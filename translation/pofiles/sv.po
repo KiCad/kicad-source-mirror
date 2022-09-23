@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-21 11:21+0000\n"
+"PO-Revision-Date: 2022-09-25 11:47+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -7529,9 +7529,9 @@ msgid "Item not annotated: %s%s"
 msgstr "Komponent inte numrerad: %s%s"
 
 #: eeschema/component_references_lister.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr "Fel: symbol %s%s%s (enhet %d) överskrider definierade enheter (%d)\n"
+msgstr "Fel: symbol %s%s%s (enhet %d) överskrider definierade enheter (%d)"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -12738,7 +12738,7 @@ msgstr "Ingen förbindelse"
 
 #: eeschema/erc.cpp:283
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Oupplöst textvariabel i ritningsarket."
+msgstr "Oupplöst textvariabel i ritningsarket"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -21099,7 +21099,6 @@ msgid "Time to fuse:"
 msgstr "Utlösningstid:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
-#, fuzzy
 msgid "s"
 msgstr "s"
 
@@ -21612,9 +21611,8 @@ msgid "Speed in medium:"
 msgstr "Hastighet i medium:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
-#, fuzzy
 msgid "er:"
-msgstr "Er:"
+msgstr "εr:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
 msgid "relative permittivity (dielectric constant)"
@@ -25489,7 +25487,7 @@ msgstr "Termisk avlastning"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:395
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:782
 msgid "Clearance Overrides and Settings"
-msgstr "Lokala avstånd och inställningar"
+msgstr "Lokala undantag för frigång och inställningar"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
 msgid ""
@@ -27266,7 +27264,7 @@ msgstr "Krenelerad lödyta (endast för hålmonteringshål)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:566
 msgid "Clearance Overrides"
-msgstr "Åsidosättande av isolationsavstånd"
+msgstr "Undantag för isolationsavstånd och frigång"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:569
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -27363,7 +27361,7 @@ msgstr "Lödyta konvex form"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:725
 msgid "Thermal Relief Overrides"
-msgstr "Åsidosättanden för termisk avlastning"
+msgstr "Undantag för termisk avlastning"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
 msgid "Relief gap:"
@@ -29999,7 +29997,6 @@ msgid "Check rule syntax"
 msgstr "Kontrollera regelsyntax"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30322,7 +30319,7 @@ msgid ""
 "        (constraint connection_width (min 0.8mm))\n"
 "        (condition \"A.NetClass == 'Power'\"))"
 msgstr ""
-"### Top-level satser\n"
+"### Toppnivåsatser\n"
 "\n"
 "    (version <number>)\n"
 "\n"
@@ -30348,6 +30345,7 @@ msgstr ""
 "\n"
 " * annular\\_width\n"
 " * clearance\n"
+" * connection\\_width\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
@@ -30370,10 +30368,17 @@ msgstr ""
 " * via\\_diameter\n"
 " * zone\\_connection\n"
 "\n"
-"Notera: `clearance` (frigång, isolationsavstånd) och `hole_clearance` "
-"(frigång för hål) regler körs inte mot objekt på samma nät; det görs däremot "
-"med `physical_clearance` (fysisk frigång) och "
+"Notera: regler för `clearance` (frigång, isolationsavstånd) och "
+"`hole_clearance` (frigång för hål) körs inte mot objekt i samma nät; det "
+"görs däremot med `physical_clearance` (fysisk frigång) och "
 "`physical_hole_clearance`(fysisk frigång för hål).\n"
+"<br><br>\n"
+"\n"
+"### Objekt\n"
+"\n"
+" * `A` &nbsp;&nbsp; _det första (eller enda) objektet som testas_\n"
+" * `B` &nbsp;&nbsp; _det andra objektet som testas (för binära test)_\n"
+" * `L` &nbsp;&nbsp; _lagret som för närvarande testas_\n"
 "\n"
 "<br>\n"
 "\n"
@@ -30392,6 +30397,7 @@ msgstr ""
 "<br>\n"
 "\n"
 "### Zonanslutningar\n"
+"\n"
 " * solid\n"
 " * thermal\\_reliefs\n"
 " * none\n"
@@ -30456,27 +30462,35 @@ msgstr ""
 "\n"
 "### Uttrycksfunktioner (Expression functions)\n"
 "\n"
-"Alla funktionsparametrar stöder användning av enkla jokertecken (`*` och `?"
-"`).\n"
+"Alla funktionsparametrar stöder användning av enkla jokertecken (`*` och "
+"`?`).\n"
 "<br><br>\n"
 "\n"
-"    A.insideCourtyard('<footprint_refdes>')\n"
-"Sant om någon del av `A` ligger inom det givna fotavtryckets huvudgårdsplan "
-"(principal courtyard).\n"
+"    A.intersectsCourtyard('<footprint_refdes>')\n"
+"Sant om någon del av `A` ligger inom det givna fotavtryckets huvudgårdsplan ("
+"principal courtyard).\n"
 "<br><br>\n"
 "\n"
-"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
 "Sant om någon del av `A` ligger inom det givna fotavtryckets gårdsplan på "
 "mönsterkortets framsida.\n"
 "<br><br>\n"
 "\n"
-"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"    A.intersectsBackCourtyard('<footprint_refdes>')\n"
 "Sant om någon del av `A` ligger inom det givna fotavtryckets gårdsplan på "
 "mönsterkortets baksida.\n"
 "<br><br>\n"
 "\n"
-"    A.insideArea('<zone_name>')\n"
+"    A.intersectsArea('<zone_name>')\n"
 "Sant om någon del av `A` ligger inom konturen för den givna zonen.\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"Sant om hela `A` ligger inom konturen för den givna zonen.  \n"
+"\n"
+"Notera: Detta är potentiellt en mer beräkningsintensiv kontroll än "
+"`intersectsArea()`.  Använd `intersectsArea()` \n"
+"om möjligt.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
@@ -30509,22 +30523,38 @@ msgstr ""
 "OBS: detta returnerar sant om `A` är på det givna lagret, oberoende\n"
 "av huruvida regeln utvärderas för det lagret.\n"
 "För det sistnämnda, använd en sats `(layer \"layer_name\")` i regeln.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"Föråldrad; använd `intersectsCourtyard()` istället.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"Föråldrad; använd `intersectsFrontCourtyard()` istället.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"Föråldrad; använd `intersectsBackCourtyard()` istället.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"Föråldrad; använd `intersectsArea()` istället.\n"
 "<br><br><br>\n"
 "\n"
 "### Fler exempel\n"
 "\n"
 "    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
-"       (condition \"A.insideArea('zone3')\"))\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
 "    (rule \"BGA neckdown\"\n"
 "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
 "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.insideCourtyard('U3')\"))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    # prevent silk over tented vias\n"
+"    # förhindra anvisningstryck på täckta vior\n"
 "    (rule silk_over_via\n"
 "       (constraint silk_clearance (min 0.2mm))\n"
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
@@ -30532,13 +30562,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -30577,8 +30607,8 @@ msgstr ""
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # Använd inte termisk avlastning på lödytor som är kylelement "
-"(heatsink)\n"
+"    # Använd inte termisk avlastning på lödytor som är kylelement (heatsink)"
+"\n"
 "    (rule heat_sink_pad\n"
 "        (constraint zone_connection solid)\n"
 "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
@@ -30618,7 +30648,14 @@ msgstr ""
 "    (rule front_mechanical_board_edge_clearance\n"
 "        (layer \"F.Courtyard\")\n"
 "        (constraint physical_clearance (min 3mm))\n"
-"        (condition \"B.Layer == 'Edge.Cuts'\"))"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Kontrollera strömkapacitet\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -30790,7 +30827,7 @@ msgstr "Lödytan är inte för hålmontering; anslutningen blir: %s."
 #: pcbnew/drc/drc_engine.cpp:735 pcbnew/drc/drc_engine.cpp:745
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Lokal åsidosättning på %s; godkännande: %s."
+msgstr "Lokalt undantag för %s; frigång: %s."
 
 #: pcbnew/drc/drc_engine.cpp:760 pcbnew/drc/drc_engine.cpp:1362
 #: pcbnew/drc/drc_engine.cpp:1377
@@ -30815,17 +30852,17 @@ msgstr "Mönsterkortets minsta frigång mellan hål: %s."
 #: pcbnew/drc/drc_engine.cpp:794
 #, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "Lokalt åsidosättande på %s; zonanslutning: %s."
+msgstr "Lokalt undantag för %s; zonanslutning: %s."
 
 #: pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "Lokal åsidosättning på %s; värmeavlastningsavstånd: %s."
+msgstr "Lokal undantag för %s; värmeavlastningsavstånd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:828
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "Lokalt åsidosättande på %s; värmeavlastningens ekerbredd: %s."
+msgstr "Lokalt undantag för %s; värmeavlastningens ekerbredd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:837
 #, c-format
@@ -31302,9 +31339,8 @@ msgid "Rule: %s"
 msgstr "Regel: %s"
 
 #: pcbnew/drc/drc_item.cpp:436
-#, fuzzy
 msgid "Local override"
-msgstr "Lokalt åsidosättande"
+msgstr "Lokalt undantag"
 
 #: pcbnew/drc/drc_rule.h:154
 #, c-format
@@ -32193,7 +32229,7 @@ msgstr "(lödyta %s förekommer i mer än en lödytegrupp med nätbrygga)"
 
 #: pcbnew/footprint.cpp:2877 pcbnew/pad.cpp:1774 pcbnew/zone.cpp:1310
 msgid "Clearance Override"
-msgstr "Åsidosatt isolationsavstånd"
+msgstr "Undantag för isolationsavstånd"
 
 #: pcbnew/footprint.cpp:2880 pcbnew/pad.cpp:1748
 msgid "Solderpaste Margin Override"
@@ -34013,7 +34049,7 @@ msgstr "Prefix"
 
 #: pcbnew/pcb_dimension.cpp:303
 msgid "Override Text"
-msgstr "Åsidosätt text"
+msgstr "Undantag för text"
 
 #: pcbnew/pcb_dimension.cpp:330
 msgid "Suffix"
@@ -38709,7 +38745,7 @@ msgstr "Ledning vald"
 
 #: pcbnew/tools/pcb_actions.cpp:1466
 msgid "Sequentially route selected items from ratsnest anchor."
-msgstr ""
+msgstr "Dra ledare för valda objekt sekventiellt från nätlinjeankare."
 
 #: pcbnew/tools/pcb_actions.cpp:1472
 msgid "Route Selected From Other End"
@@ -38718,14 +38754,15 @@ msgstr "Dra vald ledare från andra ändan"
 #: pcbnew/tools/pcb_actions.cpp:1473
 msgid "Sequentially route selected items from other end of ratsnest anchor."
 msgstr ""
+"Dra ledare för valda objekt sekventiellt från andra änden av nätlinjeankare."
 
 #: pcbnew/tools/pcb_actions.cpp:1479
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "Försök färdigställa valda (Autoroute)"
 
 #: pcbnew/tools/pcb_actions.cpp:1480
 msgid "Sequentially attempt to automatically route all selected pads."
-msgstr ""
+msgstr "Försök att sekventiellt dra ledningar för alla valda lödytor."
 
 #: pcbnew/tools/pcb_actions.cpp:1486
 msgid ""
