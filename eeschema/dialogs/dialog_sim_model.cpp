@@ -496,7 +496,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
     }
 
     wxArrayString modelNames;
-    for( const wxString& name : m_library->GetModelNames() )
+    for( const std::string& name : m_library->GetModelNames() )
         modelNames.Add( name );
 
     auto validator = dynamic_cast<MODEL_NAME_VALIDATOR*>( m_modelNameCombobox->GetValidator() );
