@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-21 11:21+0000\n"
+"PO-Revision-Date: 2022-09-25 11:47+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -3022,9 +3022,8 @@ msgid "Show icons in menus"
 msgstr "Mostrar íconos en menús"
 
 #: common/dialogs/panel_common_settings_base.cpp:124
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "Mostrar íconos en menús"
+msgstr "Mostrar barras de desplazamiento en los editores"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "This change takes effect when relaunching the editor."
@@ -4366,9 +4365,8 @@ msgstr "Dibujar elemento"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "Número"
+msgstr "Cuadro numérico"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1198
 msgid "Rect"
@@ -4441,9 +4439,8 @@ msgid "Points"
 msgstr "Puntos"
 
 #: common/eda_shape.cpp:607
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Número de pad"
+msgstr "Cuadro de número de pad"
 
 #: common/eda_shape.cpp:613 common/eda_text.cpp:1042
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -5890,9 +5887,8 @@ msgid "Find"
 msgstr "Buscar"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Search for items"
-msgstr "Buscar otros elementos de texto"
+msgstr "Buscar artículos"
 
 #: common/tool/actions.cpp:215
 msgid "Find text"
@@ -6558,9 +6554,8 @@ msgid "Select a File"
 msgstr "Seleccionar un archivo"
 
 #: common/widgets/lib_tree.cpp:279
-#, fuzzy
 msgid "recent searches"
-msgstr "Lista de rutas de búsqueda activas"
+msgstr "búsquedas recientes"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -7562,20 +7557,20 @@ msgstr ""
 "Script no disponible."
 
 #: eeschema/component_references_lister.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Elemento sin anotar: %s%s (unidad %d)\n"
+msgstr "Elemento sin anotar: %s%s (unidad %d)"
 
 #: eeschema/component_references_lister.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Elemento sin anotar: %s%s\n"
+msgstr "Elemento sin anotar: %s%s"
 
 #: eeschema/component_references_lister.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
 msgstr ""
-"Error: el símbolo %s%s%s (unidad %d) sobrepasa las unidades definidas (%d)\n"
+"Error: el símbolo %s%s%s (unidad %d) sobrepasa las unidades definidas (%d)"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -11638,9 +11633,8 @@ msgstr ""
 "no son necesarios para el diseño de la placa, como soportes mecánicos y cajas"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Do not populate"
-msgstr "No exportar"
+msgstr "No rellenar"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 msgid "Update Symbol from Library..."
@@ -12820,9 +12814,8 @@ msgid "No Connection"
 msgstr "Sin conectar"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Variable de texto sin resolver en la hoja de dibujo."
+msgstr "Variable de texto sin resolver en la hoja de dibujo"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -12835,9 +12828,8 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Se han asignado huellas diferentes a %s y %s"
 
 #: eeschema/erc.cpp:438
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
-msgstr "Pines con marca de \"no conectado\" están conectados"
+msgstr "Los pines de tipo \"sin conexión\" están conectados"
 
 #: eeschema/erc.cpp:563
 #, c-format
@@ -12850,24 +12842,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "El pin %s está conectado tanto a %s como a %s"
 
 #: eeschema/erc.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "La configuración actual no incluye la librería '%s'."
+msgstr "La configuración actual no incluye la biblioteca '%s'"
 
 #: eeschema/erc.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "La biblioteca '%s' no está habilitada en la configuración actual."
+msgstr "La biblioteca '%s' no está habilitada en la configuración actual"
 
 #: eeschema/erc.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "No se ha encontrado el símbolo '%s' en la librería '%s'."
+msgstr "No se ha encontrado el símbolo '%s' en la librería '%s'"
 
 #: eeschema/erc.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "No se ha encontrado el símbolo '%s' en la librería '%s'."
+msgstr "No se ha encontrado el símbolo '%s' en la librería '%s'"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -14648,19 +14640,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "Pin de hoja jerárquica %s"
 
 #: eeschema/sch_symbol.cpp:1156
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "Excluir del BOM"
+msgstr "Excluido del BOM"
 
 #: eeschema/sch_symbol.cpp:1161
-#, fuzzy
 msgid "Excluded from board"
-msgstr "Excluir de la placa"
+msgstr "Excluido de la placa"
 
 #: eeschema/sch_symbol.cpp:1166
-#, fuzzy
 msgid "DNP"
-msgstr "PPP"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1537
 msgid "Power symbol"
@@ -17621,9 +17610,9 @@ msgid "Symbol is not derived from another symbol."
 msgstr "El símbolo no es derivado de otro símbolo."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Enter display name for unit %s"
-msgstr "Ingrese el número de hoja para la ruta de hoja %s"
+msgstr "Introduzca el nombre para mostrar de la unidad %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:673
 msgid "Set Unit Display Name"
@@ -26996,9 +26985,8 @@ msgid "angle"
 msgstr "ángulo"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
-#, fuzzy
 msgid "at"
-msgstr "t"
+msgstr "en"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:733
 msgid "radius"
@@ -27011,9 +26999,8 @@ msgstr "número de esquinas %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:745
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2178
-#, fuzzy
 msgid "Number box"
-msgstr "Número"
+msgstr "Cuadro numérico"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:754
 msgid "Unknown primitive"
@@ -30231,7 +30218,6 @@ msgid "Check rule syntax"
 msgstr "Verificar reglas de sintaxis"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30606,14 +30592,23 @@ msgstr ""
 "Nota: las reglas `clearance` y `hole_clearance` no se ejecutan contra "
 "elementos de la misma red; las reglas `physical_clearance` y "
 "`physical_hole_clearance` sí lo hacen.\n"
+"<br><br>\n"
+"\n"
+"### Elementos\n"
+"\n"
+" * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
+"_\n"
+" * `L` &nbsp;&nbsp; _la capa bajo prueba_\n"
+"\n"
 "<br>\n"
 "\n"
 "### Tipos de elementos\n"
 "\n"
-" * buried_via\n"
+" * buried\\_via\n"
 " * graphic\n"
 " * hole\n"
-" * micro_via\n"
+" * micro\\_via\n"
 " * pad\n"
 " * text\n"
 " * track\n"
@@ -30680,8 +30675,8 @@ msgstr ""
 "\n"
 "Las reglas deberían ser ordenadas por especificidad.\n"
 "Las reglas posteriores tienen precedencia sobre las reglas anteriores;\n"
-"una vez que se encuentra una regla coincidente, no se comprobarán más "
-"reglas.\n"
+"una vez que se encuentra una regla coincidente, no se comprobarán más reglas."
+"\n"
 "\n"
 "Use Ctrl+/ para comentar o descomentar la(s) línea(s).\n"
 "<br><br><br>\n"
@@ -30714,8 +30709,8 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "Verdadero si todo `A` se encuentra dentro del contorno de la zona dada.\n"
 "\n"
-"Note: esto es una llamada potencialmente más costosa que "
-"`intersectsArea()`.  Use `intersectsArea()` \n"
+"Note: esto es una llamada potencialmente más costosa que `intersectsArea()`"
+".  Use `intersectsArea()` \n"
 "donde sea posible.\n"
 "<br><br>\n"
 " \n"
@@ -30724,8 +30719,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"Verdadero si `A` tiene una red que es parte del par diferencial "
-"especificado.\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
 "`<net_name>` es el nombre base del par diferencial. Por ejemplo, "
 "`inDiffPair('CLK')`\n"
 "coincide con los elementos en las redes `CLK_P` y `CLK_N`.\n"
@@ -33855,28 +33850,28 @@ msgstr ""
 "Atributo de fabricación 'excluir de la lista de materiales' %s eliminado."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
 msgstr ""
-"Añadir el atributo de fabricación 'excluir de la lista de materiales' %s."
+"Añadir el atributo de fabricación 'excluir de los archivos de posición' %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
 msgstr ""
-"Eliminar el atributo de fabricación 'excluir de la lista de materiales' %s."
+"Eliminar el atributo de fabricación 'excluir de los archivos de posición' %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
 msgstr ""
-"Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
+"Atributo de fabricación 'excluir de los archivos de posición' %s añadido."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
 msgstr ""
-"Atributo de fabricación 'excluir de la lista de materiales' %s eliminado."
+"Atributo de fabricación 'excluir de los archivos de posición' %s eliminado."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:497
 #, c-format
@@ -34338,9 +34333,8 @@ msgid "Export netlist used to update schematics"
 msgstr "Exportar la lista de redes usada para actualizar esquemas"
 
 #: pcbnew/pcb_edit_frame.cpp:310
-#, fuzzy
 msgid "Search"
-msgstr "Buscar texto"
+msgstr "Buscar"
 
 #: pcbnew/pcb_edit_frame.cpp:382
 msgid "New PCB file is unsaved"
@@ -38462,14 +38456,12 @@ msgid "Show/hide the properties panel"
 msgstr "Mostrar/ocultar el panel de propiedades"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "Mostrar el panel de propiedades"
+msgstr "Mostrar el panel de búsqueda"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Mostrar/ocultar el panel de propiedades"
+msgstr "Mostrar/ocultar el panel de búsqueda"
 
 #: pcbnew/tools/pcb_actions.cpp:847
 msgid "Flip Board View"
@@ -39084,9 +39076,8 @@ msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr "Intentos de completar la ruta actual hasta el extremo más cercano."
 
 #: pcbnew/tools/pcb_actions.cpp:1465
-#, fuzzy
 msgid "Route Selected"
-msgstr "Grupo seleccionado"
+msgstr "Ruta seleccionada"
 
 #: pcbnew/tools/pcb_actions.cpp:1466
 msgid "Sequentially route selected items from ratsnest anchor."
@@ -39095,9 +39086,8 @@ msgstr ""
 "líneas aéreas."
 
 #: pcbnew/tools/pcb_actions.cpp:1472
-#, fuzzy
 msgid "Route Selected From Other End"
-msgstr "Ruta desde el otro extremo"
+msgstr "Ruta seleccionada desde el otro extremo"
 
 #: pcbnew/tools/pcb_actions.cpp:1473
 msgid "Sequentially route selected items from other end of ratsnest anchor."
