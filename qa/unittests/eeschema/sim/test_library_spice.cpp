@@ -27,6 +27,7 @@
 
 #include <boost/algorithm/string/case_conv.hpp>
 #include <fmt/core.h>
+#include <locale_io.h>
 
 
 class TEST_SIM_LIBRARY_SPICE_FIXTURE
@@ -126,6 +127,8 @@ BOOST_FIXTURE_TEST_SUITE( SimLibrarySpice, TEST_SIM_LIBRARY_SPICE_FIXTURE )
 
 BOOST_AUTO_TEST_CASE( Diodes )
 {
+    LOCALE_IO dummy;
+
     LoadLibrary( "diodes" );
 
     const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
@@ -205,7 +208,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
             case 17:
                 CompareToUsualDiodeModel( model, modelName, i );
                 break;
-            
+
             case 18:
                 BOOST_CHECK_EQUAL( modelName, "D<>/?:\\|[]!@#$%^&-_18" );
                 BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "-1.1" );
@@ -231,6 +234,8 @@ BOOST_AUTO_TEST_CASE( Diodes )
 
 BOOST_AUTO_TEST_CASE( Bjts )
 {
+    LOCALE_IO dummy;
+
     LoadLibrary( "bjts" );
 
     const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
@@ -285,6 +290,8 @@ BOOST_AUTO_TEST_CASE( Bjts )
 
 BOOST_AUTO_TEST_CASE( Fets )
 {
+    LOCALE_IO dummy;
+
     LoadLibrary( "fets" );
 
     const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
@@ -406,7 +413,7 @@ BOOST_AUTO_TEST_CASE( Fets )
                             { "vto", "theta", "gamma", "phi", "eta", "rd", "rs", "cbd", "cbs",
                               "is" } );
             break;
-        
+
         case 18:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NMOS_BSIM1,
                             { "vfb", "lvfb", "wvfb", "phi", "lphi", "wphi", "k1", "lk1", "wk1",
@@ -548,7 +555,7 @@ BOOST_AUTO_TEST_CASE( Fets )
 
         case 41:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PMOS_HISIMHV1,
-                            { "prd", "prd22", "prd23", "prd24", "prdict1", "prdov13", "prdslp1", 
+                            { "prd", "prd22", "prd23", "prd24", "prdict1", "prdov13", "prdslp1",
                               "prdvb", "prdvd", "prdvg11" } );
             break;
 

@@ -31,6 +31,7 @@
 #include <sim/spice_reporter.h>
 #include <wx/ffile.h>
 #include <mock_pgm_base.h>
+#include <locale_io.h>
 
 
 class TEST_NETLIST_EXPORTER_SPICE_FIXTURE : public TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>
@@ -271,6 +272,8 @@ BOOST_FIXTURE_TEST_SUITE( NetlistExporterSpice, TEST_NETLIST_EXPORTER_SPICE_FIXT
 
 BOOST_AUTO_TEST_CASE( Rectifier )
 {
+    LOCALE_IO dummy;
+
     const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
     MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
@@ -284,12 +287,14 @@ BOOST_AUTO_TEST_CASE( Rectifier )
 
 /*BOOST_AUTO_TEST_CASE( Chirp )
 {
+    LOCALE_IO dummy;
     TestNetlist( "chirp", { "V(/out)", "I(R1)" } );
 }*/
 
 
 BOOST_AUTO_TEST_CASE( Opamp )
 {
+    LOCALE_IO dummy;
     // Instead of Simulation_SPICE:OPAMP, we use Amplifier_Operational:MCP6001-OT because its pins
     // are not ordered by pin numbers, which is a possible failure condition.
 
@@ -307,6 +312,7 @@ BOOST_AUTO_TEST_CASE( Opamp )
 
 BOOST_AUTO_TEST_CASE( NpnCeAmp )
 {
+    LOCALE_IO dummy;
     // This test intentionally uses non-inferred voltage sources to test them.
 
     TestNetlist( "npn_ce_amp" );
@@ -320,6 +326,7 @@ BOOST_AUTO_TEST_CASE( NpnCeAmp )
 // Incomplete. TODO.
 BOOST_AUTO_TEST_CASE( Rlc )
 {
+    LOCALE_IO dummy;
     TestNetlist( "rlc" );
     TestTranPoint( 9.43e-3, { { "V(/Vp)", -19e-3 }, { "I(Rs1)", 19e-3 } } );
     TestTranPoint( 9.74e-3, { { "V(/Vp)", 19e-3 }, { "I(Rs1)", -19e-3 } } );
@@ -328,6 +335,7 @@ BOOST_AUTO_TEST_CASE( Rlc )
 
 BOOST_AUTO_TEST_CASE( Tlines )
 {
+    LOCALE_IO dummy;
     TestNetlist( "tlines" );
     TestTranPoint( 910e-6, { { "V(/z0_in)", 1 }, { "V(/z0_out)", 0 },
                              { "V(/rlgc_in)", 1 }, { "V(/rlgc_out)", 0 } } );
@@ -338,6 +346,7 @@ BOOST_AUTO_TEST_CASE( Tlines )
 
 /*BOOST_AUTO_TEST_CASE( Sources )
 {
+    LOCALE_IO dummy;
     TestNetlist( "sources", { "V(/vdc)", "V(/idc)",
                               "V(/vsin)", "V(/isin)",
                               "V(/vpulse)", "V(/ipulse)",
@@ -357,6 +366,7 @@ BOOST_AUTO_TEST_CASE( Tlines )
 
 BOOST_AUTO_TEST_CASE( CmosNot )
 {
+    LOCALE_IO dummy;
     TestNetlist( "cmos_not" );
     TestTranPoint( 0, { { "V(/in)", 2.5 }, { "V(/out)", 2.64 } } );
     TestTranPoint( 250e-6, { { "V(/in)", 5 }, { "V(/out)", 0.013 } } );
@@ -375,6 +385,7 @@ BOOST_AUTO_TEST_CASE( CmosNot )
 
 BOOST_AUTO_TEST_CASE( FliegeFilter )
 {
+    LOCALE_IO dummy;
     // We test a multi-unit part here, as Fliege topology uses two op amps (power supply pins are a
     // third part).
 
@@ -387,6 +398,7 @@ BOOST_AUTO_TEST_CASE( FliegeFilter )
 
 BOOST_AUTO_TEST_CASE( Switches )
 {
+    LOCALE_IO dummy;
     TestNetlist( "switches" );
     TestTranPoint( 0.5e-3, { { "V(/inswv)", 0 }, { "V(/outswv)", 0 } } );
     TestTranPoint( 1.5e-3, { { "V(/inswv)", 1 }, { "V(/outswv)", 5 } } );
@@ -398,6 +410,7 @@ BOOST_AUTO_TEST_CASE( Switches )
 
 BOOST_AUTO_TEST_CASE( Directives )
 {
+    LOCALE_IO dummy;
     TestNetlist( "directives" );
     TestTranPoint( 9.25e-3, { { "V(/in)", 1 }, { "V(/out)", -900e-3 }, { "I(XR1)", 1e-3 } } );
     TestTranPoint( 9.50e-3, { { "V(/in)", 0 }, { "V(/out)", 0 }, { "I(XR1)", 1e-3 } } );
@@ -408,6 +421,8 @@ BOOST_AUTO_TEST_CASE( Directives )
 
 BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
+    LOCALE_IO dummy;
+
     TestNetlist( "legacy_laser_driver" );
 
     if( m_abort )
@@ -424,6 +439,7 @@ BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 
 BOOST_AUTO_TEST_CASE( LegacyPspice )
 {
+    LOCALE_IO dummy;
     TestNetlist( "legacy_pspice" );
     TestACPoint( 190, { { "V(/VIN)", pow( 10, -186e-3 / 20 ) },
                         { "V(VOUT)", pow( 10, 87e-3 / 20 ) } } );
@@ -432,6 +448,7 @@ BOOST_AUTO_TEST_CASE( LegacyPspice )
 
 BOOST_AUTO_TEST_CASE( LegacyRectifier )
 {
+    LOCALE_IO dummy;
     TestNetlist( "legacy_rectifier" );
     TestTranPoint( 0, { { "V(/signal_in)", 0 },
                         { "V(/rect_out)", 0 } } );
@@ -442,6 +459,7 @@ BOOST_AUTO_TEST_CASE( LegacyRectifier )
 
 BOOST_AUTO_TEST_CASE( LegacySallenKey )
 {
+    LOCALE_IO dummy;
     TestNetlist( "legacy_sallen_key" );
 
     if( m_abort )
@@ -454,6 +472,7 @@ BOOST_AUTO_TEST_CASE( LegacySallenKey )
 
 /*BOOST_AUTO_TEST_CASE( LegacySources )
 {
+    LOCALE_IO dummy;
     TestNetlist( "legacy_sources", { "V(/vam)", "V(/iam)",
                                      "V(/vdc)", "V(/idc)",
                                      "V(/vexp)", "V(/iexp)",
@@ -468,6 +487,7 @@ BOOST_AUTO_TEST_CASE( LegacySallenKey )
 
 BOOST_AUTO_TEST_CASE( LegacyOpamp )
 {
+    LOCALE_IO dummy;
     // Amplifier_Operational:AD797 model is used to test symbols that have more pins than the model.
 
     TestNetlist( "legacy_opamp" );
