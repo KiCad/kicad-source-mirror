@@ -453,10 +453,7 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, std::vector<ROW>
 
     try
     {
-        if( !results.first() )
-            return false;
-
-        do
+        while( results.next() )
         {
             ROW result;
 
@@ -467,8 +464,7 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, std::vector<ROW>
             }
 
             aResults.emplace_back( std::move( result ) );
-
-        } while( results.next() );
+        }
     }
     catch( nanodbc::database_error& e )
     {
