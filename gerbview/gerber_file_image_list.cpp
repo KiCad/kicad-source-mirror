@@ -109,14 +109,14 @@ void GERBER_FILE_IMAGE_LIST::DeleteAllImages()
 }
 
 
-void GERBER_FILE_IMAGE_LIST::DeleteImage( int aIdx )
+void GERBER_FILE_IMAGE_LIST::DeleteImage( unsigned int aIdx )
 {
     // Ensure the index is valid:
-    if( aIdx < 0 || aIdx >= int( m_GERBER_List.size() ) )
+    if( aIdx >= m_GERBER_List.size() )
         return;
 
     // delete image aIdx
-    GERBER_FILE_IMAGE* gbr_image = GetGbrImage( aIdx );
+    GERBER_FILE_IMAGE* gbr_image = GetGbrImage( static_cast<int>( aIdx ) );
 
     delete gbr_image;
     m_GERBER_List[ aIdx ] = nullptr;
@@ -457,11 +457,8 @@ std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
 std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SwapImages( unsigned int layer1,
                                                                  unsigned int layer2 )
 {
-    if( ( layer1 < 0 || layer1 >= m_GERBER_List.size() )
-        || ( layer2 < 0 || layer2 >= m_GERBER_List.size() ) )
-    {
+    if( ( layer1 >= m_GERBER_List.size() ) || ( layer2 >= m_GERBER_List.size() ) )
         return std::unordered_map<int, int>();
-    }
 
     std::swap( m_GERBER_List[layer1], m_GERBER_List[layer2] );
     return GetLayerRemap();
@@ -469,7 +466,7 @@ std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SwapImages( unsigned int la
 
 std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::RemoveImage( unsigned int layer )
 {
-    if( layer < 0 || layer >= m_GERBER_List.size() )
+    if( layer >= m_GERBER_List.size() )
         return std::unordered_map<int, int>();
 
     DeleteImage( layer );

@@ -127,7 +127,7 @@ public:
      *
      * @param aIdx is the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 ).
      */
-    void DeleteImage( int aIdx );
+    void DeleteImage( unsigned int aIdx );
 
     /**
      * Get the display name for the layer at \a aIdx.
