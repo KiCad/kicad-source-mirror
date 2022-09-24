@@ -49,8 +49,8 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 3, 5, 5 );
 	fgSizer2->AddGrowableCol( 1 );
-	fgSizer2->SetFlexibleDirection( wxBOTH );
-	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	fgSizer2->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
 	m_textSizeLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Default text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
@@ -146,7 +146,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	int m_choiceJunctionDotSizeNChoices = sizeof( m_choiceJunctionDotSizeChoices ) / sizeof( wxString );
 	m_choiceJunctionDotSize = new wxChoice( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceJunctionDotSizeNChoices, m_choiceJunctionDotSizeChoices, 0 );
 	m_choiceJunctionDotSize->SetSelection( 3 );
-	bSizer61->Add( m_choiceJunctionDotSize, 1, wxEXPAND|wxRIGHT, 5 );
+	bSizer61->Add( m_choiceJunctionDotSize, 1, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizer2->Add( bSizer61, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );

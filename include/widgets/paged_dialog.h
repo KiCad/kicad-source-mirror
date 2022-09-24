@@ -70,6 +70,8 @@ private:
     wxString    m_title;
 
     wxBoxSizer* m_buttonsSizer;
+
+    std::vector<bool> m_macHack;
 };
 
 

@@ -234,13 +234,13 @@
                                     <property name="proportion">1</property>
                                     <object class="wxFlexGridSizer" expanded="1">
                                         <property name="cols">3</property>
-                                        <property name="flexible_direction">wxBOTH</property>
+                                        <property name="flexible_direction">wxHORIZONTAL</property>
                                         <property name="growablecols">1</property>
                                         <property name="growablerows"></property>
                                         <property name="hgap">5</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">fgSizer2</property>
-                                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_NONE</property>
                                         <property name="permission">none</property>
                                         <property name="rows">0</property>
                                         <property name="vgap">5</property>
@@ -1294,7 +1294,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxEXPAND|wxRIGHT</property>
+                                            <property name="flag">wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
                                             <property name="proportion">1</property>
                                             <object class="wxChoice" expanded="1">
                                                 <property name="BottomDockable">1</property>

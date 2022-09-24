@@ -114,6 +114,9 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
 
 void PAGED_DIALOG::finishInitialization()
 {
+    for( size_t i = 1; i < m_treebook->GetPageCount(); ++i )
+   	    m_macHack.push_back( true );
+
     // For some reason adding page labels to the treeCtrl doesn't invalidate its bestSize
     // cache so we have to do it by hand
     m_treebook->GetTreeCtrl()->InvalidateBestSize();
@@ -373,22 +376,33 @@ void PAGED_DIALOG::onCharHook( wxKeyEvent& aEvent )
 
 void PAGED_DIALOG::onPageChanged( wxBookCtrlEvent& event )
 {
-    int page = event.GetSelection();
+    size_t page = event.GetSelection();
 
     // Use the first sub-page when a tree level node is selected.
-    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty() )
+    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty()
+            && page + 1 < m_treebook->GetPageCount() )
     {
-        unsigned next = page + 1;
-
-        if( next < m_treebook->GetPageCount() )
-            m_treebook->ChangeSelection( next );
+        m_treebook->ChangeSelection( ++page );
     }
 
     UpdateResetButton( page );
 
-    wxSizeEvent evt( wxDefaultSize );
+#ifdef __WXMAC__
+    // Work around an OSX wxWidgets issue where the wxGrid children don't get placed correctly
+    // until the first resize event
+    if( page < m_macHack.size() && m_macHack[ page ] )
+    {
+        wxSize pageSize = m_treebook->GetPage( page )->GetSize();
+        pageSize.x -= 5;
+        pageSize.y += 2;
 
+        m_treebook->GetPage( page )->SetSize( pageSize );
+        m_macHack[ page ] = false;
+    }
+#else
+    wxSizeEvent evt( wxDefaultSize );
     wxQueueEvent( m_treebook, evt.Clone() );
+#endif
 }
 
 
