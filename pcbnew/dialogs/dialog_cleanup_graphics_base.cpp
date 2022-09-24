@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,7 +23,20 @@ DIALOG_CLEANUP_GRAPHICS_BASE::DIALOG_CLEANUP_GRAPHICS_BASE( wxWindow* parent, wx
 	bSizerUpper->Add( m_createRectanglesOpt, 0, wxALL, 5 );
 
 	m_deleteRedundantOpt = new wxCheckBox( this, wxID_ANY, _("Delete redundant graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerUpper->Add( m_deleteRedundantOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerUpper->Add( m_deleteRedundantOpt, 0, wxALL, 5 );
+
+	m_mergePadsOpt = new wxCheckBox( this, wxID_ANY, _("Merge overlapping graphics into pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerUpper->Add( m_mergePadsOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerMargins;
+	bSizerMargins = new wxBoxSizer( wxVERTICAL );
+
+	m_nettieHint = new wxStaticText( this, wxID_ANY, _("(Pads which appear in a Net Tie pad group will not be considered for merging.)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_nettieHint->Wrap( -1 );
+	bSizerMargins->Add( m_nettieHint, 0, wxLEFT, 25 );
+
+
+	bSizerUpper->Add( bSizerMargins, 1, wxEXPAND|wxALL, 3 );
 
 
 	bSizerMain->Add( bSizerUpper, 0, wxEXPAND|wxALL, 5 );
@@ -40,7 +53,7 @@ DIALOG_CLEANUP_GRAPHICS_BASE::DIALOG_CLEANUP_GRAPHICS_BASE( wxWindow* parent, wx
 	bLowerSizer->Add( m_changesDataView, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizerMain->Add( bLowerSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( bLowerSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -61,6 +74,7 @@ DIALOG_CLEANUP_GRAPHICS_BASE::DIALOG_CLEANUP_GRAPHICS_BASE( wxWindow* parent, wx
 	// Connect Events
 	m_createRectanglesOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_deleteRedundantOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
+	m_mergePadsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_changesDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnSelectItem ), NULL, this );
 	m_changesDataView->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnLeftDClickItem ), NULL, this );
 }
@@ -70,6 +84,7 @@ DIALOG_CLEANUP_GRAPHICS_BASE::~DIALOG_CLEANUP_GRAPHICS_BASE()
 	// Disconnect Events
 	m_createRectanglesOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_deleteRedundantOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
+	m_mergePadsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_changesDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnSelectItem ), NULL, this );
 	m_changesDataView->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnLeftDClickItem ), NULL, this );
 

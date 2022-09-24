@@ -29,15 +29,19 @@
 #include <cleanup_item.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
+#include <pad.h>
+#include <footprint.h>
 #include <graphics_cleaner.h>
 #include <board_design_settings.h>
-
+#include <tool/tool_manager.h>
+#include <tools/pad_tool.h>
 
 GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootprint,
-                                    BOARD_COMMIT& aCommit ) :
+                                    BOARD_COMMIT& aCommit, TOOL_MANAGER* aToolMgr ) :
         m_drawings( aDrawings ),
         m_parentFootprint( aParentFootprint ),
         m_commit( aCommit ),
+        m_toolMgr( aToolMgr ),
         m_dryRun( true ),
         m_epsilon( 0 ),
         m_itemsList( nullptr )
@@ -47,7 +51,7 @@ GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootp
 
 void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun,
                                      std::vector<std::shared_ptr<CLEANUP_ITEM>>* aItemsList,
-                                     bool aMergeRects, bool aDeleteRedundant )
+                                     bool aMergeRects, bool aDeleteRedundant, bool aMergePads )
 {
     m_dryRun = aDryRun;
     m_itemsList = aItemsList;
@@ -63,6 +67,9 @@ void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun,
 
     if( aMergeRects )
         mergeRects();
+
+    if( aMergePads )
+        mergePads();
 
     // Clear the flag used to mark some shapes:
     for( BOARD_ITEM* drawing : m_drawings )
@@ -339,3 +346,49 @@ void GRAPHICS_CLEANER::mergeRects()
         delete side;
 }
 
+
+void GRAPHICS_CLEANER::mergePads()
+{
+    wxCHECK_MSG( m_parentFootprint, /*void*/, wxT( "mergePads() is FootprintEditor only" ) );
+
+    PAD_TOOL* padTool = m_toolMgr->GetTool<PAD_TOOL>();
+
+    for( PAD* pad : m_parentFootprint->Pads() )
+        pad->SetFlags( CANDIDATE );
+
+    if( m_parentFootprint->IsNetTie() )
+    {
+        for( const wxString& group : m_parentFootprint->GetNetTiePadGroups() )
+        {
+            wxStringTokenizer groupParser( group, "," );
+
+            while( groupParser.HasMoreTokens() )
+            {
+                wxString number = groupParser.GetNextToken().Trim( false ).Trim( true );
+
+                if( PAD* pad = m_parentFootprint->FindPadByNumber( number ) )
+                    pad->ClearFlags( CANDIDATE );
+            }
+        }
+    }
+
+    for( PAD* pad : m_parentFootprint->Pads() )
+    {
+        if( !( pad->GetFlags() & CANDIDATE ) )
+            continue;
+
+        std::vector<FP_SHAPE*> shapes = padTool->RecombinePad( pad, m_dryRun, m_commit );
+
+        if( !shapes.empty() )
+        {
+            std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_MERGE_PAD );
+
+            for( FP_SHAPE* shape : shapes )
+                item->AddItem( shape );
+
+            item->AddItem( pad );
+
+            m_itemsList->push_back( item );
+        }
+    }
+}

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,8 @@ enum CLEANUP_RC_CODE {
     CLEANUP_TRACK_IN_PAD,
     CLEANUP_NULL_GRAPHIC,
     CLEANUP_DUPLICATE_GRAPHIC,
-    CLEANUP_LINES_TO_RECT
+    CLEANUP_LINES_TO_RECT,
+    CLEANUP_MERGE_PAD
 };
 
 class CLEANUP_ITEM : public RC_ITEM

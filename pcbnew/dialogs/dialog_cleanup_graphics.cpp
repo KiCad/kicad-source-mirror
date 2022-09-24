@@ -24,6 +24,7 @@
 #include <dialog_cleanup_graphics.h>
 #include <board_commit.h>
 #include <footprint.h>
+#include <pad.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <graphics_cleaner.h>
@@ -40,9 +41,16 @@ DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent,
     m_changesDataView->AssociateModel( m_changesTreeModel );
 
     if( aIsFootprintEditor )
+    {
         SetupStandardButtons( { { wxID_OK, _( "Update Footprint" ) } } );
+        m_nettieHint->SetFont( KIUI::GetInfoFont( aParent ).Italic() );
+    }
     else
+    {
         SetupStandardButtons( { { wxID_OK, _( "Update PCB" ) } } );
+        m_mergePadsOpt->Show( false );
+        m_nettieHint->Show( false );
+    }
 
     GetSizer()->SetSizeHints(this);
     Centre();
@@ -84,7 +92,8 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
     BOARD_COMMIT     commit( m_parentFrame );
     BOARD*           board = m_parentFrame->GetBoard();
     FOOTPRINT*       fp = m_isFootprintEditor ? board->GetFirstFootprint() : nullptr;
-    GRAPHICS_CLEANER cleaner( fp ? fp->GraphicalItems() : board->Drawings(), fp, commit );
+    GRAPHICS_CLEANER cleaner( fp ? fp->GraphicalItems() : board->Drawings(), fp, commit,
+                              m_parentFrame->GetToolManager() );
 
     if( !aDryRun )
     {
@@ -101,7 +110,8 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
     m_parentFrame->Compile_Ratsnest( false );
 
     cleaner.CleanupBoard( aDryRun, &m_items, m_createRectanglesOpt->GetValue(),
-                                             m_deleteRedundantOpt->GetValue() );
+                                             m_deleteRedundantOpt->GetValue(),
+                                             m_mergePadsOpt->GetValue() );
 
     if( aDryRun )
     {
@@ -122,6 +132,9 @@ void DIALOG_CLEANUP_GRAPHICS::OnSelectItem( wxDataViewEvent& aEvent )
     const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
     BOARD_ITEM*   item = m_parentFrame->GetBoard()->GetItem( itemID );
     WINDOW_THAWER thawer( m_parentFrame );
+
+    if( item && !item->GetLayerSet().test( m_parentFrame->GetActiveLayer() ) )
+        m_parentFrame->SetActiveLayer( item->GetLayerSet().UIOrder().front() );
 
     m_parentFrame->FocusOnItem( item );
     m_parentFrame->GetCanvas()->Refresh();

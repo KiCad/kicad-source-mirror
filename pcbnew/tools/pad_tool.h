@@ -28,6 +28,7 @@
 #include <tools/pcb_tool_base.h>
 
 class ACTION_MENU;
+class FP_SHAPE;
 
 /**
  * Tool relating to pads and pad settings.
@@ -64,6 +65,15 @@ public:
     wxString GetLastPadNumber() const { return m_lastPadNumber; }
     void SetLastPadNumber( const wxString& aPadNumber ) { m_lastPadNumber = aPadNumber; }
 
+    /**
+     * Recombine an exploded pad (or one produced with overlapping polygons in an older version).
+     * @param aPad the pad to run the recombination algorithm on
+     * @param aIsDryRun if true the list will be generated but no changes will be made
+     * @param aCommit the commit to add any changes to
+     * @return a list of FP_SHAPEs that will be combined
+     */
+    std::vector<FP_SHAPE*> RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_COMMIT& aCommit );
+
 private:
     ///< Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
@@ -78,8 +88,8 @@ private:
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
     PCB_LAYER_ID explodePad( PAD* aPad );
-    void recombinePad( PAD* aPad );
 
+private:
     wxString       m_lastPadNumber;
 
     bool           m_wasHighContrast;
