@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-08-15 08:15+0000\n"
+"PO-Revision-Date: 2022-09-25 11:47+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -262,9 +262,8 @@ msgid "&Preferences"
 msgstr "ตั้งความชอบ(&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "ช่องมอง (Alt+Tab):"
+msgstr "ช่องมอง (Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2673
@@ -1445,9 +1444,8 @@ msgid "Warning"
 msgstr "ระวัง"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
-#, fuzzy
 msgid "File Open Warning"
-msgstr "การเปิดไฟล์ผิดพลาด"
+msgstr "การเปิดไฟล์มีคำเตือน"
 
 #: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
@@ -1774,7 +1772,7 @@ msgstr "รายงาน"
 
 #: common/dialogs/dialog_assign_netclass.cpp:95
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b> ขณะนี้กำลังจับคู่เน็ต:</b>"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2962,13 +2960,12 @@ msgid "Show icons in menus"
 msgstr "แสดงไอคอนในเมนู"
 
 #: common/dialogs/panel_common_settings_base.cpp:124
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "แสดงไอคอนในเมนู"
+msgstr "แสดงแถบเลื่อนในเครื่องมือแก้ไข"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "การแก้ไขนี้จะมีผลเมื่อปิด-เปิดเครื่องมือแก้ไขอีกครั้ง"
 
 #: common/dialogs/panel_common_settings_base.cpp:133
 msgid "Icon theme:"
@@ -3190,15 +3187,26 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad สามารถรายงานข้อขัดข้องและข้อมูลเหตุการณ์พิเศษไปยังนักพัฒนาเพื่อช่วยระบุ"
+"ข้อบกพร่องที่สําคัญ เพื่อใช้เป็นแนวทางในการปรับปรุง\n"
+"\n"
+"ในการเชื่อมโยงรายงานอัตโนมัติจาก KiCad ตัวเลขสุ่มที่ไม่ซ้ํากันจะถูกสร้างขึ้น "
+"จะใช้เพื่อวัตถุประสงค์ในการรายงานข้อขัดข้องเท่านั้น "
+"ไม่มีการจัดเก็บข้อมูลที่สามารถระบุตัวบุคคลได้ (PII) รวมถึงที่อยู่ IP "
+"หรือเชื่อมต่อกับตัวระบุนี้ คุณสามารถรีเซ็ต id นี้ได้ตลอดเวลาด้วยปุ่มที่ให้"
+"มา\n"
+"\n"
+"หากคุณเลือกที่จะเข้าร่วมโดยสมัครใจ KiCad "
+"จะจัดการการส่งรายงานดังกล่าวโดยอัตโนมัติเมื่อเกิดปัญหาหรือเหตุการณ์เกิดขึ้น "
+"ไฟล์ออกแบบของคุณเช่นวงจรหรือพีซีบีจะไม่ถูกแชร์ในกระบวนการนี้"
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "ฉันตกลงส่งรายงานโดยไม่ระบุชื่อ"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "ล้างมุมมอง"
+msgstr "ล้างเลขไอดี"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
@@ -3542,7 +3550,7 @@ msgstr "ต้องกำหนดปริยายของเน็ตคล
 #: common/dialogs/panel_setup_netclasses.cpp:718
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b> เน็ตจับคู่กับ '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -3624,14 +3632,12 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "เลือกสีโปร่งแสงเพื่อใช้สีปริยายของ KiCad"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:100
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "มอบหมายให้วงจร"
+msgstr "การกำหนดเน็ตคลาส:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
-#, fuzzy
 msgid "Pattern"
-msgstr "รูปแบบแรเงา"
+msgstr "รูปแบบ"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114 pcbnew/pcb_marker.cpp:179
@@ -3885,9 +3891,8 @@ msgid "Hotkeys"
 msgstr "คีย์ร้อน"
 
 #: common/eda_base_frame.cpp:997
-#, fuzzy
 msgid "Data Collection"
-msgstr "การเชื่อมต่อแพ็ด"
+msgstr "การเก็บข้อมูล"
 
 #: common/eda_base_frame.cpp:1013 common/tool/actions.cpp:592
 #: eeschema/symbol_editor/symbol_editor.cpp:86
@@ -3921,9 +3926,8 @@ msgid "Schematic Editor"
 msgstr "เครื่องมือแก้ไขวงจร"
 
 #: common/eda_base_frame.cpp:1024
-#, fuzzy
 msgid "Annotation Options"
-msgstr "ทำอธิบายประกอบ"
+msgstr "ทางเลือกทำอธิบายประกอบ"
 
 #: common/eda_base_frame.cpp:1026
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
@@ -4258,9 +4262,8 @@ msgstr "วาดชิ้นส่วน"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "หมายเลข"
+msgstr "กล่องตัวเลข"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1198
 msgid "Rect"
@@ -4333,9 +4336,8 @@ msgid "Points"
 msgstr "คะแนน"
 
 #: common/eda_shape.cpp:607
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "หมายเลขแพ็ด"
+msgstr "กล่องหมายเลขแพ็ด"
 
 #: common/eda_shape.cpp:613 common/eda_text.cpp:1042
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -4517,9 +4519,8 @@ msgid "Bottom"
 msgstr "ล่าง"
 
 #: common/eda_text.cpp:1024
-#, fuzzy
 msgid "Hyperlink"
-msgstr "ไฮเปอร์ลินซ์..."
+msgstr "ไฮเปอร์ลิงค์"
 
 #: common/eda_text.cpp:1027
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5003,9 +5004,8 @@ msgid "Schematic text && graphics"
 msgstr "ข้อความในวงจรและกราฟิก"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "ข้อความในวงจรและกราฟิก"
+msgstr "ข้อความและกราฟิกส่วนตัวในสัญลักษณ์"
 
 #: common/layer_id.cpp:126
 msgid "Schematic text && graphics backgrounds"
@@ -5088,9 +5088,8 @@ msgid "Cursor"
 msgstr "เคอร์เซอร์"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "ย้ายชิ้นส่วน"
+msgstr "เหนือชิ้นส่วน"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5109,9 +5108,8 @@ msgid "Drawing sheet"
 msgstr "กระดาษเขียนแบบ"
 
 #: common/layer_id.cpp:149 common/layer_id.cpp:178
-#, fuzzy
 msgid "Page limits"
-msgstr "สิ้นสุดหน้า"
+msgstr "จำกัดหน้ากระดาษ"
 
 #: common/layer_id.cpp:153
 msgid "Footprints front"
@@ -5231,23 +5229,20 @@ msgid "Locked item shadow"
 msgstr "เงาชิ้นส่วนที่ถูกล็อก"
 
 #: common/layer_id.cpp:186
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "ป้ายชื่อขัดแย้ง"
+msgstr "เงาชิ้นส่วนที่ขัดแย้ง"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
 msgstr "ตั้งชื่อไลบรารีด้วยตัวอักษรผิดกฎ"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "ไม่ได้เลือกรูปร่าง"
+msgstr "กระตุ้นที่เลือก"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "ลบเซลส์ที่ถูกเลือก"
+msgstr "เลิกกระตุ้นที่เลือก"
 
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
@@ -5335,10 +5330,17 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad "
+"สามารถรายงานข้อขัดข้องและข้อมูลเหตุการณ์พิเศษให้กับนักพัฒนาโดยไม่เปิดเผยตั"
+"วตน เพื่อช่วยระบุจุดบกพร่องที่วิกฤติ และช่วยกลั่นกรอง "
+"ฟังก์ชั่นเพื่อแนวทางในการปรับปรุง\n"
+"หากคุณเลือกที่จะเข้าร่วมโดยสมัครใจ KiCad "
+"จะจัดการส่งรายงานดังกล่าวโดยอัตโนมัติเมื่อเกิดปัญหาหรือเหตุการณ์ขึ้น\n"
+"ไฟล์การออกแบบของคุณ เช่น วงจรหรือพีซีบี จะไม่ถูกแชร์ในกระบวนการนี้"
 
 #: common/pgm_base.cpp:349
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "ต้องการคำขอรับรวบรวมข้อมูล"
 
 #: common/pgm_base.cpp:398
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -5353,9 +5355,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "ไฟล์ภาษาของ KiCad ไม่ได้ติดตั้ง"
 
 #: common/plotters/PDF_plotter.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "แสดงจํากัดของหน้า"
+msgstr "แสดงหน้าที่ %s"
 
 #: common/plotters/PDF_plotter.cpp:1007
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:802
@@ -5630,9 +5632,8 @@ msgid "Save current document to another location"
 msgstr "บันทึกเอกสารปัจจุบันไปที่ตำแหน่งอื่น"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "บันทึกสำเนาเป็น…"
+msgstr "บันทึกเป็นสำเนา…"
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -5724,9 +5725,8 @@ msgid "Paste Special..."
 msgstr "วางสำเนาแบบพิเศษ…"
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "วางสำเนาชิ้นส่วนจากคลิปบอร์ดแบบมีทางเลือก"
+msgstr "วางสำเนาชิ้นส่วนจากคลิปบอร์ดแบบมีทางเลือกคำอธิบายประกอบ"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -5764,9 +5764,8 @@ msgid "Find"
 msgstr "ค้นหา"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Search for items"
-msgstr "ค้นหาข้อความอื่นๆ"
+msgstr "ค้นหาสำหรับชิ้นส่วน"
 
 #: common/tool/actions.cpp:215
 msgid "Find text"
@@ -5973,9 +5972,8 @@ msgid "Show Grid"
 msgstr "แสดงกริด"
 
 #: common/tool/actions.cpp:486
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "แสดงกริดจุดหรือกริดเส้นในหน้าต่างแก้ไข"
+msgstr "แสดงจุดกริดบนพื้นหลังในหน้าต่างแก้ไข"
 
 #: common/tool/actions.cpp:491
 msgid "Grid Properties..."
@@ -6429,7 +6427,7 @@ msgstr "เลือกไฟล์"
 
 #: common/widgets/lib_tree.cpp:279
 msgid "recent searches"
-msgstr ""
+msgstr "การค้นหาล่าสุด"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -6481,14 +6479,12 @@ msgstr "ล้าง %s เป็นค่าปริยาย"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "ไม่ได้เลือกบัส"
+msgstr "ไม่ได้เลือกวัตถุ"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "ไม่ได้เลือกบัส"
+msgstr "เลือกวัตถุหลายชิ้น"
 
 #: common/widgets/unit_binder.cpp:260
 #, c-format
@@ -6652,7 +6648,6 @@ msgid "KiCad legacy symbol library files"
 msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad รุ่นเก่า"
 
 #: common/wildcards_and_files_ext.cpp:243
-#, fuzzy
 msgid "KiCad database library files"
 msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad"
 
@@ -6895,9 +6890,9 @@ msgid "Hotkey file"
 msgstr "ไฟล์คีย์ร้อน"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "ไฟล์เท่าเทียม '%s' หาไม่พบ ในเส้นทางค้นหาปริยาย"
+msgstr "ไฟล์เสมอเหมือน '%s' ค้นหาไม่พบ"
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -7171,9 +7166,8 @@ msgstr "ผู้ดูฟุ้ทพรินท์"
 
 #: cvpcb/display_footprints_frame.cpp:325
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "กำหนดค่าฟุ้ทพรินท์อัตโนมัติ"
+msgstr "การซูมอัตโนมัติเมื่อฟุ้ทพรินท์เปลี่ยนแปลง"
 
 #: cvpcb/display_footprints_frame.cpp:413
 #, c-format
@@ -7286,16 +7280,15 @@ msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr "บันทึกการเชื่อมโยงฟุ้ทพรินท์ ในฟิลด์สัญลักษณ์วงจร"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "บันทึกในวงจร"
+msgstr "บันทึกไปยังวงจรและไฟล์"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr "บันทึกการเชื่อมโยงฟุ้ทพรินท์ ในฟิลด์สัญลักษณ์วงจร"
+msgstr ""
+"บันทึกการเชื่อมโยงฟุ้ทพรินท์ ในช่องฟุ้ทพรินท์ของสัญลักษณ์วงจร และไฟล์วงจร"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -7410,19 +7403,19 @@ msgstr ""
 "ไม่พบ. สคริปต์ไม่พร้อมใช้งาน"
 
 #: eeschema/component_references_lister.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "ชิ้นส่วนยังไม่ทำอธิบายประกอบ: %s%s (หน่วย %d)\n"
+msgstr "ชิ้นส่วนยังไม่ทำอธิบายประกอบ: %s%s (หน่วย %d)"
 
 #: eeschema/component_references_lister.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "ชิ้นส่วนยังไม่ทำคำอธิบายประกอบ: %s %s\n"
+msgstr "ชิ้นส่วนยังไม่ทำคำอธิบายประกอบ: %s%s"
 
 #: eeschema/component_references_lister.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr "ข้อผิดพลาด: สัญลักษณ์ %s%s%s (หน่วย %d) เกินหน่วยที่กำหนด (%d)\n"
+msgstr "ข้อผิดพลาด: สัญลักษณ์ %s%s%s (หน่วย %d) เกินหน่วยที่กำหนด (%d)"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -7519,9 +7512,8 @@ msgid "Selection"
 msgstr "การเลือก"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "ถึงจุดสิ้นสุดของแผ่นชีต"
+msgstr "เรียกซ้ำในแผ่นวงจรย่อย"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -8614,23 +8606,20 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:93
-#, fuzzy
 msgid "Show field name"
-msgstr "ชื่อช่องใหม่:"
+msgstr "แสดงชื่อช่อง"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:95
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "แสดงชื่อฟิลด์รวมกับแสดงค่า"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:102
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "กฎการวางตำแหน่งอัตโนมัติ"
+msgstr "ยอมให้วางตำแหน่งอัตโนมัติ"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:105
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "ดําเนินการจัดวางส่วนอุปกรณ์ที่เลือกโดยอัตโนมัติ"
+msgstr "ยอมให้จัดวางฟิลด์นี้อัตโนมัติในผังวงจร"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:118
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
@@ -8851,9 +8840,8 @@ msgid "Set To"
 msgstr "ตั้งเป็น"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "สีเน็ต:"
+msgstr "สีข้อความ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -8983,16 +8971,14 @@ msgid "Diameter:"
 msgstr "เส้นผ่าศูนย์กลาง:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
-msgstr "ตั้งค่าเส้นผ่าศูนย์กลางเป็น 0 เพื่อใช้ขนาดจุดของจุดเชื่อมวงจร"
+msgstr "ตั้งค่าเส้นผ่าศูนย์กลางเป็น 0 เพื่อใช้ขนาดจุดเชื่อมวงจรจากผังวงจร"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr "กำหนดสีเป็นโปร่งใสเพื่อใช้สีจากเครื่องมือแก้ไขวงจร"
+msgstr "ล้างเพื่อใช้ชุดสีของเครื่องมือแก้ไขผังวงจร"
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -9152,9 +9138,8 @@ msgstr "ตำแหน่ง Y"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:316
 #: pcbnew/pcb_dimension.cpp:337 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:310
-#, fuzzy
 msgid "Font"
-msgstr "ฟ้อนท์:"
+msgstr "ฟ้อนท์"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9248,14 +9233,12 @@ msgid "ALL"
 msgstr "ทั้งหมด"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
-#, fuzzy
 msgid "Standard"
-msgstr "ชนิดมาตรฐาน"
+msgstr "มาตรฐาน"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
-#, fuzzy
 msgid "Alternate"
-msgstr "ชื่อเรียกอื่นของขา"
+msgstr "ทางเลือก"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:114
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:87
@@ -9301,9 +9284,8 @@ msgstr "ขนาดชื่อ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
-msgstr "มาตรฐานเดอมอร์แกน"
+msgstr "เดอมอร์แกน"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:792
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:70
@@ -9371,14 +9353,12 @@ msgid "Group by name"
 msgstr "จับกลุ่มโดยชื่อ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
-#, fuzzy
 msgid "Group Selected"
-msgstr "ไม่ได้เลือกบัส"
+msgstr "กลุ่มที่เลือก"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "กรองโดยจำนวนขา"
+msgstr "กรองโดยหน่วย:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -9507,9 +9487,8 @@ msgid "Style:"
 msgstr "สไตล์:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:89
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default symbol line width."
-msgstr "ตั้งความกว้างขอบเขตเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของวงจร"
+msgstr "ตั้งความกว้างขอบเขตเป็น 0 เพื่อใช้ค่าปริยายขนาดเส้นตรงจากผังวงจร"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:103
 msgid "Fill Style"
@@ -9575,9 +9554,9 @@ msgstr "ลบรูปร่างชนิดทางเลือก(เด�
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:319
 #: eeschema/tools/symbol_editor_control.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "สัญลักษณ์ '%s' มีอยู่แล้วในไลบรารี '%s'"
+msgstr "ชื่อสัญลักษณ์ '%s' มีอยู่แล้วในไลบรารี '%s'"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:441
 #, c-format
@@ -9784,9 +9763,8 @@ msgid "Text Box Properties"
 msgstr "คุณสมบัติกล่องข้อความ"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:77
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
-msgstr "ตั้งค่าความกว้างเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของวงจร"
+msgstr "ตั้งค่าความกว้างเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงจากผังวงจร"
 
 #: eeschema/dialogs/dialog_line_properties_base.h:68
 msgid "Line Properties"
@@ -9852,33 +9830,29 @@ msgstr "การจำลองต้องการวงจรที่ทำ
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 #: eeschema/dialogs/dialog_netlist.cpp:396
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "หน้าปัจจุบันเท่านั้น"
+msgstr "ใช้ชีตปัจจุบันเป็นรากตั้งต้น"
 
 #: eeschema/dialogs/dialog_netlist.cpp:350
 #: eeschema/dialogs/dialog_netlist.cpp:397
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "ส่งออกไปหน้ากระดาษอื่น"
+msgstr "ส่งออกรายการเน็ตสำหรับชีตปัจจุบันเท่านั้น"
 
 #: eeschema/dialogs/dialog_netlist.cpp:355
-#, fuzzy
 msgid "Save all voltages"
-msgstr "บันทึกการเปลี่ยนแปลงทั้งหมด"
+msgstr "บันทึกค่าโวลท์ทั้งหมด"
 
 #: eeschema/dialogs/dialog_netlist.cpp:356
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "เขียนคำสั่งเพื่อบันทึกค่าโวลท์ทั้งหมด (.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:361
-#, fuzzy
 msgid "Save all currents"
-msgstr "บันทึกการเปลี่ยนแปลงทั้งหมด"
+msgstr "บันทึกค่าปัจจุบันทั้งหมด"
 
 #: eeschema/dialogs/dialog_netlist.cpp:362
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "เขียนคำสั่งเพื่อบันทึกค่ากระแสทั้งหมด (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:368
 msgid "External simulator command:"
@@ -9969,10 +9943,9 @@ msgstr "การกำหนดชื่อขาทางเลือก ไ�
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:274
 msgid "Exit sync pins mode"
-msgstr ""
+msgstr "ออกจากโหมดพินซิงค์"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:289
-#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
