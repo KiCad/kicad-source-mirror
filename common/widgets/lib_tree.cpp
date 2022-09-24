@@ -27,6 +27,7 @@
 #include <macros.h>
 #include <wxdataviewctrl_helpers.h>
 #include <wx/sizer.h>
+#include <dialogs/eda_reorderable_list_dialog.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
@@ -47,7 +48,8 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         m_lib_table( aLibTable ), m_adapter( aAdapter ), m_query_ctrl( nullptr ),
         m_details_ctrl( nullptr ),
         m_inTimerEvent( false ),
-        m_recentSearchesKey( aRecentSearchesKey )
+        m_recentSearchesKey( aRecentSearchesKey ),
+        m_skipNextRightClick( false )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -132,7 +134,11 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
     m_tree_ctrl->Bind( wxEVT_SIZE, &LIB_TREE::onSize, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &LIB_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
-    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onContextMenu, this );
+    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onItemContextMenu,
+                       this );
+    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK,
+                       &LIB_TREE::onHeaderContextMenu, this );
+    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, &LIB_TREE::onHeaderClick, this );
 
     Bind( SYMBOL_PRESELECTED, &LIB_TREE::onPreselect, this );
 
@@ -171,7 +177,7 @@ LIB_TREE::~LIB_TREE()
     m_debounceTimer->Stop();
 
     // Save the column widths to the config file
-    m_adapter->SaveColWidths();
+    m_adapter->SaveSettings();
 }
 
 
@@ -573,8 +579,14 @@ void LIB_TREE::onPreselect( wxCommandEvent& aEvent )
 }
 
 
-void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
+void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
 {
+    if( m_skipNextRightClick )
+    {
+        m_skipNextRightClick = false;
+        return;
+    }
+
     if( TOOL_INTERACTIVE* tool = m_adapter->GetContextMenuTool() )
     {
         tool->Activate();
@@ -608,6 +620,35 @@ void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
             }
         }
     }
+}
+
+
+void LIB_TREE::onHeaderContextMenu( wxDataViewEvent& aEvent )
+{
+    ACTION_MENU menu( true, nullptr );
+
+    menu.Add( ACTIONS::selectColumns );
+
+    if( GetPopupMenuSelectionFromUser( menu ) != wxID_NONE )
+    {
+        EDA_REORDERABLE_LIST_DIALOG dlg( m_parent, _( "Select Columns" ),
+                                         m_adapter->GetAvailableColumns(),
+                                         m_adapter->GetShownColumns() );
+
+        if( dlg.ShowModal() == wxID_OK )
+            m_adapter->SetShownColumns( dlg.EnabledList() );
+    }
+
+#if !wxCHECK_VERSION( 3, 1, 0 )
+    // wxGTK 3.0 sends item right click events for header right clicks
+    m_skipNextRightClick = true;
+#endif
+}
+
+
+void LIB_TREE::onHeaderClick( wxDataViewEvent& aEvent )
+{
+
 }
 
 

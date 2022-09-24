@@ -171,6 +171,7 @@ public:
     static TOOL_ACTION activatePointEditor;
     static TOOL_ACTION changeEditMethod;
     static TOOL_ACTION updatePreferences;
+    static TOOL_ACTION selectColumns;
 
     // Suite
     static TOOL_ACTION openPreferences;

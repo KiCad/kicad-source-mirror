@@ -512,6 +512,10 @@ TOOL_ACTION ACTIONS::updateUnits( "common.Control.updateUnits",
 TOOL_ACTION ACTIONS::updatePreferences( "common.Control.updatePreferences",
         AS_GLOBAL );
 
+TOOL_ACTION ACTIONS::selectColumns( "common.Control.selectColumns",
+                                    AS_GLOBAL, 0, "",
+                                    _( "Select Columns" ) );
+
 TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
         AS_GLOBAL,
         MD_CTRL + 'U', LEGACY_HK_NAME( "Switch Units" ),

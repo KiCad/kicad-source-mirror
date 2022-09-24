@@ -138,7 +138,7 @@ public:
      * Save the column widths to the config file. This requires the tree view to still be
      * valid.
      */
-    void SaveColWidths();
+    void SaveSettings();
 
     /**
      * Set the symbol filter type. Must be set before adding libraries
@@ -185,6 +185,16 @@ public:
     {
         doAddColumn( aHeader, false );
     }
+
+    std::vector<wxString> GetAvailableColumns() const { return m_availableColumns; }
+
+    std::vector<wxString> GetShownColumns() const { return m_shownColumns; }
+
+    /**
+     * Sets which columns are shown in the widget.  Invalid column names are discarded.
+     * @param aColumnNames is an ordered list of column names to show
+     */
+    void SetShownColumns( const std::vector<wxString>& aColumnNames );
 
     /**
      * Sort the tree and assign ranks after adding libraries.
@@ -407,6 +417,8 @@ private:
 protected:
     void addColumnIfNecessary( const wxString& aHeader );
 
+    void recreateColumns();
+
     LIB_TREE_NODE_ROOT           m_tree;
     std::map<unsigned, wxString> m_colIdxMap;
 
@@ -424,6 +436,8 @@ private:
     std::vector<wxDataViewColumn*>        m_columns;
     std::map<wxString, wxDataViewColumn*> m_colNameMap;
     std::map<wxString, int>               m_colWidths;
+    std::vector<wxString>                 m_availableColumns;
+    std::vector<wxString>                 m_shownColumns;   // Stored in display order
 };
 
 #endif // LIB_TREE_MODEL_ADAPTER_H

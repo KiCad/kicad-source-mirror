@@ -200,7 +200,9 @@ protected:
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
-    void onContextMenu( wxDataViewEvent& aEvent );
+    void onItemContextMenu( wxDataViewEvent& aEvent );
+    void onHeaderClick( wxDataViewEvent& aEvent );
+    void onHeaderContextMenu( wxDataViewEvent& aEvent );
 
     void onDebounceTimer( wxTimerEvent& aEvent );
 
@@ -217,6 +219,8 @@ protected:
 
     LIB_ID           m_last_libid;
     wxString         m_recentSearchesKey;
+
+    bool             m_skipNextRightClick;
 };
 
 ///< Custom event sent when a new symbol is preselected

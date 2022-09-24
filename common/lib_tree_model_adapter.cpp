@@ -77,10 +77,20 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
     m_colWidths[ wxT( "Item" ) ] = 300;
     m_colWidths[ wxT( "Description" ) ] = 600;
 
+    m_availableColumns = { wxT( "Item" ), wxT( "Description" ) };
+
     APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
 
     for( const std::pair<const wxString, int>& pair : cfg->m_LibTree.column_widths )
         m_colWidths[pair.first] = pair.second;
+
+    m_shownColumns = cfg->m_LibTree.columns;
+
+    if( m_shownColumns.empty() )
+        m_shownColumns = m_availableColumns;
+
+    if( m_shownColumns[0] != wxT( "Item" ) )
+        m_shownColumns.insert( m_shownColumns.begin(), wxT( "Item" ) );
 }
 
 
@@ -88,21 +98,17 @@ LIB_TREE_MODEL_ADAPTER::~LIB_TREE_MODEL_ADAPTER()
 {}
 
 
-void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
+void LIB_TREE_MODEL_ADAPTER::SaveSettings()
 {
     if( m_widget )
     {
         APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
 
-        cfg->m_LibTree.columns.clear();
+        cfg->m_LibTree.columns = GetShownColumns();
         cfg->m_LibTree.column_widths.clear();
 
-        // TODO(JE) ordering?
         for( const std::pair<const wxString, wxDataViewColumn*>& pair : m_colNameMap )
-        {
-            cfg->m_LibTree.columns.emplace_back( pair.first );
             cfg->m_LibTree.column_widths[pair.first] = pair.second->GetWidth();
-        }
     }
 }
 
@@ -245,19 +251,25 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
     m_widget = aDataViewCtrl;
     aDataViewCtrl->SetIndent( kDataViewIndent );
     aDataViewCtrl->AssociateModel( this );
-    aDataViewCtrl->ClearColumns();
+    recreateColumns();
+}
 
-    // These two columns are always added; other columns may be added by specific libraries.
-    // Do not use translated names here.
+
+void LIB_TREE_MODEL_ADAPTER::recreateColumns()
+{
+    m_widget->ClearColumns();
+
+    m_columns.clear();
+    m_colIdxMap.clear();
+    m_colNameMap.clear();
+
+    // The Item column is always shown
     doAddColumn( wxT( "Item" ) );
 
-    // TODO(JE) make Description optional
-    doAddColumn( wxT( "Description" ) );
-
-    for( auto& it : m_colNameMap )
+    for( const wxString& colName : m_shownColumns )
     {
-        if( !it.second )
-            doAddColumn( it.first, false );
+        if( !m_colNameMap.count( colName ) )
+            doAddColumn( colName, false );
     }
 }
 
@@ -327,6 +339,18 @@ void LIB_TREE_MODEL_ADAPTER::addColumnIfNecessary( const wxString& aHeader )
 
     // Columns will be created later
     m_colNameMap[aHeader] = nullptr;
+    m_availableColumns.emplace_back( aHeader );
+}
+
+
+void LIB_TREE_MODEL_ADAPTER::SetShownColumns( const std::vector<wxString>& aColumnNames )
+{
+    bool recreate = m_shownColumns != aColumnNames;
+
+    m_shownColumns = aColumnNames;
+
+    if( recreate && m_widget )
+        recreateColumns();
 }
 
 
@@ -548,10 +572,6 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
 
         break;
 
-    case DESC_COL:
-        aVariant = node->m_Desc;
-        break;
-
     default:
         if( m_colIdxMap.count( aCol ) )
         {
@@ -559,6 +579,8 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
 
             if( node->m_Fields.count( key ) )
                 aVariant = node->m_Fields.at( key );
+            else if( key == wxT( "Description" ) )
+                aVariant = node->m_Desc;
             else
                 aVariant = wxEmptyString;
         }

@@ -107,7 +107,7 @@ protected:
     void onActivated( wxTreeListEvent& aEvent );
 
     /**
-     * Method onContextMenu
+     * Method onItemContextMenu
      * Handle right-click on a row.
      */
     void onContextMenu( wxTreeListEvent& aEvent );

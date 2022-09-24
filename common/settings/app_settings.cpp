@@ -79,6 +79,8 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<int>( "color_picker.default_tab",
             &m_ColorPicker.default_tab, 0 ) );
 
+    m_params.emplace_back( new PARAM_LIST<wxString>( "lib_tree.columns", &m_LibTree.columns, {} ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "lib_tree.column_widths",
             [&]() -> nlohmann::json
             {
