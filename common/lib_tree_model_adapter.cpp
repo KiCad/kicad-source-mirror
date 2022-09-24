@@ -446,23 +446,6 @@ void LIB_TREE_MODEL_ADAPTER::FinishTreeInitialization()
 
 void LIB_TREE_MODEL_ADAPTER::OnSize( wxSizeEvent& aEvent )
 {
-    for( auto& it : m_colNameMap )
-    {
-        if( it.second == m_columns[0] )
-        {
-            // On GTK, this value in not immediately available, so don't
-            // set it to zero just because we haven't fully initialized
-            if( it.second->GetWidth() > 0 )
-               m_colWidths[it.first] = it.second->GetWidth();
-
-            continue;
-        }
-
-        wxASSERT( m_colWidths.count( it.first ) );
-        it.second->SetWidth( m_colWidths[it.first] );
-    }
-
-    // Mandatory in any wxSizeEvent handler:
     aEvent.Skip();
 }
 
