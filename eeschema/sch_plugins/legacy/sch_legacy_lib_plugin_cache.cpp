@@ -1377,7 +1377,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& 
 
     if( aMap )
     {
-        for( auto entry : *aMap )
+        for( auto& entry : *aMap )
         {
             LIB_SYMBOL* symbol = entry.second;
 

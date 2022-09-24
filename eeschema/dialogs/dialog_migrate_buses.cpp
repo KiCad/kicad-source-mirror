@@ -105,7 +105,7 @@ void DIALOG_MIGRATE_BUSES::updateUi()
     m_migration_list->InsertColumn( 2, _( "New Label" ) );
     m_migration_list->InsertColumn( 3, _( "Status" ) );
 
-    for( auto item : m_items )
+    for( auto& item : m_items )
     {
         wxString old = item.labels[0];
         for( unsigned j = 1; j < item.labels.size(); j++ )

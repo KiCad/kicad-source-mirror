@@ -767,7 +767,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     {
         const SCH_SYMBOL* origSymbol = cmp.second.cmp;
 
-        for( auto unitEntry : cmp.second.units )
+        for( auto& unitEntry : cmp.second.units )
         {
             if( unitEntry.second == false )
                 continue; // unit has been already processed

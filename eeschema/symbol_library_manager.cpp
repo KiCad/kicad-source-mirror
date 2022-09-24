@@ -1029,7 +1029,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
 
             aLibTable->SaveSymbol( m_libName, parentSymbol );
 
-            for( auto entry : derivedSymbols )
+            for( auto& entry : derivedSymbols )
             {
                 std::shared_ptr<SYMBOL_BUFFER> symbol = GetBuffer( entry );
 
