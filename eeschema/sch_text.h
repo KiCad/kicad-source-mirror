@@ -108,9 +108,6 @@ enum LABEL_FLAG_SHAPE
 };
 
 
-extern const char* SheetLabelType[];    /* names of types of labels */
-
-
 class SCH_TEXT : public SCH_ITEM, public EDA_TEXT
 {
 public:

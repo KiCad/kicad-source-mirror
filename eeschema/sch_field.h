@@ -119,10 +119,20 @@ public:
 
     wxString GetShownText( int aDepth = 0 ) const override;
 
+    COLOR4D GetFieldColor() const;
+
+    void SetLastResolvedState( const SCH_ITEM* aItem ) override
+    {
+        const SCH_FIELD* aField = dynamic_cast<const SCH_FIELD*>( aItem );
+
+        if( aField )
+            m_lastResolvedColor = aField->m_lastResolvedColor;
+    }
+
     /**
      * Adjusters to allow EDA_TEXT to draw/print/etc. text in absolute coords.
      */
-    EDA_ANGLE         GetDrawRotation() const override;
+    EDA_ANGLE GetDrawRotation() const override;
 
     const BOX2I GetBoundingBox() const override;
 
@@ -242,6 +252,8 @@ private:
     mutable bool                                        m_renderCacheValid;
     mutable VECTOR2I                                    m_renderCachePos;
     mutable std::vector<std::unique_ptr<KIFONT::GLYPH>> m_renderCache;
+
+    mutable COLOR4D                                     m_lastResolvedColor;
 };
 
 

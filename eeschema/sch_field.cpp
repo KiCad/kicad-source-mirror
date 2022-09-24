@@ -64,7 +64,8 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
     m_name( aName ),
     m_showName( false ),
     m_allowAutoPlace( true ),
-    m_renderCacheValid( false )
+    m_renderCacheValid( false ),
+    m_lastResolvedColor( COLOR4D::UNSPECIFIED )
 {
     SetTextPos( aPos );
     SetId( aFieldId );  // will also set the layer
@@ -91,6 +92,8 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
 
     m_renderCacheValid = aField.m_renderCacheValid;
     m_renderCachePos = aField.m_renderCachePos;
+
+    m_lastResolvedColor = aField.m_lastResolvedColor;
 }
 
 
@@ -113,6 +116,8 @@ SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
 
     m_renderCacheValid = aField.m_renderCacheValid;
     m_renderCachePos = aField.m_renderCachePos;
+
+    m_lastResolvedColor = aField.m_lastResolvedColor;
 
     return *this;
 }
@@ -387,6 +392,26 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
     std::swap( m_allowAutoPlace, item->m_allowAutoPlace );
     SwapText( *item );
     SwapAttributes( *item );
+
+    std::swap( m_lastResolvedColor, item->m_lastResolvedColor );
+}
+
+
+COLOR4D SCH_FIELD::GetFieldColor() const
+{
+    if( GetTextColor() != COLOR4D::UNSPECIFIED )
+    {
+        m_lastResolvedColor = GetTextColor();
+    }
+    else
+    {
+        SCH_LABEL_BASE* parentLabel = dynamic_cast<SCH_LABEL_BASE*>( GetParent() );
+
+        if( parentLabel && !parentLabel->IsConnectivityDirty() )
+            m_lastResolvedColor = parentLabel->GetEffectiveNetClass()->GetSchematicColor();
+    }
+
+    return m_lastResolvedColor;
 }
 
 

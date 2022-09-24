@@ -355,7 +355,7 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 
 
 COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDrawingShadows,
-            bool aDimmed ) const
+                                     bool aDimmed ) const
 {
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
@@ -404,6 +404,14 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDr
                 color = shape->GetFillColor();
             else
                 color = shape->GetStroke().GetColor();
+        }
+        else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
+        {
+            color = static_cast<const SCH_LABEL_BASE*>( aItem )->GetLabelColor();
+        }
+        else if( aItem->Type() == SCH_FIELD_T )
+        {
+            color = static_cast<const SCH_FIELD*>( aItem )->GetFieldColor();
         }
         else if( aItem->Type() == SCH_TEXTBOX_T )
         {
@@ -1898,8 +1906,9 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     {
         if( aText->IsDangling() )
         {
-            drawDanglingSymbol( aText->GetTextPos(), color, schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ),
-                                drawingShadows, aText->IsBrightened() );
+            drawDanglingSymbol( aText->GetTextPos(), color,
+                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), drawingShadows,
+                                aText->IsBrightened() );
         }
 
         return;

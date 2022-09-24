@@ -156,7 +156,8 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const VECTOR2I& aPos, const wxString& aText, KIC
         SCH_TEXT( aPos, aText, aType ),
         m_shape( L_UNSPECIFIED ),
         m_connectionType( CONNECTION_TYPE::NONE ),
-        m_isDangling( true )
+        m_isDangling( true ),
+        m_lastResolvedColor( COLOR4D::UNSPECIFIED )
 {
     SetMultilineAllowed( false );
     ClearFieldsAutoplaced();    // fiels are not yet autoplaced.
@@ -167,7 +168,8 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const SCH_LABEL_BASE& aLabel ) :
         SCH_TEXT( aLabel ),
         m_shape( aLabel.m_shape ),
         m_connectionType( aLabel.m_connectionType ),
-        m_isDangling( aLabel.m_isDangling )
+        m_isDangling( aLabel.m_isDangling ),
+        m_lastResolvedColor( aLabel.m_lastResolvedColor )
 {
     SetMultilineAllowed( false );
 
@@ -254,6 +256,18 @@ void SCH_LABEL_BASE::SwapData( SCH_ITEM* aItem )
     std::swap( m_shape, label->m_shape );
     std::swap( m_connectionType, label->m_connectionType );
     std::swap( m_isDangling, label->m_isDangling );
+    std::swap( m_lastResolvedColor, label->m_lastResolvedColor );
+}
+
+
+COLOR4D SCH_LABEL_BASE::GetLabelColor() const
+{
+    if( GetTextColor() != COLOR4D::UNSPECIFIED )
+        m_lastResolvedColor = GetTextColor();
+    else if( !IsConnectivityDirty() )
+        m_lastResolvedColor = GetEffectiveNetClass()->GetSchematicColor();
+
+    return m_lastResolvedColor;
 }
 
 

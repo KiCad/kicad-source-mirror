@@ -31,9 +31,6 @@
 #include <sch_connection.h>   // for CONNECTION_TYPE
 
 
-extern const char* SheetLabelType[];    /* names of types of labels */
-
-
 class SCH_LABEL_BASE : public SCH_TEXT
 {
 public:
@@ -75,6 +72,16 @@ public:
 
     LABEL_FLAG_SHAPE GetShape() const override        { return m_shape; }
     void SetShape( LABEL_FLAG_SHAPE aShape ) override { m_shape = aShape; }
+
+    COLOR4D GetLabelColor() const;
+
+    void SetLastResolvedState( const SCH_ITEM* aItem ) override
+    {
+        const SCH_LABEL_BASE* aLabel = dynamic_cast<const SCH_LABEL_BASE*>( aItem );
+
+        if( aLabel )
+            m_lastResolvedColor = aLabel->m_lastResolvedColor;
+    }
 
     static const wxString GetDefaultFieldName( const wxString& aName, bool aUseDefaultName );
 
@@ -203,6 +210,8 @@ protected:
     CONNECTION_TYPE         m_connectionType;
     bool                    m_isDangling;
     bool                    m_autoRotateOnPlacement = false;
+
+    mutable COLOR4D         m_lastResolvedColor;
 };
 
 
