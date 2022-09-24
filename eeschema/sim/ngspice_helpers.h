@@ -48,7 +48,8 @@ class NGSPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_SPICE, public SIMULATION_M
 {
 public:
     NGSPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic ) :
-            NETLIST_EXPORTER_SPICE( aSchematic )
+            NETLIST_EXPORTER_SPICE( aSchematic ),
+            m_options( 0 )
     {
     }
     virtual ~NGSPICE_CIRCUIT_MODEL() {}

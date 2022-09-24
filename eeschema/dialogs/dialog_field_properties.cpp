@@ -133,6 +133,10 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     m_verticalJustification = aTextItem->GetVertJustify();
     m_horizontalJustification = aTextItem->GetHorizJustify();
     m_isVisible = aTextItem->IsVisible();
+
+    // These should be initialized in the child classes implementing dialogs for lib and sch items.
+    m_isNameVisible  = false;
+    m_allowAutoplace = true;
 }
 
 

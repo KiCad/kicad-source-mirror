@@ -53,7 +53,8 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         m_undoRedoBlocked( false ),
         m_selectionFilterPanel( nullptr ),
         m_appearancePanel( nullptr ),
-        m_propertiesPanel( nullptr )
+        m_propertiesPanel( nullptr ),
+        m_tabbedPanel( nullptr )
 {
     Bind( wxEVT_IDLE,
           [this]( wxIdleEvent& aEvent )

@@ -40,6 +40,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_ViaOpacity( 1.0 ),
         m_PadOpacity( 1.0 ),
         m_ZoneOpacity( 0.6 ),
+        m_ImageOpacity( 0.6 ),
         m_SelectionFilter(),
         m_project( aProject )
 {

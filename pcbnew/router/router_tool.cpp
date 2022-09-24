@@ -175,7 +175,8 @@ static const TOOL_ACTION ACT_SwitchCornerMode( "pcbnew.InteractiveRouter.SwitchR
 
 ROUTER_TOOL::ROUTER_TOOL() :
         TOOL_BASE( "pcbnew.InteractiveRouter" ),
-        m_lastTargetLayer( UNDEFINED_LAYER )
+        m_lastTargetLayer( UNDEFINED_LAYER ),
+        m_originalActiveLayer( UNDEFINED_LAYER )
 {
 }
 
@@ -433,7 +434,8 @@ ROUTER_TOOL::~ROUTER_TOOL()
 
 bool ROUTER_TOOL::Init()
 {
-    m_lastTargetLayer = UNDEFINED_LAYER;
+    m_lastTargetLayer     = UNDEFINED_LAYER;
+    m_originalActiveLayer = UNDEFINED_LAYER;
 
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
 

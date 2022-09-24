@@ -58,7 +58,9 @@ wxString OUTLINE_FONT::FreeTypeVersion()
     if( !m_freeType )
         FT_Init_FreeType( &m_freeType );
 
-    FT_Int major, minor, patch;
+    FT_Int major = 0;
+    FT_Int minor = 0;
+    FT_Int patch = 0;
     FT_Library_Version( m_freeType, &major, &minor, &patch );
 
     return wxString::Format( "%d.%d.%d", major, minor, patch );

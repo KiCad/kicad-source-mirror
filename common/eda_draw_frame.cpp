@@ -91,6 +91,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_auxiliaryToolBar    = nullptr;
     m_gridSelectBox       = nullptr;
     m_zoomSelectBox       = nullptr;
+    m_searchPane          = nullptr;
     m_firstRunDialogSetting = 0;
     m_undoRedoCountMax    = DEFAULT_MAX_UNDO_ITEMS;
 

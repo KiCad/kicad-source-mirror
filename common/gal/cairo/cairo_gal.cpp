@@ -1323,6 +1323,7 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     m_tempBuffer = 0;
     m_savedBuffer = 0;
     m_validCompositor = false;
+    m_currentTarget = TARGET_NONCACHED;
     SetTarget( TARGET_NONCACHED );
 
     m_bitmapBuffer = nullptr;
