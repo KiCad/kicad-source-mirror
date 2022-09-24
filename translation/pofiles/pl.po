@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-15 14:16+0000\n"
+"PO-Revision-Date: 2022-09-25 11:47+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -3013,13 +3013,12 @@ msgid "Show icons in menus"
 msgstr "Pokaż ikony w menu"
 
 #: common/dialogs/panel_common_settings_base.cpp:124
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "Pokaż ikony w menu"
+msgstr "Pokaż paski przewijania w oknach edycyjnych"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "Ta zmiana będzie obowiązywała po ponownym uruchomieniu edytora."
 
 #: common/dialogs/panel_common_settings_base.cpp:133
 msgid "Icon theme:"
@@ -4353,9 +4352,8 @@ msgstr "Rysuj element"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "Numer"
+msgstr "Pole numerowane"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1198
 msgid "Rect"
@@ -4428,9 +4426,8 @@ msgid "Points"
 msgstr "Punkty"
 
 #: common/eda_shape.cpp:607
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Numer pola"
+msgstr "Ramka z numerami pól"
 
 #: common/eda_shape.cpp:613 common/eda_text.cpp:1042
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -5875,9 +5872,8 @@ msgid "Find"
 msgstr "Znajdź"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Search for items"
-msgstr "Wyszukaj w innych elementach tekstowych footprintów"
+msgstr "Wyszukaj w elementach"
 
 #: common/tool/actions.cpp:215
 msgid "Find text"
@@ -6164,7 +6160,7 @@ msgstr "Przełącza na kursor pełnoekranowy"
 
 #: common/tool/actions.cpp:546
 msgid "Inactive Layer View Mode"
-msgstr "Tryb wyświetlania nieaktywnej warstwy"
+msgstr "Tryb ukrywania nieaktywnych warstw"
 
 #: common/tool/actions.cpp:547
 msgid "Toggle inactive layers between normal and dimmed"
@@ -6173,7 +6169,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:553
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "Tryb wyświetlana nieaktywnej warstwy (3-stany)"
+msgstr "Tryb wyświetlana nieaktywnych warstw (3-stany)"
 
 #: common/tool/actions.cpp:554
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
@@ -6545,7 +6541,7 @@ msgstr "Wybierz plik"
 
 #: common/widgets/lib_tree.cpp:279
 msgid "recent searches"
-msgstr ""
+msgstr "ostatnie wyszukiwania"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -7546,20 +7542,20 @@ msgstr ""
 "nie został znaleziony. Wtyczka nie będzie dostępna."
 
 #: eeschema/component_references_lister.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Element nie ma numeracji: %s%s (część %d)\n"
+msgstr "Element nie ma numeracji: %s%s (część %d)"
 
 #: eeschema/component_references_lister.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Element nie ma numeracji: %s%s\n"
+msgstr "Element nie ma numeracji: %s%s"
 
 #: eeschema/component_references_lister.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
 msgstr ""
-"Błąd: symbol %s%s%s (część %d) przekracza liczbę zdefiniowanych części (%d)\n"
+"Błąd: symbol %s%s%s (część %d) przekracza liczbę zdefiniowanych części (%d)"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -11623,9 +11619,8 @@ msgstr ""
 "lub obudowy"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Do not populate"
-msgstr "Nie eksportuj"
+msgstr "Nie wypełniaj"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 msgid "Update Symbol from Library..."
@@ -12793,9 +12788,8 @@ msgid "No Connection"
 msgstr "Nie podłączony"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Nierozwiązana zmienna tekstowa na arkuszu."
+msgstr "Nierozwiązywalna zmienna tekstowa na arkuszu"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -12808,9 +12802,8 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Różne footprinty przydzielone do %s oraz %s"
 
 #: eeschema/erc.cpp:438
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
-msgstr "Piny z flagą \"nie połączone\" są połączone"
+msgstr "Piny z flagą 'nie połączone' są połączone"
 
 #: eeschema/erc.cpp:563
 #, c-format
@@ -12823,24 +12816,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s jest połączony zarówno do %s jak i %s"
 
 #: eeschema/erc.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "Obecna konfiguracja nie zawiera biblioteki '%s'."
+msgstr "Obecna konfiguracja nie zawiera biblioteki '%s'"
 
 #: eeschema/erc.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "Biblioteka '%s' nie jest włączona w bieżącej konfiguracji."
+msgstr "Biblioteka '%s' nie jest włączona w bieżącej konfiguracji"
 
 #: eeschema/erc.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'."
+msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'"
 
 #: eeschema/erc.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'."
+msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -14620,19 +14613,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarchiczny pin arkusza %s"
 
 #: eeschema/sch_symbol.cpp:1156
-#, fuzzy
 msgid "Excluded from BOM"
 msgstr "Wyklucz z BOM"
 
 #: eeschema/sch_symbol.cpp:1161
-#, fuzzy
 msgid "Excluded from board"
 msgstr "Wyklucz z płytki"
 
 #: eeschema/sch_symbol.cpp:1166
-#, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1537
 msgid "Power symbol"
@@ -15653,7 +15643,7 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"Nie wszystkie biblioteki symboli mogą zostać załadowane.   Użyj Menadżera "
+"Nie wszystkie biblioteki symboli mogą zostać załadowane.   Użyj Menedżera "
 "Bibliotek Symboli \n"
 "by naprawić ścieżkę dostępu lub dodać albo usunąć biblioteki."
 
@@ -16395,11 +16385,11 @@ msgstr "Uaktualnia symbol by dołączyć zmiany wykonane w symbolu nadrzędnym"
 
 #: eeschema/tools/ee_actions.cpp:186
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "Ustaw wyświetlaną nazwę części..."
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr ""
+msgstr "Ustala wyświetlaną nazwę dla części składowej"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -17591,13 +17581,13 @@ msgid "Symbol is not derived from another symbol."
 msgstr "Symbol nie pochodzi z innego symbolu."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Enter display name for unit %s"
-msgstr "Wprowadź numer strony dla ścieżki arkusza %s"
+msgstr "Wprowadź wyświetlaną nazwę dla części składowej %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:673
 msgid "Set Unit Display Name"
-msgstr ""
+msgstr "Ustaw wyświetlaną nazwę części"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -18581,11 +18571,11 @@ msgstr "Wczytuje plik skompresowanego archiwum (pliki Gerber i Excellon)"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Show Layers Manager"
-msgstr "Pokaż menadżera warstw"
+msgstr "Pokaż menedżera warstw"
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Show or hide the layer manager"
-msgstr "Pokaż/Ukryj pasek menadżera warstw"
+msgstr "Pokaż/Ukryj pasek menedżera warstw"
 
 #: gerbview/tools/gerbview_actions.cpp:75
 msgid "List DCodes..."
@@ -26930,9 +26920,8 @@ msgid "angle"
 msgstr "kąt"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
-#, fuzzy
 msgid "at"
-msgstr "t"
+msgstr "na"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:733
 msgid "radius"
@@ -26945,9 +26934,8 @@ msgstr "liczba wierzchołków %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:745
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2178
-#, fuzzy
 msgid "Number box"
-msgstr "Numer"
+msgstr "Ramka z numerem"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:754
 msgid "Unknown primitive"
@@ -28475,7 +28463,7 @@ msgstr "Właściwości obszaru z regułami"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:49
 msgid "Move items on:"
-msgstr "Przesuń elementy na:"
+msgstr "Przesuń elementy z:"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:50
 msgid "To layer:"
@@ -30169,7 +30157,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30546,6 +30533,14 @@ msgstr ""
 "`physical_hole_clearance` są sprawdzane.\n"
 "<br>\n"
 "\n"
+"### Elementy\n"
+"\n"
+" * `A` &nbsp;&nbsp; _pierwszy (lub tylko jeden) element poddany testowi_\n"
+" * `B` &nbsp;&nbsp; _drugi element poddany testowi (dla testów binarnych)_\n"
+" * `L` &nbsp;&nbsp; _warstwa poddawana testowi_\n"
+"\n"
+"<br>\n"
+"\n"
 "### Typy elementów\n"
 "\n"
 " * buried\\_via\n"
@@ -30662,8 +30657,8 @@ msgstr ""
 "\n"
 "    A.inDiffPair('<nazwa_sieci>')\n"
 "Prawdziwe jeśli `A` posiada sieć, która jest składnikiem pary różnicowej.\n"
-"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład `inDiffPair('/"
-"CLK')`\n"
+"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład "
+"`inDiffPair('/CLK')`\n"
 "odnosi się do sieci zarówno `/CLK_P` jak i `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
@@ -30685,8 +30680,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy"
-"\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br><br>\n"
 "\n"
 "    !!! A.insideCourtyard('<oznaczenie_footprintu>') !!!\n"
@@ -33759,24 +33754,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "Usunięto dla %s atrybut 'wyklucz z BOM'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "Dodaj dla %s atrybut 'wyklucz z BOM'."
+msgstr "Dodaj dla %s atrybut 'wyklucz z pliku położeń'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "Usuń dla %s atrybut 'wyklucz z BOM'."
+msgstr "Usuń dla %s atrybut 'wyklucz z pliku położeń'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "Dodano dla %s atrybut 'wyklucz z BOM'."
+msgstr "Dodano dla %s atrybut 'wyklucz z pliku położeń'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "Usunięto dla %s atrybut 'wyklucz z BOM'."
+msgstr "Usunięto dla %s atrybut 'wyklucz z pliku położeń'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:497
 #, c-format
@@ -34224,9 +34219,8 @@ msgid "Export netlist used to update schematics"
 msgstr "Eksport listy sieci używanej do aktualizacji schematów"
 
 #: pcbnew/pcb_edit_frame.cpp:310
-#, fuzzy
 msgid "Search"
-msgstr "Wyszukaj tekst"
+msgstr "Wyszukaj"
 
 #: pcbnew/pcb_edit_frame.cpp:382
 msgid "New PCB file is unsaved"
@@ -38311,11 +38305,11 @@ msgstr "Pokaż Inspektora listy sieci"
 
 #: pcbnew/tools/pcb_actions.cpp:832
 msgid "Show Appearance Manager"
-msgstr "Pokaż Menedżera wyglądu"
+msgstr "Pokaż menedżera wyglądu"
 
 #: pcbnew/tools/pcb_actions.cpp:832
 msgid "Show/hide the appearance manager"
-msgstr "Pokazuje lub ukrywa Menedżera wyglądu"
+msgstr "Pokazuje lub ukrywa menedżera wyglądu"
 
 #: pcbnew/tools/pcb_actions.cpp:837
 msgid "Show Properties Panel"
@@ -38326,14 +38320,12 @@ msgid "Show/hide the properties panel"
 msgstr "Pokazuje lub ukrywa panel z właściwościami"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "Pokaż panel z właściwościami"
+msgstr "Pokaż panel wyszukiwania"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Pokazuje lub ukrywa panel z właściwościami"
+msgstr "Pokazuje lub ukrywa panel wyszukiwania"
 
 #: pcbnew/tools/pcb_actions.cpp:847
 msgid "Flip Board View"
@@ -38954,30 +38946,32 @@ msgstr ""
 "końca nitki pomocniczej."
 
 #: pcbnew/tools/pcb_actions.cpp:1465
-#, fuzzy
 msgid "Route Selected"
-msgstr "Grupuj wybrane"
+msgstr "Trasuj wybrane"
 
 #: pcbnew/tools/pcb_actions.cpp:1466
 msgid "Sequentially route selected items from ratsnest anchor."
 msgstr ""
+"Kolejno trasuje wybrane elementy z miejsca zakotwiczenia nitek "
+"wspomagających."
 
 #: pcbnew/tools/pcb_actions.cpp:1472
-#, fuzzy
 msgid "Route Selected From Other End"
-msgstr "Trasuj z przeciwnego końca"
+msgstr "Trasuj wybrane z przeciwnego końca"
 
 #: pcbnew/tools/pcb_actions.cpp:1473
 msgid "Sequentially route selected items from other end of ratsnest anchor."
 msgstr ""
+"Kolejno trasuje wybrane elementy do miejsca zakotwiczenia nitek "
+"wspomagających."
 
 #: pcbnew/tools/pcb_actions.cpp:1479
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "Spróbuj zakończyć wybraną (Autorouter)"
 
 #: pcbnew/tools/pcb_actions.cpp:1480
 msgid "Sequentially attempt to automatically route all selected pads."
-msgstr ""
+msgstr "Kolejno próbuje trasować ścieżki z wybranego pola lutowniczego."
 
 #: pcbnew/tools/pcb_actions.cpp:1486
 msgid ""
