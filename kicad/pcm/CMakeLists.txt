@@ -63,6 +63,18 @@ target_include_directories(
     PRIVATE $<TARGET_PROPERTY:common,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+# Copy the schema to the build directory when building outside the source tree
+# to allow for proper running of kicad from the build directory.
+if( NOT (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR} ) )
+    file( GLOB SCHEMA_FILES ${CMAKE_CURRENT_SOURCE_DIR}/schemas/*.json )
+
+    add_custom_target( schema_build_copy ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/schemas ${CMAKE_BINARY_DIR}/schemas
+        DEPENDS ${SCHEMA_FILES}
+        COMMENT "Copying schema files into build directory"
+        )
+endif()
+
 INSTALL( DIRECTORY
     schemas
     DESTINATION ${KICAD_DATA}
