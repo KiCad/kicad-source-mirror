@@ -596,14 +596,14 @@ void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
             {
                 menu.Add( ACTIONS::unpinLibrary );
 
-                if( GetPopupMenuSelectionFromUser( menu ) )
+                if( GetPopupMenuSelectionFromUser( menu ) != wxID_NONE )
                     m_adapter->UnpinLibrary( current );
             }
             else
             {
                 menu.Add( ACTIONS::pinLibrary );
 
-                if( GetPopupMenuSelectionFromUser( menu ) )
+                if( GetPopupMenuSelectionFromUser( menu ) != wxID_NONE )
                     m_adapter->PinLibrary( current );
             }
         }
