@@ -69,7 +69,13 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
                                              return pv.version == aVersion;
                                          } );
 
-        wxASSERT_MSG( find_pkgver != aPackage.versions.end(), "Package version not found" );
+        if( find_pkgver == aPackage.versions.end() )
+        {
+            m_reporter->PCMReport( wxString::Format( _( "Version %s of package %s not found!" ),
+                                                     aVersion, aPackage.identifier ),
+                                   RPT_SEVERITY_ERROR );
+            return;
+        }
 
         if( !wxDirExists( file_path.GetPath() )
             && !wxFileName::Mkdir( file_path.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
@@ -154,7 +160,13 @@ void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
                                     return pv.version == aVersion;
                                 } );
 
-    wxASSERT_MSG( pkgver != aPackage.versions.end(), "Package version not found" );
+    if( pkgver == aPackage.versions.end() )
+    {
+        m_reporter->PCMReport( wxString::Format( _( "Version %s of package %s not found!" ),
+                                                 aVersion, aPackage.identifier ),
+                               RPT_SEVERITY_ERROR );
+        return;
+    }
 
     // wxRegEx is not CopyConstructible hence the weird choice of forward_list
     std::forward_list<wxRegEx> keep_on_update;
