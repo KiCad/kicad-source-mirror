@@ -97,7 +97,7 @@ VVIA* DRAGGER::checkVirtualVia( const VECTOR2D& aP, SEGMENT* aSeg )
         return nullptr;
     }
 
-    for( auto lnk : jt->LinkList() )
+    for( auto& lnk : jt->LinkList() )
     {
         if( lnk.item->IsVirtual() && lnk.item->OfKind( ITEM::VIA_T ))
         {

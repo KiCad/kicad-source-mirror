@@ -365,17 +365,17 @@ int DIALOG_SIM_SETTINGS::ShowModal()
         { m_noiseRef, m_noiseRef->GetStringSelection() }
     };
 
-    for( auto c : cmbNet )
+    for( auto& c : cmbNet )
         c.first->Clear();
 
     for( const auto& net : m_circuitModel->GetNets() )
     {
-        for( auto c : cmbNet )
+        for( auto& c : cmbNet )
             c.first->Append( net );
     }
 
     // Try to restore the previous selection, if possible
-    for( auto c : cmbNet )
+    for( auto& c : cmbNet )
     {
         int idx = c.first->FindString( c.second );
 

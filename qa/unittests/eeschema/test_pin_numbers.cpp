@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE( ComparePinNumbers )
 
     };
 
-    for( auto el : cases )
+    for( auto& el : cases )
     {
         int retval = PIN_NUMBERS::Compare( el.m_lhs, el.m_rhs );
         wxString msg;

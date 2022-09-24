@@ -1256,7 +1256,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::HasDerivedSymbols( const wxString& aPar
 
 void SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetRootSymbolNames( wxArrayString& aRootSymbolNames )
 {
-    for( auto entry : m_symbols )
+    for( auto& entry : m_symbols )
     {
         if( entry->GetSymbol()->IsAlias() )
             continue;

@@ -37,7 +37,7 @@ static bool pluginHandlesExt( const GRAPHICS_IMPORT_PLUGIN& aPlugin, const std::
 {
     const auto exts = aPlugin.GetFileExtensions();
 
-    for( auto ext : exts )
+    for( const auto& ext : exts )
     {
         std::regex ext_reg( ext );
 

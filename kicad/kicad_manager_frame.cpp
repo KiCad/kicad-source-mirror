@@ -437,7 +437,7 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
     std::vector<std::string> gerberExts( GerberFileExtensions );
     gerberExts.push_back( DrillFileExtension );
 
-    for( auto fileName : m_AcceptedFiles )
+    for( const wxFileName& fileName : m_AcceptedFiles )
     {
         if( IsExtensionAccepted( fileName.GetExt(), gerberExts ) )
         {

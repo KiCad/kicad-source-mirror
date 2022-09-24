@@ -638,7 +638,7 @@ void SIM_PLOT_PANEL::ResetScales()
     if( m_axis_y2 )
         m_axis_y2->ResetDataRange();
 
-    for( auto t : m_traces )
+    for( auto& t : m_traces )
         t.second->UpdateScales();
 }
 

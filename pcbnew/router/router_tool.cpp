@@ -565,7 +565,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     const auto& events = logger->GetEvents();
 
-    for( auto evt : events)
+    for( const auto& evt : events)
     {
         fprintf( f, "event %d %d %d %s\n", evt.p.x, evt.p.y, evt.type,
                  static_cast<const char*>( evt.uuid.AsString().c_str() ) );
