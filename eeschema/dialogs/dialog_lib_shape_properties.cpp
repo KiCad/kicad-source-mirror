@@ -145,7 +145,7 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
         COLOR4D color = m_shape->GetStroke().GetColor();
 
         if( color == COLOR4D::UNSPECIFIED )
-            m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE );
+            color = m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE );
 
         m_fillColorSwatch->SetSwatchColor( color, false );
     }
@@ -185,7 +185,7 @@ void DIALOG_LIB_SHAPE_PROPERTIES::onFill( wxCommandEvent& event )
         COLOR4D color = m_shape->GetStroke().GetColor();
 
         if( color == COLOR4D::UNSPECIFIED )
-            m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE );
+            color = m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE );
 
         m_fillColorSwatch->SetSwatchColor( color, false );
     }
