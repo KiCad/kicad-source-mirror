@@ -266,14 +266,18 @@ bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
         return true;
 
     if( aFPAttributes & FP_EXCLUDE_FROM_POS_FILES )
-        return false;
+    {
+        if( !m_Cfg->m_Render.show_footprints_not_in_posfile )
+            return false;
+    }
 
     if( aFPAttributes & FP_SMD )
         return m_Cfg->m_Render.show_footprints_insert;
-    else if( aFPAttributes & FP_THROUGH_HOLE )
+
+    if( aFPAttributes & FP_THROUGH_HOLE )
         return m_Cfg->m_Render.show_footprints_normal;
-    else
-        return m_Cfg->m_Render.show_footprints_virtual;
+
+    return m_Cfg->m_Render.show_footprints_virtual;
 }
 
 

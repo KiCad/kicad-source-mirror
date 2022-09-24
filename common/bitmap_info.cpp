@@ -487,6 +487,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::show_mod_edge].emplace_back( BITMAPS::show_mod_edge, wxT( "show_mod_edge_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::show_ratsnest].emplace_back( BITMAPS::show_ratsnest, wxT( "show_ratsnest_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::showtrack].emplace_back( BITMAPS::showtrack, wxT( "showtrack_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::show_not_in_posfile].emplace_back( BITMAPS::show_not_in_posfile, wxT( "show_not_in_posfile_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::show_other].emplace_back( BITMAPS::show_other, wxT( "show_other_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::show_tht].emplace_back( BITMAPS::show_tht, wxT( "show_tht_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::show_smt].emplace_back( BITMAPS::show_smt, wxT( "show_smt_24.png" ), 24, wxT( "light" ) );
@@ -866,6 +867,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::show_mod_edge].emplace_back( BITMAPS::show_mod_edge, wxT( "show_mod_edge_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::show_ratsnest].emplace_back( BITMAPS::show_ratsnest, wxT( "show_ratsnest_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::showtrack].emplace_back( BITMAPS::showtrack, wxT( "showtrack_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::show_not_in_posfile].emplace_back( BITMAPS::show_not_in_posfile, wxT( "show_not_in_posfile_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::show_other].emplace_back( BITMAPS::show_other, wxT( "show_other_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::show_tht].emplace_back( BITMAPS::show_tht, wxT( "show_tht_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::show_smt].emplace_back( BITMAPS::show_smt, wxT( "show_smt_dark_24.png" ), 24, wxT( "dark" ) );

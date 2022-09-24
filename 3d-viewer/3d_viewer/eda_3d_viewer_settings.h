@@ -83,6 +83,7 @@ public:
         bool show_footprints_insert;
         bool show_footprints_normal;
         bool show_footprints_virtual;
+        bool show_footprints_not_in_posfile;
         bool show_silkscreen;
         bool show_soldermask;
         bool show_solderpaste;

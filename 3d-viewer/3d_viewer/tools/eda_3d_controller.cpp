@@ -244,6 +244,11 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
         FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_virtual );
         reload = true;
     }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showNotInPosFile ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_not_in_posfile );
+        reload = true;
+    }
     else if( aEvent.IsAction( &EDA_3D_ACTIONS::showBBoxes ) )
     {
         FLIP( m_boardAdapter->m_Cfg->m_Render.opengl_show_model_bbox );
@@ -430,6 +435,8 @@ void EDA_3D_CONTROLLER::setTransitions()
     Go( &EDA_3D_CONTROLLER::ToggleOrtho,        EDA_3D_ACTIONS::toggleOrtho.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showTHT.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showSMD.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showVirtual.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showNotInPosFile.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showVirtual.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showBBoxes.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleRealisticMode.MakeEvent() );

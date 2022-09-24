@@ -222,6 +222,12 @@ TOOL_ACTION EDA_3D_ACTIONS::showVirtual( "3DViewer.Control.attributesOther",
         _( "Toggle Other 3D models" ), _( "Toggle 3D models for 'Other' type components" ),
         BITMAPS::show_other, AF_NONE );
 
+TOOL_ACTION EDA_3D_ACTIONS::showNotInPosFile( "3DViewer.Control.attribute_not_in_posfile",
+        AS_ACTIVE,
+        'P', "",
+        _( "Toggle 3D models not in pos file" ), _( "Toggle 3D models not in pos file" ),
+        BITMAPS::show_not_in_posfile, AF_NONE );
+
 TOOL_ACTION EDA_3D_ACTIONS::showBBoxes( "3DViewer.Control.showBoundingBoxes",
          AS_GLOBAL, 0, "",
          _( "Show Model Bounding Boxes" ), _( "Show Model Bounding Boxes" ),

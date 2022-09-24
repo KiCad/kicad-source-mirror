@@ -464,6 +464,7 @@ set( BMAPS_MID
     show_mod_edge
     show_ratsnest
     showtrack
+    show_not_in_posfile
     show_other
     show_tht
     show_smt

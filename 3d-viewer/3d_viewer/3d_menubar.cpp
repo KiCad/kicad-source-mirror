@@ -118,9 +118,10 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
 
     prefsMenu->AppendSeparator();
 
-    prefsMenu->Add( EDA_3D_ACTIONS::showTHT,     ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::showSMD,     ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::showVirtual, ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showTHT,          ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showSMD,          ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showVirtual,      ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showNotInPosFile, ACTION_MENU::CHECK );
 
     prefsMenu->AppendSeparator();
 

@@ -245,6 +245,11 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
             {
                 return m_boardAdapter.m_Cfg->m_Render.show_footprints_virtual;
             };
+    auto show_NotInPosfile =
+            [this]( const SELECTION& aSel )
+            {
+                return m_boardAdapter.m_Cfg->m_Render.show_footprints_not_in_posfile;
+            };
     auto showBBoxes =
             [this]( const SELECTION& aSel )
             {
@@ -266,6 +271,8 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
     mgr->SetConditions( EDA_3D_ACTIONS::showTHT,       ACTION_CONDITIONS().Check( showTH ) );
     mgr->SetConditions( EDA_3D_ACTIONS::showSMD,       ACTION_CONDITIONS().Check( showSMD ) );
     mgr->SetConditions( EDA_3D_ACTIONS::showVirtual,   ACTION_CONDITIONS().Check( showVirtual ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showNotInPosFile,   ACTION_CONDITIONS().Check( show_NotInPosfile ) );
+
 
     mgr->SetConditions( EDA_3D_ACTIONS::showBBoxes,    ACTION_CONDITIONS().Check( showBBoxes ) );
     mgr->SetConditions( EDA_3D_ACTIONS::showAxis,      ACTION_CONDITIONS().Check( showAxes ) );

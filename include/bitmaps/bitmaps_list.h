@@ -509,6 +509,7 @@ enum class BITMAPS : unsigned int
     show_no_copper_layers,
     show_no_layers,
     show_ratsnest,
+    show_not_in_posfile,
     show_other,
     show_tht,
     show_smt,
