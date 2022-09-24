@@ -52,6 +52,9 @@
 // Does the compiler support the -Wimplicit-int-float-conversion warning
 #cmakedefine HAVE_WIMPLICIT_FLOAT_CONVERSION
 
+// Does the compiler support the -Winconsistent-missing-override
+#cmakedefine HAVE_WINCONSISTENT_MISSING_OVERRIDE
+
 // Use Posix getc_unlocked() instead of getc() when it's available.
 #cmakedefine HAVE_FGETC_NOLOCK
 

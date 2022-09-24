@@ -52,6 +52,10 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     if( COMPILER_SUPPORTS_WINCONSISTENT_MISSING_OVERRIDE )
         set( WARN_FLAGS_CXX "${WARN_FLAGS_CXX} -Winconsistent-missing-override" )
+
+        # Also use this to guard warning removal of the warning inside the code
+        set( HAVE_WINCONSISTENT_MISSING_OVERRIDE true )
+
         message( STATUS "Enabling warning -Winconsistent-missing-override" )
     endif()
 
