@@ -53,7 +53,7 @@ class SYMBOL_LIBRARY_MANAGER
 {
 public:
     SYMBOL_LIBRARY_MANAGER( SCH_BASE_FRAME& aFrame );
-    ~SYMBOL_LIBRARY_MANAGER();
+    virtual ~SYMBOL_LIBRARY_MANAGER();
 
     /**
      * Preloads all symbol libraries in the symbol library table using SYMBOL_ASYNC_LOADER.

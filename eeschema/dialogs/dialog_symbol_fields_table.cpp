@@ -1127,7 +1127,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
     for( int i = 0; i < m_dataModel->GetNumberCols(); ++i )
     {
          if( fieldName == m_dataModel->GetColLabelValue( i ) )
-         col = i;
+            col = i;
     }
 
     m_fieldsCtrl->DeleteItem( row );
