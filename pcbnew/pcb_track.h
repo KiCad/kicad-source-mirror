@@ -93,6 +93,8 @@ public:
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
+    virtual void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis );
+
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     void          SetPosition( const VECTOR2I& aPos ) override { m_Start = aPos; }
@@ -262,9 +264,11 @@ public:
         m_End   += aMoveVector;
     }
 
-    virtual void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
-    virtual void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
+    void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis ) override;
+
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     void            SetMid( const VECTOR2I& aMid ) { m_Mid = aMid; }
     const VECTOR2I& GetMid() const { return m_Mid; }

@@ -1326,6 +1326,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case PCB_FP_ZONE_T:
         case PCB_ZONE_T:
         case PCB_PAD_T:
+        case PCB_TRACE_T:
+        case PCB_ARC_T:
+        case PCB_VIA_T:
             if( !item->IsNew() && !IsFootprintEditor() )
                 m_commit->Modify( item );
 
@@ -1370,6 +1373,12 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             else
                 mirrorPadY( *static_cast<PAD*>( item ), mirrorPoint );
 
+            break;
+
+        case PCB_TRACE_T:
+        case PCB_ARC_T:
+        case PCB_VIA_T:
+            static_cast<PCB_TRACK*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
 
         default:

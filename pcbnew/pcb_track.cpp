@@ -25,6 +25,7 @@
  */
 
 #include <pcb_base_frame.h>
+#include <core/mirror.h>
 #include <connectivity/connectivity_data.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -292,6 +293,38 @@ void PCB_ARC::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     RotatePoint( m_Start, aRotCentre, aAngle );
     RotatePoint( m_End, aRotCentre, aAngle );
     RotatePoint( m_Mid, aRotCentre, aAngle );
+}
+
+
+void PCB_TRACK::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
+{
+    if( aMirrorAroundXAxis )
+    {
+        MIRROR( m_Start.y, aCentre.y );
+        MIRROR( m_End.y, aCentre.y );
+    }
+    else
+    {
+        MIRROR( m_Start.x, aCentre.x );
+        MIRROR( m_End.x, aCentre.x );
+    }
+}
+
+
+void PCB_ARC::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
+{
+    if( aMirrorAroundXAxis )
+    {
+        MIRROR( m_Start.y, aCentre.y );
+        MIRROR( m_End.y, aCentre.y );
+        MIRROR( m_Mid.y, aCentre.y );
+    }
+    else
+    {
+        MIRROR( m_Start.x, aCentre.x );
+        MIRROR( m_End.x, aCentre.x );
+        MIRROR( m_Mid.x, aCentre.x );
+    }
 }
 
 
