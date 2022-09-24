@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -81,7 +81,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	fgFeatureConstraints->Add( m_MinConnTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
 
 	m_MinConnCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_MinConnCtrl->SetToolTip( _("The minimum track width.  If set, this is an absolute minimum and cannot be reduced by netclasses, custom rules, or other settings.") );
+	m_MinConnCtrl->SetToolTip( _("The minimum copper width of connected copper items.") );
 	m_MinConnCtrl->SetMinSize( wxSize( 120,-1 ) );
 
 	fgFeatureConstraints->Add( m_MinConnCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxEXPAND|wxTOP, 5 );

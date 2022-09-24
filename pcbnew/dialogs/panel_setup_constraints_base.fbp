@@ -895,7 +895,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip">The minimum track width.  If set, this is an absolute minimum and cannot be reduced by netclasses, custom rules, or other settings.</property>
+                                                    <property name="tooltip">The minimum copper width of connected copper items.</property>
                                                     <property name="validator_data_type">wxString</property>
                                                     <property name="validator_style">wxFILTER_NUMERIC</property>
                                                     <property name="validator_type">wxTextValidator</property>
