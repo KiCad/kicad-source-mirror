@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-25 11:47+0000\n"
-"Last-Translator: Andrii Shelestov <streamx3@gmail.com>\n"
+"PO-Revision-Date: 2022-09-27 13:22+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
 "Language: uk\n"
@@ -4408,9 +4408,8 @@ msgid "Points"
 msgstr "Точки"
 
 #: common/eda_shape.cpp:607
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Поле номеру контактної площадки:"
+msgstr "Область номеру контактної площадки"
 
 #: common/eda_shape.cpp:613 common/eda_text.cpp:1042
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -7964,7 +7963,7 @@ msgid ""
 msgstr ""
 "# 1 - Повна документація\n"
 "\n"
-"Документація Eeschema  (*eeschema.html*) описує цей проміжний список мережі "
+"Документація Eeschema (*eeschema.html*) описує цей проміжний список мережі "
 "містить приклади (параграф ***створення кастомізованого списку мереж та "
 "файлів BOM***).\n"
 "\n"
@@ -29066,49 +29065,49 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:781
 msgid "Inner Layers To Be Deleted"
-msgstr ""
+msgstr "Внутрішні шари для видалення"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:816
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "Всі користувацькі шари вже додані."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:820
 msgid "Add User-defined Layer"
-msgstr ""
+msgstr "Додати визначений користувачем шар"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
 msgid "Add User Defined Layer..."
-msgstr ""
+msgstr "Додати заданий шар користувача..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:46
 msgid "CrtYd_Front"
-msgstr ""
+msgstr "CrtYd_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:51
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:639
 msgid "Off-board, testing"
-msgstr ""
+msgstr "Поза платою, тестовий"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:58
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr ""
+msgstr "Якщо вам потрібен виробничий шар для лицьової сторони плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:62
 msgid "Fab_Front"
-msgstr ""
+msgstr "Fab_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:65
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:629
 msgid "Off-board, manufacturing"
-msgstr ""
+msgstr "Поза платою, виробничий"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:70
 msgid "If you want an adhesive template for the front side of the board"
-msgstr ""
+msgstr "Якщо вам потрібен клейовий шаблон для лицьової сторони плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:74
 msgid "Adhes_Front"
-msgstr ""
+msgstr "Adhes_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:77
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:89
@@ -29119,43 +29118,43 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:605
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:617
 msgid "On-board, non-copper"
-msgstr ""
+msgstr "На платі, без міді"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
 msgid "If you want a solder paste layer for front side of the board"
-msgstr ""
+msgstr "Якщо вам потрібен шар паяльної пасти для передньої сторони плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
 msgid "SoldP_Front"
-msgstr ""
+msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:94
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr ""
+msgstr "Якщо вам потрібен шар шовкографії для лицьової сторони плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
 msgid "SilkS_Front"
-msgstr ""
+msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
-msgstr ""
+msgstr "Якщо вам потрібен шар паяльної маски для передньої частини плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:110
 msgid "Mask_Front"
-msgstr ""
+msgstr "Mask_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:118
 msgid "If you want a front copper layer"
-msgstr ""
+msgstr "Якщо потрібний верхній шар міді"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:122
 msgid "Front_layer"
-msgstr ""
+msgstr "Front_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:123
 msgid "Layer name of front (top) copper layer"
-msgstr ""
+msgstr "Назва шару переднього (верхнього) шару міді"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -29190,7 +29189,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "signal"
-msgstr ""
+msgstr "сигнальний"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -29225,7 +29224,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "power plane"
-msgstr ""
+msgstr "площина живлення"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -29260,7 +29259,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "mixed"
-msgstr ""
+msgstr "змішаний"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -29295,7 +29294,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "jumper"
-msgstr ""
+msgstr "перемичка"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:131
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:145
@@ -29333,186 +29332,188 @@ msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
+"Тип мідного шару для Freerouter та інших зовнішніх маршрутизаторів.\n"
+"Шари живлення видаляються з меню шарів Freerouter."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:138
 msgid "In1"
-msgstr ""
+msgstr "In1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:152
 msgid "In2"
-msgstr ""
+msgstr "In2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:166
 msgid "In3"
-msgstr ""
+msgstr "In3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:180
 msgid "In4"
-msgstr ""
+msgstr "In4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:194
 msgid "In5"
-msgstr ""
+msgstr "In5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:208
 msgid "In6"
-msgstr ""
+msgstr "In6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:222
 msgid "In7"
-msgstr ""
+msgstr "In7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:236
 msgid "In8"
-msgstr ""
+msgstr "In8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:250
 msgid "In9"
-msgstr ""
+msgstr "In9"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:264
 msgid "In10"
-msgstr ""
+msgstr "In10"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:278
 msgid "In11"
-msgstr ""
+msgstr "In11"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:292
 msgid "In12"
-msgstr ""
+msgstr "In12"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:306
 msgid "In13"
-msgstr ""
+msgstr "In13"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:320
 msgid "In14"
-msgstr ""
+msgstr "In14"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:334
 msgid "In15"
-msgstr ""
+msgstr "In15"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:348
 msgid "In16"
-msgstr ""
+msgstr "In16"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:362
 msgid "In17"
-msgstr ""
+msgstr "In17"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:376
 msgid "In18"
-msgstr ""
+msgstr "In18"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:390
 msgid "In19"
-msgstr ""
+msgstr "In19"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:404
 msgid "In20"
-msgstr ""
+msgstr "In20"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:418
 msgid "In21"
-msgstr ""
+msgstr "In21"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:432
 msgid "In22"
-msgstr ""
+msgstr "In22"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:446
 msgid "In23"
-msgstr ""
+msgstr "In23"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:460
 msgid "In24"
-msgstr ""
+msgstr "In24"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:474
 msgid "In25"
-msgstr ""
+msgstr "In25"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:488
 msgid "In26"
-msgstr ""
+msgstr "In26"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:502
 msgid "In27"
-msgstr ""
+msgstr "In27"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:516
 msgid "In28"
-msgstr ""
+msgstr "In28"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:530
 msgid "In29"
-msgstr ""
+msgstr "In29"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:544
 msgid "In30"
-msgstr ""
+msgstr "In30"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:556
 msgid "If you want a back copper layer"
-msgstr ""
+msgstr "Якщо необхідно нижній мідний шар"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:561
 msgid "Layer name of back (bottom) copper layer"
-msgstr ""
+msgstr "Назва шару заднього (нижнього) шару міді"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:574
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr ""
+msgstr "Якщо необхідний шар паяльної маски для нижньої сторони плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:578
 msgid "SoldM_Back"
-msgstr ""
+msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:586
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr ""
+msgstr "Якщо необхідно шар шовкографії для нижньої сторони плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:590
 msgid "SilkS_Back"
-msgstr ""
+msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr ""
+msgstr "Якщо необхідно шар паяльної пасти для нижньої сторони плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:602
 msgid "SoldP_Back"
-msgstr ""
+msgstr "SoldP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:610
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr ""
+msgstr "Якщо необхідно клейовий шар для нижньої сторони плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:614
 msgid "Adhes_Back"
-msgstr ""
+msgstr "Adhes_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:622
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr ""
+msgstr "Якщо необхідно виробничий шар для нижньої сторони плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:626
 msgid "Fab_Back"
-msgstr ""
+msgstr "Fab_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:636
 msgid "CrtYd_Back"
-msgstr ""
+msgstr "CrtYd_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:646
 msgid "Pcb_Edges"
-msgstr ""
+msgstr "Pcb_Edges"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
 msgid "Board contour"
-msgstr ""
+msgstr "Контур плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
@@ -29520,42 +29521,42 @@ msgstr "Margin"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
-msgstr ""
+msgstr "Відступ від контуру плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:666
 msgid "Eco1"
-msgstr ""
+msgstr "Eco1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:669
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:679
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:691
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:703
 msgid "Auxiliary"
-msgstr ""
+msgstr "Допоміжні"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:676
 msgid "Eco2"
-msgstr ""
+msgstr "Eco2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:684
 msgid "If you want a separate layer for comments or notes"
-msgstr ""
+msgstr "Якщо необхідно окремий шар для коментарів чи нотаток"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:688
 msgid "Comments"
-msgstr ""
+msgstr "Коментарі"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:696
 msgid "If you want a layer for documentation drawings"
-msgstr ""
+msgstr "Якщо необхідно шар для показу документації"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:700
 msgid "Drawings"
-msgstr ""
+msgstr "Креслення"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:710
 msgid "User1"
-msgstr ""
+msgstr "User1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:723
@@ -29567,65 +29568,72 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:783
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:793
 msgid "User defined layer"
-msgstr ""
+msgstr "Користувацький шар"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:720
 msgid "User2"
-msgstr ""
+msgstr "User2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:730
 msgid "User3"
-msgstr ""
+msgstr "User3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:740
 msgid "User4"
-msgstr ""
+msgstr "User4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:750
 msgid "User5"
-msgstr ""
+msgstr "User5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:760
 msgid "User6"
-msgstr ""
+msgstr "User6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:770
 msgid "User7"
-msgstr ""
+msgstr "User7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:780
 msgid "User8"
-msgstr ""
+msgstr "User8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:790
 msgid "User9"
-msgstr ""
+msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
 msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
 msgstr ""
+"Використовуйте рекомендації виробника плати щодо розширення паяльної маски "
+"та мінімальної ширини."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
-msgstr ""
+msgstr "Якщо нічого не вказано, рекомендовано встановити значення до нуля."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
+"Глобальне значення зазору між контактними площадками та паяльною маскою.\n"
+"Це значення можна замінити локальними значеннями для посадкового місця або "
+"контактної площадки."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
+"Додатній зазор означає площу, більшу за майданчик (зазвичай для зазору "
+"паяльної маски)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
-msgstr ""
+msgstr "Мінімальна ширина паяльної маски:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 msgid ""
@@ -29634,24 +29642,33 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
+"Мінімальна відстань між 2 областями контактної площадки.\n"
+"Дві області контактних площадок, ближчі за це значення, буде об’єднано під "
+"час виробництва.\n"
+"Цей параметр використовується лише для побудови шарів паяльної маски.\n"
+"Залиште 0, якщо ви не знаєте, що робите."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:76
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
+"Мінімальна відстань між отворами в паяльній масці. Отвори контактних "
+"площадок ближче, ніж ця відстань, будуть накреслені як один отвір."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
 msgid "Solder mask to copper clearance:"
-msgstr ""
+msgstr "Зазор паяльна маски до міді:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
+"Дозвольте з’єднати отвори паяльної маски між майданчиками в межах посадкових "
+"місць"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
 msgid "Tent vias"
-msgstr ""
+msgstr "Покривати перехідні отвори"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
@@ -29659,12 +29676,19 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
+"Глобальний зазор між контактними площадками та паяльною пастою.\n"
+"Це значення можна замінити локальними значеннями для посадкових місць або "
+"контактних площадок.\n"
+"Остаточне значення зазору є сумою цього значення та співвідношення значення "
+"зазору."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
+"Негативний зазор означає площу, меншу за контактну площадку (звичайно для "
+"зазору паяльної пасти)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid ""
@@ -29673,41 +29697,50 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
+"Глобальний коефіцієнт зазору у відсотках між контактними площадками та "
+"паяльною пастою.\n"
+"Значення 10 означає, що значення зазору становить 10 відсотків розміру "
+"контактної площадки.\n"
+"Це значення можна замінити локальними значеннями для посадкових місць та "
+"контактних площадок.\n"
+"Остаточне значення зазору є сумою цього значення та значення зазору."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
 msgid "Additional clearance as a percentage of the pad size."
-msgstr ""
+msgstr "Додатковий зазор у відсотках від розміру колодки."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:134
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
+"Примітка. Зазори паяльної пасти (абсолютні та відносні) додаються для "
+"визначення кінцевого зазору."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:93
 msgid "Cancel Changes?"
-msgstr ""
+msgstr "Скасувати зміни?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:539
 msgid "DRC rules"
-msgstr ""
+msgstr "Правила DRC"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:546
 #: pcbnew/drc/drc_rule_condition.cpp:64
 msgid "ERROR:"
-msgstr ""
+msgstr "ПОМИЛКА:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:607
 msgid "Design rules cannot be added without a project"
-msgstr ""
+msgstr "Правила проектування не можна додавати без проекту"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:26
 msgid "DRC rules:"
-msgstr ""
+msgstr "DRC правила:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:78
 msgid "Check rule syntax"
-msgstr ""
+msgstr "Перевірити синтаксис правил"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
 msgid ""
@@ -30035,133 +30068,136 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
-msgstr ""
+msgstr "Властивості за замовчуванням для розмірів нових об’єктів:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:93
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
+"Одиниці за замовчуванням для розмірів (\"автоматично\" для дотримання "
+"вибраних одиниць інтерфейсу користувача)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
 msgid "Text position:"
-msgstr ""
+msgstr "Положення тексту:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:108
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr ""
+msgstr "Де розмістити розмірний текст відносно розмірної лінії"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:122
 msgid "Keep text aligned"
-msgstr ""
+msgstr "Вирівняти текст"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:123
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr ""
+msgstr "Якщо позначено, розмір тексту вирівнюватиметься за розмірними лініями"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
 msgid "How many digits of precision to show"
-msgstr ""
+msgstr "Скільки цифр точності показати"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:151
 msgid ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
 msgstr ""
+"Якщо позначено, «1,2300» відображатиметься як «1,23», навіть якщо "
+"встановлено точність, щоб показувати більше цифр"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
-msgstr ""
+msgstr "Розмір наскрізного отвору не визначено."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:388
 msgid "No differential pair gap defined."
-msgstr ""
+msgstr "Розрив диференціальної пари не визначено."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr ""
+msgstr "Попередньо визначені розміри доріжок та переходів:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:53
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:113
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:174
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:100 pcbnew/pad.cpp:990
 #: pcbnew/pcb_track.cpp:868 pcbnew/pcb_track.cpp:1280
 msgid "Diameter"
-msgstr ""
+msgstr "Діаметр"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:101 pcbnew/pad.cpp:1019
 #: pcbnew/pcb_track.cpp:872 pcbnew/pcb_track.cpp:1282
 #: pcbnew/tools/board_inspection_tool.cpp:922
 #: pcbnew/tools/board_inspection_tool.cpp:951
 msgid "Hole"
-msgstr ""
+msgstr "Отвір"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:146
 msgid "Differential Pairs"
-msgstr ""
+msgstr "Диференціальні пари"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:161
 msgid "Gap"
-msgstr ""
+msgstr "Зазор"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:162
 msgid "Via Gap"
-msgstr ""
+msgstr "Зазор перехідного отвору"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:98
-#, fuzzy
 msgid "Change property"
-msgstr "Змінити властивості тексту"
+msgstr "Змінити властивості"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:119 pcbnew/pcb_track.cpp:1285
 msgid "Layer Top"
-msgstr ""
+msgstr "Верхній шар"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:120 pcbnew/pcb_track.cpp:1287
 msgid "Layer Bottom"
-msgstr ""
+msgstr "Нижній шар"
 
 #: pcbnew/drc/drc_cache_generator.cpp:132
 msgid "Gathering copper items..."
-msgstr ""
+msgstr "Збір мідних елементів..."
 
 #: pcbnew/drc/drc_engine.cpp:149
 msgid "board setup constraints"
-msgstr ""
+msgstr "задання обмеження плати"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints zone fill strategy"
-msgstr ""
+msgstr "обмеження налаштування плати для заповнення зон"
 
 #: pcbnew/drc/drc_engine.cpp:180
 msgid "board setup constraints silk"
-msgstr ""
+msgstr "встановлення обмежень шовкографії для плати"
 
 #: pcbnew/drc/drc_engine.cpp:186
 msgid "board setup constraints silk text height"
-msgstr ""
+msgstr "обмеження налаштування дошки висота тексту на шару шовкографії"
 
 #: pcbnew/drc/drc_engine.cpp:192
 msgid "board setup constraints silk text thickness"
-msgstr ""
+msgstr "обмеження налаштувань плати товщина тексту для шару шовкографії"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup constraints hole"
-msgstr ""
+msgstr "налаштування обмежень отворів для плати"
 
 #: pcbnew/drc/drc_engine.cpp:203
 msgid "board setup constraints edge"
-msgstr ""
+msgstr "налаштування контуру плати"
 
 #: pcbnew/drc/drc_engine.cpp:208
 msgid "board setup constraints courtyard"
-msgstr ""
+msgstr "налаштування області встановлення для плати"
 
 #: pcbnew/drc/drc_engine.cpp:215
 msgid "board setup micro-via constraints"
-msgstr ""
+msgstr "налаштування обмежень для мікро перехідних отворів плати"
 
 #: pcbnew/drc/drc_engine.cpp:241 pcbnew/drc/drc_engine.cpp:320
 #: pcbnew/drc/drc_engine.cpp:348
@@ -30177,214 +30213,217 @@ msgstr "клас звʼязків '%s' (диференційна пара)"
 
 #: pcbnew/drc/drc_engine.cpp:422
 msgid "keepout area"
-msgstr ""
+msgstr "площина заборони"
 
 #: pcbnew/drc/drc_engine.cpp:424
 #, c-format
 msgid "keepout area '%s'"
-msgstr ""
+msgstr "площина заборони '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:618
 #, c-format
 msgid "Resolved zone connection type: %s."
-msgstr ""
+msgstr "Тип з'єднання заданої зони: %s."
 
 #: pcbnew/drc/drc_engine.cpp:636
 #, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
-msgstr ""
+msgstr "Контактна площадка не є PTH типом; з'єднання буде: %s."
 
 #: pcbnew/drc/drc_engine.cpp:735 pcbnew/drc/drc_engine.cpp:745
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr ""
+msgstr "Локально перевизначено на %s; зазор: %s."
 
 #: pcbnew/drc/drc_engine.cpp:760 pcbnew/drc/drc_engine.cpp:1362
 #: pcbnew/drc/drc_engine.cpp:1377
 msgid "board minimum"
-msgstr ""
+msgstr "мінімум плати"
 
 #: pcbnew/drc/drc_engine.cpp:763 pcbnew/drc/drc_engine.cpp:1356
 #: pcbnew/drc/drc_engine.cpp:1371
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr ""
+msgstr "Мінімальний зазор для плати: %s."
 
 #: pcbnew/drc/drc_engine.cpp:772
 msgid "board minimum hole"
-msgstr ""
+msgstr "мінімальний отвір плати"
 
 #: pcbnew/drc/drc_engine.cpp:775
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr ""
+msgstr "Мінімальна зазор для отворів: %s."
 
 #: pcbnew/drc/drc_engine.cpp:794
 #, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr ""
+msgstr "Локально перевизначено на %s, з'єднання з зоною: %s."
 
 #: pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr ""
+msgstr "Локально перевизначено на %s; тепловий зазор зв'язку: %s."
 
 #: pcbnew/drc/drc_engine.cpp:828
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr ""
+msgstr "Локально перевизначено на %s; товщина теплового переходу: %s."
 
 #: pcbnew/drc/drc_engine.cpp:837
 #, c-format
 msgid "%s min thickness: %s."
-msgstr ""
+msgstr "%s мін. товщина: %s."
 
 #: pcbnew/drc/drc_engine.cpp:851
 #, c-format
 msgid "Checking assertion \"%s\"."
-msgstr ""
+msgstr "Перевірка твердження \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:857 pcbnew/drc/drc_engine.cpp:1481
 msgid "Assertion passed."
-msgstr ""
+msgstr "Призначення перевірено."
 
 #: pcbnew/drc/drc_engine.cpp:861 pcbnew/drc/drc_engine.cpp:1485
 msgid "--> Assertion failed. <--"
-msgstr ""
+msgstr "--> Помилка твердження. <--"
 
 #: pcbnew/drc/drc_engine.cpp:881
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr ""
+msgstr "Перевірка %s зазору: %s."
 
 #: pcbnew/drc/drc_engine.cpp:887
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr ""
+msgstr "Перевірка %s максимальна довжина без зв’язку: %s."
 
 #: pcbnew/drc/drc_engine.cpp:893
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr ""
+msgstr "Перевірка %s максимум нахилу: %s."
 
 #: pcbnew/drc/drc_engine.cpp:899
 #, c-format
 msgid "Checking %s gap: %s."
-msgstr ""
+msgstr "Перевірка %s розрив: %s."
 
 #: pcbnew/drc/drc_engine.cpp:905
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr ""
+msgstr "Перевірка %s ширина термічної переходу: %s."
 
 #: pcbnew/drc/drc_engine.cpp:911
 #, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr ""
+msgstr "Перевірка %s мінімальна к-ть переходів: %s."
 
 #: pcbnew/drc/drc_engine.cpp:917
 #, c-format
 msgid "Checking %s zone connection: %s."
-msgstr ""
+msgstr "Перевірка %s зони з'єднання: %s."
 
 #: pcbnew/drc/drc_engine.cpp:935 pcbnew/drc/drc_engine.cpp:936
 #: pcbnew/drc/drc_engine.cpp:937 pcbnew/tools/board_inspection_tool.cpp:212
 #: pcbnew/tools/board_inspection_tool.cpp:221
 #: pcbnew/tools/board_inspection_tool.cpp:230
 msgid "undefined"
-msgstr ""
+msgstr "не визначено"
 
 #: pcbnew/drc/drc_engine.cpp:951
 #, c-format
 msgid "Checking %s track width: opt %s."
-msgstr ""
+msgstr "Перевірка %s ширина доріжки: оптимально %s."
 
 #: pcbnew/drc/drc_engine.cpp:957
 #, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr ""
+msgstr "Перевірка налаштування на платі ширини доріжок: мін %s."
 
 #: pcbnew/drc/drc_engine.cpp:965
 #, c-format
 msgid "Checking %s annular width: min %s."
-msgstr ""
+msgstr "Перевірка %s ширина кільця: мін. %s."
 
 #: pcbnew/drc/drc_engine.cpp:973
 #, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr ""
+msgstr "Перевірка %s діаметр перехідного отвору: опт %s."
 
 #: pcbnew/drc/drc_engine.cpp:979
 #, c-format
 msgid "Checking board setup constraints via diameter: min %s."
 msgstr ""
+"Перевірка обмежень для налаштування плати діаметру перехідних отворів: мін. "
+"%s."
 
 #: pcbnew/drc/drc_engine.cpp:988
 #, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr ""
+msgstr "Перевірка %s розмір отвору: опт %s."
 
 #: pcbnew/drc/drc_engine.cpp:994
 #, c-format
 msgid "Checking board setup constraints hole size: min %s."
-msgstr ""
+msgstr "Перевірка обмежень налаштування плати для розміру отвору: мін %s."
 
 #: pcbnew/drc/drc_engine.cpp:1004
 #, c-format
 msgid "Checking %s: min %s."
-msgstr ""
+msgstr "Перевірка %s: мін %s."
 
 #: pcbnew/drc/drc_engine.cpp:1012
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr ""
+msgstr "Перевірка %s зазору диференційних пар: опт %s."
 
 #: pcbnew/drc/drc_engine.cpp:1019
 #, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr ""
+msgstr "Перевірка обмежень зазору налаштування плати: мін %s."
 
 #: pcbnew/drc/drc_engine.cpp:1027
 #, c-format
 msgid "Checking board setup constraints hole to hole: min %s."
-msgstr ""
+msgstr "Перевірка обмежень налаштування плати між отворами: мін %s."
 
 #: pcbnew/drc/drc_engine.cpp:1033 pcbnew/drc/drc_engine.cpp:1062
 #: pcbnew/drc/drc_engine.cpp:1494
 #, c-format
 msgid "Checking %s."
-msgstr ""
+msgstr "Перевіряється %s."
 
 #: pcbnew/drc/drc_engine.cpp:1051
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr ""
+msgstr "Перевірка %s: мін %s; опт %s; макс %s."
 
 #: pcbnew/drc/drc_engine.cpp:1070
 msgid "Board and netclass clearances apply only between copper items."
 msgstr ""
+"Зазори плати та класи зв'язків що застосовуються лише між мідними елементами."
 
 #: pcbnew/drc/drc_engine.cpp:1118
 msgid "Keepout constraint not met."
-msgstr ""
+msgstr "Обмеження зони заборони не порушується."
 
 #: pcbnew/drc/drc_engine.cpp:1120
 msgid "Disallow constraint not met."
-msgstr ""
+msgstr "Задані обмеження не порушуються."
 
 #: pcbnew/drc/drc_engine.cpp:1142
 msgid "Keepout layer(s) not matched."
-msgstr ""
+msgstr "Співпадіння між шаром(и) і забороненої зони відсутні."
 
 #: pcbnew/drc/drc_engine.cpp:1146 pcbnew/drc/drc_engine.cpp:1167
 #: pcbnew/drc/drc_engine.cpp:1498
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr ""
+msgstr "Шар правил '%s' не співпадає; правила проігноровано."
 
 #: pcbnew/drc/drc_engine.cpp:1151 pcbnew/drc/drc_engine.cpp:1172
 msgid "Rule layer not matched; rule ignored."
-msgstr ""
+msgstr "Шар правил не співпадає; правила проігноровано."
 
 #: pcbnew/drc/drc_engine.cpp:1186
 #, c-format
