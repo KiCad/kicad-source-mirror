@@ -929,34 +929,36 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         if( s_poly.size() )
             aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
+
+        // Plot attributes to a hypertext menu
+        std::vector<wxString> properties;
+
+        if( connection )
+        {
+            properties.emplace_back(
+                    wxString::Format( wxT( "!%s = %s" ), _( "Net" ), connection->Name() ) );
+
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
+                                                       GetEffectiveNetClass()->GetName() ) );
+        }
+
+        for( const SCH_FIELD& field : GetFields() )
+        {
+            properties.emplace_back(
+                    wxString::Format( wxT( "!%s = %s" ), field.GetName(), field.GetShownText() ) );
+        }
+
+        if( !properties.empty() )
+            aPlotter->HyperlinkMenu( GetBodyBoundingBox(), properties );
+
+        if( Type() == SCH_HIER_LABEL_T )
+        {
+            aPlotter->Bookmark( GetBodyBoundingBox(), GetShownText(), _( "Hierarchical Labels" ) );
+        }
     }
 
     for( const SCH_FIELD& field : m_fields )
         field.Plot( aPlotter, aBackground );
-
-    // Plot attributes to a hypertext menu
-    std::vector<wxString> properties;
-
-    if( connection )
-    {
-        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                   _( "Net" ),
-                                                   connection->Name() ) );
-
-        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                   _( "Resolved netclass" ),
-                                                   GetEffectiveNetClass()->GetName() ) );
-    }
-
-    for( const SCH_FIELD& field : GetFields() )
-    {
-        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                   field.GetName(),
-                                                   field.GetShownText() ) );
-    }
-
-    if( !properties.empty() )
-        aPlotter->HyperlinkMenu( GetBodyBoundingBox(), properties );
 }
 
 
