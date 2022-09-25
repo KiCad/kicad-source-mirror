@@ -813,35 +813,37 @@ void PDF_PLOTTER::ClosePage()
     OUTLINE_NODE* pageOutlineNode = addOutlineNode(
             m_outlineRoot.get(), -1, wxString::Format( _( "Page %s" ), m_pageNumbers.back() ) );
 
-
-    OUTLINE_NODE* componentOutlineNode = addOutlineNode( pageOutlineNode, -1, _( "Components" ) );
-
     // let's reorg the symbol bookmarks under a page handle
-    for( const std::pair<BOX2I, wxString>& bookmarkPair : m_componentBookmarksInPage )
+    // let's reorg the symbol bookmarks under a page handle
+    for( const auto& [groupName, groupVector] : m_bookmarksInPage )
     {
-        const BOX2I&    box = bookmarkPair.first;
-        const wxString& ref = bookmarkPair.second;
+        OUTLINE_NODE* groupOutlineNode = addOutlineNode( pageOutlineNode, -1, groupName );
 
-        VECTOR2I bottomLeft = iuToPdfUserSpace( box.GetPosition() );
-        VECTOR2I topRight = iuToPdfUserSpace( box.GetEnd() );
+        for( const std::pair<BOX2I, wxString>& bookmarkPair : groupVector )
+        {
+            const BOX2I&    box = bookmarkPair.first;
+            const wxString& ref = bookmarkPair.second;
 
-        int actionHandle = emitGoToAction( pageHandle, bottomLeft, topRight );
+            VECTOR2I bottomLeft = iuToPdfUserSpace( box.GetPosition() );
+            VECTOR2I topRight = iuToPdfUserSpace( box.GetEnd() );
 
-        addOutlineNode( componentOutlineNode, actionHandle, ref );
+            int actionHandle = emitGoToAction( pageHandle, bottomLeft, topRight );
+
+            addOutlineNode( groupOutlineNode, actionHandle, ref );
+        }
+
+        std::sort( groupOutlineNode->children.begin(), groupOutlineNode->children.end(),
+                   []( const OUTLINE_NODE* a, const OUTLINE_NODE* b ) -> bool
+                   {
+                       return a->title < b->title;
+                   } );
     }
-
-
-    std::sort( componentOutlineNode->children.begin(), componentOutlineNode->children.end(),
-               []( const OUTLINE_NODE* a, const OUTLINE_NODE* b ) -> bool
-               {
-                   return a->title < b->title;
-               } );
 
 
     // Clean up
     m_hyperlinksInPage.clear();
     m_hyperlinkMenusInPage.clear();
-    m_componentBookmarksInPage.clear();
+    m_bookmarksInPage.clear();
 }
 
 
@@ -856,7 +858,7 @@ bool PDF_PLOTTER::StartPlot(const wxString& aPageNumber)
     m_hyperlinkMenusInPage.clear();
     m_hyperlinkHandles.clear();
     m_hyperlinkMenuHandles.clear();
-    m_componentBookmarksInPage.clear();
+    m_bookmarksInPage.clear();
     m_outlineRoot.release();
     m_totalOutlineNodes = 0;
 
@@ -1367,7 +1369,8 @@ void PDF_PLOTTER::HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>&
 }
 
 
-void PDF_PLOTTER::ComponentBookmark( const BOX2I& aLocation, const wxString& aSymbolReference )
+void PDF_PLOTTER::Bookmark( const BOX2I& aLocation, const wxString& aSymbolReference, const wxString &aGroupName )
 {
-    m_componentBookmarksInPage.push_back( std::make_pair( aLocation, aSymbolReference ) );
+
+    m_bookmarksInPage[aGroupName].push_back( std::make_pair( aLocation, aSymbolReference ) );
 }

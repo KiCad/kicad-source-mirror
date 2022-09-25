@@ -454,7 +454,8 @@ public:
      * @aBox is the bounding box of the symbol
      * @aSymbolReference is the symbol schematic ref
      */
-    virtual void ComponentBookmark( const BOX2I& aBox, const wxString& aSymbolReference )
+    virtual void Bookmark( const BOX2I& aBox, const wxString& aName,
+                           const wxString& aGroupName = wxEmptyString )
     {
         // NOP for most plotters.
     }

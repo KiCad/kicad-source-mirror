@@ -352,7 +352,7 @@ public:
 
     void HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>& aDestURLs ) override;
 
-    void ComponentBookmark( const BOX2I& aLocation, const wxString& aSymbolReference ) override;
+    void Bookmark( const BOX2I& aBox, const wxString& aName, const wxString& aGroupName = wxEmptyString ) override;
 
     /**
      * PDF images are handles as inline, not XObject streams...
@@ -481,7 +481,7 @@ protected:
     std::map<int, std::pair<BOX2D, wxString>>              m_hyperlinkHandles;
     std::map<int, std::pair<BOX2D, std::vector<wxString>>> m_hyperlinkMenuHandles;
 
-    std::vector<std::pair<BOX2I, wxString>>      m_componentBookmarksInPage;
+    std::map<wxString, std::vector<std::pair<BOX2I, wxString>>>      m_bookmarksInPage;
 
     std::unique_ptr<OUTLINE_NODE> m_outlineRoot;    ///< Root outline node
     int                           m_totalOutlineNodes;  ///< Total number of outline nodes
