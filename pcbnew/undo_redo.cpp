@@ -475,6 +475,16 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             SwapItemData( item, image );
 
+            if( item->Type() == PCB_GROUP_T )
+            {
+                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+
+                group->RunOnChildren( [&]( BOARD_ITEM* child )
+                                      {
+                                          child->SetParentGroup( group );
+                                      } );
+            }
+
             view->Add( item );
             view->Hide( item, false );
             connectivity->Add( item );
