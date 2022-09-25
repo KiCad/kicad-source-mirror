@@ -2684,6 +2684,9 @@ void OPENGL_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal )
 
 void OPENGL_GAL::DrawGlyphs( const std::vector<std::unique_ptr<KIFONT::GLYPH>>& aGlyphs )
 {
+    if( aGlyphs.empty() )
+        return;
+
     bool allGlyphsAreStroke = true;
     bool allGlyphsAreOutline = true;
 
