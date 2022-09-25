@@ -594,7 +594,7 @@ void ACTION_TOOLBAR::onPaletteEvent( wxCommandEvent& aEvent )
 
     // Find the action corresponding to the button press
     auto actionIt = std::find_if( group->GetActions().begin(), group->GetActions().end(),
-                                  [=]( const TOOL_ACTION* aAction )
+                                  [&]( const TOOL_ACTION* aAction )
                                   {
                                       return aAction->GetUIId() == aEvent.GetId();
                                   } );
