@@ -840,9 +840,9 @@ void PDF_PLOTTER::ClosePage()
             VECTOR2I bottomLeft = iuToPdfUserSpace( box.GetPosition() );
             VECTOR2I topRight = iuToPdfUserSpace( box.GetEnd() );
 
-            int curr_actionHandle = emitGoToAction( pageHandle, bottomLeft, topRight );
+            actionHandle = emitGoToAction( pageHandle, bottomLeft, topRight );
 
-            addOutlineNode( groupOutlineNode, curr_actionHandle, ref );
+            addOutlineNode( groupOutlineNode, actionHandle, ref );
         }
 
         std::sort( groupOutlineNode->children.begin(), groupOutlineNode->children.end(),

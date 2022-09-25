@@ -367,11 +367,20 @@ public:
 protected:
     struct OUTLINE_NODE
     {
-        int      actionHandle;  //< Handle to action
-        wxString title;         //< Title of outline node
-        int      entryHandle;   //< Allocated handle for this outline entry
+        int      actionHandle;  ///< Handle to action
+        wxString title;         ///< Title of outline node
+        int      entryHandle;   ///< Allocated handle for this outline entry
 
-        std::vector<OUTLINE_NODE*> children;
+        std::vector<OUTLINE_NODE*> children;    ///< Ordered list of children
+
+        ~OUTLINE_NODE()
+        {
+            std::for_each( children.begin(), children.end(),
+                           []( OUTLINE_NODE* node )
+                           {
+                               delete node;
+                           } );
+        }
 
         OUTLINE_NODE* AddChild( int aActionHandle, const wxString& aTitle, int aEntryHandle )
         {
