@@ -1149,6 +1149,11 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
             if( item )
             {
+                if( item->IsConnectivityDirty() )
+                {
+                    editFrame->RecalculateConnections( NO_CLEANUP );
+                }
+
                 if( item->Type() == SCH_FIELD_T )
                     symbol = dynamic_cast<SCH_SYMBOL*>( item->GetParent() );
 
@@ -1481,10 +1486,6 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 {
-    // TODO(JE) remove once real-time connectivity is a given
-    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        m_frame->RecalculateConnections( NO_CLEANUP );
-
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
