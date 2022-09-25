@@ -1161,6 +1161,7 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     {
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
         m_show_properties          = cfg->m_AuiPanels.show_properties;
+        m_show_search              = cfg->m_AuiPanels.show_search;
     }
 }
 
@@ -1177,7 +1178,8 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
-        cfg->m_AuiPanels.show_properties      = m_show_properties;
+        cfg->m_AuiPanels.show_properties = m_show_properties;
+        cfg->m_AuiPanels.show_search = m_show_search;
     }
 }
 

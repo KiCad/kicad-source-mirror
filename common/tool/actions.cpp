@@ -203,10 +203,10 @@ TOOL_ACTION ACTIONS::activatePointEditor( "common.Control.activatePointEditor",
 TOOL_ACTION ACTIONS::changeEditMethod( "common.Interactive.changeEditMethod", AS_GLOBAL,
         MD_CTRL + ' ', "", _( "Change Edit Method" ), _( "Change edit method constraints" ) );
 
-TOOL_ACTION ACTIONS::search( "common.Interactive.search",
+TOOL_ACTION ACTIONS::showSearch( "common.Interactive.search",
         AS_GLOBAL,
         MD_CTRL + 'G', LEGACY_HK_NAME( "Search" ),
-        _( "Find" ), _( "Search for items" ),
+        _( "Show Search Panel" ), _( "Show/hide the search panel" ),
         BITMAPS::find );
 
 TOOL_ACTION ACTIONS::find( "common.Interactive.find",

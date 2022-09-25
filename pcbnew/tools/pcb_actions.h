@@ -368,7 +368,6 @@ public:
 
     static TOOL_ACTION showLayersManager;
     static TOOL_ACTION showProperties;
-    static TOOL_ACTION showSearch;
     static TOOL_ACTION showPythonConsole;
 
     // Module editor tools

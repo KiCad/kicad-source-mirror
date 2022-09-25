@@ -127,6 +127,7 @@ public:
         int  right_panel_width;
         bool show_layer_manager;
         bool show_properties;
+        bool show_search;
     };
 
     struct DIALOG_CLEANUP

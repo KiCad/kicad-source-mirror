@@ -74,7 +74,7 @@ public:
     static TOOL_ACTION deleteTool;
 
     // Find and Replace
-    static TOOL_ACTION search;
+    static TOOL_ACTION showSearch;
     static TOOL_ACTION find;
     static TOOL_ACTION findAndReplace;
     static TOOL_ACTION findNext;

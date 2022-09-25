@@ -1599,7 +1599,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::PageSettings,           ACTIONS::pageSettings.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Plot,                   ACTIONS::plot.MakeEvent() );
 
-    Go( &BOARD_EDITOR_CONTROL::Search,                 ACTIONS::search.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::Search,                 ACTIONS::showSearch.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Find,                   ACTIONS::find.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::FindNext,               ACTIONS::findNext.MakeEvent() );
 
