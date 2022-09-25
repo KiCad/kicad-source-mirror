@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "ki_exception.h"
 #include <string_utils.h>
 #include <locale_io.h>
 #include <gerbview.h>
@@ -137,31 +138,22 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
  */
 bool GERBER_FILE_IMAGE::TestFileIsRS274( const wxString& aFullFileName )
 {
-    char* letter;
-    bool  foundADD = false;
-    bool  foundD0 = false;
-    bool  foundD2 = false;
-    bool  foundM0 = false;
-    bool  foundM2 = false;
+    char* letter    = nullptr;
+    bool  foundADD  = false;
+    bool  foundD0   = false;
+    bool  foundD2   = false;
+    bool  foundM0   = false;
+    bool  foundM2   = false;
     bool  foundStar = false;
-    bool  foundX = false;
-    bool  foundY = false;
-
-
-    FILE* file = wxFopen( aFullFileName, "rb" );
-
-    if( file == nullptr )
-        return false;
-
-    FILE_LINE_READER gerberReader( aFullFileName );
+    bool  foundX    = false;
+    bool  foundY    = false;
 
     try
     {
-        while( true )
-        {
-            if( gerberReader.ReadLine() == nullptr )
-                break;
+        FILE_LINE_READER gerberReader( aFullFileName );
 
+        while( gerberReader.ReadLine() )
+        {
             // Remove all whitespace from the beginning and end
             char* line = StrPurge( gerberReader.Line() );
 
@@ -216,12 +208,16 @@ bool GERBER_FILE_IMAGE::TestFileIsRS274( const wxString& aFullFileName )
     // RS-274X
     if( ( foundD0 || foundD2 || foundM0 || foundM2 ) && foundADD && foundStar
         && ( foundX || foundY ) )
+    {
         return true;
+    }
     // RS-274D. Could be folded into the expression above, but someday
     // we might want to test for them separately.
     else if( ( foundD0 || foundD2 || foundM0 || foundM2 ) && !foundADD && foundStar
              && ( foundX || foundY ) )
+    {
         return true;
+    }
 
 
     return false;
