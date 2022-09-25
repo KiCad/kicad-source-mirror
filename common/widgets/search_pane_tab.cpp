@@ -33,7 +33,8 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
     RefreshColumnNames();
 
     Bind( wxEVT_LIST_ITEM_SELECTED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
-    Bind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
+    Bind( wxEVT_LIST_ITEM_FOCUSED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
+    Bind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemDeselected, this );
 }
 
 
@@ -60,6 +61,8 @@ void SEARCH_PANE_LISTVIEW::OnItemSelected( wxListEvent& aEvent )
     std::vector<long> list;
     GetSelectRowsList( list );
     m_handler->SelectItems( list );
+
+    aEvent.Skip();
 }
 
 
