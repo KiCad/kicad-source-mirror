@@ -2066,7 +2066,8 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         aPlotter->EndBlock( nullptr );
 
-        aPlotter->Bookmark( GetBoundingBox(), GetField( REFERENCE_FIELD )->GetShownText(), _("Symbols") );
+        if( !m_part->IsPower() )
+            aPlotter->Bookmark( GetBoundingBox(), GetField( REFERENCE_FIELD )->GetShownText(), _("Symbols") );
     }
 }
 
