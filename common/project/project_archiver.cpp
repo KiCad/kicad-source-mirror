@@ -33,12 +33,45 @@
 #include <wxstream_helper.h>
 #include <wx/log.h>
 
+#include <set>
+
 
 #define ZipFileExtension wxT( "zip" )
 
-
 PROJECT_ARCHIVER::PROJECT_ARCHIVER()
 {
+}
+
+bool PROJECT_ARCHIVER::AreZipArchivesIdentical( const wxString& aZipFileA,
+                                                const wxString& aZipFileB, REPORTER& aReporter )
+{
+    wxFFileInputStream streamA( aZipFileA );
+    wxFFileInputStream streamB( aZipFileB );
+
+    if( !streamA.IsOk() || !streamB.IsOk() )
+    {
+        aReporter.Report( _( "Could not open archive file." ), RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    wxZipInputStream zipStreamA = wxZipInputStream( streamA );
+    wxZipInputStream zipStreamB = wxZipInputStream( streamB );
+
+    std::set<wxUint32> crcsA;
+    std::set<wxUint32> crcsB;
+
+
+    for( wxZipEntry* entry = zipStreamA.GetNextEntry(); entry; entry = zipStreamA.GetNextEntry() )
+    {
+        crcsA.insert( entry->GetCrc() );
+    }
+
+    for( wxZipEntry* entry = zipStreamB.GetNextEntry(); entry; entry = zipStreamB.GetNextEntry() )
+    {
+        crcsB.insert( entry->GetCrc() );
+    }
+
+    return crcsA == crcsB;
 }
 
 

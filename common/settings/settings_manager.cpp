@@ -1339,17 +1339,36 @@ bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
                    return first.GetTicks() > second.GetTicks();
                } );
 
-    // Do we even need to back up?
-    if( !files.empty() )
+    // Backup
+    bool backupSuccessful = BackupProject( aReporter );
+    if( !backupSuccessful )
+        return false;
+
+    // Update the file list
+    files.clear();
+    dir.Traverse( traverser, wxT( "*.zip" ) );
+
+    // Sort newest-first
+    std::sort( files.begin(), files.end(),
+               [&]( const wxString& aFirst, const wxString& aSecond ) -> bool
+               {
+                   wxDateTime first = modTime( aFirst );
+                   wxDateTime second = modTime( aSecond );
+
+                   return first.GetTicks() > second.GetTicks();
+               } );
+
+    // Are there any changes since the last backup?
+    if( files.size() > 1 )
     {
-        wxDateTime lastTime = modTime( files[0] );
+        PROJECT_ARCHIVER archiver;
+        bool             identicalToPrevious =
+                archiver.AreZipArchivesIdentical( files[0], files[1], aReporter );
 
-        if( lastTime.IsValid() )
+        if( identicalToPrevious )
         {
-            wxTimeSpan delta = wxDateTime::Now() - modTime( files[0] );
-
-            if( delta.IsShorterThan( wxTimeSpan::Seconds( settings.min_interval ) ) )
-                return true;
+            wxRemoveFile( files[0] );
+            return true;
         }
     }
 
@@ -1413,7 +1432,7 @@ bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
             wxRemoveFile( file );
     }
 
-    return BackupProject( aReporter );
+    return true;
 }
 
 

@@ -37,6 +37,16 @@ public:
     ~PROJECT_ARCHIVER() = default;
 
     /**
+     * Compares the crcs of all the files in zip archive to determine whether the archives are identical
+     * @param aZipFileA is the full path to the first zip
+     * @param aZipFileB is the full path to the second zip
+     * @param aReporter is used to report status
+     * @return true if the archives are identical
+     */
+    bool AreZipArchivesIdentical( const wxString& aZipFileA, const wxString& aZipFileB,
+                                  REPORTER& aReporter );
+
+    /**
      * Creates an archive of the project
      * @param aSrcFile is the full path to the project to be archived
      * @param aDestFile is the full path to the zip file to be created
