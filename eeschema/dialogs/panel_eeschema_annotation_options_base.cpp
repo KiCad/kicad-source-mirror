@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,15 +40,11 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	m_rbSortBy_X_Position = new wxRadioButton( sbSizerOrder->GetStaticBox(), ID_SORT_BY_X_POSITION, _("Sort symbols by &X position"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	bSizerXpos->Add( m_rbSortBy_X_Position, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-
 	annotate_down_right_bitmap = new wxStaticBitmap( sbSizerOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerXpos->Add( annotate_down_right_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	sbSizerOrder->Add( bSizerXpos, 0, wxEXPAND, 5 );
-
-
-	sbSizerOrder->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerYpos;
 	bSizerYpos = new wxBoxSizer( wxHORIZONTAL );
@@ -56,12 +52,11 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	m_rbSortBy_Y_Position = new wxRadioButton( sbSizerOrder->GetStaticBox(), ID_SORT_BY_Y_POSITION, _("Sort symbols by &Y position"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerYpos->Add( m_rbSortBy_Y_Position, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-
 	annotate_right_down_bitmap = new wxStaticBitmap( sbSizerOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerYpos->Add( annotate_right_down_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	sbSizerOrder->Add( bSizerYpos, 0, wxEXPAND, 5 );
+	sbSizerOrder->Add( bSizerYpos, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
 	bLeftColumn->Add( sbSizerOrder, 0, wxALL|wxEXPAND, 5 );
@@ -94,7 +89,7 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	gbSizerNumbering->Add( m_rbSheetX1000, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxTOP, 2 );
 
 
-	sbSizerNumbering->Add( gbSizerNumbering, 1, wxEXPAND, 5 );
+	sbSizerNumbering->Add( gbSizerNumbering, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
 	fgSizerNumbering->Add( sbSizerNumbering, 1, wxALL|wxEXPAND, 5 );

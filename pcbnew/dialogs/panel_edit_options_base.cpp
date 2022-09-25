@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,7 +30,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizeFPEdit->Add( m_magneticPads, 0, wxBOTTOM, 3 );
 
 	m_magneticGraphics = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Magnetic graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizeFPEdit->Add( m_magneticGraphics, 0, wxBOTTOM, 10 );
+	bSizeFPEdit->Add( m_magneticGraphics, 0, wxBOTTOM, 5 );
 
 
 	bOptionsSizer->Add( bSizeFPEdit, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -39,7 +39,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizerBoardEdit = new wxBoxSizer( wxVERTICAL );
 
 	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBoardEdit->Add( m_flipLeftRight, 0, wxBOTTOM, 10 );
+	bSizerBoardEdit->Add( m_flipLeftRight, 0, wxBOTTOM, 5 );
 
 
 	bOptionsSizer->Add( bSizerBoardEdit, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -70,10 +70,10 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_allowFreePads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allowFreePads->SetToolTip( _("If checked, pads can be moved with respect to the rest of the footprint.") );
 
-	bSizerUniversal->Add( m_allowFreePads, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerUniversal->Add( m_allowFreePads, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_escClearsNetHighlight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("<ESC> clears net highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerUniversal->Add( m_escClearsNetHighlight, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerUniversal->Add( m_escClearsNetHighlight, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	bOptionsSizer->Add( bSizerUniversal, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -129,10 +129,10 @@ PANEL_3D_COLORS_BASE::PANEL_3D_COLORS_BASE( wxWindow* parent, wxWindowID id, con
 
 	boardBodyLabel = new wxStaticText( sbBoardColors->GetStaticBox(), wxID_ANY, _("Board body:"), wxDefaultPosition, wxDefaultSize, 0 );
 	boardBodyLabel->Wrap( -1 );
-	fgSizer2->Add( boardBodyLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 20 );
+	fgSizer2->Add( boardBodyLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 20 );
 
 	m_boardBody = new COLOR_SWATCH( sbBoardColors->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_boardBody, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer2->Add( m_boardBody, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	sbBoardColors->Add( fgSizer2, 1, wxEXPAND, 5 );

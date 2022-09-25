@@ -35,7 +35,6 @@
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
-            <property name="drag_accept_files">0</property>
             <property name="enabled">1</property>
             <property name="event_handler">impl_virtual</property>
             <property name="fg"></property>
@@ -105,7 +104,6 @@
                                         <property name="dock">Dock</property>
                                         <property name="dock_fixed">0</property>
                                         <property name="docking">Left</property>
-                                        <property name="drag_accept_files">0</property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
                                         <property name="floatable">1</property>
@@ -170,7 +168,6 @@
                                         <property name="dock">Dock</property>
                                         <property name="dock_fixed">0</property>
                                         <property name="docking">Left</property>
-                                        <property name="drag_accept_files">0</property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
                                         <property name="floatable">1</property>
@@ -211,11 +208,11 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">0</property>
-                            <object class="wxStaticBoxSizer" expanded="0">
+                            <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">Order</property>
                                 <property name="minimum_size"></property>
@@ -223,11 +220,11 @@
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="parent">1</property>
                                 <property name="permission">none</property>
-                                <object class="sizeritem" expanded="0">
+                                <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxBoxSizer" expanded="0">
+                                    <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizerXpos</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -257,7 +254,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -324,7 +320,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -359,11 +354,11 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="0">
+                                <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxBoxSizer" expanded="0">
+                                    <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizerYpos</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -393,7 +388,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -436,16 +430,6 @@
                                         </object>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag"></property>
-                                            <property name="proportion">1</property>
-                                            <object class="spacer" expanded="0">
-                                                <property name="height">0</property>
-                                                <property name="permission">protected</property>
-                                                <property name="width">0</property>
-                                            </object>
-                                        </object>
-                                        <object class="sizeritem" expanded="0">
-                                            <property name="border">5</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticBitmap" expanded="0">
@@ -470,7 +454,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -537,7 +520,7 @@
                                         <property name="permission">none</property>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag">wxEXPAND</property>
+                                            <property name="flag">wxBOTTOM|wxEXPAND</property>
                                             <property name="proportion">1</property>
                                             <object class="wxGridBagSizer" expanded="0">
                                                 <property name="empty_cell_size"></property>
@@ -578,7 +561,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -647,7 +629,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -716,7 +697,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -785,7 +765,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>

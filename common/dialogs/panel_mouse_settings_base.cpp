@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,7 +60,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_zoomSizer->Add( m_checkAutoZoomSpeed, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
 
 
-	gbSizer1->Add( m_zoomSizer, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
+	gbSizer1->Add( m_zoomSizer, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	m_panSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -75,7 +75,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_panSizer->Add( m_autoPanSpeed, 1, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 0 );
 
 
-	gbSizer1->Add( m_panSizer, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
+	gbSizer1->Add( m_panSizer, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	gbSizer1->AddGrowableCol( 0 );

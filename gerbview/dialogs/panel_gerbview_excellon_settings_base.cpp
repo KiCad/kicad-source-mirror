@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -63,7 +63,7 @@ PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE::PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( wx
 	sbSizerCoordinates->Add( m_staticText7, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizerFmt;
-	fgSizerFmt = new wxFlexGridSizer( 0, 4, 0, 0 );
+	fgSizerFmt = new wxFlexGridSizer( 0, 2, 0, 0 );
 	fgSizerFmt->SetFlexibleDirection( wxBOTH );
 	fgSizerFmt->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -71,41 +71,53 @@ PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE::PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( wx
 	m_staticTextUnitsmm->Wrap( -1 );
 	fgSizerFmt->Add( m_staticTextUnitsmm, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
 	wxString m_choiceIntegerMMChoices[] = { _("2"), _("3"), _("4"), _("5"), _("6") };
 	int m_choiceIntegerMMNChoices = sizeof( m_choiceIntegerMMChoices ) / sizeof( wxString );
 	m_choiceIntegerMM = new wxChoice( sbSizerCoordinates->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceIntegerMMNChoices, m_choiceIntegerMMChoices, 0 );
 	m_choiceIntegerMM->SetSelection( 1 );
-	fgSizerFmt->Add( m_choiceIntegerMM, 0, wxALL, 5 );
+	bSizer4->Add( m_choiceIntegerMM, 0, wxALL, 5 );
 
 	m_staticText8 = new wxStaticText( sbSizerCoordinates->GetStaticBox(), wxID_ANY, _(":"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
-	fgSizerFmt->Add( m_staticText8, 0, wxALL, 5 );
+	bSizer4->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_choiceMantissaMMChoices[] = { _("2"), _("3"), _("4"), _("5"), _("6") };
 	int m_choiceMantissaMMNChoices = sizeof( m_choiceMantissaMMChoices ) / sizeof( wxString );
 	m_choiceMantissaMM = new wxChoice( sbSizerCoordinates->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceMantissaMMNChoices, m_choiceMantissaMMChoices, 0 );
 	m_choiceMantissaMM->SetSelection( 1 );
-	fgSizerFmt->Add( m_choiceMantissaMM, 0, wxALL, 5 );
+	bSizer4->Add( m_choiceMantissaMM, 0, wxALL, 5 );
+
+
+	fgSizerFmt->Add( bSizer4, 1, wxEXPAND, 5 );
 
 	m_staticTextUnitsInch = new wxStaticText( sbSizerCoordinates->GetStaticBox(), wxID_ANY, _("Format for inches"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitsInch->Wrap( -1 );
 	fgSizerFmt->Add( m_staticTextUnitsInch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+
 	wxString m_choiceIntegerInchChoices[] = { _("2"), _("3"), _("4"), _("5"), _("6") };
 	int m_choiceIntegerInchNChoices = sizeof( m_choiceIntegerInchChoices ) / sizeof( wxString );
 	m_choiceIntegerInch = new wxChoice( sbSizerCoordinates->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceIntegerInchNChoices, m_choiceIntegerInchChoices, 0 );
 	m_choiceIntegerInch->SetSelection( 0 );
-	fgSizerFmt->Add( m_choiceIntegerInch, 0, wxALL, 5 );
+	bSizer3->Add( m_choiceIntegerInch, 0, wxALL, 5 );
 
 	m_staticText9 = new wxStaticText( sbSizerCoordinates->GetStaticBox(), wxID_ANY, _(":"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
-	fgSizerFmt->Add( m_staticText9, 0, wxALL, 5 );
+	bSizer3->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_choiceMantissaInchChoices[] = { _("2"), _("3"), _("4"), _("5"), _("6") };
 	int m_choiceMantissaInchNChoices = sizeof( m_choiceMantissaInchChoices ) / sizeof( wxString );
 	m_choiceMantissaInch = new wxChoice( sbSizerCoordinates->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceMantissaInchNChoices, m_choiceMantissaInchChoices, 0 );
 	m_choiceMantissaInch->SetSelection( 2 );
-	fgSizerFmt->Add( m_choiceMantissaInch, 0, wxALL, 5 );
+	bSizer3->Add( m_choiceMantissaInch, 0, wxALL, 5 );
+
+
+	fgSizerFmt->Add( bSizer3, 1, wxEXPAND, 5 );
 
 
 	sbSizerCoordinates->Add( fgSizerFmt, 1, wxEXPAND, 5 );

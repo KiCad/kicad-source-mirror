@@ -161,7 +161,7 @@
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
-                                                    <property name="border">10</property>
+                                                    <property name="border">5</property>
                                                     <property name="flag">wxBOTTOM</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
@@ -236,7 +236,7 @@
                                                 <property name="orient">wxVERTICAL</property>
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
-                                                    <property name="border">10</property>
+                                                    <property name="border">5</property>
                                                     <property name="flag">wxBOTTOM</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
@@ -509,7 +509,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxTOP|wxBOTTOM|wxRIGHT</property>
+                                                    <property name="flag">wxBOTTOM|wxRIGHT</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -573,7 +573,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxTOP|wxBOTTOM|wxRIGHT</property>
+                                                    <property name="flag">wxBOTTOM|wxRIGHT</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="BottomDockable">1</property>
