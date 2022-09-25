@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-19 02:29+0000\n"
+"PO-Revision-Date: 2022-09-25 11:47+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4793,9 +4793,9 @@ msgid "Error loading font '%s'."
 msgstr "Chyba načítání písma '%s'."
 
 #: common/font/fontconfig.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "Pouzdro '%s' nenalezeno."
+msgstr "Písmo '%s' nenalezeno; nahrazeno '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:965
 #: eeschema/symbol_editor/symbol_library_manager.cpp:97
@@ -5169,9 +5169,8 @@ msgid "Cursor"
 msgstr "Kurzor"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "Přesunout položku"
+msgstr "Podsvícené prvky"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5325,9 +5324,8 @@ msgid "Activate selected"
 msgstr "Aktivovat vybrané"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Síť není zvolena"
+msgstr "Deaktivujte vyznačené"
 
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
@@ -5845,9 +5843,8 @@ msgid "Find"
 msgstr "Hledat"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Search for items"
-msgstr "Hledat další textové položky"
+msgstr "Vyhledání prvků"
 
 #: common/tool/actions.cpp:215
 msgid "Find text"
@@ -6510,9 +6507,8 @@ msgid "Select a File"
 msgstr "Vybrat soubor"
 
 #: common/widgets/lib_tree.cpp:279
-#, fuzzy
 msgid "recent searches"
-msgstr "Aktuální seznam prohledávaných cest"
+msgstr "nedávné vyhledávání"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -6737,9 +6733,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "Soubory starých knihoven symbolů KiCadu"
 
 #: common/wildcards_and_files_ext.cpp:243
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "Soubor knihovny symbolů KiCadu"
+msgstr "Soubory databázové knihovny KiCad"
 
 #: common/wildcards_and_files_ext.cpp:250
 msgid "All KiCad symbol library files"
@@ -7504,20 +7499,19 @@ msgstr ""
 "nebyl nalezen. Skript není k dispozici."
 
 #: eeschema/component_references_lister.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Neočíslované položky: %s%s (část %d)\n"
+msgstr "Neočíslované položka: %s%s (jednotka %d)"
 
 #: eeschema/component_references_lister.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Neočíslované položky: %s%s\n"
+msgstr "Neočíslované položky: %s%s"
 
 #: eeschema/component_references_lister.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr ""
-"Chyba: symbol %s%s%s (jednotka %d) překračuje definované jednotky (%d)\n"
+msgstr "Chyba: symbol %s%s%s (jednotka %d) překračuje definované jednotky (%d)"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -8662,9 +8656,9 @@ msgstr "Kliknutím na položky je na desce zvýrazníte."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:87
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Porušení (%d)"
+msgstr "Porušení (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
 #: pcbnew/dialogs/dialog_drc_base.cpp:149
@@ -11494,7 +11488,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "Výchozí pro všechny instance listu"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 msgid ""
@@ -11808,9 +11802,9 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"Za normálních okolností jsou stopy spojeny s jejich symboly prostřednictvím "
-"jejich jedinečných ID. Tuto možnost vyberte, pouze pokud chcete obnovit "
-"vazby stopy na základě jejich referenčních označení."
+"Za normálních okolností jsou pouzdra spojeny s jejich symboly "
+"prostřednictvím jejich jedinečných ID. Tuto možnost vyberte, pouze pokud "
+"chcete obnovit vazby stopy na základě jejich referenčních označení."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -12014,7 +12008,7 @@ msgstr "Volný úhel"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "Úhel 90 stupňů"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "45 deg Angle"
@@ -14534,19 +14528,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarchický vývod listu %s"
 
 #: eeschema/sch_symbol.cpp:1156
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "Vyloučit z rozpisky materiálu"
+msgstr "Vyloučit z BOM"
 
 #: eeschema/sch_symbol.cpp:1161
-#, fuzzy
 msgid "Excluded from board"
 msgstr "Vyloučit z desky"
 
 #: eeschema/sch_symbol.cpp:1166
-#, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1537
 msgid "Power symbol"
@@ -17326,14 +17317,12 @@ msgstr "symbol není multi-jednotka"
 
 #: eeschema/tools/sch_edit_tool.cpp:395 eeschema/tools/sch_edit_tool.cpp:436
 #: eeschema/tools/sch_edit_tool.cpp:475
-#, fuzzy
 msgid "Edit Main Fields"
-msgstr "Upravit %s pole"
+msgstr "Upravit hlavní pole"
 
 #: eeschema/tools/sch_edit_tool.cpp:496
-#, fuzzy
 msgid "Change To"
-msgstr "Změnit typ"
+msgstr "Změnit na"
 
 #: eeschema/tools/sch_edit_tool.cpp:1110
 msgid "Label value cannot go below zero"
@@ -17596,46 +17585,43 @@ msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10A Log"
-msgstr ""
+msgstr "10A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log"
-msgstr ""
+msgstr "15A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log S"
-msgstr ""
+msgstr "15A Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10C Rev Log"
-msgstr ""
+msgstr "10C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log"
-msgstr ""
+msgstr "15C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log S"
-msgstr ""
+msgstr "15C Rev Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "0B Lin"
-msgstr ""
+msgstr "0B Lin"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "4B S-Curve"
-msgstr "Oblouk"
+msgstr "Křivka 4B"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "5B S-Curve"
-msgstr "Oblouk"
+msgstr "Křivka 5B"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "Switch"
-msgstr "Přepnout jednotky"
+msgstr "Přepínaná"
 
 #: eeschema/widgets/tuner_slider_base.cpp:70
 #, fuzzy
@@ -20808,7 +20794,7 @@ msgstr "Teplotní koeficient:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
-msgstr ""
+msgstr "Tepelný součinitel při 20°C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Linear resistance:"
@@ -20882,7 +20868,7 @@ msgstr "Úbytek napětí:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:225
 msgid "Dissipated power:"
-msgstr ""
+msgstr "Rozptýlený výkon:"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
@@ -21616,7 +21602,7 @@ msgstr "relativní permitivita (dielektrická konstanta)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:99
 msgid "mur:"
-msgstr ""
+msgstr "µr:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "relative permeability"
@@ -29124,15 +29110,16 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "Poznámka: Vyplňování zón může být pomalé, když je < %s."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:398
 msgid "Zone fill strategy"
 msgstr "Strategie plnění zóny"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:408
+#, fuzzy
 msgid "Allow fillets outside zone outline"
-msgstr ""
+msgstr "Povolit vyplnění mimo obrys zóny"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:420
 #, fuzzy
@@ -30431,11 +30418,11 @@ msgstr "Kontrola pravidla podmínky \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:857 pcbnew/drc/drc_engine.cpp:1481
 msgid "Assertion passed."
-msgstr ""
+msgstr "Minulé tvrzení."
 
 #: pcbnew/drc/drc_engine.cpp:861 pcbnew/drc/drc_engine.cpp:1485
 msgid "--> Assertion failed. <--"
-msgstr ""
+msgstr "--> Ujištění selhalo. <--"
 
 #: pcbnew/drc/drc_engine.cpp:881
 #, c-format
@@ -32399,7 +32386,7 @@ msgstr "Kontrola plošek..."
 
 #: pcbnew/ibis/ibis_parser.cpp:548
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "Chybí [IBIS Ver]"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
@@ -32835,7 +32822,7 @@ msgstr "Import souboru vektorové grafiky"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:132
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "Nedostatek paměti pro načtení DXF, soubor může být příliš velký."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1379
 msgid "Invalid spline definition encountered"
@@ -33615,7 +33602,7 @@ msgstr "Ploška %s %s z %s na %s"
 #: pcbnew/pad.cpp:1255
 #, c-format
 msgid "NPTH of %s"
-msgstr ""
+msgstr "NPTH z %s"
 
 #: pcbnew/pad.cpp:1259
 #, fuzzy, c-format
@@ -33905,7 +33892,7 @@ msgstr "Text na DPS '%s' na %s"
 #: pcbnew/pcb_track.cpp:103
 #, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Slepá/vnořená prokovy %s na %s"
+msgstr "Slepé/vnořené prokovy %s na %s"
 
 #: pcbnew/pcb_track.cpp:104
 #, c-format
@@ -34319,6 +34306,9 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
+"Písma CADSTAR se liší od těch v KiCadu. To pravděpodobně povede k problémům "
+"se zarovnáním, které mohou způsobit chyby DRC. Pečlivě zkontrolujte "
+"importované textové prvky a v případě potřeby opravte ručně."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -34597,6 +34587,8 @@ msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
 msgstr ""
+"Projekt CADSTAR obsahuje slzy. Import to je ještě nepodporuje, takže slzy v "
+"projektu byly ignorovány."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2486
 #, c-format
@@ -35840,12 +35832,12 @@ msgstr "U reference drátové propojky chybí prvky plošky '%s'."
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
 #, c-format
 msgid "%d Teardrops created"
-msgstr ""
+msgstr "Vytvořeno %d slz"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:235
 #, c-format
 msgid "%d Teardrops removed."
-msgstr ""
+msgstr "Odstraněno %d slz."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
 #, fuzzy
@@ -36535,7 +36527,7 @@ msgstr "Akce"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1289
 msgid "Assertions for:"
-msgstr ""
+msgstr "Tvrzení pro:"
 
 #: pcbnew/tools/convert_tool.cpp:151
 msgid "Create from Selection"
@@ -37219,7 +37211,7 @@ msgstr "Změnit šířku spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:336
 msgid "Updates selected track & via sizes"
-msgstr "Aktualizace velikosti spojů & prokov"
+msgstr "Aktualizace velikosti spojů & prokovů"
 
 #: pcbnew/tools/pcb_actions.cpp:340
 msgid "Adds arcs tangent to the selected straight track segments"
