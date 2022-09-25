@@ -25,14 +25,17 @@
 
 #pragma once
 
+#include <board.h>
 #include <optional>
 #include <dialog_net_inspector_base.h>
 
 class PCB_EDIT_FRAME;
 class NETINFO_ITEM;
 class BOARD;
+class BOARD_ITEM;
 class CN_ITEM;
 class EDA_PATTERN_MATCH;
+class PCB_TRACK;
 
 class DIALOG_NET_INSPECTOR : public DIALOG_NET_INSPECTOR_BASE, public BOARD_LISTENER
 {

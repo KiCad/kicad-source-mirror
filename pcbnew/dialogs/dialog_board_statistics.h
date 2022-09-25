@@ -27,7 +27,6 @@
 #define _DIALOG_BOARD_STATISTICS_H
 
 
-#include <base_units.h>
 #include <board.h>
 #include <footprint.h>
 #include <pcb_track.h>

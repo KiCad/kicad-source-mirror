@@ -25,7 +25,6 @@
 
 #include <string_utils.h>
 #include <tools/board_inspection_tool.h>
-#include <board.h>
 #include <board_design_settings.h>
 #include <confirm.h>
 #include <pcb_track.h>

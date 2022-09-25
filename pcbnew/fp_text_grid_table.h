@@ -24,7 +24,6 @@
 #ifndef FP_TEXT_GRID_TABLE_H
 #define FP_TEXT_GRID_TABLE_H
 
-#include <base_units.h>
 #include <wx/grid.h>
 #include <grid_tricks.h>
 #include <fp_text.h>

@@ -30,8 +30,9 @@
 #include <pcb_painter.h>
 #include <connectivity/connectivity_data.h>
 #include <drc/drc_engine.h>
-#include <dialogs/panel_setup_rules_base.h>
+#include <dialogs/dialog_board_statistics.h>
 #include <dialogs/dialog_constraints_reporter.h>
+#include <dialogs/panel_setup_rules_base.h>
 #include <string_utils.h>
 #include "board_inspection_tool.h"
 #include <pcbnew_settings.h>

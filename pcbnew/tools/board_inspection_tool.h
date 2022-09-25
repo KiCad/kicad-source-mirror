@@ -24,9 +24,7 @@
 #ifndef BOARD_INSPECTION_TOOL_H
 #define BOARD_INSPECTION_TOOL_H
 
-#include <dialogs/dialog_board_statistics.h>
 #include <dialogs/dialog_net_inspector.h>
-#include <dialogs/dialog_HTML_reporter_base.h>
 #include <dialogs/dialog_constraints_reporter.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_engine.h>

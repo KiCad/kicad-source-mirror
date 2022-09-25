@@ -24,7 +24,6 @@
 #ifndef FIELDS_GRID_TABLE_H
 #define FIELDS_GRID_TABLE_H
 
-#include <base_units.h>
 #include <sch_validators.h>
 #include <wx/grid.h>
 #include <sch_symbol.h>
