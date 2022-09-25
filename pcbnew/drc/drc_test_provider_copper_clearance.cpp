@@ -511,17 +511,26 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     bool testShorting = !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS );
     bool testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
 
-    // Disable some tests *within* a single footprint
+    // Disable some tests for net-tie objects in a footprint
     if( other->GetParent() == pad->GetParent() )
     {
-        FOOTPRINT* fp = static_cast<FOOTPRINT*>( pad->GetParent() );
+        FOOTPRINT*              fp = static_cast<FOOTPRINT*>( pad->GetParent() );
+        std::map<wxString, int> padToNetTieGroupMap = fp->MapPadNumbersToNetTieGroups();
+        int                     padGroupIdx = padToNetTieGroupMap[ pad->GetNumber() ];
 
-        // Graphic items are allowed to act as net-ties within their own footprint
-        if( fp->IsNetTie() && ( other->Type() == PCB_FP_SHAPE_T || other->Type() == PCB_PAD_T ) )
+        if( other->Type() == PCB_PAD_T )
+        {
+            PAD* otherPad = static_cast<PAD*>( other );
+
+            if( padGroupIdx >= 0 && padGroupIdx == padToNetTieGroupMap[ otherPad->GetNumber() ] )
+                testClearance = false;
+
+            if( pad->SameLogicalPadAs( otherPad ) )
+                testHoles = false;
+        }
+
+        if( other->Type() == PCB_FP_SHAPE_T && padGroupIdx >= 0 )
             testClearance = false;
-
-        if( other->Type() == PCB_PAD_T && pad->SameLogicalPadAs( static_cast<PAD*>( other ) ) )
-            testHoles = false;
     }
 
     PAD*     otherPad = nullptr;

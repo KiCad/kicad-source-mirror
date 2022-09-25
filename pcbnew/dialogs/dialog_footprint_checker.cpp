@@ -154,10 +154,10 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                 errorHandler( aPad, nullptr, nullptr, aErrorCode, aMsg, aPad->GetPosition() );
             } );
 
-    footprint->CheckOverlappingPads(
+    footprint->CheckShortingPads(
             [&]( const PAD* aPadA, const PAD* aPadB, const VECTOR2I& aPosition )
             {
-                errorHandler( aPadA, aPadB, nullptr, DRCE_OVERLAPPING_PADS, wxEmptyString,
+                errorHandler( aPadA, aPadB, nullptr, DRCE_SHORTING_ITEMS, wxEmptyString,
                               aPosition );
             } );
 

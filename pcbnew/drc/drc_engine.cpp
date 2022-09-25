@@ -1757,6 +1757,10 @@ bool DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, 
 }
 
 
+/**
+ * Check if the given collision between a track and another item occurs during the track's entry
+ * into a net-tie pad.
+ */
 bool DRC_ENGINE::IsNetTieExclusion( int aTrackNetCode, PCB_LAYER_ID aTrackLayer,
                                     const VECTOR2I& aCollisionPos, BOARD_ITEM* aCollidingItem )
 {
@@ -1764,13 +1768,13 @@ bool DRC_ENGINE::IsNetTieExclusion( int aTrackNetCode, PCB_LAYER_ID aTrackLayer,
 
     if( parentFootprint && parentFootprint->IsNetTie() )
     {
+        std::map<wxString, int> padToNetTieGroupMap = parentFootprint->MapPadNumbersToNetTieGroups();
+
         for( PAD* pad : parentFootprint->Pads() )
         {
-            if( aTrackNetCode == pad->GetNetCode() )
+            if( padToNetTieGroupMap[ pad->GetNumber() ] >= 0 && aTrackNetCode == pad->GetNetCode() )
             {
-                std::shared_ptr<SHAPE> otherShape = pad->GetEffectiveShape( aTrackLayer );
-
-                if( otherShape->Collide( aCollisionPos, 0 ) )
+                if( pad->GetEffectiveShape( aTrackLayer )->Collide( aCollisionPos, 0 ) )
                     return true;
             }
         }

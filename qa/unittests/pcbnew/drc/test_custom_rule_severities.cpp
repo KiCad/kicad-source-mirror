@@ -60,7 +60,6 @@ BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE 
     bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
     // Also disable a couple of footprint checks which throw up errors on this board
-    bds.m_DRCSeverities[ DRCE_OVERLAPPING_PADS ] = SEVERITY::RPT_SEVERITY_IGNORE;
     bds.m_DRCSeverities[ DRCE_FOOTPRINT_TYPE_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
     bds.m_DRCEngine->SetViolationHandler(

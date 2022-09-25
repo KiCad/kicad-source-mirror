@@ -257,10 +257,6 @@ DRC_ITEM DRC_ITEM::footprintTHPadhasNoHole( DRCE_PAD_TH_WITH_NO_HOLE,
         _( "Through hole pad has no hole" ),
         wxT( "through_hole_pad_without_hole" ) );
 
-DRC_ITEM DRC_ITEM::footprintOverlappingPads( DRCE_OVERLAPPING_PADS,
-        _( "Pads with different numbers overlap" ),
-        wxT( "overlapping_pads" ) );
-
 
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::heading_electrical,
@@ -322,8 +318,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::footprintTypeMismatch,
             DRC_ITEM::libFootprintIssues,
             DRC_ITEM::libFootprintMismatch,
-            DRC_ITEM::footprintTHPadhasNoHole,
-            DRC_ITEM::footprintOverlappingPads
+            DRC_ITEM::footprintTHPadhasNoHole
         } );
 
 
@@ -383,7 +378,6 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_FOOTPRINT:                return std::make_shared<DRC_ITEM>( footprint );
     case DRCE_FOOTPRINT_TYPE_MISMATCH:  return std::make_shared<DRC_ITEM>( footprintTypeMismatch );
     case DRCE_PAD_TH_WITH_NO_HOLE:      return std::make_shared<DRC_ITEM>( footprintTHPadhasNoHole );
-    case DRCE_OVERLAPPING_PADS:         return std::make_shared<DRC_ITEM>( footprintOverlappingPads );
     default:
         wxFAIL_MSG( wxT( "Unknown DRC error code" ) );
         return nullptr;

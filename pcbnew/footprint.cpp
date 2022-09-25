@@ -43,7 +43,6 @@
 #include <footprint.h>
 #include <zone.h>
 #include <view/view.h>
-#include <geometry/shape_null.h>
 #include <i18n_utility.h>
 #include <drc/drc_item.h>
 #include <geometry/shape_segment.h>
@@ -1185,25 +1184,6 @@ PAD* FOOTPRINT::GetPad( const VECTOR2I& aPosition, LSET aLayerMask )
 }
 
 
-PAD* FOOTPRINT::GetTopLeftPad()
-{
-    PAD* topLeftPad = m_pads.front();
-
-    for( PAD* p : m_pads )
-    {
-        VECTOR2I pnt = p->GetPosition(); // GetPosition() returns the center of the pad
-
-        if( ( pnt.x < topLeftPad->GetPosition().x ) ||
-            ( topLeftPad->GetPosition().x == pnt.x && pnt.y < topLeftPad->GetPosition().y ) )
-        {
-            topLeftPad = p;
-        }
-    }
-
-    return topLeftPad;
-}
-
-
 unsigned FOOTPRINT::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 {
     if( aIncludeNPTH )
@@ -1396,33 +1376,6 @@ void FOOTPRINT::RunOnChildren( const std::function<void ( BOARD_ITEM*)>& aFuncti
     {
         wxFAIL_MSG( wxT( "Error running FOOTPRINT::RunOnChildren" ) );
     }
-}
-
-
-void FOOTPRINT::GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads ) const
-{
-    std::unordered_set<int> layers;
-
-    for( BOARD_ITEM* item : m_drawings )
-        layers.insert( static_cast<int>( item->GetLayer() ) );
-
-    if( aIncludePads )
-    {
-        for( PAD* pad : m_pads )
-        {
-            int pad_layers[KIGFX::VIEW::VIEW_MAX_LAYERS], pad_layers_count;
-            pad->ViewGetLayers( pad_layers, pad_layers_count );
-
-            for( int i = 0; i < pad_layers_count; i++ )
-                layers.insert( pad_layers[i] );
-        }
-    }
-
-    aCount = layers.size();
-    int i = 0;
-
-    for( int layer : layers )
-        aLayers[i++] = layer;
 }
 
 
@@ -2296,6 +2249,48 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
 }
 
 
+std::map<wxString, int> FOOTPRINT::MapPadNumbersToNetTieGroups() const
+{
+    std::map<wxString, int> padNumberToGroupIdxMap;
+
+    for( const PAD* pad : m_pads )
+        padNumberToGroupIdxMap[ pad->GetNumber() ] = -1;
+
+    for( size_t ii = 0; ii < m_netTiePadGroups.size(); ++ii )
+    {
+        wxStringTokenizer     groupParser( m_netTiePadGroups[ ii ], "," );
+        std::vector<wxString> numbersInGroup;
+
+        while( groupParser.HasMoreTokens() )
+            padNumberToGroupIdxMap[ groupParser.GetNextToken().Trim( false ).Trim( true ) ] = ii;
+    }
+
+    return padNumberToGroupIdxMap;
+}
+
+
+std::vector<PAD*> FOOTPRINT::GetNetTiePads( PAD* aPad ) const
+{
+    // First build a map from pad numbers to allowed-shorting-group indexes.  This ends up being
+    // something like O(3n), but it still beats O(n^2) for large numbers of pads.
+
+    std::map<wxString, int> padToNetTieGroupMap = MapPadNumbersToNetTieGroups();
+    int                     groupIdx = padToNetTieGroupMap[ aPad->GetNumber() ];
+    std::vector<PAD*>       otherPads;
+
+    if( groupIdx >= 0 )
+    {
+        for( PAD* pad : m_pads )
+        {
+            if( padToNetTieGroupMap[ pad->GetNumber() ] == groupIdx )
+                otherPads.push_back( pad );
+        }
+    }
+
+    return otherPads;
+}
+
+
 void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxString& )>& aErrorHandler )
 {
     int likelyAttr = GetLikelyAttribute();
@@ -2405,19 +2400,24 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
 }
 
 
-void FOOTPRINT::CheckOverlappingPads( const std::function<void( const PAD*, const PAD*,
-                                                                const VECTOR2I& )>& aErrorHandler )
+void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const PAD*,
+                                                             const VECTOR2I& )>& aErrorHandler )
 {
     std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
 
     for( PAD* pad : Pads() )
     {
+        std::vector<PAD*> netTiePads = GetNetTiePads( pad );
+
         for( PAD* other : Pads() )
         {
             if( other == pad || pad->SameLogicalPadAs( other ) )
                 continue;
 
-            if( !( pad->GetLayerSet() & other->GetLayerSet() ).any() )
+            if( alg::contains( netTiePads, other ) )
+                continue;
+
+            if( !( ( pad->GetLayerSet() & other->GetLayerSet() ) & LSET::AllCuMask() ).any() )
                 continue;
 
             // store canonical order so we don't collide in both directions (a:b and b:a)
@@ -2451,26 +2451,10 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
                                                         const BOARD_ITEM* cItem,
                                                         const VECTOR2I& )>& aErrorHandler )
 {
-    // First build a map from pads to allowed-shorting-group indexes.  This ends up being
+    // First build a map from pad numbers to allowed-shorting-group indexes.  This ends up being
     // something like O(3n), but it still beats O(n^2) for large numbers of pads.
 
-    std::unordered_map<const PAD*, int> padToGroupIdxMap;
-
-    for( const PAD* pad : m_pads )
-        padToGroupIdxMap[ pad ] = -1;
-
-    for( size_t ii = 0; ii < m_netTiePadGroups.size(); ++ii )
-    {
-        wxStringTokenizer groupParser( m_netTiePadGroups[ ii ], "," );
-
-        while( groupParser.HasMoreTokens() )
-        {
-            PAD* pad = FindPadByNumber( groupParser.GetNextToken().Trim( false ).Trim( true ) );
-
-            if( pad )
-                padToGroupIdxMap[ pad ] = ii;
-        }
-    }
+    std::map<wxString, int> padNumberToGroupIdxMap = MapPadNumbersToNetTieGroups();
 
     // Now collect all the footprint items which are on copper layers
 
@@ -2533,12 +2517,12 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
             if( pads.size() > 1 )
             {
                 const PAD* firstPad = pads[0];
-                int        firstGroupIdx = padToGroupIdxMap[ firstPad ];
+                int        firstGroupIdx = padNumberToGroupIdxMap[ firstPad->GetNumber() ];
 
                 for( size_t ii = 1; ii < pads.size(); ++ii )
                 {
                     const PAD* thisPad = pads[ii];
-                    int        thisGroupIdx = padToGroupIdxMap[ thisPad ];
+                    int        thisGroupIdx = padNumberToGroupIdxMap[ thisPad->GetNumber() ];
 
                     if( thisGroupIdx < 0 || thisGroupIdx != firstGroupIdx )
                     {
@@ -2571,6 +2555,7 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
 void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& )>& aErrorHandler )
 {
     std::set<wxString> padNumbers;
+    wxString           msg;
 
     for( size_t ii = 0; ii < m_netTiePadGroups.size(); ++ii )
     {
@@ -2583,15 +2568,13 @@ void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& 
 
             if( !pad )
             {
-                aErrorHandler( wxString::Format( _( "(net-tie pad group contains unknown pad "
-                                                    "number %s)" ),
-                                                 padNumber ) );
+                msg.Printf( _( "(net-tie pad group contains unknown pad number %s)" ), padNumber );
+                aErrorHandler( msg );
             }
-            else if( !padNumbers.insert( padNumber ).second )
+            else if( !padNumbers.insert( pad->GetNumber() ).second )
             {
-                aErrorHandler( wxString::Format( _( "(pad %s appears in more than one net-tie "
-                                                    "pad group)" ),
-                                                 padNumber ) );
+                msg.Printf( _( "(pad %s appears in more than one net-tie pad group)" ), padNumber );
+                aErrorHandler( msg );
             }
         }
     }

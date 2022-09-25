@@ -261,8 +261,8 @@ public:
     }
 
     /**
-     * Return a list of pad groups, each of which is allowed to short nets within their group.
-     * A pad group is a comma-separated list of pad numbers.
+     * @return a list of pad groups, each of which is allowed to short nets within their group.
+     *         A pad group is a comma-separated list of pad numbers.
      */
     const std::vector<wxString>& GetNetTiePadGroups() const { return m_netTiePadGroups; }
 
@@ -275,6 +275,17 @@ public:
     {
         m_netTiePadGroups.emplace_back( aGroup );
     }
+
+    /**
+     * @return a map from pad numbers to net-tie group indicies.  If a pad is not a member of
+     *         a net-tie group its index will be -1.
+     */
+    std::map<wxString, int> MapPadNumbersToNetTieGroups() const;
+
+    /**
+     * @return a list of pads that appear in \a aPad's net-tie pad group.
+     */
+    std::vector<PAD*> GetNetTiePads( PAD* aPad ) const;
 
     /**
      * Returns the most likely attribute based on pads
@@ -385,13 +396,13 @@ public:
     void CheckPads( const std::function<void( const PAD*, int, const wxString& )>& aErrorHandler );
 
     /**
-     * Check for overlapping, different-numbered pads.
+     * Check for overlapping, different-numbered, non-net-tie pads.
      *
      * @param aErrorHandler callback to handle the error messages generated
      */
-    void CheckOverlappingPads( const std::function<void( const PAD*,
-                                                         const PAD*,
-                                                         const VECTOR2I& )>& aErrorHandler );
+    void CheckShortingPads( const std::function<void( const PAD*,
+                                                      const PAD*,
+                                                      const VECTOR2I& )>& aErrorHandler );
 
     /**
      * Check for un-allowed shorting of pads in net-tie footprints.  If two pads are shorted,
@@ -577,8 +588,6 @@ public:
      */
     PAD* GetPad( const VECTOR2I& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
 
-    PAD* GetTopLeftPad();
-
     /**
      * Return the number of pads.
      *
@@ -658,15 +667,6 @@ public:
      * @param aFunction is the function to be invoked.
      */
     void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const;
-
-    /**
-     * Return a set of all layers that this footprint has drawings on similar to ViewGetLayers().
-     *
-     * @param aLayers is an array to store layer ids.
-     * @param aCount is the number of layers stored in the array.
-     * @param aIncludePads controls whether to also include pad layers.
-     */
-    void GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads = true ) const;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 

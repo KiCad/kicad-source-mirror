@@ -874,33 +874,60 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
-        bool skipFootprint = false;
-
         knockoutGraphicClearance( &footprint->Reference() );
         knockoutGraphicClearance( &footprint->Value() );
 
-        // Don't knock out holes in zones that share a net with a nettie footprint
+        std::set<PAD*> allowedNetTiePads;
+
+        // Don't knock out holes for graphic items which implement a net-tie to the zone's net
+        // on the layer being filled.
         if( footprint->IsNetTie() )
         {
             for( PAD* pad : footprint->Pads() )
             {
-                if( aZone->GetNetCode() == pad->GetNetCode() )
+                if( pad->GetNetCode() == aZone->GetNetCode() )
                 {
-                    skipFootprint = true;
-                    break;
+                    if( pad->IsOnLayer( aLayer ) )
+                        allowedNetTiePads.insert( pad );
+
+                    for( PAD* other : footprint->GetNetTiePads( pad ) )
+                    {
+                        if( other->IsOnLayer( aLayer ) )
+                            allowedNetTiePads.insert( other );
+                    }
                 }
             }
         }
-
-        if( skipFootprint )
-            continue;
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
             if( checkForCancel( m_progressReporter ) )
                 return;
 
-            knockoutGraphicClearance( item );
+            BOX2I itemBBox = item->GetBoundingBox();
+
+            if( !zone_boundingbox.Intersects( itemBBox ) )
+                continue;
+
+            bool skipItem = false;
+
+            if( item->IsOnLayer( aLayer ) )
+            {
+                std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape();
+
+                for( PAD* pad : allowedNetTiePads )
+                {
+                    if( pad->GetBoundingBox().Intersects( itemBBox )
+                            && pad->GetEffectiveShape()->Collide( itemShape.get() ) )
+                    {
+                        skipItem = true;
+                        break;
+                    }
+                }
+            }
+
+            if( !skipItem )
+                knockoutGraphicClearance( item );
         }
     }
 

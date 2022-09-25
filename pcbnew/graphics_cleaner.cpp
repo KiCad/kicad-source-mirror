@@ -351,30 +351,13 @@ void GRAPHICS_CLEANER::mergePads()
 {
     wxCHECK_MSG( m_parentFootprint, /*void*/, wxT( "mergePads() is FootprintEditor only" ) );
 
-    PAD_TOOL* padTool = m_toolMgr->GetTool<PAD_TOOL>();
-
-    for( PAD* pad : m_parentFootprint->Pads() )
-        pad->SetFlags( CANDIDATE );
-
-    if( m_parentFootprint->IsNetTie() )
-    {
-        for( const wxString& group : m_parentFootprint->GetNetTiePadGroups() )
-        {
-            wxStringTokenizer groupParser( group, "," );
-
-            while( groupParser.HasMoreTokens() )
-            {
-                wxString number = groupParser.GetNextToken().Trim( false ).Trim( true );
-
-                if( PAD* pad = m_parentFootprint->FindPadByNumber( number ) )
-                    pad->ClearFlags( CANDIDATE );
-            }
-        }
-    }
+    PAD_TOOL*               padTool = m_toolMgr->GetTool<PAD_TOOL>();
+    std::map<wxString, int> padToNetTieGroupMap = m_parentFootprint->MapPadNumbersToNetTieGroups();
 
     for( PAD* pad : m_parentFootprint->Pads() )
     {
-        if( !( pad->GetFlags() & CANDIDATE ) )
+        // Don't merge a pad that's in a net-tie pad group.  (We don't care which group.)
+        if( padToNetTieGroupMap[ pad->GetNumber() ] >= 0 )
             continue;
 
         std::vector<FP_SHAPE*> shapes = padTool->RecombinePad( pad, m_dryRun, m_commit );

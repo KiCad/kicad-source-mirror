@@ -386,18 +386,10 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aT
     // footprint.  They must be allowed to intrude into their pad's mask aperture.
     if( aTestNet < 0 && aMaskItem->Type() == PCB_PAD_T && fp->IsNetTie() )
     {
-        wxString padNumber = static_cast<PAD*>( aMaskItem )->GetNumber();
+        std::map<wxString, int> padNumberToGroupIdxMap = fp->MapPadNumbersToNetTieGroups();
 
-        for( const wxString& group : fp->GetNetTiePadGroups() )
-        {
-            wxStringTokenizer groupParser( group, "," );
-
-            while( groupParser.HasMoreTokens() )
-            {
-                if( groupParser.GetNextToken().Trim( false ).Trim( true ) == padNumber )
-                    return false;
-            }
-        }
+        if( padNumberToGroupIdxMap[ static_cast<PAD*>( aMaskItem )->GetNumber() ] >= 0 )
+            return false;
     }
 
     return true;
