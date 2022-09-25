@@ -449,6 +449,17 @@ public:
     }
 
     /**
+     * Create a bookmark to a symbol
+     *
+     * @aBox is the bounding box of the symbol
+     * @aSymbolReference is the symbol schematic ref
+     */
+    virtual void ComponentBookmark( const BOX2I& aBox, const wxString& aSymbolReference )
+    {
+        // NOP for most plotters.
+    }
+
+    /**
      * Draw a marker (used for the drill map).
      */
     static const unsigned MARKER_COUNT = 58;

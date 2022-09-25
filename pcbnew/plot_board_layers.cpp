@@ -524,6 +524,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         }
 
         aPlotter->EndBlock( nullptr );
+        aPlotter->ComponentBookmark( footprint->GetBoundingBox(), footprint->GetReference() );
     }
 
     // Plot vias on copper layers, and if aPlotOpt.GetPlotViaOnMaskLayer() is true,

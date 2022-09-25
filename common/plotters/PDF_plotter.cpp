@@ -660,7 +660,7 @@ void PDF_PLOTTER::closePdfStream()
     }
 
     delete[] inbuf;
-    fputs( "endstream\n", m_outputFile );
+    fputs( "\nendstream\n", m_outputFile );
     closePdfObject();
 
     // Writing the deferred length as an indirect object
@@ -782,7 +782,8 @@ void PDF_PLOTTER::ClosePage()
     }
 
     // Emit the page object and put it in the page list for later
-    m_pageHandles.push_back( startPdfObject() );
+    int pageHandle = startPdfObject();
+    m_pageHandles.push_back( pageHandle );
 
     fprintf( m_outputFile,
              "<<\n"
@@ -809,15 +810,44 @@ void PDF_PLOTTER::ClosePage()
     // Mark the page stream as idle
     m_pageStreamHandle = 0;
 
+    OUTLINE_NODE* pageOutlineNode = addOutlineNode(
+            m_outlineRoot.get(), -1, wxString::Format( _( "Page %s" ), m_pageNumbers.back() ) );
+
+
+    OUTLINE_NODE* componentOutlineNode = addOutlineNode( pageOutlineNode, -1, _( "Components" ) );
+
+    // let's reorg the symbol bookmarks under a page handle
+    for( const std::pair<BOX2I, wxString>& bookmarkPair : m_componentBookmarksInPage )
+    {
+        const BOX2I&    box = bookmarkPair.first;
+        const wxString& ref = bookmarkPair.second;
+
+        VECTOR2I bottomLeft = iuToPdfUserSpace( box.GetPosition() );
+        VECTOR2I topRight = iuToPdfUserSpace( box.GetEnd() );
+
+        int actionHandle = emitGoToAction( pageHandle, bottomLeft, topRight );
+
+        addOutlineNode( componentOutlineNode, actionHandle, ref );
+    }
+
+
+    std::sort( componentOutlineNode->children.begin(), componentOutlineNode->children.end(),
+               []( const OUTLINE_NODE* a, const OUTLINE_NODE* b ) -> bool
+               {
+                   return a->title < b->title;
+               } );
+
+
     // Clean up
     m_hyperlinksInPage.clear();
     m_hyperlinkMenusInPage.clear();
+    m_componentBookmarksInPage.clear();
 }
 
 
-bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber )
+bool PDF_PLOTTER::StartPlot(const wxString& aPageNumber)
 {
-    wxASSERT( m_outputFile );
+    wxASSERT(m_outputFile);
 
     // First things first: the customary null object
     m_xrefTable.clear();
@@ -826,11 +856,16 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber )
     m_hyperlinkMenusInPage.clear();
     m_hyperlinkHandles.clear();
     m_hyperlinkMenuHandles.clear();
+    m_componentBookmarksInPage.clear();
+    m_outlineRoot.release();
+    m_totalOutlineNodes = 0;
+
+    m_outlineRoot = std::make_unique<OUTLINE_NODE>();
 
     /* The header (that's easy!). The second line is binary junk required
        to make the file binary from the beginning (the important thing is
        that they must have the bit 7 set) */
-    fputs( "%PDF-1.5\n%\200\201\202\203\n", m_outputFile );
+    fputs("%PDF-1.5\n%\200\201\202\203\n", m_outputFile);
 
     /* Allocate an entry for the page tree root, it will go in every page parent entry */
     m_pageTreeHandle = allocPdfObject();
@@ -842,10 +877,129 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber )
     /* Now, the PDF is read from the end, (more or less)... so we start
        with the page stream for page 1. Other more important stuff is written
        at the end */
-    StartPage( aPageNumber );
+    StartPage(aPageNumber);
     return true;
 }
 
+
+int PDF_PLOTTER::emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft,
+                                 const VECTOR2I& aTopRight )
+{
+    int actionHandle = allocPdfObject();
+    startPdfObject( actionHandle );
+
+    fprintf( m_outputFile,
+             "<</S /GoTo /D [%d 0 R /FitR %d %d %d %d]\n"
+             ">>\n",
+             aPageHandle, aBottomLeft.x, aBottomLeft.y, aTopRight.x, aTopRight.y );
+
+    closePdfObject();
+
+    return actionHandle;
+}
+
+
+void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nextNode,
+                                   int prevNode )
+{
+    int nodeHandle = node->entryHandle;
+
+    int prevHandle = -1;
+    int nextHandle = -1;
+    for( std::vector<OUTLINE_NODE*>::iterator it = node->children.begin();
+         it != node->children.end(); it++ )
+    {
+        if( it >= node->children.end() - 1 )
+        {
+            nextHandle = -1;
+        }
+        else
+        {
+            nextHandle = ( *( it + 1 ) )->entryHandle;
+        }
+
+        emitOutlineNode( *it, nodeHandle, nextHandle, prevHandle );
+
+        prevHandle = ( *it )->entryHandle;
+    }
+
+    if( parentHandle != -1 )    // -1 for parentHandle is the outline root itself which is handed elsewhere
+    {
+        startPdfObject( nodeHandle );
+
+        fprintf( m_outputFile,
+                 "<< /Title %s\n"
+                 "   /Parent %d 0 R\n",
+                 encodeStringForPlotter(node->title ).c_str(),
+                 parentHandle);
+
+        if( nextNode > 0 )
+        {
+            fprintf( m_outputFile, "   /Next %d 0 R\n", nextNode );
+        }
+
+        if( prevNode > 0 )
+        {
+            fprintf( m_outputFile, "   /Prev %d 0 R\n", prevNode );
+        }
+
+        if( node->children.size() > 0 )
+        {
+            fprintf( m_outputFile, "   /Count %lld\n", -1*node->children.size() );
+            fprintf( m_outputFile, "   /First %d 0 R\n", node->children.front()->entryHandle );
+            fprintf( m_outputFile, "   /Last %d 0 R\n", node->children.back()->entryHandle );
+        }
+
+        if( node->actionHandle != -1 )
+        {
+            fprintf( m_outputFile, "   /A %d 0 R\n", node->actionHandle );
+        }
+
+        fputs( ">>\n", m_outputFile );
+        closePdfObject();
+    }
+}
+
+
+PDF_PLOTTER::OUTLINE_NODE* PDF_PLOTTER::addOutlineNode( OUTLINE_NODE* aParent, int aActionHandle,
+                                                        const wxString& aTitle )
+{
+    OUTLINE_NODE *node = aParent->AddChild( aActionHandle, aTitle, allocPdfObject() );
+    m_totalOutlineNodes++;
+
+    return node;
+}
+
+
+int PDF_PLOTTER::emitOutline()
+{
+    if( m_outlineRoot->children.size() > 0 )
+    {
+        // declare the outline object
+        m_outlineRoot->entryHandle = allocPdfObject();
+
+        emitOutlineNode( m_outlineRoot.get(), -1, -1, -1 );
+
+        startPdfObject( m_outlineRoot->entryHandle );
+
+        fprintf( m_outputFile,
+                 "<< /Type /Outlines\n"
+                 "   /Count %d\n"
+                 "   /First %d 0 R\n"
+                 "   /Last %d 0 R\n"
+                 ">>\n",
+                 m_totalOutlineNodes,
+                 m_outlineRoot->children.front()->entryHandle,
+                 m_outlineRoot->children.back()->entryHandle
+        );
+
+        closePdfObject();
+
+        return m_outlineRoot->entryHandle;
+    }
+
+    return -1;
+}
 
 bool PDF_PLOTTER::EndPlot()
 {
@@ -1054,6 +1208,7 @@ bool PDF_PLOTTER::EndPlot()
              ">>\n", (long) m_pageHandles.size() );
     closePdfObject();
 
+
     // The info dictionary
     int infoDictHandle = startPdfObject();
     char date_buf[250];
@@ -1080,16 +1235,37 @@ bool PDF_PLOTTER::EndPlot()
     fputs( ">>\n", m_outputFile );
     closePdfObject();
 
+    // Let's dump in the outline
+    int outlineHandle = emitOutline();
+
     // The catalog, at last
     int catalogHandle = startPdfObject();
-    fprintf( m_outputFile,
-             "<<\n"
-             "/Type /Catalog\n"
-             "/Pages %d 0 R\n"
-             "/Version /1.5\n"
-             "/PageMode /UseNone\n"
-             "/PageLayout /SinglePage\n"
-             ">>\n", m_pageTreeHandle );
+    if( outlineHandle > 0 )
+    {
+        fprintf( m_outputFile,
+                 "<<\n"
+                 "/Type /Catalog\n"
+                 "/Pages %d 0 R\n"
+                 "/Version /1.5\n"
+                 "/PageMode /UseOutlines\n"
+                 "/Outlines %d 0 R\n"
+                 "/PageLayout /SinglePage\n"
+                 ">>\n",
+                 m_pageTreeHandle,
+                 outlineHandle );
+    }
+    else
+    {
+        fprintf( m_outputFile,
+                 "<<\n"
+                 "/Type /Catalog\n"
+                 "/Pages %d 0 R\n"
+                 "/Version /1.5\n"
+                 "/PageMode /UseNone\n"
+                 "/PageLayout /SinglePage\n"
+                 ">>\n",
+                 m_pageTreeHandle );
+    }
     closePdfObject();
 
     /* Emit the xref table (format is crucial to the byte, each entry must
@@ -1188,4 +1364,10 @@ void PDF_PLOTTER::HyperlinkBox( const BOX2I& aBox, const wxString& aDestinationU
 void PDF_PLOTTER::HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>& aDestURLs )
 {
     m_hyperlinkMenusInPage.push_back( std::make_pair( aBox, aDestURLs ) );
+}
+
+
+void PDF_PLOTTER::ComponentBookmark( const BOX2I& aLocation, const wxString& aSymbolReference )
+{
+    m_componentBookmarksInPage.push_back( std::make_pair( aLocation, aSymbolReference ) );
 }

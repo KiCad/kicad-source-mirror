@@ -352,6 +352,8 @@ public:
 
     void HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>& aDestURLs ) override;
 
+    void ComponentBookmark( const BOX2I& aLocation, const wxString& aSymbolReference ) override;
+
     /**
      * PDF images are handles as inline, not XObject streams...
      */
@@ -359,6 +361,38 @@ public:
 
 
 protected:
+    struct OUTLINE_NODE
+    {
+        int      actionHandle;  //< Handle to action
+        wxString title;         //< Title of outline node
+        int      entryHandle;   //< Allocated handle for this outline entry
+
+        std::vector<OUTLINE_NODE*> children;
+
+        OUTLINE_NODE* AddChild( int aActionHandle, const wxString& aTitle, int aEntryHandle )
+        {
+            OUTLINE_NODE* child = new OUTLINE_NODE
+            {
+                aActionHandle, aTitle, aEntryHandle
+            };
+
+            children.push_back( child );
+
+            return child;
+        }
+    };
+
+    /**
+     * Adds a new outline node entry
+     *
+     * The PDF object handle is automacially allocated
+     *
+     * @param aParent Parent node to append the new node to
+     * @param aActionHandle The handle of an action that may be performed on click, set to -1 for no action
+     * @param aTitle Title of node to display
+     */
+    OUTLINE_NODE* addOutlineNode( OUTLINE_NODE* aParent, int aActionHandle,
+                                  const wxString& aTitle );
 
     virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aEndAngle, int aRadius,
@@ -410,6 +444,23 @@ protected:
      */
     void closePdfStream();
 
+    /**
+     * Starts emitting the outline object
+     */
+    int emitOutline();
+
+    /**
+     * Emits a outline item object and recurses into any children
+     */
+    void emitOutlineNode( OUTLINE_NODE* aNode, int aParentHandle, int aNextNode, int aPrevNode );
+
+    /**
+     * Emits an action object that instructs a goto coordinates on a page
+     *
+     * @return Generated action handle
+     */
+    int emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft, const VECTOR2I& aTopRight );
+
     int m_pageTreeHandle;           ///< Handle to the root of the page tree object
     int m_fontResDictHandle;        ///< Font resource dictionary
     std::vector<int> m_pageHandles; ///< Handles to the page objects
@@ -429,6 +480,11 @@ protected:
     ///< Handles for all the hyperlink objects that will be deferred
     std::map<int, std::pair<BOX2D, wxString>>              m_hyperlinkHandles;
     std::map<int, std::pair<BOX2D, std::vector<wxString>>> m_hyperlinkMenuHandles;
+
+    std::vector<std::pair<BOX2I, wxString>>      m_componentBookmarksInPage;
+
+    std::unique_ptr<OUTLINE_NODE> m_outlineRoot;    ///< Root outline node
+    int                           m_totalOutlineNodes;  ///< Total number of outline nodes
 };
 
 

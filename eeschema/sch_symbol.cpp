@@ -2065,6 +2065,9 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
         aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
 
         aPlotter->EndBlock( nullptr );
+
+        aPlotter->ComponentBookmark( GetBoundingBox(),
+                                     GetField( REFERENCE_FIELD )->GetShownText() );
     }
 }
 
