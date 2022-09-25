@@ -464,6 +464,7 @@ protected:
      * @return Generated action handle
      */
     int emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft, const VECTOR2I& aTopRight );
+    int emitGoToAction( int aPageHandle );
 
     int m_pageTreeHandle;           ///< Handle to the root of the page tree object
     int m_fontResDictHandle;        ///< Font resource dictionary

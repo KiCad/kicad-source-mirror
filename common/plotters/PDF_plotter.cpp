@@ -822,13 +822,15 @@ void PDF_PLOTTER::ClosePage()
     }
 
 
-    OUTLINE_NODE* pageOutlineNode = addOutlineNode( m_outlineRoot.get(), -1, pageOutlineName );
+    int           actionHandle = emitGoToAction( pageHandle );
+    OUTLINE_NODE* pageOutlineNode =
+            addOutlineNode( m_outlineRoot.get(), actionHandle, pageOutlineName );
 
     // let's reorg the symbol bookmarks under a page handle
     // let's reorg the symbol bookmarks under a page handle
     for( const auto& [groupName, groupVector] : m_bookmarksInPage )
     {
-        OUTLINE_NODE* groupOutlineNode = addOutlineNode( pageOutlineNode, -1, groupName );
+        OUTLINE_NODE* groupOutlineNode = addOutlineNode( pageOutlineNode, actionHandle, groupName );
 
         for( const std::pair<BOX2I, wxString>& bookmarkPair : groupVector )
         {
@@ -912,6 +914,22 @@ int PDF_PLOTTER::emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft,
              "<</S /GoTo /D [%d 0 R /FitR %d %d %d %d]\n"
              ">>\n",
              aPageHandle, aBottomLeft.x, aBottomLeft.y, aTopRight.x, aTopRight.y );
+
+    closePdfObject();
+
+    return actionHandle;
+}
+
+
+int PDF_PLOTTER::emitGoToAction( int aPageHandle )
+{
+    int actionHandle = allocPdfObject();
+    startPdfObject( actionHandle );
+
+    fprintf( m_outputFile,
+             "<</S /GoTo /D [%d 0 R /Fit]\n"
+             ">>\n",
+             aPageHandle );
 
     closePdfObject();
 
