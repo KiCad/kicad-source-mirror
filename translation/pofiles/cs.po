@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:34-0700\n"
-"PO-Revision-Date: 2022-08-28 17:17+0000\n"
+"PO-Revision-Date: 2022-09-27 07:22+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -11379,9 +11379,9 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"Za normálních okolností jsou stopy spojeny s jejich symboly prostřednictvím "
-"jejich jedinečných ID. Tuto možnost vyberte, pouze pokud chcete obnovit "
-"vazby stopy na základě jejich referenčních označení."
+"Za normálních okolností jsou pouzdra spojeny s jejich symboly "
+"prostřednictvím jejich jedinečných ID. Tuto možnost vyberte, pouze pokud "
+"chcete obnovit vazby stopy na základě jejich referenčních označení."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -27320,7 +27320,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "Poznámka: Vyplňování zón může být pomalé, když je < %s."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:98
 msgid "Zone fill strategy"
@@ -27347,8 +27347,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:134
+#, fuzzy
 msgid "Allow fillets outside zone outline"
-msgstr ""
+msgstr "Povolit vyplnění mimo obrys zóny"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid "Length tuning"
@@ -30072,7 +30073,7 @@ msgstr "Import souboru vektorové grafiky"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "Nedostatek paměti pro načtení DXF, soubor může být příliš velký."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
@@ -31053,7 +31054,7 @@ msgstr "Text na DPS '%s' na %s"
 #: pcbnew/pcb_track.cpp:103
 #, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Slepá/vnořená prokovy %s na %s"
+msgstr "Slepé/vnořené prokovy %s na %s"
 
 #: pcbnew/pcb_track.cpp:104
 #, c-format
@@ -34037,7 +34038,7 @@ msgstr "Změnit šířku spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Updates selected track & via sizes"
-msgstr "Aktualizace velikosti spojů & prokov"
+msgstr "Aktualizace velikosti spojů & prokovů"
 
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Adds arcs tangent to the selected straight track segments"
