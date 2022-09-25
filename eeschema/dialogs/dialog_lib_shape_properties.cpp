@@ -38,6 +38,8 @@ DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aPa
     m_shape( aShape ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true )
 {
+    wxASSERT( aShape );
+
     SetTitle( m_shape->GetTypeName() + wxT( " " ) + GetTitle() );
     m_helpLabel->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
@@ -132,11 +134,11 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
 
     m_checkApplyToAllConversions->Enable( enblConvOptStyle );
 
-    m_rbFillNone->Enable( m_shape != nullptr );
-    m_rbFillOutline->Enable( m_shape != nullptr );
-    m_rbFillBackground->Enable( m_shape != nullptr );
-    m_rbFillCustom->Enable( m_shape != nullptr );
-    m_fillColorSwatch->Enable( m_shape != nullptr );
+    m_rbFillNone->Enable( true );
+    m_rbFillOutline->Enable( true );
+    m_rbFillBackground->Enable( true );
+    m_rbFillCustom->Enable( true );
+    m_fillColorSwatch->Enable( true );
 
     if( m_shape->GetFillMode() == FILL_T::FILLED_SHAPE )
     {
