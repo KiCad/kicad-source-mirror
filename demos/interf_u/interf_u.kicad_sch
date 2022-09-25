@@ -1,4 +1,4 @@
-(kicad_sch (version 20220822) (generator eeschema)
+(kicad_sch (version 20220914) (generator eeschema)
 
   (uuid 092cfb52-b6f1-4355-8e6c-0f835c9fcaf7)
 
@@ -5810,7 +5810,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:Bus_ISA_8bit") (at 57.15 74.93 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000322d3011)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 55.88 33.02 0)
@@ -5890,7 +5890,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:74LS245") (at 132.08 99.06 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000322d31f4)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 135.89 81.28 0)
@@ -5928,7 +5928,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:EP600") (at 189.23 44.45 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000322d321c)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 195.58 20.32 0)
@@ -5970,7 +5970,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:R") (at 350.52 26.67 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000322d3295)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 350.52 24.13 90)
@@ -5990,7 +5990,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:R") (at 350.52 38.1 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000322d32a0)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 350.52 35.56 90)
@@ -6010,7 +6010,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:LED") (at 372.11 38.1 90) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000322d32ac)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 374.8532 36.1696 90)
@@ -6030,7 +6030,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:LED") (at 361.95 49.53 90) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000322d32be)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 364.6932 47.5996 90)
@@ -6050,7 +6050,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:4003APG120") (at 284.48 144.78 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000322d32fa)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 284.48 74.93 0)
@@ -6185,7 +6185,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:74LS688") (at 111.76 175.26 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000322d35b4)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 115.57 147.32 0)
@@ -6223,7 +6223,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:CP") (at 25.4 243.84 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307dc0)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 27.94 242.57 0)
@@ -6243,7 +6243,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:CP") (at 41.91 243.84 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307dca)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 44.45 242.57 0)
@@ -6263,7 +6263,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:CP") (at 55.88 243.84 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307dcf)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 58.42 242.57 0)
@@ -6283,7 +6283,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:CP") (at 72.39 243.84 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307de2)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 75.3872 241.5032 0)
@@ -6303,7 +6303,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:R") (at 354.33 93.98 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307ea1)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 354.33 91.44 90)
@@ -6323,7 +6323,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:R") (at 375.92 93.98 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307eaa)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 375.92 91.44 90)
@@ -6343,7 +6343,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:Crystal") (at 354.33 105.41 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307ec0)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 354.33 100.33 0)
@@ -6363,7 +6363,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:C") (at 342.9 115.57 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307ecf)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 349.25 114.3 0)
@@ -6383,7 +6383,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:C") (at 365.76 115.57 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307ed4)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 372.11 114.3 0)
@@ -6403,7 +6403,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 33.02 36.83 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307fa7)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 33.02 36.83 0)
@@ -6422,7 +6422,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 33.02 113.03 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032307fb9)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 33.02 113.03 0)
@@ -6441,7 +6441,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 361.95 53.34 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003230837a)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 361.95 53.34 0)
@@ -6460,7 +6460,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 372.11 41.91 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032308380)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 372.11 41.91 0)
@@ -6479,7 +6479,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 172.72 26.67 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032331877)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 172.72 26.67 0)
@@ -6498,7 +6498,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 205.74 26.67 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032332c72)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 208.28 26.67 0)
@@ -6517,7 +6517,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:628128") (at 195.58 229.87 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003240023f)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 195.58 200.66 0)
@@ -6566,7 +6566,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:R") (at 163.83 251.46 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000324002e6)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 163.83 253.492 90)
@@ -6586,7 +6586,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:DB25_Female") (at 382.27 182.88 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003256759c)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 383.54 217.17 0)
@@ -6629,7 +6629,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 372.11 154.94 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000325676d0)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 372.11 154.94 0)
@@ -6648,7 +6648,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:RR9") (at 69.85 210.82 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000325679c1)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 69.85 212.09 90)
@@ -6676,7 +6676,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 83.82 201.93 270) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032567a22)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 88.9 201.93 0)
@@ -6695,7 +6695,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:Conn_02x08_Odd_Even") (at 43.18 184.15 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000032568d1e)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 43.18 195.58 0)
@@ -6729,7 +6729,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 189.23 67.31 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003268ed7f)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 189.23 67.31 0)
@@ -6748,7 +6748,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 25.4 237.49 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000038c8dfd2)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 25.4 234.95 0)
@@ -6767,7 +6767,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 189.23 19.05 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000038c8e014)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 189.23 22.86 0)
@@ -6786,7 +6786,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:PWR_FLAG") (at 72.39 237.49 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000038c8e81f)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 72.39 230.632 0)
@@ -6805,7 +6805,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:PWR_FLAG") (at 72.39 250.19 180) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000038cea284)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 72.39 257.048 0)
@@ -6824,7 +6824,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 25.4 250.19 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000043020328)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 25.4 250.19 0)
@@ -6843,7 +6843,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 34.29 195.58 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004302032e)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 34.29 195.58 0)
@@ -6862,7 +6862,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 120.65 64.77 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000043020343)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 120.65 64.77 0)
@@ -6881,7 +6881,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 342.9 119.38 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000043020354)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 342.9 119.38 0)
@@ -6900,7 +6900,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 365.76 119.38 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000043020357)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 365.76 119.38 0)
@@ -6919,7 +6919,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:74LS541") (at 133.35 49.53 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004a087146)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 137.16 33.02 0)
@@ -6957,7 +6957,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 33.02 107.95 90) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004a33b1cf)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 27.94 107.95 0)
@@ -6976,7 +6976,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 33.02 41.91 90) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004a33b1d0)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 27.94 41.91 0)
@@ -6995,7 +6995,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 255.27 76.2 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004a33b1d1)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 255.27 73.66 0)
@@ -7014,7 +7014,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 158.75 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004a33b1d2)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 158.75 248.92 0)
@@ -7033,7 +7033,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 133.35 69.85 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a0ad927)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 133.35 69.85 0)
@@ -7052,7 +7052,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 133.35 29.21 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a0adedf)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 133.35 33.02 0)
@@ -7071,7 +7071,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 132.08 78.74 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a0adf62)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 132.08 82.55 0)
@@ -7090,7 +7090,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:VCC") (at 111.76 144.78 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a0aed42)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 111.76 148.59 0)
@@ -7109,7 +7109,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 132.08 119.38 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a0aee3d)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 132.08 119.38 0)
@@ -7128,7 +7128,7 @@
   )
 
   (symbol (lib_id "interf_u_schlib:GND") (at 111.76 205.74 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a0aeec0)
     (default_instance (reference "") (unit 1) (value "") (footprint ""))
     (property "Reference" "" (id 0) (at 111.76 205.74 0)
