@@ -522,7 +522,7 @@ public:
         }
         else    // size.x < 0:
         {
-            if( m_Size.x > -2 * dx )
+            if( m_Size.x > 2 * dx )
             {
                 // Don't allow deflate to eat more width than we have,
                 m_Pos.x -= m_Size.x / 2;
