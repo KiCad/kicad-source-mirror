@@ -93,7 +93,6 @@ BOARD::BOARD() :
 
     m_SolderMask = new ZONE( this );
     m_SolderMask->SetLayerSet( LSET().set( F_Mask ).set( B_Mask ) );
-    m_SolderMask->SetOutline( new SHAPE_POLY_SET() );
     int infinity = ( std::numeric_limits<int>::max() / 2 ) - pcbIUScale.mmToIU( 1 );
     m_SolderMask->Outline()->NewOutline();
     m_SolderMask->Outline()->Append( VECTOR2I( -infinity, -infinity ) );
