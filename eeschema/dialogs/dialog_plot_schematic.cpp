@@ -851,7 +851,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
 
                 // Open the plotter and do the first page
                 setupPlotPagePDF( plotter, screen );
-                plotter->StartPlot( sheetList[i].GetPageNumber() );
+                plotter->StartPlot( sheetList[i].GetPageNumber(), _("Root") );
             }
             catch( const IO_ERROR& e )
             {
@@ -870,7 +870,8 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
              *  reconfigure, and then start a new one */
             plotter->ClosePage();
             setupPlotPagePDF( plotter, screen );
-            plotter->StartPage( sheetList[i].GetPageNumber() );
+            plotter->StartPage( sheetList[i].GetPageNumber(),
+                                sheetList[i].Last()->GetFields()[SHEETNAME].GetShownText() );
         }
 
         plotOneSheetPDF( plotter, screen, aPlotDrawingSheet );

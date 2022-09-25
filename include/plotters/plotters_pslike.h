@@ -274,12 +274,16 @@ public:
      * are to be closed and reopened. Between each page parameters can be set.
      */
     virtual bool StartPlot( const wxString& aPageNumber ) override;
+
+    virtual bool StartPlot( const wxString& aPageNumber,
+                            const wxString& aPageName = wxEmptyString );
+
     virtual bool EndPlot() override;
 
     /**
      * Start a new page in the PDF document.
      */
-    virtual void StartPage( const wxString& aPageNumber );
+    virtual void StartPage( const wxString& aPageNumber, const wxString& aPageName = wxEmptyString );
 
     /**
      * Close the current page in the PDF document (and emit its compressed stream).
@@ -467,6 +471,7 @@ protected:
     int m_pageStreamHandle;         ///< Handle of the page content object
     int m_streamLengthHandle;       ///< Handle to the deferred stream length
     wxString m_workFilename;
+    wxString m_pageName;
     FILE* m_workFile;               ///< Temporary file to construct the stream before zipping
     std::vector<long> m_xrefTable;  ///< The PDF xref offset table
 

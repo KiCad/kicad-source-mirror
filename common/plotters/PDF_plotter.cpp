@@ -670,12 +670,13 @@ void PDF_PLOTTER::closePdfStream()
 }
 
 
-void PDF_PLOTTER::StartPage( const wxString& aPageNumber )
+void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageName )
 {
     wxASSERT( m_outputFile );
     wxASSERT( !m_workFile );
 
     m_pageNumbers.push_back( aPageNumber );
+    m_pageName = aPageName;
 
     // Compute the paper size in IUs
     m_paperSize = m_pageInfo.GetSizeMils();
@@ -810,8 +811,18 @@ void PDF_PLOTTER::ClosePage()
     // Mark the page stream as idle
     m_pageStreamHandle = 0;
 
-    OUTLINE_NODE* pageOutlineNode = addOutlineNode(
-            m_outlineRoot.get(), -1, wxString::Format( _( "Page %s" ), m_pageNumbers.back() ) );
+    wxString pageOutlineName = wxEmptyString;
+    if( m_pageName.IsEmpty() )
+    {
+        pageOutlineName = wxString::Format( _( "Page %s" ), m_pageNumbers.back() );
+    }
+    else
+    {
+        pageOutlineName = wxString::Format( _( "%s (Page %s)" ), m_pageName, m_pageNumbers.back() );
+    }
+
+
+    OUTLINE_NODE* pageOutlineNode = addOutlineNode( m_outlineRoot.get(), -1, pageOutlineName );
 
     // let's reorg the symbol bookmarks under a page handle
     // let's reorg the symbol bookmarks under a page handle
@@ -847,7 +858,14 @@ void PDF_PLOTTER::ClosePage()
 }
 
 
-bool PDF_PLOTTER::StartPlot(const wxString& aPageNumber)
+bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber )
+{
+    return StartPlot( aPageNumber, wxEmptyString );
+}
+
+
+bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber,
+                             const wxString& aPageName )
 {
     wxASSERT(m_outputFile);
 
@@ -879,7 +897,7 @@ bool PDF_PLOTTER::StartPlot(const wxString& aPageNumber)
     /* Now, the PDF is read from the end, (more or less)... so we start
        with the page stream for page 1. Other more important stuff is written
        at the end */
-    StartPage(aPageNumber);
+    StartPage(aPageNumber, aPageName);
     return true;
 }
 
