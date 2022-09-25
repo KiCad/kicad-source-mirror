@@ -377,7 +377,7 @@ protected:
         {
             OUTLINE_NODE* child = new OUTLINE_NODE
             {
-                aActionHandle, aTitle, aEntryHandle
+                aActionHandle, aTitle, aEntryHandle, {}
             };
 
             children.push_back( child );
