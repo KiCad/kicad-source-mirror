@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-25 11:47+0000\n"
+"PO-Revision-Date: 2022-09-27 13:21+0000\n"
 "Last-Translator: obit <szpttboy@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -12590,7 +12590,7 @@ msgstr "给定的图框中重复图框名称"
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
-msgstr "符号引脚或离网结束连线"
+msgstr "符号引脚或连线脱离网格"
 
 #: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
@@ -19957,7 +19957,7 @@ msgstr "添加线"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add a line"
-msgstr "添加线"
+msgstr "添加一条线"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add Bitmap"
