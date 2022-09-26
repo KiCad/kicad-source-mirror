@@ -30,6 +30,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <fp_lib_table.h>
 #include <fp_shape.h>
 #include <idf_parser.h>
 #include <pad.h>
@@ -275,6 +276,18 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
     // Reference Designator
     std::string crefdes = TO_UTF8( aFootprint->Reference().GetShownText() );
 
+    wxString libraryName = aFootprint->GetFPID().GetLibNickname();
+    wxString footprintBasePath = wxEmptyString;
+
+    if( aPcb->GetProject() )
+    {
+        const FP_LIB_TABLE_ROW* fpRow =
+                aPcb->GetProject()->PcbFootprintLibs()->FindRow( libraryName, false );
+
+        if( fpRow )
+            footprintBasePath = fpRow->GetFullURI( true );
+    }
+
     if( crefdes.empty() || !crefdes.compare( "~" ) )
     {
         std::string cvalue = TO_UTF8( aFootprint->Value().GetShownText() );
@@ -411,7 +424,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
             continue;
         }
 
-        idfFile.Assign( resolver->ResolvePath( sM->m_Filename, wxEmptyString ) );
+        idfFile.Assign( resolver->ResolvePath( sM->m_Filename, footprintBasePath ) );
         idfExt = idfFile.GetExt();
 
         if( idfExt.Cmp( wxT( "idf" ) ) && idfExt.Cmp( wxT( "IDF" ) ) )

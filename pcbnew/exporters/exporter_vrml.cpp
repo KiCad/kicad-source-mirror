@@ -33,6 +33,7 @@
 #include "3d_cache/3d_info.h"
 #include "board.h"
 #include "board_design_settings.h"
+#include <fp_lib_table.h>
 #include "fp_shape.h"
 #include "footprint.h"
 #include "pad.h"
@@ -993,6 +994,19 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
     // file contains only the filename of 3D shapes to add to the full vrml scene
     wxCHECK( aFootprint, /* void */ );
 
+    wxString libraryName = aFootprint->GetFPID().GetLibNickname();
+    wxString footprintBasePath = wxEmptyString;
+
+    if( m_board->GetProject() )
+    {
+        const FP_LIB_TABLE_ROW* fpRow =
+                m_board->GetProject()->PcbFootprintLibs()->FindRow( libraryName, false );
+
+        if( fpRow )
+            footprintBasePath = fpRow->GetFullURI( true );
+    }
+
+
     // Export pad holes
     for( PAD* pad : aFootprint->Pads() )
         ExportVrmlPadHole( pad );
@@ -1013,7 +1027,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             continue;
         }
 
-        SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename, wxEmptyString );
+        SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename, footprintBasePath );
 
         if( nullptr == mod3d )
         {
