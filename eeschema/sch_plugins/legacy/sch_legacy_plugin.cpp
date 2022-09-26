@@ -712,7 +712,9 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
                 THROW_IO_ERROR( _( "unexpected end of file" ) );
         }
         else if( strCompare( "$EndBitmap", line ) )
+        {
             return bitmap.release();
+        }
 
         line = aReader.ReadLine();
     }
@@ -893,7 +895,9 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
             SCH_PARSE_ERROR( "invalid bus entry definition expected 'Bus'", aReader, line );
     }
     else
+    {
         SCH_PARSE_ERROR( "invalid bus entry type", aReader, line );
+    }
 
     line = aReader.ReadLine();
 
@@ -928,35 +932,51 @@ const std::map<LABEL_FLAG_SHAPE, const char*> sheetLabelNames
 
 SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
 {
-    const char*   line = aReader.Line();
+    const char* line = aReader.Line();
+    KICAD_T     textType = TYPE_NOT_INIT;
 
     wxCHECK( strCompare( "Text", line, &line ), nullptr );
 
-    std::unique_ptr<SCH_TEXT> text;
-
     if( strCompare( "Notes", line, &line ) )
-        text.reset( new SCH_TEXT );
+    {
+        textType = SCH_TEXT_T;
+    }
     else if( strCompare( "Label", line, &line ) )
-        text.reset( new SCH_LABEL );
+    {
+        textType = SCH_LABEL_T;
+    }
     else if( strCompare( "HLabel", line, &line ) )
-        text.reset( new SCH_HIERLABEL );
+    {
+        textType = SCH_HIER_LABEL_T;
+    }
     else if( strCompare( "GLabel", line, &line ) )
     {
         // Prior to version 2, the SCH_GLOBALLABEL object did not exist.
         if( m_version == 1 )
-            text = std::make_unique<SCH_HIERLABEL>();
+            textType = SCH_HIER_LABEL_T;
         else
-            text = std::make_unique<SCH_GLOBALLABEL>();
+            textType = SCH_GLOBAL_LABEL_T;
     }
     else
+    {
         SCH_PARSE_ERROR( "unknown Text type", aReader, line );
+    }
 
-    // Parse the parameters common to all text objects.
     VECTOR2I position;
 
     position.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     position.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
-    text->SetPosition( position );
+
+    std::unique_ptr<SCH_TEXT> text;
+
+    switch( textType )
+    {
+    case SCH_TEXT_T:         text.reset( new SCH_TEXT( position ) );        break;
+    case SCH_LABEL_T:        text.reset( new SCH_LABEL( position ) );       break;
+    case SCH_HIER_LABEL_T:   text.reset( new SCH_HIERLABEL( position ) );   break;
+    case SCH_GLOBAL_LABEL_T: text.reset( new SCH_GLOBALLABEL( position ) ); break;
+    default:                                                                break;
+    }
 
     int spinStyle = parseInt( aReader, line, &line );
 
@@ -1271,20 +1291,30 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
                 if( textAttrs.Length() > 1 )
                 {
                     if( textAttrs.Length() != 3 )
+                    {
                         SCH_PARSE_ERROR( _( "symbol field text attributes must be 3 characters wide" ),
                                          aReader, line );
+                    }
 
                     if( textAttrs[1] == 'I' )
+                    {
                         field.SetItalic( true );
+                    }
                     else if( textAttrs[1] != 'N' )
+                    {
                         SCH_PARSE_ERROR( "symbol field text italics indicator must be I or N",
                                          aReader, line );
+                    }
 
                     if( textAttrs[2] == 'B' )
+                    {
                         field.SetBold( true );
+                    }
                     else if( textAttrs[2] != 'N' )
+                    {
                         SCH_PARSE_ERROR( "symbol field text bold indicator must be B or N",
                                          aReader, line );
+                    }
                 }
             }
 
@@ -1750,14 +1780,18 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
     SCH_FIELD& fileName = aSheet->GetFields()[SHEETFILENAME];
 
     if( !sheetName.GetText().IsEmpty() )
+    {
         m_out->Print( 0, "F0 %s %d\n",
                       EscapedUTF8( sheetName.GetText() ).c_str(),
                       schIUScale.IUToMils( sheetName.GetTextSize().x ) );
+    }
 
     if( !fileName.GetText().IsEmpty() )
+    {
         m_out->Print( 0, "F1 %s %d\n",
                       EscapedUTF8( fileName.GetText() ).c_str(),
                       schIUScale.IUToMils( fileName.GetTextSize().x ) );
+    }
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {
@@ -1822,15 +1856,19 @@ void SCH_LEGACY_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry )
     wxCHECK_RET( aBusEntry != nullptr, "SCH_BUS_ENTRY_BASE* is NULL" );
 
     if( aBusEntry->GetLayer() == LAYER_WIRE )
+    {
         m_out->Print( 0, "Entry Wire Line\n\t%-4d %-4d %-4d %-4d\n",
                       schIUScale.IUToMils( aBusEntry->GetPosition().x ),
                       schIUScale.IUToMils( aBusEntry->GetPosition().y ),
                       schIUScale.IUToMils( aBusEntry->GetEnd().x ), schIUScale.IUToMils( aBusEntry->GetEnd().y ) );
+    }
     else
+    {
         m_out->Print( 0, "Entry Bus Bus\n\t%-4d %-4d %-4d %-4d\n",
                       schIUScale.IUToMils( aBusEntry->GetPosition().x ),
                       schIUScale.IUToMils( aBusEntry->GetPosition().y ),
                       schIUScale.IUToMils( aBusEntry->GetEnd().x ), schIUScale.IUToMils( aBusEntry->GetEnd().y ) );
+    }
 }
 
 
