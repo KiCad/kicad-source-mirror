@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <bitmaps.h>
 #include <hotkeys_basic.h>
+#include <wx/stringimpl.h>
 #include <wx/translation.h>
 
 TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
@@ -60,6 +61,26 @@ TOOL_ACTION::TOOL_ACTION() :
         m_param( nullptr )
 {
     SetHotKey( 0 );
+}
+
+
+TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
+        m_name( aArgs.m_name.value_or( "" ) ),
+        m_scope( aArgs.m_scope.value_or( AS_CONTEXT ) ),
+        m_defaultHotKey( aArgs.m_defaultHotKey.value_or( 0 ) ),
+        m_hotKey( aArgs.m_defaultHotKey.value_or( 0 ) ),
+        m_legacyName( aArgs.m_legacyName.value_or( "" ) ),
+        m_label( aArgs.m_menuText.value_or( wxEmptyString ) ),
+        m_tooltip( aArgs.m_tooltip.value_or( wxEmptyString ) ),
+        m_icon( aArgs.m_icon.value_or( BITMAPS::INVALID_BITMAP) ),
+        m_id( -1 ),
+        m_flags( aArgs.m_flags.value_or( AF_NONE ) ),
+        m_param( aArgs.m_param.value_or( nullptr ) )
+{
+    // Action name is the only mandatory part
+    assert( !m_name.empty() );
+
+    ACTION_MANAGER::GetActionList().push_back( this );
 }
 
 

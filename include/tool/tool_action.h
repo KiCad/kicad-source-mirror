@@ -30,6 +30,7 @@
 
 #include <string>
 #include <cassert>
+#include <optional>
 
 #include <wx/string.h>
 
@@ -54,6 +55,119 @@ enum TOOL_ACTION_FLAGS
 };
 
 /**
+ * Build up the properties of a TOOL_ACTION in an incremental manner that is static-construction
+ * safe.
+ */
+class TOOL_ACTION_ARGS
+{
+public:
+    TOOL_ACTION_ARGS() = default;
+
+    /**
+     * The name of the action, the convention is "app.tool.actionName".
+     *
+     * This is a required property.
+     */
+    TOOL_ACTION_ARGS& Name( std::string aName )
+    {
+        m_name = aName;
+        return *this;
+    }
+
+    /**
+     * The scope of the action.
+     */
+    TOOL_ACTION_ARGS& Scope( TOOL_ACTION_SCOPE aScope )
+    {
+        m_scope = aScope;
+        return *this;
+    }
+
+    /**
+     * The default hotkey to assign to the action.
+     */
+    TOOL_ACTION_ARGS& DefaultHotkey( int aDefaultHotkey )
+    {
+        m_defaultHotKey = aDefaultHotkey;
+        return *this;
+    }
+
+    /**
+     * The legacy hotkey name from the old system.
+     *
+     * This property is only needed for existing actions and shouldn't be used in new actions.
+     */
+    TOOL_ACTION_ARGS& LegacyHotkeyName( std::string aLegacyName )
+    {
+        m_legacyName = aLegacyName;
+        return *this;
+    }
+
+    /**
+     *The string to use when displaying the action in a menu.
+     */
+    TOOL_ACTION_ARGS& MenuText( wxString aMenuText )
+    {
+        m_menuText = aMenuText;
+        return *this;
+    }
+
+    /**
+     * The string to use as a tooltip for the action in menus and toolbars.
+     */
+    TOOL_ACTION_ARGS& Tooltip( wxString aTooltip )
+    {
+        m_tooltip = aTooltip;
+        return *this;
+    }
+
+    /**
+     * The bitmap to use as the icon for the action in toolbars and menus.
+     */
+    TOOL_ACTION_ARGS& Icon( BITMAPS aIcon )
+    {
+        m_icon = aIcon;
+        return *this;
+    }
+
+    /**
+     * Flags describing the type of the action.
+     */
+    TOOL_ACTION_ARGS& Flags( TOOL_ACTION_FLAGS aFlags )
+    {
+        m_flags = aFlags;
+        return *this;
+    }
+
+    /**
+     * Custom parameter to pass information to the tool.
+     */
+    TOOL_ACTION_ARGS& Parameter( void* aParam )
+    {
+        m_param = aParam;
+        return *this;
+    }
+
+protected:
+    // Let the TOOL_ACTION constructor have direct access to the members here
+    friend class TOOL_ACTION;
+
+    std::optional<std::string>          m_name;
+    std::optional<TOOL_ACTION_SCOPE>    m_scope;
+    std::optional<TOOL_ACTION_FLAGS>    m_flags;
+
+    std::optional<int>                  m_defaultHotKey;
+    std::optional<std::string>          m_legacyName;
+
+    std::optional<wxString>             m_menuText;
+    std::optional<wxString>             m_tooltip;
+
+    std::optional<BITMAPS>              m_icon;
+
+    std::optional<void*>                m_param;
+};
+
+/**
  * Represent a single user action.
  *
  * For instance:
@@ -67,6 +181,7 @@ enum TOOL_ACTION_FLAGS
 class TOOL_ACTION
 {
 public:
+    TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs );
     TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope = AS_CONTEXT,
                  int aDefaultHotKey = 0, const std::string& aLegacyHotKeyName = "",
                  const wxString& aMenuText = wxEmptyString,

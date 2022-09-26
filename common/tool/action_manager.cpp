@@ -44,6 +44,10 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
         if( action->m_id == -1 )
             action->m_id = MakeActionId( action->m_name );
 
+        wxLogTrace( kicadTraceToolStack,
+                    "ACTION_MANAGER::ACTION_MANAGER: Registering action %s with ID %d and UI ID %d",
+                    action->m_name, action->m_id, action->GetUIId() );
+
         RegisterAction( action );
     }
 }
