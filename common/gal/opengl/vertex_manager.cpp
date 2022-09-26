@@ -68,6 +68,9 @@ void VERTEX_MANAGER::Unmap()
 
 bool VERTEX_MANAGER::Reserve( unsigned int aSize )
 {
+    if( !aSize )
+        return true;
+
     assert( m_reservedSpace == 0 && m_reserved == nullptr );
 
     // flag to avoid hanging by calling DisplayError too many times:
