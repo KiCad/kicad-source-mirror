@@ -63,13 +63,15 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	m_textSizeUnits->Wrap( -1 );
 	fgSizer2->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE, 5 );
 
-	m_textOffsetRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Text offset ratio:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOffsetRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Label offset ratio:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOffsetRatioLabel->Wrap( -1 );
-	m_textOffsetRatioLabel->SetToolTip( _("Percentage of the text size to offset text above or below wire or bus") );
+	m_textOffsetRatioLabel->SetToolTip( _("Percentage of the text size to offset labels above (or below) a wire, bus, or pin") );
 
 	fgSizer2->Add( m_textOffsetRatioLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textOffsetRatioCtrl = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOffsetRatioCtrl->SetToolTip( _("Percentage of the text size to offset labels above (or below) a wire, bus, or pin") );
+
 	fgSizer2->Add( m_textOffsetRatioCtrl, 0, wxEXPAND, 5 );
 
 	m_offsetRatioUnits = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -83,6 +85,8 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	fgSizer2->Add( m_labelSizeRatioLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_labelSizeRatioCtrl = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelSizeRatioCtrl->SetToolTip( _("Percentage of the text size to use as space around a global label") );
+
 	fgSizer2->Add( m_labelSizeRatioCtrl, 0, wxEXPAND, 5 );
 
 	m_labelSizeRatioUnits = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
