@@ -30,6 +30,7 @@
 #include <trigo.h>
 #include <project.h>
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
+#include <fp_lib_table.h>
 #include <eda_3d_canvas.h>
 #include <eda_3d_viewer_frame.h>
 
@@ -922,6 +923,19 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
     // Go for all footprints
     for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
+        wxString                libraryName = footprint->GetFPID().GetLibNickname();
+        wxString                footprintBasePath = wxEmptyString;
+
+        if( m_boardAdapter.GetBoard()->GetProject() )
+        {
+            const FP_LIB_TABLE_ROW* fpRow =
+                    m_boardAdapter.GetBoard()->GetProject()->PcbFootprintLibs()->FindRow(
+                            libraryName, false );
+
+            if( fpRow )
+                footprintBasePath = fpRow->GetFullURI( true );
+        }
+
         for( const FP_3DMODEL& fp_model : footprint->Models() )
         {
             if( fp_model.m_Show && !fp_model.m_Filename.empty() )
@@ -941,7 +955,7 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
                 {
                     // It is not present, try get it from cache
                     const S3DMODEL* modelPtr =
-                            m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename );
+                            m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename, footprintBasePath );
 
                     // only add it if the return is not NULL
                     if( modelPtr )

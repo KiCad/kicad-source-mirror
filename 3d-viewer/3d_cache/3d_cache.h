@@ -92,9 +92,10 @@ public:
 
      *
      * @param aModelFile is the partial or full path to the model to be loaded.
+     * @param aBasePath is the path to search for any relative files
      * @return true if the model was successfully loaded, otherwise false.
      */
-    SCENEGRAPH* Load( const wxString& aModelFile );
+    SCENEGRAPH* Load( const wxString& aModelFile, const wxString& aBasePath );
 
     FILENAME_RESOLVER* GetResolver() noexcept;
 
@@ -124,7 +125,7 @@ public:
      * @param aModelFileName is the full path to the model to be loaded.
      * @return is a pointer to the render data or NULL if not available.
      */
-    S3DMODEL* GetModel( const wxString& aModelFileName );
+    S3DMODEL* GetModel( const wxString& aModelFileName, const wxString& aBasePath );
 
     /**
      * Delete up old cache files in cache directory.
@@ -164,7 +165,7 @@ private:
     bool saveCacheData( S3D_CACHE_ENTRY* aCacheItem );
 
     // the real load function (can supply a cache entry pointer to member functions)
-    SCENEGRAPH* load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCachePtr = nullptr );
+    SCENEGRAPH* load( const wxString& aModelFile, const wxString& aBasePath, S3D_CACHE_ENTRY** aCachePtr = nullptr );
 
     /// cache entries
     std::list< S3D_CACHE_ENTRY* > m_CacheList;

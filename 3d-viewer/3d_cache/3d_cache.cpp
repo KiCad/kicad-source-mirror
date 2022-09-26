@@ -212,12 +212,13 @@ S3D_CACHE::~S3D_CACHE()
 }
 
 
-SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCachePtr )
+SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, const wxString& aBasePath,
+                             S3D_CACHE_ENTRY** aCachePtr )
 {
     if( aCachePtr )
         *aCachePtr = nullptr;
 
-    wxString full3Dpath = m_FNResolver->ResolvePath( aModelFile );
+    wxString full3Dpath = m_FNResolver->ResolvePath( aModelFile, aBasePath );
 
     if( full3Dpath.empty() )
     {
@@ -282,9 +283,9 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
 }
 
 
-SCENEGRAPH* S3D_CACHE::Load( const wxString& aModelFile )
+SCENEGRAPH* S3D_CACHE::Load( const wxString& aModelFile, const wxString& aBasePath )
 {
-    return load( aModelFile );
+    return load( aModelFile, aBasePath );
 }
 
 
@@ -641,10 +642,10 @@ void S3D_CACHE::ClosePlugins()
 }
 
 
-S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName )
+S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName, const wxString& aBasePath )
 {
     S3D_CACHE_ENTRY* cp = nullptr;
-    SCENEGRAPH* sp = load( aModelFileName, &cp );
+    SCENEGRAPH*      sp = load( aModelFileName, aBasePath,&cp );
 
     if( !sp )
         return nullptr;

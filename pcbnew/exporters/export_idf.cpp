@@ -411,7 +411,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
             continue;
         }
 
-        idfFile.Assign( resolver->ResolvePath( sM->m_Filename ) );
+        idfFile.Assign( resolver->ResolvePath( sM->m_Filename, wxEmptyString ) );
         idfExt = idfFile.GetExt();
 
         if( idfExt.Cmp( wxT( "idf" ) ) && idfExt.Cmp( wxT( "IDF" ) ) )

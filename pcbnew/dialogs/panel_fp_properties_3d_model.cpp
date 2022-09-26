@@ -32,6 +32,7 @@
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <footprint.h>
+#include <fp_lib_table.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <dialog_footprint_properties_fp_editor.h>
@@ -427,7 +428,15 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
     if( !resolv->ValidateFileName( aFilename, hasAlias ) )
         return MODEL_VALIDATE_ERRORS::ILLEGAL_FILENAME;
 
-    wxString fullPath = resolv->ResolvePath( aFilename );
+    wxString libraryName = m_footprint->GetFPID().GetLibNickname();
+    const FP_LIB_TABLE_ROW* fpRow =
+            m_frame->Prj().PcbFootprintLibs()->FindRow( libraryName, false );
+
+    wxString footprintBasePath = wxEmptyString;
+    if( fpRow )
+        footprintBasePath = fpRow->GetFullURI( true );
+
+    wxString fullPath = resolv->ResolvePath( aFilename, footprintBasePath );
 
     if( fullPath.IsEmpty() )
         return MODEL_VALIDATE_ERRORS::RESOLVE_FAIL;

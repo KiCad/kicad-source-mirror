@@ -39,6 +39,8 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <fp_lib_table.h>
+#include <eda_3d_viewer_frame.h>
 
 #include <base_units.h>
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
@@ -1251,13 +1253,27 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
             auto       sM       = fp->Models().begin();
             auto       eM       = fp->Models().end();
 
+            wxString                libraryName = fp->GetFPID().GetLibNickname();
+
+            wxString                footprintBasePath = wxEmptyString;
+            if( m_boardAdapter.GetBoard()->GetProject() )
+            {
+                const FP_LIB_TABLE_ROW* fpRow =
+                        m_boardAdapter.GetBoard()->GetProject()->PcbFootprintLibs()->FindRow(
+                                libraryName, false );
+
+                if( fpRow )
+                    footprintBasePath = fpRow->GetFullURI( true );
+            }
+
             while( sM != eM )
             {
                 if( ( static_cast<float>( sM->m_Opacity ) > FLT_EPSILON )
                   && ( sM->m_Show && !sM->m_Filename.empty() ) )
                 {
                     // get it from cache
-                    const S3DMODEL* modelPtr = cacheMgr->GetModel( sM->m_Filename );
+                    const S3DMODEL* modelPtr =
+                            cacheMgr->GetModel( sM->m_Filename, footprintBasePath );
 
                     // only add it if the return is not NULL.
                     if( modelPtr )

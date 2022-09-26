@@ -54,6 +54,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_userUnits = aFrame->GetUserUnits();
 
     m_dummyBoard = new BOARD();
+    m_dummyBoard->SetProject( &aFrame->Prj() );
 
     // This board will only be used to hold a footprint for viewing
     m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );

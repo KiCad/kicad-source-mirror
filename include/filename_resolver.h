@@ -101,8 +101,11 @@ public:
      * In the future remote files may be supported, in which case it is best to require a full
      * URI in which case ResolvePath should check that the URI conforms to RFC-2396 and related
      * documents and copies \a aFileName into aResolvedName if the URI is valid.
+     *
+     * @param aFileName The configured file path to resolve
+     * @param aWorkingPath The current working path for relative path resolutions
      */
-    wxString ResolvePath( const wxString& aFileName );
+    wxString ResolvePath( const wxString& aFileName, const wxString& aWorkingPath );
 
     /**
      * Produce a relative path based on the existing search directories or returns the same path

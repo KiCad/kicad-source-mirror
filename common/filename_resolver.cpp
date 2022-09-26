@@ -240,7 +240,7 @@ bool FILENAME_RESOLVER::UpdatePathList( const std::vector< SEARCH_PATH >& aPathL
 }
 
 
-wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
+wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxString& aWorkingPath )
 {
     std::lock_guard<std::mutex> lock( mutex_resolver );
 
@@ -322,6 +322,21 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             return tname;
         }
 
+    }
+
+    // check path relative to search path
+    if( !aWorkingPath.IsEmpty() && !tname.StartsWith( ":" ) )
+    {
+        wxString tmp = aWorkingPath;
+        tmp.Append( tmpFN.GetPathSeparator() );
+        tmp.Append( tname );
+        tmpFN.Assign( tmp );
+
+        if( tmpFN.MakeAbsolute() && tmpFN.FileExists() )
+        {
+            tname = tmpFN.GetFullPath();
+            return tname;
+        }
     }
 
     // check the partial path relative to ${KICAD6_3DMODEL_DIR} (legacy behavior)

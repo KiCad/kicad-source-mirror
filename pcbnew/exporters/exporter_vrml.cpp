@@ -1013,7 +1013,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             continue;
         }
 
-        SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename );
+        SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename, wxEmptyString );
 
         if( nullptr == mod3d )
         {
@@ -1078,7 +1078,8 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             int old_precision = aOutputFile->precision();
             aOutputFile->precision( m_precision );
 
-            wxFileName srcFile = m_Cache3Dmodels->GetResolver()->ResolvePath( sM->m_Filename );
+            wxFileName srcFile =
+                    m_Cache3Dmodels->GetResolver()->ResolvePath( sM->m_Filename, wxEmptyString );
             wxFileName dstFile;
             dstFile.SetPath( m_Subdir3DFpModels );
             dstFile.SetName( srcFile.GetName() );
