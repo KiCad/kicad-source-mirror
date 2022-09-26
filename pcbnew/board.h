@@ -445,8 +445,9 @@ public:
      * Should be called immediately after loading board in order for everything to work.
      *
      * @param aProject is a loaded project to link to.
+     * @param aReferenceOnly avoids taking ownership of settings stored in project if true
      */
-    void SetProject( PROJECT* aProject );
+    void SetProject( PROJECT* aProject, bool aReferenceOnly = false );
 
     void ClearProject();
 

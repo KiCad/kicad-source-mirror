@@ -158,14 +158,14 @@ void BOARD::BuildConnectivity( PROGRESS_REPORTER* aReporter )
 }
 
 
-void BOARD::SetProject( PROJECT* aProject )
+void BOARD::SetProject( PROJECT* aProject, bool aReferenceOnly )
 {
     if( m_project )
         ClearProject();
 
     m_project = aProject;
 
-    if( aProject )
+    if( aProject && !aReferenceOnly )
     {
         PROJECT_FILE& project = aProject->GetProjectFile();
 
