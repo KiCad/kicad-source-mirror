@@ -1533,7 +1533,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 }
 
 
-void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
+void SCH_EDIT_FRAME::RecomputeIntersheetRefs( bool autoplaceUninitialized )
 {
     std::map<wxString, std::set<int>>& pageRefsMap = Schematic().GetPageRefsMap();
 
@@ -1579,10 +1579,15 @@ void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
 
     for( SCH_GLOBALLABEL* globalLabel : globalLabels )
     {
-        globalLabel->GetFields()[0].SetVisible( show );
+        std::vector<SCH_FIELD>& fields = globalLabel->GetFields();
+
+        fields[0].SetVisible( show );
 
         if( show )
         {
+            if( fields.size() == 1 && fields[0].GetTextPos() == globalLabel->GetPosition() )
+                globalLabel->AutoplaceFields( GetScreen(), false );
+
             GetScreen()->Update( globalLabel );
             GetCanvas()->GetView()->Update( globalLabel );
         }
@@ -1593,7 +1598,7 @@ void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
 void SCH_EDIT_FRAME::ShowAllIntersheetRefs( bool aShow )
 {
     if( aShow )
-        RecomputeIntersheetRefs();
+        RecomputeIntersheetRefs( true );
 
     GetCanvas()->GetView()->SetLayerVisible( LAYER_INTERSHEET_REFS, aShow );
 }

@@ -662,6 +662,18 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
         else if( fieldType == FOOTPRINT_FIELD )
             symbol->SetFootprint( m_text );
     }
+    else if( parent && parent->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        if( fieldType == 0 )
+        {
+            if( m_visible->GetValue() != parent->Schematic()->Settings().m_IntersheetRefsShow )
+            {
+                DisplayInfoMessage( this, _( "Intersheet reference visibility is "
+                                             "controlled globally from "
+                                             "Schematic Setup > General > Formatting" ) );
+            }
+        }
+    }
 
     bool positioningModified = false;
 

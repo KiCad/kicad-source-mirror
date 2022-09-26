@@ -450,11 +450,24 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         field.Offset( m_currentLabel->GetPosition() );
 
         if( field.GetCanonicalName() == wxT( "Netclass" ) )
+        {
             field.SetLayer( LAYER_NETCLASS_REFS );
+        }
         else if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
+        {
+            if( field.IsVisible() != m_Parent->Schematic().Settings().m_IntersheetRefsShow )
+            {
+                DisplayInfoMessage( this, _( "Intersheet reference visibility is "
+                                             "controlled globally from "
+                                             "Schematic Setup > General > Formatting" ) );
+            }
+
             field.SetLayer( LAYER_INTERSHEET_REFS );
+        }
         else
+        {
             field.SetLayer( LAYER_FIELDS );
+        }
     }
 
     if( positioningChanged( m_fields, m_currentLabel->GetFields() ) )

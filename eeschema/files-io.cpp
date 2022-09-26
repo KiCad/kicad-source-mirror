@@ -485,7 +485,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     initScreenZoom();
     SetSheetNumberAndCount();
 
-    RecomputeIntersheetRefs();
+    RecomputeIntersheetRefs( true );
     GetCurrentSheet().UpdateAllScreenReferences();
 
     // re-create junctions if needed. Eeschema optimizes wires by merging
