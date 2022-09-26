@@ -35,106 +35,159 @@
 #undef _
 #define _(s) s
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::newProject( "kicad.Control.newProject",
-        AS_GLOBAL,
-        MD_CTRL + 'N', LEGACY_HK_NAME( "New Project" ),
-        _( "New Project..." ), _( "Create new blank project" ),
-        BITMAPS::new_project );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::newProject( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.newProject" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'N' )
+        .LegacyHotkeyName( "New Project" )
+        .MenuText( _( "New Project..." ) )
+        .Tooltip( _( "Create new blank project" ) )
+        .Icon( BITMAPS::new_project ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromTemplate( "kicad.Control.newFromTemplate",
-        AS_GLOBAL,
-        MD_CTRL + 'T', LEGACY_HK_NAME( "New Project From Template" ),
-        _( "New Project from Template..." ), _( "Create new project from template" ),
-        BITMAPS::new_project_from_template );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromTemplate( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.newFromTemplate" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'T' )
+        .LegacyHotkeyName( "New Project From Template" )
+        .MenuText( _( "New Project from Template..." ) )
+        .Tooltip( _( "Create new project from template" ) )
+        .Icon( BITMAPS::new_project_from_template ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::openDemoProject( "kicad.Control.openDemoProject",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Open Demo Project" ),
-        _( "Open Demo Project..." ), _( "Open a demo project" ),
-        BITMAPS::open_project_demo );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::openDemoProject( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.openDemoProject" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Open Demo Project" )
+        .MenuText( _( "Open Demo Project..." ) )
+        .Tooltip( _( "Open a demo project" ) )
+        .Icon( BITMAPS::open_project_demo ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::openProject( "kicad.Control.openProject",
-        AS_GLOBAL,
-        MD_CTRL + 'O', LEGACY_HK_NAME( "Open Project" ),
-        _( "Open Project..." ), _( "Open an existing project" ),
-        BITMAPS::open_project );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::openProject( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.openProject" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'O' )
+        .LegacyHotkeyName( "Open Project" )
+        .MenuText( _( "Open Project..." ) )
+        .Tooltip( _( "Open an existing project" ) )
+        .Icon( BITMAPS::open_project ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::closeProject( "kicad.Control.closeProject",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Close Project" ),
-        _( "Close Project" ), _( "Close the current project" ),
-        BITMAPS::project_close );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::closeProject( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.closeProject" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Close Project" )
+        .MenuText( _( "Close Project" ) )
+        .Tooltip( _( "Close the current project" ) )
+        .Icon( BITMAPS::project_close ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::loadProject( "kicad.Control.loadProject",
-        AS_GLOBAL);
+TOOL_ACTION KICAD_MANAGER_ACTIONS::loadProject( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.loadProject" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::importNonKicadProj( "kicad.Control.importNonKicadProj",
-        AS_GLOBAL );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::importNonKicadProj( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.importNonKicadProj" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::viewDroppedGerbers( "kicad.Control.viewDroppedGerbers",
-        AS_GLOBAL );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::viewDroppedGerbers( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.viewDroppedGerbers" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( "kicad.Control.editSchematic",
-        AS_GLOBAL,
-        MD_CTRL + 'E', LEGACY_HK_NAME( "Run Eeschema" ),
-        _( "Schematic Editor" ), _( "Edit schematic" ),
-        BITMAPS::icon_eeschema_24, AF_NONE, (void*) FRAME_SCH );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.editSchematic" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'E' )
+        .LegacyHotkeyName( "Run Eeschema" )
+        .MenuText( _( "Schematic Editor" ) )
+        .Tooltip( _( "Edit schematic" ) )
+        .Icon( BITMAPS::icon_eeschema_24 )
+        .Flags( AF_NONE )
+        .Parameter( (void*) FRAME_SCH ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( "kicad.Control.editSymbols",
-        AS_GLOBAL,
-        MD_CTRL + 'L', LEGACY_HK_NAME( "Run LibEdit" ),
-        _( "Symbol Editor" ), _( "Edit schematic symbols" ),
-        BITMAPS::icon_libedit_24, AF_NONE, (void*) FRAME_SCH_SYMBOL_EDITOR );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.editSymbols" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'L' )
+        .LegacyHotkeyName( "Run LibEdit" )
+        .MenuText( _( "Symbol Editor" ) )
+        .Tooltip( _( "Edit schematic symbols" ) )
+        .Icon( BITMAPS::icon_libedit_24 )
+        .Flags( AF_NONE )
+        .Parameter( (void*) FRAME_SCH_SYMBOL_EDITOR ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( "kicad.Control.editPCB",
-        AS_GLOBAL,
-        MD_CTRL + 'P', LEGACY_HK_NAME( "Run Pcbnew" ),
-        _( "PCB Editor" ), _( "Edit PCB" ),
-        BITMAPS::icon_pcbnew_24, AF_NONE, (void*) FRAME_PCB_EDITOR );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.editPCB" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'P' )
+        .LegacyHotkeyName( "Run Pcbnew" )
+        .MenuText( _( "PCB Editor" ) )
+        .Tooltip( _( "Edit PCB" ) )
+        .Icon( BITMAPS::icon_pcbnew_24 )
+        .Flags( AF_NONE )
+        .Parameter( (void*) FRAME_PCB_EDITOR ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( "kicad.Control.editFootprints",
-        AS_GLOBAL,
-        MD_CTRL + 'F', LEGACY_HK_NAME( "Run FpEditor" ),
-        _( "Footprint Editor" ), _( "Edit PCB footprints" ),
-        BITMAPS::icon_modedit_24, AF_NONE, (void*) FRAME_FOOTPRINT_EDITOR );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.editFootprints" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'F' )
+        .LegacyHotkeyName( "Run FpEditor" )
+        .MenuText( _( "Footprint Editor" ) )
+        .Tooltip( _( "Edit PCB footprints" ) )
+        .Icon( BITMAPS::icon_modedit_24 )
+        .Flags( AF_NONE )
+        .Parameter( (void*) FRAME_FOOTPRINT_EDITOR ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( "kicad.Control.viewGerbers",
-        AS_GLOBAL,
-        MD_CTRL + 'G', LEGACY_HK_NAME( "Run Gerbview" ),
-        _( "Gerber Viewer" ), _( "Preview Gerber output files" ),
-        BITMAPS::icon_gerbview_24 );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.viewGerbers" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'G' )
+        .LegacyHotkeyName( "Run Gerbview" )
+        .MenuText( _( "Gerber Viewer" ) )
+        .Tooltip( _( "Preview Gerber output files" ) )
+        .Icon( BITMAPS::icon_gerbview_24 ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::convertImage( "kicad.Control.convertImage",
-        AS_GLOBAL,
-        MD_CTRL + 'B', LEGACY_HK_NAME( "Run Bitmap2Component" ),
-        _( "Image Converter" ), _( "Convert bitmap images to schematic or PCB components" ),
-        BITMAPS::icon_bitmap2component_24 );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::convertImage( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.convertImage" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'B' )
+        .LegacyHotkeyName( "Run Bitmap2Component" )
+        .MenuText( _( "Image Converter" ) )
+        .Tooltip( _( "Convert bitmap images to schematic or PCB components" ) )
+        .Icon( BITMAPS::icon_bitmap2component_24 ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( "kicad.Control.showCalculator",
-        AS_GLOBAL, 0, LEGACY_HK_NAME( "Run PcbCalculator" ),
-        _( "Calculator Tools" ), _( "Run component calculations, track width calculations, etc." ),
-        BITMAPS::icon_pcbcalculator_24 );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.showCalculator" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Run PcbCalculator" )
+        .MenuText( _( "Calculator Tools" ) )
+        .Tooltip( _( "Run component calculations, track width calculations, etc." ) )
+        .Icon( BITMAPS::icon_pcbcalculator_24 ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::editDrawingSheet( "kicad.Control.editDrawingSheet",
-        AS_GLOBAL,
-        MD_CTRL + 'Y', LEGACY_HK_NAME( "Run PlEditor" ),
-        _( "Drawing Sheet Editor" ), _( "Edit drawing sheet borders and title block" ),
-        BITMAPS::icon_pagelayout_editor_24 );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editDrawingSheet( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.editDrawingSheet" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'Y' )
+        .LegacyHotkeyName( "Run PlEditor" )
+        .MenuText( _( "Drawing Sheet Editor" ) )
+        .Tooltip( _( "Edit drawing sheet borders and title block" ) )
+        .Icon( BITMAPS::icon_pagelayout_editor_24 ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::showPluginManager( "kicad.Control.pluginContentManager",
-        AS_GLOBAL,
-        MD_CTRL + 'M', "",
-        _( "Plugin and Content Manager" ), _( "Run Plugin and Content Manager" ),
-        BITMAPS::icon_pcm_24 );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::showPluginManager( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.pluginContentManager" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'M' )
+        .MenuText( _( "Plugin and Content Manager" ) )
+        .Tooltip( _( "Run Plugin and Content Manager" ) )
+        .Icon( BITMAPS::icon_pcm_24 ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::openTextEditor( "kicad.Control.openTextEditor",
-        AS_GLOBAL,
-        0, "",
-        _( "Open Text Editor" ), _( "Launch preferred text editor" ),
-        BITMAPS::editor );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::openTextEditor( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.openTextEditor" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Open Text Editor" ) )
+        .Tooltip( _( "Launch preferred text editor" ) )
+        .Icon( BITMAPS::editor ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherSch( "kicad.Control.editOtherSch",
-        AS_GLOBAL );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherSch( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.editOtherSch" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherPCB( "kicad.Control.editOtherPCB",
-        AS_GLOBAL );
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherPCB( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.editOtherPCB" )
+        .Scope( AS_GLOBAL ) );
