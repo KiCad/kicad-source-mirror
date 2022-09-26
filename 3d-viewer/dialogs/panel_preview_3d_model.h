@@ -229,6 +229,8 @@ private:
     int                      m_selected;   /// Index into m_parentInfoList
 
     EDA_UNITS m_userUnits;
+
+    double                   m_boardThickness_mm;
 };
 
 #endif  // PANEL_PREVIEW_3D_MODEL_H
