@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -91,7 +91,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_mruImagePath( wxEmptyString )
 {
     m_maximizeByDefault = true;
-    m_userUnits = EDA_UNITS::MILLIMETRES;
+    SetUserUnits( EDA_UNITS::MILLIMETRES );
 
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
     DS_DATA_MODEL::GetTheInstance().m_EditMode = true;
@@ -665,14 +665,14 @@ void PL_EDITOR_FRAME::DisplayGridMsg()
     wxString line;
     wxString gridformatter;
 
-    switch( m_userUnits )
+    switch( GetUserUnits() )
     {
     case EDA_UNITS::INCHES:      gridformatter = "grid %.3f"; break;
     case EDA_UNITS::MILLIMETRES: gridformatter = "grid %.4f"; break;
     default:                     gridformatter = "grid %f";   break;
     }
 
-    double grid = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, m_userUnits,
+    double grid = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, GetUserUnits(),
                                                   GetCanvas()->GetGAL()->GetGridSize().x );
     line.Printf( gridformatter, grid );
 

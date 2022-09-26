@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,9 +106,10 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                                                 // BLACK for Pcbnew, BLACK or WHITE for Eeschema
     m_colorSettings       = nullptr;
     m_msgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight( this );
-    m_userUnits           = EDA_UNITS::MILLIMETRES;
     m_polarCoords         = false;
     m_findReplaceData     = std::make_unique<EDA_SEARCH_DATA>();
+
+    SetUserUnits( EDA_UNITS::MILLIMETRES );
 
     m_auimgr.SetFlags( wxAUI_MGR_DEFAULT );
 
@@ -273,7 +274,7 @@ void EDA_DRAW_FRAME::ToggleUserUnits()
     }
     else
     {
-        SetUserUnits( m_userUnits == EDA_UNITS::INCHES ? EDA_UNITS::MILLIMETRES
+        SetUserUnits( GetUserUnits() == EDA_UNITS::INCHES ? EDA_UNITS::MILLIMETRES
                                                        : EDA_UNITS::INCHES );
         unitsChangeRefresh();
 
@@ -588,7 +589,7 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 {
     wxString msg;
 
-    switch( m_userUnits )
+    switch( GetUserUnits() )
     {
     case EDA_UNITS::INCHES:      msg = _( "inches" ); break;
     case EDA_UNITS::MILS:        msg = _( "mils" );   break;
@@ -667,7 +668,7 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     WINDOW_SETTINGS* window = GetWindowSettings( aCfg );
 
-    aCfg->m_System.units = static_cast<int>( m_userUnits );
+    aCfg->m_System.units = static_cast<int>( GetUserUnits() );
     aCfg->m_System.first_run_shown = m_firstRunDialogSetting;
     aCfg->m_System.max_undo_items = GetMaxUndoItems();
 

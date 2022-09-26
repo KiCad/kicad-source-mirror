@@ -1612,7 +1612,7 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
             text->SetLexer( wxSTC_LEX_SPICE );
 
             wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-            sizer->Add( text, 1, wxEXPAND );
+            sizer->Add( text, 1, wxEXPAND | wxALL, 5 );
             SetSizer( sizer );
 
             Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ),

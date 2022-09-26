@@ -158,10 +158,9 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     SCH_BASE_FRAME::SaveSettings( eeconfig() );
     wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
 
-    // TODO(JE) do we need to keep m_userUnits around?
     if( eeconfig() )
     {
-        eeconfig()->m_System.units = static_cast<int>( m_userUnits );
+        eeconfig()->m_System.units = static_cast<int>( GetUserUnits() );
         eeconfig()->m_AuiPanels.show_schematic_hierarchy = hierarchy_pane.IsShown();
         eeconfig()->m_AuiPanels.schematic_hierarchy_float = hierarchy_pane.IsFloating();
         // Other parameters (hierarchy_panel_float_width, hierarchy_panel_float_height,
