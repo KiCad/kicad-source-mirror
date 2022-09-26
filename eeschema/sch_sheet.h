@@ -55,7 +55,8 @@ class SCH_SHEET : public SCH_ITEM
 {
 public:
     SCH_SHEET( EDA_ITEM* aParent = nullptr, const VECTOR2I& aPos = VECTOR2I( 0, 0 ),
-               wxSize aSize = wxSize( schIUScale.MilsToIU( MIN_SHEET_WIDTH ), schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) ),
+               wxSize aSize = wxSize( schIUScale.MilsToIU( MIN_SHEET_WIDTH ),
+                                      schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) ),
                FIELDS_AUTOPLACED aAutoplaceFields = FIELDS_AUTOPLACED_AUTO );
 
     /**
@@ -169,11 +170,7 @@ public:
     void AddPin( SCH_SHEET_PIN* aSheetPin );
 
     std::vector<SCH_SHEET_PIN*>& GetPins() { return m_pins; }
-
-    const std::vector<SCH_SHEET_PIN*>& GetPins() const
-    {
-        return m_pins;
-    }
+    const std::vector<SCH_SHEET_PIN*>& GetPins() const { return m_pins; }
 
     /**
      * Remove \a aSheetPin from the sheet.
@@ -461,14 +458,16 @@ private:
 
     friend class SCH_SHEET_PIN;
 
-    SCH_SCREEN*   m_screen;     // Screen that contains the physical data for the sheet.  In
-                                // complex hierarchies multiple sheets can share a common screen.
+private:
+    SCH_SCREEN*                 m_screen;       // Screen that contains the physical data for the
+                                                // sheet.  In complex hierarchies multiple sheets
+                                                // can share a common screen.
 
-    std::vector<SCH_SHEET_PIN*> m_pins;               // The list of sheet connection points.
+    std::vector<SCH_SHEET_PIN*> m_pins;         // The list of sheet connection points.
     std::vector<SCH_FIELD>      m_fields;
 
-    VECTOR2I                    m_pos;                // The position of the sheet.
-    wxSize                      m_size;               // The size of the sheet.
+    VECTOR2I                    m_pos;          // The position of the sheet.
+    wxSize                      m_size;         // The size of the sheet.
     int                         m_borderWidth;
     KIGFX::COLOR4D              m_borderColor;
     KIGFX::COLOR4D              m_backgroundColor;

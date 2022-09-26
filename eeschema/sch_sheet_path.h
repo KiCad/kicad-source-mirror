@@ -103,7 +103,6 @@ struct SCH_SHEET_INSTANCE
  */
 
 
-class wxFindReplaceData;
 class EDA_ITEM;
 class SCH_SHEET;
 class SCH_SCREEN;

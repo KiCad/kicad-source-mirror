@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@
 #include <schematic.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
-#include <sch_sheet_path.h>
 
 #include <hierarch.h>
 #include <kiface_base.h>
@@ -42,12 +41,12 @@
 /**
  * Store an SCH_SHEET_PATH of each sheet in hierarchy.
  */
-class TreeItemData : public wxTreeItemData
+class TREE_ITEM_DATA : public wxTreeItemData
 {
 public:
     SCH_SHEET_PATH m_SheetPath;
 
-    TreeItemData( SCH_SHEET_PATH& sheet ) : wxTreeItemData()
+    TREE_ITEM_DATA( SCH_SHEET_PATH& sheet ) : wxTreeItemData()
     {
         m_SheetPath = sheet;
     }
@@ -61,14 +60,15 @@ wxIMPLEMENT_ABSTRACT_CLASS( HIERARCHY_TREE, wxTreeCtrl );
 
 int HIERARCHY_TREE::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 )
 {
-    SCH_SHEET_PATH* item1Path = &static_cast<TreeItemData*>( GetItemData( item1 ) )->m_SheetPath;
-    SCH_SHEET_PATH* item2Path = &static_cast<TreeItemData*>( GetItemData( item2 ) )->m_SheetPath;
+    SCH_SHEET_PATH* item1Path = &static_cast<TREE_ITEM_DATA*>( GetItemData( item1 ) )->m_SheetPath;
+    SCH_SHEET_PATH* item2Path = &static_cast<TREE_ITEM_DATA*>( GetItemData( item2 ) )->m_SheetPath;
 
     return item1Path->ComparePageNum( *item2Path );
 }
 
 
-HIERARCHY_NAVIG_PANEL::HIERARCHY_NAVIG_PANEL( SCH_EDIT_FRAME* aParent ) : WX_PANEL( aParent )
+HIERARCHY_NAVIG_PANEL::HIERARCHY_NAVIG_PANEL( SCH_EDIT_FRAME* aParent ) :
+        WX_PANEL( aParent )
 {
     wxASSERT( dynamic_cast<SCH_EDIT_FRAME*>( aParent ) );
 
@@ -81,8 +81,8 @@ HIERARCHY_NAVIG_PANEL::HIERARCHY_NAVIG_PANEL( SCH_EDIT_FRAME* aParent ) : WX_PAN
     // Make an image list containing small icons
     // All icons are expected having the same size.
     wxBitmap tree_nosel_bm( KiBitmap( BITMAPS::tree_nosel ) );
-    wxImageList* imageList =
-            new wxImageList( tree_nosel_bm.GetWidth(), tree_nosel_bm.GetHeight(), true, 2 );
+    wxImageList* imageList = new wxImageList( tree_nosel_bm.GetWidth(), tree_nosel_bm.GetHeight(),
+                                              true, 2 );
 
     imageList->Add( tree_nosel_bm );
     imageList->Add( KiBitmap( BITMAPS::tree_sel ) );
@@ -123,7 +123,7 @@ void HIERARCHY_NAVIG_PANEL::buildHierarchyTree( SCH_SHEET_PATH* aList, const wxT
         wxString sheetName = formatPageString( sheet->GetFields()[SHEETNAME].GetShownText(),
                                                sheet->GetPageNumber( *aList ) );
         wxTreeItemId child = m_tree->AppendItem( aParent, sheetName, 0, 1 );
-        m_tree->SetItemData( child, new TreeItemData( *aList ) );
+        m_tree->SetItemData( child, new TREE_ITEM_DATA( *aList ) );
 
         buildHierarchyTree( aList, child );
         aList->pop_back();
@@ -150,7 +150,8 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
     {
         wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
 
-        TreeItemData* itemData = static_cast<TreeItemData*>( m_tree->GetItemData( id ) );
+        TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+
         if( itemData->m_SheetPath == m_frame->GetCurrentSheet() )
         {
             m_tree->EnsureVisible( id );
@@ -159,6 +160,7 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
 
         wxTreeItemIdValue cookie;
         wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
+
         while( child.IsOk() )
         {
             selectSheet( child );
@@ -201,7 +203,7 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
 
     wxTreeItemId root = m_tree->AddRoot( getRootString(), 0, 1 );
     m_tree->SetItemBold( root, true );
-    m_tree->SetItemData( root, new TreeItemData( m_list ) );
+    m_tree->SetItemData( root, new TREE_ITEM_DATA( m_list ) );
 
     buildHierarchyTree( &m_list, root );
     UpdateHierarchySelection();
@@ -224,7 +226,7 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
 void HIERARCHY_NAVIG_PANEL::onSelectSheetPath( wxTreeEvent& event )
 {
     wxTreeItemId  itemSel = m_tree->GetSelection();
-    TreeItemData* itemData = static_cast<TreeItemData*>( m_tree->GetItemData( itemSel ) );
+    TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( itemSel ) );
 
     SetCursor( wxCURSOR_ARROWWAIT );
     m_frame->GetToolManager()->RunAction( EE_ACTIONS::changeSheet, true, &itemData->m_SheetPath );
