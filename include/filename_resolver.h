@@ -162,13 +162,6 @@ private:
     bool addPath( const SEARCH_PATH& aPath );
 
     /**
-     * Read a list of path names from a configuration file.
-     *
-     * @return true if a file was found and contained at least one valid path.
-     */
-    bool readPathList( void );
-
-    /**
      * Check the ${ENV_VAR} component of a path and adds it to the resolver's path list if
      * it is not yet in the list.
      */

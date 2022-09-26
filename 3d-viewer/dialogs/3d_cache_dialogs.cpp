@@ -45,7 +45,7 @@ bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache, wxString& prevMod
 
 bool S3D::Configure3DPaths( wxWindow* aParent, FILENAME_RESOLVER* aResolver )
 {
-    DIALOG_CONFIGURE_PATHS dlg( aParent, aResolver );
+    DIALOG_CONFIGURE_PATHS dlg( aParent );
 
     // Use QuasiModal so that HTML help window will work
     return( dlg.ShowQuasiModal() == wxID_OK );

@@ -37,7 +37,6 @@
 
 // configuration file version
 #define CFGFILE_VERSION 1
-#define RESOLVER_CONFIG wxT( "3Dresolver.cfg" )
 
 // flag bits used to track different one-off messages to users
 #define ERRFLG_ALIAS    (1)
@@ -47,8 +46,6 @@
 #define MASK_3D_RESOLVER "3D_RESOLVER"
 
 static std::mutex mutex_resolver;
-
-static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& aResult );
 
 
 FILENAME_RESOLVER::FILENAME_RESOLVER() :
@@ -176,9 +173,13 @@ bool FILENAME_RESOLVER::createPathList()
 
     if( GetKicadPaths( epaths ) )
     {
-        for( const wxString& curr_path : epaths )
+        for( const wxString& currPath : epaths )
         {
-            wxString pathVal = ExpandEnvVarSubstitutions( curr_path, m_project );
+            wxString currPathVarFormat = currPath;
+            currPathVarFormat.Prepend( wxS( "${" ) );
+            currPathVarFormat.Append( wxS( "}" ) );
+
+            wxString pathVal = ExpandEnvVarSubstitutions( currPathVarFormat, m_project );
 
             if( pathVal.empty() )
             {
@@ -191,18 +192,20 @@ bool FILENAME_RESOLVER::createPathList()
                 lpath.m_Pathexp = fndummy.GetFullPath();
             }
 
-            lpath.m_Alias   = curr_path;
-            lpath.m_Pathvar = curr_path;
+            lpath.m_Alias = currPath;
+            lpath.m_Pathvar = currPath;
 
             if( !lpath.m_Pathexp.empty() && psep == *lpath.m_Pathexp.rbegin() )
                 lpath.m_Pathexp.erase( --lpath.m_Pathexp.end() );
 
+            // we add it first with the alias set to the non-variable format
+            m_paths.push_back( lpath );
+
+            // now add it with the "new variable format ${VAR}"
+            lpath.m_Alias = currPathVarFormat;
             m_paths.push_back( lpath );
         }
     }
-
-    if( !m_configDir.empty() )
-        readPathList();
 
     if( m_paths.empty() )
         return false;
@@ -233,7 +236,7 @@ bool FILENAME_RESOLVER::UpdatePathList( const std::vector< SEARCH_PATH >& aPathL
     for( const SEARCH_PATH& path : aPathList )
         addPath( path );
 
-    return WritePathList( m_configDir, RESOLVER_CONFIG, false );
+    return true;
 }
 
 
@@ -478,118 +481,6 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
     m_paths.push_back( tpath );
     return true;
-}
-
-
-bool FILENAME_RESOLVER::readPathList()
-{
-    if( m_configDir.empty() )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "3D configuration directory is unknown";
-        ostr << " * " << errmsg.ToUTF8();
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-        return false;
-    }
-
-    wxFileName cfgpath( m_configDir, RESOLVER_CONFIG );
-
-    // This should be the same as wxWidgets 3.0 wxPATH_NORM_ALL which is deprecated in 3.1.
-    // There are known issues with environment variable expansion so maybe we should be using
-    // our own ExpandEnvVarSubstitutions() here instead.
-    cfgpath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-    wxString cfgname = cfgpath.GetFullPath();
-
-    size_t nitems = m_paths.size();
-
-    std::ifstream cfgFile;
-    std::string   cfgLine;
-
-    if( !wxFileName::Exists( cfgname ) )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "no 3D configuration file";
-        ostr << " * " << errmsg.ToUTF8() << " '";
-        ostr << cfgname.ToUTF8() << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-        return false;
-    }
-
-    cfgFile.open( cfgname.ToUTF8() );
-
-    if( !cfgFile.is_open() )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "Could not open configuration file";
-        ostr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-        return false;
-    }
-
-    int lineno = 0;
-    SEARCH_PATH al;
-    size_t idx;
-    int vnum = 0;           // version number
-
-    while( cfgFile.good() )
-    {
-        cfgLine.clear();
-        std::getline( cfgFile, cfgLine );
-        ++lineno;
-
-        if( cfgLine.empty() )
-        {
-            if( cfgFile.eof() )
-                break;
-
-            continue;
-        }
-
-        if( 1 == lineno && cfgLine.compare( 0, 2, "#V" ) == 0 )
-        {
-            // extract the version number and parse accordingly
-            if( cfgLine.size() > 2 )
-            {
-                std::istringstream istr;
-                istr.str( cfgLine.substr( 2 ) );
-                istr >> vnum;
-            }
-
-            continue;
-        }
-
-        idx = 0;
-
-        if( !getHollerith( cfgLine, idx, al.m_Alias ) )
-            continue;
-
-        // Don't add KICAD6_3DMODEL_DIR, one of its legacy equivalents, or KIPRJMOD from a
-        // config file.  They're system variables are are defined at runtime.
-        if( al.m_Alias == "${KICAD6_3DMODEL_DIR}"
-                || al.m_Alias == "${KIPRJMOD}" || al.m_Alias == "$(KIPRJMOD)"
-                || al.m_Alias == "${KISYS3DMOD}" || al.m_Alias == "$(KISYS3DMOD)" )
-        {
-            continue;
-        }
-
-        if( !getHollerith( cfgLine, idx, al.m_Pathvar ) )
-            continue;
-
-        if( !getHollerith( cfgLine, idx, al.m_Description ) )
-            continue;
-
-        addPath( al );
-    }
-
-    cfgFile.close();
-
-    if( vnum < CFGFILE_VERSION )
-        WritePathList( m_configDir, RESOLVER_CONFIG, false );
-
-    return( m_paths.size() != nitems );
 }
 
 
@@ -858,101 +749,6 @@ bool FILENAME_RESOLVER::SplitAlias( const wxString& aFileName,
 }
 
 
-static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& aResult )
-{
-    aResult.clear();
-
-    if( aIndex >= aString.size() )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "bad Hollerith string on line";
-        ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-
-        return false;
-    }
-
-    size_t i2 = aString.find( '"', aIndex );
-
-    if( std::string::npos == i2 )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "missing opening quote mark in config file";
-        ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-
-        return false;
-    }
-
-    ++i2;
-
-    if( i2 >= aString.size() )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "invalid entry (unexpected end of line)";
-        ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-
-        return false;
-    }
-
-    std::string tnum;
-
-    while( aString[i2] >= '0' && aString[i2] <= '9' )
-        tnum.append( 1, aString[i2++] );
-
-    if( tnum.empty() || aString[i2++] != ':' )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "bad Hollerith string on line";
-        ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-
-        return false;
-    }
-
-    std::istringstream istr;
-    istr.str( tnum );
-    size_t nchars;
-    istr >> nchars;
-
-    if( (i2 + nchars) >= aString.size() )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "invalid entry (unexpected end of line)";
-        ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-
-        return false;
-    }
-
-    if( nchars > 0 )
-    {
-        aResult = wxString::FromUTF8( aString.substr( i2, nchars ).c_str() );
-        i2 += nchars;
-    }
-
-    if( i2 >= aString.size() || aString[i2] != '"' )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "missing closing quote mark in config file";
-        ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-
-        return false;
-    }
-
-    aIndex = i2 + 1;
-    return true;
-}
-
-
 bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias ) const
 {
     // Rules:
@@ -1066,32 +862,30 @@ bool FILENAME_RESOLVER::GetKicadPaths( std::list< wxString >& paths ) const
     while( mS != mE )
     {
         // filter out URLs, template directories, and known system paths
-        if( mS->first == wxString( "KICAD_PTEMPLATES" )
-            || mS->first == wxString( "KICAD6_FOOTPRINT_DIR" ) )
+        if( mS->first == wxS( "KICAD_PTEMPLATES" )
+            || mS->first == wxS( "KICAD6_FOOTPRINT_DIR" ) )
         {
             ++mS;
             continue;
         }
 
-        if( wxString::npos != mS->second.GetValue().find( wxString( "://" ) ) )
+        if( wxString::npos != mS->second.GetValue().find( wxS( "://" ) ) )
         {
             ++mS;
             continue;
         }
 
-        wxString tmp( "${" );
-        tmp.Append( mS->first );
-        tmp.Append( "}" );
-        paths.push_back( tmp );
+        //also add the path without the ${} to act as legacy alias support for older files
+        paths.push_back( mS->first );
 
-        if( tmp == "${KICAD6_3DMODEL_DIR}" )
+        if( mS->first == wxS("KICAD6_3DMODEL_DIR") )
             hasKisys3D = true;
 
         ++mS;
     }
 
     if( !hasKisys3D )
-        paths.emplace_back("${KICAD6_3DMODEL_DIR}" );
+        paths.emplace_back( wxS("KICAD6_3DMODEL_DIR") );
 
     return true;
 }

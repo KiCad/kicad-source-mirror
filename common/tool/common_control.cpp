@@ -111,7 +111,7 @@ int COMMON_CONTROL::ConfigurePaths( const TOOL_EVENT& aEvent )
     }
     else
     {
-        DIALOG_CONFIGURE_PATHS dlg( m_frame, nullptr );
+        DIALOG_CONFIGURE_PATHS dlg( m_frame );
 
         if( dlg.ShowModal() == wxID_OK )
             m_frame->Kiway().CommonSettingsChanged( true, false );

@@ -116,7 +116,7 @@ static struct IFACE : public KIFACE_BASE
 
         case DIALOG_CONFIGUREPATHS:
         {
-            DIALOG_CONFIGURE_PATHS dlg( aParent, aKiway->Prj().Get3DFilenameResolver() );
+            DIALOG_CONFIGURE_PATHS dlg( aParent );
 
             // The dialog's constructor probably failed to set its Kiway because the
             // dynamic_cast fails when aParent was allocated by a separate compilation

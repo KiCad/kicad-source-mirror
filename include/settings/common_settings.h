@@ -155,6 +155,19 @@ public:
 private:
     bool migrateSchema0to1();
     bool migrateSchema1to2();
+    bool migrateSchema2to3();
+
+    struct LEGACY_3D_SEARCH_PATH
+    {
+        wxString m_Alias;       // alias to the base path
+        wxString m_Pathvar;     // base path as stored in the config file
+        wxString m_Pathexp;     // expanded base path
+        wxString m_Description; // description of the aliased path
+    };
+
+    static bool getLegacy3DHollerith( const std::string& aString, size_t& aIndex,
+                                      wxString& aResult );
+    bool readLegacy3DResolverCfg( const wxString& aPath, std::vector<LEGACY_3D_SEARCH_PATH>& aSearchPaths );
 
 public:
     APPEARANCE m_Appearance;

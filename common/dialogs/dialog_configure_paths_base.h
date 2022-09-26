@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,12 +42,6 @@ class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 		WX_GRID* m_EnvVars;
 		wxBitmapButton* m_btnAddEnvVar;
 		wxBitmapButton* m_btnDeleteEnvVar;
-		wxStaticBoxSizer* m_sb3DSearchPaths;
-		WX_GRID* m_SearchPaths;
-		wxBitmapButton* m_btnAddSearchPath;
-		wxBitmapButton* m_btnMoveUp;
-		wxBitmapButton* m_btnMoveDown;
-		wxBitmapButton* m_btnDeleteSearchPath;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -58,18 +52,13 @@ class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddEnvVar( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveEnvVar( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnGridCellChange( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnGridCellRightClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnAddSearchPath( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSearchPathMoveUp( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSearchPathMoveDown( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDeleteSearchPath( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelp( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Paths"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_CONFIGURE_PATHS_BASE();
 
 };

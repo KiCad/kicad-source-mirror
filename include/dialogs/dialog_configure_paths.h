@@ -30,15 +30,13 @@
 #include <wx/string.h>
 #include <wx/valtext.h>
 
-
-class FILENAME_RESOLVER;
 class HTML_WINDOW;
 
 
 class DIALOG_CONFIGURE_PATHS: public DIALOG_CONFIGURE_PATHS_BASE
 {
 public:
-    DIALOG_CONFIGURE_PATHS(  wxWindow* aParent, FILENAME_RESOLVER* aResolver  );
+    DIALOG_CONFIGURE_PATHS(  wxWindow* aParent );
     ~DIALOG_CONFIGURE_PATHS() override;
 
     bool TransferDataToWindow() override;
@@ -46,16 +44,11 @@ public:
 
 protected:
     // Various button callbacks
-    void OnGridCellRightClick( wxGridEvent& event ) override;
     void OnGridSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnAddEnvVar( wxCommandEvent& event ) override;
     void OnRemoveEnvVar( wxCommandEvent& event ) override;
-    void OnAddSearchPath( wxCommandEvent& event ) override;
-    void OnDeleteSearchPath( wxCommandEvent& event ) override;
-    void OnSearchPathMoveUp( wxCommandEvent& event ) override;
-    void OnSearchPathMoveDown( wxCommandEvent& event ) override;
     void OnHelp( wxCommandEvent& event ) override;
 
     void AppendEnvVar( const wxString& aName, const wxString& aPath, bool isExternal );
@@ -67,7 +60,6 @@ private:
     int                 m_errorRow;
     int                 m_errorCol;
 
-    FILENAME_RESOLVER*  m_resolver;
     wxString            m_curdir;
     wxTextValidator     m_aliasValidator;
 
