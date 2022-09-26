@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-25 11:47+0000\n"
+"PO-Revision-Date: 2022-09-27 13:22+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -11273,9 +11273,9 @@ msgid "Field name '%s' already in use."
 msgstr "ช่องชื่อ '%s' ถูกใช้แล้ว"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1121
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบชิ้นส่วนที่เลือก?"
+msgstr "คุณแน่ใจว่าต้องการลบช่อง '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1369
 #, fuzzy
@@ -13642,9 +13642,9 @@ msgid "Label '%s'"
 msgstr "ป้ายชื่อ '%s'"
 
 #: eeschema/sch_label.cpp:1203
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "ป้ายชื่อคำสั่ง"
+msgstr "ป้ายชื่อคำสั่ง [%s %s]"
 
 #: eeschema/sch_label.cpp:1479
 #, c-format
@@ -13922,13 +13922,13 @@ msgstr ""
 "ยังไม่ได้โหลดส่วนนี้ลงในไลบรารี KiCad"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
 msgstr ""
-"คำจำกัดความอุปกรณ์ ' %s' สัญลักษณ์อ้างอิง ' %s' (ทางเลือก '%s') ไม่พบในไลบรารีสัญลักษณ์ "
-"ยังไม่ได้โหลดส่วนนี้ลงในไลบรารี KiCad"
+"คำจำกัดความอุปกรณ์ ' %s' ไม่สมบูรณ์ (ไม่พบคำจำกัดความของสัญลักษณ์) "
+"อุปกรณ์นี้จะไม่ถูกโหลดเข้าไปในไลบรารี KiCad"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:455
 #, c-format
@@ -14028,9 +14028,9 @@ msgid ""
 msgstr "วงจร CADSTAR อาจเสียหาย: บล็อก %s อ้างอิงไปชีตย่อย แต่ไม่มีการกำหนดตัวเลข"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "เกิดข้อผิดพลาดในการอ่านรูปภาพ %s"
+msgstr "เกิดข้อผิดพลาดการอ่านตารางฐานข้อมูล %s:%s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:184
 #, c-format
@@ -14079,9 +14079,9 @@ msgstr "ชื่อสัญลักษณ์ไม่ถูกต้อง"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:199
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2485
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "ไม่พบสัญลักษณ์ %s ในไลบรารี '%s'"
+msgstr "สัญลักษณ์ %s มีอักขระไม่ถูกต้อง '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:206
 msgid "Invalid library identifier"
@@ -14121,9 +14121,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "สัญลักษณ์แปลงตัวเลข %s ไม่ถูกต้อง"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:650
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "หมายเลขขาไม่ถูกต้อง"
+msgstr "URL ไฮเปอร์ลิงก์ไม่ถูกต้อง '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:739
 msgid "Invalid pin names definition"
@@ -15207,13 +15207,13 @@ msgstr ""
 "<b>(%.3f, %.3f)</b> ของการแปลง"
 
 #: eeschema/symbol_checker.cpp:128
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
-"<b> ขาซ้ำ %s</b> %s ที่ตําแหน่ง <b>(%.3f, %.3f)</b> ขัดแย้งกับขา %s%s ที่ตําแหน่ง "
-"<b>(%.3f, %.3f)</b> ในหน่วย %c และ %c ของการแปลง"
+"<b> ขาซ้ำ %s</b> %s ที่ตําแหน่ง <b>(%.3f, %.3f)</b> ขัดแย้งกับขา %s%s "
+"ที่ตําแหน่ง <b>(%.3f, %.3f)</b> ในหน่วย %s และ %s ของการแปลง"
 
 #: eeschema/symbol_checker.cpp:147
 #, c-format
@@ -15225,13 +15225,13 @@ msgstr ""
 "%s)</b>."
 
 #: eeschema/symbol_checker.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b> ขาซ้ำ %s</b> %s ที่ตําแหน่ง <b>(%s, %s)</b> ขัดแย้งกับขา %s%s ที่ตําแหน่ง <b>(%s, "
-"%s)</b> ในหน่วย %c และ %c"
+"<b> ขาซ้ำ %s</b> %s ที่ตําแหน่ง <b>(%s, %s)</b> ขัดแย้งกับขา %s%s ที่ตําแหน่"
+"ง <b>(%s, %s)</b> ในหน่วย %s และ %s"
 
 #: eeschema/symbol_checker.cpp:188
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -17198,9 +17198,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "กด <ESC> เพื่อยกเลิกการย้าย"
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%d' not found."
-msgstr "ไฟล์ '%s' หาไม่พบ"
+msgstr "ไม่พบหน้าที่ '%d'"
 
 #: eeschema/tools/symbol_editor_control.cpp:184
 msgid "No symbol library selected."
@@ -18859,9 +18859,9 @@ msgid "Color themes (%d)"
 msgstr "ธีมชุดสี (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "คุณแน่ใจว่าต้องการปิดตัวจัดการแพ็คเกจและละทิ้งการเปลี่ยนแปลงที่ค้างอยู่?"
+msgstr "คุณแน่ใจว่าต้องการปรับปรุงขาของแพ็คเกจจากรุ่น %s ไป %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:77
 #, fuzzy
@@ -19277,11 +19277,13 @@ msgid "Archive metadata must have a single version defined"
 msgstr "ข้อมูลเมตาของหน่วยเก็บถาวรต้องมีการกําหนดเวอร์ชั่นเดียว"
 
 #: kicad/pcm/pcm_task_manager.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
-msgstr "แพ็คเกจที่มีตัวระบุ %s ถูกติดตั้งอยู่แล้ว,คุณต้องถอนการติดตั้งแพ็คเกจนี้ก่อน"
+msgstr ""
+"แพ็คเกจที่มีตัวระบุ %s ถูกติดตั้งเรียบร้อยแล้ว "
+"คุณต้องการปรับปรุงเป็นรุ่นจากไฟล์ที่เลือกหรือไม่?"
 
 #: kicad/pcm/pcm_task_manager.cpp:384
 #, fuzzy
@@ -24328,9 +24330,8 @@ msgid "Schematic Parity (%s)"
 msgstr "เท่าเทียมกับวงจร (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "แก้ไขการละเมิดที่ถูกละเลย…"
+msgstr "แก้ไขการทดสอบที่ถูกละเว้น"
 
 #: pcbnew/dialogs/dialog_drc_base.h:108 pcbnew/tools/pcb_actions.cpp:240
 msgid "Design Rules Checker"
@@ -25127,12 +25128,13 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"นี่คืออัตราส่วนระยะห่างคิดเป็นเปอร์เซ็นต์ ระหว่างแพ็ดและโซลเดอร์เพสต์ของฟุ้ทพรินท์\n"
-"ค่า 10 หมายความว่าค่าช่องว่างแนวนอนคือ 10% ของความกว้างแพ็ดและช่องว่างแนวตั้ง 10% "
-"ของความสูงแพ็ด\n"
-"ค่านี้สามารถถูกแทนที่ด้วยค่าเฉพาะที่แพ็ด\n"
-"ค่าระยะห่างค่าสุดท้าย คือผลรวมของค่านี้และกำหนดค่าระยะห่าง\n"
-"ค่าลบหมายถึงขนาดมาสก์ที่เล็กกว่าขนาดแพ็ด"
+"นี่คืออัตราส่วนระยะห่างคิดเป็นเปอร์เซ็นต์ "
+"ระหว่างความกว้างและความสูงของแพ็ดของฟุ้ทพรินท์ \n"
+"ค่า 10 หมายความว่า ระยะห่างแนวนอนคือ 10% ของความกว้างแพ็ด "
+"และระยะห่างแนวตั้งคือ 10% ของความสูงแพ็ด \n"
+"ค่านี้สามารถถูกแทนที่ด้วยค่าเฉพาะที่ของแพ็ดเอง \n"
+"ค่าระยะห่างค่าสุดท้าย คือผลรวมของค่านี้และค่าระยะห่างสมบูรณ์ \n"
+"ค่าลบหมายถึงขนาดเปิดสเต็นซิลที่เล็กกว่าขนาดแพ็ด"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:339
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:310
@@ -25548,9 +25550,8 @@ msgid "Map File Format"
 msgstr "รูปแบบไฟล์แผนที่"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "สร้างแผนที่การเจาะใน PS, HPGL หรือรูปแบบอื่นๆ"
+msgstr "สร้างแผนที่การเจาะใน PDF หรือรูปแบบอื่นๆ"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -32154,9 +32155,8 @@ msgid "Invalid C_pkg value."
 msgstr "ค่าความยาวไม่ถูกต้อง"
 
 #: pcbnew/ibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Checking pin "
-msgstr "ตรวจสอบขา…"
+msgstr "ตรวจสอบขา "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
 #, fuzzy
@@ -32194,9 +32194,8 @@ msgid "Component name cannot be empty."
 msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
 
 #: pcbnew/ibis/ibis_parser.cpp:222
-#, fuzzy
 msgid "Checking component "
-msgstr "กำลังตรวจสอบโซน"
+msgstr "กำลังตรวจอุปกรณ์ "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
 #, fuzzy
@@ -32246,9 +32245,8 @@ msgid "Model name cannot be empty"
 msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
 
 #: pcbnew/ibis/ibis_parser.cpp:433
-#, fuzzy
 msgid "Checking model "
-msgstr "กำลังตรวจสอบโซน"
+msgstr "กำลังตรวจสอบโมเดล "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
 #, fuzzy
@@ -32353,9 +32351,8 @@ msgid "Package model name cannot be empty."
 msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
 
 #: pcbnew/ibis/ibis_parser.cpp:594
-#, fuzzy
 msgid "Checking package model "
-msgstr "กำลังตรวจสอบรูเจาะบนแพ็ด..."
+msgstr "กำลังตรวจสอบโมเดลของแพ็กเกจ "
 
 #: pcbnew/ibis/ibis_parser.cpp:599
 #, fuzzy
@@ -32413,24 +32410,20 @@ msgid "Inductance matrix is nullptr"
 msgstr "ค่าความเหนี่ยวนำต่อหน่วยความยาว"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
-#, fuzzy
 msgid "Cannot open file "
-msgstr "ไม่สามารถเปิดไฟล์ '%s'"
+msgstr "ไม่สามารถเปิดไฟล์ "
 
 #: pcbnew/ibis/ibis_parser.cpp:695
-#, fuzzy
 msgid "Reading file "
-msgstr "กำลังอ่านไฟล์..."
+msgstr "กำลังอ่านไฟล์ "
 
 #: pcbnew/ibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "จุดสิ้นสุดของไฟล์โดยไม่คาดคิด"
+msgstr "ไม่คาดคิดจุดสิ้นสุดไฟล์ ขาด[END]หรือไม่?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
-#, fuzzy
 msgid "Error on line "
-msgstr "ข้อผิดพลาด ตั้งข้อมูลเริ่มต้นให้เครื่องพิมพ์"
+msgstr "ข้อผิดพลาดบรรทัด "
 
 #: pcbnew/ibis/ibis_parser.cpp:756
 #, fuzzy
@@ -32474,14 +32467,12 @@ msgid "No extra argument was expected"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "รหัสบันทึกที่ไม่รู้จัก: %d"
+msgstr "ไม่รู้จักคำสำคัญใน "
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid " context: "
-msgstr "ข้อความขั้นตอน:"
+msgstr " บริบท: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1321
 #, fuzzy
@@ -32540,27 +32531,24 @@ msgid "Typ-Min-Max Values requires at least Typ."
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "ไม่รู้จักเมธอด"
+msgstr "ไม่รู้จักชนิดโมเดล "
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
 msgid "Internal Error while reading model_type"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "ไม่รู้จักเลเยอร์ของ PCad %u"
+msgstr "ไม่รู้จักการเปิดใช้งานนี้: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1894 pcbnew/ibis/ibis_parser.cpp:1916
 msgid "Internal Error while reading Enable"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1909
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "ไม่รู้จักวัตถุดั่งเดิม"
+msgstr "ไม่รู้จักขั้ว "
 
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -33850,9 +33838,8 @@ msgid "removed annular ring"
 msgstr "ถอดวงแหวนออก"
 
 #: pcbnew/pcb_track.cpp:784
-#, fuzzy
 msgid "Track (arc)"
-msgstr "จัดชิดแทร็ก:"
+msgstr "แทร็ก(ส่วนโค้ง)"
 
 #: pcbnew/pcb_track.cpp:799
 msgid "Segment Length"
