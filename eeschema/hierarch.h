@@ -96,7 +96,12 @@ private:
      * Open the selected sheet and display the corresponding screen when a tree item is
      * selected.
      */
-    void onSelectSheetPath( wxTreeEvent& event );
+    void onSelectSheetPath( wxTreeEvent& aEvent );
+
+    /**
+     * Handle a right-click in the tree.
+     */
+    void onRightClick( wxTreeEvent& aEvent );
 
     /**
      * @return String with page number in parenthesis

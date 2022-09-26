@@ -36,7 +36,7 @@
 #include <eeschema_settings.h>
 
 #include <wx/object.h>
-
+#include "wx/generic/textdlgg.h"
 
 /**
  * Store an SCH_SHEET_PATH of each sheet in hierarchy.
@@ -98,6 +98,7 @@ HIERARCHY_NAVIG_PANEL::HIERARCHY_NAVIG_PANEL( SCH_EDIT_FRAME* aParent ) :
     // Enable selection events
     Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
     Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+    Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
 
     m_events_bound = true;
 }
@@ -107,6 +108,7 @@ HIERARCHY_NAVIG_PANEL::~HIERARCHY_NAVIG_PANEL()
 {
     Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
     Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+    Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
 }
 
 
@@ -142,6 +144,7 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
         // Disable selection events
         Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
         Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
 
         m_events_bound = false;
     }
@@ -175,6 +178,7 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
         // Enable selection events
         Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
         Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
 
         m_events_bound = true;
     }
@@ -192,6 +196,7 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
         // Disable selection events
         Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
         Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
 
         m_events_bound = false;
     }
@@ -215,6 +220,7 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
         // Enable selection events
         Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
         Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
 
         m_events_bound = true;
     }
@@ -223,7 +229,7 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
 }
 
 
-void HIERARCHY_NAVIG_PANEL::onSelectSheetPath( wxTreeEvent& event )
+void HIERARCHY_NAVIG_PANEL::onSelectSheetPath( wxTreeEvent& aEvent )
 {
     wxTreeItemId  itemSel = m_tree->GetSelection();
     TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( itemSel ) );
@@ -231,6 +237,47 @@ void HIERARCHY_NAVIG_PANEL::onSelectSheetPath( wxTreeEvent& event )
     SetCursor( wxCURSOR_ARROWWAIT );
     m_frame->GetToolManager()->RunAction( EE_ACTIONS::changeSheet, true, &itemData->m_SheetPath );
     SetCursor( wxCURSOR_ARROW );
+}
+
+
+void HIERARCHY_NAVIG_PANEL::onRightClick( wxTreeEvent& aEvent )
+{
+    wxMenu ctxMenu;
+
+    ctxMenu.Append( 1, _( "Edit Page Number" ) );
+
+    if( GetPopupMenuSelectionFromUser( ctxMenu ) == 1 )
+    {
+        wxTreeItemId  itemSel = m_tree->GetSelection();
+        TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( itemSel ) );
+
+        wxString msg;
+        wxString sheetPath = itemData->m_SheetPath.PathHumanReadable( false );
+        wxString pageNumber = itemData->m_SheetPath.GetPageNumber();
+
+        msg.Printf( _( "Enter page number for sheet path%s" ),
+                    ( sheetPath.Length() > 20 ) ? "\n" + sheetPath : " " + sheetPath );
+
+        wxTextEntryDialog dlg( m_frame, msg, _( "Edit Sheet Page Number" ), pageNumber );
+
+        dlg.SetTextValidator( wxFILTER_ALPHANUMERIC );  // No white space.
+
+        if( dlg.ShowModal() == wxID_OK && dlg.GetValue() != itemData->m_SheetPath.GetPageNumber() )
+        {
+            m_frame->SaveCopyInUndoList( itemData->m_SheetPath.LastScreen(),
+                                         itemData->m_SheetPath.Last(), UNDO_REDO::CHANGED, false );
+
+            itemData->m_SheetPath.SetPageNumber( dlg.GetValue() );
+
+            if( itemData->m_SheetPath == m_frame->GetCurrentSheet() )
+            {
+                m_frame->GetScreen()->SetPageNumber( dlg.GetValue() );
+                m_frame->OnPageSettingsChange();
+            }
+
+            m_frame->OnModify();
+        }
+    }
 }
 
 
