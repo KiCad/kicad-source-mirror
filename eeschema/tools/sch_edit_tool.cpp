@@ -928,6 +928,18 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                         pin->MirrorHorizontally( sheet->GetBoundingBox().GetCenter().x );
                 }
             }
+            else if( item->Type() == SCH_FIELD_T )
+            {
+                SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+                if( vertical )
+                    field->SetVertJustify( TO_VJUSTIFY( -field->GetVertJustify() ) );
+                else
+                    field->SetHorizJustify( TO_HJUSTIFY( -field->GetHorizJustify() ) );
+
+                // Now that we're re-justifying a field, they're no longer autoplaced.
+                static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
+            }
             else
             {
                 if( vertical )
