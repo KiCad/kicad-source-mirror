@@ -1056,9 +1056,10 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         // Check for items becoming invisible and drop them from the selection.
 
-        LSET visible = editFrame->GetBoard()->GetVisibleLayers();
+        PCB_SELECTION selCopy = selection;
+        LSET          visible = editFrame->GetBoard()->GetVisibleLayers();
 
-        for( EDA_ITEM* eda_item : selection )
+        for( EDA_ITEM* eda_item : selCopy )
         {
             BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
 
