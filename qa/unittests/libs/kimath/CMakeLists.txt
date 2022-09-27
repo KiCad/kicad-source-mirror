@@ -39,6 +39,7 @@ set( QA_KIMATH_SRCS
     geometry/test_shape_poly_set_iterator.cpp
     geometry/test_shape_line_chain.cpp
 
+    math/test_box2.cpp
     math/test_vector2.cpp
     math/test_vector3.cpp
     math/test_util.cpp
