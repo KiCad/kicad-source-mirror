@@ -54,6 +54,8 @@ bool PANEL_DATA_COLLECTION::TransferDataToWindow()
         Disable();
     }
 
+    m_sentryUid->SetValue( Pgm().GetSentryId() );
+
     return true;
 }
 
@@ -81,4 +83,5 @@ void PANEL_DATA_COLLECTION::applySettingsToPanel()
 void PANEL_DATA_COLLECTION::OnResetIdClick( wxCommandEvent& aEvent )
 {
     Pgm().ResetSentryId();
+    m_sentryUid->SetValue( Pgm().GetSentryId() );
 }

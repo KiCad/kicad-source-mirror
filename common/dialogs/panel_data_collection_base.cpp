@@ -21,11 +21,16 @@ PANEL_DATA_COLLECTION_BASE::PANEL_DATA_COLLECTION_BASE( wxWindow* parent, wxWind
 	m_stExplanation->Wrap( 500 );
 	bSizer8->Add( m_stExplanation, 0, wxALL, 5 );
 
+	m_cbOptIn = new wxCheckBox( this, wxID_ANY, _("I agree to provide anonymous reports"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_cbOptIn, 0, wxALL, 5 );
+
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_cbOptIn = new wxCheckBox( this, wxID_ANY, _("I agree to provide anonymous reports"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_cbOptIn, 0, wxALL, 5 );
+	m_sentryUid = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_sentryUid->SetMinSize( wxSize( 340,-1 ) );
+
+	bSizer3->Add( m_sentryUid, 0, wxALL, 5 );
 
 	m_buttonResetId = new wxButton( this, wxID_ANY, _("Reset Unique Id"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_buttonResetId, 0, wxALL, 5 );

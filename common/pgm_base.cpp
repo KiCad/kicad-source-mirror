@@ -276,7 +276,13 @@ wxString PGM_BASE::sentryCreateUid()
 
 void PGM_BASE::ResetSentryId()
 {
-    sentryCreateUid();
+    m_sentryUid = sentryCreateUid();
+}
+
+
+const wxString& PGM_BASE::GetSentryId()
+{
+    return m_sentryUid;
 }
 
 
@@ -287,15 +293,13 @@ void PGM_BASE::sentryInit()
 
     if( IsSentryOptedIn() )
     {
-        wxString userGuid;
-
         wxFFile sentryInitFile( m_sentry_uid_fn.GetFullPath() );
-        sentryInitFile.ReadAll( &userGuid );
+        sentryInitFile.ReadAll( &m_sentryUid );
         sentryInitFile.Close();
 
-        if( userGuid.IsEmpty() || userGuid.length() != 36 )
+        if( m_sentryUid.IsEmpty() || m_sentryUid.length() != 36 )
         {
-            userGuid = sentryCreateUid();
+            m_sentryUid = sentryCreateUid();
         }
 
         sentry_options_t* options = sentry_options_new();
@@ -321,7 +325,7 @@ void PGM_BASE::sentryInit()
         sentry_init( options );
 
         sentry_value_t user = sentry_value_new_object();
-        sentry_value_set_by_key( user, "id", sentry_value_new_string( userGuid.c_str() ) );
+        sentry_value_set_by_key( user, "id", sentry_value_new_string( m_sentryUid.c_str() ) );
         sentry_set_user( user );
 
         sentry_set_tag( "kicad.version", KICAD_VERSION_FULL );

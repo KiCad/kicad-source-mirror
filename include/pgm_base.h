@@ -289,6 +289,7 @@ public:
     bool IsSentryOptedIn();
     void SetSentryOptIn( bool aOptIn );
     void ResetSentryId();
+    const wxString& GetSentryId();
 #endif
 
     /**
@@ -339,6 +340,7 @@ protected:
 #ifdef KICAD_USE_SENTRY
     wxFileName      m_sentry_optin_fn;
     wxFileName      m_sentry_uid_fn;
+    wxString        m_sentryUid;
 #endif
 };
 

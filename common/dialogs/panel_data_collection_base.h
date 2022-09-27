@@ -18,6 +18,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/checkbox.h>
+#include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -37,6 +38,7 @@ class PANEL_DATA_COLLECTION_BASE : public RESETTABLE_PANEL
 	protected:
 		wxStaticText* m_stExplanation;
 		wxCheckBox* m_cbOptIn;
+		wxTextCtrl* m_sentryUid;
 		wxButton* m_buttonResetId;
 
 		// Virtual event handlers, override them in your derived class
