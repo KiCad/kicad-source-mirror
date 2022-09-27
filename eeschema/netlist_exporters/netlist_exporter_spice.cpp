@@ -31,6 +31,9 @@
 #include <pgm_base.h>
 #include <env_paths.h>
 #include <sim/sim_library.h>
+#include <sim/sim_library_kibis.h>
+#include <sim/sim_model_kibis.h>
+#include <sim/sim_model.h>
 #include <sch_screen.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
@@ -39,8 +42,11 @@
 
 #include <boost/algorithm/string/replace.hpp>
 #include <fmt/core.h>
+#include <paths.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
+#include <../../pcbnew/ibis/kibis.h>
+#include <wx/dir.h>
 
 
 namespace NETLIST_EXPORTER_SPICE_PARSER
@@ -122,6 +128,45 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
     m_items.clear();
     m_libParts.clear();
 
+    wxFileName cacheDir;
+    cacheDir.AssignDir( PATHS::GetUserCachePath() );
+    cacheDir.AppendDir( wxT( "ibis" ) );
+
+    if( !cacheDir.DirExists() )
+    {
+        cacheDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+        if( !cacheDir.DirExists() )
+        {
+            wxLogTrace(
+                    "IBIS_CACHE:", wxT( "%s:%s:%d\n * failed to create ibis cache directory '%s'" ),
+                    __FILE__, __FUNCTION__, __LINE__, cacheDir.GetPath() );
+
+            return false;
+        }
+    }
+
+    wxDir    dir;
+    wxString dirName = cacheDir.GetFullPath();
+
+    if( !dir.Open( dirName ) )
+        return false;
+
+    wxFileName    thisFile;
+    wxArrayString fileList;
+    wxString      fileSpec = wxT( "*.cache" );
+
+    thisFile.SetPath( dirName ); // Set the base path to the cache folder
+
+    int numFilesFound = dir.GetAllFiles( dirName, &fileList, fileSpec );
+
+    for( unsigned int i = 0; i < numFilesFound; i++ )
+    {
+        // Completes path to specific file so we can get its "last access" date
+        thisFile.SetFullName( fileList[i] );
+        wxRemoveFile( thisFile.GetFullPath() );
+    }
+
     for( SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
@@ -134,6 +179,223 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             CreatePinList( symbol, &sheet, true );
 
             ITEM spiceItem;
+
+            // @TODO This is to be removed once ngspice gets ibis support
+            if( SIM_MODEL::GetFieldValue( &( symbol->GetFields() ), SIM_MODEL::DEVICE_TYPE_FIELD )
+                == "IBIS" )
+            {
+                if( !readRefName( sheet, *symbol, spiceItem, refNames ) )
+                    return false;
+
+                wxString ibisFile = SIM_MODEL::GetFieldValue( &( symbol->GetFields() ),
+                                                              SIM_LIBRARY::LIBRARY_FIELD );
+                wxString ibisModel = SIM_MODEL::GetFieldValue( &( symbol->GetFields() ),
+                                                               SIM_LIBRARY_KIBIS::MODEL_FIELD );
+                wxString ibisPin = SIM_MODEL::GetFieldValue( &( symbol->GetFields() ),
+                                                             SIM_LIBRARY_KIBIS::PIN_FIELD );
+                wxString ibisComp = SIM_MODEL::GetFieldValue( &( symbol->GetFields() ),
+                                                              SIM_LIBRARY::NAME_FIELD );
+                wxString modelType =
+                        SIM_MODEL::GetFieldValue( &( symbol->GetFields() ), SIM_MODEL::TYPE_FIELD );
+
+                wxString absolutePath = m_schematic->Prj().AbsolutePath( ibisFile );
+
+                KIBIS vkibis = KIBIS( std::string( absolutePath.c_str() ) );
+
+                if( !vkibis.m_valid )
+                {
+                    wxLogTrace( "IBIS:", wxT( "Can't parse ibis file '%s'" ), ibisFile );
+                    return false;
+                }
+
+                KIBIS_MODEL* kmodel = vkibis.GetModel( std::string( ibisModel.c_str() ) );
+
+                if( !kmodel )
+                {
+                    wxLogTrace( "IBIS:", wxT( "Can't find model '%s'" ), ibisModel );
+                    return false;
+                }
+
+                if( !kmodel->m_valid )
+                {
+                    wxLogTrace( "IBIS:", wxT( "Invalid model '%s'" ), ibisModel );
+                    return false;
+                }
+
+                KIBIS_COMPONENT* kcomp = vkibis.GetComponent( std::string( ibisComp.c_str() ) );
+
+                if( !kcomp )
+                {
+                    wxLogTrace( "IBIS:", wxT( "Can't find model '%s'" ), ibisComp );
+                    return false;
+                }
+
+                if( !kcomp->m_valid )
+                {
+                    wxLogTrace( "IBIS:", wxT( "Invalid model '%s'" ), ibisComp );
+                    return false;
+                }
+
+                KIBIS_PIN* kpin = kcomp->GetPin( std::string( ibisPin.c_str() ) );
+
+                if( !kpin )
+                {
+                    wxLogTrace( "IBIS:", wxT( "Can't find model '%s'" ), ibisPin );
+                    return false;
+                }
+
+                if( !kpin->m_valid )
+                {
+                    wxLogTrace( "IBIS:", wxT( "Invalid model '%s'" ), ibisPin );
+                    return false;
+                }
+
+                std::string modelData;
+                std::string modelName =
+                        std::string( symbol->GetRef( &sheet ).c_str() ) + "_ibisGenerated";
+
+                spiceItem.libraryPath =
+                        cacheDir.GetPath() + "/" + symbol->GetRef( &sheet ) + ".cache";
+                wxFile cacheFile( spiceItem.libraryPath, wxFile::write );
+
+                if( !cacheFile.IsOpened() )
+                {
+                    wxLogTrace( "IBIS:", wxT( "Cannot open file for writing: '%s'" ),
+                                spiceItem.libraryPath );
+                    return false;
+                }
+
+                spiceItem.model =
+                        SIM_MODEL::Create( static_cast<unsigned>( m_sortedSymbolPinList.size() ),
+                                           symbol->GetFields() );
+
+                SIM_MODEL::TYPE type = spiceItem.model->GetType();
+
+                switch( type )
+                {
+                case SIM_MODEL::TYPE::KIBIS_DEVICE:
+                case SIM_MODEL::TYPE::KIBIS_DRIVER: break;
+                default:
+                    wxLogTrace( "IBIS:", wxT( "Invalid ibis type: '%s'" ),
+                                symbol->GetRef( &sheet ) );
+                    continue;
+                }
+
+
+                m_libraries.try_emplace( spiceItem.libraryPath,
+                                         SIM_LIBRARY::Create( spiceItem.libraryPath ) );
+
+                readNameField( *symbol, spiceItem );
+
+                if( !readModel( *symbol, spiceItem ) )
+                    continue;
+
+                spiceItem.modelName = modelName;
+
+                readPinNumbers( *symbol, spiceItem );
+                readPinNetNames( *symbol, spiceItem, ncCounter );
+
+
+                KIBIS_PARAMETER kparams;
+                const SIM_MODEL::PARAM* mparam;
+
+                mparam = spiceItem.model->FindParam( "vcc" );
+
+                if( mparam )
+                    kparams.SetCornerFromString( kparams.m_supply, mparam->value->ToString() );
+
+                mparam = spiceItem.model->FindParam( "rpin" );
+
+                if( mparam )
+                    kparams.SetCornerFromString( kparams.m_Rpin, mparam->value->ToString() );
+
+                mparam = spiceItem.model->FindParam( "lpin" );
+
+                if( mparam )
+                    kparams.SetCornerFromString( kparams.m_Lpin, mparam->value->ToString() );
+
+                mparam = spiceItem.model->FindParam( "cpin" );
+
+                if( mparam )
+                    kparams.SetCornerFromString( kparams.m_Cpin, mparam->value->ToString() );
+
+                mparam = spiceItem.model->FindParam( "ccomp" );
+
+                if( mparam )
+                    kparams.SetCornerFromString( kparams.m_Ccomp, mparam->value->ToString() );
+
+                switch( type )
+                {
+                case SIM_MODEL::TYPE::KIBIS_DEVICE:
+                    kpin->writeSpiceDevice( &modelData, modelName, *kmodel, kparams );
+                    break;
+                case SIM_MODEL::TYPE::KIBIS_DRIVER:
+                {
+                    mparam = spiceItem.model->FindParam( "wftype" );
+
+                    if( mparam )
+                    {
+                        std::string paramValue = mparam->value->ToString();
+
+                        if( paramValue == "rect" )
+                        {
+                            kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>(
+                                    new KIBIS_WAVEFORM_RECTANGULAR() );
+
+                            mparam = spiceItem.model->FindParam( "ton" );
+
+                            if( mparam )
+                                static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
+                                        ->m_ton = static_cast<double>(
+                                        std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
+                                                ->Get()
+                                                .value_or( 1 ) );
+
+                            mparam = spiceItem.model->FindParam( "toff" );
+
+                            if( mparam )
+                                static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
+                                        ->m_toff = static_cast<double>(
+                                        std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
+                                                ->Get()
+                                                .value_or( 1 ) );
+
+                            mparam = spiceItem.model->FindParam( "delay" );
+
+                            if( mparam )
+                                static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
+                                        ->m_delay = static_cast<double>(
+                                        std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
+                                                ->Get()
+                                                .value_or( 0 ) );
+                        }
+                        else if( paramValue == "stuck high" )
+                        {
+                            kparams.m_waveform =
+                                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH() );
+                        }
+                        else if( paramValue == "stuck low" )
+                        {
+                            kparams.m_waveform =
+                                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW() );
+                        }
+                        else if( paramValue == "high Z" )
+                        {
+                            kparams.m_waveform =
+                                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z() );
+                        }
+                    }
+                    kpin->writeSpiceDriver( &modelData, modelName, *kmodel, kparams );
+                    break;
+                }
+                default: continue;
+                }
+
+                cacheFile.Write( wxString( modelData ) );
+
+                m_items.push_back( std::move( spiceItem ) );
+                continue;
+            }
 
             if( !readRefName( sheet, *symbol, spiceItem, refNames ) )
                 return false;

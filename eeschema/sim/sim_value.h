@@ -120,6 +120,8 @@ public:
     friend SIM_VALUE_INST<Type> operator/( const SIM_VALUE_INST<Type>& aLeft,
                                            const SIM_VALUE_INST<Type>& aRight );
 
+    std::optional<T> Get() { return m_value; };
+
 private:
     std::string getMetricSuffix();
 

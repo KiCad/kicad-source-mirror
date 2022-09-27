@@ -99,6 +99,7 @@ class SIM_MODEL
 {
 public:
     friend class SPICE_GENERATOR;
+    friend class NETLIST_EXPORTER_SPICE;
 
     struct PIN;
     struct PARAM;
@@ -138,6 +139,8 @@ public:
 
         V,
         I,
+
+        KIBIS,
 
         SUBCKT,
         XSPICE,
@@ -293,6 +296,8 @@ public:
         //I_RANDPOISSON,
         I_BEHAVIORAL,
 
+        KIBIS_DRIVER,
+        KIBIS_DEVICE,
 
         SUBCKT,
         XSPICE,
@@ -351,6 +356,7 @@ public:
             LIMITING_VALUES,
             ADVANCED,
             FLAGS,
+            WAVEFORM,
             INITIAL_CONDITIONS,
             SUPERFLUOUS
         };
@@ -410,7 +416,7 @@ public:
             }
         };
 
-        std::unique_ptr<SIM_VALUE> value;
+        std::shared_ptr<SIM_VALUE> value;
         const INFO& info;
         bool isOtherVariant = false; // Legacy.
 
@@ -537,6 +543,9 @@ public:
     void SetIsEnabled( bool aIsEnabled ) { m_isEnabled = aIsEnabled; }
     bool IsEnabled() const { return m_isEnabled; }
 
+    bool RequiresUIUpdate() { return m_requiresUIUpdate; };
+    void UIUpdated() { m_requiresUIUpdate = false; };
+
 protected:
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
 
@@ -560,6 +569,8 @@ protected:
     void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
                                  bool aAllowOnlyFirstValue = false,
                                  bool aAllowParamValuePairs = true );
+    std::vector<PARAM> m_params;
+    bool               m_requiresUIUpdate = false;
 
 private:
     static TYPE readTypeFromSpiceStrings( const std::string& aTypeString,
@@ -592,7 +603,6 @@ private:
 
     const TYPE m_type;
     std::vector<PIN> m_pins;
-    std::vector<PARAM> m_params;
     bool m_isEnabled;
     bool m_isInferred;
 };

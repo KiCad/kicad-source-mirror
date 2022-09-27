@@ -32,6 +32,7 @@
 #include <sim/sim_model.h>
 #include <sim/sim_library.h>
 #include <sch_symbol.h>
+#include <../../pcbnew/ibis/kibis.h>
 
 
 // Some probable wxWidgets bugs encountered when writing this class:
@@ -100,6 +101,10 @@ private:
     void onModelNameCombobox( wxCommandEvent& aEvent ) override;
     void onModelNameComboboxKillFocus( wxFocusEvent& event ) override;
     void onModelNameComboboxTextEnter( wxCommandEvent& event ) override;
+    void onIbisPinCombobox( wxCommandEvent& event ) override;
+    void onIbisPinComboboxTextEnter( wxCommandEvent& event ) override;
+    void onIbisModelCombobox( wxCommandEvent& event ) override;
+    void onIbisModelComboboxTextEnter( wxCommandEvent& event ) override;
     void onOverrideCheckbox( wxCommandEvent& aEvent ) override;
     void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
     void onTypeChoice( wxCommandEvent& aEvent ) override;
@@ -138,6 +143,11 @@ private:
 
     wxPGProperty* m_prevParamGridSelection;
     bool m_wasCodePreviewUpdated;
+
+    std::shared_ptr<SIM_MODEL> m_currentIbisModel = nullptr;
+
+    void setIbisMode( bool aIbisMode );
+    bool IsIbisLoaded() { return m_library->GetType() == SIM_LIBRARY::LIBRARY_TYPE::KIBIS; };
 };
 
 #endif /* DIALOG_SIM_MODEL_H */

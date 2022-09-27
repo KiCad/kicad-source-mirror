@@ -275,13 +275,19 @@ set( EESCHEMA_SRCS
     sch_plugins/legacy/sch_legacy_plugin_helpers.cpp
     sch_plugins/database/sch_database_plugin.cpp
 
+
+    ${CMAKE_SOURCE_DIR}/pcbnew/ibis/ibis_parser.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/ibis/kibis.cpp
+    
     # Some simulation features must be built even if libngspice is not linked.
     sim/sim_library.cpp
     sim/sim_library_spice.cpp
+    sim/sim_library_kibis.cpp
     sim/sim_model.cpp
     sim/sim_model_behavioral.cpp
     sim/sim_model_ideal.cpp
     sim/sim_model_mutual_inductor.cpp
+    sim/sim_model_kibis.cpp
     sim/sim_model_ngspice.cpp
     sim/sim_model_ngspice_data.cpp
     sim/sim_model_raw_spice.cpp

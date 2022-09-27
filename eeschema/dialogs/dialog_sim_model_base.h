@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,6 +61,10 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxStaticText* m_modelNameLabel;
 		wxComboBox* m_modelNameCombobox;
 		wxCheckBox* m_overrideCheckbox;
+		wxStaticText* m_ibisPinLabel;
+		wxComboBox* m_ibisPinCombobox;
+		wxStaticText* m_ibisModelLabel;
+		wxComboBox* m_ibisModelCombobox;
 		wxNotebook* m_notebook4;
 		wxPanel* m_parametersPanel;
 		wxStaticText* m_staticTextDevType;
@@ -90,6 +94,10 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onModelNameComboboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onOverrideCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOverrideCheckboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onIbisPinCombobox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onIbisPinComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onIbisModelCombobox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onIbisModelComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeviceTypeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeviceTypeChoiceUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onTypeChoice( wxCommandEvent& event ) { event.Skip(); }

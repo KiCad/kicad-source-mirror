@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 Mikolaj Wielgus
  * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -22,33 +21,36 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_LIBRARY_SPICE_H
-#define SIM_LIBRARY_SPICE_H
+#ifndef SIM_LIBRARY_KIBIS_H
+#define SIM_LIBRARY_KIBIS_H
 
 #include <sim/sim_library.h>
-#include <sim/spice_library_parser.h>
+#include <sim/sim_model_kibis.h>
+#include <../../pcbnew/ibis/kibis.h>
 
-
-class SIM_LIBRARY_SPICE : public SIM_LIBRARY
+class SIM_LIBRARY_KIBIS : public SIM_LIBRARY
 {
-public:
-    friend class SPICE_LIBRARY_PARSER;
+    friend class SIM_MODEL_KIBIS;
 
-    SIM_LIBRARY_SPICE();
+public:
+    static constexpr auto PIN_FIELD = "Ibis_Pin";
+    static constexpr auto MODEL_FIELD = "Ibis_Model";
 
     // @copydoc SIM_LIBRARY::ReadFile()
     void ReadFile( const std::string& aFilePath ) override;
 
     // @copydoc SIM_LIBRARY::WriteFile()
-    void WriteFile( const std::string& aFilePath ) override;
+    void WriteFile( const std::string& aFilePath ) override{};
 
     virtual SIM_LIBRARY::LIBRARY_TYPE GetType() override
     {
-        return SIM_LIBRARY::LIBRARY_TYPE::SPICE;
+        return SIM_LIBRARY::LIBRARY_TYPE::KIBIS;
     };
 
-private:
-    std::unique_ptr<SPICE_LIBRARY_PARSER> m_spiceLibraryParser;
+    bool InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName );
+
+protected:
+    KIBIS m_kibis;
 };
 
 #endif // SIM_LIBRARY_SPICE_H

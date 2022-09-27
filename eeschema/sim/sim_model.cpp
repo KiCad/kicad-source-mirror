@@ -27,6 +27,7 @@
 #include <sim/sim_model_ideal.h>
 #include <sim/sim_model_mutual_inductor.h>
 #include <sim/sim_model_ngspice.h>
+#include <sim/sim_model_kibis.h>
 #include <sim/sim_model_source.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_subckt.h>
@@ -96,6 +97,8 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE_ aDeviceType )
 
         case DEVICE_TYPE_::V:         return { "V",      "Voltage Source"    };
         case DEVICE_TYPE_::I:         return { "I",      "Current Source"    };
+
+    	case DEVICE_TYPE_::KIBIS:     return { "IBIS",  "Ibis model" };
 
         case DEVICE_TYPE_::SUBCKT:    return { "SUBCKT", "Subcircuit"        };
         case DEVICE_TYPE_::XSPICE:    return { "XSPICE", "XSPICE Code Model" };
@@ -226,6 +229,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     //case TYPE::I_RANDPOISSON:        return { DEVICE_TYPE::I,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::I_BEHAVIORAL:         return { DEVICE_TYPE_::I,      "=",              "Behavioral"                 };
 
+    case TYPE::KIBIS_DRIVER:         return { DEVICE_TYPE_::KIBIS,  "IBISDRIVER",    "Driver"                     };
+    case TYPE::KIBIS_DEVICE:         return { DEVICE_TYPE_::KIBIS,  "IBISDEVICE",    "Device"                     };
     case TYPE::SUBCKT:               return { DEVICE_TYPE_::SUBCKT, "",               ""                           };
     case TYPE::XSPICE:               return { DEVICE_TYPE_::XSPICE, "",               ""                           };
     case TYPE::RAWSPICE:                return { DEVICE_TYPE_::SPICE,  "",               ""                           };
@@ -358,6 +363,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::SUBCKT:               return { "X"  };
     case TYPE::XSPICE:               return { "A"  };
 
+    case TYPE::KIBIS_DEVICE:         return { "X"  };
+    case TYPE::KIBIS_DRIVER:         return { "X"  };
     case TYPE::NONE:
     case TYPE::RAWSPICE:
         return {};
@@ -939,6 +946,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
 
     case TYPE::XSPICE:
         return std::make_unique<SIM_MODEL_XSPICE>( aType );
+
+    case TYPE::KIBIS_DRIVER:
+    case TYPE::KIBIS_DEVICE:
+        return std::make_unique<SIM_MODEL_KIBIS>( aType );
 
     case TYPE::RAWSPICE:
         return std::make_unique<SIM_MODEL_RAW_SPICE>();

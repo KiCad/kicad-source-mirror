@@ -24,7 +24,9 @@
 
 #include <dialog_sim_model.h>
 #include <sim/sim_property.h>
+#include <sim/sim_library_kibis.h>
 #include <sim/sim_library_spice.h>
+#include <sim/sim_model_kibis.h>
 #include <sim/sim_model_raw_spice.h>
 #include <widgets/wx_grid.h>
 #include <kiplatform/ui.h>
@@ -112,23 +114,63 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+    setIbisMode( IsIbisLoaded() );
 }
 
 
 template <typename T>
 bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 {
-    wxString libraryFilename = SIM_MODEL::GetFieldValue( &m_fields,
-                                                         SIM_LIBRARY_SPICE::LIBRARY_FIELD );
+    wxString libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
     if( libraryFilename != "" )
     {
         // The model is sourced from a library, optionally with instance overrides.
         loadLibrary( libraryFilename );
 
+        bool ibisMode = IsIbisLoaded();
+        setIbisMode( ibisMode );
+
         // Must be set before curModel() is used since the latter checks the combobox value.
         m_modelNameCombobox->SetStringSelection(
-                SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_SPICE::NAME_FIELD ) );
+                SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD ) );
+
+        if( ibisMode && ( m_modelNameCombobox->GetSelection() >= 0 ) )
+        {
+            std::shared_ptr<SIM_MODEL_KIBIS> kibismodel =
+                    std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
+                            m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
+
+            if( kibismodel )
+            {
+                wxCommandEvent dummyEvent;
+                onModelNameCombobox( dummyEvent ); // refresh list of pins
+
+                long unsigned int i = 0;
+
+                for( std::pair<std::string, std::string> strs : kibismodel->GetIbisPins() )
+                {
+                    if( strs.first
+                        == SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::PIN_FIELD ) )
+                    {
+                        kibismodel->ChangePin(
+                                *( std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library ) ),
+                                strs.first );
+                        m_ibisPinCombobox->SetSelection( i );
+                        break;
+                    }
+                    i++;
+                }
+
+                if( i < kibismodel->GetIbisPins().size() )
+                {
+                    onIbisPinCombobox( dummyEvent ); // refresh list of models
+
+                    m_ibisModelCombobox->SetStringSelection(
+                            SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD ) );
+                }
+            }
+        }
 
         m_excludeSymbolCheckbox->SetValue( !curModel().IsEnabled() );
     }
@@ -169,14 +211,13 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 
     std::string modelName;
 
-    if( m_useLibraryModelRadioButton->GetValue() )
-        modelName = m_modelNameCombobox->GetValue();
+    modelName = m_modelNameCombobox->GetValue();
 
-    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_SPICE::NAME_FIELD, modelName );
+    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, modelName );
 
     std::string path;
 
-    if( m_useLibraryModelRadioButton->GetValue() )
+    if( m_useLibraryModelRadioButton->GetValue() || IsIbisLoaded() )
     {
         path = m_library->GetFilePath();
         wxFileName fn( path );
@@ -185,7 +226,23 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
             path = fn.GetFullPath();
     }
 
-    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_SPICE::LIBRARY_FIELD, path );
+    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path );
+
+    if( IsIbisLoaded() )
+    {
+        std::shared_ptr<SIM_MODEL_KIBIS> kibismodel = std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
+                m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
+
+        if( kibismodel )
+
+        {
+            SIM_MODEL::SetFieldValue(
+                    m_fields, SIM_LIBRARY_KIBIS::PIN_FIELD,
+                    kibismodel->GetIbisPins().at( m_ibisPinCombobox->GetSelection() ).first );
+            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD,
+                                      std::string( m_ibisModelCombobox->GetValue().c_str() ) );
+        }
+    }
 
     curModel().WriteFields( m_fields );
 
@@ -207,13 +264,15 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 {
-    if( &curModel() != m_prevModel )
+    if( ( &curModel() != m_prevModel ) || curModel().RequiresUIUpdate() )
     {
         SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
 
         // Change the Type choice to match the current device type.
-        if( !m_prevModel || deviceType != m_prevModel->GetDeviceType() )
+        if( !m_prevModel || deviceType != m_prevModel->GetDeviceType()
+            || curModel().RequiresUIUpdate() )
         {
+            curModel().UIUpdated();
             m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
 
             m_typeChoice->Clear();
@@ -268,6 +327,9 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         m_paramGrid->Append( new wxPropertyCategory( "Distributed Quantities" ) );
         m_paramGrid->HideProperty( "Distributed Quantities" );
 
+        m_paramGrid->Append( new wxPropertyCategory( "Waveform" ) );
+        m_paramGrid->HideProperty( "Waveform" );
+
         m_paramGrid->Append( new wxPropertyCategory( "Limiting Values" ) );
         m_paramGrid->HideProperty( "Limiting Values" );
 
@@ -284,6 +346,7 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 
         m_paramGrid->CollapseAll();
         m_paramGrid->Expand( "AC" );
+        m_paramGrid->Expand( "Waveform" );
     }
 
     // Either enable all properties or disable all except the principal ones.
@@ -311,10 +374,11 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
             ( *it )->SetValueFromString( prop->GetParam().value->ToString() );
 
         // Most of the values are disabled when the override checkbox is unchecked.
-        ( *it )->Enable( m_useInstanceModelRadioButton->GetValue()
-            || ( prop->GetParam().info.isInstanceParam
-                 && prop->GetParam().info.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL )
-            || m_overrideCheckbox->GetValue() );
+        ( *it )->Enable(
+                ( IsIbisLoaded() ) || m_useInstanceModelRadioButton->GetValue()
+                || ( prop->GetParam().info.isInstanceParam
+                     && prop->GetParam().info.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL )
+                || m_overrideCheckbox->GetValue() );
     }
 }
 
@@ -451,6 +515,13 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 {
     const wxString absolutePath = Prj().AbsolutePath( aFilePath );
 
+    if( absolutePath.EndsWith( ".ibs" ) )
+        m_library = std::make_shared<SIM_LIBRARY_KIBIS>();
+    else
+        m_library = std::make_shared<SIM_LIBRARY_SPICE>();
+
+    setIbisMode( IsIbisLoaded() );
+
     try
     {
         m_library->ReadFile( std::string( absolutePath.ToUTF8() ) );
@@ -473,11 +544,14 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
         {
             const SIM_MODEL& baseModel = m_library->GetModels().at( i );
             wxString         baseModelName = m_library->GetModelNames().at( i );
+            wxString         expectedModelName;
+
+            expectedModelName =
+                    SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::NAME_FIELD );
 
             // Only the current model is initialized from fields. Others have default
             // initialization.
-            if( baseModelName
-                == SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_SPICE::NAME_FIELD ) )
+            if( baseModelName == expectedModelName )
             {
                 //TODO: it's not cur model.
 
@@ -500,6 +574,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
         modelNames.Add( name );
 
     auto validator = dynamic_cast<MODEL_NAME_VALIDATOR*>( m_modelNameCombobox->GetValidator() );
+
     if( validator )
         validator->SetIncludes( modelNames );
 
@@ -545,6 +620,11 @@ void DIALOG_SIM_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
     case CATEGORY::DISTRIBUTED_QUANTITIES:
         m_paramGrid->HideProperty( "Distributed Quantities", false );
         m_paramGrid->AppendIn( "Distributed Quantities", newParamProperty( aParamIndex ) );
+        break;
+
+    case CATEGORY::WAVEFORM:
+        m_paramGrid->HideProperty( "Waveform", false );
+        m_paramGrid->AppendIn( "Waveform", newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::GEOMETRY:
@@ -693,9 +773,7 @@ std::shared_ptr<SIM_MODEL> DIALOG_SIM_MODEL<T>::curModelSharedPtr() const
 {
     if( m_useLibraryModelRadioButton->GetValue()
         && m_modelNameCombobox->GetSelection() != wxNOT_FOUND )
-    {
         return m_libraryModels.at( m_modelNameCombobox->GetSelection() );
-    }
     else
         return m_models.at( static_cast<int>( m_curModelType ) );
 }
@@ -803,6 +881,27 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onModelNameCombobox( wxCommandEvent& aEvent )
 {
+    if( IsIbisLoaded() )
+    {
+        wxArrayString    pinLabels;
+        SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
+
+        if( !modelkibis )
+        {
+            wxFAIL;
+            return;
+        }
+
+        for( std::pair<wxString, wxString> strs : modelkibis->GetIbisPins() )
+        {
+            pinLabels.Add( strs.first + " - " + strs.second );
+        }
+
+        m_ibisPinCombobox->Set( pinLabels );
+
+        wxArrayString emptyArray;
+        m_ibisModelCombobox->Set( emptyArray );
+    }
     updateWidgets();
 }
 
@@ -821,9 +920,63 @@ void DIALOG_SIM_MODEL<T>::onModelNameComboboxTextEnter( wxCommandEvent& aEvent )
 {
     m_modelNameCombobox->SetSelection(
         m_modelNameCombobox->FindString( m_modelNameCombobox->GetValue() ) );
+    onModelNameCombobox( aEvent );
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onIbisPinCombobox( wxCommandEvent& aEvent )
+{
+    if( IsIbisLoaded() )
+    {
+        wxArrayString modelLabels;
+
+        SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
+
+        if( !modelkibis )
+        {
+            wxFAIL;
+            return;
+        }
+
+        std::vector<std::pair<std::string, std::string>> strs = modelkibis->GetIbisPins();
+        modelkibis->ChangePin( *std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library ),
+                               strs.at( m_ibisPinCombobox->GetSelection() ).first );
+
+        for( wxString modelName : modelkibis->GetIbisModels() )
+            modelLabels.Add( modelName );
+
+        m_ibisModelCombobox->Set( modelLabels );
+    }
     updateWidgets();
 }
 
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onIbisPinComboboxTextEnter( wxCommandEvent& aEvent )
+{
+    m_ibisPinCombobox->SetSelection(
+            m_ibisPinCombobox->FindString( m_ibisPinCombobox->GetValue() ) );
+
+    onIbisPinCombobox( aEvent );
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onIbisModelCombobox( wxCommandEvent& aEvent )
+{
+    updateWidgets();
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onIbisModelComboboxTextEnter( wxCommandEvent& aEvent )
+{
+    m_ibisModelCombobox->SetSelection(
+            m_ibisModelCombobox->FindString( m_ibisModelCombobox->GetValue() ) );
+
+    onIbisPinCombobox( aEvent );
+}
 
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onOverrideCheckbox( wxCommandEvent& aEvent )
@@ -856,6 +1009,25 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
         if( deviceType == SIM_MODEL::TypeInfo( type ).deviceType
             && typeDescription == SIM_MODEL::TypeInfo( type ).description )
         {
+            if( IsIbisLoaded()
+                && ( type == SIM_MODEL::TYPE::KIBIS_DEVICE
+                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER ) )
+            {
+                std::shared_ptr<SIM_MODEL_KIBIS> kibismodel =
+                        std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
+                                m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
+
+                m_libraryModels.at( m_modelNameCombobox->GetSelection() ) =
+                        std::shared_ptr<SIM_MODEL>( dynamic_cast<SIM_MODEL*>(
+                                new SIM_MODEL_KIBIS( type, *kibismodel, m_fields ) ) );
+
+                wxCommandEvent dummyEvent;
+                onIbisPinCombobox( dummyEvent );
+
+                kibismodel = std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
+                        m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
+            }
+
             m_curModelType = type;
             break;
         }
@@ -869,6 +1041,25 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onParamGridChanged( wxPropertyGridEvent& aEvent )
 {
+    if( IsIbisLoaded() )
+    {
+        wxString      propValue = "";
+        wxString      propName = aEvent.GetPropertyName();
+        wxPGProperty* property = aEvent.GetProperty();
+
+        if( property && propName == "wftype" )
+        {
+            wxVariant variant = aEvent.GetPropertyValue();
+            propValue = property->ValueToString( variant );
+
+            std::shared_ptr<SIM_MODEL_KIBIS> kibismodel =
+                    std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
+                            m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
+
+            kibismodel->SetParameters( std::string( propValue.c_str() ) );
+            kibismodel->SetParamValue( "wftype", std::string( propValue.c_str() ) );
+        }
+    }
     updateWidgets();
 }
 
@@ -965,7 +1156,7 @@ void DIALOG_SIM_MODEL<T>::onDeviceTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( m_useInstanceModelRadioButton->GetValue() );
+    aEvent.Enable( m_useInstanceModelRadioButton->GetValue() || ( IsIbisLoaded() ) );
 }
 
 
@@ -1060,6 +1251,20 @@ void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEven
     m_prevParamGridSelection = grid->GetSelection();
 }
 
+template <typename T>
+void DIALOG_SIM_MODEL<T>::setIbisMode( bool aIbisMode )
+{
+    m_ibisModelCombobox->Show( aIbisMode );
+    m_ibisPinCombobox->Show( aIbisMode );
+    m_ibisModelLabel->Show( aIbisMode );
+    m_ibisPinLabel->Show( aIbisMode );
+    m_overrideCheckbox->Show( !aIbisMode );
+
+    m_modelNameLabel->SetLabel( aIbisMode ? "Component:" : "Model:" );
+    this->Fit();
+    this->Refresh();
+    this->Update();
+}
 
 template class DIALOG_SIM_MODEL<SCH_FIELD>;
 template class DIALOG_SIM_MODEL<LIB_FIELD>;
