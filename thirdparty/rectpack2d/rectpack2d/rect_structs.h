@@ -6,7 +6,7 @@ namespace rectpack2D {
 
 	struct rect_wh {
 		rect_wh() : w(0), h(0) {}
-		rect_wh(const int w, const int h) : w(w), h(h) {}
+		rect_wh(const int w_, const int h_) : w(w_), h(h_) {}
 
 		int w;
 		int h;
@@ -45,7 +45,7 @@ namespace rectpack2D {
 		int h;
 
 		rect_xywh() : x(0), y(0), w(0), h(0) {}
-		rect_xywh(const int x, const int y, const int w, const int h) : x(x), y(y), w(w), h(h) {}
+		rect_xywh(const int x_, const int y_, const int w_, const int h_) : x(x_), y(y_), w(w_), h(h_) {}
 
 		int	area() const { return w * h; }
 		int perimeter() const { return 2 * w + 2 * h; }
@@ -63,7 +63,7 @@ namespace rectpack2D {
 		bool flipped;
 
 		rect_xywhf() : x(0), y(0), w(0), h(0), flipped(false) {}
-		rect_xywhf(const int x, const int y, const int w, const int h, const bool flipped) : x(x), y(y), w(flipped ? h : w), h(flipped ? w : h), flipped(flipped) {}
+		rect_xywhf(const int x_, const int y_, const int w_, const int h_, const bool aFlipped) : x(x_), y(y_), w(aFlipped ? h_ : w_), h(aFlipped ? w_ : h_), flipped(aFlipped) {}
 		rect_xywhf(const rect_xywh& b) : rect_xywhf(b.x, b.y, b.w, b.h, false) {}
 
 		int	area() const { return w * h; }

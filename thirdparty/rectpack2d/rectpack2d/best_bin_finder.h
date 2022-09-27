@@ -167,12 +167,12 @@ namespace rectpack2D {
 	) {
 		const auto try_pack = [&](
 			const bin_dimension tried_dimension, 
-			const rect_wh starting_bin
+			const rect_wh a_starting_bin
 		) {
 			return best_packing_for_ordering_impl(
 				root,
 				std::forward<O>(ordering),
-				starting_bin,
+				a_starting_bin,
 				discard_step,
 				tried_dimension
 			);
@@ -187,9 +187,9 @@ namespace rectpack2D {
 		auto best_bin = std::get<rect_wh>(best_result);
 
 		auto trial = [&](const bin_dimension tried_dimension) {
-			const auto trial = try_pack(tried_dimension, best_bin);
+			const auto l_trial = try_pack(tried_dimension, best_bin);
 
-			if (const auto better = std::get_if<rect_wh>(&trial)) {
+			if (const auto better = std::get_if<rect_wh>(&l_trial)) {
 				best_bin = *better;
 			}
 		};
