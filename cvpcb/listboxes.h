@@ -150,6 +150,7 @@ public:
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
     void     Finish();
+    void     ClearList();
 
     wxString GetSelectedLibrary();
     wxString OnGetItemText( long item, long column ) const override;

@@ -129,6 +129,10 @@ void LIBRARY_LISTBOX::Finish()
     }
 }
 
+void LIBRARY_LISTBOX::ClearList()
+{
+    m_libraryList.clear();
+}
 
 BEGIN_EVENT_TABLE( LIBRARY_LISTBOX, ITEMS_LISTBOX_BASE )
     EVT_CHAR( LIBRARY_LISTBOX::OnChar )

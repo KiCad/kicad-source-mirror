@@ -1040,6 +1040,7 @@ void CVPCB_MAINFRAME::BuildLibrariesListBox()
     FP_LIB_TABLE*      tbl = Prj().PcbFootprintLibs();
     std::set<wxString> pinnedMatches;
     std::set<wxString> otherMatches;
+    m_librariesListBox->ClearList();
 
     auto process =
             [&]( const wxString& aNickname )
@@ -1247,7 +1248,13 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         Go into SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event ) and trim GNL_ALL down.
         */
         break;
-
+    case MAIL_RELOAD_LIB:
+        m_cannotClose = true;
+        LoadFootprintFiles();
+        BuildFootprintsListBox();
+        BuildLibrariesListBox();
+        m_cannotClose = false;
+        break;
     default:
         ;       // ignore most
     }

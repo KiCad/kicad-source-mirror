@@ -58,6 +58,7 @@
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
 #include <kiway.h>
+#include <kiway_express.h>
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <pcbnew_id.h>          // For ID_PCBNEW_END_LIST
@@ -1136,4 +1137,7 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
 
     if( viewer )
         viewer->ReCreateLibraryList();
+
+    std::string payload = "";
+    aKiway->ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload );
 }
