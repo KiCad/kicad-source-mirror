@@ -36,7 +36,8 @@
 #include <eeschema_settings.h>
 
 #include <wx/object.h>
-#include "wx/generic/textdlgg.h"
+#include <wx/generic/textdlgg.h>
+#include <wx/menu.h>
 
 /**
  * Store an SCH_SHEET_PATH of each sheet in hierarchy.
