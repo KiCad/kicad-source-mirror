@@ -47,9 +47,9 @@ public:
      * Type information, which will be shown in dialog.
      */
     template <typename T>
-    struct TYPE_CONTAINER_T
+    struct LINE_ITEM
     {
-        TYPE_CONTAINER_T<T>( T aAttribute, const wxString& aTitle ) :
+        LINE_ITEM<T>( T aAttribute, const wxString& aTitle ) :
                 attribute( aAttribute ),
                 title( aTitle ),
                 qty( 0 )
@@ -65,9 +65,9 @@ public:
      * Footprint attributes (such as SMD, THT, Virtual and so on), which will be shown in the
      * dialog. Holds both front and back footprint quantities.
      */
-    struct FOOTPRINT_TYPE_T
+    struct FP_LINE_ITEM
     {
-        FOOTPRINT_TYPE_T( int aAttributeMask, int aAttributeValue, wxString aTitle ) :
+        FP_LINE_ITEM( int aAttributeMask, int aAttributeValue, wxString aTitle ) :
                 attribute_mask( aAttributeMask ),
                 attribute_value( aAttributeValue ),
                 title( aTitle ),
@@ -83,7 +83,7 @@ public:
         int      backSideQty;
     };
 
-    struct DRILL_TYPE_T
+    struct DRILL_LINE_ITEM
     {
         enum COL_ID
         {
@@ -97,8 +97,8 @@ public:
             COL_STOP_LAYER
         };
 
-        DRILL_TYPE_T( int aXSize, int aYSize, PAD_DRILL_SHAPE_T aShape, bool aIsPlated,
-                      bool aIsPad, PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aStopLayer, int aQty ) :
+        DRILL_LINE_ITEM( int aXSize, int aYSize, PAD_DRILL_SHAPE_T aShape, bool aIsPlated,
+                         bool aIsPad, PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aStopLayer ) :
                 xSize( aXSize ),
                 ySize( aYSize ),
                 shape( aShape ),
@@ -106,11 +106,11 @@ public:
                 isPad( aIsPad ),
                 startLayer( aStartLayer ),
                 stopLayer( aStopLayer ),
-                qty( aQty )
+                qty( 0 )
         {
         }
 
-        bool operator==( const DRILL_TYPE_T& other )
+        bool operator==( const DRILL_LINE_ITEM& other )
         {
             return xSize == other.xSize && ySize == other.ySize && shape == other.shape
                    && isPlated == other.isPlated && isPad == other.isPad
@@ -122,7 +122,7 @@ public:
             COMPARE( COL_ID aColId, bool aAscending ) : colId( aColId ), ascending( aAscending )
             {
             }
-            bool operator()( const DRILL_TYPE_T& aLeft, const DRILL_TYPE_T& aRight )
+            bool operator()( const DRILL_LINE_ITEM& aLeft, const DRILL_LINE_ITEM& aRight )
             {
                 switch( colId )
                 {
@@ -209,10 +209,10 @@ private:
 
     bool            m_hasOutline;          ///< Show if board outline properly defined.
 
-    std::deque<FOOTPRINT_TYPE_T>             m_fpTypes;
-    std::deque<TYPE_CONTAINER_T<PAD_ATTRIB>> m_padTypes;
-    std::deque<TYPE_CONTAINER_T<VIATYPE>>    m_viaTypes;
-    std::deque<DRILL_TYPE_T>                 m_drillTypes;
+    std::deque<FP_LINE_ITEM>          m_fpTypes;
+    std::deque<LINE_ITEM<PAD_ATTRIB>> m_padTypes;
+    std::deque<LINE_ITEM<VIATYPE>>    m_viaTypes;
+    std::deque<DRILL_LINE_ITEM>       m_drillTypes;
 
     int m_startLayerColInitialSize;        ///< Width of the start layer column as calculated by
                                            ///<    the wxWidgets autosizing algorithm.

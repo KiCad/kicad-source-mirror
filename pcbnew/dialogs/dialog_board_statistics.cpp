@@ -142,20 +142,20 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
     m_fpTypes.clear();
 
     // If you need some more types to be shown, simply add them to the corresponding list
-    m_fpTypes.push_back( FOOTPRINT_TYPE_T( FP_THROUGH_HOLE,        FP_THROUGH_HOLE, _( "THT:" ) ) );
-    m_fpTypes.push_back( FOOTPRINT_TYPE_T( FP_SMD,                 FP_SMD,          _( "SMD:" ) ) );
-    m_fpTypes.push_back( FOOTPRINT_TYPE_T( FP_THROUGH_HOLE|FP_SMD, 0,               _( "Unspecified:" ) ) );
+    m_fpTypes.push_back( FP_LINE_ITEM( FP_THROUGH_HOLE,        FP_THROUGH_HOLE, _( "THT:" ) ) );
+    m_fpTypes.push_back( FP_LINE_ITEM( FP_SMD,                 FP_SMD,          _( "SMD:" ) ) );
+    m_fpTypes.push_back( FP_LINE_ITEM( FP_THROUGH_HOLE|FP_SMD, 0,               _( "Unspecified:" ) ) );
 
     m_padTypes.clear();
-    m_padTypes.push_back( TYPE_CONTAINER_T<PAD_ATTRIB>( PAD_ATTRIB::PTH,  _( "Through hole:" ) ) );
-    m_padTypes.push_back( TYPE_CONTAINER_T<PAD_ATTRIB>( PAD_ATTRIB::SMD,  _( "SMD:" ) ) );
-    m_padTypes.push_back( TYPE_CONTAINER_T<PAD_ATTRIB>( PAD_ATTRIB::CONN, _( "Connector:" ) ) );
-    m_padTypes.push_back( TYPE_CONTAINER_T<PAD_ATTRIB>( PAD_ATTRIB::NPTH, _( "NPTH:" ) ) );
+    m_padTypes.push_back( LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::PTH,  _( "Through hole:" ) ) );
+    m_padTypes.push_back( LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::SMD,  _( "SMD:" ) ) );
+    m_padTypes.push_back( LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::CONN, _( "Connector:" ) ) );
+    m_padTypes.push_back( LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::NPTH, _( "NPTH:" ) ) );
 
     m_viaTypes.clear();
-    m_viaTypes.push_back( TYPE_CONTAINER_T<VIATYPE>( VIATYPE::THROUGH,      _( "Through vias:" ) ) );
-    m_viaTypes.push_back( TYPE_CONTAINER_T<VIATYPE>( VIATYPE::BLIND_BURIED, _( "Blind/buried:" ) ) );
-    m_viaTypes.push_back( TYPE_CONTAINER_T<VIATYPE>( VIATYPE::MICROVIA,     _( "Micro vias:" ) ) );
+    m_viaTypes.push_back( LINE_ITEM<VIATYPE>( VIATYPE::THROUGH,      _( "Through vias:" ) ) );
+    m_viaTypes.push_back( LINE_ITEM<VIATYPE>( VIATYPE::BLIND_BURIED, _( "Blind/buried:" ) ) );
+    m_viaTypes.push_back( LINE_ITEM<VIATYPE>( VIATYPE::MICROVIA,     _( "Micro vias:" ) ) );
 
     // If there not enough rows in grids, append some
     int appendRows = m_fpTypes.size() + 2 - m_gridComponents->GetNumberRows();
@@ -185,8 +185,8 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
     m_drillsPanel->Layout();
 
     m_gridDrills->AutoSizeColumns();
-    m_startLayerColInitialSize = m_gridDrills->GetColSize( DRILL_TYPE_T::COL_START_LAYER );
-    m_stopLayerColInitialSize = m_gridDrills->GetColSize( DRILL_TYPE_T::COL_STOP_LAYER );
+    m_startLayerColInitialSize = m_gridDrills->GetColSize( DRILL_LINE_ITEM::COL_START_LAYER );
+    m_stopLayerColInitialSize = m_gridDrills->GetColSize( DRILL_LINE_ITEM::COL_STOP_LAYER );
 
     // Add space for the vertical scrollbar, so that it won't overlap with the cells.
     m_gridDrills->SetMinSize( wxSize( m_gridDrills->GetEffectiveMinSize().x
@@ -213,14 +213,14 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             continue;
 
         // Go through components types list
-        for( FOOTPRINT_TYPE_T& type : m_fpTypes )
+        for( FP_LINE_ITEM& line : m_fpTypes )
         {
-            if( ( footprint->GetAttributes() & type.attribute_mask ) == type.attribute_value )
+            if( ( footprint->GetAttributes() & line.attribute_mask ) == line.attribute_value )
             {
                 if( footprint->IsFlipped() )
-                    type.backSideQty++;
+                    line.backSideQty++;
                 else
-                    type.frontSideQty++;
+                    line.frontSideQty++;
                 break;
             }
         }
@@ -228,11 +228,11 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         for( PAD* pad : footprint->Pads() )
         {
             // Go through pads types list
-            for( TYPE_CONTAINER_T<PAD_ATTRIB>& type : m_padTypes )
+            for( LINE_ITEM<PAD_ATTRIB>& line : m_padTypes )
             {
-                if( pad->GetAttribute() == type.attribute )
+                if( pad->GetAttribute() == line.attribute )
                 {
-                    type.qty++;
+                    line.qty++;
                     break;
                 }
             }
@@ -253,9 +253,10 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                     bottom = pad->GetLayerSet().CuStack().back();
                 }
 
-                DRILL_TYPE_T drill( pad->GetDrillSize().x, pad->GetDrillSize().y,
-                                    pad->GetDrillShape(), pad->GetAttribute() != PAD_ATTRIB::NPTH,
-                                    true, top, bottom, 0 );
+                DRILL_LINE_ITEM drill( pad->GetDrillSize().x, pad->GetDrillSize().y,
+                                       pad->GetDrillShape(),
+                                       pad->GetAttribute() != PAD_ATTRIB::NPTH,
+                                       true, top, bottom );
 
                 auto it = m_drillTypes.begin();
 
@@ -283,17 +284,18 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     {
         if( PCB_VIA* via = dyn_cast<PCB_VIA*>( track ) )
         {
-            for( TYPE_CONTAINER_T<VIATYPE>& type : m_viaTypes )
+            for( LINE_ITEM<VIATYPE>& line : m_viaTypes )
             {
-                if( via->GetViaType() == type.attribute )
+                if( via->GetViaType() == line.attribute )
                 {
-                    type.qty++;
+                    line.qty++;
                     break;
                 }
             }
 
-            DRILL_TYPE_T drill( via->GetDrillValue(), via->GetDrillValue(), PAD_DRILL_SHAPE_CIRCLE,
-                                true, false, via->TopLayer(), via->BottomLayer(), 0 );
+            DRILL_LINE_ITEM drill( via->GetDrillValue(), via->GetDrillValue(),
+                                   PAD_DRILL_SHAPE_CIRCLE, true, false, via->TopLayer(),
+                                   via->BottomLayer() );
 
             auto it = m_drillTypes.begin();
 
@@ -316,7 +318,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     }
 
     sort( m_drillTypes.begin(), m_drillTypes.end(),
-          DRILL_TYPE_T::COMPARE( DRILL_TYPE_T::COL_COUNT, false ) );
+          DRILL_LINE_ITEM::COMPARE( DRILL_LINE_ITEM::COL_COUNT, false ) );
 
     bool           boundingBoxCreated = false; //flag if bounding box initialized
     BOX2I          bbox;
@@ -383,11 +385,11 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     int totalPads  = 0;
     int row = 0;
 
-    for( const TYPE_CONTAINER_T<PAD_ATTRIB>& type : m_padTypes )
+    for( const LINE_ITEM<PAD_ATTRIB>& line : m_padTypes )
     {
-        m_gridPads->SetCellValue( row, COL_LABEL, type.title );
-        m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( type.qty ) );
-        totalPads += type.qty;
+        m_gridPads->SetCellValue( row, COL_LABEL, line.title );
+        m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( line.qty ) );
+        totalPads += line.qty;
         row++;
     }
 
@@ -397,11 +399,11 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     int totalVias = 0;
     row = 0;
 
-    for( const TYPE_CONTAINER_T<VIATYPE>& type : m_viaTypes )
+    for( const LINE_ITEM<VIATYPE>& line : m_viaTypes )
     {
-        m_gridVias->SetCellValue( row, COL_LABEL, type.title );
-        m_gridVias->SetCellValue( row, COL_AMOUNT, formatCount( type.qty ) );
-        totalVias += type.qty;
+        m_gridVias->SetCellValue( row, COL_LABEL, line.title );
+        m_gridVias->SetCellValue( row, COL_AMOUNT, formatCount( line.qty ) );
+        totalVias += line.qty;
         row++;
     }
 
@@ -415,14 +417,14 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     // We don't use row 0, as there labels are
     row = 1;
 
-    for( const FOOTPRINT_TYPE_T& type : m_fpTypes )
+    for( const FP_LINE_ITEM& line : m_fpTypes )
     {
-        m_gridComponents->SetCellValue( row, COL_LABEL, type.title );
-        m_gridComponents->SetCellValue( row, COL_FRONT_SIDE, formatCount( type.frontSideQty ) );
-        m_gridComponents->SetCellValue( row, COL_BOTTOM_SIDE, formatCount( type.backSideQty ) );
-        m_gridComponents->SetCellValue( row, 3, formatCount( type.frontSideQty + type.backSideQty ) );
-        totalFront += type.frontSideQty;
-        totalBack  += type.backSideQty;
+        m_gridComponents->SetCellValue( row, COL_LABEL, line.title );
+        m_gridComponents->SetCellValue( row, COL_FRONT_SIDE, formatCount( line.frontSideQty ) );
+        m_gridComponents->SetCellValue( row, COL_BOTTOM_SIDE, formatCount( line.backSideQty ) );
+        m_gridComponents->SetCellValue( row, 3, formatCount( line.frontSideQty + line.backSideQty ) );
+        totalFront += line.frontSideQty;
+        totalBack  += line.backSideQty;
         row++;
     }
 
@@ -462,45 +464,45 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 void DIALOG_BOARD_STATISTICS::updateDrillGrid()
 {
     BOARD* board = m_parentFrame->GetBoard();
-    int    currentRow = 0;
+    int    row = 0;
 
-    for( const DRILL_TYPE_T& type : m_drillTypes )
+    for( const DRILL_LINE_ITEM& line : m_drillTypes )
     {
         wxString shapeStr;
         wxString startLayerStr;
         wxString stopLayerStr;
 
-        switch( type.shape )
+        switch( line.shape )
         {
         case PAD_DRILL_SHAPE_CIRCLE: shapeStr = _( "Round" ); break;
         case PAD_DRILL_SHAPE_OBLONG: shapeStr = _( "Slot" );  break;
         default:                     shapeStr = _( "???" );   break;
         }
 
-        if( type.startLayer == UNDEFINED_LAYER )
+        if( line.startLayer == UNDEFINED_LAYER )
             startLayerStr = _( "N/A" );
         else
-            startLayerStr = board->GetLayerName( type.startLayer );
+            startLayerStr = board->GetLayerName( line.startLayer );
 
-        if( type.stopLayer == UNDEFINED_LAYER )
+        if( line.stopLayer == UNDEFINED_LAYER )
             stopLayerStr = _( "N/A" );
         else
-            stopLayerStr = board->GetLayerName( type.stopLayer );
+            stopLayerStr = board->GetLayerName( line.stopLayer );
 
-        m_gridDrills->SetCellValue( currentRow, DRILL_TYPE_T::COL_COUNT, formatCount( type.qty ) );
-        m_gridDrills->SetCellValue( currentRow, DRILL_TYPE_T::COL_SHAPE, shapeStr );
-        m_gridDrills->SetCellValue( currentRow, DRILL_TYPE_T::COL_X_SIZE,
-                                    m_parentFrame->MessageTextFromValue( type.xSize ) );
-        m_gridDrills->SetCellValue( currentRow, DRILL_TYPE_T::COL_Y_SIZE,
-                                    m_parentFrame->MessageTextFromValue( type.ySize ) );
-        m_gridDrills->SetCellValue( currentRow, DRILL_TYPE_T::COL_PLATED,
-                                    type.isPlated ? _( "PTH" ) : _( "NPTH" ) );
-        m_gridDrills->SetCellValue( currentRow, DRILL_TYPE_T::COL_VIA_PAD,
-                                    type.isPad ? _( "Pad" ) : _( "Via" ) );
-        m_gridDrills->SetCellValue( currentRow, DRILL_TYPE_T::COL_START_LAYER, startLayerStr );
-        m_gridDrills->SetCellValue( currentRow, DRILL_TYPE_T::COL_STOP_LAYER, stopLayerStr );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_COUNT, formatCount( line.qty ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_SHAPE, shapeStr );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_X_SIZE,
+                                    m_parentFrame->MessageTextFromValue( line.xSize ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_Y_SIZE,
+                                    m_parentFrame->MessageTextFromValue( line.ySize ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_PLATED,
+                                    line.isPlated ? _( "PTH" ) : _( "NPTH" ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_VIA_PAD,
+                                    line.isPad ? _( "Pad" ) : _( "Via" ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_START_LAYER, startLayerStr );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_STOP_LAYER, stopLayerStr );
 
-        currentRow++;
+        row++;
     }
 }
 
@@ -602,7 +604,7 @@ void DIALOG_BOARD_STATISTICS::adjustDrillGridColumns()
     // Find the total current width
     for( int i = 0; i < m_gridDrills->GetNumberCols(); i++ )
     {
-        if( i != DRILL_TYPE_T::COL_START_LAYER && i != DRILL_TYPE_T::COL_STOP_LAYER )
+        if( i != DRILL_LINE_ITEM::COL_START_LAYER && i != DRILL_LINE_ITEM::COL_STOP_LAYER )
             remainingWidth -= m_gridDrills->GetColSize( i );
     }
 
@@ -612,8 +614,8 @@ void DIALOG_BOARD_STATISTICS::adjustDrillGridColumns()
     int startLayerColWidth = static_cast<int>( m_startLayerColInitialSize * scalingFactor );
     int stopLayerColWidth = static_cast<int>( m_stopLayerColInitialSize * scalingFactor );
 
-    m_gridDrills->SetColSize( DRILL_TYPE_T::COL_START_LAYER, startLayerColWidth );
-    m_gridDrills->SetColSize( DRILL_TYPE_T::COL_STOP_LAYER, stopLayerColWidth );
+    m_gridDrills->SetColSize( DRILL_LINE_ITEM::COL_START_LAYER, startLayerColWidth );
+    m_gridDrills->SetColSize( DRILL_LINE_ITEM::COL_STOP_LAYER, stopLayerColWidth );
 }
 
 
@@ -707,12 +709,12 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     int frontTotal = 0;
     int backTotal = 0;
 
-    for( const FOOTPRINT_TYPE_T& type : m_fpTypes )
+    for( const FP_LINE_ITEM& line : m_fpTypes )
     {
         // Get maximum width for left label column
-        widths[0] = std::max<int>( type.title.size(), widths[0] );
-        frontTotal += type.frontSideQty;
-        backTotal += type.backSideQty;
+        widths[0] = std::max<int>( line.title.size(), widths[0] );
+        frontTotal += line.frontSideQty;
+        backTotal += line.backSideQty;
     }
 
     // Get maximum width for other columns
@@ -754,11 +756,11 @@ void DIALOG_BOARD_STATISTICS::drillGridSize( wxSizeEvent& aEvent )
 
 void DIALOG_BOARD_STATISTICS::drillGridSort( wxGridEvent& aEvent )
 {
-    DRILL_TYPE_T::COL_ID colId = static_cast<DRILL_TYPE_T::COL_ID>( aEvent.GetCol() );
-    bool                 ascending = !( m_gridDrills->IsSortingBy( colId )
-                                        && m_gridDrills->IsSortOrderAscending() );
+    DRILL_LINE_ITEM::COL_ID colId = static_cast<DRILL_LINE_ITEM::COL_ID>( aEvent.GetCol() );
+    bool                    ascending = !( m_gridDrills->IsSortingBy( colId )
+                                              && m_gridDrills->IsSortOrderAscending() );
 
-    sort( m_drillTypes.begin(), m_drillTypes.end(), DRILL_TYPE_T::COMPARE( colId, ascending ) );
+    sort( m_drillTypes.begin(), m_drillTypes.end(), DRILL_LINE_ITEM::COMPARE( colId, ascending ) );
 
     updateDrillGrid();
 }
