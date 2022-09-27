@@ -383,6 +383,7 @@ set( BMAPS_MID
     options_schematic
     opt_show_polygon
     ortho
+    pack_footprints
     pad_sketch
     pad
     pad_enumerate

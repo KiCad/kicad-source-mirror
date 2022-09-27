@@ -121,6 +121,11 @@ public:
      */
     int Swap( const TOOL_EVENT& aEvent );
 
+    /**
+     * Try to fit selected footprints inside a minimal area and start movement.
+     */
+    int PackAndMoveFootprints( const TOOL_EVENT& aEvent );
+
     int ChangeTrackWidth( const TOOL_EVENT& aEvent );
 
     /**

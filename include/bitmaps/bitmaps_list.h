@@ -373,6 +373,7 @@ enum class BITMAPS : unsigned int
     options_pad,
     options_schematic,
     ortho,
+    pack_footprints,
     pad,
     pad_enumerate,
     pad_number,

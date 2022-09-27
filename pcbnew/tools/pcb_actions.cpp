@@ -342,6 +342,13 @@ TOOL_ACTION PCB_ACTIONS::swap( "pcbnew.InteractiveEdit.swap",
         _( "Swap" ), _( "Swaps selected items' positions" ),
         BITMAPS::swap );
 
+TOOL_ACTION PCB_ACTIONS::packAndMoveFootprints( "pcbnew.InteractiveEdit.packAndMoveFootprints",
+        AS_GLOBAL, 
+        'P', "",
+        _( "Pack and Move Footprints" ), 
+        _( "Sorts selected footprints by reference, packs based on size and initiates movement" ),
+        BITMAPS::pack_footprints );
+
 TOOL_ACTION PCB_ACTIONS::changeTrackWidth( "pcbnew.InteractiveEdit.changeTrackWidth",
         AS_GLOBAL, 0, "",
         _( "Change Track Width" ), _( "Updates selected track & via sizes" ) );

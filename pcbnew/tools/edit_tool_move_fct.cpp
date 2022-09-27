@@ -37,6 +37,7 @@
 #include <kiway.h>
 #include <array_creator.h>
 #include <pcbnew_settings.h>
+#include <spread_footprints.h>
 #include <status_popup.h>
 #include <tool/selection_conditions.h>
 #include <tool/tool_manager.h>
@@ -377,6 +378,49 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     return 0;
+}
+
+
+int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
+{
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( !dynamic_cast<FOOTPRINT*>( item ) )
+                        aCollector.Remove( item );
+                }
+            },
+            true /* prompt user regarding locked items */ );
+
+    std::vector<FOOTPRINT*> footprintsToPack;
+
+    for( EDA_ITEM* item : selection )
+        footprintsToPack.push_back( static_cast<FOOTPRINT*>( item ) );
+
+    if( footprintsToPack.empty() )
+        return 0;
+
+    BOARD_COMMIT commit( editFrame );
+    BOX2I        footprintsBbox;
+
+    for( FOOTPRINT* item : footprintsToPack )
+    {
+        commit.Modify( item );
+        footprintsBbox.Merge( item->GetBoundingBox( false, false ) );
+    }
+
+    SpreadFootprints( &footprintsToPack, footprintsBbox.Normalize().GetOrigin(), false );
+
+    commit.Push( _( "Pack footprints" ) );
+
+    return doMoveSelection( aEvent );
 }
 
 

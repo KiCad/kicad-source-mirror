@@ -132,6 +132,9 @@ public:
     /// Swapping of selected items
     static TOOL_ACTION swap;
 
+    /// Pack and start moving selected footprints
+    static TOOL_ACTION packAndMoveFootprints;
+
     /// Update selected tracks & vias to the current track & via dimensions
     static TOOL_ACTION changeTrackWidth;
 

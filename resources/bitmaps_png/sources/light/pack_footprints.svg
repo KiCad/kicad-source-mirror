@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="pack_footprints.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1380"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="22.627417"
+     inkscape:cx="10.658528"
+     inkscape:cy="14.798326"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>array</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs115922">
+    <style
+       id="style115920">.cls-1{fill:#1a81c4;}.cls-2{fill:#545454;}</style>
+  </defs>
+  <title
+     id="title115924">array</title>
+  <rect
+     class="cls-2"
+     x="2"
+     y="2"
+     width="8"
+     height="6"
+     id="rect115932"
+     style="fill:#545454;stroke-width:0.76980036" />
+  <rect
+     class="cls-2"
+     x="2"
+     y="9"
+     width="8"
+     height="6"
+     id="rect115932-3"
+     style="fill:#545454;stroke-width:0.76980036" />
+  <rect
+     class="cls-2"
+     x="2"
+     y="16"
+     width="8"
+     height="6"
+     id="rect115932-3-6"
+     style="fill:#545454;stroke-width:0.76980036" />
+  <rect
+     class="cls-2"
+     x="11"
+     y="2"
+     width="5"
+     height="3"
+     id="rect115932-7"
+     style="fill:#545454;stroke-width:0.4303315" />
+  <rect
+     class="cls-2"
+     x="11"
+     y="6"
+     width="5"
+     height="3"
+     id="rect115932-7-5"
+     style="fill:#545454;stroke-width:0.4303315" />
+  <rect
+     class="cls-2"
+     x="11"
+     y="10"
+     width="5"
+     height="3"
+     id="rect115932-7-3"
+     style="fill:#545454;stroke-width:0.4303315" />
+  <rect
+     class="cls-2"
+     x="11"
+     y="14"
+     width="5"
+     height="3"
+     id="rect115932-7-5-5"
+     style="fill:#545454;stroke-width:0.4303315" />
+  <rect
+     class="cls-2"
+     x="11"
+     y="18"
+     width="5"
+     height="3"
+     id="rect115932-7-3-6"
+     style="fill:#545454;stroke-width:0.4303315" />
+  <rect
+     class="cls-2"
+     x="17"
+     y="2"
+     width="5"
+     height="3"
+     id="rect115932-7-2"
+     style="fill:#545454;stroke-width:0.4303315" />
+  <rect
+     class="cls-2"
+     x="17"
+     y="6"
+     width="5"
+     height="3"
+     id="rect115932-7-5-9"
+     style="fill:#545454;stroke-width:0.4303315" />
+  <rect
+     class="cls-2"
+     x="17"
+     y="10"
+     width="5"
+     height="3"
+     id="rect115932-7-3-1"
+     style="fill:#545454;stroke-width:0.4303315" />
+  <rect
+     class="cls-2"
+     x="17"
+     y="14"
+     width="5"
+     height="3"
+     id="rect115932-7-5-5-2"
+     style="fill:#545454;stroke-width:0.4303315" />
+  <rect
+     class="cls-2"
+     x="0.49999997"
+     y="0.49999997"
+     width="23"
+     height="23"
+     id="rect157605"
+     style="fill:none;fill-opacity:1;stroke:#1a81c4;stroke-width:1.00156999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     inkscape:transform-center-x="-37.586826"
+     inkscape:transform-center-y="-34.435834" />
+</svg>

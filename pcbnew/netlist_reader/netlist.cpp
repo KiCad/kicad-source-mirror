@@ -36,6 +36,7 @@ using namespace std::placeholders;
 #include <fp_lib_table.h>
 #include <board.h>
 #include <footprint.h>
+#include <spread_footprints.h>
 #include <ratsnest/ratsnest_data.h>
 #include <io_mgr.h>
 #include "board_netlist_updater.h"
@@ -44,9 +45,6 @@ using namespace std::placeholders;
 #include <tools/pcb_selection_tool.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
 #include <wx/msgdlg.h>
-
-
-extern void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aSpreadAreaPosition );
 
 
 bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aNetlist,
@@ -96,11 +94,10 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
 
     // Spread new footprints.
     std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedFootprints();
-    VECTOR2I                areaPosition = GetCanvas()->GetViewControls()->GetCursorPosition();
 
     GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    SpreadFootprints( &newFootprints, areaPosition );
+    SpreadFootprints( &newFootprints, { 0, 0 }, true );
 
     // Start drag command for new footprints
     if( !newFootprints.empty() )
@@ -109,13 +106,6 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
             GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, footprint );
 
         *aRunDragCommand = true;
-
-        // Now fix a reference point to move the footprints.
-        // We use the first footprint in list as reference point
-        // The graphic cursor will be on this fp when moving the footprints.
-        PCB_SELECTION_TOOL* selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-        PCB_SELECTION&      selection = selTool->GetSelection();
-        selection.SetReferencePoint( newFootprints[0]->GetPosition() );
     }
 
     Compile_Ratsnest( true );

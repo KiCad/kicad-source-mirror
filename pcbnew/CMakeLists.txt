@@ -277,7 +277,6 @@ set( PCBNEW_CLASS_SRCS
     ${PCBNEW_NETLIST_SRCS}
     ${PCBNEW_BRDSTACKUP_MGR}
 
-    autorouter/rect_placement/rect_placement.cpp
     autorouter/spread_footprints.cpp
     autorouter/ar_autoplacer.cpp
     autorouter/ar_matrix.cpp
@@ -639,6 +638,7 @@ target_link_libraries( pcbnew
     gal
     scripting
     nlohmann_json
+    rectpack2d
     ${wxWidgets_LIBRARIES}
     )
 
@@ -673,6 +673,7 @@ target_link_libraries( pcbnew_kiface_objects
         nanosvg
         tinyspline_lib
         nlohmann_json
+        rectpack2d
     )
 
 target_include_directories( pcbnew_kiface_objects PRIVATE

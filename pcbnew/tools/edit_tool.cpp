@@ -204,6 +204,8 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::mirrorH,           SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::mirrorV,           SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ) );
+    menu.AddItem( PCB_ACTIONS::packAndMoveFootprints, SELECTION_CONDITIONS::MoreThan( 1 ) 
+                                                      && SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
 
     menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
 
@@ -2239,29 +2241,30 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 
 void EDIT_TOOL::setTransitions()
 {
-    Go( &EDIT_TOOL::GetAndPlace,         PCB_ACTIONS::getAndPlace.MakeEvent() );
-    Go( &EDIT_TOOL::Move,                PCB_ACTIONS::move.MakeEvent() );
-    Go( &EDIT_TOOL::MoveIndividually,    PCB_ACTIONS::moveIndividually.MakeEvent() );
-    Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::drag45Degree.MakeEvent() );
-    Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::dragFreeAngle.MakeEvent() );
-    Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCw.MakeEvent() );
-    Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCcw.MakeEvent() );
-    Go( &EDIT_TOOL::Flip,                PCB_ACTIONS::flip.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,              ACTIONS::doDelete.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::deleteFull.MakeEvent() );
-    Go( &EDIT_TOOL::Properties,          PCB_ACTIONS::properties.MakeEvent() );
-    Go( &EDIT_TOOL::MoveExact,           PCB_ACTIONS::moveExact.MakeEvent() );
-    Go( &EDIT_TOOL::MoveWithReference,   PCB_ACTIONS::moveWithReference.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,           ACTIONS::duplicate.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicateIncrement.MakeEvent() );
-    Go( &EDIT_TOOL::CreateArray,         PCB_ACTIONS::createArray.MakeEvent() );
-    Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirrorH.MakeEvent() );
-    Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirrorV.MakeEvent() );
-    Go( &EDIT_TOOL::Swap,                PCB_ACTIONS::swap.MakeEvent() );
-    Go( &EDIT_TOOL::ChangeTrackWidth,    PCB_ACTIONS::changeTrackWidth.MakeEvent() );
-    Go( &EDIT_TOOL::FilletTracks,        PCB_ACTIONS::filletTracks.MakeEvent() );
+    Go( &EDIT_TOOL::GetAndPlace,           PCB_ACTIONS::getAndPlace.MakeEvent() );
+    Go( &EDIT_TOOL::Move,                  PCB_ACTIONS::move.MakeEvent() );
+    Go( &EDIT_TOOL::MoveIndividually,      PCB_ACTIONS::moveIndividually.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,                  PCB_ACTIONS::drag45Degree.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,                  PCB_ACTIONS::dragFreeAngle.MakeEvent() );
+    Go( &EDIT_TOOL::Rotate,                PCB_ACTIONS::rotateCw.MakeEvent() );
+    Go( &EDIT_TOOL::Rotate,                PCB_ACTIONS::rotateCcw.MakeEvent() );
+    Go( &EDIT_TOOL::Flip,                  PCB_ACTIONS::flip.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,                ACTIONS::doDelete.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,                PCB_ACTIONS::deleteFull.MakeEvent() );
+    Go( &EDIT_TOOL::Properties,            PCB_ACTIONS::properties.MakeEvent() );
+    Go( &EDIT_TOOL::MoveExact,             PCB_ACTIONS::moveExact.MakeEvent() );
+    Go( &EDIT_TOOL::MoveWithReference,     PCB_ACTIONS::moveWithReference.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,             ACTIONS::duplicate.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,             PCB_ACTIONS::duplicateIncrement.MakeEvent() );
+    Go( &EDIT_TOOL::CreateArray,           PCB_ACTIONS::createArray.MakeEvent() );
+    Go( &EDIT_TOOL::Mirror,                PCB_ACTIONS::mirrorH.MakeEvent() );
+    Go( &EDIT_TOOL::Mirror,                PCB_ACTIONS::mirrorV.MakeEvent() );
+    Go( &EDIT_TOOL::Swap,                  PCB_ACTIONS::swap.MakeEvent() );
+    Go( &EDIT_TOOL::PackAndMoveFootprints, PCB_ACTIONS::packAndMoveFootprints.MakeEvent() );
+    Go( &EDIT_TOOL::ChangeTrackWidth,      PCB_ACTIONS::changeTrackWidth.MakeEvent() );
+    Go( &EDIT_TOOL::FilletTracks,          PCB_ACTIONS::filletTracks.MakeEvent() );
 
-    Go( &EDIT_TOOL::copyToClipboard,     ACTIONS::copy.MakeEvent() );
-    Go( &EDIT_TOOL::copyToClipboard,     PCB_ACTIONS::copyWithReference.MakeEvent() );
-    Go( &EDIT_TOOL::cutToClipboard,      ACTIONS::cut.MakeEvent() );
+    Go( &EDIT_TOOL::copyToClipboard,       ACTIONS::copy.MakeEvent() );
+    Go( &EDIT_TOOL::copyToClipboard,       PCB_ACTIONS::copyWithReference.MakeEvent() );
+    Go( &EDIT_TOOL::cutToClipboard,        ACTIONS::cut.MakeEvent() );
 }

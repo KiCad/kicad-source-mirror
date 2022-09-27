@@ -5,7 +5,7 @@
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,309 +34,291 @@
  * their selection.
  */
 
+#include <spread_footprints.h>
 #include <algorithm>
+#include <refdes_utils.h>
+#include <string_utils.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
-#include <footprint.h>
-#include <rect_placement/rect_placement.h>
+#include <rectpack2d/finders_interface.h>
 
-struct TSubRect : public CRectPlacement::TRect
-{
-    int n;      // Original index of this subrect, before sorting
 
-    TSubRect() : TRect(),
-        n( 0 )
-    {
-    }
+constexpr bool allow_flip = true;
 
-    TSubRect( int _w, int _h, int _n ) :
-        TRect( 0, 0, _w, _h ), n( _n ) { }
-};
-
-typedef std::vector<TSubRect> CSubRectArray;
+using spaces_type = rectpack2D::empty_spaces<allow_flip, rectpack2D::default_empty_spaces>;
+using rect_type = rectpack2D::output_rect_t<spaces_type>;
+using rect_ptr = rect_type*;
+using rect_vector = std::vector<rect_type>;
 
 // Use 0.01 mm units to calculate placement, to avoid long calculation time
 const int scale = (int) ( 0.01 * pcbIUScale.IU_PER_MM );
 
-const int PADDING = (int) ( 1 * pcbIUScale.IU_PER_MM );
 
-// Populates a list of rectangles, from a list of footprints
-void fillRectList( CSubRectArray& vecSubRects, std::vector <FOOTPRINT*>& aFootprintList )
+static bool compareFootprintsbyRef( FOOTPRINT* ref, FOOTPRINT* compare )
 {
-    vecSubRects.clear();
+    const wxString& refPrefix = UTIL::GetRefDesPrefix( ref->GetReference() );
+    const wxString& cmpPrefix = UTIL::GetRefDesPrefix( compare->GetReference() );
 
-    for( unsigned ii = 0; ii < aFootprintList.size(); ii++ )
+    if( refPrefix != cmpPrefix )
     {
-        BOX2I    fpBox = aFootprintList[ii]->GetBoundingBox( false, false );
-        TSubRect fpRect( ( fpBox.GetWidth() + PADDING ) / scale,
-                         ( fpBox.GetHeight() + PADDING ) / scale, ii );
-        vecSubRects.push_back( fpRect );
+        return refPrefix < cmpPrefix;
     }
-}
-
-// Populates a list of rectangles, from a list of BOX2I
-void fillRectList( CSubRectArray& vecSubRects, std::vector<BOX2I>& aRectList )
-{
-    vecSubRects.clear();
-
-    for( unsigned ii = 0; ii < aRectList.size(); ii++ )
+    else
     {
-        BOX2I& rect = aRectList[ii];
-        TSubRect fpRect( rect.GetWidth()/scale, rect.GetHeight()/scale, ii );
-        vecSubRects.push_back( fpRect );
-    }
-}
+        const int refInt = GetTrailingInt( ref->GetReference() );
+        const int cmpInt = GetTrailingInt( compare->GetReference() );
 
+        return refInt < cmpInt;
+    }
+
+    return false;
+}
 
 
 // Spread a list of rectangles inside a placement area
-void spreadRectangles( CRectPlacement& aPlacementArea,
-                       CSubRectArray& vecSubRects,
-                       int areaSizeX, int areaSizeY )
+rectpack2D::rect_wh spreadRectangles( rect_vector& vecSubRects, int areaSizeX, int areaSizeY )
 {
-    areaSizeX/= scale;
-    areaSizeY/= scale;
+    areaSizeX /= scale;
+    areaSizeY /= scale;
 
-    // Sort the subRects based on dimensions, larger dimension goes first.
-    std::sort( vecSubRects.begin(), vecSubRects.end(), CRectPlacement::TRect::Greater );
+    rectpack2D::rect_wh result;
 
-    // gives the initial size to the area
-    aPlacementArea.Init( areaSizeX, areaSizeY );
+    int max_side = std::max( areaSizeX, areaSizeY );
 
-    // Add all subrects
-    CSubRectArray::iterator it;
-
-    for( it = vecSubRects.begin(); it != vecSubRects.end(); )
+    while( true )
     {
-        CRectPlacement::TRect r( 0, 0, it->w, it->h );
+        bool      anyUnsuccessful = false;
+        const int discard_step = 1;
 
-        bool bPlaced = aPlacementArea.AddAtEmptySpotAutoGrow( &r, areaSizeX, areaSizeY );
-
-        if( !bPlaced )   // No room to place the rectangle: enlarge area and retry
+        auto report_successful = [&]( rect_type& )
         {
-            bool retry = false;
+            return rectpack2D::callback_result::CONTINUE_PACKING;
+        };
 
-            if( areaSizeX < INT_MAX/2 )
-            {
-                retry = true;
-                areaSizeX = areaSizeX * 1.2;
-            }
+        auto report_unsuccessful = [&]( rect_type& r )
+        {
+            anyUnsuccessful = true;
+            return rectpack2D::callback_result::ABORT_PACKING;
+        };
 
-            if( areaSizeX < INT_MAX/2 )
-            {
-                retry = true;
-                areaSizeY = areaSizeY * 1.2;
-            }
+        result = rectpack2D::find_best_packing<spaces_type>(
+                vecSubRects,
+                make_finder_input( max_side, discard_step, report_successful, report_unsuccessful,
+                                   rectpack2D::flipping_option::DISABLED ) );
 
-            if( retry )
-            {
-                aPlacementArea.Init( areaSizeX, areaSizeY );
-                it = vecSubRects.begin();
-                continue;
-            }
+        if( anyUnsuccessful )
+        {
+            max_side = (int) ( max_side * 1.2 );
+            continue;
         }
 
-        // When correctly placed in a placement area, the coords are returned in r.x and r.y
-        // Store them.
-        it->x   = r.x;
-        it->y   = r.y;
-
-        it++;
+        break;
     }
+
+    return result;
 }
 
 
-void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector<FOOTPRINT*>& aFootprintList,
-                           const BOX2I& aFreeArea, bool aFindAreaOnly )
+void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBoxPosition,
+                       bool aGroupBySheet, int aComponentGap, int aGroupGap )
 {
-    CSubRectArray   vecSubRects;
+    using FpBBoxToFootprintsPair = std::pair<BOX2I, std::vector<FOOTPRINT*>>;
+    using SheetBBoxToFootprintsMapPair =
+            std::pair<BOX2I, std::map<VECTOR2I, FpBBoxToFootprintsPair>>;
 
-    fillRectList( vecSubRects, aFootprintList );
-    spreadRectangles( aPlacementArea, vecSubRects, aFreeArea.GetWidth(), aFreeArea.GetHeight() );
+    std::map<wxString, SheetBBoxToFootprintsMapPair> sheetsMap;
+    std::vector<BOX2I>                               blockMap;
 
-    if( aFindAreaOnly )
-        return;
-
-    for( unsigned it = 0; it < vecSubRects.size(); ++it )
-    {
-        VECTOR2I pos( vecSubRects[it].x, vecSubRects[it].y );
-        pos.x *= scale;
-        pos.y *= scale;
-
-        FOOTPRINT* footprint = aFootprintList[vecSubRects[it].n];
-
-        BOX2I    fpBBox = footprint->GetBoundingBox( false, false );
-        VECTOR2I mod_pos = pos + ( footprint->GetPosition() - fpBBox.GetOrigin() )
-                                  + aFreeArea.GetOrigin();
-
-        footprint->Move( mod_pos - footprint->GetPosition() );
-    }
-}
-
-static bool sortFootprintsbySheetPath( FOOTPRINT* ref, FOOTPRINT* compare );
-
-
-/**
- * Footprints (after loaded by reading a netlist for instance) are moved
- * to be in a small free area (outside the current board) without overlapping.
- * @param aBoard is the board to edit.
- * @param aFootprints: a list of footprints to be spread out.
- * @param aSpreadAreaPosition the position of the upper left corner of the
- *        area allowed to spread footprints
- */
-void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aSpreadAreaPosition )
-{
-    // Build candidate list
-    // calculate also the area needed by these footprints
-    std::vector <FOOTPRINT*> footprintList;
-
+    // Fill in the maps
     for( FOOTPRINT* footprint : *aFootprints )
     {
-        if( footprint->IsLocked() )
-            continue;
+        wxString path =
+                aGroupBySheet ? footprint->GetPath().AsString().BeforeLast( '/' ) : wxS( "" );
 
-        footprintList.push_back( footprint );
+        VECTOR2I size = footprint->GetBoundingBox( false, false ).GetSize();
+        size.x += aComponentGap;
+        size.y += aComponentGap;
+
+        sheetsMap[path].second[size].second.push_back( footprint );
     }
 
-    if( footprintList.empty() )
-        return;
-
-    // sort footprints by sheet path. we group them later by sheet
-    sort( footprintList.begin(), footprintList.end(), sortFootprintsbySheetPath );
-
-    // Extract and place footprints by sheet
-    std::vector<FOOTPRINT*>  footprintListBySheet;
-    std::vector<BOX2I>       placementSheetAreas;
-    double                   subsurface;
-    double                   placementsurface = 0.0;
-
-    // The placement uses 2 passes:
-    // the first pass creates the rectangular areas to place footprints
-    // each sheet in schematic creates one rectangular area.
-    // the second pass moves footprints inside these areas
-    for( int pass = 0; pass < 2; pass++ )
+    for( auto& [sheetPath, sheetPair] : sheetsMap )
     {
-        int subareaIdx = 0;
-        footprintListBySheet.clear();
-        subsurface = 0.0;
+        auto& [sheet_bbox, sizeToFpMap] = sheetPair;
 
-        int fp_max_width = 0;
-        int fp_max_height = 0;
-
-        for( unsigned ii = 0; ii < footprintList.size(); ii++ )
+        for( auto& [fpSize, fpPair] : sizeToFpMap )
         {
-            FOOTPRINT* footprint = footprintList[ii];
-            bool       islastItem = false;
+            auto& [block_bbox, footprints] = fpPair;
 
-            if( ii == footprintList.size() - 1 ||
-                ( footprintList[ii]->GetPath().AsString().BeforeLast( '/' ) !=
-                  footprintList[ii+1]->GetPath().AsString().BeforeLast( '/' ) ) )
-                islastItem = true;
+            // Find optimal arrangement of same-size footprints
 
-            footprintListBySheet.push_back( footprint );
-            subsurface += footprint->GetArea( PADDING );
+            double blockEstimateArea = (double) fpSize.x * fpSize.y * footprints.size();
+            double initialSide = std::sqrt( blockEstimateArea );
+            bool   vertical = fpSize.x >= fpSize.y;
 
-            // Calculate min size of placement area:
-            BOX2I bbox = footprint->GetBoundingBox( false, false );
-            fp_max_width = std::max( fp_max_width, bbox.GetWidth() );
-            fp_max_height = std::max( fp_max_height, bbox.GetHeight() );
+            int initialCountPerLine = footprints.size();
 
-            if( islastItem )
+            const int singleLineRatio = 5;
+
+            // Wrap the line if the ratio is not satisfied
+            if( vertical )
             {
-                // end of the footprint sublist relative to the same sheet path
-                // calculate placement of the current sublist
-                BOX2I freeArea;
-                int Xsize_allowed = (int) ( sqrt( subsurface ) * 4.0 / 3.0 );
-                Xsize_allowed = std::max( fp_max_width, Xsize_allowed );
+                if( ( fpSize.y * footprints.size() / fpSize.x ) > singleLineRatio )
+                    initialCountPerLine = initialSide / fpSize.y;
+            }
+            else
+            {
+                if( ( fpSize.x * footprints.size() / fpSize.y ) > singleLineRatio )
+                    initialCountPerLine = initialSide / fpSize.x;
+            }
 
-                int Ysize_allowed = (int) ( subsurface / Xsize_allowed );
-                Ysize_allowed = std::max( fp_max_height, Ysize_allowed );
+            int optimalCountPerLine = initialCountPerLine;
+            int optimalRemainder = footprints.size() % optimalCountPerLine;
 
-                freeArea.SetWidth( Xsize_allowed );
-                freeArea.SetHeight( Ysize_allowed );
-                CRectPlacement placementArea;
-
-                if( pass == 1 )
+            if( optimalRemainder != 0 )
+            {
+                for( int i = std::max( 2, initialCountPerLine - 2 );
+                     i <= std::min( (int) footprints.size() - 2, initialCountPerLine + 2 ); i++ )
                 {
-                    VECTOR2I areapos =
-                            placementSheetAreas[subareaIdx].GetOrigin()
-                                      + aSpreadAreaPosition;
-                    freeArea.SetOrigin( areapos );
+                    int r = footprints.size() % i;
+
+                    if( r == 0 || r >= optimalRemainder )
+                    {
+                        optimalCountPerLine = i;
+                        optimalRemainder = r;
+                    }
+                }
+            }
+
+            std::sort( footprints.begin(), footprints.end(), compareFootprintsbyRef );
+
+            // Arrange footprints in rows or columns (blocks)
+            for( unsigned i = 0; i < footprints.size(); i++ )
+            {
+                FOOTPRINT* footprint = footprints[i];
+
+                VECTOR2I position = fpSize / 2;
+
+                if( vertical )
+                {
+                    position.x += fpSize.x * ( i / optimalCountPerLine );
+                    position.y += fpSize.y * ( i % optimalCountPerLine );
+                }
+                else
+                {
+                    position.x += fpSize.x * ( i % optimalCountPerLine );
+                    position.y += fpSize.y * ( i / optimalCountPerLine );
                 }
 
-                bool findAreaOnly = pass == 0;
-                moveFootprintsInArea( placementArea, footprintListBySheet, freeArea, findAreaOnly );
+                BOX2I old_fp_bbox = footprint->GetBoundingBox( false, false );
+                footprint->Move( position - old_fp_bbox.GetOrigin() );
 
-                if( pass == 0 )
-                {
-                    // Populate sheet placement areas list
-                    BOX2I sub_area;
-                    sub_area.SetWidth( placementArea.GetW()*scale );
-                    sub_area.SetHeight( placementArea.GetH()*scale );
-                    // Add a margin around the sheet placement area:
-                    sub_area.Inflate( pcbIUScale.mmToIU( 1.5 ) );
-
-                    placementSheetAreas.push_back( sub_area );
-
-                    placementsurface += (double) sub_area.GetWidth()*
-                                        sub_area.GetHeight();
-                }
-
-                // Prepare buffers for next sheet
-                subsurface  = 0.0;
-                footprintListBySheet.clear();
-                subareaIdx++;
+                BOX2I new_fp_bbox = footprint->GetBoundingBox( false, false );
+                new_fp_bbox.Inflate( aComponentGap / 2 );
+                block_bbox.Merge( new_fp_bbox );
             }
         }
 
-        // End of pass:
-        // At the end of the first pass, we have to find position of each sheet
-        // placement area
-        if( pass == 0 )
+        rect_vector vecSubRects;
+        long long   blocksArea = 0;
+
+        // Fill in arrays for packing of blocks
+        for( auto& [fpSize, fpPair] : sizeToFpMap )
         {
-            int Xsize_allowed = (int) ( sqrt( placementsurface ) * 4.0 / 3.0 );
+            auto& [block_bbox, footprints] = fpPair;
 
-            if( Xsize_allowed <= 0 || Xsize_allowed > INT_MAX/2 )
-                Xsize_allowed = INT_MAX/2;
+            vecSubRects.emplace_back( 0, 0, block_bbox.GetWidth() / scale,
+                                      block_bbox.GetHeight() / scale, false );
 
-            int Ysize_allowed = (int) ( placementsurface / Xsize_allowed );
+            blocksArea += block_bbox.GetArea();
+        }
 
-            if( Ysize_allowed <= 0 || Ysize_allowed > INT_MAX/2 )
-                Ysize_allowed = INT_MAX/2;
+        // Pack the blocks
+        int areaSide = std::sqrt( blocksArea );
+        spreadRectangles( vecSubRects, areaSide, areaSide );
 
-            CRectPlacement placementArea;
-            CSubRectArray  vecSubRects;
-            fillRectList( vecSubRects, placementSheetAreas );
-            spreadRectangles( placementArea, vecSubRects, Xsize_allowed, Ysize_allowed );
+        unsigned block_i = 0;
 
-            for( unsigned it = 0; it < vecSubRects.size(); ++it )
+        // Move footprints to the new block locations
+        for( auto& [fpSize, pair] : sizeToFpMap )
+        {
+            auto& [src_bbox, footprints] = pair;
+
+            rect_type srect = vecSubRects[block_i];
+
+            VECTOR2I target_pos( srect.x * scale, srect.y * scale );
+            VECTOR2I target_size( srect.w * scale, srect.h * scale );
+
+            // Avoid too large coordinates: Overlapping components
+            // are better than out of screen components
+            if( (uint64_t) target_pos.x + (uint64_t) target_size.x > INT_MAX / 2 )
+                target_pos.x -= INT_MAX / 2;
+
+            if( (uint64_t) target_pos.y + (uint64_t) target_size.y > INT_MAX / 2 )
+                target_pos.y -= INT_MAX / 2;
+
+            for( FOOTPRINT* footprint : footprints )
             {
-                TSubRect& srect = vecSubRects[it];
-                VECTOR2I  pos( srect.x * scale, srect.y * scale );
-                VECTOR2I  size( srect.w * scale, srect.h * scale );
+                footprint->Move( target_pos - src_bbox.GetPosition() );
+                sheet_bbox.Merge( footprint->GetBoundingBox( false, false ) );
+            }
 
-                // Avoid too large coordinates: Overlapping components
-                // are better than out of screen components
-                if( (uint64_t)pos.x + (uint64_t)size.x > INT_MAX/2 )
-                    pos.x = 0;
+            block_i++;
+        }
+    }
 
-                if( (uint64_t)pos.y + (uint64_t)size.y > INT_MAX/2 )
-                    pos.y = 0;
+    rect_vector vecSubRects;
+    long long   sheetsArea = 0;
 
-                placementSheetAreas[srect.n].SetOrigin( pos );
-                placementSheetAreas[srect.n].SetSize( size );
+    // Fill in arrays for packing of hierarchical sheet groups
+    for( auto& [sheetPath, sheetPair] : sheetsMap )
+    {
+        auto& [sheet_bbox, sizeToFpMap] = sheetPair;
+        BOX2I rect = sheet_bbox;
+
+        // Add a margin around the sheet placement area:
+        rect.Inflate( aGroupGap );
+
+        vecSubRects.emplace_back( 0, 0, rect.GetWidth() / scale, rect.GetHeight() / scale, false );
+
+        sheetsArea += sheet_bbox.GetArea();
+    }
+
+    // Pack the hierarchical sheet groups
+    int areaSide = std::sqrt( sheetsArea );
+    spreadRectangles( vecSubRects, areaSide, areaSide );
+
+    unsigned srect_i = 0;
+
+    // Move footprints to the new hierarchical sheet group locations
+    for( auto& [sheetPath, sheetPair] : sheetsMap )
+    {
+        auto& [src_bbox, sizeToFpMap] = sheetPair;
+
+        rect_type srect = vecSubRects[srect_i];
+
+        VECTOR2I target_pos( srect.x * scale + aTargetBoxPosition.x,
+                             srect.y * scale + aTargetBoxPosition.y );
+        VECTOR2I target_size( srect.w * scale, srect.h * scale );
+
+        // Avoid too large coordinates: Overlapping components
+        // are better than out of screen components
+        if( (uint64_t) target_pos.x + (uint64_t) target_size.x > INT_MAX / 2 )
+            target_pos.x -= INT_MAX / 2;
+
+        if( (uint64_t) target_pos.y + (uint64_t) target_size.y > INT_MAX / 2 )
+            target_pos.y -= INT_MAX / 2;
+
+        for( auto& [fpSize, fpPair] : sizeToFpMap )
+        {
+            auto& [block_bbox, footprints] = fpPair;
+            for( FOOTPRINT* footprint : footprints )
+            {
+                footprint->Move( target_pos - src_bbox.GetPosition() );
             }
         }
-    }   // End pass
-}
 
-
-// Sort function, used to group footprints by sheet.
-// Footprints are sorted by their sheet path.
-// (the full sheet path restricted to the time stamp of the sheet itself,
-// without the time stamp of the footprint ).
-static bool sortFootprintsbySheetPath( FOOTPRINT* ref, FOOTPRINT* compare )
-{
-    return ref->GetPath() < compare->GetPath();
+        srect_i++;
+    }
 }
