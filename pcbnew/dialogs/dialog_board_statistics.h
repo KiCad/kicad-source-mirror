@@ -47,12 +47,12 @@ public:
      * Type information, which will be shown in dialog.
      */
     template <typename T>
-    struct typeContainer_t
+    struct TYPE_CONTAINER_T
     {
-        typeContainer_t<T>( T aAttribute, const wxString& aTitle )
-                : attribute( aAttribute ),
-                  title( aTitle ),
-                  qty( 0 )
+        TYPE_CONTAINER_T<T>( T aAttribute, const wxString& aTitle ) :
+                attribute( aAttribute ),
+                title( aTitle ),
+                qty( 0 )
         {
         }
 
@@ -61,30 +61,29 @@ public:
         int        qty;
     };
 
-    using padsType_t = typeContainer_t<PAD_ATTRIB>;
-    using viasType_t = typeContainer_t<VIATYPE>;
-
     /**
      * Footprint attributes (such as SMD, THT, Virtual and so on), which will be shown in the
-     * dialog. Holds both front and bottom components quantities.
+     * dialog. Holds both front and back footprint quantities.
      */
-    struct componentsType_t
+    struct FOOTPRINT_TYPE_T
     {
-        componentsType_t( FOOTPRINT_ATTR_T aAttribute, wxString aTitle )
-                : attribute( aAttribute ),
-                  title( aTitle ),
-                  frontSideQty( 0 ),
-                  backSideQty( 0 )
+        FOOTPRINT_TYPE_T( int aAttributeMask, int aAttributeValue, wxString aTitle ) :
+                attribute_mask( aAttributeMask ),
+                attribute_value( aAttributeValue ),
+                title( aTitle ),
+                frontSideQty( 0 ),
+                backSideQty( 0 )
         {
         }
 
-        FOOTPRINT_ATTR_T attribute;
-        wxString         title;
-        int              frontSideQty;
-        int              backSideQty;
+        int      attribute_mask;
+        int      attribute_value;
+        wxString title;
+        int      frontSideQty;
+        int      backSideQty;
     };
 
-    struct drillType_t
+    struct DRILL_TYPE_T
     {
         enum COL_ID
         {
@@ -98,20 +97,20 @@ public:
             COL_STOP_LAYER
         };
 
-        drillType_t( int aXSize, int aYSize, PAD_DRILL_SHAPE_T aShape, bool aIsPlated, bool aIsPad,
-                PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aStopLayer, int aQty = 0 )
-                : xSize( aXSize ),
-                  ySize( aYSize ),
-                  shape( aShape ),
-                  isPlated( aIsPlated ),
-                  isPad( aIsPad ),
-                  startLayer( aStartLayer ),
-                  stopLayer( aStopLayer ),
-                  qty( aQty )
+        DRILL_TYPE_T( int aXSize, int aYSize, PAD_DRILL_SHAPE_T aShape, bool aIsPlated,
+                      bool aIsPad, PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aStopLayer, int aQty ) :
+                xSize( aXSize ),
+                ySize( aYSize ),
+                shape( aShape ),
+                isPlated( aIsPlated ),
+                isPad( aIsPad ),
+                startLayer( aStartLayer ),
+                stopLayer( aStopLayer ),
+                qty( aQty )
         {
         }
 
-        bool operator==( const drillType_t& other )
+        bool operator==( const DRILL_TYPE_T& other )
         {
             return xSize == other.xSize && ySize == other.ySize && shape == other.shape
                    && isPlated == other.isPlated && isPad == other.isPad
@@ -123,7 +122,7 @@ public:
             COMPARE( COL_ID aColId, bool aAscending ) : colId( aColId ), ascending( aAscending )
             {
             }
-            bool operator()( const drillType_t& aLeft, const drillType_t& aRight )
+            bool operator()( const DRILL_TYPE_T& aLeft, const DRILL_TYPE_T& aRight )
             {
                 switch( colId )
                 {
@@ -167,11 +166,6 @@ public:
         int               qty;
     };
 
-    using componentsTypeList_t = std::deque<componentsType_t>;
-    using padsTypeList_t = std::deque<padsType_t>;
-    using viasTypeList_t = std::deque<viasType_t>;
-    using drillTypeList_t = std::deque<drillType_t>;
-
     DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame );
     ~DIALOG_BOARD_STATISTICS();
 
@@ -193,8 +187,8 @@ private:
     void updateDrillGrid();
 
     ///< Print grid to string in tabular format.
-    void printGridToStringAsTable( wxGrid* aGrid, wxString& aStr, bool aUseRowLabels,
-            bool aUseColLabels, bool aUseFirstColAsLabel );
+    void printGridToStringAsTable( wxGrid* aGrid, wxString& aStr, bool aUseColLabels,
+                                   bool aUseFirstColAsLabel );
 
     void adjustDrillGridColumns();
 
@@ -213,26 +207,16 @@ private:
     int             m_boardHeight;
     double          m_boardArea;
 
-    ///< Show if board outline properly defined.
-    bool m_hasOutline;
+    bool            m_hasOutline;          ///< Show if board outline properly defined.
 
-    ///< Hold all components types to be shown in the dialog.
-    componentsTypeList_t m_componentsTypes;
+    std::deque<FOOTPRINT_TYPE_T>             m_fpTypes;
+    std::deque<TYPE_CONTAINER_T<PAD_ATTRIB>> m_padTypes;
+    std::deque<TYPE_CONTAINER_T<VIATYPE>>    m_viaTypes;
+    std::deque<DRILL_TYPE_T>                 m_drillTypes;
 
-    ///< Hold all pads types to be shown in the dialog.
-    padsTypeList_t  m_padsTypes;
-
-    ///< Hold all vias types to be shown in the dialog.
-    viasTypeList_t m_viasTypes;
-
-    ///< Hold all drill hole types to be shown in the dialog.
-    drillTypeList_t m_drillTypes;
-
-    ///< Width of the start layer column as calculated by the wxWidgets autosizing algorithm.
-    int m_startLayerColInitialSize;
-
-    ///< Width of the stop layer column as calculated by the wxWidgets autosizing algorithm.
-    int m_stopLayerColInitialSize;
+    int m_startLayerColInitialSize;        ///< Width of the start layer column as calculated by
+                                           ///<    the wxWidgets autosizing algorithm.
+    int m_stopLayerColInitialSize;         ///< Width of the stop layer column.
 };
 
 #endif // __DIALOG_BOARD_STATISTICS_H
