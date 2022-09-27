@@ -421,19 +421,21 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( splitDelta == VECTOR2I( 0, 0 ) )
                     continue;
 
-                for( EDA_ITEM* item :
-                     selection.GetItemsSortedByTypeAndXY( ( delta.x >= 0 ), ( delta.y >= 0 ) ) )
+                for( EDA_ITEM* item : selection.GetItemsSortedByTypeAndXY( ( delta.x >= 0 ),
+                                                                           ( delta.y >= 0 ) ) )
                 {
                     // Don't double move pins, fields, etc.
                     if( item->GetParent() && item->GetParent()->IsSelected() )
                         continue;
 
-                    SCH_LINE* line =
-                            item->Type() == SCH_LINE_T ? static_cast<SCH_LINE*>( item ) : nullptr;
+                    SCH_LINE* line = item->Type() == SCH_LINE_T ? static_cast<SCH_LINE*>( item )
+                                                                : nullptr;
 
-                    //Only partially selected drag lines in orthogonal line mode need special handling
-                    if( m_isDrag && cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE && line
-                        && ( line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) ) )
+                    // Only partially selected drag lines in orthogonal line mode need special handling
+                    if( m_isDrag
+                            && cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE
+                            && line
+                            && line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) )
                     {
                         // If the move is not the same angle as this move,  then we need to do something
                         // special with the unselected end to maintain orthogonality. Either drag some
@@ -515,6 +517,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                                 // Create a new wire ending at the unselected end
                                 foundLine = new SCH_LINE( unselectedEnd, line->GetLayer() );
                                 foundLine->SetFlags( IS_NEW );
+                                foundLine->SetLastResolvedState( line );
                                 m_frame->AddToScreen( foundLine, m_frame->GetScreen() );
                                 m_newDragLines.insert( foundLine );
 
@@ -658,12 +661,16 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                                 SCH_LINE* a = new SCH_LINE( unselectedEnd, line->GetLayer() );
                                 a->MoveStart( VECTOR2I( xMove, yMove ) );
                                 a->SetFlags( IS_NEW );
+                                a->SetConnectivityDirty( true );
+                                a->SetLastResolvedState( line );
                                 m_frame->AddToScreen( a, m_frame->GetScreen() );
                                 m_newDragLines.insert( a );
 
                                 SCH_LINE* b = new SCH_LINE( a->GetStartPoint(), line->GetLayer() );
                                 b->MoveStart( VECTOR2I( splitDelta.x, splitDelta.y ) );
                                 b->SetFlags( IS_NEW | STARTPOINT );
+                                b->SetConnectivityDirty( true );
+                                b->SetLastResolvedState( line );
                                 m_frame->AddToScreen( b, m_frame->GetScreen() );
                                 m_newDragLines.insert( b );
 
@@ -672,13 +679,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                                 // Ok move the unselected end of our item
                                 if( line->HasFlag( STARTPOINT ) )
+                                {
                                     line->MoveEnd(
                                             VECTOR2I( splitDelta.x ? splitDelta.x : xMove,
                                                       splitDelta.y ? splitDelta.y : yMove ) );
+                                }
                                 else
+                                {
                                     line->MoveStart(
                                             VECTOR2I( splitDelta.x ? splitDelta.x : xMove,
                                                       splitDelta.y ? splitDelta.y : yMove ) );
+                                }
 
                                 updateItem( line, true );
 
@@ -1122,6 +1133,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
                         // Add a new line so we have something to drag
                         newWire = new SCH_LINE( aPoint, line->GetLayer() );
                         newWire->SetFlags( IS_NEW );
+                        newWire->SetConnectivityDirty( true );
+                        newWire->SetLastResolvedState( line );
                         m_frame->AddToScreen( newWire, m_frame->GetScreen() );
 
                         newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
@@ -1197,6 +1210,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
                 }
 
                 newWire->SetFlags( IS_NEW );
+                newWire->SetConnectivityDirty( true );
+                newWire->SetLastResolvedState( aOriginalItem );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
 
                 newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
@@ -1271,6 +1286,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
                 }
 
                 newWire->SetFlags( IS_NEW );
+                newWire->SetConnectivityDirty( true );
+                newWire->SetLastResolvedState( aOriginalItem );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
 
                 newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
