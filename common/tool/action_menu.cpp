@@ -476,15 +476,9 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
             parent = dynamic_cast<ACTION_MENU*>( parent->GetParent() );
         }
 
-        // Check if there is a TOOL_ACTION for the given ID
-        // Note that we also have to check the standard wxWidgets' cut/copy/paste IDs because
-        // we can't use our own IDs there without losing cut/copy/paste in places like search
-        // boxes in standard file dialogs.
-        if( m_selected == wxID_CUT || m_selected == wxID_COPY || m_selected == wxID_PASTE
-                || m_selected >= TOOL_ACTION::GetBaseUIId() )
-        {
+        // Check if there is a TOOL_ACTION for the given UI ID
+        if( getToolManager()->GetActionManager()->IsActionUIId( m_selected ) )
             evt = findToolAction( m_selected );
-        }
 
         if( !evt )
         {

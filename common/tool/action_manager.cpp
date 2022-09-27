@@ -68,6 +68,9 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     wxASSERT( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
 
     m_actionNameIndex[aAction->m_name] = aAction;
+
+    if( aAction->HasCustomUIId() )
+        m_customUIIdIndex[aAction->GetUIId()] = aAction;
 }
 
 
@@ -229,6 +232,19 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
                 KeyNameFromKeyCode( aHotKey ) );
 
     return false;
+}
+
+
+bool ACTION_MANAGER::IsActionUIId( int aId ) const
+{
+    // Automatically assigned IDs are always in this range
+    if( aId >= TOOL_ACTION::GetBaseUIId() )
+        return true;
+
+    // Search the custom assigned UI IDs
+    auto it = m_customUIIdIndex.find( aId );
+
+    return ( it != m_customUIIdIndex.end() );
 }
 
 

@@ -147,25 +147,42 @@ TOOL_ACTION ACTIONS::redo( "common.Interactive.redo",
         _( "Redo" ), _( "Redo last edit" ),
         BITMAPS::redo );
 
-TOOL_ACTION ACTIONS::cut( "common.Interactive.cut",
-        AS_GLOBAL,
-        MD_CTRL + 'X', LEGACY_HK_NAME( "Cut" ),
-        _( "Cut" ), _( "Cut selected item(s) to clipboard" ),
-        BITMAPS::cut, AF_NONE, (void*) wxID_CUT );
+// The following actions need to have a hard-coded UI ID using a wx-specific ID
+// to fix things like search controls in standard file dialogs. If wxWidgets
+// doesn't find these specific IDs somewhere in the menus then it won't enable
+// cut/copy/paste.
+TOOL_ACTION ACTIONS::cut( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.cut" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'X' )
+        .LegacyHotkeyName( "Cut" )
+        .MenuText( _( "Cut" ) )
+        .Tooltip( _( "Cut selected item(s) to clipboard" ) )
+        .Icon( BITMAPS::cut )
+        .Flags( AF_NONE )
+        .UIId( wxID_CUT ) );
 
-TOOL_ACTION ACTIONS::copy( "common.Interactive.copy",
-        AS_GLOBAL,
-        MD_CTRL + 'C', LEGACY_HK_NAME( "Copy" ),
-        _( "Copy" ), _( "Copy selected item(s) to clipboard" ),
-        BITMAPS::copy, AF_NONE, (void*) wxID_COPY );
+TOOL_ACTION ACTIONS::copy( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.copy" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'C' )
+        .LegacyHotkeyName( "Copy" )
+        .MenuText( _( "Copy" ) )
+        .Tooltip( _( "Copy selected item(s) to clipboard" ) )
+        .Icon( BITMAPS::copy )
+        .Flags( AF_NONE )
+        .UIId( wxID_COPY ) );
 
-// This action is also used for a tool in the main horizontal toolbar in schematic editor
-// do not specify a wxID like wxID_PASTE, it prevent the tool working (at least on Windows)
-TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
-        AS_GLOBAL,
-        MD_CTRL + 'V', LEGACY_HK_NAME( "Paste" ),
-        _( "Paste" ), _( "Paste item(s) from clipboard" ),
-        BITMAPS::paste, AF_NONE /*, (void*) wxID_PASTE*/ );
+TOOL_ACTION ACTIONS::paste( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.paste" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'V' )
+        .LegacyHotkeyName( "Paste" )
+        .MenuText( _( "Paste" ) )
+        .Tooltip( _( "Paste item(s) from clipboard" ) )
+        .Icon( BITMAPS::paste )
+        .Flags( AF_NONE )
+        .UIId( wxID_PASTE ) );
 
 TOOL_ACTION ACTIONS::selectAll( "common.Interactive.selectAll",
         AS_GLOBAL,

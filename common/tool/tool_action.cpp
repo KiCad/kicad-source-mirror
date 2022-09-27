@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <optional>
 #include <tool/tool_action.h>
 #include <tool/tool_event.h>
 #include <tool/action_manager.h>
@@ -74,11 +75,15 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
         m_tooltip( aArgs.m_tooltip.value_or( wxEmptyString ) ),
         m_icon( aArgs.m_icon.value_or( BITMAPS::INVALID_BITMAP) ),
         m_id( -1 ),
+        m_uiid( std::nullopt ),
         m_flags( aArgs.m_flags.value_or( AF_NONE ) ),
         m_param( aArgs.m_param.value_or( nullptr ) )
 {
     // Action name is the only mandatory part
     assert( !m_name.empty() );
+
+    if( aArgs.m_uiid.has_value() )
+        m_uiid = aArgs.m_uiid.value();
 
     ACTION_MANAGER::GetActionList().push_back( this );
 }

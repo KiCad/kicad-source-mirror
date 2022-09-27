@@ -148,6 +148,15 @@ public:
         return *this;
     }
 
+    /**
+     * The ID number to use for the action when interacting with any UI elements.
+     */
+    TOOL_ACTION_ARGS& UIId( int aUIId )
+    {
+        m_uiid = aUIId;
+        return *this;
+    }
+
 protected:
     // Let the TOOL_ACTION constructor have direct access to the members here
     friend class TOOL_ACTION;
@@ -155,6 +164,8 @@ protected:
     std::optional<std::string>          m_name;
     std::optional<TOOL_ACTION_SCOPE>    m_scope;
     std::optional<TOOL_ACTION_FLAGS>    m_flags;
+
+    std::optional<int>                  m_uiid;
 
     std::optional<int>                  m_defaultHotKey;
     std::optional<std::string>          m_legacyName;
@@ -235,27 +246,20 @@ public:
      */
     int GetId() const { return m_id; }
 
+    /**
+     * Return true if this action has a custom UI ID set.
+     */
+    bool HasCustomUIId() const { return m_uiid.has_value(); }
+
     /*
      * Get the unique ID for this action in the user interface system.
      *
-     * This is simply the action ID offset by @c ACTION_BASE_UI_ID.
+     * This can be either set to a specific ID during creation or computed
+     * by offsetting the action ID by @c ACTION_BASE_UI_ID.
      *
      * @return The unique ID number for use in the user interface system.
      */
-    int GetUIId() const
-    {
-        // Hack for wxWidgets' use in stuff like search controls in standard file dialogs.  If
-        // it doesn't find these specific IDs somewhere in the menus then it won't enable
-        // cut/copy/paste.
-        if( m_param == (void*) wxID_CUT )
-            return wxID_CUT;
-        else if( m_param == (void*) wxID_COPY )
-            return wxID_COPY;
-        else if( m_param == (void*) wxID_PASTE )
-            return wxID_PASTE;
-
-        return m_id + ACTION_BASE_UI_ID;
-    }
+    int GetUIId() const { return m_uiid.value_or( m_id + ACTION_BASE_UI_ID ); }
 
     /*
      * Get the base value used to offset the user interface IDs for the actions.
@@ -330,6 +334,7 @@ protected:
     BITMAPS              m_icon;           // Icon for the menu entry
 
     int                  m_id;             // Unique ID for maps. Assigned by ACTION_MANAGER.
+    std::optional<int>   m_uiid;           // ID to use when interacting with the UI (if empty, generate one)
 
     TOOL_ACTION_FLAGS    m_flags;
     void*                m_param;          // Generic parameter

@@ -114,6 +114,11 @@ public:
     const std::map<std::string, TOOL_ACTION*>& GetActions() const;
 
     /**
+     * Test if a UI ID corresponds to an action ID in our system.
+     */
+    bool IsActionUIId( int aId ) const;
+
+    /**
      * Find an action with a given name (if there is one available).
      *
      * @param aActionName is the searched action.
@@ -183,6 +188,9 @@ private:
 
     ///< Map for indexing actions by their names
     std::map<std::string, TOOL_ACTION*> m_actionNameIndex;
+
+    ///< Map for recording actions that have custom UI IDs
+    std::map<int, TOOL_ACTION*> m_customUIIdIndex;
 
     ///< Map for indexing actions by their hotkeys
     typedef std::map<int, std::list<TOOL_ACTION*> > HOTKEY_LIST;
