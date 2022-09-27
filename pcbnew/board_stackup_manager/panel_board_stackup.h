@@ -189,6 +189,12 @@ private:
      */
     int computeBoardThickness();
 
+    /**
+     * Set the widths of dielectric layers to sensible defaults
+     * @param targetThickness target thickness of PCB in IU
+     */
+    void setDefaultLayerWidths( int targetThickness );
+
     void onColorSelected( wxCommandEvent& event );
     void onMaterialChange( wxCommandEvent& event );
     void onThicknessChange( wxCommandEvent& event );

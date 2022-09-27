@@ -130,8 +130,10 @@ PANEL_SETUP_BOARD_STACKUP::~PANEL_SETUP_BOARD_STACKUP()
 
 void PANEL_SETUP_BOARD_STACKUP::onCopperLayersSelCount( wxCommandEvent& event )
 {
+    int oldBoardWidth = static_cast<int>( m_frame->ValueFromString( m_tcCTValue->GetValue() ) );
     updateCopperLayerCount();
     showOnlyActiveLayers();
+    setDefaultLayerWidths( oldBoardWidth );
     computeBoardThickness();
     Layout();
 }
@@ -189,7 +191,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
 
     int iu_thickness = m_frame->ValueFromString( dlg.GetValue() );
 
-    if( iu_thickness <= min_thickness )
+    if( iu_thickness < min_thickness )
     {
         wxMessageBox( wxString::Format( _("Value too small (min value %s)." ),
                                         m_frame->StringFromValue( min_thickness, true ) ) );
@@ -200,14 +202,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
 
     if( items_candidate.size() )
     {
-        int thickness_layer = ( iu_thickness - min_thickness ) / items_candidate.size();
-        wxString txt = m_frame->StringFromValue( thickness_layer, true );
-
-        for( BOARD_STACKUP_ROW_UI_ITEM* ui_item : items_candidate )
-        {
-            wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item->m_ThicknessCtrl );
-            textCtrl->ChangeValue( txt );
-        }
+        setDefaultLayerWidths( iu_thickness );
     }
     else
     {
@@ -422,6 +417,112 @@ wxColor PANEL_SETUP_BOARD_STACKUP::GetSelectedColor( int aRow ) const
         return m_rowUiItemsList[aRow].m_UserColor.ToColour();
     else
         return GetStandardColor( item->GetType(), idx ).ToColour();
+}
+
+
+void PANEL_SETUP_BOARD_STACKUP::setDefaultLayerWidths( int targetThickness )
+{
+    // This function tries to set the PCB thickness to the parameter and uses a fixed prepreg thickness
+    // of 0.1 mm. The core thickness is calculated accordingly as long as it also stays above 0.1mm.
+    // If the core thickness would be smaller than the default pregreg thickness given here,
+    // both are reduced towards zero to arrive at the correct PCB width
+    const int prePregDefaultThickness = pcbIUScale.mmToIU( 0.1 );
+
+    int copperLayerCount = GetCopperLayerCount();
+
+    // This code is for a symmetrical PCB stackup with even copper layer count
+    // If asymmetric stackups were to be implemented, the following layer count calculations
+    // for dielectric/core layers might need adjustments.
+    wxASSERT( copperLayerCount % 2 == 0 );
+
+    int  dielectricLayerCount = copperLayerCount - 1;
+    int  coreLayerCount = copperLayerCount / 2 - 1;
+
+    wxASSERT( dielectricLayerCount > 0 );
+
+    bool currentLayerIsCore = false;
+
+    // start with prepreg layer on the outside, except when creating two-layer-board
+    if( copperLayerCount == 2 )
+    {
+        coreLayerCount = 1;
+        currentLayerIsCore = true;
+    }
+
+    wxASSERT( coreLayerCount > 0 );
+
+    int prePregLayerCount = dielectricLayerCount - coreLayerCount;
+
+    int totalWidthOfFixedItems = 0;
+
+    for( BOARD_STACKUP_ROW_UI_ITEM& ui_item : m_rowUiItemsList )
+    {
+        BOARD_STACKUP_ITEM* item = ui_item.m_Item;
+
+        if( !item->IsThicknessEditable() || !ui_item.m_isEnabled )
+            continue;
+
+        wxCheckBox* cbLock = dynamic_cast<wxCheckBox*>( ui_item.m_ThicknessLockCtrl );
+        wxChoice*   layerType = dynamic_cast<wxChoice*>( ui_item.m_LayerTypeCtrl );
+
+        if( ( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && !layerType ) || item->GetType() == BS_ITEM_TYPE_SOLDERMASK
+            || item->GetType() == BS_ITEM_TYPE_COPPER || ( cbLock && cbLock->GetValue() ) )
+        {
+            // secondary dielectric layers, mask and copper layers and locked layers will be counted as fixed width
+            wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item.m_ThicknessCtrl );
+            int         item_thickness = m_frame->ValueFromString( textCtrl->GetValue() );
+
+            totalWidthOfFixedItems += item_thickness;
+        }
+    }
+
+    // Width that hasn't been allocated by fixed items
+    int remainingWidth =
+            targetThickness - totalWidthOfFixedItems - ( prePregDefaultThickness * prePregLayerCount );
+
+    int prePregThickness = prePregDefaultThickness;
+    int coreThickness = remainingWidth / coreLayerCount;
+
+    if( coreThickness < prePregThickness )
+    {
+        // There's not enough room for prepreg and core layers of at least 0.1 mm, so adjust both down
+        remainingWidth = targetThickness - totalWidthOfFixedItems;
+        prePregThickness = coreThickness = std::max( 0, remainingWidth / dielectricLayerCount );
+    }
+
+    for( BOARD_STACKUP_ROW_UI_ITEM& ui_item : m_rowUiItemsList )
+    {
+        BOARD_STACKUP_ITEM* item = ui_item.m_Item;
+
+        if( item->GetType() != BS_ITEM_TYPE_DIELECTRIC || !ui_item.m_isEnabled )
+            continue;
+
+        wxChoice* layerType = dynamic_cast<wxChoice*>( ui_item.m_LayerTypeCtrl );
+
+        if( !layerType )
+        {
+            // ignore secondary dielectric layers
+            continue;
+        }
+
+        wxCheckBox* cbLock = dynamic_cast<wxCheckBox*>( ui_item.m_ThicknessLockCtrl );
+
+        if( cbLock && cbLock->GetValue() )
+        {
+            currentLayerIsCore = !currentLayerIsCore;
+
+            // Don't override width of locked layer
+            continue;
+        }
+
+        int layerThickness = currentLayerIsCore ? coreThickness : prePregThickness;
+
+        wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item.m_ThicknessCtrl );
+        layerType->SetSelection( currentLayerIsCore ? 0 : 1 );
+        textCtrl->SetValue( m_frame->StringFromValue( layerThickness ) );
+
+        currentLayerIsCore = !currentLayerIsCore;
+    }
 }
 
 
