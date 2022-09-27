@@ -87,8 +87,8 @@ bool SVG_IMPORT_PLUGIN::Import()
 
         for( NSVGpath* path = shape->paths; path != nullptr; path = path->next )
         {
-            DrawPath( path->pts, path->npts, path->closed, shape->fill.type == NSVG_PAINT_COLOR,
-                      lineWidth );
+            DrawPath( path->pts, path->npts, path->closed || rule == GRAPHICS_IMPORTER::PF_EVEN_ODD,
+                      shape->fill.type == NSVG_PAINT_COLOR, lineWidth );
         }
     }
 
@@ -124,15 +124,15 @@ double SVG_IMPORT_PLUGIN::GetImageWidth() const
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath,
-                                  bool aFilled, double aLineWidth )
+void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aPoly, bool aFilled,
+                                  double aLineWidth )
 {
     std::vector< VECTOR2D > collectedPathPoints;
 
     if( aNumPoints > 0 )
         DrawCubicBezierPath( aPoints, aNumPoints, collectedPathPoints );
 
-    if( aFilled )
+    if( aPoly && aFilled )
         DrawPolygon( collectedPathPoints, aLineWidth );
     else
         DrawLineSegments( collectedPathPoints, aLineWidth );

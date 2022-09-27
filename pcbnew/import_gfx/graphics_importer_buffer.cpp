@@ -178,7 +178,7 @@ void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
     std::list<std::unique_ptr<IMPORTED_SHAPE>> newShapes;
     std::vector<IMPORTED_POLYGON*>             polypaths;
 
-    for( auto& shape : m_shapes )
+    for( std::unique_ptr<IMPORTED_SHAPE>& shape : m_shapes )
     {
         IMPORTED_POLYGON* poly = dynamic_cast<IMPORTED_POLYGON*>( shape.get() );
 
@@ -188,30 +188,21 @@ void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
             continue;
         }
 
-        lastWidth = poly->GetWidth();
         int index = poly->GetParentShapeIndex();
 
-        if( curShapeIdx < 0 )
-            index = curShapeIdx;
-
-        if( index == curShapeIdx )
-        {
-            polypaths.push_back( poly );
-        }
-        else if( index >= curShapeIdx + 1 )
+        if( index != curShapeIdx && curShapeIdx >= 0 )
         {
             convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth );
-            curShapeIdx++;
             polypaths.clear();
-            polypaths.push_back( poly );
         }
+
+        curShapeIdx = index;
+        lastWidth = poly->GetWidth();
+        polypaths.push_back( poly );
     }
 
-    POLY_FILL_RULE last_rule = ( m_shapeFillRules.size() && curShapeIdx >= 0 )
-                                ? m_shapeFillRules[curShapeIdx]
-                                : POLY_FILL_RULE::PF_EVEN_ODD;
-
-    convertPolygon( newShapes, polypaths, last_rule, lastWidth );
+    if( curShapeIdx >= 0 )
+        convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth );
 
     m_shapes.swap( newShapes );
 }
