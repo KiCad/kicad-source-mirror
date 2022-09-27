@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 - 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -330,16 +330,16 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
 
     wxPoint newPos( m_posX.GetValue(), -m_posY.GetValue() );
 
-    const int acceptable_mingrid = 50;
+    const int standard_grid = 50;
 
     // Only show the warning if the position has been changed
     if( ( m_origPos != newPos )
-        && ( ( m_posX.GetValue() % acceptable_mingrid ) || ( m_posY.GetValue() % acceptable_mingrid ) ) )
+        && (( m_posX.GetValue() % standard_grid ) || ( m_posY.GetValue() % standard_grid ) ) )
     {
-        auto msg = wxString::Format( _( "This pin is not on a %d mils grid which will make it\n"
-                                        "difficult to connect to in the schematic.\n"
-                                        "Do you want to continue?" ),
-                                     acceptable_mingrid );
+        wxString msg = wxString::Format( _( "This pin is not on a %d mils grid which will make it "
+                                            "difficult to connect to in the schematic.\n"
+                                            "Do you wish to continue?" ),
+                                         standard_grid );
         if( !IsOK( this, msg ) )
             return false;
     }

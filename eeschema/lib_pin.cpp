@@ -1186,7 +1186,8 @@ void LIB_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
                                      bool aIncludeElectricalType ) const
 {
-    KIFONT::FONT* font = KIFONT::FONT::GetFont( Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>()->m_Appearance.default_font );
+    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    KIFONT::FONT*      font = KIFONT::FONT::GetFont( cfg->m_Appearance.default_font );
 
     BOX2I          bbox;
     VECTOR2I       begin;
