@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-27 13:22+0000\n"
+"PO-Revision-Date: 2022-09-29 15:54+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -30419,112 +30419,112 @@ msgstr "Співпадіння між шаром(и) і забороненої �
 #: pcbnew/drc/drc_engine.cpp:1498
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "Шар правил '%s' не співпадає; правила проігноровано."
+msgstr "Шар правил '%s' не співпадає; правило проігноровано."
 
 #: pcbnew/drc/drc_engine.cpp:1151 pcbnew/drc/drc_engine.cpp:1172
 msgid "Rule layer not matched; rule ignored."
-msgstr "Шар правил не співпадає; правила проігноровано."
+msgstr "Шар правил не співпадає; правило проігноровано."
 
 #: pcbnew/drc/drc_engine.cpp:1186
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
-msgstr ""
+msgstr "%s не є наскрізним отвором; правило проігноровано."
 
 #: pcbnew/drc/drc_engine.cpp:1198
 msgid "Unconditional constraint applied."
-msgstr ""
+msgstr "Застосовано безумовне обмеження."
 
 #: pcbnew/drc/drc_engine.cpp:1202 pcbnew/drc/drc_engine.cpp:1504
 msgid "Unconditional rule applied."
-msgstr ""
+msgstr "Застосовується безумовне правило."
 
 #: pcbnew/drc/drc_engine.cpp:1207
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr ""
+msgstr "Застосовано безумовне правило; заміняє попередні обмеження."
 
 #: pcbnew/drc/drc_engine.cpp:1222 pcbnew/drc/drc_engine.cpp:1509
 #, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr ""
+msgstr "Перевірка умови правила -%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1232
 msgid "Constraint applied."
-msgstr ""
+msgstr "Обмеження застосовано."
 
 #: pcbnew/drc/drc_engine.cpp:1236 pcbnew/drc/drc_engine.cpp:1515
 msgid "Rule applied."
-msgstr ""
+msgstr "Правило застосовано."
 
 #: pcbnew/drc/drc_engine.cpp:1241
 msgid "Rule applied; overrides previous constraints."
-msgstr ""
+msgstr "Застосовано правило; перевизначає попередні обмеження."
 
 #: pcbnew/drc/drc_engine.cpp:1267
 msgid "Membership not satisfied; constraint ignored."
-msgstr ""
+msgstr "Членство не задоволене; обмеження проігноровано."
 
 #: pcbnew/drc/drc_engine.cpp:1268 pcbnew/drc/drc_engine.cpp:1520
 msgid "Condition not satisfied; rule ignored."
-msgstr ""
+msgstr "Умови незадоволені; правило ігнорується."
 
 #: pcbnew/drc/drc_engine.cpp:1324 pcbnew/drc/drc_engine.cpp:1341
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
-msgstr ""
+msgstr "Локальний зазор на %s; зазор: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1392
 #, c-format
 msgid "%s zone connection: %s."
-msgstr ""
+msgstr "%s зона з'єднання: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1408
 #, c-format
 msgid "%s pad connection: %s."
-msgstr ""
+msgstr "%s підключення контактної площадки: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1413 pcbnew/drc/drc_engine.cpp:1430
 #: pcbnew/drc/drc_engine.cpp:1447 pcbnew/zone.cpp:332 pcbnew/zone.cpp:443
 msgid "zone"
-msgstr ""
+msgstr "зона"
 
 #: pcbnew/drc/drc_engine.cpp:1425
 #, c-format
 msgid "%s thermal relief gap: %s."
-msgstr ""
+msgstr "%s зазор теплового зазору: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1442
 #, c-format
 msgid "%s thermal spoke width: %s."
-msgstr ""
+msgstr "%s ширина термічного переходу: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1475
 #, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr ""
+msgstr "Перевірка твердження правил\"%s\"."
 
 #: pcbnew/drc/drc_item.cpp:45
 msgid "Electrical"
-msgstr ""
+msgstr "Електричні"
 
 #: pcbnew/drc/drc_item.cpp:46
 msgid "Design for Manufacturing"
-msgstr ""
+msgstr "Дизайн для виробництва"
 
 #: pcbnew/drc/drc_item.cpp:47
 msgid "Schematic Parity"
-msgstr ""
+msgstr "Відповідність схеми"
 
 #: pcbnew/drc/drc_item.cpp:48
 msgid "Signal Integrity"
-msgstr ""
+msgstr "Цілісність сигналу"
 
 #: pcbnew/drc/drc_item.cpp:49
 msgid "Readability"
-msgstr ""
+msgstr "Читабельність"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Missing connection between items"
-msgstr ""
+msgstr "Немає зв'язку між елементами"
 
 #: pcbnew/drc/drc_item.cpp:57
 msgid "Items shorting two nets"
@@ -30532,91 +30532,91 @@ msgstr "Елементи замикають два звʼязки"
 
 #: pcbnew/drc/drc_item.cpp:61
 msgid "Items not allowed"
-msgstr ""
+msgstr "Елементи заборонені"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr ""
+msgstr "Текст (або розмір) на шарі Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:69
 msgid "Clearance violation"
-msgstr ""
+msgstr "Порушення зазору"
 
 #: pcbnew/drc/drc_item.cpp:73
 msgid "Tracks crossing"
-msgstr ""
+msgstr "Пересічення доріжок"
 
 #: pcbnew/drc/drc_item.cpp:77
 msgid "Board edge clearance violation"
-msgstr ""
+msgstr "Порушення відступу від контуру плати"
 
 #: pcbnew/drc/drc_item.cpp:81
 msgid "Copper zones intersect"
-msgstr ""
+msgstr "Перетин мідних зон"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Isolated copper fill"
-msgstr ""
+msgstr "Ізольована мідна заливка"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Thermal relief connection to zone incomplete"
-msgstr ""
+msgstr "Термальне з'єднання з зоною незавершене"
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Via is not connected or connected on only one layer"
-msgstr ""
+msgstr "Перехідні отвори не підключені або підключені до одного шару"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Track has unconnected end"
-msgstr ""
+msgstr "Доріжка має непідключений край"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
-msgstr ""
+msgstr "Порушено зазор між отворами"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
-msgstr ""
+msgstr "Наскрізні отвори занадто близько один від одного"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
-msgstr ""
+msgstr "Наскрізні отвори пересікаються"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Copper connection too narrow"
-msgstr ""
+msgstr "Мідне з’єднання занадто вузьке"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Track width"
-msgstr ""
+msgstr "Ширина доріжки"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Annular width"
-msgstr ""
+msgstr "Ширина пояска"
 
 #: pcbnew/drc/drc_item.cpp:125
 msgid "Drill out of range"
-msgstr ""
+msgstr "Розмір свердла перевищує межі"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Via diameter"
-msgstr ""
+msgstr "Діаметр перехідного отвору"
 
 #: pcbnew/drc/drc_item.cpp:133
 msgid "Padstack is not valid"
-msgstr ""
+msgstr "Стек контактних площадок не дійсний"
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Micro via drill out of range"
-msgstr ""
+msgstr "Розмір свердла для мікро перехідного отвору перевищує межу"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
-msgstr ""
+msgstr "Поля перекриваються"
 
 #: pcbnew/drc/drc_item.cpp:145
 msgid "Footprint has no courtyard defined"
-msgstr ""
+msgstr "Посадкове місце не має області встановлення"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Footprint has malformed courtyard"
