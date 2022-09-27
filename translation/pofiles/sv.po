@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-25 11:47+0000\n"
+"PO-Revision-Date: 2022-09-29 15:54+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -7496,12 +7496,12 @@ msgstr "Uppdaterade %s från %s till %s."
 #: eeschema/annotate.cpp:396
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Annoterade %s (enhet %s) som %s."
+msgstr "Numrerade %s (enhet %s) som %s."
 
 #: eeschema/annotate.cpp:403
 #, c-format
 msgid "Annotated %s as %s."
-msgstr "Annoterade %s som %s."
+msgstr "Numrerade %s som %s."
 
 #: eeschema/annotate.cpp:420
 msgid "Annotation complete."
@@ -7604,7 +7604,7 @@ msgstr "Annotationsmeddelanden:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:93
 msgid "Annotate"
-msgstr "Annotera"
+msgstr "Numrera"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -7682,7 +7682,7 @@ msgstr "Rensa Annotering"
 
 #: eeschema/dialogs/dialog_annotate_base.h:85
 msgid "Annotate Schematic"
-msgstr "Annotera Schema"
+msgstr "Numrera komponenter i kretsschema"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -7715,7 +7715,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom.cpp:344
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"För att generera en materiallista (BOM) krävs ett fullständigt annoterat "
+"För att generera en materiallista (BOM) krävs ett fullständigt numrerat "
 "schema."
 
 #: eeschema/dialogs/dialog_bom.cpp:381 eeschema/dialogs/dialog_bom_base.cpp:43
@@ -8484,7 +8484,7 @@ msgstr "Visa dialogrutan Annotering"
 #: eeschema/dialogs/dialog_erc.cpp:164
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
-"Schemat är inte fullständigt annoterat. ERC-resultaten kommer att vara "
+"Schemat är inte fullständigt numrerat. ERC-resultaten kommer att vara "
 "ofullständiga."
 
 #: eeschema/dialogs/dialog_erc.cpp:299
@@ -9972,7 +9972,7 @@ msgstr "Exportera nätlista"
 
 #: eeschema/dialogs/dialog_netlist.cpp:323
 msgid "Simulator requires a fully annotated schematic."
-msgstr "Simulatorn kräver ett fullständigt annoterat schema."
+msgstr "Simulatorn kräver ett fullständigt numrerat schema."
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 #: eeschema/dialogs/dialog_netlist.cpp:396
@@ -10034,7 +10034,7 @@ msgstr "%s Exportera"
 #: eeschema/dialogs/dialog_netlist.cpp:564
 #: eeschema/netlist_exporters/netlist_generator.cpp:55
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Export av nätlistan kräver ett fullständigt annoterat schema."
+msgstr "Export av nätlistan kräver ett fullständigt numrerat schema."
 
 #: eeschema/dialogs/dialog_netlist.cpp:691
 msgid "This plugin already exists."
@@ -12895,7 +12895,7 @@ msgstr "Problem med bibliotekssymbol"
 
 #: eeschema/erc_item.cpp:146
 msgid "Symbol is not annotated"
-msgstr "Symbolen är inte annoterad"
+msgstr "Symbolen är inte numrerad"
 
 #: eeschema/erc_item.cpp:150
 msgid "Symbol has more units than are defined"
@@ -13725,7 +13725,7 @@ msgstr "Öppna schema"
 
 #: eeschema/sch_edit_frame.cpp:1228
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr "Tilldelning av fotavtryck kräver ett fullständigt annoterat schema."
+msgstr "Tilldelning av fotavtryck kräver ett fullständigt numrerat schema."
 
 #: eeschema/sch_edit_frame.cpp:1253
 msgid "Could not open CvPcb"
@@ -16122,7 +16122,7 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:303
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr "Återlänkning av fotavtryck kräver ett fullständigt annoterat schema."
+msgstr "Återlänkning av fotavtryck kräver ett fullständigt numrerat schema."
 
 #: eeschema/tools/backannotate.cpp:306
 msgid "Footprint re-linking cancelled by user."
@@ -16317,7 +16317,7 @@ msgstr "Visa elektriska typer för stift"
 
 #: eeschema/tools/ee_actions.cpp:196
 msgid "Annotate pins with their electrical types"
-msgstr "Kommentera stift med deras elektriska typer"
+msgstr "Märk upp stift med deras elektriska typer"
 
 #: eeschema/tools/ee_actions.cpp:201
 msgid "Show Pin Numbers"
@@ -16325,7 +16325,7 @@ msgstr "Visa stiftnummer"
 
 #: eeschema/tools/ee_actions.cpp:201
 msgid "Annotate pins with their numbers"
-msgstr "Märk stift med deras nummer"
+msgstr "Märk upp stift med deras nummer"
 
 #: eeschema/tools/ee_actions.cpp:206
 msgid "Show Symbol Tree"
@@ -16896,7 +16896,7 @@ msgstr "Importera symbolavtryckstilldelningar från .cmp-fil skapad av Pcbnew"
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Annotate Schematic..."
-msgstr "Kommentera schemat ..."
+msgstr "Numrera komponenter i kretsschemat..."
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Fill in schematic symbol reference designators"
@@ -22874,7 +22874,7 @@ msgid ""
 "%s footprints will be reannotated."
 msgstr ""
 "\n"
-"%s fotavtryck kommer att omnoteras."
+"%s fotavtryck kommer att numreras om."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
 #, c-format
@@ -23301,7 +23301,7 @@ msgid ""
 "of reference (R means R*)"
 msgstr ""
 "Numrera inte om referenser av\n"
-"den här typen (R betyder R *)"
+"den här typen (R betyder R*)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
@@ -36470,8 +36470,7 @@ msgstr "Inga mönsterkortsproblem hittades."
 
 #: pcbnew/tools/board_editor_control.cpp:630
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr ""
-"Uppdatering av mönsterkort kräver att schemat är fullständigt annoterat."
+msgstr "Uppdatering av mönsterkort kräver att schemat är fullständigt numrerat."
 
 #: pcbnew/tools/board_editor_control.cpp:644
 msgid ""
@@ -37053,7 +37052,7 @@ msgstr "Gör om fyllning av alla zoner ..."
 
 #: pcbnew/tools/drc_tool.cpp:159
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "Paritetskontroll av schema kräver att det är fullständigt annoterat."
+msgstr "Paritetskontroll av schema kräver att det är fullständigt numrerat."
 
 #: pcbnew/tools/drc_tool.cpp:193
 msgid "DRC"
@@ -38436,7 +38435,7 @@ msgstr "Geografisk komponentnumrering..."
 
 #: pcbnew/tools/pcb_actions.cpp:1156
 msgid "Reannotate PCB in geographical order"
-msgstr "Anmärka PCB i geografisk ordning"
+msgstr "Numrera om mönsterkortet i geografisk ordning"
 
 #: pcbnew/tools/pcb_actions.cpp:1161
 msgid "Repair Board"
