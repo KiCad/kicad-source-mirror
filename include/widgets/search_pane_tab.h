@@ -36,6 +36,8 @@ public:
                           const wxPoint& pos = wxDefaultPosition,
                           const wxSize& size = wxDefaultSize );
 
+    virtual ~SEARCH_PANE_LISTVIEW();
+
     void RefreshColumnNames();
 
 protected:
