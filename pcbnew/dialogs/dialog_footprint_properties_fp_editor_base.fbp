@@ -1227,7 +1227,7 @@
                                                                     <property name="caption"></property>
                                                                     <property name="caption_visible">1</property>
                                                                     <property name="center_pane">0</property>
-                                                                    <property name="choices">&quot;Through hole&quot; &quot;SMD&quot; &quot;Other&quot;</property>
+                                                                    <property name="choices">&quot;Through hole&quot; &quot;SMD&quot; &quot;Unspecified&quot;</property>
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -70,7 +70,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	bSizerComponents->Add( m_gridComponents, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	fgSizerContents->Add( bSizerComponents, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerContents->Add( bSizerComponents, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerPads;
 	bSizerPads = new wxBoxSizer( wxVERTICAL );
@@ -110,7 +110,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	bSizerPads->Add( m_gridPads, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	fgSizerContents->Add( bSizerPads, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerContents->Add( bSizerPads, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerBrdSize;
 	bSizerBrdSize = new wxBoxSizer( wxVERTICAL );
@@ -195,16 +195,16 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	bGeneralPanelSizer->Add( fgSizerContents, 1, wxEXPAND, 5 );
 
 	wxGridSizer* gOptionsSizer;
-	gOptionsSizer = new wxGridSizer( 0, 2, 0, 0 );
+	gOptionsSizer = new wxGridSizer( 0, 1, 0, 0 );
 
 	m_checkBoxSubtractHoles = new wxCheckBox( m_generalPanel, wxID_ANY, _("Subtract holes from board area"), wxDefaultPosition, wxDefaultSize, 0 );
-	gOptionsSizer->Add( m_checkBoxSubtractHoles, 0, wxALL|wxEXPAND, 5 );
+	gOptionsSizer->Add( m_checkBoxSubtractHoles, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 4 );
 
-	m_checkBoxExcludeComponentsNoPins = new wxCheckBox( m_generalPanel, wxID_ANY, _("Exclude components with no pins"), wxDefaultPosition, wxDefaultSize, 0 );
-	gOptionsSizer->Add( m_checkBoxExcludeComponentsNoPins, 0, wxALL|wxEXPAND, 5 );
+	m_checkBoxExcludeComponentsNoPins = new wxCheckBox( m_generalPanel, wxID_ANY, _("Exclude footprints with no pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	gOptionsSizer->Add( m_checkBoxExcludeComponentsNoPins, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 4 );
 
 
-	bGeneralPanelSizer->Add( gOptionsSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bGeneralPanelSizer->Add( gOptionsSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 2 );
 
 
 	m_generalPanel->SetSizer( bGeneralPanelSizer );
@@ -245,7 +245,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridDrills->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
-	m_gridDrills->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_gridDrills->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_gridDrills->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );

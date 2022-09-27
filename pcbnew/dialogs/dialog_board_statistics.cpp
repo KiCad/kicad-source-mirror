@@ -24,7 +24,6 @@
 
 
 #include "dialog_board_statistics.h"
-#include "base_units.h"
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <pad.h>
@@ -145,6 +144,7 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
     // If you need some more types to be shown, simply add them to the corresponding list
     m_fpTypes.push_back( FOOTPRINT_TYPE_T( FP_THROUGH_HOLE,        FP_THROUGH_HOLE, _( "THT:" ) ) );
     m_fpTypes.push_back( FOOTPRINT_TYPE_T( FP_SMD,                 FP_SMD,          _( "SMD:" ) ) );
+    m_fpTypes.push_back( FOOTPRINT_TYPE_T( FP_THROUGH_HOLE|FP_SMD, 0,               _( "Unspecified:" ) ) );
 
     m_padTypes.clear();
     m_padTypes.push_back( TYPE_CONTAINER_T<PAD_ATTRIB>( PAD_ATTRIB::PTH,  _( "Through hole:" ) ) );
@@ -189,8 +189,9 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
     m_stopLayerColInitialSize = m_gridDrills->GetColSize( DRILL_TYPE_T::COL_STOP_LAYER );
 
     // Add space for the vertical scrollbar, so that it won't overlap with the cells.
-    m_gridDrills->SetMinSize( m_gridDrills->GetEffectiveMinSize()
-                              + wxSize( wxSystemSettings::GetMetric( wxSYS_VSCROLL_X ), 0 ) );
+    m_gridDrills->SetMinSize( wxSize( m_gridDrills->GetEffectiveMinSize().x
+                                            + wxSystemSettings::GetMetric( wxSYS_VSCROLL_X ),
+                                      60 ) );
 
     adjustDrillGridColumns();
 

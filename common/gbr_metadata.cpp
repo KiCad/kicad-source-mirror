@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -766,7 +766,7 @@ wxString GBR_CMP_PNP_METADATA::FormatCmpPnPMetadata()
     wxString start_of_line( "%TO." );
     wxString end_of_line( "*%\n" );
 
-    wxString mounType[] =
+    wxString mountTypeStrings[] =
     {
         "Other", "SMD", "TH"
     };
@@ -792,7 +792,7 @@ wxString GBR_CMP_PNP_METADATA::FormatCmpPnPMetadata()
     if( !m_LibraryDescr.IsEmpty() )
         text << start_of_line << "CLbD," << m_LibraryDescr << end_of_line;
 
-    text << start_of_line << "CMnt," << mounType[m_MountType] << end_of_line;
+    text << start_of_line << "CMnt," << mountTypeStrings[m_MountType] << end_of_line;
     text << start_of_line << "CRot," << m_Orientation << end_of_line;
 
     return text;
