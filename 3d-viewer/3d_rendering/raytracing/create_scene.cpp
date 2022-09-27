@@ -1258,12 +1258,20 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
             wxString                footprintBasePath = wxEmptyString;
             if( m_boardAdapter.GetBoard()->GetProject() )
             {
-                const FP_LIB_TABLE_ROW* fpRow =
-                        m_boardAdapter.GetBoard()->GetProject()->PcbFootprintLibs()->FindRow(
-                                libraryName, false );
+                try
+                {
+                    // FindRow() can throw an exception
+                    const FP_LIB_TABLE_ROW* fpRow =
+                            m_boardAdapter.GetBoard()->GetProject()->PcbFootprintLibs()->FindRow(
+                                    libraryName, false );
 
-                if( fpRow )
-                    footprintBasePath = fpRow->GetFullURI( true );
+                    if( fpRow )
+                        footprintBasePath = fpRow->GetFullURI( true );
+                }
+                catch( ... )
+                {
+                    // Do nothing if the libraryName is not found in lib table
+                }
             }
 
             while( sM != eM )

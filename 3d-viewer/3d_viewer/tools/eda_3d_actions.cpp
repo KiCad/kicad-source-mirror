@@ -219,7 +219,7 @@ TOOL_ACTION EDA_3D_ACTIONS::showSMD( "3DViewer.Control.attributesSMD",
 TOOL_ACTION EDA_3D_ACTIONS::showVirtual( "3DViewer.Control.attributesOther",
         AS_ACTIVE,
         'V', "",
-        _( "Toggle Other 3D models" ), _( "Toggle 3D models for 'Other' type components" ),
+        _( "Toggle unspecified 3D models" ), _( "Toggle 3D models for 'unspecified' type components" ),
         BITMAPS::show_other, AF_NONE );
 
 TOOL_ACTION EDA_3D_ACTIONS::showNotInPosFile( "3DViewer.Control.attribute_not_in_posfile",

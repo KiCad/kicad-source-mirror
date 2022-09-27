@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -928,12 +928,20 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
 
         if( m_boardAdapter.GetBoard()->GetProject() )
         {
-            const FP_LIB_TABLE_ROW* fpRow =
-                    m_boardAdapter.GetBoard()->GetProject()->PcbFootprintLibs()->FindRow(
-                            libraryName, false );
+            try
+            {
+                // FindRow() can throw an exception
+                const FP_LIB_TABLE_ROW* fpRow =
+                        m_boardAdapter.GetBoard()->GetProject()->PcbFootprintLibs()->FindRow(
+                                libraryName, false );
 
-            if( fpRow )
-                footprintBasePath = fpRow->GetFullURI( true );
+                if( fpRow )
+                    footprintBasePath = fpRow->GetFullURI( true );
+            }
+            catch( ... )
+            {
+                // Do nothing if the libraryName is not found in lib table
+            }
         }
 
         for( const FP_3DMODEL& fp_model : footprint->Models() )
