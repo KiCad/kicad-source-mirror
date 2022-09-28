@@ -52,7 +52,7 @@ std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const std::strin
         case SIM_MODEL::DEVICE_TYPE_::C:
         case SIM_MODEL::DEVICE_TYPE_::L:
         case SIM_MODEL::DEVICE_TYPE_::D:
-            return CurrentNames( aRefName );
+            return SPICE_GENERATOR::CurrentNames( aRefName );
 
         default:
             wxFAIL_MSG( "Unhandled model device type in SIM_MODEL_NGSPICE" );
