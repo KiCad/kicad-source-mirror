@@ -121,11 +121,13 @@ TOOL_ACTION ACTIONS::cancelInteractive( "common.Interactive.cancel",
         _( "Cancel" ), _( "Cancel current tool" ),
         BITMAPS::cancel, AF_NONE );
 
-TOOL_ACTION ACTIONS::showContextMenu( "common.Control.showContextMenu",
-        AS_GLOBAL,
-        0, "",
-        _( "Show Context Menu" ), _( "Perform the right-mouse-button action" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_RIGHT_CLICK );
+TOOL_ACTION ACTIONS::showContextMenu( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showContextMenu" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Context Menu" ) )
+        .Tooltip( _( "Perform the right-mouse-button action" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_RIGHT_CLICK ) );
 
 TOOL_ACTION ACTIONS::updateMenu( "common.Interactive.updateMenu",
         AS_GLOBAL );
@@ -375,66 +377,90 @@ TOOL_ACTION ACTIONS::centerContents( "common.Control.centerContents",
         AS_GLOBAL );
 
 // Cursor control
-TOOL_ACTION ACTIONS::cursorUp( "common.Control.cursorUp",
-        AS_GLOBAL,
-        WXK_UP, "",
-        _( "Cursor Up" ), "",
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_UP );
+TOOL_ACTION ACTIONS::cursorUp( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorUp" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_UP )
+        .MenuText( _( "Cursor Up" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_UP ) );
 
-TOOL_ACTION ACTIONS::cursorDown( "common.Control.cursorDown",
-        AS_GLOBAL,
-        WXK_DOWN, "",
-        _( "Cursor Down" ), "" ,
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_DOWN );
+TOOL_ACTION ACTIONS::cursorDown( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorDown" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_DOWN )
+        .MenuText( _( "Cursor Down" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_DOWN ) );
 
-TOOL_ACTION ACTIONS::cursorLeft( "common.Control.cursorLeft",
-        AS_GLOBAL,
-        WXK_LEFT, "",
-        _( "Cursor Left" ), "" ,
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_LEFT );
+TOOL_ACTION ACTIONS::cursorLeft( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorLeft" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_LEFT )
+        .MenuText( _( "Cursor Left" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_LEFT ) );
 
-TOOL_ACTION ACTIONS::cursorRight( "common.Control.cursorRight",
-        AS_GLOBAL,
-        WXK_RIGHT, "",
-        _( "Cursor Right" ), "" ,
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_RIGHT );
+TOOL_ACTION ACTIONS::cursorRight( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorRight" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_RIGHT )
+        .MenuText( _( "Cursor Right" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_RIGHT ) );
 
 
-TOOL_ACTION ACTIONS::cursorUpFast( "common.Control.cursorUpFast",
-        AS_GLOBAL,
-        MD_CTRL + WXK_UP, "",
-        _( "Cursor Up Fast" ), "",
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) ( CURSOR_UP | CURSOR_FAST_MOVE ) );
+TOOL_ACTION ACTIONS::cursorUpFast( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorUpFast" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + WXK_UP )
+        .MenuText( _( "Cursor Up Fast" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_UP | CURSOR_FAST_MOVE ) );
 
-TOOL_ACTION ACTIONS::cursorDownFast( "common.Control.cursorDownFast",
-        AS_GLOBAL,
-        MD_CTRL + WXK_DOWN, "",
-        _( "Cursor Down Fast" ), "" ,
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) ( CURSOR_DOWN | CURSOR_FAST_MOVE ) );
+TOOL_ACTION ACTIONS::cursorDownFast( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorDownFast" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + WXK_DOWN )
+        .MenuText( _( "Cursor Down Fast" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_DOWN | CURSOR_FAST_MOVE ) );
 
-TOOL_ACTION ACTIONS::cursorLeftFast( "common.Control.cursorLeftFast",
-        AS_GLOBAL,
-        MD_CTRL + WXK_LEFT, "",
-        _( "Cursor Left Fast" ), "" ,
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) ( CURSOR_LEFT | CURSOR_FAST_MOVE ) );
+TOOL_ACTION ACTIONS::cursorLeftFast( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorLeftFast" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + WXK_LEFT )
+        .MenuText( _( "Cursor Left Fast" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_LEFT | CURSOR_FAST_MOVE ) );
 
-TOOL_ACTION ACTIONS::cursorRightFast( "common.Control.cursorRightFast",
-        AS_GLOBAL,
-        MD_CTRL + WXK_RIGHT, "",
-        _( "Cursor Right Fast" ), "" ,
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) ( CURSOR_RIGHT | CURSOR_FAST_MOVE ) );
+TOOL_ACTION ACTIONS::cursorRightFast( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorRightFast" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + WXK_RIGHT )
+        .MenuText( _( "Cursor Right Fast" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_RIGHT | CURSOR_FAST_MOVE ) );
 
-TOOL_ACTION ACTIONS::cursorClick( "common.Control.cursorClick",
-        AS_GLOBAL,
-        WXK_RETURN, LEGACY_HK_NAME( "Mouse Left Click" ),
-        _( "Click" ), _( "Performs left mouse button click" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_CLICK );
+TOOL_ACTION ACTIONS::cursorClick( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorClick" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_RETURN )
+        .LegacyHotkeyName( "Mouse Left Click" )
+        .MenuText( _( "Click" ) )
+        .Tooltip( _( "Performs left mouse button click" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_CLICK ) );
 
-TOOL_ACTION ACTIONS::cursorDblClick( "common.Control.cursorDblClick",
-        AS_GLOBAL,
-        WXK_END, LEGACY_HK_NAME( "Mouse Left Double Click" ),
-        _( "Double-click" ), _( "Performs left mouse button double-click" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_DBL_CLICK );
+TOOL_ACTION ACTIONS::cursorDblClick( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorDblClick" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_END )
+        .LegacyHotkeyName( "Mouse Left Double Click" )
+        .MenuText( _( "Double-click" ) )
+        .Tooltip( _( "Performs left mouse button double-click" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_DBL_CLICK ) );
 
 TOOL_ACTION ACTIONS::refreshPreview( "common.Control.refreshPreview",
         AS_GLOBAL );
@@ -449,29 +475,37 @@ TOOL_ACTION ACTIONS::unpinLibrary( "common.Control.unpinLibrary",
         _( "Unpin Library" ),
         _( "No longer keep the library at the top of the list" ) );
 
-TOOL_ACTION ACTIONS::panUp( "common.Control.panUp",
-        AS_GLOBAL,
-        MD_SHIFT + WXK_UP, "",
-        _( "Pan Up" ), "",
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_UP );
+TOOL_ACTION ACTIONS::panUp( TOOL_ACTION_ARGS()
+        .Name( "common.Control.panUp" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + WXK_UP )
+        .MenuText( _( "Pan Up" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_UP ) );
 
-TOOL_ACTION ACTIONS::panDown( "common.Control.panDown",
-        AS_GLOBAL,
-        MD_SHIFT + WXK_DOWN, "",
-        _( "Pan Down" ), "" ,
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_DOWN );
+TOOL_ACTION ACTIONS::panDown( TOOL_ACTION_ARGS()
+        .Name( "common.Control.panDown" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + WXK_DOWN )
+        .MenuText( _( "Pan Down" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_DOWN ) );
 
-TOOL_ACTION ACTIONS::panLeft( "common.Control.panLeft",
-        AS_GLOBAL,
-        MD_SHIFT + WXK_LEFT, "",
-        _( "Pan Left" ), "" ,
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_LEFT );
+TOOL_ACTION ACTIONS::panLeft( TOOL_ACTION_ARGS()
+        .Name( "common.Control.panLeft" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + WXK_LEFT )
+        .MenuText( _( "Pan Left" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_LEFT ) );
 
-TOOL_ACTION ACTIONS::panRight( "common.Control.panRight",
-        AS_GLOBAL,
-        MD_SHIFT + WXK_RIGHT, "",
-        _( "Pan Right" ), "" ,
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_RIGHT );
+TOOL_ACTION ACTIONS::panRight( TOOL_ACTION_ARGS()
+        .Name( "common.Control.panRight" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + WXK_RIGHT )
+        .MenuText( _( "Pan Right" ) )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_RIGHT ) );
 
 // Grid control
 TOOL_ACTION ACTIONS::gridFast1( "common.Control.gridFast1",
@@ -517,20 +551,32 @@ TOOL_ACTION ACTIONS::gridProperties( "common.Control.gridProperties",
         _( "Grid Properties..." ), _( "Set grid dimensions" ),
         BITMAPS::grid_select );
 
-TOOL_ACTION ACTIONS::inchesUnits( "common.Control.imperialUnits",
-        AS_GLOBAL, 0, "",
-        _( "Inches" ), _( "Use inches" ),
-        BITMAPS::unit_inch, AF_NONE, (void*) EDA_UNITS::INCHES );
+TOOL_ACTION ACTIONS::inchesUnits( TOOL_ACTION_ARGS()
+        .Name( "common.Control.imperialUnits" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Inches" ) )
+        .Tooltip( _( "Use inches" ) )
+        .Icon( BITMAPS::unit_inch )
+        .Flags( AF_NONE )
+        .Parameter( EDA_UNITS::INCHES ) );
 
-TOOL_ACTION ACTIONS::milsUnits( "common.Control.mils",
-        AS_GLOBAL, 0, "",
-        _( "Mils" ), _( "Use mils" ),
-        BITMAPS::unit_mil, AF_NONE, (void*) EDA_UNITS::MILS );
+TOOL_ACTION ACTIONS::milsUnits( TOOL_ACTION_ARGS()
+        .Name( "common.Control.mils" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Mils" ) )
+        .Tooltip( _( "Use mils" ) )
+        .Icon( BITMAPS::unit_mil )
+        .Flags( AF_NONE )
+        .Parameter( EDA_UNITS::MILS ) );
 
-TOOL_ACTION ACTIONS::millimetersUnits( "common.Control.metricUnits",
-        AS_GLOBAL, 0, "",
-        _( "Millimeters" ), _( "Use millimeters" ),
-        BITMAPS::unit_mm, AF_NONE, (void*) EDA_UNITS::MILLIMETRES );
+TOOL_ACTION ACTIONS::millimetersUnits( TOOL_ACTION_ARGS()
+        .Name( "common.Control.metricUnits" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Millimeters" ) )
+        .Tooltip( _( "Use millimeters" ) )
+        .Icon( BITMAPS::unit_mm )
+        .Flags( AF_NONE )
+        .Parameter( EDA_UNITS::MILLIMETRES ) );
 
 TOOL_ACTION ACTIONS::updateUnits( "common.Control.updateUnits",
         AS_GLOBAL );
@@ -615,25 +661,41 @@ TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
         _( "3D Viewer" ), _( "Show 3D viewer window" ),
         BITMAPS::three_d );
 
-TOOL_ACTION ACTIONS::showSymbolBrowser( "common.Control.showSymbolBrowser",
-        AS_GLOBAL, 0, "",
-        _( "Symbol Library Browser" ), _( "Browse symbol libraries" ),
-        BITMAPS::library_browser, AF_NONE, (void*) FRAME_SCH_VIEWER );
+TOOL_ACTION ACTIONS::showSymbolBrowser( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showSymbolBrowser" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Symbol Library Browser" ) )
+        .Tooltip( _( "Browse symbol libraries" ) )
+        .Icon( BITMAPS::library_browser )
+        .Flags( AF_NONE)
+        .Parameter( FRAME_SCH_VIEWER ) );
 
-TOOL_ACTION ACTIONS::showSymbolEditor( "common.Control.showSymbolEditor",
-        AS_GLOBAL, 0, "",
-        _( "Symbol Editor" ), _( "Create, delete and edit symbols" ),
-        BITMAPS::libedit, AF_NONE, (void*) FRAME_SCH_SYMBOL_EDITOR );
+TOOL_ACTION ACTIONS::showSymbolEditor( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showSymbolEditor" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Symbol Editor" ) )
+        .Tooltip( _( "Create, delete and edit symbols" ) )
+        .Icon( BITMAPS::libedit )
+        .Flags( AF_NONE )
+        .Parameter( FRAME_SCH_SYMBOL_EDITOR ) );
 
-TOOL_ACTION ACTIONS::showFootprintBrowser( "common.Control.showFootprintBrowser",
-        AS_GLOBAL, 0, "",
-        _( "Footprint Library Browser" ), _( "Browse footprint libraries" ),
-        BITMAPS::library_browser, AF_NONE, (void*) FRAME_FOOTPRINT_VIEWER );
+TOOL_ACTION ACTIONS::showFootprintBrowser( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showFootprintBrowser" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Footprint Library Browser" ) )
+        .Tooltip( _( "Browse footprint libraries" ) )
+        .Icon( BITMAPS::library_browser )
+        .Flags( AF_NONE )
+        .Parameter( FRAME_FOOTPRINT_VIEWER ) );
 
-TOOL_ACTION ACTIONS::showFootprintEditor( "common.Control.showFootprintEditor",
-        AS_GLOBAL, 0, "",
-        _( "Footprint Editor" ), _( "Create, delete and edit footprints" ),
-        BITMAPS::module_editor, AF_NONE, (void*) FRAME_FOOTPRINT_EDITOR );
+TOOL_ACTION ACTIONS::showFootprintEditor( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showFootprintEditor" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Footprint Editor" ) )
+        .Tooltip( _( "Create, delete and edit footprints" ) )
+        .Icon( BITMAPS::module_editor )
+        .Flags( AF_NONE )
+        .Parameter( FRAME_FOOTPRINT_EDITOR ) );
 
 TOOL_ACTION ACTIONS::updatePcbFromSchematic( "common.Control.updatePcbFromSchematic",
         AS_GLOBAL,

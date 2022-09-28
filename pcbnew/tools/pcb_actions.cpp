@@ -24,6 +24,7 @@
  */
 
 #include "pcb_actions.h"
+#include "tool/tool_action.h"
 #include "tool/tool_event.h"
 #include <pcbnew_id.h>
 #include <bitmaps.h>
@@ -82,11 +83,16 @@ TOOL_ACTION PCB_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
         _( "Draw Line" ), _( "Draw a line" ),
         BITMAPS::add_graphical_segments, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drawPolygon( "pcbnew.InteractiveDrawing.graphicPolygon",
-        AS_GLOBAL,
-        MD_SHIFT + MD_CTRL + 'P', LEGACY_HK_NAME( "Draw Graphic Polygon" ),
-        _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ),
-        BITMAPS::add_graphical_polygon, AF_ACTIVATE, (void*) ZONE_MODE::GRAPHIC_POLYGON );
+TOOL_ACTION PCB_ACTIONS::drawPolygon( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.graphicPolygon" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'P' )
+        .LegacyHotkeyName( "Draw Graphic Polygon" )
+        .MenuText( _( "Draw Graphic Polygon" ) )
+        .Tooltip( _( "Draw a graphic polygon" ) )
+        .Icon( BITMAPS::add_graphical_polygon )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ZONE_MODE::GRAPHIC_POLYGON ) );
 
 TOOL_ACTION PCB_ACTIONS::drawRectangle( "pcbnew.InteractiveDrawing.rectangle",
         AS_GLOBAL, 0, "",
@@ -159,16 +165,20 @@ TOOL_ACTION PCB_ACTIONS::drawLeader( "pcbnew.InteractiveDrawing.leader",
         _( "Add Leader" ), _( "Add a leader dimension" ),
         BITMAPS::add_leader, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
-        AS_GLOBAL,
+TOOL_ACTION PCB_ACTIONS::drawZone( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.zone" )
+        .Scope( AS_GLOBAL )
 #ifdef __WXOSX_MAC__
-        MD_ALT + 'Z',
+        .DefaultHotkey( MD_ALT + 'Z' )
 #else
-        MD_SHIFT + MD_CTRL + 'Z',
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'Z' )
 #endif
-        LEGACY_HK_NAME( "Add Filled Zone" ),
-        _( "Add Filled Zone" ), _( "Add a filled zone" ),
-        BITMAPS::add_zone, AF_ACTIVATE, (void*) ZONE_MODE::ADD );
+        .LegacyHotkeyName( "Add Filled Zone" )
+        .MenuText( _( "Add Filled Zone" ) )
+        .Tooltip( _( "Add a filled zone" ) )
+        .Icon( BITMAPS::add_zone )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ZONE_MODE::ADD ) );
 
 TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
         AS_GLOBAL,
@@ -176,23 +186,38 @@ TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
         _( "Add Vias" ), _( "Add free-standing vias" ),
         BITMAPS::add_via, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drawRuleArea( "pcbnew.InteractiveDrawing.ruleArea",
-        AS_GLOBAL,
-        MD_SHIFT + MD_CTRL + 'K', LEGACY_HK_NAME( "Add Keepout Area" ),
-        _( "Add Rule Area" ), _( "Add a rule area (keepout)" ),
-        BITMAPS::add_keepout_area, AF_ACTIVATE, (void*) ZONE_MODE::ADD );
+TOOL_ACTION PCB_ACTIONS::drawRuleArea( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.ruleArea" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'K' )
+        .LegacyHotkeyName( "Add Keepout Area" )
+        .MenuText( _( "Add Rule Area" ) )
+        .Tooltip( _( "Add a rule area (keepout)" ) )
+        .Icon( BITMAPS::add_keepout_area )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ZONE_MODE::ADD ) );
 
-TOOL_ACTION PCB_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
-        AS_GLOBAL,
-        MD_SHIFT + 'C', LEGACY_HK_NAME( "Add a Zone Cutout" ),
-        _( "Add a Zone Cutout" ), _( "Add a cutout area of an existing zone" ),
-        BITMAPS::add_zone_cutout, AF_ACTIVATE, (void*) ZONE_MODE::CUTOUT );
+TOOL_ACTION PCB_ACTIONS::drawZoneCutout( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.zoneCutout" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'C' )
+        .LegacyHotkeyName( "Add a Zone Cutout" )
+        .MenuText( _( "Add a Zone Cutout" ) )
+        .Tooltip( _( "Add a cutout area of an existing zone" ) )
+        .Icon( BITMAPS::add_zone_cutout )
+        .Flags(  AF_ACTIVATE )
+        .Parameter( ZONE_MODE::CUTOUT ) );
 
-TOOL_ACTION PCB_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone",
-        AS_GLOBAL,
-        MD_SHIFT + MD_CTRL + '.', LEGACY_HK_NAME( "Add a Similar Zone" ),
-        _( "Add a Similar Zone" ), _( "Add a zone with the same settings as an existing zone" ),
-        BITMAPS::add_zone, AF_ACTIVATE, (void*) ZONE_MODE::SIMILAR );
+TOOL_ACTION PCB_ACTIONS::drawSimilarZone( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.similarZone" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + '.' )
+        .LegacyHotkeyName( "Add a Similar Zone" )
+        .MenuText( _( "Add a Similar Zone" ) )
+        .Tooltip( _( "Add a zone with the same settings as an existing zone" ) )
+        .Icon( BITMAPS::add_zone )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ZONE_MODE::SIMILAR ) );
 
 TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.placeImportedGraphics",
         AS_GLOBAL,
@@ -307,18 +332,28 @@ TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
         _( "Create Array..." ), _( "Create array" ),
         BITMAPS::array, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
-        AS_GLOBAL,
+TOOL_ACTION PCB_ACTIONS::rotateCw( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.rotateCw" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'R' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        MD_SHIFT + 'R', LEGACY_HK_NAME( "Rotate Item Clockwise (Modern Toolset only)" ),
-        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
-        BITMAPS::rotate_cw, AF_NONE, (void*) -1 );
+        .LegacyHotkeyName( "Rotate Item Clockwise (Modern Toolset only)" )
+        .MenuText( _( "Rotate Clockwise" ) )
+        .Tooltip( _( "Rotates selected item(s) clockwise" ) )
+        .Icon( BITMAPS::rotate_cw )
+        .Flags( AF_NONE )
+        .Parameter( -1 ) );
 
-TOOL_ACTION PCB_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
-        AS_GLOBAL,
-        'R', LEGACY_HK_NAME( "Rotate Item" ),
-        _( "Rotate Counterclockwise" ), _( "Rotates selected item(s) counterclockwise" ),
-        BITMAPS::rotate_ccw, AF_NONE, (void*) 1 );
+TOOL_ACTION PCB_ACTIONS::rotateCcw( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.rotateCcw" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'R' )
+        .LegacyHotkeyName( "Rotate Item" )
+        .MenuText( _( "Rotate Counterclockwise" ) )
+        .Tooltip( _( "Rotates selected item(s) counterclockwise" ) )
+        .Icon( BITMAPS::rotate_ccw )
+        .Flags( AF_NONE )
+        .Parameter( 1 ) );
 
 TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_GLOBAL,
@@ -367,11 +402,16 @@ TOOL_ACTION PCB_ACTIONS::filletLines( "pcbnew.InteractiveEdit.filletLines",
         AS_GLOBAL, 0, "",
         _( "Fillet Lines" ), _( "Adds arcs tangent to the selected lines" ) );
 
-TOOL_ACTION PCB_ACTIONS::deleteFull( "pcbnew.InteractiveEdit.deleteFull",
-        AS_GLOBAL,
-        MD_SHIFT + WXK_DELETE, LEGACY_HK_NAME( "Delete Full Track" ),
-        _( "Delete Full Track" ), _( "Deletes selected item(s) and copper connections" ),
-        BITMAPS::delete_cursor, AF_NONE, (void*) REMOVE_FLAGS::ALT );
+TOOL_ACTION PCB_ACTIONS::deleteFull( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.deleteFull" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + WXK_DELETE )
+        .LegacyHotkeyName( "Delete Full Track" )
+        .MenuText( _( "Delete Full Track" ) )
+        .Tooltip( _( "Deletes selected item(s) and copper connections" ) )
+        .Icon( BITMAPS::delete_cursor )
+        .Flags( AF_NONE )
+        .Parameter( REMOVE_FLAGS::ALT ) );
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL,
@@ -531,28 +571,41 @@ TOOL_ACTION PCB_ACTIONS::cleanupGraphics( "pcbnew.GlobalEdit.cleanupGraphics",
 
 // MICROWAVE_TOOL
 //
-TOOL_ACTION PCB_ACTIONS::microwaveCreateGap( "pcbnew.MicrowaveTool.createGap",
-        AS_GLOBAL, 0, "",
-        _( "Add Microwave Gap" ), _( "Create gap of specified length for microwave applications" ),
-        BITMAPS::mw_add_gap, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::GAP );
+TOOL_ACTION PCB_ACTIONS::microwaveCreateGap( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.MicrowaveTool.createGap" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Microwave Gap" ) )
+        .Tooltip( _( "Create gap of specified length for microwave applications" ) )
+        .Icon( BITMAPS::mw_add_gap )
+        .Flags( AF_ACTIVATE )
+        .Parameter( MICROWAVE_FOOTPRINT_SHAPE::GAP ) );
 
-TOOL_ACTION PCB_ACTIONS::microwaveCreateStub( "pcbnew.MicrowaveTool.createStub",
-        AS_GLOBAL, 0, "",
-        _( "Add Microwave Stub" ),
-        _( "Create stub of specified length for microwave applications" ),
-        BITMAPS::mw_add_stub, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::STUB );
+TOOL_ACTION PCB_ACTIONS::microwaveCreateStub( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.MicrowaveTool.createStub" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Microwave Stub" ) )
+        .Tooltip( _( "Create stub of specified length for microwave applications" ) )
+        .Icon( BITMAPS::mw_add_stub )
+        .Flags( AF_ACTIVATE )
+        .Parameter( MICROWAVE_FOOTPRINT_SHAPE::STUB ) );
 
-TOOL_ACTION PCB_ACTIONS::microwaveCreateStubArc( "pcbnew.MicrowaveTool.createStubArc",
-        AS_GLOBAL, 0, "",
-        _( "Add Microwave Arc Stub" ),
-        _( "Create stub (arc) of specified size for microwave applications" ),
-        BITMAPS::mw_add_stub_arc, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC );
+TOOL_ACTION PCB_ACTIONS::microwaveCreateStubArc( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.MicrowaveTool.createStubArc" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Microwave Arc Stub" ) )
+        .Tooltip( _( "Create stub (arc) of specified size for microwave applications" ) )
+        .Icon( BITMAPS::mw_add_stub_arc )
+        .Flags( AF_ACTIVATE )
+        .Parameter( MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC ) );
 
-TOOL_ACTION PCB_ACTIONS::microwaveCreateFunctionShape( "pcbnew.MicrowaveTool.createFunctionShape",
-        AS_GLOBAL, 0, "",
-        _( "Add Microwave Polygonal Shape" ),
-        _( "Create a microwave polygonal shape from a list of vertices" ),
-        BITMAPS::mw_add_shape, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::FUNCTION_SHAPE );
+TOOL_ACTION PCB_ACTIONS::microwaveCreateFunctionShape( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.MicrowaveTool.createFunctionShape" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Microwave Polygonal Shape" ) )
+        .Tooltip( _( "Create a microwave polygonal shape from a list of vertices" ) )
+        .Icon( BITMAPS::mw_add_shape )
+        .Flags( AF_ACTIVATE )
+        .Parameter( MICROWAVE_FOOTPRINT_SHAPE::FUNCTION_SHAPE ) );
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateLine( "pcbnew.MicrowaveTool.createLine",
         AS_GLOBAL, 0, "",
@@ -957,173 +1010,271 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayToggle( "pcbnew.Control.zoneDisplayToggle",
 
 
 // Layer control
-TOOL_ACTION PCB_ACTIONS::layerTop( "pcbnew.Control.layerTop",
-        AS_GLOBAL,
-        WXK_PAGEUP, LEGACY_HK_NAME( "Switch to Component (F.Cu) layer" ),
-        _( "Switch to Component (F.Cu) layer" ), _( "Switch to Component (F.Cu) layer" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) F_Cu );
+TOOL_ACTION PCB_ACTIONS::layerTop( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerTop" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_PAGEUP )
+        .LegacyHotkeyName( "Switch to Component (F.Cu) layer" )
+        .MenuText( _( "Switch to Component (F.Cu) layer" ) )
+        .Tooltip( _( "Switch to Component (F.Cu) layer" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( F_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner1( "pcbnew.Control.layerInner1",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Switch to Inner layer 1" ),
-        _( "Switch to Inner layer 1" ), _( "Switch to Inner layer 1" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In1_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner1( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner1" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Switch to Inner layer 1" )
+        .MenuText( _( "Switch to Inner layer 1" ) )
+        .Tooltip( _( "Switch to Inner layer 1" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In1_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner2( "pcbnew.Control.layerInner2",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Switch to Inner layer 2" ),
-        _( "Switch to Inner layer 2" ), _( "Switch to Inner layer 2" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In2_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner2( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner2" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Switch to Inner layer 2" )
+        .MenuText( _( "Switch to Inner layer 2" ) )
+        .Tooltip( _( "Switch to Inner layer 2" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In2_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner3( "pcbnew.Control.layerInner3",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Switch to Inner layer 3" ),
-        _( "Switch to Inner layer 3" ), _( "Switch to Inner layer 3" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In3_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner3( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner3" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Switch to Inner layer 3" )
+        .MenuText( _( "Switch to Inner layer 3" ) )
+        .Tooltip( _( "Switch to Inner layer 3" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In3_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner4( "pcbnew.Control.layerInner4",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Switch to Inner layer 4" ),
-        _( "Switch to Inner layer 4" ), _( "Switch to Inner layer 4" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In4_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner4( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner4" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Switch to Inner layer 4" )
+        .MenuText( _( "Switch to Inner layer 4" ) )
+        .Tooltip( _( "Switch to Inner layer 4" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In4_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner5( "pcbnew.Control.layerInner5",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Switch to Inner layer 5" ),
-        _( "Switch to Inner layer 5" ), _( "Switch to Inner layer 5" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In5_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner5( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner5" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Switch to Inner layer 5" )
+        .MenuText( _( "Switch to Inner layer 5" ) )
+        .Tooltip( _( "Switch to Inner layer 5" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In5_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner6( "pcbnew.Control.layerInner6",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Switch to Inner layer 6" ),
-        _( "Switch to Inner layer 6" ), _( "Switch to Inner layer 6" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In6_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner6( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner6" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Switch to Inner layer 6" )
+        .MenuText( _( "Switch to Inner layer 6" ) )
+        .Tooltip( _( "Switch to Inner layer 6" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In6_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner7( "pcbnew.Control.layerInner7",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 7" ), _( "Switch to Inner layer 7" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In7_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner7( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner7" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 7" ) )
+        .Tooltip( _( "Switch to Inner layer 7" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In7_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner8( "pcbnew.Control.layerInner8",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 8" ), _( "Switch to Inner layer 8" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In8_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner8( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner8" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 8" ) )
+        .Tooltip( _( "Switch to Inner layer 8" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In8_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner9( "pcbnew.Control.layerInner9",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 9" ), _( "Switch to Inner layer 9" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In9_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner9( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner9" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 9" ) )
+        .Tooltip( _( "Switch to Inner layer 9" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In9_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner10( "pcbnew.Control.layerInner10",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 10" ), _( "Switch to Inner layer 10" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In10_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner10( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner10" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 10" ) )
+        .Tooltip( _( "Switch to Inner layer 10" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In10_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner11( "pcbnew.Control.layerInner11",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 11" ), _( "Switch to Inner layer 11" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In11_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner11( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner11" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 11" ) )
+        .Tooltip( _( "Switch to Inner layer 11" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In11_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner12( "pcbnew.Control.layerInner12",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 12" ), _( "Switch to Inner layer 12" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In12_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner12( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner12" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 12" ) )
+        .Tooltip( _( "Switch to Inner layer 12" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In12_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner13( "pcbnew.Control.layerInner13",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 13" ), _( "Switch to Inner layer 13" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In13_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner13( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner13" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 13" ) )
+        .Tooltip( _( "Switch to Inner layer 13" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In13_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner14( "pcbnew.Control.layerInner14",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 14" ), _( "Switch to Inner layer 14" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In14_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner14( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner14" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 14" ) )
+        .Tooltip( _( "Switch to Inner layer 14" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In14_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner15( "pcbnew.Control.layerInner15",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 15" ), _( "Switch to Inner layer 15" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In15_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner15( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner15" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 15" ) )
+        .Tooltip( _( "Switch to Inner layer 15" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In15_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner16( "pcbnew.Control.layerInner16",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 16" ), _( "Switch to Inner layer 16" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In16_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner16( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner16" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 16" ) )
+        .Tooltip( _( "Switch to Inner layer 16" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In16_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner17( "pcbnew.Control.layerInner17",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 17" ), _( "Switch to Inner layer 17" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In17_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner17( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner17" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 17" ) )
+        .Tooltip( _( "Switch to Inner layer 17" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In17_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner18( "pcbnew.Control.layerInner18",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 18" ), _( "Switch to Inner layer 18" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In18_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner18( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner18" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 18" ) )
+        .Tooltip( _( "Switch to Inner layer 18" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In18_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner19( "pcbnew.Control.layerInner19",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 19" ), _( "Switch to Inner layer 19" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In19_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner19( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner19" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 19" ) )
+        .Tooltip( _( "Switch to Inner layer 19" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In19_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner20( "pcbnew.Control.layerInner20",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 20" ), _( "Switch to Inner layer 20" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In20_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner20( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner20" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 20" ) )
+        .Tooltip( _( "Switch to Inner layer 20" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In20_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner21( "pcbnew.Control.layerInner21",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 21" ), _( "Switch to Inner layer 21" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In21_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner21( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner21" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 21" ) )
+        .Tooltip( _( "Switch to Inner layer 21" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In21_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner22( "pcbnew.Control.layerInner22",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 22" ), _( "Switch to Inner layer 22" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In22_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner22( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner22" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 22" ) )
+        .Tooltip( _( "Switch to Inner layer 22" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In22_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner23( "pcbnew.Control.layerInner23",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 23" ), _( "Switch to Inner layer 23" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In23_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner23( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner23" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 23" ) )
+        .Tooltip( _( "Switch to Inner layer 23" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In23_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner24( "pcbnew.Control.layerInner24",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 24" ), _( "Switch to Inner layer 24" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In24_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner24( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner24" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 24" ) )
+        .Tooltip( _( "Switch to Inner layer 24" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In24_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner25( "pcbnew.Control.layerInner25",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 25" ), _( "Switch to Inner layer 25" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In25_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner25( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner25" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 25" ) )
+        .Tooltip( _( "Switch to Inner layer 25" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In25_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner26( "pcbnew.Control.layerInner26",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 26" ), _( "Switch to Inner layer 26" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In26_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner26( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner26" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 26" ) )
+        .Tooltip( _( "Switch to Inner layer 26" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In26_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner27( "pcbnew.Control.layerInner27",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 27" ), _( "Switch to Inner layer 27" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In27_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner27( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner27" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 27" ) )
+        .Tooltip( _( "Switch to Inner layer 27" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In27_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner28( "pcbnew.Control.layerInner28",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 28" ), _( "Switch to Inner layer 28" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In28_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner28( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner28" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 28" ) )
+        .Tooltip( _( "Switch to Inner layer 28" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In28_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner29( "pcbnew.Control.layerInner29",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 29" ), _( "Switch to Inner layer 29" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In29_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner29( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner29" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 29" ) )
+        .Tooltip( _( "Switch to Inner layer 29" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In29_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerInner30( "pcbnew.Control.layerInner30",
-        AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 30" ), _( "Switch to Inner layer 30" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In30_Cu );
+TOOL_ACTION PCB_ACTIONS::layerInner30( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerInner30" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Inner layer 30" ) )
+        .Tooltip( _( "Switch to Inner layer 30" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( In30_Cu ) );
 
-TOOL_ACTION PCB_ACTIONS::layerBottom( "pcbnew.Control.layerBottom",
-        AS_GLOBAL,
-        WXK_PAGEDOWN, LEGACY_HK_NAME( "Switch to Copper (B.Cu) layer" ),
-        _( "Switch to Copper (B.Cu) layer" ), _( "Switch to Copper (B.Cu) layer" ),
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) B_Cu );
+TOOL_ACTION PCB_ACTIONS::layerBottom( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerBottom" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_PAGEDOWN )
+        .LegacyHotkeyName( "Switch to Copper (B.Cu) layer" )
+        .MenuText( _( "Switch to Copper (B.Cu) layer" ) )
+        .Tooltip( _( "Switch to Copper (B.Cu) layer" ) )
+        .Flags( AF_NOTIFY )
+        .Parameter( B_Cu ) );
 
 TOOL_ACTION PCB_ACTIONS::layerNext( "pcbnew.Control.layerNext",
         AS_GLOBAL,
@@ -1263,17 +1414,19 @@ TOOL_ACTION PCB_ACTIONS::pointEditorRemoveCorner( "pcbnew.PointEditor.removeCorn
         _( "Remove Corner" ), _( "Remove corner" ),
         BITMAPS::delete_cursor );
 
-TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepCenter( "pcbnew.PointEditor.arcKeepCenter",
-        AS_GLOBAL, 0, "",
-        _( "Keep arc center, adjust radius" ),
-        _( "Switch arc editing mode to keep center, adjust radius and endpoints" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS );
+TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepCenter( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PointEditor.arcKeepCenter" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Keep arc center, adjust radius" ) )
+        .Tooltip( _( "Switch arc editing mode to keep center, adjust radius and endpoints" ) )
+        .Parameter( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ) );
 
-TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepEndpoint( "pcbnew.PointEditor.arcKeepEndpoint",
-        AS_GLOBAL, 0, "",
-        _( "Keep arc endpoints or direction of starting point" ),
-        _( "Switch arc editing mode to keep endpoints, or to keep direction of the other point" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION );
+TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepEndpoint( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PointEditor.arcKeepEndpoint" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Keep arc endpoints or direction of starting point" ) )
+        .Tooltip( _( "Switch arc editing mode to keep endpoints, or to keep direction of the other point" ) )
+        .Parameter( ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION ) );
 
 
 // GROUP_TOOL
@@ -1435,18 +1588,28 @@ TOOL_ACTION PCB_ACTIONS::autoplaceOffboardComponents( "pcbnew.Autoplacer.autopla
 
 // ROUTER_TOOL
 //
-TOOL_ACTION PCB_ACTIONS::routeSingleTrack( "pcbnew.InteractiveRouter.SingleTrack",
-        AS_GLOBAL,
-        'X', LEGACY_HK_NAME( "Add New Track" ),
-        _( "Route Single Track" ), _( "Route tracks" ),
-        BITMAPS::add_tracks, AF_ACTIVATE, (void*) PNS::PNS_MODE_ROUTE_SINGLE );
+TOOL_ACTION PCB_ACTIONS::routeSingleTrack( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SingleTrack" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'X' )
+        .LegacyHotkeyName( "Add New Track" )
+        .MenuText( _( "Route Single Track" ) )
+        .Tooltip( _( "Route tracks" ) )
+        .Icon( BITMAPS::add_tracks )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PNS::PNS_MODE_ROUTE_SINGLE ) );
 
-TOOL_ACTION PCB_ACTIONS::routeDiffPair( "pcbnew.InteractiveRouter.DiffPair",
-        AS_GLOBAL,
+TOOL_ACTION PCB_ACTIONS::routeDiffPair( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.DiffPair" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '6' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        '6', LEGACY_HK_NAME( "Route Differential Pair (Modern Toolset only)" ),
-        _( "Route Differential Pair" ), _( "Route differential pairs" ),
-        BITMAPS::ps_diff_pair, AF_ACTIVATE, (void*) PNS::PNS_MODE_ROUTE_DIFF_PAIR );
+        .LegacyHotkeyName( "Route Differential Pair (Modern Toolset only)" )
+        .MenuText( _( "Route Differential Pair" ) )
+        .Tooltip( _( "Route differential pairs" ) )
+        .Icon( BITMAPS::ps_diff_pair )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PNS::PNS_MODE_ROUTE_DIFF_PAIR ) );
 
 TOOL_ACTION PCB_ACTIONS::routerSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
         AS_GLOBAL,
@@ -1459,20 +1622,29 @@ TOOL_ACTION PCB_ACTIONS::routerDiffPairDialog( "pcbnew.InteractiveRouter.DiffPai
         _( "Differential Pair Dimensions..." ), _( "Open Differential Pair Dimension settings" ),
         BITMAPS::ps_diff_pair_gap );
 
-TOOL_ACTION PCB_ACTIONS::routerHighlightMode( "pcbnew.InteractiveRouter.HighlightMode",
-        AS_GLOBAL, 0, "",
-        _( "Router Highlight Mode" ), _( "Switch router to highlight mode" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) PNS::RM_MarkObstacles );
+TOOL_ACTION PCB_ACTIONS::routerHighlightMode( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.HighlightMode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Router Highlight Mode" ) )
+        .Tooltip( _( "Switch router to highlight mode" ) )
+        .Flags( AF_NONE )
+        .Parameter( PNS::RM_MarkObstacles ) );
 
-TOOL_ACTION PCB_ACTIONS::routerShoveMode( "pcbnew.InteractiveRouter.ShoveMode",
-        AS_GLOBAL, 0, "",
-        _( "Router Shove Mode" ), _( "Switch router to shove mode" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) PNS::RM_Shove );
+TOOL_ACTION PCB_ACTIONS::routerShoveMode( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.ShoveMode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Router Shove Mode" ) )
+        .Tooltip( _( "Switch router to shove mode" ) )
+        .Flags( AF_NONE )
+        .Parameter( PNS::RM_Shove ) );
 
-TOOL_ACTION PCB_ACTIONS::routerWalkaroundMode( "pcbnew.InteractiveRouter.WalkaroundMode",
-        AS_GLOBAL, 0, "",
-        _( "Router Walkaround Mode" ), _( "Switch router to walkaround mode" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) PNS::RM_Walkaround );
+TOOL_ACTION PCB_ACTIONS::routerWalkaroundMode( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.WalkaroundMode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Router Walkaround Mode" ) )
+        .Tooltip( _( "Switch router to walkaround mode" ) )
+        .Flags( AF_NONE )
+        .Parameter( PNS::RM_Walkaround ) );
 
 TOOL_ACTION PCB_ACTIONS::cycleRouterMode( "pcbnew.InteractiveRouter.CycleRouterMode",
         AS_GLOBAL, 0, "",
@@ -1484,26 +1656,41 @@ TOOL_ACTION PCB_ACTIONS::selectLayerPair( "pcbnew.InteractiveRouter.SelectLayerP
         _( "Set Layer Pair..." ), _( "Change active layer pair for routing" ),
         BITMAPS::select_layer_pair, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::routerTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
-        AS_GLOBAL,
+TOOL_ACTION PCB_ACTIONS::routerTuneSingleTrace( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.LengthTuner.TuneSingleTrack" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '7' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        '7', LEGACY_HK_NAME( "Tune Single Track (Modern Toolset only)" ),
-        _( "Tune length of a single track" ), _( "Tune length of a single track" ),
-        BITMAPS::ps_tune_length, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_SINGLE );
+        .LegacyHotkeyName( "Tune Single Track (Modern Toolset only)" )
+        .MenuText( _( "Tune length of a single track" ) )
+        .Tooltip( _( "Tune length of a single track" ) )
+        .Icon( BITMAPS::ps_tune_length )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PNS::PNS_MODE_TUNE_SINGLE ) );
 
-TOOL_ACTION PCB_ACTIONS::routerTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
-        AS_GLOBAL,
+TOOL_ACTION PCB_ACTIONS::routerTuneDiffPair( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.LengthTuner.TuneDiffPair" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '8' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        '8', LEGACY_HK_NAME( "Tune Differential Pair Length (Modern Toolset only)" ),
-        _( "Tune length of a differential pair" ), _( "Tune length of a differential pair" ),
-        BITMAPS::ps_diff_pair_tune_length, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_DIFF_PAIR );
+        .LegacyHotkeyName( "Tune Differential Pair Length (Modern Toolset only)" )
+        .MenuText( _( "Tune length of a differential pair" ) )
+        .Tooltip( _( "Tune length of a differential pair" ) )
+        .Icon( BITMAPS::ps_diff_pair_tune_length )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PNS::PNS_MODE_TUNE_DIFF_PAIR ) );
 
-TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
-        AS_GLOBAL,
+TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.LengthTuner.TuneDiffPairSkew" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '9' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        '9', LEGACY_HK_NAME( "Tune Differential Pair Skew (Modern Toolset only)" ),
-        _( "Tune skew of a differential pair" ), _( "Tune skew of a differential pair" ),
-        BITMAPS::ps_diff_pair_tune_phase, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW );
+        .LegacyHotkeyName( "Tune Differential Pair Skew (Modern Toolset only)" )
+        .MenuText( _( "Tune skew of a differential pair" ) )
+        .Tooltip( _( "Tune skew of a differential pair" ) )
+        .Icon( BITMAPS::ps_diff_pair_tune_phase )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW ) );
 
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
         AS_CONTEXT );
@@ -1525,26 +1712,32 @@ TOOL_ACTION PCB_ACTIONS::routerAttemptFinish( "pcbnew.InteractiveRouter.AttemptF
         _( "Attempt Finish" ),
         _( "Attempts to complete current route to nearest ratsnest end." ) );
 
-TOOL_ACTION PCB_ACTIONS::routerRouteSelected( "pcbnew.InteractiveRouter.RouteSelected",
-        AS_GLOBAL,
-        MD_SHIFT + 'X', "",
-        _( "Route Selected" ),
-        _( "Sequentially route selected items from ratsnest anchor." ),
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE, (void *) PNS::PNS_MODE_ROUTE_SINGLE);
+TOOL_ACTION PCB_ACTIONS::routerRouteSelected( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.RouteSelected" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'X' )
+        .MenuText( _( "Route Selected" ) )
+        .Tooltip( _( "Sequentially route selected items from ratsnest anchor." ) )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PNS::PNS_MODE_ROUTE_SINGLE ) );
 
-TOOL_ACTION PCB_ACTIONS::routerRouteSelectedFromEnd( "pcbnew.InteractiveRouter.RouteSelectedFromEnd",
-        AS_GLOBAL,
-        MD_SHIFT + 'E', "",
-        _( "Route Selected From Other End" ),
-        _( "Sequentially route selected items from other end of ratsnest anchor." ),
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE, (void *) PNS::PNS_MODE_ROUTE_SINGLE);
+TOOL_ACTION PCB_ACTIONS::routerRouteSelectedFromEnd( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.RouteSelectedFromEnd" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'E' )
+        .MenuText( _( "Route Selected From Other End" ) )
+        .Tooltip( _( "Sequentially route selected items from other end of ratsnest anchor." ) )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PNS::PNS_MODE_ROUTE_SINGLE ) );
 
-TOOL_ACTION PCB_ACTIONS::routerAutorouteSelected( "pcbnew.InteractiveRouter.Autoroute",
-        AS_GLOBAL,
-        MD_SHIFT + 'F', "",
-        _( "Attempt Finish Selected (Autoroute)" ),
-        _( "Sequentially attempt to automatically route all selected pads." ),
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE, (void *) PNS::PNS_MODE_ROUTE_SINGLE);
+TOOL_ACTION PCB_ACTIONS::routerAutorouteSelected( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.Autoroute" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'F' )
+        .MenuText( _( "Attempt Finish Selected (Autoroute)" ) )
+        .Tooltip( _( "Sequentially attempt to automatically route all selected pads." ) )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PNS::PNS_MODE_ROUTE_SINGLE ) );
 
 TOOL_ACTION PCB_ACTIONS::breakTrack( "pcbnew.InteractiveRouter.BreakTrack",
         AS_GLOBAL, 0, "",

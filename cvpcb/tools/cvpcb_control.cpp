@@ -96,9 +96,7 @@ int CVPCB_CONTROL::Main( const TOOL_EVENT& aEvent )
 
 int CVPCB_CONTROL::ChangeFocus( const TOOL_EVENT& aEvent )
 {
-    int tmp = aEvent.Parameter<intptr_t>();
-    CVPCB_MAINFRAME::FOCUS_DIR dir =
-            static_cast<CVPCB_MAINFRAME::FOCUS_DIR>( tmp );
+    CVPCB_MAINFRAME::FOCUS_DIR dir = aEvent.Parameter<CVPCB_MAINFRAME::FOCUS_DIR>();
 
     switch( dir )
     {
@@ -217,10 +215,8 @@ int CVPCB_CONTROL::ShowFootprintViewer( const TOOL_EVENT& aEvent )
 
 int CVPCB_CONTROL::ToggleFootprintFilter( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetFootprintFilter(
-            static_cast<FOOTPRINTS_LISTBOX::FP_FILTER_T>( aEvent.Parameter<intptr_t>() ),
-            CVPCB_MAINFRAME::FILTER_TOGGLE );
-
+    m_frame->SetFootprintFilter( aEvent.Parameter<FOOTPRINTS_LISTBOX::FP_FILTER_T>(),
+                                 CVPCB_MAINFRAME::FILTER_TOGGLE );
     return 0;
 }
 
@@ -250,9 +246,7 @@ int CVPCB_CONTROL::SaveAssociationsToSchematic( const TOOL_EVENT& aEvent )
 
 int CVPCB_CONTROL::ToNA( const TOOL_EVENT& aEvent )
 {
-    int tmp = aEvent.Parameter<intptr_t>();
-    CVPCB_MAINFRAME::ITEM_DIR dir =
-            static_cast<CVPCB_MAINFRAME::ITEM_DIR>( tmp );
+    CVPCB_MAINFRAME::ITEM_DIR dir = aEvent.Parameter<CVPCB_MAINFRAME::ITEM_DIR>();
 
     std::vector<unsigned int> naComp = m_frame->GetComponentIndices( CVPCB_MAINFRAME::NA_COMPONENTS );
     std::vector<unsigned int> tempSel = m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS );

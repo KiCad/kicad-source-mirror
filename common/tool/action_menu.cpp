@@ -527,8 +527,8 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                 else
                     menuText = GetLabelText( aEvent.GetId() );
 
-                evt = TOOL_EVENT( TC_COMMAND, TA_CHOICE_MENU_CHOICE, m_selected, AS_GLOBAL,
-                                  &menuText );
+                evt = TOOL_EVENT( TC_COMMAND, TA_CHOICE_MENU_CHOICE, m_selected, AS_GLOBAL );
+                evt->SetParameter( &menuText );
             }
         }
     }

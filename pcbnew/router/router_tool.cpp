@@ -20,6 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "tool/tool_action.h"
 #include <wx/hyperlink.h>
 #include <advanced_config.h>
 
@@ -102,79 +103,103 @@ enum VIA_ACTION_FLAGS
 #undef _
 #define _(s) s
 
-static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
-        AS_CONTEXT,
-        WXK_END, "",
-        _( "Finish Track" ),  _( "Stops laying the current track." ),
-        BITMAPS::checked_ok );
+static const TOOL_ACTION ACT_EndTrack( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.EndTrack" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( WXK_END )
+        .MenuText( _( "Finish Track" ) )
+        .Tooltip( _( "Stops laying the current track." ) )
+        .Icon( BITMAPS::checked_ok ) );
 
-static const TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
-        AS_CONTEXT,
-        'V', LEGACY_HK_NAME( "Add Through Via" ),
-        _( "Place Through Via" ),
-        _( "Adds a through-hole via at the end of currently routed track." ),
-        BITMAPS::via, AF_NONE, (void*) VIA_ACTION_FLAGS::VIA );
+static const TOOL_ACTION ACT_PlaceThroughVia( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.PlaceVia" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( 'V' )
+        .LegacyHotkeyName( "Add Through Via" )
+        .MenuText( _( "Place Through Via" ) )
+        .Tooltip( _( "Adds a through-hole via at the end of currently routed track." ) )
+        .Icon( BITMAPS::via )
+        .Flags( AF_NONE )
+        .Parameter( VIA_ACTION_FLAGS::VIA ) );
 
-static const TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
-        AS_CONTEXT,
-        MD_ALT + MD_SHIFT + 'V', LEGACY_HK_NAME( "Add Blind/Buried Via" ),
-        _( "Place Blind/Buried Via" ),
-        _( "Adds a blind or buried via at the end of currently routed track."),
-        BITMAPS::via_buried, AF_NONE, (void*) VIA_ACTION_FLAGS::BLIND_VIA );
+static const TOOL_ACTION ACT_PlaceBlindVia( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.PlaceBlindVia" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( MD_ALT + MD_SHIFT + 'V' )
+        .LegacyHotkeyName( "Add Blind/Buried Via" )
+        .MenuText( _( "Place Blind/Buried Via" ) )
+        .Tooltip( _( "Adds a blind or buried via at the end of currently routed track.") )
+        .Icon( BITMAPS::via_buried )
+        .Flags( AF_NONE )
+        .Parameter( VIA_ACTION_FLAGS::BLIND_VIA ) );
 
-static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
-        AS_CONTEXT,
-        MD_CTRL + 'V', LEGACY_HK_NAME( "Add MicroVia" ),
-        _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
-        BITMAPS::via_microvia, AF_NONE, (void*) VIA_ACTION_FLAGS::MICROVIA );
+static const TOOL_ACTION ACT_PlaceMicroVia( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.PlaceMicroVia" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( MD_CTRL + 'V' )
+        .LegacyHotkeyName( "Add MicroVia" )
+        .MenuText( _( "Place Microvia" ) )
+        .Tooltip( _( "Adds a microvia at the end of currently routed track." ) )
+        .Icon( BITMAPS::via_microvia )
+        .Flags( AF_NONE )
+        .Parameter( VIA_ACTION_FLAGS::MICROVIA ) );
 
-static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia(
-        "pcbnew.InteractiveRouter.SelLayerAndPlaceVia",
-        AS_CONTEXT,
-        '<', LEGACY_HK_NAME( "Select Layer and Add Through Via" ),
-        _( "Select Layer and Place Through Via..." ),
-        _( "Select a layer, then add a through-hole via at the end of currently routed track." ),
-        BITMAPS::select_w_layer, AF_NONE,
-        (void*) ( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SelLayerAndPlaceVia" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( '<' )
+        .LegacyHotkeyName( "Select Layer and Add Through Via" )
+        .MenuText( _( "Select Layer and Place Through Via..." ) )
+        .Tooltip( _( "Select a layer, then add a through-hole via at the end of currently routed track." ) )
+        .Icon( BITMAPS::select_w_layer )
+        .Flags( AF_NONE )
+        .Parameter( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
-static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia(
-        "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia",
-        AS_CONTEXT,
-        MD_ALT + '<', LEGACY_HK_NAME( "Select Layer and Add Blind/Buried Via" ),
-        _( "Select Layer and Place Blind/Buried Via..." ),
-        _( "Select a layer, then add a blind or buried via at the end of currently routed track." ),
-        BITMAPS::select_w_layer, AF_NONE,
-        (void*) ( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( MD_ALT + '<' )
+        .LegacyHotkeyName( "Select Layer and Add Blind/Buried Via" )
+        .MenuText( _( "Select Layer and Place Blind/Buried Via..." ) )
+        .Tooltip( _( "Select a layer, then add a blind or buried via at the end of currently routed track." ) )
+        .Icon( BITMAPS::select_w_layer )
+        .Flags( AF_NONE )
+        .Parameter( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
-static const TOOL_ACTION ACT_SelLayerAndPlaceMicroVia(
-        "pcbnew.InteractiveRouter.SelLayerAndPlaceMicroVia",
-        AS_CONTEXT,
-        0, "",
-        _( "Select Layer and Place Micro Via..." ),
-        _( "Select a layer, then add a micro via at the end of currently routed track." ),
-        BITMAPS::select_w_layer, AF_NONE,
-        (void*) ( VIA_ACTION_FLAGS::MICROVIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+static const TOOL_ACTION ACT_SelLayerAndPlaceMicroVia( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SelLayerAndPlaceMicroVia" )
+        .Scope( AS_CONTEXT )
+        .MenuText( _( "Select Layer and Place Micro Via..." ) )
+        .Tooltip( _( "Select a layer, then add a micro via at the end of currently routed track." ) )
+        .Icon( BITMAPS::select_w_layer )
+        .Flags( AF_NONE )
+        .Parameter( VIA_ACTION_FLAGS::MICROVIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
-static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
-        AS_CONTEXT,
-        'Q', LEGACY_HK_NAME( "Custom Track/Via Size" ),
-        _( "Custom Track/Via Size..." ),
-        _( "Shows a dialog for changing the track width and via size." ),
-        BITMAPS::width_track );
+static const TOOL_ACTION ACT_CustomTrackWidth( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.CustomTrackViaSize" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( 'Q' )
+        .LegacyHotkeyName( "Custom Track/Via Size" )
+        .MenuText( _( "Custom Track/Via Size..." ) )
+        .Tooltip( _( "Shows a dialog for changing the track width and via size." ) )
+        .Icon( BITMAPS::width_track ) );
 
-static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture",
-        AS_CONTEXT,
-        '/', LEGACY_HK_NAME( "Switch Track Posture" ),
-        _( "Switch Track Posture" ),
-        _( "Switches posture of the currently routed track." ),
-        BITMAPS::change_entry_orient );
+static const TOOL_ACTION ACT_SwitchPosture( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SwitchPosture" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( '/' )
+        .LegacyHotkeyName( "Switch Track Posture" )
+        .MenuText( _( "Switch Track Posture" ) )
+        .Tooltip( _( "Switches posture of the currently routed track." ) )
+        .Icon( BITMAPS::change_entry_orient ) );
 
-static const TOOL_ACTION ACT_SwitchCornerMode( "pcbnew.InteractiveRouter.SwitchRounding",
-        AS_CONTEXT,
-        MD_CTRL + '/', "",
-        _( "Track Corner Mode" ),
-        _( "Switches between sharp/rounded and 45°/90° corners when routing tracks." ),
-        BITMAPS::switch_corner_rounding_shape );
+static const TOOL_ACTION ACT_SwitchCornerMode( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SwitchRounding" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( MD_CTRL + '/' )
+        .MenuText( _( "Track Corner Mode" ) )
+        .Tooltip( _( "Switches between sharp/rounded and 45°/90° corners when routing tracks." ) )
+        .Icon( BITMAPS::switch_corner_rounding_shape ) );
 
 #undef _
 #define _(s) wxGetTranslation((s))
@@ -1013,7 +1038,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     // Otherwise it is one of the router-specific via commands
     if( targetLayer == UNDEFINED_LAYER )
     {
-        const int actViaFlags = aEvent.Parameter<intptr_t>();
+        const int actViaFlags = aEvent.Parameter<int>();
         selectLayer           = actViaFlags & VIA_ACTION_FLAGS::SELECT_LAYER;
 
         viaType = getViaTypeFromFlags( actViaFlags );

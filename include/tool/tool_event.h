@@ -27,6 +27,7 @@
 #ifndef __TOOL_EVENT_H
 #define __TOOL_EVENT_H
 
+#include <any>
 #include <cstdio>
 #include <deque>
 #include <iterator>
@@ -163,28 +164,26 @@ public:
     const std::string Format() const;
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory = TC_NONE, TOOL_ACTIONS aAction = TA_NONE,
-                TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = nullptr ) :
+                TOOL_ACTION_SCOPE aScope = AS_GLOBAL ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( aParameter ),
         m_firstResponder( nullptr )
     {
         init();
     }
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory, TOOL_ACTIONS aAction, int aExtraParam,
-                TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = nullptr ) :
+                TOOL_ACTION_SCOPE aScope = AS_GLOBAL ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( aParameter ),
         m_firstResponder( nullptr )
     {
         if( aCategory == TC_MOUSE )
@@ -209,15 +208,13 @@ public:
     }
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory, TOOL_ACTIONS aAction,
-            const std::string& aExtraParam, TOOL_ACTION_SCOPE aScope = AS_GLOBAL,
-            void* aParameter = nullptr ) :
+            const std::string& aExtraParam, TOOL_ACTION_SCOPE aScope = AS_GLOBAL ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( aParameter ),
         m_firstResponder( nullptr )
     {
         if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
@@ -439,15 +436,32 @@ public:
      * target tool.
      */
     template<typename T>
-    inline T Parameter() const
+    T Parameter() const
     {
-        // Exhibit #798 on why I love to hate C++
-        // - reinterpret_cast needs to be used for pointers
-        // - static_cast must be used for enums
-        // - templates can't usefully distinguish between pointer and non-pointer types
-        // Fortunately good old C's cast can be a reinterpret_cast or a static_cast, and
-        // C99 gave us intptr_t which is guaranteed to be round-trippable with a pointer.
-        return (T) reinterpret_cast<intptr_t>( m_param );
+#ifdef WX_COMPATIBILITY
+        wxASSERT_MSG( m_param.has_value(), "Attempted to get a parameter from an event with no parameter." );
+#else
+        assert( m_param.has_value() );
+#endif
+
+        T param;
+
+        try
+        {
+            param = std::any_cast<T>( m_param );
+        }
+        catch( const std::bad_any_cast& e )
+        {
+#ifdef WX_COMPATIBILITY
+            wxASSERT_MSG( false,
+                          wxString::Format( "Requested parameter type %s from event with parameter type %s.",
+                                            typeid(T).name(), m_param.type().name() ) );
+#else
+            assert( false );
+#endif
+        }
+
+        return param;
     }
 
     /**
@@ -456,10 +470,9 @@ public:
      *
      * @param aParam is the new parameter.
      */
-    template<typename T>
-    void SetParameter(T aParam)
+    void SetParameter(const std::any& aParam)
     {
-        m_param = reinterpret_cast<void*>( aParam );
+        m_param = aParam;
     }
 
     std::optional<int> GetCommandId() const
@@ -545,7 +558,7 @@ private:
     int m_modifiers;
 
     ///< Generic parameter used for passing non-standard data.
-    void* m_param;
+    std::any m_param;
 
     ///< The first tool to receive the event
     TOOL_BASE* m_firstResponder;

@@ -39,7 +39,7 @@ EDA_ANGLE TOOL_EVT_UTILS::GetEventRotationAngle( const PCB_BASE_EDIT_FRAME& aFra
     wxASSERT_MSG( IsRotateToolEvt( aEvent ), wxT( "Expected rotation event" ) );
 
     EDA_ANGLE rotAngle = aFrame.GetRotationAngle();
-    const int angleMultiplier = aEvent.Parameter<intptr_t>();
+    const int angleMultiplier = aEvent.Parameter<int>();
 
     wxASSERT_MSG( angleMultiplier == 1 || angleMultiplier == -1, "Expected 1 or -1" );
 

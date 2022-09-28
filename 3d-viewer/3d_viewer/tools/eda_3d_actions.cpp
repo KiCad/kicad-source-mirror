@@ -23,6 +23,7 @@
 #include <3d_viewer_id.h>
 #include <3d_enums.h>
 #include "eda_3d_actions.h"
+#include "tool/tool_action.h"
 
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
@@ -32,251 +33,386 @@
 #undef _
 #define _(s) s
 
+// No description, it is not supposed to be shown anywhere
+TOOL_ACTION EDA_3D_ACTIONS::controlActivate( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::controlActivate( "3DViewer.Control", AS_GLOBAL,
-        0, "", "", "",
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
+TOOL_ACTION EDA_3D_ACTIONS::pivotCenter( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.pivotCenter" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( ' ' )
+        .MenuText( _( "Center pivot rotation" ) )
+        .Tooltip( _( "Center pivot rotation (middle mouse click)" ) )
+        .Flags( AF_NONE )
+        .Parameter( WXK_SPACE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::pivotCenter( "3DViewer.Control.pivotCenter",
-        AS_ACTIVE,
-        ' ', "",
-        _( "Center pivot rotation" ), _( "Center pivot rotation (middle mouse click)" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) WXK_SPACE );
+TOOL_ACTION EDA_3D_ACTIONS::rotateXCW( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.rotateXclockwise" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rotate X Clockwise" ) )
+        .Tooltip( _( "Rotate X Clockwise" ) )
+        .Icon( BITMAPS::rotate_cw_x )
+        .Flags( AF_NONE )
+        .Parameter( ROTATION_DIR::X_CW ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::rotateXCW( "3DViewer.Control.rotateXclockwise",
-        AS_GLOBAL, 0, "",
-        _( "Rotate X Clockwise" ), _( "Rotate X Clockwise" ),
-        BITMAPS::rotate_cw_x, AF_NONE, (void*) ROTATION_DIR::X_CW );
+TOOL_ACTION EDA_3D_ACTIONS::rotateXCCW( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.rotateXcounterclockwise" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rotate X Counterclockwise" ) )
+        .Tooltip( _( "Rotate X Counterclockwise" ) )
+        .Icon( BITMAPS::rotate_ccw_x )
+        .Flags( AF_NONE )
+        .Parameter( ROTATION_DIR::X_CCW ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::rotateXCCW( "3DViewer.Control.rotateXcounterclockwise",
-        AS_GLOBAL, 0, "",
-        _( "Rotate X Counterclockwise" ), _( "Rotate X Counterclockwise" ),
-        BITMAPS::rotate_ccw_x, AF_NONE, (void*) ROTATION_DIR::X_CCW );
+TOOL_ACTION EDA_3D_ACTIONS::rotateYCW( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.rotateYclockwise" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rotate Y Clockwise" ) )
+        .Tooltip( _( "Rotate Y Clockwise" ) )
+        .Icon( BITMAPS::rotate_cw_y )
+        .Flags( AF_NONE )
+        .Parameter( ROTATION_DIR::Y_CW ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::rotateYCW( "3DViewer.Control.rotateYclockwise",
-        AS_GLOBAL, 0, "",
-        _( "Rotate Y Clockwise" ), _( "Rotate Y Clockwise" ),
-        BITMAPS::rotate_cw_y, AF_NONE, (void*) ROTATION_DIR::Y_CW );
+TOOL_ACTION EDA_3D_ACTIONS::rotateYCCW( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.rotateYcounterclockwise" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rotate Y Counterclockwise" ) )
+        .Tooltip( _( "Rotate Y Counterclockwise" ) )
+        .Icon( BITMAPS::rotate_ccw_y )
+        .Flags( AF_NONE )
+        .Parameter( ROTATION_DIR::Y_CCW ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::rotateYCCW( "3DViewer.Control.rotateYcounterclockwise",
-        AS_GLOBAL, 0, "",
-        _( "Rotate Y Counterclockwise" ), _( "Rotate Y Counterclockwise" ),
-        BITMAPS::rotate_ccw_y, AF_NONE, (void*) ROTATION_DIR::Y_CCW );
+TOOL_ACTION EDA_3D_ACTIONS::rotateZCW( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.rotateZclockwise" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rotate Z Clockwise" ) )
+        .Tooltip( _( "Rotate Z Clockwise" ) )
+        .Icon( BITMAPS::rotate_cw_z )
+        .Flags( AF_NONE )
+        .Parameter( ROTATION_DIR::Z_CW ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::rotateZCW( "3DViewer.Control.rotateZclockwise",
-        AS_GLOBAL, 0, "",
-        _( "Rotate Z Clockwise" ), _( "Rotate Z Clockwise" ),
-        BITMAPS::rotate_cw_z, AF_NONE, (void*) ROTATION_DIR::Z_CW );
+TOOL_ACTION EDA_3D_ACTIONS::rotateZCCW( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.rotateZcounterclockwise" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rotate Z Counterclockwise" ) )
+        .Tooltip( _( "Rotate Z Counterclockwise" ) )
+        .Icon( BITMAPS::rotate_ccw_z )
+        .Flags( AF_NONE )
+        .Parameter( ROTATION_DIR::Z_CCW ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::rotateZCCW( "3DViewer.Control.rotateZcounterclockwise",
-        AS_GLOBAL, 0, "",
-        _( "Rotate Z Counterclockwise" ), _( "Rotate Z Counterclockwise" ),
-        BITMAPS::rotate_ccw_z, AF_NONE, (void*) ROTATION_DIR::Z_CCW );
+TOOL_ACTION EDA_3D_ACTIONS::moveLeft( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.moveLeft" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( WXK_LEFT )
+        .MenuText( _( "Move board Left" ) )
+        .Tooltip( _( "Move board Left" ) )
+        .Icon( BITMAPS::left )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_LEFT ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::moveLeft( "3DViewer.Control.moveLeft",
-        AS_ACTIVE,
-        WXK_LEFT, "",
-        _( "Move board Left" ), _( "Move board Left" ),
-        BITMAPS::left, AF_NONE, (void*) CURSOR_LEFT );
+TOOL_ACTION EDA_3D_ACTIONS::moveRight( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.moveRight" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( WXK_RIGHT )
+        .MenuText( _( "Move board Right" ) )
+        .Tooltip( _( "Move board Right" ) )
+        .Icon( BITMAPS::right )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_RIGHT ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::moveRight( "3DViewer.Control.moveRight",
-        AS_ACTIVE,
-        WXK_RIGHT, "",
-        _( "Move board Right" ), _( "Move board Right" ),
-        BITMAPS::right, AF_NONE, (void*) CURSOR_RIGHT );
+TOOL_ACTION EDA_3D_ACTIONS::moveUp( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.moveUp" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( WXK_UP )
+        .MenuText( _( "Move board Up" ) )
+        .Tooltip( _( "Move board Up" ) )
+        .Icon( BITMAPS::up )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_UP ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::moveUp( "3DViewer.Control.moveUp",
-        AS_ACTIVE,
-        WXK_UP, "",
-        _( "Move board Up" ), _( "Move board Up" ),
-        BITMAPS::up, AF_NONE, (void*) CURSOR_UP );
+TOOL_ACTION EDA_3D_ACTIONS::moveDown( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.moveDown" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( WXK_DOWN )
+        .MenuText( _( "Move board Down" ) )
+        .Tooltip( _( "Move board Down" ) )
+        .Icon( BITMAPS::down )
+        .Flags( AF_NONE )
+        .Parameter( CURSOR_DOWN ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::moveDown( "3DViewer.Control.moveDown",
-        AS_ACTIVE,
-        WXK_DOWN, "",
-        _( "Move board Down" ), _( "Move board Down" ),
-        BITMAPS::down, AF_NONE, (void*) CURSOR_DOWN );
+TOOL_ACTION EDA_3D_ACTIONS::homeView( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.homeView" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( WXK_HOME )
+        .MenuText ( _( "Home view" ) )
+        .Tooltip( _( "Home view" ) )
+        .Flags( AF_NONE )
+        .Parameter( WXK_HOME ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::homeView( "3DViewer.Control.homeView",
-        AS_ACTIVE,
-        WXK_HOME, "",
-        _( "Home view" ), _( "Home view" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) WXK_HOME );
+TOOL_ACTION EDA_3D_ACTIONS::resetView( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.resetView" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'R' )
+        .MenuText( _( "Reset view" ) )
+        .Tooltip( _( "Reset view" ) )
+        .Flags( AF_NONE )
+        .Parameter( ID_VIEW3D_RESET ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::resetView( "3DViewer.Control.resetView",
-        AS_ACTIVE,
-        'R', "",
-        _( "Reset view" ), _( "Reset view" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) ID_VIEW3D_RESET );
+TOOL_ACTION EDA_3D_ACTIONS::flipView( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.flipView" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'F' )
+        .MenuText( _( "Flip Board" ) )
+        .Tooltip( _( "Flip the board view" ) )
+        .Icon( BITMAPS::flip_board )
+        .Flags( AF_NONE )
+        .Parameter( ID_VIEW3D_FLIP ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::flipView( "3DViewer.Control.flipView",
-        AS_ACTIVE,
-        'F', "",
-        _( "Flip Board" ), _( "Flip the board view" ),
-        BITMAPS::flip_board, AF_NONE, (void*) ID_VIEW3D_FLIP );
+TOOL_ACTION EDA_3D_ACTIONS::toggleOrtho( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleOrtho" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle orthographic projection" ) )
+        .Tooltip( _( "Enable/disable orthographic projection" ) )
+        .Icon( BITMAPS::ortho ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleOrtho( "3DViewer.Control.toggleOrtho",
-        AS_GLOBAL, 0, "",
-        _( "Toggle orthographic projection" ), _( "Enable/disable orthographic projection" ),
-        BITMAPS::ortho );
+TOOL_ACTION EDA_3D_ACTIONS::viewFront( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.viewFront" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'Y' )
+        .MenuText( _( "View Front" ) )
+        .Tooltip( _( "View Front" ) )
+        .Icon( BITMAPS::axis3d_front )
+        .Flags( AF_NONE )
+        .Parameter( ID_VIEW3D_FRONT ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::viewFront( "3DViewer.Control.viewFront",
-        AS_ACTIVE,
-        'Y', "",
-        _( "View Front" ), _( "View Front" ),
-        BITMAPS::axis3d_front, AF_NONE, (void*) ID_VIEW3D_FRONT );
+TOOL_ACTION EDA_3D_ACTIONS::viewBack( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.viewBack" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( MD_SHIFT + 'Y' )
+        .MenuText( _( "View Back" ) )
+        .Tooltip( _( "View Back" ) )
+        .Icon( BITMAPS::axis3d_back )
+        .Flags( AF_NONE )
+        .Parameter( ID_VIEW3D_BACK ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::viewBack( "3DViewer.Control.viewBack",
-        AS_ACTIVE,
-        MD_SHIFT + 'Y', "",
-        _( "View Back" ), _( "View Back" ),
-        BITMAPS::axis3d_back, AF_NONE, (void*) ID_VIEW3D_BACK );
+TOOL_ACTION EDA_3D_ACTIONS::viewLeft( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.viewLeft" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( MD_SHIFT + 'X' )
+        .MenuText( _( "View Left" ) )
+        .Tooltip( _( "View Left" ) )
+        .Icon( BITMAPS::axis3d_left )
+        .Flags( AF_NONE )
+        .Parameter( ID_VIEW3D_LEFT ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::viewLeft( "3DViewer.Control.viewLeft",
-        AS_ACTIVE,
-        MD_SHIFT + 'X', "",
-        _( "View Left" ), _( "View Left" ),
-        BITMAPS::axis3d_left, AF_NONE, (void*) ID_VIEW3D_LEFT );
+TOOL_ACTION EDA_3D_ACTIONS::viewRight( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.viewRight" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'X' )
+        .MenuText( _( "View Right" ) )
+        .Tooltip( _( "View Right" ) )
+        .Icon( BITMAPS::axis3d_right )
+        .Flags( AF_NONE )
+        .Parameter( ID_VIEW3D_RIGHT ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::viewRight( "3DViewer.Control.viewRight",
-        AS_ACTIVE,
-        'X', "",
-        _( "View Right" ), _( "View Right" ),
-        BITMAPS::axis3d_right, AF_NONE, (void*) ID_VIEW3D_RIGHT );
+TOOL_ACTION EDA_3D_ACTIONS::viewTop( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.viewTop" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'Z' )
+        .MenuText( _( "View Top" ) )
+        .Tooltip( _( "View Top" ) )
+        .Icon( BITMAPS::axis3d_top )
+        .Flags( AF_NONE )
+        .Parameter( ID_VIEW3D_TOP ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::viewTop( "3DViewer.Control.viewTop",
-        AS_ACTIVE,
-        'Z', "",
-        _( "View Top" ), _( "View Top" ),
-        BITMAPS::axis3d_top, AF_NONE, (void*) ID_VIEW3D_TOP );
+TOOL_ACTION EDA_3D_ACTIONS::viewBottom( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.viewBottom" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( MD_SHIFT + 'Z' )
+        .MenuText( _( "View Bottom" ) )
+        .Tooltip( _( "View Bottom" ) )
+        .Icon( BITMAPS::axis3d_bottom )
+        .Flags( AF_NONE )
+        .Parameter( ID_VIEW3D_BOTTOM ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::viewBottom( "3DViewer.Control.viewBottom",
-        AS_ACTIVE,
-        MD_SHIFT + 'Z', "",
-        _( "View Bottom" ), _( "View Bottom" ),
-        BITMAPS::axis3d_bottom, AF_NONE, (void*) ID_VIEW3D_BOTTOM );
+TOOL_ACTION EDA_3D_ACTIONS::noGrid( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.noGrid" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "No 3D Grid" ) )
+        .Tooltip( _( "No 3D Grid" ) )
+        .Flags( AF_NONE )
+        .Parameter( GRID3D_TYPE::NONE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::noGrid( "3DViewer.Control.noGrid",
-        AS_GLOBAL, 0, "",
-        _( "No 3D Grid" ), _( "No 3D Grid" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) GRID3D_TYPE::NONE );
+TOOL_ACTION EDA_3D_ACTIONS::show10mmGrid( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.show10mmGrid" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "3D Grid 10mm" ) )
+        .Tooltip( _( "3D Grid 10mm" ) )
+        .Flags( AF_NONE )
+        .Parameter( GRID3D_TYPE::GRID_10MM ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::show10mmGrid( "3DViewer.Control.show10mmGrid",
-        AS_GLOBAL, 0, "",
-        _( "3D Grid 10mm" ), _( "3D Grid 10mm" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) GRID3D_TYPE::GRID_10MM );
+TOOL_ACTION EDA_3D_ACTIONS::show5mmGrid( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.show5mmGrid" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "3D Grid 5mm" ) )
+        .Tooltip( _( "3D Grid 5mm" ) )
+        .Flags( AF_NONE )
+        .Parameter( GRID3D_TYPE::GRID_5MM ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::show5mmGrid( "3DViewer.Control.show5mmGrid",
-        AS_GLOBAL, 0, "",
-        _( "3D Grid 5mm" ), _( "3D Grid 5mm" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) GRID3D_TYPE::GRID_5MM );
+TOOL_ACTION EDA_3D_ACTIONS::show2_5mmGrid( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.show2_5mmGrid" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "3D Grid 2.5mm" ) )
+        .Tooltip( _( "3D Grid 2.5mm" ) )
+        .Flags( AF_NONE )
+        .Parameter( GRID3D_TYPE::GRID_2P5MM ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::show2_5mmGrid( "3DViewer.Control.show2_5mmGrid",
-        AS_GLOBAL, 0, "",
-        _( "3D Grid 2.5mm" ), _( "3D Grid 2.5mm" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) GRID3D_TYPE::GRID_2P5MM );
+TOOL_ACTION EDA_3D_ACTIONS::show1mmGrid( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.show1mmGrid" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "3D Grid 1mm" ) )
+        .Tooltip( _( "3D Grid 1mm" ) )
+        .Flags( AF_NONE )
+        .Parameter( GRID3D_TYPE::GRID_1MM ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::show1mmGrid( "3DViewer.Control.show1mmGrid",
-        AS_GLOBAL, 0, "",
-        _( "3D Grid 1mm" ), _( "3D Grid 1mm" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) GRID3D_TYPE::GRID_1MM );
+TOOL_ACTION EDA_3D_ACTIONS::materialNormal( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.materialNormal" )
+        .Scope( AS_ACTIVE )
+        .MenuText( _( "Render Realistic Materials" ) )
+        .Tooltip( _( "Use all material properties from each 3D model file" ) )
+        .Flags( AF_NONE )
+        .Parameter( MATERIAL_MODE::NORMAL ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::materialNormal( "3DViewer.Control.materialNormal",
-        AS_ACTIVE,
-        0, "",
-        _( "Render Realistic Materials" ),
-        _( "Use all material properties from each 3D model file" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) MATERIAL_MODE::NORMAL );
+TOOL_ACTION EDA_3D_ACTIONS::materialDiffuse( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.materialDiffuse" )
+        .Scope( AS_ACTIVE )
+        .MenuText( _( "Render Solid Colors" ) )
+        .Tooltip( _( "Use only the diffuse color property from model 3D model file" ) )
+        .Flags( AF_NONE )
+        .Parameter( MATERIAL_MODE::DIFFUSE_ONLY ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::materialDiffuse( "3DViewer.Control.materialDiffuse",
-        AS_ACTIVE,
-        0, "",
-        _( "Render Solid Colors" ),
-        _( "Use only the diffuse color property from 3D model file" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) MATERIAL_MODE::DIFFUSE_ONLY );
+TOOL_ACTION EDA_3D_ACTIONS::materialCAD( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.materialCAD" )
+        .Scope( AS_ACTIVE )
+        .MenuText( _( "Render CAD Colors" ) )
+        .Tooltip( _( "Use a CAD color style based on the diffuse color of the material" ) )
+        .Flags( AF_NONE )
+        .Parameter( MATERIAL_MODE::CAD_MODE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::materialCAD( "3DViewer.Control.materialCAD",
-        AS_ACTIVE,
-        0, "",
-        _( "Render CAD Colors" ),
-        _( "Use a CAD color style based on the diffuse color of the material" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) MATERIAL_MODE::CAD_MODE );
+TOOL_ACTION EDA_3D_ACTIONS::showTHT( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.attributesTHT" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'T' )
+        .MenuText( _( "Toggle Through Hole 3D models" ) )
+        .Tooltip( _( "Toggle 3D models for 'Through hole' type components" ) )
+        .Icon( BITMAPS::show_tht )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::showTHT( "3DViewer.Control.attributesTHT",
-        AS_ACTIVE,
-        'T', "",
-        _( "Toggle Through Hole 3D models" ),
-        _( "Toggle 3D models for 'Through hole' type components" ),
-        BITMAPS::show_tht, AF_NONE );
+TOOL_ACTION EDA_3D_ACTIONS::showSMD( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.attributesSMD" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'S' )
+        .MenuText( _( "Toggle SMD 3D models" ) )
+        .Tooltip( _( "Toggle 3D models for 'Surface mount' type components" ) )
+        .Icon( BITMAPS::show_smt )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::showSMD( "3DViewer.Control.attributesSMD",
-        AS_ACTIVE,
-        'S', "",
-        _( "Toggle SMD 3D models" ),
-        _( "Toggle 3D models for 'Surface mount' type components" ),
-        BITMAPS::show_smt, AF_NONE );
+TOOL_ACTION EDA_3D_ACTIONS::showVirtual( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.attributesOther" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'V' )
+        .MenuText( _( "Toggle unspecified 3D models" ) )
+        .Tooltip( _( "Toggle 3D models for 'unspecified' type components" ) )
+        .Icon( BITMAPS::show_other )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::showVirtual( "3DViewer.Control.attributesOther",
-        AS_ACTIVE,
-        'V', "",
-        _( "Toggle unspecified 3D models" ), _( "Toggle 3D models for 'unspecified' type components" ),
-        BITMAPS::show_other, AF_NONE );
+TOOL_ACTION EDA_3D_ACTIONS::showNotInPosFile( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.attribute_not_in_posfile" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'P' )
+        .MenuText( _( "Toggle 3D models not in pos file" ) )
+        .Tooltip( _( "Toggle 3D models not in pos file" ) )
+        .Icon( BITMAPS::show_not_in_posfile )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::showNotInPosFile( "3DViewer.Control.attribute_not_in_posfile",
-        AS_ACTIVE,
-        'P', "",
-        _( "Toggle 3D models not in pos file" ), _( "Toggle 3D models not in pos file" ),
-        BITMAPS::show_not_in_posfile, AF_NONE );
+TOOL_ACTION EDA_3D_ACTIONS::showDNP( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.attribute_dnp" )
+        .Scope( AS_ACTIVE )
+        .DefaultHotkey( 'D' )
+        .MenuText( _( "Toggle 3D models marked DNP" ) )
+        .Tooltip( _( "Toggle 3D models for components marked 'Do Not Place'" ) )
+        .Icon( BITMAPS::show_dnp )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::showDNP( "3DViewer.Control.attribute_dnp",
-        AS_ACTIVE,
-        'D', "",
-        _( "Toggle 3D models marked DNP" ), _( "Toggle 3D models for components marked 'Do Not Place'" ),
-        BITMAPS::show_dnp, AF_NONE );
+TOOL_ACTION EDA_3D_ACTIONS::showBBoxes( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.showBoundingBoxes" )
+         .Scope( AS_GLOBAL )
+         .MenuText( _( "Show Model Bounding Boxes" ) )
+         .Tooltip( _( "Show Model Bounding Boxes" ) )
+         .Icon( BITMAPS::ortho )
+         .Flags( AF_NONE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::showBBoxes( "3DViewer.Control.showBoundingBoxes",
-         AS_GLOBAL, 0, "",
-         _( "Show Model Bounding Boxes" ), _( "Show Model Bounding Boxes" ),
-         BITMAPS::ortho, AF_NONE );
+TOOL_ACTION EDA_3D_ACTIONS::toggleRealisticMode( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleRealisticMode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle realistic mode" ) )
+        .Tooltip( _( "Toggle realistic mode" ) ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleRealisticMode( "3DViewer.Control.toggleRealisticMode",
-        AS_GLOBAL, 0, "",
-        _( "Toggle realistic mode" ), _( "Toggle realistic mode" ) );
+TOOL_ACTION EDA_3D_ACTIONS::toggleBoardBody( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleBoardBody" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle board body display" ) )
+        .Tooltip( _( "Toggle board body display" ) ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleBoardBody( "3DViewer.Control.toggleBoardBody",
-        AS_GLOBAL, 0, "",
-        _( "Toggle board body display" ), _( "Toggle board body display" ) );
+TOOL_ACTION EDA_3D_ACTIONS::showAxis( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.showAxis" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show 3D Axis" ) )
+        .Tooltip( _( "Show 3D Axis" ) )
+        .Icon( BITMAPS::axis3d_front )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::showAxis( "3DViewer.Control.showAxis",
-        AS_GLOBAL, 0, "",
-        _( "Show 3D Axis" ), _( "Show 3D Axis" ),
-        BITMAPS::axis3d_front, AF_NONE );
+TOOL_ACTION EDA_3D_ACTIONS::toggleZones( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleZones" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle zone display" ) )
+        .Tooltip( _( "Toggle zone display" ) ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleZones( "3DViewer.Control.toggleZones",
-        AS_GLOBAL, 0, "",
-        _( "Toggle zone display" ), _( "Toggle zone display" ) );
+TOOL_ACTION EDA_3D_ACTIONS::toggleAdhesive( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleAdhesive" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle adhesive display" ) )
+        .Tooltip( _( "Toggle display of adhesive layers" ) ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleAdhesive( "3DViewer.Control.toggleAdhesive",
-        AS_GLOBAL, 0, "",
-        _( "Toggle adhesive display" ), _( "Toggle display of adhesive layers" ) );
+TOOL_ACTION EDA_3D_ACTIONS::toggleSilk( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleSilk" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle silkscreen display" ) )
+        .Tooltip( _( "Toggle display of silkscreen layers" ) ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleSilk( "3DViewer.Control.toggleSilk",
-        AS_GLOBAL, 0, "",
-        _( "Toggle silkscreen display" ), _( "Toggle display of silkscreen layers" ) );
+TOOL_ACTION EDA_3D_ACTIONS::toggleSolderMask( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleSolderMask" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle solder mask display" ) )
+        .Tooltip( _( "Toggle display of solder mask layers" ) ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleSolderMask( "3DViewer.Control.toggleSolderMask",
-        AS_GLOBAL, 0, "",
-        _( "Toggle solder mask display" ), _( "Toggle display of solder mask layers" ) );
+TOOL_ACTION EDA_3D_ACTIONS::toggleSolderPaste( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleSolderPaste" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle solder paste display" ) )
+        .Tooltip( _( "Toggle display of solder paste layers" ) ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleSolderPaste( "3DViewer.Control.toggleSolderPaste",
-        AS_GLOBAL, 0, "",
-        _( "Toggle solder paste display" ), _( "Toggle display of solder paste layers" ) );
+TOOL_ACTION EDA_3D_ACTIONS::toggleComments( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleComments" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle comments display" ) )
+        .Tooltip( _( "Toggle display of comments and drawings layers" ) ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleComments( "3DViewer.Control.toggleComments",
-        AS_GLOBAL, 0, "",
-        _( "Toggle comments display" ), _( "Toggle display of comments and drawings layers" ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::toggleECO( "3DViewer.Control.toggleECO",
-        AS_GLOBAL, 0, "",
-        _( "Toggle ECO display" ), _( "Toggle display of ECO layers" ) );
+TOOL_ACTION EDA_3D_ACTIONS::toggleECO( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.toggleECO" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle ECO display" ) )
+        .Tooltip( _( "Toggle display of ECO layers" ) ) );
 

@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "tool/tool_action.h"
 #include <bitmaps.h>
 
 #include <cvpcb_mainframe.h>
@@ -76,36 +77,38 @@ TOOL_ACTION CVPCB_ACTIONS::saveAssociationsToFile( "cvpcb.Control.SaveAssociatio
         BITMAPS::save );
 
 // Actions to navigate the display
-TOOL_ACTION CVPCB_ACTIONS::changeFocusRight( "cvpcb.Control.changeFocusRight",
-        AS_GLOBAL,
-        WXK_TAB, "",
-        "",
-        "",
-        BITMAPS::INVALID_BITMAP, AF_NONE,
-        (void*) CVPCB_MAINFRAME::CHANGE_FOCUS_RIGHT );
+TOOL_ACTION CVPCB_ACTIONS::changeFocusRight( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.changeFocusRight" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_TAB )
+        .Flags( AF_NONE )
+        .Parameter( CVPCB_MAINFRAME::CHANGE_FOCUS_RIGHT ) );
 
-TOOL_ACTION CVPCB_ACTIONS::changeFocusLeft( "cvpcb.Control.changeFocusLeft",
-        AS_GLOBAL,
-        MD_SHIFT + WXK_TAB, "",
-        "",
-        "",
-        BITMAPS::INVALID_BITMAP, AF_NONE,
-        (void*) CVPCB_MAINFRAME::CHANGE_FOCUS_LEFT );
+TOOL_ACTION CVPCB_ACTIONS::changeFocusLeft( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.changeFocusLeft" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + WXK_TAB )
+        .Flags( AF_NONE )
+        .Parameter( CVPCB_MAINFRAME::CHANGE_FOCUS_LEFT ) );
 
 // Actions to navigate the component list
-TOOL_ACTION CVPCB_ACTIONS::gotoNextNA( "cvpcb.Control.GotoNextNA",
-        AS_GLOBAL, 0, "",
-        _( "Select next unassigned symbol" ),
-        _( "Select next symbol with no footprint assignment" ),
-        BITMAPS::right, AF_NONE,
-        (void*) CVPCB_MAINFRAME::ITEM_NEXT );
+TOOL_ACTION CVPCB_ACTIONS::gotoNextNA( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.GotoNextNA" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Select next unassigned symbol" ) )
+        .Tooltip( _( "Select next symbol with no footprint assignment" ) )
+        .Icon( BITMAPS::right )
+        .Flags( AF_NONE )
+        .Parameter( CVPCB_MAINFRAME::ITEM_NEXT ) );
 
-TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA",
-        AS_GLOBAL, 0, "",
-        _( "Select previous unassigned symbol" ),
-        _( "Select previous symbol with no footprint assignment" ),
-        BITMAPS::left, AF_NONE,
-        (void*) CVPCB_MAINFRAME::ITEM_PREV );
+TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.GotoPreviousNA" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Select previous unassigned symbol" ) )
+        .Tooltip( _( "Select previous symbol with no footprint assignment" ) )
+        .Icon( BITMAPS::left )
+        .Flags( AF_NONE )
+        .Parameter( CVPCB_MAINFRAME::ITEM_PREV ) );
 
 
 // Actions to modify component associations
@@ -137,23 +140,29 @@ TOOL_ACTION CVPCB_ACTIONS::deleteAll( "cvpcb.Association.DeleteAll",
 
 
 // Actions to filter the footprint list
-TOOL_ACTION CVPCB_ACTIONS::FilterFPbyFPFilters( "cvpcb.Control.FilterFPbyFPFilters",
-        AS_GLOBAL, 0, "",
-        _( "Use symbol footprint filters" ),
-        _( "Filter footprint list by footprint filters defined in the symbol" ),
-        BITMAPS::module_filtered_list, AF_NONE,
-        (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS );
+TOOL_ACTION CVPCB_ACTIONS::FilterFPbyFPFilters( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.FilterFPbyFPFilters" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Use symbol footprint filters" ) )
+        .Tooltip( _( "Filter footprint list by footprint filters defined in the symbol" ) )
+        .Icon( BITMAPS::module_filtered_list )
+        .Flags( AF_NONE )
+        .Parameter( FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS ) );
 
-TOOL_ACTION CVPCB_ACTIONS::filterFPbyPin( "cvpcb.Control.FilterFPByPin",
-        AS_GLOBAL, 0, "",
-        _( "Filter by pin count" ),
-        _( "Filter footprint list by pin count" ),
-        BITMAPS::module_pin_filtered_list, AF_NONE,
-        (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT );
+TOOL_ACTION CVPCB_ACTIONS::filterFPbyPin( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.FilterFPByPin" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Filter by pin count" ) )
+        .Tooltip( _( "Filter footprint list by pin count" ) )
+        .Icon( BITMAPS::module_pin_filtered_list )
+        .Flags( AF_NONE )
+        .Parameter( FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) );
 
-TOOL_ACTION CVPCB_ACTIONS::FilterFPbyLibrary( "cvpcb.Control.FilterFPbyLibrary",
-        AS_GLOBAL, 0, "",
-        _( "Filter by library" ),
-        _( "Filter footprint list by library" ),
-        BITMAPS::module_library_list, AF_NONE,
-        (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY );
+TOOL_ACTION CVPCB_ACTIONS::FilterFPbyLibrary( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.FilterFPbyLibrary" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Filter by library" ) )
+        .Tooltip( _( "Filter footprint list by library" ) )
+        .Icon( BITMAPS::module_library_list )
+        .Flags( AF_NONE )
+        .Parameter( FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) );

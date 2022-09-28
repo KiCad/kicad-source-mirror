@@ -1684,7 +1684,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 
 int BOARD_INSPECTION_TOOL::HighlightNet( const TOOL_EVENT& aEvent )
 {
-    int                     netcode     = aEvent.Parameter<intptr_t>();
+    int                     netcode     = aEvent.Parameter<int>();
     KIGFX::RENDER_SETTINGS* settings    = m_toolMgr->GetView()->GetPainter()->GetSettings();
     const std::set<int>&    highlighted = settings->GetHighlightNetCodes();
 
@@ -1946,14 +1946,14 @@ int BOARD_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
 
 int BOARD_INSPECTION_TOOL::HideNetInRatsnest( const TOOL_EVENT& aEvent )
 {
-    doHideRatsnestNet( aEvent.Parameter<intptr_t>(), true );
+    doHideRatsnestNet( aEvent.Parameter<int>(), true );
     return 0;
 }
 
 
 int BOARD_INSPECTION_TOOL::ShowNetInRatsnest( const TOOL_EVENT& aEvent )
 {
-    doHideRatsnestNet( aEvent.Parameter<intptr_t>(), false );
+    doHideRatsnestNet( aEvent.Parameter<int>(), false );
     return 0;
 }
 

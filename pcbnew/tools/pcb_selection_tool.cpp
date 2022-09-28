@@ -1567,7 +1567,7 @@ int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
     bool select = aEvent.IsAction( &PCB_ACTIONS::selectNet );
 
     // If we've been passed an argument, just select that netcode1
-    int netcode = (int) aEvent.Parameter<intptr_t>();
+    int netcode = aEvent.Parameter<int>();
 
     if( netcode > 0 )
     {

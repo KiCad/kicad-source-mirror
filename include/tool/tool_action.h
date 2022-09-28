@@ -28,6 +28,7 @@
 #ifndef __TOOL_ACTION_H
 #define __TOOL_ACTION_H
 
+#include <any>
 #include <string>
 #include <cassert>
 #include <optional>
@@ -142,7 +143,7 @@ public:
     /**
      * Custom parameter to pass information to the tool.
      */
-    TOOL_ACTION_ARGS& Parameter( void* aParam )
+    TOOL_ACTION_ARGS& Parameter( std::any aParam )
     {
         m_param = aParam;
         return *this;
@@ -175,7 +176,7 @@ protected:
 
     std::optional<BITMAPS>              m_icon;
 
-    std::optional<void*>                m_param;
+    std::any                            m_param;
 };
 
 /**
@@ -197,8 +198,7 @@ public:
                  int aDefaultHotKey = 0, const std::string& aLegacyHotKeyName = "",
                  const wxString& aMenuText = wxEmptyString,
                  const wxString& aTooltip = wxEmptyString,
-                 BITMAPS aIcon = static_cast<BITMAPS>( 0 ), TOOL_ACTION_FLAGS aFlags = AF_NONE,
-                 void* aParam = nullptr );
+                 BITMAPS aIcon = static_cast<BITMAPS>( 0 ), TOOL_ACTION_FLAGS aFlags = AF_NONE);
 
     ~TOOL_ACTION();
 
@@ -278,7 +278,38 @@ public:
 
     TOOL_ACTION_SCOPE GetScope() const { return m_scope; }
 
-    void* GetParam() const { return m_param; }
+    /**
+     * Return a non-standard parameter assigned to the action.
+     */
+    template<typename T>
+    T GetParam() const
+    {
+#ifdef WX_COMPATIBILITY
+        wxASSERT_MSG( m_param.has_value(), "Attempted to get a parameter from an action with no parameter." );
+#else
+        assert( m_param.has_value() );
+#endif
+
+        T param;
+
+        try
+        {
+            param = std::any_cast<T>( m_param );
+        }
+        catch( const std::bad_any_cast& e )
+        {
+#ifdef WX_COMPATIBILITY
+            wxASSERT_MSG( false,
+                          wxString::Format( "Requested parameter type %s from action with parameter type %s.",
+                                            typeid(T).name(), m_param.type().name() ) );
+#else
+            assert( false );
+#endif
+        }
+
+        return param;
+    }
+
 
     /**
      * Return name of the tool associated with the action. It is basically the action name
@@ -337,7 +368,7 @@ protected:
     std::optional<int>   m_uiid;           // ID to use when interacting with the UI (if empty, generate one)
 
     TOOL_ACTION_FLAGS    m_flags;
-    void*                m_param;          // Generic parameter
+    std::any             m_param;          // Generic parameter
 };
 
 #endif

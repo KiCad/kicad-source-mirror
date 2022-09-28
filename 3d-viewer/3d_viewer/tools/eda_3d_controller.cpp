@@ -152,7 +152,7 @@ int EDA_3D_CONTROLLER::Main( const TOOL_EVENT& aEvent )
 
 int EDA_3D_CONTROLLER::ViewControl( const TOOL_EVENT& aEvent )
 {
-    m_canvas->SetView3D( aEvent.Parameter<intptr_t>() );
+    m_canvas->SetView3D( aEvent.Parameter<int>() );
 
     return 0;
 }
@@ -160,7 +160,7 @@ int EDA_3D_CONTROLLER::ViewControl( const TOOL_EVENT& aEvent )
 
 int EDA_3D_CONTROLLER::PanControl( const TOOL_EVENT& aEvent )
 {
-    switch( aEvent.Parameter<intptr_t>() )
+    switch( aEvent.Parameter<ACTIONS::CURSOR_EVENT_TYPE>() )
     {
     case ACTIONS::CURSOR_UP:    m_canvas->SetView3D( WXK_UP );    break;
     case ACTIONS::CURSOR_DOWN:  m_canvas->SetView3D( WXK_DOWN );  break;

@@ -36,7 +36,7 @@
 TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
                           int aDefaultHotKey, const std::string& aLegacyHotKeyName,
                           const wxString& aLabel, const wxString& aTooltip,
-                          BITMAPS aIcon, TOOL_ACTION_FLAGS aFlags, void* aParam ) :
+                          BITMAPS aIcon, TOOL_ACTION_FLAGS aFlags ) :
         m_name( aName ),
         m_scope( aScope ),
         m_defaultHotKey( aDefaultHotKey ),
@@ -45,8 +45,7 @@ TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
         m_tooltip( aTooltip ),
         m_icon( aIcon ),
         m_id( -1 ),
-        m_flags( aFlags ),
-        m_param( aParam )
+        m_flags( aFlags )
 {
     SetHotKey( aDefaultHotKey );
     ACTION_MANAGER::GetActionList().push_back( this );
@@ -58,8 +57,7 @@ TOOL_ACTION::TOOL_ACTION() :
         m_defaultHotKey( 0 ),
         m_icon( BITMAPS::INVALID_BITMAP ),
         m_id( -1 ),
-        m_flags( AF_NONE ),
-        m_param( nullptr )
+        m_flags( AF_NONE )
 {
     SetHotKey( 0 );
 }
@@ -76,14 +74,16 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
         m_icon( aArgs.m_icon.value_or( BITMAPS::INVALID_BITMAP) ),
         m_id( -1 ),
         m_uiid( std::nullopt ),
-        m_flags( aArgs.m_flags.value_or( AF_NONE ) ),
-        m_param( aArgs.m_param.value_or( nullptr ) )
+        m_flags( aArgs.m_flags.value_or( AF_NONE ) )
 {
     // Action name is the only mandatory part
     assert( !m_name.empty() );
 
     if( aArgs.m_uiid.has_value() )
         m_uiid = aArgs.m_uiid.value();
+
+    if( aArgs.m_param.has_value() )
+        m_param = aArgs.m_param;
 
     ACTION_MANAGER::GetActionList().push_back( this );
 }
@@ -97,12 +97,19 @@ TOOL_ACTION::~TOOL_ACTION()
 
 TOOL_EVENT TOOL_ACTION::MakeEvent() const
 {
+    TOOL_EVENT evt;
+
     if( IsActivation() )
-        return TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope, m_param );
+        evt = TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope );
     else if( IsNotification() )
-        return TOOL_EVENT( TC_MESSAGE, TA_NONE, m_name, m_scope, m_param );
+        evt = TOOL_EVENT( TC_MESSAGE, TA_NONE, m_name, m_scope );
     else
-        return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope, m_param );
+        evt = TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
+
+    if( m_param.has_value() )
+        evt.SetParameter( m_param );
+
+    return evt;
 }
 
 

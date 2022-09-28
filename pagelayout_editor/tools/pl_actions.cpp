@@ -39,25 +39,41 @@
 
 // PL_DRAWING_TOOLS
 //
-TOOL_ACTION PL_ACTIONS::drawLine( "plEditor.InteractiveDrawing.drawLine",
-        AS_GLOBAL, 0, "",
-        _( "Add Line" ), _( "Add a line" ),
-        BITMAPS::add_graphical_segments, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_SEGMENT );
+TOOL_ACTION PL_ACTIONS::drawLine( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveDrawing.drawLine" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Line" ) )
+        .Tooltip( _( "Add a line" ) )
+        .Icon( BITMAPS::add_graphical_segments )
+        .Flags( AF_ACTIVATE )
+        .Parameter( DS_DATA_ITEM::DS_SEGMENT ) );
 
-TOOL_ACTION PL_ACTIONS::drawRectangle( "plEditor.InteractiveDrawing.drawRectangle",
-        AS_GLOBAL, 0, "",
-        _( "Add Rectangle" ), _( "Add a rectangle" ),
-        BITMAPS::add_rectangle, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_RECT );
+TOOL_ACTION PL_ACTIONS::drawRectangle( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveDrawing.drawRectangle" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Rectangle" ) )
+        .Tooltip( _( "Add a rectangle" ) )
+        .Icon( BITMAPS::add_rectangle )
+        .Flags( AF_ACTIVATE )
+        .Parameter( DS_DATA_ITEM::DS_RECT ) );
 
-TOOL_ACTION PL_ACTIONS::placeText( "plEditor.InteractiveDrawing.placeText",
-        AS_GLOBAL, 0, "",
-        _( "Add Text" ), _( "Add a text item" ),
-        BITMAPS::text, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_TEXT );
+TOOL_ACTION PL_ACTIONS::placeText( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveDrawing.placeText" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Text" ) )
+        .Tooltip( _( "Add a text item" ) )
+        .Icon( BITMAPS::text )
+        .Flags( AF_ACTIVATE )
+        .Parameter( DS_DATA_ITEM::DS_TEXT ) );
 
-TOOL_ACTION PL_ACTIONS::placeImage( "plEditor.InteractiveDrawing.placeImage",
-        AS_GLOBAL, 0, "",
-        _( "Add Bitmap" ), _( "Add a bitmap image" ),
-        BITMAPS::image, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_BITMAP );
+TOOL_ACTION PL_ACTIONS::placeImage( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveDrawing.placeImage" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Bitmap" ) )
+        .Tooltip( _( "Add a bitmap image" ) )
+        .Icon( BITMAPS::image )
+        .Flags( AF_ACTIVATE )
+        .Parameter( DS_DATA_ITEM::DS_BITMAP ) );
 
 
 // PL_EDIT_TOOL

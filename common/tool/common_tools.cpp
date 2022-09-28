@@ -103,7 +103,7 @@ int COMMON_TOOLS::SelectionTool( const TOOL_EVENT& aEvent )
 // Cursor control
 int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 {
-    long type = aEvent.Parameter<intptr_t>();
+    long type = aEvent.Parameter<long>();
     bool fastMove = type & ACTIONS::CURSOR_FAST_MOVE;
     type &= ~ACTIONS::CURSOR_FAST_MOVE;
     bool mirroredX = getView()->IsMirroredX();
@@ -151,7 +151,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
             button = BUT_RIGHT;
 
         TOOL_EVENT evt( TC_MOUSE, action, button | modifiers );
-        evt.SetParameter( static_cast<intptr_t>( type ) );
+        evt.SetParameter( type );
         evt.SetMousePosition( getViewControls()->GetCursorPosition() );
         m_toolMgr->ProcessEvent( evt );
 
@@ -170,7 +170,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::PanControl( const TOOL_EVENT& aEvent )
 {
-    long type = aEvent.Parameter<intptr_t>();
+    long type = aEvent.Parameter<long>();
     KIGFX::VIEW* view = getView();
     VECTOR2D center = view->GetCenter();
     VECTOR2D gridSize = getView()->GetGAL()->GetGridSize() * 10;
@@ -383,7 +383,7 @@ int COMMON_TOOLS::CenterContents( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::ZoomPreset( const TOOL_EVENT& aEvent )
 {
-    unsigned int idx = aEvent.Parameter<intptr_t>();
+    unsigned int idx = aEvent.Parameter<unsigned int>();
     return doZoomToPreset( (int) idx, false );
 }
 
@@ -450,7 +450,7 @@ int COMMON_TOOLS::GridPrev( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::GridPreset( const TOOL_EVENT& aEvent )
 {
-    return GridPreset( aEvent.Parameter<intptr_t>() );
+    return GridPreset( aEvent.Parameter<int>() );
 }
 
 

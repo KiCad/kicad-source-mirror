@@ -243,31 +243,52 @@ TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( "eeschema.SymbolLibraryControl.tog
 
 // SYMBOL_EDITOR_DRAWING_TOOLS
 //
-TOOL_ACTION EE_ACTIONS::placeSymbolPin( "eeschema.SymbolDrawing.placeSymbolPin",
-        AS_GLOBAL,
-        'P', LEGACY_HK_NAME( "Create Pin" ),
-        _( "Add Pin" ), _( "Draw pins" ),
-        BITMAPS::pin, AF_ACTIVATE, (void*) LIB_PIN_T );
+TOOL_ACTION EE_ACTIONS::placeSymbolPin( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolDrawing.placeSymbolPin" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'P' )
+        .LegacyHotkeyName( "Create Pin" )
+        .MenuText( _( "Add Pin" ) )
+        .Tooltip( _( "Add a pin" ) )
+        .Icon( BITMAPS::pin )
+        .Flags( AF_ACTIVATE )
+        .Parameter( LIB_PIN_T ) );
 
-TOOL_ACTION EE_ACTIONS::placeSymbolText( "eeschema.SymbolDrawing.placeSymbolText",
-        AS_GLOBAL, 0, "",
-        _( "Add Text" ), _( "Draw text items" ),
-        BITMAPS::text, AF_ACTIVATE, (void*) LIB_TEXT_T );
+TOOL_ACTION EE_ACTIONS::placeSymbolText( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolDrawing.placeSymbolText" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Text" ) )
+        .Tooltip( _( "Add a text item" ) )
+        .Icon( BITMAPS::text )
+        .Flags( AF_ACTIVATE )
+        .Parameter( LIB_TEXT_T ) );
 
-TOOL_ACTION EE_ACTIONS::drawSymbolTextBox( "eeschema.SymbolDrawing.drawSymbolTextBox",
-        AS_GLOBAL, 0, "",
-        _( "Add Text Box" ), _( "Draw text box items" ),
-        BITMAPS::add_textbox, AF_ACTIVATE, (void*) LIB_TEXTBOX_T );
+TOOL_ACTION EE_ACTIONS::drawSymbolTextBox( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolDrawing.drawSymbolTextBox" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Text Box" ) )
+        .Tooltip( _( "Add a text box item" ) )
+        .Icon( BITMAPS::add_textbox )
+        .Flags( AF_ACTIVATE )
+        .Parameter( LIB_TEXTBOX_T ) );
 
-TOOL_ACTION EE_ACTIONS::drawSymbolLines( "eeschema.SymbolDrawing.drawSymbolLines",
-        AS_GLOBAL, 0, "",
-        _( "Add Lines" ), _( "Draw lines" ),
-        BITMAPS::add_graphical_segments, AF_ACTIVATE, (void*) SHAPE_T::SEGMENT );
+TOOL_ACTION EE_ACTIONS::drawSymbolLines( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolDrawing.drawSymbolLines" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Lines" ) )
+        .Tooltip( _( "Add connected graphic lines" ) )
+        .Icon( BITMAPS::add_graphical_segments )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::POLY ) );
 
-TOOL_ACTION EE_ACTIONS::drawSymbolPolygon( "eeschema.SymbolDrawing.drawSymbolPolygon",
-        AS_GLOBAL, 0, "",
-        _( "Add Polygon" ), _( "Draw polygons" ),
-        BITMAPS::add_graphical_polygon, AF_ACTIVATE, (void*) SHAPE_T::POLY );
+TOOL_ACTION EE_ACTIONS::drawSymbolPolygon( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolDrawing.drawSymbolPolygon" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Polygon" ) )
+        .Tooltip( _( "Draw polygons" ) )
+        .Icon( BITMAPS::add_graphical_polygon )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::POLY ) );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "eeschema.SymbolDrawing.placeSymbolAnchor",
         AS_GLOBAL, 0, "",
@@ -311,23 +332,38 @@ TOOL_ACTION EE_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerSymbo
         _( "Add Power" ), _( "Add power symbols" ),
         BITMAPS::add_power, AF_ACTIVATE );
 
-TOOL_ACTION EE_ACTIONS::placeNoConnect( "eeschema.InteractiveDrawing.placeNoConnect",
-        AS_GLOBAL,
-        'Q', LEGACY_HK_NAME( "Add No Connect Flag" ),
-        _( "Add No Connect Flag" ), _( "Draw no-connection flags" ),
-        BITMAPS::noconn, AF_ACTIVATE, (void*) SCH_NO_CONNECT_T );
+TOOL_ACTION EE_ACTIONS::placeNoConnect( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeNoConnect" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'Q' )
+        .LegacyHotkeyName( "Add No Connect Flag" )
+        .MenuText( _( "Add No Connect Flag" ) )
+        .Tooltip( _( "Draw no-connection flags" ) )
+        .Icon( BITMAPS::noconn )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SCH_NO_CONNECT_T ) );
 
-TOOL_ACTION EE_ACTIONS::placeJunction( "eeschema.InteractiveDrawing.placeJunction",
-        AS_GLOBAL,
-        'J', LEGACY_HK_NAME( "Add Junction" ),
-        _( "Add Junction" ), _( "Draw junctions" ),
-        BITMAPS::add_junction, AF_ACTIVATE, (void*) SCH_JUNCTION_T );
+TOOL_ACTION EE_ACTIONS::placeJunction( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeJunction" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'J' )
+        .LegacyHotkeyName( "Add Junction" )
+        .MenuText( _( "Add Junction" ) )
+        .Tooltip( _( "Draw junctions" ) )
+        .Icon( BITMAPS::add_junction )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SCH_JUNCTION_T ) );
 
-TOOL_ACTION EE_ACTIONS::placeBusWireEntry( "eeschema.InteractiveDrawing.placeBusWireEntry",
-        AS_GLOBAL,
-        'Z', LEGACY_HK_NAME( "Add Wire Entry" ),
-        _( "Add Wire to Bus Entry" ), _( "Add a wire entry to a bus" ),
-        BITMAPS::add_line2bus, AF_ACTIVATE, (void*) SCH_BUS_WIRE_ENTRY_T );
+TOOL_ACTION EE_ACTIONS::placeBusWireEntry( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeBusWireEntry" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'Z' )
+        .LegacyHotkeyName( "Add Wire Entry" )
+        .MenuText( _( "Add Wire to Bus Entry" ) )
+        .Tooltip( _( "Add a wire entry to a bus" ) )
+        .Icon( BITMAPS::add_line2bus )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SCH_BUS_WIRE_ENTRY_T ) );
 
 TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL,
@@ -346,11 +382,16 @@ TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierar
         _( "Add Hierarchical Label" ), _( "Add hierarchical labels" ),
         BITMAPS::add_hierarchical_label, AF_ACTIVATE );
 
-TOOL_ACTION EE_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
-        AS_GLOBAL,
-        'S', LEGACY_HK_NAME( "Add Sheet" ),
-        _( "Add Sheet" ), _( "Draw hierarchical sheets" ),
-        BITMAPS::add_hierarchical_subsheet, AF_ACTIVATE, (void*) SCH_SHEET_T );
+TOOL_ACTION EE_ACTIONS::drawSheet( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawSheet" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'S' )
+        .LegacyHotkeyName( "Add Sheet" )
+        .MenuText( _( "Add Sheet" ) )
+        .Tooltip( _( "Draw hierarchical sheets" ) )
+        .Icon( BITMAPS::add_hierarchical_subsheet )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SCH_SHEET_T ) );
 
 TOOL_ACTION EE_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
         AS_GLOBAL, 0, "",
@@ -369,25 +410,41 @@ TOOL_ACTION EE_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSc
         _( "Add Text" ), _( "Draw text items" ),
         BITMAPS::text, AF_ACTIVATE );
 
-TOOL_ACTION EE_ACTIONS::drawTextBox( "eeschema.InteractiveDrawing.drawTextBox",
-        AS_GLOBAL, 0, "",
-        _( "Add Text Box" ), _( "Draw text box items" ),
-        BITMAPS::add_textbox, AF_ACTIVATE, (void*) SHAPE_T::RECT );
+TOOL_ACTION EE_ACTIONS::drawTextBox( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawTextBox" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Text Box" ) )
+        .Tooltip( _( "Draw text box items" ) )
+        .Icon( BITMAPS::add_textbox )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::RECT ) );
 
-TOOL_ACTION EE_ACTIONS::drawRectangle( "eeschema.InteractiveDrawing.drawRectangle",
-        AS_GLOBAL, 0, "",
-        _( "Add Rectangle" ), _( "Draw rectangles" ),
-        BITMAPS::add_rectangle, AF_ACTIVATE, (void*) SHAPE_T::RECT );
+TOOL_ACTION EE_ACTIONS::drawRectangle( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawRectangle" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Rectangle" ) )
+        .Tooltip( _( "Draw rectangles" ) )
+        .Icon( BITMAPS::add_rectangle )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::RECT ) );
 
-TOOL_ACTION EE_ACTIONS::drawCircle( "eeschema.InteractiveDrawing.drawCircle",
-        AS_GLOBAL, 0, "",
-        _( "Add Circle" ), _( "Draw circles" ),
-        BITMAPS::add_circle, AF_ACTIVATE, (void*) SHAPE_T::CIRCLE );
+TOOL_ACTION EE_ACTIONS::drawCircle( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawCircle" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Circle" ) )
+        .Tooltip( _( "Draw circles" ) )
+        .Icon( BITMAPS::add_circle )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::CIRCLE ) );
 
-TOOL_ACTION EE_ACTIONS::drawArc( "eeschema.InteractiveDrawing.drawArc",
-        AS_GLOBAL, 0, "",
-        _( "Add Arc" ), _( "Draw arcs" ),
-        BITMAPS::add_arc, AF_ACTIVATE, (void*) SHAPE_T::ARC );
+TOOL_ACTION EE_ACTIONS::drawArc( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawArc" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Arc" ) )
+        .Tooltip( _( "Draw arcs" ) )
+        .Icon( BITMAPS::add_arc )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::ARC ) );
 
 TOOL_ACTION EE_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
         AS_GLOBAL, 0, "",
@@ -514,35 +571,59 @@ TOOL_ACTION EE_ACTIONS::showDeMorganAlternate( "eeschema.InteractiveEdit.showDeM
         _( "De Morgan Alternate" ), _( "Switch to alternate De Morgan representation" ),
         BITMAPS::morgan2 );
 
-TOOL_ACTION EE_ACTIONS::toLabel( "eeschema.InteractiveEdit.toLabel",
-        AS_GLOBAL, 0, "",
-        _( "Change to Label" ), _( "Change existing item to a label" ),
-        BITMAPS::add_line_label, AF_NONE, (void*) SCH_LABEL_T );
+TOOL_ACTION EE_ACTIONS::toLabel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.toLabel" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Change to Label" ) )
+        .Tooltip( _( "Change existing item to a label" ) )
+        .Icon( BITMAPS::add_line_label )
+        .Flags( AF_NONE )
+        .Parameter( SCH_LABEL_T ) );
 
-TOOL_ACTION EE_ACTIONS::toCLabel( "eeschema.InteractiveEdit.toCLabel",
-        AS_GLOBAL, 0, "",
-        _( "Change to Directive Label" ), _( "Change existing item to a directive label" ),
-        BITMAPS::add_class_flag, AF_NONE, (void*) SCH_DIRECTIVE_LABEL_T );
+TOOL_ACTION EE_ACTIONS::toCLabel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.toCLabel" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Change to Directive Label" ) )
+        .Tooltip( _( "Change existing item to a directive label" ) )
+        .Icon( BITMAPS::add_class_flag )
+        .Flags( AF_NONE )
+        .Parameter( SCH_DIRECTIVE_LABEL_T ) );
 
-TOOL_ACTION EE_ACTIONS::toHLabel( "eeschema.InteractiveEdit.toHLabel",
-        AS_GLOBAL, 0, "",
-        _( "Change to Hierarchical Label" ), _( "Change existing item to a hierarchical label" ),
-        BITMAPS::add_hierarchical_label, AF_NONE, (void*) SCH_HIER_LABEL_T );
+TOOL_ACTION EE_ACTIONS::toHLabel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.toHLabel" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Change to Hierarchical Label" ) )
+        .Tooltip( _( "Change existing item to a hierarchical label" ) )
+        .Icon( BITMAPS::add_hierarchical_label )
+        .Flags( AF_NONE )
+        .Parameter( SCH_HIER_LABEL_T ) );
 
-TOOL_ACTION EE_ACTIONS::toGLabel( "eeschema.InteractiveEdit.toGLabel",
-        AS_GLOBAL, 0, "",
-        _( "Change to Global Label" ), _( "Change existing item to a global label" ),
-        BITMAPS::add_glabel, AF_NONE, (void*) SCH_GLOBAL_LABEL_T );
+TOOL_ACTION EE_ACTIONS::toGLabel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.toGLabel" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Change to Global Label" ) )
+        .Tooltip( _( "Change existing item to a global label" ) )
+        .Icon( BITMAPS::add_glabel )
+        .Flags( AF_NONE )
+        .Parameter( SCH_GLOBAL_LABEL_T ) );
 
-TOOL_ACTION EE_ACTIONS::toText( "eeschema.InteractiveEdit.toText",
-        AS_GLOBAL, 0, "",
-        _( "Change to Text" ), _( "Change existing item to a text comment" ),
-        BITMAPS::text, AF_NONE, (void*) SCH_TEXT_T );
+TOOL_ACTION EE_ACTIONS::toText( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.toText" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Change to Text" ) )
+        .Tooltip( _( "Change existing item to a text comment" ) )
+        .Icon( BITMAPS::text )
+        .Flags( AF_NONE )
+        .Parameter( SCH_TEXT_T ) );
 
-TOOL_ACTION EE_ACTIONS::toTextBox( "eeschema.InteractiveEdit.toTextBox",
-        AS_GLOBAL, 0, "",
-        _( "Change to Text Box" ), _( "Change existing item to a text box" ),
-        BITMAPS::add_textbox, AF_NONE, (void*) SCH_TEXTBOX_T );
+TOOL_ACTION EE_ACTIONS::toTextBox( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.toTextBox" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Change to Text Box" ) )
+        .Tooltip( _( "Change existing item to a text box" ) )
+        .Icon( BITMAPS::add_textbox )
+        .Flags( AF_NONE )
+        .Parameter( SCH_TEXTBOX_T ) );
 
 TOOL_ACTION EE_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheetPins",
         AS_GLOBAL, 0, "",
@@ -798,22 +879,32 @@ TOOL_ACTION EE_ACTIONS::toggleOPCurrents( "eeschema.EditorControl.showOperatingP
         _( "Show OP Currents" ),
         _( "Show operating point current data from simulation" ) );
 
-TOOL_ACTION EE_ACTIONS::lineModeFree( "eeschema.EditorControl.lineModeFree",
-        AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ), _( "Draw and drag at any angle" ),
-        BITMAPS::lines_any, AF_NONE, (void*) LINE_MODE::LINE_MODE_FREE );
+TOOL_ACTION EE_ACTIONS::lineModeFree( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.lineModeFree" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Line Mode for Wires and Buses" ) )
+        .Tooltip( _( "Draw and drag at any angle" ) )
+        .Icon( BITMAPS::lines_any )
+        .Flags( AF_NONE )
+        .Parameter( LINE_MODE::LINE_MODE_FREE ) );
 
-TOOL_ACTION EE_ACTIONS::lineMode90( "eeschema.EditorControl.lineModeOrthonal",
-        AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ),
-        _( "Constrain drawing and dragging to horizontal or vertical motions" ),
-        BITMAPS::lines90, AF_NONE, (void*) LINE_MODE::LINE_MODE_90);
+TOOL_ACTION EE_ACTIONS::lineMode90( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.lineModeOrthonal" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Line Mode for Wires and Buses" ) )
+        .Tooltip( _( "Constrain drawing and dragging to horizontal or vertical motions" ) )
+        .Icon( BITMAPS::lines90 )
+        .Flags( AF_NONE )
+        .Parameter( LINE_MODE::LINE_MODE_90) );
 
-TOOL_ACTION EE_ACTIONS::lineMode45( "eeschema.EditorControl.lineMode45",
-        AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ),
-        _( "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle motions" ),
-        BITMAPS::hv45mode, AF_NONE, (void*) LINE_MODE::LINE_MODE_45);
+TOOL_ACTION EE_ACTIONS::lineMode45( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.lineMode45" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Line Mode for Wires and Buses" ) )
+        .Tooltip( _( "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle motions" ) )
+        .Icon( BITMAPS::hv45mode )
+        .Flags( AF_NONE )
+        .Parameter( LINE_MODE::LINE_MODE_45 ) );
 
 TOOL_ACTION EE_ACTIONS::lineModeNext( "eeschema.EditorControl.lineModeNext",
         AS_GLOBAL, MD_SHIFT + WXK_SPACE, "",
@@ -894,18 +985,28 @@ TOOL_ACTION EE_ACTIONS::showHierarchy( "eeschema.EditorTool.showHierarchy",
 // SCH_LINE_WIRE_BUS_TOOL
 //
 const DRAW_SEGMENT_EVENT_PARAMS drawWireActionParam = { LAYER_WIRE, false, nullptr };
-TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.InteractiveDrawingLineWireBus.drawWires",
-        AS_GLOBAL,
-        'W', LEGACY_HK_NAME( "Begin Wire" ),
-        _( "Add Wire" ), _( "Add a wire" ),
-        BITMAPS::add_line, AF_ACTIVATE, (void*) &drawWireActionParam );
+TOOL_ACTION EE_ACTIONS::drawWire( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.drawWires" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'W' )
+        .LegacyHotkeyName( "Begin Wire" )
+        .MenuText( _( "Add Wire" ) )
+        .Tooltip( _( "Add a wire" ) )
+        .Icon( BITMAPS::add_line )
+        .Flags( AF_ACTIVATE )
+        .Parameter( &drawWireActionParam ) );
 
 const DRAW_SEGMENT_EVENT_PARAMS drawBusActionParam = { LAYER_BUS, false, nullptr };
-TOOL_ACTION EE_ACTIONS::drawBus( "eeschema.InteractiveDrawingLineWireBus.drawBuses",
-        AS_GLOBAL,
-        'B', LEGACY_HK_NAME( "Begin Bus" ),
-        _( "Add Bus" ), _( "Add a bus" ),
-        BITMAPS::add_bus, AF_ACTIVATE, (void*) &drawBusActionParam );
+TOOL_ACTION EE_ACTIONS::drawBus( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.drawBuses" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'B' )
+        .LegacyHotkeyName( "Begin Bus" )
+        .MenuText( _( "Add Bus" ) )
+        .Tooltip( _( "Add a bus" ) )
+        .Icon( BITMAPS::add_bus )
+        .Flags( AF_ACTIVATE )
+        .Parameter( &drawBusActionParam ) );
 
 TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.InteractiveDrawingLineWireBus.unfoldBus",
         AS_GLOBAL,
@@ -914,11 +1015,16 @@ TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.InteractiveDrawingLineWireBus.unfol
                                    BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
 const DRAW_SEGMENT_EVENT_PARAMS drawLinesActionParam = { LAYER_NOTES, false, nullptr };
-TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.InteractiveDrawingLineWireBus.drawLines",
-        AS_GLOBAL,
-        'I', LEGACY_HK_NAME( "Add Graphic PolyLine" ),
-        _( "Add Lines" ), _( "Draw graphic lines" ),
-        BITMAPS::add_graphical_segments, AF_ACTIVATE, (void*) &drawLinesActionParam );
+TOOL_ACTION EE_ACTIONS::drawLines( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.drawLines" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'I' )
+        .LegacyHotkeyName( "Add Graphic PolyLine" )
+        .MenuText( _( "Add Lines" ) )
+        .Tooltip( _( "Draw graphic lines" ) )
+        .Icon( BITMAPS::add_graphical_segments )
+        .Flags( AF_ACTIVATE )
+        .Parameter( &drawLinesActionParam ) );
 
 TOOL_ACTION EE_ACTIONS::undoLastSegment( "eeschema.InteractiveDrawingLineWireBus.undoLastSegment",
         AS_GLOBAL,

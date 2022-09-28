@@ -716,7 +716,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) || isSkip )
         {
             // Eat mouse-up/-click events that leaked through from the lock dialog
-            if( eatFirstMouseUp && evt->Parameter<intptr_t>() != ACTIONS::CURSOR_CLICK )
+            if( eatFirstMouseUp && evt->Parameter<ACTIONS::CURSOR_EVENT_TYPE>() != ACTIONS::CURSOR_CLICK )
             {
                 eatFirstMouseUp = false;
                 continue;
