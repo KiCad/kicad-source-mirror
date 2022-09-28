@@ -27,7 +27,6 @@
 
 
 #include <../common/dialogs/eda_list_dialog_base.h>
-#include <eda_units.h>
 
 
 class EDA_DRAW_FRAME;
