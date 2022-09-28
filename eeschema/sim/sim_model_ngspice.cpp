@@ -212,8 +212,6 @@ SIM_MODEL_NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
     case TYPE::PMOS_HISIMHV1:        return MODEL_TYPE::HISIMHV1;
     case TYPE::NMOS_HISIMHV2:
     case TYPE::PMOS_HISIMHV2:        return MODEL_TYPE::HISIMHV2;
-    case TYPE::KIBIS_DRIVER:
-    case TYPE::KIBIS_DEVICE:         return MODEL_TYPE::KIBIS;
 
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_NGSPICE" );

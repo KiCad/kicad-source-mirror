@@ -87,8 +87,7 @@ protected:
         B3SOIPD,
         HISIM2,
         HISIMHV1,
-        HISIMHV2,
-        KIBIS
+        HISIMHV2
     )
 
     struct MODEL_INFO
