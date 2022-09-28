@@ -99,7 +99,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( TOOL_ACTION_ARGS()
         .Tooltip( _( "Edit schematic" ) )
         .Icon( BITMAPS::icon_eeschema_24 )
         .Flags( AF_NONE )
-        .Parameter( (void*) FRAME_SCH ) );
+        .Parameter( FRAME_SCH ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.editSymbols" )
@@ -110,7 +110,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( TOOL_ACTION_ARGS()
         .Tooltip( _( "Edit schematic symbols" ) )
         .Icon( BITMAPS::icon_libedit_24 )
         .Flags( AF_NONE )
-        .Parameter( (void*) FRAME_SCH_SYMBOL_EDITOR ) );
+        .Parameter( FRAME_SCH_SYMBOL_EDITOR ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.editPCB" )
@@ -121,7 +121,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( TOOL_ACTION_ARGS()
         .Tooltip( _( "Edit PCB" ) )
         .Icon( BITMAPS::icon_pcbnew_24 )
         .Flags( AF_NONE )
-        .Parameter( (void*) FRAME_PCB_EDITOR ) );
+        .Parameter( FRAME_PCB_EDITOR ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.editFootprints" )
@@ -132,7 +132,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( TOOL_ACTION_ARGS()
         .Tooltip( _( "Edit PCB footprints" ) )
         .Icon( BITMAPS::icon_modedit_24 )
         .Flags( AF_NONE )
-        .Parameter( (void*) FRAME_FOOTPRINT_EDITOR ) );
+        .Parameter( FRAME_FOOTPRINT_EDITOR ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.viewGerbers" )
