@@ -51,6 +51,7 @@
 #include <transform.h>
 
 struct PICKED_SYMBOL;
+class KIID_PATH;
 class SCH_SCREEN;
 class LIB_ITEM;
 class LIB_PIN;
@@ -139,6 +140,9 @@ public:
     {
         return m_instanceReferences;
     }
+
+    bool GetInstance( SYMBOL_INSTANCE_REFERENCE& aInstance,
+                      const KIID_PATH& aSheetPath ) const;
 
     void SetDefaultInstance( const SYMBOL_INSTANCE_REFERENCE& aInstance )
     {
@@ -591,6 +595,8 @@ public:
                                    const wxString&  aValue = wxEmptyString,
                                    const wxString&  aFootprint = wxEmptyString );
 
+    void AddHierarchicalReference( const SYMBOL_INSTANCE_REFERENCE& aInstance );
+
     /// Return the instance-specific unit selection for the given sheet path.
     int GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const;
 
@@ -713,10 +719,11 @@ public:
     void Plot( PLOTTER* aPlotter, bool aBackground ) const override;
 
     /**
-     * Plot just the symbol pins.  This is separated to match the GAL display order.  The pins are
-     * ALSO plotted with the symbol group.  This replotting allows us to ensure that they are shown above
-     * other elements in the schematic
-     * @param aPlotter
+     * Plot just the symbol pins.  This is separated to match the GAL display order.  The pins
+     * are ALSO plotted with the symbol group.  This replotting allows us to ensure that they
+     * are shown above other elements in the schematic.
+     *
+     * @param aPlotter is the #PLOTTER object used to plot pins.
      */
     void PlotPins( PLOTTER* aPlotter ) const;
 

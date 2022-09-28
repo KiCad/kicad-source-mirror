@@ -51,6 +51,7 @@ id
 image
 input
 input_low
+instances
 inverted
 inverted_clock
 in_bom

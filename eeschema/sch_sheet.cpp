@@ -1208,17 +1208,17 @@ bool SCH_SHEET::AddInstance( const SCH_SHEET_PATH& aSheetPath )
     for( const SCH_SHEET_INSTANCE& instance : m_instances )
     {
         // if aSheetPath is found, nothing to do:
-        if( instance.m_Path == aSheetPath.PathWithoutRootUuid() )
+        if( instance.m_Path == aSheetPath.Path() )
             return false;
     }
 
     wxLogTrace( traceSchSheetPaths, wxT( "Adding instance `%s` to sheet `%s`." ),
-                aSheetPath.PathWithoutRootUuid().AsString(),
+                aSheetPath.Path().AsString(),
                 ( GetName().IsEmpty() ) ? wxT( "root" ) : GetName() );
 
     SCH_SHEET_INSTANCE instance;
 
-    instance.m_Path = aSheetPath.PathWithoutRootUuid();
+    instance.m_Path = aSheetPath.Path();
 
     // This entry does not exist: add it with an empty page number.
     m_instances.emplace_back( instance );
@@ -1231,7 +1231,7 @@ wxString SCH_SHEET::GetPageNumber( const SCH_SHEET_PATH& aSheetPath ) const
     wxCHECK( aSheetPath.IsFullPath(), wxEmptyString );
 
     wxString pageNumber;
-    KIID_PATH path = aSheetPath.PathWithoutRootUuid();
+    KIID_PATH path = aSheetPath.Path();
 
     for( const SCH_SHEET_INSTANCE& instance : m_instances )
     {
@@ -1250,7 +1250,7 @@ void SCH_SHEET::SetPageNumber( const SCH_SHEET_PATH& aSheetPath, const wxString&
 {
     wxCHECK( aSheetPath.IsFullPath(), /* void */ );
 
-    KIID_PATH path = aSheetPath.PathWithoutRootUuid();
+    KIID_PATH path = aSheetPath.Path();
 
     for( SCH_SHEET_INSTANCE& instance : m_instances )
     {

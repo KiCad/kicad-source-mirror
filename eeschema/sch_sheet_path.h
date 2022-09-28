@@ -266,13 +266,6 @@ public:
     KIID_PATH Path() const;
 
     /**
-     * Get the sheet path as an #KIID_PATH without the root sheet UUID prefix.
-     *
-     * @note This #KIID_PATH does not include the root sheet UUID prefixed to the path.
-     */
-    KIID_PATH PathWithoutRootUuid() const;
-
-    /**
      * Return the sheet path in a human readable form made from the sheet names.
      *
      * The "normal" path instead uses the #KIID objects in the path that do not change
@@ -372,6 +365,23 @@ public:
      *    the absolute file name path.
      */
     void MakeFilePathRelativeToParentSheet();
+
+    /**
+     * Attempt to add new symbol instances for all symbols in this sheet path prefixed
+     * with \a aPrefixSheetPath.
+     *
+     * The new symbol instance data will be assigned by the following criteria:
+     *  - If the instance data can be found for this sheet path, use the instance data.
+     *  - If the instance data cannot be found for this sheet path and the instance data cache
+     *    for the symbol is not empty, use the first instance data in the cache.
+     *  - If the cache is empty and the library symbol link is valid, set the instance data
+     *    from the library symbol.
+     *  - If all else fails, set the reference to "U?", the unit to 1, and everything else to
+     *    an empty string.
+     */
+    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
+
+    int AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPath, int aNextVirtualPageNumber );
 
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
@@ -633,6 +643,19 @@ public:
      * Migrate V6 simulator models to V7. Must be called only after UpdateSymbolInstances().
      */
     void MigrateSimModelNameFields();
+
+    /**
+     * Attempt to add new symbol instances for all symbols in this list of sheet paths prefixed
+     * with \a aPrefixSheetPath.
+     *
+     * @param aPrefixSheetPath is the sheet path to append the new symbol instances to.
+     */
+    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
+
+    void AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
+                               int aLastVirtualPageNumber );
+
+    int GetLastVirtualPageNumber() const;
 
 private:
     SCH_SHEET_PATH  m_currentSheetPath;

@@ -472,6 +472,22 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 }
 
 
+bool SCH_SYMBOL::GetInstance( SYMBOL_INSTANCE_REFERENCE& aInstance,
+                              const KIID_PATH& aSheetPath ) const
+{
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    {
+        if( instance.m_Path == aSheetPath )
+        {
+            aInstance = instance;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxString& aRef,
                                            int aUnit, const wxString& aValue,
                                            const wxString& aFootprint )
@@ -501,15 +517,81 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
     instance.m_Value = aValue;
     instance.m_Footprint = aFootprint;
 
-    wxLogTrace( traceSchSheetPaths, "Adding symbol instance:\n"
-                                    "  sheet path %s\n"
-                                    "  reference %s, unit %d to symbol %s.",
-                                    aPath.AsString(),
-                                    aRef,
-                                    aUnit,
-                                    m_Uuid.AsString() );
+    wxLogTrace( traceSchSheetPaths,
+                "Adding symbol '%s' instance:\n"
+                "    sheet path '%s'\n"
+                "    reference '%s'\n"
+                "    unit %d\n"
+                "    value '%s'\n"
+                "    footprint '%s'",
+                m_Uuid.AsString(),
+                aPath.AsString(),
+                aRef,
+                aUnit,
+                aValue,
+                aFootprint );
 
     m_instanceReferences.push_back( instance );
+
+    // This should set the default instance to the first saved instance data for each symbol
+    // when importing sheets.
+    if( m_instanceReferences.size() == 1 )
+    {
+        m_fields[ REFERENCE_FIELD ].SetText( aRef );
+        m_fields[ VALUE_FIELD ].SetText( aValue );
+        m_unit = aUnit;
+        m_fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
+    }
+}
+
+
+void SCH_SYMBOL::AddHierarchicalReference( const SYMBOL_INSTANCE_REFERENCE& aInstance )
+{
+    // Search for an existing path and remove it if found (should not occur)
+    for( unsigned ii = 0; ii < m_instanceReferences.size(); ii++ )
+    {
+        if( m_instanceReferences[ii].m_Path == aInstance.m_Path )
+        {
+            wxLogTrace( traceSchSheetPaths, "Removing symbol instance:\n"
+                                            "  sheet path %s\n"
+                                            "  reference %s, unit %d from symbol %s.",
+                                            aInstance.m_Path.AsString(),
+                                            m_instanceReferences[ii].m_Reference,
+                                            m_instanceReferences[ii].m_Unit,
+                                            m_Uuid.AsString() );
+
+            m_instanceReferences.erase( m_instanceReferences.begin() + ii );
+            ii--;
+        }
+    }
+
+    SYMBOL_INSTANCE_REFERENCE instance = aInstance;
+
+    wxLogTrace( traceSchSheetPaths,
+                "Adding symbol '%s' instance:\n"
+                "    sheet path '%s'\n"
+                "    reference '%s'\n"
+                "    unit %d\n"
+                "    value '%s'\n"
+                "    footprint '%s'",
+                m_Uuid.AsString(),
+                instance.m_Path.AsString(),
+                instance.m_Reference,
+                instance.m_Unit,
+                instance.m_Value,
+                instance.m_Footprint );
+
+    m_instanceReferences.push_back( instance );
+
+    // This should set the default instance to the first saved instance data for each symbol
+    // when importing sheets.
+    if( m_instanceReferences.size() == 1 )
+    {
+        m_fields[ REFERENCE_FIELD ].SetText( instance.m_Reference );
+        m_fields[ VALUE_FIELD ].SetText( instance.m_Value );
+        m_unit = instance.m_Unit;
+        m_fields[ FOOTPRINT_FIELD ].SetText( instance.m_Footprint );
+    }
 }
 
 
@@ -1218,7 +1300,7 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetP
 
 bool SCH_SYMBOL::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPath )
 {
-    // a empty sheet path is illegal:
+    // An empty sheet path is illegal, at a minimum the root sheet UUID must be present.
     wxCHECK( aSheetPath.size() > 0, false );
 
     for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )

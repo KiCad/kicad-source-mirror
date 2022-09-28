@@ -88,6 +88,7 @@ SCH_SEXPR_PLUGIN::~SCH_SEXPR_PLUGIN()
 void SCH_SEXPR_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aProperties )
 {
     m_version         = 0;
+    m_appending       = false;
     m_rootSheet       = nullptr;
     m_schematic       = aSchematic;
     m_cache           = nullptr;
@@ -113,6 +114,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
     if( aAppendToMe )
     {
+        m_appending = true;
         wxLogTrace( traceSchLegacyPlugin, "Append \"%s\" to sheet \"%s\".",
                     aFileName, aAppendToMe->GetFileName() );
 
@@ -299,7 +301,7 @@ void SCH_SEXPR_PLUGIN::loadFile( const wxString& aFileName, SCH_SHEET* aSheet )
         reader.Rewind();
     }
 
-    SCH_SEXPR_PARSER parser( &reader, m_progressReporter, lineCount );
+    SCH_SEXPR_PARSER parser( &reader, m_progressReporter, lineCount, m_rootSheet, m_appending );
 
     parser.ParseSchematic( aSheet );
 }
@@ -482,14 +484,14 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
         symbolInstances.SortByReferenceOnly();
 
-        saveInstances( sheetPaths.GetSheetInstances(), symbolInstances.GetSymbolInstances(), 1 );
+        saveInstances( sheetPaths.GetSheetInstances(), 1 );
     }
     else
     {
         // Schematic files (SCH_SCREEN objects) can be shared so we have to save and restore
         // symbol and sheet instance data even if the file being saved is not the root sheet
         // because it is possible that the file is the root sheet of another project.
-        saveInstances( screen->m_sheetInstances, screen->m_symbolInstances, 1 );
+        saveInstances( screen->m_sheetInstances, 1 );
     }
 
     m_out->Print( 0, ")\n" );
@@ -621,7 +623,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
     }
 
     // Make all instance information relative to the selection path
-    KIID_PATH selectionPath = aSelectionPath->PathWithoutRootUuid();
+    KIID_PATH selectionPath = aSelectionPath->Path();
 
     selectedSheets.SortByPageNumbers();
     std::vector<SCH_SHEET_INSTANCE> sheetinstances = selectedSheets.GetSheetInstances();
@@ -642,7 +644,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
                       "Symbol is not inside the selection path?" );
     }
 
-    saveInstances( sheetinstances, symbolInstances, 0 );
+    saveInstances( sheetinstances, 0 );
 }
 
 
@@ -807,7 +809,24 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         }
     }
 
-    m_out->Print( aNestLevel, ")\n" );
+    m_out->Print( aNestLevel + 1, "(instances\n" );
+
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : aSymbol->GetInstanceReferences() )
+    {
+        wxString path = instance.m_Path.AsString();
+
+        m_out->Print( aNestLevel + 2, "(path %s\n",
+                      m_out->Quotew( path ).c_str() );
+        m_out->Print( aNestLevel + 3, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
+                      m_out->Quotew( instance.m_Reference ).c_str(),
+                      instance.m_Unit,
+                      m_out->Quotew( instance.m_Value ).c_str(),
+                      m_out->Quotew( instance.m_Footprint ).c_str() );
+        m_out->Print( aNestLevel + 2, ")\n" );
+    }
+
+    m_out->Print( aNestLevel + 1, ")\n" );  // Closes `instances`.
+    m_out->Print( aNestLevel, ")\n" );      // Closes `symbol`.
 }
 
 
@@ -1210,7 +1229,6 @@ void SCH_SEXPR_PLUGIN::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNes
 
 
 void SCH_SEXPR_PLUGIN::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheets,
-                                      const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbols,
                                       int aNestLevel )
 {
     if( aSheets.size() )
@@ -1231,26 +1249,6 @@ void SCH_SEXPR_PLUGIN::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSh
         }
 
         m_out->Print( aNestLevel, ")\n" ); // Close sheet instances token.
-    }
-
-    if( aSymbols.size() )
-    {
-        m_out->Print( 0, "\n" );
-        m_out->Print( aNestLevel, "(symbol_instances\n" );
-
-        for( const SYMBOL_INSTANCE_REFERENCE& instance : aSymbols )
-        {
-            m_out->Print( aNestLevel + 1, "(path %s\n",
-                          m_out->Quotew( instance.m_Path.AsString() ).c_str() );
-            m_out->Print( aNestLevel + 2, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
-                          m_out->Quotew( instance.m_Reference ).c_str(),
-                          instance.m_Unit,
-                          m_out->Quotew( instance.m_Value ).c_str(),
-                          m_out->Quotew( instance.m_Footprint ).c_str() );
-            m_out->Print( aNestLevel + 1, ")\n" );
-        }
-
-        m_out->Print( aNestLevel, ")\n" ); // Close symbol instances token.
     }
 }
 

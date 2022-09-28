@@ -72,6 +72,7 @@
 
 
 SCH_LEGACY_PLUGIN::SCH_LEGACY_PLUGIN() :
+    m_appending( false ),
     m_progressReporter( nullptr ),
     m_lineReader( nullptr ),
     m_lastProgressLine( 0 ),
@@ -174,6 +175,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
     }
     else
     {
+        m_appending = true;
         wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
         m_rootSheet = &aSchematic->Root();
         sheet = aAppendToMe;
@@ -1182,19 +1184,18 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
 
             parseQuotedString( pathStr, aReader, line, &line );
 
-            // Note: AR path excludes root sheet, but includes symbol.  Normalize to
-            // internal format by shifting everything down one and adding the root sheet.
+            // Note: AR path excludes root sheet, but includes symbol.  Drop the symbol ID
+            // since it's already defined in the symbol itself.
             KIID_PATH path( pathStr );
 
             if( path.size() > 0 )
-            {
-                for( size_t i = path.size() - 1; i > 0; --i )
-                    path[i] = path[i-1];
+                path.pop_back();
 
-                path[0] = m_rootSheet->m_Uuid;
-            }
-            else
-                path.push_back( m_rootSheet->m_Uuid );
+            // In the new file format, the root schematic UUID is used as the virtual SCH_SHEET
+            // UUID so we need to prefix it to the symbol path so the symbol instance paths
+            // get saved with the root schematic UUID.
+            if( !m_appending )
+                path.insert( path.begin(), m_rootSheet->GetScreen()->m_Uuid );
 
             strCompare = "Ref=";
             len = strlen( strCompare );

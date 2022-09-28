@@ -182,12 +182,29 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
         if( wxFileName::GetPathSeparator() == '\\' )
             topLevelSheetPath.Replace( "\\", "/" );
+
+        // Update the paths to the loaded sheets.
+        std::vector< SCH_ITEM* > sheetsInLoadedSchematic;
+
+        newSheet->GetScreen()->GetSheets( &sheetsInLoadedSchematic );
+
+        for( SCH_ITEM* item : sheetsInLoadedSchematic )
+        {
+            SCH_SHEET* sheet = static_cast< SCH_SHEET* >( item );
+
+            wxCHECK2( sheet, continue );
+
+            wxFileName loadedSheetFileName = sheet->GetFileName();
+            wxString newSheetFilePath = topLevelSheetPath + loadedSheetFileName.GetFullName();
+
+            sheet->SetFileName( newSheetFilePath );
+        }
     }
 
-    // Make sure any new sheet changes do not cause any recursion issues.
-    SCH_SHEET_LIST hierarchy = Schematic().GetSheets(); // This is the schematic sheet hierarchy.
     SCH_SHEET_LIST sheetHierarchy( newSheet.get() );    // This is the hierarchy of the loaded file.
+    SCH_SHEET_LIST hierarchy = Schematic().GetSheets(); // This is the schematic sheet hierarchy.
 
+    // Make sure any new sheet changes do not cause any recursion issues.
     if( CheckSheetForRecursion( newSheet.get(), aHierarchy )
           || checkForNoFullyDefinedLibIds( newSheet.get() ) )
     {
@@ -205,6 +222,29 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     wxMessageDialog::ButtonLabel okButtonLabel( _( "Continue Load" ) );
     wxMessageDialog::ButtonLabel cancelButtonLabel( _( "Cancel Load" ) );
+
+    // Prior to schematic file format 20220919, all symbol instance data was saved in the root
+    // sheet so loading a hierarchical sheet that is not the root sheet will have no symbol
+    // instance data.  Give the user a chance to go back and save the project that contains this
+    // hierarchical sheet so the symbol instance data will be correct on load.
+    if( ( newSheet->GetScreen()->GetFileFormatVersionAtLoad() < 20220919 )
+      && newSheet->GetScreen()->GetSymbolInstances().empty() )
+    {
+        msg = _( "There hierarchical sheets in the loaded schematic file from an older "
+                 "file version resulting in  missing symbol instance data.  This will "
+                 "result in all of the symbols in the loaded schematic to use either the "
+                 "default instance setting or fall back to the library symbol settings.  "
+                 "Loading the project that uses this schematic file and saving to the "
+                 "lastest file version will resolve this issue.\n\n"
+                 "Do you wish to continue?" );
+        wxMessageDialog msgDlg7( this, msg, _( "Continue Load Schematic" ),
+                                 wxOK | wxCANCEL | wxCANCEL_DEFAULT |
+                                 wxCENTER | wxICON_QUESTION );
+        msgDlg7.SetOKCancelLabels( okButtonLabel, cancelButtonLabel );
+
+        if( msgDlg7.ShowModal() == wxID_CANCEL )
+            return false;
+    }
 
     if( !prjScreens.HasSchematic( fullFilename ) )
     {
@@ -444,6 +484,29 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         Prj().SchSymbolLibTable()->Save( Prj().GetProjectPath() +
                                          SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     }
+
+    // Make the best attempt to set the symbol instance data for the loaded scheamtic.
+    if( newScreen->GetFileFormatVersionAtLoad() < 20220919 )
+    {
+        if( !newScreen->GetSymbolInstances().empty() )
+        {
+            // If the loaded schematic is a root sheet for another project, update the symbol
+            // instances.
+            sheetHierarchy.UpdateSymbolInstances( newScreen->GetSymbolInstances() );
+        }
+        else
+        {
+            // Otherwise, fall back to the default instance data which still exists in this
+            // schematic file version.
+            newScreens.SetAllSymbolDefaultInstances();
+        }
+    }
+
+    // Attempt to create new symbol instances using the instance data loaded above.
+    sheetHierarchy.AddNewSymbolInstances( *aHierarchy );
+
+    // Add new sheet instance data.
+    sheetHierarchy.AddNewSheetInstances( *aHierarchy, hierarchy.GetLastVirtualPageNumber() );
 
     // It is finally safe to add or append the imported schematic.
     if( aSheet->GetScreen() == nullptr )
