@@ -5,18 +5,18 @@
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  * this list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
  * to endorse or promote products derived from this software without specific
  * prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
  * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
  * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -31,8 +31,6 @@
 
 #ifndef IBIS_PARSER_H
 #define IBIS_PARSER_H
-
-#define _( x ) x
 
 #define NAN_NA "1"
 #define NAN_INVALID "0"
@@ -54,10 +52,10 @@ class IBIS_REPORTER
 {
 public:
     /** @brief Print a message
-     * 
+     *
      * In the future, this function could do more than just printing a message.
-     * All KIBIS messages are concentrated at a single point in the code. 
-     * 
+     * All KIBIS messages are concentrated at a single point in the code.
+     *
      * @param aMsg Message
      * @param aSeverity Message sevirity
      */
@@ -71,9 +69,9 @@ public:
     IBIS_REPORTER* m_reporter;
 
     /** @brief Print a message
-     * 
+     *
      * Call m_reporter->Report if m_reporter exists.
-     * 
+     *
      * @param aMsg Message
      * @param aSeverity Message sevirity
      */
@@ -86,7 +84,7 @@ public:
     };
 protected:
     /** @brief Convert a double to string using scientific notation
-     * 
+     *
      * @param aNumber Number
      * @return Output string
      */
@@ -98,8 +96,8 @@ class IBIS_INPUT : public IBIS_ANY
 {
 public:
     IBIS_INPUT( IBIS_REPORTER* aReporter ) : IBIS_ANY( aReporter ){};
-    /** @brief Check if the data held by the object is valid. 
-     * 
+    /** @brief Check if the data held by the object is valid.
+     *
      * @return true in case of success
      */
     bool virtual Check() { return false; };
@@ -338,9 +336,9 @@ public:
     bool Check() override;
 
     /** @brief Interpolate the IV table
-     * 
+     *
      * Linear interpolation to find the current for voltage aV
-     * 
+     *
      * @param aV voltage
      * @param aCorner Power supply corner
      * @return current
@@ -348,10 +346,10 @@ public:
     double   InterpolatedI( double aV, IBIS_CORNER aCorner );
 
     /** @brief Interpolate the IV table
-     * 
+     *
      * Generate the spice directive needed to define a model defined by its IV table.
      * The order of aPort1 and aPort2 is important. ( Inverting them will reverse the component )
-     * 
+     *
      * @param aN Index of the 'a' device
      * @param aPort1 Spice node
      * @param aPort2 Spice node
@@ -381,10 +379,10 @@ public:
 };
 
 /*
-Model_type must be one of the following: 
-Input, Output, I/O, 3-state, Open_drain, I/O_open_drain, Open_sink, I/O_open_sink, 
-Open_source, I/O_open_source, Input_ECL, Output_ECL, I/O_ECL, 3-state_ECL, Terminator, 
-Series, and Series_switch. 
+Model_type must be one of the following:
+Input, Output, I/O, 3-state, Open_drain, I/O_open_drain, Open_sink, I/O_open_sink,
+Open_source, I/O_open_source, Input_ECL, Output_ECL, I/O_ECL, 3-state_ECL, Terminator,
+Series, and Series_switch.
 */
 
 enum class IBIS_MODEL_TYPE
@@ -629,9 +627,9 @@ public:
     IbisWaveform*      m_currentWaveform = nullptr;
 
     /** @brief Parse a file
-     * 
+     *
      * This is the entry point to parse a file
-     * 
+     *
      * @param aFileName input file name
      * @return True in case of success
      */
@@ -641,9 +639,9 @@ private:
     std::string* m_continuingString = nullptr;
 
     /** @brief compare two strings without being case sensitive
-     * 
+     *
      * Ibis: "The content of the files is case sensitive, except for reserved words and keywords."
-     * 
+     *
      * @param a string to compare
      * @param b string to compare
      * @return true if the string are equal
@@ -651,43 +649,43 @@ private:
     bool compareIbisWord( const std::string& a, const std::string& b );
 
     /** @brief Parse a single keyword in the header context
-     * 
+     *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parseHeader( std::string& aKeyword );
     /** @brief Parse a single keyword in the component context
-     * 
+     *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parseComponent( std::string& aKeyword );
     /** @brief Parse a single keyword in the component context
-     * 
+     *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parseModelSelector( std::string& aKeyword );
     /** @brief Parse a single keyword in the model selector context
-     * 
+     *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parseModel( std::string& aKeyword );
     /** @brief Parse a single keyword in the model context
-     * 
+     *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parsePackageModel( std::string& aKeyword );
     /** @brief Parse a single keyword in the package model context
-     * 
+     *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parsePackageModelModelData( std::string& );
     /** @brief Parse a double according to the ibis standard
-     * 
+     *
      * @param aDest Where the double should be stored
      * @param aStr The string to parse
      * @param aAllowModifiers Allows modifiers ( p for pico, f for femto, k for kilo, ... )

@@ -124,6 +124,7 @@ principle should be easily implemented by adapting the current STL containers.
 %include marker_base.h
 %include eda_text.h
 %include build_version.h
+%include layer_ids.h
 %include settings/settings_manager.h
 
 // Cast time_t to known type for Python

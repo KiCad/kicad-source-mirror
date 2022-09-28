@@ -5,18 +5,18 @@
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  * this list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
  * to endorse or promote products derived from this software without specific
  * prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
  * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
  * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -35,13 +35,25 @@
 #include <iterator>
 #include <locale_io.h> // KiCad header
 
-bool IbisParser::compareIbisWord( const std::string& a, const std::string& b )
+// _() is used here to mark translatable strings in IBIS_REPORTER::Report()
+// However, currently non ASCII7 chars are nor correctly handled when printing messages
+// So we disable translations
+#if 0
+#include <wx/intl.h>    // for _() macro and wxGetTranslation()
+#else
+#undef _
+#define _( x ) x
+#endif
+
+
+bool IbisParser::compareIbisWord( const std::string& stra, const std::string& strb )
 {
-    return std::equal(a.begin(), a.end(),
-                    b.begin(), b.end(),
-                    [](char a, char b) {
-                        return std::tolower(a) == std::tolower(b);
-                    });
+    return std::equal( stra.begin(), stra.end(),
+                        strb.begin(), strb.end(),
+                        [](char a, char b)
+                        {
+                            return std::tolower(a) == std::tolower(b);
+                        });
 }
 
 bool IBIS_MATRIX_BANDED::Check()
@@ -231,9 +243,9 @@ bool IbisComponent::Check()
     if( !m_package.Check() )
     {
         Report( _( "Component: Invalid Package." ), RPT_SEVERITY_ERROR );
-        status = false;        
+        status = false;
     }
-    
+
     if( m_pins.size() < 1 )
     {
         Report( _( "Component: no pin" ), RPT_SEVERITY_ERROR );
@@ -322,7 +334,7 @@ double IVtable::InterpolatedI( double aV, IBIS_CORNER aCorner )
             return m_entries.at( 0 ).I.value[aCorner];
         }
 
-        for( int i = 1; i < m_entries.size(); i++ )
+        for( size_t i = 1; i < m_entries.size(); i++ )
         {
             if( m_entries.at( i ).V > aV )
             {
@@ -612,13 +624,13 @@ bool IbisPackageModel::Check()
         status = false;
     }
 
-    if( m_pins.size() != m_numberOfPins )
+    if( (int)m_pins.size() != m_numberOfPins )
     {
         Report( "Number of pins does not match [Pin Numbers] size", RPT_SEVERITY_ERROR );
         status = false;
     }
 
-    for( int i = 0; i < m_pins.size(); i++ )
+    for( size_t i = 0; i < m_pins.size(); i++ )
     {
         if( m_pins.at( i ).empty() )
         {
@@ -778,7 +790,7 @@ bool IbisParser::readDvdt( std::string& aString, dvdt& aDest )
 
     int i = 0;
 
-    for( i = 1; i < aString.length(); i++ )
+    for( i = 1; i < (int)aString.length(); i++ )
     {
         if( aString.at( i ) == '/' )
         {
@@ -951,7 +963,7 @@ bool IbisParser::readInt( int& aDest )
     if( readWord( str ) )
     {
         double result;
-        size_t size;
+        size_t size = 0;
 
         try
         {
@@ -1036,7 +1048,7 @@ bool IbisParser::readString( std::string& aDest )
 
 bool IbisParser::storeString( std::string& aDest, bool aMultiline )
 {
-    
+
     skipWhitespaces();
 
     readString( aDest );
@@ -1082,7 +1094,6 @@ bool IbisParser::changeCommentChar()
         return false;
     }
 
-    int i = 0;
     while( isspace( c ) && c != 0 && c != '\n' && c != d )
     {
         c = m_buffer[m_lineOffset + m_lineIndex++];
@@ -1444,7 +1455,7 @@ bool IbisParser::readMatrixFull( std::string aKeyword, IBIS_MATRIX_FULL& aDest )
 
         status &= readTableLine( values );
         int i;
-        for( i = 0; i < values.size(); i++ )
+        for( i = 0; i < (int)values.size(); i++ )
         {
             int index = i + m_currentMatrixRow * aDest.m_dim + m_currentMatrixRow;
             // + final m_currentMatrixRow because we don't fill the lower triangle.
@@ -1718,7 +1729,7 @@ bool IbisParser::readNumericSubparam( std::string aSubparam, double& aDest )
     std::string paramName;
     bool     status = true;
 
-    if( aSubparam.size() >= m_lineLength )
+    if( aSubparam.size() >= (size_t)m_lineLength )
     {
         // Continuing would result in an overflow
         return false;
@@ -1727,7 +1738,8 @@ bool IbisParser::readNumericSubparam( std::string aSubparam, double& aDest )
     int old_index = m_lineIndex;
     m_lineIndex = 0;
 
-    for( int i = 0; i < aSubparam.size(); i++ )
+
+    for( size_t i = 0; i < aSubparam.size(); i++ )
     {
         paramName += m_buffer[m_lineOffset + m_lineIndex++];
     }
@@ -1784,9 +1796,9 @@ bool IbisParser::readTypMinMaxValueSubparam( std::string aSubparam, TypMinMaxVal
 
     m_lineIndex = 0; // rewind
 
-    if( aSubparam.size() < m_lineLength )
+    if( aSubparam.size() < (size_t)m_lineLength )
     {
-        for( int i = 0; i < aSubparam.size(); i++ )
+        for( size_t i = 0; i < aSubparam.size(); i++ )
         {
             paramName += m_buffer[m_lineOffset + m_lineIndex++];
         }
@@ -1811,8 +1823,6 @@ bool IbisParser::readTypMinMaxValueSubparam( std::string aSubparam, TypMinMaxVal
 bool IbisParser::readModel()
 {
     bool status = true;
-
-    int startOfLine = m_lineIndex;
 
     std::string subparam;
     if( readWord( subparam ) )
@@ -1931,7 +1941,7 @@ bool IbisParser::readModel()
                 ;
             else if( readTypMinMaxValueSubparam( std::string( "C_comp" ),
                                                  m_currentModel->m_C_comp ) )
-                ; 
+                ;
             else
             {
                 status = false;
@@ -1940,6 +1950,7 @@ bool IbisParser::readModel()
             m_continue = IBIS_PARSER_CONTINUE::MODEL;
 
             break;
+
         default:
             status = false;
             Report( _( "Continued reading a model that did not begin. ( internal error )" ),
@@ -2085,7 +2096,7 @@ bool IbisParser::readPackage()
 
     int extraArg = ( m_continue == IBIS_PARSER_CONTINUE::NONE ) ? 1 : 0;
 
-    if( fields.size() == ( 4 + extraArg ) )
+    if( (int)fields.size() == ( 4 + extraArg ) )
     {
         if( fields.at( 0 ) == "R_pkg" )
         {
