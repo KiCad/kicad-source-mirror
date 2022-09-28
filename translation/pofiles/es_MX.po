@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-25 11:47+0000\n"
+"PO-Revision-Date: 2022-09-29 15:54+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -20978,7 +20978,7 @@ msgstr "Corriente:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:186
 msgid "Length:"
-msgstr "Long."
+msgstr "Longitud:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:188
 msgid "Length includes the return path"
@@ -32939,7 +32939,7 @@ msgstr "dv/dt ascendente inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:428
 msgid "Model name cannot be empty"
-msgstr "El nombre de modelo no puede estar vacío."
+msgstr "El nombre de modelo no puede estar vacío"
 
 #: pcbnew/ibis/ibis_parser.cpp:433
 msgid "Checking model "
@@ -36514,7 +36514,7 @@ msgstr "Forma de vía no soportada: %s"
 #: pcbnew/specctra_import_export/specctra_import.cpp:286
 #, c-format
 msgid "Session file uses invalid layer id '%s'"
-msgstr "El archivo Session utiliza un ID de capa '%s' inválido."
+msgstr "El archivo Session utiliza un ID de capa '%s' inválido"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:342
 msgid "Session file is missing the \"session\" section"
