@@ -400,16 +400,16 @@ void EDA_3D_MODEL_VIEWER::OnMouseWheel( wxMouseEvent& event )
     if( event.ShiftDown() )
     {
         //if( event.GetWheelRotation() < 0 )
-            //SetView3D( WXK_UP );    // move up
+            //SetView3D( VIEW_3D_TYPE::VIEW3D_PAN_UP );    // move up
         //else
-            //SetView3D( WXK_DOWN );  // move down
+            //SetView3D( VIEW_3D_TYPE::VIEW3D_PAN_DOWN );  // move down
     }
     else if( event.ControlDown() )
     {
         //if( event.GetWheelRotation() > 0 )
-            //SetView3D( WXK_RIGHT ); // move right
+            //SetView3D( VIEW_3D_TYPE::VIEW3D_PAN_RIGHT ); // move right
         //else
-            //SetView3D( WXK_LEFT );  // move left
+            //SetView3D( VIEW_3D_TYPE::VIEW3D_PAN_LEFT );  // move left
     }
     else
     {

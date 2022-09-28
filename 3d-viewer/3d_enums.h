@@ -74,4 +74,29 @@ enum class MATERIAL_MODE
     CAD_MODE     = 2  ///< Use a gray shading based on diffuse material
 };
 
+enum class VIEW3D_TYPE
+{
+    // Specific directions
+    VIEW3D_TOP,
+    VIEW3D_BOTTOM,
+    VIEW3D_LEFT,
+    VIEW3D_RIGHT,
+    VIEW3D_FRONT,
+    VIEW3D_BACK,
+    VIEW3D_RESET,
+    VIEW3D_FLIP,
+
+    // Movement commands
+    VIEW3D_PAN_UP,
+    VIEW3D_PAN_DOWN,
+    VIEW3D_PAN_LEFT,
+    VIEW3D_PAN_RIGHT,
+    VIEW3D_ZOOM_IN,
+    VIEW3D_ZOOM_OUT,
+    VIEW3D_PIVOT_CENTER,
+
+    // Specific levels
+    VIEW3D_FIT_SCREEN
+};
+
 #endif // _3D_ENUMS_H_

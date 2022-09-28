@@ -916,7 +916,7 @@ void EDA_3D_CANVAS::move_pivot_based_on_cur_mouse_position()
 }
 
 
-bool EDA_3D_CANVAS::SetView3D( int aKeycode )
+bool EDA_3D_CANVAS::SetView3D( VIEW3D_TYPE aRequestedView )
 {
     if( m_camera_is_moving )
         return false;
@@ -925,59 +925,48 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
     const float arrow_moving_time_speed = 8.0f;
     bool        handled = false;
 
-    switch( aKeycode )
+    switch( aRequestedView )
     {
-    case WXK_SPACE:
+    case VIEW3D_TYPE::VIEW3D_PIVOT_CENTER:
         move_pivot_based_on_cur_mouse_position();
         return true;
 
-    case WXK_LEFT:
+    case VIEW3D_TYPE::VIEW3D_PAN_LEFT:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Pan_T1( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
-    case WXK_RIGHT:
+    case VIEW3D_TYPE::VIEW3D_PAN_RIGHT:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Pan_T1( SFVEC3F( +delta_move, 0.0f, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
-    case WXK_UP:
+    case VIEW3D_TYPE::VIEW3D_PAN_UP:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Pan_T1( SFVEC3F( 0.0f, +delta_move, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
-    case WXK_DOWN:
+    case VIEW3D_TYPE::VIEW3D_PAN_DOWN:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Pan_T1( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
-    case WXK_HOME:
+    case VIEW3D_TYPE::VIEW3D_FIT_SCREEN:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
         request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 1 / 1.26f ), 1.26f ) );
         return true;
 
-    case WXK_END:
-        break;
-
-    case WXK_TAB:
-        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::EASING_IN_OUT );
-        m_camera.SetT0_and_T1_current_T();
-        m_camera.RotateZ_T1( glm::radians( 45.0f ) );
-        request_start_moving_camera();
-        handled = true;
-        break;
-
-    case WXK_F1:
+    case VIEW3D_TYPE::VIEW3D_ZOOM_IN:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
 
@@ -986,7 +975,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
         return true;
 
-    case WXK_F2:
+    case VIEW3D_TYPE::VIEW3D_ZOOM_OUT:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
 
@@ -995,14 +984,14 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
         return true;
 
-    case ID_VIEW3D_RESET:
+    case VIEW3D_TYPE::VIEW3D_RESET:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
         request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 0.5f ), 1.125f ) );
         return true;
 
-    case ID_VIEW3D_RIGHT:
+    case VIEW3D_TYPE::VIEW3D_RIGHT:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
@@ -1011,7 +1000,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         request_start_moving_camera();
         return true;
 
-    case ID_VIEW3D_LEFT:
+    case VIEW3D_TYPE::VIEW3D_LEFT:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
@@ -1020,7 +1009,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         request_start_moving_camera();
         return true;
 
-    case ID_VIEW3D_FRONT:
+    case VIEW3D_TYPE::VIEW3D_FRONT:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
@@ -1028,7 +1017,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         request_start_moving_camera();
         return true;
 
-    case ID_VIEW3D_BACK:
+    case VIEW3D_TYPE::VIEW3D_BACK:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
@@ -1041,14 +1030,14 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         request_start_moving_camera();
         return true;
 
-    case ID_VIEW3D_TOP:
+    case VIEW3D_TYPE::VIEW3D_TOP:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
         request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 0.5f ), 1.125f ) );
         return true;
 
-    case ID_VIEW3D_BOTTOM:
+    case VIEW3D_TYPE::VIEW3D_BOTTOM:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
@@ -1056,7 +1045,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 0.5f ), 1.125f ) );
         return true;
 
-    case ID_VIEW3D_FLIP:
+    case VIEW3D_TYPE::VIEW3D_FLIP:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.RotateY_T1( glm::radians( 179.999f ) );

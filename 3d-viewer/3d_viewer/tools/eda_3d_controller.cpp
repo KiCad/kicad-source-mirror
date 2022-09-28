@@ -152,7 +152,7 @@ int EDA_3D_CONTROLLER::Main( const TOOL_EVENT& aEvent )
 
 int EDA_3D_CONTROLLER::ViewControl( const TOOL_EVENT& aEvent )
 {
-    m_canvas->SetView3D( aEvent.Parameter<int>() );
+    m_canvas->SetView3D( aEvent.Parameter<VIEW3D_TYPE>() );
 
     return 0;
 }
@@ -162,10 +162,10 @@ int EDA_3D_CONTROLLER::PanControl( const TOOL_EVENT& aEvent )
 {
     switch( aEvent.Parameter<ACTIONS::CURSOR_EVENT_TYPE>() )
     {
-    case ACTIONS::CURSOR_UP:    m_canvas->SetView3D( WXK_UP );    break;
-    case ACTIONS::CURSOR_DOWN:  m_canvas->SetView3D( WXK_DOWN );  break;
-    case ACTIONS::CURSOR_LEFT:  m_canvas->SetView3D( WXK_LEFT );  break;
-    case ACTIONS::CURSOR_RIGHT: m_canvas->SetView3D( WXK_RIGHT ); break;
+    case ACTIONS::CURSOR_UP:    m_canvas->SetView3D( VIEW3D_TYPE::VIEW3D_PAN_UP );    break;
+    case ACTIONS::CURSOR_DOWN:  m_canvas->SetView3D( VIEW3D_TYPE::VIEW3D_PAN_DOWN );  break;
+    case ACTIONS::CURSOR_LEFT:  m_canvas->SetView3D( VIEW3D_TYPE::VIEW3D_PAN_LEFT );  break;
+    case ACTIONS::CURSOR_RIGHT: m_canvas->SetView3D( VIEW3D_TYPE::VIEW3D_PAN_RIGHT ); break;
     default:                    wxFAIL;                           break;
     }
 
@@ -360,7 +360,7 @@ int EDA_3D_CONTROLLER::doZoomInOut( bool aDirection, bool aCenterOnCursor )
 {
     if( m_canvas )
     {
-        m_canvas->SetView3D( aDirection ? WXK_F1 : WXK_F2 );
+        m_canvas->SetView3D( aDirection ? VIEW3D_TYPE::VIEW3D_ZOOM_IN : VIEW3D_TYPE::VIEW3D_ZOOM_OUT );
         m_canvas->DisplayStatus();
     }
 
@@ -372,7 +372,7 @@ int EDA_3D_CONTROLLER::ZoomFitScreen( const TOOL_EVENT& aEvent )
 {
     if( m_canvas )
     {
-        m_canvas->SetView3D( WXK_HOME );
+        m_canvas->SetView3D( VIEW3D_TYPE::VIEW3D_FIT_SCREEN );
         m_canvas->DisplayStatus();
     }
 

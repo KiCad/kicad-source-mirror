@@ -114,12 +114,12 @@ public:
     void GetScreenshot( wxImage& aDstImage );
 
     /**
-     * Helper function to call view commands.
+     * Select a specific 3D view or operation
      *
-     * @param aKeycode ascii key commands.
-     * @return true if the key code was handled, false if no command found for this code.
+     * @param aRequestedView the view to move to
+     * @return true if the view request was handled, false if no command found for this view.
      */
-    bool SetView3D( int aKeycode );
+    bool SetView3D( VIEW3D_TYPE aRequestedView );
 
     /**
      * Enable or disable camera animation when switching to a pre-defined view.

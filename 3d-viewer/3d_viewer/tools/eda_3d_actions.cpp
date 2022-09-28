@@ -46,7 +46,7 @@ TOOL_ACTION EDA_3D_ACTIONS::pivotCenter( TOOL_ACTION_ARGS()
         .MenuText( _( "Center pivot rotation" ) )
         .Tooltip( _( "Center pivot rotation (middle mouse click)" ) )
         .Flags( AF_NONE )
-        .Parameter( WXK_SPACE ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_PIVOT_CENTER ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateXCW( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.rotateXclockwise" )
@@ -149,7 +149,7 @@ TOOL_ACTION EDA_3D_ACTIONS::homeView( TOOL_ACTION_ARGS()
         .MenuText ( _( "Home view" ) )
         .Tooltip( _( "Home view" ) )
         .Flags( AF_NONE )
-        .Parameter( WXK_HOME ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_FIT_SCREEN ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::resetView( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.resetView" )
@@ -158,7 +158,7 @@ TOOL_ACTION EDA_3D_ACTIONS::resetView( TOOL_ACTION_ARGS()
         .MenuText( _( "Reset view" ) )
         .Tooltip( _( "Reset view" ) )
         .Flags( AF_NONE )
-        .Parameter( ID_VIEW3D_RESET ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_RESET ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::flipView( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.flipView" )
@@ -168,7 +168,7 @@ TOOL_ACTION EDA_3D_ACTIONS::flipView( TOOL_ACTION_ARGS()
         .Tooltip( _( "Flip the board view" ) )
         .Icon( BITMAPS::flip_board )
         .Flags( AF_NONE )
-        .Parameter( ID_VIEW3D_FLIP ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_FLIP ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleOrtho( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.toggleOrtho" )
@@ -185,7 +185,7 @@ TOOL_ACTION EDA_3D_ACTIONS::viewFront( TOOL_ACTION_ARGS()
         .Tooltip( _( "View Front" ) )
         .Icon( BITMAPS::axis3d_front )
         .Flags( AF_NONE )
-        .Parameter( ID_VIEW3D_FRONT ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_FRONT ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewBack( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.viewBack" )
@@ -195,7 +195,7 @@ TOOL_ACTION EDA_3D_ACTIONS::viewBack( TOOL_ACTION_ARGS()
         .Tooltip( _( "View Back" ) )
         .Icon( BITMAPS::axis3d_back )
         .Flags( AF_NONE )
-        .Parameter( ID_VIEW3D_BACK ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_BACK ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewLeft( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.viewLeft" )
@@ -205,7 +205,7 @@ TOOL_ACTION EDA_3D_ACTIONS::viewLeft( TOOL_ACTION_ARGS()
         .Tooltip( _( "View Left" ) )
         .Icon( BITMAPS::axis3d_left )
         .Flags( AF_NONE )
-        .Parameter( ID_VIEW3D_LEFT ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_LEFT ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewRight( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.viewRight" )
@@ -215,7 +215,7 @@ TOOL_ACTION EDA_3D_ACTIONS::viewRight( TOOL_ACTION_ARGS()
         .Tooltip( _( "View Right" ) )
         .Icon( BITMAPS::axis3d_right )
         .Flags( AF_NONE )
-        .Parameter( ID_VIEW3D_RIGHT ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_RIGHT ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewTop( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.viewTop" )
@@ -225,7 +225,7 @@ TOOL_ACTION EDA_3D_ACTIONS::viewTop( TOOL_ACTION_ARGS()
         .Tooltip( _( "View Top" ) )
         .Icon( BITMAPS::axis3d_top )
         .Flags( AF_NONE )
-        .Parameter( ID_VIEW3D_TOP ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_TOP ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewBottom( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.viewBottom" )
@@ -235,7 +235,7 @@ TOOL_ACTION EDA_3D_ACTIONS::viewBottom( TOOL_ACTION_ARGS()
         .Tooltip( _( "View Bottom" ) )
         .Icon( BITMAPS::axis3d_bottom )
         .Flags( AF_NONE )
-        .Parameter( ID_VIEW3D_BOTTOM ) );
+        .Parameter( VIEW3D_TYPE::VIEW3D_BOTTOM ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::noGrid( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.noGrid" )

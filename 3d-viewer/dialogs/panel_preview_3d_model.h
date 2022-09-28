@@ -155,17 +155,17 @@ private:
 
 	void View3DLeft( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( ID_VIEW3D_LEFT );
+        m_previewPane->SetView3D( VIEW3D_TYPE::VIEW3D_LEFT );
     }
 
 	void View3DFront( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( ID_VIEW3D_FRONT );
+        m_previewPane->SetView3D( VIEW3D_TYPE::VIEW3D_FRONT );
     }
 
 	void View3DTop( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( ID_VIEW3D_TOP );
+        m_previewPane->SetView3D( VIEW3D_TYPE::VIEW3D_TOP );
     }
 
 	void View3DUpdate( wxCommandEvent& event ) override
@@ -176,17 +176,17 @@ private:
 
 	void View3DRight( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( ID_VIEW3D_RIGHT );
+        m_previewPane->SetView3D( VIEW3D_TYPE::VIEW3D_RIGHT );
     }
 
 	void View3DBack( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( ID_VIEW3D_BACK );
+        m_previewPane->SetView3D( VIEW3D_TYPE::VIEW3D_BACK );
     }
 
 	void View3DBottom( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( ID_VIEW3D_BOTTOM );
+        m_previewPane->SetView3D( VIEW3D_TYPE::VIEW3D_BOTTOM );
     }
 
 private:
