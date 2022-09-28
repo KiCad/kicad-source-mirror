@@ -1038,7 +1038,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     // Otherwise it is one of the router-specific via commands
     if( targetLayer == UNDEFINED_LAYER )
     {
-        const int actViaFlags = aEvent.Parameter<int>();
+        const int actViaFlags = static_cast<int>( aEvent.Parameter<VIA_ACTION_FLAGS>() );
         selectLayer           = actViaFlags & VIA_ACTION_FLAGS::SELECT_LAYER;
 
         viaType = getViaTypeFromFlags( actViaFlags );
@@ -2234,7 +2234,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         p = controls()->GetCursorPosition();
     }
 
-    int dragMode = aEvent.Parameter<int64_t> ();
+    int dragMode = aEvent.Parameter<int> ();
 
     bool dragStarted = m_router->StartDragging( p, itemsToDrag, dragMode );
 

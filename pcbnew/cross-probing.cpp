@@ -192,9 +192,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         bbox = footprint->GetBoundingBox( true, false ); // No invisible text in bbox calc
 
         if( pad )
-            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) pad );
+            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, pad );
         else
-            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) footprint );
+            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, footprint );
     }
     else if( netcode > 0 || multiHighlight )
     {
@@ -645,13 +645,11 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( selectConnections )
             {
-                GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, true,
-                                             static_cast<void*>( &items ) );
+                GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, true, &items );
             }
             else
             {
-                GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, true,
-                                             static_cast<void*>( &items ) );
+                GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, true, &items );
             }
 
             // Update 3D viewer highlighting

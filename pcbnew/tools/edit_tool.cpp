@@ -283,7 +283,7 @@ int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
     if( fp )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, (void*) fp );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
 
         selectionTool->GetSelection().SetReferencePoint( fp->GetPosition() );
         m_toolMgr->RunAction( PCB_ACTIONS::move, false );
@@ -314,8 +314,7 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
 
     if( theRouter->CanInlineDrag( aDragMode ) )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true,
-                              static_cast<intptr_t>( aDragMode ) );
+        m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true, aDragMode );
         return true;
     }
 

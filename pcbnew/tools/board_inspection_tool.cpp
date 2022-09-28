@@ -1519,7 +1519,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
         if( item )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, (void*) item );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, item );
     }
     m_frame->m_probingSchToPcb = false;
 

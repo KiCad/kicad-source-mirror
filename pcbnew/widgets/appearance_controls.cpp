@@ -3194,8 +3194,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                 runOnNetsOfClass( m_contextMenuNetclass,
                         [&]( NETINFO_ITEM* aItem )
                         {
-                            toolMgr->RunAction( action, true,
-                                                static_cast<intptr_t>( aItem->GetNetCode() ) );
+                            toolMgr->RunAction( action, true, aItem->GetNetCode() );
                         } );
             }
             break;

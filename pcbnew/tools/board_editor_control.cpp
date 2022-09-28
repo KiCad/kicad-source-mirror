@@ -1481,7 +1481,7 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
             },
             true /* prompt user regarding locked items */ );
 
-    intptr_t netCode = -1;
+    int netCode = -1;
     wxString netName;
 
     for( EDA_ITEM* item : selection )
@@ -1503,7 +1503,7 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     }
 
     selectionTool->ClearSelection();
-    m_toolMgr->RunAction( PCB_ACTIONS::selectNet, true, (void*) netCode );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectNet, true, netCode );
     canvas()->ForceRefresh();
 
     DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, board()->GetNetClassAssignmentCandidates(),
