@@ -872,17 +872,21 @@ TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightN
 TOOL_ACTION PCB_ACTIONS::highlightItem( "pcbnew.EditorControl.highlightItem",
         AS_GLOBAL );
 
-TOOL_ACTION PCB_ACTIONS::hideNetInRatsnest( "pcbnew.EditorControl.hideNet",
-        AS_GLOBAL, 0, "",
-        _( "Hide Net in Ratsnest" ),
-        _( "Hide the selected net in the ratsnest of unconnected net lines/arcs" ),
-        BITMAPS::hide_ratsnest );
+TOOL_ACTION PCB_ACTIONS::hideNetInRatsnest( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.hideNet" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Hide Net in Ratsnest" ) )
+        .Tooltip( _( "Hide the selected net in the ratsnest of unconnected net lines/arcs" ) )
+        .Icon( BITMAPS::hide_ratsnest )
+        .Parameter( static_cast<int>( 0 ) ) );    // Default to hiding selected net
 
-TOOL_ACTION PCB_ACTIONS::showNetInRatsnest( "pcbnew.EditorControl.showNet",
-        AS_GLOBAL, 0, "",
-        _( "Show Net in Ratsnest" ),
-        _( "Show the selected net in the ratsnest of unconnected net lines/arcs" ),
-        BITMAPS::show_ratsnest );
+TOOL_ACTION PCB_ACTIONS::showNetInRatsnest( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.showNet" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Net in Ratsnest" ) )
+        .Tooltip( _( "Show the selected net in the ratsnest of unconnected net lines/arcs" ) )
+        .Icon( BITMAPS::show_ratsnest )
+        .Parameter( static_cast<int>( 0 ) ) );    // Default to showing selected net
 
 TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
         AS_GLOBAL, 0, "",

@@ -295,7 +295,7 @@ void NET_GRID_TABLE::updateNetVisibility( const NET_GRID_ENTRY& aNet )
     const TOOL_ACTION& action = aNet.visible ? PCB_ACTIONS::showNetInRatsnest
                                              : PCB_ACTIONS::hideNetInRatsnest;
 
-    m_frame->GetToolManager()->RunAction( action, true, static_cast<intptr_t>( aNet.code ) );
+    m_frame->GetToolManager()->RunAction( action, true, aNet.code );
 }
 
 
@@ -2966,20 +2966,17 @@ void APPEARANCE_CONTROLS::onNetContextMenu( wxCommandEvent& aEvent )
         break;
 
     case ID_HIGHLIGHT_NET:
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::highlightNet, true,
-                                              static_cast<intptr_t>( net.code ) );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::highlightNet, true, net.code );
         m_frame->GetCanvas()->Refresh();
         break;
 
     case ID_SELECT_NET:
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true,
-                                              static_cast<intptr_t>( net.code ) );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true, net.code );
         m_frame->GetCanvas()->Refresh();
         break;
 
     case ID_DESELECT_NET:
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::deselectNet, true,
-                                              static_cast<intptr_t>( net.code ) );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::deselectNet, true, net.code );
         m_frame->GetCanvas()->Refresh();
         break;
 
@@ -3017,7 +3014,7 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
             m_frame->GetToolManager()->RunAction( aShow ? PCB_ACTIONS::showNetInRatsnest
                                                         : PCB_ACTIONS::hideNetInRatsnest,
                                                   true,
-                                                  static_cast<intptr_t>( net->GetNetCode() ) );
+                                                  net->GetNetCode() );
 
             int row = m_netsTable->GetRowByNetcode( net->GetNetCode() );
 
