@@ -34,47 +34,53 @@
 
 
 // Selection tool action for the footprint viewer window
-TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.FootprintViewerInteractiveSelection",
-        AS_GLOBAL, 0, "",
-        "",
-        "", // No description, it is not supposed to be shown anywhere
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+// No description, it is not supposed to be shown anywhere
+TOOL_ACTION CVPCB_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.FootprintViewerInteractiveSelection" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION CVPCB_ACTIONS::controlActivate( "cvpcb.Control",
-        AS_GLOBAL, 0, "",
-        "",
-        "", // No description, it is not supposed to be shown anywhere
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+// No description, it is not supposed to be shown anywhere
+TOOL_ACTION CVPCB_ACTIONS::controlActivate( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_ACTIVATE ) );
 
 
 // Action to show the footprint viewer window
-TOOL_ACTION CVPCB_ACTIONS::showFootprintViewer( "cvpcb.Control.ShowFootprintViewer",
-        AS_GLOBAL, 0, "",
-        _( "View selected footprint" ),
-        _( "View the selected footprint in the footprint viewer" ),
-        BITMAPS::show_footprint );
+TOOL_ACTION CVPCB_ACTIONS::showFootprintViewer( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.ShowFootprintViewer" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "View selected footprint" ) )
+        .Tooltip( _( "View the selected footprint in the footprint viewer" ) )
+        .Icon( BITMAPS::show_footprint ) );
 
 
 // Actions to handle management tasks
-TOOL_ACTION CVPCB_ACTIONS::showEquFileTable( "cvpcb.Control.ShowEquFileTable",
-        AS_GLOBAL, 0, "",
-        _( "Manage Footprint Association Files" ),
-        _( "Configure footprint association file (.equ) list.  These files are "
-           "used to automatically assign footprint names from symbol values." ) );
+TOOL_ACTION CVPCB_ACTIONS::showEquFileTable( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.ShowEquFileTable" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Manage Footprint Association Files" ) )
+        .Tooltip( _( "Configure footprint association file (.equ) list.  These files are "
+           "used to automatically assign footprint names from symbol values." ) ) );
 
-TOOL_ACTION CVPCB_ACTIONS::saveAssociationsToSchematic( "cvpcb.Control.SaveAssociationsToSchematic",
-        AS_GLOBAL,
-        MD_CTRL + 'S', LEGACY_HK_NAME( "Save" ),
-        _( "Save to Schematic" ),
-        _( "Save footprint associations in schematic symbol footprint fields" ),
-        BITMAPS::save );
+TOOL_ACTION CVPCB_ACTIONS::saveAssociationsToSchematic( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.SaveAssociationsToSchematic" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'S' )
+        .LegacyHotkeyName( "Save" )
+        .MenuText( _( "Save to Schematic" ) )
+        .Tooltip( _( "Save footprint associations in schematic symbol footprint fields" ) )
+        .Icon( BITMAPS::save ) );
 
-TOOL_ACTION CVPCB_ACTIONS::saveAssociationsToFile( "cvpcb.Control.SaveAssociationsToFile",
-        AS_GLOBAL,
-        MD_CTRL + 'S', LEGACY_HK_NAME( "Save" ),
-        _( "Save to Schematic and File" ),
-        _( "Save footprint associations in schematic symbol footprint fields and schematic files" ),
-        BITMAPS::save );
+TOOL_ACTION CVPCB_ACTIONS::saveAssociationsToFile( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Control.SaveAssociationsToFile" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'S' )
+        .LegacyHotkeyName( "Save" )
+        .MenuText( _( "Save to Schematic and File" ) )
+        .Tooltip( _( "Save footprint associations in schematic symbol footprint fields and schematic files" ) )
+        .Icon( BITMAPS::save ) );
 
 // Actions to navigate the display
 TOOL_ACTION CVPCB_ACTIONS::changeFocusRight( TOOL_ACTION_ARGS()
@@ -112,31 +118,35 @@ TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( TOOL_ACTION_ARGS()
 
 
 // Actions to modify component associations
-TOOL_ACTION CVPCB_ACTIONS::associate( "cvpcb.Association.Associate",
-        AS_GLOBAL,
-        WXK_RETURN, "",
-        _( "Assign footprint" ),
-        _( "Assign footprint to selected symbols" ),
-        BITMAPS::auto_associate );
+TOOL_ACTION CVPCB_ACTIONS::associate( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Association.Associate" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_RETURN )
+        .MenuText( _( "Assign footprint" ) )
+        .Tooltip( _( "Assign footprint to selected symbols" ) )
+        .Icon( BITMAPS::auto_associate ) );
 
-TOOL_ACTION CVPCB_ACTIONS::autoAssociate( "cvpcb.Association.AutoAssociate",
-        AS_GLOBAL, 0, "",
-        _( "Automatically assign footprints" ),
-        _( "Perform automatic footprint assignment" ),
-        BITMAPS::auto_associate );
+TOOL_ACTION CVPCB_ACTIONS::autoAssociate( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Association.AutoAssociate" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Automatically assign footprints" ) )
+        .Tooltip( _( "Perform automatic footprint assignment" ) )
+        .Icon( BITMAPS::auto_associate ) );
 
-TOOL_ACTION CVPCB_ACTIONS::deleteAssoc( "cvpcb.Association.Delete",
-        AS_GLOBAL,
-        WXK_DELETE, "",
-        _( "Delete association" ),
-        _( "Delete selected footprint associations" ),
-        BITMAPS::delete_association );
+TOOL_ACTION CVPCB_ACTIONS::deleteAssoc( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Association.Delete" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_DELETE )
+        .MenuText( _( "Delete association" ) )
+        .Tooltip( _( "Delete selected footprint associations" ) )
+        .Icon( BITMAPS::delete_association ) );
 
-TOOL_ACTION CVPCB_ACTIONS::deleteAll( "cvpcb.Association.DeleteAll",
-        AS_GLOBAL, 0, "",
-        _( "Delete all footprint associations" ),
-        _( "Delete all footprint associations" ),
-        BITMAPS::delete_association );
+TOOL_ACTION CVPCB_ACTIONS::deleteAll( TOOL_ACTION_ARGS()
+        .Name( "cvpcb.Association.DeleteAll" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Delete all footprint associations" ) )
+        .Tooltip( _( "Delete all footprint associations" ) )
+        .Icon( BITMAPS::delete_association ) );
 
 
 // Actions to filter the footprint list
