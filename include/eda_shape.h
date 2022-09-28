@@ -25,7 +25,6 @@
 #ifndef EDA_SHAPE_H
 #define EDA_SHAPE_H
 
-#include <eda_units.h>
 #include <trigo.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>

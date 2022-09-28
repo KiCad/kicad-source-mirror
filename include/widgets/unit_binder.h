@@ -26,7 +26,6 @@
 #ifndef __UNIT_BINDER_H_
 #define __UNIT_BINDER_H_
 
-#include <eda_units.h>
 #include <base_units.h>
 #include <origin_transforms.h>
 #include <libeval/numeric_evaluator.h>

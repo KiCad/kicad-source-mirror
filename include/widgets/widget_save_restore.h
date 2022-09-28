@@ -24,7 +24,7 @@
 #ifndef WIDGETS_WIDGET_SAVE_RESTORE__H
 #define WIDGETS_WIDGET_SAVE_RESTORE__H
 
-#include <eda_units.h>
+#include <base_units.h>
 #include <vector>
 
 class wxCheckBox;

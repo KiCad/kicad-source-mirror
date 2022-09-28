@@ -28,6 +28,7 @@
 #include <wx/textentry.h>
 #include <limits>
 #include <base_units.h>
+#include <eda_units.h>
 #include <eda_draw_frame.h>
 #include <confirm.h>
 

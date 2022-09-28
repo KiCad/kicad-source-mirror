@@ -27,8 +27,6 @@
 
 
 #include <eda_item.h>
-#include <eda_units.h>
-#include <gr_basic.h>
 #include <layer_ids.h>
 #include <geometry/geometry_utils.h>
 #include <stroke_params.h>

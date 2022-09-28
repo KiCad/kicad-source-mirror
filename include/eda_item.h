@@ -34,7 +34,6 @@
 #include <eda_search_data.h>
 #include <view/view_item.h>
 #include <kiid.h>
-#include <units_provider.h>
 
 enum class BITMAPS : unsigned int;
 
@@ -49,20 +48,7 @@ enum class INSPECT_RESULT
 /**
  * Additional flag values wxFindReplaceData::m_Flags
  */
-enum FIND_REPLACE_FLAGS
-{
-    // The last wxFindReplaceFlag enum is wxFR_MATCHCASE = 0x4.
-    FR_CURRENT_SHEET_ONLY = 0x4 << 1,   // Search the current sheet only.
-    FR_SEARCH_ALL_FIELDS  = 0x4 << 2,   // Search hidden fields too.
-    FR_SEARCH_ALL_PINS    = 0x4 << 3,   // Search pin name and number.
-    FR_MATCH_WILDCARD     = 0x4 << 4,   // Use simple wild card matching (* & ?).
-    FR_SEARCH_WRAP        = 0x4 << 5,   // Wrap around the start or end of search.
-    FR_SEARCH_REPLACE     = 0x4 << 7,   // Search for a item that has replaceable text.
-    FR_REPLACE_ITEM_FOUND = 0x4 << 8,   // Indicates an item with replaceable text has been found.
-    FR_REPLACE_REFERENCES = 0x4 << 9    // Don't replace in references.
-};
-
-class wxFindReplaceData;
+class UNITS_PROVIDER;
 class EDA_DRAW_FRAME;
 class MSG_PANEL_ITEM;
 
