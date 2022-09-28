@@ -373,8 +373,10 @@ TOOL_ACTION ACTIONS::zoomTool( "common.Control.zoomTool",
         _( "Zoom to Selection" ), _( "Zoom to Selection" ),
         BITMAPS::zoom_area, AF_ACTIVATE );
 
-TOOL_ACTION ACTIONS::zoomPreset( "common.Control.zoomPreset",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::zoomPreset( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomPreset" )
+        .Scope( AS_GLOBAL )
+        .Parameter( static_cast<int>( 0 ) ) );      // Default parameter is the 0th item in the list
 
 TOOL_ACTION ACTIONS::centerContents( "common.Control.centerContents",
         AS_GLOBAL );
@@ -541,8 +543,10 @@ TOOL_ACTION ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
         0, LEGACY_HK_NAME( "Reset Grid Origin" ),
         _( "Reset Grid Origin" ), "" );
 
-TOOL_ACTION ACTIONS::gridPreset( "common.Control.gridPreset",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::gridPreset( TOOL_ACTION_ARGS()
+        .Name( "common.Control.gridPreset" )
+        .Scope( AS_GLOBAL )
+        .Parameter( static_cast<int>( 0 ) ) );          // Default to the 1st element of the list
 
 TOOL_ACTION ACTIONS::toggleGrid( "common.Control.toggleGrid",
         AS_GLOBAL, 0, "",

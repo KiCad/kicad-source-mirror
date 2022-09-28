@@ -466,7 +466,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     }
     else
     {
-        m_toolManager->RunAction( ACTIONS::gridPreset, true, static_cast<intptr_t>( idx ) );
+        m_toolManager->RunAction( ACTIONS::gridPreset, true, idx );
     }
 
     UpdateStatusBar();
@@ -553,7 +553,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     if( id < 0 || !( id < (int)m_zoomSelectBox->GetCount() ) )
         return;
 
-    m_toolManager->RunAction( ACTIONS::zoomPreset, true, static_cast<intptr_t>( id ) );
+    m_toolManager->RunAction( ACTIONS::zoomPreset, true, id );
     UpdateStatusBar();
     m_canvas->Refresh();
     // Needed on Windows because clicking on m_zoomSelectBox remove the focus from m_canvas

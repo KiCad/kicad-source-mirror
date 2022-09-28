@@ -103,7 +103,8 @@ int COMMON_TOOLS::SelectionTool( const TOOL_EVENT& aEvent )
 // Cursor control
 int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 {
-    long type = aEvent.Parameter<long>();
+    long type = static_cast<long>( aEvent.Parameter<ACTIONS::CURSOR_EVENT_TYPE>() );
+
     bool fastMove = type & ACTIONS::CURSOR_FAST_MOVE;
     type &= ~ACTIONS::CURSOR_FAST_MOVE;
     bool mirroredX = getView()->IsMirroredX();
@@ -170,7 +171,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::PanControl( const TOOL_EVENT& aEvent )
 {
-    long type = aEvent.Parameter<long>();
+    ACTIONS::CURSOR_EVENT_TYPE type = aEvent.Parameter<ACTIONS::CURSOR_EVENT_TYPE>();
     KIGFX::VIEW* view = getView();
     VECTOR2D center = view->GetCenter();
     VECTOR2D gridSize = getView()->GetGAL()->GetGridSize() * 10;
@@ -383,8 +384,8 @@ int COMMON_TOOLS::CenterContents( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::ZoomPreset( const TOOL_EVENT& aEvent )
 {
-    unsigned int idx = aEvent.Parameter<unsigned int>();
-    return doZoomToPreset( (int) idx, false );
+    int idx = aEvent.Parameter<int>();
+    return doZoomToPreset( idx, false );
 }
 
 
