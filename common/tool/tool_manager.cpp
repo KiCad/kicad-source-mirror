@@ -285,7 +285,7 @@ bool TOOL_MANAGER::InvokeTool( const std::string& aToolName )
 }
 
 
-bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* aParam )
+bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, std::any aParam )
 {
     TOOL_ACTION* action = m_actionMgr->FindAction( aActionName );
 
@@ -319,7 +319,7 @@ VECTOR2D TOOL_MANAGER::GetCursorPosition() const
 }
 
 
-bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam )
+bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam )
 {
     if( m_shuttingDown )
         return true;
@@ -331,7 +331,7 @@ bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
         event.SetMousePosition( GetCursorPosition() );
 
     // Allow to override the action parameter
-    if( aParam )
+    if( aParam.has_value() )
         event.SetParameter( aParam );
 
     if( aNow )

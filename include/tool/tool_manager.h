@@ -138,17 +138,14 @@ public:
      *               depends on the action.
      * @return False if the action was not found.
      */
-    template<typename T>
-    bool RunAction( const std::string& aActionName, bool aNow = false, T aParam = NULL )
-    {
-        return RunAction( aActionName, aNow, reinterpret_cast<void*>( aParam ) );
-    }
-
-    bool RunAction( const std::string& aActionName, bool aNow, void* aParam );
+    bool RunAction( const std::string& aActionName, bool aNow, std::any aParam );
 
     bool RunAction( const std::string& aActionName, bool aNow = false )
     {
-        return RunAction( aActionName, aNow, (void*) NULL );
+        // Default initialize the parameter argument to an empty std::any
+        std::any a;
+
+        return RunAction( aActionName, aNow, a );
     }
 
     /**
@@ -164,17 +161,14 @@ public:
      *               depends on the action.
      * @return True if the action was handled immediately
      */
-    template <typename T>
-    bool RunAction( const TOOL_ACTION& aAction, bool aNow = false, T aParam = NULL )
-    {
-        return RunAction( aAction, aNow, reinterpret_cast<void*>( aParam ) );
-    }
-
-    bool RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam );
+    bool RunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam );
 
     bool RunAction( const TOOL_ACTION& aAction, bool aNow = false )
     {
-        return RunAction( aAction, aNow, (void*) NULL );
+        // Default initialize the parameter argument to an empty std::any
+        std::any a;
+
+        return RunAction( aAction, aNow, a );
     }
 
     /**
