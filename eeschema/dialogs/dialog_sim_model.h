@@ -24,6 +24,7 @@
 
 #ifndef DIALOG_SIM_MODEL_H
 #define DIALOG_SIM_MODEL_H
+#include <../../pcbnew/ibis/kibis.h>
 
 #include <dialog_sim_model_base.h>
 #include <netlist_exporter_spice.h>
@@ -32,7 +33,6 @@
 #include <sim/sim_model.h>
 #include <sim/sim_library.h>
 #include <sch_symbol.h>
-#include <../../pcbnew/ibis/kibis.h>
 
 
 // Some probable wxWidgets bugs encountered when writing this class:
@@ -82,7 +82,7 @@ private:
     void removeOrphanedPinAssignments();
 
     void loadLibrary( const wxString& aFilePath );
-    
+
     void addParamPropertyIfRelevant( int aParamIndex );
     wxPGProperty* newParamProperty( int aParamIndex ) const;
 

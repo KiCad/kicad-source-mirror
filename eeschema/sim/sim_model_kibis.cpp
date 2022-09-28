@@ -21,9 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <../../pcbnew/ibis/kibis.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_library_kibis.h>
-#include <../../pcbnew/ibis/kibis.h>
 #include <locale_io.h>
 
 

@@ -22,9 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <sim/sim_library_kibis.h>
 #include <sim/sim_library.h>
 #include <sim/sim_library_spice.h>
-#include <sim/sim_library_kibis.h>
 
 
 std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( std::string aFilePath )

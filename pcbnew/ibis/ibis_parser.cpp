@@ -133,7 +133,6 @@ bool IBIS_MATRIX_SPARSE::Check()
 
 bool isNumberNA( double aNumber )
 {
-    bool result = false;
     double NA = nan( NAN_NA );
     return *reinterpret_cast<std::uint64_t*>(&aNumber) == *reinterpret_cast<std::uint64_t*>( &NA );
 }

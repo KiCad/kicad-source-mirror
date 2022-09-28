@@ -24,9 +24,9 @@
 #ifndef SIM_LIBRARY_KIBIS_H
 #define SIM_LIBRARY_KIBIS_H
 
+#include <../../pcbnew/ibis/kibis.h>
 #include <sim/sim_library.h>
 #include <sim/sim_model_kibis.h>
-#include <../../pcbnew/ibis/kibis.h>
 
 class SIM_LIBRARY_KIBIS : public SIM_LIBRARY
 {

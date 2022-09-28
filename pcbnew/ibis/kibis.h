@@ -5,18 +5,18 @@
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  * this list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
  * to endorse or promote products derived from this software without specific
  * prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
  * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
  * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -99,21 +99,21 @@ public:
 };
 
 /** Accuracy level.
- * 
+ *
  * Level 0 is faster, but not as accurate
- * 
+ *
  * Level 0 :
  *      - Driver: Don't use waveform
  *      - Driver: Don't use _DUT info
  * Level 1 :
  *      _ Driver: Use up to one waveform
- *      _ Driver: Don't use _DUT info 
+ *      _ Driver: Don't use _DUT info
  * Level 2 :
  *      _ Driver: Use up to two waveforms
  *      _ Driver: Don't use _DUT info
- *      
+ *
  * Level 3 : ( not implemented, fallback to level 2 )
- *      _ Driver: Use up to two waveforms 
+ *      _ Driver: Use up to two waveforms
  *      _ Driver: Use _DUT info if at least one waveform
 */
 enum class KIBIS_ACCURACY
@@ -224,7 +224,7 @@ public:
     bool HasPOWERClamp();
 
     /** @brief Generate the spice directive to simulate the die
-     * 
+     *
      *  @param aParam Parameters
      *  @param aIndex Index used to offset spice nodes / directives
      *  @return A multiline string with spice directives
@@ -232,21 +232,21 @@ public:
     std::string SpiceDie( KIBIS_PARAMETER& aParam, int aIndex );
 
     /** @brief Create waveform pairs
-     * 
+     *
      *  For maximum accuracy, we need a waveform pair.
      *  This function creates the pairs based on the fixture.
      *  The first element is the rising edge, the second is the falling edge.
-     *  
+     *
      *  @return a vector of waveform pairs
      */
     std::vector<std::pair<IbisWaveform*, IbisWaveform*>> waveformPairs();
 
 
     /** @brief Generate a square waveform
-     * 
+     *
      *  For maximum accuracy, we need a waveform pair.
-     *  This function creates the pairs based on the fixture.  
-     *  
+     *  This function creates the pairs based on the fixture.
+     *
      *  @param aNode1 node where the voltage is applied
      *  @param aNode2 Reference node
      *  @param aBits The first member is the bit value ( 1 or 0 ).
@@ -262,8 +262,8 @@ public:
 
 
     /** @brief Copy a waveform, and substract the first value to all samples
-     * 
-     * 
+     *
+     *
      * @param aIn Input waveform
      * @return Output waveform
      */
@@ -321,7 +321,7 @@ public:
                              KIBIS_PARAMETER& aParam );
 
     /** @brief Update m_Ku, m_Kd using with two waveform inputs
-     * 
+     *
      *  The order of aPair1 and aPair2 is not important.
      *  @param aModel Model to be used
      *  @param aPair1 @see waveformPairs()
@@ -334,23 +334,23 @@ public:
                               KIBIS_PARAMETER&                        aParam );
 
     /** @brief Update m_Ku, m_Kd using with two waveform inputs
-     * 
+     *
      *  The order of aPair1 and aPair2 is not important.
      *  @param aModel Model to be used
      *  @param aPair @see waveformPairs()
      *  @param aParam Parameters
      *  @param aIndex Index for numbering spice .SUBCKT
-     * 
+     *
      *  @return A multiline string with spice directives
      */
     std::string KuKdDriver( KIBIS_MODEL& aModel, std::pair<IbisWaveform*, IbisWaveform*> aPair,
                             KIBIS_PARAMETER& aParam, int aIndex );
 
     /** @brief Generate the spice directive to simulate the die for Ku/Kd estimation
-     * 
+     *
      *  DO NOT use it in order to generate a model.
      *  It sole purpose is to run the internal simulation to get Ku/Kd
-     * 
+     *
      *  @param aModel Model to be used
      *  @param aParam Parameters
      *  @param aIndex Index for numbering ports
@@ -360,11 +360,11 @@ public:
 
 
     /** @brief Update m_Ku, m_Kd using with two waveform inputs
-     * 
+     *
      * Runs a simulation. The simulation creates a specific file with Ku/Kd values
      * This function then reads the output file and updates m_Ku / m_Kd.
      * This function probably needs a rewrite.
-     * 
+     *
      * @param aSimul The simulation to run, multiline spice directives
      */
     void     getKuKdFromFile( std::string* aSimul );
@@ -382,7 +382,7 @@ public:
     std::vector<KIBIS_PIN> m_pins;
 
     /** @brief Get a pin by its number ( 1, 2, A1, A2, ... )
-     *  
+     *
      *  @param aPinNumber pin number
      *  @return pointer to a KIBIS_PIN, or nullptr if there is no matching pin
      */

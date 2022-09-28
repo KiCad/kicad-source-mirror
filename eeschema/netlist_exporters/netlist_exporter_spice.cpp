@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <../../pcbnew/ibis/kibis.h>
 #include "netlist_exporter_spice.h"
 #include <sim/sim_model_raw_spice.h>
 #include <sim/spice_grammar.h>
@@ -45,7 +46,6 @@
 #include <paths.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
-#include <../../pcbnew/ibis/kibis.h>
 #include <wx/dir.h>
 
 
@@ -160,7 +160,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
     int numFilesFound = dir.GetAllFiles( dirName, &fileList, fileSpec );
 
-    for( unsigned int i = 0; i < numFilesFound; i++ )
+    for( int i = 0; i < numFilesFound; i++ )
     {
         // Completes path to specific file so we can get its "last access" date
         thisFile.SetFullName( fileList[i] );
