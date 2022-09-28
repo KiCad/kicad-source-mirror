@@ -202,16 +202,19 @@ TOOL_ACTION ACTIONS::duplicate( "common.Interactive.duplicate",
         _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
         BITMAPS::duplicate );
 
-TOOL_ACTION ACTIONS::doDelete( "common.Interactive.delete",
-        AS_GLOBAL,
+TOOL_ACTION ACTIONS::doDelete( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.delete" )
+        .Scope( AS_GLOBAL )
 #if defined( __WXMAC__ )
-        WXK_BACK,
+        .DefaultHotkey( WXK_BACK )
 #else
-        WXK_DELETE,
+        .DefaultHotkey( WXK_DELETE )
 #endif
-        LEGACY_HK_NAME( "Delete Item" ),
-        _( "Delete" ), _( "Deletes selected item(s)" ),
-        BITMAPS::trash );
+        .LegacyHotkeyName( "Delete Item" )
+        .MenuText( _( "Delete" ) )
+        .Tooltip( _( "Deletes selected item(s)" ) )
+        .Icon( BITMAPS::trash )
+        .Parameter( ACTIONS::REMOVE_FLAGS::NORMAL ) );
 
 TOOL_ACTION ACTIONS::deleteTool( "common.Interactive.deleteTool",
         AS_GLOBAL, 0, "",
