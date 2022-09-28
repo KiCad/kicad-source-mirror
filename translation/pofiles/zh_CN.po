@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-27 13:21+0000\n"
+"PO-Revision-Date: 2022-09-29 15:54+0000\n"
 "Last-Translator: obit <szpttboy@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -28185,7 +28185,7 @@ msgstr "翻转板项目 L/R (默认值为 T/B)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:53
 msgid "Step for &rotate commands:"
-msgstr "&旋转命令的步骤："
+msgstr "&旋转命令的步进量："
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
