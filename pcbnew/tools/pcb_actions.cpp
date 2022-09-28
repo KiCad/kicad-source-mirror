@@ -411,7 +411,7 @@ TOOL_ACTION PCB_ACTIONS::deleteFull( TOOL_ACTION_ARGS()
         .Tooltip( _( "Deletes selected item(s) and copper connections" ) )
         .Icon( BITMAPS::delete_cursor )
         .Flags( AF_NONE )
-        .Parameter( REMOVE_FLAGS::ALT ) );
+        .Parameter( PCB_ACTIONS::REMOVE_FLAGS::ALT ) );
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL,
@@ -1342,11 +1342,13 @@ TOOL_ACTION PCB_ACTIONS::boardReannotate( "pcbnew.ReannotateTool.ShowReannotateD
         _( "Geographical Reannotate..." ), _( "Reannotate PCB in geographical order" ),
         BITMAPS::annotate );
 
-TOOL_ACTION PCB_ACTIONS::repairBoard( "pcbnew.Control.repairBoard",
-        AS_GLOBAL, 0, "",
-        _( "Repair Board" ),
-        _( "Run various diagnostics and attempt to repair board" ),
-        BITMAPS::rescue );
+TOOL_ACTION PCB_ACTIONS::repairBoard( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.repairBoard" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Repair Board" ) )
+        .Tooltip( _( "Run various diagnostics and attempt to repair board" ) )
+        .Icon( BITMAPS::rescue )
+        .Parameter( false ) );  // Don't repair quietly
 
 TOOL_ACTION PCB_ACTIONS::repairFootprint( "pcbnew.ModuleEditor.repairFootprint",
         AS_GLOBAL, 0, "",
