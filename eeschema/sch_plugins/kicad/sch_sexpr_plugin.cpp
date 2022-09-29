@@ -624,12 +624,16 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, SC
         {
             if( ancestorSheetPath.LastScreen()->GetFileName() == fileName.GetFullPath() )
             {
+                if( m_error.IsEmpty() )
+                {
+                    m_error = _( "The entire schematic could not be loaded.  Errors occurred "
+                                 "attempting to load hierarchical sheets." );
+                }
+
                 if( !m_error.IsEmpty() )
                     m_error += "\n";
 
-                m_error += wxString::Format( _( "Could not load sheet '%s' because it already "
-                                                "appears as a direct ancestor in the schematic "
-                                                "hierarchy." ),
+                m_error += wxString::Format( _( "Error loading schematic '%s'." ),
                                              fileName.GetFullPath() );
 
                 fileName = wxEmptyString;

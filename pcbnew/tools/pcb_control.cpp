@@ -786,9 +786,11 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
 
     if( ( returnItems.size() < aItems.size() ) || fpItemDeleted )
     {
-        DisplayError( m_frame, _( "Warning: some pasted items were on layers which are not "
-                                  "present in the current board.\n"
-                                  "These items could not be pasted.\n" )  );
+        // We have no existing strings in 6.0 that are even remotely appropriate here, so the
+        // best we can do is show the user English and let them use Google Translate.
+        DisplayError( m_frame, wxT( "Warning: some pasted items were on layers which are not "
+                                    "present in the current board.\n"
+                                    "These items could not be pasted.\n" )  );
     }
 
     aItems = returnItems;

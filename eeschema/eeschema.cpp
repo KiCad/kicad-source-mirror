@@ -331,8 +331,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             if( !aErrors.empty() )
                 aErrors += "\n";
 
-            msg.Printf( _( "Cannot copy file '%s' as it will be overwritten by the new root "
-                           "sheet file." ), destFile.GetFullPath() );
+            msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
             aErrors += msg;
             return;
         }
