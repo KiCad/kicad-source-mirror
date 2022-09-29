@@ -655,6 +655,18 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
                                                      candidate->GetValue(),
                                                      candidate->GetFPID().Format().wx_str() );
             m_symbolsListBox->SetString( idx, description );
+
+            FOOTPRINT_INFO* fp =
+                    m_FootprintsList->GetFootprintInfo( symbol->GetFPID().Format().wx_str() );
+
+            if( !fp )
+            {
+                m_symbolsListBox->AppendWarning( idx );
+            }
+            else
+            {
+                m_symbolsListBox->RemoveWarning( idx );
+            }
         }
     }
 
@@ -1021,6 +1033,14 @@ void CVPCB_MAINFRAME::BuildSymbolsListBox()
                                 symbol->GetValue(),
                                 symbol->GetFPID().Format().wx_str() );
         m_symbolsListBox->m_SymbolList.Add( msg );
+
+        FOOTPRINT_INFO* fp =
+                m_FootprintsList->GetFootprintInfo( symbol->GetFPID().Format().wx_str() );
+
+        if( !fp )
+        {
+            m_symbolsListBox->AppendWarning( i );
+        }
     }
 
     if( m_symbolsListBox->m_SymbolList.Count() )

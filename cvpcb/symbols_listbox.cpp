@@ -34,8 +34,10 @@
 
 
 SYMBOLS_LISTBOX::SYMBOLS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
-    ITEMS_LISTBOX_BASE( parent, id )
+    ITEMS_LISTBOX_BASE( parent, id ), 
+    m_warningAttr( std::make_unique<wxListItemAttr>() )
 {
+    m_warningAttr->SetBackgroundColour( *wxYELLOW );
 }
 
 
@@ -85,9 +87,38 @@ void SYMBOLS_LISTBOX::AppendLine( const wxString& text )
 }
 
 
+void SYMBOLS_LISTBOX::AppendWarning( int index )
+{
+    if( !std::count( m_symbolWarning.begin(), m_symbolWarning.end(), index ) )
+    {
+        m_symbolWarning.emplace_back( index );
+    }
+}
+
+
+void SYMBOLS_LISTBOX::RemoveWarning( int index )
+{
+    if( auto const found{ std::find( m_symbolWarning.begin(), m_symbolWarning.end(), index ) };                                        
+        found != m_symbolWarning.end() )
+    {
+        m_symbolWarning.erase( found );
+    }
+}
+
+
 wxString SYMBOLS_LISTBOX::OnGetItemText( long item, long column ) const
 {
     return m_SymbolList.Item( item );
+}
+
+
+wxListItemAttr* SYMBOLS_LISTBOX::OnGetItemAttr( long item ) const
+{
+    if( std::count( m_symbolWarning.begin(), m_symbolWarning.end(), item ) )
+    {
+        return m_warningAttr.get();
+    }
+    return nullptr;    
 }
 
 

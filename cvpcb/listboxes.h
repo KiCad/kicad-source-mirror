@@ -26,6 +26,7 @@
 
 #include <wx/listctrl.h>
 #include <footprint_filter.h>
+#include <memory>
 
 /*  Forward declarations of all top-level window classes. */
 class CVPCB_MAINFRAME;
@@ -192,6 +193,7 @@ public:
      * because real data is not handled by #ITEMS_LISTBOX_BASE.
      */
     wxString OnGetItemText( long item, long column ) const override;
+    wxListItemAttr* OnGetItemAttr( long item) const override;
 
     /*
      * Enable or disable an item
@@ -199,6 +201,8 @@ public:
     void     SetSelection( int index, bool State = true );
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
+    void     AppendWarning( int index );
+    void     RemoveWarning( int index );
 
     // Events functions:
 
@@ -221,6 +225,10 @@ public:
 
 public:
     wxArrayString      m_SymbolList;
+
+private:
+    std::vector<long>               m_symbolWarning;
+    std::unique_ptr<wxListItemAttr> m_warningAttr;
 };
 
 
