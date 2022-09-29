@@ -481,6 +481,7 @@ std::string KIBIS_MODEL::generateSquareWave( std::string aNode1, std::string aNo
 {
     IBIS_CORNER supply = aParam.m_supply;
     std::string simul;
+    std::vector<int>stimuliIndex;
 
     IbisWaveform risingWF = TrimWaveform( *( aPair.first ) );
     IbisWaveform fallingWF = TrimWaveform( *( aPair.second ) );
@@ -495,15 +496,23 @@ std::string KIBIS_MODEL::generateSquareWave( std::string aNode1, std::string aNo
     double delta = deltaR + deltaF;
 
     int i = 0;
+
+    int prevBit = 2; 
+
     for( std::pair<int, double> bit : aBits )
     {
         IbisWaveform* WF;
         double        timing = bit.second;
 
+        
+        if ( bit.first != prevBit )
+        {
         if( bit.first == 1 )
             WF = &risingWF;
         else
             WF = &fallingWF;
+        
+        stimuliIndex.push_back( i );
 
         simul += "Vstimuli";
         simul += std::to_string( i );
@@ -534,8 +543,10 @@ std::string KIBIS_MODEL::generateSquareWave( std::string aNode1, std::string aNo
             simul += " ";
         }
         simul += ")\n";
+        }
 
         i++;
+        prevBit = bit.first;
     }
 
     simul += "bin ";
@@ -544,7 +555,7 @@ std::string KIBIS_MODEL::generateSquareWave( std::string aNode1, std::string aNo
     simul += aNode2;
     simul += " v=(";
 
-    for( size_t ii = 0; ii < aBits.size(); ii++ )
+    for( int ii: stimuliIndex )
     {
         simul += " v( stimuli";
         simul += std::to_string( ii );
@@ -797,6 +808,13 @@ std::string KIBIS_PIN::KuKdDriver( KIBIS_MODEL&                            aMode
         simul += aModel.generateSquareWave( "DIE0", "GND", bits, aPair, aParam );
         break;
     }
+    case KIBIS_WAVEFORM_TYPE::PRBS:
+    {
+        KIBIS_WAVEFORM_PRBS* prbsWave = dynamic_cast<KIBIS_WAVEFORM_PRBS*>( wave );
+        std::vector<std::pair<int, double>> bits = prbsWave->GenerateBitSequence();
+        simul += aModel.generateSquareWave( "DIE0", "GND", bits, aPair, aParam );
+        break;
+    }
     case KIBIS_WAVEFORM_TYPE::STUCK_HIGH:
     {
         IbisWaveform* waveform = wave->inverted ? risingWF : fallingWF;
@@ -901,8 +919,15 @@ void KIBIS_PIN::getKuKdOneWaveform( KIBIS_MODEL&                            aMod
 
         switch( wave->GetType() )
         {
-        case KIBIS_WAVEFORM_TYPE::RECTANGULAR: simul += ".tran 0.1n 1000n \n"; break;
-
+        case KIBIS_WAVEFORM_TYPE::PRBS:
+        case KIBIS_WAVEFORM_TYPE::RECTANGULAR:
+        {
+            double duration = wave->GetDuration();
+            simul += ".tran 0.1n ";
+            simul += doubleToString( duration );
+            simul += "\n";
+            break;
+        }
         case KIBIS_WAVEFORM_TYPE::HIGH_Z:
         case KIBIS_WAVEFORM_TYPE::STUCK_LOW:
         case KIBIS_WAVEFORM_TYPE::STUCK_HIGH:
@@ -1097,15 +1122,30 @@ void KIBIS_PIN::getKuKdTwoWaveforms( KIBIS_MODEL&                            aMo
             Report( _( "Driver needs at least a pullup or a pulldown" ), RPT_SEVERITY_ERROR );
         }
 
-        simul += ".tran 0.1n 1000n \n";
+        switch( wave->GetType() )
+        {
+        case KIBIS_WAVEFORM_TYPE::RECTANGULAR:
+        case KIBIS_WAVEFORM_TYPE::PRBS:
+        {
+            double duration = wave->GetDuration();
+            simul += ".tran 0.1n ";
+            simul += doubleToString( duration );
+            simul += "\n";
+            break;
+        }
+        case KIBIS_WAVEFORM_TYPE::HIGH_Z:
+        case KIBIS_WAVEFORM_TYPE::STUCK_LOW:
+        case KIBIS_WAVEFORM_TYPE::STUCK_HIGH:
+        default: simul += ".tran 0.5 1 \n"; //
+        }
         //simul += ".dc Vpin -5 5 0.1\n";
         simul += ".control run \n";
         simul += "set filetype=ascii\n";
         simul += "run \n";
         simul += "plot v(KU) v(KD)\n";
-        simul += "plot v(x1.DIE0) \n";
+        //simul += "plot v(x1.DIE0) \n";
         simul += "write temp_output.spice v(KU) v(KD)\n"; // @TODO we might want to remove this...
-        //simul += "quit\n";
+        simul += "quit\n";
         simul += ".endc \n";
         simul += ".end \n";
 
@@ -1142,13 +1182,13 @@ bool KIBIS_PIN::writeSpiceDriver( std::string* aDest, std::string aName, KIBIS_M
 
         if( m_parent )
         {
-            result += m_parent->m_name;
+            //result += m_parent->m_name;
         }
         result += "\n*Manufacturer: ";
 
         if( m_parent )
         {
-            result += m_parent->m_manufacturer;
+            //result += m_parent->m_manufacturer;
         }
         result += "\n*Pin number: ";
         result += m_pinNumber;
@@ -1303,13 +1343,13 @@ bool KIBIS_PIN::writeSpiceDiffDriver( std::string* aDest, std::string aName, KIB
 
     if( m_parent )
     {
-        result += m_parent->m_name;
+        //result += m_parent->m_name;
     }
     result += "\n*Manufacturer: ";
 
     if( m_parent )
     {
-        result += m_parent->m_manufacturer;
+        //result += m_parent->m_manufacturer;
     }
 
     result += "\n.SUBCKT ";
@@ -1350,13 +1390,13 @@ bool KIBIS_PIN::writeSpiceDiffDevice( std::string* aDest, std::string aName, KIB
 
     if( m_parent )
     {
-        result += m_parent->m_name;
+        //result += m_parent->m_name;
     }
     result += "\n*Manufacturer: ";
 
     if( m_parent )
     {
-        result += m_parent->m_manufacturer;
+        //result += m_parent->m_manufacturer;
     }
 
     result += "\n.SUBCKT ";
@@ -1413,4 +1453,39 @@ void KIBIS_PARAMETER::SetCornerFromString( IBIS_CORNER& aCorner, std::string aSt
         aCorner = IBIS_CORNER::MAX;
     else
         aCorner = IBIS_CORNER::TYP;
+}
+
+std::vector<std::pair<int, double>> KIBIS_WAVEFORM_PRBS::GenerateBitSequence()
+{
+    std::vector<std::pair<int, double>> bitSequence;
+    uint8_t polynomial = 0b1100000;
+    //1100000 = x^7+x^6+1
+    //10100 = x^5+x^3+1
+    //110 = x^3+x^2+1
+    uint8_t seed = 0x12; // Any non zero state
+    uint8_t lfsr = seed;
+    
+    if ( m_bitrate == 0 )
+        return bitSequence;
+
+    double period = 1/m_bitrate;
+    double t = 0;
+    m_bits = abs( m_bits ); // Just to be sure.
+    
+    int bits = 0;
+    do
+    {
+        uint8_t lsb = lfsr & 0x01;
+        bitSequence.emplace_back( ( inverted ^ lsb ? 1 : 0 ), t );
+        lfsr = lfsr >> 1;
+        
+        if ( lsb )
+            lfsr ^= polynomial;
+
+        t += period;
+
+    } while ( ++bits < m_bits );
+    
+    return bitSequence;
+
 }

@@ -43,6 +43,8 @@ int main( void )
 
     KIBIS_PARAMETER params;
 
+    params.m_waveform = new KIBIS_WAVEFORM_RECTANGULAR();
+
     pin2->writeSpiceDevice( tmp4, "device_typ", *( pin2->m_models.at( 0 ) ), params );
 
     KIBIS_MODEL* model1 = pin1->m_models.at( 0 );

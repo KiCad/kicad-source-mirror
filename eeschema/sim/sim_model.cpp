@@ -229,8 +229,10 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     //case TYPE::I_RANDPOISSON:        return { DEVICE_TYPE::I,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::I_BEHAVIORAL:         return { DEVICE_TYPE_::I,      "=",              "Behavioral"                 };
 
-    case TYPE::KIBIS_DRIVER:         return { DEVICE_TYPE_::KIBIS,  "IBISDRIVER",    "Driver"                     };
-    case TYPE::KIBIS_DEVICE:         return { DEVICE_TYPE_::KIBIS,  "IBISDEVICE",    "Device"                     };
+    case TYPE::KIBIS_DRIVER:         return { DEVICE_TYPE_::KIBIS,  "IBISDRIVER",     "Driver"                     };
+    case TYPE::KIBIS_DEVICE:         return { DEVICE_TYPE_::KIBIS,  "IBISDEVICE",     "Device"                     };
+    case TYPE::KIBIS_DIFFDRIVER:     return { DEVICE_TYPE_::KIBIS,  "IBISDIFFDRIVER", "Differential driver"        };
+    case TYPE::KIBIS_DIFFDEVICE:     return { DEVICE_TYPE_::KIBIS,  "IBISDIFFDEVICE", "Differential device"        };
     case TYPE::SUBCKT:               return { DEVICE_TYPE_::SUBCKT, "",               ""                           };
     case TYPE::XSPICE:               return { DEVICE_TYPE_::XSPICE, "",               ""                           };
     case TYPE::RAWSPICE:                return { DEVICE_TYPE_::SPICE,  "",               ""                           };
@@ -365,6 +367,9 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 
     case TYPE::KIBIS_DEVICE:         return { "X"  };
     case TYPE::KIBIS_DRIVER:         return { "X"  };
+    case TYPE::KIBIS_DIFFDEVICE:     return { "X"  };
+    case TYPE::KIBIS_DIFFDRIVER:     return { "X"  };
+
     case TYPE::NONE:
     case TYPE::RAWSPICE:
         return {};
@@ -949,6 +954,8 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
 
     case TYPE::KIBIS_DRIVER:
     case TYPE::KIBIS_DEVICE:
+    case TYPE::KIBIS_DIFFDEVICE:
+    case TYPE::KIBIS_DIFFDRIVER:
         return std::make_unique<SIM_MODEL_KIBIS>( aType );
 
     case TYPE::RAWSPICE:

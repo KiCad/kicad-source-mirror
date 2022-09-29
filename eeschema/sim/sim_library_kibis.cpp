@@ -30,7 +30,7 @@
 #include <pegtl/contrib/parse_tree.hpp>
 
 
-void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath )
+void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, SIM_MODEL::TYPE aType )
 {
     SIM_LIBRARY::ReadFile( aFilePath );
     m_kibis = KIBIS( std::string( aFilePath.c_str() ) );
@@ -41,13 +41,20 @@ void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath )
         return;
     }
 
+    unsigned pinNumber = 2;
+
+    if( aType == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE || aType == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE )
+        pinNumber = 3;
+
     for( KIBIS_COMPONENT& kcomp : m_kibis.m_components )
     {
-        m_models.push_back( SIM_MODEL::Create( SIM_MODEL::TYPE::KIBIS_DEVICE, 2 ) );
+        m_models.push_back( SIM_MODEL::Create( aType, pinNumber ) );
         m_modelNames.emplace_back( kcomp.m_name );
 
         SIM_MODEL_KIBIS* libcomp = dynamic_cast<SIM_MODEL_KIBIS*>( m_models.back().get() );
-        InitModel( *libcomp, kcomp.m_name );
+
+        if ( libcomp )
+            InitModel( *libcomp, kcomp.m_name );
     }
 }
 

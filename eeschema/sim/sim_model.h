@@ -298,6 +298,8 @@ public:
 
         KIBIS_DRIVER,
         KIBIS_DEVICE,
+        KIBIS_DIFFDEVICE,
+        KIBIS_DIFFDRIVER,
 
         SUBCKT,
         XSPICE,
@@ -502,7 +504,7 @@ public:
     DEVICE_TYPE_ GetDeviceType() const { return GetTypeInfo().deviceType; }
     TYPE GetType() const { return m_type; }
 
-    const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
+    virtual const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
     virtual void SetBaseModel( const SIM_MODEL& aBaseModel ) { m_baseModel = &aBaseModel; }
 
     int GetPinCount() const { return static_cast<int>( m_pins.size() ); }
@@ -517,7 +519,7 @@ public:
 
 
     int GetParamCount() const { return static_cast<int>( m_params.size() ); }
-    const PARAM& GetParam( unsigned aParamIndex ) const; // Return base parameter unless it's overridden.
+    virtual const PARAM& GetParam( unsigned aParamIndex ) const; // Return base parameter unless it's overridden.
 
     const PARAM* FindParam( const std::string& aParamName ) const;
 
@@ -571,6 +573,7 @@ protected:
                                  bool aAllowParamValuePairs = true );
     std::vector<PARAM> m_params;
     bool               m_requiresUIUpdate = false;
+    const SIM_MODEL* m_baseModel;
 
 private:
     static TYPE readTypeFromSpiceStrings( const std::string& aTypeString,
@@ -599,7 +602,6 @@ private:
 
 
     std::unique_ptr<SPICE_GENERATOR> m_spiceGenerator;
-    const SIM_MODEL* m_baseModel;
 
     const TYPE m_type;
     std::vector<PIN> m_pins;

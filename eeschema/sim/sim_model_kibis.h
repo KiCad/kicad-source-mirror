@@ -50,13 +50,15 @@ class SIM_MODEL_KIBIS : public SIM_MODEL
     static constexpr auto DRIVER_STUCKH = "stuck high";
     static constexpr auto DRIVER_STUCKL = "stuck low";
     static constexpr auto DRIVER_HIGHZ = "high Z";
+    static constexpr auto DRIVER_PRBS = "prbs";
+    static constexpr auto JOCKER = "kicadjocker"; // Gets all parameters
 
 public:
     SIM_MODEL_KIBIS( TYPE aType, std::string aWfType = "NoInit" );
 
     // @brief Special copy constructor
     // creates a a model with aType, but tries to match parameters from aSource.
-    SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource );
+    SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource );
 
     SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<LIB_FIELD>& aFields );
     SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<SCH_FIELD>& aFields );
@@ -79,6 +81,9 @@ public:
                        ? dynamic_cast<const SIM_MODEL_KIBIS*>( GetBaseModel() )->GetComponentName()
                        : m_componentName;
     };
+
+
+    const PARAM& GetParam( unsigned aParamIndex ) const override { return m_params.at( aParamIndex ); };
 
     /** @brief update the list of available models based on the pin number.
      * */

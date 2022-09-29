@@ -524,7 +524,26 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 
     try
     {
-        m_library->ReadFile( std::string( absolutePath.ToUTF8() ) );
+        if( IsIbisLoaded() )
+        {
+            wxString ibisTypeString = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::TYPE_FIELD );
+
+            SIM_MODEL::TYPE ibisType = SIM_MODEL::TYPE::KIBIS_DEVICE;
+
+            if( ibisTypeString == "IBISDRIVER" )
+                ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER;
+            else if( ibisTypeString == "IBISDIFFDRIVER" )
+                ibisType = SIM_MODEL::TYPE::KIBIS_DIFFDRIVER;
+            else if( ibisTypeString == "IBISDIFFDEVICE" )
+                ibisType = SIM_MODEL::TYPE::KIBIS_DIFFDEVICE;
+
+            std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library )
+                    ->ReadFile( std::string( absolutePath.ToUTF8() ), ibisType );
+        }
+        else
+        {
+            m_library->ReadFile( std::string( absolutePath.ToUTF8() ) );
+        }
     }
     catch( const IO_ERROR& e )
     {
@@ -1010,8 +1029,9 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
             && typeDescription == SIM_MODEL::TypeInfo( type ).description )
         {
             if( IsIbisLoaded()
-                && ( type == SIM_MODEL::TYPE::KIBIS_DEVICE
-                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER ) )
+                && ( type == SIM_MODEL::TYPE::KIBIS_DEVICE || type == SIM_MODEL::TYPE::KIBIS_DRIVER
+                     || type == SIM_MODEL::TYPE::KIBIS_DIFFDRIVER
+                     || type == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE ) )
             {
                 std::shared_ptr<SIM_MODEL_KIBIS> kibismodel =
                         std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(

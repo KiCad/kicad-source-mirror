@@ -37,7 +37,11 @@ public:
     static constexpr auto MODEL_FIELD = "Ibis_Model";
 
     // @copydoc SIM_LIBRARY::ReadFile()
-    void ReadFile( const std::string& aFilePath ) override;
+    void ReadFile( const std::string& aFilePath, SIM_MODEL::TYPE aType );
+    void ReadFile( const std::string& aFilePath ) override
+    {
+        ReadFile( aFilePath, SIM_MODEL::TYPE::KIBIS_DEVICE );
+    }
 
     // @copydoc SIM_LIBRARY::WriteFile()
     void WriteFile( const std::string& aFilePath ) override{};

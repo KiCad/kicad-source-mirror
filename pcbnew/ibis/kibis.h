@@ -51,6 +51,7 @@ public:
 enum KIBIS_WAVEFORM_TYPE
 {
     NONE = 0, // Used for three state
+    PRBS,
     RECTANGULAR,
     STUCK_HIGH,
     STUCK_LOW,
@@ -63,6 +64,7 @@ class KIBIS_WAVEFORM
 public:
     KIBIS_WAVEFORM(){};
     KIBIS_WAVEFORM_TYPE GetType() { return m_type; };
+    virtual double GetDuration() { return 1; };
     bool                inverted = false; // Used for differential drivers
     virtual ~KIBIS_WAVEFORM(){};
 
@@ -76,8 +78,23 @@ public:
     KIBIS_WAVEFORM_RECTANGULAR() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::RECTANGULAR; };
     double m_ton = 100e-9;
     double m_toff = 100e-9;
-    int    m_cycles = 10;
+    int    m_cycles = 1;
     double m_delay = 0;
+
+    double GetDuration() override { return ( m_ton + m_toff ) * m_cycles; };
+};
+
+// For now, we only support PRBS7
+class KIBIS_WAVEFORM_PRBS : public KIBIS_WAVEFORM
+{
+public:
+    KIBIS_WAVEFORM_PRBS() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::PRBS; };
+    double m_bitrate = 10e6;
+    double m_delay = 0;
+    double m_bits = 10;
+
+    std::vector<std::pair<int, double>> GenerateBitSequence();
+    double GetDuration() override { return m_bits / m_bitrate ; };
 };
 
 class KIBIS_WAVEFORM_STUCK_HIGH : public KIBIS_WAVEFORM
