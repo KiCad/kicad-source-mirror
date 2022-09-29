@@ -1494,7 +1494,7 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
     if( netName.IsEmpty() )
     {
-        m_frame->ShowInfoBarError( _( "Selection contains no items with labelled nets." ) );
+        m_frame->ShowInfoBarError( _( "Selection contains no items with labeled nets." ) );
         return 0;
     }
 
