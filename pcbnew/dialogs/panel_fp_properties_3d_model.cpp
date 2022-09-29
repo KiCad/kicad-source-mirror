@@ -429,10 +429,18 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
         return MODEL_VALIDATE_ERRORS::ILLEGAL_FILENAME;
 
     wxString libraryName = m_footprint->GetFPID().GetLibNickname();
-    const FP_LIB_TABLE_ROW* fpRow =
-            m_frame->Prj().PcbFootprintLibs()->FindRow( libraryName, false );
+    const FP_LIB_TABLE_ROW* fpRow = nullptr;
+    try
+    {
+        fpRow = m_frame->Prj().PcbFootprintLibs()->FindRow( libraryName, false );
+    }
+    catch( ... )
+    {
+        // if libraryName is not found in table, do nothing
+    }
 
     wxString footprintBasePath = wxEmptyString;
+
     if( fpRow )
         footprintBasePath = fpRow->GetFullURI( true );
 
