@@ -80,15 +80,18 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::closeProject( TOOL_ACTION_ARGS()
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::loadProject( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.loadProject" )
-        .Scope( AS_GLOBAL ) );
+        .Scope( AS_GLOBAL )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::importNonKicadProj( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.importNonKicadProj" )
-        .Scope( AS_GLOBAL ) );
+        .Scope( AS_GLOBAL )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::viewDroppedGerbers( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.viewDroppedGerbers" )
-        .Scope( AS_GLOBAL ) );
+        .Scope( AS_GLOBAL )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.editSchematic" )
@@ -141,7 +144,8 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Run Gerbview" )
         .MenuText( _( "Gerber Viewer" ) )
         .Tooltip( _( "Preview Gerber output files" ) )
-        .Icon( BITMAPS::icon_gerbview_24 ) );
+        .Icon( BITMAPS::icon_gerbview_24 )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::convertImage( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.convertImage" )
@@ -150,7 +154,8 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::convertImage( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Run Bitmap2Component" )
         .MenuText( _( "Image Converter" ) )
         .Tooltip( _( "Convert bitmap images to schematic or PCB components" ) )
-        .Icon( BITMAPS::icon_bitmap2component_24 ) );
+        .Icon( BITMAPS::icon_bitmap2component_24 )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.showCalculator" )
@@ -158,7 +163,8 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Run PcbCalculator" )
         .MenuText( _( "Calculator Tools" ) )
         .Tooltip( _( "Run component calculations, track width calculations, etc." ) )
-        .Icon( BITMAPS::icon_pcbcalculator_24 ) );
+        .Icon( BITMAPS::icon_pcbcalculator_24 )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editDrawingSheet( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.editDrawingSheet" )
@@ -167,7 +173,8 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editDrawingSheet( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Run PlEditor" )
         .MenuText( _( "Drawing Sheet Editor" ) )
         .Tooltip( _( "Edit drawing sheet borders and title block" ) )
-        .Icon( BITMAPS::icon_pagelayout_editor_24 ) );
+        .Icon( BITMAPS::icon_pagelayout_editor_24 )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::showPluginManager( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.pluginContentManager" )
@@ -182,12 +189,15 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::openTextEditor( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .MenuText( _( "Open Text Editor" ) )
         .Tooltip( _( "Launch preferred text editor" ) )
-        .Icon( BITMAPS::editor ) );
+        .Icon( BITMAPS::editor )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherSch( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.editOtherSch" )
-        .Scope( AS_GLOBAL ) );
+        .Scope( AS_GLOBAL )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherPCB( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.editOtherPCB" )
-        .Scope( AS_GLOBAL ) );
+        .Scope( AS_GLOBAL )
+        .Parameter<wxString*>( nullptr ) );      // Default to no filename
