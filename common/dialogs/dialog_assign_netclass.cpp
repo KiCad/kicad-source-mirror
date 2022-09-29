@@ -75,43 +75,38 @@ bool DIALOG_ASSIGN_NETCLASS::TransferDataFromWindow()
 }
 
 
-void DIALOG_ASSIGN_NETCLASS::OnUpdateUI( wxUpdateUIEvent& event )
+void DIALOG_ASSIGN_NETCLASS::onPatternText( wxCommandEvent& aEvent )
 {
     wxString pattern = m_patternCtrl->GetValue();
 
     if( pattern != m_lastPattern )
     {
-        CallAfter(
-                [this, pattern]()
+        m_matchingNets->Clear();
+
+        std::vector<wxString> matchingNetNames;
+
+        if( !pattern.IsEmpty() )
+        {
+            EDA_COMBINED_MATCHER matcher( pattern, CTX_NETCLASS );
+
+            m_matchingNets->Report( _( "<b>Currently matching nets:</b>" ) );
+
+            for( const wxString& net : m_netCandidates )
+            {
+                int matches;
+                int offset;
+
+                if( matcher.Find( net, matches, offset ) && offset == 0 )
                 {
-                    m_matchingNets->Clear();
+                    m_matchingNets->Report( net );
+                    matchingNetNames.push_back( net );
+                }
+            }
+        }
 
-                    std::vector<wxString> matchingNetNames;
+        m_matchingNets->Flush();
 
-                    if( !pattern.IsEmpty() )
-                    {
-                        EDA_COMBINED_MATCHER matcher( pattern, CTX_NETCLASS );
-
-                        m_matchingNets->Report( _( "<b>Currently matching nets:</b>" ) );
-
-                        for( const wxString& net : m_netCandidates )
-                        {
-                            int matches;
-                            int offset;
-
-                            if( matcher.Find( net, matches, offset ) && offset == 0 )
-                            {
-                                m_matchingNets->Report( net );
-                                matchingNetNames.push_back( net );
-                            }
-                        }
-                    }
-
-                    m_matchingNets->Flush();
-
-                    m_previewer( matchingNetNames );
-                } );
-
+        m_previewer( matchingNetNames );
         m_lastPattern = pattern;
     }
 }

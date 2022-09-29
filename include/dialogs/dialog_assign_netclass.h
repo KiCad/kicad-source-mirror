@@ -39,15 +39,14 @@ public:
     ~DIALOG_ASSIGN_NETCLASS() override {}
 
 private:
-    void OnUpdateUI( wxUpdateUIEvent &event ) override;
-
+    void onPatternText( wxCommandEvent& aEvent ) override;
     bool TransferDataFromWindow() override;
 
 private:
     EDA_BASE_FRAME*    m_frame;
     std::set<wxString> m_netCandidates;
 
-    const std::function<void( const std::vector<wxString>& )>& m_previewer;
+    std::function<void( const std::vector<wxString>& )> m_previewer;
 
     wxString           m_lastPattern;
 };

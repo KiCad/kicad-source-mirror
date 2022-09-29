@@ -84,12 +84,12 @@ DIALOG_ASSIGN_NETCLASS_BASE::DIALOG_ASSIGN_NETCLASS_BASE( wxWindow* parent, wxWi
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_ASSIGN_NETCLASS_BASE::OnUpdateUI ) );
+	m_patternCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_ASSIGN_NETCLASS_BASE::onPatternText ), NULL, this );
 }
 
 DIALOG_ASSIGN_NETCLASS_BASE::~DIALOG_ASSIGN_NETCLASS_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_ASSIGN_NETCLASS_BASE::OnUpdateUI ) );
+	m_patternCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_ASSIGN_NETCLASS_BASE::onPatternText ), NULL, this );
 
 }
