@@ -31,6 +31,7 @@
 #include <typeinfo>
 #include <wx/utils.h>
 #include <wx/evtloop.h>
+#include <wx/socket.h>
 
 
 BEGIN_EVENT_TABLE( KIWAY_PLAYER, EDA_BASE_FRAME )
@@ -65,7 +66,19 @@ KIWAY_PLAYER::KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& a
 }
 
 
-KIWAY_PLAYER::~KIWAY_PLAYER() throw() {}
+KIWAY_PLAYER::~KIWAY_PLAYER() throw() {
+
+    // socket server must be destructed before we complete
+    // destructing the frame or else we could crash
+    // as the socket server holds a reference to this frame
+    if( m_socketServer )
+    {
+        // ensure any event handling stops
+        m_socketServer->Notify( false );
+
+        delete m_socketServer;
+    }
+}
 
 
 void KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent )
