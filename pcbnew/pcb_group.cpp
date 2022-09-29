@@ -25,6 +25,7 @@
 #include <eda_draw_frame.h>
 #include <board.h>
 #include <board_item.h>
+#include <footprint.h>
 #include <pcb_group.h>
 #include <confirm.h>
 #include <widgets/msgpanel.h>
@@ -225,7 +226,12 @@ const BOX2I PCB_GROUP::GetBoundingBox() const
     BOX2I bbox;
 
     for( BOARD_ITEM* item : m_items )
-        bbox.Merge( item->GetBoundingBox() );
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+            bbox.Merge( static_cast<FOOTPRINT*>( item )->GetBoundingBox( true, false ) );
+        else
+            bbox.Merge( item->GetBoundingBox() );
+    }
 
     bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Give a min size to the bbox
 
