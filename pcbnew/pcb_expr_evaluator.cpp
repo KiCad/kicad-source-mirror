@@ -714,13 +714,23 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                                 return i->second;
 
                             SHAPE_POLY_SET itemShape;
+                            bool           enclosedByArea;
 
                             item->TransformShapeWithClearanceToPolygon( itemShape, layer, 0,
                                                                         maxError, ERROR_OUTSIDE );
 
-                            itemShape.BooleanSubtract( *aArea->Outline(), SHAPE_POLY_SET::PM_FAST );
+                            if( itemShape.IsEmpty() )
+                            {
+                                // If it's already empty then our test will have no meaning.
+                                enclosedByArea = false;
+                            }
+                            else
+                            {
+                                itemShape.BooleanSubtract( *aArea->Outline(),
+                                                           SHAPE_POLY_SET::PM_FAST );
 
-                            bool enclosedByArea = itemShape.IsEmpty();
+                                enclosedByArea = itemShape.IsEmpty();
+                            }
 
                             board->m_EnclosedByAreaCache[ key ] = enclosedByArea;
 
