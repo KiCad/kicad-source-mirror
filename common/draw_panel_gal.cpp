@@ -254,49 +254,56 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
         cntUpd.Stop();
 
-        cntCtx.Start();
-        KIGFX::GAL_DRAWING_CONTEXT ctx( m_gal );
-        cntCtx.Stop();
-
-        if( m_view->IsTargetDirty( KIGFX::TARGET_OVERLAY )
-            && !m_gal->HasTarget( KIGFX::TARGET_OVERLAY ) )
+        // GAL_DRAWING_CONTEXT can throw in the dtor, so we need to scope
+        // the full lifetime inside the try block
         {
-            m_view->MarkDirty();
-        }
+            cntCtx.Start();
+            KIGFX::GAL_DRAWING_CONTEXT ctx( m_gal );
+            cntCtx.Stop();
 
-        m_gal->SetClearColor( settings->GetBackgroundColor() );
-        m_gal->SetGridColor( settings->GetGridColor() );
-        m_gal->SetCursorColor( settings->GetCursorColor() );
-
-        // TODO: find why ClearScreen() must be called here in opengl mode
-        // and only if m_view->IsDirty() in Cairo mode to avoid display artifacts
-        // when moving the mouse cursor
-        if( m_backend == GAL_TYPE_OPENGL )
-            m_gal->ClearScreen();
-
-        if( m_view->IsDirty() )
-        {
-            if( m_backend != GAL_TYPE_OPENGL  // Already called in opengl
-                    && m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+            if( m_view->IsTargetDirty( KIGFX::TARGET_OVERLAY )
+                && !m_gal->HasTarget( KIGFX::TARGET_OVERLAY ) )
             {
-                m_gal->ClearScreen();
+                m_view->MarkDirty();
             }
 
-            m_view->ClearTargets();
+            m_gal->SetClearColor( settings->GetBackgroundColor() );
+            m_gal->SetGridColor( settings->GetGridColor() );
+            m_gal->SetCursorColor( settings->GetCursorColor() );
 
-            // Grid has to be redrawn only when the NONCACHED target is redrawn
-            if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
-                m_gal->DrawGrid();
+            // TODO: find why ClearScreen() must be called here in opengl mode
+            // and only if m_view->IsDirty() in Cairo mode to avoid display artifacts
+            // when moving the mouse cursor
+            if( m_backend == GAL_TYPE_OPENGL )
+                m_gal->ClearScreen();
 
-            cntRedraw.Start();
-            m_view->Redraw();
-            cntRedraw.Stop();
-            isDirty = true;
+            if( m_view->IsDirty() )
+            {
+                if( m_backend != GAL_TYPE_OPENGL  // Already called in opengl
+                        && m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+                {
+                    m_gal->ClearScreen();
+                }
+
+                m_view->ClearTargets();
+
+                // Grid has to be redrawn only when the NONCACHED target is redrawn
+                if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+                    m_gal->DrawGrid();
+
+                cntRedraw.Start();
+                m_view->Redraw();
+                cntRedraw.Stop();
+                isDirty = true;
+            }
+
+            m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
+
+            cntCtxDestroy.Start();
         }
 
-        m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
-
-        cntCtxDestroy.Start();
+        // ctx goes out of scope here so destructor would be called
+        cntCtxDestroy.Stop();
     }
     catch( std::exception& err )
     {
@@ -314,10 +321,6 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
             DisplayInfoMessage( m_parent, _( "Could not use OpenGL" ), wxString( err.what() ) );
         }
     }
-
-    // ctx goes out of scope here so destructor would be called
-    cntCtxDestroy.Stop();
-
 
     if( isDirty )
     {
