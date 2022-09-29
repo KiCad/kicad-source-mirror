@@ -1112,7 +1112,7 @@ public:
         m_gal->BeginDrawing();
     }
 
-    ~GAL_DRAWING_CONTEXT()
+    ~GAL_DRAWING_CONTEXT() noexcept( false )
     {
         m_gal->EndDrawing();
     }
