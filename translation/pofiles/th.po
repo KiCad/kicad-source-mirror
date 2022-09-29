@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-27 13:22+0000\n"
+"PO-Revision-Date: 2022-09-29 15:54+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -27152,13 +27152,13 @@ msgid "Y scale constrained."
 msgstr "อัตราด้าน Y ถูกจำกัด"
 
 #: pcbnew/dialogs/dialog_plot.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Width correction constrained.  The width correction value must be in the "
 "range of [%s; %s] for the current design rules."
 msgstr ""
-"การแก้ไขความกว้างถูกจำกัด ค่าการแก้ไขความกว้างที่เหมาะสมต้องอยู่ในช่วง [%s; %s] (%s) "
-"สำหรับกฎการออกแบบปัจจุบัน"
+"ข้อจำกัดแก้ไขขนาดความกว้าง  ค่าแก้ไขความกว้างที่เหมาะสมต้องอยู่ในช่วง [%s; "
+"%s] สำหรับกฎการออกแบบปัจจุบัน"
 
 #: pcbnew/dialogs/dialog_plot.cpp:934
 msgid "No layer selected, Nothing to plot"
@@ -30371,9 +30371,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "ทับค่าเฉพาะที่บน %s; ระยะห่าง: %s"
 
 #: pcbnew/drc/drc_engine.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "ความหนาของเส้น:"
+msgstr "%s ความหนาขั้นต่ำ: %s"
 
 #: pcbnew/drc/drc_engine.cpp:851
 #, fuzzy, c-format
@@ -30399,29 +30399,29 @@ msgid "Checking %s max uncoupled length: %s."
 msgstr "กำลังตรวจสอบ %s; ระยะห่างของรูเจาะ: %s"
 
 #: pcbnew/drc/drc_engine.cpp:893
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max skew: %s."
-msgstr "กำลังตรวจสอบ %s %s:%s"
+msgstr "กำลังตรวจสอบ %s ค่าบิดเบี้ยวสูงสุด:%s"
 
 #: pcbnew/drc/drc_engine.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s gap: %s."
-msgstr "กำลังตรวจสอบ %s %s:%s"
+msgstr "กำลังตรวจสอบ %s ช่องห่าง:%s"
 
 #: pcbnew/drc/drc_engine.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "ความกว้างของซี่ล้อบรรเทาความร้อน:"
+msgstr "กำลังตรวจสอบ %s ความกว้างของซี่ล้อบรรเทาความร้อน: %s"
 
 #: pcbnew/drc/drc_engine.cpp:911
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "กำลังตรวจสอบ %s %s:%s"
+msgstr "กำลังตรวจสอบ %s จำนวนซี่น้อยที่สุด:%s"
 
 #: pcbnew/drc/drc_engine.cpp:917
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "กําลังตรวจสอบการเชื่อมต่อเน็ต..."
+msgstr "กําลังตรวจสอบ %s การเชื่อมต่อโซน:%s"
 
 #: pcbnew/drc/drc_engine.cpp:935 pcbnew/drc/drc_engine.cpp:936
 #: pcbnew/drc/drc_engine.cpp:937 pcbnew/tools/board_inspection_tool.cpp:212
@@ -30431,29 +30431,29 @@ msgid "undefined"
 msgstr "ไม่ได้กําหนด"
 
 #: pcbnew/drc/drc_engine.cpp:951
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "กำลังตรวจสอบความกว้างแทร็ก..."
+msgstr "กำลังตรวจสอบ %s ความกว้างแทร็ก: เลือก %s"
 
 #: pcbnew/drc/drc_engine.cpp:957
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "ตั้งค่าบอร์ดกำหนดข้อจำกัดลานสนาม"
+msgstr "กำลังตรวจสอบข้อจำกัดการตั้งค่าบอร์ด ความกว้างแทร็ค:อย่างต่ำ %s"
 
 #: pcbnew/drc/drc_engine.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "ตรวจสอบวงแหวนเวีย..."
+msgstr "กำลังตรวจสอบ %s ขนาดวงแหวน: อย่างต่ำ %s"
 
 #: pcbnew/drc/drc_engine.cpp:973
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "ตรวจสอบเส้นผ่าศูนย์กลางเวีย..."
+msgstr "กำลังตรวจสอบ %s เส้นผ่าศูนย์กลางเวีย: เลือก %s"
 
 #: pcbnew/drc/drc_engine.cpp:979
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints via diameter: min %s."
-msgstr "ตั้งค่าบอร์ดกำหนดข้อจำกัดขอบบอร์ด"
+msgstr "กำลังตรวจสอบข้อจำกัดการตั้งค่าบอร์ด เส้นผ่าศูนย์กลางเวีย:อย่างต่ำ %s"
 
 #: pcbnew/drc/drc_engine.cpp:988
 #, fuzzy, c-format
@@ -30461,14 +30461,14 @@ msgid "Checking %s hole size: opt %s."
 msgstr "กำลังตรวจสอบ %s; ระยะห่างของรูเจาะ: %s"
 
 #: pcbnew/drc/drc_engine.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole size: min %s."
-msgstr "ตั้งค่าบอร์ดกำหนดข้อจำกัดรูเจาะ"
+msgstr "กำลังตรวจสอบ ข้อจำกัดการตั้งค่าบอร์ด ขนาดรูเจาะ: อย่างต่ำ %s"
 
 #: pcbnew/drc/drc_engine.cpp:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "กำลังตรวจสอบ %s %s:%s"
+msgstr "กำลังตรวจสอบ %s : อย่างต่ำ %s"
 
 #: pcbnew/drc/drc_engine.cpp:1012
 #, fuzzy, c-format
@@ -30476,14 +30476,15 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "ตรวจสอบ %s; ระยะห่าง: %s"
 
 #: pcbnew/drc/drc_engine.cpp:1019
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr "ตรวจสอบ %s; ระยะห่างจากลานสนาม: %s"
+msgstr "กำลังตรวจสอบ ข้อจำกัดการตั้งค่าบอร์ด ค่าระยะห่าง:อย่างต่ำ %s"
 
 #: pcbnew/drc/drc_engine.cpp:1027
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole to hole: min %s."
-msgstr "ตั้งค่าบอร์ดกำหนดข้อจำกัดรูเจาะ"
+msgstr ""
+"กำลังตรวจสอบ ข้อจำกัดการตั้งค่าบอร์ด ระยะจากรูเจาะถึงรูเจาะ: อย่างต่ำ %s"
 
 #: pcbnew/drc/drc_engine.cpp:1033 pcbnew/drc/drc_engine.cpp:1062
 #: pcbnew/drc/drc_engine.cpp:1494
@@ -30523,9 +30524,9 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "เลเยอร์กฎไม่ตรงกัน กฎถูกละเว้น"
 
 #: pcbnew/drc/drc_engine.cpp:1186
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a drilled hole; rule ignored."
-msgstr "เงื่อนไขไม่พอใจ กฎถูกละเว้น"
+msgstr "%s ไม่ใช่รูเจาะ; กฎจะละเว้น"
 
 #: pcbnew/drc/drc_engine.cpp:1198
 msgid "Unconditional constraint applied."
@@ -30572,14 +30573,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "ระยะห่างเฉพาะที่บน %s; ระยะห่าง: %s"
 
 #: pcbnew/drc/drc_engine.cpp:1392
-#, fuzzy, c-format
+#, c-format
 msgid "%s zone connection: %s."
-msgstr "กําลังตรวจสอบการเชื่อมต่อเน็ต..."
+msgstr "%s การเชื่อมต่อโซน: %s"
 
 #: pcbnew/drc/drc_engine.cpp:1408
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection: %s."
-msgstr "ประเภทการเชื่อมต่อโซน: %s"
+msgstr "%s การเชื่อมต่อแพ็ด: %s"
 
 #: pcbnew/drc/drc_engine.cpp:1413 pcbnew/drc/drc_engine.cpp:1430
 #: pcbnew/drc/drc_engine.cpp:1447 pcbnew/zone.cpp:332 pcbnew/zone.cpp:443
@@ -30587,14 +30588,14 @@ msgid "zone"
 msgstr "โซน"
 
 #: pcbnew/drc/drc_engine.cpp:1425
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "บรรเทาความร้อนโซน: %s"
+msgstr "%s ระยะบรรเทาความร้อน: %s"
 
 #: pcbnew/drc/drc_engine.cpp:1442
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "ความกว้างของซี่ล้อบรรเทาความร้อน:"
+msgstr "%s ความกว้างซี่ล้อบรรเทาความร้อน:%s"
 
 #: pcbnew/drc/drc_engine.cpp:1475
 #, fuzzy, c-format
@@ -31004,9 +31005,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "กําลังตรวจสอบการเชื่อมต่อเน็ต..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum connection width %s; actual %s"
-msgstr "(%s ความกว้างขั้นต่ำ %s ค่าจริง %s)"
+msgstr "ความกว้างการเชื่อมต่อขั้นต่ำ %s; ค่าจริง %s"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -31169,14 +31170,14 @@ msgid "The library '%s' is not enabled in the current configuration."
 msgstr "ไลบรารี '%s' ไม่เปิดใช้งานในการปรับแต่งปัจจุบัน"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:548
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "ไม่พบฟุ้ทพรินท์ในรายการการเปลี่ยนแปลง"
+msgstr "ไม่พบฟุ้ทพรินท์ '%s' ในไลบรารี่ '%s'"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
-msgstr "ชนิดฟุ้ทพรินท์ไม่ตรงกับแพ็ดของฟุ้ทพรินท์"
+msgstr "ฟุ้ทพรินท์ '%s' ไม่ตรงกับสำเนาในไลบรารี่ '%s'"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
 #, c-format
@@ -31248,9 +31249,9 @@ msgid "Checking physical clearances..."
 msgstr "กำลังตรวจสอบระยะห่างแพ็ด..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "ระยะห่างเฉพาะที่บน %s; ระยะห่าง: %s"
+msgstr "การละเมิดระยะห่างภายใน (%s ระยะห่าง %s, ค่าจริง %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -31712,9 +31713,9 @@ msgid "(expected 'Through hole'; actual '%s')"
 msgstr "คาดหวังชนิด \"รูเจาะทะลุ\" แต่ตั้งเป็น \"%s\""
 
 #: pcbnew/footprint.cpp:2316
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(%s เส้นผ่านศูนย์กลางสูงสุด %s; ค่าจริง %s)"
+msgstr "(คาดหวัง 'SMD'; ค่าจริง %s)"
 
 #: pcbnew/footprint.cpp:2319
 #, c-format
@@ -32108,9 +32109,9 @@ msgid "Footprint Text '%s' of %s"
 msgstr "ข้อความฟุ้ทพรินท์ '%s' ของ %s"
 
 #: pcbnew/fp_textbox.cpp:333
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint Text Box of %s"
-msgstr "ข้อความฟุ้ทพรินท์ '%s' ของ %s"
+msgstr "ข้อความฟุ้ทพรินท์ของ %s"
 
 #: pcbnew/generate_footprint_info.cpp:43
 msgid "Documentation"
@@ -33517,9 +33518,9 @@ msgid "Pad %s of %s on %s"
 msgstr "แพ็ด %s ของ %s บน %s"
 
 #: pcbnew/pad.cpp:1234
-#, fuzzy, c-format
+#, c-format
 msgid "NPTH pad of %s"
-msgstr "แพ็ดของ %s บน %s"
+msgstr "แพ็ดชนิด NPTH ของ %s"
 
 #: pcbnew/pad.cpp:1238
 #, fuzzy, c-format
@@ -33719,9 +33720,9 @@ msgid "Unrecognized layer '%s'"
 msgstr "เลเยอร์ที่ไม่รู้จัก '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "เชื่อมโยงฟุ้ทพรินท์ โดยใช้อักษรอ้างอิง"
+msgstr "ไม่พบตัวแปรในฟุ้ทพรินท์ (A, B, หรือ อักษรอ้างอิง) ไปยัง %s"
 
 #: pcbnew/pcb_expr_evaluator.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -33736,9 +33737,9 @@ msgid "Footprint has no back courtyard."
 msgstr "ฟุ้ทพรินท์ไม่มีลานสนามด้านหลัง"
 
 #: pcbnew/pcb_expr_evaluator.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr "เชื่อมโยงฟุ้ทพรินท์ โดยใช้อักษรอ้างอิง"
+msgstr "ไม่พบตัวแปร กฏ-พื้นที่ (A, B, หรือชื่อจริง กฎ-พื่นที่) ไปยัง %s"
 
 #: pcbnew/pcb_expr_evaluator.cpp:739
 #, fuzzy, c-format
@@ -33814,9 +33815,9 @@ msgid "PCB Text '%s' on %s"
 msgstr "ข้อความพีซีบี '%s' บน %s"
 
 #: pcbnew/pcb_textbox.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text Box on %s"
-msgstr "ข้อความพีซีบี '%s' บน %s"
+msgstr "กล่องข้อความพีซีบีบน %s"
 
 #: pcbnew/pcb_track.cpp:103
 #, c-format
@@ -33854,9 +33855,9 @@ msgid "Full Length"
 msgstr "เต็มความยาว"
 
 #: pcbnew/pcb_track.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s; เลือก %s; สูงสุด %s"
+msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s, สูงสุด %s"
 
 #: pcbnew/pcb_track.cpp:840
 #, fuzzy, c-format
@@ -33945,14 +33946,14 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "การจับคู่ที่ไม่รู้จักของเลเยอร์จาก Altium '%s'"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Mode string: '%s'."
-msgstr "ไม่รู้จักโหนด '%s' ใน '%s'"
+msgstr "ไม่รู้จักโหนดข้อความ: '%s'"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record name string: '%s'."
-msgstr "รหัสบันทึกที่ไม่รู้จัก: %d"
+msgstr "ไม่รู้จักข้อความชื่อเรคคอร์ด: '%s'"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
 #, fuzzy, c-format
@@ -34307,9 +34308,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "ข้อกําหนดแพ็ด CADSTAR '%s' มีข้อผิดพลาดในการนําเข้า: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1257
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "ไม่สามารถหาโปรแกรมดูสำหรับ PDF '%s'"
+msgstr "ไม่สามารถหาตัวชี้แพ็ด '%d' ในฟุ้ทพรินท์ '%s'"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1290
 #, c-format
@@ -34745,9 +34746,9 @@ msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr "ชิ้นส่วนซ้ำสำหรับไอดี %d และลำดับ %d ในแถว %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "ไม่สามารถสร้างไฟล์คลัง '%s'\n"
+msgstr "ไม่สามารถเจาะจงแพ็ดสแต็ก %s ในไฟล์ %s\n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2332
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2361
@@ -35668,9 +35669,9 @@ msgid "Footprint with value of '%s' has an empty reference designator."
 msgstr "สัญลักษณ์ที่มีค่า '%s' มีรหัสอ้างอิงว่างเปล่า"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "ปรับปรุงฟุ้ทพรินท์ที่ตรงกับอักษรอ้างอิง:"
+msgstr "ฟุ้ทพรินท์หลายตัวมีอักษรอ้างอิง '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:76
 msgid ""
@@ -36080,9 +36081,9 @@ msgid "Text height resolution for:"
 msgstr "การแก้ปิดกั้นสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s; เลือก %s; สูงสุด %s"
+msgstr "ข้อจำกัดความสูงที่แก้แล้ว: ต่ำสุด %s; สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:302
 #: pcbnew/tools/board_inspection_tool.cpp:1248
@@ -36091,9 +36092,9 @@ msgid "Text thickness resolution for:"
 msgstr "ความยาวแทร็กอยู่นอกช่วง"
 
 #: pcbnew/tools/board_inspection_tool.cpp:310
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s; เลือก %s; สูงสุด %s"
+msgstr "ข้อจำกัดความหนาที่แก้แล้ว: ต่ำสุด %s; สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:317
 #: pcbnew/tools/board_inspection_tool.cpp:1153
@@ -36101,9 +36102,9 @@ msgid "Track width resolution for:"
 msgstr "ความละเอียดความกว้างของแทร็กสําหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s; เลือก %s; สูงสุด %s"
+msgstr "ข้อจำกัดความกว้าง ที่แก้แล้ว: ต่ำสุด %s; สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:331
 #, fuzzy
@@ -36127,9 +36128,9 @@ msgstr "ความละเอียดเส้นผ่านศูนย์
 
 #: pcbnew/tools/board_inspection_tool.cpp:354
 #: pcbnew/tools/board_inspection_tool.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "ข้อจำกัดเส้นผ่าศูนย์กลาง: ต่ำสุด %s;เลือก %s;สูงสุด %s"
+msgstr "ข้อจำกัดเส้นผ่าศูนย์กลาง ที่แก้แล้ว: ต่ำสุด %s;สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:360
 #, fuzzy
@@ -36142,9 +36143,9 @@ msgid "Via annular width resolution for:"
 msgstr "ความละเอียดความกว้างวงแหวนเวียสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:369
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "ข้อจำกัดความกว้างของวงแหวน: ต่ำสุด %s;เลือก %s;สูงสุด %s"
+msgstr "ข้อจำกัดความกว้างของวงแหวน ที่แก้แล้ว: ต่ำสุด %s; สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:376
 #: pcbnew/tools/board_inspection_tool.cpp:1209
@@ -36273,9 +36274,9 @@ msgid "Spoke width resolution for:"
 msgstr "ความละเอียดความกว้างของแทร็กสําหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:667
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "ความกว้างของซี่ล้อบรรเทาความร้อน:"
+msgstr "ขนาดความกว้างของซี่ล้อบรรเทาความร้อน ที่แก้ไขแล้ว:%s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:672
 #, fuzzy
@@ -36283,9 +36284,9 @@ msgid "Spoke count resolution for:"
 msgstr "การแก้ปิดกั้นสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "ความกว้างของซี่ล้อบรรเทาความร้อน:"
+msgstr "จำนวนของซี่ล้อบรรเทาความร้อน ที่แก้ไขแล้ว:%d"
 
 #: pcbnew/tools/board_inspection_tool.cpp:690
 #: pcbnew/tools/board_inspection_tool.cpp:738
@@ -36599,9 +36600,9 @@ msgid "Positioning Tools"
 msgstr "ตำแหน่งเลื่อน:"
 
 #: pcbnew/tools/edit_tool.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to resize arc tracks of %s or greater."
-msgstr "ไม่สามารถปรับขนาดแทร็กโค้ง %.1f องศาหรือมากกว่าได้"
+msgstr "ไม่สามารถปรับขนาดแทร็กโค้งของ %s หรือมากกว่า"
 
 #: pcbnew/tools/edit_tool.cpp:722
 msgid "Drag Arc Track"
@@ -36688,9 +36689,9 @@ msgid "Footprint name cannot be empty."
 msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
 
 #: pcbnew/tools/footprint_editor_control.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "ไม่พบฟุ้ทพรินท์ในรายการการเปลี่ยนแปลง"
+msgstr "ชื่อฟุ้ทพรินท์ '%s' มีใช้ในไลบรารี่ '%s'"
 
 #: pcbnew/tools/footprint_editor_control.cpp:749
 msgid "No footprint problems found."
