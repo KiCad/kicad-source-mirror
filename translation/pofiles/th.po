@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:34-0700\n"
-"PO-Revision-Date: 2022-09-27 07:22+0000\n"
+"PO-Revision-Date: 2022-09-29 15:54+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v6/th/>\n"
 "Language: th\n"
@@ -31506,9 +31506,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "ข้อกําหนดแพ็ด CADSTAR '%s' มีข้อผิดพลาดในการนําเข้า: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1256
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "ไม่สามารถหาโปรแกรมดูสำหรับ PDF '%s'"
+msgstr "ไม่สามารถหาตัวชี้แพ็ด '%d' ในฟุ้ทพรินท์ '%s'"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1289
 #, c-format
