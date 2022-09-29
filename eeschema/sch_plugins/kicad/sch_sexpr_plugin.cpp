@@ -811,40 +811,18 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
 
     m_out->Print( aNestLevel + 1, "(instances\n" );
 
-    // Sort symbol instance data to minimize file churn.
-    std::vector< SYMBOL_INSTANCE_REFERENCE > sortedInstances( aSymbol->GetInstanceReferences() );
-    std::sort( sortedInstances.begin(), sortedInstances.end(), SortSymbolInstancesByProjectUuid );
-
-    KIID lastProjectUuid;
-
-    for( size_t i = 0; i < sortedInstances.size(); i++ )
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : aSymbol->GetInstanceReferences() )
     {
-        if( lastProjectUuid != sortedInstances[i].m_Path[0] )
-        {
-            wxString projectName;
+        wxString path = instance.m_Path.AsString();
 
-            if( sortedInstances[i].m_Path[0] == m_schematic->RootScreen()->GetUuid() )
-                projectName = m_schematic->Prj().GetProjectName();
-            else
-                projectName = sortedInstances[i].m_ProjectName;
-
-            lastProjectUuid = sortedInstances[i].m_Path[0];
-            m_out->Print( aNestLevel + 2, "(project %s\n", m_out->Quotew( projectName ).c_str() );
-        }
-
-        wxString path = sortedInstances[i].m_Path.AsString();
-
-        m_out->Print( aNestLevel + 3, "(path %s\n",
+        m_out->Print( aNestLevel + 2, "(path %s\n",
                       m_out->Quotew( path ).c_str() );
-        m_out->Print( aNestLevel + 4, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
-                      m_out->Quotew( sortedInstances[i].m_Reference ).c_str(),
-                      sortedInstances[i].m_Unit,
-                      m_out->Quotew( sortedInstances[i].m_Value ).c_str(),
-                      m_out->Quotew( sortedInstances[i].m_Footprint ).c_str() );
-        m_out->Print( aNestLevel + 3, ")\n" );
-
-        if( i + 1 == sortedInstances.size() || lastProjectUuid != sortedInstances[i+1].m_Path[0] )
-            m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
+        m_out->Print( aNestLevel + 3, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
+                      m_out->Quotew( instance.m_Reference ).c_str(),
+                      instance.m_Unit,
+                      m_out->Quotew( instance.m_Value ).c_str(),
+                      m_out->Quotew( instance.m_Footprint ).c_str() );
+        m_out->Print( aNestLevel + 2, ")\n" );
     }
 
     m_out->Print( aNestLevel + 1, ")\n" );  // Closes `instances`.

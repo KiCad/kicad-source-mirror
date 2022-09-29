@@ -51,14 +51,7 @@ struct SYMBOL_INSTANCE_REFERENCE
     // Things that can be back-annotated:
     wxString  m_Value;
     wxString  m_Footprint;
-
-    // The project name associated with this instance.
-    wxString  m_ProjectName;
 };
-
-
-extern bool SortSymbolInstancesByProjectUuid( const SYMBOL_INSTANCE_REFERENCE& aLhs,
-                                              const SYMBOL_INSTANCE_REFERENCE& aRhs );
 
 
 /**

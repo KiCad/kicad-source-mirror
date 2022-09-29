@@ -2641,12 +2641,13 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
                 token = NextTok();
 
-                if( token != T_project )
-                    Expecting( "project" );
+                if( token != T_path )
+                    Expecting( "path" );
+
+                SYMBOL_INSTANCE_REFERENCE instance;
 
                 NeedSYMBOL();
-
-                wxString projectName = FromUTF8();
+                instance.m_Path = KIID_PATH( FromUTF8() );
 
                 for( token = NextTok(); token != T_RIGHT; token = NextTok() )
                 {
@@ -2655,54 +2656,36 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
                     token = NextTok();
 
-                    if( token != T_path )
-                        Expecting( "path" );
-
-                    SYMBOL_INSTANCE_REFERENCE instance;
-
-                    instance.m_ProjectName = projectName;
-
-                    NeedSYMBOL();
-                    instance.m_Path = KIID_PATH( FromUTF8() );
-
-                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    switch( token )
                     {
-                        if( token != T_LEFT )
-                            Expecting( T_LEFT );
+                    case T_reference:
+                        NeedSYMBOL();
+                        instance.m_Reference = FromUTF8();
+                        NeedRIGHT();
+                        break;
 
-                        token = NextTok();
+                    case T_unit:
+                        instance.m_Unit = parseInt( "symbol unit" );
+                        NeedRIGHT();
+                        break;
 
-                        switch( token )
-                        {
-                        case T_reference:
-                            NeedSYMBOL();
-                            instance.m_Reference = FromUTF8();
-                            NeedRIGHT();
-                            break;
+                    case T_value:
+                        NeedSYMBOL();
+                        instance.m_Value = FromUTF8();
+                        NeedRIGHT();
+                        break;
 
-                        case T_unit:
-                            instance.m_Unit = parseInt( "symbol unit" );
-                            NeedRIGHT();
-                            break;
+                    case T_footprint:
+                        NeedSYMBOL();
+                        instance.m_Footprint = FromUTF8();
+                        NeedRIGHT();
+                        break;
 
-                        case T_value:
-                            NeedSYMBOL();
-                            instance.m_Value = FromUTF8();
-                            NeedRIGHT();
-                            break;
-
-                        case T_footprint:
-                            NeedSYMBOL();
-                            instance.m_Footprint = FromUTF8();
-                            NeedRIGHT();
-                            break;
-
-                        default:
-                            Expecting( "reference, unit, value or footprint" );
-                        }
-
-                        symbol->AddHierarchicalReference( instance );
+                    default:
+                        Expecting( "reference, unit, value or footprint" );
                     }
+
+                    symbol->AddHierarchicalReference( instance );
                 }
             }
 
