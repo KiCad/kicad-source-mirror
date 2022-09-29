@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 19:33-0700\n"
+"POT-Creation-Date: 2022-09-29 08:57-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -341,11 +341,14 @@ msgstr "Toggle SMD 3D models"
 msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr "Toggle 3D models for 'Surface mount' type components"
 
-msgid "Toggle Other 3D models"
-msgstr "Toggle Other 3D models"
+msgid "Toggle unspecified 3D models"
+msgstr "Toggle unspecified 3D models"
 
-msgid "Toggle 3D models for 'Other' type components"
-msgstr "Toggle 3D models for 'Other' type components"
+msgid "Toggle 3D models for 'unspecified' type components"
+msgstr "Toggle 3D models for 'unspecified' type components"
+
+msgid "Toggle 3D models not in pos file"
+msgstr "Toggle 3D models not in pos file"
 
 msgid "Show Model Bounding Boxes"
 msgstr "Show Model Bounding Boxes"
@@ -1179,12 +1182,6 @@ msgstr ""
 msgid "The name %s is reserved, and cannot be used."
 msgstr "The name %s is reserved, and cannot be used."
 
-msgid "File Browser..."
-msgstr "File Browser…"
-
-msgid "Select Path"
-msgstr "Select Path"
-
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -1215,12 +1212,6 @@ msgstr "Name"
 
 msgid "Path"
 msgstr "Path"
-
-msgid "3D Search Paths"
-msgstr "3D Search Paths"
-
-msgid "Alias"
-msgstr "Alias"
 
 #, c-format
 msgid "Configure Global %s Library Table"
@@ -1683,6 +1674,24 @@ msgstr "Filter"
 
 msgid "Items:"
 msgstr "Items:"
+
+msgid "Available:"
+msgstr "Available:"
+
+msgid ">>"
+msgstr ">>"
+
+msgid "<<"
+msgstr "<<"
+
+msgid "Enabled:"
+msgstr "Enabled:"
+
+msgid "Move up"
+msgstr "Move up"
+
+msgid "Move down"
+msgstr "Move down"
 
 msgid "View Preset Switcher"
 msgstr "View Preset Switcher"
@@ -2664,6 +2673,9 @@ msgstr "Sheet"
 msgid "SCH Screen"
 msgstr "SCH Screen"
 
+msgid "Alias"
+msgstr "Alias"
+
 msgid "Symbol Field"
 msgstr "Symbol Field"
 
@@ -2936,6 +2948,9 @@ msgstr ""
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
 msgstr "fp-lib-table files contain no library named '%s'."
+
+msgid "Added by Plugin and Content Manager"
+msgstr "Added by Plugin and Content Manager"
 
 #, c-format
 msgid "Cannot create global library table path '%s'."
@@ -3355,6 +3370,14 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "The KiCad language file for this language is not installed."
 
 #, c-format
+msgid "Page %s"
+msgstr "Page %s"
+
+#, c-format
+msgid "%s (Page %s)"
+msgstr "%s (Page %s)"
+
+#, c-format
 msgid "Show Page %s"
 msgstr "Show Page %s"
 
@@ -3636,11 +3659,14 @@ msgstr "Change Edit Method"
 msgid "Change edit method constraints"
 msgstr "Change edit method constraints"
 
+msgid "Show Search Panel"
+msgstr "Show Search Panel"
+
+msgid "Show/hide the search panel"
+msgstr "Show/hide the search panel"
+
 msgid "Find"
 msgstr "Find"
-
-msgid "Search for items"
-msgstr "Search for items"
 
 msgid "Find text"
 msgstr "Find text"
@@ -3815,6 +3841,9 @@ msgstr "Millimeters"
 
 msgid "Use millimeters"
 msgstr "Use millimeters"
+
+msgid "Select Columns"
+msgstr "Select Columns"
 
 msgid "Switch units"
 msgstr "Switch units"
@@ -4119,6 +4148,9 @@ msgstr "Always show crosshairs"
 
 msgid "Select a File"
 msgstr "Select a File"
+
+msgid "Select Path"
+msgstr "Select Path"
 
 msgid "recent searches"
 msgstr "recent searches"
@@ -5800,6 +5832,13 @@ msgstr "Value may not be empty."
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "Sheet filename can only be modified in Sheet Properties dialog."
 
+msgid ""
+"Intersheet reference visibility is controlled globally from Schematic Setup "
+"> General > Formatting"
+msgstr ""
+"Intersheet reference visibility is controlled globally from Schematic Setup "
+"> General > Formatting"
+
 msgid "Text:"
 msgstr "Text:"
 
@@ -6081,12 +6120,6 @@ msgstr "Font"
 
 msgid "Add field"
 msgstr "Add field"
-
-msgid "Move up"
-msgstr "Move up"
-
-msgid "Move down"
-msgstr "Move down"
 
 msgid "Delete field"
 msgstr "Delete field"
@@ -6600,13 +6633,13 @@ msgstr "Alternate pin definitions must have a name."
 
 #, c-format
 msgid ""
-"This pin is not on a %d mils grid which will make it\n"
-"difficult to connect to in the schematic.\n"
-"Do you want to continue?"
+"This pin is not on a %d mils grid which will make it difficult to connect to "
+"in the schematic.\n"
+"Do you wish to continue?"
 msgstr ""
-"This pin is not on a %d mils grid which will make it\n"
-"difficult to connect to in the schematic.\n"
-"Do you want to continue?"
+"This pin is not on a %d mils grid which will make it difficult to connect to "
+"in the schematic.\n"
+"Do you wish to continue?"
 
 msgid "Synchronized Pins Mode."
 msgstr "Synchronized Pins Mode."
@@ -6731,6 +6764,9 @@ msgstr "Plotted to '%s'."
 
 msgid "Done."
 msgstr "Done."
+
+msgid "Root"
+msgstr "Root"
 
 #, c-format
 msgid "Plotted to '%s'.\n"
@@ -7216,6 +7252,9 @@ msgstr "Model:"
 
 msgid "Override"
 msgstr "Override"
+
+msgid "Pin:"
+msgstr "Pin:"
 
 msgid "Model"
 msgstr "Model"
@@ -8070,11 +8109,15 @@ msgstr "_1"
 msgid "Default text size:"
 msgstr "Default text size:"
 
-msgid "Text offset ratio:"
-msgstr "Text offset ratio:"
+msgid "Label offset ratio:"
+msgstr "Label offset ratio:"
 
-msgid "Percentage of the text size to offset text above or below wire or bus"
-msgstr "Percentage of the text size to offset text above or below wire or bus"
+msgid ""
+"Percentage of the text size to offset labels above (or below) a wire, bus, "
+"or pin"
+msgstr ""
+"Percentage of the text size to offset labels above (or below) a wire, bus, "
+"or pin"
 
 msgid "Global label margin:"
 msgstr "Global label margin:"
@@ -8803,8 +8846,15 @@ msgstr "Alias of"
 msgid "Unknown"
 msgstr "Unknown"
 
-msgid "Root"
-msgstr "Root"
+msgid "Edit Page Number"
+msgstr "Edit Page Number"
+
+#, c-format
+msgid "Enter page number for sheet path%s"
+msgstr "Enter page number for sheet path%s"
+
+msgid "Edit Sheet Page Number"
+msgstr "Edit Sheet Page Number"
 
 #, c-format
 msgid "(page %s)"
@@ -8932,6 +8982,12 @@ msgstr "Drawing to Clipboard"
 
 msgid "Netlist..."
 msgstr "Netlist..."
+
+msgid "Symbols to Library..."
+msgstr "Symbols to Library..."
+
+msgid "Symbols to New Library..."
+msgstr "Symbols to New Library..."
 
 msgid "&Units"
 msgstr "&Units"
@@ -9093,6 +9149,27 @@ msgstr ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 
+msgid "Add the library to the global library table?"
+msgstr "Add the library to the global library table?"
+
+msgid "Add To Global Library Table"
+msgstr "Add To Global Library Table"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Choose the Library Table to add the library to:"
+msgstr "Choose the Library Table to add the library to:"
+
+msgid "Add To Library Table"
+msgstr "Add To Library Table"
+
+msgid "No symbol libraries are loaded."
+msgstr "No symbol libraries are loaded."
+
+msgid "Select Symbol Library"
+msgstr "Select Symbol Library"
+
 msgid "Bus to Wire Entry"
 msgstr "Bus to Wire Entry"
 
@@ -9208,6 +9285,9 @@ msgstr "Net"
 
 msgid "Resolved netclass"
 msgstr "Resolved netclass"
+
+msgid "Hierarchical Labels"
+msgstr "Hierarchical Labels"
 
 #, c-format
 msgid "Label '%s'"
@@ -10292,13 +10372,42 @@ msgstr "%s describes %lu pins, expected %u"
 msgid "Failed to infer model from Value '%s'"
 msgstr "Failed to infer model from Value '%s'"
 
+msgid "Power supply"
+msgstr "Power supply"
+
+msgid "Parasitic Resistance"
+msgstr "Parasitic Resistance"
+
+msgid "Parasitic Pin Inductance"
+msgstr "Parasitic Pin Inductance"
+
+msgid "Parasitic Pin Capacitance"
+msgstr "Parasitic Pin Capacitance"
+
+msgid "Waveform"
+msgstr "Waveform"
+
+msgid "Modeling accuracy"
+msgstr "Modeling accuracy"
+
+msgid "ON time"
+msgstr "ON time"
+
+msgid "OFF time"
+msgstr "OFF time"
+
+msgid "Delay"
+msgstr "Delay"
+
+msgid "Bitrate"
+msgstr "Bitrate"
+
+msgid "Number of bits"
+msgstr "Number of bits"
+
 #, c-format
 msgid "Invalid symbol pin index: '%s'"
 msgstr "Invalid symbol pin index: '%s'"
-
-#, c-format
-msgid "Failed to set parameter '%s' to '%s'"
-msgstr "Failed to set parameter '%s' to '%s'"
 
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
@@ -10490,6 +10599,10 @@ msgstr "Voltage (measured)"
 
 msgid "Unknown SIM_VALUE type"
 msgstr "Unknown SIM_VALUE type"
+
+#, c-format
+msgid "Failed to set parameter '%s' to '%s'"
+msgstr "Failed to set parameter '%s' to '%s'"
 
 msgid "DC Sweep"
 msgstr "DC Sweep"
@@ -10718,21 +10831,6 @@ msgstr "Could not open the library file."
 msgid "Loading library '%s'..."
 msgstr "Loading library '%s'..."
 
-msgid "Add the library to the global library table?"
-msgstr "Add the library to the global library table?"
-
-msgid "Add To Global Library Table"
-msgstr "Add To Global Library Table"
-
-msgid "Global"
-msgstr "Global"
-
-msgid "Choose the Library Table to add the library to:"
-msgstr "Choose the Library Table to add the library to:"
-
-msgid "Add To Library Table"
-msgstr "Add To Library Table"
-
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Failed to save backup to '%s'."
@@ -10773,12 +10871,6 @@ msgstr "[Read Only Library]"
 
 msgid "[no symbol loaded]"
 msgstr "[no symbol loaded]"
-
-msgid "No symbol libraries are loaded."
-msgstr "No symbol libraries are loaded."
-
-msgid "Select Symbol Library"
-msgstr "Select Symbol Library"
 
 msgid "No schematic currently open."
 msgstr "No schematic currently open."
@@ -10932,6 +11024,16 @@ msgstr "Error creating symbol library '%s'."
 msgid "Symbol %s saved to library '%s'."
 msgstr "Symbol %s saved to library '%s'."
 
+#, c-format
+msgid ""
+"Duplicate library nickname '%s' found in symbol library table file line %d"
+msgstr ""
+"Duplicate library nickname '%s' found in symbol library table file line %d"
+
+#, c-format
+msgid "Error loading symbol library '%s'."
+msgstr "Error loading symbol library '%s'."
+
 msgid "Errors loading symbols:"
 msgstr "Errors loading symbols:"
 
@@ -10957,16 +11059,6 @@ msgstr "Cannot enumerate library '%s'."
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
 msgstr "Error saving symbol %s to library '%s'."
-
-#, c-format
-msgid ""
-"Duplicate library nickname '%s' found in symbol library table file line %d"
-msgstr ""
-"Duplicate library nickname '%s' found in symbol library table file line %d"
-
-#, c-format
-msgid "Error loading symbol library '%s'."
-msgstr "Error loading symbol library '%s'."
 
 msgid "(failed to load)"
 msgstr "(failed to load)"
@@ -11682,6 +11774,26 @@ msgstr "Generate BOM..."
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Generate a bill of materials for the current schematic"
 
+msgid "Export Symbols to Library..."
+msgstr "Export Symbols to Library..."
+
+msgid ""
+"Add symbols used in schematic to an existing symbol library\n"
+"(does not remove other symbols from this library)"
+msgstr ""
+"Add symbols used in schematic to an existing symbol library\n"
+"(does not remove other symbols from this library)"
+
+msgid "Export Symbols to New Library..."
+msgstr "Export Symbols to New Library..."
+
+msgid ""
+"Create a new symbol library using the symbols used in the schematic\n"
+"(if the library already exists it will be replaced)"
+msgstr ""
+"Create a new symbol library using the symbols used in the schematic\n"
+"(if the library already exists it will be replaced)"
+
 msgid "Select on PCB"
 msgstr "Select on PCB"
 
@@ -11957,13 +12069,6 @@ msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Do you wish to delete the unreferenced pins from this sheet?"
 
 #, c-format
-msgid "Enter page number for sheet path%s"
-msgstr "Enter page number for sheet path%s"
-
-msgid "Edit Sheet Page Number"
-msgstr "Edit Sheet Page Number"
-
-#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Revert '%s' (and all sub-sheets) to last version saved?"
 
@@ -11975,6 +12080,13 @@ msgstr "Reached end of sheet."
 
 msgid "Find again to wrap around to the start."
 msgstr "Find again to wrap around to the start."
+
+#, c-format
+msgid "Could not add library '%s'."
+msgstr "Could not add library '%s'."
+
+msgid "Update symbols in schematic to refer to new library?"
+msgstr "Update symbols in schematic to refer to new library?"
 
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Error: duplicate sub-sheet names found in current sheet."
@@ -13391,6 +13503,25 @@ msgstr "Download"
 msgid "Check for package updates on startup"
 msgstr "Check for package updates on startup"
 
+msgid "Library package handling"
+msgstr "Library package handling"
+
+msgid "Automatically add installed libraries to global lib table"
+msgstr "Automatically add installed libraries to global lib table"
+
+msgid "Automatically remove uninstalled libraries"
+msgstr "Automatically remove uninstalled libraries"
+
+msgid "Library nickname prefix:"
+msgstr "Library nickname prefix:"
+
+msgid ""
+"After packages are (un)installed KiCad may need to be restarted to reflect "
+"changes in the global library table."
+msgstr ""
+"After packages are (un)installed KiCad may need to be restarted to reflect "
+"changes in the global library table."
+
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "schema file '%s' not found"
@@ -13468,6 +13599,10 @@ msgstr "Package updates are available"
 
 msgid "No package updates available"
 msgstr "No package updates available"
+
+#, c-format
+msgid "Version %s of package %s not found!"
+msgstr "Version %s of package %s not found!"
 
 msgid "Unable to create download directory!"
 msgstr "Unable to create download directory!"
@@ -14533,6 +14668,36 @@ msgstr "4th Band"
 msgid "Multiplier"
 msgstr "Multiplier"
 
+msgid "Copper (Cu)"
+msgstr "Copper (Cu)"
+
+msgid ""
+"When two metals are in contact, there will be a potential difference between "
+"them that will lead to corrosion.\n"
+"In order to avoid corrosion, it is good practice to keep the difference "
+"below 300mV.\n"
+"\n"
+"One of the metal will be anodic (+) and will be attacked. The other one will "
+"be cathodic and will be protected.\n"
+"In the table below, if the number is positive then the row is anodic and the "
+"column is cathodic. \n"
+"\n"
+"You can use an interface metal, just like with the ENIG surface finish that "
+"uses nickel as an interface between gold and copper to prevent corrosion."
+msgstr ""
+"When two metals are in contact, there will be a potential difference between "
+"them that will lead to corrosion.\n"
+"In order to avoid corrosion, it is good practice to keep the difference "
+"below 300mV.\n"
+"\n"
+"One of the metal will be anodic (+) and will be attacked. The other one will "
+"be cathodic and will be protected.\n"
+"In the table below, if the number is positive then the row is anodic and the "
+"column is cathodic. \n"
+"\n"
+"You can use an interface metal, just like with the ENIG surface finish that "
+"uses nickel as an interface between gold and copper to prevent corrosion."
+
 msgid "Voltage > 500 V:"
 msgstr "Voltage > 500 V:"
 
@@ -15177,6 +15342,9 @@ msgstr "Color Code"
 
 msgid "Board Classes"
 msgstr "Board Classes"
+
+msgid "Galvanic corrosion"
+msgstr "Galvanic corrosion"
 
 msgid "Write Data Failed"
 msgstr "Write Data Failed"
@@ -15838,8 +16006,8 @@ msgstr "Merge co-linear tracks"
 msgid "Remove track not connected at both ends"
 msgstr "Remove track not connected at both ends"
 
-msgid "Remove via connected on fewer than two layers"
-msgstr "Remove via connected on fewer than two layers"
+msgid "Remove via connected on less than 2 layers"
+msgstr "Remove via connected on less than 2 layers"
 
 msgid "Remove zero-length track"
 msgstr "Remove zero-length track"
@@ -15855,6 +16023,9 @@ msgstr "Remove duplicated graphic"
 
 msgid "Convert lines to rectangle"
 msgstr "Convert lines to rectangle"
+
+msgid "Merge overlapping shapes into pad"
+msgstr "Merge overlapping shapes into pad"
 
 msgid "Unknown cleanup action"
 msgstr "Unknown cleanup action"
@@ -16333,6 +16504,9 @@ msgstr "THT:"
 msgid "SMD:"
 msgstr "SMD:"
 
+msgid "Unspecified:"
+msgstr "Unspecified:"
+
 msgid "Through hole:"
 msgstr "Through hole:"
 
@@ -16413,8 +16587,8 @@ msgstr "Board Size"
 msgid "Subtract holes from board area"
 msgstr "Subtract holes from board area"
 
-msgid "Exclude components with no pins"
-msgstr "Exclude components with no pins"
+msgid "Exclude footprints with no pads"
+msgstr "Exclude footprints with no pads"
 
 msgid "X Size"
 msgstr "X Size"
@@ -16460,6 +16634,16 @@ msgstr "Merge lines into rectangles"
 
 msgid "Delete redundant graphics"
 msgstr "Delete redundant graphics"
+
+msgid "Merge overlapping graphics into pads"
+msgstr "Merge overlapping graphics into pads"
+
+msgid ""
+"(Pads which appear in a Net Tie pad group will not be considered for "
+"merging.)"
+msgstr ""
+"(Pads which appear in a Net Tie pad group will not be considered for "
+"merging.)"
 
 msgid "Changes To Be Applied:"
 msgstr "Changes To Be Applied:"
@@ -17647,9 +17831,6 @@ msgstr "Through hole"
 msgid "SMD"
 msgstr "SMD"
 
-msgid "Other"
-msgstr "Other"
-
 msgid "Not in schematic"
 msgstr "Not in schematic"
 
@@ -18458,9 +18639,6 @@ msgstr "<"
 
 msgid "Remove selected layers from matched layers list."
 msgstr "Remove selected layers from matched layers list."
-
-msgid "<<"
-msgstr "<<"
 
 msgid "Remove all matched layers."
 msgstr "Remove all matched layers."
@@ -20441,6 +20619,9 @@ msgstr ""
 msgid "Minimum connection width:"
 msgstr "Minimum connection width:"
 
+msgid "The minimum copper width of connected copper items."
+msgstr "The minimum copper width of connected copper items."
+
 msgid "Minimum annular width:"
 msgstr "Minimum annular width:"
 
@@ -22174,9 +22355,6 @@ msgstr "Footprint component type doesn't match footprint pads"
 msgid "Through hole pad has no hole"
 msgstr "Through hole pad has no hole"
 
-msgid "Pads with different numbers overlap"
-msgstr "Pads with different numbers overlap"
-
 #, c-format
 msgid "Rule: %s"
 msgstr "Rule: %s"
@@ -22745,6 +22923,9 @@ msgid ""
 msgstr ""
 "Board copied to:\n"
 "%s"
+
+msgid "Other"
+msgstr "Other"
 
 msgid "Last Change"
 msgstr "Last Change"
@@ -26150,8 +26331,8 @@ msgstr "Some zones did not intersect and were not merged."
 msgid "Duplicate zone"
 msgstr "Duplicate zone"
 
-msgid "Selection contains no items with labelled nets."
-msgstr "Selection contains no items with labelled nets."
+msgid "Selection contains no items with labeled nets."
+msgstr "Selection contains no items with labeled nets."
 
 msgid "Net Inspection Tools"
 msgstr "Net Inspection Tools"
@@ -26583,6 +26764,9 @@ msgstr "Selection copied"
 msgid "Copy canceled"
 msgstr "Copy canceled"
 
+msgid "Pack footprints"
+msgstr "Pack footprints"
+
 msgid "Select reference point for move..."
 msgstr "Select reference point for move..."
 
@@ -26631,6 +26815,9 @@ msgstr "Renumber pads"
 msgid "Place pad"
 msgstr "Place pad"
 
+msgid "Recombine pad"
+msgstr "Recombine pad"
+
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
 msgstr "Pad Edit Mode.  Press %s again to exit."
@@ -26641,9 +26828,6 @@ msgstr "Pad Edit Mode.  Press %s to exit."
 
 msgid "Edit pad shapes"
 msgstr "Edit pad shapes"
-
-msgid "Recombine pads"
-msgstr "Recombine pads"
 
 msgid "Create Polygon from Selection"
 msgstr "Create Polygon from Selection"
@@ -26835,6 +27019,12 @@ msgstr ""
 "Selects a footprint by reference designator and places it under the cursor "
 "for moving"
 
+msgid "Move Individually"
+msgstr "Move Individually"
+
+msgid "Moves the selected items one-by-one"
+msgstr "Moves the selected items one-by-one"
+
 msgid "Move with Reference"
 msgstr "Move with Reference"
 
@@ -26871,8 +27061,21 @@ msgstr "Rotates selected item(s) counterclockwise"
 msgid "Flips selected item(s) to opposite side of board"
 msgstr "Flips selected item(s) to opposite side of board"
 
-msgid "Mirrors selected item"
-msgstr "Mirrors selected item"
+msgid "Mirrors selected item across the Y axis"
+msgstr "Mirrors selected item across the Y axis"
+
+msgid "Mirrors selected item across the X axis"
+msgstr "Mirrors selected item across the X axis"
+
+msgid "Pack and Move Footprints"
+msgstr "Pack and Move Footprints"
+
+msgid ""
+"Sorts selected footprints by reference, packs based on size and initiates "
+"movement"
+msgstr ""
+"Sorts selected footprints by reference, packs based on size and initiates "
+"movement"
 
 msgid "Change Track Width"
 msgstr "Change Track Width"
@@ -27322,12 +27525,6 @@ msgstr "Show Properties Panel"
 msgid "Show/hide the properties panel"
 msgstr "Show/hide the properties panel"
 
-msgid "Show Search Panel"
-msgstr "Show Search Panel"
-
-msgid "Show/hide the search panel"
-msgstr "Show/hide the search panel"
-
 msgid "Flip Board View"
 msgstr "Flip Board View"
 
@@ -27637,6 +27834,12 @@ msgstr ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
 
+msgid "Unroute Selected"
+msgstr "Unroute Selected"
+
+msgid "Unroutes selected items to the nearest pad."
+msgstr "Unroutes selected items to the nearest pad."
+
 msgid "Select All Tracks in Net"
 msgstr "Select All Tracks in Net"
 
@@ -27648,6 +27851,22 @@ msgstr "Deselect All Tracks in Net"
 
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "Deselects all tracks & vias belonging to the same net."
+
+msgid "Select All Unconnected Footprints"
+msgstr "Select All Unconnected Footprints"
+
+msgid "Selects all unconnected footprints belonging to each selected net."
+msgstr "Selects all unconnected footprints belonging to each selected net."
+
+msgid "Grab Nearest Unconnected Footprints"
+msgstr "Grab Nearest Unconnected Footprints"
+
+msgid ""
+"Selects and initiates moving the nearest unconnected footprint on each "
+"selected net."
+msgstr ""
+"Selects and initiates moving the nearest unconnected footprint on each "
+"selected net."
 
 msgid "Selects all footprints and tracks in the schematic sheet"
 msgstr "Selects all footprints and tracks in the schematic sheet"
@@ -28464,6 +28683,9 @@ msgstr "Dimensions"
 msgid "Other items"
 msgstr "Other items"
 
+msgid "Textbox"
+msgstr "Textbox"
+
 msgid "Rule Area"
 msgstr "Rule Area"
 
@@ -28675,6 +28897,57 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Toggle Other 3D models"
+#~ msgstr "Toggle Other 3D models"
+
+#~ msgid "Toggle 3D models for 'Other' type components"
+#~ msgstr "Toggle 3D models for 'Other' type components"
+
+#~ msgid "File Browser..."
+#~ msgstr "File Browser…"
+
+#~ msgid "3D Search Paths"
+#~ msgstr "3D Search Paths"
+
+#~ msgid "Search for items"
+#~ msgstr "Search for items"
+
+#, c-format
+#~ msgid ""
+#~ "This pin is not on a %d mils grid which will make it\n"
+#~ "difficult to connect to in the schematic.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "This pin is not on a %d mils grid which will make it\n"
+#~ "difficult to connect to in the schematic.\n"
+#~ "Do you want to continue?"
+
+#~ msgid "Text offset ratio:"
+#~ msgstr "Text offset ratio:"
+
+#~ msgid ""
+#~ "Percentage of the text size to offset text above or below wire or bus"
+#~ msgstr ""
+#~ "Percentage of the text size to offset text above or below wire or bus"
+
+#~ msgid "Remove via connected on fewer than two layers"
+#~ msgstr "Remove via connected on fewer than two layers"
+
+#~ msgid "Exclude components with no pins"
+#~ msgstr "Exclude components with no pins"
+
+#~ msgid "Pads with different numbers overlap"
+#~ msgstr "Pads with different numbers overlap"
+
+#~ msgid "Selection contains no items with labelled nets."
+#~ msgstr "Selection contains no items with labelled nets."
+
+#~ msgid "Recombine pads"
+#~ msgstr "Recombine pads"
+
+#~ msgid "Mirrors selected item"
+#~ msgstr "Mirrors selected item"
 
 #, c-format
 #~ msgid "Item not annotated: %s%s (unit %d)\n"
@@ -43041,9 +43314,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "Edit Page Number..."
 #~ msgstr "Edit Page Number..."
 
-#~ msgid "Edit Page Number"
-#~ msgstr "Edit Page Number"
-
 #~ msgid "<b>No more available layers</b> in Gerbview to load files"
 #~ msgstr "<b>No more available layers</b> in Gerbview to load files"
 
@@ -43619,9 +43889,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Degree"
 #~ msgstr "Degree"
-
-#~ msgid "Available:"
-#~ msgstr "Available:"
 
 #~ msgid "Via drill size has to be smaller than via diameter"
 #~ msgstr "Via drill size has to be smaller than via diameter"
