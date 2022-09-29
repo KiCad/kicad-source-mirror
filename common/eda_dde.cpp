@@ -51,9 +51,9 @@ void KIWAY_PLAYER::CreateServer( int service, bool local )
     if( local )
         addr.Hostname( HOSTNAME );
 
-    // this helps kill any events that could come in during deletion
     if( m_socketServer )
     {
+        // this helps prevent any events that could come in during deletion
         m_socketServer->Notify( false );
         delete m_socketServer;
     }
