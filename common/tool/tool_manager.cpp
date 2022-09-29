@@ -285,7 +285,7 @@ bool TOOL_MANAGER::InvokeTool( const std::string& aToolName )
 }
 
 
-bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, std::any aParam )
+bool TOOL_MANAGER::doRunAction( const std::string& aActionName, bool aNow, std::any aParam )
 {
     TOOL_ACTION* action = m_actionMgr->FindAction( aActionName );
 
@@ -295,7 +295,7 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, std::an
         return false;
     }
 
-    RunAction( *action, aNow, aParam );
+    doRunAction( *action, aNow, aParam );
 
     return false;
 }
@@ -319,7 +319,7 @@ VECTOR2D TOOL_MANAGER::GetCursorPosition() const
 }
 
 
-bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam )
+bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam )
 {
     if( m_shuttingDown )
         return true;

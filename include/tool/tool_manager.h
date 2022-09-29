@@ -131,6 +131,9 @@ public:
      *
      * The common format for action names is "application.ToolName.Action".
      *
+     * Note: The type of the optional parameter must match exactly with the type the consuming
+     *       action is expecting, otherwise an assert will occur when reading the paramter.
+     *
      * @param aActionName is the name of action to be invoked.
      * @param aNow decides if the action has to be run immediately or after the current coroutine
      *             is preemptied.
@@ -138,14 +141,21 @@ public:
      *               depends on the action.
      * @return False if the action was not found.
      */
-    bool RunAction( const std::string& aActionName, bool aNow, std::any aParam );
+    template<typename T>
+    bool RunAction( const std::string& aActionName, bool aNow, T aParam )
+    {
+        // Use a cast to ensure the proper type is stored inside the parameter
+        std::any a( static_cast<T>( aParam ) );
+
+        return doRunAction( aActionName, aNow, a );
+    }
 
     bool RunAction( const std::string& aActionName, bool aNow = false )
     {
         // Default initialize the parameter argument to an empty std::any
         std::any a;
 
-        return RunAction( aActionName, aNow, a );
+        return doRunAction( aActionName, aNow, a );
     }
 
     /**
@@ -154,6 +164,9 @@ public:
      * This function will only return if the action has been handled when the action is run
      * immediately (aNow = true), otherwise it will always return false.
      *
+     * Note: The type of the optional parameter must match exactly with the type the consuming
+     *       action is expecting, otherwise an assert will occur when reading the paramter.
+     *
      * @param aAction is the action to be invoked.
      * @param aNow decides if the action has to be run immediately or after the current coroutine
      *             is preemptied.
@@ -161,14 +174,21 @@ public:
      *               depends on the action.
      * @return True if the action was handled immediately
      */
-    bool RunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam );
+    template<typename T>
+    bool RunAction( const TOOL_ACTION& aAction, bool aNow, T aParam )
+    {
+        // Use a cast to ensure the proper type is stored inside the parameter
+        std::any a( static_cast<T>( aParam ) );
+
+        return doRunAction( aAction, aNow, a );
+    }
 
     bool RunAction( const TOOL_ACTION& aAction, bool aNow = false )
     {
         // Default initialize the parameter argument to an empty std::any
         std::any a;
 
-        return RunAction( aAction, aNow, a );
+        return doRunAction( aAction, aNow, a );
     }
 
     /**
@@ -440,6 +460,12 @@ public:
 
 private:
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
+
+    /**
+     * Helper function to actually run an action.
+     */
+    bool doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam );
+    bool doRunAction( const std::string& aActionName, bool aNow, std::any aParam );
 
     /**
      * Pass an event at first to the active tools, then to all others.
