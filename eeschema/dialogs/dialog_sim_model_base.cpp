@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -102,7 +102,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer16->SetFlexibleDirection( wxBOTH );
 	fgSizer16->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextDevType = new wxStaticText( m_parametersPanel, wxID_ANY, _("Spice device:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDevType = new wxStaticText( m_parametersPanel, wxID_ANY, _("Device:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDevType->Wrap( -1 );
 	fgSizer16->Add( m_staticTextDevType, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -111,7 +111,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_deviceTypeChoice->SetSelection( 0 );
 	fgSizer16->Add( m_deviceTypeChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
-	m_staticTextSpiceType = new wxStaticText( m_parametersPanel, wxID_ANY, _("Spice type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSpiceType = new wxStaticText( m_parametersPanel, wxID_ANY, _("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSpiceType->Wrap( -1 );
 	fgSizer16->Add( m_staticTextSpiceType, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -325,7 +325,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 
 	bSizerBottom->Add( 5, 0, 0, 0, 5 );
 
-	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Spice Model..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Simulation Model..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBottom->Add( m_spiceFieldsButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 15 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();

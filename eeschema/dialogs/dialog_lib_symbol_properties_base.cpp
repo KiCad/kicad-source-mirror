@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,7 +54,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_grid->SetColSize( 12, 48 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelValue( 0, _("Name") );
 	m_grid->SetColLabelValue( 1, _("Value") );
 	m_grid->SetColLabelValue( 2, _("Show") );
@@ -68,6 +67,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_grid->SetColLabelValue( 10, _("Y Position") );
 	m_grid->SetColLabelValue( 11, _("Font") );
 	m_grid->SetColLabelValue( 12, _("Color") );
+	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -334,7 +334,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	bSizer101->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Edit Spice Model..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Edit Simulation Model..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer101->Add( m_spiceFieldsButton, 0, wxEXPAND|wxALL, 5 );
 
 
