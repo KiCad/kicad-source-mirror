@@ -303,7 +303,6 @@ public:
      * This must be called after a board change (changes for pads, footprints or a read
      * netlist ).
      *
-     * @param aDC is the current device context (can be NULL).
      * @param aDisplayStatus  if true, display the computation results.
      */
     void Compile_Ratsnest( bool aDisplayStatus );

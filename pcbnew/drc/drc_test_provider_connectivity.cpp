@@ -82,7 +82,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
             islandsList.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone ) );
     }
 
-    // Rebuild just in case. This really needs to be reliable.
+    // Rebuild (from scratch, ignoring dirty flags) just in case. This really needs to be reliable.
     connectivity->Clear();
     connectivity->Build( board, m_drcEngine->GetProgressReporter() );
     connectivity->FindIsolatedCopperIslands( islandsList, true );
@@ -155,24 +155,24 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     if( !reportPhase( _( "Checking net connections..." ) ) )
         return false;   // DRC cancelled
 
-    std::vector<CN_EDGE> edges;
-    connectivity->GetUnconnectedEdges( edges );
-
     ii = 0;
-    count = edges.size();
+    count = connectivity->GetUnconnectedCount( false );
 
-    for( const CN_EDGE& edge : edges )
-    {
-        if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNCONNECTED_ITEMS ) )
-            break;
+    connectivity->RunOnUnconnectedEdges(
+            [&]( CN_EDGE& edge )
+            {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNCONNECTED_ITEMS ) )
+                    return false;
 
-        if( !reportProgress( ii++, count, progressDelta ) )
-            return false;   // DRC cancelled
+                if( !reportProgress( ii++, count, progressDelta ) )
+                    return false;   // DRC cancelled
 
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
-        drcItem->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
-        reportViolation( drcItem, edge.GetSourceNode()->Pos(), UNDEFINED_LAYER );
-    }
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
+                drcItem->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
+                reportViolation( drcItem, edge.GetSourceNode()->Pos(), UNDEFINED_LAYER );
+
+                return true;
+            } );
 
     reportRuleStatistics();
 

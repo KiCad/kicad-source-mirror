@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -107,8 +107,7 @@ private:
 };
 
 
-void RN_NET::kruskalMST( std::vector<CN_EDGE>& aEdges,
-                         const std::set< std::pair<KIID, KIID> >& aExclusions )
+void RN_NET::kruskalMST( const std::vector<CN_EDGE> &aEdges )
 {
     disjoint_set dset( m_nodes.size() );
 
@@ -119,20 +118,15 @@ void RN_NET::kruskalMST( std::vector<CN_EDGE>& aEdges,
     for( const std::shared_ptr<CN_ANCHOR>& node : m_nodes )
         node->SetTag( i++ );
 
-    for( CN_EDGE& tmp : aEdges )
+    for( const CN_EDGE& tmp : aEdges )
     {
-        const std::shared_ptr<CN_ANCHOR>&  source = tmp.GetSourceNode();
-        const std::shared_ptr<CN_ANCHOR>&  target = tmp.GetTargetNode();
+        const std::shared_ptr<CN_ANCHOR>& source = tmp.GetSourceNode();
+        const std::shared_ptr<CN_ANCHOR>& target = tmp.GetTargetNode();
 
         if( dset.unite( source->GetTag(), target->GetTag() ) )
         {
             if( tmp.GetWeight() > 0 )
-            {
-                std::pair<KIID, KIID> ids = { source->Parent()->m_Uuid, target->Parent()->m_Uuid };
-                tmp.SetVisible( aExclusions.count( ids ) == 0 );
-
                 m_rnEdges.push_back( tmp );
-            }
         }
     }
 }
@@ -271,7 +265,7 @@ RN_NET::RN_NET() : m_dirty( true )
 }
 
 
-void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
+void RN_NET::compute()
 {
     // Special cases do not need complicated algorithms (actually, it does not work well with
     // the Delaunay triangulator)
@@ -285,15 +279,9 @@ void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
             auto last = ++m_nodes.begin();
 
             // There can be only one possible connection, but it is missing
-            CN_EDGE                            edge( *m_nodes.begin(), *last );
-            const std::shared_ptr<CN_ANCHOR>&  source = edge.GetSourceNode();
-            const std::shared_ptr<CN_ANCHOR>&  target = edge.GetTargetNode();
-
-            std::pair<KIID, KIID> ids = { source->Parent()->m_Uuid, target->Parent()->m_Uuid };
-
-            source->SetTag( 0 );
-            target->SetTag( 1 );
-            edge.SetVisible( aExclusions.count( ids ) == 0 );
+            CN_EDGE edge ( *m_nodes.begin(), *last );
+            edge.GetSourceNode()->SetTag( 0 );
+            edge.GetTargetNode()->SetTag( 1 );
 
             m_rnEdges.push_back( edge );
         }
@@ -333,7 +321,7 @@ void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
 #ifdef PROFILE
     PROF_TIMER cnt2( "mst" );
 #endif
-    kruskalMST( triangEdges, aExclusions );
+    kruskalMST( triangEdges );
 #ifdef PROFILE
     cnt2.Show();
 #endif
@@ -341,9 +329,9 @@ void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
 
 
 
-void RN_NET::Update( const std::set< std::pair<KIID, KIID> >& aExclusions )
+void RN_NET::Update()
 {
-    compute( aExclusions );
+    compute();
 
     m_dirty = false;
 }

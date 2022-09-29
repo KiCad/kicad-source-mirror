@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,11 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-//#define USE_TOOL_MANAGER
 
-#include <wx/timer.h>
-#include <wx/math.h>
-#include <wx/log.h>
 #include <wx/popupwin.h>
 #include <wx/cmdline.h>
 #include <profile.h>
@@ -38,7 +34,6 @@
 #include <layer_ids.h>
 
 #include <gal/graphics_abstraction_layer.h>
-#include <view/view.h>
 #include <class_draw_panel_gal.h>
 #include <pcb_draw_panel_gal.h>
 #include <view/wx_view_controls.h>
@@ -47,23 +42,18 @@
 #include <pad.h>
 #include <footprint.h>
 #include <board.h>
-
 #include <pcb_track.h>
-#include <pcb_painter.h>
 #include <pcb_edit_frame.h>
 
 #include <connectivity/connectivity_data.h>
 
 #include <io_mgr.h>
 #include <memory>
-#include <set>
 
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_tool_base.h>
-#include <tools/pcb_actions.h>
-#include <pcbnew/tools/pcb_selection_tool.h>
 #include <plugins/kicad/pcb_plugin.h>
 
 #include "pcb_test_frame.h"
@@ -78,7 +68,7 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
     m_board = b;
 
     PROF_TIMER cntConnectivity( "connectivity-build" );
-    m_board->GetConnectivity()->Build( m_board.get() );
+    m_board->BuildConnectivity();
     cntConnectivity.Stop();
 
     PROF_TIMER cntView("view-build");

@@ -498,7 +498,7 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     int           viaCount = 0;
     int           trackSegmentCount = 0;
     std::set<int> netCodes;
-    int           unconnected = board->GetConnectivity()->GetUnconnectedCount();
+    int           unconnected = board->GetConnectivity()->GetUnconnectedCount( true );
 
     for( PCB_TRACK* item : board->Tracks() )
     {

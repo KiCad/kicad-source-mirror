@@ -904,9 +904,6 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 }
 
                 placeBoardItems( clipBoard, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
-
-                m_frame->GetBoard()->BuildConnectivity();
-                m_frame->Compile_Ratsnest( true );
             }
 
             break;

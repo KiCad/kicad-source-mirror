@@ -118,7 +118,9 @@ void FillZones( BOARD* m_board )
         toFill.push_back( zone );
 
     if( filler.Fill( toFill, false, nullptr ) )
-        commit.Push( _( "Fill Zone(s)" ), SKIP_UNDO | SKIP_SET_DIRTY | ZONE_FILL_OP );
+        commit.Push( _( "Fill Zone(s)" ), SKIP_UNDO | SKIP_SET_DIRTY | ZONE_FILL_OP | SKIP_CONNECTIVITY );
+
+    m_board->BuildConnectivity();
 }
 
 

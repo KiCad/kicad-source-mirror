@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -80,7 +80,7 @@ public:
     /**
      * Recompute ratsnest for a net.
      */
-    void Update( const std::set< std::pair<KIID, KIID> >& aExclusions );
+    void Update();
     void Clear();
 
     void AddCluster( std::shared_ptr<CN_CLUSTER> aCluster );
@@ -94,11 +94,10 @@ public:
 
 protected:
     ///< Recompute ratsnest from scratch.
-    void compute( const std::set< std::pair<KIID, KIID> >& aExclusions );
+    void compute();
 
     ///< Compute the minimum spanning tree using Kruskal's algorithm
-    void kruskalMST( std::vector<CN_EDGE>& aEdges,
-                     const std::set< std::pair<KIID, KIID> >& aExclusions );
+    void kruskalMST( const std::vector<CN_EDGE> &aEdges );
 
     ///< Vector of nodes
     std::multiset<std::shared_ptr<CN_ANCHOR>, CN_PTR_CMP> m_nodes;

@@ -155,6 +155,7 @@ BOARD::~BOARD()
 void BOARD::BuildConnectivity( PROGRESS_REPORTER* aReporter )
 {
     GetConnectivity()->Build( this, aReporter );
+    UpdateRatsnestExclusions();
 }
 
 
@@ -234,29 +235,43 @@ void BOARD::IncrementTimeStamp()
     }
 }
 
+
+void BOARD::UpdateRatsnestExclusions()
+{
+    std::set<std::pair<KIID, KIID>> m_ratsnestExclusions;
+
+    for( PCB_MARKER* marker : GetBoard()->Markers() )
+    {
+        if( marker->GetMarkerType() == MARKER_BASE::MARKER_RATSNEST && marker->IsExcluded() )
+        {
+            const std::shared_ptr<RC_ITEM>& rcItem = marker->GetRCItem();
+            m_ratsnestExclusions.emplace( rcItem->GetMainItemID(), rcItem->GetAuxItemID() );
+            m_ratsnestExclusions.emplace( rcItem->GetAuxItemID(), rcItem->GetMainItemID() );
+        }
+    }
+
+    GetConnectivity()->RunOnUnconnectedEdges(
+            [&]( CN_EDGE& aEdge )
+            {
+                std::pair<KIID, KIID> ids = { aEdge.GetSourceNode()->Parent()->m_Uuid,
+                                              aEdge.GetTargetNode()->Parent()->m_Uuid };
+
+                aEdge.SetVisible( m_ratsnestExclusions.count( ids ) == 0 );
+
+                return true;
+            } );
+}
+
+
 std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
 {
-    std::shared_ptr<CONNECTIVITY_DATA> conn = GetConnectivity();
-
-    auto setExcluded =
-            [&conn]( PCB_MARKER* aMarker )
-            {
-                if( aMarker->GetMarkerType() == MARKER_BASE::MARKER_RATSNEST )
-                {
-                    const std::shared_ptr<RC_ITEM>& rcItem = aMarker->GetRCItem();
-                    conn->AddExclusion( rcItem->GetMainItemID(), rcItem->GetAuxItemID() );
-                }
-
-                aMarker->SetExcluded( true );
-            };
-
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
         auto i = m_designSettings->m_DrcExclusions.find( marker->Serialize() );
 
         if( i != m_designSettings->m_DrcExclusions.end() )
         {
-            setExcluded( marker );
+            marker->SetExcluded( true );
             m_designSettings->m_DrcExclusions.erase( i );
         }
     }
@@ -269,7 +284,7 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
 
         if( marker )
         {
-            setExcluded( marker );
+            marker->SetExcluded( true );
             newMarkers.push_back( marker );
         }
     }
@@ -1148,12 +1163,6 @@ unsigned BOARD::GetNodesCount( int aNet ) const
 }
 
 
-unsigned BOARD::GetUnconnectedNetCount() const
-{
-    return m_connectivity->GetUnconnectedCount();
-}
-
-
 BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
     BOX2I bbox;
@@ -1221,7 +1230,7 @@ void BOARD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     int           viaCount = 0;
     int           trackSegmentCount = 0;
     std::set<int> netCodes;
-    int           unconnected = GetConnectivity()->GetUnconnectedCount();
+    int           unconnected = GetConnectivity()->GetUnconnectedCount( true );
 
     for( PCB_TRACK* item : m_tracks )
     {

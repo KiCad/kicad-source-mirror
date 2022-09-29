@@ -473,23 +473,24 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         if( !m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest )
             m_frame->GetToolManager()->RunAction( PCB_ACTIONS::showRatsnest, true );
 
-        std::vector<CN_EDGE> edges;
-        m_frame->GetBoard()->GetConnectivity()->GetUnconnectedEdges( edges );
-
         if( item->Type() == PCB_ZONE_T )
         {
-            for( const CN_EDGE& edge : edges )
-            {
-                if( edge.GetSourceNode()->Parent() == a  && edge.GetTargetNode()->Parent() == b )
-                {
-                    if( item == a )
-                        m_frame->FocusOnLocation( edge.GetSourcePos() );
-                    else
-                        m_frame->FocusOnLocation( edge.GetTargetPos() );
+            m_frame->GetBoard()->GetConnectivity()->RunOnUnconnectedEdges(
+                    [&]( CN_EDGE& edge )
+                    {
+                        if( edge.GetSourceNode()->Parent() == a
+                                && edge.GetTargetNode()->Parent() == b )
+                        {
+                            if( item == a )
+                                m_frame->FocusOnLocation( edge.GetSourcePos() );
+                            else
+                                m_frame->FocusOnLocation( edge.GetTargetPos() );
 
-                    break;
-                }
-            }
+                            return false;
+                        }
+
+                        return true;
+                    } );
         }
         else
         {
@@ -651,12 +652,14 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             marker->SetExcluded( false );
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
-                conn->RemoveExclusion( drcItem->GetMainItemID(), drcItem->GetAuxItemID() );
-
-            if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+            {
+                m_frame->GetBoard()->UpdateRatsnestExclusions();
                 m_frame->GetCanvas()->RedrawRatsnest();
+            }
             else
+            {
                 m_frame->GetCanvas()->GetView()->Update( marker );
+            }
 
             // Update view
             static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
@@ -675,12 +678,14 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             marker->SetExcluded( true );
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
-                conn->AddExclusion( drcItem->GetMainItemID(), drcItem->GetAuxItemID() );
-
-            if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+            {
+                m_frame->GetBoard()->UpdateRatsnestExclusions();
                 m_frame->GetCanvas()->RedrawRatsnest();
+            }
             else
+            {
                 m_frame->GetCanvas()->GetView()->Update( marker );
+            }
 
             // Update view
             if( m_severities & RPT_SEVERITY_EXCLUSION )

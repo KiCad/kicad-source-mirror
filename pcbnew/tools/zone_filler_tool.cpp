@@ -94,7 +94,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
         commit.Revert();
     }
 
-    board()->GetConnectivity()->Build( board() );
+    board()->BuildConnectivity();
 
     canvas()->Refresh();
     m_fillInProgress = false;
@@ -169,7 +169,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         commit.Revert();
     }
 
-    board()->GetConnectivity()->Build( board(), reporter.get() );
+    board()->BuildConnectivity( reporter.get() );
 
     if( filler.IsDebug() )
         frame->UpdateUserInterface();
@@ -251,7 +251,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     else
         commit.Revert();
 
-    board()->GetConnectivity()->Build( board(), reporter.get() );
+    board()->BuildConnectivity( reporter.get() );
 
     if( filler.IsDebug() )
         frame->UpdateUserInterface();
@@ -309,7 +309,7 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
         commit.Revert();
     }
 
-    board()->GetConnectivity()->Build( board(), reporter.get() );
+    board()->BuildConnectivity( reporter.get() );
 
     canvas()->Refresh();
     m_fillInProgress = false;

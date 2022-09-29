@@ -572,14 +572,10 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         }
     }
 
-    // If some board items are deleted: Rebuild the connectivity,
-    // because it is likely some tracks and vias were removed
+    // If some board items are deleted: Rebuild the connectivity, because it is likely some
+    // tracks and vias were removed
     if( hasRemovedBoardItems )
-    {
-        // Rebuild list of nets (full ratsnest rebuild)
         m_pcb->BuildConnectivity();
-        m_frame->Compile_Ratsnest( true );
-    }
 
     if( modified )
         m_frame->OnModify();

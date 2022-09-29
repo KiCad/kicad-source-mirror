@@ -52,7 +52,6 @@
 #include <pcb_painter.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
-#include <project/net_settings.h>
 #include <python_scripting.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
@@ -98,7 +97,6 @@
 #include <ratsnest/ratsnest_view_item.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/pcb_search_pane.h>
-#include <wx/fdrepdlg.h>
 #include <widgets/infobar.h>
 #include <widgets/panel_selection_filter.h>
 #include <widgets/wx_aui_utils.h>
@@ -493,7 +491,7 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity,
     aBoard->SetProject( &Prj() );
 
     if( aBuildConnectivity )
-        aBoard->GetConnectivity()->Build( aBoard );
+        aBoard->BuildConnectivity();
 
     // reload the drawing-sheet
     SetPageSettings( aBoard->GetPageSettings() );
@@ -949,7 +947,7 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
         commit.Add( marker );
     }
 
-    commit.Push( wxEmptyString, SKIP_UNDO | SKIP_SET_DIRTY );
+    commit.Push( wxEmptyString, SKIP_UNDO | SKIP_SET_DIRTY | SKIP_CONNECTIVITY );
 
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
@@ -959,6 +957,8 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
             GetCanvas()->GetView()->Add( marker );
         }
     }
+
+    GetBoard()->UpdateRatsnestExclusions();
 }
 
 
@@ -1484,7 +1484,6 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
 
     // Rebuild list of nets (full ratsnest rebuild)
     GetBoard()->BuildConnectivity();
-    Compile_Ratsnest( true );
 
     // Update info shown by the horizontal toolbars
     ReCreateLayerBox();

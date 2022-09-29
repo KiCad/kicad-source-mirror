@@ -77,6 +77,16 @@ void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 }
 
 
+/**
+ * Fills the given list of zones.
+ *
+ * NB: Invalidates connectivity - it is up to the caller to obtain a lock on the connectivity
+ * data before calling Fill to prevent access to stale data by other coroutines (for example,
+ * ratsnest redraw).  This will generally be required if a UI-based progress reporter has been
+ * installed.
+ *
+ * Caller is also responsible for re-building connectivity afterwards.
+ */
 bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aParent )
 {
     std::lock_guard<KISPINLOCK> lock( m_board->GetConnectivity()->GetLock() );
@@ -87,7 +97,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
 
-    // Rebuild just in case. This really needs to be reliable.
+    // Rebuild (from scratch, ignoring dirty flags) just in case. This really needs to be reliable.
     connectivity->Clear();
     connectivity->Build( m_board, m_progressReporter );
 

@@ -178,7 +178,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
             [&]( const int a, const int b)
             {
                 for( int ii = a; ii < b; ++ii )
-                    dirty_nets[ii]->Update( m_exclusions );
+                    dirty_nets[ii]->Update();
             }).wait();
 
 #ifdef PROFILE
@@ -235,9 +235,7 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
         }
 
         if( m_connAlgo->IsNetDirty( net ) )
-        {
             addRatsnestCluster( c );
-        }
     }
 
     m_connAlgo->ClearDirtyFlags();
@@ -458,7 +456,7 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
 }
 
 
-unsigned int CONNECTIVITY_DATA::GetUnconnectedCount() const
+unsigned int CONNECTIVITY_DATA::GetUnconnectedCount( bool aVisibleOnly ) const
 {
     unsigned int unconnected = 0;
 
@@ -469,7 +467,7 @@ unsigned int CONNECTIVITY_DATA::GetUnconnectedCount() const
 
         for( const CN_EDGE& edge : net->GetEdges() )
         {
-            if( edge.IsVisible() )
+            if( edge.IsVisible() || !aVisibleOnly )
                 ++unconnected;
         }
     }
@@ -546,35 +544,10 @@ CONNECTIVITY_DATA::GetNetItems( int aNetCode, const std::initializer_list<KICAD_
 }
 
 
-bool CONNECTIVITY_DATA::CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport )
-{
-    RecalculateRatsnest();
-
-    for( auto net : m_nets )
-    {
-        if( net )
-        {
-            for( const auto& edge : net->GetEdges() )
-            {
-                CN_DISJOINT_NET_ENTRY ent;
-                ent.net = edge.GetSourceNode()->Parent()->GetNetCode();
-                ent.a   = edge.GetSourceNode()->Parent();
-                ent.b   = edge.GetTargetNode()->Parent();
-                ent.anchorA = edge.GetSourceNode()->Pos();
-                ent.anchorB = edge.GetTargetNode()->Pos();
-                aReport.push_back( ent );
-            }
-        }
-    }
-
-    return aReport.empty();
-}
-
-
 const std::vector<PCB_TRACK*>
 CONNECTIVITY_DATA::GetConnectedTracks( const BOARD_CONNECTED_ITEM* aItem ) const
 {
-    auto& entry = m_connAlgo->ItemEntry( aItem );
+    CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY& entry = m_connAlgo->ItemEntry( aItem );
 
     std::set<PCB_TRACK*> tracks;
     std::vector<PCB_TRACK*> rv;
@@ -662,14 +635,17 @@ unsigned int CONNECTIVITY_DATA::GetPadCount( int aNet ) const
 }
 
 
-void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
+void CONNECTIVITY_DATA::RunOnUnconnectedEdges( std::function<bool( CN_EDGE& )> aFunc )
 {
-    for( const RN_NET* rnNet : m_nets )
+    for( RN_NET* rnNet : m_nets )
     {
         if( rnNet )
         {
-            for( const CN_EDGE& edge : rnNet->GetEdges() )
-                aEdges.push_back( edge );
+            for( CN_EDGE& edge : rnNet->GetEdges() )
+            {
+                if( !aFunc( edge ) )
+                    return;
+            }
         }
     }
 }
@@ -885,48 +861,6 @@ void CONNECTIVITY_DATA::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
     m_connAlgo->SetProgressReporter( m_progressReporter );
-}
-
-
-void CONNECTIVITY_DATA::AddExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 )
-{
-    m_exclusions.emplace( aBoardItemId1, aBoardItemId2 );
-    m_exclusions.emplace( aBoardItemId2, aBoardItemId1 );
-
-    for( RN_NET* rnNet : m_nets )
-    {
-        for( CN_EDGE& edge : rnNet->GetEdges() )
-        {
-            if( ( edge.GetSourceNode()->Parent()->m_Uuid == aBoardItemId1
-                    && edge.GetTargetNode()->Parent()->m_Uuid == aBoardItemId2 )
-             || ( edge.GetSourceNode()->Parent()->m_Uuid == aBoardItemId2
-                    && edge.GetTargetNode()->Parent()->m_Uuid == aBoardItemId1 ) )
-            {
-                edge.SetVisible( false );
-            }
-        }
-    }
-}
-
-
-void CONNECTIVITY_DATA::RemoveExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 )
-{
-    m_exclusions.erase( std::pair<KIID, KIID>( aBoardItemId1, aBoardItemId2 ) );
-    m_exclusions.erase( std::pair<KIID, KIID>( aBoardItemId2, aBoardItemId1 ) );
-
-    for( RN_NET* rnNet : m_nets )
-    {
-        for( CN_EDGE& edge : rnNet->GetEdges() )
-        {
-            if( ( edge.GetSourceNode()->Parent()->m_Uuid == aBoardItemId1
-                    && edge.GetTargetNode()->Parent()->m_Uuid == aBoardItemId2 )
-             || ( edge.GetSourceNode()->Parent()->m_Uuid == aBoardItemId2
-                    && edge.GetTargetNode()->Parent()->m_Uuid == aBoardItemId1 ) )
-            {
-                edge.SetVisible( true );
-            }
-        }
-    }
 }
 
 

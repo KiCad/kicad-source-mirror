@@ -46,10 +46,14 @@ public:
     PROGRESS_REPORTER* GetProgressReporter() const { return m_progressReporter; }
 
     /**
-     * Fills the given list of zones.  Invalidates connectivity - it is up to the caller to obtain
-     * a lock on the connectivity data before calling Fill to prevent access to stale data by other
-     * coroutines (for example, ratsnest redraw).  This will generally be required if a UI-based
-     * progress reporter has been installed.
+     * Fills the given list of zones.
+     *
+     * NB: Invalidates connectivity - it is up to the caller to obtain a lock on the connectivity
+     * data before calling Fill to prevent access to stale data by other coroutines (for example,
+     * ratsnest redraw).  This will generally be required if a UI-based progress reporter has been
+     * installed.
+     *
+     * Caller is also responsible for re-building connectivity afterwards.
      */
     bool Fill( std::vector<ZONE*>& aZones, bool aCheck = false, wxWindow* aParent = nullptr );
 

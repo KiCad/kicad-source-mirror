@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -176,8 +176,6 @@ public:
     void PropagateNets( BOARD_COMMIT* aCommit = nullptr,
                         PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
 
-    bool CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport );
-
     /**
      * Function FindIsolatedCopperIslands()
      * Searches for copper islands in zone aZone that are not connected to any pad.
@@ -196,10 +194,10 @@ public:
     void RecalculateRatsnest( BOARD_COMMIT* aCommit = nullptr );
 
     /**
-     * Function GetUnconnectedCount()
-     * Returns the number of remaining edges in the ratsnest.
+     * @param aVisibleOnly include only visbile edges in the count
+     * @return the number of remaining edges in the ratsnest
      */
-    unsigned int GetUnconnectedCount() const;
+    unsigned int GetUnconnectedCount( bool aVisibileOnly ) const;
 
     bool IsConnectedOnLayer( const BOARD_CONNECTED_ITEM* aItem, int aLayer,
                              const std::initializer_list<KICAD_T>& aTypes = {},
@@ -230,7 +228,7 @@ public:
                                const std::initializer_list<KICAD_T>& aTypes,
                                const int& aMaxError = 0 ) const;
 
-    void GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges ) const;
+    void RunOnUnconnectedEdges( std::function<bool( CN_EDGE& )> aFunc );
 
     bool TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* aPos = nullptr );
 
@@ -287,9 +285,6 @@ public:
 
     const std::map<int, wxString>& GetNetclassMap() const { return m_netclassMap; }
 
-    void AddExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 );
-    void RemoveExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 );
-
 #ifndef SWIG
     const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*> aItems );
 
@@ -315,9 +310,6 @@ private:
 
     /// Used to suppress ratsnest calculations on dynamic ratsnests
     bool                            m_skipRatsnest = false;
-
-    /// Ratsnest lines that have been excluded in DRC
-    std::set<std::pair<KIID, KIID>> m_exclusions;
 
     KISPINLOCK                      m_lock;
 

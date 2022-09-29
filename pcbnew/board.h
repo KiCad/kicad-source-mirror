@@ -457,6 +457,11 @@ public:
     std::vector<PCB_MARKER*> ResolveDRCExclusions();
 
     /**
+     * Update the visibility flags on the current unconnected ratsnest lines.
+     */
+    void UpdateRatsnestExclusions();
+
+    /**
      * Reset all high light data to the init state
      */
     void ResetNetHighLight();
@@ -723,11 +728,6 @@ public:
      * @return the number of pads members of nets (i.e. with netcode > 0).
      */
     unsigned GetNodesCount( int aNet = -1 ) const;
-
-    /**
-     * @return the number of unconnected nets in the current ratsnest.
-     */
-    unsigned GetUnconnectedNetCount() const;
 
     /**
      * Return a reference to a list of all the pads.

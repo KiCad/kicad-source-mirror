@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,6 +78,7 @@ BOOST_FIXTURE_TEST_CASE( FailedToCleanRegressionTests, TRACK_CLEANER_TEST_FIXTUR
         KI_TEST::LoadBoard( m_settingsManager, entry.m_File, m_board );
         KI_TEST::FillZones( m_board.get() );
         m_board->GetConnectivity()->RecalculateRatsnest();
+        m_board->UpdateRatsnestExclusions();
 
         TOOL_MANAGER toolMgr;
         toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
@@ -146,6 +147,7 @@ BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE
         KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
         KI_TEST::FillZones( m_board.get() );
         m_board->GetConnectivity()->RecalculateRatsnest();
+        m_board->UpdateRatsnestExclusions();
 
         TOOL_MANAGER toolMgr;
         toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );

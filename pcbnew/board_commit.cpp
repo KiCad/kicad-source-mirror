@@ -34,7 +34,6 @@
 #include <tools/pcb_tool_base.h>
 #include <tools/pcb_actions.h>
 #include <connectivity/connectivity_data.h>
-#include <pcbnew_settings.h>
 
 #include <functional>
 using namespace std::placeholders;
@@ -501,6 +500,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 connectivity->PropagateNets( this, PROPAGATE_MODE::RESOLVE_CONFLICTS );
 
             connectivity->RecalculateRatsnest( this );
+            board->UpdateRatsnestExclusions();
             connectivity->ClearLocalRatsnest();
         }
 
@@ -593,10 +593,10 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 
 void BOARD_COMMIT::Revert()
 {
-    PICKED_ITEMS_LIST undoList;
-    KIGFX::VIEW* view = m_toolMgr->GetView();
-    BOARD* board = (BOARD*) m_toolMgr->GetModel();
-    auto connectivity = board->GetConnectivity();
+    PICKED_ITEMS_LIST                  undoList;
+    KIGFX::VIEW*                       view = m_toolMgr->GetView();
+    BOARD*                             board = (BOARD*) m_toolMgr->GetModel();
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
@@ -664,7 +664,10 @@ void BOARD_COMMIT::Revert()
         board->OnItemsChanged( itemsChanged );
 
     if ( !m_isFootprintEditor )
+    {
         connectivity->RecalculateRatsnest();
+        board->UpdateRatsnestExclusions();
+    }
 
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     selTool->RebuildSelection();

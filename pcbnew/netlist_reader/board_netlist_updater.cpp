@@ -1038,7 +1038,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     if( !m_isDryRun )
     {
-        m_board->GetConnectivity()->Build( m_board );
+        m_board->BuildConnectivity();
         testConnectivity( aNetlist, footprintMap );
 
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )

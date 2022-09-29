@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,23 +23,19 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <macros.h>
-#include <board.h>
 #include <footprint.h>
-#include <pcbnew.h>
 #include <ratsnest/ratsnest_data.h>
 
 /**
  * Function Compile_Ratsnest
  *  Create the entire board ratsnest.
- *  Must be called after a board change (changes for
- *  pads, footprints or a read netlist ).
- * @param aDC = the current device context (can be NULL)
+ *  Must be called after a board change (changes for pads, footprints or a read netlist ).
  * @param aDisplayStatus : if true, display the computation results
  */
 void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
 {
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
+    GetBoard()->UpdateRatsnestExclusions();
 
     if( aDisplayStatus )
         SetMsgPanel( m_pcb );
