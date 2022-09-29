@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -238,8 +238,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                  "lastest file version will resolve this issue.\n\n"
                  "Do you wish to continue?" );
         wxMessageDialog msgDlg7( this, msg, _( "Continue Load Schematic" ),
-                                 wxOK | wxCANCEL | wxCANCEL_DEFAULT |
-                                 wxCENTER | wxICON_QUESTION );
+                                 wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER | wxICON_QUESTION );
         msgDlg7.SetOKCancelLabels( okButtonLabel, cancelButtonLabel );
 
         if( msgDlg7.ShowModal() == wxID_CANCEL )
