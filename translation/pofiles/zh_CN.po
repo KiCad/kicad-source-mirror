@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
 "PO-Revision-Date: 2022-10-02 00:43+0000\n"
-"Last-Translator: yangyangdaji <1504305527@qq.com>\n"
+"Last-Translator: Eric <hamburger1024@mailbox.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -532,19 +532,16 @@ msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr "切换'表面贴装'类型组件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle unspecified 3D models"
-msgstr "切换其他 3D 模型"
+msgstr "切换未指定的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "切换 '其他' 类型组件的 3D 模型"
+msgstr "切换 '未指定' 类型组件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
-#, fuzzy
 msgid "Toggle 3D models not in pos file"
-msgstr "切换 '其他' 类型组件的 3D 模型"
+msgstr "切换不在 pos 文件中的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
@@ -2806,9 +2803,8 @@ msgid "Available:"
 msgstr "可用："
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
-#, fuzzy
 msgid ">>"
-msgstr ">"
+msgstr ">>"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:43
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
@@ -2816,9 +2812,8 @@ msgid "<<"
 msgstr "<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
-#, fuzzy
 msgid "Enabled:"
-msgstr "启用"
+msgstr "已启用："
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:65
 #: eeschema/dialogs/dialog_label_properties_base.cpp:123
@@ -4795,9 +4790,8 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr "fp-lib-table 文件不包含名为 '%s' 的库。"
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:568
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "插件和工具管理器"
+msgstr "由插件和内容管理器添加"
 
 #: common/fp_lib_table.cpp:555
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -5407,14 +5401,14 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "未安装此语言的 KiCad 语言文件。"
 
 #: common/plotters/PDF_plotter.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "第 1 页"
+msgstr "第 %s 页"
 
 #: common/plotters/PDF_plotter.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(页 %s)"
+msgstr "%s (第 %s 页)"
 
 #: common/plotters/PDF_plotter.cpp:1188
 #, c-format
@@ -6080,9 +6074,8 @@ msgid "Use millimeters"
 msgstr "使用 mm 作为单位"
 
 #: common/tool/actions.cpp:517 common/widgets/lib_tree.cpp:634
-#, fuzzy
 msgid "Select Columns"
-msgstr "取消选择"
+msgstr "选择列"
 
 #: common/tool/actions.cpp:522
 msgid "Switch units"
@@ -8636,13 +8629,10 @@ msgstr "图纸文件名只能在图纸属性对话框中修改。"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:671
 #: eeschema/dialogs/dialog_label_properties.cpp:460
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr ""
-"文字周围的边距由文字偏移率控制\n"
-"在 “原理图设置” > “常规” > “格式” 中。"
+msgstr "图框间位号可见性通过\"原理图设置 >常规> 格式\" 进行全局控制"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -10002,14 +9992,13 @@ msgid "Alternate pin definitions must have a name."
 msgstr "备用引脚号定义必须有名称。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"此引脚不在 %d mils 网格上\n"
-"在原理图中难以连接\n"
+"此引脚不在 %d mils 网格上，这造成在原理图中难以连接到此引脚。\n"
 "你想继续吗？"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
@@ -10895,7 +10884,7 @@ msgstr "覆盖"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:63
 msgid "Pin:"
-msgstr ""
+msgstr "引脚："
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:90
 #: eeschema/dialogs/dialog_sim_model_base.cpp:194
@@ -12104,17 +12093,15 @@ msgid "Default text size:"
 msgstr "默认文本大小："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "文本偏移率："
+msgstr "标签偏移率："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
-msgstr "在导线或母线上方或下方偏移文字的文字大小百分比"
+msgstr "文本大小偏移导线、总线或引脚上方（或下方）标签的百分比"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Global label margin:"
@@ -13070,9 +13057,8 @@ msgid "Unknown"
 msgstr "未知"
 
 #: eeschema/hierarch.cpp:248
-#, fuzzy
 msgid "Edit Page Number"
-msgstr "编辑图纸页码"
+msgstr "编辑页码"
 
 #: eeschema/hierarch.cpp:259 eeschema/tools/sch_edit_tool.cpp:2298
 #, c-format
@@ -13268,14 +13254,12 @@ msgid "Netlist..."
 msgstr "网表..."
 
 #: eeschema/menubar.cpp:125
-#, fuzzy
 msgid "Symbols to Library..."
-msgstr "从库更新符号..."
+msgstr "符号到库..."
 
 #: eeschema/menubar.cpp:127
-#, fuzzy
 msgid "Symbols to New Library..."
-msgstr "将封装导出到新库..."
+msgstr "符号到新库..."
 
 #: eeschema/menubar.cpp:195
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
@@ -13691,9 +13675,8 @@ msgid "Resolved netclass"
 msgstr "已解析的网络类"
 
 #: eeschema/sch_label.cpp:956
-#, fuzzy
 msgid "Hierarchical Labels"
-msgstr "层次标签"
+msgstr "分层标签"
 
 #: eeschema/sch_label.cpp:1041
 #, c-format
@@ -14933,54 +14916,48 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "无法从值“%s”推断模型"
 
 #: eeschema/sim/sim_model_kibis.cpp:205
-#, fuzzy
 msgid "Power supply"
-msgstr "电源符号"
+msgstr "供电"
 
 #: eeschema/sim/sim_model_kibis.cpp:215
-#, fuzzy
 msgid "Parasitic Resistance"
-msgstr "电阻系数"
+msgstr "寄生电阻"
 
 #: eeschema/sim/sim_model_kibis.cpp:225
 msgid "Parasitic Pin Inductance"
-msgstr ""
+msgstr "寄生引脚电感"
 
 #: eeschema/sim/sim_model_kibis.cpp:235
 msgid "Parasitic Pin Capacitance"
-msgstr ""
+msgstr "寄生引脚电容"
 
 #: eeschema/sim/sim_model_kibis.cpp:250
 msgid "Waveform"
-msgstr ""
+msgstr "波形"
 
 #: eeschema/sim/sim_model_kibis.cpp:265
 msgid "Modeling accuracy"
-msgstr ""
+msgstr "建模精度"
 
 #: eeschema/sim/sim_model_kibis.cpp:278
 msgid "ON time"
-msgstr ""
+msgstr "“打开”时间"
 
 #: eeschema/sim/sim_model_kibis.cpp:287
-#, fuzzy
 msgid "OFF time"
-msgstr "下降时间："
+msgstr "“关闭”时间"
 
 #: eeschema/sim/sim_model_kibis.cpp:296
-#, fuzzy
 msgid "Delay"
-msgstr "延时："
+msgstr "延时"
 
 #: eeschema/sim/sim_model_kibis.cpp:309
-#, fuzzy
 msgid "Bitrate"
-msgstr "基质"
+msgstr "比特率"
 
 #: eeschema/sim/sim_model_kibis.cpp:318
-#, fuzzy
 msgid "Number of bits"
-msgstr "单元数量："
+msgstr "位数"
 
 #: eeschema/sim/sim_model_raw_spice.cpp:291
 #, c-format
@@ -16779,32 +16756,28 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "生成当前原理图的 BOM"
 
 #: eeschema/tools/ee_actions.cpp:681
-#, fuzzy
 msgid "Export Symbols to Library..."
-msgstr "从库更新符号..."
+msgstr "将符号导出到库..."
 
 #: eeschema/tools/ee_actions.cpp:682
-#, fuzzy
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"将所有封装压缩到现有库的封装库表中\n"
-" (不会删除此库中的其他封装)"
+"将原理图中使用的符号添加到现有符号库\n"
+" （不从此库中删除其他符号）"
 
 #: eeschema/tools/ee_actions.cpp:688
-#, fuzzy
 msgid "Export Symbols to New Library..."
-msgstr "从库更新符号..."
+msgstr "将符号导出到新库..."
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"创建包含电路板上使用的封装的新封装库。\n"
-"(如果库已存在，它将被替换)"
+"使用原理图中使用的符号创建一个新的符号库\n"
+" （如果库已经存在，它将被替换）"
 
 #: eeschema/tools/ee_actions.cpp:695
 msgid "Select on PCB"
@@ -17198,14 +17171,13 @@ msgid "Find again to wrap around to the start."
 msgstr "再次查找到开始。"
 
 #: eeschema/tools/sch_editor_control.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add library '%s'."
-msgstr "找不到库文件 '%s'"
+msgstr "无法添加库 '%s'。"
 
 #: eeschema/tools/sch_editor_control.cpp:819
-#, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
-msgstr "更新板上的封装以引用新库？"
+msgstr "更新原理图中的符号以指向新库？"
 
 #: eeschema/tools/sch_editor_control.cpp:1142
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -19168,30 +19140,26 @@ msgid "Check for package updates on startup"
 msgstr "启动时检查包更新"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:28
-#, fuzzy
 msgid "Library package handling"
-msgstr "库变更未保存"
+msgstr "库包处理"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "是否将库添加到全局库表？"
+msgstr "自动将已安装的库添加到全局库表"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "自动布线"
+msgstr "自动删除已卸载的库"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "库别名错误"
+msgstr "库昵称前缀："
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
-msgstr ""
+msgstr "安装/卸载包之后，可能需要重新启动 KiCad，以反映全局库表中的更改。"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19287,9 +19255,9 @@ msgid "No package updates available"
 msgstr "无可用的包更新"
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "%s 引脚 %s 未找到"
+msgstr "未找到包 %s 的 %s 版本！"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -20726,9 +20694,8 @@ msgstr "乘数"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
-#, fuzzy
 msgid "Copper (Cu)"
-msgstr "铜层"
+msgstr "铜层（Cu）"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:54
 msgid ""
@@ -20745,6 +20712,14 @@ msgid ""
 "You can use an interface metal, just like with the ENIG surface finish that "
 "uses nickel as an interface between gold and copper to prevent corrosion."
 msgstr ""
+"当两种金属接触时，它们之间会产生潜在电位差，导致腐蚀。\n"
+"为了避免腐蚀，最好将差值保持在300mV以下。\n"
+"\n"
+"其中一种金属将是阳极(+)，将受到攻击。另一个是阴极，会受到保护。\n"
+"在下表中，如果数字为正数，则行为阳极，列为阴极。\n"
+"\n"
+"你可以使用介质金属（interface "
+"metal），就像化学金表面处理，使用镍作为金和铜之间的介质金属，以防止腐蚀。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:32
 msgid "Voltage > 500 V:"
@@ -21603,7 +21578,7 @@ msgstr "电路板类别"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
 msgid "Galvanic corrosion"
-msgstr ""
+msgstr "接触腐蚀"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -22592,9 +22567,8 @@ msgid "Remove track not connected at both ends"
 msgstr "删除未连接端的布线"
 
 #: pcbnew/cleanup_item.cpp:52
-#, fuzzy
 msgid "Remove via connected on less than 2 layers"
-msgstr "删除连接在两层以下的过孔"
+msgstr "删除层连接数不到 2 的过孔"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
@@ -22617,9 +22591,8 @@ msgid "Convert lines to rectangle"
 msgstr "将直线转换为矩形"
 
 #: pcbnew/cleanup_item.cpp:60
-#, fuzzy
 msgid "Merge overlapping shapes into pad"
-msgstr "将线条合并为矩形"
+msgstr "将重叠的形状合并到焊盘中"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
@@ -23229,9 +23202,8 @@ msgid "SMD:"
 msgstr "贴片 (SMD)："
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "未指定"
+msgstr "未指定："
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -23351,9 +23323,8 @@ msgid "Subtract holes from board area"
 msgstr "从电路板敷铜中减去过孔"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
-#, fuzzy
 msgid "Exclude footprints with no pads"
-msgstr "排除具有通孔焊盘的所有封装"
+msgstr "排除没有焊盘的封装"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "X Size"
@@ -23419,15 +23390,14 @@ msgid "Delete redundant graphics"
 msgstr "删除冗余图形"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:28
-#, fuzzy
 msgid "Merge overlapping graphics into pads"
-msgstr "正删除焊盘内导线…"
+msgstr "将重叠图形合并到焊盘中"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:34
 msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
-msgstr ""
+msgstr "（不会考虑合并出现在 Net Tie 焊盘组中的焊盘。）"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -28751,9 +28721,8 @@ msgid "Minimum connection width:"
 msgstr "最小连接宽度："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
-#, fuzzy
 msgid "The minimum copper width of connected copper items."
-msgstr "选择如何处理未连接的孤铜"
+msgstr "相连铜件的最小铜宽。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -36067,9 +36036,8 @@ msgid "Duplicate zone"
 msgstr "复制敷铜"
 
 #: pcbnew/tools/board_editor_control.cpp:1497
-#, fuzzy
 msgid "Selection contains no items with labeled nets."
-msgstr "所选部分中没有带标签网络的项目。"
+msgstr "所选部分不包含带标签网络的项目。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
 msgid "Net Inspection Tools"
@@ -36676,9 +36644,8 @@ msgid "Copy canceled"
 msgstr "已取消复制"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:421
-#, fuzzy
 msgid "Pack footprints"
-msgstr "锁定封装"
+msgstr "打包封装"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:566
 msgid "Select reference point for move..."
@@ -36743,9 +36710,8 @@ msgid "Place pad"
 msgstr "放置焊盘"
 
 #: pcbnew/tools/pad_tool.cpp:583
-#, fuzzy
 msgid "Recombine pad"
-msgstr "重新组合焊盘"
+msgstr "重新合并焊盘"
 
 #: pcbnew/tools/pad_tool.cpp:601
 #, c-format
@@ -37013,12 +36979,11 @@ msgstr "按位号选择封装，并将其放置在光标下以进行移动"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Move Individually"
-msgstr ""
+msgstr "单独移动"
 
 #: pcbnew/tools/pcb_actions.cpp:276
-#, fuzzy
 msgid "Moves the selected items one-by-one"
-msgstr "移动选择项"
+msgstr "逐一移动选定的项目"
 
 #: pcbnew/tools/pcb_actions.cpp:281
 msgid "Move with Reference"
@@ -37069,25 +37034,22 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "将所选项目翻转到板的另一侧"
 
 #: pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Mirrors selected item across the Y axis"
-msgstr "镜像选择项"
+msgstr "沿 Y 轴镜像选定项目"
 
 #: pcbnew/tools/pcb_actions.cpp:336
-#, fuzzy
 msgid "Mirrors selected item across the X axis"
-msgstr "镜像选择项"
+msgstr "沿 X 轴镜像选定项目"
 
 #: pcbnew/tools/pcb_actions.cpp:348
-#, fuzzy
 msgid "Pack and Move Footprints"
-msgstr "获取和移动封装"
+msgstr "打包并移动封装"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
-msgstr ""
+msgstr "根据位号对选定封装进行排序，基于尺寸打包并发起移动"
 
 #: pcbnew/tools/pcb_actions.cpp:354
 msgid "Change Track Width"
@@ -38089,14 +38051,12 @@ msgid ""
 msgstr "选择连接或将现有选择扩展到结点、焊盘或整个连接"
 
 #: pcbnew/tools/pcb_actions.cpp:1304
-#, fuzzy
 msgid "Unroute Selected"
-msgstr "布线所选项"
+msgstr "取消布线所选项"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
-#, fuzzy
 msgid "Unroutes selected items to the nearest pad."
-msgstr "对齐选择的项到左边"
+msgstr "取消将所选项布线到距离最近的焊盘。"
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Select All Tracks in Net"
@@ -38115,25 +38075,22 @@ msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "取消选择属于同一网的所有布线和过孔。"
 
 #: pcbnew/tools/pcb_actions.cpp:1327
-#, fuzzy
 msgid "Select All Unconnected Footprints"
-msgstr "所有连接的布线与过孔。"
+msgstr "选择所有未连接的封装"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
-#, fuzzy
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "选择所有属于同一网络的布线与过孔。"
+msgstr "选中所有属于每个所选网络的未连接封装。"
 
 #: pcbnew/tools/pcb_actions.cpp:1333
-#, fuzzy
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "放置选定的封装"
+msgstr "获取离得最近的未连接封装"
 
 #: pcbnew/tools/pcb_actions.cpp:1334
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
-msgstr ""
+msgstr "选择并开始移动每个所选网络上距离最近的未连接封装。"
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -39239,7 +39196,6 @@ msgid "Other items"
 msgstr "其他项目"
 
 #: pcbnew/widgets/search_handlers.cpp:245
-#, fuzzy
 msgid "Textbox"
 msgstr "文本框"
 
