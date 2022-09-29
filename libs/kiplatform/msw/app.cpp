@@ -61,6 +61,26 @@ bool KIPLATFORM::APP::Init()
     // Moves the CWD to the end of the search list for spawning processes
     SetSearchPathMode( BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT );
 
+    // In order to support GUI and CLI
+    // Let's attach to console when it's possible
+    HANDLE handleStdOut, handleStdErr;
+    if( AttachConsole( ATTACH_PARENT_PROCESS ) )
+    {
+        handleStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+        if( handleStdOut != INVALID_HANDLE_VALUE )
+        {
+            freopen( "CONOUT$", "w", stdout );
+            setvbuf( stdout, NULL, _IONBF, 0 );
+        }
+
+        handleStdErr = GetStdHandle( STD_ERROR_HANDLE );
+        if( handleStdErr != INVALID_HANDLE_VALUE )
+        {
+            freopen( "CONOUT$", "w", stderr );
+            setvbuf( stderr, NULL, _IONBF, 0 );
+        }
+    }
+
     return true;
 }
 
