@@ -51,7 +51,13 @@ void KIWAY_PLAYER::CreateServer( int service, bool local )
     if( local )
         addr.Hostname( HOSTNAME );
 
-    delete m_socketServer;
+    // this helps kill any events that could come in during deletion
+    if( m_socketServer )
+    {
+        m_socketServer->Notify( false );
+        delete m_socketServer;
+    }
+
     m_socketServer = new wxSocketServer( addr );
 
     m_socketServer->SetNotify( wxSOCKET_CONNECTION_FLAG );
