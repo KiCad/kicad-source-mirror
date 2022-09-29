@@ -990,9 +990,6 @@ const std::vector<KICAD_T> swappableItems = {
     SCH_SYMBOL_T,
     SCH_SHEET_T,
     SCH_BITMAP_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_LINE_T,
     SCH_JUNCTION_T,
     SCH_NO_CONNECT_T
 };

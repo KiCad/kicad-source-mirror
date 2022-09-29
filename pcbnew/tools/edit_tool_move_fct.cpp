@@ -285,6 +285,19 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForFreePads( aCollector );
+
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    switch( item->Type() )
+                    {
+                    case PCB_TRACE_T: aCollector.Remove( item ); break;
+
+                    default: break;
+                    }
+                }
             },
             true /* prompt user regarding locked items */ );
 
