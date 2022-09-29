@@ -54,7 +54,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
 OPT_TOOL_EVENT GRID_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT event( ACTIONS::gridPreset.MakeEvent() );
-    event->SetParameter( aEvent.GetId() - ID_POPUP_GRID_START );
+    event->SetParameter<int>( aEvent.GetId() - ID_POPUP_GRID_START );
     return event;
 }
 

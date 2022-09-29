@@ -143,7 +143,8 @@ public:
     /**
      * Custom parameter to pass information to the tool.
      */
-    TOOL_ACTION_ARGS& Parameter( std::any aParam )
+    template<typename T>
+    TOOL_ACTION_ARGS& Parameter( T aParam )
     {
         m_param = aParam;
         return *this;

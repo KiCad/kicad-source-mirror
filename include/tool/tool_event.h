@@ -470,7 +470,8 @@ public:
      *
      * @param aParam is the new parameter.
      */
-    void SetParameter(const std::any& aParam)
+    template<typename T>
+    void SetParameter(T aParam)
     {
         m_param = aParam;
     }
