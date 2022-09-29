@@ -114,7 +114,7 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE_ aDeviceType )
 SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
 {
     switch( aType )
-    { 
+    {
     case TYPE::NONE:                 return { DEVICE_TYPE_::NONE,   "",               ""                           };
 
     case TYPE::R:                    return { DEVICE_TYPE_::R,      "",               "Ideal"                      };
@@ -124,7 +124,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::C_BEHAVIORAL:         return { DEVICE_TYPE_::C,      "=",              "Behavioral"                 };
 
     case TYPE::L:                    return { DEVICE_TYPE_::L,      "",               "Ideal"                      };
-    case TYPE::L_MUTUAL:             return { DEVICE_TYPE_::L,      "MUTUAL",         "Mutual"                     };       
+    case TYPE::L_MUTUAL:             return { DEVICE_TYPE_::L,      "MUTUAL",         "Mutual"                     };
     case TYPE::L_BEHAVIORAL:         return { DEVICE_TYPE_::L,      "=",              "Behavioral"                 };
 
     case TYPE::TLINE_Z0:             return { DEVICE_TYPE_::TLINE,  "Z0",             "Characteristic impedance"   };
@@ -134,7 +134,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::SW_I:                 return { DEVICE_TYPE_::SW,     "I",              "Current-controlled"         };
 
     case TYPE::D:                    return { DEVICE_TYPE_::D,      "",               ""                           };
-    
+
     case TYPE::NPN_GUMMELPOON:       return { DEVICE_TYPE_::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::PNP_GUMMELPOON:       return { DEVICE_TYPE_::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::NPN_VBIC:             return { DEVICE_TYPE_::NPN,    "VBIC",           "VBIC"                       };
@@ -258,7 +258,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::L:                    return { "L", ""        };
     case TYPE::L_MUTUAL:             return { "K", ""        };
     case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        "0",   false, true   };
-    
+
     //case TYPE::TLINE_Z0:             return { "T"  };
     case TYPE::TLINE_Z0:             return { "O", "LTRA"    };
     case TYPE::TLINE_RLGC:           return { "O", "LTRA"    };
@@ -845,7 +845,7 @@ bool SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string&
                             {
                                 return param.info.name == boost::to_lower_copy( aParamName );
                             } );
-    
+
     if( it == params.end() )
         return false;
 
@@ -907,7 +907,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::V_BEHAVIORAL:
     case TYPE::I_BEHAVIORAL:
         return std::make_unique<SIM_MODEL_BEHAVIORAL>( aType );
-    
+
     case TYPE::TLINE_Z0:
     case TYPE::TLINE_RLGC:
         return std::make_unique<SIM_MODEL_TLINE>( aType );
@@ -973,9 +973,9 @@ SIM_MODEL::SIM_MODEL( TYPE aType ) :
 }
 
 
-SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) : 
-    m_spiceGenerator( std::move( aSpiceGenerator ) ),
+SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
     m_baseModel( nullptr ),
+    m_spiceGenerator( std::move( aSpiceGenerator ) ),
     m_type( aType ),
     m_isEnabled( true ),
     m_isInferred( false )
@@ -1074,7 +1074,7 @@ void SIM_MODEL::ParseParamsField( const std::string& aParamsField )
     try
     {
         // Using parse tree instead of actions because we don't care about performance that much,
-        // and having a tree greatly simplifies some things. 
+        // and having a tree greatly simplifies some things.
         root = tao::pegtl::parse_tree::parse<
             SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
             SIM_MODEL_PARSER::fieldParamValuePairsSelector>
@@ -1093,7 +1093,7 @@ void SIM_MODEL::ParseParamsField( const std::string& aParamsField )
             paramName = node->string();
         // TODO: Do something with number<SIM_VALUE::TYPE_INT, ...>.
         // It doesn't seem too useful?
-        else if( node->is_type<SIM_MODEL_PARSER::quotedStringContent>() 
+        else if( node->is_type<SIM_MODEL_PARSER::quotedStringContent>()
             || node->is_type<SIM_MODEL_PARSER::unquotedString>() )
         {
             wxASSERT( paramName != "" );
