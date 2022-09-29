@@ -76,6 +76,22 @@ public:
  */
 class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
 {
+    int m_requiredVersion;  ///< Set to the symbol library file version required.
+    int m_fieldId;          ///< The current field ID.
+    int m_unit;             ///< The current unit being parsed.
+    int m_convert;          ///< The current body style being parsed.
+    wxString m_symbolName;  ///< The current symbol name.
+
+    /// Field IDs that have been read so far for the current symbol.
+    std::set<int>      m_fieldIDsRead;
+
+    std::set<KIID>     m_uuids;
+
+    PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
+    const LINE_READER* m_lineReader;        // for progress reporting
+    unsigned           m_lastProgressLine;
+    unsigned           m_lineCount;         // for progress reporting
+
     void checkpoint();
 
     KIID parseKIID();
@@ -168,8 +184,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
 
 public:
     SCH_SEXPR_PARSER( LINE_READER* aLineReader = nullptr,
-                      PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0,
-                      SCH_SHEET* aRootSheet = nullptr, bool aIsAppending = false );
+                      PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0 );
 
     void ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap );
 
@@ -197,28 +212,6 @@ public:
      */
     void ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyablyOnly = false,
                          int aFileVersion = SEXPR_SCHEMATIC_FILE_VERSION );
-private:
-    int m_requiredVersion;  ///< Set to the symbol library file version required.
-    int m_fieldId;          ///< The current field ID.
-    int m_unit;             ///< The current unit being parsed.
-    int m_convert;          ///< The current body style being parsed.
-    wxString m_symbolName;  ///< The current symbol name.
-    bool m_appending;       ///< Appending load status.
-
-    /// Field IDs that have been read so far for the current symbol.
-    std::set<int>      m_fieldIDsRead;
-
-    std::set<KIID>     m_uuids;
-
-    PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
-    const LINE_READER* m_lineReader;        // for progress reporting
-    unsigned           m_lastProgressLine;
-    unsigned           m_lineCount;         // for progress reporting
-
-    KIID               m_rootUuid;          // The UUID of the root schematic.
-
-    /// The rootsheet for full project loads or null for importing a schematic.
-    SCH_SHEET*         m_rootSheet;
 };
 
 #endif    // __SCH_SEXPR_PARSER_H__

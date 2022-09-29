@@ -1645,10 +1645,6 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
             // side-effects.
             const_cast<KIID&>( item->m_Uuid ) = KIID();
             count++;
-
-            // @todo If the item is a sheet, we need to decend the heirarchy from the sheet
-            //       and repace all instances of the changed UUID in sheet paths.  Otherwise,
-            //       all instance paths with the sheet's UUID will get clobbered.
         }
     }
 
@@ -1877,17 +1873,4 @@ void SCH_SCREENS::SetLegacySymbolInstanceData()
 
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
         screen->SetLegacySymbolInstanceData();
-}
-
-
-void SCH_SCREENS::SetAllSymbolDefaultInstances()
-{
-    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
-    {
-        if( screen->GetFileFormatVersionAtLoad() <= 20220622 )
-        {
-            if( screen->AllSymbolDefaultInstancesNotSet() )
-                screen->SetAllSymbolDefaultInstances();
-        }
-    }
 }
