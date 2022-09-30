@@ -2574,7 +2574,10 @@ void PCB_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
 void PCB_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
     if( aGroup )
+    {
         aGroup->Add( aItem );
+        view()->Hide( aItem, true );    // Hide the original item, so it is shown only on overlay
+    }
 
     highlightInternal( aItem, aMode, aGroup != nullptr );
     view()->Update( aItem, KIGFX::REPAINT );
@@ -2592,9 +2595,6 @@ void PCB_SELECTION_TOOL::highlightInternal( EDA_ITEM* aItem, int aMode, bool aUs
         aItem->SetSelected();
     else if( aMode == BRIGHTENED )
         aItem->SetBrightened();
-
-    if( aUsingOverlay )
-        view()->Hide( aItem, true );    // Hide the original item, so it is shown only on overlay
 
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
@@ -2618,7 +2618,10 @@ void PCB_SELECTION_TOOL::highlightInternal( EDA_ITEM* aItem, int aMode, bool aUs
 void PCB_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
     if( aGroup )
+    {
         aGroup->Remove( aItem );
+        view()->Hide( aItem, false );   // // Restore original item visibility
+    }
 
     unhighlightInternal( aItem, aMode, aGroup != nullptr );
     view()->Update( aItem, KIGFX::REPAINT );
@@ -2635,9 +2638,6 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
         aItem->ClearSelected();
     else if( aMode == BRIGHTENED )
         aItem->ClearBrightened();
-
-    if( aUsingOverlay )
-        view()->Hide( aItem, false );   // // Restore original item visibility
 
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
