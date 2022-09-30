@@ -46,6 +46,10 @@ const int eeschemaSchemaVersion = 3;
 const nlohmann::json defaultBomPlugins =
         {
             {
+                { "name", "bom_csv_grouped_extra" },
+                { "path", "bom_csv_grouped_extra.py" }
+            },
+            {
                 { "name", "bom_csv_grouped_by_value" },
                 { "path", "bom_csv_grouped_by_value.py" }
             },
