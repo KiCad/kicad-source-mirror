@@ -299,7 +299,7 @@ wxPanel* DIALOG_CHOOSE_SYMBOL::ConstructRightPanel( wxWindow* aParent )
     {
         FOOTPRINT_LIST* fp_list = FOOTPRINT_LIST::GetInstance( Kiway() );
 
-        sizer->Add( m_symbol_preview, 1, wxEXPAND | wxALL, 5 );
+        sizer->Add( m_symbol_preview, 11, wxEXPAND | wxALL, 5 );
 
         if ( fp_list )
         {
@@ -310,10 +310,10 @@ wxPanel* DIALOG_CHOOSE_SYMBOL::ConstructRightPanel( wxWindow* aParent )
         }
 
         if( m_fp_sel_ctrl )
-            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 3 );
+            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxALL, 4 );
 
         if( m_fp_preview )
-            sizer->Add( m_fp_preview, 1, wxEXPAND | wxALL, 5 );
+            sizer->Add( m_fp_preview, 10, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     }
     else
     {
