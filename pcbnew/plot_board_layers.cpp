@@ -1161,6 +1161,15 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         break;
 
     case PLOT_FORMAT::GERBER:
+        // For Gerber plotter, a valid board layer must be set, in order to create a valid
+        // Gerber header, especially the TF.FileFunction and .FilePolarity data
+        if( aLayer < PCBNEW_LAYER_ID_START || aLayer >= PCB_LAYER_ID_COUNT )
+        {
+            wxLogError( wxString::Format(
+                        "Invalid board layer %d, cannot build a valid Gerber file header",
+                        aLayer ) );
+        }
+
         plotter = new GERBER_PLOTTER();
         break;
 
