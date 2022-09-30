@@ -328,10 +328,126 @@ void RN_NET::compute()
 }
 
 
+void RN_NET::optimizeRNEdges()
+{
+    auto findZoneAnchor =
+            [&]( const VECTOR2I& aPos, const LSET& aLayerSet,
+                 const std::shared_ptr<CN_ANCHOR> aAnchor )
+            {
+                SEG::ecoord closest_dist_sq = ( aAnchor->Pos() - aPos ).SquaredEuclideanNorm();
+                VECTOR2I    closest_pt;
+                CN_ITEM*    closest_item = nullptr;
+
+                for( CN_ITEM* item : aAnchor->Item()->ConnectedItems() )
+                {
+                    CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( item );
+
+                    if( zoneLayer && aLayerSet.test( zoneLayer->Layer() ) )
+                    {
+                        const std::vector<VECTOR2I>& pts = zoneLayer->GetOutline().CPoints();
+
+                        for( VECTOR2I pt : pts )
+                        {
+                            SEG::ecoord dist_sq = ( pt - aPos ).SquaredEuclideanNorm();
+
+                            if( dist_sq < closest_dist_sq )
+                            {
+                                closest_pt = pt;
+                                closest_item = zoneLayer;
+                                closest_dist_sq = dist_sq;
+                            }
+                        }
+                    }
+                }
+
+                if( closest_item )
+                {
+                    closest_item->AddAnchor( closest_pt );
+                    return closest_item->GetAnchorItem( closest_item->GetAnchorItemCount() - 1 );
+                }
+
+                return aAnchor;
+            };
+
+    auto findZoneToZoneAnchors =
+            [&]( std::shared_ptr<CN_ANCHOR>& a, std::shared_ptr<CN_ANCHOR>& b )
+            {
+                for( CN_ITEM* itemA : a->Item()->ConnectedItems() )
+                {
+                    CN_ZONE_LAYER* zoneLayerA = dynamic_cast<CN_ZONE_LAYER*>( itemA );
+
+                    if( !zoneLayerA )
+                        continue;
+
+                    for( CN_ITEM* itemB : b->Item()->ConnectedItems() )
+                    {
+                        CN_ZONE_LAYER* zoneLayerB = dynamic_cast<CN_ZONE_LAYER*>( itemB );
+
+                        if( zoneLayerB && zoneLayerB->Layer() == zoneLayerA->Layer() )
+                        {
+                            // Process the first matching layer.  We don't really care if it's
+                            // the "best" layer or not, as anything will be better than the
+                            // original anchors (which are connected to the zone and so certainly
+                            // don't look like they should have ratsnest lines coming off them).
+
+                            VECTOR2I     startA = zoneLayerA->GetOutline().GetPoint( 0 );
+                            VECTOR2I     startB = zoneLayerB->GetOutline().GetPoint( 0 );
+                            const SHAPE* shapeA = &zoneLayerA->GetOutline();
+                            const SHAPE* shapeB = &zoneLayerB->GetOutline();
+                            int          startDist = ( startA - startB ).EuclideanNorm();
+
+                            VECTOR2I ptA;
+                            shapeA->Collide( shapeB, startDist + 10, nullptr, &ptA );
+                            zoneLayerA->AddAnchor( ptA );
+                            a = zoneLayerA->GetAnchorItem( zoneLayerA->GetAnchorItemCount() - 1 );
+
+                            VECTOR2I ptB;
+                            shapeB->Collide( shapeA, startDist + 10, nullptr, &ptB );
+                            zoneLayerB->AddAnchor( ptB );
+                            b = zoneLayerB->GetAnchorItem( zoneLayerB->GetAnchorItemCount() - 1 );
+
+                            return;
+                        }
+                    }
+                }
+            };
+
+    for( CN_EDGE& edge : m_rnEdges )
+    {
+        std::shared_ptr<CN_ANCHOR> source = edge.GetSourceNode();
+        std::shared_ptr<CN_ANCHOR> target = edge.GetTargetNode();
+
+        if( source->ConnectedItemsCount() == 0 )
+        {
+            edge.SetTargetNode( findZoneAnchor( source->Pos(), source->Parent()->GetLayerSet(),
+                                                target ) );
+        }
+        else if( target->ConnectedItemsCount() == 0 )
+        {
+            edge.SetSourceNode( findZoneAnchor( target->Pos(), target->Parent()->GetLayerSet(),
+                                                source ) );
+        }
+        else
+        {
+            findZoneToZoneAnchors( source, target );
+            edge.SetSourceNode( source );
+            edge.SetTargetNode( target );
+        }
+    }
+}
+
 
 void RN_NET::Update()
 {
     compute();
+
+#ifdef PROFILE
+    PROF_TIMER cnt( "optimize" );
+#endif
+    optimizeRNEdges();
+#ifdef PROFILE
+    cnt.Show();
+#endif
 
     m_dirty = false;
 }
@@ -450,5 +566,4 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, VECTOR2I* aPos1, VEC
 
     return rv;
 }
-
 

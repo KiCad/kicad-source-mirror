@@ -250,6 +250,9 @@ public:
     virtual int AnchorCount() const;
     virtual const VECTOR2I GetAnchor( int n ) const;
 
+    int GetAnchorItemCount() const { return m_anchors.size(); }
+    std::shared_ptr<CN_ANCHOR> GetAnchorItem( int n ) const { return m_anchors[n]; }
+
     int Net() const
     {
         return ( !m_parent || !m_valid ) ? -1 : m_parent->GetNetCode();
@@ -343,6 +346,20 @@ public:
     virtual int AnchorCount() const override;
     virtual const VECTOR2I GetAnchor( int n ) const override;
 
+    const SHAPE_LINE_CHAIN& GetOutline() const
+    {
+        return m_triangulatedPoly->Outline( m_subpolyIndex );
+    }
+
+    VECTOR2I ClosestPoint( const VECTOR2I aPt )
+    {
+        VECTOR2I closest;
+
+        m_triangulatedPoly->SquaredDistanceToPolygon( aPt, m_subpolyIndex, &closest );
+
+        return closest;
+    }
+
     bool Collide( SHAPE* aRefShape ) const
     {
         BOX2I bbox = aRefShape->BBox();
@@ -368,7 +385,6 @@ public:
     }
 
 private:
-    std::vector<VECTOR2I>               m_testOutlinePoints;
     int                                 m_subpolyIndex;
     PCB_LAYER_ID                        m_layer;
     std::shared_ptr<SHAPE_POLY_SET>     m_triangulatedPoly;
