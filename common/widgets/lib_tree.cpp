@@ -134,11 +134,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
     m_tree_ctrl->Bind( wxEVT_SIZE, &LIB_TREE::onSize, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &LIB_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
-    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onItemContextMenu,
+    m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onItemContextMenu, this );
+    m_tree_ctrl->Bind( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &LIB_TREE::onHeaderContextMenu,
                        this );
-    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK,
-                       &LIB_TREE::onHeaderContextMenu, this );
-    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, &LIB_TREE::onHeaderClick, this );
 
     Bind( SYMBOL_PRESELECTED, &LIB_TREE::onPreselect, this );
 
@@ -643,12 +641,6 @@ void LIB_TREE::onHeaderContextMenu( wxDataViewEvent& aEvent )
     // wxGTK 3.0 sends item right click events for header right clicks
     m_skipNextRightClick = true;
 #endif
-}
-
-
-void LIB_TREE::onHeaderClick( wxDataViewEvent& aEvent )
-{
-
 }
 
 

@@ -201,7 +201,6 @@ protected:
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
     void onItemContextMenu( wxDataViewEvent& aEvent );
-    void onHeaderClick( wxDataViewEvent& aEvent );
     void onHeaderContextMenu( wxDataViewEvent& aEvent );
 
     void onDebounceTimer( wxTimerEvent& aEvent );
