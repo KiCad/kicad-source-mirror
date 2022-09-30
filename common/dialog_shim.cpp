@@ -60,7 +60,7 @@ public:
         if( m_win )
         {
             m_win->Enable();
-            m_win->SetFocus(); // let's focus back on the parent window
+            m_win->Raise(); // let's focus back on the parent window
         }
     }
 };

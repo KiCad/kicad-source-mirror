@@ -55,6 +55,7 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxGridBagSizer* m_gbUserInterface;
 		wxCheckBox* m_checkBoxIconsInMenus;
 		wxCheckBox* m_showScrollbars;
+		wxCheckBox* m_focusFollowSchPcb;
 		wxStaticText* m_stIconTheme;
 		wxRadioButton* m_rbIconThemeLight;
 		wxRadioButton* m_rbIconThemeDark;

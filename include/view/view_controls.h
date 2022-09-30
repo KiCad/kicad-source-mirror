@@ -66,6 +66,9 @@ struct VC_SETTINGS
     ///< Flag for grabbing the mouse cursor.
     bool m_grabMouse;
 
+    ///< Flag for automatic focus switching between Schematic and PCB editors.
+    bool m_focusFollowSchPcb;
+
     ///< Flag for turning on autopanning.
     bool m_autoPanEnabled;
 

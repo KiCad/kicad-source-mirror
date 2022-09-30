@@ -292,15 +292,16 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     m_highContrastCtrl->GetValue().ToDouble( &dimmingPercent );
     commonSettings->m_Appearance.hicontrast_dimming_factor = dimmingPercent / 100.0f;
 
-    commonSettings->m_Input.immediate_actions   = !m_NonImmediateActions->GetValue();
-    commonSettings->m_Input.warp_mouse_on_move  = m_warpMouseOnMove->GetValue();
+    commonSettings->m_Input.focus_follow_sch_pcb = m_focusFollowSchPcb->GetValue();
+    commonSettings->m_Input.immediate_actions    = !m_NonImmediateActions->GetValue();
+    commonSettings->m_Input.warp_mouse_on_move   = m_warpMouseOnMove->GetValue();
 
-    commonSettings->m_Backup.enabled            = m_cbBackupEnabled->GetValue();
-    commonSettings->m_Backup.backup_on_autosave = m_cbBackupAutosave->GetValue();
-    commonSettings->m_Backup.limit_total_files  = m_backupLimitTotalFiles->GetValue();
-    commonSettings->m_Backup.limit_daily_files  = m_backupLimitDailyFiles->GetValue();
-    commonSettings->m_Backup.min_interval       = m_backupMinInterval->GetValue() * 60;
-    commonSettings->m_Backup.limit_total_size   = m_backupLimitTotalSize->GetValue() * 1024 * 1024;
+    commonSettings->m_Backup.enabled             = m_cbBackupEnabled->GetValue();
+    commonSettings->m_Backup.backup_on_autosave  = m_cbBackupAutosave->GetValue();
+    commonSettings->m_Backup.limit_total_files   = m_backupLimitTotalFiles->GetValue();
+    commonSettings->m_Backup.limit_daily_files   = m_backupLimitDailyFiles->GetValue();
+    commonSettings->m_Backup.min_interval        = m_backupMinInterval->GetValue() * 60;
+    commonSettings->m_Backup.limit_total_size    = m_backupLimitTotalSize->GetValue() * 1024 * 1024;
 
     commonSettings->m_Session.remember_open_files = m_cbRememberOpenFiles->GetValue();
 
@@ -384,6 +385,7 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
     double dimmingPercent = aSettings.m_Appearance.hicontrast_dimming_factor * 100.0f;
     m_highContrastCtrl->SetValue( wxString::Format( "%.0f", dimmingPercent ) );
 
+    m_focusFollowSchPcb->SetValue( aSettings.m_Input.focus_follow_sch_pcb );
     m_warpMouseOnMove->SetValue( aSettings.m_Input.warp_mouse_on_move );
     m_NonImmediateActions->SetValue( !aSettings.m_Input.immediate_actions );
 

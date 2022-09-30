@@ -78,6 +78,7 @@ public:
 
     struct INPUT
     {
+        bool focus_follow_sch_pcb;
         bool auto_pan;
         int  auto_pan_acceleration;
         bool center_on_zoom;

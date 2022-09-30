@@ -227,6 +227,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
             },
             {} ) );
 
+    m_params.emplace_back( new PARAM<bool>( "input.focus_follow_sch_pcb",
+            &m_Input.focus_follow_sch_pcb, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "input.auto_pan", &m_Input.auto_pan, false ) );
 
     m_params.emplace_back( new PARAM<int>( "input.auto_pan_acceleration",

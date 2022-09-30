@@ -127,6 +127,11 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	bSizer81->Add( m_showScrollbars, 0, wxALIGN_LEFT|wxBOTTOM, 5 );
 
+	m_focusFollowSchPcb = new wxCheckBox( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Focus follows mouse between schematic and PCB editors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_focusFollowSchPcb->SetToolTip( _("If the mouse cursor is moved over the canvas of a schematic or PCB editor window, that window is raised.") );
+
+	bSizer81->Add( m_focusFollowSchPcb, 0, wxALIGN_LEFT|wxBOTTOM, 5 );
+
 
 	m_gbUserInterface->Add( bSizer81, wxGBPosition( 0, 0 ), wxGBSpan( 2, 4 ), wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxEXPAND, 5 );
 

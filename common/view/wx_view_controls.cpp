@@ -39,6 +39,8 @@
 #include <geometry/geometry_utils.h>
 #include <widgets/ui_common.h>
 #include <class_draw_panel_gal.h>
+#include <eda_draw_frame.h>
+#include <kiway.h>
 #include <kiplatform/ui.h>
 #include <wx/log.h>
 
@@ -156,6 +158,7 @@ void WX_VIEW_CONTROLS::LoadSettings()
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
 
     m_settings.m_warpCursor            = cfg->m_Input.center_on_zoom;
+    m_settings.m_focusFollowSchPcb     = cfg->m_Input.focus_follow_sch_pcb;
     m_settings.m_autoPanSettingEnabled = cfg->m_Input.auto_pan;
     m_settings.m_autoPanAcceleration   = cfg->m_Input.auto_pan_acceleration;
     m_settings.m_horizontalPan         = cfg->m_Input.horizontal_pan;
@@ -200,6 +203,30 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     int x = aEvent.GetX();
     int y = aEvent.GetY();
     VECTOR2D mousePos( x, y );
+
+    // Automatic focus switching between SCH and PCB windows on canvas mouse motion
+    if( m_settings.m_focusFollowSchPcb )
+    {
+        if( EDA_DRAW_FRAME* frame = m_parentPanel->GetParentEDAFrame() )
+        {
+            KIWAY_PLAYER* otherFrame = nullptr;
+
+            if( frame->IsType( FRAME_PCB_EDITOR ) )
+            {
+                otherFrame = frame->Kiway().Player( FRAME_SCH, false );
+            }
+            else if( frame->IsType( FRAME_SCH ) )
+            {
+                otherFrame = frame->Kiway().Player( FRAME_PCB_EDITOR, false );
+            }
+
+            if( otherFrame && KIPLATFORM::UI::IsWindowActive( otherFrame )
+                && !KIPLATFORM::UI::IsWindowActive( frame ) )
+            {
+                frame->Raise();
+            }
+        }
+    }
 
     if( m_state != DRAG_PANNING && m_state != DRAG_ZOOMING )
         handleCursorCapture( x, y );
