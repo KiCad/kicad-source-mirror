@@ -41,7 +41,6 @@ popt.SetAutoScale(False)
 popt.SetScale(1)
 popt.SetMirror(False)
 popt.SetUseGerberAttributes(True)
-popt.SetExcludeEdgeLayer(False);
 popt.SetScale(1)
 popt.SetUseAuxOrigin(True)
 
@@ -71,6 +70,8 @@ plot_plan = [
 ]
 
 
+# In Gerber format, Set layer before calling OpenPlotfile is mandatory to generate
+# the right Gerber file header.
 for layer_info in plot_plan:
     pctl.SetLayer(layer_info[1])
     pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])

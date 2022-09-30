@@ -57,7 +57,6 @@ popt.SetUseGerberAttributes(True)
 popt.SetIncludeGerberNetlistInfo(True)
 popt.SetCreateGerberJobFile(gen_job_file)
 popt.SetUseGerberProtelExtensions(False)
-popt.SetExcludeEdgeLayer(False);
 popt.SetUseAuxOrigin(True)
 
 # This by gerbers only
@@ -91,6 +90,8 @@ plot_plan = [
 ]
 
 
+# In Gerber format, Set layer before calling OpenPlotfile is mandatory to generate
+# the right Gerber file header.
 for layer_info in plot_plan:
     if layer_info[1] <= B_Cu:
         popt.SetSkipPlotNPTH_Pads( True )
