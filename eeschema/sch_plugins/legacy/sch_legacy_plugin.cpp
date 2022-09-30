@@ -2352,7 +2352,7 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
 
         if( aLine->GetLineColor() != COLOR4D::UNSPECIFIED )
             m_out->Print( 0, " %s",
-                TO_UTF8( aLine->GetLineColor().ToColour().GetAsString( wxC2S_CSS_SYNTAX ) ) );
+                TO_UTF8( aLine->GetLineColor().ToCSSString() ) );
     }
 
     m_out->Print( 0, "\n" );

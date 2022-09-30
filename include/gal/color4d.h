@@ -166,7 +166,7 @@ public:
      */
     bool SetFromWxString( const wxString& aColorString );
 
-    wxString ToWxString( long flags ) const;
+    wxString ToCSSString() const;
 
     bool SetFromHexString( const wxString& aColorString );
     wxString ToHexString() const;

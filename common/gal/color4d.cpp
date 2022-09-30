@@ -144,10 +144,33 @@ bool COLOR4D::SetFromWxString( const wxString& aColorString )
 }
 
 
-wxString COLOR4D::ToWxString( long flags ) const
+wxString COLOR4D::ToCSSString() const
 {
     wxColour c = ToColour();
-    return c.GetAsString( flags );
+    wxString str;
+
+    const int  red = c.Red();
+    const int  green = c.Green();
+    const int  blue = c.Blue();
+    const int  alpha = c.Alpha();
+
+    if ( alpha == wxALPHA_OPAQUE )
+    {
+        str.Printf( wxT( "rgb(%d, %d, %d)" ), red, green, blue );
+    }
+    else // use rgba() form
+    {
+        wxString alpha_str = wxString::FromCDouble( alpha / 255.0, 3 );
+
+        // The wxC2S_CSS_SYNTAX is particularly sensitive to ','s (as it uses them for value
+        // delimiters), and wxWidgets is known to be buggy in this respect when dealing with
+        // Serbian and Russian locales (at least), so we enforce an extra level of safety.
+        alpha_str.Replace( wxT( "," ), wxT( "." ) );
+
+        str.Printf( wxT( "rgba(%d, %d, %d, %s)" ), red, green, blue, alpha_str );
+    }
+
+    return str;
 }
 
 
@@ -271,38 +294,13 @@ const bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
 
 std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 {
-    return aStream << aColor.ToWxString( wxC2S_CSS_SYNTAX );
+    return aStream << aColor.ToCSSString();
 }
 
 
 void to_json( nlohmann::json& aJson, const COLOR4D& aColor )
 {
-    wxColour   c = aColor.ToColour();
-    wxString   str;
-
-    const int  red = c.Red();
-    const int  green = c.Green();
-    const int  blue = c.Blue();
-    const int  alpha = c.Alpha();
-
-    if ( alpha == wxALPHA_OPAQUE )
-    {
-        str.Printf( wxT( "rgb(%d, %d, %d)" ), red, green, blue );
-    }
-    else // use rgba() form
-    {
-        wxString a = wxString::FromCDouble( alpha / 255.0, 3);
-
-        // The wxC2S_CSS_SYNTAX is particularly sensitive to ','s (as it uses them for value
-        // delimiters), and wxWidgets is known to be buggy in this respect when dealing with
-        // Serbian and Russian locales (at least), so we enforce an extra level of safety.
-        a.Replace( wxT( "," ), wxT( "." ) );
-
-        str.Printf( wxT( "rgba(%d, %d, %d, %s)" ), red, green, blue, a );
-    }
-
-    aJson = nlohmann::json( str.ToStdString() );
-
+    aJson = nlohmann::json( aColor.ToCSSString().ToStdString() );
 }
 
 

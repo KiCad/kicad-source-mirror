@@ -250,7 +250,7 @@ static void netclassToGridRow( EDA_UNITS aUnits, wxGrid* aGrid, int aRow, const 
     SET_MILS_CELL( GRID_WIREWIDTH, nc->GetWireWidth() );
     SET_MILS_CELL( GRID_BUSWIDTH, nc->GetBusWidth() );
 
-    wxString colorAsString = nc->GetSchematicColor().ToWxString( wxC2S_CSS_SYNTAX );
+    wxString colorAsString = nc->GetSchematicColor().ToCSSString();
     aGrid->SetCellValue( aRow, GRID_SCHEMATIC_COLOR, colorAsString );
 
     int lineStyleIdx = std::max( 0, nc->GetLineStyle() );
