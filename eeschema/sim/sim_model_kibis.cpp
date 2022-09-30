@@ -47,17 +47,35 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const std::string&
     std::vector<std::string> currentNames;
 
     for( const SIM_MODEL::PIN& pin : GetPins() )
-    {
-        currentNames.push_back( fmt::format( "I({:s}:{:s})", ItemName( aRefName ), pin.name ) );
-    }
+        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aRefName ), pin.name ) );
 
     return currentNames;
 }
 
-SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, std::string aWfType ) :
+SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType ) :
         SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_KIBIS>( *this ) )
 {
-    SetParameters( aType, aWfType );
+    static std::vector<PARAM::INFO> device = makeParamInfos( TYPE::KIBIS_DEVICE );
+    static std::vector<PARAM::INFO> dcDriver = makeParamInfos( TYPE::KIBIS_DRIVER_DC );
+    static std::vector<PARAM::INFO> rectDriver = makeParamInfos( TYPE::KIBIS_DRIVER_RECT );
+    static std::vector<PARAM::INFO> prbsDriver = makeParamInfos( TYPE::KIBIS_DRIVER_PRBS );
+
+    std::vector<PARAM::INFO>* paramInfos = nullptr;
+
+    switch( aType )
+    {
+    case SIM_MODEL::TYPE::KIBIS_DEVICE:      paramInfos = &device;     break;
+    case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:   paramInfos = &dcDriver;   break;
+    case SIM_MODEL::TYPE::KIBIS_DRIVER_RECT: paramInfos = &rectDriver; break;
+    case SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS: paramInfos = &prbsDriver; break;
+
+    default:
+        wxFAIL;
+        return;
+    }
+
+    for( const PARAM::INFO& paramInfo : *paramInfos )
+        AddParam( paramInfo );
 
     if( aType == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE || aType == SIM_MODEL::TYPE::KIBIS_DIFFDRIVER )
     {
@@ -106,80 +124,6 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
     ReadDataFields( 2, &aFields );
 }
 
-void SIM_MODEL_KIBIS::SetParameters( TYPE aType, std::string aWfType )
-{
-    static std::vector<PARAM::INFO> kibisparam_device =
-            makeKibisParamInfos( SIM_MODEL::TYPE::KIBIS_DEVICE, "Dummy" );
-    static std::vector<PARAM::INFO> kibisparam_driver_rect =
-            makeKibisParamInfos( SIM_MODEL::TYPE::KIBIS_DRIVER, SIM_MODEL_KIBIS::DRIVER_RECT );
-    static std::vector<PARAM::INFO> kibisparam_driver_stuckh =
-            makeKibisParamInfos( SIM_MODEL::TYPE::KIBIS_DRIVER, SIM_MODEL_KIBIS::DRIVER_STUCKH );
-    static std::vector<PARAM::INFO> kibisparam_driver_stuckl =
-            makeKibisParamInfos( SIM_MODEL::TYPE::KIBIS_DRIVER, SIM_MODEL_KIBIS::DRIVER_STUCKL );
-    static std::vector<PARAM::INFO> kibisparam_driver_highz =
-            makeKibisParamInfos( SIM_MODEL::TYPE::KIBIS_DRIVER, SIM_MODEL_KIBIS::DRIVER_HIGHZ );
-    static std::vector<PARAM::INFO> kibisparam_driver_prbs =
-            makeKibisParamInfos( SIM_MODEL::TYPE::KIBIS_DRIVER, SIM_MODEL_KIBIS::DRIVER_PRBS );
-    static std::vector<PARAM::INFO> kibisparam_driver_allParams =
-            makeKibisParamInfos( SIM_MODEL::TYPE::KIBIS_DRIVER, SIM_MODEL_KIBIS::JOCKER );
-
-    m_requiresUIUpdate = true;
-
-    static std::vector<PARAM::INFO>* params;
-
-    switch( aType )
-    {
-    case SIM_MODEL::TYPE::KIBIS_DEVICE:
-    case SIM_MODEL::TYPE::KIBIS_DIFFDEVICE: params = &kibisparam_device; break;
-    case SIM_MODEL::TYPE::KIBIS_DIFFDRIVER:
-    case SIM_MODEL::TYPE::KIBIS_DRIVER:
-
-        if( aWfType == SIM_MODEL_KIBIS::DRIVER_RECT )
-            params = &kibisparam_driver_rect;
-        else if( aWfType == SIM_MODEL_KIBIS::DRIVER_STUCKH )
-            params = &kibisparam_driver_stuckh;
-        else if( aWfType == SIM_MODEL_KIBIS::DRIVER_STUCKL )
-            params = &kibisparam_driver_stuckl;
-        else if( aWfType == SIM_MODEL_KIBIS::DRIVER_HIGHZ )
-            params = &kibisparam_driver_highz;
-        else if( aWfType == SIM_MODEL_KIBIS::DRIVER_PRBS )
-            params = &kibisparam_driver_prbs;
-        else
-            params = &kibisparam_driver_allParams;
-            // All params allow for a newly created model to read any parameter
-        break;
-
-    default: wxFAIL; return;
-    }
-
-    m_params.clear();
-
-    /*
-    if( m_params.empty() )
-    {
-        for( const PARAM::INFO& paramInfo : *params )
-            AddParam( paramInfo );
-    }
-
-    for( PARAM& param : m_params )
-    {
-        // We don't erase other params because we don't want to reset their values
-        if( param.info.category == PARAM::CATEGORY::WAVEFORM )
-        {
-            m_params.pop_back(); // waveform parameters are at the end of the vector
-        }
-    }
-    */
-    
-    for( const PARAM::INFO& paramInfo : *params )
-        AddParam( paramInfo );
-}
-
-void SIM_MODEL_KIBIS::SetParameters( std::string aWfType )
-{
-    SetParameters( GetType(), aWfType );
-}
-
 void SIM_MODEL_KIBIS::CreatePins( unsigned aSymbolPinCount )
 {
     SIM_MODEL::CreatePins( aSymbolPinCount );
@@ -191,8 +135,28 @@ void SIM_MODEL_KIBIS::CreatePins( unsigned aSymbolPinCount )
 }
 
 
-const std::vector<SIM_MODEL::PARAM::INFO>
-SIM_MODEL_KIBIS::makeKibisParamInfos( TYPE aType, std::string aWfType )
+bool SIM_MODEL_KIBIS::ChangePin( SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber )
+{
+    KIBIS_COMPONENT* kcomp = aLib.m_kibis.GetComponent( std::string( GetComponentName() ) );
+
+    if( !kcomp )
+        return false;
+
+    KIBIS_PIN* kpin = kcomp->GetPin( std::string( aPinNumber.c_str() ) );
+
+    if( !kpin )
+        return false;
+
+    m_ibisModels.clear();
+
+    for( KIBIS_MODEL* kmodel : kpin->m_models )
+        m_ibisModels.push_back( kmodel->m_name );
+
+    return true;
+}
+
+
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeParamInfos( TYPE aType )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO              paramInfo;
@@ -218,7 +182,7 @@ SIM_MODEL_KIBIS::makeKibisParamInfos( TYPE aType, std::string aWfType )
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "lpin";
-        paramInfo.type = SIM_VALUE::TYPE_STRING;
+    paramInfo.type = SIM_VALUE::TYPE_STRING;
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "TYP";
@@ -236,109 +200,107 @@ SIM_MODEL_KIBIS::makeKibisParamInfos( TYPE aType, std::string aWfType )
     paramInfo.spiceModelName = "";
     paramInfo.enumValues = { "TYP", "MIN", "MAX" };
     paramInfos.push_back( paramInfo );
+    
+    std::vector<PARAM::INFO> dc = makeDcWaveformParamInfos();
+    std::vector<PARAM::INFO> rect = makeRectWaveformParamInfos();
+    std::vector<PARAM::INFO> prbs = makePrbsWaveformParamInfos();
 
-    if( aType == SIM_MODEL::TYPE::KIBIS_DEVICE || aType == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE )
-        return paramInfos; // Devices have no waveform parameters
-
-
-
-    paramInfo.name = "wftype";
-    paramInfo.type = SIM_VALUE::TYPE_STRING;
-    paramInfo.unit = "";
-    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
-    paramInfo.defaultValue = DRIVER_HIGHZ;
-    paramInfo.description = _( "Waveform" );
-    paramInfo.spiceModelName = "";
-    paramInfo.enumValues = { DRIVER_RECT, DRIVER_STUCKH, DRIVER_STUCKL, DRIVER_HIGHZ, DRIVER_PRBS };
-    paramInfos.push_back( paramInfo );
-
-    if( aWfType == DRIVER_STUCKH || aWfType == DRIVER_STUCKL || aWfType == DRIVER_HIGHZ )
+    switch( aType )
     {
-        return paramInfos;
-    }
+    case TYPE::KIBIS_DRIVER_DC:
+        for( const PARAM::INFO& param : makeDcWaveformParamInfos() )
+            paramInfos.push_back( param );
+        break;
 
-    paramInfo.name = "ac";
-    paramInfo.type = SIM_VALUE::TYPE_STRING;
-    paramInfo.unit = "";
-    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
-    paramInfo.defaultValue = "normal";
-    paramInfo.description = _( "Modeling accuracy" );
-    paramInfo.spiceModelName = "";
-    paramInfo.enumValues = { "low", "normal", "high" };
-    paramInfos.push_back( paramInfo );
+    case TYPE::KIBIS_DRIVER_RECT:
+        for( const PARAM::INFO& param : makeRectWaveformParamInfos() )
+            paramInfos.push_back( param );
+        break;
 
-    if ( aWfType == DRIVER_RECT || aWfType == JOCKER  )
+    case TYPE::KIBIS_DRIVER_PRBS:
+        for( const PARAM::INFO& param : makePrbsWaveformParamInfos() )
+            paramInfos.push_back( param );
+        break;
 
-    {
-        paramInfo.name = "ton";
-        paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-        paramInfo.unit = "s";
-        paramInfo.category = PARAM::CATEGORY::WAVEFORM;
-        paramInfo.defaultValue = "";
-        paramInfo.description = _( "ON time" );
-        paramInfo.spiceModelName = "";
-        paramInfos.push_back( paramInfo );
-
-        paramInfo.name = "toff";
-        paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-        paramInfo.unit = "s";
-        paramInfo.category = PARAM::CATEGORY::WAVEFORM;
-        paramInfo.defaultValue = "";
-        paramInfo.description = _( "OFF time" );
-        paramInfo.spiceModelName = "";
-        paramInfos.push_back( paramInfo );
-
-        paramInfo.name = "delay";
-        paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-        paramInfo.unit = "s";
-        paramInfo.category = PARAM::CATEGORY::WAVEFORM;
-        paramInfo.defaultValue = "0";
-        paramInfo.description = _( "Delay" );
-        paramInfo.spiceModelName = "";
-        paramInfos.push_back( paramInfo );
-    }
-
-    if ( ( aWfType == DRIVER_PRBS ) || ( aWfType == JOCKER )  )
-
-    {
-        paramInfo.name = "f0";
-        paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-        paramInfo.unit = "Hz";
-        paramInfo.category = PARAM::CATEGORY::WAVEFORM;
-        paramInfo.defaultValue = "";
-        paramInfo.description = _( "Bitrate" );
-        paramInfo.spiceModelName = "";
-        paramInfos.push_back( paramInfo );
-
-        paramInfo.name = "bits";
-        paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-        paramInfo.unit = "Hz";
-        paramInfo.category = PARAM::CATEGORY::WAVEFORM;
-        paramInfo.defaultValue = "";
-        paramInfo.description = _( "Number of bits" );
-        paramInfo.spiceModelName = "";
-        paramInfos.push_back( paramInfo );
+    default:
+        break;
     }
 
     return paramInfos;
 }
 
-bool SIM_MODEL_KIBIS::ChangePin( SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber )
+
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeDcWaveformParamInfos()
 {
-    KIBIS_COMPONENT* kcomp = aLib.m_kibis.GetComponent( std::string( GetComponentName() ) );
+    std::vector<PARAM::INFO> paramInfos;
+    PARAM::INFO              paramInfo;
 
-    if( !kcomp )
-        return false;
+    paramInfo.name = "dc";
+    paramInfo.type = SIM_VALUE::TYPE_STRING;
+    paramInfo.unit = "";
+    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
+    paramInfo.defaultValue = "hi-Z";
+    paramInfo.description = _( "DC Value" );
+    paramInfo.enumValues = { "hi-Z", "low", "high" };
+    paramInfos.push_back( paramInfo );
 
-    KIBIS_PIN* kpin = kcomp->GetPin( std::string( aPinNumber.c_str() ) );
+    return paramInfos;
+}
 
-    if( !kpin )
-        return false;
 
-    m_ibisModels.clear();
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeRectWaveformParamInfos()
+{
+    std::vector<PARAM::INFO> paramInfos;
+    PARAM::INFO              paramInfo;
 
-    for( KIBIS_MODEL* kmodel : kpin->m_models )
-        m_ibisModels.push_back( kmodel->m_name );
+    paramInfo.name = "ton";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "s";
+    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
+    paramInfo.defaultValue = "";
+    paramInfo.description = _( "ON time" );
+    paramInfos.push_back( paramInfo );
 
-    return true;
+    paramInfo.name = "toff";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "s";
+    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
+    paramInfo.defaultValue = "";
+    paramInfo.description = _( "OFF time" );
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "delay";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "s";
+    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
+    paramInfo.defaultValue = "0";
+    paramInfo.description = _( "Delay" );
+    paramInfos.push_back( paramInfo );
+    
+    return paramInfos;
+}
+
+
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makePrbsWaveformParamInfos()
+{
+    std::vector<PARAM::INFO> paramInfos;
+    PARAM::INFO              paramInfo;
+
+    paramInfo.name = "f0";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "Hz";
+    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
+    paramInfo.defaultValue = "";
+    paramInfo.description = _( "Bitrate" );
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "bits";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "";
+    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
+    paramInfo.defaultValue = "";
+    paramInfo.description = _( "Number of bits" );
+    paramInfos.push_back( paramInfo );
+
+    return paramInfos;
 }

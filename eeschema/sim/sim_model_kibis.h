@@ -51,10 +51,9 @@ class SIM_MODEL_KIBIS : public SIM_MODEL
     static constexpr auto DRIVER_STUCKL = "stuck low";
     static constexpr auto DRIVER_HIGHZ = "high Z";
     static constexpr auto DRIVER_PRBS = "prbs";
-    static constexpr auto JOCKER = "kicadjocker"; // Gets all parameters
 
 public:
-    SIM_MODEL_KIBIS( TYPE aType, std::string aWfType = "NoInit" );
+    SIM_MODEL_KIBIS( TYPE aType );
 
     // @brief Special copy constructor
     // creates a a model with aType, but tries to match parameters from aSource.
@@ -62,9 +61,6 @@ public:
 
     SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<LIB_FIELD>& aFields );
     SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<SCH_FIELD>& aFields );
-
-    void SetParameters( TYPE aType, std::string aWfType ); // To change between device / driver
-    void SetParameters( std::string aWfType );             // To change between device / driver
 
     std::vector<std::pair<std::string, std::string>> GetIbisPins() const
     {
@@ -96,9 +92,12 @@ protected:
 
 private:
     bool requiresSpiceModelLine() const override { return true; }
-    static const std::vector<PARAM::INFO> makeKibisParamInfos( TYPE aType, std::string aWfType );
 
-    std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
+    static std::vector<PARAM::INFO> makeParamInfos( TYPE aType );
+    static std::vector<PARAM::INFO> makeDcWaveformParamInfos();
+    static std::vector<PARAM::INFO> makeRectWaveformParamInfos();
+    static std::vector<PARAM::INFO> makePrbsWaveformParamInfos();
+
     std::vector<std::string>                  m_ibisModels;
 };
 

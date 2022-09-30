@@ -45,7 +45,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
     : DIALOG_SIM_MODEL_BASE( aParent ),
       m_symbol( aSymbol ),
       m_fields( aFields ),
-      m_library( std::make_shared<SIM_LIBRARY_SPICE>() ),
+      m_library( nullptr ),
       m_prevModel( nullptr ),
       m_firstCategory( nullptr ),
       m_prevParamGridSelection( nullptr ),
@@ -114,7 +114,6 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
-    setIbisMode( IsIbisLoaded() );
 }
 
 
@@ -264,15 +263,13 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 {
-    if( ( &curModel() != m_prevModel ) || curModel().RequiresUIUpdate() )
+    if( &curModel() != m_prevModel )
     {
         SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
 
         // Change the Type choice to match the current device type.
-        if( !m_prevModel || deviceType != m_prevModel->GetDeviceType()
-            || curModel().RequiresUIUpdate() )
+        if( !m_prevModel || deviceType != m_prevModel->GetDeviceType() )
         {
-            curModel().UIUpdated();
             m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
 
             m_typeChoice->Clear();
@@ -530,12 +527,16 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 
             SIM_MODEL::TYPE ibisType = SIM_MODEL::TYPE::KIBIS_DEVICE;
 
-            if( ibisTypeString == "IBISDRIVER" )
-                ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER;
-            else if( ibisTypeString == "IBISDIFFDRIVER" )
-                ibisType = SIM_MODEL::TYPE::KIBIS_DIFFDRIVER;
+            if( ibisTypeString == "IBISDRIVERDC" )
+                ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER_DC;
+            else if( ibisTypeString == "IBISDRIVERRECT" )
+                ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER_RECT;
+            else if( ibisTypeString == "IBISDRIVRPRBS" )
+                ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS;
             else if( ibisTypeString == "IBISDIFFDEVICE" )
                 ibisType = SIM_MODEL::TYPE::KIBIS_DIFFDEVICE;
+            else if( ibisTypeString == "IBISDIFFDRIVER" )
+                ibisType = SIM_MODEL::TYPE::KIBIS_DIFFDRIVER;
 
             std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library )
                     ->ReadFile( std::string( absolutePath.ToUTF8() ), ibisType );
@@ -1029,9 +1030,12 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
             && typeDescription == SIM_MODEL::TypeInfo( type ).description )
         {
             if( IsIbisLoaded()
-                && ( type == SIM_MODEL::TYPE::KIBIS_DEVICE || type == SIM_MODEL::TYPE::KIBIS_DRIVER
-                     || type == SIM_MODEL::TYPE::KIBIS_DIFFDRIVER
-                     || type == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE ) )
+                && ( type == SIM_MODEL::TYPE::KIBIS_DEVICE
+                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER_DC
+                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER_RECT
+                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS
+                     || type == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE
+                     || type == SIM_MODEL::TYPE::KIBIS_DIFFDRIVER ) )
             {
                 std::shared_ptr<SIM_MODEL_KIBIS> kibismodel =
                         std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
@@ -1061,25 +1065,6 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onParamGridChanged( wxPropertyGridEvent& aEvent )
 {
-    if( IsIbisLoaded() )
-    {
-        wxString      propValue = "";
-        wxString      propName = aEvent.GetPropertyName();
-        wxPGProperty* property = aEvent.GetProperty();
-
-        if( property && propName == "wftype" )
-        {
-            wxVariant variant = aEvent.GetPropertyValue();
-            propValue = property->ValueToString( variant );
-
-            std::shared_ptr<SIM_MODEL_KIBIS> kibismodel =
-                    std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
-                            m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
-
-            kibismodel->SetParameters( std::string( propValue.c_str() ) );
-            kibismodel->SetParamValue( "wftype", std::string( propValue.c_str() ) );
-        }
-    }
     updateWidgets();
 }
 

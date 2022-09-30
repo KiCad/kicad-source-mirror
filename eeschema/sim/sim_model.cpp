@@ -98,7 +98,7 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE_ aDeviceType )
         case DEVICE_TYPE_::V:         return { "V",      "Voltage Source"    };
         case DEVICE_TYPE_::I:         return { "I",      "Current Source"    };
 
-    	case DEVICE_TYPE_::KIBIS:     return { "IBIS",  "Ibis model" };
+        case DEVICE_TYPE_::KIBIS:     return { "IBIS",  "Ibis Model" };
 
         case DEVICE_TYPE_::SUBCKT:    return { "SUBCKT", "Subcircuit"        };
         case DEVICE_TYPE_::XSPICE:    return { "XSPICE", "XSPICE Code Model" };
@@ -197,7 +197,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::NMOS_HISIMHV2:        return { DEVICE_TYPE_::NMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
     case TYPE::PMOS_HISIMHV2:        return { DEVICE_TYPE_::PMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
 
-    case TYPE::V:                 return { DEVICE_TYPE_::V,      "DC",             "DC",                        };
+    case TYPE::V:                    return { DEVICE_TYPE_::V,      "DC",             "DC",                        };
     case TYPE::V_SIN:                return { DEVICE_TYPE_::V,      "SIN",            "Sine"                       };
     case TYPE::V_PULSE:              return { DEVICE_TYPE_::V,      "PULSE",          "Pulse"                      };
     case TYPE::V_EXP:                return { DEVICE_TYPE_::V,      "EXP",            "Exponential"                };
@@ -213,7 +213,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     //case TYPE::V_RANDPOISSON:        return { DEVICE_TYPE::V,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::V_BEHAVIORAL:         return { DEVICE_TYPE_::V,      "=",              "Behavioral"                 };
 
-    case TYPE::I:                 return { DEVICE_TYPE_::I,      "DC",             "DC",                        };
+    case TYPE::I:                    return { DEVICE_TYPE_::I,      "DC",             "DC",                        };
     case TYPE::I_SIN:                return { DEVICE_TYPE_::I,      "SIN",            "Sine"                       };
     case TYPE::I_PULSE:              return { DEVICE_TYPE_::I,      "PULSE",          "Pulse"                      };
     case TYPE::I_EXP:                return { DEVICE_TYPE_::I,      "EXP",            "Exponential"                };
@@ -229,15 +229,19 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     //case TYPE::I_RANDPOISSON:        return { DEVICE_TYPE::I,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::I_BEHAVIORAL:         return { DEVICE_TYPE_::I,      "=",              "Behavioral"                 };
 
-    case TYPE::KIBIS_DRIVER:         return { DEVICE_TYPE_::KIBIS,  "IBISDRIVER",     "Driver"                     };
-    case TYPE::KIBIS_DEVICE:         return { DEVICE_TYPE_::KIBIS,  "IBISDEVICE",     "Device"                     };
-    case TYPE::KIBIS_DIFFDRIVER:     return { DEVICE_TYPE_::KIBIS,  "IBISDIFFDRIVER", "Differential driver"        };
-    case TYPE::KIBIS_DIFFDEVICE:     return { DEVICE_TYPE_::KIBIS,  "IBISDIFFDEVICE", "Differential device"        };
     case TYPE::SUBCKT:               return { DEVICE_TYPE_::SUBCKT, "",               ""                           };
     case TYPE::XSPICE:               return { DEVICE_TYPE_::XSPICE, "",               ""                           };
-    case TYPE::RAWSPICE:                return { DEVICE_TYPE_::SPICE,  "",               ""                           };
 
-    case TYPE::_ENUM_END:             break;
+    case TYPE::KIBIS_DEVICE:         return { DEVICE_TYPE_::KIBIS,  "IBISDEVICE",     "Device"                     };
+    case TYPE::KIBIS_DRIVER_DC:      return { DEVICE_TYPE_::KIBIS,  "IBISDRIVERDC",   "DC driver"                  };
+    case TYPE::KIBIS_DRIVER_RECT:    return { DEVICE_TYPE_::KIBIS,  "IBISDRIVERRECT", "Rectangular wave driver"    };
+    case TYPE::KIBIS_DRIVER_PRBS:    return { DEVICE_TYPE_::KIBIS,  "IBISDRIVERPRBS", "PRBS driver"                };
+    case TYPE::KIBIS_DIFFDEVICE:     return { DEVICE_TYPE_::KIBIS,  "IBISDIFFDEVICE", "Differential device"        };
+    case TYPE::KIBIS_DIFFDRIVER:     return { DEVICE_TYPE_::KIBIS,  "IBISDIFFDRIVER", "Differential driver"        };
+
+    case TYPE::RAWSPICE:             return { DEVICE_TYPE_::SPICE,  "",               ""                           };
+
+    case TYPE::_ENUM_END:            break;
     }
 
     wxFAIL;
@@ -366,7 +370,9 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::XSPICE:               return { "A"  };
 
     case TYPE::KIBIS_DEVICE:         return { "X"  };
-    case TYPE::KIBIS_DRIVER:         return { "X"  };
+    case TYPE::KIBIS_DRIVER_DC:      return { "X"  };
+    case TYPE::KIBIS_DRIVER_RECT:    return { "X"  };
+    case TYPE::KIBIS_DRIVER_PRBS:    return { "X"  };
     case TYPE::KIBIS_DIFFDEVICE:     return { "X"  };
     case TYPE::KIBIS_DIFFDRIVER:     return { "X"  };
 
@@ -952,8 +958,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::XSPICE:
         return std::make_unique<SIM_MODEL_XSPICE>( aType );
 
-    case TYPE::KIBIS_DRIVER:
     case TYPE::KIBIS_DEVICE:
+    case TYPE::KIBIS_DRIVER_DC:
+    case TYPE::KIBIS_DRIVER_RECT:
+    case TYPE::KIBIS_DRIVER_PRBS:
     case TYPE::KIBIS_DIFFDEVICE:
     case TYPE::KIBIS_DIFFDRIVER:
         return std::make_unique<SIM_MODEL_KIBIS>( aType );
@@ -973,7 +981,7 @@ SIM_MODEL::SIM_MODEL( TYPE aType ) :
 }
 
 
-SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
+SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) : 
     m_baseModel( nullptr ),
     m_spiceGenerator( std::move( aSpiceGenerator ) ),
     m_type( aType ),

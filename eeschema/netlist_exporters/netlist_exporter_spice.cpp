@@ -273,10 +273,14 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
                 switch( type )
                 {
+                case SIM_MODEL::TYPE::KIBIS_DEVICE:
+                case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
+                case SIM_MODEL::TYPE::KIBIS_DRIVER_RECT:
+                case SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS:
                 case SIM_MODEL::TYPE::KIBIS_DIFFDEVICE:
                 case SIM_MODEL::TYPE::KIBIS_DIFFDRIVER:
-                case SIM_MODEL::TYPE::KIBIS_DEVICE:
-                case SIM_MODEL::TYPE::KIBIS_DRIVER: break;
+                    break;
+
                 default:
                     wxLogTrace( "IBIS:", wxT( "Invalid ibis type: '%s'" ),
                                 symbol->GetRef( &sheet ) );
@@ -299,7 +303,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
 
                 KIBIS_PARAMETER kparams;
-                const SIM_MODEL::PARAM* mparam;
+                const SIM_MODEL::PARAM* mparam = nullptr;
 
                 mparam = spiceItem.model->FindParam( "vcc" );
 
@@ -331,107 +335,110 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                 case SIM_MODEL::TYPE::KIBIS_DEVICE:
                     kpin->writeSpiceDevice( &modelData, modelName, *kmodel, kparams );
                     break;
+
                 case SIM_MODEL::TYPE::KIBIS_DIFFDEVICE:
                     kpin->writeSpiceDiffDevice( &modelData, modelName, *kmodel, kparams );
                     break;
+
                 case SIM_MODEL::TYPE::KIBIS_DIFFDRIVER:
-                case SIM_MODEL::TYPE::KIBIS_DRIVER:
+                    kpin->writeSpiceDiffDriver( &modelData, modelName, *kmodel, kparams );
+                    break;
+
+                case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
                 {
-                    mparam = spiceItem.model->FindParam( "wftype" );
+                    std::string paramValue = spiceItem.model->FindParam( "dc" )->value->ToString();
 
-                    if( mparam )
+                    if( paramValue == "hi-Z" )
                     {
-                        std::string paramValue = mparam->value->ToString();
-
-                        if( paramValue == "rect" )
-                        {
-                            kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>(
-                                    new KIBIS_WAVEFORM_RECTANGULAR() );
-
-                            mparam = spiceItem.model->FindParam( "ton" );
-
-                            if( mparam )
-                                static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
-                                        ->m_ton = static_cast<double>(
-                                        std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                                ->Get()
-                                                .value_or( 1 ) );
-
-                            mparam = spiceItem.model->FindParam( "toff" );
-
-                            if( mparam )
-                                static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
-                                        ->m_toff = static_cast<double>(
-                                        std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                                ->Get()
-                                                .value_or( 1 ) );
-
-                            mparam = spiceItem.model->FindParam( "delay" );
-
-                            if( mparam )
-                                static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
-                                        ->m_delay = static_cast<double>(
-                                        std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                                ->Get()
-                                                .value_or( 0 ) );
-                        }
-
-                        if( paramValue == "prbs" )
-                        {
-                            kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>(
-                                    new KIBIS_WAVEFORM_PRBS() );
-
-                            mparam = spiceItem.model->FindParam( "bitrate" );
-
-                            if( mparam )
-                                static_cast<KIBIS_WAVEFORM_PRBS*>( kparams.m_waveform )
-                                        ->m_bitrate = static_cast<double>(
-                                        std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                                ->Get()
-                                                .value_or( 1 ) );
-
-                            mparam = spiceItem.model->FindParam( "nbits" );
-
-                            if( mparam )
-                                static_cast<KIBIS_WAVEFORM_PRBS*>( kparams.m_waveform )
-                                        ->m_bits = static_cast<double>(
-                                        std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                                ->Get()
-                                                .value_or( 1 ) );
-
-                            mparam = spiceItem.model->FindParam( "delay" );
-
-                            if( mparam )
-                                static_cast<KIBIS_WAVEFORM_PRBS*>( kparams.m_waveform )
-                                        ->m_delay = static_cast<double>(
-                                        std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                                ->Get()
-                                                .value_or( 0 ) );
-                        }
-                        else if( paramValue == "stuck high" )
-                        {
-                            kparams.m_waveform =
-                                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH() );
-                        }
-                        else if( paramValue == "stuck low" )
-                        {
-                            kparams.m_waveform =
-                                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW() );
-                        }
-                        else if( paramValue == "high Z" )
-                        {
-                            kparams.m_waveform =
-                                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z() );
-                        }
+                        kparams.m_waveform =
+                                static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z() );
+                    }
+                    else if( paramValue == "low" )
+                    {
+                        kparams.m_waveform =
+                                static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW() );
+                    }
+                    else if( paramValue == "high" )
+                    {
+                        kparams.m_waveform =
+                                static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH() );
                     }
 
-                    if( type == SIM_MODEL::TYPE::KIBIS_DIFFDRIVER )
-                        kpin->writeSpiceDiffDriver( &modelData, modelName, *kmodel, kparams );
-                    else
-                        kpin->writeSpiceDriver( &modelData, modelName, *kmodel, kparams );
+                    kpin->writeSpiceDriver( &modelData, modelName, *kmodel, kparams );
                     break;
                 }
-                default: continue;
+                case SIM_MODEL::TYPE::KIBIS_DRIVER_RECT:
+                {
+                    kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>(
+                            new KIBIS_WAVEFORM_RECTANGULAR() );
+
+                    mparam = spiceItem.model->FindParam( "ton" );
+
+                    if( mparam )
+                        static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
+                                ->m_ton = static_cast<double>(
+                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
+                                        ->Get()
+                                        .value_or( 1 ) );
+
+                    mparam = spiceItem.model->FindParam( "toff" );
+
+                    if( mparam )
+                        static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
+                                ->m_toff = static_cast<double>(
+                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
+                                        ->Get()
+                                        .value_or( 1 ) );
+
+                    mparam = spiceItem.model->FindParam( "delay" );
+
+                    if( mparam )
+                        static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
+                                ->m_delay = static_cast<double>(
+                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
+                                        ->Get()
+                                        .value_or( 0 ) );
+
+                    kpin->writeSpiceDriver( &modelData, modelName, *kmodel, kparams );
+                    break;
+                }
+                case SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS:
+                {
+                    kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>(
+                            new KIBIS_WAVEFORM_PRBS() );
+
+                    mparam = spiceItem.model->FindParam( "f0" );
+
+                    if( mparam )
+                        static_cast<KIBIS_WAVEFORM_PRBS*>( kparams.m_waveform )
+                                ->m_bitrate = static_cast<double>(
+                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
+                                        ->Get()
+                                        .value_or( 1 ) );
+
+                    mparam = spiceItem.model->FindParam( "bits" );
+
+                    if( mparam )
+                        static_cast<KIBIS_WAVEFORM_PRBS*>( kparams.m_waveform )
+                                ->m_bits = static_cast<double>(
+                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
+                                        ->Get()
+                                        .value_or( 1 ) );
+
+                    mparam = spiceItem.model->FindParam( "delay" );
+
+                    if( mparam )
+                        static_cast<KIBIS_WAVEFORM_PRBS*>( kparams.m_waveform )
+                                ->m_delay = static_cast<double>(
+                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
+                                        ->Get()
+                                        .value_or( 0 ) );
+
+                    kpin->writeSpiceDriver( &modelData, modelName, *kmodel, kparams );
+                    break;
+                }
+                default:
+                    continue;
                 }
 
                 cacheFile.Write( wxString( modelData ) );

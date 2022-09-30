@@ -140,10 +140,11 @@ public:
         V,
         I,
 
-        KIBIS,
-
         SUBCKT,
         XSPICE,
+
+        KIBIS,
+
         SPICE
     )
 
@@ -296,13 +297,16 @@ public:
         //I_RANDPOISSON,
         I_BEHAVIORAL,
 
-        KIBIS_DRIVER,
+        SUBCKT,
+        XSPICE,
+
         KIBIS_DEVICE,
+        KIBIS_DRIVER_DC,
+        KIBIS_DRIVER_RECT,
+        KIBIS_DRIVER_PRBS,
         KIBIS_DIFFDEVICE,
         KIBIS_DIFFDRIVER,
 
-        SUBCKT,
-        XSPICE,
         RAWSPICE
     )
 
@@ -504,7 +508,7 @@ public:
     DEVICE_TYPE_ GetDeviceType() const { return GetTypeInfo().deviceType; }
     TYPE GetType() const { return m_type; }
 
-    virtual const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
+    const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
     virtual void SetBaseModel( const SIM_MODEL& aBaseModel ) { m_baseModel = &aBaseModel; }
 
     int GetPinCount() const { return static_cast<int>( m_pins.size() ); }
@@ -545,9 +549,6 @@ public:
     void SetIsEnabled( bool aIsEnabled ) { m_isEnabled = aIsEnabled; }
     bool IsEnabled() const { return m_isEnabled; }
 
-    bool RequiresUIUpdate() { return m_requiresUIUpdate; };
-    void UIUpdated() { m_requiresUIUpdate = false; };
-
 protected:
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
 
@@ -572,7 +573,6 @@ protected:
                                  bool aAllowOnlyFirstValue = false,
                                  bool aAllowParamValuePairs = true );
     std::vector<PARAM> m_params;
-    bool               m_requiresUIUpdate = false;
     const SIM_MODEL* m_baseModel;
 
 private:
