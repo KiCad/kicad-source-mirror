@@ -146,7 +146,7 @@ void GRID_CELL_COLOR_SELECTOR::Create( wxWindow* aParent, wxWindowID aId,
 
 wxString GRID_CELL_COLOR_SELECTOR::GetValue() const
 {
-    return m_value.ToWxString( wxC2S_CSS_SYNTAX );
+    return m_value.ToCSSString();
 }
 
 

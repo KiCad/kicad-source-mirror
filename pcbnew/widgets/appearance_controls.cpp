@@ -104,7 +104,7 @@ wxString NET_GRID_TABLE::GetValue( int aRow, int aCol )
     switch( aCol )
     {
     case COL_COLOR:
-        return m_nets[aRow].color.ToWxString( wxC2S_CSS_SYNTAX );
+        return m_nets[aRow].color.ToCSSString();
 
     case COL_VISIBILITY:
         return m_nets[aRow].visible ? wxT( "1" ) : wxT( "0" );

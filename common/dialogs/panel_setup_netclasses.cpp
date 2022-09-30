@@ -248,7 +248,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
                     setCell( aRow, GRID_WIREWIDTH - EESCHEMA_COL_OFFSET, nc->GetWireWidth() );
                     setCell( aRow, GRID_BUSWIDTH - EESCHEMA_COL_OFFSET, nc->GetBusWidth() );
 
-                    wxString colorAsString = nc->GetSchematicColor().ToWxString( wxC2S_CSS_SYNTAX );
+                    wxString colorAsString = nc->GetSchematicColor().ToCSSString();
                     m_netclassGrid->SetCellValue( aRow, GRID_SCHEMATIC_COLOR - EESCHEMA_COL_OFFSET,
                                                   colorAsString );
 

@@ -604,7 +604,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
             return DEFAULT_FONT_NAME;
 
     case FDC_COLOR:
-        return field.GetTextColor().ToWxString( wxC2S_CSS_SYNTAX );
+        return field.GetTextColor().ToCSSString();
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
