@@ -77,7 +77,7 @@ NUMERIC_EVALUATOR::~NUMERIC_EVALUATOR()
 
 void NUMERIC_EVALUATOR::Clear()
 {
-    free( m_token.token );
+    delete[] m_token.token;
     m_token.token = nullptr;
     m_token.input = nullptr;
     m_parseError = true;
@@ -103,7 +103,7 @@ void NUMERIC_EVALUATOR::parseSetResult( double val )
     {
         // Naively printing this with %g produces "nan" on some platforms
         // and "-nan(ind)" on others (e.g. MSVC). So force a "standard" string.
-        snprintf( m_token.token, m_token.OutLen, "%s", "NaN" );
+        snprintf( m_token.token, m_token.outputLen, "%s", "NaN" );
     }
     else
     {
@@ -111,7 +111,7 @@ void NUMERIC_EVALUATOR::parseSetResult( double val )
         // Warning: DO NOT use a format like %f or %g, because they can create issues.
         // especially %g can generate an exponent, incompatible with UNIT_BINDER
         // Use the optimized UIDouble2Str
-        snprintf( m_token.token, m_token.OutLen, "%s", UIDouble2Str( val ).c_str() );
+        snprintf( m_token.token, m_token.outputLen, "%s", UIDouble2Str( val ).c_str() );
     }
 }
 
@@ -159,12 +159,11 @@ void NUMERIC_EVALUATOR::newString( const wxString& aString )
     Clear();
 
     m_originalText = aString;
-
-    m_token.token = reinterpret_cast<decltype( m_token.token )>( malloc( TokenStat::OutLen + 1 ) );
-    strcpy( m_token.token, "0" );
     m_token.inputLen = aString.length();
+    m_token.outputLen = std::max<std::size_t>( 64, m_token.inputLen + 1 );
     m_token.pos = 0;
     m_token.input = aString.mb_str();
+    m_token.token = new char[m_token.outputLen]();
 
     m_parseFinished = false;
 }
