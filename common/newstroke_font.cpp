@@ -8635,7 +8635,7 @@ const char* const newstroke_font[] =
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
-    /* // Letterlike Symbols (2100-214F) */
+    /* // Letterlike Symbols (2100-2125) */
     "F^K[KFYFY[K[", /* U+2100 */
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
@@ -8674,7 +8674,8 @@ const char* const newstroke_font[] =
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
-    "F^K[KFYFY[K[",
+    "F^J[O[OWMVKTJQJLKIMGPFTFWGYIZLZQYTWVUWU[Z[",
+    /* // Letterlike Symbols (2127-214F) */
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
