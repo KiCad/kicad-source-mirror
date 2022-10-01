@@ -164,6 +164,7 @@ void NUMERIC_EVALUATOR::newString( const wxString& aString )
     m_token.pos = 0;
     m_token.input = aString.mb_str();
     m_token.token = new char[m_token.outputLen]();
+    m_token.token[0] = '0';
 
     m_parseFinished = false;
 }
