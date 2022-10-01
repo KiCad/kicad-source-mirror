@@ -314,7 +314,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
 
     worstCaseBBox.Inflate( m_board->m_DRCMaxClearance );
 
-    if( !worstCaseBBox.Intersects( aZone->GetCachedBoundingBox() ) )
+    if( !worstCaseBBox.Intersects( aZone->GetBoundingBox() ) )
         return;
 
     bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );

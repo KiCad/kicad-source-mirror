@@ -128,10 +128,10 @@ public:
     const BOX2I GetBoundingBox() const override;
 
     /**
-     * ONLY TO BE USED BY CLIENTS WHICH SET UP THE CACHE!
+     * Used to preload the zone bounding box cache so we don't have to worry about mutex-locking
+     * it each time.
      */
-    const BOX2I GetCachedBoundingBox() const { return m_bboxCache; }
-    void CacheBoundingBox() { m_bboxCache = GetBoundingBox(); }
+    void CacheBoundingBox();
 
     /**
      * Return any local clearances set in the "classic" (ie: pre-rule) system.  These are
@@ -869,7 +869,6 @@ protected:
     std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> m_FilledPolysList;
 
     /// Temp variables used while filling
-    BOX2I                                  m_bboxCache;
     LSET                                   m_fillFlags;
 
     /// A hash value used in zone filling calculations to see if the filled areas are up to date

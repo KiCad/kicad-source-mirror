@@ -706,7 +706,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
 
         worstCaseBBox.Inflate( m_board->m_DRCMaxClearance );
 
-        if( !worstCaseBBox.Intersects( zone->GetCachedBoundingBox() ) )
+        if( !worstCaseBBox.Intersects( zone->GetBoundingBox() ) )
             continue;
 
         bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );

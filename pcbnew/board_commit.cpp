@@ -149,7 +149,7 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
                     continue;
 
                 if( ( zone->GetLayerSet() & layers ).any()
-                        && zone->GetCachedBoundingBox().Intersects( bbox ) )
+                        && zone->GetBoundingBox().Intersects( bbox ) )
                 {
                     zoneFillerTool->DirtyZone( zone );
                 }

@@ -216,10 +216,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
                 // A higher priority zone is found: if we intersect and it's not filled yet
                 // then we have to wait.
-                BOX2I inflatedBBox = aZone->GetCachedBoundingBox();
+                BOX2I inflatedBBox = aZone->GetBoundingBox();
                 inflatedBBox.Inflate( m_worstClearance );
 
-                if( !inflatedBBox.Intersects( aOtherZone->GetCachedBoundingBox() ) )
+                if( !inflatedBBox.Intersects( aOtherZone->GetBoundingBox() ) )
                     return false;
 
                 return aZone->Outline()->Collide( aOtherZone->Outline(), m_worstClearance );
@@ -619,7 +619,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
             BOX2I padBBox = pad->GetBoundingBox();
             padBBox.Inflate( m_worstClearance );
 
-            if( !padBBox.Intersects( aZone->GetCachedBoundingBox() ) )
+            if( !padBBox.Intersects( aZone->GetBoundingBox() ) )
                 continue;
 
             if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
@@ -716,7 +716,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     // A small extra clearance to be sure actual track clearances are not smaller than
     // requested clearance due to many approximations in calculations, like arc to segment
     // approx, rounding issues, etc.
-    BOX2I zone_boundingbox = aZone->GetCachedBoundingBox();
+    BOX2I zone_boundingbox = aZone->GetBoundingBox();
     int   extra_margin = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_ExtraClearance );
 
     // Items outside the zone bounding box are skipped, so it needs to be inflated by the
@@ -958,7 +958,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 if( !aKnockout->GetLayerSet().test( aLayer ) )
                     return;
 
-                if( aKnockout->GetCachedBoundingBox().Intersects( zone_boundingbox ) )
+                if( aKnockout->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
                     if( aKnockout->GetIsRuleArea() )
                     {
@@ -1032,6 +1032,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                                SHAPE_POLY_SET& aRawFill )
 {
+    BOX2I zoneBBox = aZone->GetBoundingBox();
+
     auto knockoutZoneOutline =
             [&]( ZONE* aKnockout )
             {
@@ -1039,7 +1041,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
                 if( !aKnockout->GetLayerSet().test( aLayer ) )
                     return;
 
-                if( aKnockout->GetCachedBoundingBox().Intersects( aZone->GetCachedBoundingBox() ) )
+                if( aKnockout->GetBoundingBox().Intersects( zoneBBox ) )
                 {
                     // Processing of arc shapes in zones is not yet supported because Clipper
                     // can't do boolean operations on them.  The poly outline must be converted to
@@ -1310,7 +1312,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                      SHAPE_POLY_SET& aFillPolys )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    BOX2I                  zone_boundingbox = aZone->GetCachedBoundingBox();
+    BOX2I                  zone_boundingbox = aZone->GetBoundingBox();
     SHAPE_POLY_SET         clearanceHoles;
     long                   ticker = 0;
 
@@ -1428,7 +1430,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                       std::deque<SHAPE_LINE_CHAIN>& aSpokesList )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    BOX2I                  zoneBB = aZone->GetCachedBoundingBox();
+    BOX2I                  zoneBB = aZone->GetBoundingBox();
     DRC_CONSTRAINT         constraint;
 
     zoneBB.Inflate( std::max( bds.GetBiggestClearanceValue(), aZone->GetLocalClearance() ) );
@@ -1778,7 +1780,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
         // one of the holes.  Effectively this means their copper outline needs to be expanded
         // to be at least as wide as the gap so that it is guaranteed to touch at least one
         // edge.
-        BOX2I          zone_boundingbox = aZone->GetCachedBoundingBox();
+        BOX2I          zone_boundingbox = aZone->GetBoundingBox();
         SHAPE_POLY_SET aprons;
         int            min_apron_radius = ( aZone->GetHatchGap() * 10 ) / 19;
 

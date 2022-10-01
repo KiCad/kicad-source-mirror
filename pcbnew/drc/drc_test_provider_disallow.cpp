@@ -116,8 +116,8 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
                 ZONE* ruleArea = areaZonePair.first;
                 ZONE* copperZone = areaZonePair.second;
-                BOX2I areaBBox = ruleArea->GetCachedBoundingBox();
-                BOX2I copperBBox = copperZone->GetCachedBoundingBox();
+                BOX2I areaBBox = ruleArea->GetBoundingBox();
+                BOX2I copperBBox = copperZone->GetBoundingBox();
                 bool  isInside = false;
 
                 if( copperZone->IsFilled() && areaBBox.Intersects( copperBBox ) )

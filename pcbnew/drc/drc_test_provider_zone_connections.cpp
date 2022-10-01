@@ -101,7 +101,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 
             BOX2I item_bbox = pad->GetBoundingBox();
 
-            if( !item_bbox.Intersects( aZone->GetCachedBoundingBox() ) )
+            if( !item_bbox.Intersects( aZone->GetBoundingBox() ) )
                 continue;
 
             if( !pad->FlashLayer( aLayer ) )

@@ -406,7 +406,7 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 bool collidesWithArea( BOARD_ITEM* aItem, PCB_EXPR_CONTEXT* aCtx, ZONE* aArea )
 {
     BOARD*                 board = aArea->GetBoard();
-    BOX2I                  areaBBox = aArea->GetCachedBoundingBox();
+    BOX2I                  areaBBox = aArea->GetBoundingBox();
     std::shared_ptr<SHAPE> shape;
 
     // Collisions include touching, so we need to deflate outline by enough to exclude it.
@@ -621,12 +621,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
             {
                 BOARD*       board = item->GetBoard();
                 PCB_LAYER_ID layer = context->GetLayer();
-                BOX2I        itemBBox;
-
-                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
-                    itemBBox = static_cast<ZONE*>( item )->GetCachedBoundingBox();
-                else
-                    itemBBox = item->GetBoundingBox();
+                BOX2I        itemBBox = item->GetBoundingBox();
 
                 if( searchAreas( board, arg->AsString(), context,
                         [&]( ZONE* aArea )
@@ -634,7 +629,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             if( !aArea || aArea == item || aArea->GetParent() == item )
                                 return false;
 
-                            if( !aArea->GetCachedBoundingBox().Intersects( itemBBox ) )
+                            if( !aArea->GetBoundingBox().Intersects( itemBBox ) )
                                 return false;
 
                             std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
@@ -689,12 +684,7 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 BOARD*       board = item->GetBoard();
                 int          maxError = board->GetDesignSettings().m_MaxError;
                 PCB_LAYER_ID layer = context->GetLayer();
-                BOX2I        itemBBox;
-
-                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
-                    itemBBox = static_cast<ZONE*>( item )->GetCachedBoundingBox();
-                else
-                    itemBBox = item->GetBoundingBox();
+                BOX2I        itemBBox = item->GetBoundingBox();
 
                 if( searchAreas( board, arg->AsString(), context,
                         [&]( ZONE* aArea )
@@ -702,7 +692,7 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             if( !aArea || aArea == item || aArea->GetParent() == item )
                                 return false;
 
-                            if( !aArea->GetCachedBoundingBox().Intersects( itemBBox ) )
+                            if( !aArea->GetBoundingBox().Intersects( itemBBox ) )
                                 return false;
 
                             std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );

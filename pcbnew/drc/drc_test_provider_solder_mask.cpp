@@ -582,7 +582,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
 
         inflatedBBox.Inflate( clearance );
 
-        if( !inflatedBBox.Intersects( zone->GetCachedBoundingBox() ) )
+        if( !inflatedBBox.Intersects( zone->GetBoundingBox() ) )
             continue;
 
         DRC_RTREE* zoneTree = m_board->m_CopperZoneRTreeCache[ zone ].get();
