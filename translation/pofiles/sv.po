@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-09-29 15:54+0000\n"
+"PO-Revision-Date: 2022-10-02 00:43+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -526,19 +526,16 @@ msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr "Växla visning av 3D-modeller för ytmonterade komponenter"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle unspecified 3D models"
-msgstr "Växla Övriga 3D-modeller"
+msgstr "Växla ospecificerade 3D-modeller"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "Växla visning av 3D-modeller för komponenter av annan typ"
+msgstr "Växla visning av 3D-modeller för komponenter av 'ospecificerad' typ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
-#, fuzzy
 msgid "Toggle 3D models not in pos file"
-msgstr "Växla visning av 3D-modeller för komponenter av annan typ"
+msgstr "Växla visning av 3D-modeller som inte är med i positionsfilen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
@@ -2828,9 +2825,8 @@ msgid "Available:"
 msgstr "Tillgängliga:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
-#, fuzzy
 msgid ">>"
-msgstr ">"
+msgstr ">>"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:43
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
@@ -2838,9 +2834,8 @@ msgid "<<"
 msgstr "<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
-#, fuzzy
 msgid "Enabled:"
-msgstr "Aktivera"
+msgstr "Aktiverad:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:65
 #: eeschema/dialogs/dialog_label_properties_base.cpp:123
@@ -4868,9 +4863,8 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr "fp-lib-tabellfiler innehåller inget bibliotek med namnet '%s'."
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:568
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "Insticksmoduls- och innehålls-hanterare"
+msgstr "Tillagd via insticksmoduls- och innehålls-hanteraren"
 
 #: common/fp_lib_table.cpp:555
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -5486,14 +5480,14 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "KiCad-språkfilen för detta språk är inte installerad."
 
 #: common/plotters/PDF_plotter.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Sida 1"
+msgstr "Sida %s"
 
 #: common/plotters/PDF_plotter.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(sida %s)"
+msgstr "%s (sida %s)"
 
 #: common/plotters/PDF_plotter.cpp:1188
 #, c-format
@@ -6161,9 +6155,8 @@ msgid "Use millimeters"
 msgstr "Använd millimeter"
 
 #: common/tool/actions.cpp:517 common/widgets/lib_tree.cpp:634
-#, fuzzy
 msgid "Select Columns"
-msgstr "Avmarkera"
+msgstr "Välj kolumner"
 
 #: common/tool/actions.cpp:522
 msgid "Switch units"
@@ -8784,13 +8777,12 @@ msgstr "Bladets filnamn kan bara modifieras i dialogrutan för bladegenskaper."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:671
 #: eeschema/dialogs/dialog_label_properties.cpp:460
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Marginalerna runt texten styrs av förhållandet mellan textförskjutning\n"
-"i Schematisk inställning> Allmänt> Formatering."
+"Synligheten för referenser mellan ark styrs globalt från "
+"Kretsschemainställningar > Allmänt > Formatering"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -10162,14 +10154,14 @@ msgid "Alternate pin definitions must have a name."
 msgstr "Alternativa stiftdefinitioner måste ha ett namn."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"Detta stift är inte placerat på ett %d mils rutnät, vilket\n"
-"kommer att göra det svårt att ansluta till i schemat.\n"
+"Detta stift är inte placerat på ett %d mils rutnät, vilket kommer att göra "
+"det svårt att ansluta till i schemat.\n"
 "Vill du fortsätta?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
@@ -11069,7 +11061,7 @@ msgstr "Åsidosätt"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:63
 msgid "Pin:"
-msgstr ""
+msgstr "Stift:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:90
 #: eeschema/dialogs/dialog_sim_model_base.cpp:194
@@ -12302,17 +12294,17 @@ msgid "Default text size:"
 msgstr "Standardtextstorlek:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "Proportionellt textavstånd:"
+msgstr "Proportionell förskjutning av etikett:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
-msgstr "Avstånd mellan text och tråd eller buss i procent av textstorleken"
+msgstr ""
+"Textens avstånd över (eller under) tråd, buss eller stift, i procent av "
+"textstorleken"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Global label margin:"
@@ -13293,9 +13285,8 @@ msgid "Unknown"
 msgstr "Okänd"
 
 #: eeschema/hierarch.cpp:248
-#, fuzzy
 msgid "Edit Page Number"
-msgstr "Ändra bladets sidnummer"
+msgstr "Redigera sidnummer"
 
 #: eeschema/hierarch.cpp:259 eeschema/tools/sch_edit_tool.cpp:2298
 #, c-format
@@ -13495,14 +13486,12 @@ msgid "Netlist..."
 msgstr "Nätlista..."
 
 #: eeschema/menubar.cpp:125
-#, fuzzy
 msgid "Symbols to Library..."
-msgstr "Uppdatera symboler från biblioteket ..."
+msgstr "Symboler till bibliotek..."
 
 #: eeschema/menubar.cpp:127
-#, fuzzy
 msgid "Symbols to New Library..."
-msgstr "Fotavtryck till nytt bibliotek..."
+msgstr "Symboler till nytt bibliotek..."
 
 #: eeschema/menubar.cpp:195
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
@@ -13923,9 +13912,8 @@ msgid "Resolved netclass"
 msgstr "Fastställd nätklass"
 
 #: eeschema/sch_label.cpp:956
-#, fuzzy
 msgid "Hierarchical Labels"
-msgstr "Hierarkisk etikett"
+msgstr "Hierarkiska etiketter"
 
 #: eeschema/sch_label.cpp:1041
 #, c-format
@@ -14118,7 +14106,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2012
 #, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "Power Port har okänd stil, använd balk istället."
+msgstr "Strömförsörjningsport med okänd stil har importerats med typ 'Bar'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2053
 #, c-format
@@ -15222,54 +15210,48 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "Det gick inte att sluta sig till en modell utifrån värde '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:205
-#, fuzzy
 msgid "Power supply"
-msgstr "Kraftsymbol"
+msgstr "Strömförsörjning"
 
 #: eeschema/sim/sim_model_kibis.cpp:215
-#, fuzzy
 msgid "Parasitic Resistance"
-msgstr "Specifik motstånd"
+msgstr "Parasitisk resistans"
 
 #: eeschema/sim/sim_model_kibis.cpp:225
 msgid "Parasitic Pin Inductance"
-msgstr ""
+msgstr "Stiftets parasitiska induktans"
 
 #: eeschema/sim/sim_model_kibis.cpp:235
 msgid "Parasitic Pin Capacitance"
-msgstr ""
+msgstr "Stiftets parasitiska kapacitans"
 
 #: eeschema/sim/sim_model_kibis.cpp:250
 msgid "Waveform"
-msgstr ""
+msgstr "Vågform"
 
 #: eeschema/sim/sim_model_kibis.cpp:265
 msgid "Modeling accuracy"
-msgstr ""
+msgstr "Modelleringsnoggrannhet"
 
 #: eeschema/sim/sim_model_kibis.cpp:278
 msgid "ON time"
-msgstr ""
+msgstr "TILL-tid"
 
 #: eeschema/sim/sim_model_kibis.cpp:287
-#, fuzzy
 msgid "OFF time"
-msgstr "Höst tid:"
+msgstr "FRÅN-tid"
 
 #: eeschema/sim/sim_model_kibis.cpp:296
-#, fuzzy
 msgid "Delay"
-msgstr "Dröjsmål:"
+msgstr "Fördröjning"
 
 #: eeschema/sim/sim_model_kibis.cpp:309
-#, fuzzy
 msgid "Bitrate"
-msgstr "substrat"
+msgstr "Bithastighet"
 
 #: eeschema/sim/sim_model_kibis.cpp:318
-#, fuzzy
 msgid "Number of bits"
-msgstr "Antal enheter:"
+msgstr "Antal bitar"
 
 #: eeschema/sim/sim_model_raw_spice.cpp:291
 #, c-format
@@ -17109,34 +17091,29 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Skapa en materialförteckning för det aktuella schemat"
 
 #: eeschema/tools/ee_actions.cpp:681
-#, fuzzy
 msgid "Export Symbols to Library..."
-msgstr "Uppdatera symboler från biblioteket ..."
+msgstr "Exportera symboler till bibliotek..."
 
 #: eeschema/tools/ee_actions.cpp:682
-#, fuzzy
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Lägg till fotavtryck som används på mönsterkoret till ett befintligt "
-"fotavtrycksbibliotek\n"
-"(tar inte bort andra fotavtryck från detta bibliotek)"
+"Lägg till symboler som används i kretsschemat till ett befintligt "
+"symbolbibliotek\n"
+"(tar inte bort andra symboler från detta bibliotek)"
 
 #: eeschema/tools/ee_actions.cpp:688
-#, fuzzy
 msgid "Export Symbols to New Library..."
-msgstr "Uppdatera symboler från biblioteket ..."
+msgstr "Exportera symboler till nytt bibliotek..."
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Skapa ett nytt fotavtrycksbibliotek som innehåller de fotavtryck som används "
-"på mönsterkortet\n"
-"(om biblioteket redan finns kommer det att ersättas)"
+"Skapa ett nytt symbolbibliotek med de symboler som används i kretsschemat\n"
+"(om biblioteket redan finns kommer det att skrivas över)"
 
 #: eeschema/tools/ee_actions.cpp:695
 msgid "Select on PCB"
@@ -17538,14 +17515,14 @@ msgid "Find again to wrap around to the start."
 msgstr "Sök igen för att gå tillbaka till början."
 
 #: eeschema/tools/sch_editor_control.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add library '%s'."
-msgstr "Kunde inte hitta biblioteksfilen '%s'"
+msgstr "Kunde inte lägga till bibliotek '%s'"
 
 #: eeschema/tools/sch_editor_control.cpp:819
-#, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
-msgstr "Uppdatera fotavtrycken på kortet så de refererar till nytt bibliotek?"
+msgstr ""
+"Uppdatera symboler i kretsschemat så att de refererar till nytt bibliotek?"
 
 #: eeschema/tools/sch_editor_control.cpp:1142
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -19540,30 +19517,29 @@ msgid "Check for package updates on startup"
 msgstr "Sök efter paketuppdateringar vid uppstart"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:28
-#, fuzzy
 msgid "Library package handling"
-msgstr "Biblioteksändringar sparas inte"
+msgstr "Hantering av bibliotekspaket"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "Lägg till biblioteket i den globala bibliotektabellen?"
+msgstr ""
+"Lägg automatiskt till installerade bibliotek i den globala bibliotekstabellen"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Automatiskt dirigerade spår"
+msgstr "Ta automatiskt bort avinstallerade bibliotek"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Fel i bibliotekets smeknamn"
+msgstr "Prefix för bibliotekets smeknamn:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
 msgstr ""
+"När paket har (av)installerats kan KiCad behöva startas om för att ändringar "
+"i den globala bibliotekstabellen skall visas."
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19663,9 +19639,9 @@ msgid "No package updates available"
 msgstr "Inga paketuppdateringar tillgängliga"
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "%s stift %s hittades inte"
+msgstr "Version %s av paket %s hittades inte!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -21110,9 +21086,8 @@ msgstr "Multiplikator"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
-#, fuzzy
 msgid "Copper (Cu)"
-msgstr "Koppar"
+msgstr "Koppar (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:54
 msgid ""
@@ -21129,6 +21104,18 @@ msgid ""
 "You can use an interface metal, just like with the ENIG surface finish that "
 "uses nickel as an interface between gold and copper to prevent corrosion."
 msgstr ""
+"När två metaller är i kontakt med varandra i närvaro av en ledande "
+"elektrolyt, kommer de att ha en potentialskillnad som leder till korrosion.\n"
+"För att undvika korrosin är det god praxis att hålla potentialskillnaden "
+"under 300mV.\n"
+"\n"
+"En av metallerna kommer att vara anod (+) och kommer att anfrätas. Den andra "
+"kommer att vara katod och kommer att skyddas.\n"
+"Om värdet i tabellen är positivt är raden anod och kolumnen katod. \n"
+" \n"
+"Man kan använda en gränssnittsmetall, i likhet med ENIG-ytbeläggningen som "
+"använder nickel som gränssnitt mellan guld och koppar för att undvika "
+"korrosion."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:32
 msgid "Voltage > 500 V:"
@@ -22003,7 +21990,7 @@ msgstr "Mönsterkortsklasser"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
 msgid "Galvanic corrosion"
-msgstr ""
+msgstr "Galvanisk korrosion"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -23002,7 +22989,6 @@ msgid "Remove track not connected at both ends"
 msgstr "Ta bort ledare som inte är ansluten i någondera ändan"
 
 #: pcbnew/cleanup_item.cpp:52
-#, fuzzy
 msgid "Remove via connected on less than 2 layers"
 msgstr "Ta bort via ansluten på färre än två lager"
 
@@ -23027,9 +23013,8 @@ msgid "Convert lines to rectangle"
 msgstr "Konvertera rader till rektangel"
 
 #: pcbnew/cleanup_item.cpp:60
-#, fuzzy
 msgid "Merge overlapping shapes into pad"
-msgstr "Slå samman linjer till rektanglar"
+msgstr "Slå samman överlappande former till en lödyta"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
@@ -23651,9 +23636,8 @@ msgid "SMD:"
 msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "Inte angiven"
+msgstr "Ospecificerad:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -23773,9 +23757,8 @@ msgid "Subtract holes from board area"
 msgstr "Subtrahera hål från mönsterkortsarea"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
-#, fuzzy
 msgid "Exclude footprints with no pads"
-msgstr "Uteslut alla fotavtryck med hålmonterings-lödytor"
+msgstr "Uteslut fotavtryck utan lödytor"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "X Size"
@@ -23841,15 +23824,16 @@ msgid "Delete redundant graphics"
 msgstr "Ta bort överflödig grafik"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:28
-#, fuzzy
 msgid "Merge overlapping graphics into pads"
-msgstr "Tar bort ledare i lödytor..."
+msgstr "Slå samman överlappande grafik till lödytor"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:34
 msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
 msgstr ""
+"(Lödytor som är med i en nätbryggegrupp kommer inte att beaktas vid "
+"sammanslagning.)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -29299,9 +29283,8 @@ msgid "Minimum connection width:"
 msgstr "Minsta anslutningsbredd:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
-#, fuzzy
 msgid "The minimum copper width of connected copper items."
-msgstr "Välj vad du ska göra med icke kopplade kopparöar"
+msgstr "Minsta kopparbredd för anslutna kopparobjekt."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -36766,7 +36749,6 @@ msgid "Duplicate zone"
 msgstr "Dubblett zon"
 
 #: pcbnew/tools/board_editor_control.cpp:1497
-#, fuzzy
 msgid "Selection contains no items with labeled nets."
 msgstr "Urvalet innehåller inga objekt med namngivna nät."
 
@@ -37378,9 +37360,8 @@ msgid "Copy canceled"
 msgstr "Kopiering avbröts"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:421
-#, fuzzy
 msgid "Pack footprints"
-msgstr "Lås fotavtryck"
+msgstr "Packa fotavtryck"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:566
 msgid "Select reference point for move..."
@@ -37717,12 +37698,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Move Individually"
-msgstr ""
+msgstr "Flytta individuellt"
 
 #: pcbnew/tools/pcb_actions.cpp:276
-#, fuzzy
 msgid "Moves the selected items one-by-one"
-msgstr "Flyttar markerade objekt"
+msgstr "Flyttar valda objekt individuellt"
 
 #: pcbnew/tools/pcb_actions.cpp:281
 msgid "Move with Reference"
@@ -37773,25 +37753,24 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "Vänd markerade objekt till motsatt sida av mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Mirrors selected item across the Y axis"
-msgstr "Speglar valt objekt"
+msgstr "Speglar valt objekt över Y-axeln"
 
 #: pcbnew/tools/pcb_actions.cpp:336
-#, fuzzy
 msgid "Mirrors selected item across the X axis"
-msgstr "Speglar valt objekt"
+msgstr "Speglar valt objekt över X-axeln"
 
 #: pcbnew/tools/pcb_actions.cpp:348
-#, fuzzy
 msgid "Pack and Move Footprints"
-msgstr "Få och flytta fotavtryck"
+msgstr "Packa och flytta fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
 msgstr ""
+"Sorterar de valda fotavtrycken efter referensbeteckning, packar baserat på "
+"storlek och påbörjar flyttning"
 
 #: pcbnew/tools/pcb_actions.cpp:354
 msgid "Change Track Width"
@@ -38806,14 +38785,12 @@ msgstr ""
 "lödytor eller hela anslutningar"
 
 #: pcbnew/tools/pcb_actions.cpp:1304
-#, fuzzy
 msgid "Unroute Selected"
-msgstr "Ledning vald"
+msgstr "Ta bort vald ledningsdragning"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
-#, fuzzy
 msgid "Unroutes selected items to the nearest pad."
-msgstr "Justerar valda objekt till vänster kant"
+msgstr "Tar bort valda objekt till närmaste lödyta."
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Select All Tracks in Net"
@@ -38832,25 +38809,24 @@ msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "Tar bort alla ledare och vior som tillhör samma nät från val."
 
 #: pcbnew/tools/pcb_actions.cpp:1327
-#, fuzzy
 msgid "Select All Unconnected Footprints"
-msgstr "Placera valda fotavtryck"
+msgstr "Välj alla icke anslutna fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
-#, fuzzy
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "Väljer alla ledare och vior som tillhör samma nät."
+msgstr "Väljer alla icke anslutna fotavtryck som hör till varje valt nät."
 
 #: pcbnew/tools/pcb_actions.cpp:1333
-#, fuzzy
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "Placera valda fotavtryck"
+msgstr "Ta tag i närmaste icke anslutna fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:1334
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
 msgstr ""
+"Väljer och startar flyttning av närmaste oanslutna fotavtryck i varje valt "
+"nät."
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Selects all footprints and tracks in the schematic sheet"
