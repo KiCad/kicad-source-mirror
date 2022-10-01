@@ -159,11 +159,14 @@ private:
     /* Token state for input string. */
     struct TokenStat
     {
-        enum { OutLen = 32 };
-        TokenStat() : input( nullptr ), token( nullptr ), inputLen( 0 ), pos( 0 ) { /* empty */ }
+        TokenStat() :
+            input( nullptr ), token( nullptr ), inputLen( 0 ), outputLen( 0 ), pos( 0 )
+            { /* empty */ }
+
         const char* input;      // current input string ("var=4")
         char*       token;      // output token ("var", type:VAR; "4", type:VALUE)
         size_t      inputLen;   // strlen(input)
+        size_t      outputLen;  // At least 64, up to input length
         size_t      pos;        // current index
     }
             m_token;
