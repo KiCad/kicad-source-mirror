@@ -111,7 +111,7 @@ void NUMERIC_EVALUATOR::parseSetResult( double val )
         // Warning: DO NOT use a format like %f or %g, because they can create issues.
         // especially %g can generate an exponent, incompatible with UNIT_BINDER
         // Use the optimized Double2Str
-        snprintf( m_token.token, m_token.OutLen, "%s", Double2Str( val ).c_str() );
+        snprintf( m_token.token, m_token.outputLen, "%s", Double2Str( val ).c_str() );
     }
 }
 
@@ -164,6 +164,7 @@ void NUMERIC_EVALUATOR::newString( const wxString& aString )
     m_token.pos = 0;
     m_token.input = aString.mb_str();
     m_token.token = new char[m_token.outputLen]();
+    m_token.token[0] = '0';
 
     m_parseFinished = false;
 }
