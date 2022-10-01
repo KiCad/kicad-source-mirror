@@ -647,7 +647,10 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
     for( const auto& it : connection_map )
     {
-        const std::vector<SCH_ITEM*>& connection_vec = it.second;
+        std::vector<SCH_ITEM*> connection_vec = it.second;
+        std::sort( connection_vec.begin(), connection_vec.end() );
+        connection_vec.erase( std::unique( connection_vec.begin(), connection_vec.end() ),
+                connection_vec.end() );
 
         // Pre-scan to see if we have a bus at this location
         SCH_LINE* busLine = aSheet.LastScreen()->GetBus( it.first );
