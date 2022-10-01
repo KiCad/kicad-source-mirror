@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,7 +47,7 @@ class DIALOG_LINE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_lineWidth;
 		wxStaticText* m_staticWidthUnits;
 		wxStaticText* m_staticTextColor;
-		wxPanel* m_panel11;
+		wxPanel* m_panelColor;
 		COLOR_SWATCH* m_colorSwatch;
 		wxStaticText* m_staticTextStyle;
 		wxBitmapComboBox* m_typeCombo;
@@ -59,13 +59,14 @@ class DIALOG_LINE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerApply;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void resetDefaults( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 412,182 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_LINE_PROPERTIES_BASE();
 
 };

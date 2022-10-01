@@ -109,6 +109,12 @@ principle should be easily implemented by adapting the current STL containers.
 // SWIG is incompatible with std::unique_ptr
 %ignore GetNewConfig;
 
+// wrapper of BASE_SEQ (see typedef std::vector<PCB_LAYER_ID> BASE_SEQ;)
+%template(base_seqVect) std::vector<enum PCB_LAYER_ID>;
+
+// TODO: wrapper of BASE_SET (see std::bitset<PCB_LAYER_ID_COUNT> BASE_SET;)
+
+
 // header files that must be wrapped
 %include <outline_mode.h>
 %include macros_swig.h
@@ -133,11 +139,6 @@ typedef long time_t;
 // std template mappings
 %template(intVector) std::vector<int>;
 %template(str_utf8_Map) std::map< std::string,UTF8 >;
-
-// wrapper of BASE_SEQ (see typedef std::vector<PCB_LAYER_ID> BASE_SEQ;)
-%template(base_seqVect) std::vector<enum PCB_LAYER_ID>;
-
-// TODO: wrapper of BASE_SET (see std::bitset<PCB_LAYER_ID_COUNT> BASE_SET;)
 
 
 // KiCad plugin handling

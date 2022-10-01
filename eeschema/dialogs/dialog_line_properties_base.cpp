@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,7 +34,7 @@ DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_lineWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_lineWidth->SetMinSize( wxSize( 146,-1 ) );
 
-	gbSizer1->Add( m_lineWidth, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_lineWidth, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticWidthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticWidthUnits->Wrap( -1 );
@@ -46,18 +46,18 @@ DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_staticTextColor->Wrap( -1 );
 	gbSizer1->Add( m_staticTextColor, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
-	m_panel11 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
+	m_panelColor = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer21;
 	bSizer21 = new wxBoxSizer( wxVERTICAL );
 
-	m_colorSwatch = new COLOR_SWATCH( m_panel11, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colorSwatch = new COLOR_SWATCH( m_panelColor, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer21->Add( m_colorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
-	m_panel11->SetSizer( bSizer21 );
-	m_panel11->Layout();
-	bSizer21->Fit( m_panel11 );
-	gbSizer1->Add( m_panel11, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_panelColor->SetSizer( bSizer21 );
+	m_panelColor->Layout();
+	bSizer21->Fit( m_panelColor );
+	gbSizer1->Add( m_panelColor, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_staticTextStyle = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStyle->Wrap( -1 );
@@ -68,6 +68,8 @@ DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	gbSizer1->Add( m_typeCombo, wxGBPosition( 1, 1 ), wxGBSpan( 1, 4 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
+
+	gbSizer1->AddGrowableCol( 1 );
 
 	mainSizer->Add( gbSizer1, 0, wxEXPAND|wxALL, 10 );
 
@@ -102,7 +104,6 @@ DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	this->SetSizer( mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 }
