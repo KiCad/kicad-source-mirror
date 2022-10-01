@@ -1235,36 +1235,27 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
     if( conn )
     {
-        if( !conn->IsBus()
-            && ( !conn->Driver()
-                 || CONNECTION_SUBGRAPH::GetDriverPriority( conn->Driver() )
-                            < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN ) )
+        wxString netName = conn->Name();
+
+        if( conn->IsBus() )
+        {
+            wxString prefix;
+
+            if( NET_SETTINGS::ParseBusVector( netName, &prefix, nullptr ) )
+            {
+                netName = prefix + wxT( "*" );
+            }
+            else if( NET_SETTINGS::ParseBusGroup( netName, &prefix, nullptr ) )
+            {
+                netName = prefix + wxT( ".*" );
+            }
+        }
+        else if( !conn->Driver() || CONNECTION_SUBGRAPH::GetDriverPriority( conn->Driver() )
+                                                    < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN )
         {
             m_frame->ShowInfoBarError( _( "Net must be labeled to assign a netclass." ) );
             highlightNet( m_toolMgr, CLEAR );
             return 0;
-        }
-        else if( conn->IsBus() && conn->Members().size() == 0 )
-        {
-            m_frame->ShowInfoBarError( _( "Bus has no members to assign netclass to." ) );
-            highlightNet( m_toolMgr, CLEAR );
-            return 0;
-        }
-
-        wxString netName;
-
-        if( conn->IsBus() && conn->Members().size() )
-        {
-            const std::shared_ptr<SCH_CONNECTION>& member = conn->Members()[0];
-
-            if( member->IsBus() && member->Members().size() )
-                netName = member->Members()[0]->Name();
-            else
-                netName = member->Name();
-        }
-        else
-        {
-            netName = conn->Name();
         }
 
         DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, schematic.GetNetClassAssignmentCandidates(),
@@ -1325,7 +1316,14 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                     m_frame->GetCanvas()->ForceRefresh();
                 } );
 
-        dlg.ShowModal();
+        if( dlg.ShowModal() )
+        {
+            getView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                    []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                    {
+                        return dynamic_cast<SCH_LINE*>( aItem );
+                    } );
+        }
     }
 
     highlightNet( m_toolMgr, CLEAR );
