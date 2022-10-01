@@ -466,17 +466,18 @@ bool ROUTER_TOOL::Init()
                 return !m_router->RoutingInProgress();
             };
 
-    auto hasOtherEnd = [&]( const SELECTION& )
-    {
-        // Need to have something unconnected to finish to
-        return getEditFrame<PCB_EDIT_FRAME>()
-                       ->GetBoard()
-                       ->GetConnectivity()
-                       ->GetRatsnestForNet( m_router->GetCurrentNets()[0] )
-                       ->GetEdges()
-                       .size()
-               > 0;
-    };
+    auto hasOtherEnd =
+            [&]( const SELECTION& )
+            {
+                std::vector<int> currentNets = m_router->GetCurrentNets();
+
+                // Need to have something unconnected to finish to
+                int     currentNet = currentNets.empty() ? -1 : currentNets[0];
+                BOARD*  board = getEditFrame<PCB_EDIT_FRAME>()->GetBoard();
+                RN_NET* ratsnest = board->GetConnectivity()->GetRatsnestForNet( currentNet );
+
+                return ratsnest && !ratsnest->GetEdges().empty();
+            };
 
     menu.AddItem( ACTIONS::cancelInteractive,         SELECTION_CONDITIONS::ShowAlways, 1 );
     menu.AddSeparator( 1 );
