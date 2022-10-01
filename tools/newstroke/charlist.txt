@@ -2128,8 +2128,13 @@ skipcodes 26 0
 // Combining Diacritical Marks For Symbols (20D0-20FF)
 skipcodes 48 0
 
-// Letterlike Symbols (2100-214F)
-skipcodes 80 0
+// Letterlike Symbols (2100-2125)
+skipcodes 38 0
+
++ OMEGA_CAP
+
+// Letterlike Symbols (2127-214F)
+skipcodes 41 0
 
 // Number Forms (2150-218F)
 skipcodes 64 0
