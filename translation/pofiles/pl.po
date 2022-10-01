@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-09-25 11:47+0000\n"
+"PO-Revision-Date: 2022-10-02 00:43+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -525,19 +525,16 @@ msgstr ""
 "Przełącza modele 3D posiadające atrybut 'Do montażu powierzchniowego (SMT)'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle unspecified 3D models"
-msgstr "Przełącz modele 3D pozostałych elementów"
+msgstr "Przełącz nieokreślone modele 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "Przełącz modele 3D dla komponentów typu 'Inne'"
+msgstr "Przełącz modele 3D dla komponentów typu 'Nieokreślone'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
-#, fuzzy
 msgid "Toggle 3D models not in pos file"
-msgstr "Przełącz modele 3D dla komponentów typu 'Inne'"
+msgstr "Przełącz modele 3D dla komponentów spoza pliku położeń"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
@@ -2832,9 +2829,8 @@ msgid "Available:"
 msgstr "Dostępne:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
-#, fuzzy
 msgid ">>"
-msgstr ">"
+msgstr ">>"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:43
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
@@ -2842,9 +2838,8 @@ msgid "<<"
 msgstr "<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
-#, fuzzy
 msgid "Enabled:"
-msgstr "Włącz"
+msgstr "Włączone:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:65
 #: eeschema/dialogs/dialog_label_properties_base.cpp:123
@@ -4879,9 +4874,8 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr "pliki fp-lib-table nie zawierają biblioteki o nazwie skrótowej '%s'."
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:568
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "Menedżer wtyczek i treści"
+msgstr "Dodano poprzez Menadżera zawartości i wtyczek"
 
 #: common/fp_lib_table.cpp:555
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -5495,14 +5489,14 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Plik z tłumaczeniem dla tego języka nie jest zainstalowany."
 
 #: common/plotters/PDF_plotter.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Pierwsza strona"
+msgstr "Strona %s"
 
 #: common/plotters/PDF_plotter.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(strona %s)"
+msgstr "%s (Strona %s)"
 
 #: common/plotters/PDF_plotter.cpp:1188
 #, c-format
@@ -6172,9 +6166,8 @@ msgid "Use millimeters"
 msgstr "Używa milimetrów do określania odległości lub wielkości"
 
 #: common/tool/actions.cpp:517 common/widgets/lib_tree.cpp:634
-#, fuzzy
 msgid "Select Columns"
-msgstr "Odznacz wszystkie"
+msgstr "Wybierz kolumny"
 
 #: common/tool/actions.cpp:522
 msgid "Switch units"
@@ -8816,13 +8809,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_field_properties.cpp:671
 #: eeschema/dialogs/dialog_label_properties.cpp:460
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Marginesy wokół tekstu są kontrolowane poprzez stosunek offsetu tekstu\n"
-"w Ustawienia Schematu > Ogólne > Formatowanie."
+"Widoczność odniesień między arkuszami jest kontrolowana globalnie w menu "
+"Ustawienia Schematu > Ogólne > Formatowanie"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -10198,14 +10190,14 @@ msgid "Alternate pin definitions must have a name."
 msgstr "Alternatywne definicje pinów muszą mieć nazwę."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"Ten pin nie pasuje do siatki %d mils, co spowoduje, że\n"
-"nie będzie łatwo go połączyć na schemacie.\n"
+"Ten pin nie pasuje do siatki %d mils, co spowoduje, że nie będzie łatwo go "
+"połączyć na schemacie.\n"
 "Czy chcesz kontynuować?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
@@ -11109,7 +11101,7 @@ msgstr "Nadpisanie"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:63
 msgid "Pin:"
-msgstr ""
+msgstr "Wyprowadzenie:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:90
 #: eeschema/dialogs/dialog_sim_model_base.cpp:194
@@ -12345,19 +12337,17 @@ msgid "Default text size:"
 msgstr "Domyślny rozmiar tekstu:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "Stosunek przesunięcia tekstu:"
+msgstr "Współczynnik przesunięcia etykiet:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
 msgstr ""
 "Procent rozmiaru tekstu względem przesunięcia tekstu powyżej lub poniżej "
-"połączenia lub magistrali"
+"połączenia, magistrali lub pinu"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Global label margin:"
@@ -13353,9 +13343,8 @@ msgid "Unknown"
 msgstr "Nieznany"
 
 #: eeschema/hierarch.cpp:248
-#, fuzzy
 msgid "Edit Page Number"
-msgstr "Edycja numeru strony arkusza"
+msgstr "Edycja numeru strony"
 
 #: eeschema/hierarch.cpp:259 eeschema/tools/sch_edit_tool.cpp:2298
 #, c-format
@@ -13553,14 +13542,12 @@ msgid "Netlist..."
 msgstr "Lista sieci..."
 
 #: eeschema/menubar.cpp:125
-#, fuzzy
 msgid "Symbols to Library..."
-msgstr "Uaktualnij symbole z biblioteki..."
+msgstr "Symbole do biblioteki..."
 
 #: eeschema/menubar.cpp:127
-#, fuzzy
 msgid "Symbols to New Library..."
-msgstr "Footprinty do nowej biblioteki..."
+msgstr "Symbole do nowej biblioteki..."
 
 #: eeschema/menubar.cpp:195
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
@@ -13985,9 +13972,8 @@ msgid "Resolved netclass"
 msgstr "Przeanalizowane klasy sieci"
 
 #: eeschema/sch_label.cpp:956
-#, fuzzy
 msgid "Hierarchical Labels"
-msgstr "Etykieta hierarchiczna"
+msgstr "Etykiety hierarchiczne"
 
 #: eeschema/sch_label.cpp:1041
 #, c-format
@@ -15300,54 +15286,48 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "Nie udało się wywnioskować modelu z Wartości '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:205
-#, fuzzy
 msgid "Power supply"
 msgstr "Symbol zasilania"
 
 #: eeschema/sim/sim_model_kibis.cpp:215
-#, fuzzy
 msgid "Parasitic Resistance"
-msgstr "Rezystancja charakterystyczna"
+msgstr "Rezystancja pasożytnicza"
 
 #: eeschema/sim/sim_model_kibis.cpp:225
 msgid "Parasitic Pin Inductance"
-msgstr ""
+msgstr "Pasożytnicza impedancja wyprowadzenia"
 
 #: eeschema/sim/sim_model_kibis.cpp:235
 msgid "Parasitic Pin Capacitance"
-msgstr ""
+msgstr "Pasożytnicza pojemność wyprowadzenia"
 
 #: eeschema/sim/sim_model_kibis.cpp:250
 msgid "Waveform"
-msgstr ""
+msgstr "Przebieg"
 
 #: eeschema/sim/sim_model_kibis.cpp:265
 msgid "Modeling accuracy"
-msgstr ""
+msgstr "Dokładność modelowania"
 
 #: eeschema/sim/sim_model_kibis.cpp:278
 msgid "ON time"
-msgstr ""
+msgstr "Czas ON"
 
 #: eeschema/sim/sim_model_kibis.cpp:287
-#, fuzzy
 msgid "OFF time"
-msgstr "Czas opadania:"
+msgstr "Czas OFF"
 
 #: eeschema/sim/sim_model_kibis.cpp:296
-#, fuzzy
 msgid "Delay"
-msgstr "Opóźnienie:"
+msgstr "Opóźnienie"
 
 #: eeschema/sim/sim_model_kibis.cpp:309
-#, fuzzy
 msgid "Bitrate"
-msgstr "podłoże"
+msgstr "Prędkość transmisji"
 
 #: eeschema/sim/sim_model_kibis.cpp:318
-#, fuzzy
 msgid "Number of bits"
-msgstr "Liczba części składowych:"
+msgstr "Liczba bitów"
 
 #: eeschema/sim/sim_model_raw_spice.cpp:291
 #, c-format
@@ -17195,31 +17175,27 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Tworzy listę materiałową dla bieżącego schematu"
 
 #: eeschema/tools/ee_actions.cpp:681
-#, fuzzy
 msgid "Export Symbols to Library..."
-msgstr "Uaktualnij symbole z biblioteki..."
+msgstr "Eksportuj symbole do biblioteki..."
 
 #: eeschema/tools/ee_actions.cpp:682
-#, fuzzy
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Dodaj footprinty używane na płytce do istniejącej biblioteki footprintów\n"
-"(nie usuwa innych footprintów z tej biblioteki)"
+"Dodaj symbole używane na schemacie do istniejącej biblioteki sybmoli\n"
+"(nie usuwa innych symboli z tej biblioteki)"
 
 #: eeschema/tools/ee_actions.cpp:688
-#, fuzzy
 msgid "Export Symbols to New Library..."
-msgstr "Uaktualnij symbole z biblioteki..."
+msgstr "Eksportuj symbole do nowej biblioteki..."
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Tworzy nową bibliotekę footprintów zawierającą footprinty użyte na płytce\n"
+"Tworzy nową bibliotekę symboli zawierającą symbole użyte na schemacie\n"
 "(Jeśli biblioteka istnieje zostanie zastąpiona)"
 
 #: eeschema/tools/ee_actions.cpp:695
@@ -17623,14 +17599,13 @@ msgid "Find again to wrap around to the start."
 msgstr "Wyszukaj ponownie by wrócić na początek."
 
 #: eeschema/tools/sch_editor_control.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add library '%s'."
-msgstr "Nie można odnaleźć pliku biblioteki '%s'"
+msgstr "Nie można dodać biblioteki '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:819
-#, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
-msgstr "Uaktualnić footprinty na płytce by odnosiły się do nowej biblioteki?"
+msgstr "Uaktualnić symbole na schemacie by odnosiły się do nowej biblioteki?"
 
 #: eeschema/tools/sch_editor_control.cpp:1142
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -19624,30 +19599,29 @@ msgid "Check for package updates on startup"
 msgstr "Sprawdza aktualizacje pakietów przy uruchamianiu"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:28
-#, fuzzy
 msgid "Library package handling"
-msgstr "Zmiany w bibliotece nie są zapisane"
+msgstr "Obsługa pakietów bibliotecznych"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "Dodać bibliotekę do globalnej tabeli bibliotek?"
+msgstr ""
+"Automatycznie dodaje zainstalowane biblioteki do globalnej tabeli bibliotek"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Ścieżki autoroutera"
+msgstr "Automatycznie usuwa niezainstalowane biblioteki"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Błąd w nazwie skrótowej biblioteki"
+msgstr "Prefiks nazwy skrótowej biblioteki:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
 msgstr ""
+"Po (de)instalacji pakietów, program KiCad może wymagać ponownego "
+"uruchomienia w celu odzwierciedlenia zmian w globalnej tabeli bibliotek."
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19747,9 +19721,9 @@ msgid "No package updates available"
 msgstr "Nie ma dostępnych aktualizacji pakietów"
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "Nie znaleziono pinu %s w %s"
+msgstr "Wersja %s pakietu %s nie została znaleziona!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -21195,9 +21169,8 @@ msgstr "Mnożnik"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
-#, fuzzy
 msgid "Copper (Cu)"
-msgstr "Warstwa miedzi"
+msgstr "Warstwa miedzi (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:54
 msgid ""
@@ -21214,6 +21187,19 @@ msgid ""
 "You can use an interface metal, just like with the ENIG surface finish that "
 "uses nickel as an interface between gold and copper to prevent corrosion."
 msgstr ""
+"Gdy dwa metale się zetkną, wystąpi między nimi różnica potencjałów, która "
+"doprowadzi do korozji.\n"
+"Aby uniknąć korozji, dobrą praktyką jest utrzymywanie różnicy poniżej 300mV."
+"\n"
+"\n"
+"Jeden z metali będzie miał potencjał dodatni (anoda) i będzie atakowany. "
+"Drugi będzie miał potencjał ujemny (katoda) i będzie chroniony.\n"
+"W poniższej tabeli, jeśli liczba jest dodatnia, to rzędy są dodatnie, a "
+"kolumny ujemne.\n"
+"\n"
+"Możesz użyć metalu pośredniego, tak jak w przypadku wykończenia powierzchni "
+"ENIG, który wykorzystuje nikiel jako przekładka między złotem a miedzią, aby "
+"zapobiec korozji."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:32
 msgid "Voltage > 500 V:"
@@ -22085,7 +22071,7 @@ msgstr "Klasy płytek"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
 msgid "Galvanic corrosion"
-msgstr ""
+msgstr "Korozja galwaniczna"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -23083,9 +23069,8 @@ msgid "Remove track not connected at both ends"
 msgstr "Usuń ścieżki niepołączone z obu stron"
 
 #: pcbnew/cleanup_item.cpp:52
-#, fuzzy
 msgid "Remove via connected on less than 2 layers"
-msgstr "Usuń przelotki łączące mniej niż dwie warstwy"
+msgstr "Usuń przelotki łączące mniej niż 2 warstwy"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
@@ -23108,9 +23093,8 @@ msgid "Convert lines to rectangle"
 msgstr "Konwersja linii na prostokąt"
 
 #: pcbnew/cleanup_item.cpp:60
-#, fuzzy
 msgid "Merge overlapping shapes into pad"
-msgstr "Połącz linie w prostokąty"
+msgstr "Połącz nakładające się kształty w pola lutownicze"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
@@ -23735,9 +23719,8 @@ msgid "SMD:"
 msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "Nieokreślony"
+msgstr "Nieokreślony:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -23857,9 +23840,8 @@ msgid "Subtract holes from board area"
 msgstr "Odejmij otwory od powierzchni płytki"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
-#, fuzzy
 msgid "Exclude footprints with no pads"
-msgstr "Wyklucz wszystkie footprinty z polami przewlekanymi"
+msgstr "Wyklucz wszystkie footprinty które nie posiadają pól"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "X Size"
@@ -23925,15 +23907,16 @@ msgid "Delete redundant graphics"
 msgstr "Usuń nadmiarową grafikę"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:28
-#, fuzzy
 msgid "Merge overlapping graphics into pads"
-msgstr "Usuwanie ścieżek wewnątrz pola..."
+msgstr "Połącz nakładające się grafiki w pola lutownicze"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:34
 msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
 msgstr ""
+"(Pola, które pojawiają się w grupie padów Net Tie, nie będą brane pod uwagę "
+"przy łączeniu.)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -29445,9 +29428,8 @@ msgid "Minimum connection width:"
 msgstr "Minimalna szerokość łącza:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
-#, fuzzy
 msgid "The minimum copper width of connected copper items."
-msgstr "Określ co zrobić z niepołączonymi nigdzie obszarami stref wypełnień"
+msgstr "Minimalna szerokość połączonych elementów na warstwach miedzi."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -36957,7 +36939,6 @@ msgid "Duplicate zone"
 msgstr "Klonowanie strefy"
 
 #: pcbnew/tools/board_editor_control.cpp:1497
-#, fuzzy
 msgid "Selection contains no items with labeled nets."
 msgstr "Wybór nie zawiera elementów z opisanymi sieciami."
 
@@ -37572,9 +37553,8 @@ msgid "Copy canceled"
 msgstr "Kopiowanie przerwane"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:421
-#, fuzzy
 msgid "Pack footprints"
-msgstr "Zablokuj footprint"
+msgstr "Pakuj footprinty"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:566
 msgid "Select reference point for move..."
@@ -37639,7 +37619,6 @@ msgid "Place pad"
 msgstr "Umieść pole lutownicze"
 
 #: pcbnew/tools/pad_tool.cpp:583
-#, fuzzy
 msgid "Recombine pad"
 msgstr "Ponownie połącz pola"
 
@@ -37911,12 +37890,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Move Individually"
-msgstr ""
+msgstr "Przesuń indywidualnie"
 
 #: pcbnew/tools/pcb_actions.cpp:276
-#, fuzzy
 msgid "Moves the selected items one-by-one"
-msgstr "Przesuwa wybrany(e) element(y)"
+msgstr "Przesuwa wybrane elementy pojedynczo"
 
 #: pcbnew/tools/pcb_actions.cpp:281
 msgid "Move with Reference"
@@ -37967,25 +37945,24 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "Przenosi wybrane elementy na przeciwległa warstwę"
 
 #: pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Mirrors selected item across the Y axis"
-msgstr "Odbij wybrane elementy"
+msgstr "Odbija wybrane elementy względem osi Y"
 
 #: pcbnew/tools/pcb_actions.cpp:336
-#, fuzzy
 msgid "Mirrors selected item across the X axis"
-msgstr "Odbij wybrane elementy"
+msgstr "Odbija wybrane elementy względem osi X"
 
 #: pcbnew/tools/pcb_actions.cpp:348
-#, fuzzy
 msgid "Pack and Move Footprints"
-msgstr "Uchwyć element i przesuń"
+msgstr "Spakuj i przesuń footprinty"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
 msgstr ""
+"Sortuje wybrane footprinty według odniesienia, pakując je na podstawie "
+"rozmiaru i inicjuje ruch"
 
 #: pcbnew/tools/pcb_actions.cpp:354
 msgid "Change Track Width"
@@ -39008,14 +38985,12 @@ msgstr ""
 "połączenia"
 
 #: pcbnew/tools/pcb_actions.cpp:1304
-#, fuzzy
 msgid "Unroute Selected"
-msgstr "Trasuj wybrane"
+msgstr "Usuń trasowanie z wybranych"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
-#, fuzzy
 msgid "Unroutes selected items to the nearest pad."
-msgstr "Wyrównuje wybrane elementy do górnej krawędzi"
+msgstr "Anuluje trasowanie wybranych elementów do najbliższego pola."
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Select All Tracks in Net"
@@ -39034,25 +39009,25 @@ msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "Odznacza wszystkie ścieżki i przelotki należące do tej samej sieci."
 
 #: pcbnew/tools/pcb_actions.cpp:1327
-#, fuzzy
 msgid "Select All Unconnected Footprints"
-msgstr "Wybiera wszystkie ścieżki i przelotki danej sieci."
+msgstr "Wybiera wszystkie niepołączone footprinty"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
-#, fuzzy
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "Wybiera wszystkie ścieżki i przelotki należące do tej samej sieci."
+msgstr ""
+"Wybiera wszystkie niepołączone footprinty należące do każdej wybranej sieci."
 
 #: pcbnew/tools/pcb_actions.cpp:1333
-#, fuzzy
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "Rozmieść zaznaczone footprinty"
+msgstr "Uchwyć najbliższe niepołączone footprinty"
 
 #: pcbnew/tools/pcb_actions.cpp:1334
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
 msgstr ""
+"Wybiera i inicjuje przesuwanie najbliższego niepołączonego footprintu w "
+"każdej z wybranej sieci."
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -40184,9 +40159,8 @@ msgid "Other items"
 msgstr "Pozostałe elementy"
 
 #: pcbnew/widgets/search_handlers.cpp:245
-#, fuzzy
 msgid "Textbox"
-msgstr "Blok tekstu"
+msgstr "Ramka tekstowa"
 
 #: pcbnew/zone.cpp:481
 msgid "Rule Area"
