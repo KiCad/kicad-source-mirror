@@ -65,16 +65,19 @@ using namespace TSCHEMATIC_T;
 
 
 SCH_SEXPR_PARSER::SCH_SEXPR_PARSER( LINE_READER* aLineReader, PROGRESS_REPORTER* aProgressReporter,
-                                    unsigned aLineCount ) :
+                                    unsigned aLineCount, SCH_SHEET* aRootSheet,
+                                    bool aIsAppending ) :
     SCHEMATIC_LEXER( aLineReader ),
     m_requiredVersion( 0 ),
     m_fieldId( 0 ),
     m_unit( 1 ),
     m_convert( 1 ),
+    m_appending( aIsAppending ),
     m_progressReporter( aProgressReporter ),
     m_lineReader( aLineReader ),
     m_lastProgressLine( 0 ),
-    m_lineCount( aLineCount )
+    m_lineCount( aLineCount ),
+    m_rootSheet( aRootSheet )
 {
 }
 
@@ -2086,6 +2089,10 @@ void SCH_SEXPR_PARSER::parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN
 
             instance.m_Path = KIID_PATH( FromUTF8() );
 
+            if( ( !m_appending && aRootSheet->GetScreen() == aScreen ) &&
+                ( aScreen->GetFileFormatVersionAtLoad() < 20221002 ) )
+                instance.m_Path.insert( instance.m_Path.begin(), m_rootUuid );
+
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 if( token != T_LEFT )
@@ -2145,6 +2152,7 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
     wxCHECK_RET( CurTok() == T_symbol_instances,
                  "Cannot parse " + GetTokenString( CurTok() ) + " as an instances token." );
     wxCHECK( aScreen, /* void */ );
+    wxCHECK( m_rootUuid != NilUuid(), /* void */ );
 
     T token;
 
@@ -2164,6 +2172,9 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
             SYMBOL_INSTANCE_REFERENCE instance;
 
             instance.m_Path = KIID_PATH( FromUTF8() );
+
+            if( !m_appending )
+                instance.m_Path.insert( instance.m_Path.begin(), m_rootUuid );
 
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
@@ -2224,6 +2235,8 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
     if( aIsCopyableOnly )
         m_requiredVersion = aFileVersion;
 
+    bool fileHasUuid = false;
+
     T token;
 
     if( !aIsCopyableOnly )
@@ -2235,6 +2248,11 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
             Expecting( "kicad_sch" );
 
         parseHeader( T_kicad_sch, SEXPR_SCHEMATIC_FILE_VERSION );
+
+        // Prior to schematic file version 20210406, schematics did not have UUIDs so we need
+        // to generate one for the root schematic for instance paths.
+        if( m_requiredVersion < 20210406 )
+            m_rootUuid = screen->GetUuid();
     }
 
     screen->SetFileFormatVersionAtLoad( m_requiredVersion );
@@ -2259,6 +2277,17 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         case T_uuid:
             NeedSYMBOL();
             screen->m_uuid = parseKIID();
+
+            // Set the root sheet UUID with the schematic file UUID.  Root sheets are virtual
+            // and always get a new UUID so this prevents file churn now that the root UUID
+            // is saved in the symbol instance path.
+            if( aSheet == m_rootSheet )
+            {
+                const_cast<KIID&>( aSheet->m_Uuid ) = screen->GetUuid();
+                m_rootUuid = screen->GetUuid();
+                fileHasUuid = true;
+            }
+
             NeedRIGHT();
             break;
 
@@ -2453,6 +2482,14 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         }
     }
 
+    // Older s-expression schematics may not have a UUID so use the one automatically generated
+    // as the virtual root sheet UUID.
+    if( ( aSheet == m_rootSheet ) && !fileHasUuid )
+    {
+        const_cast<KIID&>( aSheet->m_Uuid ) = screen->GetUuid();
+        m_rootUuid = screen->GetUuid();
+    }
+
     screen->UpdateLocalLibSymbolLinks();
 
     if( m_requiredVersion < 20200828 )
@@ -2636,11 +2673,88 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
                     break;
 
                 default:
-                    Expecting( "path, unit, value or footprint" );
+                    Expecting( "reference, unit, value or footprint" );
                 }
             }
 
             symbol->SetDefaultInstance( defaultInstance );
+            break;
+        }
+
+        case T_instances:
+        {
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                if( token != T_project )
+                    Expecting( "project" );
+
+                NeedSYMBOL();
+
+                wxString projectName = FromUTF8();
+
+                for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                {
+                    if( token != T_LEFT )
+                        Expecting( T_LEFT );
+
+                    token = NextTok();
+
+                    if( token != T_path )
+                        Expecting( "path" );
+
+                    SYMBOL_INSTANCE_REFERENCE instance;
+
+                    instance.m_ProjectName = projectName;
+
+                    NeedSYMBOL();
+                    instance.m_Path = KIID_PATH( FromUTF8() );
+
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    {
+                        if( token != T_LEFT )
+                            Expecting( T_LEFT );
+
+                        token = NextTok();
+
+                        switch( token )
+                        {
+                        case T_reference:
+                            NeedSYMBOL();
+                            instance.m_Reference = FromUTF8();
+                            NeedRIGHT();
+                            break;
+
+                        case T_unit:
+                            instance.m_Unit = parseInt( "symbol unit" );
+                            NeedRIGHT();
+                            break;
+
+                        case T_value:
+                            NeedSYMBOL();
+                            instance.m_Value = FromUTF8();
+                            NeedRIGHT();
+                            break;
+
+                        case T_footprint:
+                            NeedSYMBOL();
+                            instance.m_Footprint = FromUTF8();
+                            NeedRIGHT();
+                            break;
+
+                        default:
+                            Expecting( "reference, unit, value or footprint" );
+                        }
+
+                        symbol->AddHierarchicalReference( instance );
+                    }
+                }
+            }
+
             break;
         }
 
@@ -2745,7 +2859,8 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             break;
 
         default:
-            Expecting( "lib_id, lib_name, at, mirror, uuid, property, pin, or instances" );
+            Expecting( "lib_id, lib_name, at, mirror, uuid, on_board, in_bom, dnp, "
+                       "default_instance, property, pin, or instances" );
         }
     }
 

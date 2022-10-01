@@ -111,7 +111,7 @@ public:
 
     const wxString GetPath() const
     {
-        return m_rootSymbol ? m_sheetPath.PathAsString() + m_rootSymbol->m_Uuid.AsString() : "";
+        return m_sheetPath.PathAsString();
     }
 
     /**

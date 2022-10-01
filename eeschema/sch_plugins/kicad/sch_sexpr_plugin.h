@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -159,8 +159,7 @@ private:
     void saveText( SCH_TEXT* aText, int aNestLevel );
     void saveTextBox( SCH_TEXTBOX* aText, int aNestLevel );
     void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNestLevel );
-    void saveInstances( const std::vector<SCH_SHEET_INSTANCE>&        aSheets,
-                        const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbols, int aNestLevel );
+    void saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheets, int aNestLevel );
 
     void cacheLib( const wxString& aLibraryFileName, const PROPERTIES* aProperties );
     bool isBuffering( const PROPERTIES* aProperties );
@@ -168,7 +167,7 @@ private:
 protected:
     int                     m_version;          ///< Version of file being loaded.
     int                     m_nextFreeFieldId;
-
+    bool                    m_appending;        ///< Schematic load append status.
     wxString                m_error;            ///< For throwing exceptions or errors on partial
                                                 ///<  loads.
     PROGRESS_REPORTER*      m_progressReporter;

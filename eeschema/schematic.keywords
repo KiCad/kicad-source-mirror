@@ -51,6 +51,7 @@ id
 image
 input
 input_low
+instances
 inverted
 inverted_clock
 in_bom
@@ -102,6 +103,7 @@ power
 power_in
 power_out
 private
+project
 property
 property_del
 pts

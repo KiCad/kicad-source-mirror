@@ -313,7 +313,7 @@ std::vector<SYMBOL_INSTANCE_REFERENCE> SCH_REFERENCE_LIST::GetSymbolInstances() 
     for( const SCH_REFERENCE& ref : flatList )
     {
         SYMBOL_INSTANCE_REFERENCE instance;
-        instance.m_Path = ref.GetPath();
+        instance.m_Path = ref.GetSheetPath().Path();
         instance.m_Reference = ref.GetRef();
         instance.m_Unit = ref.GetUnit();
         instance.m_Value = ref.GetValue();
