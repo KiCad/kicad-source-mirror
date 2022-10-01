@@ -30,6 +30,7 @@
 
 using namespace TFIELD_T;
 
+// N.B. Do not change these values without transitioning the file format
 #define REFERENCE_CANONICAL "Reference"
 #define VALUE_CANONICAL "Value"
 #define FOOTPRINT_CANONICAL "Footprint"

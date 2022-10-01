@@ -46,8 +46,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220126   // Text boxes.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220328   // Text box start/end -> at/size.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220331   // Text colors.
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914     // Symbol unit display names.
-
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Symbol unit display names.
+#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914     // Don't save property ID
 
 /**
  * Schematic file version.
@@ -87,4 +87,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220822  // Hyperlinks in text objects
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220903  // Field name visibility
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220904  // Do not autoplace field option
-#define SEXPR_SCHEMATIC_FILE_VERSION 20220914    // Add support for DNP
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20220914  // Add support for DNP
+#define SEXPR_SCHEMATIC_FILE_VERSION 20220929    // Don't save property ID

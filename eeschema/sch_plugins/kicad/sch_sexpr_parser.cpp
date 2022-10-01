@@ -770,6 +770,18 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
     }
 
     field->SetName( name );
+
+    // Correctly set the ID based on canonical (untranslated) field name
+    // If ID is stored in the file (old versions), it will overwrite this
+    for( int ii = 0; ii < MANDATORY_FIELDS; ++ii )
+    {
+        if( !name.CmpNoCase( TEMPLATE_FIELDNAME::GetDefaultFieldName( ii ) ) )
+        {
+            field->SetId( ii );
+            break;
+        }
+    }
+
     token = NextTok();
 
     if( !IsSymbol( token ) )
@@ -1900,6 +1912,31 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     field->SetText( value );
     field->SetVisible( true );
 
+    // Correctly set the ID based on canonical (untranslated) field name
+    // If ID is stored in the file (old versions), it will overwrite this
+    if( aParent->Type() == SCH_SYMBOL_T )
+    {
+        for( int ii = 0; ii < MANDATORY_FIELDS; ++ii )
+        {
+            if( name == TEMPLATE_FIELDNAME::GetDefaultFieldName( ii, false ) )
+            {
+                field->SetId( ii );
+                break;
+            }
+        }
+    }
+    else if( aParent->Type() == SCH_SHEET_T )
+    {
+        for( int ii = 0; ii < SHEET_MANDATORY_FIELDS; ++ii )
+        {
+            if( name == SCH_SHEET::GetDefaultFieldName( ii,  false ) )
+            {
+                field->SetId( ii );
+                break;
+            }
+        }
+    }
+
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
@@ -2878,12 +2915,14 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
             // complete) solution is to disallow multiple instances of the same id (for all
             // files since the source of the error *might* in fact be hand-edited files).
             //
-            // While no longer used, -1 is still a valid id for user field.  It gets converted
-            // to the next unused number on save.
-            if( fieldIDsRead.count( field->GetId() ) )
-                field->SetId( -1 );
-            else
-                fieldIDsRead.insert( field->GetId() );
+            // While no longer used, -1 is still a valid id for user field.  We convert it to
+            // the first available ID after the mandatory fields
+
+            if( field->GetId() < 0 )
+                field->SetId( SHEET_MANDATORY_FIELDS );
+
+            while( !fieldIDsRead.insert( field->GetId() ).second )
+                field->SetId( field->GetId() + 1 );
 
             fields.emplace_back( *field );
             delete field;

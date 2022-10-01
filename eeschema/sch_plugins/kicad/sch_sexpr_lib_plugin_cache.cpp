@@ -398,10 +398,9 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFor
     if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
         fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(), false );
 
-    aFormatter.Print( aNestLevel, "(property %s %s (id %d) (at %s %s %g)",
+    aFormatter.Print( aNestLevel, "(property %s %s (at %s %s %g)",
                       aFormatter.Quotew( fieldName ).c_str(),
                       aFormatter.Quotew( aField->GetText() ).c_str(),
-                      aField->GetId(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().x ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().y ).c_str(),
                       aField->GetTextAngle().AsDegrees() );

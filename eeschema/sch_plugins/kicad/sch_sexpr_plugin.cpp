@@ -816,7 +816,6 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
     wxCHECK_RET( aField != nullptr && m_out != nullptr, "" );
 
     wxString fieldName = aField->GetCanonicalName();
-
     // For some reason (bug in legacy parser?) the field ID for non-mandatory fields is -1 so
     // check for this in order to correctly use the field name.
 
@@ -830,10 +829,9 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
         m_nextFreeFieldId = aField->GetId() + 1;
     }
 
-    m_out->Print( aNestLevel, "(property %s %s (id %d) (at %s %s %s)",
+    m_out->Print( aNestLevel, "(property %s %s (at %s %s %s)",
                   m_out->Quotew( fieldName ).c_str(),
                   m_out->Quotew( aField->GetText() ).c_str(),
-                  aField->GetId(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().x ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aField->GetTextAngle() ).c_str() );

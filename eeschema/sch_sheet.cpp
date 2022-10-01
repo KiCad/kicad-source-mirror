@@ -46,8 +46,9 @@
 #include <pgm_base.h>
 #include <wx/log.h>
 
-#define SHEET_NAME_CANONICAL "Sheet name"
-#define SHEET_FILE_CANONICAL "Sheet file"
+// N.B. Do not change these values without transitioning the file format
+#define SHEET_NAME_CANONICAL "Sheetname"
+#define SHEET_FILE_CANONICAL "Sheetfile"
 #define USER_FIELD_CANONICAL "Field%d"
 
 
