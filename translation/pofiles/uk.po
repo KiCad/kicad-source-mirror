@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-09-29 15:54+0000\n"
+"PO-Revision-Date: 2022-10-02 00:43+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -516,19 +516,16 @@ msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr "Перемкнути показ 3D-моделей компонентів вивідного монтажу"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle unspecified 3D models"
-msgstr "Перемкнути показ Інших 3D-моделей"
+msgstr "Перемкнути невизначені 3D-моделі"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "Перемкнути показ 3D моделей 'Інші' компонентів"
+msgstr "Перемикання 3D-моделей для компонентів «невизначеного» типу"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
-#, fuzzy
 msgid "Toggle 3D models not in pos file"
-msgstr "Перемкнути показ 3D моделей 'Інші' компонентів"
+msgstr "Перемкнути 3D-моделі, яких немає в pos-файлі"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
@@ -2818,14 +2815,12 @@ msgid "Items:"
 msgstr "Елементи:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:25
-#, fuzzy
 msgid "Available:"
-msgstr "Доступні шляхи:"
+msgstr "Доступно:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
-#, fuzzy
 msgid ">>"
-msgstr ">"
+msgstr ">>"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:43
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
@@ -2833,9 +2828,8 @@ msgid "<<"
 msgstr "<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
-#, fuzzy
 msgid "Enabled:"
-msgstr "Вимкнено"
+msgstr "Увімкнено:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:65
 #: eeschema/dialogs/dialog_label_properties_base.cpp:123
@@ -4856,9 +4850,8 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr "файли fp-lib-table не містять бібліотеки з назвою '%s'."
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:568
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "Управління плагінами і контентом"
+msgstr "Додано плагінами і менеджером вмісту"
 
 #: common/fp_lib_table.cpp:555
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -5472,14 +5465,14 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Файл перекладу KiCad для цієї мови не встановлений."
 
 #: common/plotters/PDF_plotter.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Сторінка 1"
+msgstr "Сторінка %s"
 
 #: common/plotters/PDF_plotter.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(сторінка %s)"
+msgstr "%s (Сторінка %s)"
 
 #: common/plotters/PDF_plotter.cpp:1188
 #, c-format
@@ -5886,14 +5879,12 @@ msgid "Change edit method constraints"
 msgstr "Змінити обмеження методу правки"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "Властивості аркуша"
+msgstr "Показати панель пошуку"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Показати або приховати менеджер шарів"
+msgstr "Показати або приховати панель пошуку"
 
 #: common/tool/actions.cpp:215 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -6149,9 +6140,8 @@ msgid "Use millimeters"
 msgstr "Використовувати міліметри"
 
 #: common/tool/actions.cpp:517 common/widgets/lib_tree.cpp:634
-#, fuzzy
 msgid "Select Columns"
-msgstr "Не вибирати нічого"
+msgstr "Вибрати колонки"
 
 #: common/tool/actions.cpp:522
 msgid "Switch units"
@@ -8771,6 +8761,8 @@ msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
+"Видимість міжлистових посилань керується глобально в меню Налаштування схеми»"
+" > Загальні > Форматування"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -9775,6 +9767,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
+"Виберіть символ, з якого потрібно отримати цей символ, або виберіть\n"
+"<Немає> для кореневого символу.\n"
+"\n"
+"Похідні символи раніше називалися псевдонімами.\n"
+"Це вже не так, і всі символи також\n"
+"походять від інших символів або стоять окремо\n"
+"кореневі символи."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:172
 msgid "Has alternate body style (De Morgan)"
@@ -9797,6 +9796,11 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
+"Якщо налаштувати цей параметр, відповідний символ з’явиться в\n"
+"діалогове вікно «додати порт живлення». Він заблокує текст значення, щоб "
+"захистити його\n"
+"від редагування в Eeschema. Символ не буде включено в\n"
+"BOM і не може бути призначено посадкового місця."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:191
 msgid "Number of Units:"
@@ -9837,6 +9841,9 @@ msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
+"Позначте цей параметр, щоб назви виводів містилися всередині корпусу, а "
+"номери виводів – зовні.\n"
+"Якщо не позначено, назви і номери виводів знаходяться за межами."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:244
 msgid "Position offset:"
@@ -9873,6 +9880,9 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
+"Список назв посадкових місць, які можна використовувати для цього символу.\n"
+"У назвах посадкових місць можна використовувати символи підстановки, "
+"наприклад sm*, щоб усі назви слідів починалися на sm."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:297
 msgid "Add footprint filter"
@@ -9952,12 +9962,16 @@ msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
+"Ця схема містить одну або декілька шин із кількома мітками.\n"
+"Це було дозволено в попередніх версіях KiCad, але більше не дозволено."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
+"Будь ласка, виберіть нову назву для кожної з шин нижче.\n"
+"Запропоновано назву на основі міток, прикріплених до шини."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
 msgid "Proposed new name:"
@@ -9982,15 +9996,13 @@ msgstr "Симулятор потребує повністю позначену 
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 #: eeschema/dialogs/dialog_netlist.cpp:396
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Тільки поточний аркуш"
+msgstr "Використовувати поточний аркуш як кореневий"
 
 #: eeschema/dialogs/dialog_netlist.cpp:350
 #: eeschema/dialogs/dialog_netlist.cpp:397
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Експортувати на інші аркуші"
+msgstr "Експортувати список зв'язків лише для поточного аркуша"
 
 #: eeschema/dialogs/dialog_netlist.cpp:355
 msgid "Save all voltages"
@@ -10018,6 +10030,9 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
+"Введіть командний рядок, щоб запустити spice\n"
+"Зазвичай <шлях до двійкового файлу spice> %I\n"
+"%Мене буде замінено фактичною назвою зв'язків spice"
 
 #: eeschema/dialogs/dialog_netlist.cpp:383
 msgid "Create Netlist and Run Simulator Command"
@@ -10102,6 +10117,8 @@ msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
+"Увімкнено режим синхронізованих контактів.\n"
+"Подібні контакти буде відредаговано незалежно від цього параметра."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:294
 msgid "If checked, this pin will exist in all units."
@@ -10122,6 +10139,9 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
+"Цей вивід не знаходиться на сітці %d миль, що ускладнить підключення до "
+"нього на схемі.\n"
+"Ви бажаєте продовжити?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode."
@@ -10130,10 +10150,13 @@ msgstr "Режим синхронного редагування виводів.
 #: eeschema/dialogs/dialog_pin_properties.cpp:436
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
+"Режим синхронізованих виводів. Новий вивід буде додано до всіх елементів."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:438
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Режим синхронізації виводів.  Відповідні виводи в інших елементах будуть "
+"оновлені."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -10219,6 +10242,8 @@ msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
+"Ви хочете використовувати відносний шлях\n"
+"\"%s\"?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:233
 #: pcbnew/dialogs/dialog_export_svg.cpp:211
@@ -10469,18 +10494,16 @@ msgid "Pen width:"
 msgstr "Ширина пера:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:158
-#, fuzzy
 msgid "Other options"
 msgstr "Інші опції"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:160
-#, fuzzy
 msgid "Open file after plot"
-msgstr "Введіть тип фільтру"
+msgstr "Відкрити файл після креслення"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:162
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "Відкрийте вихідний файл пов’язаною програмою після успішного створення"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
@@ -10530,6 +10553,12 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
+"Цю схему створено з використанням старих бібліотек символів, які можуть "
+"порушити схему. Деякі символи може знадобитися пов’язати з іншою назвою "
+"символу. Деякі символи може знадобитися «врятувати» (скопіювати та "
+"перейменувати) у нову бібліотеку.\n"
+"\n"
+"Для оновлення проекту рекомендовано внести зміни."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:108
 msgid "Accept"
@@ -10563,6 +10592,11 @@ msgid ""
 "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
+"Зупинити показ цього інструменту?\n"
+"Жодних змін не буде.\n"
+"\n"
+"Цей параметр можна змінити в діалоговому вікні «Бібліотеки символів»,\n"
+"і інструмент можна активувати вручну з меню «Інструменти»."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:298
 msgid "Rescue Symbols"
@@ -10748,9 +10782,8 @@ msgid "Net Classes"
 msgstr "Класи зв'язків"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "Визначення шин"
+msgstr "Визначення псевдонімів шини"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10824,6 +10857,9 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
+"Використання відносних ієрархічних шляхів імен файлів аркушів покращує "
+"переміщення схем між системами та платформами. Використання абсолютних "
+"шляхів може призвести до проблем з переміщенням."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:307
 msgid "Use Relative Path"
@@ -10867,6 +10903,10 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
+"Неможливо нормалізувати новий шлях до файлу схеми аркуша:\n"
+"\"%s\"\n"
+"проти шляху до файлу схеми батьківського аркуша:\n"
+"\"%s\"."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:494
 #: kicad/tools/kicad_manager_control.cpp:660
@@ -10959,24 +10999,22 @@ msgstr "Додати сигнал з імʼям:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:476
 #: eeschema/dialogs/dialog_sim_model.cpp:870
-#, fuzzy
 msgid "Not Connected"
-msgstr "Немає підключення"
+msgstr "Не підключено"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading model library '%s'."
-msgstr "Не вдалося завантажити бібліотеку kiface '%s'."
+msgstr "Помилка читання бібліотеки моделі '%s'."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:885
-#, fuzzy
 msgid "Browse Models"
-msgstr "Модель з коду"
+msgstr "Вибір моделей"
 
 #: eeschema/dialogs/dialog_sim_model.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "Назва звʼязку '%s' вже використовується."
+msgstr "У бібліотеці немає моделі з назвою '%s'."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:27
 msgid "Source"
@@ -10984,7 +11022,7 @@ msgstr "Джерело"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
 msgid "Instance"
-msgstr ""
+msgstr "Екземпляр"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -11001,7 +11039,7 @@ msgstr "Перезаписати"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:63
 msgid "Pin:"
-msgstr ""
+msgstr "Вивід:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:90
 #: eeschema/dialogs/dialog_sim_model_base.cpp:194
@@ -11009,19 +11047,16 @@ msgid "Model"
 msgstr "Модель"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:105
-#, fuzzy
 msgid "Spice device:"
-msgstr "Директиви Spice:"
+msgstr "Spice пристрій:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:114
-#, fuzzy
 msgid "Spice type:"
-msgstr "Тип фігури:"
+msgstr "Spice тип:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:129
-#, fuzzy
 msgid "Page"
-msgstr "На всіх сторінках"
+msgstr "Сторінка"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -11409,9 +11444,9 @@ msgid "Field name '%s' already in use."
 msgstr "Імʼя поля '%s' вже використовується."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1121
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "Ви впевнені, що бажаєте видалити виділені елементи?"
+msgstr "Ви впевнені, що хочете видалити поле '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1369
 msgid "Unsaved data"
@@ -11484,6 +11519,9 @@ msgid ""
 "footprint fields the default for all sheet instances\n"
 "of this symbol"
 msgstr ""
+"Перевірити та зробити одиницю і посилання, значення та\n"
+"посадкового місця за замовчуванням для всіх екземплярів аркуша\n"
+"цього символу"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:345
@@ -11552,6 +11590,9 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
+"Цей параметр дозволяє додавання символів для посадкових місця на дошку, "
+"таких як допоміжні знаки\n"
+"і логотипи, які ви не потрібно відображати в експорті специфікації матеріалів"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:209
 msgid ""
@@ -11559,11 +11600,14 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
+"Це необхідно для додавання символів, які експортуються лише до списку "
+"компонентів\n"
+"не потрібно компонувати шари на платі, наприклад механічні кріплення і "
+"корпуса"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Do not populate"
-msgstr "Не експортувати"
+msgstr "Не заповнювати"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 msgid "Update Symbol from Library..."
@@ -11628,6 +11672,14 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
+"Ця схема наразі використовує метод пошуку бібліотеки символів проекту для "
+"завантаження символів бібліотеки. KiCad спробує відобразити існуючі символи "
+"для використання нової таблиці бібліотеки символів. Переналаштування змінить "
+"деякі файли проекту, а схеми можуть бути несумісними зі старішими версіями "
+"KiCad. Усі змінені файли буде створено в папці \"remap_backup\" у папці "
+"проекту, якщо вам знадобиться скасувати будь-які зміни. Якщо ви вирішите "
+"пропустити цей крок, ви будете відповідальні за ручне переналаштування "
+"символів."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:209
 #, c-format
@@ -11647,10 +11699,12 @@ msgid ""
 "Failed to write project symbol library table. Error:\n"
 "  %s"
 msgstr ""
+"Не вдалося записати таблицю бібліотеки символів проекту. Помилка:\n"
+"   %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:241
 msgid "Created project symbol library table.\n"
-msgstr ""
+msgstr "Створено таблицю бібліотеки символів проекту.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:263
 #, c-format
@@ -11725,9 +11779,9 @@ msgid "<root sheet>"
 msgstr "<кореневий лист>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Перейти до сторінки %s (%s)"
+msgstr "Сторінка %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:492
 msgid ""
@@ -11735,14 +11789,17 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"Недійсне призначення гіперпосилання. Введіть дійсну URL-адресу (наприклад, "
+"file:// або http(s)://) або \"#<номер сторінки>\", щоб створити "
+"гіперпосилання на сторінку в цій схемі."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:288
 msgid "Link:"
-msgstr ""
+msgstr "Посилання:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:290
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Перетворити текст на гіперпосилання, яке можна натиснути"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:114
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -11774,6 +11831,9 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
+"Зазвичай посадкові місця пов’язуються з їхніми символами через їхні "
+"унікальні ідентифікатори. Виберіть цей параметр, лише якщо ви хочете скинути "
+"зв’язки посадкового місця на основі їхніх посилань."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -11851,6 +11911,9 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
+"Деякі елементи мають той самий колір, що й фон\n"
+"і їх не буде видно на екрані. Ви\n"
+"впевнені, що хочете використовувати ці кольори?"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:201
 msgid "(symbol editor only)"
@@ -12004,6 +12067,8 @@ msgstr "<ESC>очистити підсвічені зв'язки"
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
+"Перший <ESC> в режимі виділення знімає виділення, наступний очищає "
+"підсвічування мереж"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -12028,6 +12093,9 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
+"У редакторі схем:\n"
+"Якщо ввімкнено, клацання на виводі вибирає батьківський символ.\n"
+"Якщо вимкнено, натискання на вивід вибирає лише один вивід."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:95
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:143
@@ -12042,6 +12110,9 @@ msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
+"Клацання лівою кнопкою миші (і перетягування) залежать від 2 "
+"клавіш-модифікаторів:\n"
+"Shift і Ctrl."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:109
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:157
@@ -12202,17 +12273,17 @@ msgid "Default text size:"
 msgstr "Розмір тексту по замовчуванню:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "Відносне зміщення тексту:"
+msgstr "Коефіцієнт зміщення мітки:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
-msgstr "Відсоток співвідношення розміру тексту, відстані між текстом або шини"
+msgstr ""
+"Відсоток розміру тексту для зміщення міток над (або під) доріжкою, шиною або "
+"виводом"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Global label margin:"
@@ -12699,9 +12770,8 @@ msgid "No Connection"
 msgstr "Відсутнє з'єднання"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Невирішена змінна тексту у рамці листа."
+msgstr "Невизначена текстова змінна на аркуші креслення"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -12714,9 +12784,8 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Різні посадкові місця назначені %s та %s"
 
 #: eeschema/erc.cpp:438
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
-msgstr "Вивід типу \"не підключено\" підключений"
+msgstr "Виводи з типом 'не підключено' має підключення"
 
 #: eeschema/erc.cpp:563
 #, c-format
@@ -12729,24 +12798,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Вивід %s з'єднано з %s та %s"
 
 #: eeschema/erc.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "Поточна конфігурація не містить бібліотеку '%s'."
+msgstr "Поточна конфігурація не включає бібліотеку '%s'"
 
 #: eeschema/erc.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "Бібліотека '%s' не включена в поточній конфігурації."
+msgstr "Бібліотека '%s' не ввімкнена в поточній конфігурації"
 
 #: eeschema/erc.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Символ %s не знайдено в бібліотеці '%s."
+msgstr "Символ '%s' не знайдено в бібліотеці символів '%s'"
 
 #: eeschema/erc.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "Символ %s не знайдено в бібліотеці '%s."
+msgstr "Символ '%s' було змінено в бібліотеці '%s'"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -13191,7 +13260,6 @@ msgid "Unknown"
 msgstr "Не вказано"
 
 #: eeschema/hierarch.cpp:248
-#, fuzzy
 msgid "Edit Page Number"
 msgstr "Редагувати номер сторінки"
 
@@ -13389,14 +13457,12 @@ msgid "Netlist..."
 msgstr "Список звʼязків..."
 
 #: eeschema/menubar.cpp:125
-#, fuzzy
 msgid "Symbols to Library..."
-msgstr "Оновити символи з бібліотеки..."
+msgstr "Символи до бібліотеки..."
 
 #: eeschema/menubar.cpp:127
-#, fuzzy
 msgid "Symbols to New Library..."
-msgstr "Оновити символи з бібліотеки..."
+msgstr "Символи до нової бібліотеки..."
 
 #: eeschema/menubar.cpp:195
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
@@ -13816,9 +13882,8 @@ msgid "Resolved netclass"
 msgstr "Вирішений мережевий клас"
 
 #: eeschema/sch_label.cpp:956
-#, fuzzy
 msgid "Hierarchical Labels"
-msgstr "Ієрархічна мітка"
+msgstr "Ієрархічні мітки"
 
 #: eeschema/sch_label.cpp:1041
 #, c-format
@@ -14553,19 +14618,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "Ієрархічна вивід листа %s"
 
 #: eeschema/sch_symbol.cpp:1157
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "Виключити з BOM"
+msgstr "Виключено з BOM"
 
 #: eeschema/sch_symbol.cpp:1162
-#, fuzzy
 msgid "Excluded from board"
-msgstr "Виключити з плати"
+msgstr "Виключено з плати"
 
 #: eeschema/sch_symbol.cpp:1167
-#, fuzzy
 msgid "DNP"
-msgstr "Точок на дюйм"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1538
 msgid "Power symbol"
@@ -14979,54 +15041,48 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "Не вдалося визначити модель із значенням '%s'."
 
 #: eeschema/sim/sim_model_kibis.cpp:205
-#, fuzzy
 msgid "Power supply"
-msgstr "Символ живлення"
+msgstr "Блок живлення"
 
 #: eeschema/sim/sim_model_kibis.cpp:215
-#, fuzzy
 msgid "Parasitic Resistance"
-msgstr "Питомий опір"
+msgstr "Паразитарний опір"
 
 #: eeschema/sim/sim_model_kibis.cpp:225
 msgid "Parasitic Pin Inductance"
-msgstr ""
+msgstr "Паразитарна індуктивність виводу"
 
 #: eeschema/sim/sim_model_kibis.cpp:235
 msgid "Parasitic Pin Capacitance"
-msgstr ""
+msgstr "Паразитарна ємність виводу"
 
 #: eeschema/sim/sim_model_kibis.cpp:250
 msgid "Waveform"
-msgstr ""
+msgstr "Форма хвилі"
 
 #: eeschema/sim/sim_model_kibis.cpp:265
 msgid "Modeling accuracy"
-msgstr ""
+msgstr "Точність моделювання"
 
 #: eeschema/sim/sim_model_kibis.cpp:278
 msgid "ON time"
-msgstr ""
+msgstr "ON час"
 
 #: eeschema/sim/sim_model_kibis.cpp:287
-#, fuzzy
 msgid "OFF time"
-msgstr "Час падіння:"
+msgstr "OFF час"
 
 #: eeschema/sim/sim_model_kibis.cpp:296
-#, fuzzy
 msgid "Delay"
-msgstr "Затримка:"
+msgstr "Затримка"
 
 #: eeschema/sim/sim_model_kibis.cpp:309
-#, fuzzy
 msgid "Bitrate"
-msgstr "підкладка"
+msgstr "Швидкість передачі"
 
 #: eeschema/sim/sim_model_kibis.cpp:318
-#, fuzzy
 msgid "Number of bits"
-msgstr "Кількість частин:"
+msgstr "Кількість біт"
 
 #: eeschema/sim/sim_model_raw_spice.cpp:291
 #, c-format
@@ -16198,11 +16254,11 @@ msgstr "Оновити символ до відповідності змін, в
 
 #: eeschema/tools/ee_actions.cpp:186
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "Встановити назву частини..."
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr ""
+msgstr "Встановіть відображуване ім’я для елементу"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -16869,26 +16925,29 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Згенерувати список компонентів для поточної схеми"
 
 #: eeschema/tools/ee_actions.cpp:681
-#, fuzzy
 msgid "Export Symbols to Library..."
-msgstr "Оновити символи з бібліотеки..."
+msgstr "Експортувати символи до бібліотеки..."
 
 #: eeschema/tools/ee_actions.cpp:682
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
+"Додати символи, які використовуються на схемі, до існуючої бібліотеки "
+"символів\n"
+"(не видаляти інші символи з цієї бібліотеки)"
 
 #: eeschema/tools/ee_actions.cpp:688
-#, fuzzy
 msgid "Export Symbols to New Library..."
-msgstr "Оновити символи з бібліотеки..."
+msgstr "Експортувати символи до нової бібліотеки..."
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
+"Створіть нову бібліотеку символів, використовуючи символи на схемі\n"
+"(якщо бібліотека вже існує, її буде замінено)"
 
 #: eeschema/tools/ee_actions.cpp:695
 msgid "Select on PCB"
@@ -17287,14 +17346,13 @@ msgid "Find again to wrap around to the start."
 msgstr "Почати пошук знову з початку."
 
 #: eeschema/tools/sch_editor_control.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add library '%s'."
-msgstr "Не вдалося знайти файл бібліотеки %s."
+msgstr "Не вдалося додати бібліотеку '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:819
-#, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
-msgstr "Оновити поля символу з нової бібліотеки"
+msgstr "Оновити символи на схемі для посилання на нову бібліотеку?"
 
 #: eeschema/tools/sch_editor_control.cpp:1142
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -17410,13 +17468,13 @@ msgid "Symbol is not derived from another symbol."
 msgstr "Символ не унаслідується з іншого символу."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Enter display name for unit %s"
-msgstr "Введіть номер сторінки для листа%s"
+msgstr "Введіть назву для елементу %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:672
 msgid "Set Unit Display Name"
-msgstr ""
+msgstr "Встановлення відображення назви елементу"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -19283,30 +19341,29 @@ msgid "Check for package updates on startup"
 msgstr "Перевірте наявність оновлень пакетів під час запуску"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:28
-#, fuzzy
 msgid "Library package handling"
-msgstr "Зміни бібліотеки не збережені"
+msgstr "Обробка пакету бібліотеки"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "Додати бібліотеку до таблиці глобальної бібліотеки?"
+msgstr ""
+"Автоматично додавати встановлені бібліотеки до глобальної таблиці бібліотек"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Автоматично починати провідник від непідключених виводів"
+msgstr "Автоматичне видалення невстановлених бібліотек"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Помилка в назві бібліотеки"
+msgstr "Префікс псевдоніму бібліотеки:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
 msgstr ""
+"Після (де)інсталяції пакетів може знадобитися перезапустити KiCad, щоб "
+"відобразити зміни в таблиці глобальної бібліотеки."
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19405,9 +19462,9 @@ msgid "No package updates available"
 msgstr "Немає оновлень пакетів"
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "Файл форматної рамки «%s» не знайдено."
+msgstr "Версія %s пакету %s не знайдено!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -20747,9 +20804,9 @@ msgid "Linear resistance:"
 msgstr "Лінійний опір:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "Частота для 100% проникнення в глибину:"
+msgstr "Частота для 100% ефективної проникності:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:136
 msgid "Ampacity:"
@@ -20851,9 +20908,8 @@ msgstr "Множник"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
-#, fuzzy
 msgid "Copper (Cu)"
-msgstr "Мідь"
+msgstr "Мідь (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:54
 msgid ""
@@ -20870,6 +20926,17 @@ msgid ""
 "You can use an interface metal, just like with the ENIG surface finish that "
 "uses nickel as an interface between gold and copper to prevent corrosion."
 msgstr ""
+"Коли два метали знаходяться в контакті, між ними буде різниця потенціалів, "
+"що призведе до корозії.\n"
+"Щоб уникнути корозії, рекомендовано підтримувати різницю нижче 300 мВ.\n"
+"\n"
+"Один з металів буде анодним (+) і піддасться атаці. Другий буде катодним і "
+"захищеним.\n"
+"У наведеній нижче таблиці, якщо число позитивне, то рядок анодний, а "
+"стовпець катодний.\n"
+"\n"
+"Ви можете використовувати металевий інтерфейс, як і з поверхнею ENIG, яка "
+"використовує нікель як межу між золотом і міддю для запобігання корозії."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:32
 msgid "Voltage > 500 V:"
@@ -21734,7 +21801,7 @@ msgstr "Класи плати"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
 msgid "Galvanic corrosion"
-msgstr ""
+msgstr "Гальванічна корозія"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -22730,9 +22797,8 @@ msgid "Remove track not connected at both ends"
 msgstr "Видалити доріжку не з'єднаний з обох кінців"
 
 #: pcbnew/cleanup_item.cpp:52
-#, fuzzy
 msgid "Remove via connected on less than 2 layers"
-msgstr "Видалити перехідні отвори. що під'єднані до двох або меньше шарів"
+msgstr "Видалити перехідні отвори що підключені на менш ніж 2 шарах"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
