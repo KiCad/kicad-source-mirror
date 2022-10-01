@@ -138,6 +138,64 @@ template class PARAM_LIST<KIGFX::COLOR4D>;
 template class PARAM_LIST<FILE_INFO_PAIR>;
 
 
+template <typename ValueType>
+void PARAM_SET<ValueType>::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
+{
+    if( m_readOnly )
+        return;
+
+    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+    {
+        std::set<ValueType> val;
+
+        if( js->is_array() )
+        {
+            for( const auto& el : js->items() )
+                val.insert( el.value().get<ValueType>() );
+        }
+
+        *m_ptr = val;
+    }
+    else if( aResetIfMissing )
+        *m_ptr = m_default;
+}
+
+
+template <typename ValueType>
+void PARAM_SET<ValueType>::Store( JSON_SETTINGS* aSettings ) const
+{
+    nlohmann::json js = nlohmann::json::array();
+
+    for( const auto& el : *m_ptr )
+        js.push_back( el );
+
+    aSettings->Set<nlohmann::json>( m_path, js );
+}
+
+
+template <typename ValueType>
+bool PARAM_SET<ValueType>::MatchesFile( JSON_SETTINGS* aSettings ) const
+{
+    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+    {
+        if( js->is_array() )
+        {
+            std::set<ValueType> val;
+
+            for( const auto& el : js->items() )
+                val.insert( el.value().get<ValueType>() );
+
+            return val == *m_ptr;
+        }
+    }
+
+    return false;
+}
+
+
+template class PARAM_SET<wxString>;
+
+
 void PARAM_PATH_LIST::Store( JSON_SETTINGS* aSettings ) const
 {
     nlohmann::json js = nlohmann::json::array();

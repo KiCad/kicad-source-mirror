@@ -31,6 +31,8 @@
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
+#include <project.h>
+#include <project/project_local_settings.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -2230,6 +2232,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
             m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
 
     std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
+    const std::set<wxString>& hiddenClasses = m_frame->Prj().GetLocalSettings().m_HiddenNetclasses;
 
     m_netclassOuterSizer->Clear( true );
 
@@ -2263,7 +2266,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 setting->ctl_visibility = new BITMAP_TOGGLE( setting->ctl_panel, aId,
                                                              KiBitmap( BITMAPS::visibility ),
                                                              KiBitmap( BITMAPS::visibility_off ),
-                                                             true );
+                                                             !hiddenClasses.count( name ) );
 
                 wxString tip;
                 tip.Printf( _( "Show or hide ratsnest for nets in %s" ), name );
@@ -2929,6 +2932,13 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
                 m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
         }
     }
+
+    PROJECT_LOCAL_SETTINGS& localSettings = m_frame->Prj().GetLocalSettings();
+
+    if( !aShow )
+        localSettings.m_HiddenNetclasses.insert( aClassName );
+    else
+        localSettings.m_HiddenNetclasses.erase( aClassName );
 
     m_netsGrid->ForceRefresh();
 }

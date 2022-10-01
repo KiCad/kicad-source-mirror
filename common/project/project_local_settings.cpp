@@ -162,6 +162,9 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "board.hidden_nets", &m_HiddenNets, {} ) );
 
+    m_params.emplace_back( new PARAM_SET<wxString>( "board.hidden_netclasses",
+                                                     &m_HiddenNetclasses, {} ) );
+
     m_params.emplace_back( new PARAM_ENUM<NET_COLOR_MODE>( "board.net_color_mode",
                            &m_NetColorMode, NET_COLOR_MODE::RATSNEST, NET_COLOR_MODE::OFF,
                            NET_COLOR_MODE::ALL ) );

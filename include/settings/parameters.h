@@ -21,6 +21,7 @@
 #ifndef _PARAMETERS_H
 #define _PARAMETERS_H
 
+#include <set>
 #include <string>
 #include <utility>
 #include <math/util.h>
@@ -443,6 +444,41 @@ protected:
     std::vector<Type>* m_ptr;
 
     std::vector<Type> m_default;
+};
+
+template<typename Type>
+class PARAM_SET : public PARAM_BASE
+{
+public:
+    PARAM_SET( const std::string& aJsonPath, std::set<Type>* aPtr,
+               std::initializer_list<Type> aDefault, bool aReadOnly = false ) :
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault )
+    { }
+
+    PARAM_SET( const std::string& aJsonPath, std::set<Type>* aPtr,
+               std::set<Type> aDefault, bool aReadOnly = false ) :
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault )
+    { }
+
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override;
+
+    void Store( JSON_SETTINGS* aSettings) const override;
+
+    void SetDefault() override
+    {
+        *m_ptr = m_default;
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
+
+protected:
+    std::set<Type>* m_ptr;
+
+    std::set<Type> m_default;
 };
 
 /**

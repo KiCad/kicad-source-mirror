@@ -60,12 +60,20 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     KIGFX::RENDER_SETTINGS*        rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
     KIGFX::PCB_RENDER_SETTINGS*    renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
 
+    NETINFO_LIST& nets = GetBoard()->GetNetInfo();
+
     std::set<int>& hiddenNets = renderSettings->GetHiddenNets();
     hiddenNets.clear();
 
     for( const wxString& hidden : localSettings.m_HiddenNets )
     {
-        if( NETINFO_ITEM* net = GetBoard()->GetNetInfo().GetNetItem( hidden ) )
+        if( NETINFO_ITEM* net = nets.GetNetItem( hidden ) )
+            hiddenNets.insert( net->GetNetCode() );
+    }
+
+    for( NETINFO_ITEM* net : nets )
+    {
+        if( localSettings.m_HiddenNetclasses.count( net->GetNetClass()->GetName() ) )
             hiddenNets.insert( net->GetNetCode() );
     }
 

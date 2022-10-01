@@ -130,6 +130,7 @@ public:
      * Currently, hiding nets means hiding the ratsnest for those nets.
      */
     std::vector<wxString> m_HiddenNets;
+    std::set<wxString> m_HiddenNetclasses;
 
     /// State of the selection filter widget
     SELECTION_FILTER_OPTIONS m_SelectionFilter;
