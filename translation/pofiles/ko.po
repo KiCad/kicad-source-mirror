@@ -28,10 +28,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-09-19 02:29+0000\n"
+"PO-Revision-Date: 2022-10-02 00:43+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -553,14 +553,12 @@ msgid "Toggle unspecified 3D models"
 msgstr "그 외의 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "'기타' 유형 부품의 3D 모델 전환"
+msgstr "'지정되지 않은' 유형 구성 요소에 대한 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
-#, fuzzy
 msgid "Toggle 3D models not in pos file"
-msgstr "'기타' 유형 부품의 3D 모델 전환"
+msgstr "pos 파일에 없는 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
@@ -2829,14 +2827,12 @@ msgid "Items:"
 msgstr "항목:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:25
-#, fuzzy
 msgid "Available:"
-msgstr "사용 가능한 경로 :"
+msgstr "사용 가능:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
-#, fuzzy
 msgid ">>"
-msgstr ">"
+msgstr ">>"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:43
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
@@ -2844,9 +2840,8 @@ msgid "<<"
 msgstr "<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
-#, fuzzy
 msgid "Enabled:"
-msgstr "비활성화됨"
+msgstr "활성화됨:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:65
 #: eeschema/dialogs/dialog_label_properties_base.cpp:123
@@ -15155,14 +15150,12 @@ msgid "ON time"
 msgstr ""
 
 #: eeschema/sim/sim_model_kibis.cpp:287
-#, fuzzy
 msgid "OFF time"
-msgstr "하강 시간:"
+msgstr "꺼짐 시간"
 
 #: eeschema/sim/sim_model_kibis.cpp:296
-#, fuzzy
 msgid "Delay"
-msgstr "지연:"
+msgstr "지연"
 
 #: eeschema/sim/sim_model_kibis.cpp:309
 #, fuzzy
@@ -15170,9 +15163,8 @@ msgid "Bitrate"
 msgstr "서브스트레이트"
 
 #: eeschema/sim/sim_model_kibis.cpp:318
-#, fuzzy
 msgid "Number of bits"
-msgstr "유닛 개수:"
+msgstr "비트 수"
 
 #: eeschema/sim/sim_model_raw_spice.cpp:291
 #, c-format
@@ -19427,9 +19419,8 @@ msgid "Automatically remove uninstalled libraries"
 msgstr "연결되지 않은 핀에서 자동으로 와이어 시작"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "라이브러리 별명 오류"
+msgstr "라이브러리 별칭 접두사:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
@@ -23492,9 +23483,8 @@ msgid "SMD:"
 msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "지정하지 않음"
+msgstr "지정되지 않음:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -38532,9 +38522,8 @@ msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "같은 네트에 속한 모든 배선 & 비아를 선택 해제합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1327
-#, fuzzy
 msgid "Select All Unconnected Footprints"
-msgstr "미연결 트랙 삭제:"
+msgstr "연결되지 않은 모든 풋프린트 선택"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
 #, fuzzy
