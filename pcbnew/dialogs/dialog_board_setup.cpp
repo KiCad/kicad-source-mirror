@@ -115,7 +115,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
 
-    m_treebook->SetMinSize( wxSize( -1, 480 ) );
+    m_treebook->SetMinSize( wxSize( -1, 580 ) );
 
     finishDialogSettings();
 

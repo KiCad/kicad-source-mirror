@@ -298,44 +298,44 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	m_silkClearanceLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum item clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_silkClearanceLabel->Wrap( -1 );
-	fgFeatureConstraints->Add( m_silkClearanceLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgFeatureConstraints->Add( m_silkClearanceLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
 	m_silkClearanceCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_silkClearanceCtrl->SetToolTip( _("Minimum clearance between two items on the same silkscreen layer.  If set this can improve legibility.  (Note: does not apply to multiple shapes within a single footprint.)") );
 
-	fgFeatureConstraints->Add( m_silkClearanceCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	fgFeatureConstraints->Add( m_silkClearanceCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
 
 	m_silkClearanceUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_silkClearanceUnits->Wrap( -1 );
-	fgFeatureConstraints->Add( m_silkClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgFeatureConstraints->Add( m_silkClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_textHeightLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum text height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textHeightLabel->Wrap( -1 );
-	fgFeatureConstraints->Add( m_textHeightLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgFeatureConstraints->Add( m_textHeightLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
 	m_textHeightCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_textHeightCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	fgFeatureConstraints->Add( m_textHeightCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	m_textHeightUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textHeightUnits->Wrap( -1 );
-	fgFeatureConstraints->Add( m_textHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgFeatureConstraints->Add( m_textHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_textThicknessLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum text thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textThicknessLabel->Wrap( -1 );
-	fgFeatureConstraints->Add( m_textThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgFeatureConstraints->Add( m_textThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
 	m_textThicknessCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_textThicknessCtrl, 0, wxTOP|wxBOTTOM|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgFeatureConstraints->Add( m_textThicknessCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	m_textThicknessUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textThicknessUnits->Wrap( -1 );
-	fgFeatureConstraints->Add( m_textThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgFeatureConstraints->Add( m_textThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 
 	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND|wxLEFT, 5 );
@@ -354,7 +354,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	m_stCircleToPolyOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Arc/circle approximated by segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stCircleToPolyOpt->Wrap( -1 );
-	bSizerArcToPoly->Add( m_stCircleToPolyOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerArcToPoly->Add( m_stCircleToPolyOpt, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 4, 3, 0 );
@@ -388,7 +388,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	bSizerArcToPoly->Add( m_stCircleToPolyWarning, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	sbFeatureRules->Add( bSizerArcToPoly, 0, wxEXPAND|wxTOP, 5 );
+	sbFeatureRules->Add( bSizerArcToPoly, 0, wxEXPAND, 5 );
 
 	m_bSizerPolygonFillOption = new wxBoxSizer( wxVERTICAL );
 
