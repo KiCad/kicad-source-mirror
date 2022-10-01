@@ -16,13 +16,14 @@
 # Ian McInerney <ian.s.mcinerney@ieee.org>, 2022.
 # Eric <hamburger1024@firemail.cc>, 2022.
 # Eric <hamburger1024@mailbox.org>, 2022.
+# yangyangdaji <1504305527@qq.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-09-29 15:54+0000\n"
-"Last-Translator: obit <szpttboy@163.com>\n"
+"PO-Revision-Date: 2022-10-02 00:43+0000\n"
+"Last-Translator: yangyangdaji <1504305527@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -29665,7 +29666,6 @@ msgid "Check rule syntax"
 msgstr "检查规则语法"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30066,9 +30066,9 @@ msgstr ""
 "Note: `clearance` and `hole_clearance` rules are not run against items of "
 "the same net; `mechanical_clearance` and `mechanical_hole_clearance` rules "
 "are.\n"
-"# 注：`clearance(间隙)` 和 `hole_clearance (过孔间隙)` 规则不是针对同一网中的"
-"项目运行，`mechanical_clearance (机械间隙)` 和 `mechanical_hole_clearance (机"
-"械孔间隙)` 规则是针对同一网络中的项目运行的。\n"
+"# 注：`clearance(间隙)` 和 `hole_clearance (过孔间隙)` "
+"规则不是针对同一网中的项目运行，`mechanical_clearance (机械间隙)` 和 `"
+"mechanical_hole_clearance (机械孔间隙)` 规则是针对同一网络中的项目运行的。\n"
 "<br>\n"
 "\n"
 "### Item Types\n"
@@ -30338,7 +30338,7 @@ msgstr ""
 "    # 禁止阻焊层边距覆盖\n"
 "    (rule \"disallow solder mask margin overrides\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
-"        (condition \"A.Type == 'Pad'\"))\n"
+"        (condition \"A.Type == 'Pad'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
