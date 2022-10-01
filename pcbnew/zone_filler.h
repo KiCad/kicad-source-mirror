@@ -100,7 +100,7 @@ private:
      * Function buildThermalSpokes
      * Constructs a list of all thermal spokes for the given zone.
      */
-    void buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
+    void buildThermalSpokes( const ZONE* box, PCB_LAYER_ID aLayer,
                              const std::vector<PAD*>& aSpokedPadsList,
                              std::deque<SHAPE_LINE_CHAIN>& aSpokes );
 

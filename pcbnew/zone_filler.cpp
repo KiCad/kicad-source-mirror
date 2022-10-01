@@ -1473,72 +1473,153 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         if( !( itemBB.Intersects( zoneBB ) ) )
             continue;
 
-        // Thermal spokes consist of segments from the pad center to points just outside
-        // the thermal relief.
-        VECTOR2I  shapePos = pad->ShapePos();
-        EDA_ANGLE spokesAngle = pad->GetThermalSpokeAngle();
+        // Thermal spokes consist of square-ended segments from the pad center to points just
+        // outside the thermal relief.  The outside end has an extra center point (which must be
+        // at idx 3) which is used for testing whether or not the spoke connects to copper in the
+        // parent zone.
 
-        // We use the bounding-box to lay out the spokes, but for this to work the bounding
-        // box has to be built at the same rotation as the spokes.  We have to use a dummy pad
-        // to avoid dirtying the cached shapes.
-        PAD dummy_pad( *pad );
-        dummy_pad.SetOrientation( spokesAngle );
+        auto buildSpokesFromOrigin =
+                [&]( const BOX2I& box )
+                {
+                    for( int i = 0; i < 4; i++ )
+                    {
+                        SHAPE_LINE_CHAIN spoke;
 
-        // Spokes are from center of pad shape, not from hole. So the dummy pad
-        // (the pad shape) has no offset and is at position 0,0
-        dummy_pad.SetPosition( VECTOR2I( 0, 0 ) );
-        dummy_pad.SetOffset( VECTOR2I( 0, 0 ) );
+                        switch( i )
+                        {
+                        case 0:       // lower stub
+                            spoke.Append( +spoke_half_w, -spoke_half_w );
+                            spoke.Append( -spoke_half_w, -spoke_half_w );
+                            spoke.Append( -spoke_half_w, box.GetBottom() );
+                            spoke.Append( 0,             box.GetBottom() );  // test pt
+                            spoke.Append( +spoke_half_w, box.GetBottom() );
+                            break;
 
-        BOX2I reliefBB = dummy_pad.GetBoundingBox();
-        reliefBB.Inflate( thermalReliefGap + epsilon );
+                        case 1:       // upper stub
+                            spoke.Append( +spoke_half_w, +spoke_half_w );
+                            spoke.Append( -spoke_half_w, +spoke_half_w );
+                            spoke.Append( -spoke_half_w, box.GetTop() );
+                            spoke.Append( 0,             box.GetTop() );     // test pt
+                            spoke.Append( +spoke_half_w, box.GetTop() );
+                            break;
 
-        for( int i = 0; i < 4; i++ )
+                        case 2:       // right stub
+                            spoke.Append( -spoke_half_w,  +spoke_half_w );
+                            spoke.Append( -spoke_half_w,  -spoke_half_w );
+                            spoke.Append( box.GetRight(), -spoke_half_w );
+                            spoke.Append( box.GetRight(), 0             );   // test pt
+                            spoke.Append( box.GetRight(), +spoke_half_w );
+                            break;
+
+                        case 3:       // left stub
+                            spoke.Append( +spoke_half_w, +spoke_half_w );
+                            spoke.Append( +spoke_half_w, -spoke_half_w );
+                            spoke.Append( box.GetLeft(), -spoke_half_w );
+                            spoke.Append( box.GetLeft(), 0             );    // test pt
+                            spoke.Append( box.GetLeft(), +spoke_half_w );
+                            break;
+                        }
+
+                        spoke.SetClosed( true );
+                        aSpokesList.push_back( std::move( spoke ) );
+                    }
+                };
+
+        // If the spokes are at a cardinal angle then we can generate them from a bounding box
+        // without trig.
+        if( pad->GetThermalSpokeAngle().IsCardinal() )
         {
-            SHAPE_LINE_CHAIN spoke;
-            switch( i )
+            BOX2I spokesBox = pad->GetBoundingBox();
+            spokesBox.Inflate( thermalReliefGap + epsilon );
+
+            // Spokes are from center of pad shape, not from hole.
+            spokesBox.Offset( - pad->ShapePos() );
+
+            buildSpokesFromOrigin( spokesBox );
+
+            auto spokeIter = aSpokesList.rbegin();
+
+            for( int ii = 0; ii < 4; ++ii, ++spokeIter )
+                spokeIter->Move( pad->ShapePos() );
+        }
+        // Even if the spokes are rotated, we can fudge it for round and square pads by rotating
+        // the bounding box to match the spokes.
+        else if( pad->GetSizeX() == pad->GetSizeY() && pad->GetShape() != PAD_SHAPE::CUSTOM )
+        {
+            // Since the bounding-box needs to be correclty rotated we use a dummy pad to keep
+            // from dirtying the real pad's cached shapes.
+            PAD dummy_pad( *pad );
+            dummy_pad.SetOrientation( pad->GetThermalSpokeAngle() );
+
+            // Spokes are from center of pad shape, not from hole. So the dummy pad has no shape
+            // offset and is at position 0,0
+            dummy_pad.SetPosition( VECTOR2I( 0, 0 ) );
+            dummy_pad.SetOffset( VECTOR2I( 0, 0 ) );
+
+            BOX2I spokesBox = dummy_pad.GetBoundingBox();
+            spokesBox.Inflate( thermalReliefGap + epsilon );
+
+            buildSpokesFromOrigin( spokesBox );
+
+            auto spokeIter = aSpokesList.rbegin();
+
+            for( int ii = 0; ii < 4; ++ii, ++spokeIter )
             {
-            case 0:       // lower stub
-                spoke.Append( +spoke_half_w,       -spoke_half_w );
-                spoke.Append( -spoke_half_w,       -spoke_half_w );
-                spoke.Append( -spoke_half_w,       reliefBB.GetBottom() );
-                spoke.Append( 0,                   reliefBB.GetBottom() );  // test pt
-                spoke.Append( +spoke_half_w,       reliefBB.GetBottom() );
-                break;
-
-            case 1:       // upper stub
-                spoke.Append( +spoke_half_w,       spoke_half_w );
-                spoke.Append( -spoke_half_w,       spoke_half_w );
-                spoke.Append( -spoke_half_w,       reliefBB.GetTop() );
-                spoke.Append( 0,                   reliefBB.GetTop() );     // test pt
-                spoke.Append( +spoke_half_w,       reliefBB.GetTop() );
-                break;
-
-            case 2:       // right stub
-                spoke.Append( -spoke_half_w,       spoke_half_w );
-                spoke.Append( -spoke_half_w,       -spoke_half_w );
-                spoke.Append( reliefBB.GetRight(), -spoke_half_w );
-                spoke.Append( reliefBB.GetRight(), 0 );                     // test pt
-                spoke.Append( reliefBB.GetRight(), spoke_half_w );
-                break;
-
-            case 3:       // left stub
-                spoke.Append( spoke_half_w,        spoke_half_w );
-                spoke.Append( spoke_half_w,        -spoke_half_w );
-                spoke.Append( reliefBB.GetLeft(),  -spoke_half_w );
-                spoke.Append( reliefBB.GetLeft(),  0 );                     // test pt
-                spoke.Append( reliefBB.GetLeft(),  spoke_half_w );
-                break;
+                spokeIter->Rotate( pad->GetOrientation() + pad->GetThermalSpokeAngle() );
+                spokeIter->Move( pad->ShapePos() );
             }
+        }
+        // And lastly, even when we have to resort to trig, we can use it only in a post-process
+        // after the rotated-bounding-box trick from above.
+        else
+        {
+            // Since the bounding-box needs to be correclty rotated we use a dummy pad to keep
+            // from dirtying the real pad's cached shapes.
+            PAD dummy_pad( *pad );
+            dummy_pad.SetOrientation( pad->GetThermalSpokeAngle() );
 
-            // Rotate and move the spokes to the right position
-            spoke.Rotate( pad->GetOrientation() + spokesAngle );
-            spoke.Move( shapePos );
+            // Spokes are from center of pad shape, not from hole. So the dummy pad has no shape
+            // offset and is at position 0,0
+            dummy_pad.SetPosition( VECTOR2I( 0, 0 ) );
+            dummy_pad.SetOffset( VECTOR2I( 0, 0 ) );
 
-            spoke.SetClosed( true );
-            spoke.GenerateBBoxCache();
-            aSpokesList.push_back( std::move( spoke ) );
+            BOX2I spokesBox = dummy_pad.GetBoundingBox();
+
+            // In this case make the box -big-; we're going to clip to the "real" bbox later.
+            spokesBox.Inflate( thermalReliefGap + spokesBox.GetWidth() + spokesBox.GetHeight() );
+
+            buildSpokesFromOrigin( spokesBox );
+
+            BOX2I realBBox = pad->GetBoundingBox();
+            realBBox.Inflate( thermalReliefGap + epsilon );
+
+            auto spokeIter = aSpokesList.rbegin();
+
+            for( int ii = 0; ii < 4; ++ii, ++spokeIter )
+            {
+                spokeIter->Rotate( pad->GetOrientation() + pad->GetThermalSpokeAngle() );
+                spokeIter->Move( pad->ShapePos() );
+
+                VECTOR2I origin_p = spokeIter->GetPoint( 0 );
+                VECTOR2I origin_m = spokeIter->GetPoint( 1 );
+                VECTOR2I origin = ( origin_p + origin_m ) / 2;
+                VECTOR2I end_m = spokeIter->GetPoint( 2 );
+                VECTOR2I end = spokeIter->GetPoint( 3 );
+                VECTOR2I end_p = spokeIter->GetPoint( 4 );
+
+                ClipLine( &realBBox, origin_p.x, origin_p.y, end_p.x, end_p.y );
+                ClipLine( &realBBox, origin_m.x, origin_m.y, end_m.x, end_m.y );
+                ClipLine( &realBBox, origin.x, origin.y, end.x, end.y );
+
+                spokeIter->SetPoint( 2, end_m );
+                spokeIter->SetPoint( 3, end );
+                spokeIter->SetPoint( 4, end_p );
+            }
         }
     }
+
+    for( size_t ii = 0; ii < aSpokesList.size(); ++ii )
+        aSpokesList[ii].GenerateBBoxCache();
 }
 
 
