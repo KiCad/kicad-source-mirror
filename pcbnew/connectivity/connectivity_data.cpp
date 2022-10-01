@@ -313,14 +313,18 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
     // moving selection
     for( unsigned int nc = 1; nc < aDynamicData->m_nets.size(); nc++ )
     {
-        auto dynNet = aDynamicData->m_nets[nc];
+        RN_NET* dynamicNet = aDynamicData->m_nets[nc];
+        RN_NET* staticNet  = m_nets[nc];
 
-        if( dynNet->GetNodeCount() != 0 )
+        /// We don't need to compute the dynamic ratsnest in two cases:
+        /// 1) We are not moving any net elements
+        /// 2) We are moving all net elements
+        if( dynamicNet->GetNodeCount() != 0
+                && dynamicNet->GetNodeCount() != staticNet->GetNodeCount() )
         {
-            RN_NET*  ourNet = m_nets[nc];
             VECTOR2I pos1, pos2;
 
-            if( ourNet->NearestBicoloredPair( *dynNet, &pos1, &pos2 ) )
+            if( staticNet->NearestBicoloredPair( *dynamicNet, &pos1, &pos2 ) )
             {
                 RN_DYNAMIC_LINE l;
                 l.a = pos1;
