@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 19:10-0700\n"
-"PO-Revision-Date: 2022-09-27 07:22+0000\n"
+"PO-Revision-Date: 2022-10-03 10:53+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -20141,11 +20141,15 @@ msgid "nanoseconds"
 msgstr "nanosekund"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
+#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
+"Varování:\n"
+"průměr izolační mezery otvoru.\n"
+"Některé parametry nelze vypočítat pro prokov uvnitř zóny mědi."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
 msgid "Thermal resistance:"
@@ -23430,9 +23434,9 @@ msgid "Use relative paths to model files in board VRML file"
 msgstr "Použít relativní cestu k souborům modelů ve VRML souboru desky"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
-#, fuzzy
 msgid "Use paths for model files in board VRML file relative to the VRML file"
-msgstr "Použít relativní cestu k souborům modelů ve VRML souboru desky"
+msgstr ""
+"Použít cesty pro soubory modelu v souboru VRML desky vzhledem k souboru VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:67
 msgid "VRML Export Options"
@@ -31809,12 +31813,14 @@ msgstr ""
 "ekvivalent v KiCadu. Místo toho se používá plná výplň."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3567
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
+"Kód šrafování CADSTAR '%s' má %d definovaných šrafování. KiCad podporuje 2 "
+"šrafování (křížové šrafování) 90°"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3577
 #, c-format
