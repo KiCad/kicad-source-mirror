@@ -2293,12 +2293,10 @@ std::vector<PAD*> FOOTPRINT::GetNetTiePads( PAD* aPad ) const
 
 void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxString& )>& aErrorHandler )
 {
-    int likelyAttr = GetLikelyAttribute();
+    int likelyAttr = ( GetLikelyAttribute() & ( FP_SMD | FP_THROUGH_HOLE ) );
     int setAttr = ( GetAttributes() & ( FP_SMD | FP_THROUGH_HOLE ) );
 
-    // This is only valid if the footprint doesn't have FP_SMD and FP_THROUGH_HOLE set
-    // Which is, unfortunately, possible in theory but not in the UI (I think)
-    if( aErrorHandler && likelyAttr != setAttr )
+    if( setAttr && likelyAttr && setAttr != likelyAttr )
     {
         wxString msg;
 
@@ -2310,12 +2308,10 @@ void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxStri
         case FP_SMD:
             msg.Printf( _( "(expected 'SMD'; actual '%s')" ), GetTypeName() );
             break;
-        default:
-            msg.Printf( _( "(expected 'Other'; actual '%s')" ), GetTypeName() );
-            break;
         }
 
-        (aErrorHandler)( msg );
+        if( aErrorHandler )
+            (aErrorHandler)( msg );
     }
 }
 
