@@ -56,8 +56,8 @@ public:
                  wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
                  bool aAllowEval = true );
 
-    UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale, wxStaticText* aLabel, wxWindow* aValueCtrl,
-                 wxStaticText* aUnitLabel, bool aAllowEval = true );
+    UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale, wxStaticText* aLabel,
+                 wxWindow* aValueCtrl, wxStaticText* aUnitLabel, bool aAllowEval = true );
 
     ~UNIT_BINDER() override;
 

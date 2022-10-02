@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,22 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file panel_prev_model.h
- * @brief Defines a panel which is to be added to a wxFileDialog via
- * SetExtraControl();
- * The panel shows a preview of the footprint being edited and provides controls
- * to set the offset/rotation/scale of each model 3d shape as per KiCad's
- * current behavior. The panel may also be used in the 3D configuration dialog
- * to tune the positioning of the models without invoking a file selector dialog.
- */
-
 #ifndef PANEL_PREVIEW_3D_MODEL_H
 #define PANEL_PREVIEW_3D_MODEL_H
 
 #include "panel_preview_3d_model_base.h"
 
 #include <vector>
+#include <widgets/unit_binder.h>
 #include <tool/tools_holder.h>
 #include <3d_canvas/eda_3d_canvas.h>
 #include <3d_viewer_id.h>
@@ -48,8 +39,6 @@
 #define MAX_SCALE          10000.0
 #define MAX_ROTATION       180.0
 #define MAX_OFFSET         1000.0
-#define MIN_BOARD_THICKNESS 0.01
-#define MAX_BOARD_THICKNESS 100.0
 
 #define SCALE_INCREMENT_FINE       0.02
 #define SCALE_INCREMENT            0.1
@@ -63,12 +52,6 @@
 
 #define OFFSET_INCREMENT_MIL       25.0
 #define OFFSET_INCREMENT_MIL_FINE  5.0
-
-#define BOARD_THICKNESS_INCREMENT_MM 0.2
-#define BOARD_THICKNESS_INCREMENT_MM_FINE 0.05
-
-#define BOARD_THICKNESS_INCREMENT_MIL 10.0
-#define BOARD_THICKNESS_INCREMENT_MIL_FINE 2.0
 
 
 // Declared classes to create pointers
@@ -124,7 +107,6 @@ private:
 	void onMouseWheelScale( wxMouseEvent& event ) override;
 	void onMouseWheelRot( wxMouseEvent& event ) override;
 	void onMouseWheelOffset( wxMouseEvent& event ) override;
-    void onMouseWheelBoardThickness( wxMouseEvent& event ) override;
 
 	void onIncrementRot( wxSpinEvent& event ) override
     {
@@ -150,14 +132,6 @@ private:
     {
         doIncrementOffset( event, -1.0 );
     }
-	void onIncrementBoardThickness( wxSpinEvent& event ) override
-    {
-        doIncrementBoardThickness( event, 1.0 );
-    }
-	void onDecrementBoardThickness( wxSpinEvent& event ) override
-    {
-        doIncrementBoardThickness( event, -1.0 );
-    }
 
     void onOpacitySlider( wxCommandEvent& event ) override;
 
@@ -166,12 +140,10 @@ private:
     void doIncrementScale( wxSpinEvent& aEvent, double aSign );
     void doIncrementRotation( wxSpinEvent& aEvent, double aSign );
     void doIncrementOffset( wxSpinEvent& aEvent, double aSign );
-    void doIncrementBoardThickness( wxSpinEvent& aEvent, double aSign );
 
     wxString formatScaleValue( double aValue );
     wxString formatRotationValue( double aValue );
     wxString formatOffsetValue( double aValue );
-    wxString formatBoardThicknessValue( double aValue );
 
 	void View3DISO( wxCommandEvent& event ) override
     {
@@ -228,9 +200,8 @@ private:
     std::vector<FP_3DMODEL>* m_parentModelList;
     int                      m_selected;   /// Index into m_parentInfoList
 
-    EDA_UNITS m_userUnits;
-
-    double                   m_boardThickness_mm;
+    UNIT_BINDER              m_boardThickness;
+    EDA_UNITS                m_userUnits;
 };
 
 #endif  // PANEL_PREVIEW_3D_MODEL_H

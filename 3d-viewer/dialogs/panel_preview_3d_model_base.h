@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-0-g4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -66,8 +66,8 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		wxTextCtrl* zoff;
 		wxSpinButton* m_spinZoffset;
 		wxSlider* m_opacity;
-		wxTextCtrl* boardthickness;
-		wxSpinButton* m_spinBoardThickness;
+		wxTextCtrl* m_boardThicknessCtrl;
+		wxStaticText* m_boardThicknessUnits;
 		wxBoxSizer* m_SizerPanelView;
 		wxBitmapButton* m_bpvISO;
 		wxBitmapButton* m_bpvLeft;
@@ -92,8 +92,6 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		virtual void onOpacitySlider( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMouseWheelBoardThickness( wxMouseEvent& event ) { event.Skip(); }
 		virtual void updateBoardThickness( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onDecrementBoardThickness( wxSpinEvent& event ) { event.Skip(); }
-		virtual void onIncrementBoardThickness( wxSpinEvent& event ) { event.Skip(); }
 		virtual void View3DISO( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DLeft( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DRight( wxCommandEvent& event ) { event.Skip(); }

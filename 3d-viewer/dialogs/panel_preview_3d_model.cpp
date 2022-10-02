@@ -50,7 +50,8 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
         m_infobar( nullptr ),
         m_boardAdapter(),
         m_currentCamera( m_trackBallCamera ),
-        m_trackBallCamera( 2 * RANGE_SCALE_3D )
+        m_trackBallCamera( 2 * RANGE_SCALE_3D ),
+        m_boardThickness( aFrame, aFrame->GetIuScale(), nullptr, m_boardThicknessCtrl, m_boardThicknessUnits )
 {
     m_userUnits = aFrame->GetUserUnits();
 
@@ -61,8 +62,6 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
 
     BOARD_DESIGN_SETTINGS parent_bds = aFrame->GetDesignSettings();
-    m_boardThickness_mm = parent_bds.GetBoardThickness() / pcbIUScale.IU_PER_MM;
-
     BOARD_DESIGN_SETTINGS dummy_bds = m_dummyBoard->GetDesignSettings();
     dummy_bds.SetBoardThickness( parent_bds.GetBoardThickness() );
     BOARD_STACKUP& dummy_board_stackup = m_dummyBoard->GetDesignSettings().GetStackupDescriptor();
@@ -90,8 +89,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     {
         m_spinXscale, m_spinYscale, m_spinZscale,
         m_spinXrot, m_spinYrot, m_spinZrot,
-        m_spinXoffset,m_spinYoffset, m_spinZoffset,
-        m_spinBoardThickness
+        m_spinXoffset,m_spinYoffset, m_spinZoffset
     };
 
     for( wxSpinButton* button : spinButtonList )
@@ -279,17 +277,6 @@ wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
                              EDA_UNIT_UTILS::GetText( m_userUnits ) );
 }
 
-wxString PANEL_PREVIEW_3D_MODEL::formatBoardThicknessValue( double aValue )
-{
-    // Convert from internal units (mm) to user units
-    if( m_userUnits == EDA_UNITS::INCHES )
-        aValue /= 25.4f;
-    else if( m_userUnits == EDA_UNITS::MILS )
-        aValue /= 25.4 / 1e3;
-
-    return wxString::Format( "%.2f %s", aValue, EDA_UNIT_UTILS::GetText( m_userUnits ) );
-}
-
 
 void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 {
@@ -312,8 +299,6 @@ void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
         yoff->ChangeValue( formatOffsetValue( modelInfo.m_Offset.y ) );
         zoff->ChangeValue( formatOffsetValue( modelInfo.m_Offset.z ) );
 
-        boardthickness->ChangeValue( formatBoardThicknessValue( m_boardThickness_mm ) );
-
         m_opacity->SetValue( modelInfo.m_Opacity * 100.0 );
     }
     else
@@ -334,6 +319,9 @@ void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 
         m_opacity->SetValue( 100 );
     }
+
+    BOARD_DESIGN_SETTINGS dummy_bds = m_dummyBoard->GetDesignSettings();
+    m_boardThickness.ChangeValue( dummy_bds.GetBoardThickness() );
 }
 
 
@@ -385,16 +373,11 @@ void PANEL_PREVIEW_3D_MODEL::onOpacitySlider( wxCommandEvent& event )
     }
 }
 
+
 void PANEL_PREVIEW_3D_MODEL::updateBoardThickness( wxCommandEvent& event )
 {
-    double curr_value_mm = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
-                                                                      boardthickness->GetValue() )
-                           / pcbIUScale.IU_PER_MM;
-    curr_value_mm = std::min( MAX_BOARD_THICKNESS, curr_value_mm );
-    curr_value_mm = std::max( curr_value_mm, MIN_BOARD_THICKNESS );
-
     BOARD_DESIGN_SETTINGS dummy_bds = m_dummyBoard->GetDesignSettings();
-    dummy_bds.SetBoardThickness( static_cast<int>( curr_value_mm * pcbIUScale.IU_PER_MM ) );
+    dummy_bds.SetBoardThickness( m_boardThickness.GetValue() );
 
     BOARD_STACKUP& dummy_board_stackup = m_dummyBoard->GetDesignSettings().GetStackupDescriptor();
     dummy_board_stackup.RemoveAll();
@@ -415,7 +398,8 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementScale( wxSpinEvent& event, double aSign 
     else if( spinCtrl == m_spinZscale )
         textCtrl = zscale;
 
-    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::UNSCALED, textCtrl->GetValue() );
+    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::UNSCALED,
+                                                                   textCtrl->GetValue() );
 
     curr_value += ( SCALE_INCREMENT * aSign );
     curr_value = std::max( 1/MAX_SCALE, curr_value );
@@ -474,32 +458,6 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign
     textCtrl->SetValue( formatOffsetValue( curr_value_mm ) );
 }
 
-
-void PANEL_PREVIEW_3D_MODEL::doIncrementBoardThickness( wxSpinEvent& aEvent, double aSign )
-{
-    wxSpinButton* spinCtrl = (wxSpinButton*) aEvent.GetEventObject();
-    wxTextCtrl*   textCtrl = boardthickness;
-
-    double step = BOARD_THICKNESS_INCREMENT_MM;
-
-    if( m_userUnits == EDA_UNITS::INCHES )
-        step = BOARD_THICKNESS_INCREMENT_MIL / 1000.0;
-    else if( m_userUnits == EDA_UNITS::MILS )
-        step = BOARD_THICKNESS_INCREMENT_MIL;
-
-    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
-                                                                   textCtrl->GetValue() )
-                        / pcbIUScale.IU_PER_MM;
-
-    // avoid keeping the lower limit as offset after hitting it (0.4 -> 0.2 -> 0.01 -> 0.2 -> 0.4)
-    if (curr_value <= MIN_BOARD_THICKNESS)
-        curr_value = 0;
-    curr_value += ( step * aSign );
-    curr_value = std::max( MIN_BOARD_THICKNESS, curr_value );
-    curr_value = std::min( curr_value, MAX_BOARD_THICKNESS );
-
-    textCtrl->SetValue( formatBoardThicknessValue( curr_value ) );
-}
 
 void PANEL_PREVIEW_3D_MODEL::onMouseWheelScale( wxMouseEvent& event )
 {
@@ -576,42 +534,6 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelOffset( wxMouseEvent& event )
     curr_value_mm = std::min( curr_value_mm, MAX_OFFSET );
 
     textCtrl->SetValue( formatOffsetValue( curr_value_mm ) );
-}
-
-void PANEL_PREVIEW_3D_MODEL::onMouseWheelBoardThickness( wxMouseEvent& event )
-{
-    wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
-
-    double step = BOARD_THICKNESS_INCREMENT_MM;
-
-    if( event.ShiftDown( ))
-        step = BOARD_THICKNESS_INCREMENT_MM_FINE;
-
-    if(m_userUnits==EDA_UNITS::INCHES)
-    {
-        step = BOARD_THICKNESS_INCREMENT_MIL/1000.0;
-
-        if( event.ShiftDown() )
-            step = BOARD_THICKNESS_INCREMENT_MIL_FINE/1000.0;
-    }
-    else if( m_userUnits == EDA_UNITS::MILS )
-    {
-        step = BOARD_THICKNESS_INCREMENT_MIL;
-
-        if( event.ShiftDown() )
-            step = BOARD_THICKNESS_INCREMENT_MIL_FINE;
-    }
-
-    if (event.GetWheelRotation()>=0)
-        step = -step;
-
-    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
-                                                                   textCtrl->GetValue() )
-                        / pcbIUScale.IU_PER_MM;
-
-    curr_value += step;
-    curr_value = std::max( 0.0, curr_value );
-    curr_value = std::min( curr_value, MAX_BOARD_THICKNESS );
 }
 
 
