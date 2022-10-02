@@ -798,6 +798,9 @@ void PCB_EDIT_FRAME::ToggleProperties()
 
 void PCB_EDIT_FRAME::ToggleSearch()
 {
+    // Ensure m_show_search is up to date (the pane can be closed outside the menu)
+    m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
+
     m_show_search = !m_show_search;
 
     m_auimgr.GetPane( SearchPaneName() ).Show( m_show_search );

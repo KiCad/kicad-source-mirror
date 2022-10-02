@@ -739,6 +739,12 @@ void PCB_EDIT_FRAME::setupUIConditions()
             return PropertiesShown();
         };
 
+    auto searchPaneCond =
+        [this] ( const SELECTION& )
+        {
+            return m_auimgr.GetPane( SearchPaneName() ).IsShown();
+        };
+
     auto highContrastCond =
             [this] ( const SELECTION& )
             {
@@ -781,6 +787,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
                                                            .Enable( enableNetHighlightCond ) );
     mgr->SetConditions( PCB_ACTIONS::boardSetup,           ENABLE( enableBoardSetupCondition ) );
     mgr->SetConditions( PCB_ACTIONS::showProperties,       CHECK( propertiesCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showSearch,           CHECK( searchPaneCond ) );
 
     auto isHighlightMode =
             [this]( const SELECTION& )
@@ -1181,6 +1188,8 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
         cfg->m_AuiPanels.show_properties = m_show_properties;
+        // ensure m_show_search is up to date (the pane can be closed)
+        m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
         cfg->m_AuiPanels.show_search = m_show_search;
     }
 }
