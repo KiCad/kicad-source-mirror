@@ -1701,25 +1701,48 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     auto checkNetclassDrivers =
             [&]( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs )
             {
+                const CONNECTION_SUBGRAPH* driverSubgraph;
+                wxString                   netclass;
+
                 for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
                 {
                     for( SCH_ITEM* item : subgraph->m_items )
                     {
-                        const wxString netclass = subgraph->GetNetclassForDriver( item );
+                        netclass = subgraph->GetNetclassForDriver( item );
 
                         if( !netclass.IsEmpty() )
-                        {
-                            const wxString netname = subgraph->GetNetName();
+                            break;
+                    }
 
-                            netSettings->m_NetClassLabelAssignments[ netname ] = netclass;
-
-                            if( oldAssignments[ netname ] != netclass )
-                                dirtySubgraphs( subgraphs );
-
-                            return;
-                        }
+                    if( !netclass.IsEmpty() )
+                    {
+                        driverSubgraph = subgraph;
+                        break;
                     }
                 }
+
+                if( netclass.IsEmpty() )
+                    return;
+
+                const wxString netname = driverSubgraph->GetNetName();
+
+                if( driverSubgraph->m_driver_connection->IsBus() )
+                {
+                    for( const auto& member : driverSubgraph->m_driver_connection->Members() )
+                    {
+                        netSettings->m_NetClassLabelAssignments[ member->Name() ] = netclass;
+
+                        auto ii = m_net_name_to_subgraphs_map.find( member->Name() );
+
+                        if( ii != m_net_name_to_subgraphs_map.end() )
+                            dirtySubgraphs( ii->second );
+                    }
+                }
+
+                netSettings->m_NetClassLabelAssignments[ netname ] = netclass;
+
+                if( oldAssignments[ netname ] != netclass )
+                    dirtySubgraphs( subgraphs );
             };
 
     for( const auto& [ netname, subgraphs ] : m_net_name_to_subgraphs_map )
