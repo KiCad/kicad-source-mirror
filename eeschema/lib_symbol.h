@@ -315,6 +315,17 @@ public:
                 int aMulti, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts );
 
     /**
+     * Print just the background fills of a symbol
+     *
+     * @param aOffset - Position of symbol.
+     * @param aMulti - unit if multiple units per symbol.
+     * @param aConvert - Symbol conversion (DeMorgan) if available.
+     * @param aOpts - Drawing options
+     */
+    void PrintBackground( const RENDER_SETTINGS *aSettings, const wxPoint &aOffset, int aMulti,
+            int aConvert, const LIB_SYMBOL_OPTIONS &aOpts );
+
+    /**
      * Plot lib symbol to plotter.
      * Lib Fields not are plotted here, because this plot function
      * is used to plot schematic items, which have they own fields

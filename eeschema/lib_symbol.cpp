@@ -526,7 +526,7 @@ wxString LIB_SYMBOL::SubReference( int aUnit, bool aAddSeparator )
 }
 
 
-void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+void LIB_SYMBOL::PrintBackground( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
                         int aUnit, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts )
 {
     /* draw background for filled items using background option
@@ -553,6 +553,12 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
             }
         }
     }
+}
+
+
+void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, int aUnit,
+                        int aConvert, const LIB_SYMBOL_OPTIONS& aOpts )
+{
 
     for( LIB_ITEM& item : m_drawings )
     {

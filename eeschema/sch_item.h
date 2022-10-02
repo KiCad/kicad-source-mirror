@@ -286,6 +286,15 @@ public:
     virtual void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) = 0;
 
     /**
+     * Print the (optional) backaground elements if they exist
+     * @param aSettings Print settings
+     * @param aOffset is the drawing offset (usually {0,0} but can be different when moving an
+     *                object).
+     */
+
+    virtual void PrintBackground( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) {};
+
+    /**
      * Move the item by \a aMoveVector to a new position.
      */
     virtual void Move( const wxPoint& aMoveVector ) = 0;

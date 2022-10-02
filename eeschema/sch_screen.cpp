@@ -45,7 +45,9 @@
 
 #include <symbol_library.h>
 #include <connection_graph.h>
+#include <lib_item.h>
 #include <lib_pin.h>
+#include <lib_shape.h>
 #include <sch_symbol.h>
 #include <sch_junction.h>
 #include <sch_line.h>
@@ -815,17 +817,20 @@ void SCH_SCREEN::Print( const RENDER_SETTINGS* aSettings )
     }
 
     /// Sort to ensure plot-order consistency with screen drawing
-    std::sort( other.begin(), other.end(),
+    std::stable_sort( other.begin(), other.end(),
                []( const SCH_ITEM* a, const SCH_ITEM* b )
                {
                     if( a->Type() == b->Type() )
                         return a->GetLayer() > b->GetLayer();
 
-                    return a->Type() > b->Type();
+                    return a->Type() < b->Type();
                } );
 
     for( SCH_ITEM* item : bitmaps )
         item->Print( aSettings, wxPoint( 0, 0 ) );
+
+    for( SCH_ITEM* item : other )
+        item->PrintBackground( aSettings, wxPoint( 0, 0 ) );
 
     for( SCH_ITEM* item : other )
         item->Print( aSettings, wxPoint( 0, 0 ) );
