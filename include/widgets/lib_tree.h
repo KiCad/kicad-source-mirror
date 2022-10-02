@@ -196,6 +196,7 @@ protected:
 
     void onTreeSelect( wxDataViewEvent& aEvent );
     void onTreeActivate( wxDataViewEvent& aEvent );
+    void onTreeCharHook( wxKeyEvent& aEvent );
     void onSize( wxSizeEvent& aEvent );
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );

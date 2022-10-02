@@ -82,7 +82,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         auto symbolSelectedCondition =
                 [ editFrame ]( const SELECTION& aSel )
                 {
-                    LIB_ID sel = editFrame->GetTreeLIBID();
+                    LIB_ID sel = editFrame->GetTargetLibId();
                     return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
                 };
         auto saveSymbolAsCondition =

@@ -30,6 +30,7 @@
 #include <dialogs/eda_reorderable_list_dialog.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
+#include <tool/action_manager.h>
 #include <tool/actions.h>
 #include <wx/srchctrl.h>
 #include <wx/settings.h>
@@ -137,6 +138,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onItemContextMenu, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &LIB_TREE::onHeaderContextMenu,
                        this );
+
+    // Process hotkeys when the tree control has focus:
+    m_tree_ctrl->Bind( wxEVT_CHAR, &LIB_TREE::onTreeCharHook, this );
 
     Bind( SYMBOL_PRESELECTED, &LIB_TREE::onPreselect, this );
 
@@ -525,6 +529,23 @@ void LIB_TREE::onQueryMouseMoved( wxMouseEvent& aEvent )
         SetCursor( wxCURSOR_ARROW );
     else
         SetCursor( wxCURSOR_IBEAM );
+}
+
+
+void LIB_TREE::onTreeCharHook( wxKeyEvent& aKeyStroke )
+{
+    onQueryCharHook( aKeyStroke );
+
+    if( aKeyStroke.GetSkipped() )
+    {
+        if( TOOL_INTERACTIVE* tool = m_adapter->GetContextMenuTool() )
+        {
+            int hotkey = aKeyStroke.GetModifiers() | aKeyStroke.GetKeyCode();
+
+            if( tool->GetManager()->GetActionManager()->RunHotKey( hotkey ) )
+                aKeyStroke.Skip( false );
+        }
+    }
 }
 
 
