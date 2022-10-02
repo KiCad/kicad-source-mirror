@@ -1799,8 +1799,13 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    std::string tool = aEvent.GetCommandStr().value();
-    editFrame->PushTool( tool );
+    std::string tool{};
+
+    if( aEvent.GetCommandStr() )
+    {
+        tool = aEvent.GetCommandStr().value();
+        editFrame->PushTool( tool );
+    }
 
     std::vector<BOARD_ITEM*> lockedItems;
     Activate();
@@ -2494,7 +2499,7 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
         // N.B. Setting the CUT flag prevents lock filtering as we only want to delete the items
         // that were copied to the clipboard, no more, no fewer.  Filtering for locked item, if
         // any will be done in the copyToClipboard() routine
-        TOOL_EVENT evt( aEvent.Category(), aEvent.Action(), TOOL_ACTION_SCOPE::AS_GLOBAL );
+        TOOL_EVENT evt( aEvent.Category(), aEvent.Action(), "Cut", TOOL_ACTION_SCOPE::AS_GLOBAL );
         evt.SetParameter( PCB_ACTIONS::REMOVE_FLAGS::CUT );
         Remove( evt );
     }
