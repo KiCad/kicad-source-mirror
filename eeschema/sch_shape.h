@@ -113,6 +113,7 @@ public:
 
 private:
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
+    void PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     EDA_ANGLE getParentOrientation() const override { return ANGLE_0; }
     VECTOR2I getParentPosition() const override { return VECTOR2I(); }

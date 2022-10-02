@@ -99,5 +99,7 @@ void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
     plot_offset.x = pagesize.x / 2;
     plot_offset.y = pagesize.y / 2;
 
+    m_symbol->PrintBackground( aSettings, plot_offset, m_unit, m_convert, LIB_SYMBOL_OPTIONS(), false );
+
     m_symbol->Print( aSettings, plot_offset, m_unit, m_convert, LIB_SYMBOL_OPTIONS(), false );
 }

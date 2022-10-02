@@ -539,11 +539,20 @@ public:
     /**
      * Print a symbol.
      *
-     * @param aDC is the device context (can be null).
+     * @param aSettings Render settings controlling output
      * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
      *                moving an object)
      */
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
+
+    /**
+     * Print only the background parts of a symbol (if any)
+     *
+     * @param aSettings Render settings controlling output
+     * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
+     *                moving an object)
+     */
+    void PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 

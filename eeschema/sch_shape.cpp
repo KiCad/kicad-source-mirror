@@ -241,13 +241,10 @@ int SCH_SHAPE::GetPenWidth() const
 }
 
 
-void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SHAPE::PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    int      penWidth = GetPenWidth();
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color;
-
-    penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
 
     unsigned ptCount = 0;
     VECTOR2I* buffer = nullptr;
@@ -303,6 +300,39 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         default:
             UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
+    }
+
+}
+
+
+void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+{
+    int      penWidth = GetPenWidth();
+    wxDC*    DC = aSettings->GetPrintDC();
+    COLOR4D  color;
+
+    penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
+
+    unsigned ptCount = 0;
+    VECTOR2I* buffer = nullptr;
+
+    if( GetShape() == SHAPE_T::POLY )
+    {
+        SHAPE_LINE_CHAIN poly = m_poly.Outline( 0 );
+
+        ptCount = poly.GetPointCount();
+        buffer = new VECTOR2I[ptCount];
+
+        for( unsigned ii = 0; ii < ptCount; ++ii )
+            buffer[ii] = poly.CPoint( ii );
+    }
+    else if( GetShape() == SHAPE_T::BEZIER )
+    {
+        ptCount = m_bezierPoints.size();
+        buffer = new VECTOR2I[ptCount];
+
+        for( size_t ii = 0; ii < ptCount; ++ii )
+            buffer[ii] = m_bezierPoints[ii];
     }
 
     if( GetStroke().GetColor() == COLOR4D::UNSPECIFIED )

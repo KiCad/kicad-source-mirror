@@ -451,6 +451,18 @@ bool SCH_SYMBOL::HasUnitDisplayName( int aUnit )
 }
 
 
+void SCH_SYMBOL::PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+{
+    LIB_SYMBOL_OPTIONS opts;
+    opts.transform = m_transform;
+    opts.draw_visible_fields = false;
+    opts.draw_hidden_fields = false;
+
+    if( m_part )
+        m_part->PrintBackground( aSettings, m_pos + aOffset, m_unit, m_convert, opts, GetDNP() );
+}
+
+
 void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     LIB_SYMBOL_OPTIONS opts;

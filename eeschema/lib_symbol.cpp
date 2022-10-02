@@ -619,8 +619,8 @@ wxString LIB_SYMBOL::SubReference( int aUnit, bool aAddSeparator )
 }
 
 
-void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aUnit,
-                        int aConvert, const LIB_SYMBOL_OPTIONS& aOpts, bool aDimmed )
+void LIB_SYMBOL::PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                        int aUnit, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts, bool aDimmed )
 {
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background
@@ -650,6 +650,12 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
             }
         }
     }
+}
+
+
+void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aUnit,
+                        int aConvert, const LIB_SYMBOL_OPTIONS& aOpts, bool aDimmed )
+{
 
     for( LIB_ITEM& item : m_drawings )
     {
