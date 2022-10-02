@@ -1151,7 +1151,6 @@ public:
     std::unordered_map< wxString, LSET >                  m_LayerExpressionCache;
     std::unordered_map<ZONE*, std::unique_ptr<DRC_RTREE>> m_CopperZoneRTreeCache;
     std::unique_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;
-
     mutable std::unordered_map<const ZONE*, BOX2I>        m_ZoneBBoxCache;
 
     // ------------ DRC caches -------------

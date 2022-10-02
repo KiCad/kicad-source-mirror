@@ -308,16 +308,19 @@ bool ZONE::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 const BOX2I ZONE::GetBoundingBox() const
 {
-    if( const BOARD* parent = GetBoard() )
+    if( const BOARD* board = GetBoard() )
     {
-        std::unordered_map<const ZONE*, BOX2I>& cache = parent->m_ZoneBBoxCache;
+        std::unordered_map<const ZONE*, BOX2I>& cache = board->m_ZoneBBoxCache;
         auto                                    cacheIter = cache.find( this );
 
         if( cacheIter != cache.end() )
             return cacheIter->second;
 
         BOX2I bbox = m_Poly->BBox();
+
+        std::unique_lock<std::mutex> cacheLock( const_cast<BOARD*>( board )->m_CachesMutex );
         cache[ this ] = bbox;
+
         return bbox;
     }
 
@@ -327,12 +330,16 @@ const BOX2I ZONE::GetBoundingBox() const
 
 void ZONE::CacheBoundingBox()
 {
-    std::unordered_map<const ZONE*, BOX2I>& cache = GetBoard()->m_ZoneBBoxCache;
+    BOARD*                                  board = GetBoard();
+    std::unordered_map<const ZONE*, BOX2I>& cache = board->m_ZoneBBoxCache;
 
     auto cacheIter = cache.find( this );
 
     if( cacheIter == cache.end() )
+    {
+        std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
         cache[ this ] = m_Poly->BBox();
+    }
 }
 
 
