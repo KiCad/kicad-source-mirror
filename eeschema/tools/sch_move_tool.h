@@ -71,14 +71,17 @@ private:
     void getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint, EDA_ITEMS& aList );
     void getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint, EDA_ITEMS& aList );
 
-    ///< Set up handlers for various events.
-    void setTransitions() override;
+    void orthoLineDrag( SCH_LINE* line, const VECTOR2I& splitDelta, int& xBendCount,
+                        int& yBendCount, const EE_GRID_HELPER& grid );
 
     ///< Saves the new drag lines to the undo list
     void commitDragLines();
 
     ///< Clears the new drag lines and removes them from the screen
     void clearNewDragLines();
+
+    ///< Set up handlers for various events.
+    void setTransitions() override;
 
 private:
     ///< Flag determining if anything is being dragged right now

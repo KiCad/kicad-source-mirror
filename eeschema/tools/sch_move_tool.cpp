@@ -84,6 +84,274 @@ bool SCH_MOVE_TOOL::Init()
 }
 
 
+void SCH_MOVE_TOOL::orthoLineDrag( SCH_LINE* line, const VECTOR2I& splitDelta, int& xBendCount,
+                                   int& yBendCount, const EE_GRID_HELPER& grid )
+{
+    // If the move is not the same angle as this move,  then we need to do something special with
+    // the unselected end to maintain orthogonality. Either drag some connected line that is the
+    // same angle as the move or add two lines to make a 90 degree connection
+    if( !EDA_ANGLE( splitDelta ).IsParallelTo( line->Angle() ) || line->GetLength() == 0 )
+    {
+        VECTOR2I unselectedEnd = line->HasFlag( STARTPOINT ) ? line->GetEndPoint()
+                                                             : line->GetStartPoint();
+        VECTOR2I selectedEnd = line->HasFlag( STARTPOINT ) ? line->GetStartPoint()
+                                                           : line->GetEndPoint();
+
+        // Look for pre-existing lines we can drag with us instead of creating new ones
+        bool      foundAttachment = false;
+        bool      foundJunction   = false;
+        bool      foundPin        = false;
+        SCH_LINE* foundLine       = nullptr;
+
+        for( EDA_ITEM* cItem : m_lineConnectionCache[line] )
+        {
+            foundAttachment = true;
+
+            // If the move is the same angle as a connected line, we can shrink/extend that line
+            // endpoint
+            switch( cItem->Type() )
+            {
+            case SCH_LINE_T:
+            {
+                SCH_LINE* cLine = static_cast<SCH_LINE*>( cItem );
+
+                // A matching angle on a non-zero-length line means lengthen/shorten will work
+                if( EDA_ANGLE( splitDelta ).IsParallelTo( cLine->Angle() )
+                        && cLine->GetLength() != 0 )
+                {
+                    foundLine = cLine;
+                }
+
+                // Zero length lines are lines that this algorithm has shortened to 0 so they also
+                // work but we should prefer using a segment with length and angle matching when
+                // we can (otherwise the zero length line will draw overlapping segments on them)
+                if( !foundLine && cLine->GetLength() == 0 )
+                    foundLine = cLine;
+
+                break;
+            }
+            case SCH_JUNCTION_T:
+                foundJunction = true;
+                break;
+
+            case SCH_PIN_T:
+                foundPin = true;
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        // Ok... what if our original line is length zero from moving in its direction, and the
+        // last added segment of the 90 bend we are connected to is zero from moving it in its
+        // direction after it was added?
+        //
+        // If we are moving in original direction, we should lengthen the original drag wire.
+        // Otherwise we should lengthen the new wire.
+        bool preferOriginalLine = false;
+
+        if( foundLine
+                && foundLine->GetLength() == 0
+                && line->GetLength() == 0
+                && EDA_ANGLE( splitDelta ).IsParallelTo( line->GetStoredAngle() ) )
+        {
+            preferOriginalLine = true;
+        }
+        // If we have found an attachment, but not a line, we want to check if it's a junction.
+        // These are special-cased and get a single line added instead of a 90-degree bend. Except
+        // when we're on a pin, because pins always need bends, and junctions are just added to
+        // pins for visual clarity.
+        else if( !foundLine && foundJunction && !foundPin )
+        {
+            // Create a new wire ending at the unselected end
+            foundLine = new SCH_LINE( unselectedEnd, line->GetLayer() );
+            foundLine->SetFlags( IS_NEW );
+            foundLine->SetLastResolvedState( line );
+            m_frame->AddToScreen( foundLine, m_frame->GetScreen() );
+            m_newDragLines.insert( foundLine );
+
+            // We just broke off of the existing items, so replace all of them with our new
+            // end connection.
+            m_lineConnectionCache[foundLine] = m_lineConnectionCache[line];
+            m_lineConnectionCache[line].clear();
+            m_lineConnectionCache[line].emplace_back( foundLine );
+        }
+
+        // We want to drag our found line if it's in the same angle as the move or zero length,
+        // but if the original drag line is also zero and the same original angle we should extend
+        // that one first
+        if( foundLine && !preferOriginalLine )
+        {
+            // Move the connected line found oriented in the direction of our move.
+            //
+            // Make sure we grab the right endpoint, it's not always STARTPOINT since the user can
+            // draw a box of lines. We need to only move one though, and preferably the start point,
+            // in case we have a zero length line that we are extending (we want the foundLine
+            // start point to be attached to the unselected end of our drag line).
+            //
+            // Also, new lines are added already so they'll be in the undo list, skip adding them.
+            if( !foundLine->HasFlag( IS_CHANGED ) && !foundLine->HasFlag( IS_NEW ) )
+            {
+                saveCopyInUndoList( (SCH_ITEM*) foundLine, UNDO_REDO::CHANGED, true );
+
+                if( !foundLine->IsSelected() )
+                    m_changedDragLines.insert( foundLine );
+            }
+
+            if( foundLine->GetStartPoint() == unselectedEnd )
+                foundLine->MoveStart( splitDelta );
+            else if( foundLine->GetEndPoint() == unselectedEnd )
+                foundLine->MoveEnd( splitDelta );
+
+            updateItem( foundLine, true );
+
+
+            SCH_LINE* bendLine = nullptr;
+
+            if( m_lineConnectionCache.count( foundLine ) == 1
+                    && m_lineConnectionCache[foundLine][0]->Type() == SCH_LINE_T )
+            {
+                bendLine = static_cast<SCH_LINE*>( m_lineConnectionCache[foundLine][0] );
+            }
+
+            // Remerge segments we've created if this is a segment that we've added whose only
+            // other connection is also an added segment
+            //
+            // bendLine is first added segment at the original attachment point, foundLine is the
+            // orthogonal line between bendLine and this line
+            if( foundLine->HasFlag( IS_NEW )
+                    && foundLine->GetLength() == 0
+                    && bendLine && bendLine->HasFlag( IS_NEW ) )
+            {
+                if( line->HasFlag( STARTPOINT ) )
+                    line->SetEndPoint( bendLine->GetEndPoint() );
+                else
+                    line->SetStartPoint( bendLine->GetEndPoint() );
+
+                // Update our cache of the connected items.
+
+                // First, re-attach our drag labels to the original line being re-merged.
+                for( EDA_ITEM* candidate : m_lineConnectionCache[bendLine] )
+                {
+                    SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( candidate );
+
+                    if( label && m_specialCaseLabels.count( label ) )
+                        m_specialCaseLabels[label].attachedLine = line;
+                }
+
+                m_lineConnectionCache[line] = m_lineConnectionCache[bendLine];
+                m_lineConnectionCache[bendLine].clear();
+                m_lineConnectionCache[foundLine].clear();
+
+                m_frame->RemoveFromScreen( bendLine, m_frame->GetScreen() );
+                m_frame->RemoveFromScreen( foundLine, m_frame->GetScreen() );
+
+                m_newDragLines.erase( bendLine );
+                m_newDragLines.erase( foundLine );
+
+                delete bendLine;
+                delete foundLine;
+            }
+            //Ok, move the unselected end of our item
+            else
+            {
+                if( line->HasFlag( STARTPOINT ) )
+                    line->MoveEnd( splitDelta );
+                else
+                    line->MoveStart( splitDelta );
+            }
+
+            updateItem( line, true );
+        }
+        else if( line->GetLength() == 0 )
+        {
+            // We didn't find another line to shorten/lengthen, (or we did but it's also zero)
+            // so now is a good time to use our existing zero-length original line
+        }
+        // Either no line was at the "right" angle, or this was a junction, pin, sheet, etc. We
+        // need to add segments to keep the soon-to-move unselected end connected to these items.
+        //
+        // To keep our drag selections all the same, we'll move our unselected end point and then
+        // put wires between it and its original endpoint.
+        else if( foundAttachment && line->IsOrthogonal() )
+        {
+            // The bend counter handles a group of wires all needing their offset one grid movement
+            // further out from each other to not overlap.  The absolute value stuff finds the
+            // direction of the line and hence the the bend increment on that axis
+            unsigned int xMoveBit = splitDelta.x != 0;
+            unsigned int yMoveBit = splitDelta.y != 0;
+            int          xLength = abs( unselectedEnd.x - selectedEnd.x );
+            int          yLength = abs( unselectedEnd.y - selectedEnd.y );
+            int          xMove = ( xLength - ( xBendCount * grid.GetGrid().x ) )
+                                    * sign( selectedEnd.x - unselectedEnd.x );
+            int          yMove = ( yLength - ( yBendCount * grid.GetGrid().y ) )
+                                    * sign( selectedEnd.y - unselectedEnd.y );
+
+            // Create a new wire ending at the unselected end, we'll move the new wire's start
+            // point to the unselected end
+            SCH_LINE* a = new SCH_LINE( unselectedEnd, line->GetLayer() );
+            a->MoveStart( VECTOR2I( xMove, yMove ) );
+            a->SetFlags( IS_NEW );
+            a->SetConnectivityDirty( true );
+            a->SetLastResolvedState( line );
+            m_frame->AddToScreen( a, m_frame->GetScreen() );
+            m_newDragLines.insert( a );
+
+            SCH_LINE* b = new SCH_LINE( a->GetStartPoint(), line->GetLayer() );
+            b->MoveStart( VECTOR2I( splitDelta.x, splitDelta.y ) );
+            b->SetFlags( IS_NEW | STARTPOINT );
+            b->SetConnectivityDirty( true );
+            b->SetLastResolvedState( line );
+            m_frame->AddToScreen( b, m_frame->GetScreen() );
+            m_newDragLines.insert( b );
+
+            xBendCount += yMoveBit;
+            yBendCount += xMoveBit;
+
+            // Ok move the unselected end of our item
+            if( line->HasFlag( STARTPOINT ) )
+            {
+                line->MoveEnd( VECTOR2I( splitDelta.x ? splitDelta.x : xMove,
+                                         splitDelta.y ? splitDelta.y : yMove ) );
+            }
+            else
+            {
+                line->MoveStart( VECTOR2I( splitDelta.x ? splitDelta.x : xMove,
+                                           splitDelta.y ? splitDelta.y : yMove ) );
+            }
+
+            updateItem( line, true );
+
+            // Update our cache of the connected items. First, attach our drag labels to the line
+            // left behind.
+            for( EDA_ITEM* candidate : m_lineConnectionCache[line] )
+            {
+                SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( candidate );
+
+                if( label && m_specialCaseLabels.count( label ) )
+                    m_specialCaseLabels[label].attachedLine = a;
+            }
+
+            // We just broke off of the existing items, so replace all of them with our new end
+            // connection.
+            m_lineConnectionCache[a] = m_lineConnectionCache[line];
+            m_lineConnectionCache[b].emplace_back( a );
+            m_lineConnectionCache[line].clear();
+            m_lineConnectionCache[line].emplace_back( b );
+        }
+        // Original line has no attachments, just move the unselected end
+        else if( !foundAttachment )
+        {
+            if( line->HasFlag( STARTPOINT ) )
+                line->MoveEnd( splitDelta );
+            else
+                line->MoveStart( splitDelta );
+        }
+    }
+}
+
+
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     EESCHEMA_SETTINGS*    cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
@@ -226,8 +494,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         m_selectionTool->AddItemToSel( item, QUIET_MODE );
                     }
 
-                    // Pre-cache all connections of our selected objects so we can keep track of what
-                    // they were originally connected to as we drag them around
+                    // Pre-cache all connections of our selected objects so we can keep track of
+                    // what they were originally connected to as we drag them around
                     for( EDA_ITEM* edaItem : selection )
                     {
                         SCH_ITEM* schItem = static_cast<SCH_ITEM*>( edaItem );
@@ -331,10 +599,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         item->ClearFlags( IS_PASTED );
                     }
 
-                    // The first time pasted items are moved we need to store
-                    // the position of the cursor so that rotate while moving
-                    // works as expected (instead of around the original anchor
-                    // point
+                    // The first time pasted items are moved we need to store the position of the
+                    // cursor so that rotate while moving works as expected (instead of around the
+                    // original anchor point
                     if( isPasted )
                         selection.SetReferencePoint( m_cursor );
 
@@ -428,8 +695,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     if( item->GetParent() && item->GetParent()->IsSelected() )
                         continue;
 
-                    SCH_LINE* line = item->Type() == SCH_LINE_T ? static_cast<SCH_LINE*>( item )
-                                                                : nullptr;
+                    SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
 
                     // Only partially selected drag lines in orthogonal line mode need special handling
                     if( m_isDrag
@@ -437,297 +703,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             && line
                             && line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) )
                     {
-                        // If the move is not the same angle as this move,  then we need to do something
-                        // special with the unselected end to maintain orthogonality. Either drag some
-                        // connected line that is the same angle as the move or add two lines to make
-                        // a 90 degree connection
-                        if( !( EDA_ANGLE( splitDelta ).IsParallelTo( line->Angle() ) )
-                            || ( line->GetLength() == 0 ) )
-                        {
-                            VECTOR2I unselectedEnd = line->HasFlag( STARTPOINT )
-                                                             ? line->GetEndPoint()
-                                                             : line->GetStartPoint();
-                            VECTOR2I selectedEnd = line->HasFlag( STARTPOINT )
-                                                           ? line->GetStartPoint()
-                                                           : line->GetEndPoint();
-
-                            // Look for pre-existing lines we can drag with us instead of creating new ones
-                            bool      foundAttachment = false;
-                            bool      foundJunction   = false;
-                            bool      foundPin        = false;
-                            SCH_LINE* foundLine       = nullptr;
-                            for( EDA_ITEM* cItem : m_lineConnectionCache[line] )
-                            {
-                                foundAttachment = true;
-
-                                // If the move is the same angle as a connected line,
-                                // we can shrink/extend that line endpoint
-                                switch( cItem->Type() )
-                                {
-                                case SCH_LINE_T:
-                                {
-                                    SCH_LINE* cLine = static_cast<SCH_LINE*>( cItem );
-
-                                    // A matching angle on a non-zero-length line means lengthen/shorten will work
-                                    if( ( EDA_ANGLE( splitDelta ).IsParallelTo( cLine->Angle() ) )
-                                        && cLine->GetLength() != 0 )
-                                        foundLine = cLine;
-
-                                    // Zero length lines are lines that this algorithm has shortened to 0 so they
-                                    // also work but we should prefer using a segment with length and angle matching
-                                    // when we can (otherwise the zero length line will draw overlapping segments on them)
-                                    if( foundLine == nullptr && cLine->GetLength() == 0 )
-                                        foundLine = cLine;
-
-                                    break;
-                                }
-                                case SCH_JUNCTION_T:
-                                    foundJunction = true;
-                                    break;
-
-                                case SCH_PIN_T:
-                                    foundPin = true;
-                                    break;
-
-                                default: break;
-                                }
-                            }
-
-                            // Ok... what if our original line is length zero from moving in its direction,
-                            // and the last added segment of the 90 bend we are connected to is zero from moving
-                            // it its direction after it was added?
-                            //
-                            // If we are moving in original direction, we should lengthen the original
-                            // drag wire. Otherwise we should lengthen the new wire.
-                            bool preferOriginalLine = false;
-
-                            if( foundLine && ( foundLine->GetLength() == 0 )
-                                && ( line->GetLength() == 0 )
-                                && ( EDA_ANGLE( splitDelta )
-                                             .IsParallelTo( line->GetStoredAngle() ) ) )
-                            {
-                                preferOriginalLine = true;
-                            }
-                            // If we have found an attachment, but not a line, we want to check if it's
-                            // a junction. These are special-cased and get a single line added instead of a
-                            // 90-degree bend. Except when we're on a pin, because pins always need bends,
-                            // and junctions are just added to pins for visual clarity.
-                            else if( !foundLine && foundJunction && !foundPin )
-                            {
-                                // Create a new wire ending at the unselected end
-                                foundLine = new SCH_LINE( unselectedEnd, line->GetLayer() );
-                                foundLine->SetFlags( IS_NEW );
-                                foundLine->SetLastResolvedState( line );
-                                m_frame->AddToScreen( foundLine, m_frame->GetScreen() );
-                                m_newDragLines.insert( foundLine );
-
-                                // We just broke off of the existing items, so replace all of them with our new
-                                // end connection.
-                                m_lineConnectionCache[foundLine] = m_lineConnectionCache[line];
-                                m_lineConnectionCache[line].clear();
-                                m_lineConnectionCache[line].emplace_back( foundLine );
-                            }
-
-                            // We want to drag our found line if it's in the same angle as the move or zero length,
-                            // but if the original drag line is also zero and the same original angle we should extend
-                            // that one first
-                            if( foundLine && !preferOriginalLine )
-                            {
-                                // Move the connected line found oriented in the direction of our move.
-                                //
-                                // Make sure we grab the right endpoint, it's not always STARTPOINT since
-                                // the user can draw a box of lines. We need to only move one though,
-                                // and preferably the start point, in case we have a zero length line
-                                // that we are extending (we want the foundLine start point to be attached
-                                // to the unselected end of our drag line).
-                                //
-                                // Also, new lines are added already so they'll be in the undo list, skip
-                                // adding them.
-                                if( !foundLine->HasFlag( IS_CHANGED )
-                                    && !foundLine->HasFlag( IS_NEW ) )
-                                {
-                                    saveCopyInUndoList( (SCH_ITEM*) foundLine, UNDO_REDO::CHANGED,
-                                                        true );
-
-                                    if( !foundLine->IsSelected() )
-                                        m_changedDragLines.insert( foundLine );
-                                }
-
-                                if( foundLine->GetStartPoint() == unselectedEnd )
-                                    foundLine->MoveStart( splitDelta );
-                                else if( foundLine->GetEndPoint() == unselectedEnd )
-                                    foundLine->MoveEnd( splitDelta );
-
-                                updateItem( foundLine, true );
-
-
-                                SCH_LINE* bendLine = nullptr;
-
-                                if( ( m_lineConnectionCache.count( foundLine ) == 1 )
-                                    && ( m_lineConnectionCache[foundLine][0]->Type()
-                                         == SCH_LINE_T ) )
-                                {
-                                    bendLine = static_cast<SCH_LINE*>(
-                                            m_lineConnectionCache[foundLine][0] );
-                                }
-
-                                // Remerge segments we've created if this is a segment that we've added
-                                // whose only other connection is also an added segment
-                                //
-                                // bendLine is first added segment at the original attachment point,
-                                // foundLine is the orthogonal line between bendLine and this line
-                                if( foundLine->HasFlag( IS_NEW ) && ( foundLine->GetLength() == 0 )
-                                    && ( bendLine != nullptr ) && bendLine->HasFlag( IS_NEW ) )
-                                {
-                                    if( line->HasFlag( STARTPOINT ) )
-                                        line->SetEndPoint( bendLine->GetEndPoint() );
-                                    else
-                                        line->SetStartPoint( bendLine->GetEndPoint() );
-
-                                    // Update our cache of the connected items.
-
-                                    // First, re-attach our drag labels to the original line being re-merged.
-                                    for( EDA_ITEM* possibleLabel : m_lineConnectionCache[bendLine] )
-                                    {
-                                        switch( possibleLabel->Type() )
-                                        {
-                                        case SCH_LABEL_T:
-                                        case SCH_GLOBAL_LABEL_T:
-                                        case SCH_HIER_LABEL_T:
-                                        {
-                                            SCH_LABEL* label =
-                                                    static_cast<SCH_LABEL*>( possibleLabel );
-                                            if( m_specialCaseLabels.count( label ) )
-                                                m_specialCaseLabels[label].attachedLine = line;
-                                            break;
-                                        }
-                                        default: break;
-                                        }
-                                    }
-
-                                    m_lineConnectionCache[line] = m_lineConnectionCache[bendLine];
-                                    m_lineConnectionCache[bendLine].clear();
-                                    m_lineConnectionCache[foundLine].clear();
-
-
-                                    m_frame->RemoveFromScreen( bendLine, m_frame->GetScreen() );
-                                    m_frame->RemoveFromScreen( foundLine, m_frame->GetScreen() );
-
-                                    m_newDragLines.erase( bendLine );
-                                    m_newDragLines.erase( foundLine );
-
-                                    delete bendLine;
-                                    delete foundLine;
-                                }
-                                //Ok, move the unselected end of our item
-                                else
-                                {
-                                    if( line->HasFlag( STARTPOINT ) )
-                                        line->MoveEnd( splitDelta );
-                                    else
-                                        line->MoveStart( splitDelta );
-                                }
-
-                                updateItem( line, true );
-                            }
-                            else if( line->GetLength() == 0 )
-                            {
-                                // We didn't find another line to shorten/lengthen, (or we did but it's also zero)
-                                // so now is a good time to use our existing zero-length original line
-                            }
-                            // Either no line was at the "right" angle, or this was a junction, pin, sheet, etc.
-                            // We need to add segments to keep the soon-to-move unselected end connected to these
-                            // items.
-                            //
-                            // To keep our drag selections all the same, we'll move our unselected end point and
-                            // then put wires between it and its original endpoint.
-                            else if( foundAttachment && line->IsOrthogonal() )
-                            {
-                                // The bend counter handles a group of wires all needing their offset one
-                                // grid movement further out from each other to not overlap.
-                                // The absolute value stuff finds the direction of the line and hence
-                                // the the bend increment on that axis
-                                unsigned int xMoveBit = splitDelta.x != 0;
-                                unsigned int yMoveBit = splitDelta.y != 0;
-                                int          xLength = abs( unselectedEnd.x - selectedEnd.x );
-                                int          yLength = abs( unselectedEnd.y - selectedEnd.y );
-                                int          xMove = ( xLength - ( xBendCount * grid.GetGrid().x ) )
-                                            * sign( selectedEnd.x - unselectedEnd.x );
-                                int          yMove = ( yLength - ( yBendCount * grid.GetGrid().y ) )
-                                            * sign( selectedEnd.y - unselectedEnd.y );
-
-                                // Create a new wire ending at the unselected end, we'll
-                                // move the new wire's start point to the unselected end
-                                SCH_LINE* a = new SCH_LINE( unselectedEnd, line->GetLayer() );
-                                a->MoveStart( VECTOR2I( xMove, yMove ) );
-                                a->SetFlags( IS_NEW );
-                                a->SetConnectivityDirty( true );
-                                a->SetLastResolvedState( line );
-                                m_frame->AddToScreen( a, m_frame->GetScreen() );
-                                m_newDragLines.insert( a );
-
-                                SCH_LINE* b = new SCH_LINE( a->GetStartPoint(), line->GetLayer() );
-                                b->MoveStart( VECTOR2I( splitDelta.x, splitDelta.y ) );
-                                b->SetFlags( IS_NEW | STARTPOINT );
-                                b->SetConnectivityDirty( true );
-                                b->SetLastResolvedState( line );
-                                m_frame->AddToScreen( b, m_frame->GetScreen() );
-                                m_newDragLines.insert( b );
-
-                                xBendCount += yMoveBit;
-                                yBendCount += xMoveBit;
-
-                                // Ok move the unselected end of our item
-                                if( line->HasFlag( STARTPOINT ) )
-                                {
-                                    line->MoveEnd(
-                                            VECTOR2I( splitDelta.x ? splitDelta.x : xMove,
-                                                      splitDelta.y ? splitDelta.y : yMove ) );
-                                }
-                                else
-                                {
-                                    line->MoveStart(
-                                            VECTOR2I( splitDelta.x ? splitDelta.x : xMove,
-                                                      splitDelta.y ? splitDelta.y : yMove ) );
-                                }
-
-                                updateItem( line, true );
-
-                                // Update our cache of the connected items.
-                                // First, attach our drag labels to the line left behind.
-                                for( EDA_ITEM* possibleLabel : m_lineConnectionCache[line] )
-                                {
-                                    switch( possibleLabel->Type() )
-                                    {
-                                    case SCH_LABEL_T:
-                                    case SCH_GLOBAL_LABEL_T:
-                                    case SCH_HIER_LABEL_T:
-                                    {
-                                        SCH_LABEL* label = static_cast<SCH_LABEL*>( possibleLabel );
-                                        if( m_specialCaseLabels.count( label ) )
-                                            m_specialCaseLabels[label].attachedLine = a;
-                                        break;
-                                    }
-                                    default: break;
-                                    }
-                                }
-
-                                // We just broke off of the existing items, so replace all of them with our new
-                                // end connection.
-                                m_lineConnectionCache[a] = m_lineConnectionCache[line];
-                                m_lineConnectionCache[b].emplace_back( a );
-                                m_lineConnectionCache[line].clear();
-                                m_lineConnectionCache[line].emplace_back( b );
-                            }
-                            // Original line has no attachments, just move the unselected end
-                            else if( !foundAttachment )
-                            {
-                                if( line->HasFlag( STARTPOINT ) )
-                                    line->MoveEnd( splitDelta );
-                                else
-                                    line->MoveStart( splitDelta );
-                            }
-                        }
+                        orthoLineDrag( line, splitDelta, xBendCount, yBendCount, grid );
                     }
 
                     // Move all other items normally, including the selected end of
@@ -1140,52 +1116,40 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
                         newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
                         aList.push_back( newWire );
 
-                        //We need to add a connection reference here because the normal
-                        //algorithm won't find a new line with a point in the middle of an
-                        //existing line
+                        // We need to add a connection reference here because the normal algorithm
+                        // won't find a new line with a point in the middle of an existing line
                         m_lineConnectionCache[newWire] = { line };
                     }
                     break;
-                default: break;
+
+                default:
+                    break;
                 }
 
                 break;
             }
 
-            // Since only one end is going to move, the movement vector of any labels attached
-            // to it is scaled by the proportion of the line length the label is from the moving
-            // end.
+            // Since only one end is going to move, the movement vector of any labels attached to
+            // it is scaled by the proportion of the line length the label is from the moving end.
             for( SCH_ITEM* item : items.Overlapping( line->GetBoundingBox() ) )
             {
-                switch( item->Type() )
+                SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item );
+
+                if( !label || label->IsSelected() )
+                    continue;   // These will be moved on their own because they're selected
+
+                if( label->HasFlag( SELECTED_BY_DRAG ) )
+                    continue;
+
+                if( label->CanConnect( line ) && line->HitTest( label->GetPosition(), 1 ) )
                 {
-                case SCH_LABEL_T:
-                case SCH_HIER_LABEL_T:
-                case SCH_GLOBAL_LABEL_T:
-                case SCH_DIRECTIVE_LABEL_T:
-                {
-                    SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
+                    label->SetFlags( SELECTED_BY_DRAG );
+                    aList.push_back( label );
 
-                    if( label->IsSelected() )
-                        continue;   // These will be moved on their own because they're selected
-
-                    if( label->HasFlag( SELECTED_BY_DRAG ) )
-                        continue;
-
-                    if( label->CanConnect( line ) && line->HitTest( label->GetPosition(), 1 ) )
-                    {
-                        label->SetFlags( SELECTED_BY_DRAG );
-                        aList.push_back( label );
-
-                        SPECIAL_CASE_LABEL_INFO info;
-                        info.attachedLine = line;
-                        info.originalLabelPos = label->GetPosition();
-                        m_specialCaseLabels[label] = info;
-                    }
-
-                    break;
-                }
-                default: break;
+                    SPECIAL_CASE_LABEL_INFO info;
+                    info.attachedLine = line;
+                    info.originalLabelPos = label->GetPosition();
+                    m_specialCaseLabels[label] = info;
                 }
             }
 
@@ -1594,15 +1558,6 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_MOVE_TOOL::setTransitions()
-{
-    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::moveActivate.MakeEvent() );
-    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
-    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::drag.MakeEvent() );
-    Go( &SCH_MOVE_TOOL::AlignElements,      EE_ACTIONS::alignToGrid.MakeEvent() );
-}
-
-
 void SCH_MOVE_TOOL::commitDragLines()
 {
     for( SCH_LINE* newLine : m_newDragLines )
@@ -1626,7 +1581,7 @@ void SCH_MOVE_TOOL::commitDragLines()
 void SCH_MOVE_TOOL::clearNewDragLines()
 {
     // Remove new bend lines added during the drag
-    for( auto newLine : m_newDragLines )
+    for( SCH_LINE* newLine : m_newDragLines )
     {
         m_frame->RemoveFromScreen( newLine, m_frame->GetScreen() );
         delete newLine;
@@ -1634,3 +1589,14 @@ void SCH_MOVE_TOOL::clearNewDragLines()
 
     m_newDragLines.clear();
 }
+
+
+void SCH_MOVE_TOOL::setTransitions()
+{
+    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::moveActivate.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::drag.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::AlignElements,      EE_ACTIONS::alignToGrid.MakeEvent() );
+}
+
+
