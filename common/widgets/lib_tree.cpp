@@ -140,7 +140,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
                        this );
 
     // Process hotkeys when the tree control has focus:
-    m_tree_ctrl->Bind( wxEVT_CHAR, &LIB_TREE::onTreeCharHook, this );
+    m_tree_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onTreeCharHook, this );
 
     Bind( SYMBOL_PRESELECTED, &LIB_TREE::onPreselect, this );
 
@@ -540,7 +540,16 @@ void LIB_TREE::onTreeCharHook( wxKeyEvent& aKeyStroke )
     {
         if( TOOL_INTERACTIVE* tool = m_adapter->GetContextMenuTool() )
         {
-            int hotkey = aKeyStroke.GetModifiers() | aKeyStroke.GetKeyCode();
+            int hotkey = aKeyStroke.GetKeyCode();
+
+            if( aKeyStroke.ShiftDown() )
+                hotkey |= MD_SHIFT;
+
+            if( aKeyStroke.AltDown() )
+                hotkey |= MD_ALT;
+
+            if( aKeyStroke.ControlDown() )
+                hotkey |= MD_CTRL;
 
             if( tool->GetManager()->GetActionManager()->RunHotKey( hotkey ) )
                 aKeyStroke.Skip( false );
