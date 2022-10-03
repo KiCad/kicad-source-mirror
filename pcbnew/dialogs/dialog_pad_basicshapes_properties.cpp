@@ -114,7 +114,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         SetTitle( _( "Arc" ) );
         m_startX.SetValue( m_shape->GetStart().x );
         m_startY.SetValue( m_shape->GetStart().y );
-        m_staticTextPosEnd->SetLabel( _( "Center" ) );
+        m_staticTextPosEnd->SetLabel( _( "Center Point:" ) );
         m_endX.SetValue( m_shape->GetCenter().x );
         m_endY.SetValue( m_shape->GetCenter().y );
         m_radiusLabel->SetLabel( _( "Angle:" ) );
@@ -143,7 +143,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_endY.Show( false );
 
         // Circle center uses position controls:
-        m_staticTextPosStart->SetLabel( _( "Center:" ) );
+        m_staticTextPosStart->SetLabel( _( "Center Point:" ) );
         m_startX.SetValue( m_shape->GetStart().x );
         m_startY.SetValue( m_shape->GetStart().y );
         m_radius.SetValue( m_shape->GetRadius() );

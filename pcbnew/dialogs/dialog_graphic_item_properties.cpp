@@ -208,7 +208,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     {
     case SHAPE_T::CIRCLE:
         SetTitle( _( "Circle Properties" ) );
-        m_startPointLabel->SetLabel( _( "Center" ) );
+        m_startPointLabel->SetLabel( _( "Center Point" ) );
 
         m_endPointLabel->SetLabel( _( "Radius" ) );
         m_endXLabel->Show( false );

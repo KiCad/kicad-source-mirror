@@ -333,7 +333,7 @@ TOOL_ACTION ACTIONS::zoomOutCenter( "common.Control.zoomOutCenter",
 TOOL_ACTION ACTIONS::zoomCenter( "common.Control.zoomCenter",
         AS_GLOBAL,
         WXK_F4, LEGACY_HK_NAME( "Zoom Center" ),
-        _( "Center" ), _( "Center" ),
+        _( "Center on Cursor" ), _( "Center on Cursor" ),
         BITMAPS::zoom_center_on_screen );
 
 TOOL_ACTION ACTIONS::zoomTool( "common.Control.zoomTool",

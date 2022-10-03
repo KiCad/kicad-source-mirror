@@ -1662,7 +1662,7 @@ mpWindow::mpWindow( wxWindow* parent,
 
     m_lockaspect = false;
 
-    m_popmenu.Append( mpID_CENTER, _( "Center" ), _( "Center plot view to this position" ) );
+    m_popmenu.Append( mpID_CENTER, _( "Center on Cursor" ), _( "Center plot view to this position" ) );
     m_popmenu.Append( mpID_FIT, _( "Fit on Screen" ), _( "Set plot view to show all items" ) );
     m_popmenu.Append( mpID_ZOOM_IN, _( "Zoom In" ), _( "Zoom in plot view." ) );
     m_popmenu.Append( mpID_ZOOM_OUT, _( "Zoom Out" ), _( "Zoom out plot view." ) );
