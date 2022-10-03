@@ -1116,6 +1116,12 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
                         newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
                         aList.push_back( newWire );
 
+                        if( aPoint != line->GetStartPoint() && aPoint != line->GetEndPoint() )
+                        {
+                            newWire->SetEndPoint( line->GetEndPoint() );
+                            line->SetEndPoint( aPoint );
+                        }
+
                         // We need to add a connection reference here because the normal algorithm
                         // won't find a new line with a point in the middle of an existing line
                         m_lineConnectionCache[newWire] = { line };
