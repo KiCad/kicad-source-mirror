@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-10-02 00:43+0000\n"
-"Last-Translator: KwonHyeokbeom <gurqja3810@naver.com>\n"
+"PO-Revision-Date: 2022-10-03 10:53+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -3032,13 +3032,12 @@ msgid "Show icons in menus"
 msgstr "메뉴에 아이콘 표시"
 
 #: common/dialogs/panel_common_settings_base.cpp:124
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "메뉴에 아이콘 표시"
+msgstr "편집기에 스크롤바 표시"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "이 변경 사항은 편집기를 다시 시작할 때 적용됩니다."
 
 #: common/dialogs/panel_common_settings_base.cpp:133
 msgid "Icon theme:"
@@ -4353,9 +4352,8 @@ msgstr "그리기 항목"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "핀 번호"
+msgstr "번호 상자"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1197
 msgid "Rect"
@@ -4428,9 +4426,8 @@ msgid "Points"
 msgstr "포인트"
 
 #: common/eda_shape.cpp:601
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "패드 번호"
+msgstr "패드 번호 상자"
 
 #: common/eda_shape.cpp:605 common/eda_text.cpp:1042
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:671
@@ -4843,9 +4840,8 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr "fp-lib-table 파일에는 '%s'라는 라이브러리가 없습니다."
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:568
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "플러그인과 컨텐츠 매니저"
+msgstr "플러그인 및 콘텐츠 관리자에 의해 추가 됨"
 
 #: common/fp_lib_table.cpp:555
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -5457,14 +5453,14 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "이 언어에 대한 KiCad 언어 파일이 설치되어 있지 않습니다."
 
 #: common/plotters/PDF_plotter.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "페이지 1"
+msgstr "페이지 %s"
 
 #: common/plotters/PDF_plotter.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(페이지 %s)"
+msgstr "%s (페이지 %s)"
 
 #: common/plotters/PDF_plotter.cpp:1188
 #, c-format
@@ -5874,14 +5870,12 @@ msgid "Change edit method constraints"
 msgstr "편집 방식의 제약 변경"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "속성 패널 표시"
+msgstr "검색 패널 표시"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "속성 패널 표시/숨기기"
+msgstr "검색 패널 표시/숨기기"
 
 #: common/tool/actions.cpp:215 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -6137,9 +6131,8 @@ msgid "Use millimeters"
 msgstr "mm 단위 사용"
 
 #: common/tool/actions.cpp:517 common/widgets/lib_tree.cpp:634
-#, fuzzy
 msgid "Select Columns"
-msgstr "글꼴 선택"
+msgstr "열 선택"
 
 #: common/tool/actions.cpp:522
 msgid "Switch units"
@@ -6557,7 +6550,7 @@ msgstr "경로 선택"
 
 #: common/widgets/lib_tree.cpp:285
 msgid "recent searches"
-msgstr ""
+msgstr "최근 검색"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -7543,20 +7536,19 @@ msgstr ""
 "찾지 못했습니다. 스크립트가 존재하지 않습니다."
 
 #: eeschema/component_references_lister.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "주석이 없는 항목: %s%s (단위 %d)\n"
+msgstr "주석이 없는 항목: %s%s (단위 %d)"
 
 #: eeschema/component_references_lister.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "주석이 없는 항목: %s%s\n"
+msgstr "주석이 없는 항목: %s%s"
 
 #: eeschema/component_references_lister.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr ""
-"오류: 심볼 %s%s%s (단위 %d)가 정의된 유닛 개수 (%d) 를 초과하였습니다.\n"
+msgstr "오류: 심볼 %s%s%s (유닛 %d)가 정의된 유닛 개수 (%d) 를 초과하였음"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -8732,13 +8724,10 @@ msgstr "시트 파일명은 시트 설정 대화 상자에서만 변경할 수 �
 
 #: eeschema/dialogs/dialog_field_properties.cpp:671
 #: eeschema/dialogs/dialog_label_properties.cpp:460
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr ""
-"텍스트 주위의 여백은 회로도 설정 > 일반 > 서식 에 정의된\n"
-"텍스트 간격 비율에 따라 결정됩니다."
+msgstr "시트 간 참조 가시성은 회로도 설정 > 일반 > 서식에서 전역적으로 제어됨"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -10103,14 +10092,13 @@ msgid "Alternate pin definitions must have a name."
 msgstr "대체 핀 정의에는 이름이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"해당 핀은 %d mils 그리드 위에 있지 않으며, 이 때문에\n"
-"회로도와 연결하기 어려워집니다.\n"
+"이 핀은 %d mils 그리드에 있지 않으므로 회로도에서 연결하기가 어렵습니다.\n"
 "계속하시겠습니까?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
@@ -11002,7 +10990,7 @@ msgstr "재정의"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:63
 msgid "Pin:"
-msgstr ""
+msgstr "핀:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:90
 #: eeschema/dialogs/dialog_sim_model_base.cpp:194
@@ -11567,9 +11555,8 @@ msgstr ""
 "기판의 위에는 표시될 필요가 없는 심볼을 추가할 때 도움이 됩니다"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Do not populate"
-msgstr "내보내지 않기"
+msgstr "채우지 마십시오"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 msgid "Update Symbol from Library..."
@@ -12222,18 +12209,15 @@ msgid "Default text size:"
 msgstr "기본 텍스트 크기:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "텍스트 오프셋 비율:"
+msgstr "라벨 오프셋 비율:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
-msgstr ""
-"와이어 또는 버스 위 또는 아래의 텍스트를 간격띄우기하는 텍스트 크기의 백분율"
+msgstr "와이어, 버스 또는 핀의 위(또는 아래)에 레이블을 오프셋할 텍스트 크기의 백분율"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Global label margin:"
@@ -12716,9 +12700,8 @@ msgid "No Connection"
 msgstr "연결 없음"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "도면 시트에서 확인되지 않은 텍스트 변수입니다."
+msgstr "도면 시트의 해결되지 않은 텍스트 변수"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -12731,9 +12714,8 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "%s와 %s에 다른 풋프린트가 할당되었음"
 
 #: eeschema/erc.cpp:438
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
-msgstr "\"연결 없음\" 유형의 핀이 연결되어 있습니다"
+msgstr "'연결 없음' 유형의 핀이 연결됨"
 
 #: eeschema/erc.cpp:563
 #, c-format
@@ -12746,24 +12728,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "핀 %s이(가) %s 및 %s에 모두 연결됨"
 
 #: eeschema/erc.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "현재 구성에 라이브러리 '%s'이(가) 포함되어 있지 않습니다."
+msgstr "현재 구성에 '%s' 라이브러리가 포함되어 있지 않음"
 
 #: eeschema/erc.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "라이브러리 '%s'이(가) 현재 구성에서 사용하도록 설정되어 있지 않습니다."
+msgstr "라이브러리 '%s'는 현재 구성에서 사용할 수 없음"
 
 #: eeschema/erc.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "심볼 %s이(가) 라이브러리 '%s'에서 찾을 수 없습니다."
+msgstr "심볼 %s를 라이브러리 '%s'에서 찾을 수 없음"
 
 #: eeschema/erc.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "심볼 %s이(가) 라이브러리 '%s'에서 찾을 수 없습니다."
+msgstr "심볼 %s이(가) 라이브러리 '%s'에서 수정되었음"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -13205,9 +13187,8 @@ msgid "Unknown"
 msgstr "알 수 없음"
 
 #: eeschema/hierarch.cpp:248
-#, fuzzy
 msgid "Edit Page Number"
-msgstr "시트 페이지 번호 편집"
+msgstr "페이지 번호 편집"
 
 #: eeschema/hierarch.cpp:259 eeschema/tools/sch_edit_tool.cpp:2298
 #, c-format
@@ -13403,14 +13384,12 @@ msgid "Netlist..."
 msgstr "네트리스트…"
 
 #: eeschema/menubar.cpp:125
-#, fuzzy
 msgid "Symbols to Library..."
-msgstr "라이브러리에서 심볼 업데이트..."
+msgstr "심볼을 라이브러리로..."
 
 #: eeschema/menubar.cpp:127
-#, fuzzy
 msgid "Symbols to New Library..."
-msgstr "풋프린트를 새 라이브러리로 내보내기.."
+msgstr "심볼을 새 라이브러리로.."
 
 #: eeschema/menubar.cpp:195
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
@@ -13829,7 +13808,6 @@ msgid "Resolved netclass"
 msgstr "해결된 넷클래스"
 
 #: eeschema/sch_label.cpp:956
-#, fuzzy
 msgid "Hierarchical Labels"
 msgstr "계층 라벨"
 
@@ -14557,19 +14535,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "계층 시트 핀 %s"
 
 #: eeschema/sch_symbol.cpp:1157
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "BOM에서 제외"
+msgstr "BOM에서 제외됨"
 
 #: eeschema/sch_symbol.cpp:1162
-#, fuzzy
 msgid "Excluded from board"
-msgstr "기판에서 제외"
+msgstr "기판에서 제외됨"
 
 #: eeschema/sch_symbol.cpp:1167
-#, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1538
 msgid "Power symbol"
@@ -15119,34 +15094,32 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "값' %s'에서 모델 유추에 실패"
 
 #: eeschema/sim/sim_model_kibis.cpp:205
-#, fuzzy
 msgid "Power supply"
-msgstr "전원 심볼"
+msgstr "전원 공급 장치"
 
 #: eeschema/sim/sim_model_kibis.cpp:215
-#, fuzzy
 msgid "Parasitic Resistance"
-msgstr "비저항"
+msgstr "기생 저항"
 
 #: eeschema/sim/sim_model_kibis.cpp:225
 msgid "Parasitic Pin Inductance"
-msgstr ""
+msgstr "기생 핀 인덕턴스"
 
 #: eeschema/sim/sim_model_kibis.cpp:235
 msgid "Parasitic Pin Capacitance"
-msgstr ""
+msgstr "기생 핀 커패시턴스"
 
 #: eeschema/sim/sim_model_kibis.cpp:250
 msgid "Waveform"
-msgstr ""
+msgstr "파형"
 
 #: eeschema/sim/sim_model_kibis.cpp:265
 msgid "Modeling accuracy"
-msgstr ""
+msgstr "모델링 정확도"
 
 #: eeschema/sim/sim_model_kibis.cpp:278
 msgid "ON time"
-msgstr ""
+msgstr "ON 시간"
 
 #: eeschema/sim/sim_model_kibis.cpp:287
 msgid "OFF time"
@@ -15157,9 +15130,8 @@ msgid "Delay"
 msgstr "지연"
 
 #: eeschema/sim/sim_model_kibis.cpp:309
-#, fuzzy
 msgid "Bitrate"
-msgstr "서브스트레이트"
+msgstr "비트 전송률"
 
 #: eeschema/sim/sim_model_kibis.cpp:318
 msgid "Number of bits"
@@ -16329,11 +16301,11 @@ msgstr "부모 심볼의 변경 사항과 일치하도록 심볼 업데이트"
 
 #: eeschema/tools/ee_actions.cpp:186
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "단위 표시 이름 설정..."
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr ""
+msgstr "장치의 표시 이름 설정"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -16994,31 +16966,27 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "현재 회로도에 대한 BOM 생성"
 
 #: eeschema/tools/ee_actions.cpp:681
-#, fuzzy
 msgid "Export Symbols to Library..."
-msgstr "라이브러리에서 심볼 업데이트..."
+msgstr "라이브러리로 심볼 내보내기..."
 
 #: eeschema/tools/ee_actions.cpp:682
-#, fuzzy
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"기판에서 사용되는 풋프린트를 기존 풋프린트 라이브러리에 추가합니다\n"
-"(이 라이브러리에서 다른 풋프린트를 제거하지 않음)"
+"회로도에서 사용되는 심볼을 기존 심볼 라이브러리에 추가함\n"
+"(이 라이브러리에서 다른 심볼을 제거하지 않음)"
 
 #: eeschema/tools/ee_actions.cpp:688
-#, fuzzy
 msgid "Export Symbols to New Library..."
-msgstr "라이브러리에서 심볼 업데이트..."
+msgstr "새 라이브러리로 심볼 내보내기..."
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"기판에서 사용된 풋프린트를 포함하는 새 풋프린트 라이브러리를 만듭니다\n"
+"회로도에 사용된 심볼을 사용하여 새 심볼 라이브러리 생성\n"
 "(이미 존재하는 라이브러리는 대체됨)"
 
 #: eeschema/tools/ee_actions.cpp:695
@@ -17415,14 +17383,13 @@ msgid "Find again to wrap around to the start."
 msgstr "처음으로 돌아가서 다시 검색합니다."
 
 #: eeschema/tools/sch_editor_control.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add library '%s'."
-msgstr "라이브러리 파일 '%s'을(를) 찾을 수 없음"
+msgstr "라이브러리 '%s'을(를) 추가 할 수 없음."
 
 #: eeschema/tools/sch_editor_control.cpp:819
-#, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
-msgstr "기판상의 풋프린트를 새 라이브러리를 참조하여 업데이트하시겠습니까?"
+msgstr "새 라이브러리를 참조하도록 회로도의 심볼을 업데이트하시겠습니까?"
 
 #: eeschema/tools/sch_editor_control.cpp:1142
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -17536,13 +17503,13 @@ msgid "Symbol is not derived from another symbol."
 msgstr "심볼이 다른 심볼로부터 파생되지 않았습니다."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Enter display name for unit %s"
-msgstr "시트 경로 %s의 페이지 번호를 입력하세요"
+msgstr "유닛 %s의 표시 이름 입력"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:672
 msgid "Set Unit Display Name"
-msgstr ""
+msgstr "장치 표시 이름 설정"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -19403,19 +19370,16 @@ msgid "Check for package updates on startup"
 msgstr "시작 시 패키지 업데이트 확인"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:28
-#, fuzzy
 msgid "Library package handling"
-msgstr "라이브러리 변경점 저장되지 않음"
+msgstr "라이브러리 패키지 처리"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "전역 라이브러리 표에 라이브러리를 추가 하겠습니까?"
+msgstr "설치된 라이브러리를 전역 라이브러리 표에 추가"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "연결되지 않은 핀에서 자동으로 와이어 시작"
+msgstr "설치되지 않은 라이브러리를 자동으로 제거"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
 msgid "Library nickname prefix:"
@@ -19425,7 +19389,8 @@ msgstr "라이브러리 별칭 접두사:"
 msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
-msgstr ""
+msgstr "패키지를 (제거) 설치한 후 전역 라이브러리 테이블의 변경 사항을 반영하기 위해 "
+"KiCad를 다시 시작해야 할 수 있습니다."
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19523,9 +19488,9 @@ msgid "No package updates available"
 msgstr "사용 가능한 패키지 업데이트가 없습니다"
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "%s 핀 %s을(를) 찾을 수 없음"
+msgstr "버전 %s 패키지 %s 찾을 수 없습니다!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -20968,9 +20933,8 @@ msgstr "곱셈 회로"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
-#, fuzzy
 msgid "Copper (Cu)"
-msgstr "구리"
+msgstr "구리 (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:54
 msgid ""
@@ -20987,6 +20951,15 @@ msgid ""
 "You can use an interface metal, just like with the ENIG surface finish that "
 "uses nickel as an interface between gold and copper to prevent corrosion."
 msgstr ""
+"두 금속이 접촉하면 부식을 일으키는 전위차가 있습니다.\n"
+"부식을 방지하려면 차이를 300mV 미만으로 유지하는 것이 좋습니다.\n"
+"\n"
+"금속 중 하나는 양극(+)이며 공격을 받습니다. 다른 하나는 음극이며 보호됩니다."
+"\n"
+"아래 표에서 숫자가 양수이면 행은 양극이고 열은 음극입니다.\n"
+"\n"
+"부식을 방지하기 위해 금과 구리 사이의 계면으로 니켈을 사용하는 ENIG 표면 "
+"마감과 마찬가지로 계면 금속을 사용할 수 있습니다."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:32
 msgid "Voltage > 500 V:"
@@ -21847,7 +21820,7 @@ msgstr "보드 클래스"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
 msgid "Galvanic corrosion"
-msgstr ""
+msgstr "갈바닉 부식"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -22838,9 +22811,8 @@ msgid "Remove track not connected at both ends"
 msgstr "양쪽 끝에 연결되지 않은 배선 제거"
 
 #: pcbnew/cleanup_item.cpp:52
-#, fuzzy
 msgid "Remove via connected on less than 2 layers"
-msgstr "2개 미만의 레이어에서 연결된 비아 제거"
+msgstr "2개 미만의 레이어에 연결된 비아 제거"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
@@ -22863,9 +22835,8 @@ msgid "Convert lines to rectangle"
 msgstr "선을 직사각형으로 변환"
 
 #: pcbnew/cleanup_item.cpp:60
-#, fuzzy
 msgid "Merge overlapping shapes into pad"
-msgstr "세그먼트 병합"
+msgstr "겹치는 도형을 패드에 병합"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
@@ -23603,9 +23574,8 @@ msgid "Subtract holes from board area"
 msgstr "기판 영역에서 홀 부분들을 뺍니다"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
-#, fuzzy
 msgid "Exclude footprints with no pads"
-msgstr "스루홀 패드가 존재하는 모든 풋프린트를 제외"
+msgstr "패드가 없는 풋프린트 제외"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "X Size"
@@ -23671,15 +23641,14 @@ msgid "Delete redundant graphics"
 msgstr "중복 그래픽 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:28
-#, fuzzy
 msgid "Merge overlapping graphics into pads"
-msgstr "세그먼트 병합"
+msgstr "겹치는 그래픽을 패드에 병합"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:34
 msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
-msgstr ""
+msgstr "(Net Tie 패드 그룹에 나타나는 패드는 병합 대상에서 제외됩니다.)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -26847,7 +26816,7 @@ msgstr "각도"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
 #, fuzzy
 msgid "at"
-msgstr "경로"
+msgstr "at"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:733
 msgid "radius"
@@ -26860,9 +26829,8 @@ msgstr "모서리 수 %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:745
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2178
-#, fuzzy
 msgid "Number box"
-msgstr "핀 번호"
+msgstr "번호 상자"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:754
 msgid "Unknown primitive"
@@ -29078,9 +29046,8 @@ msgid "Minimum connection width:"
 msgstr "최소 연결 너비:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
-#, fuzzy
 msgid "The minimum copper width of connected copper items."
-msgstr "연결되지 않은 고립 영역으로 할 일을 선택"
+msgstr "연결된 구리 항목의 최소 구리 너비입니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -33560,24 +33527,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "%s에 'BOM에서 제외' 제작 속성이 제거되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "%s에 'BOM에서 제외' 제작 속성을 추가합니다."
+msgstr "%s '위치 파일에서 제외' 제작 속성을 추가합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "%s에서 'BOM에서 제외' 제작 속성을 제거합니다."
+msgstr "%s '위치 파일에서 제외' 제작 속성을 제거합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "%s에 'BOM에서 제외' 제작 속성이 추가되었습니다."
+msgstr "%s '위치 파일에서 제외' 제작 속성을 추가합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "%s에 'BOM에서 제외' 제작 속성이 제거되었습니다."
+msgstr "%s '위치 파일에서 제외' 제작 속성이 제거되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:497
 #, c-format
@@ -34021,9 +33988,8 @@ msgid "Export netlist used to update schematics"
 msgstr "회로도를 업데이트하기 위해 사용된 네트리스트 내보내기"
 
 #: pcbnew/pcb_edit_frame.cpp:310
-#, fuzzy
 msgid "Search"
-msgstr "문자열 검색"
+msgstr "검색"
 
 #: pcbnew/pcb_edit_frame.cpp:383
 msgid "New PCB file is unsaved"
@@ -36473,7 +36439,6 @@ msgid "Duplicate zone"
 msgstr "중복 영역"
 
 #: pcbnew/tools/board_editor_control.cpp:1497
-#, fuzzy
 msgid "Selection contains no items with labeled nets."
 msgstr "선택 항목에는 레이블이 지정된 네트가 있는 항목이 없습니다."
 
@@ -37083,7 +37048,6 @@ msgid "Copy canceled"
 msgstr "복사 취소됨"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:421
-#, fuzzy
 msgid "Pack footprints"
 msgstr "풋프린트 잠금"
 
@@ -37150,7 +37114,6 @@ msgid "Place pad"
 msgstr "패드 배치"
 
 #: pcbnew/tools/pad_tool.cpp:583
-#, fuzzy
 msgid "Recombine pad"
 msgstr "패드 재결합"
 
@@ -37420,12 +37383,11 @@ msgstr "참조 지정자로 풋프린트를 선택하여, 이동을 위해 커�
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Move Individually"
-msgstr ""
+msgstr "개별적으로 이동"
 
 #: pcbnew/tools/pcb_actions.cpp:276
-#, fuzzy
 msgid "Moves the selected items one-by-one"
-msgstr "선택된 항목 이동"
+msgstr "선택한 항목을 하나씩 이동"
 
 #: pcbnew/tools/pcb_actions.cpp:281
 msgid "Move with Reference"
@@ -37476,25 +37438,22 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "선택한 항목을 기판의 반대쪽으로 뒤집습니다"
 
 #: pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Mirrors selected item across the Y axis"
-msgstr "선택한 항목 미러링"
+msgstr "선택한 항목을 Y축 미러링"
 
 #: pcbnew/tools/pcb_actions.cpp:336
-#, fuzzy
 msgid "Mirrors selected item across the X axis"
-msgstr "선택한 항목 미러링"
+msgstr "선택한 항목을 X축 미러링"
 
 #: pcbnew/tools/pcb_actions.cpp:348
-#, fuzzy
 msgid "Pack and Move Footprints"
-msgstr "풋 프린트 가져오기 및 이동"
+msgstr "풋프린트 포장 및 이동"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
-msgstr ""
+msgstr "선택한 풋프린트를 참조별로 정렬하고 크기에 따라 포장하고 이동을 시작함"
 
 #: pcbnew/tools/pcb_actions.cpp:354
 msgid "Change Track Width"
@@ -38495,14 +38454,12 @@ msgid ""
 msgstr "접합, 패드 또는 전체 연결에 대한 연결 선택 또는 기존 선택 확장"
 
 #: pcbnew/tools/pcb_actions.cpp:1304
-#, fuzzy
 msgid "Unroute Selected"
-msgstr "그룹 선택됨"
+msgstr "경로 해제 선택됨"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
-#, fuzzy
 msgid "Unroutes selected items to the nearest pad."
-msgstr "선택한 항목을 왼쪽 모서리에 정렬"
+msgstr "선택한 항목을 가장 가까운 패드로 언라우트함"
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Select All Tracks in Net"
