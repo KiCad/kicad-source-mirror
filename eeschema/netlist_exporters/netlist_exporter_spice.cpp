@@ -376,28 +376,22 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
                     if( mparam )
                         static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
-                                ->m_ton = static_cast<double>(
-                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                        ->Get()
-                                        .value_or( 1 ) );
+                                ->m_ton = static_cast<SIM_VALUE_FLOAT*>( mparam->value.get() )->Get()
+                                        .value_or( 1 );
 
                     mparam = spiceItem.model->FindParam( "toff" );
 
                     if( mparam )
                         static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
-                                ->m_toff = static_cast<double>(
-                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                        ->Get()
-                                        .value_or( 1 ) );
+                                ->m_toff = static_cast<SIM_VALUE_FLOAT*>( mparam->value.get() )->Get()
+                                        .value_or( 1 );
 
                     mparam = spiceItem.model->FindParam( "delay" );
 
                     if( mparam )
                         static_cast<KIBIS_WAVEFORM_RECTANGULAR*>( kparams.m_waveform )
-                                ->m_delay = static_cast<double>(
-                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                        ->Get()
-                                        .value_or( 0 ) );
+                                ->m_delay = static_cast<SIM_VALUE_FLOAT*>( mparam->value.get() )->Get()
+                                        .value_or( 0 );
 
                     kpin->writeSpiceDriver( &modelData, modelName, *kmodel, kparams );
                     break;
@@ -411,28 +405,22 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
                     if( mparam )
                         static_cast<KIBIS_WAVEFORM_PRBS*>( kparams.m_waveform )
-                                ->m_bitrate = static_cast<double>(
-                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                        ->Get()
-                                        .value_or( 1 ) );
+                                ->m_bitrate = static_cast<SIM_VALUE_FLOAT*>( mparam->value.get() )->Get()
+                                        .value_or( 0 );
 
                     mparam = spiceItem.model->FindParam( "bits" );
 
                     if( mparam )
                         static_cast<KIBIS_WAVEFORM_PRBS*>( kparams.m_waveform )
-                                ->m_bits = static_cast<double>(
-                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                        ->Get()
-                                        .value_or( 1 ) );
+                                ->m_bits = static_cast<SIM_VALUE_FLOAT*>( mparam->value.get() )->Get()
+                                        .value_or( 0 );
 
                     mparam = spiceItem.model->FindParam( "delay" );
 
                     if( mparam )
                         static_cast<KIBIS_WAVEFORM_PRBS*>( kparams.m_waveform )
-                                ->m_delay = static_cast<double>(
-                                std::dynamic_pointer_cast<SIM_VALUE_FLOAT>( mparam->value )
-                                        ->Get()
-                                        .value_or( 0 ) );
+                                ->m_delay = static_cast<SIM_VALUE_FLOAT*>( mparam->value.get() )->Get()
+                                        .value_or( 0 );
 
                     kpin->writeSpiceDriver( &modelData, modelName, *kmodel, kparams );
                     break;

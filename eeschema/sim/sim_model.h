@@ -422,7 +422,7 @@ public:
             }
         };
 
-        std::shared_ptr<SIM_VALUE> value;
+        std::unique_ptr<SIM_VALUE> value;
         const INFO& info;
         bool isOtherVariant = false; // Legacy.
 
