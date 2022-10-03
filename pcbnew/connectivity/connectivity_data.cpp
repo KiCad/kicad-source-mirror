@@ -209,6 +209,11 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
         for( unsigned int i = prevSize; i < m_nets.size(); i++ )
             m_nets[i] = new RN_NET;
     }
+    else
+    {
+        for( size_t ii = lastNet; ii < m_nets.size(); ++ii )
+            m_nets[ii]->Clear();
+    }
 
     const std::vector<std::shared_ptr<CN_CLUSTER>>& clusters = m_connAlgo->GetClusters();
 
