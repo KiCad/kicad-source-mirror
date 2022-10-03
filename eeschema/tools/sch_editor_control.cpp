@@ -45,6 +45,7 @@
 #include <sch_edit_frame.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <sch_line.h>
+#include <sch_shape.h>
 #include <sch_painter.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
@@ -1801,6 +1802,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     std::string        content;
+    VECTOR2I           eventPos;
 
     if( aEvent.IsAction( &ACTIONS::duplicate ) )
         content = m_localClipboard;
@@ -1809,6 +1811,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     if( content.empty() )
         return 0;
+
+    if( aEvent.IsAction( &ACTIONS::duplicate ) )
+        eventPos = getViewControls()->GetCursorPosition( false );
 
     STRING_LINE_READER reader( content, "Clipboard" );
     SCH_SEXPR_PLUGIN   plugin;
@@ -1837,8 +1842,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // Save loaded screen instances to m_clipboardSheetInstances
     setClipboardInstances( tempScreen );
 
-    PASTE_MODE pasteMode =
-            annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS : PASTE_MODE::REMOVE_ANNOTATIONS;
+    PASTE_MODE pasteMode = annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS
+                                              : PASTE_MODE::REMOVE_ANNOTATIONS;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
@@ -2153,9 +2158,97 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     if( !selection.Empty() )
     {
-        SCH_ITEM* item = (SCH_ITEM*) selection.GetTopLeftItem();
+        if( aEvent.IsAction( &ACTIONS::duplicate ) )
+        {
+            int closest_dist = INT_MAX;
 
-        selection.SetReferencePoint( item->GetPosition() );
+            auto processPt =
+                    [&]( const VECTOR2I& pt )
+                    {
+                        int dist = ( eventPos - pt ).EuclideanNorm();
+
+                        if( dist < closest_dist )
+                        {
+                            selection.SetReferencePoint( pt );
+                            closest_dist = dist;
+                        }
+                    };
+
+            // Prefer connection points (which should remain on grid)
+
+            for( EDA_ITEM* item : selection.Items() )
+            {
+                SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
+                LIB_PIN*  lib_pin = dynamic_cast<LIB_PIN*>( item );
+
+                if( sch_item && sch_item->IsConnectable() )
+                {
+                    for( const VECTOR2I& pt : sch_item->GetConnectionPoints() )
+                        processPt( pt );
+                }
+                else if( lib_pin )
+                {
+                    processPt( lib_pin->GetPosition() );
+                }
+            }
+
+            // Only process other points if we didn't find any connection points
+
+            if( closest_dist == INT_MAX )
+            {
+                for( EDA_ITEM* item : selection.Items() )
+                {
+                    switch( item->Type() )
+                    {
+                    case SCH_LINE_T:
+                        processPt( static_cast<SCH_LINE*>( item )->GetStartPoint() );
+                        processPt( static_cast<SCH_LINE*>( item )->GetEndPoint() );
+                        break;
+
+                    case SCH_SHAPE_T:
+                    {
+                        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
+
+                        switch( shape->GetShape() )
+                        {
+                        case SHAPE_T::RECT:
+                            for( const VECTOR2I& pt : shape->GetRectCorners() )
+                                processPt( pt );
+
+                            break;
+
+                        case SHAPE_T::CIRCLE:
+                            processPt( shape->GetCenter() );
+                            break;
+
+                        case SHAPE_T::POLY:
+                            for( int ii = 0; ii < shape->GetPolyShape().TotalVertices(); ++ii )
+                                processPt( shape->GetPolyShape().CVertex( ii ) );
+
+                            break;
+
+                        default:
+                            processPt( shape->GetStart() );
+                            processPt( shape->GetEnd() );
+                            break;
+                        }
+
+                        break;
+                    }
+
+                    default:
+                        processPt( item->GetPosition() );
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetTopLeftItem() );
+
+            selection.SetReferencePoint( item->GetPosition() );
+        }
 
         m_toolMgr->RunAction( EE_ACTIONS::move, false );
     }
