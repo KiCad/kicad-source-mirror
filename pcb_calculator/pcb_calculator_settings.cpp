@@ -236,6 +236,10 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<wxString>( "via_size.pulse_rise_time",
             &m_ViaSize.pulse_rise_time, "1" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "corrosion_table.threshold_voltage",
+            &m_CorrosionTable.threshold_voltage, "0" ) );
+
 }
 
 

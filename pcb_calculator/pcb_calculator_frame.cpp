@@ -116,7 +116,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     AddCalculator( new PANEL_BOARD_CLASS( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _("Board Classes") );
     AddCalculator( new PANEL_CORROSION( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "Galvanic corrosion" ) );
+                   _( "Galvanic Corrosion" ) );
 
     LoadSettings( config() );
 

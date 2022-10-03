@@ -140,6 +140,11 @@ public:
         wxString pulse_rise_time;
     };
 
+    struct CORROSION_TABLE
+    {
+        wxString threshold_voltage;
+    };
+
     PCB_CALCULATOR_SETTINGS();
 
     virtual ~PCB_CALCULATOR_SETTINGS() {}
@@ -171,6 +176,8 @@ public:
     TRANSMISSION_LINE m_TransLine;
 
     VIA_SIZE m_ViaSize;
+
+    CORROSION_TABLE m_CorrosionTable;
 };
 
 #endif

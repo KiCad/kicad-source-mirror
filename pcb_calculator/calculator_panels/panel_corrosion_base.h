@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,7 @@
 #include <wx/sizer.h>
 #include <wx/scrolwin.h>
 #include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,6 +37,13 @@ class PANEL_CORROSION_BASE : public CALCULATOR_PANEL
 		wxScrolledWindow* m_scrolledWindow1;
 		wxGrid* m_table;
 		wxStaticText* m_staticText16;
+		wxStaticText* m_staticText2;
+		wxTextCtrl* m_corFilterCtrl;
+		wxStaticText* m_staticText3;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnCorFilterChange( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 

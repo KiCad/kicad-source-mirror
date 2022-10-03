@@ -50,6 +50,10 @@ public:
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void ThemeChanged() override;
+    void OnCorFilterChange( wxCommandEvent& aEvent ) override;
+private:
+    double m_corFilterValue;
+    void FillTable();
 };
 
 #endif

@@ -19,6 +19,10 @@
 
 #include <calculator_panels/panel_corrosion.h>
 #include <pcb_calculator_settings.h>
+#include <widgets/unit_selector.h>
+#include <math/util.h> // for KiROUND
+
+extern double DoubleFromString( const wxString& TextValue );
 
 #define CORROSION_VOLTAGE_1 0.3
 #define CORROSION_VOLTAGE_2 0.5
@@ -69,13 +73,48 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
     m_table->AppendCols( m_entries.size() );
     m_table->AppendRows( m_entries.size() );
 
+    m_corFilterValue = 0;
+    FillTable();
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
+}
+
+
+PANEL_CORROSION::~PANEL_CORROSION()
+{
+}
+
+void PANEL_CORROSION::ThemeChanged()
+{
+}
+
+
+void PANEL_CORROSION::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+{
+    m_corFilterCtrl->SetValue( aCfg->m_CorrosionTable.threshold_voltage );
+    m_corFilterValue = DoubleFromString( m_corFilterCtrl->GetValue() );
+}
+
+
+void PANEL_CORROSION::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+{
+    aCfg->m_CorrosionTable.threshold_voltage = wxString( "" ) << m_corFilterValue;
+}
+
+
+void PANEL_CORROSION::OnCorFilterChange( wxCommandEvent& aEvent )
+{
+    m_corFilterValue = DoubleFromString( m_corFilterCtrl->GetValue() );
+    FillTable();
+}
+
+
+void PANEL_CORROSION::FillTable()
+{
     // Fill the table with data
     int i = 0;
 
-    wxColour color_ok( 189, 255, 189 );
-    wxColour color_w1( 255, 255, 157 );
-    wxColour color_w2( 250, 191, 9 );
-    wxColour color_w3( 255, 83, 83 );
+    wxColour color_ok( 122, 166, 194 );
 
     wxColour color_text( 0, 0, 0 );
     wxString value;
@@ -97,6 +136,7 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
         for( CORROSION_TABLE_ENTRY entryB : m_entries )
         {
             double diff = entryA.m_potential - entryB.m_potential;
+            int diff_temp = KiROUND( abs( diff * 100 ) );
             value = "";
             value << diff * 1000; // Let's display it in mV instead of V.
             m_table->SetCellValue( i, j, value );
@@ -104,17 +144,14 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
             // Overide anything that could come from a dark them
             m_table->SetCellTextColour( i, j, color_text );
 
-            if( abs( diff ) > CORROSION_VOLTAGE_3 )
+            if( ( abs( diff ) ) == 0 )
             {
-                m_table->SetCellBackgroundColour( i, j, color_w3 );
+                m_table->SetCellBackgroundColour( i, j, wxColor( 193, 231, 255 ) );
             }
-            else if( abs( diff ) > CORROSION_VOLTAGE_2 )
+            else if( ( KiROUND( abs( diff * 1000 ) ) ) > m_corFilterValue )
             {
-                m_table->SetCellBackgroundColour( i, j, color_w2 );
-            }
-            else if( abs( diff ) > CORROSION_VOLTAGE_1 )
-            {
-                m_table->SetCellBackgroundColour( i, j, color_w1 );
+                m_table->SetCellBackgroundColour(
+                        i, j, wxColour( 202 - diff_temp, 206 - diff_temp, 225 - diff_temp ) );
             }
             else
             {
@@ -125,33 +162,12 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
         }
         i++;
     }
-
+    
     m_table->SetColLabelTextOrientation( wxVERTICAL );
 
     m_table->SetColLabelSize( wxGRID_AUTOSIZE );
     m_table->SetRowLabelSize( wxGRID_AUTOSIZE );
     m_table->AutoSizeColumns();
     m_table->AutoSizeRows();
-    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
-    GetSizer()->SetSizeHints( this );
-
-}
-
-
-PANEL_CORROSION::~PANEL_CORROSION()
-{
-}
-
-void PANEL_CORROSION::ThemeChanged()
-{
-}
-
-
-void PANEL_CORROSION::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
-{
-}
-
-
-void PANEL_CORROSION::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
-{
+    Refresh();
 }
