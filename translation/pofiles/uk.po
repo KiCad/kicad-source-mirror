@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-10-02 00:43+0000\n"
+"PO-Revision-Date: 2022-10-03 10:53+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -22821,9 +22821,8 @@ msgid "Convert lines to rectangle"
 msgstr "Перетворити лінії на прямокутник"
 
 #: pcbnew/cleanup_item.cpp:60
-#, fuzzy
 msgid "Merge overlapping shapes into pad"
-msgstr "Об'єднати лінії у прямокутники"
+msgstr "Об’єднайте форми, що перекриваються, у контактні площадки"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
@@ -23444,9 +23443,8 @@ msgid "SMD:"
 msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "Не вказано"
+msgstr "Не вказано:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -23566,9 +23564,8 @@ msgid "Subtract holes from board area"
 msgstr "Вирахувати отвори з області плати"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
-#, fuzzy
 msgid "Exclude footprints with no pads"
-msgstr "Виключати всі посадкові місця зі наскрізними отворами"
+msgstr "Виключити посадкові місця без контактних площадок"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "X Size"
@@ -23635,13 +23632,15 @@ msgstr "Видалити надлишкову графіку"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:28
 msgid "Merge overlapping graphics into pads"
-msgstr ""
+msgstr "Об’єднайте графічні елементи, що перекривається, у контактні площадки"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:34
 msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
 msgstr ""
+"(Контактні площадки, які з’являються в групі контактних площадок Net Tie, не "
+"розглядатимуться для об’єднання.)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
