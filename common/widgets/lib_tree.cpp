@@ -340,6 +340,7 @@ void LIB_TREE::selectIfValid( const wxDataViewItem& aTreeId )
     if( aTreeId.IsOk() )
     {
         m_tree_ctrl->EnsureVisible( aTreeId );
+        m_tree_ctrl->UnselectAll();
         m_tree_ctrl->Select( aTreeId );
         postPreselectEvent();
     }
