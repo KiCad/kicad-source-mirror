@@ -270,7 +270,7 @@ bool KIUI::IsInputControlFocused( wxWindow* aFocus )
     wxSlider*         sliderCtl = dynamic_cast<wxSlider*>( aFocus );
 
     // Data view control is annoying, the focus is on a "wxDataViewCtrlMainWindow" class that
-    // is not formerly exported via the header.
+    // is not formally exported via the header.
     wxDataViewCtrl* dataViewCtrl = nullptr;
 
     wxWindow* parent = aFocus->GetParent();

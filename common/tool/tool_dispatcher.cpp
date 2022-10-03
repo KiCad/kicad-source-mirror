@@ -26,20 +26,15 @@
 #include <ignore.h>
 #include <macros.h>
 #include <trace_helpers.h>
-
 #include <tool/tool_manager.h>
-#include <tool/tools_holder.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
 #include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
-
-#include <class_draw_panel_gal.h>
 #include <eda_draw_frame.h>
-
-#include <core/arraydim.h>
+#include <core/kicad_algo.h>
 #include <optional>
 #include <wx/log.h>
 #include <wx/stc/stc.h>
@@ -279,21 +274,13 @@ bool isKeySpecialCode( int aKeyCode )
 {
     // These keys have predefined actions (like move thumbtrack cursor),
     // and we do not want these actions executed
-    const enum wxKeyCode special_keys[] =
+    const std::vector<enum wxKeyCode> special_keys =
     {
         WXK_PAGEUP, WXK_PAGEDOWN,
         WXK_NUMPAD_PAGEUP, WXK_NUMPAD_PAGEDOWN
     };
 
-    bool isInList = false;
-
-    for( unsigned ii = 0; ii < arrayDim( special_keys ) && !isInList; ii++ )
-    {
-        if( special_keys[ii] == aKeyCode )
-            isInList = true;
-    }
-
-    return isInList;
+    return alg::contains( special_keys, aKeyCode );
 }
 
 
@@ -302,20 +289,12 @@ bool isKeySpecialCode( int aKeyCode )
 // that is not used alone in kicad
 static bool isKeyModifierOnly( int aKeyCode )
 {
-    const enum wxKeyCode special_keys[] =
+    const std::vector<enum wxKeyCode> special_keys =
     {
-        WXK_CONTROL, WXK_RAW_CONTROL, WXK_SHIFT,WXK_ALT
+        WXK_CONTROL, WXK_RAW_CONTROL, WXK_SHIFT, WXK_ALT
     };
 
-    bool isInList = false;
-
-    for( unsigned ii = 0; ii < arrayDim( special_keys ) && !isInList; ii++ )
-    {
-        if( special_keys[ii] == aKeyCode )
-            isInList = true;
-    }
-
-    return isInList;
+    return alg::contains( special_keys, aKeyCode );
 }
 
 
@@ -634,11 +613,13 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // Escape key presses are never skipped by the handler since they correspond to tool cancel
     // events, and if they aren't skipped then they are propagated to other frames (which we
     // don't want).
-    if( (type == wxEVT_CHAR || type == wxEVT_CHAR_HOOK)
-         && !keyIsSpecial
-         && !handled
-         && !keyIsEscape )
+    if( ( type == wxEVT_CHAR || type == wxEVT_CHAR_HOOK )
+             && !keyIsSpecial
+             && !handled
+             && !keyIsEscape )
+    {
         aEvent.Skip();
+    }
 
     wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxEvent - Wx event skipped: %s",
                 ( aEvent.GetSkipped() ? "true" : "false" ) );
