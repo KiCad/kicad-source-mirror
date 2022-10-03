@@ -55,21 +55,6 @@ wxString COMMON_CONTROL::m_bugReportUrl =
 
 /// Issue template to use for reporting bugs (this should not be translated)
 wxString COMMON_CONTROL::m_bugReportTemplate =
-        "<!-- Before Creating a New Issue:\n"
-        "* Search the issue tracker to verify the issue has not already been reported.\n"
-        "* Only report one problem per issue. -->\n"
-        "\n"
-        "# Description\n"
-        "<!-- What is the current behavior and what is the expected behavior? -->\n"
-        "<!-- Please attach screenshots if they will help explain the problem. -->\n"
-        "\n"
-        "# Steps to reproduce\n"
-        "<!-- Please include a screen recording if it will help explain how to reproduce. -->\n"
-        "<!-- If this issue is specific to a project, please attach it. -->\n"
-        "1.\n"
-        "2.\n"
-        "# KiCad Version\n"
-        "\n"
         "```\n"
         "%s\n"
         "```";
