@@ -302,6 +302,8 @@ void SCH_SHAPE::PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2
         }
     }
 
+    delete[] buffer;
+
 }
 
 
