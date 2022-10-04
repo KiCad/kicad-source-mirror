@@ -75,6 +75,7 @@ private:
     bool TransferDataFromWindow() override;
 
     void updateWidgets();
+    void updateIbisWidgets();
     void updateModelParamsTab();
     void updateModelCodeTab();
     void updatePinAssignments();
@@ -146,8 +147,7 @@ private:
 
     std::shared_ptr<SIM_MODEL> m_currentIbisModel = nullptr;
 
-    void setIbisMode( bool aIbisMode );
-    bool IsIbisLoaded() { return m_library->GetType() == SIM_LIBRARY::LIBRARY_TYPE::KIBIS; };
+    bool isIbisLoaded() { return m_library->GetType() == SIM_LIBRARY::LIBRARY_TYPE::KIBIS; };
 };
 
 #endif /* DIALOG_SIM_MODEL_H */
