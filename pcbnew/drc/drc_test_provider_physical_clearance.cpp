@@ -745,11 +745,6 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
                     std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
                     int                            size = hole->GetWidth();
 
-                    // Note: drill size represents finish size, which means the actual hole
-                    // size is the plating thickness larger.
-                    if( pad->GetAttribute() == PAD_ATTRIB::PTH )
-                        size += m_board->GetDesignSettings().GetHolePlatingThickness();
-
                     itemShape = std::make_shared<SHAPE_SEGMENT>( hole->GetSeg(), size );
                 }
             }

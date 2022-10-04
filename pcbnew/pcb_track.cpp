@@ -1152,12 +1152,7 @@ std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
     }
     else
     {
-        int radius = GetDrillValue() / 2;
-
-        if( GetBoard() )
-            radius += GetBoard()->GetDesignSettings().GetHolePlatingThickness();
-
-        return std::make_shared<SHAPE_CIRCLE>( m_Start, radius );
+        return std::make_shared<SHAPE_CIRCLE>( m_Start, GetDrillValue() / 2 );
     }
 }
 
