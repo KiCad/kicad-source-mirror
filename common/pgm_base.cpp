@@ -137,7 +137,7 @@ PGM_BASE::~PGM_BASE()
 {
     Destroy();
 
-    for( size_t n = 0; n < m_argcUtf8; n++ )
+    for( int n = 0; n < m_argcUtf8; n++ )
     {
         delete m_argvUtf8[n];
     }
@@ -385,7 +385,7 @@ void PGM_BASE::BuildArgvUtf8()
     m_argcUtf8 = argArray.size();
 
     m_argvUtf8 = new char*[m_argcUtf8 + 1];
-    for( size_t n = 0; n < m_argcUtf8; n++ )
+    for( int n = 0; n < m_argcUtf8; n++ )
     {
         m_argvUtf8[n] = wxStrdup( argArray[n].ToUTF8() );
     }

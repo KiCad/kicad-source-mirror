@@ -1150,14 +1150,6 @@ bool IbisParser::changeContext( std::string& aKeyword )
 {
     bool status = true;
 
-    // Old context;
-    IBIS_PARSER_CONTEXT old_context = m_context;
-    IbisComponent*      old_component = m_currentComponent;
-    IbisModel*          old_model = m_currentModel;
-    IbisModelSelector*  old_modelSelector = m_currentModelSelector;
-    IbisPackageModel*   old_packageModel = m_currentPackageModel;
-
-
     if( status )
     {
         switch( m_context )
