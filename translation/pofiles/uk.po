@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-10-03 10:53+0000\n"
+"PO-Revision-Date: 2022-10-04 22:26+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -36120,21 +36120,21 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:377
 #: pcbnew/tools/board_inspection_tool.cpp:1208
 msgid "Hole Size"
-msgstr ""
+msgstr "Розмір отвору"
 
 #: pcbnew/tools/board_inspection_tool.cpp:378
 #: pcbnew/tools/board_inspection_tool.cpp:1209
 msgid "Hole diameter resolution for:"
-msgstr ""
+msgstr "Дозволений діаметр отвору для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:392
 msgid "Hole Clearance"
-msgstr ""
+msgstr "Зазор для отвору"
 
 #: pcbnew/tools/board_inspection_tool.cpp:393
 #: pcbnew/tools/board_inspection_tool.cpp:931
 msgid "Hole clearance resolution for:"
-msgstr ""
+msgstr "Дозволений зазор для отвору:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:401
 #: pcbnew/tools/board_inspection_tool.cpp:502
@@ -36160,136 +36160,135 @@ msgstr "Елементи належать до того ж звʼязку. Пр�
 #: pcbnew/tools/board_inspection_tool.cpp:1103
 #, c-format
 msgid "Resolved clearance: %s."
-msgstr ""
+msgstr "Вирахуваний зазор: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:416
 #: pcbnew/tools/board_inspection_tool.cpp:1086
 msgid "Physical hole clearance resolution for:"
-msgstr ""
+msgstr "Дозволений фізичний зазор для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:425
 #: pcbnew/tools/board_inspection_tool.cpp:1098
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr ""
+msgstr "Не визначено обмеження 'physical_hole_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 msgid "Hole to Hole"
-msgstr ""
+msgstr "Від отвору до отвору"
 
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:960
-#, fuzzy
 msgid "Hole to hole clearance resolution for:"
-msgstr "Запустити інструмент перевірки відступів..."
+msgstr "Дозволений зазор для отвору до отвору:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:451
 msgid "Edge Clearance"
-msgstr ""
+msgstr "Зазор до краю"
 
 #: pcbnew/tools/board_inspection_tool.cpp:452
 #: pcbnew/tools/board_inspection_tool.cpp:999
 msgid "Edge clearance resolution for:"
-msgstr ""
+msgstr "Дозволений зазор до краю плати:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:494
 #: pcbnew/tools/board_inspection_tool.cpp:758
 msgid "Clearance resolution for:"
-msgstr ""
+msgstr "Дозволений зазор для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:517
 #: pcbnew/tools/board_inspection_tool.cpp:1020
 msgid "Physical clearance resolution for:"
-msgstr ""
+msgstr "Дозволений фізичний зазор для плати:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:526
 #: pcbnew/tools/board_inspection_tool.cpp:1032
 msgid "No 'physical_clearance' constraints defined."
-msgstr ""
+msgstr "Не задано обмеження 'physical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:554
 msgid "Select two items for a clearance resolution report."
-msgstr ""
+msgstr "Виберіть два елементи для звіту про зазори."
 
 #: pcbnew/tools/board_inspection_tool.cpp:569
 #: pcbnew/tools/board_inspection_tool.cpp:582
 msgid "Cannot generate clearance report on empty group."
-msgstr ""
+msgstr "Не вдалося створити звіт про зазори для порожніх груп."
 
 #: pcbnew/tools/board_inspection_tool.cpp:595
 msgid "Clearance Report"
-msgstr ""
+msgstr "Звіт про зазори"
 
 #: pcbnew/tools/board_inspection_tool.cpp:635
 msgid "Zone connection resolution for:"
-msgstr ""
+msgstr "Роздільна здатність з'єднання зон для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:643
 msgid "Thermal relief gap resolution for:"
-msgstr ""
+msgstr "Дозвіл теплового розриву для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:652
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr ""
+msgstr "Дозвіл відступу теплового розриву: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:657
 msgid "Spoke width resolution for:"
-msgstr ""
+msgstr "Дозволена ширина термічного переходу для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:666
 #, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr ""
+msgstr "Дозволена ширина термічного переходу для: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 msgid "Spoke count resolution for:"
-msgstr ""
+msgstr "Кількість термічних переходів для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:680
 #, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr ""
+msgstr "Дозволена мінімальна кількість термічних переходів: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:689
 #: pcbnew/tools/board_inspection_tool.cpp:737
 msgid "Zone clearance resolution for:"
-msgstr ""
+msgstr "Дозвіл про очищення зони для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:693
 #, c-format
 msgid "Zone clearance: %s."
-msgstr ""
+msgstr "Зазор зони: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:703
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr ""
+msgstr "Замінено більшим фізичним зазором на %s; зазор: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:719
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr ""
+msgstr "Замінено на більший фізичний зазор для отвору %s;зазор: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:791
 msgid "Diff Pair"
-msgstr ""
+msgstr "Диференційна пара"
 
 #: pcbnew/tools/board_inspection_tool.cpp:792
 msgid "Diff pair gap resolution for:"
-msgstr ""
+msgstr "Роздільна здатність диференційної пари для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:797
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr ""
+msgstr "Дозволене обмеження зазору: мін %s; опт %s;макс %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:805
 msgid "Diff pair max uncoupled length resolution for:"
-msgstr ""
+msgstr "Дозволена максимальна довжина диференційних пар для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:810
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr ""
+msgstr "обмежень 'diff_pair_uncoupled' не визначено."
 
 #: pcbnew/tools/board_inspection_tool.cpp:842
 #, c-format
