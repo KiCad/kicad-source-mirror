@@ -135,7 +135,7 @@ COLOR4D SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
 bool SCH_RENDER_SETTINGS::GetShowPageLimits() const
 {
-    return eeconfig()->m_Appearance.show_page_limits;
+    return eeconfig() && eeconfig()->m_Appearance.show_page_limits;
 }
 
 

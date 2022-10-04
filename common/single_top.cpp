@@ -464,7 +464,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
             launcher.
         */
 
-        for( size_t i = 1; i < App().argc; i++ )
+        for( int i = 1; i < App().argc; i++ )
             fileArgs.push_back( App().argv[i] );
 
         // special attention to a single argument: argv[1] (==argSet[0])
