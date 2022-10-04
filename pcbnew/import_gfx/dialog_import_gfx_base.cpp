@@ -77,7 +77,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	m_xUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_xUnits->Wrap( -1 );
-	bSizerPosSettings->Add( m_xUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerPosSettings->Add( m_xUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 	m_yLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );
@@ -129,7 +129,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerImportSettings->Add( m_staticTextBrdlayer, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgSizerImportSettings->Add( m_SelLayerBox, 0, wxEXPAND, 5 );
+	fgSizerImportSettings->Add( m_SelLayerBox, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	fgSizerImportSettings->Add( 0, 0, 0, 0, 5 );
@@ -188,7 +188,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	m_lineWidthUnits = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthUnits->Wrap( -1 );
-	fgDxfImportSettings->Add( m_lineWidthUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgDxfImportSettings->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 	m_staticTextLineWidth1 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Default units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLineWidth1->Wrap( -1 );
