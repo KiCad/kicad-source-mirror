@@ -481,7 +481,7 @@ public:
                 m_items.begin(), m_items.end(), aNetCode, LIST_ITEM_NETCODE_CMP_LESS() );
 
         if( i == m_items.end() || ( *i )->GetNetCode() != aNetCode )
-            return {};
+            return std::nullopt;
 
         return { i };
     }
@@ -491,7 +491,7 @@ public:
         if( aNet != nullptr )
             return findItem( aNet->GetNetCode() );
         else
-            return {};
+            return std::nullopt;
     }
 
     std::optional<LIST_ITEM_ITER> addItem( std::unique_ptr<LIST_ITEM> aItem )
