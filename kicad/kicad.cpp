@@ -143,11 +143,9 @@ bool PGM_KICAD::OnPgmInit()
     }
     catch( const std::runtime_error& err )
     {
-        // this provides the nice pretty print
-        std::cerr << err.what() << std::endl;
-        std::cerr << argParser;
-
-        std::exit( CLI::EXIT_CODES::ERR_ARGS );
+        // Ignore any argParser "errors"
+        // unforunately there are cases like the only arg being a file (double click open)
+        // that we need to fall through
     }
 
     bool          cliCmdRequested = false;
