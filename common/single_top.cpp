@@ -341,13 +341,11 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     {
         argParser.parse_args( m_argcUtf8, m_argvUtf8 );
     }
-    catch( const std::runtime_error& err )
+    catch( const std::runtime_error& )
     {
-        // this provides the nice pretty print
-        std::cerr << err.what() << std::endl;
-        std::cerr << argParser;
-
-        std::exit( CLI::EXIT_CODES::ERR_ARGS );
+        // Ignore any argParser "errors"
+        // unforunately there are cases like the only arg being a file (double click open)
+        // that we need to fall through
     }
 
     bool cliCmdRequested = false;
