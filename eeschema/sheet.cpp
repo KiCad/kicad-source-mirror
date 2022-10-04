@@ -493,12 +493,6 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
             // instances.
             sheetHierarchy.UpdateSymbolInstances( newScreen->GetSymbolInstances() );
         }
-        else
-        {
-            // Otherwise, fall back to the default instance data which still exists in this
-            // schematic file version.
-            newScreens.SetAllSymbolDefaultInstances();
-        }
     }
 
     // Attempt to create new symbol instances using the instance data loaded above.

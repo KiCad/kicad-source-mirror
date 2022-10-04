@@ -797,18 +797,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    if( m_cbMakeDefaultInstance->IsChecked() )
-    {
-        SYMBOL_INSTANCE_REFERENCE defaultInstance;
-
-        defaultInstance.m_Unit = unit_selection;
-        defaultInstance.m_Reference = m_fields->at( REFERENCE_FIELD ).GetText();
-        defaultInstance.m_Value = m_fields->at( VALUE_FIELD ).GetText();
-        defaultInstance.m_Footprint = m_fields->at( FOOTPRINT_FIELD ).GetText();
-
-        m_symbol->SetDefaultInstance( defaultInstance );
-    }
-
     currentScreen->Append( m_symbol );
     GetParent()->TestDanglingEnds();
     GetParent()->UpdateItem( m_symbol, false, true );

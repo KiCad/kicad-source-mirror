@@ -509,13 +509,6 @@ public:
      */
     bool AllSymbolDefaultInstancesNotSet();
 
-    /**
-     * Set symbol default instances to the first instance in the instance list.
-     *
-     * @warning The schematic symbol instance data must be loaded before this method is called.
-     */
-    void SetAllSymbolDefaultInstances();
-
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
@@ -738,13 +731,6 @@ public:
      * Update the symbol value and footprint instance data for legacy designs.
      */
     void SetLegacySymbolInstanceData();
-
-    /**
-     * Set symbol default instances to the first instance in the instance list.
-     *
-     * @warning The schematic symbol instance data must be loaded before this method is called.
-     */
-    void SetAllSymbolDefaultInstances();
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );

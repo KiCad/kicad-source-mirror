@@ -132,9 +132,6 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
 
     m_prefix = UTIL::GetRefDesPrefix( m_part->GetReferenceField().GetText() );
 
-    // Set initial default symbol instance data from library symbol and initial unit.
-    m_defaultInstance.m_Unit = -1;
-
     if( aSheet )
     {
         SetRef( aSheet, UTIL::GetRefDesUnannotated( m_prefix ) );
@@ -199,7 +196,6 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
 
     m_fieldsAutoplaced = aSymbol.m_fieldsAutoplaced;
     m_schLibSymbolName = aSymbol.m_schLibSymbolName;
-    m_defaultInstance = aSymbol.m_defaultInstance;
 }
 
 
@@ -519,6 +515,13 @@ void SCH_SYMBOL::RemoveInstance( const SCH_SHEET_PATH& aInstancePath )
             ii--;
         }
     }
+}
+
+
+void SCH_SYMBOL::SortInstances( bool (*aSortFunction)( const SYMBOL_INSTANCE_REFERENCE& aLhs,
+                                                       const SYMBOL_INSTANCE_REFERENCE& aRhs ) )
+{
+    std::sort( m_instanceReferences.begin(), m_instanceReferences.end(), aSortFunction );
 }
 
 
@@ -1144,7 +1147,6 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_instanceReferences, symbol->m_instanceReferences );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
-    std::swap( m_defaultInstance, symbol->m_defaultInstance );
 }
 
 
@@ -2042,7 +2044,6 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_ITEM& aItem )
         m_transform = c->m_transform;
 
         m_instanceReferences = c->m_instanceReferences;
-        m_defaultInstance = c->m_defaultInstance;
 
         m_fields    = c->m_fields;    // std::vector's assignment operator
 
@@ -2254,26 +2255,4 @@ bool SCH_SYMBOL::IsPointClickableAnchor( const VECTOR2I& aPos ) const
     }
 
     return false;
-}
-
-
-void SCH_SYMBOL::SetInstanceToDefault( const SCH_SHEET_PATH& aInstance )
-{
-    KIID_PATH path = aInstance.Path();
-
-    for( SYMBOL_INSTANCE_REFERENCE& instance: m_instanceReferences )
-    {
-        if( instance.m_Path == path )
-        {
-            instance.m_Reference = m_defaultInstance.m_Reference;
-            instance.m_Unit = m_defaultInstance.m_Unit;
-            instance.m_Value = m_defaultInstance.m_Value;
-            instance.m_Footprint = m_defaultInstance.m_Footprint;
-            return;
-        }
-    }
-
-    // It's a new instance so add it.
-    AddHierarchicalReference( path, m_defaultInstance.m_Reference, m_defaultInstance.m_Unit,
-                              m_defaultInstance.m_Value, m_defaultInstance.m_Footprint );
 }

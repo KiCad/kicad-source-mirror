@@ -1441,46 +1441,6 @@ void SCH_SCREEN::SetLegacySymbolInstanceData()
 }
 
 
-bool SCH_SCREEN::AllSymbolDefaultInstancesNotSet()
-{
-    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
-    {
-        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-
-        wxCHECK2( symbol, continue );
-
-        SYMBOL_INSTANCE_REFERENCE symbolDefaultReference = symbol->GetDefaultInstance();
-
-        const std::unique_ptr<LIB_SYMBOL>& libSymbol = symbol->GetLibSymbolRef();
-
-        if( !libSymbol )
-            continue;
-
-        if( symbolDefaultReference.m_Unit != 1 ||
-            symbolDefaultReference.m_Reference != symbol->GetPrefix() ||
-            symbolDefaultReference.m_Value != libSymbol->GetValueField().GetText() ||
-            symbolDefaultReference.m_Footprint != libSymbol->GetFootprintField().GetText() )
-            return false;
-    }
-
-    return true;
-}
-
-
-void SCH_SCREEN::SetAllSymbolDefaultInstances()
-{
-    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
-    {
-        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-
-        wxCHECK2( symbol, continue );
-
-        if( !symbol->GetInstanceReferences().empty() )
-            symbol->SetDefaultInstance( symbol->GetInstanceReferences()[0] );
-    }
-}
-
-
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
@@ -1864,7 +1824,7 @@ void SCH_SCREENS::BuildClientSheetPathList()
     {
         SCH_SCREEN* used_screen = sheetpath.LastScreen();
 
-        // SEarch for the used_screen in list and add this unique sheet path:
+        // Search for the used_screen in list and add this unique sheet path:
         for( SCH_SCREEN* curr_screen = GetFirst(); curr_screen; curr_screen = GetNext() )
         {
             if( used_screen == curr_screen )
@@ -1879,20 +1839,6 @@ void SCH_SCREENS::BuildClientSheetPathList()
 
 void SCH_SCREENS::SetLegacySymbolInstanceData()
 {
-
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
         screen->SetLegacySymbolInstanceData();
-}
-
-
-void SCH_SCREENS::SetAllSymbolDefaultInstances()
-{
-    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
-    {
-        if( screen->GetFileFormatVersionAtLoad() <= 20220622 )
-        {
-            if( screen->AllSymbolDefaultInstancesNotSet() )
-                screen->SetAllSymbolDefaultInstances();
-        }
-    }
 }

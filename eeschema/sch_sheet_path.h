@@ -340,11 +340,6 @@ public:
                               bool aIncludePowerSymbols = true ) const;
 
     /**
-     * Set all of the symbol instances in this sheet instance to the default symbol instance data.
-     */
-    void SetSymbolInstancesToDefault();
-
-    /**
      * Test the SCH_SHEET_PATH file names to check adding the sheet stored in the file
      * \a aSrcFileName to the sheet stored in file \a aDestFileName  will cause a sheet
      * path recursion.

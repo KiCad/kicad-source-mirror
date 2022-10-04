@@ -89,4 +89,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220904  // Do not autoplace field option
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220914  // Add support for DNP
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220929  // Don't save property ID
-#define SEXPR_SCHEMATIC_FILE_VERSION 20221002    // Move instance data back into symbol definition.
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20221002  // Move instance data back into symbol definition.
+#define SEXPR_SCHEMATIC_FILE_VERSION 20221004    // Move instance data back into symbol definition.

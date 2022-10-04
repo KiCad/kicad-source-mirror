@@ -144,16 +144,10 @@ public:
     bool GetInstance( SYMBOL_INSTANCE_REFERENCE& aInstance,
                       const KIID_PATH& aSheetPath ) const;
 
-    void SetDefaultInstance( const SYMBOL_INSTANCE_REFERENCE& aInstance )
-    {
-        m_defaultInstance = aInstance;
-    }
-
     void RemoveInstance( const SCH_SHEET_PATH& aInstancePath );
 
-    const SYMBOL_INSTANCE_REFERENCE& GetDefaultInstance() const { return m_defaultInstance; }
-
-    void SetInstanceToDefault( const SCH_SHEET_PATH& aInstance );
+    void SortInstances( bool ( *aSortFunction )( const SYMBOL_INSTANCE_REFERENCE& aLhs,
+                                                 const SYMBOL_INSTANCE_REFERENCE& aRhs ) );
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -802,16 +796,6 @@ private:
     // Defines the hierarchical path and reference of the symbol.  This allows support
     // for multiple references to a single sub-sheet.
     std::vector<SYMBOL_INSTANCE_REFERENCE> m_instanceReferences;
-
-    /**
-     * The default instance data for this symbol.
-     *
-     * This allows for setting the default data across all instances of this symbol.  This
-     * means that any reuse of the symbol in the current schematic will initially use the
-     * default instance data.  @see SYMBOL_INSTANCE_REFERENCE definition for the allowable
-     * instance settings.
-     */
-    SYMBOL_INSTANCE_REFERENCE m_defaultInstance;
 };
 
 #endif /* __SYMBOL_H__ */

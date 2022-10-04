@@ -653,6 +653,9 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
 {
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
 
+    // Sort symbol instance data to minimize file churn.
+    aSymbol->SortInstances( SortSymbolInstancesByProjectUuid );
+
     std::string     libName;
 
     wxString symbol_name = aSymbol->GetLibId().Format();
@@ -732,24 +735,6 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aSymbol->m_Uuid.AsString() ) );
 
-    // On the first save, if the default instance is not set, use the first instance data as
-    // the default.
-    if( aSymbol->GetDefaultInstance().m_Reference == wxEmptyString &&
-        aSymbol->GetDefaultInstance().m_Unit == -1 &&
-        aSymbol->GetDefaultInstance().m_Value == wxEmptyString &&
-        aSymbol->GetDefaultInstance().m_Footprint == wxEmptyString )
-    {
-        if( !aSymbol->GetInstanceReferences().empty() )
-            aSymbol->SetDefaultInstance( aSymbol->GetInstanceReferences()[0] );
-    }
-
-    m_out->Print( aNestLevel + 1,
-                  "(default_instance (reference %s) (unit %d) (value %s) (footprint %s))\n",
-                  m_out->Quotew( aSymbol->GetDefaultInstance().m_Reference ).c_str(),
-                  aSymbol->GetDefaultInstance().m_Unit,
-                  m_out->Quotew( aSymbol->GetDefaultInstance().m_Value ).c_str(),
-                  m_out->Quotew( aSymbol->GetDefaultInstance().m_Footprint ).c_str() );
-
     m_nextFreeFieldId = MANDATORY_FIELDS;
 
     for( SCH_FIELD& field : aSymbol->GetFields() )
@@ -757,21 +742,21 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         int id = field.GetId();
         wxString value = field.GetText();
 
-        if( !aForClipboard )
+        if( !aForClipboard && aSymbol->GetInstanceReferences().size() )
         {
             // The instance fields are always set to the default instance regardless of the
             // sheet instance to prevent file churn.
             if( id == REFERENCE_FIELD )
             {
-                field.SetText( aSymbol->GetDefaultInstance().m_Reference );
+                field.SetText( aSymbol->GetInstanceReferences()[0].m_Reference );
             }
             else if( id == VALUE_FIELD )
             {
-                field.SetText( aSymbol->GetDefaultInstance().m_Value );
+                field.SetText( aSymbol->GetInstanceReferences()[0].m_Value );
             }
             else if( id == FOOTPRINT_FIELD )
             {
-                field.SetText( aSymbol->GetDefaultInstance().m_Footprint );
+                field.SetText( aSymbol->GetInstanceReferences()[0].m_Footprint );
             }
         }
 
@@ -811,14 +796,10 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
 
     m_out->Print( aNestLevel + 1, "(instances\n" );
 
-    // Sort symbol instance data to minimize file churn.
-    std::vector< SYMBOL_INSTANCE_REFERENCE > sortedInstances( aSymbol->GetInstanceReferences() );
-    std::sort( sortedInstances.begin(), sortedInstances.end(), SortSymbolInstancesByProjectUuid );
-
     KIID lastProjectUuid;
     SCH_SHEET_LIST fullHierarchy = m_schematic->GetSheets();
 
-    for( size_t i = 0; i < sortedInstances.size(); i++ )
+    for( size_t i = 0; i < aSymbol->GetInstanceReferences().size(); i++ )
     {
         // If the instance data is part of this design but no longer has an associated sheet
         // path, don't save it.  This prevents large amounts of orphaned instance data for the
@@ -826,42 +807,42 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         //
         // Keep all instance data when copying to the clipboard.  It may be needed on paste.
         if( !aForClipboard
-          && ( sortedInstances[i].m_Path[0] == m_schematic->RootScreen()->GetUuid() )
-          && !fullHierarchy.GetSheetPathByKIIDPath( sortedInstances[i].m_Path ) )
+          && ( aSymbol->GetInstanceReferences()[i].m_Path[0] == m_schematic->RootScreen()->GetUuid() )
+          && !fullHierarchy.GetSheetPathByKIIDPath( aSymbol->GetInstanceReferences()[i].m_Path ) )
         {
-            if( ( i + 1 == sortedInstances.size() )
-              || lastProjectUuid != sortedInstances[i+1].m_Path[0] )
+            if( ( i + 1 == aSymbol->GetInstanceReferences().size() )
+              || lastProjectUuid != aSymbol->GetInstanceReferences()[i+1].m_Path[0] )
                 m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
 
             continue;
         }
 
-        if( lastProjectUuid != sortedInstances[i].m_Path[0] )
+        if( lastProjectUuid != aSymbol->GetInstanceReferences()[i].m_Path[0] )
         {
             wxString projectName;
 
-            if( sortedInstances[i].m_Path[0] == m_schematic->RootScreen()->GetUuid() )
+            if( aSymbol->GetInstanceReferences()[i].m_Path[0] == m_schematic->RootScreen()->GetUuid() )
                 projectName = m_schematic->Prj().GetProjectName();
             else
-                projectName = sortedInstances[i].m_ProjectName;
+                projectName = aSymbol->GetInstanceReferences()[i].m_ProjectName;
 
-            lastProjectUuid = sortedInstances[i].m_Path[0];
+            lastProjectUuid = aSymbol->GetInstanceReferences()[i].m_Path[0];
             m_out->Print( aNestLevel + 2, "(project %s\n", m_out->Quotew( projectName ).c_str() );
         }
 
-        wxString path = sortedInstances[i].m_Path.AsString();
+        wxString path = aSymbol->GetInstanceReferences()[i].m_Path.AsString();
 
         m_out->Print( aNestLevel + 3, "(path %s\n",
                       m_out->Quotew( path ).c_str() );
         m_out->Print( aNestLevel + 4, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
-                      m_out->Quotew( sortedInstances[i].m_Reference ).c_str(),
-                      sortedInstances[i].m_Unit,
-                      m_out->Quotew( sortedInstances[i].m_Value ).c_str(),
-                      m_out->Quotew( sortedInstances[i].m_Footprint ).c_str() );
+                      m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Reference ).c_str(),
+                      aSymbol->GetInstanceReferences()[i].m_Unit,
+                      m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Value ).c_str(),
+                      m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Footprint ).c_str() );
         m_out->Print( aNestLevel + 3, ")\n" );
 
-        if( ( i + 1 == sortedInstances.size() )
-          || lastProjectUuid != sortedInstances[i+1].m_Path[0] )
+        if( ( i + 1 == aSymbol->GetInstanceReferences().size() )
+          || lastProjectUuid != aSymbol->GetInstanceReferences()[i+1].m_Path[0] )
             m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
     }
 

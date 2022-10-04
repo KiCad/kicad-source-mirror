@@ -452,15 +452,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 sheetList.UpdateSymbolInstances( Schematic().RootScreen()->GetSymbolInstances() );
 
             sheetList.UpdateSheetInstances( Schematic().RootScreen()->GetSheetInstances() );
-
-            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
-            {
-                if( screen->GetFileFormatVersionAtLoad() <= 20220622 )
-                {
-                    if( screen->AllSymbolDefaultInstancesNotSet() )
-                        screen->SetAllSymbolDefaultInstances();
-                }
-            }
         }
 
         Schematic().ConnectionGraph()->Reset();

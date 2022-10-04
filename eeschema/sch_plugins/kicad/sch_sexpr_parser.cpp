@@ -2678,7 +2678,6 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
                 }
             }
 
-            symbol->SetDefaultInstance( defaultInstance );
             break;
         }
 

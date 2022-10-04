@@ -414,19 +414,6 @@ void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefLi
 }
 
 
-void SCH_SHEET_PATH::SetSymbolInstancesToDefault()
-{
-    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
-    {
-        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-
-        wxCHECK2( symbol, continue );
-
-        symbol->SetInstanceToDefault( *this );
-    }
-}
-
-
 bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
 {
     return m_current_hash == d1.GetCurrentHash();

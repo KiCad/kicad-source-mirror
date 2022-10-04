@@ -381,18 +381,6 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     if( m_sheet->IsNew() )
     {
         m_sheet->AddInstance( instance );
-
-        if( filename_changed )
-        {
-            // Set the symbol instance data to the default for all new sheets and sub-sheets.
-            SCH_SHEET_LIST newInstances( m_sheet );
-
-            for( SCH_SHEET_PATH& newInstance : newInstances )
-            {
-                instance = m_frame->GetCurrentSheet() + newInstance;
-                instance.SetSymbolInstancesToDefault();
-            }
-        }
     }
 
     m_sheet->SetPageNumber( instance, m_pageNumberTextCtrl->GetValue() );
