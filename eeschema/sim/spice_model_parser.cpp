@@ -25,6 +25,7 @@
 #include <sim/spice_model_parser.h>
 #include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>
+#include <sim/sim_library_spice.h>
 
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/algorithm/string/predicate.hpp>
@@ -38,6 +39,7 @@ namespace SIM_MODEL_SPICE_PARSER
 
     template <typename Rule> struct spiceUnitSelector : std::false_type {};
 
+    template <> struct spiceUnitSelector<dotModelAko> : std::true_type {};
     template <> struct spiceUnitSelector<dotModel> : std::true_type {};
     template <> struct spiceUnitSelector<modelName> : std::true_type {};
     template <> struct spiceUnitSelector<dotModelType> : std::true_type {};
@@ -130,7 +132,8 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const std::string& aSpiceCode )
 }
 
 
-void SPICE_MODEL_PARSER::ReadModel( const std::string& aSpiceCode )
+void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
+                                    const std::string& aSpiceCode )
 {
     // The default behavior is to treat the Spice param=value pairs as the model parameters and
     // values (for many models the correspondence is not exact, so this function is overridden).
@@ -153,9 +156,25 @@ void SPICE_MODEL_PARSER::ReadModel( const std::string& aSpiceCode )
 
     for( const auto& node : root->children )
     {
-        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
+        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModelAko>() )
         {
-            std::string paramName = "";
+            std::string modelName = node->children.at( 0 )->string();
+            std::string akoName = node->children.at( 1 )->string();
+
+            const SIM_MODEL* sourceModel = aLibrary.FindModel( modelName );
+
+            if( !sourceModel )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Could not find model '%s' to copy for ako model '%s'" ),
+                        akoName,
+                        modelName ) );
+            }
+
+            for( int i = 0; i < static_cast<int>( sourceModel->GetParamCount() ); ++i )
+                m_model.SetParamValue( i, *sourceModel->GetParam( i ).value );
+
+            std::string paramName;
 
             for( const auto& subnode : node->children )
             {
@@ -178,9 +197,48 @@ void SPICE_MODEL_PARSER::ReadModel( const std::string& aSpiceCode )
                     if( !m_model.SetParamFromSpiceCode( paramName, subnode->string() ) )
                     {
                         THROW_IO_ERROR( wxString::Format(
-                                        _( "Failed to set parameter '%s' to '%s'" ),
+                                        _( "Failed to set parameter '%s' to '%s' in model '%s'" ),
                                         paramName,
-                                        subnode->string() ) );
+                                        subnode->string(),
+                                        modelName ) );
+                    }
+                }
+                else
+                {
+                    wxFAIL_MSG( "Unhandled parse tree subnode" );
+                }
+            }
+        }
+        else if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
+        {
+            std::string modelName;
+            std::string paramName;
+
+            for( const auto& subnode : node->children )
+            {
+                if( subnode->is_type<SIM_MODEL_SPICE_PARSER::modelName>() )
+                {
+                    modelName = subnode->string();
+                }
+                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::dotModelType>() )
+                {
+                    // Do nothing.
+                }
+                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::param>() )
+                {
+                    paramName = subnode->string();
+                }
+                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::paramValue>() )
+                {
+                    wxASSERT( paramName != "" );
+
+                    if( !m_model.SetParamFromSpiceCode( paramName, subnode->string() ) )
+                    {
+                        THROW_IO_ERROR( wxString::Format(
+                                        _( "Failed to set parameter '%s' to '%s' in model '%s'" ),
+                                        paramName,
+                                        subnode->string(),
+                                        modelName ) );
                     }
                 }
                 else
@@ -229,4 +287,10 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const std::string&
     // If the type string is not recognized, demote to a raw Spice element. This way the user won't
     // have an error if there is a type KiCad does not recognize.
     return SIM_MODEL::TYPE::RAWSPICE;
+}
+
+
+void SPICE_MODEL_PARSER::CopyModelFromLibrary( const SIM_LIBRARY_SPICE& aSourceLibrary,
+                                               const std::string& aModelName )
+{
 }

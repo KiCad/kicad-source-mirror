@@ -28,6 +28,7 @@
 #include <sim/sim_model.h>
 
 class SIM_MODEL_SPICE;
+class SIM_LIBRARY_SPICE;
 
 
 class SPICE_MODEL_PARSER
@@ -36,14 +37,18 @@ public:
     static SIM_MODEL::TYPE ReadType( const std::string& aSpiceCode );
 
     SPICE_MODEL_PARSER( SIM_MODEL_SPICE& aModel ) : m_model( aModel ) {}
+    virtual ~SPICE_MODEL_PARSER() = default;
 
-    virtual void ReadModel( const std::string& aSpiceCode );
+    virtual void ReadModel( const SIM_LIBRARY_SPICE& aLibrary, const std::string& aSpiceCode );
 
 protected:
     static SIM_MODEL::TYPE ReadTypeFromSpiceStrings( const std::string& aTypeString,
                                                      const std::string& aLevel = "",
                                                      const std::string& aVersion = "",
                                                      bool aSkipDefaultLevel = true );
+
+    void CopyModelFromLibrary( const SIM_LIBRARY_SPICE& aSourceLibrary,
+                               const std::string& aModelName );
 
     SIM_MODEL_SPICE& m_model;
 };

@@ -227,30 +227,29 @@ void SIM_MODEL_SOURCE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) con
 }
 
 
-bool SIM_MODEL_SOURCE::SetParamValue( unsigned aParamIndex, const std::string& aValue,
-                                      SIM_VALUE_GRAMMAR::NOTATION aNotation )
+bool SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
 {
     // Sources are special. All preceding parameter values must be filled. If they are not, fill
     // them out automatically. If a value is nulled, delete everything after it.
-    if( aValue == "" )
+    if( !aValue.HasValue() )
     {
         for( int paramIndex = static_cast<int>( aParamIndex );
              paramIndex < GetParamCount();
              ++paramIndex )
         {
-            SIM_MODEL::SetParamValue( paramIndex, "", aNotation );
+            SIM_MODEL::SetParamValue( paramIndex, "" );
         }
     }
     else
     {
-        for( unsigned paramIndex = 0; paramIndex < aParamIndex; ++paramIndex )
+        for( int paramIndex = 0; paramIndex < aParamIndex; ++paramIndex )
         {
             if( GetParam( paramIndex ).value->ToString() == "" )
-                SIM_MODEL::SetParamValue( paramIndex, "0", aNotation );
+                SIM_MODEL::SetParamValue( paramIndex, "0" );
         }
     }
 
-    return SIM_MODEL::SetParamValue( aParamIndex, aValue, aNotation );
+    return SIM_MODEL::SetParamValue( aParamIndex, aValue );
 }
 
 

@@ -359,10 +359,10 @@ std::string SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, int& aRe
 }
 
 
-std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType, std::string aString )
+std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType, std::string aString, NOTATION aNotation )
 {
     std::unique_ptr<SIM_VALUE> value = SIM_VALUE::Create( aType );
-    value->FromString( aString );
+    value->FromString( aString, aNotation );
     return value;
 }
 
@@ -409,6 +409,18 @@ template SIM_VALUE_INT::SIM_VALUE_INST( const int& aValue );
 template SIM_VALUE_FLOAT::SIM_VALUE_INST( const double& aValue );
 template SIM_VALUE_COMPLEX::SIM_VALUE_INST( const std::complex<double>& aValue );
 template SIM_VALUE_STRING::SIM_VALUE_INST( const std::string& aValue );
+
+
+template <> SIM_VALUE::TYPE SIM_VALUE_BOOL::GetType() const { return TYPE_BOOL; }
+template <> SIM_VALUE::TYPE SIM_VALUE_INT::GetType() const { return TYPE_INT; }
+template <> SIM_VALUE::TYPE SIM_VALUE_FLOAT::GetType() const { return TYPE_FLOAT; }
+template <> SIM_VALUE::TYPE SIM_VALUE_COMPLEX::GetType() const { return TYPE_FLOAT; }
+template <> SIM_VALUE::TYPE SIM_VALUE_STRING::GetType() const { return TYPE_STRING; }
+// TODO
+/*template <> SIM_VALUE::TYPE SIM_VALUE_BOOL_VECTOR::GetType() const { return TYPE_BOOL; }
+template <> SIM_VALUE::TYPE SIM_VALUE_INT_VECTOR::GetType() const { return TYPE_INT; }
+template <> SIM_VALUE::TYPE SIM_VALUE_FLOAT_VECTOR::GetType() const { return TYPE_FLOAT; }
+template <> SIM_VALUE::TYPE SIM_VALUE_COMPLEX_VECTOR::GetType() const { return TYPE_COMPLEX; }*/
 
 
 template <typename T>
@@ -636,6 +648,14 @@ std::string SIM_VALUE_COMPLEX::ToSimpleString() const
 
     return result;*/
     return "";
+}
+
+
+template <typename T>
+void SIM_VALUE_INST<T>::operator=( const SIM_VALUE& aOther )
+{
+    auto other = dynamic_cast<const SIM_VALUE_INST<T>*>( &aOther );
+    m_value = other->m_value;
 }
 
 

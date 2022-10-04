@@ -50,11 +50,11 @@ namespace SIM_LIBRARY_SPICE_PARSER
 };
 
 
-void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath )
+void SPICE_LIBRARY_PARSER::ReadFile( const std::string& aFilePath )
 {
     try
     {
-        tao::pegtl::file_input in( aFilePath.ToStdString() );
+        tao::pegtl::file_input in( aFilePath );
         auto root = tao::pegtl::parse_tree::parse<SIM_LIBRARY_SPICE_PARSER::libraryGrammar,
                                                   SIM_LIBRARY_SPICE_PARSER::librarySelector,
                                                   tao::pegtl::nothing,
@@ -68,14 +68,7 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath )
         {
             if( node->is_type<SIM_LIBRARY_SPICE_PARSER::modelUnit>() )
             {
-                m_library.m_models.push_back( SIM_MODEL_SPICE::Create( node->string() ) );
-
-                if( node->children.size() < 1
-                    || !node->children.at( 0 )->is_type<SIM_LIBRARY_SPICE_PARSER::modelName>() )
-                {
-                    THROW_IO_ERROR( wxString::Format( "Model name token not found" ) );
-                }
-
+                m_library.m_models.push_back( SIM_MODEL_SPICE::Create( m_library, node->string() ) );
                 m_library.m_modelNames.emplace_back( node->children.at( 0 )->string() );
             }
             else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::unknownLine>() )

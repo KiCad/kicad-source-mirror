@@ -35,7 +35,7 @@ class SPICE_LIBRARY_PARSER
 public:
     SPICE_LIBRARY_PARSER( SIM_LIBRARY_SPICE& aLibrary ) : m_library( aLibrary ) {}
 
-    virtual void ReadFile( const wxString& aFilePath );
+    virtual void ReadFile( const std::string& aFilePath );
 
 private:
     SIM_LIBRARY_SPICE& m_library;

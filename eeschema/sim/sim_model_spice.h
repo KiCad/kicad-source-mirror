@@ -29,6 +29,8 @@
 #include <sim/spice_generator.h>
 #include <sim/spice_model_parser.h>
 
+class SIM_LIBRARY_SPICE;
+
 
 class SPICE_GENERATOR_SPICE : public SPICE_GENERATOR
 {
@@ -45,7 +47,8 @@ public:
     friend class SPICE_GENERATOR_SPICE;
     friend class SPICE_MODEL_PARSER;
 
-    static std::unique_ptr<SIM_MODEL_SPICE> Create( const std::string& aSpiceCode );
+    static std::unique_ptr<SIM_MODEL_SPICE> Create( const SIM_LIBRARY_SPICE& aLibrary,
+                                                    const std::string& aSpiceCode );
 
     SIM_MODEL_SPICE( TYPE aType,
                      std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
@@ -55,9 +58,7 @@ public:
                      std::unique_ptr<SPICE_MODEL_PARSER> aSpiceModelParser );
 
 protected:
-    bool SetParamValue( unsigned aParamIndex, const std::string& aParamValue,
-                        SIM_VALUE_GRAMMAR::NOTATION aNotation
-                            = SIM_VALUE_GRAMMAR::NOTATION::SI ) override;
+    bool SetParamValue( int aParamIndex, const SIM_VALUE& aValue ) override;
 
     virtual bool SetParamFromSpiceCode( const std::string& aParamName,
                                         const std::string& aParamValue,

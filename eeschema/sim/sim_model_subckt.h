@@ -44,7 +44,7 @@ class SPICE_MODEL_PARSER_SUBCKT : public SPICE_MODEL_PARSER
 public:
     using SPICE_MODEL_PARSER::SPICE_MODEL_PARSER;
 
-    void ReadModel( const std::string& aSpiceCode ) override;
+    void ReadModel( const SIM_LIBRARY_SPICE& aLibrary, const std::string& aSpiceCode ) override;
 };
 
 

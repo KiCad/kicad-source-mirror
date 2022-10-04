@@ -65,7 +65,8 @@ std::vector<std::string> SPICE_GENERATOR_SUBCKT::CurrentNames( const std::string
 }
 
 
-void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const std::string& aSpiceCode )
+void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
+                                           const std::string& aSpiceCode )
 {
     tao::pegtl::string_input<> in( aSpiceCode, "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;

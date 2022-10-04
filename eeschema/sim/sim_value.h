@@ -65,15 +65,19 @@ public:
         TYPE_COMPLEX_VECTOR
     };
 
-    static std::unique_ptr<SIM_VALUE> Create( TYPE aType, std::string aString );
+    static std::unique_ptr<SIM_VALUE> Create( TYPE aType, std::string aString,
+                                              NOTATION aNotation = NOTATION::SI );
     static std::unique_ptr<SIM_VALUE> Create( TYPE aType );
 
     virtual ~SIM_VALUE() = default;
     SIM_VALUE() = default;
 
+    virtual TYPE GetType() const = 0;
+
     virtual bool HasValue() const = 0;
 
     void operator=( const std::string& aString );
+    virtual void operator=( const SIM_VALUE& aValue ) = 0;
     virtual bool operator==( const SIM_VALUE& aOther ) const = 0;
     bool operator!=( const SIM_VALUE& aOther ) const;
 
@@ -93,13 +97,16 @@ public:
     SIM_VALUE_INST() = default;
     SIM_VALUE_INST( const T& aValue );
 
+    TYPE GetType() const override;
     bool HasValue() const override;
 
     // TODO: Don't pass aNotation. Make a FromSpiceString() function instead.
+    // TODO: Don't use FromString(). Use assignment. Values should be immutable.
     bool FromString( const std::string& aString, NOTATION aNotation = NOTATION::SI ) override;
     std::string ToString( NOTATION aNotation = NOTATION::SI ) const override;
     std::string ToSimpleString() const override;
 
+    void operator=( const SIM_VALUE& aOther ) override;
     void operator=( const T& aValue );
     bool operator==( const T& aOther ) const;
     bool operator==( const SIM_VALUE& aOther ) const override;

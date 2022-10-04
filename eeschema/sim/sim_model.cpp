@@ -834,15 +834,22 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetBaseParam( unsigned aParamIndex ) const
 }
 
 
-bool SIM_MODEL::SetParamValue( unsigned aParamIndex, const std::string& aValue,
-                               SIM_VALUE_GRAMMAR::NOTATION aNotation )
+bool SIM_MODEL::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
 {
-    return m_params.at( aParamIndex ).value->FromString( aValue, aNotation );
+    *m_params.at( aParamIndex ).value = aValue;
+    return true;
 }
 
 
-bool SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string& aValue,
-                               SIM_VALUE_GRAMMAR::NOTATION aNotation )
+bool SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
+                               SIM_VALUE::NOTATION aNotation )
+{
+    const SIM_VALUE& value = *GetParam( aParamIndex ).value;
+    return SetParamValue( aParamIndex, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
+}
+
+
+bool SIM_MODEL::SetParamValue( const std::string& aParamName, const SIM_VALUE& aValue )
 {
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
@@ -855,7 +862,16 @@ bool SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string&
     if( it == params.end() )
         return false;
 
-    return SetParamValue( it - params.begin(), aValue, aNotation );
+    SetParamValue( static_cast<int>( it - params.begin() ), aValue );
+    return true;
+}
+
+
+bool SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string& aValue,
+                               SIM_VALUE::NOTATION aNotation )
+{
+    const SIM_VALUE& value = *FindParam( aParamName )->value;
+    return SetParamValue( aParamName, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
 }
 
 

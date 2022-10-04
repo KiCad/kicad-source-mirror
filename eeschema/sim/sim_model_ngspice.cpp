@@ -112,7 +112,8 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName, co
                                  } );
 
     if( paramIt != params.end() )
-        return SetParamValue( paramIt - params.begin(), aParamValue, aNotation );
+        return SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue,
+                                         aNotation );
 
 
     // One Spice param can have multiple names, we need to take this into account.
@@ -142,7 +143,8 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName, co
     if( paramIt == params.end() )
         return false;
 
-    return SetParamValue( paramIt - params.begin(), aParamValue, aNotation );
+    return SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue,
+                                     aNotation );
 }
 
 

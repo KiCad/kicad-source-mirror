@@ -25,6 +25,7 @@
 #include <sim/sim_model_spice.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/spice_model_parser.h>
+#include <sim/sim_library_spice.h>
 #include <confirm.h>
 
 #include <boost/algorithm/string/trim.hpp>
@@ -50,14 +51,15 @@ std::string SPICE_GENERATOR_SPICE::Preview( const std::string& aModelName ) cons
 }
 
 
-std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const std::string& aSpiceCode )
+std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
+                                                          const std::string& aSpiceCode )
 {
     auto model = static_cast<SIM_MODEL_SPICE*>(
             SIM_MODEL::Create( SPICE_MODEL_PARSER::ReadType( aSpiceCode ) ).release() );
 
     try
     {
-        model->m_spiceModelParser->ReadModel( aSpiceCode );
+        model->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
     }
     catch( const IO_ERROR& e )
     {
@@ -85,14 +87,13 @@ SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType,
 }
 
 
-bool SIM_MODEL_SPICE::SetParamValue( unsigned aParamIndex, const std::string& aParamValue,
-                                     SIM_VALUE_GRAMMAR::NOTATION aNotation )
+bool SIM_MODEL_SPICE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
 {
     // Models sourced from a library are immutable.
     if( m_spiceCode != "" )
         return false;
 
-    return SIM_MODEL::SetParamValue( aParamIndex, aParamValue, aNotation );
+    return SIM_MODEL::SetParamValue( aParamIndex, aValue );
 }
 
 

@@ -69,9 +69,7 @@ public:
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
-    bool SetParamValue( unsigned aParamIndex, const std::string& aValue,
-                        SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI )
-        override;
+    bool SetParamValue( int aParamIndex, const SIM_VALUE& aValue ) override;
 
     bool HasAutofill() const override { return true; }
 

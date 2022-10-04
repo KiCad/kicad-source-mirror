@@ -102,7 +102,7 @@ namespace SPICE_GRAMMAR
     struct token : seq<tokenStart,
                        star<not_at<eolf>,
                             not_at<backslashContinuation>,
-                            not_one<' ', '\t', '=', '(', ')', ',', '+', '-', '*', '/', '^', ';'>>>
+                            not_one<' ', '\t', '=', '(', ')', ',', '*', '/', '^', ';'>>>
         {};
 
     struct param : token {};
@@ -112,6 +112,18 @@ namespace SPICE_GRAMMAR
                                 sep,
                                 paramValue> {};
     struct paramValuePairs : list<paramValuePair, sep> {};
+    struct dotModelAko : seq<opt<sep>,
+                             if_must<seq<TAO_PEGTL_ISTRING( ".model" ),
+                                         sep,
+                                         modelName,
+                                         sep,
+                                         TAO_PEGTL_ISTRING( "ako:" )>,
+                                     opt<sep>,
+                                     modelName,
+                                     opt<sep,
+                                         dotModelType>,
+                                     opt<sep,
+                                         paramValuePairs>>> {};
     struct dotModel : seq<opt<sep>,
                           if_must<TAO_PEGTL_ISTRING( ".model" ),
                                   sep,
@@ -122,6 +134,7 @@ namespace SPICE_GRAMMAR
                                       paramValuePairs>,
                                   opt<sep>,
                                   newline>> {};
+                                     
 
 
     struct dotSubcktPinName : seq<not_at<TAO_PEGTL_ISTRING( "params:" )>,
@@ -147,7 +160,8 @@ namespace SPICE_GRAMMAR
                                          spiceUnit>>> {};
 
 
-    struct modelUnit : sor<dotModel,
+    struct modelUnit : sor<dotModelAko,
+                           dotModel,
                            dotSubckt> {};
 
 
@@ -229,6 +243,8 @@ namespace SPICE_GRAMMAR
     template <> inline constexpr auto errorMessage<opt<sep>> = "";
     template <> inline constexpr auto errorMessage<modelName> = "expected model name";
     template <> inline constexpr auto errorMessage<dotModelType> = "expected model type";
+    template <> inline constexpr auto errorMessage<opt<sep,
+                                                       dotModelType>> = "";
     template <> inline constexpr auto errorMessage<opt<sep,
                                                        paramValuePairs>> = "";
     template <> inline constexpr auto errorMessage<opt<sep,

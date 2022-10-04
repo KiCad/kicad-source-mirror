@@ -532,12 +532,13 @@ public:
     const PARAM& GetUnderlyingParam( unsigned aParamIndex ) const; // Return the actual parameter.
     const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
 
-    virtual bool SetParamValue( unsigned aParamIndex, const std::string& aValue,
-                                SIM_VALUE_GRAMMAR::NOTATION aNotation
-                                    = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
+    virtual bool SetParamValue( int aParamIndex, const SIM_VALUE& aValue );
+    bool SetParamValue( int aParamIndex, const std::string& aValue,
+                        SIM_VALUE::NOTATION aNotation = SIM_VALUE::NOTATION::SI );
+    bool SetParamValue( const std::string& aParamName, const SIM_VALUE& aValue );
     bool SetParamValue( const std::string& aParamName, const std::string& aValue,
-                        SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
+                        SIM_VALUE::NOTATION aNotation = SIM_VALUE::NOTATION::SI );
 
     bool HasOverrides() const;
     bool HasNonInstanceOverrides() const;
