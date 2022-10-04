@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-10-03 10:53+0000\n"
+"PO-Revision-Date: 2022-10-04 22:26+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -20830,9 +20830,9 @@ msgid "Linear resistance:"
 msgstr "선형 저항:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "침투깊이 100%를 위한 주파수:"
+msgstr "침투깊이 100\\%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:136
 msgid "Ampacity:"
@@ -26814,9 +26814,8 @@ msgid "angle"
 msgstr "각도"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
-#, fuzzy
 msgid "at"
-msgstr "at"
+msgstr "에"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:733
 msgid "radius"
@@ -29974,7 +29973,6 @@ msgid "Check rule syntax"
 msgstr "규칙 문법을 체크"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30346,9 +30344,17 @@ msgstr ""
 " * via\\_diameter\n"
 " * zone\\_connection\n"
 "\n"
-"참고: `clearance` 및 `hole_clearance` 규칙은 동일한 네트의 항목에 대해 실행되"
-"지 않습니다; 'physical_clearance' 및 'physical_hole_clearance' 규칙이 있습니"
-"다.\n"
+"참고: `clearance` 및 `hole_clearance` 규칙은 동일한 네트의 항목에 대해 "
+"실행되지 않습니다; 'physical_clearance' 및 'physical_hole_clearance' 규칙이 "
+"있습니다.\n"
+"<br><br>\n"
+"\n"
+"### Items\n"
+"\n"
+" * `A` &nbsp;&nbsp; _시험 중인 첫 번째 항목(또는 유일한)_\n"
+" * `B` &nbsp;&nbsp; _테스트 중인 두 번째 항목(이진 테스트용)_\n"
+" * `L` &nbsp;&nbsp; _현재 시험 중인 층_\n"
+"\n"
 "<br>\n"
 "\n"
 "### 개체 형식\n"
@@ -30481,7 +30487,7 @@ msgstr ""
 "주의: 규칙이 해당 레이어에 적용되는지 여부와 관계 없이,\n"
 "`A`가 제시된 레이어에 있을 경우 참을 반환합니다.\n"
 "후자의 경우 규칙에서`(layer \"layer_name\")` 절을 사용합니다.\n"
-"<br><br><br>\n"
+"<br><br>\n"
 "\n"
 "    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
 "더 이상 사용되지 않습니다. 대신 `intersectsCourtyard()`를 사용하세요.\n"
@@ -30520,13 +30526,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -38459,7 +38465,7 @@ msgstr "경로 해제 선택됨"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
 msgid "Unroutes selected items to the nearest pad."
-msgstr "선택한 항목을 가장 가까운 패드로 언라우트함"
+msgstr "선택한 항목을 가장 가까운 패드로 언라우트함."
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Select All Tracks in Net"
@@ -38482,20 +38488,19 @@ msgid "Select All Unconnected Footprints"
 msgstr "연결되지 않은 모든 풋프린트 선택"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
-#, fuzzy
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "같은 네트에 속한 모든 배선 & 비아를 선택합니다."
+msgstr "선택한 각 네트에 속하는 연결되지 않은 모든 풋프린트를 선택합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1333
-#, fuzzy
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "선택한 풋프린트 배치"
+msgstr "연결되지 않은 가장 가까운 풋프린트 잡기"
 
 #: pcbnew/tools/pcb_actions.cpp:1334
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
-msgstr ""
+msgstr "선택한 각 네트에서 가장 가까운 연결되지 않은 풋프린트를 선택하고 이동을 "
+"시작합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -38681,30 +38686,28 @@ msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr "가장 가까운 ratnest 끝까지 현재 경로를 완료하려고 시도합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1496
-#, fuzzy
 msgid "Route Selected"
-msgstr "그룹 선택됨"
+msgstr "선택한 경로"
 
 #: pcbnew/tools/pcb_actions.cpp:1497
 msgid "Sequentially route selected items from ratsnest anchor."
-msgstr ""
+msgstr "래트네스트 앵커에서 선택한 항목을 순차적으로 라우팅합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1503
-#, fuzzy
 msgid "Route Selected From Other End"
-msgstr "다른 끝에서 경로"
+msgstr "다른 끝에서 선택한 경로"
 
 #: pcbnew/tools/pcb_actions.cpp:1504
 msgid "Sequentially route selected items from other end of ratsnest anchor."
-msgstr ""
+msgstr "래트네스트 앵커의 다른 끝에서 선택된 항목을 순차적으로 라우팅합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1510
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "선택한 완료 시도(자동 경로)"
 
 #: pcbnew/tools/pcb_actions.cpp:1511
 msgid "Sequentially attempt to automatically route all selected pads."
-msgstr ""
+msgstr "선택한 모든 패드를 자동으로 라우팅하도록 순차적으로 시도합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1517
 msgid ""
@@ -39610,7 +39613,6 @@ msgid "Other items"
 msgstr "기타 항목"
 
 #: pcbnew/widgets/search_handlers.cpp:245
-#, fuzzy
 msgid "Textbox"
 msgstr "텍스트 상자"
 
