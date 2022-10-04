@@ -582,11 +582,6 @@ void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_P
  */
 void ZONE_FILLER::addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
 {
-    // Note: drill size represents finish size, which means the actual hole size is the plating
-    // thickness larger.
-    if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
-        aGap += aPad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
-
     aPad->TransformHoleWithClearanceToPolygon( aHoles, aGap, m_maxError, ERROR_OUTSIDE );
 }
 
@@ -656,11 +651,6 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 // for the hole.
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
-
-                // Note: drill size represents finish size, which means the actual holes size is
-                // the plating thickness larger.
-                if( pad->GetAttribute() == PAD_ATTRIB::PTH )
-                    gap += pad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
 
                 pad->TransformHoleWithClearanceToPolygon( holes, gap, m_maxError, ERROR_OUTSIDE );
             }
@@ -790,7 +780,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                                     aZone, via, aLayer ) );
                         }
 
-                        int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness();
+                        int radius = via->GetDrillValue() / 2;
 
                         TransformCircleToPolygon( aHoles, via->GetPosition(),
                                                   radius + gap + extra_margin,

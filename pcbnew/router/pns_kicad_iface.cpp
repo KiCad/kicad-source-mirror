@@ -967,7 +967,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
         if( aPad->GetAttribute() != PAD_ATTRIB::NPTH )
         {
             BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-            slot->SetWidth( slot->GetWidth() + bds.GetHolePlatingThickness() * 2 );
+            slot->SetWidth( slot->GetWidth() );
         }
 
         solid->SetHole( slot );
@@ -1044,7 +1044,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     via->SetHole( SHAPE_CIRCLE( aVia->GetPosition(),
-                                aVia->GetDrillValue() / 2 + bds.GetHolePlatingThickness() ) );
+                                aVia->GetDrillValue() / 2 ) );
 
     return via;
 }

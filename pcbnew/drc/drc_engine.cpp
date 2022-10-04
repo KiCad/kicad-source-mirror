@@ -1345,12 +1345,7 @@ std::shared_ptr<SHAPE> DRC_ENGINE::GetShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLa
 
         if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
         {
-            BOARD_DESIGN_SETTINGS& bds = aPad->GetBoard()->GetDesignSettings();
-
-            // Note: drill size represents finish size, which means the actual holes size is the
-            // plating thickness larger.
             auto hole = static_cast<SHAPE_SEGMENT*>( aPad->GetEffectiveHoleShape()->Clone() );
-            hole->SetWidth( hole->GetWidth() + bds.GetHolePlatingThickness() );
             return std::make_shared<SHAPE_SEGMENT>( *hole );
         }
 
