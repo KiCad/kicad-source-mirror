@@ -23,6 +23,7 @@
 
 # Note: The glew folder isn't added here because it is added inside the main CMakeLists.txt
 
+add_subdirectory( argparse )
 add_subdirectory( clipper )
 add_subdirectory( compoundfilereader )
 add_subdirectory( delaunator )

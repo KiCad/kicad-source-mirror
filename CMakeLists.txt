@@ -155,10 +155,6 @@ cmake_dependent_option( KICAD_WIN32_INSTALL_PDBS
     OFF "WIN32"
     OFF )
 
-option( KICAD_STEP_EXPORT_LIB
-    "Build and use kicad2step as a library, meant for debugging"
-    OFF )
-
 option( KICAD_USE_3DCONNEXION
     "Build KiCad with support for 3Dconnexion devices (Currently only for Mac/MSW)"
     OFF )

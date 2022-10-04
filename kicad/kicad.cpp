@@ -51,9 +51,13 @@
 #include "pgm_kicad.h"
 #include "kicad_manager_frame.h"
 
+#include <kicad_build_version.h>
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
 
+#include "cli/command_export_kicad_pcbnew.h"
+#include "cli/command_export_step.h"
+#include "cli/exit_codes.h"
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_base.h>
@@ -89,9 +93,25 @@ PGM_KICAD& PgmTop()
     return program;
 }
 
+struct COMMAND_ENTRY
+{
+    CLI::COMMAND* handler;
+
+    std::vector<COMMAND_ENTRY> subCommands;
+
+    COMMAND_ENTRY( CLI::COMMAND* aHandler ) : handler( aHandler ){};
+    COMMAND_ENTRY( CLI::COMMAND* aHandler, std::vector<COMMAND_ENTRY> aSub ) :
+            handler( aHandler ), subCommands( aSub ){};
+};
+
+static CLI::EXPORT_STEP_COMMAND   stepCmd{};
+static CLI::EXPORT_KICAD_PCBNEW_COMMAND exportPcbCmd{};
+
+static std::vector<COMMAND_ENTRY> commandStack = { { &exportPcbCmd, { &stepCmd } } };
 
 bool PGM_KICAD::OnPgmInit()
 {
+    PGM_BASE::BuildArgvUtf8();
     App().SetAppDisplayName( wxT( "KiCad" ) );
 
 #if defined(DEBUG)
@@ -103,6 +123,55 @@ bool PGM_KICAD::OnPgmInit()
         return false;
     }
 #endif
+
+    argparse::ArgumentParser argParser( std::string( "kicad" ),
+                                        KICAD_MAJOR_MINOR_VERSION );
+
+    for( COMMAND_ENTRY& entry : commandStack )
+    {
+        argParser.add_subparser( entry.handler->GetArgParser() );
+
+        for( COMMAND_ENTRY& subentry : entry.subCommands )
+        {
+            entry.handler->GetArgParser().add_subparser( subentry.handler->GetArgParser() );
+        }
+    }
+
+    try
+    {
+        argParser.parse_args( m_argcUtf8, m_argvUtf8 );
+    }
+    catch( const std::runtime_error& err )
+    {
+        // this provides the nice pretty print
+        std::cerr << err.what() << std::endl;
+        std::cerr << argParser;
+
+        std::exit( CLI::EXIT_CODES::ERR_ARGS );
+    }
+
+    bool          cliCmdRequested = false;
+    CLI::COMMAND* cliCmd = nullptr;
+    for( COMMAND_ENTRY& entry : commandStack )
+    {
+        if( argParser.is_subcommand_used( entry.handler->GetName() ) )
+        {
+            for( COMMAND_ENTRY& subentry : entry.subCommands )
+            {
+                if( entry.handler->GetArgParser().is_subcommand_used(
+                            subentry.handler->GetName() ) )
+                {
+                    cliCmd = subentry.handler;
+                    cliCmdRequested = true;
+                }
+            }
+
+            if( !cliCmdRequested )
+            {
+                cliCmd = entry.handler;
+            }
+        }
+    }
 
     if( !InitPgm() )
         return false;
@@ -146,6 +215,24 @@ bool PGM_KICAD::OnPgmInit()
 
         if( it != GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
             m_bm.m_search.Insert( it->second.GetValue(), 0 );
+    }
+
+    if( cliCmdRequested )
+    {
+        int exitCode = CLI::EXIT_CODES::ERR_UNKNOWN;
+        if( cliCmd )
+        {
+            exitCode = cliCmd->Perform( Kiway );
+        }
+
+        if( exitCode != CLI::EXIT_CODES::AVOID_CLOSING )
+        {
+            std::exit( exitCode );
+        }
+        else
+        {
+            return true;
+        }
     }
 
     KICAD_MANAGER_FRAME* frame = new KICAD_MANAGER_FRAME( nullptr, wxT( "KiCad" ),

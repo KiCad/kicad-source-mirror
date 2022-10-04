@@ -119,6 +119,11 @@ public:
 #endif
 
     /**
+     * Builds the UTF8 based argv variable
+     */
+    void BuildArgvUtf8();
+
+    /**
      * Specific to MacOSX (not used under Linux or Windows).
      *
      * MacOSX requires it for file association.
@@ -342,6 +347,11 @@ protected:
     wxFileName      m_sentry_uid_fn;
     wxString        m_sentryUid;
 #endif
+
+    char** m_argvUtf8;                      /// argv parameters converted to utf8 form, because wxwidgets has opinions
+                                            /// and will return argv as either force converted to ascii in char* or wchar_t only
+
+    int m_argcUtf8;
 };
 
 

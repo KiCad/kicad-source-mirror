@@ -5,4 +5,3 @@ if( COMPILER_SUPPORTS_WARNINGS )
 endif()
 
 add_subdirectory( idftools )
-add_subdirectory( kicad2step )

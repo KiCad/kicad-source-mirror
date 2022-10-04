@@ -654,6 +654,14 @@ bool KIWAY::ProcessEvent( wxEvent& aEvent )
 }
 
 
+int KIWAY::ProcessJob( KIWAY::FACE_T aFace, JOB* job )
+{
+    KIFACE* kiface = KiFACE( aFace );
+
+    return kiface->HandleJob( job );
+}
+
+
 void KIWAY::OnKiCadExit()
 {
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )

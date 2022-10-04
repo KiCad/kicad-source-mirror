@@ -287,6 +287,12 @@ set( COMMON_SRCS
     ${PLUGINS_CADSTAR_SRCS}
     ${PLUGINS_EAGLE_SRCS}
 	${FONT_SRCS}
+    cli/command_export_kicad_pcbnew.cpp
+    cli/command_export_pcb_svg.cpp
+    cli/command_export_pcbnew.cpp
+    cli/command_export_step.cpp
+    jobs/job_export_step.cpp
+    jobs/job_dispatcher.cpp
     advanced_config.cpp
     array_axis.cpp
     array_options.cpp
@@ -481,6 +487,7 @@ target_link_libraries( common
     compoundfilereader
     pcm_settings
     nanodbc # for now; maybe hoist out of common
+    argparse::argparse
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
     ${wxWidgets_LIBRARIES}
@@ -574,6 +581,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_painter.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/plugins/kicad/pcb_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_plot_params.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_plot_svg.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_screen.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_view.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcbnew_settings.cpp

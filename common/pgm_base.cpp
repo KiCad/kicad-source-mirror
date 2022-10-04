@@ -124,6 +124,8 @@ PGM_BASE::PGM_BASE()
     m_Printing = false;
     m_Quitting = false;
     m_ModalDialogCount = 0;
+    m_argcUtf8 = 0;
+    m_argvUtf8 = nullptr;
 
     setLanguageId( wxLANGUAGE_DEFAULT );
 
@@ -134,6 +136,13 @@ PGM_BASE::PGM_BASE()
 PGM_BASE::~PGM_BASE()
 {
     Destroy();
+
+    for( size_t n = 0; n < m_argcUtf8; n++ )
+    {
+        delete m_argvUtf8[n];
+    }
+
+    delete m_argvUtf8;
 }
 
 
@@ -368,6 +377,21 @@ void PGM_BASE::sentryPrompt()
     }
 }
 #endif
+
+
+void PGM_BASE::BuildArgvUtf8()
+{
+    const wxArrayString& argArray = App().argv.GetArguments();
+    m_argcUtf8 = argArray.size();
+
+    m_argvUtf8 = new char*[m_argcUtf8 + 1];
+    for( size_t n = 0; n < m_argcUtf8; n++ )
+    {
+        m_argvUtf8[n] = wxStrdup( argArray[n].ToUTF8() );
+    }
+
+    m_argvUtf8[m_argcUtf8] = NULL;  // null terminator at end of argv
+}
 
 
 bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )

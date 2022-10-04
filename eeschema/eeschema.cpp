@@ -298,6 +298,9 @@ static struct IFACE : public KIFACE_BASE
                      const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
                      const wxString& aSrcFilePath, wxString& aErrors ) override;
 
+
+    int HandleJob( JOB* aJob ) override;
+
 } kiface( "eeschema", KIWAY::FACE_SCH );
 
 } // namespace
@@ -560,3 +563,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
     }
 }
 
+int IFACE::HandleJob( JOB* aJob )
+{
+    return 0;
+}

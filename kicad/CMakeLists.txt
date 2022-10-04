@@ -107,11 +107,12 @@ if( KICAD_WIN32_INSTALL_PDBS )
     install(FILES $<TARGET_PDB_FILE:kicad> DESTINATION ${KICAD_BIN})
 endif()
 
-if( MSVC )
-    # Allow for MSVC to run from the build directory
+if( WIN32 )
     add_custom_command( TARGET kicad POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/pcm/schemas" "${CMAKE_BINARY_DIR}/schemas"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_SOURCE_DIR}/resources/msw/cmd-wrappers/kicad.cmd" "$<TARGET_FILE_DIR:kicad>"
         )
+
+    install(FILES "${CMAKE_SOURCE_DIR}/resources/msw/cmd-wrappers/kicad.cmd" DESTINATION ${KICAD_BIN})
 endif()
 
 if( APPLE )

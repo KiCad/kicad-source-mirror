@@ -85,6 +85,7 @@ target_link_libraries( pl_editor
     # There's way too much crap coming in from common yet.
     gal
     common
+    argparse::argparse
     ${wxWidgets_LIBRARIES}
     )
 

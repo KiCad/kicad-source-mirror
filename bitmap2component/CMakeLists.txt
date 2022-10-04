@@ -53,6 +53,7 @@ add_executable( bitmap2component WIN32 MACOSX_BUNDLE
 
 target_link_libraries( bitmap2component
     common
+    argparse::argparse
     ${wxWidgets_LIBRARIES}
     potrace
     )

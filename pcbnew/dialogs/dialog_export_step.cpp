@@ -46,9 +46,7 @@
 #include <filename_resolver.h>
 
 
-#ifdef KICAD_STEP_EXPORT_LIB
 #include <kicad2step.h>
-#endif
 
 
 class DIALOG_EXPORT_STEP : public DIALOG_EXPORT_STEP_BASE
@@ -371,7 +369,6 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     double xOrg = 0.0;
     double yOrg = 0.0;
 
-#ifndef KICAD_STEP_EXPORT_LIB
     wxFileName appK2S( wxStandardPaths::Get().GetExecutablePath() );
 #ifdef __WXMAC__
     // On macOS, we have standalone applications inside the main bundle, so we handle that here:
@@ -385,11 +382,15 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     }
 #endif
 
-    appK2S.SetName( wxT( "kicad2step" ) );
+    appK2S.SetName( wxT( "pcbnew" ) );
 
     wxString cmdK2S = wxT( "\"" );
     cmdK2S.Append( appK2S.GetFullPath() );
     cmdK2S.Append( wxT( "\"" ) );
+
+    cmdK2S.Append( wxT( " export" ) );
+    cmdK2S.Append( wxT( " step" ) );
+    cmdK2S.Append( wxT( " --gui" ) );
 
     if( GetNoVirtOption() )
         cmdK2S.Append( wxT( " --no-virtual" ) );
@@ -458,65 +459,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     // Output file path.
     cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ), quote,  m_boardPath, quote ) );
 
-    wxLogTrace( traceKiCad2Step, wxT( "KiCad2Step command: %s" ), cmdK2S );
+    wxLogTrace( traceKiCad2Step, wxT( "export step command: %s" ), cmdK2S );
     wxExecute( cmdK2S, wxEXEC_ASYNC  | wxEXEC_SHOW_CONSOLE );
-
-#else
-
-    KICAD2MCAD_PRMS params;
-    params.m_filename = m_boardPath;
-    params.m_outputFile = m_filePickerSTEP->GetPath();
-
-    params.m_includeVirtual = !GetNoVirtOption();
-
-    params.m_substModels = GetSubstOption();
-    params.m_minDistance = tolerance;
-    params.m_overwrite = true;
-
-    switch( orgOpt )
-    {
-    case DIALOG_EXPORT_STEP::STEP_ORG_0:
-        break;
-
-    case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
-        params.m_useDrillOrigin = true;
-        break;
-
-    case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
-        params.m_useGridOrigin = true;
-        break;
-
-    case DIALOG_EXPORT_STEP::STEP_ORG_USER:
-    {
-        xOrg = GetXOrg();
-        yOrg = GetYOrg();
-
-        if( GetOrgUnitsChoice() == 1 )
-        {
-            // selected reference unit is in inches, and STEP units are mm
-            xOrg *= 25.4;
-            yOrg *= 25.4;
-        }
-
-        params.m_xOrigin = xOrg;
-        params.m_yOrigin = yOrg;
-        break;
-    }
-
-    case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
-    {
-        BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
-        xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
-        yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
-        params.m_xOrigin = xOrg;
-        params.m_yOrigin = yOrg;
-        break;
-    }
-    }
-
-    KICAD2STEP converter( params );
-    converter.Run();
-#endif
 
     aEvent.Skip(); // Close the dialog
 }

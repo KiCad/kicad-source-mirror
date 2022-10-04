@@ -60,6 +60,7 @@
 
 #include "invoke_pcb_dialog.h"
 #include <wildcards_and_files_ext.h>
+#include "pcbnew_jobs_handler.h"
 
 
 /* init functions defined by swig */
@@ -290,6 +291,11 @@ static struct IFACE : public KIFACE_BASE
                      const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
                      const wxString& aSrcFilePath, wxString& aErrors ) override;
 
+    int HandleJob( JOB* aJob ) override;
+
+private:
+    std::unique_ptr<PCBNEW_JOBS_HANDLER> m_jobHandler;
+
 } kiface( "pcbnew", KIWAY::FACE_PCB );
 
 } // namespace
@@ -380,6 +386,8 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
             DisplayErrorMessage( nullptr, msg, ioe.What() );
         }
     }
+
+    m_jobHandler = std::make_unique<PCBNEW_JOBS_HANDLER>();
 
     return true;
 }
@@ -478,3 +486,8 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
     }
 }
 
+
+int IFACE::HandleJob( JOB* aJob )
+{
+    return m_jobHandler->RunJob( aJob );
+}

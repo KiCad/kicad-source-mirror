@@ -104,6 +104,7 @@
 #include <frame_type.h>
 #include <mail_type.h>
 #include <ki_exception.h>
+#include <jobs/job.h>
 
 
 #define KIFACE_VERSION      1
@@ -233,6 +234,11 @@ struct KIFACE
      * Append this Kiface's registered actions to the given list.
      */
     virtual void GetActions( std::vector<TOOL_ACTION*>& aActions ) const = 0;
+
+    virtual int HandleJob( JOB* aJob )
+    {
+        return 0;
+    }
 };
 
 
@@ -402,6 +408,8 @@ public:
     void OnKiwayEnd();
 
     bool ProcessEvent( wxEvent& aEvent ) override;
+
+    int ProcessJob( KIWAY::FACE_T aFace, JOB* job );
 
     /**
      * Gets the window pointer to the blocking dialog (to send it signals)

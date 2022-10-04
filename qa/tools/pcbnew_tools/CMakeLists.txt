@@ -29,10 +29,6 @@ add_executable( qa_pcbnew_tools
     tools/polygon_generator/polygon_generator.cpp
 
     tools/polygon_triangulation/polygon_triangulation.cpp
-
-    # Older CMakes cannot link OBJECT libraries
-    # https://cmake.org/pipermail/cmake/2013-November/056263.html
-    $<TARGET_OBJECTS:pcbnew_kiface_objects>
 )
 
 # Anytime we link to the kiface_objects, we have to add a dependency on the last object
@@ -41,6 +37,7 @@ add_executable( qa_pcbnew_tools
 add_dependencies( qa_pcbnew_tools pcbnew )
 
 target_link_libraries( qa_pcbnew_tools
+    pcbnew_kiface_objects
     qa_pcbnew_utils
     3d-viewer
     connectivity

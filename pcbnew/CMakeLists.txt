@@ -13,6 +13,7 @@ add_definitions( -DPCBNEW )
 add_subdirectory(connectivity)
 
 add_subdirectory(router)
+add_subdirectory(exporters/step)
 
 # psnrouter depends on make_lexer outputs in common (bug #1285878 )
 add_dependencies( pnsrouter pcbcommon )
@@ -313,6 +314,7 @@ set( PCBNEW_CLASS_SRCS
     pcb_layer_box_selector.cpp
     pcb_edit_frame.cpp
     pcbnew_config.cpp
+    pcbnew_jobs_handler.cpp
     pcbnew_printout.cpp
     pcbnew_settings.cpp
     pcbplot.cpp
@@ -639,6 +641,7 @@ target_link_libraries( pcbnew
     scripting
     nlohmann_json
     rectpack2d
+    argparse::argparse
     ${wxWidgets_LIBRARIES}
     )
 
@@ -674,15 +677,12 @@ target_link_libraries( pcbnew_kiface_objects
         tinyspline_lib
         nlohmann_json
         rectpack2d
+        kicad2step_lib
     )
 
 target_include_directories( pcbnew_kiface_objects PRIVATE
     $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     )
-
-if( KICAD_STEP_EXPORT_LIB )
-    add_definitions( -DKICAD_STEP_EXPORT_LIB )
-endif()
 
 add_library( pcbnew_kiface MODULE )
 
@@ -756,6 +756,12 @@ if( WIN32 )
     add_custom_command( TARGET pcbnew POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kicad_3dsg>" "$<TARGET_FILE_DIR:pcbnew>"
         )
+
+    add_custom_command( TARGET pcbnew POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_SOURCE_DIR}/resources/msw/cmd-wrappers/pcbnew.cmd" "$<TARGET_FILE_DIR:pcbnew>"
+        )
+
+    install(FILES "${CMAKE_SOURCE_DIR}/resources/msw/cmd-wrappers/pcbnew.cmd" DESTINATION ${KICAD_BIN})
 endif()
 
 # these 2 binaries are a matched set, keep them together:

@@ -127,20 +127,6 @@ public:
         return false;
     }
 
-    /**
-     * Handle command-line arguments in a frame-specific way.
-     *
-     * The given argument parser has already been initialized with the command line and any
-     * options/switches that are handled by the top-level launcher before passing control to
-     * the child frame.
-     *
-     * @param aParser is the argument parser created by the top-level launcher.
-     */
-    virtual void ParseArgs( wxCmdLineParser& aParser )
-    {
-        WXUNUSED( aParser );
-    }
-
 
     /**
      * Show this wxFrame as if it were a modal dialog, with all other instantiated wxFrames

@@ -278,7 +278,7 @@ set( EESCHEMA_SRCS
 
     ${CMAKE_SOURCE_DIR}/pcbnew/ibis/ibis_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/ibis/kibis.cpp
-    
+
     # Some simulation features must be built even if libngspice is not linked.
     sim/sim_library.cpp
     sim/sim_library_spice.cpp
@@ -427,6 +427,7 @@ target_link_libraries( eeschema
     # There's way too much crap coming in from common yet.
     gal
     common
+    argparse::argparse
     ${wxWidgets_LIBRARIES}
     )
 

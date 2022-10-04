@@ -28,6 +28,8 @@
 #include <strsafe.h>
 #include <config.h>
 #include <VersionHelpers.h>
+#include <iostream>
+#include <cstdio>
 
 #if defined( _MSC_VER )
 #include <werapi.h>     // issues on msys2
@@ -63,22 +65,35 @@ bool KIPLATFORM::APP::Init()
 
     // In order to support GUI and CLI
     // Let's attach to console when it's possible
-    HANDLE handleStdOut, handleStdErr;
+    HANDLE handle;
     if( AttachConsole( ATTACH_PARENT_PROCESS ) )
     {
-        handleStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
-        if( handleStdOut != INVALID_HANDLE_VALUE )
+        if( GetStdHandle( STD_INPUT_HANDLE ) != INVALID_HANDLE_VALUE )
+        {
+            freopen( "CONIN$", "r", stdin );
+            setvbuf( stdin, NULL, _IONBF, 0 );
+        }
+
+        if( GetStdHandle( STD_OUTPUT_HANDLE ) != INVALID_HANDLE_VALUE )
         {
             freopen( "CONOUT$", "w", stdout );
             setvbuf( stdout, NULL, _IONBF, 0 );
         }
 
-        handleStdErr = GetStdHandle( STD_ERROR_HANDLE );
-        if( handleStdErr != INVALID_HANDLE_VALUE )
+        if( GetStdHandle( STD_ERROR_HANDLE ) != INVALID_HANDLE_VALUE )
         {
             freopen( "CONOUT$", "w", stderr );
             setvbuf( stderr, NULL, _IONBF, 0 );
         }
+
+        std::ios::sync_with_stdio( true );
+
+        std::wcout.clear();
+        std::cout.clear();
+        std::wcerr.clear();
+        std::cerr.clear();
+        std::wcin.clear();
+        std::cin.clear();
     }
 
     return true;
