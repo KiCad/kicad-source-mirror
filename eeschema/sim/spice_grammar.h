@@ -82,9 +82,9 @@ namespace SPICE_GRAMMAR
                                   commentBackslashContinuation,
                                   plusContinuation>,
                               opt<garbage>> {};
-                             
-                
 
+
+    // Token separator.
     struct sep : sor<plus<continuation>,
                      garbage> {};
 
@@ -105,13 +105,23 @@ namespace SPICE_GRAMMAR
                             not_one<' ', '\t', '=', '(', ')', ',', '*', '/', '^', ';'>>>
         {};
 
-    struct param : token {};
+    // Param names cannot be `token` because LTspice models contain spurious values without
+    // parameter names, which we need to skip.
+    struct param : identifier {};
+
     struct paramValue : token {};
 
     struct paramValuePair : seq<param,
                                 sep,
                                 paramValue> {};
-    struct paramValuePairs : list<paramValuePair, sep> {};
+    struct paramValuePairs : list<sor<paramValuePair,
+                                      // In some LTspice models there are spurious values without
+                                      // specified parameter name. Ngspice ignores these, and we
+                                      // follow suit.
+                                      // TODO: Possibly create an LTspice compatibility mode, so
+                                      // that we don't have to silently ignore values blanketly.
+                                      token>,
+                                  sep> {};
     struct dotModelAko : seq<opt<sep>,
                              if_must<seq<TAO_PEGTL_ISTRING( ".model" ),
                                          sep,

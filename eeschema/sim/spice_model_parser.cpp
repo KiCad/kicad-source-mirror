@@ -50,7 +50,8 @@ namespace SIM_MODEL_SPICE_PARSER
 }
 
 
-SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const std::string& aSpiceCode )
+SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary,
+                                              const std::string& aSpiceCode )
 {
     tao::pegtl::string_input<> in( aSpiceCode, "Spice_Code" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
@@ -71,7 +72,23 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const std::string& aSpiceCode )
 
     for( const auto& node : root->children )
     {
-        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
+        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModelAko>() )
+        {
+            std::string modelName = node->children.at( 0 )->string();
+            std::string akoName = node->children.at( 1 )->string();
+            const SIM_MODEL* sourceModel = aLibrary.FindModel( akoName );
+
+            if( !sourceModel )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Could not find model '%s' to copy for ako model '%s'" ),
+                        akoName,
+                        modelName ) );
+            }
+
+            return sourceModel->GetType();
+        }
+        else if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
         {
             std::string paramName;
             std::string typeString;
@@ -161,7 +178,7 @@ void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
             std::string modelName = node->children.at( 0 )->string();
             std::string akoName = node->children.at( 1 )->string();
 
-            const SIM_MODEL* sourceModel = aLibrary.FindModel( modelName );
+            const SIM_MODEL* sourceModel = aLibrary.FindModel( akoName );
 
             if( !sourceModel )
             {

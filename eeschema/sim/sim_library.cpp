@@ -50,7 +50,7 @@ void SIM_LIBRARY::ReadFile( const std::string& aFilePath )
 
 SIM_MODEL* SIM_LIBRARY::FindModel( const std::string& aModelName ) const
 {
-    for( unsigned i = 0; i < GetModelNames().size(); ++i )
+    for( int i = 0; i < static_cast<int>( GetModelNames().size() ); ++i )
     {
         std::string curModelName = GetModelNames().at( i );
 

@@ -55,7 +55,7 @@ std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPIC
                                                           const std::string& aSpiceCode )
 {
     auto model = static_cast<SIM_MODEL_SPICE*>(
-            SIM_MODEL::Create( SPICE_MODEL_PARSER::ReadType( aSpiceCode ) ).release() );
+            SIM_MODEL::Create( SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode ) ).release() );
 
     try
     {
