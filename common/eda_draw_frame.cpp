@@ -969,22 +969,27 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
     wxString prompt = doOpen ? _( "Select Library" ) : _( "New Library" );
     aFilename.SetExt( ext );
 
-    wxString dir;
+    wxString projectDir = Prj().IsNullProject() ? aFilename.GetPath() : Prj().GetProjectPath();
+    wxString defaultDir;
 
-    if( GetMruPath().IsEmpty() )
-        dir = aGlobalPath;
+    if( aIsGlobal )
+    {
+        if( !GetMruPath().IsEmpty() && !GetMruPath().StartsWith( projectDir ) )
+            defaultDir = GetMruPath();
+        else
+            defaultDir = aGlobalPath;
+    }
     else
-        dir = GetMruPath();
-
+    {
+        if( !GetMruPath().IsEmpty() && GetMruPath().StartsWith( projectDir ) )
+            defaultDir = GetMruPath();
+        else
+            defaultDir = projectDir;
+    }
 
     if( isDirectory && doOpen )
     {
-        if( !aIsGlobal && GetMruPath().IsEmpty() )
-        {
-            dir = Prj().GetProjectPath();
-        }
-
-        wxDirDialog dlg( this, prompt, dir, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+        wxDirDialog dlg( this, prompt, defaultDir, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
@@ -998,12 +1003,7 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
         if( aFilename.GetName().empty() )
             aFilename.SetName( wxT( "Library" ) );
 
-        if( !aIsGlobal && GetMruPath().IsEmpty() )
-        {
-            dir = Prj().IsNullProject() ? aFilename.GetFullPath() : Prj().GetProjectPath();
-        }
-
-        wxFileDialog dlg( this, prompt, dir, aFilename.GetFullName(),
+        wxFileDialog dlg( this, prompt, defaultDir, aFilename.GetFullName(),
                           wildcard, doOpen ? wxFD_OPEN | wxFD_FILE_MUST_EXIST
                                            : wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT );
 
