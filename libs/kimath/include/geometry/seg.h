@@ -277,34 +277,9 @@ public:
         return ( d1 <= 1 && d2 <= 1 );
     }
 
-    bool ApproxCollinear( const SEG& aSeg ) const
-    {
-        ecoord p, q, r;
-        CanonicalCoefs( p, q, r );
-
-        ecoord dist1 = ( p * aSeg.A.x + q * aSeg.A.y + r ) / sqrt( p * p + q * q );
-        ecoord dist2 = ( p * aSeg.B.x + q * aSeg.B.y + r ) / sqrt( p * p + q * q );
-
-        return std::abs( dist1 ) <= 1 && std::abs( dist2 ) <= 1;
-    }
-
-    bool ApproxParallel( const SEG& aSeg, int aDistanceThreshold = 1 ) const
-    {
-        ecoord p, q, r;
-        CanonicalCoefs( p, q, r );
-
-        ecoord dist1 = ( p * aSeg.A.x + q * aSeg.A.y + r ) / sqrt( p * p + q * q );
-        ecoord dist2 = ( p * aSeg.B.x + q * aSeg.B.y + r ) / sqrt( p * p + q * q );
-
-        return std::abs( dist1 - dist2 ) <= aDistanceThreshold;
-    }
-
-    bool ApproxPerpendicular( const SEG& aSeg ) const
-    {
-        SEG perp = PerpendicularSeg( A );
-
-        return aSeg.ApproxParallel( perp );
-    }
+    bool ApproxCollinear( const SEG& aSeg, int aDistanceThreshold = 1 ) const;
+    bool ApproxParallel( const SEG& aSeg, int aDistanceThreshold = 1 ) const;
+    bool ApproxPerpendicular( const SEG& aSeg ) const;
 
     bool Overlaps( const SEG& aSeg ) const
     {
@@ -394,6 +369,8 @@ private:
 
     bool intersects( const SEG& aSeg, bool aIgnoreEndpoints = false, bool aLines = false,
                      VECTOR2I* aPt = nullptr ) const;
+
+    bool mutualDistance( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const;
 
 private:
     ///< index within the parent shape (used when m_is_local == false)

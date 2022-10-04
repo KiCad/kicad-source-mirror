@@ -347,3 +347,55 @@ int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
     return aDetermineSide ? dist : std::abs( dist );
 }
 
+
+bool SEG::mutualDistance( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const
+{
+    SEG a( *this );
+    SEG b( aSeg );
+
+    if( a.SquaredLength() < b.SquaredLength() )
+    {
+        std::swap(a, b);
+    }
+
+    ecoord p = ecoord{ a.A.y } - a.B.y;
+    ecoord q = ecoord{ a.B.x } - a.A.x;
+    ecoord r = -p * a.A.x - q * a.A.y;
+
+    ecoord l = p * p + q * q;
+
+    ecoord det1 = p * b.A.x + q * b.A.y + r;
+    ecoord det2 = p * b.B.x + q * b.B.y + r;
+
+    aD1 = isqrt( rescale( det1, det1, l ) );
+    aD2 = isqrt( rescale( det2, det2, l ) );
+
+    return true;
+}
+
+bool SEG::ApproxCollinear( const SEG& aSeg, int aDistanceThreshold ) const
+{
+    ecoord d1, d2;
+
+    mutualDistance( aSeg, d1, d2 );
+
+    return std::abs( d1 ) <= aDistanceThreshold && std::abs( d2 ) <= aDistanceThreshold;
+}
+
+
+bool SEG::ApproxParallel( const SEG& aSeg, int aDistanceThreshold ) const
+{
+    ecoord d1, d2;
+
+    mutualDistance( aSeg, d1, d2 );
+
+    return std::abs( d1 - d2 ) <= (ecoord) aDistanceThreshold;
+}
+
+
+bool SEG::ApproxPerpendicular( const SEG& aSeg ) const
+{
+    SEG perp = PerpendicularSeg( A );
+
+    return aSeg.ApproxParallel( perp );
+}
