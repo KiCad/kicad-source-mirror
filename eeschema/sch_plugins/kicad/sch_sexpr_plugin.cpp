@@ -409,7 +409,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         {
         case SCH_SYMBOL_T:
             m_out->Print( 0, "\n" );
-            saveSymbol( static_cast<SCH_SYMBOL*>( item ), nullptr, 1, false );
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ), *m_schematic, 1, false );
             break;
 
         case SCH_BITMAP_T:
@@ -499,12 +499,13 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
 
 void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelectionPath,
-                               SCH_SHEET_LIST* aFullSheetHierarchy,
-                               OUTPUTFORMATTER* aFormatter, bool aForClipboard )
+                               const SCHEMATIC& aSchematic, OUTPUTFORMATTER* aFormatter,
+                               bool aForClipboard )
 {
-    wxCHECK( aSelection && aSelectionPath && aFullSheetHierarchy && aFormatter, /* void */ );
+    wxCHECK( aSelection && aSelectionPath && aFormatter, /* void */ );
 
     LOCALE_IO toggle;
+    SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
 
     m_out = aFormatter;
 
@@ -560,7 +561,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
         switch( item->Type() )
         {
         case SCH_SYMBOL_T:
-            saveSymbol( static_cast<SCH_SYMBOL*>( item ), aSelectionPath, 0, aForClipboard );
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ), aSchematic, 0, aForClipboard );
 
             aSelectionPath->AppendSymbol( selectedSymbols, static_cast<SCH_SYMBOL*>( item ),
                                           true, true );
@@ -577,9 +578,8 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
                 SCH_SHEET_PATH subSheetPath = *aSelectionPath;
                 subSheetPath.push_back( static_cast<SCH_SHEET*>( item ) );
 
-                aFullSheetHierarchy->GetSheetsWithinPath( selectedSheets, subSheetPath );
-                aFullSheetHierarchy->GetSymbolsWithinPath( selectedSymbols, subSheetPath, true,
-                                                          true );
+                fullHierarchy.GetSheetsWithinPath( selectedSheets, subSheetPath );
+                fullHierarchy.GetSymbolsWithinPath( selectedSymbols, subSheetPath, true, true );
             }
 
             break;
@@ -634,7 +634,6 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
                       "Sheet is not inside the selection path?" );
     }
 
-
     selectedSymbols.SortByReferenceOnly();
     std::vector<SYMBOL_INSTANCE_REFERENCE> symbolInstances = selectedSymbols.GetSymbolInstances();
 
@@ -648,7 +647,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 }
 
 
-void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath,
+void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic,
                                    int aNestLevel, bool aForClipboard )
 {
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
@@ -797,7 +796,8 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
     m_out->Print( aNestLevel + 1, "(instances\n" );
 
     KIID lastProjectUuid;
-    SCH_SHEET_LIST fullHierarchy = m_schematic->GetSheets();
+    KIID rootSheetUuid = aSchematic.Root().m_Uuid;
+    SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
 
     for( size_t i = 0; i < aSymbol->GetInstanceReferences().size(); i++ )
     {
@@ -807,7 +807,7 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         //
         // Keep all instance data when copying to the clipboard.  It may be needed on paste.
         if( !aForClipboard
-          && ( aSymbol->GetInstanceReferences()[i].m_Path[0] == m_schematic->RootScreen()->GetUuid() )
+          && ( aSymbol->GetInstanceReferences()[i].m_Path[0] == rootSheetUuid )
           && !fullHierarchy.GetSheetPathByKIIDPath( aSymbol->GetInstanceReferences()[i].m_Path ) )
         {
             if( ( i + 1 == aSymbol->GetInstanceReferences().size() )
@@ -821,8 +821,8 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         {
             wxString projectName;
 
-            if( aSymbol->GetInstanceReferences()[i].m_Path[0] == m_schematic->RootScreen()->GetUuid() )
-                projectName = m_schematic->Prj().GetProjectName();
+            if( aSymbol->GetInstanceReferences()[i].m_Path[0] == rootSheetUuid )
+                projectName = aSchematic.Prj().GetProjectName();
             else
                 projectName = aSymbol->GetInstanceReferences()[i].m_ProjectName;
 

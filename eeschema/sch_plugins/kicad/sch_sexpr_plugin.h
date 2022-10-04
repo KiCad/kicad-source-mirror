@@ -108,8 +108,7 @@ public:
     void Format( SCH_SHEET* aSheet );
 
     void Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelectionPath,
-                 SCH_SHEET_LIST* aFullSheetHierarchy, OUTPUTFORMATTER* aFormatter,
-                 bool aForClipboard );
+                 const SCHEMATIC& aSchematic, OUTPUTFORMATTER* aFormatter, bool aForClipboard );
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,
@@ -146,7 +145,7 @@ private:
     void loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, SCH_SHEET* aSheet );
     void loadFile( const wxString& aFileName, SCH_SHEET* aSheet );
 
-    void saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath, int aNestLevel,
+    void saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic, int aNestLevel,
                      bool aForClipboard );
     void saveField( SCH_FIELD* aField, int aNestLevel );
     void saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel );

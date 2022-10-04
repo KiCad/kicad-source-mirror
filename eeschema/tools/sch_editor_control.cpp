@@ -1606,7 +1606,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseLocalClipboard )
     SCH_SHEET_LIST   hierarchy = schematic.GetSheets();
     SCH_SHEET_PATH   selPath = m_frame->GetCurrentSheet();
 
-    plugin.Format( &selection, &selPath, &hierarchy, &formatter, true );
+    plugin.Format( &selection, &selPath, schematic, &formatter, true );
 
     if( aUseLocalClipboard )
     {
