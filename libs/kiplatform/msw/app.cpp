@@ -2,7 +2,7 @@
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
 * Copyright (C) 2020 Mark Roszko <mark.roszko@gmail.com>
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software: you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -68,6 +68,8 @@ bool KIPLATFORM::APP::Init()
     HANDLE handle;
     if( AttachConsole( ATTACH_PARENT_PROCESS ) )
     {
+        #if !defined( __MINGW32__ ) // These redirections create problems on mingw:
+                                    // Nothing is printed to the console
         if( GetStdHandle( STD_INPUT_HANDLE ) != INVALID_HANDLE_VALUE )
         {
             freopen( "CONIN$", "r", stdin );
@@ -85,6 +87,7 @@ bool KIPLATFORM::APP::Init()
             freopen( "CONOUT$", "w", stderr );
             setvbuf( stderr, NULL, _IONBF, 0 );
         }
+        #endif
 
         std::ios::sync_with_stdio( true );
 
