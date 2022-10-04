@@ -2513,6 +2513,7 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
     symbol->ClearFieldsAutoplaced();
 
     m_fieldId = MANDATORY_FIELDS;
+    m_fieldIDsRead.clear();
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -2763,17 +2764,15 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             // the field positions are set.
             field = parseSchField( symbol.get() );
 
-            // It would appear that at some point we allowed duplicate ids to slip through
-            // when writing files.  The easiest (and most complete) solution is to disallow
-            // multiple instances of the same id (for all files since the source of the error
-            // *might* in fact be hand-edited files).
-            //
-            // While no longer used, -1 is still a valid id for user field.  It gets converted
-            // to the next unused number on save.
-            if( fieldIDsRead.count( field->GetId() ) )
-                field->SetId( -1 );
-            else
-                fieldIDsRead.insert( field->GetId() );
+            if( m_fieldIDsRead.count( field->GetId() ) )
+            {
+                int nextAvailableId = field->GetId() + 1;
+
+                while( m_fieldIDsRead.count( nextAvailableId ) )
+                    nextAvailableId += 1;
+
+                field->SetId( nextAvailableId );
+            }
 
             // Set the default symbol reference prefix.
             if( field->GetId() == REFERENCE_FIELD )
@@ -2806,6 +2805,8 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
                 *symbol->GetFieldById( field->GetId() ) = *field;
             else
                 symbol->AddField( *field );
+
+            m_fieldIDsRead.insert( field->GetId() );
 
             delete field;
             break;
