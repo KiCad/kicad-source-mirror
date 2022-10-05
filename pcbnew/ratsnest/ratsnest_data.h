@@ -90,7 +90,7 @@ public:
     const std::vector<CN_EDGE>& GetEdges() const { return m_rnEdges; }
     std::vector<CN_EDGE>& GetEdges() { return m_rnEdges; }
 
-    bool NearestBicoloredPair( const RN_NET& aOtherNet, VECTOR2I* aPos1, VECTOR2I* aPos2 ) const;
+    bool NearestBicoloredPair( RN_NET* aOtherNet, VECTOR2I& aPos1, VECTOR2I& aPos2 ) const;
 
 protected:
     ///< Recompute ratsnest from scratch.

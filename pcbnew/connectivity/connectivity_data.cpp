@@ -313,10 +313,12 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
         return;
 
     m_dynamicRatsnest.clear();
+    std::mutex dynamic_ratsnest_mutex;
 
     // This gets connections between the stationary board and the
     // moving selection
-    for( unsigned int nc = 1; nc < aDynamicData->m_nets.size(); nc++ )
+
+    auto update_lambda = [&]( int nc )
     {
         RN_NET* dynamicNet = aDynamicData->m_nets[nc];
         RN_NET* staticNet  = m_nets[nc];
@@ -329,17 +331,25 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
         {
             VECTOR2I pos1, pos2;
 
-            if( staticNet->NearestBicoloredPair( *dynamicNet, &pos1, &pos2 ) )
+            if( staticNet->NearestBicoloredPair( dynamicNet, pos1, pos2 ) )
             {
                 RN_DYNAMIC_LINE l;
                 l.a = pos1;
                 l.b = pos2;
                 l.netCode = nc;
 
+                std::lock_guard<std::mutex> lock( dynamic_ratsnest_mutex );
                 m_dynamicRatsnest.push_back( l );
             }
         }
-    }
+    };
+
+    GetKiCadThreadPool().parallelize_loop( 1, aDynamicData->m_nets.size(),
+            [&]( const int a, const int b)
+            {
+                for( int ii = a; ii < b; ++ii )
+                    update_lambda( ii );
+            }).wait();
 
     // This gets the ratsnest for internal connections in the moving set
     const std::vector<CN_EDGE>& edges = GetRatsnestForItems( aItems );
