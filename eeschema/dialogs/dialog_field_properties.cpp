@@ -658,9 +658,9 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
         if( fieldType == REFERENCE_FIELD )
             symbol->SetRef( aSheetPath, m_text );
         else if( fieldType == VALUE_FIELD )
-            symbol->SetValue( m_text );
+            symbol->SetValue( aSheetPath, m_text );
         else if( fieldType == FOOTPRINT_FIELD )
-            symbol->SetFootprint( m_text );
+            symbol->SetFootprint( aSheetPath, m_text );
     }
     else if( parent && parent->Type() == SCH_GLOBAL_LABEL_T )
     {
