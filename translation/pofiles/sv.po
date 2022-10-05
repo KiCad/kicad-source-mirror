@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-10-02 00:43+0000\n"
+"PO-Revision-Date: 2022-10-06 21:19+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -17517,7 +17517,7 @@ msgstr "Sök igen för att gå tillbaka till början."
 #: eeschema/tools/sch_editor_control.cpp:806
 #, c-format
 msgid "Could not add library '%s'."
-msgstr "Kunde inte lägga till bibliotek '%s'"
+msgstr "Kunde inte lägga till bibliotek '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:819
 msgid "Update symbols in schematic to refer to new library?"
@@ -26829,11 +26829,11 @@ msgstr "RegEx"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
 msgid "Wildcard Substr"
-msgstr "Wildcard Substr"
+msgstr "Delsträng med jokertecken"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:49
 msgid "RegEx Substr"
-msgstr "RegEx Substr"
+msgstr "RegEx delsträng"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:88
 msgid "Create Report..."
