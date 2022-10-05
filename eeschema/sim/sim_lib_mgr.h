@@ -28,6 +28,7 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <string>
 
 class PROJECT;
 class SCH_SYMBOL;
