@@ -802,9 +802,6 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
     if( !m_libMgr->LibraryExists( lib ) )
         return;
 
-    LIB_SYMBOL* srcSymbol = nullptr;
-    LIB_SYMBOL* newSymbol = nullptr;
-
     std::vector<LIB_SYMBOL*> newSymbols;
 
     if( aFromClipboard )
@@ -826,6 +823,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
         wxString symbolSource = data.GetText();
 
         std::unique_ptr<STRING_LINE_READER> reader = std::make_unique<STRING_LINE_READER>( TO_UTF8( symbolSource ), "Clipboard" );
+        LIB_SYMBOL* newSymbol = nullptr;
 
         do
         {
@@ -848,7 +846,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
     }
     else
     {
-        srcSymbol = m_libMgr->GetBufferedSymbol( libId.GetLibItemName(), lib );
+        LIB_SYMBOL*  srcSymbol = m_libMgr->GetBufferedSymbol( libId.GetLibItemName(), lib );
 
         wxCHECK( srcSymbol, /* void */ );
 
@@ -861,7 +859,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
 
             wxCHECK( srcParent, /* void */ );
 
-            newSymbol->SetParent( srcParent.get() );
+            newSymbols.back()->SetParent( srcParent.get() );
         }
     }
 
@@ -879,7 +877,8 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
     SyncLibraries( false );
     m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newSymbols[0]->GetName() ) );
 
-    delete newSymbol;
+    for( LIB_SYMBOL* symbol : newSymbols )
+        delete symbol;
 }
 
 
