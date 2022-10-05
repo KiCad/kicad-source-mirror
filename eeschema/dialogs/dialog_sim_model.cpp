@@ -167,8 +167,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                 }
             }
         }
-
-        m_excludeSymbolCheckbox->SetValue( !curModel().IsEnabled() );
     }
     else
     {
@@ -190,6 +188,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     }
 
     m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
+    m_excludeSymbolCheckbox->SetValue( !curModel().IsEnabled() );
 
     updateWidgets();
 
