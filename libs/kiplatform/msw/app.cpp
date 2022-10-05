@@ -121,15 +121,18 @@ bool KIPLATFORM::APP::IsOperatingSystemUnsupported()
 
 bool KIPLATFORM::APP::RegisterApplicationRestart( const wxString& aCommandLine )
 {
+    // Command line arguments with spaces require quotes.
+    wxString restartCmd = wxS( "\"" ) + aCommandLine + wxS( "\"" );
+
     // Ensure we don't exceed the maximum allowable size
-    if( aCommandLine.length() > RESTART_MAX_CMD_LINE - 1 )
+    if( restartCmd.length() > RESTART_MAX_CMD_LINE - 1 )
     {
         return false;
     }
 
     HRESULT hr = S_OK;
 
-    hr = ::RegisterApplicationRestart( aCommandLine.wc_str(), RESTART_NO_PATCH );
+    hr = ::RegisterApplicationRestart( restartCmd.wc_str(), RESTART_NO_PATCH );
 
     return SUCCEEDED( hr );
 }
