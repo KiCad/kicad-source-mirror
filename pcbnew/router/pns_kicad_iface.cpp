@@ -600,8 +600,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
             viaDiameter = std::max( viaDiameter, constraint.m_Value.Opt() );
         }
 
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, aStartItem, nullptr,
-                                             m_startLayer, &constraint ) )
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, aStartItem,
+                                             nullptr, m_startLayer, &constraint ) )
         {
             viaDrill = std::max( viaDrill, constraint.m_Value.Opt() );
         }
