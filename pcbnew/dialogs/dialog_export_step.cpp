@@ -383,8 +383,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 #else
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
-        fn.RemoveLastDir();
-        fn.AppendDir( "kicad" );
+        appK2S.RemoveLastDir();
+        appK2S.AppendDir( "kicad" );
     }
 #endif
 
