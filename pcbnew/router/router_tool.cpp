@@ -616,6 +616,51 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
     m_router->SwitchLayer( *newLayer );
     m_lastTargetLayer = *newLayer;
+
+    // NB: track and diff-pair values may have changed if layer-specific rules are in play
+
+    PCB_LAYER_ID     targetLayer = ToLAYER_ID( *newLayer );
+    std::vector<int> nets        = m_router->GetCurrentNets();
+
+    PNS::SIZES_SETTINGS          sizes     = m_router->Sizes();
+    BOARD_DESIGN_SETTINGS&       bds       = board()->GetDesignSettings();
+    std::shared_ptr<DRC_ENGINE>& drcEngine = bds.m_DRCEngine;
+    DRC_CONSTRAINT               constraint;
+
+    PCB_TRACK dummyTrack( board() );
+    dummyTrack.SetLayer( targetLayer );
+    dummyTrack.SetNetCode( nets.empty() ? 0 : nets[0] );
+
+    if( bds.UseNetClassTrack() || !sizes.TrackWidthIsExplicit() )
+    {
+        constraint = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, &dummyTrack, nullptr,
+                                           targetLayer );
+
+        if( !constraint.IsNull() )
+            sizes.SetTrackWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+    }
+
+    if( nets.size() >= 2 && ( bds.UseNetClassDiffPair() || !sizes.TrackWidthIsExplicit() ) )
+    {
+        PCB_TRACK dummyTrackB( board() );
+        dummyTrackB.SetLayer( targetLayer );
+        dummyTrackB.SetNetCode( nets[1] );
+
+        constraint = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, &dummyTrack, &dummyTrackB,
+                                           targetLayer );
+
+        if( !constraint.IsNull() )
+            sizes.SetDiffPairWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+
+        constraint = drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT, &dummyTrack, &dummyTrackB,
+                                           targetLayer );
+
+        if( !constraint.IsNull() )
+            sizes.SetDiffPairGap( std::max( bds.m_MinClearance, constraint.m_Value.Opt() ) );
+    }
+
+    m_router->UpdateSizes( sizes );
+    frame()->UpdateMsgPanel();
 }
 
 
