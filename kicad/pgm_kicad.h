@@ -48,6 +48,7 @@ public:
 
     bool OnPgmInit();
     void OnPgmExit();
+    int OnPgmRun();
 
     void MacOpenFile( const wxString& aFileName ) override;
 

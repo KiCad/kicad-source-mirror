@@ -483,7 +483,7 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
     if( m_headless )
     {
         wxLogTrace( traceSettings, wxT( "Settings migration not checked; running headless" ) );
-        return false;
+        return true;
     }
 
     wxFileName path( GetUserSettingsPath(), "" );

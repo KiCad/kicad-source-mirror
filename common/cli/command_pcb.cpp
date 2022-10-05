@@ -18,14 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "command_export_kicad_pcbnew.h"
+#include "command_pcb.h"
 
-CLI::EXPORT_KICAD_PCBNEW_COMMAND::EXPORT_KICAD_PCBNEW_COMMAND() : COMMAND( "export-pcb" )
+CLI::PCB_COMMAND::PCB_COMMAND() : COMMAND( "pcb" )
 {
 }
 
-
-int CLI::EXPORT_KICAD_PCBNEW_COMMAND::Perform( KIWAY& aKiway ) const
+int CLI::PCB_COMMAND::Perform( KIWAY& aKiway ) const
 {
-    return 0;
+    std::cout << m_argParser;
+
+    return 1;
 }

@@ -287,9 +287,9 @@ set( COMMON_SRCS
     ${PLUGINS_CADSTAR_SRCS}
     ${PLUGINS_EAGLE_SRCS}
 	${FONT_SRCS}
-    cli/command_export_kicad_pcbnew.cpp
     cli/command_export_pcb_svg.cpp
-    cli/command_export_pcbnew.cpp
+    cli/command_pcb.cpp
+    cli/command_pcb_export.cpp
     cli/command_export_step.cpp
     jobs/job_export_step.cpp
     jobs/job_dispatcher.cpp

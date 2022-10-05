@@ -40,7 +40,6 @@
 #include <wx/stdpaths.h>
 #include <wx/snglinst.h>
 #include <wx/html/htmlwin.h>
-#include <argparse/argparse.hpp>
 
 #include <kiway.h>
 #include <pgm_base.h>
@@ -49,14 +48,9 @@
 #include <confirm.h>
 #include <settings/settings_manager.h>
 
-#include <kicad_build_version.h>
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
 
-#include "cli/command_export_pcbnew.h"
-#include "cli/command_export_pcb_svg.h"
-#include "cli/command_export_step.h"
-#include "cli/exit_codes.h"
 
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
@@ -280,36 +274,8 @@ struct APP_SINGLE_TOP : public wxApp
 IMPLEMENT_APP( APP_SINGLE_TOP )
 
 
-
-struct COMMAND_ENTRY
-{
-    CLI::COMMAND* handler;
-
-    std::vector<COMMAND_ENTRY> subCommands;
-
-    COMMAND_ENTRY( CLI::COMMAND* aHandler ) : handler( aHandler ){};
-    COMMAND_ENTRY( CLI::COMMAND* aHandler, std::vector<COMMAND_ENTRY> aSub ) :
-            handler( aHandler ), subCommands( aSub ) {};
-};
-
-#ifdef PCBNEW
-static CLI::EXPORT_STEP_COMMAND   stepCmd{};
-static CLI::EXPORT_PCB_SVG_COMMAND   svgCmd{};
-static CLI::EXPORT_PCBNEW_COMMAND exportCmd{};
-
-static std::vector<COMMAND_ENTRY> commandStack = {
-    { &exportCmd, { &stepCmd, &svgCmd } }
-};
-#else
-
-static std::vector<COMMAND_ENTRY> commandStack = {
-};
-#endif
-
 bool PGM_SINGLE_TOP::OnPgmInit()
 {
-    PGM_BASE::BuildArgvUtf8();
-
 #if defined(DEBUG)
     wxString absoluteArgv0 = wxStandardPaths::Get().GetExecutablePath();
 
@@ -319,60 +285,10 @@ bool PGM_SINGLE_TOP::OnPgmInit()
         return false;
     }
 #endif
-    wxString pgm_name;
-    if( App().argc == 0 )
-        pgm_name = wxT( "kicad" );
-    else
-        pgm_name = wxFileName( App().argv[0] ).GetName().Lower();
-
-    argparse::ArgumentParser argParser( std::string( pgm_name.utf8_str() ), KICAD_MAJOR_MINOR_VERSION );
-
-    for(COMMAND_ENTRY& entry : commandStack)
-    {
-        argParser.add_subparser( entry.handler->GetArgParser() );
-
-        for( COMMAND_ENTRY& subentry : entry.subCommands )
-        {
-            entry.handler->GetArgParser().add_subparser( subentry.handler->GetArgParser() );
-        }
-    }
-
-    try
-    {
-        argParser.parse_args( m_argcUtf8, m_argvUtf8 );
-    }
-    catch( const std::runtime_error& )
-    {
-        // Ignore any argParser "errors"
-        // unforunately there are cases like the only arg being a file (double click open)
-        // that we need to fall through
-    }
-
-    bool cliCmdRequested = false;
-    CLI::COMMAND* cliCmd = nullptr;
-    for( COMMAND_ENTRY& entry : commandStack )
-    {
-        if( argParser.is_subcommand_used( entry.handler->GetName() ) )
-        {
-            for( COMMAND_ENTRY& subentry : entry.subCommands )
-            {
-                if( entry.handler->GetArgParser().is_subcommand_used( subentry.handler->GetName() ) )
-                {
-                    cliCmd = subentry.handler;
-                    cliCmdRequested = true;
-                }
-            }
-
-            if( !cliCmdRequested )
-            {
-                cliCmd = entry.handler;
-            }
-        }
-    }
 
     // Not all kicad applications use the python stuff. skip python init
     // for these apps.
-    bool skip_python_initialization = cliCmdRequested;
+    bool skip_python_initialization = false;
 #if defined( BITMAP_2_CMP ) || defined( PL_EDITOR ) || defined( GERBVIEW ) ||\
         defined( PCB_CALCULATOR_BUILD )
     skip_python_initialization = true;
@@ -404,33 +320,13 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     Kiway.set_kiface( KIWAY::KifaceType( TOP_FRAME ), kiface );
 #endif
 
-    FRAME_T appType = TOP_FRAME;
-
     // Tell the settings manager about the current Kiway
     GetSettingsManager().SetKiway( &Kiway );
-
-    if( cliCmdRequested )
-    {
-        int exitCode = CLI::EXIT_CODES::ERR_UNKNOWN;
-        if( cliCmd )
-        {
-            exitCode = cliCmd->Perform( Kiway );
-        }
-
-        if( exitCode != CLI::EXIT_CODES::AVOID_CLOSING )
-        {
-            std::exit( exitCode );
-        }
-        else
-        {
-            return true;
-        }
-    }
 
     // Use KIWAY to create a top window, which registers its existence also.
     // "TOP_FRAME" is a macro that is passed on compiler command line from CMake,
     // and is one of the types in FRAME_T.
-    KIWAY_PLAYER* frame = Kiway.Player( appType, true );
+    KIWAY_PLAYER* frame = Kiway.Player( TOP_FRAME, true );
 
     if( frame == nullptr )
     {
@@ -453,7 +349,17 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     // Now after the frame processing, the rest of the positional args are files
     std::vector<wxString> fileArgs;
 
-    if( App().argc > 1 )
+
+    static const wxCmdLineEntryDesc desc[] = {
+        { wxCMD_LINE_PARAM, nullptr, nullptr, "File to load", wxCMD_LINE_VAL_STRING,
+          wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_NONE, nullptr, nullptr, nullptr, wxCMD_LINE_VAL_NONE, 0 }
+    };
+
+    wxCmdLineParser parser( App().argc, App().argv );
+    parser.SetDesc( desc );
+    parser.Parse( false );
+    if( parser.GetParamCount() )
     {
         /*
             gerbview handles multiple project data files, i.e. gerber files on
@@ -464,15 +370,15 @@ bool PGM_SINGLE_TOP::OnPgmInit()
             launcher.
         */
 
-        for( int i = 1; i < App().argc; i++ )
-            fileArgs.push_back( App().argv[i] );
+        for( size_t i = 0; i < parser.GetParamCount(); i++ )
+            fileArgs.push_back( parser.GetParam( i ) );
 
         // special attention to a single argument: argv[1] (==argSet[0])
         if( fileArgs.size() == 1 )
         {
             wxFileName argv1( fileArgs[0] );
 
-#if defined( PGM_DATA_FILE_EXT )
+#if defined(PGM_DATA_FILE_EXT)
             // PGM_DATA_FILE_EXT, if present, may be different for each compile,
             // it may come from CMake on the compiler command line, but often does not.
             // This facility is mostly useful for those program footprints

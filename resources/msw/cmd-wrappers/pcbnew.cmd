@@ -1,1 +1,0 @@
-@"%~dp0pcbnew.exe" %*

@@ -756,12 +756,6 @@ if( WIN32 )
     add_custom_command( TARGET pcbnew POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kicad_3dsg>" "$<TARGET_FILE_DIR:pcbnew>"
         )
-
-    add_custom_command( TARGET pcbnew POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_SOURCE_DIR}/resources/msw/cmd-wrappers/pcbnew.cmd" "$<TARGET_FILE_DIR:pcbnew>"
-        )
-
-    install(FILES "${CMAKE_SOURCE_DIR}/resources/msw/cmd-wrappers/pcbnew.cmd" DESTINATION ${KICAD_BIN})
 endif()
 
 # these 2 binaries are a matched set, keep them together:

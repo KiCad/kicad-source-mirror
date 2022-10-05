@@ -25,9 +25,9 @@
 
 namespace CLI
 {
-struct EXPORT_KICAD_PCBNEW_COMMAND : public COMMAND
+struct EXPORT_PCB_COMMAND : public COMMAND
 {
-    EXPORT_KICAD_PCBNEW_COMMAND();
+    EXPORT_PCB_COMMAND();
 
     int Perform( KIWAY& aKiway ) const override;
 };

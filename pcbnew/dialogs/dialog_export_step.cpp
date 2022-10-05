@@ -380,17 +380,24 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         appK2S.AppendDir( wxT( ".." ) );
         appK2S.AppendDir( wxT( "MacOS" ) );
     }
+#else
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        fn.RemoveLastDir();
+        fn.AppendDir( "kicad" );
+    }
 #endif
 
-    appK2S.SetName( wxT( "pcbnew" ) );
+
+    appK2S.SetName( wxT( "kicad-cli" ) );
 
     wxString cmdK2S = wxT( "\"" );
     cmdK2S.Append( appK2S.GetFullPath() );
     cmdK2S.Append( wxT( "\"" ) );
 
+    cmdK2S.Append( wxT( " pcb" ) );
     cmdK2S.Append( wxT( " export" ) );
     cmdK2S.Append( wxT( " step" ) );
-    cmdK2S.Append( wxT( " --gui" ) );
 
     if( GetNoVirtOption() )
         cmdK2S.Append( wxT( " --no-virtual" ) );
