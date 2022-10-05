@@ -124,7 +124,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         if( color == COLOR4D::UNSPECIFIED )
             color = defaultColor;
 
-        gal->SetStrokeColor( color.Brightened( 0.5 ) );
+        gal->SetStrokeColor( color.Brightened( 0.5 ).WithAlpha( std::min( 1.0, color.a + 0.4 ) ) );
 
         if( l.a == l.b )
         {
