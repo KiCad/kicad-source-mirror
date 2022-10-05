@@ -394,7 +394,7 @@ void PGM_BASE::BuildArgvUtf8()
 }
 
 
-bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
+bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 {
     // Just make sure we init precreate any folders early for later code
     // In particular, the user cache path is the most likely to be hit by startup code
@@ -465,6 +465,12 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
     SetDefaultLanguage( tmp );
 
     m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );
+
+    // Our unit test mocks break if we continue
+    // A bug caused InitPgm to terminate early in unit tests and the mocks are...simplistic
+    // TODO fix the unit tests so this can be removed
+    if( aIsUnitTest )
+        return false;
 
     // Something got in the way of settings load: can't continue
     if( !m_settings_manager->IsOK() )

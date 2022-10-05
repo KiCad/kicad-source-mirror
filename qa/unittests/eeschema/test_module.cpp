@@ -59,7 +59,7 @@ bool init_unit_test()
 
     wxSetAssertHandler( &wxAssertThrower );
 
-    Pgm().InitPgm( true, true );
+    Pgm().InitPgm( true, true, true );
 
     return ok;
 }

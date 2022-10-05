@@ -278,7 +278,7 @@ public:
      * Useful in application that do not use python, to disable python dependency at run time
      * @return true if success, false if failure and program is to terminate.
      */
-    bool InitPgm( bool aHeadless = false, bool aSkipPyInit = false );
+    bool InitPgm( bool aHeadless = false, bool aSkipPyInit = false, bool aIsUnitTest = false );
 
     // The PGM_* classes can have difficulties at termination if they
     // are not destroyed soon enough.  Relying on a static destructor can be
