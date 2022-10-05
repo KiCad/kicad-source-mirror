@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 08:57-0700\n"
-"PO-Revision-Date: 2022-10-04 22:26+0000\n"
+"PO-Revision-Date: 2022-10-06 21:19+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -36293,127 +36293,129 @@ msgstr "обмежень 'diff_pair_uncoupled' не визначено."
 #: pcbnew/tools/board_inspection_tool.cpp:842
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr ""
+msgstr "Примітка: %s закриті маскою; зазор застосовуватиметься лише до отворів."
 
 #: pcbnew/tools/board_inspection_tool.cpp:859
 msgid "Silkscreen clearance resolution for:"
-msgstr ""
+msgstr "Дозволений зазор шовкографії для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:887
 msgid "Courtyard clearance resolution for:"
-msgstr ""
+msgstr "Дозволений зазор встановлення для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1015
 msgid "Physical Clearances"
-msgstr ""
+msgstr "Фізичний відступ"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1125
 msgid "Select an item for a constraints resolution report."
-msgstr ""
+msgstr "Виберіть елементи для звіту про обмеження."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1132
 msgid "Constraints Report"
-msgstr ""
+msgstr "Звіт про обмеження"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1160
 #, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
-msgstr ""
+msgstr "Обмеження ширини: мін %s; опт %s; макс %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1180
 #: pcbnew/tools/board_inspection_tool.cpp:1218
 #, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
-msgstr ""
+msgstr "Обмеження діаметру: мін %s; опт %s; макс %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1187
 msgid "Via Annular Width"
-msgstr ""
+msgstr "Ширина пояска перехідного отвору"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1197
 #, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr ""
+msgstr "Обмеження ширини пояска перехідного отвору: мін %s; опт %s; макс %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1239
 #, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
-msgstr ""
+msgstr "Обмеження висоти тексту: мін %s; опт %s; макс %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1255
 #, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
-msgstr ""
+msgstr "Обмеження товщини тексту: мін %s; опт %s; макс %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1263
 msgid "Keepouts"
-msgstr ""
+msgstr "Області заборони"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1264
 msgid "Keepout resolution for:"
-msgstr ""
+msgstr "Дозволені зони заборони для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1274
 #: pcbnew/tools/board_inspection_tool.cpp:1296
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
+"Звіт може бути неповним: деякі посадкові місця мають некоректну область "
+"встановлення."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1275
 #: pcbnew/tools/board_inspection_tool.cpp:1297
 msgid "Run DRC for a full analysis."
-msgstr ""
+msgstr "Виконайте DRC для повного аналізу."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1281
 msgid "Item <b>disallowed</b> at current location."
-msgstr ""
+msgstr "Елемент <b>заборонений</b> в поточній локації."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1283
 msgid "Item allowed at current location."
-msgstr ""
+msgstr "Елементи дозволені в поточній локації."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1287
 msgid "Assertions"
-msgstr ""
+msgstr "Дозволи"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1288
 msgid "Assertions for:"
-msgstr ""
+msgstr "Дозволи для:"
 
 #: pcbnew/tools/convert_tool.cpp:151
 msgid "Create from Selection"
-msgstr ""
+msgstr "Створити з вибраного"
 
 #: pcbnew/tools/convert_tool.cpp:362
 msgid "Convert shapes to polygon"
-msgstr ""
+msgstr "Перетворити форми в полігон"
 
 #: pcbnew/tools/convert_tool.cpp:364
 msgid "Convert shapes to zone"
-msgstr ""
+msgstr "Перетворити фігури в зону"
 
 #: pcbnew/tools/convert_tool.cpp:817
 msgid "Convert polygons to lines"
-msgstr ""
+msgstr "Перетворити полігони в лінії"
 
 #: pcbnew/tools/convert_tool.cpp:905
 msgid "Create arc from line segment"
-msgstr ""
+msgstr "Створити дугу з відрізка лінії"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:245
 msgid "Layer Name"
-msgstr ""
+msgstr "Назва шару"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:260
 msgid "Thickness (mm)"
-msgstr ""
+msgstr "Товщина (мм)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:261
 msgid "Thickness (inches)"
-msgstr ""
+msgstr "Товщина (дюйми)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262
 msgid "Thickness (mils)"
-msgstr ""
+msgstr "Товщина (милі)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:277
 msgid "Loss Tangent"
@@ -36421,256 +36423,255 @@ msgstr "Втрата Тангесу"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
-msgstr ""
+msgstr "Діелектрик"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:353
 msgid "Insert board stackup table"
-msgstr ""
+msgstr "Вставити таблицю зі стеком"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:397
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "ХАРАКТЕРИСТИКИ ПЛАТИ"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:412
 msgid "Copper Layer Count: "
-msgstr ""
+msgstr "Кількість шарів міді: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:424
 msgid "Board overall dimensions: "
-msgstr ""
+msgstr "Габарити плати: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:434
 msgid "Min track/spacing: "
-msgstr ""
+msgstr "Мінімальна доріжка/зазор: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:444
 msgid "Copper Finish: "
-msgstr ""
+msgstr "Покриття міді: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
-msgstr ""
+msgstr "Зубчасті контактні площадки: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:460
 msgid "Board Thickness: "
-msgstr ""
+msgstr "Товщина плати: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 msgid "Min hole diameter: "
-msgstr ""
+msgstr "Мінімальний діаметр отвору: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:483
 msgid "Impedance Control: "
-msgstr ""
+msgstr "Контроль імпедансу: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:491
 msgid "Plated Board Edge: "
-msgstr ""
+msgstr "Покриття краю плати: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:499
 msgid "Edge card connectors: "
-msgstr ""
+msgstr "Крайні з'єднувачі: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:507
 msgid "Yes, Bevelled"
-msgstr ""
+msgstr "Так, скошений"
 
 #: pcbnew/tools/drawing_tool.cpp:88
 msgid "Select Via Size"
-msgstr ""
+msgstr "Вибрати розмір перехідного отвору"
 
 #: pcbnew/tools/drawing_tool.cpp:327 pcbnew/tools/drawing_tool.cpp:2016
 msgid "Draw a line segment"
-msgstr ""
+msgstr "Креслити сегмент лінії"
 
 #: pcbnew/tools/drawing_tool.cpp:408
 msgid "Draw a text box"
-msgstr ""
+msgstr "Накреслите тестовий блок"
 
 #: pcbnew/tools/drawing_tool.cpp:408 pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw a rectangle"
-msgstr ""
+msgstr "Накреслити прямокутник"
 
 #: pcbnew/tools/drawing_tool.cpp:459 pcbnew/tools/pcb_actions.cpp:99
 msgid "Draw a circle"
-msgstr ""
+msgstr "Накреслити коло"
 
 #: pcbnew/tools/drawing_tool.cpp:509 pcbnew/tools/pcb_actions.cpp:105
 msgid "Draw an arc"
-msgstr ""
+msgstr "Накреслити дугу"
 
 #: pcbnew/tools/drawing_tool.cpp:702
-#, fuzzy
 msgid "Place an image"
-msgstr "Розмістити всі частини"
+msgstr "Розмістити зображення"
 
 #: pcbnew/tools/drawing_tool.cpp:948
 msgid "Place a text"
-msgstr ""
+msgstr "Розмістити текст"
 
 #: pcbnew/tools/drawing_tool.cpp:1281
 msgid "Draw a dimension"
-msgstr ""
+msgstr "Накреслити розмір"
 
 #: pcbnew/tools/drawing_tool.cpp:1496
 msgid "No graphic items found in file."
-msgstr ""
+msgstr "Графічні елементи не знайдені у файлі."
 
 #: pcbnew/tools/drawing_tool.cpp:1546 pcbnew/tools/drawing_tool.cpp:1616
 msgid "Place a DXF_SVG drawing"
-msgstr ""
+msgstr "Додати DXF_SVG креслення"
 
 #: pcbnew/tools/drawing_tool.cpp:1691
 msgid "Move the footprint reference anchor"
-msgstr ""
+msgstr "Перемістіть опорну точку посадкового місця"
 
 #: pcbnew/tools/drawing_tool.cpp:2490
 msgid "Self-intersecting polygons are not allowed"
-msgstr ""
+msgstr "Перетин багатокутників не допускається"
 
 #: pcbnew/tools/drawing_tool.cpp:3012
 msgid "Via location violates DRC."
-msgstr ""
+msgstr "Положення перехідного отвору порушує DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:3209
 msgid "Place via"
-msgstr ""
+msgstr "Розмістити перехідний отвір"
 
 #: pcbnew/tools/drc_tool.cpp:150
 msgid "Refilling all zones..."
-msgstr ""
+msgstr "Перезалити всі зони..."
 
 #: pcbnew/tools/drc_tool.cpp:159
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr ""
+msgstr "Схематичні тести на парність вимагають повністю анотованої схеми."
 
 #: pcbnew/tools/drc_tool.cpp:193
 msgid "DRC"
-msgstr ""
+msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:94
-#, fuzzy
 msgid "Positioning Tools"
-msgstr "Зсув:"
+msgstr "Інструменти позиціонування"
 
 #: pcbnew/tools/edit_tool.cpp:400
 #, c-format
 msgid "Unable to resize arc tracks of %s or greater."
-msgstr ""
+msgstr "Неможливо змінити розмір доріжки дуги %s або більше."
 
 #: pcbnew/tools/edit_tool.cpp:737
 msgid "Drag Arc Track"
-msgstr ""
+msgstr "Перемістити дугову доріжку"
 
 #: pcbnew/tools/edit_tool.cpp:799
 msgid "Edit track width/via size"
-msgstr ""
+msgstr "Редагувати ширину доріжки/розмір перехідного отвору"
 
 #: pcbnew/tools/edit_tool.cpp:834
 msgid "At least two straight track segments must be selected."
-msgstr ""
+msgstr "Необхідно вибрати принаймні два прямі сегменти доріжки."
 
 #: pcbnew/tools/edit_tool.cpp:838
 msgid "Enter fillet radius:"
-msgstr ""
+msgstr "Введіть радіус закруглення:"
 
 #: pcbnew/tools/edit_tool.cpp:838 pcbnew/tools/edit_tool.cpp:1002
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Fillet Tracks"
-msgstr ""
+msgstr "Закруглення доріжок"
 
 #: pcbnew/tools/edit_tool.cpp:848
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
 msgstr ""
+"Введено нульовий радіус.\n"
+"Операція заокруглення не виконана."
 
 #: pcbnew/tools/edit_tool.cpp:1009
 msgid "Unable to fillet the selected track segments."
-msgstr ""
+msgstr "Не вдалося заокруглити вибрані сегменти."
 
 #: pcbnew/tools/edit_tool.cpp:1011
 msgid "Some of the track segments could not be filleted."
-msgstr ""
+msgstr "Деякі з сегментів доріжки не вдалося заокруглити."
 
 #: pcbnew/tools/edit_tool.cpp:1179
 msgid "Rotate"
-msgstr ""
+msgstr "Обертати"
 
 #: pcbnew/tools/edit_tool.cpp:1475 pcbnew/tools/pcb_actions.cpp:326
 msgid "Change Side / Flip"
-msgstr ""
+msgstr "Змінити сторону / Перевернути"
 
 #: pcbnew/tools/edit_tool.cpp:1836
 msgid "Move exact"
-msgstr ""
+msgstr "Перемістити точно"
 
 #: pcbnew/tools/edit_tool.cpp:1972
 #, c-format
 msgid "Duplicated %d item(s)"
-msgstr ""
+msgstr "Дубльовано %d елемент(и)"
 
 #: pcbnew/tools/edit_tool.cpp:2199
 msgid "Select reference point for the copy..."
-msgstr ""
+msgstr "Виберіть контрольну точку для копії..."
 
 #: pcbnew/tools/edit_tool.cpp:2200 pcbnew/tools/edit_tool.cpp:2217
 msgid "Selection copied"
-msgstr ""
+msgstr "Виділення скопійовано"
 
 #: pcbnew/tools/edit_tool.cpp:2201
 msgid "Copy canceled"
-msgstr ""
+msgstr "Копіювання скасовано"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:421
-#, fuzzy
 msgid "Pack footprints"
-msgstr "Заблоковані посадкові місця"
+msgstr "Пакувати посадкові місця"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:566
 msgid "Select reference point for move..."
-msgstr ""
+msgstr "Виберіть точку відліку для переміщення..."
 
 #: pcbnew/tools/footprint_editor_control.cpp:348
 msgid "_copy"
-msgstr ""
+msgstr "_копія"
 
 #: pcbnew/tools/footprint_editor_control.cpp:396
 msgid "Change Footprint Name"
-msgstr ""
+msgstr "Змінити ім'я посадкового місця"
 
 #: pcbnew/tools/footprint_editor_control.cpp:406
 msgid "Footprint name cannot be empty."
-msgstr ""
+msgstr "Ім'я посадкового місця не може бути пустим."
 
 #: pcbnew/tools/footprint_editor_control.cpp:410
 #, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr ""
+msgstr "Ім'я посадкового місця '%s' вже використовується в бібліотеці '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:725
 msgid "No footprint problems found."
-msgstr ""
+msgstr "Проблем посадкового місця не знайдено."
 
 #: pcbnew/tools/group_tool.cpp:43
 msgid "Grouping"
-msgstr ""
+msgstr "Групування"
 
 #: pcbnew/tools/group_tool.cpp:65
 msgid "Group is in inconsistent state:"
-msgstr ""
+msgstr "Група знаходиться в непослідовному стані:"
 
 #: pcbnew/tools/group_tool.cpp:146
 msgid "Click on new member..."
-msgstr ""
+msgstr "Натисніть на нового елементу..."
 
 #: pcbnew/tools/pad_tool.cpp:154
 msgid "Paste Pad Properties"
-msgstr ""
+msgstr "Вставити властивості контактної площадки"
 
 #: pcbnew/tools/pad_tool.cpp:269
 msgid "Push Pad Settings"
-msgstr ""
+msgstr "Виконати налаштування для контактної площадки"
 
 #: pcbnew/tools/pad_tool.cpp:334
 #, c-format
@@ -36678,108 +36679,110 @@ msgid ""
 "Click on pad %s%d\n"
 "Press <esc> to cancel or double-click to commit"
 msgstr ""
+"Натисніть на контактну площадку %s%d\n"
+"Натисніть <esc> для відміни або подвійне натискання для підтвердження"
 
 #: pcbnew/tools/pad_tool.cpp:357 pcbnew/tools/pad_tool.cpp:454
 msgid "Renumber pads"
-msgstr ""
+msgstr "Перенумерувати контактні площадки"
 
 #: pcbnew/tools/pad_tool.cpp:561
 msgid "Place pad"
-msgstr ""
+msgstr "Розмістити контактну площадку"
 
 #: pcbnew/tools/pad_tool.cpp:583
 msgid "Recombine pad"
-msgstr ""
+msgstr "Перебрати контактну площадку"
 
 #: pcbnew/tools/pad_tool.cpp:601
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr ""
+msgstr "Режим редагування контактної площадки.  Натисніть %s знову для виходу."
 
 #: pcbnew/tools/pad_tool.cpp:606
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr ""
+msgstr "Режим редагування контактної площадки.  Натисніть %s для виходу."
 
 #: pcbnew/tools/pad_tool.cpp:699
 msgid "Edit pad shapes"
-msgstr ""
+msgstr "Редагувати форму контактної площадки"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Create Polygon from Selection"
-msgstr ""
+msgstr "Створити полігон з виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
-msgstr ""
+msgstr "Створює графічний полігон із виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Create Zone from Selection"
-msgstr ""
+msgstr "Створити зону з виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
-msgstr ""
+msgstr "Створити мідну зону з виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Create Rule Area from Selection"
-msgstr ""
+msgstr "Створити регульовану зону з виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Creates a rule area from the selection"
-msgstr ""
+msgstr "Створити зону правил з виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Create Lines from Selection"
-msgstr ""
+msgstr "Створити лінії з виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Creates graphic lines from the selection"
-msgstr ""
+msgstr "Створити графічні лінії з виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:68
 msgid "Create Arc from Selection"
-msgstr ""
+msgstr "Створити дугу з виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:68
 msgid "Creates an arc from the selected line segment"
-msgstr ""
+msgstr "Створити дугу з виділеного відрізка"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Create Tracks from Selection"
-msgstr ""
+msgstr "Створити доріжки з виділеного"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Creates tracks from the selected graphic lines"
-msgstr ""
+msgstr "Створити доріжки з виділених графічних ліній"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
-msgstr ""
+msgstr "Накреслити лінію"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw a line"
-msgstr ""
+msgstr "Накреслити лінію"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw Graphic Polygon"
-msgstr ""
+msgstr "Накреслити графічний полігон"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw a graphic polygon"
-msgstr ""
+msgstr "Накреслити графічний полігон"
 
 #: pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw Rectangle"
-msgstr ""
+msgstr "Накреслити прямокутник"
 
 #: pcbnew/tools/pcb_actions.cpp:99
 msgid "Draw Circle"
-msgstr ""
+msgstr "Накреслити коло"
 
 #: pcbnew/tools/pcb_actions.cpp:105
 msgid "Draw Arc"
-msgstr ""
+msgstr "Накреслити дугу"
 
 #: pcbnew/tools/pcb_actions.cpp:110
 msgid "Add Board Characteristics"
