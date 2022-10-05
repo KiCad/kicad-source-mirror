@@ -38,8 +38,6 @@
 #include <pgm_base.h>
 #include "kicad2step.h"
 #include "pcb/kicadpcb.h"
-#include "kicad2step_frame_base.h"
-#include "panel_kicad2step.h"
 #include <Message.hxx>                  // OpenCascade messenger
 #include <Message_PrinterOStream.hxx>   // OpenCascade output messenger
 #include <Standard_Failure.hxx>         // In open cascade
@@ -54,18 +52,6 @@
 #include <Message_Messenger.hxx>
 #endif
 
-class KICAD2STEP_FRAME : public KICAD2STEP_FRAME_BASE
-{
-public:
-    KICAD2STEP_FRAME( KICAD2STEP* aConverter, const wxString& title );
-
-protected:
-    virtual void OnOKButtonClick( wxCommandEvent& aEvent ) override;
-    virtual void OnIdle( wxIdleEvent& aEvent ) override;
-
-    KICAD2STEP* m_converter;
-    bool        m_running;
-};
 
 
 // Horrible hack until we decouple things more
@@ -142,54 +128,6 @@ KICAD2MCAD_PRMS::KICAD2MCAD_PRMS()
 }
 
 
-KICAD2STEP_FRAME::KICAD2STEP_FRAME( KICAD2STEP* aConverter, const wxString& title ) :
-        KICAD2STEP_FRAME_BASE( nullptr, wxID_ANY, title ), m_converter( aConverter ), m_running( false )
-{
-}
-
-
-void KICAD2STEP_FRAME::OnOKButtonClick( wxCommandEvent& aEvent )
-{
-    Close();
-}
-
-
-void KICAD2STEP_FRAME::OnIdle( wxIdleEvent& aEvent )
-{
-    if( !m_running )
-    {
-        m_running = true;
-        m_converter->DoRun();
-    }
-}
-
-
-PANEL_KICAD2STEP::PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id,
-                                    const wxPoint& pos,
-                                    const wxSize& size, long style ) :
-        wxPanel( parent, id, pos, size, style ),
-        m_error( false ), m_fail( false )
-{
-	wxBoxSizer* bSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_tcMessages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                                   wxTE_MULTILINE | wxTE_READONLY );
-	bSizer->Add( m_tcMessages, 1, wxALL | wxEXPAND, 5 );
-
-	SetSizer( bSizer );
-	Layout();
-	bSizer->Fit( this );
-}
-
-
-void PANEL_KICAD2STEP::AppendMessage( const wxString& aMessage )
-{
-    m_tcMessages->AppendText( aMessage );
-    wxSafeYield();
-}
-
-
-
 wxString KICAD2MCAD_PRMS::getOutputExt() const
 {
 #ifdef SUPPORTS_IGES
@@ -202,7 +140,7 @@ wxString KICAD2MCAD_PRMS::getOutputExt() const
 
 
 KICAD2STEP::KICAD2STEP( KICAD2MCAD_PRMS aParams ) :
-        m_params( aParams ), m_panel( nullptr ), m_error( false ), m_fail( false )
+        m_params( aParams ), m_error( false ), m_fail( false )
 {
 }
 
@@ -340,37 +278,12 @@ int KICAD2STEP::Run()
 {
     k2sInstance = this;
 
-    if( m_params.m_gui )
-    {
-        // create the main application window
-        KICAD2STEP_FRAME* frame = new KICAD2STEP_FRAME( this, wxT( "PCB Step Export" ) );
-
-        m_panel = frame->m_panelKicad2Step;
-        m_panel->m_params = m_params;
-
-        Pgm().App().SetTopWindow( frame );
-
-        frame->Iconize( false );
-        frame->Show( true );
-
-        return CLI::EXIT_CODES::AVOID_CLOSING;
-    }
-    else
-    {
-        int diag = DoRun();
-        return diag;
-    }
+    int diag = DoRun();
+    return diag;
 }
 
 
 void KICAD2STEP::ReportMessage( const wxString& aMessage )
 {
-    if( m_params.m_gui )
-    {
-        m_panel->AppendMessage( aMessage );
-    }
-    else
-    {
-        wxPrintf( aMessage );
-    }
+     wxPrintf( aMessage );
 }

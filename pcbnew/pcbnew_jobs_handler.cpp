@@ -60,7 +60,6 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     params.m_yOrigin = aStepJob->m_yOrigin;
     params.m_minDistance = aStepJob->m_minDistance;
     params.m_substModels = aStepJob->m_substModels;
-    params.m_gui = aStepJob->m_gui;
 
     // we might need the lifetime of the converter to continue until frame destruction
     // due to the gui parameter

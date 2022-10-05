@@ -31,7 +31,8 @@
 #include <pgm_base.h>
 #include <board.h>
 #include <confirm.h>
-#include <dialog_export_step_base.h>
+#include "dialog_export_step_base.h"
+#include "dialog_export_step_process.h"
 #include <footprint.h>
 #include <kiface_base.h>
 #include <locale_io.h>
@@ -110,6 +111,7 @@ private:
     double          m_XOrg;          // remember last User Origin X value
     double          m_YOrg;          // remember last User Origin Y value
     wxString        m_boardPath;     // path to the exported board file
+    wxProcess*      m_process;       // running conversion process
     static int      m_toleranceLastChoice;  // Store m_tolerance option during a session
 };
 
@@ -125,6 +127,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
     m_sdbSizerOK->SetLabel( _( "Export" ) );
     m_sdbSizer->Layout();
+    m_process = nullptr;
 
     // Build default output file name
     wxString path = m_parent->GetLastPath( LAST_PATH_STEP );
@@ -467,7 +470,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ), quote,  m_boardPath, quote ) );
 
     wxLogTrace( traceKiCad2Step, wxT( "export step command: %s" ), cmdK2S );
-    wxExecute( cmdK2S, wxEXEC_ASYNC  | wxEXEC_SHOW_CONSOLE );
 
-    aEvent.Skip(); // Close the dialog
+    DIALOG_EXPORT_STEP_LOG* log = new DIALOG_EXPORT_STEP_LOG( this, cmdK2S );
+    log->ShowModal();
+    Close();
 }

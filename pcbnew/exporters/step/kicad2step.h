@@ -28,8 +28,6 @@
 #include <wx/string.h>
 #include <import_export.h>
 
-class PANEL_KICAD2STEP;
-
 class APIEXPORT KICAD2MCAD_PRMS // A small class to handle parameters of conversion
 {
 public:
@@ -51,7 +49,6 @@ public:
     double   m_xOrigin;
     double   m_yOrigin;
     double   m_minDistance;
-    bool     m_gui;
 };
 
 class APIEXPORT KICAD2STEP
@@ -69,7 +66,6 @@ private:
     int DoRun();
 
     KICAD2MCAD_PRMS m_params;
-    PANEL_KICAD2STEP* m_panel;
 
     bool m_error;
     bool m_fail;
