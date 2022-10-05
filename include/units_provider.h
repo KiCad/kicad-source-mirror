@@ -93,11 +93,20 @@ public:
      * @param aTextValue A reference to a wxString object containing the string to convert.
      * @return internal units value
      */
-    long long int ValueFromString( const wxString& aTextValue,
-                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE )
+    int ValueFromString( const wxString& aTextValue, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE )
     {
-        return EDA_UNIT_UTILS::UI::ValueFromString( GetIuScale(), GetUserUnits(), aTextValue,
-                                                    aType );
+        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), GetUserUnits(),
+                                                                  aTextValue, aType );
+
+        return KiROUND<double, int>( value );
+    }
+
+    EDA_ANGLE AngleValueFromString( const wxString& aTextValue )
+    {
+        double angle = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), EDA_UNITS::DEGREES,
+                                                                  aTextValue );
+
+        return EDA_ANGLE( angle, DEGREES_T );
     }
 
 private:

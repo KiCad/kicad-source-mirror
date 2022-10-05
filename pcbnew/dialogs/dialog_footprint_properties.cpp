@@ -35,7 +35,7 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
-#include <validators.h>
+#include <pcbnew.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/text_ctrl_eval.h>
@@ -347,19 +347,100 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
     if( !DIALOG_SHIM::Validate() )
         return false;
 
-    // Check for empty texts.
-    for( size_t i = 2; i < m_texts->size(); ++i )
+    // Validate texts.
+    for( size_t i = 0; i < m_texts->size(); ++i )
     {
         FP_TEXT& text = m_texts->at( i );
 
-        if( text.GetText().IsEmpty() )
+        if( i >= 2 )
         {
-            if( m_NoteBook->GetSelection() != 0 )
-                m_NoteBook->SetSelection( 0 );
+            if( text.GetText().IsEmpty() )
+            {
+                if( m_NoteBook->GetSelection() != 0 )
+                    m_NoteBook->SetSelection( 0 );
+
+                m_delayedFocusGrid = m_itemsGrid;
+                m_delayedErrorMessage = _( "Text items must have some content." );
+                m_delayedFocusColumn = FPT_TEXT;
+                m_delayedFocusRow = i;
+
+                return false;
+            }
+        }
+
+        int width = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, FPT_WIDTH ) );
+
+        if( width < TEXTS_MIN_SIZE )
+        {
+            wxString min = m_frame->StringFromValue( TEXTS_MIN_SIZE, true );
+
+            m_itemsGrid->SetCellValue( i, FPT_WIDTH, min );
 
             m_delayedFocusGrid = m_itemsGrid;
-            m_delayedErrorMessage = _( "Text items must have some content." );
-            m_delayedFocusColumn = FPT_TEXT;
+            m_delayedErrorMessage = wxString::Format( _( "Text width must be at least %s." ), min );
+            m_delayedFocusColumn = FPT_WIDTH;
+            m_delayedFocusRow = i;
+
+            return false;
+        }
+        else if( width > TEXTS_MAX_SIZE )
+        {
+            wxString max = m_frame->StringFromValue( TEXTS_MAX_SIZE, true );
+
+            m_itemsGrid->SetCellValue( i, FPT_WIDTH, max );
+
+            m_delayedFocusGrid = m_itemsGrid;
+            m_delayedErrorMessage = wxString::Format( _( "Text width must be at most %s." ), max );
+            m_delayedFocusColumn = FPT_WIDTH;
+            m_delayedFocusRow = i;
+
+            return false;
+        }
+
+        int height = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, FPT_HEIGHT ) );
+
+        if( height < TEXTS_MIN_SIZE )
+        {
+            wxString min = m_frame->StringFromValue( TEXTS_MIN_SIZE, true );
+
+            m_itemsGrid->SetCellValue( i, FPT_HEIGHT, min );
+
+            m_delayedFocusGrid = m_itemsGrid;
+            m_delayedErrorMessage = wxString::Format( _( "Text height must be at least %s." ), min );
+            m_delayedFocusColumn = FPT_HEIGHT;
+            m_delayedFocusRow = i;
+
+            return false;
+        }
+        else if( height > TEXTS_MAX_SIZE )
+        {
+            wxString max = m_frame->StringFromValue( TEXTS_MAX_SIZE, true );
+
+            m_itemsGrid->SetCellValue( i, FPT_HEIGHT, max );
+
+            m_delayedFocusGrid = m_itemsGrid;
+            m_delayedErrorMessage = wxString::Format( _( "Text height must be at most %s." ), max );
+            m_delayedFocusColumn = FPT_HEIGHT;
+            m_delayedFocusRow = i;
+
+            return false;
+        }
+
+        // Test for acceptable values for thickness and size and clamp if fails
+        int maxPenWidth = Clamp_Text_PenSize( text.GetTextThickness(), text.GetTextSize() );
+
+        if( text.GetTextThickness() > maxPenWidth )
+        {
+            wxString clamped = m_frame->StringFromValue( maxPenWidth, true );
+
+            m_itemsGrid->SetCellValue( i, FPT_THICKNESS, clamped );
+
+            m_delayedFocusGrid = m_itemsGrid;
+            m_delayedErrorMessage = wxString::Format( _( "Text thickness is too large for the "
+                                                         "text size.\n"
+                                                         "It will be clamped at %s." ),
+                                                      clamped );
+            m_delayedFocusColumn = FPT_THICKNESS;
             m_delayedFocusRow = i;
 
             return false;

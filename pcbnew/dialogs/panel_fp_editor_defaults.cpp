@@ -317,7 +317,10 @@ bool PANEL_FP_EDITOR_DEFAULTS::Show( bool aShow )
 
 int PANEL_FP_EDITOR_DEFAULTS::getGridValue( int aRow, int aCol )
 {
-    return EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_units, m_graphicsGrid->GetCellValue( aRow, aCol ) );
+    wxString msg = m_graphicsGrid->GetCellValue( aRow, aCol );
+    double   value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_units, msg );
+
+    return KiROUND<double, int>( value );
 }
 
 

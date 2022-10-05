@@ -29,6 +29,7 @@
 #include <climits>
 #include <math/util.h>
 #include <wx/log.h>
+#include <wx/string.h>
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -51,6 +52,13 @@ void kimathLogDebug( const char* aFormatString, ... )
 
         va_end( argList );
     }
+}
+
+
+void kimathLogOverflow( double v, const char* aTypeName )
+{
+    wxString typeName( aTypeName );
+    wxLogWarning( wxString::Format( wxT( "Overflow converting value %f to %s." ), v, typeName ) );
 }
 
 

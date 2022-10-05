@@ -198,7 +198,7 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
 int PANEL_SETUP_TEXT_AND_GRAPHICS::getGridValue( int aRow, int aCol )
 {
-    return EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), m_grid->GetCellValue( aRow, aCol ) );
+    return m_Frame->ValueFromString( m_grid->GetCellValue( aRow, aCol ) );
 }
 
 

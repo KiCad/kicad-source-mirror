@@ -60,15 +60,18 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
 
     for( const wxString& gridDef : settings.sizes )
     {
-        int gridSize = (int) EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::MILLIMETRES,
-                                                                  gridDef );
-        m_grids.emplace_back( gridSize, gridSize );
+        double gridSize = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
+                                                                     gridDef );
+
+        m_grids.emplace_back( KiROUND<double, int>( gridSize ), KiROUND<double, int>( gridSize ) );
     }
 
-    m_grids.emplace_back( EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::MILLIMETRES,
-                                                               settings.user_grid_x ),
-                          EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::MILLIMETRES,
-                                                               settings.user_grid_y ) );
+    double userGridX = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
+                                                                  settings.user_grid_x );
+    double userGridY = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
+                                                                  settings.user_grid_y );
+
+    m_grids.emplace_back( KiROUND<double, int>( userGridX ), KiROUND<double, int>( userGridY ) );
 
     OnGridChanged();
 }

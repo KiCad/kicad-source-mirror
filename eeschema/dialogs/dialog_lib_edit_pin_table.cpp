@@ -349,29 +349,25 @@ public:
                 break;
 
             case COL_NUMBER_SIZE:
-                pin->SetNumberTextSize( EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(), aValue ) );
+                pin->SetNumberTextSize( m_frame->ValueFromString( aValue ) );
                 break;
 
             case COL_NAME_SIZE:
-                pin->SetNameTextSize( EDA_UNIT_UTILS::UI::ValueFromString(
-                        schIUScale, m_frame->GetUserUnits(), aValue ) );
+                pin->SetNameTextSize( m_frame->ValueFromString( aValue ) );
                 break;
 
             case COL_LENGTH:
-                pin->ChangeLength( EDA_UNIT_UTILS::UI::ValueFromString(
-                        schIUScale, m_frame->GetUserUnits(), aValue ) );
+                pin->ChangeLength( m_frame->ValueFromString( aValue ) );
                 break;
 
             case COL_POSX:
-                pin->SetPosition( wxPoint( EDA_UNIT_UTILS::UI::ValueFromString(
-                                         schIUScale, m_frame->GetUserUnits(), aValue ),
+                pin->SetPosition( wxPoint( m_frame->ValueFromString( aValue ),
                                            pin->GetPosition().y ) );
                 break;
 
             case COL_POSY:
                 pin->SetPosition( wxPoint( pin->GetPosition().x,
-                                 -EDA_UNIT_UTILS::UI::ValueFromString(
-                                         schIUScale, m_frame->GetUserUnits(), aValue ) ) );
+                                           -m_frame->ValueFromString( aValue ) ) );
                 break;
 
             case COL_VISIBLE:

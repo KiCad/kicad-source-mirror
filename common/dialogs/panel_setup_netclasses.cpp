@@ -336,7 +336,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     int row = 0;
 
     auto getCell =
-            [this]( int aRow, int aCol ) -> long long int
+            [this]( int aRow, int aCol ) -> int
             {
                 return m_frame->ValueFromString( m_netclassGrid->GetCellValue( aRow, aCol ) );
             };

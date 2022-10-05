@@ -271,18 +271,19 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         break;
 
     case FPT_WIDTH:
-        text.SetTextWidth( EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), aValue ) );
+        text.SetTextWidth( m_frame->ValueFromString( aValue ) );
         break;
 
     case FPT_HEIGHT:
-        text.SetTextHeight( EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), aValue ) );
+        text.SetTextHeight( m_frame->ValueFromString( aValue ) );
         break;
 
-    case FPT_THICKNESS:text.SetTextThickness( EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), aValue ) );
+    case FPT_THICKNESS:
+        text.SetTextThickness( m_frame->ValueFromString( aValue ) );
         break;
 
     case FPT_ORIENTATION:
-        text.SetTextAngle( EDA_ANGLE( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::UNSCALED, aValue ), DEGREES_T ) );
+        text.SetTextAngle( m_frame->AngleValueFromString( aValue ) );
         text.SetDrawCoord();
         break;
 
@@ -291,9 +292,9 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         pos = text.GetPos0();
 
         if( aCol == FPT_XOFFSET )
-            pos.x = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), aValue );
+            pos.x = m_frame->ValueFromString( aValue );
         else
-            pos.y = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), aValue );
+            pos.y = m_frame->ValueFromString( aValue );
 
         text.SetPos0( pos );
         text.SetDrawCoord();

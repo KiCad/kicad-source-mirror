@@ -564,9 +564,9 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging( wxGridEvent& event )
         return;
 
     if( col == 0 )  // Set the X value
-        m_currPoints[row].x = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, GetUserUnits(), msg );
+        m_currPoints[row].x = m_frame->ValueFromString( msg );
     else            // Set the Y value
-        m_currPoints[row].y = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, GetUserUnits(), msg );
+        m_currPoints[row].y = m_frame->ValueFromString( msg );
 
     Validate();
 

@@ -709,9 +709,8 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         break;
 
     case FDC_TEXT_SIZE:
-        field.SetTextSize(
-                wxSize( EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(), aValue ),
-                        EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(), aValue ) ) );
+        field.SetTextSize( wxSize( m_frame->ValueFromString( aValue ),
+                                   m_frame->ValueFromString( aValue ) ) );
         break;
 
     case FDC_ORIENTATION:
@@ -729,10 +728,9 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         pos = field.GetTextPos();
 
         if( aCol == FDC_POSX )
-            pos.x = EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(), aValue );
+            pos.x = m_frame->ValueFromString( aValue );
         else
-            pos.y = EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(),
-                                                         aValue );
+            pos.y = m_frame->ValueFromString( aValue );
 
         field.SetTextPos( pos );
         break;

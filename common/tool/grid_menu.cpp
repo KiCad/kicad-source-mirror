@@ -94,8 +94,8 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
 
     for( const wxString& gridSize : aCfg->m_Window.grid.sizes )
     {
-        int val = (int) EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::MILLIMETRES,
-                                                             gridSize );
+        double val = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
+                                                                gridSize );
 
         msg.Printf( _( "Grid: %s (%s)" ),
                     EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, primaryUnit, val ),
@@ -106,8 +106,8 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
 
     if( !aCfg->m_Window.grid.user_grid_x.empty() )
     {
-        int val = (int) EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::INCHES,
-                                                             aCfg->m_Window.grid.user_grid_x );
+        double val = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::INCHES,
+                                                                aCfg->m_Window.grid.user_grid_x );
 
         msg.Printf( _( "User grid: %s (%s)" ),
                     EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, primaryUnit, val ),

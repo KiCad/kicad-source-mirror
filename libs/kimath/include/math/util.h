@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
  * Copyright (C) CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -46,6 +46,11 @@
 void kimathLogDebug( const char* aFormatString, ... );
 
 /**
+ * Workaround to avoid the empty-string conversion issue in wxWidgets
+ */
+void kimathLogOverflow( double v, const char* aTypeName );
+
+/**
  * Limit @a value within the range @a lower <= @a value <= @a upper.
  *
  * It will work on temporary expressions, since they are evaluated only once, and it should
@@ -82,12 +87,20 @@ constexpr ret_type KiROUND( fp_type v )
     using max_ret = long long int;
     fp_type ret = v < 0 ? v - 0.5 : v + 0.5;
 
-    if( std::numeric_limits<ret_type>::max() < ret ||
-        std::numeric_limits<ret_type>::lowest() > ret )
+    if( ret > std::numeric_limits<ret_type>::max() )
     {
-        kimathLogDebug( "Overflow KiROUND converting value %f to %s", double( v ),
-                        typeid( ret_type ).name() );
-        return 0;
+        kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+        
+        return std::numeric_limits<ret_type>::max() - 1;
+    }
+    else if( ret < std::numeric_limits<ret_type>::lowest() )
+    {
+        kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+
+        if( std::numeric_limits<ret_type>::is_signed )
+            return std::numeric_limits<ret_type>::lowest() + 1;
+        else
+            return 0;
     }
 
     return ret_type( max_ret( ret ) );
