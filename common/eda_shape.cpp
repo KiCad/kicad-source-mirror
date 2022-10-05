@@ -1353,16 +1353,13 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         switch( m_editState )
         {
         case 1:
-        {
-            // Keep center clockwise from chord while drawing
-            VECTOR2I  chordVector = m_end - m_start;
-            EDA_ANGLE chordAngle( chordVector );
+            // Keep arc clockwise while drawing i.e. arc angle = 90 deg.
+            // it can be 90 or 270 deg depending on the arc center choice (c1 or c2)
+            m_arcCenter = c1;   // first trial
 
-            VECTOR2I c1Test = c1;
-            RotatePoint( c1Test, m_start, -chordAngle.Normalize() );
+            if( GetArcAngle() > ANGLE_180 )
+                m_arcCenter = c2;
 
-            m_arcCenter = c1Test.x > 0 ? c2 : c1;
-        }
             break;
 
         case 2:
