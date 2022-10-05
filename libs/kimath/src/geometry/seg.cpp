@@ -364,6 +364,9 @@ bool SEG::mutualDistance( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const
 
     ecoord l = p * p + q * q;
 
+    if( l == 0 )
+        return false;
+
     ecoord det1 = p * b.A.x + q * b.A.y + r;
     ecoord det2 = p * b.B.x + q * b.B.y + r;
 
@@ -380,7 +383,8 @@ bool SEG::ApproxCollinear( const SEG& aSeg, int aDistanceThreshold ) const
 {
     ecoord d1, d2;
 
-    mutualDistance( aSeg, d1, d2 );
+    if( ! mutualDistance( aSeg, d1, d2 ) )
+        return false;
 
     return std::abs( d1 ) <= aDistanceThreshold && std::abs( d2 ) <= aDistanceThreshold;
 }
@@ -390,7 +394,8 @@ bool SEG::ApproxParallel( const SEG& aSeg, int aDistanceThreshold ) const
 {
     ecoord d1, d2;
 
-    mutualDistance( aSeg, d1, d2 );
+    if( ! mutualDistance( aSeg, d1, d2 ) )
+        return false;
 
     return std::abs( d1 - d2 ) <= (ecoord) aDistanceThreshold;
 }
