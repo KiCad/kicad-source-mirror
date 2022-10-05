@@ -367,8 +367,11 @@ bool SEG::mutualDistance( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const
     ecoord det1 = p * b.A.x + q * b.A.y + r;
     ecoord det2 = p * b.B.x + q * b.B.y + r;
 
-    aD1 = isqrt( rescale( det1, det1, l ) );
-    aD2 = isqrt( rescale( det2, det2, l ) );
+    ecoord dsq1 = rescale( det1, det1, l );
+    ecoord dsq2 = rescale( det2, det2, l );
+
+    aD1 = sgn( det1 ) * isqrt( dsq1 );
+    aD2 = sgn( det2 ) * isqrt( dsq2 );
 
     return true;
 }
