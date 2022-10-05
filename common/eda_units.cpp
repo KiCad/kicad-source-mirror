@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +37,6 @@ bool EDA_UNIT_UTILS::IsImperialUnit( EDA_UNITS aUnit )
     default:
         return false;
     }
-
-    return false;
 }
 
 
@@ -52,8 +50,6 @@ bool EDA_UNIT_UTILS::IsMetricUnit( EDA_UNITS aUnit )
     default:
         return false;
     }
-
-    return false;
 }
 
 
@@ -293,8 +289,8 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
 // A lower-precision (for readability) version of StringFromValue()
 wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                                    int aValue,
-                               bool aAddUnitLabel,
-                               EDA_DATA_TYPE aType )
+                                                   bool aAddUnitLabel,
+                                                   EDA_DATA_TYPE aType )
 {
     return MessageTextFromValue( aIuScale, aUnits, double( aValue ), aAddUnitLabel, aType );
 }
@@ -303,8 +299,8 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
 // A lower-precision (for readability) version of StringFromValue()
 wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                                    long long int aValue,
-                               bool aAddUnitLabel,
-                               EDA_DATA_TYPE aType )
+                                                   bool aAddUnitLabel,
+                                                   EDA_DATA_TYPE aType )
 {
     return MessageTextFromValue( aIuScale, aUnits, double( aValue ), aAddUnitLabel, aType );
 }
@@ -436,7 +432,9 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const wxString& aTextValue )
 
         if( !( ( ch >= '0' && ch <= '9' ) || ( ch == decimal_point ) || ( ch == '-' )
                || ( ch == '+' ) ) )
+        {
             break;
+        }
 
         ++brk_point;
     }
@@ -449,7 +447,7 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const wxString& aTextValue )
 
 
 double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                              const wxString& aTextValue, EDA_DATA_TYPE aType )
+                                                  const wxString& aTextValue, EDA_DATA_TYPE aType )
 {
     double dtmp = 0;
 
@@ -482,8 +480,9 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
     // Check the optional unit designator (2 ch significant)
     wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
 
-    if( aUnits == EDA_UNITS::MILLIMETRES || aUnits == EDA_UNITS::MILS
-      || aUnits == EDA_UNITS::INCHES )
+    if( aUnits == EDA_UNITS::MILLIMETRES
+            || aUnits == EDA_UNITS::MILS
+            || aUnits == EDA_UNITS::INCHES )
     {
         if( unit == wxT( "mm" ) )
         {
@@ -528,7 +527,7 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
 
 
 long long int EDA_UNIT_UTILS::UI::ValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                               const wxString& aTextValue, EDA_DATA_TYPE aType )
+                                                   const wxString& aTextValue, EDA_DATA_TYPE aType )
 {
     double value = DoubleValueFromString( aIuScale, aUnits, aTextValue, aType );
 

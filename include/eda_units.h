@@ -195,6 +195,7 @@ namespace EDA_UNIT_UTILS
          * converts \a aTextValue to a double
          * @warning This utilizes the current locale and will break if decimal formats differ
          *
+         * @param aIuScale The internal units scale for the current frame/app.
          * @param aUnits The units of \a aTextValue.
          * @param aTextValue A reference to a wxString object containing the string to convert.
          * @return A double representing that value in internal units
@@ -210,9 +211,10 @@ namespace EDA_UNIT_UTILS
          * converts \a aTextValue in \a aUnits to internal units used by the application.
          * @warning This utilizes the current locale and will break if decimal formats differ
          *
+         * @param aIuScale The internal units scale for the current frame/app.
          * @param aUnits The units of \a aTextValue.
          * @param aTextValue A reference to a wxString object containing the string to convert.
-         * @return The string from Value, according to units (inch, mm ...) for display,
+         * @return A long long int representing that value in internal units
          */
         long long int ValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                        const wxString& aTextValue,
