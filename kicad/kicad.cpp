@@ -152,6 +152,15 @@ bool PGM_KICAD::OnPgmInit()
         }
     }
 
+    if( appType == KICAD_MAIN_FRAME_T )
+    {
+        Kiway.SetCtlBits( KFCTL_CPP_PROJECT_SUITE );
+    }
+    else
+    {
+        Kiway.SetCtlBits( KFCTL_STANDALONE );
+    }
+
     bool skipPythonInit = false;
 
     if( appType == FRAME_BM2CMP || appType == FRAME_PL_EDITOR || appType == FRAME_GERBER
@@ -163,7 +172,6 @@ bool PGM_KICAD::OnPgmInit()
 
     m_bm.InitSettings( new KICAD_SETTINGS );
     GetSettingsManager().RegisterSettings( PgmSettings() );
-    GetSettingsManager().SetKiway( &Kiway );
     m_bm.Init();
 
     // Add search paths to feed the PGM_KICAD::SysSearch() function,

@@ -395,6 +395,12 @@ public:
     KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop = nullptr );
 
     /**
+     * Overwrites previously set ctl bits, only for use in kicad.cpp to flip between
+     * standalone and manager mode before we actually load anything
+     */
+    void SetCtlBits( int aCtlBits ) { m_ctl = aCtlBits; }
+
+    /**
      * Tell this KIWAY about the top most frame in the program and optionally allows it to
      * play the role of one of the KIWAY_PLAYERs if launched from single_top.cpp.
      *
