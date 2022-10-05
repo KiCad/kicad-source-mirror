@@ -54,6 +54,7 @@
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
 #include <sim/spice_generator.h>
+#include <sim/sim_lib_mgr.h>
 #include "symbol_library_manager.h"
 #include <symbol_viewer_frame.h>
 #include <status_popup.h>
@@ -883,52 +884,12 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
                     std::vector<LIB_PIN*> pins = symbol->GetLibPins();
 
-                    // TODO: We need to unify this library-model inheritance stuff into one
-                    // abstraction.
-
-                    // It might not be the best idea to have to load a file every time current is
-                    // probed either.
-
-                    std::unique_ptr<SIM_MODEL> model;
-                    std::unique_ptr<SIM_LIBRARY> library;
-
-                    SCH_FIELD* libraryField = symbol->FindField( SIM_LIBRARY::LIBRARY_FIELD );
-                    SCH_FIELD* nameField = symbol->FindField( SIM_LIBRARY::NAME_FIELD );
-
-                    if( libraryField )
-                    {
-                        wxString path = m_frame->Prj().AbsolutePath( libraryField->GetShownText() );
-
-                        try
-                        {
-                            library = SIM_LIBRARY::Create( std::string( path.ToUTF8() ) );
-                        }
-                        catch( const IO_ERROR& e )
-                        {
-                            DisplayErrorMessage( m_frame,
-                                wxString::Format( "Failed reading model library '%s'", path ),
-                                e.What() );
-                            return true;
-                        }
-
-                        if( !nameField )
-                            return true;
-
-                        SIM_MODEL* baseModel = library->FindModel( std::string( nameField->GetShownText().ToUTF8() ) );
-
-                        if( !baseModel )
-                            return true;
-
-                        model = SIM_MODEL::Create( *baseModel,
-                                                   static_cast<int>( pins.size() ),
-                                                   symbol->GetFields() );
-                    }
-                    else
-                        model = SIM_MODEL::Create( static_cast<int>( pins.size() ),
-                                                   symbol->GetFields() );
+                    SIM_LIB_MGR mgr( m_frame->Prj() );
+                    SIM_MODEL&  model = mgr.CreateModel( *symbol );
 
                     auto ref = std::string( symbol->GetRef( &m_frame->GetCurrentSheet() ).ToUTF8() );
-                    std::vector<std::string> currentNames = model->SpiceGenerator().CurrentNames( ref );
+                    std::vector<std::string> currentNames =
+                            model.SpiceGenerator().CurrentNames( ref );
 
                     if( currentNames.size() == 0 )
                         return true;
@@ -938,7 +899,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         return true;
                     }
 
-                    int modelPinIndex = model->FindModelPinIndex( std::string( pin->GetNumber().ToUTF8() ) );
+                    int modelPinIndex =
+                            model.FindModelPinIndex( std::string( pin->GetNumber().ToUTF8() ) );
 
                     if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
                     {
