@@ -242,7 +242,7 @@ class SCH_REFERENCE_LIST
 {
 
 private:
-    std::vector<SCH_REFERENCE> flatList;
+    std::vector<SCH_REFERENCE> m_flatList;
 
 public:
     SCH_REFERENCE_LIST()
@@ -251,25 +251,25 @@ public:
 
     SCH_REFERENCE& operator[]( int aIndex )
     {
-        return flatList[ aIndex ];
+        return m_flatList[ aIndex ];
     }
 
     const SCH_REFERENCE& operator[]( int aIndex ) const
     {
-        return flatList[ aIndex ];
+        return m_flatList[ aIndex ];
     }
 
     void Clear()
     {
-        flatList.clear();
+        m_flatList.clear();
     }
 
-    size_t GetCount() const { return flatList.size(); }
+    size_t GetCount() const { return m_flatList.size(); }
 
-    SCH_REFERENCE& GetItem( int aIdx ) { return flatList[aIdx]; }
-    const SCH_REFERENCE& GetItem( int aIdx ) const { return flatList[aIdx]; }
+    SCH_REFERENCE& GetItem( int aIdx ) { return m_flatList[aIdx]; }
+    const SCH_REFERENCE& GetItem( int aIdx ) const { return m_flatList[aIdx]; }
 
-    void AddItem( const SCH_REFERENCE& aItem ) { flatList.push_back( aItem ); }
+    void AddItem( const SCH_REFERENCE& aItem ) { m_flatList.push_back( aItem ); }
 
     /**
      * Remove an item from the list of references.
@@ -304,7 +304,7 @@ public:
     void SplitReferences()
     {
         for( unsigned ii = 0; ii < GetCount(); ii++ )
-            flatList[ii].Split();
+            m_flatList[ii].Split();
     }
 
     /**
@@ -316,8 +316,8 @@ public:
     {
         for( unsigned ii = 0; ii < GetCount(); ii++ )
         {
-            if( !flatList[ii].m_libPart->IsPower() || aIncludePowerSymbols )
-                flatList[ii].m_isNew = true;
+            if( !m_flatList[ii].m_libPart->IsPower() || aIncludePowerSymbols )
+                m_flatList[ii].m_isNew = true;
         }
     }
 
@@ -333,7 +333,7 @@ public:
     {
         /* update the reference numbers */
         for( unsigned ii = 0; ii < GetCount(); ii++ )
-            flatList[ii].Annotate();
+            m_flatList[ii].Annotate();
     }
 
     /**
@@ -441,7 +441,7 @@ public:
      */
     void SortByXCoordinate()
     {
-        sort( flatList.begin(), flatList.end(), sortByXPosition );
+        sort( m_flatList.begin(), m_flatList.end(), sortByXPosition );
     }
 
     /**
@@ -456,7 +456,7 @@ public:
      */
     void SortByYCoordinate()
     {
-        sort( flatList.begin(), flatList.end(), sortByYPosition );
+        sort( m_flatList.begin(), m_flatList.end(), sortByYPosition );
     }
 
     /**
@@ -466,7 +466,7 @@ public:
      */
     void SortByTimeStamp()
     {
-        sort( flatList.begin(), flatList.end(), sortByTimeStamp );
+        sort( m_flatList.begin(), m_flatList.end(), sortByTimeStamp );
     }
 
     /**
@@ -482,7 +482,7 @@ public:
      */
     void SortByRefAndValue()
     {
-        sort( flatList.begin(), flatList.end(), sortByRefAndValue );
+        sort( m_flatList.begin(), m_flatList.end(), sortByRefAndValue );
     }
 
     /**
@@ -494,7 +494,7 @@ public:
      */
     void SortByReferenceOnly()
     {
-        sort( flatList.begin(), flatList.end(), sortByReferenceOnly );
+        sort( m_flatList.begin(), m_flatList.end(), sortByReferenceOnly );
     }
 
     /**
@@ -557,9 +557,9 @@ public:
     {
         printf( "%s\n", aPrefix );
 
-        for( unsigned i=0; i < flatList.size(); ++i )
+        for( unsigned i=0; i < m_flatList.size(); ++i )
         {
-            SCH_REFERENCE& schref = flatList[i];
+            SCH_REFERENCE& schref = m_flatList[i];
 
             printf( " [%-2d] ref:%-8s num:%-3d lib_part:%s\n",
                     i,

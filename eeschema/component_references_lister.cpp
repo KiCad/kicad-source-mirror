@@ -44,8 +44,8 @@
 
 void SCH_REFERENCE_LIST::RemoveItem( unsigned int aIndex )
 {
-    if( aIndex < flatList.size() )
-        flatList.erase( flatList.begin() + aIndex );
+    if( aIndex < m_flatList.size() )
+        m_flatList.erase( m_flatList.begin() + aIndex );
 }
 
 
@@ -53,7 +53,7 @@ bool SCH_REFERENCE_LIST::Contains( const SCH_REFERENCE& aItem ) const
 {
     for( unsigned ii = 0; ii < GetCount(); ii++ )
     {
-        if( flatList[ii].IsSameInstance( aItem ) )
+        if( m_flatList[ii].IsSameInstance( aItem ) )
             return true;
     }
 
@@ -157,17 +157,17 @@ bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
 
 int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit, bool aIncludeNew ) const
 {
-    int NumRef = flatList[aIndex].m_numRef;
+    int NumRef = m_flatList[aIndex].m_numRef;
 
-    for( size_t ii = 0; ii < flatList.size(); ii++ )
+    for( size_t ii = 0; ii < m_flatList.size(); ii++ )
     {
         if(  ( aIndex == ii )
-          || ( flatList[ii].m_isNew && !aIncludeNew )
-          || ( flatList[ii].m_numRef != NumRef )
-          || ( flatList[aIndex].CompareRef( flatList[ii] ) != 0 ) )
+          || ( m_flatList[ii].m_isNew && !aIncludeNew )
+          || ( m_flatList[ii].m_numRef != NumRef )
+          || ( m_flatList[aIndex].CompareRef( m_flatList[ii] ) != 0 ) )
             continue;
 
-        if( flatList[ii].m_unit == aUnit )
+        if( m_flatList[ii].m_unit == aUnit )
             return (int) ii;
     }
 
@@ -177,9 +177,9 @@ int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit, bool aIncludeNew ) c
 
 int SCH_REFERENCE_LIST::FindRefByPath( const wxString& aPath ) const
 {
-    for( size_t i = 0; i < flatList.size(); ++i )
+    for( size_t i = 0; i < m_flatList.size(); ++i )
     {
-        if( flatList[i].GetPath() == aPath )
+        if( m_flatList[i].GetPath() == aPath )
             return i;
     }
 
@@ -189,9 +189,9 @@ int SCH_REFERENCE_LIST::FindRefByPath( const wxString& aPath ) const
 
 int SCH_REFERENCE_LIST::FindRef( const wxString& aRef ) const
 {
-    for( size_t i = 0; i < flatList.size(); ++i )
+    for( size_t i = 0; i < m_flatList.size(); ++i )
     {
-        if( flatList[i].GetRef() == aRef )
+        if( m_flatList[i].GetRef() == aRef )
             return i;
     }
 
@@ -204,10 +204,10 @@ void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList,
 {
     aIdList.clear();
 
-    for( const SCH_REFERENCE& ref : flatList )
+    for( const SCH_REFERENCE& ref : m_flatList )
     {
         // Don't add new references to the list as we will reannotate those
-        if( flatList[aIndex].CompareRef( ref ) == 0 && ref.m_numRef >= aMinRefId && !ref.m_isNew )
+        if( m_flatList[aIndex].CompareRef( ref ) == 0 && ref.m_numRef >= aMinRefId && !ref.m_isNew )
             aIdList.push_back( ref.m_numRef );
     }
 
@@ -226,7 +226,7 @@ std::vector<int> SCH_REFERENCE_LIST::GetUnitsMatchingRef( const SCH_REFERENCE& a
     // Always add this reference to the list
     unitsList.push_back( aRef.m_unit );
 
-    for( SCH_REFERENCE ref : flatList )
+    for( SCH_REFERENCE ref : m_flatList )
     {
         if( ref.CompareValue( aRef ) != 0 )
             continue;
@@ -264,7 +264,7 @@ int SCH_REFERENCE_LIST::FindFirstUnusedReference( const SCH_REFERENCE& aRef, int
     // reference prefix as aRef
     std::map<int, std::vector<SCH_REFERENCE>> refNumberMap;
 
-    for( const SCH_REFERENCE& ref : flatList )
+    for( const SCH_REFERENCE& ref : m_flatList )
     {
         // search only for the current reference prefix:
         if( ref.CompareRef( aRef ) != 0 )
@@ -310,7 +310,7 @@ std::vector<SYMBOL_INSTANCE_REFERENCE> SCH_REFERENCE_LIST::GetSymbolInstances() 
 {
     std::vector<SYMBOL_INSTANCE_REFERENCE> retval;
 
-    for( const SCH_REFERENCE& ref : flatList )
+    for( const SCH_REFERENCE& ref : m_flatList )
     {
         SYMBOL_INSTANCE_REFERENCE instance;
         instance.m_Path = ref.GetSheetPath().Path();
@@ -390,7 +390,7 @@ void SCH_REFERENCE_LIST::ReannotateByOptions( ANNOTATE_ORDER_T             aSort
 
     for( size_t i = 0; i < GetCount(); i++ )
     {
-        SCH_REFERENCE& ref = flatList[i];
+        SCH_REFERENCE& ref = m_flatList[i];
         wxString       refstr = ref.GetSymbol()->GetRef( &ref.GetSheetPath() );
 
         // Update sheet numbers based on the reference's sheet's position within the full
@@ -470,7 +470,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                                    SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
                                    const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent )
 {
-    if ( flatList.size() == 0 )
+    if ( m_flatList.size() == 0 )
         return;
 
     size_t originalSize = GetCount();
@@ -515,14 +515,14 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
     // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
     if( aUseSheetNum )
-        minRefId = flatList[first].m_sheetNum * aSheetIntervalId + 1;
+        minRefId = m_flatList[first].m_sheetNum * aSheetIntervalId + 1;
     else
         minRefId = aStartNumber + 1;
 
 
-    for( unsigned ii = 0; ii < flatList.size(); ii++ )
+    for( unsigned ii = 0; ii < m_flatList.size(); ii++ )
     {
-        auto& ref_unit = flatList[ii];
+        auto& ref_unit = m_flatList[ii];
 
         if( ref_unit.m_flag )
             continue;
@@ -549,8 +549,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 break;
         }
 
-        if(  ( flatList[first].CompareRef( ref_unit ) != 0 )
-          || ( aUseSheetNum && ( flatList[first].m_sheetNum != ref_unit.m_sheetNum ) )  )
+        if(  ( m_flatList[first].CompareRef( ref_unit ) != 0 )
+          || ( aUseSheetNum && ( m_flatList[first].m_sheetNum != ref_unit.m_sheetNum ) )  )
         {
             // New reference found: we need a new ref number for this reference
             first = ii;
@@ -616,9 +616,9 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                     continue;
 
                 // Find the matching symbol
-                for( unsigned jj = ii + 1; jj < flatList.size(); jj++ )
+                for( unsigned jj = ii + 1; jj < m_flatList.size(); jj++ )
                 {
-                    if( !lockedRef.IsSameInstance( flatList[jj] ) )
+                    if( !lockedRef.IsSameInstance( m_flatList[jj] ) )
                         continue;
 
                     wxString ref_candidate = buildFullReference( ref_unit, lockedRef.m_unit );
@@ -628,9 +628,9 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                     // multiunits symbols have duplicate references)
                     if( inUseRefs.find( ref_candidate ) == inUseRefs.end() )
                     {
-                        flatList[jj].m_numRef = ref_unit.m_numRef;
-                        flatList[jj].m_isNew = false;
-                        flatList[jj].m_flag = 1;
+                        m_flatList[jj].m_numRef = ref_unit.m_numRef;
+                        m_flatList[jj].m_isNew = false;
+                        m_flatList[jj].m_flag = 1;
                         // lock this new full reference
                         inUseRefs.insert( ref_candidate );
                         break;
@@ -663,6 +663,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 {
     int            error = 0;
     wxString       tmp;
+    wxString       tmp2;
     wxString       msg;
 
     SortByRefAndValue();
@@ -671,31 +672,31 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
     SplitReferences();
 
     // count not yet annotated items or annotation error.
-    for( unsigned ii = 0; ii < flatList.size(); ii++ )
+    for( unsigned ii = 0; ii < m_flatList.size(); ii++ )
     {
         msg.Empty();
         tmp.Empty();
 
-        if( flatList[ii].m_isNew )    // Not yet annotated
+        if( m_flatList[ii].m_isNew )    // Not yet annotated
         {
-            if( flatList[ii].m_numRef >= 0 )
-                tmp << flatList[ii].m_numRef;
+            if( m_flatList[ii].m_numRef >= 0 )
+                tmp << m_flatList[ii].m_numRef;
             else
                 tmp = wxT( "?" );
 
-            if( ( flatList[ii].m_unit > 0 ) && ( flatList[ii].m_unit < 0x7FFFFFFF )  )
+            if( ( m_flatList[ii].m_unit > 0 ) && ( m_flatList[ii].m_unit < 0x7FFFFFFF )  )
             {
                 msg.Printf( _( "Item not annotated: %s%s (unit %d)" ),
-                            flatList[ii].GetRef(),
+                            m_flatList[ii].GetRef(),
                             tmp,
-                            flatList[ii].m_unit );
+                            m_flatList[ii].m_unit );
             }
             else
             {
-                msg.Printf( _( "Item not annotated: %s%s" ), flatList[ii].GetRef(), tmp );
+                msg.Printf( _( "Item not annotated: %s%s" ), m_flatList[ii].GetRef(), tmp );
             }
 
-            aHandler( ERCE_UNANNOTATED, msg, &flatList[ii], nullptr );
+            aHandler( ERCE_UNANNOTATED, msg, &m_flatList[ii], nullptr );
             error++;
             break;
         }
@@ -703,110 +704,103 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
         // Error if unit number selected does not exist (greater than the  number of units in
         // the symbol).  This can happen if a symbol has changed in a library after a
         // previous annotation.
-        if( std::max( flatList[ii].GetLibPart()->GetUnitCount(), 1 ) < flatList[ii].m_unit )
+        if( std::max( m_flatList[ii].GetLibPart()->GetUnitCount(), 1 ) < m_flatList[ii].m_unit )
         {
-            if( flatList[ii].m_numRef >= 0 )
-                tmp << flatList[ii].m_numRef;
+            if( m_flatList[ii].m_numRef >= 0 )
+                tmp << m_flatList[ii].m_numRef;
             else
                 tmp = wxT( "?" );
 
             msg.Printf( _( "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)" ),
-                        flatList[ii].GetRef(),
+                        m_flatList[ii].GetRef(),
                         tmp,
-                        LIB_SYMBOL::SubReference( flatList[ii].m_unit ),
-                        flatList[ii].m_unit,
-                        flatList[ii].GetLibPart()->GetUnitCount() );
+                        LIB_SYMBOL::SubReference( m_flatList[ii].m_unit ),
+                        m_flatList[ii].m_unit,
+                        m_flatList[ii].GetLibPart()->GetUnitCount() );
 
-            aHandler( ERCE_EXTRA_UNITS, msg, &flatList[ii], nullptr );
+            aHandler( ERCE_EXTRA_UNITS, msg, &m_flatList[ii], nullptr );
             error++;
             break;
         }
     }
 
     // count the duplicated elements (if all are annotated)
-    int imax = flatList.size() - 1;
+    int imax = m_flatList.size() - 1;
 
     for( int ii = 0; ii < imax; ii++ )
     {
         msg.Empty();
         tmp.Empty();
+        tmp2.Empty();
 
-        if(  ( flatList[ii].CompareRef( flatList[ii + 1] ) != 0 )
-          || ( flatList[ii].m_numRef != flatList[ ii + 1].m_numRef )  )
+        SCH_REFERENCE& first = m_flatList[ii];
+        SCH_REFERENCE& second = m_flatList[ii + 1];
+
+        if(  ( first.CompareRef( second ) != 0 )
+          || ( first.m_numRef != second.m_numRef )  )
         {
             continue;
         }
 
         // Same reference found. If same unit, error!
-        if( flatList[ii].m_unit == flatList[ ii + 1].m_unit )
+        if( first.m_unit == second.m_unit )
         {
-            if( flatList[ii].m_numRef >= 0 )
-                tmp << flatList[ii].m_numRef;
+            if( first.m_numRef >= 0 )
+                tmp << first.m_numRef;
             else
                 tmp = wxT( "?" );
 
-            if( ( flatList[ii].GetLibPart()->GetUnitCount() > 1 )
-                && ( flatList[ii].m_unit > 0 )
-                && ( flatList[ii].m_unit < 0x7FFFFFFF ) )
-            {
-                msg.Printf( _( "Duplicate items %s%s%s\n" ),
-                            flatList[ii].GetRef(),
-                            tmp,
-                            LIB_SYMBOL::SubReference( flatList[ii].m_unit ) );
-            }
-            else
-            {
-                msg.Printf( _( "Duplicate items %s%s\n" ), flatList[ii].GetRef(), tmp );
-            }
+            msg.Printf( _( "Duplicate items %s%s%s\n" ),
+                        first.GetRef(),
+                        tmp,
+                        LIB_SYMBOL::SubReference( first.m_unit ) );
 
-            aHandler( ERCE_DUPLICATE_REFERENCE, msg, &flatList[ii], &flatList[ii+1] );
+            aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &m_flatList[ii+1] );
             error++;
             continue;
         }
 
         /* Test error if units are different but number of parts per package
          * too high (ex U3 ( 1 part) and we find U3B this is an error) */
-        if( flatList[ii].GetLibPart()->GetUnitCount()
-            != flatList[ ii + 1].GetLibPart()->GetUnitCount()  )
+        if( first.GetLibPart()->GetUnitCount() != second.GetLibPart()->GetUnitCount() )
         {
-            if( flatList[ii].m_numRef >= 0 )
-                tmp << flatList[ii].m_numRef;
+            if( first.m_numRef >= 0 )
+                tmp << first.m_numRef;
             else
                 tmp = wxT( "?" );
 
-            if( ( flatList[ii].m_unit > 0 )
-             && ( flatList[ii].m_unit < 0x7FFFFFFF ) )
-            {
-                msg.Printf( _( "Duplicate items %s%s%s\n" ),
-                            flatList[ii].GetRef(),
-                            tmp,
-                            LIB_SYMBOL::SubReference( flatList[ii].m_unit ) );
-            }
+            if( second.m_numRef >= 0 )
+                tmp2 << second.m_numRef;
             else
-            {
-                msg.Printf( _( "Duplicate items %s%s\n" ), flatList[ii].GetRef(), tmp );
-            }
+                tmp2 = wxT( "?" );
 
-            aHandler( ERCE_DUPLICATE_REFERENCE, msg, &flatList[ii], &flatList[ii+1] );
+            msg.Printf( _( "Differing unit counts for item %s%s%s and %s%s%s\n" ),
+                    first.GetRef(),
+                    tmp,
+                    LIB_SYMBOL::SubReference( first.m_unit ),
+                    second.GetRef(),
+                    tmp2,
+                    LIB_SYMBOL::SubReference( second.m_unit )  );
+
+            aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &second );
             error++;
+            continue;
         }
 
         // Error if values are different between units, for the same reference
-        int next = ii + 1;
-
-        if( flatList[ii].CompareValue( flatList[next] ) != 0 )
+        if( first.CompareValue( second ) != 0 )
         {
             msg.Printf( _( "Different values for %s%d%s (%s) and %s%d%s (%s)" ),
-                        flatList[ii].GetRef(),
-                        flatList[ii].m_numRef,
-                        LIB_SYMBOL::SubReference( flatList[ii].m_unit ),
-                        flatList[ii].m_value,
-                        flatList[next].GetRef(),
-                        flatList[next].m_numRef,
-                        LIB_SYMBOL::SubReference( flatList[next].m_unit ),
-                        flatList[next].m_value );
+                        first.GetRef(),
+                        first.m_numRef,
+                        LIB_SYMBOL::SubReference( first.m_unit ),
+                        first.m_value,
+                        second.GetRef(),
+                        second.m_numRef,
+                        LIB_SYMBOL::SubReference( second.m_unit ),
+                        second.m_value );
 
-            aHandler( ERCE_DIFFERENT_UNIT_VALUE, msg, &flatList[ii], &flatList[ii+1] );
+            aHandler( ERCE_DIFFERENT_UNIT_VALUE, msg, &first, &second );
             error++;
         }
     }
