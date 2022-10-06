@@ -74,6 +74,13 @@ namespace NETLIST_EXPORTER_SPICE_PARSER
 }
 
 
+NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic ) :
+    NETLIST_EXPORTER_BASE( aSchematic ),
+    m_libMgr( aSchematic->Prj() )
+{
+}
+
+
 bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     FILE_OUTPUTFORMATTER formatter( aOutFileName, wxT( "wt" ), '\'' );
@@ -181,7 +188,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             ITEM spiceItem;
 
             // @TODO This is to be removed once ngspice gets ibis support
-            if( SIM_MODEL::GetFieldValue( &( symbol->GetFields() ), SIM_MODEL::DEVICE_TYPE_FIELD )
+            /*if( SIM_MODEL::GetFieldValue( &( symbol->GetFields() ), SIM_MODEL::DEVICE_TYPE_FIELD )
                 == "IBIS" )
             {
                 if( !readRefName( sheet, *symbol, spiceItem, refNames ) )
@@ -433,23 +440,26 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
                 m_items.push_back( std::move( spiceItem ) );
                 continue;
+            }*/
+
+            try
+            {
+                if( !readRefName( sheet, *symbol, spiceItem, refNames ) )
+                    return false;
+
+                readModel( *symbol, spiceItem );
+
+                readPinNumbers( *symbol, spiceItem );
+                readPinNetNames( *symbol, spiceItem, ncCounter );
+
+                // TODO: transmission line handling?
+
+                m_items.push_back( std::move( spiceItem ) );
             }
-
-            if( !readRefName( sheet, *symbol, spiceItem, refNames ) )
-                return false;
-
-            readLibraryField( *symbol, spiceItem );
-            readNameField( *symbol, spiceItem );
-
-            if( !readModel( *symbol, spiceItem ) )
-                continue;
-
-            readPinNumbers( *symbol, spiceItem );
-            readPinNetNames( *symbol, spiceItem, ncCounter );
-
-            // TODO: transmission line handling?
-
-            m_items.push_back( std::move( spiceItem ) );
+            catch( const IO_ERROR& e )
+            {
+                DisplayErrorMessage( nullptr, e.What() );
+            }
         }
     }
 
@@ -528,7 +538,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 
                     try
                     {
-                        m_libraries.try_emplace( path, SIM_LIBRARY::Create( path ) );
+                        m_libMgr.CreateLibrary( path );
                     }
                     catch( const IO_ERROR& e )
                     {
@@ -542,72 +552,6 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
             }
         }
     }
-}
-
-
-void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, ITEM& aItem )
-{
-    SCH_FIELD* field = aSymbol.FindField( SIM_LIBRARY::LIBRARY_FIELD );
-    std::string path;
-
-    if( field )
-        path = std::string( field->GetShownText().ToUTF8() );
-
-    if( path == "" )
-        return;
-
-    wxString absolutePath = m_schematic->Prj().AbsolutePath( path );
-
-    try
-    {
-        m_libraries.try_emplace( path, SIM_LIBRARY::Create( std::string( absolutePath.ToUTF8() ) ) );
-    }
-    catch( const IO_ERROR& e )
-    {
-        DisplayErrorMessage( nullptr, wxString::Format( "Failed reading model library '%s'.",
-                                                        absolutePath ),
-                             e.What() );
-    }
-
-    aItem.libraryPath = path;
-}
-
-
-void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, ITEM& aItem )
-{
-    if( m_libraries.count( aItem.libraryPath ) )
-    {
-        SCH_FIELD* field = aSymbol.FindField( SIM_LIBRARY::NAME_FIELD );
-
-        if( !field )
-            return;
-
-        std::string modelName = std::string( field->GetShownText().ToUTF8() );
-        const SIM_LIBRARY& library = *m_libraries.at( aItem.libraryPath );
-        const SIM_MODEL* baseModel = library.FindModel( modelName );
-
-        if( baseModel )
-        {
-            try
-            {
-                aItem.model = SIM_MODEL::Create( *baseModel,
-                                                 m_sortedSymbolPinList.size(),
-                                                 aSymbol.GetFields() );
-            }
-            catch( const IO_ERROR& e )
-            {
-                DisplayErrorMessage( nullptr,
-                    wxString::Format( "Failed reading %s simulation model.", aItem.refName ),
-                    e.What() );
-                return;
-            }
-
-            aItem.modelName = modelName;
-            return;
-        }
-    }
-    else
-        aItem.modelName = "__" + aItem.refName;
 }
 
 
@@ -630,35 +574,20 @@ bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 }
 
 
-bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, ITEM& aItem )
+void NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, ITEM& aItem )
 {
-    if( !aItem.model.get() )
-    {
-        try
-        {
-            aItem.model = SIM_MODEL::Create(
-                    static_cast<int>( m_sortedSymbolPinList.size() ), aSymbol.GetFields() );
-        }
-        catch( const IO_ERROR& e )
-        {
-            DisplayErrorMessage( nullptr,
-                    wxString::Format( _( "Failed reading %s simulation model." ), aItem.refName ),
-                    e.What() );
-            return false;
-        }
-    }
+    auto [modelName, model] = m_libMgr.CreateModel( aSymbol );
+    aItem.modelName = ( modelName != "" ) ? modelName : ( "__" + aItem.refName );
+    aItem.model = &model;
 
-    // Special case for legacy models.
-    if( auto model = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model.get() ) )
+    if( auto rawSpiceModel = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model ) )
     {
-        unsigned libParamIndex = static_cast<unsigned>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
-        std::string path = model->GetParam( libParamIndex ).value->ToString();
+        int libParamIndex = static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
+        std::string path = rawSpiceModel->GetParam( libParamIndex ).value->ToString();
 
         if( path != "" )
             m_rawIncludes.insert( path );
     }
-
-    return true;
 }
 
 
@@ -713,7 +642,7 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
 
 void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
-    for( auto&& [path, library] : m_libraries )
+    for( auto&& [path, library] : m_libMgr.GetLibraries() )
         writeInclude( aFormatter, aNetlistOptions, path );
 
     for( const std::string& path : m_rawIncludes )

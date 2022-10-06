@@ -40,10 +40,14 @@ class SIM_LIB_MGR
 {
 public:
     SIM_LIB_MGR( const PROJECT& aPrj );
+    virtual ~SIM_LIB_MGR() = default;
 
     // TODO: The argument can be made const.
-    SIM_MODEL& CreateModel( SCH_SYMBOL& aSymbol );
+    std::pair<std::string, SIM_MODEL&> CreateModel( SCH_SYMBOL& aSymbol );
 
+    SIM_LIBRARY& CreateLibrary( const std::string& aLibraryPath );
+
+    std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> GetLibraries() const;
 
 private:
     const PROJECT& m_project;

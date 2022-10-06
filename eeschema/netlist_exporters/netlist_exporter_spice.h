@@ -27,8 +27,9 @@
 #define NETLIST_EXPORTER_SPICE_H
 
 #include "netlist_exporter_base.h"
-#include <sim/sim_model.h>
+#include <sim/sim_lib_mgr.h>
 #include <sim/sim_library.h>
+#include <sim/sim_model.h>
 
 
 class NETLIST_EXPORTER_SPICE : public NETLIST_EXPORTER_BASE
@@ -53,11 +54,11 @@ public:
         std::string libraryPath;
         std::vector<std::string> pinNumbers;
         std::vector<std::string> pinNetNames;
-        std::unique_ptr<const SIM_MODEL> model;
+        const SIM_MODEL* model;
         std::string modelName;
     };
 
-    NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic ) : NETLIST_EXPORTER_BASE( aSchematic ) {}
+    NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic );
 
     /**
      * Write to specified output file.
@@ -128,12 +129,9 @@ protected:
     SCH_SHEET_LIST GetSheets( unsigned aNetlistOptions = 0 ) const;
 
 private:
-    void readLibraryField( SCH_SYMBOL& aSymbol, ITEM& aItem );
-    void readNameField( SCH_SYMBOL& aSymbol, ITEM& aItem );
-    void readEnabledField( SCH_SYMBOL& aSymbol, ITEM& aItem );
     bool readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, ITEM& aItem,
                       std::set<std::string>& aRefNames );
-    bool readModel( SCH_SYMBOL& aSymbol, ITEM& aItem );
+    void readModel( SCH_SYMBOL& aSymbol, ITEM& aItem );
     void readPinNumbers( SCH_SYMBOL& aSymbol, ITEM& aItem );
     void readPinNetNames( SCH_SYMBOL& aSymbol, ITEM& aItem, int& aNcCounter );
 
@@ -144,12 +142,13 @@ private:
     void writeModels( OUTPUTFORMATTER& aFormatter );
     void writeItems( OUTPUTFORMATTER& aFormatter );
 
+    SIM_LIB_MGR                      m_libMgr;       ///< Holds libraries and models
     std::string                      m_title;        ///< Spice simulation title found in the schematic sheet
     std::vector<std::string>         m_directives;   ///< Spice directives found in the schematic sheet
-    std::map<std::string, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
+    //std::map<std::string, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
     std::set<std::string>            m_rawIncludes;  ///< include directives found in symbols
     std::set<std::string>            m_nets;
-    std::list<ITEM>         m_items;        ///< Items representing schematic symbols in Spice world
+    std::list<ITEM>                  m_items;        ///< Items representing schematic symbols in Spice world
 };
 
 

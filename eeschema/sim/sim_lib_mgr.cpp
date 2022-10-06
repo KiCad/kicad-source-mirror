@@ -27,6 +27,7 @@
 #include <sim/sim_library.h>
 #include <sim/sim_model.h>
 #include <pgm_base.h>
+#include <string>
 
 
 SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT& aPrj ) : m_project( aPrj )
@@ -34,10 +35,11 @@ SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT& aPrj ) : m_project( aPrj )
 }
 
 
-SIM_MODEL& SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
+std::pair<std::string, SIM_MODEL&> SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
 {
     std::vector<LIB_PIN*> pins = aSymbol.GetLibPins();
     SCH_FIELD* libraryField = aSymbol.FindField( SIM_LIBRARY::LIBRARY_FIELD );
+    std::string baseModelName;
 
     if( libraryField )
     {
@@ -54,7 +56,7 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
         catch( const IO_ERROR& e )
         {
             THROW_IO_ERROR(
-                    wxString::Format( _( "Error loading simulation model library '%s'.\n%s" ),
+                    wxString::Format( _( "Error loading simulation model library '%s': %s" ),
                                       absolutePath,
                                       e.What() ) );
         }
@@ -67,7 +69,7 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
                                               SIM_LIBRARY::NAME_FIELD ) );
         }
 
-        std::string baseModelName = std::string( nameField->GetShownText().ToUTF8() );
+        baseModelName = std::string( nameField->GetShownText().ToUTF8() );
         SIM_MODEL* baseModel = library->FindModel( baseModelName );
 
         if( !baseModel )
@@ -88,5 +90,23 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
                                                aSymbol.GetFields() ) );
     }
 
-    return *m_models.back();
+    return std::pair<std::string, SIM_MODEL&>( baseModelName, *m_models.back() );
+}
+
+
+SIM_LIBRARY& SIM_LIB_MGR::CreateLibrary( const std::string& aLibraryPath )
+{
+    auto it = m_libraries.try_emplace( aLibraryPath, SIM_LIBRARY::Create( aLibraryPath ) ).first;
+    return *it->second;
+}
+
+
+std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> SIM_LIB_MGR::GetLibraries() const
+{
+    std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> result;
+
+    for( auto&& [path, library] : m_libraries )
+        result.try_emplace( path, *library );
+
+    return result;
 }

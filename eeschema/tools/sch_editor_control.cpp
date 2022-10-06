@@ -880,32 +880,39 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                 if( item->Type() == SCH_PIN_T )
                 {
-                    LIB_PIN* pin = static_cast<SCH_PIN*>( item )->GetLibPin();
-                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
-                    std::vector<LIB_PIN*> pins = symbol->GetLibPins();
-
-                    SIM_LIB_MGR mgr( m_frame->Prj() );
-                    SIM_MODEL&  model = mgr.CreateModel( *symbol );
-
-                    auto ref = std::string( symbol->GetRef( &m_frame->GetCurrentSheet() ).ToUTF8() );
-                    std::vector<std::string> currentNames =
-                            model.SpiceGenerator().CurrentNames( ref );
-
-                    if( currentNames.size() == 0 )
-                        return true;
-                    else if( currentNames.size() == 1 )
+                    try
                     {
-                        simFrame->AddCurrentPlot( currentNames.at( 0 ) );
-                        return true;
+                        LIB_PIN* pin = static_cast<SCH_PIN*>( item )->GetLibPin();
+                        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
+                        std::vector<LIB_PIN*> pins = symbol->GetLibPins();
+
+                        SIM_LIB_MGR mgr( m_frame->Prj() );
+                        SIM_MODEL&  model = mgr.CreateModel( *symbol ).second;
+
+                        auto ref = std::string( symbol->GetRef( &m_frame->GetCurrentSheet() ).ToUTF8() );
+                        std::vector<std::string> currentNames =
+                                model.SpiceGenerator().CurrentNames( ref );
+
+                        if( currentNames.size() == 0 )
+                            return true;
+                        else if( currentNames.size() == 1 )
+                        {
+                            simFrame->AddCurrentPlot( currentNames.at( 0 ) );
+                            return true;
+                        }
+
+                        int modelPinIndex =
+                                model.FindModelPinIndex( std::string( pin->GetNumber().ToUTF8() ) );
+
+                        if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
+                        {
+                            wxString name = currentNames.at( modelPinIndex );
+                            simFrame->AddCurrentPlot( name );
+                        }
                     }
-
-                    int modelPinIndex =
-                            model.FindModelPinIndex( std::string( pin->GetNumber().ToUTF8() ) );
-
-                    if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
+                    catch( const IO_ERROR& e )
                     {
-                        wxString name = currentNames.at( modelPinIndex );
-                        simFrame->AddCurrentPlot( name );
+                        DisplayErrorMessage( m_frame, e.What() );
                     }
                 }
                 else if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T } ) )
