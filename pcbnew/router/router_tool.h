@@ -75,6 +75,7 @@ private:
 
     int getStartLayer( const PNS::ITEM* aItem );
     void switchLayerOnViaPlacement();
+    void updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer );
 
     int onLayerCommand( const TOOL_EVENT& aEvent );
     int onViaCommand( const TOOL_EVENT& aEvent );
