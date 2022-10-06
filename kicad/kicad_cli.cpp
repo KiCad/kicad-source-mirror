@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file kicad.cpp
- * Main KiCad project manager file.
- */
-
 
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -178,7 +173,6 @@ bool PGM_KICAD::OnPgmInit()
     GetSettingsManager().SetKiway( &Kiway );
     m_bm.Init();
 
-
     return true;
 }
 
@@ -214,11 +208,7 @@ int PGM_KICAD::OnPgmRun()
 
     if( cliCmd )
     {
-        int exitCode = CLI::EXIT_CODES::ERR_UNKNOWN;
-        if( cliCmd )
-        {
-            exitCode = cliCmd->handler->Perform( Kiway );
-        }
+        int exitCode = cliCmd->handler->Perform( Kiway );
 
         if( exitCode != CLI::EXIT_CODES::AVOID_CLOSING )
         {
@@ -405,18 +395,6 @@ struct APP_KICAD_CLI : public wxAppConsole
         }
 
         return false; // continue on. Return false to abort program
-    }
-#endif
-
-    /**
-     * Set MacOS file associations.
-     *
-     * @see http://wiki.wxwidgets.org/WxMac-specific_topics
-     */
-#if defined( __WXMAC__ )
-    void MacOpenFile( const wxString& aFileName ) override
-    {
-        Pgm().MacOpenFile( aFileName );
     }
 #endif
 };
