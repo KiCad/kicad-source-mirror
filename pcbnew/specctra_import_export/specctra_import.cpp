@@ -83,10 +83,10 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
         return false;
     }
 
-    OnModify();
-
     GetBoard()->GetConnectivity()->Clear();
     GetBoard()->GetConnectivity()->Build( GetBoard() );
+
+    OnModify();
 
     if( GetCanvas() )    // Update view:
     {
