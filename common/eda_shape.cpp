@@ -1364,14 +1364,19 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
         case 2:
         case 3:
-            // Pick the one closer to the old center
-            m_arcCenter = GetLineLength( c1, m_arcCenter ) < GetLineLength( c2, m_arcCenter ) ? c1 : c2;
+            // Pick the one of c1, c2 to keep arc <= 180 deg
+            m_arcCenter = c1;   // first trial
+
+            if( GetArcAngle() > ANGLE_180 )
+                m_arcCenter = c2;
+
             break;
 
         case 4:
             // Pick the one closer to the mouse position
             m_arcCenter = GetLineLength( c1, aPosition ) < GetLineLength( c2, aPosition ) ? c1 : c2;
 
+            // keep arc angle <= 180 deg
             if( GetArcAngle() > ANGLE_180 )
                 std::swap( m_start, m_end );
 
