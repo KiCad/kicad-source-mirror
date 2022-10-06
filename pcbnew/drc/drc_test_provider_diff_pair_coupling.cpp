@@ -272,16 +272,14 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
-
-
     std::map<DIFF_PAIR_KEY, DIFF_PAIR_ITEMS> dpRuleMatches;
 
     auto evaluateDpConstraints =
             [&]( BOARD_ITEM *item ) -> bool
             {
-                DIFF_PAIR_KEY key;
+                DIFF_PAIR_KEY         key;
                 BOARD_CONNECTED_ITEM* citem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-                NETINFO_ITEM* refNet = citem->GetNet();
+                NETINFO_ITEM*         refNet = citem->GetNet();
 
                 if( refNet && DRC_ENGINE::IsNetADiffPair( m_board, refNet, key.netP, key.netN ) )
                 {
@@ -294,8 +292,9 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                     for( int i = 0; i < 2; i++ )
                     {
-                        auto constraint = m_drcEngine->EvalRules( constraintsToCheck[ i ], item,
-                                                                  nullptr, item->GetLayer() );
+                        DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( constraintsToCheck[ i ],
+                                                                            item, nullptr,
+                                                                            item->GetLayer() );
 
                         if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                             continue;
@@ -320,7 +319,6 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                          evaluateDpConstraints );
 
     drc_dbg( 10, wxT( "dp rule matches %d\n" ), (int) dpRuleMatches.size() );
-
 
     reportAux( wxT( "DPs evaluated:" ) );
 
@@ -378,7 +376,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
             dp.computedGap = gap;
 
-            auto overlay = m_drcEngine->GetDebugOverlay();
+            std::shared_ptr<KIGFX::VIEW_OVERLAY> overlay = m_drcEngine->GetDebugOverlay();
 
             if( overlay )
             {
@@ -398,8 +396,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
             if( gapConstraint )
             {
-                auto val = gapConstraint->GetValue();
-                bool insideRange = true;
+                const MINOPTMAX<int>& val = gapConstraint->GetValue();
+                bool                  insideRange = true;
 
                 if( val.HasMin() && gap < val.Min() )
                     insideRange = false;
@@ -427,7 +425,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
         bool uncoupledViolation = false;
 
-        if( maxUncoupledConstraint && ( !itemSet.itemsP.empty() || ! itemSet.itemsN.empty() ) )
+        if( maxUncoupledConstraint && ( !itemSet.itemsP.empty() || !itemSet.itemsN.empty() ) )
         {
             const MINOPTMAX<int>& val = maxUncoupledConstraint->GetValue();
 
@@ -475,7 +473,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             }
         }
 
-        if ( gapConstraint && ( uncoupledViolation || !maxUncoupledConstraint ) )
+        if( gapConstraint && ( uncoupledViolation || !maxUncoupledConstraint ) )
         {
             for( DIFF_PAIR_COUPLED_SEGMENTS& dp : itemSet.coupled )
             {
@@ -489,12 +487,16 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                             gapConstraint->GetParentRule()->m_Name + wxS( " " );
 
                     if( val.HasMin() )
+                    {
                         msg += wxString::Format( _( "minimum gap: %s; " ),
-                                                   MessageTextFromValue( val.Min() ) );
+                                                 MessageTextFromValue( val.Min() ) );
+                    }
 
                     if( val.HasMax() )
+                    {
                         msg += wxString::Format( _( "maximum gap: %s; " ),
-                                                   MessageTextFromValue( val.Max() ) );
+                                                 MessageTextFromValue( val.Max() ) );
+                    }
 
                     msg += wxString::Format( _( "actual: %s)" ),
                                              MessageTextFromValue( dp.computedGap ) );
