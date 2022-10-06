@@ -122,11 +122,11 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
                 if( copperZone->IsFilled() && areaBBox.Intersects( copperBBox ) )
                 {
-                    // Collisions include touching, so we need to deflate outline by
-                    // enough to exclude it.  This is particularly important for detecting
-                    // copper fills as they will be exactly touching along the entire
-                    // exclusion border.
+                    // Collisions include touching, so we need to deflate outline by enough to
+                    // exclude it.  This is particularly important for detecting copper fills as
+                    // they will be exactly touching along the entire exclusion border.
                     SHAPE_POLY_SET areaPoly = ruleArea->Outline()->CloneDropTriangulation();
+                    areaPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
                     areaPoly.Deflate( epsilon, 0, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
 
                     DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ copperZone ].get();
