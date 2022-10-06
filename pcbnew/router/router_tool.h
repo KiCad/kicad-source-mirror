@@ -76,6 +76,7 @@ private:
 
     int getStartLayer( const PNS::ITEM* aItem );
     void switchLayerOnViaPlacement();
+    void updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer );
     bool getNearestRatnestAnchor( VECTOR2I& aPoint, LAYER_RANGE& aLayers );
 
     int onLayerCommand( const TOOL_EVENT& aEvent );

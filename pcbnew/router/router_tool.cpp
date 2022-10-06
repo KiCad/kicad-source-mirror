@@ -655,10 +655,13 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
     m_router->SwitchLayer( *newLayer );
     m_lastTargetLayer = *newLayer;
 
-    // NB: track and diff-pair values may have changed if layer-specific rules are in play
+    updateSizesAfterLayerSwitch( ToLAYER_ID( *newLayer ) );
+}
 
-    PCB_LAYER_ID     targetLayer = ToLAYER_ID( *newLayer );
-    std::vector<int> nets        = m_router->GetCurrentNets();
+
+void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
+{
+    std::vector<int> nets = m_router->GetCurrentNets();
 
     PNS::SIZES_SETTINGS          sizes     = m_router->Sizes();
     BOARD_DESIGN_SETTINGS&       bds       = board()->GetDesignSettings();
@@ -875,6 +878,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
         if( !aForceVia && m_router && m_router->SwitchLayer( targetLayer ) )
         {
+            updateSizesAfterLayerSwitch( targetLayer );
             updateEndItem( aEvent );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
             return 0;
@@ -1679,6 +1683,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             m_router->SwitchLayer( frame->GetActiveLayer() );
+            updateSizesAfterLayerSwitch( frame->GetActiveLayer() );
             updateStartItem( *evt );
         }
         else if( evt->IsKeyPressed() )
