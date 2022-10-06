@@ -589,6 +589,9 @@ wxString LIB_SYMBOL::SubReference( int aUnit, bool aAddSeparator )
 {
     wxString subRef;
 
+    if( aUnit < 1 )
+        return subRef;
+
     if( m_subpartIdSeparator != 0 && aAddSeparator )
         subRef << wxChar( m_subpartIdSeparator );
 
@@ -602,17 +605,14 @@ wxString LIB_SYMBOL::SubReference( int aUnit, bool aAddSeparator )
         // use one letter if letter = A .. Z or a ... z, and 2 letters otherwise
         // first letter is expected to be 'A' or 'a' (i.e. 26 letters are available)
         int u;
-        aUnit -= 1;     // Unit number starts to 1. now to 0.
 
-        while( aUnit >= 26 )    // more than one letter are needed
+        do
         {
-            u = aUnit / 26;
-            subRef << wxChar( m_subpartFirstId + u -1 );
-            aUnit %= 26;
-        }
+            u = ( aUnit - 1 ) % 26;
+            subRef = wxChar( m_subpartFirstId + u ) + subRef;
+            aUnit = ( aUnit - u ) / 26;
+        } while( aUnit > 0 );
 
-        u = m_subpartFirstId + aUnit;
-        subRef << wxChar( u );
     }
 
     return subRef;
