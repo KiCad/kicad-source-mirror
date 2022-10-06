@@ -34,6 +34,12 @@ public:
     static constexpr auto LIBRARY_FIELD = "Sim_Library";
     static constexpr auto NAME_FIELD = "Sim_Name";
 
+    struct MODEL
+    {
+        std::string name;
+        SIM_MODEL&  model;
+    };
+
     virtual ~SIM_LIBRARY() = default;
     SIM_LIBRARY() = default;
 
@@ -65,8 +71,7 @@ public:
 
     SIM_MODEL* FindModel( const std::string& aModelName ) const;
 
-    std::vector<std::reference_wrapper<SIM_MODEL>> GetModels() const;
-    const std::vector<std::string>& GetModelNames() const { return m_modelNames; }
+    std::vector<MODEL> GetModels() const;
 
     std::string GetFilePath() const { return m_filePath; }
     std::string GetError() const { return m_error; }
@@ -76,8 +81,8 @@ public:
     virtual SIM_LIBRARY::LIBRARY_TYPE GetType() { return SIM_LIBRARY::LIBRARY_TYPE::NONE; };
 
 protected:
+    std::vector<std::string>                m_modelNames;
     std::vector<std::unique_ptr<SIM_MODEL>> m_models;
-    std::vector<std::string> m_modelNames;
 
     std::string m_filePath;
     std::string m_error;

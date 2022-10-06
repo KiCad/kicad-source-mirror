@@ -131,15 +131,13 @@ BOOST_AUTO_TEST_CASE( Diodes )
 
     LoadLibrary( "diodes" );
 
-    const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
-    const std::vector<std::string>& modelNames = m_library->GetModelNames();
+    const std::vector<SIM_LIBRARY::MODEL> models = m_library->GetModels();
 
     BOOST_CHECK_EQUAL( models.size(), 22 );
 
     for( int i = 0; i < models.size(); ++i )
     {
-        const SIM_MODEL& model = models.at( i );
-        const std::string& modelName = modelNames.at( i );
+        const auto& [modelName, model] = models.at( i );
 
         switch( i )
         {
@@ -238,15 +236,13 @@ BOOST_AUTO_TEST_CASE( Bjts )
 
     LoadLibrary( "bjts" );
 
-    const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
-    const std::vector<std::string>& modelNames = m_library->GetModelNames();
+    const std::vector<SIM_LIBRARY::MODEL> models = m_library->GetModels();
 
     BOOST_CHECK_EQUAL( models.size(), 6 );
 
     for( int i = 0; i < models.size(); ++i )
     {
-        const SIM_MODEL& model = models.at( i );
-        const std::string& modelName = modelNames.at( i );
+        const auto& [modelName, model] = models.at( i );
 
         switch( i )
         {
@@ -294,15 +290,13 @@ BOOST_AUTO_TEST_CASE( Fets )
 
     LoadLibrary( "fets" );
 
-    const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
-    const std::vector<std::string>& modelNames = m_library->GetModelNames();
+    const std::vector<SIM_LIBRARY::MODEL> models = m_library->GetModels();
 
     BOOST_CHECK_EQUAL( models.size(), 44 );
 
     for( int i = 0; i < models.size(); ++i )
     {
-        const SIM_MODEL& model = models.at( i );
-        const std::string& modelName = modelNames.at( i );
+        const auto& [modelName, model] = models.at( i );
 
         switch( i )
         {

@@ -574,12 +574,9 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 
     try
     {
-        for( unsigned i = 0; i < m_library->GetModels().size(); ++i )
+        for( auto& [baseModelName, baseModel] : m_library->GetModels() )
         {
-            const SIM_MODEL& baseModel = m_library->GetModels().at( i );
-            wxString         baseModelName = m_library->GetModelNames().at( i );
             wxString         expectedModelName;
-
             expectedModelName =
                     SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::NAME_FIELD );
 
@@ -604,8 +601,8 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
     }
 
     wxArrayString modelNames;
-    for( const std::string& name : m_library->GetModelNames() )
-        modelNames.Add( name );
+    for( auto& [modelName, model] : m_library->GetModels() )
+        modelNames.Add( modelName );
 
     auto validator = dynamic_cast<MODEL_NAME_VALIDATOR*>( m_modelNameCombobox->GetValidator() );
 

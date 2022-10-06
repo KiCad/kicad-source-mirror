@@ -50,11 +50,11 @@ void SIM_LIBRARY::ReadFile( const std::string& aFilePath )
 
 SIM_MODEL* SIM_LIBRARY::FindModel( const std::string& aModelName ) const
 {
-    for( int i = 0; i < static_cast<int>( GetModelNames().size() ); ++i )
+    for( int i = 0; i < static_cast<int>( m_modelNames.size() ); ++i )
     {
-        std::string curModelName = GetModelNames().at( i );
+        const std::string& modelName = m_modelNames.at( i );
 
-        if( curModelName == aModelName )
+        if( modelName == aModelName )
             return m_models.at( i ).get();
     }
 
@@ -62,12 +62,12 @@ SIM_MODEL* SIM_LIBRARY::FindModel( const std::string& aModelName ) const
 }
 
 
-std::vector<std::reference_wrapper<SIM_MODEL>> SIM_LIBRARY::GetModels() const
+std::vector<SIM_LIBRARY::MODEL> SIM_LIBRARY::GetModels() const
 {
-    std::vector<std::reference_wrapper<SIM_MODEL>> ret;
+    std::vector<MODEL> result;
 
-    for( const std::unique_ptr<SIM_MODEL>& model : m_models )
-        ret.emplace_back( *model );
+    for( int i = 0; i < static_cast<int>( m_modelNames.size() ); ++i )
+        result.push_back( { m_modelNames.at( i ), *m_models.at( i ) } );
 
-    return ret;
+    return result;
 }
