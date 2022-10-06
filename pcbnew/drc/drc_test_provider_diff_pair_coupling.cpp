@@ -18,15 +18,14 @@
  */
 
 
-#include <common.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <pcb_track.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
-#include <drc/drc_length_report.h>
 #include <drc/drc_rtree.h>
 
 #include <geometry/shape_segment.h>
@@ -277,7 +276,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
-
+    int epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
 
     std::map<DIFF_PAIR_KEY, DIFF_PAIR_ITEMS> dpRuleMatches;
 
@@ -423,10 +422,10 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 auto val = gapConstraint->GetValue();
                 bool insideRange = true;
 
-                if( val.HasMin() && gap < val.Min() )
+                if( val.HasMin() && gap < val.Min() - epsilon )
                     insideRange = false;
 
-                if( val.HasMax() && gap > val.Max() )
+                if( val.HasMax() && gap > val.Max() + epsilon )
                     insideRange = false;
 
 //                if(val.HasMin() && val.HasMax() )
