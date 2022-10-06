@@ -71,7 +71,8 @@ void PCB_GROUP::RemoveAll()
 }
 
 
-PCB_GROUP* getTopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
+/// Returns the top level group inside the aScope group, or nullptr
+PCB_GROUP* getNestedGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
 {
     PCB_GROUP* group = nullptr;
 
@@ -87,6 +88,9 @@ PCB_GROUP* getTopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootpr
             group = aItem->GetParentGroup();
     }
 
+    if( group == aScope )
+        return nullptr;
+
     while( group && group->GetParentGroup() && group->GetParentGroup() != aScope )
     {
         if( group->GetParent()->Type() == PCB_FOOTPRINT_T && isFootprintEditor )
@@ -98,19 +102,21 @@ PCB_GROUP* getTopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootpr
     return group;
 }
 
+
 PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
 {
-    PCB_GROUP* candidate = getTopLevelGroup( aItem, aScope, isFootprintEditor );
-
-    return candidate == aScope ? nullptr : candidate;
+    return getNestedGroup( aItem, aScope, isFootprintEditor );
 }
 
 
 bool PCB_GROUP::WithinScope( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
 {
-    PCB_GROUP* candidate = getTopLevelGroup( aItem, aScope, isFootprintEditor );
+    if( aItem->GetParentGroup() && aItem->GetParentGroup() == aScope )
+        return true;
 
-    return candidate == aScope;
+    PCB_GROUP* nested = getNestedGroup( aItem, aScope, isFootprintEditor );
+
+    return nested && nested->GetParentGroup() && nested->GetParentGroup() == aScope;
 }
 
 
