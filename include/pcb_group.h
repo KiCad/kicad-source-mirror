@@ -92,11 +92,11 @@ public:
     void RemoveAll();
 
     /*
-     * Search for highest level group containing item.
+     * Search for highest level group inside of aScope, containing item.
      *
      * @param aScope restricts the search to groups within the group scope.
      * @param isFootprintEditor true if we should stop promoting at the footprint level
-     * @return group containing item, if it exists, otherwise, NULL
+     * @return group inside of aScope, containing item, if exists, otherwise, nullptr
      */
     static PCB_GROUP* TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor );
 
