@@ -2130,7 +2130,6 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCB_SELECTION& selection )
     legalOps.create      = true;
     legalOps.removeItems = hasMember;
     legalOps.ungroup     = hasGroup;
-    legalOps.enter       = hasGroup && selection.Size() == 1;
 
     return legalOps;
 }

@@ -45,7 +45,6 @@ public:
         Add( PCB_ACTIONS::group );
         Add( PCB_ACTIONS::ungroup );
         Add( PCB_ACTIONS::removeFromGroup );
-        Add( PCB_ACTIONS::groupEnter );
     }
 
     ACTION_MENU* create() const override
@@ -69,7 +68,6 @@ private:
         Enable( PCB_ACTIONS::group.GetUIId(),           legalOps.create );
         Enable( PCB_ACTIONS::ungroup.GetUIId(),         legalOps.ungroup );
         Enable( PCB_ACTIONS::removeFromGroup.GetUIId(), legalOps.removeItems );
-        Enable( PCB_ACTIONS::groupEnter.GetUIId(),      legalOps.enter );
     }
 };
 
@@ -207,7 +205,7 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
     }
 
     canvas()->SetStatusPopup( nullptr );
-    
+
     return 0;
 }
 

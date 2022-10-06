@@ -173,6 +173,9 @@ bool PCB_SELECTION_TOOL::Init()
                 return !cfg->GetHighlightNetCodes().empty();
             };
 
+    auto groupEnterCondition =
+            SELECTION_CONDITIONS::Count( 1 ) && SELECTION_CONDITIONS::HasType( PCB_GROUP_T );
+
     auto inGroupCondition =
             [this] ( const SELECTION& )
             {
@@ -187,6 +190,7 @@ bool PCB_SELECTION_TOOL::Init()
 
     // "Cancel" goes at the top of the context menu when a tool is active
     menu.AddItem( ACTIONS::cancelInteractive,  activeToolCondition, 1 );
+    menu.AddItem( PCB_ACTIONS::groupEnter,     groupEnterCondition, 1 );
     menu.AddItem( PCB_ACTIONS::groupLeave,     inGroupCondition,    1 );
     menu.AddItem( PCB_ACTIONS::clearHighlight, haveHighlight,       1 );
 
