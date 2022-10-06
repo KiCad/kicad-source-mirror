@@ -117,12 +117,10 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
             // Only report clearance info if there is any; otherwise it's just a straight collision
             if( minClearance > 0 )
             {
-                wxString msg;
-
-                msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                              constraint.GetName(),
-                              MessageTextFromValue( minClearance ),
-                              MessageTextFromValue( actual ) );
+                wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                          constraint.GetName(),
+                                          minClearance,
+                                          actual );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             }

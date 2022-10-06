@@ -128,17 +128,17 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 
                     if( fail_min )
                     {
-                        msg.Printf( _( "(%s min width %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      MessageTextFromValue( constraintWidth ),
-                                      MessageTextFromValue( actual ) );
+                        msg = formatMsg( _( "(%s min width %s; actual %s)" ),
+                                         constraint.GetName(),
+                                         constraintWidth,
+                                         actual );
                     }
                     else
                     {
-                        msg.Printf( _( "(%s max width %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      MessageTextFromValue( constraintWidth ),
-                                      MessageTextFromValue( actual ) );
+                        msg = formatMsg( _( "(%s max width %s; actual %s)" ),
+                                         constraint.GetName(),
+                                         constraintWidth,
+                                         actual );
                     }
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );

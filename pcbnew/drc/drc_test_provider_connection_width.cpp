@@ -756,11 +756,14 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                                 auto     drce = DRC_ITEM::Create( DRCE_CONNECTION_WIDTH );
                                 wxString msg;
 
-                                msg.Printf( _( "Minimum connection width %s; actual %s" ),
-                                              MessageTextFromValue( aMinWidth ),
-                                              MessageTextFromValue( dist ) );
+                                msg = formatMsg( _( "(%s minimum connection width %s; actual %s)" ),
+                                                 c.GetName(),
+                                                 aMinWidth,
+                                                 dist );
 
-                                drce->SetErrorMessage( msg + wxS( " " ) + layerDesc( aLayer ) );
+                                msg += wxS( " " ) + layerDesc( aLayer );
+
+                                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                                 drce->SetViolatingRule( c.GetParentRule() );
 
                                 for( BOARD_ITEM* item : contributingItems )

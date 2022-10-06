@@ -155,17 +155,17 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
 
         if( fail_min )
         {
-            msg.Printf( _( "(%s min width %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( constraintValue ),
-                          MessageTextFromValue( holeMinor ) );
+            msg = formatMsg( _( "(%s min width %s; actual %s)" ),
+                             constraint.GetName(),
+                             constraintValue,
+                             holeMinor );
         }
         else
         {
-            msg.Printf( _( "(%s max width %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( constraintValue ),
-                          MessageTextFromValue( holeMajor ) );
+            msg = formatMsg( _( "(%s max width %s; actual %s)" ),
+                             constraint.GetName(),
+                             constraintValue,
+                             holeMajor );
         }
 
         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
@@ -224,17 +224,17 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro,
 
         if( fail_min )
         {
-            msg.Printf( _( "(%s min width %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( constraintValue ),
-                          MessageTextFromValue( via->GetDrillValue() ) );
+            msg = formatMsg( _( "(%s min width %s; actual %s)" ),
+                             constraint.GetName(),
+                             constraintValue,
+                             via->GetDrillValue() );
         }
         else
         {
-            msg.Printf( _( "(%s max width %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( constraintValue ),
-                          MessageTextFromValue( via->GetDrillValue() ) );
+            msg = formatMsg( _( "(%s max width %s; actual %s)" ),
+                             constraint.GetName(),
+                             constraintValue,
+                             via->GetDrillValue() );
         }
 
         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );

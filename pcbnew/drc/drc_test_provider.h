@@ -113,6 +113,9 @@ protected:
 
     bool isInvisibleText( const BOARD_ITEM* aItem ) const;
 
+    wxString formatMsg( const wxString& aFormatString, const wxString& aSource, int aConstraint,
+                        int aActual );
+
     // List of basic (ie: non-compound) geometry items
     static std::vector<KICAD_T> s_allBasicItems;
     static std::vector<KICAD_T> s_allBasicItemsButZones;

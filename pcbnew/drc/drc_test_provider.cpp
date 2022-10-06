@@ -360,3 +360,20 @@ bool DRC_TEST_PROVIDER::isInvisibleText( const BOARD_ITEM* aItem ) const
 
     return false;
 }
+
+
+wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxString& aSource,
+                                       int aConstraint, int aActual )
+{
+    wxString constraint_str = MessageTextFromValue( aConstraint );
+    wxString actual_str = MessageTextFromValue( aActual );
+
+    if( constraint_str == actual_str )
+    {
+        // Use more precise formatting if the message-text strings were equal.
+        constraint_str = StringFromValue( aConstraint );
+        actual_str = StringFromValue( aActual );
+    }
+
+    return wxString::Format( aFormatString, aSource, constraint_str, actual_str );
+}

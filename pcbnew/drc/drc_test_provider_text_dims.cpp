@@ -105,12 +105,10 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( constraint.Value().HasMin() && actualHeight < constraint.Value().Min() )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_HEIGHT );
-                    wxString msg;
-
-                    msg.Printf( _( "(%s min height %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  MessageTextFromValue( constraint.Value().Min() ),
-                                  MessageTextFromValue( actualHeight ) );
+                    wxString msg = formatMsg( _( "(%s min height %s; actual %s)" ),
+                                              constraint.GetName(),
+                                              constraint.Value().Min(),
+                                              actualHeight );
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item );
@@ -122,12 +120,10 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( constraint.Value().HasMax() && actualHeight > constraint.Value().Max() )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_HEIGHT );
-                    wxString msg;
-
-                    msg.Printf( _( "(%s max height %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  MessageTextFromValue( constraint.Value().Max() ),
-                                  MessageTextFromValue( actualHeight ) );
+                    wxString msg = formatMsg( _( "(%s max height %s; actual %s)" ),
+                                              constraint.GetName(),
+                                              constraint.Value().Max(),
+                                              actualHeight );
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item );
@@ -225,12 +221,10 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     if( constraint.Value().HasMin() && actualThickness < constraint.Value().Min() )
                     {
                         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
-                        wxString msg;
-
-                        msg.Printf( _( "(%s min thickness %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      MessageTextFromValue( constraint.Value().Min() ),
-                                      MessageTextFromValue( actualThickness ) );
+                        wxString msg = formatMsg( _( "(%s min thickness %s; actual %s)" ),
+                                                  constraint.GetName(),
+                                                  constraint.Value().Min(),
+                                                  actualThickness );
 
                         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                         drcItem->SetItems( item );
@@ -242,12 +236,10 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     if( constraint.Value().HasMax() && actualThickness > constraint.Value().Max() )
                     {
                         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
-                        wxString msg;
-
-                        msg.Printf( _( "(%s max thickness %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      MessageTextFromValue( constraint.Value().Max() ),
-                                      MessageTextFromValue( actualThickness ) );
+                        wxString msg = formatMsg( _( "(%s max thickness %s; actual %s)" ),
+                                                  constraint.GetName(),
+                                                  constraint.Value().Max(),
+                                                  actualThickness );
 
                         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                         drcItem->SetItems( item );

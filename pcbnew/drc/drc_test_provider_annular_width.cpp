@@ -245,18 +245,18 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
                     if( fail_min )
                     {
-                        msg.Printf( _( "(%s min annular width %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      MessageTextFromValue( v_min ),
-                                      MessageTextFromValue( annularWidth ) );
+                        msg = formatMsg( _( "(%s min annular width %s; actual %s)" ),
+                                         constraint.GetName(),
+                                         v_min,
+                                         annularWidth );
                     }
 
                     if( fail_max )
                     {
-                        msg.Printf( _( "(%s max annular width %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      MessageTextFromValue( v_max ),
-                                      MessageTextFromValue( annularWidth ) );
+                        msg = formatMsg( _( "(%s max annular width %s; actual %s)" ),
+                                         constraint.GetName(),
+                                         v_max,
+                                         annularWidth );
                     }
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );

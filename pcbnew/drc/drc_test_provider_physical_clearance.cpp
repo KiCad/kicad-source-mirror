@@ -489,16 +489,15 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_
     for( std::pair<VECTOR2I, int> collision : collisions )
     {
         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
-        wxString msg;
         VECTOR2I pt = collision.first;
 
         if( aParentItem->GetParentFootprint() )
             pt += aParentItem->GetParentFootprint()->GetPosition();
 
-        msg.Printf( _( "Internal clearance violation (%s clearance %s; actual %s)" ),
-                      aConstraint.GetName(),
-                      MessageTextFromValue( clearance ),
-                      MessageTextFromValue( collision.second ) );
+        wxString msg = formatMsg( _( "Internal clearance violation (%s clearance %s; actual %s)" ),
+                                  aConstraint.GetName(),
+                                  clearance,
+                                  collision.second );
 
         drce->SetErrorMessage( msg );
         drce->SetItems( aParentItem );
@@ -544,12 +543,10 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER
                 if( firstOutline->Collide( secondSeg, clearance - epsilon, &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
-                    wxString msg;
-
-                    msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                                  aConstraint.GetName(),
-                                  MessageTextFromValue( clearance ),
-                                  MessageTextFromValue( actual ) );
+                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                              aConstraint.GetName(),
+                                              clearance,
+                                              actual );
 
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( aZone );
@@ -603,12 +600,10 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
         if( aItemShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
-            wxString msg;
-
-            msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( clearance ),
-                          MessageTextFromValue( actual ) );
+            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      clearance,
+                                      actual );
 
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( aItem, other );
@@ -656,12 +651,10 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
             if( itemHoleShape && itemHoleShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                wxString msg;
-
-                msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                              constraint.GetName(),
-                              MessageTextFromValue( clearance ),
-                              MessageTextFromValue( actual ) );
+                wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                          constraint.GetName(),
+                                          clearance ,
+                                          actual );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aItem, other );
@@ -673,12 +666,10 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
             if( otherHoleShape && otherHoleShape->Collide( aItemShape, clearance, &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                wxString msg;
-
-                msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                              constraint.GetName(),
-                              MessageTextFromValue( clearance ),
-                              MessageTextFromValue( actual ) );
+                wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                          constraint.GetName(),
+                                          clearance,
+                                          actual );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aItem, other );
@@ -762,12 +753,10 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
             if( colliding )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
-                wxString msg;
-
-                msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                              constraint.GetName(),
-                              MessageTextFromValue( clearance ),
-                              MessageTextFromValue( actual ) );
+                wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                          constraint.GetName(),
+                                          clearance,
+                                          actual );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aItem, zone );
@@ -803,12 +792,10 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
                                                      &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                    wxString msg;
-
-                    msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  MessageTextFromValue( clearance ),
-                                  MessageTextFromValue( actual ) );
+                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                              constraint.GetName(),
+                                              clearance,
+                                              actual );
 
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( aItem, zone );

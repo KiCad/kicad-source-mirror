@@ -157,14 +157,16 @@ struct DIFF_PAIR_COUPLED_SEGMENTS
     PCB_TRACK*   parentP;
     int          computedGap;
     PCB_LAYER_ID layer;
-    bool         couplingOK;
+    bool         couplingFailMin;
+    bool         couplingFailMax;
 
     DIFF_PAIR_COUPLED_SEGMENTS() :
         parentN( nullptr ),
         parentP( nullptr ),
         computedGap( 0 ),
         layer( UNDEFINED_LAYER ),
-        couplingOK( false )
+        couplingFailMin( false ),
+        couplingFailMax( false )
     {}
 };
 
@@ -398,22 +400,15 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             if( gapConstraint )
             {
                 const MINOPTMAX<int>& val = gapConstraint->GetValue();
-                bool                  insideRange = true;
 
                 if( val.HasMin() && gap < val.Min() - epsilon )
-                    insideRange = false;
+                    dp.couplingFailMin = true;
 
                 if( val.HasMax() && gap > val.Max() + epsilon )
-                    insideRange = false;
-
-                dp.couplingOK = insideRange;
-            }
-            else
-            {
-                dp.couplingOK = true;
+                    dp.couplingFailMax = true;
             }
 
-            if( dp.couplingOK )
+            if( !dp.couplingFailMin && !dp.couplingFailMax )
                 itemSet.totalCoupled += length;
         }
 
@@ -433,12 +428,10 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             if ( val.HasMax() && totalUncoupled > val.Max() )
             {
                 auto     drce = DRC_ITEM::Create( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG );
-                wxString msg;
-
-                msg = wxString::Format( _( "(%s maximum uncoupled length: %s; actual: %s)" ),
+                wxString msg = formatMsg( _( "(%s maximum uncoupled length %s; actual %s)" ),
                                           maxUncoupledConstraint->GetParentRule()->m_Name,
-                                          MessageTextFromValue( val.Max() ),
-                                          MessageTextFromValue( totalUncoupled ) );
+                                          val.Max(),
+                                          totalUncoupled );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
 
@@ -478,31 +471,28 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         {
             for( DIFF_PAIR_COUPLED_SEGMENTS& dp : itemSet.coupled )
             {
-                if( !dp.couplingOK && ( dp.parentP || dp.parentN ) )
+                if( ( dp.couplingFailMin || dp.couplingFailMax ) && ( dp.parentP || dp.parentN ) )
                 {
                     MINOPTMAX<int> val = gapConstraint->GetValue();
                     auto           drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
                     wxString       msg;
 
-                    msg = drcItem->GetErrorText() + wxT( " (" ) +
-                            gapConstraint->GetParentRule()->m_Name + wxS( " " );
-
-                    if( val.HasMin() )
+                    if( dp.couplingFailMin )
                     {
-                        msg += wxString::Format( _( "minimum gap: %s; " ),
-                                                 MessageTextFromValue( val.Min() ) );
+                        msg = formatMsg( _( "(%s minimum gap %s; actual %s)" ),
+                                         gapConstraint->GetParentRule()->m_Name,
+                                         val.Min(),
+                                         dp.computedGap );
+                    }
+                    else if( dp.couplingFailMax )
+                    {
+                        msg = formatMsg( _( "(%s maximum gap %s; actual %s)" ),
+                                         gapConstraint->GetParentRule()->m_Name,
+                                         val.Max(),
+                                         dp.computedGap );
                     }
 
-                    if( val.HasMax() )
-                    {
-                        msg += wxString::Format( _( "maximum gap: %s; " ),
-                                                 MessageTextFromValue( val.Max() ) );
-                    }
-
-                    msg += wxString::Format( _( "actual: %s)" ),
-                                             MessageTextFromValue( dp.computedGap ) );
-
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
 
                     BOARD_CONNECTED_ITEM* item = nullptr;
 

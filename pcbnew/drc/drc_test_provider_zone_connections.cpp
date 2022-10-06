@@ -168,12 +168,10 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( spokes < minCount )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
-                wxString msg;
-
-                msg.Printf( _( "(%s min spoke count %d; actual %d)" ),
-                              constraint.GetName(),
-                              minCount,
-                              spokes );
+                wxString msg = wxString::Format( _( "(%s min spoke count %d; actual %d)" ),
+                                                 constraint.GetName(),
+                                                 minCount,
+                                                 spokes );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aZone, pad );
