@@ -1067,7 +1067,14 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
         arc->CalcArcAngles( arc_start, arc_end );
         arc_angle = arc_end - arc_start;
 
-        if( arc_angle == ANGLE_180 )
+        // The arc angle should be <= 180 deg.
+        // If > 180 we need to swap arc ends (the first choice was not good)
+        if( arc_angle > ANGLE_180 )
+        {
+            arc->SetStart( startPoint );
+            arc->SetEnd( endPoint );
+        }
+        else if( arc_angle == ANGLE_180 )
         {
             arc->SetStart( startPoint );
             arc->SetEnd( endPoint );
