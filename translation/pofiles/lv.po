@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-29 19:10-0700\n"
+"POT-Creation-Date: 2022-10-07 11:37-0700\n"
 "PO-Revision-Date: 2021-01-13 14:21+0000\n"
 "Last-Translator: Rihards Skuja <rhssk@posteo.eu>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
@@ -4137,7 +4137,7 @@ msgid "Shape"
 msgstr ""
 
 #: common/eda_shape.cpp:574 common/eda_shape.cpp:584
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:181
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:173
 #: pcbnew/pcb_track.cpp:686
 msgid "Radius"
 msgstr ""
@@ -4171,8 +4171,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:155
 #: pcbnew/fp_text.cpp:305 pcbnew/fp_text_grid_table.cpp:105 pcbnew/pad.cpp:1008
 #: pcbnew/pcb_target.cpp:158 pcbnew/pcb_target.cpp:204 pcbnew/pcb_text.cpp:127
-#: pcbnew/pcb_track.cpp:681 pcbnew/pcb_track.cpp:1132 pcbnew/pcb_track.cpp:1149
-#: pcbnew/pcb_track.cpp:1168
+#: pcbnew/pcb_track.cpp:681 pcbnew/pcb_track.cpp:1127 pcbnew/pcb_track.cpp:1144
+#: pcbnew/pcb_track.cpp:1163
 msgid "Width"
 msgstr ""
 
@@ -4220,13 +4220,13 @@ msgstr ""
 msgid "Start Y"
 msgstr ""
 
-#: common/eda_shape.cpp:1652 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1140
-#: pcbnew/pcb_track.cpp:1157
+#: common/eda_shape.cpp:1652 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1135
+#: pcbnew/pcb_track.cpp:1152
 msgid "End X"
 msgstr ""
 
-#: common/eda_shape.cpp:1654 pcbnew/pcb_shape.cpp:266 pcbnew/pcb_track.cpp:1142
-#: pcbnew/pcb_track.cpp:1159
+#: common/eda_shape.cpp:1654 pcbnew/pcb_shape.cpp:266 pcbnew/pcb_track.cpp:1137
+#: pcbnew/pcb_track.cpp:1154
 msgid "End Y"
 msgstr ""
 
@@ -4312,7 +4312,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:89
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:105
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:179
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:171
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:145
 msgid "Center"
@@ -4576,7 +4576,7 @@ msgstr ""
 
 #: common/grid_tricks.cpp:278 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/dialogs/panel_setup_rules.cpp:112
-#: pcbnew/tools/edit_tool.cpp:2011
+#: pcbnew/tools/edit_tool.cpp:2016
 msgid "Cut"
 msgstr ""
 
@@ -4604,7 +4604,7 @@ msgstr ""
 
 #: common/grid_tricks.cpp:284 common/tool/actions.cpp:191
 #: kicad/project_tree_pane.cpp:771 pcbnew/dialogs/panel_setup_rules.cpp:115
-#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:2013
+#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:2018
 msgid "Delete"
 msgstr ""
 
@@ -5181,8 +5181,8 @@ msgid "Invalid size %lld: too large"
 msgstr ""
 
 #: common/plugins/eagle/eagle_parser.cpp:281
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:373
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:389
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:366
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:382
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr ""
@@ -16014,7 +16014,7 @@ msgstr ""
 #: pcbnew/fp_text_grid_table.cpp:109 pcbnew/pad.cpp:980
 #: pcbnew/pcb_dimension.cpp:353 pcbnew/pcb_dimension.cpp:1087
 #: pcbnew/pcb_shape.cpp:159 pcbnew/pcb_target.cpp:155 pcbnew/pcb_text.cpp:120
-#: pcbnew/pcb_track.cpp:679 pcbnew/pcb_track.cpp:738 pcbnew/pcb_track.cpp:1173
+#: pcbnew/pcb_track.cpp:679 pcbnew/pcb_track.cpp:738 pcbnew/pcb_track.cpp:1168
 #: pcbnew/tools/board_inspection_tool.cpp:238
 #: pcbnew/tools/board_inspection_tool.cpp:385
 #: pcbnew/tools/board_inspection_tool.cpp:461
@@ -19834,13 +19834,13 @@ msgstr ""
 msgid "no layers"
 msgstr ""
 
-#: pcbnew/board_item.cpp:232 pcbnew/pcb_track.cpp:1134
-#: pcbnew/pcb_track.cpp:1151
+#: pcbnew/board_item.cpp:232 pcbnew/pcb_track.cpp:1129
+#: pcbnew/pcb_track.cpp:1146
 msgid "Position X"
 msgstr ""
 
-#: pcbnew/board_item.cpp:234 pcbnew/pcb_track.cpp:1137
-#: pcbnew/pcb_track.cpp:1154
+#: pcbnew/board_item.cpp:234 pcbnew/pcb_track.cpp:1132
+#: pcbnew/pcb_track.cpp:1149
 msgid "Position Y"
 msgstr ""
 
@@ -23445,55 +23445,55 @@ msgstr ""
 msgid "Error loading footprint library table."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:170
 msgid "Circle Properties"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:191
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:183
 msgid "Arc Properties"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:197
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:189
 msgid "Polygon Properties"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:203
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:195
 msgid "Rectangle Properties"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:209
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:201
 msgid "Line Segment Properties"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:343
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:336
 msgid "Modify drawing properties"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:368
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:361
 msgid "The arc angle cannot be zero."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:395
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:405
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:415
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:427
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:433
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:388
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:398
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:408
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:420
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:426
 msgid "The item thickness must be greater than zero."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:402
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:395
 msgid "The radius must be greater than zero."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:412
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:405
 msgid "The rectangle cannot be empty."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:421
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:414
 msgid "The polygon outline thickness must be >= 0."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:444
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:437
 msgid "Error List"
 msgstr ""
 
@@ -25542,17 +25542,17 @@ msgid "Via type:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1112
+#: pcbnew/pcb_track.cpp:1107
 msgid "Through"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1114
+#: pcbnew/pcb_track.cpp:1109
 msgid "Micro"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1113
+#: pcbnew/pcb_track.cpp:1108
 msgid "Blind/buried"
 msgstr ""
 
@@ -26931,216 +26931,6 @@ msgstr ""
 msgid "Check rule syntax"
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-msgid ""
-"### Top-level Clauses\n"
-"\n"
-"    (version <number>)\n"
-"\n"
-"    (rule <rule_name> <rule_clause> ...)\n"
-"\n"
-"\n"
-"<br><br>\n"
-"\n"
-"### Rule Clauses\n"
-"\n"
-"    (constraint <constraint_type> ...)\n"
-"\n"
-"    (condition \"<expression>\")\n"
-"\n"
-"    (layer \"<layer_name>\")\n"
-"\n"
-"\n"
-"<br><br>\n"
-"\n"
-"### Constraint Types\n"
-"\n"
-" * annular\\_width\n"
-" * clearance\n"
-" * courtyard_clearance\n"
-" * diff\\_pair\\_gap\n"
-" * diff\\_pair\\_uncoupled\n"
-" * disallow\n"
-" * edge\\_clearance\n"
-" * length\n"
-" * hole\\_clearance\n"
-" * hole\\_size\n"
-" * silk\\_clearance\n"
-" * skew\n"
-" * track\\_width\n"
-" * via\\_count\n"
-" * via\\_diameter\n"
-"\n"
-"\n"
-"<br><br>\n"
-"\n"
-"### Item Types\n"
-"\n"
-" * buried_via\n"
-" * graphic\n"
-" * hole\n"
-" * micro_via\n"
-" * pad\n"
-" * text\n"
-" * track\n"
-" * via\n"
-" * zone\n"
-"\n"
-"<br>\n"
-"\n"
-"### Examples\n"
-"\n"
-"    (version 1)\n"
-"\n"
-"    (rule HV\n"
-"       (constraint clearance (min 1.5mm))\n"
-"       (condition \"A.NetClass == 'HV'\"))\n"
-"\n"
-"\n"
-"    (rule HV\n"
-"       (layer outer)\n"
-"       (constraint clearance (min 1.5mm))\n"
-"       (condition \"A.NetClass == 'HV'\"))\n"
-"\n"
-"\n"
-"    (rule HV_HV\n"
-"       # wider clearance between HV tracks\n"
-"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
-"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
-"\n"
-"\n"
-"    (rule HV_unshielded\n"
-"       (constraint clearance (min 2mm))\n"
-"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
-"<br><br>\n"
-"\n"
-"### Notes\n"
-"\n"
-"Version clause must be the first clause.  It indicates the syntax version of "
-"the file so that \n"
-"future rules parsers can perform automatic updates.  It should be\n"
-"set to \"1\".\n"
-"\n"
-"Rules should be ordered by specificity.  Later rules take\n"
-"precedence over earlier rules; once a matching rule is found\n"
-"no further rules will be checked.\n"
-"\n"
-"Use Ctrl+/ to comment or uncomment line(s).\n"
-"<br><br><br>\n"
-"\n"
-"### Expression functions\n"
-"\n"
-"All function parameters support simple wildcards (`*` and `?`).\n"
-"<br><br>\n"
-"\n"
-"    A.insideCourtyard('<footprint_refdes>')\n"
-"True if any part of `A` lies within the given footprint's principal "
-"courtyard.\n"
-"<br><br>\n"
-"\n"
-"    A.insideFrontCourtyard('<footprint_refdes>')\n"
-"True if any part of `A` lies within the given footprint's front courtyard.\n"
-"<br><br>\n"
-"\n"
-"    A.insideBackCourtyard('<footprint_refdes>')\n"
-"True if any part of `A` lies within the given footprint's back courtyard.\n"
-"<br><br>\n"
-"\n"
-"    A.insideArea('<zone_name>')\n"
-"True if any part of `A` lies within the given zone's outline.\n"
-"<br><br>\n"
-"\n"
-"    A.isPlated()\n"
-"True if `A` has a hole which is plated.\n"
-"<br><br>\n"
-"\n"
-"    A.inDiffPair('<net_name>')\n"
-"True if `A` has net that is part of the specified differential pair.\n"
-"`<net_name>` is the base name of the differential pair.  For example, "
-"`inDiffPair('/CLK')`\n"
-"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
-"<br><br>\n"
-"\n"
-"    AB.isCoupledDiffPair()\n"
-"True if `A` and `B` are members of the same diff pair.\n"
-"<br><br>\n"
-"\n"
-"    A.memberOf('<group_name>')\n"
-"True if `A` is a member of the given group. Includes nested membership.\n"
-"<br><br>\n"
-"\n"
-"    A.existsOnLayer('<layer_name>')\n"
-"True if `A` exists on the given layer.  The layer name can be\n"
-"either the name assigned in Board Setup > Board Editor Layers or\n"
-"the canonical name (ie: `F.Cu`).\n"
-"\n"
-"NB: this returns true if `A` is on the given layer, independently\n"
-"of whether or not the rule is being evaluated for that layer.\n"
-"For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
-"<br><br><br>\n"
-"\n"
-"### More Examples\n"
-"\n"
-"    (rule \"copper keepout\"\n"
-"       (constraint disallow track via zone)\n"
-"       (condition \"A.insideArea('zone3')\"))\n"
-"\n"
-"\n"
-"    (rule \"BGA neckdown\"\n"
-"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
-"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.insideCourtyard('U3')\"))\n"
-"\n"
-"\n"
-"    # prevent silk over tented vias\n"
-"    (rule silk_over_via\n"
-"       (constraint silk_clearance (min 0.2mm))\n"
-"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
-"\n"
-"\n"
-"    (rule \"Distance between Vias of Different Nets\"\n"
-"        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
-"\n"
-"    (rule \"Clearance between Pads of Different Nets\"\n"
-"        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
-"\n"
-"\n"
-"    (rule \"Via Hole to Track Clearance\"\n"
-"        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
-"\n"
-"    (rule \"Pad to Track Clearance\"\n"
-"        (constraint clearance (min 0.2mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
-"\n"
-"\n"
-"    (rule \"clearance-to-1mm-cutout\"\n"
-"        (constraint clearance (min 0.8mm))\n"
-"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
-"\n"
-"\n"
-"    (rule \"Max Drill Hole Size Mechanical\"\n"
-"        (constraint hole_size (max 6.3mm))\n"
-"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"\n"
-"    (rule \"Max Drill Hole Size PTH\"\n"
-"        (constraint hole_size (max 6.35mm))\n"
-"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
-"\n"
-"\n"
-"    # Specify an optimal gap for a particular diff-pair\n"
-"    (rule \"dp clock gap\"\n"
-"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('/CLK')\"))\n"
-"\n"
-"    # Specify a larger clearance around any diff-pair\n"
-"    (rule \"dp clearance\"\n"
-"        (constraint clearance (min \"1.5mm\"))\n"
-"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
-msgstr ""
-
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
 msgstr ""
@@ -27735,13 +27525,13 @@ msgstr ""
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:312
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:378
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:468
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:514
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:704
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:733
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:756
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:782
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1020
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:463
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:509
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:699
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:728
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:751
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:777
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1015
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:214
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:242
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:101
@@ -27751,7 +27541,7 @@ msgstr ""
 msgid "(%s clearance %s; actual %s)"
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:679
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:674
 #, c-format
 msgid "(nets %s and %s)"
 msgstr ""
@@ -29390,7 +29180,7 @@ msgstr ""
 msgid "Castellated"
 msgstr ""
 
-#: pcbnew/pad.cpp:1004 pcbnew/pcb_track.cpp:742 pcbnew/pcb_track.cpp:1169
+#: pcbnew/pad.cpp:1004 pcbnew/pcb_track.cpp:742 pcbnew/pcb_track.cpp:1164
 msgid "Diameter"
 msgstr ""
 
@@ -29723,7 +29513,7 @@ msgstr ""
 msgid "Through Via"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:746 pcbnew/pcb_track.cpp:1171
+#: pcbnew/pcb_track.cpp:746 pcbnew/pcb_track.cpp:1166
 msgid "Drill"
 msgstr ""
 
@@ -29746,23 +29536,23 @@ msgstr ""
 msgid "Track %s on %s, length %s"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1135 pcbnew/pcb_track.cpp:1152
+#: pcbnew/pcb_track.cpp:1130 pcbnew/pcb_track.cpp:1147
 msgid "Origin X"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1138 pcbnew/pcb_track.cpp:1155
+#: pcbnew/pcb_track.cpp:1133 pcbnew/pcb_track.cpp:1150
 msgid "Origin Y"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1174
+#: pcbnew/pcb_track.cpp:1169
 msgid "Layer Top"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1176
+#: pcbnew/pcb_track.cpp:1171
 msgid "Layer Bottom"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1178
+#: pcbnew/pcb_track.cpp:1173
 msgid "Via Type"
 msgstr ""
 
@@ -32063,24 +31853,24 @@ msgstr ""
 msgid "Change Side / Flip"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2107
+#: pcbnew/tools/edit_tool.cpp:2112
 msgid "Move exact"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2240
+#: pcbnew/tools/edit_tool.cpp:2245
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2463
+#: pcbnew/tools/edit_tool.cpp:2468
 msgid "Select reference point for the copy..."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2464 pcbnew/tools/edit_tool.cpp:2481
+#: pcbnew/tools/edit_tool.cpp:2469 pcbnew/tools/edit_tool.cpp:2486
 msgid "Selection copied"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2465
+#: pcbnew/tools/edit_tool.cpp:2470
 msgid "Copy canceled"
 msgstr ""
 
@@ -34269,39 +34059,39 @@ msgstr ""
 msgid "Presets (Ctrl+Tab):"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:2422
+#: pcbnew/widgets/appearance_controls.cpp:2432
 msgid "Save preset..."
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:2423
+#: pcbnew/widgets/appearance_controls.cpp:2433
 msgid "Delete preset..."
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:2501
+#: pcbnew/widgets/appearance_controls.cpp:2534
 msgid "Layer preset name:"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:2501
+#: pcbnew/widgets/appearance_controls.cpp:2534
 msgid "Save Layer Preset"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:2545
+#: pcbnew/widgets/appearance_controls.cpp:2578
 msgid "Presets"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:2557
+#: pcbnew/widgets/appearance_controls.cpp:2590
 msgid "Delete Preset"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:2558
+#: pcbnew/widgets/appearance_controls.cpp:2591
 msgid "Select preset:"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:3033
+#: pcbnew/widgets/appearance_controls.cpp:3066
 msgid "Open Preferences"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:3047
+#: pcbnew/widgets/appearance_controls.cpp:3080
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
