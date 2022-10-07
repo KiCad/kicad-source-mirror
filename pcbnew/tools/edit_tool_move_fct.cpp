@@ -244,8 +244,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
         if( !zone->GetIsRuleArea() || !zone->GetDoNotAllowFootprints() )
             continue;
 
-        bool disallowFront = ( zone->GetLayerSet() | LSET::FrontMask() ).any();
-        bool disallowBack = ( zone->GetLayerSet() | LSET::BackMask() ).any();
+        bool disallowFront = ( zone->GetLayerSet() & LSET::FrontMask() ).any();
+        bool disallowBack = ( zone->GetLayerSet() & LSET::BackMask() ).any();
 
         for( FOOTPRINT* fp : m_FpInMove )
         {
