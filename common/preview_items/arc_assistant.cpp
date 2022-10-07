@@ -103,15 +103,16 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         EDA_ANGLE start = m_constructMan.GetStartAngle();
         EDA_ANGLE subtended = m_constructMan.GetSubtended();
-        EDA_ANGLE endAngle = start + subtended;
+        EDA_ANGLE normalizedEnd = ( start + subtended ).Normalize180();
 
         // draw dimmed extender line to cursor
         preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetLastPoint(), true );
 
         cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "Δθ" ), subtended.AsDegrees(),
                                                  m_iuScale, EDA_UNITS::DEGREES ) );
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), endAngle.AsDegrees(),
-                                                 m_iuScale, EDA_UNITS::DEGREES ) );
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ),
+                                                 normalizedEnd.AsDegrees(), m_iuScale,
+                                                 EDA_UNITS::DEGREES ) );
     }
 
     // place the text next to cursor, on opposite side from radius
