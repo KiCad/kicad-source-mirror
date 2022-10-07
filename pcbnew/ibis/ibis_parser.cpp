@@ -1492,7 +1492,10 @@ bool IbisParser::readMatrixSparse( std::string aKeyword, IBIS_MATRIX_SPARSE& aDe
         {
             if( readDouble( value ) )
             {
+                #if 0
+                // Currently not used
                 int index = subindex + m_currentMatrixRow * aDest.m_dim + m_currentMatrixRow;
+                #endif
             }
             else
             {

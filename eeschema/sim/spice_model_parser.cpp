@@ -81,7 +81,7 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary,
             if( !sourceModel )
             {
                 THROW_IO_ERROR( wxString::Format(
-                        _( "Could not find model '%s' to copy for ako model '%s'" ),
+                        _( "Could not find model '%s' to copy for \"A Kind Of\" model '%s'" ),
                         akoName,
                         modelName ) );
             }
@@ -183,7 +183,7 @@ void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
             if( !sourceModel )
             {
                 THROW_IO_ERROR( wxString::Format(
-                        _( "Could not find model '%s' to copy for ako model '%s'" ),
+                        _( "Could not find model '%s' to copy for \"A Kind Of\" model '%s'" ),
                         akoName,
                         modelName ) );
             }
