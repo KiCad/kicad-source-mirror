@@ -701,6 +701,7 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
     }
 
     m_router->UpdateSizes( sizes );
+    frame()->UpdateMsgPanel();
 }
 
 
@@ -2310,23 +2311,52 @@ void ROUTER_TOOL::UpdateMessagePanel()
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
     PNS::RULE_RESOLVER* resolver   = m_iface->GetRuleResolver();
     bool                isDiffPair = m_router->Mode() == PNS::ROUTER_MODE::PNS_MODE_ROUTE_DIFF_PAIR;
+    std::vector<int>    nets = m_router->GetCurrentNets();
+    wxString            description;
+    wxString            secondary;
 
-    if( m_startItem && m_startItem->Net() > 0 )
+    if( isDiffPair )
     {
-        wxString description = isDiffPair ? _( "Routing Diff Pair: %s" ) : _( "Routing Track: %s" );
+        wxASSERT( nets.size() >= 2 );
 
-        NETINFO_ITEM* netInfo = board()->FindNet( m_startItem->Net() );
-        wxASSERT( netInfo );
+        NETINFO_ITEM* netA = board()->FindNet( nets[0] );
+        NETINFO_ITEM* netB = board()->FindNet( nets[1] );
+        wxASSERT( netA );
+        wxASSERT( netB );
 
-        items.emplace_back( wxString::Format( description,
-                                              UnescapeString( netInfo->GetNetname() ) ),
-                            wxString::Format( _( "Resolved Netclass: %s" ),
-                                              UnescapeString( netInfo->GetNetClass()->GetName() ) ) );
+        description = wxString::Format( _( "Routing Diff Pair: %s" ),
+                                        netA->GetNetname() + wxT( "/" ) + netB->GetNetname() );
+
+        wxString  netclass;
+        NETCLASS* netclassA = netA->GetNetClass();
+        NETCLASS* netclassB = netB->GetNetClass();
+
+        if( netclassA == netclassB )
+            netclass = netclassA->GetName();
+        else
+            netclass = netclassA->GetName() + wxT( "/" ) + netclassB->GetName();
+
+        secondary = wxString::Format( _( "Resolved Netclass: %s" ),
+                                      UnescapeString( netclass ) );
+    }
+    else if( !nets.empty() )
+    {
+        NETINFO_ITEM* net = board()->FindNet( nets[0] );
+        wxASSERT( net );
+
+        description = wxString::Format( _( "Routing Track: %s" ),
+                                        net->GetNetname() );
+
+        secondary = wxString::Format( _( "Resolved Netclass: %s" ),
+                                      UnescapeString( net->GetNetClass()->GetName() ) );
     }
     else
     {
-        items.emplace_back( _( "Routing Track" ), _( "(no net)" ) );
+        description = _( "Routing Track" );
+        secondary = _( "(no net)" );
     }
+
+    items.emplace_back( description, secondary );
 
     wxString cornerMode;
 
