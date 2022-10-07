@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-06 21:19+0000\n"
+"PO-Revision-Date: 2022-10-09 08:03+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1053,9 +1053,8 @@ msgid "Opacity"
 msgstr "Непрозорість"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "Товщина плати: "
+msgstr "Товщина плати"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -3039,13 +3038,15 @@ msgstr "Ці зміни буде застосовано після переза�
 
 #: common/dialogs/panel_common_settings_base.cpp:127
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Фокус слідує за мишею між редакторами схем і друкованих плат"
 
 #: common/dialogs/panel_common_settings_base.cpp:128
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Якщо курсор миші переміщується над полотном вікна редактора схем або "
+"друкованих плат, це вікно піднімається."
 
 #: common/dialogs/panel_common_settings_base.cpp:132
 msgid "Icon theme:"
@@ -6006,9 +6007,8 @@ msgid "Zoom Out"
 msgstr "Зменшити"
 
 #: common/tool/actions.cpp:336 common/widgets/mathplot.cpp:1665
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Центрувати за курсором при масштабуванні"
+msgstr "Центрувати за курсором"
 
 #: common/tool/actions.cpp:342
 msgid "Zoom to Selection"
@@ -7600,9 +7600,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Дублювання елементів %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Різні значення для %s%d%s (%s) та %s%d%s (%s)"
+msgstr "Різна кількість одиниць для елемента %s%s%s і %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
