@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-29 08:57-0700\n"
+"POT-Creation-Date: 2022-10-07 11:38-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -694,14 +694,17 @@ msgstr "Offset"
 msgid "Opacity"
 msgstr "Opacity"
 
+msgid "Board Thickness"
+msgstr "Board Thickness"
+
+msgid "mm"
+msgstr "mm"
+
 msgid "Preview"
 msgstr "Preview"
 
 msgid "Reload board and 3D models"
 msgstr "Reload board and 3D models"
-
-msgid "mm"
-msgstr "mm"
 
 msgid "Inch"
 msgstr "Inch"
@@ -1825,6 +1828,16 @@ msgstr "Show scrollbars in editors"
 
 msgid "This change takes effect when relaunching the editor."
 msgstr "This change takes effect when relaunching the editor."
+
+msgid "Focus follows mouse between schematic and PCB editors"
+msgstr "Focus follows mouse between schematic and PCB editors"
+
+msgid ""
+"If the mouse cursor is moved over the canvas of a schematic or PCB editor "
+"window, that window is raised."
+msgstr ""
+"If the mouse cursor is moved over the canvas of a schematic or PCB editor "
+"window, that window is raised."
 
 msgid "Icon theme:"
 msgstr "Icon theme:"
@@ -3737,6 +3750,9 @@ msgstr "Zoom In"
 msgid "Zoom Out"
 msgstr "Zoom Out"
 
+msgid "Center on Cursor"
+msgstr "Center on Cursor"
+
 msgid "Zoom to Selection"
 msgstr "Zoom to Selection"
 
@@ -4886,8 +4902,8 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Duplicate items %s%s%s\n"
 
 #, c-format
-msgid "Duplicate items %s%s\n"
-msgstr "Duplicate items %s%s\n"
+msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
+msgstr "Differing unit counts for item %s%s%s and %s%s%s\n"
 
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
@@ -6468,8 +6484,8 @@ msgstr "Delete footprint filter"
 msgid "Footprint Filters"
 msgstr "Footprint Filters"
 
-msgid "Edit Spice Model..."
-msgstr "Edit Spice Model…"
+msgid "Edit Simulation Model..."
+msgstr "Edit Simulation Model..."
 
 msgid "Library Symbol Properties"
 msgstr "Library Symbol Properties"
@@ -7259,11 +7275,11 @@ msgstr "Pin:"
 msgid "Model"
 msgstr "Model"
 
-msgid "Spice device:"
-msgstr "Spice device:"
+msgid "Device:"
+msgstr "Device:"
 
-msgid "Spice type:"
-msgstr "Spice type:"
+msgid "Type:"
+msgstr "Type:"
 
 msgid "Page"
 msgstr "Page"
@@ -7286,8 +7302,8 @@ msgstr "Pin Assignments"
 msgid "Exclude symbol from simulation"
 msgstr "Exclude symbol from simulation"
 
-msgid "Spice Model Editor"
-msgstr "Spice Model Editor"
+msgid "Simulation Model Editor"
+msgstr "Simulation Model Editor"
 
 msgid "You need to select DC source"
 msgstr "You need to select DC source"
@@ -7572,18 +7588,6 @@ msgstr ""
 "Use the alternate shape of this symbol.\n"
 "For gates, this is the “De Morgan” conversion"
 
-msgid "Default for all sheet instances"
-msgstr "Default for all sheet instances"
-
-msgid ""
-"Check to make the unit and reference, value, and\n"
-"footprint fields the default for all sheet instances\n"
-"of this symbol"
-msgstr ""
-"Check to make the unit and reference, value, and\n"
-"footprint fields the default for all sheet instances\n"
-"of this symbol"
-
 msgid "Angle:"
 msgstr "Angle:"
 
@@ -7666,8 +7670,8 @@ msgstr "Alternate Pin Assignments"
 msgid "Library link:"
 msgstr "Library link:"
 
-msgid "Spice Model..."
-msgstr "Spice Model..."
+msgid "Simulation Model..."
+msgstr "Simulation Model..."
 
 msgid "Symbol Properties"
 msgstr "Symbol Properties"
@@ -9012,10 +9016,6 @@ msgstr ""
 "Annotation must be corrected before simulating."
 
 #, c-format
-msgid "Failed reading %s simulation model."
-msgstr "Failed reading %s simulation model."
-
-#, c-format
 msgid "Could not find library file '%s'"
 msgstr "Could not find library file '%s'"
 
@@ -10283,6 +10283,28 @@ msgid "Cancel Load"
 msgstr "Cancel Load"
 
 msgid ""
+"There hierarchical sheets in the loaded schematic file from an older file "
+"version resulting in  missing symbol instance data.  This will result in all "
+"of the symbols in the loaded schematic to use either the default instance "
+"setting or fall back to the library symbol settings.  Loading the project "
+"that uses this schematic file and saving to the lastest file version will "
+"resolve this issue.\n"
+"\n"
+"Do you wish to continue?"
+msgstr ""
+"There hierarchical sheets in the loaded schematic file from an older file "
+"version resulting in  missing symbol instance data.  This will result in all "
+"of the symbols in the loaded schematic to use either the default instance "
+"setting or fall back to the library symbol settings.  Loading the project "
+"that uses this schematic file and saving to the lastest file version will "
+"resolve this issue.\n"
+"\n"
+"Do you wish to continue?"
+
+msgid "Continue Load Schematic"
+msgstr "Continue Load Schematic"
+
+msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
 "references for the loaded schematic.\n"
@@ -10294,9 +10316,6 @@ msgstr ""
 "references for the loaded schematic.\n"
 "\n"
 "Do you wish to continue?"
-
-msgid "Continue Load Schematic"
-msgstr "Continue Load Schematic"
 
 msgid ""
 "The selected file was created as part of a different project.  Linking the "
@@ -10365,6 +10384,22 @@ msgid "Discard New Sheet"
 msgstr "Discard New Sheet"
 
 #, c-format
+msgid "Error loading simulation model library '%s': %s"
+msgstr "Error loading simulation model library '%s': %s"
+
+#, c-format
+msgid "Error loading simulation model: no '%s' field"
+msgstr "Error loading simulation model: no '%s' field"
+
+#, c-format
+msgid ""
+"Error loading simulation model: could not find base model '%s' in library "
+"'%s'"
+msgstr ""
+"Error loading simulation model: could not find base model '%s' in library "
+"'%s'"
+
+#, c-format
 msgid "%s describes %lu pins, expected %u"
 msgstr "%s describes %lu pins, expected %u"
 
@@ -10384,11 +10419,8 @@ msgstr "Parasitic Pin Inductance"
 msgid "Parasitic Pin Capacitance"
 msgstr "Parasitic Pin Capacitance"
 
-msgid "Waveform"
-msgstr "Waveform"
-
-msgid "Modeling accuracy"
-msgstr "Modeling accuracy"
+msgid "DC Value"
+msgstr "DC Value"
 
 msgid "ON time"
 msgstr "ON time"
@@ -10601,8 +10633,12 @@ msgid "Unknown SIM_VALUE type"
 msgstr "Unknown SIM_VALUE type"
 
 #, c-format
-msgid "Failed to set parameter '%s' to '%s'"
-msgstr "Failed to set parameter '%s' to '%s'"
+msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
+msgstr "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
+
+#, c-format
+msgid "Failed to set parameter '%s' to '%s' in model '%s'"
+msgstr "Failed to set parameter '%s' to '%s' in model '%s'"
 
 msgid "DC Sweep"
 msgstr "DC Sweep"
@@ -12093,9 +12129,6 @@ msgstr "Error: duplicate sub-sheet names found in current sheet."
 
 msgid "Net must be labeled to assign a netclass."
 msgstr "Net must be labeled to assign a netclass."
-
-msgid "Bus has no members to assign netclass to."
-msgstr "Bus has no members to assign netclass to."
 
 #, c-format
 msgid ""
@@ -14668,35 +14701,106 @@ msgstr "4th Band"
 msgid "Multiplier"
 msgstr "Multiplier"
 
+msgid "Platinum"
+msgstr "Platinum"
+
+msgid "Gold"
+msgstr "Gold"
+
+msgid "Titanium"
+msgstr "Titanium"
+
+msgid "Stainless steel 18-9"
+msgstr "Stainless steel 18-9"
+
+msgid "Silver"
+msgstr "Silver"
+
+msgid "Mercury"
+msgstr "Mercury"
+
+msgid "Nickel"
+msgstr "Nickel"
+
+msgid "Copper"
+msgstr "Copper"
+
+msgid "Copper-Aluminium"
+msgstr "Copper-Aluminium"
+
+msgid "Brass"
+msgstr "Brass"
+
+msgid "Bronze"
+msgstr "Bronze"
+
+msgid "Tin"
+msgstr "Tin"
+
+msgid "Lead"
+msgstr "Lead"
+
+msgid "Aluminium-Copper"
+msgstr "Aluminium-Copper"
+
+msgid "Cast iron"
+msgstr "Cast iron"
+
+msgid "Carbon steel"
+msgstr "Carbon steel"
+
+msgid "Aluminium"
+msgstr "Aluminium"
+
+msgid "Cadmium"
+msgstr "Cadmium"
+
+msgid "Iron"
+msgstr "Iron"
+
+msgid "Chrome"
+msgstr "Chrome"
+
+msgid "Zinc"
+msgstr "Zinc"
+
+msgid "Manganese"
+msgstr "Manganese"
+
+msgid "Magnesium"
+msgstr "Magnesium"
+
 msgid "Copper (Cu)"
 msgstr "Copper (Cu)"
 
 msgid ""
-"When two metals are in contact, there will be a potential difference between "
-"them that will lead to corrosion.\n"
-"In order to avoid corrosion, it is good practice to keep the difference "
-"below 300mV.\n"
-"\n"
-"One of the metal will be anodic (+) and will be attacked. The other one will "
-"be cathodic and will be protected.\n"
-"In the table below, if the number is positive then the row is anodic and the "
-"column is cathodic. \n"
-"\n"
-"You can use an interface metal, just like with the ENIG surface finish that "
-"uses nickel as an interface between gold and copper to prevent corrosion."
+"This table shows the difference in electrochemical potential between various "
+"metals and alloys. A positive number indicates that the row is anodic and "
+"the column is cathodic.\n"
+"Galvanic corrosion affects different metals in contact and under certain "
+"conditions.\n"
+"The anode of an electrochemical pair gets oxidized and eaten away, while the "
+"cathode gets dissolved metals plated onto it but stays protected.\n"
+"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
+"of a third interface metal in between the main pair(ie the ENIG surface "
+"finish)."
 msgstr ""
-"When two metals are in contact, there will be a potential difference between "
-"them that will lead to corrosion.\n"
-"In order to avoid corrosion, it is good practice to keep the difference "
-"below 300mV.\n"
-"\n"
-"One of the metal will be anodic (+) and will be attacked. The other one will "
-"be cathodic and will be protected.\n"
-"In the table below, if the number is positive then the row is anodic and the "
-"column is cathodic. \n"
-"\n"
-"You can use an interface metal, just like with the ENIG surface finish that "
-"uses nickel as an interface between gold and copper to prevent corrosion."
+"This table shows the difference in electrochemical potential between various "
+"metals and alloys. A positive number indicates that the row is anodic and "
+"the column is cathodic.\n"
+"Galvanic corrosion affects different metals in contact and under certain "
+"conditions.\n"
+"The anode of an electrochemical pair gets oxidized and eaten away, while the "
+"cathode gets dissolved metals plated onto it but stays protected.\n"
+"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
+"of a third interface metal in between the main pair(ie the ENIG surface "
+"finish)."
+
+msgid "Threshold voltage:"
+msgstr "Threshold voltage:"
+
+msgid "mV"
+msgstr "mV"
 
 msgid "Voltage > 500 V:"
 msgstr "Voltage > 500 V:"
@@ -14869,9 +14973,6 @@ msgstr "Vref set to 0 !"
 
 msgid "Incorrect value for R1 R2"
 msgstr "Incorrect value for R1 R2"
-
-msgid "Type:"
-msgstr "Type:"
 
 msgid ""
 "Type of the regulator.\n"
@@ -15343,8 +15444,8 @@ msgstr "Color Code"
 msgid "Board Classes"
 msgstr "Board Classes"
 
-msgid "Galvanic corrosion"
-msgstr "Galvanic corrosion"
+msgid "Galvanic Corrosion"
+msgstr "Galvanic Corrosion"
 
 msgid "Write Data Failed"
 msgstr "Write Data Failed"
@@ -15613,9 +15714,6 @@ msgstr "km"
 msgid "feet"
 msgstr "feet"
 
-msgid "mV"
-msgstr "mV"
-
 msgid "mW"
 msgstr "mW"
 
@@ -15803,9 +15901,6 @@ msgstr "Remove Dielectric Layer"
 
 msgid "Select layer to remove:"
 msgstr "Select layer to remove:"
-
-msgid "Copper"
-msgstr "Copper"
 
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
@@ -17792,6 +17887,30 @@ msgstr ""
 msgid "Text items must have some content."
 msgstr "Text items must have some content."
 
+#, c-format
+msgid "Text width must be at least %s."
+msgstr "Text width must be at least %s."
+
+#, c-format
+msgid "Text width must be at most %s."
+msgstr "Text width must be at most %s."
+
+#, c-format
+msgid "Text height must be at least %s."
+msgstr "Text height must be at least %s."
+
+#, c-format
+msgid "Text height must be at most %s."
+msgstr "Text height must be at most %s."
+
+#, c-format
+msgid ""
+"Text thickness is too large for the text size.\n"
+"It will be clamped at %s."
+msgstr ""
+"Text thickness is too large for the text size.\n"
+"It will be clamped at %s."
+
 msgid "Modify footprint properties"
 msgstr "Modify footprint properties"
 
@@ -17974,6 +18093,21 @@ msgstr "Footprint must have a name."
 #, c-format
 msgid "Footprint name may not contain '%s'."
 msgstr "Footprint name may not contain '%s'."
+
+#, c-format
+msgid "The text width must be between %s and %s."
+msgstr "The text width must be between %s and %s."
+
+#, c-format
+msgid "The text height must be between %s and %s."
+msgstr "The text height must be between %s and %s."
+
+msgid ""
+"The text thickness is too large for the text size.\n"
+"It will be clamped."
+msgstr ""
+"The text thickness is too large for the text size.\n"
+"It will be clamped."
 
 msgid "Unconstrained"
 msgstr "Unconstrained"
@@ -18506,6 +18640,9 @@ msgstr "Error loading footprint library table."
 msgid "Circle Properties"
 msgstr "Circle Properties"
 
+msgid "Center Point"
+msgstr "Center Point"
+
 msgid "Arc Properties"
 msgstr "Arc Properties"
 
@@ -18852,11 +18989,11 @@ msgstr "degree"
 msgid "Non Copper Zone Properties"
 msgstr "Non Copper Zone Properties"
 
+msgid "Center Point:"
+msgstr "Center Point:"
+
 msgid "Ring"
 msgstr "Ring"
-
-msgid "Center:"
-msgstr "Center:"
 
 msgid "Line width may not be 0 for unfilled shapes."
 msgstr "Line width may not be 0 for unfilled shapes."
@@ -19700,6 +19837,9 @@ msgstr "Deselect all Layers"
 msgid "Trace gap must be greater than 0."
 msgstr "Trace gap must be greater than 0."
 
+msgid "user choice"
+msgstr "user choice"
+
 msgid "u"
 msgstr "u"
 
@@ -20112,13 +20252,6 @@ msgstr "Reference:"
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
 msgstr "Footprint %s (%s), %s, rotated %.1f deg"
-
-msgid ""
-"The text thickness is too large for the text size.\n"
-"It will be clamped."
-msgstr ""
-"The text thickness is too large for the text size.\n"
-"It will be clamped."
 
 msgid "Change text properties"
 msgstr "Change text properties"
@@ -22466,8 +22599,8 @@ msgid "Checking nets for minimum connection width..."
 msgstr "Checking nets for minimum connection width..."
 
 #, c-format
-msgid "Minimum connection width %s; actual %s"
-msgstr "Minimum connection width %s; actual %s"
+msgid "(%s minimum connection width %s; actual %s)"
+msgstr "(%s minimum connection width %s; actual %s)"
 
 msgid "Checking pad, via and zone connections..."
 msgstr "Checking pad, via and zone connections..."
@@ -22508,20 +22641,16 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Checking footprints for overlapping courtyards..."
 
 #, c-format
-msgid "(%s maximum uncoupled length: %s; actual: %s)"
-msgstr "(%s maximum uncoupled length: %s; actual: %s)"
+msgid "(%s maximum uncoupled length %s; actual %s)"
+msgstr "(%s maximum uncoupled length %s; actual %s)"
 
 #, c-format
-msgid "minimum gap: %s; "
-msgstr "minimum gap: %s; "
+msgid "(%s minimum gap %s; actual %s)"
+msgstr "(%s minimum gap %s; actual %s)"
 
 #, c-format
-msgid "maximum gap: %s; "
-msgstr "maximum gap: %s; "
-
-#, c-format
-msgid "actual: %s)"
-msgstr "actual: %s)"
+msgid "(%s maximum gap %s; actual %s)"
+msgstr "(%s maximum gap %s; actual %s)"
 
 msgid "Checking keepouts & disallow constraints..."
 msgstr "Checking keepouts & disallow constraints..."
@@ -22582,20 +22711,20 @@ msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "Footprint '%s' does not match copy in library '%s'."
 
 #, c-format
-msgid "(%s min length: %s; actual: %s)"
-msgstr "(%s min length: %s; actual: %s)"
+msgid "(%s min length %s; actual %s)"
+msgstr "(%s min length %s; actual %s)"
 
 #, c-format
-msgid "(%s max length: %s; actual: %s)"
-msgstr "(%s max length: %s; actual: %s)"
+msgid "(%s max length %s; actual %s)"
+msgstr "(%s max length %s; actual %s)"
 
 #, c-format
-msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
-msgstr "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
+msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
+msgstr "(%s max skew %s; actual %s; average net length %s; actual %s)"
 
 #, c-format
-msgid "(%s max count: %d; actual: %d)"
-msgstr "(%s max count: %d; actual: %d)"
+msgid "(%s max count %d; actual %d)"
+msgstr "(%s max count %d; actual %d)"
 
 msgid "Gathering length-constrained connections..."
 msgstr "Gathering length-constrained connections..."
@@ -22813,6 +22942,120 @@ msgstr "Created Gerber job file '%s'."
 msgid "Board stackup settings not up to date."
 msgstr "Board stackup settings not up to date."
 
+#, c-format
+msgid "No such file: %s"
+msgstr "No such file: %s"
+
+msgid ""
+"** Output already exists. Export aborted. **\n"
+"Enable the force overwrite flag to overwrite it."
+msgstr ""
+"** Output already exists. Export aborted. **\n"
+"Enable the force overwrite flag to overwrite it."
+
+#, c-format
+msgid "Read file: '%s'\n"
+msgstr "Read file: '%s'\n"
+
+msgid "Build STEP data\n"
+msgstr "Build STEP data\n"
+
+msgid ""
+"\n"
+"** Error building STEP board model. Export aborted. **\n"
+msgstr ""
+"\n"
+"** Error building STEP board model. Export aborted. **\n"
+
+msgid "Write STEP file\n"
+msgstr "Write STEP file\n"
+
+msgid ""
+"\n"
+"** Error writing STEP file. **\n"
+msgstr ""
+"\n"
+"** Error writing STEP file. **\n"
+
+#, c-format
+msgid ""
+"\n"
+"STEP file '%s' created.\n"
+msgstr ""
+"\n"
+"STEP file '%s' created.\n"
+
+msgid ""
+"\n"
+"** Error exporting STEP file. Export aborted. **\n"
+msgstr ""
+"\n"
+"** Error exporting STEP file. Export aborted. **\n"
+
+msgid ""
+"\n"
+"** Error reading kicad_pcb file. **\n"
+msgstr ""
+"\n"
+"** Error reading kicad_pcb file. **\n"
+
+msgid ""
+"Unable to create STEP file.\n"
+"Check that the board has a valid outline and models."
+msgstr ""
+"Unable to create STEP file.\n"
+"Check that the board has a valid outline and models."
+
+msgid "STEP file has been created, but there are warnings."
+msgstr "STEP file has been created, but there are warnings."
+
+msgid "pcb_filename"
+msgstr "pcb_filename"
+
+msgid "output filename"
+msgstr "output filename"
+
+msgid "IGES output (default STEP)"
+msgstr "IGES output (default STEP)"
+
+msgid "overwrite output file"
+msgstr "overwrite output file"
+
+msgid "Use Drill Origin for output origin"
+msgstr "Use Drill Origin for output origin"
+
+msgid "Use Grid Origin for output origin"
+msgstr "Use Grid Origin for output origin"
+
+msgid ""
+"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
+msgstr ""
+"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
+
+msgid "Exclude 3D models for components with 'virtual' attribute"
+msgstr "Exclude 3D models for components with 'virtual' attribute"
+
+msgid ""
+"Substitute STEP or IGS models with the same name in place of VRML models"
+msgstr ""
+"Substitute STEP or IGS models with the same name in place of VRML models"
+
+msgid ""
+"Minimum distance between points to treat them as separate ones (default "
+"0.01mm)"
+msgstr ""
+"Minimum distance between points to treat them as separate ones (default "
+"0.01mm)"
+
+msgid "display this message"
+msgstr "display this message"
+
+msgid "Kicad2step Converter"
+msgstr "Kicad2step Converter"
+
+msgid "Alias:"
+msgstr "Alias:"
+
 msgid "All KiCad Board Files"
 msgstr "All KiCad Board Files"
 
@@ -22983,10 +23226,6 @@ msgstr "(expected 'Through hole'; actual '%s')"
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(expected 'SMD'; actual '%s')"
-
-#, c-format
-msgid "(expected 'Other'; actual '%s')"
-msgstr "(expected 'Other'; actual '%s')"
 
 msgid "(PTH pad has no copper layers)"
 msgstr "(PTH pad has no copper layers)"
@@ -23895,8 +24134,8 @@ msgstr "Auto-Place Footprints"
 msgid "Add Teardrops..."
 msgstr "Add Teardrops..."
 
-msgid "Remove Teardrops..."
-msgstr "Remove Teardrops..."
+msgid "Remove Teardrops"
+msgstr "Remove Teardrops"
 
 msgid "External Plugins"
 msgstr "External Plugins"
@@ -24625,6 +24864,15 @@ msgid ""
 msgstr ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
+
+msgid "Loading board\n"
+msgstr "Loading board\n"
+
+msgid "Successfully created svg file"
+msgstr "Successfully created svg file"
+
+msgid "Error creating svg file"
+msgstr "Error creating svg file"
 
 msgid "Multiple Layers"
 msgstr "Multiple Layers"
@@ -25765,17 +26013,17 @@ msgstr "Tuned: "
 msgid "?"
 msgstr "?"
 
+msgid "board minimum clearance"
+msgstr "board minimum clearance"
+
+msgid "board minimum track width"
+msgstr "board minimum track width"
+
 msgid "existing track"
 msgstr "existing track"
 
-msgid "board minimum width"
-msgstr "board minimum width"
-
 msgid "netclass 'Default'"
 msgstr "netclass 'Default'"
-
-msgid "user choice"
-msgstr "user choice"
 
 #, c-format
 msgid "%s is malformed."
@@ -26010,12 +26258,12 @@ msgid "Routing Diff Pair: %s"
 msgstr "Routing Diff Pair: %s"
 
 #, c-format
-msgid "Routing Track: %s"
-msgstr "Routing Track: %s"
-
-#, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Resolved Netclass: %s"
+
+#, c-format
+msgid "Routing Track: %s"
+msgstr "Routing Track: %s"
 
 msgid "Routing Track"
 msgstr "Routing Track"
@@ -26045,8 +26293,9 @@ msgstr "Corner Style"
 msgid "Track Width: %s"
 msgstr "Track Width: %s"
 
-msgid "Diff Pair Gap"
-msgstr "Diff Pair Gap"
+#, c-format
+msgid "Diff Pair Gap: %s"
+msgstr "Diff Pair Gap: %s"
 
 msgid "Warning: top and bottom layers are same."
 msgstr "Warning: top and bottom layers are same."
@@ -28898,6 +29147,138 @@ msgstr "KiCad Schematic"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
 
+#, c-format
+#~ msgid "Duplicate items %s%s\n"
+#~ msgstr "Duplicate items %s%s\n"
+
+#~ msgid "Edit Spice Model..."
+#~ msgstr "Edit Spice Model…"
+
+#~ msgid "Spice device:"
+#~ msgstr "Spice device:"
+
+#~ msgid "Spice type:"
+#~ msgstr "Spice type:"
+
+#~ msgid "Spice Model Editor"
+#~ msgstr "Spice Model Editor"
+
+#~ msgid "Default for all sheet instances"
+#~ msgstr "Default for all sheet instances"
+
+#~ msgid ""
+#~ "Check to make the unit and reference, value, and\n"
+#~ "footprint fields the default for all sheet instances\n"
+#~ "of this symbol"
+#~ msgstr ""
+#~ "Check to make the unit and reference, value, and\n"
+#~ "footprint fields the default for all sheet instances\n"
+#~ "of this symbol"
+
+#~ msgid "Spice Model..."
+#~ msgstr "Spice Model..."
+
+#, c-format
+#~ msgid "Failed reading %s simulation model."
+#~ msgstr "Failed reading %s simulation model."
+
+#~ msgid "Waveform"
+#~ msgstr "Waveform"
+
+#~ msgid "Modeling accuracy"
+#~ msgstr "Modeling accuracy"
+
+#, c-format
+#~ msgid "Failed to set parameter '%s' to '%s'"
+#~ msgstr "Failed to set parameter '%s' to '%s'"
+
+#~ msgid "Bus has no members to assign netclass to."
+#~ msgstr "Bus has no members to assign netclass to."
+
+#~ msgid ""
+#~ "When two metals are in contact, there will be a potential difference "
+#~ "between them that will lead to corrosion.\n"
+#~ "In order to avoid corrosion, it is good practice to keep the difference "
+#~ "below 300mV.\n"
+#~ "\n"
+#~ "One of the metal will be anodic (+) and will be attacked. The other one "
+#~ "will be cathodic and will be protected.\n"
+#~ "In the table below, if the number is positive then the row is anodic and "
+#~ "the column is cathodic. \n"
+#~ "\n"
+#~ "You can use an interface metal, just like with the ENIG surface finish "
+#~ "that uses nickel as an interface between gold and copper to prevent "
+#~ "corrosion."
+#~ msgstr ""
+#~ "When two metals are in contact, there will be a potential difference "
+#~ "between them that will lead to corrosion.\n"
+#~ "In order to avoid corrosion, it is good practice to keep the difference "
+#~ "below 300mV.\n"
+#~ "\n"
+#~ "One of the metal will be anodic (+) and will be attacked. The other one "
+#~ "will be cathodic and will be protected.\n"
+#~ "In the table below, if the number is positive then the row is anodic and "
+#~ "the column is cathodic. \n"
+#~ "\n"
+#~ "You can use an interface metal, just like with the ENIG surface finish "
+#~ "that uses nickel as an interface between gold and copper to prevent "
+#~ "corrosion."
+
+#~ msgid "Galvanic corrosion"
+#~ msgstr "Galvanic corrosion"
+
+#~ msgid "Center:"
+#~ msgstr "Center:"
+
+#, c-format
+#~ msgid "Minimum connection width %s; actual %s"
+#~ msgstr "Minimum connection width %s; actual %s"
+
+#, c-format
+#~ msgid "(%s maximum uncoupled length: %s; actual: %s)"
+#~ msgstr "(%s maximum uncoupled length: %s; actual: %s)"
+
+#, c-format
+#~ msgid "minimum gap: %s; "
+#~ msgstr "minimum gap: %s; "
+
+#, c-format
+#~ msgid "maximum gap: %s; "
+#~ msgstr "maximum gap: %s; "
+
+#, c-format
+#~ msgid "actual: %s)"
+#~ msgstr "actual: %s)"
+
+#, c-format
+#~ msgid "(%s min length: %s; actual: %s)"
+#~ msgstr "(%s min length: %s; actual: %s)"
+
+#, c-format
+#~ msgid "(%s max length: %s; actual: %s)"
+#~ msgstr "(%s max length: %s; actual: %s)"
+
+#, c-format
+#~ msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
+#~ msgstr "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
+
+#, c-format
+#~ msgid "(%s max count: %d; actual: %d)"
+#~ msgstr "(%s max count: %d; actual: %d)"
+
+#, c-format
+#~ msgid "(expected 'Other'; actual '%s')"
+#~ msgstr "(expected 'Other'; actual '%s')"
+
+#~ msgid "Remove Teardrops..."
+#~ msgstr "Remove Teardrops..."
+
+#~ msgid "board minimum width"
+#~ msgstr "board minimum width"
+
+#~ msgid "Diff Pair Gap"
+#~ msgstr "Diff Pair Gap"
+
 #~ msgid "Toggle Other 3D models"
 #~ msgstr "Toggle Other 3D models"
 
@@ -29820,9 +30201,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "Net or Bus Name"
 #~ msgstr "Net or Bus Name"
 
-#~ msgid "Device:"
-#~ msgstr "Device:"
-
 #, c-format
 #~ msgid ""
 #~ "Error parsing spice code <%s>\n"
@@ -30520,9 +30898,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Edit Symbol Name"
 #~ msgstr "Edit Symbol Name"
-
-#~ msgid "Remove Teardrops"
-#~ msgstr "Remove Teardrops"
 
 #~ msgid "Auto-finish Track"
 #~ msgstr "Auto-finish Track"
@@ -51115,9 +51490,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgstr ""
 #~ "Unable to create STEP file.  Check that the board has a valid outline and "
 #~ "models."
-
-#~ msgid "STEP file has been created, but there are warnings."
-#~ msgstr "STEP file has been created, but there are warnings."
 
 #~ msgid "STEP file has been created successfully."
 #~ msgstr "STEP file has been created successfully."

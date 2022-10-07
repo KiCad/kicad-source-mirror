@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:09+0200\n"
+"POT-Creation-Date: 2022-10-07 11:38-0700\n"
 "PO-Revision-Date: 2022-10-07 10:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -1569,8 +1569,8 @@ msgstr "Information"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:474
 #: pcbnew/footprint_libraries_utils.cpp:477
-#: pcbnew/footprint_libraries_utils.cpp:1176 pcbnew/router/router_tool.cpp:1728
-#: pcbnew/router/router_tool.cpp:2241 pcbnew/zone_filler.cpp:475
+#: pcbnew/footprint_libraries_utils.cpp:1176 pcbnew/router/router_tool.cpp:1750
+#: pcbnew/router/router_tool.cpp:2263 pcbnew/zone_filler.cpp:475
 msgid "Confirmation"
 msgstr "Confirmation"
 
@@ -14558,7 +14558,7 @@ msgid "Invalid symbol name"
 msgstr "Nom de symbole invalide"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:202
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2560
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2567
 #, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "Le symbole %s contient un caractère invalide '%c'"
@@ -14610,58 +14610,58 @@ msgid "Invalid pin names definition"
 msgstr "Définition de noms de pin non valide"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:763
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1889
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1896
 msgid "Invalid property name"
 msgstr "Nom de propriété invalide"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:771
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1897
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1904
 msgid "Empty property name"
 msgstr "Nom de propriété vide"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:792
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1905
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1912
 msgid "Invalid property value"
 msgstr "Valeur de propriété invalide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1343
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1350
 msgid "Invalid pin name"
 msgstr "Nom de pin invalide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1381
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1388
 msgid "Invalid pin number"
 msgstr "Numéro de pin invalide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1418
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1425
 msgid "Invalid alternate pin name"
 msgstr "Nom alternatif de pin non valide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1593
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1653
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1600
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1660
 msgid "Invalid text string"
 msgstr "Texte invalide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1737
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1744
 msgid "Invalid page type"
 msgstr "Page type non valide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1864
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1871
 msgid "Invalid title block comment number"
 msgstr "Numéro de commentaire de bloc de titre non valide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1991
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1998
 msgid "Invalid sheet pin name"
 msgstr "Nom de pin de feuille invalide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1999
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2006
 msgid "Empty sheet pin name"
 msgstr "Nom de pin de feuille vide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2535
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2542
 msgid "Invalid symbol library name"
 msgstr "Nom de librairie de symbole invalide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2566
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2573
 msgid "Invalid symbol library ID"
 msgstr "ID de librairie de symbole invalide"
 
@@ -28526,6 +28526,13 @@ msgstr "Désélection Toutes Couches"
 msgid "Trace gap must be greater than 0."
 msgstr "La distance entre pistes doit être plus grande que 0."
 
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:65
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:66
+#: pcbnew/router/pns_kicad_iface.cpp:584 pcbnew/router/pns_kicad_iface.cpp:657
+#: pcbnew/router/pns_kicad_iface.cpp:658
+msgid "user choice"
+msgstr "choix de l’utilisateur"
+
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:58
@@ -32667,12 +32674,12 @@ msgstr "Création du fichier Gerber \"job\" '%s'."
 msgid "Board stackup settings not up to date."
 msgstr "Le \"Stackup\" du circuit imprimé n'est pas à jour."
 
-#: pcbnew/exporters/step/kicad2step.cpp:214
+#: pcbnew/exporters/step/kicad2step.cpp:216
 #, c-format
 msgid "No such file: %s"
 msgstr "Pas de tel fichier: %s"
 
-#: pcbnew/exporters/step/kicad2step.cpp:237
+#: pcbnew/exporters/step/kicad2step.cpp:239
 msgid ""
 "** Output already exists. Export aborted. **\n"
 "Enable the force overwrite flag to overwrite it."
@@ -32680,16 +32687,16 @@ msgstr ""
 "** La sortie existe déjà. Exportation interrompue. **\n"
 "Activez l'option \"force overwrite\" pour l'écraser."
 
-#: pcbnew/exporters/step/kicad2step.cpp:248
+#: pcbnew/exporters/step/kicad2step.cpp:256
 #, c-format
 msgid "Read file: '%s'\n"
 msgstr "Lecture fichier '%s'\n"
 
-#: pcbnew/exporters/step/kicad2step.cpp:265
+#: pcbnew/exporters/step/kicad2step.cpp:273
 msgid "Build STEP data\n"
 msgstr "Construction des données STEP\n"
 
-#: pcbnew/exporters/step/kicad2step.cpp:271
+#: pcbnew/exporters/step/kicad2step.cpp:279
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -32698,11 +32705,11 @@ msgstr ""
 "** Erreur de construction du modèle STEP du PCB. Exportation interrompue. "
 "**\n"
 
-#: pcbnew/exporters/step/kicad2step.cpp:276
+#: pcbnew/exporters/step/kicad2step.cpp:284
 msgid "Write STEP file\n"
 msgstr "Ecriture fichier STEP\n"
 
-#: pcbnew/exporters/step/kicad2step.cpp:287
+#: pcbnew/exporters/step/kicad2step.cpp:295
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
@@ -32710,7 +32717,7 @@ msgstr ""
 "\n"
 "** Erreur d'écriture du fichier STEP. **\n"
 
-#: pcbnew/exporters/step/kicad2step.cpp:292
+#: pcbnew/exporters/step/kicad2step.cpp:300
 #, c-format
 msgid ""
 "\n"
@@ -32719,8 +32726,8 @@ msgstr ""
 "\n"
 "Fichier STEP '%s' créé.\n"
 
-#: pcbnew/exporters/step/kicad2step.cpp:298
-#: pcbnew/exporters/step/kicad2step.cpp:303
+#: pcbnew/exporters/step/kicad2step.cpp:306
+#: pcbnew/exporters/step/kicad2step.cpp:311
 msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
@@ -32728,7 +32735,7 @@ msgstr ""
 "\n"
 "** Erreur d'exportation du fichier STEP. Exportation interrompue. **\n"
 
-#: pcbnew/exporters/step/kicad2step.cpp:309
+#: pcbnew/exporters/step/kicad2step.cpp:317
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
@@ -32736,7 +32743,7 @@ msgstr ""
 "\n"
 "** Erreur de lecture du fichier kicad_pcb. **\n"
 
-#: pcbnew/exporters/step/kicad2step.cpp:317
+#: pcbnew/exporters/step/kicad2step.cpp:325
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
@@ -32744,7 +32751,7 @@ msgstr ""
 "Impossible de créer le fichier STEP.\n"
 "Vérifier que le circuit imprimé  a un contour et des modèles valides."
 
-#: pcbnew/exporters/step/kicad2step.cpp:322
+#: pcbnew/exporters/step/kicad2step.cpp:330
 msgid "STEP file has been created, but there are warnings."
 msgstr "Le fichier STEP a été créé, mais il y a des avertissements."
 
@@ -34778,15 +34785,17 @@ msgid "Hole X / Y"
 msgstr "Trou X/Y"
 
 #: pcbnew/pad.cpp:1036 pcbnew/pcb_track.cpp:857 pcbnew/pcb_track.cpp:902
-#: pcbnew/router/router_tool.cpp:2367 pcbnew/zone.cpp:606
+#: pcbnew/router/router_tool.cpp:2409 pcbnew/router/router_tool.cpp:2426
+#: pcbnew/zone.cpp:606
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Isolation Minimum: %s"
 
 #: pcbnew/pad.cpp:1038 pcbnew/pcb_track.cpp:859 pcbnew/pcb_track.cpp:868
 #: pcbnew/pcb_track.cpp:874 pcbnew/pcb_track.cpp:904 pcbnew/pcb_track.cpp:910
-#: pcbnew/router/router_tool.cpp:2354 pcbnew/router/router_tool.cpp:2369
-#: pcbnew/zone.cpp:608
+#: pcbnew/router/router_tool.cpp:2406 pcbnew/router/router_tool.cpp:2411
+#: pcbnew/router/router_tool.cpp:2416 pcbnew/router/router_tool.cpp:2423
+#: pcbnew/router/router_tool.cpp:2428 pcbnew/zone.cpp:608
 #, c-format
 msgid "(from %s)"
 msgstr "(de %s)"
@@ -36691,28 +36700,32 @@ msgstr "Ajusté: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:559
+#: pcbnew/router/pns_kicad_iface.cpp:550 pcbnew/router/pns_kicad_iface.cpp:621
+#: pcbnew/router/router_tool.cpp:720
+#, fuzzy
+msgid "board minimum clearance"
+msgstr "Isolation minimum du PCB %s."
+
+#: pcbnew/router/pns_kicad_iface.cpp:554 pcbnew/router/pns_kicad_iface.cpp:620
+#: pcbnew/router/router_tool.cpp:687 pcbnew/router/router_tool.cpp:707
+#, fuzzy
+msgid "board minimum track width"
+msgstr "c.i. largeur minimum"
+
+#: pcbnew/router/pns_kicad_iface.cpp:561
 msgid "existing track"
 msgstr "piste existante"
-
-#: pcbnew/router/pns_kicad_iface.cpp:573 pcbnew/router/pns_kicad_iface.cpp:586
-msgid "board minimum width"
-msgstr "c.i. largeur minimum"
 
 #: pcbnew/router/pns_kicad_iface.cpp:582
 msgid "netclass 'Default'"
 msgstr "netclasse 'Défaut'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:584
-msgid "user choice"
-msgstr "choix de l’utilisateur"
-
-#: pcbnew/router/pns_kicad_iface.cpp:1097
+#: pcbnew/router/pns_kicad_iface.cpp:1107
 #, c-format
 msgid "%s is malformed."
 msgstr "%s est mal formé."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1100
+#: pcbnew/router/pns_kicad_iface.cpp:1110
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -36720,7 +36733,7 @@ msgstr ""
 "Cette zone ne peut pas être gérée par le routeur.\n"
 "SVP vérifier qu’il ne s’agit pas d’un polygone auto-intersectant."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1704 pcbnew/router/router_tool.cpp:445
+#: pcbnew/router/pns_kicad_iface.cpp:1714 pcbnew/router/router_tool.cpp:445
 msgid "Interactive Router"
 msgstr "Routeur Interactif"
 
@@ -36756,32 +36769,32 @@ msgstr ""
 "La distance de la paire différentielle est inférieure à l'isolation minimale "
 "(%s)."
 
-#: pcbnew/router/pns_router.cpp:247
+#: pcbnew/router/pns_router.cpp:254
 msgid "Cannot start routing from a non-plated hole."
 msgstr "Ne peut pas commencer une piste sur un pad à trou non métallisé."
 
-#: pcbnew/router/pns_router.cpp:258
+#: pcbnew/router/pns_router.cpp:265
 #, c-format
 msgid "Rule area '%s' disallows tracks."
 msgstr "La zone de règle '%s' interdit les pistes."
 
-#: pcbnew/router/pns_router.cpp:263
+#: pcbnew/router/pns_router.cpp:270
 msgid "Rule area disallows tracks."
 msgstr "La zone de règle interdit les pistes."
 
-#: pcbnew/router/pns_router.cpp:272
+#: pcbnew/router/pns_router.cpp:279
 msgid "Cannot start routing from a text item."
 msgstr "Ne peut pas commencer une piste sur un texte."
 
-#: pcbnew/router/pns_router.cpp:277
+#: pcbnew/router/pns_router.cpp:284
 msgid "Cannot start routing from a graphic."
 msgstr "Ne peut pas commencer une piste sur un élément graphique."
 
-#: pcbnew/router/pns_router.cpp:312 pcbnew/router/pns_router.cpp:368
+#: pcbnew/router/pns_router.cpp:323 pcbnew/router/pns_router.cpp:379
 msgid "The routing start point violates DRC."
 msgstr "Le point de départ du routage viole le DRC."
 
-#: pcbnew/router/pns_router.cpp:320
+#: pcbnew/router/pns_router.cpp:331
 msgid "Cannot start a differential pair in the middle of nowhere."
 msgstr "Ne peut pas démarrer une paire différentielle au milieu de nulle part."
 
@@ -36985,80 +36998,81 @@ msgstr ""
 "Souhaitez-vous sauver journal des événements\n"
 "du routeur à des fins de débogage?"
 
-#: pcbnew/router/router_tool.cpp:1037
+#: pcbnew/router/router_tool.cpp:1059
 msgid "Blind/buried via need 2 different layers."
 msgstr "Une via aveugle / enterré nécessite 2 couches différentes."
 
-#: pcbnew/router/router_tool.cpp:1115
+#: pcbnew/router/router_tool.cpp:1137
 msgid "Tracks on Copper layers only."
 msgstr "Pistes sur Couches Cuivre seulement."
 
-#: pcbnew/router/router_tool.cpp:1728 pcbnew/router/router_tool.cpp:2241
+#: pcbnew/router/router_tool.cpp:1750 pcbnew/router/router_tool.cpp:2263
 msgid "The selected item is locked."
 msgstr "L'élément sélectionné est verrouillé."
 
-#: pcbnew/router/router_tool.cpp:1730
+#: pcbnew/router/router_tool.cpp:1752
 msgid "Drag Anyway"
 msgstr "Dragger de Toute Façon"
 
-#: pcbnew/router/router_tool.cpp:2243 pcbnew/tools/pcb_actions.cpp:1516
+#: pcbnew/router/router_tool.cpp:2265 pcbnew/tools/pcb_actions.cpp:1516
 msgid "Break Track"
 msgstr "Briser Piste"
 
-#: pcbnew/router/router_tool.cpp:2316
+#: pcbnew/router/router_tool.cpp:2348
 #, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Routage Paire Différentielle: %s"
 
-#: pcbnew/router/router_tool.cpp:2316
-#, c-format
-msgid "Routing Track: %s"
-msgstr "Routage Piste: %s"
-
-#: pcbnew/router/router_tool.cpp:2323
+#: pcbnew/router/router_tool.cpp:2360 pcbnew/router/router_tool.cpp:2371
 #, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Netclasse Résolue: %s"
 
-#: pcbnew/router/router_tool.cpp:2328
+#: pcbnew/router/router_tool.cpp:2368
+#, c-format
+msgid "Routing Track: %s"
+msgstr "Routage Piste: %s"
+
+#: pcbnew/router/router_tool.cpp:2376
 msgid "Routing Track"
 msgstr "Routage Piste"
 
-#: pcbnew/router/router_tool.cpp:2328
+#: pcbnew/router/router_tool.cpp:2377
 msgid "(no net)"
 msgstr "(pas de net)"
 
-#: pcbnew/router/router_tool.cpp:2335
+#: pcbnew/router/router_tool.cpp:2386
 msgid "Free-angle"
 msgstr "Angle libre"
 
-#: pcbnew/router/router_tool.cpp:2341
+#: pcbnew/router/router_tool.cpp:2392
 msgid "45-degree"
 msgstr "45 degrés"
 
-#: pcbnew/router/router_tool.cpp:2342
+#: pcbnew/router/router_tool.cpp:2393
 msgid "45-degree rounded"
 msgstr "Arrondi à 45 degrés"
 
-#: pcbnew/router/router_tool.cpp:2343
+#: pcbnew/router/router_tool.cpp:2394
 msgid "90-degree"
 msgstr "90 degrés"
 
-#: pcbnew/router/router_tool.cpp:2344
+#: pcbnew/router/router_tool.cpp:2395
 msgid "90-degree rounded"
 msgstr "Arrondi à 90 degrés"
 
-#: pcbnew/router/router_tool.cpp:2349
+#: pcbnew/router/router_tool.cpp:2400
 msgid "Corner Style"
 msgstr "Style de coins"
 
-#: pcbnew/router/router_tool.cpp:2352
+#: pcbnew/router/router_tool.cpp:2404 pcbnew/router/router_tool.cpp:2421
 #, c-format
 msgid "Track Width: %s"
 msgstr "Largeur Piste: '%s'"
 
-#: pcbnew/router/router_tool.cpp:2376
-msgid "Diff Pair Gap"
+#: pcbnew/router/router_tool.cpp:2414
+#, fuzzy, c-format
+msgid "Diff Pair Gap: %s"
 msgstr "Ecart Paire Différentielle"
 
 #: pcbnew/sel_layer.cpp:340
@@ -40839,11 +40853,6 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -40854,10 +40863,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -40871,10 +40879,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -40884,9 +40891,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -40901,10 +40908,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -40917,11 +40920,6 @@ msgstr "PCB Calculator"
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
-
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
@@ -40933,6 +40931,10 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -40986,6 +40988,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid "Duplicate items %s%s\n"
 #~ msgstr "Eléments dupliqués %s%s\n"
