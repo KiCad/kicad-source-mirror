@@ -576,6 +576,9 @@ bool isInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CONTEX
     if( !aArea || aArea == aItem || aArea->GetParent() == aItem )
         return false;
 
+    if( !( aArea->GetLayerSet() & aItem->GetLayerSet() ).any() )
+        return false;
+
     BOARD*                                             board = aArea->GetBoard();
     std::unique_lock<std::mutex>                       cacheLock( board->m_CachesMutex );
     PCB_LAYER_ID                                       layer = aCtx->GetLayer();
