@@ -818,6 +818,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 }
 
                 SCH_ITEM* newItem = static_cast<SCH_ITEM*>( previewItem->Clone() );
+                const_cast<KIID&>( newItem->m_Uuid ) = KIID();
                 newItem->SetPosition( cursorPos );
                 newItem->SetFlags( IS_NEW );
 
