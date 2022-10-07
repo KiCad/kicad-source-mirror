@@ -36,6 +36,7 @@
 
 ///< Default minimum distance between points to treat them as separate ones (mm)
 static constexpr double MIN_DISTANCE = 0.01;
+static constexpr double MIN_ACCEPTABLE_DISTANCE = 0.001;
 
 namespace SEXPR
 {

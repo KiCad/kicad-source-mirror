@@ -678,6 +678,9 @@ void PCBMODEL::SetBoardColor( double r, double g, double b )
 
 void PCBMODEL::SetMinDistance( double aDistance )
 {
+    // Ensure a minimal value (in mm)
+    aDistance = std::max( aDistance, MIN_ACCEPTABLE_DISTANCE );
+
     // m_minDistance2 keeps a squared distance value
     m_minDistance2 = aDistance * aDistance;
     BRepBuilderAPI::Precision( aDistance );

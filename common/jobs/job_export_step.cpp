@@ -29,6 +29,6 @@ JOB_EXPORT_STEP::JOB_EXPORT_STEP( bool aIsCli ) : JOB( "step", aIsCli )
     m_substModels = false;
     m_xOrigin = 0.0;
     m_yOrigin = 0.0;
-    m_minDistance = 0.0;
+    m_minDistance = 0.01;   // 0.01 mm is a good value to connect 2 items of the board outlines
     m_gui = false;
 }

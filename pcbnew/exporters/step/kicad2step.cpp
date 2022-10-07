@@ -46,6 +46,8 @@
 
 #include <Standard_Version.hxx>
 
+#include <locale_io.h>
+
 #define OCC_VERSION_MIN 0x070500
 
 #if OCC_VERSION_HEX < OCC_VERSION_MIN
@@ -240,11 +242,17 @@ int KICAD2STEP::DoRun()
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
+    LOCALE_IO dummy;
+
     wxString outfile = out_fname.GetFullPath();
     KICADPCB pcb( fname.GetName() );
 
     pcb.SetOrigin( m_params.m_xOrigin, m_params.m_yOrigin );
-    pcb.SetMinDistance( m_params.m_minDistance );
+    // Set the min dist in mm to consider 2 points at the same place
+    // This is also the tolerance to consider 2 lines or arcs are connected
+    // A min value (0.001mm) is needed to have closed board outlines
+    // 0.01 mm is a good value
+    pcb.SetMinDistance( std::max( m_params.m_minDistance, MIN_ACCEPTABLE_DISTANCE ) );
     ReportMessage( wxString::Format( _( "Read file: '%s'\n" ), m_params.m_filename ) );
 
     Message::DefaultMessenger()->RemovePrinters( STANDARD_TYPE( Message_PrinterOStream ) );
