@@ -2136,10 +2136,20 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 
     aArc.SetCenter( vec );
 
-    vec = aMgr.GetStartRadiusEnd();
-    aArc.SetStart( vec );
-    vec = aMgr.GetEndRadiusEnd();
-    aArc.SetEnd( vec );
+    if( aMgr.GetSubtended() < ANGLE_0 )
+    {
+        vec = aMgr.GetStartRadiusEnd();
+        aArc.SetStart( vec );
+        vec = aMgr.GetEndRadiusEnd();
+        aArc.SetEnd( vec );
+    }
+    else
+    {
+        vec = aMgr.GetEndRadiusEnd();
+        aArc.SetStart( vec );
+        vec = aMgr.GetStartRadiusEnd();
+        aArc.SetEnd( vec );
+    }
 }
 
 
