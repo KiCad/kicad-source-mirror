@@ -983,7 +983,7 @@ void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nex
 
         if( node->children.size() > 0 )
         {
-            fprintf( m_outputFile, "   /Count %zu\n", -1*node->children.size() );
+            fprintf( m_outputFile, "   /Count %zd\n", -1 * node->children.size() );
             fprintf( m_outputFile, "   /First %d 0 R\n", node->children.front()->entryHandle );
             fprintf( m_outputFile, "   /Last %d 0 R\n", node->children.back()->entryHandle );
         }
