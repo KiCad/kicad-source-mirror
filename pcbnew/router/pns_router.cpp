@@ -224,16 +224,23 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
     }
 
     ITEM_SET candidates = QueryHoverItems( aWhere );
+    wxString failureReason;
 
     for( ITEM* item : candidates.Items() )
     {
+        // Edge cuts are put on all layers, but they're not *really* on all layers
         if( item->Parent() && item->Parent()->GetLayer() == Edge_Cuts )
-        {
-            // Edge cuts are put on all layers, but they're not *really* on all layers
             continue;
-        }
 
-        if( !item->IsRoutable() && item->Layers().Overlaps( aLayer ) )
+        if( !item->Layers().Overlaps( aLayer ) )
+            continue;
+
+        if( item->IsRoutable() )
+        {
+            failureReason = wxEmptyString;
+            break;
+        }
+        else
         {
             BOARD_ITEM* parent = item->Parent();
 
@@ -244,7 +251,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
                 PAD* pad = static_cast<PAD*>( parent );
 
                 if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
-                    SetFailureReason( _( "Cannot start routing from a non-plated hole." ) );
+                    failureReason = _( "Cannot start routing from a non-plated hole." );
             }
                 break;
 
@@ -255,12 +262,12 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
                 if( !zone->GetZoneName().IsEmpty() )
                 {
-                    SetFailureReason( wxString::Format( _( "Rule area '%s' disallows tracks." ),
-                                                        zone->GetZoneName() ) );
+                    failureReason = wxString::Format( _( "Rule area '%s' disallows tracks." ),
+                                                      zone->GetZoneName() );
                 }
                 else
                 {
-                    SetFailureReason( _( "Rule area disallows tracks." ) );
+                    failureReason = _( "Rule area disallows tracks." );
                 }
             }
                 break;
@@ -269,19 +276,23 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
             case PCB_FP_TEXT_T:
             case PCB_TEXTBOX_T:
             case PCB_FP_TEXTBOX_T:
-                SetFailureReason( _( "Cannot start routing from a text item." ) );
+                failureReason = _( "Cannot start routing from a text item." );
                 break;
 
             case PCB_SHAPE_T:
             case PCB_FP_SHAPE_T:
-                SetFailureReason( _( "Cannot start routing from a graphic." ) );
+                failureReason = _( "Cannot start routing from a graphic." );
 
             default:
                 break;
             }
-
-            return false;
         }
+    }
+
+    if( !failureReason.IsEmpty() )
+    {
+        SetFailureReason( failureReason );
+        return false;
     }
 
     VECTOR2I startPoint = aWhere;
