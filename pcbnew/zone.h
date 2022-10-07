@@ -90,6 +90,12 @@ public:
     void InitDataFromSrcInCopyCtor( const ZONE& aZone );
 
     /**
+     * For rule areas which exclude footprints (and therefore participate in courtyard conflicts
+     * during move).
+     */
+    bool IsConflicting() const;
+
+    /**
      * @return a VECTOR2I, position of the first point of the outline
      */
     VECTOR2I GetPosition() const override;

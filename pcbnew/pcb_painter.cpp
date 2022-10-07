@@ -2162,7 +2162,7 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
 #endif
     }
 
-    if( aLayer == LAYER_CONFLICTS_SHADOW )    // happens only if locked
+    if( aLayer == LAYER_CONFLICTS_SHADOW )
     {
         const SHAPE_POLY_SET& frontpoly = aFootprint->GetCourtyard( F_CrtYd );
         const SHAPE_POLY_SET& backpoly = aFootprint->GetCourtyard( B_CrtYd );
@@ -2251,6 +2251,18 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 
 void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 {
+    if( aLayer == LAYER_CONFLICTS_SHADOW )
+    {
+        COLOR4D color = m_pcbSettings.GetColor( aZone, aLayer );
+
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetFillColor( color );
+
+        m_gal->DrawPolygon( aZone->Outline()->Outline( 0 ) );
+        return;
+    }
+
     /*
      * aLayer will be the virtual zone layer (LAYER_ZONE_START, ... in GAL_LAYER_ID)
      * This is used for draw ordering in the GAL.

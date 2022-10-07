@@ -221,6 +221,12 @@ bool ZONE::UnFill()
 }
 
 
+bool ZONE::IsConflicting() const
+{
+    return HasFlag( COURTYARD_CONFLICT );
+}
+
+
 VECTOR2I ZONE::GetPosition() const
 {
     return GetCornerPosition( 0 );
@@ -289,6 +295,9 @@ void ZONE::ViewGetLayers( int aLayers[], int& aCount ) const
         aLayers[idx] = LAYER_ZONE_START + layers[idx];
 
     aCount = layers.size();
+
+    if( IsConflicting() )
+        aLayers[ aCount++ ] = LAYER_CONFLICTS_SHADOW;
 }
 
 

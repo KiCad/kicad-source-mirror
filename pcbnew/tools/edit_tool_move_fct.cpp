@@ -105,8 +105,8 @@ public:
         return wxT( "Tests footprints' courtyard clearance" );
     }
 
-    // The list of footprints having issues
-    std::set<FOOTPRINT*> m_FpInConflict;
+    // The list of items in collision
+    std::set<BOARD_ITEM*> m_ItemsInConflict;
 
     // The list of moved footprints
     std::vector<FOOTPRINT*> m_FpInMove;
@@ -163,8 +163,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
 
                 if( frontA.Collide( &frontB, clearance, &actual, &pos ) )
                 {
-                    m_FpInConflict.insert( fpA );
-                    m_FpInConflict.insert( fpB );
+                    m_ItemsInConflict.insert( fpA );
+                    m_ItemsInConflict.insert( fpB );
                  }
             }
 
@@ -176,11 +176,10 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
                 // constraint.GetValue().Min();
                 clearance = 0;
 
-
                 if( backA.Collide( &backB, clearance, &actual, &pos ) )
                 {
-                    m_FpInConflict.insert( fpA );
-                    m_FpInConflict.insert( fpB );
+                    m_ItemsInConflict.insert( fpA );
+                    m_ItemsInConflict.insert( fpB );
                 }
             }
 
@@ -213,8 +212,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
                 {
                     if( testPadAgainstCourtyards( padB, fpA ) )
                     {
-                        m_FpInConflict.insert( fpA );
-                        m_FpInConflict.insert( fpB );
+                        m_ItemsInConflict.insert( fpA );
+                        m_ItemsInConflict.insert( fpB );
                         skipNextCmp = true;
                         break;
                     }
@@ -231,8 +230,50 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
                 {
                     if( testPadAgainstCourtyards( padA, fpB ) )
                     {
-                        m_FpInConflict.insert( fpA );
-                        m_FpInConflict.insert( fpB );
+                        m_ItemsInConflict.insert( fpA );
+                        m_ItemsInConflict.insert( fpB );
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() || !zone->GetDoNotAllowFootprints() )
+            continue;
+
+        bool disallowFront = ( zone->GetLayerSet() | LSET::FrontMask() ).any();
+        bool disallowBack = ( zone->GetLayerSet() | LSET::BackMask() ).any();
+
+        for( FOOTPRINT* fp : m_FpInMove )
+        {
+            if( disallowFront )
+            {
+                const SHAPE_POLY_SET& frontCourtyard = fp->GetCourtyard( F_CrtYd );
+
+                if( !frontCourtyard.IsEmpty() )
+                {
+                    if( zone->Outline()->Collide( &frontCourtyard.Outline( 0 ) ) )
+                    {
+                        m_ItemsInConflict.insert( fp );
+                        m_ItemsInConflict.insert( zone );
+                        break;
+                    }
+                }
+            }
+
+            if( disallowBack )
+            {
+                const SHAPE_POLY_SET& backCourtyard = fp->GetCourtyard( B_CrtYd );
+
+                if( !backCourtyard.IsEmpty() )
+                {
+                    if( zone->Outline()->Collide( &backCourtyard.Outline( 0 ) ) )
+                    {
+                        m_ItemsInConflict.insert( fp );
+                        m_ItemsInConflict.insert( zone );
                         break;
                     }
                 }
@@ -257,7 +298,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::Init( BOARD* aBoard )
 
 bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::Run()
 {
-    m_FpInConflict.clear();
+    m_ItemsInConflict.clear();
     m_largestCourtyardClearance = 0;
 
     DRC_CONSTRAINT constraint;
@@ -593,9 +634,9 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                                                             : wxT( "" ) );
             };
 
-    std::vector<BOARD_ITEM*> sel_items;         // All the items operated on by the move below
-    std::vector<BOARD_ITEM*> orig_items;        // All the original items in the selection
-    std::vector<FOOTPRINT*> lastFpInConflict;   // last footprints with courtyard overlapping
+    std::vector<BOARD_ITEM*> sel_items;             // All the items operated on by the move below
+    std::vector<BOARD_ITEM*> orig_items;            // All the original items in the selection
+    std::vector<BOARD_ITEM*> lastItemsInConflict;   // last footprints with courtyard overlapping
 
     for( EDA_ITEM* item : selection )
     {
@@ -758,25 +799,25 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                                                 // has changed
 
                     // Ensure the "old" conflicts are cleared
-                    for( FOOTPRINT* fp: lastFpInConflict )
+                    for( BOARD_ITEM* item: lastItemsInConflict )
                     {
-                        fp->ClearFlags( COURTYARD_CONFLICT );
-                        m_toolMgr->GetView()->Update( fp );
+                        item->ClearFlags( COURTYARD_CONFLICT );
+                        m_toolMgr->GetView()->Update( item );
                         need_redraw = true;
                     }
 
-                    lastFpInConflict.clear();
+                    lastItemsInConflict.clear();
 
-                    for( FOOTPRINT* fp: drc_on_move.m_FpInConflict )
+                    for( BOARD_ITEM* item: drc_on_move.m_ItemsInConflict )
                     {
-                        if( !fp->HasFlag( COURTYARD_CONFLICT ) )
+                        if( !item->HasFlag( COURTYARD_CONFLICT ) )
                         {
-                            fp->SetFlags( COURTYARD_CONFLICT );
-                            m_toolMgr->GetView()->Update( fp );
+                            item->SetFlags( COURTYARD_CONFLICT );
+                            m_toolMgr->GetView()->Update( item );
                             need_redraw = true;
                         }
 
-                        lastFpInConflict.push_back( fp );
+                        lastItemsInConflict.push_back( item );
                     }
 
                     if( need_redraw )
@@ -976,10 +1017,10 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     } while( ( evt = Wait() ) ); // Assignment (instead of equality test) is intentional
 
     // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
-    for( FOOTPRINT* fp: lastFpInConflict )
+    for( BOARD_ITEM* item: lastItemsInConflict )
     {
-        m_toolMgr->GetView()->Update( fp );
-        fp->ClearFlags( COURTYARD_CONFLICT );
+        m_toolMgr->GetView()->Update( item );
+        item->ClearFlags( COURTYARD_CONFLICT );
     }
 
     controls->ForceCursorPosition( false );
