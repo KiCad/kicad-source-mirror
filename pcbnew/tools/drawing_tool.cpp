@@ -217,6 +217,12 @@ bool DRAWING_TOOL::Init()
                          || m_mode == MODE::GRAPHIC_POLYGON );
             };
 
+    auto arcToolActive =
+            [this]( const SELECTION& aSel )
+            {
+                return m_mode == MODE::ARC;
+            };
+
     auto viaToolActive =
             [this]( const SELECTION& aSel )
             {
@@ -235,6 +241,7 @@ bool DRAWING_TOOL::Init()
     // tool-specific actions
     ctxMenu.AddItem( PCB_ACTIONS::closeOutline,        canCloseOutline, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint,     canUndoPoint, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::arcPosture,          arcToolActive, 200 );
 
     ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, SELECTION_CONDITIONS::ShowAlways, 250 );
     ctxMenu.AddSeparator( 500 );
