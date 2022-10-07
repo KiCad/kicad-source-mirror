@@ -629,6 +629,9 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             if( !aArea || aArea == item || aArea->GetParent() == item )
                                 return false;
 
+                            if( !( aArea->GetLayerSet() & item->GetLayerSet() ).any() )
+                                return false;
+
                             if( !aArea->GetBoundingBox().Intersects( itemBBox ) )
                                 return false;
 
@@ -690,6 +693,9 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                         [&]( ZONE* aArea )
                         {
                             if( !aArea || aArea == item || aArea->GetParent() == item )
+                                return false;
+
+                            if( !( aArea->GetLayerSet() & item->GetLayerSet() ).any() )
                                 return false;
 
                             if( !aArea->GetBoundingBox().Intersects( itemBBox ) )
