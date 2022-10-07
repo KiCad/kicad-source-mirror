@@ -678,7 +678,14 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
                                            targetLayer );
 
         if( !constraint.IsNull() )
+        {
             sizes.SetTrackWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+
+            if( sizes.TrackWidth() == constraint.m_Value.Opt() )
+                sizes.SetWidthSource( constraint.GetName() );
+            else
+                sizes.SetDiffPairGapSource( _( "board minimum track width" ) );
+        }
     }
 
     if( nets.size() >= 2 && ( bds.UseNetClassDiffPair() || !sizes.TrackWidthIsExplicit() ) )
@@ -691,13 +698,27 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
                                            targetLayer );
 
         if( !constraint.IsNull() )
+        {
             sizes.SetDiffPairWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+
+            if( sizes.DiffPairWidth() == constraint.m_Value.Opt() )
+                sizes.SetDiffPairWidthSource( constraint.GetName() );
+            else
+                sizes.SetDiffPairGapSource( _( "board minimum track width" ) );
+        }
 
         constraint = drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT, &dummyTrack, &dummyTrackB,
                                            targetLayer );
 
         if( !constraint.IsNull() )
+        {
             sizes.SetDiffPairGap( std::max( bds.m_MinClearance, constraint.m_Value.Opt() ) );
+
+            if( sizes.DiffPairGap() == constraint.m_Value.Opt() )
+                sizes.SetDiffPairGapSource( constraint.GetName() );
+            else
+                sizes.SetDiffPairGapSource( _( "board minimum clearance" ) );
+        }
     }
 
     m_router->UpdateSizes( sizes );
@@ -2378,33 +2399,34 @@ void ROUTER_TOOL::UpdateMessagePanel()
 
     items.emplace_back( _( "Corner Style" ), cornerMode );
 
-    int width = isDiffPair ? sizes.DiffPairWidth() : sizes.TrackWidth();
-    items.emplace_back( wxString::Format( _( "Track Width: %s" ),
-                                          frame()->MessageTextFromValue( width ) ),
-                        wxString::Format( _( "(from %s)" ),
-                                          sizes.GetWidthSource() ) );
-
-    if( m_startItem )
-    {
-        PNS::SEGMENT dummy;
-        dummy.SetNet( m_startItem->Net() );
-
-        PNS::CONSTRAINT constraint;
-
-        if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, &dummy, nullptr,
-                                       m_router->GetCurrentLayer(), &constraint ) )
-        {
-            items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                                  frame()->MessageTextFromValue( constraint.m_Value.Min() ) ),
-                                wxString::Format( _( "(from %s)" ),
-                                                  constraint.m_RuleName ) );
-        }
-    }
-
     if( isDiffPair )
     {
-        items.emplace_back( _( "Diff Pair Gap" ),
-                            frame()->MessageTextFromValue( sizes.DiffPairGap() ) );
+        items.emplace_back( wxString::Format( _( "Track Width: %s" ),
+                                              frame()->MessageTextFromValue( sizes.DiffPairWidth() ) ),
+                            wxString::Format( _( "(from %s)" ),
+                                              sizes.GetDiffPairWidthSource() ) );
+
+        items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                              frame()->MessageTextFromValue( sizes.MinClearance() ) ),
+                            wxString::Format( _( "(from %s)" ),
+                                              sizes.GetClearanceSource() ) );
+
+        items.emplace_back( wxString::Format( _( "Diff Pair Gap: %s" ),
+                                              frame()->MessageTextFromValue( sizes.DiffPairGap() ) ),
+                            wxString::Format( _( "(from %s)" ),
+                                              sizes.GetDiffPairGapSource() ) );
+    }
+    else
+    {
+        items.emplace_back( wxString::Format( _( "Track Width: %s" ),
+                                              frame()->MessageTextFromValue( sizes.TrackWidth() ) ),
+                            wxString::Format( _( "(from %s)" ),
+                                              sizes.GetWidthSource() ) );
+
+        items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                              frame()->MessageTextFromValue( sizes.MinClearance() ) ),
+                            wxString::Format( _( "(from %s)" ),
+                                              sizes.GetClearanceSource() ) );
     }
 
     frame()->SetMsgPanel( items );

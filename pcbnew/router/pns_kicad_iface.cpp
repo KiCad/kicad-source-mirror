@@ -547,9 +547,11 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         m_startLayer = aStartItem->Layer();
 
     aSizes.SetMinClearance( bds.m_MinClearance );
+    aSizes.SetClearanceSource( _( "board minimum clearance" ) );
 
     int  trackWidth = bds.m_TrackMinWidth;
     bool found = false;
+    aSizes.SetWidthSource( _( "board minimum track width" ) );
 
     if( bds.m_UseConnectedTrackWidth && !bds.m_TempOverrideTrackWidth && aStartItem != nullptr )
     {
@@ -569,8 +571,6 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
             if( trackWidth == constraint.m_Value.Opt() )
                 aSizes.SetWidthSource( constraint.m_RuleName );
-            else
-                aSizes.SetWidthSource( _( "board minimum width" ) );
         }
     }
 
@@ -582,8 +582,6 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
             aSizes.SetWidthSource( _( "netclass 'Default'" ) );
         else if( trackWidth == bds.GetCurrentTrackWidth() )
             aSizes.SetWidthSource( _( "user choice" ) );
-        else
-            aSizes.SetWidthSource( _( "board minimum width" ) );
     }
 
     aSizes.SetTrackWidth( trackWidth );
@@ -619,6 +617,9 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     int diffPairGap = bds.m_MinClearance;
     int diffPairViaGap = bds.m_MinClearance;
 
+    aSizes.SetDiffPairWidthSource( _( "board minimum track width" ) );
+    aSizes.SetDiffPairGapSource( _( "board minimum clearance" ) );
+
     found = false;
 
     // First try to pick up diff pair width from starting track, if enabled
@@ -632,6 +633,9 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
                                                        nullptr, m_startLayer, &constraint ) )
         {
             diffPairWidth = std::max( diffPairWidth, constraint.m_Value.Opt() );
+
+            if( diffPairWidth == constraint.m_Value.Opt() )
+                aSizes.SetDiffPairWidthSource( constraint.m_RuleName );
         }
 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aStartItem,
@@ -639,6 +643,9 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         {
             diffPairGap = std::max( diffPairGap, constraint.m_Value.Opt() );
             diffPairViaGap = std::max( diffPairViaGap, constraint.m_Value.Opt() );
+
+            if( diffPairGap == constraint.m_Value.Opt() )
+                aSizes.SetDiffPairGapSource( constraint.m_RuleName );
         }
     }
     else
@@ -646,6 +653,9 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         diffPairWidth  = bds.GetCurrentDiffPairWidth();
         diffPairGap    = bds.GetCurrentDiffPairGap();
         diffPairViaGap = bds.GetCurrentDiffPairViaGap();
+
+        aSizes.SetDiffPairWidthSource( _( "user choice" ) );
+        aSizes.SetDiffPairGapSource( _( "user choice" ) );
     }
 
     aSizes.SetDiffPairWidth( diffPairWidth );

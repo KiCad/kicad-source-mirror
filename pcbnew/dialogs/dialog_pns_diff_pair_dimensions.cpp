@@ -62,6 +62,9 @@ bool DIALOG_PNS_DIFF_PAIR_DIMENSIONS::TransferDataFromWindow()
     m_sizes.SetDiffPairViaGap( m_viaGap.GetValue() );
     m_sizes.SetDiffPairWidth( m_traceWidth.GetValue() );
 
+    m_sizes.SetDiffPairGapSource( _( "user choice" ) );
+    m_sizes.SetDiffPairWidthSource( _( "user choice" ) );
+
     return true;
 }
 
