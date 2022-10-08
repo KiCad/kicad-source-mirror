@@ -28,10 +28,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-04 22:26+0000\n"
+"PO-Revision-Date: 2022-10-09 08:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1073,9 +1073,8 @@ msgid "Opacity"
 msgstr "불투명도"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "보드 두께: "
+msgstr "보드 두께"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -3047,13 +3046,14 @@ msgstr "이 변경 사항은 편집기를 다시 시작할 때 적용됩니다."
 
 #: common/dialogs/panel_common_settings_base.cpp:127
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "회로도와 PCB 편집기 사이에서 마우스를 따라가는 포커스"
 
 #: common/dialogs/panel_common_settings_base.cpp:128
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
-msgstr ""
+msgstr "마우스 커서가 회로도 또는 PCB 편집기 창의 캔버스 위로 이동하면 해당 창이 "
+"열립니다."
 
 #: common/dialogs/panel_common_settings_base.cpp:132
 msgid "Icon theme:"
@@ -5997,9 +5997,8 @@ msgid "Zoom Out"
 msgstr "축소"
 
 #: common/tool/actions.cpp:336 common/widgets/mathplot.cpp:1665
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "페이지에 맞추기"
+msgstr "커서 중심"
 
 #: common/tool/actions.cpp:342
 msgid "Zoom to Selection"
@@ -7578,9 +7577,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "중복된 항목 %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "서로 다른 값 : %s%d%s (%s) 과 %s%d%s (%s)"
+msgstr "항목 %s%s%s 및 %s%s%s의 단위 수가 다릅니다.\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
@@ -9879,9 +9878,8 @@ msgid "Footprint Filters"
 msgstr "풋프린트 필터"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:337
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "스파이스 모델 편집 ..."
+msgstr "시뮬레이션 모델 편집..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
@@ -11062,9 +11060,8 @@ msgid "Exclude symbol from simulation"
 msgstr "시뮬레이션에서 심볼 비활성화"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:114
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Spice 모델 편집기"
+msgstr "시뮬레이션 모델 편집기"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11604,9 +11601,8 @@ msgid "Library link:"
 msgstr "라이브러리 링크:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:323
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "시뮬레이터..."
+msgstr "시뮬레이션 모델..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:108
 msgid "Symbol Properties"
@@ -15011,6 +15007,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"이전 파일 버전에서 로드된 회로도 파일에 계층 시트가 있어 기호 인스턴스 "
+"데이터가 누락되었습니다. 그러면 로드된 회로도의 모든 기호가 기본 인스턴스 "
+"설정을 사용하거나 라이브러리 심볼 설정으로 대체됩니다. 이 회로도 파일을 "
+"사용하는 프로젝트를 로드하고 최신 파일 버전으로 저장하면 이 문제가 "
+"해결됩니다.\n"
+"\n"
+"계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:240 eeschema/sheet.cpp:268 eeschema/sheet.cpp:309
 #: eeschema/sheet.cpp:358 eeschema/sheet.cpp:419
@@ -15103,21 +15106,21 @@ msgid "Discard New Sheet"
 msgstr "새로운 시트 버리기"
 
 #: eeschema/sim/sim_lib_mgr.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "심볼 라이브러리 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
+msgstr "시뮬레이션 모델 라이브러리 '%s'를로드 중 오류 발생: %s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "회로도 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
+msgstr "시뮬레이션 모델 로드 오류: '%s' 필드 없음"
 
 #: eeschema/sim/sim_lib_mgr.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "심볼 %s을(를) 불러오는 중 라이브러리 '%s'에서 오류 발생."
+msgstr "시뮬레이션 모델 로드 오류: '%s' 라이브러리에서 기본 모델 '%s'를 찾을 수 없음"
 
 #: eeschema/sim/sim_model.cpp:1167
 #, c-format
@@ -15146,9 +15149,8 @@ msgid "Parasitic Pin Capacitance"
 msgstr "기생 핀 커패시턴스"
 
 #: eeschema/sim/sim_model_kibis.cpp:243
-#, fuzzy
 msgid "DC Value"
-msgstr "값"
+msgstr "직류 값"
 
 #: eeschema/sim/sim_model_kibis.cpp:261
 msgid "ON time"
@@ -15434,13 +15436,13 @@ msgstr "알 수 없는 SIM_VALUE 유형"
 #: eeschema/sim/spice_model_parser.cpp:186
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr ""
+msgstr "복사할 모델 '%s''를 \"A Kind Of\" 모델 '%s'에서 찾을 수 없음"
 
 #: eeschema/sim/spice_model_parser.cpp:217
 #: eeschema/sim/spice_model_parser.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s' in model '%s'"
-msgstr "매개변수 '%s'를 '%s'로 설정 실패"
+msgstr "매개 변수 '%s'를 '%s'로 모델 '%s'에서 설정하지 못함"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -20969,34 +20971,32 @@ msgid "Multiplier"
 msgstr "곱셈 회로"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:40
-#, fuzzy
 msgid "Platinum"
-msgstr "알루미늄"
+msgstr "백금"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:41
 msgid "Gold"
-msgstr ""
+msgstr "금"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:42
 msgid "Titanium"
-msgstr ""
+msgstr "티탄"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:43
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "스테인리스 18-9"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:45
 msgid "Silver"
-msgstr ""
+msgstr "은"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:46
 msgid "Mercury"
-msgstr ""
+msgstr "수은"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:47
-#, fuzzy
 msgid "Nickel"
-msgstr "별칭"
+msgstr "니켈"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:48
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:838
@@ -21005,69 +21005,64 @@ msgid "Copper"
 msgstr "구리"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:49
-#, fuzzy
 msgid "Copper-Aluminium"
-msgstr "알루미늄"
+msgstr "구리-알루미늄"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "놋쇠"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
-msgstr ""
+msgstr "청동"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
-#, fuzzy
 msgid "Tin"
-msgstr "in"
+msgstr "주석"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:53
-#, fuzzy
 msgid "Lead"
-msgstr "리더"
+msgstr "납"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:54
-#, fuzzy
 msgid "Aluminium-Copper"
-msgstr "알루미늄"
+msgstr "알루미늄-구리"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "주철"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
-msgstr ""
+msgstr "탄소강"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:57
-#, fuzzy
 msgid "Aluminium"
 msgstr "알루미늄"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:58
 msgid "Cadmium"
-msgstr ""
+msgstr "카드뮴"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:59
 msgid "Iron"
-msgstr ""
+msgstr "철"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:60
 msgid "Chrome"
-msgstr ""
+msgstr "크롬"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:61
 msgid "Zinc"
-msgstr ""
+msgstr "아연"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:62
 msgid "Manganese"
-msgstr ""
+msgstr "망간"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:63
 msgid "Magnesium"
-msgstr ""
+msgstr "마그네슘"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
@@ -21087,10 +21082,17 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"이 표는 다양한 금속과 합금 간의 전기 화학적 전위의 차이를 보여줍니다. 양수는 "
+"행이 양극이고 열이 음극임을 나타냅니다.\n"
+"갈바닉 부식은 접촉 및 특정 조건 하에서 다른 금속에 영향을 미칩니다.\n"
+"전기 화학 쌍의 양극은 산화되어 먹히는 반면, 음극은 용해 된 금속을 도금하지만 "
+"보호 상태를 유지합니다.\n"
+"EN 50310은 300mV 미만의 전압 차이를 제안합니다. 알려진 관행은 주 쌍 (즉, "
+"ENIG 표면 마무리) 사이에 세 번째 인터페이스 금속을 사용합니다."
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
 msgid "Threshold voltage:"
-msgstr ""
+msgstr "임계 전압:"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:68
 #: pcb_calculator/widgets/unit_selector.cpp:255
@@ -21950,7 +21952,6 @@ msgid "Board Classes"
 msgstr "보드 클래스"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
-#, fuzzy
 msgid "Galvanic Corrosion"
 msgstr "갈바닉 부식"
 
@@ -25372,33 +25373,33 @@ msgid "Text items must have some content."
 msgstr "텍스트 개체는 내용이 있어야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at least %s."
-msgstr "%s은(는) 최소 %s여야 합니다."
+msgstr "텍스트 너비는 %s 이상이어야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at most %s."
-msgstr "%s은(는) 최소 %s여야 합니다."
+msgstr "텍스트 너비는 최대 %s여야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at least %s."
-msgstr "%s은(는) 최소 %s여야 합니다."
+msgstr "텍스트 높이는 %s 이상이어야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at most %s."
-msgstr "%s은(는) 최소 %s여야 합니다."
+msgstr "텍스트 높이는 최대 %s여야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
-"텍스트의 굵기가 텍스트의 크기에 비해 너무 큽니다.\n"
-"글씨가 깨질 수 있습니다."
+"텍스트 크기에 비해 텍스트 두께가 너무 큽니다.\n"
+"%s에서 고정됩니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:574
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:603
@@ -25684,14 +25685,14 @@ msgid "Footprint name may not contain '%s'."
 msgstr "풋프린트 이름에는 '%s'이(가) 포함되지 않아야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "The text width must be between %s and %s."
-msgstr "라인 폭은 0보다 커야 합니다."
+msgstr "텍스트 너비는 %s와 %s 사이여야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "'%s'와 %lf 간의 유형 불일치"
+msgstr "텍스트 높이는 %s와 %s 사이여야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:452
 #: pcbnew/dialogs/dialog_text_properties.cpp:420
@@ -26420,9 +26421,8 @@ msgid "Circle Properties"
 msgstr "원 속성"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:211
-#, fuzzy
 msgid "Center Point"
-msgstr "시작 지점"
+msgstr "중심점"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:223
 msgid "Arc Properties"
@@ -26898,9 +26898,8 @@ msgstr "구리가 아닌 영역 속성"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:146
-#, fuzzy
 msgid "Center Point:"
-msgstr "가운데"
+msgstr "중심점:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:136
 #: pcbnew/dialogs/dialog_pad_properties.cpp:728
@@ -31601,9 +31600,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "네트의 최소 연결 너비 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum connection width %s; actual %s)"
-msgstr "최소 연결 폭 %s; 실제 값 %s"
+msgstr "(%s 최소 연결 폭 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -31675,19 +31674,19 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "겹치는 코트야드가 있는 지 풋프린트 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "(%s 최대 비결합 길이: %s, 실제 값: %s)"
+msgstr "(%s 최대 비결합 길이 %s, 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum gap %s; actual %s)"
-msgstr "(%s 최소 값 %s; 실제 값 %s)"
+msgstr "(%s 최소 간격 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum gap %s; actual %s)"
-msgstr "(%s 최대 높이 %s; 실제 %s)"
+msgstr "(%s 최대 간격 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 msgid "Checking keepouts & disallow constraints..."
@@ -31769,17 +31768,17 @@ msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "풋프린트 '%s'이(가) 라이브러리 '%s'의 복사본과 일치하지 않습니다."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s 최소 길이: %s, 실제 값: %s)"
+msgstr "(%s 최소 길이 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s 최대 길이: %s, 실제 값: %s)"
+msgstr "(%s 최대 길이 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
 msgstr "(%s 최대 스큐: %s, 실제 값: %s, 평균 네트 길이: %s, 실제 값: %s)"
 
@@ -32081,49 +32080,56 @@ msgid "Board stackup settings not up to date."
 msgstr "기판 시작 설정이 최신이 아닙니다."
 
 #: pcbnew/exporters/step/kicad2step.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "No such file: %s"
-msgstr "압축 파일 풀기"
+msgstr "해당 파일 없음: %s"
 
 #: pcbnew/exporters/step/kicad2step.cpp:239
 msgid ""
 "** Output already exists. Export aborted. **\n"
 "Enable the force overwrite flag to overwrite it."
 msgstr ""
+"** 출력이 이미 존재합니다. 내보내기가 중단되었습니다. **\n"
+"덮어쓰려면 강제 덮어쓰기 플래그를 활성화합니다."
 
 #: pcbnew/exporters/step/kicad2step.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "생성된 파일 '%s'"
+msgstr "파일 읽기: '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:273
 msgid "Build STEP data\n"
-msgstr ""
+msgstr "STEP 데이터 구축\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:279
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
+"\n"
+"** STEP 보드 모델을 빌드하는 동안 오류가 발생했습니다. 내보내기가 "
+"중단되었습니다. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:284
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "STEP 파일"
+msgstr "STEP 파일 쓰기\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:295
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "파일 쓰기 오류 '%s'."
+msgstr ""
+"\n"
+"** STEP 파일 쓰기 오류. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "보고서 파일 '%s' 생성됨."
+msgstr ""
+"\n"
+"STEP 파일 '%s' 생성됨.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:306
 #: pcbnew/exporters/step/kicad2step.cpp:311
@@ -32131,13 +32137,16 @@ msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr ""
+"\n"
+"** STEP 파일을 내보내는 중 오류가 발생했습니다. 내보내기가 중단됨 **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:317
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "파일을 읽는 중에 오류가 발생하였습니다."
+msgstr ""
+"\n"
+"** kicad_pcb 파일을 읽는 동안 오류가 발생했습니다. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:325
 msgid ""
