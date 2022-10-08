@@ -74,7 +74,6 @@ public:
     std::vector<MODEL> GetModels() const;
 
     std::string GetFilePath() const { return m_filePath; }
-    std::string GetError() const { return m_error; }
 
     DEFINE_ENUM_CLASS_WITH_ITERATOR( LIBRARY_TYPE, NONE, KIBIS, SPICE )
 
@@ -85,7 +84,6 @@ protected:
     std::vector<std::unique_ptr<SIM_MODEL>> m_models;
 
     std::string m_filePath;
-    std::string m_error;
 };
 
 

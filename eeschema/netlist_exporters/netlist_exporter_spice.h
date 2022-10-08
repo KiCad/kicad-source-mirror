@@ -51,7 +51,6 @@ public:
     struct ITEM
     {
         std::string refName;
-        std::string libraryPath;
         std::vector<std::string> pinNumbers;
         std::vector<std::string> pinNetNames;
         const SIM_MODEL* model;
@@ -131,7 +130,7 @@ protected:
 private:
     bool readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, ITEM& aItem,
                       std::set<std::string>& aRefNames );
-    void readModel( SCH_SYMBOL& aSymbol, ITEM& aItem );
+    void readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, ITEM& aItem );
     void readPinNumbers( SCH_SYMBOL& aSymbol, ITEM& aItem );
     void readPinNetNames( SCH_SYMBOL& aSymbol, ITEM& aItem, int& aNcCounter );
 

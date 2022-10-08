@@ -24,8 +24,10 @@
 #ifndef SIM_MODEL_KIBIS_H
 #define SIM_MODEL_KIBIS_H
 
+#include <../../pcbnew/ibis/kibis.h>
 #include <sim/sim_model.h>
 #include <sim/spice_generator.h>
+#include <project.h>
 
 class SIM_LIBRARY_KIBIS;
 
@@ -85,10 +87,12 @@ public:
      * */
     bool ChangePin( SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber );
 
+    void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
+
+    std::string GenerateSpiceDriver( const std::vector<SCH_FIELD>& aFields ) const;
+
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;
-    std::vector<std::pair<std::string, std::string>> m_ibisPins;
-    std::string                                   m_componentName;
 
 private:
     bool requiresSpiceModelLine() const override { return true; }
@@ -98,7 +102,9 @@ private:
     static std::vector<PARAM::INFO> makeRectWaveformParamInfos();
     static std::vector<PARAM::INFO> makePrbsWaveformParamInfos();
 
-    std::vector<std::string>                  m_ibisModels;
+    std::vector<std::string>                         m_ibisModels;
+    std::vector<std::pair<std::string, std::string>> m_ibisPins;
+    std::string                                      m_componentName;
 };
 
 #endif // SIM_MODEL_KIBIS_H

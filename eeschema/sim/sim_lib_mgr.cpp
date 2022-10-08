@@ -35,7 +35,7 @@ SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT& aPrj ) : m_project( aPrj )
 }
 
 
-std::pair<std::string, SIM_MODEL&> SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
+SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
 {
     std::vector<LIB_PIN*> pins = aSymbol.GetLibPins();
     SCH_FIELD* libraryField = aSymbol.FindField( SIM_LIBRARY::LIBRARY_FIELD );
@@ -90,7 +90,7 @@ std::pair<std::string, SIM_MODEL&> SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol
                                                aSymbol.GetFields() ) );
     }
 
-    return std::pair<std::string, SIM_MODEL&>( baseModelName, *m_models.back() );
+    return { baseModelName, *m_models.back() };
 }
 
 

@@ -33,7 +33,7 @@
 void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, SIM_MODEL::TYPE aType )
 {
     SIM_LIBRARY::ReadFile( aFilePath );
-    m_kibis = KIBIS( std::string( aFilePath.c_str() ) );
+    m_kibis = KIBIS( aFilePath );
 
     if( !m_kibis.m_valid )
     {
@@ -57,6 +57,7 @@ void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, SIM_MODEL::TYPE 
             InitModel( *libcomp, kcomp.m_name );
     }
 }
+
 
 bool SIM_LIBRARY_KIBIS::InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName )
 {

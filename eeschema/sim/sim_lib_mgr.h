@@ -30,10 +30,11 @@
 #include <vector>
 #include <string>
 
+#include <sim/sim_library.h>
+#include <sim/sim_model.h>
+
 class PROJECT;
 class SCH_SYMBOL;
-class SIM_LIBRARY;
-class SIM_MODEL;
 
 
 class SIM_LIB_MGR
@@ -43,7 +44,7 @@ public:
     virtual ~SIM_LIB_MGR() = default;
 
     // TODO: The argument can be made const.
-    std::pair<std::string, SIM_MODEL&> CreateModel( SCH_SYMBOL& aSymbol );
+    SIM_LIBRARY::MODEL CreateModel( SCH_SYMBOL& aSymbol );
 
     SIM_LIBRARY& CreateLibrary( const std::string& aLibraryPath );
 
