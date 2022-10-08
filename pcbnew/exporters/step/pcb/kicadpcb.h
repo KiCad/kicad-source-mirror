@@ -34,7 +34,7 @@
 #include <wx/colour.h>
 #include <string>
 #include <vector>
-#include "3d_resolver.h"
+#include <filename_resolver.h>
 #include "base.h"
 
 #ifdef SUPPORTS_IGES
@@ -102,7 +102,7 @@ private:
     bool parsePolygon( SEXPR::SEXPR* data );
 
 private:
-    S3D_RESOLVER                 m_resolver;
+    FILENAME_RESOLVER            m_resolver;
     wxString                     m_filename;
     PCBMODEL*                    m_pcb_model;
     DOUBLET                      m_origin;

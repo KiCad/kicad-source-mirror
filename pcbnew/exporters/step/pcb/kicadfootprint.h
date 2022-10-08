@@ -40,7 +40,7 @@ class KICADPAD;
 class KICADCURVE;
 class KICADMODEL;
 class PCBMODEL;
-class S3D_RESOLVER;
+class FILENAME_RESOLVER;
 
 class KICADFOOTPRINT
 {
@@ -50,7 +50,7 @@ public:
 
     bool Read( SEXPR::SEXPR* aEntry );
 
-    bool ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
+    bool ComposePCB( class PCBMODEL* aPCB, FILENAME_RESOLVER* resolver,
                      DOUBLET aOrigin, bool aComposeVirtual = true, bool aSubstituteModels = true );
 
 private:

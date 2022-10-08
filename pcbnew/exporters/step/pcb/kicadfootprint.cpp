@@ -24,7 +24,7 @@
 
 #include "kicadfootprint.h"
 
-#include "3d_resolver.h"
+#include <filename_resolver.h>
 #include "kicadcurve.h"
 #include "kicadmodel.h"
 #include "kicadpad.h"
@@ -358,7 +358,7 @@ bool KICADFOOTPRINT::parsePad( SEXPR::SEXPR* data )
 }
 
 
-bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
+bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, FILENAME_RESOLVER* resolver,
                                  DOUBLET aOrigin, bool aComposeVirtual, bool aSubstituteModels )
 {
     // translate pads and curves to final position and append to PCB.
@@ -439,22 +439,14 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
             continue;
 
         std::vector<wxString> searchedPaths;
-        mname = resolver->ResolvePath( mname, searchedPaths );
+        mname = resolver->ResolvePath( mname, wxEmptyString );
 
         if( !wxFileName::FileExists( mname ) )
         {
-            wxString paths;
-
-            for( const wxString& path : searchedPaths )
-                paths += "    " + path + "\n";
-
             ReportMessage( wxString::Format( wxT( "Could not add 3D model to %s.\n"
-                                                  "File not found: %s\n"
-                                                  "Searched paths:\n"
-                                                  "%s" ),
+                                                  "File not found: %s\n" ),
                                              m_refdes,
-                                             mname,
-                                             paths) );
+                                             mname) );
             continue;
         }
 

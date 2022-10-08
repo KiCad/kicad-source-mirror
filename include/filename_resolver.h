@@ -34,6 +34,7 @@
 #include <vector>
 #include <wx/string.h>
 
+class PROJECT;
 class PGM_BASE;
 
 struct SEARCH_PATH
@@ -88,12 +89,6 @@ public:
      * configuration file on success.
      */
     bool UpdatePathList( const std::vector<SEARCH_PATH>& aPathList );
-
-    /**
-     * Write the current path list to a config file.
-     * @param aResolvePaths indicates whether env vars should also be written out or not
-     */
-    bool WritePathList( const wxString& aDir, const wxString& aFilename, bool aResolvePaths );
 
     /**
      * Determines the full path of the given file name.

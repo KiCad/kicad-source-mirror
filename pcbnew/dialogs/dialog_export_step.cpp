@@ -363,11 +363,6 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             return;
     }
 
-    FILENAME_RESOLVER* fnResolver = m_parent->Prj().Get3DFilenameResolver();
-
-    fnResolver->WritePathList( wxStandardPaths::Get().GetTempDir(), wxT( "ExportPaths.cfg" ),
-                               true );
-
     DIALOG_EXPORT_STEP::STEP_ORG_OPT orgOpt = GetOriginOption();
     double xOrg = 0.0;
     double yOrg = 0.0;
