@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-02 00:43+0000\n"
+"PO-Revision-Date: 2022-10-09 08:03+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1071,9 +1071,8 @@ msgid "Opacity"
 msgstr "Peittävyys"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "Piirilevyn Paksuus: "
+msgstr "Piirilevyn Paksuus"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -3059,13 +3058,15 @@ msgstr "Tämä muutos tulee voimaan, kun editori käynnistetään uudelleen."
 
 #: common/dialogs/panel_common_settings_base.cpp:127
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Focus seuraa hiirtä kaavio- ja PCB-editorien välillä"
 
 #: common/dialogs/panel_common_settings_base.cpp:128
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Jos hiiren osoitin siirretään kytkentäkaavion tai PCB-editorin ikkunan "
+"kankaan päälle, ikkuna nousee ylös."
 
 #: common/dialogs/panel_common_settings_base.cpp:132
 msgid "Icon theme:"
@@ -6040,9 +6041,8 @@ msgid "Zoom Out"
 msgstr "Loitonna Näkymää"
 
 #: common/tool/actions.cpp:336 common/widgets/mathplot.cpp:1665
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Keskellä sivulla"
+msgstr "Keskitä kohdistin"
 
 #: common/tool/actions.cpp:342
 msgid "Zoom to Selection"
@@ -7629,9 +7629,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Kaksoiskappaleita %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Eri arvot ryhmille %s %d %s (%s) ja %s %d %s (%s)"
+msgstr "Erilaiset yksikkömäärät kohteille %s%s%s ja %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
@@ -9954,9 +9954,8 @@ msgid "Footprint Filters"
 msgstr "Jalanjälkisuodattimet"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:337
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "Muokkaa Spice-mallia ..."
+msgstr "Muokkaa simulaatiomallia..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
@@ -11148,9 +11147,8 @@ msgid "Exclude symbol from simulation"
 msgstr "Poista symboli simulaatiosta"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:114
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Spice-mallieditori"
+msgstr "Simulaatiomallieditori"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11690,9 +11688,8 @@ msgid "Library link:"
 msgstr "Kirjastolinkki:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:323
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "Simulaattori..."
+msgstr "Simulaatiomalli..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:108
 msgid "Symbol Properties"
@@ -15137,6 +15134,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Ladatussa kytkentäkaaviotiedostossa on hierarkkisia taulukoita vanhemmasta "
+"tiedostoversiosta, mikä johtaa puuttuviin symboli-ilmentymiin. Tämä johtaa "
+"siihen, että kaikki ladatun kaavion symbolit käyttävät joko "
+"oletusinstanssiasetusta tai palaavat kirjaston symboliasetuksiin. Tätä "
+"kaaviotiedostoa käyttävän projektin lataaminen ja uusimpaan tiedostoversioon "
+"tallentaminen ratkaisee tämän ongelman.\n"
+"\n"
+"Haluatko jatkaa?"
 
 #: eeschema/sheet.cpp:240 eeschema/sheet.cpp:268 eeschema/sheet.cpp:309
 #: eeschema/sheet.cpp:358 eeschema/sheet.cpp:419
@@ -15233,21 +15238,23 @@ msgid "Discard New Sheet"
 msgstr "Hylkää Uusi Lehti"
 
 #: eeschema/sim/sim_lib_mgr.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "Virhe ladattaessa symbolikirjastoa '%s'."
+msgstr "Virhe ladattaessa simulaatiomallikirjastoa '%s': %s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "Virhe ladattaessa kytkentäkaaviota '%s'."
+msgstr "Virhe ladattaessa simulaatiomallia: ei %s-kenttää"
 
 #: eeschema/sim/sim_lib_mgr.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "Virhe ladattaessa symbolia %s kirjastosta %s."
+msgstr ""
+"Virhe ladattaessa simulaatiomallia: perusmallia '%s' ei löytynyt kirjastosta "
+"'%s'"
 
 #: eeschema/sim/sim_model.cpp:1167
 #, c-format
@@ -15276,9 +15283,8 @@ msgid "Parasitic Pin Capacitance"
 msgstr "Parasiittisten pintojen kapasitanssi"
 
 #: eeschema/sim/sim_model_kibis.cpp:243
-#, fuzzy
 msgid "DC Value"
-msgstr "Arvo"
+msgstr "DC Arvo"
 
 #: eeschema/sim/sim_model_kibis.cpp:261
 msgid "ON time"
@@ -15563,12 +15569,14 @@ msgstr "Tuntematon SIM_ARVO tyyppi"
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr ""
+"Mallia \"%s\" ei löytynyt kopioitavaksi \"eräänlaiselle\" mallille \"%s\""
 
 #: eeschema/sim/spice_model_parser.cpp:217
 #: eeschema/sim/spice_model_parser.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s' in model '%s'"
-msgstr "Parametrin \"%s\" asettaminen arvoksi \"%s\" epäonnistui"
+msgstr ""
+"Parametrin \"%s\" asettaminen arvoksi \"%s\" epäonnistui mallissa \"%s\""
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -21121,34 +21129,32 @@ msgid "Multiplier"
 msgstr "Kerroin"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:40
-#, fuzzy
 msgid "Platinum"
-msgstr "Alumiini"
+msgstr "Platina"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:41
 msgid "Gold"
-msgstr ""
+msgstr "Kulta"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:42
 msgid "Titanium"
-msgstr ""
+msgstr "Titaani"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:43
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "Ruostumaton teräs 18-9"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:45
 msgid "Silver"
-msgstr ""
+msgstr "Hopea"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:46
 msgid "Mercury"
-msgstr ""
+msgstr "Elohopea"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:47
-#, fuzzy
 msgid "Nickel"
-msgstr "Nimimerkki"
+msgstr "Nikkeli"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:48
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:838
@@ -21157,70 +21163,64 @@ msgid "Copper"
 msgstr "Kupari"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:49
-#, fuzzy
 msgid "Copper-Aluminium"
-msgstr "Alumiini"
+msgstr "Kupari-Alumiini"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "Messinki"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
-msgstr ""
+msgstr "Pronssi"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
-#, fuzzy
 msgid "Tin"
-msgstr "in"
+msgstr "Tina"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:53
-#, fuzzy
 msgid "Lead"
-msgstr "Johtaja"
+msgstr "Lyijy"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:54
-#, fuzzy
 msgid "Aluminium-Copper"
-msgstr "Alumiini"
+msgstr "Alumiini-Kupari"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "Valurauta"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
-msgstr ""
+msgstr "Hiiliteräs"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:57
-#, fuzzy
 msgid "Aluminium"
 msgstr "Alumiini"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:58
 msgid "Cadmium"
-msgstr ""
+msgstr "Kadmium"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:59
 msgid "Iron"
-msgstr ""
+msgstr "Rauta"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:60
 msgid "Chrome"
-msgstr ""
+msgstr "Kromi"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:61
 msgid "Zinc"
-msgstr ""
+msgstr "Sinkki"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:62
-#, fuzzy
 msgid "Manganese"
-msgstr "Japani"
+msgstr "Mangaani"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:63
 msgid "Magnesium"
-msgstr ""
+msgstr "Magnesiumi"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
@@ -21240,11 +21240,19 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"Tämä taulukko näyttää sähkökemiallisten potentiaalien erot eri metallien ja "
+"metalliseosten välillä. Positiivinen luku osoittaa, että rivi on anodinen ja "
+"sarakekatodinen.\n"
+"Galvaaninen korroosio vaikuttaa eri metalleihin kosketuksessa ja tietyissä "
+"olosuhteissa.\n"
+"Sähkökemiallisen parin anodi hapettuu ja syö pois, kun taas katodi "
+"pinnoittaa liuenneita metalleja, mutta pysyy suojattuna.\n"
+"EN 50310 ehdottaa jännite-eroa alle 300 mV. Tunnetut käytännöt käyttävät "
+"kolmatta rajapintametallia pääparin välissä (eli ENIG-pintakäsittely)."
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
-#, fuzzy
 msgid "Threshold voltage:"
-msgstr "Lopullinen jännite:"
+msgstr "Kynnysjännite:"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:68
 #: pcb_calculator/widgets/unit_selector.cpp:255
@@ -22111,7 +22119,6 @@ msgid "Board Classes"
 msgstr "Piirilevyluokat"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
-#, fuzzy
 msgid "Galvanic Corrosion"
 msgstr "Galvaaninen korroosio"
 
@@ -25559,33 +25566,33 @@ msgid "Text items must have some content."
 msgstr "Tekstikohteissa on oltava jonkin verran sisältöä."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at least %s."
-msgstr "%s on oltava vähintään %s."
+msgstr "Tekstin leveyden on oltava vähintään %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at most %s."
-msgstr "%s on oltava vähintään %s."
+msgstr "Tekstin leveys saa olla enintään %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at least %s."
-msgstr "%s on oltava vähintään %s."
+msgstr "Tekstin korkeuden on oltava vähintään %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at most %s."
-msgstr "%s on oltava vähintään %s."
+msgstr "Tekstin korkeuden on oltava enintään %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
 "Tekstin paksuus on liian suuri tekstin kokoon nähden.\n"
-"Se kiinnitetään."
+"Se kiinnitetään kohtaan %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:574
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:603
@@ -25875,14 +25882,14 @@ msgid "Footprint name may not contain '%s'."
 msgstr "Jalanjäljen nimi ei saa sisältää '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "The text width must be between %s and %s."
-msgstr "Viivan leveyden on oltava suurempi kuin nolla."
+msgstr "Tekstin leveyden on oltava %s ja %s välillä."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "Tyypin yhteensopimattomuus '%s' ja %lf välillä"
+msgstr "Tekstin korkeuden on oltava %s ja %s välillä."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:452
 #: pcbnew/dialogs/dialog_text_properties.cpp:420
@@ -26622,9 +26629,8 @@ msgid "Circle Properties"
 msgstr "Ympyrän ominaisuudet"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:211
-#, fuzzy
 msgid "Center Point"
-msgstr "Aloituspiste"
+msgstr "Keskipiste"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:223
 msgid "Arc Properties"
@@ -27109,9 +27115,8 @@ msgstr "Ei Kupari Vyöhykkeen Ominaisuudet"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:146
-#, fuzzy
 msgid "Center Point:"
-msgstr "Keskiö X"
+msgstr "Keskipiste:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:136
 #: pcbnew/dialogs/dialog_pad_properties.cpp:728
@@ -31819,9 +31824,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "Tarkistetaan vähimmäisliitäntäleveys verkosta..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum connection width %s; actual %s)"
-msgstr "Liitännän vähimmäisleveys %s; todellinen %s"
+msgstr "(%s vähimmäisyhteyden leveys %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -31893,19 +31898,19 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Tarkistetaan sisäpihojen päällekkäisyyksiä ..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "(%s irrottamaton enimmäispituus: %s; todellinen: %s)"
+msgstr "(%s suurin irrotettu pituus %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum gap %s; actual %s)"
-msgstr "(%s minimi %s; todellinen %s)"
+msgstr "(%s vähimmäisväli %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum gap %s; actual %s)"
-msgstr "(%s enimmäiskorkeus %s; todellinen %s)"
+msgstr "(%s enimmäisväli %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 msgid "Checking keepouts & disallow constraints..."
@@ -31987,26 +31992,26 @@ msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "Jalanjälki '%s' ei täsmää kirjastossa olevaan kopioon '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s minimipituus: %s; todellinen: %s)"
+msgstr "(%s min pituus %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s maksimipituus: %s; todellinen: %s)"
+msgstr "(%s maksimipituus %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
 msgstr ""
-"(%s suurin vinous: %s; todellinen: %s; keskimääräinen nettopituus: %s; "
-"todellinen: %s)"
+"(%s maks. vinous %s; todellinen %s; keskimääräinen verkon pituus %s; "
+"todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s enimmäismäärä: %d; todellinen: %d)"
+msgstr "(%s enimmäismäärä %d; todellinen %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:221
 msgid "Gathering length-constrained connections..."
@@ -32303,49 +32308,55 @@ msgid "Board stackup settings not up to date."
 msgstr "Piirilevyn kerrospinon asetukset eivät ole ajantasalla."
 
 #: pcbnew/exporters/step/kicad2step.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "No such file: %s"
-msgstr "ei sellaista tiedostoa"
+msgstr "Ei tällaista tiedostoa: %s"
 
 #: pcbnew/exporters/step/kicad2step.cpp:239
 msgid ""
 "** Output already exists. Export aborted. **\n"
 "Enable the force overwrite flag to overwrite it."
 msgstr ""
+"** Lähtö on jo olemassa. Vienti keskeytetty. **\n"
+"Korvaa se ottamalla käyttöön pakotettu ylikirjoituslippu."
 
 #: pcbnew/exporters/step/kicad2step.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "Luotiin tiedosto '%s'"
+msgstr "Lue tiedosto: '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:273
 msgid "Build STEP data\n"
-msgstr ""
+msgstr "Rakenna STEP tiedot\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:279
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Virhe rakennettaessa STEP-piirilevymallia. Vienti keskeytetty. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:284
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "STEP tiedostot"
+msgstr "Kirjoita STEP tiedosto\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:295
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Virhe kirjoitettaessa tiedostoon '%s'."
+msgstr ""
+"\n"
+"* Virhe kirjoitettaessa STEP-tiedostoa. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "Raporttitiedosto '%s' luotu."
+msgstr ""
+"\n"
+"STEP-tiedosto '%s' luotu.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:306
 #: pcbnew/exporters/step/kicad2step.cpp:311
@@ -32353,88 +32364,89 @@ msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Virhe vietäessä STEP-tiedostoa. Vienti keskeytetty. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:317
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "Virhe luettaessa tiedostoa."
+msgstr ""
+"\n"
+"** Virhe luettaessa kicad_pcb-tiedostoa. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:325
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
+"STEP-tiedostoa ei voi luoda.\n"
+"Tarkista, että taulussa on oikeat ääriviivat ja mallit."
 
 #: pcbnew/exporters/step/kicad2step.cpp:330
 msgid "STEP file has been created, but there are warnings."
-msgstr ""
+msgstr "STEP-tiedosto on luotu, mutta siinä on varoituksia."
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:64
-#, fuzzy
 msgid "pcb_filename"
-msgstr "Tiedostonimi:"
+msgstr "pcb_tiedostonimi"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:66
-#, fuzzy
 msgid "output filename"
-msgstr "Lehtien tiedostonimet"
+msgstr "ulostulo tiedostonimi"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:70
 msgid "IGES output (default STEP)"
-msgstr ""
+msgstr "IGES-lähtö (oletus STEP)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:74
-#, fuzzy
 msgid "overwrite output file"
-msgstr "Korvaa vanha tiedosto"
+msgstr "korvaa ulostulotiedosto"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:76
-#, fuzzy
 msgid "Use Drill Origin for output origin"
-msgstr "Käytä pora/paikka-tiedostoa alkupisteenä"
+msgstr "Käytä poraus alkupistettä ulostulon aloituskohtana"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:78
-#, fuzzy
 msgid "Use Grid Origin for output origin"
-msgstr "Käytä ruudukon alkuperää"
+msgstr "Käytä ristikon alkupistettä ulostulon aloituskohta"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:81
 msgid ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
 msgstr ""
+"Käyttäjän määrittämä lähtölähde esim. 1x1 tuumaa, 1x1 tuumaa, 25,4x25,4 mm ("
+"oletus mm)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:84
-#, fuzzy
 msgid "Exclude 3D models for components with 'virtual' attribute"
-msgstr "Vaihda 3D-mallit Virtual-määritteellä"
+msgstr ""
+"Sulje pois 3D-mallit komponenteille, joissa on \"virtuaalinen\" attribuutti"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:87
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
-msgstr ""
+msgstr "Korvaa STEP- tai IGS-mallit samalla nimellä VRML-mallien tilalle"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:90
 msgid ""
 "Minimum distance between points to treat them as separate ones (default "
 "0.01mm)"
 msgstr ""
+"Pisteiden välinen vähimmäisetäisyys, jotta niitä voidaan käsitellä "
+"erillisinä (oletus 0,01 mm)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:93
-#, fuzzy
 msgid "display this message"
-msgstr "Piilota tämä viesti."
+msgstr "näytä tämä viesti"
 
 #: pcbnew/exporters/step/kicad2step_frame_base.h:46
-#, fuzzy
 msgid "Kicad2step Converter"
-msgstr "KiCad Kuvamuokkain"
+msgstr "Kicad2step konvertoija"
 
 #: pcbnew/exporters/step/pcb/3d_resolver.cpp:343
-#, fuzzy
 msgid "Alias:"
-msgstr "Alias: "
+msgstr "Alias:"
 
 #: pcbnew/files.cpp:150
 msgid "All KiCad Board Files"
@@ -33853,9 +33865,8 @@ msgid "Add Teardrops..."
 msgstr "Lisää Kyynelpisarat..."
 
 #: pcbnew/menubar_pcb_editor.cpp:419
-#, fuzzy
 msgid "Remove Teardrops"
-msgstr "Poista kyynelpisarat"
+msgstr "Poista Kyynelpisarat"
 
 #: pcbnew/menubar_pcb_editor.cpp:439
 msgid "External Plugins"
@@ -34799,19 +34810,16 @@ msgstr ""
 "Muokkaa tätä yleistä jalanjälkikirjastotaulukkoa Asetukset-valikossa."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:89
-#, fuzzy
 msgid "Loading board\n"
-msgstr "Ladataan piirilevyn tietoja..."
+msgstr "Ladataan piirilevyä\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:96
-#, fuzzy
 msgid "Successfully created svg file"
-msgstr "Piirilevyn selitteet onnistuneesti merkitty uudelleen"
+msgstr "Svg-tiedoston luominen onnistui"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:98
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "Virhe luettaessa tiedostoa."
+msgstr "Virhe luotaessa svg-tiedostoa"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -36253,15 +36261,13 @@ msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:550 pcbnew/router/pns_kicad_iface.cpp:621
 #: pcbnew/router/router_tool.cpp:720
-#, fuzzy
 msgid "board minimum clearance"
-msgstr "Piirilevyn pienin välys: %s."
+msgstr "Piirilevyn pienin välys"
 
 #: pcbnew/router/pns_kicad_iface.cpp:554 pcbnew/router/pns_kicad_iface.cpp:620
 #: pcbnew/router/router_tool.cpp:687 pcbnew/router/router_tool.cpp:707
-#, fuzzy
 msgid "board minimum track width"
-msgstr "piirilevyn minimi leveys"
+msgstr "piirilevyn pienin johdinleveys"
 
 #: pcbnew/router/pns_kicad_iface.cpp:561
 msgid "existing track"
@@ -36620,9 +36626,9 @@ msgid "Track Width: %s"
 msgstr "Johtimen Leveys: %s"
 
 #: pcbnew/router/router_tool.cpp:2414
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "Differentiaaliparin Väli"
+msgstr "Differentiaaliparin väli: %s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
