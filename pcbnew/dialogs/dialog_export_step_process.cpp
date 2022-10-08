@@ -58,7 +58,7 @@ public:
     }
 
 private:
-    ExitCode Entry() wxOVERRIDE;
+    ExitCode Entry() override;
     void     DrainInput();
 
     wxMessageQueue<DIALOG_EXPORT_STEP_LOG::STATE_MESSAGE>& m_queue;
