@@ -285,5 +285,6 @@ int KICAD2STEP::Run()
 
 void KICAD2STEP::ReportMessage( const wxString& aMessage )
 {
-     wxPrintf( aMessage );
+    wxPrintf( aMessage );
+    fflush( stdout );       // Force immediate printing (needed on mingw)
 }
