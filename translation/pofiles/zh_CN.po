@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-02 00:43+0000\n"
+"PO-Revision-Date: 2022-10-09 08:03+0000\n"
 "Last-Translator: Eric <hamburger1024@mailbox.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -1056,9 +1056,8 @@ msgid "Opacity"
 msgstr "不透明度"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "电路板厚度： "
+msgstr "电路板厚度"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -3017,13 +3016,13 @@ msgstr "该更改在重新启动编辑器时生效。"
 
 #: common/dialogs/panel_common_settings_base.cpp:127
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "焦点在原理图和 PCB 编辑器之间跟踪鼠标"
 
 #: common/dialogs/panel_common_settings_base.cpp:128
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
-msgstr ""
+msgstr "如果将鼠标光标移到原理图或 PCB 编辑器窗口的画布上，则该窗口会出现。"
 
 #: common/dialogs/panel_common_settings_base.cpp:132
 msgid "Icon theme:"
@@ -5940,9 +5939,8 @@ msgid "Zoom Out"
 msgstr "缩小"
 
 #: common/tool/actions.cpp:336 common/widgets/mathplot.cpp:1665
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "图框中心"
+msgstr "以光标为中心"
 
 #: common/tool/actions.cpp:342
 msgid "Zoom to Selection"
@@ -7504,9 +7502,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "重复项目 %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "不同的值：%s%d%s (%s) 和 %s%d%s (%s)"
+msgstr "项目 %s%s%s 和 %s%s%s 的不同单位计数\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
@@ -9781,9 +9779,8 @@ msgid "Footprint Filters"
 msgstr "封装筛选器"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:337
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "编辑 Spice 模型..."
+msgstr "编辑仿真模型..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
@@ -10956,9 +10953,8 @@ msgid "Exclude symbol from simulation"
 msgstr "将符号排除于仿真外"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:114
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Spice 模型编辑器"
+msgstr "仿真模型编辑器"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11496,9 +11492,8 @@ msgid "Library link:"
 msgstr "库链接："
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:323
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "仿真..."
+msgstr "仿真模型..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:108
 msgid "Symbol Properties"
@@ -14835,6 +14830,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"从旧文件版本加载的原理图文件中的分层表会导致符号实例数据丢失。 "
+"这会导致加载原理图中的所有符号使用默认实例设置或回退到库符号设置。 "
+"加载使用此原理图文件的项目并保存到最新文件版本将解决此问题。\n"
+"\n"
+" 你想继续吗？"
 
 #: eeschema/sheet.cpp:240 eeschema/sheet.cpp:268 eeschema/sheet.cpp:309
 #: eeschema/sheet.cpp:358 eeschema/sheet.cpp:419
@@ -14924,21 +14924,21 @@ msgid "Discard New Sheet"
 msgstr "丢弃新图纸"
 
 #: eeschema/sim/sim_lib_mgr.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "加载符号库“%s”时出现错误。"
+msgstr "加载仿真模型库“%s”出错：%s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "加载原理图 '%s' 时出错。"
+msgstr "加载仿真模型除错：无'%s' 字段"
 
 #: eeschema/sim/sim_lib_mgr.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "加载来自库 '%s' 的符号 %s 时出错。"
+msgstr "加载仿真模型时出错: 在库“%s”中找不到基础模型“%s”"
 
 #: eeschema/sim/sim_model.cpp:1167
 #, c-format
@@ -14967,9 +14967,8 @@ msgid "Parasitic Pin Capacitance"
 msgstr "寄生引脚电容"
 
 #: eeschema/sim/sim_model_kibis.cpp:243
-#, fuzzy
 msgid "DC Value"
-msgstr "值"
+msgstr "DC 值"
 
 #: eeschema/sim/sim_model_kibis.cpp:261
 msgid "ON time"
@@ -15251,13 +15250,13 @@ msgstr "未知的 SIM_VALUE 类型"
 #: eeschema/sim/spice_model_parser.cpp:186
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr ""
+msgstr "找不到“A Kind Of”模型'%s'要复制的模型“%s”"
 
 #: eeschema/sim/spice_model_parser.cpp:217
 #: eeschema/sim/spice_model_parser.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s' in model '%s'"
-msgstr "未能将参数“%s”设置到“%s”"
+msgstr "未能将参数“%s”设置到“%s”模型中的“%s”"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -20728,34 +20727,32 @@ msgid "Multiplier"
 msgstr "乘数"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:40
-#, fuzzy
 msgid "Platinum"
-msgstr "铝自然色"
+msgstr "铂"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:41
 msgid "Gold"
-msgstr ""
+msgstr "金"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:42
 msgid "Titanium"
-msgstr ""
+msgstr "钛"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:43
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "不锈钢 18-9"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:45
 msgid "Silver"
-msgstr ""
+msgstr "银"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:46
 msgid "Mercury"
-msgstr ""
+msgstr "汞"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:47
-#, fuzzy
 msgid "Nickel"
-msgstr "别名"
+msgstr "铝"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:48
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:838
@@ -20764,70 +20761,64 @@ msgid "Copper"
 msgstr "铜层"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:49
-#, fuzzy
 msgid "Copper-Aluminium"
-msgstr "铝自然色"
+msgstr "铜铝"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "黄铜"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
-msgstr ""
+msgstr "青铜"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
-#, fuzzy
 msgid "Tin"
-msgstr "in"
+msgstr "锡"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:53
-#, fuzzy
 msgid "Lead"
-msgstr "引线"
+msgstr "铅"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:54
-#, fuzzy
 msgid "Aluminium-Copper"
-msgstr "铝自然色"
+msgstr "铝铜"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "铸铁"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
-msgstr ""
+msgstr "碳素钢"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:57
-#, fuzzy
 msgid "Aluminium"
-msgstr "铝自然色"
+msgstr "铝"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:58
 msgid "Cadmium"
-msgstr ""
+msgstr "镉"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:59
 msgid "Iron"
-msgstr ""
+msgstr "铁"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:60
 msgid "Chrome"
-msgstr ""
+msgstr "铬合金"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:61
 msgid "Zinc"
-msgstr ""
+msgstr "锌"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:62
-#, fuzzy
 msgid "Manganese"
-msgstr "日语"
+msgstr "锰"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:63
 msgid "Magnesium"
-msgstr ""
+msgstr "镁"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
@@ -20847,11 +20838,16 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"该表显示了各种金属和合金之间的电化学电位差异。 正数表示行为阳极，列为阴极。\n"
+" 电偶腐蚀会在特定条件下影响接触的不同金属。\n"
+" 电化学对的阳极被氧化并被腐蚀掉，而阴极则被溶解的金属镀在上面，但仍受到保护。"
+"\n"
+" EN 50310 暗示电压差低于 300mV。 "
+"已知的做法在主要金属或合金对之间使用第三接触金属（即化学金表面光洁度）。"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
-#, fuzzy
 msgid "Threshold voltage:"
-msgstr "终止电压："
+msgstr "阈值电压："
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:68
 #: pcb_calculator/widgets/unit_selector.cpp:255
@@ -21709,9 +21705,8 @@ msgid "Board Classes"
 msgstr "电路板类别"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
-#, fuzzy
 msgid "Galvanic Corrosion"
-msgstr "接触腐蚀"
+msgstr "电偶腐蚀"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -25107,33 +25102,33 @@ msgid "Text items must have some content."
 msgstr "文本项必须包含一些内容。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at least %s."
-msgstr "%s 必须至少为 %s 。"
+msgstr "文本宽度必须至少为 %s 。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at most %s."
-msgstr "%s 必须至少为 %s 。"
+msgstr "文本宽度不得超过 %s 。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at least %s."
-msgstr "%s 必须至少为 %s 。"
+msgstr "文本高度必须至少为 %s 。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at most %s."
-msgstr "%s 必须至少为 %s 。"
+msgstr "文本高度不得超过 %s 。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
-"文本粗细与高度比例不对。\n"
-"它将会变形，被挤在一起。"
+"文本粗细对于文本大小来说太大。\n"
+"它将被限制在 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:574
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:603
@@ -25411,14 +25406,14 @@ msgid "Footprint name may not contain '%s'."
 msgstr "封装名称可能不包含\"%s\"。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "The text width must be between %s and %s."
-msgstr "线宽必须大于 0。"
+msgstr "文本宽度范围必须在 %s 和 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "'%s' 和 %lf 的类型不匹配"
+msgstr "文本高度范围必须在 %s 和 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:452
 #: pcbnew/dialogs/dialog_text_properties.cpp:420
@@ -26142,9 +26137,8 @@ msgid "Circle Properties"
 msgstr "圆属性"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:211
-#, fuzzy
 msgid "Center Point"
-msgstr "起始点"
+msgstr "中心点"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:223
 msgid "Arc Properties"
@@ -26619,9 +26613,8 @@ msgstr "非敷铜区属性"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:146
-#, fuzzy
 msgid "Center Point:"
-msgstr "X 轴中心："
+msgstr "中心点："
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:136
 #: pcbnew/dialogs/dialog_pad_properties.cpp:728
@@ -31296,9 +31289,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "正检查网络的最小连接宽度..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum connection width %s; actual %s)"
-msgstr "最小连接宽度 %s; 实际 %s"
+msgstr "（%s 最小连接宽度 %s; 实际 %s）"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -31370,19 +31363,19 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "正在检查外框重叠的封装..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "(%s 最大未耦合长度：%s; 实际：%s )"
+msgstr "(%s 最大未耦合长度 %s; 实际 %s )"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum gap %s; actual %s)"
-msgstr "(%s 最小 %s; 实际 %s)"
+msgstr "(%s 最小间隙 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum gap %s; actual %s)"
-msgstr "(%s 最大高度 %s；实际 %s)"
+msgstr "(%s 最大间隙 %s；实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 msgid "Checking keepouts & disallow constraints..."
@@ -31464,24 +31457,24 @@ msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "封装 '%s' 与库 '%s' 中的副本不匹配。"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s 最小长度：%s; 实际：%s)"
+msgstr "(%s 最小长度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s 最大长度：%s; 实际：%s)"
+msgstr "(%s 最大长度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
-msgstr "(%s 最大偏斜：%s; 实际偏斜：%s; 平均网络长度：%s; 实际长度：%s)"
+msgstr "(%s 最大偏斜 %s; 实际偏斜 %s; 平均网络长度 %s; 实际长度 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s 最大计数：%d; 实际：%d)"
+msgstr "(%s 最大计数 %d; 实际 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:221
 msgid "Gathering length-constrained connections..."
@@ -31776,49 +31769,55 @@ msgid "Board stackup settings not up to date."
 msgstr "电路板压层设置不是最新的。"
 
 #: pcbnew/exporters/step/kicad2step.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "No such file: %s"
-msgstr "没有此类文件"
+msgstr "没有此类文件：%s"
 
 #: pcbnew/exporters/step/kicad2step.cpp:239
 msgid ""
 "** Output already exists. Export aborted. **\n"
 "Enable the force overwrite flag to overwrite it."
 msgstr ""
+"** 输出已经存在。 导出中止。 **\n"
+"启用强制覆盖标志以覆盖它。"
 
 #: pcbnew/exporters/step/kicad2step.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "已创建文件 '%s'"
+msgstr "读取文件： '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:273
 msgid "Build STEP data\n"
-msgstr ""
+msgstr "构建 STEP 数据\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:279
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
+"\n"
+"** 构建 STEP 板模型时出错。 导出中止。**\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:284
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "STEP 文件"
+msgstr "写入 STEP 文件\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:295
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "写入文件 \"%s\" 时出错。"
+msgstr ""
+"\n"
+"** 写入 STEP 文件出错。 **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "已创建报告文件 \"%s\"。"
+msgstr ""
+"\n"
+"已创建 STEP 文件 \"%s\"。\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:306
 #: pcbnew/exporters/step/kicad2step.cpp:311
@@ -31826,20 +31825,24 @@ msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr ""
+"\n"
+"** 导出 STEP 文件时出错。 导出中止。 **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:317
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "读取文件时出错。"
+msgstr ""
+"\n"
+"** 读取 kicad_pcb 文件出错。**\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:325
-#, fuzzy
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
-msgstr "无法创建 STEP 文件。 检查电路板是否具有有效的轮廓和模型。"
+msgstr ""
+"无法创建 STEP 文件。\n"
+"检查电路板是否具有有效的轮廓和模型。"
 
 #: pcbnew/exporters/step/kicad2step.cpp:330
 msgid "STEP file has been created, but there are warnings."
@@ -31875,35 +31878,31 @@ msgid ""
 msgstr "用户指定的输出原点 列如：1x1in，1x1inch，25.4x25.4mm（默认mm）"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:84
-#, fuzzy
 msgid "Exclude 3D models for components with 'virtual' attribute"
-msgstr "排除具有“虚拟”属性元件的 3D 模型"
+msgstr "排除“虚拟”属性元件的 3D 模型"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:87
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
-msgstr ""
+msgstr "用 VRML 模型处的同名文件代替STEP 或 IGS 模型"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:90
-#, fuzzy
 msgid ""
 "Minimum distance between points to treat them as separate ones (default "
 "0.01mm)"
-msgstr "将它们作为单独的点之间的最小距离（默认为 0.01 mm）"
+msgstr "点之间最短相距多少才能被视作分开的点（默认为 0.01 mm）"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:93
 msgid "display this message"
 msgstr "显示此消息"
 
 #: pcbnew/exporters/step/kicad2step_frame_base.h:46
-#, fuzzy
 msgid "Kicad2step Converter"
-msgstr "KiCad 图片转换器"
+msgstr "Kicad2step 转换器"
 
 #: pcbnew/exporters/step/pcb/3d_resolver.cpp:343
-#, fuzzy
 msgid "Alias:"
-msgstr "别名： "
+msgstr "别名："
 
 #: pcbnew/files.cpp:150
 msgid "All KiCad Board Files"
@@ -33299,7 +33298,6 @@ msgid "Add Teardrops..."
 msgstr "添加泪滴…"
 
 #: pcbnew/menubar_pcb_editor.cpp:419
-#, fuzzy
 msgid "Remove Teardrops"
 msgstr "移除泪滴"
 
@@ -34240,19 +34238,16 @@ msgstr ""
 "请在偏好设置菜单中编辑此全局封装库表。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:89
-#, fuzzy
 msgid "Loading board\n"
-msgstr "正加载板数据..."
+msgstr "加载电路板\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:96
-#, fuzzy
 msgid "Successfully created svg file"
-msgstr "PCB 已重新批注成功"
+msgstr "已成功创建 svg 文件"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:98
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "读取文件时出错。"
+msgstr "创建 svg 文件出错"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -35624,15 +35619,13 @@ msgstr "？"
 
 #: pcbnew/router/pns_kicad_iface.cpp:550 pcbnew/router/pns_kicad_iface.cpp:621
 #: pcbnew/router/router_tool.cpp:720
-#, fuzzy
 msgid "board minimum clearance"
-msgstr "板最小间隙：%s。"
+msgstr "板最小间隙"
 
 #: pcbnew/router/pns_kicad_iface.cpp:554 pcbnew/router/pns_kicad_iface.cpp:620
 #: pcbnew/router/router_tool.cpp:687 pcbnew/router/router_tool.cpp:707
-#, fuzzy
 msgid "board minimum track width"
-msgstr "电路板最小宽度"
+msgstr "板最小走线宽度"
 
 #: pcbnew/router/pns_kicad_iface.cpp:561
 msgid "existing track"
@@ -35981,9 +35974,9 @@ msgid "Track Width: %s"
 msgstr "线路宽度：%s"
 
 #: pcbnew/router/router_tool.cpp:2414
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "差分对间距"
+msgstr "差分对间距：%s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
