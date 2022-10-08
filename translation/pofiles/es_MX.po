@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-02 00:43+0000\n"
+"PO-Revision-Date: 2022-10-09 08:03+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -1062,9 +1062,8 @@ msgid "Opacity"
 msgstr "Opacidad"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "Grosor de la placa: "
+msgstr "Grosor de la placa"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -6051,9 +6050,8 @@ msgid "Zoom Out"
 msgstr "Menos zoom"
 
 #: common/tool/actions.cpp:336 common/widgets/mathplot.cpp:1665
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Centro de la página"
+msgstr "Centrar en el cursor"
 
 #: common/tool/actions.cpp:342
 msgid "Zoom to Selection"
@@ -7649,9 +7647,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Duplicar elementos %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Valores diferentes para %s%d%s (%s) y %s%d%s (%s)"
+msgstr "Diferentes recuentos de unidades para el artículo %s%s%s y %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
@@ -9987,9 +9985,8 @@ msgid "Footprint Filters"
 msgstr "Filtros de huellas"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:337
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "Editar modelo Spice..."
+msgstr "Editar modelo de simulación..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
@@ -11146,9 +11143,8 @@ msgid "Model"
 msgstr "Modelo"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:105
-#, fuzzy
 msgid "Device:"
-msgstr "Componente"
+msgstr "Dispositivo:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:114
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -11190,9 +11186,8 @@ msgid "Exclude symbol from simulation"
 msgstr "Excluir el símbolo de la simulación"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:114
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Editor de modelo Spice"
+msgstr "Editor de modelos de simulación"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11733,9 +11728,8 @@ msgid "Library link:"
 msgstr "Enlace de librería:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:323
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "Simulador..."
+msgstr "Modelo de simulación..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:108
 msgid "Symbol Properties"
@@ -15319,9 +15313,9 @@ msgid "Discard New Sheet"
 msgstr "Descartar nueva hoja"
 
 #: eeschema/sim/sim_lib_mgr.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "Error al cargar la librería de símbolos '%s'."
+msgstr "Error al cargar la biblioteca del modelo de simulación '%s': %s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
 #, fuzzy, c-format
