@@ -531,7 +531,8 @@ LIB_ID SYMBOL_LIBRARY_MANAGER::RevertSymbol( const wxString& aAlias, const wxStr
     }
     else
     {
-        symbolBuf->SetSymbol( new LIB_SYMBOL( original ) );
+        // copy the initial data to the current symbol to restore
+        *symbolBuf->GetSymbol() = original;
         m_frame.SyncLibraries( false );
     }
 
