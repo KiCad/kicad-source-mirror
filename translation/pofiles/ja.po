@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-09-25 11:47+0000\n"
+"PO-Revision-Date: 2022-10-09 08:03+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -522,12 +522,10 @@ msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr "「表面実装」タイプの部品の 3D モデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle unspecified 3D models"
 msgstr "その他の3Dモデル表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models for 'unspecified' type components"
 msgstr "「その他」タイプの部品の 3D モデル表示を切り替え"
 
@@ -2824,9 +2822,8 @@ msgid "Available:"
 msgstr "利用可能なモード:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
-#, fuzzy
 msgid ">>"
-msgstr ">>>"
+msgstr ">>"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:43
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
@@ -2834,9 +2831,8 @@ msgid "<<"
 msgstr "<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
-#, fuzzy
 msgid "Enabled:"
-msgstr "有効化"
+msgstr "有効化:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:65
 #: eeschema/dialogs/dialog_label_properties_base.cpp:123
@@ -4861,9 +4857,8 @@ msgstr ""
 "fp-lib-table ファイルは '%s' という名前のライブラリーを含んでいません。"
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:568
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "プラグインとコンテンツマネージャー"
+msgstr "プラグインとコンテンツマネージャーにより追加された"
 
 #: common/fp_lib_table.cpp:555
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -5478,14 +5473,14 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "この言語向けのKiCadの言語ファイルがインストールされていません。"
 
 #: common/plotters/PDF_plotter.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "ページ 1"
+msgstr "%s ページ"
 
 #: common/plotters/PDF_plotter.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(%s ページ)"
+msgstr "%s (%s ページ)"
 
 #: common/plotters/PDF_plotter.cpp:1188
 #, c-format
@@ -5896,14 +5891,12 @@ msgid "Change edit method constraints"
 msgstr "編集メソッドの制約を変更する"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "シート プロパティ"
+msgstr "検索パネルを表示"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "外観マネージャーの表示/非表示"
+msgstr "検索パネルの表示/非表示"
 
 #: common/tool/actions.cpp:215 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -6008,9 +6001,8 @@ msgid "Zoom Out"
 msgstr "ズーム アウト"
 
 #: common/tool/actions.cpp:336 common/widgets/mathplot.cpp:1665
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "ページの中央"
+msgstr "カーソルを中心に"
 
 #: common/tool/actions.cpp:342
 msgid "Zoom to Selection"
@@ -6164,9 +6156,8 @@ msgid "Use millimeters"
 msgstr "mm 単位を使用"
 
 #: common/tool/actions.cpp:517 common/widgets/lib_tree.cpp:663
-#, fuzzy
 msgid "Select Columns"
-msgstr "選択なし"
+msgstr "列を選択"
 
 #: common/tool/actions.cpp:522
 msgid "Switch units"
@@ -7583,9 +7574,9 @@ msgstr ""
 "見つかりません。スクリプトは無効です。"
 
 #: eeschema/component_references_lister.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "アノテーションされなかったアイテム: %s%s (ユニット %d)\n"
+msgstr "アノテーションされなかったアイテム: %s%s (ユニット %d)"
 
 #: eeschema/component_references_lister.cpp:696
 #, c-format
@@ -7593,11 +7584,10 @@ msgid "Item not annotated: %s%s"
 msgstr "アノテーションされなかったアイテム: %s%s"
 
 #: eeschema/component_references_lister.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr ""
-"エラー: シンボル %s%s%s (ユニット %d) は定義されたユニット数 %d を超えていま"
-"す\n"
+msgstr "エラー: シンボル %s%s%s (ユニット %d) は定義されたユニット数 (%d) "
+"を超えています"
 
 #: eeschema/component_references_lister.cpp:753
 #, c-format
@@ -7605,9 +7595,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "重複したアイテム %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "異なる値: %s%d%s (%s) と %s%d%s (%s)"
+msgstr "アイテム %s%s%s と %s%s%s のユニット数が異なります。\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
@@ -8818,9 +8808,8 @@ msgid "Allow autoplacement"
 msgstr "自動配置を許可する"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:105
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "選択されたコンポーネントの自動配置を実行"
+msgstr "回路図でこのフィールドの自動配置を許可する"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:118
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
@@ -9927,9 +9916,8 @@ msgid "Footprint Filters"
 msgstr "フットプリント フィルター"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:337
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "Spice モデルを編集..."
+msgstr "シミュレーションモデルを編集..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
