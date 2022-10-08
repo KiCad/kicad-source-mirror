@@ -39,6 +39,7 @@
 #include <pcb_item_containers.h>
 #include <fp_text.h>
 #include <functional>
+#include <math/vector3.h>
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -86,11 +87,6 @@ public:
         m_Show( true )
     {
     }
-
-    struct VECTOR3D
-    {
-        double x, y, z;
-    };
 
     VECTOR3D m_Scale;       ///< 3D model scaling factor (dimensionless)
     VECTOR3D m_Rotation;    ///< 3D model rotation (degrees)

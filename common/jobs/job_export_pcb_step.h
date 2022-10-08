@@ -32,7 +32,8 @@ public:
             m_overwrite( false ),
             m_useGridOrigin( false ),
             m_useDrillOrigin( false ),
-            m_includeVirtual( false ),
+            m_boardOnly( false ),
+            m_includeExcludedBom( false ),
             m_substModels( false ),
             m_filename(),
             m_outputFile(),
@@ -45,7 +46,8 @@ public:
     bool     m_overwrite;
     bool     m_useGridOrigin;
     bool     m_useDrillOrigin;
-    bool     m_includeVirtual;
+    bool     m_boardOnly;
+    bool     m_includeExcludedBom;
     bool     m_substModels;
     wxString m_filename;
     wxString m_outputFile;

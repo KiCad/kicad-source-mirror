@@ -13,7 +13,6 @@ add_definitions( -DPCBNEW )
 add_subdirectory(connectivity)
 
 add_subdirectory(router)
-add_subdirectory(exporters/step)
 
 # psnrouter depends on make_lexer outputs in common (bug #1285878 )
 add_dependencies( pnsrouter pcbcommon )
@@ -223,6 +222,8 @@ set( PCBNEW_EXPORTERS
     exporters/export_footprint_associations.cpp
     exporters/export_gencad.cpp
     exporters/export_idf.cpp
+    exporters/step/exporter_step.cpp
+    exporters/step/step_pcb_model.cpp
     exporters/exporter_vrml.cpp
     exporters/place_file_exporter.cpp
     exporters/gen_drill_report_files.cpp
@@ -680,7 +681,8 @@ target_link_libraries( pcbnew_kiface_objects
         tinyspline_lib
         nlohmann_json
         rectpack2d
-        kicad2step_lib
+        gzip-hpp
+        ${OCC_LIBRARIES}
     )
 
 target_include_directories( pcbnew_kiface_objects PRIVATE

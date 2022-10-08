@@ -30,9 +30,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "base.h"
-#include "kicadpcb.h"
-#include "kicadcurve.h"
 
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <TDocStd_Document.hxx>
@@ -41,65 +38,34 @@
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Edge.hxx>
 
+#include <math/vector2d.h>
+#include <math/vector3.h>
+#include <geometry/shape_poly_set.h>
+
+///< Default minimum distance between points to treat them as separate ones (mm)
+static constexpr double STEPEXPORT_MIN_DISTANCE = 0.01;
+static constexpr double STEPEXPORT_MIN_ACCEPTABLE_DISTANCE = 0.001;
+
+class PAD;
 
 typedef std::pair< std::string, TDF_Label > MODEL_DATUM;
 typedef std::map< std::string, TDF_Label > MODEL_MAP;
 
-class KICADPAD;
+extern void ReportMessage( const wxString& aMessage );
 
-class OUTLINE
+class STEP_PCB_MODEL
 {
 public:
-    OUTLINE();
-    virtual ~OUTLINE();
-
-    void Clear();
-
-    // attempt to add a curve to the outline; on success returns true
-    bool AddSegment( const KICADCURVE& aCurve );
-
-    bool IsClosed()
-    {
-        return m_closed;
-    }
-
-    void SetMinSqDistance( double aDistance )
-    {
-        m_minDistance2 = aDistance;
-    }
-
-    bool MakeShape( TopoDS_Shape& aShape, double aThickness );
-
-private:
-    bool addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBLET& aLastPoint );
-    bool testClosed( const KICADCURVE& aFrontCurve, const KICADCURVE& aBackCurve );
-
-public:
-    std::list< KICADCURVE > m_curves;   // list of contiguous segments
-
-private:
-    bool   m_closed;        // set true if the loop is closed
-    double m_minDistance2;  // min squared distance to treat points as separate entities (mm)
-};
-
-
-class PCBMODEL
-{
-public:
-    PCBMODEL( const wxString& aPcbName );
-    virtual ~PCBMODEL();
-
-    // add an outline segment (must be in final position)
-    bool AddOutlineSegment( KICADCURVE* aCurve );
+    STEP_PCB_MODEL( const wxString& aPcbName );
+    virtual ~STEP_PCB_MODEL();
 
     // add a pad hole or slot (must be in final position)
-    bool AddPadHole( const KICADPAD* aPad );
+    bool AddPadHole( const PAD* aPad );
 
     // add a component at the given position and orientation
-    bool AddComponent( const std::string& aFileName, const std::string& aRefDes,
-                       bool aBottom, DOUBLET aPosition, double aRotation,
-                       TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale,
-                       bool aSubstituteModels = true );
+    bool AddComponent( const std::string& aFileName, const std::string& aRefDes, bool aBottom,
+                       VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
+                       VECTOR3D aOrientation, VECTOR3D aScale, bool aSubstituteModels = true );
 
     void SetBoardColor( double r, double g, double b );
 
@@ -112,8 +78,12 @@ public:
     // Set the minimum distance (in mm) to consider 2 points have the same coordinates
     void SetMinDistance( double aDistance );
 
+    void SetMaxError( int aMaxError ) { m_maxError = aMaxError; }
+
     // create the PCB model using the current outlines and drill holes
-    bool CreatePCB();
+    bool CreatePCB( SHAPE_POLY_SET& aOutline );
+
+    bool MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& chain, double aThickness );
 
 #ifdef SUPPORTS_IGES
     // write the assembly model in IGES format
@@ -136,17 +106,17 @@ private:
      * @param aErrorMessage (can be nullptr) is an error message to be displayed on error.
      * @return true if successfully loaded, false on error.
      */
-    bool getModelLabel( const std::string& aFileNameUTF8, TRIPLET aScale, TDF_Label& aLabel,
+    bool getModelLabel( const std::string& aFileNameUTF8, VECTOR3D aScale, TDF_Label& aLabel,
                         bool aSubstituteModels, wxString* aErrorMessage = nullptr );
 
-    bool getModelLocation( bool aBottom, DOUBLET aPosition, double aRotation, TRIPLET aOffset,
-                           TRIPLET aOrientation, TopLoc_Location& aLocation );
+    bool getModelLocation( bool aBottom, VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
+                           VECTOR3D aOrientation, TopLoc_Location& aLocation );
 
     bool readIGES( Handle( TDocStd_Document )& m_doc, const char* fname );
     bool readSTEP( Handle( TDocStd_Document )& m_doc, const char* fname );
 
-    TDF_Label transferModel( Handle( TDocStd_Document )& source,
-                             Handle( TDocStd_Document )& dest, TRIPLET aScale );
+    TDF_Label transferModel( Handle( TDocStd_Document )& source, Handle( TDocStd_Document ) & dest,
+                             VECTOR3D aScale );
 
     Handle( XCAFApp_Application )   m_app;
     Handle( TDocStd_Document )      m_doc;
@@ -163,13 +133,13 @@ private:
 
     double                          m_minx;         // leftmost curve point
     double                          m_minDistance2; // minimum squared distance between items (mm)
-    std::list<KICADCURVE>::iterator m_mincurve;     // iterator to the leftmost curve
 
-    std::list<KICADCURVE>           m_curves;
     std::vector<TopoDS_Shape>       m_cutouts;
 
     /// Name of the PCB, which will most likely be the file name of the path.
     wxString                        m_pcbName;
+
+    int                             m_maxError;
 };
 
 #endif // OCE_VIS_OCE_UTILS_H

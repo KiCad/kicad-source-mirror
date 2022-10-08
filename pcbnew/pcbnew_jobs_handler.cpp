@@ -19,7 +19,6 @@
  */
 
 #include "pcbnew_jobs_handler.h"
-#include <kicad2step.h>
 #include <jobs/job_export_pcb_gerber.h>
 #include <jobs/job_export_pcb_drill.h>
 #include <jobs/job_export_pcb_dxf.h>
@@ -32,6 +31,7 @@
 #include <plotters/plotter_gerber.h>
 #include <plotters/plotters_pslike.h>
 #include <exporters/place_file_exporter.h>
+#include <exporters/step/exporter_step.h>
 #include "gerber_placefile_writer.h"
 #include <pgm_base.h>
 #include <pcbplot.h>
@@ -65,23 +65,39 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     if( aStepJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    KICAD2MCAD_PRMS params;
+    if( aJob->IsCli() )
+        wxPrintf( _( "Loading board\n" ) );
+
+    BOARD* brd = LoadBoard( aStepJob->m_filename );
+
+    if( aStepJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( wxS( "step" ) );
+
+        aStepJob->m_outputFile = fn.GetFullName();
+    }
+
+    EXPORTER_STEP_PARAMS params;
+    params.m_includeExcludedBom = aStepJob->m_includeExcludedBom;
+    params.m_minDistance = aStepJob->m_minDistance;
+    params.m_overwrite = aStepJob->m_overwrite;
+    params.m_substModels = aStepJob->m_substModels;
+    params.m_origin = VECTOR2D( aStepJob->m_xOrigin, aStepJob->m_yOrigin );
     params.m_useDrillOrigin = aStepJob->m_useDrillOrigin;
     params.m_useGridOrigin = aStepJob->m_useGridOrigin;
-    params.m_overwrite = aStepJob->m_overwrite;
-    params.m_includeVirtual = aStepJob->m_includeVirtual;
-    params.m_filename = aStepJob->m_filename;
-    params.m_outputFile = aStepJob->m_outputFile;
-    params.m_xOrigin = aStepJob->m_xOrigin;
-    params.m_yOrigin = aStepJob->m_yOrigin;
-    params.m_minDistance = aStepJob->m_minDistance;
-    params.m_substModels = aStepJob->m_substModels;
+    params.m_boardOnly = aStepJob->m_boardOnly;
 
-    // we might need the lifetime of the converter to continue until frame destruction
-    // due to the gui parameter
-    KICAD2STEP* converter = new KICAD2STEP( params );
+    EXPORTER_STEP stepExporter( brd, params );
+    stepExporter.m_outputFile = aStepJob->m_outputFile;
 
-    return converter->Run();
+    if( !stepExporter.Export() )
+    {
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    return CLI::EXIT_CODES::OK;
 }
 
 

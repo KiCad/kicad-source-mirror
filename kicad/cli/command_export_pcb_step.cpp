@@ -35,6 +35,7 @@
 #define ARG_INPUT "input"
 #define ARG_MIN_DISTANCE "--min-distance"
 #define ARG_USER_ORIGIN "--user-origin"
+#define ARG_BOARD_ONLY "--board-only"
 
 #define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
 #define REGEX_DELIMITER "(?:[\\s]*x)"
@@ -67,6 +68,11 @@ CLI::EXPORT_PCB_STEP_COMMAND::EXPORT_PCB_STEP_COMMAND() : COMMAND( "step" )
             .implicit_value( true )
             .default_value( false );
 
+    m_argParser.add_argument( ARG_BOARD_ONLY )
+            .help( "only generate a board with no components" )
+            .implicit_value( true )
+            .default_value( false );
+
     m_argParser.add_argument( ARG_MIN_DISTANCE )
             .default_value( std::string() )
             .help( "Minimum distance between points to treat them as separate ones (default 0.01mm)" );
@@ -88,11 +94,12 @@ int CLI::EXPORT_PCB_STEP_COMMAND::Perform( KIWAY& aKiway )
 
     step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
     step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
-    step->m_includeVirtual = !m_argParser.get<bool>( ARG_NO_VIRTUAL );
+    step->m_includeExcludedBom = !m_argParser.get<bool>( ARG_NO_VIRTUAL );
     step->m_substModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
     step->m_overwrite = m_argParser.get<bool>( ARG_FORCE );
     step->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     step->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
 
     wxString userOrigin = FROM_UTF8( m_argParser.get<std::string>( ARG_USER_ORIGIN ).c_str() );
     if( !userOrigin.IsEmpty() )

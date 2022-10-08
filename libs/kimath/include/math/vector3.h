@@ -102,6 +102,9 @@ public:
 
     ///< Not equality operator
     bool operator!=( const VECTOR3<T>& aVector ) const;
+
+    VECTOR3<T>& operator*=( T val );
+    VECTOR3<T>& operator/=( T val );
 };
 
 
@@ -172,6 +175,28 @@ template <class T>
 bool VECTOR3<T>::operator!=( VECTOR3<T> const& aVector ) const
 {
     return ( aVector.x != x ) || ( aVector.y != y ) || ( aVector.z != z );
+}
+
+
+template <class T>
+VECTOR3<T>& VECTOR3<T>::operator*=( T aScalar )
+{
+    x = x * aScalar;
+    y = y * aScalar;
+    z = z * aScalar;
+
+    return *this;
+}
+
+
+template <class T>
+VECTOR3<T>& VECTOR3<T>::operator/=( T aScalar )
+{
+    x = x / aScalar;
+    y = y / aScalar;
+    z = z / aScalar;
+
+    return *this;
 }
 
 

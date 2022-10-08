@@ -47,9 +47,6 @@
 #include <filename_resolver.h>
 
 
-#include <kicad2step.h>
-
-
 class DIALOG_EXPORT_STEP : public DIALOG_EXPORT_STEP_BASE
 {
 public:

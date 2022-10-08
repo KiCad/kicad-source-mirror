@@ -452,7 +452,7 @@ struct AMODEL
     wxString id;
     bool     isEmbedded;
 
-    FP_3DMODEL::VECTOR3D rotation;
+    VECTOR3D rotation;
 
     explicit AMODEL( ALTIUM_PARSER& aReader );
 };
@@ -564,8 +564,8 @@ struct ACOMPONENTBODY6
     wxString             modelId;
     bool                 modelIsEmbedded;
 
-    FP_3DMODEL::VECTOR3D modelPosition;
-    FP_3DMODEL::VECTOR3D modelRotation;
+    VECTOR3D             modelPosition;
+    VECTOR3D             modelRotation;
     double               rotation;
     double               bodyOpacity;
 
