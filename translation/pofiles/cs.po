@@ -11,15 +11,16 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # Radek Kuznik <radek.kzn@gmail.com>, 2021, 2022.
 # Ondřej Čertík <ondrej@certik.us>, 2022.
+# ZbeeGin <zbeegin@op.pl>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-02 22:46+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2022-10-09 08:03+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8752,13 +8753,12 @@ msgstr "Název souboru listu lze změnit pouze v okně Vlastnosti listu."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:671
 #: eeschema/dialogs/dialog_label_properties.cpp:460
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Okraje kolem textu jsou řízeny poměrem odsazení textu\n"
-"v části Schematické nastavení> Obecné> Formátování."
+"Okraje kolem textu jsou řízeny poměrem odsazení textu v části Schematické "
+"nastavení> Obecné> Formátování"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -10155,9 +10155,8 @@ msgstr ""
 "Chcete pokračovat?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Synchronizovaný režim editace vývodu"
+msgstr "Synchronizovaný režim editace vývodu."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:436
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
@@ -12775,9 +12774,8 @@ msgid "No Connection"
 msgstr "Nezapojeno"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Nevyřešená textová proměnná v listu výkresu."
+msgstr "Nevyřešená textová proměnná v listu výkresu"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -12812,7 +12810,7 @@ msgstr "Aktuální konfigurace neobsahuje knihovnu '%s'"
 #: eeschema/erc.cpp:746
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "Knihovna '%s' není v aktuální konfiguraci povolena."
+msgstr "Knihovna '%s' není v aktuální konfiguraci povolena"
 
 #: eeschema/erc.cpp:761
 #, c-format
@@ -29033,9 +29031,8 @@ msgstr "Vybrat položku(y)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:144
 #: pcbnew/dialogs/panel_edit_options_base.cpp:216
-#, fuzzy
 msgid "Toggle selection."
-msgstr "Přepnout stav výběru"
+msgstr "Přepnout stav výběru."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:144
 #: pcbnew/dialogs/panel_edit_options_base.cpp:216
