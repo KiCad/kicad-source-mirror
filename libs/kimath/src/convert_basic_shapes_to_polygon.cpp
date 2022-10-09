@@ -273,7 +273,7 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
                 endAngle = RAD2DECIDEG( angle );
             }
 
-            if( aInflate )
+            if( aInflate && tanAngle2 )
             {
                 radius += aInflate;
                 cornerPosition += incoming.Resize( aInflate / tanAngle2 )
