@@ -12765,8 +12765,9 @@ msgid "No Connection"
 msgstr "Nezapojeno"
 
 #: eeschema/erc.cpp:283
+#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Nevyřešená textová proměnná v listu výkresu"
+msgstr "Nevyřešená textová proměnná v listu výkresu."
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -15215,7 +15216,7 @@ msgstr "Hodnota"
 
 #: eeschema/sim/sim_model_kibis.cpp:261
 msgid "ON time"
-msgstr ""
+msgstr "Čas ON"
 
 #: eeschema/sim/sim_model_kibis.cpp:269
 #, fuzzy
@@ -17635,7 +17636,7 @@ msgstr "Zadejte číslo stránky pro cestu listu%s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:672
 msgid "Set Unit Display Name"
-msgstr ""
+msgstr "Nastavte název zobrazené jednotky"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -19532,6 +19533,8 @@ msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
 msgstr ""
+"Po (od)instalovaných balíčcích bude možná nutné KiCad restartovat, aby "
+"odrážel změny v globální tabulce knihoven."
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -21081,23 +21084,23 @@ msgstr "Hliník"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:41
 msgid "Gold"
-msgstr ""
+msgstr "Zlato"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:42
 msgid "Titanium"
-msgstr ""
+msgstr "Titan"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:43
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "Nerezová ocel 18-9"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:45
 msgid "Silver"
-msgstr ""
+msgstr "Stříbro"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:46
 msgid "Mercury"
-msgstr ""
+msgstr "Rtuť"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:47
 #, fuzzy
@@ -21117,11 +21120,11 @@ msgstr "Hliník"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "Mosaz"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
-msgstr ""
+msgstr "Bronz"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
 #, fuzzy
@@ -21140,11 +21143,11 @@ msgstr "Hliník"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "Litina"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
-msgstr ""
+msgstr "Uhlíková ocel"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:57
 #, fuzzy
@@ -21153,19 +21156,19 @@ msgstr "Hliník"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:58
 msgid "Cadmium"
-msgstr ""
+msgstr "Kadmium"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:59
 msgid "Iron"
-msgstr ""
+msgstr "Železo"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:60
 msgid "Chrome"
-msgstr ""
+msgstr "Chróm"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:61
 msgid "Zinc"
-msgstr ""
+msgstr "Zinek"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:62
 #, fuzzy
@@ -21174,7 +21177,7 @@ msgstr "Japonština"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:63
 msgid "Magnesium"
-msgstr ""
+msgstr "Hořčík"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
