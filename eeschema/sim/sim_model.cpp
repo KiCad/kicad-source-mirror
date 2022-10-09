@@ -644,7 +644,13 @@ template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
-    std::unique_ptr<SIM_MODEL> model = Create( aBaseModel.GetType() );
+    TYPE type = ReadTypeFromFields( aFields );
+
+    // If the model has a specified type, it takes priority over the type of its base class.
+    if( type == TYPE::NONE )
+        type = aBaseModel.GetType();
+
+    std::unique_ptr<SIM_MODEL> model = Create( type );
 
     model->SetBaseModel( aBaseModel );
     model->ReadDataFields( aSymbolPinCount, &aFields );

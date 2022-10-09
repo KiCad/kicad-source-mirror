@@ -40,6 +40,8 @@ public:
     std::string ModelLine( const std::string& aModelName ) const override;
     std::vector<std::string> CurrentNames( const std::string& aRefName ) const override;
 
+    std::string IbisDevice( const std::vector<SCH_FIELD>& aFields ) const;
+
 protected:
     std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const override;
 };
@@ -89,8 +91,6 @@ public:
 
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
-    std::string GenerateSpiceDriver( const std::vector<SCH_FIELD>& aFields ) const;
-
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;
 
@@ -102,6 +102,7 @@ private:
     static std::vector<PARAM::INFO> makeRectWaveformParamInfos();
     static std::vector<PARAM::INFO> makePrbsWaveformParamInfos();
 
+    const SIM_MODEL*                                 m_sourceModel;
     std::vector<std::string>                         m_ibisModels;
     std::vector<std::pair<std::string, std::string>> m_ibisPins;
     std::string                                      m_componentName;

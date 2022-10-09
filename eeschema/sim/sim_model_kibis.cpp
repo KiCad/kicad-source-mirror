@@ -50,6 +50,119 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const std::string&
     return currentNames;
 }
 
+
+std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFields ) const
+{
+    std::string ibisLibFilename = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
+    std::string ibisCompName    = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD  );
+    std::string ibisPinName     = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY_KIBIS::PIN_FIELD );
+    std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
+
+    KIBIS kibis( ibisLibFilename );
+    KIBIS_COMPONENT* kcomp = kibis.GetComponent( std::string( ibisCompName ) );
+    
+    if( !kcomp )
+        THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS component '%s'" ), ibisCompName ) );
+
+    KIBIS_PIN* kpin = kcomp->GetPin( ibisPinName );
+
+    if( !kpin )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS pin '%s' in component '%s'" ),
+                                          ibisPinName,
+                                          ibisCompName ) );
+    }
+
+    if( !kpin->m_valid )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS pin '%s' in component '%s'" ),
+                                          ibisPinName,
+                                          ibisCompName ) );
+    }
+
+    KIBIS_MODEL* kmodel = kibis.GetModel( ibisModelName );
+
+    if( !kmodel )
+        THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS model '%s'" ), ibisModelName ) );
+
+    if( !kmodel->m_valid )
+        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS model '%s'" ), ibisModelName ) );
+
+    KIBIS_PARAMETER kparams;
+
+    kparams.SetCornerFromString( kparams.m_supply, m_model.FindParam( "vcc" )->value->ToString() );
+    kparams.SetCornerFromString( kparams.m_Rpin, m_model.FindParam( "rpin" )->value->ToString() );
+    kparams.SetCornerFromString( kparams.m_Lpin, m_model.FindParam( "lpin" )->value->ToString() );
+    kparams.SetCornerFromString( kparams.m_Cpin, m_model.FindParam( "cpin" )->value->ToString() );
+    //kparams.SetCornerFromString( kparams.m_Ccomp, FindParam( "ccomp" )->value->ToString() );
+
+    std::string result;
+
+    switch( m_model.GetType() )
+    {
+    case SIM_MODEL::TYPE::KIBIS_DEVICE:
+        kpin->writeSpiceDevice( &result, ibisModelName, *kmodel, kparams );
+        break;
+
+    case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
+    {
+        std::string paramValue = m_model.FindParam( "dc" )->value->ToString();
+
+        if( paramValue == "hi-Z" )
+        {
+            kparams.m_waveform =
+                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z() );
+        }
+        else if( paramValue == "low" )
+        {
+            kparams.m_waveform =
+                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW() );
+        }
+        else if( paramValue == "high" )
+        {
+            kparams.m_waveform =
+                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH() );
+        }
+
+        kpin->writeSpiceDriver( &result, ibisModelName, *kmodel, kparams );
+        break;
+    }
+
+    case SIM_MODEL::TYPE::KIBIS_DRIVER_RECT:
+    {
+        KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR();
+
+        waveform->m_ton = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "ton" )->value ).Get().value_or( 1 );
+        waveform->m_toff = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "toff" )->value ).Get().value_or( 1 );
+        waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
+
+        kparams.m_waveform = waveform;
+        kpin->writeSpiceDriver( &result, ibisModelName, *kmodel, kparams );
+        break;
+    }
+
+    case SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS:
+    {
+        KIBIS_WAVEFORM_PRBS* waveform = new KIBIS_WAVEFORM_PRBS();
+
+        waveform->m_bitrate = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "f0" )->value ).Get().value_or( 0 );
+        waveform->m_bits = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "bits" )->value ).Get().value_or( 0 );
+        waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
+
+        kparams.m_waveform = waveform;
+        kpin->writeSpiceDriver( &result, ibisModelName, *kmodel, kparams );
+        break;
+    }
+
+    default:
+        wxFAIL_MSG( "Unknown IBIS model type" );
+        return "";
+    }
+
+    return result;
+}
+
+
 SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType ) :
         SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_KIBIS>( *this ) )
 {
@@ -156,119 +269,11 @@ bool SIM_MODEL_KIBIS::ChangePin( SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber
 
 void SIM_MODEL_KIBIS::SetBaseModel( const SIM_MODEL& aBaseModel )
 {
-    
-}
-
-
-std::string SIM_MODEL_KIBIS::GenerateSpiceDriver( const std::vector<SCH_FIELD>& aFields ) const
-{
-    std::string ibisLibFilename = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
-    std::string ibisCompName    = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD  );
-    std::string ibisPinName     = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY_KIBIS::PIN_FIELD );
-    std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
-
-    KIBIS kibis( ibisLibFilename );
-    KIBIS_COMPONENT* kcomp = kibis.GetComponent( std::string( ibisCompName ) );
-    
-    if( !kcomp )
-        THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS component '%s'" ), ibisCompName ) );
-
-    KIBIS_PIN* kpin = kcomp->GetPin( ibisPinName );
-
-    if( !kpin )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS pin '%s' in component '%s'" ),
-                                          ibisPinName,
-                                          ibisCompName ) );
-    }
-
-    if( !kpin->m_valid )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS pin '%s' in component '%s'" ),
-                                          ibisPinName,
-                                          ibisCompName ) );
-    }
-
-    KIBIS_MODEL* kmodel = kibis.GetModel( ibisModelName );
-
-    if( !kmodel )
-        THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS model '%s'" ), ibisModelName ) );
-
-    if( !kmodel->m_valid )
-        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS model '%s'" ), ibisModelName ) );
-
-    KIBIS_PARAMETER kparams;
-
-    kparams.SetCornerFromString( kparams.m_supply, FindParam( "vcc" )->value->ToString() );
-    kparams.SetCornerFromString( kparams.m_Rpin, FindParam( "rpin" )->value->ToString() );
-    kparams.SetCornerFromString( kparams.m_Lpin, FindParam( "lpin" )->value->ToString() );
-    kparams.SetCornerFromString( kparams.m_Cpin, FindParam( "cpin" )->value->ToString() );
-    //kparams.SetCornerFromString( kparams.m_Ccomp, FindParam( "ccomp" )->value->ToString() );
-
-    std::string result;
-
-    switch( GetType() )
-    {
-    case SIM_MODEL::TYPE::KIBIS_DEVICE:
-        kpin->writeSpiceDevice( &result, ibisModelName, *kmodel, kparams );
-        break;
-
-    case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
-    {
-        std::string paramValue = FindParam( "dc" )->value->ToString();
-
-        if( paramValue == "hi-Z" )
-        {
-            kparams.m_waveform =
-                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z() );
-        }
-        else if( paramValue == "low" )
-        {
-            kparams.m_waveform =
-                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW() );
-        }
-        else if( paramValue == "high" )
-        {
-            kparams.m_waveform =
-                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH() );
-        }
-
-        kpin->writeSpiceDriver( &result, ibisModelName, *kmodel, kparams );
-        break;
-    }
-
-    case SIM_MODEL::TYPE::KIBIS_DRIVER_RECT:
-    {
-        KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR();
-
-        waveform->m_ton = static_cast<SIM_VALUE_FLOAT&>( *FindParam( "ton" )->value ).Get().value_or( 1 );
-        waveform->m_toff = static_cast<SIM_VALUE_FLOAT&>( *FindParam( "toff" )->value ).Get().value_or( 1 );
-        waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *FindParam( "delay" )->value ).Get().value_or( 0 );
-
-        kparams.m_waveform = waveform;
-        kpin->writeSpiceDriver( &result, ibisModelName, *kmodel, kparams );
-        break;
-    }
-
-    case SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS:
-    {
-        KIBIS_WAVEFORM_PRBS* waveform = new KIBIS_WAVEFORM_PRBS();
-
-        waveform->m_bitrate = static_cast<SIM_VALUE_FLOAT&>( *FindParam( "f0" )->value ).Get().value_or( 0 );
-        waveform->m_bits = static_cast<SIM_VALUE_FLOAT&>( *FindParam( "bits" )->value ).Get().value_or( 0 );
-        waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *FindParam( "delay" )->value ).Get().value_or( 0 );
-
-        kparams.m_waveform = waveform;
-        kpin->writeSpiceDriver( &result, ibisModelName, *kmodel, kparams );
-        break;
-    }
-
-    default:
-        wxFAIL_MSG( "Unknown IBIS model type" );
-        return "";
-    }
-
-    return result;
+    // Actual base models can only be of the same type, which is not the case here, as in addition
+    // to IBIS device model type we have multiple types of drivers available for the same sourced
+    // model. And we don't want to inherit the default values anyway. So we just store these models
+    // and use the only for Spice code generation.
+    m_sourceModel = &aBaseModel;
 }
 
 

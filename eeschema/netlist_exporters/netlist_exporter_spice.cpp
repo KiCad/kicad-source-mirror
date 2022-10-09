@@ -326,7 +326,7 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
     aItem.modelName = ( modelName != "" ) ? modelName : ( "__" + aItem.refName );
     aItem.model = &model;
 
-    // Special cases for raw Spice models and KIBIS.
+    // FIXME: Special cases for raw Spice models and KIBIS.
     if( auto rawSpiceModel = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model ) )
     {
         int libParamIndex = static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
@@ -356,7 +356,9 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
                                       libraryPath ) );
         }
 
-        std::string modelData = kibisModel->GenerateSpiceDriver( aSymbol.GetFields() );
+        auto spiceGenerator = static_cast<const SPICE_GENERATOR_KIBIS&>( kibisModel->SpiceGenerator() );
+        std::string modelData = spiceGenerator.IbisDevice( aSymbol.GetFields() );
+
         cacheFile.Write( wxString( modelData ) );
         m_rawIncludes.insert( libraryPath );
     }
