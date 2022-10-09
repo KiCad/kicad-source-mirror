@@ -1370,6 +1370,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 {
                     const SHAPE_SIMPLE* poly = static_cast<const SHAPE_SIMPLE*>( shape );
 
+                    if( poly->PointCount() < 2 )     // Careful of empty pads
+                        break;
+
                     if( margin.x < 0 )  // The poly shape must be deflated
                     {
                         int numSegs = GetArcToSegmentCount( -margin.x, m_maxError, FULL_CIRCLE );
@@ -1469,7 +1472,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                     // Use ERROR_INSIDE because it avoids Clipper and is therefore much faster.
                     aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ),
                                                                 clearance, m_maxError, ERROR_INSIDE );
-                    m_gal->DrawPolygon( polySet );
+
+                    if( polySet.Outline( 0 ).PointCount() > 2 )     // Careful of empty pads
+                        m_gal->DrawPolygon( polySet );
                 }
             }
             else if( aPad->GetEffectiveHoleShape() && clearance > 0 )
