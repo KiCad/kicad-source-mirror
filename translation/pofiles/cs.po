@@ -10145,8 +10145,9 @@ msgstr ""
 "Chcete pokračovat?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
+#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Synchronizovaný režim editace vývodu."
+msgstr "Synchronizovaný režim editace vývodu"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:436
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
@@ -11042,7 +11043,7 @@ msgstr "Přepsat"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:63
 msgid "Pin:"
-msgstr ""
+msgstr "Vývod:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:90
 #: eeschema/dialogs/dialog_sim_model_base.cpp:194
