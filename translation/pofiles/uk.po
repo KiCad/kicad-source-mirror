@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-09 08:03+0000\n"
+"PO-Revision-Date: 2022-10-11 00:17+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -36089,121 +36089,123 @@ msgstr ""
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:224
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:328
 msgid "Straight lines"
-msgstr ""
+msgstr "Прямі лінії"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:120
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:224
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:328
 msgid "Curved"
-msgstr ""
+msgstr "Крива"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:138
-#, fuzzy
 msgid "Rect shapes:"
-msgstr "Заповнити вибрані фігури"
+msgstr "Прямокутні форми:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:242
-#, fuzzy
 msgid "Tracks:"
-msgstr "Доріжки"
+msgstr "Доріжки:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:349
 msgid "Vias and PTH pads"
-msgstr ""
+msgstr "Перехідні отвори і PTH контактні площадки"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:351
 msgid "Add teardrops to vias and pads with holes"
 msgstr ""
+"Додайте краплевидність перехідним отворам та контактним площадкам з отворами"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:355
 msgid "Round pads only"
-msgstr ""
+msgstr "Округлити тільки контактні площадки"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:356
 msgid "Add teardrops to round shapes only "
-msgstr ""
+msgstr "Додати краплевидну форму тільки округлим фігурам "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:360
-#, fuzzy
 msgid "SMD pads"
-msgstr "SMD виводи знизу"
+msgstr "SMD контактні площадки"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:362
 msgid "Add teardrops to not driiled pads, like SMD"
-msgstr ""
+msgstr "Додати краплевидність контактним площадкам без отвору, наприклад SMD"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:366
 msgid "Track to track"
-msgstr ""
+msgstr "Доріжка до доріжки"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:368
 msgid "Add teardrops to two connected tracks of different widths"
-msgstr ""
+msgstr "Додати краплевидність до двох підключених доріжок різної ширини"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:378
 msgid "Allow teardrops to span two track segments"
-msgstr ""
+msgstr "Дозволити краплевидність сегментам двох доріжок"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:380
 msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
 msgstr ""
+"Дозволяє поширити краплевидність на 2 доріжки, якщо перший сегмент доріжки "
+"закороткий"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:384
 msgid "Place teardrops on pads in zones"
-msgstr ""
+msgstr "Розмістити краплевидність для контактних площадок в зонах"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:385
 msgid ""
 "Pads inside a  copper zone outline of same net have no teardrop.\n"
 "Check this option to allow teardrop for these pads."
 msgstr ""
+"Контактні площадки всередині контуру мідної зони того ж зв'язку не мають "
+"краплевидності.\n"
+"Позначте цей параметр, щоб увімкнути розрив для цих контактних площадок."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
-#, fuzzy
 msgid "Curve points:"
-msgstr "Крива Безьє, %d точки"
+msgstr "Точки кривої:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:397
 msgid "Number of segments to build a teardrop with curved shape"
-msgstr ""
+msgstr "Кількість сегментів, щоб побудувати краплю з кривими формами"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:121
 msgid "Add Teardrops"
-msgstr ""
+msgstr "Додати краплі"
 
 #: pcbnew/teardrop/teardrop.cpp:228
 msgid "Add teardrops"
-msgstr ""
+msgstr "Додати краплі"
 
 #: pcbnew/teardrop/teardrop.cpp:433
 msgid "Remove teardrops"
-msgstr ""
+msgstr "Видалити краплі"
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
-msgstr ""
+msgstr "Завантажити посадкові місця для поточної плати"
 
 #: pcbnew/toolbars_footprint_editor.cpp:96
 msgid "Insert footprint into current board"
-msgstr ""
+msgstr "Вставити контактні площадки для поточної плати"
 
 #: pcbnew/toolbars_footprint_editor.cpp:265 pcbnew/toolbars_pcb_editor.cpp:758
 msgid "+/- to switch"
-msgstr ""
+msgstr "+/- для переключення"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:62
 msgid "Display previous footprint"
-msgstr ""
+msgstr "Відобразити попереднє посадкове місце"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:65
 msgid "Display next footprint"
-msgstr ""
+msgstr "Відобразити наступне посадкове місце"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:78
 msgid "Insert footprint in board"
-msgstr ""
+msgstr "Вставити посадкове місце на плату"
 
 #: pcbnew/toolbars_pcb_editor.cpp:547
 msgid ""
@@ -36211,12 +36213,18 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
+"Виберіть ширину для нових треків по замовчуванню. Зверніть увагу, що ця "
+"ширина може бути перевизначена мінімальною шириною плати, або на ширину "
+"існуючого треку, якщо включена функція 'Використовувати існуючу ширину "
+"треків'."
 
 #: pcbnew/toolbars_pcb_editor.cpp:554
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
+"Під час маршрутизації з існуючого маршруту використовувати його ширину "
+"замість поточного налаштування ширини"
 
 #: pcbnew/toolbars_pcb_editor.cpp:660
 msgid "Track: use netclass width"
@@ -36225,11 +36233,11 @@ msgstr "Доріжка: ширина з класу звʼязків"
 #: pcbnew/toolbars_pcb_editor.cpp:666
 #, c-format
 msgid "Track: %s (%s)"
-msgstr ""
+msgstr "Доріжка: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:675 pcbnew/toolbars_pcb_editor.cpp:743
 msgid "Edit Pre-defined Sizes..."
-msgstr ""
+msgstr "Змінити попередньо визначені розміри..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:712
 msgid "Via: use netclass sizes"
@@ -36238,19 +36246,19 @@ msgstr "Перехідний отвір: розмір з класу звʼязк
 #: pcbnew/toolbars_pcb_editor.cpp:735
 #, c-format
 msgid "Via: %s (%s)"
-msgstr ""
+msgstr "Перехідний отвір: %s (%s)"
 
 #: pcbnew/tools/board_editor_control.cpp:115
 msgid "Locking"
-msgstr ""
+msgstr "Блокувати"
 
 #: pcbnew/tools/board_editor_control.cpp:385
 msgid "Specctra Session File"
-msgstr ""
+msgstr "Файл сеансу Specctra"
 
 #: pcbnew/tools/board_editor_control.cpp:412
 msgid "Specctra DSN File"
-msgstr ""
+msgstr "Файл Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:436
 msgid "Export Board Netlist"
@@ -36263,11 +36271,11 @@ msgstr "Файли списку звʼязків плати KiCad"
 #: pcbnew/tools/board_editor_control.cpp:451
 #, c-format
 msgid "Path `%s` is read only."
-msgstr ""
+msgstr "Шлях `%s` тільки для читання."
 
 #: pcbnew/tools/board_editor_control.cpp:452
 msgid "I/O Error"
-msgstr ""
+msgstr "Помилка вводу/виводу"
 
 #: pcbnew/tools/board_editor_control.cpp:540
 #, c-format
