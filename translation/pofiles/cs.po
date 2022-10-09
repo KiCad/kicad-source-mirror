@@ -8750,8 +8750,8 @@ msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Okraje kolem textu jsou řízeny poměrem odsazení textu v části Schematické "
-"nastavení> Obecné> Formátování"
+"Mezilistová viditelnost reference je řízena globálně ze Schéma Nastavení > "
+"Obecné > Formátování"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -8777,14 +8777,12 @@ msgid "Show the field name in addtion to its value"
 msgstr ""
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:102
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "Automaticky umístit pole"
+msgstr "Povolit automatické umístění"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:105
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "Provádí automatické umístění vybraných součástek"
+msgstr "Povolit automatické umístění tohoto pole ve schématu"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:118
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
@@ -9390,9 +9388,8 @@ msgid "Standard"
 msgstr "Standardní"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
-#, fuzzy
 msgid "Alternate"
-msgstr "Alternativní název vývodu"
+msgstr "Alternativa"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:114
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:87
