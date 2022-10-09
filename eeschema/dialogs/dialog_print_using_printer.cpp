@@ -409,6 +409,11 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
  */
 void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 {
+    // Warning:
+    // When printing many pages, changes in the current wxDC will affect all next printings
+    // because all prints are using the same wxPrinterDC after creation
+    // So be careful and reinit parameters, especially when using offsets.
+
     wxPoint  tmp_startvisu;
     wxSize   pageSizeIU;             // Page size in internal units
     wxPoint  old_org;
@@ -439,16 +444,31 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     int xoffset = ( fitRect.width - pageSizeIU.x ) / 2;
     int yoffset = ( fitRect.height - pageSizeIU.y ) / 2;
 
+    // Using a wxAffineMatrix2D has a big advantage: it handles different pages orientations
+    //(PORTRAIT/LANDSCAPE), but the affine matrix is not always supported
     if( dc->CanUseTransformMatrix() )
     {
-        wxAffineMatrix2D matrix = dc->GetTransformMatrix();
+        wxAffineMatrix2D matrix;    // starts from a unity matrix (the current wxDC default)
 
         // Check for portrait/landscape mismatch:
         if( ( fitRect.width > fitRect.height ) != ( pageSizeIU.x > pageSizeIU.y ) )
         {
+            // Rotate the coordinates, and keep the draw coordinates inside the page
             matrix.Rotate( M_PI_2 );
-            xoffset = ( fitRect.height - pageSizeIU.x ) / 2;
-            yoffset = ( fitRect.width - pageSizeIU.y ) / 2;
+            matrix.Translate( 0, -pageSizeIU.y );
+
+            // Recalculate the offsets and page sizes according to the page rotation
+            std::swap( pageSizeIU.x, pageSizeIU.y );
+            FitThisSizeToPaper( pageSizeIU );
+            fitRect = GetLogicalPaperRect();
+
+            xoffset = ( fitRect.width - pageSizeIU.x ) / 2;
+            yoffset = ( fitRect.height - pageSizeIU.y ) / 2;
+
+            // All the coordinates will be rotated 90 deg when printing,
+            // so the X,Y offset vector must be rotated -90 deg before printing
+            std::swap( xoffset, yoffset );
+            yoffset = -yoffset;
         }
 
         matrix.Translate( xoffset, yoffset );
@@ -456,12 +476,8 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     }
     else
     {
-        // wxWidgets appears to have a bug when OffsetLogicalOrigin()'s yoffset changes from
-        // page to page.
-        // NB: this is a workaround, not a fix.  The Y centering will be off, but this is less
-        // annoying than a blank page.  See https://bugs.launchpad.net/kicad/+bug/1464773.
-        yoffset = 0;
-
+        SetLogicalOrigin( 0, 0 );   // Reset all offset settings made previously.
+                                    // When printing previous pages (all prints are using the same wxDC)
         OffsetLogicalOrigin( xoffset, yoffset );
     }
 
