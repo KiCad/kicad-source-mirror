@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-09 08:03+0000\n"
+"PO-Revision-Date: 2022-10-11 00:17+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -6617,7 +6617,6 @@ msgid "No objects selected"
 msgstr "Žádné vybrané objekty"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
 msgstr "Několik vybraných objektů"
 
@@ -10134,20 +10133,18 @@ msgid "Alternate pin definitions must have a name."
 msgstr "Alternativní definice vývodů musí mít název."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"Tento vývod není na mřížce %d milů a\n"
-"ve schématu nebude snadné ho připojit.\n"
+"Tento vývod není na mřížce %d milů a ve schématu nebude snadné ho připojit.\n"
 "Chcete pokračovat?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Synchronizovaný režim editace vývodu"
+msgstr "Synchronizovaný režim vývodů."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:436
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
@@ -12765,9 +12762,8 @@ msgid "No Connection"
 msgstr "Nezapojeno"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Nevyřešená textová proměnná v listu výkresu."
+msgstr "Nevyřešená textová proměnná v listu výkresu"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -14458,11 +14454,13 @@ msgid "Invalid symbol library ID"
 msgstr "Neplatný ID knihovny symbolů"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
-msgstr "v aktuální hierarchii schéma"
+msgstr ""
+"Nelze načíst '%s' list, protože se již jeví jako přímý předchůdce v "
+"hierarchii schématu."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1406
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2133
@@ -17712,13 +17710,16 @@ msgstr ""
 "s celým číslem, která neposkytuje žádné duplikáty v tabulkách."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:55
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
-msgstr "Přidat nový záznam do tabulky knihovny symbolů projektu."
+msgstr ""
+"Přidat nový záznam do tabulky knihovny symbolů projektu.\n"
+"\n"
+"Přezdívka tabulky knihoven symbolů je přípona s\n"
+"celým čísel, které zabrání duplicitním položkám tabulky."
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
@@ -19514,9 +19515,8 @@ msgid "Library package handling"
 msgstr "Změny v knihovně nejsou uloženy"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "Přidat knihovnu do globální tabulky knihoven?"
+msgstr "Automaticky přidat nainstalované knihovny do globální tabulky knihoven"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
 #, fuzzy
@@ -21797,14 +21797,13 @@ msgid "nanoseconds"
 msgstr "nanosekund"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Varování:\n"
-"průměr izolační mezery otvoru.\n"
+"Průměr plošky prokovu >= průměr izolační mezery otvoru.\n"
 "Některé parametry nelze vypočítat pro prokov uvnitř zóny mědi."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
@@ -29025,8 +29024,9 @@ msgstr "Vybrat položku(y)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:144
 #: pcbnew/dialogs/panel_edit_options_base.cpp:216
+#, fuzzy
 msgid "Toggle selection."
-msgstr "Přepnout stav výběru."
+msgstr "Přepnout stav výběru"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:144
 #: pcbnew/dialogs/panel_edit_options_base.cpp:216
@@ -31929,9 +31929,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "Vytvořit soubor '%s'"
+msgstr "Číst soubor: '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:273
 msgid "Build STEP data\n"
@@ -31944,23 +31944,25 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:284
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "STEP soubory"
+msgstr "Zapsat soubor STEP\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:295
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Chyba při zápisu do souboru '%s'."
+msgstr ""
+"\n"
+"** Chyba při zápisu do STEP souboru. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "Soubor hlášení '%s' vytvořen."
+msgstr ""
+"\n"
+"Soubor STEP '%s' vytvořen.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:306
 #: pcbnew/exporters/step/kicad2step.cpp:311
@@ -31970,19 +31972,20 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:317
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "Chyba čtení souboru."
+msgstr ""
+"\n"
+"**Chyba čtení souboru kicad_pcb.**\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:325
-#, fuzzy
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
-"Nelze vytvořit soubor STEP. Zkontrolujte, zda deska má platný obrys a modely."
+"Nelze vytvořit soubor STEP.\n"
+"Zkontrolujte, zda deska má platný obrys a modely."
 
 #: pcbnew/exporters/step/kicad2step.cpp:330
 msgid "STEP file has been created, but there are warnings."
@@ -32049,9 +32052,8 @@ msgid "Kicad2step Converter"
 msgstr "KiCad převod obrázků"
 
 #: pcbnew/exporters/step/pcb/3d_resolver.cpp:343
-#, fuzzy
 msgid "Alias:"
-msgstr "Alias: "
+msgstr "Alias:"
 
 #: pcbnew/files.cpp:150
 msgid "All KiCad Board Files"
@@ -32722,19 +32724,16 @@ msgid "Model name cannot be empty."
 msgstr "Název sítě nemůže být prázdný."
 
 #: pcbnew/ibis/ibis_parser.cpp:204
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Jméno souboru není platné!"
+msgstr "Rpin není platný."
 
 #: pcbnew/ibis/ibis_parser.cpp:209
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Jméno souboru není platné!"
+msgstr "Lpin není platný."
 
 #: pcbnew/ibis/ibis_parser.cpp:214
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Jméno souboru není platné!"
+msgstr "Cpin není platný."
 
 #: pcbnew/ibis/ibis_parser.cpp:228
 #, fuzzy
@@ -32832,9 +32831,8 @@ msgid "Invalid V_meas value."
 msgstr "Neplatná hodnota vlastnosti"
 
 #: pcbnew/ibis/ibis_parser.cpp:485
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Některé soubory jsou neplatné!"
+msgstr "C_COMP je neplatný."
 
 #: pcbnew/ibis/ibis_parser.cpp:490
 #, fuzzy
@@ -32842,9 +32840,8 @@ msgid "Temperature Range is invalid."
 msgstr "Zvýšení teploty"
 
 #: pcbnew/ibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Jméno souboru není platné!"
+msgstr "Rozsah napětí je neplatný."
 
 #: pcbnew/ibis/ibis_parser.cpp:521
 #, fuzzy
@@ -34482,9 +34479,8 @@ msgstr ""
 "Upravte tuto globální tabulku knihoven pouzder v menu Předvolby."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:89
-#, fuzzy
 msgid "Loading board\n"
-msgstr "Znovu načíst desku"
+msgstr "Načítání desky\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:96
 #, fuzzy
@@ -37671,7 +37667,7 @@ msgstr "Vybírá pouzdro podle odkazu a umístí ho pod kurzor pro přesun"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Move Individually"
-msgstr ""
+msgstr "Přesunout individuálně"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 #, fuzzy
@@ -38271,7 +38267,7 @@ msgstr "Přesune vybranou položku(y)"
 
 #: pcbnew/tools/pcb_actions.cpp:753
 msgid "Ungroup"
-msgstr ""
+msgstr "Zrušit seskupení"
 
 #: pcbnew/tools/pcb_actions.cpp:753
 msgid "Ungroup any selected groups"
