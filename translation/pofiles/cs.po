@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
 "PO-Revision-Date: 2022-10-09 08:03+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -1056,9 +1056,8 @@ msgid "Opacity"
 msgstr "Neprůhlednost"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "Tloušťka desky: "
+msgstr "Tloušťka desky"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -3981,9 +3980,8 @@ msgid "Hotkeys"
 msgstr "Kl. zkratky"
 
 #: common/eda_base_frame.cpp:989
-#, fuzzy
 msgid "Data Collection"
-msgstr "Připojení plošek"
+msgstr "Shromážděná data"
 
 #: common/eda_base_frame.cpp:1005 common/tool/actions.cpp:596
 #: eeschema/symbol_editor/symbol_editor.cpp:86
@@ -4300,9 +4298,8 @@ msgstr "Označení sítě"
 
 #: common/eda_item.cpp:359 eeschema/sch_label.cpp:850
 #: eeschema/sch_label.cpp:1214
-#, fuzzy
 msgid "Directive Label"
-msgstr "Označení sítě"
+msgstr "Označení směrnice"
 
 #: common/eda_item.cpp:360 eeschema/sch_label.cpp:851
 msgid "Global Label"
@@ -4360,9 +4357,8 @@ msgstr "Grafická položka"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "Číslo"
+msgstr "Číselné pole"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1197
 msgid "Rect"
@@ -4854,9 +4850,8 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr "soubory fp-lib-table neobsahují žádnou knihovnu s názvem '%s'."
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:568
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "Správce pluginu a obsahu"
+msgstr "Přidáno správcem zásuvných modulů a obsahu"
 
 #: common/fp_lib_table.cpp:555
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -5989,9 +5984,8 @@ msgid "Zoom Out"
 msgstr "Zmenšit"
 
 #: common/tool/actions.cpp:336 common/widgets/mathplot.cpp:1665
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Střed stránky"
+msgstr "Vystředit na kurzoru"
 
 #: common/tool/actions.cpp:342
 msgid "Zoom to Selection"
@@ -6146,9 +6140,8 @@ msgid "Use millimeters"
 msgstr "Použít milimetry"
 
 #: common/tool/actions.cpp:517 common/widgets/lib_tree.cpp:663
-#, fuzzy
 msgid "Select Columns"
-msgstr "Nevybrat žádný"
+msgstr "Vybrat sloupce"
 
 #: common/tool/actions.cpp:522
 msgid "Switch units"
@@ -7576,9 +7569,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Duplicitní prvky %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Různé hodnoty pro %s%d%s (%s) a %s%d%s (%s)"
+msgstr "Odlišné počty jednotek pro položku %s%s%s a %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
