@@ -272,6 +272,9 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
 
 int SHAPE_ARC::IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const
 {
+    if( aSeg.A == aSeg.B )      // One point does not define a line....
+        return 0;
+
     CIRCLE circ( GetCenter(), GetRadius() );
 
     std::vector<VECTOR2I> intersections = circ.IntersectLine( aSeg );
