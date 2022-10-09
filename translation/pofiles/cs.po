@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:37-0700\n"
-"PO-Revision-Date: 2022-10-03 10:53+0000\n"
+"PO-Revision-Date: 2022-10-10 18:10+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -20141,14 +20141,13 @@ msgid "nanoseconds"
 msgstr "nanosekund"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Varování:\n"
-"průměr izolační mezery otvoru.\n"
+"Průměr plošky prokovu >= průměr izolační mezery otvoru.\n"
 "Některé parametry nelze vypočítat pro prokov uvnitř zóny mědi."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
@@ -34336,7 +34335,7 @@ msgstr "Přesune vybranou položku(y)"
 
 #: pcbnew/tools/pcb_actions.cpp:704
 msgid "Ungroup"
-msgstr ""
+msgstr "Zrušit seskupení"
 
 #: pcbnew/tools/pcb_actions.cpp:704
 msgid "Ungroup any selected groups"
