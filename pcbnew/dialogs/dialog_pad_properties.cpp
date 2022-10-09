@@ -1256,12 +1256,12 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     else if( m_dummyPad->GetShape() == PAD_SHAPE::CIRCLE )
     {
         if( pad_size.x <= 0 )
-            warning_msgs.Add( _( "Warning: Pad size is less than zero." ) );
+            error_msgs.Add( _( "Error: Pad must have a positive size." ) );
     }
     else
     {
         if( pad_size.x <= 0 || pad_size.y <= 0 )
-            warning_msgs.Add( _( "Warning: Pad size is less than zero." ) );
+            error_msgs.Add( _( "Error: Pad must have a positive size." ) );
     }
 
     // Test hole against pad shape
@@ -1452,10 +1452,12 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
                                                : _( "Pad Properties Warnings" );
         HTML_MESSAGE_BOX dlg( this, title );
 
-        dlg.ListSet( error_msgs );
+        wxArrayString msgs = error_msgs;
 
-        if( warning_msgs.GetCount() )
-            dlg.ListSet( warning_msgs );
+        for( const wxString& msg : warning_msgs )
+            msgs.Add( msg );
+
+        dlg.ListSet( msgs );
 
         dlg.ShowModal();
     }
