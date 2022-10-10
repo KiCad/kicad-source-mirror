@@ -37,7 +37,7 @@ void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, SIM_MODEL::TYPE 
 
     if( !m_kibis.m_valid )
     {
-        THROW_IO_ERROR( wxString::Format( "Invalid ibis file." ) );
+        THROW_IO_ERROR( wxString::Format( "Invalid ibis file" ) );
         return;
     }
 

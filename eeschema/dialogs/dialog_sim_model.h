@@ -32,6 +32,7 @@
 
 #include <sim/sim_model.h>
 #include <sim/sim_library.h>
+#include <sim/sim_library_kibis.h>
 #include <sch_symbol.h>
 
 
@@ -145,9 +146,7 @@ private:
     wxPGProperty* m_prevParamGridSelection;
     bool m_wasCodePreviewUpdated;
 
-    std::shared_ptr<SIM_MODEL> m_currentIbisModel = nullptr;
-
-    bool isIbisLoaded() { return m_library->GetType() == SIM_LIBRARY::LIBRARY_TYPE::KIBIS; };
+    bool isIbisLoaded() { return dynamic_cast<SIM_LIBRARY_KIBIS*>( m_library.get() ); }
 };
 
 #endif /* DIALOG_SIM_MODEL_H */

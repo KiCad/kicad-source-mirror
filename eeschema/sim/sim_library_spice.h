@@ -42,11 +42,6 @@ public:
     // @copydoc SIM_LIBRARY::WriteFile()
     void WriteFile( const std::string& aFilePath ) override;
 
-    virtual SIM_LIBRARY::LIBRARY_TYPE GetType() override
-    {
-        return SIM_LIBRARY::LIBRARY_TYPE::SPICE;
-    };
-
 private:
     std::unique_ptr<SPICE_LIBRARY_PARSER> m_spiceLibraryParser;
 };

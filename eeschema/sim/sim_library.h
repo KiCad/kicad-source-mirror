@@ -75,10 +75,6 @@ public:
 
     std::string GetFilePath() const { return m_filePath; }
 
-    DEFINE_ENUM_CLASS_WITH_ITERATOR( LIBRARY_TYPE, NONE, KIBIS, SPICE )
-
-    virtual SIM_LIBRARY::LIBRARY_TYPE GetType() { return SIM_LIBRARY::LIBRARY_TYPE::NONE; };
-
 protected:
     std::vector<std::string>                m_modelNames;
     std::vector<std::unique_ptr<SIM_MODEL>> m_models;
