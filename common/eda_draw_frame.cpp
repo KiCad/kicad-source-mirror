@@ -300,7 +300,7 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
         else
         {
             m_autoSaveTimer->Stop();
-            m_autoSaveState = false;
+            m_autoSavePending = false;
         }
     }
 

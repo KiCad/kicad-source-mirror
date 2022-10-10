@@ -723,7 +723,7 @@ private:
     FILE_HISTORY*   m_fileHistory;          // The frame's recently opened file list
 
     bool            m_supportsAutoSave;
-    bool            m_autoSaveState;
+    bool            m_autoSavePending;
     wxTimer*        m_autoSaveTimer;
 
     int                 m_undoRedoCountMax; // undo/Redo command Max depth

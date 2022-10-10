@@ -1246,7 +1246,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
         GetScreen()->SetContentModified();
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );
         UpdateTitle();
-        m_autoSaveState = false;
+        m_autoSavePending = false;
 
         if( !Kiface().IsSingle() &&
             GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )

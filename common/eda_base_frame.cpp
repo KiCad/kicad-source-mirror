@@ -122,7 +122,7 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     m_settingsManager   = nullptr;
     m_fileHistory       = nullptr;
     m_supportsAutoSave  = false;
-    m_autoSaveState     = false;
+    m_autoSavePending   = false;
     m_undoRedoCountMax  = DEFAULT_MAX_UNDO_ITEMS;
     m_isClosing         = false;
     m_isNonUserClose    = false;
@@ -273,20 +273,20 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
         return true;
 
     if( !m_isClosing && m_supportsAutoSave && IsShown() && IsActive()
-        && m_autoSaveState != isAutoSaveRequired()
-        && GetAutoSaveInterval() > 0 )
+            && m_autoSavePending != isAutoSaveRequired()
+            && GetAutoSaveInterval() > 0 )
     {
-        if( !m_autoSaveState )
+        if( !m_autoSavePending )
         {
             wxLogTrace( traceAutoSave, wxT( "Starting auto save timer." ) );
             m_autoSaveTimer->Start( GetAutoSaveInterval() * 1000, wxTIMER_ONE_SHOT );
-            m_autoSaveState = true;
+            m_autoSavePending = true;
         }
         else if( m_autoSaveTimer->IsRunning() )
         {
             wxLogTrace( traceAutoSave, wxT( "Stopping auto save timer." ) );
             m_autoSaveTimer->Stop();
-            m_autoSaveState = false;
+            m_autoSavePending = false;
         }
     }
 

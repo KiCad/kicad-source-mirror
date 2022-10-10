@@ -1142,14 +1142,19 @@ bool SCH_EDIT_FRAME::doAutoSave()
         fn.SetName( GetAutoSaveFilePrefix() + fn.GetName() );
 
         if( saveSchematicFile( screens.GetSheet( i ), fn.GetFullPath() ) )
+        {
+            // This was only an auto-save, not a real save.  Reset the modified flag.
             screens.GetScreen( i )->SetContentModified();
+        }
         else
+        {
             autoSaveOk = false;
+        }
     }
 
     if( autoSaveOk && updateAutoSaveFile() )
     {
-        m_autoSaveState = false;
+        m_autoSavePending = false;
 
         if( !Kiface().IsSingle() &&
             GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
