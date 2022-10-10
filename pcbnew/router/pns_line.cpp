@@ -1040,12 +1040,13 @@ int LINE::Rank() const
 {
     int min_rank = INT_MAX;
 
-    if( IsLinked() ) {
-        for( auto s : m_links )
-        {
-            min_rank = std::min( min_rank, s->Rank() );
-        }
-    } else {
+    if( IsLinked() )
+    {
+        for( const LINKED_ITEM* item : m_links )
+            min_rank = std::min( min_rank, item->Rank() );
+    }
+    else
+    {
         min_rank = m_rank;
     }
 
