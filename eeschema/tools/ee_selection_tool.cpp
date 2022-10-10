@@ -1353,14 +1353,9 @@ bool EE_SELECTION_TOOL::selectMultiple()
                             if( selectionRect.Contains( line->GetEndPoint() ) || isGreedy )
                                 flags |= ENDPOINT;
 
-
                             // If no ends were selected, select whole line (both ends)
-                            // Also select both ends if the selection overlaps the midpoint
-                            if( ( !( flags & STARTPOINT ) && !( flags & ENDPOINT ) )
-                                || selectionRect.Contains( line->GetMidPoint() ) )
-                            {
+                            if( !( flags & STARTPOINT ) && !( flags & ENDPOINT ) )
                                 flags = STARTPOINT | ENDPOINT;
-                            }
                         }
 
                         if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
