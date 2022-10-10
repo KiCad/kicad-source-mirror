@@ -218,7 +218,7 @@ void PCB_EDIT_FRAME::OnRunTeardropTool( wxCommandEvent& event )
 
     m_infoBar->RemoveAllButtons();
     m_infoBar->AddCloseButton();
-    m_infoBar->ShowMessageFor( wxString::Format( _( "%d Teardrops created" ), added_count ),
+    m_infoBar->ShowMessageFor( wxString::Format( _( "%d teardrops created" ), added_count ),
                                1000, wxICON_EXCLAMATION );
 }
 
@@ -230,9 +230,12 @@ void PCB_EDIT_FRAME::OnRemoveTeardropTool( wxCommandEvent& event )
 
     int count = trdm.RemoveTeardrops( &committer, true );
 
+    GetCanvas()->RedrawRatsnest();
+    GetCanvas()->Refresh();
+
     m_infoBar->RemoveAllButtons();
     m_infoBar->AddCloseButton();
-    m_infoBar->ShowMessageFor( wxString::Format( _( "%d Teardrops removed." ), count ),
+    m_infoBar->ShowMessageFor( wxString::Format( _( "%d teardrops removed." ), count ),
                                1000, wxICON_EXCLAMATION );
 }
 
