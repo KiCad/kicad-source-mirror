@@ -995,7 +995,10 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
 void PCB_BASE_FRAME::OnModify()
 {
+    EDA_BASE_FRAME::OnModify();
+
     GetScreen()->SetContentModified();
+    m_autoSaveRequired = true;
 
     GetBoard()->IncrementTimeStamp();
 

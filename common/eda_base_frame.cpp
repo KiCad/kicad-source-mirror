@@ -127,6 +127,7 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     m_isClosing         = false;
     m_isNonUserClose    = false;
     m_autoSaveTimer     = new wxTimer( this, ID_AUTO_SAVE_TIMER );
+    m_autoSaveRequired  = false;
     m_mruPath           = PATHS::GetDefaultUserProjectsPath();
     m_frameSize         = defaultSize( aFrameType );
     m_displayIndex      = -1;
@@ -1297,6 +1298,12 @@ PICKED_ITEMS_LIST* EDA_BASE_FRAME::PopCommandFromUndoList( )
 PICKED_ITEMS_LIST* EDA_BASE_FRAME::PopCommandFromRedoList( )
 {
     return m_redoList.PopCommand();
+}
+
+
+void EDA_BASE_FRAME::OnModify()
+{
+    m_autoSaveRequired = true;
 }
 
 

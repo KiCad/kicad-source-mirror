@@ -144,8 +144,8 @@ public:
     bool IsContentModified() const override;
 
     /**
-     * Must be called after a schematic change in order to set the "modify" flag of the
-     * current screen and update the date in frame reference.
+     * Must be called after a schematic change in order to set the "modify" flag and update other
+     * data structures and GUI elements.
      */
     void OnModify() override;
 
@@ -839,11 +839,6 @@ protected:
      * @return true if the auto save was successful otherwise false.
      */
     bool doAutoSave() override;
-
-    /**
-     * Return true if the schematic has been modified.
-     */
-    bool isAutoSaveRequired() const override;
 
     /**
      * Send the KiCad netlist over to CVPCB.

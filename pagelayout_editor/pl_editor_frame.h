@@ -237,8 +237,10 @@ public:
     /**
      * Must be called after a change in order to set the "modify" flag.
      */
-    void OnModify()
+    void OnModify() override
     {
+        EDA_BASE_FRAME::OnModify();
+
         GetScreen()->SetContentModified();
     }
 

@@ -955,12 +955,15 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 
 void SCH_EDIT_FRAME::OnModify()
 {
+    EDA_BASE_FRAME::OnModify();
+
     wxASSERT( GetScreen() );
 
     if( !GetScreen() )
         return;
 
     GetScreen()->SetContentModified();
+    m_autoSaveRequired = true;
 
     if( ADVANCED_CFG::GetCfg().m_RealTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( NO_CLEANUP );
@@ -1278,20 +1281,6 @@ void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
     GetScreen()->Print( aSettings );
     PrintDrawingSheet( aSettings, GetScreen(), Schematic().GetProperties(), schIUScale.IU_PER_MILS,
                        fileName );
-}
-
-
-bool SCH_EDIT_FRAME::isAutoSaveRequired() const
-{
-    // In case this event happens before g_RootSheet is initialized which does happen
-    // on mingw64 builds.
-
-    if( Schematic().IsValid() )
-    {
-        return IsContentModified();
-    }
-
-    return false;
 }
 
 

@@ -240,12 +240,6 @@ public:
      */
     void SyncView();
 
-    /**
-     * Must be called after a model change in order to set the "modify" flag and
-     * do other frame-specific processing.
-     */
-    virtual void OnModify() {}
-
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**

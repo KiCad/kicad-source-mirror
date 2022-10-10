@@ -828,7 +828,10 @@ LIB_SYMBOL_LIBRARY_MANAGER& SYMBOL_EDIT_FRAME::GetLibManager()
 
 void SYMBOL_EDIT_FRAME::OnModify()
 {
+    EDA_BASE_FRAME::OnModify();
+
     GetScreen()->SetContentModified();
+    m_autoSaveRequired = true;
 
     if( !IsSymbolFromSchematic() )
         storeCurrentSymbol();

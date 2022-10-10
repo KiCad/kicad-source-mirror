@@ -1033,6 +1033,9 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         success &= saveSchematicFile( screens.GetSheet( i ), tmpFn.GetFullPath() );
     }
 
+    if( success )
+        m_autoSaveRequired = false;
+
     // One or more of the modified sheets did not save correctly so update the auto save file.
     if( !aSaveAs && !success )
         success &= updateAutoSaveFile();
@@ -1154,10 +1157,11 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
     if( autoSaveOk && updateAutoSaveFile() )
     {
+        m_autoSaveRequired = false;
         m_autoSavePending = false;
 
-        if( !Kiface().IsSingle() &&
-            GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
+        if( !Kiface().IsSingle()
+                && GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
         {
             GetSettingsManager()->TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
         }

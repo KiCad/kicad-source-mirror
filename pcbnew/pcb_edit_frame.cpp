@@ -562,15 +562,6 @@ bool PCB_EDIT_FRAME::IsContentModified() const
 }
 
 
-bool PCB_EDIT_FRAME::isAutoSaveRequired() const
-{
-    if( GetScreen() )
-        return GetScreen()->IsContentModified();
-
-    return false;
-}
-
-
 SELECTION& PCB_EDIT_FRAME::GetCurrentSelection()
 {
     return m_toolManager->GetTool<PCB_SELECTION_TOOL>()->GetSelection();

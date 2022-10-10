@@ -243,13 +243,10 @@ public:
     FOOTPRINT* GetFootprintFromBoardByReference();
 
     /**
-     * Must be called after a change in order to set the "modify" flag of the current screen
-     * and update the date in frame reference.
-     *
-     * Do not forget to call this basic OnModify function to update info in derived OnModify
-     * functions.
+     * Must be called after a change in order to set the "modify" flag and update other data
+     * structures and GUI elements.
      */
-    virtual void OnModify();
+    void OnModify() override;
 
     /**
      * Creates a new footprint, at position 0,0.

@@ -782,11 +782,6 @@ protected:
     bool doAutoSave() override;
 
     /**
-     * Return true if the board has been modified.
-     */
-    bool isAutoSaveRequired() const override;
-
-    /**
      * Load the given filename but sets the path to the current project path.
      *
      * @param full file path of file to be imported.

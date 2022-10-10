@@ -418,7 +418,15 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
     case ID_SAVE_BOARD:
         if( !GetBoard()->GetFileName().IsEmpty() )
-            return SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) );
+        {
+            if( SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) ) )
+            {
+                m_autoSaveRequired = false;
+                return true;
+            }
+
+            return false;
+        }
 
         KI_FALLTHROUGH;
 
@@ -446,16 +454,24 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         wxFileName  fn( savePath.GetPath(), orig_name, KiCadPcbFileExtension );
         wxString    filename = fn.GetFullPath();
         bool        createProject = false;
+        bool        success = false;
 
         if( AskSaveBoardFileName( this, &filename, &createProject ) )
         {
             if( id == ID_COPY_BOARD_AS )
-                return SavePcbCopy( filename, createProject );
+            {
+                success = SavePcbCopy( filename, createProject );
+            }
             else
-                return SavePcbFile( filename, addToHistory, createProject );
+            {
+                success = SavePcbFile( filename, addToHistory, createProject );
+
+                if( success )
+                    m_autoSaveRequired = false;
+            }
         }
 
-        return false;
+        return success;
     }
 
     default:
@@ -1246,6 +1262,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
         GetScreen()->SetContentModified();
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );
         UpdateTitle();
+        m_autoSaveRequired = false;
         m_autoSavePending = false;
 
         if( !Kiface().IsSingle() &&

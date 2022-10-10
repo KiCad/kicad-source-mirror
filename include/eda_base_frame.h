@@ -564,6 +564,12 @@ public:
 
     int GetMaxUndoItems() const { return m_undoRedoCountMax; }
 
+    /**
+     * Must be called after a model change in order to set the "modify" flag and do other
+     * frame-specific processing.
+     */
+    virtual void OnModify();
+
     bool NonUserClose( bool aForce )
     {
         m_isNonUserClose = true;
@@ -606,7 +612,7 @@ protected:
      *
      * Override this function if your derived frame supports automatic file saving.
      */
-    virtual bool isAutoSaveRequired() const { return false; }
+    virtual bool isAutoSaveRequired() const { return m_autoSaveRequired; }
 
     /**
      * This should be overridden by the derived class to handle the auto save feature.
@@ -724,6 +730,7 @@ private:
 
     bool            m_supportsAutoSave;
     bool            m_autoSavePending;
+    bool            m_autoSaveRequired;
     wxTimer*        m_autoSaveTimer;
 
     int                 m_undoRedoCountMax; // undo/Redo command Max depth
