@@ -75,6 +75,25 @@ namespace NETLIST_EXPORTER_SPICE_PARSER
 }
 
 
+std::string NAME_GENERATOR::Generate( const std::string& aProposedName )
+{
+    if( !m_names.count( aProposedName ) )
+        return aProposedName;
+
+    for( uint64_t i = 1; i < UINT64_MAX; ++i )
+    {
+        std::string name = fmt::format( "{}#{}", aProposedName, i );
+
+        if( !m_names.count( name ) )
+            return name;
+    }
+
+    // Should never happen.
+    THROW_IO_ERROR( wxString::Format( _( "Failed to generate a name for '%s': exceeded UINT64_MAX" ),
+                                      aProposedName ) );
+}
+
+
 NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic ) :
     NETLIST_EXPORTER_BASE( aSchematic ),
     m_libMgr( aSchematic->Prj() )
@@ -322,11 +341,15 @@ bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 
 void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, ITEM& aItem )
 {
-    auto [modelName, model] = m_libMgr.CreateModel( aSymbol );
-    aItem.modelName = ( modelName != "" ) ? modelName : ( "__" + aItem.refName );
+    auto [baseModelName, model] = m_libMgr.CreateModel( aSymbol );
     aItem.model = &model;
 
-    // FIXME: Special cases for raw Spice models and KIBIS.
+    std::string modelName = aItem.model->SpiceGenerator().ModelName( aItem.refName,
+                                                                     baseModelName );
+    // Resolve model name collisions.
+    aItem.modelName = m_modelNameGenerator.Generate( modelName );
+
+    // FIXME: Don't have special cases for raw Spice models and KIBIS.
     if( auto rawSpiceModel = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model ) )
     {
         int libParamIndex = static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
@@ -337,9 +360,6 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
     }
     else if( auto kibisModel = dynamic_cast<const SIM_MODEL_KIBIS*>( aItem.model ) )
     {
-        aItem.modelName = aItem.model->GetFieldValue( &aSymbol.GetFields(),
-                                                      SIM_LIBRARY_KIBIS::MODEL_FIELD );
-
         wxFileName cacheDir;
         cacheDir.AssignDir( PATHS::GetUserCachePath() );
         cacheDir.AppendDir( wxT( "ibis" ) );
@@ -357,7 +377,7 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
         }
 
         auto spiceGenerator = static_cast<const SPICE_GENERATOR_KIBIS&>( kibisModel->SpiceGenerator() );
-        std::string modelData = spiceGenerator.IbisDevice( aSymbol.GetFields() );
+        std::string modelData = spiceGenerator.IbisDevice( aSymbol.GetFields(), aItem.modelName );
 
         cacheFile.Write( wxString( modelData ) );
         m_rawIncludes.insert( libraryPath );

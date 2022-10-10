@@ -32,6 +32,16 @@
 #include <sim/sim_model.h>
 
 
+class NAME_GENERATOR
+{
+public:
+    std::string Generate( const std::string& aProposedName );
+
+private:
+    std::unordered_set<std::string> m_names;
+};
+
+
 class NETLIST_EXPORTER_SPICE : public NETLIST_EXPORTER_BASE
 {
 public:
@@ -141,13 +151,15 @@ private:
     void writeModels( OUTPUTFORMATTER& aFormatter );
     void writeItems( OUTPUTFORMATTER& aFormatter );
 
-    SIM_LIB_MGR                      m_libMgr;       ///< Holds libraries and models
-    std::string                      m_title;        ///< Spice simulation title found in the schematic sheet
-    std::vector<std::string>         m_directives;   ///< Spice directives found in the schematic sheet
+    SIM_LIB_MGR                      m_libMgr;             ///< Holds libraries and models
+    NAME_GENERATOR                   m_modelNameGenerator; ///< Generates unique model names
+    NAME_GENERATOR                   m_netNameGenerator;   ///< Generates unique net names (only unique for NC nets for now)
+    std::string                      m_title;              ///< Spice simulation title found in the schematic sheet
+    std::vector<std::string>         m_directives;         ///< Spice directives found in the schematic sheet
     //std::map<std::string, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
-    std::set<std::string>            m_rawIncludes;  ///< include directives found in symbols
+    std::set<std::string>            m_rawIncludes;        ///< include directives found in symbols
     std::set<std::string>            m_nets;
-    std::list<ITEM>                  m_items;        ///< Items representing schematic symbols in Spice world
+    std::list<ITEM>                  m_items;              ///< Items representing schematic symbols in Spice world
 };
 
 

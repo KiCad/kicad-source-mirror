@@ -28,6 +28,13 @@
 #include <fmt/core.h>
 
 
+std::string SPICE_GENERATOR_KIBIS::ModelName( const std::string& aRefName,
+                                              const std::string& aBaseModelName ) const
+{
+    return fmt::format( "{}.{}", aRefName, aBaseModelName );
+}
+
+
 std::string SPICE_GENERATOR_KIBIS::ModelLine( const std::string& aModelName ) const
 {
     return "";
@@ -51,7 +58,8 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const std::string&
 }
 
 
-std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFields ) const
+std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFields,
+                                               const std::string& aModelName ) const
 {
     std::string ibisLibFilename = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string ibisCompName    = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD  );
@@ -101,7 +109,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFi
     switch( m_model.GetType() )
     {
     case SIM_MODEL::TYPE::KIBIS_DEVICE:
-        kpin->writeSpiceDevice( &result, ibisModelName, *kmodel, kparams );
+        kpin->writeSpiceDevice( &result, aModelName, *kmodel, kparams );
         break;
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
@@ -124,7 +132,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFi
                     static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH() );
         }
 
-        kpin->writeSpiceDriver( &result, ibisModelName, *kmodel, kparams );
+        kpin->writeSpiceDriver( &result, aModelName, *kmodel, kparams );
         break;
     }
 
@@ -137,7 +145,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFi
         waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
 
         kparams.m_waveform = waveform;
-        kpin->writeSpiceDriver( &result, ibisModelName, *kmodel, kparams );
+        kpin->writeSpiceDriver( &result, aModelName, *kmodel, kparams );
         break;
     }
 
@@ -150,7 +158,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFi
         waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
 
         kparams.m_waveform = waveform;
-        kpin->writeSpiceDriver( &result, ibisModelName, *kmodel, kparams );
+        kpin->writeSpiceDriver( &result, aModelName, *kmodel, kparams );
         break;
     }
 

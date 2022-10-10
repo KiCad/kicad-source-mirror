@@ -34,6 +34,8 @@ public:
     SPICE_GENERATOR( const SIM_MODEL& aModel ) : m_model( aModel ) {}
     virtual ~SPICE_GENERATOR() = default;
 
+    virtual std::string ModelName( const std::string& aRefName,
+                                   const std::string& aBaseModelName ) const;
     virtual std::string ModelLine( const std::string& aModelName ) const;
 
     std::string ItemLine( const std::string& aRefName,

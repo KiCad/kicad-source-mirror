@@ -29,6 +29,20 @@
 #include <fmt/core.h>
 
 
+std::string SPICE_GENERATOR::ModelName( const std::string& aRefName,
+                                        const std::string& aBaseModelName ) const
+{
+    if( aBaseModelName == "" )
+        return fmt::format( "__{}", aRefName );
+
+    // FIXME: This ModelLine() call is relatively expensive.
+    if( ModelLine( aBaseModelName ) != "" )
+        return fmt::format( "{}.{}", aRefName, aBaseModelName );
+
+    return aBaseModelName;
+}
+
+
 std::string SPICE_GENERATOR::ModelLine( const std::string& aModelName ) const
 {
     if( !m_model.HasSpiceNonInstanceOverrides() && !m_model.requiresSpiceModelLine() )
