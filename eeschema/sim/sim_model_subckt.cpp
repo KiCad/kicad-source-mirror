@@ -48,18 +48,18 @@ namespace SIM_MODEL_SUBCKT_SPICE_PARSER
 }
 
 
-std::string SPICE_GENERATOR_SUBCKT::ModelLine( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_SUBCKT::ModelLine( const SPICE_ITEM& aItem ) const
 {
     return "";
 }
 
 
-std::vector<std::string> SPICE_GENERATOR_SUBCKT::CurrentNames( const std::string& aRefName ) const
+std::vector<std::string> SPICE_GENERATOR_SUBCKT::CurrentNames( const SPICE_ITEM& aItem ) const
 {
     std::vector<std::string> currentNames;
 
     for( const SIM_MODEL::PIN& pin : GetPins() )
-        currentNames.push_back( fmt::format( "I({:s}:{:s})", ItemName( aRefName ), pin.name ) );
+        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.name ) );
 
     return currentNames;
 }

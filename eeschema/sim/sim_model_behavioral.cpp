@@ -29,40 +29,38 @@
 #include <fmt/core.h>
 
 
-std::string SPICE_GENERATOR_BEHAVIORAL::ModelLine( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_BEHAVIORAL::ModelLine( const SPICE_ITEM& aItem ) const
 {
     return "";
 }
 
 
-std::string SPICE_GENERATOR_BEHAVIORAL::ItemLine( const std::string& aRefName,
-                                                  const std::string& aModelName,
-                                                  const std::vector<std::string>& aSymbolPinNumbers,
-                                                  const std::vector<std::string>& aPinNetNames ) const
+std::string SPICE_GENERATOR_BEHAVIORAL::ItemLine( const SPICE_ITEM& aItem ) const
 {
     switch( m_model.GetType() )
     {
     case SIM_MODEL::TYPE::R_BEHAVIORAL:
     case SIM_MODEL::TYPE::C_BEHAVIORAL:
     case SIM_MODEL::TYPE::L_BEHAVIORAL:
-        return SPICE_GENERATOR::ItemLine( aRefName,
-                                          m_model.GetParam( 0 ).value->ToString(),
-                                          aSymbolPinNumbers,
-                                          aPinNetNames );
+    {
+        SPICE_ITEM item = aItem;
+        item.modelName = m_model.GetParam( 0 ).value->ToSpiceString();
+        return SPICE_GENERATOR::ItemLine( item );
+    }
 
     case SIM_MODEL::TYPE::V_BEHAVIORAL:
-        return SPICE_GENERATOR::ItemLine( aRefName,
-                                          fmt::format( "V={0}",
-                                                       m_model.GetParam( 0 ).value->ToString() ),
-                                          aSymbolPinNumbers,
-                                          aPinNetNames );
+    {
+        SPICE_ITEM item = aItem;
+        item.modelName = fmt::format( "V={}", m_model.GetParam( 0 ).value->ToSpiceString() );
+        return SPICE_GENERATOR::ItemLine( item );
+    }
 
     case SIM_MODEL::TYPE::I_BEHAVIORAL:
-        return SPICE_GENERATOR::ItemLine( aRefName,
-                                          fmt::format( "I={0}",
-                                                       m_model.GetParam( 0 ).value->ToString() ),
-                                          aSymbolPinNumbers,
-                                          aPinNetNames );
+    {
+        SPICE_ITEM item = aItem;
+        item.modelName = fmt::format( "I={}", m_model.GetParam( 0 ).value->ToSpiceString() );
+        return SPICE_GENERATOR::ItemLine( item );
+    }
 
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_BEHAVIORAL" );

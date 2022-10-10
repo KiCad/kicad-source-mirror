@@ -205,7 +205,8 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
             CreatePinList( symbol, &sheet, true );
 
-            ITEM spiceItem;
+            SPICE_ITEM spiceItem;
+            spiceItem.fields = &symbol->GetFields();
 
             try
             {
@@ -242,10 +243,10 @@ void NETLIST_EXPORTER_SPICE::ReplaceForbiddenChars( std::string& aNetName )
 
 std::string NETLIST_EXPORTER_SPICE::GetItemName( const std::string& aRefName ) const
 {
-    const std::list<ITEM>& spiceItems = GetItems();
+    const std::list<SPICE_ITEM>& spiceItems = GetItems();
 
     auto it = std::find_if( spiceItems.begin(), spiceItems.end(),
-                            [aRefName]( const ITEM& aItem )
+                            [aRefName]( const SPICE_ITEM& aItem )
                             {
                                 return aItem.refName == aRefName;
                             } );
@@ -253,7 +254,9 @@ std::string NETLIST_EXPORTER_SPICE::GetItemName( const std::string& aRefName ) c
     if( it == spiceItems.end() )
         return "";
 
-    return it->model->SpiceGenerator().ItemName( aRefName );
+    SPICE_ITEM item;
+    item.refName = aRefName;
+    return it->model->SpiceGenerator().ItemName( item );
 }
 
 
@@ -263,14 +266,14 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 
     for( const SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
-        for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+        for( SCH_ITEM* SPICE_ITEM : sheet.LastScreen()->Items() )
         {
             wxString text;
 
-            if( item->Type() == SCH_TEXT_T )
-                text = static_cast<SCH_TEXT*>( item )->GetShownText();
-            else if( item->Type() == SCH_TEXTBOX_T )
-                text = static_cast<SCH_TEXTBOX*>( item )->GetShownText();
+            if( SPICE_ITEM->Type() == SCH_TEXT_T )
+                text = static_cast<SCH_TEXT*>( SPICE_ITEM )->GetShownText();
+            else if( SPICE_ITEM->Type() == SCH_TEXTBOX_T )
+                text = static_cast<SCH_TEXTBOX*>( SPICE_ITEM )->GetShownText();
             else
                 continue;
 
@@ -321,7 +324,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 
 
 bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
-                                          ITEM& aItem,
+                                          SPICE_ITEM& aItem,
                                           std::set<std::string>& aRefNames )
 {
     aItem.refName = aSymbol.GetRef( &aSheet );
@@ -339,13 +342,14 @@ bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 }
 
 
-void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, ITEM& aItem )
+void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 {
-    auto [baseModelName, model] = m_libMgr.CreateModel( aSymbol );
-    aItem.model = &model;
+    SIM_LIBRARY::MODEL libModel = m_libMgr.CreateModel( aSymbol );
 
-    std::string modelName = aItem.model->SpiceGenerator().ModelName( aItem.refName,
-                                                                     baseModelName );
+    aItem.baseModelName = libModel.name;
+    aItem.model = &libModel.model;
+
+    std::string modelName = aItem.model->SpiceGenerator().ModelName( aItem );
     // Resolve model name collisions.
     aItem.modelName = m_modelNameGenerator.Generate( modelName );
 
@@ -377,7 +381,7 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
         }
 
         auto spiceGenerator = static_cast<const SPICE_GENERATOR_KIBIS&>( kibisModel->SpiceGenerator() );
-        std::string modelData = spiceGenerator.IbisDevice( aSymbol.GetFields(), aItem.modelName );
+        std::string modelData = spiceGenerator.IbisDevice( aItem );
 
         cacheFile.Write( wxString( modelData ) );
         m_rawIncludes.insert( libraryPath );
@@ -385,14 +389,14 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
 }
 
 
-void NETLIST_EXPORTER_SPICE::readPinNumbers( SCH_SYMBOL& aSymbol, ITEM& aItem )
+void NETLIST_EXPORTER_SPICE::readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 {
     for( const PIN_INFO& pin : m_sortedSymbolPinList )
         aItem.pinNumbers.emplace_back( std::string( pin.num.ToUTF8() ) );
 }
 
 
-void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, ITEM& aItem,
+void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                                               int& aNcCounter )
 {
     for( const PIN_INFO& pinInfo : m_sortedSymbolPinList )
@@ -449,29 +453,24 @@ void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter, unsigne
 
 void NETLIST_EXPORTER_SPICE::writeModels( OUTPUTFORMATTER& aFormatter )
 {
-    for( const ITEM& item : m_items )
+    for( const SPICE_ITEM& item : m_items )
     {
         if( !item.model->IsEnabled() )
             continue;
 
-        aFormatter.Print( 0, "%s",
-                          item.model->SpiceGenerator().ModelLine( item.modelName ).c_str() );
+        aFormatter.Print( 0, "%s", item.model->SpiceGenerator().ModelLine( item ).c_str() );
     }
 }
 
 
 void NETLIST_EXPORTER_SPICE::writeItems( OUTPUTFORMATTER& aFormatter )
 {
-    for( const ITEM& item : m_items )
+    for( const SPICE_ITEM& item : m_items )
     {
         if( !item.model->IsEnabled() )
             continue;
 
-        aFormatter.Print( 0, "%s",
-                          item.model->SpiceGenerator().ItemLine( item.refName,
-                                                                 item.modelName,
-                                                                 item.pinNumbers,
-                                                                 item.pinNetNames ).c_str() );
+        aFormatter.Print( 0, "%s", item.model->SpiceGenerator().ItemLine( item ).c_str() );
     }
 }
 

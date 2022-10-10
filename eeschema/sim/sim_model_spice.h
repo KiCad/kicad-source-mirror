@@ -37,7 +37,7 @@ class SPICE_GENERATOR_SPICE : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    std::string Preview( const std::string& aModelName ) const override;
+    std::string Preview( const SPICE_ITEM& aItem ) const override;
 };
 
 

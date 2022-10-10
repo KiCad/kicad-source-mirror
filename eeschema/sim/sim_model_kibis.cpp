@@ -28,14 +28,13 @@
 #include <fmt/core.h>
 
 
-std::string SPICE_GENERATOR_KIBIS::ModelName( const std::string& aRefName,
-                                              const std::string& aBaseModelName ) const
+std::string SPICE_GENERATOR_KIBIS::ModelName( const SPICE_ITEM& aItem ) const
 {
-    return fmt::format( "{}.{}", aRefName, aBaseModelName );
+    return fmt::format( "{}.{}", aItem.refName, aItem.baseModelName );
 }
 
 
-std::string SPICE_GENERATOR_KIBIS::ModelLine( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_KIBIS::ModelLine( const SPICE_ITEM& aItem ) const
 {
     return "";
 }
@@ -47,24 +46,23 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SPICE_GENERATOR_KIBI
 }
 
 
-std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const std::string& aRefName ) const
+std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const SPICE_ITEM& aItem ) const
 {
     std::vector<std::string> currentNames;
 
     for( const SIM_MODEL::PIN& pin : GetPins() )
-        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aRefName ), pin.name ) );
+        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.name ) );
 
     return currentNames;
 }
 
 
-std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFields,
-                                               const std::string& aModelName ) const
+std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem ) const
 {
-    std::string ibisLibFilename = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
-    std::string ibisCompName    = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD  );
-    std::string ibisPinName     = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY_KIBIS::PIN_FIELD );
-    std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
+    std::string ibisLibFilename = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
+    std::string ibisCompName    = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY::NAME_FIELD  );
+    std::string ibisPinName     = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::PIN_FIELD );
+    std::string ibisModelName   = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
 
     KIBIS kibis( ibisLibFilename );
     KIBIS_COMPONENT* kcomp = kibis.GetComponent( std::string( ibisCompName ) );
@@ -109,7 +107,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFi
     switch( m_model.GetType() )
     {
     case SIM_MODEL::TYPE::KIBIS_DEVICE:
-        kpin->writeSpiceDevice( &result, aModelName, *kmodel, kparams );
+        kpin->writeSpiceDevice( &result, aItem.modelName, *kmodel, kparams );
         break;
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
@@ -132,7 +130,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFi
                     static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH() );
         }
 
-        kpin->writeSpiceDriver( &result, aModelName, *kmodel, kparams );
+        kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
         break;
     }
 
@@ -145,7 +143,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFi
         waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
 
         kparams.m_waveform = waveform;
-        kpin->writeSpiceDriver( &result, aModelName, *kmodel, kparams );
+        kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
         break;
     }
 
@@ -158,7 +156,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFi
         waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
 
         kparams.m_waveform = waveform;
-        kpin->writeSpiceDriver( &result, aModelName, *kmodel, kparams );
+        kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
         break;
     }
 
@@ -172,7 +170,8 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const std::vector<SCH_FIELD>& aFi
 
 
 SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType ) :
-        SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_KIBIS>( *this ) )
+        SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_KIBIS>( *this ) ),
+        m_sourceModel( nullptr )
 {
     static std::vector<PARAM::INFO> device = makeParamInfos( TYPE::KIBIS_DEVICE );
     static std::vector<PARAM::INFO> dcDriver = makeParamInfos( TYPE::KIBIS_DRIVER_DC );

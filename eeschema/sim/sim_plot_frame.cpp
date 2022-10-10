@@ -897,7 +897,7 @@ void SIM_PLOT_FRAME::updateTuners()
         const wxString& ref = (*it)->GetComponentName();
 
         if( std::find_if( spiceItems.begin(), spiceItems.end(),
-                          [&]( const NETLIST_EXPORTER_SPICE::ITEM& item )
+                          [&]( const SPICE_ITEM& item )
                 {
                     return item.refName == ref;
                 }) == spiceItems.end() )

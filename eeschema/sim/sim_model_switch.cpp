@@ -26,10 +26,7 @@
 #include <fmt/core.h>
 
 
-std::string SPICE_GENERATOR_SWITCH::ItemLine( const std::string& aRefName,
-                                              const std::string& aModelName,
-                                              const std::vector<std::string>& aSymbolPinNumbers,
-                                              const std::vector<std::string>& aPinNetNames ) const
+std::string SPICE_GENERATOR_SWITCH::ItemLine( const SPICE_ITEM& aItem ) const
 {
     std::string result;
     
@@ -37,19 +34,20 @@ std::string SPICE_GENERATOR_SWITCH::ItemLine( const std::string& aRefName,
     {
     case SIM_MODEL::TYPE::SW_V:
     {
-        result = SPICE_GENERATOR::ItemLine( aRefName, aModelName, aSymbolPinNumbers, aPinNetNames );
+        result = SPICE_GENERATOR::ItemLine( aItem );
         break;
     }
 
     case SIM_MODEL::TYPE::SW_I:
     {
-        std::string vsourceName = "V__" + aRefName;
+        std::string vsourceName = fmt::format( "V__{}", aItem.refName );
 
         // Current switches measure input current through a voltage source.
-        result.append( fmt::format( "{0} {1} 0\n", aPinNetNames[0], aPinNetNames[1] ) );
-        result.append( SPICE_GENERATOR::ItemLine( aRefName, fmt::format( "{0} {1}",
-                                                                         vsourceName, aModelName ),
-                                                  aSymbolPinNumbers, aPinNetNames ) );
+        result.append( fmt::format( "{0} {1} 0\n", aItem.pinNetNames[0], aItem.pinNetNames[1] ) );
+
+        SPICE_ITEM item = aItem;
+        item.modelName = fmt::format( "{0} {1}", vsourceName, aItem.modelName );
+        result.append( SPICE_GENERATOR::ItemLine( item ) );
         break;
     }
 

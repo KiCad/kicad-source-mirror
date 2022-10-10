@@ -399,10 +399,11 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
 {
-    wxString modelName = m_modelNameCombobox->GetStringSelection();
+    SPICE_ITEM item;
+    item.modelName = m_modelNameCombobox->GetStringSelection();
 
-    if( m_useInstanceModelRadioButton->GetValue() || modelName.IsEmpty() )
-        modelName = m_fields.at( REFERENCE_FIELD ).GetText();
+    if( m_useInstanceModelRadioButton->GetValue() || item.modelName == "" )
+        item.modelName = m_fields.at( REFERENCE_FIELD ).GetText();
 
     m_codePreview->SetEditable( true ); // ???
 
@@ -415,7 +416,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
         wxTextFile file;
         wxString text;
 
-        text << curModel().SpiceGenerator().Preview( std::string( modelName.ToUTF8() ) );
+        text << curModel().SpiceGenerator().Preview( item );
         text << "\n";
         text << "--- FILE SOURCE (" << path << ") ---\n";
         text << "\n";
@@ -433,7 +434,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
         }
     }
     else
-        m_codePreview->SetText( curModel().SpiceGenerator().Preview( std::string( modelName.ToUTF8() ) ) );
+        m_codePreview->SetText( curModel().SpiceGenerator().Preview( item ) );
 
     m_codePreview->SetEditable( false ); // ???
     m_wasCodePreviewUpdated = true;

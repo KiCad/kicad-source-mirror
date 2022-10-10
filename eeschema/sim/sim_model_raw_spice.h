@@ -34,17 +34,14 @@ class SPICE_GENERATOR_RAW_SPICE : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    std::string ModelLine( const std::string& aModelName ) const override;
+    std::string ModelLine( const SPICE_ITEM& aItem ) const override;
 
-    std::string ItemName( const std::string& aRefName ) const override;
-    std::string ItemPins( const std::string& aRefName,
-                       const std::string& aModelName,
-                       const std::vector<std::string>& aSymbolPinNumbers,
-                       const std::vector<std::string>& aPinNetNames ) const override;
-    std::string ItemModelName( const std::string& aModelName ) const override;
+    std::string ItemName( const SPICE_ITEM& aItem ) const override;
+    std::string ItemPins( const SPICE_ITEM& aItem ) const override;
+    std::string ItemModelName( const SPICE_ITEM& aItem ) const override;
     std::string ItemParams() const override;
 
-    std::string Preview( const std::string& aModelName ) const override;
+    std::string Preview( const SPICE_ITEM& aItem ) const override;
 };
 
 

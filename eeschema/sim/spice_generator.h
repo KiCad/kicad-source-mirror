@@ -27,39 +27,42 @@
 
 #include <sim/sim_model.h>
 
+class SCH_FIELD;
+
+
+struct SPICE_ITEM
+{
+    std::string refName;
+    std::vector<std::string> pinNumbers;
+    std::vector<std::string> pinNetNames;
+    std::string baseModelName;
+    std::string modelName;
+    const SIM_MODEL* model = nullptr;
+    const std::vector<SCH_FIELD>* fields = nullptr;
+};
+
 
 class SPICE_GENERATOR
 {
 public:
+
     SPICE_GENERATOR( const SIM_MODEL& aModel ) : m_model( aModel ) {}
     virtual ~SPICE_GENERATOR() = default;
 
-    virtual std::string ModelName( const std::string& aRefName,
-                                   const std::string& aBaseModelName ) const;
-    virtual std::string ModelLine( const std::string& aModelName ) const;
+    virtual std::string ModelName( const SPICE_ITEM& aItem ) const;
+    virtual std::string ModelLine( const SPICE_ITEM& aItem ) const;
 
-    std::string ItemLine( const std::string& aRefName,
-                          const std::string& aModelName ) const;
-    std::string ItemLine( const std::string& aRefName,
-                          const std::string& aModelName,
-                          const std::vector<std::string>& aSymbolPinNumbers ) const;
-    virtual std::string ItemLine( const std::string& aRefName,
-                                  const std::string& aModelName,
-                                  const std::vector<std::string>& aSymbolPinNumbers,
-                                  const std::vector<std::string>& aPinNetNames ) const;
-    virtual std::string ItemName( const std::string& aRefName ) const;
-    virtual std::string ItemPins( const std::string& aRefName,
-                                  const std::string& aModelName,
-                                  const std::vector<std::string>& aSymbolPinNumbers,
-                                  const std::vector<std::string>& aPinNetNames ) const;
-    virtual std::string ItemModelName( const std::string& aModelName ) const;
+    virtual std::string ItemLine( const SPICE_ITEM& aItem ) const;
+    virtual std::string ItemName( const SPICE_ITEM& aItem ) const;
+    virtual std::string ItemPins( const SPICE_ITEM& aItem ) const;
+    virtual std::string ItemModelName( const SPICE_ITEM& aItem ) const;
     virtual std::string ItemParams() const;
 
-    virtual std::string TuningLine( const std::string& aSymbol ) const;
+    virtual std::string TuningLine( const SPICE_ITEM& aItem ) const;
 
-    virtual std::vector<std::string> CurrentNames( const std::string& aRefName ) const;
+    virtual std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const;
 
-    virtual std::string Preview( const std::string& aModelName ) const;
+    virtual std::string Preview( const SPICE_ITEM& aItem ) const;
 
 protected:
     virtual std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> GetPins() const

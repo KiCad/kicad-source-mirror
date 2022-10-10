@@ -27,22 +27,19 @@
 #include <pegtl/contrib/parse_tree.hpp>
 
 
-std::string SPICE_GENERATOR_IDEAL::ModelLine( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_IDEAL::ModelLine( const SPICE_ITEM& aItem ) const
 {
     return "";
 }
 
 
-std::string SPICE_GENERATOR_IDEAL::ItemLine( const std::string& aRefName,
-                                             const std::string& aModelName,
-                                             const std::vector<std::string>& aSymbolPinNumbers,
-                                             const std::vector<std::string>& aPinNetNames ) const
+std::string SPICE_GENERATOR_IDEAL::ItemLine( const SPICE_ITEM& aItem ) const
 {
-    std::string valueStr = m_model.GetParam( 0 ).value->ToString( SIM_VALUE::NOTATION::SPICE );
+    SPICE_ITEM item = aItem;
+    item.modelName = m_model.GetParam( 0 ).value->ToString( SIM_VALUE::NOTATION::SPICE );
 
-    if( valueStr != "" )
-        return SPICE_GENERATOR::ItemLine( aRefName, valueStr, aSymbolPinNumbers,
-                                          aPinNetNames );
+    if( item.modelName != "" )
+        return SPICE_GENERATOR::ItemLine( item );
     else
         return "";
 }

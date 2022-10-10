@@ -34,8 +34,8 @@ class SPICE_GENERATOR_SUBCKT : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    std::string ModelLine( const std::string& aModelName ) const override;
-    std::vector<std::string> CurrentNames( const std::string& aRefName ) const override;
+    std::string ModelLine( const SPICE_ITEM& aItem ) const override;
+    std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const override;
 };
 
 

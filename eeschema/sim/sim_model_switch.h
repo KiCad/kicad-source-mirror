@@ -34,9 +34,7 @@ class SPICE_GENERATOR_SWITCH : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    std::string ItemLine( const std::string& aRefName, const std::string& aModelName,
-                       const std::vector<std::string>& aSymbolPinNumbers,
-                       const std::vector<std::string>& aPinNetNames ) const override;
+    std::string ItemLine( const SPICE_ITEM& aItem ) const override;
     std::string ItemParams() const override;
     std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> GetPins() const override;
 };

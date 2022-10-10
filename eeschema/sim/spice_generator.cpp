@@ -29,28 +29,27 @@
 #include <fmt/core.h>
 
 
-std::string SPICE_GENERATOR::ModelName( const std::string& aRefName,
-                                        const std::string& aBaseModelName ) const
+std::string SPICE_GENERATOR::ModelName( const SPICE_ITEM& aItem ) const
 {
-    if( aBaseModelName == "" )
-        return fmt::format( "__{}", aRefName );
+    if( aItem.baseModelName == "" )
+        return fmt::format( "__{}", aItem.refName );
 
     // FIXME: This ModelLine() call is relatively expensive.
-    if( ModelLine( aBaseModelName ) != "" )
-        return fmt::format( "{}.{}", aRefName, aBaseModelName );
+    if( ModelLine( aItem ) != "" )
+        return fmt::format( "{}.{}", aItem.refName, aItem.baseModelName );
 
-    return aBaseModelName;
+    return aItem.baseModelName;
 }
 
 
-std::string SPICE_GENERATOR::ModelLine( const std::string& aModelName ) const
+std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
 {
     if( !m_model.HasSpiceNonInstanceOverrides() && !m_model.requiresSpiceModelLine() )
         return "";
 
     std::string result = "";
 
-    result.append( fmt::format( ".model {} ", aModelName ) );
+    result.append( fmt::format( ".model {} ", aItem.modelName ) );
     size_t indentLength = result.length();
 
     result.append( fmt::format( "{}\n", m_model.GetSpiceInfo().modelType ) );
@@ -75,76 +74,57 @@ std::string SPICE_GENERATOR::ModelLine( const std::string& aModelName ) const
 }
 
 
-std::string SPICE_GENERATOR::ItemLine( const std::string& aRefName,
-                                       const std::string& aModelName ) const
+std::string SPICE_GENERATOR::ItemLine( const SPICE_ITEM& aItem ) const
 {
-    // Use linear symbol pin numbers enumeration. Used in model preview.
+    SPICE_ITEM item = aItem;
 
-    std::vector<std::string> pinNumbers;
+    if( item.pinNumbers.empty() )
+    {
+        for( int i = 0; i < m_model.GetPinCount(); ++i )
+            item.pinNumbers.push_back( fmt::format( "{}", i + 1 ) );
+    }
 
-    for( int i = 0; i < m_model.GetPinCount(); ++i )
-        pinNumbers.push_back( fmt::format( "{}", i + 1 ) );
+    if( item.pinNetNames.empty() )
+    {
+        for( const SIM_MODEL::PIN& pin : GetPins() )
+            item.pinNetNames.push_back( pin.name );
+    }
 
-    return ItemLine( aRefName, aModelName, pinNumbers );
-}
-
-
-std::string SPICE_GENERATOR::ItemLine( const std::string& aRefName,
-                                       const std::string& aModelName,
-                                       const std::vector<std::string>& aSymbolPinNumbers ) const
-{
-    std::vector<std::string> pinNetNames;
-
-    for( const SIM_MODEL::PIN& pin : GetPins() )
-        pinNetNames.push_back( pin.name );
-
-    return ItemLine( aRefName, aModelName, aSymbolPinNumbers, pinNetNames );
-}
-
-
-std::string SPICE_GENERATOR::ItemLine( const std::string& aRefName,
-                                       const std::string& aModelName,
-                                       const std::vector<std::string>& aSymbolPinNumbers,
-                                       const std::vector<std::string>& aPinNetNames ) const
-{
     std::string result;
-    result.append( ItemName( aRefName ) );
-    result.append( ItemPins( aRefName, aModelName, aSymbolPinNumbers, aPinNetNames ) );
-    result.append( ItemModelName( aModelName ) );
+    result.append( ItemName( aItem ) );
+    result.append( ItemPins( aItem ) );
+    result.append( ItemModelName( aItem ) );
     result.append( ItemParams() );
     result.append( "\n" );
     return result;
 }
 
 
-std::string SPICE_GENERATOR::ItemName( const std::string& aRefName ) const
+std::string SPICE_GENERATOR::ItemName( const SPICE_ITEM& aItem ) const
 {
-    if( aRefName != "" && boost::starts_with( aRefName, m_model.GetSpiceInfo().itemType ) )
-        return aRefName;
+    if( aItem.refName != "" && boost::starts_with( aItem.refName, m_model.GetSpiceInfo().itemType ) )
+        return aItem.refName;
     else
-        return m_model.GetSpiceInfo().itemType + aRefName;
+        return fmt::format( "{}{}", m_model.GetSpiceInfo().itemType, aItem.refName );
 }
 
 
-std::string SPICE_GENERATOR::ItemPins( const std::string& aRefName,
-                                       const std::string& aModelName,
-                                       const std::vector<std::string>& aSymbolPinNumbers,
-                                       const std::vector<std::string>& aPinNetNames ) const
+std::string SPICE_GENERATOR::ItemPins( const SPICE_ITEM& aItem ) const
 {
     std::string result;
     int ncCounter = 0;
 
     for( const SIM_MODEL::PIN& pin : GetPins() )
     {
-        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
+        auto it = std::find( aItem.pinNumbers.begin(), aItem.pinNumbers.end(),
                              pin.symbolPinNumber );
 
-        if( it == aSymbolPinNumbers.end() )
-            result.append( fmt::format( " NC-{}-{}", aRefName, ncCounter++ ) );
+        if( it == aItem.pinNumbers.end() )
+            result.append( fmt::format( " NC-{}-{}", aItem.refName, ncCounter++ ) );
         else
         {
-            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            result.append( " " + aPinNetNames.at( symbolPinIndex ) );
+            long symbolPinIndex = std::distance( aItem.pinNumbers.begin(), it );
+            result.append( fmt::format( " {}", aItem.pinNetNames.at( symbolPinIndex ) ) );
         }
     }
 
@@ -152,9 +132,9 @@ std::string SPICE_GENERATOR::ItemPins( const std::string& aRefName,
 }
 
 
-std::string SPICE_GENERATOR::ItemModelName( const std::string& aModelName ) const
+std::string SPICE_GENERATOR::ItemModelName( const SPICE_ITEM& aItem ) const
 {
-    return " " + aModelName;
+    return fmt::format( " {}", aItem.modelName );
 }
 
 
@@ -176,24 +156,24 @@ std::string SPICE_GENERATOR::ItemParams() const
 }
 
 
-std::string SPICE_GENERATOR::TuningLine( const std::string& aSymbol ) const
+std::string SPICE_GENERATOR::TuningLine( const SPICE_ITEM& aItem ) const
 {
     // TODO.
     return "";
 }
 
 
-std::vector<std::string> SPICE_GENERATOR::CurrentNames( const std::string& aRefName ) const
+std::vector<std::string> SPICE_GENERATOR::CurrentNames( const SPICE_ITEM& aItem ) const
 {
-    return { fmt::format( "I({})", ItemName( aRefName ) ) };
+    return { fmt::format( "I({})", ItemName( aItem ) ) };
 }
 
 
-std::string SPICE_GENERATOR::Preview( const std::string& aModelName ) const
+std::string SPICE_GENERATOR::Preview( const SPICE_ITEM& aItem ) const
 {
-    std::string spiceCode = ModelLine( aModelName );
+    std::string spiceCode = ModelLine( aItem );
 
-    std::string itemLine = ItemLine( "", aModelName );
+    std::string itemLine = ItemLine( aItem );
     if( spiceCode != "" )
         spiceCode.append( "\n" );
 

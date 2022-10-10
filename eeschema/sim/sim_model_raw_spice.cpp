@@ -39,40 +39,37 @@ namespace SIM_MODEL_RAW_SPICE_PARSER
 }
 
 
-std::string SPICE_GENERATOR_RAW_SPICE::ModelLine( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_RAW_SPICE::ModelLine( const SPICE_ITEM& aItem ) const
 {
     return "";
 }
 
 
-std::string SPICE_GENERATOR_RAW_SPICE::ItemName( const std::string& aRefName ) const
+std::string SPICE_GENERATOR_RAW_SPICE::ItemName( const SPICE_ITEM& aItem ) const
 {
     std::string elementType = m_model.GetParam(
         static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::TYPE ) ).value->ToString();
 
-    if( aRefName != "" && boost::starts_with( aRefName, elementType ) )
-        return aRefName;
+    if( aItem.refName != "" && boost::starts_with( aItem.refName, elementType ) )
+        return aItem.refName;
     else
-        return elementType + aRefName;
+        return fmt::format( "{}{}", elementType, aItem.refName );
 }
 
 
-std::string SPICE_GENERATOR_RAW_SPICE::ItemPins( const std::string& aRefName,
-                                                 const std::string& aModelName,
-                                                 const std::vector<std::string>& aSymbolPinNumbers,
-                                                 const std::vector<std::string>& aPinNetNames ) const
+std::string SPICE_GENERATOR_RAW_SPICE::ItemPins( const SPICE_ITEM& aItem ) const
 {
     std::string result;
 
     for( const SIM_MODEL::PIN& pin : GetPins() )
     {
-        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
+        auto it = std::find( aItem.pinNumbers.begin(), aItem.pinNumbers.end(),
                              pin.symbolPinNumber );
 
-        if( it != aSymbolPinNumbers.end() )
+        if( it != aItem.pinNumbers.end() )
         {
-            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            result.append( " " + aPinNetNames.at( symbolPinIndex ) );
+            long symbolPinIndex = std::distance( aItem.pinNumbers.begin(), it );
+            result.append( fmt::format( " {}", aItem.pinNetNames.at( symbolPinIndex ) ) );
         }
     }
 
@@ -80,7 +77,7 @@ std::string SPICE_GENERATOR_RAW_SPICE::ItemPins( const std::string& aRefName,
 }
 
 
-std::string SPICE_GENERATOR_RAW_SPICE::ItemModelName( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_RAW_SPICE::ItemModelName( const SPICE_ITEM& aItem ) const
 {
     return "";
 }
@@ -100,18 +97,18 @@ std::string SPICE_GENERATOR_RAW_SPICE::ItemParams() const
 }
 
 
-std::string SPICE_GENERATOR_RAW_SPICE::Preview( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_RAW_SPICE::Preview( const SPICE_ITEM& aItem ) const
 {
-    std::vector<std::string> pinNumbers;
-    std::vector<std::string> pinNetNames;
+    SPICE_ITEM item = aItem;
+    item.refName = "";
 
     for( int i = 0; i < m_model.GetPinCount(); ++i )
     {
-        pinNumbers.push_back( fmt::format( "{0}", i + 1 ) );
-        pinNetNames.push_back( fmt::format( "{0}", i + 1 ) );
+        item.pinNumbers.push_back( fmt::format( "{}", i + 1 ) );
+        item.pinNetNames.push_back( fmt::format( "{}", i + 1 ) );
     }
 
-    return ItemLine( "", aModelName, pinNumbers, pinNetNames );
+    return ItemLine( item );
 }
 
 

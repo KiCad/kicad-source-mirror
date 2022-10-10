@@ -37,13 +37,11 @@ class SPICE_GENERATOR_KIBIS : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    std::string ModelName( const std::string& aRefName,
-                           const std::string& aBaseModelName ) const override;
-    std::string ModelLine( const std::string& aModelName ) const override;
-    std::vector<std::string> CurrentNames( const std::string& aRefName ) const override;
+    std::string ModelName( const SPICE_ITEM& aItem ) const override;
+    std::string ModelLine( const SPICE_ITEM& aItem ) const override;
+    std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const override;
 
-    std::string IbisDevice( const std::vector<SCH_FIELD>& aFields,
-                            const std::string& aModelName ) const;
+    std::string IbisDevice( const SPICE_ITEM& aItem ) const;
 
 protected:
     std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const override;

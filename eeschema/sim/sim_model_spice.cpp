@@ -31,9 +31,9 @@
 #include <boost/algorithm/string/trim.hpp>
 
 
-std::string SPICE_GENERATOR_SPICE::Preview( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const
 {
-    std::string spiceCode = ModelLine( aModelName );
+    std::string spiceCode = ModelLine( aItem );
 
     if( spiceCode == "" )
         spiceCode = static_cast<const SIM_MODEL_SPICE&>( m_model ).m_spiceCode;
@@ -41,7 +41,9 @@ std::string SPICE_GENERATOR_SPICE::Preview( const std::string& aModelName ) cons
     if( spiceCode == "" && m_model.GetBaseModel() )
         spiceCode = static_cast<const SIM_MODEL_SPICE*>( m_model.GetBaseModel() )->m_spiceCode;
 
-    std::string itemLine = ItemLine( "", aModelName );
+    SPICE_ITEM item = aItem;
+    item.refName = "";
+    std::string itemLine = ItemLine( item );
 
     if( spiceCode != "" )
         spiceCode.append( "\n" );

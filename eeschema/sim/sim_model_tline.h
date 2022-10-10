@@ -34,7 +34,7 @@ class SPICE_GENERATOR_TLINE : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    std::string ModelLine( const std::string& aModelName ) const override;
+    std::string ModelLine( const SPICE_ITEM& aItem ) const override;
 };
 
 

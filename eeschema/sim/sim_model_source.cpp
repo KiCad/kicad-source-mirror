@@ -39,24 +39,22 @@ namespace SIM_MODEL_SOURCE_PARSER
 }
 
 
-std::string SPICE_GENERATOR_SOURCE::ModelLine( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_SOURCE::ModelLine( const SPICE_ITEM& aItem ) const
 {
     return "";
 }
 
 
-std::string SPICE_GENERATOR_SOURCE::ItemLine( const std::string& aRefName,
-                                              const std::string& aModelName,
-                                              const std::vector<std::string>& aSymbolPinNumbers,
-                                              const std::vector<std::string>& aPinNetNames ) const
+std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
 {
-    std::string model;
+    SPICE_ITEM item = aItem;
+    item.modelName = "";
 
     std::string ac = m_model.FindParam( "ac" )->value->ToSpiceString();
     std::string ph = m_model.FindParam( "ph" )->value->ToSpiceString();
 
     if( ac != "" )
-        model.append( fmt::format( "AC {} {} ", ac, ph ) );
+        item.modelName.append( fmt::format( "AC {} {} ", ac, ph ) );
 
     if( m_model.GetSpiceInfo().inlineTypeString != "" )
     {
@@ -179,12 +177,12 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const std::string& aRefName,
             break;
         }
 
-        model.append( fmt::format( "{}( {})", m_model.GetSpiceInfo().inlineTypeString, args ) );
+        item.modelName.append( fmt::format( "{}( {})", m_model.GetSpiceInfo().inlineTypeString, args ) );
     }
     else
-        model.append( m_model.GetParam( 0 ).value->ToSpiceString() );
+        item.modelName.append( m_model.GetParam( 0 ).value->ToSpiceString() );
 
-    return SPICE_GENERATOR::ItemLine( aRefName, model, aSymbolPinNumbers, aPinNetNames );
+    return SPICE_GENERATOR::ItemLine( item );
 }
 
 

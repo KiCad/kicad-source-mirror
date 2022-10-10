@@ -28,15 +28,15 @@
 #include <fmt/core.h>
 
 
-std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const std::string& aRefName ) const
+std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const SPICE_ITEM& aItem ) const
 {
     switch( m_model.GetTypeInfo().deviceType )
     {
         case SIM_MODEL::DEVICE_TYPE_::NPN:
         case SIM_MODEL::DEVICE_TYPE_::PNP:
-            return { fmt::format( "I({}:c)", aRefName ),
-                     fmt::format( "I({}:b)", aRefName ),
-                     fmt::format( "I({}:e)", aRefName ) };
+            return { fmt::format( "I({}:c)", aItem.refName ),
+                     fmt::format( "I({}:b)", aItem.refName ),
+                     fmt::format( "I({}:e)", aItem.refName ) };
 
         case SIM_MODEL::DEVICE_TYPE_::NJFET:
         case SIM_MODEL::DEVICE_TYPE_::PJFET:
@@ -44,15 +44,15 @@ std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const std::strin
         case SIM_MODEL::DEVICE_TYPE_::PMES:
         case SIM_MODEL::DEVICE_TYPE_::NMOS:
         case SIM_MODEL::DEVICE_TYPE_::PMOS:
-            return { fmt::format( "I({}:d)", aRefName ),
-                     fmt::format( "I({}:g)", aRefName ),
-                     fmt::format( "I({}:s)", aRefName ) };
+            return { fmt::format( "I({}:d)", aItem.refName ),
+                     fmt::format( "I({}:g)", aItem.refName ),
+                     fmt::format( "I({}:s)", aItem.refName ) };
 
         case SIM_MODEL::DEVICE_TYPE_::R:
         case SIM_MODEL::DEVICE_TYPE_::C:
         case SIM_MODEL::DEVICE_TYPE_::L:
         case SIM_MODEL::DEVICE_TYPE_::D:
-            return SPICE_GENERATOR::CurrentNames( aRefName );
+            return SPICE_GENERATOR::CurrentNames( aItem );
 
         default:
             wxFAIL_MSG( "Unhandled model device type in SIM_MODEL_NGSPICE" );

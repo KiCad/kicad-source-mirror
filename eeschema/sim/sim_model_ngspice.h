@@ -34,7 +34,7 @@ class SPICE_GENERATOR_NGSPICE : public SPICE_GENERATOR_SPICE
 public:
     using SPICE_GENERATOR_SPICE::SPICE_GENERATOR_SPICE;
 
-    std::vector<std::string> CurrentNames( const std::string& aRefName ) const override;
+    std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const override;
 };
 
 

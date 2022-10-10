@@ -889,9 +889,10 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         SIM_LIB_MGR mgr( m_frame->Prj() );
                         SIM_MODEL&  model = mgr.CreateModel( *symbol ).model;
 
-                        auto ref = std::string( symbol->GetRef( &m_frame->GetCurrentSheet() ).ToUTF8() );
+                        SPICE_ITEM spiceItem;
+                        spiceItem.refName = std::string( symbol->GetRef( &m_frame->GetCurrentSheet() ).ToUTF8() );
                         std::vector<std::string> currentNames =
-                                model.SpiceGenerator().CurrentNames( ref );
+                                model.SpiceGenerator().CurrentNames( spiceItem );
 
                         if( currentNames.size() == 0 )
                             return true;

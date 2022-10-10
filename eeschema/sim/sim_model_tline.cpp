@@ -29,7 +29,7 @@
 using PARAM = SIM_MODEL::PARAM;
 
 
-std::string SPICE_GENERATOR_TLINE::ModelLine( const std::string& aModelName ) const
+std::string SPICE_GENERATOR_TLINE::ModelLine( const SPICE_ITEM& aItem ) const
 {
     std::string r, l, g, c, len;
 
@@ -41,7 +41,7 @@ std::string SPICE_GENERATOR_TLINE::ModelLine( const std::string& aModelName ) co
         auto td = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value );
 
         if( !z0.HasValue() || !td.HasValue() )
-            return fmt::format( ".model {} LTRA()\n", aModelName );
+            return fmt::format( ".model {} LTRA()\n", aItem.modelName );
 
         r = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
         l = ( td * z0 ).ToSpiceString();
@@ -65,7 +65,7 @@ std::string SPICE_GENERATOR_TLINE::ModelLine( const std::string& aModelName ) co
     }
 
     return fmt::format( ".model {} LTRA( r={} l={} g={} c={} len={} )\n",
-                        aModelName, r, l, g, c, len );
+                        aItem.modelName, r, l, g, c, len );
 }
 
 
