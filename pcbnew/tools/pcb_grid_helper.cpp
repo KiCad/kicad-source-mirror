@@ -405,7 +405,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 {
                 case PAD_SHAPE::CIRCLE:
                 {
-                    int      r      = aPad->GetSizeX();
+                    int      r      = aPad->GetSizeX() / 2;
                     VECTOR2I center = aPad->ShapePos();
 
                     addAnchor( center + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, aPad );
