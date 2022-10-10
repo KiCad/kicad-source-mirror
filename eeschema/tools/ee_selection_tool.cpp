@@ -1255,13 +1255,13 @@ bool EE_SELECTION_TOOL::selectMultiple()
          * Left > Right : Select objects that are fully enclosed by selection
          * Right > Left : Select objects that are crossed by selection
          */
-        bool isWindowSelection = width >= 0;
+        bool isGreedy = width < 0;
 
         if( view->IsMirroredX() )
-            isWindowSelection = !isWindowSelection;
+            isGreedy = !isGreedy;
 
-        m_frame->GetCanvas()->SetCurrentCursor( isWindowSelection ? KICURSOR::SELECT_WINDOW
-                                                                  : KICURSOR::SELECT_LASSO );
+        m_frame->GetCanvas()->SetCurrentCursor( isGreedy ? KICURSOR::SELECT_LASSO
+                                                         : KICURSOR::SELECT_WINDOW );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -1336,55 +1336,57 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
             bool anyAdded = false;
             bool anySubtracted = false;
-            auto selectItem = [&]( EDA_ITEM* aItem )
-            {
-                EDA_ITEM_FLAGS flags = 0;
 
-                // Handle line ends specially
-                if( aItem->Type() == SCH_LINE_T )
-                {
-                    SCH_LINE* line = (SCH_LINE*) aItem;
-
-                    if( selectionRect.Contains( line->GetStartPoint() ) )
-                        flags |= STARTPOINT;
-
-                    if( selectionRect.Contains( line->GetEndPoint() ) )
-                        flags |= ENDPOINT;
-
-
-                    // If no ends were selected, select whole line (both ends)
-                    // Also select both ends if the selection overlaps the midpoint
-                    if( ( !( flags & STARTPOINT ) && !( flags & ENDPOINT ) )
-                        || selectionRect.Contains( line->GetMidPoint() ) )
+            auto selectItem =
+                    [&]( EDA_ITEM* aItem )
                     {
-                        flags = STARTPOINT | ENDPOINT;
-                    }
-                }
+                        EDA_ITEM_FLAGS flags = 0;
 
-                if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
-                {
-                    aItem->ClearFlags( flags );
+                        // Handle line ends specially
+                        if( aItem->Type() == SCH_LINE_T )
+                        {
+                            SCH_LINE* line = (SCH_LINE*) aItem;
 
-                    if( !aItem->HasFlag( STARTPOINT ) && !aItem->HasFlag( ENDPOINT ) )
-                    {
-                        unselect( aItem );
-                        anySubtracted = true;
-                    }
-                }
-                else
-                {
-                    aItem->SetFlags( flags );
-                    select( aItem );
-                    anyAdded = true;
-                }
-            };
+                            if( selectionRect.Contains( line->GetStartPoint() ) || isGreedy )
+                                flags |= STARTPOINT;
+
+                            if( selectionRect.Contains( line->GetEndPoint() ) || isGreedy )
+                                flags |= ENDPOINT;
+
+
+                            // If no ends were selected, select whole line (both ends)
+                            // Also select both ends if the selection overlaps the midpoint
+                            if( ( !( flags & STARTPOINT ) && !( flags & ENDPOINT ) )
+                                || selectionRect.Contains( line->GetMidPoint() ) )
+                            {
+                                flags = STARTPOINT | ENDPOINT;
+                            }
+                        }
+
+                        if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
+                        {
+                            aItem->ClearFlags( flags );
+
+                            if( !aItem->HasFlag( STARTPOINT ) && !aItem->HasFlag( ENDPOINT ) )
+                            {
+                                unselect( aItem );
+                                anySubtracted = true;
+                            }
+                        }
+                        else
+                        {
+                            aItem->SetFlags( flags );
+                            select( aItem );
+                            anyAdded = true;
+                        }
+                    };
 
             for( EDA_ITEM* item : nearbyItems )
             {
                 if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
                     item->SetFlags( SHOW_ELEC_TYPE );
 
-                if( Selectable( item ) && item->HitTest( selectionRect, isWindowSelection ) )
+                if( Selectable( item ) && item->HitTest( selectionRect, !isGreedy ) )
                 {
                     item->SetFlags( CANDIDATE );
                     flaggedItems.push_back( item );
@@ -1401,7 +1403,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
                 if( Selectable( item )
                         && !item->GetParent()->HasFlag( CANDIDATE )
-                        && item->HitTest( selectionRect, isWindowSelection ) )
+                        && item->HitTest( selectionRect, !isGreedy ) )
                 {
                     selectItem( item );
                 }
