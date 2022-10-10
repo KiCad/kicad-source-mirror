@@ -401,114 +401,96 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 if( aFrom )
                     return;
 
-                const std::shared_ptr<SHAPE> eshape = aPad->GetEffectiveShape();
-
-                // PTH reduced to only a hole do not return a valid pad shape list
-                if( eshape->Type() != SH_COMPOUND )
-                    return;
-
-                const std::vector<SHAPE*> shapes =
-                        static_cast<const SHAPE_COMPOUND*>( eshape.get() )->Shapes();
-
-                for( const SHAPE* shape : shapes )
+                switch( aPad->GetShape() )
                 {
-                    switch( shape->Type() )
-                    {
-                    case SH_RECT:
-                    {
-                        const SHAPE_RECT* rect    = static_cast<const SHAPE_RECT*>( shape );
-                        SHAPE_LINE_CHAIN  outline = rect->Outline();
+                case PAD_SHAPE::CIRCLE:
+                {
+                    int      r      = aPad->GetSizeX();
+                    VECTOR2I center = aPad->ShapePos();
 
-                        for( int i = 0; i < outline.SegmentCount(); i++ )
-                        {
-                            const SEG& seg = outline.CSegment( i );
-                            addAnchor( seg.A,         OUTLINE | SNAPPABLE, aPad );
-                            addAnchor( seg.Center(),  OUTLINE | SNAPPABLE, aPad );
-                        }
+                    addAnchor( center + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, aPad );
+                    addAnchor( center + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, aPad );
+                    addAnchor( center + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, aPad );
+                    addAnchor( center + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, aPad );
+                    break;
+                }
 
-                        break;
+                case PAD_SHAPE::OVAL:
+                {
+                    VECTOR2I pos = aPad->ShapePos();
+                    VECTOR2I half_size = aPad->GetSize() / 2;
+                    int      half_width = std::min( half_size.x, half_size.y );
+                    VECTOR2I half_len( half_size.x - half_width, half_size.y - half_width );
+
+                    RotatePoint( half_len, aPad->GetOrientation() );
+
+                    VECTOR2I a( pos - half_len );
+                    VECTOR2I b( pos + half_len );
+                    VECTOR2I normal = b - a;
+                    normal.Resize( half_width );
+                    RotatePoint( normal, ANGLE_90 );
+
+                    addAnchor( a + normal, OUTLINE | SNAPPABLE, aPad );
+                    addAnchor( a - normal, OUTLINE | SNAPPABLE, aPad );
+                    addAnchor( b + normal, OUTLINE | SNAPPABLE, aPad );
+                    addAnchor( b - normal, OUTLINE | SNAPPABLE, aPad );
+                    addAnchor( pos + normal, OUTLINE | SNAPPABLE, aPad );
+                    addAnchor( pos - normal, OUTLINE | SNAPPABLE, aPad );
+
+                    RotatePoint( normal, -ANGLE_90 );
+
+                    addAnchor( a - normal, OUTLINE | SNAPPABLE, aPad );
+                    addAnchor( b + normal, OUTLINE | SNAPPABLE, aPad );
+                    break;
+                }
+
+                case PAD_SHAPE::RECT:
+                case PAD_SHAPE::TRAPEZOID:
+                case PAD_SHAPE::ROUNDRECT:
+                case PAD_SHAPE::CHAMFERED_RECT:
+                {
+                    VECTOR2I half_size( aPad->GetSize() / 2 );
+                    VECTOR2I trap_delta( 0, 0 );
+
+                    if( aPad->GetShape() == PAD_SHAPE::TRAPEZOID )
+                        trap_delta = aPad->GetDelta() / 2;
+
+                    SHAPE_LINE_CHAIN corners;
+
+                    corners.Append( -half_size.x - trap_delta.y,  half_size.y + trap_delta.x );
+                    corners.Append(  half_size.x + trap_delta.y,  half_size.y - trap_delta.x );
+                    corners.Append(  half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
+                    corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
+                    corners.SetClosed( true );
+
+                    corners.Rotate( aPad->GetOrientation() );
+                    corners.Move( aPad->ShapePos() );
+
+                    for( size_t ii = 0; ii < corners.GetSegmentCount(); ++ii )
+                    {
+                        const SEG& seg = corners.GetSegment( ii );
+                        addAnchor( seg.A, OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( seg.Center(), OUTLINE | SNAPPABLE, aPad );
+
+                        if( ii == corners.GetSegmentCount() - 1 )
+                            addAnchor( seg.B, OUTLINE | SNAPPABLE, aPad );
                     }
 
-                    case SH_SEGMENT:
+                    break;
+                }
+
+                default:
+                {
+                    const std::shared_ptr<SHAPE_POLY_SET>& outline = aPad->GetEffectivePolygon();
+
+                    if( !outline->IsEmpty() )
                     {
-                        const SHAPE_SEGMENT* segment = static_cast<const SHAPE_SEGMENT*>( shape );
-
-                        int offset = segment->GetWidth() / 2;
-                        SEG seg    = segment->GetSeg();
-                        VECTOR2I normal = ( seg.B - seg.A );
-                        normal.Resize( offset );
-                        RotatePoint( normal, ANGLE_90 );
-
-                        /*
-                         * TODO: This creates more snap points than necessary for rounded rect pads
-                         * because they are built up of overlapping segments.  We could fix this if
-                         * desired by testing these to see if they are "inside" the pad.
-                         */
-
-                        addAnchor( seg.A + normal, OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( seg.A - normal, OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( seg.B + normal, OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( seg.B - normal, OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( seg.Center() + normal, OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( seg.Center() - normal, OUTLINE | SNAPPABLE, aPad );
-
-                        RotatePoint( normal, -ANGLE_90 );
-
-                        addAnchor( seg.A - normal, OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( seg.B + normal, OUTLINE | SNAPPABLE, aPad );
-                        break;
+                        for( const VECTOR2I& pt : outline->Outline( 0 ).CPoints() )
+                            addAnchor( pt, OUTLINE | SNAPPABLE, aPad );
                     }
 
-                    case SH_CIRCLE:
-                    {
-                        const SHAPE_CIRCLE* circle = static_cast<const SHAPE_CIRCLE*>( shape );
-
-                        int      r     = circle->GetRadius();
-                        VECTOR2I start = circle->GetCenter();
-
-                        addAnchor( start + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( start + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( start + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( start + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, aPad );
-                        break;
-                    }
-
-                    case SH_ARC:
-                    {
-                        const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( shape );
-
-                        addAnchor( arc->GetP0(), OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( arc->GetP1(), OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( arc->GetArcMid(), OUTLINE | SNAPPABLE, aPad );
-                        break;
-                    }
-
-                    case SH_SIMPLE:
-                    {
-                        const SHAPE_SIMPLE* poly = static_cast<const SHAPE_SIMPLE*>( shape );
-
-                        for( size_t i = 0; i < poly->GetSegmentCount(); i++ )
-                        {
-                            const SEG& seg = poly->GetSegment( i );
-
-                            addAnchor( seg.A, OUTLINE | SNAPPABLE, aPad );
-                            addAnchor( seg.Center(), OUTLINE | SNAPPABLE, aPad );
-
-                            if( i == poly->GetSegmentCount() - 1 )
-                                addAnchor( seg.B, OUTLINE | SNAPPABLE, aPad );
-                        }
-
-                        break;
-                    }
-
-                    case SH_POLY_SET:
-                    case SH_LINE_CHAIN:
-                    case SH_COMPOUND:
-                    case SH_POLY_SET_TRIANGLE:
-                    case SH_NULL:
-                    default:
-                        break;
-                    }
+                    break;
+                }
                 }
             };
 
