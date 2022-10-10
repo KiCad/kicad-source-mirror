@@ -88,10 +88,7 @@ public:
      *
      * Returns the net code(s) of currently routed track(s).
      */
-    const std::vector<int> CurrentNets() const override
-    {
-        return std::vector<int>( 1, m_draggedLine.Net() );
-    }
+    const std::vector<int> CurrentNets() const override;
 
     /**
      * Function CurrentLayer()

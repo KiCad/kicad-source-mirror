@@ -266,6 +266,15 @@ void DRAGGER::SetMode( int aMode )
 }
 
 
+const std::vector<int> DRAGGER::CurrentNets() const
+{
+    if( m_mode == PNS::DM_VIA )
+        return std::vector<int>( 1, m_draggedVia.net );
+    else
+        return std::vector<int>( 1, m_draggedLine.Net() );
+}
+
+
 bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
 {
     // fixme: rewrite using shared_ptr...
