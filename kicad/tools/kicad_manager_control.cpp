@@ -746,8 +746,6 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     if( !m_loading.try_lock() )
         return -1;
 
-    wxBusyCursor dummy;
-
     const std::lock_guard<std::mutex> lock( m_loading, std::adopt_lock );
 
     try
@@ -802,6 +800,7 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
             }
         }
 
+        wxBusyCursor busy;
         player->Show( true );
     }
 

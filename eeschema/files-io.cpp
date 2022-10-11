@@ -232,7 +232,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         try
         {
-            Schematic().SetRoot( pi->Load( fullFileName, &Schematic() ) );
+            {
+                wxBusyCursor busy;
+                Schematic().SetRoot( pi->Load( fullFileName, &Schematic() ) );
+            }
 
             if( !pi->GetError().IsEmpty() )
             {
