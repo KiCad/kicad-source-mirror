@@ -24,6 +24,7 @@
 #ifndef KICAD_WX_GRID_H
 #define KICAD_WX_GRID_H
 
+#include <vector>
 #include <wx/event.h>
 #include <wx/grid.h>
 #include <wx/version.h>
