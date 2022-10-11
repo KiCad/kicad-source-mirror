@@ -2,21 +2,22 @@
 # Jarl Gjessing <jarlgjessing@gmail.com>, 2020.
 # ZbeeGin <zbeegin@op.pl>, 2020.
 # nickoe <oe.nick@gmail.com>, 2021.
+# Mads Dyrmann <madsdyrmannlarsen@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2021-08-20 19:52+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
-"source/da/>\n"
+"PO-Revision-Date: 2022-10-17 17:05+0000\n"
+"Last-Translator: Mads Dyrmann <madsdyrmannlarsen@gmail.com>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/"
+"master-source/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -1503,6 +1504,7 @@ msgstr "Kan ikke oprette outputmappe \"%s\".\n"
 #: common/common.cpp:608
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
+"Dette operativsystem er ikke understøttet af KiCad og dets afhængigheder."
 
 #: common/common.cpp:610
 #, fuzzy
