@@ -347,7 +347,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 wxString paths;
                 wxArrayString libNames;
 
-                SYMBOL_LIBS::LibNamesAndPaths( &Prj(), false, &paths, &libNames );
+                SYMBOL_LIBS::GetLibNamesAndPaths( &Prj(), &paths, &libNames );
 
                 if( !libNames.IsEmpty() )
                 {
@@ -371,7 +371,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
                     libNames.Clear();
                     paths.Clear();
-                    SYMBOL_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
+                    SYMBOL_LIBS::SetLibNamesAndPaths( &Prj(), paths, libNames );
                 }
 
                 if( !cfg || !cfg->m_RescueNeverShow )

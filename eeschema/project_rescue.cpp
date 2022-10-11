@@ -724,7 +724,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
     try
     {
-        SYMBOL_LIBS::LibNamesAndPaths( m_prj, false, &libPaths, &libNames );
+        SYMBOL_LIBS::GetLibNamesAndPaths( m_prj, &libPaths, &libNames );
 
         // Make sure the library is not already in the list
         while( libNames.Index( libName ) != wxNOT_FOUND )
@@ -732,7 +732,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
         // Add the library to the top of the list and save.
         libNames.Insert( libName, 0 );
-        SYMBOL_LIBS::LibNamesAndPaths( m_prj, true, &libPaths, &libNames );
+        SYMBOL_LIBS::SetLibNamesAndPaths( m_prj, libPaths, libNames );
     }
     catch( const IO_ERROR& )
     {

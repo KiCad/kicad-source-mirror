@@ -93,11 +93,11 @@ public:
      */
     void LoadAllLibraries( PROJECT* aProject, bool aShowProgress=true );
 
-    /**
-     * Save or load the names of the currently configured symbol libraries (without paths).
-     */
-    static void LibNamesAndPaths( PROJECT* aProject, bool doSave,
-                                  wxString* aPaths, wxArrayString* aNames = nullptr );
+    static void GetLibNamesAndPaths( PROJECT* aProject, wxString* aPaths,
+                                     wxArrayString* aNames = nullptr );
+
+    static void SetLibNamesAndPaths( PROJECT* aProject, const wxString& aPaths,
+                                     const wxArrayString& aNames );
 
     /**
      * Return the name of the cache library after potentially fixing it from

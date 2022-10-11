@@ -55,7 +55,7 @@ SEARCH_STACK* PROJECT::SchSearchS()
 
         try
         {
-            SYMBOL_LIBS::LibNamesAndPaths( this, false, &libDir );
+            SYMBOL_LIBS::GetLibNamesAndPaths( this, &libDir );
         }
         catch( const IO_ERROR& )
         {

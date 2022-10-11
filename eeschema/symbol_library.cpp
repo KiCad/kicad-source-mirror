@@ -408,29 +408,29 @@ void SYMBOL_LIBS::FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates,
 }
 
 
-void SYMBOL_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
-                                    wxString* aPaths, wxArrayString* aNames )
+void SYMBOL_LIBS::GetLibNamesAndPaths( PROJECT* aProject, wxString* aPaths, wxArrayString* aNames )
 {
-    wxCHECK_RET( aProject, "Null PROJECT in LibNamesAndPaths" );
+    wxCHECK_RET( aProject, "Null PROJECT in GetLibNamesAndPaths" );
 
     PROJECT_FILE& project = aProject->GetProjectFile();
 
-    if( doSave )
-    {
-        if( aPaths )
-            project.m_LegacyLibDir = *aPaths;
+    if( aPaths )
+        *aPaths = project.m_LegacyLibDir;
 
-        if( aNames )
-            project.m_LegacyLibNames = *aNames;
-    }
-    else
-    {
-        if( aPaths )
-            *aPaths = project.m_LegacyLibDir;
+    if( aNames )
+        *aNames = project.m_LegacyLibNames;
+}
 
-        if( aNames )
-            *aNames = project.m_LegacyLibNames;
-    }
+
+void SYMBOL_LIBS::SetLibNamesAndPaths( PROJECT* aProject, const wxString& aPaths,
+                                       const wxArrayString& aNames )
+{
+    wxCHECK_RET( aProject, "Null PROJECT in SetLibNamesAndPaths" );
+
+    PROJECT_FILE& project = aProject->GetProjectFile();
+
+    project.m_LegacyLibDir = aPaths;
+    project.m_LegacyLibNames = aNames;
 }
 
 
@@ -460,7 +460,7 @@ void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
 
     wxArrayString   lib_names;
 
-    LibNamesAndPaths( aProject, false, nullptr, &lib_names );
+    GetLibNamesAndPaths( aProject, nullptr, &lib_names );
 
     // Post symbol library table, this should be empty.  Only the cache library should get loaded.
     if( !lib_names.empty() )
