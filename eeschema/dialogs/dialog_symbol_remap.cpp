@@ -114,8 +114,6 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     // check to see if the schematic has not been converted to the symbol library table
     // method for looking up symbols.
 
-    wxBusyCursor busy;
-
     wxFileName prjSymLibTableFileName( Prj().GetProjectPath(),
                                        SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
@@ -133,7 +131,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     wxString paths;
     wxArrayString libNames;
 
-    SYMBOL_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
+    SYMBOL_LIBS::SetLibNamesAndPaths( &Prj(), paths, libNames );
 
     // Reload the cache symbol library.
     Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
@@ -171,6 +169,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 
     if( getLibsNotInGlobalSymbolLibTable( libs ) )
     {
+        wxBusyCursor          busy;
         SYMBOL_LIB_TABLE      libTable;
         std::vector<wxString> libNames = SYMBOL_LIB_TABLE::GetGlobalLibTable().GetLogicalLibs();
         wxString              msg;
@@ -245,10 +244,11 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 
 void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 {
-    wxString msg;
-    SCH_SCREENS schematic( m_frame->Schematic().Root() );
-    SCH_SYMBOL* symbol;
-    SCH_SCREEN* screen;
+    wxBusyCursor busy;
+    wxString     msg;
+    SCH_SCREENS  schematic( m_frame->Schematic().Root() );
+    SCH_SYMBOL*  symbol;
+    SCH_SCREEN*  screen;
 
     for( screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
     {
