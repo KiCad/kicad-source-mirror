@@ -62,7 +62,7 @@ add_executable( kicad WIN32 MACOSX_BUNDLE
     ${KICAD_RESOURCES}
     )
 
-add_executable( kicad-cli WIN32 MACOSX_BUNDLE
+add_executable( kicad-cli WIN32
     kicad_cli.cpp
     ${KICAD_SRCS}
     ${KICAD_EXTRA_SRCS}
