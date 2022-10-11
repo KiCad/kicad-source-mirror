@@ -167,15 +167,15 @@ size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< SYMBO
 
 void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 {
-    wxString msg;
-    std::vector< SYMBOL_LIB* > libs;
+    std::vector<SYMBOL_LIB*> libs;
 
     if( getLibsNotInGlobalSymbolLibTable( libs ) )
     {
-        SYMBOL_LIB_TABLE prjLibTable;
-        std::vector< wxString > libNames = SYMBOL_LIB_TABLE::GetGlobalLibTable().GetLogicalLibs();
+        SYMBOL_LIB_TABLE      libTable;
+        std::vector<wxString> libNames = SYMBOL_LIB_TABLE::GetGlobalLibTable().GetLogicalLibs();
+        wxString              msg;
 
-        for( auto lib : libs )
+        for( SYMBOL_LIB* lib : libs )
         {
             wxString libName = lib->GetName();
             int libNameInc = 1;
@@ -193,48 +193,46 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
                 libNameInc++;
             }
 
-            wxString pluginType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY );
-            wxFileName fn = lib->GetFullFileName();
+            wxString   type = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY );
+            wxFileName fn( lib->GetFullFileName() );
 
             // Use environment variable substitution where possible.  This is based solely
             // on the internal user environment variable list.  Checking against all of the
             // system wide environment variables is probably not a good idea.
-            wxString fullFileName = NormalizePath( fn, &Pgm().GetLocalEnvVariables(), &Prj() );
-
-            wxFileName tmpFn = fullFileName;
+            wxString   normalizedPath = NormalizePath( fn, &Pgm().GetLocalEnvVariables(), &Prj() );
+            wxFileName normalizedFn( normalizedPath );
 
             // Don't add symbol libraries that do not exist.
-            if( tmpFn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS ) && tmpFn.FileExists() )
+            if( normalizedFn.Normalize(FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS )
+                    && normalizedFn.FileExists() )
             {
                 msg.Printf( _( "Adding library '%s', file '%s' to project symbol library table." ),
                             libName,
-                            fullFileName );
+                            normalizedPath );
                 aReporter.Report( msg, RPT_SEVERITY_INFO );
 
-                prjLibTable.InsertRow( new SYMBOL_LIB_TABLE_ROW( libName, fullFileName,
-                                                                 pluginType ) );
+                libTable.InsertRow( new SYMBOL_LIB_TABLE_ROW( libName, normalizedPath, type ) );
             }
             else
             {
-                msg.Printf( _( "Library '%s' not found." ), fullFileName );
+                msg.Printf( _( "Library '%s' not found." ), normalizedPath );
                 aReporter.Report( msg, RPT_SEVERITY_WARNING );
             }
         }
 
         // Don't save empty project symbol library table.
-        if( !prjLibTable.IsEmpty() )
+        if( !libTable.IsEmpty() )
         {
             wxFileName fn( Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
             try
             {
                 FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
-                prjLibTable.Format( &formatter, 0 );
+                libTable.Format( &formatter, 0 );
             }
             catch( const IO_ERROR& ioe )
             {
-                msg.Printf( _( "Failed to write project symbol library table. Error:\n  %s" ),
-                            ioe.What() );
+                msg.Printf( _( "Error writing project symbol library table.\n  %s" ), ioe.What() );
                 aReporter.ReportTail( msg, RPT_SEVERITY_ERROR );
             }
 
