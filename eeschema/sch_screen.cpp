@@ -934,7 +934,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
         if( !tmp && legacyLibs && legacyLibs->GetLibraryCount() )
         {
-            SYMBOL_LIB& legacyCacheLib = legacyLibs->at( 0 );
+            SYMBOL_LIB& legacyCacheLib = legacyLibs->back();
 
             // It better be the cache library.
             wxCHECK2( legacyCacheLib.IsCache(), continue );

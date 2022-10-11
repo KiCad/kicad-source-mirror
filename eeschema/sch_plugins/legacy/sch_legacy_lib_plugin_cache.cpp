@@ -303,11 +303,10 @@ LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorV
 
     name = tokens.GetNextToken();
 
-    // Don't escape symbol library name if it's already been escaped.  Given that the original
-    // change to escape the symbol library name has resulted in rescue libraries with escaped
-    // names, we will have to live with the consequences.
-    if( name == UnescapeString( name ) )
-        name = EscapeString( name, CTX_LIBID );
+    // This fixes a dubious decision to escape LIB_ID characters. Escaped LIB_IDs broke rescue
+    // library look up.  Legacy LIB_IDs should not be escaped.
+    if( name != UnescapeString( name ) )
+        name = UnescapeString( name );
 
     pos += name.size() + 1;
 

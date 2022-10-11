@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -379,9 +379,9 @@ public:
     virtual void AddSymbol( LIB_SYMBOL* aNewSymbol ) override;
 
 private:
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;
+    std::vector<std::unique_ptr<LIB_SYMBOL>> m_rescueLibSymbols;
 
-    std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties
+    std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties.
 };
 
 #endif // _LIB_CACHE_RESCUE_H_
