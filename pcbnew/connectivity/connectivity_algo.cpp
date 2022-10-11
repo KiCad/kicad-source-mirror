@@ -745,9 +745,6 @@ void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
 
 void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aItem )
 {
-    if( aZoneLayer->Net() != aItem->Net() && !aItem->CanChangeNet() )
-        return;
-
     PCB_LAYER_ID layer = aZoneLayer->GetLayer();
 
     if( !aItem->Parent()->IsOnLayer( layer ) )
@@ -788,9 +785,6 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
 {
     const ZONE* zoneA = static_cast<const ZONE*>( aZoneLayerA->Parent() );
     const ZONE* zoneB = static_cast<const ZONE*>( aZoneLayerB->Parent() );
-
-    if( aZoneLayerB->Net() != aZoneLayerA->Net() )
-        return; // we only test zones belonging to the same net
 
     const BOX2I& boxA = aZoneLayerA->BBox();
     const BOX2I& boxB = aZoneLayerB->BBox();
@@ -846,6 +840,10 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
         return true;
 
     if( parentA == parentB )
+        return true;
+
+    // Don't connect items in different nets that can't be changed
+    if( !aCandidate->CanChangeNet() && !m_item->CanChangeNet() && aCandidate->Net() != m_item->Net() )
         return true;
 
     // If both m_item and aCandidate are marked dirty, they will both be searched
