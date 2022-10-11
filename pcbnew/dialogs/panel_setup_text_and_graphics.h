@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,12 +47,9 @@ public:
     void ImportSettingsFrom( BOARD* aBoard );
 
 private:
-    int getGridValue( int aRow, int aCol );
-
     void onUnitsChanged( wxCommandEvent& aEvent );
 
 private:
-    PAGED_DIALOG*           m_Parent;
     PCB_EDIT_FRAME*         m_Frame;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
     UNIT_BINDER             m_arrowLength;

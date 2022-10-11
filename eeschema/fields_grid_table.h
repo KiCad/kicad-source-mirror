@@ -145,6 +145,9 @@ private:
     wxGridCellAttr*       m_netclassAttr;
     wxGridCellAttr*       m_fontAttr;
     wxGridCellAttr*       m_colorAttr;
+
+    std::unique_ptr<NUMERIC_EVALUATOR>        m_eval;
+    std::map< std::pair<int, int>, wxString > m_evalOriginal;
 };
 
 

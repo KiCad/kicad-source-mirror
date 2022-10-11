@@ -86,6 +86,8 @@ public:
             m_edited( false ),
             m_pinTable( aPinTable )
     {
+        m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
+
         m_frame->Bind( UNITS_CHANGED, &PIN_TABLE_DATA_MODEL::onUnitsChanged, this );
     }
 
@@ -136,6 +138,17 @@ public:
 
     wxString GetValue( int aRow, int aCol ) override
     {
+        wxGrid*  grid = GetView();
+
+        if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol
+                && grid->IsCellEditControlShown() )
+        {
+            auto it = m_evalOriginal.find( { m_rows[ aRow ], aCol } );
+
+            if( it != m_evalOriginal.end() )
+                return it->second;
+        }
+
         return GetValue( m_rows[ aRow ], aCol, m_frame );
     }
 
@@ -252,13 +265,36 @@ public:
         if( aValue == INDETERMINATE_STATE )
             return;
 
+        wxString value = aValue;
+
+        switch( aCol )
+        {
+        case COL_NUMBER_SIZE:
+        case COL_NAME_SIZE:
+        case COL_LENGTH:
+        case COL_POSX:
+        case COL_POSY:
+            m_eval->SetDefaultUnits( m_frame->GetUserUnits() );
+
+            if( m_eval->Process( value ) )
+            {
+                m_evalOriginal[ { m_rows[ aRow ], aCol } ] = value;
+                value = m_eval->Result();
+            }
+
+            break;
+
+        default:
+            break;
+        }
+
         LIB_PINS pins = m_rows[ aRow ];
 
         // If the NUMBER column is edited and the pins are grouped, renumber, and add or
         // remove pins based on the comma separated list of pins.
         if( aCol == COL_NUMBER && m_pinTable->IsDisplayGrouped() )
         {
-            wxStringTokenizer tokenizer( aValue, "," );
+            wxStringTokenizer tokenizer( value, "," );
             size_t            i = 0;
 
             while( tokenizer.HasMoreTokens() )
@@ -323,59 +359,59 @@ public:
             {
             case COL_NUMBER:
                 if( !m_pinTable->IsDisplayGrouped() )
-                    pin->SetNumber( aValue );
+                    pin->SetNumber( value );
 
                 break;
 
             case COL_NAME:
-                pin->SetName( aValue );
+                pin->SetName( value );
                 break;
 
             case COL_TYPE:
-                if( PinTypeNames().Index( aValue ) != wxNOT_FOUND )
-                    pin->SetType( (ELECTRICAL_PINTYPE) PinTypeNames().Index( aValue ) );
+                if( PinTypeNames().Index( value ) != wxNOT_FOUND )
+                    pin->SetType( (ELECTRICAL_PINTYPE) PinTypeNames().Index( value ) );
 
                 break;
 
             case COL_SHAPE:
-                if( PinShapeNames().Index( aValue ) != wxNOT_FOUND )
-                    pin->SetShape( (GRAPHIC_PINSHAPE) PinShapeNames().Index( aValue ) );
+                if( PinShapeNames().Index( value ) != wxNOT_FOUND )
+                    pin->SetShape( (GRAPHIC_PINSHAPE) PinShapeNames().Index( value ) );
 
                 break;
 
             case COL_ORIENTATION:
-                if( PinOrientationNames().Index( aValue ) != wxNOT_FOUND )
-                    pin->SetOrientation( PinOrientationCode( PinOrientationNames().Index( aValue ) ) );
+                if( PinOrientationNames().Index( value ) != wxNOT_FOUND )
+                    pin->SetOrientation( PinOrientationCode( PinOrientationNames().Index( value ) ) );
                 break;
 
             case COL_NUMBER_SIZE:
-                pin->SetNumberTextSize( m_frame->ValueFromString( aValue ) );
+                pin->SetNumberTextSize( m_frame->ValueFromString( value ) );
                 break;
 
             case COL_NAME_SIZE:
-                pin->SetNameTextSize( m_frame->ValueFromString( aValue ) );
+                pin->SetNameTextSize( m_frame->ValueFromString( value ) );
                 break;
 
             case COL_LENGTH:
-                pin->ChangeLength( m_frame->ValueFromString( aValue ) );
+                pin->ChangeLength( m_frame->ValueFromString( value ) );
                 break;
 
             case COL_POSX:
-                pin->SetPosition( wxPoint( m_frame->ValueFromString( aValue ),
+                pin->SetPosition( wxPoint( m_frame->ValueFromString( value ),
                                            pin->GetPosition().y ) );
                 break;
 
             case COL_POSY:
                 pin->SetPosition( wxPoint( pin->GetPosition().x,
-                                           -m_frame->ValueFromString( aValue ) ) );
+                                           -m_frame->ValueFromString( value ) ) );
                 break;
 
             case COL_VISIBLE:
-                pin->SetVisible(BoolFromString( aValue ));
+                pin->SetVisible(BoolFromString( value ));
                 break;
 
             case COL_UNIT:
-                if( aValue == UNITS_ALL )
+                if( value == UNITS_ALL )
                 {
                     pin->SetUnit( 0 );
                 }
@@ -383,7 +419,7 @@ public:
                 {
                     for( int i = 1; i <= pin->GetParent()->GetUnitCount(); i++ )
                     {
-                        if( aValue == LIB_SYMBOL::SubReference( i, false ) )
+                        if( value == LIB_SYMBOL::SubReference( i, false ) )
                         {
                             pin->SetUnit( i );
                             break;
@@ -393,9 +429,9 @@ public:
                 break;
 
             case COL_DEMORGAN:
-                if( aValue == DEMORGAN_STD )
+                if( value == DEMORGAN_STD )
                     pin->SetConvert( 1 );
-                else if( aValue == DEMORGAN_ALT )
+                else if( value == DEMORGAN_ALT )
                     pin->SetConvert( 2 );
                 else
                     pin->SetConvert( 0 );
@@ -656,6 +692,9 @@ private:
     bool                  m_edited;
 
     DIALOG_LIB_EDIT_PIN_TABLE* m_pinTable;
+
+    std::unique_ptr<NUMERIC_EVALUATOR>             m_eval;
+    std::map< std::pair<LIB_PINS, int>, wxString > m_evalOriginal;
 };
 
 

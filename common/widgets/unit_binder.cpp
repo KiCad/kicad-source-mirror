@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -103,6 +103,8 @@ UNIT_BINDER::~UNIT_BINDER()
 void UNIT_BINDER::SetUnits( EDA_UNITS aUnits )
 {
     m_units = aUnits;
+
+    m_eval.SetDefaultUnits( m_units );
 
     if( m_unitLabel )
         m_unitLabel->SetLabel( EDA_UNIT_UTILS::GetLabel( m_units, m_dataType ) );

@@ -22,7 +22,6 @@
  */
 
 
-#include <base_units.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <bitmaps.h>
@@ -96,6 +95,14 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent,
     m_trackWidthsGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
     m_viaSizesGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
     m_diffPairsGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+
+    m_trackWidthsGrid->SetUnitsProvider( m_Frame );
+    m_viaSizesGrid->SetUnitsProvider( m_Frame );
+    m_diffPairsGrid->SetUnitsProvider( m_Frame );
+
+    m_trackWidthsGrid->SetAutoEvalCols( { 0 } );
+    m_viaSizesGrid->SetAutoEvalCols( { 0, 1 } );
+    m_diffPairsGrid->SetAutoEvalCols( { 0, 1, 2 } );
 
     // Ensure width of columns is enough to enter any reasonable value
     WX_GRID* grid_list[] = { m_trackWidthsGrid, m_viaSizesGrid, m_diffPairsGrid, nullptr };
@@ -286,25 +293,19 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 
     for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
     {
-        msg = m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL );
-
-        if( !msg.IsEmpty() )
-            trackWidths.push_back( m_Frame->ValueFromString( msg ) );
+        if( !m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL ).IsEmpty() )
+            trackWidths.push_back( m_trackWidthsGrid->GetUnitValue( row, TR_WIDTH_COL ) );
     }
 
     for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
     {
-        msg = m_viaSizesGrid->GetCellValue( row, VIA_SIZE_COL );
-
-        if( !msg.IsEmpty() )
+        if( !m_viaSizesGrid->GetCellValue( row, VIA_SIZE_COL ).IsEmpty() )
         {
             VIA_DIMENSION via_dim;
-            via_dim.m_Diameter = m_Frame->ValueFromString( msg );
+            via_dim.m_Diameter = m_viaSizesGrid->GetUnitValue( row, VIA_SIZE_COL );
 
-            msg = m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL );
-
-            if( !msg.IsEmpty() )
-                via_dim.m_Drill = m_Frame->ValueFromString( msg );
+            if( !m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL ).IsEmpty() )
+                via_dim.m_Drill = m_viaSizesGrid->GetUnitValue( row, VIA_DRILL_COL );
 
             vias.push_back( via_dim );
         }
@@ -312,20 +313,16 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 
     for( int row = 0; row < m_diffPairsGrid->GetNumberRows();  ++row )
     {
-        msg = m_diffPairsGrid->GetCellValue( row, DP_WIDTH_COL );
-
-        if( !msg.IsEmpty() )
+        if( !m_diffPairsGrid->GetCellValue( row, DP_WIDTH_COL ).IsEmpty() )
         {
             DIFF_PAIR_DIMENSION diffPair_dim;
-            diffPair_dim.m_Width = m_Frame->ValueFromString( msg );
+            diffPair_dim.m_Width = m_diffPairsGrid->GetUnitValue( row, DP_WIDTH_COL );
 
-            msg = m_diffPairsGrid->GetCellValue( row, DP_GAP_COL );
-            diffPair_dim.m_Gap = m_Frame->ValueFromString( msg );
+            if( !m_diffPairsGrid->GetCellValue( row, DP_GAP_COL ).IsEmpty() )
+            diffPair_dim.m_Gap = m_diffPairsGrid->GetUnitValue( row, DP_GAP_COL );
 
-            msg = m_diffPairsGrid->GetCellValue( row, DP_VIA_GAP_COL );
-
-            if( !msg.IsEmpty() )
-                diffPair_dim.m_ViaGap = m_Frame->ValueFromString( msg );
+            if( !m_diffPairsGrid->GetCellValue( row, DP_VIA_GAP_COL ).IsEmpty() )
+                diffPair_dim.m_ViaGap = m_diffPairsGrid->GetUnitValue( row, DP_VIA_GAP_COL );
 
             diffPairs.push_back( diffPair_dim );
         }
@@ -374,7 +371,6 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::Validate()
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
-
     }
 
     // Test diff pairs
@@ -401,7 +397,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendTrackWidth( const int aWidth )
 
     m_trackWidthsGrid->AppendRows( 1 );
 
-    m_trackWidthsGrid->SetCellValue( i, TR_WIDTH_COL, m_Frame->StringFromValue( aWidth, true ) );
+    m_trackWidthsGrid->SetUnitValue( i, TR_WIDTH_COL, aWidth );
 }
 
 
@@ -411,10 +407,10 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendViaSize( int aSize, int aDrill )
 
     m_viaSizesGrid->AppendRows( 1 );
 
-    m_viaSizesGrid->SetCellValue( i, VIA_SIZE_COL, m_Frame->StringFromValue( aSize, true ) );
+    m_viaSizesGrid->SetUnitValue( i, VIA_SIZE_COL, aSize );
 
     if( aDrill > 0 )
-        m_viaSizesGrid->SetCellValue( i, VIA_DRILL_COL, m_Frame->StringFromValue( aDrill, true ) );
+        m_viaSizesGrid->SetUnitValue( i, VIA_DRILL_COL, aDrill );
 }
 
 
@@ -424,13 +420,13 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendDiffPairs( int aWidth, int aGap, int aVi
 
     m_diffPairsGrid->AppendRows( 1 );
 
-    m_diffPairsGrid->SetCellValue( i, DP_WIDTH_COL, m_Frame->StringFromValue( aWidth, true ) );
+    m_diffPairsGrid->SetUnitValue( i, DP_WIDTH_COL, aWidth );
 
     if( aGap > 0 )
-        m_diffPairsGrid->SetCellValue( i, DP_GAP_COL, m_Frame->StringFromValue( aGap, true ) );
+        m_diffPairsGrid->SetUnitValue( i, DP_GAP_COL, aGap );
 
     if( aViaGap > 0 )
-        m_diffPairsGrid->SetCellValue( i, DP_VIA_GAP_COL, m_Frame->StringFromValue( aViaGap, true ) );
+        m_diffPairsGrid->SetUnitValue( i, DP_VIA_GAP_COL, aViaGap );
 }
 
 

@@ -291,6 +291,8 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     m_colorAttr->SetRenderer( new GRID_CELL_COLOR_RENDERER( m_dialog ) );
     m_colorAttr->SetEditor( new GRID_CELL_COLOR_SELECTOR( m_dialog, aGrid ) );
 
+    m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
+
     m_frame->Bind( UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
 }
 
@@ -519,7 +521,18 @@ template <class T>
 wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
 {
     wxCHECK( aRow < GetNumberRows(), wxEmptyString );
+
+    wxGrid*  grid = GetView();
     const T& field = this->at( (size_t) aRow );
+
+    if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol
+            && grid->IsCellEditControlShown() )
+    {
+        auto it = m_evalOriginal.find( { aRow, aCol } );
+
+        if( it != m_evalOriginal.end() )
+            return it->second;
+    }
 
     switch( aCol )
     {
@@ -640,17 +653,35 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
     wxCHECK( aRow < GetNumberRows(), /*void*/ );
     T& field = this->at( (size_t) aRow );
     VECTOR2I pos;
+    wxString value = aValue;
+
+    switch( aCol )
+    {
+    case FDC_TEXT_SIZE:
+    case FDC_POSX:
+    case FDC_POSY:
+        m_eval->SetDefaultUnits( m_frame->GetUserUnits() );
+
+        if( m_eval->Process( value ) )
+        {
+            m_evalOriginal[ { aRow, aCol } ] = value;
+            value = m_eval->Result();
+        }
+
+        break;
+
+    default:
+        break;
+    }
 
     switch( aCol )
     {
     case FDC_NAME:
-        field.SetName( aValue );
+        field.SetName( value );
         break;
 
     case FDC_VALUE:
     {
-        wxString value( aValue );
-
         if( m_parentType == SCH_SHEET_T && aRow == SHEETFILENAME )
         {
             wxFileName fn( value );
@@ -673,53 +704,53 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
     }
 
     case FDC_SHOWN:
-        field.SetVisible( BoolFromString( aValue ) );
+        field.SetVisible( BoolFromString( value ) );
         break;
 
     case FDC_H_ALIGN:
-        if( aValue == _( "Left" ) )
+        if( value == _( "Left" ) )
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        else if( aValue == _( "Center" ) )
+        else if( value == _( "Center" ) )
             field.SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-        else if( aValue == _( "Right" ) )
+        else if( value == _( "Right" ) )
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         else
-            wxFAIL_MSG( wxT( "unknown horizontal alignment: " ) + aValue );
+            wxFAIL_MSG( wxT( "unknown horizontal alignment: " ) + value );
 
         break;
 
     case FDC_V_ALIGN:
-        if( aValue == _( "Top" ) )
+        if( value == _( "Top" ) )
             field.SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-        else if( aValue == _( "Center" ) )
+        else if( value == _( "Center" ) )
             field.SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-        else if( aValue == _( "Bottom" ) )
+        else if( value == _( "Bottom" ) )
             field.SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         else
-            wxFAIL_MSG( wxT( "unknown vertical alignment: " ) + aValue);
+            wxFAIL_MSG( wxT( "unknown vertical alignment: " ) + value);
 
         break;
 
     case FDC_ITALIC:
-        field.SetItalic( BoolFromString( aValue ) );
+        field.SetItalic( BoolFromString( value ) );
         break;
 
     case FDC_BOLD:
-        field.SetBold( BoolFromString( aValue ) );
+        field.SetBold( BoolFromString( value ) );
         break;
 
     case FDC_TEXT_SIZE:
-        field.SetTextSize( wxSize( m_frame->ValueFromString( aValue ),
-                                   m_frame->ValueFromString( aValue ) ) );
+        field.SetTextSize( wxSize( m_frame->ValueFromString( value ),
+                                   m_frame->ValueFromString( value ) ) );
         break;
 
     case FDC_ORIENTATION:
-        if( aValue == _( "Horizontal" ) )
+        if( value == _( "Horizontal" ) )
             field.SetTextAngle( ANGLE_HORIZONTAL );
-        else if( aValue == _( "Vertical" ) )
+        else if( value == _( "Vertical" ) )
             field.SetTextAngle( ANGLE_VERTICAL );
         else
-            wxFAIL_MSG( wxT( "unknown orientation: " ) + aValue );
+            wxFAIL_MSG( wxT( "unknown orientation: " ) + value );
 
         break;
 
@@ -728,17 +759,17 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         pos = field.GetTextPos();
 
         if( aCol == FDC_POSX )
-            pos.x = m_frame->ValueFromString( aValue );
+            pos.x = m_frame->ValueFromString( value );
         else
-            pos.y = m_frame->ValueFromString( aValue );
+            pos.y = m_frame->ValueFromString( value );
 
         field.SetTextPos( pos );
         break;
 
     case FDC_FONT:
-        if( aValue == DEFAULT_FONT_NAME )
+        if( value == DEFAULT_FONT_NAME )
             field.SetFont( nullptr );
-        else if( aValue == KICAD_FONT_NAME )
+        else if( value == KICAD_FONT_NAME )
             field.SetFont( KIFONT::FONT::GetFont( wxEmptyString, field.IsBold(), field.IsItalic() ) );
         else
             field.SetFont( KIFONT::FONT::GetFont( aValue, field.IsBold(), field.IsItalic() ) );
@@ -746,7 +777,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         break;
 
     case FDC_COLOR:
-        field.SetTextColor( wxColor( aValue ) );
+        field.SetTextColor( wxColor( value ) );
         break;
 
     default:

@@ -1489,7 +1489,7 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE::DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWi
 	bSizerRightButts->Add( m_deleteButton, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bLeftSizer->Add( bSizerRightButts, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bLeftSizer->Add( bSizerRightButts, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizerThickness;
 	fgSizerThickness = new wxFlexGridSizer( 0, 4, 0, 0 );
@@ -1515,7 +1515,7 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE::DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWi
 	bLeftSizer->Add( fgSizerThickness, 0, wxALL|wxEXPAND, 10 );
 
 
-	bSizerUpper->Add( bLeftSizer, 1, wxEXPAND, 5 );
+	bSizerUpper->Add( bLeftSizer, 1, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -1545,10 +1545,10 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE::DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWi
 	bRightSizer->Add( m_warningSizer, 0, wxEXPAND|wxRIGHT, 10 );
 
 
-	bSizerUpper->Add( bRightSizer, 1, wxEXPAND, 5 );
+	bSizerUpper->Add( bRightSizer, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerUpper, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline3, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );

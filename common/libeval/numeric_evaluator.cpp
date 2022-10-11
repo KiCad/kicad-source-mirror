@@ -2,7 +2,7 @@
  * This file is part of libeval, a simple math expression evaluator
  *
  * Copyright (C) 2017 Michael Geselbracht, mgeselbracht3@gmail.com
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,13 +54,7 @@ NUMERIC_EVALUATOR::NUMERIC_EVALUATOR( EDA_UNITS aUnits )
 
     m_parser = numEval::ParseAlloc( malloc );
 
-    switch( aUnits )
-    {
-    case EDA_UNITS::MILLIMETRES: m_defaultUnits = Unit::MM;   break;
-    case EDA_UNITS::MILS:        m_defaultUnits = Unit::Mil;  break;
-    case EDA_UNITS::INCHES:      m_defaultUnits = Unit::Inch; break;
-    default:                     m_defaultUnits = Unit::MM;   break;
-    }
+    SetDefaultUnits( aUnits );
 }
 
 
@@ -82,6 +76,18 @@ void NUMERIC_EVALUATOR::Clear()
     m_token.input = nullptr;
     m_parseError = true;
     m_originalText = wxEmptyString;
+}
+
+
+void NUMERIC_EVALUATOR::SetDefaultUnits( EDA_UNITS aUnits )
+{
+    switch( aUnits )
+    {
+    case EDA_UNITS::MILLIMETRES: m_defaultUnits = Unit::MM;   break;
+    case EDA_UNITS::MILS:        m_defaultUnits = Unit::Mil;  break;
+    case EDA_UNITS::INCHES:      m_defaultUnits = Unit::Inch; break;
+    default:                     m_defaultUnits = Unit::MM;   break;
+    }
 }
 
 

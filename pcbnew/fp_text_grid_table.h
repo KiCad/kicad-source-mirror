@@ -89,6 +89,9 @@ private:
     wxGridCellAttr* m_boolColAttr;
     wxGridCellAttr* m_orientationColAttr;
     wxGridCellAttr* m_layerColAttr;
+
+    std::unique_ptr<NUMERIC_EVALUATOR>        m_eval;
+    std::map< std::pair<int, int>, wxString > m_evalOriginal;
 };
 
 

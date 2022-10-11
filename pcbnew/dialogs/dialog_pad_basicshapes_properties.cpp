@@ -265,6 +265,11 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
     m_deleteButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
     m_warningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
 
+    m_gridCornersList->SetUnitsProvider( aFrame );
+    m_gridCornersList->SetAutoEvalCols( { 0, 1 } );
+
+    m_gridCornersList->SetDefaultRowSize( m_gridCornersList->GetDefaultRowSize() + 4 );
+
     // Test for acceptable polygon (more than 2 corners, and not self-intersecting) and
     // remove any redundant corners.  A warning message is displayed if not OK.
     doValidate( true );
@@ -312,19 +317,13 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
     }
 
     // enter others corner coordinates
-    wxString msg;
-
     for( unsigned row = 0; row < m_currPoints.size(); ++row )
     {
         // Row label is "Corner x"
-        msg.Printf( _( "Corner %d" ), row+1 );
-        m_gridCornersList->SetRowLabelValue( row, msg );
+        m_gridCornersList->SetRowLabelValue( row, wxString::Format( _( "Corner %d" ), row+1 ) );
 
-        msg = m_frame->StringFromValue( m_currPoints[row].x, true );
-        m_gridCornersList->SetCellValue( row, 0, msg );
-
-        msg = m_frame->StringFromValue( m_currPoints[row].y, true );
-        m_gridCornersList->SetCellValue( row, 1, msg );
+        m_gridCornersList->SetUnitValue( row, 0, m_currPoints[row].x );
+        m_gridCornersList->SetUnitValue( row, 1, m_currPoints[row].y );
     }
 
     return true;
@@ -556,21 +555,21 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onGridSelect( wxGridRangeSelectEvent& even
 
 void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging( wxGridEvent& event )
 {
-    int      row = event.GetRow();
-    int      col = event.GetCol();
-    wxString msg = event.GetString();
+    int row = event.GetRow();
+    int col = event.GetCol();
 
-    if( msg.IsEmpty() )
-        return;
+    CallAfter(
+            [this, row, col]()
+            {
+                if( col == 0 )  // Set the X value
+                    m_currPoints[row].x = m_gridCornersList->GetUnitValue( row, col );
+                else            // Set the Y value
+                    m_currPoints[row].y = m_gridCornersList->GetUnitValue( row, col );
 
-    if( col == 0 )  // Set the X value
-        m_currPoints[row].x = m_frame->ValueFromString( msg );
-    else            // Set the Y value
-        m_currPoints[row].y = m_frame->ValueFromString( msg );
+                Validate();
 
-    Validate();
-
-    m_panelPoly->Refresh();
+                m_panelPoly->Refresh();
+            } );
 }
 
 

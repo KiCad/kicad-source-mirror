@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <base_units.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <widgets/wx_grid.h>
@@ -62,10 +61,14 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aPar
         m_extensionOffset( aFrame, m_lblExtensionOffset, m_dimensionExtensionOffset,
                            m_dimensionExtensionOffsetUnits )
 {
-    m_Parent = aParent;
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
 
+    m_grid->SetUnitsProvider( m_Frame );
+    m_grid->SetAutoEvalCols( { COL_LINE_THICKNESS,
+                               COL_TEXT_WIDTH,
+                               COL_TEXT_HEIGHT,
+                               COL_TEXT_THICKNESS } );
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
     // Work around a bug in wxWidgets where it fails to recalculate the grid height
@@ -196,12 +199,6 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
 }
 
 
-int PANEL_SETUP_TEXT_AND_GRAPHICS::getGridValue( int aRow, int aCol )
-{
-    return m_Frame->ValueFromString( m_grid->GetCellValue( aRow, aCol ) );
-}
-
-
 bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 {
     if( !m_grid->CommitPendingChanges() )
@@ -209,14 +206,14 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 
     for( int i = 0; i < ROW_COUNT; ++i )
     {
-        m_BrdSettings->m_LineThickness[ i ] = getGridValue( i, COL_LINE_THICKNESS );
+        m_BrdSettings->m_LineThickness[ i ] = m_grid->GetUnitValue( i, COL_LINE_THICKNESS );
 
         if( i == ROW_EDGES || i == ROW_COURTYARD )
             continue;
 
-        m_BrdSettings->m_TextSize[ i ] = wxSize( getGridValue( i, COL_TEXT_WIDTH ),
-                                                 getGridValue( i, COL_TEXT_HEIGHT ) );
-        m_BrdSettings->m_TextThickness[ i ] = getGridValue( i, COL_TEXT_THICKNESS );
+        m_BrdSettings->m_TextSize[ i ] = wxSize( m_grid->GetUnitValue( i, COL_TEXT_WIDTH ),
+                                                 m_grid->GetUnitValue( i, COL_TEXT_HEIGHT ) );
+        m_BrdSettings->m_TextThickness[ i ] = m_grid->GetUnitValue( i, COL_TEXT_THICKNESS );
         m_BrdSettings->m_TextItalic[ i ] =
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_ITALIC ) );
         m_BrdSettings->m_TextUpright[ i ] =

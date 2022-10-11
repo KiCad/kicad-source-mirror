@@ -67,6 +67,8 @@ FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
     m_layerColAttr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_frame ) );
     m_layerColAttr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, {} ) );
 
+    m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
+
     m_frame->Bind( UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
 }
 
@@ -191,7 +193,17 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
 
 wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 {
+    wxGrid*        grid = GetView();
     const FP_TEXT& text = this->at( (size_t) aRow );
+
+    if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol
+            && grid->IsCellEditControlShown() )
+    {
+        auto it = m_evalOriginal.find( { aRow, aCol } );
+
+        if( it != m_evalOriginal.end() )
+            return it->second;
+    }
 
     switch( aCol )
     {
@@ -263,27 +275,49 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
     FP_TEXT& text = this->at( (size_t) aRow );
     VECTOR2I pos;
+    wxString value = aValue;
+
+    switch( aCol )
+    {
+    case FPT_WIDTH:
+    case FPT_HEIGHT:
+    case FPT_THICKNESS:
+    case FPT_XOFFSET:
+    case FPT_YOFFSET:
+        m_eval->SetDefaultUnits( m_frame->GetUserUnits() );
+
+        if( m_eval->Process( value ) )
+        {
+            m_evalOriginal[ { aRow, aCol } ] = value;
+            value = m_eval->Result();
+        }
+
+        break;
+
+    default:
+        break;
+    }
 
     switch( aCol )
     {
     case FPT_TEXT:
-        text.SetText( aValue );
+        text.SetText( value );
         break;
 
     case FPT_WIDTH:
-        text.SetTextWidth( m_frame->ValueFromString( aValue ) );
+        text.SetTextWidth( m_frame->ValueFromString( value ) );
         break;
 
     case FPT_HEIGHT:
-        text.SetTextHeight( m_frame->ValueFromString( aValue ) );
+        text.SetTextHeight( m_frame->ValueFromString( value ) );
         break;
 
     case FPT_THICKNESS:
-        text.SetTextThickness( m_frame->ValueFromString( aValue ) );
+        text.SetTextThickness( m_frame->ValueFromString( value ) );
         break;
 
     case FPT_ORIENTATION:
-        text.SetTextAngle( m_frame->AngleValueFromString( aValue ) );
+        text.SetTextAngle( m_frame->AngleValueFromString( value ) );
         text.SetDrawCoord();
         break;
 
@@ -292,9 +326,9 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         pos = text.GetPos0();
 
         if( aCol == FPT_XOFFSET )
-            pos.x = m_frame->ValueFromString( aValue );
+            pos.x = m_frame->ValueFromString( value );
         else
-            pos.y = m_frame->ValueFromString( aValue );
+            pos.y = m_frame->ValueFromString( value );
 
         text.SetPos0( pos );
         text.SetDrawCoord();

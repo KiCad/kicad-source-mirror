@@ -179,7 +179,6 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
     m_parent = static_cast<PAGED_DIALOG*>( aParent->GetParent() );
 
     m_textItemsGrid->SetDefaultRowSize( m_textItemsGrid->GetDefaultRowSize() + 4 );
-    m_graphicsGrid->SetDefaultRowSize( m_graphicsGrid->GetDefaultRowSize() + 4 );
 
     m_textItemsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE(), true );
     m_textItemsGrid->PushEventHandler( new GRID_TRICKS( m_textItemsGrid ) );
@@ -195,6 +194,14 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
     attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( nullptr ) );
     attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( nullptr, {} ) );
     m_textItemsGrid->SetColAttr( 2, attr );
+
+    m_graphicsGrid->SetUnitsProvider( aUnitsProvider );
+    m_graphicsGrid->SetAutoEvalCols( { COL_LINE_THICKNESS,
+                                       COL_TEXT_WIDTH,
+                                       COL_TEXT_HEIGHT,
+                                       COL_TEXT_THICKNESS } );
+
+    m_graphicsGrid->SetDefaultRowSize( m_graphicsGrid->GetDefaultRowSize() + 4 );
 
     // Work around a bug in wxWidgets where it fails to recalculate the grid height
     // after changing the default row size

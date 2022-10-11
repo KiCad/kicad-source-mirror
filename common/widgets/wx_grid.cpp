@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 #include <widgets/wx_grid.h>
 #include <widgets/ui_common.h>
 #include <algorithm>
-
+#include <core/kicad_algo.h>
 
 #define MIN_GRIDCELL_MARGIN 3
 
@@ -34,7 +34,8 @@
 WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
                   long style, const wxString& name ) :
         wxGrid( parent, id, pos, size, style, name ),
-        m_weOwnTable( false )
+        m_weOwnTable( false ),
+        m_unitsProvider( nullptr )
 {
     SetDefaultCellOverflow( false );
 
@@ -45,6 +46,8 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
     Connect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
 #endif
 
+    Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
+    Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );
 }
 
 
@@ -126,15 +129,62 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
 void WX_GRID::onGridCellSelect( wxGridEvent& aEvent )
 {
     // Highlight the selected cell.
-    // Calling SelectBlock() allows a visual effect when cells are selected
-    // by tab or arrow keys.
-    // Otherwise, one cannot really know what actual cell is selected
+    // Calling SelectBlock() allows a visual effect when cells are selected by tab or arrow keys.
+    // Otherwise, one cannot really know what actual cell is selected.
     int row = aEvent.GetRow();
     int col = aEvent.GetCol();
 
     if( row >= 0 && col >= 0 )
-        SelectBlock(row,col,row,col,false);
+        SelectBlock( row, col, row, col, false );
 }
+
+
+void WX_GRID::onCellEditorShown( wxGridEvent& aEvent )
+{
+    if( alg::contains( m_autoEvalCols, aEvent.GetCol() ) )
+    {
+        int row = aEvent.GetRow();
+        int col = aEvent.GetCol();
+
+        const std::pair<wxString, wxString>& beforeAfter = m_evalBeforeAfter[ { row, col } ];
+
+        if( GetCellValue( row, col ) == beforeAfter.second )
+            SetCellValue( row, col, beforeAfter.first );
+    }
+}
+
+
+void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
+{
+    if( alg::contains( m_autoEvalCols, aEvent.GetCol() ) )
+    {
+        m_eval->SetDefaultUnits( m_unitsProvider->GetUserUnits() );
+
+        int row = aEvent.GetRow();
+        int col = aEvent.GetCol();
+
+        CallAfter(
+              [this, row, col]()
+              {
+                  wxString stringValue = GetCellValue( row, col );
+
+                  if( m_eval->Process( stringValue ) )
+                  {
+                      int      val = m_unitsProvider->ValueFromString( m_eval->Result() );
+                      wxString evalValue = m_unitsProvider->StringFromValue( val, true );
+
+                      if( stringValue != evalValue )
+                      {
+                          SetCellValue( row, col, evalValue );
+                          m_evalBeforeAfter[ { row, col } ] = { stringValue, evalValue };
+                      }
+                  }
+              } );
+    }
+
+    aEvent.Skip();
+}
+
 
 void WX_GRID::DestroyTable( wxGridTableBase* aTable )
 {
@@ -269,6 +319,35 @@ bool WX_GRID::CommitPendingChanges( bool aQuietMode )
     }
 
     return true;
+}
+
+
+void WX_GRID::SetUnitsProvider( UNITS_PROVIDER* aProvider )
+{
+    m_unitsProvider = aProvider;
+    m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_unitsProvider->GetUserUnits() );
+}
+
+
+int WX_GRID::GetUnitValue( int aRow, int aCol )
+{
+    wxString stringValue = GetCellValue( aRow, aCol );
+
+    if( alg::contains( m_autoEvalCols, aCol ) )
+    {
+        m_eval->SetDefaultUnits( m_unitsProvider->GetUserUnits() );
+
+        if( m_eval->Process( stringValue ) )
+            stringValue = m_eval->Result();
+    }
+
+    return m_unitsProvider->ValueFromString( stringValue );
+}
+
+
+void WX_GRID::SetUnitValue( int aRow, int aCol, int aValue )
+{
+    SetCellValue( aRow, aCol, m_unitsProvider->StringFromValue( aValue, true ) );
 }
 
 
