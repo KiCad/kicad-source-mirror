@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +103,9 @@ private:
     PANEL_FP_PROPERTIES_3D_MODEL*    m_3dPanel;
 
     bool                             m_initialized;
+
+    wxSize                           m_gridSize;
+    wxSize                           m_lastRequestedSize;
 };
 
 

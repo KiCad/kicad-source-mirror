@@ -36,7 +36,6 @@
 #include <kiplatform/ui.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
-#include <widgets/wx_grid.h>
 #include <settings/settings_manager.h>
 #include <ee_collectors.h>
 #include <symbol_library.h>
@@ -299,6 +298,9 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         DIALOG_SYMBOL_PROPERTIES_BASE( aParent ),
         m_symbol( nullptr ),
         m_part( nullptr ),
+        m_fieldsSize( 0, 0 ),
+        m_lastRequestedSize( 0, 0 ),
+        m_editorShown( false ),
         m_fields( nullptr ),
         m_dataModel( nullptr )
 {
@@ -311,9 +313,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     // wxASSERT( m_part );
 
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_fieldsGrid, m_symbol );
-
-    m_editorShown = false;
-    m_lastRequestedSize = wxSize( 0, 0 );
 
 #ifndef KICAD_SPICE
     m_spiceFieldsButton->Hide();

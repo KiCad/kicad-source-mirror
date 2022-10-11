@@ -39,7 +39,6 @@
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/text_ctrl_eval.h>
-#include <widgets/wx_grid.h>
 #include <settings/settings_manager.h>
 
 #include <panel_fp_properties_3d_model.h>
@@ -69,7 +68,9 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl,
                             m_PasteMarginRatioUnits ),
         m_returnValue( FP_PROPS_CANCEL ),
-        m_initialized( false )
+        m_initialized( false ),
+        m_gridSize( 0, 0 ),
+        m_lastRequestedSize( 0, 0 )
 {
     // Create the 3D models page
     m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_NoteBook );
@@ -678,9 +679,6 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
     if( !m_initialized )
         return;
 
-    if( !m_itemsGrid->IsCellEditControlShown() )
-        adjustGridColumns();
-
     // Handle a grid error.  This is delayed to OnUpdateUI so that we can change focus
     // even when the original validation was triggered from a killFocus event, and so
     // that the corresponding notebook page can be shown in the background when triggered
@@ -733,20 +731,35 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
 
 void DIALOG_FOOTPRINT_PROPERTIES::OnGridSize( wxSizeEvent& aEvent )
 {
-    // A trick to fix a cosmetic issue: when, in m_itemsGrid, a layer selector widget
-    // has the focus (is activated in column 6) when resizing the grid, the widget
-    // is not moved. So just change the widget having the focus in this case
-    if( m_NoteBook->GetSelection() == 0 && !m_itemsGrid->HasFocus() )
-    {
-        int col = m_itemsGrid->GetGridCursorCol();
+    wxSize new_size = aEvent.GetSize();
 
-        if( col == 6 )  // a layer selector widget can be activated
-             m_itemsGrid->SetFocus();
+    if( ( !m_itemsGrid->IsCellEditControlShown() || m_lastRequestedSize != new_size )
+            && m_gridSize != new_size )
+    {
+        m_gridSize = new_size;
+
+        // A trick to fix a cosmetic issue: when, in m_itemsGrid, a layer selector widget has
+        // the focus (is activated in column 6) when resizing the grid, the widget is not moved.
+        // So just change the widget having the focus in this case
+        if( m_NoteBook->GetSelection() == 0 && !m_itemsGrid->HasFocus() )
+        {
+            int col = m_itemsGrid->GetGridCursorCol();
+
+            if( col == 6 )  // a layer selector widget can be activated
+                 m_itemsGrid->SetFocus();
+        }
+
+        adjustGridColumns();
     }
 
-    adjustGridColumns();
+    // We store this value to check whether the dialog is changing size.  This might indicate
+    // that the user is scaling the dialog with an editor shown.  Some editors do not close
+    // (at least on GTK) when the user drags a dialog corner
+    m_lastRequestedSize = new_size;
 
+    // Always propagate for a grid repaint (needed if the height changes, as well as width)
     aEvent.Skip();
+
 }
 
 

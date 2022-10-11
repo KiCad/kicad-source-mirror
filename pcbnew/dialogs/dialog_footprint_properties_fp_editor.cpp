@@ -133,7 +133,9 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl,
                    m_SolderPasteMarginUnits ),
     m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl,
-                        m_PasteMarginRatioUnits )
+                        m_PasteMarginRatioUnits ),
+    m_gridSize( 0, 0 ),
+    m_lastRequestedSize( 0, 0 )
 {
     // Create the 3D models page
     m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_NoteBook );
@@ -812,9 +814,6 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns()
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    if( !m_itemsGrid->IsCellEditControlShown() )
-        adjustGridColumns();
-
     // Handle a delayed focus.  The delay allows us to:
     // a) change focus when the error was triggered from within a killFocus handler
     // b) show the correct notebook page in the background before the error dialog comes up
@@ -864,9 +863,34 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridSize( wxSizeEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridSize( wxSizeEvent& aEvent )
 {
-    adjustGridColumns();
+    wxSize new_size = aEvent.GetSize();
 
-    event.Skip();
+    if( ( !m_itemsGrid->IsCellEditControlShown() || m_lastRequestedSize != new_size )
+            && m_gridSize != new_size )
+    {
+        m_gridSize = new_size;
+
+        // A trick to fix a cosmetic issue: when, in m_itemsGrid, a layer selector widget has
+        // the focus (is activated in column 6) when resizing the grid, the widget is not moved.
+        // So just change the widget having the focus in this case
+        if( m_NoteBook->GetSelection() == 0 && !m_itemsGrid->HasFocus() )
+        {
+            int col = m_itemsGrid->GetGridCursorCol();
+
+            if( col == 6 )  // a layer selector widget can be activated
+                 m_itemsGrid->SetFocus();
+        }
+
+        adjustGridColumns();
+    }
+
+    // We store this value to check whether the dialog is changing size.  This might indicate
+    // that the user is scaling the dialog with an editor shown.  Some editors do not close
+    // (at least on GTK) when the user drags a dialog corner
+    m_lastRequestedSize = new_size;
+
+    // Always propagate for a grid repaint (needed if the height changes, as well as width)
+    aEvent.Skip();
 }
