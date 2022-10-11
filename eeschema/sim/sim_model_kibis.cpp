@@ -242,6 +242,7 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
     ReadDataFields( 2, &aFields );
 }
 
+
 void SIM_MODEL_KIBIS::CreatePins( unsigned aSymbolPinCount )
 {
     SIM_MODEL::CreatePins( aSymbolPinCount );
@@ -280,7 +281,7 @@ void SIM_MODEL_KIBIS::SetBaseModel( const SIM_MODEL& aBaseModel )
     // to IBIS device model type we have multiple types of drivers available for the same sourced
     // model. And we don't want to inherit the default values anyway. So we just store these models
     // and use the only for Spice code generation.
-    m_sourceModel = &aBaseModel;
+    m_sourceModel = dynamic_cast<const SIM_MODEL_KIBIS*>( &aBaseModel );
 }
 
 

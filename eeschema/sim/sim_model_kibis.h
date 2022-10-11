@@ -69,19 +69,15 @@ public:
 
     std::vector<std::pair<std::string, std::string>> GetIbisPins() const
     {
-        return GetBaseModel()
-                       ? dynamic_cast<const SIM_MODEL_KIBIS*>( GetBaseModel() )->GetIbisPins()
-                       : m_ibisPins;
-    };
+        return m_sourceModel ? m_sourceModel->GetIbisPins() : m_ibisPins;
+    }
 
     std::vector<std::string> GetIbisModels() const { return m_ibisModels; };
 
     std::string GetComponentName() const
     {
-        return GetBaseModel()
-                       ? dynamic_cast<const SIM_MODEL_KIBIS*>( GetBaseModel() )->GetComponentName()
-                       : m_componentName;
-    };
+        return m_sourceModel ? m_sourceModel->GetComponentName() : m_componentName;
+    }
 
 
     const PARAM& GetParam( unsigned aParamIndex ) const override { return m_params.at( aParamIndex ); };
@@ -103,7 +99,7 @@ private:
     static std::vector<PARAM::INFO> makeRectWaveformParamInfos();
     static std::vector<PARAM::INFO> makePrbsWaveformParamInfos();
 
-    const SIM_MODEL*                                 m_sourceModel;
+    const SIM_MODEL_KIBIS*                           m_sourceModel;
     std::vector<std::string>                         m_ibisModels;
     std::vector<std::pair<std::string, std::string>> m_ibisPins;
     std::string                                      m_componentName;
