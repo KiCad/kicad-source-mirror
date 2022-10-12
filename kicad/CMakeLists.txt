@@ -100,7 +100,6 @@ if( APPLE )
         )
 
     set_target_properties( kicad-cli PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/kicad/Info.plist
         RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
         )
 
@@ -138,7 +137,7 @@ target_include_directories( kicad-cli PRIVATE
     $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
-install( TARGETS kicad kicad-cli
+install( TARGETS kicad
     DESTINATION ${KICAD_BIN}
     COMPONENT binary
     )
