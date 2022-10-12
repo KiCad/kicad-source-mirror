@@ -457,6 +457,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 //
                 m_dragAdditions.clear();
                 m_specialCaseLabels.clear();
+                m_specialCaseSheetPins.clear();
                 internalPoints.clear();
                 clearNewDragLines();
 
@@ -713,6 +714,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     // selected lines
                     moveItem( item, splitDelta );
                     updateItem( item, false );
+
+                    // Update any lines connected to sheet pins to the sheet pin's location
+                    // (which may not exactly follow the splitDelta as the pins are constrained
+                    // along the sheet edges.
+                    for( const auto& [pin, lineEnd] : m_specialCaseSheetPins )
+                    {
+                        if( lineEnd.second )
+                            lineEnd.first->SetStartPoint( pin->GetPosition() );
+                        else
+                            lineEnd.first->SetEndPoint( pin->GetPosition() );
+                    }
                 }
             }
 
@@ -977,6 +989,19 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
         }
 
         case SCH_SHEET_T:
+            if( aOriginalItem->Type() == SCH_LINE_T )
+            {
+                SCH_LINE* line = static_cast<SCH_LINE*>( aOriginalItem );
+
+                for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( test )->GetPins() )
+                {
+                    if( pin->IsConnected( aPoint ) )
+                        m_specialCaseSheetPins[ pin ] = { line, line->GetStartPoint() == aPoint };
+                }
+            }
+
+            KI_FALLTHROUGH;
+
         case SCH_SYMBOL_T:
         case SCH_JUNCTION_T:
         case SCH_NO_CONNECT_T:
@@ -1021,21 +1046,43 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
 }
 
 
-void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint,
+void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR2I& aPoint,
                                            EDA_ITEMS& aList )
 {
     EE_RTREE&         items = m_frame->GetScreen()->Items();
-    EE_RTREE::EE_TYPE itemsOverlappingRTree = items.Overlapping( aOriginalItem->GetBoundingBox() );
+    EE_RTREE::EE_TYPE itemsOverlappingRTree = items.Overlapping( aSelectedItem->GetBoundingBox() );
     std::vector<SCH_ITEM*> itemsConnectable;
     bool              ptHasUnselectedJunction = false;
-    SCH_LINE*         newWire = nullptr;
+
+    auto makeNewWire =
+            [&]( SCH_ITEM* fixed, SCH_ITEM* selected )
+            {
+                SCH_LINE* newWire;
+
+                // Add a new newWire between the fixed item and the selected item so the selected
+                // item can be dragged.
+                if( fixed->GetLayer() == LAYER_BUS_JUNCTION || selected->GetLayer() == LAYER_BUS )
+                    newWire = new SCH_LINE( aPoint, LAYER_BUS );
+                else
+                    newWire = new SCH_LINE( aPoint, LAYER_WIRE );
+
+                newWire->SetFlags(IS_NEW );
+                newWire->SetConnectivityDirty( true );
+                newWire->SetLastResolvedState( selected );
+                m_frame->AddToScreen( newWire, m_frame->GetScreen() );
+
+                newWire->SetFlags(SELECTED_BY_DRAG | STARTPOINT );
+                aList.push_back( newWire );
+
+                return newWire;
+            };
 
     for( SCH_ITEM* item : itemsOverlappingRTree )
     {
         // Skip ourselves, skip already selected items (but not lines, they need both ends tested)
         // and skip unconnectable items
-        if( item == aOriginalItem || ( item->Type() != SCH_LINE_T && item->IsSelected() )
-            || !item->CanConnect( aOriginalItem ) )
+        if( item == aSelectedItem || ( item->Type() != SCH_LINE_T && item->IsSelected() )
+            || !item->CanConnect( aSelectedItem ) )
         {
             continue;
         }
@@ -1051,6 +1098,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
             break;
         }
     }
+
+    SCH_LINE* newWire = nullptr;
 
     for( SCH_ITEM* test : itemsConnectable )
     {
@@ -1097,7 +1146,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
             }
             else
             {
-                switch( aOriginalItem->Type() )
+                switch( aSelectedItem->Type() )
                 {
                 // These items can connect anywhere along a line
                 case SCH_BUS_BUS_ENTRY_T:
@@ -1106,19 +1155,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
                 case SCH_HIER_LABEL_T:
                 case SCH_GLOBAL_LABEL_T:
                 case SCH_DIRECTIVE_LABEL_T:
-                    // Only add a line if this line is unselected,
-                    // if the label and line are both selected they'll move together
+                    // Only add a line if this line is unselected; if the label and line are both
+                    // selected they'll move together
                     if( line->HitTest( aPoint, 1 ) && !line->HasFlag( SELECTED ) )
                     {
-                        // Add a new line so we have something to drag
-                        newWire = new SCH_LINE( aPoint, line->GetLayer() );
-                        newWire->SetFlags( IS_NEW );
-                        newWire->SetConnectivityDirty( true );
-                        newWire->SetLastResolvedState( line );
-                        m_frame->AddToScreen( newWire, m_frame->GetScreen() );
-
-                        newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
-                        aList.push_back( newWire );
+                        newWire = makeNewWire( line, aSelectedItem );
 
                         if( aPoint != line->GetStartPoint() && aPoint != line->GetEndPoint() )
                         {
@@ -1167,30 +1208,35 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
         }
 
         case SCH_SHEET_T:
+            for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( test )->GetPins() )
+            {
+                if( pin->IsConnected( aPoint ) )
+                {
+                    if( pin->IsSelected() && aSelectedItem->Type() == SCH_LINE_T )
+                    {
+                        SCH_LINE* line = static_cast<SCH_LINE*>( aSelectedItem );
+                        m_specialCaseSheetPins[ pin ] = { line, line->GetStartPoint() == aPoint };
+                    }
+                    else if( !newWire )
+                    {
+                        // Add a new wire between the sheetpin and the selected item so the
+                        // selected item can be dragged.
+                        newWire = makeNewWire( pin, aSelectedItem );
+                    }
+                }
+            }
+
+            break;
+
         case SCH_SYMBOL_T:
         case SCH_JUNCTION_T:
             if( test->IsConnected( aPoint ) && !newWire )
             {
                 // Add a new wire between the symbol or junction and the selected item so
                 // the selected item can be dragged.
-                if( test->GetLayer() == LAYER_BUS_JUNCTION
-                        || aOriginalItem->GetLayer() == LAYER_BUS )
-                {
-                    newWire = new SCH_LINE( aPoint, LAYER_BUS );
-                }
-                else
-                {
-                    newWire = new SCH_LINE( aPoint, LAYER_WIRE );
-                }
-
-                newWire->SetFlags( IS_NEW );
-                newWire->SetConnectivityDirty( true );
-                newWire->SetLastResolvedState( aOriginalItem );
-                m_frame->AddToScreen( newWire, m_frame->GetScreen() );
-
-                newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
-                aList.push_back( newWire );
+                newWire = makeNewWire( test, aSelectedItem );
             }
+
             break;
 
         case SCH_NO_CONNECT_T:
@@ -1212,10 +1258,10 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
                 break;
 
             // Select labels that are connected to a wire (or bus) being moved.
-            if( aOriginalItem->Type() == SCH_LINE_T && test->CanConnect( aOriginalItem ) )
+            if( aSelectedItem->Type() == SCH_LINE_T && test->CanConnect( aSelectedItem ) )
             {
                 SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( test );
-                SCH_LINE*       line = static_cast<SCH_LINE*>( aOriginalItem );
+                SCH_LINE*       line = static_cast<SCH_LINE*>( aSelectedItem );
 
                 bool oneEndFixed = !line->HasFlag( STARTPOINT ) || !line->HasFlag( ENDPOINT );
 
@@ -1249,23 +1295,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
             {
                 // Add a new wire between the label and the selected item so the selected item
                 // can be dragged.
-                if( test->GetLayer() == LAYER_BUS_JUNCTION
-                        || aOriginalItem->GetLayer() == LAYER_BUS )
-                {
-                    newWire = new SCH_LINE( aPoint, LAYER_BUS );
-                }
-                else
-                {
-                    newWire = new SCH_LINE( aPoint, LAYER_WIRE );
-                }
-
-                newWire->SetFlags( IS_NEW );
-                newWire->SetConnectivityDirty( true );
-                newWire->SetLastResolvedState( aOriginalItem );
-                m_frame->AddToScreen( newWire, m_frame->GetScreen() );
-
-                newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
-                aList.push_back( newWire );
+                newWire = makeNewWire( test, aSelectedItem );
             }
 
             break;
@@ -1277,15 +1307,15 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
                 break;
 
             // Select bus entries that are connected to a bus being moved.
-            if( aOriginalItem->Type() == SCH_LINE_T && test->CanConnect( aOriginalItem ) )
+            if( aSelectedItem->Type() == SCH_LINE_T && test->CanConnect( aSelectedItem ) )
             {
-                SCH_LINE* line = static_cast<SCH_LINE*>( aOriginalItem );
+                SCH_LINE* line = static_cast<SCH_LINE*>( aSelectedItem );
 
                 if( ( !line->HasFlag( STARTPOINT ) && test->IsConnected( line->GetStartPoint() ) )
                     || ( !line->HasFlag( ENDPOINT ) && test->IsConnected( line->GetEndPoint() ) ) )
                 {
-                    //If we have a line selected at only one end, don't grab bus entries
-                    //connected directly to the unselected endpoint
+                    // If we have a line selected at only one end, don't grab bus entries
+                    // connected directly to the unselected endpoint
                     continue;
                 }
 

@@ -69,7 +69,7 @@ private:
     ///< Connected items with no wire are included (as there is no wire to adjust for the drag).
     ///< Connected wires are included with any un-connected ends flagged (STARTPOINT or ENDPOINT).
     void getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint, EDA_ITEMS& aList );
-    void getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint, EDA_ITEMS& aList );
+    void getConnectedDragItems( SCH_ITEM* fixed, const VECTOR2I& selected, EDA_ITEMS& aList );
 
     void orthoLineDrag( SCH_LINE* line, const VECTOR2I& splitDelta, int& xBendCount,
                         int& yBendCount, const EE_GRID_HELPER& grid );
@@ -110,6 +110,9 @@ private:
     // are attached to wires which have only one end moving.
     std::map<SCH_LABEL_BASE*, SPECIAL_CASE_LABEL_INFO> m_specialCaseLabels;
 
+    // A map of sheet pins to the line-endings (true == start) they're connected to.  Sheet
+    // pins are constrained in their movement so their attached lines must be too.
+    std::map<SCH_SHEET_PIN*, std::pair<SCH_LINE*, bool>> m_specialCaseSheetPins;
 };
 
 #endif //KICAD_SCH_MOVE_TOOL_H
