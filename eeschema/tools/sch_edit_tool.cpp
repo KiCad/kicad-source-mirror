@@ -2129,6 +2129,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( item );
             EDA_TEXT* new_eda_text = dynamic_cast<EDA_TEXT*>( newtext );
 
+            new_eda_text->SetFont( eda_text->GetFont() );
             new_eda_text->SetTextSize( eda_text->GetTextSize() );
             new_eda_text->SetTextThickness( eda_text->GetTextThickness() );
             new_eda_text->SetItalic( eda_text->IsItalic() );
