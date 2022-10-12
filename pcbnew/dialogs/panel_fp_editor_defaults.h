@@ -29,7 +29,7 @@ class FOOTPRINT_EDITOR_SETTINGS;
 class PANEL_FP_EDITOR_DEFAULTS : public PANEL_FP_EDITOR_DEFAULTS_BASE
 {
 public:
-    PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent, EDA_BASE_FRAME* aUnitsProvider );
+    PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider );
     ~PANEL_FP_EDITOR_DEFAULTS() override;
 
     bool TransferDataToWindow() override;
@@ -43,14 +43,11 @@ private:
 
     bool Show( bool aShow ) override;
 
-    int getGridValue( int aRow, int aCol );
-
     bool validateData();
 
     void loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg );
 
 private:
-    EDA_UNITS     m_units = EDA_UNITS::MILLIMETRES;
     PAGED_DIALOG* m_parent;
     bool          m_firstShow = true;
 };

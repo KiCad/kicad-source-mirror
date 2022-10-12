@@ -158,8 +158,8 @@ static struct IFACE : public KIFACE_BASE
 
             if( !unitsProvider )
             {
-                // If we can't find an eeschema frame we'll have to make do with the units
-                // defined in whatever FRAME we _can_ find.
+                // If we can't find a pcb-type frame we'll have to make do with whatever FRAME
+                // we _can_ find.
                 for( unsigned i = 0; !unitsProvider && i < KIWAY_PLAYER_COUNT;  ++i )
                     unitsProvider = aKiway->Player( (FRAME_T) i, false );
             }
@@ -168,6 +168,7 @@ static struct IFACE : public KIFACE_BASE
             {
                 wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
                 unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
+                wxASSERT( unitsProvider );
             }
 
             if( aClassId == PANEL_FP_EDIT_OPTIONS )
