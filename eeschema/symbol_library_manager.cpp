@@ -190,11 +190,12 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
         // clear the deleted symbols buffer only if data is saved to the original file
         wxFileName original, destination( aFileName );
-        auto row = GetLibrary( aLibrary );
+        SYMBOL_LIB_TABLE_ROW* row = GetLibrary( aLibrary );
 
         if( row )
         {
-
+            original = row->GetFullURI();
+            original.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
         }
 
         destination.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
