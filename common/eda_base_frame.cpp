@@ -1204,13 +1204,13 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
     if( !autoSaveFileName.FileExists() )
         return;
 
-    wxString msg = wxString::Format( _(
-            "Well this is potentially embarrassing!\n"
-            "It appears that the last time you were editing the file\n"
-            "%s\n"
-            "it was not saved properly.  Do you wish to restore the last saved edits you made?" ),
-            aFileName.GetFullName()
-        );
+    wxString msg = wxString::Format( _( "Well this is potentially embarrassing!\n"
+                                        "It appears that the last time you were editing\n"
+                                        "%s\n"
+                                        "KiCad exited before saving.\n"
+                                        "\n"
+                                        "Do you wish to open the auto-saved file instead?" ),
+                                        aFileName.GetFullName() );
 
     int response = wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxYES_NO | wxICON_QUESTION,
                                  this );
