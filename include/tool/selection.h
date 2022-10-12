@@ -153,12 +153,18 @@ public:
                                 return a->GetSortPosition().y > b->GetSortPosition().y;
                         }
                         else if( leftBeforeRight )
+                        {
                             return a->GetSortPosition().x < b->GetSortPosition().x;
+                        }
                         else
+                        {
                             return a->GetSortPosition().x > b->GetSortPosition().x;
+                        }
                     }
                     else
+                    {
                         return a->Type() < b->Type();
+                    }
                 } );
 
         return sorted_items;

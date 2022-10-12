@@ -89,13 +89,13 @@ private:
     bool                  m_isDrag;
 
     ///< Items (such as wires) which were added to the selection for a drag
-    std::vector<KIID>     m_dragAdditions;
+    std::vector<KIID>                   m_dragAdditions;
     ///< Cache of the line's original connections before dragging started
-    std::map<SCH_LINE*, EDA_ITEMS> m_lineConnectionCache;
+    std::map<SCH_LINE*, EDA_ITEMS>      m_lineConnectionCache;
     ///< Lines added at bend points dynamically during the move
-    std::unordered_set<SCH_LINE*> m_newDragLines;
+    std::unordered_set<SCH_LINE*>       m_newDragLines;
     ///< Lines changed by drag algorithm that weren't selected
-    std::unordered_set<SCH_LINE*> m_changedDragLines;
+    std::unordered_set<SCH_LINE*>       m_changedDragLines;
 
     ///< Used for chaining commands
     VECTOR2I              m_moveOffset;

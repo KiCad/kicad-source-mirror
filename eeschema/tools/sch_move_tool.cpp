@@ -503,9 +503,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         if( schItem->Type() == SCH_LINE_T )
                         {
                             SCH_LINE* line = static_cast<SCH_LINE*>( schItem );
+
                             //Also store the original angle of the line, is needed later to decide
                             //which segment to extend when they've become zero length
                             line->StoreAngle();
+
                             for( VECTOR2I point : line->GetConnectionPoints() )
                                 getConnectedItems( line, point, m_lineConnectionCache[line] );
                         }
@@ -697,7 +699,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
 
-                    // Only partially selected drag lines in orthogonal line mode need special handling
+                    // Only partially selected drag lines in orthogonal line mode need special
+                    // handling
                     if( m_isDrag
                             && cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE
                             && line
@@ -706,8 +709,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         orthoLineDrag( line, splitDelta, xBendCount, yBendCount, grid );
                     }
 
-                    // Move all other items normally, including the selected end of
-                    // partially selected lines
+                    // Move all other items normally, including the selected end of partially
+                    // selected lines
                     moveItem( item, splitDelta );
                     updateItem( item, false );
                 }
@@ -913,8 +916,8 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
     // If you're connected to a junction, you're only connected to the junction.
     //
     // But, if you're connected to a junction on a pin, you're only connected to the pin. This
-    // is because junctions and pins have different logic for how bend lines are generated
-    // and we need to prioritize the pin version in some cases.
+    // is because junctions and pins have different logic for how bend lines are generated and
+    // we need to prioritize the pin version in some cases.
     for( SCH_ITEM* item : itemsOverlapping )
     {
         if( item != aOriginalItem && item->IsConnected( aPoint ) )
@@ -950,33 +953,29 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
         {
             SCH_LINE* line = static_cast<SCH_LINE*>( test );
 
-            //When getting lines for the connection cache, it's important that
-            //we only add items at the unselected end, since that is the only
-            //end that is handled specially. Fully selected lines, and the selected
-            //end of a partially selected line, are moved around normally and
-            //don't care about their connections.
+            // When getting lines for the connection cache, it's important that we only add
+            // items at the unselected end, since that is the only end that is handled specially.
+            // Fully selected lines, and the selected end of a partially selected line, are moved
+            // around normally and don't care about their connections.
             if( ( line->HasFlag( STARTPOINT ) && aPoint == line->GetStartPoint() )
                 || ( line->HasFlag( ENDPOINT ) && aPoint == line->GetEndPoint() ) )
+            {
                 continue;
+            }
 
             if( test->IsConnected( aPoint ) )
                 aList.push_back( test );
 
             // Labels can connect to a wire (or bus) anywhere along the length
-            switch( aOriginalItem->Type() )
+            if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aOriginalItem ) )
             {
-            case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIER_LABEL_T:
-                if( static_cast<SCH_LINE*>( test )->HitTest(
-                            static_cast<SCH_LABEL*>( aOriginalItem )->GetTextPos(), 1 ) )
+                if( static_cast<SCH_LINE*>( test )->HitTest( label->GetPosition(), 1 ) )
                     aList.push_back( test );
-                break;
-            default: break;
             }
 
             break;
         }
+
         case SCH_SHEET_T:
         case SCH_SYMBOL_T:
         case SCH_JUNCTION_T:
@@ -989,16 +988,19 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
+        case SCH_DIRECTIVE_LABEL_T:
             // Labels can connect to a wire (or bus) anywhere along the length
             if( aOriginalItem->Type() == SCH_LINE_T && test->CanConnect( aOriginalItem ) )
             {
-                SCH_TEXT* label = static_cast<SCH_TEXT*>( test );
-                SCH_LINE* line = static_cast<SCH_LINE*>( aOriginalItem );
+                SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( test );
+                SCH_LINE*       line = static_cast<SCH_LINE*>( aOriginalItem );
 
-                if( line->HitTest( label->GetTextPos(), 1 ) )
+                if( line->HitTest( label->GetPosition(), 1 ) )
                     aList.push_back( label );
             }
+
             break;
+
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
             if( aOriginalItem->Type() == SCH_LINE_T && test->CanConnect( aOriginalItem ) )
@@ -1009,9 +1011,11 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
                 if( line->HitTest( aPoint, 1 ) )
                     aList.push_back( label );
             }
+
             break;
 
-        default: break;
+        default:
+            break;
         }
     }
 }
