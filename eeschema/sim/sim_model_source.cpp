@@ -225,7 +225,7 @@ void SIM_MODEL_SOURCE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) con
 }
 
 
-bool SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
+void SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
 {
     // Sources are special. All preceding parameter values must be filled. If they are not, fill
     // them out automatically. If a value is nulled, delete everything after it.

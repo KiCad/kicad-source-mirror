@@ -89,19 +89,18 @@ SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType,
 }
 
 
-bool SIM_MODEL_SPICE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
+void SIM_MODEL_SPICE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
 {
-    // Models sourced from a library are immutable.
     if( m_spiceCode != "" )
-        return false;
+        THROW_IO_ERROR( "Could not change model parameters: library models are immutable" );
 
-    return SIM_MODEL::SetParamValue( aParamIndex, aValue );
+    SIM_MODEL::SetParamValue( aParamIndex, aValue );
 }
 
 
-bool SIM_MODEL_SPICE::SetParamFromSpiceCode( const std::string& aParamName,
+void SIM_MODEL_SPICE::SetParamFromSpiceCode( const std::string& aParamName,
                                              const std::string& aParamValue,
                                              SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
-    return SIM_MODEL::SetParamValue( aParamName, aParamValue, aNotation );
+    SIM_MODEL::SetParamValue( aParamName, aParamValue, aNotation );
 }

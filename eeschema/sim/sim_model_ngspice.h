@@ -46,7 +46,7 @@ public:
 
     SIM_MODEL_NGSPICE( TYPE aType );
 
-    bool SetParamFromSpiceCode( const std::string& aParamName, const std::string& aParamValue,
+    void SetParamFromSpiceCode( const std::string& aParamName, const std::string& aParamValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;
 
     // Protected because it's accessed by QA tests.

@@ -384,8 +384,14 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     // TODO: Don't use string comparison.
     if( m_model->GetBaseModel() && ( aText == "" || aText == baseParamValue ) )
     {
-        if( !m_model->SetParamValue( m_paramIndex, "" ) ) // Nullify.
+        try
+        {
+            m_model->SetParamValue( m_paramIndex, "" ); // Nullify.
+        }
+        catch( const IO_ERROR& )
+        {
             return false;
+        }
 
         aVariant = baseParamValue; // Use the inherited value (if it exists) if null.
     }

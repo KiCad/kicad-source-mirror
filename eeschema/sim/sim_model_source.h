@@ -66,7 +66,7 @@ public:
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
-    bool SetParamValue( int aParamIndex, const SIM_VALUE& aValue ) override;
+    void SetParamValue( int aParamIndex, const SIM_VALUE& aValue ) override;
 
     bool HasAutofill() const override { return true; }
 

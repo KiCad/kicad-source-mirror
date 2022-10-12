@@ -58,9 +58,9 @@ public:
                      std::unique_ptr<SPICE_MODEL_PARSER> aSpiceModelParser );
 
 protected:
-    bool SetParamValue( int aParamIndex, const SIM_VALUE& aValue ) override;
+    void SetParamValue( int aParamIndex, const SIM_VALUE& aValue ) override;
 
-    virtual bool SetParamFromSpiceCode( const std::string& aParamName,
+    virtual void SetParamFromSpiceCode( const std::string& aParamName,
                                         const std::string& aParamValue,
                                         SIM_VALUE_GRAMMAR::NOTATION aNotation
                                             = SIM_VALUE_GRAMMAR::NOTATION::SPICE );

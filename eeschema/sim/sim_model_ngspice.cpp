@@ -81,7 +81,8 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
 }
 
 
-bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName, const std::string& aParamValue,
+void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
+                                               const std::string& aParamValue,
                                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     std::string paramName = boost::to_lower_copy( aParamName );
@@ -89,24 +90,24 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName, co
     // "level" and "version" are not really parameters - they're part of the type - so silently
     // ignore them.
     if( paramName == "level" || paramName == "version" )
-        return true;
+        return;
 
     // Also ignore "type" parameter, because Ngspice does that too.
     if( paramName == "type" )
-        return true;
+        return;
 
     if( GetDeviceType() == DEVICE_TYPE_::NPN || GetDeviceType() == DEVICE_TYPE_::PNP )
     {
         // Ignore the purely informative LTspice-specific parameters "mfg", "icrating", "vceo".
         if( paramName == "mfg" || paramName == "icrating" || paramName == "vceo" )
-            return true;
+            return;
 
         // Ignore unused parameters.
         if( paramName == "bvcbo" || paramName == "nbvcbo"
             || paramName == "tbvcbo1" || paramName == "tbvcbo2"
             || paramName == "bvbe" || paramName == "ibvbe" || paramName == "nbvbe" )
         {
-            return true;
+            return;
         }
     }
 
@@ -125,8 +126,10 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName, co
                                  } );
 
     if( paramIt != params.end() )
-        return SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue,
-                                         aNotation );
+    {
+        SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue, aNotation );
+        return;
+    }
 
 
     // One Spice param can have multiple names, we need to take this into account.
@@ -140,7 +143,11 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName, co
                                         } );
 
     if( ngspiceParamIt == ngspiceParams.end() )
-        return false;
+    {
+        THROW_IO_ERROR( wxString::Format( "Failed to set parameter '%s' to value '%s'",
+                                          aParamName,
+                                          aParamValue ) );
+    }
 
 
     // We obtain the id of the Ngspice param that is to be set.
@@ -154,10 +161,13 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName, co
                             } );
     
     if( paramIt == params.end() )
-        return false;
+    {
+        THROW_IO_ERROR( wxString::Format( "Failed to set parameter '%s' to value '%s'",
+                                          aParamName,
+                                          aParamValue ) );
+    }
 
-    return SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue,
-                                     aNotation );
+    SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue, aNotation );
 }
 
 

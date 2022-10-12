@@ -840,22 +840,21 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetBaseParam( unsigned aParamIndex ) const
 }
 
 
-bool SIM_MODEL::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
+void SIM_MODEL::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
 {
     *m_params.at( aParamIndex ).value = aValue;
-    return true;
 }
 
 
-bool SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
+void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
                                SIM_VALUE::NOTATION aNotation )
 {
     const SIM_VALUE& value = *GetParam( aParamIndex ).value;
-    return SetParamValue( aParamIndex, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
+    SetParamValue( aParamIndex, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
 }
 
 
-bool SIM_MODEL::SetParamValue( const std::string& aParamName, const SIM_VALUE& aValue )
+void SIM_MODEL::SetParamValue( const std::string& aParamName, const SIM_VALUE& aValue )
 {
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
@@ -866,18 +865,28 @@ bool SIM_MODEL::SetParamValue( const std::string& aParamName, const SIM_VALUE& a
                             } );
 
     if( it == params.end() )
-        return false;
+    {
+        THROW_IO_ERROR( wxString::Format( "Could not find a model parameter named '%s'",
+                                          aParamName ) );
+    }
 
     SetParamValue( static_cast<int>( it - params.begin() ), aValue );
-    return true;
 }
 
 
-bool SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string& aValue,
+void SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string& aValue,
                                SIM_VALUE::NOTATION aNotation )
 {
+    const PARAM* param = FindParam( aParamName );
+
+    if( !param )
+    {
+        THROW_IO_ERROR( wxString::Format( "Could not find a model parameter named '%s'",
+                                          aParamName ) );
+    }
+
     const SIM_VALUE& value = *FindParam( aParamName )->value;
-    return SetParamValue( aParamName, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
+    SetParamValue( aParamName, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
 }
 
 

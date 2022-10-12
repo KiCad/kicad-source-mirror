@@ -211,14 +211,7 @@ void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
                 {
                     wxASSERT( paramName != "" );
 
-                    if( !m_model.SetParamFromSpiceCode( paramName, subnode->string() ) )
-                    {
-                        THROW_IO_ERROR( wxString::Format(
-                                        _( "Failed to set parameter '%s' to '%s' in model '%s'" ),
-                                        paramName,
-                                        subnode->string(),
-                                        modelName ) );
-                    }
+                    m_model.SetParamFromSpiceCode( paramName, subnode->string() );
                 }
                 else
                 {
@@ -249,14 +242,7 @@ void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
                 {
                     wxASSERT( paramName != "" );
 
-                    if( !m_model.SetParamFromSpiceCode( paramName, subnode->string() ) )
-                    {
-                        THROW_IO_ERROR( wxString::Format(
-                                        _( "Failed to set parameter '%s' to '%s' in model '%s'" ),
-                                        paramName,
-                                        subnode->string(),
-                                        modelName ) );
-                    }
+                    m_model.SetParamFromSpiceCode( paramName, subnode->string() );
                 }
                 else
                 {

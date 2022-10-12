@@ -544,11 +544,11 @@ public:
     const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
 
 
-    virtual bool SetParamValue( int aParamIndex, const SIM_VALUE& aValue );
-    bool SetParamValue( int aParamIndex, const std::string& aValue,
+    virtual void SetParamValue( int aParamIndex, const SIM_VALUE& aValue );
+    void SetParamValue( int aParamIndex, const std::string& aValue,
                         SIM_VALUE::NOTATION aNotation = SIM_VALUE::NOTATION::SI );
-    bool SetParamValue( const std::string& aParamName, const SIM_VALUE& aValue );
-    bool SetParamValue( const std::string& aParamName, const std::string& aValue,
+    void SetParamValue( const std::string& aParamName, const SIM_VALUE& aValue );
+    void SetParamValue( const std::string& aParamName, const std::string& aValue,
                         SIM_VALUE::NOTATION aNotation = SIM_VALUE::NOTATION::SI );
 
     bool HasOverrides() const;
