@@ -1546,6 +1546,8 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
+    picker->SetCursor( KICURSOR::BULLSEYE );
+
     picker->SetClickHandler(
             [this, board]( const VECTOR2D& pt ) -> bool
             {
