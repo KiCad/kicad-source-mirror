@@ -849,12 +849,11 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     SYMBOL_LIB_TABLE_ROW* row = m_prj->SchSymbolLibTable()->FindRow( fn.GetName() );
 
     fn.SetExt( KiCadSymbolLibFileExtension );
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi;
-
-    pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
     try
     {
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
         for( const std::unique_ptr<LIB_SYMBOL>& symbol : m_rescueLibSymbols )
             pi->SaveSymbol( fn.GetFullPath(), new LIB_SYMBOL( *symbol.get() ), m_properties.get() );
 
@@ -871,16 +870,11 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     // it to the table.
     if( !row || ( SCH_IO_MGR::EnumFromStr( row->GetType() ) == SCH_IO_MGR::SCH_LEGACY ) )
     {
-        if( row && SCH_IO_MGR::EnumFromStr( row->GetType() ) == SCH_IO_MGR::SCH_LEGACY )
-        {
-            m_prj->SchSymbolLibTable()->RemoveRow( row );
-        }
-
         wxString uri = "${KIPRJMOD}/" + fn.GetFullName();
         wxString libNickname = fn.GetName();
 
         row = new SYMBOL_LIB_TABLE_ROW( libNickname, uri, wxT( "KiCad" ) );
-        m_prj->SchSymbolLibTable()->InsertRow( row );
+        m_prj->SchSymbolLibTable()->InsertRow( row, true );
 
         fn = wxFileName( m_prj->GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
