@@ -235,7 +235,7 @@ bool SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
              paramIndex < GetParamCount();
              ++paramIndex )
         {
-            SIM_MODEL::SetParamValue( paramIndex, "" );
+            m_params.at( aParamIndex ).value->FromString( "" );
         }
     }
     else
@@ -243,7 +243,10 @@ bool SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
         for( int paramIndex = 0; paramIndex < aParamIndex; ++paramIndex )
         {
             if( GetParam( paramIndex ).value->ToString() == "" )
+            {
+                m_params.at( aParamIndex ).value->FromString( "0" );
                 SIM_MODEL::SetParamValue( paramIndex, "0" );
+            }
         }
     }
 
