@@ -59,7 +59,7 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
     if( aReason == MODEL_RELOAD )
         m_lastPadNumber = wxT( "1" );
 
-    if( m_editPad != niluuid )
+    if( board() && board()->GetItem( m_editPad ) == DELETED_BOARD_ITEM::GetInstance() )
     {
         PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
         bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
@@ -68,9 +68,9 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
             m_toolMgr->RunAction( ACTIONS::highContrastMode, true );
 
         frame()->GetInfoBar()->Dismiss();
-    }
 
-    m_editPad = niluuid;
+        m_editPad = niluuid;
+    }
 }
 
 
