@@ -4500,10 +4500,14 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
     if( !pad->GetRemoveUnconnected() )
         pad->SetKeepTopBottom( true );
 
-    // Zero-sized pads are not really selectable and likely cause crashes.
-    // They are not supported by KiCad and are removed on loading
+    // Zero-sized pads are likely algorithmically unsafe.
     if( pad->GetSizeX() <= 0 || pad->GetSizeY() <= 0 )
-        return nullptr;
+    {
+        pad->SetSize( wxSize( IU_PER_MM * 0.001, IU_PER_MM * 0.001 ) );
+
+        wxLogWarning( wxT( "Invalid zero-sized pad pinned to 1µm in\nfile: %s\nline: %d\noffset: %d" ),
+                      CurSource(), CurLineNumber(), CurOffset() );
+    }
 
     return pad.release();
 }
