@@ -1007,7 +1007,10 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
         solid->SetHole( slot );
     }
 
-    std::shared_ptr<SHAPE> shape = aPad->GetEffectiveShape();
+    // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and then
+    // perform layer-specific flashing tests internally.
+    std::shared_ptr<SHAPE> shape = aPad->GetEffectiveShape( UNDEFINED_LAYER,
+                                                            FLASHING::ALWAYS_FLASHED );
 
     if( shape->HasIndexableSubshapes() && shape->GetIndexableSubshapeCount() == 1 )
     {
