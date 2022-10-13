@@ -195,88 +195,94 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
     if( m_token.pos >= m_token.inputLen )
         return retval;
 
-    auto isDecimalSeparator = [ & ]( char ch ) -> bool {
-        return ( ch == m_localeDecimalSeparator || ch == '.' || ch == ',' );
-    };
+    auto isDecimalSeparator =
+            [&]( char ch ) -> bool
+            {
+                return ( ch == m_localeDecimalSeparator || ch == '.' || ch == ',' );
+            };
 
     // Lambda: get value as string, store into clToken.token and update current index.
-    auto extractNumber = [ & ]() {
-        bool haveSeparator = false;
-        idx = 0;
-        auto ch = m_token.input[ m_token.pos ];
+    auto extractNumber =
+            [&]()
+            {
+                bool haveSeparator = false;
+                idx = 0;
+                char ch = m_token.input[ m_token.pos ];
 
-        do
-        {
-            if( isDecimalSeparator( ch ) && haveSeparator )
-                break;
+                do
+                {
+                    if( isDecimalSeparator( ch ) && haveSeparator )
+                        break;
 
-            m_token.token[ idx++ ] = ch;
+                    m_token.token[ idx++ ] = ch;
 
-            if( isDecimalSeparator( ch ) )
-                haveSeparator = true;
+                    if( isDecimalSeparator( ch ) )
+                        haveSeparator = true;
 
-            ch = m_token.input[ ++m_token.pos ];
-        } while( isdigit( ch ) || isDecimalSeparator( ch ) );
+                    ch = m_token.input[ ++m_token.pos ];
+                } while( isdigit( ch ) || isDecimalSeparator( ch ) );
 
-        m_token.token[ idx ] = 0;
+                m_token.token[ idx ] = 0;
 
-        // Ensure that the systems decimal separator is used
-        for( int i = strlen( m_token.token ); i; i-- )
-        {
-            if( isDecimalSeparator( m_token.token[ i - 1 ] ) )
-                m_token.token[ i - 1 ] = m_localeDecimalSeparator;
-        }
-    };
+                // Ensure that the systems decimal separator is used
+                for( int i = strlen( m_token.token ); i; i-- )
+                {
+                    if( isDecimalSeparator( m_token.token[ i - 1 ] ) )
+                        m_token.token[ i - 1 ] = m_localeDecimalSeparator;
+                }
+            };
 
     // Lamda: Get unit for current token.
     // Valid units are ", in, mm, mil and thou.  Returns Unit::Invalid otherwise.
-    auto checkUnit = [ this ]() -> Unit {
-        char ch = m_token.input[ m_token.pos ];
+    auto checkUnit =
+            [this]() -> Unit
+            {
+                char ch = m_token.input[ m_token.pos ];
 
-        if( ch == '"' )
-        {
-            m_token.pos++;
-            return Unit::Inch;
-        }
+                if( ch == '"' )
+                {
+                    m_token.pos++;
+                    return Unit::Inch;
+                }
 
-        // Do not use strcasecmp() as it is not available on all platforms
-        const char* cptr = &m_token.input[ m_token.pos ];
-        const auto sizeLeft = m_token.inputLen - m_token.pos;
+                // Do not use strcasecmp() as it is not available on all platforms
+                const char* cptr = &m_token.input[ m_token.pos ];
+                const auto sizeLeft = m_token.inputLen - m_token.pos;
 
-        if( sizeLeft >= 2 && ch == 'm' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
-        {
-            m_token.pos += 2;
-            return Unit::MM;
-        }
+                if( sizeLeft >= 2 && ch == 'm' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
+                {
+                    m_token.pos += 2;
+                    return Unit::MM;
+                }
 
-        if( sizeLeft >= 2 && ch == 'c' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
-        {
-            m_token.pos += 2;
-            return Unit::CM;
-        }
+                if( sizeLeft >= 2 && ch == 'c' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
+                {
+                    m_token.pos += 2;
+                    return Unit::CM;
+                }
 
-        if( sizeLeft >= 2 && ch == 'i' && cptr[ 1 ] == 'n' && !isalnum( cptr[ 2 ] ) )
-        {
-            m_token.pos += 2;
-            return Unit::Inch;
-        }
+                if( sizeLeft >= 2 && ch == 'i' && cptr[ 1 ] == 'n' && !isalnum( cptr[ 2 ] ) )
+                {
+                    m_token.pos += 2;
+                    return Unit::Inch;
+                }
 
-        if( sizeLeft >= 3 && ch == 'm' && cptr[ 1 ] == 'i' && cptr[ 2 ] == 'l'
-          && !isalnum( cptr[ 3 ] ) )
-        {
-            m_token.pos += 3;
-            return Unit::Mil;
-        }
+                if( sizeLeft >= 3 && ch == 'm' && cptr[ 1 ] == 'i' && cptr[ 2 ] == 'l'
+                        && !isalnum( cptr[ 3 ] ) )
+                {
+                    m_token.pos += 3;
+                    return Unit::Mil;
+                }
 
-        if( sizeLeft >= 4 && ch == 't' && cptr[ 1 ] == 'h' && cptr[ 2 ] == 'o'
-          && cptr[ 3 ] == 'u' && !isalnum( cptr[ 4 ] ) )
-        {
-            m_token.pos += 4;
-            return Unit::Mil;
-        }
+                if( sizeLeft >= 4 && ch == 't' && cptr[ 1 ] == 'h' && cptr[ 2 ] == 'o'
+                        && cptr[ 3 ] == 'u' && !isalnum( cptr[ 4 ] ) )
+                {
+                    m_token.pos += 4;
+                    return Unit::Mil;
+                }
 
-        return Unit::Invalid;
-    };
+                return Unit::Invalid;
+            };
 
     char ch;
 
@@ -304,7 +310,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         retval.token = VALUE;
         retval.value.dValue = atof( m_token.token );
     }
-    else if(( convertFrom = checkUnit()) != Unit::Invalid )
+    else if( ( convertFrom = checkUnit() ) != Unit::Invalid )
     {
         // UNIT
         // Units are appended to a VALUE.
@@ -348,7 +354,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             }
         }
     }
-    else if( isalpha( ch ))
+    else if( isalpha( ch ) )
     {
         // VAR
         const char* cptr = &m_token.input[ m_token.pos ];
