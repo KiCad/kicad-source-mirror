@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,8 @@
 
 class DRC_ENGINE;
 class DRC_TEST_PROVIDER;
+class DRC_RULE;
+class DRC_CONSTRAINT;
 
 class DRC_TEST_PROVIDER_REGISTRY
 {

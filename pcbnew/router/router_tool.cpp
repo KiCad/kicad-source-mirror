@@ -51,6 +51,8 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_grid_helper.h>
+#include <tools/drc_tool.h>
+#include <drc/drc_interactive_courtyard_clearance.h>
 
 #include <project.h>
 #include <project/project_file.h>
@@ -1958,16 +1960,21 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     PNS::ITEM* startItem = nullptr;
     PNS::ITEM_SET itemsToDrag;
-    const FOOTPRINT* footprint = nullptr;
+    FOOTPRINT* footprint = nullptr;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivityData = board()->GetConnectivity();
     std::vector<BOARD_ITEM*>           dynamicItems;
     std::unique_ptr<CONNECTIVITY_DATA> dynamicData = nullptr;
     VECTOR2I                           lastOffset;
 
+    // Courtyard conflicts will be tested only if the LAYER_CONFLICTS_SHADOW gal layer is visible
+    bool showCourtyardConflicts = frame()->GetBoard()->IsElementVisible( LAYER_CONFLICTS_SHADOW );
+    DRC_INTERACTIVE_COURTYARD_CLEARANCE courtyardClearanceDRC;
+    std::vector<BOARD_ITEM*>            lastItemsInConflict;
+
     if( item->Type() == PCB_FOOTPRINT_T )
     {
-        footprint = static_cast<const FOOTPRINT*>(item);
+        footprint = static_cast<FOOTPRINT*>( item );
 
         for( PAD* pad : footprint->Pads() )
         {
@@ -1982,6 +1989,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                     dynamicItems.push_back( pad );
             }
         }
+
+        courtyardClearanceDRC.Init( board() );
+        courtyardClearanceDRC.SetDRCEngine( m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine().get() );
+        courtyardClearanceDRC.m_FpInMove.push_back( footprint );
 
         dynamicData = std::make_unique<CONNECTIVITY_DATA>( dynamicItems, true );
         connectivityData->BlockRatsnestItems( dynamicItems );
@@ -2151,6 +2162,38 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                     view()->Hide( zone, true );
                 }
 
+                if( showCourtyardConflicts )
+                {
+                    footprint->Move( offset );
+                    courtyardClearanceDRC.Run();
+                    footprint->Move( -offset );
+
+                    // Ensure the "old" conflicts are cleared
+                    for( BOARD_ITEM* conflict: lastItemsInConflict )
+                    {
+                        conflict->ClearFlags( COURTYARD_CONFLICT );
+                        getView()->Update( conflict );
+                        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+                    }
+
+                    lastItemsInConflict.clear();
+
+                    for( BOARD_ITEM* conflict: courtyardClearanceDRC.m_ItemsInConflict )
+                    {
+                        if( conflict != footprint )
+                        {
+                            if( !conflict->HasFlag( COURTYARD_CONFLICT ) )
+                            {
+                                conflict->SetFlags( COURTYARD_CONFLICT );
+                                getView()->Update( conflict );
+                                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+                            }
+
+                            lastItemsInConflict.push_back( conflict );
+                        }
+                    }
+                }
+
                 // Update ratsnest
                 dynamicData->Move( offset - lastOffset );
                 lastOffset = offset;
@@ -2204,6 +2247,13 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         view()->ShowPreview( false );
 
         connectivityData->ClearLocalRatsnest();
+    }
+
+    // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
+    for( BOARD_ITEM* conflict: lastItemsInConflict )
+    {
+        conflict->ClearFlags( COURTYARD_CONFLICT );
+        getView()->Update( conflict );
     }
 
     if( m_router->RoutingInProgress() )
