@@ -447,7 +447,21 @@ public:
     bool TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
                                               int aError, ERROR_LOC aErrorLoc ) const;
 
-    // @copydoc BOARD_ITEM::GetEffectiveShape
+    /**
+     * Some pad shapes can be complex (rounded/chamfered rectangle), even without considering
+     * custom shapes.  This routine returns a COMPOUND shape (set of simple shapes which make
+     * up the pad for use with routing, collision determination, etc).
+     *
+     * @note This list can contain a SHAPE_SIMPLE (a simple single-outline non-intersecting
+     * polygon), but should never contain a SHAPE_POLY_SET (a complex polygon consisting of
+     * multiple outlines and/or holes).
+     *
+     * @param aLayer optional parameter allowing a caller to specify a particular layer (default
+     *               is to return the pad's "natural" shape).
+     * @param aFlash optional parameter allowing a caller to force the pad to be flashed (or not
+     *               flashed) on the current layer (default is to honour the pad's setting and
+     *               the current connections for the given layer).
+     */
     virtual std::shared_ptr<SHAPE>
     GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                        FLASHING flashPTHPads = FLASHING::DEFAULT ) const override;

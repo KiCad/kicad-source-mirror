@@ -141,6 +141,9 @@ public:
      *
      * @param aLayer in case of items spanning multiple layers, only the shapes belonging to aLayer
      *               will be returned. Pass UNDEFINED_LAYER to return shapes for all layers.
+     * @param aFlash optional parameter allowing a caller to force the pad to be flashed (or not
+     *               flashed) on the current layer (default is to honour the pad's setting and
+     *               the current connections for the given layer).
      */
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                                       FLASHING aFlash = FLASHING::DEFAULT ) const;
