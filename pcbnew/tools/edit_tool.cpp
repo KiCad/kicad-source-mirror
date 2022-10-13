@@ -732,7 +732,7 @@ int EDIT_TOOL::MoveWithReference( const TOOL_EVENT& aEvent )
 
 // Note: aEvent MUST NOT be const&; the source will get de-allocated if we go into the picker's
 // event loop.
-int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
+int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference, bool aReselect )
 {
     PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     KIGFX::VIEW_CONTROLS* controls  = getViewControls();
@@ -1124,7 +1124,11 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     // Unselect all items to clear selection flags and then re-select the originally selected
     // items.
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
+
+    // In the case where the original items are temporary, we don't want to reselect
+    // as the items may be invalidated by the Revert above
+    if( !restore_state || aReselect )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
 
     editFrame->PopTool( tool );
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
@@ -2254,7 +2258,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         // If items were duplicated, pick them up
         // this works well for "dropping" copies around and pushes the commit
         TOOL_EVENT evt = PCB_ACTIONS::move.MakeEvent();
-        Move( evt );
+        doMoveSelection( evt,  false,  false );
 
         // Deslect the duplicated item if we originally started as a hover selection
         if( is_hover )

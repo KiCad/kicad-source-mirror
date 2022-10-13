@@ -180,7 +180,7 @@ private:
     bool invokeInlineRouter( int aDragMode );
     bool isRouterActive() const;
 
-    int doMoveSelection( TOOL_EVENT aEvent, bool aPickReference = false );
+    int doMoveSelection( TOOL_EVENT aEvent, bool aPickReference = false, bool aReselect = true );
 
     bool pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
