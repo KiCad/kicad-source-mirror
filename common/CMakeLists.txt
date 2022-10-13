@@ -487,7 +487,6 @@ target_link_libraries( common
     compoundfilereader
     pcm_settings
     nanodbc # for now; maybe hoist out of common
-    argparse::argparse
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
     ${wxWidgets_LIBRARIES}
@@ -508,6 +507,7 @@ target_include_directories( common
         .
         ${CMAKE_BINARY_DIR}
         $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:argparse::argparse,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 # text markup support

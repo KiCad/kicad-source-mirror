@@ -90,7 +90,6 @@ target_link_libraries( pcb_calculator
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
     common
-    argparse::argparse
     ${wxWidgets_LIBRARIES}
     )
 

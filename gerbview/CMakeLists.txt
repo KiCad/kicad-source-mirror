@@ -112,7 +112,6 @@ target_link_libraries( gerbview
     gal
     common
     nlohmann_json
-    argparse::argparse
     ${wxWidgets_LIBRARIES}
     )
 
