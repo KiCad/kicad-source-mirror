@@ -119,6 +119,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     SetFlag( FL_ZONE, true );
     SetFlag( FL_SILKSCREEN, true );
     SetFlag( FL_SOLDERMASK, true );
+    SetFlag( FL_SOLDERPASTE, true );
     SetFlag( FL_SUBTRACT_MASK_FROM_SILK, false );
 
     SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, true );
