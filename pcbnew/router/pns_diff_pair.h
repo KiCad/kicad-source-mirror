@@ -400,6 +400,8 @@ public:
     void RemoveVias()
     {
         m_hasVias = false;
+        m_line_n.RemoveVia();
+        m_line_p.RemoveVia();
     }
 
     bool EndsWithVias() const
