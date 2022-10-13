@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,7 +114,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
 
     dc.SetFont( font );
 
-    int width = dc.GetTextExtent( header ).GetWidth();
+    int width = dc.GetTextExtent( header ).GetWidth() * 1.25;
 
     m_ListOfConflicts->AppendToggleColumn( header, wxDATAVIEW_CELL_ACTIVATABLE, width,
                                            wxALIGN_CENTER );
@@ -138,9 +138,6 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
     m_previewOldWidget->SetLayoutDirection( wxLayout_LeftToRight );
     m_previewNewWidget->SetLayoutDirection( wxLayout_LeftToRight );
 
-    Layout();
-    setSizeInDU( 480, 360 );
-
     // Make sure the HTML window is large enough. Some fun size juggling and
     // fudge factors here but it does seem to work pretty reliably.
     wxSize info_size = m_htmlPrompt->GetTextExtent( info );
@@ -150,10 +147,12 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
     m_htmlPrompt->SetSizeHints( 2 * prompt_size.x / 3, approx_info_height );
 
     SetupStandardButtons();
+    m_stdButtonsOK->SetLabel( _( "Rescue Symbols" ) );
+    m_stdButtonsCancel->SetLabel( _( "Skip Symbol Rescue" ) );
+	m_stdButtons->Layout();
+    GetSizer()->SetSizeHints( this );
 
     Layout();
-    GetSizer()->SetSizeHints( this );
-    setSizeInDU( 480, 360 );
     Center();
 }
 
@@ -181,6 +180,7 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
 void DIALOG_RESCUE_EACH::PopulateConflictList()
 {
     wxVector<wxVariant> data;
+
     for( RESCUE_CANDIDATE& each_candidate : m_Rescuer->m_all_candidates )
     {
         data.clear();
@@ -195,6 +195,7 @@ void DIALOG_RESCUE_EACH::PopulateConflictList()
     {
         // Select the first choice
         m_ListOfConflicts->SelectRow( 0 );
+
         // Ensure this choice is displayed:
         displayItemsInConflict();
     }
@@ -284,6 +285,7 @@ bool DIALOG_RESCUE_EACH::TransferDataFromWindow()
         if( rescue_part )
             m_Rescuer->m_chosen_candidates.push_back( &m_Rescuer->m_all_candidates[index] );
     }
+
     return true;
 }
 
@@ -291,11 +293,11 @@ bool DIALOG_RESCUE_EACH::TransferDataFromWindow()
 void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
 {
     wxMessageDialog dlg( GetParent(),
-                _(  "Stop showing this tool?\n"
-                    "No changes will be made.\n\n"
-                    "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
-                    "and the tool can be activated manually from the \"Tools\" menu." ),
-            _( "Rescue Symbols" ), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
+                         _(  "Stop showing this tool?\n"
+                             "No changes will be made.\n\n"
+                             "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
+                             "and the tool can be activated manually from the \"Tools\" menu." ),
+                         _( "Rescue Symbols" ), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
     int resp = dlg.ShowModal ();
 
     if( resp == wxID_YES )

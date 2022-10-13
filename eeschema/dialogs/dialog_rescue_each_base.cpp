@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 400,-1 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
@@ -27,24 +27,24 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 
 	m_titleSymbols = new wxStaticText( this, wxID_ANY, _("Symbols to update:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_titleSymbols->Wrap( -1 );
-	m_titleSymbols->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_titleSymbols->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer8->Add( m_titleSymbols, 0, wxLEFT|wxRIGHT, 10 );
+	bSizer8->Add( m_titleSymbols, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_ListOfConflicts = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_ListOfConflicts, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	m_titleInstances = new wxStaticText( this, wxID_ANY, _("Instances of this symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_titleInstances->Wrap( -1 );
-	m_titleInstances->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_titleInstances->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer8->Add( m_titleInstances, 0, wxRIGHT|wxLEFT, 10 );
+	bSizer8->Add( m_titleInstances, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_ListOfInstances = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_ListOfInstances, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bSizer8->Add( m_ListOfInstances, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 
-	bSizerMain->Add( bSizer8, 2, wxEXPAND, 5 );
+	bSizerMain->Add( bSizer8, 3, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerPreviews;
 	bSizerPreviews = new wxBoxSizer( wxHORIZONTAL );
@@ -54,11 +54,13 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 
 	m_previewOldLabel = new wxStaticText( this, wxID_ANY, _("Cached Symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_previewOldLabel->Wrap( -1 );
-	m_previewOldLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_previewOldLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bSizerLeftPreview->Add( m_previewOldLabel, 0, 0, 5 );
 
 	m_previewOldPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_previewOldPanel->SetMinSize( wxSize( 350,-1 ) );
+
 	m_SizerOldPanel = new wxBoxSizer( wxVERTICAL );
 
 
@@ -75,11 +77,13 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 
 	m_previewNewLabel = new wxStaticText( this, wxID_ANY, _("Library Symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_previewNewLabel->Wrap( -1 );
-	m_previewNewLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_previewNewLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bSizerRightPreview->Add( m_previewNewLabel, 0, 0, 5 );
 
 	m_previewNewPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_previewNewPanel->SetMinSize( wxSize( 350,-1 ) );
+
 	m_SizerNewPanel = new wxBoxSizer( wxVERTICAL );
 
 
@@ -92,7 +96,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	bSizerPreviews->Add( bSizerRightPreview, 1, wxEXPAND, 5 );
 
 
-	bSizerMain->Add( bSizerPreviews, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bSizerMain->Add( bSizerPreviews, 2, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
