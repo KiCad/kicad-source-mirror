@@ -590,7 +590,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     pcb_io.Save( fname_dump.GetFullPath(), m_iface->GetBoard(), nullptr );
 
-    auto prj = m_iface->GetBoard()->GetProject();
+    PROJECT* prj = m_iface->GetBoard()->GetProject();
     prj->GetProjectFile().SaveAs( cwd, "pns" );
 }
 
@@ -608,14 +608,15 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
 
     switch( aEvent.KeyCode() )
     {
-        case '0':
+    case '0':
         if( !ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics )
             return;
 
         saveRouterDebugLog();
         aEvent.SetPassEvent( false );
         break;
-        default:
+
+    default:
         break;
     }
 }
@@ -641,15 +642,13 @@ int ROUTER_TOOL::getStartLayer( const PNS::ITEM* aItem )
 
 void ROUTER_TOOL::switchLayerOnViaPlacement()
 {
-    int al = frame()->GetActiveLayer();
-    int cl = m_router->GetCurrentLayer();
+    int activeLayer = frame()->GetActiveLayer();
+    int currentLayer = m_router->GetCurrentLayer();
 
-    if( cl != al )
-    {
-        m_router->SwitchLayer( al );
-    }
+    if( currentLayer != activeLayer )
+        m_router->SwitchLayer( activeLayer );
 
-    std::optional<int> newLayer = m_router->Sizes().PairedLayer( cl );
+    std::optional<int> newLayer = m_router->Sizes().PairedLayer( currentLayer );
 
     if( !newLayer )
         newLayer = m_router->Sizes().GetLayerTop();
@@ -825,7 +824,9 @@ int ROUTER_TOOL::onLayerCommand( const TOOL_EVENT& aEvent )
 int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 {
     if( !m_router->IsPlacingVia() )
+    {
         return handleLayerSwitch( aEvent, true );
+    }
     else
     {
         m_router->ToggleViaPlacement();
@@ -938,9 +939,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             LSET not_allowed_ly = LSET::AllNonCuMask();
 
             if( viaType != VIATYPE::THROUGH )
-            {
                 not_allowed_ly.set( currentLayer );
-            }
 
             if( viaType == VIATYPE::MICROVIA )
             {
@@ -1037,6 +1036,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
                 // but at this point we do not know what the user want.
                targetLayer = PCB_LAYER_ID( currentLayer + 1 );
             }
+
             break;
 
         case VIATYPE::BLIND_BURIED:
@@ -1320,9 +1320,7 @@ void ROUTER_TOOL::performRouting()
             bool forceFinish = evt->Modifier( MD_SHIFT );
 
             if( m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish ) )
-            {
                 break;
-            }
 
             if( needLayerSwitch )
                 switchLayerOnViaPlacement();
@@ -1522,7 +1520,9 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
                 itemList.push_back( pad );
         }
         else if( dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) != nullptr )
+        {
             itemList.push_back( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        }
     }
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = frame->GetBoard()->GetConnectivity();

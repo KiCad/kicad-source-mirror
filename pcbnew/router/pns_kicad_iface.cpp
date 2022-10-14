@@ -1696,20 +1696,19 @@ void PNS_KICAD_IFACE::Commit()
 
     EraseView();
 
-    for( auto fpOffset : m_fpOffsets )
+    for( const std::pair<const PAD*, OFFSET>& fpOffset : m_fpOffsets )
     {
-        VECTOR2I offset = fpOffset.second.p_new - fpOffset.second.p_old;
+        VECTOR2I   offset = fpOffset.second.p_new - fpOffset.second.p_old;
         FOOTPRINT* footprint = fpOffset.first->GetParent();
-
-        VECTOR2I p_orig = footprint->GetPosition();
-        VECTOR2I p_new = p_orig + offset;
+        VECTOR2I   p_orig = footprint->GetPosition();
+        VECTOR2I   p_new = p_orig + offset;
 
         if( processedFootprints.find( footprint ) != processedFootprints.end() )
             continue;
 
         processedFootprints.insert( footprint );
         m_commit->Modify( footprint );
-        footprint->SetPosition( wxPoint( p_new.x, p_new.y ) );
+        footprint->SetPosition( p_new );
     }
 
     m_fpOffsets.clear();
