@@ -1767,8 +1767,6 @@ void ROUTER_TOOL::performDragging( int aMode )
         m_startItem = nullptr;
 
         m_gridHelper->SetAuxAxes( false );
-        frame()->UndoRedoBlock( false );
-        ctls->SetAutoPan( false );
         ctls->ForceCursorPosition( false );
         highlightNet( false );
 
