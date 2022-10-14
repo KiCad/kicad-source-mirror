@@ -594,6 +594,8 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
                 m_textEditor->AddText( str << '\n' );
             }
 
+            m_textEditor->EmptyUndoBuffer();
+
             wxCommandEvent dummy;
             OnCompile( dummy );
         }

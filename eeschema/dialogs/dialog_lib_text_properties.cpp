@@ -126,6 +126,7 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
     {
         m_textSize.SetValue( m_graphicText->GetTextWidth() );
         m_StyledTextCtrl->SetValue( m_graphicText->GetText() );
+        m_StyledTextCtrl->EmptyUndoBuffer();
 
         m_fontCtrl->SetFontSelection( m_graphicText->GetFont() );
         m_textColorSwatch->SetSwatchColor( m_graphicText->GetTextColor(), false );

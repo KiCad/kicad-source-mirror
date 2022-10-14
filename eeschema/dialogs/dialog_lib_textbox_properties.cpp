@@ -142,6 +142,7 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
         return false;
 
     m_textCtrl->SetValue( m_currentText->GetText() );
+    m_textCtrl->EmptyUndoBuffer();
 
     m_fontCtrl->SetFontSelection( m_currentText->GetFont() );
     m_textSize.SetValue( m_currentText->GetTextWidth() );

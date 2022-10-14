@@ -259,6 +259,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
         // Replace our '\' 'n' sequence by the EOL char
         item->ReplaceAntiSlashSequence();
         m_stcText->SetValue( item->m_FullText );
+        m_stcText->EmptyUndoBuffer();
 
         msg.Printf( wxT( "%d" ), item->m_IncrementLabel );
         m_textCtrlTextIncrement->SetValue( msg );

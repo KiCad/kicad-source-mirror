@@ -205,6 +205,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     // show text variable cross-references in a human-readable format
     m_textCtrl->SetValue( schematic.ConvertKIIDsToRefs( m_currentText->GetText() ) );
+    m_textCtrl->EmptyUndoBuffer();
 
     m_fontCtrl->SetFontSelection( m_currentText->GetFont() );
     m_textSize.SetValue( m_currentText->GetTextWidth() );

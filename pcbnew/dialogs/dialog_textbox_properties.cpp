@@ -169,6 +169,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
 
     m_MultiLineText->SetValue( converted );
     m_MultiLineText->SetSelection( -1, -1 );
+    m_MultiLineText->EmptyUndoBuffer();
 
     m_cbLocked->SetValue( m_item->IsLocked() );
 

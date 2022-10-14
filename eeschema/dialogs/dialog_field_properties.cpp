@@ -302,9 +302,14 @@ void DIALOG_FIELD_PROPERTIES::onVAlignButton( wxCommandEvent& aEvent )
 bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
 {
     if( m_TextCtrl->IsShown() )
+    {
         m_TextCtrl->SetValue( m_text );
+    }
     else if( m_StyledTextCtrl->IsShown() )
+    {
         m_StyledTextCtrl->SetValue( m_text );
+        m_StyledTextCtrl->EmptyUndoBuffer();
+    }
 
     m_fontCtrl->SetFontSelection( m_font );
 

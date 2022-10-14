@@ -233,6 +233,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
         m_MultiLineText->SetValue( converted );
         m_MultiLineText->SetSelection( -1, -1 );
+        m_MultiLineText->EmptyUndoBuffer();
     }
 
     if( m_item->Type() == PCB_FP_TEXT_T && m_fpText )
