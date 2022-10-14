@@ -5356,6 +5356,10 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
 
     std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
+    // File format default is no-token == no-feature.
+    via->SetRemoveUnconnected( false );
+    via->SetKeepTopBottom( false );
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token == T_locked )
