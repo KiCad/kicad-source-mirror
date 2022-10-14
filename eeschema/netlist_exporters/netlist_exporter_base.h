@@ -99,13 +99,9 @@ public:
         m_schematic( aSchematic )
     {
         wxASSERT( aSchematic );
-        m_savedCurrentSheet = m_schematic->CurrentSheet();
     }
 
-    virtual ~NETLIST_EXPORTER_BASE()
-    {
-        m_schematic->SetCurrentSheet( m_savedCurrentSheet );
-    }
+    virtual ~NETLIST_EXPORTER_BASE() = default;
 
     /**
      * Write to specified output file.
@@ -210,9 +206,6 @@ protected:
 
     /// The schematic we're generating a netlist for
     SCHEMATIC_IFACE*      m_schematic;
-
-    /// The schematic's CurrentSheet when we entered.  Restore on exiting.
-    SCH_SHEET_PATH        m_savedCurrentSheet;
 };
 
 #endif
