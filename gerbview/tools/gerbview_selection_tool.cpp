@@ -442,7 +442,6 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
             if( current )
             {
                 current->ClearBrightened();
-                getView()->Hide( current, false );
                 highlightGroup.Remove( current );
                 getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
             }
@@ -454,7 +453,6 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
             {
                 current = ( *aCollector )[id - 1];
                 current->SetBrightened();
-                getView()->Hide( current, true );
                 highlightGroup.Add( current );
                 getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
             }
@@ -477,10 +475,9 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
         }
     }
 
-    if( current && current->IsBrightened() )
+    if( current )
     {
         current->ClearBrightened();
-        getView()->Hide( current, false );
         getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
     }
 
