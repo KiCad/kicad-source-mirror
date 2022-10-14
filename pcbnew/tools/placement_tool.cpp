@@ -245,7 +245,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
     if( !GetSelections( itemsToAlign, locked_items,
             []( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
             {
-                return ( left.second.GetBottom() < right.second.GetBottom() );
+                return ( left.second.GetBottom() > right.second.GetBottom() );
             } ) )
     {
         return 0;
@@ -365,7 +365,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
     if( !GetSelections( itemsToAlign, locked_items,
             []( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
             {
-                return ( left.second.GetRight() < right.second.GetRight() );
+                return ( left.second.GetRight() > right.second.GetRight() );
             } ) )
     {
         return 0;
