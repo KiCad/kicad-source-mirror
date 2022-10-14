@@ -34,18 +34,19 @@ const std::function<void( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* it
 
 /**
  * Function ConvertOutlineToPolygon
- * build a polygon (with holes) from a PCB_SHAPE list, which is expected to be
- * a outline, therefore a closed main outline with perhaps closed inner outlines.
- * These closed inner outlines are considered as holes in the main outline
- * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
+ * build a polygon set (with holes) from a PCB_SHAPE list, which is expected to be one or more
+ * top-level closed outlines, with zero or more holes in each.  Optionally, it can be limited to
+ * a single top-level closed outline.
+ * @param aShapeList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
  * @param aErrorMax is the max error distance when polygonizing a curve (internal units)
  * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units)
+ * @param aAllowDisjoint indicates multiple top-level outlines are allowed
  * @param aErrorHandler = an optional error handler
  */
-bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                              int aErrorMax, int aChainingEpsilon,
-                              OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
+bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SET& aPolygons,
+                              int aErrorMax, int aChainingEpsilon, bool aAllowDisjoint,
+                              OUTLINE_ERROR_HANDLER* aErrorHandler );
 
 
 /**

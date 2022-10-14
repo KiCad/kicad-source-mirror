@@ -2222,7 +2222,7 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     int chainingEpsilon = pcbIUScale.mmToIU( 0.02 );  // max dist from one endPt to next startPt
 
     if( ConvertOutlineToPolygon( list_front, m_courtyard_cache_front, errorMax, chainingEpsilon,
-                                 aErrorHandler ) )
+                                 true, aErrorHandler ) )
     {
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
         m_courtyard_cache_front.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
@@ -2235,7 +2235,7 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     }
 
     if( ConvertOutlineToPolygon( list_back, m_courtyard_cache_back, errorMax, chainingEpsilon,
-                                 aErrorHandler ) )
+                                 true, aErrorHandler ) )
     {
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
         m_courtyard_cache_back.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
