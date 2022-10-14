@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -78,9 +78,14 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_italic;
 		wxStaticText* hAlignLabel;
 		wxChoice* m_hAlign;
+		wxStaticText* m_staticText14;
 		wxCheckBox* m_visible;
+		wxStaticText* m_staticText12;
 		wxStaticText* vAlignLabel;
 		wxChoice* m_vAlign;
+		wxStaticText* m_staticText15;
+		wxCheckBox* m_showFieldNames;
+		wxStaticText* m_staticText13;
 		wxStaticLine* m_staticline1;
 		wxStaticLine* m_staticline2;
 		wxStaticLine* m_staticline21;

@@ -228,6 +228,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_italic->Set3StateValue( wxCHK_UNDETERMINED );
     m_bold->Set3StateValue( wxCHK_UNDETERMINED );
     m_visible->Set3StateValue( wxCHK_UNDETERMINED );
+    m_showFieldNames->Set3StateValue( wxCHK_UNDETERMINED );
     m_lineWidth.SetValue( INDETERMINATE_ACTION );
     m_lineStyle->SetStringSelection( INDETERMINATE_ACTION );
     m_junctionSize.SetValue( INDETERMINATE_ACTION );
@@ -248,16 +249,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
             return;
     }
 
-    SCH_SYMBOL*   symbol = dynamic_cast<SCH_SYMBOL*>( aItem->GetParent() );
-    EDA_TEXT*     eda_text = dynamic_cast<EDA_TEXT*>( aItem );
-    SCH_TEXT*     sch_text = dynamic_cast<SCH_TEXT*>( aItem );
-    SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( aItem );
-
     m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UNDO_REDO::CHANGED, m_appendUndo,
                                   false );
     m_appendUndo = true;
 
-    if( eda_text )
+    if( EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( aItem ) )
     {
         if( !m_textSize.IsIndeterminate() )
             eda_text->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
@@ -268,8 +264,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         if( m_hAlign->GetStringSelection() != INDETERMINATE_ACTION )
         {
             GR_TEXT_H_ALIGN_T hAlign = EDA_TEXT::MapHorizJustify( m_hAlign->GetSelection() - 1 );
+            SCH_SYMBOL*       parentSymbol = dynamic_cast<SCH_SYMBOL*>( aItem->GetParent() );
 
-            if( symbol && symbol->GetTransform().x1 < 0 )
+            if( parentSymbol && parentSymbol->GetTransform().x1 < 0 )
             {
                 if( hAlign == GR_TEXT_H_ALIGN_LEFT )
                     hAlign = GR_TEXT_H_ALIGN_RIGHT;
@@ -283,8 +280,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         if( m_vAlign->GetStringSelection() != INDETERMINATE_ACTION )
         {
             GR_TEXT_V_ALIGN_T vAlign = EDA_TEXT::MapVertJustify( m_vAlign->GetSelection() - 1 );
+            SCH_SYMBOL*       parentSymbol = dynamic_cast<SCH_SYMBOL*>( aItem->GetParent() );
 
-            if( symbol && symbol->GetTransform().y1 < 0 )
+            if( parentSymbol && parentSymbol->GetTransform().y1 < 0 )
             {
                 if( vAlign == GR_TEXT_V_ALIGN_TOP )
                     vAlign = GR_TEXT_V_ALIGN_BOTTOM;
@@ -322,11 +320,16 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         }
     }
 
-    // No else!  Labels are both.
-    if( sch_text )
+    if( SCH_TEXT* sch_text = dynamic_cast<SCH_TEXT*>( aItem ) )
     {
         if( m_orientation->GetStringSelection() != INDETERMINATE_ACTION )
             sch_text->SetTextSpinStyle( (TEXT_SPIN_STYLE::SPIN) m_orientation->GetSelection() );
+    }
+
+    if( SCH_FIELD* sch_field = dynamic_cast<SCH_FIELD*>( aItem ) )
+    {
+        if( m_showFieldNames->Get3StateValue() != wxCHK_UNDETERMINED )
+            sch_field->SetNameShown( m_showFieldNames->GetValue() );
     }
 
     if( aItem->HasLineStroke() )
@@ -350,10 +353,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         aItem->SetStroke( stroke );
     }
 
-    if( aItem->Type() == SCH_SHAPE_T )
+    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
     {
-        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
-
         if( m_setFillColor->GetValue() )
         {
             shape->SetFillColor( m_fillColorSwatch->GetSwatchColor() );
@@ -365,7 +366,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         }
     }
 
-    if( junction )
+    if( SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( aItem ) )
     {
         if( !m_junctionSize.IsIndeterminate() )
             junction->SetDiameter( m_junctionSize.GetValue() );
