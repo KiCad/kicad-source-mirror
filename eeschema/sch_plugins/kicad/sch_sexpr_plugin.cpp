@@ -793,60 +793,72 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
         }
     }
 
-    m_out->Print( aNestLevel + 1, "(instances\n" );
-
-    KIID lastProjectUuid;
-    KIID rootSheetUuid = aSchematic.Root().m_Uuid;
-    SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
-
-    for( size_t i = 0; i < aSymbol->GetInstanceReferences().size(); i++ )
+    if( !aSymbol->GetInstanceReferences().empty() )
     {
-        // If the instance data is part of this design but no longer has an associated sheet
-        // path, don't save it.  This prevents large amounts of orphaned instance data for the
-        // current project from accumulating in the schematic files.
-        //
-        // Keep all instance data when copying to the clipboard.  It may be needed on paste.
-        if( !aForClipboard
-          && ( aSymbol->GetInstanceReferences()[i].m_Path[0] == rootSheetUuid )
-          && !fullHierarchy.GetSheetPathByKIIDPath( aSymbol->GetInstanceReferences()[i].m_Path ) )
+        m_out->Print( aNestLevel + 1, "(instances\n" );
+
+        KIID lastProjectUuid;
+        KIID rootSheetUuid = aSchematic.Root().m_Uuid;
+        SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
+        bool project_open = false;
+
+        for( size_t i = 0; i < aSymbol->GetInstanceReferences().size(); i++ )
         {
-            if( ( i + 1 == aSymbol->GetInstanceReferences().size() )
-              || lastProjectUuid != aSymbol->GetInstanceReferences()[i+1].m_Path[0] )
+            // If the instance data is part of this design but no longer has an associated sheet
+            // path, don't save it.  This prevents large amounts of orphaned instance data for the
+            // current project from accumulating in the schematic files.
+            //
+            // Keep all instance data when copying to the clipboard.  It may be needed on paste.
+            if( !aForClipboard
+              && ( aSymbol->GetInstanceReferences()[i].m_Path[0] == rootSheetUuid )
+              && !fullHierarchy.GetSheetPathByKIIDPath( aSymbol->GetInstanceReferences()[i].m_Path ) )
+            {
+                if( project_open && ( ( i + 1 == aSymbol->GetInstanceReferences().size() )
+                  || lastProjectUuid != aSymbol->GetInstanceReferences()[i+1].m_Path[0] ) )
+                {
+                    m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
+                    project_open = false;
+                }
+
+                continue;
+            }
+
+            if( lastProjectUuid != aSymbol->GetInstanceReferences()[i].m_Path[0] )
+            {
+                wxString projectName;
+
+                if( aSymbol->GetInstanceReferences()[i].m_Path[0] == rootSheetUuid )
+                    projectName = aSchematic.Prj().GetProjectName();
+                else
+                    projectName = aSymbol->GetInstanceReferences()[i].m_ProjectName;
+
+                lastProjectUuid = aSymbol->GetInstanceReferences()[i].m_Path[0];
+                m_out->Print( aNestLevel + 2, "(project %s\n", m_out->Quotew( projectName ).c_str() );
+                project_open = true;
+            }
+
+            wxString path = aSymbol->GetInstanceReferences()[i].m_Path.AsString();
+
+            m_out->Print( aNestLevel + 3, "(path %s\n",
+                          m_out->Quotew( path ).c_str() );
+            m_out->Print( aNestLevel + 4, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
+                          m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Reference ).c_str(),
+                          aSymbol->GetInstanceReferences()[i].m_Unit,
+                          m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Value ).c_str(),
+                          m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Footprint ).c_str() );
+            m_out->Print( aNestLevel + 3, ")\n" );
+
+            if( project_open && ( ( i + 1 == aSymbol->GetInstanceReferences().size() )
+              || lastProjectUuid != aSymbol->GetInstanceReferences()[i+1].m_Path[0] ) )
+            {
                 m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
-
-            continue;
+                project_open = false;
+            }
         }
 
-        if( lastProjectUuid != aSymbol->GetInstanceReferences()[i].m_Path[0] )
-        {
-            wxString projectName;
-
-            if( aSymbol->GetInstanceReferences()[i].m_Path[0] == rootSheetUuid )
-                projectName = aSchematic.Prj().GetProjectName();
-            else
-                projectName = aSymbol->GetInstanceReferences()[i].m_ProjectName;
-
-            lastProjectUuid = aSymbol->GetInstanceReferences()[i].m_Path[0];
-            m_out->Print( aNestLevel + 2, "(project %s\n", m_out->Quotew( projectName ).c_str() );
-        }
-
-        wxString path = aSymbol->GetInstanceReferences()[i].m_Path.AsString();
-
-        m_out->Print( aNestLevel + 3, "(path %s\n",
-                      m_out->Quotew( path ).c_str() );
-        m_out->Print( aNestLevel + 4, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
-                      m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Reference ).c_str(),
-                      aSymbol->GetInstanceReferences()[i].m_Unit,
-                      m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Value ).c_str(),
-                      m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Footprint ).c_str() );
-        m_out->Print( aNestLevel + 3, ")\n" );
-
-        if( ( i + 1 == aSymbol->GetInstanceReferences().size() )
-          || lastProjectUuid != aSymbol->GetInstanceReferences()[i+1].m_Path[0] )
-            m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
+        m_out->Print( aNestLevel + 1, ")\n" );  // Closes `instances`.
     }
 
-    m_out->Print( aNestLevel + 1, ")\n" );  // Closes `instances`.
     m_out->Print( aNestLevel, ")\n" );      // Closes `symbol`.
 }
 
