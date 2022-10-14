@@ -1363,7 +1363,6 @@ void ROUTER_TOOL::performRouting()
             break;
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate()
-                 || evt->IsUndoRedo()
                  || evt->IsAction( &PCB_ACTIONS::routerInlineDrag ) )
         {
             if( evt->IsCancelInteractive() && !m_router->RoutingInProgress() )
@@ -1372,6 +1371,12 @@ void ROUTER_TOOL::performRouting()
             if( evt->IsActivate() && !evt->IsMoveTool() )
                 m_cancelled = true;
 
+            break;
+        }
+        else if( evt->IsUndoRedo() )
+        {
+            // We're in an UndoRedoBlock.  If we get here, something's broken.
+            wxFAIL;
             break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -1807,7 +1812,7 @@ void ROUTER_TOOL::performDragging( int aMode )
         {
             m_menu.ShowContextMenu( selection() );
         }
-        else if( evt->IsCancelInteractive() || evt->IsActivate() || evt->IsUndoRedo() )
+        else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( evt->IsCancelInteractive() && !m_startItem )
                 m_cancelled = true;
@@ -1816,6 +1821,35 @@ void ROUTER_TOOL::performDragging( int aMode )
                 m_cancelled = true;
 
             break;
+        }
+        else if( evt->IsUndoRedo() )
+        {
+            // We're in an UndoRedoBlock.  If we get here, something's broken.
+            wxFAIL;
+            break;
+        }
+        else if( evt->Category() == TC_COMMAND )
+        {
+            // disallow editing commands
+            if( evt->IsAction( &ACTIONS::cut )
+                || evt->IsAction( &ACTIONS::copy )
+                || evt->IsAction( &ACTIONS::paste )
+                || evt->IsAction( &ACTIONS::pasteSpecial ) )
+            {
+                wxBell();
+            }
+            // treat an undo as an escape
+            else if( evt->IsAction( &ACTIONS::undo ) )
+            {
+                if( m_startItem )
+                    break;
+                else
+                    wxBell();
+            }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
         else
         {
@@ -2183,6 +2217,12 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             m_router->FixRoute( m_endSnapPoint, m_endItem );
             break;
         }
+        else if( evt->IsUndoRedo() )
+        {
+            // We're in an UndoRedoBlock.  If we get here, something's broken.
+            wxFAIL;
+            break;
+        }
         else if( evt->Category() == TC_COMMAND )
         {
             // disallow editing commands
@@ -2192,6 +2232,14 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 || evt->IsAction( &ACTIONS::pasteSpecial ) )
             {
                 wxBell();
+            }
+            // treat an undo as an escape
+            else if( evt->IsAction( &ACTIONS::undo ) )
+            {
+                if( wasLocked )
+                    item->SetLocked( true );
+
+                break;
             }
             else
             {
