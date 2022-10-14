@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-09 08:03+0000\n"
+"PO-Revision-Date: 2022-10-17 17:05+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3056,13 +3056,15 @@ msgstr "Este cambio surte efecto al reiniciar el editor."
 
 #: common/dialogs/panel_common_settings_base.cpp:127
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "El foco sigue al ratón entre los editores de esquemas y de PCB"
 
 #: common/dialogs/panel_common_settings_base.cpp:128
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Si el cursor del mouse se mueve sobre el lienzo de una ventana del editor de "
+"esquemas o de PCB, esa ventana se eleva."
 
 #: common/dialogs/panel_common_settings_base.cpp:132
 msgid "Icon theme:"
@@ -15219,6 +15221,15 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Hay hojas jerárquicas en el archivo esquemático cargado que provienen de una "
+"versión de archivo más antigua, lo que hace que falten datos de instancias "
+"de símbolos.  Esto resultará en que todos los símbolos del esquema cargado "
+"utilicen la configuración de instancia por defecto o vuelvan a la "
+"configuración de símbolos de la biblioteca.  Cargar el proyecto que utiliza "
+"este archivo esquemático y guardar a la última versión de archivo resolverá "
+"este problema.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:240 eeschema/sheet.cpp:268 eeschema/sheet.cpp:309
 #: eeschema/sheet.cpp:358 eeschema/sheet.cpp:419
@@ -15318,16 +15329,18 @@ msgid "Error loading simulation model library '%s': %s"
 msgstr "Error al cargar la biblioteca del modelo de simulación '%s': %s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "Error al cargar el esquema '%s'."
+msgstr "Error al cargar el modelo de simulación: no hay campo '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "Ha ocurrido un error al cargar el símbolo %s desde la librería '%s'."
+msgstr ""
+"Error al cargar el modelo de simulación: no se ha podido encontrar el modelo "
+"base '%s' en la biblioteca '%s'"
 
 #: eeschema/sim/sim_model.cpp:1167
 #, c-format
@@ -15356,9 +15369,8 @@ msgid "Parasitic Pin Capacitance"
 msgstr "Capacitancia de pin parásita"
 
 #: eeschema/sim/sim_model_kibis.cpp:243
-#, fuzzy
 msgid "DC Value"
-msgstr "Valor"
+msgstr "Valor DC"
 
 #: eeschema/sim/sim_model_kibis.cpp:261
 msgid "ON time"
@@ -15645,12 +15657,14 @@ msgstr "Tipo de SIM_VALUE desconocido"
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr ""
+"No se pudo encontrar el modelo '%s' para copiar para el modelo \"Un tipo de "
+"'%s'"
 
 #: eeschema/sim/spice_model_parser.cpp:217
 #: eeschema/sim/spice_model_parser.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s' in model '%s'"
-msgstr "Fallo al establecer el parámetro '%s' a '%s'"
+msgstr "Error al establecer el parámetro '%s' en '%s' en el modelo '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -21249,34 +21263,32 @@ msgid "Multiplier"
 msgstr "Multiplicador"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:40
-#, fuzzy
 msgid "Platinum"
-msgstr "Aluminio"
+msgstr "Platino"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:41
 msgid "Gold"
-msgstr ""
+msgstr "Oro"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:42
 msgid "Titanium"
-msgstr ""
+msgstr "Titanio"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:43
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "Acero inoxidable 18-9"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:45
 msgid "Silver"
-msgstr ""
+msgstr "Plata"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:46
 msgid "Mercury"
-msgstr ""
+msgstr "Mercurio"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:47
-#, fuzzy
 msgid "Nickel"
-msgstr "Apodo"
+msgstr "Níquel"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:48
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:838
@@ -21285,70 +21297,64 @@ msgid "Copper"
 msgstr "Cobre"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:49
-#, fuzzy
 msgid "Copper-Aluminium"
-msgstr "Aluminio"
+msgstr "Cobre-Aluminio"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "Latón"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
-msgstr ""
+msgstr "Bronce"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
-#, fuzzy
 msgid "Tin"
-msgstr "in"
+msgstr "Estaño"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:53
-#, fuzzy
 msgid "Lead"
-msgstr "Líder"
+msgstr "Plomo"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:54
-#, fuzzy
 msgid "Aluminium-Copper"
-msgstr "Aluminio"
+msgstr "Aluminio-Cobre"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "Hierro fundido"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
-msgstr ""
+msgstr "Acero al carbono"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:57
-#, fuzzy
 msgid "Aluminium"
 msgstr "Aluminio"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:58
 msgid "Cadmium"
-msgstr ""
+msgstr "Cadmio"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:59
 msgid "Iron"
-msgstr ""
+msgstr "Hierro"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:60
 msgid "Chrome"
-msgstr ""
+msgstr "Cromo"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:61
 msgid "Zinc"
-msgstr ""
+msgstr "Zinc"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:62
-#, fuzzy
 msgid "Manganese"
-msgstr "日本人"
+msgstr "Manganeso"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:63
 msgid "Magnesium"
-msgstr ""
+msgstr "Magnesio"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
@@ -21368,11 +21374,20 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"Esta tabla muestra la diferencia de potencial electroquímico entre varios "
+"metales y aleaciones. Un número positivo indica que la fila es anódica y la "
+"columna es catódica.\n"
+"La corrosión galvánica afecta a diferentes metales en contacto y en "
+"determinadas condiciones.\n"
+"El ánodo de un par electroquímico se oxida y se corroe, mientras que el "
+"cátodo recibe metales disueltos pero permanece protegido.\n"
+"La norma EN 50310 sugiere una diferencia de tensión inferior a 300mV. Las "
+"prácticas conocidas utilizan un tercer metal de interfaz entre el par "
+"principal (es decir, el acabado superficial ENIG)."
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
-#, fuzzy
 msgid "Threshold voltage:"
-msgstr "Valor umbral:"
+msgstr "Tensión umbral:"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:68
 #: pcb_calculator/widgets/unit_selector.cpp:255
@@ -22249,7 +22264,6 @@ msgid "Board Classes"
 msgstr "Clases de placas"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
-#, fuzzy
 msgid "Galvanic Corrosion"
 msgstr "Corrosión galvánica"
 
@@ -25722,33 +25736,33 @@ msgid "Text items must have some content."
 msgstr "Los elementos de texto deben tener contenido."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at least %s."
-msgstr "%s debe ser al menos %s."
+msgstr "El ancho del texto debe ser de al menos %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at most %s."
-msgstr "%s debe ser al menos %s."
+msgstr "El ancho del texto debe ser a lo más %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at least %s."
-msgstr "%s debe ser al menos %s."
+msgstr "La altura del texto debe ser de al menos %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at most %s."
-msgstr "%s debe ser al menos %s."
+msgstr "La altura del texto debe ser a lo más %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
 "El grosor del texto es demasiado grande para el tamaño del texto.\n"
-"Será recortado."
+"Será recortará a %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:574
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:603
@@ -26040,14 +26054,14 @@ msgid "Footprint name may not contain '%s'."
 msgstr "El nombre de huella no debe contener '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "The text width must be between %s and %s."
-msgstr "El ancho de línea debe ser mayor que cero."
+msgstr "El ancho del texto debe estar entre %s y %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "Error de tipo entre '%s' y %lf"
+msgstr "La altura del texto debe estar entre %s y %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:452
 #: pcbnew/dialogs/dialog_text_properties.cpp:420
@@ -26795,9 +26809,8 @@ msgid "Circle Properties"
 msgstr "Propiedades del círculo"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:211
-#, fuzzy
 msgid "Center Point"
-msgstr "Centro X"
+msgstr "Punto central"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:223
 msgid "Arc Properties"
@@ -27283,9 +27296,8 @@ msgstr "Propiedades de zonas sin cobre"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:146
-#, fuzzy
 msgid "Center Point:"
-msgstr "Centro X:"
+msgstr "Punto central:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:136
 #: pcbnew/dialogs/dialog_pad_properties.cpp:728
@@ -28473,7 +28485,7 @@ msgstr "Desvío objetivo:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:22
 msgid "Length / Skew"
-msgstr "Longitud / desvío"
+msgstr "Longitud / Desvío"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:30
 msgid "Tune from:"
@@ -32099,9 +32111,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "Comprobación del ancho mínimo de conexión de las redes..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum connection width %s; actual %s)"
-msgstr "Ancho mínimo de conexión %s; actual %s"
+msgstr "(%s ancho mínimo de conexión %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -32173,19 +32185,19 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Comprobando el solapamiento del patios de huellas..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "(%s largo desacoplado máximo: %s; real: %s)"
+msgstr "(%s longitud máxima desacoplada %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum gap %s; actual %s)"
-msgstr "(%s mínimo %s; real %s)"
+msgstr "(%s brecha mínima %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum gap %s; actual %s)"
-msgstr "(%s altura máxima %s; real %s)"
+msgstr "(%s brecha máxima %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 msgid "Checking keepouts & disallow constraints..."
@@ -32269,25 +32281,25 @@ msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "La huella '%s' no coincide con la copia en la biblioteca '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s largo mínimo %s; real %s)"
+msgstr "(%s longitud mínima %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s largo máximo %s; real %s)"
+msgstr "(%s longitud máxima %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
 msgstr ""
-"(%s desviación máxima: %s; real %s; longitud promedio de redes: %s; real: %s)"
+"(%s desviación máxima: %s; real %s; longitud neta promedio %s; real: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s cantidad máxima %d; real %d)"
+msgstr "(%s recuento máximo %d; real %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:221
 msgid "Gathering length-constrained connections..."
@@ -32592,49 +32604,56 @@ msgid "Board stackup settings not up to date."
 msgstr "La configuración del apilado de la placa está desactualizada."
 
 #: pcbnew/exporters/step/kicad2step.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "No such file: %s"
-msgstr "no existe el archivo"
+msgstr "No existe tal archivo: %s"
 
 #: pcbnew/exporters/step/kicad2step.cpp:239
 msgid ""
 "** Output already exists. Export aborted. **\n"
 "Enable the force overwrite flag to overwrite it."
 msgstr ""
+"** La salida ya existe. Exportación abortada. **\n"
+"Activa la bandera de forzar sobrescritura para sobrescribirla."
 
 #: pcbnew/exporters/step/kicad2step.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "Archivo '%s' creado"
+msgstr "Leer archivo: '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:273
 msgid "Build STEP data\n"
-msgstr ""
+msgstr "Construir datos STEP\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:279
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Error en la construcción del modelo de placa STEP. Exportación abortada. "
+"**\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:284
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "Archivos STEP"
+msgstr "Escribir archivo STEP\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:295
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Error al escribir el archivo '%s'."
+msgstr ""
+"\n"
+"** Error al escribir el archivo STEP. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "Se ha creado el archivo de informe '%s'."
+msgstr ""
+"\n"
+"Archivo STEP '%s' creado.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:306
 #: pcbnew/exporters/step/kicad2step.cpp:311
@@ -32642,22 +32661,24 @@ msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Error al exportar el archivo STEP. Exportación abortada. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:317
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "Error al leer el archivo."
+msgstr ""
+"\n"
+"** Error al leer el archivo kicad_pcb. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:325
-#, fuzzy
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
-"No puede crearse el archivo STEP. Compruebe que la placa tiene un contorno y "
-"modelos válidos."
+"No se pudo crear el archivo STEP.\n"
+"Compruebe que la placa tiene un contorno y modelos válidos."
 
 #: pcbnew/exporters/step/kicad2step.cpp:330
 msgid "STEP file has been created, but there are warnings."
@@ -32676,9 +32697,8 @@ msgid "IGES output (default STEP)"
 msgstr "Salida IGES (STEP por defecto)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:74
-#, fuzzy
 msgid "overwrite output file"
-msgstr "Sobrescribir archivo antiguo"
+msgstr "sobrescribir el archivo de salida"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:76
 msgid "Use Drill Origin for output origin"
@@ -32696,38 +32716,35 @@ msgstr ""
 "25.4x25.4mm (por defecto milímetros)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:84
-#, fuzzy
 msgid "Exclude 3D models for components with 'virtual' attribute"
-msgstr "excluir modelos 3D para componentes con atributo 'virtual'"
+msgstr "Excluir los modelos 3D de los componentes con el atributo \"virtual"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:87
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
 msgstr ""
+"Sustituir los modelos STEP o IGS con el mismo nombre en lugar de los modelos "
+"VRML"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:90
-#, fuzzy
 msgid ""
 "Minimum distance between points to treat them as separate ones (default "
 "0.01mm)"
 msgstr ""
-"Distancia mínima entre puntos para considerarlos independientes (por defecto "
-"0,01 mm)"
+"Distancia mínima entre puntos para tratarlos como separados (por defecto "
+"0,01mm)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:93
-#, fuzzy
 msgid "display this message"
-msgstr "Ocultar este mensaje."
+msgstr "mostrar este mensaje"
 
 #: pcbnew/exporters/step/kicad2step_frame_base.h:46
-#, fuzzy
 msgid "Kicad2step Converter"
-msgstr "Conversor de imágenes de KiCad"
+msgstr "Convertidor Kicad2step"
 
 #: pcbnew/exporters/step/pcb/3d_resolver.cpp:343
-#, fuzzy
 msgid "Alias:"
-msgstr "Alias: "
+msgstr "Alias:"
 
 # Pendiente de contexto
 #: pcbnew/files.cpp:150
@@ -34161,7 +34178,6 @@ msgid "Add Teardrops..."
 msgstr "Añadir lágrimas..."
 
 #: pcbnew/menubar_pcb_editor.cpp:419
-#, fuzzy
 msgid "Remove Teardrops"
 msgstr "Eliminar lágrimas"
 
@@ -35135,19 +35151,16 @@ msgstr ""
 "Preferencias."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:89
-#, fuzzy
 msgid "Loading board\n"
-msgstr "Abrir placa"
+msgstr "Cargando placa\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:96
-#, fuzzy
 msgid "Successfully created svg file"
-msgstr "Placa reanotada con éxito"
+msgstr "Archivo svg creado exitosamente"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:98
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "Error al leer el archivo."
+msgstr "Error al crear el archivo svg"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -36631,15 +36644,13 @@ msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:550 pcbnew/router/pns_kicad_iface.cpp:621
 #: pcbnew/router/router_tool.cpp:720
-#, fuzzy
 msgid "board minimum clearance"
-msgstr "Margen mínimo de placa: %s."
+msgstr "margen mínimo de placa"
 
 #: pcbnew/router/pns_kicad_iface.cpp:554 pcbnew/router/pns_kicad_iface.cpp:620
 #: pcbnew/router/router_tool.cpp:687 pcbnew/router/router_tool.cpp:707
-#, fuzzy
 msgid "board minimum track width"
-msgstr "ancho mínimo de placa"
+msgstr "ancho de pista mínimo de placa"
 
 #: pcbnew/router/pns_kicad_iface.cpp:561
 msgid "existing track"
@@ -36997,9 +37008,9 @@ msgid "Track Width: %s"
 msgstr "Ancho de pista: %s"
 
 #: pcbnew/router/router_tool.cpp:2414
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "Espaciado de par diferencial"
+msgstr "Brecha del par del diferencial: %s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
