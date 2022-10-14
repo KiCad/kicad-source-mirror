@@ -301,16 +301,15 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 
     // Constrain moving bounding box to coordinates limits
     VECTOR2D tryMovement( aMovement );
+    VECTOR2D bBoxOrigin( aSourceBBox.GetPosition() + aBBoxOffset );
+    VECTOR2D clampedBBoxOrigin = GetClampedCoords( bBoxOrigin + tryMovement, COORDS_PADDING );
 
-    VECTOR2D clampedBBoxOrigin = GetClampedCoords(
-            VECTOR2D( aSourceBBox.GetPosition() ) + aBBoxOffset + tryMovement, COORDS_PADDING );
+    tryMovement = clampedBBoxOrigin - bBoxOrigin;
 
-    tryMovement = clampedBBoxOrigin - aBBoxOffset - aSourceBBox.GetPosition();
+    VECTOR2D bBoxEnd( aSourceBBox.GetEnd() + aBBoxOffset );
+    VECTOR2D clampedBBoxEnd = GetClampedCoords( bBoxEnd + tryMovement, COORDS_PADDING );
 
-    VECTOR2D clampedBBoxEnd = GetClampedCoords(
-            VECTOR2D( aSourceBBox.GetEnd() ) + aBBoxOffset + tryMovement, COORDS_PADDING );
-
-    tryMovement = clampedBBoxEnd - aBBoxOffset - aSourceBBox.GetEnd();
+    tryMovement = clampedBBoxEnd - bBoxEnd;
 
     return GetClampedCoords<double, int>( tryMovement );
 }
@@ -382,12 +381,11 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
             [editFrame]( bool constrained )
             {
                 editFrame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" )
-                                                            : wxT( "" ) );
+                                                              : wxT( "" ) );
             };
 
-    std::vector<BOARD_ITEM*> sel_items;             // All the items operated on by the move below
-    std::vector<BOARD_ITEM*> orig_items;            // All the original items in the selection
-    std::vector<BOARD_ITEM*> lastItemsInConflict;   // last footprints with courtyard overlapping
+    std::vector<BOARD_ITEM*> sel_items;         // All the items operated on by the move below
+    std::vector<BOARD_ITEM*> orig_items;        // All the original items in the selection
 
     for( EDA_ITEM* item : selection )
     {
@@ -432,16 +430,14 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     bool showCourtyardConflicts = !m_isFootprintEditor
                                     && board->IsElementVisible( LAYER_CONFLICTS_SHADOW );
 
-    displayConstraintsMessage( hv45Mode );
-
     // Used to test courtyard overlaps
-    DRC_INTERACTIVE_COURTYARD_CLEARANCE drc_on_move;
+    std::shared_ptr<DRC_ENGINE>         drcEngine = m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine();
+    DRC_INTERACTIVE_COURTYARD_CLEARANCE drc_on_move( drcEngine );
 
     if( showCourtyardConflicts )
-    {
         drc_on_move.Init( board );
-        drc_on_move.SetDRCEngine( m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine().get() );
-    }
+
+    displayConstraintsMessage( hv45Mode );
 
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -545,34 +541,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                 if( showCourtyardConflicts && drc_on_move.m_FpInMove.size() )
                 {
                     drc_on_move.Run();
-
-                    bool need_redraw = false;   // will be set to true if a COURTYARD_CONFLICT
-                                                // has changed
-
-                    // Ensure the "old" conflicts are cleared
-                    for( BOARD_ITEM* item: lastItemsInConflict )
-                    {
-                        item->ClearFlags( COURTYARD_CONFLICT );
-                        m_toolMgr->GetView()->Update( item );
-                        need_redraw = true;
-                    }
-
-                    lastItemsInConflict.clear();
-
-                    for( BOARD_ITEM* item: drc_on_move.m_ItemsInConflict )
-                    {
-                        if( !item->HasFlag( COURTYARD_CONFLICT ) )
-                        {
-                            item->SetFlags( COURTYARD_CONFLICT );
-                            m_toolMgr->GetView()->Update( item );
-                            need_redraw = true;
-                        }
-
-                        lastItemsInConflict.push_back( item );
-                    }
-
-                    if( need_redraw )
-                        m_toolMgr->GetView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+                    drc_on_move.UpdateConflicts( m_toolMgr->GetView(), true );
                 }
 
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
@@ -768,11 +737,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     } while( ( evt = Wait() ) ); // Assignment (instead of equality test) is intentional
 
     // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
-    for( BOARD_ITEM* item: lastItemsInConflict )
-    {
-        m_toolMgr->GetView()->Update( item );
-        item->ClearFlags( COURTYARD_CONFLICT );
-    }
+    drc_on_move.ClearConflicts( m_toolMgr->GetView() );
 
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );

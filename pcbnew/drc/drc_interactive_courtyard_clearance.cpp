@@ -73,8 +73,8 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
 
                 if( frontA.Collide( &frontB, clearance, &actual, &pos ) )
                 {
-                    m_ItemsInConflict.insert( fpA );
-                    m_ItemsInConflict.insert( fpB );
+                    m_itemsInConflict.insert( fpA );
+                    m_itemsInConflict.insert( fpB );
                  }
             }
 
@@ -88,8 +88,8 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
 
                 if( backA.Collide( &backB, clearance, &actual, &pos ) )
                 {
-                    m_ItemsInConflict.insert( fpA );
-                    m_ItemsInConflict.insert( fpB );
+                    m_itemsInConflict.insert( fpA );
+                    m_itemsInConflict.insert( fpB );
                 }
             }
 
@@ -122,8 +122,8 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
                 {
                     if( testPadAgainstCourtyards( padB, fpA ) )
                     {
-                        m_ItemsInConflict.insert( fpA );
-                        m_ItemsInConflict.insert( fpB );
+                        m_itemsInConflict.insert( fpA );
+                        m_itemsInConflict.insert( fpB );
                         skipNextCmp = true;
                         break;
                     }
@@ -140,8 +140,8 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
                 {
                     if( testPadAgainstCourtyards( padA, fpB ) )
                     {
-                        m_ItemsInConflict.insert( fpA );
-                        m_ItemsInConflict.insert( fpB );
+                        m_itemsInConflict.insert( fpA );
+                        m_itemsInConflict.insert( fpB );
                         break;
                     }
                 }
@@ -167,8 +167,8 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
                 {
                     if( zone->Outline()->Collide( &frontCourtyard.Outline( 0 ) ) )
                     {
-                        m_ItemsInConflict.insert( fp );
-                        m_ItemsInConflict.insert( zone );
+                        m_itemsInConflict.insert( fp );
+                        m_itemsInConflict.insert( zone );
                         break;
                     }
                 }
@@ -182,8 +182,8 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
                 {
                     if( zone->Outline()->Collide( &backCourtyard.Outline( 0 ) ) )
                     {
-                        m_ItemsInConflict.insert( fp );
-                        m_ItemsInConflict.insert( zone );
+                        m_itemsInConflict.insert( fp );
+                        m_itemsInConflict.insert( zone );
                         break;
                     }
                 }
@@ -208,7 +208,7 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::Init( BOARD* aBoard )
 
 bool DRC_INTERACTIVE_COURTYARD_CLEARANCE::Run()
 {
-    m_ItemsInConflict.clear();
+    m_itemsInConflict.clear();
     m_largestCourtyardClearance = 0;
 
     DRC_CONSTRAINT constraint;
@@ -220,3 +220,46 @@ bool DRC_INTERACTIVE_COURTYARD_CLEARANCE::Run()
 
     return true;
 }
+
+
+void DRC_INTERACTIVE_COURTYARD_CLEARANCE::UpdateConflicts( KIGFX::VIEW* aView,
+                                                           bool aHighlightMoved )
+{
+    // Ensure the "old" conflicts are cleared
+    for( BOARD_ITEM* item: m_lastItemsInConflict )
+    {
+        item->ClearFlags(COURTYARD_CONFLICT );
+        aView->Update( item );
+        aView->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+    }
+
+    m_lastItemsInConflict.clear();
+
+    for( BOARD_ITEM* item: m_itemsInConflict )
+    {
+        if( aHighlightMoved || !alg::contains( m_FpInMove, item ) )
+        {
+            if( !item->HasFlag( COURTYARD_CONFLICT ) )
+            {
+                item->SetFlags( COURTYARD_CONFLICT );
+                aView->Update( item );
+                aView->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+            }
+
+            m_lastItemsInConflict.push_back( item );
+        }
+    }
+}
+
+
+void DRC_INTERACTIVE_COURTYARD_CLEARANCE::ClearConflicts( KIGFX::VIEW* aView )
+{
+    for( BOARD_ITEM* item: m_lastItemsInConflict )
+    {
+        item->ClearFlags( COURTYARD_CONFLICT );
+        aView->Update( item );
+        aView->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+    }
+}
+
+

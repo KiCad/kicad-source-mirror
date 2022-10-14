@@ -32,11 +32,12 @@
 class DRC_INTERACTIVE_COURTYARD_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
-    DRC_INTERACTIVE_COURTYARD_CLEARANCE() :
+    DRC_INTERACTIVE_COURTYARD_CLEARANCE( const std::shared_ptr<DRC_ENGINE>& aDRCEngine ) :
             DRC_TEST_PROVIDER_CLEARANCE_BASE(),
             m_largestCourtyardClearance( 0 )
     {
         m_isRuleDriven = false;
+        SetDRCEngine( aDRCEngine.get() );
     }
 
     virtual ~DRC_INTERACTIVE_COURTYARD_CLEARANCE ()
@@ -57,15 +58,20 @@ public:
         return wxT( "Tests footprints' courtyard collisions" );
     }
 
+    void UpdateConflicts( KIGFX::VIEW* aView, bool aHighlightMoved );
+    void ClearConflicts( KIGFX::VIEW* aView );
+
 public:
-    std::vector<FOOTPRINT*> m_FpInMove;             // The list of moved footprints
-    std::set<BOARD_ITEM*>   m_ItemsInConflict;      // The list of items in conflict
+    std::vector<FOOTPRINT*>   m_FpInMove;             // The list of moved footprints
 
 private:
     void testCourtyardClearances();
 
 private:
     int m_largestCourtyardClearance;
+
+    std::set<BOARD_ITEM*>     m_itemsInConflict;      // The list of items in conflict
+    std::vector<BOARD_ITEM*>  m_lastItemsInConflict;  // The list of items last highlighted
 };
 
 #endif // DRC_INTERACTIVE_COURTYARD_CLEARANCE_H

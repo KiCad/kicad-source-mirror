@@ -1958,19 +1958,20 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     m_startItem = nullptr;
 
-    PNS::ITEM* startItem = nullptr;
+    PNS::ITEM*    startItem = nullptr;
     PNS::ITEM_SET itemsToDrag;
-    FOOTPRINT* footprint = nullptr;
-
-    std::shared_ptr<CONNECTIVITY_DATA> connectivityData = board()->GetConnectivity();
-    std::vector<BOARD_ITEM*>           dynamicItems;
-    std::unique_ptr<CONNECTIVITY_DATA> dynamicData = nullptr;
-    VECTOR2I                           lastOffset;
+    FOOTPRINT*    footprint = nullptr;
 
     // Courtyard conflicts will be tested only if the LAYER_CONFLICTS_SHADOW gal layer is visible
     bool showCourtyardConflicts = frame()->GetBoard()->IsElementVisible( LAYER_CONFLICTS_SHADOW );
-    DRC_INTERACTIVE_COURTYARD_CLEARANCE courtyardClearanceDRC;
-    std::vector<BOARD_ITEM*>            lastItemsInConflict;
+
+    std::shared_ptr<DRC_ENGINE>         drcEngine = m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine();
+    DRC_INTERACTIVE_COURTYARD_CLEARANCE courtyardClearanceDRC( drcEngine );
+
+    std::shared_ptr<CONNECTIVITY_DATA>  connectivityData = board()->GetConnectivity();
+    std::vector<BOARD_ITEM*>            dynamicItems;
+    std::unique_ptr<CONNECTIVITY_DATA>  dynamicData = nullptr;
+    VECTOR2I                            lastOffset;
 
     if( item->Type() == PCB_FOOTPRINT_T )
     {
@@ -1990,9 +1991,11 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             }
         }
 
-        courtyardClearanceDRC.Init( board() );
-        courtyardClearanceDRC.SetDRCEngine( m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine().get() );
-        courtyardClearanceDRC.m_FpInMove.push_back( footprint );
+        if( showCourtyardConflicts )
+        {
+            courtyardClearanceDRC.Init( board() );
+            courtyardClearanceDRC.m_FpInMove.push_back( footprint );
+        }
 
         dynamicData = std::make_unique<CONNECTIVITY_DATA>( dynamicItems, true );
         connectivityData->BlockRatsnestItems( dynamicItems );
@@ -2166,32 +2169,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 {
                     footprint->Move( offset );
                     courtyardClearanceDRC.Run();
+                    courtyardClearanceDRC.UpdateConflicts( getView(), false );
                     footprint->Move( -offset );
-
-                    // Ensure the "old" conflicts are cleared
-                    for( BOARD_ITEM* conflict: lastItemsInConflict )
-                    {
-                        conflict->ClearFlags( COURTYARD_CONFLICT );
-                        getView()->Update( conflict );
-                        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-                    }
-
-                    lastItemsInConflict.clear();
-
-                    for( BOARD_ITEM* conflict: courtyardClearanceDRC.m_ItemsInConflict )
-                    {
-                        if( conflict != footprint )
-                        {
-                            if( !conflict->HasFlag( COURTYARD_CONFLICT ) )
-                            {
-                                conflict->SetFlags( COURTYARD_CONFLICT );
-                                getView()->Update( conflict );
-                                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-                            }
-
-                            lastItemsInConflict.push_back( conflict );
-                        }
-                    }
                 }
 
                 // Update ratsnest
@@ -2250,11 +2229,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     }
 
     // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
-    for( BOARD_ITEM* conflict: lastItemsInConflict )
-    {
-        conflict->ClearFlags( COURTYARD_CONFLICT );
-        getView()->Update( conflict );
-    }
+    courtyardClearanceDRC.ClearConflicts( getView() );
 
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
