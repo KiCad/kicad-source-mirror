@@ -207,13 +207,13 @@ public:
     const LIB_ID& GetFPID() const { return m_fpid; }
     void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID; }
 
-    const wxString GetFPIDAsString() const { return m_fpid.Format(); }
+    wxString GetFPIDAsString() const { return m_fpid.Format(); }
     void SetFPIDAsString( const wxString& aFPID ) { m_fpid.Parse( aFPID ); }
 
-    const wxString& GetDescription() const { return m_doc; }
+    wxString GetDescription() const { return m_doc; }
     void SetDescription( const wxString& aDoc ) { m_doc = aDoc; }
 
-    const wxString& GetKeywords() const { return m_keywords; }
+    wxString GetKeywords() const { return m_keywords; }
     void SetKeywords( const wxString& aKeywords ) { m_keywords = aKeywords; }
 
     const KIID_PATH& GetPath() const { return m_path; }
@@ -530,6 +530,12 @@ public:
         m_reference->SetText( aReference );
     }
 
+    // Property system doesn't like const references
+    wxString GetReferenceAsString() const
+    {
+        return GetReference();
+    }
+
     /**
      * Bump the current reference by \a aDelta.
      */
@@ -551,6 +557,12 @@ public:
         m_value->SetText( aValue );
     }
 
+    // Property system doesn't like const references
+    wxString GetValueAsString() const
+    {
+        return GetValue();
+    }
+
     /// read/write accessors:
     FP_TEXT& Value()           { return *m_value; }
     FP_TEXT& Reference()       { return *m_reference; }
@@ -559,14 +571,14 @@ public:
     FP_TEXT& Value() const     { return *m_value; }
     FP_TEXT& Reference() const { return *m_reference; }
 
-    const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
+    const std::map<wxString, wxString>& GetProperties() const        { return m_properties; }
     void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
-    const wxString& GetProperty( const wxString& aKey) { return m_properties[ aKey ]; }
+    const wxString& GetProperty( const wxString& aKey)               { return m_properties[ aKey ]; }
     bool HasProperty( const wxString& aKey)
     {
         return m_properties.find( aKey ) != m_properties.end();
     }
-    void SetProperty( const wxString& aKey, const wxString& aVal ) { m_properties[ aKey ] = aVal; }
+    void SetProperty( const wxString& aKey, const wxString& aVal )   { m_properties[ aKey ] = aVal; }
 
     /**
      * Return a #PAD with a matching number.

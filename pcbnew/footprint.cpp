@@ -2848,11 +2848,10 @@ static struct FOOTPRINT_DESC
                     &FOOTPRINT::SetLayer, &FOOTPRINT::GetLayer );
         layer->SetChoices( fpLayers );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
-        /*
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Reference" ),
-                    &FOOTPRINT::SetReference, &FOOTPRINT::GetReference ) );
+                    &FOOTPRINT::SetReference, &FOOTPRINT::GetReferenceAsString ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Value" ),
-                    &FOOTPRINT::SetValue, &FOOTPRINT::GetValue ) );*/
+                    &FOOTPRINT::SetValue, &FOOTPRINT::GetValueAsString ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Orientation" ),
                     &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ) );
@@ -2864,13 +2863,13 @@ static struct FOOTPRINT_DESC
                     PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMarginRatio,
-                &FOOTPRINT::GetLocalSolderPasteMarginRatio ) ); /*
+                &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library ID" ),
                     &FOOTPRINT::SetFPIDAsString, &FOOTPRINT::GetFPIDAsString ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Description" ),
                     &FOOTPRINT::SetDescription, &FOOTPRINT::GetDescription ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
-                    &FOOTPRINT::SetKeywords, &FOOTPRINT::GetKeywords ) );*/
+                    &FOOTPRINT::SetKeywords, &FOOTPRINT::GetKeywords ) );
         // TODO zone connection
     }
 } _FOOTPRINT_DESC;
