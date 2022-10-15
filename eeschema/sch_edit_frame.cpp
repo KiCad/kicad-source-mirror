@@ -679,11 +679,14 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_schematic->Reset();
     m_schematic->SetProject( &Prj() );
 
-    m_schematic->SetRoot( new SCH_SHEET( m_schematic ) );
+    SCH_SHEET* rootSheet = new SCH_SHEET( m_schematic );
+    m_schematic->SetRoot( rootSheet );
 
     SCH_SCREEN* rootScreen = new SCH_SCREEN( m_schematic );
+    const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
     m_schematic->Root().SetScreen( rootScreen );
     SetScreen( Schematic().RootScreen() );
+
 
     m_schematic->RootScreen()->SetFileName( wxEmptyString );
 

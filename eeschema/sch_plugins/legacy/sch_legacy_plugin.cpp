@@ -194,6 +194,8 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
 {
     SCH_SCREEN* screen = nullptr;
 
+    m_currentSheet = aSheet;
+
     if( !aSheet->GetScreen() )
     {
         // SCH_SCREEN objects store the full path and file name where the SCH_SHEET object only
@@ -225,6 +227,9 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         {
             aSheet->SetScreen( new SCH_SCREEN( m_schematic ) );
             aSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
+
+            if( aSheet == m_rootSheet )
+                const_cast<KIID&>( aSheet->m_Uuid ) = aSheet->GetScreen()->GetUuid();
 
             try
             {
@@ -1338,6 +1343,15 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
         }
         else if( strCompare( "$EndComp", line ) )
         {
+            if( !m_appending && ( m_currentSheet == m_rootSheet ) )
+            {
+                KIID_PATH path;
+                path.push_back( m_rootSheet->GetScreen()->GetUuid() );
+                symbol->AddHierarchicalReference( path,
+                                                  symbol->GetField( REFERENCE_FIELD )->GetText(),
+                                                  symbol->GetUnit() );
+            }
+
             // Ensure all flags (some are set by previous initializations) are reset:
             symbol->ClearFlags();
             return symbol.release();
