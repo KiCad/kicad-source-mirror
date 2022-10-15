@@ -1200,7 +1200,7 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
             // UUID so we need to prefix it to the symbol path so the symbol instance paths
             // get saved with the root schematic UUID.
             if( !m_appending )
-                path.insert( path.begin(), m_rootSheet->GetScreen()->m_Uuid );
+                path.insert( path.begin(), m_rootSheet->GetScreen()->GetUuid() );
 
             strCompare = "Ref=";
             len = strlen( strCompare );
