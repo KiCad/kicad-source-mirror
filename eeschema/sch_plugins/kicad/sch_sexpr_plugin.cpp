@@ -889,7 +889,10 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
                   EDA_UNIT_UTILS::FormatAngle( aField->GetTextAngle() ).c_str() );
 
     if( aField->IsNameShown() )
-        m_out->Print( aNestLevel, " (show_name)" );
+        m_out->Print( 0, " (show_name)" );
+
+    if( !aField->CanAutoplace() )
+        m_out->Print( 0, " (do_not_autoplace)" );
 
     if( !aField->IsDefaultFormatting()
       || ( aField->GetTextHeight() != schIUScale.MilsToIU( DEFAULT_SIZE_TEXT ) ) )

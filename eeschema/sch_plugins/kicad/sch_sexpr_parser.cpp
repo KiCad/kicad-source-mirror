@@ -1976,8 +1976,13 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
             NeedRIGHT();
             break;
 
+        case T_do_not_autoplace:
+            field->SetCanAutoplace( false );
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "id, show_name, at or effects" );
+            Expecting( "id, at, show_name, do_not_autoplace or effects" );
         }
     }
 

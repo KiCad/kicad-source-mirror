@@ -406,10 +406,10 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFor
                       aField->GetTextAngle().AsDegrees() );
 
     if( aField->IsNameShown() )
-        aFormatter.Print( aNestLevel, " (show_name)" );
+        aFormatter.Print( 0, " (show_name)" );
 
     if( !aField->CanAutoplace() )
-        aFormatter.Print( aNestLevel, " (do_not_autoplace)" );
+        aFormatter.Print( 0, " (do_not_autoplace)" );
 
     aFormatter.Print( 0, "\n" );
     aField->Format( &aFormatter, aNestLevel, 0 );
