@@ -188,7 +188,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     }
 
     m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
-    m_excludeSymbolCheckbox->SetValue( !curModel().IsEnabled() );
+    m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
 
     updateWidgets();
 
@@ -1129,9 +1129,9 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
 
 
 template <typename T>
-void DIALOG_SIM_MODEL<T>::onExcludeSymbolCheckbox( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onExcludeCheckbox( wxCommandEvent& aEvent )
 {
-    curModel().SetIsEnabled( !m_excludeSymbolCheckbox->GetValue() );
+    curModel().SetIsEnabled( !m_excludeCheckbox->GetValue() );
 }
 
 

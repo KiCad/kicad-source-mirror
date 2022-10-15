@@ -588,7 +588,7 @@
     (property "Sim_Pins" "1 6 3 5" (at 163.83 121.92 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Sim_Disabled" "1" (at 163.83 121.92 0)
+    (property "Sim_Enable" "0" (at 163.83 121.92 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 76e69abc-f617-4b9c-a790-060112fdebed))

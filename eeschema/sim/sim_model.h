@@ -153,7 +153,7 @@ public:
     static constexpr auto TYPE_FIELD = "Sim_Type";
     static constexpr auto PINS_FIELD = "Sim_Pins";
     static constexpr auto PARAMS_FIELD = "Sim_Params";
-    static constexpr auto DISABLED_FIELD = "Sim_Disabled";
+    static constexpr auto ENABLE_FIELD = "Sim_Enable";
 
 
     // There's a trailing '_' because `DEVICE_TYPE` collides with something in Windows headers.
@@ -620,7 +620,7 @@ protected:
     void ParseParamsField( const std::string& aParamsField );
 
     void ParsePinsField( unsigned aSymbolPinCount, const std::string& aPinsField );
-    void ParseDisabledField( const std::string& aDisabledField );
+    void ParseEnableField( const std::string& aDisabledField );
 
     template <typename T>
     void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
@@ -645,7 +645,7 @@ private:
     std::string generateTypeField() const;
 
     std::string generatePinsField() const;
-    std::string generateDisabledField() const;
+    std::string generateEnableField() const;
 
     std::string parseFieldFloatValue( std::string aFieldFloatValue );
 

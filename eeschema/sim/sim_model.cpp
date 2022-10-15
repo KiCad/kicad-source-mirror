@@ -1001,7 +1001,7 @@ void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const std::str
     SetFieldValue( aFields, DEVICE_TYPE_FIELD, "" );
     SetFieldValue( aFields, TYPE_FIELD, "" );
     SetFieldValue( aFields, PARAMS_FIELD, "" );
-    SetFieldValue( aFields, DISABLED_FIELD, "" );
+    SetFieldValue( aFields, ENABLE_FIELD, "" );
 }
 
 
@@ -1140,14 +1140,14 @@ void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const std::string& aPi
 }
 
 
-void SIM_MODEL::ParseDisabledField( const std::string& aDisabledField )
+void SIM_MODEL::ParseEnableField( const std::string& aEnableField )
 {
-    if( aDisabledField == "" )
+    if( aEnableField == "" )
         return;
 
-    char c = boost::to_lower_copy( aDisabledField )[0];
+    char c = boost::to_lower_copy( aEnableField )[0];
 
-    if( c == 'y' || c == 't' || c == '1' )
+    if( c == 'n' || c == 'f' || c == '0' )
         m_isEnabled = false;
 }
 
@@ -1155,7 +1155,7 @@ void SIM_MODEL::ParseDisabledField( const std::string& aDisabledField )
 template <typename T>
 void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
-    ParseDisabledField( GetFieldValue( aFields, DISABLED_FIELD ) );
+    ParseEnableField( GetFieldValue( aFields, ENABLE_FIELD ) );
     ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
 
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
@@ -1233,7 +1233,7 @@ void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
     SetFieldValue( aFields, TYPE_FIELD, generateTypeField() );
     SetFieldValue( aFields, PINS_FIELD, generatePinsField() );
     SetFieldValue( aFields, PARAMS_FIELD, GenerateParamsField( " " ) );
-    SetFieldValue( aFields, DISABLED_FIELD, generateDisabledField() );
+    SetFieldValue( aFields, ENABLE_FIELD, generateEnableField() );
 }
 
 
@@ -1271,9 +1271,9 @@ std::string SIM_MODEL::generatePinsField() const
 }
 
 
-std::string SIM_MODEL::generateDisabledField() const
+std::string SIM_MODEL::generateEnableField() const
 {
-    return m_isEnabled ? "" : "1";
+    return m_isEnabled ? "" : "0";
 }
 
 

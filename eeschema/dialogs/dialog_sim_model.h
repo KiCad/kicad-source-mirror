@@ -114,7 +114,7 @@ private:
     void onCodePreviewSetFocus( wxFocusEvent& aEvent ) override;
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
-    void onExcludeSymbolCheckbox( wxCommandEvent& aEvent ) override;
+    void onExcludeCheckbox( wxCommandEvent& aEvent ) override;
 
     void onLibraryPathUpdate( wxUpdateUIEvent& aEvent ) override;
     void onBrowseButtonUpdate( wxUpdateUIEvent& aEvent ) override;
