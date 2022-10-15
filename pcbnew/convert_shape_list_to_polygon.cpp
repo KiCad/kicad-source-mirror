@@ -594,7 +594,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
     if( segList.size() )
     {
         success = ConvertOutlineToPolygon( segList, aOutlines, aErrorMax, aChainingEpsilon,
-                                           false, aErrorHandler );
+                                           true, aErrorHandler );
     }
 
     if( !success || !aOutlines.OutlineCount() )
