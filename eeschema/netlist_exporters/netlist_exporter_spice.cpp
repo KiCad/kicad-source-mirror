@@ -224,7 +224,10 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             }
             catch( const IO_ERROR& e )
             {
-                DisplayErrorMessage( nullptr, e.What() );
+                DisplayErrorMessage( nullptr, 
+                                     wxString::Format( "Failed reading model from symbol '%s':\n%s",
+                                                       symbol->GetRef( &sheet ),
+                                                       e.What() ) );
             }
         }
     }
@@ -284,6 +287,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
             {
                 root = tao::pegtl::parse_tree::parse<NETLIST_EXPORTER_SPICE_PARSER::textGrammar,
                                                      NETLIST_EXPORTER_SPICE_PARSER::textSelector,
+                                                     tao::pegtl::nothing,
                                                      NETLIST_EXPORTER_SPICE_PARSER::control>
                     ( in );
             }

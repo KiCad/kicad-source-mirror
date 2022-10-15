@@ -76,8 +76,7 @@ void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
         root = tao::pegtl::parse_tree::parse<SIM_MODEL_SUBCKT_SPICE_PARSER::spiceUnitGrammar,
                                              SIM_MODEL_SUBCKT_SPICE_PARSER::spiceUnitSelector,
                                              tao::pegtl::nothing,
-                                             SIM_MODEL_SUBCKT_SPICE_PARSER::control>
-            ( in );
+                                             SIM_MODEL_SUBCKT_SPICE_PARSER::control>( in );
     }
     catch( const tao::pegtl::parse_error& e )
     {
@@ -97,7 +96,7 @@ void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
                 }
                 else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktPinName>() )
                 {
-                    model.AddPin( { subnode->string(), fmt::format( "{:d}", model.GetPinCount() + 1 ) } );
+                    model.AddPin( { subnode->string(), fmt::format( "{}", model.GetPinCount() + 1 ) } );
                 }
                 else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktParams>() )
                 {

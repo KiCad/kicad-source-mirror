@@ -58,8 +58,7 @@ void SPICE_LIBRARY_PARSER::ReadFile( const std::string& aFilePath )
         auto root = tao::pegtl::parse_tree::parse<SIM_LIBRARY_SPICE_PARSER::libraryGrammar,
                                                   SIM_LIBRARY_SPICE_PARSER::librarySelector,
                                                   tao::pegtl::nothing,
-                                                  SIM_LIBRARY_SPICE_PARSER::control>
-            ( in );
+                                                  SIM_LIBRARY_SPICE_PARSER::control>( in );
 
         m_library.m_models.clear();
         m_library.m_modelNames.clear();

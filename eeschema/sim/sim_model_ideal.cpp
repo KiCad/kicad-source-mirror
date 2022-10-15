@@ -64,26 +64,6 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType ) :
 }
 
 
-void SIM_MODEL_IDEAL::ReadDataSchFields( unsigned aSymbolPinCount,
-                                         const std::vector<SCH_FIELD>* aFields )
-{
-    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
-        SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
-    else
-        InferredReadDataFields( aSymbolPinCount, aFields, true, false );
-}
-
-
-void SIM_MODEL_IDEAL::ReadDataLibFields( unsigned aSymbolPinCount,
-                                         const std::vector<LIB_FIELD>* aFields )
-{
-    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
-        SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
-    else
-        InferredReadDataFields( aSymbolPinCount, aFields, true, false );
-}
-
-
 void SIM_MODEL_IDEAL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
 {
     SIM_MODEL::WriteDataSchFields( aFields );

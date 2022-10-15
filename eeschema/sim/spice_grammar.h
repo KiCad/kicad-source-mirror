@@ -237,12 +237,12 @@ namespace SPICE_GRAMMAR
                            kLine,
                            eol, // Empty line. This is necessary to terminate on EOF.
                            unknownLine> {};
-    struct spiceUnitGrammar : spiceUnit {};
+    struct spiceUnitGrammar : must<spiceUnit> {};
 
 
     struct spiceSource : star<spiceUnit> {};
     struct spiceSourceNothrow : star<try_catch<spiceUnit>> {};
-    struct spiceSourceGrammar : spiceSource {};
+    struct spiceSourceGrammar : must<spiceSource> {};
 
 
     template <typename> inline constexpr const char* errorMessage = nullptr;
@@ -263,7 +263,13 @@ namespace SPICE_GRAMMAR
                                                        dotSubcktParams>> = "";
     template <> inline constexpr auto errorMessage<until<dotSubcktEnd,
                                                          spiceUnit>> =
-        "expected a (possibly empty) sequence of Spice lines followed by an .ends line";
+        "expected (possibly empty) sequence of Spice lines followed by an .ends line";
+    template <> inline constexpr auto errorMessage<spiceUnit> =
+        "expected Spice directive, item, subcircuit definitions, or empty or commented out line";
+    template <> inline constexpr auto errorMessage<spiceSource> =
+        "expected zero or more Spice directives, items, subcircuit definitions, or empty or commented out lines";
+    template <> inline constexpr auto errorMessage<spiceSourceNothrow> =
+        "expected zero or more Spice directives, items, subcircuit definitions, or empty or commented out lines";
 
     // We create a custom PEGTL control to modify the parser error messages.
     struct error

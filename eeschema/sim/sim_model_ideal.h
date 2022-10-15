@@ -44,9 +44,6 @@ class SIM_MODEL_IDEAL : public SIM_MODEL
 public:
     SIM_MODEL_IDEAL( TYPE aType );
 
-    void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
-    void ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields ) override;
-
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 

@@ -48,9 +48,6 @@ public:
 
 private:
     template <typename T>
-    void inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
-
-    template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
     std::vector<std::string> getPinNames() const override { return { "1+", "1-", "2+", "2-" }; }

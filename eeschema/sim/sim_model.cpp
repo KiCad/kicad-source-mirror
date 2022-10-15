@@ -57,18 +57,24 @@ namespace SIM_MODEL_PARSER
 
     template <typename Rule> struct fieldParamValuePairsSelector : std::false_type {};
 
-    template <> struct fieldParamValuePairsSelector<param> : std::true_type {};
-    template <> struct fieldParamValuePairsSelector<quotedStringContent> : std::true_type {};
-    template <> struct fieldParamValuePairsSelector<unquotedString> : std::true_type {};
+
+    template <typename Rule> struct pinSequenceSelector : std::false_type {};
+    template <> struct pinSequenceSelector<pinNumber> : std::true_type {};
 
 
     template <typename Rule> struct fieldFloatValueSelector : std::false_type {};
     template <> struct fieldFloatValueSelector<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>>
         : std::true_type {};
+    template <> struct fieldParamValuePairsSelector<param> : std::true_type {};
+    template <> struct fieldParamValuePairsSelector<quotedStringContent> : std::true_type {};
+    template <> struct fieldParamValuePairsSelector<unquotedString> : std::true_type {};
 
 
-    template <typename Rule> struct pinSequenceSelector : std::false_type {};
-    template <> struct pinSequenceSelector<pinNumber> : std::true_type {};
+    template <typename Rule> struct fieldInferValueSelector : std::false_type {};
+    template <> struct fieldInferValueSelector<fieldFloatValue> : std::true_type {};
+    template <> struct fieldInferValueSelector<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>> : std::true_type {};
+    template <> struct fieldInferValueSelector<fieldInferValuePrefix> : std::true_type {};
+    template <> struct fieldInferValueSelector<fieldParamValuePairs> : std::true_type {};
 }
 
 
@@ -127,7 +133,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::L_MUTUAL:             return { DEVICE_TYPE_::L,      "MUTUAL",         "Mutual"                     };
     case TYPE::L_BEHAVIORAL:         return { DEVICE_TYPE_::L,      "=",              "Behavioral"                 };
 
-    case TYPE::TLINE_Z0:             return { DEVICE_TYPE_::TLINE,  "Z0",             "Characteristic impedance"   };
+    case TYPE::TLINE_Z0:             return { DEVICE_TYPE_::TLINE,  "",               "Characteristic impedance"   };
     case TYPE::TLINE_RLGC:           return { DEVICE_TYPE_::TLINE,  "RLGC",           "RLGC"                       };
 
     case TYPE::SW_V:                 return { DEVICE_TYPE_::SW,     "V",              "Voltage-controlled"         };
@@ -197,7 +203,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::NMOS_HISIMHV2:        return { DEVICE_TYPE_::NMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
     case TYPE::PMOS_HISIMHV2:        return { DEVICE_TYPE_::PMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
 
-    case TYPE::V:                    return { DEVICE_TYPE_::V,      "DC",             "DC",                        };
+    case TYPE::V:                    return { DEVICE_TYPE_::V,      "",               "DC",                        };
     case TYPE::V_SIN:                return { DEVICE_TYPE_::V,      "SIN",            "Sine"                       };
     case TYPE::V_PULSE:              return { DEVICE_TYPE_::V,      "PULSE",          "Pulse"                      };
     case TYPE::V_EXP:                return { DEVICE_TYPE_::V,      "EXP",            "Exponential"                };
@@ -213,7 +219,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     //case TYPE::V_RANDPOISSON:        return { DEVICE_TYPE::V,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::V_BEHAVIORAL:         return { DEVICE_TYPE_::V,      "=",              "Behavioral"                 };
 
-    case TYPE::I:                    return { DEVICE_TYPE_::I,      "DC",             "DC",                        };
+    case TYPE::I:                    return { DEVICE_TYPE_::I,      "",               "DC",                        };
     case TYPE::I_SIN:                return { DEVICE_TYPE_::I,      "SIN",            "Sine"                       };
     case TYPE::I_PULSE:              return { DEVICE_TYPE_::I,      "PULSE",          "Pulse"                      };
     case TYPE::I_EXP:                return { DEVICE_TYPE_::I,      "EXP",            "Exponential"                };
@@ -420,7 +426,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
         return typeFromLegacyFields;
 
     // Still no type information.
-    // For passives we infer the model from the mandatory fields in this case.
+    // We try to infer the model from the mandatory fields in this case.
     return InferTypeFromRefAndValue( GetFieldValue( &aFields, REFERENCE_FIELD ),
                                      GetFieldValue( &aFields, VALUE_FIELD ) );
 }
@@ -428,120 +434,50 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
 
 TYPE SIM_MODEL::InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue )
 {
-    static std::map<std::string, TYPE> refPrefixToType = {
-        { "R", TYPE::R },
-        { "C", TYPE::C },
-        { "L", TYPE::L },
-        { "TLINE", TYPE::TLINE_Z0 },
-        { "VSIN", TYPE::V_SIN },
-        { "VPULSE", TYPE::V_PULSE },
-        { "VEXP", TYPE::V_EXP },
-        /*{ "VSFAM", TYPE::V_SFAM },
-        { "VSFFM", TYPE::V_SFFM },*/
-        { "VPWL", TYPE::V_PWL },
-        { "VWHITENOISE", TYPE::V_WHITENOISE },
-        { "VPINKNOISE", TYPE::V_PINKNOISE },
-        { "VBURSTNOISE", TYPE::V_BURSTNOISE },
-        { "VRANDUNIFORM", TYPE::V_RANDUNIFORM },
-        { "VRANDNORMAL", TYPE::V_RANDNORMAL },
-        { "VRANDEXP", TYPE::V_RANDEXP },
-        //{ "VRANDPOISSON", TYPE::V_RANDPOISSON },
-        { "ISIN", TYPE::I_SIN },
-        { "IPULSE", TYPE::I_PULSE },
-        { "IEXP", TYPE::I_EXP },
-        /*{ "ISFAM", TYPE::I_SFAM },
-        { "ISFFM", TYPE::I_SFFM },*/
-        { "IPWL", TYPE::I_PWL },
-        { "IWHITENOISE", TYPE::I_WHITENOISE },
-        { "IPINKNOISE", TYPE::I_PINKNOISE },
-        { "IBURSTNOISE", TYPE::I_BURSTNOISE },
-        { "IRANDUNIFORM", TYPE::I_RANDUNIFORM },
-        { "IRANDNORMAL", TYPE::I_RANDNORMAL },
-        { "IRANDEXP", TYPE::I_RANDEXP },
-        //{ "IRANDPOISSON", TYPE::I_RANDPOISSON },
-    };
+    std::string prefix;
 
-    TYPE type = TYPE::NONE;
-
-    for( auto&& [curPrefix, curType] : refPrefixToType )
+    try
     {
-        if( boost::starts_with( aRef, curPrefix ) )
+        tao::pegtl::string_input<> in( aValue, VALUE_FIELD );
+        auto root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::fieldInferValueGrammar,
+                                                  SIM_MODEL_PARSER::fieldInferValueSelector,
+                                                  tao::pegtl::nothing,
+                                                  SIM_MODEL_PARSER::control>( in );
+
+        for( const auto& node : root->children )
         {
-            type = curType;
-            break;
+            if( node->is_type<SIM_MODEL_PARSER::fieldInferValuePrefix>() )
+                prefix = node->string();
         }
     }
-
-    // We handle "V" and "I" later because it collides and std::map is unordered.
-
-    if( type == TYPE::NONE && boost::starts_with( aRef, "V" ) )
-        type = TYPE::V;
-
-    if( type == TYPE::NONE && boost::starts_with( aRef, "I" ) )
-        type = TYPE::I;
-
-    std::string value = aValue;
-
-    // Some types have to be inferred from Value field.
-    switch( type )
+    catch( const tao::pegtl::parse_error& )
     {
-    case TYPE::R:
-        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
-            type = TYPE::R_BEHAVIORAL;
-        break;
-
-    case TYPE::C:
-        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
-            type = TYPE::C_BEHAVIORAL;
-        break;
-
-    case TYPE::L:
-        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
-            type = TYPE::L_BEHAVIORAL;
-        break;
-
-    case TYPE::V:
-        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
-            type = TYPE::V_BEHAVIORAL;
-        break;
-
-    case TYPE::I:
-        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
-            type = TYPE::I_BEHAVIORAL;
-        break;
-
-    case TYPE::TLINE_Z0:
-        try
-        {
-            tao::pegtl::string_input<> in( aValue, "Value" );
-            auto root = tao::pegtl::parse_tree::parse<
-                SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
-                SIM_MODEL_PARSER::fieldParamValuePairsSelector>
-                    ( in );
-
-            for( const auto& node : root->children )
-            {
-                if( node->is_type<SIM_MODEL_PARSER::param>()
-                    && (node->string() == "r" || node->string() == "R"
-                        || node->string() == "c" || node->string() == "C"
-                        || node->string() == "l" || node->string() == "L" ) )
-                {
-                    type = TYPE::TLINE_RLGC;
-                    break;
-                }
-            }
-        }
-        catch( const tao::pegtl::parse_error& e )
-        {
-        }
-
-        break;
-
-    default:
-        break;
     }
 
-    return type;
+    DEVICE_TYPE_ deviceType = DEVICE_TYPE_::NONE;
+
+    if( boost::starts_with( aRef, "R" ) )
+        deviceType  = DEVICE_TYPE_::R;
+    else if( boost::starts_with( aRef, "C" ) )
+        deviceType = DEVICE_TYPE_::C;
+    else if( boost::starts_with( aRef, "L" ) )
+        deviceType = DEVICE_TYPE_::L;
+    else if( boost::starts_with( aRef, "V" ) )
+        deviceType = DEVICE_TYPE_::V;
+    else if( boost::starts_with( aRef, "I" ) )
+        deviceType = DEVICE_TYPE_::I;
+    else if( boost::starts_with( aRef, "TL" ) )
+        deviceType = DEVICE_TYPE_::TLINE;
+    else
+        return TYPE::NONE;
+
+    for( TYPE type : TYPE_ITERATOR() )
+    {
+        if( TypeInfo( type ).deviceType == deviceType && TypeInfo( type ).fieldValue == prefix )
+            return type;
+    }
+
+    return TYPE::NONE;
 }
 
 
@@ -670,7 +606,12 @@ template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
-    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( ReadTypeFromFields( aFields ) );
+    TYPE type = ReadTypeFromFields( aFields );
+
+    if( type == TYPE::NONE )
+        THROW_IO_ERROR( wxString::Format( _( "Failed to read simulation model from fields" ) ) );
+
+    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
     model->ReadDataFields( aSymbolPinCount, &aFields );
     return model;
@@ -690,14 +631,14 @@ std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const std::
     if( !aFields )
         return ""; // Should not happen, T=void specialization will be called instead.
 
-    auto fieldIt = std::find_if( aFields->begin(), aFields->end(),
-                                 [aFieldName]( const T& field )
-                                 {
-                                     return field.GetName() == aFieldName;
-                                 } );
+    auto it = std::find_if( aFields->begin(), aFields->end(),
+                            [aFieldName]( const T& field )
+                            {
+                                return field.GetName() == aFieldName;
+                            } );
 
-    if( fieldIt != aFields->end() )
-        return std::string( fieldIt->GetText().ToUTF8() );
+    if( it != aFields->end() )
+        return std::string( it->GetText().ToUTF8() );
 
     return "";
 }
@@ -866,7 +807,7 @@ void SIM_MODEL::SetParamValue( const std::string& aParamName, const SIM_VALUE& a
 
     if( it == params.end() )
     {
-        THROW_IO_ERROR( wxString::Format( "Could not find a model parameter named '%s'",
+        THROW_IO_ERROR( wxString::Format( _( "Could not find a simulation model parameter named '%s'" ),
                                           aParamName ) );
     }
 
@@ -881,7 +822,7 @@ void SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string&
 
     if( !param )
     {
-        THROW_IO_ERROR( wxString::Format( "Could not find a model parameter named '%s'",
+        THROW_IO_ERROR( wxString::Format( _( "Could not find a simulation model parameter named '%s'" ),
                                           aParamName ) );
     }
 
@@ -1116,7 +1057,9 @@ void SIM_MODEL::ParseParamsField( const std::string& aParamsField )
         // and having a tree greatly simplifies some things.
         root = tao::pegtl::parse_tree::parse<
             SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
-            SIM_MODEL_PARSER::fieldParamValuePairsSelector>
+            SIM_MODEL_PARSER::fieldParamValuePairsSelector,
+            tao::pegtl::nothing,
+            SIM_MODEL_PARSER::control>
                 ( in );
     }
     catch( const tao::pegtl::parse_error& e )
@@ -1170,7 +1113,9 @@ void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const std::string& aPi
     try
     {
         root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::pinSequenceGrammar,
-                                             SIM_MODEL_PARSER::pinSequenceSelector>( in );
+                                             SIM_MODEL_PARSER::pinSequenceSelector,
+                                             tao::pegtl::nothing,
+                                             SIM_MODEL_PARSER::control>( in );
     }
     catch( const tao::pegtl::parse_error& e )
     {
@@ -1211,12 +1156,10 @@ template <typename T>
 void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
     ParseDisabledField( GetFieldValue( aFields, DISABLED_FIELD ) );
+    ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
 
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
-    {
-        ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
         ParseParamsField( GetFieldValue( aFields, PARAMS_FIELD ) );
-    }
     else
         InferredReadDataFields( aSymbolPinCount, aFields, true );
 }
@@ -1224,11 +1167,13 @@ void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>
 
 template <typename T>
 void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
-                                        bool aAllowOnlyFirstValue,
-                                        bool aAllowParamValuePairs )
+                                        bool aAllowOnlyFirstValue )
 {
-    ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
+    // TODO: Make a subclass SIM_MODEL_NONE.
+    if( GetType() == SIM_MODEL::TYPE::NONE )
+        return;
 
+    // TODO: Don't call this multiple times.
     if( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
                                   GetFieldValue( aFields, VALUE_FIELD ) ) != GetType() )
     {
@@ -1236,29 +1181,38 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
         return;
     }
 
-    std::string valueField = GetFieldValue( aFields, VALUE_FIELD );
-
-    if( aAllowParamValuePairs ) // The usual param-value pairs have precedence.
+    try
     {
-        try
+        // TODO: Don't call this multiple times.
+        tao::pegtl::string_input<> in( GetFieldValue( aFields, VALUE_FIELD ), VALUE_FIELD );
+        auto root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::fieldInferValueGrammar,
+                                                  SIM_MODEL_PARSER::fieldInferValueSelector,
+                                                  tao::pegtl::nothing,
+                                                  SIM_MODEL_PARSER::control>( in );
+
+        for( const auto& node : root->children )
         {
-            ParseParamsField( GetFieldValue( aFields, VALUE_FIELD ) );
-        }
-        catch( const IO_ERROR& e )
-        {
-            if( GetParamCount() >= 1 )
+            if( node->is_type<SIM_MODEL_PARSER::fieldParamValuePairs>() )
+                ParseParamsField( node->string() );
+            else if( node->is_type<SIM_MODEL_PARSER::fieldFloatValue>() )
             {
                 if( aAllowOnlyFirstValue )
-                    SetParamValue( 0, parseFieldFloatValue( valueField ) );
-                else
-                    throw e;
+                {
+                    for( const auto& subnode : node->children ) 
+                    {
+                        if( subnode->is_type<SIM_MODEL_PARSER::number<SIM_VALUE::TYPE_FLOAT,
+                                                                      SIM_VALUE::NOTATION::SI>>() )
+                        {
+                            SetParamValue( 0, subnode->string() );
+                        }
+                    }
+                }
             }
         }
     }
-    else if( GetParamCount() >= 1 && aAllowOnlyFirstValue )
+    catch( const tao::pegtl::parse_error& e )
     {
-        // This is reached only when model allows only the first value.
-        SetParamValue( 0, parseFieldFloatValue( valueField ) );
+        THROW_IO_ERROR( e.what() );
     }
 
     m_isInferred = true;
@@ -1266,12 +1220,10 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
 
 template void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount,
                                                  const std::vector<SCH_FIELD>* aFields,
-                                                 bool aAllowOnlyFirstValue,
-                                                 bool aAllowParamValuePairs );
+                                                 bool aAllowOnlyFirstValue );
 template void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount,
                                                  const std::vector<LIB_FIELD>* aFields,
-                                                 bool aAllowOnlyFirstValue,
-                                                 bool aAllowParamValuePairs );
+                                                 bool aAllowOnlyFirstValue );
 
 
 template <typename T>
@@ -1322,26 +1274,6 @@ std::string SIM_MODEL::generatePinsField() const
 std::string SIM_MODEL::generateDisabledField() const
 {
     return m_isEnabled ? "" : "1";
-}
-
-
-std::string SIM_MODEL::parseFieldFloatValue( std::string aFieldFloatValue )
-{
-    try
-    {
-        tao::pegtl::string_input<> in( aFieldFloatValue, "Value" );
-        auto root = tao::pegtl::parse_tree::parse<
-                SIM_MODEL_PARSER::fieldFloatValueGrammar,
-                SIM_MODEL_PARSER::fieldFloatValueSelector>
-            ( in );
-
-        return root->children[0]->string();
-    }
-    catch( const tao::pegtl::parse_error& )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Failed to infer model from Value '%s'" ),
-                                          aFieldFloatValue ) );
-    }
 }
 
 
