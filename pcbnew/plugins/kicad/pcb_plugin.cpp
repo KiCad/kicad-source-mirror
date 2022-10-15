@@ -2113,9 +2113,15 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
         // always store the drill value, because netclass value is not stored in the board file.
         // Otherwise the drill value of some (old) vias can be unknown
         if( via->GetDrill() != UNDEFINED_DRILL_DIAMETER )
-            m_out->Print( 0, " (drill %s)", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, via->GetDrill() ).c_str() );
+        {
+            m_out->Print( 0, " (drill %s)",
+                          EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, via->GetDrill() ).c_str() );
+        }
         else    // Probably old board!
-            m_out->Print( 0, " (drill %s)", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, via->GetDrillValue() ).c_str() );
+        {
+            m_out->Print( 0, " (drill %s)",
+                          EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, via->GetDrillValue() ).c_str() );
+        }
 
         m_out->Print( 0, " (layers %s %s)",
                       m_out->Quotew( LSET::Name( layer1 ) ).c_str(),
