@@ -94,7 +94,7 @@ public:
 bool SortSymbolInstancesByProjectUuid( const SYMBOL_INSTANCE_REFERENCE& aLhs,
                                        const SYMBOL_INSTANCE_REFERENCE& aRhs )
 {
-    wxCHECK2( !aLhs.m_Path.empty() && !aRhs.m_Path.empty(), false );
+    wxCHECK2( !aLhs.m_Path.empty() && !aRhs.m_Path.empty(), return false );
 
     return aLhs.m_Path[0] < aRhs.m_Path[0];
 }
