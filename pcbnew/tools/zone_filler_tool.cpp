@@ -28,6 +28,8 @@
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
 #include <footprint.h>
+#include <pcb_track.h>
+#include <pad.h>
 #include <pcb_group.h>
 #include <board_design_settings.h>
 #include <progress_reporter.h>
@@ -96,7 +98,8 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
 
     board()->BuildConnectivity();
 
-    canvas()->Refresh();
+    refresh();
+
     m_fillInProgress = false;
 }
 
@@ -174,7 +177,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     if( filler.IsDebug() )
         frame->UpdateUserInterface();
 
-    canvas()->Refresh();
+    refresh();
+
     m_fillInProgress = false;
 
     // wxWidgets has keyboard focus issues after the progress reporter.  Re-setting the focus
@@ -256,7 +260,8 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     if( filler.IsDebug() )
         frame->UpdateUserInterface();
 
-    canvas()->Refresh();
+    refresh();
+
     m_fillInProgress = false;
 
     // wxWidgets has keyboard focus issues after the progress reporter.  Re-setting the focus
@@ -311,7 +316,8 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
 
     board()->BuildConnectivity( reporter.get() );
 
-    canvas()->Refresh();
+    refresh();
+
     m_fillInProgress = false;
     return 0;
 }
@@ -340,7 +346,8 @@ int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
     }
 
     commit.Push( _( "Unfill Zone" ), ZONE_FILL_OP );
-    canvas()->Refresh();
+
+    refresh();
 
     return 0;
 }
@@ -358,9 +365,31 @@ int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
     }
 
     commit.Push( _( "Unfill All Zones" ), ZONE_FILL_OP );
-    canvas()->Refresh();
+
+    refresh();
 
     return 0;
+}
+
+
+void ZONE_FILLER_TOOL::refresh()
+{
+    canvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+            {
+                if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
+                {
+                    return via->GetRemoveUnconnected();
+                }
+                else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                {
+                    return pad->GetRemoveUnconnected();
+                }
+
+                return false;
+            } );
+
+    canvas()->Refresh();
 }
 
 

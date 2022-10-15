@@ -68,6 +68,8 @@ private:
     ///< Refocus on an idle event (used after the Progress Reporter messes up the focus).
     void singleShotRefocus( wxIdleEvent& );
 
+    void refresh();
+
     ///< Set up handlers for various events.
     void setTransitions() override;
 
