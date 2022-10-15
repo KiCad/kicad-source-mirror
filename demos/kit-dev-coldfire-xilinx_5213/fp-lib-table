@@ -12,4 +12,7 @@
   (lib (name "Diode_THT")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Diode_THT.pretty")(options "")(descr ""))
   (lib (name "Resistor_SMD")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Resistor_SMD.pretty")(options "")(descr ""))
   (lib (name "Resistor_THT")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Resistor_THT.pretty")(options "")(descr ""))
+  (lib (name "Capacitor_SMD")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Capacitor_SMD.pretty")(options "")(descr ""))
+  (lib (name "Capacitor_THT")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Capacitor_THT.pretty")(options "")(descr ""))
+  (lib (name "Connector_Dsub")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Connector_Dsub.pretty")(options "")(descr ""))
 )
