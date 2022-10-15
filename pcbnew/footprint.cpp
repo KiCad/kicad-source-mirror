@@ -480,6 +480,9 @@ void FOOTPRINT::GetContextualTextVars( wxArrayString* aVars ) const
 
 bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    if( GetBoard() && GetBoard()->GetBoardUse() == BOARD_USE::FPHOLDER )
+        return false;
+
     if( token->IsSameAs( wxT( "REFERENCE" ) ) )
     {
         *token = m_reference->GetShownText( aDepth + 1 );
