@@ -999,8 +999,16 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
     if( m_board->GetProject() )
     {
-        const FP_LIB_TABLE_ROW* fpRow =
-                m_board->GetProject()->PcbFootprintLibs()->FindRow( libraryName, false );
+        const FP_LIB_TABLE_ROW* fpRow = nullptr;
+
+        try
+        {
+            fpRow = m_board->GetProject()->PcbFootprintLibs()->FindRow( libraryName, false );
+        }
+        catch( ... )
+        {
+            // Not found: do nothing
+        }
 
         if( fpRow )
             footprintBasePath = fpRow->GetFullURI( true );

@@ -281,8 +281,16 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 
     if( aPcb->GetProject() )
     {
-        const FP_LIB_TABLE_ROW* fpRow =
-                aPcb->GetProject()->PcbFootprintLibs()->FindRow( libraryName, false );
+        const FP_LIB_TABLE_ROW* fpRow = nullptr;
+
+        try
+        {
+            fpRow = aPcb->GetProject()->PcbFootprintLibs()->FindRow( libraryName, false );
+        }
+        catch( ... )
+        {
+            // Not found: do nothing
+        }
 
         if( fpRow )
             footprintBasePath = fpRow->GetFullURI( true );
