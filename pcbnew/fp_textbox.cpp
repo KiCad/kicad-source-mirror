@@ -448,26 +448,36 @@ void FP_TEXTBOX::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorn
     KIFONT::FONT*              font = GetDrawFont();
     int                        penWidth = GetEffectiveTextPenWidth();
 
+    // Note: this function is mainly used in 3D viewer.
+    // the polygonal shape of a text can have many basic shapes,
+    // so combining these shapes can be very useful to create a final shape
+    // swith a lot less vertices to speedup calculations using this final shape
+    // Simplify shapes is not usually always efficient, but in this case it is.
+    SHAPE_POLY_SET buffer;
+
     CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( aCornerBuffer, aPt1, aPt2, penWidth + ( 2 * aClearance ),
+                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth + ( 2 * aClearance ),
                                         aError, ERROR_INSIDE );
             },
             // Triangulation callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
             {
-                aCornerBuffer.NewOutline();
+                buffer.NewOutline();
 
                 for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
-                    aCornerBuffer.Append( point.x, point.y );
+                    buffer.Append( point.x, point.y );
             } );
 
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_Angle = GetDrawRotation();
 
     font->Draw( &callback_gal, GetShownText(), GetDrawPos(), attrs );
+
+    buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
+    aCornerBuffer.Append( buffer );
 }
 
 
