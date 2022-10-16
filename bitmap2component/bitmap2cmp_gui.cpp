@@ -220,7 +220,7 @@ void BM2CMP_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    auto cfg = static_cast<BITMAP2CMP_SETTINGS*>( aCfg );
+    BITMAP2CMP_SETTINGS* cfg = static_cast<BITMAP2CMP_SETTINGS*>( aCfg );
 
     m_BitmapFileName    = cfg->m_BitmapFileName;
     m_ConvertedFileName = cfg->m_ConvertedFileName;
@@ -264,7 +264,7 @@ void BM2CMP_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    auto cfg = static_cast<BITMAP2CMP_SETTINGS*>( aCfg );
+    BITMAP2CMP_SETTINGS* cfg = static_cast<BITMAP2CMP_SETTINGS*>( aCfg );
 
     cfg->m_BitmapFileName    = m_BitmapFileName;
     cfg->m_ConvertedFileName = m_ConvertedFileName;
@@ -406,8 +406,8 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     m_outputSizeY.SetOriginalSizePixels( h );
 
     // Update display to keep aspect ratio
-    auto fakeEvent = wxCommandEvent();
-    OnSizeChangeX( fakeEvent );
+    wxCommandEvent dummy;
+    OnSizeChangeX( dummy );
 
     updateImageInfo();
 
@@ -589,11 +589,11 @@ void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
     if( m_AspectRatioLocked )
     {
         m_AspectRatioLockButton->SetBitmap( KiBitmap( BITMAPS::locked ) );
-        //Force display update when aspect ratio is locked
-        auto fakeEvent = wxCommandEvent();
-        OnSizeChangeX( fakeEvent );
-    }
 
+        //Force display update when aspect ratio is locked
+        wxCommandEvent dummy;
+        OnSizeChangeX( dummy );
+    }
     else
     {
         m_AspectRatioLockButton->SetBitmap( KiBitmap( BITMAPS::unlocked ) );
@@ -609,12 +609,13 @@ void BM2CMP_FRAME::Binarize( double aThreshold )
     unsigned char alpha_thresh = 0.7 * threshold;
 
     for( int y = 0; y < h; y++ )
+    {
         for( int x = 0; x < w; x++ )
         {
             unsigned char pixout;
-            auto pixin   = m_Greyscale_Image.GetGreen( x, y );
-            auto alpha   = m_Greyscale_Image.HasAlpha() ?
-                    m_Greyscale_Image.GetAlpha( x, y ) : wxALPHA_OPAQUE;
+            unsigned char pixin = m_Greyscale_Image.GetGreen( x, y );
+            unsigned char alpha = m_Greyscale_Image.HasAlpha() ? m_Greyscale_Image.GetAlpha( x, y )
+                                                               : wxALPHA_OPAQUE;
 
             if( pixin < threshold && alpha > alpha_thresh )
                 pixout = 0;
@@ -624,6 +625,7 @@ void BM2CMP_FRAME::Binarize( double aThreshold )
             m_NB_Image.SetRGB( x, y, pixout, pixout, pixout );
 
         }
+    }
 
     m_BN_Bitmap = wxBitmap( m_NB_Image );
 
@@ -632,17 +634,19 @@ void BM2CMP_FRAME::Binarize( double aThreshold )
 
 void BM2CMP_FRAME::NegateGreyscaleImage( )
 {
-    unsigned char  pix;
-    int             h = m_Greyscale_Image.GetHeight();
-    int             w = m_Greyscale_Image.GetWidth();
+    unsigned char pix;
+    int           h = m_Greyscale_Image.GetHeight();
+    int           w = m_Greyscale_Image.GetWidth();
 
     for( int y = 0; y < h; y++ )
+    {
         for( int x = 0; x < w; x++ )
         {
             pix   = m_Greyscale_Image.GetGreen( x, y );
             pix = ~pix;
             m_Greyscale_Image.SetRGB( x, y, pix, pix, pix );
         }
+    }
 }
 
 
@@ -776,14 +780,10 @@ void BM2CMP_FRAME::exportPostScriptFormat()
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = ::wxGetCwd();
 
-    wxFileDialog fileDlg( this, _( "Create PostScript File" ),
-                          path, wxEmptyString,
-                          PSFileWildcard(),
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog fileDlg( this, _( "Create PostScript File" ), path, wxEmptyString,
+                          PSFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    int          diag = fileDlg.ShowModal();
-
-    if( diag != wxID_OK )
+    if( fileDlg.ShowModal() != wxID_OK )
         return;
 
     fn = fileDlg.GetPath();
@@ -816,14 +816,10 @@ void BM2CMP_FRAME::exportEeschemaFormat()
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxFileDialog fileDlg( this, _( "Create Symbol Library" ),
-                          path, wxEmptyString,
-                          KiCadSymbolLibFileWildcard(),
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog fileDlg( this, _( "Create Symbol Library" ), path, wxEmptyString,
+                          KiCadSymbolLibFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    int          diag = fileDlg.ShowModal();
-
-    if( diag != wxID_OK )
+    if( fileDlg.ShowModal() != wxID_OK )
         return;
 
     fn = fileDlg.GetPath();
@@ -855,14 +851,10 @@ void BM2CMP_FRAME::exportPcbnewFormat()
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = m_mruPath;
 
-    wxFileDialog fileDlg( this, _( "Create Footprint Library" ),
-                          path, wxEmptyString,
-                          KiCadFootprintLibFileWildcard(),
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog fileDlg( this, _( "Create Footprint Library" ), path, wxEmptyString,
+                          KiCadFootprintLibFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    int          diag = fileDlg.ShowModal();
-
-    if( diag != wxID_OK )
+    if( fileDlg.ShowModal() != wxID_OK )
         return;
 
     fn = fileDlg.GetPath();
@@ -907,7 +899,7 @@ void BM2CMP_FRAME::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
     {
         for( int x = 0; x < w; x++ )
         {
-            auto pix = m_NB_Image.GetGreen( x, y );
+            unsigned char pix = m_NB_Image.GetGreen( x, y );
             BM_PUT( potrace_bitmap, x, y, pix ? 0 : 1 );
         }
     }

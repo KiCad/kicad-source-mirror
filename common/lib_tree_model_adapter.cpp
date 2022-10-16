@@ -494,8 +494,8 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
     {
         size_t i = 0;
 
-        for( auto& it : m_colNameMap )
-            m_colWidths[it.first] = widths[i++];
+        for( const auto& [ colName, colPtr ] : m_colNameMap )
+            m_colWidths[ colName ] = widths[i++];
     }
 
     auto colIt = m_colWidths.begin();
@@ -506,13 +506,13 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
     if( colIt != m_colWidths.end() )
         colIt->second -= walk;
 
-    for( auto& it : m_colNameMap )
+    for( const auto& [ colName, colPtr ] : m_colNameMap )
     {
-        if( it.second == m_columns[0] )
+        if( colPtr == m_columns[0] )
             continue;
 
-        wxASSERT( m_colWidths.count( it.first ) );
-        it.second->SetWidth( m_colWidths[it.first] );
+        wxASSERT( m_colWidths.count( colName ) );
+        colPtr->SetWidth( m_colWidths[ colName ] );
     }
 
     walk = -walk;

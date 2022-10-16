@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +35,13 @@
 #include <regex>
 
 bool compareFileExtensions( const std::string& aExtension,
-        const std::vector<std::string>& aReference, bool aCaseSensitive )
+                            const std::vector<std::string>& aReference, bool aCaseSensitive )
 {
     // Form the regular expression string by placing all possible extensions into it as alternatives
     std::string regexString = "(";
     bool        first = true;
-    for( const auto& ext : aReference )
+
+    for( const std::string& ext : aReference )
     {
         // The | separate goes between the extensions
         if( !first )
@@ -50,6 +51,7 @@ bool compareFileExtensions( const std::string& aExtension,
 
         regexString += ext;
     }
+
     regexString += ")";
 
     // Create the regex and see if it matches
@@ -106,7 +108,8 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
 
     // Add extensions to the filter list, using a formatted string (GTK specific):
     bool first = true;
-    for( const auto& ext : aExts )
+
+    for( const std::string& ext : aExts )
     {
         if( !first )
             files_filter << ";*.";

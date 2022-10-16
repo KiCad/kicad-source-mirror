@@ -407,7 +407,7 @@ void EDA_BASE_FRAME::HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAM
 
     // wxMenuItems don't want to be checked unless they actually are checkable, so we have to
     // check to see if they can be and can't just universally apply a check in this event.
-    if( auto menu = dynamic_cast<wxMenu*>( aEvent.GetEventObject() ) )
+    if( wxMenu* menu = dynamic_cast<wxMenu*>( aEvent.GetEventObject() ) )
         canCheck = menu->FindItem( aEvent.GetId() )->IsCheckable();
 
     if( canCheck )

@@ -115,7 +115,7 @@ EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_REGEX::Find( const wxString& aC
             m_regex.GetMatch( &start, &len, 0 );
 
             return { static_cast<int>( std::min( start, static_cast<size_t>( INT_MAX ) ) ),
-                static_cast<int>( std::min( len, static_cast<size_t>( INT_MAX ) ) ) };
+                     static_cast<int>( std::min( len, static_cast<size_t>( INT_MAX ) ) ) };
         }
         else
         {
@@ -147,6 +147,7 @@ bool EDA_PATTERN_MATCH_WILDCARD::SetPattern( const wxString& aPattern )
     for( wxString::const_iterator it = aPattern.begin(); it < aPattern.end(); ++it )
     {
         wxUniChar c = *it;
+
         if( c == '?' )
         {
             regex += wxT( "." );
@@ -193,9 +194,11 @@ bool EDA_PATTERN_MATCH_WILDCARD_EXPLICIT::SetPattern( const wxString& aPattern )
     const wxString to_replace = wxT( ".*+?^${}()|[]/\\" );
 
     regex +=  wxT( "^" );
+
     for( wxString::const_iterator it = aPattern.begin(); it < aPattern.end(); ++it )
     {
         wxUniChar c = *it;
+
         if( c == '?' )
         {
             regex += wxT( "." );
@@ -214,6 +217,7 @@ bool EDA_PATTERN_MATCH_WILDCARD_EXPLICIT::SetPattern( const wxString& aPattern )
             regex += c;
         }
     }
+
     regex += wxT( "$" );
 
     return EDA_PATTERN_MATCH_REGEX::SetPattern( regex );
@@ -278,8 +282,7 @@ wxString const& EDA_PATTERN_MATCH_RELATIONAL::GetPattern() const
 }
 
 
-EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_RELATIONAL::Find(
-        const wxString& aCandidate ) const
+EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_RELATIONAL::Find( const wxString& aCandidate ) const
 {
     wxStringTokenizer tokenizer( aCandidate );
     size_t lastpos = 0;
@@ -332,11 +335,11 @@ int EDA_PATTERN_MATCH_RELATIONAL::FindOne( const wxString& aCandidate ) const
 
     switch( m_relation )
     {
-    case LT:  return val_parsed <  m_value    ? istart : EDA_PATTERN_NOT_FOUND;
-    case LE:  return val_parsed <= m_value    ? istart : EDA_PATTERN_NOT_FOUND;
-    case EQ:  return val_parsed == m_value    ? istart : EDA_PATTERN_NOT_FOUND;
-    case GE:  return val_parsed >= m_value    ? istart : EDA_PATTERN_NOT_FOUND;
-    case GT:  return val_parsed >  m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case LT:  return val_parsed <  m_value ? istart : EDA_PATTERN_NOT_FOUND;
+    case LE:  return val_parsed <= m_value ? istart : EDA_PATTERN_NOT_FOUND;
+    case EQ:  return val_parsed == m_value ? istart : EDA_PATTERN_NOT_FOUND;
+    case GE:  return val_parsed >= m_value ? istart : EDA_PATTERN_NOT_FOUND;
+    case GT:  return val_parsed >  m_value ? istart : EDA_PATTERN_NOT_FOUND;
     case ANY: return istart;
     default:  return EDA_PATTERN_NOT_FOUND;
     }
@@ -364,8 +367,8 @@ const std::map<wxString, double> EDA_PATTERN_MATCH_RELATIONAL::m_units = {
 
 
 EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern,
-                                            COMBINED_MATCHER_CONTEXT aContext )
-    : m_pattern( aPattern )
+                                            COMBINED_MATCHER_CONTEXT aContext ) :
+        m_pattern( aPattern )
 {
     switch( aContext )
     {
@@ -392,7 +395,7 @@ bool EDA_COMBINED_MATCHER::Find( const wxString& aTerm, int& aMatchersTriggered,
     aPosition = EDA_PATTERN_NOT_FOUND;
     aMatchersTriggered = 0;
 
-    for( auto const& matcher : m_matchers )
+    for( const std::unique_ptr<EDA_PATTERN_MATCH>& matcher : m_matchers )
     {
         EDA_PATTERN_MATCH::FIND_RESULT local_find = matcher->Find( aTerm );
 
@@ -401,9 +404,7 @@ bool EDA_COMBINED_MATCHER::Find( const wxString& aTerm, int& aMatchersTriggered,
             aMatchersTriggered += 1;
 
             if( local_find.start < aPosition || aPosition == EDA_PATTERN_NOT_FOUND )
-            {
                 aPosition = local_find.start;
-            }
         }
     }
 
@@ -417,12 +418,9 @@ wxString const& EDA_COMBINED_MATCHER::GetPattern() const
 }
 
 
-void EDA_COMBINED_MATCHER::AddMatcher(
-        const wxString &aPattern,
-        std::unique_ptr<EDA_PATTERN_MATCH> aMatcher )
+void EDA_COMBINED_MATCHER::AddMatcher( const wxString &aPattern,
+                                       std::unique_ptr<EDA_PATTERN_MATCH> aMatcher )
 {
     if ( aMatcher->SetPattern( aPattern ) )
-    {
         m_matchers.push_back( std::move( aMatcher ) );
-    }
 }

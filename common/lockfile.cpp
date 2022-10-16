@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,13 +46,10 @@ std::unique_ptr<wxSingleInstanceChecker> LockFile( const wxString& aFileName )
     // We can have filenames coming from Windows, so also convert Windows separator
     lockFileName.Replace( "\\", "_" );
 
-    auto p = std::make_unique<wxSingleInstanceChecker>( lockFileName,
-                                                        GetKicadLockFilePath() );
+    auto p = std::make_unique<wxSingleInstanceChecker>( lockFileName, GetKicadLockFilePath() );
 
     if( p->IsAnotherRunning() )
-    {
         p = nullptr;
-    }
 
     return p;
 }

@@ -654,10 +654,10 @@ void EDA_DRAW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     m_findReplaceData->matchCase = aCfg->m_FindReplace.match_case;
     m_findReplaceData->searchAndReplace = aCfg->m_FindReplace.search_and_replace;
 
-    for( auto& s : aCfg->m_FindReplace.find_history )
+    for( const wxString& s : aCfg->m_FindReplace.find_history )
         m_findStringHistoryList.Add( s );
 
-    for( auto& s : aCfg->m_FindReplace.replace_history )
+    for( const wxString& s : aCfg->m_FindReplace.replace_history )
         m_replaceStringHistoryList.Add( s );
 }
 

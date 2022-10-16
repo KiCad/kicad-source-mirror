@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -89,7 +89,7 @@ void FOOTPRINT_FILTER_IT::increment()
             int      matches, position;
             bool     exclude = false;
 
-            for( auto& matcher : m_filter->m_pattern_filters )
+            for( std::unique_ptr<EDA_COMBINED_MATCHER>& matcher : m_filter->m_pattern_filters )
             {
                 if( !matcher->Find( searchStr.Lower(), matches, position ) )
                 {
@@ -132,7 +132,7 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
     // The matching is case insensitive
     wxString name;
 
-    for( auto const& each_filter : m_filter->m_footprint_filters )
+    for( const std::unique_ptr<EDA_PATTERN_MATCH>& each_filter : m_filter->m_footprint_filters )
     {
         name.Empty();
 
