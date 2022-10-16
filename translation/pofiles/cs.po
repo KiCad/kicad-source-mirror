@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:37-0700\n"
-"PO-Revision-Date: 2022-10-10 18:10+0000\n"
+"PO-Revision-Date: 2022-10-17 12:00+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -20141,13 +20141,14 @@ msgid "nanoseconds"
 msgstr "nanosekund"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
+#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Varování:\n"
-"Průměr plošky prokovu >= průměr izolační mezery otvoru.\n"
+"průměr izolační mezery otvoru.\n"
 "Některé parametry nelze vypočítat pro prokov uvnitř zóny mědi."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
@@ -20188,7 +20189,7 @@ msgstr "Degradace času vzestupu:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:304
 msgid "Rise time degradation for given Z0 and calculated capacitance"
-msgstr ""
+msgstr "Zvětšení doby náběhu pro danou Z0 a vypočítaná kapacita"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:312
 msgid "ps"
@@ -20216,7 +20217,7 @@ msgstr "Reaktance:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:334
 msgid "Inductive reactance for given rise time and calculated inductance"
-msgstr ""
+msgstr "Indukční reaktance pro daný čas náběhu a vypočítaná indukčnost"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
@@ -20385,6 +20386,27 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
+"Pokud zadáte maximální proud, pak se šířky spojů vypočítají podle toho, jak "
+"budou vyhovovat.\n"
+"\n"
+"Pokud zadáte některou šířku spoje, bude vypočítán maximální proud, se kterým "
+"si poradí. Poté se vypočte šířka pro druhý spoj, který má tento proud také "
+"zpracovat.\n"
+"\n"
+"Kontrolní hodnota je zobrazena tučně.\n"
+"\n"
+"Výpočty platí pro proudy do 35 A (vnější) nebo 17,5 A (vnitřní), teplota "
+"stoupne do 100 °C a šířky do 400 mil (10 mm).\n"
+"\n"
+"Vzorec z IPC 2221 je\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
+"kde:<br>\n"
+"___I___ je maximální proud v A<br>\n"
+"___&Delta;T___ je zvýšení teploty nad okolním v &deg;C<br>\n"
+"___W___ je šířka v milech<br>\n"
+"___H___ je tloušťka (výška) v milech<br>\n"
+"___K___ e 0,024 pro vnitřní spoje nebo 0,048 pro vnější spoje\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -29876,7 +29898,7 @@ msgstr ""
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1387
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "Vytvořena neplatná Bezierova křivka"
 
 #: pcbnew/initpcb.cpp:50
 msgid ""
@@ -32119,7 +32141,7 @@ msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:596
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr ""
+msgstr "Soubor '%s' má nerozpoznanou verzi: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:742
 #, c-format
@@ -33452,7 +33474,7 @@ msgstr "Seskupení"
 
 #: pcbnew/tools/group_tool.cpp:65
 msgid "Group is in inconsistent state:"
-msgstr ""
+msgstr "Skupina je v nekonzistentním stavu:"
 
 #: pcbnew/tools/group_tool.cpp:148
 msgid "Click on new member..."
