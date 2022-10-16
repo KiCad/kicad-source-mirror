@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-09 08:03+0000\n"
+"PO-Revision-Date: 2022-10-17 17:05+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -530,9 +530,8 @@ msgid "Toggle 3D models for 'unspecified' type components"
 msgstr "「その他」タイプの部品の 3D モデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
-#, fuzzy
 msgid "Toggle 3D models not in pos file"
-msgstr "仮想タイプへ 3D モデルを切替"
+msgstr "posファイルにない3Dモデルの切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
@@ -10017,9 +10016,8 @@ msgstr "現在のシートをルートとして使用する"
 
 #: eeschema/dialogs/dialog_netlist.cpp:350
 #: eeschema/dialogs/dialog_netlist.cpp:397
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "現在のシートだけを保存する"
+msgstr "現在のシートのネットリストのみをエクスポートする"
 
 #: eeschema/dialogs/dialog_netlist.cpp:355
 msgid "Save all voltages"
@@ -10150,7 +10148,7 @@ msgid "Alternate pin definitions must have a name."
 msgstr "代替ピン定義は名前を持たなければなりません。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
@@ -11051,7 +11049,7 @@ msgstr "上書き"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:63
 msgid "Pin:"
-msgstr ""
+msgstr "ピン:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:90
 #: eeschema/dialogs/dialog_sim_model_base.cpp:194
@@ -11102,9 +11100,8 @@ msgid "Exclude symbol from simulation"
 msgstr "シミュレーションからシンボルを除外する"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:114
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Spice モデル エディター"
+msgstr "シミュレーション モデル エディター"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11604,9 +11601,8 @@ msgstr ""
 "です"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:208
-#, fuzzy
 msgid "Do not populate"
-msgstr "エクスポートできません"
+msgstr "移入しないでください"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:220
 msgid "Update Symbol from Library..."
@@ -11644,9 +11640,8 @@ msgid "Library link:"
 msgstr "ライブラリー リンク:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:323
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "シミュレーター..."
+msgstr "シミュレーションモデル..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:108
 msgid "Symbol Properties"
@@ -11791,6 +11786,9 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"ハイパーリンクのリンク先が無効です。有効なURL(file:// やhttp(s)://など)"
+"または \"#<page number>\" "
+"を入力して、この回路図のページへのハイパーリンクを作成してください。"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:288
 msgid "Link:"
@@ -12222,9 +12220,8 @@ msgid "Members of '%s':"
 msgstr "'%s' のメンバー:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "ネットまたはバス名"
+msgstr "ネット/ネストされたバス名"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -12266,9 +12263,8 @@ msgid "Default text size:"
 msgstr "デフォルト テキスト サイズ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "テキスト オフセット比:"
+msgstr "ラベル オフセット比:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
@@ -12703,7 +12699,8 @@ msgstr ""
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
-msgstr ""
+msgstr "新しいルートシートファイルで上書きされるため、ファイル '%s' "
+"をコピーすることができません。"
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -12763,9 +12760,8 @@ msgid "No Connection"
 msgstr "未接続"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "図面シート上のテキスト変数が未解決。"
+msgstr "図面シート上のテキスト変数が未解決"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -12778,7 +12774,6 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "%s と %s に関連付けられた異なったフットプリント"
 
 #: eeschema/erc.cpp:438
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
 msgstr "\"未接続\" タイプのピンが接続されています"
 
@@ -12793,24 +12788,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "ピン %s が %s と %s の両方に接続されています"
 
 #: eeschema/erc.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "現在の設定には '%s' のライブラリーは含まれません。"
+msgstr "現在の設定には '%s' のライブラリーは含まれません"
 
 #: eeschema/erc.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "ライブラリー '%s' は現在の設定では有効化されていません。"
+msgstr "ライブラリー '%s' は現在の設定では有効化されていません"
 
 #: eeschema/erc.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "シンボル '%s' がシンボル ライブラリー '%s' 内に見つかりません。"
+msgstr "シンボル '%s' がシンボル ライブラリー '%s' 内に見つかりません"
 
 #: eeschema/erc.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "シンボル '%s' がライブラリー '%s' に見つかりません。"
+msgstr "シンボル '%s' がライブラリー '%s' で変更されました"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -13254,9 +13249,8 @@ msgid "Unknown"
 msgstr "不明"
 
 #: eeschema/hierarch.cpp:248
-#, fuzzy
 msgid "Edit Page Number"
-msgstr "シートのページ番号を編集"
+msgstr "ページ番号を編集"
 
 #: eeschema/hierarch.cpp:259 eeschema/tools/sch_edit_tool.cpp:2295
 #, c-format
@@ -13452,14 +13446,12 @@ msgid "Netlist..."
 msgstr "ネットリスト..."
 
 #: eeschema/menubar.cpp:125
-#, fuzzy
 msgid "Symbols to Library..."
-msgstr "ライブラリーからシンボルを更新..."
+msgstr "シンボルからライブラリーへ..."
 
 #: eeschema/menubar.cpp:127
-#, fuzzy
 msgid "Symbols to New Library..."
-msgstr "フットプリントを新しいライブラリーにエクスポート..."
+msgstr "シンボルから新しいライブラリーへ..."
 
 #: eeschema/menubar.cpp:195
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
@@ -13876,7 +13868,6 @@ msgid "Resolved netclass"
 msgstr "解決されたネットクラス"
 
 #: eeschema/sch_label.cpp:956
-#, fuzzy
 msgid "Hierarchical Labels"
 msgstr "階層ラベル"
 
@@ -14601,19 +14592,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "階層シートピン %s"
 
 #: eeschema/sch_symbol.cpp:1275
-#, fuzzy
 msgid "Excluded from BOM"
 msgstr "部品表から除外"
 
 #: eeschema/sch_symbol.cpp:1280
-#, fuzzy
 msgid "Excluded from board"
 msgstr "基板から除外"
 
 #: eeschema/sch_symbol.cpp:1285
-#, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1656
 msgid "Power symbol"
@@ -15170,21 +15158,22 @@ msgid "Discard New Sheet"
 msgstr "新規シートを破棄"
 
 #: eeschema/sim/sim_lib_mgr.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "シンボル ライブラリー %s のロード中にエラーしました。"
+msgstr "シミュレーション モデル ライブラリー %s のロード中にエラーしました:%s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "回路図 '%s' のロード中のエラー。"
+msgstr "シミュレーション モデルの読み込みエラー: '%s' フィールドがありません"
 
 #: eeschema/sim/sim_lib_mgr.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "シンボル '%s' をライブラリー '%s' からロード中にエラーしました。"
+msgstr "シミュレーション モデルの読み込み中にエラーが発生しました: ベース モデル "
+"'%s' がライブラリ '%s' 内に見つかりませんでした"
 
 #: eeschema/sim/sim_model.cpp:1167
 #, c-format
@@ -15197,9 +15186,8 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "値 '%s' からモデルを推論できませんでした"
 
 #: eeschema/sim/sim_model_kibis.cpp:169
-#, fuzzy
 msgid "Power supply"
-msgstr "電源シンボル"
+msgstr "電源"
 
 #: eeschema/sim/sim_model_kibis.cpp:179
 #, fuzzy
@@ -15229,19 +15217,16 @@ msgid "OFF time"
 msgstr "立ち下がり時間:"
 
 #: eeschema/sim/sim_model_kibis.cpp:277
-#, fuzzy
 msgid "Delay"
-msgstr "遅延:"
+msgstr "遅延"
 
 #: eeschema/sim/sim_model_kibis.cpp:294
-#, fuzzy
 msgid "Bitrate"
-msgstr "サブストレート"
+msgstr "ビットレート"
 
 #: eeschema/sim/sim_model_kibis.cpp:302
-#, fuzzy
 msgid "Number of bits"
-msgstr "ユニット数"
+msgstr "ビット数"
 
 #: eeschema/sim/sim_model_raw_spice.cpp:291
 #, c-format
@@ -15511,9 +15496,9 @@ msgstr ""
 
 #: eeschema/sim/spice_model_parser.cpp:217
 #: eeschema/sim/spice_model_parser.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s' in model '%s'"
-msgstr "パラメータ '%s' を '%s' に設定することに失敗しました"
+msgstr "パラメータ '%s' を '%s' に設定できませんでした(モデル '%s')"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -16434,7 +16419,6 @@ msgid "Annotate pins with their electrical types"
 msgstr "エレクトリカル タイプでピンをアノテーション"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Show Pin Numbers"
 msgstr "ピン番号を表示"
 
@@ -16732,7 +16716,7 @@ msgstr "選択されたアイテムの左右を反転"
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/edit_tool_move_fct.cpp:389
 #: pcbnew/tools/pcb_actions.cpp:342
 msgid "Swap"
-msgstr ""
+msgstr "交換"
 
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/pcb_actions.cpp:342
 #, fuzzy
@@ -17093,9 +17077,8 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "現在の回路図から部品表 (Bill Of Materials)を作成"
 
 #: eeschema/tools/ee_actions.cpp:681
-#, fuzzy
 msgid "Export Symbols to Library..."
-msgstr "ライブラリーからシンボルを更新..."
+msgstr "シンボルをライブラリにエクスポート..."
 
 #: eeschema/tools/ee_actions.cpp:682
 #, fuzzy
@@ -17107,9 +17090,8 @@ msgstr ""
 "(このライブラリーにある他のフットプリントを削除しません)"
 
 #: eeschema/tools/ee_actions.cpp:688
-#, fuzzy
 msgid "Export Symbols to New Library..."
-msgstr "ライブラリーからシンボルを更新..."
+msgstr "シンボルを新しいライブラリにエクスポート..."
 
 #: eeschema/tools/ee_actions.cpp:689
 #, fuzzy
@@ -17515,15 +17497,13 @@ msgid "Find again to wrap around to the start."
 msgstr "最初に戻って再度検索します。"
 
 #: eeschema/tools/sch_editor_control.cpp:808
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add library '%s'."
-msgstr "ライブラリーファイル '%s' が見つかりませんでした"
+msgstr "ライブラリ '%s' を追加できませんでした。"
 
 #: eeschema/tools/sch_editor_control.cpp:821
-#, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
-msgstr ""
-"基板上のフットプリントが 新しいライブラリーを参照するように更新しますか?"
+msgstr "基板上のシンボルが 新しいライブラリーを参照するように更新しますか?"
 
 #: eeschema/tools/sch_editor_control.cpp:1112
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -17545,9 +17525,8 @@ msgstr ""
 "一つになっているためです。"
 
 #: eeschema/tools/sch_editor_control.cpp:2244
-#, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr "シンボル ライブラリー '%s' が削除できませんでした。"
+msgstr "ライブラリシンボルリンクが壊れているシンボルは編集できません。"
 
 #: eeschema/tools/sch_editor_control.cpp:2538
 #: pcbnew/tools/board_editor_control.cpp:597
@@ -17634,14 +17613,13 @@ msgid "Symbol is not derived from another symbol."
 msgstr "シンボルは他のシンボルから派生していません。"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Enter display name for unit %s"
-msgstr "シートパス %s のページ番号を入力します"
+msgstr "ユニット %s の表示名を入力"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:672
-#, fuzzy
 msgid "Set Unit Display Name"
-msgstr "表示名でフィルター"
+msgstr "ユニット表示名の設定"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -17969,7 +17947,7 @@ msgid "Negative Objects"
 msgstr "ネガ オブジェクト"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Layer %d"
 msgstr "グラフィック レイヤー %d"
 
@@ -19262,12 +19240,11 @@ msgid "Color themes (%d)"
 msgstr "カラーテーマ (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "本当に %lu アイテムを削除してもよろしいですか？"
+msgstr "ピン留めされたパッケージをバージョン %s から %s に更新してもよいですか?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:77
-#, fuzzy
 msgid "Confirm update"
 msgstr "変更の確認"
 
@@ -19390,9 +19367,8 @@ msgid "Applying Package Changes"
 msgstr "パッケージの変更を適用しています"
 
 #: kicad/pcm/dialogs/panel_package.cpp:65
-#, fuzzy
 msgid "Pin package"
-msgstr "パッケージ"
+msgstr "ピンパッケージ"
 
 #: kicad/pcm/dialogs/panel_package.cpp:66
 msgid ""
@@ -19513,19 +19489,16 @@ msgid "Check for package updates on startup"
 msgstr "起動時にパッケージのアップデートを確認する"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:28
-#, fuzzy
 msgid "Library package handling"
-msgstr "ライブラリーの変更は保存されていません"
+msgstr "ライブラリパッケージの取り扱い"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "ライブラリーをグローバル ライブラリー テーブルを追加しますか?"
+msgstr "インストールされたライブラリをグローバル lib テーブルに自動的に追加する"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "自動配線された配線"
+msgstr "アンインストールされたライブラリを自動的に削除"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
 #, fuzzy
@@ -19637,9 +19610,9 @@ msgid "No package updates available"
 msgstr "パッケージのアップデートはありません"
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "%s ピン %s が見つかりません"
+msgstr "バージョン %s （パッケージ %s ）が見つかりません!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -20997,9 +20970,8 @@ msgid "Application"
 msgstr "アプリケーション"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:162
-#, fuzzy
 msgid "Cable temperature:"
-msgstr "周囲の温度:"
+msgstr "ケーブルの温度:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
@@ -21089,17 +21061,16 @@ msgid "Multiplier"
 msgstr "乗数"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:40
-#, fuzzy
 msgid "Platinum"
-msgstr "アルミニウム"
+msgstr "白金"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:41
 msgid "Gold"
-msgstr ""
+msgstr "金"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:42
 msgid "Titanium"
-msgstr ""
+msgstr "チタン"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:43
 msgid "Stainless steel 18-9"
@@ -21107,16 +21078,15 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:45
 msgid "Silver"
-msgstr ""
+msgstr "銀"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:46
 msgid "Mercury"
-msgstr ""
+msgstr "水銀"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:47
-#, fuzzy
 msgid "Nickel"
-msgstr "別名(ニックネーム)"
+msgstr "ニッケル"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:48
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:838
@@ -21138,14 +21108,12 @@ msgid "Bronze"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
-#, fuzzy
 msgid "Tin"
-msgstr "inch"
+msgstr "錫"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:53
-#, fuzzy
 msgid "Lead"
-msgstr "引出線"
+msgstr "鉛"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:54
 #, fuzzy
@@ -21161,17 +21129,16 @@ msgid "Carbon steel"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:57
-#, fuzzy
 msgid "Aluminium"
 msgstr "アルミニウム"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:58
 msgid "Cadmium"
-msgstr ""
+msgstr "カドミウム"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:59
 msgid "Iron"
-msgstr ""
+msgstr "鉄"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:60
 msgid "Chrome"
@@ -21179,22 +21146,20 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:61
 msgid "Zinc"
-msgstr ""
+msgstr "亜鉛"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:62
-#, fuzzy
 msgid "Manganese"
-msgstr "日本語"
+msgstr "マンガン"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:63
 msgid "Magnesium"
-msgstr ""
+msgstr "マグネシウム"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
-#, fuzzy
 msgid "Copper (Cu)"
-msgstr "銅"
+msgstr "銅 (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:54
 msgid ""
@@ -23704,9 +23669,8 @@ msgid "SMD:"
 msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "不特定"
+msgstr "不特定:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
