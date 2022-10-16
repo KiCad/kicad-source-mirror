@@ -47,6 +47,8 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_engine.h>
 
+#include <connectivity/connectivity_data.h>
+
 #include <wx/log.h>
 
 #include <memory>
@@ -1497,10 +1499,34 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
 }
 
 
-void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor )
+void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aNetCode )
 {
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aRatline, m_view );
-    pitem->SetColor( COLOR4D( static_cast<EDA_COLOR_T>( aColor ) ) );
+
+    KIGFX::RENDER_SETTINGS*     renderSettings = m_view->GetPainter()->GetSettings();
+    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings );
+    bool                        colorByNet = rs->GetNetColorMode() != NET_COLOR_MODE::OFF;
+    COLOR4D                     defaultColor = rs->GetColor( nullptr, LAYER_RATSNEST );
+    COLOR4D                     color = defaultColor;
+
+    std::shared_ptr<CONNECTIVITY_DATA>  connectivity = m_board->GetConnectivity();
+    std::set<int>                       highlightedNets = rs->GetHighlightNetCodes();
+    std::map<int, KIGFX::COLOR4D>&      netColors = rs->GetNetColorMap();
+    std::map<wxString, KIGFX::COLOR4D>& ncColors = rs->GetNetclassColorMap();
+    const std::map<int, wxString>&      ncMap = connectivity->GetNetclassMap();
+
+    if( colorByNet && netColors.count( aNetCode ) )
+        color = netColors.at( aNetCode );
+    else if( colorByNet && ncMap.count( aNetCode ) && ncColors.count( ncMap.at( aNetCode ) ) )
+        color = ncColors.at( ncMap.at( aNetCode ) );
+    else
+        color = defaultColor;
+
+    if( color == COLOR4D::UNSPECIFIED )
+        color = defaultColor;
+
+    pitem->SetColor( color.Brightened( 0.5 ).WithAlpha( std::min( 1.0, color.a + 0.4 ) ) );
+
     m_previewItems->Add( pitem );
     m_view->Update( m_previewItems );
 }

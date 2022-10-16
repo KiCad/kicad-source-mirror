@@ -848,10 +848,10 @@ void DIFF_PAIR_PLACER::updateLeadingRatLine()
     TOPOLOGY topo( m_lastNode );
 
     if( topo.LeadingRatLine( &m_currentTrace.PLine(), ratLineP ) )
-        m_router->GetInterface()->DisplayRatline( ratLineP, 1 );
+        m_router->GetInterface()->DisplayRatline( ratLineP, m_netP );
 
     if( topo.LeadingRatLine ( &m_currentTrace.NLine(), ratLineN ) )
-        m_router->GetInterface()->DisplayRatline( ratLineN, 3 );
+        m_router->GetInterface()->DisplayRatline( ratLineN, m_netN );
 }
 
 

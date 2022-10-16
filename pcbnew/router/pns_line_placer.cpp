@@ -1726,7 +1726,7 @@ void LINE_PLACER::updateLeadingRatLine()
     TOPOLOGY topo( m_lastNode );
 
     if( topo.LeadingRatLine( &current, ratLine ) )
-        m_router->GetInterface()->DisplayRatline( ratLine, 5 );
+        m_router->GetInterface()->DisplayRatline( ratLine, m_currentNet );
 }
 
 
