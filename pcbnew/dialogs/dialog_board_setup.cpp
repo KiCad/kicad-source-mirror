@@ -249,8 +249,8 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
         // separately, and stackup can be imported only after layers options
         if( importDlg.m_LayersOpt->GetValue() )
         {
-            m_layers->ImportSettingsFrom( otherBoard );
             m_physicalStackup->ImportSettingsFrom( otherBoard );
+            m_layers->ImportSettingsFrom( otherBoard );
         }
 
         if( importDlg.m_TextAndGraphicsOpt->GetValue() )
