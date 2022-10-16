@@ -694,7 +694,6 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
 void PANEL_SETUP_BOARD_STACKUP::showOnlyActiveLayers()
 {
-
     // Now enable/disable stackup items, according to the m_enabledLayers config
     // Calculate copper layer count from m_enabledLayers, and *do not use* brd_stackup
     // for that, because it is not necessary up to date
@@ -1293,13 +1292,15 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
 void PANEL_SETUP_BOARD_STACKUP::ImportSettingsFrom( BOARD* aBoard )
 {
     BOARD* savedBrd = m_board;
+    m_board = aBoard;
+
     BOARD_DESIGN_SETTINGS* savedSettings = m_brdSettings;
     m_brdSettings = &aBoard->GetDesignSettings();
 
-    m_enabledLayers = m_panelLayers->GetUILayerMask() & BOARD_STACKUP::StackupAllowedBrdLayers();
-    synchronizeWithBoard( true );
+    m_enabledLayers = m_board->GetEnabledLayers() & BOARD_STACKUP::StackupAllowedBrdLayers();
 
     rebuildLayerStackPanel();
+    synchronizeWithBoard( true );
     computeBoardThickness();
 
     m_brdSettings = savedSettings;
