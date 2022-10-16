@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:37-0700\n"
-"PO-Revision-Date: 2022-10-06 09:15+0000\n"
+"PO-Revision-Date: 2022-10-17 12:00+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -18105,7 +18105,7 @@ msgstr "Arkivera alla projektfiler som behövs i zip-arkivet"
 
 #: kicad/menubar.cpp:122
 msgid "&Unarchive Project..."
-msgstr "& Packa upp arkiverat projekt..."
+msgstr "&Packa upp arkiverat projekt..."
 
 #: kicad/menubar.cpp:123 kicad/menubar.cpp:231
 msgid "Unarchive project files from zip archive"
@@ -18345,7 +18345,7 @@ msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
-"Detta paketets version är inte kompatibel med din KiCad-version eller "
+"Detta pakets version är inte kompatibel med din KiCad-version eller "
 "platform. Vill du installera det ändå?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:560
@@ -18515,7 +18515,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Kan inte tolka pakets metadata:\n"
+"Kan inte tolka metadata för paket:\n"
 "\n"
 "%s"
 
@@ -30792,7 +30792,7 @@ msgstr "Diameter"
 
 #: pcbnew/pad.cpp:1026
 msgid "Length in Package"
-msgstr "Längd i paketet"
+msgstr "Längd i kapslingen"
 
 #: pcbnew/pad.cpp:1039
 msgid "Hole X / Y"
