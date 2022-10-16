@@ -316,7 +316,11 @@ bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITO
     catch( const std::exception& e )
     {
         if( m_dialog )
-            wxLogError( wxString::Format( _( "Unable to parse repository:\n\n%s" ), e.what() ) );
+        {
+            wxLogError( wxString::Format( _( "Unable to parse repository: %s" ), e.what() ) );
+            wxLogError( _( "The given repository URL does not look like a valid KiCad package "
+                           "repository. Please double check the URL." ) );
+        }
 
         return false;
     }
