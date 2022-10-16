@@ -431,11 +431,14 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                                     && board->IsElementVisible( LAYER_CONFLICTS_SHADOW );
 
     // Used to test courtyard overlaps
-    std::shared_ptr<DRC_ENGINE>         drcEngine = m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine();
-    DRC_INTERACTIVE_COURTYARD_CLEARANCE drc_on_move( drcEngine );
+    std::unique_ptr<DRC_INTERACTIVE_COURTYARD_CLEARANCE> drc_on_move = nullptr;
 
     if( showCourtyardConflicts )
-        drc_on_move.Init( board );
+    {
+        std::shared_ptr<DRC_ENGINE> drcEngine = m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine();
+        drc_on_move.reset( new DRC_INTERACTIVE_COURTYARD_CLEARANCE( drcEngine ) );
+        drc_on_move->Init( board );
+    }
 
     displayConstraintsMessage( hv45Mode );
 
@@ -538,10 +541,10 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                     hasRedrawn3D = true;
                 }
 
-                if( showCourtyardConflicts && drc_on_move.m_FpInMove.size() )
+                if( showCourtyardConflicts && drc_on_move->m_FpInMove.size() )
                 {
-                    drc_on_move.Run();
-                    drc_on_move.UpdateConflicts( m_toolMgr->GetView(), true );
+                    drc_on_move->Run();
+                    drc_on_move->UpdateConflicts( m_toolMgr->GetView(), true );
                 }
 
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
@@ -628,8 +631,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                     {
                         items.push_back( static_cast<BOARD_ITEM*>( item ) );
 
-                        if( item->Type() == PCB_FOOTPRINT_T )
-                            drc_on_move.m_FpInMove.push_back( static_cast<FOOTPRINT*>( item ) );
+                        if( showCourtyardConflicts && item->Type() == PCB_FOOTPRINT_T )
+                            drc_on_move->m_FpInMove.push_back( static_cast<FOOTPRINT*>( item ) );
                     }
 
                     m_cursor = grid.BestDragOrigin( originalCursorPos, items );
@@ -737,7 +740,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     } while( ( evt = Wait() ) ); // Assignment (instead of equality test) is intentional
 
     // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
-    drc_on_move.ClearConflicts( m_toolMgr->GetView() );
+    if( showCourtyardConflicts )
+        drc_on_move->ClearConflicts( m_toolMgr->GetView() );
 
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
