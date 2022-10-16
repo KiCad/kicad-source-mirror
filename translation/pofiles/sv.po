@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-09 08:03+0000\n"
+"PO-Revision-Date: 2022-10-17 17:05+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -1060,7 +1060,7 @@ msgstr "Opacitet"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
 #, fuzzy
 msgid "Board Thickness"
-msgstr "Korttjocklek: "
+msgstr "Mönsterkortstjocklek:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -6023,9 +6023,8 @@ msgid "Zoom Out"
 msgstr "Zooma Ut"
 
 #: common/tool/actions.cpp:336 common/widgets/mathplot.cpp:1665
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Centrera på sidan"
+msgstr "Centrera på markören"
 
 #: common/tool/actions.cpp:342
 msgid "Zoom to Selection"
@@ -7612,9 +7611,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Dubbla objekt %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Olika värden för %s%d%s (%s) och %s%d%s (%s)"
+msgstr "Olika antal enheter för objekt %s%s%s och %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
@@ -9942,9 +9941,8 @@ msgid "Footprint Filters"
 msgstr "Fotavtrycksfilter"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:337
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "Redigera Spice-modell..."
+msgstr "Redigera simulationsmodell..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
@@ -11092,9 +11090,8 @@ msgid "Model"
 msgstr "Modell"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:105
-#, fuzzy
 msgid "Device:"
-msgstr "Spice-enhet:"
+msgstr "Enhet:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:114
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -11136,9 +11133,8 @@ msgid "Exclude symbol from simulation"
 msgstr "Exkludera symbol från simulering"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:114
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Spice-modellredigerare"
+msgstr "Simualtionsmodellredigerare"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11680,9 +11676,8 @@ msgid "Library link:"
 msgstr "Bibliotekslänk:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:323
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "Simulator..."
+msgstr "Simulationsmodell..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:108
 msgid "Symbol Properties"
@@ -12264,9 +12259,8 @@ msgid "Members of '%s':"
 msgstr "Medlemmar för '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Namn för nät- / nästlad buss"
+msgstr "Namn för nät / nästlad buss"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -15127,6 +15121,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Det öppnade kretsschemat innehåller hierarkiska ark från en äldre filversion "
+"som orsakar saknade data för symbolinstanser. Det resulterar i att alla "
+"symboler i det öppnade kretsschemat använder antingen förinställningar för "
+"instanser eller faller tillbaka på bibliotekets symbolinställningar. "
+"Problemet kan lösas genom att öppna det projekt som använder detta "
+"kretsschema och spara som senaste filversion.\n"
+"\n"
+"Vill du fortsätta?"
 
 #: eeschema/sheet.cpp:240 eeschema/sheet.cpp:268 eeschema/sheet.cpp:309
 #: eeschema/sheet.cpp:358 eeschema/sheet.cpp:419
@@ -15221,21 +15223,23 @@ msgid "Discard New Sheet"
 msgstr "Kasta nytt ark"
 
 #: eeschema/sim/sim_lib_mgr.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "Fel vid inläsning av symbolbibliotek '%s'."
+msgstr "Fel vid inläsning av simulationsmodellbibliotek '%s': %s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "Fel vid inläsning av schema '%s'."
+msgstr "Fel vid inläsning av simulationsmodell: inget '%s'-fält"
 
 #: eeschema/sim/sim_lib_mgr.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "Fel vid inläsning av symbolen %s från biblioteket '%s'."
+msgstr ""
+"Fel vid inläsning av simulationsmodell: kunde inte hitta grundmodell '%s' i "
+"biblioteket '%s'"
 
 #: eeschema/sim/sim_model.cpp:1167
 #, c-format
@@ -15264,9 +15268,8 @@ msgid "Parasitic Pin Capacitance"
 msgstr "Stiftets parasitiska kapacitans"
 
 #: eeschema/sim/sim_model_kibis.cpp:243
-#, fuzzy
 msgid "DC Value"
-msgstr "Värde"
+msgstr "DC-värde"
 
 #: eeschema/sim/sim_model_kibis.cpp:261
 msgid "ON time"
@@ -15549,13 +15552,13 @@ msgstr "Okänd SIM_VALUE typ"
 #: eeschema/sim/spice_model_parser.cpp:186
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr ""
+msgstr "Kunde inte hitta modell '%s' att kopiera till \"en slags\" modell '%s'"
 
 #: eeschema/sim/spice_model_parser.cpp:217
 #: eeschema/sim/spice_model_parser.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s' in model '%s'"
-msgstr "Det gick inte att sätta parameter '%s' till '%s'"
+msgstr "Det gick inte att sätta parameter '%s' till värde '%s' i modell '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -19229,7 +19232,7 @@ msgstr "Arkivera alla projektfiler som behövs i zip-arkivet"
 
 #: kicad/menubar.cpp:124
 msgid "&Unarchive Project..."
-msgstr "& Packa upp arkiverat projekt..."
+msgstr "&Packa upp arkiverat projekt..."
 
 #: kicad/menubar.cpp:125 kicad/menubar.cpp:252
 msgid "Unarchive project files from zip archive"
@@ -19515,7 +19518,7 @@ msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
-"Detta paketets version är inte kompatibel med din KiCad-version eller "
+"Detta pakets version är inte kompatibel med din KiCad-version eller "
 "platform. Vill du installera det ändå?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:590
@@ -19740,7 +19743,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Kan inte tolka pakets metadata:\n"
+"Kan inte tolka metadata för paket:\n"
 "\n"
 "%s"
 
@@ -21123,34 +21126,32 @@ msgid "Multiplier"
 msgstr "Multiplikator"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:40
-#, fuzzy
 msgid "Platinum"
-msgstr "Aluminum"
+msgstr "Platina"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:41
 msgid "Gold"
-msgstr ""
+msgstr "Guld"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:42
 msgid "Titanium"
-msgstr ""
+msgstr "Titan"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:43
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "Rostfritt stål 18-9"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:45
 msgid "Silver"
-msgstr ""
+msgstr "Silver"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:46
 msgid "Mercury"
-msgstr ""
+msgstr "Kvicksilver"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:47
-#, fuzzy
 msgid "Nickel"
-msgstr "Smeknamn"
+msgstr "Nickel"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:48
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:838
@@ -21159,70 +21160,64 @@ msgid "Copper"
 msgstr "Koppar"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:49
-#, fuzzy
 msgid "Copper-Aluminium"
-msgstr "Aluminum"
+msgstr "Koppar-Aluminium"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "Mässing"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
-msgstr ""
+msgstr "Brons"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
-#, fuzzy
 msgid "Tin"
-msgstr "tum"
+msgstr "Tenn"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:53
-#, fuzzy
 msgid "Lead"
-msgstr "Ledare"
+msgstr "Bly"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:54
-#, fuzzy
 msgid "Aluminium-Copper"
-msgstr "Aluminum"
+msgstr "Aluminium-Koppar"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "Gjutjärn"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
-msgstr ""
+msgstr "Kolstål"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:57
-#, fuzzy
 msgid "Aluminium"
-msgstr "Aluminum"
+msgstr "Aluminium"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:58
 msgid "Cadmium"
-msgstr ""
+msgstr "Kadmium"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:59
 msgid "Iron"
-msgstr ""
+msgstr "Järn"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:60
 msgid "Chrome"
-msgstr ""
+msgstr "Krom"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:61
 msgid "Zinc"
-msgstr ""
+msgstr "Zink"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:62
-#, fuzzy
 msgid "Manganese"
-msgstr "Japanska"
+msgstr "Mangan"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:63
 msgid "Magnesium"
-msgstr ""
+msgstr "Magnesium"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
@@ -21242,11 +21237,20 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"Denna tabell visar skillnaden i elektrokemisk potential mellan olika "
+"metaller och legeringar. Ett positivt tal visar att raden är anodisk och "
+"kolumnen katodisk.\n"
+"Galvanisk korrosion påverkar olika metaller i kontakt och under vissa "
+"förhållanden.\n"
+"Anoden i ett elektrokemiskt par oxideras och fräts bort, medan katoden får "
+"upplösta metaller pläterad på sig och är skyddad.\n"
+"EN 50310 föreslår en potentialdifferens under 300mV. Känd praxis använder "
+"sig av en tredje gränssnittsmetall mellan huvudparet (t.ex. plätering av typ "
+"ENIG)."
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
-#, fuzzy
 msgid "Threshold voltage:"
-msgstr "Slutlig spänning:"
+msgstr "Tröskelspänning:"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:68
 #: pcb_calculator/widgets/unit_selector.cpp:255
@@ -22120,7 +22124,6 @@ msgid "Board Classes"
 msgstr "Mönsterkortsklasser"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
-#, fuzzy
 msgid "Galvanic Corrosion"
 msgstr "Galvanisk korrosion"
 
@@ -24915,9 +24918,8 @@ msgid "Run clearance resolution tool..."
 msgstr "Kör avståndsupplösningsverktyget..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:613
-#, fuzzy
 msgid "Run constraints resolution tool..."
-msgstr "Kör avståndsupplösningsverktyget..."
+msgstr "Kör begränsningssupplösningsverktyget..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:640
 msgid "Open the Board Setup... dialog"
@@ -25572,33 +25574,33 @@ msgid "Text items must have some content."
 msgstr "Textobjekt måste ha något innehåll."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at least %s."
-msgstr "%s måste vara minst %s."
+msgstr "Textbredden måste vara minst %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at most %s."
-msgstr "%s måste vara minst %s."
+msgstr "Textbredden måste vara högst %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at least %s."
-msgstr "%s måste vara minst %s."
+msgstr "Texthöjden måste vara minst %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at most %s."
-msgstr "%s måste vara minst %s."
+msgstr "Texthöjden måste vara högst %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
 "Texttjockleken är för stor för textstorleken.\n"
-"Det kommer att klämmas fast."
+"Den kommer att begränsas till %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:574
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:603
@@ -25889,14 +25891,14 @@ msgid "Footprint name may not contain '%s'."
 msgstr "Fotavtryckets namn kan inte innehålla '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "The text width must be between %s and %s."
-msgstr "Linjebredden måste vara större än noll."
+msgstr "Textbredden måste vara mellan %s och %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "Typkonflikt mellan '%s' och %lf"
+msgstr "Texthöjden måste vara mellan %s och %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:452
 #: pcbnew/dialogs/dialog_text_properties.cpp:420
@@ -26634,9 +26636,8 @@ msgid "Circle Properties"
 msgstr "Cirkelegenskaper"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:211
-#, fuzzy
 msgid "Center Point"
-msgstr "Startpunkt"
+msgstr "Centrumpunkt"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:223
 msgid "Arc Properties"
@@ -27116,9 +27117,8 @@ msgstr "Egenskaper för icke-kopparzoner"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:146
-#, fuzzy
 msgid "Center Point:"
-msgstr "Centrera"
+msgstr "Centrumpunkt:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:136
 #: pcbnew/dialogs/dialog_pad_properties.cpp:728
@@ -31295,9 +31295,9 @@ msgid "Checking %s max uncoupled length: %s."
 msgstr "Kontrollerar %s; maximal okopplad längd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:891
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max skew: %s."
-msgstr "Kontrollerar %s max skew: %s."
+msgstr "Kontrollerar %s max skevning: %s."
 
 #: pcbnew/drc/drc_engine.cpp:897
 #, c-format
@@ -31886,9 +31886,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "Kontrollerar nät med avseende på minsta bredd för anslutningar..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum connection width %s; actual %s)"
-msgstr "Minsta anslutningsbredd %s; faktisk %s"
+msgstr "(%s minsta anslutningsbredd %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -31961,19 +31961,19 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Kontrollera fotavtryck för överlappande gårdar ..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "(%s maximal frikopplad längd: %s; faktisk: %s)"
+msgstr "(%s maximal okopplad längd: %s; faktisk: %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum gap %s; actual %s)"
-msgstr "(%s min %s; faktisk %s)"
+msgstr "(%s minsta mellanrum %s; faktiskt %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum gap %s; actual %s)"
-msgstr "(%s maximal höjd %s; faktisk %s)"
+msgstr "(%s maximalt mellanrum %s; faktiskt %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 msgid "Checking keepouts & disallow constraints..."
@@ -32055,25 +32055,25 @@ msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "Fotavtryck '%s' stämmer inte överens med kopia i bibliotek '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s min längd: %s; faktisk: %s)"
+msgstr "(%s min längd %s; faktisk: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s maxlängd: %s; faktisk: %s)"
+msgstr "(%s max längd: %s; faktisk: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
 msgstr ""
-"(%s max skev: %s; faktisk: %s; genomsnittlig nätlängd: %s; faktisk: %s)"
+"(%s max skevning: %s; faktisk: %s; genomsnittlig nätlängd: %s; faktisk: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s maxantal: %d; faktisk: %d)"
+msgstr "(%s max antal %d; faktiskt %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:221
 msgid "Gathering length-constrained connections..."
@@ -32369,49 +32369,55 @@ msgid "Board stackup settings not up to date."
 msgstr "Kortets lageruppbyggnadsinställningar är inte aktuella."
 
 #: pcbnew/exporters/step/kicad2step.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "No such file: %s"
-msgstr "ingen sådan fil"
+msgstr "Ingen sådan fil: %s"
 
 #: pcbnew/exporters/step/kicad2step.cpp:239
 msgid ""
 "** Output already exists. Export aborted. **\n"
 "Enable the force overwrite flag to overwrite it."
 msgstr ""
+"** Utmatningen existerar redan. Export avbruten. **\n"
+"Aktivera flaggan \"tvinga överskrivning\" för att skriva över."
 
 #: pcbnew/exporters/step/kicad2step.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "Skapade fil '%s'"
+msgstr "Läs fil: '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:273
 msgid "Build STEP data\n"
-msgstr ""
+msgstr "Bygg STEP-data\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:279
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Fel vid uppbyggnad av STEP mönsterkortsmodell. Export avbruten. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:284
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "STEP-filer"
+msgstr "Skriv STEP-fil\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:295
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Fel under skrivning av fil '%s'."
+msgstr ""
+"\n"
+"** Fel vid skrivning av STEP-fil. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "Rapportfil %s skapad."
+msgstr ""
+"\n"
+"STEP-fil '%s' skapad.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:306
 #: pcbnew/exporters/step/kicad2step.cpp:311
@@ -32419,83 +32425,86 @@ msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Fel vid export av STEP-fil. Export avbruten. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:317
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "Fel vid läsning av fil."
+msgstr ""
+"\n"
+"** Fel vid läsning av kicad_pcb-fil. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:325
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
+"Kunde inte skapa STEP-fil.\n"
+"Kontrollera att mönserkortet har en giltig definition av kant och giltiga "
+"modeller."
 
 #: pcbnew/exporters/step/kicad2step.cpp:330
 msgid "STEP file has been created, but there are warnings."
-msgstr ""
+msgstr "STEP-fil har skapats, men det finns varningar."
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:64
-#, fuzzy
 msgid "pcb_filename"
-msgstr "Filnamn:"
+msgstr "pcb_filnamn"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:66
-#, fuzzy
 msgid "output filename"
-msgstr "Namn på arkfiler"
+msgstr "Filnamn för utmatning"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:70
 msgid "IGES output (default STEP)"
-msgstr ""
+msgstr "IGES-utmatning (förinställning STEP)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:74
-#, fuzzy
 msgid "overwrite output file"
-msgstr "Skriv över gammal fil"
+msgstr "skriv över utmatningsfil"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:76
-#, fuzzy
 msgid "Use Drill Origin for output origin"
-msgstr "Använd borr- / placeringsfilens origo som origo"
+msgstr "Använd borr-origo som utmatningens origo"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:78
-#, fuzzy
 msgid "Use Grid Origin for output origin"
-msgstr "Använd rutnäts-origo"
+msgstr "Använd rutnäts-origo som utmatningens origo"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:81
 msgid ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
 msgstr ""
+"Användardefinierad utmatningskälla, t.ex. 1x1in, 1x1inch, 25.4x25.4mm ("
+"förinställning mm)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:84
-#, fuzzy
 msgid "Exclude 3D models for components with 'virtual' attribute"
-msgstr "Växla 3D-modeller med attributet 'Virtuellt'"
+msgstr "Exkludera 3D-modeller för komponenter med attributet 'virtuell'"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:87
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
 msgstr ""
+"Substituera STEP eller IGS-modeller med samma namn istället för VRML-modeller"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:90
 msgid ""
 "Minimum distance between points to treat them as separate ones (default "
 "0.01mm)"
 msgstr ""
+"Minsta avstånd mellan punkter för att behandla dem som separata ("
+"förinställning 0,01mm)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:93
-#, fuzzy
 msgid "display this message"
-msgstr "Dölj detta meddelande."
+msgstr "visa detta meddelande"
 
 #: pcbnew/exporters/step/kicad2step_frame_base.h:46
-#, fuzzy
 msgid "Kicad2step Converter"
-msgstr "KiCad bildkonverterare"
+msgstr "KiCad2step konverterare"
 
 #: pcbnew/exporters/step/pcb/3d_resolver.cpp:343
 #, fuzzy
@@ -33921,7 +33930,6 @@ msgid "Add Teardrops..."
 msgstr "Lägg till kragförstärkningar..."
 
 #: pcbnew/menubar_pcb_editor.cpp:419
-#, fuzzy
 msgid "Remove Teardrops"
 msgstr "Ta bort kragförstärkningar"
 
@@ -34428,7 +34436,7 @@ msgstr "Krenelerad"
 
 #: pcbnew/pad.cpp:1010
 msgid "Length in Package"
-msgstr "Längd i paketet"
+msgstr "Längd i kapslingen"
 
 #: pcbnew/pad.cpp:1024
 msgid "Hole X / Y"
@@ -34872,20 +34880,16 @@ msgstr ""
 "Redigera denna globala tabell för biblioteksavtryck i inställningsmenyn."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:89
-#, fuzzy
 msgid "Loading board\n"
-msgstr "Läser in mönsterkortsdata..."
+msgstr "Läser in mönsterkort\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:96
-#, fuzzy
 msgid "Successfully created svg file"
-msgstr ""
-"Mönsterkortets referensbeteckningar har numrerats om med lyckat resultat"
+msgstr "Lyckades skapa svg-fil"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:98
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "Fel vid läsning av fil."
+msgstr "Fel vid försök att skapa svg-fil"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -36322,15 +36326,13 @@ msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:550 pcbnew/router/pns_kicad_iface.cpp:621
 #: pcbnew/router/router_tool.cpp:720
-#, fuzzy
 msgid "board minimum clearance"
-msgstr "Mönsterkortets minsta isolationsavstånd: %s."
+msgstr "mönsterkortets minsta isolationsavstånd"
 
 #: pcbnew/router/pns_kicad_iface.cpp:554 pcbnew/router/pns_kicad_iface.cpp:620
 #: pcbnew/router/router_tool.cpp:687 pcbnew/router/router_tool.cpp:707
-#, fuzzy
 msgid "board minimum track width"
-msgstr "kortets minsta bredd"
+msgstr "mönsterkortets minsta ledarbredd"
 
 #: pcbnew/router/pns_kicad_iface.cpp:561
 msgid "existing track"
@@ -36692,9 +36694,9 @@ msgid "Track Width: %s"
 msgstr "Ledarbredd: %s"
 
 #: pcbnew/router/router_tool.cpp:2414
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "Mellanrum mellan differentialpar"
+msgstr "Mellanrum för differentialpar: %s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
@@ -37686,7 +37688,7 @@ msgstr "Kopiering avbröts"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:434
 msgid "Pack footprints"
-msgstr "Packa fotavtryck"
+msgstr "Samla fotavtryck"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:579
 msgid "Select reference point for move..."
@@ -38087,7 +38089,7 @@ msgstr "Speglar valt objekt över X-axeln"
 
 #: pcbnew/tools/pcb_actions.cpp:348
 msgid "Pack and Move Footprints"
-msgstr "Packa och flytta fotavtryck"
+msgstr "Samla och flytta fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid ""
@@ -40269,7 +40271,6 @@ msgid "Other items"
 msgstr "Andra saker"
 
 #: pcbnew/widgets/search_handlers.cpp:245
-#, fuzzy
 msgid "Textbox"
 msgstr "Textruta"
 
