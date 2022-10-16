@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-11 00:17+0000\n"
+"PO-Revision-Date: 2022-10-17 17:05+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -5096,9 +5096,8 @@ msgid "Sheet references"
 msgstr "Reference na list"
 
 #: common/layer_id.cpp:121
-#, fuzzy
 msgid "Net class references"
-msgstr "Třídy spojů"
+msgstr "Reference třídy spojů"
 
 #: common/layer_id.cpp:122
 msgid "Symbol body outlines"
@@ -5114,9 +5113,8 @@ msgid "Schematic text && graphics"
 msgstr "Text schématu && grafika"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "Text schématu && grafika"
+msgstr "Text symbolu && grafika"
 
 #: common/layer_id.cpp:126
 msgid "Schematic text && graphics backgrounds"
@@ -5340,9 +5338,8 @@ msgid "Locked item shadow"
 msgstr "Stín na uzamčeném prvku"
 
 #: common/layer_id.cpp:186
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "Konflikt označení"
+msgstr "Stíny prvků v konfliktu"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -5442,6 +5439,13 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad umí vývojářům anonymně hlásit pády a speciální data událostí, aby "
+"efektivněji napomohl identifikaci kritických chyb napříč uživatelskou "
+"základnou a pomohl funkcionalitě profilu usměrňovat vylepšení. \n"
+"Pokud se rozhodnete pro dobrovolnou účast, KiCad bude automaticky "
+"zpracovávat odesílání zmíněných hlášení, když dojde k haváriím nebo "
+"událostem.\n"
+"Návrhové soubory jako schémata nebo DPS nejsou v tomto procesu sdíleny."
 
 #: common/pgm_base.cpp:362
 msgid "Data collection opt in request"
@@ -6196,9 +6200,8 @@ msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "Cyklus neaktivní vrstvy mezi normálními, stmívanými a skrytými"
 
 #: common/tool/actions.cpp:563
-#, fuzzy
 msgid "Draw Bounding Boxes"
-msgstr "Ohraničovací Box"
+msgstr "Kreslit ohraničující obdélník"
 
 #: common/tool/actions.cpp:568
 msgid "Select item(s)"
@@ -9167,23 +9170,20 @@ msgid "Label Properties"
 msgstr "Vlastnosti označení"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:102
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "Vlastnosti hierarchického označení"
+msgstr "Vlastnosti označení direktivy"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:103
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "Vlastnosti vývodů hierarchického listu"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:438
-#, fuzzy
 msgid "Label can not be empty."
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Označení nemůže být prázdné."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:638
-#, fuzzy
 msgid "The first field is mandatory."
-msgstr "První pole %d jsou povinná."
+msgstr "První pole je povinné."
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:30
 #: eeschema/dialogs/dialog_label_properties_base.cpp:39
@@ -9495,18 +9495,16 @@ msgid "Pin count:"
 msgstr "Počet vývodů:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
-#, fuzzy
 msgid "Duplicate pins:"
-msgstr "Duplikáty:"
+msgstr "Duplicitní vývody:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:136
 msgid "Group by name"
 msgstr "Skupina podle jména"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
-#, fuzzy
 msgid "Group Selected"
-msgstr "Výběr mřížky"
+msgstr "Vybraná skupina"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
 msgid "Filter by unit:"
@@ -10139,7 +10137,8 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"Tento vývod není na mřížce %d milů a ve schématu nebude snadné ho připojit.\n"
+"Tento vývod není na mřížce %d milů a ve schématu ho nebude snadné ho "
+"připojit.\n"
 "Chcete pokračovat?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
@@ -12415,6 +12414,8 @@ msgid ""
 "Set to 0 to allow symbols to inherit their line widths from\n"
 "their parent Schematic"
 msgstr ""
+"Nastavit na 0, aby symboly mohly zdědit šířku čáry od\n"
+"svého nadřazeného schématu"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:55
 msgid "D&efault pin length:"
@@ -12703,6 +12704,8 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
+"Nelze zkopírovat soubor '%s', protože bude přepsán novým souborem kořenového "
+"listu."
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -14459,7 +14462,7 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
-"Nelze načíst '%s' list, protože se již jeví jako přímý předchůdce v "
+"Nelze načíst list '%s' protože se již objevuje jako přímý pedchůdce v "
 "hierarchii schématu."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1406
@@ -16389,7 +16392,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr ""
+msgstr "Nastavit název zobrazení pro jednotku"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -16710,7 +16713,7 @@ msgstr "Převrátí vybrané položky zleva doprava"
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/edit_tool_move_fct.cpp:389
 #: pcbnew/tools/pcb_actions.cpp:342
 msgid "Swap"
-msgstr ""
+msgstr "Prohodit"
 
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/pcb_actions.cpp:342
 #, fuzzy
@@ -17229,7 +17232,7 @@ msgstr "Přejít na stránku"
 
 #: eeschema/tools/ee_actions.cpp:780
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "Přejděte na předchozí list v hierarchii"
 
 #: eeschema/tools/ee_actions.cpp:786
 #, fuzzy
@@ -17238,7 +17241,7 @@ msgstr "Přejít na stránku"
 
 #: eeschema/tools/ee_actions.cpp:786
 msgid "Move forward in sheet navigation history"
-msgstr ""
+msgstr "Posun vpřed v historii navigace listů"
 
 #: eeschema/tools/ee_actions.cpp:792
 #, fuzzy
@@ -17247,7 +17250,7 @@ msgstr "Navigátor"
 
 #: eeschema/tools/ee_actions.cpp:792
 msgid "Move backward in sheet navigation history"
-msgstr ""
+msgstr "Přesune se dozadu v historii navigace"
 
 #: eeschema/tools/ee_actions.cpp:798
 #, fuzzy
@@ -17256,7 +17259,7 @@ msgstr "Předchozí vrstva"
 
 #: eeschema/tools/ee_actions.cpp:798
 msgid "Move to previous sheet by number"
-msgstr ""
+msgstr "Přesunout na předchozí list podle čísla"
 
 #: eeschema/tools/ee_actions.cpp:804
 #, fuzzy
@@ -17265,7 +17268,7 @@ msgstr "Tisk rohového razítka"
 
 #: eeschema/tools/ee_actions.cpp:804
 msgid "Move to next sheet by number"
-msgstr ""
+msgstr "Přesunout na následující list podle čísla"
 
 #: eeschema/tools/ee_actions.cpp:810
 msgid "Hierarchy Navigator"
@@ -17710,16 +17713,13 @@ msgstr ""
 "s celým číslem, která neposkytuje žádné duplikáty v tabulkách."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:55
+#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
-msgstr ""
-"Přidat nový záznam do tabulky knihovny symbolů projektu.\n"
-"\n"
-"Přezdívka tabulky knihoven symbolů je přípona s\n"
-"celým čísel, které zabrání duplicitním položkám tabulky."
+msgstr "Přidat nový záznam do tabulky knihovny symbolů projektu."
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
@@ -18895,7 +18895,7 @@ msgstr "Řazení vrstev je-li X2 mód"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:180
 msgid "Sort Layers by File Extension"
-msgstr ""
+msgstr "Seřadit vrstvy pomocí přípony souboru"
 
 #: gerbview/widgets/layer_widget.cpp:130
 msgid "Change Layer Color for"
@@ -19404,9 +19404,8 @@ msgid "Uninstall Pending"
 msgstr "Odinstalovat čekající"
 
 #: kicad/pcm/dialogs/panel_package.cpp:157
-#, fuzzy
 msgid "Update Pending"
-msgstr "Aktualizovat DPS"
+msgstr "Aktualizovat čekající"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:216
 msgid "Metadata"
@@ -21797,13 +21796,14 @@ msgid "nanoseconds"
 msgstr "nanosekund"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
+#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Varování:\n"
-"Průměr plošky prokovu >= průměr izolační mezery otvoru.\n"
+"průměr izolační mezery otvoru.\n"
 "Některé parametry nelze vypočítat pro prokov uvnitř zóny mědi."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
@@ -21844,7 +21844,7 @@ msgstr "Degradace času vzestupu:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:304
 msgid "Rise time degradation for given Z0 and calculated capacitance"
-msgstr ""
+msgstr "Zvětšení doby náběhu pro danou Z0 a vypočítaná kapacita"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:312
 #: pcb_calculator/widgets/unit_selector.cpp:317
@@ -21873,7 +21873,7 @@ msgstr "Reaktance:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:334
 msgid "Inductive reactance for given rise time and calculated inductance"
-msgstr ""
+msgstr "Indukční reaktance pro daný čas náběhu a vypočítaná indukčnost"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
@@ -21889,11 +21889,11 @@ msgstr "Vlnová délka ve vakuu:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
-msgstr ""
+msgstr "Vlnová délka ve středu:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr ""
+msgstr "Rychlost ve středu:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
 msgid "er:"
@@ -21998,6 +21998,14 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"Tuto kalkulačku můžete použít k ověření, zda malý spoj vydrží velký proud po "
+"krátkou dobu.<br>\n"
+"Tento nástroj vám umožňuje navrhnout pojistku, ale měl by být použit pouze "
+"pro odhad.\n"
+"\n"
+"Kalkulátor odhaduje energii potřebnou k ohřevu drátu až do bodu tání <br>\n"
+"a energii potřebnou pro změnu fáze.<br>\n"
+"Tato energie se poté porovná s energií rozptýlenou odporem drátu."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:80
 msgid "General system design"
@@ -22026,7 +22034,7 @@ msgstr "Velikost kabelu"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:100
 msgid "High speed"
-msgstr ""
+msgstr "Vysoká rychlost"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:104
 msgid "Wavelength"
@@ -22042,7 +22050,7 @@ msgstr "Přenosové vedení"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:110
 msgid "Memo"
-msgstr ""
+msgstr "Poznámka"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:113
 msgid "E-Series"
@@ -22058,7 +22066,7 @@ msgstr "Třída desky"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
 msgid "Galvanic Corrosion"
-msgstr ""
+msgstr "Galvanická koroze"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -22107,6 +22115,27 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
+"Pokud zadáte maximální proud, pak se šířky spojů vypočítají podle toho, jak "
+"budou vyhovovat.\n"
+"\n"
+"Pokud zadáte některou šířku spoje, bude vypočítán maximální proud, se kterým "
+"si poradí. Poté se vypočte šířka pro druhý spoj, který má tento proud také "
+"zpracovat.\n"
+"\n"
+"Kontrolní hodnota je zobrazena tučně.\n"
+"\n"
+"Výpočty platí pro proudy do 35 A (vnější) nebo 17,5 A (vnitřní), teplota "
+"stoupne do 100 °C a šířky do 400 mil (10 mm).\n"
+"\n"
+"Vzorec z IPC 2221 je\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
+"kde:<br>\n"
+"___I___ je maximální proud v A<br>\n"
+"___&Delta;T___ je zvýšení teploty nad okolním v &deg;C<br>\n"
+"___W___ je šířka v milech<br>\n"
+"___H___ je tloušťka (výška) v milech<br>\n"
+"___K___ e 0,024 pro vnitřní spoje nebo 0,048 pro vnější spoje\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
 msgid "Dielectric Loss Factor"
@@ -31929,9 +31958,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:256
-#, c-format
+#, c-format, fuzzy
 msgid "Read file: '%s'\n"
-msgstr "Číst soubor: '%s'\n"
+msgstr "Vytvořit soubor '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:273
 msgid "Build STEP data\n"
@@ -31942,27 +31971,31 @@ msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Chyba sestavení STEP modelu desky. Export přerušen. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:284
+#, fuzzy
 msgid "Write STEP file\n"
-msgstr "Zapsat soubor STEP\n"
+msgstr "STEP soubory\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:295
+#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
 msgstr ""
 "\n"
-"** Chyba při zápisu do STEP souboru. **\n"
+"Chyba při zápisu do souboru '%s'.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:300
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
 msgstr ""
 "\n"
-"Soubor STEP '%s' vytvořen.\n"
+"Soubor hlášení '%s' vytvořen.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:306
 #: pcbnew/exporters/step/kicad2step.cpp:311
@@ -31970,14 +32003,17 @@ msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Chyba exportu souboru STEP. Export přerušen. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:317
+#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
 msgstr ""
 "\n"
-"**Chyba čtení souboru kicad_pcb.**\n"
+"Chyba čtení souboru.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:325
 msgid ""
@@ -32003,7 +32039,7 @@ msgstr "Názvy souborů listu"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:70
 msgid "IGES output (default STEP)"
-msgstr ""
+msgstr "Výstup IGES (výchozí STEP)"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:74
 #, fuzzy
@@ -32033,7 +32069,7 @@ msgstr "Přepnout zobrazení 3D modelů 'virtuálního' typu"
 #: pcbnew/exporters/step/kicad2step_app.cpp:87
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
-msgstr ""
+msgstr "Nahradit modely STEP nebo IGS se stejným názvem namísto modelů VRML"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:90
 msgid ""
@@ -32052,6 +32088,7 @@ msgid "Kicad2step Converter"
 msgstr "KiCad převod obrázků"
 
 #: pcbnew/exporters/step/pcb/3d_resolver.cpp:343
+#, fuzzy
 msgid "Alias:"
 msgstr "Alias:"
 
@@ -32724,16 +32761,19 @@ msgid "Model name cannot be empty."
 msgstr "Název sítě nemůže být prázdný."
 
 #: pcbnew/ibis/ibis_parser.cpp:204
+#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Rpin není platný."
+msgstr "Jméno souboru není platné!"
 
 #: pcbnew/ibis/ibis_parser.cpp:209
+#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Lpin není platný."
+msgstr "Jméno souboru není platné!"
 
 #: pcbnew/ibis/ibis_parser.cpp:214
+#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Cpin není platný."
+msgstr "Jméno souboru není platné!"
 
 #: pcbnew/ibis/ibis_parser.cpp:228
 #, fuzzy
@@ -32831,8 +32871,9 @@ msgid "Invalid V_meas value."
 msgstr "Neplatná hodnota vlastnosti"
 
 #: pcbnew/ibis/ibis_parser.cpp:485
+#, fuzzy
 msgid "C_comp is invalid."
-msgstr "C_COMP je neplatný."
+msgstr "Některé soubory jsou neplatné!"
 
 #: pcbnew/ibis/ibis_parser.cpp:490
 #, fuzzy
@@ -32840,8 +32881,9 @@ msgid "Temperature Range is invalid."
 msgstr "Zvýšení teploty"
 
 #: pcbnew/ibis/ibis_parser.cpp:515
+#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Rozsah napětí je neplatný."
+msgstr "Jméno souboru není platné!"
 
 #: pcbnew/ibis/ibis_parser.cpp:521
 #, fuzzy
@@ -33319,7 +33361,7 @@ msgstr ""
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1386
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "Vytvořena neplatná Bezierova křivka"
 
 #: pcbnew/initpcb.cpp:50
 msgid ""
@@ -34479,8 +34521,9 @@ msgstr ""
 "Upravte tuto globální tabulku knihoven pouzder v menu Předvolby."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:89
+#, fuzzy
 msgid "Loading board\n"
-msgstr "Načítání desky\n"
+msgstr "Znovu načíst desku\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:96
 #, fuzzy
@@ -35647,7 +35690,7 @@ msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:586
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr ""
+msgstr "Soubor '%s' má nerozpoznanou verzi: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:732
 #, c-format
@@ -37335,7 +37378,7 @@ msgstr "Seskupení"
 
 #: pcbnew/tools/group_tool.cpp:64
 msgid "Group is in inconsistent state:"
-msgstr ""
+msgstr "Skupina je v nekonzistentním stavu:"
 
 #: pcbnew/tools/group_tool.cpp:144
 msgid "Click on new member..."
