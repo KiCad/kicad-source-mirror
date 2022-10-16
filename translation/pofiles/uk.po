@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
 "PO-Revision-Date: 2022-10-17 17:05+0000\n"
-"Last-Translator: Stanislav Kaliuk <staskalyuk.096@gmail.com>\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
 "Language: uk\n"
@@ -9922,9 +9922,8 @@ msgid "Footprint Filters"
 msgstr "Фільтри посадкових місць"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:337
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "Редагувати Spice модель..."
+msgstr "Редагувати модель симуляції..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
@@ -11112,9 +11111,8 @@ msgid "Exclude symbol from simulation"
 msgstr "Виключити символ з симуляції"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:114
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Редактор Spice моделі"
+msgstr "Редактор моделі симуляції"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11656,9 +11654,8 @@ msgid "Library link:"
 msgstr "Посилання на бібліотеку:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:323
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "Симулятор..."
+msgstr "Модель симуляції..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:108
 msgid "Symbol Properties"
@@ -35965,9 +35962,9 @@ msgid "Unable to export, please fix and try again"
 msgstr ""
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "Відфільтрувати елементи за позначенням:"
+msgstr "Посадкове місце з значенням '%s' має порожнє поле визначника."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
 #, fuzzy, c-format
@@ -37106,319 +37103,319 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "Додати таблицю характеристик на графічний шар"
 
 #: pcbnew/tools/pcb_actions.cpp:116
 msgid "Add Stackup Table"
-msgstr ""
+msgstr "Додати таблицю параметрів шарів"
 
 #: pcbnew/tools/pcb_actions.cpp:117
 msgid "Add a board stackup table on a graphic layer"
-msgstr ""
+msgstr "Додати таблицю параметрів шарів для плати на графічний шар"
 
 #: pcbnew/tools/pcb_actions.cpp:133
 msgid "Add a wrapped text item"
-msgstr ""
+msgstr "Додайте загорнутий текстовий елемент"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add Aligned Dimension"
-msgstr ""
+msgstr "Додати лінійний розмір"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add an aligned linear dimension"
-msgstr ""
+msgstr "Додати вирівняну розмірну лінію"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add Center Dimension"
-msgstr ""
+msgstr "Додати вимір центру"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add a center dimension"
-msgstr ""
+msgstr "Додати розмір центру"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add Radial Dimension"
-msgstr ""
+msgstr "Додати радіальну величину"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add a radial dimension"
-msgstr ""
+msgstr "Додати радіальний вимір"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add Orthogonal Dimension"
-msgstr ""
+msgstr "Додати ортогональний розмір"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add an orthogonal dimension"
-msgstr ""
+msgstr "Додати ортогональний розмір"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add Leader"
-msgstr ""
+msgstr "Додати опорний розмір"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add a leader dimension"
-msgstr ""
+msgstr "Додати опорний розмір"
 
 #: pcbnew/tools/pcb_actions.cpp:170
 msgid "Add Filled Zone"
-msgstr ""
+msgstr "Додати заповнену зону"
 
 #: pcbnew/tools/pcb_actions.cpp:170
 msgid "Add a filled zone"
-msgstr ""
+msgstr "Додати заповнену зону"
 
 #: pcbnew/tools/pcb_actions.cpp:176
 msgid "Add Vias"
-msgstr ""
+msgstr "Додати перехідний отвір"
 
 #: pcbnew/tools/pcb_actions.cpp:176
 msgid "Add free-standing vias"
-msgstr ""
+msgstr "Додати вільний перехідний отвір"
 
 #: pcbnew/tools/pcb_actions.cpp:182
 msgid "Add Rule Area"
-msgstr ""
+msgstr "Додати область з правилами"
 
 #: pcbnew/tools/pcb_actions.cpp:182
 msgid "Add a rule area (keepout)"
-msgstr ""
+msgstr "Додати область для правила (зона заборони)"
 
 #: pcbnew/tools/pcb_actions.cpp:188
 msgid "Add a Zone Cutout"
-msgstr ""
+msgstr "Додати зону вирізу"
 
 #: pcbnew/tools/pcb_actions.cpp:188
 msgid "Add a cutout area of an existing zone"
-msgstr ""
+msgstr "Додати зону вирізу на існуючій зоні"
 
 #: pcbnew/tools/pcb_actions.cpp:194
 msgid "Add a Similar Zone"
-msgstr ""
+msgstr "Додати аналогічну зону"
 
 #: pcbnew/tools/pcb_actions.cpp:194
 msgid "Add a zone with the same settings as an existing zone"
-msgstr ""
+msgstr "Додати зону з такими ж налаштуваннями, що й існуюча зона"
 
 #: pcbnew/tools/pcb_actions.cpp:200
 msgid "Import Graphics..."
-msgstr ""
+msgstr "Імпортувати графіку..."
 
 #: pcbnew/tools/pcb_actions.cpp:200
 msgid "Import 2D drawing file"
-msgstr ""
+msgstr "Імпортувати 2D файл"
 
 #: pcbnew/tools/pcb_actions.cpp:206
 msgid "Place the Footprint Anchor"
-msgstr ""
+msgstr "Розмістити привязку посадкового місця"
 
 #: pcbnew/tools/pcb_actions.cpp:207
 msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr ""
+msgstr "Встановити точку початку координат (якір)для посадкового місця"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Increase Line Width"
-msgstr ""
+msgstr "Збільшити ширину лінії"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Increase the line width"
-msgstr ""
+msgstr "Збільшити ширину лінії"
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Decrease Line Width"
-msgstr ""
+msgstr "Зменшити ширину лінії"
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Decrease the line width"
-msgstr ""
+msgstr "Зменшити ширину лінії"
 
 #: pcbnew/tools/pcb_actions.cpp:223
 msgid "Switch Arc Posture"
-msgstr ""
+msgstr "Переключити позицію дуги"
 
 #: pcbnew/tools/pcb_actions.cpp:223
 msgid "Switch the arc posture"
-msgstr ""
+msgstr "Переключити позицію дуги"
 
 #: pcbnew/tools/pcb_actions.cpp:228
 msgid "Delete Last Point"
-msgstr ""
+msgstr "Видалити останню точку"
 
 #: pcbnew/tools/pcb_actions.cpp:228
 msgid "Delete the last point added to the current item"
-msgstr ""
+msgstr "Видалити останню точку додано до поточного елемента"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Close Outline"
-msgstr ""
+msgstr "Закрити обрис"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Close the in progress outline"
-msgstr ""
+msgstr "Закрийте поточний обрис"
 
 #: pcbnew/tools/pcb_actions.cpp:240
 msgid "Show the design rules checker window"
-msgstr ""
+msgstr "Показувати вікно перевірки правил дизайну"
 
 #: pcbnew/tools/pcb_actions.cpp:249
 msgid "Open in Footprint Editor"
-msgstr ""
+msgstr "Відкрити в редакторі місць розташувань"
 
 #: pcbnew/tools/pcb_actions.cpp:250 pcbnew/tools/pcb_actions.cpp:257
 msgid "Opens the selected footprint in the Footprint Editor"
-msgstr ""
+msgstr "Відкрити вибране посадкове місце у редакторі посадкових місць"
 
 #: pcbnew/tools/pcb_actions.cpp:264
 msgid ""
 "Selects a footprint by reference designator and places it under the cursor "
 "for moving"
 msgstr ""
+"Вибрати посадкове місце по позначенню і розмістити його під курсором для "
+"переміщення"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Move Individually"
-msgstr ""
+msgstr "Перемістити індивідуально"
 
 #: pcbnew/tools/pcb_actions.cpp:276
-#, fuzzy
 msgid "Moves the selected items one-by-one"
-msgstr "Перемістити вибраний(і) об'єкт"
+msgstr "Перемістити вибраний(і) елементи по одному"
 
 #: pcbnew/tools/pcb_actions.cpp:281
 msgid "Move with Reference"
-msgstr ""
+msgstr "Перемістити з позначенням"
 
 #: pcbnew/tools/pcb_actions.cpp:282
 msgid "Moves the selected item(s) with a specified starting point"
-msgstr ""
+msgstr "Перемістити вибрані елементи відносно початкової точки"
 
 #: pcbnew/tools/pcb_actions.cpp:287
 msgid "Copy with Reference"
-msgstr ""
+msgstr "Копіювати з позначенням"
 
 #: pcbnew/tools/pcb_actions.cpp:288
 msgid "Copy selected item(s) to clipboard with a specified starting point"
-msgstr ""
+msgstr "Копіювати обраний елемент в буфер обміну з вказаною початковою точкою"
 
 #: pcbnew/tools/pcb_actions.cpp:294
 msgid "Duplicate and Increment"
-msgstr ""
+msgstr "Дублювати і збільшити"
 
 #: pcbnew/tools/pcb_actions.cpp:295
 msgid "Duplicates the selected item(s), incrementing pad numbers"
-msgstr ""
+msgstr "Дублює обрані елементи(и), збільшити номери контактних площадок"
 
 #: pcbnew/tools/pcb_actions.cpp:301
 msgid "Move Exactly..."
-msgstr ""
+msgstr "Точно перемістити..."
 
 #: pcbnew/tools/pcb_actions.cpp:301
 msgid "Moves the selected item(s) by an exact amount"
-msgstr ""
+msgstr "Перемісти вибрані елементи на точну відстань"
 
 #: pcbnew/tools/pcb_actions.cpp:307
 msgid "Create Array..."
-msgstr ""
+msgstr "Створити масив..."
 
 #: pcbnew/tools/pcb_actions.cpp:307
 msgid "Create array"
-msgstr ""
+msgstr "Створити масив"
 
 #: pcbnew/tools/pcb_actions.cpp:320
 msgid "Rotates selected item(s) counterclockwise"
-msgstr ""
+msgstr "Обертати обрані елементи проти годинникової стрілки"
 
 #: pcbnew/tools/pcb_actions.cpp:326
 msgid "Flips selected item(s) to opposite side of board"
-msgstr ""
+msgstr "Розмістити вибрані елементи на протилежну сторону плти"
 
 #: pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Mirrors selected item across the Y axis"
-msgstr "Перевернути вибрані елемент зліва направо"
+msgstr "Віддзеркалити вибраний елемент по осі Y"
 
 #: pcbnew/tools/pcb_actions.cpp:336
-#, fuzzy
 msgid "Mirrors selected item across the X axis"
-msgstr "Перевернути вибрані елемент зліва направо"
+msgstr "Віддзеркалити вибраний елемент по осі X"
 
 #: pcbnew/tools/pcb_actions.cpp:348
-#, fuzzy
 msgid "Pack and Move Footprints"
-msgstr "Найти і перемістити посадкове місце"
+msgstr "Упакувати і перемістити посадкові місця"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
 msgstr ""
+"Сортувати вибрані посадкові місця за позначенням, упакувати за розміром і "
+"ініціювати переміщення"
 
 #: pcbnew/tools/pcb_actions.cpp:354
 msgid "Change Track Width"
-msgstr ""
+msgstr "Змінити ширину доріжки"
 
 #: pcbnew/tools/pcb_actions.cpp:354
 msgid "Updates selected track & via sizes"
-msgstr ""
+msgstr "Оновити вибрані доріжки і розмір перехідних отворів"
 
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr ""
+msgstr "Додати заокруглення до вибраних відрізків доріжок"
 
 #: pcbnew/tools/pcb_actions.cpp:363
 msgid "Delete Full Track"
-msgstr ""
+msgstr "Видалити всю доріжку"
 
 #: pcbnew/tools/pcb_actions.cpp:363
 msgid "Deletes selected item(s) and copper connections"
-msgstr ""
+msgstr "Видаляє вибрані елементи і мідні підключення"
 
 #: pcbnew/tools/pcb_actions.cpp:377
 msgid "Show Footprint Tree"
-msgstr ""
+msgstr "Показати дерево посадкового місця"
 
 #: pcbnew/tools/pcb_actions.cpp:382
 msgid "Hide Footprint Tree"
-msgstr ""
+msgstr "Приховати дерево посадкового місця"
 
 #: pcbnew/tools/pcb_actions.cpp:388
 msgid "New Footprint..."
-msgstr ""
+msgstr "Нове посадкове місце"
 
 #: pcbnew/tools/pcb_actions.cpp:388
 msgid "Create a new, empty footprint"
-msgstr ""
+msgstr "Створити нове порожнє посадкове місце"
 
 #: pcbnew/tools/pcb_actions.cpp:393
 msgid "Create Footprint..."
-msgstr ""
+msgstr "Створити посадкове місце..."
 
 #: pcbnew/tools/pcb_actions.cpp:393
 msgid "Create a new footprint using the Footprint Wizard"
-msgstr ""
+msgstr "Створити нове посадкове місце з використанням помічника майстра"
 
 #: pcbnew/tools/pcb_actions.cpp:398
 msgid "Edit Footprint"
-msgstr ""
+msgstr "Редагувати посадкове місце"
 
 #: pcbnew/tools/pcb_actions.cpp:398
 msgid "Show selected footprint on editor canvas"
-msgstr ""
+msgstr "Показати вибране посадкове місце у вікні редактора"
 
 #: pcbnew/tools/pcb_actions.cpp:403
 msgid "Duplicate Footprint"
-msgstr ""
+msgstr "Дублювати посадкове місце"
 
 #: pcbnew/tools/pcb_actions.cpp:403
 msgid "Make a copy of the selected footprint"
-msgstr ""
+msgstr "Створити копію вибраного посадкового місця"
 
 #: pcbnew/tools/pcb_actions.cpp:408
 msgid "Rename Footprint..."
-msgstr ""
+msgstr "Перейменувати посадкове місце..."
 
 #: pcbnew/tools/pcb_actions.cpp:408
 msgid "Rename the selected footprint"
-msgstr ""
+msgstr "Перейменувати вибране посадкове місце"
 
 #: pcbnew/tools/pcb_actions.cpp:413
 msgid "Delete Footprint from Library"
@@ -37480,172 +37477,185 @@ msgstr "Оновити посадкове місце з бібліотеки..."
 
 #: pcbnew/tools/pcb_actions.cpp:462
 msgid "Update footprints to include any changes from the library"
-msgstr ""
+msgstr "Оновити посадкове місце з усіма змінами з бібліотеки"
 
 #: pcbnew/tools/pcb_actions.cpp:467
 msgid "Remove Unused Pads..."
-msgstr ""
+msgstr "Видалити не задіяні контактні площадки..."
 
 #: pcbnew/tools/pcb_actions.cpp:468
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
+"Видалити або відновити не підключені внутрішні шари з контактними площадками "
+"з отворами і перехідних отворів"
 
 #: pcbnew/tools/pcb_actions.cpp:473
 msgid "Assign a different footprint from the library"
-msgstr ""
+msgstr "Призначити посадкове місце з бібліотеки"
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Change Footprints..."
-msgstr ""
+msgstr "Змінити посадкові місця..."
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Assign different footprints from the library"
-msgstr ""
+msgstr "Призначити інше посадкове місце з бібліотеки"
 
 #: pcbnew/tools/pcb_actions.cpp:483
 msgid "Swap Layers..."
-msgstr ""
+msgstr "Замінити шари..."
 
 #: pcbnew/tools/pcb_actions.cpp:483
 msgid "Move tracks or drawings from one layer to another"
-msgstr ""
+msgstr "Перемістити доріжки або креслення з одного шару до іншого"
 
 #: pcbnew/tools/pcb_actions.cpp:488
 msgid "Edit Track & Via Properties..."
-msgstr ""
+msgstr "Редагувати параметри доріжок і перехідних отворів..."
 
 #: pcbnew/tools/pcb_actions.cpp:489
 msgid "Edit track and via properties globally across board"
 msgstr ""
+"Редагувати параметри доріжок і перехідних отворів через властивості "
+"глобально по всій платі"
 
 #: pcbnew/tools/pcb_actions.cpp:495
 msgid "Edit Text and graphics properties globally across board"
-msgstr ""
+msgstr "Редагувати властивості тексту і графіки глобально на дошці"
 
 #: pcbnew/tools/pcb_actions.cpp:500
 msgid "Global Deletions..."
-msgstr ""
+msgstr "Глобальне видалення..."
 
 #: pcbnew/tools/pcb_actions.cpp:501
 msgid "Delete tracks, footprints and graphic items from board"
-msgstr ""
+msgstr "Видалити доріжки, посадкові місця і графічні елементи з плати"
 
 #: pcbnew/tools/pcb_actions.cpp:506
 msgid "Cleanup Tracks & Vias..."
-msgstr ""
+msgstr "Очистка доріжок і перехідних отворів..."
 
 #: pcbnew/tools/pcb_actions.cpp:507
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr ""
+msgstr "Очистити від зайвих елементів, та іншого."
 
 #: pcbnew/tools/pcb_actions.cpp:512
 msgid "Cleanup Graphics..."
-msgstr ""
+msgstr "Очищення графіки..."
 
 #: pcbnew/tools/pcb_actions.cpp:513
 msgid "Cleanup redundant items, etc."
-msgstr ""
+msgstr "Очищення зайвих елементів і т.д."
 
 #: pcbnew/tools/pcb_actions.cpp:520
 msgid "Add Microwave Gap"
-msgstr ""
+msgstr "Додати мікрохвильовий зазор"
 
 #: pcbnew/tools/pcb_actions.cpp:520
 msgid "Create gap of specified length for microwave applications"
-msgstr ""
+msgstr "Створити зазор заданої довжини для мікрохвильових пристроїв"
 
 #: pcbnew/tools/pcb_actions.cpp:525
 msgid "Add Microwave Stub"
-msgstr ""
+msgstr "Додати мікрохвильову неоднорідність"
 
 #: pcbnew/tools/pcb_actions.cpp:526
 msgid "Create stub of specified length for microwave applications"
-msgstr ""
+msgstr "Додати неоднорідність заданої довжини для мікрохвильових пристроїв"
 
 #: pcbnew/tools/pcb_actions.cpp:531
 msgid "Add Microwave Arc Stub"
-msgstr ""
+msgstr "Додати мікрохвильову дугу"
 
 #: pcbnew/tools/pcb_actions.cpp:532
 msgid "Create stub (arc) of specified size for microwave applications"
-msgstr ""
+msgstr "Створити дугу заданого розміру для мікрохвильових пристроїв"
 
 #: pcbnew/tools/pcb_actions.cpp:537
 msgid "Add Microwave Polygonal Shape"
-msgstr ""
+msgstr "Додати полігональну мікрохвильову форму"
 
 #: pcbnew/tools/pcb_actions.cpp:538
 msgid "Create a microwave polygonal shape from a list of vertices"
-msgstr ""
+msgstr "Створити мікрохвильову полігональну форму зі списку вертикалів"
 
 #: pcbnew/tools/pcb_actions.cpp:543
 msgid "Add Microwave Line"
-msgstr ""
+msgstr "Додати мікрохвильову лінію"
 
 #: pcbnew/tools/pcb_actions.cpp:544
 msgid "Create line of specified length for microwave applications"
 msgstr ""
+"Створюйте мікрохвильову лінію заданої довжини для мікрохвильових пристроїв"
 
 #: pcbnew/tools/pcb_actions.cpp:552
 msgid "Copy Pad Properties to Default"
-msgstr ""
+msgstr "Копіювати налаштування контактної площадки по замовчуванню"
 
 #: pcbnew/tools/pcb_actions.cpp:552
 msgid "Copy current pad's properties"
-msgstr ""
+msgstr "Копіювати налаштування поточних контактних площадок"
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Paste Default Pad Properties to Selected"
-msgstr ""
+msgstr "Вставити налаштування контактної площадки по замовчуванню для виділених"
 
 #: pcbnew/tools/pcb_actions.cpp:558
 msgid "Replace the current pad's properties with those copied earlier"
 msgstr ""
+"Замінити параметри поточних контактних площадок з попередньо скопійованого"
 
 #: pcbnew/tools/pcb_actions.cpp:563
 msgid "Push Pad Properties to Other Pads..."
-msgstr ""
+msgstr "Використати параметри контактної площадки для інших..."
 
 #: pcbnew/tools/pcb_actions.cpp:564
 msgid "Copy the current pad's properties to other pads"
 msgstr ""
+"Копіювати параметри поточних контактних площадок для інших контактних "
+"площадок"
 
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Renumber Pads..."
-msgstr ""
+msgstr "Перенумерувати контактні площадки..."
 
 #: pcbnew/tools/pcb_actions.cpp:570
 msgid "Renumber pads by clicking on them in the desired order"
 msgstr ""
+"Перенумерувати контактні площадки натискаючи по ним в необхідній "
+"послідовності"
 
 #: pcbnew/tools/pcb_actions.cpp:575
 msgid "Add Pad"
-msgstr ""
+msgstr "Додати контактну площадку"
 
 #: pcbnew/tools/pcb_actions.cpp:575
 msgid "Add a pad"
-msgstr ""
+msgstr "Додати контактну площадку"
 
 #: pcbnew/tools/pcb_actions.cpp:581
 msgid "Edit Pad as Graphic Shapes"
-msgstr ""
+msgstr "Редагувати форму контактної площадки"
 
 #: pcbnew/tools/pcb_actions.cpp:582
 msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
 msgstr ""
+"Розділити спеціальну панель форми на окремі графічні форми для редагування"
 
 #: pcbnew/tools/pcb_actions.cpp:588
 msgid "Finish Pad Edit"
-msgstr ""
+msgstr "Закінчити редагування контактної площадки"
 
 #: pcbnew/tools/pcb_actions.cpp:589
 msgid "Regroups all touching graphic shapes into the edited pad"
 msgstr ""
+"Перегруповує всі графічні форми, що дотикаються, у редагованому контактної "
+"площадки"
 
 #: pcbnew/tools/pcb_actions.cpp:594
 msgid "Default Pad Properties..."
-msgstr ""
+msgstr "Параметри контактної площадки за замовчуванням..."
 
 #: pcbnew/tools/pcb_actions.cpp:595
 msgid "Edit the pad properties used when creating new pads"
@@ -38717,308 +38727,308 @@ msgstr ""
 
 #: pcbnew/tools/placement_tool.cpp:64
 msgid "Align/Distribute"
-msgstr ""
+msgstr "Вирівняти/розподілити"
 
 #: pcbnew/tools/placement_tool.cpp:234
 msgid "Align to top"
-msgstr ""
+msgstr "Вирівняти по верху"
 
 #: pcbnew/tools/placement_tool.cpp:279
 msgid "Align to bottom"
-msgstr ""
+msgstr "Вирівняти по низу"
 
 #: pcbnew/tools/placement_tool.cpp:339
 msgid "Align to left"
-msgstr ""
+msgstr "Вирівняти по лівій стороні"
 
 #: pcbnew/tools/placement_tool.cpp:399
 msgid "Align to right"
-msgstr ""
+msgstr "Вирівняти по правій стороні"
 
 #: pcbnew/tools/placement_tool.cpp:444
 msgid "Align to middle"
-msgstr ""
+msgstr "Вирівняти по середині"
 
 #: pcbnew/tools/placement_tool.cpp:489
 msgid "Align to center"
-msgstr ""
+msgstr "Вирівняти по центру"
 
 #: pcbnew/tools/placement_tool.cpp:554
 msgid "Distribute horizontally"
-msgstr ""
+msgstr "Розподілити горизонтально"
 
 #: pcbnew/tools/placement_tool.cpp:681
 msgid "Distribute vertically"
-msgstr ""
+msgstr "Розподілити вертикально"
 
 #: pcbnew/tools/position_relative_tool.cpp:155
 msgid "Position Relative"
-msgstr ""
+msgstr "Відносна позиція"
 
 #: pcbnew/tools/position_relative_tool.cpp:176
 msgid "Click on reference item..."
-msgstr ""
+msgstr "Натисніть на елемент посилання..."
 
 #: pcbnew/tools/zone_create_helper.cpp:213
 msgid "Add a zone cutout"
-msgstr ""
+msgstr "Додати виріз в зоні"
 
 #: pcbnew/tools/zone_create_helper.cpp:246
 msgid "Add a zone"
-msgstr ""
+msgstr "Додати зону"
 
 #: pcbnew/tools/zone_create_helper.cpp:279
 msgid "Add a graphical polygon"
-msgstr ""
+msgstr "Додати графічний полігон"
 
 #: pcbnew/tools/zone_filler_tool.cpp:83
 msgid "Checking Zones"
-msgstr ""
+msgstr "Перевірити зони"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89 pcbnew/tools/zone_filler_tool.cpp:164
 #: pcbnew/tools/zone_filler_tool.cpp:305
 msgid "Fill Zone(s)"
-msgstr ""
+msgstr "Залити зону(и)"
 
 #: pcbnew/tools/zone_filler_tool.cpp:133 pcbnew/tools/zone_filler_tool.cpp:217
 msgid "Show DRC rules"
-msgstr ""
+msgstr "Показати правила DRC"
 
 #: pcbnew/tools/zone_filler_tool.cpp:140 pcbnew/tools/zone_filler_tool.cpp:224
 msgid "Rules"
-msgstr ""
+msgstr "Правила"
 
 #: pcbnew/tools/zone_filler_tool.cpp:146 pcbnew/tools/zone_filler_tool.cpp:230
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr ""
+msgstr "Заливка зони може бути неточною.  Присутні порушення правил DRC."
 
 #: pcbnew/tools/zone_filler_tool.cpp:241
 #, c-format
 msgid "Refill %d Zones"
-msgstr ""
+msgstr "Перезалити %d зони"
 
 #: pcbnew/tools/zone_filler_tool.cpp:250
 msgid "Auto-fill Zone(s)"
-msgstr ""
+msgstr "Автоматична заливка зон(и)"
 
 #: pcbnew/tracks_cleaner.cpp:68
 msgid "Checking null tracks and vias..."
-msgstr ""
+msgstr "Перевірити непотрібні доріжки і перехідні отвори..."
 
 #: pcbnew/tracks_cleaner.cpp:70
 msgid "Removing null tracks and vias..."
-msgstr ""
+msgstr "Видалити непотрібні доріжки і перехідні отвори..."
 
 #: pcbnew/tracks_cleaner.cpp:81
 msgid "Checking redundant tracks..."
-msgstr ""
+msgstr "Перевірка зайвих доріжок..."
 
 #: pcbnew/tracks_cleaner.cpp:83
 msgid "Removing redundant tracks..."
-msgstr ""
+msgstr "Видалення зайвих доріжок..."
 
 #: pcbnew/tracks_cleaner.cpp:95
 msgid "Checking shorting tracks..."
-msgstr ""
+msgstr "Перевірка коротких доріжок..."
 
 #: pcbnew/tracks_cleaner.cpp:97
 msgid "Removing shorting tracks..."
-msgstr ""
+msgstr "Видалення коротких доріжок..."
 
 #: pcbnew/tracks_cleaner.cpp:110
 msgid "Checking tracks in pads..."
-msgstr ""
+msgstr "Перевірити доріжки в контактних площадках..."
 
 #: pcbnew/tracks_cleaner.cpp:112
 msgid "Removing tracks in pads..."
-msgstr ""
+msgstr "Видалити доріжки в контактних площадках..."
 
 #: pcbnew/tracks_cleaner.cpp:126
 msgid "Checking dangling tracks and vias..."
-msgstr ""
+msgstr "Перевірка непідключених доріжок і переходів..."
 
 #: pcbnew/tracks_cleaner.cpp:131
 msgid "Removing dangling tracks..."
-msgstr ""
+msgstr "Видалити непідключені доріжки..."
 
 #: pcbnew/tracks_cleaner.cpp:134
 msgid "Removing dangling vias..."
-msgstr ""
+msgstr "Видалити непідключені перехідні отвори..."
 
 #: pcbnew/tracks_cleaner.cpp:148
 msgid "Checking collinear tracks..."
-msgstr ""
+msgstr "Перевірка колінеарних доріжок..."
 
 #: pcbnew/tracks_cleaner.cpp:150
 msgid "Merging collinear tracks..."
-msgstr ""
+msgstr "Об'єднання колінеарних доріжок..."
 
 #: pcbnew/undo_redo.cpp:563
 msgid "Incomplete undo/redo operation: some items not found"
-msgstr ""
+msgstr "Незавершена операція скасування/повторення: деякі елементи не знайдено"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show tracks"
-msgstr ""
+msgstr "Показати доріжки"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show all vias"
-msgstr ""
+msgstr "Показати всі перехідні отвори"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show all pads"
-msgstr ""
+msgstr "Показати всі контактні площадки"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show copper zones"
-msgstr ""
+msgstr "Показати мідні зони"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
-#, fuzzy
 msgid "Images"
 msgstr "Зображення"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
-#, fuzzy
 msgid "Show user images"
-msgstr "Показати шари паяльної маски"
+msgstr "Показати зображення користувача"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Footprints Front"
-msgstr ""
+msgstr "Верхні посадкові місця"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Show footprints that are on board's front"
-msgstr ""
+msgstr "Показати посадкові місця зверху плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Footprints Back"
-msgstr ""
+msgstr "Посадкові місця знизу"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Show footprints that are on board's back"
-msgstr ""
+msgstr "Показати посадкові місця знизу плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Through-hole Pads"
-msgstr ""
+msgstr "Контактні площадки з наскрізними отворами"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show through-hole pads"
-msgstr ""
+msgstr "Показати контактні площадки з наскрізними отворами"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show footprint values"
-msgstr ""
+msgstr "Показати значення посадкових місць"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "References"
-msgstr ""
+msgstr "Позначення"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Show footprint references"
-msgstr ""
+msgstr "Показувати позначення посадкових місць"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Footprint Text"
-msgstr ""
+msgstr "Текст посадкового місця"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Show all footprint text"
-msgstr ""
+msgstr "Показати всі надписи посадкових місць"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Hidden Text"
-msgstr ""
+msgstr "Приховати текст"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show footprint text marked as invisible"
-msgstr ""
+msgstr "Показати текст посадкових місць, що помічений як невидимий"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show unconnected nets as a ratsnest"
-msgstr ""
+msgstr "Показати непідключені мережі зв'язків у вигляді зв'язків"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "DRC Warnings"
-msgstr ""
+msgstr "Попередження DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "DRC violations with a Warning severity"
-msgstr ""
+msgstr "Порушення DRC на рівні попередження"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "DRC Errors"
-msgstr ""
+msgstr "Помилки DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "DRC violations with an Error severity"
-msgstr ""
+msgstr "Порушення DRC на рівні помилки"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "DRC Exclusions"
-msgstr ""
+msgstr "Виключення DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "DRC violations which have been individually excluded"
-msgstr ""
+msgstr "DRC помилки, що були виключені індивідуально"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Show footprint and text origins as a cross"
-msgstr ""
+msgstr "Показати посадкові місця і точки привязки тексту як хрестиком"
 
 #: pcbnew/widgets/appearance_controls.cpp:360
 msgid "Shadow on Locked Items"
-msgstr ""
+msgstr "Підсвітка заблокованих елементів"
 
 #: pcbnew/widgets/appearance_controls.cpp:360
 msgid "Show a shadow marker on locked items"
-msgstr ""
+msgstr "Показати підсвіченим маркером заблоковані елементи"
 
 #: pcbnew/widgets/appearance_controls.cpp:361
 msgid "Shadow on Conflicts"
-msgstr ""
+msgstr "Відобразити конфлікти"
 
 #: pcbnew/widgets/appearance_controls.cpp:361
 msgid "Show a shadow on overlapping courtyards while moving footprints"
 msgstr ""
+"Підсвічувати області встановлення, що пересікаються, при переміщенні "
+"посадкових місць"
 
 #: pcbnew/widgets/appearance_controls.cpp:362
 msgid "Show drawing sheet borders and title block"
-msgstr ""
+msgstr "Показати форматну рамку та основний блок"
 
 #: pcbnew/widgets/appearance_controls.cpp:384
 msgid "No Layers"
-msgstr ""
+msgstr "Немає шарів"
 
 #: pcbnew/widgets/appearance_controls.cpp:386
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
-msgstr ""
+msgstr "Всі шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:388
 msgid "All Copper Layers"
-msgstr ""
+msgstr "Всі мідні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:391
 msgid "Inner Copper Layers"
-msgstr ""
+msgstr "Внутрішні мідні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:394
 msgid "Front Layers"
-msgstr ""
+msgstr "Верхні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:397
 msgid "Front Assembly View"
-msgstr ""
+msgstr "Вид збірки зверху"
 
 #: pcbnew/widgets/appearance_controls.cpp:400
 msgid "Back Layers"
-msgstr ""
+msgstr "Нижні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:403
 msgid "Back Assembly View"
-msgstr ""
+msgstr "Вигляд знизу на збірку"
 
 #: pcbnew/widgets/appearance_controls.cpp:453
 msgid "Filter nets"
@@ -39027,48 +39037,48 @@ msgstr "Фільтр звʼязків"
 #: pcbnew/widgets/appearance_controls.cpp:593
 #: pcbnew/widgets/appearance_controls.cpp:1687
 msgid "Layer Display Options"
-msgstr ""
+msgstr "Параметри відображення шарів"
 
 #: pcbnew/widgets/appearance_controls.cpp:605
 #: pcbnew/widgets/appearance_controls.cpp:1693
 #, c-format
 msgid "Inactive layers (%s):"
-msgstr ""
+msgstr "Неактивні шари (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:607
 #: pcbnew/widgets/appearance_controls.cpp:1695
 msgid "Inactive layers:"
-msgstr ""
+msgstr "Неактивні шари:"
 
 #: pcbnew/widgets/appearance_controls.cpp:621
 #: pcbnew/widgets/appearance_controls.cpp:1700
 msgid "Inactive layers will be shown in full color"
-msgstr ""
+msgstr "Неактивні шари показуватимуться кольорами"
 
 #: pcbnew/widgets/appearance_controls.cpp:626
 #: pcbnew/widgets/appearance_controls.cpp:1702
 msgid "Dim"
-msgstr ""
+msgstr "Затемнено"
 
 #: pcbnew/widgets/appearance_controls.cpp:628
 #: pcbnew/widgets/appearance_controls.cpp:1703
 msgid "Inactive layers will be dimmed"
-msgstr ""
+msgstr "Неактивні шари будуть затемнені"
 
 #: pcbnew/widgets/appearance_controls.cpp:633
 #: pcbnew/widgets/appearance_controls.cpp:1705
 msgid "Hide"
-msgstr ""
+msgstr "Приховати"
 
 #: pcbnew/widgets/appearance_controls.cpp:635
 #: pcbnew/widgets/appearance_controls.cpp:1706
 msgid "Inactive layers will be hidden"
-msgstr ""
+msgstr "Неактивні шари будуть приховані"
 
 #: pcbnew/widgets/appearance_controls.cpp:646
 #: pcbnew/widgets/appearance_controls.cpp:1708
 msgid "Flip board view"
-msgstr ""
+msgstr "Перевернути вигляд плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:668
 #: pcbnew/widgets/appearance_controls.cpp:2367
@@ -39100,6 +39110,7 @@ msgstr "Кольори звʼязків та класи звʼязків пок�
 #: pcbnew/widgets/appearance_controls.cpp:2383
 msgid "Net and netclass colors are shown on the ratsnest only"
 msgstr ""
+"Кольори зв'язків і класів зв'язків відображаються тільки до лінії зв'язку"
 
 #: pcbnew/widgets/appearance_controls.cpp:711
 #: pcbnew/widgets/appearance_controls.cpp:2386
@@ -39110,37 +39121,37 @@ msgstr "Не показувати кольори звʼязків та клас�
 #: pcbnew/widgets/appearance_controls.cpp:2391
 #, c-format
 msgid "Ratsnest display (%s):"
-msgstr ""
+msgstr "Показати лінії зв'язку (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:724
 #: pcbnew/widgets/appearance_controls.cpp:2393
 msgid "Ratsnest display:"
-msgstr ""
+msgstr "Показати лінії зв'язку:"
 
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:2396
 msgid "Choose which ratsnest lines to display"
-msgstr ""
+msgstr "Виберіть які лінії зв'язків показати"
 
 #: pcbnew/widgets/appearance_controls.cpp:739
 #: pcbnew/widgets/appearance_controls.cpp:2399
 msgid "Show ratsnest lines to items on all layers"
-msgstr ""
+msgstr "Показати лінії зв'язків для елементів на всіх шарах"
 
 #: pcbnew/widgets/appearance_controls.cpp:744
 #: pcbnew/widgets/appearance_controls.cpp:2401
 msgid "Visible layers"
-msgstr ""
+msgstr "Видимі шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:746
 #: pcbnew/widgets/appearance_controls.cpp:2402
 msgid "Show ratsnest lines to items on visible layers"
-msgstr ""
+msgstr "Відображати лінії зв'язків для елементів на видимих шарів"
 
 #: pcbnew/widgets/appearance_controls.cpp:753
 #: pcbnew/widgets/appearance_controls.cpp:2405
 msgid "Hide all ratsnest lines"
-msgstr ""
+msgstr "Приховати всі лінії зв'язків"
 
 #: pcbnew/widgets/appearance_controls.cpp:892
 msgid "Set Net Color"
@@ -39149,19 +39160,19 @@ msgstr "Встановити колір для звʼязку"
 #: pcbnew/widgets/appearance_controls.cpp:895
 #, c-format
 msgid "Highlight %s"
-msgstr ""
+msgstr "Підсвітити %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:898
 #: pcbnew/widgets/appearance_controls.cpp:2313
 #, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr ""
+msgstr "Виберіть доріжки і перехідні отвори в %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:901
 #: pcbnew/widgets/appearance_controls.cpp:2317
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr ""
+msgstr "Відмінити виділення доріжки і перехідні отвори в %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:906
 msgid "Show All Nets"
@@ -39174,193 +39185,197 @@ msgstr "Сховати всі інші звʼязки"
 #: pcbnew/widgets/appearance_controls.cpp:940
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr ""
+msgstr "Натисніть, щоб приховати зв'язки для %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:941
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr ""
+msgstr "Натисніть, щоб показати зв'язки для %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:950
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
 msgstr ""
+"Подвійне натискання (або натискання на середню клавішу), щоб змінити колір; "
+"натисніть правою кнопкою миші для додаткових дій"
 
 #: pcbnew/widgets/appearance_controls.cpp:989
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 msgid "Objects"
-msgstr ""
+msgstr "Об'єкти"
 
 #: pcbnew/widgets/appearance_controls.cpp:1473
 msgid "Double click or middle click for color change, right click for menu"
 msgstr ""
+"Натисніть двічі або середню кнопку для зміни кольору, правою кнопкою миші "
+"для меню"
 
 #: pcbnew/widgets/appearance_controls.cpp:1480
 msgid "Show or hide this layer"
-msgstr ""
+msgstr "Показати або приховати цей шар"
 
 #: pcbnew/widgets/appearance_controls.cpp:1553
 msgid "Adhesive on board's front"
-msgstr ""
+msgstr "Клейовий шар зверху плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1554
 msgid "Adhesive on board's back"
-msgstr ""
+msgstr "Клейовий шар знизу плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1555
 msgid "Solder paste on board's front"
-msgstr ""
+msgstr "Паяльна паста зверху плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1556
 msgid "Solder paste on board's back"
-msgstr ""
+msgstr "Паяльна паста знизу плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1557
 msgid "Silkscreen on board's front"
-msgstr ""
+msgstr "Шовкографія зверху плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1558
 msgid "Silkscreen on board's back"
-msgstr ""
+msgstr "Шовкографія знизу плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1559
 msgid "Solder mask on board's front"
-msgstr ""
+msgstr "Паяльна маска зверху плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1560
 msgid "Solder mask on board's back"
-msgstr ""
+msgstr "Паяльна маска знизу плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1561
 msgid "Explanatory drawings"
-msgstr ""
+msgstr "Пояснювальні малюнки"
 
 #: pcbnew/widgets/appearance_controls.cpp:1562
 msgid "Explanatory comments"
-msgstr ""
+msgstr "Пояснювальні коментарі"
 
 #: pcbnew/widgets/appearance_controls.cpp:1563
 #: pcbnew/widgets/appearance_controls.cpp:1564
 msgid "User defined meaning"
-msgstr ""
+msgstr "Призначення користувачем"
 
 #: pcbnew/widgets/appearance_controls.cpp:1565
 msgid "Board's perimeter definition"
-msgstr ""
+msgstr "Визначення контуру плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1566
 msgid "Board's edge setback outline"
-msgstr ""
+msgstr "Відступ від контуру плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1567
 msgid "Footprint courtyards on board's front"
-msgstr ""
+msgstr "Області встановлення посадкових місць зверху плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1568
 msgid "Footprint courtyards on board's back"
-msgstr ""
+msgstr "Області встановлення посадкових місць знизу плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1569
 msgid "Footprint assembly on board's front"
-msgstr ""
+msgstr "Інформація про монтаж посадкових місць зверху плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1570
 msgid "Footprint assembly on board's back"
-msgstr ""
+msgstr "Інформація про монтаж посадкових місць знизу плати"
 
 #: pcbnew/widgets/appearance_controls.cpp:1571
 msgid "User defined layer 1"
-msgstr ""
+msgstr "Користувацький шар 1"
 
 #: pcbnew/widgets/appearance_controls.cpp:1572
 msgid "User defined layer 2"
-msgstr ""
+msgstr "Користувацький шар 2"
 
 #: pcbnew/widgets/appearance_controls.cpp:1573
 msgid "User defined layer 3"
-msgstr ""
+msgstr "Користувацький шар 3"
 
 #: pcbnew/widgets/appearance_controls.cpp:1574
 msgid "User defined layer 4"
-msgstr ""
+msgstr "Користувацький шар 4"
 
 #: pcbnew/widgets/appearance_controls.cpp:1575
 msgid "User defined layer 5"
-msgstr ""
+msgstr "Користувацький шар 5"
 
 #: pcbnew/widgets/appearance_controls.cpp:1576
 msgid "User defined layer 6"
-msgstr ""
+msgstr "Користувацький шар 6"
 
 #: pcbnew/widgets/appearance_controls.cpp:1577
 msgid "User defined layer 7"
-msgstr ""
+msgstr "Користувацький шар 7"
 
 #: pcbnew/widgets/appearance_controls.cpp:1578
 msgid "User defined layer 8"
-msgstr ""
+msgstr "Користувацький шар 8"
 
 #: pcbnew/widgets/appearance_controls.cpp:1579
 msgid "User defined layer 9"
-msgstr ""
+msgstr "Користувацький шар 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1627
 msgid "Front copper layer"
-msgstr ""
+msgstr "Верхній мідний шар"
 
 #: pcbnew/widgets/appearance_controls.cpp:1628
 msgid "Back copper layer"
-msgstr ""
+msgstr "Нижній мідний шар"
 
 #: pcbnew/widgets/appearance_controls.cpp:1629
 msgid "Inner copper layer"
-msgstr ""
+msgstr "Внутрішні мідні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
 msgid "Show All Copper Layers"
-msgstr ""
+msgstr "Показати всі мідні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
 msgid "Hide All Copper Layers"
-msgstr ""
+msgstr "Приховати всі мідні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:1729
 msgid "Show All Non Copper Layers"
-msgstr ""
+msgstr "Показати всі немідні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:1732
 msgid "Hide All Non Copper Layers"
-msgstr ""
+msgstr "Приховати всі немідні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:1745
 msgid "Show Only Front Assembly Layers"
-msgstr ""
+msgstr "Показувати лише верхні шари для складання"
 
 #: pcbnew/widgets/appearance_controls.cpp:1748
 msgid "Show Only Front Layers"
-msgstr ""
+msgstr "Показати лише передні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:1754
 msgid "Show Only Inner Layers"
-msgstr ""
+msgstr "Показати тільки внутрішні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:1758
 msgid "Show Only Back Layers"
-msgstr ""
+msgstr "Показати лише нижні шари"
 
 #: pcbnew/widgets/appearance_controls.cpp:1761
 msgid "Show Only Back Assembly Layers"
-msgstr ""
+msgstr "Показати лише нижні шари для складання"
 
 #: pcbnew/widgets/appearance_controls.cpp:2070
 #, c-format
 msgid "Show or hide %s"
-msgstr ""
+msgstr "Показати або приховати %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2111
 #, c-format
 msgid "Set opacity of %s"
-msgstr ""
+msgstr "Встановити непрозорість %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2272
 #, c-format
@@ -39387,35 +39402,35 @@ msgstr "Приховати всі інші класи зв'язків"
 #: pcbnew/widgets/appearance_controls.cpp:2416
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 msgid "Presets (Ctrl+Tab):"
-msgstr ""
+msgstr "Предустановки (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls.cpp:2437
 msgid "Save preset..."
-msgstr ""
+msgstr "Зберегти предустановки..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2438
 msgid "Delete preset..."
-msgstr ""
+msgstr "Видалити предустановки..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2539
 msgid "Layer preset name:"
-msgstr ""
+msgstr "Назва предустановленного шару:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2539
 msgid "Save Layer Preset"
-msgstr ""
+msgstr "Зберегти предстановлений шар"
 
 #: pcbnew/widgets/appearance_controls.cpp:2583
 msgid "Presets"
-msgstr ""
+msgstr "Предустановки"
 
 #: pcbnew/widgets/appearance_controls.cpp:2595
 msgid "Delete Preset"
-msgstr ""
+msgstr "Видалити предустановки"
 
 #: pcbnew/widgets/appearance_controls.cpp:2596
 msgid "Select preset:"
-msgstr ""
+msgstr "Вибрати предустановки:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2668
 #: pcbnew/widgets/appearance_controls_base.cpp:182
@@ -39445,21 +39460,21 @@ msgstr "Налаштувати класи звʼязків"
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #: pcbnew/widgets/appearance_controls_base.cpp:186
 msgid "(unsaved)"
-msgstr ""
+msgstr "(не збережено)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:169
 #: pcbnew/widgets/appearance_controls_base.cpp:190
 msgid "Layer presets"
-msgstr ""
+msgstr "Пресети шару"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:32
 #: pcbnew/widgets/legacyfiledlg_save_project.h:34
 msgid "Create a new project for this board"
-msgstr ""
+msgstr "Створити новий проект для цієї плати"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:35
 msgid "Omit extra information"
-msgstr ""
+msgstr "Пропустити додаткову інформацію"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:36
 msgid "Omit nets"
@@ -39467,7 +39482,7 @@ msgstr "Заборонити звʼязки"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:38
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "Не можна використовувати префікс шляху з посадковим місцем UUID."
 
 #: pcbnew/widgets/legacyfiledlg_save_project.h:36
 msgid ""
@@ -39480,117 +39495,116 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter.cpp:146
 #, c-format
 msgid "Only %s"
-msgstr ""
+msgstr "Тільки %s"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:184
 #: pcbnew/widgets/panel_selection_filter_base.cpp:23
 msgid "Locked items"
-msgstr ""
+msgstr "Заблоковані елементи"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:185
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
 msgid "Allow selection of locked items"
-msgstr ""
+msgstr "Дозволити виділити заблоковані елементи"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:193
 #: pcbnew/widgets/panel_selection_filter_base.cpp:57
 msgid "Rule Areas"
-msgstr ""
+msgstr "Області з правилами"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:194
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr ""
+msgstr "Розміри"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:195
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Other items"
-msgstr ""
+msgstr "Інші елементи"
 
 #: pcbnew/widgets/search_handlers.cpp:245
-#, fuzzy
 msgid "Textbox"
-msgstr "Напис"
+msgstr "Текстова область"
 
 #: pcbnew/zone.cpp:512
 msgid "Rule Area"
-msgstr ""
+msgstr "Область з правилами"
 
 #: pcbnew/zone.cpp:514
 msgid "Teardrop Area"
-msgstr ""
+msgstr "Зона розриву"
 
 #: pcbnew/zone.cpp:516
 msgid "Copper Zone"
-msgstr ""
+msgstr "Мідна зона"
 
 #: pcbnew/zone.cpp:518
 msgid "Non-copper Zone"
-msgstr ""
+msgstr "Не мідні зони"
 
 #: pcbnew/zone.cpp:523
 msgid "Cutout"
-msgstr ""
+msgstr "Виріз"
 
 #: pcbnew/zone.cpp:532
 msgid "No vias"
-msgstr ""
+msgstr "Без перехідних отворів"
 
 #: pcbnew/zone.cpp:535
 msgid "No tracks"
-msgstr ""
+msgstr "Без доріжок"
 
 #: pcbnew/zone.cpp:538
 msgid "No pads"
-msgstr ""
+msgstr "Без контактних площадок"
 
 #: pcbnew/zone.cpp:541
 msgid "No copper zones"
-msgstr ""
+msgstr "Без мідних зон"
 
 #: pcbnew/zone.cpp:544
 msgid "No footprints"
-msgstr ""
+msgstr "Без посадкових місць"
 
 #: pcbnew/zone.cpp:547
 msgid "Restrictions"
-msgstr ""
+msgstr "Обмеження"
 
 #: pcbnew/zone.cpp:560 pcbnew/zone.cpp:1320
 msgid "Priority"
-msgstr ""
+msgstr "Пріоритет"
 
 #: pcbnew/zone.cpp:582 pcbnew/zone.cpp:761
 #, c-format
 msgid "%s and %d more"
-msgstr ""
+msgstr "%s та ще %d"
 
 #: pcbnew/zone.cpp:596
 msgid "Fill Mode"
-msgstr ""
+msgstr "Режим заливки"
 
 #: pcbnew/zone.cpp:598
 msgid "Filled Area"
-msgstr ""
+msgstr "Залита площа"
 
 #: pcbnew/zone.cpp:619
 msgid "Corner Count"
-msgstr ""
+msgstr "Кількість кутів"
 
 #: pcbnew/zone.cpp:767
 #, c-format
 msgid "Rule Area Cutout on %s"
-msgstr ""
+msgstr "Обрізка забороненої зони на %s"
 
 #: pcbnew/zone.cpp:769
 #, c-format
 msgid "Zone Cutout on %s"
-msgstr ""
+msgstr "Виріз зони на %s"
 
 #: pcbnew/zone.cpp:774
 #, c-format
 msgid "Rule Area on %s"
-msgstr ""
+msgstr "Область з правилами на %s"
 
 #: pcbnew/zone.cpp:776
 #, c-format
