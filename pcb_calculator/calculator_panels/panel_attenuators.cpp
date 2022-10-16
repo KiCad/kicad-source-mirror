@@ -138,6 +138,12 @@ void PANEL_ATTENUATORS::SetAttenuator( unsigned aIdx )
     m_Att_R1_Value->SetValue( wxEmptyString );
     m_Att_R2_Value->SetValue( wxEmptyString );
     m_Att_R3_Value->SetValue( wxEmptyString );
+
+    // Disable R3 for bridget T attenuator only
+    bool enable = aIdx != 2;
+    m_attenuatorR3Label->Enable( enable );
+    m_Att_R3_Value->Enable( enable );
+    m_attR3Unit->Enable( enable );
 }
 
 
