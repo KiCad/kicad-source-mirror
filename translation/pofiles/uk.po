@@ -2,13 +2,14 @@
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
 # Artem <artem@molotov.work>, 2022.
 # Andrii Shelestov <streamx3@gmail.com>, 2022.
+# Stanislav Kaliuk <staskalyuk.096@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-07 11:38-0700\n"
-"PO-Revision-Date: 2022-10-11 00:17+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"PO-Revision-Date: 2022-10-17 17:05+0000\n"
+"Last-Translator: Stanislav Kaliuk <staskalyuk.096@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
 "Language: uk\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -15049,9 +15050,9 @@ msgid "Discard New Sheet"
 msgstr "Відхилити новий лист"
 
 #: eeschema/sim/sim_lib_mgr.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "Помилка завантаження бібліотеки символів '%s."
+msgstr "Помилка завантаження бібліотеки символів '%s':%s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
 #, fuzzy, c-format
@@ -15384,9 +15385,9 @@ msgstr ""
 
 #: eeschema/sim/spice_model_parser.cpp:217
 #: eeschema/sim/spice_model_parser.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s' in model '%s'"
-msgstr "Не вдалося встановити параметр '%s' в '%s'"
+msgstr "Не вдалося встановити параметр '%s' в '%s' у моделі '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -25383,33 +25384,33 @@ msgid "Text items must have some content."
 msgstr "Елементи тексту повинні мати деякий вміст."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at least %s."
-msgstr "%s має бути принаймні %s."
+msgstr "Довжина тексту має бути принаймні %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at most %s."
-msgstr "%s має бути принаймні %s."
+msgstr "Довжина тексту має бути принаймні %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at least %s."
-msgstr "%s має бути принаймні %s."
+msgstr "Висота тексту має бути принаймні %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at most %s."
-msgstr "%s має бути принаймні %s."
+msgstr "Висота тексту має бути принаймні %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
 "Товщина тексту завелика для розміру тексту.\n"
-"Він буде стиснутим."
+"Він буде стиснутим до %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:574
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:603
@@ -25704,14 +25705,14 @@ msgid "Footprint name may not contain '%s'."
 msgstr "Ім'я посадкового місця не може містити '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "The text width must be between %s and %s."
-msgstr "Ширина лінії має бути більше нуля."
+msgstr "Ширина лінії має бути між %s і %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "Невідповідність типів між '%s' і %lf"
+msgstr "Невідповідність типів між %s і %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:452
 #: pcbnew/dialogs/dialog_text_properties.cpp:420
@@ -27699,7 +27700,7 @@ msgstr "Шар не вибрано, немає чого креслити"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1004
 msgid "Warning: Scale option set to a very small value"
-msgstr "Попередження: встановлено дуже маленьке значення значення масштабу"
+msgstr "Попередження: встановлено дуже маленьке значення масштабу"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1007
 msgid "Warning: Scale option set to a very large value"
@@ -29411,9 +29412,8 @@ msgid "Silkscreen"
 msgstr "Шовкографія"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:299
-#, fuzzy
 msgid "Minimum item clearance:"
-msgstr "Мінімальний відступ для шовкографії."
+msgstr "Мінімальний відступ для шовкографії:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:304
 msgid ""
@@ -31429,9 +31429,9 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "Перевірка %s максимальна довжина без зв’язку: %s."
+msgstr "Перевірка %s максимальна довжина без зв’язку: %s. Поточна: %s"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:482
 #, fuzzy, c-format
@@ -31752,9 +31752,8 @@ msgid "No project when exporting the VRML file"
 msgstr ""
 
 #: pcbnew/exporters/exporter_vrml.cpp:1293
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "Експорт у файл"
+msgstr "Не вдалося експортувати у VRML файл\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
@@ -31844,9 +31843,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "Файл проєкту:%s'"
+msgstr "Відкрити файл: '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:273
 msgid "Build STEP data\n"
@@ -31859,23 +31858,25 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:284
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "Файли STEP"
+msgstr "Записати у STEP файл\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:295
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Помилка запису файлу '%s."
+msgstr ""
+"\n"
+"Помилка запису STEP файлу\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "Файл звіту '%s' створений."
+msgstr ""
+"\n"
+"STEP файл '%s' створений.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:306
 #: pcbnew/exporters/step/kicad2step.cpp:311
@@ -31885,11 +31886,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:317
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "Помилка читання файлу."
+msgstr ""
+"\n"
+"**Помилка читання kicad_pcb файлу. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:325
 msgid ""
@@ -31902,9 +31904,8 @@ msgid "STEP file has been created, but there are warnings."
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:64
-#, fuzzy
 msgid "pcb_filename"
-msgstr "Назва файлу:"
+msgstr "Назва файлу"
 
 #: pcbnew/exporters/step/kicad2step_app.cpp:66
 #, fuzzy
@@ -31961,9 +31962,8 @@ msgid "Kicad2step Converter"
 msgstr "Перетворення зображень KiCad"
 
 #: pcbnew/exporters/step/pcb/3d_resolver.cpp:343
-#, fuzzy
 msgid "Alias:"
-msgstr "Псевдоніми: "
+msgstr "Псевдоніми:"
 
 #: pcbnew/files.cpp:150
 msgid "All KiCad Board Files"
@@ -32580,9 +32580,8 @@ msgid "Invalid C_pkg value."
 msgstr "Неправильне значення довжини"
 
 #: pcbnew/ibis/ibis_parser.cpp:184
-#, fuzzy
 msgid "Checking pin "
-msgstr "Перевірка виводів..."
+msgstr "Перевірка виводів "
 
 #: pcbnew/ibis/ibis_parser.cpp:189
 #, fuzzy
@@ -32620,9 +32619,8 @@ msgid "Component name cannot be empty."
 msgstr "Ім'я звʼязку не може бути пустим."
 
 #: pcbnew/ibis/ibis_parser.cpp:233
-#, fuzzy
 msgid "Checking component "
-msgstr "Перевірка конфліктів..."
+msgstr "Перевірка конфліктів "
 
 #: pcbnew/ibis/ibis_parser.cpp:238
 #, fuzzy
@@ -32670,9 +32668,8 @@ msgid "Model name cannot be empty"
 msgstr "Ім'я звʼязку не може бути пустим."
 
 #: pcbnew/ibis/ibis_parser.cpp:444
-#, fuzzy
 msgid "Checking model "
-msgstr "Перевірка міток..."
+msgstr "Перевірка міток "
 
 #: pcbnew/ibis/ibis_parser.cpp:449
 #, fuzzy
@@ -32830,23 +32827,20 @@ msgid "Inductance matrix is nullptr"
 msgstr "Індуктивність на одиницю довжини"
 
 #: pcbnew/ibis/ibis_parser.cpp:700
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Не вдалося відкрити файл %s'"
+msgstr "Не вдалося відкрити файл "
 
 #: pcbnew/ibis/ibis_parser.cpp:706
-#, fuzzy
 msgid "Reading file "
-msgstr "Помилка читання файлу."
+msgstr "Читання файлу "
 
 #: pcbnew/ibis/ibis_parser.cpp:727
 msgid "Unexpected end of file. Missing [END] ?"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:739
-#, fuzzy
 msgid "Error on line "
-msgstr "Помилка читання файлу."
+msgstr "Помилка у рядку "
 
 #: pcbnew/ibis/ibis_parser.cpp:767
 msgid "A line did not end properly.."
@@ -32867,9 +32861,8 @@ msgid "Failed to read a word."
 msgstr "Не вдалося створити файл '%s'."
 
 #: pcbnew/ibis/ibis_parser.cpp:987
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "Кількість частин:"
+msgstr "Число не є цілим"
 
 #: pcbnew/ibis/ibis_parser.cpp:1031
 msgid "Unable to read string, input is empty."
@@ -32888,9 +32881,8 @@ msgid "No extra argument was expected"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1255
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Невідомий вузол '%s' в '%s'"
+msgstr "Невідомий вузол '%s' в '%s' "
 
 #: pcbnew/ibis/ibis_parser.cpp:1255
 msgid " context: "
@@ -32968,9 +32960,8 @@ msgid "Internal Error while reading Enable"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1913
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Невідомий батько властивості"
+msgstr "Невідома полярність "
 
 #: pcbnew/ibis/ibis_parser.cpp:1950
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -33050,9 +33041,8 @@ msgid "Error while reading temporary file"
 msgstr "Помилка читання файлу."
 
 #: pcbnew/ibis/kibis.cpp:703
-#, fuzzy
 msgid "Error while creating temporary file"
-msgstr "Помилка розпакування файлу!"
+msgstr "Помилка під час створення тимчасового файлу"
 
 #: pcbnew/ibis/kibis.cpp:761
 msgid ""
@@ -33942,9 +33932,9 @@ msgid "NPTH pad of %s"
 msgstr ""
 
 #: pcbnew/pad.cpp:1237
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s of %s"
-msgstr "%s контактна площадка %s не знайдена в %s."
+msgstr "Контактна площадка %s не знайдена в %s."
 
 #: pcbnew/pad.cpp:1246
 #, c-format
@@ -34329,9 +34319,8 @@ msgstr ""
 "Налаштування."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:89
-#, fuzzy
 msgid "Loading board\n"
-msgstr "Завантаження Трасування променів: плата"
+msgstr "Завантаження плати\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:96
 #, fuzzy
@@ -35109,9 +35098,9 @@ msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "Не вдалося прочитати файл даних '%s."
+msgstr "Не вдалося виявити посадкове місце %s у файлі %s.\n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2332
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2361
