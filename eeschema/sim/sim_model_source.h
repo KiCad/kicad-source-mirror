@@ -98,9 +98,6 @@ private:
     static std::vector<PARAM::INFO> makeRandomPoissonParamInfos( std::string aPrefix, std::string aUnit );
 
     static void appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, std::string aUnit );
-
-
-    bool m_isInferred;
 };
 
 #endif // SIM_MODEL_SOURCE_H

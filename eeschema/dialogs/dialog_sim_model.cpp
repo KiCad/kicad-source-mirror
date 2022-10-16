@@ -189,6 +189,11 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
     m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
+    m_inferCheckbox->SetValue( curModel().IsInferred() );
+
+    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
+    m_inferCheckbox->Show(
+        SIM_MODEL::InferDeviceTypeFromRef( ref ) != SIM_MODEL::DEVICE_TYPE_::NONE );
 
     updateWidgets();
 
@@ -248,10 +253,18 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateWidgets()
 {
+    m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
+
     updateIbisWidgets();
     updateModelParamsTab();
     updateModelCodeTab();
     updatePinAssignments();
+    
+    m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
+
+    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
+    m_inferCheckbox->Enable( SIM_MODEL::InferDeviceTypeFromRef( ref ) == curModel().GetDeviceType() );
+    m_inferCheckbox->SetValue( curModel().IsInferred() );
 
     m_modelPanel->Layout();
     m_pinAssignmentsPanel->Layout();
@@ -1132,6 +1145,13 @@ template <typename T>
 void DIALOG_SIM_MODEL<T>::onExcludeCheckbox( wxCommandEvent& aEvent )
 {
     curModel().SetIsEnabled( !m_excludeCheckbox->GetValue() );
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onInferCheckbox( wxCommandEvent& aEvent )
+{
+    curModel().SetIsInferred( m_inferCheckbox->GetValue() );
 }
 
 

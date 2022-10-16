@@ -79,6 +79,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		WX_GRID* m_pinAssignmentsGrid;
 		wxStaticLine* m_staticline1;
 		wxCheckBox* m_excludeCheckbox;
+		wxCheckBox* m_inferCheckbox;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -107,6 +108,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onPinAssignmentsGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void onExcludeCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onInferCheckbox( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

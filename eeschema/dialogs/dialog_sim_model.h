@@ -115,6 +115,7 @@ private:
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
     void onExcludeCheckbox( wxCommandEvent& aEvent ) override;
+    void onInferCheckbox( wxCommandEvent& aEvent ) override;
 
     void onLibraryPathUpdate( wxUpdateUIEvent& aEvent ) override;
     void onBrowseButtonUpdate( wxUpdateUIEvent& aEvent ) override;

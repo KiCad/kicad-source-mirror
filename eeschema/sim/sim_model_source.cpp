@@ -199,8 +199,7 @@ std::string SPICE_GENERATOR_SOURCE::getParamValueString( const std::string& aPar
 
 
 SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
-    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SOURCE>( *this ) ),
-      m_isInferred( false )
+    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SOURCE>( *this ) )
 {
     for( const SIM_MODEL::PARAM::INFO& paramInfo : makeParamInfos( aType ) )
         AddParam( paramInfo );
@@ -211,7 +210,7 @@ void SIM_MODEL_SOURCE::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) con
 {
     SIM_MODEL::WriteDataSchFields( aFields );
 
-    if( m_isInferred )
+    if( IsInferred() )
         inferredWriteDataFields( aFields );
 }
 
@@ -220,7 +219,7 @@ void SIM_MODEL_SOURCE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) con
 {
     SIM_MODEL::WriteDataLibFields( aFields );
 
-    if( m_isInferred )
+    if( IsInferred() )
         inferredWriteDataFields( aFields );
 }
 
@@ -266,7 +265,14 @@ std::string SIM_MODEL_SOURCE::GenerateParamValuePair( const PARAM& aParam, bool&
 template <typename T>
 void SIM_MODEL_SOURCE::inferredWriteDataFields( std::vector<T>& aFields ) const
 {
-    std::string value = GetFieldValue( &aFields, PARAMS_FIELD );
+    std::string value;
+
+    if( GetTypeInfo().fieldValue != "" )
+        value = fmt::format( "{} {}",
+                             GetTypeInfo().fieldValue,
+                             GetFieldValue( &aFields, PARAMS_FIELD ) );
+    else
+        value = fmt::format( "{}", GetFieldValue( &aFields, PARAMS_FIELD ) );
 
     if( value == "" )
         value = GetDeviceTypeInfo().fieldValue;

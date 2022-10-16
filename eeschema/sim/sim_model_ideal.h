@@ -54,8 +54,6 @@ private:
     std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
     static PARAM::INFO makeParamInfo( std::string aName, std::string aDescription, std::string aUnit );
-
-    bool m_isInferred;
 };
 
 #endif // SIM_MODEL_IDEAL_H

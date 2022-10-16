@@ -484,6 +484,8 @@ public:
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
 
+    static DEVICE_TYPE_ InferDeviceTypeFromRef( const std::string& aRef );
+
     static TYPE InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue );
 
     template <typename T>
@@ -602,6 +604,9 @@ public:
 
     void SetIsEnabled( bool aIsEnabled ) { m_isEnabled = aIsEnabled; }
     bool IsEnabled() const { return m_isEnabled; }
+
+    void SetIsInferred( bool aIsInferred ) { m_isInferred = aIsInferred; }
+    bool IsInferred() const { return m_isInferred; }
 
 protected:
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType );

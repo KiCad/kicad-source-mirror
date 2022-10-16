@@ -432,6 +432,26 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
 }
 
 
+DEVICE_TYPE SIM_MODEL::InferDeviceTypeFromRef( const std::string& aRef )
+{
+
+    if( boost::starts_with( aRef, "R" ) )
+        return DEVICE_TYPE::R;
+    else if( boost::starts_with( aRef, "C" ) )
+        return DEVICE_TYPE::C;
+    else if( boost::starts_with( aRef, "L" ) )
+        return DEVICE_TYPE::L;
+    else if( boost::starts_with( aRef, "V" ) )
+        return DEVICE_TYPE::V;
+    else if( boost::starts_with( aRef, "I" ) )
+        return DEVICE_TYPE::I;
+    else if( boost::starts_with( aRef, "TL" ) )
+        return DEVICE_TYPE::TLINE;
+
+    return DEVICE_TYPE::NONE;
+}
+
+
 TYPE SIM_MODEL::InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue )
 {
     std::string prefix;
@@ -454,22 +474,7 @@ TYPE SIM_MODEL::InferTypeFromRefAndValue( const std::string& aRef, const std::st
     {
     }
 
-    DEVICE_TYPE_ deviceType = DEVICE_TYPE_::NONE;
-
-    if( boost::starts_with( aRef, "R" ) )
-        deviceType  = DEVICE_TYPE_::R;
-    else if( boost::starts_with( aRef, "C" ) )
-        deviceType = DEVICE_TYPE_::C;
-    else if( boost::starts_with( aRef, "L" ) )
-        deviceType = DEVICE_TYPE_::L;
-    else if( boost::starts_with( aRef, "V" ) )
-        deviceType = DEVICE_TYPE_::V;
-    else if( boost::starts_with( aRef, "I" ) )
-        deviceType = DEVICE_TYPE_::I;
-    else if( boost::starts_with( aRef, "TL" ) )
-        deviceType = DEVICE_TYPE_::TLINE;
-    else
-        return TYPE::NONE;
+    DEVICE_TYPE deviceType = InferDeviceTypeFromRef( aRef );
 
     for( TYPE type : TYPE_ITERATOR() )
     {

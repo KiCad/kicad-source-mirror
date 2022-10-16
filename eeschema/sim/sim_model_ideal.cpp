@@ -46,8 +46,7 @@ std::string SPICE_GENERATOR_IDEAL::ItemLine( const SPICE_ITEM& aItem ) const
 
 
 SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_IDEAL>( *this ) ),
-    m_isInferred( false )
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_IDEAL>( *this ) )
 {
     static PARAM::INFO resistor  = makeParamInfo( "r", "Resistance",  "Ω" );
     static PARAM::INFO capacitor = makeParamInfo( "c", "Capacitance", "F"   );
@@ -68,7 +67,7 @@ void SIM_MODEL_IDEAL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) cons
 {
     SIM_MODEL::WriteDataSchFields( aFields );
 
-    if( m_isInferred )
+    if( IsInferred() )
         inferredWriteDataFields( aFields );
 }
 
@@ -77,7 +76,7 @@ void SIM_MODEL_IDEAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
 {
     SIM_MODEL::WriteDataLibFields( aFields );
 
-    if( m_isInferred )
+    if( IsInferred() )
         inferredWriteDataFields( aFields );
 }
 
