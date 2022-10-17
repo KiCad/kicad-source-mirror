@@ -285,12 +285,6 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     preview->SetZoom( 100 );
 
     SCH_PREVIEW_FRAME* frame = new SCH_PREVIEW_FRAME( preview, this, title );
-    frame->SetMinSize( wxSize( 550, 350 ) );
-
-    // on first invocation in this runtime session, set to 2/3 size of my parent,
-    // but will be changed in Show() if not first time as will position.
-    frame->SetSize( (m_parent->GetSize() * 2) / 3 );
-    frame->Center();
 
     // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
     // close the frame using the X box in caption, when the preview frame is run
@@ -304,6 +298,13 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     // With this option, only the parent is reenabled.
     // Reenabling all top level frames should be made by the parent dialog.
     frame->InitializeWithModality( wxPreviewFrame_WindowModal );
+
+    // on first invocation in this runtime session, set to 3/4 size of parent,
+    // but will be changed in Show() if not first time as will position.
+    // Must be called after InitializeWithModality because otherwise in some wxWidget
+    // versions it is not always taken in account
+    frame->SetMinSize( wxSize( 650, 500 ) );
+    frame->SetSize( (m_parent->GetSize() * 3) / 4 );
 
     frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );
