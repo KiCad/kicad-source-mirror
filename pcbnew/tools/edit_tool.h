@@ -123,6 +123,8 @@ public:
      */
     int Remove( const TOOL_EVENT& aEvent );
 
+    void DeleteItems( const PCB_SELECTION& aItems, bool aIsCut );
+
     /**
      * Duplicate the current selection and starts a move action.
      */
