@@ -30,14 +30,14 @@
     <translation type="gettext">kicad</translation>
 
     <keywords>
-        <keyword>KiCad</keyword>
+        <keyword translate="no">KiCad</keyword>
         <keyword>EDA</keyword>
         <keyword>PCB</keyword>
         <keyword>Schematic</keyword>
         <keyword>Circuit board</keyword>
         <keyword>Gerber</keyword>
-        <keyword>PcbNew</keyword>
-        <keyword>Eeschema</keyword>
+        <keyword translate="no">PcbNew</keyword>
+        <keyword translate="no">Eeschema</keyword>
     </keywords>
 
     <categories>
@@ -81,7 +81,7 @@
     <url type="donation">https://go.kicad.org/donate</url>
     <url type="translate">https://go.kicad.org/translate</url>
 
-    <update_contact>kicad-developers@lists.launchpad.net</update_contact>
+    <update_contact>devlist@kicad.org</update_contact>
     <developer_name>The KiCad Developers</developer_name>
 
     <!-- This is actually a valid tag, but the utilities don't think so -->
