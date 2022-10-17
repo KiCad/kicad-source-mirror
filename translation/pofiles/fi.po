@@ -13,15 +13,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-09-21 11:23+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2022-10-18 22:04+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -111,7 +111,7 @@ msgstr "Rakenna BVH reikiä ja läpivientejä varten"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:411
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "OpenGL-versiotasi ei tueta. Vähintään versio 1.5 vaaditaan."
+msgstr "Sinun OpenGL-versio ei ole tuettu. Vaaditaan vähintään versio 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:539
 #, c-format
