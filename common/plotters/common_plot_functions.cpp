@@ -112,8 +112,12 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
         case WSG_RECT_T:
         {
             DS_DRAW_ITEM_RECT* rect = (DS_DRAW_ITEM_RECT*) item;
-            int penWidth = std::max( rect->GetPenWidth(), defaultPenWidth );
-            plotter->Rect( rect->GetStart(), rect->GetEnd(), FILL_T::NO_FILL, penWidth );
+            plotter->SetCurrentLineWidth( std::max( rect->GetPenWidth(), defaultPenWidth ) );
+            plotter->MoveTo( rect->GetStart() );
+            plotter->LineTo( VECTOR2I( rect->GetEnd().x, rect->GetStart().y ) );
+            plotter->LineTo( VECTOR2I( rect->GetEnd().x, rect->GetEnd().y ) );
+            plotter->LineTo( VECTOR2I( rect->GetStart().x, rect->GetEnd().y ) );
+            plotter->FinishTo( rect->GetStart() );
         }
             break;
 

@@ -70,9 +70,16 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
 
 bool SVG_IMPORT_PLUGIN::Import()
 {
+    auto alpha =
+            []( int color )
+            {
+                return color >> 24;
+            };
+
     for( NSVGshape* shape = m_parsedImage->shapes; shape != nullptr; shape = shape->next )
     {
         double lineWidth = shape->strokeWidth;
+        bool   filled = shape->fill.type == NSVG_PAINT_COLOR && alpha( shape->fill.color ) > 0;
 
         GRAPHICS_IMPORTER::POLY_FILL_RULE rule = GRAPHICS_IMPORTER::PF_NONZERO;
 
@@ -87,8 +94,9 @@ bool SVG_IMPORT_PLUGIN::Import()
 
         for( NSVGpath* path = shape->paths; path != nullptr; path = path->next )
         {
-            DrawPath( path->pts, path->npts, path->closed || rule == GRAPHICS_IMPORTER::PF_EVEN_ODD,
-                      shape->fill.type == NSVG_PAINT_COLOR, lineWidth );
+            bool closed = path->closed || rule == GRAPHICS_IMPORTER::PF_EVEN_ODD;
+
+            DrawPath( path->pts, path->npts, closed, filled, lineWidth );
         }
     }
 
