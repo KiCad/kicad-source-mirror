@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 11:37-0700\n"
+"POT-Creation-Date: 2022-10-17 10:26-0700\n"
 "PO-Revision-Date: 2022-06-09 19:41+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
@@ -138,20 +138,20 @@ msgstr ""
 msgid "All Files"
 msgstr "Tutti i file"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:360
+#: 3d-viewer/3d_canvas/board_adapter.cpp:361
 msgid "Build board outline"
 msgstr "Crea contorni scheda"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:538
+#: 3d-viewer/3d_canvas/board_adapter.cpp:539
 msgid "Create layers"
 msgstr "Crea strati"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:712
+#: 3d-viewer/3d_canvas/board_adapter.cpp:713
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:105
 msgid "No footprint loaded."
 msgstr "Nessuna impronta caricata."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:728
+#: 3d-viewer/3d_canvas/board_adapter.cpp:729
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -159,7 +159,7 @@ msgstr ""
 "Contorno impronta mancante o malformato. Eseguire il controllo impronte per "
 "un'analisi completa."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:737
+#: 3d-viewer/3d_canvas/board_adapter.cpp:738
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "Contorno scheda mancante o malformato. Eseguire DRC per un'analisi completa."
@@ -4796,7 +4796,7 @@ msgstr "Impossibile copiare il file '%s'."
 
 #: common/grid_tricks.cpp:278 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/dialogs/panel_setup_rules.cpp:112
-#: pcbnew/tools/edit_tool.cpp:2016
+#: pcbnew/tools/edit_tool.cpp:2020
 msgid "Cut"
 msgstr "Taglia"
 
@@ -4825,7 +4825,7 @@ msgstr "Incolla le celle sugli appunti sulla matrice alla cella corrente"
 
 #: common/grid_tricks.cpp:284 common/tool/actions.cpp:191
 #: kicad/project_tree_pane.cpp:771 pcbnew/dialogs/panel_setup_rules.cpp:115
-#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:2018
+#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:2022
 msgid "Delete"
 msgstr "Cancella"
 
@@ -7599,8 +7599,8 @@ msgid ""
 "On Windows the command line is the following.\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
-"\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl "
+"\"%I\"\n"
 "```\n"
 "\n"
 "On Linux the command becomes as following.\n"
@@ -7785,8 +7785,8 @@ msgstr ""
 "Su Windows la riga di comando è la seguente.\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
-"\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl "
+"\"%I\"\n"
 "```\n"
 "\n"
 "Su Linux il comando diventa il seguente.\n"
@@ -8652,8 +8652,8 @@ msgstr ""
 #, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
 msgstr ""
-"Impossibile copiare il file tabella librerie di simboli globale \"%s\" a \"%s"
-"\"."
+"Impossibile copiare il file tabella librerie di simboli globale \"%s\" a "
+"\"%s\"."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
 #, c-format
@@ -9915,8 +9915,8 @@ msgid ""
 msgstr ""
 "Questo progetto è stato fatto usando vecchie librerie di simboli che "
 "potrebbero rovinare lo schema. Alcuni simboli potrebbero dover essere "
-"collegati ad un nome simbolo diverso. Potrebbe essere necessario \"recuperare"
-"\" (copiare e rinominare) alcuni simboli in una nuova libreria.\n"
+"collegati ad un nome simbolo diverso. Potrebbe essere necessario "
+"\"recuperare\" (copiare e rinominare) alcuni simboli in una nuova libreria.\n"
 "\n"
 "I seguenti cambiamenti sono raccomandati per aggiornare il progetto."
 
@@ -11406,8 +11406,8 @@ msgstr "Mappatura tabella librerie simboli completa!"
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
 msgstr ""
-"Impossibile creare la cartella di salvataggio rimappatura del progetto \"%s"
-"\"."
+"Impossibile creare la cartella di salvataggio rimappatura del progetto "
+"\"%s\"."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:349
 #: eeschema/dialogs/dialog_symbol_remap.cpp:497
@@ -13720,8 +13720,8 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
-"La definizione della parte \"%s\" che fa riferimento al simbolo \"%s"
-"\" (alternativamente \"%s\") non si trova nella libreria dei simboli. La "
+"La definizione della parte \"%s\" che fa riferimento al simbolo "
+"\"%s\" (alternativamente \"%s\") non si trova nella libreria dei simboli. La "
 "parte non è stata caricata nella libreria KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:441
@@ -15344,18 +15344,18 @@ msgstr "Simbolo non trovato."
 msgid "Error loading symbol %s from library '%s'. (%s)"
 msgstr "Errore durante il caricamento del simbolo %s dalla libreria '%s'. (%s)"
 
-#: eeschema/symbol_editor/symbol_library_manager.cpp:620
+#: eeschema/symbol_editor/symbol_library_manager.cpp:621
 #, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
 msgstr "Impossibile caricare il simbolo '%s' dalla libreria '%s'."
 
-#: eeschema/symbol_editor/symbol_library_manager.cpp:773
+#: eeschema/symbol_editor/symbol_library_manager.cpp:774
 #, c-format
 msgid "Cannot enumerate library '%s'."
 msgstr "Impossibile enumerare la libreria '%s'."
 
-#: eeschema/symbol_editor/symbol_library_manager.cpp:963
-#: eeschema/symbol_editor/symbol_library_manager.cpp:1061
+#: eeschema/symbol_editor/symbol_library_manager.cpp:964
+#: eeschema/symbol_editor/symbol_library_manager.cpp:1062
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
 msgstr "Errore nel caricamento del simbolo %s dalla libreria '%s'."
@@ -16459,8 +16459,8 @@ msgstr ""
 #: eeschema/tools/ee_inspection_tool.cpp:305
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
-"%s at location <b>(%s, %s)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+"%s%s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>Pin duplicato %s</b> %s posizione <b>(%s, %s)</b> in conflitto con il pin "
 "%s%s in posizione <b>(%s, %s)</b>."
@@ -16468,8 +16468,8 @@ msgstr ""
 #: eeschema/tools/ee_inspection_tool.cpp:318
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
-"%s at location <b>(%s, %s)</b> in units %c and %c."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+"%s%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
 "<b>Pin duplicato %s</b> %s posizione <b>(%s, %s)</b> in conflitto con il pin "
 "%s%s posizione <b>(%s, %s)</b> in unità %c e %c."
@@ -17346,7 +17346,7 @@ msgid "Polarity"
 msgstr "Polarità"
 
 #: gerbview/gerber_draw_item.cpp:735 pcbnew/fp_text.cpp:296
-#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1694
+#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1698
 #: pcbnew/tools/pcb_actions.cpp:310
 msgid "Mirror"
 msgstr "Speculare"
@@ -28536,6 +28536,216 @@ msgstr "Regole DRC:"
 msgid "Check rule syntax"
 msgstr "Controlla la sintassi regole"
 
+#: pcbnew/dialogs/panel_setup_rules_help_md.h:2
+msgid ""
+"### Top-level Clauses\n"
+"\n"
+"    (version <number>)\n"
+"\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Rule Clauses\n"
+"\n"
+"    (constraint <constraint_type> ...)\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Constraint Types\n"
+"\n"
+" * annular\\_width\n"
+" * clearance\n"
+" * courtyard_clearance\n"
+" * diff\\_pair\\_gap\n"
+" * diff\\_pair\\_uncoupled\n"
+" * disallow\n"
+" * edge\\_clearance\n"
+" * length\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * silk\\_clearance\n"
+" * skew\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Item Types\n"
+"\n"
+" * buried_via\n"
+" * graphic\n"
+" * hole\n"
+" * micro_via\n"
+" * pad\n"
+" * text\n"
+" * track\n"
+" * via\n"
+" * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Examples\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"<br><br>\n"
+"\n"
+"### Notes\n"
+"\n"
+"Version clause must be the first clause.  It indicates the syntax version of "
+"the file so that \n"
+"future rules parsers can perform automatic updates.  It should be\n"
+"set to \"1\".\n"
+"\n"
+"Rules should be ordered by specificity.  Later rules take\n"
+"precedence over earlier rules; once a matching rule is found\n"
+"no further rules will be checked.\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"<br><br><br>\n"
+"\n"
+"### Expression functions\n"
+"\n"
+"All function parameters support simple wildcards (`*` and `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.insideCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's principal "
+"courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's front courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's back courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.insideArea('<zone_name>')\n"
+"True if any part of `A` lies within the given zone's outline.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"True if `A` has a hole which is plated.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<net_name>')\n"
+"True if `A` has net that is part of the specified differential pair.\n"
+"`<net_name>` is the base name of the differential pair.  For example, "
+"`inDiffPair('/CLK')`\n"
+"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"True if `A` and `B` are members of the same diff pair.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOf('<group_name>')\n"
+"True if `A` is a member of the given group. Includes nested membership.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"True if `A` exists on the given layer.  The layer name can be\n"
+"either the name assigned in Board Setup > Board Editor Layers or\n"
+"the canonical name (ie: `F.Cu`).\n"
+"\n"
+"NB: this returns true if `A` is on the given layer, independently\n"
+"of whether or not the rule is being evaluated for that layer.\n"
+"For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+"<br><br><br>\n"
+"\n"
+"### More Examples\n"
+"\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.insideArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.insideCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # prevent silk over tented vias\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"\n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Specify an optimal gap for a particular diff-pair\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
+"\n"
+"    # Specify a larger clearance around any diff-pair\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+msgstr ""
+
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
 msgstr "Proprietà predefinite per i nuovi oggetti dimensione:"
@@ -29791,8 +30001,8 @@ msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"La configurazione corrente non include una libreria con denominatore \"%s"
-"\".\n"
+"La configurazione corrente non include una libreria con denominatore "
+"\"%s\".\n"
 "Usare il gestore delle librerie di impronte per modificare la configurazione."
 
 #: pcbnew/footprint_editor_utils.cpp:297
@@ -31921,8 +32131,8 @@ msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
-"Il collegamento \"%s\" si riferisce ad un indice piazzola non esistente \"%d"
-"\" nel componente \"%s\". Ignorato."
+"Il collegamento \"%s\" si riferisce ad un indice piazzola non esistente "
+"\"%d\" nel componente \"%s\". Ignorato."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2373
 msgid "Text Variables could not be set as there is no project loaded."
@@ -33754,24 +33964,24 @@ msgstr "Trascina pista arco"
 msgid "Select reference point for move..."
 msgstr "Selezionare il punto di riferimento per lo spostamento..."
 
-#: pcbnew/tools/edit_tool.cpp:1192
+#: pcbnew/tools/edit_tool.cpp:1196
 msgid "Edit track width/via size"
 msgstr "Larghezza piste/dimensioni via"
 
-#: pcbnew/tools/edit_tool.cpp:1227
+#: pcbnew/tools/edit_tool.cpp:1231
 msgid "At least two straight track segments must be selected."
 msgstr "Bisogna selezionare almeno due segmenti di pista diritti."
 
-#: pcbnew/tools/edit_tool.cpp:1231
+#: pcbnew/tools/edit_tool.cpp:1235
 msgid "Enter fillet radius:"
 msgstr "Inserire raggio stondamento:"
 
-#: pcbnew/tools/edit_tool.cpp:1231 pcbnew/tools/edit_tool.cpp:1393
+#: pcbnew/tools/edit_tool.cpp:1235 pcbnew/tools/edit_tool.cpp:1397
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Fillet Tracks"
 msgstr "Piste di stondamento"
 
-#: pcbnew/tools/edit_tool.cpp:1241
+#: pcbnew/tools/edit_tool.cpp:1245
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
@@ -33779,40 +33989,40 @@ msgstr ""
 "È stato inserito un raggio zero.\n"
 "L'operazione di stondamento non è stata eseguita."
 
-#: pcbnew/tools/edit_tool.cpp:1400
+#: pcbnew/tools/edit_tool.cpp:1404
 msgid "Unable to fillet the selected track segments."
 msgstr "Impossibile stondare i segmenti di pista selezionati."
 
-#: pcbnew/tools/edit_tool.cpp:1402
+#: pcbnew/tools/edit_tool.cpp:1406
 msgid "Some of the track segments could not be filleted."
 msgstr "Alcuni dei segmenti di pista potrebbero non essere stati stondati."
 
-#: pcbnew/tools/edit_tool.cpp:1547
+#: pcbnew/tools/edit_tool.cpp:1551
 msgid "Rotate"
 msgstr "Ruota"
 
-#: pcbnew/tools/edit_tool.cpp:1771 pcbnew/tools/pcb_actions.cpp:305
+#: pcbnew/tools/edit_tool.cpp:1775 pcbnew/tools/pcb_actions.cpp:305
 msgid "Change Side / Flip"
 msgstr "Cambia lato / ribalta"
 
-#: pcbnew/tools/edit_tool.cpp:2112
+#: pcbnew/tools/edit_tool.cpp:2116
 msgid "Move exact"
 msgstr "Sposta esattamente"
 
-#: pcbnew/tools/edit_tool.cpp:2245
+#: pcbnew/tools/edit_tool.cpp:2249
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d elementi duplicati"
 
-#: pcbnew/tools/edit_tool.cpp:2468
+#: pcbnew/tools/edit_tool.cpp:2472
 msgid "Select reference point for the copy..."
 msgstr "Selezionare il punto di riferimento per la copia..."
 
-#: pcbnew/tools/edit_tool.cpp:2469 pcbnew/tools/edit_tool.cpp:2486
+#: pcbnew/tools/edit_tool.cpp:2473 pcbnew/tools/edit_tool.cpp:2490
 msgid "Selection copied"
 msgstr "Selezione copiata"
 
-#: pcbnew/tools/edit_tool.cpp:2470
+#: pcbnew/tools/edit_tool.cpp:2474
 msgid "Copy canceled"
 msgstr "Copia annullata"
 
