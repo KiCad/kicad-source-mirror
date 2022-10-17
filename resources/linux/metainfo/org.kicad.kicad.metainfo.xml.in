@@ -30,14 +30,14 @@
     <translation type="gettext">kicad</translation>
 
     <keywords>
-        <keyword>KiCad</keyword>
-        <keyword>EDA</keyword>
-        <keyword>PCB</keyword>
-        <keyword>Schematic</keyword>
-        <keyword>Circuit board</keyword>
-        <keyword>Gerber</keyword>
-        <keyword>PcbNew</keyword>
-        <keyword>Eeschema</keyword>
+        <keyword translate="no">KiCad</keyword>
+        <keyword translate="no">EDA</keyword>
+        <keyword translate="no">PCB</keyword>
+        <keyword translate="no">Schematic</keyword>
+        <keyword translate="no">Circuit board</keyword>
+        <keyword translate="no">Gerber</keyword>
+        <keyword translate="no">PcbNew</keyword>
+        <keyword translate="no">Eeschema</keyword>
     </keywords>
 
     <categories>
