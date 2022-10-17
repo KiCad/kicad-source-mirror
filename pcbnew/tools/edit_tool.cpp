@@ -1493,81 +1493,12 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 }
 
 
-int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
+void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 {
-    PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
-    if( isRouterActive() )
-    {
-        m_toolMgr->RunAction( PCB_ACTIONS::routerUndoLastSegment, true );
-        return 0;
-    }
-
-    editFrame->PushTool( aEvent );
-
-    std::vector<BOARD_ITEM*> lockedItems;
-    Activate();
-
-    // get a copy instead of reference (as we're going to clear the selection before removing items)
-    PCB_SELECTION selectionCopy;
-    bool isCut = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::CUT;
-    bool isAlt = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::ALT;
-
-    // If we are in a "Cut" operation, then the copied selection exists already and we want to
-    // delete exactly that; no more, no fewer.  Any filtering for locked items must be done in
-    // the copyToClipboard() routine.
-    if( isCut )
-    {
-        selectionCopy = m_selectionTool->GetSelection();
-    }
-    else
-    {
-        // When not in free-pad mode we normally auto-promote selected pads to their parent
-        // footprints.  But this is probably a little too dangerous for a destructive operation,
-        // so we just do the promotion but not the deletion (allowing for a second delete to do
-        // it if that's what the user wanted).
-        selectionCopy = m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-                {
-                } );
-
-        size_t beforeFPCount = selectionCopy.CountType( PCB_FOOTPRINT_T );
-
-        m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-                {
-                    sTool->FilterCollectorForFreePads( aCollector );
-                } );
-
-        if( !selectionCopy.IsHover()
-                && m_selectionTool->GetSelection().CountType( PCB_FOOTPRINT_T ) > beforeFPCount )
-        {
-            wxBell();
-            canvas()->Refresh();
-            editFrame->PopTool( aEvent );
-            return 0;
-        }
-
-        // In "alternative" mode, we expand selected track items to their full connection.
-        if( isAlt && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
-        {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectConnection, true );
-        }
-
-        // Finally run RequestSelection() one more time to find out what user wants to do about
-        // locked objects.
-        selectionCopy = m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-                {
-                    sTool->FilterCollectorForFreePads( aCollector );
-                },
-                true /* prompt user regarding locked items */ );
-    }
-
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    for( EDA_ITEM* item : selectionCopy )
+    for( EDA_ITEM* item : aItems )
     {
         PCB_GROUP* parentGroup = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
 
@@ -1645,7 +1576,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         // is called from inside a cutout when the zone is selected.
         {
             // Only interact with cutouts when deleting and a single item is selected
-            if( !isCut && selectionCopy.GetSize() == 1 )
+            if( !aIsCut && aItems.GetSize() == 1 )
             {
                 VECTOR2I curPos = getViewControls()->GetCursorPosition();
                 ZONE*    zone   = static_cast<ZONE*>( item );
@@ -1735,10 +1666,85 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     if( enteredGroup && enteredGroup->GetItems().empty() )
         m_selectionTool->ExitGroup();
 
-    if( isCut )
+    if( aIsCut )
         m_commit->Push( _( "Cut" ) );
     else
         m_commit->Push( _( "Delete" ) );
+}
+
+
+int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
+{
+    PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    if( isRouterActive() )
+    {
+        m_toolMgr->RunAction( PCB_ACTIONS::routerUndoLastSegment, true );
+        return 0;
+    }
+
+    editFrame->PushTool( aEvent );
+
+    std::vector<BOARD_ITEM*> lockedItems;
+    Activate();
+
+    // get a copy instead of reference (as we're going to clear the selection before removing items)
+    PCB_SELECTION selectionCopy;
+    bool isCut = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::CUT;
+    bool isAlt = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::ALT;
+
+    // If we are in a "Cut" operation, then the copied selection exists already and we want to
+    // delete exactly that; no more, no fewer.  Any filtering for locked items must be done in
+    // the copyToClipboard() routine.
+    if( isCut )
+    {
+        selectionCopy = m_selectionTool->GetSelection();
+    }
+    else
+    {
+        // When not in free-pad mode we normally auto-promote selected pads to their parent
+        // footprints.  But this is probably a little too dangerous for a destructive operation,
+        // so we just do the promotion but not the deletion (allowing for a second delete to do
+        // it if that's what the user wanted).
+        selectionCopy = m_selectionTool->RequestSelection(
+                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+                {
+                } );
+
+        size_t beforeFPCount = selectionCopy.CountType( PCB_FOOTPRINT_T );
+
+        m_selectionTool->RequestSelection(
+                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+                {
+                    sTool->FilterCollectorForFreePads( aCollector );
+                } );
+
+        if( !selectionCopy.IsHover()
+                && m_selectionTool->GetSelection().CountType( PCB_FOOTPRINT_T ) > beforeFPCount )
+        {
+            wxBell();
+            canvas()->Refresh();
+            editFrame->PopTool( aEvent );
+            return 0;
+        }
+
+        // In "alternative" mode, we expand selected track items to their full connection.
+        if( isAlt && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
+        {
+            m_toolMgr->RunAction( PCB_ACTIONS::selectConnection, true );
+        }
+
+        // Finally run RequestSelection() one more time to find out what user wants to do about
+        // locked objects.
+        selectionCopy = m_selectionTool->RequestSelection(
+                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+                {
+                    sTool->FilterCollectorForFreePads( aCollector );
+                },
+                true /* prompt user regarding locked items */ );
+    }
+
+    DeleteItems( selectionCopy, isCut );
 
     editFrame->PopTool( aEvent );
     return 0;

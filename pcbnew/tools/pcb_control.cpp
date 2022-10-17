@@ -583,8 +583,13 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
                     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
                     selectionTool->UnbrightenItem( m_pickerItem );
-                    selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
-                    m_toolMgr->RunAction( ACTIONS::doDelete, true );
+
+                    PCB_SELECTION items;
+                    items.Add( m_pickerItem );
+
+                    EDIT_TOOL* editTool = m_toolMgr->GetTool<EDIT_TOOL>();
+                    editTool->DeleteItems( items, false );
+
                     m_pickerItem = nullptr;
                 }
 
