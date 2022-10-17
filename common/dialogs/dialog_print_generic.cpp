@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2018 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -30,6 +30,56 @@
 // Define min and max reasonable values for print scale
 static constexpr double MIN_SCALE = 0.01;
 static constexpr double MAX_SCALE = 100.0;
+
+
+
+/**
+ * Custom print preview frame.
+ * This derived preview frame remembers its size and position during a session
+ */
+class KI_PREVIEW_FRAME : public wxPreviewFrame
+{
+public:
+    KI_PREVIEW_FRAME( wxPrintPreview* aPreview, wxWindow* aParent,
+                       const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
+                       const wxSize& aSize = wxDefaultSize ) :
+        wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
+    {
+    }
+
+    bool Show( bool show ) override
+    {
+        bool        ret;
+
+        // Show or hide the window.  If hiding, save current position and size.
+        // If showing, use previous position and size.
+        if( show )
+        {
+            ret = wxPreviewFrame::Show( show );
+
+            if( s_size.x != 0 && s_size.y != 0 )
+                SetSize( s_pos.x, s_pos.y, s_size.x, s_size.y, 0 );
+        }
+        else
+        {
+            // Save the dialog's position & size before hiding
+            s_size = GetSize();
+            s_pos  = GetPosition();
+
+            ret = wxPreviewFrame::Show( show );
+        }
+
+        return ret;
+    }
+
+private:
+    static wxPoint  s_pos;
+    static wxSize   s_size;
+};
+
+
+wxPoint KI_PREVIEW_FRAME::s_pos;
+wxSize  KI_PREVIEW_FRAME::s_size;
 
 
 DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SETTINGS* aSettings )
@@ -200,10 +250,7 @@ void DIALOG_PRINT_GENERIC::onPrintPreview( wxCommandEvent& event )
 
     preview->SetZoom( 100 );
 
-    wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, m_parent->GetPosition(),
-                                                m_parent->GetSize() );
-    frame->SetMinSize( wxSize( 550, 350 ) );
-    frame->Center();
+    KI_PREVIEW_FRAME* frame = new KI_PREVIEW_FRAME( preview, this, title );
 
     // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
     // close the frame using the X box in caption, when the preview frame is run
@@ -217,6 +264,13 @@ void DIALOG_PRINT_GENERIC::onPrintPreview( wxCommandEvent& event )
     // With this option, only the parent is reenabled.
     // Reenabling all top level frames should be made by the parent dialog.
     frame->InitializeWithModality( wxPreviewFrame_WindowModal );
+
+    // on first invocation in this runtime session, set to 3/4 size of parent,
+    // but will be changed in Show() if not first time as will position.
+    // Must be called after InitializeWithModality because otherwise in some wxWidget
+    // versions it is not always taken in account
+    frame->SetMinSize( wxSize( 650, 500 ) );
+    frame->SetSize( (m_parent->GetSize() * 3) / 4 );
 
     frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );
