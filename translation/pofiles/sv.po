@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-17 17:05+0000\n"
+"PO-Revision-Date: 2022-10-21 15:03+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -1058,9 +1058,8 @@ msgid "Opacity"
 msgstr "Opacitet"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "Mönsterkortstjocklek:"
+msgstr "Mönsterkortstjocklek"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -4127,7 +4126,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Otillräckliga behörigheter till mappen '%s'."
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4136,11 +4135,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"Hoppsan, det här är pinsamt!\n"
-"Det verkar som att filen\n"
+"Hoppsan, det här kan vara pinsamt!\n"
+"Det verkar som att sist du redigerade\n"
 "%s\n"
-"inte sparades ordentligt när du senast ändrade den. Vill du återställa de "
-"senast sparade ändringarna du gjorde?"
+"avslutades KiCad innan filen sparades.\n"
+"\n"
+"Vill du öppna den senast automatsparade filen istället?"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -9063,9 +9063,8 @@ msgstr "H Rikta in:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "Synlig (endast fält)"
+msgstr "(endast fält)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
 msgid "V Align:"
@@ -9114,11 +9113,13 @@ msgid "symbol"
 msgstr "symbol"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Fel vid skapande av symbolbibliotek '%s'."
+msgstr ""
+"Fel vid skapande av bibliotekstabell '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9132,22 +9133,23 @@ msgid "File '%s' not found."
 msgstr "Filen %s fanns ej."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "Fel vid inläsning av symbolbibliotekstabellen '%s'."
+msgstr ""
+"Fel vid inläsning av symbolbibliotekstabell '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "Kan inte skapa global sökväg '%s' för bibliotekstabellen."
+msgstr "Kan inte skapa global bibliotekstabell '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr ""
-"Det går inte att kopiera global symbolbibliotekstabellfil '%s' till '%s'."
+msgstr "Det går inte att kopiera global symbolbibliotekstabell '%s' till '%s'."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -10597,9 +10599,8 @@ msgid "Rescue Symbols"
 msgstr "Räddningssymboler"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Visa symbolträd"
+msgstr "Hoppa över att rädda symboler"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -11106,14 +11107,12 @@ msgid "Pin Assignments"
 msgstr "Stifttilldelningar"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:242
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Exkludera symbol från simulering"
+msgstr "Exkludera från simulering"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Store in Reference and Value"
-msgstr "Referensnod"
+msgstr "Spara i referensbeteckning och värde"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:116
 msgid "Simulation Model Editor"
@@ -11709,14 +11708,13 @@ msgid "Library '%s' not found."
 msgstr "Biblioteket '%s' hittades inte."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"Fel uppstod vid skrivning av tom symbolbibliotekstabell.\n"
-"\n"
-"%s"
+"Fel vid skrivning av projektets symbolbibliotekstabell.\n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -13521,7 +13519,7 @@ msgstr "&Inställningar"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "Misslyckades att skapa namn för '%s': överskred UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:339
 msgid ""
@@ -13534,7 +13532,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:383
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "Kunde inte öppna fil '%s' för att skriva IBIS-modell"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, c-format
@@ -15236,14 +15234,13 @@ msgstr ""
 "biblioteket '%s'"
 
 #: eeschema/sim/sim_model.cpp:617
-#, fuzzy
 msgid "Failed to read simulation model from fields"
-msgstr "Det gick inte att läsa simulationsmodell '%s'."
+msgstr "Det gick inte att läsa in simulationsmodell från fält"
 
 #: eeschema/sim/sim_model.cpp:815 eeschema/sim/sim_model.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a simulation model parameter named '%s'"
-msgstr "Kunde inte hitta användardefinierad lödyta '%s'."
+msgstr "Kunde inte hitta simulationsmodellparameter med namn '%s'"
 
 #: eeschema/sim/sim_model.cpp:1132
 #, c-format
@@ -15256,31 +15253,33 @@ msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
+"Simulationsmodellens typ måste vara samma som dess grundklass: '%s', men är "
+"'%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "Kunde inte hitta användardefinierad lödyta '%s'."
+msgstr "Kunde inte hitta IBIS-komponent '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "Kunde inte hitta användardefinierad lödyta '%s'."
+msgstr "Kunde inte hitta IBIS-stift '%s' i komponent '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Ogiltigt symbolstifts index '%s'"
+msgstr "Ogiltigt IBIS-stift '%s' i komponent '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "Kunde inte hitta användardefinierad lödyta '%s'."
+msgstr "Kunde inte hitta IBIS-modell '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Ogiltigt symbolstifts index '%s'"
+msgstr "Ogiltig IBIS-modell '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:298
 msgid "Power supply"
@@ -19640,18 +19639,17 @@ msgid "Unable to load repository url"
 msgstr "Kunde inte läsa repositoryts url"
 
 #: kicad/pcm/pcm.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"Kan inte tolka repository:\n"
-"\n"
-"%s"
+msgstr "Kan inte tolka repository: %s"
 
 #: kicad/pcm/pcm.cpp:321
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
+"Den angivna URL:en till repository ser inte ut som ett giltigt KiCad "
+"paketrepository. Vänligen kontrollera URL:en."
 
 #: kicad/pcm/pcm.cpp:347
 msgid "Fetching repository packages"
@@ -20693,7 +20691,6 @@ msgstr ""
 "___R3 = 1 / (A/Z<sub>ut</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -20703,10 +20700,10 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
-"### Split Attenuator\n"
-"Dämpning är 6 dB  \n"
-"___Z<sub>in</sub>___ är önskad ingångsimpedans i &#x2126;  \n"
-"___Z<sub>ut</sub>___ är önskad utgångsimpedans i &#x2126;  \n"
+"### Fördelningsdämpare\n"
+"Dämpning är 6 dB \n"
+"___Z<sub>in</sub>___ är önskad ingångsimpedans i &#x2126; \n"
+"___Z<sub>ut</sub>___ är önskad utgångsimpedans i &#x2126; \n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>ut</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
@@ -23192,9 +23189,8 @@ msgid "(not a closed shape)"
 msgstr "(inte en sluten form)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:489
-#, fuzzy
 msgid "(multiple board outlines not supported)"
-msgstr "Krets layouten är ej sluten:"
+msgstr "(fler än ett mönsterkort stöds inte)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -27289,9 +27285,8 @@ msgstr "%s och %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid "Error: Pad must have a positive size."
-msgstr "Fel: Negativ hörnstorlek."
+msgstr "Fel: Lödytan måste ha positiv storlek."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
@@ -35919,15 +35914,15 @@ msgstr ""
 "rad: %d förskjutning: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ogiltigt arknålnamn i\n"
-"fil: \"%s\"\n"
+"Ogiltig lödyta med storlek noll fäst till %s i\n"
+"fil: %s\n"
 "rad: %d\n"
 "förskjutning: %d"
 
@@ -36770,14 +36765,14 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "En wire_via refererar till en saknad kragstapel '%s'."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops created"
-msgstr "%d Kragförstärkningar skapade"
+msgstr "%d kragförstärkningar skapades"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops removed."
-msgstr "%d Kragförstärkningar borttagna."
+msgstr "%d kragförstärkningar borttagna."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
 msgid "Round shapes:"
@@ -40497,22 +40492,19 @@ msgstr "En EDA-svit för schema- och kretskortsdesign"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
-msgstr "Skriv ut kretskort"
+msgstr "Mönsterkort"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-#, fuzzy
 msgid "PcbNew"
-msgstr "&PcbNew"
+msgstr "PcbNew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:40
-#, fuzzy
 msgid "Eeschema"
-msgstr "eeschema"
+msgstr "Eeschema"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
