@@ -89,6 +89,8 @@ private:
     std::shared_ptr<ACTION_MENU> m_trackViaMenu;
 
     int                          m_lastTargetLayer;
+
+    bool                         m_inRouterTool;         // Re-entrancy guard
 };
 
 #endif
