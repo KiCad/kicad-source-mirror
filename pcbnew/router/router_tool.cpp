@@ -178,7 +178,8 @@ static const TOOL_ACTION ACT_SwitchCornerMode( "pcbnew.InteractiveRouter.SwitchR
 ROUTER_TOOL::ROUTER_TOOL() :
         TOOL_BASE( "pcbnew.InteractiveRouter" ),
         m_lastTargetLayer( UNDEFINED_LAYER ),
-        m_originalActiveLayer( UNDEFINED_LAYER )
+        m_originalActiveLayer( UNDEFINED_LAYER ),
+        m_inRouterTool( false )
 {
 }
 
@@ -1603,6 +1604,11 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
 
 int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 {
+    if( m_inRouterTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inRouterTool );
+
     PNS::ROUTER_MODE mode = aEvent.Parameter<PNS::ROUTER_MODE>();
     PCB_EDIT_FRAME*  frame = getEditFrame<PCB_EDIT_FRAME>();
     VIEW_CONTROLS*   controls = getViewControls();
