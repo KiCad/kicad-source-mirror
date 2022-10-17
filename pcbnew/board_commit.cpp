@@ -172,6 +172,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     bool                solderMaskDirty = false;
     bool                autofillZones = false;
 
+    wxCHECK( frame && selTool, /* void */ );
+
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
@@ -239,243 +241,245 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
         switch( changeType )
         {
-            case CHT_ADD:
+        case CHT_ADD:
+        {
+            if( selTool->GetEnteredGroup() && !boardItem->GetParentGroup() )
+                selTool->GetEnteredGroup()->AddItem( boardItem );
+
+            if( m_isFootprintEditor )
             {
-                if( selTool->GetEnteredGroup() && !boardItem->GetParentGroup() )
-                    selTool->GetEnteredGroup()->AddItem( boardItem );
+                // footprints inside footprints are not supported yet
+                wxASSERT( boardItem->Type() != PCB_FOOTPRINT_T );
 
-                if( m_isFootprintEditor )
+                boardItem->SetParent( board->Footprints().front() );
+
+                if( !( changeFlags & CHT_DONE ) )
+                    board->Footprints().front()->Add( boardItem );
+            }
+            else if( boardItem->Type() == PCB_PAD_T
+                   || boardItem->Type() == PCB_FP_TEXT_T
+                   || boardItem->Type() == PCB_FP_TEXTBOX_T
+                   || boardItem->Type() == PCB_FP_SHAPE_T
+                   || boardItem->Type() == PCB_FP_DIM_ALIGNED_T
+                   || boardItem->Type() == PCB_FP_DIM_LEADER_T
+                   || boardItem->Type() == PCB_FP_DIM_CENTER_T
+                   || boardItem->Type() == PCB_FP_DIM_RADIAL_T
+                   || boardItem->Type() == PCB_FP_DIM_ORTHOGONAL_T
+                   || boardItem->Type() == PCB_FP_ZONE_T )
+            {
+                wxASSERT( boardItem->GetParent() &&
+                          boardItem->GetParent()->Type() == PCB_FOOTPRINT_T );
+            }
+            else
+            {
+                if( !( aCommitFlags & SKIP_UNDO ) )
+                    undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::NEWITEM ) );
+
+                if( !( changeFlags & CHT_DONE ) )
                 {
-                    // footprints inside footprints are not supported yet
-                    wxASSERT( boardItem->Type() != PCB_FOOTPRINT_T );
-
-                    boardItem->SetParent( board->Footprints().front() );
-
-                    if( !( changeFlags & CHT_DONE ) )
-                        board->Footprints().front()->Add( boardItem );
+                    board->Add( boardItem, ADD_MODE::BULK_INSERT ); // handles connectivity
+                    bulkAddedItems.push_back( boardItem );
                 }
-                else if( boardItem->Type() == PCB_PAD_T
-                        || boardItem->Type() == PCB_FP_TEXT_T
-                        || boardItem->Type() == PCB_FP_TEXTBOX_T
-                        || boardItem->Type() == PCB_FP_SHAPE_T
-                        || boardItem->Type() == PCB_FP_DIM_ALIGNED_T
-                        || boardItem->Type() == PCB_FP_DIM_LEADER_T
-                        || boardItem->Type() == PCB_FP_DIM_CENTER_T
-                        || boardItem->Type() == PCB_FP_DIM_RADIAL_T
-                        || boardItem->Type() == PCB_FP_DIM_ORTHOGONAL_T
-                        || boardItem->Type() == PCB_FP_ZONE_T )
-                {
-                    wxASSERT( boardItem->GetParent() &&
-                              boardItem->GetParent()->Type() == PCB_FOOTPRINT_T );
-                }
-                else
-                {
-                    if( !( aCommitFlags & SKIP_UNDO ) )
-                        undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::NEWITEM ) );
-
-                    if( !( changeFlags & CHT_DONE ) )
-                    {
-                        board->Add( boardItem, ADD_MODE::BULK_INSERT ); // handles connectivity
-                        bulkAddedItems.push_back( boardItem );
-                    }
-                }
-
-                if( autofillZones && boardItem->Type() != PCB_MARKER_T )
-                    dirtyIntersectingZones( boardItem );
-
-                if( view && boardItem->Type() != PCB_NETINFO_T )
-                    view->Add( boardItem );
-
-                break;
             }
 
-            case CHT_REMOVE:
+            if( autofillZones && boardItem->Type() != PCB_MARKER_T )
+                dirtyIntersectingZones( boardItem );
+
+            if( view && boardItem->Type() != PCB_NETINFO_T )
+                view->Add( boardItem );
+
+            break;
+        }
+
+        case CHT_REMOVE:
+        {
+            PCB_GROUP* parentGroup = boardItem->GetParentGroup();
+
+            if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
+                undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::DELETED ) );
+
+            if( boardItem->IsSelected() )
             {
-                PCB_GROUP* parentGroup = boardItem->GetParentGroup();
+                selTool->RemoveItemFromSel( boardItem, true /* quiet mode */ );
+                itemsDeselected = true;
+            }
 
-                if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
-                    undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::DELETED ) );
+            if( autofillZones )
+                dirtyIntersectingZones( boardItem );
 
-                if( boardItem->IsSelected() )
+            switch( boardItem->Type() )
+            {
+                // Footprint items
+            case PCB_PAD_T:
+            case PCB_FP_SHAPE_T:
+            case PCB_FP_TEXT_T:
+            case PCB_FP_TEXTBOX_T:
+            case PCB_FP_DIM_ALIGNED_T:
+            case PCB_FP_DIM_LEADER_T:
+            case PCB_FP_DIM_CENTER_T:
+            case PCB_FP_DIM_RADIAL_T:
+            case PCB_FP_DIM_ORTHOGONAL_T:
+            case PCB_FP_ZONE_T:
+                // This level can only handle footprint children in the footprint editor as
+                // only in that case has the entire footprint (and all its children) already
+                // been saved for undo.
+                wxASSERT( m_isFootprintEditor );
+
+                if( boardItem->Type() == PCB_FP_TEXT_T )
                 {
-                    selTool->RemoveItemFromSel( boardItem, true /* quiet mode */ );
-                    itemsDeselected = true;
+                    FP_TEXT* text = static_cast<FP_TEXT*>( boardItem );
+
+                    // don't allow deletion of Reference or Value
+                    if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
+                        break;
                 }
 
-                if( autofillZones )
-                    dirtyIntersectingZones( boardItem );
+                if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
+                    parentGroup->RemoveItem( boardItem );
 
-                switch( boardItem->Type() )
+                if( view )
+                    view->Remove( boardItem );
+
+                if( !( changeFlags & CHT_DONE ) )
                 {
-                // Footprint items
-                case PCB_PAD_T:
-                case PCB_FP_SHAPE_T:
-                case PCB_FP_TEXT_T:
-                case PCB_FP_TEXTBOX_T:
-                case PCB_FP_DIM_ALIGNED_T:
-                case PCB_FP_DIM_LEADER_T:
-                case PCB_FP_DIM_CENTER_T:
-                case PCB_FP_DIM_RADIAL_T:
-                case PCB_FP_DIM_ORTHOGONAL_T:
-                case PCB_FP_ZONE_T:
-                    // This level can only handle footprint children in the footprint editor as
-                    // only in that case has the entire footprint (and all its children) already
-                    // been saved for undo.
-                    wxASSERT( m_isFootprintEditor );
+                    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem->GetParent() );
+                    wxASSERT( footprint && footprint->Type() == PCB_FOOTPRINT_T );
+                    footprint->Delete( boardItem );
+                }
 
-                    if( boardItem->Type() == PCB_FP_TEXT_T )
-                    {
-                        FP_TEXT* text = static_cast<FP_TEXT*>( boardItem );
+                break;
 
-                        // don't allow deletion of Reference or Value
-                        if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
-                            break;
-                    }
+            // Board items
+            case PCB_SHAPE_T:            // a shape (normally not on copper layers)
+            case PCB_BITMAP_T:           // a bitmap on a user layer
+            case PCB_TEXT_T:             // a text on a layer
+            case PCB_TEXTBOX_T:          // a wrapped text on a layer
+            case PCB_TRACE_T:            // a track segment (segment on a copper layer)
+            case PCB_ARC_T:              // an arced track segment (segment on a copper layer)
+            case PCB_VIA_T:              // a via (like track segment on a copper layer)
+            case PCB_DIM_ALIGNED_T:      // a dimension (graphic item)
+            case PCB_DIM_CENTER_T:
+            case PCB_DIM_RADIAL_T:
+            case PCB_DIM_ORTHOGONAL_T:
+            case PCB_DIM_LEADER_T:       // a leader dimension
+            case PCB_TARGET_T:           // a target (graphic item)
+            case PCB_MARKER_T:           // a marker used to show something
+            case PCB_ZONE_T:
+                if( view )
+                    view->Remove( boardItem );
 
-                    if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
-                        parentGroup->RemoveItem( boardItem );
+                if( !( changeFlags & CHT_DONE ) )
+                {
+                    board->Remove( boardItem, REMOVE_MODE::BULK );
+                    bulkRemovedItems.push_back( boardItem );
+                }
 
-                    if( view )
-                        view->Remove( boardItem );
+                break;
 
-                    if( !( changeFlags & CHT_DONE ) )
-                    {
-                        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem->GetParent() );
-                        wxASSERT( footprint && footprint->Type() == PCB_FOOTPRINT_T );
-                        footprint->Delete( boardItem );
-                    }
+            case PCB_FOOTPRINT_T:
+            {
+                // No support for nested footprints (yet)
+                wxASSERT( !m_isFootprintEditor );
 
-                    break;
+                FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
 
-                // Board items
-                case PCB_SHAPE_T:            // a shape (normally not on copper layers)
-                case PCB_BITMAP_T:           // a bitmap on a user layer
-                case PCB_TEXT_T:             // a text on a layer
-                case PCB_TEXTBOX_T:          // a wrapped text on a layer
-                case PCB_TRACE_T:            // a track segment (segment on a copper layer)
-                case PCB_ARC_T:              // an arced track segment (segment on a copper layer)
-                case PCB_VIA_T:              // a via (like track segment on a copper layer)
-                case PCB_DIM_ALIGNED_T:      // a dimension (graphic item)
-                case PCB_DIM_CENTER_T:
-                case PCB_DIM_RADIAL_T:
-                case PCB_DIM_ORTHOGONAL_T:
-                case PCB_DIM_LEADER_T:       // a leader dimension
-                case PCB_TARGET_T:           // a target (graphic item)
-                case PCB_MARKER_T:           // a marker used to show something
-                case PCB_ZONE_T:
-                    if( view )
-                        view->Remove( boardItem );
+                if( view )
+                    view->Remove( footprint );
 
-                    if( !( changeFlags & CHT_DONE ) )
+                footprint->ClearFlags();
+
+                if( !( changeFlags & CHT_DONE ) )
+                {
+                    board->Remove( footprint, REMOVE_MODE::BULK ); // handles connectivity
+                    bulkRemovedItems.push_back( footprint );
+                }
+            }
+
+            break;
+
+            case PCB_GROUP_T:
+                if( view )
+                    view->Remove( boardItem );
+
+                if( !( changeFlags & CHT_DONE ) )
+                {
+                    if( m_isFootprintEditor )
+                        board->GetFirstFootprint()->Remove( boardItem );
+                    else
                     {
                         board->Remove( boardItem, REMOVE_MODE::BULK );
                         bulkRemovedItems.push_back( boardItem );
                     }
-
-                    break;
-
-                case PCB_FOOTPRINT_T:
-                {
-                    // No support for nested footprints (yet)
-                    wxASSERT( !m_isFootprintEditor );
-
-                    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
-
-                    if( view )
-                        view->Remove( footprint );
-
-                    footprint->ClearFlags();
-
-                    if( !( changeFlags & CHT_DONE ) )
-                    {
-                        board->Remove( footprint, REMOVE_MODE::BULK ); // handles connectivity
-                        bulkRemovedItems.push_back( footprint );
-                    }
-                }
-                break;
-
-                case PCB_GROUP_T:
-                    if( view )
-                        view->Remove( boardItem );
-
-                    if( !( changeFlags & CHT_DONE ) )
-                    {
-                        if( m_isFootprintEditor )
-                            board->GetFirstFootprint()->Remove( boardItem );
-                        else
-                        {
-                            board->Remove( boardItem, REMOVE_MODE::BULK );
-                            bulkRemovedItems.push_back( boardItem );
-                        }
-                    }
-                    break;
-
-                // Metadata items
-                case PCB_NETINFO_T:
-                    board->Remove( boardItem, REMOVE_MODE::BULK );
-                    bulkRemovedItems.push_back( boardItem );
-                    break;
-
-                default:                // other types do not need to (or should not) be handled
-                    wxASSERT( false );
-                    break;
                 }
 
                 break;
-            }
 
-            case CHT_MODIFY:
-            {
-                if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
-                {
-                    ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
-                    wxASSERT( ent.m_copy );
-                    itemWrapper.SetLink( ent.m_copy );
-                    undoList.PushItem( itemWrapper );
-                }
-
-                if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
-                {
-                    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
-
-                    if( ent.m_copy )
-                        connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
-
-                    connectivity->Update( boardItem );
-                }
-
-                if( autofillZones )
-                {
-                    dirtyIntersectingZones( static_cast<BOARD_ITEM*>( ent.m_copy ));   // before
-                    dirtyIntersectingZones( boardItem );                               // after
-                }
-
-                if( view )
-                {
-                    view->Update( boardItem );
-
-                    if( m_isFootprintEditor )
-                    {
-                        static_cast<FOOTPRINT*>( boardItem )->RunOnChildren(
-                                [&]( BOARD_ITEM* aChild )
-                                {
-                                    view->Update( aChild );
-                                });
-                    }
-                }
-
-                itemsChanged.push_back( boardItem );
-
-                // if no undo entry is needed, the copy would create a memory leak
-                if( aCommitFlags & SKIP_UNDO )
-                    delete ent.m_copy;
-
+            // Metadata items
+            case PCB_NETINFO_T:
+                board->Remove( boardItem, REMOVE_MODE::BULK );
+                bulkRemovedItems.push_back( boardItem );
                 break;
-            }
 
-            default:
+            default:                // other types do not need to (or should not) be handled
                 wxASSERT( false );
                 break;
+            }
+
+            break;
+        }
+
+        case CHT_MODIFY:
+        {
+            if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
+            {
+                ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
+                wxASSERT( ent.m_copy );
+                itemWrapper.SetLink( ent.m_copy );
+                undoList.PushItem( itemWrapper );
+            }
+
+            if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
+            {
+                std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
+
+                if( ent.m_copy )
+                    connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
+
+                connectivity->Update( boardItem );
+            }
+
+            if( autofillZones )
+            {
+                dirtyIntersectingZones( static_cast<BOARD_ITEM*>( ent.m_copy ));   // before
+                dirtyIntersectingZones( boardItem );                               // after
+            }
+
+            if( view )
+            {
+                view->Update( boardItem );
+
+                if( m_isFootprintEditor )
+                {
+                    static_cast<FOOTPRINT*>( boardItem )->RunOnChildren(
+                            [&]( BOARD_ITEM* aChild )
+                            {
+                                view->Update( aChild );
+                            });
+                }
+            }
+
+            itemsChanged.push_back( boardItem );
+
+            // if no undo entry is needed, the copy would create a memory leak
+            if( aCommitFlags & SKIP_UNDO )
+                delete ent.m_copy;
+
+            break;
+        }
+
+        default:
+            wxASSERT( false );
+            break;
         }
     }
 

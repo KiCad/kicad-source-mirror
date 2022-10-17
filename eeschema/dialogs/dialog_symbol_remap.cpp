@@ -256,6 +256,8 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
         {
             symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
+            wxCHECK2( symbol, continue );
+
             if( !remapSymbolToLibTable( symbol ) )
             {
                 msg.Printf( _( "No symbol %s found in symbol library table." ),

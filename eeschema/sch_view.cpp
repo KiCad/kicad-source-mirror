@@ -47,6 +47,7 @@ SCH_VIEW::SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame ) :
     VIEW( aIsDynamic )
 {
     m_frame = aFrame;
+
     // Set m_boundary to define the max working area size. The default value is acceptable for
     // Pcbnew and Gerbview, but too large for Eeschema due to very different internal units.
     // A full size = 3 * MAX_PAGE_SIZE_MILS size allows a wide margin around the drawing-sheet.
@@ -109,6 +110,9 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     if( m_frame && m_frame->IsType( FRAME_SCH ) )
     {
         SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+        wxCHECK( editFrame, /* void */ );
+
         wxString        sheetName = editFrame->GetCurrentSheet().Last()->GetName();
         wxString        sheetPath = editFrame->GetCurrentSheet().PathHumanReadable();
         m_drawingSheet->SetSheetName( TO_UTF8( sheetName ) );

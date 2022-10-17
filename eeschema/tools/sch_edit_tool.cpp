@@ -619,6 +619,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             if( line->HasFlag( STARTPOINT ) == line->HasFlag( ENDPOINT ) )
             {
                 line->SetFlags( STARTPOINT | ENDPOINT );
+
                 // When we allow off grid items, the rotPoint should be set to the midpoint
                 // of the line to allow rotation around the center, and the next if
                 // should become an else-if
@@ -1133,7 +1134,8 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             {
                 static_cast<SCH_SYMBOL*>( newItem )->ClearAnnotation( nullptr, false );
                 NULL_REPORTER reporter;
-                m_frame->AnnotateSymbols( ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
+                m_frame->AnnotateSymbols( ANNOTATE_SELECTION,
+                                          (ANNOTATE_ORDER_T) annotate.sort_order,
                                           (ANNOTATE_ALGO_T) annotate.method, annotate.recursive,
                                           annotateStartNum, false, false, reporter, appendUndo );
             }
@@ -1368,7 +1370,8 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     if( parentType == SCH_SYMBOL_T && aField->GetId() < MANDATORY_FIELDS )
     {
         wxString translated_fieldname;
-        translated_fieldname = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(), DO_TRANSLATE );
+        translated_fieldname = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(),
+                                                                        DO_TRANSLATE );
         caption.Printf( _( "Edit %s Field" ), TitleCaps( translated_fieldname ) );
     }
     else if( parentType == SCH_SHEET_T && aField->GetId() < SHEET_MANDATORY_FIELDS )
@@ -1929,10 +1932,12 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 bbox.Inflate( -textbox->GetTextMargin() );
 
                 if( convertTo == SCH_LABEL_T
-                        || convertTo == SCH_HIER_LABEL_T
-                        || convertTo == SCH_GLOBAL_LABEL_T )
+                  || convertTo == SCH_HIER_LABEL_T
+                  || convertTo == SCH_GLOBAL_LABEL_T )
                 {
-                    int textSize = dynamic_cast<EDA_TEXT*>( item )->GetTextSize().y;
+                    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item );
+                    wxCHECK( text, 0 );
+                    int textSize = text->GetTextSize().y;
                     bbox.Inflate( item->Schematic()->Settings().m_LabelSizeRatio * textSize );
                 }
 
@@ -2128,6 +2133,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
             EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( item );
             EDA_TEXT* new_eda_text = dynamic_cast<EDA_TEXT*>( newtext );
+
+            wxCHECK2( eda_text && new_eda_text, continue );
 
             new_eda_text->SetFont( eda_text->GetFont() );
             new_eda_text->SetTextSize( eda_text->GetTextSize() );

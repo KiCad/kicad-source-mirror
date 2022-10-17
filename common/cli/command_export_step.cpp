@@ -91,7 +91,7 @@ CLI::EXPORT_STEP_COMMAND::EXPORT_STEP_COMMAND() : COMMAND( "step" )
 
 int CLI::EXPORT_STEP_COMMAND::Perform( KIWAY& aKiway ) const
 {
-    JOB_EXPORT_STEP* step = new JOB_EXPORT_STEP( true );
+    std::unique_ptr<JOB_EXPORT_STEP> step( new JOB_EXPORT_STEP( true ) );
 
     step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
     step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
@@ -168,7 +168,7 @@ int CLI::EXPORT_STEP_COMMAND::Perform( KIWAY& aKiway ) const
         }
     }
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, step );
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, step.get() );
 
     return exitCode;
 }

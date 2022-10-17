@@ -42,6 +42,7 @@
 
 #include <plotters/plotters_pslike.h>
 
+
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 {
     // returns a string compatible with PDF string convention from a unicode string.
@@ -250,11 +251,12 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
     double magic = radius * 0.551784; // You don't want to know where this come from
 
     // This is the convex hull for the bezier approximated circle
-    fprintf( m_workFile, "%g %g m "
-                       "%g %g %g %g %g %g c "
-                       "%g %g %g %g %g %g c "
-                       "%g %g %g %g %g %g c "
-                       "%g %g %g %g %g %g c %c\n",
+    fprintf( m_workFile,
+             "%g %g m "
+             "%g %g %g %g %g %g c "
+             "%g %g %g %g %g %g c "
+             "%g %g %g %g %g %g c "
+             "%g %g %g %g %g %g c %c\n",
              pos_dev.x - radius, pos_dev.y,
 
              pos_dev.x - radius, pos_dev.y + magic,
@@ -812,6 +814,7 @@ void PDF_PLOTTER::ClosePage()
     m_pageStreamHandle = 0;
 
     wxString pageOutlineName = wxEmptyString;
+
     if( m_pageName.IsEmpty() )
     {
         pageOutlineName = wxString::Format( _( "Page %s" ), m_pageNumbers.back() );
@@ -852,7 +855,6 @@ void PDF_PLOTTER::ClosePage()
                    } );
     }
 
-
     // Clean up
     m_hyperlinksInPage.clear();
     m_hyperlinkMenusInPage.clear();
@@ -866,10 +868,9 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber )
 }
 
 
-bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber,
-                             const wxString& aPageName )
+bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageName )
 {
-    wxASSERT(m_outputFile);
+    wxASSERT( m_outputFile );
 
     // First things first: the customary null object
     m_xrefTable.clear();
@@ -879,7 +880,6 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber,
     m_hyperlinkHandles.clear();
     m_hyperlinkMenuHandles.clear();
     m_bookmarksInPage.clear();
-    m_outlineRoot.release();
     m_totalOutlineNodes = 0;
 
     m_outlineRoot = std::make_unique<OUTLINE_NODE>();
@@ -899,7 +899,7 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber,
     /* Now, the PDF is read from the end, (more or less)... so we start
        with the page stream for page 1. Other more important stuff is written
        at the end */
-    StartPage(aPageNumber, aPageName);
+    StartPage( aPageNumber, aPageName );
     return true;
 }
 
@@ -941,9 +941,9 @@ void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nex
                                    int prevNode )
 {
     int nodeHandle = node->entryHandle;
-
     int prevHandle = -1;
     int nextHandle = -1;
+
     for( std::vector<OUTLINE_NODE*>::iterator it = node->children.begin();
          it != node->children.end(); it++ )
     {
@@ -961,7 +961,8 @@ void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nex
         prevHandle = ( *it )->entryHandle;
     }
 
-    if( parentHandle != -1 )    // -1 for parentHandle is the outline root itself which is handed elsewhere
+    // -1 for parentHandle is the outline root itself which is handed elsewhere.
+    if( parentHandle != -1 )
     {
         startPdfObject( nodeHandle );
 
@@ -1038,6 +1039,7 @@ int PDF_PLOTTER::emitOutline()
 
     return -1;
 }
+
 
 bool PDF_PLOTTER::EndPlot()
 {
@@ -1243,7 +1245,7 @@ bool PDF_PLOTTER::EndPlot()
     fprintf( m_outputFile,
             "]\n"
             "/Count %ld\n"
-             ">>\n", (long) m_pageHandles.size() );
+            ">>\n", (long) m_pageHandles.size() );
     closePdfObject();
 
 
@@ -1256,8 +1258,8 @@ bool PDF_PLOTTER::EndPlot()
     if( m_title.IsEmpty() )
     {
         // Windows uses '\' and other platforms use '/' as separator
-        m_title = m_filename.AfterLast( '\\');
-        m_title = m_title.AfterLast( '/');
+        m_title = m_filename.AfterLast( '\\' );
+        m_title = m_title.AfterLast( '/' );
     }
 
     fprintf( m_outputFile,
@@ -1278,6 +1280,7 @@ bool PDF_PLOTTER::EndPlot()
 
     // The catalog, at last
     int catalogHandle = startPdfObject();
+
     if( outlineHandle > 0 )
     {
         fprintf( m_outputFile,
@@ -1304,6 +1307,7 @@ bool PDF_PLOTTER::EndPlot()
                  ">>\n",
                  m_pageTreeHandle );
     }
+
     closePdfObject();
 
     /* Emit the xref table (format is crucial to the byte, each entry must
@@ -1405,7 +1409,8 @@ void PDF_PLOTTER::HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>&
 }
 
 
-void PDF_PLOTTER::Bookmark( const BOX2I& aLocation, const wxString& aSymbolReference, const wxString &aGroupName )
+void PDF_PLOTTER::Bookmark( const BOX2I& aLocation, const wxString& aSymbolReference,
+                            const wxString &aGroupName )
 {
 
     m_bookmarksInPage[aGroupName].push_back( std::make_pair( aLocation, aSymbolReference ) );

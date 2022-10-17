@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,6 +139,8 @@ class BASIC_FOOTPRINT_INFO : public FOOTPRINT_INFO
 public:
     BASIC_FOOTPRINT_INFO( FOOTPRINT* aFootprint )
     {
+        wxASSERT( aFootprint );
+
         m_nickname = aFootprint->GetFPID().GetLibNickname().wx_str();
         m_fpname = aFootprint->GetFPID().GetLibItemName().wx_str();
         m_pad_count = aFootprint->GetPadCount( DO_NOT_INCLUDE_NPTH );

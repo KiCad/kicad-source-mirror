@@ -292,6 +292,9 @@ void SYMBOL_LIBRARY_MANAGER::SetSymbolModified( const wxString& aAlias,
 
     const LIB_BUFFER& buf = libIt->second;
     std::shared_ptr<SYMBOL_LIBRARY_MANAGER::SYMBOL_BUFFER> symbolBuf = buf.GetBuffer( aAlias );
+
+    wxCHECK( symbolBuf, /* void */ );
+
     symbolBuf->GetScreen()->SetContentModified();
 }
 

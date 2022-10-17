@@ -415,6 +415,7 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
             else
                 m_layerCheckListBox->Check( i, false );
         }
+
         break;
 
     case ID_SELECT_COPPER_LAYERS:
@@ -423,6 +424,7 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
             if( IsCopperLayer( m_layerList[i] ) )
                 m_layerCheckListBox->Check( i, true );
         }
+
         break;
 
     case ID_DESELECT_COPPER_LAYERS:
@@ -431,16 +433,19 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
             if( IsCopperLayer( m_layerList[i] ) )
                 m_layerCheckListBox->Check( i, false );
         }
+
         break;
 
     case ID_SELECT_ALL_LAYERS:
         for( unsigned i = 0; i < m_layerList.size(); i++ )
             m_layerCheckListBox->Check( i, true );
+
         break;
 
     case ID_DESELECT_ALL_LAYERS:
         for( unsigned i = 0; i < m_layerList.size(); i++ )
             m_layerCheckListBox->Check( i, false );
+
         break;
 
     default:
@@ -507,7 +512,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     if( dirDialog.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
+    wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
 
     wxFileName fn( Prj().AbsolutePath( m_parent->GetBoard()->GetFileName() ) );
     wxString   defaultPath = fn.GetPathWithSep();
@@ -884,6 +889,8 @@ void DIALOG_PLOT::applyPlotSettings()
         int index = plotOnAllLayersSelections.Item( i );
         wxClientData* tmp = m_plotAllLayersList->GetClientObject( index );
         PCB_LAYER_ID_CLIENT_DATA* layerId = dynamic_cast<PCB_LAYER_ID_CLIENT_DATA*>( tmp );
+
+        wxCHECK2( layerId, continue );
 
         plotOnAllLayers.set( layerId->GetData() );
     }

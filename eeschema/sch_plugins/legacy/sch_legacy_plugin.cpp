@@ -92,6 +92,7 @@ void SCH_LEGACY_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aProperti
 {
     m_version   = 0;
     m_rootSheet = nullptr;
+    m_currentSheet = nullptr;
     m_schematic = aSchematic;
     m_cache     = nullptr;
     m_out       = nullptr;
@@ -845,6 +846,7 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
                 }
 
                 int prm_count = ( keyword == T_COLORA ) ? 4 : 3;
+
                 // fix opacity to 1.0 or 255, when not exists in file
                 color[3] = 255;
 
@@ -924,6 +926,7 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
 
     return busEntry.release();
 }
+
 
 // clang-format off
 const std::map<LABEL_FLAG_SHAPE, const char*> sheetLabelNames
@@ -1875,14 +1878,16 @@ void SCH_LEGACY_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry )
         m_out->Print( 0, "Entry Wire Line\n\t%-4d %-4d %-4d %-4d\n",
                       schIUScale.IUToMils( aBusEntry->GetPosition().x ),
                       schIUScale.IUToMils( aBusEntry->GetPosition().y ),
-                      schIUScale.IUToMils( aBusEntry->GetEnd().x ), schIUScale.IUToMils( aBusEntry->GetEnd().y ) );
+                      schIUScale.IUToMils( aBusEntry->GetEnd().x ),
+                      schIUScale.IUToMils( aBusEntry->GetEnd().y ) );
     }
     else
     {
         m_out->Print( 0, "Entry Bus Bus\n\t%-4d %-4d %-4d %-4d\n",
                       schIUScale.IUToMils( aBusEntry->GetPosition().x ),
                       schIUScale.IUToMils( aBusEntry->GetPosition().y ),
-                      schIUScale.IUToMils( aBusEntry->GetEnd().x ), schIUScale.IUToMils( aBusEntry->GetEnd().y ) );
+                      schIUScale.IUToMils( aBusEntry->GetEnd().x ),
+                      schIUScale.IUToMils( aBusEntry->GetEnd().y ) );
     }
 }
 
@@ -1920,8 +1925,10 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
     m_out->Print( 0, "\n" );
 
     m_out->Print( 0, "\t%-4d %-4d %-4d %-4d",
-                  schIUScale.IUToMils( aLine->GetStartPoint().x ), schIUScale.IUToMils( aLine->GetStartPoint().y ),
-                  schIUScale.IUToMils( aLine->GetEndPoint().x ), schIUScale.IUToMils( aLine->GetEndPoint().y ) );
+                  schIUScale.IUToMils( aLine->GetStartPoint().x ),
+                  schIUScale.IUToMils( aLine->GetStartPoint().y ),
+                  schIUScale.IUToMils( aLine->GetEndPoint().x ),
+                  schIUScale.IUToMils( aLine->GetEndPoint().y ) );
 
     m_out->Print( 0, "\n");
 }
@@ -1977,7 +1984,8 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
             spinStyle = 0;
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %d\n%s\n", textType,
-                      schIUScale.IUToMils( aText->GetPosition().x ), schIUScale.IUToMils( aText->GetPosition().y ),
+                      schIUScale.IUToMils( aText->GetPosition().x ),
+                      schIUScale.IUToMils( aText->GetPosition().y ),
                       spinStyle,
                       schIUScale.IUToMils( aText->GetTextWidth() ),
                       italics, schIUScale.IUToMils( aText->GetTextThickness() ), TO_UTF8( text ) );
@@ -1990,7 +1998,8 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
         wxCHECK_RET( shapeLabelIt != sheetLabelNames.end(), "Shape not found in names list" );
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
-                      schIUScale.IUToMils( aText->GetPosition().x ), schIUScale.IUToMils( aText->GetPosition().y ),
+                      schIUScale.IUToMils( aText->GetPosition().x ),
+                      schIUScale.IUToMils( aText->GetPosition().y ),
                       static_cast<int>( aText->GetTextSpinStyle() ),
                       schIUScale.IUToMils( aText->GetTextWidth() ),
                       shapeLabelIt->second,

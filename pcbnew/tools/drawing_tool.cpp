@@ -3063,6 +3063,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                             track->SetEnd( *joint1 );
 
                             PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
+                            wxCHECK( newTrack, /* void */ );
                             const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
 
                             newTrack->SetStart( *joint1 );
@@ -3070,6 +3071,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                             aCommit.Add( newTrack );
 
                             newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
+                            wxCHECK( newTrack, /* void */ );
                             const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
 
                             newTrack->SetStart( viaPos );
@@ -3077,6 +3079,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                             aCommit.Add( newTrack );
 
                             newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
+                            wxCHECK( newTrack, /* void */ );
                             const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
 
                             newTrack->SetStart( *joint2 );
