@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-09 08:03+0000\n"
+"PO-Revision-Date: 2022-10-21 15:03+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -116,7 +116,7 @@ msgstr "Rakenna BVH reikiä ja läpivientejä varten"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "OpenGL-versiotasi ei tueta. Vähintään versio 1.5 vaaditaan."
+msgstr "Sinun OpenGL-versio ei ole tuettu. Vaaditaan vähintään versio 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:546
 #, c-format
@@ -4143,7 +4143,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Ei riittäviä käyttöoikeuksia kansioon '%s'."
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4152,11 +4152,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"No, tämä on mahdollisesti kiusallista!\n"
-"Vaikuttaa siltä, että edellisen kerran, kun muokkasit tiedostoa\n"
+"No tämä on mahdollisesti noloa!\n"
+"Näyttää siltä, että viimeksi muokkasit\n"
 "%s\n"
-"se ei tallentunut oikein. Haluatko palauttaa viimeisellä kerralla "
-"tallentamasi muokkaukset?"
+"KiCad poistui ennen tallennusta.\n"
+"\n"
+"Haluatko avata sen sijaan automaattisesti tallennetun tiedoston?"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -9074,9 +9075,8 @@ msgstr "H Kohdista:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "Näkyvä (vain kentät)"
+msgstr "(vain kentät)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
 msgid "V Align:"
@@ -9125,11 +9125,13 @@ msgid "symbol"
 msgstr "symboli"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Virhe luotaessa symbolikirjastoa '%s'."
+msgstr ""
+"Virhe luotaessa symbolikirjastotaulukkoa '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9143,23 +9145,23 @@ msgid "File '%s' not found."
 msgstr "Tiedostoa '%s' ei löydy."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "Symbolikirjastotaulukon '%s' lataamisessa tapahtui virhe."
+msgstr ""
+"Virhe luettaessa symbolikirjastotaulukkoa '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "Ei voida luoda yleistä kirjastotaulukon polkua '%s'."
+msgstr "Ei voida luoda yleistä kirjastotaulukkoa '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr ""
-"Yleisen symbolikirjastotaulukon tiedostoa ei voi kopioida '%s' kohteeseen "
-"'%s'."
+msgstr "Virhe kopioitaessa yleistä symbolikirjastotaulukkoa %s hakemistoon %s."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -10613,9 +10615,8 @@ msgid "Rescue Symbols"
 msgstr "Pelastussymbolit"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Näytä symbolipuu"
+msgstr "Ohita Symbolin Pelastus"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -11120,14 +11121,12 @@ msgid "Pin Assignments"
 msgstr "Nastojen määritykset"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:242
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Poista symboli simulaatiosta"
+msgstr "Sulje pois simulaatiosta"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Store in Reference and Value"
-msgstr "Viitesolmu"
+msgstr "Tallenna Viite ja Arvo kohtaan"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:116
 msgid "Simulation Model Editor"
@@ -11720,14 +11719,13 @@ msgid "Library '%s' not found."
 msgstr "Kirjastoa '%s' ei löydy."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"Tyhjän symbolikirjastotaulukon tiedoston kirjoittamisessa tapahtui virhe.\n"
-"\n"
-"%s"
+"Virhe kirjoitettaessa projektin symbolikirjastotaulukkoa.\n"
+"   %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -13533,7 +13531,7 @@ msgstr "A&setukset"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "Nimen luominen kohteelle '%s' epäonnistui: ylitetty UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:339
 msgid ""
@@ -13546,7 +13544,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:383
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "Tiedostoa %s ei voitu avata IBIS-mallin kirjoittamista varten"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, c-format
@@ -15251,14 +15249,13 @@ msgstr ""
 "'%s'"
 
 #: eeschema/sim/sim_model.cpp:617
-#, fuzzy
 msgid "Failed to read simulation model from fields"
-msgstr "Simulaatiomallin %s lukeminen epäonnistui."
+msgstr "Simulaatiomallin lukeminen kentistä epäonnistui"
 
 #: eeschema/sim/sim_model.cpp:815 eeschema/sim/sim_model.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a simulation model parameter named '%s'"
-msgstr "Mukautettua anturaa '%s' ei löytynyt."
+msgstr "Simulaatiomalliparametria nimeltä '%s' ei löytynyt"
 
 #: eeschema/sim/sim_model.cpp:1132
 #, c-format
@@ -15271,31 +15268,33 @@ msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
+"Simulaatiomallin tyypin on oltava sama kuin sen perusluokan: '%s', mutta on "
+"'%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "Mukautettua anturaa '%s' ei löytynyt."
+msgstr "IBIS-komponenttia '%s' ei löytynyt"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "Mukautettua anturaa '%s' ei löytynyt."
+msgstr "IBIS-nastaa '%s' ei löytynyt komponentista '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Virheellinen symbolinasta indeksi: '%s'"
+msgstr "Virheellinen IBIS-pinni '%s' komponentissa '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "Mukautettua anturaa '%s' ei löytynyt."
+msgstr "IBIS-mallia '%s' ei löytynyt"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Virheellinen symbolinasta indeksi: '%s'"
+msgstr "Virheellinen IBIS-malli '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:298
 msgid "Power supply"
@@ -19645,18 +19644,17 @@ msgid "Unable to load repository url"
 msgstr "Tietovaraston verkko-osoitetta ei voinut ladata"
 
 #: kicad/pcm/pcm.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"Lähteen tietojen jäsentäminen ei onnistu:\n"
-"\n"
-"%s"
+msgstr "Tietovaraston jäsentäminen epäonnistui: %s"
 
 #: kicad/pcm/pcm.cpp:321
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
+"Annettu arkiston URL-osoite ei näytä kelvolliselta KiCad-pakettivarastolta. "
+"Tarkista URL-osoite uudelleen."
 
 #: kicad/pcm/pcm.cpp:347
 msgid "Fetching repository packages"
@@ -20696,7 +20694,6 @@ msgstr ""
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -20707,10 +20704,10 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### Jakovaimennin\n"
-"Vaimennus on 6 dB\n"
-"___Z<sub>in</sub>___ on haluttu sisääntuloimpedanssi &#x2126;  \n"
-"___Z<sub>out</sub>___ on haluttu ulostuloimpedanssi &#x2126;  \n"
-"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"Vaimennus on 6 dB<br>\n"
+"___Z<sub>in</sub>___ on haluttu sisääntuloimpedanssi &#x2126;<br>\n"
+"___Z<sub>out</sub>___ on haluttu lähtöimpedanssi &#x2126;<br>\n"
+"___Z<sub>0</sub> = Z<sub>sisään</sub> = Z<sub>ulos</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
@@ -23182,9 +23179,8 @@ msgid "(not a closed shape)"
 msgstr "(ei suljettu muoto)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:489
-#, fuzzy
 msgid "(multiple board outlines not supported)"
-msgstr "Poista levyn reunaviiva"
+msgstr "(useita piirilevyn ääriviivoja ei tueta)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -27285,9 +27281,8 @@ msgstr "%s ja %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid "Error: Pad must have a positive size."
-msgstr "Virhe: Negatiivinen kulman koko."
+msgstr "Virhe: Anturalla on oltava positiivinen koko."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
@@ -35856,15 +35851,15 @@ msgstr ""
 "rivi: %d offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Virheellinen taulukon pin-nimi\n"
-"tiedosto: \"%s\"\n"
+"Virheellinen nollakokoinen antura kiinnitetty kohtaan %s >\n"
+"tiedosto %s\n"
 "rivi: %d\n"
 "offset: %d"
 
@@ -36702,12 +36697,12 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "A Wire_via viittaa puuttuvaan padstackiin '%s'."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops created"
 msgstr "%d Kyynelpisarat luotu"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops removed."
 msgstr "%d Kyynelpisarat poistettu."
 
@@ -40444,21 +40439,19 @@ msgstr "EDA-ohjelmisto kytkentäkaavioiden ja piirilevyjen suunnitteluun"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
-msgstr "Tulosta levy"
+msgstr "Piirilevy"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "PcbNew"
-msgstr ""
+msgstr "UusiPiirilevy"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:40
-#, fuzzy
 msgid "Eeschema"
-msgstr "eeskeema"
+msgstr "Eeskeema"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
