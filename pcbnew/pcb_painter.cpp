@@ -916,6 +916,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         {
             draw = true;
             outline_mode = true;
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
         }
 
         if( !outline_mode )
@@ -1232,6 +1233,15 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     {
         drawShape = true;
         outline_mode = true;
+    }
+
+    if( outline_mode )
+    {
+        // Outline mode
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetStrokeColor( color );
     }
 
     if( drawShape )
