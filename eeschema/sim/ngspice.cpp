@@ -559,6 +559,19 @@ void NGSPICE::init_dll()
     Command( "set noaskquit" );
     Command( "set nomoremode" );
 
+    // reset and remcirc give an error if no circuit is loaded, so load an empty circuit at the
+    // start.
+
+    vector<char*> lines;
+    lines.push_back( strdup( "*" ) );
+    lines.push_back( strdup( ".end" ) );
+    lines.push_back( nullptr ); // Sentinel.
+
+    m_ngSpice_Circ( lines.data() );
+
+    for( auto line : lines )
+        free( line );
+
     m_initialized = true;
 }
 
