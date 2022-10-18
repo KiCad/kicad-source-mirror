@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-17 17:05+0000\n"
+"PO-Revision-Date: 2022-10-21 15:03+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4146,7 +4146,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Permisos insuficientes para la carpeta '%s'."
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4155,11 +4155,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"¡Esto puede ser embarazoso!\n"
-"Parece ser que en la última ocasión que editó el archivo\n"
-"\"%s\"\n"
-"no se guardó de forma apropiada.  ¿Desea recuperar las últimas ediciones que "
-"realizó?"
+"Bueno, ¡esto es potencialmente embarazoso!\n"
+"Parece que la última vez que editó\n"
+"%s\n"
+"KiCad salió antes de guardar.\n"
+"\n"
+"¿Desea abrir el archivo guardado automáticamente en su lugar?"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -9105,9 +9106,8 @@ msgstr "Alineación H:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "Visible (solo campos)"
+msgstr "(solo campos)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
 msgid "V Align:"
@@ -9156,11 +9156,13 @@ msgid "symbol"
 msgstr "símbolo"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Error al crear la librería de símbolos '%s'."
+msgstr ""
+"Error al crear la tabla de la biblioteca de símbolos '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9174,23 +9176,24 @@ msgid "File '%s' not found."
 msgstr "No se ha encontrado el archivo '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "Error al cargar la tabla de librerías de símbolos '%s'."
+msgstr ""
+"Error al leer la tabla de la biblioteca de símbolos '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "No se puede crear la ruta '%s' de la tabla global de librerías."
+msgstr "No se puede crear la tabla de la biblioteca global '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
 msgstr ""
-"No se puede copiar el archivo de tabla de bibliotecas de símbolos global "
-"'%s' a '%s'."
+"Error al copiar la tabla de la biblioteca global de símbolos '%s' a '%s'."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -10649,9 +10652,8 @@ msgid "Rescue Symbols"
 msgstr "Recuperar símbolos"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Mostrar árbol de símbolos"
+msgstr "Saltar rescate de símbolo"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -11160,14 +11162,12 @@ msgid "Pin Assignments"
 msgstr "Asignaciones de pines"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:242
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Excluir el símbolo de la simulación"
+msgstr "Excluir de la simulación"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Store in Reference and Value"
-msgstr "Nodo de referencia"
+msgstr "Almacenar en referencia y valor"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:116
 msgid "Simulation Model Editor"
@@ -11763,15 +11763,13 @@ msgid "Library '%s' not found."
 msgstr "No se ha encontrado la librería '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"Se ha producido un error al escribir la tabla de la biblioteca de símbolos "
-"vacía.\n"
-"\n"
-"%s"
+"Error al escribir la tabla de la biblioteca de símbolos del proyecto.\n"
+" %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -13597,7 +13595,7 @@ msgstr "P&referencias"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "No se ha podido generar un nombre para '%s': se ha excedido UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:339
 msgid ""
@@ -13610,7 +13608,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:383
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "No se pudo abrir el archivo '%s' para escribir el modelo IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, c-format
@@ -15336,14 +15334,13 @@ msgstr ""
 "base '%s' en la biblioteca '%s'"
 
 #: eeschema/sim/sim_model.cpp:617
-#, fuzzy
 msgid "Failed to read simulation model from fields"
-msgstr "Fallo en la lectura del modelo de simulación %s."
+msgstr "Fallo en la lectura del modelo de simulación de los campos"
 
 #: eeschema/sim/sim_model.cpp:815 eeschema/sim/sim_model.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a simulation model parameter named '%s'"
-msgstr "No se puede encontrar el pad personalizado '%s'."
+msgstr "No se pudo encontrar un parámetro del modelo de simulación llamado '%s'"
 
 #: eeschema/sim/sim_model.cpp:1132
 #, c-format
@@ -15356,31 +15353,33 @@ msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
+"El tipo de modelo de simulación debe ser el mismo que el de su clase base: "
+"'%s', pero es '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "No se puede encontrar el pad personalizado '%s'."
+msgstr "No se pudo encontrar el componente IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "No se puede encontrar el pad personalizado '%s'."
+msgstr "No se pudo encontrar el pin IBIS '%s' en el componente '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Índice del pin del símbolo inválido: '%s'"
+msgstr "Pin IBIS inválido '%s' en el componente '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "No se puede encontrar el pad personalizado '%s'."
+msgstr "No se pudo encontrar el modelo IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Índice del pin del símbolo inválido: '%s'"
+msgstr "Modelo IBIS inválido '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:298
 msgid "Power supply"
@@ -19772,18 +19771,17 @@ msgid "Unable to load repository url"
 msgstr "No se pudo cargar la URL del repositorio"
 
 #: kicad/pcm/pcm.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"No puede interpretarse el repositorio:\n"
-"\n"
-"\"%s\""
+msgstr "No se ha podido analizar el repositorio: %s"
 
 #: kicad/pcm/pcm.cpp:321
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
+"La URL dada del repositorio no parece un repositorio de paquetes KiCad "
+"válido. Por favor, compruebe de nuevo la URL."
 
 #: kicad/pcm/pcm.cpp:347
 msgid "Fetching repository packages"
@@ -20830,7 +20828,6 @@ msgstr ""
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -20841,9 +20838,9 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### Atenuador Dividido\n"
-"La atenuación es de 6dB  \n"
-"___Z<sub>in</sub>___ es la impedancia de entrada deseada en &#x2126;  \n"
-"___Z<sub>out</sub>___ es la impedancia de salida deseada en &#x2126;  \n"
+"La atenuación es de 6dB<br>\n"
+"___Z<sub>in</sub>___ es la impedancia de entrada deseada en &#x2126;<br>\n"
+"___Z<sub>out</sub>___ es la impedancia de salida deseada en &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
@@ -23332,9 +23329,8 @@ msgid "(not a closed shape)"
 msgstr "(no es una forma cerrada)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:489
-#, fuzzy
 msgid "(multiple board outlines not supported)"
-msgstr "Contorno de la placa no está cerrado:"
+msgstr "(no se admiten varios contornos de placa)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -27466,9 +27462,8 @@ msgstr "%s y %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid "Error: Pad must have a positive size."
-msgstr "Error: el tamaño de esquina es negativo."
+msgstr "Error: El pad debe tener un tamaño positivo."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
@@ -36233,17 +36228,17 @@ msgstr ""
 "línea: %d posición: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"ID de red no válido en\n"
-"archivo: \"%s\"\n"
+"Pad de tamaño cero no válida fijada en %s en\n"
+"archivo: %s\n"
 "línea: %d\n"
-"posición: %d"
+"offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5239
 #, c-format
@@ -37084,14 +37079,14 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Un cable_via hace referencia a una pila de pad faltante '%s'."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops created"
-msgstr "%d Lágrimas creadas"
+msgstr "%d lágrimas creadas"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops removed."
-msgstr "%d Lágrimas eliminadas."
+msgstr "%d lágrimas eliminadas."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
 msgid "Round shapes:"
@@ -40856,16 +40851,15 @@ msgstr "Una suite EDA para el diseño de esquemas y placas de circuitos"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
-msgstr "Imprimir placa"
+msgstr "Placa de circuito impreso"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "PcbNew"
-msgstr ""
+msgstr "PcbNew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:40
 msgid "Eeschema"
