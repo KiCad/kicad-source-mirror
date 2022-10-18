@@ -1438,13 +1438,14 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
                             && via->GetBoundingBox().Intersects( zone_boundingbox ) )
                     {
                         auto viaShape = via->GetEffectiveShape( aLayer, FLASHING::ALWAYS_FLASHED );
+                        auto flashedShape = via->GetEffectiveShape( aLayer, FLASHING::DEFAULT );
 
                         // If the via collides with the zone's outline then we "own" the via.
                         // If it collides with the fill then it's connected; otherwise not.
 
                         if( aZone->Outline()->Collide( viaShape.get() ) )
                         {
-                            if( aFillPolys.Collide( viaShape.get() ) )
+                            if( aFillPolys.Collide( flashedShape.get() ) )
                                 via->ZoneConnectionCache( aLayer ) = ZLC_CONNECTED;
                             else
                                 via->ZoneConnectionCache( aLayer ) = ZLC_UNCONNECTED;
@@ -1464,13 +1465,14 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
                             && pad->GetBoundingBox().Intersects( zone_boundingbox ) )
                     {
                         auto padShape = pad->GetEffectiveShape( aLayer, FLASHING::ALWAYS_FLASHED );
+                        auto flashedShape = pad->GetEffectiveShape( aLayer, FLASHING::DEFAULT );
 
                         // If the pad collides with the zone's outline then we "own" the pad.
                         // If it collides with the fill then it's connected; otherwise not.
 
                         if( aZone->Outline()->Collide( padShape.get() ) )
                         {
-                            if( aFillPolys.Collide( padShape.get() ) )
+                            if( aFillPolys.Collide( flashedShape.get() ) )
                                 pad->ZoneConnectionCache( aLayer ) = ZLC_CONNECTED;
                             else
                                 pad->ZoneConnectionCache( aLayer ) = ZLC_UNCONNECTED;
