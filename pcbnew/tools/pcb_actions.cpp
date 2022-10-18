@@ -1359,11 +1359,6 @@ TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSel
 
 // ZONE_FILLER_TOOL
 //
-TOOL_ACTION PCB_ACTIONS::zoneFill( "pcbnew.ZoneFiller.zoneFill",
-        AS_GLOBAL, 0, "",
-        _( "Fill Zone" ), _( "Update copper fill of selected zone(s)" ),
-        BITMAPS::fill_zone );
-
 TOOL_ACTION PCB_ACTIONS::zoneFillAll( "pcbnew.ZoneFiller.zoneFillAll",
         AS_GLOBAL,
         'B', LEGACY_HK_NAME( "Fill or Refill All Zones" ),
@@ -1372,11 +1367,6 @@ TOOL_ACTION PCB_ACTIONS::zoneFillAll( "pcbnew.ZoneFiller.zoneFillAll",
 
 TOOL_ACTION PCB_ACTIONS::zoneFillDirty( "pcbnew.ZoneFiller.zoneFillDirty",
         AS_CONTEXT );
-
-TOOL_ACTION PCB_ACTIONS::zoneUnfill( "pcbnew.ZoneFiller.zoneUnfill",
-        AS_GLOBAL, 0, "",
-        _( "Unfill Zone" ), _( "Remove copper fill from selected zone(s)" ),
-        BITMAPS::zone_unfill );
 
 TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.ZoneFiller.zoneUnfillAll",
         AS_GLOBAL,

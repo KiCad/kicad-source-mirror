@@ -84,9 +84,7 @@ public:
         SetIcon( BITMAPS::add_zone );
         SetTitle( _( "Zones" ) );
 
-        Add( PCB_ACTIONS::zoneFill );
         Add( PCB_ACTIONS::zoneFillAll );
-        Add( PCB_ACTIONS::zoneUnfill );
         Add( PCB_ACTIONS::zoneUnfillAll );
 
         AppendSeparator();
