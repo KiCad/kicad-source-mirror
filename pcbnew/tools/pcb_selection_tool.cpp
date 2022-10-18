@@ -447,21 +447,23 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_disambiguateTimer.Stop();
             m_frame->FocusOnItem( nullptr );
 
-            if( m_enteredGroup )
-            {
-                ExitGroup();
-                ClearSelection();
-            }
-            else if( !GetSelection().Empty() )
+            if( !GetSelection().Empty() )
             {
                 ClearSelection();
             }
             else if( evt->FirstResponder() == this && evt->GetCommandId() == (int) WXK_ESCAPE )
             {
-                BOARD_INSPECTION_TOOL* controller = m_toolMgr->GetTool<BOARD_INSPECTION_TOOL>();
+                if( m_enteredGroup )
+                {
+                    ExitGroup();
+                }
+                else
+                {
+                    BOARD_INSPECTION_TOOL* controller = m_toolMgr->GetTool<BOARD_INSPECTION_TOOL>();
 
-                if( controller && m_frame->GetPcbNewSettings()->m_ESCClearsNetHighlight )
-                    controller->ClearHighlight( *evt );
+                    if( controller && m_frame->GetPcbNewSettings()->m_ESCClearsNetHighlight )
+                        controller->ClearHighlight( *evt );
+                }
             }
         }
         else
@@ -514,6 +516,7 @@ void PCB_SELECTION_TOOL::EnterGroup()
                                    } );
 
     m_enteredGroupOverlay.Add( m_enteredGroup );
+    view()->Update( &m_enteredGroupOverlay );
 }
 
 
@@ -531,6 +534,7 @@ void PCB_SELECTION_TOOL::ExitGroup( bool aSelectGroup )
 
     m_enteredGroupOverlay.Clear();
     m_enteredGroup = nullptr;
+    view()->Update( &m_enteredGroupOverlay );
 }
 
 
