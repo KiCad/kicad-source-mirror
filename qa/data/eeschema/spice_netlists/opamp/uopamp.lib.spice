@@ -3,6 +3,7 @@
 * Date: 2019-11-23
 * 
 * Written in 2019 by Ste Kulov, HD Retrovision LLC.
+* Later modified by KiCad developers
 * To the extent possible under law, the author(s) have dedicated all copyright
 * and related and neighboring rights to this software to the public domain worldwide. 
 * This software is distributed without any warranty. 
@@ -28,6 +29,10 @@
 * 1.) lvl2:	Removed SW model and replaced all instances with semiconductor diodes.
 * 2.) lvl2: Added offsets to the voltage sources to compensate for the new semiconductor junctions.
 * ---------------------------------------
+* v1.2
+* 2022-08-23
+* ---------------------------------------
+* 1.) Added dual and quad channel models for both lvl1 and lvl2
 *****************************************
 
 
@@ -54,6 +59,21 @@ C3 OUT 0 {Avol/(2*pi*GBW*Rout)}
 .param Rin=100g
 .param Rout=1
 .param pi=3.1415926535898
+.ends
+
+*****************************************
+.subckt uopamp_lvl1_2x +IN1 -IN1 OUT1 +IN2 -IN2 OUT2
+X1 +IN1 -IN1 OUT1 uopamp_lvl1
+X2 +IN2 -IN2 OUT2 uopamp_lvl2 
+.ends
+*****************************************
+
+*****************************************
+.subckt uopamp_lvl1_4x +IN1 -IN1 OUT1 +IN2 -IN2 OUT2 +IN3 -IN3 OUT3 +IN4 -IN4 OUT4
+X1 +IN1 -IN1 OUT1 uopamp_lvl1 
+X2 +IN2 -IN2 OUT2 uopamp_lvl1 
+X3 +IN3 -IN3 OUT3 uopamp_lvl1 
+X4 +IN4 -IN4 OUT4 uopamp_lvl1 
 .ends
 *****************************************
 
@@ -116,5 +136,21 @@ I1 VCC VEE {Iq}
 .model diode D(Is=1e-14)
 .model zener D(Is=1e-14 BV={Vmax})
 .param pi=3.1415926535898
+.ends
+*****************************************
+
+*****************************************
+.subckt uopamp_lvl2_2x VCC VEE +IN1 -IN1 OUT1 +IN2 -IN2 OUT2
+X1 +IN1 -IN1 VCC VEE OUT1 uopamp_lvl2 
+X2 +IN2 -IN2 VCC VEE OUT2 uopamp_lvl2 
+.ends
+*****************************************
+
+*****************************************
+.subckt uopamp_lvl2_4x VCC VEE +IN1 -IN1 OUT1 +IN2 -IN2 OUT2 +IN3 -IN3 OUT3 +IN4 -IN4 OUT4
+X1 +IN1 -IN1 VCC VEE OUT1 uopamp_lvl2 
+X2 +IN2 -IN2 VCC VEE OUT2 uopamp_lvl2 
+X3 +IN3 -IN3 VCC VEE OUT3 uopamp_lvl2 
+X4 +IN4 -IN4 VCC VEE OUT4 uopamp_lvl2 
 .ends
 *****************************************

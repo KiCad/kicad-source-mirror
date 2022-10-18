@@ -607,7 +607,7 @@
     (property "Sim_Pins" "3 2 7 4 6 ~ ~ ~" (at 156.21 88.9 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Sim_Params" "type=X model=uopamp_lvl2 lib=opamp.lib.spice" (at 156.21 88.9 0)
+    (property "Sim_Params" "type=X model=uopamp_lvl2 lib=uopamp.lib.spice" (at 156.21 88.9 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 7bc9184d-2a47-45f1-be60-ec64a780338c))
