@@ -64,7 +64,7 @@ C3 OUT 0 {Avol/(2*pi*GBW*Rout)}
 *****************************************
 .subckt uopamp_lvl1_2x +IN1 -IN1 OUT1 +IN2 -IN2 OUT2
 X1 +IN1 -IN1 OUT1 uopamp_lvl1
-X2 +IN2 -IN2 OUT2 uopamp_lvl2 
+X2 +IN2 -IN2 OUT2 uopamp_lvl1
 .ends
 *****************************************
 
