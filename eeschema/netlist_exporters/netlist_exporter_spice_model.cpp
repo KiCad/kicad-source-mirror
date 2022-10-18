@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 Mikolaj Wielgus, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2022 Mikolaj Wielgus.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,12 +90,16 @@ void NETLIST_EXPORTER_SPICE_MODEL::readPorts( unsigned aNetlistOptions )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
         {
-            auto label = static_cast<SCH_LABEL_BASE*>( item );
+            SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
 
             if( SCH_CONNECTION* conn = label->Connection( &sheet ) )
+            {
                 m_ports.insert( { std::string( conn->Name().ToUTF8() ),
                                   PORT_INFO{ std::string( label->GetText().ToUTF8() ),
-                                                          label->GetShape() } } );
+                                             label->GetShape()
+                                           }
+                                } );
+            }
         }
     }
 }

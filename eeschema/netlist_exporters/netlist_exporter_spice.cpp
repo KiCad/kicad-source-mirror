@@ -206,6 +206,11 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             CreatePinList( symbol, &sheet, true );
 
             SPICE_ITEM spiceItem;
+
+            // This is a little bit dangerous as any value fetched from the fields will not
+            // be instance-data aware, and will just fetch the value of some random sheet
+            // (whatever sheet the user happens to be looking at).  However, we currently only
+            // use it to fetch "Sim_*" fields, which have no instance data.
             spiceItem.fields = &symbol->GetFields();
 
             try
@@ -269,14 +274,14 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 
     for( const SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
-        for( SCH_ITEM* SPICE_ITEM : sheet.LastScreen()->Items() )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
             wxString text;
 
-            if( SPICE_ITEM->Type() == SCH_TEXT_T )
-                text = static_cast<SCH_TEXT*>( SPICE_ITEM )->GetShownText();
-            else if( SPICE_ITEM->Type() == SCH_TEXTBOX_T )
-                text = static_cast<SCH_TEXTBOX*>( SPICE_ITEM )->GetShownText();
+            if( item->Type() == SCH_TEXT_T )
+                text = static_cast<SCH_TEXT*>( item )->GetShownText();
+            else if( item->Type() == SCH_TEXTBOX_T )
+                text = static_cast<SCH_TEXTBOX*>( item )->GetShownText();
             else
                 continue;
 
@@ -320,7 +325,9 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
                     }
                 }
                 else
+                {
                     m_directives.emplace_back( node->string() );
+                }
             }
         }
     }
@@ -436,7 +443,9 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
         }
     }
     else
+    {
         fullPath = expandedPath;
+    }
 
     aFormatter.Print( 0, ".include \"%s\"\n", TO_UTF8( fullPath ) );
 }

@@ -233,7 +233,6 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     for( unsigned ii = 0; ii < sheetList.size(); ii++ )
     {
         SCH_SHEET_PATH sheet = sheetList[ii];
-        m_schematic->SetCurrentSheet( sheet );
 
         auto cmp = [sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
                    {
@@ -283,7 +282,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             xcomps->AddChild( xcomp = node( wxT( "comp" ) ) );
 
             xcomp->AddAttribute( wxT( "ref" ), symbol->GetRef( &sheet ) );
-            addSymbolFields( xcomp, symbol, &sheetList[ ii ] );
+            addSymbolFields( xcomp, symbol, &sheet );
 
             XNODE*  xlibsource;
             xcomp->AddChild( xlibsource = node( wxT( "libsource" ) ) );
@@ -674,11 +673,10 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
     std::vector<NET_RECORD*> nets;
 
-    for( const auto& it : m_schematic->ConnectionGraph()->GetNetMap() )
+    for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
     {
-        wxString                                 net_name  = it.first.Name;
-        const std::vector<CONNECTION_SUBGRAPH*>& subgraphs = it.second;
-        NET_RECORD*                              net_record = nullptr;
+        wxString    net_name  = key.Name;
+        NET_RECORD* net_record = nullptr;
 
         if( subgraphs.empty() )
             continue;
