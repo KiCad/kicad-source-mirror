@@ -39,7 +39,8 @@
 #include <board_connected_item.h>
 #include <base_units.h>
 #include <geometry/shape_segment.h>
-#include "core/minoptmax.h"
+#include <core/minoptmax.h>
+#include <core/arraydim.h>
 
 class PCB_TRACK;
 class PCB_VIA;
@@ -504,6 +505,17 @@ public:
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
+    void ClearZoneConnectionCache()
+    {
+        for( size_t ii = 0; ii < arrayDim( m_zoneLayerConnections ); ++ii )
+            m_zoneLayerConnections[ ii ] = ZLC_UNRESOLVED;
+    }
+
+    ZONE_LAYER_CONNECTION& ZoneConnectionCache( PCB_LAYER_ID aLayer ) const
+    {
+        return m_zoneLayerConnections[ aLayer ];
+    }
+
 protected:
     wxString layerMaskDescribe() const override;
 
@@ -518,6 +530,8 @@ private:
     bool         m_removeUnconnectedLayer;   ///< Remove unconnected copper on a via
     bool         m_keepTopBottomLayer;       ///< Keep the top and bottom annular rings
     bool         m_isFree;                   ///< "Free" vias don't get their nets auto-updated
+
+    mutable ZONE_LAYER_CONNECTION m_zoneLayerConnections[B_Cu + 1];
 };
 
 

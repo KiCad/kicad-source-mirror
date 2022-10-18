@@ -803,8 +803,9 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 {
-    COLOR4D  color = m_pcbSettings.GetColor( aVia, aLayer );
-    VECTOR2D center( aVia->GetStart() );
+    const BOARD* board = aVia->GetBoard();
+    COLOR4D      color = m_pcbSettings.GetColor( aVia, aLayer );
+    VECTOR2D     center( aVia->GetStart() );
 
     if( color == COLOR4D::CLEAR )
         return;
@@ -901,10 +902,21 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     {
         int    annular_width = ( aVia->GetWidth() - getDrillSize( aVia ) ) / 2.0;
         double radius = aVia->GetWidth() / 2.0;
-        bool   draw = aLayer == LAYER_VIA_THROUGH;
+        bool   draw = false;
 
         if( m_pcbSettings.IsPrinting() )
+        {
             draw = aVia->FlashLayer( m_pcbSettings.GetPrintLayers() );
+        }
+        else if( aVia->FlashLayer( board->GetVisibleLayers() & board->GetEnabledLayers() ) )
+        {
+            draw = true;
+        }
+        else if( aVia->IsSelected() )
+        {
+            draw = true;
+            outline_mode = true;
+        }
 
         if( !outline_mode )
         {
@@ -983,7 +995,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
-    COLOR4D color = m_pcbSettings.GetColor( aPad, aLayer );
+    const BOARD* board = aPad->GetBoard();
+    COLOR4D      color = m_pcbSettings.GetColor( aPad, aLayer );
 
     if( IsNetnameLayer( aLayer ) )
     {
@@ -1196,6 +1209,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         m_gal->SetFillColor( color );
     }
 
+    bool drawShape = false;
+
     if( aLayer == LAYER_PAD_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
         std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
@@ -1205,7 +1220,21 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         else
             m_gal->DrawSegment( slot->GetSeg().A, slot->GetSeg().B, slot->GetWidth() );
     }
-    else
+    else if( m_pcbSettings.IsPrinting() )
+    {
+        drawShape = aPad->FlashLayer( m_pcbSettings.GetPrintLayers() );
+    }
+    else if( aPad->FlashLayer( board->GetVisibleLayers() & board->GetEnabledLayers() ) )
+    {
+        drawShape = true;
+    }
+    else if( aPad->IsSelected() )
+    {
+        drawShape = true;
+        outline_mode = true;
+    }
+
+    if( drawShape )
     {
         VECTOR2I pad_size = aPad->GetSize();
         VECTOR2I margin;

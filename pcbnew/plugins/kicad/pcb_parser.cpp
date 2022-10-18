@@ -4701,7 +4701,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
         case T_drill:
         {
-            bool   haveWidth = false;
+            bool     haveWidth = false;
             VECTOR2I drillSize = pad->GetDrillSize();
 
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -4869,7 +4869,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
         case T_chamfer:
         {
-            int chamfers = 0;
+            int  chamfers = 0;
             bool end_list = false;
 
             while( !end_list )
@@ -4912,7 +4912,6 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         }
 
         case T_property:
-        {
             while( token != T_RIGHT )
             {
                 token = NextTok();
@@ -4938,7 +4937,6 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             }
 
             break;
-        }
 
         case T_options:
             parsePAD_option( pad.get() );
@@ -5018,6 +5016,19 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_keep_end_layers:
             pad->SetKeepTopBottom( true );
             NeedRIGHT();
+            break;
+
+        case T_zone_layer_connections:
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                PCB_LAYER_ID layer = lookUpLayer<PCB_LAYER_ID>( m_layerIndices );
+
+                if( layer < F_Cu || layer > B_Cu )
+                    Expecting( "copper layer name" );
+
+                pad->ZoneConnectionCache( layer ) = ZLC_CONNECTED;
+            }
+
             break;
 
         // Continue to process "(locked)" format which was output during 5.99 development
@@ -5429,6 +5440,19 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
         case T_keep_end_layers:
             via->SetKeepTopBottom( true );
             NeedRIGHT();
+            break;
+
+        case T_zone_layer_connections:
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                PCB_LAYER_ID layer = lookUpLayer<PCB_LAYER_ID>( m_layerIndices );
+
+                if( layer < F_Cu || layer > B_Cu )
+                    Expecting( "copper layer name" );
+
+                via->ZoneConnectionCache( layer ) = ZLC_CONNECTED;
+            }
+
             break;
 
         case T_tstamp:

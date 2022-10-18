@@ -23,6 +23,8 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <pad.h>
+#include <pcb_track.h>
 #include <eda_list_dialog.h>
 #include <string_utils.h>
 #include <footprint_edit_frame.h>
@@ -1203,16 +1205,31 @@ void APPEARANCE_CONTROLS::SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible 
 
 void APPEARANCE_CONTROLS::setVisibleLayers( LSET aLayers )
 {
+    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+
     if( m_isFpEditor )
     {
-        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
-
         for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
             view->SetLayerVisible( layer, aLayers.Contains( layer ) );
     }
     else
     {
         m_frame->GetBoard()->SetVisibleLayers( aLayers );
+
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
+                    {
+                        return via->GetRemoveUnconnected();
+                    }
+                    else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        return pad->GetRemoveUnconnected();
+                    }
+
+                    return false;
+                } );
     }
 }
 

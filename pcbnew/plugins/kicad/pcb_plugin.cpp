@@ -1496,7 +1496,8 @@ void PCB_PLUGIN::formatLayers( LSET aLayerMask, int aNestLevel ) const
 
 void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 {
-    const char* shape;
+    const BOARD* board = aPad->GetBoard();
+    const char*  shape;
 
     switch( aPad->GetShape() )
     {
@@ -1600,6 +1601,16 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
             if( aPad->GetKeepTopBottom() )
                 m_out->Print( 0, " (keep_end_layers)" );
+
+            m_out->Print( 0, " (zone_layer_connections" );
+
+            for( LSEQ cu = board->GetEnabledLayers().CuStack();  cu;  ++cu )
+            {
+                if( aPad->ZoneConnectionCache( *cu ) == ZLC_CONNECTED )
+                    m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( *cu ) ).c_str() );
+            }
+
+            m_out->Print( 0, ")" );
         }
     }
 
@@ -2075,7 +2086,7 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
         PCB_LAYER_ID  layer1, layer2;
 
         const PCB_VIA* via = static_cast<const PCB_VIA*>( aTrack );
-        BOARD*         board = (BOARD*) via->GetParent();
+        const BOARD*   board = via->GetBoard();
 
         wxCHECK_RET( board != nullptr, wxT( "Via has no parent." ) );
 
@@ -2137,6 +2148,19 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
         if( via->GetIsFree() )
             m_out->Print( 0, " (free)" );
+
+        if( via->GetRemoveUnconnected() )
+        {
+            m_out->Print( 0, " (zone_layer_connections" );
+
+            for( LSEQ cu = board->GetEnabledLayers().CuStack();  cu;  ++cu )
+            {
+                if( via->ZoneConnectionCache( *cu ) == ZLC_CONNECTED )
+                    m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( *cu ) ).c_str() );
+            }
+
+            m_out->Print( 0, ")" );
+        }
     }
     else if( aTrack->Type() == PCB_ARC_T )
     {

@@ -32,6 +32,7 @@
 #include <geometry/shape_compound.h>
 #include <pad_shapes.h>
 #include <geometry/eda_angle.h>
+#include <core/arraydim.h>
 
 class PCB_SHAPE;
 class PARAM_CFG;
@@ -718,6 +719,17 @@ public:
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
+    void ClearZoneConnectionCache()
+    {
+        for( size_t ii = 0; ii < arrayDim( m_zoneLayerConnections ); ++ii )
+            m_zoneLayerConnections[ ii ] = ZLC_UNRESOLVED;
+    }
+
+    ZONE_LAYER_CONNECTION& ZoneConnectionCache( PCB_LAYER_ID aLayer ) const
+    {
+        return m_zoneLayerConnections[ aLayer ];
+    }
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -833,6 +845,8 @@ private:
     EDA_ANGLE   m_thermalSpokeAngle;            // Rotation of the spokes.  45° will produce an X,
                                                 //   while 90° will produce a +.
     int         m_thermalGap;
+
+    mutable ZONE_LAYER_CONNECTION m_zoneLayerConnections[B_Cu + 1];
 };
 
 #endif  // PAD_H

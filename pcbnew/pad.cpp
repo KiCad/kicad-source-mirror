@@ -102,6 +102,9 @@ PAD::PAD( FOOTPRINT* parent ) :
     m_effectiveBoundingRadius = 0;
     m_removeUnconnectedLayer = false;
     m_keepTopBottomLayer = true;
+
+    for( size_t ii = 0; ii < arrayDim( m_zoneLayerConnections ); ++ii )
+        m_zoneLayerConnections[ ii ] = ZLC_UNCONNECTED;
 }
 
 
@@ -292,11 +295,16 @@ bool PAD::FlashLayer( int aLayer ) const
             static std::initializer_list<KICAD_T> types = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
                                                             PCB_PAD_T };
 
-            // Do not check zones.  Doing so results in race conditions when the via collides with
-            // two different zones of different priorities.
+            // Only the highest priority zone that a via interacts with on any given layer gets
+            // to determine if it is connected or not.  This keeps us from deciding it's not
+            // flashed when filling the first zone, and then later having another zone connect to
+            // it, causing it to become flashed, resulting in the first zone having insufficient
+            // clearance.
             // See https://gitlab.com/kicad/code/kicad/-/issues/11299.
+            if( m_zoneLayerConnections[ aLayer ] == ZLC_CONNECTED )
+                return true;
 
-            return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, types, true );
+            return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, types );
         }
     }
 
@@ -1384,25 +1392,9 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( IsBackLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
         return HIDE;
 
-    LSET visible = LSET::AllLayersMask();
+    LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
-    // Handle board visibility
-    if( board )
-        visible &= board->GetEnabledLayers();
-
-    // Handle view visibility
-    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
-    {
-        if( !aView->IsLayerVisible( layer ) )
-            visible.set( layer, false );
-    }
-
-    if( aLayer == LAYER_PADS_TH )
-    {
-        if( !FlashLayer( visible ) )
-            return HIDE;
-    }
-    else if( IsHoleLayer( aLayer ) )
+    if( IsHoleLayer( aLayer ) )
     {
         if( !( visible & LSET::PhysicalLayersMask() ).any() )
             return HIDE;
@@ -1425,8 +1417,8 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         // Netnames will be shown only if zoom is appropriate
         int divisor = std::min( GetBoundingBox().GetWidth(), GetBoundingBox().GetHeight() );
 
-        // Pad sizes can be zero briefly when someone is typing a number like "0.5"
-        // in the pad properties dialog
+        // Pad sizes can be zero briefly when someone is typing a number like "0.5" in the pad
+        // properties dialog
         if( divisor == 0 )
             return HIDE;
 
@@ -1440,8 +1432,7 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 const BOX2I PAD::ViewBBox() const
 {
-    // Bounding box includes soldermask too. Remember mask and/or paste
-    // margins can be < 0
+    // Bounding box includes soldermask too. Remember mask and/or paste margins can be < 0
     int      solderMaskMargin  = std::max( GetSolderMaskExpansion(), 0 );
     VECTOR2I solderPasteMargin = VECTOR2D( GetSolderPasteMargin() );
     BOX2I    bbox              = GetBoundingBox();

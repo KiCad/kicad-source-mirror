@@ -1075,7 +1075,12 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
                     if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
                     {
                         return via->GetViaType() == VIATYPE::BLIND_BURIED
-                                || via->GetViaType() == VIATYPE::MICROVIA;
+                                || via->GetViaType() == VIATYPE::MICROVIA
+                                || via->GetRemoveUnconnected();
+                    }
+                    else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        return pad->GetRemoveUnconnected();
                     }
 
                     return false;

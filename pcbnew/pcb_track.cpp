@@ -83,8 +83,13 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
     SetViaType( VIATYPE::THROUGH );
     m_bottomLayer = B_Cu;
     SetDrillDefault();
+
     m_removeUnconnectedLayer = false;
     m_keepTopBottomLayer = true;
+
+    for( size_t ii = 0; ii < arrayDim( m_zoneLayerConnections ); ++ii )
+        m_zoneLayerConnections[ ii ] = ZLC_UNCONNECTED;
+
     m_isFree = false;
 }
 
@@ -613,13 +618,17 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
 
     // Must be static to keep from raising its ugly head in performance profiles
     static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
-                                                             PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
+                                                             PCB_PAD_T };
 
-    // Do not check zones.  Doing so results in race conditions when the via collides with
-    // two different zones of different priorities.
+    // Only the highest priority zone that a via interacts with on any given layer gets to
+    // determine if it is connected or not.  This keeps us from deciding it's not flashed when
+    // filling the first zone, and then later having another zone connect to it, causing it to
+    // become flashed, resulting in the first zone having insufficient clearance.
     // See https://gitlab.com/kicad/code/kicad/-/issues/11299.
+    if( m_zoneLayerConnections[ aLayer ] == ZLC_CONNECTED )
+        return true;
 
-    return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, connectedTypes, true );
+    return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, connectedTypes );
 }
 
 
@@ -762,12 +771,7 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
             return HIDE;
     }
 
-    if( IsViaPadLayer( aLayer ) )
-    {
-        if( !FlashLayer( visible ) )
-            return HIDE;
-    }
-    else if( IsHoleLayer( aLayer ) )
+    if( IsHoleLayer( aLayer ) )
     {
         if( m_viaType == VIATYPE::BLIND_BURIED || m_viaType == VIATYPE::MICROVIA )
         {

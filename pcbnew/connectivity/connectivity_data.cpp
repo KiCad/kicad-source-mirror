@@ -392,8 +392,7 @@ void CONNECTIVITY_DATA::PropagateNets( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMo
 
 
 bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, int aLayer,
-                                            const std::initializer_list<KICAD_T>& aTypes,
-                                            bool aCheckOptionalFlashing ) const
+                                            const std::initializer_list<KICAD_T>& aTypes ) const
 {
     CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY &entry = m_connAlgo->ItemEntry( aItem );
 

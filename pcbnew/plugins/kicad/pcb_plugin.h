@@ -127,7 +127,8 @@ class SHAPE_LINE_CHAIN;
 //#define SEXPR_BOARD_FILE_VERSION    20220621  // Add Image support
 //#define SEXPR_BOARD_FILE_VERSION    20220815  // Add allow-soldermask-bridges-in-FPs flag
 //#define SEXPR_BOARD_FILE_VERSION    20220818  // First-class storage for net-ties
-#define SEXPR_BOARD_FILE_VERSION      20220914  // Number boxes for custom-shape pads
+//#define SEXPR_BOARD_FILE_VERSION    20220914  // Number boxes for custom-shape pads
+#define SEXPR_BOARD_FILE_VERSION      20221018  // Via & pad zone-layer-connections
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

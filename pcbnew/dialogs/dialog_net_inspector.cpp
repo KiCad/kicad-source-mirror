@@ -1575,6 +1575,9 @@ unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const PCB_TRACK* aTrack )
 
     BOARD_DESIGN_SETTINGS& bds = m_brd->GetDesignSettings();
 
+    // Must be static to keep from raising its ugly head in performance profiles
+    static std::initializer_list<KICAD_T> traceAndPadTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T };
+
     // calculate the via length individually from the board stackup and via's start and end layer.
     if( bds.m_HasStackup )
     {
@@ -1583,8 +1586,7 @@ unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const PCB_TRACK* aTrack )
 
         for( int layer = via->TopLayer(); layer <= via->BottomLayer(); ++layer )
         {
-            if( m_brd->GetConnectivity()->IsConnectedOnLayer( via, layer,
-                    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T }, true ) )
+            if( m_brd->GetConnectivity()->IsConnectedOnLayer( via, layer, traceAndPadTypes ) )
             {
                 if( top_layer == UNDEFINED_LAYER )
                     top_layer = PCB_LAYER_ID( layer );

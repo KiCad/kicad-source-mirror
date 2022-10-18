@@ -41,6 +41,14 @@ class SHAPE;
 class PCB_GROUP;
 
 
+enum ZONE_LAYER_CONNECTION
+{
+    ZLC_UNRESOLVED,
+    ZLC_CONNECTED,
+    ZLC_UNCONNECTED
+};
+
+
 /**
  * A base class for any item which can be embedded within the #BOARD container class, and
  * therefore instances of derived classes should only be found in Pcbnew or other programs

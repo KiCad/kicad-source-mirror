@@ -31,7 +31,6 @@
 #include <zone.h>
 #include <footprint.h>
 #include <pad.h>
-#include <pcb_shape.h>
 #include <pcb_target.h>
 #include <pcb_track.h>
 #include <pcb_text.h>
@@ -136,6 +135,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 pad->BuildEffectivePolygon();
             }
 
+            pad->ClearZoneConnectionCache();
+
             m_worstClearance = std::max( m_worstClearance, pad->GetLocalClearance() );
         }
 
@@ -147,6 +148,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         // Rules may depend on insideCourtyard() or other expressions
         footprint->BuildCourtyardCaches();
+    }
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+            static_cast<PCB_VIA*>( track )->ClearZoneConnectionCache();
     }
 
     // Sort by priority to reduce deferrals waiting on higher priority zones.
@@ -775,6 +782,14 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     int  gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
                                                   aZone, aTrack, aLayer );
 
+                    if( aTrack->Type() == PCB_VIA_T )
+                    {
+                        PCB_VIA* via = static_cast<PCB_VIA*>( aTrack );
+
+                        if( via->ZoneConnectionCache( aLayer ) == ZLC_UNCONNECTED )
+                            sameNet = false;
+                    }
+
                     if( !sameNet )
                     {
                         gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT,
@@ -1401,7 +1416,69 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
     if( aZone->IsOnCopperLayer() )
     {
         if( fillCopperZone( aZone, aLayer, debugLayer, smoothedPoly, maxExtents, aFillPolys ) )
+        {
             aZone->SetNeedRefill( false );
+
+            BOX2I zone_boundingbox = aZone->GetBoundingBox();
+
+            // Check all conditionally-flashed vias and pads which aren't owned yet to see if
+            // we own them.  If so, set their connection caches.  See FlashLayer() for additional
+            // background.
+
+            for( PCB_TRACK* track : m_board->Tracks() )
+            {
+                if( track->Type() == PCB_VIA_T )
+                {
+                    PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+                    if( !via->IsOnLayer( aLayer ) || !via->GetRemoveUnconnected() )
+                        continue;
+
+                    if( via->ZoneConnectionCache( aLayer ) == ZLC_UNRESOLVED
+                            && via->GetBoundingBox().Intersects( zone_boundingbox ) )
+                    {
+                        auto viaShape = via->GetEffectiveShape( aLayer, FLASHING::ALWAYS_FLASHED );
+
+                        // If the via collides with the zone's outline then we "own" the via.
+                        // If it collides with the fill then it's connected; otherwise not.
+
+                        if( aZone->Outline()->Collide( viaShape.get() ) )
+                        {
+                            if( aFillPolys.Collide( viaShape.get() ) )
+                                via->ZoneConnectionCache( aLayer ) = ZLC_CONNECTED;
+                            else
+                                via->ZoneConnectionCache( aLayer ) = ZLC_UNCONNECTED;
+                        }
+                    }
+                }
+            }
+
+            for( FOOTPRINT* footprint : m_board->Footprints() )
+            {
+                for( PAD* pad : footprint->Pads() )
+                {
+                    if( !pad->IsOnLayer( aLayer ) || !pad->GetRemoveUnconnected() )
+                        continue;
+
+                    if( pad->ZoneConnectionCache( aLayer ) == ZLC_UNRESOLVED
+                            && pad->GetBoundingBox().Intersects( zone_boundingbox ) )
+                    {
+                        auto padShape = pad->GetEffectiveShape( aLayer, FLASHING::ALWAYS_FLASHED );
+
+                        // If the pad collides with the zone's outline then we "own" the pad.
+                        // If it collides with the fill then it's connected; otherwise not.
+
+                        if( aZone->Outline()->Collide( padShape.get() ) )
+                        {
+                            if( aFillPolys.Collide( padShape.get() ) )
+                                pad->ZoneConnectionCache( aLayer ) = ZLC_CONNECTED;
+                            else
+                                pad->ZoneConnectionCache( aLayer ) = ZLC_UNCONNECTED;
+                        }
+                    }
+                }
+            }
+        }
     }
     else
     {

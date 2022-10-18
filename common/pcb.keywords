@@ -338,5 +338,6 @@ zone
 zone_45_only
 zone_clearance
 zone_connect
+zone_layer_connections
 zone_type
 zones
