@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-07 10:09+0200\n"
+"POT-Creation-Date: 2022-10-18 09:17+0200\n"
+"PO-Revision-Date: 2022-10-17 20:00+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -165,7 +165,7 @@ msgstr "Temps de rechargement %.3fs"
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:956
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:427
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:293
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:283
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:284
 #: eeschema/symbol_library.cpp:484 pcbnew/plugins/eagle/eagle_plugin.cpp:383
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2422
@@ -4162,7 +4162,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Autorisations insuffisantes pour le dossier '%s'."
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4171,11 +4171,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"Voilà qui est potentiellement ennuyeux!\n"
-"Il semble que la dernière fois où vous avez édité le fichier\n"
+"Eh bien, c'est potentiellement embarrassant !\n"
+"Il semble que la dernière fois que vous avez édité\n"
 "%s\n"
-"il n'a pas été sauvé correctement. Voulez vous restaurer la dernière édition "
-"que vous avez faite?"
+"KiCad a quitté avant de sauvegarder.\n"
+"\n"
+"Voulez-vous ouvrir le fichier sauvegardé automatiquement à la place ?"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -5523,22 +5524,22 @@ msgstr "Ce langage n’est pas pris en charge par le système d’exploitation."
 msgid "The KiCad language file for this language is not installed."
 msgstr "Le fichier dictionnaire KiCad pour cette langue n’est pas installé."
 
-#: common/plotters/PDF_plotter.cpp:817
+#: common/plotters/PDF_plotter.cpp:820
 #, c-format
 msgid "Page %s"
 msgstr "Page %s"
 
-#: common/plotters/PDF_plotter.cpp:821
+#: common/plotters/PDF_plotter.cpp:824
 #, c-format
 msgid "%s (Page %s)"
 msgstr "%s (Page %s)"
 
-#: common/plotters/PDF_plotter.cpp:1188
+#: common/plotters/PDF_plotter.cpp:1190
 #, c-format
 msgid "Show Page %s"
 msgstr "Monter Page %s"
 
-#: common/plotters/PDF_plotter.cpp:1199
+#: common/plotters/PDF_plotter.cpp:1201
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:801
 #: eeschema/tools/sch_navigate_tool.cpp:86
 #, c-format
@@ -5676,7 +5677,7 @@ msgstr "Erreur en extrayant le fichier!"
 #: pcbnew/dialogs/dialog_drc.cpp:875 pcbnew/dialogs/dialog_export_idf.cpp:223
 #: pcbnew/dialogs/dialog_export_svg.cpp:314
 #: pcbnew/dialogs/dialog_export_vrml.cpp:266
-#: pcbnew/dialogs/dialog_gendrill.cpp:480 pcbnew/dialogs/dialog_plot.cpp:1093
+#: pcbnew/dialogs/dialog_gendrill.cpp:480 pcbnew/dialogs/dialog_plot.cpp:1100
 #: pcbnew/exporters/export_footprint_associations.cpp:83
 #: pcbnew/exporters/export_gencad.cpp:257
 #: pcbnew/exporters/gen_footprints_placefile.cpp:327
@@ -7984,8 +7985,8 @@ msgid ""
 "On Windows the command line is the following.\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl "
-"\"%I\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
+"\"\n"
 "```\n"
 "\n"
 "On Linux the command becomes as following.\n"
@@ -8176,8 +8177,8 @@ msgstr ""
 "Sous Windows, la ligne de commande est la suivante.\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o\"%O \"f:/kicad/bin/plugins/myconverter.xsl "
-"\"%I\"\n"
+"f:/kicad/bin/xsltproc.exe -o\"%O \"f:/kicad/bin/plugins/myconverter.xsl \"%I"
+"\"\n"
 "```\n"
 "\n"
 "Sous Linux, la commande devient la suivante. \n"
@@ -8256,8 +8257,8 @@ msgstr ""
 "\n"
 "Sous Linux : \n"
 "```\n"
-"xsltproc -o \"%O.bom \"/usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-"xsl\"%I \"\n"
+"xsltproc -o \"%O.bom \"/usr/local/kicad/bin/plugins/netlist_form_pads-pcb.xsl"
+"\"%I \"\n"
 "```\n"
 "\n"
 "Les exemples ci-dessus supposent que `xsltproc` est installé sur votre PC "
@@ -9148,9 +9149,8 @@ msgstr "Alignement H:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "Visible (champs seulement)"
+msgstr "(champs uniquement)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
 msgid "V Align:"
@@ -9199,11 +9199,13 @@ msgid "symbol"
 msgstr "symbole"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Erreur en création de librairie de symboles '%s'."
+msgstr ""
+"Erreur en création de la table des librairies de symboles '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9217,22 +9219,24 @@ msgid "File '%s' not found."
 msgstr "Fichier '%s' non trouvé."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "Erreur lors du chargement de la table des librairies de symboles '%s'."
+msgstr ""
+"Erreur lors du chargement de la table des librairies de symboles '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "Impossible de créer le chemin de la table des librairie globale '%s'."
+msgstr "Impossible de créer la table de librairies globale '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
 msgstr ""
-"Impossible de copier le fichier table globale de librairies de symboles '%s' "
+"Erreur en copiant le fichier table globale de librairies de symboles '%s' "
 "vers '%s'."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
@@ -10336,14 +10340,14 @@ msgstr "Tracer Page Courante"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:214
 #: pcbnew/dialogs/dialog_export_svg.cpp:203
-#: pcbnew/dialogs/dialog_gendrill.cpp:300 pcbnew/dialogs/dialog_plot.cpp:505
+#: pcbnew/dialogs/dialog_gendrill.cpp:300 pcbnew/dialogs/dialog_plot.cpp:510
 #: pcbnew/exporters/gen_footprints_placefile.cpp:221
 #: pcbnew/exporters/gen_footprints_placefile.cpp:582
 msgid "Select Output Directory"
 msgstr "Sélection du Répertoire de Sortie"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:231
-#: pcbnew/dialogs/dialog_gendrill.cpp:309 pcbnew/dialogs/dialog_plot.cpp:522
+#: pcbnew/dialogs/dialog_gendrill.cpp:309 pcbnew/dialogs/dialog_plot.cpp:527
 #, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -10356,7 +10360,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_export_svg.cpp:222
 #: pcbnew/dialogs/dialog_gendrill.cpp:311
-#: pcbnew/dialogs/dialog_gendrill.cpp:319 pcbnew/dialogs/dialog_plot.cpp:524
+#: pcbnew/dialogs/dialog_gendrill.cpp:319 pcbnew/dialogs/dialog_plot.cpp:529
 #: pcbnew/exporters/gen_footprints_placefile.cpp:229
 #: pcbnew/exporters/gen_footprints_placefile.cpp:239
 msgid "Plot Output Directory"
@@ -10425,7 +10429,6 @@ msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:434
 #: eeschema/sch_edit_frame.cpp:1115
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -10438,7 +10441,7 @@ msgstr "Impossible d'écrire les fichiers de tracés dans le répertoire '%s'."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:688
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1047
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1183
-#: pcbnew/dialogs/dialog_plot.cpp:1088
+#: pcbnew/dialogs/dialog_plot.cpp:1095
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Tracé en '%s'."
@@ -10449,7 +10452,7 @@ msgstr "Tracé en '%s'."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1065
 #: kicad/pcm/pcm_task_manager.cpp:619
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
-#: pcbnew/dialogs/dialog_plot.cpp:1110
+#: pcbnew/dialogs/dialog_plot.cpp:1117
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:124
 msgid "Done."
@@ -10695,9 +10698,8 @@ msgid "Rescue Symbols"
 msgstr "Sauvetage Composants"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Éditer Référence du Symbole"
+msgstr "Ignorer Symbole de Secours"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -11211,14 +11213,12 @@ msgid "Pin Assignments"
 msgstr "Affectation de Pin"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:242
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Désactiver le composant pour la simulation"
+msgstr "Exclure de la simulation"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Store in Reference and Value"
-msgstr "Nœud de référence"
+msgstr "Stocker en Référence et Valeur"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:116
 msgid "Simulation Model Editor"
@@ -11819,81 +11819,79 @@ msgid "Library '%s' not found."
 msgstr "Librairie '%s' non trouvée."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"Une erreur s'est produite lors de l'écriture d'une table des librairies de "
-"symboles vierge.\n"
-"\n"
-"%s"
+"Erreur lors de l'écriture de la table des librairies de symboles du projet.\n"
+" %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
 msgstr "Créer une table  de librairies de symboles spécifique au projet.\n"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:261
+#: eeschema/dialogs/dialog_symbol_remap.cpp:263
 #, c-format
 msgid "No symbol %s found in symbol library table."
 msgstr "Aucun symbole '%s' trouvé dans la table des librairies de symboles."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:267
+#: eeschema/dialogs/dialog_symbol_remap.cpp:269
 #, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
 msgstr "Symbole '%s' lié à la librairie de symboles '%s'."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:276
+#: eeschema/dialogs/dialog_symbol_remap.cpp:278
 msgid "Symbol library table mapping complete!"
 msgstr "Mappage de table dl librairie de symboles complet !"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:346
+#: eeschema/dialogs/dialog_symbol_remap.cpp:348
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
 msgstr ""
 "Impossible de créer le  répertoire de sauvegarde de \"remappage\" '%s'."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:349
-#: eeschema/dialogs/dialog_symbol_remap.cpp:501
+#: eeschema/dialogs/dialog_symbol_remap.cpp:351
+#: eeschema/dialogs/dialog_symbol_remap.cpp:503
 msgid "Backup Error"
 msgstr "Erreur en Sauvegarde"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:351
-#: eeschema/dialogs/dialog_symbol_remap.cpp:505
+#: eeschema/dialogs/dialog_symbol_remap.cpp:353
+#: eeschema/dialogs/dialog_symbol_remap.cpp:507
 msgid "Continue with Rescue"
 msgstr "Continuer le Sauvetage"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:352
-#: eeschema/dialogs/dialog_symbol_remap.cpp:506
+#: eeschema/dialogs/dialog_symbol_remap.cpp:354
+#: eeschema/dialogs/dialog_symbol_remap.cpp:508
 msgid "Abort Rescue"
 msgstr "Abandon Sauvetage"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:372
-#: eeschema/dialogs/dialog_symbol_remap.cpp:407
-#: eeschema/dialogs/dialog_symbol_remap.cpp:432
-#: eeschema/dialogs/dialog_symbol_remap.cpp:453
-#: eeschema/dialogs/dialog_symbol_remap.cpp:469
-#: eeschema/dialogs/dialog_symbol_remap.cpp:485
+#: eeschema/dialogs/dialog_symbol_remap.cpp:374
+#: eeschema/dialogs/dialog_symbol_remap.cpp:409
+#: eeschema/dialogs/dialog_symbol_remap.cpp:434
+#: eeschema/dialogs/dialog_symbol_remap.cpp:455
+#: eeschema/dialogs/dialog_symbol_remap.cpp:471
+#: eeschema/dialogs/dialog_symbol_remap.cpp:487
 #, c-format
 msgid "Backing up file '%s' to '%s'."
 msgstr "Sauvegarde du fichier '%s' sous '%s'."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:380
-#: eeschema/dialogs/dialog_symbol_remap.cpp:422
-#: eeschema/dialogs/dialog_symbol_remap.cpp:440
-#: eeschema/dialogs/dialog_symbol_remap.cpp:461
-#: eeschema/dialogs/dialog_symbol_remap.cpp:477
-#: eeschema/dialogs/dialog_symbol_remap.cpp:493
+#: eeschema/dialogs/dialog_symbol_remap.cpp:382
+#: eeschema/dialogs/dialog_symbol_remap.cpp:424
+#: eeschema/dialogs/dialog_symbol_remap.cpp:442
+#: eeschema/dialogs/dialog_symbol_remap.cpp:463
+#: eeschema/dialogs/dialog_symbol_remap.cpp:479
+#: eeschema/dialogs/dialog_symbol_remap.cpp:495
 #, c-format
 msgid "Failed to back up file '%s'.\n"
 msgstr "Impossible de créer le fichier sauvegarde '%s'.\n"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:414
+#: eeschema/dialogs/dialog_symbol_remap.cpp:416
 #, c-format
 msgid "Failed to create backup folder '%s'.\n"
 msgstr "Impossible de créer le répertoire de sauvegarde '%s'\n"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:500
+#: eeschema/dialogs/dialog_symbol_remap.cpp:502
 msgid "Some of the project files could not be backed up."
 msgstr "Certains des fichiers du projet n'ont pas être sauvegardés."
 
@@ -13429,12 +13427,12 @@ msgstr "Inconnu"
 msgid "Edit Page Number"
 msgstr "Editer Numéro de Page"
 
-#: eeschema/hierarch.cpp:259 eeschema/tools/sch_edit_tool.cpp:2296
+#: eeschema/hierarch.cpp:259 eeschema/tools/sch_edit_tool.cpp:2303
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
 
-#: eeschema/hierarch.cpp:262 eeschema/tools/sch_edit_tool.cpp:2299
+#: eeschema/hierarch.cpp:262 eeschema/tools/sch_edit_tool.cpp:2306
 msgid "Edit Sheet Page Number"
 msgstr "Editer Numéro de Page de la Feuille"
 
@@ -13670,7 +13668,7 @@ msgstr "P&références"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "Échec de la génération d'un nom pour '%s' : dépassement de UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:339
 msgid ""
@@ -13683,7 +13681,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:383
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "Impossible d'ouvrir le fichier '%s' pour écrire le modèle IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, c-format
@@ -13941,7 +13939,7 @@ msgstr "Hiérarchie Schématique"
 msgid "New schematic file is unsaved"
 msgstr "Le nouveau fichier schématique n'est pas sauvé"
 
-#: eeschema/sch_edit_frame.cpp:802 eeschema/sim/sim_plot_frame.cpp:1655
+#: eeschema/sch_edit_frame.cpp:802 eeschema/sim/sim_plot_frame.cpp:1657
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:538
 #: eeschema/symbol_editor/symbol_editor.cpp:1153
 #: pagelayout_editor/pl_editor_frame.cpp:381
@@ -14669,13 +14667,13 @@ msgstr ""
 "ancêtre direct dans la hiérarchie des schémas."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1421
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2147
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2156
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "La librairie de symboles '%s' existe déjà."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1447
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2173
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2182
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "La librairie de symboles '%s' ne peut pas être supprimée."
@@ -14694,7 +14692,7 @@ msgid "symbol document library file is empty"
 msgstr "le fichier de documentation de librairie est vide"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:550
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:592
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:593
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:78
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:107
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:139
@@ -14707,30 +14705,30 @@ msgstr "le fichier de documentation de librairie est vide"
 msgid "unexpected end of line"
 msgstr "fin de ligne inattendue"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:369
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:370
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
 msgstr "'%s' ne semble pas être un fichier Eeschema."
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:399
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:400
 msgid "Missing 'EELAYER END'"
 msgstr "'EELAYER END' manquant"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:447
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:719
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:729
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:448
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:720
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:730
 msgid "unexpected end of file"
 msgstr "fin de fichier inattendue"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:682
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:683
 msgid "Unexpected end of file"
 msgstr "Fin de fichier inattendue"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1038
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1041
 msgid "expected 'Italics' or '~'"
 msgstr "attendu  'Italics' ou  '~'"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1301
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1304
 msgid "symbol field text attributes must be 3 characters wide"
 msgstr "le texte des attributs du champ doit avoir 3 caractères"
 
@@ -15408,14 +15406,13 @@ msgstr ""
 "modèle de base '%s' dans la librairie '%s'"
 
 #: eeschema/sim/sim_model.cpp:617
-#, fuzzy
 msgid "Failed to read simulation model from fields"
-msgstr "Échec de la lecture du modèle de simulation %s."
+msgstr "Échec de la lecture du modèle de simulation à partir des champs"
 
 #: eeschema/sim/sim_model.cpp:815 eeschema/sim/sim_model.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a simulation model parameter named '%s'"
-msgstr "Ne peut pas trouver le pad utilisateur '%s'."
+msgstr "Impossible de trouver un paramètre de modèle de simulation nommé '%s'"
 
 #: eeschema/sim/sim_model.cpp:1132
 #, c-format
@@ -15428,31 +15425,33 @@ msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
+"Le type de modèle de simulation doit être le même que celui de sa classe de "
+"base : '%s', mais est '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "Ne peut pas trouver le pad utilisateur '%s'."
+msgstr "Impossible de trouver le composant IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "Ne peut pas trouver le pad utilisateur '%s'."
+msgstr "Impossible de trouver la broche IBIS '%s' dans le composant '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Pin \"%s\" du composant \"%s\"."
+msgstr "Broche IBIS non valide '%s' dans le composant '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "Ne peut pas trouver le pad utilisateur '%s'."
+msgstr "Impossible de trouver le modèle IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Index de la pin du symbole invalide : '%s'"
+msgstr "Modèle IBIS non valide '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:298
 msgid "Power supply"
@@ -15550,11 +15549,11 @@ msgstr "Paramètres et réglages de simulation"
 msgid "Spice Simulator"
 msgstr "Simulateur Spice"
 
-#: eeschema/sim/sim_plot_frame.cpp:477 eeschema/sim/sim_plot_frame.cpp:1482
+#: eeschema/sim/sim_plot_frame.cpp:477 eeschema/sim/sim_plot_frame.cpp:1484
 msgid "There were errors during netlist export, aborted."
 msgstr "Il y a eu des erreurs lors de l'exportation de netlist, abandon."
 
-#: eeschema/sim/sim_plot_frame.cpp:494 eeschema/sim/sim_plot_frame.cpp:1878
+#: eeschema/sim/sim_plot_frame.cpp:494 eeschema/sim/sim_plot_frame.cpp:1880
 msgid "Another simulation is already running."
 msgstr "Une autre simulation est déjà en cours."
 
@@ -15571,35 +15570,35 @@ msgstr "Erreur : type de simulation non défini !\n"
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Erreur : le type de simulation ne prend pas en charge le tracé!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:835 eeschema/sim/sim_plot_frame.cpp:1697
+#: eeschema/sim/sim_plot_frame.cpp:835 eeschema/sim/sim_plot_frame.cpp:1699
 msgid "Signal"
 msgstr "Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1114
+#: eeschema/sim/sim_plot_frame.cpp:1116
 msgid "noname"
 msgstr "sansnom"
 
-#: eeschema/sim/sim_plot_frame.cpp:1163
+#: eeschema/sim/sim_plot_frame.cpp:1165
 msgid "Open simulation workbook"
 msgstr "Ouvrir le classeur de travail de simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:1192
+#: eeschema/sim/sim_plot_frame.cpp:1194
 msgid "Save Simulation Workbook As"
 msgstr "Sauver Classeur de Travail de Simulation Sous"
 
-#: eeschema/sim/sim_plot_frame.cpp:1208
+#: eeschema/sim/sim_plot_frame.cpp:1210
 msgid "Save Plot as Image"
 msgstr "Sauver Tracé comme Fichier Image"
 
-#: eeschema/sim/sim_plot_frame.cpp:1225
+#: eeschema/sim/sim_plot_frame.cpp:1227
 msgid "Save Plot Data"
 msgstr "Sauver Données de Tracé"
 
-#: eeschema/sim/sim_plot_frame.cpp:1530
+#: eeschema/sim/sim_plot_frame.cpp:1532
 msgid "You need to run plot-providing simulation first."
 msgstr "Vous devez exécuter la simulation en premier."
 
-#: eeschema/sim/sim_plot_frame.cpp:1809
+#: eeschema/sim/sim_plot_frame.cpp:1811
 msgid ""
 "\n"
 "\n"
@@ -15611,19 +15610,19 @@ msgstr ""
 "Résultats de simulation:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1898
+#: eeschema/sim/sim_plot_frame.cpp:1900
 msgid "Hide Signal"
 msgstr "Masquer le Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1898
+#: eeschema/sim/sim_plot_frame.cpp:1900
 msgid "Erase the signal from plot screen"
 msgstr "Supprimer le signal de l’écran de tracé"
 
-#: eeschema/sim/sim_plot_frame.cpp:1904
+#: eeschema/sim/sim_plot_frame.cpp:1906
 msgid "Hide Cursor"
 msgstr "Masquer le Curseur"
 
-#: eeschema/sim/sim_plot_frame.cpp:1906
+#: eeschema/sim/sim_plot_frame.cpp:1908
 msgid "Show Cursor"
 msgstr "Afficher le Curseur"
 
@@ -15846,20 +15845,20 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:146
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin "
-"%s%s en position <b>(%s %s)</b>."
+"<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
+"%s en position <b>(%s %s)</b>."
 
 #: eeschema/symbol_checker.cpp:159
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b> in units %s and %s."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin "
-"%s%s en position <b>(%s, %s)</b> unité %s et %s."
+"<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
+"%s en position <b>(%s, %s)</b> unité %s et %s."
 
 #: eeschema/symbol_checker.cpp:187
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -16365,27 +16364,27 @@ msgstr "Erreur en chargement des symboles:"
 msgid "Library '%s' not found in the Symbol Library Table."
 msgstr "Librairie '%s' non trouvée dans la table des librairies de symboles."
 
-#: eeschema/symbol_library_manager.cpp:401
+#: eeschema/symbol_library_manager.cpp:404
 msgid "Symbol not found."
 msgstr "Symbole non trouvé."
 
-#: eeschema/symbol_library_manager.cpp:432
+#: eeschema/symbol_library_manager.cpp:435
 #, c-format
 msgid "Error loading symbol %s from library '%s'. (%s)"
 msgstr "Erreur lors du chargement du symbole '%s' de la librairie '%s'. (%s)"
 
-#: eeschema/symbol_library_manager.cpp:619
+#: eeschema/symbol_library_manager.cpp:622
 #, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
 msgstr "Impossible de charger le symbole '%s' à partie de la librairie '%s'."
 
-#: eeschema/symbol_library_manager.cpp:772
+#: eeschema/symbol_library_manager.cpp:775
 #, c-format
 msgid "Cannot enumerate library '%s'."
 msgstr "Ne peut pas énumérer la librairie '%s'."
 
-#: eeschema/symbol_library_manager.cpp:962
-#: eeschema/symbol_library_manager.cpp:1063
+#: eeschema/symbol_library_manager.cpp:965
+#: eeschema/symbol_library_manager.cpp:1066
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
 msgstr "Erreur lors de la sauvegarde du symbole '%s' dans la librairie '%s'."
@@ -17740,27 +17739,27 @@ msgstr "Édition Champs Principaux"
 msgid "Change To"
 msgstr "Changer Pour"
 
-#: eeschema/tools/sch_edit_tool.cpp:1105
+#: eeschema/tools/sch_edit_tool.cpp:1106
 msgid "Label value cannot go below zero"
 msgstr "La valeur du label ne peut pas descendre en dessous de zéro"
 
-#: eeschema/tools/sch_edit_tool.cpp:1372 eeschema/tools/sch_edit_tool.cpp:1375
+#: eeschema/tools/sch_edit_tool.cpp:1375 eeschema/tools/sch_edit_tool.cpp:1378
 #: eeschema/tools/symbol_editor_edit_tool.cpp:531
 #, c-format
 msgid "Edit %s Field"
 msgstr "Édition Champ %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1377
+#: eeschema/tools/sch_edit_tool.cpp:1380
 #: eeschema/tools/symbol_editor_edit_tool.cpp:533
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Édition Champ '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:1907 eeschema/tools/sch_edit_tool.cpp:1994
+#: eeschema/tools/sch_edit_tool.cpp:1910 eeschema/tools/sch_edit_tool.cpp:1999
 msgid "<empty>"
 msgstr "<Vide>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2236
+#: eeschema/tools/sch_edit_tool.cpp:2243
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
@@ -19851,18 +19850,17 @@ msgid "Unable to load repository url"
 msgstr "Impossible de charger l'URL de dépot"
 
 #: kicad/pcm/pcm.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"Impossible d'analyser le dépôt:\n"
-"\n"
-"%s"
+msgstr "Impossible d'analyser le dépôt : %s"
 
 #: kicad/pcm/pcm.cpp:321
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
+"L'URL du dépôt donné ne ressemble pas à un dépôt de paquetage KiCad valide. "
+"Veuillez vérifier l'URL."
 
 #: kicad/pcm/pcm.cpp:347
 msgid "Fetching repository packages"
@@ -20882,7 +20880,7 @@ msgstr ""
 "___Z<sub>out</sub>___  est l’impédance de sortie souhaitée en &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___ \n"
 "\n"
-"___L = 10<sup>a/20</<sup>___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___ <br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
@@ -20913,7 +20911,6 @@ msgstr ""
 "___R3> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -22856,7 +22853,6 @@ msgid "Tessellating copper zones..."
 msgstr "Découpage des zone de cuivre..."
 
 #: pcbnew/board.cpp:888
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "PCB"
 
@@ -23419,9 +23415,8 @@ msgid "(not a closed shape)"
 msgstr "(n'est pas une forme fermée)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:489
-#, fuzzy
 msgid "(multiple board outlines not supported)"
-msgstr "Le contour du CI n'est pas fermé:"
+msgstr "(multiples contours du circuit non supportés)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -23938,7 +23933,7 @@ msgid "Board Finish"
 msgstr "Finition du Circuit"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:101
-#: pcbnew/dialogs/dialog_plot.cpp:1141
+#: pcbnew/dialogs/dialog_plot.cpp:1148
 msgid "Solder Mask/Paste"
 msgstr "Couches Masque/Pâte à Souder"
 
@@ -25573,7 +25568,7 @@ msgid ""
 msgstr ""
 "Ne peut générer un chemin relatif (disque cible différent du disque du C.I.)"
 
-#: pcbnew/dialogs/dialog_export_svg.cpp:272 pcbnew/dialogs/dialog_plot.cpp:964
+#: pcbnew/dialogs/dialog_export_svg.cpp:272 pcbnew/dialogs/dialog_plot.cpp:971
 #: pcbnew/exporters/gen_footprints_placefile.cpp:309
 #: pcbnew/exporters/gen_footprints_placefile.cpp:418
 #, c-format
@@ -27554,9 +27549,8 @@ msgstr "%s et %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid "Error: Pad must have a positive size."
-msgstr "Erreur: Valeur négative pour la taille du coin."
+msgstr "Erreur : Le pad doit avoir une taille positive."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
@@ -28173,19 +28167,19 @@ msgstr "Déplacer la sélection actuelle vers le bas"
 msgid "Generate Drill Files..."
 msgstr "Créer Fichiers de Perçage..."
 
-#: pcbnew/dialogs/dialog_plot.cpp:795
+#: pcbnew/dialogs/dialog_plot.cpp:800
 msgid "HPGL pen size constrained."
 msgstr "Taille plume HPGL limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:813
+#: pcbnew/dialogs/dialog_plot.cpp:818
 msgid "X scale constrained."
 msgstr "Échelle X limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:825
+#: pcbnew/dialogs/dialog_plot.cpp:830
 msgid "Y scale constrained."
 msgstr "Échelle Y limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:841
+#: pcbnew/dialogs/dialog_plot.cpp:846
 #, c-format
 msgid ""
 "Width correction constrained.  The width correction value must be in the "
@@ -28194,15 +28188,15 @@ msgstr ""
 "Correction de largeur. La valeur de correction doit être dans la plage  [%s; "
 "%s]  pour les règles actuelles de conception."
 
-#: pcbnew/dialogs/dialog_plot.cpp:939
+#: pcbnew/dialogs/dialog_plot.cpp:946
 msgid "No layer selected, Nothing to plot"
 msgstr "Pas de couche sélectionnée, Rien à tracer"
 
-#: pcbnew/dialogs/dialog_plot.cpp:1004
+#: pcbnew/dialogs/dialog_plot.cpp:1011
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attention: option d'échelle ajustée à une valeur très petite"
 
-#: pcbnew/dialogs/dialog_plot.cpp:1007
+#: pcbnew/dialogs/dialog_plot.cpp:1014
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attention: option d'échelle ajustée à une valeur très grande"
 
@@ -28211,7 +28205,6 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -30994,13 +30987,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -31315,13 +31308,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -33113,11 +33106,11 @@ msgstr "Aucune empreinte sélectionnée."
 msgid "Footprint Image File Name"
 msgstr "Nom du Fichier Image Empreinte"
 
-#: pcbnew/footprint_editor_utils.cpp:248
+#: pcbnew/footprint_editor_utils.cpp:250
 msgid "Edit Zone"
 msgstr "Éditer Zone"
 
-#: pcbnew/footprint_editor_utils.cpp:327
+#: pcbnew/footprint_editor_utils.cpp:329
 #, c-format
 msgid ""
 "The current configuration does not include a library named '%s'.\n"
@@ -33126,11 +33119,11 @@ msgstr ""
 "La configuration actuelle n'inclut pas de librairie de nom logique '%s'. \n"
 "Utilisez Gérer les Librairies d'Empreintes pour modifier la configuration."
 
-#: pcbnew/footprint_editor_utils.cpp:330
+#: pcbnew/footprint_editor_utils.cpp:332
 msgid "Library not found in footprint library table."
 msgstr "Librairie non trouvée dans la table des librairies d'empreintes."
 
-#: pcbnew/footprint_editor_utils.cpp:339
+#: pcbnew/footprint_editor_utils.cpp:341
 #, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
@@ -33141,7 +33134,7 @@ msgstr ""
 "\n"
 " Utilisez Gérer les Librairies d'Empreintes pour modifier la configuration."
 
-#: pcbnew/footprint_editor_utils.cpp:342 pcbnew/footprint_viewer_frame.cpp:1107
+#: pcbnew/footprint_editor_utils.cpp:344 pcbnew/footprint_viewer_frame.cpp:1107
 msgid "Footprint library not enabled."
 msgstr "Librairie d'empreintes non activée."
 
@@ -36296,17 +36289,17 @@ msgstr ""
 "ligne: %d offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Nom de pin d feuille invalide en\n"
-"fichier: \"%s\"\n"
-"ligne: %d\n"
-"offset: %d"
+"Pad de taille zéro invalide attaché à %s dans\n"
+"fichier : %s\n"
+"ligne : %d\n"
+"décalage : %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5239
 #, c-format
@@ -36693,15 +36686,13 @@ msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:552 pcbnew/router/pns_kicad_iface.cpp:623
 #: pcbnew/router/router_tool.cpp:722
-#, fuzzy
 msgid "board minimum clearance"
-msgstr "Isolation minimum du PCB %s."
+msgstr "isolation minimum du PCB"
 
 #: pcbnew/router/pns_kicad_iface.cpp:556 pcbnew/router/pns_kicad_iface.cpp:622
 #: pcbnew/router/router_tool.cpp:689 pcbnew/router/router_tool.cpp:709
-#, fuzzy
 msgid "board minimum track width"
-msgstr "c.i. largeur minimum"
+msgstr "c.i. largeur minimum de piste"
 
 #: pcbnew/router/pns_kicad_iface.cpp:563
 msgid "existing track"
@@ -37062,9 +37053,9 @@ msgid "Track Width: %s"
 msgstr "Largeur Piste: '%s'"
 
 #: pcbnew/router/router_tool.cpp:2491
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "Ecart Paire Différentielle"
+msgstr "Ecart Paire Différentielle: %s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
@@ -37148,14 +37139,14 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Une 'wire_via'  a une référence vers un padstack '%s' manquant."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops created"
-msgstr "%d Teardrops créés"
+msgstr "%d teardrops créés"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops removed."
-msgstr "%d Teardrops supprimés."
+msgstr "%d teardrops supprimés."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
 msgid "Round shapes:"
@@ -37969,7 +37960,7 @@ msgstr "Les polygones auto intersectants ne sont pas autorisés"
 msgid "Via location violates DRC."
 msgstr "La position de la via viole le DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:3226
+#: pcbnew/tools/drawing_tool.cpp:3229
 msgid "Place via"
 msgstr "Place via"
 
@@ -40844,6 +40835,11 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -40854,9 +40850,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -40870,9 +40867,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -40882,13 +40880,12 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:33
 msgid "KiCad"
 msgstr "KiCad"
 
@@ -40899,6 +40896,10 @@ msgstr "Suite CAO Electronique"
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
+
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
@@ -40912,6 +40913,11 @@ msgstr "PCB Calculator"
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
+
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
@@ -40924,31 +40930,9 @@ msgstr "Éditeur de circuit imprimé"
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
-
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
-msgid "EDA"
-msgstr ""
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
-msgid "Circuit board"
-msgstr "Imprimer PCB"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "PcbNew"
-msgstr ""
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:40
-#, fuzzy
-msgid "Eeschema"
-msgstr "eeschema"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -40999,6 +40983,43 @@ msgstr "Schématique KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
 
+#~ msgid "Failed to infer model from Value '%s'"
+#~ msgstr "Impossible de déduire le modèle à partir de la valeur '%s'"
+
+#~ msgid "H Align (fields only):"
+#~ msgstr "Alignement H (champs seulement) :"
+
+#~ msgid "V Align (fields only):"
+#~ msgstr "Alignement V (champs seulement) :"
+
+#~ msgid ""
+#~ "'%s' is not a valid symbol library table.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\"%s\" n'est pas un fichier de table de librairies de symboles valide.\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Error loading global symbol library table.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Erreur en enregistrant la table globale de librairie de symboles.\n"
+#~ " \n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Failed to write project symbol library table. Error:\n"
+#~ "  %s"
+#~ msgstr ""
+#~ "Impossible d’écrire la table des librairies de symboles du projet. "
+#~ "Erreur : %s"
+
+#~ msgid "Failed to set parameter '%s' to '%s' in model '%s'"
+#~ msgstr "Impossible d'ajuster le paramètre '%s' à '%s' dans le modèle '%s'"
+
 #~ msgid "3D configuration directory is unknown"
 #~ msgstr "Le répertoire 3D de configuration est inconnu"
 
@@ -41010,48 +41031,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Problems writing configuration file"
 #~ msgstr "Problèmes d'écriture du fichier de configuration"
-
-#~ msgid "H Align (fields only):"
-#~ msgstr "Alignement H (champs seulement) :"
-
-#~ msgid "V Align (fields only):"
-#~ msgstr "Alignement V (champs seulement) :"
-
-#, c-format
-#~ msgid ""
-#~ "'%s' is not a valid symbol library table.\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "\"%s\" n'est pas un fichier de table de librairies de symboles valide.\n"
-#~ "\n"
-#~ "%s"
-
-#, c-format
-#~ msgid ""
-#~ "Error loading global symbol library table.\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Erreur en enregistrant la table globale de librairie de symboles.\n"
-#~ " \n"
-#~ "%s"
-
-#, c-format
-#~ msgid ""
-#~ "Failed to write project symbol library table. Error:\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Impossible d’écrire la table des librairies de symboles du projet. "
-#~ "Erreur : %s"
-
-#, c-format
-#~ msgid "Failed to infer model from Value '%s'"
-#~ msgstr "Impossible de déduire le modèle à partir de la valeur '%s'"
-
-#, c-format
-#~ msgid "Failed to set parameter '%s' to '%s' in model '%s'"
-#~ msgstr "Impossible d'ajuster le paramètre '%s' à '%s' dans le modèle '%s'"
 
 #~ msgid "Warning: Pad size is less than zero."
 #~ msgstr "Attention: La taille de la pastille est plus petite que zéro."
@@ -41103,12 +41082,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Alias:"
 #~ msgstr "Alias:"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid "Duplicate items %s%s\n"
 #~ msgstr "Eléments dupliqués %s%s\n"
@@ -43929,8 +43902,8 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "user does not have permission to delete directory \"%s\""
 #~ msgstr ""
-#~ "Vous n'avez pas la permission d'écriture pour supprimer le répertoire "
-#~ "\"%s\""
+#~ "Vous n'avez pas la permission d'écriture pour supprimer le répertoire \"%s"
+#~ "\""
 
 #~ msgid "library directory \"%s\" has unexpected sub-directories"
 #~ msgstr "le répertoire librairie \"%s\" a des sous-répertoires inattendus"
@@ -43948,8 +43921,8 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "User does not have permission to delete directory \"%s\"."
 #~ msgstr ""
-#~ "Vous n'avez pas la permission d'écriture pour supprimer le répertoire "
-#~ "\"%s\"."
+#~ "Vous n'avez pas la permission d'écriture pour supprimer le répertoire \"%s"
+#~ "\"."
 
 #~ msgid ""
 #~ "Invalid net ID in\n"
@@ -47805,13 +47778,13 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ "buried_via        graphic<br><br></pre><b>Constraint Types</"
 #~ "b><pre>clearance    annulus_width   track_width     hole<br><br></"
 #~ "pre><b>Examples</b><pre>(rule \"copper keepout\"<br>   (disallow track) "
-#~ "(disallow via) (disallow zone)<br>   (condition \"a.name == "
-#~ "no_copper\"))<br><br>(rule neckdown<br>   (constraint track_width (min "
-#~ "0.2mm) (opt 0.25mm) (max 1.0mm)<br>   (condition \"a.name == "
-#~ "BGA\"))<br><br>(rule HV<br>   (constraint clearance (min 1.5mm)<br>   "
-#~ "(condition \"a.netclass == HV\"))<br><br>(rule HV-HV<br>   (constraint "
-#~ "clearance (min 2.0mm)<br>   (condition \"a.netclass == HV && b.netclass "
-#~ "== HV\"))<br></pre>"
+#~ "(disallow via) (disallow zone)<br>   (condition \"a.name == no_copper"
+#~ "\"))<br><br>(rule neckdown<br>   (constraint track_width (min 0.2mm) (opt "
+#~ "0.25mm) (max 1.0mm)<br>   (condition \"a.name == BGA\"))<br><br>(rule "
+#~ "HV<br>   (constraint clearance (min 1.5mm)<br>   (condition \"a.netclass "
+#~ "== HV\"))<br><br>(rule HV-HV<br>   (constraint clearance (min "
+#~ "2.0mm)<br>   (condition \"a.netclass == HV && b.netclass == HV\"))<br></"
+#~ "pre>"
 #~ msgstr ""
 #~ "<b>Top-level Expressions</b><pre>(version &lt;number>)<br>(rule &lt;"
 #~ "rule_name> &lt;rule_expression> ...)<br><br></pre><b>Rule Expressions</"
@@ -47822,20 +47795,20 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ "buried_via        graphic<br><br></pre><b>Constraint Types</"
 #~ "b><pre>clearance    annulus_width   track_width     hole<br><br></"
 #~ "pre><b>Examples</b><pre>(rule \"copper keepout\"<br>   (disallow track) "
-#~ "(disallow via) (disallow zone)<br>   (condition \"a.name == "
-#~ "no_copper\"))<br><br>(rule neckdown<br>   (constraint track_width (min "
-#~ "0.2mm) (opt 0.25mm) (max 1.0mm)<br>   (condition \"a.name == "
-#~ "BGA\"))<br><br>(rule HV<br>   (constraint clearance (min 1.5mm)<br>   "
-#~ "(condition \"a.netclass == HV\"))<br><br>(rule HV-HV<br>   (constraint "
-#~ "clearance (min 2.0mm)<br>   (condition \"a.netclass == HV && b.netclass "
-#~ "== HV\"))<br></pre>"
+#~ "(disallow via) (disallow zone)<br>   (condition \"a.name == no_copper"
+#~ "\"))<br><br>(rule neckdown<br>   (constraint track_width (min 0.2mm) (opt "
+#~ "0.25mm) (max 1.0mm)<br>   (condition \"a.name == BGA\"))<br><br>(rule "
+#~ "HV<br>   (constraint clearance (min 1.5mm)<br>   (condition \"a.netclass "
+#~ "== HV\"))<br><br>(rule HV-HV<br>   (constraint clearance (min "
+#~ "2.0mm)<br>   (condition \"a.netclass == HV && b.netclass == HV\"))<br></"
+#~ "pre>"
 
 #~ msgid "Use touchpad to pan"
 #~ msgstr "Utiliser le pavé tactile pour le pan"
 
 #~ msgid ""
-#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with "
-#~ "Ctrl+scroll)."
+#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl"
+#~ "+scroll)."
 #~ msgstr ""
 #~ "Activez les commandes compatibles avec le touchpad (pan avec scroll, zoom "
 #~ "avec Ctrl+ scroll)."
@@ -50281,6 +50254,9 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgid "Settings for sheet size and frame references"
 #~ msgstr "Sélection de la dimension de la page et des textes du cartouche"
 
+#~ msgid "Print board"
+#~ msgstr "Imprimer PCB"
+
 #~ msgid "P&lot..."
 #~ msgstr "&Tracer..."
 
@@ -51456,8 +51432,8 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Could not load symbol \"%s\" from library \"%s\"."
 #~ msgstr ""
-#~ "Impossible de charger le symbole \"%s\" à partie du fichier librairie "
-#~ "\"%s\"."
+#~ "Impossible de charger le symbole \"%s\" à partie du fichier librairie \"%s"
+#~ "\"."
 
 #~ msgid "Add component"
 #~ msgstr "Ajout composant"
