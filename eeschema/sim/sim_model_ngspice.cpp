@@ -92,14 +92,14 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     if( paramName == "level" || paramName == "version" )
         return;
 
-    // Also ignore "type" parameter, because Ngspice does that too.
-    if( paramName == "type" )
+    // Ignore the purely informative LTspice-specific parameters "mfg" and "type".
+    if( paramName == "mfg" || paramName == "type" )
         return;
 
     if( GetDeviceType() == DEVICE_TYPE_::NPN || GetDeviceType() == DEVICE_TYPE_::PNP )
     {
-        // Ignore the purely informative LTspice-specific parameters "mfg", "icrating", "vceo".
-        if( paramName == "mfg" || paramName == "icrating" || paramName == "vceo" )
+        // Ignore the purely informative LTspice-specific parameters "icrating" and "vceo".
+        if( paramName == "icrating" || paramName == "vceo" )
             return;
 
         // Ignore unused parameters.
