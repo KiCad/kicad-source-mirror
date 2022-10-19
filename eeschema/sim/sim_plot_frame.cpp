@@ -466,8 +466,10 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 
     if( aSimCommand != "" )
         m_circuitModel->SetSimCommand( aSimCommand );
-    else
+    else if( m_circuitModel->GetSheetSimCommand() != getCurrentSimCommand() )
         m_circuitModel->SetSimCommand( getCurrentSimCommand() );
+    else
+        m_circuitModel->SetSimCommand( "" );
 
     // Make .save all and .probe alli permanent for now.
     m_circuitModel->SetOptions( m_settingsDlg->GetNetlistOptions()
