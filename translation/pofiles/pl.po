@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-09 08:03+0000\n"
+"PO-Revision-Date: 2022-10-21 15:03+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2363,7 +2363,7 @@ msgstr "Podgląd rozmiaru papieru"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Title Block Data"
-msgstr "Podgląd parametrów tabliczki tytułowej"
+msgstr "Podgląd parametrów bloku tytułowego"
 
 #: common/dialogs/dialog_page_settings.cpp:109
 #: common/dialogs/dialog_page_settings_base.h:145
@@ -2377,7 +2377,7 @@ msgstr "Papier"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Title Block"
-msgstr "Tabliczka tytułowa"
+msgstr "Blok tytułowy"
 
 #: common/dialogs/dialog_page_settings.cpp:472
 #, c-format
@@ -2553,7 +2553,7 @@ msgstr "Plik:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:172
 msgid "Title Block Parameters"
-msgstr "Parametry tabliczki tytułowej"
+msgstr "Parametry bloku tytułowego"
 
 #: common/dialogs/dialog_page_settings_base.cpp:182
 #, c-format
@@ -2777,7 +2777,7 @@ msgstr "Czarno-biały"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
-msgstr "Rysuj opis arkusza i tabliczkę tytułową"
+msgstr "Rysuj opis arkusza i blok tytułowy"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -4134,7 +4134,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Niewystarczające uprawnienia do folderu '%s'."
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4144,10 +4144,11 @@ msgid ""
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
 "Sytuacja potencjalnie niebezpieczna!\n"
-"Wygląda na to, że ostatnie zmiany w pliku\n"
+"Wygląda na to, że podczas edycji pliku\n"
 "%s\n"
-"nie zostały zapisane poprawnie.  Czy chcesz przywrócić ostatnie zapisane "
-"zmiany?"
+"nastąpiło zamknięcie programu przed zapisem.\n"
+"\n"
+"Czy chcesz otworzyć plik zapisany automatycznie?"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -5802,7 +5803,7 @@ msgstr "Ustawienia strony..."
 
 #: common/tool/actions.cpp:96
 msgid "Settings for paper size and title block info"
-msgstr "Ustawienia rozmiaru strony oraz ramki tytułowej"
+msgstr "Ustawienia rozmiaru strony oraz bloku tytułowego"
 
 #: common/tool/actions.cpp:102
 msgid "Print..."
@@ -9095,9 +9096,8 @@ msgstr "Ułożenie H:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "Widoczność (tylko pola)"
+msgstr "(tylko pola)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
 msgid "V Align:"
@@ -9146,11 +9146,13 @@ msgid "symbol"
 msgstr "symboli"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Błąd podczas tworzenia biblioteki symboli '%s'."
+msgstr ""
+"Błąd podczas tworzenia tabeli bibliotek symboli '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9164,21 +9166,24 @@ msgid "File '%s' not found."
 msgstr "Nie znaleziono pliku '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "Wystąpił błąd podczas ładowania tabeli bibliotek schematu '%s'."
+msgstr ""
+"Wystąpił błąd podczas ładowania tabeli bibliotek symboli '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "Nie można utworzyć globalnej tabeli bibliotek w ścieżce '%s'."
+msgstr "Nie można utworzyć globalnej tabeli bibliotek '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr "Nie można skopiować pliku globalnej tabeli symboli '%s' do '%s'."
+msgstr ""
+"Wystąpił błąd podczas kopiowania pliku globalnej tabeli symboli '%s' do '%s'."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -10477,7 +10482,7 @@ msgstr "Rysuj obramowanie strony"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr "Rysuje obramowanie arkusza i jego tabliczkę tytułową"
+msgstr "Rysuje obramowanie arkusza i jego blok tytułowy"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -10575,7 +10580,7 @@ msgstr "Drukuj stronę %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "Drukuj opis arkusza i tabliczkę tytułową"
+msgstr "Drukuj opis arkusza i blok tytułowy"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -10636,9 +10641,8 @@ msgid "Rescue Symbols"
 msgstr "Odzyskaj symbole"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Pokaż drzewo zawartości biblioteki symboli"
+msgstr "Pomiń przywracanie symboli"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -11145,14 +11149,12 @@ msgid "Pin Assignments"
 msgstr "Przyporządkowanie pinów"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:242
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Wyłącz symbol z symulacji"
+msgstr "Wyłącz z symulacji"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Store in Reference and Value"
-msgstr "Węzeł odniesienia"
+msgstr "Zapamiętaj w Oznaczeniu i Wartości"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:116
 msgid "Simulation Model Editor"
@@ -11747,14 +11749,13 @@ msgid "Library '%s' not found."
 msgstr "Biblioteka '%s' nie została znaleziona."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"Wystąpił błąd podczas zapisu pustej tabeli bibliotek symboli.\n"
-"\n"
-"%s"
+"Wystąpił błąd podczas zapisu tabeli bibliotek symboli projektu. \n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -13522,7 +13523,7 @@ msgstr "Przypisania footprintów..."
 #: pcbnew/dialogs/dialog_export_svg.cpp:93
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:131
 msgid "Export"
-msgstr "Eksportuj"
+msgstr "Eksport"
 
 #: eeschema/menubar.cpp:122
 msgid "Drawing to Clipboard"
@@ -13577,7 +13578,7 @@ msgstr "Ustawienia"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "Nie można wygenerować nazwy dla '%s': przekroczenie UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:339
 msgid ""
@@ -13590,7 +13591,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:383
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "Nie można otworzyć pliku '%s' by zapisać model IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, c-format
@@ -14550,7 +14551,7 @@ msgstr "Nieprawidłowy typ strony"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1871
 msgid "Invalid title block comment number"
-msgstr "Nieprawidłowa liczba komentarzy w tabelce tytułowej"
+msgstr "Nieprawidłowa liczba komentarzy w bloku tytułowym"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2003
 msgid "Invalid sheet pin name"
@@ -15311,14 +15312,13 @@ msgstr ""
 "bazowego '%s' w bibliotece '%s'"
 
 #: eeschema/sim/sim_model.cpp:617
-#, fuzzy
 msgid "Failed to read simulation model from fields"
-msgstr "Nie można odczytać modelu symulacji %s."
+msgstr "Nie można odczytać modelu symulacji z odpowiednich pól"
 
 #: eeschema/sim/sim_model.cpp:815 eeschema/sim/sim_model.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a simulation model parameter named '%s'"
-msgstr "Nie można odnaleźć pola zdefiniowanego przez użytkownika '%s'."
+msgstr "Nie można odnaleźć parametru modelu symulacji zwanego '%s'"
 
 #: eeschema/sim/sim_model.cpp:1132
 #, c-format
@@ -15331,31 +15331,33 @@ msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
+"Typ modelu symulacji musi być taki sam jak jego klasa bazowa: '%s', choć "
+"jest '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "Nie można odnaleźć pola zdefiniowanego przez użytkownika '%s'."
+msgstr "Nie można odnaleźć komponentu IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "Nie można odnaleźć pola zdefiniowanego przez użytkownika '%s'."
+msgstr "Nie można odnaleźć pinu IBIS '%s' w komponencie '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Niepoprawny indeks pinu symbolu: '%s'"
+msgstr "Niepoprawny pin IBIS '%s' w komponencie '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "Nie można odnaleźć pola zdefiniowanego przez użytkownika '%s'."
+msgstr "Nie można odnaleźć modelu IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Niepoprawny indeks pinu symbolu: '%s'"
+msgstr "Niepoprawny model IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:298
 msgid "Power supply"
@@ -16185,7 +16187,7 @@ msgstr "Obrys"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1243
 msgid "Power Symbol"
-msgstr "Symbol zasilania"
+msgstr "Symbol Zasilania"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:54
 msgid "Import Symbol"
@@ -19007,7 +19009,7 @@ msgstr "Pokaż punkty siatki (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:138
 msgid "Show drawing sheet border and title block"
-msgstr "Pokazuje opis arkusza i tabliczkę tytułową"
+msgstr "Pokazuje opis arkusza i blok tytułowy"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:140
 msgid "Show drawing sheet page limits"
@@ -19177,7 +19179,7 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Edycja obramowania arkusza oraz tabelki tytułowej do wykorzystania na "
+"Edycja obramowania arkusza oraz bloku tytułowego do wykorzystania na "
 "schematach i projektach PCB"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
@@ -19721,18 +19723,17 @@ msgid "Unable to load repository url"
 msgstr "Nie mogę załadować URL repozytorium"
 
 #: kicad/pcm/pcm.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"Nie można przetworzyć repozytorium:\n"
-"\n"
-"%s"
+msgstr "Nie można przetworzyć repozytorium: %s"
 
 #: kicad/pcm/pcm.cpp:321
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
+"Podany adres URL repozytorium nie wygląda na prawidłowy pakiet przeznaczony "
+"dla programu KiCad. Proszę ponownie sprawdzić poprawność adresu URL."
 
 #: kicad/pcm/pcm.cpp:347
 msgid "Fetching repository packages"
@@ -20129,7 +20130,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:121
 msgid "Edit drawing sheet borders and title block"
-msgstr "Edycja obramowania arkusza i tabliczki tytułowej"
+msgstr "Edycja obramowania arkusza i bloku tytułowego"
 
 #: kicad/tools/kicad_manager_actions.cpp:127
 msgid "Run Plugin and Content Manager"
@@ -20697,30 +20698,30 @@ msgstr "Ustawienia podglądu strony..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
-msgstr "Edytuj dane poglądowe dla rozmiaru strony i tabelki tytułowej"
+msgstr "Edytuj dane poglądowe dla rozmiaru strony i bloku tytułowego"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr "Pokaż tabliczkę tytułową w trybie podglądu"
+msgstr "Pokaż blok tytułowy w trybie podglądu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
-"Pokazuje ramkę w trybie podglądu:\n"
+"Pokazuje blok tytułowy w trybie podglądu:\n"
 "Odpowiedniki tekstu będą pokazywane jako właściwe teksty."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr "Pokaż tabliczkę tytułową w trybie edycji"
+msgstr "Pokaż blok tytułowy w trybie edycji"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
-"Pokaż ramkę w trybie edycji:\n"
+"Pokaż blok tytułowy w trybie edycji:\n"
 "Teksty będą pokazywane jako tokeny ${keyword}."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:507
@@ -20776,7 +20777,6 @@ msgstr ""
 "___R3 = 1 / (A/Z<sub>wy</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -20787,9 +20787,9 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "## Tłumik rozdzielający\n"
-"Tłumienie to 6dB  \n"
-"___Z<sub>we</sub>___ żądana impedancja wejściowa w &#x2126;  \n"
-"___Z<sub>wy</sub>___ żądana impedancja wyjściowa w &#x2126;  \n"
+"Tłumienie to 6dB<br>\n"
+"___Z<sub>we</sub>___ żądana impedancja wejściowa w &#x2126;<br>\n"
+"___Z<sub>wy</sub>___ żądana impedancja wyjściowa w &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>we</sub> = Z<sub>wy</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
@@ -23037,7 +23037,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr "Kontrolowanie impedancji"
+msgstr "Z kontrolą impedancji"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
@@ -23270,9 +23270,8 @@ msgid "(not a closed shape)"
 msgstr "(nie jest zamkniętym kształtem)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:489
-#, fuzzy
 msgid "(multiple board outlines not supported)"
-msgstr "Obrys płytki nie tworzy zamkniętego kształtu:"
+msgstr "(wielokrotne obrysy płytki nie są obsługiwane)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -25460,7 +25459,7 @@ msgstr "Eksportuj jako czarne elementy na białym tle"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
-msgstr "Strona z opisem arkusza i tabliczką tytułową"
+msgstr "Strona z opisem arkusza i blokiem tytułowym"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Current page size"
@@ -27394,9 +27393,8 @@ msgstr "%s oraz %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid "Error: Pad must have a positive size."
-msgstr "Błąd: Niepoprawna (ujemna) wartość rozmiaru narożnika."
+msgstr "Błąd: Pole lutownicze nie może posiadać ujemnego rozmiaru."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
@@ -28063,7 +28061,7 @@ msgstr "Załączone warstwy"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:74
 msgid "Plot border and title block"
-msgstr "Rysuj opis arkusza i tabliczkę tytułową"
+msgstr "Rysuj opis arkusza i blok tytułowy"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:79
 msgid "Plot footprint values"
@@ -36099,15 +36097,15 @@ msgstr ""
 "linia: %d przesunięcie: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Nieprawidłowa nazwa pinu arkusza w\n"
-"plik: \"%s\"\n"
+"Nieprawidłowe pole lut. o zerowym rozmiarze przypięte do '%s' w\n"
+"plik: %s\n"
 "linia: %d\n"
 "przesunięcie: %d"
 
@@ -36951,12 +36949,12 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Wire_via odnosi się do brakującego stosu '%s'."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops created"
 msgstr "Utworzono %d łezek"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops removed."
 msgstr "Usunięto %d łezek."
 
@@ -39944,7 +39942,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:362
 msgid "Show drawing sheet borders and title block"
-msgstr "Pokaż ramkę arkusza i tabliczkę tytułową"
+msgstr "Pokaż ramkę arkusza i blok tytułowy"
 
 #: pcbnew/widgets/appearance_controls.cpp:384
 msgid "No Layers"
@@ -40715,21 +40713,19 @@ msgstr "Pakiet EDA do projektowania schematów i obwodów drukowanych"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
-msgstr "Wydrukuj obwód drukowany"
+msgstr "Obwód drukowany"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "PcbNew"
-msgstr ""
+msgstr "PcbNew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:40
-#, fuzzy
 msgid "Eeschema"
-msgstr "eeschema"
+msgstr "Eeschema"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
