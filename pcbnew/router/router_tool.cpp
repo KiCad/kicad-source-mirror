@@ -2000,8 +2000,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     PNS::ITEM_SET itemsToDrag;
     FOOTPRINT*    footprint = nullptr;
 
-    // Courtyard conflicts will be tested only if the LAYER_CONFLICTS_SHADOW gal layer is visible
-    bool showCourtyardConflicts = frame()->GetBoard()->IsElementVisible( LAYER_CONFLICTS_SHADOW );
+    bool showCourtyardConflicts = frame()->GetPcbNewSettings()->m_ShowCourtyardCollisions;
 
     std::shared_ptr<DRC_ENGINE>         drcEngine = m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine();
     DRC_INTERACTIVE_COURTYARD_CLEARANCE courtyardClearanceDRC( drcEngine );

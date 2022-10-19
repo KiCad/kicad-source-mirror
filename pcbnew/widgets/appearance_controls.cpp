@@ -338,31 +338,30 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
 
 #define RR  APPEARANCE_CONTROLS::APPEARANCE_SETTING   // Render Row abbreviation to reduce source width
 
-    //     text                  id                        tooltip                   opacity slider
-    RR( _HKI( "Tracks" ),           LAYER_TRACKS,             _HKI( "Show tracks" ),       true ),
-    RR( _HKI( "Vias" ),             LAYER_VIAS,               _HKI( "Show all vias" ),     true ),
-    RR( _HKI( "Pads" ),             LAYER_PADS,               _HKI( "Show all pads" ),     true ),
-    RR( _HKI( "Zones" ),            LAYER_ZONES,              _HKI( "Show copper zones" ), true ),
-    RR( _HKI( "Images" ),           LAYER_DRAW_BITMAPS,       _HKI( "Show user images" ),  true ),
+    //     text                         id                        tooltip                   opacity slider
+    RR( _HKI( "Tracks" ),             LAYER_TRACKS,             _HKI( "Show tracks" ),         true ),
+    RR( _HKI( "Vias" ),               LAYER_VIAS,               _HKI( "Show all vias" ),       true ),
+    RR( _HKI( "Pads" ),               LAYER_PADS,               _HKI( "Show all pads" ),       true ),
+    RR( _HKI( "Zones" ),              LAYER_ZONES,              _HKI( "Show copper zones" ),   true ),
+    RR( _HKI( "Images" ),             LAYER_DRAW_BITMAPS,       _HKI( "Show user images" ),    true ),
     RR(),
-    RR( _HKI( "Footprints Front" ), LAYER_MOD_FR,             _HKI( "Show footprints that are on board's front" ) ),
-    RR( _HKI( "Footprints Back" ),  LAYER_MOD_BK,             _HKI( "Show footprints that are on board's back" ) ),
-    RR( _HKI( "Through-hole Pads" ),LAYER_PADS_TH,            _HKI( "Show through-hole pads" ) ),
-    RR( _HKI( "Values" ),           LAYER_MOD_VALUES,         _HKI( "Show footprint values" ) ),
-    RR( _HKI( "References" ),       LAYER_MOD_REFERENCES,     _HKI( "Show footprint references" ) ),
-    RR( _HKI( "Footprint Text" ),   LAYER_MOD_TEXT,           _HKI( "Show all footprint text" ) ),
-    RR( _HKI( "Hidden Text" ),      LAYER_MOD_TEXT_INVISIBLE, _HKI( "Show footprint text marked as invisible" ) ),
+    RR( _HKI( "Footprints Front" ),   LAYER_MOD_FR,             _HKI( "Show footprints that are on board's front" ) ),
+    RR( _HKI( "Footprints Back" ),    LAYER_MOD_BK,             _HKI( "Show footprints that are on board's back" ) ),
+    RR( _HKI( "Through-hole Pads" ),  LAYER_PADS_TH,            _HKI( "Show through-hole pads" ) ),
+    RR( _HKI( "Values" ),             LAYER_MOD_VALUES,         _HKI( "Show footprint values" ) ),
+    RR( _HKI( "References" ),         LAYER_MOD_REFERENCES,     _HKI( "Show footprint references" ) ),
+    RR( _HKI( "Footprint Text" ),     LAYER_MOD_TEXT,           _HKI( "Show all footprint text" ) ),
+    RR( _HKI( "Hidden Text" ),        LAYER_MOD_TEXT_INVISIBLE, _HKI( "Show footprint text marked as invisible" ) ),
     RR(),
     RR(),
-    RR( _HKI( "Ratsnest" ),         LAYER_RATSNEST,           _HKI( "Show unconnected nets as a ratsnest") ),
-    RR( _HKI( "DRC Warnings" ),     LAYER_DRC_WARNING,        _HKI( "DRC violations with a Warning severity" ) ),
-    RR( _HKI( "DRC Errors" ),       LAYER_DRC_ERROR,          _HKI( "DRC violations with an Error severity" ) ),
-    RR( _HKI( "DRC Exclusions" ),   LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
-    RR( _HKI( "Anchors" ),          LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
-    RR( _HKI( "Shadow on Locked Items" ), LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show a shadow marker on locked items" ) ),
-    RR( _HKI( "Shadow on Conflicts" ),    LAYER_CONFLICTS_SHADOW,   _HKI( "Show a shadow on overlapping courtyards while moving footprints" ) ),
-    RR( _HKI( "Drawing Sheet" ),    LAYER_DRAWINGSHEET,       _HKI( "Show drawing sheet borders and title block" ) ),
-    RR( _HKI( "Grid" ),             LAYER_GRID,               _HKI( "Show the (x,y) grid dots" ) )
+    RR( _HKI( "Ratsnest" ),           LAYER_RATSNEST,           _HKI( "Show unconnected nets as a ratsnest") ),
+    RR( _HKI( "DRC Warnings" ),       LAYER_DRC_WARNING,        _HKI( "DRC violations with a Warning severity" ) ),
+    RR( _HKI( "DRC Errors" ),         LAYER_DRC_ERROR,          _HKI( "DRC violations with an Error severity" ) ),
+    RR( _HKI( "DRC Exclusions" ),     LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
+    RR( _HKI( "Anchors" ),            LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
+    RR( _HKI( "Locked Item Shadow" ), LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show a shadow marker on locked items" ) ),
+    RR( _HKI( "Drawing Sheet" ),      LAYER_DRAWINGSHEET,       _HKI( "Show drawing sheet borders and title block" ) ),
+    RR( _HKI( "Grid" ),               LAYER_GRID,               _HKI( "Show the (x,y) grid dots" ) )
 };
 
 /// These GAL layers are shown in the Objects tab in the footprint editor

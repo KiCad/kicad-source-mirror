@@ -74,6 +74,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_PolarCoords( false ),
           m_RotationAngle( ANGLE_90 ),
           m_ShowPageLimits( true ),
+          m_ShowCourtyardCollisions( true ),
           m_AutoRefillZones( false ),
           m_AllowFreePads( false ),
           m_PnsSettings( nullptr ),
@@ -118,6 +119,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "editing.esc_clears_net_highlight",
             &m_ESCClearsNetHighlight, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.show_courtyard_collisions",
+            &m_ShowCourtyardCollisions, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.magnetic_graphics",
             &m_MagneticItems.graphics, true ) );

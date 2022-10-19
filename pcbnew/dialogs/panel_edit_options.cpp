@@ -67,7 +67,8 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_magneticTrackChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.tracks ) );
     m_magneticGraphicsChoice->SetSelection( !aCfg->m_MagneticItems.graphics );
     m_flipLeftRight->SetValue( aCfg->m_FlipLeftRight );
-    m_cbPcbGraphic45Mode->SetValue( aCfg->m_Use45DegreeLimit );
+    m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45DegreeLimit );
+    m_cbCourtyardCollisions->SetValue( aCfg->m_ShowCourtyardCollisions );
 
     /* Set display options */
     m_OptDisplayCurvedRatsnestLines->SetValue( aCfg->m_Display.m_DisplayRatsnestLinesCurved );
@@ -99,7 +100,7 @@ void PANEL_EDIT_OPTIONS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
     m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
     m_magneticPads->SetValue( aCfg->m_MagneticItems.pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
     m_magneticGraphics->SetValue( aCfg->m_MagneticItems.graphics );
-    m_cbFpGraphic45Mode->SetValue( aCfg->m_Use45Limit );
+    m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45Limit );
 }
 
 
@@ -138,7 +139,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
                                                                : MAGNETIC_OPTIONS::NO_EFFECT;
         cfg->m_MagneticItems.graphics = m_magneticGraphics->GetValue();
 
-        cfg->m_Use45Limit = m_cbFpGraphic45Mode->GetValue();
+        cfg->m_Use45Limit = m_cbConstrainHV45Mode->GetValue();
     }
     else
     {
@@ -172,7 +173,8 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_CtrlClickHighlight = m_rbCtrlClickAction->GetSelection();
 #endif
 
-        cfg->m_Use45DegreeLimit = m_cbPcbGraphic45Mode->GetValue();
+        cfg->m_Use45DegreeLimit = m_cbConstrainHV45Mode->GetValue();
+        cfg->m_ShowCourtyardCollisions = m_cbCourtyardCollisions->GetValue();
     }
 
     return true;

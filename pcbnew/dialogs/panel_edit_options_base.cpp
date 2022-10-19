@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,57 +23,48 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* bOptionsSizer;
 	bOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing Options") ), wxVERTICAL );
 
-	wxBoxSizer* bSizeFPEdit;
-	bSizeFPEdit = new wxBoxSizer( wxVERTICAL );
-
-	m_magneticPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Magnetic pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizeFPEdit->Add( m_magneticPads, 0, wxBOTTOM, 3 );
-
-	m_magneticGraphics = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Magnetic graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizeFPEdit->Add( m_magneticGraphics, 0, wxBOTTOM, 5 );
-
-
-	bOptionsSizer->Add( bSizeFPEdit, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
 	wxBoxSizer* bSizerBoardEdit;
 	bSizerBoardEdit = new wxBoxSizer( wxVERTICAL );
 
 	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBoardEdit->Add( m_flipLeftRight, 0, wxBOTTOM, 5 );
+	bSizerBoardEdit->Add( m_flipLeftRight, 0, wxBOTTOM|wxLEFT, 5 );
+
+	m_allowFreePads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_allowFreePads->SetToolTip( _("If checked, pads can be moved with respect to the rest of the footprint.") );
+
+	bSizerBoardEdit->Add( m_allowFreePads, 0, wxBOTTOM|wxLEFT, 5 );
+
+	m_staticline3 = new wxStaticLine( bOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerBoardEdit->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 4 );
 
 
-	bOptionsSizer->Add( bSizerBoardEdit, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bOptionsSizer->Add( bSizerBoardEdit, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerUniversal;
 	bSizerUniversal = new wxBoxSizer( wxVERTICAL );
+
+	m_cbConstrainHV45Mode = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Constrain actions to H, V, 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerUniversal->Add( m_cbConstrainHV45Mode, 0, wxTOP|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizerRotationStep;
 	bSizerRotationStep = new wxBoxSizer( wxHORIZONTAL );
 
 	m_rotationAngleLabel = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Step for &rotate commands:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotationAngleLabel->Wrap( -1 );
-	bSizerRotationStep->Add( m_rotationAngleLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerRotationStep->Add( m_rotationAngleLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 	m_rotationAngleCtrl = new wxTextCtrl( bOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotationAngleCtrl->SetToolTip( _("Set increment (in degrees) for context menu and hotkey rotation.") );
 	m_rotationAngleCtrl->SetMinSize( wxSize( 60,-1 ) );
 
-	bSizerRotationStep->Add( m_rotationAngleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerRotationStep->Add( m_rotationAngleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_rotationAngleUnits = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotationAngleUnits->Wrap( -1 );
-	bSizerRotationStep->Add( m_rotationAngleUnits, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerRotationStep->Add( m_rotationAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizerUniversal->Add( bSizerRotationStep, 0, wxEXPAND, 5 );
-
-	m_allowFreePads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_allowFreePads->SetToolTip( _("If checked, pads can be moved with respect to the rest of the footprint.") );
-
-	bSizerUniversal->Add( m_allowFreePads, 0, wxBOTTOM|wxRIGHT, 5 );
-
-	m_escClearsNetHighlight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("<ESC> clears net highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerUniversal->Add( m_escClearsNetHighlight, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	bOptionsSizer->Add( bSizerUniversal, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -244,14 +235,18 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizerFpGraphics;
-	sbSizerFpGraphics = new wxStaticBoxSizer( new wxStaticBox( fpPage, wxID_ANY, _("Graphics Editing") ), wxVERTICAL );
+	wxStaticBoxSizer* sbFPMagnets;
+	sbFPMagnets = new wxStaticBoxSizer( new wxStaticBox( fpPage, wxID_ANY, _("Magnetic Points") ), wxVERTICAL );
 
-	m_cbFpGraphic45Mode = new wxCheckBox( sbSizerFpGraphics->GetStaticBox(), wxID_ANY, _("Constrain to H, V, 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerFpGraphics->Add( m_cbFpGraphic45Mode, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_magneticPads = new wxCheckBox( sbFPMagnets->GetStaticBox(), wxID_ANY, _("Magnetic pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_magneticPads->SetValue(true);
+	sbFPMagnets->Add( m_magneticPads, 0, wxBOTTOM|wxLEFT, 5 );
+
+	m_magneticGraphics = new wxCheckBox( sbFPMagnets->GetStaticBox(), wxID_ANY, _("Magnetic graphics"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFPMagnets->Add( m_magneticGraphics, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizer10->Add( sbSizerFpGraphics, 1, wxEXPAND, 5 );
+	bSizer10->Add( sbFPMagnets, 1, wxEXPAND, 5 );
 
 
 	fpPage->SetSizer( bSizer10 );
@@ -364,32 +359,31 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	pcbOptionsSizer->Add( sbSizer41, 0, wxEXPAND|wxTOP, 5 );
 
-	wxStaticBoxSizer* sbSizerPcbGraphics;
-	sbSizerPcbGraphics = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Graphics Editing") ), wxVERTICAL );
+	wxStaticBoxSizer* sbSizerMisc;
+	sbSizerMisc = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Miscellaneous") ), wxVERTICAL );
 
-	m_cbPcbGraphic45Mode = new wxCheckBox( sbSizerPcbGraphics->GetStaticBox(), wxID_ANY, _("Limit actions to 45 degrees from start"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerPcbGraphics->Add( m_cbPcbGraphic45Mode, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_escClearsNetHighlight = new wxCheckBox( sbSizerMisc->GetStaticBox(), wxID_ANY, _("<ESC> clears net highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_escClearsNetHighlight->SetValue(true);
+	sbSizerMisc->Add( m_escClearsNetHighlight, 0, wxBOTTOM|wxLEFT, 5 );
 
-
-	pcbOptionsSizer->Add( sbSizerPcbGraphics, 0, wxEXPAND|wxTOP, 5 );
-
-	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Miscellaneous") ), wxVERTICAL );
-
-	m_showPageLimits = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Show page limits"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_showPageLimits = new wxCheckBox( sbSizerMisc->GetStaticBox(), wxID_ANY, _("Show page limits"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_showPageLimits->SetValue(true);
 	m_showPageLimits->SetToolTip( _("Draw an outline to show the sheet size.") );
 
-	sbSizer4->Add( m_showPageLimits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizerMisc->Add( m_showPageLimits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_autoRefillZones = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Auto-refill zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCourtyardCollisions = new wxCheckBox( sbSizerMisc->GetStaticBox(), wxID_ANY, _("Show courtyard collisions when moving/dragging"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCourtyardCollisions->SetValue(true);
+	sbSizerMisc->Add( m_cbCourtyardCollisions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_autoRefillZones = new wxCheckBox( sbSizerMisc->GetStaticBox(), wxID_ANY, _("Auto-refill zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_autoRefillZones->SetValue(true);
 	m_autoRefillZones->SetToolTip( _("If checked, zones will be re-filled after editing the properties of the zone using the Zone Properties dialog") );
 
-	sbSizer4->Add( m_autoRefillZones, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizerMisc->Add( m_autoRefillZones, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	pcbOptionsSizer->Add( sbSizer4, 1, wxEXPAND|wxTOP, 5 );
+	pcbOptionsSizer->Add( sbSizerMisc, 1, wxEXPAND|wxTOP, 5 );
 
 
 	pcbPage->SetSizer( pcbOptionsSizer );

@@ -372,6 +372,8 @@ public:
 
     bool m_ShowPageLimits;
 
+    bool m_ShowCourtyardCollisions;
+
     ///<@todo Implement real auto zone filling (not just after zone properties are edited)
     bool m_AutoRefillZones; // Fill zones after editing the zone using the Zone Properties dialog
 
