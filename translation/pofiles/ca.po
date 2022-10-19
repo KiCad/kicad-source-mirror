@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-09-21 11:21+0000\n"
+"PO-Revision-Date: 2022-10-21 15:03+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -5516,19 +5516,19 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "El fitxer d'idioma de KiCad per aquest idioma no està instal·lat."
 
 #: common/plotters/PDF_plotter.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Pàgina 1"
+msgstr "Pàgina %s"
 
 #: common/plotters/PDF_plotter.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(pàgina %s)"
+msgstr "%s (Pàgina %s)"
 
 #: common/plotters/PDF_plotter.cpp:1188
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Mostra els límits de la pàgina"
+msgstr "Mostra la Pàgina %s"
 
 #: common/plotters/PDF_plotter.cpp:1199
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:801
@@ -7652,9 +7652,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Duplica els elements %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Valors diferents per a %s%d%s (%s) i %s%d%s (%s)"
+msgstr "Recomptes amb unitats divergents per l'element %s%s%s i %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
@@ -9192,11 +9192,13 @@ msgid "symbol"
 msgstr "símbol"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Error en crear la biblioteca de símbols '%s'."
+msgstr ""
+"Error en crear la taula de la biblioteca de símbols '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9210,13 +9212,13 @@ msgid "File '%s' not found."
 msgstr "No s'ha trobat el fitxer '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
 msgstr ""
-"S'ha produït un error quan s'intentava carregar la taula de la biblioteca de "
-"símbols '%s'."
+"Error quan s'intentava llegir la taula de la biblioteca de símbols '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
 #, fuzzy, c-format
@@ -11593,9 +11595,9 @@ msgid "Field name '%s' already in use."
 msgstr "El nom del camp '%s' ja està en ús."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1121
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "Esteu segur que voleu eliminar els elements seleccionats?"
+msgstr "Estàs segur que vols eliminar el camp '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1369
 #, fuzzy
@@ -14107,9 +14109,9 @@ msgid "Label '%s'"
 msgstr "Etiqueta '%s'"
 
 #: eeschema/sch_label.cpp:1218
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Etiqueta de directiva"
+msgstr "Etiqueta de directiva [%s %s]"
 
 #: eeschema/sch_label.cpp:1494
 #, c-format
@@ -26263,7 +26265,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Ràtio de marge de seguretat de la pasta de soldadura:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -26439,7 +26441,7 @@ msgstr ""
 "pestanya de marges i ajustaments locals de les propietats del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
