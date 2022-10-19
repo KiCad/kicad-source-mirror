@@ -48,7 +48,7 @@
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 #include <wx/dir.h>
-
+#include <locale_io.h>
 
 namespace NETLIST_EXPORTER_SPICE_PARSER
 {
@@ -110,6 +110,8 @@ bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigne
 
 bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
+    LOCALE_IO dummy;
+
    // Cleanup list to avoid duplicate if the netlist exporter is run more than once.
     m_rawIncludes.clear();
 
@@ -229,7 +231,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             }
             catch( const IO_ERROR& e )
             {
-                DisplayErrorMessage( nullptr, 
+                DisplayErrorMessage( nullptr,
                                      wxString::Format( "Failed reading model from symbol '%s':\n%s",
                                                        symbol->GetRef( &sheet ),
                                                        e.What() ) );
