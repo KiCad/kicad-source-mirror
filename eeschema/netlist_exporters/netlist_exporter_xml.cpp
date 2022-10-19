@@ -109,7 +109,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         wxString ref = aSymbol->GetRef( aSheet );
 
         SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-        int minUnit = aSymbol->GetUnit();
+        int minUnit = aSymbol->GetUnitSelection( aSheet );
 
         for( unsigned i = 0;  i < sheetList.size();  i++ )
         {
@@ -122,7 +122,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 if( ref2.CmpNoCase( ref ) != 0 )
                     continue;
 
-                int unit = symbol2->GetUnit();
+                int unit = symbol2->GetUnitSelection( aSheet );
 
                 // The lowest unit number wins.  User should only set fields in any one unit.
                 // remark: IsVoid() returns true for empty strings or the "~" string (empty
