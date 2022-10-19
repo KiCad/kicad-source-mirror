@@ -135,3 +135,12 @@
 
 * No newline at the end of file.
 .model D21_Usual D(BV=1.1U CJ=2.2M IBV=3.3 JS=4.4K MJ=5.5MEG N=6.6G)
+
+* Base for AKO model.
+.model D22 D(is=11.1n n=2.2 rs=33.3m ikf=99.9 xti=3 eg=1.1)
+
+* AKO model.
+.model D23 ako: D22 D(ikf=111.1 eg=2.2 m=.3)
+
+* AKO model, LTspice parameters.
+.model D24 ako: D22 D(n=1.1 mfg=KiCad type=Silicon)
