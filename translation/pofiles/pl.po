@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-09-27 07:22+0000\n"
+"PO-Revision-Date: 2022-10-20 22:00+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v6/pl/>\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2403,7 +2403,7 @@ msgstr "Podgląd rozmiaru papieru"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Title Block Data"
-msgstr "Podgląd parametrów tabliczki tytułowej"
+msgstr "Podgląd parametrów bloku tytułowego"
 
 #: common/dialogs/dialog_page_settings.cpp:109
 #: common/dialogs/dialog_page_settings_base.h:145
@@ -2417,7 +2417,7 @@ msgstr "Papier"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Title Block"
-msgstr "Tabliczka tytułowa"
+msgstr "Blok tytułowy"
 
 #: common/dialogs/dialog_page_settings.cpp:474
 #, c-format
@@ -2586,7 +2586,7 @@ msgstr "Plik:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:172
 msgid "Title Block Parameters"
-msgstr "Parametry tabliczki tytułowej"
+msgstr "Parametry bloku tytułowego"
 
 #: common/dialogs/dialog_page_settings_base.cpp:182
 #, c-format
@@ -2803,7 +2803,7 @@ msgstr "Czarno-biały"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
-msgstr "Rysuj opis arkusza i tabliczkę tytułową"
+msgstr "Rysuj opis arkusza i blok tytułowy"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -5493,7 +5493,7 @@ msgstr "Ustawienia strony..."
 
 #: common/tool/actions.cpp:96
 msgid "Settings for paper size and title block info"
-msgstr "Ustawienia rozmiaru strony oraz ramki tytułowej"
+msgstr "Ustawienia rozmiaru strony oraz bloku tytułowego"
 
 #: common/tool/actions.cpp:102
 msgid "Print..."
@@ -9705,7 +9705,7 @@ msgstr "Rysuj obramowanie strony"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr "Rysuje obramowanie arkusza i jego tabliczkę tytułową"
+msgstr "Rysuje obramowanie arkusza i jego blok tytułowy"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -9789,7 +9789,7 @@ msgstr "Drukuj stronę %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "Drukuj opis arkusza i tabliczkę tytułową"
+msgstr "Drukuj opis arkusza i blok tytułowy"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -12947,7 +12947,7 @@ msgstr "Przypisania footprintów..."
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:129
 msgid "Export"
-msgstr "Eksportuj"
+msgstr "Eksport"
 
 #: eeschema/menubar.cpp:120
 msgid "Drawing to Clipboard"
@@ -13865,7 +13865,7 @@ msgstr "Nieprawidłowy typ strony"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1688
 msgid "Invalid title block comment number"
-msgstr "Nieprawidłowa liczba komentarzy w tabelce tytułowej"
+msgstr "Nieprawidłowa liczba komentarzy w bloku tytułowym"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1785
 msgid "Invalid sheet pin name"
@@ -15328,7 +15328,7 @@ msgstr "Obrys"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1276
 msgid "Power Symbol"
-msgstr "Symbol zasilania"
+msgstr "Symbol Zasilania"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:54
 msgid "Import Symbol"
@@ -17878,7 +17878,7 @@ msgstr "Pokaż punkty siatki (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:101
 msgid "Show drawing sheet border and title block"
-msgstr "Pokazuje opis arkusza i tabliczkę tytułową"
+msgstr "Pokazuje opis arkusza i blok tytułowy"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
 msgid "PCB Background"
@@ -18036,7 +18036,7 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Edycja obramowania arkusza oraz tabelki tytułowej do wykorzystania na "
+"Edycja obramowania arkusza oraz bloku tytułowego do wykorzystania na "
 "schematach i projektach PCB"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
@@ -18871,7 +18871,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Edit drawing sheet borders and title block"
-msgstr "Edycja obramowania arkusza i tabliczki tytułowej"
+msgstr "Edycja obramowania arkusza i bloku tytułowego"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
@@ -19456,30 +19456,30 @@ msgstr "Ustawienia podglądu strony..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
-msgstr "Edytuj dane poglądowe dla rozmiaru strony i tabelki tytułowej"
+msgstr "Edytuj dane poglądowe dla rozmiaru strony i bloku tytułowego"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr "Pokaż tabliczkę tytułową w trybie podglądu"
+msgstr "Pokaż blok tytułowy w trybie podglądu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
-"Pokazuje ramkę w trybie podglądu:\n"
+"Pokazuje blok tytułowy w trybie podglądu:\n"
 "Odpowiedniki tekstu będą pokazywane jako właściwe teksty."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr "Pokaż tabliczkę tytułową w trybie edycji"
+msgstr "Pokaż blok tytułowy w trybie edycji"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
-"Pokaż ramkę w trybie edycji:\n"
+"Pokaż blok tytułowy w trybie edycji:\n"
 "Teksty będą pokazywane jako tokeny ${keyword}."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:508
@@ -21272,7 +21272,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr "Kontrolowanie impedancji"
+msgstr "Z kontrolą impedancji"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
@@ -23601,7 +23601,7 @@ msgstr "Eksportuj jako czarne elementy na białym tle"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
-msgstr "Strona z opisem arkusza i tabliczką tytułową"
+msgstr "Strona z opisem arkusza i blokiem tytułowym"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Current page size"
@@ -26077,7 +26077,7 @@ msgstr "Załączone warstwy"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr "Rysuj opis arkusza i tabliczkę tytułową"
+msgstr "Rysuj opis arkusza i blok tytułowy"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
@@ -36138,7 +36138,7 @@ msgstr "Pokaż punkty bazowe footprintu i opisy w postaci krzyżyka"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show drawing sheet borders and title block"
-msgstr "Pokaż ramkę arkusza i tabliczkę tytułową"
+msgstr "Pokaż ramkę arkusza i blok tytułowy"
 
 #: pcbnew/widgets/appearance_controls.cpp:376
 msgid "No Layers"
