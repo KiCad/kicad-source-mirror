@@ -1111,6 +1111,15 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference, bool aRe
     // Discard reference point when selection is "dropped" onto the board
     selection.ClearReferencePoint();
 
+    // Unselect all items to clear selection flags and then re-select the originally selected
+    // items.
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    // In the case where the original items are temporary, we don't want to reselect
+    // as the items may be invalidated by the Revert above
+    if( !restore_state || aReselect )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
+
     // TODO: there's an encapsulation leak here: this commit often has more than just the move
     // in it; for instance it might have a paste, append board, etc. as well.
     if( restore_state )
@@ -1120,15 +1129,6 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference, bool aRe
 
     // Remove the dynamic ratsnest from the screen
     m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
-
-    // Unselect all items to clear selection flags and then re-select the originally selected
-    // items.
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    // In the case where the original items are temporary, we don't want to reselect
-    // as the items may be invalidated by the Revert above
-    if( !restore_state || aReselect )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
 
     editFrame->PopTool( tool );
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
