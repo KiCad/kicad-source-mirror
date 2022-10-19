@@ -196,6 +196,8 @@ static const wxChar ShowPropertiesPanel[] = wxT( "ShowPropertiesPanel" );
 static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
 
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );
+
+static const wxChar UseClipper2[] = wxT( "UseClipper2" );
 } // namespace KEYS
 
 
@@ -322,6 +324,8 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
+
+    m_UseClipper2               = false;
 
     loadFromConfigFile();
 }
@@ -461,6 +465,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                   &m_3DRT_BevelExtentFactor, m_3DRT_BevelExtentFactor,
                                                   0.0, 100.0,
                                                   AC_GROUPS::V3D_RayTracing ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::UseClipper2,
+                                                &m_UseClipper2, m_UseClipper2 ) );
 
 
 

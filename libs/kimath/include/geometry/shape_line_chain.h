@@ -28,6 +28,7 @@
 
 
 #include <clipper.hpp>
+#include <clipper2/clipper.h>
 #include <geometry/seg.h>
 #include <geometry/shape.h>
 #include <geometry/shape_arc.h>
@@ -192,6 +193,10 @@ public:
     }
 
     SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath,
+                      const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                      const std::vector<SHAPE_ARC>& aArcBuffer );
+
+    SHAPE_LINE_CHAIN( const Clipper2Lib::Path64& aPath,
                       const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                       const std::vector<SHAPE_ARC>& aArcBuffer );
 
@@ -912,6 +917,13 @@ protected:
     ClipperLib::Path convertToClipper( bool aRequiredOrientation,
                                        std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                                        std::vector<SHAPE_ARC>&       aArcBuffer ) const;
+
+    /**
+     * Create a new Clipper2 path from the SHAPE_LINE_CHAIN in a given orientation
+     */
+    Clipper2Lib::Path64 convertToClipper2( bool aRequiredOrientation,
+            std::vector<CLIPPER_Z_VALUE> &aZValueBuffer,
+            std::vector<SHAPE_ARC> &aArcBuffer ) const;
 
     /**
      * Fix indices of this chain to ensure arcs are not split between the end and start indices

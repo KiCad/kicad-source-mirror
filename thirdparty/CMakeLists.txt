@@ -25,6 +25,7 @@
 
 add_subdirectory( argparse )
 add_subdirectory( clipper )
+add_subdirectory( clipper2 )
 add_subdirectory( compoundfilereader )
 add_subdirectory( delaunator )
 add_subdirectory( dxflib_qcad )

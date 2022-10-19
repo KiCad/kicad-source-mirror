@@ -238,6 +238,12 @@ public:
      */
     double m_3DRT_BevelExtentFactor;
 
+    /**
+     * User Clipper2 instead of Clipper1
+     */
+    bool m_UseClipper2;
+
+
 private:
     ADVANCED_CFG();
 

@@ -32,6 +32,7 @@ add_library( kimath STATIC
 
 target_link_libraries( kimath
     clipper
+    clipper2
     othermath
     rtree
     ${wxWidgets_LIBRARIES}      # wxLogDebug, wxASSERT

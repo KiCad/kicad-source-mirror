@@ -289,6 +289,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "graphics.cairo_antialiasing_mode",
             &m_Graphics.cairo_aa_mode, 0, 0, 2 ) );
 
+    m_params.emplace_back( new PARAM<int>( "graphics.use_clipper2",
+            &m_Graphics.cairo_aa_mode, 0, 0, 1 ) );
+
     m_params.emplace_back( new PARAM<int>( "system.autosave_interval",
             &m_System.autosave_interval, 600 ) );
 

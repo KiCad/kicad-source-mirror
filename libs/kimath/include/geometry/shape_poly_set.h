@@ -39,6 +39,7 @@
 #include <vector>
 
 #include <clipper.hpp>                  // for ClipType, PolyTree (ptr only)
+#include <clipper2/clipper.h>
 #include <geometry/seg.h>               // for SEG
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
@@ -1387,6 +1388,15 @@ private:
     void importTree( ClipperLib::PolyTree*               tree,
                      const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                      const std::vector<SHAPE_ARC>&       aArcBuffe );
+    void importTree( Clipper2Lib::PolyTree64&            tree,
+                     const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                     const std::vector<SHAPE_ARC>&       aArcBuffe );
+    void importTree( Clipper2Lib::Paths64&               paths,
+                     const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                     const std::vector<SHAPE_ARC>&       aArcBuffe );
+
+    void inflate1( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy );
+    void inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy );
 
     /**
      * This is the engine to execute all polygon boolean transforms (AND, OR, ... and polygon
@@ -1405,6 +1415,11 @@ private:
 
     void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
                     const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
+
+    void booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aOtherShape );
+
+    void booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aShape,
+                    const SHAPE_POLY_SET& aOtherShape );
 
     /**
      * Check whether the point \a aP is inside the \a aSubpolyIndex-th polygon of the polyset. If

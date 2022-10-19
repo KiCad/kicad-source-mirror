@@ -59,6 +59,9 @@ endif()
 add_executable( qa_kimath
     ${QA_KIMATH_SRCS}
     ${QA_KIMATH_RESOURCES}
+    
+    # Mock Pgm needed for advanced_config
+    ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
 )
 
 target_link_libraries( qa_kimath
@@ -69,6 +72,7 @@ target_link_libraries( qa_kimath
 
 target_include_directories( qa_kimath PRIVATE
     ${CMAKE_SOURCE_DIR}/include         # Needed for core/optional.h
+    ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
