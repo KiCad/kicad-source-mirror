@@ -1346,13 +1346,28 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
         }
         else if( strCompare( "$EndComp", line ) )
         {
-            if( !m_appending && ( m_currentSheet == m_rootSheet ) )
+            if( !m_appending )
             {
-                KIID_PATH path;
-                path.push_back( m_rootSheet->GetScreen()->GetUuid() );
-                symbol->AddHierarchicalReference( path,
-                                                  symbol->GetField( REFERENCE_FIELD )->GetText(),
-                                                  symbol->GetUnit() );
+                if( m_currentSheet == m_rootSheet )
+                {
+                    KIID_PATH path;
+                    path.push_back( m_rootSheet->GetScreen()->GetUuid() );
+                    symbol->AddHierarchicalReference( path,
+                                                      symbol->GetField( REFERENCE_FIELD )->GetText(),
+                                                      symbol->GetUnit(),
+                                                      symbol->GetField( VALUE_FIELD )->GetText(),
+                                                      symbol->GetField( FOOTPRINT_FIELD )->GetText() );
+                }
+                else
+                {
+                    for( const SYMBOL_INSTANCE_REFERENCE& instance : symbol->GetInstanceReferences() )
+                    {
+                        symbol->AddHierarchicalReference( instance.m_Path, instance.m_Reference,
+                                                          instance.m_Unit,
+                                                          symbol->GetField( VALUE_FIELD )->GetText(),
+                                                          symbol->GetField( FOOTPRINT_FIELD )->GetText() );
+                    }
+                }
             }
 
             // Ensure all flags (some are set by previous initializations) are reset:
