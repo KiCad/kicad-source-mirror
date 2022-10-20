@@ -624,3 +624,28 @@
 *+ vbc_max         = 123.456E+07
 *+ vce_max         = 123.456E+07
 *+)
+
+* LTspice Gummel-Poon parameters.
+.MODEL _6_NPN_GUMMELPOON NPN(  
++     IS=000.000E+07
++     NF=100.001E+07
++     ISE=200.002E+07
++     NE=300.003E+07
++     BF=400.004E+07
++     IKF=500.005E+07
++     VAF=600.006E+07
++     NR=700.007E+07
++     ISC=800.008E+07
++     NC=900.009E+07
+*
++     BVCBO=1
++     NBVCBO=2
++     TBVCBO1=3
++     TBVCBO2=4
++     BVBE=5
++     IBVBE=6
++     NBVBE=7
++)
+
+* AKO model.
+.MODEL _7_NPN_GUMMELPOON AKO:_6_NPN_GUMMELPOON

@@ -277,7 +277,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
 
     const std::vector<SIM_LIBRARY::MODEL> models = m_library->GetModels();
 
-    BOOST_CHECK_EQUAL( models.size(), 6 );
+    BOOST_CHECK_EQUAL( models.size(), 8 );
 
     for( int i = 0; i < models.size(); ++i )
     {
@@ -317,6 +317,12 @@ BOOST_AUTO_TEST_CASE( Bjts )
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PNP_HICUM2,
                             { "c10", "qp0", "ich", "hf0", "hfe", "hfc", "hjei", "ahjei", "rhjei",
                               "hjci" } );
+            break;
+
+        case 6:
+        case 7:
+            TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NPN_GUMMELPOON,
+                            { "is", "nf", "ise", "ne", "bf", "ikf", "vaf", "nr", "isc", "nc" } );
             break;
         }
     }
