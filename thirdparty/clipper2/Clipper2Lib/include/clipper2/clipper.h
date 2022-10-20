@@ -13,6 +13,11 @@
 #include <cstdlib>
 #include <vector>
 
+// Remove this define (comes in from X.h on older Linuxes)
+#ifdef None
+#undef None
+#endif
+
 #include "clipper.core.h"
 #include "clipper.engine.h"
 #include "clipper.offset.h"
