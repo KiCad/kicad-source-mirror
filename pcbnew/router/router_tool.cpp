@@ -2156,7 +2156,7 @@ void ROUTER_TOOL::UpdateMessagePanel()
         wxASSERT( netB );
 
         description = wxString::Format( _( "Routing Diff Pair: %s" ),
-                                        netA->GetNetname() + wxT( "/" ) + netB->GetNetname() );
+                                        netA->GetNetname() + wxT( ", " ) + netB->GetNetname() );
 
         wxString  netclass;
         NETCLASS* netclassA = netA->GetNetClass();
@@ -2165,7 +2165,7 @@ void ROUTER_TOOL::UpdateMessagePanel()
         if( netclassA == netclassB )
             netclass = netclassA->GetName();
         else
-            netclass = netclassA->GetName() + wxT( "/" ) + netclassB->GetName();
+            netclass = netclassA->GetName() + wxT( ", " ) + netclassB->GetName();
 
         secondary = wxString::Format( _( "Net Class: %s" ),
                                       UnescapeString( netclass ) );
