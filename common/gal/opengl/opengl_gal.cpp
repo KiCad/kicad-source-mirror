@@ -32,8 +32,6 @@
 #define GL_SILENCE_DEPRECATION 1
 #endif
 
-#include <gl_utils.h>
-
 #include <advanced_config.h>
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/utils.h>
@@ -52,6 +50,8 @@
 
 #include <profile.h>
 #include <trace_helpers.h>
+
+#include <gl_utils.h>
 
 #include <functional>
 #include <limits>
