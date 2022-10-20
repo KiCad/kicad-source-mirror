@@ -88,7 +88,7 @@ namespace SPICE_GRAMMAR
     struct sep : sor<plus<continuation>,
                      garbage> {};
 
-    struct modelName : plus<not_at<garbage>, any> {};
+    struct modelName : plus<not_at<garbage>, not_at<eolf>, any> {};
 
     struct dotModelType : plus<alpha> {};
 
@@ -126,7 +126,10 @@ namespace SPICE_GRAMMAR
                                      opt<sep,
                                          dotModelType>,
                                      opt<sep,
-                                         paramValuePairs>>> {};
+                                         paramValuePairs>,
+                                     opt<sep>,
+                                     newline>> {};
+
     struct dotModel : seq<opt<sep>,
                           if_must<TAO_PEGTL_ISTRING( ".model" ),
                                   sep,
