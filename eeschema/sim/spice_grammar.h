@@ -37,6 +37,8 @@ namespace SPICE_GRAMMAR
     struct leaders : plus<one<' ', '\t'>> {};
     struct trailers : plus<one<' ', '\t', '\v', '\f'>> {};
 
+    struct garbageOrEolf : sor<garbage, eolf> {};
+
     // NOTE: In Ngspice, a '$' opening a comment must be preceded by ' ', ',', or '\t'. We don't
     //       implement that here - this may cause problems in the future.
     // Ngspice supports '//' for comments.
@@ -88,7 +90,7 @@ namespace SPICE_GRAMMAR
     struct sep : sor<plus<continuation>,
                      garbage> {};
 
-    struct modelName : plus<not_at<garbage>, not_at<eolf>, any> {};
+    struct modelName : plus<not_at<garbageOrEolf>, any> {};
 
     struct dotModelType : plus<alpha> {};
 
@@ -192,7 +194,8 @@ namespace SPICE_GRAMMAR
     struct dotIncludePath : star<not_at<newline>, any> {};
     // Intentionally no if_must<>.
     struct dotInclude : seq<opt<sep>,
-                            TAO_PEGTL_ISTRING( ".include" ),
+                            TAO_PEGTL_ISTRING( ".inc" ),
+                            star<not_at<garbageOrEolf>, any>,
                             sep,
                             sor<seq<one<'\"'>,
                                     dotIncludePathWithoutQuotes,
