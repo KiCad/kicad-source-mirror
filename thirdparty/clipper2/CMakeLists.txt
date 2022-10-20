@@ -24,7 +24,7 @@ target_include_directories(clipper2
 
 target_compile_definitions(clipper2 PUBLIC USINGZ)
 
-if (WIN32)
+if (MSVC)
   target_compile_options(clipper2 PRIVATE /W4 /WX)
 else()
   target_compile_options(clipper2 PRIVATE -Wall -Wextra -Wpedantic -Werror)
