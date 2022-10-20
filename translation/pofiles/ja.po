@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-17 17:05+0000\n"
+"PO-Revision-Date: 2022-10-21 15:03+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -27148,9 +27148,8 @@ msgid "angle"
 msgstr "角度"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:731
-#, fuzzy
 msgid "at"
-msgstr "t"
+msgstr "at"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
 msgid "radius"
@@ -27193,9 +27192,8 @@ msgstr "%s と %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid "Error: Pad must have a positive size."
-msgstr "エラー: コーナーのサイズが負の値です。"
+msgstr "エラー: パッドのサイズは正でなければなりません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
@@ -31035,9 +31033,8 @@ msgid "Via Gap"
 msgstr "ビア ギャップ"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:98
-#, fuzzy
 msgid "Change property"
-msgstr "テキストのプロパティを変更"
+msgstr "プロパティを変更"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:119 pcbnew/pcb_track.cpp:1272
 msgid "Layer Top"
@@ -40118,7 +40115,6 @@ msgid "Other items"
 msgstr "その他のアイテム"
 
 #: pcbnew/widgets/search_handlers.cpp:245
-#, fuzzy
 msgid "Textbox"
 msgstr "テキストボックス"
 
@@ -40355,16 +40351,15 @@ msgstr "回路図と基板設計のためのEDAスイート"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
-msgstr "基板を印刷"
+msgstr "基板"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "PcbNew"
-msgstr ""
+msgstr "PcbNew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:40
 msgid "Eeschema"
