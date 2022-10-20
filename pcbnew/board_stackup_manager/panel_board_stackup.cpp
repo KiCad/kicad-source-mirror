@@ -287,7 +287,8 @@ void PANEL_SETUP_BOARD_STACKUP::onAddDielectricLayer( wxCommandEvent& event )
         }
     }
 
-    EDA_LIST_DIALOG dlg( m_parentDialog, _( "Add Dielectric Layer" ), headers, d_list );
+    EDA_LIST_DIALOG dlg( m_parentDialog, _( "Add Dielectric Layer" ), headers, d_list,
+                         wxEmptyString, false /* do not sort the list: it is **expected** in stack order */);
     dlg.SetListLabel( _( "Select layer to add:" ) );
     dlg.HideFilter();
 
@@ -343,7 +344,8 @@ void PANEL_SETUP_BOARD_STACKUP::onRemoveDielectricLayer( wxCommandEvent& event )
         }
     }
 
-    EDA_LIST_DIALOG dlg( m_parentDialog, _( "Remove Dielectric Layer" ), headers, d_list );
+    EDA_LIST_DIALOG dlg( m_parentDialog, _( "Remove Dielectric Layer" ), headers, d_list,
+                         wxEmptyString, false /* do not sort the list: it is **expected** in stack order */ );
     dlg.SetListLabel( _( "Select layer to remove:" ) );
     dlg.HideFilter();
 
