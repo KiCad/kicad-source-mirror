@@ -31,7 +31,11 @@ static thread_pool* tp = nullptr;
 
 thread_pool& GetKiCadThreadPool()
 {
+#if 0   // Turn this on to disable multi-threading for debugging
+    if( !tp ) tp = new thread_pool( 1 );
+#else
     if( !tp ) tp = new thread_pool;
+#endif
 
     return *tp;
 }
