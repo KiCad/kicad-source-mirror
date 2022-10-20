@@ -92,27 +92,8 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     if( paramName == "level" || paramName == "version" )
         return;
 
-    // Ignore the purely informative LTspice-specific parameters "mfg" and "type".
-    if( paramName == "mfg" || paramName == "type" )
-        return;
-
-    if( GetDeviceType() == DEVICE_TYPE_::NPN || GetDeviceType() == DEVICE_TYPE_::PNP )
-    {
-        // Ignore the purely informative LTspice-specific parameters "icrating" and "vceo".
-        if( paramName == "icrating" || paramName == "vceo" )
-            return;
-
-        // Ignore unused parameters.
-        if( paramName == "bvcbo" || paramName == "nbvcbo"
-            || paramName == "tbvcbo1" || paramName == "tbvcbo2"
-            || paramName == "bvbe" || paramName == "ibvbe" || paramName == "nbvbe" )
-        {
-            return;
-        }
-    }
-
     // First we try to use the name as is. Note that you can't set instance parameters from this
-    // function, it's generally for ".model" cards, not for instantiations.
+    // function, it's for ".model" cards, not for instantiations.
 
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
@@ -139,25 +120,34 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     auto ngspiceParamIt = std::find_if( ngspiceParams.begin(), ngspiceParams.end(),
                                         [paramName]( const PARAM& param )
                                         {
+                                            // Now we search without excluding Spice instance
+                                            // parameters and superfluous parameters.
                                             return param.info.name == boost::to_lower_copy( paramName );
                                         } );
 
     if( ngspiceParamIt == ngspiceParams.end() )
     {
+        if( canSilentlyIgnoreParam( paramName ) )
+            return;
+
         THROW_IO_ERROR( wxString::Format( "Failed to set parameter '%s' to value '%s'",
                                           aParamName,
                                           aParamValue ) );
     }
 
 
-    // We obtain the id of the Ngspice param that is to be set.
+    // We obtain the id of the Ngspice param that is to be set. We use this id to address the
+    // parameter to be set here because a superfluous parameter may be an alias: this will
+    // dereference it.
     unsigned id = ngspiceParamIt->id;
 
     // Find an actual parameter with the same id.
     paramIt = std::find_if( params.begin(), params.end(),
                             [id]( const PARAM& param )
                             {
-                                return param.info.id == id;
+                                // Look for any non-superfluous parameter with the same id.
+                                return param.info.id == id
+                                    && param.info.category != PARAM::CATEGORY::SUPERFLUOUS;
                             } );
     
     if( paramIt == params.end() )
@@ -168,6 +158,50 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     }
 
     SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue, aNotation );
+}
+
+
+bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
+{
+    // Ignore the purely informative LTspice-specific parameters "mfg" and "type".
+    if( aParamName == "mfg" || aParamName == "type" )
+        return true;
+
+    if( GetDeviceType() == DEVICE_TYPE_::D )
+    {
+        if( aParamName == "perim"
+            || aParamName == "isw"
+            || aParamName == "ns"
+            || aParamName == "rsw"
+            || aParamName == "cjsw"
+            || aParamName == "vjsw"
+            || aParamName == "mjsw"
+            || aParamName == "fcs" )
+        {
+            return true;
+        }
+    }
+
+    if( GetDeviceType() == DEVICE_TYPE_::NPN || GetDeviceType() == DEVICE_TYPE_::PNP )
+    {
+        // Ignore the purely informative LTspice-specific parameters "icrating" and "vceo".
+        if( aParamName == "icrating" || aParamName == "vceo" )
+            return true;
+
+        // Ignore unused parameters.
+        if( aParamName == "bvcbo"
+            || aParamName == "nbvcbo"
+            || aParamName == "tbvcbo1"
+            || aParamName == "tbvcbo2"
+            || aParamName == "bvbe"
+            || aParamName == "ibvbe"
+            || aParamName == "nbvbe" )
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 

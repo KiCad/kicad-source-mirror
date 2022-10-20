@@ -106,6 +106,8 @@ protected:
 private:
     bool requiresSpiceModelLine() const override { return false; }
 
+    bool canSilentlyIgnoreParam( const std::string& aParamName );
+
     std::vector<std::string> getPinNames() const override;
 
     MODEL_TYPE getModelType() const;
