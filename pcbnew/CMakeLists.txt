@@ -487,9 +487,12 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     COMMAND ${SWIG_EXECUTABLE}
         ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx ${CMAKE_SOURCE_DIR}/pcbnew/python/swig/pcbnew.i
 
-    COMMAND ${PYTHON_EXECUTABLE}
-        ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py
-        ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+    # was needed only with SWIG version < 4 to disable a python section "def swig_import_helper()"
+    # found in pcbnew.py but not existing in SWIG version >= 4
+    # So it is left here for documentation purpose
+    #COMMAND ${PYTHON_EXECUTABLE}
+    #    ${CMAKE_SOURCE_DIR}/tools/build/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )

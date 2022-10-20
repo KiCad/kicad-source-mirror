@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 
 # the purpose of this script is rewriting the swig_import_helper
-# call so it will not load _xxxxx.so/dso from inside a kicad executable
+# call added by Swig version < 4.0 in pcbnew.py so it will not load
+# _xxxxx.so/dso from inside a kicad executable
 # because the kicad executable itself sill provide an _xxxxx module
 # that's linked inside itself.
 #
 # for the normal module import it should work the same way with this
 # fix in the swig_import_helper
 #
+# For Swig version >= 4.0 this method does not exist so nothing useful is made
 
 from __future__ import print_function
 
