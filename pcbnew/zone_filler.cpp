@@ -194,7 +194,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         zone->UnFill();
     }
 
-
     auto check_fill_dependency =
             [&]( ZONE* aZone, PCB_LAYER_ID aLayer, ZONE* aOtherZone ) -> bool
             {
@@ -273,7 +272,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                     return 0;
 
                 zone->SetFilledPolysList( layer, fillPolys );
-                zone->SetFillFlag( layer, true );
 
                 if( m_progressReporter )
                     m_progressReporter->AdvanceProgress();
@@ -281,6 +279,71 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 return 1;
             };
 
+    auto cache_optionally_flashed_connections =
+            [&]( ZONE* zone, PCB_LAYER_ID layer )
+            {
+                BOX2I zone_boundingbox = zone->GetBoundingBox();
+
+                // Check all conditionally-flashed vias and pads which aren't owned yet to see if
+                // we own them.  If so, set their connection caches.  See FlashLayer() for
+                // additional background.
+
+                for( PCB_TRACK* track : m_board->Tracks() )
+                {
+                    if( track->Type() == PCB_VIA_T )
+                    {
+                        PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+                        if( !via->IsOnLayer( layer ) || !via->GetRemoveUnconnected() )
+                            continue;
+
+                        if( via->ZoneConnectionCache( layer ) == ZLC_UNRESOLVED
+                                && via->GetBoundingBox().Intersects( zone_boundingbox ) )
+                        {
+                            auto viaShape = via->GetEffectiveShape( layer, FLASHING::ALWAYS_FLASHED );
+                            auto flashedShape = via->GetEffectiveShape( layer, FLASHING::DEFAULT );
+
+                            // If the via collides with the zone's outline then we "own" the via.
+                            // If it collides with the fill then it's connected; otherwise not.
+
+                            if( zone->Outline()->Collide( viaShape.get() ) )
+                            {
+                                if( zone->GetFill( layer )->Collide( flashedShape.get() ) )
+                                    via->ZoneConnectionCache( layer ) = ZLC_CONNECTED;
+                                else
+                                    via->ZoneConnectionCache( layer ) = ZLC_UNCONNECTED;
+                            }
+                        }
+                    }
+                }
+
+                for( FOOTPRINT* footprint : m_board->Footprints() )
+                {
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( !pad->IsOnLayer( layer ) || !pad->GetRemoveUnconnected() )
+                            continue;
+
+                        if( pad->ZoneConnectionCache( layer ) == ZLC_UNRESOLVED
+                                && pad->GetBoundingBox().Intersects( zone_boundingbox ) )
+                        {
+                            auto padShape = pad->GetEffectiveShape( layer, FLASHING::ALWAYS_FLASHED );
+                            auto flashedShape = pad->GetEffectiveShape( layer, FLASHING::DEFAULT );
+
+                            // If the pad collides with the zone's outline then we "own" the pad.
+                            // If it collides with the fill then it's connected; otherwise not.
+
+                            if( zone->Outline()->Collide( padShape.get() ) )
+                            {
+                                if( zone->GetFill( layer )->Collide( flashedShape.get() ) )
+                                    pad->ZoneConnectionCache( layer ) = ZLC_CONNECTED;
+                                else
+                                    pad->ZoneConnectionCache( layer ) = ZLC_UNCONNECTED;
+                            }
+                        }
+                    }
+                }
+            };
 
     auto tesselate_lambda =
             [&]( std::pair<ZONE*, PCB_LAYER_ID> aFillItem ) -> int
@@ -289,8 +352,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 ZONE*        zone = aFillItem.first;
 
                 zone->CacheTriangulation( layer );
-                return 1;
 
+                if( zone->IsOnCopperLayer() )
+                    cache_optionally_flashed_connections( zone, layer );
+
+                zone->SetFillFlag( layer, true );
+                return 1;
             };
 
     // Calculate the copper fills (NB: this is multi-threaded)
@@ -1416,71 +1483,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
     if( aZone->IsOnCopperLayer() )
     {
         if( fillCopperZone( aZone, aLayer, debugLayer, smoothedPoly, maxExtents, aFillPolys ) )
-        {
             aZone->SetNeedRefill( false );
-
-            BOX2I zone_boundingbox = aZone->GetBoundingBox();
-
-            // Check all conditionally-flashed vias and pads which aren't owned yet to see if
-            // we own them.  If so, set their connection caches.  See FlashLayer() for additional
-            // background.
-
-            for( PCB_TRACK* track : m_board->Tracks() )
-            {
-                if( track->Type() == PCB_VIA_T )
-                {
-                    PCB_VIA* via = static_cast<PCB_VIA*>( track );
-
-                    if( !via->IsOnLayer( aLayer ) || !via->GetRemoveUnconnected() )
-                        continue;
-
-                    if( via->ZoneConnectionCache( aLayer ) == ZLC_UNRESOLVED
-                            && via->GetBoundingBox().Intersects( zone_boundingbox ) )
-                    {
-                        auto viaShape = via->GetEffectiveShape( aLayer, FLASHING::ALWAYS_FLASHED );
-                        auto flashedShape = via->GetEffectiveShape( aLayer, FLASHING::DEFAULT );
-
-                        // If the via collides with the zone's outline then we "own" the via.
-                        // If it collides with the fill then it's connected; otherwise not.
-
-                        if( aZone->Outline()->Collide( viaShape.get() ) )
-                        {
-                            if( aFillPolys.Collide( flashedShape.get() ) )
-                                via->ZoneConnectionCache( aLayer ) = ZLC_CONNECTED;
-                            else
-                                via->ZoneConnectionCache( aLayer ) = ZLC_UNCONNECTED;
-                        }
-                    }
-                }
-            }
-
-            for( FOOTPRINT* footprint : m_board->Footprints() )
-            {
-                for( PAD* pad : footprint->Pads() )
-                {
-                    if( !pad->IsOnLayer( aLayer ) || !pad->GetRemoveUnconnected() )
-                        continue;
-
-                    if( pad->ZoneConnectionCache( aLayer ) == ZLC_UNRESOLVED
-                            && pad->GetBoundingBox().Intersects( zone_boundingbox ) )
-                    {
-                        auto padShape = pad->GetEffectiveShape( aLayer, FLASHING::ALWAYS_FLASHED );
-                        auto flashedShape = pad->GetEffectiveShape( aLayer, FLASHING::DEFAULT );
-
-                        // If the pad collides with the zone's outline then we "own" the pad.
-                        // If it collides with the fill then it's connected; otherwise not.
-
-                        if( aZone->Outline()->Collide( padShape.get() ) )
-                        {
-                            if( aFillPolys.Collide( flashedShape.get() ) )
-                                pad->ZoneConnectionCache( aLayer ) = ZLC_CONNECTED;
-                            else
-                                pad->ZoneConnectionCache( aLayer ) = ZLC_UNCONNECTED;
-                        }
-                    }
-                }
-            }
-        }
     }
     else
     {
