@@ -745,9 +745,10 @@ void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
 
 void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aItem )
 {
-    PCB_LAYER_ID layer = aZoneLayer->GetLayer();
+    PCB_LAYER_ID          layer = aZoneLayer->GetLayer();
+    BOARD_CONNECTED_ITEM* item = aItem->Parent();
 
-    if( !aItem->Parent()->IsOnLayer( layer ) )
+    if( !item->IsOnLayer( layer ) )
         return;
 
     auto connect =
@@ -758,6 +759,21 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
             };
 
     // Try quick checks first...
+    if( item->Type() == PCB_PAD_T )
+    {
+        PAD* pad = static_cast<PAD*>( item );
+
+        if( pad->GetRemoveUnconnected() && pad->ZoneConnectionCache( layer ) == ZLC_UNCONNECTED )
+            return;
+    }
+    else if( item->Type() == PCB_VIA_T )
+    {
+        PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+        if( via->GetRemoveUnconnected() && via->ZoneConnectionCache( layer ) == ZLC_UNCONNECTED )
+            return;
+    }
+
     for( int i = 0; i < aItem->AnchorCount(); ++i )
     {
         if( aZoneLayer->ContainsPoint( aItem->GetAnchor( i ) ) )
@@ -767,17 +783,17 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
         }
     }
 
-    if( aItem->Parent()->Type() == PCB_VIA_T || aItem->Parent()->Type() == PCB_PAD_T )
+    if( item->Type() == PCB_VIA_T || item->Type() == PCB_PAD_T )
     {
         // As long as the pad/via crosses the zone layer, check for the full effective shape
         // We check for the overlapping layers above
-        if( aZoneLayer->Collide( aItem->Parent()->GetEffectiveShape( layer, FLASHING::ALWAYS_FLASHED ).get() ) )
+        if( aZoneLayer->Collide( item->GetEffectiveShape( layer, FLASHING::ALWAYS_FLASHED ).get() ) )
             connect();
 
         return;
     }
 
-    if( aZoneLayer->Collide( aItem->Parent()->GetEffectiveShape( layer ).get() ) )
+    if( aZoneLayer->Collide( item->GetEffectiveShape( layer ).get() ) )
         connect();
 }
 
