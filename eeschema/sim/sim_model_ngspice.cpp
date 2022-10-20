@@ -187,7 +187,10 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
         // Ignore the purely informative LTspice-specific parameters "icrating" and "vceo".
         if( aParamName == "icrating" || aParamName == "vceo" )
             return true;
+    }
 
+    if( GetType() == TYPE::NPN_GUMMELPOON || GetType() == TYPE::PNP_GUMMELPOON )
+    {
         // Ignore unused parameters.
         if( aParamName == "bvcbo"
             || aParamName == "nbvcbo"
