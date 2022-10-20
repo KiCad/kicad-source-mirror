@@ -142,6 +142,13 @@ install( TARGETS kicad
     COMPONENT binary
     )
 
+if( NOT APPLE )
+    install( TARGETS kicad-cli
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+endif()
+
 if( KICAD_WIN32_INSTALL_PDBS )
     # Get the PDBs to copy over for MSVC
     install(FILES $<TARGET_PDB_FILE:kicad> DESTINATION ${KICAD_BIN})
