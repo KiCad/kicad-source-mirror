@@ -1520,6 +1520,9 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
 
     SetOrientation( pad_rot );
 
+    SetRemoveUnconnected( aMasterPad.GetRemoveUnconnected() );
+    SetKeepTopBottom( aMasterPad.GetKeepTopBottom() );
+
     SetSize( aMasterPad.GetSize() );
     SetDelta( wxSize( 0, 0 ) );
     SetOffset( aMasterPad.GetOffset() );
