@@ -52,7 +52,8 @@ public:
      */
     EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, const wxArrayString& aItemHeaders,
                      const std::vector<wxArrayString>& aItemList,
-                     const wxString& aPreselectText = wxEmptyString );
+                     const wxString& aPreselectText = wxEmptyString,
+                     bool aSortList = true );
 
     void SetListLabel( const wxString& aLabel );
     void SetOKLabel( const wxString& aLabel );
@@ -80,6 +81,7 @@ private:
 
 private:
     const std::vector<wxArrayString>* m_itemsList;
+    bool  m_sortList;
 };
 
 

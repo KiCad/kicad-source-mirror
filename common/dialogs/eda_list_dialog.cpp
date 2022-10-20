@@ -40,10 +40,11 @@ static int DEFAULT_COL_WIDTHS[] = { 200, 600 };
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
-                                  const wxString& aPreselectText ) :
+                                  const wxString& aPreselectText, bool aSortList ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
 {
     m_itemsList = &aItemList;
+    m_sortList  = aSortList;
 
     m_filterBox->SetHint( _( "Filter" ) );
 
@@ -234,5 +235,6 @@ static int wxCALLBACK myCompareFunction( wxIntPtr aItem1, wxIntPtr aItem2,
 
 void EDA_LIST_DIALOG::sortList()
 {
-    m_listBox->SortItems( myCompareFunction, 0 );
+    if( m_sortList )
+        m_listBox->SortItems( myCompareFunction, 0 );
 }
