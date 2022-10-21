@@ -1394,6 +1394,9 @@ private:
     void importTree( Clipper2Lib::Paths64&               paths,
                      const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                      const std::vector<SHAPE_ARC>&       aArcBuffe );
+    void importPolyPath( Clipper2Lib::PolyPath64*        aPolyPath,
+                     const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                     const std::vector<SHAPE_ARC>&       aArcBuffer );
 
     void inflate1( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy );
     void inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy );

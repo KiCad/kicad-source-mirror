@@ -1082,6 +1082,29 @@ void SHAPE_POLY_SET::importTree( ClipperLib::PolyTree*               tree,
 }
 
 
+void SHAPE_POLY_SET::importPolyPath( Clipper2Lib::PolyPath64*            aPolyPath,
+                                     const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                                     const std::vector<SHAPE_ARC>&       aArcBuffer )
+{
+    if( !aPolyPath->IsHole() )
+    {
+        POLYGON paths;
+        paths.reserve( aPolyPath->Count() + 1 );
+        paths.emplace_back( aPolyPath->Polygon(), aZValueBuffer, aArcBuffer );
+
+        for( Clipper2Lib::PolyPath64* child : *aPolyPath )
+        {
+            paths.emplace_back( child->Polygon(), aZValueBuffer, aArcBuffer );
+
+            for( Clipper2Lib::PolyPath64* grandchild : *child )
+                importPolyPath( grandchild, aZValueBuffer, aArcBuffer );
+        }
+
+        m_polys.push_back( paths );
+    }
+}
+
+
 void SHAPE_POLY_SET::importTree( Clipper2Lib::PolyTree64&            tree,
                                  const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                                  const std::vector<SHAPE_ARC>&       aArcBuffer )
@@ -1089,20 +1112,7 @@ void SHAPE_POLY_SET::importTree( Clipper2Lib::PolyTree64&            tree,
     m_polys.clear();
 
     for( Clipper2Lib::PolyPath64* n : tree )
-    {
-        if( !n->IsHole() )
-        {
-            POLYGON paths;
-            paths.reserve( n->Count() + 1 );
-
-            paths.emplace_back( n->Polygon(), aZValueBuffer, aArcBuffer );
-
-            for( Clipper2Lib::PolyPath64* child : *n)
-                paths.emplace_back( child->Polygon(), aZValueBuffer, aArcBuffer );
-
-            m_polys.push_back( paths );
-        }
-    }
+        importPolyPath( n, aZValueBuffer, aArcBuffer );
 }
 
 
