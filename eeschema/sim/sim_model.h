@@ -84,12 +84,18 @@ namespace SIM_MODEL_GRAMMAR
 
     struct fieldInferValueType : plus<upper> {};
     struct fieldInferValuePrincipalValue : seq<// HACK: Because `number` matches empty string,
-                                               //       ensure it is not empty.
+                                               // ensure it is not empty.
                                                at<sor<tao::pegtl::digit,
                                                       one<'.'>>>,
                                                // END HACK.
                                                number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
-                                               star<not_at<sep>, not_at<one<'='>>, any>> {};
+                                               // Hackish: match anything until param-value pairs.
+                                               // Because the user may want to write something like
+                                               // "10k 30% 30mW w=0.4", but we care only about the
+                                               // "10k" and "w=0.4".
+                                               star<not_at<sep,
+                                                           fieldParamValuePairs>,
+                                                    any>> {};
     struct fieldInferValue : sor<seq<fieldInferValueType,
                                      opt<sep,
                                          fieldParamValuePairs>>,
