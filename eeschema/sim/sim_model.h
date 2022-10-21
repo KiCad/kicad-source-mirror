@@ -86,7 +86,8 @@ namespace SIM_MODEL_GRAMMAR
     struct fieldInferValuePrincipalValue : seq<// HACK: Because `number` matches empty string,
                                                // ensure it is not empty.
                                                at<sor<tao::pegtl::digit,
-                                                      one<'.'>>>,
+                                                      seq<one<'.'>>,
+                                                          tao::pegtl::digit>>,
                                                // END HACK.
                                                number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
                                                // Hackish: match anything until param-value pairs.
