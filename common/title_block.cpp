@@ -95,6 +95,7 @@ void TITLE_BLOCK::GetContextualTextVars( wxArrayString* aVars )
 bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) const
 {
     bool tokenUpdated = false;
+    wxString originalToken = *aToken;
 
     if( aToken->IsSameAs( wxT( "ISSUE_DATE" ) ) )
     {
@@ -150,7 +151,12 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) c
 
     if( tokenUpdated )
     {
-       *aToken = ExpandTextVars( *aToken, aProject );
+        *aToken = ExpandTextVars( *aToken, aProject );
+
+        // This is the default fallback, so don't claim we resolved it
+        if( *aToken == wxT( "${" ) + originalToken + wxT( "}" ) )
+            return false;
+
        return true;
     }
 
