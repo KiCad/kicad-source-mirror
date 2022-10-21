@@ -336,6 +336,14 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     if( ( !IsVisible() && !IsForceVisible() ) || IsVoid() )
         return;
 
+    COLOR4D bg = aSettings->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
+
+    if( IsForceVisible() )
+        bg = aSettings->GetLayerColor( LAYER_HIDDEN );
+
     if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
         color = GetTextColor();
 
@@ -353,6 +361,9 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             else
                 orient = ANGLE_HORIZONTAL;
         }
+
+        if( parentSymbol && parentSymbol->GetDNP() )
+            color = color.Mix( bg, 0.5f );
     }
 
     /*
