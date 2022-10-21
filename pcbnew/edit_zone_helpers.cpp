@@ -47,7 +47,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     // note the net name and the layer can be changed, so we must save all zones
     deletedList.ClearListAndDeleteItems();
     pickedList.ClearListAndDeleteItems();
-    SaveCopyOfZones( pickedList, GetBoard(), -1, UNDEFINED_LAYER );
+    SaveCopyOfZones( pickedList, GetBoard() );
 
     if( aZone->GetIsRuleArea() )
     {

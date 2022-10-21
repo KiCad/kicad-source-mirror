@@ -94,10 +94,8 @@ bool PLUGIN::FootprintExists( const wxString& aLibraryPath, const wxString& aFoo
 }
 
 
-FOOTPRINT* PLUGIN::FootprintLoad( const wxString& aLibraryPath,
-                                  const wxString& aFootprintName,
-                                  bool  aKeepUUID,
-                                  const PROPERTIES* aProperties )
+FOOTPRINT* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                  bool  aKeepUUID, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     not_implemented( this, __FUNCTION__ );

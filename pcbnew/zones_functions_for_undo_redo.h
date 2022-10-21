@@ -51,11 +51,8 @@
  * and fill a pick list with pickers to handle these copies
  * @param aPickList = the pick list
  * @param aPcb = the Board
- * @param aNetCode = the reference netcode. if aNetCode < 0 all netcodes are used
- * @param aLayer = the layer of zones. if aLayer < 0, all layers are used
- * @return the count of saved copies
  */
-int SaveCopyOfZones(PICKED_ITEMS_LIST & aPickList, BOARD* aPcb, int aNetCode, int aLayer );
+void SaveCopyOfZones(PICKED_ITEMS_LIST & aPickList, BOARD* aPcb );
 
 
 /**

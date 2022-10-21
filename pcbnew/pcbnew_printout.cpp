@@ -48,7 +48,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Load( aConfig );
 
-    if( auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
     {
         m_DrillMarks = static_cast<DRILL_MARK_SHAPE_T>( cfg->m_Plot.pads_drill_mode );
         m_Pagination = static_cast<PAGINATION_T>( cfg->m_Plot.all_layers_on_one_page );
@@ -62,7 +62,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Save( aConfig );
 
-    if( auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
     {
         cfg->m_Plot.pads_drill_mode        = m_DrillMarks;
         cfg->m_Plot.all_layers_on_one_page = m_Pagination;
@@ -73,7 +73,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 
 
 PCBNEW_PRINTOUT::PCBNEW_PRINTOUT( BOARD* aBoard, const PCBNEW_PRINTOUT_SETTINGS& aParams,
-        const KIGFX::VIEW* aView, const wxString& aTitle ) :
+                                  const KIGFX::VIEW* aView, const wxString& aTitle ) :
     BOARD_PRINTOUT( aParams, aView, aTitle ), m_pcbnewSettings( aParams )
 {
     m_board = aBoard;
@@ -296,8 +296,8 @@ int KIGFX::PCB_PRINT_PAINTER::getDrillShape( const PAD* aPad ) const
 
 VECTOR2D KIGFX::PCB_PRINT_PAINTER::getDrillSize( const PAD* aPad ) const
 {
-    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillSize( aPad ) :
-        VECTOR2D( m_drillMarkSize, m_drillMarkSize );
+    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillSize( aPad )
+                           : VECTOR2D( m_drillMarkSize, m_drillMarkSize );
 }
 
 

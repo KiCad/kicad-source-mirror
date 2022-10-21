@@ -906,12 +906,10 @@ void ZONE::HatchBorder()
         // Iterate through all vertices
         for( auto iterator = m_Poly->IterateSegmentsWithHoles(); iterator; iterator++ )
         {
-            double x, y;
+            const SEG seg = *iterator;
+            double    x, y;
 
-            SEG segment = *iterator;
-
-            if( FindLineSegmentIntersection( a, slope, segment.A.x, segment.A.y, segment.B.x,
-                    segment.B.y, x, y ) )
+            if( FindLineSegmentIntersection( a, slope, seg.A.x, seg.A.y, seg.B.x, seg.B.y, x, y ) )
                 pointbuffer.emplace_back( KiROUND( x ), KiROUND( y ) );
         }
 
@@ -976,7 +974,7 @@ void ZONE::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_ZONE_T || aImage->Type() == PCB_FP_ZONE_T );
 
-    std::swap( *((ZONE*) this), *((ZONE*) aImage) );
+    std::swap( *static_cast<ZONE*>( this ), *static_cast<ZONE*>( aImage) );
 }
 
 
@@ -984,8 +982,8 @@ void ZONE::CacheTriangulation( PCB_LAYER_ID aLayer )
 {
     if( aLayer == UNDEFINED_LAYER )
     {
-        for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& pair : m_FilledPolysList )
-            pair.second->CacheTriangulation();
+        for( auto& [ layer, poly ] : m_FilledPolysList )
+            poly->CacheTriangulation();
 
         m_Poly->CacheTriangulation( false );
     }
@@ -1070,9 +1068,11 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     bool         smooth_requested = m_cornerSmoothingType == ZONE_SETTINGS::SMOOTHING_CHAMFER
                                     || m_cornerSmoothingType == ZONE_SETTINGS::SMOOTHING_FILLET;
 
-    if( IsTeardropArea() )  // We use teardrop shapes with no smoothing
-                            // these shapes are already optimized
+    if( IsTeardropArea() )
+    {
+        // We use teardrop shapes with no smoothing; these shapes are already optimized
         smooth_requested = false;
+    }
 
     if( board )
     {
