@@ -183,7 +183,8 @@ private:
     bool isUnitAndConversionShown( const LIB_ITEM* aItem ) const;
 
     float getShadowWidth( bool aForHighlight ) const;
-    COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows, bool aDimmed = false ) const;
+    COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows,
+                            bool aDimmed = false ) const;
     float getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) const;
     float getTextThickness( const EDA_ITEM* aItem ) const;
 

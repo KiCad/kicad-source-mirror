@@ -763,7 +763,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimm
 }
 
 
-void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDNP )
+void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDimmed )
 {
     if( !isUnitAndConversionShown( aShape ) )
         return;
@@ -771,12 +771,12 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDNP )
     if( aShape->IsPrivate() && !m_schSettings.m_IsSymbolEditor )
         return;
 
-    if( !setDeviceColors( aShape, aLayer, aDNP ) )
+    if( !setDeviceColors( aShape, aLayer, aDimmed ) )
         return;
 
     bool           drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
-    COLOR4D        color = getRenderColor( aShape, aLayer, drawingShadows, aDNP );
+    COLOR4D        color = getRenderColor( aShape, aLayer, drawingShadows, aDimmed );
 
     auto drawShape =
             [&]( const LIB_SHAPE* shape )
@@ -1069,6 +1069,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
     if( drawingShadows && !( aTextBox->IsBrightened() || aTextBox->IsSelected() ) )
         return;
 
+    COLOR4D bg = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
     COLOR4D color = getRenderColor( aTextBox, aLayer, drawingShadows, aDimmed );
     float   borderWidth = getLineWidth( aTextBox, drawingShadows );
 
@@ -1122,6 +1123,9 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
             {
                 borderColor = m_schSettings.GetLayerColor( aLayer );
             }
+
+            if( aDimmed )
+                borderColor = borderColor.Mix( bg, 0.5f );
 
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
@@ -1421,12 +1425,12 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     {
         size     [INSIDE] = showPinNames ? aPin->GetNameTextSize() : 0;
         thickness[INSIDE] = nameStrokeWidth;
-        colour   [INSIDE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
+        colour   [INSIDE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows, aDimmed );
         text     [INSIDE] = aPin->GetShownName();
 
         size     [ABOVE] = showPinNumbers ? aPin->GetNumberTextSize() : 0;
         thickness[ABOVE] = numStrokeWidth;
-        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
+        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
         text     [ABOVE] = aPin->GetShownNumber();
     }
     // Otherwise pin NAMES go above and pin NUMBERS go below
@@ -1434,12 +1438,12 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     {
         size     [ABOVE] = showPinNames ? aPin->GetNameTextSize() : 0;
         thickness[ABOVE] = nameStrokeWidth;
-        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
+        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows, aDimmed );
         text     [ABOVE] = aPin->GetShownName();
 
         size     [BELOW] = showPinNumbers ? aPin->GetNumberTextSize() : 0;
         thickness[BELOW] = numStrokeWidth;
-        colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
+        colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
         text     [BELOW] = aPin->GetShownNumber();
     }
 
@@ -1447,7 +1451,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     {
         size[OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
         thickness[OUTSIDE] = float( size[OUTSIDE] ) / 8.0F;
-        colour   [OUTSIDE] = getRenderColor( aPin, LAYER_PRIVATE_NOTES, drawingShadows );
+        colour   [OUTSIDE] = getRenderColor( aPin, LAYER_PRIVATE_NOTES, drawingShadows, aDimmed );
         text     [OUTSIDE] = aPin->GetElectricalTypeName();
     }
 
@@ -1465,7 +1469,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     if( !aPin->IsVisible() )
     {
         for( COLOR4D& c : colour )
-            c = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows );
+            c = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
     }
 
     float insideOffset  = textOffset                                     - thickness[INSIDE]  / 2.0;
