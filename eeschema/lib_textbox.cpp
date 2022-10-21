@@ -382,8 +382,13 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
         return;
     }
 
-    VECTOR2I       start = aTransform.TransformCoordinate( m_start ) + aOffset;
-    VECTOR2I       end = aTransform.TransformCoordinate( m_end ) + aOffset;
+    VECTOR2I start = aTransform.TransformCoordinate( m_start ) + aOffset;
+    VECTOR2I end = aTransform.TransformCoordinate( m_end ) + aOffset;
+    COLOR4D  bg = aPlotter->RenderSettings()->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
     int            penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
     COLOR4D        color = GetStroke().GetColor();
     PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
@@ -395,6 +400,9 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
             lineStyle = PLOT_DASH_TYPE::DASH;
+
+        if( aDimmed )
+            color = color.Mix( bg, 0.5f );
 
         aPlotter->SetColor( color );
         aPlotter->SetDash( penWidth, lineStyle );
@@ -408,11 +416,6 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
         color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
-
-    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
-
-    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
-        bg = COLOR4D::WHITE;
 
     if( aDimmed )
         color = color.Mix( bg, 0.5f );

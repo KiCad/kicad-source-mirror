@@ -705,7 +705,7 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 
 
 void LIB_SYMBOL::Plot( PLOTTER *aPlotter, int aUnit, int aConvert, bool aBackground,
-        const VECTOR2I &aOffset, const TRANSFORM &aTransform, bool aDimmed ) const
+                       const VECTOR2I &aOffset, const TRANSFORM &aTransform, bool aDimmed ) const
 {
     wxASSERT( aPlotter != nullptr );
 
@@ -726,8 +726,8 @@ void LIB_SYMBOL::Plot( PLOTTER *aPlotter, int aUnit, int aConvert, bool aBackgro
         if( item.IsPrivate() )
             continue;
 
-        // Lib Fields are not plotted here, because this plot function
-        // is used to plot schematic items, which have they own fields
+        // LIB_FIELDs are not plotted here, because this plot function is used to plot schematic
+        // items which have their own SCH_FIELDs
         if( item.Type() == LIB_FIELD_T )
             continue;
 

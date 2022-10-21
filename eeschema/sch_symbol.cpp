@@ -2155,7 +2155,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
         for( bool local_background : { true, false } )
         {
             tempSymbol.Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp,
-                    GetDNP() );
+                             GetDNP() );
 
             for( SCH_FIELD field : m_fields )
                 field.Plot( aPlotter, local_background );
