@@ -232,7 +232,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             catch( const IO_ERROR& e )
             {
                 DisplayErrorMessage( nullptr,
-                                     wxString::Format( "Failed reading model from symbol '%s':\n%s",
+                                     wxString::Format( "Failed reading simulation model from symbol '%s':\n%s",
                                                        symbol->GetRef( &sheet ),
                                                        e.What() ) );
             }

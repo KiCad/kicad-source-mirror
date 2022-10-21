@@ -1209,7 +1209,7 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
                 else
                 {
                     THROW_IO_ERROR(
-                        wxString::Format( _( "Model of type '%s' cannot have a principal value (which is '%s') in Value field" ),
+                        wxString::Format( _( "Simulation model of type '%s' cannot have a principal value (which is '%s') in Value field" ),
                                           GetTypeInfo().fieldValue,
                                           node->string() ) );
                 }
