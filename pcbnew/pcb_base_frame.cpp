@@ -417,8 +417,8 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
             case PCB_FP_DIM_CENTER_T:
             case PCB_FP_DIM_RADIAL_T:
             case PCB_FP_DIM_ORTHOGONAL_T:
-                item->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0,
-                                                            pcbIUScale.mmToIU( 0.1 ), ERROR_INSIDE );
+                item->TransformShapeToPolygon( itemPoly, aLayer, 0, pcbIUScale.mmToIU( 0.1 ),
+                                               ERROR_INSIDE );
                 break;
 
             case PCB_ZONE_T:
@@ -429,8 +429,8 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
                 // unfortunately the calculations are highly time consuming, even for not very
                 // large areas (can be easily a few minutes for large areas).
                 // so we used only the zone outline that usually do not have too many vertices.
-                zone->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0,
-                                                            pcbIUScale.FromMillimeter( 0.1 ), ERROR_INSIDE );
+                zone->TransformShapeToPolygon( itemPoly, aLayer, 0, pcbIUScale.mmToIU( 0.1 ),
+                                               ERROR_INSIDE );
 
                 if( itemPoly.IsEmpty() )
                     itemPoly = *zone->Outline();

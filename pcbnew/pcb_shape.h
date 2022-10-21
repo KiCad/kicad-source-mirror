@@ -121,21 +121,18 @@ public:
     void Scale( double aScale );
 
     /**
-     * Convert the shape to a closed polygon.
+     * Convert the shape to a closed polygon.  Circles and arcs are approximated by segments.
      *
-     * Used in filling zones calculations.  Circles and arcs are approximated by segments.
-     *
-     * @param aCornerBuffer is a buffer to store the polygon.
-     * @param aClearanceValue is the clearance around the pad.
+     * @param aBuffer is a buffer to store the polygon.
+     * @param aClearance is the clearance around the pad.
      * @param aError is the maximum deviation from a true arc.
      * @param aErrorLoc whether any approximation error should be placed inside or outside
-     * @param ignoreLineWidth is used for edge cut items where the line width is only
-     *        for visualization
+     * @param ignoreLineWidth is used for edge cut items where the line width is only for
+     *                        visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                               PCB_LAYER_ID aLayer, int aClearanceValue,
-                                               int aError, ERROR_LOC aErrorLoc,
-                                               bool ignoreLineWidth = false ) const override;
+    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                  int aError, ERROR_LOC aErrorLoc,
+                                  bool ignoreLineWidth = false ) const override;
 
     virtual wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 

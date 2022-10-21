@@ -175,7 +175,7 @@ bool PCB_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
     {
         SHAPE_POLY_SET poly;
 
-        TransformBoundingBoxWithClearanceToPolygon( &poly, getKnockoutMargin() );
+        TransformBoundingBoxToPolygon( &poly, getKnockoutMargin());
 
         return poly.Collide( aPoint, aAccuracy );
     }
@@ -284,9 +284,8 @@ std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHIN
 }
 
 
-void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                         PCB_LAYER_ID aLayer, int aClearance,
-                                                         int aError, ERROR_LOC aErrorLoc ) const
+void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                       int aClearance, int aError, ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = GetDrawFont();
@@ -303,7 +302,7 @@ void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( aCornerBuffer, aPt1, aPt2, penWidth+ ( 2 * aClearance ),
+                TransformOvalToPolygon( aBuffer, aPt1, aPt2, penWidth + ( 2 * aClearance ),
                                         aError, ERROR_INSIDE );
             },
             // Triangulation callback
@@ -318,16 +317,15 @@ void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
     font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
-    aCornerBuffer.Append( buffer );
+    aBuffer.Append( buffer );
 }
 
 
-void PCB_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                     PCB_LAYER_ID aLayer, int aClearance,
-                                                     int aError, ERROR_LOC aErrorLoc,
-                                                     bool aIgnoreLineWidth ) const
+void PCB_TEXT::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                        int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                        bool aIgnoreLineWidth ) const
 {
-    EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &aCornerBuffer, aClearance );
+    EDA_TEXT::TransformBoundingBoxToPolygon( &aBuffer, aClearance );
 }
 
 

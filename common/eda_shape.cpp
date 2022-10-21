@@ -1491,30 +1491,26 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
 }
 
 
-void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                      int aClearanceValue,
-                                                      int aError, ERROR_LOC aErrorLoc,
-                                                      bool ignoreLineWidth ) const
+void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                         ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
 {
     int width = ignoreLineWidth ? 0 : GetWidth();
 
-    width += 2 * aClearanceValue;
+    width += 2 * aClearance;
 
     switch( m_shape )
     {
     case SHAPE_T::CIRCLE:
+    {
+        int r = GetRadius();
+
         if( IsFilled() )
-        {
-            TransformCircleToPolygon( aCornerBuffer, getCenter(), GetRadius() + width / 2, aError,
-                                      aErrorLoc );
-        }
+            TransformCircleToPolygon( aBuffer, getCenter(), r + width / 2, aError, aErrorLoc );
         else
-        {
-            TransformRingToPolygon( aCornerBuffer, getCenter(), GetRadius(), width, aError,
-                                    aErrorLoc );
-        }
+            TransformRingToPolygon( aBuffer, getCenter(), r, width, aError, aErrorLoc );
 
         break;
+    }
 
     case SHAPE_T::RECT:
     {
@@ -1522,31 +1518,30 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
         if( IsFilled() || IsAnnotationProxy() )
         {
-            aCornerBuffer.NewOutline();
+            aBuffer.NewOutline();
 
             for( const VECTOR2I& pt : pts )
-                aCornerBuffer.Append( pt );
+                aBuffer.Append( pt );
         }
 
         if( width > 0 || !IsFilled() )
         {
             // Add in segments
-            TransformOvalToPolygon( aCornerBuffer, pts[0], pts[1], width, aError, aErrorLoc );
-            TransformOvalToPolygon( aCornerBuffer, pts[1], pts[2], width, aError, aErrorLoc );
-            TransformOvalToPolygon( aCornerBuffer, pts[2], pts[3], width, aError, aErrorLoc );
-            TransformOvalToPolygon( aCornerBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aError, aErrorLoc );
         }
 
         break;
     }
 
     case SHAPE_T::ARC:
-        TransformArcToPolygon( aCornerBuffer, GetStart(), GetArcMid(), GetEnd(), width, aError,
-                               aErrorLoc );
+        TransformArcToPolygon( aBuffer, GetStart(), GetArcMid(), GetEnd(), width, aError, aErrorLoc );
         break;
 
     case SHAPE_T::SEGMENT:
-        TransformOvalToPolygon( aCornerBuffer, GetStart(), GetEnd(), width, aError, aErrorLoc );
+        TransformOvalToPolygon( aBuffer, GetStart(), GetEnd(), width, aError, aErrorLoc );
         break;
 
     case SHAPE_T::POLY:
@@ -1570,10 +1565,10 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
         if( IsFilled() )
         {
-            aCornerBuffer.NewOutline();
+            aBuffer.NewOutline();
 
             for( const VECTOR2I& point : poly )
-                aCornerBuffer.Append( point.x, point.y );
+                aBuffer.Append( point.x, point.y );
         }
 
         if( width > 0 || !IsFilled() )
@@ -1583,7 +1578,7 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
             for( const VECTOR2I& pt2 : poly )
             {
                 if( pt2 != pt1 )
-                    TransformOvalToPolygon( aCornerBuffer, pt1, pt2, width, aError, aErrorLoc );
+                    TransformOvalToPolygon( aBuffer, pt1, pt2, width, aError, aErrorLoc );
 
                 pt1 = pt2;
             }
@@ -1600,10 +1595,7 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         converter.GetPoly( poly, GetWidth() );
 
         for( unsigned ii = 1; ii < poly.size(); ii++ )
-        {
-            TransformOvalToPolygon( aCornerBuffer, poly[ii - 1], poly[ii], width, aError,
-                                    aErrorLoc );
-        }
+            TransformOvalToPolygon( aBuffer, poly[ii - 1], poly[ii], width, aError, aErrorLoc );
 
         break;
     }

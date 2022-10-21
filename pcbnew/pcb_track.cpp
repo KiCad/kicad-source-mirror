@@ -1167,10 +1167,9 @@ std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
 }
 
 
-void PCB_TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                      PCB_LAYER_ID aLayer, int aClearanceValue,
-                                                      int aError, ERROR_LOC aErrorLoc,
-                                                      bool ignoreLineWidth ) const
+void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                         int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                         bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, wxT( "IgnoreLineWidth has no meaning for tracks." ) );
 
@@ -1179,26 +1178,26 @@ void PCB_TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
     {
     case PCB_VIA_T:
     {
-        int radius = ( m_Width / 2 ) + aClearanceValue;
-        TransformCircleToPolygon( aCornerBuffer, m_Start, radius, aError, aErrorLoc );
+        int radius = ( m_Width / 2 ) + aClearance;
+        TransformCircleToPolygon( aBuffer, m_Start, radius, aError, aErrorLoc );
         break;
     }
 
     case PCB_ARC_T:
     {
         const PCB_ARC* arc = static_cast<const PCB_ARC*>( this );
-        int            width = m_Width + ( 2 * aClearanceValue );
+        int            width = m_Width + ( 2 * aClearance );
 
-        TransformArcToPolygon( aCornerBuffer, arc->GetStart(), arc->GetMid(),
-                               arc->GetEnd(), width, aError, aErrorLoc );
+        TransformArcToPolygon( aBuffer, arc->GetStart(), arc->GetMid(), arc->GetEnd(), width,
+                               aError, aErrorLoc );
         break;
     }
 
     default:
     {
-        int width = m_Width + ( 2 * aClearanceValue );
+        int width = m_Width + ( 2 * aClearance );
 
-        TransformOvalToPolygon( aCornerBuffer, m_Start, m_End, width, aError, aErrorLoc );
+        TransformOvalToPolygon( aBuffer, m_Start, m_End, width, aError, aErrorLoc );
         break;
     }
     }

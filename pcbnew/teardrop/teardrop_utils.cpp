@@ -438,8 +438,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
         force_clip_shape = true;
 
         preferred_height = aViaPad.m_Width * aCurrParams->m_HeightRatio;
-        pad->TransformShapeWithClearanceToPolygon( c_buffer, aTrack->GetLayer(), 0,
-                                                   ARC_LOW_DEF, ERROR_INSIDE );
+        pad->TransformShapeToPolygon( c_buffer, aTrack->GetLayer(), 0, ARC_LOW_DEF, ERROR_INSIDE );
     }
 
     // Clip the pad/via shape to match the m_TdMaxHeight constraint, and for
@@ -619,8 +618,8 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
     else
     {
         PAD* pad = static_cast<PAD*>( aViaPad.m_Parent );
-        pad->TransformShapeWithClearanceToPolygon( shapebuffer, aTrack->GetLayer(), 0,
-                                                   ARC_LOW_DEF, ERROR_INSIDE );
+        pad->TransformShapeToPolygon( shapebuffer, aTrack->GetLayer(), 0,
+                                      ARC_LOW_DEF, ERROR_INSIDE );
     }
 
     SHAPE_LINE_CHAIN& outline = shapebuffer.Outline(0);

@@ -466,8 +466,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     SHAPE_POLY_SET outline;
                     int maxError = aBoard->GetDesignSettings().m_MaxError;
                     int numSegs = GetArcToSegmentCount( mask_clearance, maxError, FULL_CIRCLE );
-                    dummy.TransformShapeWithClearanceToPolygon( outline, UNDEFINED_LAYER, 0,
-                                                                maxError, ERROR_INSIDE );
+                    dummy.TransformShapeToPolygon( outline, UNDEFINED_LAYER, 0, maxError,
+                                                   ERROR_INSIDE );
                     outline.InflateWithLinkedHoles( mask_clearance, numSegs,
                                                     SHAPE_POLY_SET::PM_FAST );
 
@@ -846,23 +846,19 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         for( const FOOTPRINT* footprint : aBoard->Footprints() )
         {
             // add shapes with their exact mask layer size in initialPolys
-            footprint->TransformPadsWithClearanceToPolygon( initialPolys, layer, 0, maxError,
-                                                            ERROR_OUTSIDE );
+            footprint->TransformPadsToPolySet( initialPolys, layer, 0, maxError, ERROR_OUTSIDE );
             // add shapes inflated by aMinThickness/2 in areas
-            footprint->TransformPadsWithClearanceToPolygon( areas, layer, inflate, maxError,
-                                                            ERROR_OUTSIDE );
+            footprint->TransformPadsToPolySet( areas, layer, inflate, maxError, ERROR_OUTSIDE );
 
             for( const BOARD_ITEM* item : footprint->GraphicalItems() )
             {
                 if( item->Type() == PCB_FP_SHAPE_T && item->IsOnLayer( layer ) )
                 {
                     // add shapes with their exact mask layer size in initialPolys
-                    item->TransformShapeWithClearanceToPolygon( initialPolys, layer, 0, maxError,
-                                                                ERROR_OUTSIDE );
+                    item->TransformShapeToPolygon( initialPolys, layer, 0, maxError, ERROR_OUTSIDE );
 
                     // add shapes inflated by aMinThickness/2 in areas
-                    item->TransformShapeWithClearanceToPolygon( areas, layer, inflate, maxError,
-                                                                ERROR_OUTSIDE );
+                    item->TransformShapeToPolygon( areas, layer, inflate, maxError, ERROR_OUTSIDE );
                 }
                 else if( item->Type() == PCB_FP_SHAPE_T && item->IsOnLayer( Edge_Cuts ) )
                 {
@@ -880,15 +876,14 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             if( !via || !via->IsOnLayer( layer ) )
                 continue;
 
-            int            clearance = via->GetSolderMaskExpansion();
+            int clearance = via->GetSolderMaskExpansion();
 
             // add shapes with their exact mask layer size in initialPolys
-            via->TransformShapeWithClearanceToPolygon( initialPolys, layer, clearance, maxError,
-                                                       ERROR_OUTSIDE );
+            via->TransformShapeToPolygon( initialPolys, layer, clearance, maxError, ERROR_OUTSIDE );
 
             // add shapes inflated by aMinThickness/2 in areas
-            via->TransformShapeWithClearanceToPolygon( areas, layer, clearance + inflate, maxError,
-                                                       ERROR_OUTSIDE );
+            clearance += inflate;
+            via->TransformShapeToPolygon( areas, layer, clearance, maxError, ERROR_OUTSIDE );
         }
 
         // Add filled zone areas.
@@ -903,11 +898,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             if( item->IsOnLayer( layer ) )
             {
                 // add shapes with their exact mask layer size in initialPolys
-                item->TransformShapeWithClearanceToPolygon( initialPolys, layer, 0, maxError,
-                                                            ERROR_OUTSIDE );
+                item->TransformShapeToPolygon( initialPolys, layer, 0, maxError, ERROR_OUTSIDE );
                 // add shapes inflated by aMinThickness/2 in areas
-                item->TransformShapeWithClearanceToPolygon( areas, layer, inflate, maxError,
-                                                            ERROR_OUTSIDE );
+                item->TransformShapeToPolygon( areas, layer, inflate, maxError, ERROR_OUTSIDE );
             }
             else if( item->IsOnLayer( Edge_Cuts ) )
             {

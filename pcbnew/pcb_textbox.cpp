@@ -447,9 +447,8 @@ std::shared_ptr<SHAPE> PCB_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLAS
 }
 
 
-void PCB_TEXTBOX::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                            PCB_LAYER_ID aLayer, int aClearance,
-                                                            int aError, ERROR_LOC aErrorLoc ) const
+void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                          int aClearance, int aError, ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = GetDrawFont();
@@ -466,8 +465,8 @@ void PCB_TEXTBOX::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCor
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth+ ( 2 * aClearance ),
-                                        aError, ERROR_INSIDE );
+                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth + ( 2 * aClearance ), aError,
+                                        ERROR_INSIDE );
             },
             // Triangulation callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
@@ -481,34 +480,33 @@ void PCB_TEXTBOX::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCor
     font->Draw( &callback_gal, GetShownText(), GetDrawPos(), GetAttributes() );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
-    aCornerBuffer.Append( buffer );
+    aBuffer.Append( buffer );
 }
 
 
-void PCB_TEXTBOX::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                     PCB_LAYER_ID aLayer, int aClearance,
-                                                     int aError, ERROR_LOC aErrorLoc,
-                                                     bool aIgnoreLineWidth ) const
+void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                           int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                           bool aIgnoreLineWidth ) const
 {
-    // Don't use PCB_SHAPE::TransformShapeWithClearanceToPolygon.  We want to treat the
-    // textbox as filled even if there's no background colour.
+    // Don't use PCB_SHAPE::TransformShapeToPolygon.  We want to treat the textbox as filled even
+    // if there's no background colour.
 
     std::vector<VECTOR2I> pts = GetRectCorners();
 
-    aCornerBuffer.NewOutline();
+    aBuffer.NewOutline();
 
     for( const VECTOR2I& pt : pts )
-        aCornerBuffer.Append( pt );
+        aBuffer.Append( pt );
 
     int width = GetWidth() + ( 2 * aClearance );
 
     if( width > 0 )
     {
         // Add in segments
-        TransformOvalToPolygon( aCornerBuffer, pts[0], pts[1], width, aError, aErrorLoc );
-        TransformOvalToPolygon( aCornerBuffer, pts[1], pts[2], width, aError, aErrorLoc );
-        TransformOvalToPolygon( aCornerBuffer, pts[2], pts[3], width, aError, aErrorLoc );
-        TransformOvalToPolygon( aCornerBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+        TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
+        TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aError, aErrorLoc );
+        TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aError, aErrorLoc );
+        TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aError, aErrorLoc );
     }
 }
 

@@ -712,8 +712,8 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             SHAPE_POLY_SET itemShape;
                             bool           enclosedByArea;
 
-                            item->TransformShapeWithClearanceToPolygon( itemShape, layer, 0,
-                                                                        maxError, ERROR_OUTSIDE );
+                            item->TransformShapeToPolygon( itemShape, layer, 0, maxError,
+                                                           ERROR_OUTSIDE );
 
                             if( itemShape.IsEmpty() )
                             {

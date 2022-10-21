@@ -135,8 +135,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
                 PAD* pad = static_cast<PAD*>( aItem );
                 int  clearance = ( m_webWidth / 2 ) + pad->GetSolderMaskExpansion();
 
-                aItem->TransformShapeWithClearanceToPolygon( *solderMask->GetFill( layer ), layer,
-                                                             clearance, m_maxError, ERROR_OUTSIDE );
+                aItem->TransformShapeToPolygon( *solderMask->GetFill( layer ), layer, clearance,
+                                                m_maxError, ERROR_OUTSIDE );
 
                 m_itemTree->Insert( aItem, layer, m_largestClearance );
             }
@@ -151,8 +151,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
                 PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
                 int      clearance = ( m_webWidth / 2 ) + via->GetSolderMaskExpansion();
 
-                via->TransformShapeWithClearanceToPolygon( *solderMask->GetFill( layer ), layer,
-                                                           clearance, m_maxError, ERROR_OUTSIDE );
+                via->TransformShapeToPolygon( *solderMask->GetFill( layer ), layer, clearance,
+                                              m_maxError, ERROR_OUTSIDE );
 
                 m_itemTree->Insert( aItem, layer, m_largestClearance );
             }
@@ -164,9 +164,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
         {
             if( aItem->IsOnLayer( layer ) )
             {
-                aItem->TransformShapeWithClearanceToPolygon( *solderMask->GetFill( layer ),
-                                                             layer, m_webWidth / 2, m_maxError,
-                                                             ERROR_OUTSIDE );
+                aItem->TransformShapeToPolygon( *solderMask->GetFill( layer ), layer,
+                                                m_webWidth / 2, m_maxError, ERROR_OUTSIDE );
 
                 m_itemTree->Insert( aItem, layer, m_largestClearance );
             }

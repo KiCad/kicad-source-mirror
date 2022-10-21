@@ -106,13 +106,12 @@ public:
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
-                                               int aClearance, int aError, ERROR_LOC aErrorLoc,
-                                               bool aIgnoreLineWidth ) const override;
+    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                  int aError, ERROR_LOC aErrorLoc,
+                                  bool aIgnoreLineWidth = false ) const override;
 
-    void TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                   PCB_LAYER_ID aLayer, int aClearanceValue,
-                                                   int aError, ERROR_LOC aErrorLoc ) const;
+    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                 int aError, ERROR_LOC aErrorLoc ) const;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,

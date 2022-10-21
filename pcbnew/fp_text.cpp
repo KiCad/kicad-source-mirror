@@ -450,9 +450,8 @@ std::shared_ptr<SHAPE> FP_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
 }
 
 
-void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                        PCB_LAYER_ID aLayer, int aClearance,
-                                                        int aError, ERROR_LOC aErrorLoc ) const
+void FP_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                      int aError, ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = GetDrawFont();
@@ -469,8 +468,8 @@ void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth+ ( 2 * aClearance ),
-                                        aError, ERROR_INSIDE );
+                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth + ( 2 * aClearance ), aError,
+                                        ERROR_INSIDE );
             },
             // Triangulation callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
@@ -487,19 +486,17 @@ void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
     font->Draw( &callback_gal, GetShownText(), GetTextPos(), attrs );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
-    aCornerBuffer.Append( buffer );
+    aBuffer.Append( buffer );
 }
 
 
-void FP_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                    PCB_LAYER_ID aLayer, int aClearance,
-                                                    int aError, ERROR_LOC aErrorLoc,
-                                                    bool aIgnoreLineWidth ) const
+void FP_TEXT::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                       int aError, ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
 {
     SHAPE_POLY_SET buffer;
 
-    EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &buffer, aClearance );
-    aCornerBuffer.Append( buffer );
+    EDA_TEXT::TransformBoundingBoxToPolygon( &buffer, aClearance );
+    aBuffer.Append( buffer );
 }
 
 

@@ -3459,8 +3459,7 @@ void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE&   aShape,
     HelperSetZoneLayers( zone, aAltiumLayer );
     HelperSetZoneKeepoutRestrictions( zone, aKeepoutRestrictions );
 
-    aShape.EDA_SHAPE::TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF,
-                                                            ERROR_INSIDE, false );
+    aShape.EDA_SHAPE::TransformShapeToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, ERROR_INSIDE );
 
     zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                  ZONE::GetDefaultHatchPitch(), true );
@@ -3481,8 +3480,7 @@ void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*         aFoo
     HelperSetZoneLayers( zone, aAltiumLayer );
     HelperSetZoneKeepoutRestrictions( zone, aKeepoutRestrictions );
 
-    aShape.EDA_SHAPE::TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF,
-                                                            ERROR_INSIDE, false );
+    aShape.EDA_SHAPE::TransformShapeToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, ERROR_INSIDE );
 
     zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                  ZONE::GetDefaultHatchPitch(), true );

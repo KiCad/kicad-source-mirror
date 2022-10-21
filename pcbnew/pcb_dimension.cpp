@@ -514,10 +514,9 @@ OPT_VECTOR2I PCB_DIMENSION_BASE::segCircleIntersection( CIRCLE& aCircle, SEG& aS
 }
 
 
-void PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                               PCB_LAYER_ID aLayer, int aClearance,
-                                                               int aError, ERROR_LOC aErrorLoc,
-                                                               bool aIgnoreLineWidth ) const
+void PCB_DIMENSION_BASE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                                  int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                                  bool aIgnoreLineWidth ) const
 {
     wxASSERT_MSG( !aIgnoreLineWidth, wxT( "IgnoreLineWidth has no meaning for dimensions." ) );
 
@@ -528,20 +527,18 @@ void PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& a
 
         if( circle )
         {
-            TransformCircleToPolygon( aCornerBuffer, circle->GetCenter(),
+            TransformCircleToPolygon( aBuffer, circle->GetCenter(),
                                       circle->GetRadius() + m_lineThickness / 2 + aClearance,
                                       aError, aErrorLoc );
         }
         else if( seg )
         {
-            TransformOvalToPolygon( aCornerBuffer, seg->GetSeg().A,
-                                    seg->GetSeg().B, m_lineThickness + 2 * aClearance,
-                                    aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, seg->GetSeg().A, seg->GetSeg().B,
+                                    m_lineThickness + 2 * aClearance, aError, aErrorLoc );
         }
         else
         {
-            wxFAIL_MSG( wxT( "PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon unexpected "
-                             "shape type." ) );
+            wxFAIL_MSG( wxT( "PCB_DIMENSION_BASE::TransformShapeToPolygon unknown shape type." ) );
         }
     }
 }

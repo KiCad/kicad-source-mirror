@@ -188,8 +188,8 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         // Slow (but general purpose) method.
                         SHAPE_POLY_SET padOutline;
 
-                        pad->TransformShapeWithClearanceToPolygon( padOutline, UNDEFINED_LAYER, 0,
-                                                                   maxError, ERROR_INSIDE );
+                        pad->TransformShapeToPolygon( padOutline, UNDEFINED_LAYER, 0, maxError,
+                                                      ERROR_INSIDE );
 
                         if( !padOutline.Collide( pad->GetPosition() ) )
                         {

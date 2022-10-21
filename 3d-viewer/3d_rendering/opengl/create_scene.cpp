@@ -825,11 +825,10 @@ void RENDER_3D_OPENGL::generateViasAndPads()
                     if( !hasHole )
                         continue;
 
-                    pad->TransformHoleWithClearanceToPolygon( tht_outer_holes_poly,
-                                                              platingThickness,
-                                                              ARC_HIGH_DEF, ERROR_INSIDE );
-                    pad->TransformHoleWithClearanceToPolygon( tht_inner_holes_poly, 0,
-                                                              ARC_HIGH_DEF, ERROR_INSIDE );
+                    pad->TransformHoleToPolygon( tht_outer_holes_poly, platingThickness,
+                                                 ARC_HIGH_DEF, ERROR_INSIDE );
+                    pad->TransformHoleToPolygon( tht_inner_holes_poly, 0, ARC_HIGH_DEF,
+                                                 ERROR_INSIDE );
                 }
             }
         }

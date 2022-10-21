@@ -1180,7 +1180,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
     SHAPE_POLY_SET outline;
     SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
-    aText->TransformBoundingBoxWithClearanceToPolygon( &outline, 0 );
+    aText->TransformBoundingBoxToPolygon( &outline, 0 );
 
     for( auto iter = outline.CIterate( 0 ); iter; iter++ )
         shape->Append( *iter );

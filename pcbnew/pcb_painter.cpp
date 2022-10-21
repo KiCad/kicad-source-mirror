@@ -1453,8 +1453,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         {
             // This is expensive.  Avoid if possible.
             SHAPE_POLY_SET polySet;
-            aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x,
-                                                        m_maxError, ERROR_INSIDE );
+            aPad->TransformShapeToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x, m_maxError,
+                                           ERROR_INSIDE );
             m_gal->DrawPolygon( polySet );
         }
     }
@@ -1509,8 +1509,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                     SHAPE_POLY_SET polySet;
 
                     // Use ERROR_INSIDE because it avoids Clipper and is therefore much faster.
-                    aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ),
-                                                                clearance, m_maxError, ERROR_INSIDE );
+                    aPad->TransformShapeToPolygon( polySet, ToLAYER_ID( aLayer ), clearance,
+                                                   m_maxError, ERROR_INSIDE );
 
                     if( polySet.Outline( 0 ).PointCount() > 2 )     // Careful of empty pads
                         m_gal->DrawPolygon( polySet );
@@ -1845,8 +1845,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         m_gal->SetLineWidth( m_lockedShadowMargin );
 
         SHAPE_POLY_SET poly;
-        aText->TransformShapeWithClearanceToPolygon( poly, aText->GetLayer(), 0, m_maxError,
-                                                     ERROR_OUTSIDE );
+        aText->TransformShapeToPolygon( poly, aText->GetLayer(), 0, m_maxError, ERROR_OUTSIDE );
         m_gal->DrawPolygon( poly );
 
         return;
@@ -1884,7 +1883,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         int            margin = attrs.m_StrokeWidth * 1.5
                                     + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
 
-        aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
+        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
         finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
@@ -2049,7 +2048,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         int            margin = attrs.m_StrokeWidth * 1.5
                                     + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
 
-        aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
+        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
         finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 

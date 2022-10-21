@@ -934,8 +934,8 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 
         if( item->Type() != PCB_FP_TEXT_T && item->Type() != PCB_BITMAP_T )
         {
-            item->TransformShapeWithClearanceToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
-                                                        ERROR_OUTSIDE );
+            item->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
+                                           ERROR_OUTSIDE );
         }
 
         // We intentionally exclude footprint text from the bounding hull.
@@ -943,10 +943,9 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 
     for( PAD* pad : m_pads )
     {
-        pad->TransformShapeWithClearanceToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
-                                                   ERROR_OUTSIDE );
+        pad->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
         // In case hole is larger than pad
-        pad->TransformHoleWithClearanceToPolygon( rawPolys, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+        pad->TransformHoleToPolygon( rawPolys, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
 
     for( FP_ZONE* zone : m_fp_zones )
@@ -2023,15 +2022,13 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
     {
         const FP_TEXT* text = static_cast<const FP_TEXT*>( aItem );
 
-        text->TransformTextShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, textMargin,
-                                                        ARC_LOW_DEF, ERROR_OUTSIDE );
+        text->TransformTextToPolySet( poly, UNDEFINED_LAYER, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
     else if( aItem->Type() == PCB_FP_TEXTBOX_T )
     {
-        const FP_TEXTBOX* textbox = static_cast<const FP_TEXTBOX*>( aItem );
+        const FP_TEXTBOX* tb = static_cast<const FP_TEXTBOX*>( aItem );
 
-        textbox->TransformTextShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, textMargin,
-                                                           ARC_LOW_DEF, ERROR_OUTSIDE );
+        tb->TransformTextToPolySet( poly, UNDEFINED_LAYER, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
     else if( aItem->Type() == PCB_SHAPE_T )
     {
@@ -2059,8 +2056,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
         }
 
         default:
-            shape->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
-                                                         ARC_LOW_DEF, ERROR_OUTSIDE );
+            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
         }
     }
     else if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_ARC_T )
@@ -2070,8 +2066,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
     }
     else
     {
-        aItem->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
-                                                     ARC_LOW_DEF, ERROR_OUTSIDE );
+        aItem->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
 
     return polygonArea( poly );
@@ -2085,14 +2080,13 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
     SHAPE_POLY_SET footprintRegion( GetBoundingHull() );
     SHAPE_POLY_SET coveredRegion;
 
-    TransformPadsWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
-                                         ERROR_OUTSIDE );
+    TransformPadsToPolySet( coveredRegion, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
 
-    TransformFPShapesWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, textMargin,
-                                             ARC_LOW_DEF, ERROR_OUTSIDE,
-                                             true,  /* include text */
-                                             false, /* include shapes */
-                                             false  /* include private items */ );
+    TransformFPShapesToPolySet( coveredRegion, UNDEFINED_LAYER, textMargin, ARC_LOW_DEF,
+                                ERROR_OUTSIDE,
+                                true,  /* include text */
+                                false, /* include shapes */
+                                false  /* include private items */ );
 
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {
@@ -2105,8 +2099,8 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         case PCB_FP_SHAPE_T:
             if( item->GetParent() != this )
             {
-                item->TransformShapeWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 0,
-                                                            ARC_LOW_DEF, ERROR_OUTSIDE );
+                item->TransformShapeToPolygon( coveredRegion, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
+                                               ERROR_OUTSIDE );
             }
             break;
 
@@ -2116,8 +2110,8 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
-            item->TransformShapeWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 0,
-                                                        ARC_LOW_DEF, ERROR_OUTSIDE );
+            item->TransformShapeToPolygon( coveredRegion, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
+                                           ERROR_OUTSIDE );
             break;
 
         case PCB_FOOTPRINT_T:
@@ -2345,14 +2339,13 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
                 PCB_LAYER_ID   layer = lset.Seq().at( 0 );
                 SHAPE_POLY_SET padOutline;
 
-                pad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, ARC_HIGH_DEF,
-                                                           ERROR_LOC::ERROR_INSIDE );
+                pad->TransformShapeToPolygon( padOutline, layer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
 
                 std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
                 SHAPE_POLY_SET                 holeOutline;
 
                 TransformOvalToPolygon( holeOutline, hole->GetSeg().A, hole->GetSeg().B,
-                                        hole->GetWidth(), ARC_HIGH_DEF, ERROR_LOC::ERROR_INSIDE );
+                                        hole->GetWidth(), ARC_HIGH_DEF, ERROR_INSIDE );
 
                 padOutline.BooleanSubtract( holeOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
@@ -2490,8 +2483,8 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
         {
             if( item->IsOnLayer( layer ) )
             {
-                item->TransformShapeWithClearanceToPolygon( copperOutlines, layer, 0,
-                                                            ARC_HIGH_DEF, ERROR_OUTSIDE );
+                item->TransformShapeToPolygon( copperOutlines, layer, 0, ARC_HIGH_DEF,
+                                               ERROR_OUTSIDE );
             }
         }
 
@@ -2679,12 +2672,10 @@ bool FOOTPRINT::cmp_zones::operator()( const FP_ZONE* aFirst, const FP_ZONE* aSe
 #undef TEST
 
 
-void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                     PCB_LAYER_ID aLayer, int aClearance,
-                                                     int aMaxError, ERROR_LOC aErrorLoc,
-                                                     bool aSkipNPTHPadsWihNoCopper,
-                                                     bool aSkipPlatedPads,
-                                                     bool aSkipNonPlatedPads ) const
+void FOOTPRINT::TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                        int aClearance, int aMaxError, ERROR_LOC aErrorLoc,
+                                        bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
+                                        bool aSkipNonPlatedPads ) const
 {
     for( const PAD* pad : m_pads )
     {
@@ -2728,10 +2719,9 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
             break;
         }
 
-        // Our standard TransformShapeWithClearanceToPolygon() routines can't handle differing
-        // x:y clearance values (which get generated when a relative paste margin is used with
-        // an oblong pad).  So we apply this huge hack and fake a larger pad to run the transform
-        // on.
+        // Our standard TransformShapeToPolygon() routines can't handle differing x:y clearance
+        // values (which get generated when a relative paste margin is used with an oblong pad).
+        // So we apply this huge hack and fake a larger pad to run the transform on.
         // Of course being a hack it falls down when dealing with custom shape pads (where the
         // size is only the size of the anchor), so for those we punt and just use clearance.x.
 
@@ -2745,24 +2735,20 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
 
             PAD dummy( *pad );
             dummy.SetSize( dummySize );
-            dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
-                                                        aMaxError, aErrorLoc );
+            dummy.TransformShapeToPolygon( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
         }
         else
         {
-            pad->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, clearance.x,
-                                                       aMaxError, aErrorLoc );
+            pad->TransformShapeToPolygon( aBuffer, aLayer, clearance.x, aMaxError, aErrorLoc );
         }
     }
 }
 
 
-void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                         PCB_LAYER_ID aLayer, int aClearance,
-                                                         int aError, ERROR_LOC aErrorLoc,
-                                                         bool aIncludeText,
-                                                         bool aIncludeShapes,
-                                                         bool aIncludePrivateItems ) const
+void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                            int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                            bool aIncludeText, bool aIncludeShapes,
+                                            bool aIncludePrivateItems ) const
 {
     std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
 
@@ -2784,10 +2770,7 @@ void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
             FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
 
             if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer && textbox->IsVisible() )
-            {
-                textbox->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
-                                                               aError, aErrorLoc, false );
-            }
+                textbox->TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
         }
 
         if( item->Type() == PCB_FP_SHAPE_T && aIncludeShapes )
@@ -2795,10 +2778,7 @@ void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
             const FP_SHAPE* outline = static_cast<FP_SHAPE*>( item );
 
             if( aLayer != UNDEFINED_LAYER && outline->GetLayer() == aLayer )
-            {
-                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
-                                                               aError, aErrorLoc );
-            }
+                outline->TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
         }
     }
 
@@ -2812,10 +2792,7 @@ void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
     }
 
     for( const FP_TEXT* text : texts )
-    {
-        text->TransformTextShapeWithClearanceToPolygon( aCornerBuffer, aLayer, aClearance,
-                                                        aError, aErrorLoc );
-    }
+        text->TransformTextToPolySet( aBuffer, aLayer, aClearance, aError, aErrorLoc );
 }
 
 

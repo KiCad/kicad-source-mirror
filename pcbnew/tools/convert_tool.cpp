@@ -559,9 +559,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromGraphics( const std::deque<EDA_ITEM*>&
             if( aIgnoreLineWidths )
                 temp->SetFilled( true );
 
-            temp->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
-                                                        bds.m_MaxError, ERROR_INSIDE,
-                                                        aIgnoreLineWidths );
+            temp->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
+                                           aIgnoreLineWidths );
             item->SetFlags( SKIP_STRUCT );
             break;
         }

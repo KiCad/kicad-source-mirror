@@ -425,28 +425,27 @@ public:
     /**
      * Convert the pad shape to a closed polygon. Circles and arcs are approximated by segments.
      *
-     * @param aCornerBuffer a buffer to store the polygon.
-     * @param aClearanceValue the clearance around the pad.
+     * @param aBuffer a buffer to store the polygon.
+     * @param aClearance the clearance around the pad.
      * @param aMaxError maximum error from true when converting arcs.
      * @param aErrorLoc should the approximation error be placed outside or inside the polygon?
      * @param ignoreLineWidth used for edge cuts where the line width is only for visualization.
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                               PCB_LAYER_ID aLayer, int aClearanceValue,
-                                               int aMaxError, ERROR_LOC aErrorLoc,
-                                               bool ignoreLineWidth = false ) const override;
+    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                  int aMaxError, ERROR_LOC aErrorLoc,
+                                  bool ignoreLineWidth = false ) const override;
 
     /**
      * Build the corner list of the polygonal drill shape in the board coordinate system.
      *
-     * @param aCornerBuffer a buffer to fill.
-     * @param aInflateValue the clearance or margin value.
+     * @param aBuffer a buffer to fill.
+     * @param aClearance the clearance or margin value.
      * @param aError maximum deviation of an arc from the polygon approximation.
      * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
      * @return false if the pad has no hole, true otherwise.
      */
-    bool TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
-                                              int aError, ERROR_LOC aErrorLoc ) const;
+    bool TransformHoleToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                 ERROR_LOC aErrorLoc ) const;
 
     /**
      * Some pad shapes can be complex (rounded/chamfered rectangle), even without considering

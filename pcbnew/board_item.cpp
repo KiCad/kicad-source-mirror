@@ -169,13 +169,11 @@ BOARD_ITEM* BOARD_ITEM::Duplicate() const
 }
 
 
-void BOARD_ITEM::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                       PCB_LAYER_ID aLayer, int aClearanceValue,
-                                                       int aError, ERROR_LOC aErrorLoc,
-                                                       bool ignoreLineWidth ) const
+void BOARD_ITEM::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                          int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                          bool ignoreLineWidth ) const
 {
-    wxASSERT_MSG( false, wxT( "Called TransformShapeWithClearanceToPolygon() on unsupported "
-                              "BOARD_ITEM." ) );
+    wxASSERT_MSG( false, wxT( "Called TransformShapeToPolygon() on unsupported BOARD_ITEM." ) );
 };
 
 

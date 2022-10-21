@@ -125,8 +125,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
                 continue;
 
             SHAPE_POLY_SET padPoly;
-            pad->TransformShapeWithClearanceToPolygon( padPoly, aLayer, 0, ARC_LOW_DEF,
-                                                       ERROR_OUTSIDE );
+            pad->TransformShapeToPolygon( padPoly, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
 
             SHAPE_LINE_CHAIN& padOutline = padPoly.Outline( 0 );
             BOX2I             padBBox( item_bbox );

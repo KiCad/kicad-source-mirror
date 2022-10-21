@@ -1180,7 +1180,7 @@ double ZONE::CalculateOutlineArea()
 }
 
 
-void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearance,
+void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance,
                                               int aMaxError, ERROR_LOC aErrorLoc,
                                               SHAPE_POLY_SET* aBoardOutline ) const
 {
@@ -1209,7 +1209,7 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int
     }
 
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
-    aCornerBuffer.Append( polybuffer );
+    aBuffer.Append( polybuffer );
 }
 
 
@@ -1275,9 +1275,8 @@ std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aF
 }
 
 
-void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                 PCB_LAYER_ID aLayer, int aClearance, int aError,
-                                                 ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
+void ZONE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                    int aError, ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
 {
     wxASSERT_MSG( !aIgnoreLineWidth, wxT( "IgnoreLineWidth has no meaning for zones." ) );
 
@@ -1286,7 +1285,7 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     if( !aClearance )
     {
-        aCornerBuffer.Append( *m_FilledPolysList.at( aLayer ) );
+        aBuffer.Append( *m_FilledPolysList.at( aLayer ) );
         return;
     }
 
@@ -1300,15 +1299,14 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     temp_buf.InflateWithLinkedHoles( aClearance, numSegs, SHAPE_POLY_SET::PM_FAST );
 
-    aCornerBuffer.Append( temp_buf );
+    aBuffer.Append( temp_buf );
 }
 
 
-void ZONE::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aCornerBuffer,
-                                               int aError ) const
+void ZONE::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aBuffer ) const
 {
     if( m_FilledPolysList.count( aLayer ) && !m_FilledPolysList.at( aLayer )->IsEmpty() )
-        aCornerBuffer.Append( *m_FilledPolysList.at( aLayer ) );
+        aBuffer.Append( *m_FilledPolysList.at( aLayer ) );
 }
 
 

@@ -593,8 +593,7 @@ void PAD::BuildEffectivePolygon() const
 
     // Polygon
     m_effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
-    TransformShapeWithClearanceToPolygon( *m_effectivePolygon, UNDEFINED_LAYER, 0, maxError,
-                                          ERROR_INSIDE );
+    TransformShapeToPolygon( *m_effectivePolygon, UNDEFINED_LAYER, 0, maxError, ERROR_INSIDE );
 
     // Bounding radius
     //
@@ -1550,8 +1549,8 @@ void PAD::SwapData( BOARD_ITEM* aImage )
 }
 
 
-bool PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
-                                               int aError, ERROR_LOC aErrorLoc ) const
+bool PAD::TransformHoleToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                  ERROR_LOC aErrorLoc ) const
 {
     VECTOR2I drillsize = GetDrillSize();
 
@@ -1560,17 +1559,15 @@ bool PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, in
 
     std::shared_ptr<SHAPE_SEGMENT> slot = GetEffectiveHoleShape();
 
-    TransformOvalToPolygon( aCornerBuffer, slot->GetSeg().A, slot->GetSeg().B,
-                            slot->GetWidth() + aInflateValue * 2, aError, aErrorLoc );
+    TransformOvalToPolygon( aBuffer, slot->GetSeg().A, slot->GetSeg().B,
+                            slot->GetWidth() + aClearance * 2, aError, aErrorLoc );
 
     return true;
 }
 
 
-void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                PCB_LAYER_ID aLayer, int aClearanceValue,
-                                                int aError, ERROR_LOC aErrorLoc,
-                                                bool ignoreLineWidth ) const
+void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                   int aError, ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, wxT( "IgnoreLineWidth has no meaning for pads." ) );
 
@@ -1581,8 +1578,8 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     int       dx = m_size.x / 2;
     int       dy = m_size.y / 2;
 
-    VECTOR2I padShapePos = ShapePos(); // Note: for pad having a shape offset,
-                                              // the pad position is NOT the shape position
+    VECTOR2I padShapePos = ShapePos();    // Note: for pad having a shape offset, the pad
+                                          //   position is NOT the shape position
 
     switch( GetShape() )
     {
@@ -1591,8 +1588,8 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         // Note: dx == dy is not guaranteed for circle pads in legacy boards
         if( dx == dy || ( GetShape() == PAD_SHAPE::CIRCLE ) )
         {
-            TransformCircleToPolygon( aCornerBuffer, padShapePos, dx + aClearanceValue, aError,
-                                      aErrorLoc, pad_min_seg_per_circle_count );
+            TransformCircleToPolygon( aBuffer, padShapePos, dx + aClearance, aError, aErrorLoc,
+                                      pad_min_seg_per_circle_count );
         }
         else
         {
@@ -1601,8 +1598,8 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
             RotatePoint( delta, m_orient );
 
-            TransformOvalToPolygon( aCornerBuffer, padShapePos - delta, padShapePos + delta,
-                                    ( half_width + aClearanceValue ) * 2, aError, aErrorLoc,
+            TransformOvalToPolygon( aBuffer, padShapePos - delta, padShapePos + delta,
+                                    ( half_width + aClearance ) * 2, aError, aErrorLoc,
                                     pad_min_seg_per_circle_count );
         }
 
@@ -1615,9 +1612,9 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         int  ddy = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.y / 2 : 0;
 
         SHAPE_POLY_SET outline;
-        TransformTrapezoidToPolygon( outline, padShapePos, m_size, m_orient, ddx, ddy,
-                                     aClearanceValue, aError, aErrorLoc );
-        aCornerBuffer.Append( outline );
+        TransformTrapezoidToPolygon( outline, padShapePos, m_size, m_orient, ddx, ddy, aClearance,
+                                     aError, aErrorLoc );
+        aBuffer.Append( outline );
         break;
     }
 
@@ -1631,8 +1628,8 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                               GetRoundRectCornerRadius(),
                                               doChamfer ? GetChamferRectRatio() : 0,
                                               doChamfer ? GetChamferPositions() : 0,
-                                              aClearanceValue, aError, aErrorLoc );
-        aCornerBuffer.Append( outline );
+                                              aClearance, aError, aErrorLoc );
+        aBuffer.Append( outline );
         break;
     }
 
@@ -1643,11 +1640,11 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         outline.Rotate( m_orient );
         outline.Move( VECTOR2I( m_pos ) );
 
-        if( aClearanceValue )
+        if( aClearance )
         {
-            int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, FULL_CIRCLE ),
+            int numSegs = std::max( GetArcToSegmentCount( aClearance, aError, FULL_CIRCLE ),
                                                           pad_min_seg_per_circle_count );
-            int clearance = aClearanceValue;
+            int clearance = aClearance;
 
             if( aErrorLoc == ERROR_OUTSIDE )
             {
@@ -1660,12 +1657,12 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         }
 
-        aCornerBuffer.Append( outline );
+        aBuffer.Append( outline );
         break;
     }
 
     default:
-        wxFAIL_MSG( wxT( "PAD::TransformShapeWithClearanceToPolygon no implementation for " )
+        wxFAIL_MSG( wxT( "PAD::TransformShapeToPolygon no implementation for " )
                     + PAD_SHAPE_T_asString( GetShape() ) );
         break;
     }

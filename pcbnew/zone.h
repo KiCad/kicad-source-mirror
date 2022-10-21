@@ -361,11 +361,10 @@ public:
      * Arcs (ends of segments) are approximated by segments
      *
      * @param aLayer is the layer of the zone to retrieve
-     * @param aCornerBuffer = a buffer to store the polygons
+     * @param aBuffer = a buffer to store the polygons
      * @param aError = Maximum error allowed between true arc and polygon approx
      */
-    void TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aCornerBuffer,
-                                             int aError = ARC_HIGH_DEF ) const;
+    void TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aBuffer ) const;
 
     /**
      * Convert the outlines shape to a polygon with no holes
@@ -374,11 +373,11 @@ public:
      * Used in filling zones calculations
      * Circles (vias) and arcs (ends of tracks) are approximated by segments.
      *
-     * @param aCornerBuffer is a buffer to store the polygon
+     * @param aBuffer is a buffer to store the polygon
      * @param aClearance is the min clearance around outlines
      * @param aBoardOutline is the board outline (if a valid one exists; nullptr otherwise)
      */
-    void TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearance,
+    void TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance,
                                             int aError, ERROR_LOC aErrorLoc,
                                             SHAPE_POLY_SET* aBoardOutline ) const;
 
@@ -388,16 +387,15 @@ public:
      * Circles and arcs are approximated by segments
      *
      * @param aLayer is the layer of the filled zone to retrieve
-     * @param aCornerBuffer is a buffer to store the polygon
-     * @param aClearanceValue is the clearance around the pad
+     * @param aBuffer is a buffer to store the polygon
+     * @param aClearance is the clearance around the pad
      * @param aError is the maximum deviation from true circle
-     * @param ignoreLineWidth is used for edge cut items where the line width is only
-     * for visualization
+     * @param ignoreLineWidth is used for edge cut items where the line width is only for
+     *                        visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                               PCB_LAYER_ID aLayer, int aClearanceValue,
-                                               int aError, ERROR_LOC aErrorLoc,
-                                               bool ignoreLineWidth = false ) const override;
+    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                  int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                  bool ignoreLineWidth = false ) const override;
 
     /**
      * Test if the given VECTOR2I is near a corner.

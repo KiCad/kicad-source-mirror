@@ -137,20 +137,19 @@ public:
     virtual double GetLength() const;
 
     /**
-     * Function TransformShapeWithClearanceToPolygon
+     * Function TransformShapeToPolygon
      * Convert the track shape to a closed polygon
      * Used in filling zones calculations
      * Circles (vias) and arcs (ends of tracks) are approximated by segments
-     * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearanceValue = the clearance around the pad
+     * @param aBuffer = a buffer to store the polygon
+     * @param aClearance = the clearance around the pad
      * @param aError = the maximum deviation from true circle
-     * @param ignoreLineWidth = used for edge cut items where the line width is only
-     * for visualization
+     * @param ignoreLineWidth = used for edge cut items where the line width is only for
+     *                          visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                               PCB_LAYER_ID aLayer, int aClearanceValue,
-                                               int aError, ERROR_LOC aErrorLoc,
-                                               bool ignoreLineWidth = false ) const override;
+    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                  int aError, ERROR_LOC aErrorLoc,
+                                  bool ignoreLineWidth = false ) const override;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,

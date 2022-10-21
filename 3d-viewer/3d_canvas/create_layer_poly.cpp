@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
  */
 
 #include "board_adapter.h"
+#include <board_design_settings.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <fp_shape.h>
 #include <footprint.h>
@@ -37,13 +38,15 @@
 /*
  * This is used to draw pad outlines on silk layers.
  */
-void BOARD_ADAPTER::buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aCornerBuffer,
+void BOARD_ADAPTER::buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aBuffer,
                                               int aWidth ) const
 {
+    int maxError = m_board->GetDesignSettings().m_MaxError;
+
     if( aPad->GetShape() == PAD_SHAPE::CIRCLE )    // Draw a ring
     {
-        TransformRingToPolygon( aCornerBuffer, aPad->ShapePos(), aPad->GetSize().x / 2, aWidth,
-                                ARC_HIGH_DEF, ERROR_INSIDE );
+        TransformRingToPolygon( aBuffer, aPad->ShapePos(), aPad->GetSize().x / 2, aWidth, maxError,
+                                ERROR_INSIDE );
         return;
     }
 
@@ -56,14 +59,16 @@ void BOARD_ADAPTER::buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& a
         const VECTOR2I& a = path.CPoint( ii );
         const VECTOR2I& b = path.CPoint( ii + 1 );
 
-        TransformOvalToPolygon( aCornerBuffer, a, b, aWidth, ARC_HIGH_DEF, ERROR_INSIDE );
+        TransformOvalToPolygon( aBuffer, a, b, aWidth, maxError, ERROR_INSIDE );
     }
 }
 
 
-void BOARD_ADAPTER::transformFPShapesToPolygon( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
-                                                SHAPE_POLY_SET& aCornerBuffer ) const
+void BOARD_ADAPTER::transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
+                                                SHAPE_POLY_SET& aBuffer ) const
 {
+    int maxError = m_board->GetDesignSettings().m_MaxError;
+
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
         if( item->Type() == PCB_FP_SHAPE_T )
@@ -71,20 +76,14 @@ void BOARD_ADAPTER::transformFPShapesToPolygon( const FOOTPRINT* aFootprint, PCB
             FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
 
             if( shape->GetLayer() == aLayer )
-            {
-                shape->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
-                                                             ARC_HIGH_DEF, ERROR_INSIDE );
-            }
+                shape->TransformShapeToPolygon( aBuffer, aLayer, 0, maxError, ERROR_INSIDE );
         }
         else if( BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
             PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( item );
 
             if( dimension->GetLayer() == aLayer )
-            {
-                dimension->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
-                                                                 ARC_HIGH_DEF, ERROR_INSIDE );
-            }
+                dimension->TransformShapeToPolygon( aBuffer, aLayer, 0, maxError, ERROR_INSIDE );
         }
     }
 }

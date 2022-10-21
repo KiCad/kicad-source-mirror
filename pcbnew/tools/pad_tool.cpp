@@ -718,8 +718,7 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
             [&]( PCB_LAYER_ID aLayer ) -> FP_SHAPE*
             {
                 SHAPE_POLY_SET padPoly;
-                aPad->TransformShapeWithClearanceToPolygon( padPoly, aLayer, 0, maxError,
-                                                            ERROR_INSIDE );
+                aPad->TransformShapeToPolygon( padPoly, aLayer, 0, maxError, ERROR_INSIDE );
 
                 for( BOARD_ITEM* item : footprint->GraphicalItems() )
                 {
@@ -735,8 +734,7 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
                         return (FP_SHAPE*) item;
 
                     SHAPE_POLY_SET drawPoly;
-                    shape->TransformShapeWithClearanceToPolygon( drawPoly, aLayer, 0, maxError,
-                                                                 ERROR_INSIDE );
+                    shape->TransformShapeToPolygon( drawPoly, aLayer, 0, maxError, ERROR_INSIDE );
                     drawPoly.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
 
                     if( !drawPoly.IsEmpty() )
@@ -799,10 +797,10 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
                 // Create a new minimally-sized circular anchor and convert existing pad
                 // to a polygon primitive
                 SHAPE_POLY_SET existingOutline;
-                aPad->TransformShapeWithClearanceToPolygon( existingOutline, layer, 0, maxError,
-                                                            ERROR_INSIDE );
+                aPad->TransformShapeToPolygon( existingOutline, layer, 0, maxError, ERROR_INSIDE );
 
                 aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
+
                 if( aPad->GetSizeX() > aPad->GetSizeY() )
                     aPad->SetSizeX( aPad->GetSizeY() );
 

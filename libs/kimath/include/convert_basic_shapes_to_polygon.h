@@ -66,7 +66,7 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRa
 /**
  * Convert a circle to a polygon, using multiple straight lines.
  *
- * @param aCornerBuffer is a buffer to store the polygon.
+ * @param aBuffer is a buffer to store the polygon.
  * @param aCenter is the center of the circle.
  * @param aRadius is the radius of the circle.
  * @param aError is the internal units allowed for error approximation.
@@ -74,13 +74,13 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRa
  * @param aMinSegCount is the min count of segments to approximate.
  * Default = 0 to do not force a min count.
  */
-void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const VECTOR2I& aCenter,
-                               int aRadius, int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
+void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer, const VECTOR2I& aCenter, int aRadius,
+                               int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
 
 /**
  * Convert a circle to a polygon, using multiple straight lines.
  *
- * @param aCornerBuffer is a buffer to store the polygon.
+ * @param aBuffer is a buffer to store the polygon.
  * @param aCenter is the center of the circle.
  * @param aRadius is the radius of the circle.
  * @param aError is the internal units allowed for error in approximation.
@@ -88,7 +88,7 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const VECTOR2I& 
  * @param aMinSegCount is the min count of segments to approximate.
  * Default = 0 to do not force a min count.
  */
-void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aCenter, int aRadius,
+void TransformCircleToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aCenter, int aRadius,
                                int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
 
 
@@ -100,7 +100,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aC
  * because multiple segments create a smaller area than the circle.  The radius of the circle to
  * approximate must be bigger ( radius*aCorrectionFactor) to create segments outside the circle.
  *
- * @param aCornerBuffer is a buffer to store the polygon.
+ * @param aBuffer is a buffer to store the polygon.
  * @param aStart is the first point of the segment.
  * @param aEnd is the second point of the segment.
  * @param aWidth is the width of the segment.
@@ -109,16 +109,15 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aC
  * @param aMinSegCount is the min count of segments to approximate.
  * Default = 0 to do not force a min count.
  */
-void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStart,
-                             const VECTOR2I& aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc,
-                             int aMinSegCount = 0 );
+void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                             int aWidth, int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
 
 /**
  * Convert a rectangle or trapezoid to a polygon.
  *
  * This will generate at least 16 segments per circle (when using inflate).
  *
- * @param aCornerBuffer is a buffer to store the polygon.
+ * @param aBuffer is a buffer to store the polygon.
  * @param aPosition is the coordinate of the center of the rectangle.
  * @param aSize is the size of the rectangle.
  * @param aDeltaX is the delta for trapezoids in X direction
@@ -127,7 +126,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
  * @param aError is the IU allowed for error in approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
-void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aPosition,
+void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aPosition,
                                   const VECTOR2I& aSize, const EDA_ANGLE& aRotation, int aDeltaX,
                                   int aDeltaY, int aInflate, int aError, ERROR_LOC aErrorLoc );
 
@@ -137,7 +136,7 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
  * Convert rounded corners arcs to multiple straight lines. This will generate at least
  * 16 segments per circle.
  *
- * @param aCornerBuffer is a buffer to store the polygon.
+ * @param aBuffer is a buffer to store the polygon.
  * @param aPosition is the coordinate of the center of the rectangle.
  * @param aSize is the size of the rectangle.
  * @param aCornerRadius is the radius of rounded corners (can be 0).
@@ -154,16 +153,16 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
  * @param aError is the IU allowed for error in approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
-void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                           const VECTOR2I& aPosition, const VECTOR2I& aSize,
-                                           const EDA_ANGLE& aRotation, int aCornerRadius,
-                                           double aChamferRatio, int aChamferCorners, int aInflate,
-                                           int aError, ERROR_LOC aErrorLoc );
+void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aPosition,
+                                           const VECTOR2I& aSize, const EDA_ANGLE& aRotation,
+                                           int aCornerRadius, double aChamferRatio,
+                                           int aChamferCorners, int aInflate, int aError,
+                                           ERROR_LOC aErrorLoc );
 
 /**
  * Convert arc to multiple straight segments.
  *
- * @param aCornerBuffer is a buffer to store the polygon.
+ * @param aBuffer is a buffer to store the polygon.
  * @param aCentre is the center of the arc or circle.
  * @param aStart is the start point of the arc or a point on the circle.
  * @param aArcAngle is the arc angle in 0.1 degrees. For a circle, aArcAngle = 3600.
@@ -171,21 +170,20 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aError is the internal units allowed for error in approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
-void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStart,
-                            const VECTOR2I& aMid, const VECTOR2I& aEnd, int aWidth, int aError,
-                            ERROR_LOC aErrorLoc );
+void TransformArcToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, const VECTOR2I& aMid,
+                            const VECTOR2I& aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc );
 
 /**
  * Convert arcs to multiple straight segments.
  *
- * @param aCornerBuffer is a buffer to store the polygon.
+ * @param aBuffer is a buffer to store the polygon.
  * @param aCentre is the center of the arc or circle.
  * @param aRadius is the radius of the circle.
  * @param aWidth is the width (thickness) of the ring.
  * @param aError is the internal units allowed for error in approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
-void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aCentre, int aRadius,
+void TransformRingToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aCentre, int aRadius,
                              int aWidth, int aError, ERROR_LOC aErrorLoc );
 
 #endif     // CONVERT_BASIC_SHAPES_TO_POLYGON_H

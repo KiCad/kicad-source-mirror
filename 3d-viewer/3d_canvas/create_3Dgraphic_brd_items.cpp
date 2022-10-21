@@ -94,7 +94,7 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
         int            margin = attrs.m_StrokeWidth * 1.5 +
                                     GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
 
-        aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
+        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
         finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
@@ -328,7 +328,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
 
         PAD dummy( *aPad );
         dummy.SetSize( wxSize( dummySize.x, dummySize.y ) );
-        dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0, maxError, ERROR_INSIDE );
+        dummy.TransformShapeToPolygon( poly, aLayer, 0, maxError, ERROR_INSIDE );
         clearance = { 0, 0 };
     }
     else
@@ -622,8 +622,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             {
                 SHAPE_POLY_SET polyList;
 
-                aShape->TransformShapeWithClearanceToPolygon( polyList, UNDEFINED_LAYER, 0,
-                                                              ARC_HIGH_DEF, ERROR_INSIDE );
+                aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
+                                                 ERROR_INSIDE );
 
                 polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 
@@ -671,8 +671,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         {
             SHAPE_POLY_SET polyList;
 
-            aShape->TransformShapeWithClearanceToPolygon( polyList, UNDEFINED_LAYER, 0,
-                                                          ARC_HIGH_DEF, ERROR_INSIDE );
+            aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
+                                             ERROR_INSIDE );
 
             if( polyList.IsEmpty() ) // Just for caution
                 break;
@@ -682,7 +682,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         break;
 
         default:
-            wxFAIL_MSG( wxT( "BOARD_ADAPTER::addShapeWithClearance no implementation for " )
+            wxFAIL_MSG( wxT( "BOARD_ADAPTER::addShape no implementation for " )
                         + aShape->SHAPE_T_asString() );
             break;
         }

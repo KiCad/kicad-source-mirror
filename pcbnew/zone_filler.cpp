@@ -583,8 +583,7 @@ void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_P
     if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
         SHAPE_POLY_SET poly;
-        aPad->TransformShapeWithClearanceToPolygon( poly, aLayer, aGap, m_maxError,
-                                                    ERROR_OUTSIDE );
+        aPad->TransformShapeToPolygon( poly, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
 
         // the pad shape in zone can be its convex hull or the shape itself
         if( aPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
@@ -602,8 +601,7 @@ void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_P
     }
     else
     {
-        aPad->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
-                                                    ERROR_OUTSIDE );
+        aPad->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
     }
 }
 
@@ -613,7 +611,7 @@ void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_P
  */
 void ZONE_FILLER::addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
 {
-    aPad->TransformHoleWithClearanceToPolygon( aHoles, aGap, m_maxError, ERROR_OUTSIDE );
+    aPad->TransformHoleToPolygon( aHoles, aGap, m_maxError, ERROR_OUTSIDE );
 }
 
 
@@ -646,15 +644,15 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     case PCB_FP_TEXTBOX_T:
     case PCB_FP_SHAPE_T:
     case PCB_TARGET_T:
-        aItem->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
-                                                     ERROR_OUTSIDE, aIgnoreLineWidth );
+        aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,
+                                        aIgnoreLineWidth );
         break;
 
     case PCB_FP_TEXT_T:
         if( text->IsVisible() )
         {
-            aItem->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
-                                                         ERROR_OUTSIDE, aIgnoreLineWidth );
+            aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,
+                                            aIgnoreLineWidth );
         }
 
         break;
@@ -746,14 +744,9 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
             }
 
             if( pad->FlashLayer( aLayer ) )
-            {
                 addKnockout( pad, aLayer, padClearance, holes );
-            }
             else if( pad->GetDrillSize().x > 0 )
-            {
-                pad->TransformHoleWithClearanceToPolygon( holes, holeClearance, m_maxError,
-                                                          ERROR_OUTSIDE );
-            }
+                pad->TransformHoleToPolygon( holes, holeClearance, m_maxError, ERROR_OUTSIDE );
         }
     }
 
@@ -869,9 +862,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
                         if( via->FlashLayer( aLayer ) && gap > 0 )
                         {
-                            via->TransformShapeWithClearanceToPolygon( aHoles, aLayer,
-                                                                       gap + extra_margin,
-                                                                       m_maxError, ERROR_OUTSIDE );
+                            via->TransformShapeToPolygon( aHoles, aLayer, gap + extra_margin,
+                                                          m_maxError, ERROR_OUTSIDE );
                         }
 
                         gap = std::max( gap, evalRulesForItems( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT,
@@ -896,10 +888,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     {
                         if( gap > 0 )
                         {
-                            aTrack->TransformShapeWithClearanceToPolygon( aHoles, aLayer,
-                                                                          gap + extra_margin,
-                                                                          m_maxError,
-                                                                          ERROR_OUTSIDE );
+                            aTrack->TransformShapeToPolygon( aHoles, aLayer, gap + extra_margin,
+                                                             m_maxError, ERROR_OUTSIDE );
                         }
                     }
                 }
@@ -1048,10 +1038,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                                 aKnockout, aLayer ) );
 
                         SHAPE_POLY_SET poly;
-                        aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer,
-                                                                         gap + extra_margin,
-                                                                         m_maxError,
-                                                                         ERROR_OUTSIDE );
+                        aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin,
+                                                            m_maxError, ERROR_OUTSIDE );
                         aHoles.Append( poly );
                     }
                 }
@@ -1896,8 +1884,8 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
                                               outline_margin - min_annular_ring_width );
 
                     clearance = std::max( 0, clearance - linethickness / 2 );
-                    pad->TransformShapeWithClearanceToPolygon( aprons, aLayer, clearance,
-                                                               ARC_HIGH_DEF, ERROR_OUTSIDE );
+                    pad->TransformShapeToPolygon( aprons, aLayer, clearance, ARC_HIGH_DEF,
+                                                  ERROR_OUTSIDE );
                 }
             }
         }

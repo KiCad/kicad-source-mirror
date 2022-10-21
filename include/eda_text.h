@@ -225,12 +225,11 @@ public:
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments
      *
-     * @param aCornerBuffer a buffer to store the polygon.
-     * @param aClearanceValue the clearance around the text bounding box
+     * @param aBuffer a buffer to store the polygon.
+     * @param aClearance the clearance around the text bounding box
      * to the real clearance value (usually near from 1.0).
      */
-    void TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCornerBuffer,
-                                                     int aClearanceValue ) const;
+    void TransformBoundingBoxToPolygon( SHAPE_POLY_SET* aBuffer, int aClearance ) const;
 
     /**
      * build a list of segments (SHAPE_SEGMENT) to describe a text shape.

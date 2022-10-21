@@ -2202,22 +2202,19 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         if( !track->IsOnLayer( aLayer ) )
             continue;
 
-        track->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
-                                                     ERROR_INSIDE );
+        track->TransformShapeToPolygon( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
     }
 
     // convert pads and other copper items in footprints
     for( const FOOTPRINT* footprint : m_footprints )
     {
-        footprint->TransformPadsWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
-                                                        ERROR_INSIDE );
+        footprint->TransformPadsToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
 
         // Microwave footprints may have items on copper layers
-        footprint->TransformFPShapesWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
-                                                            ERROR_INSIDE,
-                                                            true, /* include text */
-                                                            true, /* include shapes */
-                                                            false /* include private items */ );
+        footprint->TransformFPShapesToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE,
+                                               true, /* include text */
+                                               true, /* include shapes */
+                                               false /* include private items */ );
 
         for( const ZONE* zone : footprint->Zones() )
         {
@@ -2244,16 +2241,14 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         case PCB_SHAPE_T:
         {
             const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
-            shape->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
-                                                         ERROR_INSIDE );
+            shape->TransformShapeToPolygon( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
             break;
         }
 
         case PCB_TEXT_T:
         {
             const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );
-            text->TransformTextShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
-                                                            ERROR_INSIDE );
+            text->TransformTextToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
             break;
         }
 
@@ -2262,11 +2257,10 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
             const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
 
             // plot border
-            textbox->PCB_SHAPE::TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0,
-                                                                      maxError, ERROR_INSIDE );
+            textbox->PCB_SHAPE::TransformShapeToPolygon( aOutlines, aLayer, 0, maxError,
+                                                         ERROR_INSIDE );
             // plot text
-            textbox->TransformTextShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
-                                                               ERROR_INSIDE );
+            textbox->TransformTextToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
             break;
         }
 

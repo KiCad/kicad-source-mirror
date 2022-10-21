@@ -425,13 +425,13 @@ public:
 
     /**
      * Generate pads shapes on layer \a aLayer as polygons and adds these polygons to
-     * \a aCornerBuffer.
+     * \a aBuffer.
      *
      * Useful to generate a polygonal representation of a footprint in 3D view and plot functions,
      * when a full polygonal approach is needed.
      *
      * @param aLayer is the layer to consider, or #UNDEFINED_LAYER to consider all layers.
-     * @param aCornerBuffer i the buffer to store polygons.
+     * @param aBuffer i the buffer to store polygons.
      * @param aClearance is an additional size to add to pad shapes.
      * @param aMaxError is the maximum deviation from true for arcs.
      * @param aSkipNPTHPadsWihNoCopper if true, do not add a NPTH pad shape, if the shape has
@@ -443,44 +443,39 @@ public:
      * @param aSkipPlatedPads is used on 3D-Viewer to extract plated and non-plated pads.
      * @param aSkipNonPlatedPads is used on 3D-Viewer to extract plated and plated pads.
      */
-    void TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                              PCB_LAYER_ID aLayer, int aClearance,
-                                              int aMaxError, ERROR_LOC aErrorLoc,
-                                              bool aSkipNPTHPadsWihNoCopper = false,
-                                              bool aSkipPlatedPads = false,
-                                              bool aSkipNonPlatedPads = false ) const;
+    void TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                 int aMaxError, ERROR_LOC aErrorLoc,
+                                 bool aSkipNPTHPadsWihNoCopper = false,
+                                 bool aSkipPlatedPads = false,
+                                 bool aSkipNonPlatedPads = false ) const;
 
     /**
      * Generate shapes of graphic items (outlines) on layer \a aLayer as polygons and adds these
-     * polygons to \a aCornerBuffer.
+     * polygons to \a aBuffer.
      *
      * Useful to generate a polygonal representation of a footprint in 3D view and plot functions,
      * when a full polygonal approach is needed.
      *
      * @param aLayer is the layer to consider, or #UNDEFINED_LAYER to consider all.
-     * @param aCornerBuffer is the buffer to store polygons.
+     * @param aBuffer is the buffer to store polygons.
      * @param aClearance is a value to inflate shapes.
      * @param aError is the maximum error between true arc and polygon approximation.
      * @param aIncludeText set to true to transform text shapes.
      * @param aIncludeShapes set to true to transform footprint shapes.
      */
-    void TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                  PCB_LAYER_ID aLayer, int aClearance,
-                                                  int aError, ERROR_LOC aErrorLoc,
-                                                  bool aIncludeText = true,
-                                                  bool aIncludeShapes = true,
-                                                  bool aIncludePrivateItems = false ) const;
+    void TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                     int aError, ERROR_LOC aErrorLoc,
+                                     bool aIncludeText = true,
+                                     bool aIncludeShapes = true,
+                                     bool aIncludePrivateItems = false ) const;
 
     /**
-     * This function is the same as TransformGraphicShapesWithClearanceToPolygonSet
-     * but only generate text.
+     * This function is the same as TransformFPShapesToPolySet but only generates text.
      */
-    void TransformFPTextWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
-                                                   PCB_LAYER_ID aLayer, int aClearance,
-                                                   int aError, ERROR_LOC aErrorLoc ) const
+    void TransformFPTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                   int aError, ERROR_LOC aErrorLoc ) const
     {
-        TransformFPShapesWithClearanceToPolygon( aCornerBuffer, aLayer, aClearance, aError,
-                                                 aErrorLoc, true, false );
+        TransformFPShapesToPolySet( aBuffer, aLayer, aClearance, aError, aErrorLoc, true, false );
     }
 
     /**

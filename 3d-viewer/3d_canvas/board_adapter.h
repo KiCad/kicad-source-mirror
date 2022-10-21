@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -367,11 +367,10 @@ private:
     void buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer, int aWidth );
 
     // Helper functions to create poly contours
-    void buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aCornerBuffer,
-                                   int aWidth) const;
+    void buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aBuffer, int aWidth) const;
 
-    void transformFPShapesToPolygon( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
-                                     SHAPE_POLY_SET& aCornerBuffer ) const;
+    void transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
+                                     SHAPE_POLY_SET& aBuffer ) const;
 
 public:
     static CUSTOM_COLORS_LIST   g_SilkscreenColors;

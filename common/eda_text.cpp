@@ -936,22 +936,20 @@ int EDA_TEXT::Compare( const EDA_TEXT* aOther ) const
 }
 
 
-void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCornerBuffer,
-                                                           int aClearanceValue ) const
+void EDA_TEXT::TransformBoundingBoxToPolygon( SHAPE_POLY_SET* aBuffer, int aClearance ) const
 {
     if( GetText().Length() == 0 )
         return;
 
-    VECTOR2I  corners[4];    // Buffer of polygon corners
-
-    BOX2I rect = GetTextBox();
+    VECTOR2I corners[4];    // Buffer of polygon corners
+    BOX2I    rect = GetTextBox();
 
     // TrueType bounding boxes aren't guaranteed to include all descenders, diacriticals, etc.
     // Since we use this for zone knockouts and DRC, we need something more accurate.
     if( GetDrawFont()->IsOutline() )
         rect = GetEffectiveTextShape( false, false )->BBox();
 
-    rect.Inflate( aClearanceValue );
+    rect.Inflate( aClearance );
 
     corners[0].x = rect.GetOrigin().x;
     corners[0].y = rect.GetOrigin().y;
@@ -962,13 +960,13 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
     corners[3].y = corners[2].y;
     corners[3].x = corners[0].x;
 
-    aCornerBuffer->NewOutline();
+    aBuffer->NewOutline();
 
     for( VECTOR2I& corner : corners )
     {
         RotatePoint( corner, GetDrawPos(), GetDrawRotation() );
 
-        aCornerBuffer->Append( corner.x, corner.y );
+        aBuffer->Append( corner.x, corner.y );
     }
 }
 

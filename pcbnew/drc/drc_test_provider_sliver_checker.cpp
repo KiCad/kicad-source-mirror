@@ -144,9 +144,8 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                             }
                             else
                             {
-                                item->TransformShapeWithClearanceToPolygon( poly, layer, 0,
-                                                                            ARC_LOW_DEF,
-                                                                            ERROR_OUTSIDE );
+                                item->TransformShapeToPolygon( poly, layer, 0, ARC_LOW_DEF,
+                                                               ERROR_OUTSIDE );
                             }
 
                             if( m_drcEngine->IsCancelled() )

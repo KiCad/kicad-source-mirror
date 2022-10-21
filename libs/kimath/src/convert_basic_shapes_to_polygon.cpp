@@ -35,8 +35,8 @@
 #include <trigo.h>
 
 
-void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const VECTOR2I& aCenter,
-                               int aRadius, int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
+void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer, const VECTOR2I& aCenter, int aRadius,
+                               int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
     VECTOR2I corner_position;
     int     numSegs = GetArcToSegmentCount( aRadius, aError, FULL_CIRCLE );
@@ -67,14 +67,14 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const VECTOR2I& 
         corner_position.y = 0;
         RotatePoint( corner_position, angle );
         corner_position += aCenter;
-        aCornerBuffer.Append( corner_position.x, corner_position.y );
+        aBuffer.Append( corner_position.x, corner_position.y );
     }
 
-    aCornerBuffer.SetClosed( true );
+    aBuffer.SetClosed( true );
 }
 
 
-void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aCenter, int aRadius,
+void TransformCircleToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aCenter, int aRadius,
                                int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
     VECTOR2I corner_position;
@@ -100,7 +100,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aC
         radius += GetCircleToPolyCorrection( actual_delta_radius );
     }
 
-    aCornerBuffer.NewOutline();
+    aBuffer.NewOutline();
 
     for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
     {
@@ -108,20 +108,19 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aC
         corner_position.y = 0;
         RotatePoint( corner_position, angle );
         corner_position += aCenter;
-        aCornerBuffer.Append( corner_position.x, corner_position.y );
+        aBuffer.Append( corner_position.x, corner_position.y );
     }
 
     // Finish circle
     corner_position.x = radius;
     corner_position.y = 0;
     corner_position += aCenter;
-    aCornerBuffer.Append( corner_position.x, corner_position.y );
+    aBuffer.Append( corner_position.x, corner_position.y );
 }
 
 
-void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStart,
-                             const VECTOR2I& aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc,
-                             int aMinSegCount )
+void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                             int aWidth, int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
     // To build the polygonal shape outside the actual shape, we use a bigger
     // radius to build rounded ends.
@@ -219,7 +218,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
     polyshape.Rotate( -delta_angle );
     polyshape.Move( startp );
 
-    aCornerBuffer.Append( polyshape);
+    aBuffer.Append( polyshape);
 }
 
 
@@ -373,7 +372,7 @@ void CornerListRemoveDuplicates( std::vector<ROUNDED_CORNER>& aCorners )
 }
 
 
-void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aPosition,
+void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aPosition,
                                   const VECTOR2I& aSize, const EDA_ANGLE& aRotation, int aDeltaX,
                                   int aDeltaY, int aInflate, int aError, ERROR_LOC aErrorLoc )
 {
@@ -442,11 +441,11 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
         outline.Rotate( aRotation );
 
     outline.Move( VECTOR2I( aPosition ) );
-    aCornerBuffer.Append( outline );
+    aBuffer.Append( outline );
 }
 
 
-void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aPosition,
+void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aPosition,
                                            const VECTOR2I& aSize, const EDA_ANGLE& aRotation,
                                            int aCornerRadius, double aChamferRatio,
                                            int aChamferCorners, int aInflate, int aError,
@@ -509,7 +508,7 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
         outline.Rotate( aRotation );
 
     outline.Move( aPosition );
-    aCornerBuffer.Append( outline );
+    aBuffer.Append( outline );
 }
 
 
@@ -574,9 +573,8 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRa
 }
 
 
-void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStart,
-                            const VECTOR2I& aMid, const VECTOR2I& aEnd, int aWidth,
-                            int aError, ERROR_LOC aErrorLoc )
+void TransformArcToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, const VECTOR2I& aMid,
+                            const VECTOR2I& aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc )
 {
     SEG startToEnd( aStart, aEnd );
     int distanceToMid = startToEnd.Distance( aMid );
@@ -584,8 +582,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
     if( distanceToMid <= 1 )
     {
         // Not an arc but essentially a straight line with a small error
-        TransformOvalToPolygon( aCornerBuffer, aStart, aEnd, aWidth + distanceToMid, aError,
-                                aErrorLoc );
+        TransformOvalToPolygon( aBuffer, aStart, aEnd, aWidth + distanceToMid, aError, aErrorLoc );
         return;
     }
 
@@ -635,11 +632,11 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
                               -arc_angle, aError, errorLocInner );
     }
 
-    aCornerBuffer.Append( polyshape );
+    aBuffer.Append( polyshape );
 }
 
 
-void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aCentre, int aRadius,
+void TransformRingToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aCentre, int aRadius,
                              int aWidth, int aError, ERROR_LOC aErrorLoc )
 {
     int inner_radius = aRadius - ( aWidth / 2 );
@@ -648,8 +645,7 @@ void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aCen
     if( inner_radius <= 0 )
     {
         //In this case, the ring is just a circle (no hole inside)
-        TransformCircleToPolygon( aCornerBuffer, aCentre, aRadius + ( aWidth / 2 ), aError,
-                                  aErrorLoc );
+        TransformCircleToPolygon( aBuffer, aCentre, aRadius + ( aWidth / 2 ), aError, aErrorLoc );
         return;
     }
 
@@ -665,5 +661,5 @@ void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aCen
                               aError, inner_err_loc );
 
     buffer.Fracture( SHAPE_POLY_SET::PM_FAST );
-    aCornerBuffer.Append( buffer );
+    aBuffer.Append( buffer );
 }

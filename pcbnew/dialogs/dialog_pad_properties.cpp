@@ -1269,8 +1269,8 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         int            maxError = m_board->GetDesignSettings().m_MaxError;
         SHAPE_POLY_SET padOutline;
 
-        m_dummyPad->TransformShapeWithClearanceToPolygon( padOutline, UNDEFINED_LAYER, 0,
-                                                          maxError, ERROR_INSIDE );
+        m_dummyPad->TransformShapeToPolygon( padOutline, UNDEFINED_LAYER, 0, maxError,
+                                             ERROR_INSIDE );
 
         if( !padOutline.Collide( m_dummyPad->GetPosition() ) )
         {

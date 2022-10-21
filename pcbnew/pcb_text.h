@@ -115,25 +115,25 @@ public:
     }
 
     /**
-     * Function TransformTextShapeWithClearanceToPolygon
+     * Function TransformTextToPolySet
      * Convert the text to a polygonSet describing the actual character strokes (one per segment).
      * Used in 3D viewer
      * Circles and arcs are approximated by segments
-     * @aCornerBuffer = SHAPE_POLY_SET to store the polygon corners
-     * @aClearanceValue = the clearance around the text
+     * @aBuffer = SHAPE_POLY_SET to store the polygon corners
+     * @aClearance = the clearance around the text
      * @aError = the maximum error to allow when approximating curves
      */
-    void TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                   PCB_LAYER_ID aLayer, int aClearanceValue,
-                                                   int aError, ERROR_LOC aErrorLoc ) const;
+    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                 int aError, ERROR_LOC aErrorLoc ) const;
 
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
-                                               int aClearanceValue, int aError, ERROR_LOC aErrorLoc,
-                                               bool aIgnoreLineWidth = false ) const override;
+    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                  int aError, ERROR_LOC aErrorLoc,
+                                  bool aIgnoreLineWidth = false ) const override;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-            FLASHING aFlash = FLASHING::DEFAULT ) const override;
+    virtual std::shared_ptr<SHAPE>
+    GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                       FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 

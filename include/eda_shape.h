@@ -297,20 +297,17 @@ public:
     double GetLength() const;
 
     /**
-     * Convert the shape to a closed polygon.
+     * Convert the shape to a closed polygon.  Circles and arcs are approximated by segments.
      *
-     * Used in filling zones calculations.  Circles and arcs are approximated by segments.
-     *
-     * @param aCornerBuffer is a buffer to store the polygon.
-     * @param aClearanceValue is the clearance around the pad.
+     * @param aBuffer is a buffer to store the polygon.
+     * @param aClearance is the clearance around the pad.
      * @param aError is the maximum deviation from a true arc.
      * @param aErrorLoc whether any approximation error shoule be placed inside or outside
-     * @param ignoreLineWidth is used for edge cut items where the line width is only
-     *        for visualization
+     * @param ignoreLineWidth is used for edge cut items where the line width is only for
+     *                        visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue,
-                                               int aError, ERROR_LOC aErrorLoc,
-                                               bool ignoreLineWidth ) const;
+    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                  ERROR_LOC aErrorLoc, bool ignoreLineWidth = false ) const;
 
     int Compare( const EDA_SHAPE* aOther ) const;
 

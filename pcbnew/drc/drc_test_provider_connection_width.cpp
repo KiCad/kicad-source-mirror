@@ -679,8 +679,8 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
                 for( BOARD_ITEM* item : itemsPoly.Items )
                 {
-                    item->TransformShapeWithClearanceToPolygon( itemsPoly.Poly, aLayer, 0,
-                                                                ARC_HIGH_DEF, ERROR_OUTSIDE );
+                    item->TransformShapeToPolygon( itemsPoly.Poly, aLayer, 0, ARC_HIGH_DEF,
+                                                   ERROR_OUTSIDE );
                 }
 
                 itemsPoly.Poly.Fracture( SHAPE_POLY_SET::PM_FAST );

@@ -158,10 +158,9 @@ void PCB_TARGET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 }
 
 
-void PCB_TARGET::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                       PCB_LAYER_ID aLayer, int aClearanceValue,
-                                                       int aError, ERROR_LOC aErrorLoc,
-                                                       bool ignoreLineWidth ) const
+void PCB_TARGET::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                          int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                          bool ignoreLineWidth ) const
 {
     int size = GetShape() ? GetSize() / 1.5 : GetSize() / 2.0;
     int radius = GetShape() ? GetSize() / 2.0 : GetSize() / 3.0;
@@ -184,8 +183,8 @@ void PCB_TARGET::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBu
     {
         item->SetWidth( GetWidth() );
         item->Move( GetPosition() );
-        item->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, aClearanceValue,
-                                                    aError, aErrorLoc, ignoreLineWidth );
+        item->TransformShapeToPolygon( aBuffer, aLayer, aClearance, aError, aErrorLoc,
+                                       ignoreLineWidth );
     }
 }
 

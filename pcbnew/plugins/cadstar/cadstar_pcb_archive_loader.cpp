@@ -1174,8 +1174,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
             pad->SetPosition( { 0, 0 } );
             pad->SetPos0( { 0, 0 } );
-            pad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
-                                                       ERROR_LOC::ERROR_INSIDE );
+            pad->TransformShapeToPolygon( padOutline, layer, 0, maxError, ERROR_INSIDE );
 
             PCB_SHAPE* padShape = new PCB_SHAPE;
             padShape->SetShape( SHAPE_T::POLY );
