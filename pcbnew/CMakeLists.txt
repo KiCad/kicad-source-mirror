@@ -437,6 +437,13 @@ if( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/doxygen-xml )
     set( SWIG_OPTS ${SWIG_OPTS} -I${CMAKE_CURRENT_BINARY_DIR}/docstrings )
 endif()
 
+# This command is needed only with SWIG version < 4 to disable a python section "def swig_import_helper()"
+# found at the beginning of pcbnew.py, but not longer existing in SWIG version >= 4
+if( ${SWIG_VERSION} VERSION_LESS 4.0.0 )
+    set( OPT_CMD COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py )
+endif()
+
+
 add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
                     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
 
@@ -487,12 +494,8 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     COMMAND ${SWIG_EXECUTABLE}
         ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx ${CMAKE_SOURCE_DIR}/pcbnew/python/swig/pcbnew.i
 
-    # was needed only with SWIG version < 4 to disable a python section "def swig_import_helper()"
-    # found in pcbnew.py but not existing in SWIG version >= 4
-    # So it is left here for documentation purpose
-    #COMMAND ${PYTHON_EXECUTABLE}
-    #    ${CMAKE_SOURCE_DIR}/tools/build/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
-
+    # Optional command for SWIG version < 4 to disable a python section "def swig_import_helper()"
+    ${OPT_CMD}
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
