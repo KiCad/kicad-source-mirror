@@ -748,7 +748,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimm
         {
             m_gal->SetIsStroke( true );
             m_gal->SetLineWidth( getLineWidth( aItem, false ) );
-            m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, false, aDimmed ) );
+            m_gal->SetStrokeColor( getRenderColor( aItem, aLayer, false, aDimmed ) );
         }
         else
         {
@@ -997,7 +997,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
     if( drawingShadows && !( aText->IsBrightened() || aText->IsSelected() ) )
         return;
 
-    COLOR4D color = getRenderColor( aText, LAYER_DEVICE, drawingShadows, aDimmed );
+    COLOR4D color = getRenderColor( aText, aLayer, drawingShadows, aDimmed );
 
     if( !aText->IsVisible() )
     {
