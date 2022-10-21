@@ -239,13 +239,15 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
 
 bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    wxString var = *token;
+
     if( GetTitleBlock().TextVarResolver( token, m_project ) )
     {
         return true;
     }
-    else if( m_properties.count( *token ) )
+    else if( m_properties.count( var ) )
     {
-        *token = m_properties.at( *token );
+        *token = m_properties.at( var );
         return true;
     }
 
