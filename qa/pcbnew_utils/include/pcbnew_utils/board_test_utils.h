@@ -28,6 +28,9 @@
 #include <memory>
 #include <string>
 #include <wx/string.h>
+#include <mutex>
+#include <map>
+#include <reporter.h>
 
 class BOARD;
 class BOARD_ITEM;
@@ -61,6 +64,97 @@ public:
     void DumpBoardToFile( BOARD& aBoard, const std::string& aName ) const;
 
     const bool m_dump_boards;
+};
+
+
+class CONSOLE_LOG
+{
+public:
+    enum COLOR
+    {
+        RED = 0,
+        GREEN,
+        DEFAULT
+    };
+
+    CONSOLE_LOG(){};
+
+    void PrintProgress( const wxString& aMessage )
+    {
+        if( m_lastLineIsProgressBar )
+            eraseLastLine();
+
+        printf( "%s", (const char*) aMessage.c_str() );
+        fflush( stdout );
+
+        m_lastLineIsProgressBar = true;
+    }
+
+
+    void Print( const wxString& aMessage )
+    {
+        if( m_lastLineIsProgressBar )
+            eraseLastLine();
+
+        printf( "%s", (const char*) aMessage.c_str() );
+        fflush( stdout );
+
+        m_lastLineIsProgressBar = false;
+    }
+
+
+    void SetColor( COLOR color )
+    {
+        std::map<COLOR, wxString> colorMap = { { RED, "\033[0;31m" },
+                                               { GREEN, "\033[0;32m" },
+                                               { DEFAULT, "\033[0;37m" } };
+
+        printf( "%s", (const char*) colorMap[color].c_str() );
+        fflush( stdout );
+    }
+
+
+private:
+    void eraseLastLine()
+    {
+        printf( "\r\033[K" );
+        fflush( stdout );
+    }
+
+    bool       m_lastLineIsProgressBar = false;
+    std::mutex m_lock;
+};
+
+
+class CONSOLE_MSG_REPORTER : public REPORTER
+{
+public:
+    CONSOLE_MSG_REPORTER( CONSOLE_LOG* log ) : m_log( log ){};
+    ~CONSOLE_MSG_REPORTER(){};
+
+
+    virtual REPORTER& Report( const wxString& aText,
+                              SEVERITY        aSeverity = RPT_SEVERITY_UNDEFINED ) override
+    {
+        switch( aSeverity )
+        {
+        case RPT_SEVERITY_ERROR:
+            m_log->SetColor( CONSOLE_LOG::RED );
+            m_log->Print( "ERROR | " );
+            break;
+
+        default: m_log->SetColor( CONSOLE_LOG::DEFAULT ); m_log->Print( "      | " );
+        }
+
+        m_log->SetColor( CONSOLE_LOG::DEFAULT );
+        m_log->Print( aText + "\n" );
+        return *this;
+    }
+
+    virtual bool HasMessage() const override { return true; }
+
+private:
+    CONSOLE_LOG* m_log;
 };
 
 
