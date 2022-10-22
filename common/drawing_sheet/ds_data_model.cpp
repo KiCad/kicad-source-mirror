@@ -55,7 +55,7 @@
 // The layout shape used in the application
 // It is accessible by DS_DATA_MODEL::GetTheInstance()
 static DS_DATA_MODEL wksTheInstance;
-static DS_DATA_MODEL* wksAltInstance;
+static DS_DATA_MODEL* wksAltInstance = nullptr;
 
 DS_DATA_MODEL::DS_DATA_MODEL() :
         m_WSunits2Iu( 1000.0 ),
