@@ -62,7 +62,7 @@ public:
         return false;
     }
 
-    wxString GetShownText( int aDepth = 0 ) const override;
+    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
 
     /// PCB_TEXTs are always visible:
     void SetVisible( bool aVisible ) override { /* do nothing */}

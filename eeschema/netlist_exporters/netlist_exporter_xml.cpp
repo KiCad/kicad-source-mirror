@@ -332,7 +332,9 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), sheetField.GetCanonicalName() );
 
                 if( m_resolveTextVars )
-                    xproperty->AddAttribute( wxT( "value" ), sheetField.GetShownText() );
+                    // do not allow GetShownText() to add any prefix useful only when displaying
+                    // the field on screen
+                    xproperty->AddAttribute( wxT( "value" ), sheetField.GetShownText( 0, false ) );
                 else
                     xproperty->AddAttribute( wxT( "value" ), sheetField.GetText() );
             }
