@@ -130,21 +130,6 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
             }
             else
             {
-                // See if a previous driver is still a candidate
-                void* previousDriver = nullptr;
-
-                for( SCH_ITEM* member : m_items )
-                {
-                    if( SCH_CONNECTION* mc = member->Connection( &m_sheet ) )
-                    {
-                        if( mc->GetLastDriver() )
-                        {
-                            previousDriver = mc->GetLastDriver();
-                            break;
-                        }
-                    }
-                }
-
                 // For all other driver types, sort by quality of name
                 std::sort( candidates.begin(), candidates.end(),
                            [&]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
@@ -159,12 +144,6 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
                                // Ensure we don't pick the subset over the superset
                                if( ac->IsBus() && bc->IsBus() )
                                    return bc->IsSubsetOf( ac );
-
-                               if( a == previousDriver )
-                                   return true;
-
-                               if( b == previousDriver )
-                                   return false;
 
                                wxString a_name = GetNameForDriver( a );
                                wxString b_name = GetNameForDriver( b );
