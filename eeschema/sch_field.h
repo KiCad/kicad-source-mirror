@@ -117,7 +117,7 @@ public:
 
     void SetId( int aId );
 
-    wxString GetShownText( int aDepth = 0 ) const override;
+    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
 
     COLOR4D GetFieldColor() const;
 

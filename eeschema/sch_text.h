@@ -128,7 +128,7 @@ public:
         return wxT( "SCH_TEXT" );
     }
 
-    wxString GetShownText( int aDepth = 0 ) const override;
+    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
 
     bool IsHypertext() const override
     {

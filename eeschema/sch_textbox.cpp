@@ -278,7 +278,7 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 }
 
 
-wxString SCH_TEXTBOX::GetShownText( int aDepth ) const
+wxString SCH_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool

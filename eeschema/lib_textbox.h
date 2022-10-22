@@ -55,7 +55,7 @@ public:
 
     VECTOR2I GetDrawPos() const override;
 
-    wxString GetShownText( int aDepth = 0 ) const override;
+    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
 
     KIFONT::FONT* GetDrawFont() const override;
 

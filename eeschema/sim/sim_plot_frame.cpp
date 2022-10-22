@@ -1015,6 +1015,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
             param = file.GetNextLine();
 
+            #if 0   // no longer in use
             if( param.IsEmpty() )
             {
                 DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is empty." );
@@ -1022,6 +1023,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
                 return false;
             }
+            #endif
 
             addPlot( name, (SIM_PLOT_TYPE) traceType );
         }

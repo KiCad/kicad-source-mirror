@@ -128,7 +128,7 @@ public:
 
     virtual bool ResolveTextVar( wxString* token, int aDepth ) const;
 
-    wxString GetShownText( int aDepth = 0 ) const override;
+    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 

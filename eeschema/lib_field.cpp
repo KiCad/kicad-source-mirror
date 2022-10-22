@@ -394,7 +394,7 @@ wxString LIB_FIELD::GetFullText( int unit ) const
 }
 
 
-wxString LIB_FIELD::GetShownText( int aDepth ) const
+wxString LIB_FIELD::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     wxString text = EDA_TEXT::GetShownText( aDepth );
 

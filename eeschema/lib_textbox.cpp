@@ -315,7 +315,7 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 }
 
 
-wxString LIB_TEXTBOX::GetShownText( int aDepth ) const
+wxString LIB_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     wxString text = EDA_TEXT::GetShownText();
 

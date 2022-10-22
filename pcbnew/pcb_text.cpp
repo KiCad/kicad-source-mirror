@@ -52,7 +52,7 @@ PCB_TEXT::~PCB_TEXT()
 }
 
 
-wxString PCB_TEXT::GetShownText( int aDepth ) const
+wxString PCB_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     BOARD* board = dynamic_cast<BOARD*>( GetParent() );
 

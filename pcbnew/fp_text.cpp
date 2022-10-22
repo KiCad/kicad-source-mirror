@@ -409,7 +409,7 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-wxString FP_TEXT::GetShownText( int aDepth ) const
+wxString FP_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     const FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( GetParent() );
     wxASSERT( parentFootprint );

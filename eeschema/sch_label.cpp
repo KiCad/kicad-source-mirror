@@ -555,7 +555,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-wxString SCH_LABEL_BASE::GetShownText( int aDepth ) const
+wxString SCH_LABEL_BASE::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool

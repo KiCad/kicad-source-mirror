@@ -238,7 +238,7 @@ double PCB_TEXTBOX::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-wxString PCB_TEXTBOX::GetShownText( int aDepth ) const
+wxString PCB_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     BOARD* board = dynamic_cast<BOARD*>( GetParent() );
 

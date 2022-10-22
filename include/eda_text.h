@@ -91,8 +91,11 @@ public:
      *
      * @param aDepth is used to prevent infinite recursions and loops when expanding
      * text variables.
+     * @param aAllowExtraText is true to allow adding more text than the initial expanded text,
+     * for intance a title, a prefix for texts in display functions.
+     * False to disable any added text (for instance when writing the shown text in netlists).
      */
-    virtual wxString GetShownText( int aDepth = 0 ) const { return m_shown_text; }
+    virtual wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const { return m_shown_text; }
 
     /**
      * Indicates the ShownText has text var references which need to be processed.

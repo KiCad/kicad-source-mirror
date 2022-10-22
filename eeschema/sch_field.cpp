@@ -166,7 +166,7 @@ void SCH_FIELD::SetId( int aId )
 }
 
 
-wxString SCH_FIELD::GetShownText( int aDepth ) const
+wxString SCH_FIELD::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
@@ -252,7 +252,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
-        if( m_id == SHEETFILENAME )
+        if( m_id == SHEETFILENAME && aAllowExtraText )
             text = _( "File:" ) + wxS( " " )+ text;
     }
 
