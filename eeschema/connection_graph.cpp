@@ -2952,8 +2952,10 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( pinCount > 1 )
         return true;
 
-    for( auto& [type, label_vec] : label_map )
+    for( const auto& label_pair : label_map )
     {
+        const KICAD_T          type = label_pair.first;
+        std::vector<SCH_TEXT*> label_vec = label_pair.second;
         switch( type )
         {
         case SCH_GLOBAL_LABEL_T:
