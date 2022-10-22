@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -355,6 +355,14 @@ int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     PL_SELECTION& selection = m_selectionTool->RequestSelection();
 
     if( selection.Size() == 0 )
+        return 0;
+
+
+    // Do not delete an item if it is currently a new item being created to avoid a crash
+    // In this case the selection contains only one item.
+    DS_DRAW_ITEM_BASE* currItem = static_cast<DS_DRAW_ITEM_BASE*>( selection.Front() );
+
+    if( currItem->GetFlags() & ( IS_NEW ) )
         return 0;
 
     m_frame->SaveCopyInUndoList();
