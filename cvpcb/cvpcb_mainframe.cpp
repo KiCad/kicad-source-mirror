@@ -464,7 +464,7 @@ void CVPCB_MAINFRAME::onTextFilterChangedTimer( wxTimerEvent& aEvent )
 
     DisplayStatus();
 
-    if( searchCtrlHasFocus )
+    if( searchCtrlHasFocus && !m_tcFilterString->HasFocus() )
     {
         m_tcFilterString->SetFocus();
         m_tcFilterString->SetInsertionPoint( pos );
