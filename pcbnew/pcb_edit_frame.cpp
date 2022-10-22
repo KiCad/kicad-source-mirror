@@ -506,6 +506,13 @@ BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 
 void PCB_EDIT_FRAME::redrawNetnames( wxTimerEvent& aEvent )
 {
+    // Don't stomp on the auto-save timer event.
+    if( aEvent.GetId() == ID_AUTO_SAVE_TIMER )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( !cfg || cfg->m_Display.m_NetNames < 2 )
@@ -1177,6 +1184,7 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
         cfg->m_AuiPanels.show_properties = m_show_properties;
+
         // ensure m_show_search is up to date (the pane can be closed)
         m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
         cfg->m_AuiPanels.show_search = m_show_search;
@@ -1784,6 +1792,7 @@ void PCB_EDIT_FRAME::RunEeschema()
         if( frame->IsIconized() )
         {
             frame->Iconize( false );
+
             // If an iconized frame was created by Pcbnew, Iconize( false ) is not enough
             // to show the frame at its normal size: Maximize should be called.
             frame->Maximize( false );
@@ -1865,7 +1874,6 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
         editor->Show( true );
         editor->Raise();        // Iconize( false );
     }
-
     else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_EDIT_LIBRARY_FP )
     {
         auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
@@ -1875,12 +1883,10 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
         editor->Show( true );
         editor->Raise();        // Iconize( false );
     }
-
     else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_UPDATE_FP )
     {
         ShowExchangeFootprintsDialog( aFootprint, true, true );
     }
-
     else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_CHANGE_FP )
     {
         ShowExchangeFootprintsDialog( aFootprint, false, true );

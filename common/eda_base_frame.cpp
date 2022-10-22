@@ -303,6 +303,13 @@ int EDA_BASE_FRAME::GetAutoSaveInterval() const
 
 void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
 {
+    // Don't stomp on someone else's timer event.
+    if( aEvent.GetId() != ID_AUTO_SAVE_TIMER )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     if( !doAutoSave() )
         m_autoSaveTimer->Start( GetAutoSaveInterval() * 1000, wxTIMER_ONE_SHOT );
 }
@@ -1016,7 +1023,8 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
         book->AddSubPage( CREATE_PANEL( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
         book->AddSubPage( CREATE_PANEL( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
         book->AddSubPage( CREATE_PANEL( PANEL_SCH_COLORS ), _( "Colors" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_SCH_FIELD_NAME_TEMPLATES ),
+                          _( "Field Name Templates" ) );
     }
     catch( ... )
     {
@@ -1119,6 +1127,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 void EDA_BASE_FRAME::OnDropFiles( wxDropFilesEvent& aEvent )
 {
     wxString* files = aEvent.GetFiles();
+
     for( int nb = 0; nb < aEvent.GetNumberOfFiles(); nb++ )
     {
         const wxFileName fn = wxFileName( files[nb] );
@@ -1131,6 +1140,7 @@ void EDA_BASE_FRAME::OnDropFiles( wxDropFilesEvent& aEvent )
             }
         }
     }
+
     DoWithAcceptedFiles();
     m_AcceptedFiles.clear();
 }
@@ -1407,8 +1417,10 @@ WXLRESULT EDA_BASE_FRAME::MSWWindowProc( WXUINT message, WXWPARAM wParam, WXLPAR
     // This will help avoid the menu keeping focus when the alt key is released
     // You can still trigger accelerators as long as you hold down alt
     if( message == WM_SYSCOMMAND )
+    {
         if( wParam == SC_KEYMENU && ( lParam >> 16 ) <= 0 )
             return 0;
+    }
 
     return wxFrame::MSWWindowProc( message, wParam, lParam );
 }
