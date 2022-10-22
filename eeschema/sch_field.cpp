@@ -965,13 +965,10 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
     COLOR4D          color = settings->GetLayerColor( GetLayer() );
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
 
-    COLOR4D bg = settings->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
+    COLOR4D bg = settings->GetBackgroundColor();;
 
-    if( !aPlotter->GetColorMode() )
+    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
-
-    if( SCH_SYMBOL* parent = dyn_cast<SCH_SYMBOL*>( m_parent ); parent && parent->GetDNP() )
-        color = color.Mix( bg, 0.5f );
 
     if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
         color = GetTextColor();

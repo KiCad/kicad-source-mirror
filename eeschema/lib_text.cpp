@@ -282,14 +282,14 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
     int      t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
     VECTOR2I pos = aTransform.TransformCoordinate( txtpos ) + offset;
     COLOR4D  color = GetTextColor();
-    COLOR4D  bg = settings->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
+    COLOR4D  bg = settings->GetBackgroundColor();
 
     if( !plotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
         color = settings->GetLayerColor( LAYER_DEVICE );
 
     if( !IsVisible() )
         bg = settings->GetLayerColor( LAYER_HIDDEN );
-    else if( !plotter->GetColorMode() )
+    else if( bg == COLOR4D::UNSPECIFIED || !plotter->GetColorMode() )
         bg = COLOR4D::WHITE;
 
     if( aDimmed )
