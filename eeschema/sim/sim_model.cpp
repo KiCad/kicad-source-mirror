@@ -27,6 +27,7 @@
 #include <sim/sim_model_ideal.h>
 #include <sim/sim_model_mutual_inductor.h>
 #include <sim/sim_model_ngspice.h>
+#include <sim/sim_model_r_pot.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_model_source.h>
 #include <sim/sim_model_raw_spice.h>
@@ -118,6 +119,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::NONE:                 return { DEVICE_TYPE_::NONE,   "",               ""                           };
 
     case TYPE::R:                    return { DEVICE_TYPE_::R,      "",               "Ideal"                      };
+    case TYPE::R_POT:                return { DEVICE_TYPE_::R,      "POT",            "Potentiometer"              };
     case TYPE::R_BEHAVIORAL:         return { DEVICE_TYPE_::R,      "=",              "Behavioral"                 };
 
     case TYPE::C:                    return { DEVICE_TYPE_::C,      "",               "Ideal"                      };
@@ -254,6 +256,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     switch( aType )
     {
     case TYPE::R:                    return { "R", ""        };
+    case TYPE::R_POT:                return { "A", ""        };
     case TYPE::R_BEHAVIORAL:         return { "R", "",       "",        "0",   false, true   };
 
     case TYPE::C:                    return { "C", ""        };
@@ -389,11 +392,13 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 }
 
 
-template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields );
-template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFields );
+template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields,
+                                             int aSymbolPinCount );
+template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFields,
+                                             int aSymbolPinCount );
 
 template <typename T>
-TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
+TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, int aSymbolPinCount )
 {
     std::string deviceTypeFieldValue = GetFieldValue( &aFields, DEVICE_TYPE_FIELD );
     std::string typeFieldValue = GetFieldValue( &aFields, TYPE_FIELD );
@@ -422,7 +427,8 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
     // Still no type information.
     // We try to infer the model from the mandatory fields in this case.
     return InferTypeFromRefAndValue( GetFieldValue( &aFields, REFERENCE_FIELD ),
-                                     GetFieldValue( &aFields, VALUE_FIELD ) );
+                                     GetFieldValue( &aFields, VALUE_FIELD ),
+                                     aSymbolPinCount );
 }
 
 
@@ -446,7 +452,8 @@ DEVICE_TYPE SIM_MODEL::InferDeviceTypeFromRef( const std::string& aRef )
 }
 
 
-TYPE SIM_MODEL::InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue )
+TYPE SIM_MODEL::InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue,
+                                          int aSymbolPinCount )
 {
     std::string typeString;
 
@@ -469,6 +476,10 @@ TYPE SIM_MODEL::InferTypeFromRefAndValue( const std::string& aRef, const std::st
     }
 
     DEVICE_TYPE deviceType = InferDeviceTypeFromRef( aRef );
+
+    // Exception. Potentiometer model is determined from pin count.
+    if( deviceType == DEVICE_TYPE_::R && aSymbolPinCount == 3 )
+        return TYPE::R_POT;
 
     for( TYPE type : TYPE_ITERATOR() )
     {
@@ -579,7 +590,7 @@ template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
-    TYPE type = ReadTypeFromFields( aFields );
+    TYPE type = ReadTypeFromFields( aFields, aSymbolPinCount );
 
     // If the model has a specified type, it takes priority over the type of its base class.
     if( type == TYPE::NONE )
@@ -605,7 +616,7 @@ template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
-    TYPE type = ReadTypeFromFields( aFields );
+    TYPE type = ReadTypeFromFields( aFields, aSymbolPinCount );
 
     if( type == TYPE::NONE )
         THROW_IO_ERROR( wxString::Format( _( "Failed to read simulation model from fields" ) ) );
@@ -876,6 +887,9 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::C:
     case TYPE::L:
         return std::make_unique<SIM_MODEL_IDEAL>( aType );
+    
+    case TYPE::R_POT:
+        return std::make_unique<SIM_MODEL_R_POT>();
 
     case TYPE::L_MUTUAL:
         return std::make_unique<SIM_MODEL_MUTUAL_INDUCTOR>();
@@ -1176,7 +1190,8 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
 
     // TODO: Don't call this multiple times.
     if( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
-                                  GetFieldValue( aFields, VALUE_FIELD ) ) != GetType() )
+                                  GetFieldValue( aFields, VALUE_FIELD ),
+                                  aSymbolPinCount ) != GetType() )
     {
         // Not an inferred model. Nothing to do here.
         return;

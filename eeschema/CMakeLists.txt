@@ -291,6 +291,7 @@ set( EESCHEMA_SRCS
     sim/sim_model_kibis.cpp
     sim/sim_model_ngspice.cpp
     sim/sim_model_ngspice_data.cpp
+    sim/sim_model_r_pot.cpp
     sim/sim_model_raw_spice.cpp
     sim/sim_model_source.cpp
     sim/sim_model_spice.cpp

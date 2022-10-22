@@ -201,6 +201,7 @@ public:
         NONE,
 
         R,
+        R_POT,
         R_BEHAVIORAL,
 
         C,
@@ -482,11 +483,12 @@ public:
 
 
     template <typename T>
-    static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
+    static TYPE ReadTypeFromFields( const std::vector<T>& aFields, int aSymbolPinCount );
 
     static DEVICE_TYPE_ InferDeviceTypeFromRef( const std::string& aRef );
 
-    static TYPE InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue );
+    static TYPE InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue,
+                                          int aSymbolPinCount );
 
     template <typename T>
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );

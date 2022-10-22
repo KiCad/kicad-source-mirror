@@ -171,11 +171,12 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     else
     {
         // The model is sourced from the instance.
-        SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( m_fields );
+        SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( m_fields, m_sortedSymbolPins.size() );
 
         try
         {
-            m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) ) =
+            m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields,
+                                                                          m_sortedSymbolPins.size() ) ) ) =
                     SIM_MODEL::Create( m_sortedSymbolPins.size(), m_fields );
         }
         catch( const IO_ERROR& e )

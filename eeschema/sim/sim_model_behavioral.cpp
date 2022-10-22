@@ -151,7 +151,8 @@ void SIM_MODEL_BEHAVIORAL::inferredReadDataFields( unsigned aSymbolPinCount,
     ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
 
     if( ( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
-                                    GetFieldValue( aFields, VALUE_FIELD ) ) == GetType()
+                                    GetFieldValue( aFields, VALUE_FIELD ),
+                                    aSymbolPinCount ) == GetType()
             && parseValueField( GetFieldValue( aFields, VALUE_FIELD ) ) )
         // If Value is device type, this is an empty model
         || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )

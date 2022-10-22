@@ -549,7 +549,8 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
     if( !plotPanel )
         return;
 
-    SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( aSymbol->GetFields() );
+    SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( aSymbol->GetFields(),
+                                                          static_cast<int>( aSymbol->GetLibPins().size() ) );
     SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
 
     switch( deviceType )
