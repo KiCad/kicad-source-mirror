@@ -48,33 +48,43 @@ ITEMS_LISTBOX_BASE::~ITEMS_LISTBOX_BASE()
 
 void ITEMS_LISTBOX_BASE::UpdateWidth( int aLine )
 {
+    wxClientDC dc( this );
+    int itemCount = GetItemCount();
+
     // Less than zero: recalculate width of all items.
     if( aLine < 0 )
     {
         columnWidth = 0;
-        for( int ii = 0; ii < GetItemCount(); ii++ )
+        for( int ii = 0; ii < itemCount; ii++ )
         {
-            UpdateLineWidth( (unsigned)ii );
+            UpdateLineWidth( (unsigned)ii, dc );
         }
     }
 
     // Zero or above: update from a single line.
     else
     {
-        if( aLine < GetItemCount() )
-            UpdateLineWidth( (unsigned)aLine );
+        if( aLine < itemCount )
+            UpdateLineWidth( (unsigned)aLine, dc );
     }
 }
 
 
-void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine )
+void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine, wxClientDC& dc )
 {
-    wxClientDC dc( this );
     wxCoord w;
     int newWidth = 10;  // Value of AUTOSIZE_COL_MARGIN from wxWidgets source.
+    wxString str;
 
     dc.SetFont( GetFont() );
-    dc.GetTextExtent( GetItemText( aLine, 0 ) + " ", &w, nullptr );
+
+    if( IsVirtual() )
+        str = OnGetItemText( aLine, 0 );
+    else
+        str = GetItemText( aLine, 0 );
+    str += " ";
+
+    dc.GetTextExtent( str, &w, nullptr );
     newWidth += w;
 
     if( newWidth > columnWidth )
@@ -93,8 +103,10 @@ int ITEMS_LISTBOX_BASE::GetSelection()
 
 void ITEMS_LISTBOX_BASE::DeselectAll()
 {
-    for( int i = 0; i < GetItemCount(); i++ )
+    for( int i = GetFirstSelected(); i >= 0; i = GetNextSelected(i))
+    {
         Select( i, false );
+    }
 }
 
 

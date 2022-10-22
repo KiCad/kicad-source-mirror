@@ -76,7 +76,7 @@ private:
      * if needed. This is effectively the wxListCtrl code for autosizing.
      * NB. it relies on the caller checking the given line number is valid.
      */
-    void UpdateLineWidth( unsigned aLine );
+    void UpdateLineWidth( unsigned aLine, wxClientDC& dc );
 
     int columnWidth;
 };
