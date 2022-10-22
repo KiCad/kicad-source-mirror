@@ -861,7 +861,7 @@ void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     if( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
         aList.emplace_back( _( "Type" ), getElectricalTypeLabel( GetShape() ) );
 
-    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
@@ -914,6 +914,11 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
+
     VECTOR2I textpos = GetTextPos() + GetSchematicTextOffset( aPlotter->RenderSettings() );
     CreateGraphicShape( aPlotter->RenderSettings(), s_poly, GetTextPos() );
 
@@ -925,7 +930,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     {
         aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
                         GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(),
-                        false, GetDrawFont() );
+                        false, font );
 
         if( s_poly.size() )
             aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );

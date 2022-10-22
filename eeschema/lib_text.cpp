@@ -297,9 +297,14 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
 
     int penWidth = std::max( GetEffectiveTextPenWidth(), settings->GetMinPenWidth() );
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
+
     plotter->Text( pos, color, GetText(), t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL, GetTextSize(),
                    GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
-                   true, GetDrawFont() );
+                   true, font );
 }
 
 
@@ -309,7 +314,7 @@ int LIB_TEXT::GetPenWidth() const
 }
 
 
-KIFONT::FONT* LIB_TEXT::GetDrawFont() const
+KIFONT::FONT* LIB_TEXT::getDrawFont() const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
 
@@ -354,6 +359,11 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
             orient = ANGLE_HORIZONTAL;
     }
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
+
     /*
      * Calculate the text justification, according to the symbol orientation/mirror.
      * This is a bit complicated due to cumulative calculations:
@@ -374,7 +384,7 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
     GRPrintText( DC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-                 GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetDrawFont() );
+                 GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), font );
 }
 
 
@@ -387,7 +397,7 @@ void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text" ), UnescapeString( GetText() ) );
 
-    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 
     aList.emplace_back( _( "Style" ), GetTextStyleName() );
 

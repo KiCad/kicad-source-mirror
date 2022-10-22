@@ -516,6 +516,8 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     renderSettings.SetLayerColor( LAYER_DRAWINGSHEET,
                                   renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
 
+    renderSettings.SetDefaultFont( cfg->m_Appearance.default_font );
+
     if( printReference )
     {
         m_parent->PrintDrawingSheet( &renderSettings, aScreen, aScreen->Schematic()->GetProperties(),

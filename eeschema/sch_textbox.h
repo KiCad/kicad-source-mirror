@@ -70,8 +70,6 @@ public:
 
     bool operator<( const SCH_ITEM& aItem ) const override;
 
-    KIFONT::FONT* GetDrawFont() const override;
-
     void Move( const VECTOR2I& aMoveVector ) override
     {
         EDA_SHAPE::move( aMoveVector );
@@ -112,6 +110,9 @@ public:
     }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+
+protected:
+    KIFONT::FONT* getDrawFont() const override;
 };
 
 

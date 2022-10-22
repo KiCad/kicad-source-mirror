@@ -57,8 +57,6 @@ public:
 
     wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
 
-    KIFONT::FONT* GetDrawFont() const override;
-
     void MirrorHorizontally( const VECTOR2I& center );
     void MirrorVertically( const VECTOR2I& center );
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW ) override;
@@ -94,6 +92,9 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
+protected:
+        KIFONT::FONT* getDrawFont() const override;
 
 private:
     int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const override;

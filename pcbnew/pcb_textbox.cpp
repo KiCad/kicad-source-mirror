@@ -282,7 +282,7 @@ wxString PCB_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
     if( board && HasTextVars() && aDepth < 10 )
         text = ExpandTextVars( text, &pcbTextResolver, &boardTextResolver, board->GetProject() );
 
-    KIFONT::FONT*         font = GetDrawFont();
+    KIFONT::FONT*         font = getDrawFont();
     std::vector<VECTOR2I> corners = GetAnchorAndOppositeCorner();
     int                   colWidth = ( corners[1] - corners[0] ).EuclideanNorm();
 
@@ -305,7 +305,7 @@ void PCB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     aList.emplace_back( _( "Mirror" ), IsMirrored() ? _( "Yes" ) : _( "No" ) );
     aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngle().AsDegrees() ) );
 
-    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
     aList.emplace_back( _( "Text Thickness" ), aFrame->MessageTextFromValue( GetTextThickness() ) );
     aList.emplace_back( _( "Text Width" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
     aList.emplace_back( _( "Text Height" ), aFrame->MessageTextFromValue( GetTextHeight() ) );
@@ -451,7 +451,7 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
                                           int aClearance, int aError, ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-    KIFONT::FONT*              font = GetDrawFont();
+    KIFONT::FONT*              font = getDrawFont();
     int                        penWidth = GetEffectiveTextPenWidth();
 
     // Note: this function is mainly used in 3D viewer.

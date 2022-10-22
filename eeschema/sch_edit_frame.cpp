@@ -1607,6 +1607,7 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+    GetRenderSettings()->SetDefaultFont( cfg->m_Appearance.default_font );
 
     KIGFX::VIEW* view = GetCanvas()->GetView();
     view->SetLayerVisible( LAYER_ERC_ERR, cfg->m_Appearance.show_erc_errors );

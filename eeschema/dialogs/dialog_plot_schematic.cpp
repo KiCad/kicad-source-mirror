@@ -344,6 +344,8 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
 
         // HPGL Pen Size is stored in mm in config
         cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / schIUScale.IU_PER_MM;
+
+        aSettings->SetDefaultFont( cfg->m_Appearance.default_font );
     }
 
     aSettings->LoadColors( colors );

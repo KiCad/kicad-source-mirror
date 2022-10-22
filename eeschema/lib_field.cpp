@@ -123,7 +123,7 @@ int LIB_FIELD::GetPenWidth() const
 }
 
 
-KIFONT::FONT* LIB_FIELD::GetDrawFont() const
+KIFONT::FONT* LIB_FIELD::getDrawFont() const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
 
@@ -154,8 +154,13 @@ void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     if( aDimmed )
         color = color.Mix( bg, 0.5f );
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
+
     GRPrintText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-                 GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
+                 GetVertJustify(), penWidth, IsItalic(), IsBold(), font );
 }
 
 
@@ -328,6 +333,8 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     if( GetText().IsEmpty() || aBackground )
         return;
 
+    RENDER_SETTINGS* renderSettings = aPlotter->RenderSettings();
+
     // Calculate the text orientation, according to the symbol orientation/mirror.
     EDA_ANGLE orient = GetTextAngle();
 
@@ -354,9 +361,9 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         if( GetTextColor() != COLOR4D::UNSPECIFIED )
             color = GetTextColor();
         else
-            color = aPlotter->RenderSettings()->GetLayerColor( GetDefaultLayer() );
+            color = renderSettings->GetLayerColor( GetDefaultLayer() );
 
-        bg = aPlotter->RenderSettings()->GetBackgroundColor();
+        bg = renderSettings->GetBackgroundColor();
 
         if( bg == COLOR4D::UNSPECIFIED )
             bg = COLOR4D::WHITE;
@@ -370,10 +377,14 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     if( aDimmed )
         color = color.Mix( bg, 0.5f );
 
-    int penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
+    int           penWidth = GetEffectivePenWidth( renderSettings );
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(), hjustify, vjustify,
-                    penWidth, IsItalic(), IsBold(), false, GetDrawFont() );
+                    penWidth, IsItalic(), IsBold(), false, font );
 }
 
 
@@ -528,7 +539,7 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
-    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 
     aList.emplace_back( _( "Style" ), GetTextStyleName() );
 

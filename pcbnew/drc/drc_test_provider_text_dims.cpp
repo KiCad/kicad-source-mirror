@@ -144,14 +144,17 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                     return true;
 
-                KIFONT::FONT* font = text->GetDrawFont();
+                KIFONT::FONT* font = text->GetFont();
+
+                if( !font )
+                    font = KIFONT::FONT::GetFont( wxEmptyString, text->IsBold(), text->IsItalic() );
 
                 if( font->IsOutline() )
                 {
                     if( !constraint.Value().HasMin() )
                         return true;
 
-                    auto* glyphs = text->GetRenderCache( text->GetShownText() );
+                    auto* glyphs = text->GetRenderCache( font, text->GetShownText() );
                     bool  collapsedStroke = false;
                     bool  collapsedArea = false;
 

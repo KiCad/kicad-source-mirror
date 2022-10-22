@@ -67,9 +67,12 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
                              const BOARD_ITEM* aOwner )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-    KIFONT::FONT*              font = aText->GetDrawFont();
     TEXT_ATTRIBUTES            attrs = aText->GetAttributes();
     float                      penWidth_3DU = TO_3DU( aText->GetEffectiveTextPenWidth() );
+    KIFONT::FONT*              font = aText->GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( wxEmptyString, aText->IsBold(), aText->IsItalic() );
 
     if( aOwner && aOwner->IsKnockout() )
     {

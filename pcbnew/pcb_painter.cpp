@@ -1855,6 +1855,14 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
     bool           outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
 
+    KIFONT::FONT* font = aText->GetFont();
+
+    if( !font )
+    {
+        font = KIFONT::FONT::GetFont( m_pcbSettings.GetDefaultFont(), aText->IsBold(),
+                                      aText->IsItalic() );
+    }
+
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
@@ -1869,8 +1877,6 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
                 {
                     knockouts.AddOutline( aPoly );
                 } );
-
-        KIFONT::FONT* font = aText->GetDrawFont();
 
         attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
@@ -1904,16 +1910,15 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
             attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
         }
 
-        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
+        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+        if( font->IsOutline() )
+            cache = aText->GetRenderCache( font, resolvedText );
 
         if( cache )
-        {
             m_gal->DrawGlyphs( *cache );
-        }
         else
-        {
             strokeText( resolvedText, aText->GetTextPos(), attrs );
-        }
     }
 }
 
@@ -1924,6 +1929,14 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     int            thickness = getLineThickness( aTextBox->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aTextBox->GetStroke().GetPlotStyle();
     wxString       resolvedText( aTextBox->GetShownText() );
+
+    KIFONT::FONT* font = aTextBox->GetFont();
+
+    if( !font )
+    {
+        font = KIFONT::FONT::GetFont( m_pcbSettings.GetDefaultFont(), aTextBox->IsBold(),
+                                      aTextBox->IsItalic() );
+    }
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked
     {
@@ -1987,8 +2000,6 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
     }
 
-    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aTextBox->GetRenderCache( resolvedText );
-
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         const COLOR4D sh_color = m_pcbSettings.GetColor( aTextBox, aLayer );
@@ -1997,14 +2008,15 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         attrs.m_StrokeWidth += m_lockedShadowMargin;
     }
 
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+    if( font->IsOutline() )
+        cache = aTextBox->GetRenderCache( font, resolvedText );
+
     if( cache )
-    {
         m_gal->DrawGlyphs( *cache );
-    }
     else
-    {
         strokeText( resolvedText, aTextBox->GetDrawPos(), attrs );
-    }
 }
 
 
@@ -2018,6 +2030,14 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
     const COLOR4D&  color = m_pcbSettings.GetColor( aText, aLayer );
     bool            outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+
+    KIFONT::FONT* font = aText->GetFont();
+
+    if( !font )
+    {
+        font = KIFONT::FONT::GetFont( m_pcbSettings.GetDefaultFont(), aText->IsBold(),
+                                      aText->IsItalic() );
+    }
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
@@ -2034,8 +2054,6 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
                 {
                     knockouts.AddOutline( aPoly );
                 } );
-
-        KIFONT::FONT* font = aText->GetDrawFont();
 
         attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
@@ -2069,16 +2087,15 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
             attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
         }
 
-        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
+        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+        if( font->IsOutline() )
+            cache = aText->GetRenderCache( font, resolvedText );
 
         if( cache )
-        {
             m_gal->DrawGlyphs( *cache );
-        }
         else
-        {
             strokeText( resolvedText, aText->GetTextPos(), attrs );
-        }
     }
 
     // Draw the umbilical line
@@ -2144,16 +2161,15 @@ void PCB_PAINTER::draw( const FP_TEXTBOX* aTextBox, int aLayer )
         attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
     }
 
-    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aTextBox->GetRenderCache( resolvedText );
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+    if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
+        cache = aTextBox->GetRenderCache( aTextBox->GetFont(), resolvedText );
 
     if( cache )
-    {
         m_gal->DrawGlyphs( *cache );
-    }
     else
-    {
         strokeText( resolvedText, aTextBox->GetDrawPos(), attrs );
-    }
 }
 
 
@@ -2438,7 +2454,10 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     else
         attrs.m_StrokeWidth = getLineThickness( text.GetEffectiveTextPenWidth() );
 
-    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = text.GetRenderCache( resolvedText );
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+    if( text.GetFont() && text.GetFont()->IsOutline() )
+        cache = text.GetRenderCache( text.GetFont(), resolvedText );
 
     if( cache )
     {

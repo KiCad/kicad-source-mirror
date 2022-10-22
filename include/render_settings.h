@@ -291,6 +291,9 @@ public:
     void SetHighlightFactor( float aFactor ) { m_highlightFactor = aFactor; }
     void SetSelectFactor( float aFactor ) { m_selectFactor = aFactor; }
 
+    void SetDefaultFont( const wxString& aFont ) { m_defaultFont = aFont; }
+    const wxString& GetDefaultFont() const { return m_defaultFont; }
+
     // TODO: these can go away once the drawing sheet is moved to Cairo-based printing
     wxDC* GetPrintDC() const { return m_printDC; }
     void SetPrintDC( wxDC* aDC ) { m_printDC = aDC; }
@@ -334,6 +337,8 @@ protected:
                                           // lines.  This sets an absolute minimum.
     double        m_dashLengthRatio;
     double        m_gapLengthRatio;
+
+    wxString      m_defaultFont;
 
     bool          m_isPrinting;
     LSET          m_printLayers;

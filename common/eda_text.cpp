@@ -423,7 +423,7 @@ void EDA_TEXT::cacheShownText()
 }
 
 
-KIFONT::FONT* EDA_TEXT::GetDrawFont() const
+KIFONT::FONT* EDA_TEXT::getDrawFont() const
 {
     KIFONT::FONT* font = GetFont();
 
@@ -448,9 +448,10 @@ void EDA_TEXT::ClearBoundingBoxCache()
 
 
 std::vector<std::unique_ptr<KIFONT::GLYPH>>*
-EDA_TEXT::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& aOffset ) const
+EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolvedText,
+                          const VECTOR2I& aOffset ) const
 {
-    if( GetDrawFont()->IsOutline() )
+    if( getDrawFont()->IsOutline() )
     {
         EDA_ANGLE resolvedAngle = GetDrawRotation();
 
@@ -461,7 +462,7 @@ EDA_TEXT::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& aOffs
         {
             m_render_cache.clear();
 
-            KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( GetDrawFont() );
+            KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( getDrawFont() );
             TEXT_ATTRIBUTES       attrs = GetAttributes();
 
             attrs.m_Angle = resolvedAngle;
@@ -495,7 +496,7 @@ void EDA_TEXT::AddRenderCacheGlyph( const SHAPE_POLY_SET& aPoly )
 
 int EDA_TEXT::GetInterline() const
 {
-    return KiROUND( GetDrawFont()->GetInterline( GetTextHeight() ) );
+    return KiROUND( getDrawFont()->GetInterline( GetTextHeight() ) );
 }
 
 
@@ -530,7 +531,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     }
 
     // calculate the H and V size
-    KIFONT::FONT* font = GetDrawFont();
+    KIFONT::FONT* font = getDrawFont();
     VECTOR2D      fontSize( GetTextSize() );
     bool          bold = IsBold();
     bool          italic = IsItalic();
@@ -722,8 +723,13 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTO
     if( IsMirrored() )
         size.x = -size.x;
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
+
     GRPrintText( DC, aOffset + aPos, aColor, aText, GetDrawRotation(), size, GetHorizJustify(),
-                 GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
+                 GetVertJustify(), penWidth, IsItalic(), IsBold(), font );
 }
 
 
@@ -849,7 +855,7 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
     KIGFX::GAL_DISPLAY_OPTIONS      empty_opts;
-    KIFONT::FONT*                   font = GetDrawFont();
+    KIFONT::FONT*                   font = getDrawFont();
     int                             penWidth = GetEffectiveTextPenWidth();
     TEXT_ATTRIBUTES                 attrs = GetAttributes();
 
@@ -946,7 +952,7 @@ void EDA_TEXT::TransformBoundingBoxToPolygon( SHAPE_POLY_SET* aBuffer, int aClea
 
     // TrueType bounding boxes aren't guaranteed to include all descenders, diacriticals, etc.
     // Since we use this for zone knockouts and DRC, we need something more accurate.
-    if( GetDrawFont()->IsOutline() )
+    if( getDrawFont()->IsOutline() )
         rect = GetEffectiveTextShape( false, false )->BBox();
 
     rect.Inflate( aClearance );

@@ -1947,9 +1947,17 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
             attrs.m_Underlined = true;
         }
 
+        KIFONT::FONT* font = aText->GetFont();
+
+        if( !font )
+        {
+            font = KIFONT::FONT::GetFont( m_schSettings.GetDefaultFont(), aText->IsBold(),
+                                          aText->IsItalic() );
+        }
+
         // Adjust text drawn in an outline font to more closely mimic the positioning of
         // SCH_FIELD text.
-        if( aText->GetDrawFont()->IsOutline() )
+        if( font->IsOutline() )
         {
             BOX2I    firstLineBBox = aText->GetTextBox( 0 );
             int      sizeDiff = firstLineBBox.GetHeight() - aText->GetTextSize().y;
@@ -1971,8 +1979,8 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         {
             std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-            if( !aText->IsHypertext() )
-                cache = aText->GetRenderCache( shownText, text_offset );
+            if( !aText->IsHypertext() && font->IsOutline() )
+                cache = aText->GetRenderCache( font, shownText, text_offset );
 
             if( cache )
             {
@@ -1996,6 +2004,14 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
     COLOR4D color = getRenderColor( aTextBox, aLayer, drawingShadows );
     float   borderWidth = getLineWidth( aTextBox, drawingShadows );
 
+    KIFONT::FONT* font = aTextBox->GetFont();
+
+    if( !font )
+    {
+        font = KIFONT::FONT::GetFont( m_schSettings.GetDefaultFont(), aTextBox->IsBold(),
+                                      aTextBox->IsItalic() );
+    }
+
     auto drawText =
             [&]()
             {
@@ -2014,8 +2030,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
                 std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-                if( !aTextBox->IsHypertext() )
-                    cache = aTextBox->GetRenderCache( shownText );
+                if( !aTextBox->IsHypertext() && font->IsOutline() )
+                    cache = aTextBox->GetRenderCache( font, shownText );
 
                 if( cache )
                 {

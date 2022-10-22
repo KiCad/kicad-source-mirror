@@ -869,11 +869,9 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         aCfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
     }
 
-    // Some, but not all derived classes have a PCBNEW_SETTINGS.
-    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-
-    if( cfg )
-        m_polarCoords = cfg->m_PolarCoords;
+    // Some, but not all, derived classes have a PCBNEW_SETTINGS.
+    if( PCBNEW_SETTINGS* pcbnew_cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg ) )
+        m_polarCoords = pcbnew_cfg->m_PolarCoords;
 
     wxASSERT( GetCanvas() );
 
@@ -885,6 +883,7 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         {
             rs->SetHighlightFactor( aCfg->m_Graphics.highlight_factor );
             rs->SetSelectFactor( aCfg->m_Graphics.select_factor );
+            rs->SetDefaultFont( wxEmptyString );    // Always the KiCad font for PCBs
         }
     }
 }

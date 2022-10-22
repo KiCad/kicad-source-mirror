@@ -402,9 +402,16 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
     m_plotter->SetColor( color );
 
     // calculate some text parameters :
-    VECTOR2I size = aText->GetTextSize();
-    VECTOR2I pos = aText->GetTextPos();
-    int     thickness = aText->GetEffectiveTextPenWidth();
+    VECTOR2I      size = aText->GetTextSize();
+    VECTOR2I      pos = aText->GetTextPos();
+    int           thickness = aText->GetEffectiveTextPenWidth();
+    KIFONT::FONT* font = aText->GetFont();
+
+    if( !font )
+    {
+        font = KIFONT::FONT::GetFont( m_plotter->RenderSettings()->GetDefaultFont(),
+                                      aText->IsBold(), aText->IsItalic() );
+    }
 
     if( aText->IsMirrored() )
         size.x = -size.x;  // Text is mirrored
@@ -428,7 +435,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
 
     m_plotter->Text( pos, aColor, aText->GetShownText(), aText->GetDrawRotation(), size,
                      aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
-                     aText->IsItalic(), allow_bold, false, aText->GetDrawFont(), &gbr_metadata );
+                     aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
 }
 
 
@@ -779,8 +786,15 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
 
 void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout )
 {
+    KIFONT::FONT* font = aText->GetFont();
+
+    if( !font )
+    {
+        font = KIFONT::FONT::GetFont( m_plotter->RenderSettings()->GetDefaultFont(),
+                                      aText->IsBold(), aText->IsItalic() );
+    }
+
     wxString        shownText( aText->GetShownText() );
-    KIFONT::FONT*   font = aText->GetDrawFont();
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
     if( shownText.IsEmpty() )

@@ -213,7 +213,7 @@ bool SCH_TEXTBOX::operator<( const SCH_ITEM& aItem ) const
 }
 
 
-KIFONT::FONT* SCH_TEXTBOX::GetDrawFont() const
+KIFONT::FONT* SCH_TEXTBOX::getDrawFont() const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
 
@@ -319,9 +319,13 @@ wxString SCH_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
             text = ExpandTextVars( text, &textResolver, &schematicTextResolver, project );
     }
 
-    KIFONT::FONT* font = GetDrawFont();
-    VECTOR2D      size = GetEnd() - GetStart();
-    int           colWidth = GetTextAngle() == ANGLE_HORIZONTAL ? size.x : size.y;
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+
+    VECTOR2D size = GetEnd() - GetStart();
+    int      colWidth = GetTextAngle() == ANGLE_HORIZONTAL ? size.x : size.y;
 
     colWidth = abs( colWidth ) - GetTextMargin() * 2;
     font->LinebreakText( text, colWidth, GetTextSize(), GetTextThickness(), IsBold(), IsItalic() );
@@ -384,7 +388,6 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
     }
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
-    KIFONT::FONT*    font = GetDrawFont();
     int              penWidth = GetPenWidth();
     COLOR4D          color = GetStroke().GetColor();
     PLOT_DASH_TYPE   lineStyle = GetStroke().GetPlotStyle();
@@ -404,6 +407,11 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
         aPlotter->Rect( m_start, m_end, FILL_T::NO_FILL, penWidth );
         aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
     }
+
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
 
     color = GetTextColor();
 
@@ -438,7 +446,7 @@ void SCH_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
-    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;

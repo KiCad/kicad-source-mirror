@@ -210,7 +210,7 @@ int LIB_TEXTBOX::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 }
 
 
-KIFONT::FONT* LIB_TEXTBOX::GetDrawFont() const
+KIFONT::FONT* LIB_TEXTBOX::getDrawFont() const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
 
@@ -305,13 +305,18 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
                                                                    : ANGLE_HORIZONTAL );
     }
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
+
     // NB: GetDrawPos() will want Symbol Editor (upside-down) coordinates
     text.SetStart( VECTOR2I( pt1.x, -pt1.y ) );
     text.SetEnd( VECTOR2I( pt2.x, -pt2.y ) );
 
     GRPrintText( DC, text.GetDrawPos(), color, text.GetShownText(), text.GetTextAngle(),
                  text.GetTextSize(), text.GetHorizJustify(), text.GetVertJustify(), penWidth,
-                 text.IsItalic(), text.IsBold(), text.GetDrawFont() );
+                 text.IsItalic(), text.IsBold(), font );
 }
 
 
@@ -319,9 +324,12 @@ wxString LIB_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     wxString text = EDA_TEXT::GetShownText();
 
-    KIFONT::FONT* font = GetDrawFont();
+    KIFONT::FONT* font = GetFont();
     VECTOR2D      size = GetEnd() - GetStart();
     int           colWidth = GetTextAngle() == ANGLE_HORIZONTAL ? size.x : size.y;
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
 
     colWidth = abs( colWidth ) - GetTextMargin() * 2;
     font->LinebreakText( text, colWidth, GetTextSize(), GetTextThickness(), IsBold(), IsItalic() );
@@ -382,21 +390,22 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
         return;
     }
 
-    VECTOR2I start = aTransform.TransformCoordinate( m_start ) + aOffset;
-    VECTOR2I end = aTransform.TransformCoordinate( m_end ) + aOffset;
-    COLOR4D  bg = aPlotter->RenderSettings()->GetBackgroundColor();
+    RENDER_SETTINGS* renderSettings = aPlotter->RenderSettings();
+    VECTOR2I         start = aTransform.TransformCoordinate( m_start ) + aOffset;
+    VECTOR2I         end = aTransform.TransformCoordinate( m_end ) + aOffset;
+    COLOR4D          bg = renderSettings->GetBackgroundColor();
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
 
-    int            penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
+    int            penWidth = GetEffectivePenWidth( renderSettings );
     COLOR4D        color = GetStroke().GetColor();
     PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
 
     if( penWidth > 0 )
     {
         if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
-            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
+            color = renderSettings->GetLayerColor( LAYER_DEVICE );
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
             lineStyle = PLOT_DASH_TYPE::DASH;
@@ -410,12 +419,17 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
         aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
     }
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
+
     LIB_TEXTBOX text( *this );
 
     color = GetTextColor();
 
     if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
-        color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
+        color = renderSettings->GetLayerColor( LAYER_DEVICE );
 
     if( aDimmed )
         color = color.Mix( bg, 0.5f );
@@ -443,7 +457,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
     {
         aPlotter->Text( positions[ii], color, strings_list.Item( ii ), text.GetTextAngle(),
                         text.GetTextSize(), text.GetHorizJustify(), text.GetVertJustify(),
-                        penWidth, text.IsItalic(), text.IsBold(), false, GetDrawFont() );
+                        penWidth, text.IsItalic(), text.IsBold(), false, font );
     }
 }
 
@@ -453,7 +467,7 @@ void LIB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
-    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;

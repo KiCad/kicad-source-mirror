@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -23,13 +23,13 @@
  */
 
 #include <eda_item.h>
+#include <font/font.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotter_hpgl.h>
 #include <plotters/plotters_pslike.h>
 #include <plotters/plotter_gerber.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_draw_item.h>
-#include <drawing_sheet/ds_painter.h>
 #include <title_block.h>
 #include <wx/filename.h>
 
@@ -65,9 +65,10 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
 {
     /* Note: Page sizes values are given in mils
      */
-    double   iusPerMil = plotter->GetIUsPerDecimil() * 10.0;
-    COLOR4D  plotColor = plotter->GetColorMode() ? aColor : COLOR4D::BLACK;
-    int      defaultPenWidth = plotter->RenderSettings()->GetDefaultPenWidth();
+    double           iusPerMil = plotter->GetIUsPerDecimil() * 10.0;
+    COLOR4D          plotColor = plotter->GetColorMode() ? aColor : COLOR4D::BLACK;
+    RENDER_SETTINGS* settings = plotter->RenderSettings();
+    int              defaultPenWidth = settings->GetDefaultPenWidth();
 
     if( plotColor == COLOR4D::UNSPECIFIED )
         plotColor = COLOR4D( RED );
@@ -86,7 +87,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
     drawList.SetFileName( fn.GetFullName() );   // Print only the short filename
     drawList.SetSheetName( aSheetName );
     drawList.SetSheetPath( aSheetPath );
-    drawList.SetSheetLayer( plotter->RenderSettings()->GetLayerName() );
+    drawList.SetSheetLayer( settings->GetLayerName() );
     drawList.SetProject( aProject );
     drawList.SetIsFirstPage( aIsFirstPage );
     drawList.SetProperties( aProperties );
@@ -124,11 +125,20 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
         case WSG_TEXT_T:
         {
             DS_DRAW_ITEM_TEXT* text = (DS_DRAW_ITEM_TEXT*) item;
+            KIFONT::FONT*      font = text->GetFont();
+
+            if( !font )
+            {
+                font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), text->IsBold(),
+                                              text->IsItalic() );
+            }
+
             int penWidth = std::max( text->GetEffectiveTextPenWidth(), defaultPenWidth );
+
             plotter->Text( text->GetTextPos(), plotColor, text->GetShownText(),
                            text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
                            text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
-                           text->IsMultilineAllowed(), text->GetDrawFont() );
+                           text->IsMultilineAllowed(), font );
         }
             break;
 

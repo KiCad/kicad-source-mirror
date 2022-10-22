@@ -170,8 +170,6 @@ public:
 
     int GetPenWidth() const override;
 
-    KIFONT::FONT* GetDrawFont() const override;
-
     void ClearCaches() override;
     void ClearRenderCache() override;
 
@@ -240,6 +238,9 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+protected:
+    KIFONT::FONT* getDrawFont() const override;
 
 private:
     int      m_id;         ///< Field index, @see enum MANDATORY_FIELD_T

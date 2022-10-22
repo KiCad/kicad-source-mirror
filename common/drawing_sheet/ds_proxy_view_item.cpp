@@ -123,6 +123,7 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
     ws_settings->SetSelectedColor( settings->GetLayerColor( LAYER_SELECT_OVERLAY ) );
     ws_settings->SetBrightenedColor( settings->GetLayerColor( LAYER_BRIGHTENED ) );
     ws_settings->SetPageBorderColor( settings->GetLayerColor( m_pageBorderColorLayer ) );
+    ws_settings->SetDefaultFont( settings->GetDefaultFont() );
 
     // Draw all the components that make the drawing sheet
     for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )

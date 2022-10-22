@@ -170,8 +170,6 @@ public:
 
     int GetPenWidth() const override;
 
-    KIFONT::FONT* GetDrawFont() const override;
-
     void Move( const VECTOR2I& aMoveVector ) override
     {
         EDA_TEXT::Offset( aMoveVector );
@@ -222,6 +220,9 @@ public:
 #endif
 
     static HTML_MESSAGE_BOX* ShowSyntaxHelp( wxWindow* aParentWindow );
+
+protected:
+    KIFONT::FONT* getDrawFont() const override;
 
 protected:
     /**

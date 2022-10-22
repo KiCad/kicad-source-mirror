@@ -252,7 +252,10 @@ void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
     KIFONT::FONT* font = aItem->GetFont();
 
     if( !font )
-        font = KIFONT::FONT::GetFont( wxEmptyString, aItem->IsBold(), aItem->IsItalic() );
+    {
+        font = KIFONT::FONT::GetFont( m_renderSettings.GetDefaultFont(), aItem->IsBold(),
+                                      aItem->IsItalic() );
+    }
 
     const COLOR4D& color = m_renderSettings.GetColor( aItem, aLayer );
 

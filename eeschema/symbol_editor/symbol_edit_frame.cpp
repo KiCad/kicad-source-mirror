@@ -292,6 +292,7 @@ void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     SCH_BASE_FRAME::LoadSettings( GetSettings() );
 
     GetRenderSettings()->m_ShowPinsElectricalType = m_settings->m_ShowPinElectricalType;
+    GetRenderSettings()->SetDefaultFont( wxEmptyString );
 }
 
 

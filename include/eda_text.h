@@ -307,7 +307,6 @@ public:
      */
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
-    virtual KIFONT::FONT* GetDrawFont() const;
     virtual EDA_ANGLE GetDrawRotation() const               { return GetTextAngle(); }
     virtual VECTOR2I GetDrawPos() const                     { return GetTextPos(); }
 
@@ -315,7 +314,8 @@ public:
     virtual void ClearBoundingBoxCache();
 
     std::vector<std::unique_ptr<KIFONT::GLYPH>>*
-    GetRenderCache( const wxString& forResolvedText, const VECTOR2I& aOffset = { 0, 0 } ) const;
+    GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolvedText,
+                    const VECTOR2I& aOffset = { 0, 0 } ) const;
 
     // Support for reading the cache from disk.
     void SetupRenderCache( const wxString& aResolvedText, const EDA_ANGLE& aAngle );
@@ -355,12 +355,8 @@ public:
     static wxString GotoPageHref( const wxString& aDestination );
 
 protected:
-    /**
-     * A hyperlink URL.  If empty, this text object is not a hyperlink.
-     */
-    wxString m_hyperlink;
+    virtual KIFONT::FONT* getDrawFont() const;
 
-private:
     void cacheShownText();
 
     /**
@@ -376,6 +372,13 @@ private:
                              const COLOR4D& aColor, OUTLINE_MODE aFillMode, const wxString& aText,
                              const VECTOR2I& aPos );
 
+protected:
+    /**
+     * A hyperlink URL.  If empty, this text object is not a hyperlink.
+     */
+    wxString m_hyperlink;
+
+private:
     wxString         m_text;
     wxString         m_shown_text;           // Cache of unescaped text for efficient access
     bool             m_shown_text_has_text_var_refs;

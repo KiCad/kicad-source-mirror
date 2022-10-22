@@ -150,6 +150,7 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;
     GetRenderSettings()->m_ShowPinNumbers = false;
+    GetRenderSettings()->SetDefaultFont( eeconfig()->m_Appearance.default_font );
 }
 
 

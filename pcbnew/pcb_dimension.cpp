@@ -325,7 +325,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "Units" ), EDA_UNIT_UTILS::GetLabel( GetUnits() ) );
 
-    aList.emplace_back( _( "Font" ), m_text.GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), m_text.GetFont() ? m_text.GetFont()->GetName() : _( "Default" ) );
     aList.emplace_back( _( "Text Thickness" ),
                         unitsProvider.MessageTextFromValue( m_text.GetTextThickness() ) );
     aList.emplace_back( _( "Text Width" ),

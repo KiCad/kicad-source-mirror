@@ -172,12 +172,6 @@ int LIB_PIN::GetPenWidth() const
 }
 
 
-KIFONT::FONT* LIB_PIN::GetDrawFont() const
-{
-    return KIFONT::FONT::GetFont( GetDefaultFont(), false, false );
-}
-
-
 wxString LIB_PIN::GetShownName() const
 {
     if( m_name == wxS( "~" ) )
@@ -380,7 +374,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
     int           x, y;
     wxDC*         DC = aSettings->GetPrintDC();
-    KIFONT::FONT* font = GetDrawFont();
+    KIFONT::FONT* font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), false, false );
 
     wxSize pinNameSize( m_nameTextSize, m_nameTextSize );
     wxSize pinNumSize( m_numTextSize, m_numTextSize );
@@ -573,10 +567,11 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
     if( aDimmed )
         color = color.Mix( bg, 0.5f );
 
-    VECTOR2I txtpos = aPosition;
+    VECTOR2I          txtpos = aPosition;
     int               offset = schIUScale.mmToIU( 0.4 );
     GR_TEXT_H_ALIGN_T hjustify = GR_TEXT_H_ALIGN_LEFT;
-    EDA_ANGLE orient = ANGLE_HORIZONTAL;
+    EDA_ANGLE         orient = ANGLE_HORIZONTAL;
+    KIFONT::FONT*     font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), false, false );
 
     switch( aOrientation )
     {
@@ -602,7 +597,7 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
     }
 
     GRPrintText( DC, txtpos, color, typeName, orient, wxSize( textSize, textSize ), hjustify,
-                 GR_TEXT_V_ALIGN_CENTER, pensize, false, false, GetDrawFont() );
+                 GR_TEXT_V_ALIGN_CENTER, pensize, false, false, font );
 }
 
 
@@ -749,8 +744,10 @@ void LIB_PIN::PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition, int aOri
 void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPinOrient,
         int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed ) const
 {
-    wxString name = GetShownName();
-    wxString number = GetShownNumber();
+    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
+    KIFONT::FONT*    font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), false, false );
+    wxString         name = GetShownName();
+    wxString         number = GetShownNumber();
 
     if( name.IsEmpty() )
         aDrawPinName = false;
@@ -763,16 +760,16 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
 
     int     x, y;
     int     namePenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_nameTextSize, true ),
-                                     aPlotter->RenderSettings()->GetDefaultPenWidth() );
+                                     settings->GetDefaultPenWidth() );
     int     numPenWidth  = std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, true ),
-                                     aPlotter->RenderSettings()->GetDefaultPenWidth() );
+                                     settings->GetDefaultPenWidth() );
     int     name_offset = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + namePenWidth;
     int     num_offset  = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + numPenWidth;
 
     /* Get the num and name colors */
-    COLOR4D nameColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_PINNAM );
-    COLOR4D numColor  = aPlotter->RenderSettings()->GetLayerColor( LAYER_PINNUM );
-    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
+    COLOR4D nameColor = settings->GetLayerColor( LAYER_PINNAM );
+    COLOR4D numColor  = settings->GetLayerColor( LAYER_PINNUM );
+    COLOR4D bg = settings->GetBackgroundColor();
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
@@ -800,7 +797,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
 
             {
                 aPlotter->Text( VECTOR2I( px, py ), color, text, angle, VECTOR2I( size, size ),
-                                hJustify, vJustify, penWidth, false, false, false, GetDrawFont() );
+                                hJustify, vJustify, penWidth, false, false, false, font );
             };
 
     /* Draw the text inside, but the pin numbers outside. */

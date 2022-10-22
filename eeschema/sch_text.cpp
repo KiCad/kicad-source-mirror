@@ -276,7 +276,7 @@ int SCH_TEXT::GetPenWidth() const
 }
 
 
-KIFONT::FONT* SCH_TEXT::GetDrawFont() const
+KIFONT::FONT* SCH_TEXT::getDrawFont() const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
 
@@ -296,9 +296,14 @@ void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset 
     if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( m_layer );
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
+
     // Adjust text drawn in an outline font to more closely mimic the positioning of
     // SCH_FIELD text.
-    if( GetDrawFont()->IsOutline() )
+    if( font->IsOutline() )
     {
         BOX2I    firstLineBBox = GetTextBox( 0 );
         int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
@@ -443,7 +448,6 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
     int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
     COLOR4D          color = GetTextColor();
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
-    KIFONT::FONT*    font = GetDrawFont();
     VECTOR2I         text_offset = GetSchematicTextOffset( aPlotter->RenderSettings() );
 
     if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
@@ -452,9 +456,14 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
+
     // Adjust text drawn in an outline font to more closely mimic the positioning of
     // SCH_FIELD text.
-    if( GetDrawFont()->IsOutline() )
+    if( font->IsOutline() )
     {
         BOX2I    firstLineBBox = GetTextBox( 0 );
         int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
@@ -492,7 +501,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Graphic Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
-    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;

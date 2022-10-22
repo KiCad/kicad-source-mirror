@@ -309,7 +309,7 @@ void FP_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     aList.emplace_back( _( "Mirror" ), IsMirrored() ? _( "Yes" ) : _( "No" ) );
     aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngle().AsDegrees() ) );
 
-    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
     aList.emplace_back( _( "Thickness" ), aFrame->MessageTextFromValue( GetTextThickness() ) );
     aList.emplace_back( _( "Text Width" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
     aList.emplace_back( _( "Text Height" ), aFrame->MessageTextFromValue( GetTextHeight() ) );
@@ -418,7 +418,7 @@ wxString FP_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
             text = ExpandTextVars( text, &footprintResolver, &boardTextResolver, project );
     }
 
-    KIFONT::FONT*         font = GetDrawFont();
+    KIFONT::FONT*         font = getDrawFont();
     std::vector<VECTOR2I> corners = GetAnchorAndOppositeCorner();
     int                   colWidth = ( corners[1] - corners[0] ).EuclideanNorm();
 
@@ -444,7 +444,7 @@ void FP_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
                                          int aClearance, int aError, ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-    KIFONT::FONT*              font = GetDrawFont();
+    KIFONT::FONT*              font = getDrawFont();
     int                        penWidth = GetEffectiveTextPenWidth();
 
     // Note: this function is mainly used in 3D viewer.

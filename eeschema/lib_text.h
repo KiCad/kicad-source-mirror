@@ -79,7 +79,7 @@ public:
 
     int GetPenWidth() const override;
 
-    KIFONT::FONT* GetDrawFont() const override;
+    KIFONT::FONT* getDrawFont() const override;
 
     const BOX2I GetBoundingBox() const override;
 

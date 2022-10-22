@@ -576,12 +576,16 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     GRForceBlackPen( false );
     dc.SetUserScale( scale, scale );
 
-    GetRenderSettings()->SetPrintDC( &dc );
-    // Init the color of the layer actually used to print the drawing sheet:
-    GetRenderSettings()->SetLayerColor( LAYER_DRAWINGSHEET,
-                GetRenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
+    KIGFX::SCH_RENDER_SETTINGS* cfg = GetRenderSettings();
 
-    PrintPage( GetRenderSettings() );
+    cfg->SetPrintDC( &dc );
+
+    // Init the color of the layer actually used to print the drawing sheet:
+    cfg->SetLayerColor( LAYER_DRAWINGSHEET, cfg->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
+
+    cfg->SetDefaultFont( eeconfig()->m_Appearance.default_font );
+
+    PrintPage( cfg );
 
     {
         wxLogNull doNotLog; // disable logging of failed clipboard actions

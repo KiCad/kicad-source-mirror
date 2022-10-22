@@ -266,7 +266,7 @@ int SCH_FIELD::GetPenWidth() const
 }
 
 
-KIFONT::FONT* SCH_FIELD::GetDrawFont() const
+KIFONT::FONT* SCH_FIELD::getDrawFont() const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
 
@@ -295,14 +295,20 @@ std::vector<std::unique_ptr<KIFONT::GLYPH>>*
 SCH_FIELD::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& forPosition,
                            TEXT_ATTRIBUTES& aAttrs ) const
 {
-    if( GetDrawFont()->IsOutline() )
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+
+    if( font->IsOutline() )
     {
+        KIFONT::OUTLINE_FONT* outlineFont = static_cast<KIFONT::OUTLINE_FONT*>( font );
+
         if( m_renderCache.empty() || !m_renderCacheValid )
         {
             m_renderCache.clear();
 
-            KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( GetDrawFont() );
-            font->GetLinesAsGlyphs( &m_renderCache, forResolvedText, forPosition, aAttrs );
+            outlineFont->GetLinesAsGlyphs( &m_renderCache, forResolvedText, forPosition, aAttrs );
 
             m_renderCachePos = forPosition;
             m_renderCacheValid = true;
@@ -366,6 +372,11 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             color = color.Mix( bg, 0.5f );
     }
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
+
     /*
      * Calculate the text justification, according to the symbol orientation/mirror.
      * This is a bit complicated due to cumulative calculations:
@@ -379,7 +390,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     textpos = GetBoundingBox().Centre() + aOffset;
 
     GRPrintText( DC, textpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-                 GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetDrawFont() );
+                 GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), font );
 }
 
 
@@ -754,7 +765,7 @@ void SCH_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
-    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 
     aList.emplace_back( _( "Style" ), GetTextStyleName() );
 
@@ -1015,8 +1026,13 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
         textpos = GetBoundingBox().Centre();
     }
 
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
+
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
-                    penWidth, IsItalic(), IsBold(), false, GetDrawFont() );
+                    penWidth, IsItalic(), IsBold(), false, font );
 
     if( IsHypertext() )
     {
