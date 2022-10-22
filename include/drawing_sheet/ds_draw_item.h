@@ -131,7 +131,7 @@ public:
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_LINE" ); }
 
     const VECTOR2I& GetStart() const { return m_start; }
-    void           SetStart( const VECTOR2I& aPos ) { m_start = aPos; }
+    void            SetStart( const VECTOR2I& aPos ) { m_start = aPos; }
     const VECTOR2I& GetEnd() const { return m_end; }
     void            SetEnd( const VECTOR2I& aPos ) override { m_end = aPos; }
 
@@ -139,7 +139,8 @@ public:
     void     SetPosition( const VECTOR2I& aPos ) override { SetStart( aPos ); }
 
     const BOX2I GetBoundingBox() const override;
-    bool           HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
+
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
     void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
@@ -218,7 +219,7 @@ public:
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_RECT" ); }
 
     const VECTOR2I& GetStart() const { return m_start; }
-    void           SetStart( const VECTOR2I& aPos ) { m_start = aPos; }
+    void            SetStart( const VECTOR2I& aPos ) { m_start = aPos; }
     const VECTOR2I& GetEnd() const { return m_end; }
     void            SetEnd( const VECTOR2I& aPos ) override { m_end = aPos; }
 
@@ -354,12 +355,13 @@ public:
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_BITMAP" ); }
 
     VECTOR2I GetPosition() const override { return m_pos; }
-    void    SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; }
+    void     SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; }
 
     void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
+
     const BOX2I GetBoundingBox() const override;
 
     wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
@@ -424,34 +426,22 @@ public:
     /**
      * Set the filename to draw/plot
      */
-    void SetFileName( const wxString& aFileName )
-    {
-        m_fileName = aFileName;
-    }
+    void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
 
     /**
      * Set the sheet name to draw/plot
      */
-    void SetSheetName( const wxString& aSheetName )
-    {
-        m_sheetName = aSheetName;
-    }
+    void SetSheetName( const wxString& aSheetName ) { m_sheetName = aSheetName; }
 
     /**
      * Set the sheet path to draw/plot
      */
-    void SetSheetPath( const wxString& aSheetPath )
-    {
-        m_sheetPath = aSheetPath;
-    }
+    void SetSheetPath( const wxString& aSheetPath ) { m_sheetPath = aSheetPath; }
 
     /**
      * Set the sheet layer to draw/plot
      */
-    void SetSheetLayer( const wxString& aSheetLayer )
-    {
-        m_sheetLayer = &aSheetLayer;
-    }
+    void SetSheetLayer( const wxString& aSheetLayer ) { m_sheetLayer = &aSheetLayer;  }
 
     void SetDefaultPenSize( int aPenSize ) { m_penSize = aPenSize; }
     int GetDefaultPenSize() const { return m_penSize; }
@@ -459,10 +449,7 @@ public:
     /**
      * Set the scalar to convert pages units (mils) to draw/plot units
      */
-    void SetMilsToIUfactor( double aMils2Iu )
-    {
-        m_milsToIu = aMils2Iu;
-    }
+    void SetMilsToIUfactor( double aMils2Iu ) { m_milsToIu = aMils2Iu; }
 
     /**
      * Get the scalar to convert pages units (mils) to draw/plot units
@@ -472,10 +459,7 @@ public:
     /**
      * Set the value of the sheet number.
      */
-    void SetPageNumber( const wxString& aPageNumber )
-    {
-        m_pageNumber = aPageNumber;
-    }
+    void SetPageNumber( const wxString& aPageNumber ) { m_pageNumber = aPageNumber; }
 
     /**
      * Set if the page is the first page.
@@ -485,10 +469,7 @@ public:
     /**
      * Set the value of the count of sheets, for basic inscriptions
      */
-    void SetSheetCount( int aSheetCount )
-    {
-        m_sheetCount = aSheetCount;
-    }
+    void SetSheetCount( int aSheetCount ) { m_sheetCount = aSheetCount; }
 
     void Append( DS_DRAW_ITEM_BASE* aItem )
     {
