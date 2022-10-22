@@ -57,7 +57,7 @@ const wxChar* EDA_3D_CANVAS::m_logTrace = wxT( "KI_TRACE_EDA_3D_CANVAS" );
 
 
 // A custom event, used to call DoRePaint during an idle time
-wxDEFINE_EVENT( wxEVT_REFRESH_CUSTOM_COMMAND, wxEvent);
+wxDEFINE_EVENT( wxEVT_REFRESH_CUSTOM_COMMAND, wxEvent );
 
 
 BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
@@ -77,7 +77,6 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
 
     // other events
     EVT_ERASE_BACKGROUND( EDA_3D_CANVAS::OnEraseBackground )
-    //EVT_REFRESH_CUSTOM_COMMAND( ID_CUSTOM_EVENT_1, EDA_3D_CANVAS::OnRefreshRequest )
     EVT_CUSTOM(wxEVT_REFRESH_CUSTOM_COMMAND, ID_CUSTOM_EVENT_1, EDA_3D_CANVAS::OnRefreshRequest )
 
     EVT_CLOSE( EDA_3D_CANVAS::OnCloseWindow )
@@ -87,26 +86,28 @@ END_EVENT_TABLE()
 
 EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
                               BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera,
-                              S3D_CACHE* a3DCachePointer )
-        : HIDPI_GL_3D_CANVAS( aCamera, aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
-                              wxFULL_REPAINT_ON_RESIZE ),
-          m_eventDispatcher( nullptr ),
-          m_parentStatusBar( nullptr ),
-          m_parentInfoBar( nullptr ),
-          m_glRC( nullptr ),
-          m_is_opengl_initialized( false ),
-          m_is_opengl_version_supported( true ),
-          m_render_pivot( false ),
-          m_camera_moving_speed( 1.0f ),
-          m_strtime_camera_movement( 0 ),
-          m_animation_enabled( true ),
-          m_moving_speed_multiplier( 3 ),
-          m_boardAdapter( aBoardAdapter ),
-          m_3d_render( nullptr ),
-          m_opengl_supports_raytracing( true ),
-          m_render_raytracing_was_requested( false ),
-          m_accelerator3DShapes( nullptr ),
-          m_currentRollOverItem( nullptr )
+                              S3D_CACHE* a3DCachePointer ) :
+        HIDPI_GL_3D_CANVAS( aCamera, aParent, wxID_ANY, aAttribList, wxDefaultPosition,
+                            wxDefaultSize, wxFULL_REPAINT_ON_RESIZE ),
+        m_eventDispatcher( nullptr ),
+        m_parentStatusBar( nullptr ),
+        m_parentInfoBar( nullptr ),
+        m_glRC( nullptr ),
+        m_is_opengl_initialized( false ),
+        m_is_opengl_version_supported( true ),
+        m_editing_timeout_timer( this, wxID_HIGHEST + 1 ),
+        m_redraw_trigger_timer( this, wxID_HIGHEST + 2 ),
+        m_render_pivot( false ),
+        m_camera_moving_speed( 1.0f ),
+        m_strtime_camera_movement( 0 ),
+        m_animation_enabled( true ),
+        m_moving_speed_multiplier( 3 ),
+        m_boardAdapter( aBoardAdapter ),
+        m_3d_render( nullptr ),
+        m_opengl_supports_raytracing( true ),
+        m_render_raytracing_was_requested( false ),
+        m_accelerator3DShapes( nullptr ),
+        m_currentRollOverItem( nullptr )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::EDA_3D_CANVAS" ) );
 
@@ -792,8 +793,14 @@ void EDA_3D_CANVAS::OnMiddleUp( wxMouseEvent& event )
 }
 
 
-void EDA_3D_CANVAS::OnTimerTimeout_Editing( wxTimerEvent& /* event */ )
+void EDA_3D_CANVAS::OnTimerTimeout_Editing( wxTimerEvent& aEvent )
 {
+    if( aEvent.GetId() != m_editing_timeout_timer.GetId() )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     m_mouse_is_moving = false;
     m_mouse_was_moved = false;
 
@@ -814,8 +821,14 @@ void EDA_3D_CANVAS::restart_editingTimeOut_Timer()
 }
 
 
-void EDA_3D_CANVAS::OnTimerTimeout_Redraw( wxTimerEvent& event )
+void EDA_3D_CANVAS::OnTimerTimeout_Redraw( wxTimerEvent& aEvent )
 {
+    if( aEvent.GetId() != m_redraw_trigger_timer.GetId() )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     Request_refresh( true );
 }
 
