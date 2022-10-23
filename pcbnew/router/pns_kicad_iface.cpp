@@ -387,26 +387,36 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         return it->second;
 
     PNS::CONSTRAINT constraint;
-    int rv = 0;
-    int layer;
+    int             rv = 0;
+    LAYER_RANGE     layers;
 
-    if( !aA->Layers().IsMultilayer() || !aB || aB->Layers().IsMultilayer() )
-        layer = aA->Layer();
+    if( !aB )
+        layers = aA->Layers();
+    else if( isEdge( aA ) )
+        layers = aB->Layers();
+    else if( isEdge( aB ) )
+        layers = aA->Layers();
     else
-        layer = aB->Layer();
+        layers = aA->Layers().Intersection( aB->Layers() );
 
-    if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
+    for( int layer = layers.Start(); layer <= layers.End(); ++layer )
     {
-        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
-            rv = constraint.m_Value.Min();
-    }
-
-    if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
-    {
-        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
+        if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
         {
-            if( constraint.m_Value.Min() > rv )
-                rv = constraint.m_Value.Min();
+            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
+            {
+                if( constraint.m_Value.Min() > rv )
+                    rv = constraint.m_Value.Min();
+            }
+        }
+
+        if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
+        {
+            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
+            {
+                if( constraint.m_Value.Min() > rv )
+                    rv = constraint.m_Value.Min();
+            }
         }
     }
 
