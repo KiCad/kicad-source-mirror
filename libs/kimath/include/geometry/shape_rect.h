@@ -188,7 +188,7 @@ public:
         return rv;
     }
 
-    virtual const std::string Format( ) const override;
+    virtual const std::string Format( bool aCplusPlus = true ) const override;
 
 private:
     VECTOR2I m_p0;      ///< Top-left corner

@@ -243,7 +243,7 @@ public:
 
     virtual bool Parse( std::stringstream& aStream );
 
-    virtual const std::string Format( ) const;
+    virtual const std::string Format( bool aCplusPlus = true ) const;
 
 protected:
     typedef VECTOR2I::extended_type ecoord;

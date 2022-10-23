@@ -1974,7 +1974,7 @@ int SHAPE_LINE_CHAIN::NearestSegment( const VECTOR2I& aP ) const
 }
 
 
-const std::string SHAPE_LINE_CHAIN::Format() const
+const std::string SHAPE_LINE_CHAIN::Format( bool aCplusPlus ) const
 {
     std::stringstream ss;
 

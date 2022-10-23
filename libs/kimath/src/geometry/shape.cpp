@@ -38,10 +38,11 @@ bool SHAPE::Parse( std::stringstream& aStream )
 }
 
 
-const std::string SHAPE::Format() const
+const std::string SHAPE::Format( bool aCplusPlus ) const
 {
-    assert( false );
-    return std::string( "" );
+    std::stringstream ss;
+    ss << "shape " << m_type;
+    return ss.str();
 }
 
 

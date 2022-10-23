@@ -51,7 +51,7 @@ public:
     ~SHAPE_COMPOUND();
 
     SHAPE_COMPOUND*   Clone() const override;
-    const std::string Format() const override;
+    const std::string Format( bool aCplusPlus = true ) const override;
 
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override;

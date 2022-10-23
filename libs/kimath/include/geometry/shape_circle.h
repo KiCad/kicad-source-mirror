@@ -135,6 +135,8 @@ public:
         return true;
     }
 
+    virtual const std::string Format( bool aCplusPlus = true ) const override;
+
 private:
     CIRCLE m_circle;
 };

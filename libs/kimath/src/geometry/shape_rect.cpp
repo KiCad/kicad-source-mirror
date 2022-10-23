@@ -91,7 +91,7 @@ bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2
     return false;
 }
 
-const std::string SHAPE_RECT::Format( ) const
+const std::string SHAPE_RECT::Format( bool aCplusPlus ) const
 {
     std::stringstream ss;
 

@@ -1054,7 +1054,7 @@ public:
     int NormalizeAreaOutlines();
 
     /// @copydoc SHAPE::Format()
-    const std::string Format() const override;
+    const std::string Format( bool aCplusPlus = true ) const override;
 
     /// @copydoc SHAPE::Parse()
     bool Parse( std::stringstream& aStream ) override;

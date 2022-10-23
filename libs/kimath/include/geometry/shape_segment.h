@@ -157,7 +157,7 @@ public:
         m_seg.B += aVector;
     }
 
-    virtual const std::string Format( ) const override;
+    virtual const std::string Format( bool aCplusPlus = true ) const override;
 
 private:
     SEG m_seg;

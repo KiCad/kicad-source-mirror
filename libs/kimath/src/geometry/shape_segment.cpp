@@ -25,11 +25,14 @@
 #include <sstream>
 
 #include <geometry/shape_segment.h>
+#include <geometry/shape_circle.h>
 
-const std::string SHAPE_SEGMENT::Format() const
+const std::string SHAPE_SEGMENT::Format( bool aCplusPlus ) const
 {
     std::stringstream ss;
 
+    if( aCplusPlus )
+    {
     ss << "SHAPE_SEGMENT( VECTOR2I( ";
     ss << m_seg.A.x;
     ss << ", ";
@@ -41,6 +44,46 @@ const std::string SHAPE_SEGMENT::Format() const
     ss << "), ";
     ss << m_width;
     ss << "); ";
+    }
+    else
+    {
+        ss << SHAPE::Format( aCplusPlus ) << " ";
+        ss << m_seg.A.x;
+        ss << " ";
+        ss << m_seg.A.y;
+        ss << " ";
+        ss << m_seg.B.x;
+        ss << " ";
+        ss << m_seg.B.y;
+        ss << " ";
+        ss << m_width;
+    }
 
     return ss.str();
 }
+
+const std::string SHAPE_CIRCLE::Format( bool aCplusPlus ) const
+{
+    std::stringstream ss;
+
+    if( aCplusPlus )
+    {
+        ss << "SHAPE_CIRCLE( VECTOR2I( ";
+        ss << m_circle.Center.x;
+        ss << ", ";
+        ss << m_circle.Center.y;
+        ss << "), ";
+        ss << m_circle.Radius;
+        ss << "); ";
+    }   else
+    {
+        ss << SHAPE::Format( aCplusPlus ) << " ";
+        ss << m_circle.Center.x;
+        ss << " ";
+        ss << m_circle.Center.y;
+        ss << " ";
+        ss << m_circle.Radius;
+    }
+    return ss.str();
+}
+

@@ -27,7 +27,7 @@
 
 #include <geometry/shape_compound.h>
 
-const std::string SHAPE_COMPOUND::Format() const
+const std::string SHAPE_COMPOUND::Format( bool aCplusPlus ) const
 {
     std::stringstream ss;
 

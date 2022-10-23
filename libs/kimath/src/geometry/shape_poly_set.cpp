@@ -1624,7 +1624,7 @@ int SHAPE_POLY_SET::NormalizeAreaOutlines()
 }
 
 
-const std::string SHAPE_POLY_SET::Format() const
+const std::string SHAPE_POLY_SET::Format( bool aCplusPlus ) const
 {
     std::stringstream ss;
 
