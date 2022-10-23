@@ -471,6 +471,49 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 }
 
 
+const std::string JSON_SETTINGS::FormatAsString() const
+{
+    LOCALE_IO dummy;
+
+    std::stringstream buffer;
+    buffer << std::setw( 2 ) << *m_internals << std::endl;
+
+    return buffer.str();
+}
+
+
+bool JSON_SETTINGS::LoadFromRawFile( const wxString& aPath )
+{
+    try
+    {
+        wxFFileInputStream fp( aPath, wxT( "rt" ) );
+        wxStdInputStream   fstream( fp );
+
+        if( fp.IsOk() )
+        {
+            *static_cast<nlohmann::json*>( m_internals.get() ) =
+                    nlohmann::json::parse( fstream, nullptr,
+                                           /* allow_exceptions = */ true,
+                                           /* ignore_comments  = */ true );
+        }
+        else
+        {
+            return false;
+        }
+    }
+    catch( nlohmann::json::parse_error& error )
+    {
+        wxLogTrace( traceSettings, wxT( "Json parse error reading %s: %s" ), aPath, error.what() );
+
+        return false;
+    }
+
+    // Now that we have new data in the JSON structure, load the params again
+    Load();
+    return true;
+}
+
+
 std::optional<nlohmann::json> JSON_SETTINGS::GetJson( const std::string& aPath ) const
 {
     nlohmann::json::json_pointer ptr = m_internals->PointerFromString( aPath );

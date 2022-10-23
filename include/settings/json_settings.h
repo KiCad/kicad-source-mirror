@@ -227,6 +227,11 @@ c     * @return true if the file was saved
     */
     static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                               unsigned int& aTarget );
+
+    const std::string FormatAsString() const;
+
+    bool LoadFromRawFile( const wxString& aPath );
+
 protected:
 
     /**
