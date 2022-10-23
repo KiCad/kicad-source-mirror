@@ -22,6 +22,7 @@
 #include <grid_tricks.h>
 #include <html_window.h>
 #include <pgm_base.h>
+#include <kiplatform/ui.h>
 #include <settings/common_settings.h>
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
@@ -746,8 +747,8 @@ PCM_PACKAGE_ACTION PANEL_PACKAGES_VIEW::getAction() const
 
 void PANEL_PACKAGES_VIEW::OnSizeInfoBox( wxSizeEvent& aEvent )
 {
-    wxSize infoSize = m_infoText->GetParent()->GetClientSize();
-    infoSize.x -= 8;
+    wxSize infoSize = KIPLATFORM::UI::GetUnobscuredSize( m_infoText->GetParent() );
+    infoSize.x -= 10;
     m_infoText->SetMinSize( infoSize );
     m_infoText->SetMaxSize( infoSize );
     m_infoText->SetSize( infoSize );
