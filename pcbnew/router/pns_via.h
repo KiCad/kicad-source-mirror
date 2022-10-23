@@ -160,6 +160,8 @@ public:
 
     const VIA_HANDLE MakeHandle() const;
 
+    virtual const std::string Format() const override;
+
 private:
     int          m_diameter;
     int          m_drill;

@@ -1225,12 +1225,21 @@ bool LINE::HasLockedSegments() const
     return false;
 }
 
+
 void LINE::Clear()
 {
     m_hasVia = false;
     m_line.Clear();
 }
 
+
+const std::string SEGMENT::Format( ) const
+{
+    std::stringstream ss;
+    ss << ITEM::Format() << " ";
+    ss << m_seg.Format( false );
+    return ss.str();
+}
 
 }
 

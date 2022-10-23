@@ -150,6 +150,7 @@ public:
 
     void UndoLastSegment();
     void CommitRouting();
+    bool GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded );
     void StopRouting();
     void ClearViewDecorations();
 

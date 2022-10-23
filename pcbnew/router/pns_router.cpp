@@ -432,15 +432,16 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
     m_placer->SetDebugDecorator( m_iface->GetDebugDecorator() );
     m_placer->SetLogger( m_logger );
 
-    if( m_logger )
-    {
-        m_logger->Clear();
-        m_logger->Log( LOGGER::EVT_START_ROUTE, aP, aStartItem );
-    }
-
     if( m_placer->Start( aP, aStartItem ) )
     {
         m_state = ROUTE_TRACK;
+
+        if( m_logger )
+        {
+            m_logger->Clear();
+            m_logger->Log( LOGGER::EVT_START_ROUTE, aP, aStartItem, &m_sizes );
+        }
+
         return true;
     }
     else
@@ -755,6 +756,36 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
     return ret;
 }
 
+bool ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded )
+{
+    NODE *node;
+    ITEM_SET current;
+
+    if( m_state == ROUTE_TRACK )
+    {
+        node = m_placer->CurrentNode( true );
+        current = m_placer->Traces();
+    }
+    else if ( m_state == DRAG_SEGMENT )
+    {
+        node = m_dragger->CurrentNode();
+        current = m_dragger->Traces();
+    }
+
+    std::unique_ptr<NODE> tmpNode( node->Branch() );
+
+    for( auto item : current )
+    {
+        std::unique_ptr<ITEM> ip( item.item->Clone() );
+        tmpNode->Add( std::move( ip ) );
+    }
+
+    tmpNode->GetUpdatedItems( aRemoved, aAdded );
+    
+    //printf("added %d removed %d\n", aRemoved.size(), aAdded.size() );
+
+    return true;
+}
 
 void ROUTER::CommitRouting( NODE* aNode )
 {
@@ -918,7 +949,7 @@ void ROUTER::ToggleViaPlacement()
 
         if( m_logger )
         {
-            m_logger->Log( LOGGER::EVT_TOGGLE_VIA );
+            m_logger->Log( LOGGER::EVT_TOGGLE_VIA, VECTOR2I(), nullptr, &m_sizes );
         }
     }
 }

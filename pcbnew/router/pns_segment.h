@@ -117,6 +117,13 @@ public:
         return 2;
     }
 
+    virtual const std::string Format() const override;
+
+    void SetShape( const SHAPE_SEGMENT& aShape )
+    {
+        m_seg = aShape;
+    }
+
 private:
     SHAPE_SEGMENT m_seg;
 };

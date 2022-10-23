@@ -24,6 +24,10 @@
 #include <advanced_config.h>
 
 #include <functional>
+#include <iomanip>
+#include <utility>
+#include <sstream>
+
 using namespace std::placeholders;
 #include <board.h>
 #include <board_design_settings.h>
@@ -557,6 +561,10 @@ void ROUTER_TOOL::saveRouterDebugLog()
     fname_dump.SetPath( cwd );
     fname_dump.SetName( "pns.dump" );
 
+    wxFileName fname_settings( cwd );
+    fname_settings.SetPath( cwd );
+    fname_settings.SetName( "pns.settings" );
+
     wxString msg = wxString::Format( _( "Event file: %s\nBoard dump: %s" ), fname_log.GetFullPath(), fname_log.GetFullPath() );
 
     int rv = OKOrCancelDialog( nullptr, _("Save router log"), _("Would you like to save the router\nevent log for debugging purposes?"), msg, _("OK"), _("Cancel") );
@@ -564,25 +572,29 @@ void ROUTER_TOOL::saveRouterDebugLog()
     if( !rv )
         return;
 
-    FILE *f = fopen( fname_log.GetFullPath().c_str(), "wb" );
+    FILE *f = fopen( fname_settings.GetFullPath().c_str(), "wb" );
+    std::string settingsStr = m_router->Settings().FormatAsString();
+    fprintf(f,"%s\n", settingsStr.c_str( ) );
+    fclose(f);
 
-    // save base router configuration (mode, etc.)
-    fprintf(f, "config %d %d %d %d\n",
-        m_router->Settings().Mode(),
-        m_router->Settings().RemoveLoops() ? 1 : 0,
-        m_router->Settings().GetFixAllSegments() ? 1 : 0,
-        static_cast<int>( m_router->Settings().GetCornerMode() )
-     );
+    f = fopen( fname_log.GetFullPath().c_str(), "wb" );
+
+    fprintf(f, "mode %d\n", m_router->Mode() );
 
     const auto& events = logger->GetEvents();
 
     for( const auto& evt : events)
     {
-        fprintf( f, "event %d %d %d %s\n", evt.p.x, evt.p.y, evt.type,
-                 static_cast<const char*>( evt.uuid.AsString().c_str() ) );
+        fprintf( f, "event %d %d %d %s %d %d %d %d %d %d %d\n", evt.p.x, evt.p.y, evt.type,
+                 static_cast<const char*>( evt.uuid.AsString().c_str() ),
+                 evt.sizes.TrackWidth(),
+                 evt.sizes.ViaDiameter(),
+                 evt.sizes.ViaDrill(),
+                 evt.sizes.TrackWidthIsExplicit() ? 1: 0,
+                 evt.sizes.GetLayerBottom(),
+                 evt.sizes.GetLayerTop(),
+                 evt.sizes.ViaType() );
     }
-
-    fclose( f );
 
     // Export as *.kicad_pcb format, using a strategy which is specifically chosen
     // as an example on how it could also be used to send it to the system clipboard.
@@ -593,6 +605,26 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     PROJECT* prj = m_iface->GetBoard()->GetProject();
     prj->GetProjectFile().SaveAs( cwd, "pns" );
+
+    std::vector<PNS::ITEM*> added, removed;
+
+    if( !m_router->GetUpdatedItems( removed, added ) )
+    {
+        fclose( f );
+        return;
+    }
+
+    for( auto item : removed )
+    {
+        fprintf(f, "removed %s\n", item->Parent()->m_Uuid.AsString().c_str().AsChar() );
+    }
+
+    for( auto item : added )
+    {
+        fprintf(f, "added %s\n", item->Format().c_str() );
+    }
+
+    fclose( f );
 }
 
 

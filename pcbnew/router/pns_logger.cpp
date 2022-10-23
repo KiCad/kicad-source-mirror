@@ -61,7 +61,7 @@ void LOGGER::Save( const std::string& aFilename )
 }
 
 
-void LOGGER::Log( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item )
+void LOGGER::Log( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item, const SIZES_SETTINGS* sizes )
 {
     LOGGER::EVENT_ENTRY ent;
 
@@ -69,6 +69,10 @@ void LOGGER::Log( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item 
     ent.p = pos;
     ent.uuid = KIID(0);
 
+    if( sizes )
+    {
+        ent.sizes = *sizes;
+    }
 
     if( item && item->Parent() )
         ent.uuid = item->Parent()->m_Uuid;

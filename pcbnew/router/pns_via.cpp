@@ -166,6 +166,7 @@ OPT_BOX2I VIA::ChangedArea( const VIA* aOther ) const
     return OPT_BOX2I();
 }
 
+
 const VIA_HANDLE VIA::MakeHandle() const
 {
     VIA_HANDLE h;
@@ -174,6 +175,15 @@ const VIA_HANDLE VIA::MakeHandle() const
     h.net = Net();
     h.valid = true;
     return h;
+}
+
+
+const std::string VIA::Format( ) const
+{
+    std::stringstream ss;
+    ss << ITEM::Format() << " drill " << m_drill << " ";
+    ss << m_shape.Format( false );
+    return ss.str();
 }
 
 }

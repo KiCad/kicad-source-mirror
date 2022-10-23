@@ -215,4 +215,13 @@ ITEM::~ITEM()
 {
 }
 
+const std::string ITEM::Format() const
+{
+    std::stringstream ss;
+    ss << KindStr() << " ";
+    ss << "net " << m_net << " ";
+    ss << "layers " << m_layers.Start() << " " << m_layers.End();
+    return ss.str();
+}
+
 }

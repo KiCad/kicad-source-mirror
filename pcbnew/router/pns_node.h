@@ -422,8 +422,9 @@ public:
         return m_collisionQueryScope;
     }
 
-private:
     void Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant = false );
+
+private:
 
     /// nodes are not copyable
     NODE( const NODE& aB );

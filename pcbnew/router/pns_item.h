@@ -245,6 +245,8 @@ public:
     void SetIsCompoundShapePrimitive() { m_isCompoundShapePrimitive = true; }
     bool IsCompoundShapePrimitive() const { return m_isCompoundShapePrimitive; }
 
+    virtual const std::string Format() const;
+
 private:
     bool collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly, int aOverrideClearance ) const;
 
