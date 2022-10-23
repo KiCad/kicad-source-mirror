@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Anil8735(https://stackoverflow.com/users/3659387/anil8753)
  *                    from https://stackoverflow.com/a/37274011
- * Copyright (C) 2020-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,16 +29,14 @@
 #include <wx/dcmemory.h>
 #include <wx/menu.h>
 #include <wx/renderer.h>
-
+#include <wx/settings.h>
+#include <kiplatform/ui.h>
 
 SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
                             const wxPoint& aPos, const wxSize& aSize ) :
         wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, "DropDownButton" ),
         m_label( aLabel )
 {
-    m_colorNormal   = GetForegroundColour();
-    m_colorDisabled = GetForegroundColour().MakeDisabled();
-
     if( aSize == wxDefaultSize )
     {
         wxSize defaultSize = wxButton::GetDefaultSize();
@@ -54,6 +52,9 @@ SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& a
     Bind( wxEVT_LEAVE_WINDOW, &SPLIT_BUTTON::OnMouseLeave, this );
     Bind( wxEVT_ENTER_WINDOW, &SPLIT_BUTTON::OnMouseEnter, this );
 
+    Bind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( SPLIT_BUTTON::onThemeChanged ),
+          this );
+
     m_pMenu = new wxMenu();
 }
 
@@ -62,6 +63,12 @@ SPLIT_BUTTON::~SPLIT_BUTTON()
 {
     delete m_pMenu;
     m_pMenu = nullptr;
+}
+
+
+void SPLIT_BUTTON::onThemeChanged( wxSysColourChangedEvent &aEvent )
+{
+    Refresh();
 }
 
 
@@ -202,6 +209,37 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     wxSize    size  = GetSize();
     const int width = size.GetWidth() - m_arrowButtonWidth;
 
+#ifdef __WXMAC__
+    auto drawBackground =
+            [&]( wxRect aRect )
+            {
+                // wxWidgets doesn't have much support for dark mode on OSX; none of the
+                // system colours return the right values, nor does wxRendererNative draw
+                // the borders correctly.  So we add some empirically chosen hacks here.
+
+                wxColor bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
+
+                if( KIPLATFORM::UI::IsDarkTheme() )
+                {
+                    aRect.width += 1;
+                    aRect.height += 1;
+                    bg = bg.ChangeLightness( m_bIsEnable ? 130 : 120 );
+                }
+                else
+                {
+                    aRect.x += 1;
+                    aRect.y += 1;
+                    aRect.width -= 1;
+                    aRect.height -= 1;
+                    bg = bg.ChangeLightness( m_bIsEnable ? 200 : 160 );
+                }
+
+                dc.SetBrush( bg );
+                dc.SetPen( bg );
+                dc.DrawRectangle( aRect );
+            };
+#endif
+
     // Draw first part of button
     wxRect r1;
     r1.x      = 0;
@@ -211,7 +249,13 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
 
-    SetForegroundColour( m_bIsEnable ? m_colorNormal : m_colorDisabled );
+#ifdef __WXMAC__
+    // wxRendereNative doesn't handle dark mode on OSX.  Repaint the background.
+    drawBackground( r1 );
+#endif
+
+    SetForegroundColour( m_bIsEnable ? wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT )
+                                     : wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 
     if( m_bitmap.IsOk() )
     {
@@ -240,6 +284,12 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     r2.height = size.GetHeight();
 
     wxRendererNative::Get().DrawPushButton( this, dc, r2, m_stateMenu );
+
+#ifdef __WXMAC__
+    // wxRendereNative doesn't handle dark mode on OSX.  Repaint the background.
+    drawBackground( r2 );
+#endif
+
     wxRendererNative::Get().DrawDropArrow( this, dc, r2, m_stateMenu );
 }
 

@@ -52,6 +52,7 @@ protected:
     void OnLeftButtonUp( wxMouseEvent& aEvent );
     void OnLeftButtonDown( wxMouseEvent& aEvent );
     void OnPaint( wxPaintEvent& WXUNUSED( aEvent ) );
+    void onThemeChanged( wxSysColourChangedEvent &aEvent );
 
     bool Enable( bool aEnable = true ) override;
 
@@ -59,8 +60,6 @@ private:
     int       m_stateButton = 0;
     int       m_stateMenu   = 0;
     bool      m_bIsEnable   = true;
-    wxColor   m_colorNormal;
-    wxColor   m_colorDisabled;
     const int m_arrowButtonWidth = 20;
     int       m_widthPadding     = 20;
     bool      m_bLButtonDown     = false;
