@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-21 15:03+0000\n"
+"PO-Revision-Date: 2022-10-24 14:09+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -34304,14 +34304,14 @@ msgid "Pad %s of %s on %s"
 msgstr "パッド %s - %s ( %s 上)"
 
 #: pcbnew/pad.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "NPTH pad of %s"
-msgstr "パッド %s ( %s 上)"
+msgstr "%sのNPTHパッド"
 
 #: pcbnew/pad.cpp:1237
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s of %s"
-msgstr "パッド %s - %s"
+msgstr "PTHパッド%s(%s)"
 
 #: pcbnew/pad.cpp:1246
 #, c-format
@@ -34321,12 +34321,12 @@ msgstr "パッド %s %s - %s ( %s 上)"
 #: pcbnew/pad.cpp:1254
 #, c-format
 msgid "NPTH of %s"
-msgstr ""
+msgstr "%s のNPTH"
 
 #: pcbnew/pad.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "パッド %s (%s) - %s"
+msgstr "PTHパッド %s %s (%s)"
 
 #: pcbnew/pad.cpp:1688
 msgid "Edge connector"
@@ -34426,9 +34426,8 @@ msgid "Export netlist used to update schematics"
 msgstr "回路図の更新に使用するネットリストをエクスポート"
 
 #: pcbnew/pcb_edit_frame.cpp:308
-#, fuzzy
 msgid "Search"
-msgstr "テキストを検索"
+msgstr "検索"
 
 #: pcbnew/pcb_edit_frame.cpp:381
 msgid "New PCB file is unsaved"
@@ -34505,10 +34504,10 @@ msgid "Unrecognized layer '%s'"
 msgstr "認識されないレイヤー '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr ""
-"%s へのフットプリント識別子引数 (A、B、または参照指定子) がありません。"
+msgstr "%s へのフットプリント識別子引数 (A、B、またはリファレンス指定子) "
+"がありません。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -34523,11 +34522,10 @@ msgid "Footprint has no back courtyard."
 msgstr "フットプリントに裏面のコートヤードがありません。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr ""
-"%s に対するルールエリア識別子の引数 (A、B、またはルールエリア名) がありませ"
-"ん。"
+msgstr "%s に対するルールエリア識別子の引数 (A、B、またはルールエリア名) "
+"がありません。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:745
 #, c-format
@@ -34705,19 +34703,16 @@ msgstr ""
 "下さい。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:88
-#, fuzzy
 msgid "Loading board\n"
-msgstr "ボードをロード"
+msgstr "基板をロード中\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:95
-#, fuzzy
 msgid "Successfully created svg file"
-msgstr "基板の再アノテーションが成功しました"
+msgstr "svgファイルの作成に成功しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:97
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "ファイル読み込み中のエラー。"
+msgstr "svg ファイルの作成中にエラーが発生しました"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -35473,6 +35468,8 @@ msgid ""
 "Invalid zero-sized pad ignored in\n"
 "file: %s"
 msgstr ""
+"サイズがゼロの無効なパッドが無視されました\n"
+"ファイル: %s"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2038
 #, c-format
@@ -35604,9 +35601,9 @@ msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr "ID %d とシーケンス %d で重複したアイテムが %zu 行目にあります。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "アーカイブ ファイル '%s' を作成できません。\n"
+msgstr "パッドスタック %s が見つかりません（ファイル %s 内）\n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2332
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2361
