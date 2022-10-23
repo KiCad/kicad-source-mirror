@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Andrew Lutsenko, anlutsenko at gmail dot com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,7 +26,9 @@
 PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
                               const PinCallback& aPinCallback, const PACKAGE_VIEW_DATA& aData ) :
         PANEL_PACKAGE_BASE( parent ),
-        m_actionCallback( aCallback ), m_pinCallback( aPinCallback ), m_data( aData )
+        m_actionCallback( aCallback ),
+        m_pinCallback( aPinCallback ),
+        m_data( aData )
 {
     // Propagate clicks on static elements to the panel handler.
     m_name->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_PACKAGE::OnClick ), NULL, this );
@@ -48,11 +50,11 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
 
     m_minHeight = GetMinHeight();
 
-    double descLineHeight = m_desc->GetTextExtent( "X" ).GetHeight() * 1.2 /* leading */;
+    double descLineHeight = m_desc->GetTextExtent( wxT( "X" ) ).GetHeight() * 1.2 /* leading */;
     m_desc->SetLabel( m_data.package.description );
     descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
 
-    int    nameLineHeight = m_name->GetTextExtent( "X" ).GetHeight();
+    int    nameLineHeight = m_name->GetTextExtent( wxT( "X" ) ).GetHeight();
     wxSize minSize = GetMinSize();
     minSize.y = std::max( nameLineHeight + KiROUND( descLineHeight ) + 15, m_minHeight );
     SetMinSize( minSize );
@@ -64,7 +66,7 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
     m_pinVersionMenuItem =
             splitMenu->Append( wxID_ANY, _( "Pin package" ),
                                _( "Pinned packages don't affect available update notification and "
-                                  "will not be updated with \"Update All\" button." ),
+                                  "will not be updated with 'Update All' button." ),
                                wxITEM_CHECK );
     splitMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_PACKAGE::OnPinVersionClick, this,
                      m_pinVersionMenuItem->GetId() );

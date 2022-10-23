@@ -131,11 +131,11 @@ void PANEL_PACKAGES_VIEW::SetData( const std::vector<PACKAGE_VIEW_DATA>& aPackag
 
     for( const PACKAGE_VIEW_DATA& data : aPackageData )
     {
-        PANEL_PACKAGE* package_panel =
-                new PANEL_PACKAGE( m_packageListWindow, m_actionCallback, m_pinCallback, data );
+        PANEL_PACKAGE* package_panel = new PANEL_PACKAGE( m_packageListWindow, m_actionCallback,
+                                                          m_pinCallback, data );
 
         package_panel->SetSelectCallback(
-                [package_panel, this]()
+                [package_panel, this] ()
                 {
                     if( m_currentSelected && m_currentSelected != package_panel )
                         m_currentSelected->SetSelected( false );
@@ -166,57 +166,59 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     // Details
     wxString details;
 
-    details << "<h5>" + package.name + "</h5>";
+    details << wxT( "<h5>" ) + package.name + wxT( "</h5>" );
 
-    auto format_desc = []( const wxString& text ) -> wxString
-    {
-        wxString result;
-        bool     inURL = false;
-        wxString url;
-
-        for( unsigned i = 0; i < text.length(); ++i )
-        {
-            wxUniChar c = text[i];
-
-            if( inURL )
+    auto format_desc =
+            []( const wxString& text ) -> wxString
             {
-                if( c == ' ' )
+                wxString result;
+                bool     inURL = false;
+                wxString url;
+
+                for( unsigned i = 0; i < text.length(); ++i )
                 {
-                    result += wxString::Format( "<a href='%s'>%s</a>", url, url );
-                    inURL = false;
+                    wxUniChar c = text[i];
 
-                    result += c;
-                }
-                else
-                {
-                    url += c;
-                }
-            }
-            else if( text.Mid( i, 5 ) == "http:" || text.Mid( i, 6 ) == "https:" )
-            {
-                url = c;
-                inURL = true;
-            }
-            else if( c == '\n' )
-            {
-                result += "</p><p>";
-            }
-            else
-            {
-                result += c;
-            }
-        }
+                    if( inURL )
+                    {
+                        if( c == ' ' )
+                        {
+                            result += wxString::Format( wxT( "<a href='%s'>%s</a>" ), url, url );
+                            inURL = false;
 
-        return result;
-    };
+                            result += c;
+                        }
+                        else
+                        {
+                            url += c;
+                        }
+                    }
+                    else if( text.Mid( i, 5 ) == wxT( "http:" )
+                                || text.Mid( i, 6 ) == wxT( "https:" ) )
+                    {
+                        url = c;
+                        inURL = true;
+                    }
+                    else if( c == '\n' )
+                    {
+                        result += wxT( "</p><p>" );
+                    }
+                    else
+                    {
+                        result += c;
+                    }
+                }
+
+                return result;
+            };
 
     wxString desc = package.description_full;
-    details << "<p>" + format_desc( desc ) + "</p>";
+    details << wxT( "<p>" ) + format_desc( desc ) + wxT( "</p>" );
 
-    details << "<p><b>" + _( "Metadata" ) + "</b></p>";
-    details << "<ul>";
-    details << "<li>" + _( "Package identifier: " ) + package.identifier + "</li>";
-    details << "<li>" + _( "License: " ) + package.license + "</li>";
+    details << wxT( "<p><b>" ) + _( "Metadata" ) + wxT( "</b></p>" );
+    details << wxT( "<ul>" );
+    details << wxT( "<li>" ) + _( "Package identifier: " ) + package.identifier + wxT( "</li>" );
+    details << wxT( "<li>" ) + _( "License: " ) + package.license + wxT( "</li>" );
 
     if( package.tags.size() > 0 )
     {
@@ -230,31 +232,37 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
             tags_str += tag;
         }
 
-        details << "<li>" + _( "Tags: " ) + tags_str + "</li>";
+        details << wxT( "<li>" ) + _( "Tags: " ) + tags_str + wxT( "</li>" );
     }
 
-    auto format_entry = []( const std::pair<const std::string, wxString>& entry ) -> wxString
-    {
-        wxString name = entry.first;
-        wxString url = EscapeHTML( entry.second );
+    auto format_entry =
+            []( const std::pair<const std::string, wxString>& entry ) -> wxString
+            {
+                wxString name = entry.first;
+                wxString url = EscapeHTML( entry.second );
 
-        if( name == "email" )
-            return wxString::Format( "<a href='mailto:%s'>%s</a>", url, url );
-        else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" ) )
-            return wxString::Format( "<a href='%s'>%s</a>", url, url );
-        else
-            return entry.second;
-    };
+                if( name == wxT( "email" ) )
+                    return wxString::Format( wxT( "<a href='mailto:%s'>%s</a>" ), url, url );
+                else if( url.StartsWith( wxT( "http:" ) ) || url.StartsWith( wxT( "https:" ) ) )
+                    return wxString::Format( wxT( "<a href='%s'>%s</a>" ), url, url );
+                else
+                    return entry.second;
+            };
 
-    auto write_contact = [&]( const wxString& type, const PCM_CONTACT& contact )
-    {
-        details << "<li>" + type + ": " + contact.name + "<ul>";
+    auto write_contact =
+            [&]( const wxString& type, const PCM_CONTACT& contact )
+            {
+                details << wxT( "<li>" ) + type + wxT( ": " ) + contact.name + wxT( "<ul>" );
 
-        for( const std::pair<const std::string, wxString>& entry : contact.contact )
-            details << "<li>" + entry.first + ": " + format_entry( entry ) + "</li>";
+                for( const std::pair<const std::string, wxString>& entry : contact.contact )
+                {
+                    details << wxT( "<li>" );
+                    details << entry.first + wxT( ": " ) + format_entry( entry );
+                    details << wxT( "</li>" );
+                }
 
-        details << "</ul>";
-    };
+                details << wxT( "</ul>" );
+            };
 
     write_contact( _( "Author" ), package.author );
 
@@ -263,15 +271,19 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
     if( package.resources.size() > 0 )
     {
-        details << "<li>" + _( "Resources" ) + "<ul>";
+        details << wxT( "<li>" ) + _( "Resources" ) + wxT( "<ul>" );
 
         for( const std::pair<const std::string, wxString>& entry : package.resources )
-            details << "<li>" + entry.first + wxS( ": " ) + format_entry( entry ) + "</li>";
+        {
+            details << wxT( "<li>" );
+            details << entry.first + wxT( ": " );
+            details << format_entry( entry ) + wxT( "</li>" );
+        }
 
-        details << "</ul>";
+        details << wxT( "</ul>" );
     }
 
-    details << "</ul>";
+    details << wxT( "</ul>" );
 
     m_infoText->SetPage( details );
 
@@ -387,17 +399,17 @@ void PANEL_PACKAGES_VIEW::unsetPackageDetails()
 wxString PANEL_PACKAGES_VIEW::toHumanReadableSize( const std::optional<uint64_t> size ) const
 {
     if( !size )
-        return "-";
+        return wxT( "-" );
 
     uint64_t b = *size;
 
     if( b >= 1024 * 1024 )
-        return wxString::Format( "%.1f MB", b / 1000.0 / 1000.0 );
+        return wxString::Format( wxT( "%.1f MB" ), b / 1000.0 / 1000.0 );
 
     if( b >= 1024 )
-        return wxString::Format( "%lld kB", b / 1000 );
+        return wxString::Format( wxT( "%lld kB" ), b / 1000 );
 
-    return wxString::Format( "%lld B", b );
+    return wxString::Format( wxT( "%lld B" ), b );
 }
 
 
@@ -504,8 +516,8 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
     KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
     wxFileDialog dialog( this, _( "Save package" ), app_settings->m_PcmLastDownloadDir,
-                         wxString::Format( "%s_v%s.zip", package.identifier, version ),
-                         "ZIP files (*.zip)|*.zip", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                         wxString::Format( wxT( "%s_v%s.zip" ), package.identifier, version ),
+                         wxT( "ZIP files (*.zip)|*.zip" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dialog.ShowModal() == wxID_CANCEL )
         return;
@@ -705,7 +717,7 @@ PCM_PACKAGE_ACTION PANEL_PACKAGES_VIEW::getAction() const
 {
     wxASSERT_MSG( m_gridVersions->GetNumberRows() == 1
                           || m_gridVersions->GetSelectedRows().size() == 1,
-                  "getAction() called with ambiguous version selection" );
+                  wxT( "getAction() called with ambiguous version selection" ) );
 
     int selected_row = 0;
 

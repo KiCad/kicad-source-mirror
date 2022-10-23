@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Andrew Lutsenko, anlutsenko at gmail dot com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -54,7 +54,8 @@ static std::vector<std::pair<PCM_PACKAGE_TYPE, wxString>> PACKAGE_TYPE_LIST = {
 
 
 DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER> pcm ) :
-        DIALOG_PCM_BASE( parent ), m_pcm( pcm )
+        DIALOG_PCM_BASE( parent ),
+        m_pcm( pcm )
 {
     m_defaultBitmap = KiBitmap( BITMAPS::icon_pcm );
 
@@ -76,7 +77,9 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER
                                                 aData.current_version, aVersion ),
                               _( "Confirm update" ), wxICON_QUESTION | wxYES_NO, this )
                 == wxNO )
+            {
                 return;
+            }
         }
 
         m_gridPendingActions->Freeze();
@@ -126,11 +129,11 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER
 
     m_pinCallback =
             [this]( const wxString& aPackageId, const PCM_PACKAGE_STATE aState, const bool aPinned )
-    {
-        m_pcm->SetPinned( aPackageId, aPinned );
+            {
+                m_pcm->SetPinned( aPackageId, aPinned );
 
-        updatePackageState( aPackageId, aState );
-    };
+                updatePackageState( aPackageId, aState );
+            };
 
     m_installedPanel = new PANEL_PACKAGES_VIEW( m_panelInstalledHolder, m_pcm, m_actionCallback,
                                                 m_pinCallback );
@@ -278,7 +281,8 @@ void DIALOG_PCM::OnRefreshClicked( wxCommandEvent& event )
 void DIALOG_PCM::OnInstallFromFileClicked( wxCommandEvent& event )
 {
     wxFileDialog open_file_dialog( this, _( "Choose package file" ), wxEmptyString, wxEmptyString,
-                                   "Zip files (*.zip)|*.zip", wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                                   wxT( "Zip files (*.zip)|*.zip" ),
+                                   wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( open_file_dialog.ShowModal() == wxID_CANCEL )
         return;
@@ -308,8 +312,8 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
 {
     if( m_pcm->CacheRepository( aRepositoryId ) )
     {
-        for( const auto& entry : m_repositoryContentPanels )
-            entry.second->ClearData();
+        for( const auto& [ packageType, packagesView ] : m_repositoryContentPanels )
+            packagesView->ClearData();
 
         m_packageBitmaps = m_pcm->GetRepositoryPackageBitmaps( aRepositoryId );
 
@@ -364,12 +368,12 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
             PCM_PACKAGE_TYPE type = PACKAGE_TYPE_LIST[i].first;
             const wxString&  label = PACKAGE_TYPE_LIST[i].second;
             m_repositoryContentPanels[type]->SetData( data[type] );
-            m_contentNotebook->SetPageText(
-                    i, wxString::Format( wxGetTranslation( label ), (int) data[type].size() ) );
+            m_contentNotebook->SetPageText( i, wxString::Format( wxGetTranslation( label ),
+                                                                 (int) data[type].size() ) );
         }
 
-        m_dialogNotebook->SetPageText(
-                0, wxString::Format( _( "Repository (%d)" ), (int) packages.size() ) );
+        m_dialogNotebook->SetPageText( 0, wxString::Format( _( "Repository (%d)" ),
+                                                            (int) packages.size() ) );
     }
 }
 
@@ -383,8 +387,8 @@ void DIALOG_PCM::OnPendingActionsCellClicked( wxGridEvent& event )
 
 void DIALOG_PCM::updatePendingActionsTab()
 {
-    m_dialogNotebook->SetPageText(
-            2, wxString::Format( _( "Pending (%d)" ), (int) m_pendingActions.size() ) );
+    m_dialogNotebook->SetPageText( 2, wxString::Format( _( "Pending (%d)" ),
+                                                        (int) m_pendingActions.size() ) );
 
     for( int col = 0; col < m_gridPendingActions->GetNumberCols(); col++ )
     {
@@ -412,8 +416,8 @@ void DIALOG_PCM::setInstalledPackages()
         else
             package_data.bitmap = &m_defaultBitmap;
 
-        package_data.state =
-                m_pcm->GetPackageState( entry.repository_id, entry.package.identifier );
+        package_data.state = m_pcm->GetPackageState( entry.repository_id,
+                                                     entry.package.identifier );
 
         if( package_data.state == PPS_UPDATE_AVAILABLE )
             package_data.update_version = m_pcm->GetPackageUpdateVersion( entry.package );
@@ -423,8 +427,8 @@ void DIALOG_PCM::setInstalledPackages()
 
     m_installedPanel->SetData( package_list );
 
-    m_dialogNotebook->SetPageText(
-            1, wxString::Format( _( "Installed (%d)" ), (int) package_list.size() ) );
+    m_dialogNotebook->SetPageText( 1, wxString::Format( _( "Installed (%d)" ),
+                                                        (int) package_list.size() ) );
 }
 
 
@@ -506,8 +510,8 @@ void DIALOG_PCM::discardAction( int aIndex )
 
     PENDING_ACTION action = m_pendingActions[aIndex];
 
-    PCM_PACKAGE_STATE state =
-            m_pcm->GetPackageState( action.repository_id, action.package.identifier );
+    PCM_PACKAGE_STATE state = m_pcm->GetPackageState( action.repository_id,
+                                                      action.package.identifier );
 
     updatePackageState( action.package.identifier, state );
 
@@ -521,8 +525,8 @@ void DIALOG_PCM::updatePackageState( const wxString& aPackageId, const PCM_PACKA
 
     m_installedPanel->SetPackageState( aPackageId, aState, pinned );
 
-    for( const auto& entry : m_repositoryContentPanels )
-        entry.second->SetPackageState( aPackageId, aState, pinned );
+    for( const auto& [ packageType, packagesView ] : m_repositoryContentPanels )
+        packagesView->SetPackageState( aPackageId, aState, pinned );
 }
 
 
