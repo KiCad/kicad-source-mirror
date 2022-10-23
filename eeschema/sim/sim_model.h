@@ -83,24 +83,24 @@ namespace SIM_MODEL_GRAMMAR
                                               tao::pegtl::eof> {};
 
     struct fieldInferValueType : plus<upper> {};
-    struct fieldInferValuePrincipalValue : seq<// HACK: Because `number` matches empty string,
-                                               // ensure it is not empty.
-                                               at<sor<tao::pegtl::digit,
-                                                      seq<one<'.'>>,
-                                                          tao::pegtl::digit>>,
+    struct fieldInferValuePrimaryValue : seq<// HACK: Because `number` matches empty string,
+                                             // ensure it is not empty.
+                                             at<sor<tao::pegtl::digit,
+                                                    seq<one<'.'>>,
+                                                        tao::pegtl::digit>>,
                                                // END HACK.
-                                               number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
+                                             number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
                                                // Hackish: match anything until param-value pairs.
                                                // Because the user may want to write something like
                                                // "10k 30% 30mW w=0.4", but we care only about the
                                                // "10k" and "w=0.4".
-                                               star<not_at<sep,
-                                                           fieldParamValuePairs>,
-                                                    any>> {};
+                                             star<not_at<sep,
+                                                         fieldParamValuePairs>,
+                                                  any>> {};
     struct fieldInferValue : sor<seq<fieldInferValueType,
                                      opt<sep,
                                          fieldParamValuePairs>>,
-                                 seq<opt<fieldInferValuePrincipalValue>,
+                                 seq<opt<fieldInferValuePrimaryValue>,
                                      opt<sep>,
                                      opt<fieldParamValuePairs>>> {};
     struct fieldInferValueGrammar : must<opt<sep>,
@@ -113,7 +113,7 @@ namespace SIM_MODEL_GRAMMAR
     template <> inline constexpr auto errorMessage<opt<sep>> = "";
     template <> inline constexpr auto errorMessage<opt<pinSequence>> = "";
     template <> inline constexpr auto errorMessage<opt<sor<fieldInferValueType,
-                                                           fieldInferValuePrincipalValue>>> = "";
+                                                           fieldInferValuePrimaryValue>>> = "";
     template <> inline constexpr auto errorMessage<one<'='>> =
         "expected '='";
     template <> inline constexpr auto errorMessage<sor<quotedString,
@@ -123,7 +123,7 @@ namespace SIM_MODEL_GRAMMAR
         "expected parameter=value pairs";
     template <> inline constexpr auto errorMessage<opt<fieldParamValuePairs>> = "";
     template <> inline constexpr auto errorMessage<fieldInferValue> =
-        "expected parameter=value pairs, together possibly preceded by a type or principal value";
+        "expected parameter=value pairs, together possibly preceded by a type or primary value";
     template <> inline constexpr auto errorMessage<tao::pegtl::eof> =
         "expected end of string";
 
@@ -631,7 +631,7 @@ protected:
 
     template <typename T>
     void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
-                                 bool aAllowPrincipalValueWithoutName = false );
+                                 bool aAllowPrimaryValueWithoutName = false );
     std::vector<PARAM> m_params;
     const SIM_MODEL* m_baseModel;
 

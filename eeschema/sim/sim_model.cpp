@@ -67,7 +67,7 @@ namespace SIM_MODEL_PARSER
 
     template <typename Rule> struct fieldInferValueSelector : std::false_type {};
     template <> struct fieldInferValueSelector<fieldInferValueType> : std::true_type {};
-    template <> struct fieldInferValueSelector<fieldInferValuePrincipalValue> : std::true_type {};
+    template <> struct fieldInferValueSelector<fieldInferValuePrimaryValue> : std::true_type {};
     template <> struct fieldInferValueSelector<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>> : std::true_type {};
     template <> struct fieldInferValueSelector<fieldParamValuePairs> : std::true_type {};
 }
@@ -1182,7 +1182,7 @@ void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>
 
 template <typename T>
 void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
-                                        bool aAllowPrincipalValueWithoutName )
+                                        bool aAllowPrimaryValueWithoutName )
 {
     // TODO: Make a subclass SIM_MODEL_NONE.
     if( GetType() == SIM_MODEL::TYPE::NONE )
@@ -1208,9 +1208,9 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
 
         for( const auto& node : root->children )
         {
-            if( node->is_type<SIM_MODEL_PARSER::fieldInferValuePrincipalValue>() )
+            if( node->is_type<SIM_MODEL_PARSER::fieldInferValuePrimaryValue>() )
             {
-                if( aAllowPrincipalValueWithoutName )
+                if( aAllowPrimaryValueWithoutName )
                 {
                     for( const auto& subnode : node->children )
                     {
@@ -1224,7 +1224,7 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
                 else
                 {
                     THROW_IO_ERROR(
-                        wxString::Format( _( "Simulation model of type '%s' cannot have a principal value (which is '%s') in Value field" ),
+                        wxString::Format( _( "Simulation model of type '%s' cannot have a primary value (which is '%s') in Value field" ),
                                           GetTypeInfo().fieldValue,
                                           node->string() ) );
                 }
