@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,7 +35,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer6->Add( m_choiceRepository, 1, wxALIGN_CENTER|wxALL, 5 );
 
 	m_buttonManage = new wxButton( m_panelRepository, wxID_ANY, _("Manage..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_buttonManage, 0, wxALL, 5 );
+	bSizer6->Add( m_buttonManage, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizer4->Add( bSizer6, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -135,7 +135,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_BottomSizer->Add( m_installLocalButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_openPackageDirButton = new wxButton( this, wxID_ANY, _("Open Package Directory"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BottomSizer->Add( m_openPackageDirButton, 0, wxALL, 5 );
+	m_BottomSizer->Add( m_openPackageDirButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_BottomSizer->Add( 0, 0, 1, 0, 5 );
