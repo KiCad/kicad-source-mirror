@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-17 17:05+0000\n"
+"PO-Revision-Date: 2022-10-24 14:09+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -38454,178 +38454,180 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1378
 msgid "Remove copper fill from selected zone(s)"
-msgstr ""
+msgstr "Видалити заповнення міді з вибраної зони"
 
 #: pcbnew/tools/pcb_actions.cpp:1384 pcbnew/tools/zone_filler_tool.cpp:367
 msgid "Unfill All Zones"
-msgstr ""
+msgstr "Відмінити заповнення всіх зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1384
 msgid "Remove copper fill from all zones"
-msgstr ""
+msgstr "Видалити заповнення міді з усіх зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1392
 msgid "Place Selected Footprints"
-msgstr ""
+msgstr "Розмістити вибрані посадкові місця"
 
 #: pcbnew/tools/pcb_actions.cpp:1393
 msgid "Performs automatic placement of selected components"
-msgstr ""
+msgstr "Автоматично розмістити вибрані компоненти"
 
 #: pcbnew/tools/pcb_actions.cpp:1397
 msgid "Place Off-Board Footprints"
-msgstr ""
+msgstr "Розмістити посадкові місця за межами плати"
 
 #: pcbnew/tools/pcb_actions.cpp:1398
 msgid "Performs automatic placement of components outside board area"
-msgstr ""
+msgstr "Виконати автоматичне розміщення компонентів поза платою"
 
 #: pcbnew/tools/pcb_actions.cpp:1406
 msgid "Route Single Track"
-msgstr ""
+msgstr "Трасування однієї доріжки"
 
 #: pcbnew/tools/pcb_actions.cpp:1406
 msgid "Route tracks"
-msgstr ""
+msgstr "Трасування доріжок"
 
 #: pcbnew/tools/pcb_actions.cpp:1413
 msgid "Route Differential Pair"
-msgstr ""
+msgstr "Трасування диференційної пари"
 
 #: pcbnew/tools/pcb_actions.cpp:1413
 msgid "Route differential pairs"
-msgstr ""
+msgstr "Трасування диференційних пар"
 
 #: pcbnew/tools/pcb_actions.cpp:1419
 msgid "Interactive Router Settings..."
-msgstr ""
+msgstr "Налаштування інтерактивного трасування..."
 
 #: pcbnew/tools/pcb_actions.cpp:1419
 msgid "Open Interactive Router settings"
-msgstr ""
+msgstr "Відкрити інтерактивні налаштування трасування"
 
 #: pcbnew/tools/pcb_actions.cpp:1424
 msgid "Differential Pair Dimensions..."
-msgstr ""
+msgstr "Розміри диференційної пари..."
 
 #: pcbnew/tools/pcb_actions.cpp:1424
 msgid "Open Differential Pair Dimension settings"
-msgstr ""
+msgstr "Відкрити налаштування розмірів диференційної пари"
 
 #: pcbnew/tools/pcb_actions.cpp:1429
 msgid "Router Highlight Mode"
-msgstr ""
+msgstr "Режим підсвічування трасування"
 
 #: pcbnew/tools/pcb_actions.cpp:1429
 msgid "Switch router to highlight mode"
-msgstr ""
+msgstr "Перемкнути в режим підсвічування трасування"
 
 #: pcbnew/tools/pcb_actions.cpp:1434
 msgid "Router Shove Mode"
-msgstr ""
+msgstr "Трасувати в режимі зміщення"
 
 #: pcbnew/tools/pcb_actions.cpp:1434
 msgid "Switch router to shove mode"
-msgstr ""
+msgstr "Перемкнути в режим трасування з зміщенням"
 
 #: pcbnew/tools/pcb_actions.cpp:1439
 msgid "Router Walkaround Mode"
-msgstr ""
+msgstr "Трасування в режимі обходження перешкод"
 
 #: pcbnew/tools/pcb_actions.cpp:1439
 msgid "Switch router to walkaround mode"
-msgstr ""
+msgstr "Перемкнути в режим обходження перешкод"
 
 #: pcbnew/tools/pcb_actions.cpp:1444
 msgid "Cycle Router Mode"
-msgstr ""
+msgstr "Перемикати режим трасування (циклічно)"
 
 #: pcbnew/tools/pcb_actions.cpp:1444
 msgid "Cycle router to the next mode"
-msgstr ""
+msgstr "Режим маршрутизації (циклічно) до неуступного режиму"
 
 #: pcbnew/tools/pcb_actions.cpp:1449
 msgid "Set Layer Pair..."
-msgstr ""
+msgstr "Встановити пару шарів..."
 
 #: pcbnew/tools/pcb_actions.cpp:1449
 msgid "Change active layer pair for routing"
-msgstr ""
+msgstr "Змінити активну пару шарів для трасування"
 
 #: pcbnew/tools/pcb_actions.cpp:1456
 msgid "Tune length of a single track"
-msgstr ""
+msgstr "Налаштувати довжину одиничної доріжки"
 
 #: pcbnew/tools/pcb_actions.cpp:1463
 msgid "Tune length of a differential pair"
-msgstr ""
+msgstr "Налаштувати довжини диференційної пари"
 
 #: pcbnew/tools/pcb_actions.cpp:1470
 msgid "Tune skew of a differential pair"
-msgstr ""
+msgstr "Налаштувати перекос диференційної пари"
 
 #: pcbnew/tools/pcb_actions.cpp:1479
 msgid "Walks the current track back one segment."
-msgstr ""
+msgstr "Відновлення поточної доріжки на один сегмент."
 
 #: pcbnew/tools/pcb_actions.cpp:1484
 msgid "Route From Other End"
-msgstr ""
+msgstr "Трасувати з протилежного кінця"
 
 #: pcbnew/tools/pcb_actions.cpp:1485
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
+"Фіксувати поточний сегмент та почати наступний сегмент із найближчого кінця."
 
 #: pcbnew/tools/pcb_actions.cpp:1490
 msgid "Attempt Finish"
-msgstr ""
+msgstr "Спроба закінчення"
 
 #: pcbnew/tools/pcb_actions.cpp:1491
 msgid "Attempts to complete current route to nearest ratsnest end."
-msgstr ""
+msgstr "Спроба пройти поточний маршрут до найближчого кінця."
 
 #: pcbnew/tools/pcb_actions.cpp:1496
-#, fuzzy
 msgid "Route Selected"
-msgstr "Групувати Виділені"
+msgstr "Трасувати вибране"
 
 #: pcbnew/tools/pcb_actions.cpp:1497
 msgid "Sequentially route selected items from ratsnest anchor."
-msgstr ""
+msgstr "Послідовно обвести вибрані елементи від точки кріплення опорних точок."
 
 #: pcbnew/tools/pcb_actions.cpp:1503
 msgid "Route Selected From Other End"
-msgstr ""
+msgstr "Трасувати вибране з іншого кінця"
 
 #: pcbnew/tools/pcb_actions.cpp:1504
 msgid "Sequentially route selected items from other end of ratsnest anchor."
-msgstr ""
+msgstr "Послідовно трасувати вибрані елементи до точки кріплення опорних точок."
 
 #: pcbnew/tools/pcb_actions.cpp:1510
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "Спробувати закінчити вибране (автотрасування)"
 
 #: pcbnew/tools/pcb_actions.cpp:1511
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr ""
+"Спробувати завершити автоматичне трасування для всіх вибраних контактних "
+"площадок."
 
 #: pcbnew/tools/pcb_actions.cpp:1517
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
-msgstr ""
+msgstr "Розділити сегмент доріжки на два сегменти, з’єднані в позиції курсора."
 
 #: pcbnew/tools/pcb_actions.cpp:1541
 msgid "Length Tuning Settings..."
-msgstr ""
+msgstr "Налаштування довжини..."
 
 #: pcbnew/tools/pcb_actions.cpp:1542
 msgid "Sets the length tuning parameters for currently routed item."
-msgstr ""
+msgstr "Встановити параметри підналаштування довжини поточного елементу."
 
 #: pcbnew/tools/pcb_control.cpp:224
 msgid "Don't show again"
-msgstr ""
+msgstr "Не показувати знову"
 
 #: pcbnew/tools/pcb_control.cpp:238
 #, c-format
@@ -38633,10 +38635,12 @@ msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
 msgstr ""
+"Не всі зони залиті. Використайте Правки > Заповнити всі зони (%s) якщо вам "
+"потрібно заповнити всі зони."
 
 #: pcbnew/tools/pcb_control.cpp:578
 msgid "Item locked."
-msgstr ""
+msgstr "Елемент заблоковано."
 
 #: pcbnew/tools/pcb_control.cpp:783
 msgid ""
@@ -38644,10 +38648,13 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"Попередження: деякі вставлені елементи були на шарах, яких немає на поточній "
+"платі.\n"
+"Не вдалося вставити ці елементи.\n"
 
 #: pcbnew/tools/pcb_control.cpp:943
 msgid "Invalid clipboard contents"
-msgstr ""
+msgstr "Неприпустимий вміст буфера обміну"
 
 #: pcbnew/tools/pcb_control.cpp:1231
 #, c-format
@@ -38655,68 +38662,68 @@ msgid ""
 "Error loading board.\n"
 "%s"
 msgstr ""
+"Помилка завантаження плати.\n"
+"%s"
 
 #: pcbnew/tools/pcb_control.cpp:1322
 msgid "Footprint Name"
-msgstr ""
+msgstr "Назва посадкового місця"
 
 #: pcbnew/tools/pcb_control.cpp:1372
 msgid "Resolved clearance"
-msgstr ""
+msgstr "Розрахувати відступ"
 
 #: pcbnew/tools/pcb_control.cpp:1377
-#, fuzzy
 msgid "Actual clearance"
-msgstr "Проріз"
+msgstr "Актуальний зазор"
 
 #: pcbnew/tools/pcb_control.cpp:1420
 msgid "Resolved hole clearance"
-msgstr ""
+msgstr "Вирахувати зазор для отвору"
 
 #: pcbnew/tools/pcb_control.cpp:1425
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "Мінімальний проріз міді"
+msgstr "Фактичний зазор для отвору"
 
 #: pcbnew/tools/pcb_control.cpp:1458
 msgid "Resolved edge clearance"
-msgstr ""
+msgstr "Розрахувати зазор до краю"
 
 #: pcbnew/tools/pcb_control.cpp:1463
 msgid "Resolved margin clearance"
-msgstr ""
+msgstr "Розрахувати зазор до поля"
 
 #: pcbnew/tools/pcb_control.cpp:1474
 msgid "Selected Items"
-msgstr ""
+msgstr "Вибрані елементи"
 
 #: pcbnew/tools/pcb_point_editor.cpp:627
 msgid "Drag a corner"
-msgstr ""
+msgstr "Перетягнути кут"
 
 #: pcbnew/tools/pcb_point_editor.cpp:1672
 msgid "Self-intersecting polygons are not allowed."
-msgstr ""
+msgstr "Само-перетин полігонів не допускається."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2300
 msgid "Add a zone corner"
-msgstr ""
+msgstr "Додати кут зони"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2337
 msgid "Split segment"
-msgstr ""
+msgstr "Розділити сегмент"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2408
 msgid "Remove a zone/polygon corner"
-msgstr ""
+msgstr "Видалити кут зони/полігону"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:78
 msgid "Select"
-msgstr ""
+msgstr "Вибрати"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1147
 msgid "Select/Expand Connection..."
-msgstr ""
+msgstr "Вибрати/Розгорнути з'єднання..."
 
 #: pcbnew/tools/placement_tool.cpp:64
 msgid "Align/Distribute"
@@ -39754,21 +39761,19 @@ msgstr "Конструктор EDA для схеми та проектуванн
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
-msgstr "Очистити друковану плату"
+msgstr "Монтажна плата"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "PcbNew"
-msgstr ""
+msgstr "PcbNew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:40
-#, fuzzy
 msgid "Eeschema"
-msgstr "eeschema"
+msgstr "Eeschema"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
