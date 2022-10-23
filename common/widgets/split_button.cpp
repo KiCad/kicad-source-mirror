@@ -42,7 +42,7 @@ SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& a
         wxSize defaultSize = wxButton::GetDefaultSize();
 
         wxSize textSize = GetTextExtent( m_label );
-        SetMinSize( wxSize( textSize.GetWidth(), defaultSize.GetHeight() ) );
+        SetMinSize( wxSize( textSize.GetWidth(), defaultSize.GetHeight() + 1 ) );
     }
 
     Bind( wxEVT_PAINT, &SPLIT_BUTTON::OnPaint, this );
@@ -217,26 +217,27 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
                 // system colours return the right values, nor does wxRendererNative draw
                 // the borders correctly.  So we add some empirically chosen hacks here.
 
+                wxColor fg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT );
                 wxColor bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
+
+                aRect.width += 1;
+                aRect.height += 1;
 
                 if( KIPLATFORM::UI::IsDarkTheme() )
                 {
-                    aRect.width += 1;
-                    aRect.height += 1;
                     bg = bg.ChangeLightness( m_bIsEnable ? 130 : 120 );
+                    dc.SetBrush( bg );
+                    dc.SetPen( bg );
                 }
                 else
                 {
-                    aRect.x += 1;
-                    aRect.y += 1;
-                    aRect.width -= 1;
-                    aRect.height -= 1;
                     bg = bg.ChangeLightness( m_bIsEnable ? 200 : 160 );
+                    dc.SetBrush( bg );
+                    fg = fg.ChangeLightness( 180 );
+                    dc.SetPen( fg );
                 }
 
-                dc.SetBrush( bg );
-                dc.SetPen( bg );
-                dc.DrawRectangle( aRect );
+                dc.DrawRoundedRectangle( aRect, aRect.height / 4 );
             };
 #endif
 
@@ -244,14 +245,15 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     wxRect r1;
     r1.x      = 0;
     r1.y      = 0;
-    r1.width  = width + 2;
+    r1.width  = width;
     r1.height = size.GetHeight();
 
-    wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
-
 #ifdef __WXMAC__
-    // wxRendereNative doesn't handle dark mode on OSX.  Repaint the background.
+    // wxRendereNative doesn't handle dark mode on OSX.
     drawBackground( r1 );
+#else
+    r1.width += 2;
+    wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
 #endif
 
     SetForegroundColour( m_bIsEnable ? wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT )
@@ -272,22 +274,23 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     }
     else
     {
-        r1.y += ( size.GetHeight() - GetCharHeight() ) / 2;
+        r1.y += ( ( size.GetHeight() - GetCharHeight() ) / 2 ) - 1;
         dc.DrawLabel( m_label, r1, wxALIGN_CENTER_HORIZONTAL );
     }
 
     // Draw second part of button
     wxRect r2;
-    r2.x      = width - 2;
+    r2.x      = width;
     r2.y      = 0;
     r2.width  = m_arrowButtonWidth;
     r2.height = size.GetHeight();
 
-    wxRendererNative::Get().DrawPushButton( this, dc, r2, m_stateMenu );
-
 #ifdef __WXMAC__
-    // wxRendereNative doesn't handle dark mode on OSX.  Repaint the background.
+    // wxRendereNative doesn't handle dark mode on OSX.
     drawBackground( r2 );
+#else
+    r2.x -= 2;
+    wxRendererNative::Get().DrawPushButton( this, dc, r2, m_stateMenu );
 #endif
 
     wxRendererNative::Get().DrawDropArrow( this, dc, r2, m_stateMenu );
