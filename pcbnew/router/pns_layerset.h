@@ -105,6 +105,22 @@ public:
             m_end = aOther.m_end;
     }
 
+    LAYER_RANGE Intersection( const LAYER_RANGE& aOther ) const
+    {
+        LAYER_RANGE overlap;
+
+        overlap.m_start = std::max( m_start, aOther.m_start );
+
+        if( m_end < 0 )
+            overlap.m_end = aOther.m_end;
+        else if( aOther.m_end < 0 )
+            overlap.m_end = m_end;
+        else
+            overlap.m_end = std::min( m_end, aOther.m_end );
+
+        return overlap;
+    }
+
     ///< Shortcut for comparisons/overlap tests
     static LAYER_RANGE All()
     {
