@@ -26,6 +26,7 @@
 #include <pcb_textbox.h>
 #include <pcb_text.h>
 #include <zone.h>
+#include <pcb_painter.h>
 #include "search_handlers.h"
 
 
@@ -327,4 +328,25 @@ wxString NETS_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
         return net->GetNetClass()->GetName();
 
     return wxEmptyString;
+}
+
+
+void NETS_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
+{
+    RENDER_SETTINGS* ps = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    ps->SetHighlight( false );
+
+    std::vector<NETINFO_ITEM*> selectedItems;
+    for( long row : aItemRows )
+    {
+        if( row >= 0 && row < (long) m_hitlist.size() )
+        {
+            NETINFO_ITEM* net = m_hitlist[row];
+
+            ps->SetHighlight( true, net->GetNetCode(), true );
+        }
+    }
+
+    m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
+    m_frame->GetCanvas()->Refresh();
 }
