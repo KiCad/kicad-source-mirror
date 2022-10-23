@@ -25,14 +25,7 @@
 #include "pns_log_file.h"
 #include "pns_log_player.h"
 
-#if 0
-#include <qa/drc_proto/drc_proto.h>
-
-#include <board_design_settings.h>
-#include <pcbnew/drc/drc_engine.h>
-#include <pcbnew/drc/drc_test_provider.h>
-#include <pns_arc.h>
-#endif
+#include <pcbnew_utils/board_test_utils.h>
 
 #define PNSLOGINFO PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO( __FILE__, __FUNCTION__, __LINE__ )
 
@@ -40,6 +33,7 @@ using namespace PNS;
 
 PNS_LOG_PLAYER::PNS_LOG_PLAYER()
 {
+    SetReporter( &NULL_REPORTER::GetInstance() );
 }
 
 
@@ -47,11 +41,6 @@ PNS_LOG_PLAYER::~PNS_LOG_PLAYER()
 {
     if( m_debugDecorator )
         delete m_debugDecorator;
-}
-
-void PNS_LOG_PLAYER::SetMode( PNS::ROUTER_MODE mode )
-{
-    m_mode = mode;
 }
 
 void PNS_LOG_PLAYER::createRouter()
@@ -62,7 +51,6 @@ void PNS_LOG_PLAYER::createRouter()
     m_iface->SetBoard( m_board.get() );
     m_router->SetInterface( m_iface.get() );
     m_router->ClearWorld();
-    m_router->SetMode( m_mode );
     m_router->SyncWorld();
     m_router->LoadSettings( new PNS::ROUTING_SETTINGS( nullptr, "" ) );
     m_router->Settings().SetMode( PNS::RM_Walkaround );
@@ -75,6 +63,27 @@ void PNS_LOG_PLAYER::createRouter()
     m_iface->SetDebugDecorator( m_debugDecorator );
 }
 
+
+const PNS_LOG_FILE::COMMIT_STATE PNS_LOG_PLAYER::GetRouterUpdatedItems()
+{
+    PNS_LOG_FILE::COMMIT_STATE state;
+    std::vector<PNS::ITEM*> added, removed;
+    m_router->GetUpdatedItems( removed, added );
+
+    //printf("a %d r %d\n", added.size(), removed.size() );
+    for( auto item : removed )
+    {
+        state.m_removedIds.insert( item->Parent()->m_Uuid );
+    }
+
+    for( auto item : added )
+    {
+        state.m_addedItems.insert( item );
+    }
+
+    return state;
+}
+
 void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aFrom, int aTo )
 {
     m_board = aLog->GetBoard();
@@ -83,9 +92,8 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
 
     m_router->LoadSettings( aLog->GetRoutingSettings() );
 
-    printf( "Router mode: %d\n", m_router->Settings().Mode() );
-
     int eventIdx = 0;
+    int totalEvents = aLog->Events().size();
 
     for( auto evt : aLog->Events() )
     {
@@ -103,9 +111,12 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         {
             m_debugDecorator->NewStage( "route-start", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
-            m_debugDecorator->Message(
-                    wxString::Format( "route-start (%d, %d)", evt.p.x, evt.p.y ) );
-            printf( "  rtr start-route (%d, %d) %p \n", evt.p.x, evt.p.y, ritem );
+
+            auto msg = wxString::Format( "event [%d/%d]: route-start (%d, %d)", eventIdx, totalEvents, evt.p.x, evt.p.y );
+
+            m_debugDecorator->Message( msg );
+            m_reporter->Report( msg );
+
             m_router->StartRouting( evt.p, ritem, ritem ? ritem->Layers().Start() : F_Cu );
             break;
         }
@@ -114,10 +125,13 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         {
             m_debugDecorator->NewStage( "drag-start", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
-            m_debugDecorator->Message(
-                    wxString::Format( "drag-start (%d, %d)", evt.p.x, evt.p.y ) );
+
+            auto msg = wxString::Format( "event [%d/%d]: drag-start (%d, %d)", eventIdx, totalEvents, evt.p.x, evt.p.y );
+
+            m_debugDecorator->Message( msg );
+            m_reporter->Report( msg );
+
             bool rv = m_router->StartDragging( evt.p, ritem, 0 );
-            printf( "  rtr start-drag (%d, %d) %p ret %d\n", evt.p.x, evt.p.y, ritem, rv ? 1 : 0 );
             break;
         }
 
@@ -135,7 +149,12 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         {
             m_debugDecorator->NewStage( "move", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
-            m_debugDecorator->Message( wxString::Format( "move (%d, %d)", evt.p.x, evt.p.y ) );
+            
+            auto msg = wxString::Format( "event [%d/%d]: move (%d, %d)", eventIdx, totalEvents, evt.p.x, evt.p.y );
+            
+            m_debugDecorator->Message( msg );
+            m_reporter->Report( msg );
+
             bool ret = m_router->Move( evt.p, ritem );
             m_debugDecorator->SetCurrentStageStatus( ret );
             break;
@@ -144,6 +163,12 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         case LOGGER::EVT_TOGGLE_VIA:
         {
             m_debugDecorator->NewStage( "toggle-via", 0, PNSLOGINFO );
+
+             auto msg = wxString::Format( "event [%d/%d]: toggle-via", eventIdx, totalEvents );
+
+            m_debugDecorator->Message( msg );
+            m_reporter->Report( msg );
+
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
             m_router->ToggleViaPlacement();
             break;
@@ -198,6 +223,16 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         }
 #endif
     }
+
+    
+}
+
+
+bool PNS_LOG_PLAYER::CompareResults( PNS_LOG_FILE* aLog )
+{
+    auto cstate = GetRouterUpdatedItems();
+
+    return cstate.Compare( aLog->GetExpectedResult() );
 }
 
 
@@ -253,3 +288,4 @@ void PNS_LOG_VIEW_TRACKER::DisplayItem( const PNS::ITEM* aItem )
     m_vitems[m_currentStage].push_back( ent );
     //printf("DBG disp cur %d cnt %d\n", m_currentStage, m_vitems[m_currentStage].size() );
 }
+

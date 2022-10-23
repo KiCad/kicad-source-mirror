@@ -30,12 +30,15 @@
 
 #include <memory>
 #include <vector>
+#include <set>
 
 #include <wx/filename.h>
 
 #include <kiid.h>
 #include <math/vector2d.h>
+
 #include <router/pns_logger.h>
+#include <router/pns_router.h>
 #include <router/pns_item.h>
 #include <router/pns_routing_settings.h>
 
@@ -58,8 +61,24 @@ public:
         KIID                    uuid;
     };
 
+    struct COMMIT_STATE 
+    {
+        COMMIT_STATE() {};
+        COMMIT_STATE( const COMMIT_STATE& aOther ) :
+            m_removedIds( aOther.m_removedIds ),
+            m_addedItems( aOther.m_addedItems )
+        {
+
+        }
+
+        std::set<KIID>                      m_removedIds;
+        std::set<PNS::ITEM*>                m_addedItems;
+
+        bool Compare( const COMMIT_STATE& aOther );
+    };
+
     // Loads a P&S event log and the associated board file. These two always go together.
-    bool Load( const wxFileName& logFileName );
+    bool Load( const wxFileName& logFileName, REPORTER* aRpt );
 
     BOARD_CONNECTED_ITEM* ItemById( const EVENT_ENTRY& evt );
 
@@ -70,11 +89,17 @@ public:
 
     PNS::ROUTING_SETTINGS* GetRoutingSettings() const { return m_routerSettings.get(); }
 
+    const COMMIT_STATE& GetExpectedResult() const { return m_commitState; }
+
+    PNS::ROUTER_MODE GetMode() const { return m_mode; }
+
 private:
     std::shared_ptr<SETTINGS_MANAGER>      m_settingsMgr;
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_routerSettings;
     std::vector<EVENT_ENTRY>               m_events;
     std::shared_ptr<BOARD>                 m_board;
+    COMMIT_STATE                           m_commitState;
+    PNS::ROUTER_MODE                       m_mode;
 };
 
 #endif

@@ -34,6 +34,7 @@
 class PNS_TEST_DEBUG_DECORATOR;
 class PNS_LOG_FILE;
 class PNS_LOG_PLAYER;
+class REPORTER;
 
 class PNS_LOG_VIEW_TRACKER
 {
@@ -81,20 +82,28 @@ public:
     PNS_LOG_PLAYER();
     ~PNS_LOG_PLAYER();
 
-    void SetMode( PNS::ROUTER_MODE mode );
     void ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex = 0, int aFrom = 0, int aTo = -1 );
+
+    void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
     PNS_TEST_DEBUG_DECORATOR* GetDebugDecorator() { return m_debugDecorator; };
     std::shared_ptr<PNS_LOG_VIEW_TRACKER> GetViewTracker() { return m_viewTracker; }
+
+    void SetTimeLimit( uint64_t microseconds ) { m_timeLimitUs = microseconds; }
+
+    bool CompareResults( PNS_LOG_FILE* aLog );
+    const PNS_LOG_FILE::COMMIT_STATE GetRouterUpdatedItems();
+
 private:
     void createRouter();
 
-    PNS::ROUTER_MODE                      m_mode;
     std::shared_ptr<PNS_LOG_VIEW_TRACKER> m_viewTracker;
     PNS_TEST_DEBUG_DECORATOR*             m_debugDecorator;
     std::shared_ptr<BOARD>                m_board;
     std::unique_ptr<PNS_LOG_PLAYER_KICAD_IFACE> m_iface;
     std::unique_ptr<PNS::ROUTER>          m_router;
+    uint64_t m_timeLimitUs;
+    REPORTER* m_reporter;
 };
 
 #endif

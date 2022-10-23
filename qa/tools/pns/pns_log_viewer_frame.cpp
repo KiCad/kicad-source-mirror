@@ -67,6 +67,12 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std:
 
     if( name.length() > 0  && aL.PointCount() > 0 )
         m_labelMgr->Add( aL.CPoint( -1 ), name, GetStrokeColor() );
+
+    if( aShowVertexNumbers )
+    {
+        for( int i = 0; i < aL.PointCount(); i++ )
+            m_labelMgr->Add( aL.CPoint(i), wxString::Format("%d", i ), GetStrokeColor() );
+    }
 }
 
 
@@ -217,6 +223,9 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
         bool isEnabled = ent->IsVisible();
         bool isSelected = ent->m_selected;
 
+        if( m_searchString.Length() > 0 )
+            isEnabled = ent->m_filterMatch;
+
         if( !isEnabled )
             return true;
 
@@ -293,8 +302,6 @@ void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
     SetBoard( m_logFile->GetBoard() );
 
     m_logPlayer.reset( new PNS_LOG_PLAYER );
-
-    m_logPlayer->SetMode( PNS::PNS_MODE_ROUTE_SINGLE );
     m_logPlayer->ReplayLog( m_logFile.get(), 0, 0, -1);
 
     auto dbgd = m_logPlayer->GetDebugDecorator();

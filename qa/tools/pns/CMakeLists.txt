@@ -25,10 +25,10 @@
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
-add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DTEST_APP_GUI)
+add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
 
 
-add_executable( test_pns
+set( COMMON_SRCS
     ../../../pcbnew/drc/drc_rule.cpp
     ../../../pcbnew/drc/drc_rule_condition.cpp
     ../../../pcbnew/drc/drc_rule_parser.cpp
@@ -54,6 +54,10 @@ add_executable( test_pns
     pns_log_file.cpp
     pns_log_player.cpp
     pns_test_debug_decorator.cpp
+)
+
+add_executable( pns_debug_tool
+    ${COMMON_SRCS}
     pns_log_viewer_frame.cpp
     pns_log_viewer_frame_base.cpp
     label_manager.cpp
@@ -63,21 +67,58 @@ add_executable( test_pns
     ../../qa_utils/mocks.cpp
     
     playground.cpp
-    main.cpp
+    pns_debug_tool_main.cpp
   )
 
-# Pcbnew tests, so pretend to be pcbnew (for units, etc)
-target_compile_definitions( test_pns
-    PRIVATE PCBNEW
+add_executable( qa_pns_regressions
+  ${COMMON_SRCS}
+  ../../qa_utils/pcb_test_frame.cpp
+  ../../qa_utils/test_app_main.cpp
+  ../../qa_utils/utility_program.cpp
+  ../../qa_utils/mocks.cpp
+  qa_pns_regressions_main.cpp
 )
 
+
+# Pcbnew tests, so pretend to be pcbnew (for units, etc)
+target_compile_definitions( pns_debug_tool
+    PRIVATE PCBNEW
+)
+target_compile_definitions( qa_pns_regressions
+    PRIVATE PCBNEW TEST_APP_NO_MAIN
+)
 # Anytime we link to the kiface_objects, we have to add a dependency on the last object
 # to ensure that the generated lexer files are finished being used before the qa runs in a
 # multi-threaded build
-add_dependencies( test_pns pcbnew )
+add_dependencies( pns_debug_tool pcbnew )
+add_dependencies( qa_pns_regressions pcbnew )
 
 
-target_link_libraries( test_pns
+target_link_libraries( pns_debug_tool
+    qa_pcbnew_utils
+    connectivity
+    pcbcommon
+    pnsrouter
+    gal
+    common
+    gal
+    qa_utils
+    dxflib_qcad
+    tinyspline_lib
+    nanosvg
+    idf3
+    pcbcommon
+    3d-viewer
+    ${PCBNEW_IO_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    ${PYTHON_LIBRARIES}
+    ${Boost_LIBRARIES}
+    ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
+)
+
+
+target_link_libraries( qa_pns_regressions
     qa_pcbnew_utils
     connectivity
     pcbcommon
