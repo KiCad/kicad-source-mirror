@@ -59,7 +59,7 @@ public:
 
 private:
     ///< Update item's points with edit points.
-    void updateParentItem() const;
+    void updateParentItem( bool aSnapToGrid ) const;
 
     ///< Update edit points with item's points.
     void updatePoints();

@@ -396,7 +396,7 @@ void EE_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
     }
     else
     {
-        point = m_editPoints->FindPoint( getViewControls()->GetCursorPosition(), getView() );
+        point = m_editPoints->FindPoint( getViewControls()->GetCursorPosition( false ), getView() );
     }
 
     if( m_editedPoint != point )
@@ -474,7 +474,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
             m_editedPoint->SetPosition( controls->GetCursorPosition( snap ) );
 
-            updateParentItem();
+            updateParentItem( snap );
             updatePoints();
         }
         else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
@@ -552,7 +552,8 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
         topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
         topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
 
-        topLeft = aGrid->AlignGrid( topLeft );
+        if( aGrid->GetSnap() )
+            topLeft = aGrid->AlignGrid( topLeft );
 
         // push edited point edges to adjacent corners
         topRight.y = topLeft.y;
@@ -564,7 +565,8 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
         topRight.x = std::max( topRight.x, botLeft.x + minWidth );
         topRight.y = std::min( topRight.y, botLeft.y - minHeight );
 
-        topRight = aGrid->AlignGrid( topRight );
+        if( aGrid->GetSnap() )
+            topRight = aGrid->AlignGrid( topRight );
 
         // push edited point edges to adjacent corners
         topLeft.y = topRight.y;
@@ -576,7 +578,8 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
         botLeft.x = std::min( botLeft.x, topRight.x - minWidth );
         botLeft.y = std::max( botLeft.y, topRight.y + minHeight );
 
-        botLeft = aGrid->AlignGrid( botLeft );
+        if( aGrid->GetSnap() )
+            botLeft = aGrid->AlignGrid( botLeft );
 
         // push edited point edges to adjacent corners
         botRight.y = botLeft.y;
@@ -588,7 +591,8 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
         botRight.x = std::max( botRight.x, topLeft.x + minWidth );
         botRight.y = std::max( botRight.y, topLeft.y + minHeight );
 
-        botRight = aGrid->AlignGrid( botRight );
+        if( aGrid->GetSnap() )
+            botRight = aGrid->AlignGrid( botRight );
 
         // push edited point edges to adjacent corners
         botLeft.y = botRight.y;
@@ -597,27 +601,35 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
     else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
     {
         topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
-        topLeft = aGrid->AlignGrid( topLeft );
+
+        if( aGrid->GetSnap() )
+            topLeft = aGrid->AlignGrid( topLeft );
     }
     else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
     {
         topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
-        topLeft = aGrid->AlignGrid( topLeft );
+
+        if( aGrid->GetSnap() )
+            topLeft = aGrid->AlignGrid( topLeft );
     }
     else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
     {
         botRight.y = std::max( botRight.y, topLeft.y + minHeight );
-        botRight = aGrid->AlignGrid( botRight );
+
+        if( aGrid->GetSnap() )
+            botRight = aGrid->AlignGrid( botRight );
     }
     else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
     {
         botRight.x = std::max( botRight.x, topLeft.x + minWidth );
-        botRight = aGrid->AlignGrid( botRight );
+
+        if( aGrid->GetSnap() )
+            botRight = aGrid->AlignGrid( botRight );
     }
 }
 
 
-void EE_POINT_EDITOR::updateParentItem() const
+void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
@@ -675,8 +687,10 @@ void EE_POINT_EDITOR::updateParentItem() const
             VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
             VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-            pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight, botLeft, botRight,
-                             &gridHelper );
+            gridHelper.SetSnap( aSnapToGrid );
+
+            pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight,
+                             botLeft, botRight, &gridHelper );
 
             if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
                     || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
@@ -735,8 +749,10 @@ void EE_POINT_EDITOR::updateParentItem() const
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-        pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight, botLeft, botRight,
-                         &gridHelper );
+        gridHelper.SetSnap( aSnapToGrid );
+
+        pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight,
+                         botLeft, botRight, &gridHelper );
 
         if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
                 || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
@@ -825,8 +841,10 @@ void EE_POINT_EDITOR::updateParentItem() const
             VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
             VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-            pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight, botLeft, botRight,
-                             &gridHelper );
+            gridHelper.SetSnap( aSnapToGrid );
+
+            pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight,
+                             botLeft, botRight, &gridHelper );
 
             if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
                     || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
@@ -885,8 +903,10 @@ void EE_POINT_EDITOR::updateParentItem() const
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-        pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight, botLeft, botRight,
-                         &gridHelper );
+        gridHelper.SetSnap( aSnapToGrid );
+
+        pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight,
+                         botLeft, botRight, &gridHelper );
 
         if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
                 || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
@@ -935,8 +955,10 @@ void EE_POINT_EDITOR::updateParentItem() const
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-        pinEditedCorner( schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 50 ), topLeft, topRight, botLeft, botRight,
-                         &gridHelper );
+        gridHelper.SetSnap( aSnapToGrid );
+
+        pinEditedCorner( schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 50 ), topLeft, topRight,
+                         botLeft, botRight, &gridHelper );
 
         double oldWidth = bitmap->GetSize().x;
         double newWidth = topRight.x - topLeft.x;
@@ -964,6 +986,8 @@ void EE_POINT_EDITOR::updateParentItem() const
             edited = RECT_TOPRIGHT;
         else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
             edited = RECT_BOTLEFT;
+
+        gridHelper.SetSnap( aSnapToGrid );
 
         pinEditedCorner( sheet->GetMinWidth( edited == RECT_TOPRIGHT || edited == RECT_BOTRIGHT ),
                          sheet->GetMinHeight( edited == RECT_BOTLEFT || edited == RECT_BOTRIGHT ),
@@ -1366,7 +1390,7 @@ bool EE_POINT_EDITOR::addCornerCondition( const SELECTION& )
     if( shape->GetShape() != SHAPE_T::POLY )
         return false;
 
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( false );
     double   threshold = getView()->ToWorld( EDIT_POINT::POINT_SIZE );
 
     return shape->HitTest( cursorPos, (int) threshold );
