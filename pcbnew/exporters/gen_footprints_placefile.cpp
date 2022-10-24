@@ -54,8 +54,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION : public DIALOG_GEN_FOOTPRINT_POSITION_BASE
 public:
     DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME * aParent ):
         DIALOG_GEN_FOOTPRINT_POSITION_BASE( aParent ),
-        m_parent( aParent ),
-        m_plotOpts( aParent->GetPlotSettings() )
+        m_parent( aParent )
     {
         m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
         m_reporter = &m_messagesPanel->Reporter();
@@ -160,7 +159,6 @@ private:
 
 private:
     PCB_EDIT_FRAME* m_parent;
-    PCB_PLOT_PARAMS m_plotOpts;
     REPORTER*       m_reporter;
 };
 
@@ -175,7 +173,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
     // Output directory
-    m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
+    m_outputDirectoryName->SetValue( cfg->m_PlaceFile.output_directory );
 
     // Update Options
     m_radioBoxUnits->SetSelection( cfg->m_PlaceFile.units );
@@ -224,8 +222,15 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
 
 void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 {
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
     m_units  = m_radioBoxUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
+
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+
+    wxString dirStr = m_outputDirectoryName->GetValue();
+    // Keep unix directory format convention in cfg files
+    dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
+
+    cfg->m_PlaceFile.output_directory   = dirStr;
 
     cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCHES ? 0 : 1;
     cfg->m_PlaceFile.file_options       = m_radioBoxFilesCount->GetSelection();
@@ -235,15 +240,6 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     cfg->m_PlaceFile.only_SMD           = m_onlySMD->GetValue();
     cfg->m_PlaceFile.use_aux_origin     = m_useDrillPlaceOrigin->GetValue();
     cfg->m_PlaceFile.negate_xcoord      = m_negateXcb->GetValue();
-
-    // Set output directory and replace backslashes with forward ones
-    // (Keep unix convention in cfg files)
-    wxString dirStr;
-    dirStr = m_outputDirectoryName->GetValue();
-    dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
-
-    m_plotOpts.SetOutputDirectory( dirStr );
-    m_parent->SetPlotSettings( m_plotOpts );
 
     if( m_rbFormat->GetSelection() == 2 )
         CreateGerberFiles();
@@ -269,7 +265,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
                 return m_parent->GetBoard()->ResolveTextVar( token, 0 );
             };
 
-    wxString path = m_plotOpts.GetOutputDirectory();
+    wxString path = m_parent->GetPcbNewSettings()->m_PlaceFile.output_directory;
     path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
@@ -377,7 +373,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
                 return m_parent->GetBoard()->ResolveTextVar( token, 0 );
             };
 
-    wxString path = m_plotOpts.GetOutputDirectory();
+    wxString path = m_parent->GetPcbNewSettings()->m_PlaceFile.output_directory;
     path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 

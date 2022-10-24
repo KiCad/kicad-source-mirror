@@ -407,7 +407,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "netlist.associate_by_ref_sch",
             &m_NetlistDialog.associate_by_ref_sch, false ) );
 
-    m_params.emplace_back(new PARAM<int>( "place_file.units",
+    m_params.emplace_back( new PARAM<wxString>( "place_file.output_directory",
+            &m_PlaceFile.output_directory, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM<int>( "place_file.units",
             &m_PlaceFile.units, 1 ) );
 
     m_params.emplace_back( new PARAM<int>( "place_file.file_options",
@@ -415,6 +418,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<int>( "place_file.file_format",
             &m_PlaceFile.file_format, 0 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "place_file.excludeTH",
+            &m_PlaceFile.exclude_TH, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "place_file.onlySMD",
+            &m_PlaceFile.only_SMD, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "place_file.include_board_edge",
             &m_PlaceFile.include_board_edge, false ) );
