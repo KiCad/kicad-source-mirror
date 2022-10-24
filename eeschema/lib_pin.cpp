@@ -1324,20 +1324,41 @@ BITMAPS LIB_PIN::GetMenuImage() const
 
 wxString LIB_PIN::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    if( !m_name.IsEmpty() )
+    if( IsVisible() )
     {
-        return wxString::Format( _( "Pin %s [%s, %s, %s]" ),
-                                 GetShownNumber(),
-                                 UnescapeString( GetShownName() ),
-                                 GetElectricalTypeName(),
-                                 PinShapeGetText( m_shape ) );
+        if( !m_name.IsEmpty() )
+        {
+            return wxString::Format( _( "Pin %s [%s, %s, %s]" ),
+                                     GetShownNumber(),
+                                     UnescapeString( GetShownName() ),
+                                     GetElectricalTypeName(),
+                                     PinShapeGetText( m_shape ) );
+        }
+        else
+        {
+            return wxString::Format( _( "Pin %s [%s, %s]" ),
+                                     GetShownNumber(),
+                                     GetElectricalTypeName(),
+                                     PinShapeGetText( m_shape ) );
+        }
     }
     else
     {
-        return wxString::Format( _( "Pin %s [%s, %s]" ),
-                                 GetShownNumber(),
-                                 GetElectricalTypeName(),
-                                 PinShapeGetText( m_shape ) );
+        if( !m_name.IsEmpty() )
+        {
+            return wxString::Format( _( "Hidden pin %s [%s, %s, %s]" ),
+                                     GetShownNumber(),
+                                     UnescapeString( GetShownName() ),
+                                     GetElectricalTypeName(),
+                                     PinShapeGetText( m_shape ) );
+        }
+        else
+        {
+            return wxString::Format( _( "Hidden pin %s [%s, %s]" ),
+                                     GetShownNumber(),
+                                     GetElectricalTypeName(),
+                                     PinShapeGetText( m_shape ) );
+        }
     }
 }
 
