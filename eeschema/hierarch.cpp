@@ -47,7 +47,8 @@ class TREE_ITEM_DATA : public wxTreeItemData
 public:
     SCH_SHEET_PATH m_SheetPath;
 
-    TREE_ITEM_DATA( SCH_SHEET_PATH& sheet ) : wxTreeItemData()
+    TREE_ITEM_DATA( SCH_SHEET_PATH& sheet ) : 
+            wxTreeItemData()
     {
         m_SheetPath = sheet;
     }
@@ -150,27 +151,28 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
         m_events_bound = false;
     }
 
-    std::function<void( const wxTreeItemId& )> selectSheet = [&]( const wxTreeItemId& id )
-    {
-        wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+    std::function<void( const wxTreeItemId& )> selectSheet =
+            [&]( const wxTreeItemId& id )
+            {
+                wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
 
-        TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+                TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
 
-        if( itemData->m_SheetPath == m_frame->GetCurrentSheet() )
-        {
-            m_tree->EnsureVisible( id );
-            m_tree->SelectItem( id );
-        }
+                if( itemData->m_SheetPath == m_frame->GetCurrentSheet() )
+                {
+                    m_tree->EnsureVisible( id );
+                    m_tree->SelectItem( id );
+                }
 
-        wxTreeItemIdValue cookie;
-        wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
+                wxTreeItemIdValue cookie;
+                wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
 
-        while( child.IsOk() )
-        {
-            selectSheet( child );
-            child = m_tree->GetNextChild( id, cookie );
-        }
-    };
+                while( child.IsOk() )
+                {
+                    selectSheet( child );
+                    child = m_tree->GetNextChild( id, cookie );
+                }
+            };
 
     selectSheet( m_tree->GetRootItem() );
 
