@@ -47,6 +47,8 @@ public:
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
+    const PARAM* GetTunerParam() const override { return &GetParam( 0 ); }
+
 private:
     template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;

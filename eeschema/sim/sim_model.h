@@ -582,6 +582,8 @@ public:
     int GetParamCount() const { return static_cast<int>( m_params.size() ); }
     virtual const PARAM& GetParam( unsigned aParamIndex ) const; // Return base parameter unless it's overridden.
 
+    virtual const PARAM* GetTunerParam() const { return nullptr; }
+
     const PARAM* FindParam( const std::string& aParamName ) const;
 
     std::vector<std::reference_wrapper<const PARAM>> GetParams() const;
