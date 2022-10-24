@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-10-18 22:04+0000\n"
+"PO-Revision-Date: 2022-10-26 16:08+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -528,7 +528,7 @@ msgstr "Vaihda realistinen tila"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:237
 msgid "Toggle board body display"
-msgstr "Vaihda piirilevynrunko-näyttö"
+msgstr "Vaihda piirilevyn runkonäyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:242
 msgid "Show 3D Axis"
@@ -544,7 +544,7 @@ msgstr "Vaihda sidosainenäkymä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:252
 msgid "Toggle display of adhesive layers"
-msgstr "Vaihda sidosainekerrosnäkymä"
+msgstr "Vaihda sidosaineen kerrosnäkymä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:257
 msgid "Toggle silkscreen display"
@@ -650,7 +650,7 @@ msgstr "Juotosmaski alapuoli:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:117
 msgid "Copper/surface finish:"
-msgstr "Kuparin/piirilevyn pinnoitteet:"
+msgstr "Kupari/pinnan viimeistely:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:130
 msgid "Board body:"
@@ -762,7 +762,7 @@ msgstr "Ota animaatio käyttöön"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:140
 msgid "Animation speed:"
-msgstr "Animaation nopeus:"
+msgstr "Animaationopeus:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
@@ -846,7 +846,7 @@ msgstr "Reunojenpehmennys (hidas)"
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Käytä näytön tilaa ympäröivää okkluusiota ja globaalin valaistuksen "
+"Käyttää näytötilan ympäröivää okkluusiota ja globaalin valaistuksen "
 "heijastuksia lopulliseen renderointiin (hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
@@ -859,7 +859,7 @@ msgstr "Leviämiskerroin %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
-msgstr "Rekursion Taso"
+msgstr "Rekursiotaso"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:66
 msgid "Shadows:"
@@ -893,7 +893,7 @@ msgid ""
 msgstr ""
 "Vuorovaikutusten määrä, jonka säde voi kulkea esineiden läpi. (suurempi "
 "tasojen lukumäärä parantaa tuloksia, erityisesti hyvin läpinäkyvillä "
-"levyillä)"
+"piirilevyillä)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:104
 msgid "Refractions:"
@@ -1357,7 +1357,7 @@ msgstr "Käyttäjäkerros Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline"
-msgstr "Levyn taso ääriviivaa varten"
+msgstr "Piirilevykerros ääriviivolle"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -1365,7 +1365,7 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
-"Valitse levykerros sijoittaaksesi ääriviivat.\n"
+"Valitse piirilevykerros sijoittaaksesi ääriviivat.\n"
 "Viitemerkintä ja arvo sijoitetaan aina silkkipainokerrokselle (mutta ne "
 "merkitään näkymättömiksi)."
 
@@ -1444,19 +1444,18 @@ msgstr "%"
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
-"Ympäristömuuttujien laajentaminen epäonnistui: puuttuu ”%c” sijainnista %u "
-"kohdassa %s."
+"Ympäristömuuttujien laajentaminen epäonnistui: puuttuu '%c' sijainnista %u "
+"kohdassa '%s'."
 
 #: common/common.cpp:308
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr ""
-"Polkua \"%s\" ei voida muuttaa absoluuttiseksi suhteessa polkuun \"%s\"."
+msgstr "Polkua '%s' ei voida muuttaa absoluuttiseksi suhteessa polkuun '%s'."
 
 #: common/common.cpp:327
 #, c-format
 msgid "Output directory '%s' created."
-msgstr "Kohdekansio \"%s\" luotu."
+msgstr "Kohdekansio '%s' luotu."
 
 #: common/common.cpp:336
 #, c-format
@@ -1520,7 +1519,7 @@ msgstr "Lomittaiset tallennukset voivat tuottaa hyvin odottamattomia tuloksia."
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:523
 msgid "OK"
-msgstr "OK"
+msgstr "Hyväksy"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
 msgid "Open Anyway"
@@ -2951,7 +2950,7 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
-"Aseta kankaalle asteikko.\n"
+"Aseta kankaalle mittakaava.\n"
 "\n"
 "Joillakin alustoilla korkean DPI: n näytöillä KiCad ei voi määrittää "
 "skaalauskerrointa. Tässä tapauksessa sinun on ehkä asetettava tämä arvoksi "
@@ -3127,7 +3126,7 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:217
 #: common/dialogs/panel_common_settings_base.cpp:294
 msgid "minutes"
-msgstr "minuuttia"
+msgstr "minuutit"
 
 #: common/dialogs/panel_common_settings_base.cpp:221
 msgid "File history size:"
@@ -3147,7 +3146,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "days"
-msgstr "päivää"
+msgstr "päivät"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Project Backup"
@@ -3253,7 +3252,7 @@ msgstr "Tuo pikanäppäintiedosto:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:246
 msgid "| Action | Default Hotkey | Description"
-msgstr "| Toimi | Oletuspikapainike | Kuvaus"
+msgstr "| Toiminta | Oletuspikapainike | Kuvaus"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: pcbnew/dialogs/panel_edit_options_base.cpp:208
@@ -3949,7 +3948,7 @@ msgstr "Asetukset"
 #: common/eda_base_frame.cpp:1006 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
-msgstr "Tavallinen"
+msgstr "Yleinen"
 
 #: common/eda_base_frame.cpp:1008
 msgid "Mouse and Touchpad"
@@ -4118,7 +4117,7 @@ msgstr "Ryhmittely"
 
 #: common/eda_item.cpp:337 eeschema/sch_junction.h:98
 msgid "Junction"
-msgstr "Liitos"
+msgstr "Liitoskohta"
 
 #: common/eda_item.cpp:338
 msgid "No-Connect Flag"
@@ -4387,7 +4386,7 @@ msgstr "Lihavoitu+Kursiivi"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:145
 msgid "Left"
-msgstr "Vasemmalle"
+msgstr "Vasen"
 
 #: common/eda_text.cpp:719 common/eda_text.cpp:723 common/tool/actions.cpp:326
 #: common/widgets/mathplot.cpp:1665
@@ -4409,7 +4408,7 @@ msgstr "Vasemmalle"
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:145
 msgid "Center"
-msgstr "Keskiö"
+msgstr "Keskusta"
 
 #: common/eda_text.cpp:720
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
@@ -4423,7 +4422,7 @@ msgstr "Keskiö"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:145
 msgid "Right"
-msgstr "Oikealle"
+msgstr "Oikea"
 
 #: common/eda_text.cpp:722
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
@@ -6668,13 +6667,13 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
-"Olet suorittanut CvPcb: n ensimmäistä kertaa käyttämällä uutta "
-"jalanjälkikirjastotaulukkomenetelmää jalanjälkien löytämiseksi.\n"
+"Olet suorittanut CvPcb:n ensimmäistä kertaa käyttämällä uutta footprint-"
+"kirjastotaulukkomenetelmää jalanjälkien etsimiseen.\n"
 "CvPcb on joko kopioinut oletustaulukon tai luonut tyhjän taulukon "
-"kotikansioon.\n"
-"Sinun on ensin määritettävä kirjastotaulukko sisällyttämään kaikki "
+"kotikansioosi.\n"
+"Sinun on ensin määritettävä kirjastotaulukko sisältämään kaikki "
 "jalanjälkikirjastot, jotka eivät sisälly KiCadiin.\n"
-"Katso lisätietoja CvPcb-dokumentaation osiosta \"Footprint Library Table\"."
+"Katso lisätietoja CvPcb-dokumentaation \"Footprint Library Table\" -osiosta."
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
@@ -17247,7 +17246,7 @@ msgstr "Ylä-Antura Master"
 
 #: gerbview/files.cpp:156
 msgid "Bottom Pad Master"
-msgstr "Ala-antura Master"
+msgstr "Pohja-antura Master"
 
 #: gerbview/files.cpp:174
 msgid "Open Gerber File(s)"
@@ -31601,7 +31600,7 @@ msgstr "Toimintalaajennukset"
 
 #: pcbnew/pcbnew_config.cpp:61
 msgid "Origins & Axes"
-msgstr "Aloituspisteet ja Akselit"
+msgstr "Aloituspisteet & Akselit"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -32591,7 +32590,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Puuttuva liukuluku\n"
+"Puuttuva liukuluku kohteessa\n"
 "tiedosto: \"%s\"\n"
 "rivi: %d\n"
 "offset: %d"
