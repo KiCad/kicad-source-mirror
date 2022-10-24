@@ -244,7 +244,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( LIB_PIN* aPin )
 
             if( !status )
             {
-                if( aPin->IsNew() )
+                if( aPin->IsNew() && !aPin->HasFlag( IS_PASTED ) )
                     delete aPin;
 
                 return false;
