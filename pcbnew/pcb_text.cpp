@@ -246,7 +246,9 @@ void PCB_TEXT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     }
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
-    SetMirrored( !IsMirrored() );
+
+    if( ( GetLayerSet() & LSET::FrontBackMask() ).any() )
+        SetMirrored( !IsMirrored() );
 }
 
 

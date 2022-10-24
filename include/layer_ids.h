@@ -689,6 +689,8 @@ public:
      */
     static LSET BackMask();
 
+    static LSET FrontBackMask();
+
     static LSET UserMask();
 
     /**
@@ -930,10 +932,8 @@ inline bool IsBackLayer( PCB_LAYER_ID aLayerId )
     case B_Fab:
         return true;
     default:
-        ;
+        return false;
     }
-
-    return false;
 }
 
 

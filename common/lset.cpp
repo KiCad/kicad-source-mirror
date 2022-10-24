@@ -905,6 +905,12 @@ LSET LSET::BackMask()
     return saved;
 }
 
+LSET LSET::FrontBackMask()
+{
+    static const LSET saved = ( BackTechMask() | FrontTechMask() ).set( F_Cu ).set( B_Cu );
+    return saved;
+}
+
 
 LSET LSET::ForbiddenFootprintLayers()
 {

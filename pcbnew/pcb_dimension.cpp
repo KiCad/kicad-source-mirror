@@ -278,7 +278,8 @@ void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight
         INVERT( m_end.y );
     }
 
-    m_text.SetMirrored( !m_text.IsMirrored() );
+    if( ( GetLayerSet() & LSET::FrontBackMask() ).any() )
+        m_text.SetMirrored( !m_text.IsMirrored() );
 
     Update();
 }

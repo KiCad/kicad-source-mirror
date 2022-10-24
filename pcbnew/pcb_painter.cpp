@@ -1904,7 +1904,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         else
             attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
-        if( m_gal->IsFlippedX() && !( aText->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+        if( m_gal->IsFlippedX() && !( aText->GetLayerSet() & LSET::FrontBackMask() ).any() )
         {
             attrs.m_Mirrored = !attrs.m_Mirrored;
             attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
@@ -1994,7 +1994,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
     attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
 
-    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::FrontBackMask() ).any() )
     {
         attrs.m_Mirrored = !attrs.m_Mirrored;
         attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
@@ -2081,7 +2081,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         else
             attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
-        if( m_gal->IsFlippedX() && !( aText->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+        if( m_gal->IsFlippedX() && !( aText->GetLayerSet() & LSET::FrontBackMask() ).any() )
         {
             attrs.m_Mirrored = !attrs.m_Mirrored;
             attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
@@ -2155,7 +2155,7 @@ void PCB_PAINTER::draw( const FP_TEXTBOX* aTextBox, int aLayer )
     attrs.m_Angle = aTextBox->GetDrawRotation();
     attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
 
-    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::FrontBackMask() ).any() )
     {
         attrs.m_Mirrored = !attrs.m_Mirrored;
         attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
@@ -2446,7 +2446,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     wxString        resolvedText = text.GetShownText();
     TEXT_ATTRIBUTES attrs = text.GetAttributes();
 
-    if( m_gal->IsFlippedX() && !( aDimension->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+    if( m_gal->IsFlippedX() && !( aDimension->GetLayerSet() & LSET::FrontBackMask() ).any() )
         attrs.m_Mirrored = !attrs.m_Mirrored;
 
     if( outline_mode )

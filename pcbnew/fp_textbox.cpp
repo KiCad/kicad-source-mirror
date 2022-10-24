@@ -278,7 +278,10 @@ void FP_TEXTBOX::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     }
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
-    SetMirrored( IsBackLayer( GetLayer() ) );
+
+    if( ( GetLayerSet() & LSET::FrontBackMask() ).any() )
+        SetMirrored( !IsMirrored() );
+
     SetLocalCoord();
 }
 
