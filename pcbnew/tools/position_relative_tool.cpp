@@ -37,6 +37,7 @@ using namespace std::placeholders;
 #include <pad.h>
 #include <footprint.h>
 #include <pcb_group.h>
+#include <pcbnew_settings.h>
 
 
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
@@ -82,30 +83,24 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 
     m_selection = selection;
 
-    static KICAD_T padsOnly[] = { PCB_PAD_T, EOT };
-    PCB_TYPE_COLLECTOR collector;
-    collector.Collect( static_cast<BOARD_ITEM*>( m_selection.GetTopLeftItem() ), padsOnly );
+    // We prefer footprints, then pads, then anything else here.
+    EDA_ITEM* preferredItem = m_selection.GetTopLeftItem( true );
 
-    if( collector.GetCount() == 0 )
+    if( !preferredItem && m_selection.HasType( PCB_PAD_T ) )
     {
-        for( FOOTPRINT* footprint : editFrame->GetBoard()->Footprints() )
-        {
-            for( PAD* pad : footprint->Pads() )
-            {
-                if( pad->IsSelected() )
-                    collector.Append( pad );
+        PCB_SELECTION padsOnly = m_selection;
+        std::deque<EDA_ITEM*>& items = padsOnly.Items();
+        items.erase( std::remove_if( items.begin(), items.end(),
+                                     []( const EDA_ITEM* aItem )
+                                     {
+                                         return aItem->Type() != PCB_PAD_T;
+                                     } ), items.end() );
 
-                if( collector.GetCount() > 0 )
-                    break;
-            }
-
-            if( collector.GetCount() > 0 )
-                break;
-        }
+        preferredItem = padsOnly.GetTopLeftItem();
     }
 
-    if( collector.GetCount() > 0 )
-        m_selectionAnchor = collector[0]->GetPosition();
+    if( preferredItem )
+        m_selectionAnchor = preferredItem->GetPosition();
     else
         m_selectionAnchor = m_selection.GetTopLeftItem()->GetPosition();
 
@@ -135,8 +130,12 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const wxPoint& aPosAnchor
     for( EDA_ITEM* item : m_selection )
     {
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && frame()->IsType( FRAME_PCB_EDITOR ) )
+        if( item->Type() == PCB_PAD_T
+            && !frame()->GetPcbNewSettings()->m_AllowFreePads
+            && frame()->IsType( FRAME_PCB_EDITOR ) )
+        {
             item = item->GetParent();
+        }
 
         m_commit->Modify( item );
 
