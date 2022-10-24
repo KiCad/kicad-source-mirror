@@ -64,16 +64,22 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
                 m_item->model->GetTypeInfo().fieldValue ) );
 
 
-    m_value = SPICE_VALUE( m_item->model->GetTunerParam()->value->ToSpiceString() );
-
     // Special case for potentiometers because we don't have value ranges implemented yet.
     if( m_item->model->GetType() == SIM_MODEL::TYPE::R_POT )
     {
+        std::string valueStr = m_item->model->GetTunerParam()->value->ToSpiceString();
+
+        if( valueStr != "" )
+            m_value = SPICE_VALUE( valueStr );
+        else
+            m_value = SPICE_VALUE( "0.5" );
+
         m_min = SPICE_VALUE( 0 );
         m_max = SPICE_VALUE( 1 );
     }
     else
     {
+        m_value = SPICE_VALUE( m_item->model->GetTunerParam()->value->ToSpiceString() );
         m_min = SPICE_VALUE( 0.5 ) * m_value;
         m_max = SPICE_VALUE( 2.0 ) * m_value;
     }

@@ -53,6 +53,8 @@ private:
     template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
+    std::vector<std::string> getPinNames() const override { return { "+", "wiper", "-" }; }
+
     static const std::vector<PARAM::INFO> makeParamInfos();
 };
 

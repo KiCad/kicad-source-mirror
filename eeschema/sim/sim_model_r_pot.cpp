@@ -29,12 +29,19 @@
 std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
 {
     std::string r = m_model.FindParam( "r" )->value->ToSpiceString();
-    std::string pos = m_model.FindParam( "pos" )->value->ToSpiceString();
 
-    if( pos != "" )
-        return fmt::format( ".model {} potentiometer( r0={} position={} )\n", aItem.modelName, r, pos );
+    // We invert the argument passed to the model because we want pos=1 to correspond to the signal
+    // from + and pos=0 to the signal from -.
+    auto pos = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "pos" )->value );
+
+    if( pos.HasValue() )
+    {
+        std::string position = ( SIM_VALUE_FLOAT( 1 ) - pos ).ToSpiceString();
+        return fmt::format( ".model {} potentiometer( r={} position={} )\n", aItem.modelName, r,
+                            position );
+    }
     else
-        return fmt::format( ".model {} potentiometer( r0={} )\n", aItem.modelName, r );
+        return fmt::format( ".model {} potentiometer( r={} )\n", aItem.modelName, r );
 }
 
 
@@ -43,7 +50,7 @@ std::string SPICE_GENERATOR_R_POT::TunerCommand( const SPICE_ITEM& aItem,
 {
     return fmt::format( "altermod @{}[position]={}",
                         aItem.model->SpiceGenerator().ItemName( aItem ),
-                        aValue.ToSpiceString() );
+                        ( SIM_VALUE_FLOAT( 1 ) - aValue ).ToSpiceString() );
 }
 
 
