@@ -47,7 +47,7 @@ class TREE_ITEM_DATA : public wxTreeItemData
 public:
     SCH_SHEET_PATH m_SheetPath;
 
-    TREE_ITEM_DATA( SCH_SHEET_PATH& sheet ) : 
+    TREE_ITEM_DATA( SCH_SHEET_PATH& sheet ) :
             wxTreeItemData()
     {
         m_SheetPath = sheet;
@@ -151,7 +151,9 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
         m_events_bound = false;
     }
 
-    std::function<void( const wxTreeItemId& )> selectSheet =
+    bool sheetSelected = false;
+
+    std::function<void( const wxTreeItemId& )> recursiveDescent =
             [&]( const wxTreeItemId& id )
             {
                 wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
@@ -161,7 +163,18 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
                 if( itemData->m_SheetPath == m_frame->GetCurrentSheet() )
                 {
                     m_tree->EnsureVisible( id );
+                    m_tree->SetItemBold( id, true );
+                }
+                else
+                {
+                    m_tree->SetItemBold( id, false );
+                }
+
+                if( itemData->m_SheetPath.Last()->IsSelected() )
+                {
+                    m_tree->EnsureVisible( id );
                     m_tree->SelectItem( id );
+                    sheetSelected = true;
                 }
 
                 wxTreeItemIdValue cookie;
@@ -169,12 +182,15 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
 
                 while( child.IsOk() )
                 {
-                    selectSheet( child );
+                    recursiveDescent( child );
                     child = m_tree->GetNextChild( id, cookie );
                 }
             };
 
-    selectSheet( m_tree->GetRootItem() );
+    recursiveDescent( m_tree->GetRootItem() );
+
+    if( !sheetSelected && m_tree->GetSelection() )
+        m_tree->SelectItem( m_tree->GetSelection(), false );
 
     if( eventsWereBound )
     {
@@ -210,7 +226,6 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
     m_tree->DeleteAllItems();
 
     wxTreeItemId root = m_tree->AddRoot( getRootString(), 0, 1 );
-    m_tree->SetItemBold( root, true );
     m_tree->SetItemData( root, new TREE_ITEM_DATA( m_list ) );
 
     buildHierarchyTree( &m_list, root );

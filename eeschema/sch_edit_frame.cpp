@@ -1029,6 +1029,12 @@ void SCH_EDIT_FRAME::UpdateHierarchyNavigator()
 }
 
 
+void SCH_EDIT_FRAME::UpdateHierarchySelection()
+{
+    m_hierarchy->UpdateHierarchySelection();
+}
+
+
 void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
 {
     wxString findString;

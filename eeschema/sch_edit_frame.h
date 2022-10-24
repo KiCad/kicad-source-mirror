@@ -209,6 +209,12 @@ public:
      */
     void UpdateHierarchyNavigator();
 
+    /**
+     * Update the hierarchy navigation tree selection (cross-probe from schematic to hierarchy
+     * pane).
+     */
+    void UpdateHierarchySelection();
+
     void ShowFindReplaceStatus( const wxString& aMsg, int aStatusTime );
     void ClearFindReplaceStatus();
 
