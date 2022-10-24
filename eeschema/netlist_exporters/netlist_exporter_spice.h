@@ -98,23 +98,27 @@ public:
      * Return the list of nets.
      */
     std::set<std::string> GetNets() const { return m_nets; }
-    
 
     /**
      * Return name of Spice device corresponding to a schematic symbol.
      *
      * @param aRefName is the component reference.
      * @return Spice device name or empty string if there is no such symbol in the netlist.
-     * Normally the name is either plain reference if the first character of reference corresponds
-     * to the assigned device model type or it is the reference prefixed with a character defining
-     * the device model type.
+     * Normally the name is either a plain reference if the first character of reference
+     * corresponds to the assigned device model type or a reference prefixed with a character
+     * defining the device model type.
      */
     std::string GetItemName( const std::string& aRefName ) const;
 
     /**
-     * Return the list of items representing schematic components in the Spice world.
+     * Return the list of items representing schematic symbols in the Spice world.
      */
     const std::list<SPICE_ITEM>& GetItems() const { return m_items; }
+
+    /**
+     * Find and return the item corresponding to \a aRefName.
+     */
+    const SPICE_ITEM* FindItem( const std::string& aRefName ) const;
 
     const std::vector<std::string>& GetDirectives() { return m_directives; }
 

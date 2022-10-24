@@ -38,6 +38,15 @@ std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
 }
 
 
+std::string SPICE_GENERATOR_R_POT::TunerCommand( const SPICE_ITEM& aItem,
+                                                 const SIM_VALUE_FLOAT& aValue ) const
+{
+    return fmt::format( "altermod @{}[position]={}",
+                        aItem.model->SpiceGenerator().ItemName( aItem ),
+                        aValue.ToSpiceString() );
+}
+
+
 SIM_MODEL_R_POT::SIM_MODEL_R_POT() :
     SIM_MODEL( TYPE::R_POT, std::make_unique<SPICE_GENERATOR_R_POT>( *this ) )
 {

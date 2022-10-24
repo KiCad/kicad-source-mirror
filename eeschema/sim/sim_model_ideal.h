@@ -36,6 +36,8 @@ public:
 
     std::string ModelLine( const SPICE_ITEM& aItem ) const override;
     std::string ItemLine( const SPICE_ITEM& aItem ) const override;
+
+    std::string TunerCommand( const SPICE_ITEM& aItem, const SIM_VALUE_FLOAT& aValue ) const override;
 };
 
 

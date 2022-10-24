@@ -25,6 +25,7 @@
 #include <sim/sim_model_ideal.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
+#include <fmt/core.h>
 
 
 std::string SPICE_GENERATOR_IDEAL::ModelLine( const SPICE_ITEM& aItem ) const
@@ -42,6 +43,15 @@ std::string SPICE_GENERATOR_IDEAL::ItemLine( const SPICE_ITEM& aItem ) const
         return SPICE_GENERATOR::ItemLine( item );
     else
         return "";
+}
+
+
+std::string SPICE_GENERATOR_IDEAL::TunerCommand( const SPICE_ITEM& aItem,
+                                                 const SIM_VALUE_FLOAT& aValue ) const
+{
+    return fmt::format( "alter @{}={}",
+                        aItem.model->SpiceGenerator().ItemName( aItem ),
+                        aValue.ToSpiceString() );
 }
 
 

@@ -116,7 +116,7 @@ public:
      * @param aId id of the symbol field
      * @param aValue new value of the symbol field
      */
-    void UpdateTunerValue( SCH_SYMBOL* aSymbol, int aId, const wxString& aValue );
+    void UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aValue );
 
     /**
      * Return the currently opened plot panel (or NULL if there is none).

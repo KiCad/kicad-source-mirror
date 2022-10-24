@@ -30,6 +30,7 @@
 #include "tuner_slider_base.h"
 
 #include <sim/spice_value.h>
+#include <sim/spice_generator.h>
 
 #include <wx/timer.h>
 
@@ -49,16 +50,6 @@ public:
         return m_name->GetLabel();
     }
 
-    const std::pair<wxString, bool>& GetSpiceTuningCommand() const
-    {
-        return m_spiceTuningCommand;
-    }
-
-    const SPICE_VALUE& GetValue() const
-    {
-        return m_value;
-    }
-
     const SPICE_VALUE& GetMin() const
     {
         return m_min;
@@ -68,6 +59,8 @@ public:
     {
         return m_max;
     }
+
+    std::string GetTunerCommand() const;
 
     bool SetValue( const SPICE_VALUE& aVal );
     bool SetMin( const SPICE_VALUE& aVal );
@@ -97,14 +90,12 @@ private:
 
     void onSimTimer( wxTimerEvent& event );
 
-    std::pair<wxString, bool> m_spiceTuningCommand;
-
     ///< Timer that restarts the simulation after the slider value has changed
     wxTimer m_simTimer;
 
     SCH_SYMBOL* m_symbol;
+    const SPICE_ITEM* m_item;
 
-    int m_fieldId;
     SPICE_VALUE m_min, m_max, m_value;
     bool m_changed;
 

@@ -156,9 +156,10 @@ std::string SPICE_GENERATOR::ItemParams() const
 }
 
 
-std::string SPICE_GENERATOR::TuningLine( const SPICE_ITEM& aItem ) const
+std::string SPICE_GENERATOR::TunerCommand( const SPICE_ITEM& aItem,
+                                           const SIM_VALUE_FLOAT& aValue ) const
 {
-    // TODO.
+    // No tuning available by default.
     return "";
 }
 

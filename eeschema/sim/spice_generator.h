@@ -58,7 +58,7 @@ public:
     virtual std::string ItemModelName( const SPICE_ITEM& aItem ) const;
     virtual std::string ItemParams() const;
 
-    virtual std::string TuningLine( const SPICE_ITEM& aItem ) const;
+    virtual std::string TunerCommand( const SPICE_ITEM& aItem, const SIM_VALUE_FLOAT& aValue ) const;
 
     virtual std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const;
 

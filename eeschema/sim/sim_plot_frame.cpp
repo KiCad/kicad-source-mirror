@@ -549,33 +549,24 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
     if( !plotPanel )
         return;
 
-    SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( aSymbol->GetFields(),
-                                                          static_cast<int>( aSymbol->GetLibPins().size() ) );
-    SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+    wxString ref = aSymbol->GetField( REFERENCE_FIELD )->GetShownText();
 
-    switch( deviceType )
-    {
-    case SIM_MODEL::DEVICE_TYPE_::R:
-    case SIM_MODEL::DEVICE_TYPE_::C:
-    case SIM_MODEL::DEVICE_TYPE_::L:
-    case SIM_MODEL::DEVICE_TYPE_::XSPICE:
-        break;
-
-    default:
-        return;
-    }
-
-    const wxString componentName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
-
-    // Do not add multiple instances for the same component
-    auto tunerIt = std::find_if( m_tuners.begin(), m_tuners.end(), [&]( const TUNER_SLIDER* t )
-        {
-            return t->GetComponentName() == componentName;
-        }
-    );
+    // Do not add multiple instances for the same component.
+    auto tunerIt = std::find_if( m_tuners.begin(), m_tuners.end(),
+                                 [ref]( const TUNER_SLIDER* tuner )
+                                 {
+                                     return tuner->GetComponentName() == ref;
+                                 } );
 
     if( tunerIt != m_tuners.end() )
-        return;     // We already have it
+        return; // We already have it.
+
+    const SPICE_ITEM*       item = GetExporter()->FindItem( std::string( ref.ToUTF8() ) );
+    const SIM_MODEL::PARAM* tunerParam = item->model->GetTunerParam();
+
+    // Do nothing if the symbol is not tunable.
+    if( !tunerParam )
+        return;
 
     try
     {
@@ -586,30 +577,31 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
     }
     catch( const KI_PARAM_ERROR& e )
     {
-        // Sorry, no bonus
         DisplayErrorMessage( nullptr, e.What() );
     }
 }
 
-void SIM_PLOT_FRAME::UpdateTunerValue( SCH_SYMBOL* aSymbol, int aId, const wxString& aValue )
+void SIM_PLOT_FRAME::UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aValue )
 {
     for( auto& item : m_schematicFrame->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {
         if( item == aSymbol )
         {
-            SCH_FIELD* field = aSymbol->GetFieldById( aId );
+            SIM_LIB_MGR mgr( Prj() );
+            SIM_MODEL&  model = mgr.CreateModel( *aSymbol ).model;
 
-            if( !field )
-                break;
+            const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
 
-            field->SetText( aValue );
+            if( !tunerParam )
+                return;
+
+            model.SetParamValue( tunerParam->info.name, std::string( aValue.ToUTF8() ) );
+            model.WriteFields( aSymbol->GetFields() );
 
             m_schematicFrame->UpdateItem( aSymbol, false, true );
             m_schematicFrame->OnModify();
-            break;
         }
     }
-
 }
 
 
@@ -923,17 +915,7 @@ void SIM_PLOT_FRAME::updateTuners()
 void SIM_PLOT_FRAME::applyTuners()
 {
     for( auto& tuner : m_tuners )
-    {
-        std::pair<wxString, bool> command = tuner->GetSpiceTuningCommand();
-        const SPICE_VALUE&        value   = tuner->GetValue();
-
-        // 0 < value < 1 for model parameter to avoid division by zero, etc.
-        command.first += command.second
-                            ? wxString::FromCDouble( Clamp( 1e-9, value.ToDouble() / 100.0, 1-1e-9 ), 9 )
-                            : value.ToSpiceString();
-
-        m_simulator->Command( command.first.ToStdString() );
-    }
+        m_simulator->Command( tuner->GetTunerCommand() );
 }
 
 

@@ -253,20 +253,29 @@ void NETLIST_EXPORTER_SPICE::ReplaceForbiddenChars( std::string& aNetName )
 
 std::string NETLIST_EXPORTER_SPICE::GetItemName( const std::string& aRefName ) const
 {
+    const SPICE_ITEM* item = FindItem( aRefName );
+
+    if( !item )
+        return "";
+
+    return item->model->SpiceGenerator().ItemName( *item );
+}
+
+
+const SPICE_ITEM* NETLIST_EXPORTER_SPICE::FindItem( const std::string& aRefName ) const
+{
     const std::list<SPICE_ITEM>& spiceItems = GetItems();
 
     auto it = std::find_if( spiceItems.begin(), spiceItems.end(),
-                            [aRefName]( const SPICE_ITEM& aItem )
+                            [aRefName]( const SPICE_ITEM& item )
                             {
-                                return aItem.refName == aRefName;
+                                return item.refName == aRefName;
                             } );
 
-    if( it == spiceItems.end() )
-        return "";
+    if( it != spiceItems.end() )
+        return &*it;
 
-    SPICE_ITEM item;
-    item.refName = aRefName;
-    return it->model->SpiceGenerator().ItemName( item );
+    return nullptr;
 }
 
 
