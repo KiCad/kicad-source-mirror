@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-21 15:03+0000\n"
+"PO-Revision-Date: 2022-10-26 22:09+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -560,7 +560,7 @@ msgstr "Vaihda realistinen tila"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:242
 msgid "Toggle board body display"
-msgstr "Vaihda piirilevynrunko-näyttö"
+msgstr "Vaihda piirilevyn runkonäyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:246
 msgid "Show 3D Axis"
@@ -576,7 +576,7 @@ msgstr "Vaihda sidosainenäkymä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle display of adhesive layers"
-msgstr "Vaihda sidosainekerrosnäkymä"
+msgstr "Vaihda sidosaineen kerrosnäkymä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:259
 msgid "Toggle silkscreen display"
@@ -682,7 +682,7 @@ msgstr "Juotosmaski alapuoli:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:117
 msgid "Copper/surface finish:"
-msgstr "Kuparin/piirilevyn pinnoitteet:"
+msgstr "Kupari/pinnan viimeistely:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:130
 msgid "Board body:"
@@ -795,7 +795,7 @@ msgstr "Ota animaatio käyttöön"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:140
 msgid "Animation speed:"
-msgstr "Animaation nopeus:"
+msgstr "Animaationopeus:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
@@ -879,7 +879,7 @@ msgstr "Reunojenpehmennys (hidas)"
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Käytä näytön tilaa ympäröivää okkluusiota ja globaalin valaistuksen "
+"Käyttää näytötilan ympäröivää okkluusiota ja globaalin valaistuksen "
 "heijastuksia lopulliseen renderointiin (hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
@@ -892,7 +892,7 @@ msgstr "Leviämiskerroin %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
-msgstr "Rekursion Taso"
+msgstr "Rekursiotaso"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:66
 msgid "Shadows:"
@@ -920,7 +920,7 @@ msgid ""
 msgstr ""
 "Vuorovaikutusten määrä, jonka säde voi kulkea esineiden läpi. (suurempi "
 "tasojen lukumäärä parantaa tuloksia, erityisesti hyvin läpinäkyvillä "
-"levyillä)"
+"piirilevyillä)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 msgid "Refractions:"
@@ -1409,7 +1409,7 @@ msgstr "Käyttäjäkerros Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline"
-msgstr "Levyn taso ääriviivaa varten"
+msgstr "Piirilevykerros ääriviivolle"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -1417,7 +1417,7 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
-"Valitse levykerros sijoittaaksesi ääriviivat.\n"
+"Valitse piirilevykerros sijoittaaksesi ääriviivat.\n"
 "Viitemerkintä ja arvo sijoitetaan aina silkkipainokerrokselle (mutta ne "
 "merkitään näkymättömiksi)."
 
@@ -1431,19 +1431,18 @@ msgstr "Luo komponentti kuvasta"
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
-"Ympäristömuuttujien laajentaminen epäonnistui: puuttuu ”%c” sijainnista %u "
-"kohdassa %s."
+"Ympäristömuuttujien laajentaminen epäonnistui: puuttuu '%c' sijainnista %u "
+"kohdassa '%s'."
 
 #: common/common.cpp:308
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr ""
-"Polkua \"%s\" ei voida muuttaa absoluuttiseksi suhteessa polkuun \"%s\"."
+msgstr "Polkua '%s' ei voida muuttaa absoluuttiseksi suhteessa polkuun '%s'."
 
 #: common/common.cpp:327
 #, c-format
 msgid "Output directory '%s' created."
-msgstr "Kohdekansio \"%s\" luotu."
+msgstr "Kohdekansio '%s' luotu."
 
 #: common/common.cpp:336
 #, c-format
@@ -1554,7 +1553,7 @@ msgstr "Palauta"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:562
 msgid "OK"
-msgstr "OK"
+msgstr "Hyväksy"
 
 #: common/confirm.cpp:331
 msgid "Information"
@@ -2968,7 +2967,7 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
-"Aseta kankaalle asteikko.\n"
+"Aseta kankaalle mittakaava.\n"
 "\n"
 "Joillakin alustoilla korkean DPI: n näytöillä KiCad ei voi määrittää "
 "skaalauskerrointa. Tässä tapauksessa sinun on ehkä asetettava tämä arvoksi "
@@ -3194,7 +3193,7 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:251
 #: common/dialogs/panel_common_settings_base.cpp:328
 msgid "minutes"
-msgstr "minuuttia"
+msgstr "minuutit"
 
 #: common/dialogs/panel_common_settings_base.cpp:255
 msgid "File history size:"
@@ -3214,7 +3213,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:271
 msgid "days"
-msgstr "päivää"
+msgstr "päivät"
 
 #: common/dialogs/panel_common_settings_base.cpp:284
 msgid "Project Backup"
@@ -3360,7 +3359,7 @@ msgstr "Tuo pikanäppäintiedosto:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:241
 msgid "| Action | Default Hotkey | Description"
-msgstr "| Toimi | Oletuspikapainike | Kuvaus"
+msgstr "| Toiminta | Oletuspikapainike | Kuvaus"
 
 #: common/dialogs/panel_image_editor.cpp:73
 msgid "Incorrect scale number"
@@ -3990,7 +3989,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Puuttuva liukuluku\n"
+"Puuttuva liukuluku kohteessa\n"
 "tiedosto: \"%s\"\n"
 "rivi: %d\n"
 "offset: %d"
@@ -4015,7 +4014,7 @@ msgstr "Asetukset"
 #: common/eda_base_frame.cpp:985 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
-msgstr "Tavallinen"
+msgstr "Yleinen"
 
 #: common/eda_base_frame.cpp:986
 msgid "Mouse and Touchpad"
@@ -4092,7 +4091,7 @@ msgstr "Toimintalaajennukset"
 
 #: common/eda_base_frame.cpp:1048
 msgid "Origins & Axes"
-msgstr "Aloituspisteet ja Akselit"
+msgstr "Aloituspisteet & Akselit"
 
 #: common/eda_base_frame.cpp:1054
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:276
@@ -4328,7 +4327,7 @@ msgstr "Ryhmittely"
 
 #: common/eda_item.cpp:350 eeschema/sch_junction.h:97
 msgid "Junction"
-msgstr "Liitos"
+msgstr "Liitoskohta"
 
 #: common/eda_item.cpp:351
 msgid "No-Connect Flag"
@@ -4619,7 +4618,7 @@ msgstr "Lihavoitu+Kursiivi"
 #: eeschema/lib_text.cpp:398 eeschema/pin_type.cpp:128
 #: eeschema/sch_field.cpp:754
 msgid "Left"
-msgstr "Vasemmalle"
+msgstr "Vasen"
 
 #: common/eda_text.cpp:1012 common/eda_text.cpp:1016
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:261
@@ -4632,7 +4631,7 @@ msgstr "Vasemmalle"
 #: eeschema/sch_field.cpp:755 eeschema/sch_field.cpp:764
 #: gerbview/gerber_file_image.cpp:342 gerbview/gerber_file_image.cpp:345
 msgid "Center"
-msgstr "Keskiö"
+msgstr "Keskusta"
 
 #: common/eda_text.cpp:1013
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:221
@@ -4642,7 +4641,7 @@ msgstr "Keskiö"
 #: eeschema/lib_text.cpp:400 eeschema/pin_type.cpp:127
 #: eeschema/sch_field.cpp:756
 msgid "Right"
-msgstr "Oikealle"
+msgstr "Oikea"
 
 #: common/eda_text.cpp:1015
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:285
@@ -7105,13 +7104,13 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
-"Olet suorittanut CvPcb: n ensimmäistä kertaa käyttämällä uutta "
-"jalanjälkikirjastotaulukkomenetelmää jalanjälkien löytämiseksi.\n"
+"Olet suorittanut CvPcb:n ensimmäistä kertaa käyttämällä uutta footprint-"
+"kirjastotaulukkomenetelmää jalanjälkien etsimiseen.\n"
 "CvPcb on joko kopioinut oletustaulukon tai luonut tyhjän taulukon "
-"kotikansioon.\n"
-"Sinun on ensin määritettävä kirjastotaulukko sisällyttämään kaikki "
+"kotikansioosi.\n"
+"Sinun on ensin määritettävä kirjastotaulukko sisältämään kaikki "
 "jalanjälkikirjastot, jotka eivät sisälly KiCadiin.\n"
-"Katso lisätietoja CvPcb-dokumentaation osiosta \"Footprint Library Table\"."
+"Katso lisätietoja CvPcb-dokumentaation \"Footprint Library Table\" -osiosta."
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
@@ -18347,7 +18346,7 @@ msgstr "Ylä-Antura Master"
 
 #: gerbview/files.cpp:222
 msgid "Bottom Pad Master"
-msgstr "Ala-antura Master"
+msgstr "Pohja-antura Master"
 
 #: gerbview/files.cpp:228
 msgid "Open Gerber File(s)"
@@ -30425,7 +30424,6 @@ msgid "Check rule syntax"
 msgstr "Tarkista säännön syntaksit"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30777,7 +30775,7 @@ msgstr ""
 " * yhteys\\_leveys\n"
 " * piha-alue_välys\n"
 " * diff\\_pari\\_väli\n"
-" * diff\\_pair\\_uncoupled\n"
+" * diff\\_pair\\_irroitettu\n"
 " * kieltää\n"
 " * reuna\\_välitys\n"
 " * pituus\n"
@@ -30800,6 +30798,14 @@ msgstr ""
 "Huomaa: \"clearance\"- ja \"hole_clearance\"-sääntöjä ei suoriteta saman "
 "verkon kohteille; \"physical_clearance\" ja \"physical_hole_clearance\" "
 "säännöt ovat.\n"
+"<br>\n"
+"\n"
+"### Items\n"
+"\n"
+" * `A` &nbsp;&nbsp; _ensimmäinen (tai ainoa) testattava kohde_\n"
+" * `B` &nbsp;&nbsp; _toinen testattava kohde (binääritesteille)_\n"
+" * `L` &nbsp;&nbsp; _taso tällä hetkellä testattavana_\n"
+"\n"
 "<br>\n"
 "\n"
 "### Tuotetyypit\n"
@@ -30876,39 +30882,47 @@ msgstr ""
 "etusija aikaisempiin sääntöihin nähden; kun vastaava sääntö löytyy\n"
 "muita sääntöjä ei tarkasteta.\n"
 "\n"
-"Käytä Ctrl+/ kommentoidaksesi tai poistaaksesi kommentteja rivejä.\n"
+"Käytä Ctrl+/ kommentoidaksesi tai poistaaksesi kommenttirivejä.\n"
 "<br><br><br>\n"
 "\n"
 "### Lausekefunktiot\n"
 "\n"
-"Kaikki funktioparametrit tukevat yksinkertaisia jokerimerkkejä (`*` ja `?"
-"`).\n"
+"Kaikki funktioparametrit tukevat yksinkertaisia jokerimerkkejä (`*` ja `?`)."
+"\n"
 "<br><br>\n"
 "\n"
-"    A.insideCourtyard('<footprint_refdes>')\n"
+"     A.intersectsCourtyard('<footprint_refdes>')\n"
 "Tosi, jos jokin osa A:sta on annetun jalanjäljen pääpihalla.\n"
 "<br><br>\n"
 "\n"
-"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"     A.intersectsFrontCourtyard('<footprint_refdes>')\n"
 "Totta, jos jokin osa A:sta on annetun jalanjäljen etupihalla.\n"
 "<br><br>\n"
 "\n"
-"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"     A.intersectsBackCourtyard('<footprint_refdes>')\n"
 "Totta, jos jokin osa A:sta on annetun jalanjäljen takapihalla.\n"
 "<br><br>\n"
 "\n"
-"    A.insideArea('<alueen_nimi>')\n"
-"Tosi, jos jokin osa A:sta on annetun vyöhykkeen ääriviivan sisällä.\n"
+"     A.intersectsArea('<alueen_nimi>')\n"
+"Tosi, jos jokin osa A:sta on tietyn vyöhykkeen ääriviivan sisällä.\n"
+"<br><br>\n"
+"\n"
+"     A.enclosedByArea('<alueen_nimi>')\n"
+"Tosi, jos kaikki \"A\" on tietyn vyöhykkeen ääriviivojen sisällä.\n"
+"\n"
+"HUOM: tämä on mahdollisesti kalliimpi kutsu kuin \"intersectsArea()\". Käytä "
+"\"intersectsArea()\".\n"
+"missä mahdollista.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
 "Totta, jos \"A\":ssa on reikä, joka on pinnoitettu.\n"
 "<br><br>\n"
-"\n"
+" \n"
 "    A.inDiffPair('<verkon_nimi>')\n"
 "Tosi, jos A:lla on verkko, joka on osa määritettyä differentiaaliparia.\n"
-"`<verkon_nimi>` on differentiaaliparin perusnimi. Esimerkiksi \"inDiffPair('/"
-"CLK')\".\n"
+"`<verkon_nimi>` on differentiaaliparin perusnimi. Esimerkiksi \"inDiffPair"
+"('/CLK')\".\n"
 "vastaa kohteita `/CLK_P` ja `/CLK_N` verkoissa.\n"
 "<br><br>\n"
 "\n"
@@ -30929,17 +30943,33 @@ msgstr ""
 "HUOM: tämä palauttaa tosi, jos \"A\" on annetulla tasolla, itsenäisesti\n"
 "siitä, arvioidaanko sääntöä kyseiselle tasolle vai ei.\n"
 "Käytä jälkimmäiselle säännössä `(taso \"kerroksen_nimi\")'-lausetta.\n"
+"<br><br>\n"
+"\n"
+"   !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsFrontCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsBackCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"Deprecated; use `intersectsArea()` instead.\n"
 "<br><br><br>\n"
 "\n"
 "### Lisää esimerkkejä\n"
 "\n"
 "    (sääntö \"kuparin säilytys\"\n"
-"       (rajoitus estää jäljityksen vyöhykkeen kautta)\n"
+"       (rajoitus estää johtimen läpivientivyöhykkeen kautta)\n"
 "       (ehto \"A.insideArea('zone3')\"))\n"
 "\n"
 "\n"
 "    (sääntö \"BGA kaventaminen\"\n"
-"       (rajoitettu radan_leveys (vähintään 0,2 mm) (opt. 0,25 mm))\n"
+"       (rajoitettu johtimen_leveys (vähintään 0,2 mm) (opt. 0,25 mm))\n"
 "       (rajoitusvälys (vähintään 0,05 mm) (opt. 0,08 mm))\n"
 "       (ehto \"A.insideCourtyard('U3')\"))\n"
 "\n"
@@ -30993,7 +31023,7 @@ msgstr ""
 "        (ehto \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # Älä käytä lämpöreliefiä jäähdytyselementtien pehmusteissa\n"
+"    # Älä käytä lämpöreliefiä jäähdytyselementtien anturoissa\n"
 "    (sääntö heat_sink_pad\n"
 "        (rajoitus zone_connection kiinteä)\n"
 "        (ehto \"A.Fabrication_Property == 'Jähdytyselementti\"))\n"
@@ -31015,7 +31045,7 @@ msgstr ""
 "        (ehto \"A.Name == 'zone_GND' || A.Name == 'zone_PWR')))\n"
 "\n"
 "\n"
-"    # Estä juotteen imeytyminen SMD-tyynyistä\n"
+"    # Estä juotteen imeytyminen SMD-anturoista\n"
 "    (sääntö holes_in_pads\n"
 "        (rajoite fyysinen_reiän_väli (min 0,2 mm))\n"
 "        (ehto \"B.Pad_Type == 'SMD'\"))\n"
