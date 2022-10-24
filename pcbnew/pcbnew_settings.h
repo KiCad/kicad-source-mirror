@@ -236,6 +236,8 @@ public:
         int  file_options;
         int  file_format;
         bool include_board_edge;
+        bool exclude_TH;
+        bool only_SMD;
         bool use_aux_origin;
         bool negate_xcoord;
     };

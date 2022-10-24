@@ -35,7 +35,6 @@
 #include <reporter.h>
 #include <tools/board_editor_control.h>
 #include <board.h>
-#include <footprint.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_base.h>
 #include "widgets/wx_html_report_panel.h"
@@ -159,27 +158,12 @@ private:
         return m_excludeTH->GetValue();
     }
 
+private:
     PCB_EDIT_FRAME* m_parent;
     PCB_PLOT_PARAMS m_plotOpts;
-    REPORTER* m_reporter;
-
-    static int m_unitsOpt;
-    static int m_fileOpt;
-    static int m_fileFormat;
-    static bool m_includeBoardEdge;
-    static bool m_excludeTHOpt;
-    static bool m_onlySMDOpt;
-    static bool m_negateBottomX;
+    REPORTER*       m_reporter;
 };
 
-
-// Static members to remember choices
-int DIALOG_GEN_FOOTPRINT_POSITION::m_fileOpt = 0;
-int DIALOG_GEN_FOOTPRINT_POSITION::m_fileFormat = 0;
-bool DIALOG_GEN_FOOTPRINT_POSITION::m_includeBoardEdge = false;
-bool DIALOG_GEN_FOOTPRINT_POSITION::m_excludeTHOpt = false;
-bool DIALOG_GEN_FOOTPRINT_POSITION::m_onlySMDOpt = false;
-bool DIALOG_GEN_FOOTPRINT_POSITION::m_negateBottomX = false;
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
@@ -188,24 +172,20 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
-    m_units            = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
-    m_fileOpt          = cfg->m_PlaceFile.file_options;
-    m_fileFormat       = cfg->m_PlaceFile.file_format;
-    m_includeBoardEdge = cfg->m_PlaceFile.include_board_edge;
-    m_negateBottomX    = cfg->m_PlaceFile.negate_xcoord;
+    m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
 
     // Update Options
     m_radioBoxUnits->SetSelection( cfg->m_PlaceFile.units );
-    m_radioBoxFilesCount->SetSelection( m_fileOpt );
-    m_rbFormat->SetSelection( m_fileFormat );
-    m_cbIncludeBoardEdge->SetValue( m_includeBoardEdge );
+    m_radioBoxFilesCount->SetSelection( cfg->m_PlaceFile.file_options );
+    m_rbFormat->SetSelection( cfg->m_PlaceFile.file_format );
+    m_cbIncludeBoardEdge->SetValue( cfg->m_PlaceFile.include_board_edge );
     m_useDrillPlaceOrigin->SetValue( cfg->m_PlaceFile.use_aux_origin );
-    m_onlySMD->SetValue( m_onlySMDOpt );
-    m_negateXcb->SetValue( m_negateBottomX );
-    m_excludeTH->SetValue( m_excludeTHOpt );
+    m_onlySMD->SetValue( cfg->m_PlaceFile.only_SMD );
+    m_negateXcb->SetValue( cfg->m_PlaceFile.negate_xcoord );
+    m_excludeTH->SetValue( cfg->m_PlaceFile.exclude_TH );
 
     // Update sizes and sizers:
     m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
@@ -225,8 +205,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
 
     wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
 
-    wxMessageDialog dialog( this, _( "Use a relative path?"),
-                            _( "Plot Output Directory" ),
+    wxMessageDialog dialog( this, _( "Use a relative path?"), _( "Plot Output Directory" ),
                             wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
 
     if( dialog.ShowModal() == wxID_YES )
@@ -245,22 +224,17 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
 
 void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 {
-    m_fileOpt = m_radioBoxFilesCount->GetSelection();
-    m_fileFormat = m_rbFormat->GetSelection();
-    m_includeBoardEdge = m_cbIncludeBoardEdge->GetValue();
-    m_onlySMDOpt = m_onlySMD->GetValue();
-    m_negateBottomX = m_negateXcb->GetValue();
-    m_excludeTHOpt = m_excludeTH->GetValue();
-
-    auto cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
     m_units  = m_radioBoxUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
     cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCHES ? 0 : 1;
-    cfg->m_PlaceFile.file_options       = m_fileOpt;
-    cfg->m_PlaceFile.file_format        = m_fileFormat;
-    cfg->m_PlaceFile.include_board_edge = m_includeBoardEdge;
+    cfg->m_PlaceFile.file_options       = m_radioBoxFilesCount->GetSelection();
+    cfg->m_PlaceFile.file_format        = m_rbFormat->GetSelection();
+    cfg->m_PlaceFile.include_board_edge = m_cbIncludeBoardEdge->GetValue();
+    cfg->m_PlaceFile.exclude_TH         = m_excludeTH->GetValue();
+    cfg->m_PlaceFile.only_SMD           = m_onlySMD->GetValue();
     cfg->m_PlaceFile.use_aux_origin     = m_useDrillPlaceOrigin->GetValue();
-    cfg->m_PlaceFile.negate_xcoord      = m_negateBottomX;
+    cfg->m_PlaceFile.negate_xcoord      = m_negateXcb->GetValue();
 
     // Set output directory and replace backslashes with forward ones
     // (Keep unix convention in cfg files)
@@ -271,7 +245,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     m_plotOpts.SetOutputDirectory( dirStr );
     m_parent->SetPlotSettings( m_plotOpts );
 
-    if( m_fileFormat == 2 )
+    if( m_rbFormat->GetSelection() == 2 )
         CreateGerberFiles();
     else
         CreateAsciiFiles();
@@ -306,8 +280,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, m_reporter ) )
     {
-        msg.Printf( _( "Could not write plot files to folder '%s'." ),
-                    outputDir.GetPath() );
+        msg.Printf( _( "Could not write plot files to folder '%s'." ), outputDir.GetPath() );
         DisplayError( this, msg );
         return false;
     }
@@ -320,7 +293,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     PLACEFILE_GERBER_WRITER exporter( brd );
     wxString filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
 
-    int fpcount = exporter.CreatePlaceFile( filename, F_Cu, m_includeBoardEdge );
+    int fpcount = exporter.CreatePlaceFile( filename, F_Cu, m_cbIncludeBoardEdge->GetValue() );
 
     if( fpcount < 0 )
     {
@@ -341,7 +314,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
     filename = exporter.GetPlaceFileName( fn.GetFullPath(), B_Cu );
 
-    fpcount = exporter.CreatePlaceFile( filename, B_Cu, m_includeBoardEdge );
+    fpcount = exporter.CreatePlaceFile( filename, B_Cu, m_cbIncludeBoardEdge->GetValue() );
 
     if( fpcount < 0 )
     {
@@ -374,7 +347,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     wxFileName fn;
     wxString   msg;
     bool       singleFile = OneFileOnly();
-    bool       useCSVfmt = m_fileFormat == 1;
+    bool       useCSVfmt = m_rbFormat->GetSelection() == 1;
     bool       useAuxOrigin = m_useDrillPlaceOrigin->GetValue();
     int        fullcount = 0;
     int        topSide = true;
