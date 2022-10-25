@@ -72,7 +72,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
     if( !libPath.IsAbsolute() )
         libPath.MakeAbsolute( aCwd );
 
-    KIBIS kibis( std::string( libPath.GetAbsolutePath().c_str() ) );
+    KIBIS kibis( std::string( libPath.GetFullPath().c_str() ) );
     kibis.m_cacheDir = aCacheDir;
 
     if( !kibis.m_valid )
