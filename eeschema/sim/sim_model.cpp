@@ -1005,12 +1005,20 @@ template void SIM_MODEL::WriteInferredDataFields( std::vector<LIB_FIELD>& aField
 template <typename T>
 void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const std::string& aValue ) const
 {
-    if( GetPinCount() == 2
-        && GetPin( 0 ).symbolPinNumber == "1"
-        && GetPin( 1 ).symbolPinNumber == "2" )
+    bool removePinsField = true;
+
+    // Only write Sim_Pins field if the pins are not in the canonical order.
+    for( int i = 0; i < GetPinCount(); ++i )
     {
-        SetFieldValue( aFields, PINS_FIELD, "" );
+        if( GetPin( i ).symbolPinNumber != fmt::format( "{}", i + 1 ) )
+        {
+            removePinsField = false;
+            break;
+        }
     }
+
+    if( removePinsField )
+        SetFieldValue( aFields, PINS_FIELD, "" );
 
     SetFieldValue( aFields, VALUE_FIELD, aValue );
     SetFieldValue( aFields, DEVICE_TYPE_FIELD, "" );
