@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,7 +40,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_sourceSizer->Add( m_tclibraryPathName, 0, wxEXPAND|wxALL, 5 );
 
 	m_browseButton = new wxBitmapButton( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_sourceSizer->Add( m_browseButton, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_sourceSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	m_sourceSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -53,7 +53,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_sourceSizer->Add( m_modelNameCombobox, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_overrideCheckbox = new wxCheckBox( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, _("Override"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sourceSizer->Add( m_overrideCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_sourceSizer->Add( m_overrideCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	m_sourceSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -66,7 +66,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_sourceSizer->Add( m_ibisPinCombobox, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_differentialCheckbox = new wxCheckBox( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, _("Differential"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sourceSizer->Add( m_differentialCheckbox, 0, wxALL, 5 );
+	m_sourceSizer->Add( m_differentialCheckbox, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	m_sourceSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -82,7 +82,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_sourceStaticSizer->Add( m_sourceSizer, 0, wxEXPAND, 5 );
 
 
-	bSizer9->Add( m_sourceStaticSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizer9->Add( m_sourceStaticSizer, 0, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizer5;
 	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, _("Model") ), wxVERTICAL );
@@ -180,10 +180,10 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer5->Fit( m_codePanel );
 	m_notebook4->AddPage( m_codePanel, _("Code"), false );
 
-	sbSizer5->Add( m_notebook4, 1, wxEXPAND | wxALL, 5 );
+	sbSizer5->Add( m_notebook4, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizer9->Add( sbSizer5, 1, wxEXPAND, 5 );
+	bSizer9->Add( sbSizer5, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	m_modelPanel->SetSizer( bSizer9 );
@@ -229,10 +229,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer10->Fit( m_pinAssignmentsPanel );
 	m_notebook->AddPage( m_pinAssignmentsPanel, _("Pin Assignments"), false );
 
-	bSizer8->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer8->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bSizer8->Add( m_notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxGridSizer* gSizer1;
 	gSizer1 = new wxGridSizer( 0, 2, 0, 0 );
@@ -244,7 +241,10 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	gSizer1->Add( m_inferCheckbox, 0, wxALIGN_RIGHT|wxALL, 5 );
 
 
-	bSizer8->Add( gSizer1, 0, wxEXPAND, 5 );
+	bSizer8->Add( gSizer1, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer8->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -253,11 +253,12 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizer8->Add( m_sdbSizer1, 0, wxBOTTOM|wxEXPAND, 5 );
+	bSizer8->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( bSizer8 );
 	this->Layout();
+	bSizer8->Fit( this );
 
 	this->Centre( wxBOTH );
 

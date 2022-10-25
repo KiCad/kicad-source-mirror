@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -80,9 +80,9 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxStyledTextCtrl* m_codePreview;
 		wxPanel* m_pinAssignmentsPanel;
 		WX_GRID* m_pinAssignmentsGrid;
-		wxStaticLine* m_staticline1;
 		wxCheckBox* m_excludeCheckbox;
 		wxCheckBox* m_inferCheckbox;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -117,7 +117,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 454,515 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_SIM_MODEL_BASE();
 
