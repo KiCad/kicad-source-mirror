@@ -70,9 +70,7 @@ std::string SPICE_GENERATOR_TLINE::ModelLine( const SPICE_ITEM& aItem ) const
 
 
 SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType ) :
-    SIM_MODEL( aType,
-               std::make_unique<SPICE_GENERATOR_TLINE>( *this ) ),
-    m_isInferred( false )
+        SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_TLINE>( *this ) )
 {
     static std::vector<PARAM::INFO> z0 = makeZ0ParamInfos();
     static std::vector<PARAM::INFO> rlgc = makeRlgcParamInfos();
@@ -100,7 +98,7 @@ void SIM_MODEL_TLINE::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) cons
 {
     SIM_MODEL::WriteDataSchFields( aFields );
 
-    if( m_isInferred )
+    if( IsInferred() )
         inferredWriteDataFields( aFields );
 }
 
@@ -109,7 +107,7 @@ void SIM_MODEL_TLINE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
 {
     SIM_MODEL::WriteDataLibFields( aFields );
 
-    if( m_isInferred )
+    if( IsInferred() )
         inferredWriteDataFields( aFields );
 }
 

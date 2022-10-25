@@ -54,8 +54,6 @@ private:
 
     static std::vector<PARAM::INFO> makeZ0ParamInfos();
     static std::vector<PARAM::INFO> makeRlgcParamInfos();
-
-    bool m_isInferred;
 };
 
 #endif // SIM_MODEL_TLINE_H
