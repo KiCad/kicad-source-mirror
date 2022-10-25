@@ -416,8 +416,13 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
         fprintf( m_workFile, "%g %g l\n", pos.x, pos.y );
     }
 
-    // Close path and stroke(/fill)
-    fprintf( m_workFile, "%c\n", aFill == FILL_T::NO_FILL ? 'S' : 'b' );
+    // Close path and stroke and/or fill
+    if( aFill == FILL_T::NO_FILL )
+        fputs( "S\n", m_workFile );
+    else if( aWidth == 0 )
+        fputs( "f\n", m_workFile );
+    else
+        fputs( "b\n", m_workFile );
 }
 
 
