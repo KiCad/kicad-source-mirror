@@ -32,6 +32,7 @@
 bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOptions )
 {
     PCB_PLOT_PARAMS plot_opts;
+    wxString        outputFile = aSvgPlotOptions.m_outputFile;
 
     plot_opts.SetPlotFrameRef( aSvgPlotOptions.m_pageSizeMode );
 
@@ -64,6 +65,15 @@ bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOpti
         aBoard->GetDesignSettings().SetAuxOrigin( origin );
     }
 
+    if( outputFile.IsEmpty() )
+    {
+        wxFileName fn = aBoard->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( wxS("svg") );
+
+        outputFile = fn.GetFullName();
+    }
+
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
@@ -84,8 +94,7 @@ bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOpti
 
     //@todo allow controlling the sheet name and path that will be displayed in the title block
     // Leave blank for now
-    SVG_PLOTTER* plotter = (SVG_PLOTTER*) StartPlotBoard( aBoard, &plot_opts, UNDEFINED_LAYER,
-                                                          aSvgPlotOptions.m_outputFile,
+    SVG_PLOTTER* plotter = (SVG_PLOTTER*) StartPlotBoard( aBoard, &plot_opts, UNDEFINED_LAYER, outputFile,
                                                           wxEmptyString, wxEmptyString );
 
     if( plotter )

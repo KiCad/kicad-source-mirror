@@ -25,6 +25,7 @@
 #include <kiface_base.h>
 #include <layer_ids.h>
 #include <regex>
+#include <wx/crt.h>
 
 #include <macros.h>
 #include <wx/tokenzr.h>
@@ -80,6 +81,8 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
         //m_layerIndices[untranslated] = PCB_LAYER_ID( layer );
         layerMasks[untranslated] = LSET( PCB_LAYER_ID( layer ) );
     }
+
+    layerMasks["*"] = LSET::AllLayersMask();
     layerMasks["*.Cu"] = LSET::AllCuMask();
     layerMasks["*In.Cu"] = LSET::InternalCuMask();
     layerMasks["F&B.Cu"] = LSET( 2, F_Cu, B_Cu );
@@ -100,6 +103,12 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
     svgJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
     svgJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
 
+    if( !wxFile::Exists( svgJob->m_filename ) )
+    {
+        wxFprintf( stderr, _( "Board file does not exist or is not accessible\n" ) );
+        return EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
     wxString layers = FROM_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
 
     LSET              layerMask = LSET::AllCuMask();
@@ -114,6 +123,10 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
             if( layerMasks.count( token ) )
             {
                 layerMask |= layerMasks[token];
+            }
+            else
+            {
+                wxFprintf( stderr, _( "Invalid layer option: %s\n" ), token );
             }
         }
     }
