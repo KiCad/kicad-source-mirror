@@ -251,7 +251,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
         if( parentA )
         {
-            parentA->SetLayer( (PCB_LAYER_ID) aLayer );
+            parentA->SetLayer( ToLAYER_ID( aLayer ) );
             static_cast<BOARD_CONNECTED_ITEM*>( parentA )->SetNetCode( aItemA->Net(), true );
         }
     }
@@ -269,13 +269,13 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
         if( parentB )
         {
-            parentB->SetLayer( (PCB_LAYER_ID) aLayer );
+            parentB->SetLayer( ToLAYER_ID( aLayer ) );
             static_cast<BOARD_CONNECTED_ITEM*>( parentB )->SetNetCode( aItemB->Net(), true );
         }
     }
 
     if( parentA )
-        hostConstraint = drcEngine->EvalRules( hostType, parentA, parentB, (PCB_LAYER_ID) aLayer );
+        hostConstraint = drcEngine->EvalRules( hostType, parentA, parentB, ToLAYER_ID( aLayer ) );
 
     if( hostConstraint.IsNull() )
         return false;
@@ -329,6 +329,9 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         layers = aA->Layers();
     else
         layers = aA->Layers().Intersection( aB->Layers() );
+
+    // Normalize layer range (no -1 magic numbers)
+    layers = layers.Intersection( LAYER_RANGE( PCBNEW_LAYER_ID_START, GAL_LAYER_ID_END ) );
 
     for( int layer = layers.Start(); layer <= layers.End(); ++layer )
     {
@@ -1270,14 +1273,14 @@ bool PNS_KICAD_IFACE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) con
         {
             const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem->Parent() );
 
-            return via->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+            return via->FlashLayer( ToLAYER_ID( aLayer ) );
         }
 
         case PCB_PAD_T:
         {
             const PAD* pad = static_cast<const PAD*>( aItem->Parent() );
 
-            return pad->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+            return pad->FlashLayer( ToLAYER_ID( aLayer ) );
         }
 
         default:
