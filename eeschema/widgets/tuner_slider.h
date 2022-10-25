@@ -78,7 +78,6 @@ private:
     void onClose( wxCommandEvent& event ) override;
     void onSave( wxCommandEvent& event ) override;
     void onSliderChanged( wxScrollEvent& event ) override;
-    void onCurveChoice( wxCommandEvent& event ) override;
 
     void onMaxKillFocus( wxFocusEvent& event ) override;
     void onValueKillFocus( wxFocusEvent& event ) override;

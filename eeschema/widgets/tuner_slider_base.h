@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,7 +23,6 @@
 #include <wx/sizer.h>
 #include <wx/slider.h>
 #include <wx/textctrl.h>
-#include <wx/choice.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,7 +42,6 @@ class TUNER_SLIDER_BASE : public wxPanel
 		wxTextCtrl* m_maxText;
 		wxTextCtrl* m_valueText;
 		wxTextCtrl* m_minText;
-		wxChoice* m_curve;
 		wxButton* m_saveBtn;
 
 		// Virtual event handlers, override them in your derived class
@@ -55,13 +53,12 @@ class TUNER_SLIDER_BASE : public wxPanel
 		virtual void onValueTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMinKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onMinTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCurveChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSave( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 126,322 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 126,283 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~TUNER_SLIDER_BASE();
 

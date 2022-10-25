@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2021)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class wxListView;
+
 #include "sim_workbook.h"
 #include "kiway_player.h"
 #include <wx/string.h>
@@ -17,6 +19,7 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
+#include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
@@ -90,7 +93,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticTextTune;
 		wxBoxSizer* m_tuneSizer;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void menuNewPlot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuOpenWorkbook( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuSaveWorkbook( wxCommandEvent& event ) { event.Skip(); }

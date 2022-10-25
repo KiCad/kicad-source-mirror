@@ -242,12 +242,6 @@ void TUNER_SLIDER::onSliderChanged( wxScrollEvent& event )
 }
 
 
-void TUNER_SLIDER::onCurveChoice( wxCommandEvent& event )
-{
-    updateValue();
-}
-
-
 void TUNER_SLIDER::onMaxKillFocus( wxFocusEvent& event )
 {
     updateMax();
