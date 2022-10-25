@@ -149,6 +149,9 @@ public:
     void        SetSvgPrecision( unsigned aPrecision );
     unsigned    GetSvgPrecision() const { return m_svgPrecision; }
 
+    void        SetBlackAndWhite( bool blackAndWhite ) { m_blackAndWhite = blackAndWhite; }
+    unsigned    GetBlackAndWhite() const { return m_blackAndWhite; }
+
     /**
      * Default precision of coordinates in Gerber files.
      *
@@ -284,6 +287,9 @@ private:
     /// precision of coordinates in SVG files: accepted 3 - 6
     /// 6 is the internal resolution of Pcbnew
     unsigned    m_svgPrecision;
+
+    /// Plot in black and white only
+    bool        m_blackAndWhite;
 
     /// Plot gerbers using auxiliary (drill) origin instead of absolute coordinates
     bool        m_useAuxOrigin;

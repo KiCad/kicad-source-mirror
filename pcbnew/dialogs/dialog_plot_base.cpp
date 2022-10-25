@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -362,14 +362,27 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_svgOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("SVG Options") ), wxHORIZONTAL );
 
+	wxGridBagSizer* gbSizer3;
+	gbSizer3 = new wxGridBagSizer( 3, 0 );
+	gbSizer3->SetFlexibleDirection( wxBOTH );
+	gbSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
 	svgPrecisionLabel = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	svgPrecisionLabel->Wrap( -1 );
-	m_svgOptionsSizer->Add( svgPrecisionLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( svgPrecisionLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_svgPrecsision = new wxSpinCtrl( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 6, 4 );
 	m_svgPrecsision->SetToolTip( _("This number defines how many digits are exported that are below 1 mm.\nUser unit is 10^-<N> mm\nChoose 4 if you are not sure.") );
 
-	m_svgOptionsSizer->Add( m_svgPrecsision, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_svgPrecsision, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+	m_SVGBlackAndWhite = new wxCheckBox( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot in black and white"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SVGBlackAndWhite->SetToolTip( _("Check to use KiCad stroke font\nUncheck to plot single-line ASCII texts as editable text (using DXF font)") );
+
+	gbSizer3->Add( m_SVGBlackAndWhite, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+
+	m_svgOptionsSizer->Add( gbSizer3, 1, wxEXPAND, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_svgOptionsSizer, 1, wxEXPAND|wxALL, 5 );

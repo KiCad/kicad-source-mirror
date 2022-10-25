@@ -141,6 +141,8 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 
     m_default_colors = std::make_shared<COLOR_SETTINGS>();
     m_colors         = m_default_colors.get();
+
+    m_blackAndWhite = true;
 }
 
 
@@ -362,6 +364,9 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_textMode != aPcbPlotParams.m_textMode )
+        return false;
+
+    if( m_blackAndWhite != aPcbPlotParams.m_blackAndWhite )
         return false;
 
     if( !m_outputDirectory.IsSameAs( aPcbPlotParams.m_outputDirectory ) )

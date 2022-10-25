@@ -332,6 +332,9 @@ void DIALOG_PLOT::init_Dialog()
     // Put vias on mask layer
     m_plotNoViaOnMaskOpt->SetValue( m_plotOpts.GetPlotViaOnMaskLayer() );
 
+    // Black and white plotting
+    m_SVGBlackAndWhite->SetValue( m_plotOpts.GetBlackAndWhite() );
+
     // Initialize a few other parameters, which can also be modified
     // from the drill dialog
     reInitDialog();
@@ -783,6 +786,8 @@ void DIALOG_PLOT::applyPlotSettings()
     else
         tempOptions.SetTextMode( m_DXF_plotTextStrokeFontOpt->GetValue() ? PLOT_TEXT_MODE::DEFAULT :
                                                                            PLOT_TEXT_MODE::NATIVE );
+
+    tempOptions.SetBlackAndWhite( m_SVGBlackAndWhite->GetValue() );
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.

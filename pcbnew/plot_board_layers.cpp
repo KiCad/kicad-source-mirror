@@ -1072,7 +1072,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
     aPlotter->SetSvgCoordinatesFormat( aPlotOpts->GetSvgPrecision() );
 
     aPlotter->SetCreator( wxT( "PCBNEW" ) );
-    aPlotter->SetColorMode( false );        // default is plot in Black and White.
+    aPlotter->SetColorMode( !aPlotOpts->GetBlackAndWhite() );        // default is plot in Black and White.
     aPlotter->SetTextMode( aPlotOpts->GetTextMode() );
 }
 
