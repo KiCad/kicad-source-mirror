@@ -144,7 +144,13 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
         TEST( a->GetKeepTopBottom(), b->GetKeepTopBottom() );
 
     TEST( a->GetShape(), b->GetShape() );
-    TEST( a->GetLayerSet(), b->GetLayerSet() );
+
+    // Trim layersets to the current board before comparing
+    LSET enabledLayers = a->GetBoard()->GetEnabledLayers();
+    LSET aLayers = a->GetLayerSet() & enabledLayers;
+    LSET bLayers = b->GetLayerSet() & enabledLayers;
+    TEST( aLayers, bLayers );
+
     TEST( a->GetAttribute(), b->GetAttribute() );
     TEST( a->GetProperty(), b->GetProperty() );
 
