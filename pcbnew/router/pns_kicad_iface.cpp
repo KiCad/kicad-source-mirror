@@ -331,7 +331,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         layers = aA->Layers().Intersection( aB->Layers() );
 
     // Normalize layer range (no -1 magic numbers)
-    layers = layers.Intersection( LAYER_RANGE( PCBNEW_LAYER_ID_START, GAL_LAYER_ID_END ) );
+    layers = layers.Intersection( LAYER_RANGE( PCBNEW_LAYER_ID_START, PCB_LAYER_ID_COUNT - 1 ) );
 
     for( int layer = layers.Start(); layer <= layers.End(); ++layer )
     {
