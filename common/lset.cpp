@@ -905,9 +905,9 @@ LSET LSET::BackMask()
     return saved;
 }
 
-LSET LSET::FrontBackMask()
+LSET LSET::SideSpecificMask()
 {
-    static const LSET saved = ( BackTechMask() | FrontTechMask() ).set( F_Cu ).set( B_Cu );
+    static const LSET saved = BackTechMask() | FrontTechMask() | AllCuMask();
     return saved;
 }
 

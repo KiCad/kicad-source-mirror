@@ -689,7 +689,7 @@ public:
      */
     static LSET BackMask();
 
-    static LSET FrontBackMask();
+    static LSET SideSpecificMask();
 
     static LSET UserMask();
 
