@@ -32,6 +32,8 @@
 #include "kibis.h"
 #include "ibis_parser.h"
 #include <sstream>
+#include <sim/spice_simulator.h>
+
 
 // _() is used here to mark translatable strings in IBIS_REPORTER::Report()
 // However, currently non ASCII7 chars are nor correctly handled when printing messages
@@ -70,11 +72,11 @@ KIBIS::KIBIS( std::string aFileName ) : KIBIS_ANY( this ), m_file( this )
 {
     IBIS_REPORTER reporter;
     IbisParser    parser( &reporter );
+    bool          status = true;
 
     parser.m_parrot = false;
-    parser.ParseFile( aFileName );
+    status &= parser.ParseFile( aFileName );
 
-    bool status = true;
 
     status &= m_file.Init( parser );
 
@@ -95,6 +97,18 @@ KIBIS::KIBIS( std::string aFileName ) : KIBIS_ANY( this ), m_file( this )
         for( KIBIS_PIN& pin : m_components.back().m_pins )
         {
             pin.m_parent = &( m_components.back() );
+        }
+
+        for( IbisDiffPinEntry dpEntry : iComponent.m_diffPin.m_entries )
+        {
+            KIBIS_PIN* pinA = m_components.back().GetPin( dpEntry.pinA );
+            KIBIS_PIN* pinB = m_components.back().GetPin( dpEntry.pinB );
+
+            if( pinA && pinB )
+            {
+                pinA->m_complementaryPin = pinB;
+                pinB->m_complementaryPin = pinA;
+            }
         }
     }
 
@@ -520,7 +534,7 @@ std::string KIBIS_MODEL::generateSquareWave( std::string aNode1, std::string aNo
         simul += std::to_string( i );
         simul += " ";
         simul += aNode2;
-        simul += " pwl ( ";
+        simul += " pwl ( \n+";
 
         if( i != 0 )
         {
@@ -532,7 +546,7 @@ std::string KIBIS_MODEL::generateSquareWave( std::string aNode1, std::string aNo
             simul += doubleToString( entry0.t + timing - deltaT );
             simul += " ";
             simul += "0";
-            simul += " ";
+            simul += "\n+";
         }
 
         for( VTtableEntry& entry : WF->m_table.m_entries )
@@ -540,7 +554,7 @@ std::string KIBIS_MODEL::generateSquareWave( std::string aNode1, std::string aNo
             simul += doubleToString( entry.t + timing );
             simul += " ";
             simul += doubleToString( entry.V.value[supply] - delta );
-            simul += " ";
+            simul += "\n+";
         }
         simul += ")\n";
         }
@@ -559,7 +573,7 @@ std::string KIBIS_MODEL::generateSquareWave( std::string aNode1, std::string aNo
     {
         simul += " v( stimuli";
         simul += std::to_string( ii );
-        simul += " ) + ";
+        simul += " ) +\n+";
     }
 
     // Depending on the first bit, we add a different DC value
@@ -632,29 +646,25 @@ std::string KIBIS_PIN::addDie( KIBIS_MODEL& aModel, KIBIS_PARAMETER& aParam, int
 
 void KIBIS_PIN::getKuKdFromFile( std::string* aSimul )
 {
-    // @TODO
-    // that's not the best way to do, but ¯\_(ツ)_/¯
-    std::ifstream in( "temp_input.spice" );
+    std::string   outputFileName = m_topLevel->m_cacheDir + "temp_output.spice";
 
-    if( std::remove( "temp_input.spice" ) )
-    {
-        Report( _( "Cannot remove temporary input file" ), RPT_SEVERITY_WARNING );
-    }
-
-    if( std::remove( "temp_ouput.spice" ) )
+    if( std::remove( outputFileName.c_str() ) )
     {
         Report( _( "Cannot remove temporary output file" ), RPT_SEVERITY_WARNING );
     }
 
-    std::ofstream file( "temp_input.spice" );
+    std::shared_ptr<SPICE_SIMULATOR> ng = SIMULATOR::CreateInstance( "ng-kibis" );
 
-    file << *aSimul;
-
-    system( "ngspice temp_input.spice" );
-
+    if( !ng )
+    {
+        throw std::runtime_error( "Could not create simulator instance" );
+        return;
+    }
+    ng->Init();
+    ng->LoadNetlist( *aSimul );
 
     std::ifstream KuKdfile;
-    KuKdfile.open( "temp_output.spice" );
+    KuKdfile.open( outputFileName );
 
     std::vector<double> ku, kd, t;
     if( KuKdfile )
@@ -700,20 +710,13 @@ void KIBIS_PIN::getKuKdFromFile( std::string* aSimul )
     }
     else
     {
-        Report( _( "Error while creating temporary file" ), RPT_SEVERITY_ERROR );
+        Report( _( "Error while creating temporary output file" ), RPT_SEVERITY_ERROR );
     }
 
-    if( std::remove( "temp_input.spice" ) )
-    {
-        Report( _( "Cannot remove temporary input file" ), RPT_SEVERITY_WARNING );
-    }
-
-    if( std::remove( "temp_ouput.spice" ) )
+    if( std::remove( outputFileName.c_str() ) )
     {
         Report( _( "Cannot remove temporary output file" ), RPT_SEVERITY_WARNING );
     }
-
-    // @TODO : this is the end of the dirty code
 
     m_Ku = ku;
     m_Kd = kd;
@@ -775,7 +778,6 @@ std::string KIBIS_PIN::KuKdDriver( KIBIS_MODEL&                            aMode
     {
     case KIBIS_WAVEFORM_TYPE::RECTANGULAR:
     {
-        std::vector<std::pair<int, double>> bits;
         KIBIS_WAVEFORM_RECTANGULAR* rectWave = dynamic_cast<KIBIS_WAVEFORM_RECTANGULAR*>( wave );
 
         if( !rectWave )
@@ -792,26 +794,14 @@ std::string KIBIS_PIN::KuKdDriver( KIBIS_MODEL&                            aMode
             Report( _( "Falling edge is longer than off time." ), RPT_SEVERITY_WARNING );
         }
 
-        for( int i = 0; i < rectWave->m_cycles; i++ )
-        {
-            std::pair<int, double> bit;
-            bit.first = rectWave->inverted ? 0 : 1;
-            bit.second = ( rectWave->m_ton + rectWave->m_toff ) * i + rectWave->m_delay;
-            bits.push_back( bit );
 
-            bit.first = rectWave->inverted ? 1 : 0;
-            bit.second = ( rectWave->m_ton + rectWave->m_toff ) * i + rectWave->m_delay
-                         + rectWave->m_ton;
-            bits.push_back( bit );
-        }
-
+        std::vector<std::pair<int, double>> bits = wave->GenerateBitSequence();
         simul += aModel.generateSquareWave( "DIE0", "GND", bits, aPair, aParam );
         break;
     }
     case KIBIS_WAVEFORM_TYPE::PRBS:
     {
-        KIBIS_WAVEFORM_PRBS* prbsWave = dynamic_cast<KIBIS_WAVEFORM_PRBS*>( wave );
-        std::vector<std::pair<int, double>> bits = prbsWave->GenerateBitSequence();
+        std::vector<std::pair<int, double>> bits = wave->GenerateBitSequence();
         simul += aModel.generateSquareWave( "DIE0", "GND", bits, aPair, aParam );
         break;
     }
@@ -939,7 +929,9 @@ void KIBIS_PIN::getKuKdOneWaveform( KIBIS_MODEL&                            aMod
         simul += "run \n";
         //simul += "plot v(x1.DIE0) i(VmeasIout) i(VmeasPD) i(VmeasPU) i(VmeasPC) i(VmeasGC)\n";
         //simul += "plot v(KU) v(KD)\n";
-        simul += "write temp_output.spice v(KU) v(KD)\n"; // @TODO we might want to remove this...
+
+        std::string outputFileName = m_topLevel->m_cacheDir + "temp_output.spice";
+        simul += "write " + outputFileName + " v(KU) v(KD)\n";
         simul += "quit\n";
         simul += ".endc \n";
         simul += ".end \n";
@@ -1144,7 +1136,8 @@ void KIBIS_PIN::getKuKdTwoWaveforms( KIBIS_MODEL&                            aMo
         simul += "run \n";
         simul += "plot v(KU) v(KD)\n";
         //simul += "plot v(x1.DIE0) \n";
-        simul += "write temp_output.spice v(KU) v(KD)\n"; // @TODO we might want to remove this...
+        std::string outputFileName = m_topLevel->m_cacheDir + "temp_output.spice";
+        simul += "write " + outputFileName + " v(KU) v(KD)\n";
         simul += "quit\n";
         simul += ".endc \n";
         simul += ".end \n";
@@ -1455,6 +1448,51 @@ void KIBIS_PARAMETER::SetCornerFromString( IBIS_CORNER& aCorner, std::string aSt
         aCorner = IBIS_CORNER::TYP;
 }
 
+
+std::vector<std::pair<int, double>> KIBIS_WAVEFORM_STUCK_HIGH::GenerateBitSequence()
+{
+    std::vector<std::pair<int, double>> bits;
+    std::pair<int, double>              bit;
+    bit.first = inverted ? 1 : 0;
+    bit.second = 0;
+    return bits;
+}
+
+
+std::vector<std::pair<int, double>> KIBIS_WAVEFORM_STUCK_LOW::GenerateBitSequence()
+{
+    std::vector<std::pair<int, double>> bits;
+    std::pair<int, double>              bit;
+    bit.first = inverted ? 0 : 1;
+    bit.second = 0;
+    return bits;
+}
+
+std::vector<std::pair<int, double>> KIBIS_WAVEFORM_HIGH_Z::GenerateBitSequence()
+{
+    std::vector<std::pair<int, double>> bits;
+    return bits;
+}
+
+std::vector<std::pair<int, double>> KIBIS_WAVEFORM_RECTANGULAR::GenerateBitSequence()
+{
+    std::vector<std::pair<int, double>> bits;
+
+    for( int i = 0; i < m_cycles; i++ )
+    {
+        std::pair<int, double> bit;
+        bit.first = inverted ? 0 : 1;
+        bit.second = ( m_ton + m_toff ) * i + m_delay;
+        bits.push_back( bit );
+
+        bit.first = inverted ? 1 : 0;
+        bit.second = ( m_ton + m_toff ) * i + m_delay + m_ton;
+        bits.push_back( bit );
+    }
+    return bits;
+}
+
+
 std::vector<std::pair<int, double>> KIBIS_WAVEFORM_PRBS::GenerateBitSequence()
 {
     std::vector<std::pair<int, double>> bitSequence;
@@ -1487,5 +1525,4 @@ std::vector<std::pair<int, double>> KIBIS_WAVEFORM_PRBS::GenerateBitSequence()
     } while ( ++bits < m_bits );
     
     return bitSequence;
-
 }

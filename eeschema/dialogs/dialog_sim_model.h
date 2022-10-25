@@ -24,7 +24,7 @@
 
 #ifndef DIALOG_SIM_MODEL_H
 #define DIALOG_SIM_MODEL_H
-#include <../../pcbnew/ibis/kibis.h>
+#include <sim/kibis/kibis.h>
 
 #include <dialog_sim_model_base.h>
 #include <netlist_exporter_spice.h>
@@ -123,6 +123,7 @@ private:
     void onOverrideCheckboxUpdate( wxUpdateUIEvent& aEvent ) override;
     void onDeviceTypeChoiceUpdate( wxUpdateUIEvent& aEvent ) override;
     void onTypeChoiceUpdate( wxUpdateUIEvent& aEvent ) override;
+    void onDifferentialCheckbox( wxCommandEvent& event ) override;
 
     void onParamGridSetFocus( wxFocusEvent& aEvent );
     void onParamGridSelectionChange( wxPropertyGridEvent& aEvent );

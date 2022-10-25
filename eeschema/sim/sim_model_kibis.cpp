@@ -21,12 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <../../pcbnew/ibis/kibis.h>
+#include <sim/kibis/kibis.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_library_kibis.h>
 #include <paths.h>
 #include <fmt/core.h>
-
+#include <wx/filename.h>
+#include <kiway.h>
 
 std::string SPICE_GENERATOR_KIBIS::ModelName( const SPICE_ITEM& aItem ) const
 {
@@ -57,20 +58,42 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const SPICE_ITEM& 
 }
 
 
-std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem ) const
+std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const std::string aCwd,
+                                               const std::string aCacheDir ) const
 {
     std::string ibisLibFilename = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string ibisCompName    = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY::NAME_FIELD  );
     std::string ibisPinName     = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::PIN_FIELD );
     std::string ibisModelName   = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
+    bool diffMode = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
 
-    KIBIS kibis( ibisLibFilename );
+    wxFileName libPath = wxFileName( wxString( ibisLibFilename ) );
+
+    if( !libPath.IsAbsolute() )
+        libPath.MakeAbsolute( aCwd );
+
+    KIBIS kibis( std::string( libPath.GetAbsolutePath().c_str() ) );
+    kibis.m_cacheDir = aCacheDir;
+
+    if( !kibis.m_valid )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS file '%s'" ),
+                                          ibisLibFilename ) );
+    }
+
     KIBIS_COMPONENT* kcomp = kibis.GetComponent( std::string( ibisCompName ) );
     
     if( !kcomp )
         THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS component '%s'" ), ibisCompName ) );
 
     KIBIS_PIN* kpin = kcomp->GetPin( ibisPinName );
+
+
+    if( !kcomp->m_valid )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS component '%s'" ),
+                                          ibisCompName ) );
+    }
 
     if( !kpin )
     {
@@ -107,7 +130,10 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem ) const
     switch( m_model.GetType() )
     {
     case SIM_MODEL::TYPE::KIBIS_DEVICE:
-        kpin->writeSpiceDevice( &result, aItem.modelName, *kmodel, kparams );
+        if( diffMode )
+            kpin->writeSpiceDiffDevice( &result, aItem.modelName, *kmodel, kparams );
+        else
+            kpin->writeSpiceDevice( &result, aItem.modelName, *kmodel, kparams );
         break;
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
@@ -130,7 +156,10 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem ) const
                     static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH() );
         }
 
-        kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
+        if( diffMode )
+            kpin->writeSpiceDiffDriver( &result, aItem.modelName, *kmodel, kparams );
+        else
+            kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
         break;
     }
 
@@ -138,12 +167,24 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem ) const
     {
         KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR();
 
-        waveform->m_ton = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "ton" )->value ).Get().value_or( 1 );
-        waveform->m_toff = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "toff" )->value ).Get().value_or( 1 );
-        waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
+        if ( m_model.FindParam( "ton" ) )
+            waveform->m_ton = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "ton" )->value ).Get().value_or( 1 );
+
+        if ( m_model.FindParam( "toff" ) )
+            waveform->m_toff = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "toff" )->value ).Get().value_or( 1 );
+
+        if ( m_model.FindParam( "delay" ) )
+            waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
+
+        if ( m_model.FindParam( "cycles" ) )
+            waveform->m_cycles = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "cycles" )->value ).Get().value_or( 0 );
 
         kparams.m_waveform = waveform;
-        kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
+
+        if( diffMode )
+            kpin->writeSpiceDiffDriver( &result, aItem.modelName, *kmodel, kparams );
+        else
+            kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
         break;
     }
 
@@ -151,12 +192,21 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem ) const
     {
         KIBIS_WAVEFORM_PRBS* waveform = new KIBIS_WAVEFORM_PRBS();
 
-        waveform->m_bitrate = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "f0" )->value ).Get().value_or( 0 );
+        if ( m_model.FindParam( "f0" ) )
+            waveform->m_bitrate = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "f0" )->value ).Get().value_or( 0 );
+
+        if ( m_model.FindParam( "bits" ) )
         waveform->m_bits = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "bits" )->value ).Get().value_or( 0 );
+
+        if ( m_model.FindParam( "delay" ) )
         waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
 
         kparams.m_waveform = waveform;
-        kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
+
+        if( diffMode )
+            kpin->writeSpiceDiffDriver( &result, aItem.modelName, *kmodel, kparams );
+        else
+            kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
         break;
     }
 
@@ -195,7 +245,15 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType ) :
     for( const PARAM::INFO& paramInfo : *paramInfos )
         AddParam( paramInfo );
 
-    if( aType == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE || aType == SIM_MODEL::TYPE::KIBIS_DIFFDRIVER )
+    SwitchSingleEndedDiff( false );
+}
+
+
+void SIM_MODEL_KIBIS::SwitchSingleEndedDiff( bool aDiff )
+{
+    DeletePins();
+
+    if( aDiff )
     {
         AddPin( { "GND", "1" } );
         AddPin( { "+", "2" } );
@@ -207,7 +265,6 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType ) :
         AddPin( { "IN/OUT", "2" } );
     }
 }
-
 
 SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) : SIM_MODEL_KIBIS( aType )
 {
@@ -405,7 +462,15 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeRectWaveformParamInfos(
     paramInfo.defaultValue = "0";
     paramInfo.description = _( "Delay" );
     paramInfos.push_back( paramInfo );
-    
+
+    paramInfo.name = "cycles";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "";
+    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
+    paramInfo.defaultValue = "1";
+    paramInfo.description = _( "cycles" );
+    paramInfos.push_back( paramInfo );
+
     return paramInfos;
 }
 
@@ -432,4 +497,21 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makePrbsWaveformParamInfos(
     paramInfos.push_back( paramInfo );
 
     return paramInfos;
+}
+
+void SIM_MODEL_KIBIS::ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
+{
+    bool diffMode = SIM_MODEL::GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
+    SwitchSingleEndedDiff( diffMode );
+
+    SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL_KIBIS::ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
+{
+    bool diffMode = SIM_MODEL::GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
+    SwitchSingleEndedDiff( diffMode );
+
+    SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
 }

@@ -24,7 +24,7 @@
 #ifndef SIM_LIBRARY_KIBIS_H
 #define SIM_LIBRARY_KIBIS_H
 
-#include <../../pcbnew/ibis/kibis.h>
+#include <sim/kibis/kibis.h>
 #include <sim/sim_library.h>
 #include <sim/sim_model_kibis.h>
 
@@ -35,6 +35,7 @@ class SIM_LIBRARY_KIBIS : public SIM_LIBRARY
 public:
     static constexpr auto PIN_FIELD = "Ibis_Pin";
     static constexpr auto MODEL_FIELD = "Ibis_Model";
+    static constexpr auto DIFF_FIELD = "Ibis_Diff";
 
     // @copydoc SIM_LIBRARY::ReadFile()
     void ReadFile( const std::string& aFilePath, SIM_MODEL::TYPE aType );
@@ -47,9 +48,11 @@ public:
     void WriteFile( const std::string& aFilePath ) override{};
 
     bool InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName );
+    bool isPinDiff( const std::string& aComp, const std::string& aPinNumber );
 
 protected:
     KIBIS m_kibis;
+    std::vector<std::pair<std::string, std::string>> m_diffPins;
 };
 
 #endif // SIM_LIBRARY_SPICE_H

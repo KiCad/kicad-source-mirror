@@ -303,14 +303,14 @@ std::string IVtable::Spice( int aN, std::string aPort1, std::string aPort2, std:
         for( IVtableEntry& entry : m_entries )
         {
             result += doubleToString( entry.V );
-            result += " ";
+            result += "\n+";
         }
         result += "]\n+ y_array=[";
 
         for( IVtableEntry& entry : m_entries )
         {
             result += doubleToString( entry.I.value[aCorner] );
-            result += " ";
+            result += "\n+";
         }
         result += "]\n+ input_domain=0.05 fraction=TRUE)\n\n";
     }
@@ -2284,6 +2284,7 @@ bool IbisParser::readDiffPin()
 {
     bool status = true;
 
+    m_lineIndex = 0; // rewind
     IbisDiffPinEntry entry( m_reporter );
 
     if( m_continue == IBIS_PARSER_CONTINUE::NONE ) // No info on first line
@@ -2302,7 +2303,7 @@ bool IbisParser::readDiffPin()
             Report( _( "Incorrect inv_pin name" ), RPT_SEVERITY_ERROR );
             status = false;
         }
-        if( status && readWord( entry.pinB ) )
+        if( status )
         {
             m_currentComponent->m_diffPin.m_entries.push_back( entry );
         }
@@ -2468,7 +2469,7 @@ bool IbisParser::onNewLine()
             return true;
         }
 
-        // No new keyword ? Then it is the continuatino of the previous one !
+        // No new keyword ? Then it is the continuation of the previous one !
         switch( m_continue )
         {
         case IBIS_PARSER_CONTINUE::STRING:

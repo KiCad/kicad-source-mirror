@@ -24,7 +24,7 @@
 #ifndef SIM_MODEL_KIBIS_H
 #define SIM_MODEL_KIBIS_H
 
-#include <../../pcbnew/ibis/kibis.h>
+#include <sim/kibis/kibis.h>
 #include <sim/sim_model.h>
 #include <sim/spice_generator.h>
 #include <project.h>
@@ -41,7 +41,8 @@ public:
     std::string ModelLine( const SPICE_ITEM& aItem ) const override;
     std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const override;
 
-    std::string IbisDevice( const SPICE_ITEM& aItem ) const;
+    std::string IbisDevice( const SPICE_ITEM& aItem, const std::string aCwd,
+                            const std::string aCacheDir ) const;
 
 protected:
     std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const override;
@@ -87,6 +88,13 @@ public:
     bool ChangePin( SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber );
 
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
+
+    void SwitchSingleEndedDiff( bool aDiff );
+    bool CanDifferential() { return m_enableDiff; };
+    bool m_enableDiff;
+
+    void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
+    void ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields ) override;
 
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;

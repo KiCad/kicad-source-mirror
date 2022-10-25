@@ -347,8 +347,6 @@ public:
         KIBIS_DRIVER_DC,
         KIBIS_DRIVER_RECT,
         KIBIS_DRIVER_PRBS,
-        KIBIS_DIFFDEVICE,
-        KIBIS_DIFFDRIVER,
 
         RAWSPICE
     )
@@ -545,6 +543,8 @@ public:
     SPICE_INFO GetSpiceInfo() const { return SpiceInfo( GetType() ); }
 
     void AddPin( const PIN& aPin );
+    void DeletePins();
+
     int FindModelPinIndex( const std::string& aSymbolPinNumber );
     void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
 

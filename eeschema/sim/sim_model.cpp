@@ -36,6 +36,8 @@
 #include <sim/sim_model_tline.h>
 #include <sim/sim_model_xspice.h>
 
+#include <sim/sim_library_kibis.h>
+
 #include <lib_symbol.h>
 #include <confirm.h>
 
@@ -238,8 +240,6 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::KIBIS_DRIVER_DC:      return { DEVICE_TYPE_::KIBIS,  "IBISDRIVERDC",   "DC driver"                  };
     case TYPE::KIBIS_DRIVER_RECT:    return { DEVICE_TYPE_::KIBIS,  "IBISDRIVERRECT", "Rectangular wave driver"    };
     case TYPE::KIBIS_DRIVER_PRBS:    return { DEVICE_TYPE_::KIBIS,  "IBISDRIVERPRBS", "PRBS driver"                };
-    case TYPE::KIBIS_DIFFDEVICE:     return { DEVICE_TYPE_::KIBIS,  "IBISDIFFDEVICE", "Differential device"        };
-    case TYPE::KIBIS_DIFFDRIVER:     return { DEVICE_TYPE_::KIBIS,  "IBISDIFFDRIVER", "Differential driver"        };
 
     case TYPE::RAWSPICE:             return { DEVICE_TYPE_::SPICE,  "",               ""                           };
 
@@ -376,8 +376,6 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::KIBIS_DRIVER_DC:      return { "X"  };
     case TYPE::KIBIS_DRIVER_RECT:    return { "X"  };
     case TYPE::KIBIS_DRIVER_PRBS:    return { "X"  };
-    case TYPE::KIBIS_DIFFDEVICE:     return { "X"  };
-    case TYPE::KIBIS_DIFFDRIVER:     return { "X"  };
 
     case TYPE::NONE:
     case TYPE::RAWSPICE:
@@ -709,6 +707,11 @@ void SIM_MODEL::AddPin( const PIN& aPin )
     m_pins.push_back( aPin );
 }
 
+void SIM_MODEL::DeletePins()
+{
+    m_pins.clear();
+}
+
 
 int SIM_MODEL::FindModelPinIndex( const std::string& aSymbolPinNumber )
 {
@@ -949,8 +952,6 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::KIBIS_DRIVER_DC:
     case TYPE::KIBIS_DRIVER_RECT:
     case TYPE::KIBIS_DRIVER_PRBS:
-    case TYPE::KIBIS_DIFFDEVICE:
-    case TYPE::KIBIS_DIFFDRIVER:
         return std::make_unique<SIM_MODEL_KIBIS>( aType );
 
     case TYPE::RAWSPICE:

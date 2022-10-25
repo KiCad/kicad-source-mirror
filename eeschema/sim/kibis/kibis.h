@@ -68,6 +68,12 @@ public:
     bool                inverted = false; // Used for differential drivers
     virtual ~KIBIS_WAVEFORM(){};
 
+    virtual std::vector<std::pair<int, double>> GenerateBitSequence()
+    {
+        std::vector<std::pair<int, double>> bits;
+        return bits;
+    };
+
 protected:
     KIBIS_WAVEFORM_TYPE m_type = KIBIS_WAVEFORM_TYPE::NONE;
 };
@@ -81,6 +87,7 @@ public:
     int    m_cycles = 1;
     double m_delay = 0;
 
+    std::vector<std::pair<int, double>> GenerateBitSequence() override;
     double GetDuration() override { return ( m_ton + m_toff ) * m_cycles; };
 };
 
@@ -93,7 +100,7 @@ public:
     double m_delay = 0;
     double m_bits = 10;
 
-    std::vector<std::pair<int, double>> GenerateBitSequence();
+    std::vector<std::pair<int, double>> GenerateBitSequence() override;
     double GetDuration() override { return m_bits / m_bitrate ; };
 };
 
@@ -101,18 +108,21 @@ class KIBIS_WAVEFORM_STUCK_HIGH : public KIBIS_WAVEFORM
 {
 public:
     KIBIS_WAVEFORM_STUCK_HIGH() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::STUCK_HIGH; };
+    std::vector<std::pair<int, double>> GenerateBitSequence() override;
 };
 
 class KIBIS_WAVEFORM_STUCK_LOW : public KIBIS_WAVEFORM
 {
 public:
     KIBIS_WAVEFORM_STUCK_LOW() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::STUCK_LOW; };
+    std::vector<std::pair<int, double>> GenerateBitSequence() override;
 };
 
 class KIBIS_WAVEFORM_HIGH_Z : public KIBIS_WAVEFORM
 {
 public:
     KIBIS_WAVEFORM_HIGH_Z() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::HIGH_Z; };
+    std::vector<std::pair<int, double>> GenerateBitSequence() override;
 };
 
 /** Accuracy level.
@@ -185,6 +195,9 @@ public:
     std::vector<KIBIS_COMPONENT> m_components;
     std::vector<KIBIS_MODEL>     m_models;
     KIBIS_FILE                   m_file;
+
+    /** @brief Absolute path of the directory that will be used for caching.  */
+    std::string m_cacheDir = "";
 
     /** @brief Return the model with name aName . Nullptr if not found */
     KIBIS_MODEL* GetModel( std::string aName );
@@ -385,6 +398,10 @@ public:
      * @param aSimul The simulation to run, multiline spice directives
      */
     void     getKuKdFromFile( std::string* aSimul );
+
+    KIBIS_PIN* m_complementaryPin = nullptr;
+
+    bool isDiffPin() { return m_complementaryPin != nullptr; };
 };
 
 class KIBIS_COMPONENT : public KIBIS_ANY

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,68 +23,66 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, _("Source") ), wxVERTICAL );
+	m_sourceStaticSizer = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, _("Source") ), wxVERTICAL );
 
-	wxFlexGridSizer* fgSizer15;
-	fgSizer15 = new wxFlexGridSizer( 0, 4, 0, 0 );
-	fgSizer15->AddGrowableCol( 2 );
-	fgSizer15->SetFlexibleDirection( wxBOTH );
-	fgSizer15->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_sourceSizer = new wxFlexGridSizer( 0, 4, 0, 0 );
+	m_sourceSizer->AddGrowableCol( 2 );
+	m_sourceSizer->SetFlexibleDirection( wxBOTH );
+	m_sourceSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_useInstanceModelRadioButton = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Instance"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	fgSizer15->Add( m_useInstanceModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_useInstanceModelRadioButton = new wxRadioButton( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, _("Instance"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_sourceSizer->Add( m_useInstanceModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_useLibraryModelRadioButton = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Library:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_useLibraryModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_useLibraryModelRadioButton = new wxRadioButton( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, _("Library:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sourceSizer->Add( m_useLibraryModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_tclibraryPathName = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer15->Add( m_tclibraryPathName, 0, wxEXPAND|wxALL, 5 );
+	m_tclibraryPathName = new wxTextCtrl( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_sourceSizer->Add( m_tclibraryPathName, 0, wxEXPAND|wxALL, 5 );
 
-	m_browseButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	fgSizer15->Add( m_browseButton, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_browseButton = new wxBitmapButton( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_sourceSizer->Add( m_browseButton, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_sourceSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_modelNameLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_modelNameLabel = new wxStaticText( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_modelNameLabel->Wrap( -1 );
-	fgSizer15->Add( m_modelNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_sourceSizer->Add( m_modelNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_modelNameCombobox = new wxComboBox( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
-	fgSizer15->Add( m_modelNameCombobox, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	m_modelNameCombobox = new wxComboBox( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
+	m_sourceSizer->Add( m_modelNameCombobox, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
-	m_overrideCheckbox = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Override"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_overrideCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_overrideCheckbox = new wxCheckBox( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, _("Override"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sourceSizer->Add( m_overrideCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	fgSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_sourceSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_ibisPinLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Pin:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ibisPinLabel = new wxStaticText( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, _("Pin:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_ibisPinLabel->Wrap( -1 );
-	fgSizer15->Add( m_ibisPinLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
+	m_sourceSizer->Add( m_ibisPinLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
 
-	m_ibisPinCombobox = new wxComboBox( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
-	fgSizer15->Add( m_ibisPinCombobox, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	m_ibisPinCombobox = new wxComboBox( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
+	m_sourceSizer->Add( m_ibisPinCombobox, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+	m_differentialCheckbox = new wxCheckBox( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, _("Differential"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sourceSizer->Add( m_differentialCheckbox, 0, wxALL, 5 );
 
 
-	fgSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_sourceSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-
-	fgSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_ibisModelLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ibisModelLabel = new wxStaticText( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_ibisModelLabel->Wrap( -1 );
-	fgSizer15->Add( m_ibisModelLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
+	m_sourceSizer->Add( m_ibisModelLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
 
-	m_ibisModelCombobox = new wxComboBox( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
-	fgSizer15->Add( m_ibisModelCombobox, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
-
-
-	sbSizer4->Add( fgSizer15, 0, wxEXPAND, 5 );
+	m_ibisModelCombobox = new wxComboBox( m_sourceStaticSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
+	m_sourceSizer->Add( m_ibisModelCombobox, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
-	bSizer9->Add( sbSizer4, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	m_sourceStaticSizer->Add( m_sourceSizer, 0, wxEXPAND, 5 );
+
+
+	bSizer9->Add( m_sourceStaticSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizer5;
 	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, _("Model") ), wxVERTICAL );
@@ -279,6 +277,8 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_ibisPinCombobox->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );
 	m_ibisPinCombobox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onIbisPinComboboxTextEnter ), NULL, this );
 	m_ibisPinCombobox->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxUpdate ), NULL, this );
+	m_differentialCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onDifferentialCheckbox ), NULL, this );
+	m_differentialCheckbox->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onOverrideCheckboxUpdate ), NULL, this );
 	m_ibisModelCombobox->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onIbisModelCombobox ), NULL, this );
 	m_ibisModelCombobox->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );
 	m_ibisModelCombobox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onIbisModelComboboxTextEnter ), NULL, this );
@@ -313,6 +313,8 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	m_ibisPinCombobox->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );
 	m_ibisPinCombobox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onIbisPinComboboxTextEnter ), NULL, this );
 	m_ibisPinCombobox->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxUpdate ), NULL, this );
+	m_differentialCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onDifferentialCheckbox ), NULL, this );
+	m_differentialCheckbox->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onOverrideCheckboxUpdate ), NULL, this );
 	m_ibisModelCombobox->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onIbisModelCombobox ), NULL, this );
 	m_ibisModelCombobox->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );
 	m_ibisModelCombobox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onIbisModelComboboxTextEnter ), NULL, this );

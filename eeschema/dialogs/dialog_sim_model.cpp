@@ -165,6 +165,17 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                     m_ibisModelCombobox->SetStringSelection(
                             SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD ) );
                 }
+
+                if( SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1" )
+                {
+                    kibismodel->SwitchSingleEndedDiff( true );
+                    m_differentialCheckbox->SetValue( true );
+                }
+                else
+                {
+                    kibismodel->SwitchSingleEndedDiff( false );
+                    m_differentialCheckbox->SetValue( false );
+                }
             }
         }
     }
@@ -235,13 +246,16 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
                 m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
 
         if( kibismodel )
-
         {
             SIM_MODEL::SetFieldValue(
                     m_fields, SIM_LIBRARY_KIBIS::PIN_FIELD,
                     kibismodel->GetIbisPins().at( m_ibisPinCombobox->GetSelection() ).first );
             SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD,
                                       std::string( m_ibisModelCombobox->GetValue().c_str() ) );
+            SIM_MODEL::SetFieldValue(
+                    m_fields, SIM_LIBRARY_KIBIS::DIFF_FIELD,
+                    ( kibismodel->CanDifferential() && m_differentialCheckbox->GetValue() ) ? "1"
+                                                                                            : "" );
         }
     }
 
@@ -280,11 +294,46 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
 {
+    SIM_MODEL_KIBIS* modelkibis = nullptr;
+
+    if( isIbisLoaded() )
+    {
+        modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
+
+        for ( auto& item : m_sourceSizer->GetChildren() )
+        {
+            if ( item->GetWindow() == m_differentialCheckbox )
+            {
+                item->SetFlag( wxALIGN_CENTER_VERTICAL|wxALL|wxRESERVE_SPACE_EVEN_IF_HIDDEN );
+            }
+            if ( item->GetWindow() == m_overrideCheckbox )
+            {
+                item->SetFlag( wxALIGN_CENTER_VERTICAL|wxALL );
+            }
+        }
+    }
+    else
+    {
+        for ( auto& item : m_sourceSizer->GetChildren() )
+        {
+            if ( item->GetWindow() == m_differentialCheckbox )
+            {
+                item->SetFlag( wxALIGN_CENTER_VERTICAL|wxALL );
+            }
+            if ( item->GetWindow() == m_overrideCheckbox )
+            {
+                item->SetFlag( wxALIGN_CENTER_VERTICAL|wxALL|wxRESERVE_SPACE_EVEN_IF_HIDDEN );
+            }
+        }
+    }
+
     m_ibisModelCombobox->Show( isIbisLoaded() );
     m_ibisPinCombobox->Show( isIbisLoaded() );
     m_ibisModelLabel->Show( isIbisLoaded() );
     m_ibisPinLabel->Show( isIbisLoaded() );
     m_overrideCheckbox->Show( !isIbisLoaded() );
+
+    m_differentialCheckbox->Show( isIbisLoaded() && modelkibis && modelkibis->CanDifferential() );
 
     m_modelNameLabel->SetLabel( isIbisLoaded() ? "Component:" : "Model:" );
 }
@@ -554,6 +603,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
         {
             wxString ibisTypeString = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::TYPE_FIELD );
 
+
             SIM_MODEL::TYPE ibisType = SIM_MODEL::TYPE::KIBIS_DEVICE;
 
             if( ibisTypeString == "IBISDRIVERDC" )
@@ -562,10 +612,6 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
                 ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER_RECT;
             else if( ibisTypeString == "IBISDRIVRPRBS" )
                 ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS;
-            else if( ibisTypeString == "IBISDIFFDEVICE" )
-                ibisType = SIM_MODEL::TYPE::KIBIS_DIFFDEVICE;
-            else if( ibisTypeString == "IBISDIFFDRIVER" )
-                ibisType = SIM_MODEL::TYPE::KIBIS_DIFFDRIVER;
 
             std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library )
                     ->ReadFile( std::string( absolutePath.ToUTF8() ), ibisType );
@@ -986,8 +1032,13 @@ void DIALOG_SIM_MODEL<T>::onIbisPinCombobox( wxCommandEvent& aEvent )
         }
 
         std::vector<std::pair<std::string, std::string>> strs = modelkibis->GetIbisPins();
+        std::string pinNumber = strs.at( m_ibisPinCombobox->GetSelection() ).first;
+
         modelkibis->ChangePin( *std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library ),
-                               strs.at( m_ibisPinCombobox->GetSelection() ).first );
+                               pinNumber );
+
+        modelkibis->m_enableDiff = dynamic_cast<SIM_LIBRARY_KIBIS*>( m_library.get() )
+                                           ->isPinDiff( modelkibis->GetComponentName(), pinNumber );
 
         for( wxString modelName : modelkibis->GetIbisModels() )
             modelLabels.Add( modelName );
@@ -1030,6 +1081,18 @@ void DIALOG_SIM_MODEL<T>::onOverrideCheckbox( wxCommandEvent& aEvent )
     updateWidgets();
 }
 
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onDifferentialCheckbox( wxCommandEvent& aEvent )
+{
+    if( isIbisLoaded() )
+    {
+        SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
+        bool             diff = m_differentialCheckbox->GetValue() && modelkibis->CanDifferential();
+        modelkibis->SwitchSingleEndedDiff( diff );
+    }
+    updateWidgets();
+}
+
 
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
@@ -1059,9 +1122,7 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
                 && ( type == SIM_MODEL::TYPE::KIBIS_DEVICE
                      || type == SIM_MODEL::TYPE::KIBIS_DRIVER_DC
                      || type == SIM_MODEL::TYPE::KIBIS_DRIVER_RECT
-                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS
-                     || type == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE
-                     || type == SIM_MODEL::TYPE::KIBIS_DIFFDRIVER ) )
+                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS ) )
             {
                 std::shared_ptr<SIM_MODEL_KIBIS> kibismodel =
                         std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
@@ -1070,12 +1131,6 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
                 m_libraryModels.at( m_modelNameCombobox->GetSelection() ) =
                         std::shared_ptr<SIM_MODEL>( dynamic_cast<SIM_MODEL*>(
                                 new SIM_MODEL_KIBIS( type, *kibismodel, m_fields ) ) );
-
-                wxCommandEvent dummyEvent;
-                onIbisPinCombobox( dummyEvent );
-
-                kibismodel = std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
-                        m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
             }
 
             m_curModelType = type;

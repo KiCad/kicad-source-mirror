@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <../../pcbnew/ibis/kibis.h>
+#include <sim/kibis/kibis.h>
 #include "netlist_exporter_spice.h"
 #include <sim/sim_library_spice.h>
 #include <sim/sim_model_raw_spice.h>
@@ -403,7 +403,9 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
         }
 
         auto spiceGenerator = static_cast<const SPICE_GENERATOR_KIBIS&>( kibisModel->SpiceGenerator() );
-        std::string modelData = spiceGenerator.IbisDevice( aItem );
+        std::string modelData = spiceGenerator.IbisDevice(
+                aItem, std::string( m_schematic->Prj().GetProjectPath().c_str() ),
+                std::string( cacheDir.GetPath( wxPATH_GET_SEPARATOR ) ).c_str() );
 
         cacheFile.Write( wxString( modelData ) );
         m_rawIncludes.insert( libraryPath );

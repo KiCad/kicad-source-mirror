@@ -25,40 +25,32 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
 
-add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DDRC_PROTO -DTEST_APP_NO_MAIN)
+add_definitions(-DBOOST_TEST_DYN_LINK -DEESCHEMA -DDRC_PROTO -DTEST_APP_NO_MAIN)
 
 add_executable( ibis_proto
     qaIbisParser.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/ibis/ibis_parser.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/ibis/kibis.cpp
+    ${CMAKE_SOURCE_DIR}/eeschema/sim/kibis/ibis_parser.cpp
+    ${CMAKE_SOURCE_DIR}/eeschema/sim/kibis/kibis.cpp
+    ${CMAKE_SOURCE_DIR}/eeschema/sim/ngspice_helpers.cpp
+    ${CMAKE_SOURCE_DIR}/eeschema/sim/ngspice.cpp
 )
 
-add_dependencies( ibis_proto pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} )
+add_dependencies( ibis_proto pnsrouter pcbcommon )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/3d-viewer
     ${CMAKE_SOURCE_DIR}/common
-    ${CMAKE_SOURCE_DIR}/pcbnew
-    ${CMAKE_SOURCE_DIR}/pcbnew/router
-    ${CMAKE_SOURCE_DIR}/pcbnew/tools
-    ${CMAKE_SOURCE_DIR}/pcbnew/dialogs
-    ${CMAKE_SOURCE_DIR}/polygon
-    ${CMAKE_SOURCE_DIR}/common/geometry
-    ${CMAKE_SOURCE_DIR}/libs/kimath/include/math
-    ${CMAKE_SOURCE_DIR}/qa/common
-    ${CMAKE_SOURCE_DIR}/qa
-    ${CMAKE_SOURCE_DIR}/qa/qa_utils
-    ${CMAKE_SOURCE_DIR}/qa/qa_utils/include
-    ${CMAKE_SOURCE_DIR}/qa/pcbnew_utils/include
+    ${CMAKE_SOURCE_DIR}/eeschema
+    ${CMAKE_SOURCE_DIR}/eeschema/sim
+    ${CMAKE_SOURCE_DIR}/qa/eeschema_utils/include
     ${Boost_INCLUDE_DIR}
     ${INC_AFTER}
 )
 
 target_link_libraries( ibis_proto
-    qa_pcbnew_utils
+    qa_eechema_utils
     3d-viewer
     connectivity
     pcbcommon
@@ -71,12 +63,11 @@ target_link_libraries( ibis_proto
     tinyspline_lib
     nanosvg
     idf3
-    ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}
-    ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
+    ${EESCHEMA_EXTRA_LIBS}    # -lrt must follow Boost
 )
 
 configure_file( "ibis_v1_1.ibs" "ibis_v1_1.ibs" COPYONLY )

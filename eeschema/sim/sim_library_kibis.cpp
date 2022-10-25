@@ -43,9 +43,6 @@ void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, SIM_MODEL::TYPE 
 
     unsigned pinNumber = 2;
 
-    if( aType == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE || aType == SIM_MODEL::TYPE::KIBIS_DIFFDEVICE )
-        pinNumber = 3;
-
     for( KIBIS_COMPONENT& kcomp : m_kibis.m_components )
     {
         m_models.push_back( SIM_MODEL::Create( aType, pinNumber ) );
@@ -72,8 +69,22 @@ bool SIM_LIBRARY_KIBIS::InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName )
         for( KIBIS_PIN& kpin : kcomp.m_pins )
         {
             aModel.m_ibisPins.emplace_back( kpin.m_pinNumber, kpin.m_signalName );
+
+            if( kpin.isDiffPin() )
+                m_diffPins.emplace_back( kcomp.m_name, kpin.m_pinNumber );
         }
         return true;
+    }
+    return false;
+}
+
+
+bool SIM_LIBRARY_KIBIS::isPinDiff( const std::string& aComp, const std::string& aPinNumber )
+{
+    for( std::pair<std::string, std::string> aInfo : m_diffPins )
+    {
+        if( aInfo.first == aComp && aInfo.second == aPinNumber )
+            return true;
     }
     return false;
 }

@@ -49,5 +49,5 @@ add_subdirectory( unittests )
 add_subdirectory( tools )
 
 if( KICAD_SIGNAL_INTEGRITY )
-    add_subdirectory( ibis )
+    #add_subdirectory( ibis )
 endif()

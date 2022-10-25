@@ -1,4 +1,4 @@
-#include "../../pcbnew/ibis/kibis.h"
+#include "../../eeschema/sim/kibis/kibis.h"
 #include <wx/textfile.h>
 
 int main( void )

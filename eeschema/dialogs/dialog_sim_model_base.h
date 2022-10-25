@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,6 +54,8 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_modelPanel;
+		wxStaticBoxSizer* m_sourceStaticSizer;
+		wxFlexGridSizer* m_sourceSizer;
 		wxRadioButton* m_useInstanceModelRadioButton;
 		wxRadioButton* m_useLibraryModelRadioButton;
 		wxTextCtrl* m_tclibraryPathName;
@@ -63,6 +65,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_overrideCheckbox;
 		wxStaticText* m_ibisPinLabel;
 		wxComboBox* m_ibisPinCombobox;
+		wxCheckBox* m_differentialCheckbox;
 		wxStaticText* m_ibisModelLabel;
 		wxComboBox* m_ibisModelCombobox;
 		wxNotebook* m_notebook4;
@@ -97,6 +100,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onOverrideCheckboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onIbisPinCombobox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisPinComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDifferentialCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisModelCombobox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisModelComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeviceTypeChoice( wxCommandEvent& event ) { event.Skip(); }

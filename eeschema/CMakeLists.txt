@@ -276,8 +276,6 @@ set( EESCHEMA_SRCS
     sch_plugins/database/sch_database_plugin.cpp
 
 
-    ${CMAKE_SOURCE_DIR}/pcbnew/ibis/ibis_parser.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/ibis/kibis.cpp
 
     # Some simulation features must be built even if libngspice is not linked.
     sim/sim_library.cpp
@@ -305,6 +303,9 @@ set( EESCHEMA_SRCS
     sim/spice_library_parser.cpp
     sim/spice_model_parser.cpp
 
+    sim/kibis/ibis_parser.cpp
+    sim/kibis/kibis.cpp
+    
     tools/assign_footprints.cpp
     tools/backannotate.cpp
     tools/ee_actions.cpp
