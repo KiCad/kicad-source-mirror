@@ -1957,7 +1957,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 
         // Adjust text drawn in an outline font to more closely mimic the positioning of
         // SCH_FIELD text.
-        if( font->IsOutline() )
+        if( font->IsOutline() && aText->Type() == SCH_TEXT_T )
         {
             BOX2I    firstLineBBox = aText->GetTextBox( 0 );
             int      sizeDiff = firstLineBBox.GetHeight() - aText->GetTextSize().y;
