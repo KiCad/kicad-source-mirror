@@ -334,6 +334,7 @@ void DIALOG_PLOT::init_Dialog()
 
     // Black and white plotting
     m_SVGBlackAndWhite->SetValue( m_plotOpts.GetBlackAndWhite() );
+    m_PDFBlackAndWhite->SetValue( m_plotOpts.GetBlackAndWhite() );
 
     // Initialize a few other parameters, which can also be modified
     // from the drill dialog
@@ -575,7 +576,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_SizerSolderMaskAlert );
     }
 
-
     switch( getPlotFormat() )
     {
     case PLOT_FORMAT::SVG:
@@ -597,9 +597,15 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_forcePSA4OutputOpt->SetValue( false );
 
         if( getPlotFormat() == PLOT_FORMAT::SVG )
+        {
             m_PlotOptionsSizer->Show( m_svgOptionsSizer );
+            m_PlotOptionsSizer->Hide( m_PDFOptionsSizer );
+        }
         else
+        {
             m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
+            m_PlotOptionsSizer->Show( m_PDFOptionsSizer );
+        }
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
@@ -626,6 +632,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Show( m_PSOptionsSizer );
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_PDFOptionsSizer );
         break;
 
     case PLOT_FORMAT::GERBER:
@@ -652,6 +659,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_PDFOptionsSizer );
         break;
 
     case PLOT_FORMAT::HPGL:
@@ -674,6 +682,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_PDFOptionsSizer );
         break;
 
     case PLOT_FORMAT::DXF:
@@ -699,6 +708,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         m_PlotOptionsSizer->Show( m_SizerDXF_options );
         m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_PDFOptionsSizer );
 
         OnChangeDXFPlotMode( event );
         break;
@@ -787,7 +797,12 @@ void DIALOG_PLOT::applyPlotSettings()
         tempOptions.SetTextMode( m_DXF_plotTextStrokeFontOpt->GetValue() ? PLOT_TEXT_MODE::DEFAULT :
                                                                            PLOT_TEXT_MODE::NATIVE );
 
-    tempOptions.SetBlackAndWhite( m_SVGBlackAndWhite->GetValue() );
+    if( getPlotFormat() == PLOT_FORMAT::SVG )
+        tempOptions.SetBlackAndWhite( m_SVGBlackAndWhite->GetValue() );
+    else if( getPlotFormat() == PLOT_FORMAT::PDF )
+        tempOptions.SetBlackAndWhite( m_PDFBlackAndWhite->GetValue() );
+    else
+        tempOptions.SetBlackAndWhite( true );
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.

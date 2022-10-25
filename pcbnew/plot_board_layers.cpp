@@ -314,16 +314,24 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             COLOR4D color = COLOR4D::BLACK;
 
-            if( ( pad->GetLayerSet() & aLayerMask )[B_Cu] )
-               color = aPlotOpt.ColorSettings()->GetColor( B_Cu );
+            // If we're plotting a single layer, the color for that layer can be used directly.
+            if( aLayerMask.count() == 1 )
+            {
+                color = aPlotOpt.ColorSettings()->GetColor( aLayerMask.Seq()[0] );
+            }
+            else
+            {
+                if( ( pad->GetLayerSet() & aLayerMask )[B_Cu] )
+                    color = aPlotOpt.ColorSettings()->GetColor( B_Cu );
 
-            if( ( pad->GetLayerSet() & aLayerMask )[F_Cu] )
-                color = color.LegacyMix( aPlotOpt.ColorSettings()->GetColor( F_Cu ) );
+                if( ( pad->GetLayerSet() & aLayerMask )[F_Cu] )
+                    color = color.LegacyMix( aPlotOpt.ColorSettings()->GetColor( F_Cu ) );
 
-            if( sketchPads && aLayerMask[F_Fab] )
-                color = aPlotOpt.ColorSettings()->GetColor( F_Fab );
-            else if( sketchPads && aLayerMask[B_Fab] )
-                color = aPlotOpt.ColorSettings()->GetColor( B_Fab );
+                if( sketchPads && aLayerMask[F_Fab] )
+                    color = aPlotOpt.ColorSettings()->GetColor( F_Fab );
+                else if( sketchPads && aLayerMask[B_Fab] )
+                    color = aPlotOpt.ColorSettings()->GetColor( B_Fab );
+            }
 
             VECTOR2I margin;
             int width_adj = 0;

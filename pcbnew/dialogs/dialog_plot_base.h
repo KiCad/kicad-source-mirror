@@ -122,6 +122,8 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticText* svgPrecisionLabel;
 		wxSpinCtrl* m_svgPrecsision;
 		wxCheckBox* m_SVGBlackAndWhite;
+		wxStaticBoxSizer* m_PDFOptionsSizer;
+		wxCheckBox* m_PDFBlackAndWhite;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_buttonDRC;

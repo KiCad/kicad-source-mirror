@@ -377,7 +377,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	gbSizer3->Add( m_svgPrecsision, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_SVGBlackAndWhite = new wxCheckBox( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot in black and white"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SVGBlackAndWhite->SetToolTip( _("Check to use KiCad stroke font\nUncheck to plot single-line ASCII texts as editable text (using DXF font)") );
+	m_SVGBlackAndWhite->SetToolTip( _("When disabled, the color from the chosen layer will be used to plot.") );
 
 	gbSizer3->Add( m_SVGBlackAndWhite, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
@@ -386,6 +386,16 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 
 	m_PlotOptionsSizer->Add( m_svgOptionsSizer, 1, wxEXPAND|wxALL, 5 );
+
+	m_PDFOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PDF Options") ), wxVERTICAL );
+
+	m_PDFBlackAndWhite = new wxCheckBox( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot in black and white"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PDFBlackAndWhite->SetToolTip( _("When disabled, the color from the chosen layer will be used to plot.") );
+
+	m_PDFOptionsSizer->Add( m_PDFBlackAndWhite, 0, wxALL, 5 );
+
+
+	m_PlotOptionsSizer->Add( m_PDFOptionsSizer, 1, wxALL|wxEXPAND, 5 );
 
 
 	bmiddleSizer->Add( m_PlotOptionsSizer, 0, 0, 6 );
