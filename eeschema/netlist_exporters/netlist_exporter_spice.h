@@ -123,7 +123,7 @@ public:
     const std::vector<std::string>& GetDirectives() { return m_directives; }
 
 protected:
-    void ReadDirectives( unsigned aNetlistOptions = 0 );
+    void ReadDirectives( unsigned aNetlistOptions, wxArrayString& aErrors );
     virtual void WriteDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) const;
 
     virtual std::string GenerateItemPinNetName( const std::string& aNetName, int& aNcCounter ) const;

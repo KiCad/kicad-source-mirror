@@ -41,7 +41,7 @@
 #include <sch_textbox.h>
 #include <string_utils.h>
 
-
+#include <dialogs/html_message_box.h>
 #include <boost/algorithm/string/replace.hpp>
 #include <fmt/core.h>
 #include <paths.h>
@@ -148,10 +148,11 @@ void NETLIST_EXPORTER_SPICE::WriteTail( OUTPUTFORMATTER& aFormatter, unsigned aN
 
 bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions )
 {
+    wxArrayString         error_msgs;
     std::set<std::string> refNames; // Set of reference names to check for duplication.
-    int ncCounter = 1;
+    int                   ncCounter = 1;
 
-    ReadDirectives( aNetlistOptions );
+    ReadDirectives( aNetlistOptions, error_msgs );
 
     m_nets.clear();
     m_items.clear();
@@ -167,9 +168,9 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
         if( !cacheDir.DirExists() )
         {
-            wxLogTrace(
-                    "IBIS_CACHE:", wxT( "%s:%s:%d\n * failed to create ibis cache directory '%s'" ),
-                    __FILE__, __FUNCTION__, __LINE__, cacheDir.GetPath() );
+            wxLogTrace( wxT( "IBIS_CACHE:" ),
+                        wxT( "%s:%s:%d\n * failed to create ibis cache directory '%s'" ),
+                        __FILE__, __FUNCTION__, __LINE__, cacheDir.GetPath() );
 
             return false;
         }
@@ -202,7 +203,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
-            if( !symbol )
+            if( !symbol || symbol->GetFieldText( SIM_MODEL::ENABLE_FIELD ) == wxT( "0" ) )
                 continue;
 
             CreatePinList( symbol, &sheet, true );
@@ -231,12 +232,20 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             }
             catch( const IO_ERROR& e )
             {
-                DisplayErrorMessage( nullptr,
-                                     wxString::Format( "Failed reading simulation model from symbol '%s':\n%s",
-                                                       symbol->GetRef( &sheet ),
-                                                       e.What() ) );
+                error_msgs.Add( wxString::Format( _( "Error reading simulation model from symbol "
+                                                     "'%s':\n%s" ),
+                                                  symbol->GetRef( &sheet ),
+                                                  e.What() ) );
             }
         }
+    }
+
+    if( error_msgs.GetCount() )
+    {
+        HTML_MESSAGE_BOX dlg( nullptr, _( "Errors" ) );
+
+        dlg.ListSet( error_msgs );
+        dlg.ShowModal();
     }
 
     return true;
@@ -279,7 +288,7 @@ const SPICE_ITEM* NETLIST_EXPORTER_SPICE::FindItem( const std::string& aRefName 
 }
 
 
-void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
+void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, wxArrayString& aErrors )
 {
     m_directives.clear();
 
@@ -330,9 +339,10 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
                     }
                     catch( const IO_ERROR& e )
                     {
-                        DisplayErrorMessage( nullptr,
-                                wxString::Format( "Failed reading model library '%s'.", path ),
-                                e.What() );
+                        aErrors.Add( wxString::Format( _( "Error reading simulation model library "
+                                                          "'%s':\n%s" ),
+                                                       path,
+                                                       e.What() ) );
                     }
                 }
                 else

@@ -4,7 +4,7 @@
  * Copyright (C) 2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,15 +25,14 @@
  */
 
 #include "ngspice_helpers.h"
-#include <string_utils.h>
 #include <macros.h>     // for TO_UTF8 def
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
 #include <locale_io.h>
 
 
-SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal(
-        const std::string& aVector, wxString& aSignal ) const
+SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
+                                                     wxString& aSignal ) const
 {
     using namespace std;
 
@@ -44,7 +43,7 @@ SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal(
     if( !internalDevParameter.Matches( vector ) )
     {
         // any text is a node name, which returns voltage
-        aSignal = "V(" + aVector + ")";
+        aSignal = wxT( "V(" ) + aVector + wxT( ")" );
         return SPT_VOLTAGE;
     }
     else
@@ -55,8 +54,8 @@ SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal(
         {
             // this is a branch current
             paramType[0] = 'I';
-            aSignal      = paramType + "(";
-            aSignal += internalDevParameter.GetMatch( vector, 1 ).Upper() + ")";
+            aSignal      = paramType + wxT( "(" );
+            aSignal += internalDevParameter.GetMatch( vector, 1 ).Upper() + wxT( ")" );
             return SPT_CURRENT;
         }
         else
@@ -69,14 +68,15 @@ SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal(
 
 wxString NGSPICE_CIRCUIT_MODEL::GetSheetSimCommand()
 {
-    wxString simCmd;
+    wxArrayString error_msgs;
+    wxString      simCmd;
 
-    ReadDirectives();
+    ReadDirectives( 0, error_msgs );
 
-    for( const auto& directive : GetDirectives() )
+    for( const std::string& directive : GetDirectives() )
     {
         if( IsSimCommand( directive ) )
-            simCmd += wxString::Format( "%s\r\n", directive );
+            simCmd += wxString::Format( wxT( "%s\r\n" ), directive );
     }
 
     return simCmd;
@@ -92,18 +92,18 @@ SIM_TYPE NGSPICE_CIRCUIT_MODEL::GetSimType()
 SIM_TYPE NGSPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
 {
     const std::vector<std::pair<wxString, SIM_TYPE>> simCmds = {
-        { "^.ac\\M.*", ST_AC },
-        { "^.dc\\M.*", ST_DC },
-        { "^.tran\\M.*", ST_TRANSIENT },
-        { "^.op\\M.*", ST_OP },
-        { "^.disto\\M.*", ST_DISTORTION },
-        { "^.noise\\M.*", ST_NOISE },
-        { "^.pz\\M.*", ST_POLE_ZERO },
-        { "^.sens\\M.*", ST_SENSITIVITY },
-        { "^.tf\\M.*", ST_TRANS_FUNC } };
+        { wxT( "^.ac\\M.*"    ), ST_AC },
+        { wxT( "^.dc\\M.*"    ), ST_DC },
+        { wxT( "^.tran\\M.*"  ), ST_TRANSIENT },
+        { wxT( "^.op\\M.*"    ), ST_OP },
+        { wxT( "^.disto\\M.*" ), ST_DISTORTION },
+        { wxT( "^.noise\\M.*" ), ST_NOISE },
+        { wxT( "^.pz\\M.*"    ), ST_POLE_ZERO },
+        { wxT( "^.sens\\M.*"  ), ST_SENSITIVITY },
+        { wxT( "^.tf\\M.*"    ), ST_TRANS_FUNC } };
     wxRegEx simCmd;
 
-    for( const auto& c : simCmds )
+    for( const std::pair<wxString, SIM_TYPE>& c : simCmds )
     {
         simCmd.Compile( c.first, wxRE_ADVANCED | wxRE_NOSUB | wxRE_ICASE );
 
