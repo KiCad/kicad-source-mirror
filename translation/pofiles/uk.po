@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-24 14:09+0000\n"
+"PO-Revision-Date: 2022-10-26 22:09+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -9036,22 +9036,19 @@ msgid "-- leave unchanged --"
 msgstr "-- залишати без змін --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
-#, fuzzy
 msgid "H Align:"
-msgstr "Горизонтальне вирівнювання"
+msgstr "Горизонтальне вирівнювання:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:267
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "Видимість (тільки поля)"
+msgstr "(тільки поля)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
-#, fuzzy
 msgid "V Align:"
-msgstr "Вертикальне вирівнювання"
+msgstr "Вертикальне вирівнювання:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:323
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:353
@@ -9096,11 +9093,13 @@ msgid "symbol"
 msgstr "символ"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Помилка створення бібліотеки символів '%s."
+msgstr ""
+"Помилка створення бібліотеки символів '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9114,16 +9113,18 @@ msgid "File '%s' not found."
 msgstr "Файл '%s' не знайдено."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "Помилка завантаження таблиці з символами бібліотеки '%s."
+msgstr ""
+"Помилка завантаження таблиці з символами бібліотеки '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "Не вдалося створити глобальну таблицю бібліотек у '%s'."
+msgstr "Не вдалося створити глобальну таблицю бібліотек '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
 #, fuzzy, c-format
@@ -34391,15 +34392,15 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:785
 #, c-format
 msgid "Record of unknown type: '%d'."
-msgstr ""
+msgstr "Запис невідомого типу: '%d'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:875
 msgid "Loading extended primitive information data..."
-msgstr ""
+msgstr "Завантаження розширеної інформації про примітиви..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:896
 msgid "Loading board data..."
-msgstr ""
+msgstr "Завантаження даних про плату..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1076
 msgid "Loading netclasses..."
@@ -34412,11 +34413,11 @@ msgstr "Дублювання назви класу звʼязків '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1121
 msgid "Loading components..."
-msgstr ""
+msgstr "Завантаження компонентів..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1182
 msgid "Loading component 3D models..."
-msgstr ""
+msgstr "Завантаження компонентів 3D моделей..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1261
 #: pcbnew/plugins/altium/altium_pcb.cpp:1357
@@ -34433,22 +34434,22 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1558
 msgid "Loading dimension drawings..."
-msgstr ""
+msgstr "Завантаження розмірів..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1579
 #: pcbnew/plugins/altium/altium_pcb.cpp:1586
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "Ігноровані розміри типу %d (не підтримуються)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1627
 msgid "No 3D-models will be imported."
-msgstr ""
+msgstr "Жодної 3D-моделі не буде імпортовано."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1656
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr ""
+msgstr "Файл не знайдено: '%s'. 3D-модель не імпортована."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1694
 msgid "Loading nets..."
@@ -34456,37 +34457,37 @@ msgstr "Завантаження звʼязків..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1715
 msgid "Loading polygons..."
-msgstr ""
+msgstr "Завантаження полігонів..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1839
 msgid "Loading rules..."
-msgstr ""
+msgstr "Завантаження правил..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1869
 msgid "Loading board regions..."
-msgstr ""
+msgstr "Завантаження регіонів плати..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1889
 msgid "Loading zones..."
-msgstr ""
+msgstr "Завантаження зон..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1962
 #: pcbnew/plugins/altium/altium_pcb.cpp:2008
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
+msgstr "Ігнорувати форму багатокутника типу %d (не підтримується)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2069
 msgid "Loading zone fills..."
-msgstr ""
+msgstr "Завантаження зон заповнення..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2150
 msgid "Loading arcs..."
-msgstr ""
+msgstr "Завантаження дуг..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2355
 msgid "Loading pads..."
-msgstr ""
+msgstr "Завантаження конт. пл..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2440
 #, c-format
