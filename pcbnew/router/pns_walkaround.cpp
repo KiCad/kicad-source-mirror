@@ -173,7 +173,7 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
             break;
 
         // Safety valve
-        if( path_cw.Line().Length() > lengthLimit && path_ccw.Line().Length() > lengthLimit )
+        if( m_lengthLimitOn && path_cw.Line().Length() > lengthLimit && path_ccw.Line().Length() > lengthLimit )
             break;
 
         m_iteration++;

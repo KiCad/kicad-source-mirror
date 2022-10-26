@@ -49,6 +49,7 @@ public:
         m_iteration = 0;
         m_forceCw = false;
         m_forceLongerPath = false;
+        m_lengthLimitOn = true;
     }
 
     ~WALKAROUND() {};
@@ -111,6 +112,11 @@ public:
 
     const RESULT Route( const LINE& aInitialPath );
 
+    void SetLengthLimit( bool aEnable ) 
+    {
+        m_lengthLimitOn = aEnable;
+    }
+
 private:
     void start( const LINE& aInitialPath );
 
@@ -129,6 +135,7 @@ private:
     std::set<ITEM*> m_restrictedSet;
     std::vector<VECTOR2I> m_restrictedVertices;
     bool m_forceLongerPath;
+    bool m_lengthLimitOn;
 };
 
 }
