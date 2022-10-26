@@ -127,6 +127,11 @@ public:
     {
         m_line = aLine;
         m_line.SetWidth( m_width );
+
+        if( m_hasVia && m_line.PointCount() > 0 )
+        {
+            m_via.SetPos( m_line.CPoint( -1 ) );
+        }
     }
 
     ///< Return the shape of the line.
