@@ -18,28 +18,44 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_EXPORT_STEP_H
-#define JOB_EXPORT_STEP_H
+#ifndef JOB_EXPORT_PCB_DXF_H
+#define JOB_EXPORT_PCB_DXF_H
 
+#include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_STEP : public JOB
+class JOB_EXPORT_PCB_DXF : public JOB
 {
 public:
-    JOB_EXPORT_STEP( bool aIsCli );
+    JOB_EXPORT_PCB_DXF( bool aIsCli ) :
+            JOB( "dxf", aIsCli ),
+            m_filename(),
+            m_outputFile(),
+            m_plotFootprintValues( true ),
+            m_plotRefDes( true ),
+            m_plotGraphicItemsUsingContours( true ),
+            m_printMaskLayer()
+    {
+    }
 
-    bool     m_overwrite;
-    bool     m_useGridOrigin;
-    bool     m_useDrillOrigin;
-    bool     m_includeVirtual;
-    bool     m_substModels;
+    enum class DXF_UNITS
+    {
+        INCHES,
+        MILLIMETERS
+    };
+
     wxString m_filename;
     wxString m_outputFile;
-    double   m_xOrigin;
-    double   m_yOrigin;
-    double   m_minDistance;
-    bool     m_gui;
+
+    bool m_plotFootprintValues;
+    bool m_plotRefDes;
+    bool m_plotGraphicItemsUsingContours;
+    DXF_UNITS m_dxfUnits;
+
+    int m_pageSizeMode;
+
+    LSET m_printMaskLayer;
 };
 
 #endif

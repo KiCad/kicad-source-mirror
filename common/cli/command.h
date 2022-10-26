@@ -27,8 +27,9 @@
 namespace CLI
 {
 
-struct COMMAND
+class COMMAND
 {
+public:
     COMMAND( std::string aName ) : m_name( aName ), m_argParser( aName ){};
 
     virtual int Perform( KIWAY& aKiway ) const = 0;

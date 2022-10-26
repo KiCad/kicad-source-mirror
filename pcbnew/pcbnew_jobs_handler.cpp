@@ -20,10 +20,12 @@
 
 #include "pcbnew_jobs_handler.h"
 #include <kicad2step.h>
+#include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_svg.h>
-#include <jobs/job_export_step.h>
+#include <jobs/job_export_pcb_step.h>
 #include <cli/exit_codes.h>
 #include <plotters/plotters_pslike.h>
+#include <plotters/plotter_dxf.h>
 #include <pgm_base.h>
 #include <pcbplot.h>
 #include <board_design_settings.h>
@@ -37,14 +39,14 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
 {
     Register( "step",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportStep, this, std::placeholders::_1 ) );
-    Register( "svg",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ) );
+    Register( "svg", std::bind( &PCBNEW_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ) );
+    Register( "dxf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDxf, this, std::placeholders::_1 ) );
 }
 
 
 int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 {
-    JOB_EXPORT_STEP* aStepJob = dynamic_cast<JOB_EXPORT_STEP*>( aJob );
+    JOB_EXPORT_PCB_STEP* aStepJob = dynamic_cast<JOB_EXPORT_PCB_STEP*>( aJob );
 
     if( aStepJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -96,6 +98,64 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
         else
             wxPrintf( _( "Error creating svg file" ) );
     }
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
+{
+    JOB_EXPORT_PCB_DXF* aDxfJob = dynamic_cast<JOB_EXPORT_PCB_DXF*>( aJob );
+
+    if( aDxfJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( aJob->IsCli() )
+        wxPrintf( _( "Loading board\n" ) );
+
+    BOARD* brd = LoadBoard( aDxfJob->m_filename );
+
+    if( aDxfJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( wxS( "dxf" ) );
+
+        aDxfJob->m_outputFile = fn.GetFullName();
+    }
+
+    PCB_PLOT_PARAMS plotOpts;
+    plotOpts.SetFormat( PLOT_FORMAT::DXF );
+
+
+    plotOpts.SetDXFPlotPolygonMode( aDxfJob->m_plotGraphicItemsUsingContours );
+
+    if( aDxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS )
+    {
+        plotOpts.SetDXFPlotUnits( DXF_UNITS::MILLIMETERS );
+    }
+    else
+    {
+        plotOpts.SetDXFPlotUnits( DXF_UNITS::INCHES );
+    }
+    plotOpts.SetPlotValue( aDxfJob->m_plotFootprintValues );
+    plotOpts.SetPlotReference( aDxfJob->m_plotRefDes );
+
+    plotOpts.SetLayerSelection( aDxfJob->m_printMaskLayer );
+
+
+    //@todo allow controlling the sheet name and path that will be displayed in the title block
+    // Leave blank for now
+    DXF_PLOTTER* plotter = (DXF_PLOTTER*) StartPlotBoard(
+            brd, &plotOpts, UNDEFINED_LAYER, aDxfJob->m_outputFile, wxEmptyString, wxEmptyString );
+
+    if( plotter )
+    {
+        PlotBoardLayers( brd, plotter, aDxfJob->m_printMaskLayer.SeqStackupBottom2Top(), plotOpts );
+        plotter->EndPlot();
+    }
+
+    delete plotter;
 
     return CLI::EXIT_CODES::OK;
 }

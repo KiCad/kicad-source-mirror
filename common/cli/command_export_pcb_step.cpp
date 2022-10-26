@@ -19,9 +19,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "command_export_step.h"
+#include "command_export_pcb_step.h"
 #include "exit_codes.h"
-#include "jobs/job_export_step.h"
+#include "jobs/job_export_pcb_step.h"
 #include <kiface_base.h>
 #include <regex>
 
@@ -36,13 +36,12 @@
 #define ARG_INPUT "input"
 #define ARG_MIN_DISTANCE "--min-distance"
 #define ARG_USER_ORIGIN "--user-origin"
-#define ARG_GUI "--gui"
 
 #define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
 #define REGEX_DELIMITER "(?:[\\s]*x)"
 #define REGEX_UNIT "([m]{2}|(?:in))"
 
-CLI::EXPORT_STEP_COMMAND::EXPORT_STEP_COMMAND() : COMMAND( "step" )
+CLI::EXPORT_PCB_STEP_COMMAND::EXPORT_PCB_STEP_COMMAND() : COMMAND( "step" )
 {
     m_argParser.add_argument( ARG_DRILL_ORIGIN )
             .help( "Use Drill Origin for output origin" )
@@ -69,11 +68,6 @@ CLI::EXPORT_STEP_COMMAND::EXPORT_STEP_COMMAND() : COMMAND( "step" )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( ARG_GUI )
-            .help( "Show GUI (log window)" )
-            .implicit_value( true )
-            .default_value( false );
-
     m_argParser.add_argument( ARG_MIN_DISTANCE )
             .default_value( std::string() )
             .help( "Minimum distance between points to treat them as separate ones (default 0.01mm)" );
@@ -89,9 +83,9 @@ CLI::EXPORT_STEP_COMMAND::EXPORT_STEP_COMMAND() : COMMAND( "step" )
     m_argParser.add_argument( ARG_INPUT ).help( "input file" );
 }
 
-int CLI::EXPORT_STEP_COMMAND::Perform( KIWAY& aKiway ) const
+int CLI::EXPORT_PCB_STEP_COMMAND::Perform( KIWAY& aKiway ) const
 {
-    std::unique_ptr<JOB_EXPORT_STEP> step( new JOB_EXPORT_STEP( true ) );
+    std::unique_ptr<JOB_EXPORT_PCB_STEP> step( new JOB_EXPORT_PCB_STEP( true ) );
 
     step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
     step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
@@ -100,7 +94,6 @@ int CLI::EXPORT_STEP_COMMAND::Perform( KIWAY& aKiway ) const
     step->m_overwrite = m_argParser.get<bool>( ARG_FORCE );
     step->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     step->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
-    step->m_gui = m_argParser.get<bool>( ARG_GUI );
 
     wxString userOrigin = FROM_UTF8( m_argParser.get<std::string>( ARG_USER_ORIGIN ).c_str() );
     if( !userOrigin.IsEmpty() )

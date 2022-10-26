@@ -48,8 +48,9 @@
 
 #include "cli/command_pcb.h"
 #include "cli/command_pcb_export.h"
+#include "cli/command_export_pcb_dxf.h"
 #include "cli/command_export_pcb_svg.h"
-#include "cli/command_export_step.h"
+#include "cli/command_export_pcb_step.h"
 #include "cli/exit_codes.h"
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
@@ -97,10 +98,11 @@ struct COMMAND_ENTRY
             handler( aHandler ), subCommands( aSub ){};
 };
 
-static CLI::EXPORT_STEP_COMMAND    stepCmd{};
-static CLI::EXPORT_PCB_SVG_COMMAND svgCmd{};
-static CLI::EXPORT_PCB_COMMAND     exportPcbCmd{};
-static CLI::PCB_COMMAND            pcbCmd{};
+static CLI::EXPORT_PCB_STEP_COMMAND stepCmd{};
+static CLI::EXPORT_PCB_DXF_COMMAND  dxfCmd{};
+static CLI::EXPORT_PCB_SVG_COMMAND  svgCmd{};
+static CLI::EXPORT_PCB_COMMAND      exportPcbCmd{};
+static CLI::PCB_COMMAND             pcbCmd{};
 
 static std::vector<COMMAND_ENTRY> commandStack = {
     {
@@ -109,7 +111,8 @@ static std::vector<COMMAND_ENTRY> commandStack = {
             { &exportPcbCmd,
                 {
                     &stepCmd,
-                    &svgCmd
+                    &svgCmd,
+                    &dxfCmd
                 }
             }
         }

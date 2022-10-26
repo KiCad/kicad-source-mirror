@@ -29,6 +29,7 @@ public:
     PCBNEW_JOBS_HANDLER();
     int JobExportStep( JOB* aJob );
     int JobExportSvg( JOB* aJob );
+    int JobExportDxf( JOB* aJob );
 };
 
 #endif

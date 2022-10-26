@@ -18,19 +18,26 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_STEP_H
-#define COMMAND_EXPORT_STEP_H
+#ifndef COMMAND_EXPORT_PCB_BASE_H
+#define COMMAND_EXPORT_PCB_BASE_H
 
 #include "command.h"
+#include <layer_ids.h>
 
 namespace CLI
 {
-struct EXPORT_STEP_COMMAND : public COMMAND
-{
-    EXPORT_STEP_COMMAND();
+#define ARG_OUTPUT "--output"
+#define ARG_INPUT "input"
 
-    int Perform( KIWAY& aKiway ) const override;
+struct EXPORT_PCB_BASE_COMMAND : public COMMAND
+{
+    EXPORT_PCB_BASE_COMMAND( std::string aName );
+
+protected:
+    LSET convertLayerStringList( wxString& aLayerString ) const;
+
+    std::map<std::string, LSET> m_layerMasks;
 };
-}
+} // namespace CLI
 
 #endif

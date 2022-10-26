@@ -18,17 +18,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "jobs/job_export_step.h"
+#ifndef COMMAND_EXPORT_PCB_DXF_H
+#define COMMAND_EXPORT_PCB_DXF_H
 
-JOB_EXPORT_STEP::JOB_EXPORT_STEP( bool aIsCli ) : JOB( "step", aIsCli )
+#include "command_export_pcb_base.h"
+
+namespace CLI
 {
-    m_overwrite = false;
-    m_useGridOrigin = false;
-    m_useDrillOrigin = false;
-    m_includeVirtual = true;
-    m_substModels = false;
-    m_xOrigin = 0.0;
-    m_yOrigin = 0.0;
-    m_minDistance = 0.01;   // 0.01 mm is a good value to connect 2 items of the board outlines
-    m_gui = false;
-}
+class EXPORT_PCB_DXF_COMMAND : public EXPORT_PCB_BASE_COMMAND
+{
+public:
+    EXPORT_PCB_DXF_COMMAND();
+
+    int Perform( KIWAY& aKiway ) const override;
+};
+} // namespace CLI
+
+#endif

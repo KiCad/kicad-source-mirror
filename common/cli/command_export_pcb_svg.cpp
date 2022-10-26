@@ -33,18 +33,12 @@
 #define ARG_PAGE_SIZE "--page-size-mode"
 #define ARG_MIRROR "--mirror"
 #define ARG_BLACKANDWHITE "--black-and-white"
-#define ARG_OUTPUT "--output"
 #define ARG_THEME "--theme"
 #define ARG_LAYERS "--layers"
-#define ARG_INPUT "input"
 
 
-CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : COMMAND( "svg" )
+CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg" )
 {
-    m_argParser.add_argument( "-o", ARG_OUTPUT )
-            .default_value( std::string() )
-            .help( "output file name" );
-
     m_argParser.add_argument( "-l", ARG_LAYERS )
             .default_value( std::string() )
             .help( "comma separated list of untranslated layer names to include such as F.Cu,B.Cu" );
@@ -66,33 +60,11 @@ CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : COMMAND( "svg" )
     m_argParser.add_argument( ARG_PAGE_SIZE )
             .help( "Set page sizing mode (0 = page with frame and title block, 1 = current page size, 2 = board area only)" )
             .default_value( 0 );
-
-    m_argParser.add_argument( ARG_INPUT ).help( "input file" );
 }
 
 
 int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
 {
-    std::map<std::string, LSET> layerMasks;
-    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
-    {
-        std::string untranslated = TO_UTF8( wxString( LSET::Name( PCB_LAYER_ID( layer ) ) ) );
-
-        //m_layerIndices[untranslated] = PCB_LAYER_ID( layer );
-        layerMasks[untranslated] = LSET( PCB_LAYER_ID( layer ) );
-    }
-
-    layerMasks["*"] = LSET::AllLayersMask();
-    layerMasks["*.Cu"] = LSET::AllCuMask();
-    layerMasks["*In.Cu"] = LSET::InternalCuMask();
-    layerMasks["F&B.Cu"] = LSET( 2, F_Cu, B_Cu );
-    layerMasks["*.Adhes"] = LSET( 2, B_Adhes, F_Adhes );
-    layerMasks["*.Paste"] = LSET( 2, B_Paste, F_Paste );
-    layerMasks["*.Mask"] = LSET( 2, B_Mask, F_Mask );
-    layerMasks["*.SilkS"] = LSET( 2, B_SilkS, F_SilkS );
-    layerMasks["*.Fab"] = LSET( 2, B_Fab, F_Fab );
-    layerMasks["*.CrtYd"] = LSET( 2, B_CrtYd, F_CrtYd );
-
     JOB_EXPORT_PCB_SVG* svgJob = new JOB_EXPORT_PCB_SVG( true );
 
     svgJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
@@ -111,25 +83,7 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
 
     wxString layers = FROM_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
 
-    LSET              layerMask = LSET::AllCuMask();
-
-    if( !layers.IsEmpty() )
-    {
-        layerMask.reset();
-        wxStringTokenizer layerTokens( layers, "," );
-        while( layerTokens.HasMoreTokens() )
-        {
-            std::string token = TO_UTF8(layerTokens.GetNextToken());
-            if( layerMasks.count( token ) )
-            {
-                layerMask |= layerMasks[token];
-            }
-            else
-            {
-                wxFprintf( stderr, _( "Invalid layer option: %s\n" ), token );
-            }
-        }
-    }
+    LSET layerMask = convertLayerStringList( layers );
 
     svgJob->m_printMaskLayer = layerMask;
 

@@ -287,11 +287,12 @@ set( COMMON_SRCS
     ${PLUGINS_CADSTAR_SRCS}
     ${PLUGINS_EAGLE_SRCS}
 	${FONT_SRCS}
+    cli/command_export_pcb_base.cpp
+    cli/command_export_pcb_dxf.cpp
+    cli/command_export_pcb_step.cpp
     cli/command_export_pcb_svg.cpp
     cli/command_pcb.cpp
     cli/command_pcb_export.cpp
-    cli/command_export_step.cpp
-    jobs/job_export_step.cpp
     jobs/job_dispatcher.cpp
     advanced_config.cpp
     array_axis.cpp
