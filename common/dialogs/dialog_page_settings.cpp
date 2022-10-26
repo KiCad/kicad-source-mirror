@@ -21,6 +21,7 @@
 #include <pgm_base.h>
 #include <bitmaps.h>
 #include <base_screen.h>
+#include <common.h>     // ExpandEnvVarSubstitutions
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <dialogs/dialog_page_settings.h>
@@ -773,17 +774,21 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
 void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 {
     wxFileName fn = GetWksFileName();
-    wxString name = GetWksFileName();
+    wxString name = fn.GetFullName();
     wxString path;
 
     if( fn.IsAbsolute() )
     {
         path = fn.GetPath();
-        name = fn.GetFullName();
     }
     else
     {
-        path = m_projectPath;
+        wxFileName expanded( ExpandEnvVarSubstitutions( GetWksFileName(), &m_parentFrame->Prj() ) );
+
+         if( expanded.IsAbsolute() )
+            path = expanded.GetPath();
+        else
+            path = m_projectPath;
     }
 
     // Display a file picker dialog
