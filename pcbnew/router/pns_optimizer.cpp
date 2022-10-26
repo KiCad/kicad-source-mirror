@@ -274,8 +274,11 @@ bool CORNER_COUNT_LIMIT_CONSTRAINT::Check( int aVertex1, int aVertex2, const LIN
     newPath.Line().Simplify();
     int cc = newPath.CountCorners( m_angleMask );
 
-    if( cc >= m_minCorners && cc <= m_maxCorners )
+    if( cc >= m_minCorners )
         return true;
+
+    // fixme: something fishy with the max corneriness limit
+    // (cc <= m_maxCorners)
 
     return false;
 }
@@ -626,6 +629,10 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult, LINE* aRoot )
         int rootObtuseCorners = aRoot->CountCorners( angleMask );
         auto c = new CORNER_COUNT_LIMIT_CONSTRAINT( m_world, rootObtuseCorners,
                                                     aLine->SegmentCount(), angleMask );
+        PNS_DBG( dbg, Message,
+                 wxString::Format( "opt limit-corner-count root %d maxc %d mask %x",
+                                   rootObtuseCorners, aLine->SegmentCount(), angleMask ) );
+
         AddConstraint( c );
     }
 
@@ -645,6 +652,8 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult, LINE* aRoot )
     if( m_effortLevel & RESTRICT_AREA )
     {
         auto c = new AREA_CONSTRAINT( m_world, m_restrictArea, m_restrictAreaIsStrict );
+        SHAPE_RECT r( m_restrictArea );
+        PNS_DBG( dbg, AddShape, &r, YELLOW, 0, wxT( "area-constraint" ) );
         AddConstraint( c );
     }
 
