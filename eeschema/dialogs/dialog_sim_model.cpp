@@ -78,8 +78,6 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
     for( SIM_MODEL::DEVICE_TYPE_ deviceType : SIM_MODEL::DEVICE_TYPE__ITERATOR() )
         m_deviceTypeChoice->Append( SIM_MODEL::DeviceTypeInfo( deviceType ).description );
 
-    m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_codePreview, wxT( "{}" ), false );
-
     m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onParamGridSelectionChange, this );
 
     m_paramGrid->SetValidationFailureBehavior( wxPG_VFB_STAY_IN_PROPERTY
@@ -110,7 +108,9 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
         grid->DedicateKey( WXK_DOWN );
     }
     else
+    {
         wxFAIL;
+    }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -120,11 +120,13 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 template <typename T>
 bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 {
+    wxCommandEvent dummyEvent;
     wxString libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
     if( libraryFilename != "" )
     {
         // The model is sourced from a library, optionally with instance overrides.
+        m_useLibraryModelRadioButton->SetValue( true );
         loadLibrary( libraryFilename );
 
         // Must be set before curModel() is used since the latter checks the combobox value.
@@ -139,7 +141,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
             if( kibismodel )
             {
-                wxCommandEvent dummyEvent;
                 onModelNameCombobox( dummyEvent ); // refresh list of pins
 
                 int i = 0;
@@ -182,6 +183,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     else
     {
         // The model is sourced from the instance.
+        m_useInstanceModelRadioButton->SetValue( true );
         SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( m_fields, m_sortedSymbolPins.size() );
 
         try
@@ -192,7 +194,11 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         }
         catch( const IO_ERROR& e )
         {
-            DisplayErrorMessage( this, e.What() );
+            DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
+                                       + wxT( "\n\n" )
+                                       + e.What() );
+
+            onRadioButton( dummyEvent );
             return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
         }
 
@@ -204,11 +210,10 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     m_inferCheckbox->SetValue( curModel().IsInferred() );
 
     std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
-    m_inferCheckbox->Show(
-        SIM_MODEL::InferDeviceTypeFromRef( ref ) != SIM_MODEL::DEVICE_TYPE_::NONE );
+    m_inferCheckbox->Show( SIM_MODEL::InferDeviceTypeFromRef( ref )
+                                            != SIM_MODEL::DEVICE_TYPE_::NONE );
 
-    updateWidgets();
-
+    onRadioButton( dummyEvent );
     return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
 }
 
@@ -291,6 +296,7 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     m_prevModel = &curModel();
 }
 
+
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
 {
@@ -300,30 +306,24 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
     {
         modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
 
-        for ( auto& item : m_sourceSizer->GetChildren() )
+        for ( wxSizerItem* item : m_sourceSizer->GetChildren() )
         {
             if ( item->GetWindow() == m_differentialCheckbox )
-            {
-                item->SetFlag( wxALIGN_CENTER_VERTICAL|wxALL|wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-            }
+                item->SetFlag( item->GetFlag() | wxRESERVE_SPACE_EVEN_IF_HIDDEN );
+
             if ( item->GetWindow() == m_overrideCheckbox )
-            {
-                item->SetFlag( wxALIGN_CENTER_VERTICAL|wxALL );
-            }
+                item->SetFlag( item->GetFlag() & ~wxRESERVE_SPACE_EVEN_IF_HIDDEN );
         }
     }
     else
     {
-        for ( auto& item : m_sourceSizer->GetChildren() )
+        for ( wxSizerItem* item : m_sourceSizer->GetChildren() )
         {
             if ( item->GetWindow() == m_differentialCheckbox )
-            {
-                item->SetFlag( wxALIGN_CENTER_VERTICAL|wxALL );
-            }
+                item->SetFlag( item->GetFlag() | wxRESERVE_SPACE_EVEN_IF_HIDDEN );
+
             if ( item->GetWindow() == m_overrideCheckbox )
-            {
-                item->SetFlag( wxALIGN_CENTER_VERTICAL|wxALL|wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-            }
+                item->SetFlag( item->GetFlag() & ~wxRESERVE_SPACE_EVEN_IF_HIDDEN );
         }
     }
 
@@ -443,18 +443,20 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
             ( *it )->GetCell( col ).SetFgCol( fgCol );
         }
 
+        const SIM_MODEL::PARAM& param = prop->GetParam();
+
         // Model values other than the currently edited value may have changed. Update them.
         // This feature is called "autofill" and present only in certain models. Don't do it for
         // models that don't have it for performance reasons.
         if( curModel().HasAutofill() )
-            ( *it )->SetValueFromString( prop->GetParam().value->ToString() );
+            ( *it )->SetValueFromString( param.value->ToString() );
 
         // Most of the values are disabled when the override checkbox is unchecked.
-        ( *it )->Enable(
-                ( isIbisLoaded() ) || m_useInstanceModelRadioButton->GetValue()
-                || ( prop->GetParam().info.isInstanceParam
-                     && prop->GetParam().info.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL )
-                || m_overrideCheckbox->GetValue() );
+        ( *it )->Enable( isIbisLoaded()
+                            || m_useInstanceModelRadioButton->GetValue()
+                            || ( param.info.isInstanceParam
+                                   && param.info.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL )
+                            || m_overrideCheckbox->GetValue() );
     }
 }
 
@@ -474,10 +476,10 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
     {
         // For raw Spice models display the whole file instead.
         
-        wxString path = curModel().FindParam( "lib" )->value->ToString();
-        wxString absolutePath = Prj().AbsolutePath( path );
+        wxString   path = curModel().FindParam( "lib" )->value->ToString();
+        wxString   absolutePath = Prj().AbsolutePath( path );
         wxTextFile file;
-        wxString text;
+        wxString   text;
 
         text << curModel().SpiceGenerator().Preview( item );
         text << "\n";
@@ -497,7 +499,9 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
         }
     }
     else
+    {
         m_codePreview->SetText( curModel().SpiceGenerator().Preview( item ) );
+    }
 
     m_codePreview->SetEditable( false ); // ???
     m_wasCodePreviewUpdated = true;
@@ -603,7 +607,6 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
         {
             wxString ibisTypeString = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::TYPE_FIELD );
 
-
             SIM_MODEL::TYPE ibisType = SIM_MODEL::TYPE::KIBIS_DEVICE;
 
             if( ibisTypeString == "IBISDRIVERDC" )
@@ -637,8 +640,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
     {
         for( auto& [baseModelName, baseModel] : m_library->GetModels() )
         {
-            wxString         expectedModelName;
-            expectedModelName =
+            wxString expectedModelName =
                     SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::NAME_FIELD );
 
             // Only the current model is initialized from fields. Others have default
@@ -662,6 +664,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
     }
 
     wxArrayString modelNames;
+
     for( auto& [modelName, model] : m_library->GetModels() )
         modelNames.Add( modelName );
 
@@ -748,6 +751,7 @@ void DIALOG_SIM_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
     }
 }
 
+
 template <typename T>
 wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 {
@@ -787,12 +791,14 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
         if( param.info.enumValues.empty() )
         {
             prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
-                    curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_STRING );
+                                            curModelSharedPtr(), aParamIndex,
+                                            SIM_VALUE::TYPE_STRING );
         }
         else
         {
             prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, m_library,
-                                          curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_STRING );
+                                          curModelSharedPtr(), aParamIndex,
+                                          SIM_VALUE::TYPE_STRING );
         }
         break;
 
@@ -864,9 +870,13 @@ std::shared_ptr<SIM_MODEL> DIALOG_SIM_MODEL<T>::curModelSharedPtr() const
 {
     if( m_useLibraryModelRadioButton->GetValue()
         && m_modelNameCombobox->GetSelection() != wxNOT_FOUND )
+    {
         return m_libraryModels.at( m_modelNameCombobox->GetSelection() );
+    }
     else
+    {
         return m_models.at( static_cast<int>( m_curModelType ) );
+    }
 }
 
 
@@ -947,6 +957,25 @@ wxArrayString DIALOG_SIM_MODEL<T>::getModelPinChoices() const
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
 {
+    bool fromLibrary = m_useLibraryModelRadioButton->GetValue();
+
+    m_pathLabel->Enable( fromLibrary );
+  	m_tclibraryPathName->Enable( fromLibrary );
+  	m_browseButton->Enable( fromLibrary );
+  	m_modelNameLabel->Enable( fromLibrary );
+  	m_modelNameCombobox->Enable( fromLibrary );
+  	m_overrideCheckbox->Enable( fromLibrary );
+  	m_ibisPinLabel->Enable( fromLibrary );
+  	m_ibisPinCombobox->Enable( fromLibrary );
+  	m_differentialCheckbox->Enable( fromLibrary );
+  	m_ibisModelLabel->Enable( fromLibrary );
+  	m_ibisModelCombobox->Enable( fromLibrary );
+
+  	m_staticTextDevType->Enable( !fromLibrary );
+  	m_deviceTypeChoice->Enable( !fromLibrary );
+  	m_staticTextSpiceType->Enable( !fromLibrary );
+  	m_typeChoice->Enable( !fromLibrary );
+
     updateWidgets();
 }
 
@@ -985,15 +1014,14 @@ void DIALOG_SIM_MODEL<T>::onModelNameCombobox( wxCommandEvent& aEvent )
         }
 
         for( std::pair<wxString, wxString> strs : modelkibis->GetIbisPins() )
-        {
-            pinLabels.Add( strs.first + " - " + strs.second );
-        }
+            pinLabels.Add( strs.first + wxT( " - " ) + strs.second );
 
         m_ibisPinCombobox->Set( pinLabels );
 
         wxArrayString emptyArray;
         m_ibisModelCombobox->Set( emptyArray );
     }
+
     updateWidgets();
 }
 
@@ -1045,6 +1073,7 @@ void DIALOG_SIM_MODEL<T>::onIbisPinCombobox( wxCommandEvent& aEvent )
 
         m_ibisModelCombobox->Set( modelLabels );
     }
+
     updateWidgets();
 }
 
@@ -1212,54 +1241,13 @@ void DIALOG_SIM_MODEL<T>::onInferCheckbox( wxCommandEvent& aEvent )
 
 
 template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryPathUpdate( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onBrowseButtonUpdate( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onModelNameComboboxUpdate( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onOverrideCheckboxUpdate( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onDeviceTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( m_useInstanceModelRadioButton->GetValue() );
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( m_useInstanceModelRadioButton->GetValue() || ( isIbisLoaded() ) );
-}
-
-
-template <typename T>
 void DIALOG_SIM_MODEL<T>::onParamGridSetFocus( wxFocusEvent& aEvent )
 {
     // By default, when a property grid is focused, the textbox is not immediately focused until
     // Tab key is pressed. This is inconvenient, so we fix that here.
 
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
+
     if( !grid )
     {
         wxFAIL;
@@ -1282,6 +1270,7 @@ template <typename T>
 void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEvent )
 {
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
+
     if( !grid )
     {
         wxFAIL;

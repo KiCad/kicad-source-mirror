@@ -116,13 +116,6 @@ private:
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
     void onExcludeCheckbox( wxCommandEvent& aEvent ) override;
     void onInferCheckbox( wxCommandEvent& aEvent ) override;
-
-    void onLibraryPathUpdate( wxUpdateUIEvent& aEvent ) override;
-    void onBrowseButtonUpdate( wxUpdateUIEvent& aEvent ) override;
-    void onModelNameComboboxUpdate( wxUpdateUIEvent& aEvent ) override;
-    void onOverrideCheckboxUpdate( wxUpdateUIEvent& aEvent ) override;
-    void onDeviceTypeChoiceUpdate( wxUpdateUIEvent& aEvent ) override;
-    void onTypeChoiceUpdate( wxUpdateUIEvent& aEvent ) override;
     void onDifferentialCheckbox( wxCommandEvent& event ) override;
 
     void onParamGridSetFocus( wxFocusEvent& aEvent );
@@ -143,7 +136,6 @@ private:
 
     MODEL_NAME_VALIDATOR m_modelNameValidator;
     wxPGProperty* m_firstCategory; // Used to add principal parameters to root.
-    std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
 
     wxPGProperty* m_prevParamGridSelection;
     bool m_wasCodePreviewUpdated;

@@ -551,6 +551,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
 #ifdef KICAD_SPICE
+    if( !m_fieldsGrid->CommitPendingChanges() )
+        return;
+
     int diff = m_fields->size();
 
     DIALOG_SIM_MODEL dialog( this, *m_symbol, *m_fields );

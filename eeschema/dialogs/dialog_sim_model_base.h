@@ -19,17 +19,16 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/stattext.h>
 #include <wx/combobox.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/manager.h>
@@ -54,10 +53,9 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_modelPanel;
-		wxStaticBoxSizer* m_sourceStaticSizer;
-		wxFlexGridSizer* m_sourceSizer;
-		wxRadioButton* m_useInstanceModelRadioButton;
 		wxRadioButton* m_useLibraryModelRadioButton;
+		wxFlexGridSizer* m_sourceSizer;
+		wxStaticText* m_pathLabel;
 		wxTextCtrl* m_tclibraryPathName;
 		wxBitmapButton* m_browseButton;
 		wxStaticText* m_modelNameLabel;
@@ -68,12 +66,13 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_differentialCheckbox;
 		wxStaticText* m_ibisModelLabel;
 		wxComboBox* m_ibisModelCombobox;
-		wxNotebook* m_notebook4;
-		wxPanel* m_parametersPanel;
+		wxRadioButton* m_useInstanceModelRadioButton;
 		wxStaticText* m_staticTextDevType;
 		wxChoice* m_deviceTypeChoice;
 		wxStaticText* m_staticTextSpiceType;
 		wxChoice* m_typeChoice;
+		wxNotebook* m_notebook4;
+		wxPanel* m_parametersPanel;
 		wxPropertyGridManager* m_paramGridMgr;
 		wxPropertyGridPage* m_paramGrid;
 		wxPanel* m_codePanel;
@@ -89,24 +88,29 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onRadioButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onLibraryPathLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onLibraryPathUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onBrowseButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBrowseButtonUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onModelNameLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onModelNameCombobox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModelNameComboboxKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onModelNameComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModelNameComboboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onOverrideCheckbox( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOverrideCheckboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onIbisPinLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onIbisPinCombobox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisPinComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDifferentialCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOverrideCheckboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onIbisModelLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onIbisModelCombobox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisModelComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDeviceTypeLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onDeviceTypeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeviceTypeChoiceUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onTypeLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onTypeChoice( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onTypeChoiceUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onParamGridChanged( wxPropertyGridEvent& event ) { event.Skip(); }
 		virtual void onCodePreviewSetFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridCellChange( wxGridEvent& event ) { event.Skip(); }

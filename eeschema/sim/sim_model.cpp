@@ -419,6 +419,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, int aSymbolPi
     // No type information. Look for legacy (pre-V7) fields.
 
     TYPE typeFromLegacyFields = InferTypeFromLegacyFields( aFields );
+
     if( typeFromLegacyFields != TYPE::NONE )
         return typeFromLegacyFields;
 
@@ -500,7 +501,9 @@ TYPE SIM_MODEL::InferTypeFromLegacyFields( const std::vector<T>& aFields )
         return TYPE::RAWSPICE;
     }
     else
+    {
         return TYPE::NONE;
+    }
 }
 
 
@@ -617,7 +620,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
     TYPE type = ReadTypeFromFields( aFields, aSymbolPinCount );
 
     if( type == TYPE::NONE )
-        THROW_IO_ERROR( wxString::Format( _( "Failed to read simulation model from fields" ) ) );
+        THROW_IO_ERROR( wxString::Format( _( "Failed to read simulation model from fields." ) ) );
 
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
