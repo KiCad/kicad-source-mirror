@@ -129,7 +129,7 @@ public:
     void SetIsFree( bool aIsFree ) { m_isFree = aIsFree; }
 
     bool PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
-                       bool aSolidsOnly = true, int aMaxIterations = 10 );
+                       int aCollisionMask = ITEM::ANY_T, int aMaxIterations = 10 );
 
     bool PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce );
 

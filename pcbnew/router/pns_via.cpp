@@ -23,6 +23,7 @@
 #include "pns_node.h"
 #include "pns_utils.h"
 #include "pns_router.h"
+#include "pns_debug_decorator.h"
 
 #include <geometry/shape_rect.h>
 #include <math/box2.h>
@@ -63,35 +64,66 @@ bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
 }
 
 bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
-                            bool aSolidsOnly, int aMaxIterations )
+                        int aCollisionMask, int aMaxIterations )
 {
-    int iter = 0;
-    VIA mv( *this );
+    int      iter = 0;
+    VIA      mv( *this );
     VECTOR2I totalForce;
 
+    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    PNS_DBG( dbg, AddPoint, Pos(), YELLOW, 100000, wxString::Format( "via-force-init-pos" ) );
 
     while( iter < aMaxIterations )
     {
-        NODE::OPT_OBSTACLE obs = aNode->CheckColliding( &mv, aSolidsOnly ? ITEM::SOLID_T
-                                                                         : ITEM::ANY_T );
+        NODE::OPT_OBSTACLE obs = aNode->CheckColliding( &mv, aCollisionMask );
 
         if( !obs )
             break;
 
-        if( iter > aMaxIterations / 2 )
-        {
-            VECTOR2I l = aDirection.Resize( m_diameter / 2 );
-            totalForce += l;
-            mv.SetPos( mv.Pos() + l );
-        }
-
         VECTOR2I force;
-        bool collFound = PushoutForce( aNode, obs->m_item, force );
+        bool     collFound = PushoutForce( aNode, obs->m_item, force );
 
-        if( collFound )
+        if( !collFound )
+            break;
+
+        const int threshold = Diameter() / 4; // another stupid heuristic.
+        const int forceMag = force.EuclideanNorm();
+
+        // We've been through a lot of iterations already and our pushout force is still too big?
+        // Perhaps the barycentric force goes in the wrong direction, let's try to move along
+        // the 'lead' vector instead (usually backwards to the cursor)
+        if( iter > aMaxIterations / 2 && forceMag > threshold )
         {
+            VECTOR2I l = aDirection.Resize( threshold );
+            totalForce += l;
+
+            SHAPE_LINE_CHAIN ff;
+            ff.Append( mv.Pos() );
+            ff.Append( mv.Pos() + l );
+
+            mv.SetPos( mv.Pos() + l );
+
+            PNS_DBG( dbg, AddShape, &ff, YELLOW, 100000, "via-force-lead" );
+        }
+        else if( collFound ) // push along the minmum translation vector
+        {
+            // Limit the force magnitude to, say, 25% of the via diameter
+            // This adds a few iterations for large areas (e.g. keepouts)
+            // But makes the algorithm more predictable and less 'jumpy'
+            if( forceMag > threshold )
+            {
+                force.Resize( threshold );
+            }
+
             totalForce += force;
+
+            SHAPE_LINE_CHAIN ff;
+            ff.Append( mv.Pos() );
+            ff.Append( mv.Pos() + force );
+
             mv.SetPos( mv.Pos() + force );
+
+            PNS_DBG( dbg, AddShape, &ff, WHITE, 100000, "via-force-coll" );
         }
 
         iter++;
@@ -99,6 +131,8 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
 
     if( iter == aMaxIterations )
         return false;
+
+    PNS_DBG( dbg, AddPoint, ( Pos() + totalForce ), WHITE, 1000000, "via-force-new" );
 
     aForce = totalForce;
 
