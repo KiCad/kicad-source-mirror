@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-21 15:03+0000\n"
+"PO-Revision-Date: 2022-10-27 23:09+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -32502,9 +32502,8 @@ msgid "(%s min spoke count %d; actual %d)"
 msgstr "(quantitat màxima de %s: %d; actual %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:193
-#, fuzzy
 msgid "Checking thermal reliefs..."
-msgstr "S'estan verificant les etiquetes..."
+msgstr "S'estan verificant els alleujaments termics..."
 
 #: pcbnew/edit_zone_helpers.cpp:84 pcbnew/edit_zone_helpers.cpp:106
 msgid "Modify zone properties"
@@ -32548,9 +32547,8 @@ msgid "No project when exporting the VRML file"
 msgstr ""
 
 #: pcbnew/exporters/exporter_vrml.cpp:1301
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "Ha fallat l'exportació IDF:\n"
+msgstr "Ha fallat l'exportació VRML:\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
@@ -32574,7 +32572,7 @@ msgstr "Nombre de components: %d."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:511
 #, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr ""
+msgstr "Arxiu de posicionament (cara de sota): '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:362
 #: pcbnew/exporters/gen_footprints_placefile.cpp:521
@@ -32585,13 +32583,12 @@ msgstr "Nombre de components total: %d."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:365
 #: pcbnew/exporters/gen_footprints_placefile.cpp:474
 #: pcbnew/exporters/gen_footprints_placefile.cpp:525
-#, fuzzy
 msgid "File generation successful."
-msgstr "Ha fallat l'operació d'escriptura de fitxer."
+msgstr "Fitxer creat satisfactòriament."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:392
 msgid "No footprint for automated placement."
-msgstr ""
+msgstr "No hi ha empremtes pel posicionament automàtic."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:463
 #, c-format
@@ -32632,9 +32629,9 @@ msgid "Board stackup settings not up to date."
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "No such file: %s"
-msgstr "no existeix el fitxer"
+msgstr "No existeix el fitxer: %s"
 
 #: pcbnew/exporters/step/kicad2step.cpp:177
 msgid ""
@@ -32643,13 +32640,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "S'ha creat el fitxer '%s'"
+msgstr "Llegeix el fitxer '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:211
 msgid "Build STEP data\n"
-msgstr ""
+msgstr "Construeix dades en STEP\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:217
 msgid ""
@@ -32658,9 +32655,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:222
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "Fitxers STEP"
+msgstr "Escriu fitxer STEP\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:233
 #, fuzzy
@@ -32670,11 +32666,13 @@ msgid ""
 msgstr "Error en escriure al fitxer '%s'."
 
 #: pcbnew/exporters/step/kicad2step.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "S'ha creat el fitxer de l'informe '%s'."
+msgstr ""
+"\n"
+"S'ha creat el fitxer STEP '%s'.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:244
 #: pcbnew/exporters/step/kicad2step.cpp:249
