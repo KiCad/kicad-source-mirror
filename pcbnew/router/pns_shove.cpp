@@ -1918,6 +1918,8 @@ void SHOVE::runOptimizer( NODE* aNode )
     {
         std::reverse( m_optimizerQueue.begin(), m_optimizerQueue.end() );
 
+        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "optimize %d lines, pass %d"), (int)m_optimizerQueue.size(), (int)pass ) );
+
         for( LINE& line : m_optimizerQueue)
         {
             if( !( line.Marker() & MK_HEAD ) )
@@ -1927,8 +1929,15 @@ void SHOVE::runOptimizer( NODE* aNode )
 
                 if( optimizer.Optimize( &line, &optimized, root ) )
                 {
+                    PNS_DBG( Dbg(), AddShape, &line.CLine(), BLUE, 0, wxT( "shove-pre-opt" ) );
+                    if( root )
+		    {
+                        PNS_DBG( Dbg(), AddItem, root, RED, 0, wxT( "shove-root-opt" ) );
+                    }
                     replaceLine( line, optimized, false, aNode );
                     line = optimized; // keep links in the lines in the queue up to date
+
+                    PNS_DBG( Dbg(), AddShape, &line.CLine(), GREEN, 0, wxT( "shove-post-opt" ) );
                 }
             }
         }
