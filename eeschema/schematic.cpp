@@ -452,3 +452,19 @@ void SCHEMATIC::SetLegacySymbolInstanceData()
 
     screens.SetLegacySymbolInstanceData();
 }
+
+
+wxString SCHEMATIC::GetUniqueFilenameForCurrentSheet()
+{
+    // Filename is rootSheetName-sheetName-...-sheetName
+    // Note that we need to fetch the rootSheetName out of its filename, as the root SCH_SHEET's
+    // name is just a timestamp.
+
+    wxFileName rootFn( CurrentSheet().at( 0 )->GetFileName() );
+    wxString   filename = rootFn.GetName();
+
+    for( unsigned i = 1; i < CurrentSheet().size(); i++ )
+        filename += wxT( "-" ) + CurrentSheet().at( i )->GetName();
+
+    return filename;
+}

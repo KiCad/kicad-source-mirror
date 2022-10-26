@@ -54,6 +54,10 @@
 #include "cli/command_export_pcb_pdf.h"
 #include "cli/command_export_pcb_svg.h"
 #include "cli/command_export_pcb_step.h"
+#include "cli/command_export_sch_pdf.h"
+#include "cli/command_export_sch_svg.h"
+#include "cli/command_sch.h"
+#include "cli/command_sch_export.h"
 #include "cli/exit_codes.h"
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
@@ -109,6 +113,10 @@ static CLI::EXPORT_PCB_PDF_COMMAND    exportPcbPdfCmd{};
 static CLI::EXPORT_PCB_GERBER_COMMAND exportPcbGerberCmd{};
 static CLI::EXPORT_PCB_COMMAND        exportPcbCmd{};
 static CLI::PCB_COMMAND               pcbCmd{};
+static CLI::EXPORT_SCH_COMMAND        exportSchCmd{};
+static CLI::SCH_COMMAND               schCmd{};
+static CLI::EXPORT_SCH_PDF_COMMAND    exportSchPdfCmd{};
+static CLI::EXPORT_SCH_SVG_COMMAND    exportSchSvgCmd{};
 
 static std::vector<COMMAND_ENTRY> commandStack = {
     {
@@ -125,7 +133,18 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                 }
             }
         }
-    }
+    },
+    {
+        &schCmd,
+        {
+            { &exportSchCmd,
+                {
+                    &exportSchPdfCmd,
+                    &exportSchSvgCmd
+                }
+            }
+        }
+    },
 };
 
 

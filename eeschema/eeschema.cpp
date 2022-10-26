@@ -28,6 +28,8 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <eda_dde.h>
+#include "eeschema_jobs_handler.h"
+#include "eeschema_helpers.h"
 #include <eeschema_settings.h>
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
@@ -141,6 +143,8 @@ static struct IFACE : public KIFACE_BASE
         case FRAME_SCH:
         {
             SCH_EDIT_FRAME* frame = new SCH_EDIT_FRAME( aKiway, aParent );
+
+            EESCHEMA_HELPERS::SetSchEditFrame( frame );
 
             if( Kiface().IsSingle() )
             {
@@ -301,6 +305,9 @@ static struct IFACE : public KIFACE_BASE
 
     int HandleJob( JOB* aJob ) override;
 
+private:
+    std::unique_ptr<EESCHEMA_JOBS_HANDLER> m_jobHandler;
+
 } kiface( "eeschema", KIWAY::FACE_SCH );
 
 } // namespace
@@ -376,6 +383,8 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
             DisplayErrorMessage( nullptr, msg, ioe.What() );
         }
     }
+
+    m_jobHandler = std::make_unique<EESCHEMA_JOBS_HANDLER>();
 
     return true;
 }
@@ -565,5 +574,5 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
 int IFACE::HandleJob( JOB* aJob )
 {
-    return 0;
+    return m_jobHandler->RunJob( aJob );
 }

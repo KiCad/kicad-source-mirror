@@ -34,21 +34,7 @@
 #include <plotters/plotter.h>
 #include <dialog_plot_schematic_base.h>
 #include <widgets/unit_binder.h>
-
-enum PageFormatReq
-{
-    PAGE_SIZE_AUTO,
-    PAGE_SIZE_A4,
-    PAGE_SIZE_A
-};
-
-enum class HPGL_PLOT_ORIGIN_AND_UNITS
-{
-    PLOTTER_BOT_LEFT,
-    PLOTTER_CENTER,
-    USER_FIT_PAGE,
-    USER_FIT_CONTENT,
-};
+#include <sch_plotter.h>
 
 class PDF_PLOTTER;
 class SCH_REPORTER;
@@ -97,26 +83,9 @@ private:
     bool getOpenFileAfterPlot() { return m_openFileAfterPlot->GetValue(); }
     void setOpenFileAfterPlot( bool aOpenFileAfterPlot ) { m_openFileAfterPlot->SetValue( aOpenFileAfterPlot ); }
 
+    void setHpglPenWidth();
+
     void plotSchematic( bool aPlotAll );
-
-    // PDF
-    void createPDFFile( bool aPlotAll, bool aPlotDrawingSheet, RENDER_SETTINGS* aRenderSettings );
-    void plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen, bool aPlotDrawingSheet);
-    void setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen );
-
-    /**
-     * Everything done, close the plot and restore the environment.
-     *
-     * @param aPlotter the plotter to close and destroy
-     * @param aOldsheetpath the stored old sheet path for the current sheet before the plot started
-     */
-    void restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath );
-
-    // DXF
-    void createDXFFiles( bool aPlotAll, bool aPlotDrawingSheet, RENDER_SETTINGS* aRenderSettings );
-    bool plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScreen,
-                          RENDER_SETTINGS* aRenderSettings, const wxPoint& aPlotOffset,
-                          double aScale, bool aPlotFrameRef );
 
     // HPGLGetPlotOriginAndUnits
     HPGL_PLOT_ORIGIN_AND_UNITS getPlotOriginAndUnits()
@@ -154,36 +123,6 @@ private:
         }
     }
 
-    void createHPGLFiles( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
-    void setHpglPenWidth();
-    bool plotOneSheetHpgl( const wxString& aFileName, SCH_SCREEN* aScreen,
-                           const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
-                           const wxPoint& aPlot0ffset, double aScale, bool aPlotFrameRef,
-                           HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits );
-
-    // PS
-    void createPSFiles( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
-    bool plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
-                         RENDER_SETTINGS* aRenderSettings, const PAGE_INFO& aPageInfo,
-                         const wxPoint& aPlot0ffset, double aScale, bool aPlotFrameRef );
-
-    // SVG
-    void createSVGFiles( bool aPrintAll, bool aPrintFrameRef, RENDER_SETTINGS* aRenderSettings );
-    bool plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScreen,
-                          RENDER_SETTINGS* aRenderSettings, bool aPlotBlackAndWhite,
-                          bool aPlotFrameRef );
-
-    /**
-     * Create a file name with an absolute path name.
-     *
-     * @param aPlotFileName the name for the file to plot without a path.
-     * @param aExtension the extension for the file to plot.
-     * @param aReporter a point to a REPORTER object use to show messages (can be NULL).
-     * @return the created file name.
-     * @throw IO_ERROR on file I/O errors.
-     */
-    wxFileName createPlotFileName( const wxString& aPlotFileName, const wxString& aExtension,
-                                   REPORTER* aReporter = nullptr );
 
     /**
      * Determine the best absolute path to plot files given the contents of the path
@@ -207,9 +146,8 @@ private:
     bool            m_configChanged;        // true if a project config param has changed
     PLOT_FORMAT     m_plotFormat;
     static int      m_pageSizeSelect;       // Static to keep last option for some format
-    static int      m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
-    double          m_HPGLPenSize;          // for HPGL format only: pen size
-
+    static HPGL_PAGE_SIZE m_HPGLPaperSizeSelect; // for HPGL format only: last selected paper size
+    double             m_HPGLPenSize;
     UNIT_BINDER     m_defaultLineWidth;
     UNIT_BINDER     m_penWidth;
 };

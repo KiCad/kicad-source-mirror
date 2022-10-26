@@ -179,6 +179,15 @@ public:
      */
     void SetLegacySymbolInstanceData();
 
+    /**
+     * @return a filename that can be used in plot and print functions for the current screen
+     * and sheet path.  This filename is unique and must be used instead of the screen filename
+     * when one must create files for each sheet in the hierarchy.
+     * Name is &ltroot sheet filename&gt-&ltsheet path&gt and has no extension.
+     * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
+     */
+    wxString GetUniqueFilenameForCurrentSheet();
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif

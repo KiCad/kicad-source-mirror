@@ -190,6 +190,8 @@ set( EESCHEMA_SRCS
     cross-probing.cpp
     ee_collectors.cpp
     eeschema_config.cpp
+    eeschema_helpers.cpp
+    eeschema_jobs_handler.cpp
     eeschema_settings.cpp
     erc.cpp
     erc_item.cpp
@@ -228,6 +230,7 @@ set( EESCHEMA_SRCS
     sch_no_connect.cpp
     sch_painter.cpp
     sch_pin.cpp
+    sch_plotter.cpp
     sch_plugin.cpp
     sch_preview_panel.cpp
     sch_screen.cpp
@@ -305,7 +308,7 @@ set( EESCHEMA_SRCS
 
     sim/kibis/ibis_parser.cpp
     sim/kibis/kibis.cpp
-    
+
     tools/assign_footprints.cpp
     tools/backannotate.cpp
     tools/ee_actions.cpp

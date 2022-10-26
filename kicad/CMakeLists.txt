@@ -25,6 +25,10 @@ set( KICAD_SRCS
     cli/command_export_pcb_svg.cpp
     cli/command_pcb.cpp
     cli/command_pcb_export.cpp
+    cli/command_export_sch_pdf.cpp
+    cli/command_export_sch_svg.cpp
+    cli/command_sch.cpp
+    cli/command_sch_export.cpp
     dialogs/dialog_template_selector_base.cpp
     dialogs/dialog_template_selector.cpp
     dialogs/panel_kicad_launcher_base.cpp
