@@ -264,8 +264,8 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
     //Respect limits of coordinates representation
     BOX2I bb;
-    bb.SetOrigin( GetClampedCoords<double, int>( VECTOR2D( aOrigin ) - snapRange / 2 ) );
-    bb.SetEnd( GetClampedCoords<double, int>( VECTOR2D( aOrigin ) + snapRange / 2 ) );
+    bb.SetOrigin( GetClampedCoords<double, int>( VECTOR2D( aOrigin ) - snapRange / 2.0 ) );
+    bb.SetEnd( GetClampedCoords<double, int>( VECTOR2D( aOrigin ) + snapRange / 2.0 ) );
 
     clearAnchors();
 

@@ -155,6 +155,8 @@ public:
 void FOOTPRINT_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem,
                                               FOOTPRINT* aFootprint )
 {
+    wxCHECK( aFootprint, /* void */ );
+
     BASIC_FOOTPRINT_INFO footprintInfo( aFootprint );
 
     if( aTreeItem.IsOk() )   // Can be not found in tree if the current footprint is imported

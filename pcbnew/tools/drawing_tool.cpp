@@ -2163,7 +2163,11 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                             std::optional<VECTOR2D> aStartingPoint )
 {
+    wxCHECK( aGraphic, false );
+
     PCB_SHAPE*&  graphic = *aGraphic;
+
+    wxCHECK( graphic, false );
 
     if( m_layer != m_frame->GetActiveLayer() )
     {

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,8 @@ const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
     { "A.Width > B.Width", false, VAL( 0.0 ) },
     { "A.Width + B.Width", false, VAL( pcbIUScale.MilsToIU(10) + pcbIUScale.MilsToIU(20) ) },
     { "A.Netclass", false, VAL( "HV" ) },
-    { "(A.Netclass == 'HV') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", false, VAL( 1.0 ) },
+    { "(A.Netclass == 'HV') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", false,
+      VAL( 1.0 ) },
     { "A.Netclass + 1.0", false, VAL( 1.0 ) },
     { "A.type == 'Track' && B.type == 'Track' && A.layer == 'F.Cu'", false, VAL( 1.0 ) },
     { "(A.type == 'Track') && (B.type == 'Track') && (A.layer == 'F.Cu')", false, VAL( 1.0 ) },
@@ -85,7 +86,7 @@ const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
 };
 
 
-static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
+static bool testEvalExpr( const wxString& expr, const LIBEVAL::VALUE& expectedResult,
                           bool expectError = false, BOARD_ITEM* itemA = nullptr,
                           BOARD_ITEM* itemB = nullptr )
 {
@@ -123,7 +124,6 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
         ok     = ( result.EqualTo( &context, &expectedResult ) );
     }
 
-
     if( expectedResult.GetType() == LIBEVAL::VT_NUMERIC )
     {
         BOOST_CHECK_EQUAL( result.AsDouble(), expectedResult.AsDouble() );
@@ -133,9 +133,9 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
         BOOST_CHECK_EQUAL( result.AsString(), expectedResult.AsString() );
     }
 
-
     return ok;
 }
+
 
 BOOST_AUTO_TEST_CASE( SimpleExpressions )
 {
@@ -144,6 +144,7 @@ BOOST_AUTO_TEST_CASE( SimpleExpressions )
         testEvalExpr( expr.expression, expr.expectedResult, expr.expectError );
     }
 }
+
 
 BOOST_AUTO_TEST_CASE( IntrospectedProperties )
 {

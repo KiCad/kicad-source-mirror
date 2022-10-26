@@ -2077,8 +2077,11 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
                     bbox.Inflate( -label->GetLabelBoxExpansion() );
 
+                EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( item );
+                wxCHECK(textItem, 0 );
+
                 // Careful: GetTextMargin() is dependent on font size...
-                new_textbox->SetTextSize( dynamic_cast<EDA_TEXT*>( item )->GetTextSize() );
+                new_textbox->SetTextSize( textItem->GetTextSize() );
 
                 int margin = new_textbox->GetTextMargin();
                 bbox.Inflate( margin );

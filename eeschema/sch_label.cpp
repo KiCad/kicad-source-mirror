@@ -446,6 +446,8 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
 void SCH_LABEL_BASE::GetIntersheetRefs( std::vector<std::pair<wxString, wxString>>* pages )
 {
+    wxCHECK( pages, /* void */ );
+
     if( Schematic() )
     {
         auto it = Schematic()->GetPageRefsMap().find( GetText() );

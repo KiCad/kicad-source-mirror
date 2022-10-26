@@ -331,6 +331,7 @@ bool isMaskAperture( BOARD_ITEM* aItem )
     return maskLayers.count() > 0 && otherLayers.count() == 0;
 }
 
+
 bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BOARD_ITEM* aTestItem,
                                                        PCB_LAYER_ID aTestLayer, int aTestNet,
                                                        BOARD_ITEM** aCollidingItem )
@@ -373,7 +374,9 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aT
 {
     FOOTPRINT* fp = static_cast<FOOTPRINT*>( aMaskItem->GetParentFootprint() );
 
-    if( fp && ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
+    wxCHECK( fp, false );
+
+    if( ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
     {
         // If we're allowing bridges then we're allowing bridges.  Nothing to check.
         return false;

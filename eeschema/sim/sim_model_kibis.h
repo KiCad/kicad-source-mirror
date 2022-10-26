@@ -81,7 +81,10 @@ public:
     }
 
 
-    const PARAM& GetParam( unsigned aParamIndex ) const override { return m_params.at( aParamIndex ); };
+    const PARAM& GetParam( unsigned aParamIndex ) const override
+    {
+        return m_params.at( aParamIndex );
+    };
 
     /** @brief update the list of available models based on the pin number.
      * */
@@ -93,8 +96,10 @@ public:
     bool CanDifferential() { return m_enableDiff; };
     bool m_enableDiff;
 
-    void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
-    void ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields ) override;
+    void ReadDataSchFields( unsigned aSymbolPinCount,
+                            const std::vector<SCH_FIELD>* aFields ) override;
+    void ReadDataLibFields( unsigned aSymbolPinCount,
+                            const std::vector<LIB_FIELD>* aFields ) override;
 
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;

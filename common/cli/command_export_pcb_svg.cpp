@@ -78,6 +78,7 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
     if( !wxFile::Exists( svgJob->m_filename ) )
     {
         wxFprintf( stderr, _( "Board file does not exist or is not accessible\n" ) );
+        delete svgJob;
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
@@ -88,6 +89,8 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
     svgJob->m_printMaskLayer = layerMask;
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob );
+
+    delete svgJob;
 
     return exitCode;
 }

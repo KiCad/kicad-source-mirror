@@ -159,7 +159,7 @@ public:
     IBIS_CORNER    m_Cpin = IBIS_CORNER::TYP;
     IBIS_CORNER    m_Ccomp = IBIS_CORNER::TYP;
     IBIS_CORNER    m_supply = IBIS_CORNER::TYP;
-    KIBIS_WAVEFORM* m_waveform;
+    KIBIS_WAVEFORM* m_waveform = nullptr;
     KIBIS_ACCURACY m_accuracy = KIBIS_ACCURACY::LEVEL_2;
 
     void SetCornerFromString( IBIS_CORNER& aCorner, std::string aString );
