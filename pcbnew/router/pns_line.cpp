@@ -164,10 +164,9 @@ static int areNeighbours( int x, int y, int max = 0 )
     return false;
 }
 
-
-//#ifdef TOM_EXTRA_DEBUG
+#ifdef TOM_EXTRA_DEBUG
 SHAPE_LINE_CHAIN g_pnew, g_hnew;
-//#endif
+#endif
 
 bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const
 {
@@ -475,6 +474,9 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
             // we should never reach this part of the code, but who really knows?
             if( !v_next )
             {
+#ifdef TOM_EXTRA_DEBUG
+                printf("still no v_next\n");
+#endif
                 for( VERTEX* vn : v->neighbours )
                 {
                     if( vn->type == ON_EDGE )
@@ -486,6 +488,19 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
                         }
                     }
                 }
+
+                if( v_next )
+                {
+                    for( auto &v : vts )
+                    {
+                        if( v.isHull )
+                            v.visited = false;
+                    }
+                }
+
+#ifdef TOM_EXTRA_DEBUG
+                printf("v_next %p\n", v_next);
+#endif
 
                 // Did we get the next hull point but the end of the line is inside?  Instead of walking
                 // around the hull some more (which will just end up taking us back to the start), lets
