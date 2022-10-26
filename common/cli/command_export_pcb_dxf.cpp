@@ -42,19 +42,19 @@ CLI::EXPORT_PCB_DXF_COMMAND::EXPORT_PCB_DXF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
             .help( "comma separated list of untranslated layer names to include such as F.Cu,B.Cu" );
 
     m_argParser.add_argument( "-ird", ARG_INCLUDE_REFDES )
-            .help( "Mirror the board (useful for trying to show bottom layers)" )
+            .help( "Include the reference designator text" )
             .implicit_value( true )
-            .default_value( true );
+            .default_value( false );
 
     m_argParser.add_argument( "-iv", ARG_INCLUDE_VALUE )
-            .help( "Mirror the board (useful for trying to show bottom layers)" )
+            .help( "Include the value text" )
             .implicit_value( true )
-            .default_value( true );
+            .default_value( false );
 
     m_argParser.add_argument( "-uc", ARG_USE_CONTOURS )
             .help( "Plot graphic items using their contours" )
             .implicit_value( true )
-            .default_value( true );
+            .default_value( false );
 
     m_argParser.add_argument( "-ou", ARG_OUTPUT_UNITS )
             .default_value( std::string( "in" ) )
@@ -68,6 +68,12 @@ int CLI::EXPORT_PCB_DXF_COMMAND::Perform( KIWAY& aKiway ) const
 
     dxfJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     dxfJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+
+    if( !wxFile::Exists( dxfJob->m_filename ) )
+    {
+        wxFprintf( stderr, _( "Board file does not exist or is not accessible\n" ) );
+        return EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
 
     dxfJob->m_plotFootprintValues = m_argParser.get<bool>( ARG_INCLUDE_VALUE );
     dxfJob->m_plotRefDes = m_argParser.get<bool>( ARG_INCLUDE_VALUE );
