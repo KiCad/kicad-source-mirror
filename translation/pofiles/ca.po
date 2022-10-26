@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-08-15 01:21+0000\n"
+"PO-Revision-Date: 2022-10-27 23:00+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -29921,7 +29921,7 @@ msgstr "Nombre de components: %d."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:496
 #, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr ""
+msgstr "Arxiu de posicionament (cara de sota): '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:348
 #: pcbnew/exporters/gen_footprints_placefile.cpp:506
@@ -29932,13 +29932,12 @@ msgstr "Nombre de components total: %d."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:351
 #: pcbnew/exporters/gen_footprints_placefile.cpp:459
 #: pcbnew/exporters/gen_footprints_placefile.cpp:510
-#, fuzzy
 msgid "File generation successful."
-msgstr "Ha fallat l'operació d'escriptura de fitxer."
+msgstr "Fitxer creat satisfactòriament."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:377
 msgid "No footprint for automated placement."
-msgstr ""
+msgstr "No hi ha empremtes pel posicionament automàtic."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
 #, c-format
