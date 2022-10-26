@@ -27,7 +27,7 @@
 class JOB_EXPORT_PCB_STEP : public JOB
 {
 public:
-    JOB_EXPORT_PCB_STEP::JOB_EXPORT_PCB_STEP( bool aIsCli ) :
+    JOB_EXPORT_PCB_STEP( bool aIsCli ) :
             JOB( "step", aIsCli ),
             m_overwrite( false ),
             m_useGridOrigin( false ),
