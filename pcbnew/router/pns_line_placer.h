@@ -34,6 +34,7 @@
 #include "pns_placement_algo.h"
 #include "pns_sizes_settings.h"
 #include "pns_via.h"
+#include "pns_walkaround.h"
 
 namespace PNS {
 
@@ -73,7 +74,6 @@ public:
 private:
     std::vector<STAGE> m_stages;
 };
-
 
 
 /**
@@ -305,7 +305,7 @@ private:
      * colliding solid or non-movable items.  Movable segments are ignored, as they'll be
      * handled later by the shove algorithm.
      */
-    bool routeHead( const VECTOR2I& aP, LINE& aNewHead );
+    bool routeHead( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail );
 
     /**
      * Perform a single routing algorithm step, for the end point \a aP.
@@ -316,13 +316,21 @@ private:
     void routeStep( const VECTOR2I& aP );
 
     ///< Route step walk around mode.
-    bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead );
+    bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail );
+    bool rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisionMask, bool& aViaOk );
+    bool splitHeadTail( const LINE& aNewLine, const LINE& aOldTail, LINE& aNewHead, LINE& aNewTail );
+    bool cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aCursor,  double lengthThreshold, SHAPE_LINE_CHAIN& aOut );
+    bool clipAndCheckCollisions( VECTOR2I aP, SHAPE_LINE_CHAIN aL, SHAPE_LINE_CHAIN& aOut, int &thresholdDist );
+
+    void updatePStart( const LINE& tail );
+
+    //bool rhPostSplitHeadTail( )
 
     ///< Route step shove mode.
-    bool rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead );
+    bool rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail );
 
     ///< Route step mark obstacles mode.
-    bool rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead );
+    bool rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail );
 
     const VIA makeVia( const VECTOR2I& aP );
 
@@ -335,13 +343,12 @@ private:
     LINE           m_head;          ///< the volatile part of the track from the previously
                                     ///< analyzed point to the current routing destination
 
-    LINE           m_last_head;     ///< Most recent successful (non-colliding) head
-
     LINE           m_tail;          ///< routing "tail": part of the track that has been already
                                     ///< fixed due to collisions with obstacles
 
     NODE*          m_world;         ///< pointer to world to search colliding items
     VECTOR2I       m_p_start;       ///< current routing start (end of tail, beginning of head)
+    std::optional<VECTOR2I>       m_last_p_end;
 
     std::unique_ptr<SHOVE> m_shove; ///< The shove engine
 
