@@ -154,6 +154,9 @@ public:
 
     double WalkaroundHugLengthThreshold() const { return m_walkaroundHugLengthThreshold; }
 
+    int ViaForcePropIterationLimit() const { return m_viaForcePropIterationLimit; }
+    void SetViaForcePropIterationLimit(int aLimit) { m_viaForcePropIterationLimit = aLimit; }
+
 private:
     bool m_shoveVias;
     bool m_startDiagonal;
@@ -178,6 +181,7 @@ private:
 
     int m_walkaroundIterationLimit;
     int m_shoveIterationLimit;
+    int m_viaForcePropIterationLimit;
     double m_walkaroundHugLengthThreshold;
 
     TIME_LIMIT m_shoveTimeLimit;

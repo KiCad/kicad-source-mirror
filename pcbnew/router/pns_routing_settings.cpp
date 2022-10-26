@@ -54,6 +54,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_walkaroundHugLengthThreshold = 1.5;
     m_autoPosture = true;
     m_fixAllSegments = true;
+    m_viaForcePropIterationLimit = 40;
 
     m_params.emplace_back( new PARAM<int>( "mode", reinterpret_cast<int*>( &m_routingMode ),
             static_cast<int>( RM_Walkaround ) ) );
@@ -68,6 +69,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_params.emplace_back( new PARAM<bool>( "follow_mouse",     &m_followMouse,     true ) );
     m_params.emplace_back( new PARAM<bool>( "start_diagonal",   &m_startDiagonal,   false ) );
     m_params.emplace_back( new PARAM<int>( "shove_iteration_limit", &m_shoveIterationLimit, 250 ) );
+    m_params.emplace_back( new PARAM<int>( "via_force_prop_iteration_limit", &m_viaForcePropIterationLimit, 40 ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<int>( "shove_time_limit",
             [this] () -> int
