@@ -77,6 +77,8 @@ private:
     template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
+
+    bool hasPrimaryValue() const override { return true; }
     std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
     static const std::vector<PARAM::INFO>& makeParamInfos( TYPE aType );

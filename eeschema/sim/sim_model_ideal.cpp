@@ -78,7 +78,7 @@ void SIM_MODEL_IDEAL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) cons
     SIM_MODEL::WriteDataSchFields( aFields );
 
     if( IsInferred() )
-        inferredWriteDataFields( aFields );
+        WriteInferredDataFields( aFields );
 }
 
 
@@ -87,19 +87,7 @@ void SIM_MODEL_IDEAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
     SIM_MODEL::WriteDataLibFields( aFields );
 
     if( IsInferred() )
-        inferredWriteDataFields( aFields );
-}
-
-
-template <typename T>
-void SIM_MODEL_IDEAL::inferredWriteDataFields( std::vector<T>& aFields ) const
-{
-    std::string value = GetParam( 0 ).value->ToString();
-
-    if( value == "" )
-        value = DeviceTypeInfo( GetDeviceType() ).fieldValue;
-
-    WriteInferredDataFields( aFields, value );
+        WriteInferredDataFields( aFields );
 }
 
 

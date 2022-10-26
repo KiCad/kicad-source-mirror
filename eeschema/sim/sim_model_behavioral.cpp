@@ -70,8 +70,7 @@ std::string SPICE_GENERATOR_BEHAVIORAL::ItemLine( const SPICE_ITEM& aItem ) cons
 
 
 SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_BEHAVIORAL>( *this ) ),
-    m_isInferred( false )
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_BEHAVIORAL>( *this ) )
 {
     static PARAM::INFO resistor  = makeParams( "r", "Expression for resistance",  "Ω" );
     static PARAM::INFO capacitor = makeParams( "c", "Expression for capacitance", "F"   );
@@ -116,7 +115,7 @@ void SIM_MODEL_BEHAVIORAL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields )
 {
     SIM_MODEL::WriteDataSchFields( aFields );
 
-    if( m_isInferred )
+    if( IsInferred() )
         inferredWriteDataFields( aFields );
 }
 
@@ -125,7 +124,7 @@ void SIM_MODEL_BEHAVIORAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields )
 {
     SIM_MODEL::WriteDataLibFields( aFields );
 
-    if( m_isInferred )
+    if( IsInferred() )
         inferredWriteDataFields( aFields );
 }
 
@@ -157,7 +156,7 @@ void SIM_MODEL_BEHAVIORAL::inferredReadDataFields( unsigned aSymbolPinCount,
         // If Value is device type, this is an empty model
         || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
     {
-        m_isInferred = true;
+        SetIsInferred( true );
     }
 }
 

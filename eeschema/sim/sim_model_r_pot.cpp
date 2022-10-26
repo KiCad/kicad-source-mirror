@@ -45,7 +45,12 @@ std::string SPICE_GENERATOR_R_POT::ItemLine( const SPICE_ITEM& aItem ) const
 {
     // Swap pin order so that pos=1 is all +, and pos=0 is all -.
     SPICE_ITEM item = aItem;
-    std::swap( item.pinNetNames[0], item.pinNetNames[2] );
+
+    // FIXME: This `if` is there because Preview() calls this function with empty pinNetNames vector.
+    // This shouldn't be necessary.
+    if( item.pinNetNames.size() >= 3 )
+        std::swap( item.pinNetNames.at( 0 ), item.pinNetNames.at( 2 ) );
+
     return SPICE_GENERATOR::ItemLine( item );
 }
 
@@ -73,7 +78,7 @@ void SIM_MODEL_R_POT::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) cons
     SIM_MODEL::WriteDataSchFields( aFields );
 
     if( IsInferred() )
-        inferredWriteDataFields( aFields );
+        WriteInferredDataFields( aFields );
 }
 
 
@@ -82,19 +87,7 @@ void SIM_MODEL_R_POT::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
     SIM_MODEL::WriteDataLibFields( aFields );
 
     if( IsInferred() )
-        inferredWriteDataFields( aFields );
-}
-
-
-template <typename T>
-void SIM_MODEL_R_POT::inferredWriteDataFields( std::vector<T>& aFields ) const
-{
-    std::string value = GetFieldValue( &aFields, PARAMS_FIELD );
-
-    if( value == "" )
-        value = GetDeviceTypeInfo().fieldValue;
-
-    WriteInferredDataFields( aFields, value );
+        WriteInferredDataFields( aFields );
 }
 
 

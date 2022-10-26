@@ -621,10 +621,11 @@ protected:
     virtual void CreatePins( unsigned aSymbolPinCount );
 
     template <typename T>
-    void WriteInferredDataFields( std::vector<T>& aFields, const std::string& aValue ) const;
+    void WriteInferredDataFields( std::vector<T>& aFields, const std::string& aValue = "" ) const;
 
     virtual std::string GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
 
+    std::string GenerateValueField( const std::string& aPairSeparator ) const;
     std::string GenerateParamsField( const std::string& aPairSeparator ) const;
     void ParseParamsField( const std::string& aParamsField );
 
@@ -632,8 +633,7 @@ protected:
     void ParseEnableField( const std::string& aDisabledField );
 
     template <typename T>
-    void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
-                                 bool aAllowPrimaryValueWithoutName = false );
+    void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
     std::vector<PARAM> m_params;
     const SIM_MODEL* m_baseModel;
 
@@ -658,6 +658,7 @@ private:
 
     std::string parseFieldFloatValue( std::string aFieldFloatValue );
 
+    virtual bool hasPrimaryValue() const { return false; }
     virtual bool requiresSpiceModelLine() const;
 
     virtual std::vector<std::string> getPinNames() const { return {}; }

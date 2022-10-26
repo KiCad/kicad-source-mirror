@@ -1021,7 +1021,12 @@ void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const std::str
     if( removePinsField )
         SetFieldValue( aFields, PINS_FIELD, "" );
 
-    SetFieldValue( aFields, VALUE_FIELD, aValue );
+    std::string value = aValue;
+
+    if( value == "" )
+        value = GenerateValueField( "=" );
+
+    SetFieldValue( aFields, VALUE_FIELD, value );
     SetFieldValue( aFields, DEVICE_TYPE_FIELD, "" );
     SetFieldValue( aFields, TYPE_FIELD, "" );
     SetFieldValue( aFields, PARAMS_FIELD, "" );
@@ -1049,6 +1054,35 @@ std::string SIM_MODEL::GenerateParamValuePair( const PARAM& aParam, bool& aIsFir
         value = "\"" + value + "\"";
 
     result.append( fmt::format( "{}={}", aParam.info.name, value ) );
+    return result;
+}
+
+
+std::string SIM_MODEL::GenerateValueField( const std::string& aPairSeparator ) const
+{
+    std::string result;
+    bool isFirst = true;
+
+    for( int i = 0; i < GetParamCount(); ++i )
+    {
+        const PARAM& param = GetParam( i );
+
+        if( i == 0 && hasPrimaryValue() )
+        {
+            result.append( param.value->ToString() );
+            isFirst = false;
+            continue;
+        }
+        
+        if( param.value->ToString() == "" )
+            continue;
+
+        result.append( GenerateParamValuePair( param, isFirst ) );
+    }
+
+    if( result == "" )
+        result = GetDeviceTypeInfo().fieldValue;
+
     return result;
 }
 
@@ -1185,13 +1219,12 @@ void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
         ParseParamsField( GetFieldValue( aFields, PARAMS_FIELD ) );
     else
-        InferredReadDataFields( aSymbolPinCount, aFields, true );
+        InferredReadDataFields( aSymbolPinCount, aFields );
 }
 
 
 template <typename T>
-void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
-                                        bool aAllowPrimaryValueWithoutName )
+void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
     // TODO: Make a subclass SIM_MODEL_NONE.
     if( GetType() == SIM_MODEL::TYPE::NONE )
@@ -1219,7 +1252,7 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
         {
             if( node->is_type<SIM_MODEL_PARSER::fieldInferValuePrimaryValue>() )
             {
-                if( aAllowPrimaryValueWithoutName )
+                if( hasPrimaryValue() )
                 {
                     for( const auto& subnode : node->children )
                     {
@@ -1249,13 +1282,6 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
 
     SetIsInferred( true );
 }
-
-template void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount,
-                                                 const std::vector<SCH_FIELD>* aFields,
-                                                 bool aAllowOnlyFirstValue );
-template void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount,
-                                                 const std::vector<LIB_FIELD>* aFields,
-                                                 bool aAllowOnlyFirstValue );
 
 
 template <typename T>

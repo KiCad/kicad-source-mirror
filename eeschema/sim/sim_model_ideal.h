@@ -55,6 +55,7 @@ private:
     template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
+    bool hasPrimaryValue() const override { return true; }
     std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
     static PARAM::INFO makeParamInfo( std::string aName, std::string aDescription, std::string aUnit );
