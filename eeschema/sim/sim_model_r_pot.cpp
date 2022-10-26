@@ -29,14 +29,10 @@
 std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
 {
     std::string r = m_model.FindParam( "r" )->value->ToSpiceString();
+    std::string position = m_model.FindParam( "pos" )->value->ToSpiceString();
 
-    // We invert the argument passed to the model because we want pos=1 to correspond to the signal
-    // from + and pos=0 to the signal from -.
-    auto pos = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "pos" )->value );
-
-    if( pos.HasValue() )
+    if( position != "" )
     {
-        std::string position = ( SIM_VALUE_FLOAT( 1 ) - pos ).ToSpiceString();
         return fmt::format( ".model {} potentiometer( r={} position={} )\n", aItem.modelName, r,
                             position );
     }
@@ -45,12 +41,20 @@ std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
 }
 
 
+std::string SPICE_GENERATOR_R_POT::ItemLine( const SPICE_ITEM& aItem ) const
+{
+    // Swap pin order so that pos=1 is all +, and pos=0 is all -.
+    SPICE_ITEM item = aItem;
+    std::swap( item.pinNetNames[0], item.pinNetNames[2] );
+    return SPICE_GENERATOR::ItemLine( item );
+}
+
+
 std::string SPICE_GENERATOR_R_POT::TunerCommand( const SPICE_ITEM& aItem,
                                                  const SIM_VALUE_FLOAT& aValue ) const
 {
     return fmt::format( "altermod @{}[position]={}",
-                        aItem.model->SpiceGenerator().ItemName( aItem ),
-                        ( SIM_VALUE_FLOAT( 1 ) - aValue ).ToSpiceString() );
+                        aItem.model->SpiceGenerator().ItemName( aItem ), aValue.ToSpiceString() );
 }
 
 
