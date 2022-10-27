@@ -71,6 +71,8 @@ public:
 
     DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol, std::vector<T>& aSchFields );
 
+    ~DIALOG_SIM_MODEL();
+
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -96,7 +98,7 @@ private:
     wxString getSymbolPinString( int aSymbolPinNumber ) const;
     wxString getModelPinString( int aModelPinIndex ) const;
     int getModelPinIndex( const wxString& aModelPinString ) const;
-    wxArrayString getModelPinChoices() const;
+    wxArrayString getModelPinChoices( const wxString& aCurrentValue ) const;
 
     void onRadioButton( wxCommandEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;

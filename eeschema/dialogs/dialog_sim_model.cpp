@@ -35,8 +35,12 @@
 #include <locale_io.h>
 #include <wx/filedlg.h>
 #include <wx/textfile.h>
+#include "grid_tricks.h"
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
+
+
+#define USED_PIN_PREFIX wxT( "⇤" )
 
 
 template <typename T>
@@ -112,8 +116,18 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
         wxFAIL;
     }
 
+    m_pinAssignmentsGrid->PushEventHandler( new GRID_TRICKS( m_pinAssignmentsGrid ) );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+}
+
+
+template <typename T>
+DIALOG_SIM_MODEL<T>::~DIALOG_SIM_MODEL()
+{
+    // Delete the GRID_TRICKS.
+    m_pinAssignmentsGrid->PopEventHandler( true );
 }
 
 
@@ -538,8 +552,6 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments()
                                             modelPinString );
     }
 
-    wxArrayString modelPinChoices = getModelPinChoices();
-
     // Set up the Symbol column grid values and Model column cell editors with dropdown options.
     for( int i = 0; i < m_pinAssignmentsGrid->GetNumberRows(); ++i )
     {
@@ -552,15 +564,12 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments()
         wxString curModelPinString = m_pinAssignmentsGrid->GetCellValue(
                 i, static_cast<int>( PIN_COLUMN::MODEL ) );
 
-        wxArrayString actualModelPinChoices( modelPinChoices );
-
-        if( curModelPinString != _( "Not Connected" ) )
-            actualModelPinChoices.Insert( curModelPinString, 0 );
+        wxArrayString modelPinChoices = getModelPinChoices( curModelPinString );
 
         // Using `new` here shouldn't cause a memory leak because `SetCellEditor()` calls
         // `DecRef()` on its last editor.
         m_pinAssignmentsGrid->SetCellEditor( i, static_cast<int>( PIN_COLUMN::MODEL ),
-                                             new wxGridCellChoiceEditor( actualModelPinChoices ) );
+                                             new wxGridCellChoiceEditor( modelPinChoices ) );
     }
 
     // TODO: Show a preview of the symbol with the pin numbers shown.
@@ -935,18 +944,21 @@ int DIALOG_SIM_MODEL<T>::getModelPinIndex( const wxString& aModelPinString ) con
 
 
 template <typename T>
-wxArrayString DIALOG_SIM_MODEL<T>::getModelPinChoices() const
+wxArrayString DIALOG_SIM_MODEL<T>::getModelPinChoices( const wxString& aCurrentValue ) const
 {
     wxArrayString modelPinChoices;
 
     for( int i = 0; i < curModel().GetPinCount(); ++i )
     {
         const SIM_MODEL::PIN& modelPin = curModel().GetPin( i );
+        const wxString&       pinString = getModelPinString( i );
 
-        if( modelPin.symbolPinNumber != "" )
-            continue;
-
-        modelPinChoices.Add( getModelPinString( i ) );
+        if( pinString == aCurrentValue )
+            modelPinChoices.Add( pinString );
+        else if( modelPin.symbolPinNumber != "" )
+            modelPinChoices.Add( wxString( USED_PIN_PREFIX ) + wxS( " " ) + pinString );
+        else
+            modelPinChoices.Add( pinString );
     }
 
     modelPinChoices.Add( _( "Not Connected" ) );
@@ -1193,10 +1205,18 @@ void DIALOG_SIM_MODEL<T>::onCodePreviewSetFocus( wxFocusEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
 {
-    int symbolPinIndex = aEvent.GetRow();
-    int oldModelPinIndex = getModelPinIndex( aEvent.GetString() );
-    int modelPinIndex = getModelPinIndex(
-            m_pinAssignmentsGrid->GetCellValue( aEvent.GetRow(), aEvent.GetCol() ) );
+    int      symbolPinIndex = aEvent.GetRow();
+    wxString oldModelPinName = aEvent.GetString();
+    wxString modelPinName = m_pinAssignmentsGrid->GetCellValue( aEvent.GetRow(), aEvent.GetCol() );
+
+    if( oldModelPinName.StartsWith( USED_PIN_PREFIX ) )
+        oldModelPinName = oldModelPinName.AfterFirst( ' ' );
+
+    if( modelPinName.StartsWith( USED_PIN_PREFIX ) )
+        modelPinName = modelPinName.AfterFirst( ' ' );
+
+    int oldModelPinIndex = getModelPinIndex( oldModelPinName );
+    int modelPinIndex = getModelPinIndex( modelPinName );
 
     if( oldModelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
         curModel().SetPinSymbolPinNumber( oldModelPinIndex, "" );
