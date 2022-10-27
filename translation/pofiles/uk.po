@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-26 22:09+0000\n"
+"PO-Revision-Date: 2022-10-29 11:07+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -38329,43 +38329,44 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1218
 msgid "Distributes selected items along the horizontal axis"
-msgstr ""
+msgstr "Розподіляти вибрані елементи по горизонтальній осі"
 
 #: pcbnew/tools/pcb_actions.cpp:1223
 msgid "Distribute Vertically"
-msgstr ""
+msgstr "Розподілити вертикально"
 
 #: pcbnew/tools/pcb_actions.cpp:1223
 msgid "Distributes selected items along the vertical axis"
-msgstr ""
+msgstr "Розподіляти вибрані елементи по вертикальній осі"
 
 #: pcbnew/tools/pcb_actions.cpp:1260
 msgid "Position Relative To..."
-msgstr ""
+msgstr "Розташування відносне до..."
 
 #: pcbnew/tools/pcb_actions.cpp:1261
 msgid "Positions the selected item(s) by an exact amount relative to another"
-msgstr ""
+msgstr "Розмістити вибрані елементів на точну відстань відносно інших"
 
 #: pcbnew/tools/pcb_actions.cpp:1298
 msgid "Select/Expand Connection"
-msgstr ""
+msgstr "Вибрати/Розгорнути підключення"
 
 #: pcbnew/tools/pcb_actions.cpp:1299
 msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
 msgstr ""
+"Вибрати підключення або розширити виділення на з'єднання, контактні площадки "
+"або всієї мережі"
 
 #: pcbnew/tools/pcb_actions.cpp:1304
-#, fuzzy
 msgid "Unroute Selected"
-msgstr "Групувати Виділені"
+msgstr "Прибрати трасування для видаленого"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
-#, fuzzy
 msgid "Unroutes selected items to the nearest pad."
-msgstr "Вирізати виділені елементи в буфер обміну"
+msgstr ""
+"Прибрати трасування для видалених елементів до найближчих контактних площадок"
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Select All Tracks in Net"
@@ -38373,7 +38374,7 @@ msgstr "Вибрати всі доріжки у звʼязку"
 
 #: pcbnew/tools/pcb_actions.cpp:1317
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr ""
+msgstr "Вибрати всі доріжки і перехідні отвори, що належать одній мережі."
 
 #: pcbnew/tools/pcb_actions.cpp:1321
 msgid "Deselect All Tracks in Net"
@@ -38382,76 +38383,77 @@ msgstr "Зняти вибір з усіх доріжок у звʼязку"
 #: pcbnew/tools/pcb_actions.cpp:1322
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr ""
+"Відмінити вибрані всі доріжки і перехідні отвори, що належать одній мережі."
 
 #: pcbnew/tools/pcb_actions.cpp:1327
-#, fuzzy
 msgid "Select All Unconnected Footprints"
-msgstr "Виключити заблоковані посадкові місця"
+msgstr "Вибрати всі непідключені посадкові місця"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
 msgid "Selects all unconnected footprints belonging to each selected net."
 msgstr ""
+"Вибрати всі непідключені посадкові місця відносно мережі до якої вони "
+"відносяться."
 
 #: pcbnew/tools/pcb_actions.cpp:1333
-#, fuzzy
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "Доріжка має непідключений край"
+msgstr "Захопити найближчі незв’язані посадкові місця"
 
 #: pcbnew/tools/pcb_actions.cpp:1334
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
 msgstr ""
+"Вибирати та ініціювати переміщення найближчих непідключених посадкових місць "
+"в кожній вибраній мережі."
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr ""
+msgstr "Вибрати всі посадкові місця і доріжки з одного листа схеми"
 
 #: pcbnew/tools/pcb_actions.cpp:1344
 msgid "Items in Same Hierarchical Sheet"
-msgstr ""
+msgstr "Елементи з того ж самого ієрархічного листа"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr ""
+msgstr "Вибрати всі посадкові місця і доріжки з того ж самого листа схеми"
 
 #: pcbnew/tools/pcb_actions.cpp:1350
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "Зберегти у схему"
+msgstr "Вибрати на схемі"
 
 #: pcbnew/tools/pcb_actions.cpp:1351
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "Обрати відповідні елементи в PCB редакторі"
+msgstr "Обрати відповідні елементи в редакторі схеми"
 
 #: pcbnew/tools/pcb_actions.cpp:1356
 msgid "Filter Selected Items..."
-msgstr ""
+msgstr "Фільтрувати вибрані елементи..."
 
 #: pcbnew/tools/pcb_actions.cpp:1356
 msgid "Remove items from the selection by type"
-msgstr ""
+msgstr "Видалити елементи з вибраного за типом"
 
 #: pcbnew/tools/pcb_actions.cpp:1364 pcbnew/tools/zone_filler_tool.cpp:304
 msgid "Fill Zone"
-msgstr ""
+msgstr "Заповнити зону"
 
 #: pcbnew/tools/pcb_actions.cpp:1364
 msgid "Update copper fill of selected zone(s)"
-msgstr ""
+msgstr "Оновити заповнення міді обраної зони"
 
 #: pcbnew/tools/pcb_actions.cpp:1370 pcbnew/tools/zone_filler_tool.cpp:159
 msgid "Fill All Zones"
-msgstr ""
+msgstr "Заповнити всі зони"
 
 #: pcbnew/tools/pcb_actions.cpp:1370
 msgid "Update copper fill of all zones"
-msgstr ""
+msgstr "Оновити заповнення міді всіх зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1378 pcbnew/tools/zone_filler_tool.cpp:348
 msgid "Unfill Zone"
-msgstr ""
+msgstr "Відмінити заповнення зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1378
 msgid "Remove copper fill from selected zone(s)"
