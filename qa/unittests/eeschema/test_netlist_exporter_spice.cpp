@@ -175,6 +175,21 @@ public:
         TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>::TestNetlist( aBaseName );
     }
 
+    void TestOpPoint( double aRefValue, const std::string& aVectorName, double aMaxRelError = 1e-2 )
+    {
+        BOOST_TEST_CONTEXT( "Vector name: " << aVectorName )
+        {
+            NGSPICE* ngspice = static_cast<NGSPICE*>( m_simulator.get() );
+
+            std::vector<double> vector = ngspice->GetRealPlot( aVectorName );
+
+            BOOST_REQUIRE_EQUAL( vector.size(), 1 );
+            
+            double maxError = abs( aRefValue * aMaxRelError );
+            BOOST_CHECK_LE( abs( vector[0] - aRefValue ), aMaxRelError );
+        }
+    }
+
     void TestPoint( const std::string& aXVectorName, double aXValue,
                     const std::map<const std::string, double> aTestVectorsAndValues,
                     double aMaxRelError = 1e-2 )
@@ -208,7 +223,7 @@ public:
 
             BOOST_REQUIRE_LT( i, xVector.size() );
 
-            for( auto&& [vectorName, refValue] : aTestVectorsAndValues )
+            for( auto& [vectorName, refValue] : aTestVectorsAndValues )
             {
                 std::vector<double> yVector = ngspice->GetMagPlot( vectorName );
 
@@ -233,16 +248,16 @@ public:
 
     void TestTranPoint( double aTime,
                         const std::map<const std::string, double> aTestVectorsAndValues,
-                        double aMaxAbsError = 1e-2 )
+                        double aMaxRelError = 1e-2 )
     {
-        TestPoint( "time", aTime, aTestVectorsAndValues, aMaxAbsError );
+        TestPoint( "time", aTime, aTestVectorsAndValues, aMaxRelError );
     }
 
     void TestACPoint( double aFrequency,
                       const std::map<const std::string, double> aTestVectorsAndValues,
-                      double aMaxAbsError = 1e-2 )
+                      double aMaxRelError = 1e-2 )
     {
-        TestPoint( "frequency", aFrequency, aTestVectorsAndValues, aMaxAbsError );
+        TestPoint( "frequency", aFrequency, aTestVectorsAndValues, aMaxRelError );
     }
 
     wxString GetResultsPath( bool aTest = false )
@@ -330,6 +345,15 @@ BOOST_AUTO_TEST_CASE( Rlc )
     TestNetlist( "rlc" );
     TestTranPoint( 9.43e-3, { { "V(/Vp)", -19e-3 }, { "I(Rs1)", 19e-3 } } );
     TestTranPoint( 9.74e-3, { { "V(/Vp)", 19e-3 }, { "I(Rs1)", -19e-3 } } );
+}
+
+
+BOOST_AUTO_TEST_CASE( Potentiometers )
+{
+    TestNetlist( "potentiometers" );
+    TestOpPoint( 0.5, "V(/out1)" );
+    TestOpPoint( 0.3, "V(/out2)" );
+    TestOpPoint( 0.1, "V(/out3)" );
 }
 
 
