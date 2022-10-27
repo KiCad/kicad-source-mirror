@@ -486,6 +486,12 @@ void EDA_3D_VIEWER_FRAME::applyViewport( const wxString& aViewportName )
             m_canvas->Request_refresh();
         else
             m_canvas->RenderRaytracingRequest();
+
+        if( !m_lastSelectedViewport->name.IsEmpty() )
+        {
+            m_viewportMRU.Remove( m_lastSelectedViewport->name );
+            m_viewportMRU.Insert( m_lastSelectedViewport->name, 0 );
+        }
     }
     else
     {
@@ -500,19 +506,13 @@ void EDA_3D_VIEWER_FRAME::onViewportChanged( wxCommandEvent& aEvent )
     int count = m_cbViewports->GetCount();
     int index = m_cbViewports->GetSelection();
 
-    if( index >= 0 && index < count - 3 )
+    if( index >= 0 && index < count - 3 /* separator */ )
     {
         VIEWPORT3D* viewport = static_cast<VIEWPORT3D*>( m_cbViewports->GetClientData( index ) );
 
         wxCHECK( viewport, /* void */ );
 
         applyViewport( viewport->name );
-
-        if( !viewport->name.IsEmpty() )
-        {
-            m_viewportMRU.Remove( viewport->name );
-            m_viewportMRU.Insert( viewport->name, 0 );
-        }
     }
     else if( index == count - 2 )
     {
