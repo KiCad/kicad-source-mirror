@@ -64,7 +64,12 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
     m_cbViewports->Append( _( "Save viewport..." ) );
     m_cbViewports->Append( _( "Delete viewport..." ) );
 
+    m_cbViewports->SetToolTip( _( "Save and restore view orientation and zoom.  Use Shift+Tab to "
+                                  "activate selector.  Successive Tabs while holding Shift down "
+                                  "will cycle through viewports in popup." ) );
+
     m_cbViewports->SetSelection( m_cbViewports->GetCount() - 3 );
+
     m_lastSelectedViewport = nullptr;
 
     // Set up toolbar

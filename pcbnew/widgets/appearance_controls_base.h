@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -69,7 +69,7 @@ class APPEARANCE_CONTROLS_BASE : public WX_PANEL
 		wxStaticText* m_viewportsLabel;
 		wxChoice* m_cbViewports;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnSetFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnNotebookPageChanged( wxNotebookEvent& event ) { event.Skip(); }
@@ -83,6 +83,7 @@ class APPEARANCE_CONTROLS_BASE : public WX_PANEL
 	public:
 
 		APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 215,400 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~APPEARANCE_CONTROLS_BASE();
 
 		void m_netsTabSplitterOnIdle( wxIdleEvent& )

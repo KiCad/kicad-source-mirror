@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -166,7 +166,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );
 	m_cbLayerPresets = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbLayerPresetsNChoices, m_cbLayerPresetsChoices, 0 );
 	m_cbLayerPresets->SetSelection( 1 );
-	m_cbLayerPresets->SetToolTip( _("Layer presets") );
+	m_cbLayerPresets->SetToolTip( _("Save and restore layer visibility combinations.  Use Shift+Tab to activate selector.  Successive Tabs while holding Shift down will cycle through presets in popup.") );
 
 	bPresets->Add( m_cbLayerPresets, 0, wxALL|wxEXPAND, 2 );
 
@@ -187,7 +187,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	int m_cbViewportsNChoices = sizeof( m_cbViewportsChoices ) / sizeof( wxString );
 	m_cbViewports = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbViewportsNChoices, m_cbViewportsChoices, 0 );
 	m_cbViewports->SetSelection( 1 );
-	m_cbViewports->SetToolTip( _("Layer presets") );
+	m_cbViewports->SetToolTip( _("Save and restore view orientation and zoom.  Use Shift+Tab to activate selector.  Successive Tabs while holding Shift down will cycle through viewports in popup.") );
 
 	bViewports->Add( m_cbViewports, 0, wxALL|wxEXPAND, 2 );
 
