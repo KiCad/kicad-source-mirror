@@ -125,6 +125,10 @@ protected:
 
     void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
 
+    /**
+     * switch to a given predefined 3D viewport
+     * @param aViewportName is the name of the viewport to switch on
+     */
     void applyViewport( const wxString& aViewportName );
 
 private:

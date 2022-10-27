@@ -470,7 +470,7 @@ void EDA_3D_VIEWER_FRAME::applyViewport( const wxString& aViewportName )
 {
     int idx = m_cbViewports->FindString( aViewportName );
 
-    if( idx >= 0 && m_cbViewports->GetSelection() != idx )
+    if( idx >= 0 )
     {
         m_cbViewports->SetSelection( idx );
         m_lastSelectedViewport = static_cast<VIEWPORT3D*>( m_cbViewports->GetClientData( idx ) );
@@ -538,6 +538,7 @@ void EDA_3D_VIEWER_FRAME::onViewportChanged( wxCommandEvent& aEvent )
         else
         {
             index = m_cbViewports->FindString( name );
+            m_viewports[name].matrix = m_currentCamera.GetViewMatrix();
             m_viewportMRU.Remove( name );
         }
 
