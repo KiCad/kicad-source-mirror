@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,16 @@
 #define  EDA_VIEW_SWITCHER_H
 
 #include <eda_view_switcher_base.h>
+
+
+#ifdef __WXMAC__
+    #define PRESET_SWITCH_KEY WXK_RAW_CONTROL
+    #define VIEWPORT_SWITCH_KEY WXK_ALT
+#else
+    #define PRESET_SWITCH_KEY WXK_CONTROL
+    #define VIEWPORT_SWITCH_KEY WXK_SHIFT
+#endif
+
 
 class EDA_VIEW_SWITCHER : public EDA_VIEW_SWITCHER_BASE
 {

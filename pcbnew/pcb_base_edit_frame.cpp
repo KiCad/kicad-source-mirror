@@ -100,60 +100,61 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
     static bool s_presetSwitcherShown = false;
     static bool s_viewportSwitcherShown = false;
 
+    // wxWidgets generates no key events for the tab key when the ctrl key is held down.  One
+    // way around this is to look at all events and inspect the keyboard state of the tab key.
+    // However, this runs into issues on some linux VMs where querying the keyboard state is
+    // very slow.  Fortunately we only use ctrl-tab on Mac, so we implement this lovely hack:
 #ifdef __WXMAC__
-    wxKeyCode presetSwitchKey = WXK_RAW_CONTROL;
-    wxKeyCode viewSwitchKey = WXK_ALT;
+    if( wxGetKeyState( WXK_TAB ) )
 #else
-    wxKeyCode presetSwitchKey = WXK_RAW_CONTROL;
-    wxKeyCode viewSwitchKey = WXK_WINDOWS_LEFT;
+    if( ( aEvent.GetEventType() == wxEVT_CHAR || aEvent.GetEventType() == wxEVT_CHAR_HOOK )
+            && static_cast<wxKeyEvent&>( aEvent ).GetKeyCode() == WXK_TAB )
 #endif
-
-    if( aEvent.GetEventType() != wxEVT_CHAR && aEvent.GetEventType() != wxEVT_CHAR_HOOK )
-        return PCB_BASE_FRAME::TryBefore( aEvent );
-
-    if( !s_presetSwitcherShown && wxGetKeyState( presetSwitchKey ) && wxGetKeyState( WXK_TAB ) )
     {
-        if( m_appearancePanel && this->IsActive() )
+        if( !s_presetSwitcherShown && wxGetKeyState( PRESET_SWITCH_KEY ) )
         {
-            const wxArrayString& mru = m_appearancePanel->GetLayerPresetsMRU();
-
-            if( mru.size() > 0 )
+            if( m_appearancePanel && this->IsActive() )
             {
-                EDA_VIEW_SWITCHER switcher( this, mru, presetSwitchKey );
+                const wxArrayString& mru = m_appearancePanel->GetLayerPresetsMRU();
 
-                s_presetSwitcherShown = true;
-                switcher.ShowModal();
-                s_presetSwitcherShown = false;
+                if( mru.size() > 0 )
+                {
+                    EDA_VIEW_SWITCHER switcher( this, mru, PRESET_SWITCH_KEY );
 
-                int idx = switcher.GetSelection();
+                    s_presetSwitcherShown = true;
+                    switcher.ShowModal();
+                    s_presetSwitcherShown = false;
 
-                if( idx >= 0 && idx < (int) mru.size() )
-                    m_appearancePanel->ApplyLayerPreset( mru[idx] );
+                    int idx = switcher.GetSelection();
 
-                return true;
+                    if( idx >= 0 && idx < (int) mru.size() )
+                        m_appearancePanel->ApplyLayerPreset( mru[idx] );
+
+                    return true;
+                }
             }
         }
-    }
-    else if( !s_viewportSwitcherShown && wxGetKeyState( viewSwitchKey ) && wxGetKeyState( WXK_TAB ) )
-    {
-        if( m_appearancePanel && this->IsActive() )
+        else if( !s_viewportSwitcherShown && wxGetKeyState( VIEWPORT_SWITCH_KEY ) )
         {
-            const wxArrayString& mru = m_appearancePanel->GetViewportsMRU();
-
-            if( mru.size() > 0 )
+            if( m_appearancePanel && this->IsActive() )
             {
-                EDA_VIEW_SWITCHER switcher( this, mru, viewSwitchKey );
+                const wxArrayString& mru = m_appearancePanel->GetViewportsMRU();
 
-                s_viewportSwitcherShown = true;
-                switcher.ShowModal();
-                s_viewportSwitcherShown = false;
+                if( mru.size() > 0 )
+                {
+                    EDA_VIEW_SWITCHER switcher( this, mru, VIEWPORT_SWITCH_KEY );
 
-                int idx = switcher.GetSelection();
+                    s_viewportSwitcherShown = true;
+                    switcher.ShowModal();
+                    s_viewportSwitcherShown = false;
 
-                if( idx >= 0 && idx < (int) mru.size() )
-                    m_appearancePanel->ApplyViewport( mru[idx] );
+                    int idx = switcher.GetSelection();
 
-                return true;
+                    if( idx >= 0 && idx < (int) mru.size() )
+                        m_appearancePanel->ApplyViewport( mru[idx] );
+
+                    return true;
+                }
             }
         }
     }

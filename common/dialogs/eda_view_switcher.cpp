@@ -106,7 +106,7 @@ bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
 
         int idx = m_listBox->GetSelection();
 
-        if( wxGetKeyState( WXK_SHIFT ) )
+        if( wxGetKeyState( WXK_SHIFT ) && m_ctrlKey != WXK_SHIFT )
         {
             if( --idx < 0 )
                 m_listBox->SetSelection( (int) m_listBox->GetCount() - 1 );

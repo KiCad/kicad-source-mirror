@@ -292,31 +292,36 @@ bool EDA_3D_VIEWER_FRAME::TryBefore( wxEvent& aEvent )
 {
     static bool s_viewportSwitcherShown = false;
 
-    // On Windows, the Alt key is not usable, especially with TAB key
-    // Shift key is OK on all platforms
-    wxKeyCode viewSwitchKey = WXK_SHIFT;
-
-    if( aEvent.GetEventType() != wxEVT_CHAR && aEvent.GetEventType() != wxEVT_CHAR_HOOK )
-        return wxFrame::TryBefore( aEvent );
-
-    if( !s_viewportSwitcherShown && wxGetKeyState( viewSwitchKey ) && wxGetKeyState( WXK_TAB ) )
+    // wxWidgets generates no key events for the tab key when the ctrl key is held down.  One
+    // way around this is to look at all events and inspect the keyboard state of the tab key.
+    // However, this runs into issues on some linux VMs where querying the keyboard state is
+    // very slow.  Fortunately we only use ctrl-tab on Mac, so we implement this lovely hack:
+#ifdef __WXMAC__
+    if( wxGetKeyState( WXK_TAB ) )
+#else
+    if( ( aEvent.GetEventType() == wxEVT_CHAR || aEvent.GetEventType() == wxEVT_CHAR_HOOK )
+            && static_cast<wxKeyEvent&>( aEvent ).GetKeyCode() == WXK_TAB )
+#endif
     {
-        if( this->IsActive() )
+        if( !s_viewportSwitcherShown && wxGetKeyState( VIEWPORT_SWITCH_KEY ) )
         {
-            if( m_viewportMRU.size() > 0 )
+            if( this->IsActive() )
             {
-                EDA_VIEW_SWITCHER switcher( this, m_viewportMRU, viewSwitchKey );
+                if( m_viewportMRU.size() > 0 )
+                {
+                    EDA_VIEW_SWITCHER switcher( this, m_viewportMRU, VIEWPORT_SWITCH_KEY );
 
-                s_viewportSwitcherShown = true;
-                switcher.ShowModal();
-                s_viewportSwitcherShown = false;
+                    s_viewportSwitcherShown = true;
+                    switcher.ShowModal();
+                    s_viewportSwitcherShown = false;
 
-                int idx = switcher.GetSelection();
+                    int idx = switcher.GetSelection();
 
-                if( idx >= 0 && idx < (int) m_viewportMRU.size() )
-                    applyViewport( m_viewportMRU[idx] );
+                    if( idx >= 0 && idx < (int) m_viewportMRU.size() )
+                        applyViewport( m_viewportMRU[idx] );
 
-                return true;
+                    return true;
+                }
             }
         }
     }

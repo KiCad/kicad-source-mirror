@@ -28,6 +28,7 @@
 #include <wx/choice.h>
 
 #include <bitmaps.h>
+#include <dialogs/eda_view_switcher.h>
 #include <eda_3d_viewer_frame.h>
 #include <menus_helpers.h>
 #include <tool/action_toolbar.h>
@@ -52,7 +53,10 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
     }
 
     // Show the hotkey to open the windows list selector:
-    m_viewportsLabel = new wxStaticText( m_mainToolBar, wxID_ANY, _( "Viewports (Shift+Tab):" ) );
+    wxString keyName = KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY );
+
+    m_viewportsLabel = new wxStaticText( m_mainToolBar, wxID_ANY,
+                                         wxString::Format( _( "Viewports (%sTab):" ), keyName ) );
    	m_viewportsLabel->Wrap( -1 );
 
    	m_cbViewports = new wxChoice( m_mainToolBar, wxID_ANY );
@@ -64,9 +68,11 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
     m_cbViewports->Append( _( "Save viewport..." ) );
     m_cbViewports->Append( _( "Delete viewport..." ) );
 
-    m_cbViewports->SetToolTip( _( "Save and restore view orientation and zoom.  Use Shift+Tab to "
-                                  "activate selector.  Successive Tabs while holding Shift down "
-                                  "will cycle through viewports in popup." ) );
+    m_cbViewports->SetToolTip( wxString::Format( _( "Save and restore view orientation and zoom.\n"
+                                                    "Use %sTab to activate selector.\n"
+                                                    "Successive Tabs while holding %s down will "
+                                                    "cycle through viewports in the popup." ),
+                                                 keyName, keyName ) );
 
     m_cbViewports->SetSelection( m_cbViewports->GetCount() - 3 );
 

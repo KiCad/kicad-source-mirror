@@ -48,6 +48,7 @@
 #include <widgets/indicator_icon.h>
 #include <widgets/infobar.h>
 #include <widgets/wx_grid.h>
+#include <dialogs/eda_view_switcher.h>
 #include <wx/bmpbuttn.h>
 #include <wx/checkbox.h>
 #include <wx/hyperlink.h>
@@ -442,6 +443,20 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_windowObjects->SetFont( infoFont );
     m_presetsLabel->SetFont( infoFont );
     m_viewportsLabel->SetFont( infoFont );
+
+    m_cbLayerPresets->SetToolTip( wxString::Format( _( "Save and restore layer visibility combinations.\n"
+                                                       "Use %sTab to activate selector.\n"
+                                                       "Successive Tabs while holding %s down will "
+                                                       "cycle through presets in the popup." ),
+                                                    KeyNameFromKeyCode( PRESET_SWITCH_KEY ),
+                                                    KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
+
+    m_cbViewports->SetToolTip( wxString::Format( _( "Save and restore view location and zoom.\n"
+                                                    "Use %sTab to activate selector.\n"
+                                                    "Successive Tabs while holding %s down will "
+                                                    "cycle through viewports in the popup." ),
+                                                 KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY ),
+                                                 KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY ) ) );
 
     createControls();
 
@@ -2429,7 +2444,8 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
 void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
 {
-    m_presetsLabel->SetLabel( _( "Presets (Ctrl+Tab):" ) );
+    m_viewportsLabel->SetLabel( wxString::Format( _( "Presets (%sTab):" ),
+                                                  KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
 
     m_cbLayerPresets->Clear();
 
@@ -2681,7 +2697,8 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 
 void APPEARANCE_CONTROLS::rebuildViewportsWidget()
 {
-    m_viewportsLabel->SetLabel( _( "Viewports (Alt+Tab):" ) );
+    m_viewportsLabel->SetLabel( wxString::Format( _( "Viewports (%sTab):" ),
+                                                  KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY ) ) );
 
     m_cbViewports->Clear();
 

@@ -175,6 +175,15 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     int      ii;
     bool     found = false;
 
+    if( aKeycode == WXK_CONTROL )
+        return MODIFIER_CTRL;
+    else if( aKeycode == WXK_RAW_CONTROL )
+        return MODIFIER_CTRL_BASE;
+    else if( aKeycode == WXK_SHIFT )
+        return MODIFIER_SHIFT;
+    else if( aKeycode == WXK_ALT )
+        return MODIFIER_ALT;
+
     // Assume keycode of 0 is "unassigned"
     if( (aKeycode & MD_CTRL) != 0 )
         modifier << MODIFIER_CTRL;
