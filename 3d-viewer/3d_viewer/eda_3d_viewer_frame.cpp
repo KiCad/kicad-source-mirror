@@ -470,7 +470,7 @@ void EDA_3D_VIEWER_FRAME::applyViewport( const wxString& aViewportName )
 {
     int idx = m_cbViewports->FindString( aViewportName );
 
-    if( idx >= 0 )
+    if( idx >= 0 && idx < m_cbViewports->GetCount() - 3 /* separator */ )
     {
         m_cbViewports->SetSelection( idx );
         m_lastSelectedViewport = static_cast<VIEWPORT3D*>( m_cbViewports->GetClientData( idx ) );
