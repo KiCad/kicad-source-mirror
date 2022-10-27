@@ -84,6 +84,11 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 #endif
         m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
         m_query_ctrl->Bind( wxEVT_MOTION, &LIB_TREE::onQueryMouseMoved, this );
+        m_query_ctrl->Bind( wxEVT_LEAVE_WINDOW,
+                            [this] ( wxMouseEvent& aEvt )
+                            {
+                                SetCursor( wxCURSOR_ARROW );
+                            } );
 
         m_query_ctrl->Bind( wxEVT_MENU,
                 [this]( wxCommandEvent& aEvent )
