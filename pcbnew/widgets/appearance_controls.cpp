@@ -445,14 +445,14 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_viewportsLabel->SetFont( infoFont );
 
     m_cbLayerPresets->SetToolTip( wxString::Format( _( "Save and restore layer visibility combinations.\n"
-                                                       "Use %sTab to activate selector.\n"
+                                                       "Use %s+Tab to activate selector.\n"
                                                        "Successive Tabs while holding %s down will "
                                                        "cycle through presets in the popup." ),
                                                     KeyNameFromKeyCode( PRESET_SWITCH_KEY ),
                                                     KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
 
     m_cbViewports->SetToolTip( wxString::Format( _( "Save and restore view location and zoom.\n"
-                                                    "Use %sTab to activate selector.\n"
+                                                    "Use %s+Tab to activate selector.\n"
                                                     "Successive Tabs while holding %s down will "
                                                     "cycle through viewports in the popup." ),
                                                  KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY ),
@@ -2444,7 +2444,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
 void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
 {
-    m_viewportsLabel->SetLabel( wxString::Format( _( "Presets (%sTab):" ),
+    m_viewportsLabel->SetLabel( wxString::Format( _( "Presets (%s+Tab):" ),
                                                   KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
 
     m_cbLayerPresets->Clear();
@@ -2697,7 +2697,7 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 
 void APPEARANCE_CONTROLS::rebuildViewportsWidget()
 {
-    m_viewportsLabel->SetLabel( wxString::Format( _( "Viewports (%sTab):" ),
+    m_viewportsLabel->SetLabel( wxString::Format( _( "Viewports (%s+Tab):" ),
                                                   KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY ) ) );
 
     m_cbViewports->Clear();

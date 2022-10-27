@@ -176,13 +176,13 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     bool     found = false;
 
     if( aKeycode == WXK_CONTROL )
-        return MODIFIER_CTRL;
+        return wxString( MODIFIER_CTRL ).BeforeFirst( '+' );
     else if( aKeycode == WXK_RAW_CONTROL )
-        return MODIFIER_CTRL_BASE;
+        return wxString( MODIFIER_CTRL_BASE ).BeforeFirst( '+' );
     else if( aKeycode == WXK_SHIFT )
-        return MODIFIER_SHIFT;
+        return wxString( MODIFIER_SHIFT ).BeforeFirst( '+' );
     else if( aKeycode == WXK_ALT )
-        return MODIFIER_ALT;
+        return wxString( MODIFIER_ALT ).BeforeFirst( '+' );
 
     // Assume keycode of 0 is "unassigned"
     if( (aKeycode & MD_CTRL) != 0 )

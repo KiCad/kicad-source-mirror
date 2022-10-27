@@ -56,7 +56,7 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
     wxString keyName = KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY );
 
     m_viewportsLabel = new wxStaticText( m_mainToolBar, wxID_ANY,
-                                         wxString::Format( _( "Viewports (%sTab):" ), keyName ) );
+                                         wxString::Format( _( "Viewports (%s+Tab):" ), keyName ) );
    	m_viewportsLabel->Wrap( -1 );
 
    	m_cbViewports = new wxChoice( m_mainToolBar, wxID_ANY );
@@ -69,7 +69,7 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
     m_cbViewports->Append( _( "Delete viewport..." ) );
 
     m_cbViewports->SetToolTip( wxString::Format( _( "Save and restore view orientation and zoom.\n"
-                                                    "Use %sTab to activate selector.\n"
+                                                    "Use %s+Tab to activate selector.\n"
                                                     "Successive Tabs while holding %s down will "
                                                     "cycle through viewports in the popup." ),
                                                  keyName, keyName ) );
