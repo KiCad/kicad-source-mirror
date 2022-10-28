@@ -2695,6 +2695,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
                 std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>& dest )
             {
                 bool triangulationValid = false;
+                int pass = 0;
 
                 while( polySet.OutlineCount() > 0 )
                 {
@@ -2709,7 +2710,15 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
                     // This may result in multiple, disjoint polygons.
                     if( !tess.TesselatePolygon( polySet.Polygon( 0 ).front() ) )
                     {
-                        polySet.Fracture( PM_FAST );
+                        ++pass;
+
+                        if( pass == 1 )
+                            polySet.Fracture( PM_FAST );
+                        else if( pass == 2 )
+                            polySet.Fracture( PM_STRICTLY_SIMPLE );
+                        else
+                            break;
+
                         triangulationValid = false;
                         continue;
                     }
