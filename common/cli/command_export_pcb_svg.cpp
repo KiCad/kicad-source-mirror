@@ -65,7 +65,7 @@ CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 
 int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
 {
-    JOB_EXPORT_PCB_SVG* svgJob = new JOB_EXPORT_PCB_SVG( true );
+    std::unique_ptr<JOB_EXPORT_PCB_SVG> svgJob( new JOB_EXPORT_PCB_SVG( true ) );
 
     svgJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
@@ -78,7 +78,6 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
     if( !wxFile::Exists( svgJob->m_filename ) )
     {
         wxFprintf( stderr, _( "Board file does not exist or is not accessible\n" ) );
-        delete svgJob;
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
@@ -88,9 +87,7 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
 
     svgJob->m_printMaskLayer = layerMask;
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob );
-
-    delete svgJob;
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );
 
     return exitCode;
 }

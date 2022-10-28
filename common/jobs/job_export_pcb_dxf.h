@@ -35,6 +35,7 @@ public:
             m_plotFootprintValues( true ),
             m_plotRefDes( true ),
             m_plotGraphicItemsUsingContours( true ),
+            m_pageSizeMode( 0 ),
             m_printMaskLayer()
     {
     }
