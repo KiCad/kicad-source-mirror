@@ -20,7 +20,7 @@
  */
 
 #include "command_export_pcb_svg.h"
-#include "exit_codes.h"
+#include <cli/exit_codes.h>
 #include "jobs/job_export_pcb_svg.h"
 #include <kiface_base.h>
 #include <layer_ids.h>

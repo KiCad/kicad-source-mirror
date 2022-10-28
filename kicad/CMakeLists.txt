@@ -16,6 +16,12 @@ include_directories(
     )
 
 set( KICAD_SRCS
+    cli/command_export_pcb_base.cpp
+    cli/command_export_pcb_dxf.cpp
+    cli/command_export_pcb_step.cpp
+    cli/command_export_pcb_svg.cpp
+    cli/command_pcb.cpp
+    cli/command_pcb_export.cpp
     dialogs/dialog_template_selector_base.cpp
     dialogs/dialog_template_selector.cpp
     dialogs/panel_kicad_launcher_base.cpp
