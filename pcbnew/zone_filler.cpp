@@ -1148,7 +1148,6 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
         { \
             m_board->SetLayerName( b, c ); \
             SHAPE_POLY_SET d = a; \
-            d.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
             d.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
             aFillPolys = d; \
             return false; \
