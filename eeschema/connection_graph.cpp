@@ -145,6 +145,22 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
                                if( ac->IsBus() && bc->IsBus() )
                                    return bc->IsSubsetOf( ac );
 
+                               // Ensure we don't pick a hidden power pin on a regular symbol over
+                               // one on a power symbol
+                               if( a->Type() == SCH_PIN_T && b->Type() == SCH_PIN_T )
+                               {
+                                   SCH_PIN* pa = static_cast<SCH_PIN*>( a );
+                                   SCH_PIN* pb = static_cast<SCH_PIN*>( b );
+
+                                   bool aPower = pa->GetLibPin()->GetParent()->IsPower();
+                                   bool bPower = pb->GetLibPin()->GetParent()->IsPower();
+
+                                   if( aPower && !bPower )
+                                       return true;
+                                   else if( bPower && !aPower )
+                                       return false;
+                               }
+
                                wxString a_name = GetNameForDriver( a );
                                wxString b_name = GetNameForDriver( b );
                                bool     a_lowQualityName = a_name.Contains( "-Pad" );
