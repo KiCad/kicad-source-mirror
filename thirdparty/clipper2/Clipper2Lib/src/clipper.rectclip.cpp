@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  15 October 2022                                                 *
+* Date      :  26 October 2022                                                 *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2022                                         *
 * Purpose   :  FAST rectangular clipping                                       *
@@ -226,13 +226,7 @@ namespace Clipper2Lib {
   // RectClip64
   //----------------------------------------------------------------------------
 
-  inline void RectClip64::Reset()
-  {
-    result_.clear();
-    start_locs_.clear();
-  }
-
-  void RectClip64::AddCorner(Location prev, Location curr)
+  void RectClip::AddCorner(Location prev, Location curr)
   {
     if (HeadingClockwise(prev, curr))
       result_.push_back(rectPath_[static_cast<int>(prev)]);
@@ -240,7 +234,7 @@ namespace Clipper2Lib {
       result_.push_back(rectPath_[static_cast<int>(curr)]);
   }
 
-  void RectClip64::AddCorner(Location& loc, bool isClockwise)
+  void RectClip::AddCorner(Location& loc, bool isClockwise)
   {
     if (isClockwise)
     {
@@ -254,7 +248,7 @@ namespace Clipper2Lib {
     }
   }
 
-  void RectClip64::GetNextLocation(const Path64& path,
+  void RectClip::GetNextLocation(const Path64& path,
       Location& loc, int& i, int highI)
   {
     switch (loc)
@@ -309,11 +303,12 @@ namespace Clipper2Lib {
     } //switch          
   }
 
-  Path64 RectClip64::Execute(const Path64& path)
+  Path64 RectClip::Execute(const Path64& path)
   {
     if (rect_.IsEmpty() || path.size() < 3) return Path64();
 
-    Reset();
+    result_.clear();
+    start_locs_.clear();
     int i = 0, highI = static_cast<int>(path.size()) - 1;
     Location prev = Location::Inside, loc;
     Location crossing_loc = Location::Inside;
@@ -427,13 +422,13 @@ namespace Clipper2Lib {
       if (starting_loc == Location::Inside) return path;
       Rect64 tmp_rect = Bounds(path);
       if (tmp_rect.Contains(rect_) &&
-        Path1ContainsPath2(path, rectPath_) != 
-          PointInPolygonResult::IsOutside) return rectPath_;
-      else 
+        Path1ContainsPath2(path, rectPath_) !=
+        PointInPolygonResult::IsOutside) return rectPath_;
+      else
         return Path64();
     }
 
-    if (loc != Location::Inside && 
+    if (loc != Location::Inside &&
       (loc != first_cross_ || start_locs_.size() > 2))
     {
       if (start_locs_.size() > 0)
@@ -475,6 +470,78 @@ namespace Clipper2Lib {
     // and a final check for collinearity
     else if (!CrossProduct(res[0], res[k - 1], res[k])) res.pop_back();
     return res;
+  }
+
+  Paths64 RectClipLines::Execute(const Path64& path)
+  {
+    result_.clear();
+    Paths64 result;
+    if (rect_.IsEmpty() || path.size() == 0) return result;
+
+    int i = 1, highI = static_cast<int>(path.size()) - 1;
+
+    Location prev = Location::Inside, loc;
+    Location crossing_loc = Location::Inside;
+    if (!GetLocation(rect_, path[0], loc))
+    {
+      while (i <= highI && !GetLocation(rect_, path[i], prev)) ++i;
+      if (i > highI) {
+        result.push_back(path);
+        return result;
+      }
+      if (prev == Location::Inside) loc = Location::Inside;
+      i = 1;
+    }
+    if (loc == Location::Inside) result_.push_back(path[0]);
+
+    ///////////////////////////////////////////////////
+    while (i <= highI)
+    {
+      prev = loc;
+      GetNextLocation(path, loc, i, highI);
+      if (i > highI) break;
+      Point64 ip, ip2;
+      Point64 prev_pt = path[static_cast<size_t>(i - 1)];
+
+      crossing_loc = loc;
+      if (!GetIntersection(rectPath_, path[i], prev_pt, crossing_loc, ip))
+      {
+        // ie remaining outside
+        ++i;
+        continue;
+      }
+
+      ////////////////////////////////////////////////////
+      // we must be crossing the rect boundary to get here
+      ////////////////////////////////////////////////////
+
+      if (loc == Location::Inside) // path must be entering rect
+      {
+        result_.push_back(ip);
+      }
+      else if (prev != Location::Inside)
+      {
+        // passing right through rect. 'ip' here will be the second 
+        // intersect pt but we'll also need the first intersect pt (ip2)
+        crossing_loc = prev;
+        GetIntersection(rectPath_, prev_pt, path[i], crossing_loc, ip2);
+        result_.push_back(ip2);
+        result_.push_back(ip);
+        result.push_back(result_);
+        result_.clear();
+      }
+      else // path must be exiting rect
+      {
+        result_.push_back(ip);
+        result.push_back(result_);
+        result_.clear();
+      }
+    } //while i <= highI
+    ///////////////////////////////////////////////////
+
+    if (result_.size() > 1)
+      result.push_back(result_);
+    return result;
   }
 
 } // namespace

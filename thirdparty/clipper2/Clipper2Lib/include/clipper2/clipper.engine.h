@@ -1,16 +1,16 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  15 October 2022                                                 *
+* Date      :  26 October 2022                                                 *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2022                                         *
 * Purpose   :  This is the main polygon clipping module                        *
 * License   :  http://www.boost.org/LICENSE_1_0.txt                            *
 *******************************************************************************/
 
-#ifndef clipper_engine_h
-#define clipper_engine_h
+#ifndef CLIPPER_ENGINE_H
+#define CLIPPER_ENGINE_H
 
-#define CLIPPER2_VERSION "1.0.5"
+#define CLIPPER2_VERSION "1.0.6"
 
 #include <cstdlib>
 #include <queue>
@@ -68,16 +68,11 @@ namespace Clipper2Lib {
 		}
 	};
 
-	template <typename T>
 	class PolyPath;
-
-	using PolyPath64 = PolyPath<int64_t>;
-	using PolyPathD = PolyPath<double>;
-
-	template <typename T>
-	using PolyTree = PolyPath<T>;
-	using PolyTree64 = PolyTree<int64_t>;
-	using PolyTreeD = PolyTree<double>;
+	class PolyPath64;
+	class PolyPathD;
+	using PolyTree64 = PolyPath64;
+	using PolyTreeD = PolyPathD;
 
 	struct OutRec;
 	typedef std::vector<OutRec*> OutRecList;
@@ -91,7 +86,7 @@ namespace Clipper2Lib {
 		Active* front_edge = nullptr;
 		Active* back_edge = nullptr;
 		OutPt* pts = nullptr;
-		PolyPath64* polypath = nullptr;
+		PolyPath* polypath = nullptr;
 		Rect64 bounds = {};
 		Path64 path;
 		bool is_open = false;
@@ -164,10 +159,8 @@ namespace Clipper2Lib {
 		FillRule fillrule_ = FillRule::EvenOdd;
 		FillRule fillpos = FillRule::Positive;
 		int64_t bot_y_ = 0;
-		bool has_open_paths_ = false;
 		bool minima_list_sorted_ = false;
 		bool using_polytree_ = false;
-		bool succeeded_ = true;
 		Active* actives_ = nullptr;
 		Active *sel_ = nullptr;
 		Joiner *horz_joiners_ = nullptr;
@@ -176,7 +169,6 @@ namespace Clipper2Lib {
 		std::vector<Vertex*> vertex_lists_;
 		std::priority_queue<int64_t> scanline_list_;
 		std::vector<IntersectNode> intersect_nodes_; 
-		std::vector<OutRec*> outrec_list_;				//pointers in case of memory reallocs
 		std::vector<Joiner*> joiner_list_;				//pointers in case of memory reallocs
 		void Reset();
 		void InsertScanline(int64_t y);
@@ -230,11 +222,12 @@ namespace Clipper2Lib {
 		void DeleteJoin(Joiner* joiner);
 		void ProcessJoinerList();
 		OutRec* ProcessJoin(Joiner* joiner);
+	protected:
+		bool has_open_paths_ = false;
+		bool succeeded_ = true;
+		std::vector<OutRec*> outrec_list_; //pointers in case list memory reallocated
 		bool ExecuteInternal(ClipType ct, FillRule ft, bool use_polytrees);
 		bool DeepCheckOwner(OutRec* outrec, OutRec* owner);
-		void BuildPaths(Paths64& solutionClosed, Paths64* solutionOpen);
-		void BuildTree(PolyPath64& polytree, Paths64& open_paths);
-	protected:
 #ifdef USINGZ
 		ZCallback64 zCallback_ = nullptr;
 		void SetZ(const Active& e1, const Active& e2, Point64& pt);
@@ -242,14 +235,6 @@ namespace Clipper2Lib {
 		void CleanUp();  // unlike Clear, CleanUp preserves added paths
 		void AddPath(const Path64& path, PathType polytype, bool is_open);
 		void AddPaths(const Paths64& paths, PathType polytype, bool is_open);
-
-		bool Execute(ClipType clip_type,
-			FillRule fill_rule, Paths64& solution_closed);
-		bool Execute(ClipType clip_type,
-			FillRule fill_rule, Paths64& solution_closed, Paths64& solution_open);
-		bool Execute(ClipType clip_type, FillRule fill_rule, PolyTree64& polytree);
-		bool Execute(ClipType clip_type,
-			FillRule fill_rule, PolyTree64& polytree, Paths64& open_paths);
 	public:
 		virtual ~ClipperBase();
 		bool PreserveCollinear = true;
@@ -264,63 +249,30 @@ namespace Clipper2Lib {
 	//alternative Paths structure, it does preserve path 'ownership' - ie those
 	//paths that contain (or own) other paths. This will be useful to some users.
 
-	template <typename T>
-	class PolyPath final {
-	private:
-		double scale_;
-		Path<T> polygon_;
-		std::vector<PolyPath*> childs_;
+	class PolyPath {
 	protected:
-		const PolyPath<T>* parent_;
-		PolyPath(const PolyPath<T>* parent, 
-			const Path<T>& path) : 
-			scale_(parent->scale_), polygon_(path), parent_(parent){}
+		PolyPath* parent_;
 	public:
-
-		explicit PolyPath(int precision = 0) // NB only for root node
-		{  
-			scale_ = std::pow(10, precision);
-			parent_ = nullptr;
-		}
-
-		~PolyPath() { Clear(); };
-		
+		PolyPath(PolyPath* parent = nullptr): parent_(parent){}
+		virtual ~PolyPath() { Clear(); };		
 		//https://en.cppreference.com/w/cpp/language/rule_of_three
 		PolyPath(const PolyPath&) = delete;
 		PolyPath& operator=(const PolyPath&) = delete;
 
-		PolyPath<T>* operator [] (size_t index) { return childs_[index]; }
-
-		typename std::vector<PolyPath*>::const_iterator begin() const { return childs_.cbegin(); }
-		typename std::vector<PolyPath*>::const_iterator end() const { return childs_.cend(); }
-
-		void Clear() { 
-			for (PolyPath<T>* child : childs_) delete child;
-			childs_.resize(0); 
-		}
-
 		unsigned Level() const
 		{
 			unsigned result = 0;
-			const PolyPath<T>* p = parent_;
+			const PolyPath* p = parent_;
 			while (p) { ++result; p = p->parent_; }
 			return result;
 		}
 
-		void reserve(size_t size)
-		{
-			if (size > childs_.size()) childs_.reserve(size);
-		}
+		virtual PolyPath* AddChild(const Path64& path) = 0;
 
-		PolyPath<T>* AddChild(const Path<T>& path)
-		{
-			childs_.push_back(new PolyPath<T>(this, path));
-			return childs_.back();
-		}
+		virtual void Clear() {};
+		virtual size_t Count() const { return 0; }
 
-		size_t Count() const { return childs_.size(); }
-
-		const PolyPath<T>* parent() const { return parent_; }
+		const PolyPath* Parent() const { return parent_; }
 
 		bool IsHole() const 
 		{
@@ -332,41 +284,70 @@ namespace Clipper2Lib {
 			}
 			return is_hole;
 		}
+	};
 
-		const Path<T>& Polygon() const { return polygon_; }
+	class PolyPath64 : public PolyPath {
+	private:
+		std::vector<PolyPath64*> childs_;
+		Path64 polygon_;
+		typedef typename std::vector<PolyPath64*>::const_iterator pp64_itor;
+	public:
+		PolyPath64(PolyPath64* parent = nullptr) : PolyPath(parent) {}
+		PolyPath64* operator [] (size_t index) { return static_cast<PolyPath64*>(childs_[index]); }
+		pp64_itor begin() const { return childs_.cbegin(); }
+		pp64_itor end() const { return childs_.cend(); }
+
+		PolyPath64* AddChild(const Path64& path) override
+		{
+			PolyPath64* result = new PolyPath64(this);
+			childs_.push_back(result);
+			result->polygon_ = path;
+			return result;
+		}
+
+		void Clear() override
+		{
+			for (const PolyPath64* child : childs_) delete child;
+			childs_.resize(0);
+		}
+
+		size_t Count() const  override
+		{
+			return childs_.size();
+		}
+
+		const Path64 Polygon() const { return polygon_; };
 
 		double Area() const
 		{
-			double result = Clipper2Lib::Area<T>(polygon_);
-			for (const PolyPath<T>* child : childs_)
+			double result = Clipper2Lib::Area<int64_t>(polygon_);
+			for (const PolyPath64* child : childs_)
 				result += child->Area();
 			return result;
 		}
 
-		friend std::ostream& operator << (std::ostream& outstream, const PolyPath& polypath)
+		friend std::ostream& operator << (std::ostream& outstream, const PolyPath64& polypath)
 		{
-			const unsigned level_indent = 4;
-			const unsigned coords_per_line = 4;
-
+			const size_t level_indent = 4;
+			const size_t coords_per_line = 4;
+			const size_t last_on_line = coords_per_line - 1;
 			unsigned level = polypath.Level();
 			if (level > 0)
 			{
 				std::string level_padding;
-				level_padding.insert(0, (level -1) * level_indent, ' ');
+				level_padding.insert(0, (level - 1) * level_indent, ' ');
 				std::string caption = polypath.IsHole() ? "Hole " : "Outer Polygon ";
 				std::string childs = polypath.Count() == 1 ? " child" : " children";
 				outstream << level_padding.c_str() << caption << "with " << polypath.Count() << childs << std::endl;
-				int last_on_line = coords_per_line - 1;
 				outstream << level_padding;
-				int i = 0, highI = polypath.Polygon().size() - 1;
+				size_t i = 0, highI = polypath.Polygon().size() - 1;
 				for (; i < highI; ++i)
 				{
 					outstream << polypath.Polygon()[i] << ' ';
 					if ((i % coords_per_line) == last_on_line)
-					outstream << std::endl << level_padding;
+						outstream << std::endl << level_padding;
 				}
-				if (highI >= 0)
-					outstream << polypath.Polygon()[i];
+				if (highI > 0) outstream << polypath.Polygon()[i];
 				outstream << std::endl;
 			}
 			for (auto child : polypath)
@@ -376,10 +357,61 @@ namespace Clipper2Lib {
 
 	};
 
-	void Polytree64ToPolytreeD(const PolyPath64& polytree, PolyPathD& result);
+	class PolyPathD : public PolyPath {
+	private:
+		std::vector<PolyPathD*> childs_;
+		double inv_scale_;
+		PathD polygon_;
+		typedef typename std::vector<PolyPathD*>::const_iterator ppD_itor;
+	public:
+		PolyPathD(PolyPathD* parent = nullptr) : PolyPath(parent) 
+		{
+			inv_scale_ = parent ? parent->inv_scale_ : 1.0;
+		}
+		PolyPathD* operator [] (size_t index) 
+		{ 
+			return static_cast<PolyPathD*>(childs_[index]); 
+		}
+		ppD_itor begin() const { return childs_.cbegin(); }
+		ppD_itor end() const { return childs_.cend(); }
+
+		void SetInvScale(double value) { inv_scale_ = value; }
+		double InvScale() { return inv_scale_; }
+		PolyPathD* AddChild(const Path64& path) override
+		{
+			PolyPathD* result = new PolyPathD(this);
+			childs_.push_back(result);
+			result->polygon_ = ScalePath<double, int64_t>(path, inv_scale_);
+			return result;
+		}
+
+		void Clear() override
+		{
+			for (const PolyPathD* child : childs_) delete child;
+			childs_.resize(0);
+		}
+
+		size_t Count() const  override
+		{
+			return childs_.size();
+		}
+
+		const PathD Polygon() const { return polygon_; };
+
+		double Area() const
+		{
+			double result = Clipper2Lib::Area<double>(polygon_);
+			for (const PolyPathD* child : childs_)
+				result += child->Area();
+			return result;
+		}
+	};
 
 	class Clipper64 : public ClipperBase
 	{
+	private:
+		void BuildPaths64(Paths64& solutionClosed, Paths64* solutionOpen);
+		void BuildTree64(PolyPath64& polytree, Paths64& open_paths);
 	public:
 #ifdef USINGZ
 		void SetZCallback(ZCallback64 cb) { zCallback_ = cb; }
@@ -401,23 +433,38 @@ namespace Clipper2Lib {
 		bool Execute(ClipType clip_type,
 			FillRule fill_rule, Paths64& closed_paths)
 		{
-			return ClipperBase::Execute(clip_type, fill_rule, closed_paths);
+			Paths64 dummy;
+			return Execute(clip_type, fill_rule, closed_paths, dummy);
 		}
 
-		bool Execute(ClipType clip_type,
-			FillRule fill_rule, Paths64& closed_paths, Paths64& open_paths)
+		bool Execute(ClipType clip_type, FillRule fill_rule, 
+			Paths64& closed_paths, Paths64& open_paths)
 		{
-			return ClipperBase::Execute(clip_type, fill_rule, closed_paths, open_paths);
+			closed_paths.clear();
+			open_paths.clear();
+			if (ExecuteInternal(clip_type, fill_rule, false))
+				BuildPaths64(closed_paths, &open_paths);
+			CleanUp();
+			return succeeded_;
 		}
 
 		bool Execute(ClipType clip_type, FillRule fill_rule, PolyTree64& polytree)
 		{
-			return ClipperBase::Execute(clip_type, fill_rule, polytree);
+			Paths64 dummy;
+			return Execute(clip_type, fill_rule, polytree, dummy);
 		}
+
 		bool Execute(ClipType clip_type,
 			FillRule fill_rule, PolyTree64& polytree, Paths64& open_paths)
 		{
-			return ClipperBase::Execute(clip_type, fill_rule, polytree, open_paths);
+			if (ExecuteInternal(clip_type, fill_rule, true))
+			{
+				open_paths.clear();
+				polytree.Clear();
+				BuildTree64(polytree, open_paths);
+			}
+			CleanUp();
+			return succeeded_;
 		}
 	};
 
@@ -427,6 +474,8 @@ namespace Clipper2Lib {
 #ifdef USINGZ
 		ZCallbackD zCallback_ = nullptr;
 #endif
+		void BuildPathsD(PathsD& solutionClosed, PathsD* solutionOpen);
+		void BuildTreeD(PolyPathD& polytree, PathsD& open_paths);
 	public:
 		explicit ClipperD(int precision = 2) : ClipperBase()
 		{
@@ -485,13 +534,8 @@ namespace Clipper2Lib {
 
 		bool Execute(ClipType clip_type, FillRule fill_rule, PathsD& closed_paths)
 		{
-#ifdef USINGZ
-			CheckCallback();
-#endif
-			Paths64 closed_paths64;
-			if (!ClipperBase::Execute(clip_type, fill_rule, closed_paths64)) return false;
-			closed_paths = ScalePaths<double, int64_t>(closed_paths64, invScale_);
-			return true;
+			PathsD dummy;
+			return Execute(clip_type, fill_rule, closed_paths, dummy);
 		}
 
 		bool Execute(ClipType clip_type,
@@ -500,40 +544,39 @@ namespace Clipper2Lib {
 #ifdef USINGZ
 			CheckCallback();
 #endif
-			Paths64 closed_paths64;
-			Paths64 open_paths64;
-			if (!ClipperBase::Execute(clip_type,
-				fill_rule, closed_paths64, open_paths64)) return false;
-			closed_paths = ScalePaths<double, int64_t>(closed_paths64, invScale_);
-			open_paths = ScalePaths<double, int64_t>(open_paths64, invScale_);
-			return true;
+			if (ExecuteInternal(clip_type, fill_rule, false))
+			{
+				BuildPathsD(closed_paths, &open_paths);
+			}
+			CleanUp();
+			return succeeded_;
 		}
 
 		bool Execute(ClipType clip_type, FillRule fill_rule, PolyTreeD& polytree)
 		{
-#ifdef USINGZ
-			CheckCallback();
-#endif
-			PolyTree64 tree_result;
-			if (!ClipperBase::Execute(clip_type, fill_rule, tree_result)) return false;;
-			Polytree64ToPolytreeD(tree_result, polytree);
-			return true;
+			PathsD dummy;
+			return Execute(clip_type, fill_rule, polytree, dummy);
 		}
 
 		bool Execute(ClipType clip_type,
-			FillRule fill_rule, PolyTreeD& polytree, Paths64& open_paths)
+			FillRule fill_rule, PolyTreeD& polytree, PathsD& open_paths)
 		{
 #ifdef USINGZ
 			CheckCallback();
 #endif
-			PolyTree64 tree_result;
-			if (!ClipperBase::Execute(clip_type, fill_rule, tree_result, open_paths)) return false;;
-			Polytree64ToPolytreeD(tree_result, polytree);
-			return true;
+			if (ExecuteInternal(clip_type, fill_rule, true))
+			{
+				polytree.Clear();
+				polytree.SetInvScale(invScale_);
+				open_paths.clear();
+				BuildTreeD(polytree, open_paths);
+			}
+			CleanUp();
+			return succeeded_;
 		}
 
 	};
 
 }  // namespace 
 
-#endif  // clipper_engine_h
+#endif  // CLIPPER_ENGINE_H

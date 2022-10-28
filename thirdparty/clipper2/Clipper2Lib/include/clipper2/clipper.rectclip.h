@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  15 October 2022                                                 *
+* Date      :  26 October 2022                                                 *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2022                                         *
 * Purpose   :  FAST rectangular clipping                                       *
@@ -20,26 +20,30 @@ namespace Clipper2Lib
 
   enum class Location { Left, Top, Right, Bottom, Inside };
 
-  class RectClip64 {
-  private:
+  class RectClip {
+  protected:
     const Rect64 rect_;
     const Point64 mp_;
     const Path64 rectPath_;
     Path64 result_;
     std::vector<Location> start_locs_;
 
-    void Reset();
     void GetNextLocation(const Path64& path,
       Location& loc, int& i, int highI);
     void AddCorner(Location prev, Location curr);
     void AddCorner(Location& loc, bool isClockwise);
-
   public:
-    RectClip64(const Rect64& rect) :
+    RectClip(const Rect64& rect) :
       rect_(rect),
       mp_(rect.MidPoint()),
       rectPath_(rect.AsPath()) {}
     Path64 Execute(const Path64& path);
+  };
+
+  class RectClipLines : public RectClip {
+  public:
+    RectClipLines(const Rect64& rect) : RectClip(rect) {};
+    Paths64 Execute(const Path64& path);
   };
 
 } // Clipper2Lib namespace
