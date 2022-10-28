@@ -348,6 +348,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     auto tesselate_lambda =
             [&]( std::pair<ZONE*, PCB_LAYER_ID> aFillItem ) -> int
             {
+
+                if( m_progressReporter && m_progressReporter->IsCancelled() )
+                    return 0;
+
                 PCB_LAYER_ID layer = aFillItem.second;
                 ZONE*        zone = aFillItem.first;
 
@@ -365,14 +369,14 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     std::vector<std::pair<std::future<int>, int>> returns;
     returns.reserve( toFill.size() );
     size_t finished = 0;
-
+    bool cancelled = false;
 
     thread_pool& tp = GetKiCadThreadPool();
 
     for( const std::pair<ZONE*, PCB_LAYER_ID>& fillItem : toFill )
         returns.emplace_back( std::make_pair( tp.submit( fill_lambda, fillItem ), 0 ) );
 
-    while( finished != 2 * toFill.size() )
+    while( !cancelled && finished != 2 * toFill.size() )
     {
         for( size_t ii = 0; ii < returns.size(); ++ii )
         {
@@ -389,12 +393,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 {
                     ++finished;
 
-                    if( ret.second == 0 )
+                    if( !cancelled && ret.second == 0 )
                         returns[ii].first = tp.submit( tesselate_lambda, toFill[ii] );
 
                     ret.second++;
                 }
-                else
+                else if( !cancelled )
                 {
                     returns[ii].first = tp.submit( fill_lambda, toFill[ii] );
                 }
@@ -406,10 +410,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         if( m_progressReporter )
         {
-            if( m_progressReporter->IsCancelled() )
-                break;
-
             m_progressReporter->KeepRefreshing();
+
+            if( m_progressReporter->IsCancelled() )
+                cancelled = true;
         }
     }
 
