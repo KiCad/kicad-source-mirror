@@ -524,6 +524,10 @@ void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
         GetInfoBar()->AddCloseButton();
         GetInfoBar()->ShowMessage( msg, wxICON_INFORMATION );
     }
+    else
+    {
+        GetInfoBar()->Dismiss();
+    }
 
     UpdateMsgPanel();
 }
