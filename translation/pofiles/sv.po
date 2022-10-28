@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-21 15:03+0000\n"
+"PO-Revision-Date: 2022-10-29 11:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -285,7 +285,7 @@ msgstr "Visningsytor (Shift+Tab):"
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2676
 msgid "Save viewport..."
-msgstr "Spara visningsyta ..."
+msgstr "Spara visningsyta..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 #: pcbnew/widgets/appearance_controls.cpp:2677
