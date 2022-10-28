@@ -29,7 +29,7 @@ struct EXPORT_PCB_STEP_COMMAND : public COMMAND
 {
     EXPORT_PCB_STEP_COMMAND();
 
-    int Perform( KIWAY& aKiway ) const override;
+    int Perform( KIWAY& aKiway ) override;
 };
 }
 

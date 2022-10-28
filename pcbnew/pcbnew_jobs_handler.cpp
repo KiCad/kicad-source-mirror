@@ -20,18 +20,24 @@
 
 #include "pcbnew_jobs_handler.h"
 #include <kicad2step.h>
+#include <jobs/job_export_pcb_gerber.h>
+#include <jobs/job_export_pcb_drill.h>
 #include <jobs/job_export_pcb_dxf.h>
+#include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <jobs/job_export_pcb_step.h>
 #include <cli/exit_codes.h>
-#include <plotters/plotters_pslike.h>
 #include <plotters/plotter_dxf.h>
+#include <plotters/plotter_gerber.h>
+#include <plotters/plotters_pslike.h>
 #include <pgm_base.h>
 #include <pcbplot.h>
 #include <board_design_settings.h>
 #include <pcbnew_settings.h>
 #include <wx/crt.h>
 #include <pcb_plot_svg.h>
+#include <gendrill_Excellon_writer.h>
+#include <gendrill_gerber_writer.h>
 
 #include "pcbnew_scripting_helpers.h"
 
@@ -41,6 +47,10 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportStep, this, std::placeholders::_1 ) );
     Register( "svg", std::bind( &PCBNEW_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ) );
     Register( "dxf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDxf, this, std::placeholders::_1 ) );
+    Register( "pdf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPdf, this, std::placeholders::_1 ) );
+    Register( "gerber",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerber, this, std::placeholders::_1 ) );
+    Register( "drill", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrill, this, std::placeholders::_1 ) );
 }
 
 
@@ -119,7 +129,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
-        fn.SetExt( wxS( "dxf" ) );
+        fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::DXF ) );
 
         aDxfJob->m_outputFile = fn.GetFullName();
     }
@@ -138,14 +148,12 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     {
         plotOpts.SetDXFPlotUnits( DXF_UNITS::INCHES );
     }
+    plotOpts.SetPlotFrameRef( aDxfJob->m_plotBorderTitleBlocks );
     plotOpts.SetPlotValue( aDxfJob->m_plotFootprintValues );
     plotOpts.SetPlotReference( aDxfJob->m_plotRefDes );
 
     plotOpts.SetLayerSelection( aDxfJob->m_printMaskLayer );
 
-
-    //@todo allow controlling the sheet name and path that will be displayed in the title block
-    // Leave blank for now
     DXF_PLOTTER* plotter = (DXF_PLOTTER*) StartPlotBoard(
             brd, &plotOpts, UNDEFINED_LAYER, aDxfJob->m_outputFile, wxEmptyString, wxEmptyString );
 
@@ -156,6 +164,207 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     }
 
     delete plotter;
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
+{
+    JOB_EXPORT_PCB_PDF* aPdfJob = dynamic_cast<JOB_EXPORT_PCB_PDF*>( aJob );
+
+    if( aPdfJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( aJob->IsCli() )
+        wxPrintf( _( "Loading board\n" ) );
+
+    BOARD* brd = LoadBoard( aPdfJob->m_filename );
+
+    if( aPdfJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
+
+        aPdfJob->m_outputFile = fn.GetFullName();
+    }
+
+    PCB_PLOT_PARAMS plotOpts;
+    plotOpts.SetFormat( PLOT_FORMAT::PDF );
+
+    plotOpts.SetPlotFrameRef( aPdfJob->m_plotBorderTitleBlocks );
+    plotOpts.SetPlotValue( aPdfJob->m_plotFootprintValues );
+    plotOpts.SetPlotReference( aPdfJob->m_plotRefDes );
+
+    plotOpts.SetLayerSelection( aPdfJob->m_printMaskLayer );
+
+    PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard(
+            brd, &plotOpts, UNDEFINED_LAYER, aPdfJob->m_outputFile, wxEmptyString, wxEmptyString );
+
+    if( plotter )
+    {
+        PlotBoardLayers( brd, plotter, aPdfJob->m_printMaskLayer.SeqStackupBottom2Top(), plotOpts );
+        PlotInteractiveLayer( brd, plotter );
+        plotter->EndPlot();
+    }
+
+    delete plotter;
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
+{
+    JOB_EXPORT_PCB_GERBER* aGerberJob = dynamic_cast<JOB_EXPORT_PCB_GERBER*>( aJob );
+
+    if( aGerberJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( aJob->IsCli() )
+        wxPrintf( _( "Loading board\n" ) );
+
+    BOARD* brd = LoadBoard( aGerberJob->m_filename );
+
+    if( aGerberJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::GERBER ) );
+
+        aGerberJob->m_outputFile = fn.GetFullName();
+    }
+
+    PCB_PLOT_PARAMS plotOpts;
+    plotOpts.SetFormat( PLOT_FORMAT::GERBER );
+
+    plotOpts.SetPlotFrameRef( aGerberJob->m_plotBorderTitleBlocks );
+    plotOpts.SetPlotValue( aGerberJob->m_plotFootprintValues );
+    plotOpts.SetPlotReference( aGerberJob->m_plotRefDes );
+
+    plotOpts.SetLayerSelection( aGerberJob->m_printMaskLayer );
+
+    plotOpts.SetSubtractMaskFromSilk( aGerberJob->m_subtractSolderMaskFromSilk );
+
+    plotOpts.SetDisableGerberMacros( aGerberJob->m_disableApertureMacros );
+    plotOpts.SetUseGerberX2format( aGerberJob->m_useX2Format );
+    plotOpts.SetIncludeGerberNetlistInfo( aGerberJob->m_includeNetlistAttributes );
+
+    plotOpts.SetGerberPrecision( aGerberJob->m_precision );
+
+    // We are feeding it one layer at the start here to silence a logic check
+    GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard(
+            brd, &plotOpts, aGerberJob->m_printMaskLayer.Seq().front(), aGerberJob->m_outputFile,
+            wxEmptyString, wxEmptyString );
+
+    if( plotter )
+    {
+        PlotBoardLayers( brd, plotter, aGerberJob->m_printMaskLayer.SeqStackupBottom2Top(),
+                         plotOpts );
+        plotter->EndPlot();
+    }
+
+    delete plotter;
+
+    return CLI::EXIT_CODES::OK;
+}
+
+static DRILL_PRECISION precisionListForInches( 2, 4 );
+static DRILL_PRECISION precisionListForMetric( 3, 3 );
+
+int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
+{
+    JOB_EXPORT_PCB_DRILL* aDrillJob = dynamic_cast<JOB_EXPORT_PCB_DRILL*>( aJob );
+
+    if( aDrillJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( aJob->IsCli() )
+        wxPrintf( _( "Loading board\n" ) );
+
+    BOARD* brd = LoadBoard( aDrillJob->m_filename );
+
+    std::unique_ptr<GENDRILL_WRITER_BASE> drillWriter;
+    if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON )
+    {
+        drillWriter = std::make_unique<EXCELLON_WRITER>( brd );
+    }
+    else
+    {
+        drillWriter = std::make_unique<GERBER_WRITER>( brd );
+    }
+
+    VECTOR2I offset;
+    if( aDrillJob->m_drillOrigin == JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::ABSOLUTE )
+        offset = VECTOR2I( 0, 0 );
+    else
+        offset = brd->GetDesignSettings().GetAuxOrigin();
+
+
+    PLOT_FORMAT mapFormat = PLOT_FORMAT::PDF;
+    switch( aDrillJob->m_mapFormat )
+    {
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::POSTSCRIPT: mapFormat = PLOT_FORMAT::POST; break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::GERBER_X2: mapFormat = PLOT_FORMAT::GERBER; break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::DXF: mapFormat = PLOT_FORMAT::DXF; break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::SVG: mapFormat = PLOT_FORMAT::SVG; break;
+    default:
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::PDF: mapFormat = PLOT_FORMAT::PDF; break;
+    }
+
+    if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON )
+    {
+        EXCELLON_WRITER::ZEROS_FMT zeroFmt;
+        switch( aDrillJob->m_zeroFormat )
+        {
+        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::KEEP_ZEROS:
+            zeroFmt = EXCELLON_WRITER::KEEP_ZEROS;
+            break;
+        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPRESS_LEADING:
+            zeroFmt = EXCELLON_WRITER::SUPPRESS_LEADING;
+            break;
+        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPRESS_TRAILING:
+            zeroFmt = EXCELLON_WRITER::SUPPRESS_TRAILING;
+            break;
+        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::DECIMAL:
+        default:
+            zeroFmt = EXCELLON_WRITER::DECIMAL_FORMAT;
+            break;
+        }
+
+        DRILL_PRECISION precision;
+        if( aDrillJob->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES )
+            precision = precisionListForInches;
+        else
+            precision = precisionListForMetric;
+
+
+        EXCELLON_WRITER* excellonWriter = dynamic_cast<EXCELLON_WRITER*>( drillWriter.get() );
+        excellonWriter->SetFormat( aDrillJob->m_drillUnits
+                                          == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS,
+                                  zeroFmt, precision.m_Lhs, precision.m_Rhs );
+        excellonWriter->SetOptions( aDrillJob->m_excellonMirrorY, aDrillJob->m_excellonMinimalHeader,
+                                   offset, aDrillJob->m_excellonCombinePTHNPTH );
+        excellonWriter->SetRouteModeForOvalHoles( aDrillJob->m_excellonOvalDrillRoute );
+        excellonWriter->SetMapFileFormat( mapFormat );
+
+        excellonWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
+                                                  aDrillJob->m_generateMap, nullptr );
+    }
+    else if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER )
+    {
+        GERBER_WRITER* gerberWriter = dynamic_cast<GERBER_WRITER*>( drillWriter.get() );
+        // Set gerber precision: only 5 or 6 digits for mantissa are allowed
+        // (SetFormat() accept 5 or 6, and any other value set the precision to 5)
+        // the integer part precision is always 4, and units always mm
+        gerberWriter->SetFormat( aDrillJob->m_gerberPrecision );
+        gerberWriter->SetOptions( offset );
+        gerberWriter->SetMapFileFormat( mapFormat );
+
+        gerberWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
+                                                aDrillJob->m_generateMap, nullptr );
+    }
 
     return CLI::EXIT_CODES::OK;
 }

@@ -25,7 +25,7 @@ CLI::EXPORT_PCB_COMMAND::EXPORT_PCB_COMMAND() : COMMAND( "export" )
 }
 
 
-int CLI::EXPORT_PCB_COMMAND::Perform( KIWAY& aKiway ) const
+int CLI::EXPORT_PCB_COMMAND::Perform( KIWAY& aKiway )
 {
     std::cout << m_argParser;
 

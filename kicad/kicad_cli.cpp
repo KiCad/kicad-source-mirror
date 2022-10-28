@@ -48,7 +48,10 @@
 
 #include "cli/command_pcb.h"
 #include "cli/command_pcb_export.h"
+#include "cli/command_export_pcb_drill.h"
 #include "cli/command_export_pcb_dxf.h"
+#include "cli/command_export_pcb_gerber.h"
+#include "cli/command_export_pcb_pdf.h"
 #include "cli/command_export_pcb_svg.h"
 #include "cli/command_export_pcb_step.h"
 #include "cli/exit_codes.h"
@@ -98,11 +101,14 @@ struct COMMAND_ENTRY
             handler( aHandler ), subCommands( aSub ){};
 };
 
-static CLI::EXPORT_PCB_STEP_COMMAND stepCmd{};
-static CLI::EXPORT_PCB_DXF_COMMAND  dxfCmd{};
-static CLI::EXPORT_PCB_SVG_COMMAND  svgCmd{};
-static CLI::EXPORT_PCB_COMMAND      exportPcbCmd{};
-static CLI::PCB_COMMAND             pcbCmd{};
+static CLI::EXPORT_PCB_DRILL_COMMAND  exportPcbDrillCmd{};
+static CLI::EXPORT_PCB_DXF_COMMAND    exportPcbDxfCmd{};
+static CLI::EXPORT_PCB_STEP_COMMAND   exportPcbStepCmd{};
+static CLI::EXPORT_PCB_SVG_COMMAND    exportPcbSvgCmd{};
+static CLI::EXPORT_PCB_PDF_COMMAND    exportPcbPdfCmd{};
+static CLI::EXPORT_PCB_GERBER_COMMAND exportPcbGerberCmd{};
+static CLI::EXPORT_PCB_COMMAND        exportPcbCmd{};
+static CLI::PCB_COMMAND               pcbCmd{};
 
 static std::vector<COMMAND_ENTRY> commandStack = {
     {
@@ -110,9 +116,12 @@ static std::vector<COMMAND_ENTRY> commandStack = {
         {
             { &exportPcbCmd,
                 {
-                    &stepCmd,
-                    &svgCmd,
-                    &dxfCmd
+                    &exportPcbDrillCmd,
+                    &exportPcbDxfCmd,
+                    &exportPcbGerberCmd,
+                    &exportPcbPdfCmd,
+                    &exportPcbStepCmd,
+                    &exportPcbSvgCmd
                 }
             }
         }

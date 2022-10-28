@@ -32,7 +32,7 @@ class COMMAND
 public:
     COMMAND( std::string aName ) : m_name( aName ), m_argParser( aName ){};
 
-    virtual int Perform( KIWAY& aKiway ) const = 0;
+    virtual int Perform( KIWAY& aKiway ) = 0;
 
     virtual ~COMMAND() = default;
 

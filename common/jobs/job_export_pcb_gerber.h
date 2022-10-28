@@ -18,43 +18,45 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_EXPORT_PCB_DXF_H
-#define JOB_EXPORT_PCB_DXF_H
+#ifndef JOB_EXPORT_PCB_GERBER_H
+#define JOB_EXPORT_PCB_GERBER_H
 
 #include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_DXF : public JOB
+class JOB_EXPORT_PCB_GERBER : public JOB
 {
 public:
-    JOB_EXPORT_PCB_DXF( bool aIsCli ) :
-            JOB( "dxf", aIsCli ),
+    JOB_EXPORT_PCB_GERBER( bool aIsCli ) :
+            JOB( "gerber", aIsCli ),
             m_filename(),
             m_outputFile(),
             m_plotFootprintValues( true ),
             m_plotRefDes( true ),
-            m_plotGraphicItemsUsingContours( true ),
             m_plotBorderTitleBlocks( false ),
-            m_dxfUnits( DXF_UNITS::INCHES ),
+            m_subtractSolderMaskFromSilk( false ),
+            m_includeNetlistAttributes( true ),
+            m_useX2Format( true ),
+            m_disableApertureMacros( false ),
+            m_precision( 5 ),
             m_printMaskLayer()
     {
     }
-
-    enum class DXF_UNITS
-    {
-        INCHES,
-        MILLIMETERS
-    };
 
     wxString m_filename;
     wxString m_outputFile;
 
     bool m_plotFootprintValues;
     bool m_plotRefDes;
-    bool m_plotGraphicItemsUsingContours;
     bool m_plotBorderTitleBlocks;
-    DXF_UNITS m_dxfUnits;
+    bool m_subtractSolderMaskFromSilk;
+    bool m_includeNetlistAttributes;
+    bool m_useX2Format;
+    bool m_disableApertureMacros;
+
+    int m_precision;
+
 
     LSET m_printMaskLayer;
 };

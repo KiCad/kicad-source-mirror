@@ -32,16 +32,11 @@
 
 #define ARG_PAGE_SIZE "--page-size-mode"
 #define ARG_MIRROR "--mirror"
-#define ARG_BLACKANDWHITE "--black-and-white"
-#define ARG_THEME "--theme"
-#define ARG_LAYERS "--layers"
 
 
 CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg" )
 {
-    m_argParser.add_argument( "-l", ARG_LAYERS )
-            .default_value( std::string() )
-            .help( "comma separated list of untranslated layer names to include such as F.Cu,B.Cu" );
+    addLayerArg( true );
 
     m_argParser.add_argument( "-m", ARG_MIRROR )
             .help( "Mirror the board (useful for trying to show bottom layers)" )
@@ -63,8 +58,12 @@ CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 }
 
 
-int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
+int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway )
 {
+    int baseExit = EXPORT_PCB_BASE_COMMAND::Perform( aKiway );
+    if( baseExit != EXIT_CODES::OK )
+        return baseExit;
+
     std::unique_ptr<JOB_EXPORT_PCB_SVG> svgJob( new JOB_EXPORT_PCB_SVG( true ) );
 
     svgJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
@@ -81,11 +80,7 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway ) const
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    wxString layers = FROM_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
-
-    LSET layerMask = convertLayerStringList( layers );
-
-    svgJob->m_printMaskLayer = layerMask;
+    svgJob->m_printMaskLayer = m_selectedLayers;
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );
 

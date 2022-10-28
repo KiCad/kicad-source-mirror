@@ -30,6 +30,9 @@ public:
     int JobExportStep( JOB* aJob );
     int JobExportSvg( JOB* aJob );
     int JobExportDxf( JOB* aJob );
+    int JobExportPdf( JOB* aJob );
+    int JobExportGerber( JOB* aJob );
+    int JobExportDrill( JOB* aJob );
 };
 
 #endif

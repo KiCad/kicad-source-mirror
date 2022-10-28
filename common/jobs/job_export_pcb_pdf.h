@@ -18,20 +18,35 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_PCB_DXF_H
-#define COMMAND_EXPORT_PCB_DXF_H
+#ifndef JOB_EXPORT_PCB_PDF_H
+#define JOB_EXPORT_PCB_PDF_H
 
-#include "command_export_pcb_base.h"
+#include <layer_ids.h>
+#include <wx/string.h>
+#include "job.h"
 
-namespace CLI
-{
-class EXPORT_PCB_DXF_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class JOB_EXPORT_PCB_PDF : public JOB
 {
 public:
-    EXPORT_PCB_DXF_COMMAND();
+    JOB_EXPORT_PCB_PDF( bool aIsCli ) :
+            JOB( "pdf", aIsCli ),
+            m_filename(),
+            m_outputFile(),
+            m_plotFootprintValues( true ),
+            m_plotRefDes( true ),
+            m_plotBorderTitleBlocks( false ),
+            m_printMaskLayer()
+    {
+    }
 
-    int Perform( KIWAY& aKiway ) override;
+    wxString m_filename;
+    wxString m_outputFile;
+
+    bool m_plotFootprintValues;
+    bool m_plotRefDes;
+    bool m_plotBorderTitleBlocks;
+
+    LSET m_printMaskLayer;
 };
-} // namespace CLI
 
 #endif

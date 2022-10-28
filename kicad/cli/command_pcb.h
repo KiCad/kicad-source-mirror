@@ -29,7 +29,7 @@ struct PCB_COMMAND : public COMMAND
 {
     PCB_COMMAND();
 
-    int Perform( KIWAY& aKiway ) const override;
+    int Perform( KIWAY& aKiway ) override;
 };
 }
 

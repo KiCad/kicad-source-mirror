@@ -28,15 +28,27 @@ namespace CLI
 {
 #define ARG_OUTPUT "--output"
 #define ARG_INPUT "input"
+#define ARG_BLACKANDWHITE "--black-and-white"
+#define ARG_LAYERS "--layers"
+#define ARG_INCLUDE_REFDES "--include-refdes"
+#define ARG_INCLUDE_VALUE "--include-value"
+#define ARG_THEME "--theme"
+#define ARG_INCLUDE_BORDER_TITLE "--include-border-title"
 
 struct EXPORT_PCB_BASE_COMMAND : public COMMAND
 {
     EXPORT_PCB_BASE_COMMAND( std::string aName );
 
+    int Perform( KIWAY& aKiway ) override;
+
 protected:
     LSET convertLayerStringList( wxString& aLayerString ) const;
+    void addLayerArg( bool aRequire );
 
     std::map<std::string, LSET> m_layerMasks;
+    LSET                        m_selectedLayers;
+
+    bool m_requireLayers;
 };
 } // namespace CLI
 

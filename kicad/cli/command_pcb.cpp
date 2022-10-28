@@ -24,7 +24,7 @@ CLI::PCB_COMMAND::PCB_COMMAND() : COMMAND( "pcb" )
 {
 }
 
-int CLI::PCB_COMMAND::Perform( KIWAY& aKiway ) const
+int CLI::PCB_COMMAND::Perform( KIWAY& aKiway )
 {
     std::cout << m_argParser;
 

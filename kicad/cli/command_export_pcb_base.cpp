@@ -21,9 +21,12 @@
 #include "command_export_pcb_base.h"
 #include <cli/exit_codes.h>
 #include <kiface_base.h>
+#include <bitset>
+#include <layer_ids.h>
 
 #include <macros.h>
 #include <wx/tokenzr.h>
+#include <wx/crt.h>
 
 CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( std::string aName ) : COMMAND( aName )
 {
@@ -33,7 +36,6 @@ CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( std::string aName ) : COM
 
     m_argParser.add_argument( ARG_INPUT ).help( "input file" );
 
-
     for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         std::string untranslated = TO_UTF8( wxString( LSET::Name( PCB_LAYER_ID( layer ) ) ) );
@@ -41,6 +43,7 @@ CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( std::string aName ) : COM
         //m_layerIndices[untranslated] = PCB_LAYER_ID( layer );
         m_layerMasks[untranslated] = LSET( PCB_LAYER_ID( layer ) );
     }
+
     m_layerMasks["*.Cu"] = LSET::AllCuMask();
     m_layerMasks["*In.Cu"] = LSET::InternalCuMask();
     m_layerMasks["F&B.Cu"] = LSET( 2, F_Cu, B_Cu );
@@ -55,7 +58,7 @@ CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( std::string aName ) : COM
 
 LSET CLI::EXPORT_PCB_BASE_COMMAND::convertLayerStringList( wxString& aLayerString ) const
 {
-    LSET layerMask = LSET::AllCuMask();
+    LSET layerMask;
 
     if( !aLayerString.IsEmpty() )
     {
@@ -68,8 +71,43 @@ LSET CLI::EXPORT_PCB_BASE_COMMAND::convertLayerStringList( wxString& aLayerStrin
             {
                 layerMask |= m_layerMasks.at(token);
             }
+            else
+            {
+                wxFprintf( stderr, _( "Invalid layer name \"%s\"\n" ), token );
+            }
         }
     }
 
     return layerMask;
+}
+
+
+void CLI::EXPORT_PCB_BASE_COMMAND::addLayerArg( bool aRequire )
+{
+    m_argParser.add_argument( "-l", ARG_LAYERS )
+            .default_value( std::string() )
+            .help( "comma separated list of untranslated layer names to include such as "
+                   "F.Cu,B.Cu" );
+
+    m_requireLayers = aRequire;
+}
+
+
+int CLI::EXPORT_PCB_BASE_COMMAND::Perform( KIWAY& aKiway )
+{
+    if( m_requireLayers )
+    {
+        wxString layers = FROM_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
+
+        LSET layerMask = convertLayerStringList( layers );
+        if( layerMask.Seq().size() < 1 )
+        {
+            wxFprintf( stderr, _( "At least one or more layers must be specified\n" ) );
+            return EXIT_CODES::ERR_ARGS;
+        }
+
+        m_selectedLayers = layerMask;
+    }
+
+    return EXIT_CODES::OK;
 }

@@ -38,9 +38,7 @@
 
 CLI::EXPORT_PCB_DXF_COMMAND::EXPORT_PCB_DXF_COMMAND() : EXPORT_PCB_BASE_COMMAND( "dxf" )
 {
-    m_argParser.add_argument( "-l", ARG_LAYERS )
-            .default_value( std::string() )
-            .help( "comma separated list of untranslated layer names to include such as F.Cu,B.Cu" );
+    addLayerArg( true );
 
     m_argParser.add_argument( "-ird", ARG_INCLUDE_REFDES )
             .help( "Include the reference designator text" )
@@ -63,8 +61,12 @@ CLI::EXPORT_PCB_DXF_COMMAND::EXPORT_PCB_DXF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 }
 
 
-int CLI::EXPORT_PCB_DXF_COMMAND::Perform( KIWAY& aKiway ) const
+int CLI::EXPORT_PCB_DXF_COMMAND::Perform( KIWAY& aKiway )
 {
+    int baseExit = EXPORT_PCB_BASE_COMMAND::Perform( aKiway );
+    if( baseExit != EXIT_CODES::OK )
+        return baseExit;
+
     std::unique_ptr<JOB_EXPORT_PCB_DXF> dxfJob( new JOB_EXPORT_PCB_DXF( true ) );
 
     dxfJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
@@ -96,11 +98,7 @@ int CLI::EXPORT_PCB_DXF_COMMAND::Perform( KIWAY& aKiway ) const
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString layers = FROM_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
-
-    LSET layerMask = convertLayerStringList( layers );
-
-    dxfJob->m_printMaskLayer = layerMask;
+    dxfJob->m_printMaskLayer = m_selectedLayers;
 
     LOCALE_IO dummy;    // Switch to "C" locale
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, dxfJob.get() );

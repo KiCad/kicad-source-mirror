@@ -264,6 +264,11 @@ public:
      */
     bool GenDrillReportFile( const wxString& aFullFileName );
 
+    /**
+     * Returns the file extension of the drill writer format
+     */
+    wxString GetDrillFileExt() const { return m_drillFileExtension; }
+
 protected:
     /**
      * Plot a map of drill marks for holes.
