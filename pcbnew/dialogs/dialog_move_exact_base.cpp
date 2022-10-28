@@ -32,7 +32,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	m_xUnit->Wrap( -1 );
 	fgInputSizer->Add( m_xUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_clearX = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	m_clearX = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgInputSizer->Add( m_clearX, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_yLabel = new wxStaticText( this, wxID_ANY, _("Move Y:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -46,7 +46,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	m_yUnit->Wrap( -1 );
 	fgInputSizer->Add( m_yUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_clearY = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	m_clearY = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgInputSizer->Add( m_clearY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_rotLabel = new wxStaticText( this, wxID_ANY, _("Rotate:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -60,7 +60,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	m_rotUnit->Wrap( -1 );
 	fgInputSizer->Add( m_rotUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_clearRot = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	m_clearRot = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgInputSizer->Add( m_clearRot, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
@@ -82,7 +82,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	bBottomSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_polarCoords = new wxCheckBox( this, wxID_ANY, _("Use polar coordinates"), wxDefaultPosition, wxDefaultSize, 0 );
-	bBottomSizer->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
+	bBottomSizer->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
@@ -91,7 +91,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	m_stdButtons->AddButton( m_stdButtonsCancel );
 	m_stdButtons->Realize();
 
-	bBottomSizer->Add( m_stdButtons, 1, wxALL|wxEXPAND, 5 );
+	bBottomSizer->Add( m_stdButtons, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	bMainSizer->Add( bBottomSizer, 0, wxEXPAND, 5 );
