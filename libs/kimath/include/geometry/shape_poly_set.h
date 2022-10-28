@@ -1391,7 +1391,7 @@ private:
     void importTree( Clipper2Lib::PolyTree64&            tree,
                      const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                      const std::vector<SHAPE_ARC>&       aArcBuffe );
-    void importTree( Clipper2Lib::Paths64&               paths,
+    void importPaths( Clipper2Lib::Paths64&               paths,
                      const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                      const std::vector<SHAPE_ARC>&       aArcBuffe );
     void importPolyPath( Clipper2Lib::PolyPath64*        aPolyPath,

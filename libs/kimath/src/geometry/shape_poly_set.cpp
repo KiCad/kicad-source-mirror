@@ -1013,11 +1013,12 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
 
     for( const POLYGON& poly : m_polys )
     {
+        Paths64 paths;
+
         for( size_t i = 0; i < poly.size(); i++ )
-        {
-            c.AddPath( poly[i].convertToClipper2( i == 0, zValues, arcBuffer ),
-                       joinType, EndType::Polygon );
-        }
+            paths.push_back( poly[i].convertToClipper2( i == 0, zValues, arcBuffer ) );
+
+        c.AddPaths( paths, joinType, EndType::Polygon );
     }
 
     // Calculate the arc tolerance (arc error) from the seg count by circle. The seg count is
@@ -1043,9 +1044,19 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
 
     c.ArcTolerance( std::abs( aAmount ) * coeff );
     c.MiterLimit( miterLimit );
+    c.MergeGroups( true );
     Paths64 solution = c.Execute( aAmount );
 
-    importTree( solution, zValues, arcBuffer );
+    // We get paths back but we need the tree to assign the holes to the correct
+    // outlines
+    Clipper64 c2;
+    PolyTree64 tree;
+    c2.PreserveCollinear = false;
+    c2.ReverseSolution = false;
+    c2.AddSubject( solution );
+    c2.Execute(ClipType::Union, FillRule::Positive, tree);
+
+    importTree( tree, zValues, arcBuffer );
 }
 
 
@@ -1116,14 +1127,14 @@ void SHAPE_POLY_SET::importTree( Clipper2Lib::PolyTree64&            tree,
 }
 
 
-void SHAPE_POLY_SET::importTree( Clipper2Lib::Paths64&     tree,
+void SHAPE_POLY_SET::importPaths( Clipper2Lib::Paths64&              aPath,
                                  const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                                  const std::vector<SHAPE_ARC>&       aArcBuffer )
 {
     m_polys.clear();
     POLYGON path;
 
-    for( const Clipper2Lib::Path64& n : tree )
+    for( const Clipper2Lib::Path64& n : aPath )
     {
         if( Clipper2Lib::Area( n ) > 0 )
         {
