@@ -201,8 +201,10 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirrorH,           SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirrorV,           SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::mirrorH,           SELECTION_CONDITIONS::NotEmpty
+                                                      && !singleFootprintCondition );
+    menu.AddItem( PCB_ACTIONS::mirrorV,           SELECTION_CONDITIONS::NotEmpty
+                                                      && !singleFootprintCondition );
     menu.AddItem( PCB_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ) );
     menu.AddItem( PCB_ACTIONS::packAndMoveFootprints, SELECTION_CONDITIONS::MoreThan( 1 ) 
                                                       && SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
