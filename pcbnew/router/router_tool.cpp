@@ -686,7 +686,7 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
             if( sizes.TrackWidth() == constraint.m_Value.Opt() )
                 sizes.SetWidthSource( constraint.GetName() );
             else
-                sizes.SetDiffPairGapSource( _( "board minimum track width" ) );
+                sizes.SetWidthSource( _( "board minimum track width" ) );
         }
     }
 
@@ -706,7 +706,7 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
             if( sizes.DiffPairWidth() == constraint.m_Value.Opt() )
                 sizes.SetDiffPairWidthSource( constraint.GetName() );
             else
-                sizes.SetDiffPairGapSource( _( "board minimum track width" ) );
+                sizes.SetDiffPairWidthSource( _( "board minimum track width" ) );
         }
 
         constraint = drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT, &dummyTrack, &dummyTrackB,
@@ -2398,114 +2398,120 @@ int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
 
 void ROUTER_TOOL::UpdateMessagePanel()
 {
-    if( !m_router->RoutingInProgress() )
+    std::vector<MSG_PANEL_ITEM> items;
+
+    if( m_router->GetState() == PNS::ROUTER::ROUTE_TRACK )
+    {
+        PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
+        PNS::RULE_RESOLVER* resolver   = m_iface->GetRuleResolver();
+        std::vector<int>    nets = m_router->GetCurrentNets();
+        wxString            description;
+        wxString            secondary;
+
+        if( m_router->Mode() == PNS::ROUTER_MODE::PNS_MODE_ROUTE_DIFF_PAIR )
+        {
+            wxASSERT( nets.size() >= 2 );
+
+            NETINFO_ITEM* netA = board()->FindNet( nets[0] );
+            NETINFO_ITEM* netB = board()->FindNet( nets[1] );
+            wxASSERT( netA );
+            wxASSERT( netB );
+
+            description = wxString::Format( _( "Routing Diff Pair: %s" ),
+                                            netA->GetNetname() + wxT( ", " ) + netB->GetNetname() );
+
+            wxString  netclass;
+            NETCLASS* netclassA = netA->GetNetClass();
+            NETCLASS* netclassB = netB->GetNetClass();
+
+            if( netclassA == netclassB )
+                netclass = netclassA->GetName();
+            else
+                netclass = netclassA->GetName() + wxT( ", " ) + netclassB->GetName();
+
+            secondary = wxString::Format( _( "Resolved Netclass: %s" ),
+                                          UnescapeString( netclass ) );
+        }
+        else if( !nets.empty() )
+        {
+            NETINFO_ITEM* net = board()->FindNet( nets[0] );
+            wxASSERT( net );
+
+            description = wxString::Format( _( "Routing Track: %s" ),
+                                            net->GetNetname() );
+
+            secondary = wxString::Format( _( "Resolved Netclass: %s" ),
+                                          UnescapeString( net->GetNetClass()->GetName() ) );
+        }
+        else
+        {
+            description = _( "Routing Track" );
+            secondary = _( "(no net)" );
+        }
+
+        items.emplace_back( description, secondary );
+
+        wxString cornerMode;
+
+        if( m_router->Settings().GetFreeAngleMode() )
+        {
+            cornerMode = _( "Free-angle" );
+        }
+        else
+        {
+            switch( m_router->Settings().GetCornerMode() )
+            {
+            case DIRECTION_45::CORNER_MODE::MITERED_45: cornerMode = _( "45-degree" );         break;
+            case DIRECTION_45::CORNER_MODE::ROUNDED_45: cornerMode = _( "45-degree rounded" ); break;
+            case DIRECTION_45::CORNER_MODE::MITERED_90: cornerMode = _( "90-degree" );         break;
+            case DIRECTION_45::CORNER_MODE::ROUNDED_90: cornerMode = _( "90-degree rounded" ); break;
+            default: break;
+            }
+        }
+
+        items.emplace_back( _( "Corner Style" ), cornerMode );
+
+#define FORMAT_VALUE( x ) frame()->MessageTextFromValue( x )
+
+        if( m_router->Mode() == PNS::ROUTER_MODE::PNS_MODE_ROUTE_DIFF_PAIR )
+        {
+            items.emplace_back( wxString::Format( _( "Track Width: %s" ),
+                                                  FORMAT_VALUE( sizes.DiffPairWidth() ) ),
+                                wxString::Format( _( "(from %s)" ),
+                                                  sizes.GetDiffPairWidthSource() ) );
+
+            items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                                  FORMAT_VALUE( sizes.MinClearance() ) ),
+                                wxString::Format( _( "(from %s)" ),
+                                                  sizes.GetClearanceSource() ) );
+
+            items.emplace_back( wxString::Format( _( "Diff Pair Gap: %s" ),
+                                                  FORMAT_VALUE( sizes.DiffPairGap() ) ),
+                                wxString::Format( _( "(from %s)" ),
+                                                  sizes.GetDiffPairGapSource() ) );
+        }
+        else
+        {
+            items.emplace_back( wxString::Format( _( "Track Width: %s" ),
+                                                  FORMAT_VALUE( sizes.TrackWidth() ) ),
+                                wxString::Format( _( "(from %s)" ),
+                                                  sizes.GetWidthSource() ) );
+
+            items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                                  FORMAT_VALUE( sizes.MinClearance() ) ),
+                                wxString::Format( _( "(from %s)" ),
+                                                  sizes.GetClearanceSource() ) );
+        }
+
+#undef FORMAT_VALUE
+
+        frame()->SetMsgPanel( items );
+    }
+    else
     {
         frame()->SetMsgPanel( board() );
         return;
     }
-
-    std::vector<MSG_PANEL_ITEM> items;
-    PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
-    PNS::RULE_RESOLVER* resolver   = m_iface->GetRuleResolver();
-    bool                isDiffPair = m_router->Mode() == PNS::ROUTER_MODE::PNS_MODE_ROUTE_DIFF_PAIR;
-    std::vector<int>    nets = m_router->GetCurrentNets();
-    wxString            description;
-    wxString            secondary;
-
-    if( isDiffPair )
-    {
-        wxASSERT( nets.size() >= 2 );
-
-        NETINFO_ITEM* netA = board()->FindNet( nets[0] );
-        NETINFO_ITEM* netB = board()->FindNet( nets[1] );
-        wxASSERT( netA );
-        wxASSERT( netB );
-
-        description = wxString::Format( _( "Routing Diff Pair: %s" ),
-                                        netA->GetNetname() + wxT( ", " ) + netB->GetNetname() );
-
-        wxString  netclass;
-        NETCLASS* netclassA = netA->GetNetClass();
-        NETCLASS* netclassB = netB->GetNetClass();
-
-        if( netclassA == netclassB )
-            netclass = netclassA->GetName();
-        else
-            netclass = netclassA->GetName() + wxT( ", " ) + netclassB->GetName();
-
-        secondary = wxString::Format( _( "Resolved Netclass: %s" ),
-                                      UnescapeString( netclass ) );
-    }
-    else if( !nets.empty() )
-    {
-        NETINFO_ITEM* net = board()->FindNet( nets[0] );
-        wxASSERT( net );
-
-        description = wxString::Format( _( "Routing Track: %s" ),
-                                        net->GetNetname() );
-
-        secondary = wxString::Format( _( "Resolved Netclass: %s" ),
-                                      UnescapeString( net->GetNetClass()->GetName() ) );
-    }
-    else
-    {
-        description = _( "Routing Track" );
-        secondary = _( "(no net)" );
-    }
-
-    items.emplace_back( description, secondary );
-
-    wxString cornerMode;
-
-    if( m_router->Settings().GetFreeAngleMode() )
-    {
-        cornerMode = _( "Free-angle" );
-    }
-    else
-    {
-        switch( m_router->Settings().GetCornerMode() )
-        {
-        case DIRECTION_45::CORNER_MODE::MITERED_45: cornerMode = _( "45-degree" );         break;
-        case DIRECTION_45::CORNER_MODE::ROUNDED_45: cornerMode = _( "45-degree rounded" ); break;
-        case DIRECTION_45::CORNER_MODE::MITERED_90: cornerMode = _( "90-degree" );         break;
-        case DIRECTION_45::CORNER_MODE::ROUNDED_90: cornerMode = _( "90-degree rounded" ); break;
-        default: break;
-        }
-    }
-
-    items.emplace_back( _( "Corner Style" ), cornerMode );
-
-    if( isDiffPair )
-    {
-        items.emplace_back( wxString::Format( _( "Track Width: %s" ),
-                                              frame()->MessageTextFromValue( sizes.DiffPairWidth() ) ),
-                            wxString::Format( _( "(from %s)" ),
-                                              sizes.GetDiffPairWidthSource() ) );
-
-        items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                              frame()->MessageTextFromValue( sizes.MinClearance() ) ),
-                            wxString::Format( _( "(from %s)" ),
-                                              sizes.GetClearanceSource() ) );
-
-        items.emplace_back( wxString::Format( _( "Diff Pair Gap: %s" ),
-                                              frame()->MessageTextFromValue( sizes.DiffPairGap() ) ),
-                            wxString::Format( _( "(from %s)" ),
-                                              sizes.GetDiffPairGapSource() ) );
-    }
-    else
-    {
-        items.emplace_back( wxString::Format( _( "Track Width: %s" ),
-                                              frame()->MessageTextFromValue( sizes.TrackWidth() ) ),
-                            wxString::Format( _( "(from %s)" ),
-                                              sizes.GetWidthSource() ) );
-
-        items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                              frame()->MessageTextFromValue( sizes.MinClearance() ) ),
-                            wxString::Format( _( "(from %s)" ),
-                                              sizes.GetClearanceSource() ) );
-    }
-
-    frame()->SetMsgPanel( items );
 }
 
 
