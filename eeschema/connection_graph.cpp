@@ -2451,7 +2451,9 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
 
             if( driver->Type() == SCH_GLOBAL_LABEL_T
                     || driver->Type() == SCH_HIER_LABEL_T
-                    || driver->Type() == SCH_LABEL_T )
+                    || driver->Type() == SCH_LABEL_T
+                    || ( driver->Type() == SCH_PIN_T
+                         && static_cast<SCH_PIN*>( driver )->IsPowerConnection() ) )
             {
                 wxString primaryName   = aSubgraph->GetNameForDriver( aSubgraph->m_driver );
                 wxString secondaryName = aSubgraph->GetNameForDriver( driver );
