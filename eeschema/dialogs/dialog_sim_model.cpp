@@ -893,21 +893,19 @@ template <typename T>
 wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
 {
     LIB_PIN* pin = m_sortedSymbolPins.at( symbolPinIndex );
-    wxString number;
-    wxString name;
+    wxString pinNumber;
+    wxString pinName;
 
     if( pin )
     {
-        number = pin->GetShownNumber();
-        name = pin->GetShownName();
+        pinNumber = pin->GetShownNumber();
+        pinName = pin->GetShownName();
     }
 
-    LOCALE_IO toggle;
+    if( !pinName.IsEmpty() && pinName != pinNumber )
+        pinNumber += wxString::Format( wxT( " (%s)" ), pinName );
 
-    if( name == "" )
-        return wxString::Format( "%s", number );
-    else
-        return wxString::Format( "%s (%s)", number, name );
+    return pinNumber;
 }
 
 
@@ -918,10 +916,12 @@ wxString DIALOG_SIM_MODEL<T>::getModelPinString( int aModelPinIndex ) const
 
     LOCALE_IO toggle;
 
-    if( pinName == "" )
-        return wxString::Format( "%d", aModelPinIndex + 1, pinName );
-    else
-        return wxString::Format( "%d (%s)", aModelPinIndex + 1, pinName );
+    wxString pinNumber = wxString::Format( "%d", aModelPinIndex + 1 );
+
+    if( !pinName.IsEmpty() && pinName != pinNumber )
+        pinNumber += wxString::Format( wxT( " (%s)" ), pinName );
+
+    return pinNumber;
 }
 
 
