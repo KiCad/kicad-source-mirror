@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,8 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
     // draw the icon
     // note that the set of icons might be smaller than the set of labels if the last
     // label is <...>.
-    auto position = m_names.Index( value );
+    int position = m_names.Index( value );
+
     if( position < (int) m_icons.size() && position != wxNOT_FOUND )
     {
         bitmap = KiBitmap( m_icons[ position ] );
@@ -197,14 +198,13 @@ void GRID_CELL_ICON_TEXT_POPUP::Create( wxWindow* aParent, wxWindowID aId,
 {
     m_control = new wxBitmapComboBox( aParent, aId, wxEmptyString, wxDefaultPosition,
                                       wxDefaultSize, 0, nullptr,
-                                      wxCB_READONLY | wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB |
-                                      wxBORDER_NONE );
+                                      wxCB_READONLY | wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxBORDER_NONE );
 
     for( unsigned i = 0; i < m_names.size(); ++i )
     {
         // note that the set of icons might be smaller than the set of labels if
         // the last label is <...>.
-        if( i < m_icons.size() )
+        if( i < m_icons.size() && m_icons[ i ] != BITMAPS::INVALID_BITMAP )
             Combo()->Append( m_names[ i ], KiBitmap( m_icons[ i ] ) );
         else
             Combo()->Append( m_names[ i ] );

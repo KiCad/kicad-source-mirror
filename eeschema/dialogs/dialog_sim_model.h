@@ -66,8 +66,21 @@ public:
         }
     };
 
-    enum class PARAM_COLUMN : int { DESCRIPTION, VALUE, UNIT, DEFAULT, TYPE, END_ };
-    enum class PIN_COLUMN : int { SYMBOL, MODEL };
+    enum PARAM_COLUMN
+    {
+        DESCRIPTION = 0,
+        VALUE,
+        UNIT,
+        DEFAULT,
+        TYPE,
+        END_
+    };
+
+    enum PIN_COLUMN
+    {
+        SYMBOL = 0,
+        MODEL
+    };
 
     DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol, std::vector<T>& aSchFields );
 
@@ -98,7 +111,6 @@ private:
     wxString getSymbolPinString( int aSymbolPinNumber ) const;
     wxString getModelPinString( int aModelPinIndex ) const;
     int getModelPinIndex( const wxString& aModelPinString ) const;
-    wxArrayString getModelPinChoices( const wxString& aCurrentValue ) const;
 
     void onRadioButton( wxCommandEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;
@@ -123,26 +135,27 @@ private:
     void onParamGridSetFocus( wxFocusEvent& aEvent );
     void onParamGridSelectionChange( wxPropertyGridEvent& aEvent );
 
+    bool isIbisLoaded() { return dynamic_cast<SIM_LIBRARY_KIBIS*>( m_library.get() ); }
 
-    SCH_SYMBOL& m_symbol;
-    std::vector<T>& m_fields;
+private:
+    SCH_SYMBOL&            m_symbol;
+    std::vector<T>&        m_fields;
 
     std::vector<std::shared_ptr<SIM_MODEL>>            m_models;
     std::vector<LIB_PIN*>                              m_sortedSymbolPins;
     std::map<SIM_MODEL::DEVICE_TYPE_, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE                                    m_curModelType = SIM_MODEL::TYPE::NONE;
 
-    std::shared_ptr<SIM_LIBRARY> m_library;
-    std::vector<std::shared_ptr<SIM_MODEL>> m_libraryModels;
-    const SIM_MODEL* m_prevModel;
+    std::shared_ptr<SIM_LIBRARY>                       m_library;
+    std::vector<std::shared_ptr<SIM_MODEL>>            m_libraryModels;
+    const SIM_MODEL*                                   m_prevModel;
 
-    MODEL_NAME_VALIDATOR m_modelNameValidator;
-    wxPGProperty* m_firstCategory; // Used to add principal parameters to root.
+    MODEL_NAME_VALIDATOR   m_modelNameValidator;
+    SCINTILLA_TRICKS*      m_scintillaTricks;
+    bool                   m_wasCodePreviewUpdated;
 
-    wxPGProperty* m_prevParamGridSelection;
-    bool m_wasCodePreviewUpdated;
-
-    bool isIbisLoaded() { return dynamic_cast<SIM_LIBRARY_KIBIS*>( m_library.get() ); }
+    wxPGProperty*          m_firstCategory;            // Used to add principal parameters to root.
+    wxPGProperty*          m_prevParamGridSelection;
 };
 
 #endif /* DIALOG_SIM_MODEL_H */

@@ -28,19 +28,16 @@
 #include <sim/sim_library_spice.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_model_raw_spice.h>
-#include <widgets/wx_grid.h>
+#include <grid_tricks.h>
+#include <widgets/grid_icon_text_helpers.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <wx/filedlg.h>
 #include <wx/textfile.h>
-#include "grid_tricks.h"
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
-
-
-#define USED_PIN_PREFIX wxT( "⇤" )
 
 
 template <typename T>
@@ -51,9 +48,10 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
       m_fields( aFields ),
       m_library( std::make_shared<SIM_LIBRARY_SPICE>() ),
       m_prevModel( nullptr ),
+      m_scintillaTricks( nullptr ),
+      m_wasCodePreviewUpdated( true ),
       m_firstCategory( nullptr ),
-      m_prevParamGridSelection( nullptr ),
-      m_wasCodePreviewUpdated( true )
+      m_prevParamGridSelection( nullptr )
 {
     m_modelNameCombobox->SetValidator( m_modelNameValidator );
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
@@ -82,17 +80,19 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
     for( SIM_MODEL::DEVICE_TYPE_ deviceType : SIM_MODEL::DEVICE_TYPE__ITERATOR() )
         m_deviceTypeChoice->Append( SIM_MODEL::DeviceTypeInfo( deviceType ).description );
 
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_codePreview, wxT( "{}" ), false );
+
     m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onParamGridSelectionChange, this );
 
     m_paramGrid->SetValidationFailureBehavior( wxPG_VFB_STAY_IN_PROPERTY
                                                | wxPG_VFB_BEEP
                                                | wxPG_VFB_MARK_CELL );
 
-    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::DESCRIPTION ), 50 );
-    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::VALUE ), 18 );
-    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::UNIT ), 10 );
-    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::DEFAULT ), 12 );
-    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::TYPE ), 10 );
+    m_paramGrid->SetColumnProportion( PARAM_COLUMN::DESCRIPTION, 50 );
+    m_paramGrid->SetColumnProportion( PARAM_COLUMN::VALUE, 18 );
+    m_paramGrid->SetColumnProportion( PARAM_COLUMN::UNIT, 10 );
+    m_paramGrid->SetColumnProportion( PARAM_COLUMN::DEFAULT, 12 );
+    m_paramGrid->SetColumnProportion( PARAM_COLUMN::TYPE, 10 );
 
     if( wxPropertyGrid* grid = m_paramGrid->GetGrid() )
     {
@@ -128,6 +128,8 @@ DIALOG_SIM_MODEL<T>::~DIALOG_SIM_MODEL()
 {
     // Delete the GRID_TRICKS.
     m_pinAssignmentsGrid->PopEventHandler( true );
+
+    delete m_scintillaTricks;
 }
 
 
@@ -385,11 +387,11 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         // This wxPropertyGridManager column and header stuff has to be here because it segfaults in
         // the constructor.
 
-        m_paramGridMgr->SetColumnCount( static_cast<int>( PARAM_COLUMN::END_ ) );
+        m_paramGridMgr->SetColumnCount( PARAM_COLUMN::END_ );
 
-        m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::UNIT ), "Unit" );
-        m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::DEFAULT ), "Default" );
-        m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::TYPE ), "Type" );
+        m_paramGridMgr->SetColumnTitle( PARAM_COLUMN::UNIT, _( "Unit" ) );
+        m_paramGridMgr->SetColumnTitle( PARAM_COLUMN::DEFAULT, _( "Default" ) );
+        m_paramGridMgr->SetColumnTitle( PARAM_COLUMN::TYPE, _( "Type" ) );
 
         m_paramGridMgr->ShowHeader();
 
@@ -534,8 +536,7 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments()
 
     for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
     {
-        m_pinAssignmentsGrid->SetCellValue( row, static_cast<int>( PIN_COLUMN::MODEL ),
-                                            "Not Connected" );
+        m_pinAssignmentsGrid->SetCellValue( row, PIN_COLUMN::MODEL, _( "Not Connected" ) );
     }
 
     // Now set up the grid values in the Model column.
@@ -547,29 +548,41 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments()
             continue;
 
         wxString modelPinString = getModelPinString( modelPinIndex );
-        m_pinAssignmentsGrid->SetCellValue( findSymbolPinRow( symbolPinNumber ),
-                                            static_cast<int>( PIN_COLUMN::MODEL ),
+        m_pinAssignmentsGrid->SetCellValue( findSymbolPinRow( symbolPinNumber ), PIN_COLUMN::MODEL,
                                             modelPinString );
     }
 
     // Set up the Symbol column grid values and Model column cell editors with dropdown options.
-    for( int i = 0; i < m_pinAssignmentsGrid->GetNumberRows(); ++i )
+    for( int ii = 0; ii < m_pinAssignmentsGrid->GetNumberRows(); ++ii )
     {
-        wxString symbolPinString = getSymbolPinString( i );
+        wxString symbolPinString = getSymbolPinString( ii );
 
-        m_pinAssignmentsGrid->SetReadOnly( i, static_cast<int>( PIN_COLUMN::SYMBOL ) );
-        m_pinAssignmentsGrid->SetCellValue( i, static_cast<int>( PIN_COLUMN::SYMBOL ),
-                                            symbolPinString );
+        m_pinAssignmentsGrid->SetReadOnly( ii, PIN_COLUMN::SYMBOL );
+        m_pinAssignmentsGrid->SetCellValue( ii, PIN_COLUMN::SYMBOL, symbolPinString );
 
-        wxString curModelPinString = m_pinAssignmentsGrid->GetCellValue(
-                i, static_cast<int>( PIN_COLUMN::MODEL ) );
+        wxString curModelPinString = m_pinAssignmentsGrid->GetCellValue( ii, PIN_COLUMN::MODEL );
 
-        wxArrayString modelPinChoices = getModelPinChoices( curModelPinString );
+        std::vector<BITMAPS> modelPinIcons;
+        wxArrayString        modelPinChoices;
+
+        for( int jj = 0; jj < curModel().GetPinCount(); ++jj )
+        {
+            if( curModel().GetPin( jj ).symbolPinNumber != "" )
+                modelPinIcons.push_back( PinShapeGetBitmap( GRAPHIC_PINSHAPE::LINE ) );
+            else
+                modelPinIcons.push_back( BITMAPS::INVALID_BITMAP );
+
+            modelPinChoices.Add( getModelPinString( jj ) );
+        }
+
+        modelPinIcons.push_back( BITMAPS::INVALID_BITMAP );
+        modelPinChoices.Add( _( "Not Connected" ) );
 
         // Using `new` here shouldn't cause a memory leak because `SetCellEditor()` calls
         // `DecRef()` on its last editor.
-        m_pinAssignmentsGrid->SetCellEditor( i, static_cast<int>( PIN_COLUMN::MODEL ),
-                                             new wxGridCellChoiceEditor( modelPinChoices ) );
+        m_pinAssignmentsGrid->SetCellEditor( ii, PIN_COLUMN::MODEL,
+                                             new GRID_CELL_ICON_TEXT_POPUP( modelPinIcons,
+                                                                            modelPinChoices ) );
     }
 
     // TODO: Show a preview of the symbol with the pin numbers shown.
@@ -828,18 +841,18 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 
     switch( param.info.type )
     {
-    case SIM_VALUE::TYPE_BOOL:           typeStr = wxString( "Bool"           ); break;
-    case SIM_VALUE::TYPE_INT:            typeStr = wxString( "Int"            ); break;
-    case SIM_VALUE::TYPE_FLOAT:          typeStr = wxString( "Float"          ); break;
-    case SIM_VALUE::TYPE_COMPLEX:        typeStr = wxString( "Complex"        ); break;
-    case SIM_VALUE::TYPE_STRING:         typeStr = wxString( "String"         ); break;
-    case SIM_VALUE::TYPE_BOOL_VECTOR:    typeStr = wxString( "Bool Vector"    ); break;
-    case SIM_VALUE::TYPE_INT_VECTOR:     typeStr = wxString( "Int Vector"     ); break;
-    case SIM_VALUE::TYPE_FLOAT_VECTOR:   typeStr = wxString( "Float Vector"   ); break;
-    case SIM_VALUE::TYPE_COMPLEX_VECTOR: typeStr = wxString( "Complex Vector" ); break;
+    case SIM_VALUE::TYPE_BOOL:           typeStr = wxT( "Bool"           ); break;
+    case SIM_VALUE::TYPE_INT:            typeStr = wxT( "Int"            ); break;
+    case SIM_VALUE::TYPE_FLOAT:          typeStr = wxT( "Float"          ); break;
+    case SIM_VALUE::TYPE_COMPLEX:        typeStr = wxT( "Complex"        ); break;
+    case SIM_VALUE::TYPE_STRING:         typeStr = wxT( "String"         ); break;
+    case SIM_VALUE::TYPE_BOOL_VECTOR:    typeStr = wxT( "Bool Vector"    ); break;
+    case SIM_VALUE::TYPE_INT_VECTOR:     typeStr = wxT( "Int Vector"     ); break;
+    case SIM_VALUE::TYPE_FLOAT_VECTOR:   typeStr = wxT( "Float Vector"   ); break;
+    case SIM_VALUE::TYPE_COMPLEX_VECTOR: typeStr = wxT( "Complex Vector" ); break;
     }
 
-    prop->SetCell( static_cast<int>( PARAM_COLUMN::TYPE ), typeStr );
+    prop->SetCell( PARAM_COLUMN::TYPE, typeStr );
 
     if( m_useLibraryModelRadioButton->GetValue()
         && !m_overrideCheckbox->GetValue()
@@ -940,29 +953,6 @@ int DIALOG_SIM_MODEL<T>::getModelPinIndex( const wxString& aModelPinString ) con
     aModelPinString.Mid( 0, length ).ToCLong( &result );
 
     return static_cast<int>( result - 1 );
-}
-
-
-template <typename T>
-wxArrayString DIALOG_SIM_MODEL<T>::getModelPinChoices( const wxString& aCurrentValue ) const
-{
-    wxArrayString modelPinChoices;
-
-    for( int i = 0; i < curModel().GetPinCount(); ++i )
-    {
-        const SIM_MODEL::PIN& modelPin = curModel().GetPin( i );
-        const wxString&       pinString = getModelPinString( i );
-
-        if( pinString == aCurrentValue )
-            modelPinChoices.Add( pinString );
-        else if( modelPin.symbolPinNumber != "" )
-            modelPinChoices.Add( wxString( USED_PIN_PREFIX ) + wxS( " " ) + pinString );
-        else
-            modelPinChoices.Add( pinString );
-    }
-
-    modelPinChoices.Add( _( "Not Connected" ) );
-    return modelPinChoices;
 }
 
 
@@ -1209,12 +1199,6 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
     wxString oldModelPinName = aEvent.GetString();
     wxString modelPinName = m_pinAssignmentsGrid->GetCellValue( aEvent.GetRow(), aEvent.GetCol() );
 
-    if( oldModelPinName.StartsWith( USED_PIN_PREFIX ) )
-        oldModelPinName = oldModelPinName.AfterFirst( ' ' );
-
-    if( modelPinName.StartsWith( USED_PIN_PREFIX ) )
-        modelPinName = modelPinName.AfterFirst( ' ' );
-
     int oldModelPinIndex = getModelPinIndex( oldModelPinName );
     int modelPinIndex = getModelPinIndex( modelPinName );
 
@@ -1239,8 +1223,8 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
     wxGridUpdateLocker deferRepaintsTillLeavingScope( m_pinAssignmentsGrid );
 
     int gridWidth = KIPLATFORM::UI::GetUnobscuredSize( m_pinAssignmentsGrid ).x;
-    m_pinAssignmentsGrid->SetColSize( static_cast<int>( PIN_COLUMN::MODEL ), gridWidth / 2 );
-    m_pinAssignmentsGrid->SetColSize( static_cast<int>( PIN_COLUMN::SYMBOL ), gridWidth / 2 );
+    m_pinAssignmentsGrid->SetColSize( PIN_COLUMN::MODEL, gridWidth / 2 );
+    m_pinAssignmentsGrid->SetColSize( PIN_COLUMN::SYMBOL, gridWidth / 2 );
 
     aEvent.Skip();
 }
