@@ -103,6 +103,8 @@ protected:
 
     static const MODEL_INFO& ModelInfo( MODEL_TYPE aType );
 
+    SIM_MODEL_NGSPICE( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
+
 private:
     bool requiresSpiceModelLine() const override { return false; }
 

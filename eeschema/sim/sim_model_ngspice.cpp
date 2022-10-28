@@ -48,12 +48,6 @@ std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const SPICE_ITEM
                      fmt::format( "I({}:g)", aItem.refName ),
                      fmt::format( "I({}:s)", aItem.refName ) };
 
-        case SIM_MODEL::DEVICE_TYPE_::R:
-        case SIM_MODEL::DEVICE_TYPE_::C:
-        case SIM_MODEL::DEVICE_TYPE_::L:
-        case SIM_MODEL::DEVICE_TYPE_::D:
-            return SPICE_GENERATOR::CurrentNames( aItem );
-
         default:
             wxFAIL_MSG( "Unhandled model device type in SIM_MODEL_NGSPICE" );
             return {};
@@ -62,22 +56,8 @@ std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const SPICE_ITEM
 
 
 SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
-    SIM_MODEL_SPICE( aType, std::make_unique<SPICE_GENERATOR_NGSPICE>( *this ) )
+        SIM_MODEL_NGSPICE( aType, std::make_unique<SPICE_GENERATOR_NGSPICE>( *this ) )
 {
-    const MODEL_INFO& modelInfo = ModelInfo( getModelType() );
-
-    for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.instanceParams )
-    {
-        // For now, only the geometry parameters.
-        if( paramInfo.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL
-            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY )
-        {
-            AddParam( paramInfo, getIsOtherVariant() );
-        }
-    }
-
-    for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.modelParams )
-        AddParam( paramInfo, getIsOtherVariant() );
 }
 
 
@@ -158,6 +138,27 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     }
 
     SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue, aNotation );
+}
+
+
+SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType,
+                                      std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
+        SIM_MODEL_SPICE( aType, std::move( aSpiceGenerator ) )
+{
+    const MODEL_INFO& modelInfo = ModelInfo( getModelType() );
+
+    for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.instanceParams )
+    {
+        // For now, only the geometry parameters.
+        if( paramInfo.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL
+            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY )
+        {
+            AddParam( paramInfo, getIsOtherVariant() );
+        }
+    }
+
+    for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.modelParams )
+        AddParam( paramInfo, getIsOtherVariant() );
 }
 
 
