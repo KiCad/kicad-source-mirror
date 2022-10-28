@@ -105,7 +105,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "p", 7, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instantaneous power", true );*/
 
 
-        modelInfos[MODEL_TYPE::DIODE] = { "Diode", "D", "", { "Anode", "Cathode" }, "Junction Diode model", {}, {} };
+        modelInfos[MODEL_TYPE::DIODE] = { "Diode", "D", "", { "Cathode", "Anode" }, "Junction Diode model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "level",  100, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1", "", "Diode level selector" );
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "is",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "A", SIM_MODEL::PARAM::CATEGORY::DC, "1e-14", "", "Saturation current" );
