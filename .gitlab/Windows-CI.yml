@@ -10,6 +10,7 @@ win64_build:
   image: registry.gitlab.com/kicad/kicad-ci/windows-build-image/win1809-msvc:latest
   variables:
     VCPKG_BINARY_SOURCES: 'nuget,kicad,readwrite'
+    GIT_FETCH_EXTRA_FLAGS: --tags
   cache:
     key: win64-vcpkg-"$CI_COMMIT_REF_SLUG"
     paths:
