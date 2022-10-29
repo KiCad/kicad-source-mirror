@@ -1070,17 +1070,9 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
 
     c.ArcTolerance( std::abs( aAmount ) * coeff );
     c.MiterLimit( miterLimit );
-    c.MergeGroups( true );
-    Paths64 solution = c.Execute( aAmount );
 
-    // We get paths back but we need the tree to assign the holes to the correct
-    // outlines
-    Clipper64 c2;
     PolyTree64 tree;
-    c2.PreserveCollinear = false;
-    c2.ReverseSolution = false;
-    c2.AddSubject( solution );
-    c2.Execute(ClipType::Union, FillRule::Positive, tree);
+    c.Execute( aAmount, tree );
 
     importTree( tree, zValues, arcBuffer );
     tree.Clear();
@@ -1120,9 +1112,9 @@ void SHAPE_POLY_SET::importTree( ClipperLib::PolyTree*               tree,
 }
 
 
-void SHAPE_POLY_SET::importPolyPath( Clipper2Lib::PolyPath64*            aPolyPath,
-                                     const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
-                                     const std::vector<SHAPE_ARC>&       aArcBuffer )
+void SHAPE_POLY_SET::importPolyPath( const std::unique_ptr<Clipper2Lib::PolyPath64>& aPolyPath,
+                                     const std::vector<CLIPPER_Z_VALUE>&             aZValueBuffer,
+                                     const std::vector<SHAPE_ARC>&                   aArcBuffer )
 {
     if( !aPolyPath->IsHole() )
     {
@@ -1130,11 +1122,11 @@ void SHAPE_POLY_SET::importPolyPath( Clipper2Lib::PolyPath64*            aPolyPa
         paths.reserve( aPolyPath->Count() + 1 );
         paths.emplace_back( aPolyPath->Polygon(), aZValueBuffer, aArcBuffer );
 
-        for( Clipper2Lib::PolyPath64* child : *aPolyPath )
+        for( const std::unique_ptr<Clipper2Lib::PolyPath64>& child : *aPolyPath )
         {
             paths.emplace_back( child->Polygon(), aZValueBuffer, aArcBuffer );
 
-            for( Clipper2Lib::PolyPath64* grandchild : *child )
+            for( const std::unique_ptr<Clipper2Lib::PolyPath64>& grandchild : *child )
                 importPolyPath( grandchild, aZValueBuffer, aArcBuffer );
         }
 
@@ -1149,7 +1141,7 @@ void SHAPE_POLY_SET::importTree( Clipper2Lib::PolyTree64&            tree,
 {
     m_polys.clear();
 
-    for( Clipper2Lib::PolyPath64* n : tree )
+    for( const std::unique_ptr<Clipper2Lib::PolyPath64>& n : tree )
         importPolyPath( n, aZValueBuffer, aArcBuffer );
 }
 
