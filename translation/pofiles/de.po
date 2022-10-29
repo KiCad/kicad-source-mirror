@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
 "PO-Revision-Date: 2022-11-04 23:18+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -32325,9 +32325,8 @@ msgid "<unconstrained>"
 msgstr "<uneingeschränkt>"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:346
-#, fuzzy
 msgid "Checking length constraints..."
-msgstr "Prüfe Netzverbindungen ..."
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:113
 msgid "(no edges found on Edge.Cuts layer)"
