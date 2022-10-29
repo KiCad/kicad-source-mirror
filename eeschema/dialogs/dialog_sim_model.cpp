@@ -137,7 +137,14 @@ template <typename T>
 bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 {
     wxCommandEvent dummyEvent;
-    wxString libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
+
+    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
+    std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
+
+    SIM_MODEL::DEVICE_TYPE_ inferredDeviceType = SIM_MODEL::InferDeviceTypeFromRef( ref );
+
+    if( inferredDeviceType == SIM_MODEL::DEVICE_TYPE_::NONE )
+        m_inferInstanceModelRadioButton->Enable( false );
 
     if( libraryFilename != "" )
     {
@@ -196,6 +203,22 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             }
         }
     }
+    else if( m_inferInstanceModelRadioButton->IsEnabled()
+            && SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::DEVICE_TYPE_FIELD ).empty() )
+    {
+        m_inferInstanceModelRadioButton->SetValue( true );
+
+        m_inferredDevice->SetValue( SIM_MODEL::DeviceTypeInfo( inferredDeviceType ).description );
+
+        for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+        {
+            if( SIM_MODEL::TypeInfo( type ).deviceType == inferredDeviceType )
+            {
+                m_inferredType->SetValue( SIM_MODEL::TypeInfo( type ).description );
+                break;
+            }
+        }
+    }
     else
     {
         // The model is sourced from the instance.
@@ -223,11 +246,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
     m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
-    m_inferCheckbox->SetValue( curModel().IsInferred() );
-
-    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
-    m_inferCheckbox->Show( SIM_MODEL::InferDeviceTypeFromRef( ref )
-                                            != SIM_MODEL::DEVICE_TYPE_::NONE );
 
     onRadioButton( dummyEvent );
     return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
@@ -280,6 +298,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
         }
     }
 
+    curModel().SetIsInferred( m_inferInstanceModelRadioButton->GetValue() );
     curModel().WriteFields( m_fields );
 
     return true;
@@ -298,10 +317,6 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
 
-    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
-    m_inferCheckbox->Enable( SIM_MODEL::InferDeviceTypeFromRef( ref ) == curModel().GetDeviceType() );
-    m_inferCheckbox->SetValue( curModel().IsInferred() );
-
     m_modelPanel->Layout();
     m_pinAssignmentsPanel->Layout();
     m_parametersPanel->Layout();
@@ -316,12 +331,12 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
 {
-    SIM_MODEL_KIBIS* modelkibis = nullptr;
+    SIM_MODEL_KIBIS* modelkibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() )
+                                                 : nullptr;
 
+    /*
     if( isIbisLoaded() )
     {
-        modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
-
         for ( wxSizerItem* item : m_sourceSizer->GetChildren() )
         {
             if ( item->GetWindow() == m_differentialCheckbox )
@@ -342,6 +357,7 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
                 item->SetFlag( item->GetFlag() & ~wxRESERVE_SPACE_EVEN_IF_HIDDEN );
         }
     }
+     */
 
     m_ibisModelCombobox->Show( isIbisLoaded() );
     m_ibisPinCombobox->Show( isIbisLoaded() );
@@ -960,6 +976,8 @@ template <typename T>
 void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
 {
     bool fromLibrary = m_useLibraryModelRadioButton->GetValue();
+    bool inferred = m_inferInstanceModelRadioButton->GetValue();
+    bool fromInstance = m_useInstanceModelRadioButton->GetValue();
 
     m_pathLabel->Enable( fromLibrary );
   	m_tclibraryPathName->Enable( fromLibrary );
@@ -973,10 +991,15 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
   	m_ibisModelLabel->Enable( fromLibrary );
   	m_ibisModelCombobox->Enable( fromLibrary );
 
-  	m_staticTextDevType->Enable( !fromLibrary );
-  	m_deviceTypeChoice->Enable( !fromLibrary );
-  	m_staticTextSpiceType->Enable( !fromLibrary );
-  	m_typeChoice->Enable( !fromLibrary );
+  	m_staticTextDevType->Enable( fromInstance );
+  	m_deviceTypeChoice->Enable( fromInstance );
+  	m_staticTextSpiceType->Enable( fromInstance );
+  	m_typeChoice->Enable( fromInstance );
+
+    m_inferredDeviceLabel->Enable( inferred );
+    m_inferredDevice->Enable( inferred );
+    m_inferredTypeLabel->Enable( inferred );
+    m_inferredType->Enable( inferred );
 
     updateWidgets();
 }
@@ -1234,13 +1257,6 @@ template <typename T>
 void DIALOG_SIM_MODEL<T>::onExcludeCheckbox( wxCommandEvent& aEvent )
 {
     curModel().SetIsEnabled( !m_excludeCheckbox->GetValue() );
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onInferCheckbox( wxCommandEvent& aEvent )
-{
-    curModel().SetIsInferred( m_inferCheckbox->GetValue() );
 }
 
 

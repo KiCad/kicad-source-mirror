@@ -26,9 +26,10 @@ class WX_GRID;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
 #include <wx/combobox.h>
 #include <wx/checkbox.h>
-#include <wx/sizer.h>
+#include <wx/gbsizer.h>
 #include <wx/choice.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/manager.h>
@@ -37,7 +38,6 @@ class WX_GRID;
 #include <wx/stc/stc.h>
 #include <wx/notebook.h>
 #include <wx/grid.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxNotebook* m_notebook;
 		wxPanel* m_modelPanel;
 		wxRadioButton* m_useLibraryModelRadioButton;
-		wxFlexGridSizer* m_sourceSizer;
 		wxStaticText* m_pathLabel;
 		wxTextCtrl* m_tclibraryPathName;
 		wxBitmapButton* m_browseButton;
@@ -71,6 +70,11 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxChoice* m_deviceTypeChoice;
 		wxStaticText* m_staticTextSpiceType;
 		wxChoice* m_typeChoice;
+		wxRadioButton* m_inferInstanceModelRadioButton;
+		wxStaticText* m_inferredDeviceLabel;
+		wxTextCtrl* m_inferredDevice;
+		wxStaticText* m_inferredTypeLabel;
+		wxTextCtrl* m_inferredType;
 		wxNotebook* m_notebook4;
 		wxPanel* m_parametersPanel;
 		wxPropertyGridManager* m_paramGridMgr;
@@ -80,8 +84,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxPanel* m_pinAssignmentsPanel;
 		WX_GRID* m_pinAssignmentsGrid;
 		wxCheckBox* m_excludeCheckbox;
-		wxCheckBox* m_inferCheckbox;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -116,7 +118,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onPinAssignmentsGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void onExcludeCheckbox( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onInferCheckbox( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
