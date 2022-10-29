@@ -3013,7 +3013,6 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                     switch( item->Type() )
                     {
                     case SCH_PIN_T:
-                    case SCH_SHEET_PIN_T:
                         ++retval;
                         break;
 
