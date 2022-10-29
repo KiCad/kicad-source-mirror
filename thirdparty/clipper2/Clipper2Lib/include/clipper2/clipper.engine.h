@@ -19,6 +19,10 @@
 #include <functional>
 #include "clipper.core.h"
 
+#ifdef None
+#undef None
+#endif
+
 namespace Clipper2Lib {
 
 	struct Scanline;
