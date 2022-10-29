@@ -10,7 +10,6 @@ win64_build:
   image: registry.gitlab.com/kicad/kicad-ci/windows-build-image/win1809-msvc:latest
   variables:
     VCPKG_BINARY_SOURCES: 'nuget,kicad,readwrite'
-    GIT_FETCH_EXTRA_FLAGS: --tags
   cache:
     key: win64-vcpkg-"$CI_COMMIT_REF_SLUG"
     paths:
@@ -21,6 +20,7 @@ win64_build:
     - tags@kicad/code/kicad
   script:
     - C:\builder\build.ps1 -Env -Arch x64
+    - git fetch --tags
     - $vcpkgCache=Join-Path -Path (Get-Location) -ChildPath ".vcpkgCache";$env:VCPKG_DEFAULT_BINARY_CACHE=$vcpkgCache;New-Item -ItemType Directory -Force -Path $vcpkgCache
     - nuget.exe sources add -Name kicad -Source "https://nuget.kicad.org:443/v3/index.json"
     - nuget.exe setapikey $env:KICAD_NUGET_KEY -Source "https://nuget.kicad.org:443/v3/index.json"
