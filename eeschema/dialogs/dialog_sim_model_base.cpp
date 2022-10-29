@@ -30,7 +30,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerMargins->Add( m_useLibraryModelRadioButton, 0, wxLEFT, 5 );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 1, 5 );
+	gbSizer1 = new wxGridBagSizer( 3, 5 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -118,7 +118,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	bSizerMargins->Add( 0, 22, 0, 0, 5 );
 
-	m_inferInstanceModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("Infer from symbol's reference designator and value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_inferInstanceModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("From symbol's reference designator and value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_inferInstanceModelRadioButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizer3;

@@ -138,12 +138,13 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 {
     wxCommandEvent dummyEvent;
 
+    int         pinCount = m_sortedSymbolPins.size();
     std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
-    SIM_MODEL::DEVICE_TYPE_ inferredDeviceType = SIM_MODEL::InferDeviceTypeFromRef( ref );
+    SIM_MODEL::DEVICE_TYPE_ inferredDevice = SIM_MODEL::InferDeviceTypeFromRef( ref );
 
-    if( inferredDeviceType == SIM_MODEL::DEVICE_TYPE_::NONE )
+    if( inferredDevice == SIM_MODEL::DEVICE_TYPE_::NONE )
         m_inferInstanceModelRadioButton->Enable( false );
 
     if( libraryFilename != "" )
@@ -203,42 +204,36 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             }
         }
     }
-    else if( m_inferInstanceModelRadioButton->IsEnabled()
-            && SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::DEVICE_TYPE_FIELD ).empty() )
-    {
-        m_inferInstanceModelRadioButton->SetValue( true );
-
-        m_inferredDevice->SetValue( SIM_MODEL::DeviceTypeInfo( inferredDeviceType ).description );
-
-        for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
-        {
-            if( SIM_MODEL::TypeInfo( type ).deviceType == inferredDeviceType )
-            {
-                m_inferredType->SetValue( SIM_MODEL::TypeInfo( type ).description );
-                break;
-            }
-        }
-    }
     else
     {
         // The model is sourced from the instance.
-        m_useInstanceModelRadioButton->SetValue( true );
-        SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( m_fields, m_sortedSymbolPins.size() );
+        std::string     device = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::DEVICE_TYPE_FIELD );
+        SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( m_fields, pinCount );
+        bool            inferred = m_inferInstanceModelRadioButton->IsEnabled() && device.empty();
+
+        if( inferred )
+            m_inferInstanceModelRadioButton->SetValue( true );
+        else
+            m_useInstanceModelRadioButton->SetValue( true );
 
         try
         {
-            m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields,
-                                                                          m_sortedSymbolPins.size() ) ) ) =
-                    SIM_MODEL::Create( m_sortedSymbolPins.size(), m_fields );
+            m_models.at( static_cast<int>( type ) ) = SIM_MODEL::Create( pinCount, m_fields );
         }
         catch( const IO_ERROR& e )
         {
-            DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
-                                       + wxT( "\n\n" )
-                                       + e.What() );
+            if( !inferred )
+            {
+                DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
+                                           + wxT( "\n\n" )
+                                           + e.What() );
+            }
+        }
 
-            onRadioButton( dummyEvent );
-            return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
+        if( m_inferInstanceModelRadioButton->IsEnabled() )
+        {
+            m_inferredDevice->SetValue( SIM_MODEL::DeviceTypeInfo( inferredDevice ).description );
+            m_inferredType->SetValue( SIM_MODEL::TypeInfo( type ).description );
         }
 
         m_curModelType = type;
@@ -248,6 +243,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
 
     onRadioButton( dummyEvent );
+
     return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
 }
 
@@ -311,6 +307,7 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
 
     updateIbisWidgets();
+    updateInstanceWidgets();
     updateModelParamsTab();
     updateModelCodeTab();
     updatePinAssignments();
@@ -334,31 +331,6 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
     SIM_MODEL_KIBIS* modelkibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() )
                                                  : nullptr;
 
-    /*
-    if( isIbisLoaded() )
-    {
-        for ( wxSizerItem* item : m_sourceSizer->GetChildren() )
-        {
-            if ( item->GetWindow() == m_differentialCheckbox )
-                item->SetFlag( item->GetFlag() | wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-
-            if ( item->GetWindow() == m_overrideCheckbox )
-                item->SetFlag( item->GetFlag() & ~wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-        }
-    }
-    else
-    {
-        for ( wxSizerItem* item : m_sourceSizer->GetChildren() )
-        {
-            if ( item->GetWindow() == m_differentialCheckbox )
-                item->SetFlag( item->GetFlag() | wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-
-            if ( item->GetWindow() == m_overrideCheckbox )
-                item->SetFlag( item->GetFlag() & ~wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-        }
-    }
-     */
-
     m_ibisModelCombobox->Show( isIbisLoaded() );
     m_ibisPinCombobox->Show( isIbisLoaded() );
     m_ibisModelLabel->Show( isIbisLoaded() );
@@ -372,34 +344,43 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
 
 
 template <typename T>
+void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
+{
+    SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
+
+    // Change the Type choice to match the current device type.
+    if( !m_prevModel || deviceType != m_prevModel->GetDeviceType() )
+    {
+        m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
+        m_inferredDevice->SetValue( m_deviceTypeChoice->GetString( static_cast<int>( deviceType ) ) );
+
+        m_typeChoice->Clear();
+
+        for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+        {
+            if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
+            {
+                wxString description = SIM_MODEL::TypeInfo( type ).description;
+
+                if( !description.IsEmpty() )
+                    m_typeChoice->Append( description );
+
+                if( type == curModel().GetType() )
+                {
+                    m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
+                    m_inferredType->SetValue( description );
+                }
+            }
+        }
+    }
+}
+
+
+template <typename T>
 void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 {
     if( &curModel() != m_prevModel )
     {
-        SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
-
-        // Change the Type choice to match the current device type.
-        if( !m_prevModel || deviceType != m_prevModel->GetDeviceType() )
-        {
-            m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
-
-            m_typeChoice->Clear();
-
-            for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
-            {
-                if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
-                {
-                    wxString description = SIM_MODEL::TypeInfo( type ).description;
-
-                    if( !description.IsEmpty() )
-                        m_typeChoice->Append( description );
-
-                    if( type == curModel().GetType() )
-                        m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
-                }
-            }
-        }
-
         // This wxPropertyGridManager column and header stuff has to be here because it segfaults in
         // the constructor.
 

@@ -266,7 +266,7 @@
                                                     <property name="name">gbSizer1</property>
                                                     <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                     <property name="permission">none</property>
-                                                    <property name="vgap">1</property>
+                                                    <property name="vgap">3</property>
                                                     <object class="gbsizeritem" expanded="0">
                                                         <property name="border">5</property>
                                                         <property name="colspan">1</property>
@@ -1426,7 +1426,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Infer from symbol&apos;s reference designator and value:</property>
+                                                    <property name="label">From symbol&apos;s reference designator and value:</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
