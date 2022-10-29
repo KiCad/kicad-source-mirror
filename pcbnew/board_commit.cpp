@@ -172,14 +172,17 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     bool                solderMaskDirty = false;
     bool                autofillZones = false;
 
-    wxCHECK( frame && selTool, /* void */ );
+    if( Empty() )
+        return;
+
+    // Note:
+    // frame == nullptr happens in QA tests
+    // in this case m_isBoardEditor and m_isFootprintEditor are set to false
+    // But we also test frame == nullptr mainly to make Coverity happy
 
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
-
-    if( Empty() )
-        return;
 
     if( m_isBoardEditor
             && !( aCommitFlags & ZONE_FILL_OP )
@@ -221,7 +224,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 wxASSERT( ent.m_item->Type() == PCB_FOOTPRINT_T );
                 wxASSERT( ent.m_copy->Type() == PCB_FOOTPRINT_T );
 
-                if( !( aCommitFlags & SKIP_UNDO ) )
+                if( !( aCommitFlags & SKIP_UNDO ) && frame )
                 {
                     ITEM_PICKER itemWrapper( nullptr, ent.m_item, UNDO_REDO::CHANGED );
                     itemWrapper.SetLink( ent.m_copy );
@@ -243,7 +246,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         {
         case CHT_ADD:
         {
-            if( selTool->GetEnteredGroup() && !boardItem->GetParentGroup() )
+            if( selTool && selTool->GetEnteredGroup() && !boardItem->GetParentGroup() )
                 selTool->GetEnteredGroup()->AddItem( boardItem );
 
             if( m_isFootprintEditor )
@@ -300,7 +303,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( boardItem->IsSelected() )
             {
-                selTool->RemoveItemFromSel( boardItem, true /* quiet mode */ );
+                if( selTool )
+                    selTool->RemoveItemFromSel( boardItem, true /* quiet mode */ );
+
                 itemsDeselected = true;
             }
 
@@ -508,10 +513,13 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             connectivity->ClearLocalRatsnest();
         }
 
-        if( solderMaskDirty )
-            frame->HideSolderMask();
+        if( frame )
+        {
+            if( solderMaskDirty )
+                frame->HideSolderMask();
 
-        frame->GetCanvas()->RedrawRatsnest();
+            frame->GetCanvas()->RedrawRatsnest();
+        }
 
         // Log undo items for any connectivity changes
         for( size_t i = num_changes; i < m_changes.size(); ++i )
@@ -539,7 +547,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
     }
 
-    if( m_isBoardEditor && !( aCommitFlags & SKIP_UNDO ) )
+    if( m_isBoardEditor && !( aCommitFlags & SKIP_UNDO ) && frame )
     {
         if( aCommitFlags & APPEND_UNDO )
             frame->AppendCopyToUndoList( undoList, UNDO_REDO::UNSPECIFIED );
