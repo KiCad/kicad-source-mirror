@@ -257,7 +257,7 @@ namespace Clipper2Lib {
     return rec;
   }
 
-  inline Path64 RectClip(const Rect64& rect, const Path64& path)
+  inline Path64 ClipRect(const Rect64& rect, const Path64& path)
   {
     if (rect.IsEmpty() || path.empty()) return Path64();
     Rect64 pathRec = Bounds(path);
@@ -267,7 +267,7 @@ namespace Clipper2Lib {
     return rc.Execute(path);
   }
   
-  inline Paths64 RectClip(const Rect64& rect, const Paths64& paths)
+  inline Paths64 ClipRect(const Rect64& rect, const Paths64& paths)
   {
     if (rect.IsEmpty() || paths.empty()) return Paths64();
     class RectClip rc(rect);
@@ -290,7 +290,7 @@ namespace Clipper2Lib {
     return result;
   }
 
-  inline PathD RectClip(const RectD& rect, const PathD& path, int precision = 2)
+  inline PathD ClipRect(const RectD& rect, const PathD& path, int precision = 2)
   {
     if (rect.IsEmpty() || path.empty() ||
       !rect.Contains(Bounds(path))) return PathD();
@@ -303,7 +303,7 @@ namespace Clipper2Lib {
     return ScalePath<double, int64_t>(rc.Execute(p), 1 / scale);
   }
 
-  inline PathsD RectClip(const RectD& rect, const PathsD& paths, int precision = 2)
+  inline PathsD ClipRect(const RectD& rect, const PathsD& paths, int precision = 2)
   {
     if (rect.IsEmpty() || paths.empty()) return PathsD();
     if (precision < -8 || precision > 8)
@@ -331,7 +331,7 @@ namespace Clipper2Lib {
     return result;
   }
 
-  inline Paths64 RectClipLines(const Rect64& rect, const Path64& path)
+  inline Paths64 ClipLinesRect(const Rect64& rect, const Path64& path)
   {
     Paths64 result;
     if (rect.IsEmpty() || path.empty()) return result;
@@ -346,7 +346,7 @@ namespace Clipper2Lib {
     return rcl.Execute(path);
   }
 
-  inline Paths64 RectClipLines(const Rect64& rect, const Paths64& paths)
+  inline Paths64 ClipLinesRect(const Rect64& rect, const Paths64& paths)
   {
     Paths64 result;
     if (rect.IsEmpty() || paths.empty()) return result;
@@ -368,7 +368,7 @@ namespace Clipper2Lib {
     return result;
   }
 
-  inline PathsD RectClipLines(const RectD& rect, const PathD& path, int precision = 2)
+  inline PathsD ClipLinesRect(const RectD& rect, const PathD& path, int precision = 2)
   {
     if (rect.IsEmpty() || path.empty() ||
       !rect.Contains(Bounds(path))) return PathsD();
@@ -381,7 +381,7 @@ namespace Clipper2Lib {
     return ScalePaths<double, int64_t>(rcl.Execute(p), 1 / scale);
   }
 
-  inline PathsD RectClipLines(const RectD& rect, const PathsD& paths, int precision = 2)
+  inline PathsD ClipLinesRect(const RectD& rect, const PathsD& paths, int precision = 2)
   {
     PathsD result;
     if (rect.IsEmpty() || paths.empty()) return result;
