@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
 "PO-Revision-Date: 2022-10-29 14:50+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -3720,7 +3720,7 @@ msgstr "Die Standard-Netzklasse wird benötigt."
 #: common/dialogs/panel_setup_netclasses.cpp:712
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Auf '%s' passende Netze:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
