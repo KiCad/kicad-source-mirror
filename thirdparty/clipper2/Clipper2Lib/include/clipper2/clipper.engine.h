@@ -22,6 +22,10 @@ constexpr auto CLIPPER2_VERSION = "1.2.1";
 
 #include "clipper.core.h"
 
+#ifdef None
+#undef None
+#endif
+
 namespace Clipper2Lib {
 
 	struct Scanline;
