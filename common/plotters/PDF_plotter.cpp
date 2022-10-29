@@ -1231,7 +1231,11 @@ bool PDF_PLOTTER::EndPlot()
         fprintf( m_outputFile,
                  "   /A << /Type /Action /S /JavaScript /JS (%s) >>\n"
                  ">>\n",
+#ifdef __WXMAC__
                  js.ToStdString().c_str() );
+#else
+                 TO_UTF8( js ) );
+#endif
 
         closePdfObject();
     }
