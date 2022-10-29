@@ -82,7 +82,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
     }
 
     KIBIS_COMPONENT* kcomp = kibis.GetComponent( std::string( ibisCompName ) );
-    
+
     if( !kcomp )
         THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS component '%s'" ), ibisCompName ) );
 
@@ -221,6 +221,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
 
 SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType ) :
         SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_KIBIS>( *this ) ),
+        m_enableDiff( false ),
         m_sourceModel( nullptr )
 {
     static std::vector<PARAM::INFO> device = makeParamInfos( TYPE::KIBIS_DEVICE );
@@ -386,7 +387,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeParamInfos( TYPE aType 
     paramInfo.spiceModelName = "";
     paramInfo.enumValues = { "TYP", "MIN", "MAX" };
     paramInfos.push_back( paramInfo );
-    
+
     std::vector<PARAM::INFO> dc = makeDcWaveformParamInfos();
     std::vector<PARAM::INFO> rect = makeRectWaveformParamInfos();
     std::vector<PARAM::INFO> prbs = makePrbsWaveformParamInfos();

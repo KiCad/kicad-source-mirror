@@ -29,6 +29,8 @@
 #include <macros.h>
 #include <wx/tokenzr.h>
 
+#include <locale_io.h>
+
 #define ARG_LAYERS "--layers"
 #define ARG_INCLUDE_REFDES "--include-refdes"
 #define ARG_INCLUDE_VALUE "--include-value"
@@ -101,6 +103,7 @@ int CLI::EXPORT_PCB_DXF_COMMAND::Perform( KIWAY& aKiway ) const
 
     dxfJob->m_printMaskLayer = layerMask;
 
+    LOCALE_IO dummy;    // Switch to "C" locale
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, dxfJob.get() );
 
     return exitCode;
