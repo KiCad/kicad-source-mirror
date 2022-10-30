@@ -28,6 +28,8 @@
 #include <macros.h>
 #include <wx/tokenzr.h>
 
+#include <locale_io.h>
+
 #define ARG_NO_X2 "--no-x2"
 #define ARG_NO_NETLIST "--no-netlist"
 #define ARG_SUBTRACT_SOLDERMASK "--subtract-soldermask"
@@ -75,7 +77,7 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND() : EXPORT_PCB_BASE_CO
 
     m_argParser.add_argument( ARG_PRECISION )
             .help( "Precision of gerber coordinates (5 or 6)" )
-            .default_value( 5 );
+            .default_value( 6 );
 }
 
 
@@ -85,7 +87,7 @@ int CLI::EXPORT_PCB_GERBER_COMMAND::Perform( KIWAY& aKiway )
     if( baseExit != EXIT_CODES::OK )
         return baseExit;
 
-    JOB_EXPORT_PCB_GERBER* gerberJob = new JOB_EXPORT_PCB_GERBER( true );
+    std::unique_ptr<JOB_EXPORT_PCB_GERBER> gerberJob( new JOB_EXPORT_PCB_GERBER( true ) );
 
     gerberJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     gerberJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
@@ -113,7 +115,8 @@ int CLI::EXPORT_PCB_GERBER_COMMAND::Perform( KIWAY& aKiway )
 
     gerberJob->m_printMaskLayer = m_selectedLayers;
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, gerberJob );
+    LOCALE_IO dummy;
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, gerberJob.get() );
 
     return exitCode;
 }
