@@ -47,7 +47,7 @@
 
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
-#include <wx/stdpaths.h>
+#include <kiplatform/environment.h>
 #include <wx/log.h>
 
 
@@ -165,7 +165,7 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
     // project path is not defined so point to the users document path to save the plot files.
     if( Prj().IsNullProject() )
     {
-        path = wxStandardPaths::Get().GetDocumentsDir();
+        path = KIPLATFORM::ENV::GetDocumentsPath();
     }
     else
     {
@@ -405,8 +405,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
     wxString extMsg;
     wxFileName fn;
 
-    extMsg.Printf( _( "Falling back to user path '%s'." ),
-                   wxStandardPaths::Get().GetDocumentsDir() );
+    extMsg.Printf( _( "Falling back to user path '%s'." ), KIPLATFORM::ENV::GetDocumentsPath() );
 
     // Build the absolute path of current output directory to preselect it in the file browser.
     std::function<bool( wxString* )> textResolver =
@@ -454,7 +453,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
                 dlg.SetExtendedMessage( extMsg );
                 dlg.ShowModal();
 
-                path = wxStandardPaths::Get().GetDocumentsDir();
+                path = KIPLATFORM::ENV::GetDocumentsPath();
             }
         }
         else
@@ -467,7 +466,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
             dlg.ShowModal();
 
             // Always fall back to user's document path if no other absolute path can be normalized.
-            path = wxStandardPaths::Get().GetDocumentsDir();
+            path = KIPLATFORM::ENV::GetDocumentsPath();
         }
     }
     else
@@ -490,7 +489,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
             dlg.SetExtendedMessage( extMsg );
             dlg.ShowModal();
 
-            path = wxStandardPaths::Get().GetDocumentsDir();
+            path = KIPLATFORM::ENV::GetDocumentsPath();
         }
     }
 

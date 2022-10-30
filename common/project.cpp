@@ -22,7 +22,7 @@
  */
 
 #include <wx/log.h>
-#include <wx/stdpaths.h>
+#include <kiplatform/environment.h>
 
 #include <pgm_base.h>
 #include <confirm.h>
@@ -206,7 +206,7 @@ const wxString PROJECT::libTableName( const wxString& aLibTableName ) const
         // to be re-thought out.
 
 #ifndef __WXMAC__
-        fn.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
+        fn.AssignDir( KIPLATFORM::ENV::GetUserConfigPath() );
 #else
         // don't pollute home folder, temp folder seems to be more appropriate
         fn.AssignDir( wxStandardPaths::Get().GetTempDir() );

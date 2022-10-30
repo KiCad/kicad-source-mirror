@@ -293,9 +293,7 @@ bool PL_EDITOR_FRAME::SaveDrawingSheetFile( const wxString& aFullFileName )
 {
     if( !aFullFileName.IsEmpty() )
     {
-        wxStandardPaths& paths = wxStandardPaths::Get();
-        wxString tempFile = wxFileName::CreateTempFileName(
-                paths.GetTempDir() + wxFileName::GetPathSeparator() + wxT( "pledit" ) );
+        wxString tempFile = wxFileName::CreateTempFileName( "pledit" );
 
         try
         {

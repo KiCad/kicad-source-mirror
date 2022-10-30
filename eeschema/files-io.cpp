@@ -680,9 +680,7 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
     if( !IsWritable( schematicFileName ) )
         return false;
 
-    wxStandardPaths& paths = wxStandardPaths::Get();
-    wxString tempFile = wxFileName::CreateTempFileName(
-            paths.GetTempDir() + wxFileName::GetPathSeparator() + wxT( "eeschema" ) );
+    wxString tempFile = wxFileName::CreateTempFileName( "eeschema" );
 
     // Save
     wxLogTrace( traceAutoSave, "Saving file " + schematicFileName.GetFullPath() );

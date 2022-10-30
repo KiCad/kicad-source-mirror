@@ -24,7 +24,7 @@
 #include <search_stack.h>
 #include <systemdirsappend.h>
 
-#include <wx/stdpaths.h>
+#include <kiplatform/environment.h>
 
 
 DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParent,
@@ -114,7 +114,7 @@ bool DIALOG_GLOBAL_LIB_TABLE_CONFIG::TransferDataToWindow()
     if( !templatePath.IsEmpty() )
         ss.AddPaths( templatePath, 0 );
     else
-        templatePath = wxStandardPaths::Get().GetUserConfigDir();
+        templatePath = KIPLATFORM::ENV::GetUserConfigPath();
 
     m_filePicker1->SetInitialDirectory( templatePath );
 
