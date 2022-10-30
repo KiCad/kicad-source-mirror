@@ -44,7 +44,7 @@ BITMAP_TOGGLE::BITMAP_TOGGLE( wxWindow *aParent, wxWindowID aId, const wxBitmap&
 
     const wxBitmap& bitmap = aChecked ? m_checked_bitmap : m_unchecked_bitmap;
 
-    m_bitmap = new wxStaticBitmap( this, aId, bitmap, wxDefaultPosition, bitmap.GetSize() );
+    m_bitmap = new wxStaticBitmap( this, aId, bitmap, wxDefaultPosition );
 
     sizer->Add( m_bitmap, 0, 0 );
 
