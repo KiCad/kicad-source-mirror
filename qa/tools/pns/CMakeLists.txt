@@ -162,3 +162,4 @@ include_directories(
     ${INC_AFTER}
 )
 
+kicad_add_boost_test( qa_pns_regressions qa_pns_regressions )

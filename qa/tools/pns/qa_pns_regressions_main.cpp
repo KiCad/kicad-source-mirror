@@ -21,52 +21,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#define BOOST_TEST_NO_MAIN
+
 #include <wx/cmdline.h>
 #include <wx/stdstream.h>
 #include <wx/wfstream.h>
 
 #include <qa_utils/utility_registry.h>
 #include <pcbnew_utils/board_test_utils.h>
+#include <pcbnew_utils/board_file_utils.h>
 
 #include "pns_log_file.h"
 #include "pns_log_viewer_frame.h"
 
+#include <boost/test/included/unit_test.hpp>
 
-static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
-    {
-            wxCMD_LINE_SWITCH,
-            "h",
-            "help",
-            _( "displays help on the command line parameters" ).mb_str(),
-            wxCMD_LINE_VAL_NONE,
-            wxCMD_LINE_OPTION_HELP,
-    },
-    {
-            wxCMD_LINE_OPTION,
-            "i",
-            "iteration-limit",
-            _( "Max number of iterations" ).mb_str(),
-            wxCMD_LINE_VAL_NUMBER,
-            wxCMD_LINE_PARAM_OPTIONAL,
-    },
-    {
-            wxCMD_LINE_OPTION,
-            "s",
-            "steps-limit",
-            _( "execute log up to steps-limit events" ).mb_str(),
-            wxCMD_LINE_VAL_NUMBER,
-            wxCMD_LINE_PARAM_OPTIONAL,
-    },
-    {
-            wxCMD_LINE_PARAM,
-            "directory with tests",
-            "directory with tests",
-            _( "directory with tests (containing tests.lst)" ).mb_str(),
-            wxCMD_LINE_VAL_STRING,
-            wxCMD_LINE_OPTION_MANDATORY,
-    },
-    { wxCMD_LINE_NONE }
-};
+using namespace boost::unit_test;
+
+#if 0
 
 bool runSingleTest( REPORTER* aReporter, wxString name, wxString testDirPath )
 {
@@ -100,70 +72,10 @@ bool runSingleTest( REPORTER* aReporter, wxString name, wxString testDirPath )
     return pass;
 }
 
+
 int main( int argc, char* argv[] )
 {
-    wxCmdLineParser cl_parser( argc, argv );
-
-    cl_parser.SetDesc( g_cmdLineDesc );
-    cl_parser.AddUsageText( _( "P&S Regression Test Suite. Compares live router results against "
-                               "prerecorded references." ) );
-
-    int cmd_parsed_ok = cl_parser.Parse();
-
-    if( cl_parser.Found( "help" ) )
-    {
-        return 0;
-    }
-
-    if( cmd_parsed_ok != 0 )
-    {
-        printf( "P&S Regression Test Suite. For command line options, call %s -h.\n\n", argv[0] );
-        // Help and invalid input both stop here
-        return ( cmd_parsed_ok == -1 ) ? KI_TEST::RET_CODES::OK : KI_TEST::RET_CODES::BAD_CMDLINE;
-    }
-
-    wxString dirname;
-
-    long iter_limit = 256;
-    long steps_limit = -1;
-    cl_parser.Found( "iteration-limit", &iter_limit );
-    cl_parser.Found( "steps-limit", &steps_limit );
-
-    wxFileName fname_list( cl_parser.GetParam( 0 ), "tests.lst" );
-
-    KI_TEST::CONSOLE_LOG          log;
-    KI_TEST::CONSOLE_MSG_REPORTER reporter( &log );
-
-
-    wxTextFile fp( fname_list.GetFullPath() );
-
-
-    if( !fp.Open() )
-    {
-        reporter.Report(
-                wxString::Format( "Failed to load test list from '%s'.", fname_list.GetFullPath() ),
-                RPT_SEVERITY_ERROR );
-        return -1;
-    }
-
-    std::vector<wxString> testCases;
-
-    if( !fp.Eof() )
-    {
-        testCases.push_back( fp.GetFirstLine() );
-        while( !fp.Eof() )
-        {
-            auto l = fp.GetNextLine();
-            if( l.Length() > 0 )
-                testCases.push_back( l );
-        }
-    }
-
-    fp.Close();
-
-    reporter.Report( wxString::Format( "Loaded %d test cases from '%s'.", (int) testCases.size(),
-                                       fname_list.GetFullPath() ),
-                     RPT_SEVERITY_INFO );
+   
 
     int passed = 0, failed = 0;
 
@@ -182,4 +94,127 @@ int main( int argc, char* argv[] )
 
 
     return failed ? -1 : 0;
+}
+#endif
+
+struct PNS_TEST_CASE
+{
+    PNS_TEST_CASE( std::string name, std::string path ) : m_name( name ), m_dataPath( path ){};
+
+    std::string GetDataPath() const { return m_dataPath; }
+    std::string GetName() const { return m_name; }
+    std::string m_dataPath;
+    std::string m_name;
+};
+
+
+class PNS_TEST_FIXTURE
+{
+public:
+    static void RunTest( PNS_TEST_CASE* aTestData )
+    {
+        //  printf( "Run %s\n", aTestData->GetName().c_str() );
+
+        PNS_LOG_FILE   logFile;
+        PNS_LOG_PLAYER player;
+
+        if( !m_log )
+            m_log = new KI_TEST::CONSOLE_LOG;
+
+        if( !m_reporter )
+            m_reporter = new KI_TEST::CONSOLE_MSG_REPORTER( m_log );
+
+        if( !logFile.Load( wxString( aTestData->GetDataPath() ), m_reporter ) )
+        {
+            m_reporter->Report( wxString::Format( "Failed to load test '%s' from '%s'",
+                                                  aTestData->GetName(), aTestData->GetDataPath() ),
+                                RPT_SEVERITY_ERROR );
+        }
+
+        player.SetReporter( m_reporter );
+        player.ReplayLog( &logFile, 0 );
+        bool pass = player.CompareResults( &logFile );
+
+        if( !pass )
+            BOOST_TEST_FAIL( "replay results inconsistent with reference reslts" );
+    }
+
+    static KI_TEST::CONSOLE_LOG*          m_log;
+    static KI_TEST::CONSOLE_MSG_REPORTER* m_reporter;
+};
+
+KI_TEST::CONSOLE_LOG*          PNS_TEST_FIXTURE::m_log = nullptr;
+KI_TEST::CONSOLE_MSG_REPORTER* PNS_TEST_FIXTURE::m_reporter = nullptr;
+
+std::vector<PNS_TEST_CASE*> createTestCases()
+{
+    std::string absPath = KI_TEST::GetPcbnewTestDataDir() + std::string( "/pns_regressions/" );
+    std::vector<PNS_TEST_CASE*> testCases;
+
+    wxFileName fnameList( absPath + "tests.lst" );
+    wxTextFile fp( fnameList.GetFullPath() );
+
+    if( !fp.Open() )
+    {
+        wxString str =
+                wxString::Format( "Failed to load test list from '%s'.", fnameList.GetFullPath() );
+        BOOST_TEST_ERROR( str.c_str().AsChar() );
+        return testCases;
+    }
+
+    std::vector<wxString> lines;
+
+    if( !fp.Eof() )
+    {
+        lines.push_back( fp.GetFirstLine() );
+
+        while( !fp.Eof() )
+        {
+            auto l = fp.GetNextLine();
+            if( l.Length() > 0 )
+            {
+                lines.push_back( l );
+            }
+        }
+    }
+
+    fp.Close();
+
+    for( auto l : lines )
+    {
+        wxString fn( absPath );
+        fn = fn.Append( wxT( "/" ) );
+        fn = fn.Append( l );
+        fn = fn.Append( wxT( "/pns" ) );
+
+        testCases.push_back( new PNS_TEST_CASE( l.ToStdString(), fn.ToStdString() ) );
+    }
+
+    wxString str = wxString::Format( "Loaded %d test cases from '%s'.", (int) testCases.size(),
+                                     fnameList.GetFullPath() );
+
+    BOOST_TEST_MESSAGE( str.c_str().AsChar() );
+
+    return testCases;
+}
+
+static test_suite* init_pns_test_suite( int argc, char* argv[] )
+{
+    test_suite* pnsTestSuite = BOOST_TEST_SUITE( "pns_regressions" );
+
+    auto testCases = createTestCases();
+
+    for( auto& c : testCases )
+    {
+        pnsTestSuite->add(
+                BOOST_TEST_CASE_NAME( std::bind( &PNS_TEST_FIXTURE::RunTest, c ), c->GetName() ) );
+    }
+
+    framework::master_test_suite().add( pnsTestSuite );
+    return 0;
+}
+
+int main( int argc, char* argv[] )
+{
+    return unit_test_main( init_pns_test_suite, argc, argv );
 }
