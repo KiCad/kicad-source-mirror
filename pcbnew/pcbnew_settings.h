@@ -124,6 +124,8 @@ public:
     struct AUI_PANELS
     {
         int  appearance_panel_tab;
+        bool appearance_expand_layer_display;
+        bool appearance_expand_net_display;
         int  right_panel_width;
         bool show_layer_manager;
         bool show_properties;

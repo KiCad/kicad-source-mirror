@@ -96,6 +96,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "aui.appearance_panel_tab",
             &m_AuiPanels.appearance_panel_tab, 0, 0, 2 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "aui.appearance_expand_layer_display",
+            &m_AuiPanels.appearance_expand_layer_display, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.appearance_expand_net_display",
+            &m_AuiPanels.appearance_expand_net_display, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "aui.show_properties",
             &m_AuiPanels.show_properties, true ) );
 

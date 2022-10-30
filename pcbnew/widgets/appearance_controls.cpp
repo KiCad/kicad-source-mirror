@@ -580,6 +580,14 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     if( m_isFpEditor )
         m_notebook->RemovePage( 2 );
 
+    PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
+
+    if( settings->m_AuiPanels.appearance_expand_layer_display )
+        m_paneLayerDisplayOptions->Expand();
+
+    if( settings->m_AuiPanels.appearance_expand_net_display )
+        m_paneNetDisplayOptions->Expand();
+
     loadDefaultLayerPresets();
     rebuildObjects();
     OnBoardChanged();
@@ -594,6 +602,11 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
 APPEARANCE_CONTROLS::~APPEARANCE_CONTROLS()
 {
+    PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
+
+    settings->m_AuiPanels.appearance_expand_layer_display = m_paneLayerDisplayOptions->IsExpanded();
+    settings->m_AuiPanels.appearance_expand_net_display   = m_paneNetDisplayOptions->IsExpanded();
+
     delete m_iconProvider;
 }
 
