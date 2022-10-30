@@ -169,6 +169,16 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
           {
               wxMoveEvent dummy;
               OnMove( dummy );
+
+              // we need to kludge the msg panel to the correct size again
+              // especially important even for first launches as the constructor of the window here usually doesn't
+              // have the correct dpi awareness yet
+              m_frameSize.y += m_msgFrameHeight;
+              m_msgFrameHeight = EDA_MSG_PANEL::GetRequiredHeight( this );
+              m_frameSize.y -= m_msgFrameHeight;
+
+              m_messagePanel->SetPosition( wxPoint( 0, m_frameSize.y ) );
+              m_messagePanel->SetSize( m_frameSize.x, m_msgFrameHeight );
           } );
 #endif
 }
