@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-10-30 16:04+0000\n"
+"PO-Revision-Date: 2022-10-31 18:01+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -13402,7 +13402,7 @@ msgstr "Das Plugin \"%s\" hat die Funktion \"%s\" nicht implementiert."
 #: eeschema/sch_io_mgr.cpp:36 pcbnew/io_mgr.cpp:43
 #, c-format
 msgid "Plugin type \"%s\" is not found."
-msgstr "Plugintyp \"%s\" wurde nicht gefunden."
+msgstr "Plugin-Typ \"%s\" wurde nicht gefunden."
 
 #: eeschema/sch_io_mgr.cpp:92
 #, c-format
@@ -18413,7 +18413,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_pcm.cpp:182
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr "Erweiterungs- und Inhaltsverwaltung"
+msgstr "Plugin- und Content-Verwaltung"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:261
 msgid "Choose package file"
@@ -18460,7 +18460,7 @@ msgstr "Von Datei installieren..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:74
 msgid "Plugin And Content Manager"
-msgstr "Erweiterungs- und Inhaltsverwaltung"
+msgstr "Plugin- und Content-Verwaltung"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:57
 msgid "Aborting remaining tasks."
@@ -19004,7 +19004,7 @@ msgstr "Zeichnungsblattränder und Schriftfelder bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr "Pakete von Erweiterungen und Inhalten verwalten"
+msgstr "Plugin- und Content-Verwaltung starten"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -31974,8 +31974,9 @@ msgstr ""
 "anpassen."
 
 #: pcbnew/pcbnew_config.cpp:60
+#, fuzzy
 msgid "Action Plugins"
-msgstr "Action Plugins"
+msgstr "Action-Plugins"
 
 #: pcbnew/pcbnew_config.cpp:61
 msgid "Origins & Axes"
