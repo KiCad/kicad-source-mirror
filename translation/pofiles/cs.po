@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-10-17 12:00+0000\n"
+"PO-Revision-Date: 2022-10-30 16:04+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -21107,6 +21107,8 @@ msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
+"Pokud je nastaveno Kontrola impedance,\n"
+"bude do omezení přidána Loss tangens a Epsilon R."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
 msgid "Add Dielectric Layer..."
@@ -21417,6 +21419,8 @@ msgid ""
 "\n"
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"Pouzdra na horní vrstvě počínaje '%s' budou odstraněny předpony."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:343
 #, c-format
@@ -21424,6 +21428,8 @@ msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"Pouzdra na horní vrstvě budou mít přidány předpony '%s'."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:353
 #, c-format
@@ -21431,6 +21437,8 @@ msgid ""
 "\n"
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"Pouzdra na zadní vrstvě počínaje '%s' budou odstraněny předpony."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:359
 #, c-format
@@ -21438,6 +21446,8 @@ msgid ""
 "\n"
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"Pouzdra na zadní vrstvě budou mít přidány předpony '%s'."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:367
 #, c-format
@@ -21530,6 +21540,8 @@ msgid ""
 "\n"
 "%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s"
 msgstr ""
+"\n"
+"%d %s uuid: [ %s], X, Y: %s, zaokrouhlení X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:586
 msgid "Selected options resulted in errors! Change them and try again."
@@ -23205,7 +23217,7 @@ msgstr "STEP soubory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Modely bez měřítka jednoty:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid ""
@@ -28572,9 +28584,8 @@ msgid "keepout area '%s'"
 msgstr "zakázaná oblast '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:693
-#, fuzzy
 msgid "Tessellating copper zones..."
-msgstr "Kontrola izolační mezery mezi zónami..."
+msgstr "Mozaikování zón mědi..."
 
 #: pcbnew/drc/drc_engine.cpp:802 pcbnew/drc/drc_engine.cpp:812
 #, c-format
@@ -33831,7 +33842,7 @@ msgstr "Přidat charakteristiky desky"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "Přidat tabulku vlastností desky do grafické vrstvy"
 
 #: pcbnew/tools/pcb_actions.cpp:116
 msgid "Add Stackup Table"
