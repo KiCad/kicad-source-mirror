@@ -121,6 +121,13 @@ wxBitmap KiBitmap( const BITMAP_OPAQUE* aBitmap )
 
 int KiIconScale( wxWindow* aWindow )
 {
+    #if defined( __WXMSW__) && wxCHECK_VERSION( 3, 1, 6 )
+    // Basically don't try and scale within kicad and let wx do its thing
+    // with wx introducing bitmap bundles, it will auto scale automatically with dpi
+    // the issue is, none of the scaling factors have any tie to system scaling
+    // this means wx is actually going to scale again causing even more distorted icons
+    return 4;
+    #else
     const int vert_size = aWindow->ConvertDialogToPixels( wxSize( 0, 8 ) ).y;
 
     // Autoscale won't exceed unity until the system has quite high resolution,
@@ -131,6 +138,7 @@ int KiIconScale( wxWindow* aWindow )
     else if( vert_size > 29 )   return 7;
     else if( vert_size > 24 )   return 6;
     else                        return 4;
+    #endif
 }
 
 
