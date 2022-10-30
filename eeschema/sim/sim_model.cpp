@@ -24,7 +24,6 @@
 
 #include <sim/sim_model.h>
 #include <sim/sim_model_behavioral.h>
-#include <sim/sim_model_diode.h>
 #include <sim/sim_model_ideal.h>
 #include <sim/sim_model_mutual_inductor.h>
 #include <sim/sim_model_ngspice.h>
@@ -915,9 +914,6 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::SW_V:
     case TYPE::SW_I:
         return std::make_unique<SIM_MODEL_SWITCH>( aType );
-
-    case TYPE::D:
-        return std::make_unique<SIM_MODEL_DIODE>();
 
     case TYPE::V:
     case TYPE::I:

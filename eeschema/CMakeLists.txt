@@ -284,7 +284,6 @@ set( EESCHEMA_SRCS
     sim/sim_lib_mgr.cpp
     sim/sim_model.cpp
     sim/sim_model_behavioral.cpp
-    sim/sim_model_diode.cpp
     sim/sim_model_ideal.cpp
     sim/sim_model_mutual_inductor.cpp
     sim/sim_model_kibis.cpp
