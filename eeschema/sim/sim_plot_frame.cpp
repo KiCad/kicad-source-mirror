@@ -588,7 +588,8 @@ void SIM_PLOT_FRAME::UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aVal
         if( item == aSymbol )
         {
             SIM_LIB_MGR mgr( Prj() );
-            SIM_MODEL&  model = mgr.CreateModel( *aSymbol ).model;
+            SIM_MODEL&  model = mgr.CreateModel( &m_schematicFrame->GetCurrentSheet(), *aSymbol,
+                                                 true ).model;
 
             const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
 

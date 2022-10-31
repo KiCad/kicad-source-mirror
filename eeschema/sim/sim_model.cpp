@@ -42,7 +42,6 @@
 #include <confirm.h>
 
 #include <boost/algorithm/string/case_conv.hpp>
-#include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string.hpp>
 #include <fmt/core.h>
 #include <pegtl.hpp>
@@ -566,9 +565,9 @@ void SIM_MODEL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCount )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCount, bool aResolve )
 {
-    std::unique_ptr<SIM_MODEL> model = Create( aType );
+    std::unique_ptr<SIM_MODEL> model = Create( aType, aResolve );
 
     // Passing nullptr to ReadDataFields will make it act as if all fields were empty.
     model->ReadDataFields( aSymbolPinCount, static_cast<const std::vector<void>*>( nullptr ) );
@@ -576,10 +575,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCou
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
-                                              unsigned         aSymbolPinCount )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
+                                              bool aResolve )
 {
-    std::unique_ptr<SIM_MODEL> model = Create( aBaseModel.GetType() );
+    std::unique_ptr<SIM_MODEL> model = Create( aBaseModel.GetType(), aResolve );
 
     model->SetBaseModel( aBaseModel );
     model->ReadDataFields( aSymbolPinCount, static_cast<const std::vector<void>*>( nullptr ) );
@@ -589,7 +588,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
 
 template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
-                                              const std::vector<T>& aFields )
+                                              const std::vector<T>& aFields, bool aResolve )
 {
     TYPE type = ReadTypeFromFields( aFields, aSymbolPinCount );
 
@@ -597,7 +596,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsig
     if( type == TYPE::NONE )
         type = aBaseModel.GetType();
 
-    std::unique_ptr<SIM_MODEL> model = Create( type );
+    std::unique_ptr<SIM_MODEL> model = Create( type, aResolve );
 
     model->SetBaseModel( aBaseModel );
     model->ReadDataFields( aSymbolPinCount, &aFields );
@@ -606,32 +605,36 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsig
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
                                                        unsigned aSymbolPinCount,
-                                                       const std::vector<SCH_FIELD>& aFields );
+                                                       const std::vector<SCH_FIELD>& aFields,
+                                                       bool aResolve );
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
                                                        unsigned aSymbolPinCount,
-                                                       const std::vector<LIB_FIELD>& aFields );
+                                                       const std::vector<LIB_FIELD>& aFields,
+                                                       bool aResolve );
 
 
 template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
-                                              const std::vector<T>& aFields )
+                                              const std::vector<T>& aFields, bool aResolve )
 {
     TYPE type = ReadTypeFromFields( aFields, aSymbolPinCount );
 
     if( type == TYPE::NONE )
         THROW_IO_ERROR( wxString::Format( _( "Failed to read simulation model from fields." ) ) );
 
-    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
+    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type, aResolve );
 
     model->ReadDataFields( aSymbolPinCount, &aFields );
     return model;
 }
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
-                                                       const std::vector<SCH_FIELD>& aFields );
+                                                       const std::vector<SCH_FIELD>& aFields,
+                                                       bool aResolve );
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
-                                                       const std::vector<LIB_FIELD>& aFields );
+                                                       const std::vector<LIB_FIELD>& aFields,
+                                                       bool aResolve );
 
 
 template <typename T>
@@ -747,10 +750,17 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL::GetPins() c
 
 const SIM_MODEL::PARAM& SIM_MODEL::GetParam( unsigned aParamIndex ) const
 {
-    if( m_baseModel && m_params.at( aParamIndex ).value->ToString() == "" )
-        return m_baseModel->GetParam( aParamIndex );
-    else
-        return m_params.at( aParamIndex );
+    const SIM_MODEL::PARAM& param = m_params.at( aParamIndex );
+
+    if( m_baseModel )
+    {
+        std::string value = param.resolved ? param.value->ToString() : param.source.ToStdString();
+
+        if( value.empty() )
+            return m_baseModel->GetParam( aParamIndex );
+    }
+
+    return param;
 }
 
 
@@ -849,6 +859,33 @@ void SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string&
 }
 
 
+void SIM_MODEL::SetParamSource( const std::string& aParamName, const wxString& aSource )
+{
+    for( PARAM& param : m_params )
+    {
+        if( param.info.name == boost::to_lower_copy( aParamName ) )
+        {
+            param.source = aSource;
+            return;
+        }
+    }
+
+    THROW_IO_ERROR( wxString::Format( _( "Could not find a parameter named '%s' in simulation model of type '%s'" ),
+                                      aParamName,
+                                      GetTypeInfo().fieldValue ) );
+}
+
+
+void SIM_MODEL::SetParamSource( int aParamIndex, const wxString& aSource )
+{
+    SIM_MODEL::PARAM& param = m_params.at( aParamIndex );
+
+    wxASSERT( !param.resolved );
+
+    param.source = aSource;
+}
+
+
 bool SIM_MODEL::HasOverrides() const
 {
     for( const PARAM& param : m_params )
@@ -885,7 +922,7 @@ bool SIM_MODEL::HasSpiceNonInstanceOverrides() const
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::doCreate( TYPE aType )
 {
     switch( aType )
     {
@@ -963,6 +1000,23 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     default:
         return std::make_unique<SIM_MODEL_NGSPICE>( aType );
     }
+}
+
+
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, bool aResolve )
+{
+    std::unique_ptr<SIM_MODEL> model = doCreate( aType );
+
+    if( !aResolve )
+    {
+        for( PARAM& param : model->m_params )
+        {
+            param.source = param.value->ToString();
+            param.resolved = false;
+        }
+    }
+
+    return model;
 }
 
 
@@ -1052,11 +1106,12 @@ std::string SIM_MODEL::GenerateParamValuePair( const PARAM& aParam, bool& aIsFir
     if( boost::ends_with( aParam.info.name, "_" ) )
         name = aParam.info.name.substr( 0, aParam.info.name.length() - 1);
 
-    std::string value = aParam.value->ToString();
+    std::string value = aParam.resolved ? aParam.value->ToString() : aParam.source.ToStdString();
+
     if( value.find( " " ) != std::string::npos )
         value = "\"" + value + "\"";
 
-    result.append( fmt::format( "{}={}", aParam.info.name, value ) );
+    result.append( fmt::format( "{}={}", name, value ) );
     return result;
 }
 
@@ -1097,7 +1152,9 @@ std::string SIM_MODEL::GenerateParamsField( const std::string& aPairSeparator ) 
 
     for( const PARAM& param : m_params )
     {
-        if( param.value->ToString() == "" )
+        std::string value = param.resolved ? param.value->ToString() : param.source.ToStdString();
+
+        if( value.empty() )
             continue;
 
         result.append( GenerateParamValuePair( param, isFirst ) );
@@ -1116,12 +1173,10 @@ void SIM_MODEL::ParseParamsField( const std::string& aParamsField )
     {
         // Using parse tree instead of actions because we don't care about performance that much,
         // and having a tree greatly simplifies things.
-        root = tao::pegtl::parse_tree::parse<
-            SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
-            SIM_MODEL_PARSER::fieldParamValuePairsSelector,
-            tao::pegtl::nothing,
-            SIM_MODEL_PARSER::control>
-                ( in );
+        root = tao::pegtl::parse_tree::parse< SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
+                                              SIM_MODEL_PARSER::fieldParamValuePairsSelector,
+                                              tao::pegtl::nothing,
+                                              SIM_MODEL_PARSER::control>( in );
     }
     catch( const tao::pegtl::parse_error& e )
     {
@@ -1133,7 +1188,9 @@ void SIM_MODEL::ParseParamsField( const std::string& aParamsField )
     for( const auto& node : root->children )
     {
         if( node->is_type<SIM_MODEL_PARSER::param>() )
+        {
             paramName = node->string();
+        }
         // TODO: Do something with number<SIM_VALUE::TYPE_INT, ...>.
         // It doesn't seem too useful?
         else if( node->is_type<SIM_MODEL_PARSER::quotedStringContent>()
@@ -1142,7 +1199,10 @@ void SIM_MODEL::ParseParamsField( const std::string& aParamsField )
             wxASSERT( paramName != "" );
             // TODO: Shouldn't be named "...fromSpiceCode" here...
 
-            SetParamValue( paramName, node->string(), SIM_VALUE_GRAMMAR::NOTATION::SI );
+            if( FindParam( paramName )->resolved )
+                SetParamValue( paramName, node->string(), SIM_VALUE_GRAMMAR::NOTATION::SI );
+            else
+                SetParamSource( paramName, node->string() );
         }
         else if( node->is_type<SIM_MODEL_PARSER::quotedString>() )
         {
@@ -1151,7 +1211,10 @@ void SIM_MODEL::ParseParamsField( const std::string& aParamsField )
             // Unescape quotes.
             boost::replace_all( str, "\\\"", "\"" );
 
-            SetParamValue( paramName, str, SIM_VALUE_GRAMMAR::NOTATION::SI );
+            if( FindParam( paramName )->resolved )
+                SetParamValue( paramName, str, SIM_VALUE_GRAMMAR::NOTATION::SI );
+            else
+                SetParamSource( paramName, str );
         }
         else
         {
@@ -1275,7 +1338,9 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
                 }
             }
             else if( node->is_type<SIM_MODEL_PARSER::fieldParamValuePairs>() )
+            {
                 ParseParamsField( node->string() );
+            }
         }
     }
     catch( const tao::pegtl::parse_error& e )

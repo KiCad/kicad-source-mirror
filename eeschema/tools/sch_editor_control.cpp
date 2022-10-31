@@ -874,6 +874,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             {
                 EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 EDA_ITEM*          item = selTool->GetNode( aPosition );
+                SCH_SHEET_PATH&    sheet = m_frame->GetCurrentSheet();
 
                 if( !item )
                     return false;
@@ -887,10 +888,10 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         std::vector<LIB_PIN*> pins = symbol->GetLibPins();
 
                         SIM_LIB_MGR mgr( m_frame->Prj() );
-                        SIM_MODEL&  model = mgr.CreateModel( *symbol ).model;
+                        SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol, true ).model;
 
                         SPICE_ITEM spiceItem;
-                        spiceItem.refName = std::string( symbol->GetRef( &m_frame->GetCurrentSheet() ).ToUTF8() );
+                        spiceItem.refName = std::string( symbol->GetRef( &sheet ).ToUTF8() );
                         std::vector<std::string> currentNames =
                                 model.SpiceGenerator().CurrentNames( spiceItem );
 

@@ -66,7 +66,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        m_models.push_back( SIM_MODEL::Create( type, m_sortedSymbolPins.size() ) );
+        m_models.push_back( SIM_MODEL::Create( type, m_sortedSymbolPins.size(), false ) );
 
         SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
 
@@ -138,7 +138,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 {
     wxCommandEvent dummyEvent;
 
-    int         pinCount = m_sortedSymbolPins.size();
+    unsigned    pinCount = m_sortedSymbolPins.size();
     std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
@@ -207,7 +207,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
         try
         {
-            m_models.at( static_cast<int>( type ) ) = SIM_MODEL::Create( pinCount, m_fields );
+            m_models.at( static_cast<int>( type ) ) = SIM_MODEL::Create( pinCount, m_fields, false );
         }
         catch( const IO_ERROR& e )
         {
@@ -638,6 +638,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
         return;
     }
 
+    unsigned pinCount = m_sortedSymbolPins.size();
     m_tclibraryPathName->ChangeValue( aFilePath );
 
     m_libraryModels.clear();
@@ -655,12 +656,12 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
             {
                 //TODO: it's not cur model.
 
-                m_libraryModels.push_back(
-                        SIM_MODEL::Create( baseModel, m_sortedSymbolPins.size(), m_fields ) );
+                m_libraryModels.push_back( SIM_MODEL::Create( baseModel, pinCount, m_fields,
+                                                              false ) );
             }
             else
             {
-                m_libraryModels.push_back( SIM_MODEL::Create( baseModel, m_sortedSymbolPins.size() ) );
+                m_libraryModels.push_back( SIM_MODEL::Create( baseModel, pinCount, false ) );
             }
         }
     }
@@ -782,12 +783,12 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 
     case SIM_VALUE::TYPE_INT:
         prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
-                                        curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_INT );
+                                        curModelSharedPtr(), aParamIndex );
         break;
 
     case SIM_VALUE::TYPE_FLOAT:
         prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
-                                        curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_FLOAT );
+                                        curModelSharedPtr(), aParamIndex );
         break;
 
     //case TYPE_COMPLEX:
@@ -797,14 +798,12 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
         if( param.info.enumValues.empty() )
         {
             prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
-                                            curModelSharedPtr(), aParamIndex,
-                                            SIM_VALUE::TYPE_STRING );
+                                            curModelSharedPtr(), aParamIndex );
         }
         else
         {
             prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, m_library,
-                                          curModelSharedPtr(), aParamIndex,
-                                          SIM_VALUE::TYPE_STRING );
+                                          curModelSharedPtr(), aParamIndex );
         }
         break;
 
@@ -1145,7 +1144,7 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 
                 m_libraryModels.at( m_modelNameCombobox->GetSelection() ) =
                         std::shared_ptr<SIM_MODEL>( dynamic_cast<SIM_MODEL*>(
-                                new SIM_MODEL_KIBIS( type, *kibismodel, m_fields ) ) );
+                                new SIM_MODEL_KIBIS( type, *kibismodel, m_fields, false ) ) );
             }
 
             m_curModelType = type;

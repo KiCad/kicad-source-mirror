@@ -44,7 +44,8 @@ public:
     virtual ~SIM_LIB_MGR() = default;
 
     // TODO: The argument can be made const.
-    SIM_LIBRARY::MODEL CreateModel( SCH_SYMBOL& aSymbol );
+    SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
+                                    bool aResolve );
 
     SIM_LIBRARY& CreateLibrary( const std::string& aLibraryPath );
 

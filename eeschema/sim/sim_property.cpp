@@ -25,10 +25,7 @@
 #include <sim/sim_property.h>
 #include <sim/sim_value.h>
 #include <ki_exception.h>
-#include <confirm.h>
 #include <wx/combo.h>
-#include <wx/combobox.h>
-#include <wx/notebook.h>
 
 
 wxBEGIN_EVENT_TABLE( SIM_VALIDATOR, wxValidator )
@@ -170,84 +167,9 @@ void SIM_VALIDATOR::onKeyDown( wxKeyEvent& aEvent )
 }
 
 
-wxBEGIN_EVENT_TABLE( SIM_BOOL_VALIDATOR, SIM_VALIDATOR )
-wxEND_EVENT_TABLE()
-
-
-bool SIM_BOOL_VALIDATOR::Validate( wxWindow* aParent )
+bool SIM_VALIDATOR::Validate( wxWindow* aParent )
 {
     return true;
-}
-
-
-SIM_STRING_VALIDATOR::SIM_STRING_VALIDATOR( SIM_VALUE::TYPE aValueType,
-                                            SIM_VALUE_GRAMMAR::NOTATION aNotation )
-    : SIM_VALIDATOR(),
-      m_valueType( aValueType ),
-      m_notation( aNotation )
-{
-}
-
-
-wxObject* SIM_STRING_VALIDATOR::Clone() const
-{
-    return new SIM_STRING_VALIDATOR( *this );
-}
-
-
-bool SIM_STRING_VALIDATOR::Validate( wxWindow* aParent )
-{
-    if( !m_validatorWindow->IsEnabled() )
-        return true;
-
-    wxTextEntry* const textEntry = getTextEntry();
-
-    if( !textEntry )
-        return false;
-
-    return isValid( textEntry->GetValue() );
-}
-
-
-bool SIM_STRING_VALIDATOR::TransferToWindow()
-{
-    return true;
-}
-
-
-bool SIM_STRING_VALIDATOR::TransferFromWindow()
-{
-    return true;
-}
-
-
-bool SIM_STRING_VALIDATOR::isValid( const wxString& aString )
-{
-    return SIM_VALUE_GRAMMAR::IsValid( aString.ToStdString(), m_valueType, m_notation );
-}
-
-
-wxTextEntry* SIM_STRING_VALIDATOR::getTextEntry()
-{
-    if( !m_validatorWindow )
-        return nullptr;
-
-    // Taken from wxTextValidator.
-
-    if( wxDynamicCast( m_validatorWindow, wxTextCtrl ) )
-        return ( wxTextCtrl* ) m_validatorWindow;
-
-    if( wxDynamicCast( m_validatorWindow, wxComboBox ) )
-        return ( wxComboBox* ) m_validatorWindow;
-
-    if( wxDynamicCast( m_validatorWindow, wxComboCtrl ) )
-        return ( wxComboCtrl* ) m_validatorWindow;
-
-    wxFAIL_MSG(
-        "SIM_STRING_VALIDATOR can only be used with wxTextCtrl, wxComboBox, or wxComboCtrl"
-    );
-
-    return nullptr;
 }
 
 
@@ -279,7 +201,7 @@ SIM_BOOL_PROPERTY::SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aN
 
 wxValidator* SIM_BOOL_PROPERTY::DoGetValidator() const
 {
-    return new SIM_BOOL_VALIDATOR();
+    return new SIM_VALIDATOR();
 }
 
 
@@ -302,21 +224,21 @@ void SIM_BOOL_PROPERTY::OnSetValue()
 SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName,
                                           std::shared_ptr<SIM_LIBRARY> aLibrary,
                                           std::shared_ptr<SIM_MODEL> aModel,
-                                          int aParamIndex,
-                                          SIM_VALUE::TYPE aValueType,
-                                          SIM_VALUE_GRAMMAR::NOTATION aNotation )
+                                          int aParamIndex )
     : wxStringProperty( aLabel, aName ),
-      SIM_PROPERTY( aLibrary, aModel, aParamIndex ),
-      m_valueType( aValueType ),
-      m_notation( aNotation )
+      SIM_PROPERTY( aLibrary, aModel, aParamIndex )
 {
-    SetValueFromString( GetParam().value->ToString() );
+    const SIM_MODEL::PARAM& param = GetParam();
+
+    wxASSERT( !param.resolved );
+
+    SetValueFromString( param.source );
 }
 
 
 wxValidator* SIM_STRING_PROPERTY::DoGetValidator() const
 {
-    return new SIM_STRING_VALIDATOR( m_valueType, m_notation );
+    return new SIM_VALIDATOR();
 }
 
 
@@ -329,6 +251,13 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     // TODO: Don't use string comparison.
     if( m_model->GetBaseModel() && ( aText == "" || aText == baseParamValue ) )
     {
+        // TODO: do we want this magic of clearing overrides?
+        // Consider the case where someone uses a library model set to 220u and overrides it to
+        // 330u.  Someone then modifies the library to use 330u.  But that doesn't work either,
+        // so they modify the library again to 470u.  If the overridden symbol was edited in the
+        // middle (to set some other parameter perhaps), it suddenly gets changed to 470u, which
+        // will be a surprise to the user.
+        // NOTE: other properties also contain this magic.
         try
         {
             m_model->SetParamValue( m_paramIndex, "" ); // Nullify.
@@ -342,8 +271,8 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     }
     else
     {
-        m_model->SetParamValue( m_paramIndex, std::string( aText.ToUTF8() ) );
-        aVariant = GetParam().value->ToString();
+        m_model->SetParamSource( m_paramIndex, aText );
+        aVariant = aText;
     }
 
     return true;
@@ -364,9 +293,7 @@ static wxArrayString convertStringsToWx( const std::vector<std::string>& aString
 SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
                                       std::shared_ptr<SIM_LIBRARY> aLibrary,
                                       std::shared_ptr<SIM_MODEL> aModel,
-                                      int aParamIndex,
-                                      SIM_VALUE::TYPE aValueType,
-                                      SIM_VALUE_GRAMMAR::NOTATION aNotation )
+                                      int aParamIndex )
     : wxEnumProperty( aLabel, aName,
                       convertStringsToWx( aModel->GetParam( aParamIndex ).info.enumValues ) ),
       SIM_PROPERTY( aLibrary, aModel, aParamIndex )

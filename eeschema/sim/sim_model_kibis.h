@@ -63,10 +63,12 @@ public:
 
     // @brief Special copy constructor
     // creates a a model with aType, but tries to match parameters from aSource.
-    SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource );
+    SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource, bool aResolve );
 
-    SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<LIB_FIELD>& aFields );
-    SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<SCH_FIELD>& aFields );
+    SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<LIB_FIELD>& aFields,
+                     bool aResolve );
+    SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<SCH_FIELD>& aFields,
+                     bool aResolve );
 
     std::vector<std::pair<std::string, std::string>> GetIbisPins() const
     {
