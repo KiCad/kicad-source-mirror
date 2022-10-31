@@ -49,6 +49,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
 
     case PROPERTY_DISPLAY::PT_COORD:
         ret = new PGPROPERTY_COORD();
+        static_cast<PGPROPERTY_COORD*>( ret )->SetCoordType( aProperty->CoordType() );
         break;
 
     case PROPERTY_DISPLAY::PT_DECIDEGREE:
@@ -123,7 +124,9 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
 }
 
 
-PGPROPERTY_DISTANCE::PGPROPERTY_DISTANCE( const wxString& aRegEx )
+PGPROPERTY_DISTANCE::PGPROPERTY_DISTANCE( const wxString& aRegEx,
+                                          ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType ) :
+        m_coordType( aCoordType )
 {
     m_regExValidator.reset( new REGEX_VALIDATOR( aRegEx ) );
 }
@@ -134,7 +137,8 @@ PGPROPERTY_DISTANCE::~PGPROPERTY_DISTANCE()
 }
 
 
-bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
+bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString& aText,
+                                            int aArgFlags ) const
 {
     wxRegEx regDimension( m_regExValidator->GetRegEx(), wxRE_ICASE );
     wxASSERT( regDimension.IsValid() );
@@ -198,6 +202,14 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
             break;
     }
 
+    ORIGIN_TRANSFORMS* transforms = PROPERTY_MANAGER::Instance().GetTransforms();
+
+    if( transforms )
+    {
+        newValueIU = transforms->FromDisplay( static_cast<long long int>( newValueIU ),
+                                              m_coordType );
+    }
+
     if( aVariant.IsNull() || newValueIU != aVariant.GetLong() )
     {
         aVariant = newValueIU;
@@ -212,19 +224,26 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
 {
     wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG, wxEmptyString );
 
+    long distanceIU = aVariant.GetLong();
+
+    ORIGIN_TRANSFORMS* transforms = PROPERTY_MANAGER::Instance().GetTransforms();
+
+    if( transforms )
+        distanceIU = transforms->ToDisplay( static_cast<long long int>( distanceIU ), m_coordType );
+
     switch( PROPERTY_MANAGER::Instance().GetUnits() )
     {
         case EDA_UNITS::INCHES:
-            return wxString::Format( wxT( "%d in" ), pcbIUScale.IUToMils( aVariant.GetLong() ) / 1000.0 );
+            return wxString::Format( wxT( "%d in" ), pcbIUScale.IUToMils( distanceIU ) / 1000.0 );
 
         case EDA_UNITS::MILS:
-            return wxString::Format( wxT( "%d mils" ), pcbIUScale.IUToMils( aVariant.GetLong() ) );
+            return wxString::Format( wxT( "%d mils" ), pcbIUScale.IUToMils( distanceIU ) );
 
         case EDA_UNITS::MILLIMETRES:
-            return wxString::Format( wxT( "%g mm" ), pcbIUScale.IUTomm( aVariant.GetLong() ) );
+            return wxString::Format( wxT( "%g mm" ), pcbIUScale.IUTomm( distanceIU ) );
 
         case EDA_UNITS::UNSCALED:
-            return wxString::Format( wxT( "%li" ), aVariant.GetLong() );
+            return wxString::Format( wxT( "%li" ), distanceIU );
 
         default:
             // DEGREEs are handled by PGPROPERTY_ANGLE
@@ -250,8 +269,9 @@ wxValidator* PGPROPERTY_SIZE::DoGetValidator() const
 
 
 PGPROPERTY_COORD::PGPROPERTY_COORD( const wxString& aLabel, const wxString& aName,
-        long aValue )
-    : wxIntProperty( aLabel, aName, aValue ), PGPROPERTY_DISTANCE( REGEX_SIGNED_DISTANCE )
+                                    long aValue, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType ) :
+        wxIntProperty( aLabel, aName, aValue ),
+        PGPROPERTY_DISTANCE( REGEX_SIGNED_DISTANCE, aCoordType )
 {
 }
 

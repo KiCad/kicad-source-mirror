@@ -95,6 +95,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     propMgr.SetUnits( m_frame->GetUserUnits() );
+    propMgr.SetTransforms( &m_frame->GetOriginTransforms() );
 
     std::set<PROPERTY_BASE*> commonProps;
     const PROPERTY_LIST& allProperties = propMgr.GetProperties( *types.begin() );

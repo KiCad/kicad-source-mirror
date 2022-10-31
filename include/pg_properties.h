@@ -25,6 +25,7 @@
 #include <wx/propgrid/property.h>
 #include <wx/propgrid/props.h>
 #include <common.h>
+#include <origin_transforms.h>
 
 class PROPERTY_BASE;
 class REGEX_VALIDATOR;
@@ -35,14 +36,18 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty );
 class PGPROPERTY_DISTANCE
 {
 public:
-    PGPROPERTY_DISTANCE( const wxString& aRegEx );
+    PGPROPERTY_DISTANCE( const wxString& aRegEx,
+            ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD );
     virtual ~PGPROPERTY_DISTANCE() = 0;
+
+    void SetCoordType( ORIGIN_TRANSFORMS::COORD_TYPES_T aType ) { m_coordType = aType; }
 
 protected:
     bool StringToDistance( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 ) const;
     wxString DistanceToString( wxVariant& aVariant, int aArgFlags = 0 ) const;
 
     std::unique_ptr<REGEX_VALIDATOR> m_regExValidator;
+    ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
 };
 
 
@@ -70,7 +75,8 @@ class PGPROPERTY_COORD : public wxIntProperty, public PGPROPERTY_DISTANCE
 {
 public:
     PGPROPERTY_COORD( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
-            long aValue = 0 );
+                      long aValue = 0,
+                      ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD );
 
     bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 ) const override
     {

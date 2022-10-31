@@ -37,6 +37,7 @@
 
 class PROPERTY_BASE;
 class TYPE_CAST_BASE;
+class ORIGIN_TRANSFORMS;
 
 ///< Unique type identifier
 using TYPE_ID = size_t;
@@ -170,6 +171,9 @@ public:
         m_units = aUnits;
     }
 
+    ORIGIN_TRANSFORMS* GetTransforms() const { return m_originTransforms; }
+    void SetTransforms( ORIGIN_TRANSFORMS* aTransforms ) { m_originTransforms = aTransforms; }
+
     /**
      * Rebuild the list of all registered properties. Needs to be called
      * once before GetProperty()/GetProperties() are used.
@@ -190,8 +194,10 @@ public:
     std::vector<TYPE_ID> GetMatchingClasses( PROPERTY_BASE* aProperty );
 
 private:
-    PROPERTY_MANAGER()
-        : m_dirty( false ), m_units( EDA_UNITS::MILLIMETRES )
+    PROPERTY_MANAGER() :
+            m_dirty( false ),
+            m_units( EDA_UNITS::MILLIMETRES ),
+            m_originTransforms( nullptr )
     {
     }
 
@@ -241,6 +247,8 @@ private:
     bool m_dirty;
 
     EDA_UNITS m_units;
+
+    ORIGIN_TRANSFORMS* m_originTransforms;
 };
 
 
