@@ -391,7 +391,7 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGb
     }
 }
 
-
+#include <wx/log.h>
 void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     static D_CODE  flashed_item_D_CODE( 0 );
@@ -416,8 +416,10 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
 
     VECTOR2I offset = aGbrItem->GetABPosition( aGbrItem->m_Start );
 
-    if( aGbrItem->m_Shape == GBR_SPOT_CIRCLE ) // export it as filled circle
+    if( aGbrItem->m_Shape == GBR_SPOT_CIRCLE ||
+        ( aGbrItem->m_Shape == GBR_SPOT_OVAL && d_codeDescr->m_Size.x == d_codeDescr->m_Size.y ) )
     {
+        // export it as filled circle
         VECTOR2I center = offset;
         int radius = d_codeDescr->m_Size.x / 2;
         writePcbFilledCircle( center, radius, aLayer );
@@ -425,8 +427,23 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
     }
 
     APERTURE_MACRO* macro = d_codeDescr->GetMacro();
-    SHAPE_POLY_SET* macroShape = macro->GetApertureMacroShape( aGbrItem, VECTOR2I( 0, 0 ) );
-    writePcbPolygon( *macroShape, aLayer, offset );
+
+    if( macro )     // export a GBR_SPOT_MACRO
+    {
+        SHAPE_POLY_SET macroShape;
+        macroShape = *macro->GetApertureMacroShape( aGbrItem, VECTOR2I( 0, 0 ) );
+
+        // Compensate the Y axis orientation ( writePcbPolygon invert the Y coordinate )
+        macroShape.Outline( 0 ).Mirror( false, true );
+
+        writePcbPolygon( macroShape, aLayer, offset );
+    }
+    else
+    {
+        // Should cover primitives: GBR_SPOT_RECT, GBR_SPOT_OVAL, GBR_SPOT_POLY
+        d_codeDescr->ConvertShapeToPolygon( aGbrItem );
+        writePcbPolygon( d_codeDescr->m_Polygon, aLayer, offset );
+    }
 }
 
 
