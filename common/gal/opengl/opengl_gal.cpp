@@ -2181,9 +2181,15 @@ void OPENGL_GAL::drawPolygon( GLdouble* aPoints, int aPointCount )
 void OPENGL_GAL::drawPolyline( const std::function<VECTOR2D( int )>& aPointGetter, int aPointCount,
                                bool aReserve )
 {
-    wxCHECK( aPointCount >= 2, /* return */ );
+    wxCHECK( aPointCount > 0, /* return */ );
 
     m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b, m_strokeColor.a );
+
+    if( aPointCount == 1 )
+    {
+        drawLineQuad( aPointGetter( 0 ), aPointGetter( 0 ), false );
+        return;
+    }
 
     if( aReserve )
     {
