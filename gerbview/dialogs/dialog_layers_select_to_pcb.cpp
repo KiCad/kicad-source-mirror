@@ -229,7 +229,7 @@ void LAYERS_MAP_DIALOG::initDialog()
                 int currLayer = gerber2KicadMapping[ii];
 
                 // Default to "Do Not Export" for unselected or undefined layer
-                if( ( currLayer == UNSELECTED_LAYER ) || ( currLayer == UNDEFINED_LAYER ) )
+                if( ( currLayer == UNSELECTED_LAYER ) )
                 {
                     m_layersList[ii]->SetLabel( _( "Do not export" ) );
                     m_layersList[ii]->SetForegroundColour( *wxBLUE );
@@ -281,6 +281,10 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
         m_layersList[ii]->SetForegroundColour( *wxBLUE );
         m_buttonTable[ii] = ii;
     }
+    // wxWidgets doesn't appear to invalidate / update the StaticText displays for color change
+    // so we do it manually
+    Refresh();
+    Update();
 }
 
 
@@ -398,6 +402,10 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
             m_layersList[ii]->SetForegroundColour( wxColour( 255, 0, 128 ) );
         }
     }
+    // wxWidgets doesn't appear to invalidate / update the StaticText displays for color change
+    // so we do it manually
+    Refresh();
+    Update();
 }
 
 

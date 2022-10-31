@@ -81,13 +81,23 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
     // First collect all the holes.  We'll use these to generate pads, vias, etc.
     for( unsigned layer = 0; layer < images->ImagesMaxCount(); ++layer )
     {
+        int pcb_layer_number = aLayerLookUpTable[layer];
         EXCELLON_IMAGE* excellon = dynamic_cast<EXCELLON_IMAGE*>( images->GetGbrImage( layer ) );
-
-        if( excellon == nullptr )    // Layer not yet used or not a drill image
+        GERBER_FILE_IMAGE* gerb  = dynamic_cast<GERBER_FILE_IMAGE*>( images->GetGbrImage( layer ) );
+        if( excellon )
+        {
+            for( GERBER_DRAW_ITEM* gerb_item : excellon->GetItems() )
+                collect_hole( gerb_item );
+        }
+        else if( gerb and pcb_layer_number == UNDEFINED_LAYER ) // PCB_LAYER_ID doesn't have an entry for Hole Data, but the dialog returns UNDEFINED_LAYER for it
+        {
+            for( GERBER_DRAW_ITEM* gerb_item : gerb->GetItems() )
+                collect_hole( gerb_item );
+        }
+        else
+        {
             continue;
-
-        for(  GERBER_DRAW_ITEM* gerb_item : excellon->GetItems() )
-            collect_hole( gerb_item );
+        }
     }
 
     // Next: non copper layers:
