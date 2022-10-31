@@ -92,6 +92,7 @@ private:
 
     void updateWidgets();
     void updateIbisWidgets();
+    void updateInstanceWidgets();
     void updateModelParamsTab();
     void updateModelCodeTab();
     void updatePinAssignments();

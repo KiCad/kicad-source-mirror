@@ -292,6 +292,7 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
 
     updateIbisWidgets();
+    updateInstanceWidgets();
     updateModelParamsTab();
     updateModelCodeTab();
     updatePinAssignments();
@@ -356,34 +357,39 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
 
 
 template <typename T>
+void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
+{
+    SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
+
+    // Change the Type choice to match the current device type.
+    if( !m_prevModel || deviceType != m_prevModel->GetDeviceType() )
+    {
+        m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
+
+        m_typeChoice->Clear();
+
+        for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+        {
+            if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
+            {
+                wxString description = SIM_MODEL::TypeInfo( type ).description;
+
+                if( !description.IsEmpty() )
+                    m_typeChoice->Append( description );
+
+                if( type == curModel().GetType() )
+                    m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
+            }
+        }
+    }
+}
+
+
+template <typename T>
 void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 {
     if( &curModel() != m_prevModel )
     {
-        SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
-
-        // Change the Type choice to match the current device type.
-        if( !m_prevModel || deviceType != m_prevModel->GetDeviceType() )
-        {
-            m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
-
-            m_typeChoice->Clear();
-
-            for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
-            {
-                if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
-                {
-                    wxString description = SIM_MODEL::TypeInfo( type ).description;
-
-                    if( !description.IsEmpty() )
-                        m_typeChoice->Append( description );
-
-                    if( type == curModel().GetType() )
-                        m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
-                }
-            }
-        }
-
         // This wxPropertyGridManager column and header stuff has to be here because it segfaults in
         // the constructor.
 
