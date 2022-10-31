@@ -28,6 +28,8 @@
 #include <macros.h>
 #include <wx/tokenzr.h>
 
+#include <locale_io.h>
+
 
 CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND( "pdf" )
 {
@@ -65,7 +67,7 @@ int CLI::EXPORT_PCB_PDF_COMMAND::Perform( KIWAY& aKiway )
     if( baseExit != EXIT_CODES::OK )
         return baseExit;
 
-    JOB_EXPORT_PCB_PDF* pdfJob = new JOB_EXPORT_PCB_PDF( true );
+    std::unique_ptr<JOB_EXPORT_PCB_PDF> pdfJob( new JOB_EXPORT_PCB_PDF( true ) );
 
     pdfJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     pdfJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
@@ -82,7 +84,8 @@ int CLI::EXPORT_PCB_PDF_COMMAND::Perform( KIWAY& aKiway )
 
     pdfJob->m_printMaskLayer = m_selectedLayers;
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, pdfJob );
+    LOCALE_IO dummy;    // Switch to "C" locale
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, pdfJob.get() );
 
     return exitCode;
 }

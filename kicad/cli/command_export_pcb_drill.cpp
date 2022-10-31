@@ -95,7 +95,7 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
 
 int CLI::EXPORT_PCB_DRILL_COMMAND::Perform( KIWAY& aKiway )
 {
-    JOB_EXPORT_PCB_DRILL* drillJob = new JOB_EXPORT_PCB_DRILL( true );
+    std::unique_ptr<JOB_EXPORT_PCB_DRILL> drillJob( new JOB_EXPORT_PCB_DRILL( true ) );
 
     drillJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     drillJob->m_outputDir = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
@@ -220,7 +220,7 @@ int CLI::EXPORT_PCB_DRILL_COMMAND::Perform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, drillJob );
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, drillJob.get() );
 
     return exitCode;
 }

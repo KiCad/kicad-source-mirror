@@ -246,6 +246,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     plotOpts.SetLayerSelection( aGerberJob->m_printMaskLayer );
 
     plotOpts.SetSubtractMaskFromSilk( aGerberJob->m_subtractSolderMaskFromSilk );
+    // Always disable plot pad holes
+    plotOpts.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
     plotOpts.SetDisableGerberMacros( aGerberJob->m_disableApertureMacros );
     plotOpts.SetUseGerberX2format( aGerberJob->m_useX2Format );
