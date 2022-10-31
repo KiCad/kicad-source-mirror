@@ -137,7 +137,10 @@ template <typename T>
 bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 {
     wxCommandEvent dummyEvent;
-    wxString libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
+
+    int         pinCount = m_sortedSymbolPins.size();
+    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
+    std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
     if( libraryFilename != "" )
     {
@@ -200,13 +203,11 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     {
         // The model is sourced from the instance.
         m_useInstanceModelRadioButton->SetValue( true );
-        SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( m_fields, m_sortedSymbolPins.size() );
+        SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( m_fields, pinCount );
 
         try
         {
-            m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields,
-                                                                          m_sortedSymbolPins.size() ) ) ) =
-                    SIM_MODEL::Create( m_sortedSymbolPins.size(), m_fields );
+            m_models.at( static_cast<int>( type ) ) = SIM_MODEL::Create( pinCount, m_fields );
         }
         catch( const IO_ERROR& e )
         {
@@ -225,7 +226,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
     m_inferCheckbox->SetValue( curModel().IsInferred() );
 
-    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
     m_inferCheckbox->Show( SIM_MODEL::InferDeviceTypeFromRef( ref )
                                             != SIM_MODEL::DEVICE_TYPE_::NONE );
 
