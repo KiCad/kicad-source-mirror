@@ -92,7 +92,6 @@ private:
 
     void updateWidgets();
     void updateIbisWidgets();
-    void updateInstanceWidgets();
     void updateModelParamsTab();
     void updateModelCodeTab();
     void updatePinAssignments();
@@ -130,6 +129,7 @@ private:
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
     void onExcludeCheckbox( wxCommandEvent& aEvent ) override;
+    void onInferCheckbox( wxCommandEvent& aEvent ) override;
     void onDifferentialCheckbox( wxCommandEvent& event ) override;
 
     void onParamGridSetFocus( wxFocusEvent& aEvent );
