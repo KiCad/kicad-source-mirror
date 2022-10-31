@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,6 +291,7 @@ struct ASCH_TEXT_FRAME
 {
     VECTOR2I Location;
     wxSize   Size;
+
     // have both coordinates, for convenience
     VECTOR2I BottomLeft;
     VECTOR2I TopRight;
@@ -479,7 +480,9 @@ struct ASCH_HARNESS_CONNECTOR
 
 struct ASCH_HARNESS_ENTRY
 {
-    // int ownerindex; // Completely random, mostly this entry exists, but not always, should not be used!
+    // Completely random, mostly this entry exists, but not always, should not be used!
+    // int ownerindex;
+
     int OwnerPartID; // always -1, can be safely ignored I think
 
     int AreaColor;
@@ -510,9 +513,9 @@ struct ASCH_HARNESS_TYPE
 
     bool IsHidden;
     bool OwnerIndexAdditionalList; // what is that?
-    
+
     VECTOR2I Location;
-    
+
     wxString Text;
 
     explicit ASCH_HARNESS_TYPE( const std::map<wxString, wxString>& aProps );

@@ -61,6 +61,7 @@ class SCH_LINE;
 class SCH_LABEL_BASE;
 class PLOTTER;
 class REPORTER;
+class SCH_ALTIUM_PLUGIN;
 class SCH_EDIT_FRAME;
 class SCH_SHEET_LIST;
 class SCH_SEXPR_PARSER;
@@ -527,6 +528,7 @@ private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_SEXPR_PARSER;   // Only to load instance information from schematic file.
     friend SCH_SEXPR_PLUGIN;   // Only to save the loaded instance information to schematic file.
+    friend SCH_ALTIUM_PLUGIN;
 
     void clearLibSymbols();
 

@@ -1188,7 +1188,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     case SCH_IO_MGR::SCH_CADSTAR_ARCHIVE:
     case SCH_IO_MGR::SCH_EAGLE:
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-        wxASSERT_MSG( filename.IsAbsolute(), wxT( "Import schematic: path is not absolute!" ) );
+        wxCHECK_MSG( filename.IsAbsolute(), false,
+                     wxT( "Import schematic: path is not absolute!" ) );
 
         if( !LockFile( aFileName ) )
         {
@@ -1236,7 +1237,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             SetScreen( GetCurrentSheet().LastScreen() );
 
-            Schematic().Root().SetFileName( newfilename.GetFullPath() );
+            Schematic().Root().SetFileName( newfilename.GetFullName() );
             GetScreen()->SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetContentModified();
 

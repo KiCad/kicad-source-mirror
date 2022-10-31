@@ -87,7 +87,7 @@ template <typename T>
 T ReadEnum( const std::map<wxString, wxString>& aProps, const wxString& aKey, int aLower,
             int aUpper, T aDefault )
 {
-    int value = ALTIUM_PARSER::ReadInt( aProps, aKey, static_cast<int>( aDefault ));
+    int value = ALTIUM_PARSER::ReadInt( aProps, aKey, static_cast<int>( aDefault ) );
 
     if( value < aLower || value > aUpper )
         return aDefault;
@@ -199,18 +199,22 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProps )
         kicadX += p;
         kicadXfrac += pfrac;
         break;
+
     case ASCH_RECORD_ORIENTATION::UPWARDS:
         kicadY += p;
         kicadYfrac += pfrac;
         break;
+
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         kicadX -= p;
         kicadXfrac -= pfrac;
         break;
+
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         kicadY -= p;
         kicadYfrac -= pfrac;
         break;
+
     default:
         wxLogWarning( "Pin has unexpected orientation" );
         break;
@@ -250,7 +254,7 @@ ASCH_TEXT_FRAME::ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProps )
               || ReadRecord( aProps ) == ALTIUM_SCH_RECORD::TEXT_FRAME );
 
     BottomLeft = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
-                         -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
+                           -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
     TopRight = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
                          -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
 
@@ -271,7 +275,8 @@ ASCH_TEXT_FRAME::ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProps )
 
     IsSolid = ALTIUM_PARSER::ReadBool( aProps, "WORDWRAP", true );
 
-    Alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3, ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
+    Alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3,
+                                                     ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
 }
 
 
@@ -326,7 +331,9 @@ ASCH_POLYLINE::ASCH_POLYLINE( const std::map<wxString, wxString>& aProps )
     Color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
 
     int linestyleVar = ALTIUM_PARSER::ReadInt( aProps, "LINESTYLEEXT", 0 );
-    linestyleVar     = ALTIUM_PARSER::ReadInt( aProps, "LINESTYLE", linestyleVar ); // overwrite if present
+
+    // overwrite if present.
+    linestyleVar     = ALTIUM_PARSER::ReadInt( aProps, "LINESTYLE", linestyleVar );
     LineStyle        = linestyleVar >= 0 && linestyleVar <= 3 ?
                                 static_cast<ASCH_POLYLINE_LINESTYLE>( linestyleVar ) :
                                 ASCH_POLYLINE_LINESTYLE::SOLID;
@@ -479,12 +486,14 @@ ASCH_HARNESS_CONNECTOR::ASCH_HARNESS_CONNECTOR( const std::map<wxString, wxStrin
 }
 
 
-// Based on "ASCH_SHEET_ENTRY" import
 ASCH_HARNESS_ENTRY::ASCH_HARNESS_ENTRY( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::HARNESS_ENTRY );
 
-    // ownerindex = ReadOwnerIndex( aProps ); // use SCH_ALTIUM_PLUGIN::m_harnessEntryParent instead, because this property sometimes does not exist in altium file!
+    // use SCH_ALTIUM_PLUGIN::m_harnessEntryParent instead, because this property sometimes
+    // does not exist in altium file!
+    // ownerindex = ReadOwnerIndex( aProps );
+
     OwnerPartID = ReadOwnerPartId( aProps );
 
     IndexInSheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
@@ -537,7 +546,7 @@ ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProps )
     BottomLeft = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                            -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
     TopRight = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
-                           -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
+                         -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
 
     LineWidth     = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
     IsSolid       = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
@@ -602,6 +611,7 @@ ASCH_POWER_PORT::ASCH_POWER_PORT( const std::map<wxString, wxString>& aProps )
                                              ASCH_POWER_PORT_STYLE::CIRCLE );
 }
 
+
 ASCH_PORT::ASCH_PORT( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::PORT );
@@ -625,7 +635,8 @@ ASCH_PORT::ASCH_PORT( const std::map<wxString, wxString>& aProps )
     FontID = ALTIUM_PARSER::ReadInt( aProps, "TEXTFONTID", 0 );
     TextColor = ALTIUM_PARSER::ReadInt( aProps, "TEXTCOLOR", 0 );
 
-    Alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3, ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
+    Alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3,
+                                                     ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
 }
 
 
@@ -740,6 +751,7 @@ ASCH_SHEET_FONT::ASCH_SHEET_FONT( const std::map<wxString, wxString>& aProps, in
 
     AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR" + sid, 0 );
 }
+
 
 VECTOR2I ASchSheetGetSize( ASCH_SHEET_SIZE aSheetSize )
 {
@@ -861,6 +873,7 @@ ASCH_IMPLEMENTATION_LIST::ASCH_IMPLEMENTATION_LIST( const std::map<wxString, wxS
 
     ownerindex = ReadOwnerIndex( aProps );
 }
+
 
 ASCH_BUS_ENTRY::ASCH_BUS_ENTRY( const std::map<wxString, wxString>& aProps )
 {

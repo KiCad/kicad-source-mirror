@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,6 +107,9 @@ public:
     void ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
 
 private:
+    SCH_SCREEN* getCurrentScreen();
+    SCH_SHEET* getCurrentSheet();
+
     bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
     const ASCH_STORAGE_FILE* GetFileFromStorage( const wxString& aFilename ) const;
     void AddTextBox( const ASCH_TEXT_FRAME* aElem );
@@ -152,7 +155,7 @@ private:
     REPORTER*                       m_reporter;          // current reporter for warnings/errors
 
     SCH_SHEET* m_rootSheet;      // The root sheet of the schematic being loaded..
-    SCH_SHEET* m_currentSheet;   // The current sheet of the schematic being loaded..
+    SCH_SHEET_PATH m_sheetPath;
     SCHEMATIC* m_schematic;      // Passed to Load(), the schematic object being loaded
     wxString   m_libName;        // Library name to save symbols
 
@@ -175,9 +178,12 @@ private:
     std::map<int, ASCH_SYMBOL>      m_altiumComponents;
     std::map<int, int>              m_altiumImplementationList;
     std::vector<ASCH_PORT>          m_altiumPortsCurrentSheet; // we require all connections first
-    std::vector<ASCH_PORT>          m_altiumHarnessPortsCurrentSheet; // parse harness ports after "FileHeader" was parsed, in 2nd run
 
-    int m_harnessOwnerIndexOffset; // Add offset to all harness ownerIndex'es after parsing FileHeader
+    // parse harness ports after "FileHeader" was parsed, in 2nd run.
+    std::vector<ASCH_PORT>          m_altiumHarnessPortsCurrentSheet;
+
+    // Add offset to all harness ownerIndex'es after parsing FileHeader.
+    int m_harnessOwnerIndexOffset;
     int m_harnessEntryParent; // used to identify harness connector for harness entry element
 };
 
