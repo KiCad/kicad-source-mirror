@@ -77,6 +77,8 @@ bool PCB_SHAPE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
             sametype = m_shape == SHAPE_T::SEGMENT;
         else if( scanType == PCB_SHAPE_LOCATE_POLY_T )
             sametype = m_shape == SHAPE_T::POLY;
+        else if( scanType == PCB_SHAPE_LOCATE_BEZIER_T )
+            sametype = m_shape == SHAPE_T::BEZIER;
 
         if( sametype )
             return true;

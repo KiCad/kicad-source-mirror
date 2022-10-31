@@ -133,6 +133,7 @@ enum KICAD_T
     PCB_SHAPE_LOCATE_CIRCLE_T,
     PCB_SHAPE_LOCATE_ARC_T,
     PCB_SHAPE_LOCATE_POLY_T,
+    PCB_SHAPE_LOCATE_BEZIER_T,
 
     // Schematic draw Items.  The order of these items effects the sort order.
     // It is currently ordered to mimic the old Eeschema locate behavior where

@@ -151,7 +151,8 @@ bool CONVERT_TOOL::Init()
     m_menu->SetTitle( _( "Create from Selection" ) );
 
     auto graphicLines = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_RECT_T,
-                                          PCB_SHAPE_LOCATE_CIRCLE_T, PCB_SHAPE_LOCATE_ARC_T } )
+                                          PCB_SHAPE_LOCATE_CIRCLE_T, PCB_SHAPE_LOCATE_ARC_T,
+                                          PCB_SHAPE_LOCATE_BEZIER_T } )
                                 && P_S_C::SameLayer();
 
     auto graphicToTrack = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_ARC_T } );
@@ -451,6 +452,36 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
                             outline.Append( aAnchor == arc.GetP0() ? arc : arc.Reversed() );
                         else
                             outline.Insert( 0, aAnchor == arc.GetP0() ? arc : arc.Reversed() );
+                    }
+                    else if( aItem->IsType( { PCB_SHAPE_LOCATE_BEZIER_T } ) )
+                    {
+                        PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( aItem );
+
+                        if( aAnchor == graphic->GetStart() )
+                        {
+                            for( auto it = graphic->GetBezierPoints().begin();
+                                             it != graphic->GetBezierPoints().end();
+                                             ++it )
+                            {
+                                if( aDirection )
+                                    outline.Append( *it );
+                                else
+                                    outline.Insert( 0, *it );
+                            }
+
+                        }
+                        else
+                        {
+                            for( auto it = graphic->GetBezierPoints().rbegin();
+                                             it != graphic->GetBezierPoints().rend();
+                                             ++it )
+                            {
+                                if( aDirection )
+                                    outline.Append( *it );
+                                else
+                                    outline.Insert( 0, *it );
+                            }
+                        }
                     }
                     else
                     {
@@ -921,6 +952,7 @@ std::optional<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth
         case SHAPE_T::SEGMENT:
         case SHAPE_T::ARC:
         case SHAPE_T::POLY:
+        case SHAPE_T::BEZIER:
             if( shape->GetStart() == shape->GetEnd() )
                 return std::nullopt;
 
