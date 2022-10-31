@@ -239,6 +239,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 {
     m_pinAssignmentsGrid->CommitPendingChanges();
 
+    m_paramGrid->GetGrid()->CommitChangesFromEditor();
+
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
@@ -1258,11 +1260,7 @@ void DIALOG_SIM_MODEL<T>::onParamGridSetFocus( wxFocusEvent& aEvent )
 
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
 
-    if( !grid )
-    {
-        wxFAIL;
-        return;
-    }
+    grid->CommitChangesFromEditor();
 
     wxPGProperty* selected = grid->GetSelection();
 
@@ -1281,11 +1279,7 @@ void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEven
 {
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
 
-    if( !grid )
-    {
-        wxFAIL;
-        return;
-    }
+    grid->CommitChangesFromEditor();
 
     // Jump over categories.
     if( grid->GetSelection() && grid->GetSelection()->IsCategory() )
