@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-10-26 16:08+0000\n"
+"PO-Revision-Date: 2022-11-08 17:08+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.14.2\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -4484,7 +4484,7 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Paikallisesti asennettujen järjestelmän jalanjäljekirjastojen (.pretty "
+"Paikallisesti asennettujen järjestelmän jalanjälkikirjastojen (.pretty "
 "kansiot) peruspolku."
 
 #: common/env_vars.cpp:74
@@ -4836,7 +4836,7 @@ msgstr "Se puuttuu.\n"
 
 #: common/kiway.cpp:314
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr "Ehkä jaettu kirjastotiedosto (.dll tai .so) puuttuu.\n"
+msgstr "Ehkäpä jaettu kirjastotiedosto (.dll tai .so) puuttuu.\n"
 
 #: common/kiway.cpp:316
 msgid ""
@@ -5923,7 +5923,7 @@ msgstr "Näytä 3D-katseluikkuna"
 #: common/tool/actions.cpp:572 eeschema/symbol_viewer_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:970
 msgid "Symbol Library Browser"
-msgstr "Symbolikirjaston selain"
+msgstr "Symbolikirjastoselain"
 
 #: common/tool/actions.cpp:572
 msgid "Browse symbol libraries"
@@ -6497,7 +6497,7 @@ msgstr "Vanhat jalanjälkikirjastotiedostot"
 
 #: common/wildcards_and_files_ext.cpp:366
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Kotka ver. 6.x XML-kirjastotiedostot"
+msgstr "Eagle ver. 6.x XML-kirjastotiedostot"
 
 #: common/wildcards_and_files_ext.cpp:372
 msgid "Geda PCB footprint library files"
@@ -6649,8 +6649,8 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
-"Komponentin [%s] liitoskuvaa %s ei löytynyt mistään projektin "
-"liitoskuvakirjastoista."
+"Komponentin [%s] jalanjälkeä %s ei löytynyt mistään projektin "
+"jalanjälkikirjastoista."
 
 #: cvpcb/auto_associate.cpp:308
 msgid "CvPcb Warning"
@@ -6667,7 +6667,7 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
-"Olet suorittanut CvPcb:n ensimmäistä kertaa käyttämällä uutta footprint-"
+"Olet käynnistänyt CvPcb:n ensimmäistä kertaa käyttämällä uutta footprint-"
 "kirjastotaulukkomenetelmää jalanjälkien etsimiseen.\n"
 "CvPcb on joko kopioinut oletustaulukon tai luonut tyhjän taulukon "
 "kotikansioosi.\n"
@@ -8093,7 +8093,8 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Jos jotkut komponentit ovat orpoja (linkitettyä symbolia ei löydy mistään),\n"
+"Jos jotkut komponentit ovat hylättyjä (linkitettyä symbolia ei löydy "
+"mistään),\n"
 "yritä löytää ehdokas, jolla on sama nimi, yhdestä ladatusta "
 "symbolikirjastosta."
 
@@ -9793,10 +9794,10 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Tämä kaavio tehtiin käyttämällä vanhempia symbolikirjastoja, jotka voivat "
-"rikkoa kaavion. Jotkin symbolit on ehkä linkitettävä eri symbolien nimiin. "
-"Jotkut symbolit on ehkä \"pelastettava\" (kopioitava ja nimettävä uudelleen) "
-"uuteen kirjastoon.\n"
+"Tämä kytkentäkaavio tehtiin käyttämällä vanhempia symbolikirjastoja, jotka "
+"voivat rikkoa kytkentäkaavion. Jotkin symbolit on ehkä linkitettävä eri "
+"symbolien nimiin. Jotkut symbolit on ehkä \"pelastettava\" (kopioitava ja "
+"nimettävä uudelleen) uuteen kirjastoon.\n"
 "\n"
 "Seuraavia muutoksia suositellaan projektin päivittämiseksi."
 
@@ -9856,7 +9857,7 @@ msgstr "Välimuistissa oleva symboli:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:76
 msgid "Library Symbol:"
-msgstr "Kirjaston symboli:"
+msgstr "Kirjastosymboli:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:100
 msgid "Never Show Again"
@@ -11228,7 +11229,7 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"Tämä kaavio käyttää tällä hetkellä projektisymbolikirjastoluettelon "
+"Tämä kytkentäkaavio käyttää tällä hetkellä projektisymbolikirjastoluettelon "
 "hakutapaa kirjastosymbolien lataamiseen. KiCad yrittää kartoittaa olemassa "
 "olevat symbolit uuden symbolikirjastotaulukon käyttämiseksi. Uudelleen "
 "muotoilu muuttaa joitain projektitiedostoja, ja kaaviot eivät välttämättä "
@@ -12518,7 +12519,7 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
-"Tämä voi johtaa rikkoutuneeseen kaavioon tietyissä olosuhteissa. Jos "
+"Tämä voi johtaa rikkoutuneeseen kytkentäkaavioon tietyissä olosuhteissa. Jos "
 "kaaviossa ei ole puuttuvia symboleja avaamisen yhteydessä, tallenna se "
 "välittömästi ennen muutoksia, jotta vältät tietojen menetyksen. Jos "
 "symboleita puuttuu, vaaditaan joko kaavion manuaalinen palautus tai "
@@ -13995,7 +13996,7 @@ msgstr "<Tuntematon>"
 
 #: eeschema/sch_symbol.cpp:1489
 msgid "No library defined!"
-msgstr "Ei kirjastoa määritelty!"
+msgstr "Kirjastoa ei ole määritelty!"
 
 #: eeschema/sch_symbol.cpp:1491
 #, c-format
@@ -14848,8 +14849,8 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"Kaikkia symbolikirjastoja ei voitu ladata. Käytä Hallitse-symbolia\n"
-"Kirjastot-valintaikkuna polkujen säätämiseksi ja kirjastojen lisäämiseksi "
+"Kaikkia symbolikirjastoja ei voitu ladata.  Käytä Hallitse-symbolia\n"
+"Kirjastojen valintaikkunaa polkujen säätämiseksi ja kirjastojen lisäämiseksi "
 "tai poistamiseksi."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
@@ -15158,7 +15159,7 @@ msgstr "Tallenna kirjastoon:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:692
 msgid "No library specified.  Symbol could not be saved."
-msgstr "Kirjastoa ei ole määritetty. Symbolia ei voitu tallentaa."
+msgstr "Kirjastoa ei ole määritetty.  Symbolia ei voitu tallentaa."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:701
 msgid ""
@@ -15364,7 +15365,7 @@ msgstr "(lataus epäonnistui)"
 
 #: eeschema/symbol_viewer_frame.cpp:115
 msgid "KiCad Symbol Library Viewer"
-msgstr "KiCad-symbolikirjastot"
+msgstr "KiCad-symbolikirjastoselain"
 
 #: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1069
 msgid "[no library selected]"
@@ -15559,7 +15560,7 @@ msgstr "Tallenna kirjasto uudella nimellä..."
 
 #: eeschema/tools/ee_actions.cpp:118
 msgid "Save the current library to a new file."
-msgstr "Tallenna kirjasto uuteen tiedostoon."
+msgstr "Tallenna nykyinen kirjasto uuteen tiedostoon."
 
 #: eeschema/tools/ee_actions.cpp:123
 msgid "New Symbol..."
@@ -15587,7 +15588,7 @@ msgstr "Tee kopio valitusta symbolista"
 
 #: eeschema/tools/ee_actions.cpp:138
 msgid "Save the current symbol to a different library."
-msgstr "Tallenna symboli eri kirjastoon."
+msgstr "Tallenna nykyinen symboli eri kirjastoon."
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Remove the selected symbol from its library"
@@ -15958,7 +15959,7 @@ msgstr "Päivitä symbolit sisällyttämään kirjastoon tehdyt muutokset"
 
 #: eeschema/tools/ee_actions.cpp:438
 msgid "Assign a different symbol from the library"
-msgstr "Määritä eri symboli kuin kirjasto"
+msgstr "Määritä eri symboli kirjastosta"
 
 #: eeschema/tools/ee_actions.cpp:443
 msgid "Update Symbol..."
@@ -16119,7 +16120,7 @@ msgstr "Avaa valitun symbolin Editorissa"
 
 #: eeschema/tools/ee_actions.cpp:557
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "Avaa kirjastosymboli Editorissa"
+msgstr "Avaa kirjastosymboli editorissa"
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Edit Symbol Fields..."
@@ -16135,7 +16136,7 @@ msgstr "Muokkaa symbolikirjastolinkkejä ..."
 
 #: eeschema/tools/ee_actions.cpp:567
 msgid "Edit links between schematic and library symbols"
-msgstr "Muokkaa linkkejä kaavamaisen ja kirjastosymbolin välillä"
+msgstr "Muokkaa linkkejä kytkentäkaavion ja kirjastosymbolin välillä"
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Assign Footprints..."
@@ -16189,7 +16190,7 @@ msgstr "Etsi vanhoja symboleja projektista ja nimeä ne uudelleen / pelasta ne"
 
 #: eeschema/tools/ee_actions.cpp:605
 msgid "Remap Legacy Library Symbols..."
-msgstr "Uudelleen muotoile vanhojen kirjastojen symbolit ..."
+msgstr "Uudelleensijoita vanhojen kirjastojen symbolit ..."
 
 #: eeschema/tools/ee_actions.cpp:606
 msgid ""
@@ -21387,7 +21388,7 @@ msgstr "Muunna viivat suorakulmioiksi"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
-msgstr "Tuntematon siivous"
+msgstr "Tuntematon puhdistustoiminto"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:381
 #: pcbnew/convert_shape_list_to_polygon.cpp:532
@@ -22054,7 +22055,7 @@ msgstr "tuntematon"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:480
 msgid "Round"
-msgstr "Ympyrä"
+msgstr "Pyöreä"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:483
 msgid "Slot"
@@ -22221,7 +22222,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
-msgstr "&Poista tarpeetomat läpiviennit"
+msgstr "&Poista tarpeettomat läpiviennit"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
@@ -22393,7 +22394,7 @@ msgstr "Täytettyjen alueiden vähimmäispaksuus."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
 msgid "Pad connections:"
-msgstr "Anturan liitos:"
+msgstr "Anturan liitokset:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:217
 msgid ""
@@ -22426,7 +22427,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:234
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "Välys tyynyjen välillä samassa verkossa ja täytetyillä alueilla."
+msgstr "Välys anturoiden välillä samassa verkossa ja täytetyillä alueilla."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:242
 msgid "Thermal spoke width:"
@@ -22454,7 +22455,7 @@ msgstr "Kiinteä täyttö"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:276
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
 msgid "Hatch pattern"
-msgstr "Täyttöviiva kuvio"
+msgstr "Täyttöviivakuvio"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:293
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:140
@@ -22574,7 +22575,7 @@ msgstr "askelarvo"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:336
 msgid "horizontal count"
-msgstr "vaakalaskenta"
+msgstr "vaakasuora määrä"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:337
 msgid "vertical count"
@@ -22622,11 +22623,11 @@ msgstr "Porrastaa:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:99
 msgid "Rows"
-msgstr "Rivejä"
+msgstr "Rivit"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:99
 msgid "Columns"
-msgstr "Sarakkeita"
+msgstr "Sarakkeet"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:101
 msgid "Stagger Type"
@@ -22685,12 +22686,12 @@ msgstr "Toissijaisen akselin numerointi:"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:165
 #: pcbnew/dialogs/dialog_create_array_base.cpp:314
 msgid "Pad numbering start:"
-msgstr "Tyyppien numeroinnin alku:"
+msgstr "Antura-numeroinnin alku:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:179
 #: pcbnew/dialogs/dialog_create_array_base.cpp:321
 msgid "Pad numbering skip:"
-msgstr "Pad-numeroinnin ohitus:"
+msgstr "Antura-numeroinnin ohitus:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
 msgid "Grid Array"
@@ -22698,11 +22699,11 @@ msgstr "Ruudukkorakenne"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid "Horizontal center:"
-msgstr "Vaakasuora keskusta:"
+msgstr "Vaakasuora keskellä:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:227
 msgid "Vertical center:"
-msgstr "Pystykeskus:"
+msgstr "Pystysuora keskellä:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:238
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1223
@@ -22742,11 +22743,11 @@ msgstr "Alustettu Anturan Numero:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 msgid "Pad Numbering:"
-msgstr "Tyyppien numerointi:"
+msgstr "Anturoiden numerointi:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:341
 msgid "Circular Array"
-msgstr "Pyöreä taulukko"
+msgstr "Ympyrätaulukko"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
 msgid "Footprint Annotation"
@@ -22782,7 +22783,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:280
 msgid "Change dimension properties"
-msgstr "Muuta ulottuvuuden ominaisuuksia"
+msgstr "Muuta mittojen ominaisuuksia"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
 msgid "Leader Format"
@@ -22937,7 +22938,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
 msgid "Dimension Text"
-msgstr "Ulottuvuuden teksti"
+msgstr "Muototeksti"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:111
@@ -22947,7 +22948,7 @@ msgstr "Tekstin leveys"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:179
 msgid "Text pos X"
-msgstr "Teksti pos X"
+msgstr "Teksti sijainti X"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:248
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:130
@@ -22957,7 +22958,7 @@ msgstr "Tekstin korkeus"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:261
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:200
 msgid "Text pos Y"
-msgstr "Teksti pos Y"
+msgstr "Teksti sijainti Y"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
@@ -23170,11 +23171,11 @@ msgstr "Tyypin nimen etuliite:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:47
 msgid "First pad number:"
-msgstr "Ensimmäisen tyynyn numero:"
+msgstr "Ensimmäisen anturan numero:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:51
 msgid "Pad Enumeration Settings"
-msgstr "Pad-luettelon asetukset"
+msgstr "Anturan luettelointiasetukset"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
 msgid "Change Footprints"
@@ -23351,7 +23352,7 @@ msgstr "Ei-yhtenäis skaalatut mallit:"
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
-"Skaalattuja malleja havaittu.  Mallien skaalaaminen ei ole luotettavaa "
+"Skaalattuja malleja havaittu.  Mallien skaalaaminen ei ole luotettava "
 "mekaanisiin vienteihin."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:216
@@ -23373,7 +23374,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:361
 msgid "STEP Export"
-msgstr "VAIHE Vie"
+msgstr "STEP Vie"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
@@ -23465,8 +23466,8 @@ msgstr "Käytetäänkö suhteellista polkua?"
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
-"Toedostopolkua ei voi tehdä suhteelliseksi (kohdeosio ei ole "
-"piirilevytiedoston käyttämä osio)!"
+"Polkua ei voi tehdä suhteelliseksi (kohdeosio ei ole piirilevytiedoston "
+"käyttämä osio)!"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:275 pcbnew/dialogs/dialog_plot.cpp:827
 #: pcbnew/exporters/gen_footprints_placefile.cpp:295
@@ -23640,7 +23641,7 @@ msgstr "Sisällytä &läpiviennit"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:51
 msgid "Include &zones"
-msgstr "Sisällytä & vyöhykkeet"
+msgstr "Sisällytä &vyöhykkeet"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:59
 msgid "Filter Selected Items"
@@ -23902,14 +23903,14 @@ msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
 msgstr ""
-"Negatiivinen puhdistuma tarkoittaa alaa, joka on pienempi kuin tyyny "
-"(tavallinen tahnan puhdistuma)."
+"Negatiivinen välys tarkoittaa aluetta, joka on pienempi kuin antura (yleinen "
+"tahnan välykselle)."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:333
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:233
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:603
 msgid "Pad clearance:"
-msgstr "Tyyny:"
+msgstr "Anturan välys:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:335
 msgid ""
@@ -23936,8 +23937,9 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"Tämä on paikan välys tyynyjen ja juotemaskin välillä tälle jalanjäljelle.\n"
-"Tämä arvo voidaan korvata tyynyn paikallisella arvolla.\n"
+"Tämä on paikallinen välys anturoiden ja juotosmaskin välillä tälle "
+"jalanjäljelle.\n"
+"Tämä arvo voidaan korvata anturan paikallisella arvolla.\n"
 "Jos 0, käytetään globaalia arvoa."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:359
@@ -24152,7 +24154,7 @@ msgstr "Ei ladattavia python-komentosarjoja:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
-msgstr "Näytä seuranta"
+msgstr "Näytä Seuranta"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
@@ -24237,7 +24239,7 @@ msgstr "Sisällytä ainoastaa SMD jalanjäljet"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
-msgstr "Sulje pois kaikki jalanjäljet läpireikillä"
+msgstr "Sulje pois kaikki jalanjäljet joissa on läpivientireikäanturat"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
 msgid "Include board edge layer"
@@ -24293,8 +24295,8 @@ msgstr "Luo karttatiedosto"
 #: pcbnew/dialogs/dialog_gendrill.cpp:320
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
-"Toedostopolkua ei voi tehdä suhteelliseksi (kohdeosio ei ole "
-"piirilevytiedoston käyttämä osio)!"
+"Polkua ei voi tehdä suhteelliseksi (kohdeosion kohdemäärä eroaa tiedosto-"
+"osiosta)!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:409
 #, c-format
@@ -24399,7 +24401,7 @@ msgstr "Luo porauskaavion PDF tai muissa muodossa"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
-msgstr "Poraa alkuperä"
+msgstr "Porauksen Alkupiste"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:100
 msgid ""
@@ -24519,7 +24521,7 @@ msgstr "Jalanjäljet"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 msgid "Tracks && vias"
-msgstr "Johtimet ja läpiviennit"
+msgstr "Johtimet && läpiviennit"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -24617,7 +24619,7 @@ msgstr "Muut kerrokset"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:123
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:44
 msgid "Line Thickness"
-msgstr "Linjan paksuus"
+msgstr "Viivan paksuus"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:229
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:124
@@ -24823,7 +24825,7 @@ msgstr "Täytetty muoto"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:93
 msgid "Graphic Item Properties"
-msgstr "Graafisen osion ominaisuudet"
+msgstr "Graafisen Kohteen Ominaisuudet"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:119
 msgid "Modified group"
@@ -25017,7 +25019,7 @@ msgstr "Kytkentäverkon Nimi"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
 msgid "Pad Count"
-msgstr "Anturan Luku"
+msgstr "Anturoiden määrä"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:80
 msgid "Via Count"
@@ -25765,15 +25767,15 @@ msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"Tämä on tämän tyynyn paikallinen nettoväli.\n"
-"Jos 0, käytetään jalanjäljen paikallista arvoa tai Netclass-arvoa."
+"Tämä on paikallisen verkon välys tälle anturalle.\n"
+"Jos 0, käytetään jalanjäljen paikallista arvoa tai Verkkoluokka-arvoa."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:618
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"Tämä on paikallinen välys tämän tyynyn ja juotosmaskin välillä.\n"
+"Tämä on paikallinen välys tämän anturan ja juotosmaskin välillä.\n"
 "Jos 0, käytetään jalanjäljen paikallista arvoa tai globaalia arvoa."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:631
@@ -25784,11 +25786,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Tämä on paikallinen välys tämän tyynyn ja juotospastan välillä.\n"
+"Tämä on paikallinen välys tämän anturan ja juotospastan välillä.\n"
 "Jos 0, käytetään jalanjäljen arvoa tai globaalia arvoa.\n"
-"Lopullinen puhdistuma-arvo on tämän arvon ja puhdistuma-arvon suhteen "
-"summa.\n"
-"Negatiivinen arvo tarkoittaa pienempää maskin kokoa kuin tyynyn koko."
+"Lopullinen välysarvo on tämän arvon ja välysarvon suhteen summa.\n"
+"Negatiivinen arvo tarkoittaa pienempää maskin kokoa kuin anturan koko."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:644
 msgid ""
@@ -25799,12 +25800,12 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Tämä on paikallisen puhdistuman suhde prosentteina tämän tyynyn ja "
+"Tämä on paikallisen välyksen suhde prosentteina tämän anturan ja "
 "juotospastan välillä.\n"
-"Arvo 10 tarkoittaa, että välysarvo on 10 prosenttia tyynyn koosta.\n"
+"Arvo 10 tarkoittaa, että välysarvo on 10 prosenttia anturan koosta.\n"
 "Jos 0, käytetään jalanjäljen arvoa tai globaalia arvoa.\n"
-"Lopullinen puhdistuma-arvo on tämän arvon ja puhdistuma-arvon summa.\n"
-"Negatiivinen arvo tarkoittaa pienempää maskin kokoa kuin tyynyn koko."
+"Lopullinen välysarvo on tämän arvon ja välysarvon summa.\n"
+"Negatiivinen arvo tarkoittaa pienempää maskin kokoa kuin anturan koko."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:711
 msgid "Pad connection:"
@@ -25852,7 +25853,7 @@ msgstr "Muunna primitiivinen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:811
 msgid "Delete Primitive"
-msgstr "Poista Primitive"
+msgstr "Poista Primitiivi"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:824
 msgid "Custom Shape Primitives"
@@ -25961,7 +25962,7 @@ msgstr "Piirrä jalanjäljen arvot"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot reference designators"
-msgstr "Tontin viitenimet"
+msgstr "Piirrä viitemerkinnät"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
@@ -26491,7 +26492,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Optimize pad connections"
-msgstr "Optimoi tyynyliitännät"
+msgstr "Optimoi anturaliitännät"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:48
 msgid ""
@@ -26527,7 +26528,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid "Suggest track finish"
-msgstr "Ehdota radan loppu"
+msgstr "Ehdota johtimen loppu"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid "Optimize entire track being dragged"
@@ -26539,9 +26540,9 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
-"Kun päällä, koko vedon näkyvä osa optimoidaan ja uudelleenreititetään "
-"segmenttiä raahatessa. Kun pois päältä, vain raahauskohdan lähellä oleva "
-"alue optimoidaan."
+"Kun kytketty päälle, koko vedon näkyvä osa optimoidaan ja "
+"uudelleenreititetään segmenttiä raahatessa. Kun pois päältä, vain "
+"raahauskohdan lähellä oleva alue optimoidaan."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
@@ -26571,7 +26572,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:61
 msgid "Interactive Router Settings"
-msgstr "Interaktiivisen reitittimen asetukset"
+msgstr "Interaktiivisen Reitittimen Asetukset"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:165
 msgid "Reset to the current distance from the reference position."
@@ -26732,7 +26733,7 @@ msgstr "Perussäännöt:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
-msgstr "Pidä raitoja poissa"
+msgstr "Pidä johtimet poissa"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:49
 msgid "Prevent tracks from routing into this area"
@@ -26951,7 +26952,7 @@ msgstr "Johtimen leveys:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 msgid "Use net class widths"
-msgstr "Käytä nettoluokkien leveyksiä"
+msgstr "Käytä verkkoluokkien leveyksiä"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
 msgid "Pre-defined sizes:"
@@ -27771,7 +27772,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:654
 msgid "Layer must have a name."
-msgstr "Tasolla on oltava nimi."
+msgstr "Kerroksella on oltava nimi."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:660
 #, c-format
@@ -28294,7 +28295,7 @@ msgstr "Piirrokset"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:710
 msgid "User1"
-msgstr "Käyttäjä 1"
+msgstr "Käyttäjä1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:723
@@ -28314,23 +28315,23 @@ msgstr "Käyttäjä2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:730
 msgid "User3"
-msgstr "Käyttäjä 3"
+msgstr "Käyttäjä3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:740
 msgid "User4"
-msgstr "Käyttäjä 4"
+msgstr "Käyttäjä4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:750
 msgid "User5"
-msgstr "Käyttäjä 5"
+msgstr "Käyttäjä5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:760
 msgid "User6"
-msgstr "Käyttäjä 6"
+msgstr "Käyttäjä6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:770
 msgid "User7"
-msgstr "Käyttäjä 7"
+msgstr "Käyttäjä7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:780
 msgid "User8"
@@ -29154,7 +29155,7 @@ msgstr "Signaalin eheys"
 
 #: pcbnew/drc/drc_item.cpp:50
 msgid "Missing connection between items"
-msgstr "Kohteita ei ole yhdistetty"
+msgstr "Puuttuva yhteys kohteiden välillä"
 
 #: pcbnew/drc/drc_item.cpp:54
 msgid "Items shorting two nets"
@@ -29370,7 +29371,7 @@ msgstr "Tunnistamaton kohde %s."
 #: pcbnew/drc/drc_rule_parser.cpp:152 pcbnew/drc/drc_rule_parser.cpp:229
 #: pcbnew/drc/drc_rule_parser.cpp:410
 msgid "Incomplete statement."
-msgstr "Keskeneräinen lausunto."
+msgstr "Keskeneräinen lauseke."
 
 #: pcbnew/drc/drc_rule_parser.cpp:156 pcbnew/drc/drc_rule_parser.cpp:233
 #: pcbnew/drc/drc_rule_parser.cpp:286 pcbnew/drc/drc_rule_parser.cpp:325
@@ -29551,7 +29552,7 @@ msgstr "Tarkistetaan silkkipainatuksen ja levyn reunan varoetäisyydet..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:77
 msgid "Checking pad holes..."
-msgstr "Tarkastetaan anturareikiä ..."
+msgstr "Tarkastetaan anturareikiä..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:100
 msgid "Checking via holes..."
@@ -29960,7 +29961,7 @@ msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
-"Piirilevy kopioitu:\n"
+"Piirilevy kopioitu kohteeseen:\n"
 "%s"
 
 #: pcbnew/footprint.cpp:945
@@ -29981,7 +29982,7 @@ msgstr "autoplace"
 
 #: pcbnew/footprint.cpp:970
 msgid "not in schematic"
-msgstr "ei kaavamaisesti"
+msgstr "ei kytkentäkaaviossa"
 
 #: pcbnew/footprint.cpp:973
 msgid "exclude from pos files"
@@ -30129,8 +30130,8 @@ msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Nykyinen kokoonpano ei sisällä kirjastoa lempinimi '%s'.\n"
-"Käytä Hallitse jalanjälkikirjastoja muokata kokoonpanoa."
+"Nykyinen kokoonpano ei sisällä kirjastoa nimellä '%s'.\n"
+"Käytä hallitse jalanjälkikirjastoja muokataksesi asetuksia."
 
 #: pcbnew/footprint_editor_utils.cpp:297
 msgid "Library not found in footprint library table."
@@ -30142,9 +30143,8 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Kirjastoa lempinimellä '%s' ei ole otettu käyttöön nykyisessä "
-"kokoonpanossa.\n"
-"Käytä Hallitse jalanjälkikirjastoja -toimintoa muokkaa määritystä."
+"Kirjastoa '%s' ei ole otettu käyttöön nykyisessä kokoonpanossa.\n"
+"Käytä hallitse jalanjälkikirjastoja -toimintoa muokataksesi määrityksiä."
 
 #: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:996
 msgid "Footprint library not enabled."
@@ -30168,8 +30168,8 @@ msgstr ""
 "Vanhojen kirjastojen (.mod-tiedostojen) kirjoittaminen / muokkaaminen ei ole "
 "sallittua\n"
 "Tallenna nykyinen kirjasto uuteen .pretty-muotoon\n"
-"ja päivitä jalanjälkesi lib-taulukko\n"
-"tallentaaksesi jalanjälkesi (.kicad_mod-tiedosto) .pretty library -kansioon"
+"ja päivitä jalanjälki lib-taulukko\n"
+"tallentaaksesi jalanjälkesi (.kicad_mod-tiedosto) .pretty kirjastokansioon"
 
 #: pcbnew/footprint_libraries_utils.cpp:66
 msgid ""
@@ -30244,7 +30244,7 @@ msgstr "Päivitä kortin footprint:it osoittamaan tänne: %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:740
 msgid "Update footprints on board to refer to new library?"
-msgstr "Päivitä kortin footprint:it osoittamaan uuteen kirjastoon?"
+msgstr "Päivitä piirilevyn jalanjäljet osoittamaan uuteen kirjastoon?"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
 #: pcbnew/footprint_viewer_frame.cpp:765
@@ -30270,7 +30270,7 @@ msgstr "Tallenna jalanjälki uudella nimellä"
 
 #: pcbnew/footprint_libraries_utils.cpp:1044
 msgid "No library specified.  Footprint could not be saved."
-msgstr "Kirjastoa ei ole määritetty. Jalanjälkeä ei voitu tallentaa."
+msgstr "Kirjastoa ei ole määritetty.  Jalanjälkeä ei voitu tallentaa."
 
 #: pcbnew/footprint_libraries_utils.cpp:1054
 msgid "No footprint name specified.  Footprint could not be saved."
@@ -30305,7 +30305,7 @@ msgstr "Jalanjäljen nimeä ei ole määritelty."
 
 #: pcbnew/footprint_viewer_frame.cpp:122
 msgid "KiCad Footprint Library Viewer"
-msgstr "Jalanjälkikirjaston selain"
+msgstr "KiCad Jalanjälkikirjastoselain"
 
 #: pcbnew/footprint_viewer_frame.cpp:164
 msgid ""
@@ -30664,11 +30664,11 @@ msgstr "Vie IDF 3D -taulun esitys"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "STEP..."
-msgstr "VAIHE ..."
+msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "Export STEP 3D board representation"
-msgstr "Vie STEP 3D -taulun esitys"
+msgstr "Vie STEP 3D-piirilevyn esitys"
 
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "SVG..."
@@ -30743,11 +30743,11 @@ msgstr "Aukon koko:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:62
 msgid "Stub Size:"
-msgstr "Tynnyrin koko:"
+msgstr "Kannan koko:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:69
 msgid "Arc Stub Radius Value:"
-msgstr "Valokaaren säteen arvo:"
+msgstr "Kaaren kannan säteen arvo:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
@@ -31959,8 +31959,8 @@ msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr ""
-"CADSTAR-suunnittelu sisältää tavaratilan reitityselementtejä, joilla ei ole "
-"KiCad-vastaavaa. Näitä elementtejä ei ladattu."
+"CADSTAR-suunnittelu sisältää runkoreitityselementtejä, joilla ei ole KiCad-"
+"vastaavaa. Näitä elementtejä ei ladattu."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:153
 #, c-format
@@ -32958,7 +32958,7 @@ msgstr "Lisää mutkitteluväliä yhdellä askeleella."
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease Spacing"
-msgstr "Pienennä Väliä"
+msgstr "Pienennä Välejä"
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease meander spacing by one step."
@@ -34101,7 +34101,7 @@ msgstr "Siirrä tarkasti"
 #: pcbnew/tools/edit_tool.cpp:2249
 #, c-format
 msgid "Duplicated %d item(s)"
-msgstr "Kopioitu %d kohde (tta)"
+msgstr "Kopioitu %d kohde(tta)"
 
 #: pcbnew/tools/edit_tool.cpp:2472
 msgid "Select reference point for the copy..."
@@ -34644,7 +34644,7 @@ msgstr "Siisti Johtimet & Läpiviennit..."
 
 #: pcbnew/tools/pcb_actions.cpp:458
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr "Siivoa tarpeettomat kohteet, oikosulkuosat jne."
+msgstr "Siivoa tarpeettomat kohteet, oikosulkevat osat jne."
 
 #: pcbnew/tools/pcb_actions.cpp:463
 msgid "Cleanup Graphics..."
@@ -35588,7 +35588,7 @@ msgstr "Interaktiivisen Reitittimen Asetukset ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Open Interactive Router settings"
-msgstr "Avaa Interaktiivisen Reitittimen Asetukset"
+msgstr "Avaa Interaktiivisen Reitittimen asetukset"
 
 #: pcbnew/tools/pcb_actions.cpp:1335
 msgid "Differential Pair Dimensions..."
@@ -35724,7 +35724,7 @@ msgstr "Lisää vyöhykekulma"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2097
 msgid "Split segment"
-msgstr "Jaettu segmentti"
+msgstr "Halkaise segmentti"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2168
 msgid "Remove a zone/polygon corner"
@@ -36143,11 +36143,11 @@ msgstr "Näytä tai piilota tämä kerros"
 
 #: pcbnew/widgets/appearance_controls.cpp:1537
 msgid "Adhesive on board's front"
-msgstr "Sidosaine piirilevyn etupuolella"
+msgstr "Sidosaine levyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1538
 msgid "Adhesive on board's back"
-msgstr "Sidosaine piirilevyn takapuolella"
+msgstr "Sidosaine levyn takapuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1539
 msgid "Solder paste on board's front"
