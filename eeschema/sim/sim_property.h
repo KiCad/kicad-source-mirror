@@ -61,16 +61,8 @@ private:
 
     wxTextEntry* getTextEntry();
 
-    void onText( wxCommandEvent& aEvent );
-    void onChar( wxKeyEvent& aEvent );
-    void onMouse( wxMouseEvent& aEvent );
-
     SIM_VALUE::TYPE             m_valueType;
     SIM_VALUE_GRAMMAR::NOTATION m_notation;
-    wxString                    m_prevText;
-    long                        m_prevInsertionPoint;
-
-    wxDECLARE_EVENT_TABLE();
 };
 
 

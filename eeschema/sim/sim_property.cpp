@@ -180,27 +180,12 @@ bool SIM_BOOL_VALIDATOR::Validate( wxWindow* aParent )
 }
 
 
-wxBEGIN_EVENT_TABLE( SIM_STRING_VALIDATOR, SIM_VALIDATOR )
-    EVT_TEXT( wxID_ANY, SIM_STRING_VALIDATOR::onText )
-    EVT_CHAR( SIM_STRING_VALIDATOR::onChar )
-    EVT_MOUSE_EVENTS( SIM_STRING_VALIDATOR::onMouse )
-wxEND_EVENT_TABLE()
-
-
 SIM_STRING_VALIDATOR::SIM_STRING_VALIDATOR( SIM_VALUE::TYPE aValueType,
                                             SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : SIM_VALIDATOR(),
       m_valueType( aValueType ),
-      m_notation( aNotation ),
-      m_prevInsertionPoint( 0 )
+      m_notation( aNotation )
 {
-    wxTextEntry* textEntry = getTextEntry();
-
-    if( !textEntry )
-        return;
-
-    m_prevText = textEntry->GetValue();
-    m_prevInsertionPoint = textEntry->GetInsertionPoint();
 }
 
 
@@ -216,6 +201,7 @@ bool SIM_STRING_VALIDATOR::Validate( wxWindow* aParent )
         return true;
 
     wxTextEntry* const textEntry = getTextEntry();
+
     if( !textEntry )
         return false;
 
@@ -262,47 +248,6 @@ wxTextEntry* SIM_STRING_VALIDATOR::getTextEntry()
     );
 
     return nullptr;
-}
-
-
-void SIM_STRING_VALIDATOR::onText( wxCommandEvent& aEvent )
-{
-    wxTextEntry* textEntry = getTextEntry();
-    if( !textEntry )
-        return;
-
-    if( !isValid( textEntry->GetValue() ) )
-    {
-        textEntry->ChangeValue( m_prevText );
-        textEntry->SetInsertionPoint( m_prevInsertionPoint );
-    }
-
-    m_prevText = textEntry->GetValue();
-    m_prevInsertionPoint = textEntry->GetInsertionPoint();
-}
-
-
-void SIM_STRING_VALIDATOR::onChar( wxKeyEvent& aEvent )
-{
-    aEvent.Skip();
-
-    wxTextEntry* textEntry = getTextEntry();
-    if( !textEntry )
-        return;
-
-    m_prevInsertionPoint = textEntry->GetInsertionPoint();
-}
-
-
-void SIM_STRING_VALIDATOR::onMouse( wxMouseEvent& aEvent )
-{
-    aEvent.Skip();
-
-    wxTextEntry* textEntry = getTextEntry();
-    if( !textEntry )
-        return;
-
-    m_prevInsertionPoint = textEntry->GetInsertionPoint();
 }
 
 
