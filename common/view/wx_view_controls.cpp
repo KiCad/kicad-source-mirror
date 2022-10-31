@@ -920,6 +920,8 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     }
 
     wxCHECK_MSG( false, false, wxT( "This line should never be reached" ) );
+
+    return false;
 }
 
 
