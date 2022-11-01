@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE( AllCorrect )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        BOOST_CHECK_MESSAGE( IsTypeCorrect( type ), "Failed for " << type );
+        BOOST_CHECK_MESSAGE( IsTypeCorrect( type ), "Type " << type << " is not assigned to an application in typeinfo.h" );
     }
 }
 
