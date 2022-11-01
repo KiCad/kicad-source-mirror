@@ -111,11 +111,11 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
 
     std::vector<SHAPE_POLY_SET> layerPolys( layerCount );
 
-    auto sliver_checker =
-            [&]( int aItem ) -> size_t
+    auto build_layer_polys =
+            [&]( int layerIdx ) -> size_t
             {
-                PCB_LAYER_ID    layer = copperLayers[aItem];
-                SHAPE_POLY_SET& poly = layerPolys[aItem];
+                PCB_LAYER_ID    layer = copperLayers[layerIdx];
+                SHAPE_POLY_SET& poly = layerPolys[layerIdx];
 
                 if( m_drcEngine->IsCancelled() )
                     return 0;
@@ -125,17 +125,13 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                 forEachGeometryItem( s_allBasicItems, LSET().set( layer ),
                         [&]( BOARD_ITEM* item ) -> bool
                         {
-                            if( dynamic_cast<ZONE*>( item) )
+                            if( ZONE* zone = dynamic_cast<ZONE*>( item) )
                             {
-                                ZONE* zone = static_cast<ZONE*>( item );
-
                                 if( !zone->GetIsRuleArea() )
                                 {
                                     fill = zone->GetFill( layer )->CloneDropTriangulation();
                                     fill.Unfracture( SHAPE_POLY_SET::PM_FAST );
-
-                                    for( int jj = 0; jj < fill.OutlineCount(); ++jj )
-                                        poly.AddOutline( fill.Outline( jj ) );
+                                    poly.Append( fill );
 
                                     // Report progress on board zones only.  Everything else is
                                     // in the noise.
@@ -173,7 +169,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
     returns.reserve( copperLayers.size() );
 
     for( size_t ii = 0; ii < copperLayers.size(); ++ii )
-        returns.emplace_back( tp.submit( sliver_checker, ii ) );
+        returns.emplace_back( tp.submit( build_layer_polys, ii ) );
 
     for( const std::future<size_t>& ret : returns )
     {

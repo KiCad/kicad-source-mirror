@@ -236,7 +236,7 @@ public:
         return m_fillFlags.test( aLayer );
     }
 
-    void SetFillFlag( PCB_LAYER_ID aLayer, bool aFlag ) { m_fillFlags.set( aLayer, aFlag); }
+    void SetFillFlag( PCB_LAYER_ID aLayer, bool aFlag ) { m_fillFlags.set( aLayer, aFlag ); }
 
     bool IsFilled() const { return m_isFilled; }
     void SetIsFilled( bool isFilled ) { m_isFilled = isFilled; }
@@ -772,6 +772,13 @@ public:
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
+
+    void SetFillPoly( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aPoly )
+    {
+        m_FilledPolysList[ aLayer ] = std::make_shared<SHAPE_POLY_SET>( *aPoly );
+        SetFillFlag( aLayer, true );
+    }
+
 #endif
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
