@@ -381,7 +381,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
 
     if( valid && polyline.SelfIntersecting() )
     {
-        m_warningText->SetLabel( _( "Polygon can not be self-intersecting" ) );
+        m_warningText->SetLabel( _( "Self-intersecting polygons are not allowed" ) );
         valid = false;
     }
 
