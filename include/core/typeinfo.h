@@ -284,6 +284,7 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     case PCB_SHAPE_LOCATE_CIRCLE_T:
     case PCB_SHAPE_LOCATE_ARC_T:
     case PCB_SHAPE_LOCATE_POLY_T:
+    case PCB_SHAPE_LOCATE_BEZIER_T:
         return PCB_SHAPE_T;
 
     case PCB_DIM_ALIGNED_T:
@@ -347,6 +348,7 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
     case PCB_SHAPE_LOCATE_CIRCLE_T:
     case PCB_SHAPE_LOCATE_ARC_T:
     case PCB_SHAPE_LOCATE_POLY_T:
+    case PCB_SHAPE_LOCATE_BEZIER_T:
 
     case PCB_DIMENSION_T:
 
@@ -471,6 +473,7 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_SHAPE_LOCATE_CIRCLE_T:
     case PCB_SHAPE_LOCATE_ARC_T:
     case PCB_SHAPE_LOCATE_POLY_T:
+    case PCB_SHAPE_LOCATE_BEZIER_T:
         return true;
 
     default:
