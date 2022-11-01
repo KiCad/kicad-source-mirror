@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-27 23:09+0000\n"
+"PO-Revision-Date: 2022-11-04 23:18+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -1065,9 +1065,8 @@ msgid "Opacity"
 msgstr "Opacitat"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "Gruix de la placa: "
+msgstr "Gruix de la placa"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -2858,9 +2857,8 @@ msgid "<<"
 msgstr "<<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
-#, fuzzy
 msgid "Enabled:"
-msgstr "Habilita"
+msgstr "Habilitat:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:65
 #: eeschema/dialogs/dialog_label_properties_base.cpp:123
@@ -19918,9 +19916,10 @@ msgid "Library package handling"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "Vols afegir la biblioteca a la taula global de biblioteques?"
+msgstr ""
+"Afegeix automàticament les biblioteques instal·lades a la taula global de "
+"biblioteques"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
 #, fuzzy
@@ -20038,9 +20037,9 @@ msgid "No package updates available"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "%s pin %s no trobat"
+msgstr "No s'ha trobat la versió %s del paquet %s!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -32659,11 +32658,12 @@ msgid "Write STEP file\n"
 msgstr "Escriu fitxer STEP\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:233
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Error en escriure al fitxer '%s'."
+msgstr ""
+"\n"
+"** Error en escriure el fitxer STEP. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:238
 #, c-format
@@ -32682,11 +32682,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:255
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "Error mentre es llegia el fitxer."
+msgstr ""
+"\n"
+"** Error mentre es llegia el fitxer kicad_pcb. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:263
 msgid ""
@@ -35193,9 +35194,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:88
-#, fuzzy
 msgid "Loading board\n"
-msgstr "Carrega la placa"
+msgstr "S'està carregant la placa\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:95
 msgid "Successfully created svg file"
