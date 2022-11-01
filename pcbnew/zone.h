@@ -352,7 +352,8 @@ public:
      * merged due to other parameters such as fillet radius.  The copper pour will end up
      * effectively merged though, so we need to do some calculations with them in mind.
      */
-    void GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aZones ) const;
+    void GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aSameNetCollidingZones,
+                              std::vector<ZONE*>* aOtherNetIntersectingZones ) const;
 
     /**
      * Convert solid areas full shapes to polygon set
