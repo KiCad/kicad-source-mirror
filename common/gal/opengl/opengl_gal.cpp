@@ -2187,7 +2187,7 @@ void OPENGL_GAL::drawPolyline( const std::function<VECTOR2D( int )>& aPointGette
 
     if( aPointCount == 1 )
     {
-        drawLineQuad( aPointGetter( 0 ), aPointGetter( 0 ), false );
+        drawLineQuad( aPointGetter( 0 ), aPointGetter( 0 ), aReserve );
         return;
     }
 
