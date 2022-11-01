@@ -121,6 +121,10 @@ public:
      */
     unsigned GetPriority() const { return m_priority; }
 
+    bool HigherPriority( const ZONE* aOther ) const;
+
+    bool SameNet( const ZONE* aOther ) const;
+
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     void SetLayerSet( LSET aLayerSet ) override;
@@ -367,7 +371,8 @@ public:
      * merged due to other parameters such as fillet radius.  The copper pour will end up
      * effectively merged though, so we need to do some calculations with them in mind.
      */
-    void GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aZones ) const;
+    void GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aSameNetCollidingZones,
+                              std::vector<ZONE*>* aOtherNetIntersectingZones ) const;
 
     /**
      * Convert solid areas full shapes to polygon set

@@ -189,6 +189,21 @@ EDA_ITEM* ZONE::Clone() const
 }
 
 
+bool ZONE::HigherPriority( const ZONE* aOther ) const
+{
+    if( m_priority != aOther->m_priority )
+        return m_priority > aOther->m_priority;
+
+    return m_Uuid > aOther->m_Uuid;
+}
+
+
+bool ZONE::SameNet( const ZONE* aOther ) const
+{
+    return GetNetCode() == aOther->GetNetCode();
+}
+
+
 bool ZONE::UnFill()
 {
     bool change = false;
@@ -1084,9 +1099,13 @@ bool ZONE::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx ) const
 }
 
 
-void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aZones ) const
+void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aSameNetCollidingZones,
+                                std::vector<ZONE*>* aOtherNetIntersectingZones ) const
 {
-    int epsilon = Millimeter2iu( 0.001 );
+    int   epsilon = Millimeter2iu( 0.001 );
+    BOX2I bbox = GetBoundingBox();
+
+    bbox.Inflate( epsilon );
 
     for( ZONE* candidate : GetBoard()->Zones() )
     {
@@ -1099,16 +1118,23 @@ void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aZones 
         if( candidate->GetIsRuleArea() )
             continue;
 
-        if( candidate->GetNetCode() != GetNetCode() )
+        if( !candidate->GetBoundingBox().Intersects( bbox ) )
             continue;
 
-        for( auto iter = m_Poly->CIterate(); iter; iter++ )
+        if( candidate->GetNetCode() == GetNetCode() )
         {
-            if( candidate->m_Poly->Collide( iter.Get(), epsilon ) )
+            for( auto iter = m_Poly->CIterate(); iter; iter++ )
             {
-                aZones->push_back( candidate );
-                break;
+                if( candidate->m_Poly->Collide( iter.Get(), epsilon ) )
+                {
+                    aSameNetCollidingZones->push_back( candidate );
+                    break;
+                }
             }
+        }
+        else
+        {
+            aOtherNetIntersectingZones->push_back( candidate );
         }
     }
 }
@@ -1164,9 +1190,6 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
                       }
                   };
 
-    std::vector<ZONE*> interactingZones;
-    GetInteractingZones( aLayer, &interactingZones );
-
     SHAPE_POLY_SET* maxExtents = &flattened;
     SHAPE_POLY_SET  withFillets;
 
@@ -1183,11 +1206,34 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         maxExtents = &withFillets;
     }
 
-    for( ZONE* zone : interactingZones )
+    // We now add in the areas of any same-net, intersecting zones.  This keeps us from smoothing
+    // corners at an intersection (which often produces undesired divots between the intersecting
+    // zones -- see #2752).
+    //
+    // After smoothing, we'll subtract back out everything outside of our zone.
+    std::vector<ZONE*> sameNetCollidingZones;
+    std::vector<ZONE*> otherNetIntersectingZones;
+    GetInteractingZones( aLayer, &sameNetCollidingZones, &otherNetIntersectingZones );
+
+    for( ZONE* sameNetZone : sameNetCollidingZones )
     {
-        SHAPE_POLY_SET flattened_outline = *zone->Outline();
-        flattened_outline.ClearArcs();
-        aSmoothedPoly.BooleanAdd( flattened_outline, SHAPE_POLY_SET::PM_FAST );
+        BOX2I          sameNetBoundingBox = sameNetZone->GetBoundingBox();
+        SHAPE_POLY_SET sameNetPoly = *sameNetZone->Outline();
+
+        sameNetPoly.ClearArcs();
+
+        // Of course there's always a wrinkle.  The same-net intersecting zone *might* get knocked
+        // out along the border by a higher-priority, different-net zone.  #12797
+        for( ZONE* otherNetZone : otherNetIntersectingZones )
+        {
+            if( otherNetZone->HigherPriority( sameNetZone )
+                    && otherNetZone->GetBoundingBox().Intersects( sameNetBoundingBox ) )
+            {
+                sameNetPoly.BooleanSubtract( *otherNetZone->Outline(), SHAPE_POLY_SET::PM_FAST );
+            }
+        }
+
+        aSmoothedPoly.BooleanAdd( sameNetPoly, SHAPE_POLY_SET::PM_FAST );
     }
 
     if( aBoardOutline )
