@@ -418,10 +418,10 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
     wxString name = GetShownName();
     wxString number = GetShownNumber();
 
-    if( name.IsEmpty() )
+    if( name.IsEmpty() || m_nameTextSize == 0 )
         aDrawPinName = false;
 
-    if( number.IsEmpty() )
+    if( number.IsEmpty() || m_numTextSize == 0 )
         aDrawPinNum = false;
 
     if( aTextInside )  // Draw the text inside, but the pin numbers outside.
@@ -749,10 +749,10 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
     wxString         name = GetShownName();
     wxString         number = GetShownNumber();
 
-    if( name.IsEmpty() )
+    if( name.IsEmpty() || m_nameTextSize == 0 )
         aDrawPinName = false;
 
-    if( number.IsEmpty() )
+    if( number.IsEmpty() || m_numTextSize == 0 )
         aDrawPinNum = false;
 
     if( !aDrawPinNum && !aDrawPinName )
