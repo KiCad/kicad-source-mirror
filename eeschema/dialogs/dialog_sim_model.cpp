@@ -319,32 +319,8 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
 {
-    SIM_MODEL_KIBIS* modelkibis = nullptr;
-
-    if( isIbisLoaded() )
-    {
-        modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
-
-        for ( wxSizerItem* item : m_sourceSizer->GetChildren() )
-        {
-            if ( item->GetWindow() == m_differentialCheckbox )
-                item->SetFlag( item->GetFlag() | wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-
-            if ( item->GetWindow() == m_overrideCheckbox )
-                item->SetFlag( item->GetFlag() & ~wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-        }
-    }
-    else
-    {
-        for ( wxSizerItem* item : m_sourceSizer->GetChildren() )
-        {
-            if ( item->GetWindow() == m_differentialCheckbox )
-                item->SetFlag( item->GetFlag() | wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-
-            if ( item->GetWindow() == m_overrideCheckbox )
-                item->SetFlag( item->GetFlag() & ~wxRESERVE_SPACE_EVEN_IF_HIDDEN );
-        }
-    }
+    SIM_MODEL_KIBIS* modelkibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() )
+                                                 : nullptr;
 
     m_ibisModelCombobox->Show( isIbisLoaded() );
     m_ibisPinCombobox->Show( isIbisLoaded() );

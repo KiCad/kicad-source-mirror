@@ -26,56 +26,66 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizerMargins;
 	bSizerMargins = new wxBoxSizer( wxVERTICAL );
 
-	m_useLibraryModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("From library:"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_useLibraryModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("SPICE model from file (*.lib or *.sub)"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	bSizerMargins->Add( m_useLibraryModelRadioButton, 0, wxLEFT, 5 );
 
-	m_sourceSizer = new wxFlexGridSizer( 0, 3, 2, 0 );
-	m_sourceSizer->AddGrowableCol( 1 );
-	m_sourceSizer->AddGrowableRow( 0 );
-	m_sourceSizer->SetFlexibleDirection( wxBOTH );
-	m_sourceSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 5 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_pathLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("Library path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pathLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pathLabel->Wrap( -1 );
-	m_sourceSizer->Add( m_pathLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_pathLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_tclibraryPathName = new wxTextCtrl( m_modelPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_sourceSizer->Add( m_tclibraryPathName, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizer7->Add( m_tclibraryPathName, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
 
 	m_browseButton = new wxBitmapButton( m_modelPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_sourceSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizer7->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	gbSizer1->Add( bSizer7, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 	m_modelNameLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_modelNameLabel->Wrap( -1 );
-	m_sourceSizer->Add( m_modelNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
+	gbSizer1->Add( m_modelNameLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_modelNameCombobox = new wxComboBox( m_modelPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
-	m_sourceSizer->Add( m_modelNameCombobox, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_modelNameCombobox, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_overrideCheckbox = new wxCheckBox( m_modelPanel, wxID_ANY, _("Override"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sourceSizer->Add( m_overrideCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 7 );
+	gbSizer1->Add( m_overrideCheckbox, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 40 );
 
 	m_ibisPinLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("Pin:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ibisPinLabel->Wrap( -1 );
-	m_sourceSizer->Add( m_ibisPinLabel, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
+	gbSizer1->Add( m_ibisPinLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ibisPinCombobox = new wxComboBox( m_modelPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
-	m_sourceSizer->Add( m_ibisPinCombobox, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_ibisPinCombobox, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), 0, 5 );
 
 	m_differentialCheckbox = new wxCheckBox( m_modelPanel, wxID_ANY, _("Differential"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sourceSizer->Add( m_differentialCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 7 );
+	gbSizer1->Add( m_differentialCheckbox, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 40 );
 
 	m_ibisModelLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ibisModelLabel->Wrap( -1 );
-	m_sourceSizer->Add( m_ibisModelLabel, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
+	gbSizer1->Add( m_ibisModelLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ibisModelCombobox = new wxComboBox( m_modelPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
-	m_sourceSizer->Add( m_ibisModelCombobox, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_ibisModelCombobox, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), 0, 5 );
 
 
-	bSizerMargins->Add( m_sourceSizer, 0, wxEXPAND|wxBOTTOM|wxLEFT, 24 );
+	gbSizer1->AddGrowableCol( 1 );
 
-	m_useInstanceModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("From symbol instance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerMargins->Add( gbSizer1, 0, wxEXPAND|wxLEFT, 28 );
+
+
+	bSizerMargins->Add( 0, 18, 0, wxEXPAND, 5 );
+
+	m_useInstanceModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("Built-in SPICE model"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_useInstanceModelRadioButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizer16;

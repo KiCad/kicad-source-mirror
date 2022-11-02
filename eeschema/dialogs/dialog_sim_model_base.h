@@ -26,9 +26,10 @@ class WX_GRID;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
 #include <wx/combobox.h>
 #include <wx/checkbox.h>
-#include <wx/sizer.h>
+#include <wx/gbsizer.h>
 #include <wx/choice.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/manager.h>
@@ -54,7 +55,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxNotebook* m_notebook;
 		wxPanel* m_modelPanel;
 		wxRadioButton* m_useLibraryModelRadioButton;
-		wxFlexGridSizer* m_sourceSizer;
 		wxStaticText* m_pathLabel;
 		wxTextCtrl* m_tclibraryPathName;
 		wxBitmapButton* m_browseButton;
