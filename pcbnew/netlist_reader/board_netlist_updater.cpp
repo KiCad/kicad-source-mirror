@@ -842,16 +842,26 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist,
         {
             padNumber = component->GetNet( jj ).GetPinName();
 
-            if( footprint->FindPadByNumber( padNumber ) )
-                continue;   // OK, pad found
-
-            // not found: bad footprint, report error
-            msg.Printf( _( "%s pad %s not found in %s." ),
-                        component->GetReference(),
-                        padNumber,
-                        footprint->GetFPID().Format().wx_str() );
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-            ++m_errorCount;
+            if( padNumber.IsEmpty() )
+            {
+                // bad symbol, report error
+                msg.Printf( _( "Symbol %s has pins with no number.  These pins can not be matched "
+                               "to pads in %s." ),
+                            component->GetReference(),
+                            footprint->GetFPID().Format().wx_str() );
+                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+                ++m_errorCount;
+            }
+            else if( !footprint->FindPadByNumber( padNumber ) )
+            {
+                // not found: bad footprint, report error
+                msg.Printf( _( "%s pad %s not found in %s." ),
+                            component->GetReference(),
+                            padNumber,
+                            footprint->GetFPID().Format().wx_str() );
+                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+                ++m_errorCount;
+            }
         }
     }
 
