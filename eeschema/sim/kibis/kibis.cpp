@@ -646,6 +646,8 @@ std::string KIBIS_PIN::addDie( KIBIS_MODEL& aModel, KIBIS_PARAMETER& aParam, int
 
 void KIBIS_PIN::getKuKdFromFile( std::string* aSimul )
 {
+#ifdef KICAD_SPICE
+
     std::string   outputFileName = m_topLevel->m_cacheDir + "temp_output.spice";
 
     if( std::remove( outputFileName.c_str() ) )
@@ -721,6 +723,8 @@ void KIBIS_PIN::getKuKdFromFile( std::string* aSimul )
     m_Ku = ku;
     m_Kd = kd;
     m_t = t;
+
+#endif
 }
 
 
