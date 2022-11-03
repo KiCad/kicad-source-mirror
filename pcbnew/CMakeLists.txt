@@ -91,6 +91,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_footprint_wizard_list_base.cpp
     dialogs/dialog_fp_plugin_options.cpp
     dialogs/dialog_fp_plugin_options_base.cpp
+    dialogs/dialog_gen_footprint_position.cpp
     dialogs/dialog_gen_footprint_position_file_base.cpp
     dialogs/dialog_gencad_export_options.cpp
     dialogs/dialog_gendrill.cpp
@@ -225,7 +226,6 @@ set( PCBNEW_EXPORTERS
     exporters/exporter_vrml.cpp
     exporters/export_footprints_placefile.cpp
     exporters/gen_drill_report_files.cpp
-    exporters/gen_footprints_placefile.cpp
     exporters/gendrill_Excellon_writer.cpp
     exporters/gendrill_file_writer_base.cpp
     exporters/gendrill_gerber_writer.cpp
