@@ -1031,14 +1031,8 @@ void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aSameNe
 
         if( candidate->GetNetCode() == GetNetCode() )
         {
-            for( auto iter = m_Poly->CIterate(); iter; iter++ )
-            {
-                if( candidate->m_Poly->Collide( iter.Get(), epsilon ) )
-                {
-                    aSameNetCollidingZones->push_back( candidate );
-                    break;
-                }
-            }
+            if( m_Poly->Collide( candidate->m_Poly ) )
+                aSameNetCollidingZones->push_back( candidate );
         }
         else
         {
