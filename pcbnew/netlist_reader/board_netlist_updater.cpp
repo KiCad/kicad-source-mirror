@@ -978,6 +978,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         {
             msg.Printf( _( "Multiple footprints found for '%s'." ), component->GetReference() );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+            m_errorCount++;
         }
     }
 
@@ -1016,6 +1017,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
 
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+            m_errorCount++;
             doDelete = false;
         }
 
