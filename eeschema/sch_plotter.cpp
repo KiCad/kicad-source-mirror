@@ -139,10 +139,10 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
             m_schFrame->SetCurrentSheet( sheetList[i] );
         else
             m_schematic->SetCurrentSheet( sheetList[i] );
+
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-        if( m_schFrame )
-            m_schFrame->SetSheetNumberAndCount();
+        m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
 
@@ -315,8 +315,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-        if( m_schFrame )
-            m_schFrame->SetSheetNumberAndCount();
+        m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
         PAGE_INFO   actualPage = screen->GetPageSettings();
@@ -400,8 +399,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
     m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-    if( m_schFrame )
-        m_schFrame->SetSheetNumberAndCount();
+    m_schematic->SetSheetNumberAndCount();
 }
 
 
@@ -490,8 +488,7 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-        if( m_schFrame )
-            m_schFrame->SetSheetNumberAndCount();
+        m_schematic->SetSheetNumberAndCount();
 
         screen = m_schematic->CurrentSheet().LastScreen();
 
@@ -556,8 +553,7 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
     m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-    if( m_schFrame )
-        m_schFrame->SetSheetNumberAndCount();
+    m_schematic->SetSheetNumberAndCount();
 }
 
 
@@ -652,8 +648,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
             m_schematic->SetCurrentSheet( sheetList[i] );
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-        if( m_schFrame )
-            m_schFrame->SetSheetNumberAndCount();
+        m_schematic->SetSheetNumberAndCount();
 
         screen = m_schematic->CurrentSheet().LastScreen();
 
@@ -736,8 +731,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
     m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-    if( m_schFrame )
-        m_schFrame->SetSheetNumberAndCount();
+    m_schematic->SetSheetNumberAndCount();
 }
 
 
@@ -845,8 +839,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
             m_schematic->SetCurrentSheet( sheetList[i] );
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-        if( m_schFrame )
-            m_schFrame->SetSheetNumberAndCount();
+        m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
         wxPoint     plot_offset;
@@ -902,8 +895,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
             m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-            if( m_schFrame )
-                m_schFrame->SetSheetNumberAndCount();
+            m_schematic->SetSheetNumberAndCount();
             return;
         }
     }
@@ -918,8 +910,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
     m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-    if( m_schFrame )
-        m_schFrame->SetSheetNumberAndCount();
+    m_schematic->SetSheetNumberAndCount();
 }
 
 
@@ -990,8 +981,7 @@ void SCH_PLOTTER::restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOl
 
     m_schematic->CurrentSheet().UpdateAllScreenReferences();
 
-    if( m_schFrame )
-        m_schFrame->SetSheetNumberAndCount();
+    m_schematic->SetSheetNumberAndCount();
 }
 
 

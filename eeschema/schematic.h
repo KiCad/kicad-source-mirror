@@ -188,6 +188,13 @@ public:
      */
     wxString GetUniqueFilenameForCurrentSheet();
 
+    /**
+     * Set the m_ScreenNumber and m_NumberOfScreens members for screens.
+     *
+     * @note This must be called after deleting or adding a sheet and when entering a sheet.
+     */
+    void SetSheetNumberAndCount();
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif

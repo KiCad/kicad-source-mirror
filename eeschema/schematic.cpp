@@ -468,3 +468,32 @@ wxString SCHEMATIC::GetUniqueFilenameForCurrentSheet()
 
     return filename;
 }
+
+
+void SCHEMATIC::SetSheetNumberAndCount()
+{
+    SCH_SCREEN* screen;
+    SCH_SCREENS s_list( Root() );
+
+    // Set the sheet count, and the sheet number (1 for root sheet)
+    int              sheet_count = Root().CountSheets();
+    int              sheet_number = 1;
+    const KIID_PATH& current_sheetpath = CurrentSheet().Path();
+
+    // @todo Remove all pseudo page number system is left over from prior to real page number
+    //       implementation.
+    for( const SCH_SHEET_PATH& sheet : GetSheets() )
+    {
+        if( sheet.Path() == current_sheetpath ) // Current sheet path found
+            break;
+
+        sheet_number++; // Not found, increment before this current path
+    }
+
+    for( screen = s_list.GetFirst(); screen != nullptr; screen = s_list.GetNext() )
+        screen->SetPageCount( sheet_count );
+
+    CurrentSheet().SetVirtualPageNumber( sheet_number );
+    CurrentSheet().LastScreen()->SetVirtualPageNumber( sheet_number );
+    CurrentSheet().LastScreen()->SetPageNumber( CurrentSheet().GetPageNumber() );
+}
