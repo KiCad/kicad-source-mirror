@@ -1214,9 +1214,9 @@ bool PDF_PLOTTER::EndPlot()
         js += wxT( "]; " );
 
         js += wxT( "var cChoice = app.popUpMenuEx.apply\\( app, aParams \\); " );
-        js += wxT( "if\\( cChoice != null && cChoice.startsWith\\( '#' \\) \\)"
+        js += wxT( "if\\( cChoice != null && cChoice.substring\\( 0, 1 \\) == '#' \\)"
                    "    this.pageNum = cChoice.slice\\( 1 \\); " );
-        js += wxT( "else if\\( cChoice != null && cChoice.startsWith\\( 'http' \\) \\)"
+        js += wxT( "else if\\( cChoice != null && cChoice.substring\\( 0, 4 \\) == 'http' \\)"
                    "    app.launchURL\\( cChoice \\);" );
 
         startPdfObject( menuHandle );
