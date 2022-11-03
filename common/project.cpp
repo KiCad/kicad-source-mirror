@@ -22,6 +22,7 @@
  */
 
 #include <wx/log.h>
+#include <wx/stdpaths.h>                // required on Mac
 #include <kiplatform/environment.h>
 
 #include <pgm_base.h>
@@ -205,7 +206,7 @@ const wxString PROJECT::libTableName( const wxString& aLibTableName ) const
         // application title which is no longer constant or known.  This next line needs
         // to be re-thought out.
 
-#ifndef __WXMAC__
+#ifdef __WXMAC__
         fn.AssignDir( KIPLATFORM::ENV::GetUserConfigPath() );
 #else
         // don't pollute home folder, temp folder seems to be more appropriate
