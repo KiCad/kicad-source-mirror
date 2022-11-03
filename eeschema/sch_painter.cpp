@@ -2269,7 +2269,9 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             return;
     }
 
-    if( aField->IsVoid() )
+    wxString shownText = aField->GetShownText();
+
+    if( shownText.IsEmpty() )
         return;
 
     if( drawingShadows && !eeconfig()->m_Selection.draw_selected_children )
@@ -2323,7 +2325,6 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     }
     else
     {
-        wxString        shownText = aField->GetShownText();
         VECTOR2I        textpos = bbox.Centre();
         TEXT_ATTRIBUTES attributes = aField->GetAttributes();
 

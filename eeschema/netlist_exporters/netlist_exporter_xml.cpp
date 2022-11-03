@@ -95,6 +95,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     wxString                     value;
     wxString                     datasheet;
     wxString                     footprint;
+    wxString                     candidate;
     std::map<wxString, wxString> userFields;
 
     if( aSymbol->GetUnitCount() > 1 )
@@ -125,28 +126,21 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 int unit = symbol2->GetUnitSelection( aSheet );
 
                 // The lowest unit number wins.  User should only set fields in any one unit.
-                // remark: IsVoid() returns true for empty strings or the "~" string (empty
-                // field value)
-                if( !symbol2->GetValue( &sheetList[i], m_resolveTextVars ).IsEmpty()
-                        && ( unit < minUnit || value.IsEmpty() ) )
-                {
-                    value = symbol2->GetValue( &sheetList[i], m_resolveTextVars );
-                }
+                candidate = symbol2->GetValue( &sheetList[i], m_resolveTextVars );
 
-                if( !symbol2->GetFootprint( &sheetList[i], m_resolveTextVars ).IsEmpty()
-                        && ( unit < minUnit || footprint.IsEmpty() ) )
-                {
-                    footprint = symbol2->GetFootprint( &sheetList[i], m_resolveTextVars );
-                }
+                if( !candidate.IsEmpty() && ( unit < minUnit || value.IsEmpty() ) )
+                    value = candidate;
 
-                if( !symbol2->GetField( DATASHEET_FIELD )->IsVoid()
-                        && ( unit < minUnit || datasheet.IsEmpty() ) )
-                {
-                    if( m_resolveTextVars )
-                        datasheet = symbol2->GetField( DATASHEET_FIELD )->GetShownText();
-                    else
-                        datasheet = symbol2->GetField( DATASHEET_FIELD )->GetText();
-                }
+                candidate = symbol2->GetFootprint( &sheetList[i], m_resolveTextVars );
+
+                if( !candidate.IsEmpty() && ( unit < minUnit || footprint.IsEmpty() ) )
+                    footprint = candidate;
+
+                candidate = m_resolveTextVars ? symbol2->GetField( DATASHEET_FIELD )->GetShownText()
+                                              : symbol2->GetField( DATASHEET_FIELD )->GetText();
+
+                if( !candidate.IsEmpty() && ( unit < minUnit || datasheet.IsEmpty() ) )
+                    datasheet = candidate;
 
                 for( int ii = MANDATORY_FIELDS; ii < symbol2->GetFieldCount(); ++ii )
                 {

@@ -339,7 +339,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     VECTOR2I textpos;
     int      penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
 
-    if( ( !IsVisible() && !IsForceVisible() ) || IsVoid() )
+    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText().IsEmpty() )
         return;
 
     COLOR4D bg = aSettings->GetBackgroundColor();
@@ -572,12 +572,6 @@ GR_TEXT_V_ALIGN_T SCH_FIELD::GetEffectiveVertJustify() const
     default:
         return GR_TEXT_V_ALIGN_CENTER;
     }
-}
-
-
-bool SCH_FIELD::IsVoid() const
-{
-    return GetText().Len() == 0;
 }
 
 
@@ -927,7 +921,7 @@ BITMAPS SCH_FIELD::GetMenuImage() const
 bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Do not hit test hidden or empty fields.
-    if( !IsVisible() || IsVoid() )
+    if( !IsVisible() || GetShownText().IsEmpty() )
         return false;
 
     BOX2I rect = GetBoundingBox();
@@ -947,7 +941,7 @@ bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     // Do not hit test hidden fields.
-    if( !IsVisible() || IsVoid() )
+    if( !IsVisible() || GetShownText().IsEmpty() )
         return false;
 
     BOX2I rect = aRect;
@@ -969,7 +963,7 @@ bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 
 void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
-    if( IsVoid() || aBackground )
+    if( GetShownText().IsEmpty() || aBackground )
         return;
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();

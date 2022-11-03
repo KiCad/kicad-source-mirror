@@ -932,8 +932,13 @@ void SCH_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly 
 {
     for( SCH_FIELD& field : m_fields )
     {
-        if( !aVisibleOnly || ( field.IsVisible() && !field.IsVoid() ) )
-            aVector.push_back( &field );
+        if( aVisibleOnly )
+        {
+            if( !field.IsVisible() || field.GetShownText().IsEmpty() )
+                continue;
+        }
+
+        aVector.push_back( &field );
     }
 }
 

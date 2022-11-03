@@ -152,11 +152,6 @@ public:
     bool CanAutoplace() const { return m_allowAutoPlace; }
     void SetCanAutoplace( bool aCanPlace ) { m_allowAutoPlace = aCanPlace; }
 
-    /**
-     * @return true if the field is either empty or holds "~".
-     */
-    bool IsVoid() const;
-
     void SwapData( SCH_ITEM* aItem ) override;
 
     /**
