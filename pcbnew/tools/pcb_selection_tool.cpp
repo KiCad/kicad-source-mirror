@@ -2904,7 +2904,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         }
         else if( item->Type() == PCB_BITMAP_T )
         {
-            VECTOR2I size = static_cast<const PCB_BITMAP*>( item )->GetSize();
+            VECTOR2D size = static_cast<const PCB_BITMAP*>( item )->GetSize();
             area = size.x * size.y;
         }
         else
