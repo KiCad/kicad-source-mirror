@@ -53,6 +53,7 @@ PCB_TRACK::PCB_TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
     m_Width = pcbIUScale.mmToIU( 0.2 );     // Gives a reasonable default width
+    m_CachedLOD = 0.0;                      // Set to always display
 }
 
 

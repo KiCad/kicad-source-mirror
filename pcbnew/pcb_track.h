@@ -220,6 +220,24 @@ public:
         return true;
     }
 
+    /**
+     * Get last used LOD for the track net name
+     * @return LOD from ViewGetLOD()
+     */
+    double GetCachedLOD()
+    {
+        return m_CachedLOD;
+    }
+
+    /**
+     * Set the cached LOD
+     * @param aLOD value from ViewGetLOD() or 0.0 to always display
+     */
+    void SetCachedLOD( double aLOD )
+    {
+        m_CachedLOD = aLOD;
+    }
+
     struct cmp_tracks
     {
         bool operator()( const PCB_TRACK* aFirst, const PCB_TRACK* aSecond ) const;
@@ -239,6 +257,8 @@ protected:
     int      m_Width; ///< Thickness of track, or via diameter
     VECTOR2I m_Start; ///< Line start point
     VECTOR2I m_End;   ///< Line end point
+
+    double   m_CachedLOD; ///< Last LOD used to draw this track's net
 };
 
 

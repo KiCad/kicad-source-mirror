@@ -506,6 +506,8 @@ BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 
 void PCB_EDIT_FRAME::redrawNetnames( wxTimerEvent& aEvent )
 {
+    bool needs_refresh = false;
+
     // Don't stomp on the auto-save timer event.
     if( aEvent.GetId() == ID_AUTO_SAVE_TIMER )
     {
@@ -522,11 +524,22 @@ void PCB_EDIT_FRAME::redrawNetnames( wxTimerEvent& aEvent )
 
     for( PCB_TRACK* track : GetBoard()->Tracks() )
     {
-        if( track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view ) < view->GetScale() )
-            view->Update( track, KIGFX::REPAINT );
+        double lod = track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view );
+
+        if( lod != track->GetCachedLOD() )
+        {
+            if( lod < view->GetScale() )
+            {
+                view->Update( track, KIGFX::REPAINT );
+                needs_refresh = true;
+            }
+
+            track->SetCachedLOD( lod );
+        }
     }
 
-    GetCanvas()->Refresh();
+    if( needs_refresh )
+        GetCanvas()->Refresh();
 }
 
 
