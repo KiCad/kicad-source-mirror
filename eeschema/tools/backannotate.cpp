@@ -224,7 +224,7 @@ void BACK_ANNOTATE::getChangeList()
             if( m_matchByReference )
                 refIndex = refList.FindRef( pcbPath );
             else
-                refIndex = refList.FindRefByPath( pcbPath );
+                refIndex = refList.FindRefByFullPath( pcbPath );
 
             if( refIndex >= 0 )
             {
@@ -248,7 +248,7 @@ void BACK_ANNOTATE::getChangeList()
         if( m_matchByReference )
             refIndex = m_refs.FindRef( pcbPath );
         else
-            refIndex = m_refs.FindRefByPath( pcbPath );
+            refIndex = m_refs.FindRefByFullPath( pcbPath );
 
         if( refIndex >= 0 )
         {

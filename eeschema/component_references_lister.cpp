@@ -175,11 +175,11 @@ int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit, bool aIncludeNew ) c
 }
 
 
-int SCH_REFERENCE_LIST::FindRefByPath( const wxString& aPath ) const
+int SCH_REFERENCE_LIST::FindRefByFullPath( const wxString& aFullPath ) const
 {
     for( size_t i = 0; i < m_flatList.size(); ++i )
     {
-        if( m_flatList[i].GetPath() == aPath )
+        if( m_flatList[i].GetFullPath() == aFullPath )
             return i;
     }
 

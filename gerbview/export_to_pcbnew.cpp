@@ -89,7 +89,8 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
             for( GERBER_DRAW_ITEM* gerb_item : excellon->GetItems() )
                 collect_hole( gerb_item );
         }
-        else if( gerb and pcb_layer_number == UNDEFINED_LAYER ) // PCB_LAYER_ID doesn't have an entry for Hole Data, but the dialog returns UNDEFINED_LAYER for it
+        else if( gerb && pcb_layer_number == UNDEFINED_LAYER )  // PCB_LAYER_ID doesn't have an entry for Hole Data,
+                                                                // but the dialog returns UNDEFINED_LAYER for it
         {
             for( GERBER_DRAW_ITEM* gerb_item : gerb->GetItems() )
                 collect_hole( gerb_item );

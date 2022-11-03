@@ -109,9 +109,20 @@ public:
 
     void SetSheetNumber( int aSheetNumber )    { m_sheetNum = aSheetNumber; }
 
+     /**
+     * @return the sheet path containing the symbol item
+     */
     const wxString GetPath() const
     {
         return m_sheetPath.PathAsString();
+    }
+
+    /**
+     * @return the full patb of the symbol item
+     */
+    const wxString GetFullPath() const
+    {
+        return m_sheetPath.PathAsString() + m_symbolUuid.AsString();
     }
 
     /**
@@ -514,12 +525,12 @@ public:
     int FindUnit( size_t aIndex, int aUnit, bool aIncludeNew = false ) const;
 
     /**
-     * Search the list for a symbol with the given KIID path.
+     * Search the list for a symbol with the given KIID path (as string).
      *
-     * @param aPath is the path to search.
-     * @return index in aSymbolsList if found or -1 if not found.
+     * @param aFullPath is the path of the symbol item to search.
+     * @return an index in m_flatList if found or -1 if not found.
      */
-    int FindRefByPath( const wxString& aPath ) const;
+    int FindRefByFullPath( const wxString& aFullPath ) const;
 
     /**
      * Add all the reference designator numbers greater than \a aMinRefId to \a aIdList
