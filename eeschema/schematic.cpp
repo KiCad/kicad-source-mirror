@@ -27,7 +27,7 @@
 #include <schematic.h>
 #include <sch_screen.h>
 #include <sim/spice_settings.h>
-
+#include <sch_label.h>
 
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
           EDA_ITEM( nullptr, SCHEMATIC_T ),
@@ -496,4 +496,66 @@ void SCHEMATIC::SetSheetNumberAndCount()
     CurrentSheet().SetVirtualPageNumber( sheet_number );
     CurrentSheet().LastScreen()->SetVirtualPageNumber( sheet_number );
     CurrentSheet().LastScreen()->SetPageNumber( CurrentSheet().GetPageNumber() );
+}
+
+
+void SCHEMATIC::RecomputeIntersheetRefs( bool autoplaceUninitialized, const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback )
+{
+    std::map<wxString, std::set<int>>& pageRefsMap = GetPageRefsMap();
+
+    pageRefsMap.clear();
+
+    SCH_SCREENS      screens( Root() );
+    std::vector<int> virtualPageNumbers;
+
+    /* Iterate over screens */
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
+    {
+        virtualPageNumbers.clear();
+
+        /* Find in which sheets this screen is used */
+        for( const SCH_SHEET_PATH& sheet : GetSheets() )
+        {
+            if( sheet.LastScreen() == screen )
+                virtualPageNumbers.push_back( sheet.GetVirtualPageNumber() );
+        }
+
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            if( item->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                SCH_GLOBALLABEL* globalLabel = static_cast<SCH_GLOBALLABEL*>( item );
+                std::set<int>&   virtualpageList = pageRefsMap[globalLabel->GetText()];
+
+                for( const int& pageNo : virtualPageNumbers )
+                    virtualpageList.insert( pageNo );
+            }
+        }
+    }
+
+    bool show = Settings().m_IntersheetRefsShow;
+
+    // Refresh all global labels.  Note that we have to collect them first as the
+    // SCH_SCREEN::Update() call is going to invalidate the RTree iterator.
+
+    std::vector<SCH_GLOBALLABEL*> globalLabels;
+
+    for( EDA_ITEM* item : CurrentSheet().LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+        globalLabels.push_back( static_cast<SCH_GLOBALLABEL*>( item ) );
+
+    for( SCH_GLOBALLABEL* globalLabel : globalLabels )
+    {
+        std::vector<SCH_FIELD>& fields = globalLabel->GetFields();
+
+        fields[0].SetVisible( show );
+
+        if( show )
+        {
+            if( fields.size() == 1 && fields[0].GetTextPos() == globalLabel->GetPosition() )
+                globalLabel->AutoplaceFields( CurrentSheet().LastScreen(), false );
+
+            CurrentSheet().LastScreen()->Update( globalLabel );
+            aItemCallback( globalLabel );
+        }
+    }
 }

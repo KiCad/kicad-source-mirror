@@ -33,6 +33,7 @@ class PROJECT;
 class SCH_SCREEN;
 class SCH_SHEET;
 class SCH_SHEET_LIST;
+class SCH_GLOBALLABEL;
 
 
 class SCHEMATIC_IFACE
@@ -194,6 +195,13 @@ public:
      * @note This must be called after deleting or adding a sheet and when entering a sheet.
      */
     void SetSheetNumberAndCount();
+
+    /**
+     * Update the schematic's page reference map for all global labels, and refresh the labels
+     * so that they are redrawn with up-to-date references.
+     */
+    void RecomputeIntersheetRefs( bool autoplaceUninitialized,
+                                  const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}

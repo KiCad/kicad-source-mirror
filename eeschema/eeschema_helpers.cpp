@@ -148,6 +148,10 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
 
     schematic->ConnectionGraph()->Reset();
 
+    schematic->SetSheetNumberAndCount();
+    schematic->RecomputeIntersheetRefs( true, []( SCH_GLOBALLABEL* ) { } );
+    schematic->CurrentSheet().UpdateAllScreenReferences();
+
     schematic->CurrentSheet().LastScreen()->TestDanglingEnds( nullptr, nullptr );
 
     return schematic;

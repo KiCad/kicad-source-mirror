@@ -1494,63 +1494,11 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
 void SCH_EDIT_FRAME::RecomputeIntersheetRefs( bool autoplaceUninitialized )
 {
-    std::map<wxString, std::set<int>>& pageRefsMap = Schematic().GetPageRefsMap();
-
-    pageRefsMap.clear();
-
-    SCH_SCREENS      screens( Schematic().Root() );
-    std::vector<int> virtualPageNumbers;
-
-    /* Iterate over screens */
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
-    {
-        virtualPageNumbers.clear();
-
-        /* Find in which sheets this screen is used */
-        for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
-        {
-            if( sheet.LastScreen() == screen )
-                virtualPageNumbers.push_back( sheet.GetVirtualPageNumber() );
-        }
-
-        for( SCH_ITEM* item : screen->Items() )
-        {
-            if( item->Type() == SCH_GLOBAL_LABEL_T )
-            {
-                SCH_GLOBALLABEL*    globalLabel = static_cast<SCH_GLOBALLABEL*>( item );
-                std::set<int>& virtualpageList = pageRefsMap[ globalLabel->GetText() ];
-
-                for( const int& pageNo : virtualPageNumbers )
-                    virtualpageList.insert( pageNo );
-            }
-        }
-    }
-
-    bool show = Schematic().Settings().m_IntersheetRefsShow;
-
-    // Refresh all global labels.  Note that we have to collect them first as the
-    // SCH_SCREEN::Update() call is going to invalidate the RTree iterator.
-
-    std::vector<SCH_GLOBALLABEL*> globalLabels;
-
-    for( EDA_ITEM* item : GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
-        globalLabels.push_back( static_cast<SCH_GLOBALLABEL*>( item ) );
-
-    for( SCH_GLOBALLABEL* globalLabel : globalLabels )
-    {
-        std::vector<SCH_FIELD>& fields = globalLabel->GetFields();
-
-        fields[0].SetVisible( show );
-
-        if( show )
-        {
-            if( fields.size() == 1 && fields[0].GetTextPos() == globalLabel->GetPosition() )
-                globalLabel->AutoplaceFields( GetScreen(), false );
-
-            GetScreen()->Update( globalLabel );
-            GetCanvas()->GetView()->Update( globalLabel );
-        }
-    }
+    Schematic().RecomputeIntersheetRefs( autoplaceUninitialized,
+                                         [&]( SCH_GLOBALLABEL* label )
+                                         {
+                                             GetCanvas()->GetView()->Update( label );
+                                         });
 }
 
 
