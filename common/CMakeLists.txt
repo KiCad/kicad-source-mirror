@@ -362,7 +362,6 @@ set( COMMON_SRCS
     printout.cpp
     project.cpp
     properties.cpp
-    property_mgr.cpp
     ptree.cpp
     rc_item.cpp
     refdes_utils.cpp
@@ -459,6 +458,11 @@ set( COMMON_SRCS
     project/project_file.cpp
     project/project_local_settings.cpp
 
+    properties/eda_angle_variant.cpp
+    properties/pg_editors.cpp
+    properties/pg_properties.cpp
+    properties/property_mgr.cpp
+
     database/database_connection.cpp
     database/database_lib_settings.cpp
     )
@@ -519,7 +523,6 @@ target_include_directories( common SYSTEM PUBLIC
 set( PCB_COMMON_SRCS
     fp_lib_table.cpp
     hash_eda.cpp
-    pg_properties.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_base_frame.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_expr_evaluator.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_commit.cpp

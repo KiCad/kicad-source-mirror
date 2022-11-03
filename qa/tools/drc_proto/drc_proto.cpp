@@ -28,7 +28,7 @@
 
 #include <wx/cmdline.h>
 
-#include <property_mgr.h>
+#include <properties/property_mgr.h>
 
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew/drc/drc_engine.h>

@@ -23,10 +23,11 @@
 #include <pcb_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
-#include <property_mgr.h>
+#include <properties/property_mgr.h>
+#include <properties/pg_editors.h>
 #include <board_commit.h>
 #include <board_connected_item.h>
-#include <pg_properties.h>
+#include <properties/pg_properties.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
 #include <settings/color_settings.h>
@@ -36,6 +37,9 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
     : PROPERTIES_PANEL( aParent, aFrame ), m_frame( aFrame ), m_propMgr( PROPERTY_MANAGER::Instance() )
 {
     m_propMgr.Rebuild();
+
+    m_editor = wxPropertyGrid::RegisterEditorClass( new PG_UNIT_EDITOR( m_frame ),
+                                                    wxT( "UnitEditor" ) );
 }
 
 

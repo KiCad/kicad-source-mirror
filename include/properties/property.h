@@ -25,6 +25,7 @@
 #define PROPERTY_H
 
 #include <core/wx_stl_compat.h>
+#include <origin_transforms.h>
 
 #include <wx/any.h>
 #include <wx/string.h>
@@ -38,8 +39,6 @@
 #include <memory>
 #include <typeindex>
 #include <type_traits>
-
-#include <origin_transforms.h>
 
 class wxPGProperty;
 class INSPECTABLE;

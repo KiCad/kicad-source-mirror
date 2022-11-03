@@ -41,6 +41,7 @@ public:
     virtual ~PGPROPERTY_DISTANCE() = 0;
 
     void SetCoordType( ORIGIN_TRANSFORMS::COORD_TYPES_T aType ) { m_coordType = aType; }
+    ORIGIN_TRANSFORMS::COORD_TYPES_T CoordType() const { return m_coordType; }
 
 protected:
     bool StringToDistance( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 ) const;

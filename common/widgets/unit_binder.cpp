@@ -60,7 +60,7 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
         m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
     m_units     = aParent->GetUserUnits();
-    m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_valueCtrl );
+    m_allowEval = allowEval && ( !m_valueCtrl || dynamic_cast<wxTextEntry*>( m_valueCtrl ) );
     m_needsEval = false;
     m_selStart  = 0;
     m_selEnd    = 0;
@@ -79,12 +79,16 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
     if( m_unitLabel )
         m_unitLabel->SetLabel( EDA_UNIT_UTILS::GetLabel( m_units, m_dataType ) );
 
-    m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
-                          nullptr, this );
-    m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
-                          nullptr, this );
-    m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ), nullptr,
-                          this );
+    if( m_valueCtrl )
+    {
+        m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
+                              nullptr, this );
+        m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
+                              nullptr, this );
+        m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ), nullptr,
+                              this );
+    }
+
     Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr,
              this );
 
@@ -550,3 +554,8 @@ void UNIT_BINDER::Show( bool aShow, bool aResize )
     }
 }
 
+
+PROPERTY_EDITOR_UNIT_BINDER::PROPERTY_EDITOR_UNIT_BINDER( EDA_DRAW_FRAME* aParent ) :
+        UNIT_BINDER( aParent, nullptr, nullptr, nullptr, true )
+{
+}

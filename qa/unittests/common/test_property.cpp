@@ -22,7 +22,7 @@
 #include <wx/gdicmn.h>      // wxPoint
 
 #include <inspectable.h>
-#include <property_mgr.h>
+#include <properties/property_mgr.h>
 
 using namespace std;
 

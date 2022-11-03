@@ -19,8 +19,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <pg_properties.h>
-#include <property_mgr.h>
 #include <wx/dc.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/regex.h>
@@ -29,12 +27,18 @@
 #include <macros.h>
 #include <validators.h>
 #include <eda_units.h>
-#include <property.h>
+#include <properties/eda_angle_variant.h>
+#include <properties/pg_properties.h>
+#include <properties/property_mgr.h>
+#include <properties/property.h>
 #include <widgets/color_swatch.h>
 
 // reg-ex describing a signed valid value with a unit
 static const wxChar REGEX_SIGNED_DISTANCE[] = wxT( "([-+]?[0-9]+[\\.?[0-9]*) *(mm|in|mils)*" );
 static const wxChar REGEX_UNSIGNED_DISTANCE[] = wxT( "([0-9]+[\\.?[0-9]*) *(mm|in|mils)*" );
+
+// Force at least one to exist, otherwise wxWidgets won't register it
+static const EDA_ANGLE_VARIANT_DATA g_AngleVariantData;
 
 wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
 {
@@ -45,11 +49,13 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
     {
     case PROPERTY_DISPLAY::PT_SIZE:
         ret = new PGPROPERTY_SIZE();
+        ret->SetEditor( wxT( "UnitEditor" ) );
         break;
 
     case PROPERTY_DISPLAY::PT_COORD:
         ret = new PGPROPERTY_COORD();
         static_cast<PGPROPERTY_COORD*>( ret )->SetCoordType( aProperty->CoordType() );
+        ret->SetEditor( wxT( "UnitEditor" ) );
         break;
 
     case PROPERTY_DISPLAY::PT_DECIDEGREE:
@@ -140,89 +146,15 @@ PGPROPERTY_DISTANCE::~PGPROPERTY_DISTANCE()
 bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString& aText,
                                             int aArgFlags ) const
 {
-    wxRegEx regDimension( m_regExValidator->GetRegEx(), wxRE_ICASE );
-    wxASSERT( regDimension.IsValid() );
-
-    if( !regDimension.Matches( aText ) )
-    {
-        aVariant.MakeNull();
-        return false;
-    }
-
-
-    // Get the value
-    wxString valueText = regDimension.GetMatch( aText, 1 );
-    double value = 0.0;
-
-    if( !valueText.ToDouble( &value ) )
-    {
-        aVariant.MakeNull();
-        return false;
-    }
-
-
-    // Determine units: use the app setting if unit is not explicitly specified
-    EDA_UNITS unit;
-    wxString unitText = regDimension.GetMatch( aText, 2 ).Lower();
-
-    if( unitText == "mm" )
-        unit = EDA_UNITS::MILLIMETRES;
-    else if( unitText == "in" )
-        unit = EDA_UNITS::INCHES;
-    else if( unitText == "mils" )
-        unit = EDA_UNITS::MILS;
-    else
-        unit = PROPERTY_MANAGER::Instance().GetUnits();
-
-
-    // Conversion to internal units
-    long newValueIU = 0;
-
-    switch( unit )
-    {
-        case EDA_UNITS::INCHES:
-            newValueIU = pcbIUScale.MilsToIU( value * 1000.0 );
-            break;
-
-        case EDA_UNITS::MILS:
-            newValueIU = pcbIUScale.MilsToIU( value );
-            break;
-
-        case EDA_UNITS::MILLIMETRES:
-            newValueIU = pcbIUScale.mmToIU( value );
-            break;
-
-        case EDA_UNITS::UNSCALED:
-            newValueIU = KiROUND( value );
-            break;
-
-        default:
-            // DEGREEs are handled by PGPROPERTY_ANGLE
-            wxFAIL;
-            break;
-    }
-
-    ORIGIN_TRANSFORMS* transforms = PROPERTY_MANAGER::Instance().GetTransforms();
-
-    if( transforms )
-    {
-        newValueIU = transforms->FromDisplay( static_cast<long long int>( newValueIU ),
-                                              m_coordType );
-    }
-
-    if( aVariant.IsNull() || newValueIU != aVariant.GetLong() )
-    {
-        aVariant = newValueIU;
-        return true;
-    }
-
-    return false;
+    // TODO(JE): Are there actual use cases for this?
+    wxCHECK_MSG( false, false, wxT( "PGPROPERTY_DISTANCE::StringToDistance should not be used." ) );
 }
 
 
 wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFlags ) const
 {
     wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG, wxEmptyString );
+    // TODO(JE) This should be handled by UNIT_BINDER
 
     long distanceIU = aVariant.GetLong();
 
@@ -264,7 +196,8 @@ PGPROPERTY_SIZE::PGPROPERTY_SIZE( const wxString& aLabel, const wxString& aName,
 
 wxValidator* PGPROPERTY_SIZE::DoGetValidator() const
 {
-    return m_regExValidator.get();
+    //return m_regExValidator.get();
+            return nullptr;
 }
 
 
@@ -278,7 +211,8 @@ PGPROPERTY_COORD::PGPROPERTY_COORD( const wxString& aLabel, const wxString& aNam
 
 wxValidator* PGPROPERTY_COORD::DoGetValidator() const
 {
-    return m_regExValidator.get();
+    //return m_regExValidator.get();
+    return nullptr;
 }
 
 
@@ -306,8 +240,21 @@ bool PGPROPERTY_ANGLE::StringToValue( wxVariant& aVariant, const wxString& aText
 
 wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant, int aArgFlags ) const
 {
-    wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE, wxEmptyString );
-    return wxString::Format( wxT("%g\u00B0"), aVariant.GetDouble() / m_scale );
+    if( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
+    {
+        // TODO(JE) Is this still needed?
+        return wxString::Format( wxT( "%g\u00B0" ), aVariant.GetDouble() / m_scale );
+    }
+    else if( aVariant.GetType() == wxT( "EDA_ANGLE" ) )
+    {
+        wxString ret;
+        static_cast<EDA_ANGLE_VARIANT_DATA*>( aVariant.GetData() )->Write( ret );
+        return ret;
+    }
+    else
+    {
+        wxCHECK_MSG( false, wxEmptyString, "Unexpected variant type in PGPROPERTY_ANGLE" );
+    }
 }
 
 

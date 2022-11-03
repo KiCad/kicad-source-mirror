@@ -19,8 +19,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "property_mgr.h"
-#include "property.h"
+#include <properties/property_mgr.h>
+#include <properties/property.h>
 
 #include <algorithm>
 #include <utility>

@@ -59,7 +59,7 @@ public:
     UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale, wxStaticText* aLabel,
                  wxWindow* aValueCtrl, wxStaticText* aUnitLabel, bool aAllowEval = true );
 
-    ~UNIT_BINDER() override;
+    virtual ~UNIT_BINDER() override;
 
     /**
      * Normally not needed (as the UNIT_BINDER inherits from the parent frame), but can be
@@ -246,6 +246,20 @@ protected:
 
     /// Type of coordinate for display origin transforms
     ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
+};
+
+
+/**
+ * Specialization for wxPropertyGrid, where we have no labels and units are displayed in the editor
+ */
+class PROPERTY_EDITOR_UNIT_BINDER : public UNIT_BINDER
+{
+public:
+    PROPERTY_EDITOR_UNIT_BINDER( EDA_DRAW_FRAME* aParent );
+
+    virtual ~PROPERTY_EDITOR_UNIT_BINDER() {}
+
+    void SetControl( wxWindow* aControl ) { m_valueCtrl = aControl; }
 };
 
 #endif /* __UNIT_BINDER_H_ */

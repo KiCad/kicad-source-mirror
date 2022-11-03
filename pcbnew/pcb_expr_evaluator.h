@@ -27,8 +27,8 @@
 
 #include <unordered_map>
 
-#include <property.h>
-#include <property_mgr.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 #include <libeval_compiler/libeval_compiler.h>
 

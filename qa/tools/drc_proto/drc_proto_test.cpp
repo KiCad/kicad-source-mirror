@@ -29,7 +29,7 @@
 #include <wx/cmdline.h>
 #include <wx/init.h>
 
-#include <property_mgr.h>
+#include <properties/property_mgr.h>
 
 #include <pgm_base.h>
 

@@ -24,8 +24,8 @@
 
 #include <core/wx_stl_compat.h>
 
-#include "property_mgr.h"
-#include "property.h"
+#include <properties/property_mgr.h>
+#include <properties/property.h>
 
 #include <optional>
 
