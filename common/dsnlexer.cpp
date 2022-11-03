@@ -859,7 +859,7 @@ double DSNLEXER::parseDouble()
     const std::string& str = CurStr();
 
     // Offset any leading whitespace, this is one thing from_chars does not handle
-    int woff = 0;
+    size_t woff = 0;
     while( std::isspace( str[woff] ) && woff < str.length() )
     {
         woff++;
