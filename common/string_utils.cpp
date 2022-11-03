@@ -198,6 +198,8 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         {
             if( c == '\'' )
                 converted += wxT( "{quote}" );
+            else if( c == '\\' )
+                converted += wxT( "{backslash}" );
             else
                 converted += c;
         }
