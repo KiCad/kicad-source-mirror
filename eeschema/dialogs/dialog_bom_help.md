@@ -1,143 +1,54 @@
-# 1 - Full documentation
+# 1. Summary
 
-The Eeschema documentation (*eeschema.html*) describes this intermediate netlist and gives examples(chapter ***creating customized netlists and bom files***).
+The Bill of Materials tool creates a BOM which lists all of the components in the design.
 
-# 2 - The intermediate Netlist File
+The tool uses an external script to generate a BOM in the desired output format. Choosing a different script changes how the BOM is formatted.
 
-BOM files (and netlist files) can be created from an *Intermediate netlist file* created by Eeschema.
+Generating a BOM is described in more detail in the Schematic Editor manual.
 
-This file uses XML syntax and is called the intermediate netlist. The intermediate netlist includes a large amount of data about your board and because of this, it can be used with post-processing to create a BOM or other reports.
+# 2. Usage
 
-Depending on the output (BOM or netlist), different subsets of the complete Intermediate Netlist file will be used in the post-processing.
+Select a generator script in the **BOM generator scripts** list. Details for the selected generator are shown on the right of the dialog.
 
-# 3 - Conversion to a new format
+Clicking the **Generate** button creates a BOM file with the selected generator.
 
-By applying a post-processing filter to the Intermediate netlist file you can generate foreign netlist files as well as BOM files. Because this conversion is a text to text transformation, this post-processing filter can be written using *Python*, *XSLT*, or any other tool capable of taking XML as input.
+The default settings present several generator script options, although some additional scripts are installed with KiCad and can be added to the list with the **+** button.
 
-XSLT itself is a XML language suitable for XML transformations. There is a free program called `xsltproc` that you can download and install. The `xsltproc` program can be used to read the Intermediate XML netlist input file, apply a style-sheet to transform the input, and save the results in an output file. Use of `xsltproc` requires a style-sheet file using XSLT conventions. The full conversion process is handled by Eeschema, after it is configured once to run `xsltproc` in a specific way.
+**Note:** On Windows, there is an additional option **Show console window**. When this option is unchecked, BOM generators run in a hidden console window and any output is redirected and printed in the dialog. When this option is checked, BOM generators run in a visisble console window.
 
-A Python script is somewhat more easy to create.
+# 3. Custom generators and command lines
 
-# 4 - Initialization of the dialog window
+Internally, KiCad creates an intermediate netlist file in XML format that contains information about all of the components in the design. A BOM generator script converts the intermediate netlist file to the desired output format. KiCad runs the BOM generator scripts according to the command line entered at the bottom of the BOM dialog.
 
-You should add a new plugin (a script) in the plugin list by clicking on the Add Plugin button.
+The command line format accepts parameters for filenames. Each formatting parameter is replaced with a project-specific path or filename. The supported formatting parameters are:
 
-## 4.1 - Plugin Configuration Parameters
+ * `%I`: absolute path and filename of the intermediate netlist file, which is the input to the BOM generator
+ * `%O`: absolute path and filename of the output BOM file (without file extension)
+ * `%B`: base filename of the output BOM file (without file extension)
+ * `%P`: absolute path of the project directory, without trailing slash
 
-The Eeschema plug-in configuration dialog requires the following information:
+**Note:** the `%O` output file parameter does not include a file extension. KiCad will attempt to add an appropriate extension to the command line automatically, but an extension may need to be added by hand.
 
- * The title: for instance, the name of the netlist format.
- * The command line to launch the converter (usually a script).
+Python is the recommended tool for BOM generator scripts, but other tools can also be used.
 
-***Note (Windows only):***
-*By default, the command line runs with hidden console window and output is redirected to "Plugin info" field. To show the window of the running command, set the checkbox "Show console window".*
+## Example command lines for Python scripts
 
-Once you click on the generate button the following will happen:
-
-1. Eeschema creates an intermediate netlist file \*.xml, for instance `test.xml`.
-2. Eeschema runs the script from the command line to create the final output file.
-
-## 4.2 - Generate netlist files with the command line
-
-Assuming we are using the program `xsltproc.exe` to apply the sheet style to the intermediate file, `xsltproc.exe` is executed with the following command.
-
-```
-xsltproc.exe -o <output filename> <style-sheet filename> <input XML file to convert>
-```
-
-On Windows the command line is the following.
-
-```
-f:/kicad/bin/xsltproc.exe -o "%O" f:/kicad/bin/plugins/myconverter.xsl "%I"
-```
-
-On Linux the command becomes as following.
-
-```
-xsltproc -o "%O" /usr/local/kicad/bin/plugins/myconverter .xsl "%I"
-```
-where `myconverter.xsl` is the style-sheet that you are applying.
-
-Do not forget the double quotes around the file names, this allows them to have spaces after the substitution by Eeschema.
-
-If a Python script is used, the command line is something like (depending on the Python script):
-
-```
-python f:/kicad/bin/plugins/bom-in-python/myconverter.py "%I" "%O"
-```
-
-or
-
-```
-python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl "%I" "%O"
-```
-
-The command line format accepts parameters for filenames. The supported formatting parameters are:
-
- * `%B`: base filename of selected output file, minus path and extension.
- * `%P`: project directory, without name and without trailing '/'.
- * `%I`: complete filename and path of the temporary input file
-(the intermediate net file).
- * `%O`: complete filename and path (but without extension) of the user
-chosen output file.
-
-`%I` will be replaced by the actual intermediate file name (usually the full root sheet filename with extension ".xml").
-`%O` will be replaced by the actual output file name (the full root sheet filename minus extension).
-`%B` will be replaced by the actual output short file name (the short root sheet filename minus extension).
-`%P` will be replaced by the actual current project path.
-
-## 4.3 - Command line format:
-
-### 4.3.1 - Remark:
-
-Most of time, the created file must have an extension, depending on its type.
-Therefore you have to add to the option ***%O*** the right file extension.
-
-For instance:
-
- * **%O.csv** to create a .csv file (comma separated value file).
- * **%O.htm** to create a .html file.
- * **%O.bom** to create a .bom file.
-
-### 4.3.2 Example for xsltproc:
-
-The command line format for xsltproc is the following:
-
-```
-<path of xsltproc> xsltproc <xsltproc parameters>
-```
-
-On Windows:
-```
-f:/kicad/bin/xsltproc.exe -o "%O.bom" f:/kicad/bin/plugins/netlist_form_pads-pcb.xsl "%I"
-```
-
-On Linux:
-```
-xsltproc -o "%O.bom" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb.xsl "%I"
-```
-
-The above examples assume `xsltproc` is installed on your PC under Windows and xsl files located in `<path_to_kicad>/kicad/bin/plugins/`.
-
-
-### 4.3.3 Example for Python scripts:
-
-Assuming python is installed on your PC, and python scripts are located in
-
- `<path_to_kicad>/kicad/bin/plugins/bom-in-python/`,
-
-the command line format for python is something like:
+The command line format for a Python script is of the form:
 
 ```
 python <script file name> <input filename> <output filename>
 ```
 
-On Windows:
+On Windows, if the desired generator script for a CSV BOM is `C:\Users\username\kicad\my_python_script.py`, the command line would be:
+
 ```
-python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py "%I" "%O.html"
+python.exe C:\Users\username\kicad\my_python_script.py "%I" "%O.csv"
 ```
 
-On Linux:
+On Linux, if the desired generator script for a CSV BOM is `/home/username/kicad/my_python_script.py`, the command line would be:
+
 ```
-python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "%I" "%O.csv"
+python /home/username/kicad/my_python_script.py "%I" "%O.csv"
 ```
+
+Double quotes (`"`) around the arguments are recommended in case filenames contain spaces or special characters.
