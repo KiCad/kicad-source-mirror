@@ -34,8 +34,7 @@
 WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
                   long style, const wxString& name ) :
         wxGrid( parent, id, pos, size, style, name ),
-        m_weOwnTable( false ),
-        m_unitsProvider( nullptr )
+        m_weOwnTable( false )
 {
     SetDefaultCellOverflow( false );
 
@@ -158,20 +157,25 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
 {
     if( alg::contains( m_autoEvalCols, aEvent.GetCol() ) )
     {
-        m_eval->SetDefaultUnits( m_unitsProvider->GetUserUnits() );
+        UNITS_PROVIDER* unitsProvider = m_unitsProviders[ aEvent.GetCol() ];
+
+        if( !unitsProvider )
+            unitsProvider = m_unitsProviders.begin()->second;
+
+        m_eval->SetDefaultUnits( unitsProvider->GetUserUnits() );
 
         int row = aEvent.GetRow();
         int col = aEvent.GetCol();
 
         CallAfter(
-              [this, row, col]()
+              [this, row, col, unitsProvider]()
               {
                   wxString stringValue = GetCellValue( row, col );
 
                   if( m_eval->Process( stringValue ) )
                   {
-                      int      val = m_unitsProvider->ValueFromString( m_eval->Result() );
-                      wxString evalValue = m_unitsProvider->StringFromValue( val, true );
+                      int      val = unitsProvider->ValueFromString( m_eval->Result() );
+                      wxString evalValue = unitsProvider->StringFromValue( val, true );
 
                       if( stringValue != evalValue )
                       {
@@ -322,32 +326,44 @@ bool WX_GRID::CommitPendingChanges( bool aQuietMode )
 }
 
 
-void WX_GRID::SetUnitsProvider( UNITS_PROVIDER* aProvider )
+void WX_GRID::SetUnitsProvider( UNITS_PROVIDER* aProvider, int aCol )
 {
-    m_unitsProvider = aProvider;
-    m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_unitsProvider->GetUserUnits() );
+    m_unitsProviders[ aCol ] = aProvider;
+
+    if( !m_eval )
+        m_eval = std::make_unique<NUMERIC_EVALUATOR>( aProvider->GetUserUnits() );
 }
 
 
 int WX_GRID::GetUnitValue( int aRow, int aCol )
 {
+    UNITS_PROVIDER* unitsProvider = m_unitsProviders[ aCol ];
+
+    if( !unitsProvider )
+        unitsProvider = m_unitsProviders.begin()->second;
+
     wxString stringValue = GetCellValue( aRow, aCol );
 
     if( alg::contains( m_autoEvalCols, aCol ) )
     {
-        m_eval->SetDefaultUnits( m_unitsProvider->GetUserUnits() );
+        m_eval->SetDefaultUnits( unitsProvider->GetUserUnits() );
 
         if( m_eval->Process( stringValue ) )
             stringValue = m_eval->Result();
     }
 
-    return m_unitsProvider->ValueFromString( stringValue );
+    return unitsProvider->ValueFromString( stringValue );
 }
 
 
 void WX_GRID::SetUnitValue( int aRow, int aCol, int aValue )
 {
-    SetCellValue( aRow, aCol, m_unitsProvider->StringFromValue( aValue, true ) );
+    UNITS_PROVIDER* unitsProvider = m_unitsProviders[ aCol ];
+
+    if( !unitsProvider )
+        unitsProvider = m_unitsProviders.begin()->second;
+
+    SetCellValue( aRow, aCol, unitsProvider->StringFromValue( aValue, true ) );
 }
 
 

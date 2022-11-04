@@ -68,11 +68,14 @@ private:
     void AdjustAssignmentGridColumns( int aWidth );
 
 private:
-    EDA_DRAW_FRAME*               m_frame;
-    PAGED_DIALOG*                 m_parent;
-    bool                          m_isEEschema;
-    std::shared_ptr<NET_SETTINGS> m_netSettings;
-    std::set<wxString>            m_netNames;
+    EDA_DRAW_FRAME*                 m_frame;
+    PAGED_DIALOG*                   m_parent;
+    bool                            m_isEEschema;
+    std::shared_ptr<NET_SETTINGS>   m_netSettings;
+    std::set<wxString>              m_netNames;
+
+    std::unique_ptr<UNITS_PROVIDER> m_schUnitsProvider;
+    std::unique_ptr<UNITS_PROVIDER> m_pcbUnitsProvider;
 
     int*                  m_originalColWidths;
     bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding

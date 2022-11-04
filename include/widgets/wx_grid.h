@@ -85,7 +85,7 @@ public:
      * Set a UNITS_PROVIDER to enable use of unit- and eval-based Getters.
      * @param aProvider
      */
-    void SetUnitsProvider( UNITS_PROVIDER* aProvider );
+    void SetUnitsProvider( UNITS_PROVIDER* aProvider, int aCol = 0 );
 
     void SetAutoEvalCols( const std::vector<int>& aCols ) { m_autoEvalCols = aCols; }
 
@@ -156,7 +156,7 @@ protected:
 protected:
     bool                               m_weOwnTable;
 
-    UNITS_PROVIDER*                    m_unitsProvider;
+    std::map<int, UNITS_PROVIDER*>     m_unitsProviders;
     std::unique_ptr<NUMERIC_EVALUATOR> m_eval;
     std::vector<int>                   m_autoEvalCols;
 
