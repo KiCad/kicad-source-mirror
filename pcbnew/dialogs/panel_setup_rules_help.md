@@ -23,6 +23,7 @@
 ### Constraint Types
 
  * annular\_width
+ * assertion
  * clearance
  * connection\_width
  * courtyard_clearance
