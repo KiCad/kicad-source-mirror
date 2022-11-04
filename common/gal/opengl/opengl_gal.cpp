@@ -1228,9 +1228,6 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet,
     m_currentManager->Shader( SHADER_NONE );
     m_currentManager->Color( m_fillColor.r, m_fillColor.g, m_fillColor.b, m_fillColor.a );
 
-    unsigned int polycount = aPolySet.TriangulatedPolyCount();
-    std::vector<size_t> tricounts;
-
     if( m_isFillEnabled )
     {
         int totalTriangleCount = 0;
@@ -1238,7 +1235,6 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet,
         for( unsigned int j = 0; j < aPolySet.TriangulatedPolyCount(); ++j )
         {
             auto triPoly = aPolySet.TriangulatedPolygon( j );
-            tricounts.push_back( triPoly->GetTriangleCount() );
 
             totalTriangleCount += triPoly->GetTriangleCount();
         }
@@ -1248,12 +1244,6 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet,
         for( unsigned int j = 0; j < aPolySet.TriangulatedPolyCount(); ++j )
         {
             auto triPoly = aPolySet.TriangulatedPolygon( j );
-
-            if( polycount != aPolySet.TriangulatedPolyCount() )
-                printf("Incorrect polycount!\n");
-
-            if( tricounts[j] != triPoly->GetTriangleCount() )
-                printf("Incorrect triangle count!\n");
 
             for( size_t i = 0; i < triPoly->GetTriangleCount(); i++ )
             {
