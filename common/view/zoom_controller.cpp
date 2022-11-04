@@ -66,7 +66,7 @@ ACCELERATING_ZOOM_CONTROLLER::ACCELERATING_ZOOM_CONTROLLER(
         m_timestampProv = m_ownTimestampProv.get();
     }
 
-    m_lastTimestamp = m_timestampProv->GetTimestamp();
+    m_prevTimestamp = m_timestampProv->GetTimestamp();
 }
 
 
@@ -76,9 +76,9 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
     const double minStep = 1.05;
 
     const auto timestamp = m_timestampProv->GetTimestamp();
-    auto       timeDiff = std::chrono::duration_cast<TIMEOUT>( timestamp - m_lastTimestamp );
+    auto       timeDiff = std::chrono::duration_cast<TIMEOUT>( timestamp - m_prevTimestamp );
 
-    m_lastTimestamp = timestamp;
+    m_prevTimestamp = timestamp;
 
     wxLogTrace( traceZoomScroll,
             wxString::Format( "Rot %d, time diff: %ldms", aRotation, (long)timeDiff.count() ) );
@@ -86,7 +86,8 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
     double zoomScale;
 
     // Set scaling speed depending on scroll wheel event interval
-    if( timeDiff < m_accTimeout )
+    if( timeDiff < m_accTimeout
+        && ( (aRotation > 0) == m_prevRotationPositive ) )
     {
         zoomScale = ( 2.05 * m_scale / 5.0 ) - timeDiff / m_accTimeout;
 
@@ -100,6 +101,7 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
     {
         zoomScale = ( aRotation > 0 ) ? minStep : 1 / minStep;
     }
+    m_prevRotationPositive = aRotation > 0;
 
     wxLogTrace( traceZoomScroll, wxString::Format( "  Zoom factor: %f", zoomScale ) );
 

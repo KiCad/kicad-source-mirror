@@ -120,11 +120,14 @@ private:
     ///< Any provider owned by this class (the default one, if used).
     std::unique_ptr<TIMESTAMP_PROVIDER> m_ownTimestampProv;
 
-    ///< The timestamp of the last event.
-    TIME_PT m_lastTimestamp;
+    ///< The timestamp of the previous event.
+    TIME_PT m_prevTimestamp;
 
     ///< The timeout value.
     TIMEOUT m_accTimeout;
+
+    /// Previous rotation was positive.
+    bool m_prevRotationPositive = false;
 
     /// A multiplier for the minimum zoom step size
     double m_scale;

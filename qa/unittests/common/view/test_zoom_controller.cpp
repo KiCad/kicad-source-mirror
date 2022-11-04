@@ -116,9 +116,9 @@ struct ACCEL_ZOOM_CASE
 
 static const std::vector<ACCEL_ZOOM_CASE> accel_cases = {
     // Scrolls widely spaced, just go up and down by a constant factor
-    { 500, { 0, 1000, 2000, 3000 }, { 120, 120, -120 }, { 1.05, 1.05, 1 / 1.05 } },
-    // Close scrolls - acceleration on the latter
-    { 500, { 0, 1000, 1100 }, { 120, 120 }, { 1.05, 2.05 } },
+    { 500, { 0, 1000, 2000, 3000, 4000 }, { 120, 120, -120, -120 }, { 1.05, 1.05, 1 / 1.05, 1 / 1.05 } },
+    // Close scrolls - acceleration, apart from when changing direction
+    { 500, { 0, 1000, 1100, 1200, 1300, 1400 }, { 120, 120, -120, -120, 120 }, { 1.05, 2.05, 1 / 1.05, 1 / 2.05, 1.05 } },
 };
 
 
