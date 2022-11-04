@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-29 11:07+0000\n"
+"PO-Revision-Date: 2022-11-04 23:18+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -4118,7 +4118,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Недостатньо прав для теки '%s'."
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4127,11 +4127,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"Можливі деякі незручно!\n"
+"Можливі деякі незручності!\n"
 "Схоже, що востаннє ви редагували файл\n"
 "%s\n"
-"його не було збережено належним чином. Бажаєте відновити останні збережені "
-"вами зміни?"
+"KiCad було закрито до збереження.\n"
+"\n"
+"Чи бажаєте ви відкрити автоматично збережений файл?"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -9127,11 +9128,10 @@ msgid "Cannot create global library table '%s'."
 msgstr "Не вдалося створити глобальну таблицю бібліотек '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
 msgstr ""
-"Не вдалося скопіювати файл глобальної таблиці бібліотек символів '%s' до "
-"'%s'."
+"Помилка копіювання файлу глобальної таблиці бібліотек символів '%s' до '%s'."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -10580,9 +10580,8 @@ msgid "Rescue Symbols"
 msgstr "Порятунок Символів"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Показати дерево символу"
+msgstr "Пропустити відновлення символу"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -11087,14 +11086,12 @@ msgid "Pin Assignments"
 msgstr "Назначення виводів"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:242
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Виключити символ з симуляції"
+msgstr "Виключити з моделювання"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Store in Reference and Value"
-msgstr "Референтний вузол"
+msgstr "Зберігати в посиланні та значенні"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:116
 msgid "Simulation Model Editor"
@@ -11689,14 +11686,13 @@ msgid "Library '%s' not found."
 msgstr "Бібліотека '%s' не знайдена."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"Виникла помилка під час запису пустого символу в таблицю бібліотеки.\n"
-"\n"
-"%s"
+"Помилка запису таблиці бібліотеки символів проекту.\n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -13496,7 +13492,7 @@ msgstr "Налаштування"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "Помилка генерування імені для'%s': перевищено UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:339
 msgid ""
@@ -13509,7 +13505,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:383
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "Неможливо відкрити файл '%s' що б записати IBIS модель"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, c-format
@@ -15049,26 +15045,27 @@ msgid "Error loading simulation model library '%s': %s"
 msgstr "Помилка завантаження бібліотеки символів '%s':%s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "Помилка завантаження схеми '%s."
+msgstr "Помилка завантаження моделі симуляції: відсутнє '%s' поле"
 
 #: eeschema/sim/sim_lib_mgr.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "Помилка завантаження символу %s з бібліотеки '%s'."
+msgstr ""
+"Помилка завантаження моделі симуляції: не знайдено базової моделі '%s' в "
+"бібліотеці '%s'"
 
 #: eeschema/sim/sim_model.cpp:617
-#, fuzzy
 msgid "Failed to read simulation model from fields"
-msgstr "Не вдалося прочитати модель симуляції %s."
+msgstr "Неможливо прочитати модель симуляції з відповідних полів."
 
 #: eeschema/sim/sim_model.cpp:815 eeschema/sim/sim_model.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a simulation model parameter named '%s'"
-msgstr "Не вдалося знайти файл бібліотеки %s."
+msgstr "Помилка завантаження параметру імені моделі симуляції '%s'"
 
 #: eeschema/sim/sim_model.cpp:1132
 #, c-format
@@ -15081,31 +15078,33 @@ msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
+"Тип моделі симуляції повинен бути таким самим як і базовий клас: '%s', але є "
+"'%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "Не вдалося знайти мітку стовпця %s."
+msgstr "Не знайдемо IBIS компонент '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "Не вдалося знайти '%s' в імпортованій бібліотеці."
+msgstr "Не вдалося знайти IBIS контакт '%s' в компоненті '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Недійсний індекс символу виводу: '%s'"
+msgstr "Некоректний IBIS контакт '%s' в компоненті '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "Не вдалося знайти файл бібліотеки %s."
+msgstr "Не знайдено IBIS модель '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Недійсний індекс символу виводу: '%s'"
+msgstr "Помилкова IBIS модель '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:298
 msgid "Power supply"
@@ -15124,9 +15123,8 @@ msgid "Parasitic Pin Capacitance"
 msgstr "Паразитарна ємність виводу"
 
 #: eeschema/sim/sim_model_kibis.cpp:372
-#, fuzzy
 msgid "DC Value"
-msgstr "Значення"
+msgstr "DC значення"
 
 #: eeschema/sim/sim_model_kibis.cpp:390
 msgid "ON time"
@@ -15412,7 +15410,7 @@ msgstr "Невідомий SIM_VALUE тип"
 #: eeschema/sim/spice_model_parser.cpp:186
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr ""
+msgstr "Не знайдено модель '%s' копіювати для \"A Kind Of\" моделі '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
