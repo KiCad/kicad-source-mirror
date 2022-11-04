@@ -61,7 +61,7 @@ protected:
 
 	std::tuple<std::string, std::string, std::string, std::string, std::string> as_tuple() const
 	{
-		return std::make_tuple(urn_, scheme_, authority_, path_, identifier_ != "" ? identifier_ : pointer_);
+		return std::make_tuple(urn_, scheme_, authority_, path_, identifier_ != "" ? identifier_ : pointer_.to_string());
 	}
 
 public:
@@ -80,7 +80,7 @@ public:
 	std::string fragment() const
 	{
 		if (identifier_ == "")
-			return pointer_;
+			return pointer_.to_string();
 		else
 			return identifier_;
 	}
@@ -159,7 +159,7 @@ public:
 /**
  * Checks validity of JSON schema built-in string format specifiers like 'date-time', 'ipv4', ...
  */
-void default_string_format_check(const std::string &format, const std::string &value);
+void JSON_SCHEMA_VALIDATOR_API default_string_format_check(const std::string &format, const std::string &value);
 
 class root_schema;
 

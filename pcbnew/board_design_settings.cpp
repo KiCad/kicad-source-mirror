@@ -963,31 +963,40 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
                 return std::string( name.ToUTF8() );
             };
 
-    std::string bp = "board.design_settings.rule_severities.";
-    std::string rs = "rule_severities.";
+    const std::string rs = "rule_severities.";
+    const std::string no_courtyard_key = "legacy_no_courtyard_defined";
+    const std::string courtyard_overlap_key = "legacy_courtyards_overlap";
 
-    if( std::optional<bool> v = project->Get<bool>( bp + "legacy_no_courtyard_defined" ) )
+    try
     {
-        if( *v )
-            Set( rs + drcName( DRCE_MISSING_COURTYARD ), "error" );
-        else
-            Set( rs + drcName( DRCE_MISSING_COURTYARD ), "ignore" );
+        nlohmann::json& severities =
+                project->Internals()->at( "/board/design_settings/rule_severities"_json_pointer );
 
-        project->Internals()->erase( m_internals->PointerFromString( bp + "legacy_no_courtyard_defined" ) );
-        migrated = true;
+        if( severities.contains( no_courtyard_key ) )
+        {
+            if( severities[no_courtyard_key].get<bool>() )
+                Set( rs + drcName( DRCE_MISSING_COURTYARD ), "error" );
+            else
+                Set( rs + drcName( DRCE_MISSING_COURTYARD ), "ignore" );
+
+            severities.erase( no_courtyard_key );
+            migrated = true;
+        }
+
+        if( severities.contains( courtyard_overlap_key ) )
+        {
+            if( severities[courtyard_overlap_key].get<bool>() )
+                Set( rs + drcName( DRCE_OVERLAPPING_FOOTPRINTS ), "error" );
+            else
+                Set( rs + drcName( DRCE_OVERLAPPING_FOOTPRINTS ), "ignore" );
+
+            severities.erase( courtyard_overlap_key );
+            migrated = true;
+        }
     }
-
-    if( std::optional<bool> v = project->Get<bool>( bp + "legacy_courtyards_overlap" ) )
+    catch( ... )
     {
-        if( *v )
-            Set( rs + drcName( DRCE_OVERLAPPING_FOOTPRINTS ), "error" );
-        else
-            Set( rs + drcName( DRCE_OVERLAPPING_FOOTPRINTS ), "ignore" );
-
-        project->Internals()->erase( JSON_SETTINGS_INTERNALS::PointerFromString( bp + "legacy_courtyards_overlap" ) );
-        migrated = true;
     }
-
     if( Contains( "legacy" ) )
     {
         // This defaults to false for new boards, but version 5.1.x and prior kept the fillets

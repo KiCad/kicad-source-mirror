@@ -28,6 +28,7 @@
 
 #include <boost/uuid/uuid.hpp>
 #include <macros_swig.h>
+#include <nlohmann/json_fwd.hpp>
 
 #include <string>
 
@@ -196,5 +197,9 @@ public:
         KIID::CreateNilUuids( false );
     }
 };
+
+void to_json( nlohmann::json& aJson, const KIID& aKIID );
+
+void from_json( const nlohmann::json& aJson, KIID& aKIID );
 
 #endif // KIID_H

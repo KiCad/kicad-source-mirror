@@ -77,6 +77,9 @@ principle should be easily implemented by adapting the current STL containers.
 %ignore operator <<;
 %ignore operator=;
 
+%ignore to_json;
+%ignore from_json;
+
 // headers/imports that must be included in the _wrapper.cpp at top
 
 %{

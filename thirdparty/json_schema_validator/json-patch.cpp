@@ -85,19 +85,19 @@ json_patch::json_patch(const json &patch)
 
 json_patch &json_patch::add(const json::json_pointer &ptr, json value)
 {
-	j_.push_back(json{{"op", "add"}, {"path", ptr}, {"value", std::move(value)}});
+	j_.push_back(json{{"op", "add"}, {"path", ptr.to_string()}, {"value", std::move(value)}});
 	return *this;
 }
 
 json_patch &json_patch::replace(const json::json_pointer &ptr, json value)
 {
-	j_.push_back(json{{"op", "replace"}, {"path", ptr}, {"value", std::move(value)}});
+	j_.push_back(json{{"op", "replace"}, {"path", ptr.to_string()}, {"value", std::move(value)}});
 	return *this;
 }
 
 json_patch &json_patch::remove(const json::json_pointer &ptr)
 {
-	j_.push_back(json{{"op", "remove"}, {"path", ptr}});
+	j_.push_back(json{{"op", "remove"}, {"path", ptr.to_string()}});
 	return *this;
 }
 

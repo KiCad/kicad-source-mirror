@@ -91,7 +91,6 @@ public:
 
     nlohmann::json& At( const std::string& aPath );
     bool Contains( const std::string& aPath ) const;
-    size_t Count( const std::string& aPath ) const;
 
     JSON_SETTINGS_INTERNALS* Internals();
 

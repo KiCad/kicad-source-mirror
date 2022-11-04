@@ -14,6 +14,7 @@
 #include <memory>
 #include <set>
 #include <sstream>
+#include <string>
 
 using nlohmann::json;
 using nlohmann::json_patch;
@@ -34,12 +35,21 @@ using namespace nlohmann::json_schema;
 namespace
 {
 
-static const json EmptyDefault = nullptr;
-
 class schema
 {
 protected:
 	root_schema *root_;
+	json default_value_ = nullptr;
+
+protected:
+	virtual std::shared_ptr<schema> make_for_default_(
+	    std::shared_ptr<::schema> & /* sch */,
+	    root_schema * /* root */,
+	    std::vector<nlohmann::json_uri> & /* uris */,
+	    nlohmann::json & /* default_value */) const
+	{
+		return nullptr;
+	};
 
 public:
 	virtual ~schema() = default;
@@ -49,10 +59,12 @@ public:
 
 	virtual void validate(const json::json_pointer &ptr, const json &instance, json_patch &patch, error_handler &e) const = 0;
 
-	virtual const json &defaultValue(const json::json_pointer &, const json &, error_handler &) const
+	virtual const json &default_value(const json::json_pointer &, const json &, error_handler &) const
 	{
-		return EmptyDefault;
+		return default_value_;
 	}
+
+	void set_default_value(const json &v) { default_value_ = v; }
 
 	static std::shared_ptr<schema> make(json &schema,
 	                                    root_schema *root,
@@ -64,6 +76,8 @@ class schema_ref : public schema
 {
 	const std::string id_;
 	std::weak_ptr<schema> target_;
+	std::shared_ptr<schema> target_strong_; // for references to references keep also the shared_ptr because
+	                                        // no one else might use it after resolving
 
 	void validate(const json::json_pointer &ptr, const json &instance, json_patch &patch, error_handler &e) const final
 	{
@@ -75,24 +89,47 @@ class schema_ref : public schema
 			e.error(ptr, instance, "unresolved or freed schema-reference " + id_);
 	}
 
-	const json &defaultValue(const json::json_pointer &ptr, const json &instance, error_handler &e) const override
+	const json &default_value(const json::json_pointer &ptr, const json &instance, error_handler &e) const override final
 	{
+		if (!default_value_.is_null())
+			return default_value_;
+
 		auto target = target_.lock();
-
 		if (target)
-			return target->defaultValue(ptr, instance, e);
-		else
-			e.error(ptr, instance, "unresolved or freed schema-reference " + id_);
+			return target->default_value(ptr, instance, e);
 
-		return EmptyDefault;
+		e.error(ptr, instance, "unresolved or freed schema-reference " + id_);
+
+		return default_value_;
 	}
+
+protected:
+	virtual std::shared_ptr<schema> make_for_default_(
+	    std::shared_ptr<::schema> &sch,
+	    root_schema *root,
+	    std::vector<nlohmann::json_uri> &uris,
+	    nlohmann::json &default_value) const override
+	{
+		// create a new reference schema using the original reference (which will be resolved later)
+		// to store this overloaded default value #209
+		auto result = std::make_shared<schema_ref>(uris[0].to_string(), root);
+		result->set_target(sch, true);
+		result->set_default_value(default_value);
+		return result;
+	};
 
 public:
 	schema_ref(const std::string &id, root_schema *root)
 	    : schema(root), id_(id) {}
 
 	const std::string &id() const { return id_; }
-	void set_target(const std::shared_ptr<schema> &target) { target_ = target; }
+
+	void set_target(const std::shared_ptr<schema> &target, bool strong = false)
+	{
+		target_ = target;
+		if (strong)
+			target_strong_ = target;
+	}
 };
 
 } // namespace
@@ -168,7 +205,7 @@ public:
 		auto fragment = new_uri.pointer();
 
 		// is there a reference looking for this unknown-keyword, which is thus no longer a unknown keyword but a schema
-		auto unresolved = file.unresolved.find(fragment);
+		auto unresolved = file.unresolved.find(fragment.to_string());
 		if (unresolved != file.unresolved.end())
 			schema::make(value, this, {}, {{new_uri}});
 		else { // no, nothing ref'd it, keep for later
@@ -216,7 +253,7 @@ public:
 		//
 		// an unknown keyword can only be referenced by a json-pointer,
 		// not by a plain name fragment
-		if (uri.pointer() != "") {
+		if (uri.pointer().to_string() != "") {
 			try {
 				auto &subschema = file.unknown_keywords.at(uri.pointer()); // null is returned if not existing
 				auto s = schema::make(subschema, this, {}, {{uri}});       //  A JSON Schema MUST be an object or a boolean.
@@ -272,11 +309,31 @@ public:
 				break;
 		} while (1);
 
-		for (const auto &file : files_)
-			if (file.second.unresolved.size() != 0)
+		for (const auto &file : files_) {
+			if (file.second.unresolved.size() != 0) {
+				// Build a representation of the undefined
+				// references as a list of comma-separated strings.
+				auto n_urefs = file.second.unresolved.size();
+				std::string urefs = "[";
+
+				decltype(n_urefs) counter = 0;
+				for (const auto &p : file.second.unresolved) {
+					urefs += p.first;
+
+					if (counter != n_urefs - 1u) {
+						urefs += ", ";
+					}
+
+					++counter;
+				}
+
+				urefs += "]";
+
 				throw std::invalid_argument("after all files have been parsed, '" +
 				                            (file.first == "" ? "<root>" : file.first) +
-				                            "' has still undefined references.");
+				                            "' has still the following undefined references: " + urefs);
+			}
+		}
 	}
 
 	void validate(const json::json_pointer &ptr,
@@ -347,9 +404,9 @@ class logical_not : public schema
 			e.error(ptr, instance, "the subschema has succeeded, but it is required to not validate");
 	}
 
-	const json &defaultValue(const json::json_pointer &ptr, const json &instance, error_handler &e) const override
+	const json &default_value(const json::json_pointer &ptr, const json &instance, error_handler &e) const override
 	{
-		return subschema_->defaultValue(ptr, instance, e);
+		return subschema_->default_value(ptr, instance, e);
 	}
 
 public:
@@ -443,7 +500,6 @@ bool logical_combination<oneOf>::is_validate_complete(const json &instance, cons
 
 class type_schema : public schema
 {
-	json defaultValue_ = EmptyDefault;
 	std::vector<std::shared_ptr<schema>> type_;
 	std::pair<bool, json> enum_, const_;
 	std::vector<std::shared_ptr<schema>> logic_;
@@ -456,15 +512,10 @@ class type_schema : public schema
 
 	std::shared_ptr<schema> if_, then_, else_;
 
-	const json &defaultValue(const json::json_pointer &, const json &, error_handler &) const override
-	{
-		return defaultValue_;
-	}
-
 	void validate(const json::json_pointer &ptr, const json &instance, json_patch &patch, error_handler &e) const override final
 	{
 		// depending on the type of instance run the type specific validator - if present
-		auto type = type_[(uint8_t) instance.type()];
+		auto type = type_[static_cast<uint8_t>(instance.type())];
 
 		if (type)
 			type->validate(ptr, instance, patch, e);
@@ -504,11 +555,23 @@ class type_schema : public schema
 		}
 	}
 
+protected:
+	virtual std::shared_ptr<schema> make_for_default_(
+	    std::shared_ptr<::schema> & /* sch */,
+	    root_schema * /* root */,
+	    std::vector<nlohmann::json_uri> & /* uris */,
+	    nlohmann::json &default_value) const override
+	{
+		auto result = std::make_shared<type_schema>(*this);
+		result->set_default_value(default_value);
+		return result;
+	};
+
 public:
 	type_schema(json &sch,
 	            root_schema *root,
 	            const std::vector<nlohmann::json_uri> &uris)
-	    : schema(root), type_((uint8_t) json::value_t::discarded + 1)
+	    : schema(root), type_(static_cast<uint8_t>(json::value_t::discarded) + 1)
 	{
 		// association between JSON-schema-type and NLohmann-types
 		static const std::vector<std::pair<std::string, json::value_t>> schema_types = {
@@ -526,7 +589,7 @@ public:
 		auto attr = sch.find("type");
 		if (attr == sch.end()) // no type field means all sub-types possible
 			for (auto &t : schema_types)
-				type_[(uint8_t) t.second] = type_schema::make(sch, t.second, root, uris, known_keywords);
+				type_[static_cast<uint8_t>(t.second)] = type_schema::make(sch, t.second, root, uris, known_keywords);
 		else {
 			switch (attr.value().type()) { // "type": "type"
 
@@ -534,14 +597,14 @@ public:
 				auto schema_type = attr.value().get<std::string>();
 				for (auto &t : schema_types)
 					if (t.first == schema_type)
-						type_[(uint8_t) t.second] = type_schema::make(sch, t.second, root, uris, known_keywords);
+						type_[static_cast<uint8_t>(t.second)] = type_schema::make(sch, t.second, root, uris, known_keywords);
 			} break;
 
 			case json::value_t::array: // "type": ["type1", "type2"]
 				for (auto &schema_type : attr.value())
 					for (auto &t : schema_types)
 						if (t.first == schema_type)
-							type_[(uint8_t) t.second] = type_schema::make(sch, t.second, root, uris, known_keywords);
+							type_[static_cast<uint8_t>(t.second)] = type_schema::make(sch, t.second, root, uris, known_keywords);
 				break;
 
 			default:
@@ -551,9 +614,10 @@ public:
 			sch.erase(attr);
 		}
 
-		const auto defaultAttr = sch.find("default");
-		if (defaultAttr != sch.end()) {
-			defaultValue_ = defaultAttr.value();
+		attr = sch.find("default");
+		if (attr != sch.end()) {
+			set_default_value(attr.value());
+			sch.erase(attr);
 		}
 
 		for (auto &key : known_keywords)
@@ -561,16 +625,16 @@ public:
 
 		// with nlohmann::json float instance (but number in schema-definition) can be seen as unsigned or integer -
 		// reuse the number-validator for integer values as well, if they have not been specified explicitly
-		if (type_[(uint8_t) json::value_t::number_float] && !type_[(uint8_t) json::value_t::number_integer])
-			type_[(uint8_t) json::value_t::number_integer] = type_[(uint8_t) json::value_t::number_float];
+		if (type_[static_cast<uint8_t>(json::value_t::number_float)] && !type_[static_cast<uint8_t>(json::value_t::number_integer)])
+			type_[static_cast<uint8_t>(json::value_t::number_integer)] = type_[static_cast<uint8_t>(json::value_t::number_float)];
 
 		// #54: JSON-schema does not differentiate between unsigned and signed integer - nlohmann::json does
 		// we stick with JSON-schema: use the integer-validator if instance-value is unsigned
-		type_[(uint8_t) json::value_t::number_unsigned] = type_[(uint8_t) json::value_t::number_integer];
+		type_[static_cast<uint8_t>(json::value_t::number_unsigned)] = type_[static_cast<uint8_t>(json::value_t::number_integer)];
 
 		// special for binary types
-		if (type_[(uint8_t) json::value_t::string]) {
-			type_[(uint8_t) json::value_t::binary] = type_[(uint8_t) json::value_t::string];
+		if (type_[static_cast<uint8_t>(json::value_t::string)]) {
+			type_[static_cast<uint8_t>(json::value_t::binary)] = type_[static_cast<uint8_t>(json::value_t::string)];
 		}
 
 		attr = sch.find("enum");
@@ -657,7 +721,7 @@ class string : public schema
 	void validate(const json::json_pointer &ptr, const json &instance, json_patch &, error_handler &e) const override
 	{
 		if (minLength_.first) {
-			if (utf8_length(instance) < minLength_.second) {
+			if (utf8_length(instance.get<std::string>()) < minLength_.second) {
 				std::ostringstream s;
 				s << "instance is too short as per minLength:" << minLength_.second;
 				e.error(ptr, instance, s.str());
@@ -665,7 +729,7 @@ class string : public schema
 		}
 
 		if (maxLength_.first) {
-			if (utf8_length(instance) > maxLength_.second) {
+			if (utf8_length(instance.get<std::string>()) > maxLength_.second) {
 				std::ostringstream s;
 				s << "instance is too long as per maxLength: " << maxLength_.second;
 				e.error(ptr, instance, s.str());
@@ -701,7 +765,7 @@ class string : public schema
 				e.error(ptr, instance, std::string("a format checker was not provided but a format keyword for this string is present: ") + format_.second);
 			else {
 				try {
-					root_->format_check()(format_.second, instance);
+					root_->format_check()(format_.second, instance.get<std::string>());
 				} catch (const std::exception &ex) {
 					e.error(ptr, instance, std::string("format-checking failed: ") + ex.what());
 				}
@@ -715,13 +779,13 @@ public:
 	{
 		auto attr = sch.find("maxLength");
 		if (attr != sch.end()) {
-			maxLength_ = {true, attr.value()};
+			maxLength_ = {true, attr.value().get<size_t>()};
 			sch.erase(attr);
 		}
 
 		attr = sch.find("minLength");
 		if (attr != sch.end()) {
-			minLength_ = {true, attr.value()};
+			minLength_ = {true, attr.value().get<size_t>()};
 			sch.erase(attr);
 		}
 
@@ -759,7 +823,7 @@ public:
 #ifndef NO_STD_REGEX
 		attr = sch.find("pattern");
 		if (attr != sch.end()) {
-			patternString_ = attr.value();
+			patternString_ = attr.value().get<std::string>();
 			pattern_ = {true, REGEX_NAMESPACE::regex(attr.value().get<std::string>(),
 			                                         REGEX_NAMESPACE::regex::ECMAScript)};
 			sch.erase(attr);
@@ -771,7 +835,7 @@ public:
 			if (root_->format_check() == nullptr)
 				throw std::invalid_argument{"a format checker was not provided but a format keyword for this string is present: " + format_.second};
 
-			format_ = {true, attr.value()};
+			format_ = {true, attr.value().get<std::string>()};
 			sch.erase(attr);
 		}
 	}
@@ -792,7 +856,7 @@ class numeric : public schema
 	bool violates_multiple_of(T x) const
 	{
 		double res = std::remainder(x, multipleOf_.second);
-		double eps = std::nextafter(x, 0) - x;
+		double eps = std::nextafter(x, 0) - static_cast<double>(x);
 		return std::fabs(res) > std::fabs(eps);
 	}
 
@@ -804,15 +868,19 @@ class numeric : public schema
 			if (violates_multiple_of(value))
 				e.error(ptr, instance, "instance is not a multiple of " + std::to_string(multipleOf_.second));
 
-		if (maximum_.first)
-			if ((exclusiveMaximum_ && value >= maximum_.second) ||
-			    value > maximum_.second)
+		if (maximum_.first) {
+			if (exclusiveMaximum_ && value >= maximum_.second)
+				e.error(ptr, instance, "instance exceeds or equals maximum of " + std::to_string(maximum_.second));
+			else if (value > maximum_.second)
 				e.error(ptr, instance, "instance exceeds maximum of " + std::to_string(maximum_.second));
+		}
 
-		if (minimum_.first)
-			if ((exclusiveMinimum_ && value <= minimum_.second) ||
-			    value < minimum_.second)
+		if (minimum_.first) {
+			if (exclusiveMinimum_ && value <= minimum_.second)
+				e.error(ptr, instance, "instance is below or equals minimum of " + std::to_string(minimum_.second));
+			else if (value < minimum_.second)
 				e.error(ptr, instance, "instance is below minimum of " + std::to_string(minimum_.second));
+		}
 	}
 
 public:
@@ -821,33 +889,33 @@ public:
 	{
 		auto attr = sch.find("maximum");
 		if (attr != sch.end()) {
-			maximum_ = {true, attr.value()};
+			maximum_ = {true, attr.value().get<T>()};
 			kw.insert("maximum");
 		}
 
 		attr = sch.find("minimum");
 		if (attr != sch.end()) {
-			minimum_ = {true, attr.value()};
+			minimum_ = {true, attr.value().get<T>()};
 			kw.insert("minimum");
 		}
 
 		attr = sch.find("exclusiveMaximum");
 		if (attr != sch.end()) {
 			exclusiveMaximum_ = true;
-			maximum_ = {true, attr.value()};
+			maximum_ = {true, attr.value().get<T>()};
 			kw.insert("exclusiveMaximum");
 		}
 
 		attr = sch.find("exclusiveMinimum");
 		if (attr != sch.end()) {
-			minimum_ = {true, attr.value()};
 			exclusiveMinimum_ = true;
+			minimum_ = {true, attr.value().get<T>()};
 			kw.insert("exclusiveMinimum");
 		}
 
 		attr = sch.find("multipleOf");
 		if (attr != sch.end()) {
-			multipleOf_ = {true, attr.value()};
+			multipleOf_ = {true, attr.value().get<json::number_float_t>()};
 			kw.insert("multipleOf");
 		}
 	}
@@ -882,8 +950,8 @@ class boolean : public schema
 	{
 		if (!true_) { // false schema
 			// empty array
-			//switch (instance.type()) {
-			//case json::value_t::array:
+			// switch (instance.type()) {
+			// case json::value_t::array:
 			//	if (instance.size() != 0) // valid false-schema
 			//		e.error(ptr, instance, "false-schema required empty array");
 			//	return;
@@ -977,9 +1045,9 @@ class object : public schema
 		for (auto const &prop : properties_) {
 			const auto finding = instance.find(prop.first);
 			if (instance.end() == finding) { // if the prop is not in the instance
-				const auto &defaultValue = prop.second->defaultValue(ptr, instance, e);
-				if (!defaultValue.is_null()) { // if default value is available
-					patch.add((ptr / prop.first), defaultValue);
+				const auto &default_value = prop.second->default_value(ptr, instance, e);
+				if (!default_value.is_null()) { // if default value is available
+					patch.add((ptr / prop.first), default_value);
 				}
 			}
 		}
@@ -999,13 +1067,13 @@ public:
 	{
 		auto attr = sch.find("maxProperties");
 		if (attr != sch.end()) {
-			maxProperties_ = {true, attr.value()};
+			maxProperties_ = {true, attr.value().get<size_t>()};
 			sch.erase(attr);
 		}
 
 		attr = sch.find("minProperties");
 		if (attr != sch.end()) {
-			minProperties_ = {true, attr.value()};
+			minProperties_ = {true, attr.value().get<size_t>()};
 			sch.erase(attr);
 		}
 
@@ -1143,19 +1211,19 @@ public:
 	{
 		auto attr = sch.find("maxItems");
 		if (attr != sch.end()) {
-			maxItems_ = {true, attr.value()};
+			maxItems_ = {true, attr.value().get<size_t>()};
 			sch.erase(attr);
 		}
 
 		attr = sch.find("minItems");
 		if (attr != sch.end()) {
-			minItems_ = {true, attr.value()};
+			minItems_ = {true, attr.value().get<size_t>()};
 			sch.erase(attr);
 		}
 
 		attr = sch.find("uniqueItems");
 		if (attr != sch.end()) {
-			uniqueItems_ = attr.value();
+			uniqueItems_ = attr.value().get<bool>();
 			sch.erase(attr);
 		}
 
@@ -1255,7 +1323,7 @@ std::shared_ptr<schema> schema::make(json &schema,
 			if (std::find(uris.begin(),
 			              uris.end(),
 			              attr.value().get<std::string>()) == uris.end())
-				uris.push_back(uris.back().derive(attr.value())); // so add it to the list if it is not there already
+				uris.push_back(uris.back().derive(attr.value().get<std::string>())); // so add it to the list if it is not there already
 			schema.erase(attr);
 		}
 
@@ -1270,15 +1338,25 @@ std::shared_ptr<schema> schema::make(json &schema,
 		if (attr != schema.end()) { // this schema is a reference
 			// the last one on the uri-stack is the last id seen before coming here,
 			// so this is the origial URI for this reference, the $ref-value has thus be resolved from it
-			auto id = uris.back().derive(attr.value());
+			auto id = uris.back().derive(attr.value().get<std::string>());
 			sch = root->get_or_create_ref(id);
+
 			schema.erase(attr);
+
+			// special case where we break draft-7 and allow overriding of properties when a $ref is used
+			attr = schema.find("default");
+			if (attr != schema.end()) {
+				// copy the referenced schema depending on the underlying type and modify the default value
+				if (auto new_sch = sch->make_for_default_(sch, root, uris, attr.value())) {
+					sch = new_sch;
+				}
+				schema.erase(attr);
+			}
 		} else {
 			sch = std::make_shared<type_schema>(schema, root, uris);
 		}
 
 		schema.erase("$schema");
-		schema.erase("default");
 		schema.erase("title");
 		schema.erase("description");
 	} else {

@@ -61,28 +61,44 @@ void rfc3339_time_check(const std::string &value)
 		throw std::invalid_argument(value + " is not a time string according to RFC 3339.");
 	}
 
-	const auto hour = std::stoi(matches[1].str());
-	const auto minute = std::stoi(matches[2].str());
-	const auto second = std::stoi(matches[3].str());
+	auto hour = std::stoi(matches[1].str());
+	auto minute = std::stoi(matches[2].str());
+	auto second = std::stoi(matches[3].str());
 	// const auto secfrac      = std::stof( matches[4].str() );
 
 	range_check(hour, 0, 23);
 	range_check(minute, 0, 59);
-	/**
-     * @todo Could be made more exact by querying a leap second database and choosing the
-     *       correct maximum in {58,59,60}. This current solution might match some invalid dates
-     *       but it won't lead to false negatives. This only works if we know the full date, however
-     */
-	range_check(second, 0, 60);
+
+	int offsetHour = 0,
+	    offsetMinute = 0;
 
 	/* don't check the numerical offset if time zone is specified as 'Z' */
 	if (!matches[5].str().empty()) {
-		const auto offsetHour = std::stoi(matches[5].str());
-		const auto offsetMinute = std::stoi(matches[6].str());
+		offsetHour = std::stoi(matches[5].str());
+		offsetMinute = std::stoi(matches[6].str());
 
 		range_check(offsetHour, -23, 23);
 		range_check(offsetMinute, 0, 59);
+		if (offsetHour < 0)
+			offsetMinute *= -1;
 	}
+
+	/**
+	 * @todo Could be made more exact by querying a leap second database and choosing the
+	 *       correct maximum in {58,59,60}. This current solution might match some invalid dates
+	 *       but it won't lead to false negatives. This only works if we know the full date, however
+	 */
+
+	auto day_minutes = hour * 60 + minute - (offsetHour * 60 + offsetMinute);
+	if (day_minutes < 0)
+		day_minutes += 60 * 24;
+	hour = day_minutes % 24;
+	minute = day_minutes / 24;
+
+	if (hour == 23 && minute == 59)
+		range_check(second, 0, 60); // possible leap-second
+	else
+		range_check(second, 0, 59);
 }
 
 /**
@@ -110,7 +126,7 @@ void rfc3339_time_check(const std::string &value)
  * @endverbatim
  * NOTE: Per [ABNF] and ISO8601, the "T" and "Z" characters in this
  *       syntax may alternatively be lower case "t" or "z" respectively.
-*/
+ */
 void rfc3339_date_time_check(const std::string &value)
 {
 	const static std::regex dateTimeRegex{R"(^([0-9]{4}\-[0-9]{2}\-[0-9]{2})[Tt]([0-9]{2}\:[0-9]{2}\:[0-9]{2}(?:\.[0-9]+)?(?:[Zz]|(?:\+|\-)[0-9]{2}\:[0-9]{2}))$)"};
@@ -124,7 +140,7 @@ void rfc3339_date_time_check(const std::string &value)
 	rfc3339_time_check(matches[2].str());
 }
 
-const std::string decOctet{R"((?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))"}; // matches numbers 0-255
+const std::string decOctet{R"((?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]))"}; // matches numbers 0-255
 const std::string ipv4Address{"(?:" + decOctet + R"(\.){3})" + decOctet};
 const std::string h16{R"([0-9A-Fa-f]{1,4})"};
 const std::string h16Left{"(?:" + h16 + ":)"};
@@ -158,6 +174,8 @@ const std::string host{
     "|" + ipv4Address +
     "|" + regName +
     ")"};
+
+const std::string uuid{R"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})"};
 
 // from http://stackoverflow.com/questions/106179/regular-expression-to-match-dns-hostname-or-ip-address
 const std::string hostname{R"(^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$)"};
@@ -247,6 +265,142 @@ const std::string dotAtom{"(?:" + atext + R"(+(?:\.)" + atext + "+)*)"};
 const std::string stackoverflowMagicPart{R"((?:[[:alnum:]](?:[[:alnum:]-]*[[:alnum:]])?\.)+)"
                                          R"([[:alnum:]](?:[[:alnum:]-]*[[:alnum:]])?)"};
 const std::string email{"(?:" + dotAtom + "|" + quotedString + ")@(?:" + stackoverflowMagicPart + "|" + domainLiteral + ")"};
+
+/**
+ * @see
+ *
+ * @verbatim
+ * URI           = scheme ":" hier-part [ "?" query ] [ "#" fragment ]
+ *
+ *  hier-part     = "//" authority path-abempty
+ *               / path-absolute
+ *               / path-rootless
+ *               / path-empty
+ *
+ * URI-reference = URI / relative-ref
+ *
+ * absolute-URI  = scheme ":" hier-part [ "?" query ]
+ *
+ * relative-ref  = relative-part [ "?" query ] [ "#" fragment ]
+ *
+ * relative-part = "//" authority path-abempty
+ *               / path-absolute
+ *               / path-noscheme
+ *               / path-empty
+ *
+ * scheme        = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
+ *
+ * authority     = [ userinfo "@" ] host [ ":" port ]
+ * userinfo      = *( unreserved / pct-encoded / sub-delims / ":" )
+ * host          = IP-literal / IPv4address / reg-name
+ * port          = *DIGIT
+ *
+ * IP-literal    = "[" ( IPv6address / IPvFuture  ) "]"
+ *
+ * IPvFuture     = "v" 1*HEXDIG "." 1*( unreserved / sub-delims / ":" )
+ *
+ * IPv6address   =                            6( h16 ":" ) ls32
+ *               /                       "::" 5( h16 ":" ) ls32
+ *               / [               h16 ] "::" 4( h16 ":" ) ls32
+ *               / [ *1( h16 ":" ) h16 ] "::" 3( h16 ":" ) ls32
+ *               / [ *2( h16 ":" ) h16 ] "::" 2( h16 ":" ) ls32
+ *               / [ *3( h16 ":" ) h16 ] "::"    h16 ":"   ls32
+ *               / [ *4( h16 ":" ) h16 ] "::"              ls32
+ *               / [ *5( h16 ":" ) h16 ] "::"              h16
+ *               / [ *6( h16 ":" ) h16 ] "::"
+ *
+ * h16           = 1*4HEXDIG
+ * ls32          = ( h16 ":" h16 ) / IPv4address
+ * IPv4address   = dec-octet "." dec-octet "." dec-octet "." dec-octet
+ *    dec-octet     = DIGIT                 ; 0-9
+ *               / %x31-39 DIGIT         ; 10-99
+ *               / "1" 2DIGIT            ; 100-199
+ *               / "2" %x30-34 DIGIT     ; 200-249
+ *               / "25" %x30-35          ; 250-255
+ *
+ * reg-name      = *( unreserved / pct-encoded / sub-delims )
+ *
+ * path          = path-abempty    ; begins with "/" or is empty
+ *               / path-absolute   ; begins with "/" but not "//"
+ *               / path-noscheme   ; begins with a non-colon segment
+ *               / path-rootless   ; begins with a segment
+ *               / path-empty      ; zero characters
+ *
+ * path-abempty  = *( "/" segment )
+ * path-absolute = "/" [ segment-nz *( "/" segment ) ]
+ * path-noscheme = segment-nz-nc *( "/" segment )
+ * path-rootless = segment-nz *( "/" segment )
+ * path-empty    = 0<pchar>
+ *
+ * segment       = *pchar
+ * segment-nz    = 1*pchar
+ * segment-nz-nc = 1*( unreserved / pct-encoded / sub-delims / "@" )
+ *               ; non-zero-length segment without any colon ":"
+ *
+ * pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+ *
+ * query         = *( pchar / "/" / "?" )
+ *
+ * fragment      = *( pchar / "/" / "?" )
+ *
+ * pct-encoded   = "%" HEXDIG HEXDIG
+ *
+ * unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+ * reserved      = gen-delims / sub-delims
+ * gen-delims    = ":" / "/" / "?" / "#" / "[" / "]" / "@"
+ * sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
+ *               / "*" / "+" / "," / ";" / "="
+ *
+ * @endverbatim
+ * @see adapted from: https://github.com/jhermsmeier/uri.regex/blob/master/uri.regex
+ *
+ */
+void rfc3986_uri_check(const std::string &value)
+{
+	const static std::string scheme{R"(([A-Za-z][A-Za-z0-9+\-.]*):)"};
+	const static std::string hierPart{
+	    R"((?:(\/\/)(?:((?:[A-Za-z0-9\-._~!$&'()*+,;=:]|)"
+	    R"(%[0-9A-Fa-f]{2})*)@)?((?:\[(?:(?:(?:(?:[0-9A-Fa-f]{1,4}:){6}|)"
+	    R"(::(?:[0-9A-Fa-f]{1,4}:){5}|)"
+	    R"((?:[0-9A-Fa-f]{1,4})?::(?:[0-9A-Fa-f]{1,4}:){4}|)"
+	    R"((?:(?:[0-9A-Fa-f]{1,4}:){0,1}[0-9A-Fa-f]{1,4})?::(?:[0-9A-Fa-f]{1,4}:){3}|)"
+	    R"((?:(?:[0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})?::(?:[0-9A-Fa-f]{1,4}:){2}|)"
+	    R"((?:(?:[0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}:|)"
+	    R"((?:(?:[0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})?::)(?:[0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|)"
+	    R"((?:(?:25[0-5]|2[0-4][0-9]|)"
+	    R"([01]?[0-9][0-9]?)\.){3}(?:25[0-5]|)"
+	    R"(2[0-4][0-9]|)"
+	    R"([01]?[0-9][0-9]?))|)"
+	    R"((?:(?:[0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}|)"
+	    R"((?:(?:[0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})?::)|)"
+	    R"([Vv][0-9A-Fa-f]+\.[A-Za-z0-9\-._~!$&'()*+,;=:]+)\]|)"
+	    R"((?:(?:25[0-5]|)"
+	    R"(2[0-4][0-9]|)"
+	    R"([01]?[0-9][0-9]?)\.){3}(?:25[0-5]|)"
+	    R"(2[0-4][0-9]|)"
+	    R"([01]?[0-9][0-9]?)|)"
+	    R"((?:[A-Za-z0-9\-._~!$&'()*+,;=]|)"
+	    R"(%[0-9A-Fa-f]{2})*))(?::([0-9]*))?((?:\/(?:[A-Za-z0-9\-._~!$&'()*+,;=:@]|)"
+	    R"(%[0-9A-Fa-f]{2})*)*)|)"
+	    R"(\/((?:(?:[A-Za-z0-9\-._~!$&'()*+,;=:@]|)"
+	    R"(%[0-9A-Fa-f]{2})+(?:\/(?:[A-Za-z0-9\-._~!$&'()*+,;=:@]|)"
+	    R"(%[0-9A-Fa-f]{2})*)*)?)|)"
+	    R"(((?:[A-Za-z0-9\-._~!$&'()*+,;=:@]|)"
+	    R"(%[0-9A-Fa-f]{2})+(?:\/(?:[A-Za-z0-9\-._~!$&'()*+,;=:@]|)"
+	    R"(%[0-9A-Fa-f]{2})*)*)|))"};
+
+	const static std::string query{R"((?:\?((?:[A-Za-z0-9\-._~!$&'()*+,;=:@\/?]|%[0-9A-Fa-f]{2})*))?)"};
+	const static std::string fragment{
+	    R"((?:\#((?:[A-Za-z0-9\-._~!$&'()*+,;=:@\/?]|%[0-9A-Fa-f]{2})*))?)"};
+	const static std::string uriFormat{scheme + hierPart + query + fragment};
+
+	const static std::regex uriRegex{uriFormat};
+
+	if (!std::regex_match(value, uriRegex)) {
+		throw std::invalid_argument(value + " is not a URI string according to RFC 3986.");
+	}
+}
+
 } // namespace
 
 namespace nlohmann
@@ -268,6 +422,8 @@ void default_string_format_check(const std::string &format, const std::string &v
 		rfc3339_date_check(value);
 	} else if (format == "time") {
 		rfc3339_time_check(value);
+	} else if (format == "uri") {
+		rfc3986_uri_check(value);
 	} else if (format == "email") {
 		static const std::regex emailRegex{email};
 		if (!std::regex_match(value, emailRegex)) {
@@ -287,6 +443,11 @@ void default_string_format_check(const std::string &format, const std::string &v
 		static const std::regex ipv6Regex{ipv6Address};
 		if (!std::regex_match(value, ipv6Regex)) {
 			throw std::invalid_argument(value + " is not an IPv6 string according to RFC 5954.");
+		}
+	} else if (format == "uuid") {
+		static const std::regex uuidRegex{uuid};
+		if (!std::regex_match(value, uuidRegex)) {
+			throw std::invalid_argument(value + " is not an uuid string according to RFC 4122.");
 		}
 	} else if (format == "regex") {
 		try {

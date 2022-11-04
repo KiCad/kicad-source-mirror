@@ -33,6 +33,8 @@
 #include <boost/uuid/entropy_error.hpp>
 #endif
 
+#include <nlohmann/json.hpp>
+
 #include <cctype>
 #include <mutex>
 
@@ -335,4 +337,16 @@ wxString KIID_PATH::AsString() const
         path += '/' + pathStep.AsString();
 
     return path;
+}
+
+
+void to_json( nlohmann::json& aJson, const KIID& aKIID )
+{
+    aJson = aKIID.AsString().ToUTF8();
+}
+
+
+void from_json( const nlohmann::json& aJson, KIID& aKIID )
+{
+    aKIID = KIID( aJson.get<std::string>() );
 }

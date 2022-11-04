@@ -120,12 +120,6 @@ bool JSON_SETTINGS::Contains( const std::string& aPath ) const
 }
 
 
-size_t JSON_SETTINGS::Count( const std::string& aPath ) const
-{
-    return m_internals->count( JSON_SETTINGS_INTERNALS::PointerFromString( aPath ) );
-}
-
-
 JSON_SETTINGS_INTERNALS* JSON_SETTINGS::Internals()
 {
     return m_internals.get();

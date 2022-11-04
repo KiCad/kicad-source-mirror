@@ -435,7 +435,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1()
 
     std::string theme_ptr( "appearance.color_theme" );
 
-    if( !Count( theme_ptr ) )
+    if( !Contains( theme_ptr ) )
         return true;
 
     wxString selected = At( theme_ptr ).get<wxString>();
