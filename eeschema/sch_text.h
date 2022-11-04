@@ -210,15 +210,8 @@ public:
     virtual void Rotate90( bool aClockwise );
     virtual void MirrorSpinStyle( bool aLeftRight );
 
-    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
-    {
-        return SCH_ITEM::Matches( GetText(), aSearchData );
-    }
-
-    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData ) override
-    {
-        return EDA_TEXT::Replace( aSearchData );
-    }
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
+    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData ) override;
 
     virtual bool IsReplaceable() const override { return true; }
 

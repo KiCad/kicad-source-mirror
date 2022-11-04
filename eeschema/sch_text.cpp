@@ -665,6 +665,26 @@ wxString SCH_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
 }
 
 
+bool SCH_TEXT::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
+{
+    return SCH_ITEM::Matches( UnescapeString( GetText() ), aSearchData );
+}
+
+
+bool SCH_TEXT::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
+{
+    wxFindReplaceData localSearchData( aSearchData );
+
+    if( Type() == SCH_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_GLOBAL_LABEL_T )
+    {
+        localSearchData.SetFindString( EscapeString( aSearchData.GetFindString(), CTX_NETNAME ) );
+        localSearchData.SetReplaceString( EscapeString( aSearchData.GetReplaceString(), CTX_NETNAME ) );
+    }
+
+    return EDA_TEXT::Replace( localSearchData );
+}
+
+
 wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Graphic Text '%s'" ), ShortenedShownText() );
