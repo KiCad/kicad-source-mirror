@@ -599,6 +599,22 @@ void SCH_LABEL_BASE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFun
 }
 
 
+bool SCH_LABEL_BASE::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
+{
+    return SCH_ITEM::Matches( UnescapeString( GetText() ), aSearchData );
+}
+
+
+bool SCH_LABEL_BASE::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
+{
+    EDA_SEARCH_DATA localSearchData( aSearchData );
+    localSearchData.findString = EscapeString( aSearchData.findString, CTX_NETNAME );
+    localSearchData.replaceString = EscapeString( aSearchData.replaceString, CTX_NETNAME );
+
+    return EDA_TEXT::Replace( localSearchData );
+}
+
+
 INSPECT_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
                                       const std::vector<KICAD_T>& aScanTypes )
 {

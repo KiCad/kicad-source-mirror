@@ -135,6 +135,9 @@ public:
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
                           const std::vector<KICAD_T>& scanTypes ) override;
 
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
+    bool Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) override;
+
     VECTOR2I GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 
     /**
