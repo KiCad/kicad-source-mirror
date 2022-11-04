@@ -7,7 +7,7 @@
 """
     @package
     Output: CSV (comma-separated)
-    Grouped By: Value
+    Grouped By: Value, Symbol Name, Footprint
     Sorted By: Ref
     Fields: Item, Qty, Reference(s), Value, LibPart, Footprint, Datasheet, all additional symbol fields
 
