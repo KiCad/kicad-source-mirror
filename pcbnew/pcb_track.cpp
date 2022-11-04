@@ -53,6 +53,7 @@ PCB_TRACK::PCB_TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
     m_Width = pcbIUScale.mmToIU( 0.2 );     // Gives a reasonable default width
+    m_CachedScale = -1.0;                   // Set invalid to force update
     m_CachedLOD = 0.0;                      // Set to always display
 }
 
@@ -667,6 +668,13 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
                 return HIDE;
         }
 
+        // Pick the approximate size of the netname (square chars)
+        wxString netName = UnescapeString( GetShortNetname() );
+        size_t  num_chars = netName.size();
+
+        if( GetLength() < num_chars * GetWidth() )
+            return HIDE;
+
         // When drawing netnames, clip the track to the viewport
         VECTOR2I start( GetStart() );
         VECTOR2I end( GetEnd() );
@@ -676,10 +684,8 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         ClipLine( &clipBox, start.x, start.y, end.x, end.y );
 
         VECTOR2I line = ( end - start );
-        double length = line.EuclideanNorm();
 
-        // Check if the track is long enough to have a netname displayed
-        if( length < 6 * GetWidth() )
+        if( line.EuclideanNorm() == 0 )
             return HIDE;
 
         // Netnames will be shown only if zoom is appropriate

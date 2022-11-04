@@ -238,6 +238,24 @@ public:
         m_CachedLOD = aLOD;
     }
 
+    /**
+     * Get last used zoom scale for the track net name
+     * @return scale from GetScale()
+     */
+    double GetCachedScale()
+    {
+        return m_CachedScale;
+    }
+
+    /**
+     * Set the cached scale
+     * @param aScale value from GetScale()
+     */
+    void SetCachedScale( double aScale )
+    {
+        m_CachedScale = aScale;
+    }
+
     struct cmp_tracks
     {
         bool operator()( const PCB_TRACK* aFirst, const PCB_TRACK* aSecond ) const;
@@ -250,15 +268,13 @@ public:
 protected:
     void GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) const;
 
-public:
-    mutable VECTOR2I m_LastNetnamePosition;
-
 protected:
     int      m_Width; ///< Thickness of track, or via diameter
     VECTOR2I m_Start; ///< Line start point
     VECTOR2I m_End;   ///< Line end point
 
     double   m_CachedLOD; ///< Last LOD used to draw this track's net
+    double   m_CachedScale; ///< Last zoom scale used to draw this track's net (we want to redraw when changing zoom)
 };
 
 

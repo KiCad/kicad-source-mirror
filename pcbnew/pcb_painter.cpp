@@ -636,42 +636,40 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
         ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );
 
+        wxString netName = UnescapeString( aTrack->GetShortNetname() );
+        size_t  num_char = netName.size();
+
         // Check if the track is long enough to have a netname displayed
-        int seg_minlength = track_width * 6;
+        int seg_minlength = track_width * num_char;
 
         if( visibleSeg.Length() < seg_minlength )
             return;
 
-        const     wxString& netName = UnescapeString( aTrack->GetShortNetname() );
         double    textSize = track_width;
         double    penWidth = textSize / 12.0;
-        VECTOR2D  textPosition = ( visibleSeg.A + visibleSeg.B ) / 2.0;  // center of the track
         EDA_ANGLE textOrientation;
-
-        // If the last position is still on the track, and it's some reasonable distance inside
-        // the viewport then don't move the netname; just use the last position.
-        if( visibleSeg.Distance( aTrack->m_LastNetnamePosition ) < penWidth
-                && clipBox.Inflate( -seg_minlength / 2 ).Contains( aTrack->m_LastNetnamePosition ) )
-        {
-            textPosition = aTrack->m_LastNetnamePosition;
-        }
-        else
-        {
-            aTrack->m_LastNetnamePosition = textPosition;
-        }
+        int num_names = 1;
 
         if( end.y == start.y ) // horizontal
         {
             textOrientation = ANGLE_HORIZONTAL;
+            num_names = std::max( num_names,
+                    static_cast<int>( aTrack->GetLength() / viewport.GetWidth() ) );
         }
         else if( end.x == start.x ) // vertical
         {
             textOrientation = ANGLE_VERTICAL;
+            num_names = std::max( num_names,
+                    static_cast<int>( aTrack->GetLength() / viewport.GetHeight() ) );
         }
         else
         {
             textOrientation = EDA_ANGLE( visibleSeg.B - visibleSeg.A ) + ANGLE_90;
             textOrientation.Normalize90();
+
+            double min_size = std::min( viewport.GetWidth(), viewport.GetHeight() );
+            num_names = std::max( num_names,
+                    static_cast<int>( aTrack->GetLength() / ( M_SQRT2 * min_size ) ) );
         }
 
         m_gal->SetIsStroke( true );
@@ -685,7 +683,14 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         m_gal->SetGlyphSize( VECTOR2D( textSize * 0.55, textSize * 0.55 ) );
         m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
         m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
-        m_gal->BitmapText( netName, textPosition, textOrientation );
+
+        for( int ii = 0; ii < num_names; ++ii )
+        {
+            VECTOR2I textPosition =
+                      VECTOR2D( start ) * static_cast<double>( num_names - ii ) / ( num_names + 1 )
+                    + VECTOR2D( end ) * static_cast<double>( ii + 1 ) / ( num_names + 1 );
+            m_gal->BitmapText( netName, textPosition, textOrientation );
+        }
 
         return;
     }
