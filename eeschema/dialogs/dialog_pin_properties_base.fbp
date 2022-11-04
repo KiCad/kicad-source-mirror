@@ -2218,6 +2218,7 @@
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
                                 <object class="wxBoxSizer" expanded="1">
+                                <event name="OnCollapsiblePaneChanged">OnCollapsiblePaneChanged</event>
                                     <property name="minimum_size"></property>
                                     <property name="name">bAlternatesSizer</property>
                                     <property name="orient">wxVERTICAL</property>

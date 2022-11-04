@@ -171,8 +171,13 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
         m_sdbSizerButtonsCancel
     };
 
-    // Default alternates turndow to whether or not alternates exist
-    m_alternatesTurndown->Collapse( m_pin->GetAlternates().size() == 0 );
+    // Default alternates turndown to whether or not alternates exist, or if we've had it open before
+    m_alternatesTurndown->Collapse( m_pin->GetAlternates().size() == 0 && !s_alternatesTurndownOpen);
+
+    // wxwidgets doesn't call the OnCollapseChange even at init, so we update this value if
+    // the alternates pane defaults to open
+    if ( m_pin->GetAlternates().size() > 0 )
+        s_alternatesTurndownOpen = true;
 
     m_alternatesDataModel = new ALT_PIN_DATA_MODEL( GetUserUnits() );
 
@@ -425,6 +430,11 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
         m_infoBar->ShowMessage( getSyncPinsMessage() );
 
     m_panelShowPin->Refresh();
+}
+
+void DIALOG_PIN_PROPERTIES::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event )
+{
+    s_alternatesTurndownOpen = !event.GetCollapsed();
 }
 
 
