@@ -36,6 +36,7 @@
 #include <gal/opengl/gpu_manager.h>
 #include <gal/opengl/vertex_item.h>
 #include <confirm.h>
+#include <wx/log.h>
 
 using namespace KIGFX;
 
@@ -71,7 +72,8 @@ bool VERTEX_MANAGER::Reserve( unsigned int aSize )
     if( !aSize )
         return true;
 
-    assert( m_reservedSpace == 0 && m_reserved == nullptr );
+    if( m_reservedSpace != 0 || m_reserved )
+        wxLogDebug( wxT( "Did not use all previous vertices allocated" ) );
 
     // flag to avoid hanging by calling DisplayError too many times:
     static bool show_err = true;
@@ -170,7 +172,8 @@ void VERTEX_MANAGER::SetItem( VERTEX_ITEM& aItem ) const
 
 void VERTEX_MANAGER::FinishItem() const
 {
-    assert( m_reservedSpace == 0 && m_reserved == nullptr );
+    if( m_reservedSpace != 0 || m_reserved )
+        wxLogDebug( wxT( "Did not use all previous vertices allocated" ) );
 
     m_container->FinishItem();
 }
