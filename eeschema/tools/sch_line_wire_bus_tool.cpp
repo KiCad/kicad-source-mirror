@@ -708,6 +708,12 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
             if( segment || m_busUnfold.in_progress )
             {
                 cleanup();
+
+                if( aQuitOnDraw )
+                {
+                    m_frame->PopTool( aTool );
+                    break;
+                }
             }
             else
             {
