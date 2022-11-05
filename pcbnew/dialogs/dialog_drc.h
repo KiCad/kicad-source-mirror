@@ -120,7 +120,6 @@ private:
     BOARD*             m_currentBoard;     // the board currently on test
     PCB_EDIT_FRAME*    m_frame;
     bool               m_running;
-    std::atomic<bool>  m_cancelled;
     bool               m_drcRun;
     bool               m_footprintTestsRun;
 

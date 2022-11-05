@@ -66,7 +66,6 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         DIALOG_DRC_BASE( aParent ),
         PROGRESS_REPORTER_BASE( 1 ),
         m_running( false ),
-        m_cancelled( false ),
         m_drcRun( false ),
         m_footprintTestsRun( false ),
         m_markersTreeModel( nullptr ),
