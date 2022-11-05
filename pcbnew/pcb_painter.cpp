@@ -224,7 +224,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     // Zones should pull from the copper layer
     if( item && ( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T ) )
     {
-        if( IsZoneLayer( aLayer ) )
+        if( IsZoneFillLayer( aLayer ) )
             aLayer = aLayer - LAYER_ZONE_START;
     }
 
@@ -2333,8 +2333,12 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
      * The color for the zone comes from the associated copper layer ( aLayer - LAYER_ZONE_START )
      * and the visibility comes from the combination of that copper layer and LAYER_ZONES
      */
-    wxASSERT( IsZoneLayer( aLayer ) );
-    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aLayer - LAYER_ZONE_START );
+    PCB_LAYER_ID layer;
+
+    if( IsZoneFillLayer( aLayer ) )
+        layer = ToLAYER_ID( aLayer - LAYER_ZONE_START );
+    else
+        layer = ToLAYER_ID( aLayer );
 
     if( !aZone->IsOnLayer( layer ) )
         return;
@@ -2344,41 +2348,45 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
     ZONE_DISPLAY_MODE    displayMode = m_pcbSettings.m_ZoneDisplayMode;
 
     // Draw the outline
-    const SHAPE_POLY_SET* outline = aZone->Outline();
-
-    if( !m_pcbSettings.m_isPrinting && outline && outline->OutlineCount() > 0 )
+    if( !IsZoneFillLayer( aLayer ) )
     {
-        m_gal->SetStrokeColor( color.a > 0.0 ? color.WithAlpha( 1.0 ) : color );
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        const SHAPE_POLY_SET* outline = aZone->Outline();
 
-        // Draw each contour (main contour and holes)
+        if( !m_pcbSettings.m_isPrinting && outline && outline->OutlineCount() > 0 )
+        {
+            m_gal->SetStrokeColor( color.a > 0.0 ? color.WithAlpha( 1.0 ) : color );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
-        /*
-         * m_gal->DrawPolygon( *outline );
-         * should be enough, but currently does not work to draw holes contours in a complex
-         * polygon so each contour is draw as a simple polygon
-         */
+            // Draw each contour (main contour and holes)
 
-        // Draw the main contour
-        m_gal->DrawPolyline( outline->COutline( 0 ) );
+            /*
+             * m_gal->DrawPolygon( *outline );
+             * should be enough, but currently does not work to draw holes contours in a complex
+             * polygon so each contour is draw as a simple polygon
+             */
 
-        // Draw holes
-        int holes_count = outline->HoleCount( 0 );
+            // Draw the main contour
+            m_gal->DrawPolyline( outline->COutline( 0 ) );
 
-        for( int ii = 0; ii < holes_count; ++ii )
-            m_gal->DrawPolyline( outline->CHole( 0, ii ) );
+            // Draw holes
+            int holes_count = outline->HoleCount( 0 );
 
-        // Draw hatch lines
-        for( const SEG& hatchLine : aZone->GetHatchLines() )
-            m_gal->DrawLine( hatchLine.A, hatchLine.B );
+            for( int ii = 0; ii < holes_count; ++ii )
+                m_gal->DrawPolyline( outline->CHole( 0, ii ) );
+
+            // Draw hatch lines
+            for( const SEG& hatchLine : aZone->GetHatchLines() )
+                m_gal->DrawLine( hatchLine.A, hatchLine.B );
+        }
     }
 
     // Draw the filling
-    if( displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED
-            || displayMode == ZONE_DISPLAY_MODE::SHOW_FRACTURE_BORDERS
-            || displayMode == ZONE_DISPLAY_MODE::SHOW_TRIANGULATION )
+    if( IsZoneFillLayer( aLayer )
+            && ( displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED
+                || displayMode == ZONE_DISPLAY_MODE::SHOW_FRACTURE_BORDERS
+                || displayMode == ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) )
     {
         const std::shared_ptr<SHAPE_POLY_SET>& polySet = aZone->GetFilledPolysList( layer );
 

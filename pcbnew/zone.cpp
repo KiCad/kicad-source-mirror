@@ -289,12 +289,14 @@ void ZONE::SetLayerSet( LSET aLayerSet )
 
 void ZONE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
+    aCount = 0;
     LSEQ layers = m_layerSet.Seq();
 
-    for( unsigned int idx = 0; idx < layers.size(); idx++ )
-        aLayers[idx] = LAYER_ZONE_START + layers[idx];
-
-    aCount = layers.size();
+    for( PCB_LAYER_ID layer : m_layerSet.Seq() )
+    {
+        aLayers[ aCount++ ] = layer;                     // For outline (always full opacity)
+        aLayers[ aCount++ ] = layer + LAYER_ZONE_START;  // For fill (obeys global zone opacity)
+    }
 
     if( IsConflicting() )
         aLayers[ aCount++ ] = LAYER_CONFLICTS_SHADOW;

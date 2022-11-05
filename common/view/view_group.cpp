@@ -143,7 +143,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
     {
         int  layer = layers[i];
 
-        if( IsZoneLayer( layer ) )
+        if( IsZoneFillLayer( layer ) )
             layer = layer - LAYER_ZONE_START;
 
         bool draw = aView->IsLayerVisible( layer );
