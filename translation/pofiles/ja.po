@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-24 14:09+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2022-11-08 17:02+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.14.2\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4101,7 +4101,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "フォルダー %s に対する権限がありません。"
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4113,7 +4113,9 @@ msgstr ""
 "これはもしかすると厄介です！\n"
 "前回編集したファイル\n"
 "%s\n"
-"が正しく保存されていなかったようです。最後に保存した編集内容を復元しますか？"
+"が保存されてる前にKiCadが終了しました。\n"
+"\n"
+"代わりに自動保存されたファイルを開きますか？"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -5184,9 +5186,8 @@ msgid "Cursor"
 msgstr "カーソル"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "アイテムを移動"
+msgstr "移動中のアイテム"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -8751,13 +8752,11 @@ msgstr "シートのファイル名はシートのプロパティダイアログ
 
 #: eeschema/dialogs/dialog_field_properties.cpp:676
 #: eeschema/dialogs/dialog_label_properties.cpp:460
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr ""
-"テキスト周辺のマージンは、 回路図の設定 > 一般 > フォーマット にある\n"
-"テキストのオフセット比で制御されます。"
+msgstr "全体的なシート間リファレンスの表示の設定は 回路図の設定 > 一般設定 > "
+"フォーマット から制御できます"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -9038,9 +9037,8 @@ msgstr "水平揃え:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "可視化 (フィールドのみ)"
+msgstr "(フィールドのみ)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
 msgid "V Align:"
@@ -9089,11 +9087,13 @@ msgid "symbol"
 msgstr "シンボル"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "シンボル ライブラリー '%s' の作成中にエラーしました。"
+msgstr ""
+"シンボル ライブラリー '%s' の作成中にエラーしました。\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9107,23 +9107,23 @@ msgid "File '%s' not found."
 msgstr "ファイル '%s' が見つかりません。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "シンボル ライブラリー テーブル '%s' のロード中にエラーが発生しました。"
+msgstr ""
+"シンボル ライブラリー テーブル '%s' の読み込み中にエラーが発生しました。\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "グローバル ライブラリー テーブルのパス '%s' が生成できません。"
+msgstr "グローバル ライブラリー テーブル '%s' が生成できません。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr ""
-"グローバル シンボル ライブラリー テーブル ファイル '%s' を '%s' にコピーでき"
-"ません。"
+msgstr "グローバル シンボル ライブラリー テーブル '%s' を '%s' にコピーできません。"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -10124,8 +10124,8 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"このピンは %d mils のグリッド上に乗っておらず、\n"
-"図面上での接続が困難となります。\n"
+"このピンは %d mils "
+"のグリッド上に乗っておらず、回路図上での接続が困難となります。\n"
 "続けてもよろしいですか?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
@@ -10568,9 +10568,8 @@ msgid "Rescue Symbols"
 msgstr "シンボルをレスキュー"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "シンボルのリファレンスを編集"
+msgstr "シンボルのレスキューをスキップ"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -11073,9 +11072,8 @@ msgid "Pin Assignments"
 msgstr "ピンの割り当て"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:242
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "シミュレーションからシンボルを除外する"
+msgstr "シミュレーションから除外する"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
 #, fuzzy
@@ -11672,15 +11670,14 @@ msgid "Library '%s' not found."
 msgstr "ライブラリー '%s' が見つかりません。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"空のシンボル ライブラリー テーブルを書き込もうとしたところ、エラーが発生しま"
-"した。\n"
-"\n"
-"%s"
+"プロジェクト シンボル ライブラリー "
+"テーブルを書き込もうとしたところ、エラーが発生しました。\n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -12394,7 +12391,9 @@ msgstr "デフォルトの線幅 (&D):"
 msgid ""
 "Set to 0 to allow symbols to inherit their line widths from\n"
 "their parent Schematic"
-msgstr "0に設定すると、シンボルの線幅を親の回路図から継承することができます。"
+msgstr ""
+"0に設定すると、シンボルの線幅を親の回路図から\n"
+"継承することができます"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:55
 msgid "D&efault pin length:"
@@ -15172,14 +15171,13 @@ msgstr ""
 "'%s' がライブラリ '%s' 内に見つかりませんでした"
 
 #: eeschema/sim/sim_model.cpp:617
-#, fuzzy
 msgid "Failed to read simulation model from fields"
-msgstr "シミュレーションモデル %s を読み込めませんでした。"
+msgstr "フィールドからシミュレーションモデルを読み込めませんでした"
 
 #: eeschema/sim/sim_model.cpp:815 eeschema/sim/sim_model.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a simulation model parameter named '%s'"
-msgstr "カスタムパッド '%s' が見つかりません。"
+msgstr "シミュレーションモデルのパラメーター '%s' が見つかりません"
 
 #: eeschema/sim/sim_model.cpp:1132
 #, c-format
@@ -15194,24 +15192,24 @@ msgid ""
 msgstr ""
 
 #: eeschema/sim/sim_model_kibis.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "カスタムパッド '%s' が見つかりません。"
+msgstr "IBISコンポーネント '%s' が見つかりません"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "カスタムパッド '%s' が見つかりません。"
+msgstr "コンポーネント '%s' 中のIBISのピン '%s' がありません"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "無効なシンボルピンインデックス： '%s'"
+msgstr "コンポーネント '%s' 中のIBISのピン '%s' が不正です"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "カスタムパッド '%s' が見つかりません。"
+msgstr "IBISモデル '%s' が見つかりません"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
 #, fuzzy, c-format
@@ -16746,9 +16744,8 @@ msgid "Swap"
 msgstr "交換"
 
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/pcb_actions.cpp:342
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "選択されたアイテムを右回転"
+msgstr "選択されたアイテムの位置を交換"
 
 #: eeschema/tools/ee_actions.cpp:435 pcbnew/tools/pcb_actions.cpp:369
 msgid "Properties..."
@@ -17121,13 +17118,12 @@ msgid "Export Symbols to New Library..."
 msgstr "シンボルを新しいライブラリにエクスポート..."
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
 "基板で使われているフットプリントを含む、新しいライブラリーを作成します\n"
-"(ライブラリーが既に存在していた場合は置き換えられます)"
+"(ライブラリーが既に存在する場合は置き換えられます)"
 
 #: eeschema/tools/ee_actions.cpp:695
 msgid "Select on PCB"
@@ -17192,11 +17188,10 @@ msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:735
-#, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
-msgstr "グラフィックの線を引くときに、水平、垂直、45度に制限します。"
+msgstr "描画とドラッグの操作を水平、垂直、45度に制限します"
 
 #: eeschema/tools/ee_actions.cpp:740
 msgid "Switch to next line mode"
@@ -19573,12 +19568,9 @@ msgid "Unable to load repository url"
 msgstr "リポジトリのURLを読み込めません"
 
 #: kicad/pcm/pcm.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"リポジトリーの解析ができません:\n"
-"\n"
-"%s"
+msgstr "リポジトリーの解析ができません: %s"
 
 #: kicad/pcm/pcm.cpp:321
 msgid ""
@@ -20303,7 +20295,7 @@ msgstr "ステップ テキスト:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:410
 msgid "Number of characters or digits to step text by for each repeat."
-msgstr "繰り返しごとに増やす文字(コード)の増分を指定します。"
+msgstr "繰り返しごとに増やす文字(文字コード)の増分を指定します。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:417
 msgid "Step X:"
@@ -20627,7 +20619,6 @@ msgstr ""
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -20638,9 +20629,9 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### 分割減衰器\n"
-"減衰量は6dB\n"
-"___Z<sub>in</sub>___ 要求される入力インピーダンス (&#x2126;)  \n"
-"___Z<sub>out</sub>___ 要求される出力インピーダンス in (&#x2126;)  \n"
+"減衰量は6dB<br>\n"
+"___Z<sub>in</sub>___ 要求される入力インピーダンス (&#x2126;)<br> \n"
+"___Z<sub>out</sub>___ 要求される出力インピーダンス in (&#x2126;) <br> \n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
@@ -20990,7 +20981,7 @@ msgid "Linear resistance:"
 msgstr "線形抵抗:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "100% の表皮深さの場合の周波数:"
 
@@ -23827,9 +23818,8 @@ msgid "Subtract holes from board area"
 msgstr "基板面積から穴の部分を減算"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
-#, fuzzy
 msgid "Exclude footprints with no pads"
-msgstr "スルーホールのあるフットプリントを全て除外する"
+msgstr "パッドのないフットプリントを除外する"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "X Size"
@@ -25514,33 +25504,33 @@ msgid "Text items must have some content."
 msgstr "テキスト アイテムは内容を持っていなければなりません。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at least %s."
-msgstr "%s は少なくとも %s でなければなりません。"
+msgstr "テキストの幅は %s 以上でなければなりません。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at most %s."
-msgstr "%s は少なくとも %s でなければなりません。"
+msgstr "テキストの幅は %s 以下でなければなりません。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at least %s."
-msgstr "%s は少なくとも %s でなければなりません。"
+msgstr "テキストの高さは%s 以上でなければなりません。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at most %s."
-msgstr "%s は少なくとも %s でなければなりません。"
+msgstr "テキストの高さは %s 以下でなければなりません。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:440
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
 "文字の太さが文字サイズに比べて太過ぎます。\n"
-"文字は潰れるでしょう。"
+"%s に詰められます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:575
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:605
@@ -25738,7 +25728,7 @@ msgid "Solder paste relative clearance:"
 msgstr "ハンダ ペーストの相対クリアランス:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -25828,14 +25818,14 @@ msgid "Footprint name may not contain '%s'."
 msgstr "フットプリント名には '%s' を含めることができません。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid "The text width must be between %s and %s."
-msgstr "線幅は０より大きくする必要があります。"
+msgstr "テキストの幅は %s と %s との間でなければなりません。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "'%s' と %lf との間で型が不整合です"
+msgstr "テキストの高さは %s と %s との間でなければなりません。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:454
 #: pcbnew/dialogs/dialog_text_properties.cpp:421
@@ -25913,7 +25903,7 @@ msgstr ""
 "各パッドの設定値で置き換えられます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -25932,8 +25922,8 @@ msgstr ""
 "最終的なクリアランスの値は、この値と絶対クリアランス値を合算したものになりま"
 "す。\n"
 "負値の場合、ステンシルの開口部のサイズはパッドのサイズより小さくなります。\n"
-"この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブでパッドごと"
-"に上書きできます。"
+"この値は、パッド プロパティの\"ローカル "
+"クリアランスと設定\"タブでパッドごとに上書きできます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
 #, fuzzy
@@ -29398,9 +29388,8 @@ msgid "Minimum connection width:"
 msgstr "最小接続幅:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
-#, fuzzy
 msgid "The minimum copper width of connected copper items."
-msgstr "未接続の孤立した導体部分で実行することを選択"
+msgstr "導体アイテムの接続部分の幅の最小幅を設定します。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -30335,7 +30324,6 @@ msgid "Check rule syntax"
 msgstr "ルールの文法をチェック"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30707,9 +30695,18 @@ msgstr ""
 " * via\\_diameter\n"
 " * zone\\_connection\n"
 "\n"
-"注: `clearance` と `hole_clearance`のルールは同一ネットにあるアイテムで動作し"
-"ません; `physical_clearance` と `physical_hole_clearance` のルールについても"
-"同様です。\n"
+"注: `clearance` と "
+"`hole_clearance`のルールは同一ネットにあるアイテムで動作しません; "
+"`physical_clearance` と `physical_hole_clearance` "
+"のルールについても同様です。\n"
+"<br><br>\n"
+"\n"
+"### アイテム\n"
+"\n"
+" * `A` &nbsp;&nbsp; _評価の初めの(もしくは唯一の)アイテム_\n"
+" * `B` &nbsp;&nbsp; _評価の２つ目のアイテム(バイナリテスト用)_\n"
+" * `L` &nbsp;&nbsp; _評価の現在のレイヤー_\n"
+"\n"
 "<br>\n"
 "\n"
 "### アイテムタイプ\n"
@@ -30776,8 +30773,8 @@ msgstr ""
 "\n"
 "### 注\n"
 "\n"
-"Version句は最初の句でなければなりません。  これはファイルの文法のバージョンを"
-"示し、\n"
+"Version句は最初の句でなければなりません。  "
+"これはファイルの文法のバージョンを示し、\n"
 "将来のルールパーサーが自動的にアップデート可能にするためです。\n"
 "\"1\"を設定しなければなりません。\n"
 "\n"
@@ -30790,8 +30787,8 @@ msgstr ""
 "\n"
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
@@ -30811,6 +30808,14 @@ msgstr ""
 "\n"
 "    A.insideArea('<zone_name>')\n"
 "`A`のいずれかの部分が与えられたゾーンの中にある場合、真になります。\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"`A` のすべてが指定されたゾーンのアウトライン内にある場合に真になります。\n"
+"\n"
+"注意: "
+"これは、`intersectsArea()`よりも高コストな呼び出しになる可能性があります。\n"
+"可能であれば`intersectsArea()`を使用してください。\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
@@ -30834,13 +30839,29 @@ msgstr ""
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
 "`A`が与えられたレイヤー状にある場合、真になります。\n"
-"レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、正規化名(例: "
-"`F.Cu`)が使えます。\n"
+"レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、\n"
+"正規化名(例: `F.Cu`)が使えます。\n"
 "\n"
-"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわら"
-"ず\n"
-"`A`がレイヤーにある場合に真を返します。後者の場合、`(layer \"layer_name\")`の"
-"句をルールの中で使います。\n"
+"注意: これは、"
+"ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
+"`A`がレイヤーにある場合に真を返します。\n"
+"後者の場合、`(layer \"layer_name\")`の句をルールの中で使います。\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"廃止; 代わりに `intersectsCourtyard()` を使用してください。\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"廃止; 代わりに `intersectsFrontCourtyard()` を使用してください。\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"廃止; 代わりに `intersectsBackCourtyard()` を使用してください。\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"廃止; 代わりに `intersectsArea()` を使用してください。\n"
 "<br><br><br>\n"
 "\n"
 "### さらなる例\n"
@@ -30864,13 +30885,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -30921,8 +30942,8 @@ msgstr ""
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅を上書きす"
-"る\n"
+"    # "
+"GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅を上書きする\n"
 "    (rule defined_relief_pwr\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
@@ -31309,9 +31330,9 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "ルールレイヤーが一致しません。ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:1180
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a drilled hole; rule ignored."
-msgstr "条件を満たしません; ルールは無視されます。"
+msgstr "%s はドリル穴ではありません; ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:1192
 msgid "Unconditional constraint applied."
@@ -31555,7 +31576,7 @@ msgstr "導体スライバー"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "ハンダマスクのアパーチャーが異なるネットとブリッジしています"
+msgstr "ハンダマスクのアパーチャーが異なるネットとブリッジしている"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Silkscreen clipped by solder mask"
@@ -31766,9 +31787,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "ネットの最小接続幅をチェックしています..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum connection width %s; actual %s)"
-msgstr "最小接続幅 %s; 現状 %s"
+msgstr "(%s 最小接続幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -32249,9 +32270,9 @@ msgid "Board stackup settings not up to date."
 msgstr "基板のスタックアップ設定が最新ではありません。"
 
 #: pcbnew/exporters/step/kicad2step.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "No such file: %s"
-msgstr "そのようなファイルはありません"
+msgstr "そのようなファイルはありません: %s"
 
 #: pcbnew/exporters/step/kicad2step.cpp:177
 msgid ""
@@ -32260,13 +32281,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "ファイル '%s' を作成しました"
+msgstr "ファイルの読み込み: '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:211
 msgid "Build STEP data\n"
-msgstr ""
+msgstr "STEPデータを構築\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:217
 msgid ""
@@ -32275,23 +32296,25 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:222
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "STEPファイル"
+msgstr "STEPファイルを書き込み\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:233
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "ファイル '%s' への書き込みがエラーしました。"
+msgstr ""
+"\n"
+"** STEP ファイル の書き込み中にエラーが発生しました。 **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "レポート ファイル '%s' が作成されました。"
+msgstr ""
+"\n"
+"STEP ファイル '%s' が作成されました。\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:244
 #: pcbnew/exporters/step/kicad2step.cpp:249
@@ -32301,20 +32324,20 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:255
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "ファイル読み込み中のエラー。"
+msgstr ""
+"\n"
+"** kicad_pcb ファイル読み込み中にエラーが発生しました。 **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:263
-#, fuzzy
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
-"STEP ファイルを作成できません。基板の外形とモデルが有効であることを確認して下"
-"さい。"
+"STEP ファイルを作成できません。\n"
+"基板の外形とモデルが有効であることを確認して下さい。"
 
 #: pcbnew/exporters/step/kicad2step.cpp:268
 msgid "STEP file has been created, but there are warnings."
@@ -33725,7 +33748,7 @@ msgid ""
 "(if the library already exists it will be replaced)"
 msgstr ""
 "基板で使われているフットプリントを含む、新しいライブラリーを作成します\n"
-"(ライブラリーが既に存在していた場合は置き換えられます)"
+"(ライブラリーが既に存在する場合は置き換えられます)"
 
 #: pcbnew/menubar_pcb_editor.cpp:169
 msgid "Fabrication Outputs"
@@ -33744,7 +33767,6 @@ msgid "Add Teardrops..."
 msgstr "ティアドロップを追加…"
 
 #: pcbnew/menubar_pcb_editor.cpp:419
-#, fuzzy
 msgid "Remove Teardrops"
 msgstr "ティアドロップを削除"
 
@@ -35772,15 +35794,15 @@ msgstr ""
 "行: %d オフセット: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"不正なシートピン名：\n"
-"ファイル: \"%s\"\n"
+"サイズがゼロのパッドを '%s' に固定します\n"
+"ファイル: %s\n"
 "行: %d\n"
 "オフセット: %d"
 
@@ -36166,9 +36188,8 @@ msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:552 pcbnew/router/pns_kicad_iface.cpp:623
 #: pcbnew/router/router_tool.cpp:722
-#, fuzzy
 msgid "board minimum clearance"
-msgstr "最小クリアランス: %s."
+msgstr "基板の最小クリアランス"
 
 #: pcbnew/router/pns_kicad_iface.cpp:556 pcbnew/router/pns_kicad_iface.cpp:622
 #: pcbnew/router/router_tool.cpp:689 pcbnew/router/router_tool.cpp:709
@@ -36530,9 +36551,9 @@ msgid "Track Width: %s"
 msgstr "配線幅: %s"
 
 #: pcbnew/router/router_tool.cpp:2491
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "差動ペアのギャップ"
+msgstr "差動ペアのギャップ: %s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
@@ -36552,9 +36573,9 @@ msgid "Footprint with value of '%s' has an empty reference designator."
 msgstr "値 '%s' のシンボルはリファレンスIDが空です。"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "リファレンス指定子と一致するフットプリントを更新:"
+msgstr "複数のフットプリントにリファレンス指定子 '%s' が設定されています。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:76
 msgid ""
@@ -36915,9 +36936,8 @@ msgid "Duplicate zone"
 msgstr "ゾーンを複製"
 
 #: pcbnew/tools/board_editor_control.cpp:1497
-#, fuzzy
 msgid "Selection contains no items with labeled nets."
-msgstr "ロックされたアイテムを含んで選択しています。続けますか？"
+msgstr "選択範囲にはラベルが付けられたネットが含まれていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
 #, fuzzy
@@ -37456,9 +37476,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:94
-#, fuzzy
 msgid "Positioning Tools"
-msgstr "位置オフセット:"
+msgstr "位置決めツール"
 
 #: pcbnew/tools/edit_tool.cpp:400
 #, c-format
@@ -37868,8 +37887,9 @@ msgid ""
 msgstr "リファレンス指定子でフットプリントを選択し、移動用にカーソル直下に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:276
+#, fuzzy
 msgid "Move Individually"
-msgstr ""
+msgstr "個別に移動"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 #, fuzzy
@@ -38960,9 +38980,8 @@ msgid "Unroute Selected"
 msgstr "選択したグループ"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
-#, fuzzy
 msgid "Unroutes selected items to the nearest pad."
-msgstr "選択したアイテムを左辺へ整列"
+msgstr "選択したアイテムから最も近いパッドまでの配線を削除します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Select All Tracks in Net"
@@ -38981,14 +39000,12 @@ msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "同じネットに属する全ての配線とビアを選択を解除します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1327
-#, fuzzy
 msgid "Select All Unconnected Footprints"
-msgstr "全ての接続された配線とビアを選択."
+msgstr "未接続のフットプリントすべてを選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
-#, fuzzy
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "同じネットに属する全ての配線とビアを選択します。"
+msgstr "同じネットに属するすべての未接続のフットプリントを選択します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1333
 #, fuzzy
@@ -39014,14 +39031,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "同じ回路図に含まれる全てのフットプリントと配線を選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1350
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "回路図に保存"
+msgstr "回路図上で選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1351
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "PCBエディターで対応するアイテムを選択"
+msgstr "回路図エディターで対応するアイテムを選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1356
 msgid "Filter Selected Items..."
