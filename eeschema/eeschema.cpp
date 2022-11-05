@@ -465,7 +465,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
              ext == KiCadSymbolLibFileExtension )
     {
         if( destFile.GetName() == aProjectName + "-cache" )
-            destFile.SetName( aNewProjectName + "-cache"  );
+            destFile.SetName( aNewProjectName + "-cache" );
+
+        if( destFile.GetName() == aProjectName + "-rescue" )
+            destFile.SetName( aNewProjectName + "-rescue" );
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
