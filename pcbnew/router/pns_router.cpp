@@ -664,8 +664,17 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
             }
         }
 
+        ITEM_SET draggedItems;
+
+        if( GetDragger() )
+            draggedItems = GetDragger()->Traces();
+
         for( OBSTACLE& obs : obstacles )
         {
+            // Don't mark items being dragged; only board items they collide with
+            if( draggedItems.Contains( obs.m_item ) )
+                continue;
+
             obs.m_item->Mark( obs.m_item->Marker() | MK_VIOLATION );
             updateItem( item, obs.m_item );
         }
