@@ -749,26 +749,34 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     m_dragging = false;
     editFrame->UndoRedoBlock( false );
 
-    m_toolMgr->GetTool<DRAWING_TOOL>()->UpdateStatusBar();
-
-    if( hasRedrawn3D && restore_state )
-        editFrame->Update3DView( false, true );
-
     // Discard reference point when selection is "dropped" onto the board
     selection.ClearReferencePoint();
 
     // Unselect all items to clear selection flags and then re-select the originally selected
-    // items.
+    // items (after the potential Revert()).
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
 
     // TODO: there's an encapsulation leak here: this commit often has more than just the move
     // in it; for instance it might have a paste, append board, etc. as well.
     if( restore_state )
+    {
         m_commit->Revert();
-    else
-        m_commit->Push( _( "Drag" ) );
 
+        // Mainly for point editor, but there might be other clients that need to adjust to
+        // reverted state.
+        m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
+
+        if( hasRedrawn3D )
+            editFrame->Update3DView( false, true );
+    }
+    else
+    {
+        m_commit->Push( _( "Drag" ) );
+    }
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
+
+    m_toolMgr->GetTool<DRAWING_TOOL>()->UpdateStatusBar();
     // Remove the dynamic ratsnest from the screen
     m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest, true );
 
