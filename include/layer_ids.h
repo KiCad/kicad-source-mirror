@@ -980,7 +980,7 @@ inline bool IsNetnameLayer( LAYER_NUM aLayer )
 }
 
 
-inline bool IsZoneLayer( LAYER_NUM aLayer )
+inline bool IsZoneFillLayer( int aLayer )
 {
     return aLayer >= LAYER_ZONE_START && aLayer <= LAYER_ZONE_END;
 }
