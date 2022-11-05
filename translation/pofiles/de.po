@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-10-31 18:01+0000\n"
+"PO-Revision-Date: 2022-11-08 17:08+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.14.2\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5287,7 +5287,7 @@ msgstr "Einheit '%s' endet nicht auf 'mil'."
 #: common/plugins/altium/altium_parser.cpp:255
 #, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "\"%s\" kann nicht in einen Double-Wert umgewandelt werden."
+msgstr "Kann \"%s\" nicht in einen Double-Wert umwandeln."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2338
 #, c-format
@@ -8812,8 +8812,8 @@ msgid ""
 msgstr ""
 "Symbol der aktuellen Bibliothek als Elternsymbol auswählen.\n"
 "\n"
-"Dies war früher als Alias bekannt.  Kein bestehendes\n"
-"Symbol wählen, um ein neues Wurzelsymbol zu erstellen."
+"Dies war vorher als ein Alias bekannt.  Kein bestehendes\n"
+"Symbol wählen, um ein neues Stammsymbol zu erstellen."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:51
 msgid "Default reference designator:"
@@ -9066,13 +9066,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
-"Auswahl des Symbol, von dem dieses Symbol abgeleitet werden\n"
-"soll, oder wählen Sie <kein> aus für ein Wurzelsymbol.\n"
+"Symbol auswählen, von dem dieses Symbol abgeleitet werden\n"
+"soll, oder <Keins> auswählen für Stammsymbol.\n"
 "\n"
-"Abgeleitete Symbole wurden früher als Aliase bezeichnet.\n"
+"Abgeleitete Symbole wurden zuvor als Aliase bezeichnet.\n"
 "Dies ist nicht mehr der Fall und alle Symbole sind entweder\n"
-"abgeleitet von anderen Symbole oder sie sind alleinstehend\n"
-"als Wurzelsymbole."
+"von anderen Symbolen abgeleitet oder eigenständige\n"
+"Stammsymbole."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (De Morgan)"
@@ -11288,7 +11288,7 @@ msgstr "Symbol bearbeiten..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 #: eeschema/tools/ee_actions.cpp:557
 msgid "Edit Library Symbol..."
-msgstr "Bibliotheks-Symbol bearbeiten..."
+msgstr "Bibliothek-Symbol bearbeiten..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:263
 msgid "Pin Number"
@@ -12867,7 +12867,7 @@ msgstr "Hierarchie"
 
 #: eeschema/hierarch.cpp:297
 msgid "Root"
-msgstr "Hauptschaltplan"
+msgstr "Stammblatt"
 
 #: eeschema/hierarch.cpp:303
 #, c-format
@@ -13379,7 +13379,7 @@ msgstr "Hervorgehobenes Netz: %s"
 
 #: eeschema/sch_field.cpp:648
 msgid "<root sheet>"
-msgstr "<Hauptblatt>"
+msgstr "<Stammblatt>"
 
 #: eeschema/sch_field.cpp:655
 #, c-format
@@ -13901,9 +13901,9 @@ msgid "Invalid symbol unit number %s"
 msgstr "Ungültige Symboleinheits-Nummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
-#, c-format
+#, c-format, fuzzy
 msgid "Invalid symbol convert number %s"
-msgstr "Ungültige Symbolkonvertierungsnummer %s"
+msgstr "Ungültige Symbolumwandlungsnummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:420
 msgid "Floating point number with incorrect locale"
@@ -18348,7 +18348,7 @@ msgstr "Alle Projektdateien archivieren"
 
 #: kicad/menubar.cpp:240
 msgid "Reveal project folder in Finder"
-msgstr "Projektverzeichnis im Finder öffnen"
+msgstr "Projektverzeichnis in Dateimanager anzeigen"
 
 #: kicad/menubar.cpp:242
 msgid "Open project directory in file explorer"
@@ -18839,11 +18839,11 @@ msgstr "Ein neues Verzeichnis erstellen"
 
 #: kicad/project_tree_pane.cpp:705 kicad/project_tree_pane.cpp:715
 msgid "Reveal in Finder"
-msgstr "Im Dateimanager anzeigen"
+msgstr "In Dateimanager anzeigen"
 
 #: kicad/project_tree_pane.cpp:706
 msgid "Reveals the directory in a Finder window"
-msgstr "Anzeige des Verzeichnisses im Dateimanager"
+msgstr "Zeigt das Verzeichnis in einem Dateimanager-Fenster an"
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Open Directory in File Explorer"
@@ -18855,7 +18855,7 @@ msgstr "Öffnet das Verzeichnis im Standard-Systemdateimanager"
 
 #: kicad/project_tree_pane.cpp:716
 msgid "Reveals the directories in a Finder window"
-msgstr "Anzeige des Projektverzeichnisses im Dateimanager"
+msgstr "Zeigt die Verzeichnisse in einem Dateimanager-Fenster an"
 
 #: kicad/project_tree_pane.cpp:718
 msgid "Open Directories in File Explorer"
@@ -22478,7 +22478,7 @@ msgstr "Leiterbahnen löschen, die an einem Ende nicht verbunden sind"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
-msgstr "Leiterbahnen mit mindestens einem losen Ende löschen"
+msgstr "Leiterbahnen löschen, die mit mindestens ein unverbundenes Ende haben"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
 msgid "Delete tracks fully inside pads"
@@ -23356,7 +23356,7 @@ msgstr "Alle Flächen ausfüllen vor dem Ausführen des DRC"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "Melden aller Fehler pro Leiterbahn"
+msgstr "Alle Fehler je Leiterbahn melden"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -24075,7 +24075,7 @@ msgstr "Footprint ändern..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:257
 #: pcbnew/tools/pcb_actions.cpp:241
 msgid "Edit Library Footprint..."
-msgstr "Bearbeite Bibliothek-Footprint..."
+msgstr "Bibliothek-Footprint bearbeiten..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:267
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:170
@@ -24426,8 +24426,8 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
-"Wähle aus der oberen Liste <b>Auswahl von Optionen</b> und drücke "
-"anschließend den <b>Ausgewählte Option hinzufügen</b> Button."
+"Wählen Sie aus der oberen Liste <b>Auswahl von Optionen</b> und drücken Sie "
+"anschließend die Schaltfläche <b>Ausgewählte Option hinzufügen</b>."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:62
 #, c-format
@@ -27727,7 +27727,7 @@ msgstr "Icons"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
 msgid "Show button"
-msgstr "Button anzeigen"
+msgstr "Schaltfläche anzeigen"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Category"
@@ -28782,7 +28782,7 @@ msgstr "DRC-Regeln:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
-msgstr "Überprüfen Sie die Regelsyntax"
+msgstr "Regelsyntax überprüfen"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
 msgid ""
@@ -29596,7 +29596,7 @@ msgstr "Platine hat fehlerhaften Umriss"
 
 #: pcbnew/drc/drc_item.cpp:158
 msgid "Duplicate footprints"
-msgstr "Dupliziere Footprints"
+msgstr "Doppelte Footprints"
 
 #: pcbnew/drc/drc_item.cpp:162
 msgid "Missing footprint"
@@ -31066,9 +31066,9 @@ msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Von der Platine verwendete Footprints einer vorhandenen Footprint-Bibliothek "
+"Von der Platine verwendete Footprints einer vorhandenen Footprintbibliothek "
 "hinzufügen\n"
-"(entfernt keine anderen Footprints von dieser Bibliothek)"
+"(entfernt keine anderen Footprints aus dieser Bibliothek)"
 
 #: pcbnew/menubar_pcb_editor.cpp:158
 msgid "Footprints to New Library..."
@@ -31974,9 +31974,8 @@ msgstr ""
 "anpassen."
 
 #: pcbnew/pcbnew_config.cpp:60
-#, fuzzy
 msgid "Action Plugins"
-msgstr "Action-Plugins"
+msgstr "Aktion-Plugins"
 
 #: pcbnew/pcbnew_config.cpp:61
 msgid "Origins & Axes"
@@ -33316,7 +33315,7 @@ msgstr "Kann viaStyleDef %s nicht finden."
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:71
 msgid "Exception on python action plugin code"
 msgstr ""
-"Ausnahmefall (Exception) während der Ausführung eines Python-Action-Plugins"
+"Ausnahmefall (Exception) während der Ausführung eines Python Aktion-Plugins"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
@@ -34105,7 +34104,7 @@ msgstr "Einige Flächen hatten keine Schnittfläche und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1547
 msgid "Duplicate zone"
-msgstr "Element duplizieren"
+msgstr "Fläche duplizieren"
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
 msgid "Net Tools"
@@ -35214,11 +35213,11 @@ msgstr "Alle Python-Plugins neu laden und Plugin-Menüs aktualisieren"
 
 #: pcbnew/tools/pcb_actions.cpp:560
 msgid "Reveal Plugin Folder in Finder"
-msgstr "Plugin-Ordner im Finder anzeigen"
+msgstr "Plugin-Ordner in Dateimanager anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:560
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "Zeigt den Plugins-Ordner in einem Finder-Fenster an"
+msgstr "Zeigt den Plugins-Ordner in einem Dateimanager-Fenster an"
 
 #: pcbnew/tools/pcb_actions.cpp:570
 msgid "Board Setup..."
@@ -35348,7 +35347,7 @@ msgstr "Fläche auf Lage duplizieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:654
 msgid "Duplicate zone outline onto a different layer"
-msgstr "Duplizieren der Zone auf eine andere Lage"
+msgstr "Dupliziert die Fläche auf eine andere Lage"
 
 #: pcbnew/tools/pcb_actions.cpp:659
 msgid "Add Layer Alignment Target"
