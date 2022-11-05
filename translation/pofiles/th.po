@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-09-29 15:54+0000\n"
+"PO-Revision-Date: 2022-11-08 17:02+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -1037,9 +1037,8 @@ msgid "Opacity"
 msgstr "ความทึบแสง"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "ความหนาบอร์ด: "
+msgstr "ความหนาบอร์ด"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:159
@@ -2800,9 +2799,8 @@ msgid "<<"
 msgstr "<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
-#, fuzzy
 msgid "Enabled:"
-msgstr "ไม่ใช้"
+msgstr "เปิดใช้:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:65
 #: eeschema/dialogs/dialog_label_properties_base.cpp:123
@@ -4049,7 +4047,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "มีสิทธิไม่เพียงพอในโฟลเดอร์ '%s'"
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4061,7 +4059,9 @@ msgstr ""
 "นี่ช่างน่าขายหน้า!\n"
 "ปรากฏว่าครั้งล่าสุดที่คุณแก้ไขไฟล์\n"
 "%s\n"
-"ไม่ได้บันทึกอย่างถูกต้อง  คุณต้องการย้อนกลับไปใช้บันทึกครั้งก่อนหน้าหรือไม่?"
+"KiCad ได้ออกจากโปรแกรมก่อนบันทึก\n"
+"\n"
+"คุณต้องการเปิดบันทึกอัตโนมัติแทนหรือไม่?"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -5384,14 +5384,14 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "ไฟล์ภาษาของ KiCad ไม่ได้ติดตั้ง"
 
 #: common/plotters/PDF_plotter.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "หน้า 1"
+msgstr "หน้า %s"
 
 #: common/plotters/PDF_plotter.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(หน้า %s)"
+msgstr "%s (หน้า %s)"
 
 #: common/plotters/PDF_plotter.cpp:1188
 #, c-format
@@ -7478,9 +7478,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "ชิ้นส่วนซ้ำ %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "ค่าที่แตกต่างกันสําหรับ %s%d%s (%s) และ %s%d%s (%s)"
+msgstr "จำนวนหน่วนนับที่แตกต่าง %s%s%s และ %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
@@ -8984,11 +8984,13 @@ msgid "symbol"
 msgstr "สัญลักษณ์"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "เกิดข้อผิดพลาดในการสร้างไลบรารีสัญลักษณ์ '%s'"
+msgstr ""
+"เกิดข้อผิดพลาดในการสร้างตารางไลบรารีสัญลักษณ์ '%s'\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9002,11 +9004,13 @@ msgid "File '%s' not found."
 msgstr "ไฟล์ '%s' หาไม่พบ"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "ผิดพลาดอ่านตารางไลบรารีสัญลักษณ์ '%s'"
+msgstr ""
+"เกิดผิดพลาดอ่านตารางไลบรารีสัญลักษณ์ '%s'\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
 #, fuzzy, c-format
@@ -10896,9 +10900,8 @@ msgid "Source"
 msgstr "แหล่งกำเนิด"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
-msgstr "ความเหนี่ยวนำ:"
+msgstr "ตัวอย่าง"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -10949,9 +10952,8 @@ msgid "Parameters"
 msgstr "พารามิเตอร์"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:183
-#, fuzzy
 msgid "Code"
-msgstr "D-code:"
+msgstr "โค้ด"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:213
 #, fuzzy
@@ -11760,9 +11762,8 @@ msgid "Wire & Bus Properties"
 msgstr "คุณสมบัติเส้นลวดและบัส"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "แสดงหน่วยในสัญลักษณ์:"
+msgstr "อธิบายประกอบสัญลักษณ์"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
 #, fuzzy
@@ -11893,9 +11894,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "เน้นสีบนเน็ตเมื่อเน้นบนพีซีบี"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Line Drawing Mode:"
-msgstr "โหมดเขียนแบบ"
+msgstr "โหมดวาดเส้นตรง:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 #, fuzzy
@@ -12086,9 +12086,8 @@ msgid "Member net/alias name cannot be empty."
 msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "ข้อกำหนดบัส"
+msgstr "ข้อกำหนดบัส:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
 #, fuzzy
@@ -12096,9 +12095,9 @@ msgid "(source)"
 msgstr "แหล่งกำเนิด"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "ต้องการตัวเลขสำหรับ '%s'"
+msgstr "สมาชิกของ '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
 #, fuzzy
@@ -14992,9 +14991,9 @@ msgid "Discard New Sheet"
 msgstr "ทิ้งชีตใหม่"
 
 #: eeschema/sim/sim_lib_mgr.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "เกิดข้อผิดพลาดโหลดไลบรารีสัญลักษณ์ '%s'"
+msgstr "เกิดข้อผิดพลาดโหลดโมเดลไลบรารีการจำลอง '%s':'%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:68
 #, fuzzy, c-format
@@ -15036,14 +15035,14 @@ msgid "Could not find IBIS component '%s'"
 msgstr "ไม่พบแพ็ดกำหนดเอง '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "ไม่พบแพ็ดกำหนดเอง '%s'"
+msgstr "ไม่พบขา IBIS '%s' ในอุปกรณ์ '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "หมายเลขหน่วยสัญลักษณ์ไม่ถูกต้อง %s"
+msgstr "ขา IBIS ไม่ถูกต้อง '%s' ในอุปกรณ์ '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
 #, fuzzy, c-format
@@ -15083,14 +15082,12 @@ msgid "ON time"
 msgstr ""
 
 #: eeschema/sim/sim_model_kibis.cpp:398
-#, fuzzy
 msgid "OFF time"
-msgstr "เวลาขาลง:"
+msgstr "เวลาปิด"
 
 #: eeschema/sim/sim_model_kibis.cpp:406
-#, fuzzy
 msgid "Delay"
-msgstr "หน่วง:"
+msgstr "หน่วงเวลา"
 
 #: eeschema/sim/sim_model_kibis.cpp:423
 #, fuzzy
@@ -15098,9 +15095,8 @@ msgid "Bitrate"
 msgstr "พื้น"
 
 #: eeschema/sim/sim_model_kibis.cpp:431
-#, fuzzy
 msgid "Number of bits"
-msgstr "จำนวนหน่วย:"
+msgstr "จำนวนบิท"
 
 #: eeschema/sim/sim_model_raw_spice.cpp:288
 #, fuzzy, c-format
@@ -19340,9 +19336,8 @@ msgid "Library package handling"
 msgstr "การเปลี่ยนแปลงไลบรารีไม่ได้บันทึกไว้"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "เพิ่มไลบรารีลงในตารางไลบรารีส่วนกลางหรือไม่?"
+msgstr "เพิ่มไลบรารีที่ติดตั้งลงในตารางไลบรารีส่วนกลางอย่างอัตโนมัติ"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
 #, fuzzy
@@ -19350,9 +19345,8 @@ msgid "Automatically remove uninstalled libraries"
 msgstr "เริ่มวางเส้นลวดอัตโนมัติบนขาที่ไม่เชื่อมต่อ"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "ชื่อเล่นไลบรารีผิดพลาด"
+msgstr "คำนำหน้าชื่อเล่นของไลบรารี่:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
@@ -19457,9 +19451,9 @@ msgid "No package updates available"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "%s ขา %s ไม่พบ"
+msgstr "รุ่น %s ของแพคเกจ %s ไม่พบ!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -20436,7 +20430,6 @@ msgstr ""
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -20447,9 +20440,9 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### ลดทอนแบบแยก\n"
-"ค่าลดทอนคือ 6 dB  \n"
-"___Z<sub>in</sub>___ is desired input impedance in &#x2126;  \n"
-"___Z<sub>out</sub>___ is desired output impedance in &#x2126;  \n"
+"ค่าลดทอนคือ 6 dB \n"
+"___Z<sub>in</sub>___ คือ impedance ขาเข้าที่ต้องการใน &#x2126; \n"
+"___Z<sub>out</sub>___ คือ impedance ขาออกที่ต้องการใน &#x2126; \n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
@@ -20748,9 +20741,8 @@ msgid "Wire properties"
 msgstr "คุณสมบัติของวงกลม"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "ชนิดมาตรฐาน"
+msgstr "ขนาดมาตรฐาน:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:107
@@ -20837,14 +20829,12 @@ msgstr "องศา C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:175
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "กระแส"
+msgstr "กระแสไฟฟ้า:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:186
-#, fuzzy
 msgid "Length:"
-msgstr "ความยาว"
+msgstr "ความยาว:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:188
 msgid "Length includes the return path"
@@ -21216,9 +21206,8 @@ msgid "Ambient temperature:"
 msgstr "แสงรอบๆกล้อง:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
-#, fuzzy
 msgid "Melting point:"
-msgstr "จุดทำงาน"
+msgstr "จุดหลอมเหลว:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -22518,9 +22507,8 @@ msgid "Epsilon R:"
 msgstr "เอปซิลอน R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
-#, fuzzy
 msgid "Loss Tan:"
-msgstr "Loss Tan"
+msgstr "Loss Tan:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -23524,9 +23512,8 @@ msgid "SMD:"
 msgstr "เอสเอ็มดี:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "ไม่ระบุ"
+msgstr "ไม่ระบุ:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -25319,33 +25306,33 @@ msgid "Text items must have some content."
 msgstr "ข้อความต้องมีเนื้อหาบางส่วน"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at least %s."
-msgstr "%s ต้องอย่างน้อยที่ %s"
+msgstr "ความกว้างข้อความต้องอย่างน้อย %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at most %s."
-msgstr "%s ต้องอย่างน้อยที่ %s"
+msgstr "ความกว้างข้อความต้องไม่เกิน %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at least %s."
-msgstr "%s ต้องอย่างน้อยที่ %s"
+msgstr "ความสูงข้อความต้องอย่างน้อยที่ %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at most %s."
-msgstr "%s ต้องอย่างน้อยที่ %s"
+msgstr "ความสูงข้อความต้องไม่เกิน %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:440
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
-"ความหนาของข้อความใหญ่เกินไปสำหรับขนาดตัวอักษร\n"
-"มันจะถูกยึด"
+"ความหนาของข้อความมากเกินไปสำหรับขนาดตัวอักษร\n"
+"จะถูกตัดไว้ที่ค่า %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:575
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:605
@@ -25541,7 +25528,7 @@ msgid "Solder paste relative clearance:"
 msgstr "ค่าระยะห่างโซลเดอร์เพสต์ชนิดสัมพันธ์:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -25552,9 +25539,15 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"นี่คืออัตราส่วนระยะห่างคิดเป็นเปอร์เซ็นต์ ระหว่างความกว้างและความสูงของแพ็ดของฟุ้ทพรินท์ \n"
-"ค่า 10 หมายความว่า ระยะห่างแนวนอนคือ 10% ของความกว้างแพ็ด และระยะห่างแนวตั้งคือ 10% "
-"ของความสูงแพ็ด \n"
+"นี่คืออัตราส่วนระยะห่างคิดเป็นเปอร์เซ็นต์ "
+"ระหว่างแพ็ดและโซลเดอร์เพสต์ของฟุ้ทพรินท์\n"
+"ค่า 10 หมายความว่าค่าช่องว่างแนวนอนคือ 10% ของความกว้างแพ็ดและช่องว่างแนวตั้"
+"ง 10% ของความสูงแพ็ด\n"
+"ค่านี้สามารถถูกแทนที่ด้วยค่าเฉพาะที่แพ็ด\n"
+"ค่าระยะห่างค่าสุดท้าย คือผลรวมของค่านี้และกำหนดค่าระยะห่าง\n"
+"ค่าลบหมายถึงขนาดมาสก์ที่เล็กกว่าขนาดแพ็ด\n"
+"ค่า 10 หมายความว่า ระยะห่างแนวนอนคือ 10% ของความกว้างแพ็ด "
+"และระยะห่างแนวตั้งคือ 10% ของความสูงแพ็ด \n"
 "ค่านี้สามารถถูกแทนที่ด้วยค่าเฉพาะที่ของแพ็ดเอง \n"
 "ค่าระยะห่างค่าสุดท้าย คือผลรวมของค่านี้และค่าระยะห่างสมบูรณ์ \n"
 "ค่าลบหมายถึงขนาดเปิดสเต็นซิลที่เล็กกว่าขนาดแพ็ด"
@@ -25628,14 +25621,14 @@ msgid "Footprint name may not contain '%s'."
 msgstr "ชื่อฟุ้ทพรินท์ต้องไม่มี '%s'"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid "The text width must be between %s and %s."
-msgstr "Vout ต้องมากกว่า Vref"
+msgstr "ความกว้างข้อความต้องอยู่ระหว่าง %s และ %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "ประเภทไม่เหมือนกันระหว่าง '%s' และ %lf"
+msgstr "ความสูงข้อความต้องอยู่ระหว่าง %s และ %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:454
 #: pcbnew/dialogs/dialog_text_properties.cpp:421
@@ -28371,9 +28364,8 @@ msgid "Push Pad Properties"
 msgstr "คุณสมบัติของแพ็ดกด"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:95
-#, fuzzy
 msgid "Conversion settings:"
-msgstr "การตั้งค่าการแจงนับแพ็ด"
+msgstr "การตั้งค่าการเปลี่ยน:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:112
 msgid "Convert to Rule Area"
@@ -28525,14 +28517,12 @@ msgid "Change text box properties"
 msgstr "เปลี่ยนคุณสมบัติข้อความ"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:137
-#, fuzzy
 msgid "Text Width:"
-msgstr "ความกว้างข้อความ"
+msgstr "ความกว้างข้อความ:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:153
-#, fuzzy
 msgid "Text Height:"
-msgstr "ความสูงข้อความ"
+msgstr "ความสูงข้อความ:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
 #, fuzzy
@@ -28671,9 +28661,8 @@ msgid "Track & Via Properties"
 msgstr "คุณสมบัติแทร็กและเวีย"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
-#, fuzzy
 msgid "Track and Via Dimensions"
-msgstr "ขนาดแทร็กและเวียที่กำหนดไว้ล่วงหน้า:"
+msgstr "วัดขนาดแทร็กและเวีย"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:150
 msgid "Set Unused Pad Properties"
@@ -31137,9 +31126,8 @@ msgid "Drilled holes co-located"
 msgstr "รูเจาะดอกส่วน ทับซ้อนกัน"
 
 #: pcbnew/drc/drc_item.cpp:113
-#, fuzzy
 msgid "Copper connection too narrow"
-msgstr "การเชื่อมต่อแพ็ดไปยังโซน:"
+msgstr "การเชื่อมต่อทองแดงแคบเกินไป"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Track width"
@@ -31221,14 +31209,12 @@ msgid "Footprint doesn't match copy in library"
 msgstr "ชนิดฟุ้ทพรินท์ไม่ตรงกับแพ็ดของฟุ้ทพรินท์"
 
 #: pcbnew/drc/drc_item.cpp:197
-#, fuzzy
 msgid "Assertion failure"
-msgstr "พื้นที่หน้าตัด:"
+msgstr "การยืนยันล้มเหลว"
 
 #: pcbnew/drc/drc_item.cpp:201
-#, fuzzy
 msgid "Copper sliver"
-msgstr "เลเยอร์ทองแดง:"
+msgstr "เศษทองแดง"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
@@ -31451,9 +31437,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "กําลังตรวจสอบการเชื่อมต่อเน็ต..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum connection width %s; actual %s)"
-msgstr "ความกว้างการเชื่อมต่อขั้นต่ำ %s; ค่าจริง %s"
+msgstr "(%s ความกว้างการเชื่อมต่อขั้นต่ำ %s; ค่าจริง %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -31956,9 +31942,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "สร้างไฟล์ '%s'"
+msgstr "อ่านไฟล์: '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:211
 msgid "Build STEP data\n"
@@ -31971,23 +31957,25 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:222
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "ไฟล์ STEP"
+msgstr "เขียนไฟล์ STEP\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:233
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "เกิดข้อผิดพลาดเขียนไฟล์ '%s'"
+msgstr ""
+"\n"
+"** ผิดพลาดเขียนไฟล์ STEP **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "สร้างไฟล์รายงาน '%s'"
+msgstr ""
+"\n"
+"สร้างไฟล์ STEP ชื่อ '%s'\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:244
 #: pcbnew/exporters/step/kicad2step.cpp:249
@@ -31997,11 +31985,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:255
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "เกิดข้อผิดพลาดในการอ่านไฟล์"
+msgstr ""
+"\n"
+"** ผิดพลาดอ่านไฟล์ kicad_pcb **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:263
 msgid ""
@@ -32718,14 +32707,12 @@ msgid "Component: manufacturer cannot be empty."
 msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
 
 #: pcbnew/ibis/ibis_parser.cpp:244
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "ค่าคอมโพเนนต์:"
+msgstr "อุปกรณ์:แพคเกจไม่ถูกต้อง"
 
 #: pcbnew/ibis/ibis_parser.cpp:250
-#, fuzzy
 msgid "Component: no pin"
-msgstr "อุปกรณ์:"
+msgstr "อุปกรณ์:ไม่มีขา"
 
 #: pcbnew/ibis/ibis_parser.cpp:347
 msgid "Cannot interpolate the current based on this IV table."
@@ -32764,9 +32751,8 @@ msgid "Checking model "
 msgstr "กำลังตรวจสอบโมเดล "
 
 #: pcbnew/ibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Undefined model type"
-msgstr "เลเยอร์ที่ไม่ได้กำหนด:"
+msgstr "ไม่กำหนดชนิดโมเดล"
 
 #: pcbnew/ibis/ibis_parser.cpp:455
 #, fuzzy
@@ -34432,9 +34418,8 @@ msgstr ""
 "โปรดแก้ไขตารางไลบรารีฟุ้ทพรินท์ส่วนกลาง ในเมนูตั้งความชอบ"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:88
-#, fuzzy
 msgid "Loading board\n"
-msgstr "กําลังโหลดขอบเขตบอร์ด..."
+msgstr "กําลังโหลดบอร์ด\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:95
 #, fuzzy
@@ -35445,14 +35430,14 @@ msgstr ""
 "บรรทัด: %d ออฟเซ็ต: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"เน็ตไอดีไม่ถูกต้องใน\n"
+"ไม่ถูกต้อง แพ็ดขนาดศูนย์กำหนดให้ %s ใน\n"
 "ไฟล์: %s\n"
 "บรรทัด: %d\n"
 "ออฟเซ็ต: %d"
@@ -36195,9 +36180,9 @@ msgid "Track Width: %s"
 msgstr "ขนาดแทร็ก:%s"
 
 #: pcbnew/router/router_tool.cpp:2491
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "ช่องว่างระหว่างคู่ดิฟแพร์"
+msgstr "แก็บระหว่างดิฟแพร์:%s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
@@ -36281,33 +36266,30 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "wire_via อ้างถึงแพ็ดสแต็กที่ไม่มี '%s'"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops created"
-msgstr "เพิ่มเส้นนำ"
+msgstr "สร้างหยดน้ำตาจำนวน %d"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops removed."
-msgstr "เพิ่มเส้นนำ"
+msgstr "นำหยดน้ำตาออกจำนวน %d"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
-#, fuzzy
 msgid "Round shapes:"
-msgstr "รูปร่างทึบ"
+msgstr "รูปร่างกลม:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:152
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:256
-#, fuzzy
 msgid "Best length:"
-msgstr "ความยาวเน็ต"
+msgstr "ความยาวดีที่สุด:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:60
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:164
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:268
-#, fuzzy
 msgid "Best height:"
-msgstr "ความสูงข้อความ"
+msgstr "ความสูงดีที่สุด:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:72
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:176
@@ -36339,14 +36321,12 @@ msgid "Curved"
 msgstr "เส้นโค้ง"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:138
-#, fuzzy
 msgid "Rect shapes:"
-msgstr "วาดทึบเต็มรูปร่าง"
+msgstr "รูปร่างสี่เหลี่ยม:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:242
-#, fuzzy
 msgid "Tracks:"
-msgstr "แทร็ก"
+msgstr "แทร็ก:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:349
 msgid "Vias and PTH pads"
@@ -36375,9 +36355,8 @@ msgid "Add teardrops to not driiled pads, like SMD"
 msgstr ""
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:366
-#, fuzzy
 msgid "Track to track"
-msgstr "จัดชิดแทร็ก:"
+msgstr "แทร็คถึงแทร็ค"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:368
 msgid "Add teardrops to two connected tracks of different widths"
@@ -36405,9 +36384,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
-#, fuzzy
 msgid "Curve points:"
-msgstr "เส้นโค้งเบซิเย่ร์, %d จุด"
+msgstr "จุดโค้ง:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:397
 msgid "Number of segments to build a teardrop with curved shape"
@@ -36612,9 +36590,8 @@ msgid "Uncoupled Length"
 msgstr "ความยาวลายเดินเส้นทองแดง"
 
 #: pcbnew/tools/board_inspection_tool.cpp:273
-#, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "ความยาวช่วงไม่เข้าคู่ของสัญญาณแตกต่าง มากเกินไป"
+msgstr "ค่าความละเอียดช่วงความยาวไม่คู่กันของดิฟแพร์:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:281
 #: pcbnew/tools/board_inspection_tool.cpp:818
@@ -36635,9 +36612,8 @@ msgstr "ข้อจำกัดความสูงที่แก้แล้
 
 #: pcbnew/tools/board_inspection_tool.cpp:303
 #: pcbnew/tools/board_inspection_tool.cpp:1247
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "ความยาวแทร็กอยู่นอกช่วง"
+msgstr "ค่าความละเอียดความหนาข้อความ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:311
 #, c-format
@@ -36655,9 +36631,8 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "ข้อจำกัดความกว้าง ที่แก้แล้ว: ต่ำสุด %s; สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:332
-#, fuzzy
 msgid "Connection Width"
-msgstr "ชนิดการเชื่อมต่อ:"
+msgstr "ความกว้างของการเชื่อมต่อ"
 
 #: pcbnew/tools/board_inspection_tool.cpp:333
 #, fuzzy
@@ -36753,9 +36728,8 @@ msgid "No 'physical_hole_clearance' constraints defined."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
-#, fuzzy
 msgid "Hole to Hole"
-msgstr "ระยะห่างระหว่างรูเจาะถึงรูเจาะ:"
+msgstr "รูเจาะถึงรูเจาะ"
 
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:960
@@ -36873,9 +36847,8 @@ msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s; เลือก %s; สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:805
-#, fuzzy
 msgid "Diff pair max uncoupled length resolution for:"
-msgstr "ความยาวช่วงไม่เข้าคู่ของสัญญาณแตกต่าง มากเกินไป"
+msgstr "ค่าความละเอียดของความยาวช่วงไม่คู่กันของดิฟแพร์:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:810
 msgid "No 'diff_pair_uncoupled' constraints defined."
@@ -37143,9 +37116,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:94
-#, fuzzy
 msgid "Positioning Tools"
-msgstr "ตำแหน่งเลื่อน:"
+msgstr "เครื่องมือกําหนดตําแหน่ง"
 
 #: pcbnew/tools/edit_tool.cpp:400
 #, c-format
@@ -38954,9 +38926,8 @@ msgid "Resolved clearance"
 msgstr "แก้ไขระยะห่าง: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1377
-#, fuzzy
 msgid "Actual clearance"
-msgstr "ระยะห่างแพ็ด:"
+msgstr "ระยะห่างที่แท้จริง"
 
 #: pcbnew/tools/pcb_control.cpp:1420
 #, fuzzy
@@ -38964,9 +38935,8 @@ msgid "Resolved hole clearance"
 msgstr "แก้ไขระยะห่าง: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1425
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "ระยะห่างระหว่างรูเจาะถึงรูเจาะ:"
+msgstr "ค่าระยะห่างรูเจาะที่แท้จริง"
 
 #: pcbnew/tools/pcb_control.cpp:1458
 #, fuzzy
