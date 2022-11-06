@@ -538,7 +538,6 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     m_netsGrid->RegisterDataType( wxT( "bool" ), m_toggleGridRenderer, new wxGridCellBoolEditor );
 
-    // TODO(JE) Update background color of swatch renderer when theme changes
     m_netsGrid->RegisterDataType( wxT( "COLOR4D" ),
                                   new GRID_CELL_COLOR_RENDERER( m_frame, SWATCH_SMALL ),
                                   new GRID_CELL_COLOR_SELECTOR( m_frame, m_netsGrid ) );
@@ -1154,6 +1153,38 @@ void APPEARANCE_CONTROLS::OnColorThemeChanged()
 }
 
 
+void APPEARANCE_CONTROLS::OnDarkModeToggle()
+{
+    // This is essentially a list of hacks because DarkMode isn't yet implemented inside
+    // wxWidgets.
+    //
+    // The individual wxPanels, COLOR_SWATCHes and GRID_CELL_COLOR_RENDERERs should really be
+    // overriding some virtual method or responding to some wxWidgets event so that the parent
+    // doesn't have to know what it contains.  But, that's not where we are, so... :shrug:
+
+    m_layerPanelColour = m_panelLayers->GetBackgroundColour().ChangeLightness( 110 );
+
+    for( wxSizerItem* child : m_layersOuterSizer->GetChildren() )
+    {
+        if( child && child->GetWindow() )
+            child->GetWindow()->SetBackgroundColour( m_layerPanelColour );
+    }
+
+    // Easier than calling OnDarkModeToggle on all the GRID_CELL_COLOR_RENDERERs:
+    m_netsGrid->RegisterDataType( wxT( "COLOR4D" ),
+                                  new GRID_CELL_COLOR_RENDERER( m_frame, SWATCH_SMALL ),
+                                  new GRID_CELL_COLOR_SELECTOR( m_frame, m_netsGrid ) );
+
+    for( const std::pair<const wxString, APPEARANCE_SETTING*>& pair : m_netclassSettingsMap )
+    {
+        if( pair.second->ctl_color )
+            pair.second->ctl_color->OnDarkModeToggle();
+    }
+
+    OnLayerChanged();       // Update selected highlighting
+}
+
+
 void APPEARANCE_CONTROLS::OnLayerChanged()
 {
     for( const std::unique_ptr<APPEARANCE_SETTING>& setting : m_layerSettings )
@@ -1247,13 +1278,9 @@ void APPEARANCE_CONTROLS::setVisibleLayers( LSET aLayers )
                 []( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
                     if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
-                    {
                         return via->GetRemoveUnconnected();
-                    }
                     else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                    {
                         return pad->GetRemoveUnconnected();
-                    }
 
                     return false;
                 } );
@@ -1954,7 +1981,7 @@ void APPEARANCE_CONTROLS::syncColorsAndVisibility()
 
 void APPEARANCE_CONTROLS::onLayerLeftClick( wxMouseEvent& aEvent )
 {
-    auto eventSource = static_cast<wxWindow*>( aEvent.GetEventObject() );
+    wxWindow* eventSource = static_cast<wxWindow*>( aEvent.GetEventObject() );
 
     PCB_LAYER_ID layer = ToLAYER_ID( eventSource->GetId() );
 
@@ -2094,8 +2121,8 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                     sizer->Add( swatch, 0,  wxALIGN_CENTER_VERTICAL, 0 );
                     aSetting->ctl_color = swatch;
 
-                    swatch->Bind( COLOR_SWATCH_CHANGED,
-                                  &APPEARANCE_CONTROLS::OnColorSwatchChanged, this );
+                    swatch->Bind( COLOR_SWATCH_CHANGED, &APPEARANCE_CONTROLS::OnColorSwatchChanged,
+                                  this );
 
                     swatch->SetReadOnlyCallback( std::bind( &APPEARANCE_CONTROLS::onReadOnlySwatch,
                                                             this ) );
@@ -2345,31 +2372,31 @@ void APPEARANCE_CONTROLS::rebuildNets()
                             if( !isDefaultClass)
                             {
                                 menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
-                                             _( "Set Netclass Color" ), wxEmptyString,
-                                             wxITEM_NORMAL ) );
+                                                             _( "Set Netclass Color" ),
+                                                             wxEmptyString, wxITEM_NORMAL ) );
                             }
 
                             menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
-                                         wxString::Format( _( "Highlight Nets in %s" ),
-                                                           escapedName ),
-                                         wxEmptyString, wxITEM_NORMAL ) );
+                                                         wxString::Format( _( "Highlight Nets in %s" ),
+                                                                           escapedName ),
+                                                         wxEmptyString, wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
-                                         wxString::Format( _( "Select Tracks and Vias in %s" ),
-                                                           escapedName ),
-                                         wxEmptyString, wxITEM_NORMAL ) );
+                                                         wxString::Format( _( "Select Tracks and Vias in %s" ),
+                                                                           escapedName ),
+                                                         wxEmptyString, wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_DESELECT_NET,
-                                         wxString::Format( _( "Unselect Tracks and Vias in %s" ),
-                                                           escapedName ),
-                                         wxEmptyString, wxITEM_NORMAL ) );
+                                                         wxString::Format( _( "Unselect Tracks and Vias in %s" ),
+                                                                           escapedName ),
+                                                         wxEmptyString, wxITEM_NORMAL ) );
 
                             menu.AppendSeparator();
 
                             menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS,
-                                         _( "Show All Netclasses" ), wxEmptyString,
-                                         wxITEM_NORMAL ) );
+                                                         _( "Show All Netclasses" ), wxEmptyString,
+                                                         wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS,
-                                         _( "Hide All Other Netclasses" ), wxEmptyString,
-                                         wxITEM_NORMAL ) );
+                                                         _( "Hide All Other Netclasses" ), wxEmptyString,
+                                                         wxITEM_NORMAL ) );
 
                             menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
                                        &APPEARANCE_CONTROLS::onNetclassContextMenu, this );
@@ -2513,7 +2540,9 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
         m_cbLayerPresets->SetStringSelection( text );
     }
     else
+    {
         m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 ); // separator
+    }
 
     m_currentPreset = static_cast<LAYER_PRESET*>(
             m_cbLayerPresets->GetClientData( m_cbLayerPresets->GetSelection() ) );

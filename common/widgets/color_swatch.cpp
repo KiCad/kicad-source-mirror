@@ -293,3 +293,11 @@ void COLOR_SWATCH::GetNewSwatchColor()
         }
     }
 }
+
+
+void COLOR_SWATCH::OnDarkModeToggle()
+{
+    m_checkerboardBg = m_parent->GetBackgroundColour();
+    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
+    m_swatch->SetBitmap( bm );
+}

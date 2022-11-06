@@ -124,6 +124,9 @@ public:
     /// Registers a handler for when the user tries to interact with a read-only swatch
     void SetReadOnlyCallback( std::function<void()> aCallback ) { m_readOnlyCallback = aCallback; }
 
+    /// Respond to a change in the OS's DarkMode setting.
+    void OnDarkModeToggle();
+
     static wxBitmap MakeBitmap( const KIGFX::COLOR4D& aColor, const KIGFX::COLOR4D& aBackground,
                                 const wxSize& aSize, const wxSize& aCheckerboardSize,
                                 const KIGFX::COLOR4D& aCheckerboardBackground );

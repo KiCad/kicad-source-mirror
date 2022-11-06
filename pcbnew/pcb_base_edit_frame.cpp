@@ -24,11 +24,11 @@
  */
 
 #include <kiface_base.h>
+#include <kiplatform/ui.h>
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
-#include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -37,7 +37,6 @@
 #include <project.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-#include <tools/pcb_actions.h>
 #include <widgets/appearance_controls.h>
 #include <dialogs/eda_view_switcher.h>
 #include <pcb_properties_panel.h>
@@ -56,6 +55,8 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         m_propertiesPanel( nullptr ),
         m_tabbedPanel( nullptr )
 {
+    m_darkMode = KIPLATFORM::UI::IsDarkTheme();
+
     Bind( wxEVT_IDLE,
           [this]( wxIdleEvent& aEvent )
           {
@@ -67,6 +68,12 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
                   if( selTool )
                       selTool->OnIdle( aEvent );
+              }
+
+              if( m_darkMode != KIPLATFORM::UI::IsDarkTheme() )
+              {
+                  onDarkModeToggle();
+                  m_darkMode = KIPLATFORM::UI::IsDarkTheme();
               }
           } );
 }
@@ -306,6 +313,12 @@ void PCB_BASE_EDIT_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
     // The text in the collapsible pane headers need to be updated
     if( m_appearancePanel )
         m_appearancePanel->RefreshCollapsiblePanes();
+}
+
+
+void PCB_BASE_EDIT_FRAME::onDarkModeToggle()
+{
+    m_appearancePanel->OnDarkModeToggle();
 }
 
 

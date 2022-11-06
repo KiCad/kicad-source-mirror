@@ -241,6 +241,8 @@ protected:
 
     void unitsChangeRefresh() override;
 
+    virtual void onDarkModeToggle();
+
 protected:
     bool                    m_undoRedoBlocked;
 
@@ -248,8 +250,9 @@ protected:
     APPEARANCE_CONTROLS*    m_appearancePanel;
     PROPERTIES_PANEL*       m_propertiesPanel;
 
-    /// Panel with Layers and Object Inspector tabs
-    wxAuiNotebook* m_tabbedPanel;
+    wxAuiNotebook*          m_tabbedPanel;        /// Panel with Layers and Object Inspector tabs
+
+    bool                    m_darkMode;
 };
 
 #endif

@@ -205,21 +205,18 @@ public:
     void OnBoardChanged();
 
     void OnBoardNetSettingsChanged( BOARD& aBoard ) override;
-
     void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aItem ) override;
-
     void OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems ) override;
-
     void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aItem ) override;
-
     void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems ) override;
-
     void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aItem ) override;
-
     void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems ) override;
 
     ///< Update the colors on all the widgets from the new chosen color theme.
     void OnColorThemeChanged();
+
+    ///< Respond to change in OS's DarkMode
+    void OnDarkModeToggle();
 
     ///< Update the widget when the active board layer is changed.
     void OnLayerChanged();
@@ -252,10 +249,7 @@ public:
             return wxEmptyString;
     }
 
-    const wxArrayString& GetLayerPresetsMRU()
-    {
-        return m_presetMRU;
-    }
+    const wxArrayString& GetLayerPresetsMRU() { return m_presetMRU; }
 
     ///< Return a list of viewports created by the user.
     std::vector<VIEWPORT> GetUserViewports() const;
@@ -267,10 +261,7 @@ public:
 
     void ApplyViewport( const VIEWPORT& aPreset );
 
-    const wxArrayString& GetViewportsMRU()
-    {
-        return m_viewportMRU;
-    }
+    const wxArrayString& GetViewportsMRU() { return m_viewportMRU; }
 
     void OnColorSwatchChanged( wxCommandEvent& aEvent );
 
@@ -289,17 +280,11 @@ public:
 
 protected:
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
-
     void OnSetFocus( wxFocusEvent& aEvent ) override;
-
     void OnSize( wxSizeEvent& aEvent ) override;
-
     void OnNetGridClick( wxGridEvent& event ) override;
-
     void OnNetGridDoubleClick( wxGridEvent& event ) override;
-
     void OnNetGridRightClick( wxGridEvent& event ) override;
-
     void OnNetGridMouseEvent( wxMouseEvent& aEvent );
 
 private:
@@ -404,16 +389,13 @@ private:
     wxGridCellCoords m_hoveredCell;
 
     std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_layerSettings;
-
-    std::map<PCB_LAYER_ID, APPEARANCE_SETTING*> m_layerSettingsMap;
+    std::map<PCB_LAYER_ID, APPEARANCE_SETTING*>      m_layerSettingsMap;
 
     std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_objectSettings;
-
-    std::map<GAL_LAYER_ID, APPEARANCE_SETTING*> m_objectSettingsMap;
+    std::map<GAL_LAYER_ID, APPEARANCE_SETTING*>      m_objectSettingsMap;
 
     std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_netclassSettings;
-
-    std::map<wxString, APPEARANCE_SETTING*> m_netclassSettingsMap;
+    std::map<wxString, APPEARANCE_SETTING*>          m_netclassSettingsMap;
 
     // TODO(JE) Move preset storage to the PCB_CONTROL tool
 
@@ -426,7 +408,7 @@ private:
     VIEWPORT*                        m_lastSelectedViewport;
     wxArrayString                    m_viewportMRU;
 
-    wxMenu* m_layerContextMenu;
+    wxMenu*                          m_layerContextMenu;
 
     /// Stores wxIDs for each netclass for control event mapping
     std::map<int, wxString> m_netclassIdMap;

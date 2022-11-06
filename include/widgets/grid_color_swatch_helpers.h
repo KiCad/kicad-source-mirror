@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,15 +48,15 @@ public:
     void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, const wxRect& aRect, int aRow,
                int aCol, bool isSelected ) override;
 
+    void OnDarkModeToggle();
+
 private:
     wxWindow*       m_parent;
 
     KIGFX::COLOR4D  m_background;
 
     wxSize          m_size;
-
     wxSize          m_checkerboardSize;
-
     KIGFX::COLOR4D  m_checkerboardBg;
 };
 

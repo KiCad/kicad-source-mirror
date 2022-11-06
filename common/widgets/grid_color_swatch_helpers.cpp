@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,6 +113,11 @@ void GRID_CELL_COLOR_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
     aDC.DrawBitmap( bitmap, origin, true );
 }
 
+
+void GRID_CELL_COLOR_RENDERER::OnDarkModeToggle()
+{
+    m_checkerboardBg = m_parent->GetBackgroundColour();
+}
 
 
 //-------- Custom wxGridCellEditors ----------------------------------------------------
