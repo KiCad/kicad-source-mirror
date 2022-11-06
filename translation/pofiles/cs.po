@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-10-30 16:04+0000\n"
+"PO-Revision-Date: 2022-11-08 17:08+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.14.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -13742,9 +13742,8 @@ msgid "Invalid page type"
 msgstr "Neplatný typ stránky"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1688
-#, fuzzy
 msgid "Invalid title block comment number"
-msgstr "Neplatný počet komentářů"
+msgstr "Nesprávný počet komentářů v rohovém razítku"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1785
 msgid "Invalid sheet pin name"
@@ -19678,7 +19677,7 @@ msgstr "Požadovaný odpor:"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:92
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:106
 msgid "kOhm"
-msgstr "kOhm"
+msgstr "kOhmů"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:40
 msgid "Exclude value 1:"
@@ -19916,7 +19915,7 @@ msgstr "Odpor:"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
 msgid "ohm"
-msgstr "ohm"
+msgstr "ohmů"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:162
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:260
@@ -31861,6 +31860,9 @@ msgid ""
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
+"Šrafovací kód CADSTAR '%s' má různé šířky čar pro každé šrafování. KiCad "
+"podporuje pouze jednu šířku pro šrafování. Importované šrafování používá "
+"šířku definovanou v první definici šrafování tj. %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3589
 #, c-format
@@ -31869,6 +31871,10 @@ msgid ""
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
+"Šrafovací kód CADSTAR '%s' má pro každé šrafování různou velikost kroků. "
+"KiCad podporuje pouze jeden krok velikosti pro šrafování. Importované "
+"šrafování používá velikost kroku definovanou v první definici šrafování, tj. "
+"%.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3602
 #, c-format
@@ -31878,6 +31884,9 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
+"Šrafování v šrafovacím kódu CADSTAR '%s' má úhlový  rozdíl %.1f stupňů. "
+"KiCad podporuje šrafování jen 90 stupňů od sebe.  Importované šrafování má "
+"dvě šrafovaný 90 stupňů od sebe, orientované %.1F stupňů od horizontální."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3675
 #, c-format
