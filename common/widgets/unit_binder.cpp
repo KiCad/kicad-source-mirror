@@ -499,7 +499,7 @@ bool UNIT_BINDER::IsIndeterminate() const
 {
     wxTextEntry* te = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
-    if( te )Note that you can have two entries that come from the same database table if ou want
+    if( te )
         return te->GetValue() == INDETERMINATE_STATE || te->GetValue() == INDETERMINATE_ACTION;
 
     return false;
