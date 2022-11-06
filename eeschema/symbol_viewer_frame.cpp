@@ -214,6 +214,8 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
 
     m_auimgr.SetManagedWindow( this );
 
+    CreateInfoBar();
+
     // Manage main toolbar
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ) .Bottom().Layer(6) );
@@ -266,6 +268,8 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
         // back to minimum.
         treePane.MinSize( 100, -1 );
     }
+
+    FinishAUIInitialization();
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
