@@ -39,7 +39,7 @@ public:
     const wxString PluginName() const override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                 const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
                  PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     const wxString GetFileExtension() const override;
@@ -74,7 +74,7 @@ public:
 private:
     void clearLoadedFootprints();
 
-    const PROPERTIES*       m_props;
+    const STRING_UTF8_MAP*       m_props;
     BOARD*                  m_board;
     std::vector<FOOTPRINT*> m_loaded_footprints;
     bool                    m_show_layer_mapping_warnings;

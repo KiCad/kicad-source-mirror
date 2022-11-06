@@ -58,21 +58,21 @@ public:
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts,
-                             const PROPERTIES* aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
                                              const wxString& aFootprintName,
-                                             const PROPERTIES* aProperties = nullptr ) override;
+                                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool  aKeepUUID = false,
-                              const PROPERTIES* aProperties = nullptr ) override;
+                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                          const PROPERTIES* aProperties = nullptr ) override;
+                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,
-                             const PROPERTIES* aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
@@ -90,19 +90,19 @@ private:
     void validateCache( const wxString& aLibraryPath, bool checkModified = true );
 
     const FOOTPRINT* getFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                   const PROPERTIES* aProperties, bool checkModified );
+                                   const STRING_UTF8_MAP* aProperties, bool checkModified );
 
-    void init( const PROPERTIES* aProperties );
+    void init( const STRING_UTF8_MAP* aProperties );
 
     friend class GPCB_FPL_CACHE;
 
 protected:
-    wxString          m_error;        ///< for throwing exceptions
-    const PROPERTIES* m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
-    GPCB_FPL_CACHE*   m_cache;        ///< Footprint library cache.
-    int               m_ctl;
-    LINE_READER*      m_reader;       ///< no ownership here.
-    wxString          m_filename;     ///< for saves only, name is in m_reader for loads
+    wxString               m_error;    ///< for throwing exceptions
+    const STRING_UTF8_MAP* m_props;    ///< passed via Save() or Load(), no ownership, may be NULL.
+    GPCB_FPL_CACHE*        m_cache;    ///< Footprint library cache.
+    int                    m_ctl;
+    LINE_READER*           m_reader;   ///< no ownership here.
+    wxString               m_filename; ///< for saves only, name is in m_reader for loads
 };
 
 #endif  // _GPCB_PLUGIN_H_

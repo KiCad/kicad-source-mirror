@@ -38,7 +38,7 @@ class ALTIUM_CIRCUIT_STUDIO_PLUGIN : public PLUGIN
 public:
     const wxString PluginName() const override;
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
                  PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     const wxString GetFileExtension() const override;
@@ -53,7 +53,7 @@ public:
     ~ALTIUM_CIRCUIT_STUDIO_PLUGIN();
 
 private:
-    const PROPERTIES* m_props;
+    const STRING_UTF8_MAP* m_props;
     BOARD*            m_board;
 };
 

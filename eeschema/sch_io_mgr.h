@@ -38,7 +38,7 @@ class SYMBOL_LIB_TABLE;
 class KIWAY;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
-class PROPERTIES;
+class STRING_UTF8_MAP;
 class PROGRESS_REPORTER;
 
 
@@ -193,7 +193,7 @@ public:
      */
     virtual int GetModifyHash() const = 0;
 
-    virtual void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = nullptr );
+    virtual void SaveLibrary( const wxString& aFileName, const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Load information from some input file format that this #SCH_PLUGIN implementation
@@ -225,7 +225,7 @@ public:
      */
     virtual SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                              SCH_SHEET* aAppendToMe = nullptr,
-                             const PROPERTIES* aProperties = nullptr );
+                             const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Write \a aSchematic to a storage file in a format that this #SCH_PLUGIN implementation
@@ -253,7 +253,7 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     virtual void Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                       const PROPERTIES* aProperties = nullptr );
+                       const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Populate a list of #LIB_SYMBOL alias names contained within the library \a aLibraryPath.
@@ -272,7 +272,7 @@ public:
      * @throw IO_ERROR if the library cannot be found, the part library cannot be loaded.
      */
     virtual void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
-                                     const PROPERTIES* aProperties = nullptr );
+                                     const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Populate a list of #LIB_SYMBOL aliases contained within the library \a aLibraryPath.
@@ -295,7 +295,7 @@ public:
      */
     virtual void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                      const wxString& aLibraryPath,
-                                     const PROPERTIES* aProperties = nullptr );
+                                     const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Load a #LIB_SYMBOL object having \a aPartName from the \a aLibraryPath containing
@@ -319,7 +319,7 @@ public:
      *                 is thrown in the case where aAliasName cannot be found.
      */
     virtual LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aPartName,
-                                    const PROPERTIES* aProperties = nullptr );
+                                    const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Write \a aSymbol to an existing library located at \a aLibraryPath.  If a #LIB_SYMBOL
@@ -343,7 +343,7 @@ public:
      * @throw IO_ERROR if there is a problem saving.
      */
     virtual void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                             const PROPERTIES* aProperties = nullptr );
+                             const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Delete the entire #LIB_SYMBOL associated with \a aAliasName from the library
@@ -364,7 +364,7 @@ public:
      * @throw IO_ERROR if there is a problem finding the alias or the library or deleting it.
      */
     virtual void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                               const PROPERTIES* aProperties = nullptr );
+                               const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Create a new empty symbol library at \a aLibraryPath.  It is an error to attempt
@@ -382,7 +382,7 @@ public:
      * @throw IO_ERROR if there is a problem finding the library, or creating it.
      */
     virtual void CreateSymbolLib( const wxString& aLibraryPath,
-                                  const PROPERTIES* aProperties = nullptr );
+                                  const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Delete an existing symbol library and returns true if successful, or if library
@@ -404,7 +404,7 @@ public:
      * @throw IO_ERROR if there is a problem deleting an existing library.
      */
     virtual bool DeleteSymbolLib( const wxString& aLibraryPath,
-                                  const PROPERTIES* aProperties = nullptr );
+                                  const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Return true if the library at \a aLibraryPath is writable.  (Often
@@ -441,7 +441,7 @@ public:
      *   This would require a 3 column list, and introducing wx GUI knowledge to
      *   #SCH_PLUGIN, which has been avoided to date.
      */
-    virtual void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const;
+    virtual void SymbolLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const;
 
     /**
      * @return true if this plugin supports libraries that contain sub-libraries.

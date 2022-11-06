@@ -64,14 +64,14 @@ public:
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,
-                             const PROPERTIES* aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                              const wxString&           aLibraryPath,
-                             const PROPERTIES*         aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP*         aProperties = nullptr ) override;
 
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                            const PROPERTIES* aProperties = nullptr ) override;
+                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     bool SupportsSubLibraries() const override { return true; }
 

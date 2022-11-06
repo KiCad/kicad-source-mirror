@@ -63,7 +63,7 @@ const wxString ALTIUM_DESIGNER_PLUGIN::GetFileExtension() const
 
 
 BOARD* ALTIUM_DESIGNER_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                                     const PROPERTIES* aProperties, PROJECT* aProject,
+                                     const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                                      PROGRESS_REPORTER* aProgressReporter )
 {
     m_props = aProperties;
@@ -138,7 +138,7 @@ long long ALTIUM_DESIGNER_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryP
 
 void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames,
                                                  const wxString& aLibraryPath, bool aBestEfforts,
-                                                 const PROPERTIES* aProperties )
+                                                 const STRING_UTF8_MAP* aProperties )
 {
     ALTIUM_COMPOUND_FILE altiumLibFile( aLibraryPath );
 
@@ -186,7 +186,7 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
 
 FOOTPRINT* ALTIUM_DESIGNER_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                                   const wxString& aFootprintName, bool aKeepUUID,
-                                                  const PROPERTIES* aProperties )
+                                                  const STRING_UTF8_MAP* aProperties )
 {
     ALTIUM_COMPOUND_FILE altiumLibFile( aLibraryPath );
 

@@ -55,7 +55,7 @@ public:
 
     SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                      SCH_SHEET* aAppendToMe = nullptr,
-                     const PROPERTIES* aProperties = nullptr ) override;
+                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
 

@@ -339,7 +339,7 @@ long long FP_CACHE::GetTimestamp( const wxString& aLibPath )
 }
 
 
-void PCB_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
+void PCB_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2435,7 +2435,7 @@ PCB_PLUGIN::~PCB_PLUGIN()
 
 
 BOARD* PCB_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                         const PROPERTIES* aProperties, PROJECT* aProject,
+                         const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                          PROGRESS_REPORTER* aProgressReporter )
 {
     FILE_LINE_READER reader( aFileName );
@@ -2465,7 +2465,7 @@ BOARD* PCB_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 }
 
 
-BOARD* PCB_PLUGIN::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+BOARD* PCB_PLUGIN::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
                            PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount)
 {
     init( aProperties );
@@ -2501,7 +2501,7 @@ BOARD* PCB_PLUGIN::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPE
 }
 
 
-void PCB_PLUGIN::init( const PROPERTIES* aProperties )
+void PCB_PLUGIN::init( const STRING_UTF8_MAP* aProperties )
 {
     m_board = nullptr;
     m_reader = nullptr;
@@ -2522,7 +2522,7 @@ void PCB_PLUGIN::validateCache( const wxString& aLibraryPath, bool checkModified
 
 
 void PCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
-                                     bool aBestEfforts, const PROPERTIES* aProperties )
+                                     bool aBestEfforts, const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxDir     dir( aLibPath );
@@ -2552,7 +2552,7 @@ void PCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxStr
 
 const FOOTPRINT* PCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
                                            const wxString& aFootprintName,
-                                           const PROPERTIES* aProperties,
+                                           const STRING_UTF8_MAP* aProperties,
                                            bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
@@ -2580,14 +2580,14 @@ const FOOTPRINT* PCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
 
 const FOOTPRINT* PCB_PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
                                                      const wxString& aFootprintName,
-                                                     const PROPERTIES* aProperties )
+                                                     const STRING_UTF8_MAP* aProperties )
 {
     return getFootprint( aLibraryPath, aFootprintName, aProperties, false );
 }
 
 
 bool PCB_PLUGIN::FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                  const PROPERTIES* aProperties )
+                                  const STRING_UTF8_MAP* aProperties )
 {
     // Note: checking the cache sounds like a good idea, but won't catch files which differ
     // only in case.
@@ -2605,7 +2605,7 @@ bool PCB_PLUGIN::FootprintExists( const wxString& aLibraryPath, const wxString& 
 FOOTPRINT* PCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                       const wxString& aFootprintName,
                                       bool  aKeepUUID,
-                                      const PROPERTIES* aProperties )
+                                      const STRING_UTF8_MAP* aProperties )
 {
     const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
 
@@ -2627,7 +2627,7 @@ FOOTPRINT* PCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 
 
 void PCB_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
-                                const PROPERTIES* aProperties )
+                                const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2721,7 +2721,7 @@ void PCB_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* a
 
 
 void PCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                  const PROPERTIES* aProperties )
+                                  const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2746,7 +2746,7 @@ long long PCB_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 }
 
 
-void PCB_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void PCB_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     if( wxDir::Exists( aLibraryPath ) )
     {
@@ -2764,7 +2764,7 @@ void PCB_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROPERT
 }
 
 
-bool PCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+bool PCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );

@@ -361,7 +361,6 @@ set( COMMON_SRCS
     paths.cpp
     printout.cpp
     project.cpp
-    properties.cpp
     ptree.cpp
     rc_item.cpp
     refdes_utils.cpp
@@ -372,6 +371,7 @@ set( COMMON_SRCS
     search_stack.cpp
     searchhelpfilefullpath.cpp
     status_popup.cpp
+    string_utf8_map.cpp
     stroke_params.cpp
     systemdirsappend.cpp
     template_fieldnames.cpp

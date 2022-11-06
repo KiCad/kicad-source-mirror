@@ -32,7 +32,7 @@
 #include <memory>
 #include <mutex>
 #include <project.h>
-#include <properties.h>
+#include <string_utf8_map.h>
 #include <richio.h>
 
 
@@ -186,7 +186,7 @@ public:
      * Return the constant #PROPERTIES for this library (#LIB_TABLE_ROW).  These are
      * the "options" in a table.
      */
-    const PROPERTIES* GetProperties() const     { return properties.get(); }
+    const STRING_UTF8_MAP* GetProperties() const     { return properties.get(); }
 
     /**
      * Serialize this object as utf8 text to an #OUTPUTFORMATTER, and tries to
@@ -218,7 +218,7 @@ protected:
         m_parent( aRow.m_parent )
     {
         if( aRow.properties )
-            properties = std::make_unique<PROPERTIES>( *aRow.properties.get() );
+            properties = std::make_unique<STRING_UTF8_MAP>( *aRow.properties.get() );
         else
             properties.reset();
     }
@@ -228,7 +228,7 @@ protected:
 private:
     virtual LIB_TABLE_ROW* do_clone() const = 0;
 
-    void setProperties( PROPERTIES* aProperties );
+    void setProperties( STRING_UTF8_MAP* aProperties );
 
     wxString          nickName;
     wxString          uri_user;           ///< what user entered from UI or loaded from disk
@@ -245,7 +245,7 @@ private:
     bool              m_loaded = false;   ///< Whether the LIB_TABLE_ROW is loaded
     LIB_TABLE*        m_parent;           ///< Pointer to the table this row lives in (maybe null)
 
-    std::unique_ptr< PROPERTIES > properties;
+    std::unique_ptr<STRING_UTF8_MAP> properties;
 
     std::mutex        m_loadMutex;
 };
@@ -506,7 +506,7 @@ public:
      * a library table, this formatting is handled for you.
      * </p>
      */
-    static PROPERTIES* ParseOptions( const std::string& aOptionsList );
+    static STRING_UTF8_MAP* ParseOptions( const std::string& aOptionsList );
 
     /**
      * Returns a list of options from the aProperties parameter.
@@ -518,7 +518,7 @@ public:
      * @param aProperties is the PROPERTIES to format or NULL.  If NULL the returned
      *                    string will be empty.
      */
-    static UTF8 FormatOptions( const PROPERTIES* aProperties );
+    static UTF8 FormatOptions( const STRING_UTF8_MAP* aProperties );
 
 protected:
     /**

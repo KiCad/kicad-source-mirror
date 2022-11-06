@@ -190,42 +190,42 @@ public:
     }
 
     void Save( const wxString& aFileName, BOARD* aBoard,
-               const PROPERTIES* aProperties = nullptr ) override;
+               const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                 const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
                  PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
-    BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+    BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
                      PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount );
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const PROPERTIES* aProperties = nullptr ) override;
+                             bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
                                              const wxString& aFootprintName,
-                                             const PROPERTIES* aProperties = nullptr ) override;
+                                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
-                          const PROPERTIES* aProperties = nullptr ) override;
+                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool  aKeepUUID = false,
-                              const PROPERTIES* aProperties = nullptr ) override;
+                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
-                        const PROPERTIES* aProperties = nullptr ) override;
+                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                          const PROPERTIES* aProperties = nullptr ) override;
+                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     void FootprintLibCreate( const wxString& aLibraryPath,
-                             const PROPERTIES* aProperties = nullptr) override;
+                             const STRING_UTF8_MAP* aProperties = nullptr) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,
-                             const PROPERTIES* aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
@@ -260,9 +260,9 @@ protected:
     void validateCache( const wxString& aLibraryPath, bool checkModified = true );
 
     const FOOTPRINT* getFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                   const PROPERTIES* aProperties, bool checkModified );
+                                   const STRING_UTF8_MAP* aProperties, bool checkModified );
 
-    void init( const PROPERTIES* aProperties );
+    void init( const STRING_UTF8_MAP* aProperties );
 
     /// formats the board setup information
     void formatSetup( const BOARD* aBoard, int aNestLevel = 0 ) const;
@@ -325,8 +325,7 @@ protected:
     wxString        m_error;        ///< for throwing exceptions
     BOARD*          m_board;        ///< which BOARD, no ownership here
 
-    const
-    PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
+    const STRING_UTF8_MAP*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
     FP_CACHE*       m_cache;        ///< Footprint library cache.
 
     LINE_READER*    m_reader;       ///< no ownership here.

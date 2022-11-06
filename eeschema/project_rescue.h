@@ -41,7 +41,7 @@
 #include <wx/string.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#include <properties.h>
+#include <string_utf8_map.h>
 #include <lib_symbol.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <class_draw_panel_gal.h>
@@ -381,7 +381,7 @@ public:
 private:
     std::vector<std::unique_ptr<LIB_SYMBOL>> m_rescueLibSymbols;
 
-    std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties.
+    std::unique_ptr<STRING_UTF8_MAP> m_properties;   ///< Library plugin properties.
 };
 
 #endif // _LIB_CACHE_RESCUE_H_

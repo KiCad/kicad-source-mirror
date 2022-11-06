@@ -132,7 +132,7 @@ public:
     const wxString PluginName() const override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                 const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
                  PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
@@ -140,11 +140,11 @@ public:
     const wxString GetFileExtension() const override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const PROPERTIES* aProperties = nullptr) override;
+                             bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool  aKeepUUID = false,
-                              const PROPERTIES* aProperties = nullptr ) override;
+                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
     {
@@ -156,7 +156,7 @@ public:
         return false;   // until someone writes others like FootprintSave(), etc.
     }
 
-    void FootprintLibOptions( PROPERTIES* aProperties ) const override;
+    void FootprintLibOptions( STRING_UTF8_MAP* aProperties ) const override;
 
     typedef int BIU;
 
@@ -178,7 +178,7 @@ public:
 
 private:
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
-    void init( const PROPERTIES* aProperties );
+    void init( const STRING_UTF8_MAP* aProperties );
 
     void checkpoint();
 
@@ -332,7 +332,7 @@ private:
                                     ///< lookup key is either libname.packagename or simply
                                     ///< packagename if FootprintLoad() or FootprintEnumberate()
 
-    const PROPERTIES*   m_props;    ///< passed via Save() or Load(), no ownership, may be NULL.
+    const STRING_UTF8_MAP*   m_props;    ///< passed via Save() or Load(), no ownership, may be NULL.
     BOARD*              m_board;    ///< which BOARD is being worked on, no ownership here
 
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr

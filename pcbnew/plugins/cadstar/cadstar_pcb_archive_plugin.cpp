@@ -28,7 +28,7 @@
 #include <cadstar_pcb_archive_plugin.h>
 #include <board.h>
 #include <footprint.h>
-#include <properties.h>
+#include <string_utf8_map.h>
 
 
 std::map<wxString, PCB_LAYER_ID> CADSTAR_PCB_ARCHIVE_PLUGIN::DefaultLayerMappingCallback(
@@ -106,7 +106,7 @@ std::vector<FOOTPRINT*> CADSTAR_PCB_ARCHIVE_PLUGIN::GetImportedCachedLibraryFoot
 
 
 BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                                         const PROPERTIES* aProperties, PROJECT* aProject,
+                                         const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                                          PROGRESS_REPORTER* aProgressReporter )
 {
     m_props = aProperties;

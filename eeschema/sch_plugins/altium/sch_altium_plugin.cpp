@@ -220,7 +220,7 @@ wxFileName SCH_ALTIUM_PLUGIN::getLibFileName()
 
 
 SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                    SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
+                                    SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 

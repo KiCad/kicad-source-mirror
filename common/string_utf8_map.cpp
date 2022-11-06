@@ -18,12 +18,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <properties.h>
+#include <string_utf8_map.h>
 
 
-bool PROPERTIES::Value( const char* aName, UTF8* aFetchedValue ) const
+bool STRING_UTF8_MAP::Value( const char* aName, UTF8* aFetchedValue ) const
 {
-    PROPERTIES::const_iterator it = find( aName );
+    STRING_UTF8_MAP::const_iterator it = find( aName );
 
     if( it != end() )
     {

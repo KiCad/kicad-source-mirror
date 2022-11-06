@@ -350,7 +350,7 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
 
 
 void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
-                const PROPERTIES* aProperties )
+                const STRING_UTF8_MAP* aProperties )
 {
     init( aProperties );
 
@@ -395,7 +395,7 @@ void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
 
 
 BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                           const PROPERTIES* aProperties, PROJECT* aProject,
+                           const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                            PROGRESS_REPORTER* aProgressReporter )
 {
     std::string result;

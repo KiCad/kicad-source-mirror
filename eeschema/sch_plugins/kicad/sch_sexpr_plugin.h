@@ -46,7 +46,7 @@ class SCH_TEXTBOX;
 class SCH_SYMBOL;
 class SCH_FIELD;
 struct SYMBOL_INSTANCE_REFERENCE;
-class PROPERTIES;
+class STRING_UTF8_MAP;
 class EE_SELECTION;
 class SCH_SEXPR_PLUGIN_CACHE;
 class LIB_SYMBOL;
@@ -97,13 +97,13 @@ public:
 
     SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                      SCH_SHEET* aAppendToMe = nullptr,
-                     const PROPERTIES* aProperties = nullptr ) override;
+                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet,
                       int aVersion = SEXPR_SCHEMATIC_FILE_VERSION );
 
     void Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-               const PROPERTIES* aProperties = nullptr ) override;
+               const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void Format( SCH_SHEET* aSheet );
 
@@ -112,22 +112,22 @@ public:
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,
-                             const PROPERTIES* aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
     void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                              const wxString&           aLibraryPath,
-                             const PROPERTIES*         aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP*         aProperties = nullptr ) override;
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                            const PROPERTIES* aProperties = nullptr ) override;
+                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
     void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                     const PROPERTIES* aProperties = nullptr ) override;
+                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
     void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                       const PROPERTIES* aProperties = nullptr ) override;
+                       const STRING_UTF8_MAP* aProperties = nullptr ) override;
     void CreateSymbolLib( const wxString& aLibraryPath,
-                          const PROPERTIES* aProperties = nullptr ) override;
+                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
     bool DeleteSymbolLib( const wxString& aLibraryPath,
-                          const PROPERTIES* aProperties = nullptr ) override;
+                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
     void SaveLibrary( const wxString& aLibraryPath,
-                      const PROPERTIES* aProperties = nullptr ) override;
+                      const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
@@ -160,8 +160,8 @@ private:
     void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNestLevel );
     void saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheets, int aNestLevel );
 
-    void cacheLib( const wxString& aLibraryFileName, const PROPERTIES* aProperties );
-    bool isBuffering( const PROPERTIES* aProperties );
+    void cacheLib( const wxString& aLibraryFileName, const STRING_UTF8_MAP* aProperties );
+    bool isBuffering( const STRING_UTF8_MAP* aProperties );
 
 protected:
     int                     m_version;          ///< Version of file being loaded.
@@ -179,7 +179,7 @@ protected:
     SCH_SEXPR_PLUGIN_CACHE* m_cache;
 
     /// initialize PLUGIN like a constructor would.
-    void init( SCHEMATIC* aSchematic, const PROPERTIES* aProperties = nullptr );
+    void init( SCHEMATIC* aSchematic, const STRING_UTF8_MAP* aProperties = nullptr );
 };
 
 #endif  // _SCH_SEXPR_PLUGIN_H_

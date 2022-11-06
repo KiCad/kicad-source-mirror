@@ -20,7 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <properties.h>
+#include <string_utf8_map.h>
 
 #include <sch_io_mgr.h>
 #include <wx/translation.h>
@@ -42,14 +42,14 @@ static void not_implemented( const SCH_PLUGIN* aPlugin, const char* aCaller )
 }
 
 
-void SCH_PLUGIN::SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties )
+void SCH_PLUGIN::SaveLibrary( const wxString& aFileName, const STRING_UTF8_MAP* aProperties )
 {
     not_implemented( this, __FUNCTION__ );
 }
 
 
 SCH_SHEET* SCH_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                             SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
+                             SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
 {
     not_implemented( this, __FUNCTION__ );
     return nullptr;
@@ -57,7 +57,7 @@ SCH_SHEET* SCH_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
 
 
 void SCH_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                       const PROPERTIES* aProperties )
+                       const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
@@ -66,7 +66,7 @@ void SCH_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* 
 
 void SCH_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                                      const wxString&   aLibraryPath,
-                                     const PROPERTIES* aProperties )
+                                     const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
@@ -75,7 +75,7 @@ void SCH_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
 
 void SCH_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                      const wxString&   aLibraryPath,
-                                     const PROPERTIES* aProperties )
+                                     const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
@@ -83,7 +83,7 @@ void SCH_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                  const PROPERTIES* aProperties )
+                                  const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
@@ -92,7 +92,7 @@ LIB_SYMBOL* SCH_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString
 
 
 void SCH_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                             const PROPERTIES* aProperties )
+                             const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
@@ -100,21 +100,21 @@ void SCH_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSy
 
 
 void SCH_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                               const PROPERTIES* aProperties )
+                               const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
 }
 
 
-void SCH_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void SCH_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
 }
 
 
-bool SCH_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+bool SCH_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
@@ -130,7 +130,7 @@ bool SCH_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
 }
 
 
-void SCH_PLUGIN::SymbolLibOptions( PROPERTIES* aListToAppendTo ) const
+void SCH_PLUGIN::SymbolLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const
 {
     // disable all these in another couple of months, after everyone has seen them:
 #if 1

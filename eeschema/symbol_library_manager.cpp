@@ -167,7 +167,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( aFileType ) );
     bool res = true;    // assume all libraries are successfully saved
 
-    PROPERTIES properties;
+    STRING_UTF8_MAP properties;
     properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
 
     auto it = m_libs.find( aLibrary );
@@ -959,7 +959,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
     LIB_SYMBOL* originalSymbol = aSymbolBuf->GetOriginal();
     wxCHECK( libSymbol && originalSymbol, false );
     SYMBOL_LIB_TABLE::SAVE_T result;
-    PROPERTIES properties;
+    STRING_UTF8_MAP          properties;
     properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
 
     wxString errorMsg = _( "Error saving symbol %s to library '%s'." ) + wxS( "\n%s" );
@@ -1066,7 +1066,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
     wxString errorMsg = _( "Error saving symbol %s to library '%s'." ) + wxS( "\n%s" );
 
     // set properties to prevent save file on every symbol save
-    PROPERTIES properties;
+    STRING_UTF8_MAP properties;
     properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
 
     // Delete the original symbol if the symbol name has been changed.

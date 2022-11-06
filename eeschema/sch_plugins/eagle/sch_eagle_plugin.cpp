@@ -25,7 +25,7 @@
 #include <sch_plugins/eagle/sch_eagle_plugin.h>
 
 #include <locale_io.h>
-#include <properties.h>
+#include <string_utf8_map.h>
 
 #include <algorithm>
 #include <memory>
@@ -427,7 +427,7 @@ void SCH_EAGLE_PLUGIN::checkpoint()
 
 
 SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                   SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
+                                   SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
     LOCALE_IO toggle; // toggles on, then off, the C locale.
@@ -485,7 +485,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     wxCHECK_MSG( libTable, nullptr, wxT( "Could not load symbol lib table." ) );
 
     m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-    m_properties = std::make_unique<PROPERTIES>();
+    m_properties = std::make_unique<STRING_UTF8_MAP>();
     ( *m_properties )[SCH_LEGACY_PLUGIN::PropBuffering] = "";
 
     /// @note No check is being done here to see if the existing symbol library exists so this

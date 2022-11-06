@@ -75,19 +75,19 @@ public:
     }
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                 const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
                  PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts,
-                             const PROPERTIES* aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool  aKeepUUID = false,
-                              const PROPERTIES* aProperties = nullptr ) override;
+                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,
-                             const PROPERTIES* aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
@@ -104,7 +104,7 @@ public:
 
 protected:
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
-    void init( const PROPERTIES* aProperties );
+    void init( const STRING_UTF8_MAP* aProperties );
 
     void checkpoint();
 
@@ -181,7 +181,7 @@ protected:
 
     wxString           m_error;                  ///< for throwing exceptions
     BOARD*             m_board;                  ///< which BOARD, no ownership here
-    const PROPERTIES*  m_props;                  ///< passed via Save() or Load(), no ownership,
+    const STRING_UTF8_MAP*  m_props;                  ///< passed via Save() or Load(), no ownership,
                                                  ///<  may be NULL.
     PROGRESS_REPORTER* m_progressReporter;       ///< may be NULL, no ownership
     unsigned           m_lastProgressLine;

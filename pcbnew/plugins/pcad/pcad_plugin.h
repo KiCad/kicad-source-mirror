@@ -42,7 +42,7 @@ public:
 
     BOARD*          Load( const wxString&    aFileName,
                           BOARD*             aAppendToMe,
-                          const PROPERTIES*  aProperties = nullptr,
+                          const STRING_UTF8_MAP*  aProperties = nullptr,
                           PROJECT*           aProject = nullptr,
                           PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
@@ -55,7 +55,7 @@ public:
     }
 
 private:
-    const PROPERTIES*   m_props;
+    const STRING_UTF8_MAP*   m_props;
     BOARD*              m_board;
 };
 

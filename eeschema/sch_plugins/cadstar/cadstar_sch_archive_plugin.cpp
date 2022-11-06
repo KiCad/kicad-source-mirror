@@ -27,7 +27,7 @@
 #include <sch_plugins/cadstar/cadstar_sch_archive_loader.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_plugin.h>
 
-#include <properties.h>
+#include <string_utf8_map.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <schematic.h>
@@ -59,7 +59,7 @@ int CADSTAR_SCH_ARCHIVE_PLUGIN::GetModifyHash() const
 
 
 SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-        SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
+        SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != NULL );
 

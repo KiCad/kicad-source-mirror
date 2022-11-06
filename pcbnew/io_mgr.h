@@ -35,7 +35,7 @@
 class BOARD;
 class PLUGIN;
 class FOOTPRINT;
-class PROPERTIES;
+class STRING_UTF8_MAP;
 class PROJECT;
 class PROGRESS_REPORTER;
 
@@ -210,7 +210,7 @@ public:
      *                 be loaded.
      */
     static BOARD* Load( PCB_FILE_T aFileType, const wxString& aFileName,
-                        BOARD* aAppendToMe = nullptr, const PROPERTIES* aProperties = nullptr,
+                        BOARD* aAppendToMe = nullptr, const STRING_UTF8_MAP* aProperties = nullptr,
                         PROJECT* aProject = nullptr,
                         PROGRESS_REPORTER* aProgressReporter = nullptr );
 
@@ -234,7 +234,7 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     static void Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard,
-                      const PROPERTIES* aProperties = nullptr );
+                      const STRING_UTF8_MAP* aProperties = nullptr );
 };
 
 
@@ -316,7 +316,7 @@ public:
      *                 possible.
      */
     virtual BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                         const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                         const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
                          PROGRESS_REPORTER* aProgressReporter = nullptr );
 
     /**
@@ -348,7 +348,7 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     virtual void Save( const wxString& aFileName, BOARD* aBoard,
-                       const PROPERTIES* aProperties = nullptr );
+                       const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Return a list of footprint names contained within the library at @a aLibraryPath.
@@ -365,7 +365,7 @@ public:
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
     virtual void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                                     bool aBestEfforts, const PROPERTIES* aProperties = nullptr );
+                                     bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Generate a timestamp representing all the files in the library (including the library
@@ -393,7 +393,7 @@ public:
      * @throw IO_ERROR if there is an error prefetching the library.
      */
     virtual void PrefetchLib( const wxString& aLibraryPath,
-                              const PROPERTIES* aProperties = nullptr );
+                              const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Load a footprint having @a aFootprintName from the @a aLibraryPath containing a library
@@ -419,7 +419,7 @@ public:
     virtual FOOTPRINT* FootprintLoad( const wxString& aLibraryPath,
                                       const wxString& aFootprintName,
                                       bool  aKeepUUID = false,
-                                      const PROPERTIES* aProperties = nullptr );
+                                      const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * A version of FootprintLoad() for use after FootprintEnumerate() for more efficient
@@ -427,13 +427,13 @@ public:
      */
     virtual const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
                                                      const wxString& aFootprintName,
-                                                     const PROPERTIES* aProperties = nullptr );
+                                                     const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Check for the existence of a footprint.
      */
     virtual bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                  const PROPERTIES* aProperties = nullptr );
+                                  const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Write @a aFootprint to an existing library located at @a aLibraryPath.
@@ -452,7 +452,7 @@ public:
      * @throw IO_ERROR if there is a problem saving.
      */
     virtual void FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
-                                const PROPERTIES* aProperties = nullptr );
+                                const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Delete @a aFootprintName from the library at @a aLibraryPath.
@@ -469,7 +469,7 @@ public:
      * @throw IO_ERROR if there is a problem finding the footprint or the library, or deleting it.
      */
     virtual void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                  const PROPERTIES* aProperties = nullptr );
+                                  const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Create a new empty footprint library at @a aLibraryPath empty.
@@ -488,7 +488,7 @@ public:
      * @throw IO_ERROR if there is a problem finding the library, or creating it.
      */
     virtual void FootprintLibCreate( const wxString& aLibraryPath,
-                                     const PROPERTIES* aProperties = nullptr );
+                                     const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Delete an existing footprint library and returns true, or if library does not
@@ -507,7 +507,7 @@ public:
      * @throw IO_ERROR if there is a problem deleting an existing library.
      */
     virtual bool FootprintLibDelete( const wxString& aLibraryPath,
-                                     const PROPERTIES* aProperties = nullptr );
+                                     const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Return true if the library at @a aLibraryPath is writable.
@@ -548,7 +548,7 @@ public:
      *  This would require a 3 column list, and introducing wx GUI knowledge to
      * PLUGIN, which has been avoided to date.
      */
-    virtual void FootprintLibOptions( PROPERTIES* aListToAppendTo ) const;
+    virtual void FootprintLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const;
 
     virtual ~PLUGIN()
     {

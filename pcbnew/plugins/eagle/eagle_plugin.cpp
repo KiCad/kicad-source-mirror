@@ -64,7 +64,7 @@ Load() TODO's
 #include <geometry/geometry_utils.h>
 #include <string_utils.h>
 #include <locale_io.h>
-#include <properties.h>
+#include <string_utf8_map.h>
 #include <trigo.h>
 #include <math/util.h>      // for KiROUND
 #include <progress_reporter.h>
@@ -358,7 +358,7 @@ wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d, int aTextThickness ) c
 
 
 BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                           const PROPERTIES* aProperties, PROJECT* aProject,
+                           const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                            PROGRESS_REPORTER* aProgressReporter )
 {
     LOCALE_IO       toggle;     // toggles on, then off, the C locale.
@@ -501,7 +501,7 @@ std::vector<FOOTPRINT*> EAGLE_PLUGIN::GetImportedCachedLibraryFootprints()
 }
 
 
-void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
+void EAGLE_PLUGIN::init( const STRING_UTF8_MAP* aProperties )
 {
     m_hole_count  = 0;
     m_min_trace   = 0;
@@ -3231,7 +3231,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 
 
 void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                                       bool aBestEfforts, const PROPERTIES* aProperties )
+                                       bool aBestEfforts, const STRING_UTF8_MAP* aProperties )
 {
     wxString errorMsg;
 
@@ -3259,7 +3259,7 @@ void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 
 FOOTPRINT* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                         const wxString& aFootprintName, bool aKeepUUID,
-                                        const PROPERTIES* aProperties )
+                                        const STRING_UTF8_MAP* aProperties )
 {
     init( aProperties );
     cacheLib( aLibraryPath );
@@ -3275,7 +3275,7 @@ FOOTPRINT* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 }
 
 
-void EAGLE_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
+void EAGLE_PLUGIN::FootprintLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const
 {
     PLUGIN::FootprintLibOptions( aListToAppendTo );
 }

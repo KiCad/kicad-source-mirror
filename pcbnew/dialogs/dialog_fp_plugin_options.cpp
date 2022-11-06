@@ -79,7 +79,9 @@ public:
         if( m_choices.size() )
         {
             unsigned int row = 0;
-            for( PROPERTIES::const_iterator it = m_choices.begin();  it != m_choices.end();  ++it, ++row )
+
+            for( STRING_UTF8_MAP::const_iterator it = m_choices.begin(); it != m_choices.end();
+                 ++it, ++row )
             {
                 wxString item = FROM_UTF8( it->first.c_str() );
 
@@ -113,7 +115,7 @@ public:
         // Fill the grid with existing aOptions
         string options = TO_UTF8( m_callers_options );
 
-        PROPERTIES* props = LIB_TABLE::ParseOptions( options );
+        STRING_UTF8_MAP* props = LIB_TABLE::ParseOptions( options );
 
         if( props )
         {
@@ -121,7 +123,9 @@ public:
                 m_grid->AppendRows( props->size() - m_grid->GetNumberRows() );
 
             int row = 0;
-            for( PROPERTIES::const_iterator it = props->begin();  it != props->end();  ++it, ++row )
+
+            for( STRING_UTF8_MAP::const_iterator it = props->begin(); it != props->end();
+                 ++it, ++row )
             {
                 m_grid->SetCellValue( row, 0, FROM_UTF8( it->first.c_str() ) );
                 m_grid->SetCellValue( row, 1, it->second );
@@ -141,7 +145,7 @@ public:
         if( !DIALOG_SHIM::TransferDataFromWindow() )
             return false;
 
-        PROPERTIES  props;
+        STRING_UTF8_MAP props;
         const int   rowCount = m_grid->GetNumberRows();
 
         for( int row = 0;  row<rowCount;  ++row )
@@ -162,7 +166,7 @@ public:
 private:
     const wxString& m_callers_options;
     wxString*       m_result;
-    PROPERTIES      m_choices;
+    STRING_UTF8_MAP m_choices;
     wxString        m_initial_help;
     bool            m_grid_widths_dirty;
 

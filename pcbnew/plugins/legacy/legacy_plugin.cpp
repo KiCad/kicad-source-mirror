@@ -68,7 +68,7 @@
 #include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>
-#include <properties.h>
+#include <string_utf8_map.h>
 #include <zones.h>
 
 #include <board.h>
@@ -403,7 +403,7 @@ static inline long hexParse( const char* next, const char** out = nullptr )
 
 
 BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                            const PROPERTIES* aProperties, PROJECT* aProject,
+                            const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                             PROGRESS_REPORTER* aProgressReporter )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
@@ -2866,7 +2866,7 @@ EDA_ANGLE LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 }
 
 
-void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
+void LEGACY_PLUGIN::init( const STRING_UTF8_MAP* aProperties )
 {
     m_loading_format_version = 0;
     m_cu_count = 16;
@@ -3155,7 +3155,7 @@ void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
 
 
 void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
-                                        bool aBestEfforts, const PROPERTIES* aProperties )
+                                        bool aBestEfforts, const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxString  errorMsg;
@@ -3184,7 +3184,7 @@ void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wx
 
 FOOTPRINT* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                          const wxString& aFootprintName, bool aKeepUUID,
-                                         const PROPERTIES* aProperties )
+                                         const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -3208,7 +3208,7 @@ FOOTPRINT* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 
 
 bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath,
-                                        const PROPERTIES* aProperties )
+                                        const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn = aLibraryPath;
 

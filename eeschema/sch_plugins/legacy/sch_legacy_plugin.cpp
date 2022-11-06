@@ -88,7 +88,7 @@ SCH_LEGACY_PLUGIN::~SCH_LEGACY_PLUGIN()
 }
 
 
-void SCH_LEGACY_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aProperties )
+void SCH_LEGACY_PLUGIN::init( SCHEMATIC* aSchematic, const STRING_UTF8_MAP* aProperties )
 {
     m_version   = 0;
     m_rootSheet = nullptr;
@@ -122,7 +122,7 @@ void SCH_LEGACY_PLUGIN::checkpoint()
 
 
 SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                    SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
+                                    SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
@@ -1447,7 +1447,7 @@ std::shared_ptr<BUS_ALIAS> SCH_LEGACY_PLUGIN::loadBusAlias( LINE_READER& aReader
 
 
 void SCH_LEGACY_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                              const PROPERTIES* aProperties )
+                              const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
@@ -2035,7 +2035,7 @@ void SCH_LEGACY_PLUGIN::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 }
 
 
-void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPERTIES* aProperties )
+void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName, const STRING_UTF8_MAP* aProperties )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
@@ -2049,7 +2049,7 @@ void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPER
 }
 
 
-bool SCH_LEGACY_PLUGIN::writeDocFile( const PROPERTIES* aProperties )
+bool SCH_LEGACY_PLUGIN::writeDocFile( const STRING_UTF8_MAP* aProperties )
 {
     std::string propName( SCH_LEGACY_PLUGIN::PropNoDocFile );
 
@@ -2060,7 +2060,7 @@ bool SCH_LEGACY_PLUGIN::writeDocFile( const PROPERTIES* aProperties )
 }
 
 
-bool SCH_LEGACY_PLUGIN::isBuffering( const PROPERTIES* aProperties )
+bool SCH_LEGACY_PLUGIN::isBuffering( const STRING_UTF8_MAP* aProperties )
 {
     return ( aProperties && aProperties->Exists( SCH_LEGACY_PLUGIN::PropBuffering ) );
 }
@@ -2078,7 +2078,7 @@ int SCH_LEGACY_PLUGIN::GetModifyHash() const
 
 void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                                             const wxString&   aLibraryPath,
-                                            const PROPERTIES* aProperties )
+                                            const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2099,7 +2099,7 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                             const wxString&   aLibraryPath,
-                                            const PROPERTIES* aProperties )
+                                            const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2120,7 +2120,7 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolLis
 
 LIB_SYMBOL* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath,
                                            const wxString& aSymbolName,
-                                           const PROPERTIES* aProperties )
+                                           const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -2136,7 +2136,7 @@ LIB_SYMBOL* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath,
 
 
 void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                                    const PROPERTIES* aProperties )
+                                    const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -2150,7 +2150,7 @@ void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMB
 
 
 void SCH_LEGACY_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                      const PROPERTIES* aProperties )
+                                      const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -2164,7 +2164,7 @@ void SCH_LEGACY_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxStri
 
 
 void SCH_LEGACY_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
-                                         const PROPERTIES* aProperties )
+                                         const STRING_UTF8_MAP* aProperties )
 {
     if( wxFileExists( aLibraryPath ) )
     {
@@ -2183,7 +2183,7 @@ void SCH_LEGACY_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
 
 
 bool SCH_LEGACY_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
-                                         const PROPERTIES* aProperties )
+                                         const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn = aLibraryPath;
 
@@ -2208,7 +2208,7 @@ bool SCH_LEGACY_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
 }
 
 
-void SCH_LEGACY_PLUGIN::SaveLibrary( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void SCH_LEGACY_PLUGIN::SaveLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     if( !m_cache )
         m_cache = new SCH_LEGACY_PLUGIN_CACHE( aLibraryPath );

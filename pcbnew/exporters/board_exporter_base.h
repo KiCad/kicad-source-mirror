@@ -24,7 +24,7 @@
 #ifndef __BOARD_EXPORTER_BASE_H
 #define __BOARD_EXPORTER_BASE_H
 
-#include <properties.h>
+#include <string_utf8_map.h>
 #include <wx/file.h>
 
 class BOARD;
@@ -67,7 +67,7 @@ public:
     virtual bool Run() = 0;
 
 protected:
-    PROPERTIES         m_properties;
+    STRING_UTF8_MAP    m_properties;
     BOARD*             m_board = nullptr;
     wxFileName         m_outputFilePath;
     REPORTER*          m_reporter = nullptr;

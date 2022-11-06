@@ -704,7 +704,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         try
         {
-            PROPERTIES  props;
+            STRING_UTF8_MAP props;
             char        xbuf[30];
             char        ybuf[30];
 

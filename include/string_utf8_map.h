@@ -30,7 +30,7 @@
  * A name/value tuple with unique names and optional values.  The names
  * may be iterated alphabetically.
  */
-class PROPERTIES : public std::map< std::string, UTF8 >
+class STRING_UTF8_MAP : public std::map< std::string, UTF8 >
 {
 public:
     bool Clear( const std::string& aProperty )

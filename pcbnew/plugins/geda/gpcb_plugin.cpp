@@ -853,7 +853,7 @@ GPCB_PLUGIN::~GPCB_PLUGIN()
 }
 
 
-void GPCB_PLUGIN::init( const PROPERTIES* aProperties )
+void GPCB_PLUGIN::init( const STRING_UTF8_MAP* aProperties )
 {
     m_props = aProperties;
 }
@@ -872,7 +872,7 @@ void GPCB_PLUGIN::validateCache( const wxString& aLibraryPath, bool checkModifie
 
 
 void GPCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                                      bool aBestEfforts, const PROPERTIES* aProperties )
+                                      bool aBestEfforts, const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxDir     dir( aLibraryPath );
@@ -913,7 +913,7 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxSt
 
 const FOOTPRINT* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
                                             const wxString& aFootprintName,
-                                            const PROPERTIES* aProperties,
+                                            const STRING_UTF8_MAP* aProperties,
                                             bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
@@ -935,7 +935,7 @@ const FOOTPRINT* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
 
 const FOOTPRINT* GPCB_PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
                                                       const wxString& aFootprintName,
-                                                      const PROPERTIES* aProperties )
+                                                      const STRING_UTF8_MAP* aProperties )
 {
     return getFootprint( aLibraryPath, aFootprintName, aProperties, false );
 }
@@ -944,7 +944,7 @@ const FOOTPRINT* GPCB_PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPa
 FOOTPRINT* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                        const wxString& aFootprintName,
                                        bool  aKeepUUID,
-                                       const PROPERTIES* aProperties )
+                                       const STRING_UTF8_MAP* aProperties )
 {
     const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
 
@@ -960,7 +960,7 @@ FOOTPRINT* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 
 
 void GPCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                   const PROPERTIES* aProperties )
+                                   const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -978,7 +978,7 @@ void GPCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString&
 }
 
 
-bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );

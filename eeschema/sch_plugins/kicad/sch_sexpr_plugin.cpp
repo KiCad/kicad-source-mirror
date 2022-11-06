@@ -85,7 +85,7 @@ SCH_SEXPR_PLUGIN::~SCH_SEXPR_PLUGIN()
 }
 
 
-void SCH_SEXPR_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aProperties )
+void SCH_SEXPR_PLUGIN::init( SCHEMATIC* aSchematic, const STRING_UTF8_MAP* aProperties )
 {
     m_version         = 0;
     m_appending       = false;
@@ -98,7 +98,7 @@ void SCH_SEXPR_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aPropertie
 
 
 SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                   SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
+                                   SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
@@ -319,7 +319,7 @@ void SCH_SEXPR_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, int
 
 
 void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                             const PROPERTIES* aProperties )
+                             const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
@@ -1297,7 +1297,7 @@ void SCH_SEXPR_PLUGIN::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSh
 }
 
 
-void SCH_SEXPR_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPERTIES* aProperties )
+void SCH_SEXPR_PLUGIN::cacheLib( const wxString& aLibraryFileName, const STRING_UTF8_MAP* aProperties )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
@@ -1311,7 +1311,7 @@ void SCH_SEXPR_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPERT
 }
 
 
-bool SCH_SEXPR_PLUGIN::isBuffering( const PROPERTIES* aProperties )
+bool SCH_SEXPR_PLUGIN::isBuffering( const STRING_UTF8_MAP* aProperties )
 {
     return ( aProperties && aProperties->Exists( SCH_SEXPR_PLUGIN::PropBuffering ) );
 }
@@ -1329,7 +1329,7 @@ int SCH_SEXPR_PLUGIN::GetModifyHash() const
 
 void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                                            const wxString&   aLibraryPath,
-                                           const PROPERTIES* aProperties )
+                                           const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1350,7 +1350,7 @@ void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                            const wxString&   aLibraryPath,
-                                           const PROPERTIES* aProperties )
+                                           const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1370,7 +1370,7 @@ void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList
 
 
 LIB_SYMBOL* SCH_SEXPR_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                          const PROPERTIES* aProperties )
+                                          const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -1386,7 +1386,7 @@ LIB_SYMBOL* SCH_SEXPR_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wx
 
 
 void SCH_SEXPR_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                                   const PROPERTIES* aProperties )
+                                   const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -1400,7 +1400,7 @@ void SCH_SEXPR_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBO
 
 
 void SCH_SEXPR_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                     const PROPERTIES* aProperties )
+                                     const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -1414,7 +1414,7 @@ void SCH_SEXPR_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxStrin
 
 
 void SCH_SEXPR_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
-                                        const PROPERTIES* aProperties )
+                                        const STRING_UTF8_MAP* aProperties )
 {
     if( wxFileExists( aLibraryPath ) )
     {
@@ -1433,7 +1433,7 @@ void SCH_SEXPR_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
 
 
 bool SCH_SEXPR_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
-                                        const PROPERTIES* aProperties )
+                                        const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn = aLibraryPath;
 
@@ -1458,7 +1458,7 @@ bool SCH_SEXPR_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
 }
 
 
-void SCH_SEXPR_PLUGIN::SaveLibrary( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void SCH_SEXPR_PLUGIN::SaveLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     if( !m_cache )
         m_cache = new SCH_SEXPR_PLUGIN_CACHE( aLibraryPath );

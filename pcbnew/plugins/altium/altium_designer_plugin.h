@@ -40,7 +40,7 @@ public:
 
     const wxString PluginName() const override;
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
                  PROJECT* aProject = nullptr,
                  PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
@@ -49,11 +49,11 @@ public:
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const PROPERTIES* aProperties = nullptr ) override;
+                             bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool              aKeepUUID = false,
-                              const PROPERTIES* aProperties = nullptr ) override;
+                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     //bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = nullptr );
 
@@ -65,7 +65,7 @@ public:
     ~ALTIUM_DESIGNER_PLUGIN();
 
 private:
-    const PROPERTIES* m_props;
+    const STRING_UTF8_MAP* m_props;
     BOARD*            m_board;
 };
 

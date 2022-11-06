@@ -33,7 +33,7 @@
 #include <wildcards_and_files_ext.h>
 #include <project/project_file.h>
 #include <project_rescue.h>
-#include <properties.h>
+#include <string_utf8_map.h>
 #include <widgets/app_progress_dialog.h>
 
 #include <general.h>
@@ -61,7 +61,7 @@ SYMBOL_LIB::SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
         fileName = "unnamed.lib";
 
     m_plugin.reset( SCH_IO_MGR::FindPlugin( m_pluginType ) );
-    m_properties = std::make_unique<PROPERTIES>();
+    m_properties = std::make_unique<STRING_UTF8_MAP>();
     m_mod_hash = 0;
 }
 
@@ -77,7 +77,7 @@ void SYMBOL_LIB::Save( bool aSaveDocFile )
                  wxString::Format( wxT( "no plugin defined for library `%s`." ),
                                    fileName.GetFullPath() ) );
 
-    PROPERTIES props;
+    STRING_UTF8_MAP props;
 
     if( !aSaveDocFile )
         props[ SCH_LEGACY_PLUGIN::PropNoDocFile ] = "";

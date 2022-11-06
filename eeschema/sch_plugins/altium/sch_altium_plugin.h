@@ -63,7 +63,7 @@ public:
 
     SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                      SCH_SHEET* aAppendToMe = nullptr,
-                     const PROPERTIES* aProperties = nullptr ) override;
+                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
 
@@ -160,7 +160,7 @@ private:
     wxString   m_libName;        // Library name to save symbols
 
     SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;                // Plugin to create KiCad symbol library.
-    std::unique_ptr<PROPERTIES>     m_properties;        // Library plugin properties.
+    std::unique_ptr<STRING_UTF8_MAP>     m_properties;        // Library plugin properties.
 
     std::unique_ptr<TITLE_BLOCK>    m_currentTitleBlock; // Will be assigned at the end of parsing
                                                          // a sheet

@@ -54,7 +54,7 @@
 #include <origin_viewitem.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
-#include <properties.h>
+#include <string_utf8_map.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <footprint_edit_frame.h>
@@ -1197,7 +1197,7 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     // Load the data
     try
     {
-        PROPERTIES  props;
+        STRING_UTF8_MAP props;
         char        xbuf[30];
         char        ybuf[30];
 
