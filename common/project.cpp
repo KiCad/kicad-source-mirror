@@ -156,19 +156,19 @@ const wxString PROJECT::FootprintLibTblName() const
 void PROJECT::PinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
 {
     COMMON_SETTINGS*       cfg = Pgm().GetCommonSettings();
-    std::vector<wxString>& pinnedLibs = isSymbolLibrary ? m_projectFile->m_PinnedSymbolLibs
-                                                        : m_projectFile->m_PinnedFootprintLibs;
+    std::vector<wxString>* pinnedLibs = isSymbolLibrary ? &m_projectFile->m_PinnedSymbolLibs
+                                                        : &m_projectFile->m_PinnedFootprintLibs;
 
-    if( !alg::contains( pinnedLibs, aLibrary ) )
-        pinnedLibs.push_back( aLibrary );
+    if( !alg::contains( *pinnedLibs, aLibrary ) )
+        pinnedLibs->push_back( aLibrary );
 
     Pgm().GetSettingsManager().SaveProject();
 
-    pinnedLibs = isSymbolLibrary ? cfg->m_Session.pinned_symbol_libs
-                                 : cfg->m_Session.pinned_fp_libs;
+    pinnedLibs = isSymbolLibrary ? &cfg->m_Session.pinned_symbol_libs
+                                 : &cfg->m_Session.pinned_fp_libs;
 
-    if( !alg::contains( pinnedLibs, aLibrary ) )
-        pinnedLibs.push_back( aLibrary );
+    if( !alg::contains( *pinnedLibs, aLibrary ) )
+        pinnedLibs->push_back( aLibrary );
 
     cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
 }
@@ -177,16 +177,16 @@ void PROJECT::PinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
 void PROJECT::UnpinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
 {
     COMMON_SETTINGS*       cfg = Pgm().GetCommonSettings();
-    std::vector<wxString>& pinnedLibs = isSymbolLibrary ? m_projectFile->m_PinnedSymbolLibs
-                                                        : m_projectFile->m_PinnedFootprintLibs;
+    std::vector<wxString>* pinnedLibs = isSymbolLibrary ? &m_projectFile->m_PinnedSymbolLibs
+                                                        : &m_projectFile->m_PinnedFootprintLibs;
 
-    alg::delete_matching( pinnedLibs, aLibrary );
+    alg::delete_matching( *pinnedLibs, aLibrary );
     Pgm().GetSettingsManager().SaveProject();
 
-    pinnedLibs = isSymbolLibrary ? cfg->m_Session.pinned_symbol_libs
-                                 : cfg->m_Session.pinned_fp_libs;
+    pinnedLibs = isSymbolLibrary ? &cfg->m_Session.pinned_symbol_libs
+                                 : &cfg->m_Session.pinned_fp_libs;
 
-    alg::delete_matching( pinnedLibs, aLibrary );
+    alg::delete_matching( *pinnedLibs, aLibrary );
     cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
 }
 
