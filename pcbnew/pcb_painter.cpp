@@ -1230,7 +1230,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     {
         drawShape = aPad->FlashLayer( m_pcbSettings.GetPrintLayers() );
     }
-    else if( aPad->FlashLayer( board->GetVisibleLayers() & board->GetEnabledLayers() ) )
+    else if( aPad->FlashLayer( board->GetEnabledLayers() ) )
     {
         drawShape = true;
     }
