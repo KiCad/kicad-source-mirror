@@ -300,6 +300,8 @@ private:
 
     void syncObjectSettings();
 
+    void buildNetClassMenu( wxMenu& aMenu, bool isDefaultClass, const wxString& aName );
+
     void rebuildNets();
 
     void loadDefaultLayerPresets();

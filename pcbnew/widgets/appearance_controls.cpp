@@ -81,24 +81,20 @@ NET_GRID_TABLE::~NET_GRID_TABLE()
 
 wxGridCellAttr* NET_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind )
 {
+    wxGridCellAttr* attr = nullptr;
+
     switch( aCol )
     {
-    case COL_COLOR:
-        m_defaultAttr->IncRef();
-        return m_defaultAttr;
-
-    case COL_VISIBILITY:
-        m_defaultAttr->IncRef();
-        return m_defaultAttr;
-
-    case COL_LABEL:
-        m_labelAttr->IncRef();
-        return m_labelAttr;
-
-    default:
-        wxFAIL;
-        return nullptr;
+    case COL_COLOR:      attr = m_defaultAttr; break;
+    case COL_VISIBILITY: attr = m_defaultAttr; break;
+    case COL_LABEL:      attr = m_labelAttr;   break;
+    default:             wxFAIL;
     }
+
+    if( attr )
+        attr->IncRef();
+
+    return attr;
 }
 
 
@@ -108,17 +104,10 @@ wxString NET_GRID_TABLE::GetValue( int aRow, int aCol )
 
     switch( aCol )
     {
-    case COL_COLOR:
-        return m_nets[aRow].color.ToCSSString();
-
-    case COL_VISIBILITY:
-        return m_nets[aRow].visible ? wxT( "1" ) : wxT( "0" );
-
-    case COL_LABEL:
-        return m_nets[aRow].name;
-
-    default:
-        return wxEmptyString;
+    case COL_COLOR:      return m_nets[aRow].color.ToCSSString();
+    case COL_VISIBILITY: return m_nets[aRow].visible ? wxT( "1" ) : wxT( "0" );
+    case COL_LABEL:      return m_nets[aRow].name;
+    default:             return wxEmptyString;
     }
 }
 
@@ -418,9 +407,9 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         m_layerContextMenu( nullptr )
 {
     int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
-    m_iconProvider    = new ROW_ICON_PROVIDER( indicatorSize );
-    int pointSize     = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
     int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
+    m_iconProvider    = new ROW_ICON_PROVIDER( indicatorSize );
+    m_pointSize       = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
 
     m_layerPanelColour = m_panelLayers->GetBackgroundColour().ChangeLightness( 110 );
     SetBorders( true, false, false, false );
@@ -468,13 +457,11 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     m_txtNetFilter->SetHint( _( "Filter nets" ) );
 
-    if( screenHeight <= 900 && pointSize >= indicatorSize )
-        pointSize = pointSize * 8 / 10;
-
-    m_pointSize = pointSize;
-    wxFont font = m_notebook->GetFont();
+    if( screenHeight <= 900 && m_pointSize >= indicatorSize )
+        m_pointSize = m_pointSize * 8 / 10;
 
 #ifdef __WXMAC__
+    wxFont font = m_notebook->GetFont();
     font.SetPointSize( m_pointSize );
     m_notebook->SetFont( font );
 #endif
@@ -1193,11 +1180,9 @@ void APPEARANCE_CONTROLS::OnLayerChanged()
         setting->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
     }
 
-    wxChar r, g, b;
-
-    r = m_layerPanelColour.Red();
-    g = m_layerPanelColour.Green();
-    b = m_layerPanelColour.Blue();
+    wxChar r = m_layerPanelColour.Red();
+    wxChar g = m_layerPanelColour.Green();
+    wxChar b = m_layerPanelColour.Blue();
 
     if( r < 240 || g < 240 || b < 240 )
     {
@@ -2286,6 +2271,39 @@ void APPEARANCE_CONTROLS::syncObjectSettings()
 }
 
 
+void APPEARANCE_CONTROLS::buildNetClassMenu( wxMenu& aMenu, bool isDefaultClass,
+                                             const wxString& aName )
+{
+    if( !isDefaultClass)
+    {
+        aMenu.Append( new wxMenuItem( &aMenu, ID_SET_NET_COLOR, _( "Set Netclass Color" ),
+                                      wxEmptyString, wxITEM_NORMAL ) );
+    }
+
+    wxString name = UnescapeString( aName );
+
+    aMenu.Append( new wxMenuItem( &aMenu, ID_HIGHLIGHT_NET,
+                                  wxString::Format( _( "Highlight Nets in %s" ), name ),
+                                  wxEmptyString, wxITEM_NORMAL ) );
+    aMenu.Append( new wxMenuItem( &aMenu, ID_SELECT_NET,
+                                  wxString::Format( _( "Select Tracks and Vias in %s" ), name ),
+                                  wxEmptyString, wxITEM_NORMAL ) );
+    aMenu.Append( new wxMenuItem( &aMenu, ID_DESELECT_NET,
+                                  wxString::Format( _( "Unselect Tracks and Vias in %s" ), name ),
+                                  wxEmptyString, wxITEM_NORMAL ) );
+
+    aMenu.AppendSeparator();
+
+    aMenu.Append( new wxMenuItem( &aMenu, ID_SHOW_ALL_NETS, _( "Show All Netclasses" ),
+                                  wxEmptyString, wxITEM_NORMAL ) );
+    aMenu.Append( new wxMenuItem( &aMenu, ID_HIDE_OTHER_NETS, _( "Hide All Other Netclasses" ),
+                                  wxEmptyString, wxITEM_NORMAL ) );
+
+    aMenu.Bind( wxEVT_COMMAND_MENU_SELECTED, &APPEARANCE_CONTROLS::onNetclassContextMenu, this );
+
+}
+
+
 void APPEARANCE_CONTROLS::rebuildNets()
 {
     BOARD*          board   = m_frame->GetBoard();
@@ -2364,43 +2382,10 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 auto menuHandler =
                         [&, name, isDefaultClass]( wxMouseEvent& aEvent )
                         {
-                            m_contextMenuNetclass = name;
-                            wxString escapedName = UnescapeString( name );
-
                             wxMenu menu;
+                            buildNetClassMenu( menu, isDefaultClass, name );
 
-                            if( !isDefaultClass)
-                            {
-                                menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
-                                                             _( "Set Netclass Color" ),
-                                                             wxEmptyString, wxITEM_NORMAL ) );
-                            }
-
-                            menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
-                                                         wxString::Format( _( "Highlight Nets in %s" ),
-                                                                           escapedName ),
-                                                         wxEmptyString, wxITEM_NORMAL ) );
-                            menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
-                                                         wxString::Format( _( "Select Tracks and Vias in %s" ),
-                                                                           escapedName ),
-                                                         wxEmptyString, wxITEM_NORMAL ) );
-                            menu.Append( new wxMenuItem( &menu, ID_DESELECT_NET,
-                                                         wxString::Format( _( "Unselect Tracks and Vias in %s" ),
-                                                                           escapedName ),
-                                                         wxEmptyString, wxITEM_NORMAL ) );
-
-                            menu.AppendSeparator();
-
-                            menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS,
-                                                         _( "Show All Netclasses" ), wxEmptyString,
-                                                         wxITEM_NORMAL ) );
-                            menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS,
-                                                         _( "Hide All Other Netclasses" ), wxEmptyString,
-                                                         wxITEM_NORMAL ) );
-
-                            menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
-                                       &APPEARANCE_CONTROLS::onNetclassContextMenu, this );
-
+                            m_contextMenuNetclass = name;
                             PopupMenu( &menu );
                         };
 
@@ -3026,10 +3011,10 @@ void APPEARANCE_CONTROLS::onNetclassColorChanged( wxCommandEvent& aEvent )
 
     std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
 
-    COLOR_SWATCH* swatch    = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
-    wxString      className = netclassNameFromEvent( aEvent );
+    COLOR_SWATCH* swatch = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
+    wxString      netclassName = netclassNameFromEvent( aEvent );
 
-    netclassColors[className] = swatch->GetSwatchColor();
+    netclassColors[netclassName] = swatch->GetSwatchColor();
 
     m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
     m_frame->GetCanvas()->RedrawRatsnest();
@@ -3090,16 +3075,18 @@ void APPEARANCE_CONTROLS::onRatsnestMode( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 {
-    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
-    KIGFX::PCB_RENDER_SETTINGS* rs =
+    KIGFX::VIEW*                   view = m_frame->GetCanvas()->GetView();
+    KIGFX::PCB_RENDER_SETTINGS*    rs =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    BOARD*                         board            = m_frame->GetBoard();
-    std::shared_ptr<NET_SETTINGS>& netSettings      = board->GetDesignSettings().m_NetSettings;
+    BOARD*                         board = m_frame->GetBoard();
+    std::shared_ptr<NET_SETTINGS>& netSettings = board->GetDesignSettings().m_NetSettings;
+    APPEARANCE_SETTING*            setting = nullptr;
 
+    auto it = m_netclassSettingsMap.find( m_contextMenuNetclass );
 
-    APPEARANCE_SETTING* setting = m_netclassSettingsMap.count( m_contextMenuNetclass ) ?
-                                  m_netclassSettingsMap.at( m_contextMenuNetclass ) : nullptr;
+    if( it != m_netclassSettingsMap.end() )
+        setting = it->second;
 
     auto runOnNetsOfClass =
             [&]( const wxString& netClassName, std::function<void( NETINFO_ITEM* )> aFunction )
