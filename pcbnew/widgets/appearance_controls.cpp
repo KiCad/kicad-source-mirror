@@ -460,8 +460,9 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     if( screenHeight <= 900 && m_pointSize >= indicatorSize )
         m_pointSize = m_pointSize * 8 / 10;
 
-#ifdef __WXMAC__
     wxFont font = m_notebook->GetFont();
+
+#ifdef __WXMAC__
     font.SetPointSize( m_pointSize );
     m_notebook->SetFont( font );
 #endif
