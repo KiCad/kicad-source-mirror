@@ -39,15 +39,17 @@ wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
 
 
 UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindow* aValueCtrl,
-                          wxStaticText* aUnitLabel, bool allowEval ) :
-        UNIT_BINDER( aParent, aParent->GetIuScale(), aLabel, aValueCtrl, aUnitLabel, allowEval )
+                          wxStaticText* aUnitLabel, bool allowEval, bool aBindFrameEvents ) :
+        UNIT_BINDER( aParent, aParent->GetIuScale(), aLabel, aValueCtrl, aUnitLabel, allowEval,
+                     aBindFrameEvents )
 {
 }
 
 UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
                           wxStaticText* aLabel, wxWindow* aValueCtrl,
-                          wxStaticText* aUnitLabel, bool allowEval ) :
+                          wxStaticText* aUnitLabel, bool allowEval, bool aBindFrameEvents ) :
         m_frame( aParent ),
+        m_bindFrameEvents( aBindFrameEvents ),
         m_label( aLabel ),
         m_valueCtrl( aValueCtrl ),
         m_unitLabel( aUnitLabel ),
@@ -59,12 +61,8 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
         m_originTransforms( aParent->GetOriginTransforms() ),
         m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
-    m_units     = aParent->GetUserUnits();
+    init();
     m_allowEval = allowEval && ( !m_valueCtrl || dynamic_cast<wxTextEntry*>( m_valueCtrl ) );
-    m_needsEval = false;
-    m_selStart  = 0;
-    m_selEnd    = 0;
-
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
     if( textEntry )
@@ -89,18 +87,33 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
                               this );
     }
 
-    Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr,
-             this );
+    if( m_bindFrameEvents )
+    {
+        Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr,
+                 this );
 
-    m_frame->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
-                      nullptr, this );
+        m_frame->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+                          nullptr, this );
+    }
 }
 
 
 UNIT_BINDER::~UNIT_BINDER()
 {
-    m_frame->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
-                         nullptr, this );
+    if( m_bindFrameEvents )
+    {
+        m_frame->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+                             nullptr, this );
+    }
+}
+
+
+void UNIT_BINDER::init()
+{
+    m_units     = m_frame->GetUserUnits();
+    m_needsEval = false;
+    m_selStart  = 0;
+    m_selEnd    = 0;
 }
 
 
@@ -486,7 +499,7 @@ bool UNIT_BINDER::IsIndeterminate() const
 {
     wxTextEntry* te = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
-    if( te )
+    if( te )Note that you can have two entries that come from the same database table if ou want
         return te->GetValue() == INDETERMINATE_STATE || te->GetValue() == INDETERMINATE_ACTION;
 
     return false;
@@ -556,6 +569,11 @@ void UNIT_BINDER::Show( bool aShow, bool aResize )
 
 
 PROPERTY_EDITOR_UNIT_BINDER::PROPERTY_EDITOR_UNIT_BINDER( EDA_DRAW_FRAME* aParent ) :
-        UNIT_BINDER( aParent, nullptr, nullptr, nullptr, true )
+        UNIT_BINDER( aParent, nullptr, nullptr, nullptr, true, false )
+{
+}
+
+
+PROPERTY_EDITOR_UNIT_BINDER::~PROPERTY_EDITOR_UNIT_BINDER()
 {
 }

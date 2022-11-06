@@ -54,10 +54,11 @@ public:
      */
     UNIT_BINDER( EDA_DRAW_FRAME* aParent,
                  wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
-                 bool aAllowEval = true );
+                 bool aAllowEval = true, bool aBindFrameEvents = true );
 
     UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale, wxStaticText* aLabel,
-                 wxWindow* aValueCtrl, wxStaticText* aUnitLabel, bool aAllowEval = true );
+                 wxWindow* aValueCtrl, wxStaticText* aUnitLabel, bool aAllowEval = true,
+                 bool aBindFrameEvents = true );
 
     virtual ~UNIT_BINDER() override;
 
@@ -197,6 +198,7 @@ public:
     }
 
 protected:
+    void init();
     void onClick( wxMouseEvent& aEvent );
 
     void onSetFocus( wxFocusEvent& aEvent );
@@ -219,6 +221,7 @@ protected:
     double setPrecision( double aValue, bool aValueUsesUserUnits );
 
     EDA_BASE_FRAME*   m_frame;
+    bool              m_bindFrameEvents;
 
     ///< The bound widgets
     wxStaticText*     m_label;
@@ -257,7 +260,7 @@ class PROPERTY_EDITOR_UNIT_BINDER : public UNIT_BINDER
 public:
     PROPERTY_EDITOR_UNIT_BINDER( EDA_DRAW_FRAME* aParent );
 
-    virtual ~PROPERTY_EDITOR_UNIT_BINDER() {}
+    virtual ~PROPERTY_EDITOR_UNIT_BINDER();
 
     void SetControl( wxWindow* aControl ) { m_valueCtrl = aControl; }
 };
