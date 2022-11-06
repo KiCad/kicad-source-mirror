@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-04 23:18+0000\n"
+"PO-Revision-Date: 2022-11-08 17:02+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.14.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -9404,7 +9404,7 @@ msgstr "Velikost textu názvu"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:129
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
 msgid "De Morgan"
-msgstr "De Morgan"
+msgstr "De-Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:823
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:72
@@ -9885,9 +9885,8 @@ msgstr "Upravit editorem symbolů"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.h:108
 #: eeschema/dialogs/dialog_text_properties.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:103
-#, fuzzy
 msgid "Text Box Properties"
-msgstr "Vlastnosti textu"
+msgstr "Vlastnosti textového pole"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 #, fuzzy
@@ -10071,17 +10070,15 @@ msgstr ""
 "Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:274
-#, fuzzy
 msgid "Exit sync pins mode"
-msgstr "Upravit Spice model"
+msgstr "Opustit režim synchronizované vývody"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:289
-#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
-"Synchronizovaný režim editace vývodů je zapnutý.\n"
+"Synchronizovaný režim vývodů je povolen.\n"
 "Podobné vývody budou upraveny, bez ohledu na tuto možnost."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:294
@@ -10547,9 +10544,8 @@ msgid "Rescue Symbols"
 msgstr "Záchrana symbolů"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Zobrazit strom symbolů"
+msgstr "Přeskočit záchranu symbolů"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -12020,9 +12016,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
 #: pcbnew/dialogs/panel_edit_options_base.cpp:75
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Vymazat zvýraznění sítě"
+msgstr "<ESC> odstraní zvýraznění sítě"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
@@ -13712,9 +13707,8 @@ msgstr "Typ vstupu na sběrnici"
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:894
 #: eeschema/sch_line.cpp:912 pcbnew/pad.cpp:957 pcbnew/pcb_track.cpp:919
 #: pcbnew/zone.cpp:564
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "Přiřazená třída spojů"
+msgstr "Analyzované třídy sítě"
 
 #: eeschema/sch_connection.cpp:410
 msgid "Connection Name"
@@ -13810,9 +13804,8 @@ msgstr "Zpět na předchozí vybraný list"
 
 #: eeschema/sch_field.cpp:870 eeschema/sch_label.cpp:186
 #: eeschema/sch_label.cpp:1234
-#, fuzzy
 msgid "Sheet References"
-msgstr "Reference mezi listy"
+msgstr "Reference listů"
 
 #: eeschema/sch_io_mgr.cpp:36 pcbnew/io_mgr.cpp:42
 #, c-format
@@ -13855,9 +13848,8 @@ msgid "Net"
 msgstr "Síť"
 
 #: eeschema/sch_label.cpp:941 eeschema/sch_line.cpp:855
-#, fuzzy
 msgid "Resolved netclass"
-msgstr "Přiřazená třída spojů"
+msgstr "Analyzované třídy sítí"
 
 #: eeschema/sch_label.cpp:956
 msgid "Hierarchical Labels"
@@ -14368,9 +14360,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "Nesprávné číslo konverze symbolů %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Neplatné číslo vývodu"
+msgstr "Neplatný hypertextový odkaz URL '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:742
 msgid "Invalid pin names definition"
@@ -14413,9 +14405,8 @@ msgid "Invalid page type"
 msgstr "Neplatný typ stránky"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1871
-#, fuzzy
 msgid "Invalid title block comment number"
-msgstr "Neplatný počet komentářů"
+msgstr "Nesprávný počet komentářů v rohovém razítku"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2003
 msgid "Invalid sheet pin name"
@@ -16448,22 +16439,19 @@ msgid "Create SVG file from the current symbol"
 msgstr "Vytvoří soubor SVG z aktuálního symbolu"
 
 #: eeschema/tools/ee_actions.cpp:226
-#, fuzzy
 msgid "Synchronized Pins Mode"
-msgstr "Synchronizovaný režim editace vývodu"
+msgstr "Synchronizovaný režim vývodů"
 
 #: eeschema/tools/ee_actions.cpp:227
-#, fuzzy
 msgid ""
 "Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"Režim synchronizované úpravy vývodů\n"
-"Režim synchronizované úpravy vývodů se aplikuje na jiné jednotky se všechny "
-"změny vývodů kromě změny počtu vývodů.\n"
-"Ve výchozím nastavení je povoleno pro součásti s více jednotkami se "
-"zaměnitelnými jednotkami."
+"Synchronizovaný režim vývodů\n"
+"Pokud je aktivován, rozšíří všechny změny vývodu na ostatní jednotky, s "
+"výjimkou změny čísla.\n"
+"Standardně povoleno pro vícejednotkové části se zaměnitelnými jednotkami."
 
 #: eeschema/tools/ee_actions.cpp:238
 msgid "Add Pin"
@@ -17075,31 +17063,27 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Vytvořit rozpisku materiálu z aktuálního schématu"
 
 #: eeschema/tools/ee_actions.cpp:681
-#, fuzzy
 msgid "Export Symbols to Library..."
-msgstr "Aktualizace symbolů z knihovny..."
+msgstr "Exportovat symboly do knihovny..."
 
 #: eeschema/tools/ee_actions.cpp:682
-#, fuzzy
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Přidat pouzdra použité nadesce do existující knihovny pouzder\n"
-"(neodstraní další pouzdra z této knihovny)"
+"Přidat symboly použité ve schématu do existující knihovny symbolů\n"
+"(neodstraní jiné symboly z této knihovny)"
 
 #: eeschema/tools/ee_actions.cpp:688
-#, fuzzy
 msgid "Export Symbols to New Library..."
-msgstr "Aktualizace symbolů z knihovny..."
+msgstr "Export symbolů do nové knihovny..."
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Vytvořit novou knihovnu pouzder obsahující pouzdra použité na desce\n"
+"Vytvořit novou knihovnu symbolů pomocí symbolů použitých ve schématu\n"
 "(pokud knihovna existuje, bude nahrazena)"
 
 #: eeschema/tools/ee_actions.cpp:695
@@ -17128,33 +17112,28 @@ msgid "Toggle display of hidden text fields"
 msgstr "Přepnout zobrazení skrytých textových polí"
 
 #: eeschema/tools/ee_actions.cpp:710
-#, fuzzy
 msgid "Show ERC Warnings"
-msgstr "DRC Varování"
+msgstr "Zobrazit varování ERC"
 
 #: eeschema/tools/ee_actions.cpp:710
-#, fuzzy
 msgid "Show markers for electrical rules checker warnings"
-msgstr "Provézt kontrolu elektrického návrhu"
+msgstr "Zobrazit značky varování kontroly elektrických pravidel"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Show ERC Errors"
 msgstr "Zobrazit chyby ERC"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Show markers for electrical rules checker errors"
-msgstr "Provézt kontrolu elektrického návrhu"
+msgstr "Zobrazit značky pro chyby kontroly elektrických pravidel"
 
 #: eeschema/tools/ee_actions.cpp:718
-#, fuzzy
 msgid "Show ERC Exclusions"
-msgstr "DRC Vyloučení"
+msgstr "Zobrazit vyloučení ERC"
 
 #: eeschema/tools/ee_actions.cpp:719
-#, fuzzy
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "Provézt kontrolu elektrického návrhu"
+msgstr "Zobrazit značky pro existující výjimky kontroly pravidel návrhu"
 
 #: eeschema/tools/ee_actions.cpp:723 eeschema/tools/ee_actions.cpp:728
 #: eeschema/tools/ee_actions.cpp:734 eeschema/tools/ee_actions.cpp:740
@@ -21016,7 +20995,7 @@ msgstr "DC odpor vodiče"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
 msgid "ohm"
-msgstr "ohm"
+msgstr "ohmů"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:213
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:162
@@ -21295,7 +21274,7 @@ msgstr "Požadovaný odpor:"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:92
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:106
 msgid "kOhm"
-msgstr "kOhm"
+msgstr "kOhmů"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:40
 msgid "Exclude value 1:"
@@ -23077,9 +23056,8 @@ msgid "(not a closed shape)"
 msgstr "(není uzavřen tvar)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:489
-#, fuzzy
 msgid "(multiple board outlines not supported)"
-msgstr "Obrys desky není uzavřen:"
+msgstr "(více obrysů desky není podporováno)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -32691,19 +32669,16 @@ msgid "Model name cannot be empty."
 msgstr "Název sítě nemůže být prázdný."
 
 #: pcbnew/ibis/ibis_parser.cpp:204
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Jméno souboru není platné!"
+msgstr "Rpin není platný."
 
 #: pcbnew/ibis/ibis_parser.cpp:209
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Jméno souboru není platné!"
+msgstr "Lpin není platný."
 
 #: pcbnew/ibis/ibis_parser.cpp:214
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Jméno souboru není platné!"
+msgstr "Cpin není platný."
 
 #: pcbnew/ibis/ibis_parser.cpp:228
 #, fuzzy
@@ -32801,9 +32776,8 @@ msgid "Invalid V_meas value."
 msgstr "Neplatná hodnota vlastnosti"
 
 #: pcbnew/ibis/ibis_parser.cpp:485
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Některé soubory jsou neplatné!"
+msgstr "C_comp je neplatný."
 
 #: pcbnew/ibis/ibis_parser.cpp:490
 #, fuzzy
@@ -32811,9 +32785,8 @@ msgid "Temperature Range is invalid."
 msgstr "Zvýšení teploty"
 
 #: pcbnew/ibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Jméno souboru není platné!"
+msgstr "Rozsah napětí je neplatný."
 
 #: pcbnew/ibis/ibis_parser.cpp:521
 #, fuzzy
@@ -35105,6 +35078,9 @@ msgid ""
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
+"Šrafovací kód CADSTAR '%s' má různé šířky čar pro každé šrafování. KiCad "
+"podporuje pouze jednu šířku pro šrafování. Importované šrafování používá "
+"šířku definovanou v první definici šrafování tj. %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3585
 #, c-format
@@ -35113,15 +35089,22 @@ msgid ""
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
+"Šrafovací kód CADSTAR '%s' má pro každé šrafování různou velikost kroků. "
+"KiCad podporuje pouze jeden krok velikosti pro šrafování. Importované "
+"šrafování používá velikost kroku definovanou v první definici šrafování, tj. "
+"%.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3598
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
 "degrees. KiCad only supports hatching 90 degrees apart.  The imported "
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
+"Šrafování v šrafovacím kódu CADSTAR '%s' má úhlový  rozdíl %.1f stupňů. "
+"KiCad podporuje šrafování jen 90 stupňů od sebe.  Importované šrafování má "
+"dvě šrafovaný 90 stupňů od sebe, orientované %.1F stupňů od horizontální."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3671
 #, c-format
