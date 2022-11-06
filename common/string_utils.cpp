@@ -196,19 +196,17 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_JS_STR )
         {
-            if( c >= 0x7F )
+            if( c >= 0x7F || c == '\'' || c == '\\' )
             {
                 unsigned int code = c;
                 char buffer[16];
                 sprintf( buffer, "\\\\u%4.4X", code );
                 converted += buffer;
             }
-            else if( c == '\'' )
-                converted += wxT( "{quote}" );
-            else if( c == '\\' )
-                converted += wxT( "{backslash}" );
             else
+            {
                 converted += c;
+            }
         }
         else if( aContext == CTX_LINE )
         {
