@@ -24,7 +24,7 @@
  */
 
 #include "connection_graph.h"
-#include "sim/sim_model.h"
+#include <sim/sim_lib_mgr.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
 #include <string_utils.h>
@@ -869,6 +869,7 @@ int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
 
 int ERC_TESTER::TestSimModelIssues()
 {
+    SIM_LIB_MGR     libMgr( m_schematic->Prj() );
     SCH_SHEET_LIST  sheets = m_schematic->GetSheets();
     int         err_count = 0;
 
@@ -882,9 +883,7 @@ int ERC_TESTER::TestSimModelIssues()
 
             try
             {
-                /* JEY TODO
-                std::unique_ptr<SIM_MODEL>  model = SIM_MODEL::Create( &sheet, symbol, true );
-                 */
+                libMgr.CreateModel( &sheet, *symbol, true );
             }
             catch( IO_ERROR& e )
             {
