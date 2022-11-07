@@ -2485,6 +2485,18 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
             if( !board()->IsLayerVisible( aItem->GetLayer() ) )
                 return false;
+
+            int controlLayer;
+
+            switch( static_cast<const FP_TEXT*>( aItem )->GetType() )
+            {
+            case FP_TEXT::TEXT_is_REFERENCE: controlLayer = LAYER_MOD_REFERENCES; break;
+            case FP_TEXT::TEXT_is_VALUE:     controlLayer = LAYER_MOD_VALUES;     break;
+            case FP_TEXT::TEXT_is_DIVERS:    controlLayer = LAYER_MOD_TEXT;       break;
+            }
+
+            if( !view()->IsLayerVisible( controlLayer ) )
+                return false;
         }
 
         break;
