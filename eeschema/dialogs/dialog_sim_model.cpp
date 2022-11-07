@@ -298,7 +298,7 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     updateModelParamsTab();
     updateModelCodeTab();
     updatePinAssignments();
-    
+
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
 
     std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
@@ -430,7 +430,7 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
     for( wxPropertyGridIterator it = m_paramGrid->GetIterator(); !it.AtEnd(); ++it )
     {
         SIM_PROPERTY* prop = dynamic_cast<SIM_PROPERTY*>( *it );
-        
+
         if( !prop )
             continue;
 
@@ -475,7 +475,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
     if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( &curModel() ) )
     {
         // For raw Spice models display the whole file instead.
-        
+
         wxString   path = curModel().FindParam( "lib" )->value->ToString();
         wxString   absolutePath = Prj().AbsolutePath( path );
         wxTextFile file;
@@ -816,10 +816,17 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
     prop->SetAttribute( wxPG_ATTR_UNITS, wxString::FromUTF8( param.info.unit.c_str() ) );
 
     // Legacy due to the way we extracted the parameters from Ngspice.
-    if( param.isOtherVariant )
-        prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValueOfOtherVariant ) );
-    else
-        prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue ) );
+    #if wxCHECK_VERSION( 3, 1, 0 )
+        if( param.isOtherVariant )
+            prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValueOfOtherVariant ) );
+        else
+            prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue ) );
+    #else
+        if( param.isOtherVariant )
+            prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValueOfOtherVariant.c_str() ) );
+        else
+            prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue.c_str() ) );
+    #endif
 
     wxString typeStr;
 
