@@ -18,22 +18,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCBNEW_JOBS_HANDLER_H
-#define PCBNEW_JOBS_HANDLER_H
+#ifndef COMMAND_EXPORT_PCB_POS_H
+#define COMMAND_EXPORT_PCB_POS_H
 
-#include <jobs/job_dispatcher.h>
+#include "command_export_pcb_base.h"
 
-class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
+namespace CLI
+{
+class EXPORT_PCB_POS_COMMAND : public EXPORT_PCB_BASE_COMMAND
 {
 public:
-    PCBNEW_JOBS_HANDLER();
-    int JobExportStep( JOB* aJob );
-    int JobExportSvg( JOB* aJob );
-    int JobExportDxf( JOB* aJob );
-    int JobExportPdf( JOB* aJob );
-    int JobExportGerber( JOB* aJob );
-    int JobExportDrill( JOB* aJob );
-    int JobExportPos( JOB* aJob );
+    EXPORT_PCB_POS_COMMAND();
+
+    int Perform( KIWAY& aKiway ) override;
 };
+} // namespace CLI
 
 #endif

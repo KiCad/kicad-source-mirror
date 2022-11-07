@@ -24,12 +24,15 @@
 #include <jobs/job_export_pcb_drill.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_pdf.h>
+#include <jobs/job_export_pcb_pos.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <jobs/job_export_pcb_step.h>
 #include <cli/exit_codes.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotter_gerber.h>
 #include <plotters/plotters_pslike.h>
+#include <exporters/place_file_exporter.h>
+#include "gerber_placefile_writer.h"
 #include <pgm_base.h>
 #include <pcbplot.h>
 #include <board_design_settings.h>
@@ -38,6 +41,7 @@
 #include <pcb_plot_svg.h>
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
+#include <wildcards_and_files_ext.h>
 
 #include "pcbnew_scripting_helpers.h"
 
@@ -366,6 +370,77 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
         gerberWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
                                                 aDrillJob->m_generateMap, nullptr );
+    }
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
+{
+    JOB_EXPORT_PCB_POS* aPosJob = dynamic_cast<JOB_EXPORT_PCB_POS*>( aJob );
+
+    if( aPosJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( aJob->IsCli() )
+        wxPrintf( _( "Loading board\n" ) );
+
+    BOARD* brd = LoadBoard( aPosJob->m_filename );
+
+    if( aPosJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+
+        if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII )
+            fn.SetExt( FootprintPlaceFileExtension );
+        else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
+            fn.SetExt( CsvFileExtension );
+        else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
+            fn.SetExt( GerberFileExtension );
+
+        aPosJob->m_outputFile = fn.GetFullName();
+    }
+
+    FILE* file = nullptr;
+    file = wxFopen( aPosJob->m_outputFile, wxS( "wt" ) );
+
+    if( file == nullptr )
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+
+    if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
+    {
+        std::string         data;
+
+        bool frontSide = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
+                         || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
+
+        bool backSide = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK
+                         || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
+
+        PLACE_FILE_EXPORTER exporter( brd, aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS,
+                                        aPosJob->m_smdOnly, aPosJob->m_excludeFootprintsWithTh,
+                                        frontSide, backSide,
+                                        aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
+                                        aPosJob->m_useDrillPlaceFileOrigin,
+                                        aPosJob->m_negateBottomX );
+        data = exporter.GenPositionData();
+
+        fputs( data.c_str(), file );
+        fclose( file );
+    }
+    else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
+    {
+        PLACEFILE_GERBER_WRITER exporter( brd );
+
+        PCB_LAYER_ID gbrLayer;
+        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT )
+            gbrLayer = F_Cu;
+        else if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK )
+            gbrLayer = B_Cu;
+
+        exporter.CreatePlaceFile( aPosJob->m_outputFile, gbrLayer, aPosJob->m_gerberBoardEdge );
     }
 
     return CLI::EXIT_CODES::OK;

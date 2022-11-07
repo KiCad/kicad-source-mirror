@@ -31,7 +31,7 @@
 #include <locale_io.h>
 #include <board_design_settings.h>
 #include <build_version.h>
-#include <export_footprints_placefile.h>
+#include <exporters/place_file_exporter.h>
 #include <pad.h>
 
 #include <wx/dirdlg.h>

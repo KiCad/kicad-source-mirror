@@ -52,6 +52,7 @@
 #include "cli/command_export_pcb_dxf.h"
 #include "cli/command_export_pcb_gerber.h"
 #include "cli/command_export_pcb_pdf.h"
+#include "cli/command_export_pcb_pos.h"
 #include "cli/command_export_pcb_svg.h"
 #include "cli/command_export_pcb_step.h"
 #include "cli/command_export_sch_pdf.h"
@@ -110,6 +111,7 @@ static CLI::EXPORT_PCB_DXF_COMMAND    exportPcbDxfCmd{};
 static CLI::EXPORT_PCB_STEP_COMMAND   exportPcbStepCmd{};
 static CLI::EXPORT_PCB_SVG_COMMAND    exportPcbSvgCmd{};
 static CLI::EXPORT_PCB_PDF_COMMAND    exportPcbPdfCmd{};
+static CLI::EXPORT_PCB_POS_COMMAND    exportPcbPosCmd{};
 static CLI::EXPORT_PCB_GERBER_COMMAND exportPcbGerberCmd{};
 static CLI::EXPORT_PCB_COMMAND        exportPcbCmd{};
 static CLI::PCB_COMMAND               pcbCmd{};
@@ -128,6 +130,7 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportPcbDxfCmd,
                     &exportPcbGerberCmd,
                     &exportPcbPdfCmd,
+                    &exportPcbPosCmd,
                     &exportPcbStepCmd,
                     &exportPcbSvgCmd
                 }

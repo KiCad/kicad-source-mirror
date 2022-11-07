@@ -21,6 +21,7 @@ set( KICAD_SRCS
     cli/command_export_pcb_dxf.cpp
     cli/command_export_pcb_gerber.cpp
     cli/command_export_pcb_pdf.cpp
+    cli/command_export_pcb_pos.cpp
     cli/command_export_pcb_step.cpp
     cli/command_export_pcb_svg.cpp
     cli/command_pcb.cpp

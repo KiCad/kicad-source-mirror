@@ -39,7 +39,7 @@
 #include <kiface_base.h>
 #include "widgets/wx_html_report_panel.h"
 #include <dialog_gen_footprint_position_file_base.h>
-#include <export_footprints_placefile.h>
+#include <exporters/place_file_exporter.h>
 #include "gerber_placefile_writer.h"
 
 #include <wx/dirdlg.h>

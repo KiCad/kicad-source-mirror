@@ -224,7 +224,7 @@ set( PCBNEW_EXPORTERS
     exporters/export_gencad.cpp
     exporters/export_idf.cpp
     exporters/exporter_vrml.cpp
-    exporters/export_footprints_placefile.cpp
+    exporters/place_file_exporter.cpp
     exporters/gen_drill_report_files.cpp
     exporters/gendrill_Excellon_writer.cpp
     exporters/gendrill_file_writer_base.cpp
