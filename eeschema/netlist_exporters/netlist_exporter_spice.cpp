@@ -361,20 +361,15 @@ bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 {
     aItem.refName = aSymbol.GetRef( &aSheet );
 
-    if( aRefNames.count( aItem.refName ) )
-    {
-        DisplayErrorMessage( nullptr,
-                _( "Multiple symbols have the same reference designator.\n"
-                   "Annotation must be corrected before simulating." ) );
-        return false;
-    }
+    if( !aRefNames.insert( aItem.refName ).second )
+        wxASSERT( wxT( "Duplicate refdes encountered; what happened to ReadyToNetlist()?" ) );
 
-    aRefNames.insert( aItem.refName );
     return true;
 }
 
 
-void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
+void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
+                                        SPICE_ITEM& aItem )
 {
     SIM_LIBRARY::MODEL libModel = m_libMgr.CreateModel( aSymbol );
 

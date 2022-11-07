@@ -476,9 +476,10 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
             | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES
             | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS );
 
-    if( !m_simulator->Attach( m_circuitModel ) )
+    if( !m_schematicFrame->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) )
+            || !m_simulator->Attach( m_circuitModel ) )
     {
-        DisplayErrorMessage( this, _( "There were errors during netlist export, aborted." ) );
+        DisplayErrorMessage( this, _( "Errors during netlist generation; simulation aborted." ) );
         return;
     }
 
