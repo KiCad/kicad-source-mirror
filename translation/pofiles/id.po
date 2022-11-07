@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-04 23:18+0000\n"
+"PO-Revision-Date: 2022-11-08 17:02+0000\n"
 "Last-Translator: Neko Nekowazarashi <kodra@nekoweb.my.id>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
 "master-source/id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -301,9 +301,8 @@ msgstr "Render tampilan saat ini menggunakan Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:101
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "Penampil 3D"
+msgstr "Penampil 3D KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:517
 #: pcbnew/widgets/appearance_controls.cpp:2725
@@ -644,18 +643,16 @@ msgid "Solder paste:"
 msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Lapisan Papan Sirkuit"
+msgstr "Warna Papan"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
 msgid "Use board stackup colors"
 msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Warna"
+msgstr "Gunakan warna:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 #, fuzzy
@@ -681,9 +678,8 @@ msgid "Copper/surface finish:"
 msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:130
-#, fuzzy
 msgid "Board body:"
-msgstr "Lapisan Papan Sirkuit"
+msgstr "Badan papan:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:24
 msgid "Board Layers"
@@ -756,9 +752,8 @@ msgid "Material properties:"
 msgstr "Properti Material"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Realistic"
-msgstr "Mode realistis"
+msgstr "Realistis"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
 #, fuzzy
@@ -766,18 +761,16 @@ msgid "Solid colors"
 msgstr "Warna pilihan:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "CAD colors"
-msgstr "Warna"
+msgstr "Warna CAD"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:110
 msgid "Camera Options"
 msgstr "Opsi Kamera"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
-msgstr "Rotasi:"
+msgstr "Penambahan rotasi:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: pcb_calculator/widgets/unit_selector.cpp:130
@@ -910,9 +903,8 @@ msgid ""
 msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
-#, fuzzy
 msgid "Reflections:"
-msgstr "Opsi Render"
+msgstr "Refleksi:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:86
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -925,9 +917,8 @@ msgid ""
 msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
-#, fuzzy
 msgid "Refractions:"
-msgstr "Opsi Render"
+msgstr "Refraksi:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:103
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -946,19 +937,17 @@ msgid "Ambient camera light:"
 msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:142
-#, fuzzy
 msgid "Top light:"
-msgstr "Lampu atas"
+msgstr "Lampu atas:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:154
-#, fuzzy
 msgid "Bottom light:"
-msgstr "Lampu bawah"
+msgstr "Lampu bawah:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:178
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:195
 msgid "Elevation (deg)"
-msgstr ""
+msgstr "Kemiringan (derajat)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:182
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:199
@@ -966,44 +955,36 @@ msgid "Azimuth (deg)"
 msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:203
-#, fuzzy
 msgid "Light 1:"
-msgstr "Kanan:"
+msgstr "Lampu 1:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:221
-#, fuzzy
 msgid "Light 5:"
-msgstr "Kanan:"
+msgstr "Lampu 5:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:236
-#, fuzzy
 msgid "Light 2:"
-msgstr "Kanan:"
+msgstr "Lampu 2:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:254
-#, fuzzy
 msgid "Light 6:"
-msgstr "Kanan:"
+msgstr "Lampu 6:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:269
-#, fuzzy
 msgid "Light 3:"
-msgstr "Kanan:"
+msgstr "Lampu 3:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:287
-#, fuzzy
 msgid "Light 7:"
-msgstr "Kanan:"
+msgstr "Lampu 7:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:302
-#, fuzzy
 msgid "Light 4:"
-msgstr "Kanan:"
+msgstr "Lampu 4:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:320
-#, fuzzy
 msgid "Light 8:"
-msgstr "Kanan:"
+msgstr "Lampu 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
@@ -1322,9 +1303,8 @@ msgid "PPI"
 msgstr "PPI"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:82
-#, fuzzy
 msgid "BPP:"
-msgstr "BPP"
+msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:90
 msgid "bits"
@@ -1360,7 +1340,7 @@ msgstr "Ekspor ke Berkas"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:145
 msgid "Export to Clipboard"
-msgstr ""
+msgstr "Ekspor ke Papan Klip"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Symbol (.kicad_sym file)"
@@ -1375,9 +1355,8 @@ msgid "Postscript (.ps file)"
 msgstr "Postscript (berkas .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Logo untuk blok judul (berkas .kicad_wks)"
+msgstr "Lembar Gambar (berkas .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -1527,9 +1506,8 @@ msgid "Open Anyway"
 msgstr "Buka Saja"
 
 #: common/confirm.cpp:181 common/confirm.cpp:218
-#, fuzzy
 msgid "Save Changes?"
-msgstr "Simpan Sebagai"
+msgstr "Simpan Perubahan?"
 
 #: common/confirm.cpp:183 common/confirm.cpp:220
 msgid "If you don't save, all your changes will be permanently lost."
@@ -1566,9 +1544,8 @@ msgid "OK"
 msgstr "Oke"
 
 #: common/confirm.cpp:331
-#, fuzzy
 msgid "Information"
-msgstr "Konfirmasi"
+msgstr "Informasi"
 
 #: common/confirm.cpp:357 eeschema/symbol_editor/symbol_editor.cpp:340
 #: eeschema/symbol_editor/symbol_editor.cpp:655
@@ -2410,7 +2387,7 @@ msgstr "Orientasi:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:55
 msgid "Custom paper size:"
-msgstr "Ukuran kertas kustom."
+msgstr "Ukuran kertas kustom:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:67
 #: pcbnew/dialogs/dialog_board_statistics.cpp:105
@@ -2572,9 +2549,8 @@ msgstr "Perubahan:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
 #: eeschema/dialogs/dialog_netlist.cpp:439
-#, fuzzy
 msgid "Title:"
-msgstr "Tajuk"
+msgstr "Judul:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:250
 msgid "Company:"
@@ -3517,9 +3493,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Setel ulang ke Pengaturan Bawaan"
+msgstr "Setel ulang ke Bawaan Tetikus"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
 #, fuzzy
@@ -4121,14 +4096,13 @@ msgstr ""
 "papan sirkuit."
 
 #: common/eda_doc.cpp:130
-#, fuzzy
 msgid "Documentation File"
-msgstr "Berkas Skematik"
+msgstr "Berkas Dokumentasi"
 
 #: common/eda_doc.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Berkas skematik \"%s\" tidak ditemukan."
+msgstr "Berkas dokumentasi \"%s\" tidak ditemukan."
 
 #: common/eda_doc.cpp:183
 #, fuzzy, c-format
@@ -4221,9 +4195,8 @@ msgid "Pad"
 msgstr ""
 
 #: common/eda_item.cpp:321 common/eda_item.cpp:327 common/eda_item.cpp:377
-#, fuzzy
 msgid "Graphic"
-msgstr "Pembersihan grafis"
+msgstr "Grafis"
 
 #: common/eda_item.cpp:322 common/eda_item.cpp:355 eeschema/sch_bitmap.cpp:205
 #: pcbnew/pcb_bitmap.cpp:209
@@ -4783,11 +4756,11 @@ msgstr "Alias: "
 
 #: common/filename_resolver.cpp:484
 msgid "This path:"
-msgstr "Path ini:"
+msgstr "Jalur ini:"
 
 #: common/filename_resolver.cpp:487
 msgid "Existing path:"
-msgstr "Path wujud:"
+msgstr "Jalur telah ada:"
 
 #: common/filename_resolver.cpp:489
 msgid "Bad alias (duplicate name)"
@@ -4857,19 +4830,19 @@ msgid "Command '%s' could not be found."
 msgstr "Berkas '%s' tidak ditemukan."
 
 #: common/gestfich.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "Tidak dapat membuat berkas laporan '%s'"
+msgstr "Tidak dapat mencari pembaca PDF untuk '%s'."
 
 #: common/gestfich.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr "Tidak dapat membuat berkas laporan '%s'"
+msgstr "Galat ketika menjalankan pembaca PDF '%s'."
 
 #: common/gestfich.cpp:223 eeschema/eeschema.cpp:523 eeschema/eeschema.cpp:556
 #: gerbview/gerbview.cpp:245 kicad/project_template.cpp:279
 #: pcbnew/pcbnew.cpp:480
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Tidak dapat menyalin berkas \"%s\"."
 
@@ -14569,15 +14542,15 @@ msgstr ""
 
 #: eeschema/sch_validators.cpp:157
 msgid "space"
-msgstr ""
+msgstr "spasi"
 
 #: eeschema/sch_validators.cpp:171
 msgid " or "
-msgstr ""
+msgstr " atau "
 
 #: eeschema/sch_validators.cpp:176
 msgid ", or "
-msgstr ""
+msgstr ", atau "
 
 #: eeschema/sch_validators.cpp:189
 msgid "The reference designator cannot contain text variable references"
@@ -14585,7 +14558,7 @@ msgstr ""
 
 #: eeschema/sch_validators.cpp:196
 msgid "Field Validation Error"
-msgstr ""
+msgstr "Galat Validasi Bidang"
 
 #: eeschema/sch_validators.cpp:226
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
@@ -14627,11 +14600,11 @@ msgstr ""
 
 #: eeschema/sheet.cpp:223
 msgid "Continue Load"
-msgstr ""
+msgstr "Lanjut Pemuatan"
 
 #: eeschema/sheet.cpp:224
 msgid "Cancel Load"
-msgstr ""
+msgstr "Batal Pemuatan"
 
 #: eeschema/sheet.cpp:233
 msgid ""
@@ -14700,7 +14673,7 @@ msgstr ""
 
 #: eeschema/sheet.cpp:629
 msgid "Do not show this message again."
-msgstr ""
+msgstr "Jangan tampilkan pesan ini lagi"
 
 #: eeschema/sheet.cpp:630
 msgid "Create New Sheet"
@@ -14988,11 +14961,11 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame_base.cpp:80
 msgid "Settings..."
-msgstr ""
+msgstr "Pengaturan..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:83
 msgid "Simulation"
-msgstr ""
+msgstr "Simulasi"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
@@ -15025,7 +14998,7 @@ msgstr ""
 #: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
 #: pcb_calculator/transline_ident.cpp:108
 msgid "Frequency"
-msgstr ""
+msgstr "Frekuensi"
 
 #: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
@@ -15041,7 +15014,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_panel.cpp:365
 msgid "Time"
-msgstr ""
+msgstr "Waktu"
 
 #: eeschema/sim/sim_plot_panel.cpp:366
 msgid "Voltage"
@@ -15096,7 +15069,7 @@ msgstr ""
 
 #: eeschema/sim/spice_simulator.cpp:83
 msgid "UNKNOWN!"
-msgstr ""
+msgstr "TAKDIKETAHUI!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
@@ -15269,7 +15242,7 @@ msgstr "Simbol sebagai SVG..."
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:100
 msgid "Library Editor"
-msgstr ""
+msgstr "Penyunting Pustaka"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:114
 msgid "KiCad Symbol Editor"
@@ -15288,7 +15261,7 @@ msgstr "Pustaka"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
 msgid "Library changes are unsaved"
-msgstr ""
+msgstr "Perubahan pustaka belum disimpan"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:258
 #, fuzzy
@@ -15303,7 +15276,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:776
 msgid "Manage symbol libraries"
-msgstr ""
+msgstr "Kelola pustaka simbol"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:787
 msgid ""
@@ -15455,9 +15428,8 @@ msgstr "Anda harus menyimpan ke lokasi lain."
 #: eeschema/symbol_editor/symbol_editor.cpp:519 include/lib_table_grid.h:186
 #: pcbnew/footprint_libraries_utils.cpp:1026
 #: pcbnew/footprint_libraries_utils.cpp:1343
-#, fuzzy
 msgid "Nickname"
-msgstr "Nama panggilan"
+msgstr "Nama Panggilan"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:546
 msgid "Save Symbol As"
@@ -17276,7 +17248,7 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
-msgstr ""
+msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10A Log"
@@ -17539,11 +17511,11 @@ msgstr ""
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:34
 #: pcbnew/dialogs/panel_edit_options_base.cpp:379
 msgid "Show page limits"
-msgstr ""
+msgstr "Tampilkan batas halaman"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:41
 msgid "Drawing Mode"
-msgstr "Mode Menggambar"
+msgstr "Mode Gambar"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
 msgid "Sketch flashed items"
@@ -17559,7 +17531,7 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Full size"
-msgstr "Ukuran penuh"
+msgstr "Ukuran Penuh"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Size A4"
@@ -17636,7 +17608,7 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "Biasanya 3:3 dalam mm dan 2:4 dalam inci"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
 msgid "Format for mm"
@@ -17651,7 +17623,7 @@ msgstr "Format untuk mm"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:108
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:77
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
@@ -17661,7 +17633,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:77
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
@@ -17673,7 +17645,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:77
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
@@ -17687,7 +17659,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:172
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:77
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
@@ -17698,14 +17670,14 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:173
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:83
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:109
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:391
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:447
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:96
 msgid "Format for inches"
@@ -21267,7 +21239,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:364
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:215
 msgid "Results"
-msgstr ""
+msgstr "Hasil"
 
 #: pcb_calculator/calculator_panels/panel_via_size.cpp:92
 #: pcb_calculator/calculator_panels/panel_wavelength.cpp:257
@@ -21779,9 +21751,8 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:210
 #: pcb_calculator/transline_ident.cpp:327
 #: pcb_calculator/transline_ident.cpp:368
-#, fuzzy
 msgid "Line width"
-msgstr "Lebar teks:"
+msgstr "Lebar garis"
 
 #: pcb_calculator/transline_ident.cpp:146
 #: pcb_calculator/transline_ident.cpp:180
@@ -22458,35 +22429,35 @@ msgstr ""
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:69
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:83
 msgid "User defined"
-msgstr ""
+msgstr "Tergantung pengguna"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:62
 msgid "Green"
-msgstr ""
+msgstr "Hijau"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:63
 msgid "Red"
-msgstr ""
+msgstr "Merah"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:64
 msgid "Blue"
-msgstr ""
+msgstr "Biru"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:65
 msgid "Purple"
-msgstr ""
+msgstr "Ungu"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:66
 msgid "Black"
-msgstr ""
+msgstr "Hitam"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
 msgid "White"
-msgstr ""
+msgstr "Putih"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
 msgid "Yellow"
-msgstr ""
+msgstr "Kuning"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
@@ -22624,15 +22595,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:88
 msgid "Only selected"
-msgstr ""
+msgstr "Hanya yang dipilih"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:94
 msgid "Empty"
-msgstr ""
+msgstr "Kosong"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:95
 msgid "Invalid"
-msgstr ""
+msgstr "Tidak valid"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:96
 msgid "Excluded"
@@ -22764,7 +22735,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:534
 msgid " will be ignored"
-msgstr ""
+msgstr " akan diabaikan"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:548
 msgid ""
@@ -22949,11 +22920,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:107
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:168
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:215
 msgid "Default is 1"
-msgstr ""
+msgstr "Baku adalah 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
 msgid "Back reference start:"
@@ -23239,7 +23210,7 @@ msgstr "Papan"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:675
 #: pcbnew/dialogs/dialog_board_statistics.cpp:683
 msgid "Area"
-msgstr ""
+msgstr "Area"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:730
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:39
@@ -23257,7 +23228,7 @@ msgstr "Terjadi kesalahan saat menulis ke berkas \"%s\""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:119
 msgid "Board Size"
-msgstr ""
+msgstr "Ukuran Papan"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:200
 msgid "Subtract holes from board area"
@@ -23270,11 +23241,11 @@ msgstr "Hapus footprint tanpa simbol"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "X Size"
-msgstr ""
+msgstr "Ukuran X"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
 msgid "Y Size"
-msgstr ""
+msgstr "Ukuran Y"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Plated"
@@ -23698,11 +23669,12 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 msgid "Below area limit"
-msgstr ""
+msgstr "Dibawah batas area"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
+#, fuzzy
 msgid "Minimum island size:"
-msgstr ""
+msgstr "Ukuran minimum pulau"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 msgid "Isolated islands smaller than this will be removed"
@@ -23724,19 +23696,19 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array.cpp:133
 msgid "Numerals (0,1,2,...,9,10)"
-msgstr ""
+msgstr "Angka (0, 1, 2, ..., 9, 10)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:137
 msgid "Hexadecimal (0,1,...,F,10,...)"
-msgstr ""
+msgstr "Heksadesimal (0, 1, ..., F, 10, ...)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:141
 msgid "Alphabet, minus IOSQXZ"
-msgstr ""
+msgstr "Abjad, minus IOSQXZ"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:145
 msgid "Alphabet, full 26 characters"
-msgstr ""
+msgstr "Abjad, semua 26 karakter"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:269
 #, c-format
@@ -23850,7 +23822,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Coordinate (A1, A2, ... B1, ...)"
-msgstr ""
+msgstr "Koordinat (A1, A2, ..., B1, ...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:133
 msgid "Pad Numbering Scheme"
@@ -24204,7 +24176,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:357
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
 msgid "Manual"
-msgstr ""
+msgstr "Manual"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:361
 msgid "Choose how to position the text relative to the dimension line"
@@ -24229,7 +24201,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:403
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:139
 msgid "Arrow length:"
-msgstr ""
+msgstr "Panjang panah:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:414
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:155
@@ -24639,7 +24611,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.h:77
 msgid "Export STEP"
-msgstr ""
+msgstr "Ekspor STEP"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/exporters/gen_footprints_placefile.cpp:228
@@ -24693,15 +24665,16 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Current page size"
-msgstr ""
+msgstr "Ukuran halaman saat ini"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
+#, fuzzy
 msgid "Board area only"
-msgstr ""
+msgstr "Hanya area papan"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:90
 msgid "SVG Page Size"
-msgstr ""
+msgstr "Ukuran Halaman SVG"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:95
 msgid "Print the layer(s) horizontally mirrored"
@@ -24862,7 +24835,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
-msgstr ""
+msgstr "Cari:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
 msgid "Match case"
@@ -24904,7 +24877,7 @@ msgstr "Mulai Ulang Pencarian"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
-msgstr ""
+msgstr "Jalankan Pemeriksaan"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:71
 #: pcbnew/tools/pcb_actions.cpp:448
@@ -36683,7 +36656,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Increase Line Width"
-msgstr ""
+msgstr "Tam"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Increase the line width"
@@ -36819,7 +36792,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:354
 msgid "Change Track Width"
-msgstr ""
+msgstr "Ubah Lebar Trek"
 
 #: pcbnew/tools/pcb_actions.cpp:354
 msgid "Updates selected track & via sizes"
@@ -37173,8 +37146,9 @@ msgid "Export Specctra DSN routing info"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:640
+#, fuzzy
 msgid "Gerbers (.gbr)..."
-msgstr ""
+msgstr "Gerbers (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:640
 msgid "Generate Gerbers for fabrication"
@@ -37701,11 +37675,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1152
 msgid "Show Board Statistics"
-msgstr ""
+msgstr "Tampilkan Statistik Papan"
 
 #: pcbnew/tools/pcb_actions.cpp:1152
 msgid "Shows board statistics"
-msgstr ""
+msgstr "Tampilkan statistik papan"
 
 #: pcbnew/tools/pcb_actions.cpp:1156
 msgid "Clearance Resolution..."
@@ -37734,7 +37708,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1174
 msgid "Repair Board"
-msgstr ""
+msgstr "Perbaiki Papan"
 
 #: pcbnew/tools/pcb_actions.cpp:1175
 msgid "Run various diagnostics and attempt to repair board"
@@ -37799,23 +37773,23 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1218
 msgid "Distribute Horizontally"
-msgstr ""
+msgstr "Distribusi secara Horizontal"
 
 #: pcbnew/tools/pcb_actions.cpp:1218
 msgid "Distributes selected items along the horizontal axis"
-msgstr ""
+msgstr "Distribusi item terpilih sepanjang sumbu horizontal"
 
 #: pcbnew/tools/pcb_actions.cpp:1223
 msgid "Distribute Vertically"
-msgstr ""
+msgstr "Distribusi secara Vertikal"
 
 #: pcbnew/tools/pcb_actions.cpp:1223
 msgid "Distributes selected items along the vertical axis"
-msgstr ""
+msgstr "Distribusi item terpilih sepanjang sumbu vertikal"
 
 #: pcbnew/tools/pcb_actions.cpp:1260
 msgid "Position Relative To..."
-msgstr ""
+msgstr "Posisi Relatif Ke..."
 
 #: pcbnew/tools/pcb_actions.cpp:1261
 msgid "Positions the selected item(s) by an exact amount relative to another"
@@ -38262,11 +38236,11 @@ msgstr ""
 
 #: pcbnew/tools/zone_filler_tool.cpp:136 pcbnew/tools/zone_filler_tool.cpp:221
 msgid "Show DRC rules"
-msgstr ""
+msgstr "Tampilkan kaidah DRC"
 
 #: pcbnew/tools/zone_filler_tool.cpp:143 pcbnew/tools/zone_filler_tool.cpp:228
 msgid "Rules"
-msgstr ""
+msgstr "Kaidah"
 
 #: pcbnew/tools/zone_filler_tool.cpp:149 pcbnew/tools/zone_filler_tool.cpp:234
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
@@ -38351,7 +38325,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show tracks"
-msgstr ""
+msgstr "Tampilkan trek"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show all vias"
@@ -39150,7 +39124,7 @@ msgstr ""
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
-msgstr ""
+msgstr "[INFO] gagal memuat: baris masukan terlalu panjang\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
@@ -39216,7 +39190,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "Kalkulator untuk komputasi berbagai bidang seputar elektronik"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
