@@ -43,7 +43,8 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     PCB_GRID_HELPER       grid( m_toolMgr, frame->GetMagneticItemsSettings() );
     int                   finalize_state = WAIT_CANCEL;
 
-    frame->PushTool( aEvent );
+    if( aEvent.IsAction( &ACTIONS::pickerTool ) )
+        frame->PushTool( aEvent );
 
     Activate();
     setControls();
@@ -170,15 +171,10 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
 
-    frame->PopTool( aEvent );
+    if( aEvent.IsAction( &ACTIONS::pickerTool ) )
+        frame->PopTool( aEvent );
 
     return 0;
-}
-
-
-void PCB_PICKER_TOOL::setTransitions()
-{
-    Go( &PCB_PICKER_TOOL::Main, ACTIONS::pickerTool.MakeEvent() );
 }
 
 
@@ -196,3 +192,12 @@ void PCB_PICKER_TOOL::setControls()
     controls->CaptureCursor( false );
     controls->SetAutoPan( false );
 }
+
+
+void PCB_PICKER_TOOL::setTransitions()
+{
+    Go( &PCB_PICKER_TOOL::Main, ACTIONS::pickerTool.MakeEvent() );
+    Go( &PCB_PICKER_TOOL::Main, ACTIONS::pickerSubTool.MakeEvent() );
+}
+
+

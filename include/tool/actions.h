@@ -156,6 +156,7 @@ public:
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION measureTool;
     static TOOL_ACTION pickerTool;
+    static TOOL_ACTION pickerSubTool;
 
     // Misc
     static TOOL_ACTION show3DViewer;

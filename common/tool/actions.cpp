@@ -580,6 +580,9 @@ TOOL_ACTION ACTIONS::pickerTool( "common.InteractivePicker.pickerTool",
         "", "",
         BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
+TOOL_ACTION ACTIONS::pickerSubTool( "common.InteractivePicker.pickerSubTool",
+        AS_GLOBAL );
+
 TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
         AS_GLOBAL,
         MD_ALT + '3', LEGACY_HK_NAME( "3D Viewer" ),

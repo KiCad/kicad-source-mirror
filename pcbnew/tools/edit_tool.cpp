@@ -2141,8 +2141,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     m_statusPopup->Popup();
     canvas()->SetStatusPopup( m_statusPopup->GetPanel() );
 
-    std::string tool = "";
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
+    m_toolMgr->RunAction( ACTIONS::pickerSubTool, true );
 
     while( !done )
     {
