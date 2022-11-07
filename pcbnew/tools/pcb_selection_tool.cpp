@@ -1183,8 +1183,7 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
     m_frame->SetStatusText( wxEmptyString );
 
     // Inform other potentially interested tools
-    if( m_selection.Size() > 0 )
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
 }
