@@ -2746,7 +2746,7 @@ void APPEARANCE_CONTROLS::updateViewportSelection( const wxString& aName )
 {
     int idx = m_cbViewports->FindString( aName );
 
-    if( idx >= 0 && m_cbViewports->GetSelection() != idx )
+    if( idx >= 0 && idx < (int)m_cbViewports->GetCount() - 3 /* separator */ )
     {
         m_cbViewports->SetSelection( idx );
         m_lastSelectedViewport = static_cast<VIEWPORT*>( m_cbViewports->GetClientData( idx ) );
@@ -2806,6 +2806,7 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
         }
         else
         {
+            m_viewports[name].rect = m_frame->GetCanvas()->GetView()->GetViewport();
             index = m_cbViewports->FindString( name );
             m_viewportMRU.Remove( name );
         }
