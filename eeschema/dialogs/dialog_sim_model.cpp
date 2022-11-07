@@ -812,13 +812,13 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
         break;
     }
 
-    prop->SetAttribute( wxPG_ATTR_UNITS, param.info.unit );
+    prop->SetAttribute( wxPG_ATTR_UNITS, wxString::FromUTF8( param.info.unit.c_str() ) );
 
     // Legacy due to the way we extracted the parameters from Ngspice.
     if( param.isOtherVariant )
-        prop->SetCell( 3, wxString( param.info.defaultValueOfOtherVariant ) );
+        prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValueOfOtherVariant ) );
     else
-        prop->SetCell( 3, wxString( param.info.defaultValue ) );
+        prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue ) );
 
     wxString typeStr;
 

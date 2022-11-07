@@ -101,7 +101,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
         else if( typeId == TYPE_HASH( bool ) )
         {
             ret = new wxBoolProperty();
-            ret->SetAttribute( wxT( "UseCheckbox" ), true );
+            ret->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
         }
         else if( typeId == TYPE_HASH( wxString ) )
         {
