@@ -624,29 +624,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             getViewControls()->SetAutoPan( false );
             setAltConstraint( false );
 
-            if( item->IsType( { PCB_ZONE_T, PCB_FP_ZONE_T } ) )
-            {
-                SHAPE_POLY_SET* outline = static_cast<ZONE*>(item)->Outline();
-
-                outline->Simplify( SHAPE_POLY_SET::PM_FAST );
-
-                for( int ii = outline->OutlineCount(); ii > 1; --ii )
-                    outline->DeletePolygon( ii - 1 );
-
-                updateItem();
-            }
-            else if( item->IsType( { PCB_SHAPE_LOCATE_POLY_T } ) )
-            {
-                SHAPE_POLY_SET& outline = static_cast<PCB_SHAPE*>( item )->GetPolyShape();
-
-                outline.Simplify( SHAPE_POLY_SET::PM_FAST );
-
-                for( int ii = outline.OutlineCount(); ii > 1; --ii )
-                    outline.DeletePolygon( ii  - 1 );
-
-                updateItem();
-            }
-
             commit.Push( _( "Drag a corner" ) );
             inDrag = false;
             frame()->UndoRedoBlock( false );
@@ -1692,7 +1669,7 @@ bool PCB_POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aPoly ) const
     {
         m_statusPopup.reset( new STATUS_TEXT_POPUP( getEditFrame<PCB_BASE_EDIT_FRAME>() ) );
         m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
-        m_statusPopup->SetText( _( "Self-intersecting polygons are not allowed" ) );
+        m_statusPopup->SetText( _( "Self-intersecting polygons are not allowed." ) );
     }
 
     if( valid )
@@ -2427,17 +2404,6 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         }
 
         setEditedPoint( nullptr );
-
-        // Do not allow self-intersecting polygons
-        polygon->Simplify( SHAPE_POLY_SET::PM_FAST );
-
-        if( polygon->OutlineCount() > 1 )
-        {
-            for( int ii = polygon->OutlineCount(); ii > 1; --ii )
-                polygon->DeletePolygon( ii );
-
-            updateItem();
-        }
 
         commit.Push( _( "Remove a zone/polygon corner" ) );
 
