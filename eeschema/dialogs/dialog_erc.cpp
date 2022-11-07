@@ -519,6 +519,12 @@ void DIALOG_ERC::testErc()
         tester.TestTextVars( m_parent->GetCanvas()->GetView()->GetDrawingSheet() );
     }
 
+    if( settings.IsTestEnabled( ERCE_SIMULATION_MODEL ) )
+    {
+        AdvancePhase( _( "Checking SPICE models..." ) );
+        tester.TestSimModelIssues();
+    }
+
     if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
     {
         AdvancePhase( _( "Checking no connect pins for connections..." ) );

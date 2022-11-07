@@ -24,6 +24,7 @@
  */
 
 #include "connection_graph.h"
+#include "sim/sim_model.h"
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
 #include <string_utils.h>
@@ -858,6 +859,46 @@ int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
         for( SCH_MARKER* marker : markers )
         {
             screen->Append( marker );
+            err_count += 1;
+        }
+    }
+
+    return err_count;
+}
+
+
+int ERC_TESTER::TestSimModelIssues()
+{
+    SCH_SHEET_LIST  sheets = m_schematic->GetSheets();
+    int         err_count = 0;
+
+    for( SCH_SHEET_PATH& sheet : sheets )
+    {
+        std::vector<SCH_MARKER*> markers;
+
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            try
+            {
+                /* JEY TODO
+                std::unique_ptr<SIM_MODEL>  model = SIM_MODEL::Create( &sheet, symbol, true );
+                 */
+            }
+            catch( IO_ERROR& e )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMULATION_MODEL );
+                ercItem->SetErrorMessage( e.Problem() );
+                ercItem->SetItems( symbol );
+
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+            }
+        }
+
+        for( SCH_MARKER* marker : markers )
+        {
+            sheet.LastScreen()->Append( marker );
             err_count += 1;
         }
     }

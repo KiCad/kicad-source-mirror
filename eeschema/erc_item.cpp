@@ -134,6 +134,10 @@ ERC_ITEM ERC_ITEM::unresolvedVariable( ERCE_UNRESOLVED_VARIABLE,
         _( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
 
+ERC_ITEM ERC_ITEM::simulationModelIssues( ERCE_SIMULATION_MODEL,
+        _( "SPICE model issue" ),
+        wxT( "simulation_model_issue" ) );
+
 ERC_ITEM ERC_ITEM::wireDangling( ERCE_WIRE_DANGLING,
         _( "Wires not connected to anything" ),
         wxT( "wire_dangling" ) );
@@ -191,6 +195,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::heading_misc,
                  ERC_ITEM::unannotated,
                  ERC_ITEM::unresolvedVariable,
+                 ERC_ITEM::simulationModelIssues,
                  ERC_ITEM::similarLabels,
                  ERC_ITEM::busLabelSyntax,
                  ERC_ITEM::libSymbolIssues,
@@ -226,6 +231,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_NETCLASS_CONFLICT:       return std::make_shared<ERC_ITEM>( netclassConflict );
     case ERCE_GLOBLABEL:               return std::make_shared<ERC_ITEM>( globalLabelDangling );
     case ERCE_UNRESOLVED_VARIABLE:     return std::make_shared<ERC_ITEM>( unresolvedVariable );
+    case ERCE_SIMULATION_MODEL:        return std::make_shared<ERC_ITEM>( simulationModelIssues );
     case ERCE_WIRE_DANGLING:           return std::make_shared<ERC_ITEM>( wireDangling );
     case ERCE_LIB_SYMBOL_ISSUES:       return std::make_shared<ERC_ITEM>( libSymbolIssues );
     case ERCE_UNANNOTATED:             return std::make_shared<ERC_ITEM>( unannotated );

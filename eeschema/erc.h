@@ -134,6 +134,11 @@ public:
      */
     int TestOffGridEndpoints( int aGridSize );
 
+    /**
+     * Test SPICE models for various issues.
+     */
+    int TestSimModelIssues();
+
 private:
 
     SCHEMATIC* m_schematic;
