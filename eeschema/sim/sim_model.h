@@ -463,15 +463,12 @@ public:
             }
         };
 
-        bool                       resolved;
-        wxString                   source;
         std::unique_ptr<SIM_VALUE> value;
-        const INFO&                info;
-        bool                       isOtherVariant = false; // Legacy.
+        const INFO& info;
+        bool isOtherVariant = false; // Legacy.
 
         PARAM( const INFO& aInfo, bool aIsOtherVariant = false )
-            : resolved( true ),
-              value( SIM_VALUE::Create( aInfo.type ) ),
+            : value( SIM_VALUE::Create( aInfo.type ) ),
               info( aInfo ),
               isOtherVariant( aIsOtherVariant )
         {}
@@ -495,17 +492,17 @@ public:
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
 
 
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount, bool aResolve );
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
-                                              bool aResolve );
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount );
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel,
+                                              unsigned         aSymbolPinCount );
 
     template <typename T>
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
-                                              const std::vector<T>& aFields, bool aResolve );
+                                              const std::vector<T>& aFields );
 
     template <typename T>
     static std::unique_ptr<SIM_MODEL> Create( unsigned aSymbolPinCount,
-                                              const std::vector<T>& aFields, bool aResolve );
+                                              const std::vector<T>& aFields );
 
     template <typename T>
     static std::string GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName );
@@ -602,9 +599,6 @@ public:
     void SetParamValue( const std::string& aParamName, const std::string& aValue,
                         SIM_VALUE::NOTATION aNotation = SIM_VALUE::NOTATION::SI );
 
-    void SetParamSource( const std::string& aParamName, const wxString& aSource );
-    void SetParamSource( int aParamIndex, const wxString& aSource );
-
     bool HasOverrides() const;
     bool HasNonInstanceOverrides() const;
     bool HasSpiceNonInstanceOverrides() const;
@@ -619,7 +613,7 @@ public:
     bool IsInferred() const { return m_isInferred; }
 
 protected:
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, bool aResolve );
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
 
     SIM_MODEL( TYPE aType );
     SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
@@ -644,8 +638,6 @@ protected:
     const SIM_MODEL* m_baseModel;
 
 private:
-    static std::unique_ptr<SIM_MODEL> doCreate( TYPE aType );
-
     static TYPE readTypeFromSpiceStrings( const std::string& aTypeString,
                                           const std::string& aLevel = "",
                                           const std::string& aVersion = "",

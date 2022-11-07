@@ -38,7 +38,7 @@ struct SPICE_ITEM
     std::string baseModelName;
     std::string modelName;
     const SIM_MODEL* model = nullptr;
-    std::vector<SCH_FIELD> fields;
+    const std::vector<SCH_FIELD>* fields = nullptr;
 };
 
 

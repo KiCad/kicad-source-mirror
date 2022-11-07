@@ -56,8 +56,8 @@ std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const
 std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
                                                           const std::string& aSpiceCode )
 {
-    SIM_MODEL::TYPE modelType = SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode );
-    auto model = static_cast<SIM_MODEL_SPICE*>( SIM_MODEL::Create( modelType, true ).release() );
+    auto model = static_cast<SIM_MODEL_SPICE*>(
+            SIM_MODEL::Create( SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode ) ).release() );
 
     try
     {

@@ -35,30 +35,11 @@ SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT& aPrj ) : m_project( aPrj )
 }
 
 
-SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
-                                             bool aResolve )
+SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
 {
-    int         pinCount = aSymbol.GetLibPins().size();
-    SCH_FIELD*  libraryField = aSymbol.FindField( SIM_LIBRARY::LIBRARY_FIELD );
+    std::vector<LIB_PIN*> pins = aSymbol.GetLibPins();
+    SCH_FIELD* libraryField = aSymbol.FindField( SIM_LIBRARY::LIBRARY_FIELD );
     std::string baseModelName;
-
-    std::vector<SCH_FIELD> fields;
-
-    for( int i = 0; i < aSymbol.GetFieldCount(); ++i )
-    {
-        fields.emplace_back( VECTOR2I(), i, &aSymbol, aSymbol.GetFields()[ i ].GetName() );
-
-        if( i == REFERENCE_FIELD )
-            fields.back().SetText( aSymbol.GetRef( aSheetPath ) );
-        else if( i == VALUE_FIELD )
-            fields.back().SetText( aSymbol.GetValue( aSheetPath, aResolve ) );
-        else if( i == FOOTPRINT_FIELD )
-            fields.back().SetText( aSymbol.GetFootprint( aSheetPath, aResolve ) );
-        else if( aResolve )
-            fields.back().SetText( aSymbol.GetFields()[ i ].GetShownText( 0, false ) );
-        else
-            fields.back().SetText( aSymbol.GetFields()[ i ].GetText() );
-    }
 
     if( libraryField )
     {
@@ -74,9 +55,10 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
         }
         catch( const IO_ERROR& e )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Error loading simulation model library '%s': %s" ),
-                                              absolutePath,
-                                              e.What() ) );
+            THROW_IO_ERROR(
+                    wxString::Format( _( "Error loading simulation model library '%s': %s" ),
+                                      absolutePath,
+                                      e.What() ) );
         }
 
         SCH_FIELD* nameField = aSymbol.FindField( SIM_LIBRARY::NAME_FIELD );
@@ -92,17 +74,20 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
 
         if( !baseModel )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Error loading simulation model: could not find "
-                                                 "base model '%s' in library '%s'" ),
-                                              baseModelName,
-                                              absolutePath ) );
+            THROW_IO_ERROR(
+                    wxString::Format( _( "Error loading simulation model: could not find base model '%s' in library '%s'" ),
+                                      baseModelName,
+                                      absolutePath ) );
         }
 
-        m_models.push_back( SIM_MODEL::Create( *baseModel, pinCount, fields, aResolve ) );
+        m_models.push_back( SIM_MODEL::Create( *baseModel,
+                                               static_cast<int>( pins.size() ),
+                                               aSymbol.GetFields() ) );
     }
     else
     {
-        m_models.push_back( SIM_MODEL::Create( pinCount, fields, aResolve ) );
+        m_models.push_back( SIM_MODEL::Create( static_cast<int>( pins.size() ),
+                                               aSymbol.GetFields() ) );
     }
 
     return { baseModelName, *m_models.back() };

@@ -23,8 +23,11 @@
 
 #include <sim/sim_library_kibis.h>
 #include <sim/sim_model_kibis.h>
+#include <sim/spice_grammar.h>
 #include <ki_exception.h>
 #include <locale_io.h>
+#include <pegtl.hpp>
+#include <pegtl/contrib/parse_tree.hpp>
 
 
 void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, SIM_MODEL::TYPE aType )
@@ -42,7 +45,7 @@ void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, SIM_MODEL::TYPE 
 
     for( KIBIS_COMPONENT& kcomp : m_kibis.m_components )
     {
-        m_models.push_back( SIM_MODEL::Create( aType, pinNumber, true ) );
+        m_models.push_back( SIM_MODEL::Create( aType, pinNumber ) );
         m_modelNames.emplace_back( kcomp.m_name );
 
         SIM_MODEL_KIBIS* libcomp = dynamic_cast<SIM_MODEL_KIBIS*>( m_models.back().get() );

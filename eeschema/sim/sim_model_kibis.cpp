@@ -61,11 +61,11 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const SPICE_ITEM& 
 std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const std::string aCwd,
                                                const std::string aCacheDir ) const
 {
-    std::string ibisLibFilename = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
-    std::string ibisCompName    = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::NAME_FIELD  );
-    std::string ibisPinName     = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::PIN_FIELD );
-    std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
-    bool diffMode = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
+    std::string ibisLibFilename = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
+    std::string ibisCompName    = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY::NAME_FIELD  );
+    std::string ibisPinName     = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::PIN_FIELD );
+    std::string ibisModelName   = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
+    bool diffMode = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
 
     wxFileName libPath = wxFileName( wxString( ibisLibFilename ) );
 
@@ -267,8 +267,7 @@ void SIM_MODEL_KIBIS::SwitchSingleEndedDiff( bool aDiff )
     }
 }
 
-SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource, bool aResolve ) :
-        SIM_MODEL_KIBIS( aType )
+SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) : SIM_MODEL_KIBIS( aType )
 {
     for( PARAM& param1 : m_params )
     {
@@ -279,12 +278,6 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource, bo
             if( param1.info.name == param2.info.name )
                 *( param1.value ) = *( param2.value );
         }
-
-        if( !aResolve )
-        {
-            param1.source = param1.value->ToString();
-            param1.resolved = false;
-        }
     }
 
     m_componentName = aSource.m_componentName;
@@ -294,15 +287,15 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource, bo
 }
 
 SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
-                                  const std::vector<LIB_FIELD>& aFields, bool aResolve ) :
-        SIM_MODEL_KIBIS( aType, aSource, aResolve )
+                                  const std::vector<LIB_FIELD>& aFields ) :
+        SIM_MODEL_KIBIS( aType, aSource )
 {
     ReadDataFields( 2, &aFields );
 }
 
 SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
-                                  const std::vector<SCH_FIELD>& aFields, bool aResolve ) :
-        SIM_MODEL_KIBIS( aType, aSource, aResolve )
+                                  const std::vector<SCH_FIELD>& aFields ) :
+        SIM_MODEL_KIBIS( aType, aSource )
 {
     ReadDataFields( 2, &aFields );
 }

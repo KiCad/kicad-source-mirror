@@ -33,8 +33,6 @@
 #include <wx/propgrid/props.h>
 
 
-// This doesn't actually do any validation, but it's a convenient place to fix some navigation
-// issues with wxPropertyGrid.
 class SIM_VALIDATOR : public wxValidator
 {
 private:
@@ -42,8 +40,41 @@ private:
 
     void onKeyDown( wxKeyEvent& aEvent );
 
+    wxDECLARE_EVENT_TABLE();
+};
+
+
+class SIM_STRING_VALIDATOR : public SIM_VALIDATOR
+{
+public:
+    SIM_STRING_VALIDATOR( SIM_VALUE::TYPE aValueType, SIM_VALUE_GRAMMAR::NOTATION aNotation );
+    SIM_STRING_VALIDATOR( const SIM_STRING_VALIDATOR& aValidator ) = default;
+
+    wxObject* Clone() const override;
+
+    bool Validate( wxWindow* aParent ) override;
+    bool TransferToWindow() override;
+    bool TransferFromWindow() override;
+
+private:
+    bool isValid( const wxString& aString );
+
+    wxTextEntry* getTextEntry();
+
+    SIM_VALUE::TYPE             m_valueType;
+    SIM_VALUE_GRAMMAR::NOTATION m_notation;
+};
+
+
+class SIM_BOOL_VALIDATOR : public SIM_VALIDATOR
+{
+public:
+    SIM_BOOL_VALIDATOR() : SIM_VALIDATOR() {}
+    SIM_BOOL_VALIDATOR( const SIM_BOOL_VALIDATOR& aValidator ) = default;
+
     bool Validate( wxWindow* aParent ) override;
 
+private:
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -86,12 +117,18 @@ public:
     SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName,
                          std::shared_ptr<SIM_LIBRARY> aLibrary,
                          std::shared_ptr<SIM_MODEL> aModel,
-                         int aParamIndex );
+                         int aParamIndex,
+                         SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT,
+                         SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
     wxValidator* DoGetValidator() const override;
 
     bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 )
         const override;
+
+protected:
+    SIM_VALUE::TYPE              m_valueType;
+    SIM_VALUE_GRAMMAR::NOTATION  m_notation;
 };
 
 
@@ -101,7 +138,9 @@ public:
     SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
                        std::shared_ptr<SIM_LIBRARY> aLibrary,
                        std::shared_ptr<SIM_MODEL> aModel,
-                       int aParamIndex );
+                       int aParamIndex,
+                       SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT,
+                       SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
     bool IntToValue( wxVariant& aVariant, int aNumber, int aArgFlags = 0 ) const override;
 };

@@ -210,19 +210,11 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
             SPICE_ITEM spiceItem;
 
-            for( int i = 0; i < symbol->GetFieldCount(); ++i )
-            {
-                spiceItem.fields.emplace_back( VECTOR2I(), i, symbol, symbol->GetFields()[ i ].GetName() );
-
-                if( i == REFERENCE_FIELD )
-                    spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
-                else if( i == VALUE_FIELD )
-                    spiceItem.fields.back().SetText( symbol->GetValue( &sheet, true ) );
-                else if( i == FOOTPRINT_FIELD )
-                    spiceItem.fields.back().SetText( symbol->GetFootprint( &sheet, true ) );
-                else
-                    spiceItem.fields.back().SetText( symbol->GetFields()[ i ].GetShownText( 0, false ) );
-            }
+            // This is a little bit dangerous as any value fetched from the fields will not
+            // be instance-data aware, and will just fetch the value of some random sheet
+            // (whatever sheet the user happens to be looking at).  However, we currently only
+            // use it to fetch "Sim_*" fields, which have no instance data.
+            spiceItem.fields = &symbol->GetFields();
 
             try
             {
@@ -384,7 +376,7 @@ bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 
 void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 {
-    SIM_LIBRARY::MODEL libModel = m_libMgr.CreateModel( &aSheet, aSymbol, true );
+    SIM_LIBRARY::MODEL libModel = m_libMgr.CreateModel( aSymbol );
 
     aItem.baseModelName = libModel.name;
     aItem.model = &libModel.model;
