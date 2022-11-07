@@ -457,19 +457,19 @@ void SIM_PLOT_FRAME::setSubWindowsSashSize()
 void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 {
     wxCHECK_RET( m_circuitModel->CommandToSimType( getCurrentSimCommand() ) != ST_UNKNOWN,
-            "Unknown simulation type" );
+                 wxT( "Unknown simulation type" ) );
 
     if( !m_settingsDlg )
         m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_circuitModel, m_simulator->Settings() );
 
     m_simConsole->Clear();
 
-    if( aSimCommand != "" )
+    if( aSimCommand != wxEmptyString )
         m_circuitModel->SetSimCommand( aSimCommand );
     else if( m_circuitModel->GetSheetSimCommand() != getCurrentSimCommand() )
         m_circuitModel->SetSimCommand( getCurrentSimCommand() );
     else
-        m_circuitModel->SetSimCommand( "" );
+        m_circuitModel->SetSimCommand( wxEmptyString );
 
     // Make .save all and .probe alli permanent for now.
     m_circuitModel->SetOptions( m_settingsDlg->GetNetlistOptions()
@@ -495,7 +495,9 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
         m_simulator->Run();
     }
     else
+    {
         DisplayErrorMessage( this, _( "Another simulation is already running." ) );
+    }
 }
 
 
@@ -583,7 +585,7 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
 
 void SIM_PLOT_FRAME::UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aValue )
 {
-    for( auto& item : m_schematicFrame->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    for( EDA_ITEM* item : m_schematicFrame->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {
         if( item == aSymbol )
         {
@@ -716,15 +718,16 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
     SIM_TYPE simType = m_circuitModel->GetSimType();
 
     wxString plotTitle = aName;
+
     if( aType & SPT_AC_MAG )
-        plotTitle += " (mag)";
+        plotTitle += _( " (mag)" );
     else if( aType & SPT_AC_PHASE )
-        plotTitle += " (phase)";
+        plotTitle += _( " (phase)" );
 
     if( !SIM_PANEL_BASE::IsPlottable( simType ) )
     {
         // There is no plot to be shown
-        m_simulator->Command( wxString::Format( "print %s", aName ).ToStdString() );
+        m_simulator->Command( wxString::Format( wxT( "print %s" ), aName ).ToStdString() );
 
         return false;
     }
@@ -748,14 +751,14 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
     {
     case ST_AC:
         wxASSERT_MSG( !( ( aType & SPT_AC_MAG ) && ( aType & SPT_AC_PHASE ) ),
-                      "Cannot set both AC_PHASE and AC_MAG bits" );
+                      wxT( "Cannot set both AC_PHASE and AC_MAG bits" ) );
 
         if( aType & SPT_AC_MAG )
             data_y = m_simulator->GetMagPlot( (const char*) aName.c_str() );
         else if( aType & SPT_AC_PHASE )
             data_y = m_simulator->GetPhasePlot( (const char*) aName.c_str() );
         else
-            wxASSERT_MSG( false, "Plot type missing AC_PHASE or AC_MAG bit" );
+            wxASSERT_MSG( false, wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
 
         break;
 
@@ -766,7 +769,7 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
         break;
 
     default:
-        wxASSERT_MSG( false, "Unhandled plot type" );
+        wxASSERT_MSG( false, wxT( "Unhandled plot type" ) );
         return false;
     }
 
@@ -794,7 +797,9 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
 
             for( size_t idx = 0; idx <= outer; idx++ )
             {
-                name = wxString::Format( "%s (%s = %s V)", plotTitle, source2.m_source,
+                name = wxString::Format( wxT( "%s (%s = %s V)" ),
+                                         plotTitle,
+                                         source2.m_source,
                                          v.ToString() );
 
                 std::vector<double> sub_x( data_x.begin() + offset,
@@ -1044,7 +1049,7 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
         file.Create();
     }
 
-    file.AddLine( wxString::Format( "%llu", m_workbook->GetPageCount() ) );
+    file.AddLine( wxString::Format( wxT( "%llu" ), m_workbook->GetPageCount() ) );
 
     for( size_t i = 0; i < m_workbook->GetPageCount(); i++ )
     {
@@ -1052,26 +1057,26 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
 
         if( !basePanel )
         {
-            file.AddLine( wxString::Format( "%llu", 0ull ) );
+            file.AddLine( wxString::Format( wxT( "%llu" ), 0ull ) );
             continue;
         }
 
-        file.AddLine( wxString::Format( "%d", basePanel->GetType() ) );
+        file.AddLine( wxString::Format( wxT( "%d" ), basePanel->GetType() ) );
         file.AddLine( EscapeString( m_workbook->GetSimCommand( basePanel ), CTX_LINE ) );
 
         const SIM_PLOT_PANEL* plotPanel = dynamic_cast<const SIM_PLOT_PANEL*>( basePanel );
 
         if( !plotPanel )
         {
-            file.AddLine( wxString::Format( "%llu", 0ull ) );
+            file.AddLine( wxString::Format( wxT( "%llu" ), 0ull ) );
             continue;
         }
 
-        file.AddLine( wxString::Format( "%llu", plotPanel->GetTraces().size() ) );
+        file.AddLine( wxString::Format( wxT( "%llu" ), plotPanel->GetTraces().size() ) );
 
         for( const auto& trace : plotPanel->GetTraces() )
         {
-            file.AddLine( wxString::Format( "%d", trace.second->GetType() ) );
+            file.AddLine( wxString::Format( wxT( "%d" ), trace.second->GetType() ) );
             file.AddLine( trace.second->GetName() );
             file.AddLine( trace.second->GetParam() );
         }
@@ -1132,7 +1137,7 @@ SIM_PLOT_TYPE SIM_PLOT_FRAME::getXAxisType( SIM_TYPE aType ) const
         case ST_DC:        return SPT_SWEEP;
         case ST_TRANSIENT: return SPT_TIME;
         default:
-            wxASSERT_MSG( false, "Unhandled simulation type" );
+            wxASSERT_MSG( false, wxT( "Unhandled simulation type" ) );
             return (SIM_PLOT_TYPE) 0;
     }
 }
@@ -1230,29 +1235,29 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
 
     // write column header names on the first row
     wxString xAxisName( m_simulator->GetXAxis( simType ) );
-    out.Write( wxString::Format( "%s%c", xAxisName, SEPARATOR ) );
+    out.Write( wxString::Format( wxT( "%s%c" ), xAxisName, SEPARATOR ) );
 
     for( const auto& trace : traces )
     {
         wxString yAxisName = trace.first;
-        out.Write( wxString::Format( "%s%c", yAxisName, SEPARATOR ) );
+        out.Write( wxString::Format( wxT( "%s%c" ), yAxisName, SEPARATOR ) );
     }
 
-    out.Write( "\r\n" );
+    out.Write( wxS( "\r\n" ) );
 
     // write each row's numerical value
     for ( std::size_t curRow=0; curRow < rowCount; curRow++ )
     {
         double xAxisValue = traces.begin()->second->GetDataX().at( curRow );
-        out.Write( wxString::Format( "%g%c", xAxisValue, SEPARATOR ) );
+        out.Write( wxString::Format( wxT( "%g%c" ), xAxisValue, SEPARATOR ) );
 
         for( const auto& trace : traces )
         {
             double yAxisValue = trace.second->GetDataY().at( curRow );
-            out.Write( wxString::Format( "%g%c", yAxisValue, SEPARATOR ) );
+            out.Write( wxString::Format( wxT( "%g%c" ), yAxisValue, SEPARATOR ) );
         }
 
-        out.Write( "\r\n" );
+        out.Write( wxS( "\r\n" ) );
     }
 
     out.Close();
@@ -1510,7 +1515,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onAddSignal( wxCommandEvent& event )
 {
-    wxCHECK_RET( m_simFinished, "No simulation results available" );
+    wxCHECK_RET( m_simFinished, wxT( "No simulation results available" ) );
 
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
 
@@ -1527,7 +1532,7 @@ void SIM_PLOT_FRAME::onAddSignal( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
 {
-    wxCHECK_RET( m_simFinished, "No simulation results available" );
+    wxCHECK_RET( m_simFinished, wxT( "No simulation results available" ) );
 
     if( m_schematicFrame == nullptr )
         return;
@@ -1544,7 +1549,7 @@ void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
 {
-    wxCHECK_RET( m_simFinished, "No simulation results available" );
+    wxCHECK_RET( m_simFinished, wxT( "No simulation results available" ) );
 
     if( m_schematicFrame == nullptr )
         return;
@@ -1575,9 +1580,8 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
         }
 
         NETLIST_VIEW_DIALOG( wxWindow* parent, wxString source) :
-            DIALOG_SHIM( parent, wxID_ANY, "SPICE Netlist",
-                         wxDefaultPosition, wxDefaultSize,
-                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+                DIALOG_SHIM( parent, wxID_ANY, wxT( "SPICE Netlist" ), wxDefaultPosition,
+                             wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
         {
             wxStyledTextCtrl* text = new wxStyledTextCtrl( this, wxID_ANY );
             text->SetMinSize( wxSize( 600, 400 ) );
@@ -1692,7 +1696,7 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
     wxString labelY;
 
     if( !labelY2.IsEmpty() )
-        labelY = labelY1 + " / " + labelY2;
+        labelY = labelY1 + wxT( " / " ) + labelY2;
     else
         labelY = labelY1;
 
@@ -1763,7 +1767,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
         SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( plotPanelWindow );
-        wxCHECK_RET( plotPanel, "not a SIM_PLOT_PANEL"  );
+        wxCHECK_RET( plotPanel, wxT( "not a SIM_PLOT_PANEL" ) );
 
         struct TRACE_DESC
         {
@@ -1816,7 +1820,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
                             ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ),
                             SPICE_VALUE( val ).ToSpiceString() );
 
-            outLine.Append( type == SPT_CURRENT ? "A\n" : "V\n" );
+            outLine.Append( type == SPT_CURRENT ? wxT( "A\n" ) : wxT( "V\n" ) );
 
             m_simConsole->AppendText( outLine );
             m_simConsole->SetInsertionPointEnd();
