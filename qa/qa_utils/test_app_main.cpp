@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ static struct IFACE : public KIFACE_BASE
 
     void OnKifaceEnd() override {}
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+    wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
                             int aCtlBits = 0 ) override
     {
         assert( false );

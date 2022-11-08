@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ MOCK_BASE_CLASS( MOCK_KIFACE_BASE, KIFACE_BASE )
 
     MOCK_METHOD( OnKifaceStart, 2, bool( PGM_BASE*, int ) );
     MOCK_METHOD( OnKifaceEnd, 0, void() );
-    MOCK_METHOD( CreateWindow, 4, wxWindow*( wxWindow*, int, KIWAY*, int ) );
+    MOCK_METHOD( CreateKiWindow, 4, wxWindow*( wxWindow*, int, KIWAY*, int ) );
     MOCK_METHOD( IfaceOrAddress, 1, void*( int ) );
 };
 
