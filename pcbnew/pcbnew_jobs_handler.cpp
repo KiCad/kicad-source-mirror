@@ -434,10 +434,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     {
         PLACEFILE_GERBER_WRITER exporter( brd );
 
-        PCB_LAYER_ID gbrLayer;
-        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT )
-            gbrLayer = F_Cu;
-        else if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK )
+        PCB_LAYER_ID gbrLayer = F_Cu;
+
+        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK )
             gbrLayer = B_Cu;
 
         exporter.CreatePlaceFile( aPosJob->m_outputFile, gbrLayer, aPosJob->m_gerberBoardEdge );

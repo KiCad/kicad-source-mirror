@@ -2485,7 +2485,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
             if( !board()->IsLayerVisible( aItem->GetLayer() ) )
                 return false;
 
-            int controlLayer;
+            int controlLayer = UNDEFINED_LAYER;
 
             switch( static_cast<const FP_TEXT*>( aItem )->GetType() )
             {
@@ -2493,6 +2493,9 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
             case FP_TEXT::TEXT_is_VALUE:     controlLayer = LAYER_MOD_VALUES;     break;
             case FP_TEXT::TEXT_is_DIVERS:    controlLayer = LAYER_MOD_TEXT;       break;
             }
+
+            if( controlLayer == UNDEFINED_LAYER )
+                return false;
 
             if( !view()->IsLayerVisible( controlLayer ) )
                 return false;

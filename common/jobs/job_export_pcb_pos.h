@@ -29,12 +29,18 @@ class JOB_EXPORT_PCB_POS : public JOB
 {
 public:
     JOB_EXPORT_PCB_POS( bool aIsCli ) :
-            JOB( "pos", aIsCli ), m_filename(),
+            JOB( "pos", aIsCli ),
+            m_filename(),
             m_outputFile(),
-            m_excludeFootprintsWithTh( true ),
             m_useDrillPlaceFileOrigin( true ),
-            m_smdOnly( false )
+            m_smdOnly( false ),
+            m_excludeFootprintsWithTh( false ),
+            m_negateBottomX( false )
     {
+        m_side = SIDE::BOTH;
+        m_units = UNITS::MILLIMETERS;
+        m_format = FORMAT::ASCII;
+        m_gerberBoardEdge = true;
     }
 
     wxString m_filename;
