@@ -388,7 +388,7 @@ Series, and Series_switch.
 enum class IBIS_MODEL_TYPE
 {
     UNDEFINED,
-    INPUT,
+    INPUT_STD,       // Do not use INPUT: it can conflict with a windows header on MSYS2
     OUTPUT,
     IO,
     THREE_STATE,

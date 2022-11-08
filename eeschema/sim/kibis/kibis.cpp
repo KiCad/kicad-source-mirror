@@ -511,21 +511,21 @@ std::string KIBIS_MODEL::generateSquareWave( std::string aNode1, std::string aNo
 
     int i = 0;
 
-    int prevBit = 2; 
+    int prevBit = 2;
 
     for( std::pair<int, double> bit : aBits )
     {
         IbisWaveform* WF;
         double        timing = bit.second;
 
-        
+
         if ( bit.first != prevBit )
         {
         if( bit.first == 1 )
             WF = &risingWF;
         else
             WF = &fallingWF;
-        
+
         stimuliIndex.push_back( i );
 
         simul += "Vstimuli";
@@ -1280,7 +1280,7 @@ bool KIBIS_PIN::writeSpiceDevice( std::string* aDest, std::string aName, KIBIS_M
 
     switch( aModel.m_type )
     {
-    case IBIS_MODEL_TYPE::INPUT:
+    case IBIS_MODEL_TYPE::INPUT_STD:
     case IBIS_MODEL_TYPE::IO:
     case IBIS_MODEL_TYPE::IO_OPEN_DRAIN:
     case IBIS_MODEL_TYPE::IO_OPEN_SINK:
@@ -1506,27 +1506,27 @@ std::vector<std::pair<int, double>> KIBIS_WAVEFORM_PRBS::GenerateBitSequence()
     //110 = x^3+x^2+1
     uint8_t seed = 0x12; // Any non zero state
     uint8_t lfsr = seed;
-    
+
     if ( m_bitrate == 0 )
         return bitSequence;
 
     double period = 1/m_bitrate;
     double t = 0;
     m_bits = abs( m_bits ); // Just to be sure.
-    
+
     int bits = 0;
     do
     {
         uint8_t lsb = lfsr & 0x01;
         bitSequence.emplace_back( ( inverted ^ lsb ? 1 : 0 ), t );
         lfsr = lfsr >> 1;
-        
+
         if ( lsb )
             lfsr ^= polynomial;
 
         t += period;
 
     } while ( ++bits < m_bits );
-    
+
     return bitSequence;
 }

@@ -536,7 +536,7 @@ bool IbisModel::Check()
         Report( _( "Invalid GND clamp." ), RPT_SEVERITY_ERROR );
         status = false;
     }
-    if( m_type != IBIS_MODEL_TYPE::INPUT_ECL && m_type != IBIS_MODEL_TYPE::INPUT
+    if( m_type != IBIS_MODEL_TYPE::INPUT_ECL && m_type != IBIS_MODEL_TYPE::INPUT_STD
         && m_type != IBIS_MODEL_TYPE::TERMINATOR && m_type != IBIS_MODEL_TYPE::SERIES
         && m_type != IBIS_MODEL_TYPE::SERIES_SWITCH )
     {
@@ -1830,7 +1830,7 @@ bool IbisParser::readModel()
                 if( readWord( subparam ) )
                 {
                     if( !strcmp( subparam.c_str(), "Input" ) )
-                        m_currentModel->m_type = IBIS_MODEL_TYPE::INPUT;
+                        m_currentModel->m_type = IBIS_MODEL_TYPE::INPUT_STD;
                     else if( !strcmp( subparam.c_str(), "Output" ) )
                         m_currentModel->m_type = IBIS_MODEL_TYPE::OUTPUT;
                     else if( !strcmp( subparam.c_str(), "I/O" ) )
