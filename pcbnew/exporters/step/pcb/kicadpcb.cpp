@@ -37,11 +37,12 @@
 #include <string>
 
 #include <wx_filename.h>
-
+#include <pgm_base.h>
 
 KICADPCB::KICADPCB( const wxString& aPcbName )
 {
     m_resolver.Set3DConfigDir( wxT( "" ) );
+    m_resolver.SetProgramBase( &Pgm() );
 
     m_topSolderMask    = wxColour(  15, 102,  15 );
     m_bottomSolderMask = wxColour(  15, 102,  15 );
