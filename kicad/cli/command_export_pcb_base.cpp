@@ -44,6 +44,7 @@ CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( std::string aName ) : COM
         m_layerMasks[untranslated] = LSET( PCB_LAYER_ID( layer ) );
     }
 
+    m_layerMasks["*"] = LSET::AllLayersMask();
     m_layerMasks["*.Cu"] = LSET::AllCuMask();
     m_layerMasks["*In.Cu"] = LSET::InternalCuMask();
     m_layerMasks["F&B.Cu"] = LSET( 2, F_Cu, B_Cu );
