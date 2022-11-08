@@ -634,7 +634,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                             drc_on_move->m_FpInMove.push_back( static_cast<FOOTPRINT*>( item ) );
                     }
 
-                    m_cursor = grid.BestDragOrigin( originalCursorPos, items );
+                    m_cursor = grid.BestDragOrigin( originalCursorPos, items,
+                                                    &m_selectionTool->GetFilter() );
 
                     // Set the current cursor position to the first dragged item origin, so the
                     // movement vector could be computed later

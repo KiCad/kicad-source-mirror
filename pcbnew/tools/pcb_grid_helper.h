@@ -49,7 +49,8 @@ public:
 
     VECTOR2I AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg );
 
-    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem );
+    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem,
+                             const SELECTION_FILTER_OPTIONS* aSelectionFilter = nullptr );
 
     VECTOR2I AlignToArc ( const VECTOR2I& aPoint, const SHAPE_ARC& aSeg );
 
@@ -81,7 +82,8 @@ private:
      * @param aRefPos The point for which to compute the anchors (if used by the component)
      * @param aFrom Is this for an anchor that is designating a source point (aFrom=true) or not
      */
-    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false );
+    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false,
+                         const SELECTION_FILTER_OPTIONS* aSelectionFilter = nullptr );
 
 private:
     MAGNETIC_SETTINGS*     m_magneticSettings;
