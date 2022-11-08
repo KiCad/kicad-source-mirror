@@ -1603,15 +1603,18 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             if( aPad->GetKeepTopBottom() )
                 m_out->Print( 0, " (keep_end_layers)" );
 
-            m_out->Print( 0, " (zone_layer_connections" );
-
-            for( LSEQ cu = board->GetEnabledLayers().CuStack();  cu;  ++cu )
+            if( board )     // Will be nullptr in footprint library
             {
-                if( aPad->ZoneConnectionCache( *cu ) == ZLC_CONNECTED )
-                    m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( *cu ) ).c_str() );
-            }
+                m_out->Print( 0, " (zone_layer_connections" );
 
-            m_out->Print( 0, ")" );
+                for( LSEQ cu = board->GetEnabledLayers().CuStack();  cu;  ++cu )
+                {
+                    if( aPad->ZoneConnectionCache( *cu ) == ZLC_CONNECTED )
+                        m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( *cu ) ).c_str() );
+                }
+
+                m_out->Print( 0, ")" );
+            }
         }
     }
 
