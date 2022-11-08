@@ -39,7 +39,6 @@
 #include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/panel_sym_lib_table.h>
 #include <kiway.h>
-#include <sim/sim_plot_frame.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
 #include <sexpr/sexpr.h>
@@ -60,6 +59,7 @@
 #include <dialogs/panel_gal_display_options.h>
 #include <panel_eeschema_display_options.h>
 #include <panel_sym_display_options.h>
+#include <sim/sim_plot_frame.h>
 
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = nullptr;
@@ -135,7 +135,7 @@ static struct IFACE : public KIFACE_BASE
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+    wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
                             int aCtlBits = 0 ) override
     {
         switch( aClassId )

@@ -997,7 +997,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     book->AddPage( new PANEL_DATA_COLLECTION( &dlg, book ), _( "Data Collection" ) );
 #endif
 
-#define CREATE_PANEL( key ) kiface->CreateWindow( book, key, &Kiway() )
+#define CREATE_PANEL( key ) kiface->CreateKiWindow( book, key, &Kiway() )
 
     // If a dll is not loaded, the loader will show an error message.
 

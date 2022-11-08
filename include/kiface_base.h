@@ -49,8 +49,8 @@ public:
         end_common();
     }
 
-    virtual  wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKIWAY,
-                                     int aCtlBits = 0 ) override = 0;
+    virtual  wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKIWAY,
+                                       int aCtlBits = 0 ) override = 0;
 
     virtual void* IfaceOrAddress( int aDataId ) override = 0;
 

@@ -86,7 +86,7 @@ int COMMON_CONTROL::ConfigurePaths( const TOOL_EVENT& aEvent )
     {
         try
         {
-            pcbnew->CreateWindow( m_frame, DIALOG_CONFIGUREPATHS, &m_frame->Kiway() );
+            pcbnew->CreateKiWindow( m_frame, DIALOG_CONFIGUREPATHS, &m_frame->Kiway() );
         }
         catch( ... )
         {
@@ -113,7 +113,7 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
         try     // Sch frame was not available, try to start it
         {
             KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
-            kiface->CreateWindow( m_frame, DIALOG_SCH_LIBRARY_TABLE, &m_frame->Kiway() );
+            kiface->CreateKiWindow( m_frame, DIALOG_SCH_LIBRARY_TABLE, &m_frame->Kiway() );
         }
         catch( ... )
         {
@@ -128,7 +128,7 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
         try     // Pcb frame was not available, try to start it
         {
             KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
-            kiface->CreateWindow( m_frame, DIALOG_PCB_LIBRARY_TABLE, &m_frame->Kiway() );
+            kiface->CreateKiWindow( m_frame, DIALOG_PCB_LIBRARY_TABLE, &m_frame->Kiway() );
         }
         catch( ... )
         {

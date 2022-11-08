@@ -43,7 +43,7 @@ static struct IFACE : public KIFACE_BASE
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+    wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
                             int aCtlBits = 0 ) override
     {
         return new PCB_CALCULATOR_FRAME( aKiway, aParent );

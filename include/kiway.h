@@ -199,8 +199,8 @@ struct KIFACE
      *         and old school cast.  dynamic_cast is problematic since it needs typeinfo probably
      *         not contained in the caller's link image.
      */
-    virtual wxWindow* CreateWindow( wxWindow* aParent, int aClassId,
-                                    KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
+    virtual wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId,
+                                      KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
 
     /**
      * Saving a file under a different name is delegated to the various KIFACEs because

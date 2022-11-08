@@ -417,7 +417,7 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
             FACE_T  face_type = KifaceType( aFrameType );
             KIFACE* kiface = KiFACE( face_type );
 
-            frame = (KIWAY_PLAYER*) kiface->CreateWindow(
+            frame = (KIWAY_PLAYER*) kiface->CreateKiWindow(
                                             aParent,    // Parent window of frame in modal mode,
                                                         // NULL in non modal mode
                                             aFrameType,
