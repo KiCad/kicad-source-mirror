@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-08 17:02+0000\n"
+"PO-Revision-Date: 2022-11-09 11:21+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8711,7 +8711,7 @@ msgstr "Prüfe auf Probleme mit Bibliothekssymbolen ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:536
 msgid "Checking for off grid pins and wires..."
-msgstr "Auf Pins und Drähte außerhalb des Rasters wird geprüft..."
+msgstr "Prüfe auf Pins und Verbindungen außerhalb des Rasters ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:618 pcbnew/dialogs/dialog_drc.cpp:566
 msgid "errors"
@@ -9225,7 +9225,7 @@ msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Erstellen der Symbolbibliothekstabelle '%s'.\n"
+"Fehler beim Erstellen der Symbolbibliothekstabelle \"%s\".\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
@@ -9245,7 +9245,7 @@ msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Lesen der Symbolbibliothekstabelle '%s'.\n"
+"Fehler beim Lesen der Symbolbibliothekstabelle \"%s\".\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
@@ -9257,7 +9257,8 @@ msgstr "Globale Bibliothekstabelle '%s' kann nicht erstellt werden."
 #, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
 msgstr ""
-"Fehler beim Kopieren der globalen Symbolbibliothekstabelle '%s' nach '%s'."
+"Fehler beim Kopieren der globalen Symbolbibliothekstabelle \"%s\" nach \"%s\""
+"."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9755,7 +9756,7 @@ msgstr "Neues Symbol"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:213
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:150
 msgid "Border"
-msgstr "Grenze"
+msgstr "Rand"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:80
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:247
@@ -14264,6 +14265,8 @@ msgid ""
 "Altium's harness connector (%s) was imported as ahierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
+"Altiums Signalbündel-Anschluss (%s) wurde als hierarchisches Schaltplanblatt "
+"importiert. Bitte überprüfen Sie den importierten Schaltplan."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2012
 #, fuzzy
@@ -14281,6 +14284,8 @@ msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
+"Altiums Signalbündel-Port (%s) wurde als Textfeld importiert. Bitte "
+"überprüfen Sie den importierten Schaltplan."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2233
 #, c-format
@@ -15762,6 +15767,8 @@ msgstr "Unbekannter SIM_VALUE-Typ"
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr ""
+"Konnte Modell \"%s\" nicht finden, um es für das \"A Kind Of\"-Modell \"%s\" "
+"zu kopieren"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -19828,13 +19835,15 @@ msgstr "Deinstallierte Bibliotheken automatisch entfernen"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
 msgid "Library nickname prefix:"
-msgstr ""
+msgstr "Bibliotheks-Aliasname-Präfix:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
 msgstr ""
+"Nachdem Pakete (de)installiert wurden, kann es notwendig sein, KiCad neu zu "
+"starten, damit Änderungen in der globalen Bibliothekstabelle sichtbar werden."
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -21288,7 +21297,7 @@ msgstr "Linearer Widerstand:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:124
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr ""
+msgstr "Frequenz für 100% Eindringtiefe:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:136
 msgid "Ampacity:"
@@ -21674,6 +21683,7 @@ msgstr "4R-Lösung:"
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:228
 msgid "Current calculation is underestimated due to long fusing time."
 msgstr ""
+"Stromberechnung wird aufgrund der langen Schmelzzeit niedriger angesetzt."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
 msgid "Ambient temperature:"
@@ -21695,7 +21705,7 @@ msgstr "Leiterbahndicke:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
 msgid "Time to fuse:"
-msgstr ""
+msgstr "Schmelzzeit:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
 msgid "s"
@@ -22201,17 +22211,16 @@ msgid "Speed in medium:"
 msgstr "Geschwindigkeit in Medium:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
-#, fuzzy
 msgid "er:"
-msgstr "Er:"
+msgstr "εr:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
 msgid "relative permittivity (dielectric constant)"
-msgstr "relative Dielektrizitätskonstante (Dielektrizitätszahl)"
+msgstr "relative Permittivität (Dielektrizitätskonstante)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:99
 msgid "mur:"
-msgstr ""
+msgstr "μr:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "relative permeability"
@@ -22328,7 +22337,7 @@ msgstr "Elektrische Abstände"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:95
 msgid "Fusing Current"
-msgstr ""
+msgstr "Schmelzstrom"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "Cable Size"
@@ -26401,7 +26410,7 @@ msgstr "Ursprung der Drill/Place-Datei verwenden"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:86
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr ""
+msgstr "Negative X-Koordinaten für Footprints auf Unterseite verwenden"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
@@ -27557,15 +27566,15 @@ msgstr "%s und %s"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
 msgid "Error: Pad must have a positive size."
-msgstr ""
+msgstr "Fehler: Pad muss eine positive Größe haben."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
-msgstr ""
+msgstr "Warnung: Pad-Bohrloch nicht innerhalb der Padform."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1290
 msgid "Warning: Pad hole will leave no copper."
-msgstr ""
+msgstr "Warnung: Pad-Bohrloch wird kein Kupfer zurücklassen."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1295
 msgid "Warning: Negative local clearance values will have no effect."
@@ -28905,7 +28914,7 @@ msgstr "Positioniere relativ zum Referenelement"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
 msgid "Right-click for layer selection commands."
-msgstr ""
+msgstr "Rechts klicken für Befehle zur Lagenauswahl."
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:205
 msgid "Print according to objects tab of appearance manager"
@@ -29423,6 +29432,8 @@ msgstr "Footprint den ausgewählten Symbolen zuordnen"
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
 msgid "Ensures that cross-probed footprints are visible in the current view"
 msgstr ""
+"Stellt sicher, dass kreuzreferenzierte Footprins innerhalb des aktuellen "
+"Sichtbereichs liegen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -32002,6 +32013,8 @@ msgstr "FEHLER: %s %s"
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
 msgstr ""
+"Das Schlüsselwort \"%s\" ist veraltet.  Bitte verwenden Sie stattdessen \"%"
+"s\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:479
@@ -32327,7 +32340,7 @@ msgstr "<uneingeschränkt>"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:346
 msgid "Checking length constraints..."
-msgstr ""
+msgstr "Prüfe Längenbeschränkungen ..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:113
 msgid "(no edges found on Edge.Cuts layer)"
@@ -39512,9 +39525,8 @@ msgstr ""
 "Abzweigungen oder Pads, oder auf gesamte Verbindungen"
 
 #: pcbnew/tools/pcb_actions.cpp:1304
-#, fuzzy
 msgid "Unroute Selected"
-msgstr "Keine Bus gewählt"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1305
 #, fuzzy
@@ -39745,9 +39757,8 @@ msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1496
-#, fuzzy
 msgid "Route Selected"
-msgstr "Keine Bus gewählt"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1497
 msgid "Sequentially route selected items from ratsnest anchor."
