@@ -1417,8 +1417,6 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                     if( poly->PointCount() < 2 )     // Careful of empty pads
                         break;
 
-                    if( poly->)
-
                     if( margin.x < 0 )  // The poly shape must be deflated
                     {
                         int numSegs = GetArcToSegmentCount( -margin.x, m_maxError, FULL_CIRCLE );
