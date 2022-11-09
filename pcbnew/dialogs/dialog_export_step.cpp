@@ -53,13 +53,13 @@
 class DIALOG_EXPORT_STEP : public DIALOG_EXPORT_STEP_BASE
 {
 public:
-    enum STEP_ORG_OPT
+    enum STEP_ORIGIN_OPTION
     {
-        STEP_ORG_0,             // absolute coordinates
-        STEP_ORG_PLOT_AXIS,     // origin is plot/drill axis origin
-        STEP_ORG_GRID_AXIS,     // origin is grid origin
-        STEP_ORG_BOARD_CENTER,  // origin is board center
-        STEP_ORG_USER,          // origin is entered by user
+        STEP_ORIGIN_0,             // absolute coordinates
+        STEP_ORIGIN_PLOT_AXIS,     // origin is plot/drill axis origin
+        STEP_ORIGIN_GRID_AXIS,     // origin is grid origin
+        STEP_ORIGIN_BOARD_CENTER,  // origin is board center
+        STEP_ORIGIN_USER,          // origin is entered by user
     };
 
     DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath );
@@ -86,7 +86,7 @@ protected:
         return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_STEP_Yorg->GetValue() );
     }
 
-    STEP_ORG_OPT GetOriginOption();
+    STEP_ORIGIN_OPTION GetOriginOption();
 
     bool GetNoVirtOption()
     {
@@ -104,15 +104,14 @@ protected:
     }
 
 private:
-    PCB_EDIT_FRAME* m_parent;
-    STEP_ORG_OPT    m_STEP_org_opt;  // The last preference for STEP Origin:
-    bool            m_noVirtual;     // remember last preference for No Virtual Component
-    int             m_OrgUnits;      // remember last units for User Origin
-    double          m_XOrg;          // remember last User Origin X value
-    double          m_YOrg;          // remember last User Origin Y value
-    wxString        m_boardPath;     // path to the exported board file
-    wxProcess*      m_process;       // running conversion process
-    static int      m_toleranceLastChoice;  // Store m_tolerance option during a session
+    PCB_EDIT_FRAME*    m_parent;
+    STEP_ORIGIN_OPTION m_origin;         // The last preference for STEP origin option
+    double             m_userOriginX;    // remember last User Origin X value
+    double             m_userOriginY;    // remember last User Origin Y value
+    int                m_originUnits;    // remember last units for User Origin
+    bool               m_noVirtual;      // remember last preference for No Virtual Component
+    wxString           m_boardPath;      // path to the exported board file
+    static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
 };
 
 
@@ -127,7 +126,6 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
     m_sdbSizerOK->SetLabel( _( "Export" ) );
     m_sdbSizer->Layout();
-    m_process = nullptr;
 
     // Build default output file name
     wxString path = m_parent->GetLastPath( LAST_PATH_STEP );
@@ -146,10 +144,10 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     widget->Destroy();
 
     m_filePickerSTEP = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString,
-            _( "Select a STEP export filename" ),
-            _( "STEP files" ) + AddFileExtListToFilter( { "STEP", "STP" } ),
-            wxDefaultPosition,
-            wxSize( -1, -1 ), wxFLP_SAVE | wxFLP_USE_TEXTCTRL );
+                                             _( "Select a STEP export filename" ),
+                                             _( "STEP files" ) + AddFileExtListToFilter( { "STEP", "STP" } ),
+                                             wxDefaultPosition,
+                                             wxSize( -1, -1 ), wxFLP_SAVE | wxFLP_USE_TEXTCTRL );
     bSizerTop->Add( m_filePickerSTEP, 1, wxTOP | wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
 
     m_filePickerSTEP->SetPath( path );
@@ -161,32 +159,32 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
-    m_STEP_org_opt = static_cast<STEP_ORG_OPT>( cfg->m_ExportStep.origin_mode );
+    m_origin = static_cast<STEP_ORIGIN_OPTION>( cfg->m_ExportStep.origin_mode );
 
-    switch( m_STEP_org_opt )
+    switch( m_origin )
     {
     default:
-    case STEP_ORG_PLOT_AXIS:    m_rbDrillAndPlotOrigin->SetValue( true ); break;
-    case STEP_ORG_GRID_AXIS:    m_rbGridOrigin->SetValue( true );         break;
-    case STEP_ORG_USER:         m_rbUserDefinedOrigin->SetValue( true );  break;
-    case STEP_ORG_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true );  break;
+    case STEP_ORIGIN_PLOT_AXIS:    m_rbDrillAndPlotOrigin->SetValue( true ); break;
+    case STEP_ORIGIN_GRID_AXIS:    m_rbGridOrigin->SetValue( true );         break;
+    case STEP_ORIGIN_USER:         m_rbUserDefinedOrigin->SetValue( true );  break;
+    case STEP_ORIGIN_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true );  break;
     }
 
-    m_OrgUnits  = cfg->m_ExportStep.origin_units;
-    m_XOrg      = cfg->m_ExportStep.origin_x;
-    m_YOrg      = cfg->m_ExportStep.origin_y;
+    m_originUnits = cfg->m_ExportStep.origin_units;
+    m_userOriginX = cfg->m_ExportStep.origin_x;
+    m_userOriginY = cfg->m_ExportStep.origin_y;
     m_noVirtual = cfg->m_ExportStep.no_virtual;
 
     m_cbRemoveVirtual->SetValue( m_noVirtual );
     m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
     m_cbOverwriteFile->SetValue( cfg->m_ExportStep.overwrite_file );
 
-    m_STEP_OrgUnitChoice->SetSelection( m_OrgUnits );
+    m_STEP_OrgUnitChoice->SetSelection( m_originUnits );
     wxString tmpStr;
-    tmpStr << m_XOrg;
+    tmpStr << m_userOriginX;
     m_STEP_Xorg->SetValue( tmpStr );
     tmpStr = wxEmptyString;
-    tmpStr << m_YOrg;
+    tmpStr << m_userOriginY;
     m_STEP_Yorg->SetValue( tmpStr );
 
     wxString bad_scales;
@@ -238,11 +236,11 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 
 DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
 {
-    GetOriginOption(); // Update m_STEP_org_opt member.
+    GetOriginOption(); // Update m_origin member.
 
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
-    cfg->m_ExportStep.origin_mode = static_cast<int>( m_STEP_org_opt );
+    cfg->m_ExportStep.origin_mode = static_cast<int>( m_origin );
     cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();
     cfg->m_ExportStep.replace_models = m_cbSubstModels->GetValue();
     cfg->m_ExportStep.overwrite_file = m_cbOverwriteFile->GetValue();
@@ -261,20 +259,20 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
 }
 
 
-DIALOG_EXPORT_STEP::STEP_ORG_OPT DIALOG_EXPORT_STEP::GetOriginOption()
+DIALOG_EXPORT_STEP::STEP_ORIGIN_OPTION DIALOG_EXPORT_STEP::GetOriginOption()
 {
-    m_STEP_org_opt = STEP_ORG_0;
+    m_origin = STEP_ORIGIN_0;
 
     if( m_rbDrillAndPlotOrigin->GetValue() )
-        m_STEP_org_opt = STEP_ORG_PLOT_AXIS;
+        m_origin = STEP_ORIGIN_PLOT_AXIS;
     else if( m_rbGridOrigin->GetValue() )
-        m_STEP_org_opt = STEP_ORG_GRID_AXIS;
+        m_origin = STEP_ORIGIN_GRID_AXIS;
     else if( m_rbUserDefinedOrigin->GetValue() )
-        m_STEP_org_opt = STEP_ORG_USER;
+        m_origin = STEP_ORIGIN_USER;
     else if( m_rbBoardCenterOrigin->GetValue() )
-        m_STEP_org_opt = STEP_ORG_BOARD_CENTER;
+        m_origin = STEP_ORIGIN_BOARD_CENTER;
 
-    return m_STEP_org_opt;
+    return m_origin;
 }
 
 
@@ -363,10 +361,6 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             return;
     }
 
-    DIALOG_EXPORT_STEP::STEP_ORG_OPT orgOpt = GetOriginOption();
-    double xOrg = 0.0;
-    double yOrg = 0.0;
-
     wxFileName appK2S( wxStandardPaths::Get().GetExecutablePath() );
 #ifdef __WXMAC__
     // On macOS, we have standalone applications inside the main bundle, so we handle that here:
@@ -407,24 +401,24 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     // wxString::Format does not work. So use a %c format in string
     int quote = '"';
 
-    switch( orgOpt )
+    switch( GetOriginOption() )
     {
-    case DIALOG_EXPORT_STEP::STEP_ORG_0:
+    case STEP_ORIGIN_0:
         wxFAIL_MSG( wxT( "Unsupported origin option: how did we get here?" ) );
         break;
 
-    case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
+    case STEP_ORIGIN_PLOT_AXIS:
         cmdK2S.Append( wxT( " --drill-origin" ) );
         break;
 
-    case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
+    case STEP_ORIGIN_GRID_AXIS:
         cmdK2S.Append( wxT( " --grid-origin" ) );
         break;
 
-    case DIALOG_EXPORT_STEP::STEP_ORG_USER:
+    case STEP_ORIGIN_USER:
     {
-        xOrg = GetXOrg();
-        yOrg = GetYOrg();
+        double xOrg = GetXOrg();
+        double yOrg = GetYOrg();
 
         if( GetOrgUnitsChoice() == 1 )
         {
@@ -439,12 +433,13 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         break;
     }
 
-    case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
+    case STEP_ORIGIN_BOARD_CENTER:
     {
-        BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
-        xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
-        yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
+        BOX2I     bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
+        double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
+        double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
         LOCALE_IO dummy;
+
         cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
                                          quote, xOrg, yOrg, quote ) );
         break;
