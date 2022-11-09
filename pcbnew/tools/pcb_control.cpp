@@ -731,6 +731,10 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
 
                 if( allowed.any() )
                 {
+                    // Don't prune internal copper layers on items with holes
+                    if( aItem->HasHole() && aItem->IsOnCopperLayer() )
+                        allowed |= LSET::InternalCuMask();
+
                     aItem->SetLayerSet( allowed );
                 }
                 else

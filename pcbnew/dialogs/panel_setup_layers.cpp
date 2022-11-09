@@ -31,6 +31,9 @@
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <collectors.h>
+#include <footprint.h>
+#include <pad.h>
+#include <pcb_track.h>
 #include <panel_setup_layers.h>
 #include <board_stackup_manager/panel_board_stackup.h>
 
@@ -523,11 +526,30 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
         LSET changedLayers = m_enabledLayers ^ previousEnabled;
 
-        /* Ensure enabled layers are also visible
-         * This is mainly to avoid mistakes if some enabled
-         * layers are not visible when exiting this dialog
+        /*
+         * Ensure enabled layers are also visible.  This is mainly to avoid mistakes if some
+         * enabled layers are not visible when exiting this dialog.
          */
         m_pcb->SetVisibleLayers( m_pcb->GetVisibleLayers() | changedLayers );
+
+        /*
+         * Ensure items with through holes have all inner copper layers.  (For historical reasons
+         * this is NOT trimmed to the currently-enabled inner layers.)
+         */
+        for( FOOTPRINT* fp : m_pcb->Footprints() )
+        {
+            for( PAD* pad : fp->Pads() )
+            {
+                if( pad->HasHole() && pad->IsOnCopperLayer() )
+                    pad->SetLayerSet( pad->GetLayerSet() | LSET::InternalCuMask() );
+            }
+        }
+
+        for( PCB_TRACK* via : m_pcb->Tracks() )
+        {
+            if( via->HasHole() )
+                via->SetLayerSet( via->GetLayerSet() | LSET::InternalCuMask() );
+        }
 
         modified = true;
     }
