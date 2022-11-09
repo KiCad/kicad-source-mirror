@@ -60,14 +60,11 @@
                     "visible_on_add": true,
                     "visible_in_chooser": false,
                     "show_name": true
-                },
-                {
-                    "column": "Description",
-                    "name": "ki_description",
-                    "visible_on_add": false,
-                    "visible_in_chooser": true
                 }
-            ]
+            ],
+            "properties": {
+                "description": "Description"
+            }
         },
         {
             "name": "Capacitors",
@@ -105,14 +102,11 @@
                     "name": "Voltage Rating",
                     "visible_on_add": true,
                     "visible_in_chooser": true
-                },
-                {
-                    "column": "Description",
-                    "name": "ki_description",
-                    "visible_on_add": false,
-                    "visible_in_chooser": true
                 }
-            ]
+            ],
+            "properties": {
+                "description": "Description"
+            }
         }
     ]
 }

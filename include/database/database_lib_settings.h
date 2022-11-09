@@ -52,6 +52,15 @@ struct DATABASE_FIELD_MAPPING
 };
 
 
+struct MAPPABLE_SYMBOL_PROPERTIES
+{
+    std::string description;
+    std::string footprint_filters;
+    std::string exclude_from_bom;
+    std::string exclude_from_board;
+};
+
+
 /**
  * A database library table will be mapped to a sub-library provided by the database library entry
  * in the KiCad symbol/footprint library table.  A single database library config file (managed by
@@ -73,6 +82,7 @@ struct DATABASE_LIB_TABLE
     std::string symbols_col;       ///< Column name containing KiCad symbol refs
     std::string footprints_col;    ///< Column name containing KiCad footprint refs
 
+    MAPPABLE_SYMBOL_PROPERTIES properties;
     std::vector<DATABASE_FIELD_MAPPING> fields;
 };
 

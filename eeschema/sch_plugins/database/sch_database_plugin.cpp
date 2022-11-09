@@ -309,6 +309,39 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
                     aTable.footprints_col );
     }
 
+    if( !aTable.properties.description.empty() && aRow.count( aTable.properties.description ) )
+    {
+        wxString value(
+                std::any_cast<std::string>( aRow.at( aTable.properties.description ) ).c_str(),
+                wxConvUTF8 );
+        symbol->SetDescription( value );
+    }
+
+    if( !aTable.properties.footprint_filters.empty()
+        && aRow.count( aTable.properties.footprint_filters ) )
+    {
+        wxString value( std::any_cast<std::string>( aRow.at( aTable.properties.footprint_filters ) )
+                                .c_str(),
+                        wxConvUTF8 );
+        wxArrayString filters;
+        filters.push_back( value );
+        symbol->SetFPFilters( filters );
+    }
+
+    if( !aTable.properties.exclude_from_board.empty()
+        && aRow.count( aTable.properties.exclude_from_board ) )
+    {
+        bool exclude = std::any_cast<bool>( aRow.at( aTable.properties.exclude_from_board ) );
+        symbol->SetIncludeOnBoard( !exclude );
+    }
+
+    if( !aTable.properties.exclude_from_bom.empty()
+        && aRow.count( aTable.properties.exclude_from_bom ) )
+    {
+        bool exclude = std::any_cast<bool>( aRow.at( aTable.properties.exclude_from_bom ) );
+        symbol->SetIncludeInBom( !exclude );
+    }
+
     for( const DATABASE_FIELD_MAPPING& mapping : aTable.fields )
     {
         if( !aRow.count( mapping.column ) )
@@ -321,22 +354,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
         wxString value( std::any_cast<std::string>( aRow.at( mapping.column ) ).c_str(),
                         wxConvUTF8 );
 
-        if( mapping.name == wxT( "ki_description" ) )
-        {
-            symbol->SetDescription( value );
-            continue;
-        }
-        else if( mapping.name == wxT( "ki_keywords" ) )
-        {
-            symbol->SetKeyWords( value );
-            continue;
-        }
-        else if( mapping.name == wxT( "ki_fp_filters" ) )
-        {
-            // TODO: Handle this here?
-            continue;
-        }
-        else if( mapping.name == wxT( "Value" ) )
+        if( mapping.name == wxT( "Value" ) )
         {
             LIB_FIELD& field = symbol->GetValueField();
             field.SetText( value );

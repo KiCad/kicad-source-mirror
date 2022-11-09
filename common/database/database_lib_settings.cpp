@@ -29,7 +29,7 @@
 #include <wildcards_and_files_ext.h>
 
 
-const int dblibSchemaVersion = 0;
+const int dblibSchemaVersion = 1;
 
 
 DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
@@ -48,71 +48,131 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
     m_params.emplace_back( new PARAM<int>( "source.timeout_seconds", &m_Source.timeout, 2 ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
-            "libraries",
-            [&]() -> nlohmann::json
-            {
-                // TODO: implement this; libraries are read-only from KiCad at the moment
-                return {};
-            },
-            [&]( const nlohmann::json aObj )
-            {
-                m_Tables.clear();
+        "libraries",
+        [&]() -> nlohmann::json
+        {
+            // TODO: implement this; libraries are read-only from KiCad at the moment
+            return {};
+        },
+        [&]( const nlohmann::json aObj )
+        {
+            m_Tables.clear();
 
-                if( !aObj.is_array() )
-                    return;
+            if( !aObj.is_array() )
+                return;
 
-                for( const nlohmann::json& entry : aObj )
+            for( const nlohmann::json& entry : aObj )
+            {
+                if( entry.empty() || !entry.is_object() )
+                    continue;
+
+                DATABASE_LIB_TABLE table;
+
+                table.name           = entry["name"].get<std::string>();
+                table.table          = entry["table"].get<std::string>();
+                table.key_col        = entry["key"].get<std::string>();
+                table.symbols_col    = entry["symbols"].get<std::string>();
+                table.footprints_col = entry["footprints"].get<std::string>();
+
+                if( entry.contains( "properties" ) && entry["properties"].is_object() )
                 {
-                    if( entry.empty() || !entry.is_object() )
-                        continue;
+                    const nlohmann::json& pj = entry["properties"];
 
-                    DATABASE_LIB_TABLE table;
+                    if( pj.contains( "description" ) )
+                        table.properties.description = pj["description"].get<std::string>();
 
-                    table.name           = entry["name"].get<std::string>();
-                    table.table          = entry["table"].get<std::string>();
-                    table.key_col        = entry["key"].get<std::string>();
-                    table.symbols_col    = entry["symbols"].get<std::string>();
-                    table.footprints_col = entry["footprints"].get<std::string>();
-
-                    if( entry.contains( "fields" ) && entry["fields"].is_array() )
+                    if( pj.contains( "footprint_filters" ) )
                     {
-                        for( const nlohmann::json& fieldJson : entry["fields"] )
-                        {
-                            if( fieldJson.empty() || !fieldJson.is_object() )
-                                continue;
-
-                            std::string column = fieldJson.contains( "column" )
-                                                 ? fieldJson["column"].get<std::string>() : "";
-
-                            std::string name   = fieldJson.contains( "name" )
-                                                 ? fieldJson["name"].get<std::string>() : "";
-
-                            bool visible_on_add = !fieldJson.contains( "visible_on_add" )
-                                                  || fieldJson["visible_on_add"].get<bool>();
-
-                            bool visible_in_chooser =
-                                    !fieldJson.contains( "visible_in_chooser" )
-                                    || fieldJson["visible_in_chooser"].get<bool>();
-
-                            bool show_name = fieldJson.contains( "show_name" )
-                                             && fieldJson["show_name"].get<bool>();
-
-                            table.fields.emplace_back(
-                                    DATABASE_FIELD_MAPPING(
-                                    {
-                                        column, name, visible_on_add, visible_in_chooser, show_name
-                                    } ) );
-                        }
+                        table.properties.footprint_filters =
+                                pj["footprint_filters"].get<std::string>();
                     }
 
-                    m_Tables.emplace_back( std::move( table ) );
+                    if( pj.contains( "exclude_from_bom" ) )
+                    {
+                        table.properties.exclude_from_bom =
+                                pj["exclude_from_bom"].get<std::string>();
+                    }
+
+                    if( pj.contains( "exclude_from_board" ) )
+                    {
+                        table.properties.exclude_from_board =
+                                pj["exclude_from_board"].get<std::string>();
+                    }
                 }
-            },
-            {} ) );
+
+                if( entry.contains( "fields" ) && entry["fields"].is_array() )
+                {
+                    for( const nlohmann::json& fieldJson : entry["fields"] )
+                    {
+                        if( fieldJson.empty() || !fieldJson.is_object() )
+                            continue;
+
+                        std::string column = fieldJson.contains( "column" )
+                                             ? fieldJson["column"].get<std::string>() : "";
+
+                        std::string name   = fieldJson.contains( "name" )
+                                             ? fieldJson["name"].get<std::string>() : "";
+
+                        bool visible_on_add = !fieldJson.contains( "visible_on_add" )
+                                              || fieldJson["visible_on_add"].get<bool>();
+
+                        bool visible_in_chooser =
+                                !fieldJson.contains( "visible_in_chooser" )
+                                || fieldJson["visible_in_chooser"].get<bool>();
+
+                        bool show_name = fieldJson.contains( "show_name" )
+                                         && fieldJson["show_name"].get<bool>();
+
+                        table.fields.emplace_back(
+                                DATABASE_FIELD_MAPPING(
+                                {
+                                    column, name, visible_on_add, visible_in_chooser, show_name
+                                } ) );
+                    }
+                }
+
+                m_Tables.emplace_back( std::move( table ) );
+            }
+        },
+        {} ) );
 
     m_params.emplace_back( new PARAM<int>( "cache.max_size", &m_Cache.max_size, 256 ) );
 
     m_params.emplace_back( new PARAM<int>( "cache.max_age", &m_Cache.max_age, 10 ) );
+
+    registerMigration( 0, 1,
+                       [&]() -> bool
+                       {
+                           /*
+                            * Schema 0 -> 1
+                            * Move internal symbol properties from fields with special names to
+                            * a separate place in the schema.
+                            */
+                            if( !Contains( "libraries" ) || !At( "libraries" ).is_array() )
+                                return true;
+
+                            for( nlohmann::json& library : At( "libraries" ) )
+                            {
+                                if( !library.contains( "fields" ) )
+                                    continue;
+
+                                for( const nlohmann::json& field : library["fields"] )
+                                {
+                                    if( !field.contains( "name" ) || !field.contains( "column" ) )
+                                        continue;
+
+                                    std::string name = field["name"].get<std::string>();
+                                    std::string col  = field["column"].get<std::string>();
+
+                                    if( name == "ki_description" )
+                                        library["properties"]["description"] = col;
+                                    else if( name == "ki_fp_filters" )
+                                        library["properties"]["footprint_filters"] = col;
+                                }
+                            }
+
+                           return true;
+                       } );
 }
 
 
