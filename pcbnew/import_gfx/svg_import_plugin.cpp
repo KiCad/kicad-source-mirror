@@ -54,8 +54,11 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
 {
     wxCHECK( m_importer, false );
 
-    // wxFopen takes care of unicode filenames across platforms
-    FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
+    // 1- wxFopen takes care of unicode filenames across platforms
+    // 2 - nanosvg (exactly nsvgParseFromFile) expects a binary file (exactly the CRLF eof must
+    // not be replaced by LF and changes the byte count) in one validity test,
+    // so open it in binary mode.
+    FILE* fp = wxFopen( aFileName, wxT( "rb" ) );
 
     if( fp == nullptr )
         return false;

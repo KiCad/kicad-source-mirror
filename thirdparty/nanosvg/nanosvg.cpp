@@ -3688,6 +3688,8 @@ NSVGimage* nsvgParseFromFile( FILE *fp, const char* units, float dpi )
     if( data == NULL )
         goto error;
 
+    // This test works only if fp is open in binary mode, i.e. if the CRLF eol is not
+    // replaced by LF when reading the file
     if( fread( data, 1, size, fp ) != size )
         goto error;
 
