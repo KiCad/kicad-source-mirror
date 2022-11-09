@@ -183,12 +183,14 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
         // already loaded above
         if( !MigrateFromLegacy( cfg.get() ) )
         {
+            success = false;
             wxLogTrace( traceSettings,
                         wxT( "%s: migrated; not all settings were found in legacy file" ),
                         GetFullFilename() );
         }
         else
         {
+            success = true;
             wxLogTrace( traceSettings, wxT( "%s: migrated from legacy format" ), GetFullFilename() );
         }
 
@@ -310,6 +312,7 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
         }
         catch( nlohmann::json::parse_error& error )
         {
+            success = false;
             wxLogTrace( traceSettings, wxT( "Json parse error reading %s: %s" ),
                         path.GetFullPath(), error.what() );
             wxLogTrace( traceSettings, wxT( "Attempting migration in case file is in legacy format" ) );
@@ -327,7 +330,7 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
     wxLogTrace( traceSettings, wxT( "Loaded <%s> with schema %d" ), GetFullFilename(), m_schemaVersion );
 
     // If we migrated, clean up the legacy file (with no extension)
-    if( legacy_migrated || migrated )
+    if( m_writeFile && ( legacy_migrated || migrated ) )
     {
         if( legacy_migrated && m_deleteLegacyAfterMigration && !wxRemoveFile( path.GetFullPath() ) )
         {
