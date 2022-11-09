@@ -1234,6 +1234,8 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTe
     auto cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
+    GetBoard()->GetDesignSettings() = cfg->m_DesignSettings;
+
     GetCanvas()->GetView()->UpdateAllLayersColor();
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     GetCanvas()->ForceRefresh();
