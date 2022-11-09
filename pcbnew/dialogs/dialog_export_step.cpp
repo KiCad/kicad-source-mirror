@@ -165,11 +165,11 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 
     switch( m_STEP_org_opt )
     {
-    default: break;
-    case STEP_ORG_PLOT_AXIS: m_rbDrillAndPlotOrigin->SetValue( true );   break;
-    case STEP_ORG_GRID_AXIS: m_rbGridOrigin->SetValue( true );           break;
-    case STEP_ORG_USER: m_rbUserDefinedOrigin->SetValue( true );         break;
-    case STEP_ORG_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true ); break;
+    default:
+    case STEP_ORG_PLOT_AXIS:    m_rbDrillAndPlotOrigin->SetValue( true ); break;
+    case STEP_ORG_GRID_AXIS:    m_rbGridOrigin->SetValue( true );         break;
+    case STEP_ORG_USER:         m_rbUserDefinedOrigin->SetValue( true );  break;
+    case STEP_ORG_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true );  break;
     }
 
     m_OrgUnits  = cfg->m_ExportStep.origin_units;
@@ -410,6 +410,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     switch( orgOpt )
     {
     case DIALOG_EXPORT_STEP::STEP_ORG_0:
+        wxFAIL_MSG( wxT( "Unsupported origin option: how did we get here?" ) );
         break;
 
     case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:

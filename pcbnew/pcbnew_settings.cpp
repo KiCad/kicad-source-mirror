@@ -309,7 +309,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_ExportIdf.units_mils, false ) );
 
     m_params.emplace_back( new PARAM<int>( "export_step.origin_mode",
-            &m_ExportStep.origin_mode, 0 ) );
+            &m_ExportStep.origin_mode, 1 ) );
 
     m_params.emplace_back( new PARAM<int>( "export_step.origin_units",
             &m_ExportStep.origin_units, 0 ) );
