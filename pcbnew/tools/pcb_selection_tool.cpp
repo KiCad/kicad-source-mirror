@@ -272,10 +272,10 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),
                            evt->Modifier( MD_ALT ) );
 
-        bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
+        bool            modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
         PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
-        bool brd_editor = frame && frame->IsType( FRAME_PCB_EDITOR );
-        ROUTER_TOOL* router = m_toolMgr->GetTool<ROUTER_TOOL>();
+        bool            brd_editor = frame && frame->IsType( FRAME_PCB_EDITOR );
+        ROUTER_TOOL*    router = m_toolMgr->GetTool<ROUTER_TOOL>();
 
         // If the router tool is active, don't override
         if( router && router->IsToolActive() && router->RoutingInProgress() )
@@ -342,13 +342,9 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 selectPoint( evt->Position() );
 
             if( m_selection.GetSize() == 1 && m_selection[0]->Type() == PCB_GROUP_T )
-            {
                 EnterGroup();
-            }
             else
-            {
                 m_toolMgr->RunAction( PCB_ACTIONS::properties, true );
-            }
         }
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
@@ -411,33 +407,39 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                                 aCollector.Remove( item );
                         };
 
-                // Selection is empty? try to start dragging the item under the point where drag
-                // started
-                if( m_selection.Empty() && selectCursor( false, zoneFilledAreaFilter ) )
-                    m_selection.SetIsHover( true );
+                // See if we can drag before falling back to selectMultiple()
+                bool doDrag = false;
 
-                // Check if dragging has started within any of selected items bounding box.
-                // We verify "HasPosition()" first to protect against edge case involving
-                // moving off menus that causes problems (issue #5250)
-                if( evt->HasPosition() && selectionContains( evt->Position() ) )
+                if( evt->HasPosition() )
                 {
-                    // Yes -> run the move tool and wait till it finishes
-                    PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( m_selection.GetItem( 0 ) );
+                    if( m_selection.Empty()
+                        && selectPoint( evt->DragOrigin(), false, nullptr, zoneFilledAreaFilter ) )
+                    {
+                        m_selection.SetIsHover( true );
+                        doDrag = true;
+                    }
+                    // Check if dragging has started within any of selected items bounding box.
+                    else if( selectionContains( evt->DragOrigin() ) )
+                    {
+                        doDrag = true;
+                    }
+                }
 
-                    // If there is only item in the selection and it's a track, then we need
-                    // to route it.
-                    bool doRouting = ( track && ( 1 == m_selection.GetSize() ) );
+                if( doDrag )
+                {
+                    bool haveTrack = m_selection.GetSize() == 1
+                                         && dynamic_cast<PCB_TRACK*>( m_selection.GetItem( 0 ) );
 
-                    if( doRouting && trackDragAction == TRACK_DRAG_ACTION::DRAG )
+                    if( haveTrack && trackDragAction == TRACK_DRAG_ACTION::DRAG )
                         m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree, true );
-                    else if( doRouting && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
+                    else if( haveTrack && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
                         m_toolMgr->RunAction( PCB_ACTIONS::dragFreeAngle, true );
                     else
                         m_toolMgr->RunAction( PCB_ACTIONS::move, true );
                 }
                 else
                 {
-                    // No -> drag a selection box
+                    // Otherwise drag a selection box
                     selectMultiple();
                 }
             }
