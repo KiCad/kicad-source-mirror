@@ -2377,7 +2377,7 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
                 // Draw holes
                 int holes_count = outline->HoleCount( ii );
 
-                for( int jj = 0; ii < holes_count; ++jj )
+                for( int jj = 0; jj < holes_count; ++jj )
                     m_gal->DrawPolyline( outline->CHole( ii, jj ) );
             }
 
