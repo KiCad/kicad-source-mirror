@@ -644,6 +644,8 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
 
                 field.SetVisible( visible );
                 field.SetPosition( pos );
+                field.SetNameShown( libField->IsNameShown() );
+                field.SetCanAutoplace( libField->CanAutoplace() );
             }
 
             if( resetPositions )
