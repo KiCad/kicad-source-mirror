@@ -1,15 +1,15 @@
 # aris-kimi <aris_kimi@hotmail.com>, 2020, 2021, 2022.
 # fresh <fresh190@protonmail.com>, 2021.
 # Michalis <michalisntovas@yahoo.gr>, 2021.
-# Michael Misirlis <MMISIRLIS@gmail.com>, 2021.
+# Michael Misirlis <MMISIRLIS@gmail.com>, 2021, 2022.
 # Axel Henriksson <axe.henriksson@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-21 15:03+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"PO-Revision-Date: 2022-11-10 12:49+0000\n"
+"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -3073,13 +3073,15 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:127
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Η εστίαση ακολουθεί το ποντίκι μεταξύ επεξεργαστών σχηματικού και PCB"
 
 #: common/dialogs/panel_common_settings_base.cpp:128
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Εάν το ποντίκι μετακινηθεί πάνω από τον καμβά ενός σχηματικού ή ενός PCB, "
+"αυτό το παράθυρο ανυψώνεται."
 
 #: common/dialogs/panel_common_settings_base.cpp:132
 msgid "Icon theme:"
@@ -3321,6 +3323,22 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"Το KiCad μπορεί ανώνυμα να αναφέρει σφάλματα και δεδομένα ειδικών συμβάντων "
+"στους προγραμματιστές, προκειμένου να βοηθήσει στον αποτελεσματικό εντοπισμό "
+"κρίσιμων σφαλμάτων σε όλη τη βάση χρηστών και να βοηθήσει στη καθοδήγηση "
+"βελτιώσεων.\n"
+"\n"
+"Για τη σύνδεση αυτόματων αναφορών από την ίδια εγκατάσταση του KiCad, "
+"δημιουργείται ένα μοναδικό αναγνωριστικό που είναι εντελώς τυχαίο και "
+"χρησιμοποιείται μόνο για τους σκοπούς της αναφοράς σφαλμάτων. Δεν "
+"αποθηκεύονται ή συνδέονται με αυτό το αναγνωριστικό στοιχείο προσωπικής "
+"ταυτοποίησης, συμπεριλαμβανομένης της διεύθυνσης IP. Μπορείτε να επαναφέρετε "
+"αυτό το αναγνωριστικό ανά πάσα στιγμή με το κουμπί που παρέχεται.\n"
+"\n"
+"Εάν επιλέξετε να συμμετάσχετε εθελοντικά, το KiCad θα χειρίζεται αυτόματα "
+"την αποστολή των εν λόγω αναφορών όταν συμβαίνουν σφάλματα ή συμβάντα. Τα "
+"αρχεία σχεδίασής σας, όπως σχηματικά ή PCB, δεν κοινοποιούνται σε αυτήν τη "
+"διαδικασία."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -5497,10 +5515,18 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"Το KiCad μπορεί ανώνυμα να αναφέρει σφάλματα και δεδομένα ειδικών συμβάντων "
+"στους προγραμματιστές, προκειμένου να βοηθήσει στον αποτελεσματικό εντοπισμό "
+"κρίσιμων σφαλμάτων στη βάση χρηστών και να βοηθήσει στη καθοδήγηση των "
+"βελτιώσεων.\n"
+"Εάν επιλέξετε να συμμετάσχετε εθελοντικά, το KiCad θα χειρίζεται αυτόματα "
+"την αποστολή των εν λόγω αναφορών όταν συμβαίνουν σφάλματα ή συμβάντα.\n"
+"Τα αρχεία σχεδίασής σας, όπως σχηματικά ή PCB, δεν κοινοποιούνται σε αυτήν "
+"τη διαδικασία."
 
 #: common/pgm_base.cpp:362
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "Επιλογή συλλογής δεδομένων κατόπιν αιτήματος"
 
 #: common/pgm_base.cpp:426
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -8887,7 +8913,7 @@ msgstr "Εμφάνιση ονομασίας πεδίου"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:95
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Εμφάνιση ονόματος πεδίου εκτός από την τιμή του"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:102
 #, fuzzy
@@ -10642,6 +10668,7 @@ msgstr "Ένα αρχείο ανά επίπεδο"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:162
 msgid "Open output file with associated application after successful plot"
 msgstr ""
+"Άνοιγμα αρχείου εξόδου με τη σχετική εφαρμογή μετά την επιτυχή σχεδιογράφηση"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
@@ -11201,7 +11228,7 @@ msgstr "Αντικατάσταση"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:63
 msgid "Pin:"
-msgstr ""
+msgstr "Ακροδέκτης:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:90
 #: eeschema/dialogs/dialog_sim_model_base.cpp:194
@@ -11632,7 +11659,7 @@ msgstr "[Μη σωσμένο]"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1370
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Οι αλλαγές δεν έχουν αποθηκευτεί. Εξαγωγή μη αποθηκευμένων δεδομένων;"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1380
 #, fuzzy
@@ -11964,6 +11991,9 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"Μη έγκυρη υπερ-σύνδεση. Εισαγάγετε είτε μια έγκυρη διεύθυνση URL (π.χ. "
+"file:// ή http(s)://) είτε \"#<αριθμός σελίδας>\" για να δημιουργήσετε έναν "
+"υπερσύνδεσμο σε μια σελίδα σε αυτό το σχηματικό."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:288
 #, fuzzy
@@ -11972,7 +12002,7 @@ msgstr "Σύνδεσμοι"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:290
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Κάντε αυτό το στοιχείο κειμένου υπερσύνδεσμο με δυνατότητα κλικ"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:114
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -12222,7 +12252,7 @@ msgstr "Ελεύθερη-γωνία"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "Γωνία 90 μοιρών"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 #, fuzzy
@@ -12919,6 +12949,8 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
+"Δεν είναι δυνατή η αντιγραφή του αρχείου '%s' καθώς θα αντικατασταθεί από το "
+"νέο αρχείο ριζικού φύλλου."
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -13743,6 +13775,7 @@ msgstr ""
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr ""
+"Δεν ήταν δυνατό το άνοιγμα του αρχείου '%s' για την εγγραφή του μοντέλου IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, fuzzy, c-format
@@ -15588,9 +15621,8 @@ msgid "There were errors during netlist export, aborted."
 msgstr "Υπήρξαν λάθη κατά την εξαγωγή λίστας δικτύων, ματαιώθηκε."
 
 #: eeschema/sim/sim_plot_frame.cpp:494 eeschema/sim/sim_plot_frame.cpp:1878
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "Το %s τρέχει ήδη. Συνέχεια;"
+msgstr "Μια άλλη προσομοίωση εκτελείται ήδη."
 
 #: eeschema/sim/sim_plot_frame.cpp:521
 #, c-format
@@ -18558,18 +18590,14 @@ msgstr ""
 "φορτωθούν αρχεία"
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Δεν φορτώθηκε:</b> <i>%s</i>"
+msgstr "<b>Δεν φορτώθηκε:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:45
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Δεν φορτώθηκε:</b> <i>%s</i>"
+msgstr "<b>Η μνήμη εξαντλήθηκε κατά την ανάγνωση:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:88
 msgid "Zip files"
@@ -18673,22 +18701,22 @@ msgstr "Το αρχείο zip '%s' δεν μπορεί να ανοιχτεί."
 #: gerbview/files.cpp:480
 #, fuzzy, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "Πληροφορίες: παράλειψη αρχείου \"%s\" (αρχείο εργασίας gerber)\n"
+msgstr "\n"
 
 #: gerbview/files.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b>Αδυναμία δημιουργίας προσωρινού αρχείου αναφοράς \"%s\"</b>\n"
+msgstr "<b>Αδυναμία δημιουργίας προσωρινού αρχείου '%s'</b>"
 
 #: gerbview/files.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type)."
-msgstr "Πληροφορίες: παράλειψη αρχείου \"%s\" (άγνωστος τύπος)\n"
+msgstr ""
 
 #: gerbview/files.cpp:587
-#, fuzzy, c-format
+#, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b>σφάλμα ανάγνωσης αποσυμπιεσμένου αρχείου %s</b>\n"
+msgstr "<b>σφάλμα ανάγνωσης αποσυμπιεσμένου αρχείου %s</b>"
 
 #: gerbview/files.cpp:635
 msgid "Open Zip File"
@@ -19637,9 +19665,9 @@ msgid "Color themes (%d)"
 msgstr "Θεματικά χρωμάτων (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "Είστε σίγουροι  ότι θέλετε να αλλάξετε όλα τα αποτυπώματα;"
+msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:77
 #, fuzzy
@@ -19905,9 +19933,9 @@ msgid "Library package handling"
 msgstr "Οι αλλαγές στη βιβλιοθήκη δεν είναι αποθηκευμένες"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "Προσθήκη βιβλιοθήκης στον κατάλογο καθολικών βιβλιοθηκών;"
+msgstr ""
+"Αυτόματη προσθήκη εγκατεστημένων βιβλιοθηκών στον καθολικό πίνακα βιβ/κων"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
 #, fuzzy
@@ -20028,9 +20056,9 @@ msgid "No package updates available"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "%s Ο ακροδέκτης %s δεν βρέθηκε"
+msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -20105,13 +20133,13 @@ msgstr ""
 "Τα μεταδεδομένα αρχειοθέτησης πρέπει να έχουν καθορισμένη μία μόνο έκδοση"
 
 #: kicad/pcm/pcm_task_manager.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
 msgstr ""
-"Το πακέτο με το αναγνωριστικό %s είναι ήδη εγκατεστημένο, πρέπει πρώτα να "
-"απεγκαταστήσετε αυτό το πακέτο."
+"Το πακέτο με το αναγνωριστικό %s είναι ήδη εγκατεστημένο. Θέλετε να το "
+"ενημερώσετε στην έκδοση από το επιλεγμένο αρχείο;"
 
 #: kicad/pcm/pcm_task_manager.cpp:396
 #, fuzzy
@@ -21183,135 +21211,135 @@ msgstr "0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:78
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:79
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:80
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
 #, fuzzy
@@ -21337,7 +21365,7 @@ msgstr "Περιοχή:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 msgid "Conductor resistivity:"
@@ -21520,7 +21548,7 @@ msgstr "Χαλκοαλουμίνιο"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "Ορείχαλκος"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
@@ -21537,35 +21565,35 @@ msgstr "Μόλυβδος"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:54
 msgid "Aluminium-Copper"
-msgstr ""
+msgstr "Αλουμίνιο-Χαλκός"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "Χυτοσίδηρος"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
-msgstr ""
+msgstr "Ανθρακούχο χάλυβα"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:57
 msgid "Aluminium"
-msgstr ""
+msgstr "Αλουμίνιο"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:58
 msgid "Cadmium"
-msgstr ""
+msgstr "Κάδμιο"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:59
 msgid "Iron"
-msgstr ""
+msgstr "Σίδερο"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:60
 msgid "Chrome"
-msgstr ""
+msgstr "Χρώμιο"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:61
 msgid "Zinc"
-msgstr ""
+msgstr "Ψευδάργυρος"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:62
 #, fuzzy
@@ -21574,7 +21602,7 @@ msgstr "Ιαπωνικά"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:63
 msgid "Magnesium"
-msgstr ""
+msgstr "Μαγνήσιο"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
@@ -22479,7 +22507,7 @@ msgstr "Κλάσεις Πλακέτας"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
 msgid "Galvanic Corrosion"
-msgstr ""
+msgstr "Γαλβανική Διάβρωση"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -22504,7 +22532,6 @@ msgstr ""
 "Έξοδος και εγκατάλειψη αλλαγών;"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -22538,18 +22565,18 @@ msgstr ""
 "\n"
 "Η τιμή ελέγχου εμφανίζεται με έντονη γραφή.\n"
 "\n"
-"Οι υπολογισμοί ισχύουν για ρεύματα έως 35 A (εξωτερικά) ή 17,5 A "
-"(εσωτερικά), θερμοκρασίες έως 100 ºC και πλάτη έως 400 mil (10 mm).\n"
+"Οι υπολογισμοί ισχύουν για ρεύματα έως 35 A (εξωτερικά) ή 17,5 A (εσωτερικά)"
+", θερμοκρασίες έως 100 ºC και πλάτη έως 400 mil (10 mm).\n"
 "\n"
 "Ο τύπος, από το IPC 2221, είναι\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
 "όπου:\n"
 "__I__ = μέγιστο ρεύμα σε Α\n"
-"___&Delta;T___  = αύξηση θερμοκρασίας πάνω από το περιβάλλον σε &deg;C  \n"
+"___&Delta;T___ = αύξηση θερμοκρασίας πάνω από το περιβάλλον σε &deg;C\n"
 "__W__ = πλάτος και πάχος σε mil\n"
 "__H__ = πάχος (ύψος) σε mil\n"
-"__K__ = 0,024 για εσωτερικά ίχνη ή 0,048 για εξωτερικά ίχνη  \n"
+"__K__ = 0,024 για εσωτερικά ίχνη ή 0,048 για εξωτερικά ίχνη\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
 msgid "Dielectric Loss Factor"
@@ -22901,7 +22928,7 @@ msgstr "m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr ""
+msgstr "πόδια"
 
 #: pcb_calculator/widgets/unit_selector.cpp:279
 #, fuzzy
@@ -22910,19 +22937,19 @@ msgstr "W"
 
 #: pcb_calculator/widgets/unit_selector.cpp:288
 msgid "m/s"
-msgstr ""
+msgstr "m/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:289
 msgid "ft/s"
-msgstr ""
+msgstr "ft/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:290
 msgid "km/h"
-msgstr ""
+msgstr "km/h"
 
 #: pcb_calculator/widgets/unit_selector.cpp:291
 msgid "mi/h"
-msgstr ""
+msgstr "mi/h"
 
 #: pcbnew/array_creator.cpp:214
 msgid "Create an array"
@@ -23412,7 +23439,7 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "Αλουμίνιο"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 #: pcbnew/exporters/exporter_vrml.cpp:276
@@ -23783,9 +23810,9 @@ msgid "Reannotate anyway?"
 msgstr "Επανα-ονοματισμός ούτως ή άλλως;"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Πολλαπλά αντικείμενα %s%s\n"
+msgstr "Πολλαπλά αντικείμενα %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:795
 msgid "Aborted: too many errors"
@@ -25129,7 +25156,7 @@ msgstr "0.00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr ""
+msgstr "0.00 ιν / 0 mils / 0.0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #, fuzzy
@@ -26690,9 +26717,8 @@ msgid "Map File Format"
 msgstr "Μορφή Αρχείου Χάρτη"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Δημιουργεί ένα χάρτη διάτρησης σε μορφή PostScript, HPGL ή άλλη μορφή"
+msgstr "Δημιουργεί ένα χάρτη διάτρησης σε μορφή PDF ή άλλη μορφή"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -32856,9 +32882,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Read file: '%s'\n"
-msgstr "Δημιουργία αρχείου %s"
+msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:211
 msgid "Build STEP data\n"
@@ -32871,23 +32897,25 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:222
-#, fuzzy
 msgid "Write STEP file\n"
-msgstr "Αρχεία STEP"
+msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:233
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Σφάλμα εγγραφής στο αρχείο '%s'."
+msgstr ""
+"\n"
+"** Σφάλμα εγγραφής στο αρχείο STEP. **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "Δημιουργήθηκε το αρχείο αναφοράς '%s'."
+msgstr ""
+"\n"
+"Δημιουργήθηκε το αρχείο STEP '%s'.\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:244
 #: pcbnew/exporters/step/kicad2step.cpp:249
@@ -32897,11 +32925,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:255
-#, fuzzy
 msgid ""
 "\n"
 "** Error reading kicad_pcb file. **\n"
-msgstr "Σφάλμα ανάγνωσης αρχείου."
+msgstr ""
+"\n"
+"Σφάλμα ανάγνωσης αρχείου kicad_pcb **\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:263
 #, fuzzy
@@ -33607,19 +33636,16 @@ msgid "Model name cannot be empty."
 msgstr "Το %s δεν μπορεί να είναι κενό."
 
 #: pcbnew/ibis/ibis_parser.cpp:204
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Μη έγκυρο όνομα αρχείου!"
+msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:209
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Μη έγκυρο όνομα αρχείου!"
+msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:214
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Μη έγκυρο όνομα αρχείου!"
+msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:228
 #, fuzzy
@@ -33728,9 +33754,8 @@ msgid "Temperature Range is invalid."
 msgstr "Αύξηση θερμοκρασίας"
 
 #: pcbnew/ibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Μη έγκυρο όνομα αρχείου!"
+msgstr "Το εύρος τάσης δεν είναι έγκυρο."
 
 #: pcbnew/ibis/ibis_parser.cpp:521
 #, fuzzy
@@ -33768,7 +33793,7 @@ msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:565
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "Ο αναλυτής δεν χειρίζεται αυτήν την έκδοση IBIS"
 
 #: pcbnew/ibis/ibis_parser.cpp:571
 #, fuzzy
@@ -33852,9 +33877,8 @@ msgid "Reading file "
 msgstr "Φόρτωση κανόνων..."
 
 #: pcbnew/ibis/ibis_parser.cpp:727
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Μη αναμενόμενο τέλος αρχείου."
+msgstr "Μη αναμενόμενο τέλος αρχείου. Λείπει το [END] ;"
 
 #: pcbnew/ibis/ibis_parser.cpp:739
 #, fuzzy
@@ -33912,9 +33936,8 @@ msgid "Unknown keyword in "
 msgstr "Άγνωστος κωδικός καταγραφής: %d."
 
 #: pcbnew/ibis/ibis_parser.cpp:1255
-#, fuzzy
 msgid " context: "
-msgstr "Βήμα κειμένου:"
+msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1323
 #, fuzzy
@@ -35394,9 +35417,8 @@ msgstr ""
 "Προτιμήσεις."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:88
-#, fuzzy
 msgid "Loading board\n"
-msgstr "Φόρτωση περιοχών πλακέτας..."
+msgstr "Φόρτωση πλακέτας\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:95
 #, fuzzy
@@ -37663,9 +37685,8 @@ msgid "Duplicate zone"
 msgstr "Πολλαπλή ζώνη"
 
 #: pcbnew/tools/board_editor_control.cpp:1497
-#, fuzzy
 msgid "Selection contains no items with labeled nets."
-msgstr "Η επιλογή περιέχει κλειδωμένα αντικείμενα. Συνέχεια;"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
 #, fuzzy
@@ -40812,9 +40833,9 @@ msgid "Set opacity of %s"
 msgstr "Ορισμός αδιαφάνειας %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2272
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide ratsnest for nets in %s"
-msgstr "Προβολή ή απόκρυψη του ratsnest για δίκτυα σε %s"
+msgstr "Προβολή ή απόκρυψη φωλιάς συνδέσεων για δίκτυα σε %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2304
 msgid "Set Netclass Color"
@@ -41114,9 +41135,8 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "Αποτυχία φόρτωσης [INFO]: η γραμμή εισαγωγής είναι πολύ μεγάλη\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Μετατροπέας εικόνας"
+msgstr "Μετατροπέας Εικόνας Kicad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
@@ -41186,9 +41206,8 @@ msgid "KiCad PCB Editor (Standalone)"
 msgstr "Επεξεργαστής Σχεδίασης PCB"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
-#, fuzzy
 msgid "PCB layout editor"
-msgstr "Επεξεργαστής Σχεδίασης Σελίδας"
+msgstr "Επεξεργαστής Σχεδίασης PCB"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
@@ -41213,7 +41232,7 @@ msgstr "Εκτύπωση πλακέτας"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "PcbNew"
-msgstr ""
+msgstr "PcbNew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:40
 #, fuzzy
