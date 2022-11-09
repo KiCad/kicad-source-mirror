@@ -146,13 +146,21 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
 
     sheetList.UpdateSheetInstances( schematic->RootScreen()->GetSheetInstances() );
 
+    sheetList.AnnotatePowerSymbols();
+
     schematic->ConnectionGraph()->Reset();
 
     schematic->SetSheetNumberAndCount();
     schematic->RecomputeIntersheetRefs( true, []( SCH_GLOBALLABEL* ) { } );
-    schematic->CurrentSheet().UpdateAllScreenReferences();
 
-    schematic->CurrentSheet().LastScreen()->TestDanglingEnds( nullptr, nullptr );
+    for( SCH_SHEET_PATH& sheet : sheetList )
+    {
+        sheet.UpdateAllScreenReferences();
+        sheet.LastScreen()->TestDanglingEnds( nullptr, nullptr );
+    }
+
+    schematic->ConnectionGraph()->Recalculate( sheetList, true );
+
 
     return schematic;
 }
