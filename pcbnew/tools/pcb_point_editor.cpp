@@ -1663,27 +1663,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
 bool PCB_POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aPoly ) const
 {
-    bool valid = !aPoly.IsSelfIntersecting();
-
-    if( !m_statusPopup )
-    {
-        m_statusPopup.reset( new STATUS_TEXT_POPUP( getEditFrame<PCB_BASE_EDIT_FRAME>() ) );
-        m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
-        m_statusPopup->SetText( _( "Self-intersecting polygons are not allowed." ) );
-    }
-
-    if( valid )
-    {
-        m_statusPopup->Hide();
-    }
-    else
-    {
-        wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
-        m_statusPopup->Move( p );
-        m_statusPopup->PopupFor( 1500 );
-    }
-
-    return valid;
+    return true;
 }
 
 

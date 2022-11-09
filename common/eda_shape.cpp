@@ -201,10 +201,13 @@ void EDA_SHAPE::scale( double aScale )
     {
         std::vector<VECTOR2I> pts;
 
-        for( const VECTOR2I& pt : m_poly.Outline( 0 ).CPoints() )
+        for( int ii = 0; ii < m_poly.OutlineCount(); ++ ii )
         {
-            pts.emplace_back( pt );
-            scalePt( pts.back() );
+            for( const VECTOR2I& pt : m_poly.Outline( ii ).CPoints() )
+            {
+                pts.emplace_back( pt );
+                scalePt( pts.back() );
+            }
         }
 
         SetPolyPoints( pts );
@@ -905,35 +908,38 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
             // to the actual location in the board.
             VECTOR2I offset = getParentPosition();
 
-            SHAPE_LINE_CHAIN poly = m_poly.Outline( 0 );
-            poly.Rotate( getParentOrientation() );
-            poly.Move( offset );
-
-            int count = poly.GetPointCount();
-
-            for( int ii = 0; ii < count; ii++ )
+            for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
             {
-                VECTOR2I vertex = poly.GetPoint( ii );
+                SHAPE_LINE_CHAIN poly = m_poly.Outline( ii );
+                poly.Rotate( getParentOrientation() );
+                poly.Move( offset );
 
-                // Test if the point is within aRect
-                if( arect.Contains( vertex ) )
-                    return true;
+                int count = poly.GetPointCount();
 
-                if( ii + 1 < count )
+                for( int jj = 0; jj < count; jj++ )
                 {
-                    VECTOR2I vertexNext = poly.GetPoint( ii + 1 );
+                    VECTOR2I vertex = poly.GetPoint( jj );
 
-                    // Test if this edge intersects aRect
-                    if( arect.Intersects( vertex, vertexNext ) )
+                    // Test if the point is within aRect
+                    if( arect.Contains( vertex ) )
                         return true;
-                }
-                else if( poly.IsClosed() )
-                {
-                    VECTOR2I vertexNext = poly.GetPoint( 0 );
 
-                    // Test if this edge intersects aRect
-                    if( arect.Intersects( vertex, vertexNext ) )
-                        return true;
+                    if( jj + 1 < count )
+                    {
+                        VECTOR2I vertexNext = poly.GetPoint( jj + 1 );
+
+                        // Test if this edge intersects aRect
+                        if( arect.Intersects( vertex, vertexNext ) )
+                            return true;
+                    }
+                    else if( poly.IsClosed() )
+                    {
+                        VECTOR2I vertexNext = poly.GetPoint( 0 );
+
+                        // Test if this edge intersects aRect
+                        if( arect.Intersects( vertex, vertexNext ) )
+                            return true;
+                    }
                 }
             }
 
@@ -1139,21 +1145,24 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
         if( GetPolyShape().OutlineCount() == 0 )    // malformed/empty polygon
             break;
 
-        SHAPE_LINE_CHAIN l = GetPolyShape().COutline( 0 );
-
-        if( aLineChainOnly )
-            l.SetClosed( false );
-
-        l.Rotate( getParentOrientation() );
-        l.Move( getParentPosition() );
-
-        if( IsFilled() && !aEdgeOnly )
-            effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
-
-        if( width > 0 || !IsFilled() || aEdgeOnly )
+        for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
         {
-            for( int i = 0; i < l.SegmentCount(); i++ )
-                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ), width ) );
+            SHAPE_LINE_CHAIN l = GetPolyShape().COutline( ii );
+
+            if( aLineChainOnly )
+                l.SetClosed( false );
+
+            l.Rotate( getParentOrientation() );
+            l.Move( getParentPosition() );
+
+            if( IsFilled() && !aEdgeOnly )
+                effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
+
+            if( width > 0 || !IsFilled() || aEdgeOnly )
+            {
+                for( int jj = 0; jj < l.SegmentCount(); jj++ )
+                    effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( jj ), width ) );
+            }
         }
     }
         break;
@@ -1169,9 +1178,9 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 
 void EDA_SHAPE::DupPolyPointsList( std::vector<VECTOR2I>& aBuffer ) const
 {
-    if( m_poly.OutlineCount() )
+    for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
     {
-        int pointCount = m_poly.COutline( 0 ).PointCount();
+        int pointCount = m_poly.COutline( ii ).PointCount();
 
         if( pointCount )
         {

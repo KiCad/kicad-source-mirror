@@ -2505,10 +2505,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     POLYGON_GEOM_MANAGER polyGeomMgr( zoneTool );
     bool                 started     = false;
     PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    STATUS_TEXT_POPUP    status( m_frame );
-
-    status.SetTextColor( wxColour( 255, 0, 0 ) );
-    status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
     m_frame->PushTool( aEvent );
 
@@ -2660,17 +2656,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                  && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
             polyGeomMgr.SetCursorPosition( cursorPos );
-
-            if( polyGeomMgr.IsSelfIntersecting( true ) )
-            {
-                VECTOR2I p = wxGetMousePosition() + wxPoint( 20, 20 );
-                status.Move( p );
-                status.PopupFor( 1500 );
-            }
-            else
-            {
-                status.Hide();
-            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {

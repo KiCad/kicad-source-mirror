@@ -1417,6 +1417,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                     if( poly->PointCount() < 2 )     // Careful of empty pads
                         break;
 
+                    if( poly->)
+
                     if( margin.x < 0 )  // The poly shape must be deflated
                     {
                         int numSegs = GetArcToSegmentCount( -margin.x, m_maxError, FULL_CIRCLE );
@@ -1679,7 +1681,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
             if( outline_mode )
             {
-                m_gal->DrawSegmentChain( shape.Outline( 0 ), thickness );
+                for( int ii = 0; ii < shape.OutlineCount(); ++ii )
+                    m_gal->DrawSegmentChain( shape.Outline( ii ), thickness );
             }
             else
             {
@@ -1688,7 +1691,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
                 if( thickness > 0 )
                 {
-                    m_gal->DrawSegmentChain( shape.Outline( 0 ), thickness );
+                    for( int ii = 0; ii < shape.OutlineCount(); ++ii )
+                        m_gal->DrawSegmentChain( shape.Outline( ii ), thickness );
                 }
 
                 if( aShape->IsFilled() )
@@ -2367,14 +2371,17 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
              * polygon so each contour is draw as a simple polygon
              */
 
-            // Draw the main contour
-            m_gal->DrawPolyline( outline->COutline( 0 ) );
+            // Draw the main contour(s?)
+            for( int ii = 0; ii < outline->OutlineCount(); ++ii )
+            {
+                m_gal->DrawPolyline( outline->COutline( ii ) );
 
-            // Draw holes
-            int holes_count = outline->HoleCount( 0 );
+                // Draw holes
+                int holes_count = outline->HoleCount( ii );
 
-            for( int ii = 0; ii < holes_count; ++ii )
-                m_gal->DrawPolyline( outline->CHole( 0, ii ) );
+                for( int jj = 0; ii < holes_count; ++jj )
+                    m_gal->DrawPolyline( outline->CHole( ii, jj ) );
+            }
 
             // Draw hatch lines
             for( const SEG& hatchLine : aZone->GetHatchLines() )

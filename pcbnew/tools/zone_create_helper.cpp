@@ -355,8 +355,7 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         }
 
         outline->Outline( 0 ).SetClosed( true );
-        outline->RemoveNullSegments();
-        outline->Simplify( SHAPE_POLY_SET::PM_FAST );
+        outline->Outline( 0 ).Simplify( true );
 
         // hand the zone over to the committer
         commitZone( std::move( m_zone ) );

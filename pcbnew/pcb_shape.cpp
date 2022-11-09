@@ -142,8 +142,11 @@ std::vector<VECTOR2I> PCB_SHAPE::GetCorners() const
     {
         VECTOR2I offset = getParentPosition();
 
-        for( const VECTOR2I& pt : GetPolyShape().Outline( 0 ).CPoints() )
-            pts.emplace_back( pt + offset );
+        for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
+        {
+            for( const VECTOR2I& pt : GetPolyShape().Outline( ii ).CPoints() )
+                pts.emplace_back( pt + offset );
+        }
     }
     else
     {
