@@ -32,6 +32,7 @@
 #include <trace_helpers.h>
 #include <wx/config.h>
 #include <wx/log.h>
+#include <wx/regex.h>
 
 
 ///! The following environment variables will never be migrated from a previous version
@@ -430,10 +431,24 @@ bool COMMON_SETTINGS::migrateSchema2to3()
     std::vector<LEGACY_3D_SEARCH_PATH> legacyPaths;
     readLegacy3DResolverCfg( cfgpath.GetFullPath(), legacyPaths );
 
+    // env variables have a limited allowed character set for names
+    wxRegEx nonValidCharsRegex( "[^A-Z0-9_]+", wxRE_ADVANCED );
+
     for( const LEGACY_3D_SEARCH_PATH& path : legacyPaths )
     {
-        const wxString& key = path.m_Alias;
+        wxString key = path.m_Alias;
         const wxString& val = path.m_Pathvar;
+
+        // The 3d alias config didnt use the same naming restrictions as real env variables
+        // We need to sanitize them
+
+        // upper case only
+        key.MakeUpper();
+        // logically swap - with _
+        key.Replace( wxS( "-" ), wxS( "_" ) );
+
+        // remove any other chars
+        nonValidCharsRegex.Replace( &key, wxEmptyString );
 
         if( !m_Env.vars.count( key ) )
         {
