@@ -282,6 +282,17 @@ protected:
         return wxEmptyString;
     }
 
+    /**
+     * Helper to retrieve a value from a JSON object (dictionary) as a certain result type
+     * @tparam ResultType is the type of the retrieved value.
+     * @param aJson is the object to act on .
+     * @param aKey is the object key to retrieve the value for.
+     * @return the result, or aDefault if aKey is not found.
+     */
+    template<typename ResultType>
+    static ResultType fetchOrDefault( const nlohmann::json& aJson, const std::string& aKey,
+                                      ResultType aDefault = ResultType() );
+
     /// The filename (not including path) of this settings file (inicode)
     wxString m_filename;
 

@@ -836,3 +836,29 @@ void from_json( const nlohmann::json& aJson, wxString& aString )
 {
     aString = wxString( aJson.get<std::string>().c_str(), wxConvUTF8 );
 }
+
+
+template<typename ResultType>
+ResultType JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson, const std::string& aKey,
+                                          ResultType aDefault )
+{
+    ResultType ret = aDefault;
+
+    try
+    {
+        if( aJson.contains( aKey ) )
+            ret = aJson.at( aKey ).get<ResultType>();
+    }
+    catch( ... )
+    {
+    }
+
+    return ret;
+}
+
+
+template std::string JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson,
+                                                    const std::string& aKey, std::string aDefault );
+
+template bool JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson, const std::string& aKey,
+                                             bool aDefault );

@@ -19,6 +19,7 @@
  */
 
 #include <iostream>
+#include <unordered_set>
 
 #include <boost/algorithm/string.hpp>
 
@@ -349,6 +350,14 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
         symbol->SetIncludeInBom( !exclude );
     }
 
+    std::vector<LIB_FIELD*> fields;
+    symbol->GetFields( fields );
+
+    std::unordered_map<wxString, LIB_FIELD*> fieldsMap;
+
+    for( LIB_FIELD* field : fields )
+        fieldsMap[field->GetName()] = field;
+
     for( const DATABASE_FIELD_MAPPING& mapping : aTable.fields )
     {
         if( !aRow.count( mapping.column ) )
@@ -382,14 +391,32 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
             continue;
         }
 
-        LIB_FIELD* field = new LIB_FIELD( symbol->GetNextAvailableFieldId() );
-        field->SetName( mapping.name );
-        field->SetText( value );
-        field->SetVisible( mapping.visible_on_add );
-        field->SetAutoAdded( true );
-        field->SetNameShown( mapping.show_name );
+        LIB_FIELD* field;
+        bool isNew = false;
 
-        symbol->AddField( field );
+        if( fieldsMap.count( mapping.name ) )
+        {
+            field = fieldsMap[mapping.name];
+        }
+        else
+        {
+            field = new LIB_FIELD( symbol->GetNextAvailableFieldId() );
+            field->SetName( mapping.name );
+            isNew = true;
+            fieldsMap[mapping.name] = field;
+        }
+
+        if( !mapping.inherit_properties || isNew )
+        {
+            field->SetVisible( mapping.visible_on_add );
+            field->SetAutoAdded( true );
+            field->SetNameShown( mapping.show_name );
+        }
+
+        field->SetText( value );
+
+        if( isNew )
+            symbol->AddField( field );
 
         m_customFields.insert( mapping.name );
 

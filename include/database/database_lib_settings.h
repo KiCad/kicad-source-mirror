@@ -49,6 +49,7 @@ struct DATABASE_FIELD_MAPPING
     bool        visible_on_add;      ///< Whether to show the field when placing the symbol
     bool        visible_in_chooser;  ///< Whether the column is shown by default in the chooser
     bool        show_name;           ///< Whether or not to show the field name as well as its value
+    bool        inherit_properties;  ///< Whether or not to inherit properties from symbol field
 };
 
 

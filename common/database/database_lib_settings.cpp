@@ -78,29 +78,18 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
                 {
                     const nlohmann::json& pj = entry["properties"];
 
-                    if( pj.contains( "description" ) )
-                        table.properties.description = pj["description"].get<std::string>();
+                    table.properties.description = fetchOrDefault<std::string>( pj, "description" );
 
-                    if( pj.contains( "footprint_filters" ) )
-                    {
-                        table.properties.footprint_filters =
-                                pj["footprint_filters"].get<std::string>();
-                    }
+                    table.properties.footprint_filters =
+                            fetchOrDefault<std::string>( pj, "footprint_filters" );
 
-                    if( pj.contains( "keywords" ) )
-                        table.properties.keywords = pj["keywords"].get<std::string>();
+                    table.properties.keywords = fetchOrDefault<std::string>( pj, "keywords" );
 
-                    if( pj.contains( "exclude_from_bom" ) )
-                    {
-                        table.properties.exclude_from_bom =
-                                pj["exclude_from_bom"].get<std::string>();
-                    }
+                    table.properties.exclude_from_bom =
+                            fetchOrDefault<std::string>( pj, "exclude_from_bom" );
 
-                    if( pj.contains( "exclude_from_board" ) )
-                    {
-                        table.properties.exclude_from_board =
-                                pj["exclude_from_board"].get<std::string>();
-                    }
+                    table.properties.exclude_from_board =
+                            fetchOrDefault<std::string>( pj, "exclude_from_board" );
                 }
 
                 if( entry.contains( "fields" ) && entry["fields"].is_array() )
@@ -110,26 +99,19 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
                         if( fieldJson.empty() || !fieldJson.is_object() )
                             continue;
 
-                        std::string column = fieldJson.contains( "column" )
-                                             ? fieldJson["column"].get<std::string>() : "";
-
-                        std::string name   = fieldJson.contains( "name" )
-                                             ? fieldJson["name"].get<std::string>() : "";
-
-                        bool visible_on_add = !fieldJson.contains( "visible_on_add" )
-                                              || fieldJson["visible_on_add"].get<bool>();
-
+                        std::string column  = fetchOrDefault<std::string>( fieldJson, "column" );
+                        std::string name    = fetchOrDefault<std::string>( fieldJson, "name" );
+                        bool visible_on_add = fetchOrDefault<bool>( fieldJson, "visible_on_add" );
                         bool visible_in_chooser =
-                                !fieldJson.contains( "visible_in_chooser" )
-                                || fieldJson["visible_in_chooser"].get<bool>();
-
-                        bool show_name = fieldJson.contains( "show_name" )
-                                         && fieldJson["show_name"].get<bool>();
+                                fetchOrDefault<bool>( fieldJson, "visible_in_chooser" );
+                        bool show_name = fetchOrDefault<bool>( fieldJson, "show_name" );
+                        bool inherit   = fetchOrDefault<bool>( fieldJson, "inherit_properties" );
 
                         table.fields.emplace_back(
                                 DATABASE_FIELD_MAPPING(
                                 {
-                                    column, name, visible_on_add, visible_in_chooser, show_name
+                                    column, name, visible_on_add, visible_in_chooser, show_name,
+                                    inherit
                                 } ) );
                     }
                 }
