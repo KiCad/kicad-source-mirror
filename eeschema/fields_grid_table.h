@@ -55,6 +55,7 @@ enum FIELDS_DATA_COL_ORDER
     FDC_NAME,
     FDC_VALUE,
     FDC_SHOWN,
+    FDC_SHOW_NAME,
     FDC_H_ALIGN,
     FDC_V_ALIGN,
     FDC_ITALIC,
@@ -65,6 +66,7 @@ enum FIELDS_DATA_COL_ORDER
     FDC_POSY,
     FDC_FONT,
     FDC_COLOR,
+    FDC_ALLOW_AUTOPLACE,
 
     FDC_COUNT       // keep as last
 };

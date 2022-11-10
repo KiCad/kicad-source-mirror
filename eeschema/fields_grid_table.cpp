@@ -338,6 +338,7 @@ wxString FIELDS_GRID_TABLE<T>::GetColLabelValue( int aCol )
     case FDC_NAME:         return _( "Name" );
     case FDC_VALUE:        return _( "Value" );
     case FDC_SHOWN:        return _( "Show" );
+    case FDC_SHOW_NAME:    return _( "Show Name" );
     case FDC_H_ALIGN:      return _( "H Align" );
     case FDC_V_ALIGN:      return _( "V Align" );
     case FDC_ITALIC:       return _( "Italic" );
@@ -348,6 +349,7 @@ wxString FIELDS_GRID_TABLE<T>::GetColLabelValue( int aCol )
     case FDC_POSY:         return _( "Y Position" );
     case FDC_FONT:         return _( "Font" );
     case FDC_COLOR:        return _( "Color" );
+    case FDC_ALLOW_AUTOPLACE: return _( "Allow Autoplacement" );
     default:               wxFAIL; return wxEmptyString;
     }
 }
@@ -371,8 +373,10 @@ bool FIELDS_GRID_TABLE<T>::CanGetValueAs( int aRow, int aCol, const wxString& aT
         return aTypeName == wxGRID_VALUE_STRING;
 
     case FDC_SHOWN:
+    case FDC_SHOW_NAME:
     case FDC_ITALIC:
     case FDC_BOLD:
+    case FDC_ALLOW_AUTOPLACE:
         return aTypeName == wxGRID_VALUE_BOOL;
 
     default:
@@ -497,8 +501,10 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         return m_orientationAttr;
 
     case FDC_SHOWN:
+    case FDC_SHOW_NAME:
     case FDC_ITALIC:
     case FDC_BOLD:
+    case FDC_ALLOW_AUTOPLACE:
         m_boolAttr->IncRef();
         return m_boolAttr;
 
@@ -569,6 +575,9 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_SHOWN:
         return StringFromBool( field.IsVisible() );
 
+    case FDC_SHOW_NAME:
+        return StringFromBool( field.IsNameShown() );
+
     case FDC_H_ALIGN:
         switch ( field.GetHorizJustify() )
         {
@@ -619,6 +628,9 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_COLOR:
         return field.GetTextColor().ToCSSString();
 
+    case FDC_ALLOW_AUTOPLACE:
+        return StringFromBool( field.CanAutoplace() );
+
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
         // the column type when trying to see if there's an overflow
@@ -637,9 +649,11 @@ bool FIELDS_GRID_TABLE<T>::GetValueAsBool( int aRow, int aCol )
 
     switch( aCol )
     {
-    case FDC_SHOWN:  return field.IsVisible();
-    case FDC_ITALIC: return field.IsItalic();
-    case FDC_BOLD:   return field.IsBold();
+    case FDC_SHOWN:           return field.IsVisible();
+    case FDC_SHOW_NAME:       return field.IsNameShown();
+    case FDC_ITALIC:          return field.IsItalic();
+    case FDC_BOLD:            return field.IsBold();
+    case FDC_ALLOW_AUTOPLACE: return field.CanAutoplace();
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
         return false;
@@ -705,6 +719,10 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
 
     case FDC_SHOWN:
         field.SetVisible( BoolFromString( value ) );
+        break;
+
+    case FDC_SHOW_NAME:
+        field.SetNameShown( BoolFromString( value ) );
         break;
 
     case FDC_H_ALIGN:
@@ -780,6 +798,10 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         field.SetTextColor( wxColor( value ) );
         break;
 
+    case FDC_ALLOW_AUTOPLACE:
+        field.SetCanAutoplace( BoolFromString( value ) );
+        break;
+
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a string value" ), aCol ) );
         break;
@@ -803,12 +825,20 @@ void FIELDS_GRID_TABLE<T>::SetValueAsBool( int aRow, int aCol, bool aValue )
         field.SetVisible( aValue );
         break;
 
+    case FDC_SHOW_NAME:
+        field.SetNameShown( aValue );
+        break;
+
     case FDC_ITALIC:
         field.SetItalic( aValue );
         break;
 
     case FDC_BOLD:
         field.SetBold( aValue );
+        break;
+
+    case FDC_ALLOW_AUTOPLACE:
+        field.SetCanAutoplace( aValue );
         break;
 
     default:
