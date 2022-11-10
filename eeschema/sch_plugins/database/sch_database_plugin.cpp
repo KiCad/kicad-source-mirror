@@ -317,6 +317,13 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
         symbol->SetDescription( value );
     }
 
+    if( !aTable.properties.keywords.empty() && aRow.count( aTable.properties.keywords ) )
+    {
+        wxString value( std::any_cast<std::string>( aRow.at( aTable.properties.keywords ) ).c_str(),
+                        wxConvUTF8 );
+        symbol->SetKeyWords( value );
+    }
+
     if( !aTable.properties.footprint_filters.empty()
         && aRow.count( aTable.properties.footprint_filters ) )
     {

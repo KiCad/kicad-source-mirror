@@ -87,6 +87,9 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
                                 pj["footprint_filters"].get<std::string>();
                     }
 
+                    if( pj.contains( "keywords" ) )
+                        table.properties.keywords = pj["keywords"].get<std::string>();
+
                     if( pj.contains( "exclude_from_bom" ) )
                     {
                         table.properties.exclude_from_bom =
