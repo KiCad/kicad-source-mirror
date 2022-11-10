@@ -56,23 +56,23 @@ CLI::EXPORT_SCH_SVG_COMMAND::EXPORT_SCH_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 
 int CLI::EXPORT_SCH_SVG_COMMAND::Perform( KIWAY& aKiway )
 {
-    JOB_EXPORT_SCH_SVG* pdfJob = new JOB_EXPORT_SCH_SVG( true );
+    std::unique_ptr<JOB_EXPORT_SCH_SVG> svgJob = std::make_unique<JOB_EXPORT_SCH_SVG>( true );
 
-    pdfJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    pdfJob->m_outputDirectory = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
-    pdfJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
-    pdfJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
-    pdfJob->m_useBackgroundColor = !m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
+    svgJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
+    svgJob->m_outputDirectory = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
+    svgJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
+    svgJob->m_useBackgroundColor = !m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
 
-    if( !wxFile::Exists( pdfJob->m_filename ) )
+    if( !wxFile::Exists( svgJob->m_filename ) )
     {
         wxFprintf( stderr, _( "Schematic file does not exist or is not accessible\n" ) );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    pdfJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+    svgJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, pdfJob );
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, svgJob.get() );
 
     return exitCode;
 }

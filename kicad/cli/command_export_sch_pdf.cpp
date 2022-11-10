@@ -56,7 +56,7 @@ CLI::EXPORT_SCH_PDF_COMMAND::EXPORT_SCH_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 
 int CLI::EXPORT_SCH_PDF_COMMAND::Perform( KIWAY& aKiway )
 {
-    JOB_EXPORT_SCH_PDF* pdfJob = new JOB_EXPORT_SCH_PDF( true );
+    std::unique_ptr<JOB_EXPORT_SCH_PDF> pdfJob = std::make_unique<JOB_EXPORT_SCH_PDF>( true );
 
     pdfJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     pdfJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
@@ -72,7 +72,7 @@ int CLI::EXPORT_SCH_PDF_COMMAND::Perform( KIWAY& aKiway )
 
     pdfJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, pdfJob );
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, pdfJob.get() );
 
     return exitCode;
 }

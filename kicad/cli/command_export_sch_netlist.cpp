@@ -39,7 +39,8 @@ CLI::EXPORT_SCH_NETLIST_COMMAND::EXPORT_SCH_NETLIST_COMMAND() : EXPORT_PCB_BASE_
 
 int CLI::EXPORT_SCH_NETLIST_COMMAND::Perform( KIWAY& aKiway )
 {
-    JOB_EXPORT_SCH_NETLIST* netJob = new JOB_EXPORT_SCH_NETLIST( true );
+    std::unique_ptr<JOB_EXPORT_SCH_NETLIST> netJob =
+            std::make_unique<JOB_EXPORT_SCH_NETLIST>( true );
 
     netJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     netJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
@@ -81,7 +82,7 @@ int CLI::EXPORT_SCH_NETLIST_COMMAND::Perform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, netJob );
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, netJob.get() );
 
     return exitCode;
 }
