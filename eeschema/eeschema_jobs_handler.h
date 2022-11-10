@@ -38,6 +38,7 @@ class EESCHEMA_JOBS_HANDLER : public JOB_DISPATCHER
 {
 public:
     EESCHEMA_JOBS_HANDLER();
+    int JobExportNetlist( JOB* aJob );
     int JobExportPdf( JOB* aJob );
     int JobExportSvg( JOB* aJob );
 

@@ -579,12 +579,12 @@ bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt, wxStr
     switch( aType )
     {
     case NET_TYPE_SPICE:
-        fileExt = wxT( "cir" );
+        fileExt = SpiceFileExtension;
         fileWildcard = SpiceNetlistFileWildcard();
         break;
 
     case NET_TYPE_CADSTAR:
-        fileExt = wxT( "frp" );
+        fileExt = CadstarNetlistFileExtension;
         fileWildcard = CadstarNetlistFileWildcard();
         break;
 

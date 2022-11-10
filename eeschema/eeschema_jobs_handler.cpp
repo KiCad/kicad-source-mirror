@@ -20,6 +20,7 @@
 
 #include "eeschema_jobs_handler.h"
 #include <cli/exit_codes.h>
+#include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_pdf.h>
 #include <jobs/job_export_sch_svg.h>
 #include <pgm_base.h>
@@ -30,12 +31,25 @@
 #include <connection_graph.h>
 #include "eeschema_helpers.h"
 #include <sch_painter.h>
+#include <erc.h>
+#include <wildcards_and_files_ext.h>
 
 #include <settings/settings_manager.h>
+
+#include <netlist.h>
+#include <netlist_exporter_base.h>
+#include <netlist_exporter_orcadpcb2.h>
+#include <netlist_exporter_cadstar.h>
+#include <netlist_exporter_spice.h>
+#include <netlist_exporter_spice_model.h>
+#include <netlist_exporter_kicad.h>
+#include <netlist_exporter_xml.h>
 
 
 EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER()
 {
+    Register( "netlist",
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ) );
     Register( "pdf",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPdf, this, std::placeholders::_1 ) );
     Register( "svg",
@@ -81,7 +95,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     schPlotter->Plot( PLOT_FORMAT::PDF, settings, renderSettings.get(), nullptr );
 
-    return 0;
+    return CLI::EXIT_CODES::OK;
 }
 
 
@@ -107,5 +121,92 @@ int EESCHEMA_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 
     schPlotter->Plot( PLOT_FORMAT::SVG, settings, renderSettings.get(), nullptr );
 
-    return 0;
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
+{
+    JOB_EXPORT_SCH_NETLIST* aNetJob = dynamic_cast<JOB_EXPORT_SCH_NETLIST*>( aJob );
+
+    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+
+    // Annotation warning check
+    SCH_REFERENCE_LIST referenceList;
+    sch->GetSheets().GetSymbols( referenceList );
+    if( referenceList.GetCount() > 0 )
+    {
+        if( referenceList.CheckAnnotation( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) > 0 )
+        {
+            wxPrintf( _( "Warning: schematic has annotation errors, please use the schematic editor to fix them\n" ) );
+        }
+    }
+
+    // Test duplicate sheet names:
+    ERC_TESTER erc( sch );
+
+    if( erc.TestDuplicateSheetNames( false ) > 0 )
+    {
+        wxPrintf( _( "Warning: duplicate sheet names.\n" ) );
+    }
+
+
+    std::unique_ptr<NETLIST_EXPORTER_BASE> helper;
+
+    wxString fileExt;
+
+    switch( aNetJob->format )
+    {
+    case JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR:
+        fileExt = NetlistFileExtension;
+        helper = std::make_unique<NETLIST_EXPORTER_KICAD>( sch );
+        break;
+
+    case JOB_EXPORT_SCH_NETLIST::FORMAT::ORCADPCB2:
+        fileExt = OrCadPcb2NetlistFileExtension;
+        helper = std::make_unique<NETLIST_EXPORTER_ORCADPCB2>( sch );
+        break;
+
+    case JOB_EXPORT_SCH_NETLIST::FORMAT::CADSTAR:
+        fileExt = CadstarNetlistFileExtension;
+        helper = std::make_unique<NETLIST_EXPORTER_CADSTAR>( sch );
+        break;
+
+    case JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE:
+        fileExt = SpiceFileExtension;
+        helper = std::make_unique<NETLIST_EXPORTER_SPICE>( sch );
+        break;
+
+    case JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL:
+        fileExt = SpiceFileExtension;
+        helper = std::make_unique<NETLIST_EXPORTER_SPICE_MODEL>( sch );
+        break;
+
+    case JOB_EXPORT_SCH_NETLIST::FORMAT::KICADXML:
+        fileExt = wxS( "xml" );
+        helper = std::make_unique<NETLIST_EXPORTER_XML>( sch );
+        break;
+    default:
+        wxFprintf( stderr, _( "Unknown netlist format.\n" ) );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+
+    if( aNetJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = sch->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( fileExt );
+
+        aNetJob->m_outputFile = fn.GetFullName();
+    }
+
+    bool res = helper->WriteNetlist( aNetJob->m_outputFile, 0 );
+
+    if(!res)
+    {
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    return CLI::EXIT_CODES::OK;
 }

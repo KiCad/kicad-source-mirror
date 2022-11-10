@@ -138,6 +138,8 @@ const std::string LegacySchematicFileExtension( "sch" );
 const std::string EagleSchematicFileExtension( "sch" );
 const std::string CadstarSchematicFileExtension( "csa" );
 const std::string KiCadSchematicFileExtension( "kicad_sch" );
+const std::string SpiceFileExtension( "cir" );
+const std::string CadstarNetlistFileExtension( "frp" );
 const std::string OrCadPcb2NetlistFileExtension( "net" );
 const std::string NetlistFileExtension( "net" );
 const std::string FootprintAssignmentFileExtension( "cmp" );

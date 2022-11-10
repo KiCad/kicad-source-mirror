@@ -123,6 +123,8 @@ extern const std::string LegacySchematicFileExtension;
 extern const std::string EagleSchematicFileExtension;
 extern const std::string CadstarSchematicFileExtension;
 extern const std::string KiCadSchematicFileExtension;
+extern const std::string SpiceFileExtension;
+extern const std::string CadstarNetlistFileExtension;
 extern const std::string OrCadPcb2NetlistFileExtension;
 extern const std::string NetlistFileExtension;
 extern const std::string GerberFileExtension;
