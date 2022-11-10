@@ -233,13 +233,11 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
 
                 wxArrayString fpnames;
 
-                if( !CatchErrors( [&]()
-                                  {
-                                      m_lib_table->FootprintEnumerate( fpnames, nickname, false );
-                                  } ) )
-                {
-                    return 0;
-                }
+                CatchErrors(
+                        [&]()
+                        {
+                            m_lib_table->FootprintEnumerate( fpnames, nickname, false );
+                        } );
 
                 for( wxString fpname : fpnames )
                 {
@@ -248,7 +246,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
                             {
                                 auto* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
                                 queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
-                            });
+                            } );
 
                     if( m_cancelled )
                         return 0;
