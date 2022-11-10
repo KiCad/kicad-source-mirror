@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
  * Copyright (C) 2013-2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -129,7 +129,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
     }
     else
     {
-        for( auto const& nickname : aTable->GetLogicalLibs() )
+        for( const wxString& nickname : aTable->GetLogicalLibs() )
             m_queue_in.push( nickname );
     }
 
@@ -166,27 +166,28 @@ void FOOTPRINT_LIST_IMPL::loadLibs()
     size_t num_returns = m_queue_in.size();
     std::vector<std::future<size_t>> returns( num_returns );
 
-    auto loader_job = [this]() -> size_t
-        {
-            wxString nickname;
-            size_t retval = 0;
-
-            if( !m_cancelled && m_queue_in.pop( nickname ) )
+    auto loader_job =
+            [this]() -> size_t
             {
-                if( CatchErrors( [this, &nickname]()
-                             {
-                                 m_lib_table->PrefetchLib( nickname );
-                                 m_queue_out.push( nickname );
-                             } ) && m_progress_reporter )
+                wxString nickname;
+                size_t retval = 0;
+
+                if( !m_cancelled && m_queue_in.pop( nickname ) )
                 {
-                    m_progress_reporter->AdvanceProgress();
+                    if( CatchErrors( [this, &nickname]()
+                                     {
+                                         m_lib_table->PrefetchLib( nickname );
+                                         m_queue_out.push( nickname );
+                                     } ) && m_progress_reporter )
+                    {
+                        m_progress_reporter->AdvanceProgress();
+                    }
+
+                    ++retval;
                 }
 
-                ++retval;
-            }
-
-            return retval;
-        };
+                return retval;
+            };
 
     for( size_t ii = 0; ii < num_returns; ++ii )
         returns[ii] = tp.submit( loader_job );
@@ -218,41 +219,46 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
     // TODO: blast LOCALE_IO into the sun
 
     SYNC_QUEUE<std::unique_ptr<FOOTPRINT_INFO>> queue_parsed;
-    thread_pool& tp = GetKiCadThreadPool();
-    size_t num_elements = m_queue_out.size();
-    std::vector<std::future<size_t>> returns( num_elements );
+    thread_pool&                                tp = GetKiCadThreadPool();
+    size_t                                      num_elements = m_queue_out.size();
+    std::vector<std::future<size_t>>            returns( num_elements );
 
-    auto fp_thread = [ this, &queue_parsed ]() -> size_t
-    {
-        wxString nickname;
-
-        if( m_queue_out.pop( nickname ) && !m_cancelled )
-        {
-            wxArrayString fpnames;
-
-            if( !CatchErrors( [&]()
-                    {   m_lib_table->FootprintEnumerate( fpnames, nickname, false ); } ) )
+    auto fp_thread =
+            [ this, &queue_parsed ]() -> size_t
             {
-                return 0;
-            }
+                wxString nickname;
 
-            for( unsigned jj = 0; jj < fpnames.size() && !m_cancelled; ++jj )
-            {
-                CatchErrors( [&]()
-                    {
-                        FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpnames[jj] );
-                        queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
-                    });
-            }
+                if( m_cancelled || !m_queue_out.pop( nickname ) )
+                    return 0;
 
-            if( m_progress_reporter )
-                m_progress_reporter->AdvanceProgress();
+                wxArrayString fpnames;
 
-            return 1;
-        }
+                if( !CatchErrors( [&]()
+                                  {
+                                      m_lib_table->FootprintEnumerate( fpnames, nickname, false );
+                                  } ) )
+                {
+                    return 0;
+                }
 
-        return 0;
-    };
+                for( wxString fpname : fpnames )
+                {
+                    CatchErrors(
+                            [&]()
+                            {
+                                auto* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
+                                queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
+                            });
+
+                    if( m_cancelled )
+                        return 0;
+                }
+
+                if( m_progress_reporter )
+                    m_progress_reporter->AdvanceProgress();
+
+                return 1;
+            };
 
     for( size_t ii = 0; ii < num_elements; ++ii )
         returns[ii] = tp.submit( fp_thread );
