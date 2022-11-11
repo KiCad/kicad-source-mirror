@@ -681,26 +681,36 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
                     if( aTrack->GetLength() <= aMaxLengthIU )
                     {
+                        aTrack->SetParentGroup( nullptr );
                         delete aTrack;
-                        delete aTrackCopy;
                         aTrack = nullptr;
+
+                        aTrackCopy->SetParentGroup( nullptr );
+                        delete aTrackCopy;
                         aTrackCopy = nullptr;
+
                         return false;
                     }
                     else
                     {
                         m_commit->Add( aTrack );
+
+                        aTrackCopy->SetParentGroup( nullptr );
                         delete aTrackCopy;
                         aTrackCopy = nullptr;
+
                         return true;
                     }
                 }
                 else if( aTrack->GetLength() <= aMaxLengthIU )
                 {
-                    aTrack->SwapData( aTrackCopy ); //restore the original before notifying COMMIT
+                    aTrack->SwapItemData( aTrackCopy ); //restore the original before notifying COMMIT
                     m_commit->Remove( aTrack );
+
+                    aTrackCopy->SetParentGroup( nullptr );
                     delete aTrackCopy;
                     aTrackCopy = nullptr;
+
                     return false;
                 }
                 else

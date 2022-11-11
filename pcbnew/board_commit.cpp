@@ -309,6 +309,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 itemsDeselected = true;
             }
 
+            if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
+                parentGroup->RemoveItem( boardItem );
+
             if( autofillZones )
                 dirtyIntersectingZones( boardItem );
 
@@ -338,9 +341,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                     if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
                         break;
                 }
-
-                if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
-                    parentGroup->RemoveItem( boardItem );
 
                 if( view )
                     view->Remove( boardItem );
@@ -649,7 +649,7 @@ void BOARD_COMMIT::Revert()
             view->Remove( item );
             connectivity->Remove( item );
 
-            item->SwapData( copy );
+            item->SwapItemData( copy );
 
             view->Add( item );
             connectivity->Add( item );

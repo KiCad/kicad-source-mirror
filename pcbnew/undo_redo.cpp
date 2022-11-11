@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2016 CERN
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -151,28 +151,6 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
     }
 
     return false;
-}
-
-
-static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
-{
-    if( aImage == nullptr )
-        return;
-
-    wxASSERT( aItem->Type() == aImage->Type() );
-
-    // Remark: to create images of edited items to undo, we are using Clone method
-    // which does not do a deep copy.
-    // So we have to use the current values of these parameters.
-
-    wxASSERT( aItem->m_Uuid == aImage->m_Uuid );
-
-    EDA_ITEM* parent = aItem->GetParent();
-
-    aItem->SwapData( aImage );
-
-    // Restore pointers to be sure they are not broken
-    aItem->SetParent( parent );
 }
 
 
@@ -469,11 +447,11 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
 
             // Remove all pads/drawings/texts, as they become invalid
-            // for the VIEW after SwapData() called for footprints
+            // for the VIEW after SwapItemData() called for footprints
             view->Remove( item );
             connectivity->Remove( item );
 
-            SwapItemData( item, image );
+            item->SwapItemData( image );
 
             if( item->Type() == PCB_GROUP_T )
             {
@@ -594,10 +572,24 @@ void PCB_BASE_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aIt
 
         PICKED_ITEMS_LIST* curr_cmd = list.m_CommandsList[0];
         list.m_CommandsList.erase( list.m_CommandsList.begin() );
-
-        curr_cmd->ClearListAndDeleteItems();
+        ClearListAndDeleteItems( curr_cmd );
         delete curr_cmd;    // Delete command
     }
+}
+
+
+void PCB_BASE_EDIT_FRAME::ClearListAndDeleteItems( PICKED_ITEMS_LIST* aList )
+{
+    for( size_t ii = 0; ii < aList->GetCount();  ++ii )
+    {
+        if( BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aList->GetPickedItem( ii ) ) )
+            item->SetParentGroup( nullptr );
+
+        if( BOARD_ITEM* link = static_cast<BOARD_ITEM*>( aList->GetPickedItemLink( ii ) ) )
+            link->SetParentGroup( nullptr );
+    }
+
+    aList->ClearListAndDeleteItems();
 }
 
 
@@ -605,8 +597,7 @@ void PCB_BASE_EDIT_FRAME::RollbackFromUndo()
 {
     PICKED_ITEMS_LIST* undo = PopCommandFromUndoList();
     PutDataInPreviousState( undo );
-
-    undo->ClearListAndDeleteItems();
+    ClearListAndDeleteItems( undo );
     delete undo;
 
     GetCanvas()->Refresh();

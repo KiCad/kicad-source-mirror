@@ -45,8 +45,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     // Save initial zones configuration, for undo/redo, before adding new zone
     // note the net name and the layer can be changed, so we must save all zones
-    deletedList.ClearListAndDeleteItems();
-    pickedList.ClearListAndDeleteItems();
     SaveCopyOfZones( pickedList, GetBoard() );
 
     if( aZone->GetIsRuleArea() )
@@ -69,8 +67,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     if( dialogResult == wxID_CANCEL )
     {
-        deletedList.ClearListAndDeleteItems();
-        pickedList.ClearListAndDeleteItems();
+        ClearListAndDeleteItems( &deletedList );
+        ClearListAndDeleteItems( &pickedList );
         return;
     }
 

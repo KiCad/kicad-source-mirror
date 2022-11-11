@@ -120,6 +120,13 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
+    // Untangle group parents before doing any deleting
+    for( PCB_GROUP* group : m_groups )
+    {
+        for( BOARD_ITEM* item : group->GetItems() )
+            item->SetParentGroup( nullptr );
+    }
+
     // Clean up the owned elements
     DeleteMARKERs();
 
@@ -219,6 +226,7 @@ void BOARD::IncrementTimeStamp()
 
     {
         std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
+
         m_IntersectsAreaCache.clear();
         m_EnclosedByAreaCache.clear();
         m_IntersectsCourtyardCache.clear();
@@ -233,6 +241,7 @@ void BOARD::IncrementTimeStamp()
         m_CopperZoneRTreeCache.clear();
         m_CopperItemRTreeCache = std::make_unique<DRC_RTREE>();
         m_ZoneBBoxCache.clear();
+        m_GroupBBoxCache.clear();
     }
 }
 
@@ -1687,16 +1696,6 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<PAD*>& aVector, int aNetC
     }
 
     std::sort( aVector.begin(), aVector.end(), sortPadsByXthenYCoord );
-}
-
-
-void BOARD::PadDelete( PAD* aPad )
-{
-    GetConnectivity()->Remove( aPad );
-
-    InvokeListeners( &BOARD_LISTENER::OnBoardItemRemoved, *this, aPad );
-
-    aPad->DeleteStructure();
 }
 
 

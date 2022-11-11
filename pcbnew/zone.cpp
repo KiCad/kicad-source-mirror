@@ -972,7 +972,7 @@ BITMAPS ZONE::GetMenuImage() const
 }
 
 
-void ZONE::SwapData( BOARD_ITEM* aImage )
+void ZONE::swapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_ZONE_T || aImage->Type() == PCB_FP_ZONE_T );
 

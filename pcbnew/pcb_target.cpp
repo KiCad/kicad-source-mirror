@@ -138,7 +138,7 @@ EDA_ITEM* PCB_TARGET::Clone() const
 }
 
 
-void PCB_TARGET::SwapData( BOARD_ITEM* aImage )
+void PCB_TARGET::swapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_TARGET_T );
 

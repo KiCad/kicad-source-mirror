@@ -1541,7 +1541,7 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
 }
 
 
-void PAD::SwapData( BOARD_ITEM* aImage )
+void PAD::swapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_PAD_T );
 

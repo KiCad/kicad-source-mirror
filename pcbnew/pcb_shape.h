@@ -145,18 +145,18 @@ public:
     ///< @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
+#endif
+
+protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
 
     struct cmp_drawings
     {
         bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
     };
 
-#if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
-#endif
-
-protected:
     EDA_ANGLE getParentOrientation() const override;
     VECTOR2I getParentPosition() const override;
 };

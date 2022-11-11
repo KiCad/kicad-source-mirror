@@ -347,7 +347,7 @@ std::shared_ptr<SHAPE> PCB_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 }
 
 
-void PCB_SHAPE::SwapData( BOARD_ITEM* aImage )
+void PCB_SHAPE::swapData( BOARD_ITEM* aImage )
 {
     PCB_SHAPE* image = dynamic_cast<PCB_SHAPE*>( aImage );
     assert( image );

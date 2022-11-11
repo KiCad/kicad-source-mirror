@@ -34,6 +34,12 @@
 #include <pcb_group.h>
 
 
+BOARD_ITEM::~BOARD_ITEM()
+{
+    wxASSERT( m_group == nullptr );
+}
+
+
 const BOARD* BOARD_ITEM::GetBoard() const
 {
     if( Type() == PCB_T )
@@ -152,8 +158,29 @@ void BOARD_ITEM::DeleteStructure()
 }
 
 
-void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
+void BOARD_ITEM::swapData( BOARD_ITEM* aImage )
 {
+}
+
+
+void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
+{
+    if( aImage == nullptr )
+        return;
+
+    wxASSERT( Type() == aImage->Type() );
+    wxASSERT( m_Uuid == aImage->m_Uuid );
+
+    EDA_ITEM*  parent = GetParent();
+    PCB_GROUP* group = GetParentGroup();
+
+    SetParentGroup( nullptr );
+    aImage->SetParentGroup( nullptr );
+    swapData( aImage );
+
+    // Restore pointers to be sure they are not broken
+    SetParent( parent );
+    SetParentGroup( group );
 }
 
 

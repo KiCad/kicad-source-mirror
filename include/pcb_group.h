@@ -145,9 +145,6 @@ public:
      */
     PCB_GROUP* DeepDuplicate() const;
 
-    ///< @copydoc BOARD_ITEM::SwapData
-    void SwapData( BOARD_ITEM* aImage ) override;
-
     ///< @copydoc BOARD_ITEM::IsOnLayer
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
@@ -220,6 +217,10 @@ public:
      * @param aFunction is the function to be invoked.
      */
     void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const;
+
+protected:
+    ///< @copydoc BOARD_ITEM::swapData
+    void swapData( BOARD_ITEM* aImage ) override;
 
 private:
     std::unordered_set<BOARD_ITEM*> m_items;     // Members of the group

@@ -1001,7 +1001,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                     if( undo )
                     {
                         m_frame->PutDataInPreviousState( undo );
-                        undo->ClearListAndDeleteItems();
+                        m_frame->ClearListAndDeleteItems( undo );
                         delete undo;
                     }
                 }

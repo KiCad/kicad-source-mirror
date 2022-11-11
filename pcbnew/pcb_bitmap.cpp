@@ -94,7 +94,7 @@ EDA_ITEM* PCB_BITMAP::Clone() const
 }
 
 
-void PCB_BITMAP::SwapData( BOARD_ITEM* aItem )
+void PCB_BITMAP::swapData( BOARD_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == PCB_BITMAP_T,
                  wxString::Format( wxT( "PCB_BITMAP object cannot swap data with %s object." ),

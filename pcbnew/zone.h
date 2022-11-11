@@ -781,7 +781,8 @@ public:
 
 #endif
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
+protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
 
 protected:
     SHAPE_POLY_SET*       m_Poly;                ///< Outline of the zone.

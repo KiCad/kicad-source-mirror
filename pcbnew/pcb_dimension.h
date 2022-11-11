@@ -358,8 +358,6 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
-
     void Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight = false ) override;
 
     BITMAPS GetMenuImage() const override;
@@ -406,6 +404,8 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
+
     void updateGeometry() override;
 
     void updateText() override;
@@ -445,8 +445,6 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    void SwapData( BOARD_ITEM* aImage ) override;
-
     BITMAPS GetMenuImage() const override;
 
     /**
@@ -464,6 +462,8 @@ public:
     void     Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
 protected:
+    void swapData( BOARD_ITEM* aImage ) override;
+
     void updateGeometry() override;
 
     void updateText() override;
@@ -508,8 +508,6 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
-
     void SetLeaderLength( int aLength ) { m_leaderLength = aLength; }
     int GetLeaderLength() const { return m_leaderLength; }
 
@@ -524,6 +522,8 @@ public:
     }
 
 protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
+
     void updateText() override;
     void updateGeometry() override;
 
@@ -559,8 +559,6 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
-
     BITMAPS GetMenuImage() const override;
 
     wxString GetClass() const override
@@ -574,6 +572,8 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
+
     void updateGeometry() override;
 
 private:
@@ -600,8 +600,6 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
-
     BITMAPS GetMenuImage() const override;
 
     wxString GetClass() const override
@@ -614,6 +612,8 @@ public:
     const BOX2I ViewBBox() const override;
 
 protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
+
     void updateGeometry() override;
 };
 

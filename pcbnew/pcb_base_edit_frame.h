@@ -205,6 +205,8 @@ public:
      */
     void ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount = -1 ) override;
 
+    void ClearListAndDeleteItems( PICKED_ITEMS_LIST* aList );
+
     /**
      * Return the absolute path to the design rules file for the currently-loaded board.
      *

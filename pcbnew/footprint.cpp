@@ -196,6 +196,13 @@ FOOTPRINT::FOOTPRINT( FOOTPRINT&& aFootprint ) :
 
 FOOTPRINT::~FOOTPRINT()
 {
+    // Untangle group parents before doing any deleting
+    for( PCB_GROUP* group : m_fp_groups )
+    {
+        for( BOARD_ITEM* item : group->GetItems() )
+            item->SetParentGroup( nullptr );
+    }
+
     // Clean up the owned elements
     delete m_reference;
     delete m_value;
@@ -2573,7 +2580,7 @@ void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& 
 }
 
 
-void FOOTPRINT::SwapData( BOARD_ITEM* aImage )
+void FOOTPRINT::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == PCB_FOOTPRINT_T );
 

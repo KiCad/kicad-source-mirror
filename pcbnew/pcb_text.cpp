@@ -272,7 +272,7 @@ EDA_ITEM* PCB_TEXT::Clone() const
 }
 
 
-void PCB_TEXT::SwapData( BOARD_ITEM* aImage )
+void PCB_TEXT::swapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_TEXT_T );
 

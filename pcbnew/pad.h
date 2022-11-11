@@ -716,8 +716,6 @@ public:
 
     virtual const BOX2I ViewBBox() const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
-
     void ClearZoneConnectionCache()
     {
         for( size_t ii = 0; ii < arrayDim( m_zoneLayerConnections ); ++ii )
@@ -733,6 +731,8 @@ public:
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
+protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
 
 private:
     void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError,

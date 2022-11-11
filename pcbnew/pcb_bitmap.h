@@ -85,8 +85,6 @@ public:
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    void SwapData( BOARD_ITEM* aItem ) override;
-
     //void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
@@ -127,6 +125,9 @@ public:
 #if defined( DEBUG )
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
+
+protected:
+    void swapData( BOARD_ITEM* aItem ) override;
 
 private:
     VECTOR2I     m_pos;   // XY coordinates of center of the bitmap

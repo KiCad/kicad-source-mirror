@@ -66,6 +66,8 @@ public:
     {
     }
 
+    ~BOARD_ITEM();
+
     void SetParentGroup( PCB_GROUP* aGroup ) { m_group = aGroup; }
     PCB_GROUP* GetParentGroup() const { return m_group; }
 
@@ -229,7 +231,7 @@ public:
      *
      * @param aImage the item image which contains data to swap.
      */
-    virtual void SwapData( BOARD_ITEM* aImage );
+    void SwapItemData( BOARD_ITEM* aImage );
 
     /**
      * Test to see if this object is on the given layer.
@@ -320,6 +322,8 @@ protected:
      * Return a string (to be shown to the user) describing a layer mask.
      */
     virtual wxString layerMaskDescribe() const;
+
+    virtual void swapData( BOARD_ITEM* aImage );
 
 protected:
     PCB_LAYER_ID    m_layer;

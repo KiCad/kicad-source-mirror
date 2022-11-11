@@ -208,7 +208,7 @@ PCB_GROUP* PCB_GROUP::DeepDuplicate() const
 }
 
 
-void PCB_GROUP::SwapData( BOARD_ITEM* aImage )
+void PCB_GROUP::swapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_GROUP_T );
 
@@ -234,16 +234,41 @@ const BOX2I PCB_GROUP::GetBoundingBox() const
 {
     BOX2I bbox;
 
-    for( BOARD_ITEM* item : m_items )
+    auto calcBBox =
+            [this]()
+            {
+                BOX2I box;
+
+                for( BOARD_ITEM* item : m_items )
+                {
+                    if( item->Type() == PCB_FOOTPRINT_T )
+                        box.Merge( static_cast<FOOTPRINT*>( item )->GetBoundingBox( true, false ) );
+                    else
+                        box.Merge( item->GetBoundingBox() );
+                }
+
+                box.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Give a min size to the bbox
+
+                return box;
+            };
+
+    if( const BOARD* board = GetBoard() )
     {
-        if( item->Type() == PCB_FOOTPRINT_T )
-            bbox.Merge( static_cast<FOOTPRINT*>( item )->GetBoundingBox( true, false ) );
-        else
-            bbox.Merge( item->GetBoundingBox() );
+        std::unordered_map<const PCB_GROUP*, BOX2I>& cache = board->m_GroupBBoxCache;
+        auto                                         cacheIter = cache.find( this );
+
+        if( cacheIter != cache.end() )
+            return cacheIter->second;
+
+        bbox = calcBBox();
+
+        std::unique_lock<std::mutex> cacheLock( const_cast<BOARD*>( board )->m_CachesMutex );
+        cache[ this ] = bbox;
+
+        return bbox;
     }
 
     bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Give a min size to the bbox
-
     return bbox;
 }
 

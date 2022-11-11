@@ -757,7 +757,9 @@ public:
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
             FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
+#if defined(DEBUG)
+    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
+#endif
 
     struct cmp_drawings
     {
@@ -774,10 +776,8 @@ public:
         bool operator()( const FP_ZONE* aFirst, const FP_ZONE* aSecond ) const;
     };
 
-
-#if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
-#endif
+protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
 
 private:
     DRAWINGS        m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.

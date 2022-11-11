@@ -560,7 +560,7 @@ EDA_ITEM* PCB_DIM_ALIGNED::Clone() const
 }
 
 
-void PCB_DIM_ALIGNED::SwapData( BOARD_ITEM* aImage )
+void PCB_DIM_ALIGNED::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == Type() );
 
@@ -752,7 +752,7 @@ EDA_ITEM* PCB_DIM_ORTHOGONAL::Clone() const
 }
 
 
-void PCB_DIM_ORTHOGONAL::SwapData( BOARD_ITEM* aImage )
+void PCB_DIM_ORTHOGONAL::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == Type() );
 
@@ -969,7 +969,7 @@ EDA_ITEM* PCB_DIM_LEADER::Clone() const
 }
 
 
-void PCB_DIM_LEADER::SwapData( BOARD_ITEM* aImage )
+void PCB_DIM_LEADER::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == Type() );
 
@@ -1112,7 +1112,7 @@ EDA_ITEM* PCB_DIM_RADIAL::Clone() const
 }
 
 
-void PCB_DIM_RADIAL::SwapData( BOARD_ITEM* aImage )
+void PCB_DIM_RADIAL::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == Type() );
 
@@ -1240,7 +1240,7 @@ EDA_ITEM* PCB_DIM_CENTER::Clone() const
 }
 
 
-void PCB_DIM_CENTER::SwapData( BOARD_ITEM* aImage )
+void PCB_DIM_CENTER::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == Type() );
 

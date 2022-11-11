@@ -135,7 +135,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
+protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
 };
 
 #endif  // #define PCB_TEXTBOX_H

@@ -848,6 +848,14 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 FOOTPRINT* editorFootprint = board()->GetFirstFootprint();
                 std::vector<BOARD_ITEM*> pastedItems;
 
+                for( PCB_GROUP* group : clipBoard->Groups() )
+                {
+                    group->SetParent( nullptr );
+                    pastedItems.push_back( group );
+                }
+
+                clipBoard->Groups().clear();
+
                 for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
                     pasteFootprintItemsToFootprintEditor( clipFootprint, board(), pastedItems );
 
@@ -856,44 +864,61 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     if( clipDrawItem->Type() == PCB_SHAPE_T )
                     {
                         PCB_SHAPE* clipShape = static_cast<PCB_SHAPE*>( clipDrawItem );
+                        PCB_GROUP* parentGroup = clipDrawItem->GetParentGroup();
+
+                        if( parentGroup )
+                            parentGroup->RemoveItem( clipDrawItem );
 
                         // Convert to PCB_FP_SHAPE_T
                         FP_SHAPE* pastedShape = new FP_SHAPE( editorFootprint );
-                        static_cast<PCB_SHAPE*>( pastedShape )->SwapData( clipShape );
+                        static_cast<PCB_SHAPE*>( pastedShape )->SwapItemData( clipShape );
                         pastedShape->SetLocalCoord();
 
-                        // Replace parent nuked by above call to SwapData()
-                        pastedShape->SetParent( editorFootprint );
+                        if( parentGroup )
+                            parentGroup->AddItem( pastedShape );
+
                         pastedItems.push_back( pastedShape );
                     }
                     else if( clipDrawItem->Type() == PCB_TEXT_T )
                     {
-                        PCB_TEXT* clipTextItem = static_cast<PCB_TEXT*>( clipDrawItem );
+                        PCB_TEXT*  clipTextItem = static_cast<PCB_TEXT*>( clipDrawItem );
+                        PCB_GROUP* parentGroup = clipDrawItem->GetParentGroup();
+
+                        if( parentGroup )
+                            parentGroup->RemoveItem( clipDrawItem );
 
                         // Convert to PCB_FP_TEXT_T
                         FP_TEXT* pastedTextItem = new FP_TEXT( editorFootprint );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapText( *clipTextItem );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapAttributes( *clipTextItem );
 
-                        pastedTextItem->SetParent( editorFootprint );
+                        if( parentGroup )
+                            parentGroup->AddItem( pastedTextItem );
+
                         pastedItems.push_back( pastedTextItem );
                     }
                     else if( clipDrawItem->Type() == PCB_TEXTBOX_T )
                     {
                         PCB_TEXTBOX* clipTextBox = static_cast<PCB_TEXTBOX*>( clipDrawItem );
+                        PCB_GROUP*   parentGroup = clipDrawItem->GetParentGroup();
+
+                        if( parentGroup )
+                            parentGroup->RemoveItem( clipDrawItem );
 
                         // Convert to PCB_FP_TEXTBOX_T
                         FP_TEXTBOX* pastedTextBox = new FP_TEXTBOX( editorFootprint );
 
                         // Handle shape data
-                        static_cast<PCB_SHAPE*>( pastedTextBox )->SwapData( clipTextBox );
+                        static_cast<PCB_SHAPE*>( pastedTextBox )->SwapItemData( clipTextBox );
                         pastedTextBox->SetLocalCoord();
 
                         // Handle text data
                         static_cast<EDA_TEXT*>( pastedTextBox )->SwapText( *clipTextBox );
                         static_cast<EDA_TEXT*>( pastedTextBox )->SwapAttributes( *clipTextBox );
 
-                        pastedTextBox->SetParent( editorFootprint );
+                        if( parentGroup )
+                            parentGroup->AddItem( pastedTextBox );
+
                         pastedItems.push_back( pastedTextBox );
                     }
                 }

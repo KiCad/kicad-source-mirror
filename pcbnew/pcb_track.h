@@ -210,8 +210,6 @@ public:
 
     const BOX2I ViewBBox() const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
-
     /**
      * @return true because a track or a via is always on a copper layer.
      */
@@ -266,6 +264,8 @@ public:
 #endif
 
 protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
+
     void GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) const;
 
 protected:
@@ -349,7 +349,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
+protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
 
 private:
     VECTOR2I m_Mid; ///< Arc mid point, halfway between start and end
@@ -534,8 +535,6 @@ public:
     */
     bool IsDrillDefault() const { return m_drill <= 0; }
 
-    void SwapData( BOARD_ITEM* aImage ) override;
-
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
@@ -552,6 +551,8 @@ public:
     }
 
 protected:
+    void swapData( BOARD_ITEM* aImage ) override;
+
     wxString layerMaskDescribe() const override;
 
 private:

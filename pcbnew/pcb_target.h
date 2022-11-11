@@ -92,8 +92,6 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
-
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
@@ -115,6 +113,9 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
 
 private:
     int      m_shape;            // bit 0 : 0 = draw +, 1 = draw X

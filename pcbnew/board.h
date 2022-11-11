@@ -1004,14 +1004,6 @@ public:
     PAD* GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, LSET aLayerMask ) const;
 
     /**
-     * Delete a given pad from the BOARD by removing it from its footprint and from the
-     * m_NetInfo.  Makes no UI calls.
-     *
-     * @param aPad is the pad to delete.
-     */
-    void PadDelete( PAD* aPad );
-
-    /**
      * First empties then fills the vector with all pads and sorts them by increasing x
      * coordinate, and for increasing y coordinate for same values of x coordinates.  The vector
      * only holds pointers to the pads and those pointers are only references to pads which are
@@ -1151,6 +1143,7 @@ public:
     std::unordered_map<ZONE*, std::unique_ptr<DRC_RTREE>> m_CopperZoneRTreeCache;
     std::unique_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;
     mutable std::unordered_map<const ZONE*, BOX2I>        m_ZoneBBoxCache;
+    mutable std::unordered_map<const PCB_GROUP*, BOX2I>   m_GroupBBoxCache;
 
     // ------------ DRC caches -------------
     std::vector<ZONE*>    m_DRCZones;
