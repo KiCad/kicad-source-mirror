@@ -62,6 +62,11 @@ public:
     {
     }
 
+    ~TEST_BOARD_ITEM_FIXTURE()
+    {
+        m_text.SetParentGroup( nullptr );
+    }
+
     BOARD_ITEM* Instantiate( KICAD_T aType )
     {
         if( !IsPcbnewType( aType ) )
