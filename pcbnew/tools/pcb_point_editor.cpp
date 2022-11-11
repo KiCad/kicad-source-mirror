@@ -47,6 +47,7 @@ using namespace std::placeholders;
 #include <pad.h>
 #include <zone.h>
 #include <footprint.h>
+#include <footprint_editor_settings.h>
 #include <connectivity/connectivity_data.h>
 #include <progress_reporter.h>
 
@@ -493,7 +494,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     updateEditedPoint( aEvent );
     m_refill = false;
     bool inDrag = false;
-    bool lock45 = false;
+    bool useAltContraint = false;
 
     BOARD_COMMIT commit( editFrame );
 
@@ -502,6 +503,11 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
+        if( editFrame->IsType( FRAME_PCB_EDITOR ) )
+            useAltContraint = editFrame->GetPcbNewSettings()->m_Use45DegreeLimit;
+        else
+            useAltContraint = editFrame->GetFootprintEditorSettings()->m_Use45Limit;
 
         if( !m_editPoints || evt->IsSelectionEvent() ||
                 evt->Matches( EVENTS::InhibitSelectionEditing ) )
@@ -581,7 +587,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             m_editedPoint->SetPosition( pos );
 
             // The alternative constraint limits to 45 degrees
-            if( lock45 )
+            if( useAltContraint )
             {
                 m_altConstraint->Apply( grid );
             }
@@ -629,11 +635,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             frame()->UndoRedoBlock( false );
 
             m_refill = true;
-        }
-        else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )
-        {
-            lock45 = !lock45;
-            evt->SetPassEvent( false );
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
