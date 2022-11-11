@@ -9,7 +9,10 @@
     "wxwidgets",
     "glew",
     "curl",
-    "gettext",
+    {
+      "name": "gettext",
+      "features": [ "tools" ]
+    },
     "harfbuzz",
     "glm",
     "opencascade",
