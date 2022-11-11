@@ -198,6 +198,15 @@ std::string SPICE_GENERATOR_SOURCE::getParamValueString( const std::string& aPar
 }
 
 
+std::string SIM_SERDE_SOURCE::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const
+{
+    if( aParam.value->ToString() == "0" )
+        return "";
+
+    return SIM_SERDE::GenerateParamValuePair( aParam );
+}
+
+
 SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
     : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SOURCE>( *this ) )
 {
@@ -250,15 +259,6 @@ void SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
     }
 
     return SIM_MODEL::SetParamValue( aParamIndex, aValue );
-}
-
-
-std::string SIM_MODEL_SOURCE::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
-{
-    if( aParam.value->ToString() == "0" )
-        return "";
-
-    return SIM_MODEL::GenerateParamValuePair( aParam, aIsFirst );
 }
 
 

@@ -39,102 +39,7 @@
 
 class SIM_LIBRARY;
 class SPICE_GENERATOR;
-
-
-namespace SIM_MODEL_GRAMMAR
-{
-    using namespace SIM_VALUE_GRAMMAR;
-
-    struct sep : plus<space> {};
-
-
-    struct legacyPinNumber : digits {};
-    struct legacyPinSequence : list<legacyPinNumber, sep> {};
-
-    struct legacyPinSequenceGrammar : must<legacyPinSequence,
-                                           tao::pegtl::eof> {};
-
-
-    struct pinNumber : plus<not_at<sep>, any> {};
-    struct pinSequence : list<pinNumber, sep> {};
-    struct pinSequenceGrammar : must<opt<sep>,
-                                     opt<pinSequence>,
-                                     opt<sep>,
-                                     tao::pegtl::eof> {};
-
-    struct param : plus<alnum> {};
-
-    struct unquotedString : plus<not_at<sep>, any> {};
-    struct quotedStringContent : star<not_at<one<'"'>>, any> {}; // TODO: Allow escaping '"'.
-    struct quotedString : seq<one<'"'>,
-                              quotedStringContent,
-                              one<'"'>> {};
-
-    struct fieldParamValuePair : if_must<param,
-                                         opt<sep>,
-                                         one<'='>,
-                                         opt<sep>,
-                                         sor<quotedString,
-                                             unquotedString>> {};
-    struct fieldParamValuePairs : list<fieldParamValuePair, sep> {};
-    struct fieldParamValuePairsGrammar : must<opt<sep>,
-                                              opt<fieldParamValuePairs>,
-                                              opt<sep>,
-                                              tao::pegtl::eof> {};
-
-    struct fieldInferValueType : plus<upper> {};
-    struct fieldInferValuePrimaryValue : seq<// HACK: Because `number` matches empty string,
-                                             // ensure it is not empty.
-                                             at<sor<tao::pegtl::digit,
-                                                    seq<one<'.'>>,
-                                                        tao::pegtl::digit>>,
-                                             // END HACK.
-                                             number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
-                                             // Hackish: match anything until param-value pairs.
-                                             // Because the user may want to write something like
-                                             // "10k 30% 30mW w=0.4", but we care only about the
-                                             // "10k" and "w=0.4".
-                                             star<not_at<sep,
-                                                         try_catch<fieldParamValuePairs>>,
-                                                  any>> {};
-    struct fieldInferValue : sor<seq<fieldInferValueType,
-                                     opt<sep,
-                                         fieldParamValuePairs>>,
-                                 seq<opt<fieldInferValuePrimaryValue>,
-                                     opt<sep>,
-                                     opt<fieldParamValuePairs>>> {};
-    struct fieldInferValueGrammar : must<opt<sep>,
-                                         fieldInferValue,
-                                         opt<sep>,
-                                         tao::pegtl::eof> {};
-
-
-    template <typename> inline constexpr const char* errorMessage = nullptr;
-    template <> inline constexpr auto errorMessage<opt<sep>> = "";
-    template <> inline constexpr auto errorMessage<opt<pinSequence>> = "";
-    template <> inline constexpr auto errorMessage<opt<sor<fieldInferValueType,
-                                                           fieldInferValuePrimaryValue>>> = "";
-    template <> inline constexpr auto errorMessage<one<'='>> =
-        "expected '='";
-    template <> inline constexpr auto errorMessage<sor<quotedString,
-                                                       unquotedString>> =
-        "expected quoted or unquoted string";
-    template <> inline constexpr auto errorMessage<fieldParamValuePairs> =
-        "expected parameter=value pairs";
-    template <> inline constexpr auto errorMessage<opt<fieldParamValuePairs>> = "";
-    template <> inline constexpr auto errorMessage<fieldInferValue> =
-        "expected parameter=value pairs, together possibly preceded by a type or primary value";
-    template <> inline constexpr auto errorMessage<tao::pegtl::eof> =
-        "expected end of string";
-
-    struct error
-    {
-        template <typename Rule> static constexpr bool raise_on_failure = false;
-        template <typename Rule> static constexpr auto message = errorMessage<Rule>;
-    };
-
-    template <typename Rule> using control = must_if<error>::control<Rule>;
-}
+class SIM_SERDE;
 
 
 class SIM_MODEL
@@ -485,9 +390,6 @@ public:
 
     static DEVICE_TYPE_ InferDeviceTypeFromRef( const std::string& aRef );
 
-    static TYPE InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue,
-                                          int aSymbolPinCount );
-
     template <typename T>
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
 
@@ -606,6 +508,8 @@ public:
     // Can modifying a model parameter also modify other parameters?
     virtual bool HasAutofill() const { return false; }
 
+    virtual bool HasPrimaryValue() const { return false; }
+
     void SetIsEnabled( bool aIsEnabled ) { m_isEnabled = aIsEnabled; }
     bool IsEnabled() const { return m_isEnabled; }
 
@@ -616,14 +520,16 @@ protected:
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
 
     SIM_MODEL( TYPE aType );
-    SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
+    SIM_MODEL( TYPE aType,
+               std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
+    SIM_MODEL( TYPE aType,
+               std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
+               std::unique_ptr<SIM_SERDE> aSerde );
 
     virtual void CreatePins( unsigned aSymbolPinCount );
 
     template <typename T>
     void WriteInferredDataFields( std::vector<T>& aFields, const std::string& aValue = "" ) const;
-
-    virtual std::string GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
 
     std::string GenerateValueField( const std::string& aPairSeparator ) const;
     std::string GenerateParamsField( const std::string& aPairSeparator ) const;
@@ -636,6 +542,7 @@ protected:
     void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
     std::vector<PARAM> m_params;
     const SIM_MODEL* m_baseModel;
+    std::unique_ptr<SIM_SERDE> m_serde;
 
 private:
     static TYPE readTypeFromSpiceStrings( const std::string& aTypeString,
@@ -658,7 +565,6 @@ private:
 
     std::string parseFieldFloatValue( std::string aFieldFloatValue );
 
-    virtual bool hasPrimaryValue() const { return false; }
     virtual bool requiresSpiceModelLine() const;
 
     virtual std::vector<std::string> getPinNames() const { return {}; }

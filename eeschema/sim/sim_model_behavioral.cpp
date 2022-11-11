@@ -23,6 +23,7 @@
  */
 
 #include <sim/sim_model_behavioral.h>
+#include <sim/sim_serde.h>
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/trim.hpp>
@@ -149,9 +150,9 @@ void SIM_MODEL_BEHAVIORAL::inferredReadDataFields( unsigned aSymbolPinCount,
 {
     ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
 
-    if( ( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
-                                    GetFieldValue( aFields, VALUE_FIELD ),
-                                    aSymbolPinCount ) == GetType()
+    if( ( m_serde->InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
+                                             GetFieldValue( aFields, VALUE_FIELD ),
+                                             aSymbolPinCount ) == GetType()
             && parseValueField( GetFieldValue( aFields, VALUE_FIELD ) ) )
         // If Value is device type, this is an empty model
         || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )

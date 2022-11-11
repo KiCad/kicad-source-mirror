@@ -26,12 +26,13 @@
 #define SIM_MODEL_SOURCE_H
 
 #include <sim/sim_model.h>
+#include <sim/sim_serde.h>
 #include <sim/spice_generator.h>
 
 
 namespace SIM_MODEL_SOURCE_GRAMMAR
 {
-    using namespace SIM_MODEL_GRAMMAR;
+    using namespace SIM_SERDE_GRAMMAR;
 
     struct pwlSep : plus<space> {};
     struct pwlValues : seq<opt<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>>,
@@ -54,7 +55,14 @@ public:
 
 private:
     std::string getParamValueString( const std::string& aParamName,
-                                  const std::string& aDefaultValue ) const;
+                                     const std::string& aDefaultValue ) const;
+};
+
+
+class SIM_SERDE_SOURCE : public SIM_SERDE
+{
+protected:
+    std::string GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const override;
 };
 
 
@@ -69,16 +77,13 @@ public:
     void SetParamValue( int aParamIndex, const SIM_VALUE& aValue ) override;
 
     bool HasAutofill() const override { return true; }
-
-protected:
-    std::string GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
+    bool HasPrimaryValue() const override { return true; }
 
 private:
     template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
 
-    bool hasPrimaryValue() const override { return true; }
     std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
     static const std::vector<PARAM::INFO>& makeParamInfos( TYPE aType );

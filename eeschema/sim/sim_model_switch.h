@@ -27,6 +27,7 @@
 
 #include <sim/sim_model.h>
 #include <sim/spice_generator.h>
+#include <sim/sim_serde.h>
 
 
 class SPICE_GENERATOR_SWITCH : public SPICE_GENERATOR
@@ -40,13 +41,20 @@ public:
 };
 
 
+class SIM_SERDE_SWITCH : public SIM_SERDE
+{
+public:
+    using SIM_SERDE::SIM_SERDE;
+
+protected:
+    std::string GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const override;
+};
+
+
 class SIM_MODEL_SWITCH : public SIM_MODEL
 {
 public:
     SIM_MODEL_SWITCH( TYPE aType );
-
-protected:
-    std::string GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
 
 private:
     std::vector<std::string> getPinNames() const override

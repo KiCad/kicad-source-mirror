@@ -23,6 +23,7 @@
  */
 
 #include <sim/sim_model_raw_spice.h>
+#include <sim/sim_serde.h>
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <fmt/core.h>
@@ -32,7 +33,7 @@
 
 namespace SIM_MODEL_RAW_SPICE_PARSER
 {
-    using namespace SIM_MODEL_GRAMMAR;
+    using namespace SIM_SERDE_GRAMMAR;
 
     template <typename Rule> struct legacyPinSequenceSelector : std::false_type {};
     template <> struct legacyPinSequenceSelector<legacyPinNumber> : std::true_type {};

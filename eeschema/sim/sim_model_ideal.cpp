@@ -59,8 +59,8 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType ) :
     SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_IDEAL>( *this ) )
 {
     static PARAM::INFO resistor  = makeParamInfo( "r", "Resistance",  "Ω" );
-    static PARAM::INFO capacitor = makeParamInfo( "c", "Capacitance", "F"   );
-    static PARAM::INFO inductor  = makeParamInfo( "l", "Inductance",  "H"   );
+    static PARAM::INFO capacitor = makeParamInfo( "c", "Capacitance", "F" );
+    static PARAM::INFO inductor  = makeParamInfo( "l", "Inductance",  "H" );
 
     switch( aType )
     {

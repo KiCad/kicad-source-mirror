@@ -94,8 +94,19 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SPICE_GENERATOR_SWITCH
 }
 
 
+std::string SIM_SERDE_SWITCH::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const
+{
+    if( aParam.info.name == "ic" && aParam.value->ToString() == "none" )
+        return "";
+
+    return SIM_SERDE::GenerateParamValuePair( aParam );
+}
+
+
 SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SWITCH>( *this ) )
+    SIM_MODEL( aType,
+               std::make_unique<SPICE_GENERATOR_SWITCH>( *this ),
+               std::make_unique<SIM_SERDE_SWITCH>( *this ) )
 {
     static std::vector<PARAM::INFO> vsw = makeSwVParamInfos();
     static std::vector<PARAM::INFO> isw = makeSwIParamInfos();
@@ -121,15 +132,6 @@ SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) :
 }
 
 
-std::string SIM_MODEL_SWITCH::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
-{
-    if( aParam.info.name == "ic" && aParam.value->ToString() == "none" )
-    {
-        return "";
-    }
-
-    return SIM_MODEL::GenerateParamValuePair( aParam, aIsFirst );
-}
 
 
 const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwVParamInfos()
