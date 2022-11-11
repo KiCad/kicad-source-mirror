@@ -762,6 +762,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     if( restore_state )
     {
         m_commit->Revert();
+        m_selectionTool->RebuildSelection();
 
         // Mainly for point editor, but there might be other clients that need to adjust to
         // reverted state.
@@ -773,9 +774,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     else
     {
         m_commit->Push( _( "Drag" ) );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
     }
-
-    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
 
     m_toolMgr->GetTool<DRAWING_TOOL>()->UpdateStatusBar();
     // Remove the dynamic ratsnest from the screen
