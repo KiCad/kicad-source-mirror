@@ -352,7 +352,10 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
     if( convertSettings.m_DeleteOriginals )
     {
-        for( EDA_ITEM* item : selection )
+        PCB_SELECTION selectionCopy = selection;
+        m_selectionTool->ClearSelection();
+
+        for( EDA_ITEM* item : selectionCopy )
         {
             if( item->GetFlags() & SKIP_STRUCT )
                 commit.Remove( item );

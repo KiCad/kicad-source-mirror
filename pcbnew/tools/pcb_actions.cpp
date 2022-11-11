@@ -45,17 +45,17 @@
 //
 TOOL_ACTION PCB_ACTIONS::convertToPoly( "pcbnew.Convert.convertToPoly",
         AS_GLOBAL, 0, "",
-        _( "Create Polygon from Selection" ), _( "Creates a graphic polygon from the selection" ),
+        _( "Create Polygon from Selection..." ), _( "Creates a graphic polygon from the selection" ),
         BITMAPS::add_graphical_polygon );
 
 TOOL_ACTION PCB_ACTIONS::convertToZone( "pcbnew.Convert.convertToZone",
         AS_GLOBAL, 0, "",
-        _( "Create Zone from Selection" ), _( "Creates a copper zone from the selection" ),
+        _( "Create Zone from Selection..." ), _( "Creates a copper zone from the selection" ),
         BITMAPS::add_zone );
 
 TOOL_ACTION PCB_ACTIONS::convertToKeepout( "pcbnew.Convert.convertToKeepout",
         AS_GLOBAL, 0, "",
-        _( "Create Rule Area from Selection" ), _( "Creates a rule area from the selection" ),
+        _( "Create Rule Area from Selection..." ), _( "Creates a rule area from the selection" ),
         BITMAPS::add_keepout_area );
 
 TOOL_ACTION PCB_ACTIONS::convertToLines( "pcbnew.Convert.convertToLines",
