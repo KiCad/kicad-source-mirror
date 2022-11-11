@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-11-10 12:46+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"PO-Revision-Date: 2022-11-12 22:50+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v6/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -6658,11 +6658,9 @@ msgid "Hotkey file"
 msgstr "Αρχείο Συντομεύσεων"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"Αδυναμία εύρεσης αρχείου ισοδυναμίας \"%s\" στις προκαθορισμένες διαδρομές "
-"αναζήτησης."
+msgstr "Αδυναμία εύρεσης αρχείου ισοδυναμίας '%s'"
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
