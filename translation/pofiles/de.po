@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-09 11:21+0000\n"
+"PO-Revision-Date: 2022-11-11 22:24+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -4097,7 +4097,7 @@ msgstr "Schaltplaneditor"
 
 #: common/eda_base_frame.cpp:1017
 msgid "Annotation Options"
-msgstr "Beschriftungsoptionen"
+msgstr "Annotierungsoptionen"
 
 #: common/eda_base_frame.cpp:1019
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
@@ -5928,7 +5928,7 @@ msgstr "Spezielles Einfügen..."
 
 #: common/tool/actions.cpp:175
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Element(e) aus der Zwischenablage mit Beschriftungsoptionen einfügen"
+msgstr "Element(e) aus der Zwischenablage mit Annotierungsoptionen einfügen"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -7631,7 +7631,7 @@ msgstr "%s aktualisiert von %s auf %s."
 #: eeschema/annotate.cpp:396
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Annotiert: %s (Einheit %s) als %s."
+msgstr "%s (Einheit %s) annotiert als %s."
 
 #: eeschema/annotate.cpp:403
 #, c-format
@@ -7656,12 +7656,12 @@ msgstr ""
 #: eeschema/component_references_lister.cpp:689
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Element nicht beschriftet: %s%s (Einheit %d)"
+msgstr "Element nicht annotiert: %s%s (Einheit %d)"
 
 #: eeschema/component_references_lister.cpp:696
 #, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Element nicht beschriftet: %s%s"
+msgstr "Element nicht annotiert: %s%s"
 
 #: eeschema/component_references_lister.cpp:714
 #, c-format
@@ -7739,7 +7739,7 @@ msgstr "Ausgewähltes Netz:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:90
 msgid "Annotation Messages:"
-msgstr "Annotation-Meldungen:"
+msgstr "Annotierungsmeldungen:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:93
 msgid "Annotate"
@@ -7793,7 +7793,7 @@ msgstr "Bestehende Annotationen beibehalten"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:90
 msgid "Reset existing annotations"
-msgstr "Bestehende Annotationen ersetzen"
+msgstr "Bestehende Annotationen zurücksetzen"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:97
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:72
@@ -7817,7 +7817,7 @@ msgstr "Erste freie Nummer nach Schaltplanblattnummer × 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:136
 msgid "Clear Annotation"
-msgstr "Annotationen löschen"
+msgstr "Annotation löschen"
 
 #: eeschema/dialogs/dialog_annotate_base.h:85
 msgid "Annotate Schematic"
@@ -12026,24 +12026,24 @@ msgstr "Symbolfelder aktualisieren"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
-msgstr "Draht-/Busbreite:"
+msgstr "Verbindungs-/Busbreite:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
 msgid "Set width to 0 to use netclass's wire/bus widths."
 msgstr ""
-"Breite auf 0 setzen, um Leitungs-/Busbreiten der Netzklasse zu verwenden."
+"Breite auf 0 setzen, um Verbindungs-/Busbreiten der Netzklasse zu verwenden."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:71
 msgid "Wire & Bus Properties"
-msgstr "Draht- & Buseigenschaften"
+msgstr "Verbindungs- & Buseigenschaften"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
 msgid "Symbol Annotation"
-msgstr "Symbolbeschriftung"
+msgstr "Symbolannotierung"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
 msgid "Automatically annotate symbols"
-msgstr "Symbole automatisch beschriften"
+msgstr "Symbole automatisch annotieren"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
@@ -12209,14 +12209,14 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
 #: pcbnew/dialogs/panel_edit_options_base.cpp:75
 msgid "<ESC> clears net highlighting"
-msgstr "<ESC> löscht die Netzhervorhebung"
+msgstr "<ESC> hebt die Netzhervorhebung auf"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
-"Erstes <ESC> im Auswahlwerkzeug löscht die Auswahl, das nächste löscht die "
-"Netzhervorhebung"
+"Erstes <ESC> im Auswahlwerkzeug hebt die Auswahl auf, das nächste hebt die "
+"Netzhervorhebung auf"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -12424,7 +12424,7 @@ msgstr "Voreinstellung Schriftgröße:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
 #, fuzzy
 msgid "Label offset ratio:"
-msgstr "Bezeichner Versatz-Verhältnis:"
+msgstr "Bezeichner-Versatz-Verhältnis:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
@@ -13083,7 +13083,7 @@ msgstr "Nicht aufgelöste Textvariable"
 
 #: eeschema/erc_item.cpp:138
 msgid "Wires not connected to anything"
-msgstr "Elektrische Verbindungen sind nirgendwo angeschlossen"
+msgstr "Nirgends angeschlossene elektrische Verbindungen"
 
 #: eeschema/erc_item.cpp:142
 msgid "Library symbol issue"
@@ -14106,7 +14106,7 @@ msgstr "Syntax-Hilfe"
 #: eeschema/sch_line.cpp:701
 #, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Vertikale Leitung, Länge %s"
+msgstr "Vertikale Verbindung, Länge %s"
 
 #: eeschema/sch_line.cpp:702
 #, c-format
@@ -14121,7 +14121,7 @@ msgstr "Vertikale Grafiklinie, Länge %s"
 #: eeschema/sch_line.cpp:710
 #, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "Horizontale Leitung, Länge %s"
+msgstr "Horizontale Verbindung, Länge %s"
 
 #: eeschema/sch_line.cpp:711
 #, c-format
@@ -14136,7 +14136,7 @@ msgstr "Horizontale Grafiklinie, Länge %s"
 #: eeschema/sch_line.cpp:719
 #, c-format
 msgid "Wire, length %s"
-msgstr "Leitung, Länge %s"
+msgstr "Verbindung, Länge %s"
 
 #: eeschema/sch_line.cpp:720
 #, c-format
@@ -14613,7 +14613,7 @@ msgstr "Ungültige Symbolumwandlungsnummer %s"
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:653
 #, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Ungültige Hyperlink-URL \"%s\""
+msgstr "Ungültiger Hyperlink-URL \"%s\""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:742
 msgid "Invalid pin names definition"
@@ -16712,7 +16712,7 @@ msgstr "Pinnummern anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:201
 msgid "Annotate pins with their numbers"
-msgstr "Pins mit ihren Nummern beschriften"
+msgstr "Zeigt die Pinnummer an Pins an"
 
 #: eeschema/tools/ee_actions.cpp:206
 msgid "Show Symbol Tree"
@@ -17304,7 +17304,7 @@ msgstr "Schaltplan einrichten..."
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
 "Bearbeiten der Einstellungen für den Schaltplan einschließlich "
-"Annotationsarten und elektrischer Regeln"
+"Annotierungsarten und elektrischer Regeln"
 
 #: eeschema/tools/ee_actions.cpp:644
 msgid "Edit Sheet Page Number..."
@@ -17447,7 +17447,7 @@ msgstr ""
 #: eeschema/tools/ee_actions.cpp:723 eeschema/tools/ee_actions.cpp:728
 #: eeschema/tools/ee_actions.cpp:734 eeschema/tools/ee_actions.cpp:740
 msgid "Line Mode for Wires and Buses"
-msgstr "Linienmodus für Drähte und Busse"
+msgstr "Linienmodus für Verbindungen und Busse"
 
 #: eeschema/tools/ee_actions.cpp:723
 msgid "Draw and drag at any angle"
@@ -17470,11 +17470,11 @@ msgstr "Zu nächstem Linienmodus springen"
 
 #: eeschema/tools/ee_actions.cpp:745
 msgid "Annotate Automatically"
-msgstr "Automatisch beschriften"
+msgstr "Automatisch annotieren"
 
 #: eeschema/tools/ee_actions.cpp:745
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr "Automatische Beschriftung von neuen Teilesymbolen umschalten"
+msgstr "Automatische Annotierung von neuen Teilesymbolen umschalten"
 
 #: eeschema/tools/ee_actions.cpp:750
 msgid "Repair Schematic"
@@ -18590,7 +18590,7 @@ msgstr ""
 
 #: gerbview/files.cpp:301
 msgid "Loading files..."
-msgstr "Dateien werden geladen..."
+msgstr "Dateien werden geladen ..."
 
 #: gerbview/files.cpp:304 gerbview/files.cpp:311
 #, c-format
@@ -19528,7 +19528,7 @@ msgstr "Projektverzeichnis im Dateiexplorer öffnen"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
 msgid "Add Default Repository"
-msgstr "Standard-Repositorium hinzufügen"
+msgstr "Standard-Repository hinzufügen"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:95
 msgid "Please enter fully qualified repository url"
@@ -19835,7 +19835,7 @@ msgstr "Deinstallierte Bibliotheken automatisch entfernen"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
 msgid "Library nickname prefix:"
-msgstr "Bibliotheks-Aliasname-Präfix:"
+msgstr "Präfix für Bibliotheks-Aliasname:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
@@ -19863,7 +19863,7 @@ msgstr "Fehler beim Einlesen der Liste installierter Pakete: %s"
 #: kicad/pcm/pcm.cpp:252
 #, c-format
 msgid "Downloading %lld/%lld kB"
-msgstr "%lld/%lld kB wird heruntergeladen"
+msgstr "Lade %lld/%lld kB herunter"
 
 #: kicad/pcm/pcm.cpp:279
 msgid "Download is too large."
@@ -21233,7 +21233,7 @@ msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
 msgid "Electrical Resistivity in Ohm*m at 20 deg C"
-msgstr "Elektrischer Widerstand in Ohm*m bei 20 Grad Celsius"
+msgstr "Elektrischer Widerstand in Ohm*m bei 20 °C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:236
 msgid "Temperature coefficient"
@@ -21241,7 +21241,7 @@ msgstr "Temperaturkoeffizient"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
-msgstr "Draht-Eigenschaften"
+msgstr "Verbindungseigenschaften"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
 msgid "Standard Size:"
@@ -21262,7 +21262,7 @@ msgstr "Leiterwiderstand:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
 msgid "Specific resistance in Ohm*m at 20 deg C"
-msgstr "Spezifischer Widerstand in Ohm*m bei 20 Grad Celsius"
+msgstr "Spezifischer Widerstand in Ohm*m bei 20 °C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:103
@@ -21288,7 +21288,7 @@ msgstr "Temperaturkoeffizient:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
-msgstr "Wärmekoeffizient bei 20 Grad Celsius"
+msgstr "Wärmekoeffizient bei 20 °C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Linear resistance:"
@@ -21305,7 +21305,7 @@ msgstr "Strombelastbarkeit:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:154
 msgid "Application"
-msgstr "Anmeldung"
+msgstr "Anwendung"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:162
 msgid "Cable temperature:"
@@ -21313,7 +21313,7 @@ msgstr "Kabeltemperatur:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
-msgstr ""
+msgstr "Maximale lastfreie Leitertemperatur. Referenz: 20 °C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
@@ -21444,7 +21444,7 @@ msgstr "Bronze"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
 msgid "Tin"
-msgstr "Tin"
+msgstr "Zinn"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:53
 msgid "Lead"
@@ -22329,7 +22329,7 @@ msgstr "Regler"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
 msgid "Power, current and isolation"
-msgstr "Leistung, Strom und Isolierung"
+msgstr "Leistung, Strom und Isolation"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:88
 msgid "Electrical Spacing"
@@ -23453,7 +23453,7 @@ msgstr "Platine neu annotieren"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:278
 msgid "No PCB to reannotate!"
-msgstr "Keine Leiterplatte zum reannotieren!"
+msgstr "Keine Leiterplatte neu zu annotieren!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:290
 msgid "PCB successfully reannotated"
@@ -23464,9 +23464,8 @@ msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
-"Änderungen an der Leiterplattenannotation sollten mit dem Werkzeug "
-"\"Schaltplan aus Leiterplatte aktualisieren\" mit dem Schaltplan "
-"synchronisiert werden."
+"Änderungen an der Leiterplattenannotation sollten mittels \"Schaltplan aus "
+"Leiterplatte aktualisieren\" mit dem Schaltplan synchronisiert werden."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:304
 #, c-format
@@ -23592,7 +23591,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"Ausgenommen: %s von Reannotation\n"
+"Ausgenommen: %s von Neu-Annotierung\n"
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:526
@@ -23682,7 +23681,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:607
 msgid "Reannotate anyway?"
-msgstr "Trotzdem neu notieren?"
+msgstr "Trotzdem neu annotieren?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:789
 #, c-format
@@ -23778,11 +23777,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 msgid "Reannotation Scope"
-msgstr "Reannotation-Geltungsbereich"
+msgstr "Geltungsbereich der Neu-Annotierung"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
 msgid "Reannotate:"
-msgstr "Reannotieren:"
+msgstr "Neu annotieren:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
@@ -23913,7 +23912,7 @@ msgstr "Referenzbezeichner"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr "Geografische Reannotation"
+msgstr "Geografische Neu-Annotierung"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:52
 msgid "Board Setup"
@@ -24244,7 +24243,7 @@ msgstr "Prüfe Zonen ..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:138
 msgid "Rebuilding connectivity..."
-msgstr "Konnektivität wird wiederhergestellt..."
+msgstr "Konnektivität wird wiederhergestellt ..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:158
 msgid "Board cleanup"
@@ -24837,7 +24836,7 @@ msgstr "Kreis Array"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
 msgid "Footprint Annotation"
-msgstr "Footprint-Annotation"
+msgstr "Footprint-Annotierung"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
 msgid "Keep existing reference designators"
@@ -25816,7 +25815,7 @@ msgstr "DRC-Marker durchsuchen"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 msgid "Search net names"
-msgstr "Suche nach Netznamen"
+msgstr "Netznamen durchsuchen"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
@@ -25877,13 +25876,13 @@ msgid "Text height must be at most %s."
 msgstr "Texthöhe darf höchstens %s betragen."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:440
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
 "Die Schriftstärke ist zu groß für die Schriftgröße.\n"
-"Schriftstärke wird begrenzt."
+"Schriftstärke wird begrenzt auf %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:575
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:605
@@ -26872,7 +26871,7 @@ msgstr "Via-Durchmesser"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:231
 msgid "uVia Diameter"
-msgstr "uVia-Durchmesser"
+msgstr "µVia-Durchmesser"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -27618,7 +27617,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1359
 msgid "Error: Trapazoid delta is too large."
-msgstr ""
+msgstr "Fehler: Trapez-Delta ist zu groß."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
 msgid "Error: Through hole pad has no hole."
@@ -28992,7 +28991,7 @@ msgstr "Pad-Eigenschaften anwenden"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:95
 msgid "Conversion settings:"
-msgstr "Konvertierungseinstellungen:"
+msgstr "Umwandlungseinstellungen:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:112
 msgid "Convert to Rule Area"
@@ -31801,7 +31800,6 @@ msgid "Board edge clearance violation"
 msgstr "Platinenkanten-Abstands-Verstoß"
 
 #: pcbnew/drc/drc_item.cpp:81
-#, fuzzy
 msgid "Copper zones intersect"
 msgstr "Kupferflächen überschneiden sich"
 
@@ -31882,9 +31880,8 @@ msgid "NPTH inside courtyard"
 msgstr "Mechanische Bohrung innerhalb Abstandsfläche"
 
 #: pcbnew/drc/drc_item.cpp:161
-#, fuzzy
 msgid "Item on a disabled copper layer"
-msgstr "Element auf einer deaktivierten Lage"
+msgstr "Element auf einer deaktivierten Kupferlage"
 
 #: pcbnew/drc/drc_item.cpp:165
 msgid "Board has malformed outline"
@@ -31920,7 +31917,7 @@ msgstr "Fehlgeschlagene Zusicherung"
 
 #: pcbnew/drc/drc_item.cpp:201
 msgid "Copper sliver"
-msgstr ""
+msgstr "Kupfersplitter"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
@@ -33548,7 +33545,7 @@ msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:565
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "Der Parser unterstützt diese IBIS-Version nicht"
 
 #: pcbnew/ibis/ibis_parser.cpp:571
 msgid "Missing [File Rev]"
@@ -33587,19 +33584,19 @@ msgstr "Leere Pin-Nummer"
 
 #: pcbnew/ibis/ibis_parser.cpp:644
 msgid "Resistance matrix is incorrect"
-msgstr ""
+msgstr "Widerstandsmatrix ist nicht korrekt"
 
 #: pcbnew/ibis/ibis_parser.cpp:652
 msgid "Capacitance matrix is undefined"
-msgstr ""
+msgstr "Kapazitätsmatrix ist nicht definiert"
 
 #: pcbnew/ibis/ibis_parser.cpp:658
 msgid "Capacitance matrix is incorrect"
-msgstr ""
+msgstr "Kapazitätsmatrix ist nicht korrekt"
 
 #: pcbnew/ibis/ibis_parser.cpp:664
 msgid "Capacitance matrix is nullptr"
-msgstr ""
+msgstr "Kapazitätsmatrix ist nullptr"
 
 #: pcbnew/ibis/ibis_parser.cpp:672
 #, fuzzy
@@ -34144,8 +34141,8 @@ msgstr "Footprints Assoziierungsdatei (.cmp)..."
 #: pcbnew/menubar_pcb_editor.cpp:146
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Footprint Assozierungsdatei (*.cmp) für Eeschema Footprintfeld Back-"
-"Annotation exportieren"
+"Footprint-Assozierungsdatei (*.cmp) für Schaltplan-Rückannotierung "
+"exportieren"
 
 #: pcbnew/menubar_pcb_editor.cpp:148
 msgid "Hyperlynx..."
@@ -35920,8 +35917,8 @@ msgstr "Ignoriere ein Polygon, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
-"Das Ignorieren eines Drahtes seit der Eagle-Ebene '%s' (%d) wurde nicht "
-"abgebildet"
+"Eine Verbindung wird ignoriert, da die Eagle-Lage \"%s\" (%d) nicht "
+"zugeordnet wurde"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2026
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
@@ -37097,7 +37094,7 @@ msgstr "Referenz '%s' wurde nicht gefunden."
 #: pcbnew/specctra_import_export/specctra_import.cpp:521
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "Ein wire_via referenziert den fehlenden Padstapel \"%s\"."
+msgstr "Ein wire_via verweist auf den fehlenden Padstapel \"%s\"."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
 #, c-format
@@ -37172,7 +37169,7 @@ msgstr "Leiterbahnen"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:349
 msgid "Vias and PTH pads"
-msgstr ""
+msgstr "Vias und PTH-Pads"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:351
 msgid "Add teardrops to vias and pads with holes"
@@ -37209,23 +37206,28 @@ msgstr ""
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:378
 msgid "Allow teardrops to span two track segments"
-msgstr ""
+msgstr "Teardrops können zwei Leiterbahnsegmente überspannen"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:380
 msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
 msgstr ""
+"Ermöglicht einem Teardrop, sich über zwei Leiterbahnen zu erstrecken, wenn "
+"das erste Leiterbahnsegment zu kurz ist"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:384
 msgid "Place teardrops on pads in zones"
-msgstr ""
+msgstr "Teardrops auf Pads in Flächen einsetzen"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:385
 msgid ""
 "Pads inside a  copper zone outline of same net have no teardrop.\n"
 "Check this option to allow teardrop for these pads."
 msgstr ""
+"Pads innerhalb einer Kupferzonen-Umrandung desselben Netzes haben kein "
+"Teardrop.\n"
+"Diese Option einschalten, um Teardrops für diese Pads zu erlauben."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
 #, fuzzy
@@ -38406,7 +38408,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Move Individually"
-msgstr ""
+msgstr "Einzeln verschieben"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 #, fuzzy
@@ -38483,6 +38485,8 @@ msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
 msgstr ""
+"Sortiert ausgewählte Footprints nach Referenzbezeichner, ordnet nach Größe "
+"an und startet eine Bewegung"
 
 #: pcbnew/tools/pcb_actions.cpp:354
 msgid "Change Track Width"
@@ -39054,22 +39058,20 @@ msgid "Highlight all copper items on the selected net(s)"
 msgstr "Alle Kupfer-Elemente der ausgewählten Netze hervorheben"
 
 #: pcbnew/tools/pcb_actions.cpp:808
-#, fuzzy
 msgid "Hide Net in Ratsnest"
-msgstr "Netzlinien hervorheben"
+msgstr "Netz in Netzlinien verbergen"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr ""
+msgstr "Verbirgt das ausgewählte Netz in unverbundenen Netzlinien/-bögen"
 
 #: pcbnew/tools/pcb_actions.cpp:814
-#, fuzzy
 msgid "Show Net in Ratsnest"
-msgstr "Netzlinien anzeigen"
+msgstr "Netz in Netzlinien anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:815
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr ""
+msgstr "Zeigt das ausgewählte Netz in unverbundenen Netzlinien/-bögen"
 
 #: pcbnew/tools/pcb_actions.cpp:820
 msgid "Switch to Schematic Editor"
@@ -39414,7 +39416,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1169
 msgid "Geographical Reannotate..."
-msgstr "Geografische Reannotation..."
+msgstr "Geografisch neu annotieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:1169
 msgid "Reannotate PCB in geographical order"
