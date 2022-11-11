@@ -945,65 +945,57 @@ void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, const VECTOR2
                                                   const VECTOR2I& aEnd,
                                                   const VECTOR2I& aCursor ) const
 {
+    int  minRadius = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
     bool movingStart;
 
-    VECTOR2I p1, p2;
-    VECTOR2I  target;
+    VECTOR2I p1, p2, prev_p1;
 
-    // p1 does not move, p2 does.
+    // user is moving p1, we want to move p2 to the new radius.
 
     if( aStart != aArc->GetStart() )
     {
-        p1          = aEnd;
-        p2          = aStart;
+        prev_p1     = aArc->GetStart();
+        p1          = aStart;
+        p2          = aEnd;
         movingStart = true;
     }
     else
     {
-        p1          = aStart;
-        p2          = aEnd;
+        prev_p1     = aArc->GetEnd();
+        p1          = aEnd;
+        p2          = aStart;
         movingStart = false;
     }
-
-    target = p2 - aCenter;
-
-    double sqRadius = ( p1 - aCenter ).SquaredEuclideanNorm();
 
     p1 = p1 - aCenter;
     p2 = p2 - aCenter;
 
-    // Circle : x^2 + y^2 = R ^ 2
-    // In this coordinate system, the angular position of the cursor is (r, theta)
-    // The line coming from the center of the circle is y = start.y / start.x * x
-    // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
+    if( p1.x == 0 && p1.y == 0 )
+        p1 = prev_p1 - aCenter;
 
-    if( target.x == 0 )
-    {
-        p2.x = 0;
-        p2.y = ( target.y > 0 ) ? sqrt( sqRadius ) : -sqrt( sqRadius );
-    }
-    else
-    {
-        double tan = target.y / static_cast<double>( target.x );
+    if( p2.x == 0 && p2.y == 0 )
+        p2 = { 1, 0 };
 
-        // The divider is always greater than 1 ( cannot be 0 )
-        double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
+    double radius = p1.EuclideanNorm();
 
-        // Move to the correct quadrant
-        tmp   = target.x > 0 ? tmp : -tmp;
-        p2.y = target.y / static_cast<double>( target.x ) * tmp;
-        p2.x = tmp;
-    }
+    if( radius < minRadius )
+        radius = minRadius;
 
-    p1 = p1 + aCenter;
-    p2 = p2 + aCenter;
+    p1 = aCenter + p1.Resize( radius );
+    p2 = aCenter + p2.Resize( radius );
 
     aArc->SetCenter( aCenter );
 
     if( movingStart )
-        aArc->SetStart( aStart );
+    {
+        aArc->SetStart( p1 );
+        aArc->SetEnd( p2 );
+    }
     else
-        aArc->SetEnd( aEnd );
+    {
+        aArc->SetStart( p2 );
+        aArc->SetEnd( p1 );
+    }
 }
 
 
@@ -1011,57 +1003,26 @@ void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, const VECTOR2I& aC
                                              const VECTOR2I& aStart, const VECTOR2I& aMid,
                                              const VECTOR2I& aEnd, const VECTOR2I& aCursor ) const
 {
+    int minRadius = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
+
+    SEG chord( aStart, aEnd );
+    int newSide = chord.Side( aMid );
+
     // Now, update the edit point position
     // Express the point in a circle-centered coordinate system.
     VECTOR2I start = aStart - aCenter;
-    VECTOR2I end   = aEnd - aCenter;
+    VECTOR2I end = aEnd - aCenter;
 
-    double sqRadius = ( aCursor - aCenter ).SquaredEuclideanNorm();
+    double radius = ( aCursor - aCenter ).EuclideanNorm();
 
-    // Special case, because the tangent would lead to +/- infinity
-    if( start.x == 0 )
-    {
-        start.y = aCursor.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
-    }
-    else
-    {
-        // Circle : x^2 + y^2 = R ^ 2
-        // In this coordinate system, the angular position of the cursor is (r, theta)
-        // The line coming from the center of the circle is y = start.y / start.x * x
-        // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
+    if( radius < minRadius )
+        radius = minRadius;
 
-        double tan = aStart.y / static_cast<double>( start.x );
-        double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
-
-        // Move to the correct quadrant
-        tmp      = start.x > 0 ? tmp : -tmp;
-        start.y = start.y / static_cast<double>( start.x ) * tmp;
-        start.x = tmp;
-    }
-
-    // Special case, because the tangent would lead to +/- infinity
-    if( end.x == 0 )
-    {
-        end.y = aMid.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
-    }
-    else
-    {
-        // Circle : x^2 + y^2 = R ^ 2
-        // In this coordinate system, the angular position of the cursor is (r, theta)
-        // The line coming from the center of the circle is y = start.y / start.x * x
-        // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
-
-        double tan = end.y / static_cast<double>( end.x );
-        double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
-
-        // Move to the correct quadrant
-        tmp    = end.x > 0 ? tmp : -tmp;
-        end.y = end.y / static_cast<double>( end.x ) * tmp;
-        end.x = tmp;
-    }
+    start = start.Resize( radius );
+    end = end.Resize( radius );
 
     start = start + aCenter;
-    end   = end + aCenter;
+    end = end + aCenter;
 
     aArc->SetStart( start );
     aArc->SetEnd( end );
