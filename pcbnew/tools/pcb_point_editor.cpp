@@ -1200,9 +1200,9 @@ void PCB_POINT_EDITOR::updateItem() const
                 const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition( false );
 
                 if( m_altEditMethod )
-                    editArcMidKeepCenter( shape, center, start, mid, end, cursorPos );
-                else
                     editArcMidKeepEndpoints( shape, start, end, cursorPos );
+                else
+                    editArcMidKeepCenter( shape, center, start, mid, end, cursorPos );
             }
             else if( isModified( m_editPoints->Point( ARC_START ) )
                      || isModified( m_editPoints->Point( ARC_END ) ) )
@@ -1210,9 +1210,9 @@ void PCB_POINT_EDITOR::updateItem() const
                 const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition();
 
                 if( m_altEditMethod )
-                    editArcEndpointKeepCenter( shape, center, start, mid, end, cursorPos );
-                else
                     editArcEndpointKeepTangent( shape, center, start, mid, end, cursorPos );
+                else
+                    editArcEndpointKeepCenter( shape, center, start, mid, end, cursorPos );
             }
 
             break;
