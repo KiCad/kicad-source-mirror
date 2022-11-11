@@ -305,7 +305,7 @@ void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
 
     // Calculate the netlist filename and options
     wxFileName fn = m_Parent->Schematic().GetFileName();
-    fn.SetExt( wxT( "cir" ) );
+    fn.SetExt( SpiceFileExtension );
 
     if( settings.m_SpiceAdjustPassiveValues )
         netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS;
