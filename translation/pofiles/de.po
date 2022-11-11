@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-11-08 17:08+0000\n"
+"PO-Revision-Date: 2022-11-12 22:50+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7190,7 +7190,7 @@ msgstr "%s aktualisiert von %s auf %s."
 #: eeschema/annotate.cpp:306
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Annotiert: %s (Einheit %s) als %s."
+msgstr "%s (Einheit %s) annotiert als %s."
 
 #: eeschema/annotate.cpp:313
 #, c-format
@@ -7301,7 +7301,7 @@ msgstr "Ausgewähltes Netz:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:87
 msgid "Annotation Messages:"
-msgstr "Annotation-Meldungen:"
+msgstr "Annotierungsmeldungen:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:92
 msgid "Annotate"
@@ -7345,7 +7345,7 @@ msgstr "Bestehende Annotationen beibehalten"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:82
 msgid "Reset existing annotations"
-msgstr "Bestehende Annotationen ersetzen"
+msgstr "Bestehende Annotationen zurücksetzen"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:89
 msgid "Numbering"
@@ -7365,7 +7365,7 @@ msgstr "Erste freie Nummer nach Schaltplanblattnummer × 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:128
 msgid "Clear Annotation"
-msgstr "Annotationen löschen"
+msgstr "Annotation löschen"
 
 #: eeschema/dialogs/dialog_annotate_base.h:81
 msgid "Annotate Schematic"
@@ -12505,7 +12505,7 @@ msgstr "Nicht aufgelöste Textvariable"
 
 #: eeschema/erc_item.cpp:130
 msgid "Wires not connected to anything"
-msgstr "Elektrische Verbindungen sind nirgendwo angeschlossen"
+msgstr "Nirgends angeschlossene elektrische Verbindungen"
 
 #: eeschema/erc_item.cpp:134
 msgid "Library symbol issue"
@@ -13412,7 +13412,7 @@ msgstr "Unbekannter SCH_FILE_T-Wert: %d"
 #: eeschema/sch_line.cpp:770
 #, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Vertikale Leitung, Länge %s"
+msgstr "Vertikale Verbindung, Länge %s"
 
 #: eeschema/sch_line.cpp:771
 #, c-format
@@ -13427,7 +13427,7 @@ msgstr "Vertikale Grafiklinie, Länge %s"
 #: eeschema/sch_line.cpp:779
 #, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "Horizontale Leitung, Länge %s"
+msgstr "Horizontale Verbindung, Länge %s"
 
 #: eeschema/sch_line.cpp:780
 #, c-format
@@ -13442,7 +13442,7 @@ msgstr "Horizontale Grafiklinie, Länge %s"
 #: eeschema/sch_line.cpp:788
 #, c-format
 msgid "Wire, length %s"
-msgstr "Leitung, Länge %s"
+msgstr "Verbindung, Länge %s"
 
 #: eeschema/sch_line.cpp:789
 #, c-format
@@ -16354,7 +16354,7 @@ msgstr "Schaltplan einrichten..."
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
 "Bearbeiten der Einstellungen für den Schaltplan einschließlich "
-"Annotationsarten und elektrischer Regeln"
+"Annotierungsarten und elektrischer Regeln"
 
 #: eeschema/tools/ee_actions.cpp:594
 msgid "Edit Sheet Page Number..."
@@ -21669,7 +21669,7 @@ msgstr "Platine neu annotieren"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:277
 msgid "No PCB to reannotate!"
-msgstr "Keine Leiterplatte zum reannotieren!"
+msgstr "Keine Leiterplatte neu zu annotieren!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:289
 msgid "PCB successfully reannotated"
@@ -21680,9 +21680,8 @@ msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
-"Änderungen an der Leiterplattenannotation sollten mit dem Werkzeug "
-"\"Schaltplan aus Leiterplatte aktualisieren\" mit dem Schaltplan "
-"synchronisiert werden."
+"Änderungen an der Leiterplattenannotation sollten mittels \"Schaltplan aus "
+"Leiterplatte aktualisieren\" mit dem Schaltplan synchronisiert werden."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:305
 #, c-format
@@ -21808,7 +21807,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"Ausgenommen: %s von Reannotation\n"
+"Ausgenommen: %s von Neu-Annotierung\n"
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:527
@@ -21898,7 +21897,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 msgid "Reannotate anyway?"
-msgstr "Trotzdem neu notieren?"
+msgstr "Trotzdem neu annotieren?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:790
 #, c-format
@@ -21994,11 +21993,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 msgid "Reannotation Scope"
-msgstr "Reannotation-Geltungsbereich"
+msgstr "Geltungsbereich der Neu-Annotierung"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
 msgid "Reannotate:"
-msgstr "Reannotieren:"
+msgstr "Neu annotieren:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
@@ -22129,7 +22128,7 @@ msgstr "Referenzbezeichner"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr "Geografische Reannotation"
+msgstr "Geografische Neu-Annotierung"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:52
 msgid "Board Setup"
@@ -22988,7 +22987,7 @@ msgstr "Kreis Array"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
 msgid "Footprint Annotation"
-msgstr "Footprint-Annotation"
+msgstr "Footprint-Annotierung"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
 msgid "Keep existing reference designators"
@@ -31050,8 +31049,8 @@ msgstr "Footprints Assoziierungsdatei (.cmp)..."
 #: pcbnew/menubar_pcb_editor.cpp:144
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Footprint Assozierungsdatei (*.cmp) für Eeschema Footprintfeld Back-"
-"Annotation exportieren"
+"Footprint-Assozierungsdatei (*.cmp) für Schaltplan-Rückannotierung "
+"exportieren"
 
 #: pcbnew/menubar_pcb_editor.cpp:146
 msgid "Hyperlynx..."
@@ -32765,8 +32764,8 @@ msgstr "Ignoriere ein Polygon, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
-"Das Ignorieren eines Drahtes seit der Eagle-Ebene '%s' (%d) wurde nicht "
-"abgebildet"
+"Eine Verbindung wird ignoriert, da die Eagle-Lage \"%s\" (%d) nicht "
+"zugeordnet wurde"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1997
 #, c-format
@@ -33928,7 +33927,7 @@ msgstr "Referenz '%s' wurde nicht gefunden."
 #: pcbnew/specctra_import_export/specctra_import.cpp:545
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "Ein wire_via referenziert den fehlenden Padstapel \"%s\"."
+msgstr "Ein wire_via verweist auf den fehlenden Padstapel \"%s\"."
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -35817,7 +35816,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1113
 msgid "Geographical Reannotate..."
-msgstr "Geografische Reannotation..."
+msgstr "Geografisch neu annotieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:1113
 msgid "Reannotate PCB in geographical order"
