@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-10 12:49+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"PO-Revision-Date: 2022-11-11 22:24+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -287,15 +287,13 @@ msgstr "Προκαθορισμένα (Shift + Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2676
-#, fuzzy
 msgid "Save viewport..."
-msgstr "Αποθήκευση προεπιλογής..."
+msgstr "Αποθήκευση προβολής..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 #: pcbnew/widgets/appearance_controls.cpp:2677
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "Διαγραφή προεπιλογής..."
+msgstr "Διαγραφή προβολής..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Reload board"
@@ -316,33 +314,28 @@ msgstr "KiCad 3D Viewer"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:517
 #: pcbnew/widgets/appearance_controls.cpp:2725
-#, fuzzy
 msgid "Viewport name:"
-msgstr "Όνομα δικτύου:"
+msgstr "Όνομα προβολής:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:517
 #: pcbnew/widgets/appearance_controls.cpp:2725
-#, fuzzy
 msgid "Save Viewport"
-msgstr "Αποθήκευση Αρχείου Αναφοράς"
+msgstr "Αποθήκευση Προβολής"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:555
 #: pcbnew/widgets/appearance_controls.cpp:2763
-#, fuzzy
 msgid "Viewports"
-msgstr "Αναφορά"
+msgstr "Προβολές"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:564
 #: pcbnew/widgets/appearance_controls.cpp:2772
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "Διαγραφή Via"
+msgstr "Διαγραφή Προβολής"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:565
 #: pcbnew/widgets/appearance_controls.cpp:2773
-#, fuzzy
 msgid "Select viewport:"
-msgstr "Επιλογή προεπιλογής:"
+msgstr "Επιλογή προβολής:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:767
 msgid "3D Image File Name"
@@ -806,9 +799,8 @@ msgid "Show model bounding boxes"
 msgstr "Εμφάνιση πλαίσιων οριοθέτησης μοντέλων"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Εμφάνιση πάχους χαλκού"
+msgstr "Εμφάνιση πάχους χαλκού και τεχνικών επιπέδων (πολύ αργό)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -4170,7 +4162,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου %s."
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4182,8 +4174,8 @@ msgstr ""
 "Αυτό δεν θα έπρεπε να έχει συμβεί!\n"
 "Φαίνεται ότι την τελευταία φορά που επεξεργαστήκατε το αρχείο\n"
 "%s\n"
-"δεν αποθηκεύτηκε σωστά. Θέλετε να επαναφέρετε τις τελευταίες αποθηκευμένες "
-"αλλαγές που κάνατε;"
+"το KiCad τερματίστηκε χωρίς να αποθηκεύσει τυχών αλλαγές.\n"
+"Θέλετε να ανακτήσετε το αντίγραφο ασφαλείας;"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -4434,9 +4426,8 @@ msgstr "Σχεδίαση Αντικειμένου"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "Αριθμός"
+msgstr "Πλαίσιο Αριθμού"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1197
 msgid "Rect"
@@ -5157,14 +5148,12 @@ msgid "Symbol fields"
 msgstr "Πεδία συμβόλων"
 
 #: common/layer_id.cpp:120
-#, fuzzy
 msgid "Sheet references"
-msgstr "&Αποθήκευση Προτιμήσεων"
+msgstr "Αναφορές φύλλου"
 
 #: common/layer_id.cpp:121
-#, fuzzy
 msgid "Net class references"
-msgstr "Ορισμός προτιμήσεων χρωμάτων"
+msgstr "Αναφορές κλάσης δικτύου"
 
 #: common/layer_id.cpp:122
 msgid "Symbol body outlines"
@@ -5231,9 +5220,8 @@ msgid "ERC errors"
 msgstr "Σφάλματα ERC"
 
 #: common/layer_id.cpp:137
-#, fuzzy
 msgid "ERC exclusions"
-msgstr "Εξαιρέσεις ΕΚΣ"
+msgstr "Εξαιρέσεις ΕΗΚ"
 
 #: common/layer_id.cpp:138 common/layer_id.cpp:176
 #: pcbnew/widgets/appearance_controls.cpp:359
@@ -5405,28 +5393,24 @@ msgid "Grid axes"
 msgstr "Άξονες πλέγματος"
 
 #: common/layer_id.cpp:185
-#, fuzzy
 msgid "Locked item shadow"
-msgstr "Κλειδωμένα αντικείμενα"
+msgstr "Σκίαση κλειδωμένου αντικειμένου"
 
 #: common/layer_id.cpp:186
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "Ασυμβατότητα Ετικετών"
+msgstr "Σκίαση αντικρουόμενων αντικειμένων"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
 msgstr "Απαγορευμένος χαρακτήρας βρέθηκε στο όνομα βιβλιοθήκης"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "δεν επιλέχθηκε αρχείο"
+msgstr "Ενεργοποίηση επιλεγμένου"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Το δίκτυο δεν επιλέχτηκε"
+msgstr "Απενεργοποίηση επιλεγμένου"
 
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:128
@@ -7120,11 +7104,9 @@ msgid "Hotkey file"
 msgstr "Αρχείο Συντομεύσεων"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"Αδυναμία εύρεσης αρχείου ισοδυναμίας \"%s\" στις προκαθορισμένες διαδρομές "
-"αναζήτησης."
+msgstr "Αδυναμία εύρεσης αρχείου ισοδυναμίας '%s'"
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
