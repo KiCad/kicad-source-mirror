@@ -81,7 +81,12 @@ std::string SIM_SERDE::GenerateValue() const
         if( param.value->ToString() == "" )
             continue;
 
-        result.append( fmt::format( " {}", GenerateParamValuePair( param ) ) );
+        std::string paramValuePair = GenerateParamValuePair( param );
+
+        if( paramValuePair == "" )
+            continue; // Prevent adding empty spaces.
+
+        result.append( fmt::format( " {}", paramValuePair ) );
     }
 
     if( result == "" )
@@ -94,6 +99,7 @@ std::string SIM_SERDE::GenerateValue() const
 std::string SIM_SERDE::GenerateParams() const
 {
     std::string result;
+    bool        isFirst = true;
 
     for( int i = 0; i < m_model.GetParamCount(); ++i )
     {
@@ -102,10 +108,17 @@ std::string SIM_SERDE::GenerateParams() const
         if( param.value->ToString() == "" )
             continue;
 
-        if( i != 0 )
+        std::string paramValuePair = GenerateParamValuePair( param );
+
+        if( paramValuePair == "" )
+            continue; // Prevent adding empty spaces.
+
+        if( isFirst ) // Don't add a space at the beginning.
+            isFirst = false;
+        else
             result.append( " " );
 
-        result.append( GenerateParamValuePair( param ) );
+        result.append( paramValuePair );
     }
 
     return result;

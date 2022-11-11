@@ -208,7 +208,9 @@ std::string SIM_SERDE_SOURCE::GenerateParamValuePair( const SIM_MODEL::PARAM& aP
 
 
 SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
-    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SOURCE>( *this ) )
+    : SIM_MODEL( aType,
+                 std::make_unique<SPICE_GENERATOR_SOURCE>( *this ),
+                 std::make_unique<SIM_SERDE_SOURCE>( *this ) )
 {
     for( const SIM_MODEL::PARAM::INFO& paramInfo : makeParamInfos( aType ) )
         AddParam( paramInfo );
@@ -268,9 +270,11 @@ void SIM_MODEL_SOURCE::inferredWriteDataFields( std::vector<T>& aFields ) const
     std::string value;
 
     if( GetTypeInfo().fieldValue != "" )
+    {
         value = fmt::format( "{} {}",
                              GetTypeInfo().fieldValue,
                              GetFieldValue( &aFields, PARAMS_FIELD ) );
+    }
     else
         value = fmt::format( "{}", GetFieldValue( &aFields, PARAMS_FIELD ) );
 

@@ -132,8 +132,6 @@ SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) :
 }
 
 
-
-
 const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwVParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;

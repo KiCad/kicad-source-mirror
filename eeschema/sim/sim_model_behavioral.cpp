@@ -148,7 +148,7 @@ template <typename T>
 void SIM_MODEL_BEHAVIORAL::inferredReadDataFields( unsigned aSymbolPinCount,
                                                    const std::vector<T>* aFields )
 {
-    ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
+    m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
 
     if( ( m_serde->InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
                                              GetFieldValue( aFields, VALUE_FIELD ),

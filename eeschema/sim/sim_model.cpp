@@ -980,7 +980,7 @@ void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const std::str
     std::string value = aValue;
 
     if( value == "" )
-        value = GenerateValueField( "=" );
+        value = m_serde->GenerateValue();
 
     SetFieldValue( aFields, VALUE_FIELD, value );
     SetFieldValue( aFields, DEVICE_TYPE_FIELD, "" );
@@ -990,46 +990,16 @@ void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const std::str
 }
 
 
-std::string SIM_MODEL::GenerateValueField( const std::string& aPairSeparator ) const
-{
-    return m_serde->GenerateValue();
-}
-
-
-std::string SIM_MODEL::GenerateParamsField( const std::string& aPairSeparator ) const
-{
-    return m_serde->GenerateParams();
-}
-
-
-void SIM_MODEL::ParseParamsField( const std::string& aParamsField )
-{
-    m_serde->ParseParams( aParamsField );
-}
-
-
-void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const std::string& aPinsField )
-{
-    CreatePins( aSymbolPinCount );
-
-    m_serde->ParsePins( aPinsField );
-}
-
-
-void SIM_MODEL::ParseEnableField( const std::string& aEnableField )
-{
-    m_serde->ParseEnable( aEnableField );
-}
-
-
 template <typename T>
 void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
-    ParseEnableField( GetFieldValue( aFields, ENABLE_FIELD ) );
-    ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
+    m_serde->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
+
+    CreatePins( aSymbolPinCount );
+    m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
 
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
-        ParseParamsField( GetFieldValue( aFields, PARAMS_FIELD ) );
+        m_serde->ParseParams( GetFieldValue( aFields, PARAMS_FIELD ) );
     else
         InferredReadDataFields( aSymbolPinCount, aFields );
 }
@@ -1060,51 +1030,11 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
 template <typename T>
 void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 {
-    SetFieldValue( aFields, DEVICE_TYPE_FIELD, generateDeviceTypeField() );
-    SetFieldValue( aFields, TYPE_FIELD, generateTypeField() );
-    SetFieldValue( aFields, PINS_FIELD, generatePinsField() );
-    SetFieldValue( aFields, PARAMS_FIELD, GenerateParamsField( " " ) );
-    SetFieldValue( aFields, ENABLE_FIELD, generateEnableField() );
-}
-
-
-std::string SIM_MODEL::generateDeviceTypeField() const
-{
-    return DeviceTypeInfo( TypeInfo( m_type ).deviceType ).fieldValue;
-}
-
-
-std::string SIM_MODEL::generateTypeField() const
-{
-    return TypeInfo( m_type ).fieldValue;
-}
-
-
-std::string SIM_MODEL::generatePinsField() const
-{
-    std::string result = "";
-    bool isFirst = true;
-
-    for( const PIN& pin : GetPins() )
-    {
-        if( isFirst )
-            isFirst = false;
-        else
-            result.append( " " );
-
-        if( pin.symbolPinNumber == "" )
-            result.append( "~" );
-        else
-            result.append( pin.symbolPinNumber ); // Note that it's numbered from 1.
-    }
-
-    return result;
-}
-
-
-std::string SIM_MODEL::generateEnableField() const
-{
-    return m_isEnabled ? "" : "0";
+    SetFieldValue( aFields, DEVICE_TYPE_FIELD, m_serde->GenerateDevice() );
+    SetFieldValue( aFields, TYPE_FIELD, m_serde->GenerateType() );
+    SetFieldValue( aFields, PINS_FIELD, m_serde->GeneratePins() );
+    SetFieldValue( aFields, PARAMS_FIELD, m_serde->GenerateParams() );
+    SetFieldValue( aFields, ENABLE_FIELD, m_serde->GenerateEnable() );
 }
 
 

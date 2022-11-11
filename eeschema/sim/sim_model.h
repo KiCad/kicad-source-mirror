@@ -531,15 +531,9 @@ protected:
     template <typename T>
     void WriteInferredDataFields( std::vector<T>& aFields, const std::string& aValue = "" ) const;
 
-    std::string GenerateValueField( const std::string& aPairSeparator ) const;
-    std::string GenerateParamsField( const std::string& aPairSeparator ) const;
-    void ParseParamsField( const std::string& aParamsField );
-
-    void ParsePinsField( unsigned aSymbolPinCount, const std::string& aPinsField );
-    void ParseEnableField( const std::string& aDisabledField );
-
     template <typename T>
     void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
+
     std::vector<PARAM> m_params;
     const SIM_MODEL* m_baseModel;
     std::unique_ptr<SIM_SERDE> m_serde;
@@ -556,14 +550,6 @@ private:
 
     template <typename T>
     void doWriteFields( std::vector<T>& aFields ) const;
-
-    std::string generateDeviceTypeField() const;
-    std::string generateTypeField() const;
-
-    std::string generatePinsField() const;
-    std::string generateEnableField() const;
-
-    std::string parseFieldFloatValue( std::string aFieldFloatValue );
 
     virtual bool requiresSpiceModelLine() const;
 
