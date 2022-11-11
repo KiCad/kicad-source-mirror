@@ -452,8 +452,6 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        board->m_GroupBBoxCache.clear();
-
         if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
             eatFirstMouseUp = false;
 

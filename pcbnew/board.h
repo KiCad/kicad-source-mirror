@@ -1143,7 +1143,6 @@ public:
     std::unordered_map<ZONE*, std::unique_ptr<DRC_RTREE>> m_CopperZoneRTreeCache;
     std::unique_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;
     mutable std::unordered_map<const ZONE*, BOX2I>        m_ZoneBBoxCache;
-    mutable std::unordered_map<const PCB_GROUP*, BOX2I>   m_GroupBBoxCache;
 
     // ------------ DRC caches -------------
     std::vector<ZONE*>    m_DRCZones;

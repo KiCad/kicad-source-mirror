@@ -241,7 +241,6 @@ void BOARD::IncrementTimeStamp()
         m_CopperZoneRTreeCache.clear();
         m_CopperItemRTreeCache = std::make_unique<DRC_RTREE>();
         m_ZoneBBoxCache.clear();
-        m_GroupBBoxCache.clear();
     }
 }
 

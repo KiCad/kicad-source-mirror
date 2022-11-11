@@ -234,41 +234,16 @@ const BOX2I PCB_GROUP::GetBoundingBox() const
 {
     BOX2I bbox;
 
-    auto calcBBox =
-            [this]()
-            {
-                BOX2I box;
-
-                for( BOARD_ITEM* item : m_items )
-                {
-                    if( item->Type() == PCB_FOOTPRINT_T )
-                        box.Merge( static_cast<FOOTPRINT*>( item )->GetBoundingBox( true, false ) );
-                    else
-                        box.Merge( item->GetBoundingBox() );
-                }
-
-                box.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Give a min size to the bbox
-
-                return box;
-            };
-
-    if( const BOARD* board = GetBoard() )
+    for( BOARD_ITEM* item : m_items )
     {
-        std::unordered_map<const PCB_GROUP*, BOX2I>& cache = board->m_GroupBBoxCache;
-        auto                                         cacheIter = cache.find( this );
-
-        if( cacheIter != cache.end() )
-            return cacheIter->second;
-
-        bbox = calcBBox();
-
-        std::unique_lock<std::mutex> cacheLock( const_cast<BOARD*>( board )->m_CachesMutex );
-        cache[ this ] = bbox;
-
-        return bbox;
+        if( item->Type() == PCB_FOOTPRINT_T )
+            bbox.Merge( static_cast<FOOTPRINT*>( item )->GetBoundingBox( true, false ) );
+        else
+            bbox.Merge( item->GetBoundingBox() );
     }
 
     bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Give a min size to the bbox
+
     return bbox;
 }
 
@@ -353,14 +328,9 @@ void PCB_GROUP::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 wxString PCB_GROUP::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     if( m_name.empty() )
-    {
-        return wxString::Format( _( "Unnamed Group, %zu members" ),
-                                 m_items.size() );
-    }
-
-    return wxString::Format( _( "Group '%s', %zu members" ),
-                             m_name,
-                             m_items.size() );
+        return wxString::Format( _( "Unnamed Group, %zu members" ), m_items.size() );
+    else
+        return wxString::Format( _( "Group '%s', %zu members" ), m_name, m_items.size() );
 }
 
 
