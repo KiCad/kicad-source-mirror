@@ -466,7 +466,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( std::
     paramInfo.unit = aUnit;
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
-    paramInfo.description = "Initial value";
+    paramInfo.description = "Pulsed value";
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
