@@ -287,8 +287,8 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
     JOINT* jointA = nullptr;
     JOINT* jointB = nullptr;
 
-    followTrivialPath( &l, false, path, visited, &jointA );
-    followTrivialPath( &l, true, path, visited, &jointB );
+    followTrivialPath( &l, false, path, visited, &jointB );
+    followTrivialPath( &l, true, path, visited, &jointA );
 
     if( aTerminalJoints )
     {
