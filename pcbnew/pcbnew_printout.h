@@ -23,6 +23,7 @@
 
 #include <board_printout.h>
 #include <pcb_painter.h>
+#include <plotprint_opts.h>
 
 class BOARD;
 
@@ -30,11 +31,7 @@ struct PCBNEW_PRINTOUT_SETTINGS : BOARD_PRINTOUT_SETTINGS
 {
     PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo );
 
-    enum DRILL_MARK_SHAPE_T {
-        NO_DRILL_SHAPE,
-        SMALL_DRILL_SHAPE,
-        FULL_DRILL_SHAPE
-    } m_DrillMarks;
+    enum DRILL_MARKS m_DrillMarks;
 
     enum PAGINATION_T {
         LAYER_PER_PAGE,

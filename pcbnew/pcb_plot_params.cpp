@@ -119,7 +119,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_subtractMaskFromSilk       = false;
     m_format                     = PLOT_FORMAT::GERBER;
     m_mirror                     = false;
-    m_drillMarks                 = SMALL_DRILL_SHAPE;
+    m_drillMarks                 = DRILL_MARKS::SMALL_DRILL_SHAPE;
     m_autoScale                  = false;
     m_scale                      = 1.0;
     m_scaleSelection             = 1;
@@ -238,7 +238,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        printBool( m_subtractMaskFromSilk ) );
     aFormatter->Print( aNestLevel+1, "(outputformat %d)\n", static_cast<int>( m_format ) );
     aFormatter->Print( aNestLevel+1, "(mirror %s)\n", printBool( m_mirror ) );
-    aFormatter->Print( aNestLevel+1, "(drillshape %d)\n", m_drillMarks );
+    aFormatter->Print( aNestLevel+1, "(drillshape %d)\n", (int)m_drillMarks );
     aFormatter->Print( aNestLevel+1, "(scaleselection %d)\n", m_scaleSelection );
     aFormatter->Print( aNestLevel+1, "(outputdirectory \"%s\")",
                        (const char*) m_outputDirectory.utf8_str() );
@@ -603,8 +603,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_drillshape:
-            aPcbPlotParams->m_drillMarks = static_cast<PCB_PLOT_PARAMS::DrillMarksType>
-                                            ( parseInt( 0, 2 ) );
+            aPcbPlotParams->m_drillMarks = static_cast<DRILL_MARKS> ( parseInt( 0, 2 ) );
             break;
 
         case T_scaleselection:

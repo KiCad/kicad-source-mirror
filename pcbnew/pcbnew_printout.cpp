@@ -37,7 +37,7 @@
 PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
     : BOARD_PRINTOUT_SETTINGS( aPageInfo )
 {
-    m_DrillMarks = SMALL_DRILL_SHAPE;
+    m_DrillMarks = DRILL_MARKS::SMALL_DRILL_SHAPE;
     m_Pagination = ALL_LAYERS;
     m_PrintEdgeCutsOnAllPages = true;
     m_AsItemCheckboxes = false;
@@ -50,7 +50,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
     {
-        m_DrillMarks = static_cast<DRILL_MARK_SHAPE_T>( cfg->m_Plot.pads_drill_mode );
+        m_DrillMarks = static_cast<DRILL_MARKS>( cfg->m_Plot.pads_drill_mode );
         m_Pagination = static_cast<PAGINATION_T>( cfg->m_Plot.all_layers_on_one_page );
         m_PrintEdgeCutsOnAllPages = cfg->m_Plot.edgecut_on_all_layers;
         m_Mirror     = cfg->m_Plot.mirror;
@@ -64,7 +64,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
     {
-        cfg->m_Plot.pads_drill_mode        = m_DrillMarks;
+        cfg->m_Plot.pads_drill_mode        = (int)m_DrillMarks;
         cfg->m_Plot.all_layers_on_one_page = m_Pagination;
         cfg->m_Plot.edgecut_on_all_layers  = m_PrintEdgeCutsOnAllPages;
         cfg->m_Plot.mirror                 = m_Mirror;
@@ -219,7 +219,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
             aView.SetLayerVisible( layer, true );
     }
 
-    if( m_pcbnewSettings.m_DrillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
+    if( m_pcbnewSettings.m_DrillMarks != DRILL_MARKS::NO_DRILL_SHAPE )
     {
         // Enable hole layers to draw drill marks
         for( int layer : { LAYER_PAD_PLATEDHOLES, LAYER_NON_PLATEDHOLES, LAYER_VIA_HOLES } )
@@ -239,11 +239,11 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
 
     switch( m_pcbnewSettings.m_DrillMarks )
     {
-    case PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE:
+    case DRILL_MARKS::NO_DRILL_SHAPE:
         painter.SetDrillMarks( false, 0 );
         break;
 
-    case PCBNEW_PRINTOUT_SETTINGS::SMALL_DRILL_SHAPE:
+    case DRILL_MARKS::SMALL_DRILL_SHAPE:
         painter.SetDrillMarks( false, pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) );
 
         painter.GetSettings()->SetLayerColor( LAYER_PAD_PLATEDHOLES, COLOR4D::BLACK );
@@ -251,7 +251,7 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
         painter.GetSettings()->SetLayerColor( LAYER_VIA_HOLES, COLOR4D::BLACK );
         break;
 
-    case PCBNEW_PRINTOUT_SETTINGS::FULL_DRILL_SHAPE:
+    case DRILL_MARKS::FULL_DRILL_SHAPE:
         painter.SetDrillMarks( true );
 
         painter.GetSettings()->SetLayerColor( LAYER_PAD_PLATEDHOLES, COLOR4D::BLACK );

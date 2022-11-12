@@ -180,7 +180,7 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
     onColorModeClicked( dummy );
 
     // Options to plot pads and vias holes
-    m_drillMarksChoice->SetSelection( settings()->m_DrillMarks );
+    m_drillMarksChoice->SetSelection( (int)settings()->m_DrillMarks );
 
     // Print all layers one one page or separately
     m_checkboxPagePerLayer->SetValue( settings()->m_Pagination
@@ -423,8 +423,7 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
 
     settings()->m_AsItemCheckboxes = m_checkAsItems->GetValue();
 
-    settings()->m_DrillMarks =
-        (PCBNEW_PRINTOUT_SETTINGS::DRILL_MARK_SHAPE_T) m_drillMarksChoice->GetSelection();
+    settings()->m_DrillMarks = static_cast<DRILL_MARKS>( m_drillMarksChoice->GetSelection() );
 
     if( m_checkboxPagePerLayer->GetValue() )
     {

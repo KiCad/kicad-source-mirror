@@ -25,6 +25,7 @@
 
 #include <plotters/plotter.h>
 #include <layer_ids.h>
+#include <plotprint_opts.h>
 
 class COLOR_SETTINGS;
 class PCB_PLOT_PARAMS_PARSER;
@@ -35,12 +36,6 @@ class PCB_PLOT_PARAMS_PARSER;
 class PCB_PLOT_PARAMS
 {
 public:
-    enum DrillMarksType {
-        NO_DRILL_SHAPE    = 0,
-        SMALL_DRILL_SHAPE = 1,
-        FULL_DRILL_SHAPE  = 2
-    };
-
     PCB_PLOT_PARAMS();
 
     void        SetSkipPlotNPTH_Pads( bool aSkip ) { m_skipNPTH_Pads = aSkip; }
@@ -82,8 +77,8 @@ public:
     void        SetDXFPlotUnits( DXF_UNITS aUnit ) { m_DXFplotUnits = aUnit; }
     DXF_UNITS   GetDXFPlotUnits() const { return m_DXFplotUnits; }
 
-    void        SetDrillMarksType( DrillMarksType aVal ) { m_drillMarks = aVal; }
-    DrillMarksType GetDrillMarksType() const { return m_drillMarks; }
+    void        SetDrillMarksType( DRILL_MARKS aVal ) { m_drillMarks = aVal; }
+    DRILL_MARKS GetDrillMarksType() const { return m_drillMarks; }
 
     void        SetScale( double aVal ) { m_scale = aVal; }
     double      GetScale() const { return m_scale; }
@@ -230,7 +225,7 @@ private:
     PLOT_FORMAT m_format;
 
     /// Holes can be not plotted, have a small mark or plotted in actual size
-    DrillMarksType m_drillMarks;
+    DRILL_MARKS m_drillMarks;
 
     /// Choose how represent text with PS, PDF and DXF drivers
     PLOT_TEXT_MODE m_textMode;

@@ -38,9 +38,9 @@ bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOpti
 
     // Adding drill marks, for copper layers
     if( ( aSvgPlotOptions.m_printMaskLayer & LSET::AllCuMask() ).any() )
-        plot_opts.SetDrillMarksType( PCB_PLOT_PARAMS::FULL_DRILL_SHAPE );
+        plot_opts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
     else
-        plot_opts.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+        plot_opts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
 
     plot_opts.SetSkipPlotNPTH_Pads( false );
 

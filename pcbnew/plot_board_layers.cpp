@@ -148,7 +148,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
 
             // Disable plot pad holes
-            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+            plotOpt.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
 
             // Plot solder mask:
             if( soldermask_min_thickness == 0 )
@@ -173,7 +173,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
 
             // Disable plot pad holes
-            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+            plotOpt.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
 
             if( plotOpt.GetFormat() == PLOT_FORMAT::DXF )
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
@@ -204,7 +204,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                 aPlotter->SetLayerPolarity( false );
 
                 // Disable plot pad holes
-                plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+                plotOpt.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
 
                 // Plot the mask
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
@@ -226,7 +226,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
         case F_Fab:
         case B_Fab:
             plotOpt.SetSkipPlotNPTH_Pads( false );
-            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+            plotOpt.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
 
             if( plotOpt.GetFormat() == PLOT_FORMAT::DXF && plotOpt.GetDXFPlotPolygonMode() )
                 // PlotLayerOutlines() is designed only for DXF plotters.
@@ -239,7 +239,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 
         default:
             plotOpt.SetSkipPlotNPTH_Pads( false );
-            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+            plotOpt.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
 
             if( plotOpt.GetFormat() == PLOT_FORMAT::DXF && plotOpt.GetDXFPlotPolygonMode() )
                 // PlotLayerOutlines() is designed only for DXF plotters.
@@ -373,7 +373,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 pad->SetSize( padPlotsSize );
 
                 if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
-                    ( aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::NO_DRILL_SHAPE ) &&
+                    ( aPlotOpt.GetDrillMarksType() == DRILL_MARKS::NO_DRILL_SHAPE ) &&
                     ( pad->GetSize() == pad->GetDrillSize() ) &&
                     ( pad->GetAttribute() == PAD_ATTRIB::NPTH ) )
                 {
@@ -693,7 +693,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     aPlotter->EndBlock( nullptr );
 
     // Adding drill marks, if required and if the plotter is able to plot them:
-    if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
+    if( aPlotOpt.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE )
         itemplotter.PlotDrillMarks();
 }
 
@@ -735,9 +735,9 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         }
 
         // Plot pad holes
-        if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
+        if( aPlotOpt.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE )
         {
-            int smallDrill = ( aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
+            int smallDrill = ( aPlotOpt.GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE )
                              ? pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) :
                              INT_MAX;
 

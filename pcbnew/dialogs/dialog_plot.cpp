@@ -309,7 +309,7 @@ void DIALOG_PLOT::init_Dialog()
     m_plotInvisibleText->SetValue( m_plotOpts.GetPlotInvisibleText() );
 
     // Options to plot pads and vias holes
-    m_drillShapeOpt->SetSelection( m_plotOpts.GetDrillMarksType() );
+    m_drillShapeOpt->SetSelection( (int)m_plotOpts.GetDrillMarksType() );
 
     // Scale option
     m_scaleOpt->SetSelection( m_plotOpts.GetScaleSelection() );
@@ -767,7 +767,6 @@ static bool setInt( int* aResult, int aValue, int aMin, int aMax )
 void DIALOG_PLOT::applyPlotSettings()
 {
     REPORTER&       reporter = m_messagesPanel->Reporter();
-    int             sel;
     PCB_PLOT_PARAMS tempOptions;
 
     tempOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
@@ -779,8 +778,8 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetPlotInvisibleText( m_plotInvisibleText->GetValue() );
     tempOptions.SetScaleSelection( m_scaleOpt->GetSelection() );
 
-    sel = m_drillShapeOpt->GetSelection();
-    tempOptions.SetDrillMarksType( static_cast<PCB_PLOT_PARAMS::DrillMarksType>( sel ) );
+    int sel = m_drillShapeOpt->GetSelection();
+    tempOptions.SetDrillMarksType( static_cast<DRILL_MARKS>( sel ) );
 
     tempOptions.SetMirror( m_plotMirrorOpt->GetValue() );
     tempOptions.SetPlotMode( m_plotModeOpt->GetSelection() == 1 ? SKETCH : FILLED );
