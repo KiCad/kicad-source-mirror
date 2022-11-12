@@ -43,10 +43,15 @@ public:
     SIM_LIB_MGR( const PROJECT& aPrj );
     virtual ~SIM_LIB_MGR() = default;
 
+    SIM_LIBRARY& CreateLibrary( const std::string& aLibraryPath );
+
+    SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, int aSymbolPinCount );
+    SIM_MODEL& CreateModel( const SIM_MODEL& aBaseModel, int aSymbolPinCount );
+
     // TODO: The argument can be made const.
     SIM_LIBRARY::MODEL CreateModel( SCH_SYMBOL& aSymbol );
 
-    SIM_LIBRARY& CreateLibrary( const std::string& aLibraryPath );
+    SIM_LIBRARY::MODEL CreateModel( const std::vector<SCH_FIELD>& aFields, int aSymbolPinCount );
 
     std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> GetLibraries() const;
 

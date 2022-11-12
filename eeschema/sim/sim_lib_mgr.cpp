@@ -35,22 +35,47 @@ SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT& aPrj ) : m_project( aPrj )
 }
 
 
+SIM_LIBRARY& SIM_LIB_MGR::CreateLibrary( const std::string& aLibraryPath )
+{
+    auto it = m_libraries.try_emplace( aLibraryPath, SIM_LIBRARY::Create( aLibraryPath ) ).first;
+    return *it->second;
+}
+
+
+SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, int aSymbolPinCount )
+{
+    m_models.push_back( SIM_MODEL::Create( aType, aSymbolPinCount ) );
+    return *m_models.back();
+}
+
+
+SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel, int aSymbolPinCount )
+{
+    m_models.push_back( SIM_MODEL::Create( aBaseModel, aSymbolPinCount ) );
+    return *m_models.back();
+}
+
+
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
 {
-    std::vector<LIB_PIN*> pins = aSymbol.GetLibPins();
-    SCH_FIELD* libraryField = aSymbol.FindField( SIM_LIBRARY::LIBRARY_FIELD );
+    return CreateModel( aSymbol.GetFields(), static_cast<int>( aSymbol.GetLibPins().size() ) );
+}
+
+SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFields,
+                                             int aSymbolPinCount )
+{
+    std::string libraryPath = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string baseModelName;
 
-    if( libraryField )
+    if( libraryPath != "" )
     {
-        wxString path = libraryField->GetShownText();
-        wxString absolutePath = m_project.AbsolutePath( path );
+        std::string  absolutePath = std::string( m_project.AbsolutePath( libraryPath ).ToUTF8() );
         SIM_LIBRARY* library = nullptr;
 
         try
         {
-            auto it = m_libraries.try_emplace( std::string( path.ToUTF8() ),
-                    SIM_LIBRARY::Create( std::string( absolutePath.ToUTF8() ) ) ).first;
+            auto it = m_libraries.try_emplace( libraryPath,
+                    SIM_LIBRARY::Create( absolutePath ) ).first;
             library = &*it->second;
         }
         catch( const IO_ERROR& e )
@@ -61,15 +86,14 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
                                       e.What() ) );
         }
 
-        SCH_FIELD* nameField = aSymbol.FindField( SIM_LIBRARY::NAME_FIELD );
+        baseModelName = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD );
 
-        if( !nameField )
+        if( baseModelName == "" )
         {
             THROW_IO_ERROR( wxString::Format( _( "Error loading simulation model: no '%s' field" ),
                                               SIM_LIBRARY::NAME_FIELD ) );
         }
 
-        baseModelName = std::string( nameField->GetShownText().ToUTF8() );
         SIM_MODEL* baseModel = library->FindModel( baseModelName );
 
         if( !baseModel )
@@ -80,24 +104,12 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
                                       absolutePath ) );
         }
 
-        m_models.push_back( SIM_MODEL::Create( *baseModel,
-                                               static_cast<int>( pins.size() ),
-                                               aSymbol.GetFields() ) );
+        m_models.push_back( SIM_MODEL::Create( *baseModel, aSymbolPinCount, aFields ) );
     }
     else
-    {
-        m_models.push_back( SIM_MODEL::Create( static_cast<int>( pins.size() ),
-                                               aSymbol.GetFields() ) );
-    }
+        m_models.push_back( SIM_MODEL::Create( aSymbolPinCount, aFields ) );
 
     return { baseModelName, *m_models.back() };
-}
-
-
-SIM_LIBRARY& SIM_LIB_MGR::CreateLibrary( const std::string& aLibraryPath )
-{
-    auto it = m_libraries.try_emplace( aLibraryPath, SIM_LIBRARY::Create( aLibraryPath ) ).first;
-    return *it->second;
 }
 
 
