@@ -32,6 +32,7 @@ public:
             m_filename(),
             m_outputFile()
     {
+        format = FORMAT::KICADSEXPR;
     }
 
     wxString m_filename;

@@ -1006,7 +1006,6 @@ void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, const VECTOR2I& aC
     int minRadius = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
 
     SEG chord( aStart, aEnd );
-    int newSide = chord.Side( aMid );
 
     // Now, update the edit point position
     // Express the point in a circle-centered coordinate system.

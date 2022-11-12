@@ -403,14 +403,14 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         aPosJob->m_outputFile = fn.GetFullName();
     }
 
-    FILE* file = nullptr;
-    file = wxFopen( aPosJob->m_outputFile, wxS( "wt" ) );
-
-    if( file == nullptr )
-        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
-
     if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
     {
+        FILE* file = nullptr;
+        file = wxFopen( aPosJob->m_outputFile, wxS( "wt" ) );
+
+        if( file == nullptr )
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+
         std::string         data;
 
         bool frontSide = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
