@@ -70,7 +70,7 @@ std::string SIM_SERDE::GenerateValue() const
 
     for( int i = 0; i < m_model.GetParamCount(); ++i )
     {
-        const SIM_MODEL::PARAM& param = m_model.GetParam( i );
+        const SIM_MODEL::PARAM& param = m_model.GetUnderlyingParam( i );
 
         if( i == 0 && m_model.HasPrimaryValue() )
         {
@@ -103,7 +103,7 @@ std::string SIM_SERDE::GenerateParams() const
 
     for( int i = 0; i < m_model.GetParamCount(); ++i )
     {
-        const SIM_MODEL::PARAM& param = m_model.GetParam( i );
+        const SIM_MODEL::PARAM& param = m_model.GetUnderlyingParam( i );
 
         if( param.value->ToString() == "" )
             continue;
