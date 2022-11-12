@@ -61,8 +61,14 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
     return CreateModel( aSymbol.GetFields(), static_cast<int>( aSymbol.GetLibPins().size() ) );
 }
 
-SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFields,
-                                             int aSymbolPinCount )
+
+template SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFields,
+                                                      int aSymbolPinCount );
+template SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<LIB_FIELD>& aFields,
+                                                      int aSymbolPinCount );
+
+template <typename T>
+SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<T>& aFields, int aSymbolPinCount )
 {
     std::string libraryPath = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string baseModelName;
@@ -115,10 +121,21 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFiel
 
 std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> SIM_LIB_MGR::GetLibraries() const
 {
-    std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> result;
+    std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> libraries;
 
-    for( auto&& [path, library] : m_libraries )
-        result.try_emplace( path, *library );
+    for( auto& [path, library] : m_libraries )
+        libraries.try_emplace( path, *library );
 
-    return result;
+    return libraries;
+}
+
+
+std::vector<std::reference_wrapper<SIM_MODEL>> SIM_LIB_MGR::GetModels() const
+{
+    std::vector<std::reference_wrapper<SIM_MODEL>> models;
+
+    for( const std::unique_ptr<SIM_MODEL>& model : m_models )
+        models.emplace_back( *model );
+
+    return models;
 }

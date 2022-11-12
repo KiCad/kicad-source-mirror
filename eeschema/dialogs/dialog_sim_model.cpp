@@ -46,6 +46,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
     : DIALOG_SIM_MODEL_BASE( aParent ),
       m_symbol( aSymbol ),
       m_fields( aFields ),
+      m_builtinModelMgr( Prj() ),
+      m_curModelType( SIM_MODEL::TYPE::NONE ),
       m_library( std::make_shared<SIM_LIBRARY_SPICE>() ),
       m_prevModel( nullptr ),
       m_scintillaTricks( nullptr ),
@@ -63,16 +65,6 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
                    // We sort by StrNumCmp because SIM_MODEL_BASE sorts with it too.
                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
                } );
-
-    for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
-    {
-        m_models.push_back( SIM_MODEL::Create( type, m_sortedSymbolPins.size() ) );
-
-        SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
-
-        if( !m_curModelTypeOfDeviceType.count( deviceType ) )
-            m_curModelTypeOfDeviceType[deviceType] = type;
-    }
 
 
     m_typeChoice->Clear();
@@ -214,23 +206,29 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     {
         // The model is sourced from the instance.
         m_useInstanceModelRadioButton->SetValue( true );
-        SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( m_fields, pinCount );
+        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, pinCount );
+    }
 
+    for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+    {
         try
         {
-            m_models.at( static_cast<int>( type ) ) = SIM_MODEL::Create( pinCount, m_fields );
+            if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
+                m_builtinModelMgr.CreateModel( m_fields, m_sortedSymbolPins.size() );
+            else
+                m_builtinModelMgr.CreateModel( type, m_sortedSymbolPins.size() );
         }
         catch( const IO_ERROR& e )
         {
             DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
                                        + wxT( "\n\n" )
                                        + e.What() );
-
-            onRadioButton( dummyEvent );
-            return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
         }
 
-        m_curModelType = type;
+        SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+
+        if( !m_curModelTypeOfDeviceType.count( deviceType ) )
+            m_curModelTypeOfDeviceType[deviceType] = type;
     }
 
     m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
@@ -894,9 +892,7 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
         return *m_libraryModels.at( m_modelNameCombobox->GetSelection() );
     }
     else
-    {
-        return *m_models.at( static_cast<int>( m_curModelType ) );
-    }
+        return m_builtinModelMgr.GetModels().at( static_cast<int>( m_curModelType ) );
 }
 
 
@@ -960,21 +956,21 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
     bool fromLibrary = m_useLibraryModelRadioButton->GetValue();
 
     m_pathLabel->Enable( fromLibrary );
-  	m_tclibraryPathName->Enable( fromLibrary );
-  	m_browseButton->Enable( fromLibrary );
-  	m_modelNameLabel->Enable( fromLibrary );
-  	m_modelNameCombobox->Enable( fromLibrary );
-  	m_overrideCheckbox->Enable( fromLibrary );
-  	m_ibisPinLabel->Enable( fromLibrary );
-  	m_ibisPinCombobox->Enable( fromLibrary );
-  	m_differentialCheckbox->Enable( fromLibrary );
-  	m_ibisModelLabel->Enable( fromLibrary );
-  	m_ibisModelCombobox->Enable( fromLibrary );
+    m_tclibraryPathName->Enable( fromLibrary );
+    m_browseButton->Enable( fromLibrary );
+    m_modelNameLabel->Enable( fromLibrary );
+    m_modelNameCombobox->Enable( fromLibrary );
+    m_overrideCheckbox->Enable( fromLibrary );
+    m_ibisPinLabel->Enable( fromLibrary );
+    m_ibisPinCombobox->Enable( fromLibrary );
+    m_differentialCheckbox->Enable( fromLibrary );
+    m_ibisModelLabel->Enable( fromLibrary );
+    m_ibisModelCombobox->Enable( fromLibrary );
 
-  	m_staticTextDevType->Enable( !fromLibrary );
-  	m_deviceTypeChoice->Enable( !fromLibrary );
-  	m_staticTextSpiceType->Enable( !fromLibrary );
-  	m_typeChoice->Enable( !fromLibrary || isIbisLoaded() );
+    m_staticTextDevType->Enable( !fromLibrary );
+    m_deviceTypeChoice->Enable( !fromLibrary );
+    m_staticTextSpiceType->Enable( !fromLibrary );
+    m_typeChoice->Enable( !fromLibrary || isIbisLoaded() );
 
     updateWidgets();
 }

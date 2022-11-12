@@ -51,9 +51,11 @@ public:
     // TODO: The argument can be made const.
     SIM_LIBRARY::MODEL CreateModel( SCH_SYMBOL& aSymbol );
 
-    SIM_LIBRARY::MODEL CreateModel( const std::vector<SCH_FIELD>& aFields, int aSymbolPinCount );
+    template <typename T>
+    SIM_LIBRARY::MODEL CreateModel( const std::vector<T>& aFields, int aSymbolPinCount );
 
     std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> GetLibraries() const;
+    std::vector<std::reference_wrapper<SIM_MODEL>> GetModels() const;
 
 private:
     const PROJECT& m_project;
