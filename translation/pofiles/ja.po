@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-08 17:02+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
+"PO-Revision-Date: 2022-11-14 16:47+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -11076,9 +11076,8 @@ msgid "Exclude from simulation"
 msgstr "シミュレーションから除外する"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Store in Reference and Value"
-msgstr "基準ノード"
+msgstr "リファレンスと値に格納"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:116
 msgid "Simulation Model Editor"
@@ -14050,9 +14049,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2012
-#, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "電源ポートのスタイルが不明です。代わりにバーを使用してください。"
+msgstr "電源ポートのスタイルが不明なので、バーとしてインポートされました。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2053
 #, c-format
@@ -15212,9 +15210,9 @@ msgid "Could not find IBIS model '%s'"
 msgstr "IBISモデル '%s' が見つかりません"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "無効なシンボルピンインデックス： '%s'"
+msgstr "無効なIBISモデル '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:298
 msgid "Power supply"
@@ -15234,18 +15232,16 @@ msgid "Parasitic Pin Capacitance"
 msgstr ""
 
 #: eeschema/sim/sim_model_kibis.cpp:372
-#, fuzzy
 msgid "DC Value"
-msgstr "値"
+msgstr "電圧"
 
 #: eeschema/sim/sim_model_kibis.cpp:390
 msgid "ON time"
 msgstr ""
 
 #: eeschema/sim/sim_model_kibis.cpp:398
-#, fuzzy
 msgid "OFF time"
-msgstr "立ち下がり時間:"
+msgstr "立ち下がり時間"
 
 #: eeschema/sim/sim_model_kibis.cpp:406
 msgid "Delay"
@@ -16448,9 +16444,8 @@ msgid "Show Pin Numbers"
 msgstr "ピン番号を表示"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "エレクトリカル タイプでピンをアノテーション"
+msgstr "番号によりピンをアノテーション"
 
 #: eeschema/tools/ee_actions.cpp:206
 msgid "Show Symbol Tree"
