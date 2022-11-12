@@ -21,14 +21,12 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <confirm.h>
 
-// Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
-// (especially on msys2)
 #include <sim/sim_model_spice.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/spice_model_parser.h>
 #include <sim/sim_library_spice.h>
+#include <confirm.h>
 
 #include <boost/algorithm/string/trim.hpp>
 

@@ -24,7 +24,6 @@
  */
 
 #include "connection_graph.h"
-#include "sim/sim_model.h"
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
 #include <string_utils.h>
@@ -41,6 +40,8 @@
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <wx/ffile.h>
+
+#include "sim/sim_model.h"
 
 
 /* ERC tests :
@@ -530,7 +531,7 @@ int ERC_TESTER::TestPinToPin()
                     std::swap( first_pin, second_pin );
 
                 std::pair<SCH_PIN*, SCH_PIN*> pair = std::make_pair( first_pin, second_pin );
-                
+
                 if( auto [ins_pin, inserted ] = tested.insert( pair ); !inserted )
                     continue;
 

@@ -23,11 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <confirm.h>
-
-// Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
-// (especially on msys2)
 #include "ngspice.h"
+
+#include <confirm.h>
 
 std::shared_ptr<SPICE_SIMULATOR> SIMULATOR::CreateInstance( const std::string& )
 {

@@ -22,15 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <sim/sim_lib_mgr.h>
 #include <sch_symbol.h>
-#include <pgm_base.h>
-#include <string>
-
-// Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
-// (especially on msys2)
 #include <sim/sim_library.h>
 #include <sim/sim_model.h>
-#include <sim/sim_lib_mgr.h>
+#include <pgm_base.h>
+#include <string>
 
 
 SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT& aPrj ) : m_project( aPrj )
