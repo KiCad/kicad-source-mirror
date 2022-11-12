@@ -230,6 +230,16 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
             aView.SetLayerVisible( layer, true );
             aView.SetTopLayer( layer, true );
         }
+
+        if( m_pcbnewSettings.m_DrillMarks == DRILL_MARKS::FULL_DRILL_SHAPE
+                && !m_settings.m_blackWhite )
+        {
+            for( int layer : { LAYER_PAD_HOLEWALLS, LAYER_VIA_HOLEWALLS } )
+            {
+                aView.SetLayerVisible( layer, true );
+                aView.SetTopLayer( layer, true );
+            }
+        }
     }
 }
 
@@ -302,7 +312,9 @@ SHAPE_SEGMENT KIGFX::PCB_PRINT_PAINTER::getPadHoleShape( const PAD* aPad ) const
     SHAPE_SEGMENT segm;
 
     if( m_drillMarkReal )
+    {
         segm =  KIGFX::PCB_PAINTER::getPadHoleShape( aPad );
+    }
     else
     {
         segm = SHAPE_SEGMENT( aPad->GetPosition(),
