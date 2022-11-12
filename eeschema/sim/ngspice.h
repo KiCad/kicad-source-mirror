@@ -27,11 +27,13 @@
 #ifndef NGSPICE_H
 #define NGSPICE_H
 
-#include <sim/spice_simulator.h>
+#include <wx/dynlib.h>
+
+// Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
+// (especially on msys2)
+#include "sim/spice_simulator.h"
 #include <sim/sim_model.h>
 #include <sim/sim_value.h>
-
-#include <wx/dynlib.h>
 
 #include <ngspice/sharedspice.h>
 

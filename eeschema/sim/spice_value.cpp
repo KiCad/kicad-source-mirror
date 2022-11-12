@@ -22,17 +22,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "spice_value.h"
-
 #include <stdexcept>
 #include <cmath>
 
+#include <wx/event.h>
 #include <wx/textentry.h>
 #include <wx/numformatter.h>
 #include <confirm.h>
 #include <common.h>
 #include <ki_exception.h>
 #include <locale_io.h>
+
+// Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
+// (especially on msys2)
+#include "spice_value.h"
+
 
 SPICE_VALUE::SPICE_VALUE( const wxString& aString )
 {

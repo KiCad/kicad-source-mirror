@@ -29,8 +29,10 @@
 #include <optional>
 #include <complex>
 #include <memory>
-#include <pegtl.hpp>
 
+// Include this header after wxWidgets headers to avoid conflicts with Windows headers
+// (especially on msys2)
+#include <pegtl.hpp>
 
 namespace SIM_VALUE_GRAMMAR
 {
@@ -161,7 +163,7 @@ namespace SIM_VALUE_GRAMMAR
 
     template <SIM_VALUE::TYPE ValueType>
     struct significand;
-    
+
     template <> struct significand<SIM_VALUE::TYPE_FLOAT> :
         sor<seq<intPart, one<'.'>, fracPart>,
             seq<intPart, one<'.'>>,

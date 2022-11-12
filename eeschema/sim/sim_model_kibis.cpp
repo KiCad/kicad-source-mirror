@@ -21,13 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/kibis/kibis.h>
-#include <sim/sim_model_kibis.h>
-#include <sim/sim_library_kibis.h>
 #include <paths.h>
 #include <fmt/core.h>
 #include <wx/filename.h>
 #include <kiway.h>
+
+#include <sim/kibis/kibis.h>
+#include <sim/sim_model_kibis.h>
+#include <sim/sim_library_kibis.h>
 
 std::string SPICE_GENERATOR_KIBIS::ModelName( const SPICE_ITEM& aItem ) const
 {
