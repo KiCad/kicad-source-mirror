@@ -138,8 +138,8 @@ void DP_MEANDER_PLACER::release()
 
 long long int DP_MEANDER_PLACER::origPathLength() const
 {
-    long long int totalP = m_padToDieLength + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
-    long long int totalN = m_padToDieLength + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
+    long long int totalP = m_padToDieP + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
+    long long int totalN = m_padToDieN + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
     return std::max( totalP, totalN );
 }
 
