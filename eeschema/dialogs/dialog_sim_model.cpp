@@ -635,6 +635,12 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 
             std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library )
                     ->ReadFile( std::string( absolutePath.ToUTF8() ), ibisType );
+            
+            wxArrayString emptyArray;
+            m_ibisModelCombobox->Set( emptyArray );
+            m_ibisPinCombobox->Set( emptyArray );
+            m_ibisModelCombobox->SetSelection( -1 );
+            m_ibisPinCombobox->SetSelection( -1 );
         }
         else
         {
@@ -968,7 +974,7 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
   	m_staticTextDevType->Enable( !fromLibrary );
   	m_deviceTypeChoice->Enable( !fromLibrary );
   	m_staticTextSpiceType->Enable( !fromLibrary );
-  	m_typeChoice->Enable( !fromLibrary );
+  	m_typeChoice->Enable( !fromLibrary || isIbisLoaded() );
 
     updateWidgets();
 }

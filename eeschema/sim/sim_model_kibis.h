@@ -93,7 +93,7 @@ public:
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
     void SwitchSingleEndedDiff( bool aDiff );
-    bool CanDifferential() { return m_enableDiff; };
+    bool CanDifferential() const { return m_enableDiff; } ;
     bool m_enableDiff;
 
     void ReadDataSchFields( unsigned aSymbolPinCount,

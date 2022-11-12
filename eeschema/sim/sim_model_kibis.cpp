@@ -284,6 +284,8 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) :
 
     m_ibisPins = aSource.GetIbisPins();
     m_ibisModels = aSource.GetIbisModels();
+    
+    m_enableDiff = aSource.CanDifferential();
 }
 
 SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
@@ -297,7 +299,6 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
                                   const std::vector<SCH_FIELD>& aFields ) :
         SIM_MODEL_KIBIS( aType, aSource )
 {
-    ReadDataFields( 2, &aFields );
 }
 
 
