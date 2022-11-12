@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -24,7 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "tuner_slider.h"
 
 #include <sim/sim_plot_frame.h>
 #include <sch_symbol.h>
@@ -34,6 +33,8 @@
 #include <cmath>   // log log1p expm1
 #include <complex> // norm
 
+// Must be after other includes to avoid conflict with a window header on msys2
+#include "tuner_slider.h"
 
 TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol ) :
     TUNER_SLIDER_BASE( aParent ),
