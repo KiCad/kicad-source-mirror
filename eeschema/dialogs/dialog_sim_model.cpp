@@ -166,9 +166,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
         if( isIbisLoaded() && ( m_modelNameCombobox->GetSelection() >= 0 ) )
         {
-            std::shared_ptr<SIM_MODEL_KIBIS> kibismodel =
-                    std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
-                            m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
+            SIM_MODEL_KIBIS* kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>(
+                    m_libraryModels.at( m_modelNameCombobox->GetSelection() ).get() );
 
             if( kibismodel )
             {
@@ -277,8 +276,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 
     if( isIbisLoaded() )
     {
-        std::shared_ptr<SIM_MODEL_KIBIS> kibismodel = std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
-                m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
+        SIM_MODEL_KIBIS* kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>(
+                m_libraryModels.at( m_modelNameCombobox->GetSelection() ).get() );
 
         if( kibismodel )
         {
@@ -883,21 +882,14 @@ int DIALOG_SIM_MODEL<T>::findSymbolPinRow( const wxString& aSymbolPinNumber ) co
 template <typename T>
 SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
 {
-    return *curModelSharedPtr();
-}
-
-
-template <typename T>
-std::shared_ptr<SIM_MODEL> DIALOG_SIM_MODEL<T>::curModelSharedPtr() const
-{
     if( m_useLibraryModelRadioButton->GetValue()
         && m_modelNameCombobox->GetSelection() != wxNOT_FOUND )
     {
-        return m_libraryModels.at( m_modelNameCombobox->GetSelection() );
+        return *m_libraryModels.at( m_modelNameCombobox->GetSelection() );
     }
     else
     {
-        return m_models.at( static_cast<int>( m_curModelType ) );
+        return *m_models.at( static_cast<int>( m_curModelType ) );
     }
 }
 
@@ -1155,13 +1147,11 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
                      || type == SIM_MODEL::TYPE::KIBIS_DRIVER_RECT
                      || type == SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS ) )
             {
-                std::shared_ptr<SIM_MODEL_KIBIS> kibismodel =
-                        std::dynamic_pointer_cast<SIM_MODEL_KIBIS>(
-                                m_libraryModels.at( m_modelNameCombobox->GetSelection() ) );
+                SIM_MODEL_KIBIS* kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>(
+                        m_libraryModels.at( m_modelNameCombobox->GetSelection() ).get() );
 
                 m_libraryModels.at( m_modelNameCombobox->GetSelection() ) =
-                        std::shared_ptr<SIM_MODEL>( dynamic_cast<SIM_MODEL*>(
-                                new SIM_MODEL_KIBIS( type, *kibismodel, m_fields ) ) );
+                        std::make_unique<SIM_MODEL_KIBIS>( type, *kibismodel, m_fields );
             }
 
             m_curModelType = type;

@@ -107,7 +107,6 @@ private:
     int findSymbolPinRow( const wxString& aSymbolPinNumber ) const;
 
     SIM_MODEL& curModel() const;
-    std::shared_ptr<SIM_MODEL> curModelSharedPtr() const;
 
     wxString getSymbolPinString( int aSymbolPinNumber ) const;
     wxString getModelPinString( int aModelPinIndex ) const;
@@ -142,13 +141,13 @@ private:
     SCH_SYMBOL&            m_symbol;
     std::vector<T>&        m_fields;
 
-    std::vector<std::shared_ptr<SIM_MODEL>>            m_models;
+    std::vector<std::unique_ptr<SIM_MODEL>>            m_models;
     std::vector<LIB_PIN*>                              m_sortedSymbolPins;
     std::map<SIM_MODEL::DEVICE_TYPE_, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE                                    m_curModelType = SIM_MODEL::TYPE::NONE;
 
     std::shared_ptr<SIM_LIBRARY>                       m_library;
-    std::vector<std::shared_ptr<SIM_MODEL>>            m_libraryModels;
+    std::vector<std::unique_ptr<SIM_MODEL>>            m_libraryModels;
     const SIM_MODEL*                                   m_prevModel;
 
     MODEL_NAME_VALIDATOR   m_modelNameValidator;
