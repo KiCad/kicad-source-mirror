@@ -82,16 +82,16 @@ private:
 class SIM_PROPERTY
 {
 public:
-    SIM_PROPERTY( std::shared_ptr<SIM_LIBRARY> aLibrary, std::shared_ptr<SIM_MODEL> aModel,
-                  int aParamIndex );
+    SIM_PROPERTY( SIM_MODEL& aModel, int aParamIndex );
 
-    const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
+    void Disable();
+
+    const SIM_MODEL::PARAM& GetParam() const { return m_model.GetParam( m_paramIndex ); }
 
 protected:
-    std::shared_ptr<SIM_LIBRARY> m_library; // We hold a shared_ptr to SIM_LIBRARY to prevent its
-                                            // deallocation during this object's lifetime.
-    std::shared_ptr<SIM_MODEL>   m_model;
+    SIM_MODEL&                   m_model;
     int                          m_paramIndex;
+    bool                         m_disabled; // If true, never access the models.
 };
 
 
@@ -99,8 +99,7 @@ class SIM_BOOL_PROPERTY : public wxBoolProperty, public SIM_PROPERTY
 {
 public:
     SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName,
-                       std::shared_ptr<SIM_LIBRARY> aLibrary,
-                       std::shared_ptr<SIM_MODEL> aModel,
+                       SIM_MODEL& aModel,
                        int aParamIndex );
 
     wxValidator* DoGetValidator() const override;
@@ -115,8 +114,7 @@ public:
     // We pass shared_ptrs because we need to make sure they are destroyed only after the last time
     // SIM_PROPERTY uses them.
     SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName,
-                         std::shared_ptr<SIM_LIBRARY> aLibrary,
-                         std::shared_ptr<SIM_MODEL> aModel,
+                         SIM_MODEL& aModel,
                          int aParamIndex,
                          SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT,
                          SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
@@ -136,8 +134,7 @@ class SIM_ENUM_PROPERTY : public wxEnumProperty, public SIM_PROPERTY
 {
 public:
     SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
-                       std::shared_ptr<SIM_LIBRARY> aLibrary,
-                       std::shared_ptr<SIM_MODEL> aModel,
+                       SIM_MODEL& aModel,
                        int aParamIndex,
                        SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT,
                        SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );

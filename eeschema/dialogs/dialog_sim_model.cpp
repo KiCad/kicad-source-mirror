@@ -126,6 +126,18 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 template <typename T>
 DIALOG_SIM_MODEL<T>::~DIALOG_SIM_MODEL()
 {
+    // Disable all properties. This is necessary because some of their methods are called after
+    // destruction of DIALOG_SIM_MODEL, oddly. When disabled, they never access their models.
+    for( wxPropertyGridIterator it = m_paramGrid->GetIterator(); !it.AtEnd(); ++it )
+    {
+        SIM_PROPERTY* prop = dynamic_cast<SIM_PROPERTY*>( *it );
+
+        if( !prop )
+            continue;
+
+        prop->Disable();
+    }
+
     // Delete the GRID_TRICKS.
     m_pinAssignmentsGrid->PopEventHandler( true );
 
@@ -775,19 +787,18 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
     {
     case SIM_VALUE::TYPE_BOOL:
         // TODO.
-        prop = new SIM_BOOL_PROPERTY( paramDescription, param.info.name, m_library,
-                                      curModelSharedPtr(), aParamIndex );
+        prop = new SIM_BOOL_PROPERTY( paramDescription, param.info.name, curModel(), aParamIndex );
         prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
         break;
 
     case SIM_VALUE::TYPE_INT:
-        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
-                                        curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_INT );
+        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, curModel(),
+                                        aParamIndex, SIM_VALUE::TYPE_INT );
         break;
 
     case SIM_VALUE::TYPE_FLOAT:
-        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
-                                        curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_FLOAT );
+        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, curModel(),
+                                        aParamIndex, SIM_VALUE::TYPE_FLOAT );
         break;
 
     //case TYPE_COMPLEX:
@@ -796,15 +807,13 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
     case SIM_VALUE::TYPE_STRING:
         if( param.info.enumValues.empty() )
         {
-            prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
-                                            curModelSharedPtr(), aParamIndex,
-                                            SIM_VALUE::TYPE_STRING );
+            prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, curModel(),
+                                            aParamIndex, SIM_VALUE::TYPE_STRING );
         }
         else
         {
-            prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, m_library,
-                                          curModelSharedPtr(), aParamIndex,
-                                          SIM_VALUE::TYPE_STRING );
+            prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, curModel(),
+                                          aParamIndex, SIM_VALUE::TYPE_STRING );
         }
         break;
 

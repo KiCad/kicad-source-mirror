@@ -251,25 +251,28 @@ wxTextEntry* SIM_STRING_VALIDATOR::getTextEntry()
 }
 
 
-SIM_PROPERTY::SIM_PROPERTY( std::shared_ptr<SIM_LIBRARY> aLibrary,
-                            std::shared_ptr<SIM_MODEL> aModel,
-                            int aParamIndex )
-    : m_library( std::move( aLibrary ) ),
-      m_model( std::move( aModel ) ),
-      m_paramIndex( aParamIndex )
+SIM_PROPERTY::SIM_PROPERTY( SIM_MODEL& aModel, int aParamIndex ) :
+        m_model( aModel ),
+        m_paramIndex( aParamIndex ),
+        m_disabled( false )
 {
 }
 
 
+void SIM_PROPERTY::Disable()
+{
+    m_disabled = true;
+}
+
+
 SIM_BOOL_PROPERTY::SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName,
-                                      std::shared_ptr<SIM_LIBRARY> aLibrary,
-                                      std::shared_ptr<SIM_MODEL> aModel,
+                                      SIM_MODEL& aModel,
                                       int aParamIndex )
     : wxBoolProperty( aLabel, aName ),
-      SIM_PROPERTY( aLibrary, aModel, aParamIndex )
+      SIM_PROPERTY( aModel, aParamIndex )
 {
     auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>(
-        m_model->GetParam( m_paramIndex ).value.get() );
+        m_model.GetParam( m_paramIndex ).value.get() );
 
     wxCHECK( simValue, /*void*/ );
 
@@ -287,26 +290,28 @@ void SIM_BOOL_PROPERTY::OnSetValue()
 {
     wxPGProperty::OnSetValue();
 
+    if( m_disabled )
+        return;
+
     auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>(
-        m_model->GetParam( m_paramIndex ).value.get() );
+        m_model.GetParam( m_paramIndex ).value.get() );
 
     wxCHECK( simValue, /*void*/ );
 
-    if( m_model->GetBaseModel() && *simValue == m_value.GetBool() )
-        m_model->SetParamValue( m_paramIndex, "" );
+    if( m_model.GetBaseModel() && *simValue == m_value.GetBool() )
+        m_model.SetParamValue( m_paramIndex, "" );
     else
-        m_model->SetParamValue( m_paramIndex, m_value.GetBool() ? "1" : "0" );
+        m_model.SetParamValue( m_paramIndex, m_value.GetBool() ? "1" : "0" );
 }
 
 
 SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName,
-                                          std::shared_ptr<SIM_LIBRARY> aLibrary,
-                                          std::shared_ptr<SIM_MODEL> aModel,
+                                          SIM_MODEL& aModel,
                                           int aParamIndex,
                                           SIM_VALUE::TYPE aValueType,
                                           SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : wxStringProperty( aLabel, aName ),
-      SIM_PROPERTY( aLibrary, aModel, aParamIndex ),
+      SIM_PROPERTY( aModel, aParamIndex ),
       m_valueType( aValueType ),
       m_notation( aNotation )
 {
@@ -323,15 +328,18 @@ wxValidator* SIM_STRING_PROPERTY::DoGetValidator() const
 bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText,
                                          int aArgFlags ) const
 {
-    wxString baseParamValue = m_model->GetBaseParam( m_paramIndex ).value->ToString();
+    if( m_disabled )
+        return false;
+
+    wxString baseParamValue = m_model.GetBaseParam( m_paramIndex ).value->ToString();
     aVariant = aText;
 
     // TODO: Don't use string comparison.
-    if( m_model->GetBaseModel() && ( aText == "" || aText == baseParamValue ) )
+    if( m_model.GetBaseModel() && ( aText == "" || aText == baseParamValue ) )
     {
         try
         {
-            m_model->SetParamValue( m_paramIndex, "" ); // Nullify.
+            m_model.SetParamValue( m_paramIndex, "" ); // Nullify.
         }
         catch( const IO_ERROR& )
         {
@@ -342,7 +350,7 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     }
     else
     {
-        m_model->SetParamValue( m_paramIndex, std::string( aText.ToUTF8() ) );
+        m_model.SetParamValue( m_paramIndex, std::string( aText.ToUTF8() ) );
         aVariant = GetParam().value->ToString();
     }
 
@@ -362,14 +370,13 @@ static wxArrayString convertStringsToWx( const std::vector<std::string>& aString
 
 
 SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
-                                      std::shared_ptr<SIM_LIBRARY> aLibrary,
-                                      std::shared_ptr<SIM_MODEL> aModel,
+                                      SIM_MODEL& aModel,
                                       int aParamIndex,
                                       SIM_VALUE::TYPE aValueType,
                                       SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : wxEnumProperty( aLabel, aName,
-                      convertStringsToWx( aModel->GetParam( aParamIndex ).info.enumValues ) ),
-      SIM_PROPERTY( aLibrary, aModel, aParamIndex )
+                      convertStringsToWx( aModel.GetParam( aParamIndex ).info.enumValues ) ),
+      SIM_PROPERTY( aModel, aParamIndex )
 {
     auto it = std::find( GetParam().info.enumValues.begin(), GetParam().info.enumValues.end(),
                          GetParam().value->ToString() );
@@ -381,6 +388,9 @@ SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aN
 
 bool SIM_ENUM_PROPERTY::IntToValue( wxVariant& aVariant, int aNumber, int aArgFlags ) const
 {
-    m_model->SetParamValue( m_paramIndex, GetParam().info.enumValues.at( aNumber ) );
+    if( m_disabled )
+        return false;
+
+    m_model.SetParamValue( m_paramIndex, GetParam().info.enumValues.at( aNumber ) );
     return wxEnumProperty::IntToValue( aVariant, aNumber, aArgFlags );
 }
