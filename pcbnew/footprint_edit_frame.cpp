@@ -334,7 +334,8 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 
 bool FOOTPRINT_EDIT_FRAME::IsContentModified() const
 {
-    return GetScreen() && GetScreen()->IsContentModified() && GetBoard() && GetBoard()->GetFirstFootprint();
+    return GetScreen() && GetScreen()->IsContentModified()
+                && GetBoard() && GetBoard()->GetFirstFootprint();
 }
 
 
@@ -505,7 +506,7 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
 
 void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 {
-    m_revertModule.reset( (FOOTPRINT*) aFootprint->Clone() );
+    m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
 
     m_footprintNameWhenLoaded = aFootprint->GetFPID().GetLibItemName();
 

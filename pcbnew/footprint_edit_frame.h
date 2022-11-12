@@ -362,7 +362,7 @@ private:
 
     bool                        m_show_layer_manager_tools;
 
-    std::unique_ptr<FOOTPRINT>  m_revertModule;
+    std::unique_ptr<FOOTPRINT>  m_originalFootprintCopy;
     wxString                    m_footprintNameWhenLoaded;
     std::map<KIID, KIID>        m_boardFootprintUuids;
 };

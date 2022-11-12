@@ -118,6 +118,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 
     newFootprint = (FOOTPRINT*) aFootprint->Clone();    // Keep existing uuids
     newFootprint->SetParent( GetBoard() );
+    newFootprint->SetParentGroup( nullptr );
     newFootprint->SetLink( aFootprint->m_Uuid );
 
     newFootprint->ClearFlags();
