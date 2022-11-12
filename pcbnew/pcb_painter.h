@@ -33,6 +33,7 @@
 #include <pcb_display_options.h>
 #include <math/vector2d.h>
 #include <memory>
+#include <geometry/shape_segment.h>
 
 
 class EDA_ITEM;
@@ -201,14 +202,14 @@ protected:
     virtual int getDrillShape( const PAD* aPad ) const;
 
     /**
-     * Return drill size for a pad (internal units).
+     * Return hole shape for a pad (internal units).
      */
-    virtual VECTOR2D getDrillSize( const PAD* aPad ) const;
+    virtual SHAPE_SEGMENT getPadHoleShape( const PAD* aPad ) const;
 
     /**
      * Return drill diameter for a via (internal units).
      */
-    virtual int getDrillSize( const PCB_VIA* aVia ) const;
+    virtual int getViaDrillSize( const PCB_VIA* aVia ) const;
 
     void strokeText( const wxString& aText, const VECTOR2I& aPosition,
                      const TEXT_ATTRIBUTES& aAttrs );

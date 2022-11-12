@@ -32,6 +32,9 @@
 #include <pcbnew_settings.h>
 #include <view/view.h>
 #include <pcbplot.h>
+#include <geometry/shape_segment.h>
+#include <pad.h>
+
 #include <advanced_config.h>
 
 PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
@@ -294,14 +297,23 @@ int KIGFX::PCB_PRINT_PAINTER::getDrillShape( const PAD* aPad ) const
 }
 
 
-VECTOR2D KIGFX::PCB_PRINT_PAINTER::getDrillSize( const PAD* aPad ) const
+SHAPE_SEGMENT KIGFX::PCB_PRINT_PAINTER::getPadHoleShape( const PAD* aPad ) const
 {
-    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillSize( aPad )
-                           : VECTOR2D( m_drillMarkSize, m_drillMarkSize );
+    SHAPE_SEGMENT segm;
+
+    if( m_drillMarkReal )
+        segm =  KIGFX::PCB_PAINTER::getPadHoleShape( aPad );
+    else
+    {
+        segm = SHAPE_SEGMENT( aPad->GetPosition(),
+                              aPad->GetPosition(), m_drillMarkSize );
+    }
+
+    return segm;
 }
 
 
-int KIGFX::PCB_PRINT_PAINTER::getDrillSize( const PCB_VIA* aVia ) const
+int KIGFX::PCB_PRINT_PAINTER::getViaDrillSize( const PCB_VIA* aVia ) const
 {
-    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillSize( aVia ) : m_drillMarkSize;
+    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getViaDrillSize( aVia ) : m_drillMarkSize;
 }

@@ -425,13 +425,14 @@ int PCB_PAINTER::getDrillShape( const PAD* aPad ) const
 }
 
 
-VECTOR2D PCB_PAINTER::getDrillSize( const PAD* aPad ) const
+SHAPE_SEGMENT PCB_PAINTER::getPadHoleShape( const PAD* aPad ) const
 {
-    return VECTOR2D( aPad->GetDrillSize() );
+    SHAPE_SEGMENT segm = *aPad->GetEffectiveHoleShape().get();
+    return segm;
 }
 
 
-int PCB_PAINTER::getDrillSize( const PCB_VIA* aVia ) const
+int PCB_PAINTER::getViaDrillSize( const PCB_VIA* aVia ) const
 {
     return aVia->GetDrillValue();
 }
@@ -887,7 +888,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
     if( aLayer == LAYER_VIA_HOLEWALLS )
     {
-        double radius = ( getDrillSize( aVia ) / 2.0 ) + m_holePlatingThickness;
+        double radius = ( getViaDrillSize( aVia ) / 2.0 ) + m_holePlatingThickness;
 
         if( !outline_mode )
         {
@@ -901,11 +902,11 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     {
         m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
-        m_gal->DrawCircle( center, getDrillSize( aVia ) / 2.0 );
+        m_gal->DrawCircle( center, getViaDrillSize( aVia ) / 2.0 );
     }
     else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.IsPrinting() )
     {
-        int    annular_width = ( aVia->GetWidth() - getDrillSize( aVia ) ) / 2.0;
+        int    annular_width = ( aVia->GetWidth() - getViaDrillSize( aVia ) ) / 2.0;
         double radius = aVia->GetWidth() / 2.0;
         bool   draw = false;
 
@@ -935,7 +936,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     }
     else if( aLayer == LAYER_VIA_BBLIND || aLayer == LAYER_VIA_MICROVIA )
     {
-        int    annular_width = ( aVia->GetWidth() - getDrillSize( aVia ) ) / 2.0;
+        int    annular_width = ( aVia->GetWidth() - getViaDrillSize( aVia ) ) / 2.0;
         double radius = aVia->GetWidth() / 2.0;
 
         // Outer circles of blind/buried and micro-vias are drawn in a special way to indicate the
@@ -988,7 +989,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         if( aVia->FlashLayer( activeLayer ) )
             radius = aVia->GetWidth() / 2.0;
         else
-            radius = getDrillSize( aVia ) / 2.0 + m_holePlatingThickness;
+            radius = getViaDrillSize( aVia ) / 2.0 + m_holePlatingThickness;
 
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
         m_gal->SetIsFill( false );
@@ -1219,12 +1220,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
     if( aLayer == LAYER_PAD_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
-        std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
+        SHAPE_SEGMENT slot = getPadHoleShape( aPad );
 
-        if( slot->GetSeg().A == slot->GetSeg().B )    // Circular hole
-            m_gal->DrawCircle( slot->GetSeg().A, slot->GetWidth() / 2 );
+        if( slot.GetSeg().A == slot.GetSeg().B )    // Circular hole
+            m_gal->DrawCircle( slot.GetSeg().A, slot.GetWidth() / 2.0 );
         else
-            m_gal->DrawSegment( slot->GetSeg().A, slot->GetSeg().B, slot->GetWidth() );
+            m_gal->DrawSegment( slot.GetSeg().A, slot.GetSeg().B, slot.GetWidth() );
     }
     else if( m_pcbSettings.IsPrinting() )
     {
