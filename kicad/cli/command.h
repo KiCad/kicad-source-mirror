@@ -30,7 +30,10 @@ namespace CLI
 class COMMAND
 {
 public:
-    COMMAND( std::string aName ) : m_name( aName ), m_argParser( aName ){};
+    COMMAND( std::string                 aName,
+             argparse::default_arguments aDefaultArgs = argparse::default_arguments::help ) :
+            m_name( aName ),
+            m_argParser( aName, "", aDefaultArgs ){};
 
     virtual int Perform( KIWAY& aKiway ) = 0;
 
