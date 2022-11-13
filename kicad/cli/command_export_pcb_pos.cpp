@@ -140,7 +140,7 @@ int CLI::EXPORT_PCB_POS_COMMAND::Perform( KIWAY& aKiway )
 
     wxString side = FROM_UTF8( m_argParser.get<std::string>( ARG_SIDE ).c_str() );
 
-    if( units == wxS( "both" ) )
+    if( side == wxS( "both" ) )
     {
         if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
         {
@@ -150,11 +150,11 @@ int CLI::EXPORT_PCB_POS_COMMAND::Perform( KIWAY& aKiway )
 
         aPosJob->m_side = JOB_EXPORT_PCB_POS::SIDE::BOTH;
     }
-    else if( units == wxS( "front" ) )
+    else if( side == wxS( "front" ) )
     {
         aPosJob->m_side = JOB_EXPORT_PCB_POS::SIDE::FRONT;
     }
-    else if( units == wxS( "back" ) )
+    else if( side == wxS( "back" ) )
     {
         aPosJob->m_side = JOB_EXPORT_PCB_POS::SIDE::BACK;
     }
