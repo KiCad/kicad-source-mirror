@@ -63,6 +63,8 @@ struct HasContainerTraits : std::false_type {};
 
 template <> struct HasContainerTraits<std::string> : std::false_type {};
 
+template <> struct HasContainerTraits<std::string_view> : std::false_type {};
+
 template <typename T>
 struct HasContainerTraits<
     T, std::void_t<typename T::value_type, decltype(std::declval<T>().begin()),
@@ -597,7 +599,7 @@ public:
   std::string get_inline_usage() const {
     std::stringstream usage;
     // Find the longest variant to show in the usage string
-    std::string longest_name = m_names[0];
+    std::string longest_name = m_names.front();
     for (const auto &s : m_names) {
       if (s.size() > longest_name.size()) {
         longest_name = s;
@@ -758,6 +760,8 @@ private:
     std::stringstream stream;
     if (!m_used_name.empty()) {
       stream << m_used_name << ": ";
+    } else {
+      stream << m_names.front() << ": ";
     }
     if (m_num_args_range.is_exact()) {
       stream << m_num_args_range.get_min();
@@ -773,7 +777,7 @@ private:
 
   void throw_required_arg_not_used_error() const {
     std::stringstream stream;
-    stream << m_names[0] << ": required.";
+    stream << m_names.front() << ": required.";
     throw std::runtime_error(stream.str());
   }
 
@@ -1102,6 +1106,21 @@ public:
     return *this;
   }
 
+  explicit operator bool() const {
+    auto arg_used = std::any_of(m_argument_map.cbegin(),
+                                m_argument_map.cend(),
+                                [](auto &it) {
+                                    return it.second->m_is_used;
+                                });
+    auto subparser_used = std::any_of(m_subparser_used.cbegin(),
+                                      m_subparser_used.cend(),
+                                      [](auto &it) {
+                                          return it.second;
+                                      });
+
+    return m_is_parsed && (arg_used || subparser_used);
+  }
+
   // Parameter packing
   // Call add_argument with variadic number of string arguments
   template <typename... Targs> Argument &add_argument(Targs... f_args) {
@@ -1236,11 +1255,16 @@ public:
     return (*this)[arg_name].m_is_used;
   }
 
-  /* Getter that returns true for user-supplied options. Returns false if not
-   * user-supplied, even with a default value.
+  /* Getter that returns true if a subcommand is used.
    */
   auto is_subcommand_used(std::string_view subcommand_name) const {
     return m_subparser_used.at(subcommand_name);
+  }
+
+  /* Getter that returns true if a subcommand is used.
+   */
+  auto is_subcommand_used(const ArgumentParser &subparser) const {
+    return is_subcommand_used(subparser.m_program_name);
   }
 
   /* Indexing operator. Return a reference to an Argument object
@@ -1341,9 +1365,9 @@ public:
 
     // Add any options inline here
     for (const auto &argument : this->m_optional_arguments) {
-      if (argument.m_names[0] == "-v") {
+      if (argument.m_names.front() == "-v") {
         continue;
-      } else if (argument.m_names[0] == "-h") {
+      } else if (argument.m_names.front() == "-h") {
         stream << " [-h]";
       } else {
         stream << " " << argument.get_inline_usage();
@@ -1642,11 +1666,11 @@ private:
   bool m_is_parsed = false;
   std::list<Argument> m_positional_arguments;
   std::list<Argument> m_optional_arguments;
-  std::map<std::string_view, argument_it, std::less<>> m_argument_map;
+  std::map<std::string_view, argument_it> m_argument_map;
   std::string m_parser_path;
   std::list<std::reference_wrapper<ArgumentParser>> m_subparsers;
-  std::map<std::string_view, argument_parser_it, std::less<>> m_subparser_map;
-  std::map<std::string_view, bool, std::less<>> m_subparser_used;
+  std::map<std::string_view, argument_parser_it> m_subparser_map;
+  std::map<std::string_view, bool> m_subparser_used;
 };
 
 } // namespace argparse

@@ -38,6 +38,7 @@
      *    [Parent Parsers](#parent-parsers)
      *    [Subcommands](#subcommands)
      *    [Parse Known Args](#parse-known-args)
+     *    [ArgumentParser in bool Context](#argumentparser-in-bool-context)
      *    [Custom Prefix Characters](#custom-prefix-characters)
      *    [Custom Assignment Characters](#custom-assignment-characters)
 *    [Further Examples](#further-examples)
@@ -824,7 +825,7 @@ Subcommands:
 
 When a help message is requested from a subparser, only the help for that particular parser will be printed. The help message will not include parent parser or sibling parser messages.
 
-Additionally, every parser has a `.is_subcommand_used("<command_name>")` member function to check if a subcommand was used. 
+Additionally, every parser has the `.is_subcommand_used("<command_name>")` and `.is_subcommand_used(subparser)` member functions to check if a subcommand was used. 
 
 ### Parse Known Args
 
@@ -848,7 +849,13 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-### Custom Prefix Characters 
+### ArgumentParser in bool Context
+
+An `ArgumentParser` is `false` until it (or one of its subparsers) have extracted
+known value(s) with `.parse_args` or `.parse_known_args`. When using `.parse_known_args`,
+unknown arguments will not make a parser `true`.
+
+### Custom Prefix Characters
 
 Most command-line options will use `-` as the prefix, e.g. `-f/--foo`. Parsers that need to support different or additional prefix characters, e.g. for options like `+f` or `/foo`, may specify them using the `set_prefix_chars()`.
 
@@ -1092,7 +1099,7 @@ foo@bar:/home/dev/$ ./test --bar=BAR --foo
 Use the latest argparse in your CMake project without copying any content.  
 
 ```cmake
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.14)
 
 PROJECT(myproject)
 
