@@ -228,22 +228,6 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad )
     }
 
     // slotted hole
-    double angle_offset = 0.0;
-    double rad;  // radius of the slot
-    double hlen; // half length of the slot
-
-    if( aPad->GetDrillSize().x < aPad->GetDrillSize().y )
-    {
-        angle_offset = M_PI_2;
-        rad = aPad->GetDrillSize().x * 0.5;
-        hlen = aPad->GetDrillSize().y * 0.5 - rad;
-    }
-    else
-    {
-        rad = aPad->GetDrillSize().y * 0.5;
-        hlen = aPad->GetDrillSize().x * 0.5 - rad;
-    }
-
     SHAPE_POLY_SET holeOutlines;
     if( !aPad->TransformHoleToPolygon( holeOutlines, 0, m_maxError, ERROR_INSIDE ) )
     {

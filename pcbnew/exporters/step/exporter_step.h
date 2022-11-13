@@ -45,8 +45,8 @@ public:
             m_useDrillOrigin( false ),
             m_includeExcludedBom( true ),
             m_substModels( true ),
-            m_boardOnly( false ),
-            m_minDistance( 0.00001 ) {};
+            m_minDistance( STEPEXPORT_MIN_DISTANCE ),
+            m_boardOnly( false ) {};
 
     wxString m_outputFile;
 
@@ -58,8 +58,7 @@ public:
     bool     m_includeExcludedBom;
     bool     m_substModels;
     double   m_minDistance;
-
-    bool m_boardOnly;
+    bool     m_boardOnly;
 };
 
 class EXPORTER_STEP
