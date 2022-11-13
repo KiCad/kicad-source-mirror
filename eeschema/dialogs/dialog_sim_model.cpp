@@ -231,7 +231,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             m_curModelTypeOfDeviceType[deviceType] = type;
     }
 
-    m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
     m_inferCheckbox->SetValue( curModel().IsInferred() );
 
@@ -300,8 +299,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateWidgets()
 {
-    m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
-
     updateIbisWidgets();
     updateInstanceWidgets();
     updateModelParamsTab();
@@ -335,7 +332,6 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
     m_ibisPinCombobox->Show( isIbisLoaded() );
     m_ibisModelLabel->Show( isIbisLoaded() );
     m_ibisPinLabel->Show( isIbisLoaded() );
-    m_overrideCheckbox->Show( !isIbisLoaded() );
 
     m_differentialCheckbox->Show( isIbisLoaded() && modelkibis && modelkibis->CanDifferential() );
 
@@ -434,15 +430,10 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         m_paramGrid->Expand( "Waveform" );
     }
 
-    // Either enable all properties or disable all except the principal ones.
     // Set all properties to default colors.
+    // Update properties in models that have autofill.
     for( wxPropertyGridIterator it = m_paramGrid->GetIterator(); !it.AtEnd(); ++it )
     {
-        SIM_PROPERTY* prop = dynamic_cast<SIM_PROPERTY*>( *it );
-
-        if( !prop )
-            continue;
-
         wxColour bgCol = m_paramGrid->GetGrid()->GetPropertyDefaultCell().GetBgCol();
         wxColour fgCol = m_paramGrid->GetGrid()->GetPropertyDefaultCell().GetFgCol();
 
@@ -452,6 +443,11 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
             ( *it )->GetCell( col ).SetFgCol( fgCol );
         }
 
+        SIM_PROPERTY* prop = dynamic_cast<SIM_PROPERTY*>( *it );
+
+        if( !prop )
+            continue;
+
         const SIM_MODEL::PARAM& param = prop->GetParam();
 
         // Model values other than the currently edited value may have changed. Update them.
@@ -459,13 +455,6 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         // models that don't have it for performance reasons.
         if( curModel().HasAutofill() )
             ( *it )->SetValueFromString( param.value->ToString() );
-
-        // Most of the values are disabled when the override checkbox is unchecked.
-        ( *it )->Enable( isIbisLoaded()
-                            || m_useInstanceModelRadioButton->GetValue()
-                            || ( param.info.isInstanceParam
-                                   && param.info.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL )
-                            || m_overrideCheckbox->GetValue() );
     }
 }
 
@@ -857,13 +846,6 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 
     prop->SetCell( PARAM_COLUMN::TYPE, typeStr );
 
-    if( m_useLibraryModelRadioButton->GetValue()
-        && !m_overrideCheckbox->GetValue()
-        && !param.info.isInstanceParam )
-    {
-        prop->Enable( false );
-    }
-
     return prop;
 }
 
@@ -960,7 +942,6 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
     m_browseButton->Enable( fromLibrary );
     m_modelNameLabel->Enable( fromLibrary );
     m_modelNameCombobox->Enable( fromLibrary );
-    m_overrideCheckbox->Enable( fromLibrary );
     m_ibisPinLabel->Enable( fromLibrary );
     m_ibisPinCombobox->Enable( fromLibrary );
     m_differentialCheckbox->Enable( fromLibrary );
@@ -1098,12 +1079,6 @@ void DIALOG_SIM_MODEL<T>::onIbisModelComboboxTextEnter( wxCommandEvent& aEvent )
             m_ibisModelCombobox->FindString( m_ibisModelCombobox->GetValue() ) );
 
     onIbisPinCombobox( aEvent );
-}
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onOverrideCheckbox( wxCommandEvent& aEvent )
-{
-    updateWidgets();
 }
 
 template <typename T>

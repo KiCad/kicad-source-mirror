@@ -121,7 +121,6 @@ private:
     void onIbisPinComboboxTextEnter( wxCommandEvent& event ) override;
     void onIbisModelCombobox( wxCommandEvent& event ) override;
     void onIbisModelComboboxTextEnter( wxCommandEvent& event ) override;
-    void onOverrideCheckbox( wxCommandEvent& aEvent ) override;
     void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
     void onTypeChoice( wxCommandEvent& aEvent ) override;
     void onParamGridChanged( wxPropertyGridEvent& aEvent ) override;

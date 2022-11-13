@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,7 +60,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_browseButton;
 		wxStaticText* m_modelNameLabel;
 		wxComboBox* m_modelNameCombobox;
-		wxCheckBox* m_overrideCheckbox;
 		wxStaticText* m_ibisPinLabel;
 		wxComboBox* m_ibisPinCombobox;
 		wxCheckBox* m_differentialCheckbox;
@@ -97,7 +96,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onModelNameComboboxKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onModelNameComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModelNameComboboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onOverrideCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisPinLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onIbisPinCombobox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisPinComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
