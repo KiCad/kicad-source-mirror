@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,8 +149,7 @@ bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
         {
             // FindRow() can throw an exception
             const FP_LIB_TABLE_ROW* fpRow =
-                    m_board->GetProject()->PcbFootprintLibs()->FindRow(
-                            libraryName, false );
+                    m_board->GetProject()->PcbFootprintLibs()->FindRow( libraryName, false );
 
             if( fpRow )
                 footprintBasePath = fpRow->GetFullURI( true );
@@ -290,13 +289,18 @@ void EXPORTER_STEP::determinePcbThickness()
         {
             switch( item->GetType() )
             {
-            case BS_ITEM_TYPE_DIELECTRIC: thickness += item->GetThickness(); break;
+            case BS_ITEM_TYPE_DIELECTRIC:
+                thickness += item->GetThickness();
+                break;
 
             case BS_ITEM_TYPE_COPPER:
                 if( item->IsEnabled() )
                     thickness += item->GetThickness();
 
-            default: break;
+                break;
+
+            default:
+                break;
             }
         }
 
@@ -317,6 +321,7 @@ bool EXPORTER_STEP::Export()
     try
     {
         ReportMessage( _( "Build STEP data\n" ) );
+
         if( !composePCB() )
         {
             ReportMessage( _( "\n** Error building STEP board model. Export aborted. **\n" ) );
@@ -324,6 +329,7 @@ bool EXPORTER_STEP::Export()
         }
 
         ReportMessage( _( "Writing STEP file\n" ) );
+
         if( !m_pcbModel->WriteSTEP( m_outputFile ) )
         {
             ReportMessage( _( "\n** Error writing STEP file. **\n" ) );
