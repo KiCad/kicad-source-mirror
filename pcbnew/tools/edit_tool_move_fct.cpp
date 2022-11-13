@@ -241,46 +241,6 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 }
 
 
-int EDIT_TOOL::MoveIndividually( const TOOL_EVENT& aEvent )
-{
-    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-
-    if( isRouterActive() )
-    {
-        wxBell();
-        return 0;
-    }
-
-    EDA_ITEMS sortedItems = selTool->GetSelection().GetItemsSortedBySelectionOrder();
-
-    if( sortedItems.size() == 0 )
-        return 0;
-
-    for( EDA_ITEM* item : sortedItems )
-    {
-        selTool->ClearSelection();
-        selTool->AddItemToSel( item );
-        doMoveSelection( aEvent );
-    }
-
-    selTool->AddItemsToSel( &sortedItems );
-
-    return 0;
-}
-
-
-int EDIT_TOOL::MoveWithReference( const TOOL_EVENT& aEvent )
-{
-    if( isRouterActive() )
-    {
-        wxBell();
-        return 0;
-    }
-
-    return doMoveSelection( aEvent, true );
-}
-
-
 VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSourceBBox,
                                      const VECTOR2D& aBBoxOffset )
 {
@@ -315,13 +275,19 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 }
 
 
-int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
+int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent )
 {
+    bool moveWithReference = aEvent.IsAction( &PCB_ACTIONS::moveWithReference );
+    bool moveIndividually = aEvent.IsAction( &PCB_ACTIONS::moveIndividually );
+
     PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     PCBNEW_SETTINGS*      cfg = editFrame->GetPcbNewSettings();
     BOARD*                board = editFrame->GetBoard();
     KIGFX::VIEW_CONTROLS* controls  = getViewControls();
     VECTOR2I              originalCursorPos = controls->GetCursorPosition();
+    STATUS_TEXT_POPUP     statusPopup( frame() );
+    wxString              status;
+    size_t                itemIdx = 0;
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. KiCad old-style hover selection)
@@ -368,21 +334,37 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     controls->SetAutoPan( true );
     controls->ForceCursorPosition( false );
 
-    if( aPickReference && !pickReferencePoint( _( "Select reference point for move..." ), "", "",
-                                               pickedReferencePoint ) )
-    {
-        if( is_hover )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-        editFrame->PopTool( aEvent );
-        return 0;
-    }
-
     auto displayConstraintsMessage =
             [editFrame]( bool constrained )
             {
                 editFrame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" )
                                                               : wxT( "" ) );
+            };
+
+    auto updateStatusPopup =
+            [&]( EDA_ITEM* item, size_t ii, size_t count )
+            {
+                wxString status = _( "Click to place %s (item %ld of %ld)\n"
+                                     "Press <esc> to cancel all; double-click to finish" );
+                wxString msg;
+
+                if( item->Type() == PCB_FOOTPRINT_T )
+                {
+                    FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+                    msg = fp->GetReference();
+                }
+                else if( item->Type() == PCB_PAD_T )
+                {
+                    PAD*       pad = static_cast<PAD*>( item );
+                    FOOTPRINT* fp = static_cast<FOOTPRINT*>( pad->GetParentFootprint() );
+                    msg = wxString::Format( _( "%s pad %s" ), fp->GetReference(), pad->GetNumber() );
+                }
+                else
+                {
+                    msg = item->GetTypeDesc().Lower();
+                }
+
+                statusPopup.SetText( wxString::Format( status, msg, ii, count ) );
             };
 
     std::vector<BOARD_ITEM*> sel_items;         // All the items operated on by the move below
@@ -410,6 +392,35 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
             // so that it was skipped in the initial connectivity update in OnNetlistChanged
             footprint->SetAttributes( footprint->GetAttributes() & ~FP_JUST_ADDED );
         }
+    }
+
+    if( moveWithReference && !pickReferencePoint( _( "Select reference point for move..." ), "", "",
+                                                  pickedReferencePoint ) )
+    {
+        if( is_hover )
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+        editFrame->PopTool( aEvent );
+        return 0;
+    }
+
+    if( moveIndividually )
+    {
+        orig_items.clear();
+
+        for( EDA_ITEM* item : selection.GetItemsSortedBySelectionOrder() )
+            orig_items.push_back( static_cast<BOARD_ITEM*>( item ) );
+
+        updateStatusPopup( orig_items[ itemIdx ], itemIdx + 1, orig_items.size() );
+        statusPopup.Popup();
+        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        canvas()->SetStatusPopup( statusPopup.GetPanel() );
+
+        m_selectionTool->ClearSelection();
+        m_selectionTool->AddItemToSel( orig_items[ itemIdx ] );
+
+        sel_items.clear();
+        sel_items.push_back( orig_items[ itemIdx ] );
     }
 
     bool            restore_state = false;
@@ -624,22 +635,18 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                 }
                 else
                 {
-                    std::vector<BOARD_ITEM*> items;
-
-                    for( EDA_ITEM* item : selection )
+                    for( BOARD_ITEM* item : sel_items )
                     {
-                        items.push_back( static_cast<BOARD_ITEM*>( item ) );
-
                         if( showCourtyardConflicts && item->Type() == PCB_FOOTPRINT_T )
                             drc_on_move->m_FpInMove.push_back( static_cast<FOOTPRINT*>( item ) );
                     }
 
-                    m_cursor = grid.BestDragOrigin( originalCursorPos, items,
+                    m_cursor = grid.BestDragOrigin( originalCursorPos, sel_items,
                                                     &m_selectionTool->GetFilter() );
 
                     // Set the current cursor position to the first dragged item origin, so the
                     // movement vector could be computed later
-                    if( aPickReference )
+                    if( moveWithReference )
                     {
                         selection.SetReferencePoint( pickedReferencePoint );
                         controls->ForceCursorPosition( true, pickedReferencePoint );
@@ -667,6 +674,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                 controls->SetAutoPan( true );
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             }
+
+            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
             m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false, new VECTOR2I( movement ) );
         }
@@ -723,7 +732,31 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                 eatFirstMouseUp = false;
                 continue;
             }
+            else if( moveIndividually && m_dragging )
+            {
+                if( ++itemIdx < orig_items.size() )
+                {
+                    m_selectionTool->ClearSelection();
+                    m_selectionTool->AddItemToSel( orig_items[ itemIdx ] );
+                    selection.ClearReferencePoint();
 
+                    sel_items.clear();
+                    sel_items.push_back( orig_items[ itemIdx ] );
+                    updateStatusPopup( orig_items[ itemIdx ], itemIdx + 1, orig_items.size() );
+
+                    // Pick up new item
+                    m_dragging = false;
+                    controls->ForceCursorPosition( false );
+                    m_toolMgr->RunAction( PCB_ACTIONS::move );
+
+                    continue;
+                }
+            }
+
+            break; // finish
+        }
+        else if( evt->IsDblClick( BUT_LEFT ) )
+        {
             break; // finish
         }
         else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )

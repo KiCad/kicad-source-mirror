@@ -81,11 +81,6 @@ public:
     int Move( const TOOL_EVENT& aEvent );
 
     /**
-     * Move a selection of items one-at-a-time.
-     */
-    int MoveIndividually( const TOOL_EVENT& aEvent );
-
-    /**
      * Invoke the PNS router to drag tracks or do an offline resizing of an arc track
      * if a single arc track is selected.
      */
@@ -151,11 +146,6 @@ public:
     int MoveExact( const TOOL_EVENT& aEvent );
 
     /**
-     * Move an item but with a reference point selected first
-     */
-    int MoveWithReference( const TOOL_EVENT& aEvent );
-
-    /**
      * Create an array of the selected items, invoking the array editor dialog to set the options.
      */
     int CreateArray( const TOOL_EVENT& aEvent );
@@ -197,7 +187,7 @@ private:
     bool invokeInlineRouter( int aDragMode );
     bool isRouterActive() const;
 
-    int doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference = false );
+    int doMoveSelection( const TOOL_EVENT& aEvent );
 
     VECTOR2I getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSourceBBox,
                               const VECTOR2D& aBBoxOffset );

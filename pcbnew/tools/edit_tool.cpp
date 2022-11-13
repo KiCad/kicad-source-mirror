@@ -2260,7 +2260,7 @@ void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::GetAndPlace,           PCB_ACTIONS::getAndPlace.MakeEvent() );
     Go( &EDIT_TOOL::Move,                  PCB_ACTIONS::move.MakeEvent() );
-    Go( &EDIT_TOOL::MoveIndividually,      PCB_ACTIONS::moveIndividually.MakeEvent() );
+    Go( &EDIT_TOOL::Move,                  PCB_ACTIONS::moveIndividually.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                  PCB_ACTIONS::drag45Degree.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                  PCB_ACTIONS::dragFreeAngle.MakeEvent() );
     Go( &EDIT_TOOL::Rotate,                PCB_ACTIONS::rotateCw.MakeEvent() );
@@ -2270,7 +2270,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Remove,                PCB_ACTIONS::deleteFull.MakeEvent() );
     Go( &EDIT_TOOL::Properties,            PCB_ACTIONS::properties.MakeEvent() );
     Go( &EDIT_TOOL::MoveExact,             PCB_ACTIONS::moveExact.MakeEvent() );
-    Go( &EDIT_TOOL::MoveWithReference,     PCB_ACTIONS::moveWithReference.MakeEvent() );
+    Go( &EDIT_TOOL::Move,                  PCB_ACTIONS::moveWithReference.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,             ACTIONS::duplicate.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,             PCB_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &EDIT_TOOL::CreateArray,           PCB_ACTIONS::createArray.MakeEvent() );

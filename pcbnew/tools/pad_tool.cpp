@@ -331,7 +331,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     setCursor();
 
     STATUS_TEXT_POPUP statusPopup( frame() );
-    wxString msg = _( "Click on pad %s%d\nPress <esc> to cancel or double-click to commit" );
+    wxString msg = _( "Click on pad %s%d\nPress <esc> to cancel all; double-click to finish" );
     statusPopup.SetText( wxString::Format( msg, padPrefix, seqPadNum ) );
     statusPopup.Popup();
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
@@ -448,8 +448,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( ( evt->IsKeyPressed() && evt->KeyCode() == WXK_RETURN ) ||
-                 evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsDblClick( BUT_LEFT ) )
         {
             commit.Push( _( "Renumber pads" ) );
             frame()->PopTool( aEvent );
