@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-08 17:02+0000\n"
+"PO-Revision-Date: 2022-11-14 16:47+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -11037,9 +11037,8 @@ msgid "Parameters"
 msgstr "Parametry"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:183
-#, fuzzy
 msgid "Code"
-msgstr "D-kódy:"
+msgstr "Kód"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:213
 msgid "Symbol Pin"
@@ -11059,9 +11058,8 @@ msgid "Exclude from simulation"
 msgstr "Vyloučit ze simulace"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Store in Reference and Value"
-msgstr "Referenční uzel"
+msgstr "Uložit v referenci a hodnotě"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:116
 msgid "Simulation Model Editor"
@@ -12325,15 +12323,13 @@ msgstr "Přerušované čáry"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:224
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
-#, fuzzy
 msgid "Dash length:"
-msgstr "Délka prokovu:"
+msgstr "Délka čárky:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:231
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
-#, fuzzy
 msgid "Gap length:"
-msgstr "Délka prokovu:"
+msgstr "Délka mezery:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:241
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
@@ -12743,9 +12739,8 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Různé pouzdra přiřazené k %s a %s"
 
 #: eeschema/erc.cpp:438
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
-msgstr "Vývody s příznakem \"nepřipojeno\" jsou připojeny"
+msgstr "Vývody typu \"nepřipojeno\" jsou připojeny"
 
 #: eeschema/erc.cpp:563
 #, c-format
@@ -12851,9 +12846,8 @@ msgid "More than one name given to this bus or net"
 msgstr "Více než jedno jméno dané této sběrnici nebo síti"
 
 #: eeschema/erc_item.cpp:114
-#, fuzzy
 msgid "Conflicting netclass assignments"
-msgstr "Přiřazení pouzdra"
+msgstr "Konfliktní přiřazení třídy spojů"
 
 #: eeschema/erc_item.cpp:118
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -13218,9 +13212,8 @@ msgid "Unknown"
 msgstr "Neznámý"
 
 #: eeschema/hierarch.cpp:248
-#, fuzzy
 msgid "Edit Page Number"
-msgstr "Upravit číslo stránky listu"
+msgstr "Upravit číslo stránky"
 
 #: eeschema/hierarch.cpp:259 eeschema/tools/sch_edit_tool.cpp:2296
 #, c-format
@@ -13326,9 +13319,8 @@ msgid "Graphic Text '%s'"
 msgstr "Text '%s'"
 
 #: eeschema/lib_textbox.cpp:361 eeschema/sch_textbox.cpp:368
-#, fuzzy
 msgid "Graphic Text Box"
-msgstr "Text"
+msgstr "Grafické textové pole"
 
 #: eeschema/lib_textbox.cpp:455 eeschema/sch_label.cpp:866
 #: eeschema/sch_text.cpp:497 eeschema/sch_textbox.cpp:443
@@ -13337,15 +13329,13 @@ msgstr "Tučná kurzíva"
 
 #: eeschema/lib_textbox.cpp:461 eeschema/sch_textbox.cpp:449
 #: pcbnew/fp_textbox.cpp:318 pcbnew/pcb_textbox.cpp:313
-#, fuzzy
 msgid "Box Width"
-msgstr "Text Šířka"
+msgstr "Šířka pole"
 
 #: eeschema/lib_textbox.cpp:464 eeschema/sch_textbox.cpp:452
 #: pcbnew/fp_textbox.cpp:321 pcbnew/pcb_textbox.cpp:316
-#, fuzzy
 msgid "Box Height"
-msgstr "Text Výška"
+msgstr "Výška pole"
 
 #: eeschema/libarch.cpp:101
 #, c-format
@@ -15176,29 +15166,29 @@ msgid ""
 msgstr ""
 
 #: eeschema/sim/sim_model_kibis.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "Nelze najít vlastní plošku '%s'."
+msgstr "Nelze najít komponentu IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "Nelze najít vlastní plošku '%s'."
+msgstr "Nelze najít IBIS vývod '%s' v komponentě '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Neplatný index vývodu symbolu: '%s'"
+msgstr "Neplatný IBIS vývod '%s' v komponentě '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "Nelze najít vlastní plošku '%s'."
+msgstr "Nelze najít model IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Neplatný index vývodu symbolu: '%s'"
+msgstr "Neplatný IBIS model '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:298
 msgid "Power supply"
@@ -16344,9 +16334,8 @@ msgid "Rename Symbol..."
 msgstr "Přejmenovat symbol..."
 
 #: eeschema/tools/ee_actions.cpp:142
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "Aktualizovat vybraný symbol(y)"
+msgstr "Přejmenovat vybraný symbol"
 
 #: eeschema/tools/ee_actions.cpp:147
 msgid "Save the current symbol to a different library."
@@ -16405,14 +16394,12 @@ msgid "Annotate pins with their electrical types"
 msgstr "Zobrazit elektrický typ vývodu"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Show Pin Numbers"
-msgstr "Zobrazit číslo vývodu"
+msgstr "Zobrazit čísla vývodů"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "Zobrazit elektrický typ vývodu"
+msgstr "vývody podle jejich čísel"
 
 #: eeschema/tools/ee_actions.cpp:206
 msgid "Show Symbol Tree"
@@ -16577,9 +16564,8 @@ msgid "Add Net Class Directive"
 msgstr "Přidat směrnici Třídy spojů"
 
 #: eeschema/tools/ee_actions.cpp:324
-#, fuzzy
 msgid "Add a net class directive label"
-msgstr "Přidat označení sítě"
+msgstr "Přidá příznak popisující směrnici pro danou síť"
 
 #: eeschema/tools/ee_actions.cpp:330
 msgid "Add Hierarchical Label"
@@ -16618,9 +16604,8 @@ msgid "Add text"
 msgstr "Přidat text"
 
 #: eeschema/tools/ee_actions.cpp:363
-#, fuzzy
 msgid "Add a text box"
-msgstr "Přidat text"
+msgstr "Přidat textové pole"
 
 #: eeschema/tools/ee_actions.cpp:368 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
@@ -16708,9 +16693,8 @@ msgid "Swap"
 msgstr "Prohodit"
 
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/pcb_actions.cpp:342
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "Otočí vybranou položku(y) ve směru hodinových ručiček"
+msgstr "Prohodí pozice vybraných položek"
 
 #: eeschema/tools/ee_actions.cpp:435 pcbnew/tools/pcb_actions.cpp:369
 msgid "Properties..."
@@ -16786,9 +16770,8 @@ msgid "Assign Netclass..."
 msgstr "Přiřadit třídu spojů..."
 
 #: eeschema/tools/ee_actions.cpp:488 pcbnew/tools/pcb_actions.cpp:699
-#, fuzzy
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "Přiřadit třídu spojů k vybranému drátu sítě"
+msgstr "Přiřadit třídu spojů sítím odpovídajícím vzoru"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "De Morgan Conversion"
@@ -16823,14 +16806,12 @@ msgid "Change existing item to a label"
 msgstr "Změnit existující položku na označení"
 
 #: eeschema/tools/ee_actions.cpp:513
-#, fuzzy
 msgid "Change to Directive Label"
-msgstr "Změnit na hierarchické označení"
+msgstr "Změna na popisek směrnice"
 
 #: eeschema/tools/ee_actions.cpp:513
-#, fuzzy
 msgid "Change existing item to a directive label"
-msgstr "Změnit existující položku na označení"
+msgstr "Mění stávající prvek na štítek se směrnicí"
 
 #: eeschema/tools/ee_actions.cpp:518
 msgid "Change to Hierarchical Label"
@@ -16857,14 +16838,12 @@ msgid "Change existing item to a text comment"
 msgstr "Změnit existující položku na textový komentář"
 
 #: eeschema/tools/ee_actions.cpp:533
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "Změnit na text"
+msgstr "Změnit na textové pole"
 
 #: eeschema/tools/ee_actions.cpp:533
-#, fuzzy
 msgid "Change existing item to a text box"
-msgstr "Změnit existující položku na textový komentář"
+msgstr "Změní existující položku na textové pole"
 
 #: eeschema/tools/ee_actions.cpp:538
 msgid "Cleanup Sheet Pins"
@@ -17091,9 +17070,8 @@ msgid "Select on PCB"
 msgstr "Vybrat na DPS"
 
 #: eeschema/tools/ee_actions.cpp:696
-#, fuzzy
 msgid "Select corresponding items in PCB editor"
-msgstr "Zvýraznit odpovídající položky v editoru DPS"
+msgstr "Vybrat odpovídající položky v editoru DPS"
 
 #: eeschema/tools/ee_actions.cpp:701
 msgid "Show Hidden Pins"
@@ -17163,9 +17141,8 @@ msgid "Switch to next line mode"
 msgstr "Přepněte na další mřížku"
 
 #: eeschema/tools/ee_actions.cpp:745
-#, fuzzy
 msgid "Annotate Automatically"
-msgstr "Nastavit automaticky"
+msgstr "Automatické očíslování"
 
 #: eeschema/tools/ee_actions.cpp:745
 msgid "Toggle automatic annotation of new parts symbols"
@@ -17677,7 +17654,6 @@ msgstr ""
 "Původní knihovna již nebude použitelná."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:49
-#, fuzzy
 msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
@@ -17686,17 +17662,20 @@ msgid ""
 msgstr ""
 "Přidat nový záznam do tabulky globální knihovny symbolů.\n"
 "\n"
-"Logický název v tabulce knihoven symbolů je přidána přípona\n"
-"s celým číslem, která neposkytuje žádné duplikáty v tabulkách."
+"Přezdívka tabulky knihovny symbolů je celočíselná přípona\n"
+"pro zabránění duplicitních položek tabulky."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:55
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
-msgstr "Přidat novou položku do tabulky knihoven symbolů projektu."
+msgstr ""
+"Přidat novou položku do tabulky symbolů knihovny projektu.\n"
+"\n"
+"Přezdívka tabulky knihovny symbolů je celočíselná přípona\n"
+"pro zabránění duplicitních položek tabulky."
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
@@ -19314,9 +19293,8 @@ msgid "Install from File..."
 msgstr "Instalovat ze souboru..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "Otevřít adresář pluginu"
+msgstr "Otevřete adresář balíčků"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -19475,9 +19453,8 @@ msgid "Check for package updates on startup"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:28
-#, fuzzy
 msgid "Library package handling"
-msgstr "Změny v knihovně nejsou uloženy"
+msgstr "Správa balíčků knihoven"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
 msgid "Automatically add installed libraries to global lib table"
@@ -19489,9 +19466,8 @@ msgid "Automatically remove uninstalled libraries"
 msgstr "Automaticky vytvořené spoje"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Chyba aliasu knihovny"
+msgstr "Předpona přezdívky knihovny:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
@@ -23483,10 +23459,9 @@ msgstr "Předpona pro horní stranu:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:244
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
 msgstr ""
-"Volitelná předpona pro reference schématu na straně součástek (např.F_)"
+"Volitelná předpona pro reference schématu na straně součástek (např. F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
 msgid "Back prefix:"
@@ -23497,7 +23472,7 @@ msgstr "Předpona pro spodní stranu:"
 #, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
 msgstr ""
-"Volitelná předpona pro reference schématu na straně součástek (např.F_)"
+"Volitelná předpona pro reference schématu na straně součástek (např. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Exclude locked footprints"
@@ -28829,9 +28804,8 @@ msgid "Track & Via Properties"
 msgstr "Spoje & prokovy Vlastnosti"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
-#, fuzzy
 msgid "Track and Via Dimensions"
-msgstr "Spoje a rozměry prokovů:"
+msgstr "Spoje a prokovy Rozměry"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:150
 msgid "Set Unused Pad Properties"
@@ -31183,9 +31157,8 @@ msgid "Footprint doesn't match copy in library"
 msgstr "Editor pouzder - Vytvoření/úprava pouzder"
 
 #: pcbnew/drc/drc_item.cpp:197
-#, fuzzy
 msgid "Assertion failure"
-msgstr "Průřez:"
+msgstr "Selhání tvrzení"
 
 #: pcbnew/drc/drc_item.cpp:201
 #, fuzzy
@@ -32700,9 +32673,8 @@ msgid "Component: Invalid Package."
 msgstr "Hodnota součástky"
 
 #: pcbnew/ibis/ibis_parser.cpp:250
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Součástka:"
+msgstr "Součástka: bez vývodu"
 
 #: pcbnew/ibis/ibis_parser.cpp:347
 msgid "Cannot interpolate the current based on this IV table."
@@ -32741,9 +32713,8 @@ msgid "Checking model "
 msgstr "Kontrola modelů "
 
 #: pcbnew/ibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Nedefinované vrstvy:"
+msgstr "Nedefinovaný typ modelu"
 
 #: pcbnew/ibis/ibis_parser.cpp:455
 #, fuzzy
@@ -32867,15 +32838,15 @@ msgstr "Očekává se číslo."
 
 #: pcbnew/ibis/ibis_parser.cpp:644
 msgid "Resistance matrix is incorrect"
-msgstr ""
+msgstr "Matice odporu je nesprávná"
 
 #: pcbnew/ibis/ibis_parser.cpp:652
 msgid "Capacitance matrix is undefined"
-msgstr ""
+msgstr "Matice kapacity není definována"
 
 #: pcbnew/ibis/ibis_parser.cpp:658
 msgid "Capacitance matrix is incorrect"
-msgstr ""
+msgstr "Matice kapacity je nesprávná"
 
 #: pcbnew/ibis/ibis_parser.cpp:664
 msgid "Capacitance matrix is nullptr"
@@ -33095,9 +33066,8 @@ msgid "Internal error: Bad parser context."
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:2495
-#, fuzzy
 msgid "Missing keyword."
-msgstr "Klíčová slova aliasu:"
+msgstr "Chybí klíčové slovo."
 
 #: pcbnew/ibis/kibis.cpp:420
 #, fuzzy
