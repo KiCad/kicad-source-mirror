@@ -53,7 +53,14 @@ bool NETLIST_EXPORTER_XML::WriteNetlist( const wxString& aOutFileName, unsigned 
         return false;
 
     wxXmlDocument       xdoc;
-    xdoc.SetRoot( makeRoot( GNL_ALL | aNetlistOptions ) );
+
+    unsigned aCtl = aNetlistOptions;
+    if( aNetlistOptions & GNL_OPT_BOM )
+        aCtl |= ( GNL_SYMBOLS | GNL_HEADER );
+    else
+        aCtl |= GNL_ALL;
+
+    xdoc.SetRoot( makeRoot( aCtl ) );
 
     return xdoc.Save( stream, 2 /* indent bug, today was ignored by wxXml lib */ );
 }
