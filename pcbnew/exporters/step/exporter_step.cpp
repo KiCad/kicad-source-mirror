@@ -164,7 +164,7 @@ bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
     // Dump the pad holes into the PCB
     for( PAD* pad : aFootprint->Pads() )
     {
-        if( m_pcbModel->AddPadHole( pad ) )
+        if( m_pcbModel->AddPadHole( pad, aOrigin ) )
             hasdata = true;
     }
 
@@ -266,7 +266,7 @@ bool EXPORTER_STEP::composePCB()
 
     ReportMessage( wxT( "Create PCB solid model\n" ) );
 
-    if( !m_pcbModel->CreatePCB( pcbOutlines ) )
+    if( !m_pcbModel->CreatePCB( pcbOutlines, origin ) )
     {
         ReportMessage( wxT( "could not create PCB solid model\n" ) );
         return false;

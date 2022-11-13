@@ -208,7 +208,7 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
 }
 
 
-bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad )
+bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
 {
     if( NULL == aPad || !aPad->GetDrillSize().x )
         return false;
@@ -220,8 +220,9 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad )
         TopoDS_Shape s =
                 BRepPrimAPI_MakeCylinder( pcbIUScale.IUTomm( aPad->GetDrillSize().x ) * 0.5, m_thickness * 2.0 ).Shape();
         gp_Trsf shift;
-        shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( pos.x ), -pcbIUScale.IUTomm( pos.y ),
-                                      -m_thickness * 0.5 ) );
+        shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( pos.x - aOrigin.x ),
+                                          -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
+                                          -m_thickness * 0.5 ) );
         BRepBuilderAPI_Transform hole( s, shift );
         m_cutouts.push_back( hole.Shape() );
         return true;
@@ -238,7 +239,7 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad )
 
     if( holeOutlines.OutlineCount() > 0 )
     {
-        if( MakeShape( hole, holeOutlines.COutline( 0 ), m_thickness ) )
+        if( MakeShape( hole, holeOutlines.COutline( 0 ), m_thickness, aOrigin ) )
         {
             m_cutouts.push_back( hole );
         }
@@ -337,7 +338,8 @@ void STEP_PCB_MODEL::SetMinDistance( double aDistance )
 }
 
 
-bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain, double aThickness )
+bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
+                                double aThickness, const VECTOR2D& aOrigin )
 {
     if( !aShape.IsNull() )
         return false; // there is already data in the shape object
@@ -351,16 +353,19 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
 
     for( int j = 0; j < aChain.PointCount(); j++ )
     {
-        gp_Pnt start = gp_Pnt( pcbIUScale.IUTomm(aChain.CPoint( j ).x ), -pcbIUScale.IUTomm( aChain.CPoint( j ).y ), 0.0 );
+        gp_Pnt start = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( j ).x - aOrigin.x ),
+                               -pcbIUScale.IUTomm( aChain.CPoint( j ).y - aOrigin.y ), 0.0 );
 
         gp_Pnt end;
         if( j >= aChain.PointCount() )
         {
-            end = gp_Pnt( pcbIUScale.IUTomm(aChain.CPoint( 0 ).x), -pcbIUScale.IUTomm(aChain.CPoint( 0 ).y ), 0.0 );
+            end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
+                          -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), 0.0 );
         }
         else
         {
-            end = gp_Pnt( pcbIUScale.IUTomm(aChain.CPoint( j + 1 ).x), -pcbIUScale.IUTomm(aChain.CPoint( j + 1 ).y ), 0.0 );
+            end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( j + 1 ).x - aOrigin.x ),
+                          -pcbIUScale.IUTomm( aChain.CPoint( j + 1 ).y - aOrigin.y ), 0.0 );
         }
 
         try
@@ -403,7 +408,7 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
 }
 
 
-bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline )
+bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 {
     if( m_hasPCB )
     {
@@ -420,7 +425,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline )
     {
         const SHAPE_LINE_CHAIN& outline = aOutline.COutline( cnt );
 
-        if( !MakeShape( board, outline, m_thickness ) )
+        if( !MakeShape( board, outline, m_thickness, aOrigin ) )
         {
             // error
         }
@@ -431,7 +436,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline )
             const SHAPE_LINE_CHAIN& holeOutline = aOutline.Hole( cnt, ii );
             TopoDS_Shape hole;
 
-            if( MakeShape( hole, holeOutline, m_thickness ) )
+            if( MakeShape( hole, holeOutline, m_thickness, aOrigin ) )
             {
                 m_cutouts.push_back( hole );
             }

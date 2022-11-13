@@ -60,7 +60,7 @@ public:
     virtual ~STEP_PCB_MODEL();
 
     // add a pad hole or slot (must be in final position)
-    bool AddPadHole( const PAD* aPad );
+    bool AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin );
 
     // add a component at the given position and orientation
     bool AddComponent( const std::string& aFileName, const std::string& aRefDes, bool aBottom,
@@ -81,9 +81,10 @@ public:
     void SetMaxError( int aMaxError ) { m_maxError = aMaxError; }
 
     // create the PCB model using the current outlines and drill holes
-    bool CreatePCB( SHAPE_POLY_SET& aOutline );
+    bool CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin );
 
-    bool MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& chain, double aThickness );
+    bool MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& chain, double aThickness,
+                    const VECTOR2D& aOrigin );
 
 #ifdef SUPPORTS_IGES
     // write the assembly model in IGES format
