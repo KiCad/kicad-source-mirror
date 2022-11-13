@@ -41,6 +41,12 @@
 
 #include <wx/crt.h>
 
+#define OCC_VERSION_MIN 0x070500
+
+#if OCC_VERSION_HEX < OCC_VERSION_MIN
+#include <Message_Messenger.hxx>
+#endif
+
 #define DEFAULT_BOARD_THICKNESS 1.6
 
 void ReportMessage( const wxString& aMessage )
