@@ -1024,6 +1024,8 @@ int EE_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 
     m_multiple = false;
 
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
     return 0;
 }
 
@@ -1803,9 +1805,7 @@ void EE_SELECTION_TOOL::ClearSelection( bool aQuietMode )
 
     // Inform other potentially interested tools
     if( !aQuietMode )
-    {
         m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
-    }
 }
 
 

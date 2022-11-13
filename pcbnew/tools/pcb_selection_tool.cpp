@@ -1074,6 +1074,8 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : collection )
         select( item );
 
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
     m_frame->GetCanvas()->ForceRefresh();
 
     return 0;
@@ -1130,8 +1132,10 @@ int PCB_SELECTION_TOOL::unrouteSelected( const TOOL_EVENT& aEvent )
 
     // Reselect our footprint/pads as they were in our original selection
     for( EDA_ITEM* item : selectedItems )
+    {
         if( item->Type() == PCB_FOOTPRINT_T || item->Type() == PCB_PAD_T )
             select( item );
+    }
 
     return 0;
 }
@@ -1252,7 +1256,8 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
                 break;
             }
 
-            default: break;
+            default:
+                break;
             }
         }
 
@@ -1277,7 +1282,8 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
             activePts.push_back( { startItem->GetPosition(), startItem->GetLayerSet() } );
             break;
 
-        default: break;
+        default:
+            break;
         }
 
         bool expand = true;
@@ -1404,9 +1410,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
     }
 
     for( BOARD_CONNECTED_ITEM* item : cleanupItems )
-    {
         item->ClearFlags( SKIP_STRUCT );
-    }
 }
 
 
@@ -1622,6 +1626,7 @@ void PCB_SELECTION_TOOL::selectConnections( const std::vector<BOARD_ITEM*>& aIte
 
             break;
         }
+
         case PCB_PAD_T:
         {
             PAD* pad = static_cast<PAD*>( item );
@@ -1634,7 +1639,9 @@ void PCB_SELECTION_TOOL::selectConnections( const std::vector<BOARD_ITEM*>& aIte
 
             break;
         }
-        default: break;
+
+        default:
+            break;
         }
     }
 
@@ -1969,6 +1976,7 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
             }
             break;
         }
+
         default:
             select( aItem );
             m_frame->FocusOnLocation( aItem->GetPosition() );
