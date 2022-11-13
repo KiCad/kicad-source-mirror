@@ -233,7 +233,22 @@ int PGM_KICAD::OnPgmRun()
     catch( const std::runtime_error& err )
     {
         std::cout << err.what() << std::endl;
-        std::cout << argParser;
+
+        // find the correct argparser object to output the command usage info
+        COMMAND_ENTRY* cliCmd = nullptr;
+        for( COMMAND_ENTRY& entry : commandStack )
+        {
+            if( argParser.is_subcommand_used( entry.handler->GetName() ) )
+            {
+                cliCmd = recurseArgParserSubCommandUsed( argParser, entry );
+            }
+        }
+
+        if( cliCmd )
+            std::cout << cliCmd->handler->GetArgParser();
+        else
+            std::cout << argParser;
+
         return CLI::EXIT_CODES::ERR_ARGS;
     }
 
