@@ -81,6 +81,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     JOB_EXPORT_SCH_PDF* aPdfJob = dynamic_cast<JOB_EXPORT_SCH_PDF*>( aJob );
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aPdfJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+
+    if( sch == nullptr )
+    {
+        wxFprintf( stderr, _( "Failed to load schematic file\n" ) );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
     std::unique_ptr<KIGFX::SCH_RENDER_SETTINGS> renderSettings =
             std::make_unique<KIGFX::SCH_RENDER_SETTINGS>();
     InitRenderSettings( renderSettings.get(), aPdfJob->m_colorTheme, sch );
@@ -107,6 +114,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     JOB_EXPORT_SCH_SVG* aSvgJob = dynamic_cast<JOB_EXPORT_SCH_SVG*>( aJob );
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aSvgJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+
+    if( sch == nullptr )
+    {
+        wxFprintf( stderr, _( "Failed to load schematic file\n" ) );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
     std::unique_ptr<KIGFX::SCH_RENDER_SETTINGS> renderSettings =
             std::make_unique<KIGFX::SCH_RENDER_SETTINGS>();
     InitRenderSettings( renderSettings.get(), aSvgJob->m_colorTheme, sch );
@@ -133,6 +147,12 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     JOB_EXPORT_SCH_NETLIST* aNetJob = dynamic_cast<JOB_EXPORT_SCH_NETLIST*>( aJob );
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+
+    if( sch == nullptr )
+    {
+        wxFprintf( stderr, _( "Failed to load schematic file\n" ) );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -220,6 +240,12 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     JOB_EXPORT_SCH_BOM* aNetJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( aJob );
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+
+    if( sch == nullptr )
+    {
+        wxFprintf( stderr, _( "Failed to load schematic file\n" ) );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
