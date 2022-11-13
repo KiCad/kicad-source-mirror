@@ -211,12 +211,12 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
     else
     {
         // Write file header
-        sprintf( line, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
+        sprintf( line, "### Footprint positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
 
         buffer += line;
 
         wxString Title = GetBuildVersion();
-        sprintf( line, "### Printed by Pcbnew version %s\n", TO_UTF8( Title ) );
+        sprintf( line, "### Printed by KiCad version %s\n", TO_UTF8( Title ) );
         buffer += line;
 
         buffer +=  unit_text;
@@ -297,7 +297,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
     buffer += line;
 
     wxString Title = GetBuildVersion();
-    sprintf( line, "## Created by Pcbnew version %s\n", TO_UTF8( Title ) );
+    sprintf( line, "## Created by KiCad version %s\n", TO_UTF8( Title ) );
     buffer += line;
 
     buffer += unit_text;
