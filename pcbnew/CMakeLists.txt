@@ -673,6 +673,11 @@ make_lexer(
 
 # CMake <3.9 can't link anything to object libraries,
 # but we only need include directories, as we will link the kiface MODULE
+if( MINGW )
+    # at least on msys2, zlib must be added to gzip-hpp
+    set( EXTRA_LIB z )
+endif()
+
 target_link_libraries( pcbnew_kiface_objects
     PRIVATE
         common
@@ -682,6 +687,7 @@ target_link_libraries( pcbnew_kiface_objects
         nlohmann_json
         rectpack2d
         gzip-hpp
+        ${EXTRA_LIB}
         ${OCC_LIBRARIES}
     )
 
