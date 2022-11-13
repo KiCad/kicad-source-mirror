@@ -140,21 +140,17 @@ int CLI::EXPORT_PCB_STEP_COMMAND::Perform( KIWAY& aKiway )
     wxString minDistance = FROM_UTF8( m_argParser.get<std::string>( ARG_MIN_DISTANCE ).c_str() );
     if( !minDistance.IsEmpty() )
     {
-        std::istringstream istr;
-        istr.str( std::string( minDistance.ToUTF8() ) );
-        istr >> step->m_minDistance;
+        std::regex  re_pattern( REGEX_QUANTITY REGEX_UNIT,
+                                std::regex_constants::icase );
+        std::smatch sm;
+        std::string str( minDistance.ToUTF8() );
+        std::regex_search( str, sm, re_pattern );
+        step->m_minDistance = atof( sm.str( 1 ).c_str() );
 
-        if( istr.fail() )
+        std::string tunit( sm[2] );
+
+        if( tunit.size() > 0 ) // No unit accepted ( default = mm )
         {
-            std::cout << m_argParser;
-            return CLI::EXIT_CODES::ERR_ARGS;
-        }
-
-        if( !istr.eof() )
-        {
-            std::string tunit;
-            istr >> tunit;
-
             if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
             {
                 step->m_minDistance *= 25.4;

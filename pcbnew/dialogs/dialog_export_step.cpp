@@ -377,7 +377,6 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     }
 #endif
 
-
     appK2S.SetName( wxT( "kicad-cli" ) );
 
     wxString cmdK2S = wxT( "\"" );
@@ -396,7 +395,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     // Note: for some reason, using \" to insert a quote in a format string, under MacOS
     // wxString::Format does not work. So use a %c format in string
-    int quote = '"';
+    int quote = '\'';
 
     switch( GetOriginOption() )
     {
