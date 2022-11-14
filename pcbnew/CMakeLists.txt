@@ -680,7 +680,6 @@ target_link_libraries( pcbnew_kiface_objects
         nlohmann_json
         rectpack2d
         gzip-hpp
-        ${EXTRA_LIB}
         ${ZLIB_LIBRARIES}
         ${OCC_LIBRARIES}
     )

@@ -440,7 +440,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     {
         m_commit.Modified( aPcbFootprint, copy );
     }
-    else
+    else if( copy )
     {
         copy->SetParentGroup( nullptr );
         delete copy;
@@ -629,7 +629,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     {
         m_commit.Modified( aFootprint, copy );
     }
-    else
+    else if( copy )
     {
         copy->SetParentGroup( nullptr );
         delete copy;

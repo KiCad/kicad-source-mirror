@@ -199,6 +199,7 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_pcbName = aPcbName;
     BRepBuilderAPI::Precision( STEPEXPORT_MIN_DISTANCE );
+    m_maxError = 5000;      // 5 microns
 }
 
 
@@ -457,7 +458,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         Cut.SetArguments( mainbrd );
         TopTools_ListOfShape holelist;
 
-        for( auto hole : m_cutouts )
+        for( TopoDS_Shape& hole : m_cutouts )
             holelist.Append( hole );
 
         Cut.SetTools( holelist );

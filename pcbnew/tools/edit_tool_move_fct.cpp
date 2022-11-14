@@ -344,7 +344,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent )
     auto updateStatusPopup =
             [&]( EDA_ITEM* item, size_t ii, size_t count )
             {
-                wxString status = _( "Click to place %s (item %ld of %ld)\n"
+                wxString popuptext = _( "Click to place %s (item %ld of %ld)\n"
                                      "Press <esc> to cancel all; double-click to finish" );
                 wxString msg;
 
@@ -364,7 +364,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent )
                     msg = item->GetTypeDesc().Lower();
                 }
 
-                statusPopup.SetText( wxString::Format( status, msg, ii, count ) );
+                statusPopup.SetText( wxString::Format( popuptext, msg, ii, count ) );
             };
 
     std::vector<BOARD_ITEM*> sel_items;         // All the items operated on by the move below
