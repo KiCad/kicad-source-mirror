@@ -735,6 +735,9 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
+    // Save footprint tree column widths
+    m_adapter->SaveSettings();
+
     return PCB_BASE_EDIT_FRAME::canCloseWindow( aEvent );
 }
 

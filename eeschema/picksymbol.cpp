@@ -199,6 +199,9 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
     if( dlg.ShowModal() == wxID_CANCEL )
         return PICKED_SYMBOL();
 
+    // Save any changes to column widths, etc.
+    modelAdapter->SaveSettings();
+
     PICKED_SYMBOL sel;
     LIB_ID id = dlg.GetSelectedLibId( &sel.Unit );
 

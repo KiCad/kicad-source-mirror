@@ -182,9 +182,6 @@ LIB_TREE::~LIB_TREE()
 {
     // Stop the timer during destruction early to avoid potential race conditions (that do happen)
     m_debounceTimer->Stop();
-
-    // Save the column widths to the config file
-    m_adapter->SaveSettings();
 }
 
 

@@ -271,6 +271,9 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
     if( dialog.ShowQuasiModal() == wxID_CANCEL )
         return nullptr;
 
+    // Save any changes to column widths, etc.
+    adapter->SaveSettings();
+
     if( dialog.IsExternalBrowserSelected() )
     {
         // SelectFootprintFromLibBrowser() returns the "full" footprint name, i.e.

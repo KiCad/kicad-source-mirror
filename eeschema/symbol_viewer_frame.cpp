@@ -1016,6 +1016,9 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return;
 
+    // Save any changes to column widths, etc.
+    modelAdapter->SaveSettings();
+
     id = dlg.GetSelectedLibId( &unit );
 
     if( !id.IsValid() )

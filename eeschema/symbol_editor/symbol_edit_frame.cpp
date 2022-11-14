@@ -581,6 +581,9 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( !saveAllLibraries( true ) )
         return false;
 
+    // Save symbol tree column widths
+    m_libMgr->GetAdapter()->SaveSettings();
+
     return true;
 }
 
