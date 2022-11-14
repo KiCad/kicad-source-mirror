@@ -396,6 +396,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     // Note: for some reason, using \" to insert a quote in a format string, under MacOS
     // wxString::Format does not work. So use a %c format in string
     int quote = '\'';
+    int dblquote = '"';
 
     switch( GetOriginOption() )
     {
@@ -450,11 +451,11 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     // Input file path.
     cmdK2S.Append( wxString::Format( wxT( " -f -o %c%s%c" ),
-                                     quote, m_filePickerSTEP->GetPath(), quote ) );
+                                     dblquote, m_filePickerSTEP->GetPath(), dblquote ) );
 
 
     // Output file path.
-    cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ), quote,  m_boardPath, quote ) );
+    cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ), dblquote, m_boardPath, dblquote ) );
 
     wxLogTrace( traceKiCad2Step, wxT( "export step command: %s" ), cmdK2S );
 
