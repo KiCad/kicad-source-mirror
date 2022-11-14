@@ -36,28 +36,29 @@ CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
     addLayerArg( true );
 
     m_argParser.add_argument( "-ird", ARG_INCLUDE_REFDES )
-            .help( "Include the reference designator text" )
+            .help( UTF8STDSTR( _( "Include the reference designator text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "-iv", ARG_INCLUDE_VALUE )
-            .help( "Include the value text" )
+            .help( UTF8STDSTR( _( "Include the value text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "-ibt", ARG_INCLUDE_BORDER_TITLE )
-            .help( "Include the border and title block" )
+            .help( UTF8STDSTR( _( "Include the border and title block" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
-            .help( "Black and white only" )
+            .help( UTF8STDSTR( _( "Black and white only" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( "Color theme to use (will default to pcbnew settings)" );
+            .help( std::string(
+                    _( "Color theme to use (will default to pcbnew settings)" ).ToUTF8() ) );
 }
 
 

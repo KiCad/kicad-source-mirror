@@ -44,48 +44,48 @@
 CLI::EXPORT_PCB_STEP_COMMAND::EXPORT_PCB_STEP_COMMAND() : COMMAND( "step" )
 {
     m_argParser.add_argument( ARG_DRILL_ORIGIN )
-            .help( "Use Drill Origin for output origin" )
+            .help( UTF8STDSTR( _( "Use Drill Origin for output origin" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_GRID_ORIGIN )
-            .help( "Use Grid Origin for output origin" )
+            .help( UTF8STDSTR( _( "Use Grid Origin for output origin" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_NO_VIRTUAL )
-            .help( "Exclude 3D models for components with 'virtual' attribute" )
+            .help( UTF8STDSTR( _( "Exclude 3D models for components with 'virtual' attribute" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "--subst-models" )
-            .help( "Substitute STEP or IGS models with the same name in place of VRML models" )
+            .help( UTF8STDSTR( _( "Substitute STEP or IGS models with the same name in place of VRML models" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_FORCE, "-f" )
-            .help( "overwrite output file" )
+            .help( UTF8STDSTR( _( "Overwrite output file" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_BOARD_ONLY )
-            .help( "only generate a board with no components" )
+            .help( UTF8STDSTR( _( "Only generate a board with no components" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_MIN_DISTANCE )
-            .default_value( std::string() )
-            .help( "Minimum distance between points to treat them as separate ones (default 0.01mm)" );
+            .default_value( std::string( "0.01mm" ) )
+            .help( UTF8STDSTR( _( "Minimum distance between points to treat them as separate ones" ) ) );
 
     m_argParser.add_argument( ARG_USER_ORIGIN )
             .default_value( std::string() )
-            .help( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)" );
+            .help( UTF8STDSTR( _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm)" ) ) );
 
     m_argParser.add_argument( "-o", ARG_OUTPUT )
             .default_value( std::string() )
-            .help( "output file name" );
+            .help( UTF8STDSTR( _( "Output file name" ) ) );
 
-    m_argParser.add_argument( ARG_INPUT ).help( "input file" );
+    m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
 }
 
 int CLI::EXPORT_PCB_STEP_COMMAND::Perform( KIWAY& aKiway )

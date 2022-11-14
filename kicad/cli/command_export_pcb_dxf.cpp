@@ -41,23 +41,23 @@ CLI::EXPORT_PCB_DXF_COMMAND::EXPORT_PCB_DXF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
     addLayerArg( true );
 
     m_argParser.add_argument( "-ird", ARG_INCLUDE_REFDES )
-            .help( "Include the reference designator text" )
+            .help( UTF8STDSTR( _( "Include the reference designator text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "-iv", ARG_INCLUDE_VALUE )
-            .help( "Include the value text" )
+            .help( UTF8STDSTR( _( "Include the value text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "-uc", ARG_USE_CONTOURS )
-            .help( "Plot graphic items using their contours" )
+            .help( UTF8STDSTR( _( "Plot graphic items using their contours" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "-ou", ARG_OUTPUT_UNITS )
             .default_value( std::string( "in" ) )
-            .help( "output file name" );
+            .help( UTF8STDSTR( _( "Output units, valid options: mm, in" ) ) );
 }
 
 

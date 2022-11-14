@@ -232,7 +232,7 @@ int PGM_KICAD::OnPgmRun()
     }
     catch( const std::runtime_error& err )
     {
-        std::cout << err.what() << std::endl;
+        wxPrintf( "%s\n", err.what() );
 
         // find the correct argparser object to output the command usage info
         COMMAND_ENTRY* cliCmd = nullptr;
@@ -244,10 +244,16 @@ int PGM_KICAD::OnPgmRun()
             }
         }
 
+        // arg parser uses a stream overload for printing the help
+        // we want to intercept so we can wxString the utf8 contents
+        // because on windows our terminal codepage might not be utf8
+        std::stringstream ss;
         if( cliCmd )
-            std::cout << cliCmd->handler->GetArgParser();
+            ss << cliCmd->handler->GetArgParser();
         else
-            std::cout << argParser;
+            ss << argParser;
+
+        wxPrintf( FROM_UTF8( ss.str().c_str() ) );
 
         return CLI::EXIT_CODES::ERR_ARGS;
     }
@@ -276,7 +282,10 @@ int PGM_KICAD::OnPgmRun()
     }
     else
     {
-        std::cout << argParser;
+        std::stringstream ss;
+        ss << argParser;
+        wxPrintf( FROM_UTF8( ss.str().c_str() ) );
+
         return CLI::EXIT_CODES::ERR_ARGS;
     }
 }

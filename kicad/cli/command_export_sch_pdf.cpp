@@ -35,20 +35,20 @@ CLI::EXPORT_SCH_PDF_COMMAND::EXPORT_SCH_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 {
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( "Color theme to use (will default to pcbnew settings)" );
+            .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
-            .help( "Black and white only" )
+            .help( UTF8STDSTR( _( "Black and white only" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_EXCLUDE_DRAWING_SHEET )
-            .help( "No drawing sheet" )
+            .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_NO_BACKGROUND_COLOR )
-            .help( "Avoid setting a background color (regardless of theme)" )
+            .help( UTF8STDSTR( _( "Avoid setting a background color (regardless of theme)" ) ) )
             .implicit_value( true )
             .default_value( false );
 }

@@ -44,51 +44,51 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
 {
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "excellon" ) )
-            .help( "valid options are either excellon or gerber" );
+            .help( UTF8STDSTR( _( "Valid options excellon, gerber." ) ) );
 
     m_argParser.add_argument( ARG_EXCELLON_ZEROS_FORMAT )
             .default_value( std::string( "decimal" ) )
-            .help( "valid options are: decimal,supressleading,surpresstrailing,keep" );
+            .help( UTF8STDSTR( _( "Valid options are: decimal,supressleading,surpresstrailing,keep." ) ) );
 
     m_argParser.add_argument( ARG_DRILL_ORIGIN )
             .default_value( std::string( "absolute" ) )
-            .help( "valid options are: absolute,plot" );
+            .help( UTF8STDSTR( _( "Valid options are: absolute,plot" ) ) );
 
     m_argParser.add_argument( "-u", ARG_UNITS )
             .default_value( std::string( "in" ) )
-            .help( "output units, valid options are in or mm" );
+            .help( UTF8STDSTR( _( "Output units, valid options:in,mm" ) ) );
 
     m_argParser.add_argument( ARG_EXCELLON_MIRRORY )
-            .help( "Mirror Y axis" )
+            .help( UTF8STDSTR( _( "Mirror Y axis" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_EXCELLON_MINIMALHEAD )
-            .help( "Minimal header" )
+            .help( UTF8STDSTR( _( "Minimal header" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_EXCELLON_SEPARATE_TH )
-            .help( "PTH and NPTH in separate files file" )
+            .help( UTF8STDSTR( _( "PTH and NPTH in separate files file" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_GENERATE_MAP )
-            .help( "Generate map / summary of drill hits" )
+            .help( UTF8STDSTR( _( "Generate map / summary of drill hits" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_MAP_FORMAT )
             .default_value( std::string( "pdf" ) )
-            .help( "valid options are: pdf,gerberx2,ps,dxf,svg" );
+            .help( UTF8STDSTR( _( "Valid options: pdf,gerberx2,ps,dxf,svg" ) ) );
 
     m_argParser.add_argument( ARG_SEPARATE_FILES )
-            .help( "Generate independent files for NPTH and PTH holes" )
+            .help( UTF8STDSTR( _( "Generate independent files for NPTH and PTH holes" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_GERBER_PRECISION )
-            .help( "Precision of gerber coordinates (5 or 6)" )
+            .help( UTF8STDSTR( _( "Precision of gerber coordinates (5 or 6)" ) ) )
             .default_value( 5 );
 }
 

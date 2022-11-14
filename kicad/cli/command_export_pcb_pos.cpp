@@ -43,38 +43,41 @@ CLI::EXPORT_PCB_POS_COMMAND::EXPORT_PCB_POS_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 {
     m_argParser.add_argument( ARG_SIDE )
             .default_value( std::string( "both" ) )
-            .help( "valid options: front,back,both" );
+            .help( UTF8STDSTR( _(
+                    "Valid options: front,back,both. Gerber format only supports \"both\"." ) ) );
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "ascii" ) )
-            .help( "valid options: ascii,csv,gerber" );
+            .help( UTF8STDSTR( _( "Valid options: ascii,csv,gerber" ) ) );
 
     m_argParser.add_argument( ARG_UNITS )
             .default_value( std::string( "in" ) )
-            .help( "output units, valid options are in or mm (ascii or csv only)" );
+            .help( UTF8STDSTR( _( "Output units; ascii or csv format only; valid options: in,mm" ) ) );
 
     m_argParser.add_argument( ARG_NEGATE_BOTTOM_X )
-            .help( "Use negative X coordinates for footprints on bottom layer (ascii or csv only)" )
+            .help( UTF8STDSTR( _( "Use negative X coordinates for footprints on bottom layer "
+                                "(ascii or csv formats only)" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_USE_DRILL_FILE_ORIGIN )
-            .help( "Use drill/place file origin (ascii or csv only)" )
+            .help( UTF8STDSTR( _( "Use drill/place file origin (ascii or csv only)" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SMD_ONLY )
-            .help( "Include only SMD footprints (ascii or csv only)" )
+            .help( UTF8STDSTR( _( "Include only SMD footprints (ascii or csv only)" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_EXCLUDE_FOOTPRINTS_TH )
-            .help( "Exclue all footprints with through-hole pads (ascii or csv only)" )
+            .help( UTF8STDSTR(
+                    _( "Exclude all footprints with through-hole pads (ascii or csv only)" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_GERBER_BOARD_EDGE )
-            .help( "Include board edge layer (gerber only)" )
+            .help( UTF8STDSTR( _( "Include board edge layer (gerber only)" ) ) )
             .implicit_value( true )
             .default_value( false );
 }

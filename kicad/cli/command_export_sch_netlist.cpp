@@ -33,7 +33,7 @@ CLI::EXPORT_SCH_NETLIST_COMMAND::EXPORT_SCH_NETLIST_COMMAND() : EXPORT_PCB_BASE_
 {
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "kicadsexpr" ) )
-            .help( "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, orcadpcb2, spice, spicemodel" );
+            .help( UTF8STDSTR( _( "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, orcadpcb2, spice, spicemodel" ) ) );
 }
 
 

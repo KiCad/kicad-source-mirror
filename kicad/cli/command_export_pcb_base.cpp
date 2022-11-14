@@ -32,9 +32,9 @@ CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( std::string aName ) : COM
 {
     m_argParser.add_argument( "-o", ARG_OUTPUT )
             .default_value( std::string() )
-            .help( "output file name" );
+            .help( UTF8STDSTR( _( "Output file name" ) ) );
 
-    m_argParser.add_argument( ARG_INPUT ).help( "input file" );
+    m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
 
     for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
@@ -87,8 +87,9 @@ void CLI::EXPORT_PCB_BASE_COMMAND::addLayerArg( bool aRequire )
 {
     m_argParser.add_argument( "-l", ARG_LAYERS )
             .default_value( std::string() )
-            .help( "comma separated list of untranslated layer names to include such as "
-                   "F.Cu,B.Cu" );
+            .help( UTF8STDSTR(
+                    _( "Comma separated list of untranslated layer names to include such as "
+                       "F.Cu,B.Cu" ) ) );
 
     m_requireLayers = aRequire;
 }

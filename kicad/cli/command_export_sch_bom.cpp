@@ -33,7 +33,7 @@ CLI::EXPORT_SCH_BOM_COMMAND::EXPORT_SCH_BOM_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 {
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "xml" ) )
-            .help( "Bom output format, valid options: xml" );
+            .help( UTF8STDSTR( _( "Bom output format, valid options: xml" ) ) );
 }
 
 

@@ -39,21 +39,22 @@ CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
     addLayerArg( true );
 
     m_argParser.add_argument( "-m", ARG_MIRROR )
-            .help( "Mirror the board (useful for trying to show bottom layers)" )
+            .help( UTF8STDSTR( _( "Mirror the board (useful for trying to show bottom layers)" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( "Color theme to use (will default to pcbnew settings)" );
+            .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
-            .help( "Black and white only" )
+            .help( UTF8STDSTR( _( "Black and white only" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_PAGE_SIZE )
-            .help( "Set page sizing mode (0 = page with frame and title block, 1 = current page size, 2 = board area only)" )
+            .help( UTF8STDSTR( _( "Set page sizing mode (0 = page with frame and title block, 1 = "
+                                "current page size, 2 = board area only)" ) ) )
             .default_value( 0 );
 }
 

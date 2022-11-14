@@ -24,6 +24,8 @@
 #include <argparse/argparse.hpp>
 #include <kiway.h>
 
+#define UTF8STDSTR( s ) ( std::string( s.utf8_str() ) )
+
 namespace CLI
 {
 

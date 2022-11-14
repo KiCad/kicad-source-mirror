@@ -41,42 +41,43 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND() : EXPORT_PCB_BASE_CO
     addLayerArg( true );
 
     m_argParser.add_argument( "-ird", ARG_INCLUDE_REFDES )
-            .help( "Include the reference designator text" )
+            .help( UTF8STDSTR( _( "Include the reference designator text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "-iv", ARG_INCLUDE_VALUE )
-            .help( "Include the value text" )
+            .help( UTF8STDSTR( _( "Include the value text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( "-ibt", ARG_INCLUDE_BORDER_TITLE )
-            .help( "Include the border and title block" )
+            .help( UTF8STDSTR( _( "Include the border and title block" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_NO_X2 )
-            .help( "Do not use the extended X2 format" )
+            .help( UTF8STDSTR( _( "Do not use the extended X2 format" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_NO_NETLIST )
-            .help( "Do not generate netlist attributes" )
+            .help( UTF8STDSTR( _( "Do not generate netlist attributes" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SUBTRACT_SOLDERMASK )
-            .help( "Subtract soldermask from silkscreen" )
+            .help( UTF8STDSTR( _( "Subtract soldermask from silkscreen" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_DISABLE_APERTURE_MACROS )
-            .help( "Disable aperature macros" )
+            .help( UTF8STDSTR( _( "Disable aperature macros" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_PRECISION )
-            .help( "Precision of gerber coordinates (5 or 6)" )
+            .help( UTF8STDSTR(
+                    _( "Precision of gerber coordinates, valid options: 5 or 6" ) ) )
             .default_value( 6 );
 }
 
