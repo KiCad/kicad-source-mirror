@@ -120,13 +120,13 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     int layerColSize = textWidth + 15;
 
 #ifdef __WXMAC__
-    // TODO: something in wxWidgets 3.1.x makes checkbox padding really large...
-    int checkColMargins = 40;
-#else
-    int checkColMargins = 0;
+    // TODO: something in wxWidgets 3.1.x pads checkbox columns with extra space.  (It used to
+    // also be that the width of the column would get set too wide (to 30), but that's patched in
+    // our local wxWidgets fork.)
+    checkColSize += 30;
 #endif
 
-    m_layerCheckListBox->SetMinClientSize( wxSize( checkColSize + checkColMargins + layerColSize,
+    m_layerCheckListBox->SetMinClientSize( wxSize( checkColSize + layerColSize,
                                                    m_layerCheckListBox->GetMinClientSize().y ) );
 
     wxStaticBox*      allLayersLabel = new wxStaticBox( this, wxID_ANY, _( "Plot on All Layers" ) );
@@ -136,7 +136,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
                                                wxDefaultPosition, wxDefaultSize,
                                                plotAllLayersOrder, plotAllLayersChoicesStrings, 0 );
 
-    m_plotAllLayersList->SetMinClientSize( wxSize( checkColSize + checkColMargins + layerColSize,
+    m_plotAllLayersList->SetMinClientSize( wxSize( checkColSize + layerColSize,
                                                    m_plotAllLayersList->GetMinClientSize().y ) );
 
     // Attach the LAYER_ID to each item in m_plotAllLayersList

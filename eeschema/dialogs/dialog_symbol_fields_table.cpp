@@ -1337,8 +1337,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
     int nameColWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsCtrl ).x;
     nameColWidth -= m_showColWidth + m_groupByColWidth;
 #ifdef __WXMAC__
-    // TODO: something in wxWidgets 3.1.x makes checkboxes really wide...
-    nameColWidth -= 40;
+    // TODO: something in wxWidgets 3.1.x pads checkbox columns with extra space.  (It used to
+    // also be that the width of the column would get set too wide (to 30), but that's patched in
+    // our local wxWidgets fork.)
+    nameColWidth -= 30;
 #endif
 
     // GTK loses its head and messes these up when resizing the splitter bar:
