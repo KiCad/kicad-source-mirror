@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-11 22:24+0000\n"
+"PO-Revision-Date: 2022-11-14 22:11+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -301,17 +301,17 @@ msgstr "&Einstellungen"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Viewports (Shift+Tab):"
-msgstr "Ansichtsbereiche (Shift+Tab):"
+msgstr "Ansichten (Umschalt+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2676
 msgid "Save viewport..."
-msgstr "Ansichtsbereich speichern..."
+msgstr "Ansicht speichern..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 #: pcbnew/widgets/appearance_controls.cpp:2677
 msgid "Delete viewport..."
-msgstr "Ansichtsbereich löschen..."
+msgstr "Ansicht löschen..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Reload board"
@@ -333,27 +333,27 @@ msgstr "KiCad 3D-Betrachter"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:517
 #: pcbnew/widgets/appearance_controls.cpp:2725
 msgid "Viewport name:"
-msgstr "Name des Ansichtsbereichs:"
+msgstr "Name der Ansicht:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:517
 #: pcbnew/widgets/appearance_controls.cpp:2725
 msgid "Save Viewport"
-msgstr "Ansichtsbereich speichern"
+msgstr "Ansicht speichern"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:555
 #: pcbnew/widgets/appearance_controls.cpp:2763
 msgid "Viewports"
-msgstr "Ansichtsbereiche"
+msgstr "Ansichten"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:564
 #: pcbnew/widgets/appearance_controls.cpp:2772
 msgid "Delete Viewport"
-msgstr "Ansichtsbereich löschen"
+msgstr "Ansicht löschen"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:565
 #: pcbnew/widgets/appearance_controls.cpp:2773
 msgid "Select viewport:"
-msgstr "Ansichtsbereich wählen:"
+msgstr "Ansicht wählen:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:767
 msgid "3D Image File Name"
@@ -3583,7 +3583,7 @@ msgstr "Strg"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:120
 #: pcbnew/dialogs/panel_edit_options_base.cpp:192
 msgid "Shift"
-msgstr "Shift"
+msgstr "Umschalt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:187
 msgid "Alt"
@@ -16578,7 +16578,7 @@ msgstr "Datenblatt in einem Webbrowser öffnen"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1236
 msgid "Create Corner"
-msgstr "Ecke erstellen"
+msgstr "Eckpunkt hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1236
 msgid "Create a corner"
@@ -37422,9 +37422,8 @@ msgstr ""
 "Möchten Sie trotzdem fortfahren?"
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
-#, fuzzy
 msgid "Net Inspection Tools"
-msgstr "Netzinspektor"
+msgstr "Netzinspektion"
 
 #: pcbnew/tools/board_inspection_tool.cpp:164
 #, c-format
@@ -37816,7 +37815,7 @@ msgstr "Zusicherungen für:"
 
 #: pcbnew/tools/convert_tool.cpp:151
 msgid "Create from Selection"
-msgstr "Aus Auswahl erstellen"
+msgstr "Aus Auswahl erzeugen"
 
 #: pcbnew/tools/convert_tool.cpp:362
 msgid "Convert shapes to polygon"
@@ -37984,9 +37983,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:94
-#, fuzzy
 msgid "Positioning Tools"
-msgstr "Positionsversatz:"
+msgstr "Positionierung"
 
 #: pcbnew/tools/edit_tool.cpp:400
 #, fuzzy, c-format
@@ -39007,7 +39005,7 @@ msgstr "Ausgewählte Gruppierungen aufheben"
 
 #: pcbnew/tools/pcb_actions.cpp:758
 msgid "Remove Items"
-msgstr "Elemente entfernen"
+msgstr "Elemente aus Gruppe lösen"
 
 #: pcbnew/tools/pcb_actions.cpp:758
 msgid "Remove items from group"
@@ -40616,7 +40614,7 @@ msgstr "Voreinstellung wählen:"
 #: pcbnew/widgets/appearance_controls.cpp:2668
 #: pcbnew/widgets/appearance_controls_base.cpp:182
 msgid "Viewports (Alt+Tab):"
-msgstr "Ansichtsbereiche (Alt+Tab):"
+msgstr "Ansichten (Alt+Tab):"
 
 #: pcbnew/widgets/appearance_controls.cpp:3162
 msgid "Open Preferences"
@@ -40942,12 +40940,11 @@ msgstr "Eine EDA-Suite für Schaltplan- und Leiterplattendesign"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
-msgstr "Platine drucken"
+msgstr "Leiterplatte"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "PcbNew"
