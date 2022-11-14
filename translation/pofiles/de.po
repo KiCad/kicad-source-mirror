@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-14 22:11+0000\n"
+"PO-Revision-Date: 2022-11-16 09:18+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -12203,8 +12203,8 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
-"Wenn aktiviert, können Sie durch Anklicken nicht-verbundener Pins eine "
-"Verbindung starten, selbst wenn das Verbindungswerkzeug nicht aktiv ist"
+"Wenn aktiviert, kann durch Anklicken nicht-verbundener Pins eine Verbindung "
+"gestartet werden, selbst wenn das Verbindungswerkzeug nicht aktiv ist"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
 #: pcbnew/dialogs/panel_edit_options_base.cpp:75
@@ -13020,7 +13020,7 @@ msgstr "Ein Pin mit einer \"Keine Verbindung\"-Markierung ist verbunden"
 
 #: eeschema/erc_item.cpp:82
 msgid "Unconnected \"no connection\" flag"
-msgstr "Nicht verbundene Markierung \"Keine Verbindung\""
+msgstr "Unverbundene Markierung \"Keine Verbindung\""
 
 #: eeschema/erc_item.cpp:86
 msgid "Label not connected to anything"
@@ -14479,7 +14479,7 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
-"Das Symbol '%s' verweist auf die Blatt-ID '%s', die im Entwurf nicht "
+"Das Symbol \"%s\" verweist auf die Blatt-ID \"%s\", die im Entwurf nicht "
 "vorhanden ist. Das Symbol wurde nicht geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1908
@@ -14498,10 +14498,10 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"Die Block-ID %s (Blockname: '%s') ist auf Schaltplan '%s' gezeichnet, ist "
-"jedoch nicht mit einem anderen Schaltplan im Entwurf verknüpft. Bei KiCad "
-"müssen alle Schaltplansymbole einem Schaltplan zugeordnet sein, daher wurde "
-"der Block nicht geladen."
+"Die Block-ID %s (Blockname: \"%s\") ist auf Schaltplan \"%s\" gezeichnet, "
+"ist jedoch nicht mit einem anderen Schaltplan im Entwurf verknüpft. Bei "
+"KiCad müssen alle Schaltplansymbole einem Schaltplan zugeordnet sein, daher "
+"wurde der Block nicht geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2243
 #, c-format
@@ -14549,7 +14549,7 @@ msgstr ""
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1324
 #, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "Konnte '%s' nicht in der importierten Bibliothek finden."
+msgstr "Konnte \"%s\" nicht in der importierten Bibliothek finden."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:54
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:70
@@ -14593,7 +14593,7 @@ msgstr "Ungültiger Symboleinheitenname"
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:297
 #, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "Ungültiger Symboleinheitenpräfix %s"
+msgstr "Ungültiges Symboleinheitenpräfix %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
 #, c-format
@@ -14617,7 +14617,7 @@ msgstr "Ungültiger Hyperlink-URL \"%s\""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:742
 msgid "Invalid pin names definition"
-msgstr "Ungültige Pin-Namensdefinition"
+msgstr "Ungültige Pin-Namen-Definition"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:763
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1896
@@ -22899,7 +22899,7 @@ msgstr "Netze"
 
 #: pcbnew/board.cpp:1262 pcbnew/pcb_draw_panel_gal.cpp:531
 msgid "Unrouted"
-msgstr "Nicht geroutet"
+msgstr "Ungeroutet"
 
 #: pcbnew/board_connected_item.cpp:160
 #: pcbnew/dialogs/dialog_net_inspector.cpp:963 pcbnew/netinfo_item.cpp:85
@@ -25249,7 +25249,7 @@ msgstr "Platine und Schaltplan auf Parität prüfen"
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
 #, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Nicht verbundene Elemente (%s)"
+msgstr "Unverbundene Elemente (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
 #, c-format
@@ -31817,7 +31817,7 @@ msgstr "Via ist nicht oder nur auf einer Lage verbunden"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Track has unconnected end"
-msgstr "Leiterbahn hat nicht verbundenes Ende"
+msgstr "Leiterbahn hat unverbundenes Ende"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
@@ -33541,7 +33541,7 @@ msgstr "Prüfe Pads ..."
 
 #: pcbnew/ibis/ibis_parser.cpp:559
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "Angabe [IBIS Ver] fehlt"
 
 #: pcbnew/ibis/ibis_parser.cpp:565
 msgid "The parser does not handle this IBIS version"
@@ -35929,6 +35929,8 @@ msgid ""
 "Invalid zero-sized pad ignored in\n"
 "file: %s"
 msgstr ""
+"Ungültiges Pad mit Größe Null ignoriert in\n"
+"Datei: %s"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2038
 #, c-format
@@ -36821,7 +36823,7 @@ msgstr "Leiterbahnstellung ändern"
 
 #: pcbnew/router/router_tool.cpp:164
 msgid "Switches posture of the currently routed track."
-msgstr "Verändern die Stellung des aktuell gerouteten Leiterzuges."
+msgstr "Verändert die Stellung des aktuell gerouteten Leiterzuges."
 
 #: pcbnew/router/router_tool.cpp:170
 msgid "Track Corner Mode"
@@ -37011,9 +37013,9 @@ msgid "Track Width: %s"
 msgstr "Leiterbahnbreite: %s"
 
 #: pcbnew/router/router_tool.cpp:2491
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "Differenzialpaar-Abstand"
+msgstr "Differenzialpaar-Abstand: %s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
@@ -37028,14 +37030,14 @@ msgid "Unable to export, please fix and try again"
 msgstr "Export nicht möglich, bitte das Problem beheben und erneut versuchen"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "Symbol mit dem Wert \"%s\" hat leere Referenz-ID."
+msgstr "Footprint mit dem Wert \"%s\" hat leeren Referenzbezeichner."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "Footprints aktualisieren, die Referenzbezeichner entsprechen:"
+msgstr "Mehrere Footprints besitzen den Referenzbezeichner \"%s\"."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:76
 msgid ""
@@ -37076,15 +37078,15 @@ msgstr "Sitzungsdatei verwendet ungültige Lagen-ID \"%s\"."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:342
 msgid "Session file is missing the \"session\" section"
-msgstr "Der Sessiondatei fehlt die Sektion \"session\""
+msgstr "Der Sitzungsdatei fehlt der Abschnitt \"session\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:345
 msgid "Session file is missing the \"routes\" section"
-msgstr "Der Sessiondatei fehlt die Sektion \"routes\""
+msgstr "Der Sitzungsdatei fehlt der Abschnitt \"routes\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:348
 msgid "Session file is missing the \"library_out\" section"
-msgstr "Der Sessiondatei fehlt die Sektion \"library_out\""
+msgstr "Der Sitzungsdatei fehlt der Abschnitt \"library_out\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:392
 #, c-format
@@ -37236,7 +37238,7 @@ msgstr "Bezierkurve, %d Punkte"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:397
 msgid "Number of segments to build a teardrop with curved shape"
-msgstr ""
+msgstr "Anzahl der Segmente zur Erstellung eines Teardrop mit Kurvenform"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:121
 msgid "Add Teardrops"
@@ -37376,7 +37378,7 @@ msgstr "Footprint platzieren"
 
 #: pcbnew/tools/board_editor_control.cpp:1242 pcbnew/tools/pcb_actions.cpp:738
 msgid "Lock"
-msgstr "Gesperrt"
+msgstr "Sperren"
 
 #: pcbnew/tools/board_editor_control.cpp:1242 pcbnew/tools/pcb_actions.cpp:743
 msgid "Unlock"
@@ -37417,9 +37419,7 @@ msgstr "Fläche duplizieren"
 #: pcbnew/tools/board_editor_control.cpp:1497
 #, fuzzy
 msgid "Selection contains no items with labeled nets."
-msgstr ""
-"Die Auswahl enthält gesperrte Elemente.\n"
-"Möchten Sie trotzdem fortfahren?"
+msgstr "Die Auswahl enthält keine Elemente mit bezeichneten Netzen."
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
 msgid "Net Inspection Tools"
@@ -37442,9 +37442,8 @@ msgid "Violation Report"
 msgstr "Verstoß-Schweregrade"
 
 #: pcbnew/tools/board_inspection_tool.cpp:272
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "Geroutete Länge"
+msgstr "Ungekoppelte Länge"
 
 #: pcbnew/tools/board_inspection_tool.cpp:273
 #, fuzzy
@@ -38629,7 +38628,7 @@ msgstr "Ungenutzte Pads entfernen..."
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Entfernen oder Wiederherstellen der nicht verbundenen inneren Lagen von "
+"Entfernen oder Wiederherstellen der unverbundenen inneren Lagen von "
 "Durchsteckpads und Vias"
 
 #: pcbnew/tools/pcb_actions.cpp:473
@@ -39526,12 +39525,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1304
 msgid "Unroute Selected"
-msgstr ""
+msgstr "Leiterbahnen an Auswahl entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
-#, fuzzy
 msgid "Unroutes selected items to the nearest pad."
-msgstr "Ausgewählte Elemente an der linken Kante ausrichten"
+msgstr "Entfernt Leiterbahnen an ausgewählten Elementen bis zum nächsten Pad."
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Select All Tracks in Net"
@@ -39554,20 +39552,21 @@ msgid "Select All Unconnected Footprints"
 msgstr "Alle unverbundenen Footprints auswählen"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
-#, fuzzy
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "Wählt alle Leiterbahnen und Vias aus, die zum selben Netz gehören."
+msgstr ""
+"Wählt alle unverbundenen Footprints, die zu jedem ausgewählten Netz gehören."
 
 #: pcbnew/tools/pcb_actions.cpp:1333
-#, fuzzy
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "Ausgewählten Footprint platzieren"
+msgstr "Nächsten unverbundenen Footprint ziehen"
 
 #: pcbnew/tools/pcb_actions.cpp:1334
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
 msgstr ""
+"Wählt und startet Verschiebung des nächstgelegenen unverbundenen Footprints "
+"auf jedem ausgewählten Netz."
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -39582,14 +39581,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Wählt alle Footprints und Leiterbahnen im selben Schaltplanblatt"
 
 #: pcbnew/tools/pcb_actions.cpp:1350
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "Im Schaltplan speichern"
+msgstr "Im Schaltplan auswählen"
 
 #: pcbnew/tools/pcb_actions.cpp:1351
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "Hebt alle entsprechenden Elemente im Leiterplatteneditor hervor"
+msgstr "Wählt entsprechende Elemente im Schaltplaneditor aus"
 
 #: pcbnew/tools/pcb_actions.cpp:1356
 msgid "Filter Selected Items..."
@@ -40125,7 +40122,7 @@ msgstr "Als unsichtbar markierten Footprinttext anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show unconnected nets as a ratsnest"
-msgstr "Zeige nicht angeschlossene Netzlinien"
+msgstr "Unverbundene Netze als Netzlinien anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "DRC Warnings"
@@ -40156,9 +40153,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Footprint- und Textursprung mit Kreuz anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:360
-#, fuzzy
 msgid "Shadow on Locked Items"
-msgstr "Gesperrte Elemente überspringen"
+msgstr "Schatten auf gesperrten Elementen"
 
 #: pcbnew/widgets/appearance_controls.cpp:360
 msgid "Show a shadow marker on locked items"
@@ -40167,7 +40163,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:361
 #, fuzzy
 msgid "Shadow on Conflicts"
-msgstr "Gesperrte Elemente überspringen"
+msgstr "Schatten auf Konflikten"
 
 #: pcbnew/widgets/appearance_controls.cpp:361
 msgid "Show a shadow on overlapping courtyards while moving footprints"
