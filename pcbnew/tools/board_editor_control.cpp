@@ -61,6 +61,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/edit_tool.h>
 #include <tools/tool_event_utils.h>
+#include <tools/zone_filler_tool.h>
 #include <router/router_tool.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
@@ -1152,6 +1153,10 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         {
             // Calling 'Properties' action clears the selection, so we need to restore it
             reselect = true;
+        }
+        else if( fp && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
         }
         else
         {

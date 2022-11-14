@@ -56,6 +56,7 @@ using namespace std::placeholders;
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/drc_tool.h>
+#include <tools/zone_filler_tool.h>
 #include <drc/drc_interactive_courtyard_clearance.h>
 
 #include <project.h>
@@ -1416,6 +1417,12 @@ void ROUTER_TOOL::performRouting()
         {
             m_menu.ShowContextMenu( selection() );
         }
+        // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
+        // but we don't at present have that, so we just knock out some of the egregious ones.
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();
@@ -1868,11 +1875,13 @@ void ROUTER_TOOL::performDragging( int aMode )
         }
         else if( evt->Category() == TC_COMMAND )
         {
-            // disallow editing commands
+            // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
+            // but we don't at present have that, so we just knock out some of the egregious ones.
             if( evt->IsAction( &ACTIONS::cut )
                 || evt->IsAction( &ACTIONS::copy )
                 || evt->IsAction( &ACTIONS::paste )
-                || evt->IsAction( &ACTIONS::pasteSpecial ) )
+                || evt->IsAction( &ACTIONS::pasteSpecial )
+                || ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
             {
                 wxBell();
             }
@@ -2262,11 +2271,13 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND )
         {
-            // disallow editing commands
+            // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
+            // but we don't at present have that, so we just knock out some of the egregious ones.
             if( evt->IsAction( &ACTIONS::cut )
                 || evt->IsAction( &ACTIONS::copy )
                 || evt->IsAction( &ACTIONS::paste )
-                || evt->IsAction( &ACTIONS::pasteSpecial ) )
+                || evt->IsAction( &ACTIONS::pasteSpecial )
+                || ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
             {
                 wxBell();
             }

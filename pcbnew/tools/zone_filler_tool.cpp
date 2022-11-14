@@ -319,10 +319,18 @@ void ZONE_FILLER_TOOL::refresh()
 }
 
 
+bool ZONE_FILLER_TOOL::IsZoneFillAction( const TOOL_EVENT* aEvent )
+{
+    return aEvent->IsAction( &PCB_ACTIONS::zoneFillAll )
+           || aEvent->IsAction( &PCB_ACTIONS::zoneFillDirty )
+           || aEvent->IsAction( &PCB_ACTIONS::zoneUnfillAll );
+}
+
+
 void ZONE_FILLER_TOOL::setTransitions()
 {
     // Zone actions
     Go( &ZONE_FILLER_TOOL::ZoneFillAll,    PCB_ACTIONS::zoneFillAll.MakeEvent() );
-    Go( &ZONE_FILLER_TOOL::ZoneFillDirty, PCB_ACTIONS::zoneFillDirty.MakeEvent() );
+    Go( &ZONE_FILLER_TOOL::ZoneFillDirty,  PCB_ACTIONS::zoneFillDirty.MakeEvent() );
     Go( &ZONE_FILLER_TOOL::ZoneUnfillAll,  PCB_ACTIONS::zoneUnfillAll.MakeEvent() );
 }

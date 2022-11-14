@@ -62,6 +62,8 @@ public:
         m_dirtyZoneIDs.insert( aZone->m_Uuid );
     }
 
+    static bool IsZoneFillAction( const TOOL_EVENT* aEvent );
+
 private:
     ///< Refocus on an idle event (used after the Progress Reporter messes up the focus).
     void singleShotRefocus( wxIdleEvent& );

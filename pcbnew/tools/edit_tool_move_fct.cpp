@@ -42,6 +42,7 @@
 #include <tools/pcb_grid_helper.h>
 #include <tools/drc_tool.h>
 #include <tools/drawing_tool.h>
+#include <tools/zone_filler_tool.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_items.h>
@@ -764,6 +765,10 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent )
             hv45Mode = !hv45Mode;
             displayConstraintsMessage( hv45Mode );
             evt->SetPassEvent( false );
+        }
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
         }
         else
         {

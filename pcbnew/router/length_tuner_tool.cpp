@@ -23,6 +23,7 @@
 #include <dialogs/dialog_pns_length_tuning_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/zone_filler_tool.h>
 #include "pns_router.h"
 #include "pns_meander_placer.h" // fixme: move settings to separate header
 #include "pns_tune_status_popup.h"
@@ -238,6 +239,12 @@ void LENGTH_TUNER_TOOL::performTuning()
             TOOL_EVENT dummy;
             meanderSettingsDialog( dummy );
             statusPopup.Show();
+        }
+        // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
+        // but we don't at present have that, so we just knock out some of the egregious ones.
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
         }
         else
         {

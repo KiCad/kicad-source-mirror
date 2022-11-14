@@ -45,6 +45,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
+#include <tools/zone_filler_tool.h>
 #include <view/view.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/infobar.h>
@@ -741,6 +742,10 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         {
             cleanup();
         }
+        else if( image && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();
@@ -986,6 +991,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             text->SetPosition( cursorPos );
             selection().SetReferencePoint( cursorPos );
             m_view->Update( &selection() );
+        }
+        else if( text && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
@@ -1413,34 +1422,27 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             // Show a preview of the item
             m_view->Update( &preview );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
+        else if( dimension && evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
-            if( dimension )
+            PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+
+            if( !m_view->IsLayerVisible( layer ) )
             {
-                PCB_LAYER_ID layer = m_frame->GetActiveLayer();
-
-                if( !m_view->IsLayerVisible( layer ) )
-                {
-                    m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
-                    m_frame->GetCanvas()->Refresh();
-                }
-
-                dimension->SetLayer( layer );
-                dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
-                dimension->Text().SetTextThickness( boardSettings.GetTextThickness( layer ) );
-                dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
-                dimension->SetLineThickness( boardSettings.GetLineThickness( layer ) );
-                dimension->Update();
-
-                m_view->Update( &preview );
-                frame()->SetMsgPanel( dimension );
+                m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
+                m_frame->GetCanvas()->Refresh();
             }
-            else
-            {
-                evt->SetPassEvent();
-            }
+
+            dimension->SetLayer( layer );
+            dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
+            dimension->Text().SetTextThickness( boardSettings.GetTextThickness( layer ) );
+            dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
+            dimension->SetLineThickness( boardSettings.GetLineThickness( layer ) );
+            dimension->Update();
+
+            m_view->Update( &preview );
+            frame()->SetMsgPanel( dimension );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        else if( dimension && evt->IsAction( &PCB_ACTIONS::properties ) )
         {
             if( step == SET_END || step == SET_HEIGHT )
             {
@@ -1451,8 +1453,12 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
             else
             {
-                evt->SetPassEvent();
+                wxBell();
             }
+        }
+        else if( dimension && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
         }
         else
         {
@@ -1622,6 +1628,10 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
             commit.Push( _( "Place a DXF_SVG drawing" ) );
             break;   // This is a one-shot command, not a tool
+        }
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
         }
         else
         {
@@ -1926,20 +1936,6 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 evt->SetPassEvent();
             }
         }
-        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
-        {
-            if( started )
-            {
-                frame()->OnEditItemRequest( graphic );
-                m_view->Update( &preview );
-                frame()->SetMsgPanel( graphic );
-                break;
-            }
-            else
-            {
-                evt->SetPassEvent();
-            }
-        }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
@@ -2074,25 +2070,33 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             m_view->Update( &preview );
             m_view->Update( &twoPointAsst );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
+        else if( graphic && evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
-            if( graphic )
-            {
-                m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
-                graphic->SetStroke( m_stroke );
-                m_view->Update( &preview );
-                frame()->SetMsgPanel( graphic );
-            }
+            m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
+            graphic->SetStroke( m_stroke );
+            m_view->Update( &preview );
+            frame()->SetMsgPanel( graphic );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) )
+        else if( graphic && evt->IsAction( &PCB_ACTIONS::decWidth ) )
         {
-            if( graphic && (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
+            if( (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
             {
                 m_stroke.SetWidth( m_stroke.GetWidth() - WIDTH_STEP );
                 graphic->SetStroke( m_stroke );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );
             }
+        }
+        else if( started && evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            frame()->OnEditItemRequest( graphic );
+            m_view->Update( &preview );
+            frame()->SetMsgPanel( graphic );
+            break;
+        }
+        else if( started && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
         }
         else if( evt->IsAction( &ACTIONS::resetLocalCoords ) )
         {
@@ -2208,7 +2212,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     // Set initial cursor
     setCursor();
 
-    bool firstPoint = false;
+    bool started = false;
     bool cancelled = false;
 
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -2219,7 +2223,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( firstPoint )
+        if( started )
             m_frame->SetMsgPanel( graphic );
 
         setCursor();
@@ -2236,7 +2240,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         {
             cleanup();
 
-            if( !firstPoint )
+            if( !started )
             {
                 // We've handled the cancel event.  Don't cancel other tools
                 evt->SetPassEvent( false );
@@ -2269,7 +2273,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( !firstPoint )
+            if( !started )
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
@@ -2289,7 +2293,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
                 preview.Add( graphic );
                 frame()->SetMsgPanel( graphic );
-                firstPoint = true;
+                started = true;
             }
 
             arcManager.AddPoint( cursorPos, true );
@@ -2389,6 +2393,10 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             m_view->Update( &arcAsst );
             evt->SetPassEvent();
         }
+        else if( started && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();
@@ -2404,7 +2412,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             m_view->Update( &preview );
             m_view->Update( &arcAsst );
 
-            if( firstPoint )
+            if( started )
                 frame()->SetMsgPanel( graphic );
             else
                 frame()->SetMsgPanel( board() );
@@ -2657,18 +2665,15 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         {
             polyGeomMgr.SetCursorPosition( cursorPos );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        else if( started && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
         {
-            if( started )
-            {
-                frame()->OnEditItemRequest( zoneTool.GetZone() );
-                zoneTool.OnGeometryChange( polyGeomMgr );
-                frame()->SetMsgPanel( zoneTool.GetZone() );
-            }
-            else
-            {
-                evt->SetPassEvent();
-            }
+            wxBell();
+        }
+        else if( started&& evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            frame()->OnEditItemRequest( zoneTool.GetZone() );
+            zoneTool.OnGeometryChange( polyGeomMgr );
+            frame()->SetMsgPanel( zoneTool.GetZone() );
         }
         /*else if( evt->IsAction( &ACTIONS::updateUnits ) )
         {

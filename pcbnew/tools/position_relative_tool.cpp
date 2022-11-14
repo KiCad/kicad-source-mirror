@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,6 @@ using namespace std::placeholders;
 #include <pad.h>
 #include <footprint.h>
 #include <pcb_group.h>
-#include <pcbnew_settings.h>
 
 
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :

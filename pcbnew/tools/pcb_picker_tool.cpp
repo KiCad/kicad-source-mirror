@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 #include "pcb_actions.h"
 #include "pcb_grid_helper.h"
 #include <view/view_controls.h>
+#include <tools/zone_filler_tool.h>
 
 
 PCB_PICKER_TOOL::PCB_PICKER_TOOL() :
@@ -94,7 +95,6 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
             break;
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             bool getNext = false;
@@ -124,7 +124,6 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
             }
         }
-
         else if( evt->IsMotion() )
         {
             if( m_motionHandler )
@@ -138,18 +137,21 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
-
         else if( evt->IsDblClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) )
         {
             // Not currently used, but we don't want to pass them either
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             PCB_SELECTION dummy;
             m_menu.ShowContextMenu( dummy );
         }
-
+        // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
+        // but we don't at present have that, so we just knock out some of the egregious ones.
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();

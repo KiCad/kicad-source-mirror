@@ -37,7 +37,6 @@ using namespace std::placeholders;
 #include <tools/pcb_point_editor.h>
 #include <tools/pcb_grid_helper.h>
 #include <board_commit.h>
-#include <status_popup.h>
 #include <pcb_edit_frame.h>
 #include <fp_shape.h>
 #include <fp_textbox.h>
@@ -655,7 +654,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         {
             break;
         }
-
         else
         {
             evt->SetPassEvent();

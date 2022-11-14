@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,8 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_actions.h>
 #include <tools/tool_event_utils.h>
+#include <tools/zone_filler_tool.h>
+
 
 void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
                                                 INTERACTIVE_PLACER_BASE* aPlacer,
@@ -234,6 +236,10 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
 
                 // Notify other tools of the changes
                 m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+            }
+            else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+            {
+                wxBell();
             }
             else if( evt->IsAction( &ACTIONS::refreshPreview ) )
             {

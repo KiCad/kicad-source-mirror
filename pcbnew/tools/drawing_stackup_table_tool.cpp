@@ -30,7 +30,7 @@
 #include <board_commit.h>
 #include <scoped_set_reset.h>
 #include <painter.h>
-#include <board.h>
+#include <tools/zone_filler_tool.h>
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <fp_shape.h>
@@ -564,24 +564,22 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
         m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
-    wxPoint wxCursorPosition = wxPoint();
-    wxPoint wxPreviousCursorPosition = wxPoint( 0, 0 );
+    VECTOR2I cursorPosition;
+    VECTOR2I previousCursorPosition;
 
     view()->ClearPreview();
     view()->InitPreview();
 
     for( BOARD_ITEM* item : aPreview )
     {
-        item->Move( wxCursorPosition - wxPreviousCursorPosition );
+        item->Move( cursorPosition - previousCursorPosition );
         view()->AddToPreview( item );
     }
 
     while( TOOL_EVENT* evt = Wait() )
     {
         m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
-        VECTOR2D pos       = m_controls->GetCursorPosition();
-        wxCursorPosition.x = pos.x;
-        wxCursorPosition.y = pos.y;
+        cursorPosition = m_controls->GetCursorPosition();
 
         if( evt->IsCancelInteractive() )
         {
@@ -589,25 +587,19 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
             cancelled = true;
             break;
         }
-
-        if( evt->IsMotion() )
+        else if( evt->IsMotion() )
         {
             view()->ShowPreview( false );
 
-            for( auto item : aPreview )
-            {
-                item->Move( wxCursorPosition - wxPreviousCursorPosition );
-            }
+            for( BOARD_ITEM* item : aPreview )
+                item->Move( cursorPosition - previousCursorPosition );
 
             view()->ShowPreview( true );
 
-            wxPreviousCursorPosition.x = wxCursorPosition.x;
-            wxPreviousCursorPosition.y = wxCursorPosition.y;
-
+            previousCursorPosition = cursorPosition;
         }
         else if( evt->IsActivate() )
         {
-
             if( evt->IsMoveTool() )
             {
                 // leave ourselves on the stack so we come back after the move
@@ -653,7 +645,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
 
             for( BOARD_ITEM* item : aItems )
             {
-                item->Move( wxCursorPosition );
+                item->Move( cursorPosition );
 
                 if( item->Type() == PCB_GROUP_T )
                     static_cast<PCB_GROUP*>( item )->AddChildrenToCommit( commit );
@@ -665,6 +657,12 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
             m_frame->PopTool( aEvent );
 
             break;
+        }
+        // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
+        // but we don't at present have that, so we just knock out some of the egregious ones.
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
         }
         else
         {

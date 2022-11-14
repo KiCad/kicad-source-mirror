@@ -332,10 +332,8 @@ public:
     static TOOL_ACTION assignNetClass;
 
     // Zone actions
-    static TOOL_ACTION zoneFill;
     static TOOL_ACTION zoneFillAll;
     static TOOL_ACTION zoneFillDirty;
-    static TOOL_ACTION zoneUnfill;
     static TOOL_ACTION zoneUnfillAll;
     static TOOL_ACTION zoneMerge;
 
