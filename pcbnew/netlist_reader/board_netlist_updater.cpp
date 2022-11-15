@@ -258,8 +258,14 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     wxString msg;
 
     // Create a copy only if the footprint has not been added during this update
-    FOOTPRINT* copy = m_commit.GetStatus( aPcbFootprint ) ? nullptr
-                                                          : (FOOTPRINT*) aPcbFootprint->Clone();
+    FOOTPRINT* copy = nullptr;
+
+    if( m_commit.GetStatus( aPcbFootprint ) )
+    {
+        copy = static_cast<FOOTPRINT*>( aPcbFootprint->Clone() );
+        copy->SetParentGroup( nullptr );
+    }
+
     bool       changed = false;
 
     // Test for reference designator field change.
@@ -437,14 +443,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     }
 
     if( changed && copy )
-    {
         m_commit.Modified( aPcbFootprint, copy );
-    }
     else if( copy )
-    {
-        copy->SetParentGroup( nullptr );
         delete copy;
-    }
 
     return true;
 }
@@ -456,8 +457,15 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     wxString msg;
 
     // Create a copy only if the footprint has not been added during this update
-    FOOTPRINT* copy = m_commit.GetStatus( aFootprint ) ? nullptr : (FOOTPRINT*) aFootprint->Clone();
-    bool       changed = false;
+    FOOTPRINT* copy = nullptr;
+
+    if( m_commit.GetStatus( aFootprint ) )
+    {
+        copy = static_cast<FOOTPRINT*>( aFootprint->Clone() );
+        copy->SetParentGroup( nullptr );
+    }
+
+    bool changed = false;
 
     // At this point, the component footprint is updated.  Now update the nets.
     for( PAD* pad : aFootprint->Pads() )
@@ -626,14 +634,9 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     }
 
     if( changed && copy )
-    {
         m_commit.Modified( aFootprint, copy );
-    }
     else if( copy )
-    {
-        copy->SetParentGroup( nullptr );
         delete copy;
-    }
 
     return true;
 }

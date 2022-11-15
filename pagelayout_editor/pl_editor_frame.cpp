@@ -925,7 +925,10 @@ void PL_EDITOR_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCo
         PICKED_ITEMS_LIST* curr_cmd = list.m_CommandsList[0];
         list.m_CommandsList.erase( list.m_CommandsList.begin() );
 
-        curr_cmd->ClearListAndDeleteItems();
+        curr_cmd->ClearListAndDeleteItems( []( EDA_ITEM* aItem )
+                                           {
+                                               delete aItem;
+                                           } );
         delete curr_cmd;    // Delete command
     }
 }

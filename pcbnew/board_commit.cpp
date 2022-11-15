@@ -218,7 +218,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 if( !ent.m_copy )
                 {
                     wxASSERT( changeType != CHT_MODIFY );     // too late to make a copy..
-                    ent.m_copy = ent.m_item->Clone();
+                    ent.m_copy = makeImage( ent.m_item );
                 }
 
                 wxASSERT( ent.m_item->Type() == PCB_FOOTPRINT_T );
@@ -603,6 +603,15 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 }
 
 
+EDA_ITEM* BOARD_COMMIT::makeImage( EDA_ITEM* aItem ) const
+{
+    BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( aItem->Clone() );
+
+    clone->SetParentGroup( nullptr );
+    return clone;
+}
+
+
 void BOARD_COMMIT::Revert()
 {
     PICKED_ITEMS_LIST                  undoList;
@@ -650,6 +659,16 @@ void BOARD_COMMIT::Revert()
             connectivity->Remove( item );
 
             item->SwapItemData( copy );
+
+            if( item->Type() == PCB_GROUP_T )
+            {
+                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+
+                group->RunOnChildren( [&]( BOARD_ITEM* child )
+                                      {
+                                          child->SetParentGroup( group );
+                                      } );
+            }
 
             view->Add( item );
             connectivity->Add( item );

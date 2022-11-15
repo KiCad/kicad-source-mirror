@@ -139,6 +139,8 @@ void SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb )
     {
         ZONE* zoneDup = new ZONE( *zone );
         zoneDup->SetParent( aPcb );
+        zoneDup->SetParentGroup( nullptr );
+
         ITEM_PICKER picker( nullptr, zone, UNDO_REDO::CHANGED );
         picker.SetLink( zoneDup );
         aPickList.PushItem( picker );
@@ -217,7 +219,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList, PICKED_ITEMS_LIST& aAu
                     wxASSERT_MSG( zcopy != nullptr,
                                   wxT( "UpdateCopyOfZonesList() error: link = NULL" ) );
 
-                    *ref = *zcopy;
+                    ref->SwapItemData( zcopy );
 
                     // the copy was deleted; the link does not exists now.
                     aPickList.SetPickedItemLink( nullptr, kk );

@@ -1377,7 +1377,10 @@ void SYMBOL_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItem
 
     for( PICKED_ITEMS_LIST* command : list.m_CommandsList )
     {
-        command->ClearListAndDeleteItems();
+        command->ClearListAndDeleteItems( []( EDA_ITEM* aItem )
+                                          {
+                                              delete aItem;
+                                          } );
         delete command;
     }
 

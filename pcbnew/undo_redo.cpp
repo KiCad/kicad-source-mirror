@@ -35,10 +35,8 @@ using namespace std::placeholders;
 #include <pcb_target.h>
 #include <footprint.h>
 #include <pad.h>
-#include <pcb_dimension.h>
 #include <origin_viewitem.h>
 #include <connectivity/connectivity_data.h>
-#include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <tools/pcb_selection_tool.h>
@@ -192,6 +190,7 @@ void PCB_BASE_EDIT_FRAME::saveCopyInUndoList( PICKED_ITEMS_LIST* commandToUndo,
                 FOOTPRINT* orig = static_cast<FOOTPRINT*>( item );
                 FOOTPRINT* clone = new FOOTPRINT( *orig );
                 clone->SetParent( GetBoard() );
+                clone->SetParentGroup( nullptr );
 
                 // Clear current flags (which can be temporary set by a current edit command)
                 for( BOARD_ITEM* child : clone->GraphicalItems() )
@@ -240,7 +239,12 @@ void PCB_BASE_EDIT_FRAME::saveCopyInUndoList( PICKED_ITEMS_LIST* commandToUndo,
 
             // If we don't yet have a copy in the link, set one up
             if( !commandToUndo->GetPickedItemLink( ii ) )
-                commandToUndo->SetPickedItemLink( item->Clone(), ii );
+            {
+                BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( item->Clone() );
+                clone->SetParentGroup( nullptr );
+
+                commandToUndo->SetPickedItemLink( clone, ii );
+            }
 
             break;
 
@@ -580,16 +584,11 @@ void PCB_BASE_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aIt
 
 void PCB_BASE_EDIT_FRAME::ClearListAndDeleteItems( PICKED_ITEMS_LIST* aList )
 {
-    for( size_t ii = 0; ii < aList->GetCount();  ++ii )
-    {
-        if( BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aList->GetPickedItem( ii ) ) )
-            item->SetParentGroup( nullptr );
-
-        if( BOARD_ITEM* link = static_cast<BOARD_ITEM*>( aList->GetPickedItemLink( ii ) ) )
-            link->SetParentGroup( nullptr );
-    }
-
-    aList->ClearListAndDeleteItems();
+    aList->ClearListAndDeleteItems( []( EDA_ITEM* item )
+                                    {
+                                        static_cast<BOARD_ITEM*>( item )->SetParentGroup( nullptr );
+                                        delete item;
+                                    } );
 }
 
 

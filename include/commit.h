@@ -172,6 +172,8 @@ protected:
 
     virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const = 0;
 
+    virtual EDA_ITEM* makeImage( EDA_ITEM* aItem ) const = 0;
+
     CHANGE_TYPE convert( UNDO_REDO aType ) const;
 
     std::set<EDA_ITEM*> m_changedItems;

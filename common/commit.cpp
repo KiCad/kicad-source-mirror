@@ -48,14 +48,14 @@ COMMIT::~COMMIT()
 COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 {
     // CHT_MODIFY and CHT_DONE are not compatible
-    assert( ( aChangeType & ( CHT_MODIFY | CHT_DONE ) ) != ( CHT_MODIFY | CHT_DONE ) );
+    wxASSERT( ( aChangeType & ( CHT_MODIFY | CHT_DONE ) ) != ( CHT_MODIFY | CHT_DONE ) );
 
     int flag = aChangeType & CHT_FLAGS;
 
     switch( aChangeType & CHT_TYPE )
     {
     case CHT_ADD:
-        assert( m_changedItems.find( aItem ) == m_changedItems.end() );
+        wxASSERT( m_changedItems.find( aItem ) == m_changedItems.end() );
         makeEntry( aItem, CHT_ADD | flag );
         return *this;
 
@@ -66,14 +66,9 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
     case CHT_MODIFY:
     {
         EDA_ITEM* parent = parentObject( aItem );
-        EDA_ITEM* clone = nullptr;
+        EDA_ITEM* clone = makeImage( parent );
 
-        assert( parent );
-
-        if( parent )
-            clone = parent->Clone();
-
-        assert( clone );
+        wxASSERT( clone );
 
         if( clone )
             return createModified( parent, clone, flag );
@@ -82,7 +77,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
     }
 
     default:
-        assert( false );
+        wxFAIL;
     }
 
     return *this;
@@ -92,9 +87,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 COMMIT& COMMIT::Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType )
 {
     for( EDA_ITEM* item : container )
-    {
         Stage( item, aChangeType );
-    }
 
     return *this;
 }
@@ -106,12 +99,11 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
     {
         UNDO_REDO change_type = aItems.GetPickedItemStatus( i );
         EDA_ITEM* item = aItems.GetPickedItem( i );
-        EDA_ITEM* copy = nullptr;
 
         if( change_type == UNDO_REDO::UNSPECIFIED )
             change_type = aModFlag;
 
-        if( ( copy = aItems.GetPickedItemLink( i ) ) )
+        if( EDA_ITEM* copy = aItems.GetPickedItemLink( i ) )
         {
             assert( change_type == UNDO_REDO::CHANGED );
 

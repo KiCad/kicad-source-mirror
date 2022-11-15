@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,9 +114,8 @@ void PICKED_ITEMS_LIST::ClearItemsList()
 }
 
 
-void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
+void PICKED_ITEMS_LIST::ClearListAndDeleteItems( std::function<void(EDA_ITEM*)> aItemDeleter )
 {
-    // Delete items is they are not flagged NEWITEM, or if this is a block operation
     while( GetCount() > 0 )
     {
         ITEM_PICKER wrapper = PopItem();
@@ -126,17 +125,17 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
 
         // The Link is an undo construct; it is always owned by the undo/redo container
         if( wrapper.GetLink() )
-            delete wrapper.GetLink();
+            aItemDeleter( wrapper.GetLink() );
 
         if( wrapper.GetFlags() & UR_TRANSIENT )
         {
-            delete wrapper.GetItem();
+            aItemDeleter( wrapper.GetItem() );
         }
         else if( wrapper.GetStatus() == UNDO_REDO::DELETED )
         {
             // This should really be replaced with UR_TRANSIENT, but currently many clients
             // (eeschema in particular) abuse this to achieve non-undo-related deletions.
-            delete wrapper.GetItem();
+            aItemDeleter( wrapper.GetItem() );
         }
     }
 }

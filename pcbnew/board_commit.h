@@ -73,7 +73,9 @@ public:
     void SetResolveNetConflicts( bool aResolve = true ) { m_resolveNetConflicts = aResolve; }
 
 private:
-    virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;
+    EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;
+
+    EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
     void dirtyIntersectingZones( BOARD_ITEM* item );
 

@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,7 +229,7 @@ void LAYERS_MAP_DIALOG::initDialog()
                 int currLayer = gerber2KicadMapping[ii];
 
                 // Default to "Do Not Export" for unselected or undefined layer
-                if( ( currLayer == UNSELECTED_LAYER ) )
+                if( currLayer == UNSELECTED_LAYER )
                 {
                     m_layersList[ii]->SetLabel( _( "Do not export" ) );
                     m_layersList[ii]->SetForegroundColour( *wxBLUE );

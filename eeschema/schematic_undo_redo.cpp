@@ -393,7 +393,10 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
     if( undo )
     {
         PutDataInPreviousState( undo );
-        undo->ClearListAndDeleteItems();
+        undo->ClearListAndDeleteItems( []( EDA_ITEM* aItem )
+                                       {
+                                           delete aItem;
+                                       } );
         delete undo;
 
         SetSheetNumberAndCount();
@@ -417,7 +420,10 @@ void SCH_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCou
 
     for( PICKED_ITEMS_LIST* command : list.m_CommandsList )
     {
-        command->ClearListAndDeleteItems();
+        command->ClearListAndDeleteItems( []( EDA_ITEM* aItem )
+                                          {
+                                              delete aItem;
+                                          } );
         delete command;
     }
 
