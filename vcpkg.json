@@ -18,7 +18,8 @@
     "openssl",
     "icu",
     "ngspice",
-    "wxpython"
+    "wxpython",
+    "libxslt"
   ],
   "overrides": [
     {
