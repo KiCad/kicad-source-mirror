@@ -23,6 +23,7 @@
 #include "jobs/job_export_pcb_step.h"
 #include <kiface_base.h>
 #include <regex>
+#include <locale_io.h>
 
 #include <macros.h>
 
@@ -102,6 +103,9 @@ int CLI::EXPORT_PCB_STEP_COMMAND::Perform( KIWAY& aKiway )
     step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
 
     wxString userOrigin = FROM_UTF8( m_argParser.get<std::string>( ARG_USER_ORIGIN ).c_str() );
+
+    LOCALE_IO dummy;    // Switch to "C" locale
+
     if( !userOrigin.IsEmpty() )
     {
         std::regex  re_pattern( REGEX_QUANTITY REGEX_DELIMITER REGEX_QUANTITY REGEX_UNIT,
