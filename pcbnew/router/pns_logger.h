@@ -49,7 +49,8 @@ public:
         EVT_FIX,
         EVT_MOVE,
         EVT_ABORT,
-        EVT_TOGGLE_VIA
+        EVT_TOGGLE_VIA,
+        EVT_UNFIX
     };
 
     struct EVENT_ENTRY {

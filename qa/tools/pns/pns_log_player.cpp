@@ -145,6 +145,16 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
             break;
         }
 
+        case LOGGER::EVT_UNFIX:
+        {
+            m_debugDecorator->NewStage( "unfix", 0, PNSLOGINFO );
+            m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
+            m_debugDecorator->Message( wxString::Format( "unfix (%d, %d)", evt.p.x, evt.p.y ) );
+            printf( "  unfix\n" );
+            m_router->UndoLastSegment();
+            break;
+        }
+
         case LOGGER::EVT_MOVE:
         {
             m_debugDecorator->NewStage( "move", 0, PNSLOGINFO );
@@ -232,6 +242,7 @@ bool PNS_LOG_PLAYER::CompareResults( PNS_LOG_FILE* aLog )
 {
     auto cstate = GetRouterUpdatedItems();
 
+    printf("Comparing %lu added/%lu removed items\n", cstate.m_addedItems.size(), cstate.m_removedIds.size() );
     return cstate.Compare( aLog->GetExpectedResult() );
 }
 

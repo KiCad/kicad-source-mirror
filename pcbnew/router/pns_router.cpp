@@ -884,6 +884,7 @@ void ROUTER::UndoLastSegment()
     if( !RoutingInProgress() )
         return;
 
+    m_logger->Log( LOGGER::EVT_UNFIX );
     m_placer->UnfixRoute();
 }
 
