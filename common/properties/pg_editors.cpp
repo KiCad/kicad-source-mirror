@@ -67,7 +67,7 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
 
     long result = m_unitBinder->GetValue();
 
-    bool changed = ( result != aVariant.GetLong() );
+    bool changed = ( aVariant.IsNull() || result != aVariant.GetLong() );
 
     if( changed )
     {
