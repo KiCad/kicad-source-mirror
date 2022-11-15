@@ -70,9 +70,9 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
 
 SETTINGS_MANAGER::~SETTINGS_MANAGER()
 {
+    m_projects.clear();
     m_settings.clear();
     m_color_settings.clear();
-    m_projects.clear();
 }
 
 
