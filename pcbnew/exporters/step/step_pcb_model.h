@@ -96,6 +96,18 @@ public:
 
 private:
     /**
+     * @return true if the board(s) outline is valid. False otherwise
+     */
+    bool isBoardOutlineValid();
+
+    /** create one solid board using current outline and drill holes set
+     * @param aIdx is the main outline index
+     * @param aOutline is the set of outlines with holes
+     * @param aOrigin is the coordinate origin for 3 view
+     */
+    bool createOneBoard( int aIdx, SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin );
+
+    /**
      * Load a 3D model data.
      *
      * @param aFileNameUTF8 is the filename encoded UTF8 (different formats allowed)
@@ -124,7 +136,7 @@ private:
     Handle( XCAFDoc_ShapeTool )     m_assy;
     TDF_Label                       m_assy_label;
     bool                            m_hasPCB;       // set true if CreatePCB() has been invoked
-    TDF_Label                       m_pcb_label;    // label for the PCB model
+    std::vector<TDF_Label>          m_pcb_labels;   // labels for the PCB model (one by main outline)
     MODEL_MAP                       m_models;       // map of file names to model labels
     int                             m_components;   // number of successfully loaded components;
     double                          m_precision;    // model (length unit) numeric precision

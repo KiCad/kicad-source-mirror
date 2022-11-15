@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,6 +338,11 @@ void STEP_PCB_MODEL::SetMinDistance( double aDistance )
     BRepBuilderAPI::Precision( aDistance );
 }
 
+bool STEP_PCB_MODEL::isBoardOutlineValid()
+{
+    return m_pcb_labels.size() > 0;
+}
+
 
 bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
                                 double aThickness, const VECTOR2D& aOrigin )
@@ -413,23 +418,29 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 {
     if( m_hasPCB )
     {
-        if( m_pcb_label.IsNull() )
+        if( !isBoardOutlineValid() )
             return false;
 
         return true;
     }
 
     m_hasPCB = true; // whether or not operations fail we note that CreatePCB has been invoked
-    TopoDS_Shape board;
+
+    // Support for more than one main outline (more than one board)
+    std::vector<TopoDS_Shape> board_outlines;
 
     for( int cnt = 0; cnt < aOutline.OutlineCount(); cnt++ )
     {
         const SHAPE_LINE_CHAIN& outline = aOutline.COutline( cnt );
 
-        if( !MakeShape( board, outline, m_thickness, aOrigin ) )
+        TopoDS_Shape curr_brd;
+
+        if( !MakeShape( curr_brd, outline, m_thickness, aOrigin ) )
         {
-            // error
+            // Error
         }
+        else
+            board_outlines.push_back( curr_brd );
 
         // Generate board holes from outlines:
         for( int ii = 0; ii < aOutline.HoleCount( cnt ); ii++ )
@@ -442,7 +453,6 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
                 m_cutouts.push_back( hole );
             }
         }
-
     }
 
     // subtract cutouts (if any)
@@ -451,29 +461,39 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         ReportMessage( wxString::Format( wxT( "Build board cutouts and holes (%d holes).\n" ),
                                          (int) m_cutouts.size() ) );
 
-        BRepAlgoAPI_Cut      Cut;
-        TopTools_ListOfShape mainbrd;
-        mainbrd.Append( board );
-
-        Cut.SetArguments( mainbrd );
         TopTools_ListOfShape holelist;
 
         for( TopoDS_Shape& hole : m_cutouts )
             holelist.Append( hole );
 
-        Cut.SetTools( holelist );
-        Cut.Build();
-        board = Cut.Shape();
+        // Remove holes for each board (usually there is only one board
+        for( TopoDS_Shape& board: board_outlines )
+        {
+            BRepAlgoAPI_Cut      Cut;
+            TopTools_ListOfShape mainbrd;
+
+            mainbrd.Append( board );
+
+            Cut.SetArguments( mainbrd );
+
+            Cut.SetTools( holelist );
+            Cut.Build();
+
+            board = Cut.Shape();
+        }
     }
 
     // push the board to the data structure
     ReportMessage( wxT( "\nGenerate board full shape.\n" ) );
 
     // Dont expand the component or else coloring it gets hard
-    m_pcb_label = m_assy->AddComponent( m_assy_label, board, false );
+    for( TopoDS_Shape& board: board_outlines )
+    {
+        m_pcb_labels.push_back( m_assy->AddComponent( m_assy_label, board, false ) );
 
-    if( m_pcb_label.IsNull() )
-        return false;
+        if( m_pcb_labels.back().IsNull() )
+            return false;
+    }
 
     // AddComponent adds a label that has a reference (not a parent/child relation) to the real
     // label.  We need to extract that real label to name it for the STEP output cleanly
@@ -481,34 +501,48 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     // like "deduplicate" imported STEPs by swapping STEP assembly components with already
     // identically named assemblies.  So we want to avoid having the PCB be generally defaulted
     // to "Component" or "Assembly".
-    Handle( TDataStd_TreeNode ) node;
-
-    if( m_pcb_label.FindAttribute( XCAFDoc::ShapeRefGUID(), node ) )
-    {
-        TDF_Label label = node->Father()->Label();
-
-        if( !label.IsNull() )
-        {
-            wxString                   pcbName = wxString::Format( wxT( "%s PCB" ), m_pcbName );
-            std::string                pcbNameStdString( pcbName.ToUTF8() );
-            TCollection_ExtendedString partname( pcbNameStdString.c_str() );
-            TDataStd_Name::Set( label, partname );
-        }
-    }
 
     // color the PCB
     Handle( XCAFDoc_ColorTool ) colorTool = XCAFDoc_DocumentTool::ColorTool( m_doc->Main() );
     Quantity_Color color( m_boardColor[0], m_boardColor[1], m_boardColor[2], Quantity_TOC_RGB );
 
-    colorTool->SetColor( m_pcb_label, color, XCAFDoc_ColorSurf );
+    int pcbIdx = 1;
 
-    TopExp_Explorer topex;
-    topex.Init( m_assy->GetShape( m_pcb_label ), TopAbs_SOLID );
-
-    while( topex.More() )
+    for( TDF_Label& pcb_label : m_pcb_labels )
     {
-        colorTool->SetColor( topex.Current(), color, XCAFDoc_ColorSurf );
-        topex.Next();
+        colorTool->SetColor( pcb_label, color, XCAFDoc_ColorSurf );
+
+        Handle( TDataStd_TreeNode ) node;
+
+        if( pcb_label.FindAttribute( XCAFDoc::ShapeRefGUID(), node ) )
+        {
+            // Gives a name to each board object
+            TDF_Label label = node->Father()->Label();
+
+            if( !label.IsNull() )
+            {
+                wxString pcbName;
+
+                if( m_pcb_labels.size() == 1 )
+                    pcbName = wxT( "PCB" );
+                else
+                    pcbName = wxString::Format( wxT( "PCB%d" ), pcbIdx++ );
+
+                std::string                pcbNameStdString( pcbName.ToUTF8() );
+                TCollection_ExtendedString partname( pcbNameStdString.c_str() );
+                TDataStd_Name::Set( label, partname );
+            }
+        }
+
+        TopExp_Explorer topex;
+        // color the PCB
+        topex.Init( m_assy->GetShape( pcb_label ), TopAbs_SOLID );
+
+        while( topex.More() )
+        {
+            colorTool->SetColor( topex.Current(), color, XCAFDoc_ColorSurf );
+            topex.Next();
+        }
     }
 
 #if( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )
@@ -523,7 +557,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 // write the assembly model in IGES format
 bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
 {
-    if( m_pcb_label.IsNull() )
+    if( !isBoardOutlineValid() )
     {
         ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
                                               "'%s'.\n" ),
@@ -555,7 +589,7 @@ bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
 
 bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName )
 {
-    if( m_pcb_label.IsNull() )
+    if( !isBoardOutlineValid() )
     {
         ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
                                               "'%s'.\n" ),
