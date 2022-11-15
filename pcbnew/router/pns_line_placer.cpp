@@ -1325,6 +1325,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 {
     m_placementCorrect = false;
     m_currentStart = VECTOR2I( aP );
+    m_fixStart =  VECTOR2I( aP );
     m_currentEnd = VECTOR2I( aP );
     m_currentNet = std::max( 0, aStartItem ? aStartItem->Net() : 0 );
     m_startItem = aStartItem;
@@ -1376,7 +1377,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     else
         n = m_currentNode;
 
-    m_fixedTail.AddStage( m_currentStart, m_currentLayer, m_placingVia, m_direction, n );
+    m_fixedTail.AddStage( m_fixStart, m_currentLayer, m_placingVia, m_direction, n );
 
     return true;
 }
@@ -1612,14 +1613,9 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         setInitialDirection( d_last );
         m_currentStart = ( m_placingVia || fixAll ) ? p_last : p_pre_last;
 
-        VECTOR2I ps;
-        if( m_tail.SegmentCount() )
-            ps = m_tail.CPoint( 0 );
-        else
-            ps = m_p_start;
+        m_fixedTail.AddStage( m_fixStart, m_currentLayer, m_placingVia, m_direction, m_currentNode );
 
-        m_fixedTail.AddStage( ps, m_currentLayer, m_placingVia, m_direction, m_currentNode );
-
+        m_fixStart = m_currentStart;
         m_startItem = nullptr;
         m_placingVia = false;
         m_chainedPlacement = !pl.EndsWithVia();
@@ -1661,16 +1657,20 @@ bool LINE_PLACER::UnfixRoute()
     FIXED_TAIL::STAGE st;
 
     if ( !m_fixedTail.PopStage( st ) )
+    {
         return false;
+    }
 
     m_head.Line().Clear();
     m_tail.Line().Clear();
     m_startItem = nullptr;
     m_p_start = st.pts[0].p;
+    m_fixStart = m_p_start;
     m_direction = st.pts[0].direction;
     m_placingVia = st.pts[0].placingVias;
     m_currentNode = st.commit;
     m_currentLayer = st.pts[0].layer;
+    m_currentStart = m_p_start;
     m_head.SetLayer( m_currentLayer );
     m_tail.SetLayer( m_currentLayer );
     m_head.RemoveVia();

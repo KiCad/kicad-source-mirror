@@ -348,6 +348,8 @@ private:
 
     NODE*          m_world;         ///< pointer to world to search colliding items
     VECTOR2I       m_p_start;       ///< current routing start (end of tail, beginning of head)
+    VECTOR2I       m_fixStart;       ///< start point of the last 'fix'
+
     std::optional<VECTOR2I>       m_last_p_end;
 
     std::unique_ptr<SHOVE> m_shove; ///< The shove engine
