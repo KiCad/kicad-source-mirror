@@ -84,4 +84,3 @@ wxVariantData* EDA_ANGLE_VARIANT_DATA::VariantDataFactory( const wxAny& aAny )
 }
 
 
-REGISTER_WXANY_CONVERSION( EDA_ANGLE, EDA_ANGLE_VARIANT_DATA )

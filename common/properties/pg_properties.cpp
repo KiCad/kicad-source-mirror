@@ -37,8 +37,44 @@
 static const wxChar REGEX_SIGNED_DISTANCE[] = wxT( "([-+]?[0-9]+[\\.?[0-9]*) *(mm|in|mils)*" );
 static const wxChar REGEX_UNSIGNED_DISTANCE[] = wxT( "([0-9]+[\\.?[0-9]*) *(mm|in|mils)*" );
 
-// Force at least one to exist, otherwise wxWidgets won't register it
-static const EDA_ANGLE_VARIANT_DATA g_AngleVariantData;
+
+class wxAnyToEDA_ANGLE_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
+{
+public:
+    wxAnyToEDA_ANGLE_VARIANTRegistrationImpl( wxVariantDataFactory factory )
+        : wxAnyToVariantRegistration( factory )
+    {
+    }
+
+public:
+    static bool IsSameClass(const wxAnyValueType* otherType)
+    {
+        return AreSameClasses( *s_instance.get(), *otherType );
+    }
+
+    static wxAnyValueType* GetInstance()
+    {
+        return s_instance.get();
+    }
+
+    virtual wxAnyValueType* GetAssociatedType() wxOVERRIDE
+    {
+        return wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::GetInstance();
+    }
+private:
+    static bool AreSameClasses(const wxAnyValueType& a, const wxAnyValueType& b)
+    {
+        return wxTypeId(a) == wxTypeId(b);
+    }
+
+    static wxAnyValueTypeScopedPtr s_instance;
+};
+
+
+wxAnyValueTypeScopedPtr wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<EDA_ANGLE>() );
+
+static wxAnyToEDA_ANGLE_VARIANTRegistrationImpl s_wxAnyToEDA_ANGLE_VARIANTRegistration( &EDA_ANGLE_VARIANT_DATA::VariantDataFactory );
+
 
 wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
 {
