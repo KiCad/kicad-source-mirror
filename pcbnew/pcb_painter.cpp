@@ -665,7 +665,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         }
         else
         {
-            textOrientation = EDA_ANGLE( visibleSeg.B - visibleSeg.A ) + ANGLE_90;
+            textOrientation = -EDA_ANGLE( visibleSeg.B - visibleSeg.A );
             textOrientation.Normalize90();
 
             double min_size = std::min( viewport.GetWidth(), viewport.GetHeight() );
