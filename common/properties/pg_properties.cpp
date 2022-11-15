@@ -57,7 +57,7 @@ public:
         return s_instance.get();
     }
 
-    virtual wxAnyValueType* GetAssociatedType() wxOVERRIDE
+    virtual wxAnyValueType* GetAssociatedType() override
     {
         return wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::GetInstance();
     }
