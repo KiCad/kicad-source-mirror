@@ -127,6 +127,8 @@ public:
 
     int ClearanceEpsilon() const { return m_clearanceEpsilon; }
 
+    void SetCacheWriteEnabled( bool aEnabled ) override { m_cacheWriteEnabled = aEnabled; }
+
     void ClearCacheForItem( const PNS::ITEM* aItem ) override;
 
 private:
@@ -150,6 +152,7 @@ private:
     PCB_ARC            m_dummyArcs[2];
     PCB_VIA            m_dummyVias[2];
     int                m_clearanceEpsilon;
+    bool               m_cacheWriteEnabled;
 
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_clearanceCache;
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_holeClearanceCache;
@@ -163,7 +166,8 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard,
     m_board( aBoard ),
     m_dummyTracks{ { aBoard }, { aBoard } },
     m_dummyArcs{ { aBoard }, { aBoard } },
-    m_dummyVias{ { aBoard }, { aBoard } }
+    m_dummyVias{ { aBoard }, { aBoard } },
+    m_cacheWriteEnabled( true )
 {
     if( aBoard )
         m_clearanceEpsilon = aBoard->GetDesignSettings().GetDRCEpsilon();
@@ -426,7 +430,9 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     if( aUseClearanceEpsilon )
         rv -= m_clearanceEpsilon;
 
-    m_clearanceCache[ key ] = rv;
+    if( m_cacheWriteEnabled )
+        m_clearanceCache[key] = rv;
+
     return rv;
 }
 
@@ -455,7 +461,9 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleClearance( const PNS::ITEM* aA, const PNS::ITE
     if( aUseClearanceEpsilon )
         rv -= m_clearanceEpsilon;
 
-    m_holeClearanceCache[ key ] = rv;
+    if( m_cacheWriteEnabled )
+        m_holeClearanceCache[key] = rv;
+
     return rv;
 }
 
@@ -484,7 +492,9 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleToHoleClearance( const PNS::ITEM* aA, const PN
     if( aUseClearanceEpsilon )
         rv -= m_clearanceEpsilon;
 
-    m_holeToHoleClearanceCache[ key ] = rv;
+    if( m_cacheWriteEnabled )
+        m_holeToHoleClearanceCache[key] = rv;
+
     return rv;
 }
 

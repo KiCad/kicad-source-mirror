@@ -477,6 +477,10 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
         const LINE* line = static_cast<const LINE*>( aItemA );
         const SHAPE_LINE_CHAIN& l = line->CLine();
 
+        // s is a temporary item, we don't want to put it in the cache.
+        if( m_ruleResolver )
+            m_ruleResolver->SetCacheWriteEnabled( false );
+
         for( int i = 0; i < l.SegmentCount(); i++ )
         {
             const SEGMENT s( *line, l.CSegment( i ) );
@@ -486,10 +490,13 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
                 return OPT_OBSTACLE( obs[0] );
         }
 
+        if( m_ruleResolver )
+            m_ruleResolver->SetCacheWriteEnabled( true );
+
         if( line->EndsWithVia() )
         {
             n += QueryColliding( &line->Via(), obs, aKindMask, 1 );
-            
+
             if( n )
                 return OPT_OBSTACLE( obs[0] );
         }
