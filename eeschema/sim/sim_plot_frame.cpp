@@ -27,6 +27,11 @@
 #include <wx/debug.h>
 #include <wx/stc/stc.h>
 
+// For some obscure reason, needed on msys2 with some wxWidgets versions (3.0) to avoid
+// undefined symbol at link stage (due to use of #include <pegtl.hpp>)
+// Should not create issues on other platforms
+#include <wx/menu.h>
+
 #include <project/project_file.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
@@ -38,10 +43,8 @@
 #include <dialogs/dialog_signal_list.h>
 #include <scintilla_tricks.h>
 #include "string_utils.h"
-#include "ngspice_helpers.h"
 #include <pgm_base.h>
 #include "ngspice.h"
-#include "sim_plot_colors.h"
 #include "sim_plot_frame.h"
 #include "sim_plot_panel.h"
 #include "spice_simulator.h"
@@ -52,7 +55,6 @@
 #include <eeschema_settings.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
-#include <dialog_shim.h>
 #include <wx_filename.h>
 
 

@@ -22,13 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_property.h>
-#include <sim/sim_value.h>
-#include <ki_exception.h>
 #include <confirm.h>
 #include <wx/combo.h>
 #include <wx/combobox.h>
 #include <wx/notebook.h>
+
+// Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
+// (especially on msys2 + wxWidgets 3.0.x)
+#include <sim/sim_property.h>
+#include <sim/sim_value.h>
+#include <ki_exception.h>
 
 
 wxBEGIN_EVENT_TABLE( SIM_VALIDATOR, wxValidator )

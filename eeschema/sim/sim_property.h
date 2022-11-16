@@ -25,12 +25,12 @@
 #ifndef SIM_PROPERTY_H
 #define SIM_PROPERTY_H
 
-#include <sim/sim_model.h>
-#include <wx/window.h>
 #include <wx/notebook.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/manager.h>
 #include <wx/propgrid/props.h>
+
+#include <sim/sim_model.h>
 
 
 class SIM_VALIDATOR : public wxValidator
