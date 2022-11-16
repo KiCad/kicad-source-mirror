@@ -103,6 +103,7 @@ public:
     virtual wxString NetName( int aNet ) = 0;
 
     virtual void ClearCacheForItem( const ITEM* aItem ) {}
+    virtual void ClearCaches() {}
 };
 
 /**

@@ -307,6 +307,10 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
 
     for( int i = 0; i < aLine->CLine().SegmentCount(); i++ )
     {
+        // Note: Clearances between &s and other items are cached,
+        // which means they'll be the same for all segments in the line.
+        // Disabling the cache will lead to slowness.
+
         const SEGMENT s( *aLine, aLine->CLine().CSegment( i ) );
         QueryColliding( &s, obstacleList, aKindMask );
     }
@@ -479,6 +483,10 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
 
         for( int i = 0; i < l.SegmentCount(); i++ )
         {
+            // Note: Clearances between &s and other items are cached,
+            // which means they'll be the same for all segments in the line.
+            // Disabling the cache will lead to slowness.
+
             const SEGMENT s( *line, l.CSegment( i ) );
             n += QueryColliding( &s, obs, aKindMask, 1 );
 
@@ -489,7 +497,7 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
         if( line->EndsWithVia() )
         {
             n += QueryColliding( &line->Via(), obs, aKindMask, 1 );
-            
+
             if( n )
                 return OPT_OBSTACLE( obs[0] );
         }

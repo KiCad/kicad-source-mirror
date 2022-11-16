@@ -128,6 +128,7 @@ public:
     int ClearanceEpsilon() const { return m_clearanceEpsilon; }
 
     void ClearCacheForItem( const PNS::ITEM* aItem ) override;
+    void ClearCaches() override;
 
 private:
     int holeRadius( const PNS::ITEM* aItem ) const;
@@ -374,6 +375,14 @@ void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItem( const PNS::ITEM* aItem )
 
     key.Flag = true;
     m_clearanceCache.erase( key );
+}
+
+
+void PNS_PCBNEW_RULE_RESOLVER::ClearCaches()
+{
+    m_clearanceCache.clear();
+    m_holeClearanceCache.clear();
+    m_holeToHoleClearanceCache.clear();
 }
 
 

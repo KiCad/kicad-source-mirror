@@ -166,6 +166,8 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
         m_world->SetCollisionQueryScope( NODE::CQS_IGNORE_HOLE_CLEARANCE );
     }
 
+    GetRuleResolver()->ClearCaches();
+
     if( aStartItems.Count( ITEM::SOLID_T ) == aStartItems.Size() )
     {
         m_dragger = std::make_unique<COMPONENT_DRAGGER>( this );
@@ -395,6 +397,8 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
     {
         m_world->SetCollisionQueryScope( NODE::CQS_IGNORE_HOLE_CLEARANCE );
     }
+
+    GetRuleResolver()->ClearCaches();
 
     if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
         return false;
@@ -790,7 +794,7 @@ bool ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS
     }
 
     tmpNode->GetUpdatedItems( aRemoved, aAdded );
-    
+
     //printf("added %d removed %d\n", aRemoved.size(), aAdded.size() );
 
     return true;
