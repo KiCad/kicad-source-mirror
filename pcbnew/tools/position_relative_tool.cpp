@@ -73,7 +73,6 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
             {
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForMarkers( aCollector );
-                sTool->FilterCollectorForFreePads( aCollector );
             },
             !m_isFootprintEditor /* prompt user regarding locked items */ );
 
