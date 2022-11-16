@@ -196,7 +196,6 @@ enum KICAD_T
      * sort order is logical.
      */
     LIB_SYMBOL_T,
-    LIB_ALIAS_T,
     LIB_SHAPE_T,
     LIB_TEXT_T,
     LIB_TEXTBOX_T,
@@ -408,7 +407,6 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCHEMATIC_T:
 
     case LIB_SYMBOL_T:
-    case LIB_ALIAS_T:
     case LIB_SHAPE_T:
     case LIB_TEXT_T:
     case LIB_TEXTBOX_T:

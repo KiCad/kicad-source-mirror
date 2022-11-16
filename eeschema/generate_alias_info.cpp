@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,7 +34,7 @@ static const wxString DescriptionFormat =
     "__FIELDS__"
     "</table>";
 
-static const wxString AliasOfFormat =   "<br><i>" + _( "Alias of" ) + " %s (%s)</i>";
+static const wxString AliasOfFormat =   "<br><i>" + _( "Derived from" ) + " %s (%s)</i>";
 static const wxString DescFormat =      "<br>%s";
 static const wxString KeywordsFormat =  "<br>" + _( "Keywords" ) + ": %s";
 static const wxString FieldFormat =

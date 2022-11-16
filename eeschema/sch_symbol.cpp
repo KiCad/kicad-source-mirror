@@ -1684,7 +1684,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
                 if( parent )
                     msg = parent->GetName();
 
-                aList.emplace_back( _( "Alias of" ), UnescapeString( msg ) );
+                aList.emplace_back( _( "Derived from" ), UnescapeString( msg ) );
             }
             else if( !m_lib_id.GetLibNickname().empty() )
             {

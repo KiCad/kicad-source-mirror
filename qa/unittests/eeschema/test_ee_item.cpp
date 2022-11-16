@@ -112,8 +112,7 @@ public:
 
         case SCHEMATIC_T:
         case SCH_PIN_T:
-        case LIB_SYMBOL_T:
-        case LIB_ALIAS_T:           return nullptr;
+        case LIB_SYMBOL_T:          return nullptr;
 
         default:
             BOOST_FAIL( wxString::Format(

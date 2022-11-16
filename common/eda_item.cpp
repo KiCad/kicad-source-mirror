@@ -373,7 +373,6 @@ static struct EDA_ITEM_DESC
             .Map( SCH_SCREEN_T,            _HKI( "SCH Screen" ) )
 
             .Map( LIB_SYMBOL_T,            _HKI( "Symbol" ) )
-            .Map( LIB_ALIAS_T,             _HKI( "Alias" ) )
             .Map( LIB_SHAPE_T,             _HKI( "Graphic" ) )
             .Map( LIB_TEXT_T,              _HKI( "Text" ) )
             .Map( LIB_TEXTBOX_T,           _HKI( "Text Box" ) )
