@@ -159,9 +159,13 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet,
     // Set any fields that were modified as part of the symbol selection
     for( const std::pair<int, wxString>& i : aSel.Fields )
     {
-        SCH_FIELD* field = GetFieldById( i.first );
-
-        if( field )
+        if( i.first == REFERENCE_FIELD )
+            SetRef( aSheet, i.second );
+        else if( i.first == VALUE_FIELD )
+            SetValue( aSheet, i.second );
+        else if( i.first == FOOTPRINT_FIELD )
+            SetFootprint( aSheet, i.second );
+        else if( SCH_FIELD* field = GetFieldById( i.first ) )
             field->SetText( i.second );
     }
 }
