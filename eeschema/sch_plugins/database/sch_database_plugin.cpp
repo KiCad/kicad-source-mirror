@@ -374,19 +374,27 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
         {
             LIB_FIELD& field = symbol->GetValueField();
             field.SetText( value );
-            field.SetVisible( mapping.visible_on_add );
-            field.SetNameShown( mapping.show_name );
+
+            if( !mapping.inherit_properties )
+            {
+                field.SetVisible( mapping.visible_on_add );
+                field.SetNameShown( mapping.show_name );
+            }
             continue;
         }
         else if( mapping.name == wxT( "Datasheet" ) )
         {
             LIB_FIELD& field = symbol->GetDatasheetField();
             field.SetText( value );
-            field.SetVisible( mapping.visible_on_add );
-            field.SetNameShown( mapping.show_name );
 
-            if( mapping.visible_on_add )
-                field.SetAutoAdded( true );
+            if( !mapping.inherit_properties )
+            {
+                field.SetVisible( mapping.visible_on_add );
+                field.SetNameShown( mapping.show_name );
+
+                if( mapping.visible_on_add )
+                    field.SetAutoAdded( true );
+            }
 
             continue;
         }
