@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-11-12 22:50+0000\n"
+"PO-Revision-Date: 2022-11-18 13:47+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -3448,7 +3448,7 @@ msgstr "Strg"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:117
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 msgid "Shift"
-msgstr "Shift"
+msgstr "Umschalt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:187
 msgid "Alt"
@@ -11706,8 +11706,8 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
-"Wenn aktiviert, können Sie durch Anklicken nicht-verbundener Pins eine "
-"Verbindung starten, selbst wenn das Verbindungswerkzeug nicht aktiv ist"
+"Wenn aktiviert, kann durch Anklicken nicht-verbundener Pins eine Verbindung "
+"gestartet werden, selbst wenn das Verbindungswerkzeug nicht aktiv ist"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -12446,7 +12446,7 @@ msgstr "Ein Pin mit einer \"Keine Verbindung\"-Markierung ist verbunden"
 
 #: eeschema/erc_item.cpp:78
 msgid "Unconnected \"no connection\" flag"
-msgstr "Nicht verbundene Markierung \"Keine Verbindung\""
+msgstr "Unverbundene Markierung \"Keine Verbindung\""
 
 #: eeschema/erc_item.cpp:82
 msgid "Label not connected to anything"
@@ -13811,7 +13811,7 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
-"Das Symbol '%s' verweist auf die Blatt-ID '%s', die im Entwurf nicht "
+"Das Symbol \"%s\" verweist auf die Blatt-ID \"%s\", die im Entwurf nicht "
 "vorhanden ist. Das Symbol wurde nicht geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1899
@@ -13830,10 +13830,10 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"Die Block-ID %s (Blockname: '%s') ist auf Schaltplan '%s' gezeichnet, ist "
-"jedoch nicht mit einem anderen Schaltplan im Entwurf verknüpft. Bei KiCad "
-"müssen alle Schaltplansymbole einem Schaltplan zugeordnet sein, daher wurde "
-"der Block nicht geladen."
+"Die Block-ID %s (Blockname: \"%s\") ist auf Schaltplan \"%s\" gezeichnet, "
+"ist jedoch nicht mit einem anderen Schaltplan im Entwurf verknüpft. Bei "
+"KiCad müssen alle Schaltplansymbole einem Schaltplan zugeordnet sein, daher "
+"wurde der Block nicht geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2216
 #, c-format
@@ -13862,7 +13862,7 @@ msgstr ""
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1323
 #, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "Konnte '%s' nicht in der importierten Bibliothek finden."
+msgstr "Konnte \"%s\" nicht in der importierten Bibliothek finden."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:177
 msgid "Invalid symbol name"
@@ -13883,12 +13883,12 @@ msgstr "Kein übergeordnetes Element für erweitertes Symbol %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:267
 msgid "Invalid symbol unit name"
-msgstr "Ungültiger Symboleinheitenname"
+msgstr "Ungültiger Symboleinheitsname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
 #, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "Ungültiger Symboleinheitenpräfix %s"
+msgstr "Ungültiges Symboleinheitspräfix %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:285
 #, c-format
@@ -13898,12 +13898,12 @@ msgstr "Ungültiges Namenssuffix für Symboleinheit %s"
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:291
 #, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "Ungültige Symboleinheits-Nummer %s"
+msgstr "Ungültige Symboleinheitnummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
-#, c-format, fuzzy
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr "Ungültige Symbolumwandlungsnummer %s"
+msgstr "Ungültige Darstellungsformnummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:420
 msgid "Floating point number with incorrect locale"
@@ -13915,11 +13915,11 @@ msgstr "Ungültige Gleitkommazahl"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:436
 msgid "Missing floating point number"
-msgstr "Gleitkommazahl fehlt"
+msgstr "Fehlende Gleitkommazahl"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:739
 msgid "Invalid pin names definition"
-msgstr "Ungültige Pin-Namensdefinition"
+msgstr "Ungültige Pinnamen-Definition"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:761
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1713
@@ -13938,15 +13938,15 @@ msgstr "Ungültiger Eigenschaftswert"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1287
 msgid "Invalid pin name"
-msgstr "Ungültiger Pin-Name"
+msgstr "Ungültiger Pinname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1325
 msgid "Invalid pin number"
-msgstr "Ungültige Pin-Nummer"
+msgstr "Ungültige Pinnummer"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1362
 msgid "Invalid alternate pin name"
-msgstr "Ungültiger alternativer Pin-Name"
+msgstr "Ungültiger alternativer Pinname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1514
 msgid "Invalid text string"
@@ -13962,11 +13962,11 @@ msgstr "Ungültige Kommentarnummer für Schriftfeld"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1785
 msgid "Invalid sheet pin name"
-msgstr "Ungültiger Schaltplanpin-Name"
+msgstr "Ungültiger Schaltplanpinname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
 msgid "Empty sheet pin name"
-msgstr "Leerer Schaltplanpin-Name"
+msgstr "Leerer Schaltplanpinname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2237
 msgid "Invalid symbol library name"
@@ -14061,7 +14061,7 @@ msgstr "Symbol-Dokumentbibliotheksdatei ist leer"
 #: eeschema/sch_screen.cpp:644 eeschema/sch_screen.cpp:736
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "Setze Bibliothekskennung des Schaltplansymbols '%s %s' auf '%s'."
+msgstr "Setze Bibliothekskennung des Schaltplansymbols \"%s %s\" auf \"%s\"."
 
 #: eeschema/sch_screen.cpp:660
 #, c-format
@@ -14069,7 +14069,7 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"Bibliotheksbezeichner der Symbolreferenz '%s' ist ungültig. "
+"Bibliotheksbezeichner der Symbolreferenz \"%s\" ist ungültig. "
 "Bibliothekssymbol kann nicht verknüpft werden."
 
 #: eeschema/sch_screen.cpp:676
@@ -14078,8 +14078,8 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
-"Symbolbibliothek '%s' nicht gefunden und keine Fallback-Cache-Bibliothek "
-"verfügbar. Bibliothekssymbol kann nicht verknüpft werden."
+"Symbolbibliothek \"%s\" nicht gefunden und keine Fallback-Cache-Bibliothek "
+"verfügbar.  Bibliothekssymbol kann nicht verknüpft werden."
 
 #: eeschema/sch_screen.cpp:695
 #, c-format
@@ -14090,7 +14090,8 @@ msgstr "Ein-/Ausgabefehler %s beim Auflösen des Bibliothekssymbols %s"
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr ""
-"Greife an den Cache zurück, um Symbol '%s: %s' Verknüpfung '%s' zu setzen."
+"Greife auf den Cache zurück, um Symbol \"%s: %s\" Verknüpfung \"%s\" zu "
+"setzen."
 
 #: eeschema/sch_screen.cpp:747
 #, c-format
@@ -15699,7 +15700,7 @@ msgstr "Datenblatt in einem Webbrowser öffnen"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1180
 msgid "Create Corner"
-msgstr "Ecke erstellen"
+msgstr "Eckpunkt hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1180
 msgid "Create a corner"
@@ -21122,7 +21123,7 @@ msgstr "Netze"
 
 #: pcbnew/board.cpp:1180 pcbnew/pcb_draw_panel_gal.cpp:481
 msgid "Unrouted"
-msgstr "Nicht geroutet"
+msgstr "Ungeroutet"
 
 #: pcbnew/board_connected_item.cpp:178
 msgid "NetName"
@@ -21424,7 +21425,7 @@ msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
-"Wenn die Option Impedanzkontrolle aktiviert ist,\n"
+"Wenn die Option \"Impedanzkontrolliert\" aktiv ist,\n"
 "werden Verlusttangens und Epsilon R zu den Einschränkungen hinzugefügt."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
@@ -26983,19 +26984,19 @@ msgstr "Ändere Pads an gleichen Footprints"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
-msgstr "Pads mit unterschiedlicher Form nicht verändern"
+msgstr "Nicht auf Pads mit abweichender Form anwenden"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:28
 msgid "Do not modify pads having different layers"
-msgstr "Pads auf unterschiedlichen Lagen nicht verändern"
+msgstr "Nicht auf Pads mit abweichenden Lagen anwenden"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:31
 msgid "Do not modify pads having a different orientation"
-msgstr "Pads mit unterschiedlicher Ausrichtung nicht verändern"
+msgstr "Nicht auf Pads mit abweichender Ausrichtung anwenden"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
 msgid "Do not modify pads having a different type"
-msgstr "Pads unterschiedlicher Typen nicht verändern"
+msgstr "Nicht auf Pads mit abweichendem Typ anwenden"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
@@ -27398,7 +27399,7 @@ msgstr "Netznamen an Pads und/oder Leiterbahnen ein- oder ausblenden."
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:856
 msgid "Show pad numbers"
-msgstr "Anzeige Padnummerierungen"
+msgstr "Padnummern anzeigen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:49
 msgid "Show pad <no net> indicator"
@@ -29527,7 +29528,7 @@ msgstr "Via ist nicht oder nur auf einer Lage verbunden"
 
 #: pcbnew/drc/drc_item.cpp:90
 msgid "Track has unconnected end"
-msgstr "Leiterbahn hat nicht verbundenes Ende"
+msgstr "Leiterbahn hat unverbundenes Ende"
 
 #: pcbnew/drc/drc_item.cpp:94
 msgid "Hole clearance violation"
@@ -33636,7 +33637,7 @@ msgstr "Leiterbahnstellung ändern"
 
 #: pcbnew/router/router_tool.cpp:157
 msgid "Switches posture of the currently routed track."
-msgstr "Verändern die Stellung des aktuell gerouteten Leiterzuges."
+msgstr "Verändert die Stellung des aktuell gerouteten Leiterzuges."
 
 #: pcbnew/router/router_tool.cpp:163
 msgid "Track Corner Mode"
@@ -33909,15 +33910,15 @@ msgstr "Sessiondatei verwendet fehlerhafte Lagen-ID \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:351
 msgid "Session file is missing the \"session\" section"
-msgstr "Der Sessiondatei fehlt die Sektion \"session\""
+msgstr "Der Sitzungsdatei fehlt der Abschnitt \"session\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:354
 msgid "Session file is missing the \"routes\" section"
-msgstr "Der Sessiondatei fehlt die Sektion \"routes\""
+msgstr "Der Sitzungsdatei fehlt der Abschnitt \"routes\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:357
 msgid "Session file is missing the \"library_out\" section"
-msgstr "Der Sessiondatei fehlt die Sektion \"library_out\""
+msgstr "Der Sitzungsdatei fehlt der Abschnitt \"library_out\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:403
 #, c-format
@@ -34067,7 +34068,7 @@ msgstr "Footprint platzieren"
 
 #: pcbnew/tools/board_editor_control.cpp:1249 pcbnew/tools/pcb_actions.cpp:689
 msgid "Lock"
-msgstr "Gesperrt"
+msgstr "Sperren"
 
 #: pcbnew/tools/board_editor_control.cpp:1249 pcbnew/tools/pcb_actions.cpp:694
 msgid "Unlock"
@@ -34296,7 +34297,7 @@ msgstr "Element an aktueller Position zulässig."
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Create from Selection"
-msgstr "Aus Auswahl erstellen"
+msgstr "Aus Auswahl erzeugen"
 
 #: pcbnew/tools/convert_tool.cpp:226
 msgid "Convert shapes to polygon"
@@ -35029,7 +35030,7 @@ msgstr "Ungenutzte Pads entfernen..."
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Entfernen oder Wiederherstellen der nicht verbundenen inneren Lagen von "
+"Entfernen oder Wiederherstellen der unverbundenen inneren Lagen von "
 "Durchsteckpads und Vias"
 
 #: pcbnew/tools/pcb_actions.cpp:424
@@ -35413,7 +35414,7 @@ msgstr "Ausgewählte Gruppierungen aufheben"
 
 #: pcbnew/tools/pcb_actions.cpp:709
 msgid "Remove Items"
-msgstr "Elemente entfernen"
+msgstr "Elemente aus Gruppe lösen"
 
 #: pcbnew/tools/pcb_actions.cpp:709
 msgid "Remove items from group"
@@ -36337,7 +36338,7 @@ msgstr "Als unsichtbar markierten Footprinttext anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show unconnected nets as a ratsnest"
-msgstr "Zeige nicht angeschlossene Netzlinien"
+msgstr "Unverbundene Netze als Netzlinien anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "No-Connects"
