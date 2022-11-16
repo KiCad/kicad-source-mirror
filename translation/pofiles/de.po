@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-16 09:18+0000\n"
+"PO-Revision-Date: 2022-11-18 13:47+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -14588,12 +14588,12 @@ msgstr "Kein übergeordnetes Element für erweitertes Symbol %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:289
 msgid "Invalid symbol unit name"
-msgstr "Ungültiger Symboleinheitenname"
+msgstr "Ungültiger Symboleinheitsname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:297
 #, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "Ungültiges Symboleinheitenpräfix %s"
+msgstr "Ungültiges Symboleinheitspräfix %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
 #, c-format
@@ -14603,12 +14603,12 @@ msgstr "Ungültiges Namenssuffix für Symboleinheit %s"
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:313
 #, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "Ungültige Symboleinheits-Nummer %s"
+msgstr "Ungültige Symboleinheitnummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:321
-#, c-format, fuzzy
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr "Ungültige Symbolumwandlungsnummer %s"
+msgstr "Ungültige Darstellungsformnummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:653
 #, c-format
@@ -14617,7 +14617,7 @@ msgstr "Ungültiger Hyperlink-URL \"%s\""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:742
 msgid "Invalid pin names definition"
-msgstr "Ungültige Pin-Namen-Definition"
+msgstr "Ungültige Pinnamen-Definition"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:763
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1896
@@ -14636,15 +14636,15 @@ msgstr "Ungültiger Eigenschaftswert"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1350
 msgid "Invalid pin name"
-msgstr "Ungültiger Pin-Name"
+msgstr "Ungültiger Pinname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1388
 msgid "Invalid pin number"
-msgstr "Ungültige Pin-Nummer"
+msgstr "Ungültige Pinnummer"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1425
 msgid "Invalid alternate pin name"
-msgstr "Ungültiger alternativer Pin-Name"
+msgstr "Ungültiger alternativer Pinname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1600
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1660
@@ -14661,11 +14661,11 @@ msgstr "Ungültige Kommentarnummer für Schriftfeld"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2003
 msgid "Invalid sheet pin name"
-msgstr "Ungültiger Schaltplanpin-Name"
+msgstr "Ungültiger Schaltplanpinname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2011
 msgid "Empty sheet pin name"
-msgstr "Leerer Schaltplanpin-Name"
+msgstr "Leerer Schaltplanpinname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2547
 msgid "Invalid symbol library name"
@@ -14757,7 +14757,7 @@ msgstr "Zeichenkette ohne Anführung erwartet"
 #: eeschema/sch_screen.cpp:877 eeschema/sch_screen.cpp:969
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "Setze Bibliothekskennung des Schaltplansymbols '%s %s' auf '%s'."
+msgstr "Setze Bibliothekskennung des Schaltplansymbols \"%s %s\" auf \"%s\"."
 
 #: eeschema/sch_screen.cpp:893
 #, c-format
@@ -14765,7 +14765,7 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"Bibliotheksbezeichner der Symbolreferenz '%s' ist ungültig. "
+"Bibliotheksbezeichner der Symbolreferenz \"%s\" ist ungültig. "
 "Bibliothekssymbol kann nicht verknüpft werden."
 
 #: eeschema/sch_screen.cpp:909
@@ -14774,8 +14774,8 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
-"Symbolbibliothek '%s' nicht gefunden und keine Fallback-Cache-Bibliothek "
-"verfügbar. Bibliothekssymbol kann nicht verknüpft werden."
+"Symbolbibliothek \"%s\" nicht gefunden und keine Fallback-Cache-Bibliothek "
+"verfügbar.  Bibliothekssymbol kann nicht verknüpft werden."
 
 #: eeschema/sch_screen.cpp:928
 #, c-format
@@ -14786,7 +14786,8 @@ msgstr "Ein-/Ausgabefehler %s beim Auflösen des Bibliothekssymbols %s"
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr ""
-"Greife an den Cache zurück, um Symbol '%s: %s' Verknüpfung '%s' zu setzen."
+"Greife auf den Cache zurück, um Symbol \"%s: %s\" Verknüpfung \"%s\" zu "
+"setzen."
 
 #: eeschema/sch_screen.cpp:980
 #, c-format
@@ -23194,7 +23195,7 @@ msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
-"Wenn die Option Impedanzkontrolle aktiviert ist,\n"
+"Wenn die Option \"Impedanzkontrolliert\" aktiv ist,\n"
 "werden Verlusttangens und Epsilon R zu den Einschränkungen hinzugefügt."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
@@ -28971,19 +28972,19 @@ msgstr "Ändere Pads an gleichen Footprints"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
-msgstr "Pads mit unterschiedlicher Form nicht verändern"
+msgstr "Nicht auf Pads mit abweichender Form anwenden"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:28
 msgid "Do not modify pads having different layers"
-msgstr "Pads auf unterschiedlichen Lagen nicht verändern"
+msgstr "Nicht auf Pads mit abweichenden Lagen anwenden"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:31
 msgid "Do not modify pads having a different orientation"
-msgstr "Pads mit unterschiedlicher Ausrichtung nicht verändern"
+msgstr "Nicht auf Pads mit abweichender Ausrichtung anwenden"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
 msgid "Do not modify pads having a different type"
-msgstr "Pads unterschiedlicher Typen nicht verändern"
+msgstr "Nicht auf Pads mit abweichendem Typ anwenden"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
@@ -29380,7 +29381,7 @@ msgstr "Netznamen an Pads und/oder Leiterbahnen ein- oder ausblenden."
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:912
 msgid "Show pad numbers"
-msgstr "Anzeige Padnummerierungen"
+msgstr "Padnummern anzeigen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:53
 msgid "Clearance Outlines"
