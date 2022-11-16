@@ -1720,7 +1720,7 @@ int DRC_ENGINE::MatchDpSuffix( const wxString& aNetName, wxString& aComplementNe
     if( rv != 0 && count >= 1 )
     {
         aBaseDpName = aNetName.Left( aNetName.Length() - count );
-        aComplementNet = aBaseDpName + aComplementNet + aNetName.Right( count - 1 );
+        aComplementNet = wxString( aBaseDpName ) << aComplementNet << aNetName.Right( count - 1 );
     }
 
     return rv;

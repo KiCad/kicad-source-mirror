@@ -95,6 +95,8 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther ) :
 {
     if( aOther.IsTriangulationUpToDate() )
     {
+        m_triangulatedPolys.reserve( aOther.TriangulatedPolyCount() );
+
         for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
         {
             const TRIANGULATED_POLYGON* poly = aOther.TriangulatedPolygon( i );
