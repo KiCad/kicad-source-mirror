@@ -954,11 +954,8 @@ void PANEL_FP_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
     aWidth -= ( m_path_subs_grid->GetSize().x - m_path_subs_grid->GetClientSize().x );
 
     m_path_subs_grid->AutoSizeColumn( 0 );
-
-    if( aWidth - m_path_subs_grid->GetColSize( 0 ) < 60 )
-        m_path_subs_grid->SetColSize( 0, aWidth / 2 );
-
-    m_path_subs_grid->SetColSize( 1, aWidth - m_path_subs_grid->GetColSize( 0 ) );
+    m_path_subs_grid->SetColSize( 0, std::max( 72, m_path_subs_grid->GetColSize( 0 ) ) );
+    m_path_subs_grid->SetColSize( 1, std::max( 120, aWidth - m_path_subs_grid->GetColSize( 0 ) ) );
 }
 
 

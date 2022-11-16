@@ -1064,16 +1064,14 @@ void DIALOG_SYMBOL_PROPERTIES::AdjustFieldsGridColumns()
     int fieldsWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsGrid ).x;
 
     m_fieldsGrid->AutoSizeColumn( 0 );
+    m_fieldsGrid->SetColSize( 0, std::max( 72, m_fieldsGrid->GetColSize( 0 ) ) );
 
     int fixedColsWidth = m_fieldsGrid->GetColSize( 0 );
 
     for( int i = 2; i < m_fieldsGrid->GetNumberCols(); i++ )
         fixedColsWidth += m_fieldsGrid->GetColSize( i );
 
-    int colSize = std::max( fieldsWidth - fixedColsWidth, -1 );
-    colSize = ( colSize == 0 ) ? -1 : colSize; // don't hide the column!
-
-    m_fieldsGrid->SetColSize( 1, colSize );
+    m_fieldsGrid->SetColSize( 1, std::max( 120, fieldsWidth - fixedColsWidth ) );
 }
 
 

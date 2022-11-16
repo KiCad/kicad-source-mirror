@@ -343,9 +343,9 @@ void DIALOG_CONFIGURE_PATHS::OnUpdateUI( wxUpdateUIEvent& event )
         int width = m_EnvVars->GetClientRect().GetWidth();
 
         m_EnvVars->AutoSizeColumn( TV_NAME_COL );
-        m_EnvVars->SetColSize( TV_NAME_COL, std::max( m_EnvVars->GetColSize( TV_NAME_COL ), 120 ) );
+        m_EnvVars->SetColSize( TV_NAME_COL, std::max( 72, m_EnvVars->GetColSize( TV_NAME_COL ) ) );
 
-        m_EnvVars->SetColSize( TV_VALUE_COL, width - m_EnvVars->GetColSize( TV_NAME_COL ) );
+        m_EnvVars->SetColSize( TV_VALUE_COL, std::max( 120, width - m_EnvVars->GetColSize( TV_NAME_COL ) ) );
 
         m_gridWidth = m_EnvVars->GetSize().GetX();
         m_gridWidthsDirty = false;

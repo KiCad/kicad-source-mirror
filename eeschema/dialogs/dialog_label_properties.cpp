@@ -717,14 +717,14 @@ void DIALOG_LABEL_PROPERTIES::AdjustGridColumns( int aWidth )
     aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
 
     m_grid->AutoSizeColumn( 0 );
-    m_grid->SetColSize( 0, std::max( m_grid->GetColSize( 0 ), 72 ) );
+    m_grid->SetColSize( 0, std::max( 72, m_grid->GetColSize( 0 ) ) );
 
     int fixedColsWidth = m_grid->GetColSize( 0 );
 
     for( int i = 2; i < m_grid->GetNumberCols(); i++ )
         fixedColsWidth += m_grid->GetColSize( i );
 
-    m_grid->SetColSize( 1, std::max( aWidth - fixedColsWidth, 120 ) );
+    m_grid->SetColSize( 1, std::max( 120, aWidth - fixedColsWidth ) );
 }
 
 

@@ -200,10 +200,9 @@ void PANEL_TEXT_VARIABLES::OnUpdateUI( wxUpdateUIEvent& event )
         int width = m_TextVars->GetClientRect().GetWidth();
 
         m_TextVars->AutoSizeColumn( TV_NAME_COL );
-        m_TextVars->SetColSize( TV_NAME_COL, std::max( m_TextVars->GetColSize( TV_NAME_COL ),
-                                                       120 ) );
+        m_TextVars->SetColSize( TV_NAME_COL, std::max( 72, m_TextVars->GetColSize( TV_NAME_COL ) ) );
 
-        m_TextVars->SetColSize( TV_VALUE_COL, width - m_TextVars->GetColSize( TV_NAME_COL ) );
+        m_TextVars->SetColSize( TV_VALUE_COL, std::max( 120, width - m_TextVars->GetColSize( TV_NAME_COL ) ) );
         m_gridWidthsDirty = false;
     }
 

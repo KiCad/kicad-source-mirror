@@ -146,8 +146,8 @@ void DIALOG_SWAP_LAYERS::adjustGridColumns()
     // Account for scroll bars
     int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x;
 
-    m_grid->SetColSize( 0, width / 2 );
-    m_grid->SetColSize( 1, width - m_grid->GetColSize( 0 ) );
+    m_grid->SetColSize( 0, std::max( 40, width / 2 ) );
+    m_grid->SetColSize( 1, std::max( 40, width - m_grid->GetColSize( 0 ) ) );
 }
 
 

@@ -452,7 +452,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::AdjustNetclassGridColumns( int aWidth )
         aWidth -= m_originalColWidths[ i ];
     }
 
-    m_netclassGrid->SetColSize( 0, aWidth );
+    m_netclassGrid->SetColSize( 0, std::max( 72, aWidth ) );
 }
 
 

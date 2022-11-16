@@ -276,9 +276,9 @@ private:
             int width = m_grid->GetClientRect().GetWidth();
 
             m_grid->AutoSizeColumn( 0 );
-            m_grid->SetColSize( 0, std::max( 120, m_grid->GetColSize( 0 ) ) );
+            m_grid->SetColSize( 0, std::max( 72, m_grid->GetColSize( 0 ) ) );
 
-            m_grid->SetColSize( 1, width - m_grid->GetColSize( 0 ) );
+            m_grid->SetColSize( 1, std::max( 120, width - m_grid->GetColSize( 0 ) ) );
 
             m_grid_widths_dirty = false;
         }

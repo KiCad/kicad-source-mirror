@@ -233,7 +233,7 @@ void PANEL_TEMPLATE_FIELDNAMES::AdjustGridColumns( int aWidth )
     // Account for scroll bars
     aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
 
-    m_grid->SetColSize( 0, std::max( 40, aWidth - 2 * m_checkboxColWidth ) );
+    m_grid->SetColSize( 0, std::max( 72, aWidth - 2 * m_checkboxColWidth ) );
     m_grid->SetColSize( 1, m_checkboxColWidth );
     m_grid->SetColSize( 2, m_checkboxColWidth );
 }
