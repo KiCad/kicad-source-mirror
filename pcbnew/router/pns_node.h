@@ -102,8 +102,6 @@ public:
 
     virtual wxString NetName( int aNet ) = 0;
 
-    virtual void SetCacheWriteEnabled( bool aEnabled ) = 0;
-
     virtual void ClearCacheForItem( const ITEM* aItem ) {}
 };
 
