@@ -28,6 +28,7 @@
 
 #include <core/typeinfo.h>
 #include <eda_item_flags.h>
+#include <functional>
 #include <vector>
 
 class EDA_ITEM;
