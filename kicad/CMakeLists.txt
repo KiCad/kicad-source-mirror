@@ -248,7 +248,7 @@ if( APPLE )
             fixup_bundle( ${OSX_BUNDLE_INSTALL_BIN_DIR}/kicad
                 \"\${BUNDLE_FIX_LIBS}\"
                 \"\${BUNDLE_FIX_DIRS};${PYTHON_FRAMEWORK}\"
-                IGNORE_ITEM \"Python;python;python3;python3.8;pythonw;pythonw3;pythonw3.8\"
+                IGNORE_ITEM \"Python;python;pythonw;python3;pythonw3;python3.8;pythonw3.8;python3.9;python3.9-intel64\"
                 )
 
             # BundleUtilities clobbers the rpaths and install_names that we carefully setup in Python.framework, even if
@@ -295,7 +295,7 @@ if( APPLE )
 
         if ( ${PYTHON_FRAMEWORK_HELPER} )
             include( ${CMAKE_MODULE_PATH}/RefixupMacOS.cmake )
-            refix_kicad_bundle(${OSX_BUNDLE_INSTALL_DIR})
+            refix_kicad_bundle( ${OSX_BUNDLE_INSTALL_DIR} )
         endif( )
 
         " COMPONENT Runtime

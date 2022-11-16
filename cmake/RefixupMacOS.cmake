@@ -8,8 +8,6 @@
 # This is not intended to make an install completely
 # redistributable and relocatable.
 
-# TODO: Check style things
-
 function( refix_kicad_bundle target )
     # target should be the path to the kicad.app directory
 
@@ -56,6 +54,10 @@ function( refix_kicad_bundle target )
         refix_prereqs( ${binary} )
     endforeach( )
 
+    message( "Removing Python pyc files" )
+    file( GLOB_RECURSE pycs ${target}/*.pyc )
+    file( REMOVE ${pycs}  )
+
     string( TIMESTAMP end_time )
     # message( "Refixing start time: ${start_time}\nRefixing end time: ${end_time}" )
 endfunction( )
@@ -63,6 +65,10 @@ endfunction( )
 function( cleanup_python bundle)
     # Remove extra Python
     file( REMOVE_RECURSE ${bundle}/Contents/MacOS/Python )
+    file( GLOB extra_pythons LIST_DIRECTORIES true ${bundle}/Contents/Applications/*/Contents/MacOS/Python )
+    message( "Removing extra Pythons copied into Contents/MacOS: ${extra_pythons}" )
+    file( REMOVE_RECURSE ${extra_pythons} )
+
     # Make sure Python's Current is a symlink to 3.x
     file( REMOVE_RECURSE ${bundle}/Contents/Frameworks/Python.framework/Versions/Current )
     file( GLOB python_version LIST_DIRECTORIES true  RELATIVE ${bundle}/Contents/Frameworks/Python.framework/Versions ${bundle}/Contents/Frameworks/Python.framework/Versions/3* )
@@ -135,7 +141,7 @@ function( refix_prereqs target )
         if( "${candidate}" MATCHES "${gp_regex}" )
             string( REGEX REPLACE "${otool_regex}" "\\1" raw_prereq "${candidate}" )
 
-            if ( raw_prereq MATCHES "^@executable_path/\\.\\./\\.\\./.*/Contents/MacOS/Python$" )
+            if ( raw_prereq MATCHES "^@executable_path/\\.\\./\\.\\./Contents/MacOS/Python$" )
                 set( changed_prereq "@rpath/Versions/Current/Python" )
             elseif ( raw_prereq MATCHES "^@executable_path/\\.\\./Frameworks/" )
                 string( REPLACE "@executable_path/../Frameworks/"

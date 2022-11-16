@@ -1059,3 +1059,24 @@ endif ( KICAD_INSTALL_DEMOS )
 if( KICAD_BUILD_I18N )
     add_subdirectory( translation )
 endif()
+
+if( APPLE )
+    set( KICAD_OSX_CODESIGN ON
+            CACHE BOOL "Sign KiCad.app on macOS" FORCE )
+    set( KICAD_OSX_SIGNING_ID "-"
+            CACHE STRING "macOS Signing ID, defaults to ad-hoc" FORCE )
+    set( KICAD_OSX_SIGNING_USE_SECURE_TIMESTAMP OFF
+            CACHE BOOL "When signing on macOS, add a secure timestamp" FORCE )
+    set( KICAD_OSX_SIGNING_USE_HARDENED_RUNTIME OFF
+            CACHE BOOL "When signing on macOS, use the Hardened Runtime" FORCE )
+    set( KICAD_OSX_SIGNING_ENTITLEMENTS_FILE ""
+            CACHE FILEPATH "Path to entitlements file for macOS signing" FORCE )
+
+    # We have to sign the app bundle after *all* the files are copied in the bundle
+    # otherwise the signature will be invalid.
+
+    # As of CMP0082 (CMake 3.14), the install rules are run in order, so we can just
+    # declare it last.
+
+    add_subdirectory( signing )
+endif()
