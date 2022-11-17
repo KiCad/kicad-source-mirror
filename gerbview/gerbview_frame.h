@@ -361,10 +361,10 @@ public:
     void RemapLayers( std::unordered_map<int, int> remapping );
 
     /**
-     * Update each layers' differential option. Needed when diff mode changes or the active layer
-     * changes (due to changing rendering order) which matters for diff mode but not otherwise.
+     * Update each layers' differential option. Needed when xor mode changes or the active layer
+     * changes (due to changing rendering order) which matters for xor mode but not otherwise.
      */
-    void UpdateDiffLayers();
+    void UpdateXORLayers();
 
     /*
      * Do nothing in GerbView.

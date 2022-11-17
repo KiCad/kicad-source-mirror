@@ -60,10 +60,15 @@ void GERBVIEW_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     for( int i = GERBVIEW_LAYER_ID_START;
          i < GERBVIEW_LAYER_ID_START + GERBER_DRAWLAYERS_COUNT; i++ )
     {
-        m_layerColors[i] = aSettings->GetColor( i );
-        m_layerColorsHi[i] = m_layerColors[i].Brightened( 0.5 );
-        m_layerColorsSel[i] = m_layerColors[i].Brightened( 0.8 );
-        m_layerColorsDark[i] = m_layerColors[i].Darkened( 0.25 );
+        COLOR4D baseColor = aSettings->GetColor( i );
+
+        if( gvconfig()->m_Display.m_DiffMode )
+            baseColor.a = 0.75;
+
+        m_layerColors[i] = baseColor;
+        m_layerColorsHi[i] = baseColor.Brightened( 0.5 );
+        m_layerColorsSel[i] = baseColor.Brightened( 0.8 );
+        m_layerColorsDark[i] = baseColor.Darkened( 0.25 );
     }
 
     // Draw layers specific to Gerbview:

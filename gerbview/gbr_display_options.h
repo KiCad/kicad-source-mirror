@@ -41,6 +41,7 @@ public:
     bool    m_DisplayPageLimits;
     bool    m_IsPrinting;               ///< true when printing a page, false when drawing on screen
     bool    m_DiffMode;                 ///< Display layers in diff mode
+    bool    m_XORMode;                  ///< Display layers in exclusive-or mode
     bool    m_HighContrastMode;         ///< High contrast mode (dim un-highlighted objects)
     bool    m_FlipGerberView;           ///< Display as a mirror image
     COLOR4D m_NegativeDrawColor;        ///< The color used to draw negative objects, usually the
@@ -57,6 +58,7 @@ public:
         m_IsPrinting = false;
         m_NegativeDrawColor = COLOR4D( DARKGRAY );
         m_DiffMode = false;
+        m_XORMode = false;
         m_HighContrastMode = false;
         m_FlipGerberView = false;
     }

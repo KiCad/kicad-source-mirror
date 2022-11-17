@@ -303,6 +303,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::find_replace].emplace_back( BITMAPS::find_replace, wxT( "find_replace_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::flag].emplace_back( BITMAPS::flag, wxT( "flag_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::flip_board].emplace_back( BITMAPS::flip_board, wxT( "flip_board_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::gbr_select_mode1].emplace_back( BITMAPS::gbr_select_mode1, wxT( "gbr_select_mode1_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::gbr_select_mode2].emplace_back( BITMAPS::gbr_select_mode2, wxT( "gbr_select_mode2_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::gerbview_show_negative_objects].emplace_back( BITMAPS::gerbview_show_negative_objects, wxT( "gerbview_show_negative_objects_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::general_deletions].emplace_back( BITMAPS::general_deletions, wxT( "general_deletions_24.png" ), 24, wxT( "light" ) );
@@ -684,6 +685,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::find_replace].emplace_back( BITMAPS::find_replace, wxT( "find_replace_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::flag].emplace_back( BITMAPS::flag, wxT( "flag_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::flip_board].emplace_back( BITMAPS::flip_board, wxT( "flip_board_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::gbr_select_mode1].emplace_back( BITMAPS::gbr_select_mode1, wxT( "gbr_select_mode1_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::gbr_select_mode2].emplace_back( BITMAPS::gbr_select_mode2, wxT( "gbr_select_mode2_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::gerbview_show_negative_objects].emplace_back( BITMAPS::gerbview_show_negative_objects, wxT( "gerbview_show_negative_objects_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::general_deletions].emplace_back( BITMAPS::general_deletions, wxT( "general_deletions_dark_24.png" ), 24, wxT( "dark" ) );

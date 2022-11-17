@@ -559,7 +559,7 @@ void GERBVIEW_FRAME::RemapLayers( std::unordered_map<int, int> remapping )
 }
 
 
-void GERBVIEW_FRAME::UpdateDiffLayers()
+void GERBVIEW_FRAME::UpdateXORLayers()
 {
     auto target = GetCanvas()->GetBackend() == GERBVIEW_DRAW_PANEL_GAL::GAL_TYPE_OPENGL
                           ? KIGFX::TARGET_CACHED
@@ -570,7 +570,7 @@ void GERBVIEW_FRAME::UpdateDiffLayers()
 
     for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
     {
-        view->SetLayerDiff( GERBER_DRAW_LAYER( i ), gvconfig()->m_Display.m_DiffMode );
+        view->SetLayerDiff( GERBER_DRAW_LAYER( i ), gvconfig()->m_Display.m_XORMode );
 
         // Caching doesn't work with layered rendering of diff'd layers
         if( gvconfig()->m_Display.m_DiffMode )
@@ -799,8 +799,8 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 {
     m_activeLayer = aLayer;
 
-    if( gvconfig()->m_Display.m_DiffMode )
-        UpdateDiffLayers();
+    if( gvconfig()->m_Display.m_XORMode )
+        UpdateXORLayers();
 
     if( doLayerWidgetUpdate )
         m_LayersManager->SelectLayer( aLayer );
@@ -1079,6 +1079,12 @@ void GERBVIEW_FRAME::setupUIConditions()
             return gvconfig()->m_Display.m_DiffMode;
         };
 
+    auto xorModeCond =
+            [this] ( const SELECTION& )
+            {
+                return gvconfig()->m_Display.m_XORMode;
+            };
+
     auto highContrastModeCond =
         [this] ( const SELECTION& )
         {
@@ -1103,6 +1109,7 @@ void GERBVIEW_FRAME::setupUIConditions()
     mgr->SetConditions( GERBVIEW_ACTIONS::negativeObjectDisplay,   CHECK( negativeObjectsCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::dcodeDisplay,            CHECK( dcodeCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::toggleDiffMode,          CHECK( diffModeCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::toggleXORMode,           CHECK( xorModeCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::flipGerberView,          CHECK( flipGerberCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,                 CHECK( highContrastModeCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::toggleLayerManager,      CHECK( layersManagerShownCondition ) );
@@ -1118,8 +1125,7 @@ void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     SetPageSettings( PAGE_INFO( gvconfig()->m_Appearance.page_type ) );
 
-    if( gvconfig()->m_Display.m_DiffMode )
-        UpdateDiffLayers();
+    UpdateXORLayers();
 
     SetElementVisibility( LAYER_DCODES, gvconfig()->m_Appearance.show_dcodes );
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -307,7 +307,21 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::toggleDiffMode ) )
     {
         cfg->m_Display.m_DiffMode = !cfg->m_Display.m_DiffMode;
-        m_frame->UpdateDiffLayers();
+
+        if( cfg->m_Display.m_DiffMode && cfg->m_Display.m_XORMode )
+        {
+            cfg->m_Display.m_XORMode = false;
+            m_frame->UpdateXORLayers();
+        }
+    }
+    else if( aEvent.IsAction( &GERBVIEW_ACTIONS::toggleXORMode ) )
+    {
+        cfg->m_Display.m_XORMode = !cfg->m_Display.m_XORMode;
+
+        if( cfg->m_Display.m_XORMode && cfg->m_Display.m_DiffMode )
+            cfg->m_Display.m_DiffMode = false;
+
+        m_frame->UpdateXORLayers();
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::flipGerberView ) )
     {
@@ -533,6 +547,7 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastModeCycle.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleDiffMode.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleXORMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::flipGerberView.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::SelectedEvent );

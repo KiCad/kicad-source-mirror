@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -188,7 +188,12 @@ TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( "gerbview.Control.dcodeDisplay",
 
 TOOL_ACTION GERBVIEW_ACTIONS::toggleDiffMode( "gerbview.Control.toggleDiffMode",
         AS_GLOBAL, 0, "",
-        _( "Show in Differential Mode" ), _( "Show layers in diff (compare) mode" ),
+        _( "Show in Differential Mode" ), _( "Show layers in differential compare mode" ),
+        BITMAPS::gbr_select_mode1 );
+
+TOOL_ACTION GERBVIEW_ACTIONS::toggleXORMode( "gerbview.Control.toggleXORMode",
+        AS_GLOBAL, 0, "",
+        _( "Show in XOR Mode" ), _( "Show layers in exclusive-or compare mode" ),
         BITMAPS::gbr_select_mode2 );
 
 TOOL_ACTION GERBVIEW_ACTIONS::flipGerberView( "gerbview.Control.flipGerberView",

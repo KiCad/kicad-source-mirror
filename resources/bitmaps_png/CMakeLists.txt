@@ -280,6 +280,7 @@ set( BMAPS_MID
     find_replace
     flag
     flip_board
+    gbr_select_mode1
     gbr_select_mode2
     gerbview_show_negative_objects
     general_deletions
