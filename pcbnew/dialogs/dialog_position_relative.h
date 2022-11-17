@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ class DIALOG_POSITION_RELATIVE : public DIALOG_POSITION_RELATIVE_BASE
 {
 public:
     // Constructor and destructor
-    DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, VECTOR2I& translation, VECTOR2I& anchor );
+    DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent );
     ~DIALOG_POSITION_RELATIVE() { };
 
     void UpdateAnchor( EDA_ITEM* aItem );
@@ -69,21 +69,36 @@ private:
      * @param set to true to interpret as polar coordinates.
      * @return false if error (though the text conversion functions don't report errors).
      */
-    bool GetTranslationInIU( wxRealPoint& val, bool polar );
+    bool getTranslationInIU( VECTOR2I& val, bool polar );
 
     // Update controls and their labels after changing the coordinates type (polar/cartesian)
     void updateDialogControls( bool aPolar );
 
+    // Update controls and labels after changing anchor type
+    void updateAnchorInfo( BOARD_ITEM* aItem );
+
+    // Get the current anchor position.
+    VECTOR2I getAnchorPos();
+
     /**
      * Persistent dialog options.
      */
+    enum ANCHOR_TYPE
+    {
+        ANCHOR_GRID_ORIGIN,
+        ANCHOR_USER_ORIGIN,
+        ANCHOR_ITEM
+    };
+
     struct POSITION_RELATIVE_OPTIONS
     {
-        bool polarCoords;
-        double  entry1;
-        double  entry2;
+        ANCHOR_TYPE anchorType;
+        bool        polarCoords;
+        double      entry1;
+        double      entry2;
 
         POSITION_RELATIVE_OPTIONS() :
+            anchorType( ANCHOR_ITEM ),
             polarCoords( false ),
             entry1( 0 ),
             entry2( 0 )
@@ -95,16 +110,15 @@ private:
     static POSITION_RELATIVE_OPTIONS m_options;
 
     TOOL_MANAGER* m_toolMgr;
-    VECTOR2I&     m_translation;
-    VECTOR2I&     m_anchor_position;
+    VECTOR2I      m_anchorItemPosition;
 
     UNIT_BINDER   m_xOffset;
     UNIT_BINDER   m_yOffset;
 
-    double    m_stateX;
-    double    m_stateY;
-    double    m_stateRadius;
-    EDA_ANGLE m_stateTheta;
+    double        m_stateX;
+    double        m_stateY;
+    double        m_stateRadius;
+    EDA_ANGLE     m_stateTheta;
 };
 
 #endif      // __DIALOG_POSITION_RELATIVE__

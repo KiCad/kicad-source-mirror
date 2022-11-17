@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,12 +33,9 @@
 DIALOG_POSITION_RELATIVE::POSITION_RELATIVE_OPTIONS DIALOG_POSITION_RELATIVE::m_options;
 
 
-DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, VECTOR2I& translation,
-                                                    VECTOR2I& anchor ) :
+DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent ) :
     DIALOG_POSITION_RELATIVE_BASE( aParent ),
     m_toolMgr( aParent->GetToolManager() ),
-    m_translation( translation ),
-    m_anchor_position( anchor ),
     m_xOffset( aParent, m_xLabel, m_xEntry, m_xUnit ),
     m_yOffset( aParent, m_yLabel, m_yEntry, m_yUnit ),
     m_stateX( 0.0 ),
@@ -64,6 +61,8 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, VEC
     m_polarCoords->SetValue( m_options.polarCoords );
     updateDialogControls( m_polarCoords->IsChecked() );
 
+    updateAnchorInfo( nullptr );
+
     m_xOffset.SetDoubleValue( m_options.entry1 );
     m_yOffset.SetDoubleValue( m_options.entry2 );
 
@@ -82,21 +81,21 @@ void DIALOG_POSITION_RELATIVE::ToPolarDeg( double x, double y, double& r, EDA_AN
 }
 
 
-bool DIALOG_POSITION_RELATIVE::GetTranslationInIU( wxRealPoint& val, bool polar )
+bool DIALOG_POSITION_RELATIVE::getTranslationInIU( VECTOR2I& val, bool polar )
 {
     if( polar )
     {
         const double    r = m_xOffset.GetDoubleValue();
         const EDA_ANGLE q = m_yOffset.GetAngleValue();
 
-        val.x = r * q.Cos();
-        val.y = r * q.Sin();
+        val.x = KiROUND( r * q.Cos() );
+        val.y = KiROUND( r * q.Sin() );
     }
     else
     {
         // direct read
-        val.x = m_xOffset.GetDoubleValue();
-        val.y = m_yOffset.GetDoubleValue();
+        val.x = KiROUND( m_xOffset.GetDoubleValue() );
+        val.y = KiROUND( m_yOffset.GetDoubleValue() );
     }
 
     // no validation to do here, but in future, you could return false here
@@ -180,11 +179,10 @@ void DIALOG_POSITION_RELATIVE::OnClear( wxCommandEvent& event )
     POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
     wxASSERT( posrelTool );
 
-    VECTOR2I  offset = posrelTool->GetSelectionAnchorPosition() - m_anchor_position;
+    VECTOR2I  offset = posrelTool->GetSelectionAnchorPosition() - getAnchorPos();
     double    r;
     EDA_ANGLE q;
     ToPolarDeg( offset.x, offset.y, r, q );
-
 
     if( obj == m_clearX )
     {
@@ -223,37 +221,72 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
 }
 
 
+void DIALOG_POSITION_RELATIVE::updateAnchorInfo( BOARD_ITEM* aItem )
+{
+    switch( m_options.anchorType )
+    {
+    case ANCHOR_GRID_ORIGIN:
+        m_referenceInfo->SetLabel( _( "Reference location: grid origin" ) );
+        break;
+
+    case ANCHOR_USER_ORIGIN:
+        m_referenceInfo->SetLabel( _( "Reference location: local coordinates origin" ) );
+        break;
+
+    case ANCHOR_ITEM:
+    {
+        UNITS_PROVIDER unitsProvider( pcbIUScale, GetUserUnits() );
+        wxString       msg = _( "<none selected>" );
+
+        if( aItem )
+            msg = aItem->GetSelectMenuText( &unitsProvider );
+
+        m_referenceInfo->SetLabel( wxString::Format( _( "Reference item: %s" ), msg ) );
+        break;
+    }
+    }
+}
+
+
+VECTOR2I DIALOG_POSITION_RELATIVE::getAnchorPos()
+{
+    switch( m_options.anchorType )
+    {
+    case ANCHOR_GRID_ORIGIN:
+        return static_cast<BOARD*>( m_toolMgr->GetModel() )->GetDesignSettings().GetGridOrigin();
+
+    case ANCHOR_USER_ORIGIN:
+        return static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() )->GetScreen()->m_LocalOrigin;
+
+    case ANCHOR_ITEM:
+        return m_anchorItemPosition;
+    }
+}
+
+
 void DIALOG_POSITION_RELATIVE::OnUseGridOriginClick( wxCommandEvent& event )
 {
-    BOARD* board = (BOARD*) m_toolMgr->GetModel();
-
-    m_anchor_position = board->GetDesignSettings().GetGridOrigin();
-    m_referenceInfo->SetLabel( _( "Reference location: grid origin" ) );
+    m_options.anchorType = ANCHOR_GRID_ORIGIN;
+    updateAnchorInfo( nullptr );
 }
 
 
 void DIALOG_POSITION_RELATIVE::OnUseUserOriginClick( wxCommandEvent& event )
 {
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetToolHolder();
-
-    m_anchor_position = frame->GetScreen()->m_LocalOrigin;
-    m_referenceInfo->SetLabel( _( "Reference location: local coordinates origin" ) );
+    m_options.anchorType = ANCHOR_USER_ORIGIN;
+    updateAnchorInfo( nullptr );
 }
 
 
 void DIALOG_POSITION_RELATIVE::UpdateAnchor( EDA_ITEM* aItem )
 {
-    UNITS_PROVIDER unitsProvider( pcbIUScale, GetUserUnits() );
-    BOARD_ITEM*    item = dynamic_cast<BOARD_ITEM*>( aItem );
-    wxString       reference = _( "<none selected>" );
+    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+
+    m_options.anchorType = ANCHOR_ITEM;
+    updateAnchorInfo( item );
 
     if( item )
-    {
-        m_anchor_position = item->GetPosition();
-        reference = item->GetSelectMenuText( &unitsProvider );
-    }
-
-    m_referenceInfo->SetLabel( wxString::Format( _( "Reference item: %s" ), reference ) );
+        m_anchorItemPosition = item->GetPosition();
 
     Show( true );
 }
@@ -262,21 +295,18 @@ void DIALOG_POSITION_RELATIVE::UpdateAnchor( EDA_ITEM* aItem )
 void DIALOG_POSITION_RELATIVE::OnOkClick( wxCommandEvent& event )
 {
     // for the output, we only deliver a Cartesian vector
-    wxRealPoint translation;
-    bool ok = GetTranslationInIU( translation, m_polarCoords->IsChecked() );
-    m_translation.x = KiROUND( translation.x );
-    m_translation.y = KiROUND( translation.y );
+    VECTOR2I translation;
 
-    if( ok )
+    if( getTranslationInIU( translation, m_polarCoords->IsChecked() ) )
     {
         // save the settings
         m_options.polarCoords = m_polarCoords->GetValue();
         m_options.entry1      = m_xOffset.GetDoubleValue();
         m_options.entry2      = m_yOffset.GetDoubleValue();
-        POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
-        wxASSERT( posrelTool );
 
-        posrelTool->RelativeItemSelectionMove( m_anchor_position, m_translation );
+        POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
+
+        posrelTool->RelativeItemSelectionMove( getAnchorPos(), translation );
 
         event.Skip();
     }

@@ -87,9 +87,6 @@ private:
     std::unique_ptr<BOARD_COMMIT> m_commit;
 
     EDA_ITEM*                     m_anchor_item;
-    VECTOR2I                      m_anchor;
-
-    VECTOR2I                      m_translation;
 };
 
 #endif
