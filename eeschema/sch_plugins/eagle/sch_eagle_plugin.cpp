@@ -478,6 +478,9 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
         screen->SetFileName( newFilename.GetFullPath() );
         m_rootSheet->SetScreen( screen );
+
+        // Virtual root sheet UUID must be the same as the schematic file UUID.
+        const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
     SYMBOL_LIB_TABLE* libTable = m_schematic->Prj().SchSymbolLibTable();
@@ -502,7 +505,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
         // Save project symbol library table.
         wxFileName fn( m_schematic->Prj().GetProjectPath(),
-                SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+                       SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
         // So output formatter goes out of scope and closes the file before reloading.
         {
@@ -701,39 +704,41 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     // local labels will be used for nets found only on that sheet.
     countNets( aSchematicNode );
 
-    // Loop through all the sheets
-    int sheet_count = countChildren( sheetNode->GetParent(), wxT( "sheet" ) );
+    // There is always at least a root sheet.
+    m_sheetPath.push_back( m_rootSheet );
 
-    // If eagle schematic has multiple sheets then create corresponding subsheets on the root sheet
-    if( sheet_count > 1 )
+    SCH_SHEET_PATH rootPath;
+    m_rootSheet->AddInstance( m_sheetPath );
+    m_rootSheet->SetPageNumber( m_sheetPath, wxT( "1" ) );
+
+    int sheetCount = countChildren( sheetNode->GetParent(), wxT( "sheet" ) );
+
+    if( sheetCount > 1 )
     {
         int x, y, i;
-        i = 2;
+        i = 1;
         x = 1;
         y = 1;
 
-        m_sheetPath.push_back( m_rootSheet );
-        m_rootSheet->AddInstance( m_sheetPath );
-        m_sheetPath.SetPageNumber( wxT( "1" ) );
-
+        // Loop through all the sheets
         while( sheetNode )
         {
             VECTOR2I                   pos    = VECTOR2I( x * schIUScale.MilsToIU( 1000 ),
                                                           y * schIUScale.MilsToIU( 1000 ) );
-            std::unique_ptr<SCH_SHEET> sheet  = std::make_unique<SCH_SHEET>( getCurrentSheet(),
-                                                                             pos );
-            SCH_SCREEN*                screen = new SCH_SCREEN( m_schematic );
-            wxString                   pageNo = wxString::Format( wxT( "%d" ), i );
 
+            // Eagle schematics are never more than one sheet deep so the parent sheet is
+            // always the root sheet.
+            std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>( m_rootSheet, pos );
+            SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
             sheet->SetScreen( screen );
-            sheet->GetScreen()->SetFileName( sheet->GetFileName() );
+            screen->SetFileName( sheet->GetFileName() );
+
+            wxCHECK2( sheet && screen, continue );
+
+            wxString pageNo = wxString::Format( wxT( "%d" ), i );
+
             m_sheetPath.push_back( sheet.get() );
             loadSheet( sheetNode, i );
-
-            SCH_SCREEN* currentScreen = getCurrentScreen();
-
-            wxCHECK2( currentScreen, continue );
-            currentScreen->Append( sheet.release() );
 
             sheet->AddInstance( m_sheetPath );
             m_sheetPath.SetPageNumber( pageNo );
@@ -741,10 +746,16 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             m_rootSheet->SetPageNumber( m_sheetPath, pageNo );
             m_sheetPath.pop_back();
 
+            SCH_SCREEN* currentScreen = m_rootSheet->GetScreen();
+
+            wxCHECK2( currentScreen, continue );
+
+            currentScreen->Append( sheet.release() );
+
             sheetNode = sheetNode->GetNext();
             x += 2;
 
-            if( x > 10 ) // start next row
+            if( x > 10 ) // Start next row of sheets.
             {
                 x = 1;
                 y += 2;
@@ -755,14 +766,11 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     }
     else
     {
+        // There is only one sheet so we make that the root schematic.
         while( sheetNode )
         {
-            m_sheetPath.push_back( m_rootSheet );
             loadSheet( sheetNode, 0 );
             sheetNode = sheetNode->GetNext();
-
-            m_rootSheet->AddInstance( m_sheetPath );
-            m_sheetPath.SetPageNumber( wxT( "1" ) );
         }
     }
 
@@ -1402,7 +1410,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     symbol->GetField( REFERENCE_FIELD )->SetText( reference );
 
-    wxString value = ( epart->value ) ? kisymbolname : *epart->value;
+    wxString value = ( epart->value ) ? *epart->value : kisymbolname;
 
     symbol->GetField( VALUE_FIELD )->SetText( value );
 
