@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -4024,14 +4024,20 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_SHAPE* aBezier, OUTPUTFORMATTER& a
 {
     wxCHECK_RET( aBezier && aBezier->GetShape() == SHAPE_T::BEZIER, "Invalid BEZIER object." );
 
-    aFormatter.Print( 0, "B %u %d %d %d",
-                      (unsigned)aBezier->GetBezierPoints().size(),
+    aFormatter.Print( 0, "B 4 %d %d %d",
                       aBezier->GetUnit(),
                       aBezier->GetConvert(),
                       Iu2Mils( aBezier->GetWidth() ) );
 
-    for( const wxPoint& pt : aBezier->GetBezierPoints() )
-        aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
+    aFormatter.Print( 0, " %d %d %d %d %d %d %d %d",
+                      Iu2Mils( aBezier->GetStart().x ),
+                      Iu2Mils( aBezier->GetStart().y ),
+                      Iu2Mils( aBezier->GetBezierC1().x ),
+                      Iu2Mils( aBezier->GetBezierC1().y ),
+                      Iu2Mils( aBezier->GetBezierC2().x ),
+                      Iu2Mils( aBezier->GetBezierC2().y ),
+                      Iu2Mils( aBezier->GetEnd().x ),
+                      Iu2Mils( aBezier->GetEnd().y ) );
 
     aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aBezier->GetFillType() ) - 1 ] );
 }
