@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Kicad Developers, see AUTHORS.txt for contributors
+ * Copyright (C) 2020-2022 Kicad Developers, see AUTHORS.txt for contributors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,8 +41,6 @@ public:
      */
     static int SetSwapInterval( int aVal )
     {
-        /// This routine is written for Linux using X11 only.  The equivalent functions under
-        /// Windows would include <wglext.h> and call wglSwapIntervalEXT
 #if defined( __linux__ ) && !defined( KICAD_USE_EGL )
 
         if( Display* dpy = glXGetCurrentDisplay() )
@@ -104,10 +102,19 @@ public:
             }
         }
 
-        return std::numeric_limits<int>::max();
-#else
-        return 0;
+#elif defined( _WIN32 )
+
+        if( wglSwapIntervalEXT && wxGLCanvas::IsExtensionSupported( "WGL_EXT_swap_control" ) )
+        {
+            if( aVal == -1 && !wxGLCanvas::IsExtensionSupported( "WGL_EXT_swap_control_tear" ) )
+                aVal = 1;
+
+            if( wglSwapIntervalEXT( aVal ) )
+                return aVal;
+        }
+
 #endif
+        return 0;
     }
 };
 
