@@ -113,7 +113,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     m_auimgr.SetFlags( wxAUI_MGR_DEFAULT );
 
-    CreateStatusBar( 8 );
+    CreateStatusBar( 8 )->SetDoubleBuffered( true );
 
     // set the size of the status bar subwindows:
 
