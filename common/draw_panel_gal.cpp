@@ -206,7 +206,8 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     if( !IsDialogPreview() && GetParentEDAFrame() && GetParentEDAFrame()->GetScreen() )
         GetParentEDAFrame()->GetScreen()->m_ScrollCenter = GetView()->GetCenter();
 
-    m_viewControls->UpdateScrollbars();
+    if( Pgm().GetCommonSettings()->m_Appearance.show_scrollbars )
+        m_viewControls->UpdateScrollbars();
 
     if( !m_drawingEnabled )
         return;
