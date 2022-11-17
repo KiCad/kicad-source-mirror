@@ -134,12 +134,8 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxT( "*.mod" ),
             wxT( "*.stp" ), wxT( "*.step" ),        // 3d files
             wxT( "*.wrl" ),
-            wxT( "*.gb?" ), wxT( "*.gbrjob" ),      // Gerber files
-            wxT( "*.gko" ), wxT( "*.gm1" ),
-            wxT( "*.gm2" ), wxT( "*.g?" ),
-            wxT( "*.gp1" ), wxT( "*.gp2" ),
-            wxT( "*.gpb" ), wxT( "*.gpt" ),
-            wxT( "*.gt?" ),
+            wxT( "*.g?" ), wxT( "*.g??" ),          // Gerber files
+            wxT( "*.gm??" ), wxT( "*.gbrjob" ),
             wxT( "*.pos" ), wxT( "*.drl" ), wxT( "*.nc" ), wxT( "*.xnc" ),  // Fab files
             wxT( "*.d356" ), wxT( "*.rpt" ),
             wxT( "*.net" ), wxT( "*.py" ),

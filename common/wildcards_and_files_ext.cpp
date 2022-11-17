@@ -189,14 +189,14 @@ const std::string CsvFileExtension( "csv" );
  */
 const std::vector<std::string> GerberFileExtensions =
 {
-    GerberFileExtension, GerberJobFileExtension,
+    GerberFileExtension,
     "gbl", "gbo", "gbp", "gbs", "gko",
     "gm1", "gm2", "gm3", "gm4", "gm5", "gm6", "gm7", "gm8", "gm9",
     "g1", "g3",
     "gpt", "gpb", "gtl", "gto", "gtp", "gts", "pho", "pos"
 };
 
-const wxString GerberFileExtensionWildCard( ".((gbr|gbrjob|(gb|gt)[alops])|pho)" );
+const wxString GerberFileExtensionWildCard( "((gbr|(gb|gt)[alops]|g[0-9]{1,2}|gm[0-9]{1,2}|gko)|pho)" );
 
 
 bool IsExtensionAccepted( const wxString& aExt, const std::vector<std::string> acceptedExts )

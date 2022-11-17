@@ -233,6 +233,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_acceptedExts.emplace( LegacyProjectFileExtension, &KICAD_MANAGER_ACTIONS::loadProject );
     for( const auto& ext : GerberFileExtensions )
         m_acceptedExts.emplace( ext, &KICAD_MANAGER_ACTIONS::viewDroppedGerbers );
+    m_acceptedExts.emplace( GerberJobFileExtension, &KICAD_MANAGER_ACTIONS::viewDroppedGerbers );
     m_acceptedExts.emplace( DrillFileExtension, &KICAD_MANAGER_ACTIONS::viewDroppedGerbers );
     // Eagle files import
     m_acceptedExts.emplace( EagleSchematicFileExtension,
@@ -435,6 +436,7 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
 
     // Gerbview editor should be able to open Gerber and drill files
     std::vector<std::string> gerberExts( GerberFileExtensions );
+    gerberExts.push_back( GerberJobFileExtension );
     gerberExts.push_back( DrillFileExtension );
 
     for( const wxFileName& fileName : m_AcceptedFiles )
