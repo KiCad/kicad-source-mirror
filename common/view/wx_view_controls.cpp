@@ -580,6 +580,8 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         m_view->SetCenter( m_view->GetCenter() + dir );
 
         refreshMouse();
+
+        m_panTimer.Start();
     }
     break;
 
@@ -907,7 +909,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         if( borderHit )
         {
             setState( AUTO_PANNING );
-            m_panTimer.Start( (int) ( 250.0 / 60.0 ) );
+            m_panTimer.Start( (int) ( 250.0 / 60.0 ), true );
 
             return true;
         }
