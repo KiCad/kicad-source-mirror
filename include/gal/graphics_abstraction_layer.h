@@ -249,6 +249,9 @@ public:
         return m_screenSize;
     }
 
+    /// Return the swap interval. -1 for adaptive, 0 for disabled/unknown
+    virtual int GetSwapInterval() const { return 0; };
+
     /// Force all remaining objects to be drawn.
     virtual void Flush() {};
 

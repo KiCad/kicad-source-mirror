@@ -150,6 +150,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_drawing = false;
     m_drawingEnabled = false;
 
+    m_minRefreshPeriod = 13; // 77 FPS (minus render time) by default
+
     // Set up timer that prevents too frequent redraw commands
     m_refreshTimer.SetOwner( this );
     Connect( m_refreshTimer.GetId(), wxEVT_TIMER,
@@ -379,16 +381,16 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
     // If it has been too long since the last frame (possible depending on platform timer latency),
     // just do a refresh.  Otherwise, start the refresh timer if it hasn't already been started.
     // This ensures that we will render often enough but not too often.
-    if( delta >= MinRefreshPeriod )
+    if( delta >= m_minRefreshPeriod )
     {
         if( !m_pendingRefresh )
             ForceRefresh();
 
-        m_refreshTimer.Start( MinRefreshPeriod, true );
+        m_refreshTimer.Start( m_minRefreshPeriod, true );
     }
     else if( !m_refreshTimer.IsRunning() )
     {
-        m_refreshTimer.Start( ( MinRefreshPeriod - delta ).ToLong(), true );
+        m_refreshTimer.Start( ( m_minRefreshPeriod - delta ).ToLong(), true );
     }
 }
 
@@ -529,6 +531,12 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         m_gal->SetGridSize( grid_size );
 
     m_gal->SetGridVisibility( grid_visibility );
+
+    if( m_gal->GetSwapInterval() != 0 )
+    {
+        // In theory this could be 0 but then more CPU cycles will be wasted in SwapBuffers
+        m_minRefreshPeriod = 5;
+    }
 
     // Make sure the cursor is set on the new canvas
     SetCurrentCursor( KICURSOR::ARROW );

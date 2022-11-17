@@ -186,6 +186,9 @@ public:
     /// @brief Shows/hides the GAL canvas
     bool Show( bool aShow ) override;
 
+    /// @copydoc GAL::GetSwapInterval()
+    int GetSwapInterval() const override { return m_swapInterval; };
+
     /// @copydoc GAL::Flush()
     void Flush() override;
 
@@ -327,6 +330,7 @@ private:
 
     static wxGLContext*     m_glMainContext;    ///< Parent OpenGL context
     wxGLContext*            m_glPrivContext;    ///< Canvas-specific OpenGL context
+    int                     m_swapInterval;     ///< Used to store swap interval information
     static int              m_instanceCounter;  ///< GL GAL instance counter
     wxEvtHandler*           m_mouseListener;
     wxEvtHandler*           m_paintListener;

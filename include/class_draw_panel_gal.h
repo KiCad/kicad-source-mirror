@@ -255,11 +255,10 @@ protected:
     void onRefreshTimer( wxTimerEvent& aEvent );
     void onShowTimer( wxTimerEvent& aEvent );
 
-    static const int MinRefreshPeriod = 17;      ///< 60 FPS.
-
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
 
+    int                      m_minRefreshPeriod; ///< A minimum delay before another draw can start
     wxLongLong               m_lastRefresh;      ///< Last timestamp when the panel was refreshed
     bool                     m_pendingRefresh;   ///< Is there a redraw event requested?
     wxTimer                  m_refreshTimer;     ///< Timer to prevent too-frequent refreshing

@@ -2565,7 +2565,7 @@ void OPENGL_GAL::init()
         throw std::runtime_error( "Requested texture size is not supported" );
     }
 
-    GL_UTILS::SetSwapInterval( -1 );
+    m_swapInterval = GL_UTILS::SetSwapInterval( -1 );
 
     m_cachedManager = new VERTEX_MANAGER( true );
     m_nonCachedManager = new VERTEX_MANAGER( false );
