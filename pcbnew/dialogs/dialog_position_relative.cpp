@@ -261,6 +261,9 @@ VECTOR2I DIALOG_POSITION_RELATIVE::getAnchorPos()
     case ANCHOR_ITEM:
         return m_anchorItemPosition;
     }
+
+    // Needed by some compilers to avoid a fatal compil error (no return value).
+    return m_anchorItemPosition;
 }
 
 
