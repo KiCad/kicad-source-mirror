@@ -28,8 +28,6 @@
 #include <wx/glcanvas.h>
 #include <wx/utils.h>
 
-#include <limits>
-
 class GL_UTILS
 {
 public:
@@ -52,11 +50,11 @@ public:
             if( glXSwapIntervalEXT && glXQueryDrawable && drawable
                 && exts.find( "GLX_EXT_swap_control" ) != std::string::npos )
             {
-                if( aVal < 0 )
+                if( aVal == -1 )
                 {
                     if( exts.find( "GLX_EXT_swap_control_tear" ) == std::string::npos )
                     {
-                        aVal = 0;
+                        aVal = 1;
                     }
                     else
                     {
@@ -85,20 +83,20 @@ public:
             if( glXSwapIntervalMESA && glXGetSwapIntervalMESA
                 && exts.find( "GLX_MESA_swap_control" ) != std::string::npos )
             {
-                if( aVal < 0 )
-                    aVal = 0;
+                if( aVal == -1 )
+                    aVal = 1;
 
-                glXSwapIntervalMESA( aVal );
-                return glXGetSwapIntervalMESA();
+                if( !glXSwapIntervalMESA( aVal ) )
+                    return aVal;
             }
 
-            if( aVal > 0 && glXSwapIntervalSGI
-                && exts.find( "GLX_SGI_swap_control" ) != std::string::npos )
+            if( glXSwapIntervalSGI && exts.find( "GLX_SGI_swap_control" ) != std::string::npos )
             {
-                if( glXSwapIntervalSGI( aVal ) )
-                    glXSwapIntervalSGI( 1 );
+                if( aVal == -1 )
+                    aVal = 1;
 
-                return 1;
+                if( !glXSwapIntervalSGI( aVal ) )
+                    return aVal;
             }
         }
 
