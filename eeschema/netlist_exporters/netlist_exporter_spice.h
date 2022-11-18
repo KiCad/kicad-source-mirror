@@ -64,12 +64,14 @@ public:
     /**
      * Write to specified output file.
      */
-    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+                       REPORTER& aReporter ) override;
 
     /**
      * Write the netlist in aFormatter.
      */
-    bool DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions );
+    bool DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
+                         REPORTER& aReporter );
 
     /**
      * Write the netlist head (title and so on).
@@ -87,7 +89,7 @@ public:
      * if only net mapping and the list of SPICE_ITEMs are required.
      * @return True if successful.
      */
-    virtual bool ReadSchematicAndLibraries( unsigned aNetlistOptions );
+    virtual bool ReadSchematicAndLibraries( unsigned aNetlistOptions, REPORTER& aReporter );
 
     /**
      * Replace illegal spice net name characters with underscores.
@@ -123,7 +125,7 @@ public:
     const std::vector<std::string>& GetDirectives() { return m_directives; }
 
 protected:
-    void ReadDirectives( unsigned aNetlistOptions, wxArrayString& aErrors );
+    void ReadDirectives( unsigned aNetlistOptions, REPORTER& aReporter );
     virtual void WriteDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) const;
 
     virtual std::string GenerateItemPinNetName( const std::string& aNetName, int& aNcCounter ) const;

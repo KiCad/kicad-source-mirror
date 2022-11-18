@@ -24,6 +24,7 @@
 #include <memory>
 
 class SPICE_SIMULATOR;
+class REPORTER;
 
 class SIMULATION_MODEL
 {
@@ -70,7 +71,7 @@ public:
      *
      * @return True in case of success, false otherwise.
      */
-    virtual bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel )
+    virtual bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, REPORTER& aReporter )
     {
         m_simModel = aModel;
         return true;

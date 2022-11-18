@@ -23,6 +23,7 @@
 
 #include <jobs/job_dispatcher.h>
 #include <wx/string.h>
+#include <reporter.h>
 
 namespace KIGFX
 {
@@ -34,7 +35,7 @@ class SCHEMATIC;
 /**
  * Handles eeschema job dispatches
  */
-class EESCHEMA_JOBS_HANDLER : public JOB_DISPATCHER
+class EESCHEMA_JOBS_HANDLER : public JOB_DISPATCHER, REPORTER
 {
 public:
     EESCHEMA_JOBS_HANDLER();
@@ -54,6 +55,17 @@ public:
      */
     void InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRenderSettings, const wxString& aTheme,
                              SCHEMATIC* aSch );
+
+    /*
+     * REPORTER INTERFACE
+     */
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override
+    {
+        return false;
+    }
+
 };
 
 #endif

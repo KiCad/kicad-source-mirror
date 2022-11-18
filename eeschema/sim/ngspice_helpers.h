@@ -69,9 +69,9 @@ public:
         m_options = aOptions;
     }
 
-    bool GetNetlist( OUTPUTFORMATTER* aFormatter )
+    bool GetNetlist( OUTPUTFORMATTER* aFormatter, REPORTER& aReporter )
     {
-        return NGSPICE_CIRCUIT_MODEL::DoWriteNetlist( *aFormatter, m_options );
+        return NGSPICE_CIRCUIT_MODEL::DoWriteNetlist( *aFormatter, m_options, aReporter );
     }
 
     /**

@@ -76,6 +76,17 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRen
 }
 
 
+REPORTER& EESCHEMA_JOBS_HANDLER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    if( aSeverity == RPT_SEVERITY_ERROR )
+        wxFprintf( stderr, aText );
+    else
+        wxPrintf( aText );
+
+    return *this;
+}
+
+
 int EESCHEMA_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 {
     JOB_EXPORT_SCH_PDF* aPdfJob = dynamic_cast<JOB_EXPORT_SCH_PDF*>( aJob );
@@ -224,7 +235,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         aNetJob->m_outputFile = fn.GetFullName();
     }
 
-    bool res = helper->WriteNetlist( aNetJob->m_outputFile, 0 );
+    bool res = helper->WriteNetlist( aNetJob->m_outputFile, 0, *this );
 
     if(!res)
     {
@@ -287,7 +298,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
             aNetJob->m_outputFile = fn.GetFullName();
         }
 
-        bool res = xmlNetlist->WriteNetlist( aNetJob->m_outputFile, GNL_OPT_BOM );
+        bool res = xmlNetlist->WriteNetlist( aNetJob->m_outputFile, GNL_OPT_BOM, *this );
 
         if( !res )
         {

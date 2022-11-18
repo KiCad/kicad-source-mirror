@@ -142,9 +142,13 @@ void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::WriteNetlist()
     if( wxFileExists( GetNetlistPath( true ) ) )
         wxRemoveFile( GetNetlistPath( true ) );
 
-    auto exporter = std::make_unique<Exporter>( &m_schematic );
-    BOOST_REQUIRE_EQUAL( exporter->WriteNetlist( GetNetlistPath( true ), GetNetlistOptions() ),
-                                                 true );
+    wxString                  errors;
+    WX_STRING_REPORTER        reporter( &errors );
+    std::unique_ptr<Exporter> exporter = std::make_unique<Exporter>( &m_schematic );
+
+    bool success = exporter->WriteNetlist( GetNetlistPath( true ), GetNetlistOptions(), reporter );
+
+    BOOST_REQUIRE( success && errors.IsEmpty() );
 }
 
 

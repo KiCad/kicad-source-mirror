@@ -101,14 +101,16 @@ NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic ) :
 }
 
 
-bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+                                           REPORTER& aReporter )
 {
     FILE_OUTPUTFORMATTER formatter( aOutFileName, wxT( "wt" ), '\'' );
-    return DoWriteNetlist( formatter, aNetlistOptions );
+    return DoWriteNetlist( formatter, aNetlistOptions, aReporter );
 }
 
 
-bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
+                                             REPORTER& aReporter )
 {
     LOCALE_IO dummy;
 
@@ -118,7 +120,7 @@ bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsign
     // Default title.
     m_title = "KiCad schematic";
 
-    if( !ReadSchematicAndLibraries( aNetlistOptions ) )
+    if( !ReadSchematicAndLibraries( aNetlistOptions, aReporter ) )
         return false;
 
     WriteHead( aFormatter, aNetlistOptions );
@@ -146,13 +148,14 @@ void NETLIST_EXPORTER_SPICE::WriteTail( OUTPUTFORMATTER& aFormatter, unsigned aN
 }
 
 
-bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions,
+                                                        REPORTER& aReporter )
 {
-    wxArrayString         error_msgs;
+    wxString              msg;
     std::set<std::string> refNames; // Set of reference names to check for duplication.
     int                   ncCounter = 1;
 
-    ReadDirectives( aNetlistOptions, error_msgs );
+    ReadDirectives( aNetlistOptions, aReporter );
 
     m_nets.clear();
     m_items.clear();
@@ -232,23 +235,15 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             }
             catch( const IO_ERROR& e )
             {
-                error_msgs.Add( wxString::Format( _( "Error reading simulation model from symbol "
-                                                     "'%s':\n%s" ),
-                                                  symbol->GetRef( &sheet ),
-                                                  e.What() ) );
+                msg.Printf( _( "Error reading simulation model from symbol '%s':\n%s" ),
+                            symbol->GetRef( &sheet ),
+                            e.What() );
+                aReporter.Report( msg, RPT_SEVERITY_ERROR );
             }
         }
     }
 
-    if( error_msgs.GetCount() )
-    {
-        HTML_MESSAGE_BOX dlg( nullptr, _( "Errors" ) );
-
-        dlg.ListSet( error_msgs );
-        dlg.ShowModal();
-    }
-
-    return true;
+    return !aReporter.HasMessage();
 }
 
 
@@ -288,16 +283,17 @@ const SPICE_ITEM* NETLIST_EXPORTER_SPICE::FindItem( const std::string& aRefName 
 }
 
 
-void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, wxArrayString& aErrors )
+void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, REPORTER& aReporter )
 {
+    wxString msg;
+    wxString text;
+
     m_directives.clear();
 
     for( const SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
-            wxString text;
-
             if( item->Type() == SCH_TEXT_T )
                 text = static_cast<SCH_TEXT*>( item )->GetShownText();
             else if( item->Type() == SCH_TEXTBOX_T )
@@ -339,10 +335,10 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, wxArraySt
                     }
                     catch( const IO_ERROR& e )
                     {
-                        aErrors.Add( wxString::Format( _( "Error reading simulation model library "
-                                                          "'%s':\n%s" ),
-                                                       path,
-                                                       e.What() ) );
+                        msg.Printf( _( "Error reading simulation model library '%s':\n%s" ),
+                                    path,
+                                    e.What() );
+                        aReporter.Report( msg, RPT_SEVERITY_ERROR );
                     }
                 }
                 else

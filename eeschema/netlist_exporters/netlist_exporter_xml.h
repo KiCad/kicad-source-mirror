@@ -75,7 +75,8 @@ public:
      *
      * @return true if the netlist was written successfully.
      */
-    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+                       REPORTER& aReporter ) override;
 
 #define GNL_ALL     ( GNL_LIBRARIES | GNL_SYMBOLS | GNL_PARTS | GNL_HEADER | GNL_NETS )
 

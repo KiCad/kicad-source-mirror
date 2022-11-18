@@ -37,7 +37,7 @@ public:
 
     void WriteHead( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) override;
     void WriteTail( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) override;
-    bool ReadSchematicAndLibraries( unsigned aNetlistOptions ) override;
+    bool ReadSchematicAndLibraries( unsigned aNetlistOptions, REPORTER& aReporter ) override;
 
 protected:
     std::string GenerateItemPinNetName( const std::string& aNetName, int& aNcCounter ) const override;

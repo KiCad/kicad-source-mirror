@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_HTML_REPORT_PANEL;
+
 #include "dialog_shim.h"
 #include <wx/gdicmn.h>
 #include <wx/notebook.h>
@@ -17,6 +19,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
@@ -51,6 +54,7 @@ class NETLIST_DIALOG_BASE : public DIALOG_SHIM
 		};
 
 		wxNotebook* m_NoteBook;
+		WX_HTML_REPORT_PANEL* m_MessagesBox;
 		wxBoxSizer* m_buttonSizer;
 		wxButton* m_buttonAddGenerator;
 		wxButton* m_buttonDelGenerator;
@@ -58,7 +62,7 @@ class NETLIST_DIALOG_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer2OK;
 		wxButton* m_sdbSizer2Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnNetlistTypeSelection( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnAddGenerator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDelGenerator( wxCommandEvent& event ) { event.Skip(); }
@@ -67,6 +71,7 @@ class NETLIST_DIALOG_BASE : public DIALOG_SHIM
 	public:
 
 		NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~NETLIST_DIALOG_BASE();
 
 };
@@ -98,13 +103,14 @@ class NETLIST_DIALOG_ADD_GENERATOR_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnBrowseGenerators( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		NETLIST_DIALOG_ADD_GENERATOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Script Generator Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~NETLIST_DIALOG_ADD_GENERATOR_BASE();
 
 };

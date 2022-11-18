@@ -68,10 +68,10 @@ SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
 
 wxString NGSPICE_CIRCUIT_MODEL::GetSheetSimCommand()
 {
-    wxArrayString error_msgs;
+    NULL_REPORTER devnull;
     wxString      simCmd;
 
-    ReadDirectives( 0, error_msgs );
+    ReadDirectives( 0, devnull );
 
     for( const std::string& directive : GetDirectives() )
     {

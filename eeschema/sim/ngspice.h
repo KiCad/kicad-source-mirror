@@ -59,7 +59,8 @@ public:
     void Init( const SPICE_SIMULATOR_SETTINGS* aSettings = nullptr ) override final;
 
     ///< @copydoc SPICE_SIMULATOR::Attach()
-    bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel ) override final;
+    bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel,
+                 REPORTER& aReporter ) override final;
 
     ///< Load a netlist for the simulation
     bool LoadNetlist( const std::string& aNetlist ) override final;

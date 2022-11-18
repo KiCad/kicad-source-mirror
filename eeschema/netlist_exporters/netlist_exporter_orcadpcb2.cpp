@@ -37,7 +37,8 @@
 
 
 bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
-                                               unsigned /* aNetlistOptions */ )
+                                               unsigned /* aNetlistOptions */,
+                                               REPORTER& aReporter )
 {
     FILE* f = nullptr;
     wxString    field;
@@ -48,9 +49,8 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
     if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == nullptr )
     {
-        wxString msg;
-        msg.Printf( _( "Failed to create file '%s'." ), aOutFileName );
-        DisplayError( nullptr, msg );
+        wxString msg = wxString::Format( _( "Failed to create file '%s'." ), aOutFileName );
+        aReporter.Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
 

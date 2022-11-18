@@ -47,7 +47,8 @@ public:
      * Generate the KiCad netlist format supported by Pcbnew. It is basically the XML netlist
      * just formatted slightly different.
      */
-    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+                       REPORTER& aReporter ) override;
 
     /**
      * Output this s-expression netlist into @a aOutputFormatter.

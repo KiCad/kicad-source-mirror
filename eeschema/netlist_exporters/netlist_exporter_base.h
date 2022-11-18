@@ -106,7 +106,8 @@ public:
     /**
      * Write to specified output file.
      */
-    virtual bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
+    virtual bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+                               REPORTER& aReporter )
     {
         return false;
     }

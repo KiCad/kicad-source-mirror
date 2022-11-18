@@ -32,7 +32,8 @@
 #include "netlist_exporter_kicad.h"
 
 
-bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+                                           REPORTER& aReporter )
 {
     try
     {
@@ -42,7 +43,7 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
 
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( nullptr, ioe.What() );
+        aReporter.Report( ioe.What(), RPT_SEVERITY_ERROR );
         return false;
     }
 

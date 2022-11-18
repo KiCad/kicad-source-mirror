@@ -41,7 +41,8 @@
 
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
 
-bool NETLIST_EXPORTER_XML::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_XML::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+                                         REPORTER& aReporter )
 {
     // output the XML format netlist.
 
@@ -55,6 +56,7 @@ bool NETLIST_EXPORTER_XML::WriteNetlist( const wxString& aOutFileName, unsigned 
     wxXmlDocument       xdoc;
 
     unsigned aCtl = aNetlistOptions;
+
     if( aNetlistOptions & GNL_OPT_BOM )
         aCtl |= ( GNL_SYMBOLS | GNL_HEADER );
     else

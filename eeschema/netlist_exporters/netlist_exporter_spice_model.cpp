@@ -64,11 +64,12 @@ void NETLIST_EXPORTER_SPICE_MODEL::WriteTail( OUTPUTFORMATTER& aFormatter,
 }
 
 
-bool NETLIST_EXPORTER_SPICE_MODEL::ReadSchematicAndLibraries( unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_SPICE_MODEL::ReadSchematicAndLibraries( unsigned aNetlistOptions,
+                                                              REPORTER& aReporter )
 {
     readPorts( aNetlistOptions );
 
-    return NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( aNetlistOptions );
+    return NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( aNetlistOptions, aReporter );
 }
 
 

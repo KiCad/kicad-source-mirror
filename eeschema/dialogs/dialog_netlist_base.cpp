@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/wx_html_report_panel.h"
 
 #include "dialog_netlist_base.h"
 
@@ -29,7 +31,18 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	m_NoteBook->SetMinSize( wxSize( 540,-1 ) );
 
 
-	bUpperSizer->Add( m_NoteBook, 1, wxEXPAND | wxALL, 5 );
+	bUpperSizer->Add( m_NoteBook, 0, wxEXPAND | wxALL, 5 );
+
+	wxBoxSizer* bSizerMsgPanel;
+	bSizerMsgPanel = new wxBoxSizer( wxVERTICAL );
+
+	m_MessagesBox = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_MessagesBox->SetMinSize( wxSize( 300,150 ) );
+
+	bSizerMsgPanel->Add( m_MessagesBox, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bUpperSizer->Add( bSizerMsgPanel, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );

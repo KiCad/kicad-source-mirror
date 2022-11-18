@@ -37,16 +37,16 @@
 static wxString StartLine( wxT( "." ) );
 
 bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
-                                             unsigned /* aNetlistOptions */ )
+                                             unsigned /* aNetlistOptions */,
+                                             REPORTER& aReporter )
 {
     int ret = 0;
     FILE* f = nullptr;
 
     if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == nullptr )
     {
-        wxString msg;
-        msg.Printf( _( "Failed to create file '%s'." ), aOutFileName );
-        DisplayError( nullptr, msg );
+        wxString msg = wxString::Format( _( "Failed to create file '%s'." ), aOutFileName );
+        aReporter.Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
 

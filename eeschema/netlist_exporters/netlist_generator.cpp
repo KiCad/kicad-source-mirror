@@ -107,7 +107,13 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         break;
     }
 
-    res = helper->WriteNetlist( fileName, aNetlistOptions );
+    NULL_REPORTER devnull;
+
+    if( aReporter )
+        res = helper->WriteNetlist( fileName, aNetlistOptions, *aReporter );
+    else
+        res = helper->WriteNetlist( fileName, aNetlistOptions, devnull );
+
     delete helper;
 
     // If user provided a plugin command line, execute it.
