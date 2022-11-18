@@ -129,6 +129,11 @@ public:
     int FilletTracks( const TOOL_EVENT& aEvent );
 
     /**
+     * Fillet (i.e. adds an arc tangent to) all selected straight lines by a user defined radius.
+     */
+    int FilletLines( const TOOL_EVENT& aEvent );
+
+    /**
      * Delete currently selected items.
      */
     int Remove( const TOOL_EVENT& aEvent );

@@ -53,6 +53,7 @@
 #include <view/view_controls.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_items.h>
+#include <core/kicad_algo.h>
 #include <bitmaps.h>
 #include <cassert>
 #include <functional>
@@ -180,6 +181,10 @@ bool EDIT_TOOL::Init()
                                                PCB_ARC_T,
                                                PCB_VIA_T };
 
+    static std::vector<KICAD_T> filletTypes = { PCB_SHAPE_LOCATE_POLY_T,
+                                                PCB_SHAPE_LOCATE_RECT_T,
+                                                PCB_SHAPE_LOCATE_SEGMENT_T };
+
 
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
@@ -198,6 +203,7 @@ bool EDIT_TOOL::Init()
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
                                                       && !SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) );
     menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
+    menu.AddItem( PCB_ACTIONS::filletLines,       SELECTION_CONDITIONS::OnlyTypes( filletTypes ) );
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
@@ -1021,6 +1027,280 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         frame()->ShowInfoBarMsg( _( "Unable to fillet the selected track segments." ) );
     else if( didOneAttemptFail )
         frame()->ShowInfoBarMsg( _( "Some of the track segments could not be filleted." ) );
+
+    return 0;
+}
+
+
+int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
+{
+    // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
+    static long long filletRadiusIU = 0;
+
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+        {
+
+            std::vector<VECTOR2I> pts;
+
+            // Iterate from the back so we don't have to worry about removals.
+            for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+            {
+                BOARD_ITEM* item = aCollector[i];
+
+                // We've converted the polygon and rectangle to segments, so drop everything
+                // that isn't a segment at this point
+                if( !item->IsType( { PCB_SHAPE_LOCATE_SEGMENT_T,
+                                     PCB_SHAPE_LOCATE_POLY_T,
+                                     PCB_SHAPE_LOCATE_RECT_T } ) )
+                {
+                    aCollector.Remove( item );
+                }
+            }
+        },
+        true /* prompt user regarding locked items */ );
+
+    std::set<PCB_SHAPE*> lines_to_add;
+    std::vector<PCB_SHAPE*> items_to_remove;
+
+    for( EDA_ITEM* item : selection )
+    {
+        std::vector<VECTOR2I> pts;
+        PCB_SHAPE *graphic = static_cast<PCB_SHAPE*>( item );
+
+        if( graphic->GetShape() == SHAPE_T::RECT )
+        {
+            items_to_remove.push_back( graphic );
+            VECTOR2I start( graphic->GetStart() );
+            VECTOR2I end( graphic->GetEnd() );
+            pts.emplace_back( start );
+            pts.emplace_back( VECTOR2I( end.x, start.y ) );
+            pts.emplace_back( end );
+            pts.emplace_back( VECTOR2I( start.x, end.y ) );
+        }
+
+        if( graphic->GetShape() == SHAPE_T::POLY )
+        {
+            items_to_remove.push_back( graphic );
+
+            for( int jj = 0; jj < graphic->GetPolyShape().VertexCount(); ++jj )
+                pts.emplace_back( graphic->GetPolyShape().CVertex( jj ) );
+        }
+
+        for( size_t jj = 1; jj < pts.size(); ++jj )
+        {
+            PCB_SHAPE *line;
+
+            if( m_isFootprintEditor )
+                line = new FP_SHAPE( static_cast<FOOTPRINT*>( frame()->GetModel() ), SHAPE_T::SEGMENT );
+            else
+                line = new PCB_SHAPE( frame()->GetModel(), SHAPE_T::SEGMENT );
+
+            line->SetStart( pts[jj - 1] );
+            line->SetEnd( pts[jj] );
+            lines_to_add.insert( line );
+        }
+
+        if( pts.size() > 1 )
+        {
+            PCB_SHAPE *line;
+
+            if( m_isFootprintEditor )
+                line = new FP_SHAPE( static_cast<FOOTPRINT*>( frame()->GetModel() ), SHAPE_T::SEGMENT );
+            else
+                line = new PCB_SHAPE( frame()->GetModel(), SHAPE_T::SEGMENT );
+
+            line->SetStart( pts.back() );
+            line->SetEnd( pts.front() );
+            lines_to_add.insert( line );
+        }
+    }
+
+    for( PCB_SHAPE* item : lines_to_add )
+        selection.Add( item );
+
+    for( PCB_SHAPE* item : items_to_remove )
+        selection.Remove( item );
+
+    if( selection.CountType( PCB_SHAPE_LOCATE_SEGMENT_T ) < 2 )
+    {
+        frame()->ShowInfoBarMsg( _( "A shape with least two lines must be selected." ) );
+        return 0;
+    }
+
+    WX_UNIT_ENTRY_DIALOG dia( frame(), _( "Enter fillet radius:" ), _( "Fillet Lines" ),
+                              filletRadiusIU );
+
+    if( dia.ShowModal() == wxID_CANCEL )
+        return 0;
+
+    filletRadiusIU = dia.GetValue();
+
+    if( filletRadiusIU == 0 )
+    {
+        frame()->ShowInfoBarMsg( _( "A radius of zero was entered.\n"
+                                    "The fillet operation was not performed." ) );
+        return 0;
+    }
+
+    bool                   operationPerformedOnAtLeastOne = false;
+    bool                   didOneAttemptFail              = false;
+    std::vector<BOARD_ITEM*> itemsToAddToSelection;
+
+    // Only modify one parent in FP editor
+    if( m_isFootprintEditor )
+        m_commit->Modify( selection.Front() );
+
+    alg::for_all_pairs( selection.begin(), selection.end(), [&]( EDA_ITEM* a, EDA_ITEM* b )
+        {
+            PCB_SHAPE* line_a = static_cast<PCB_SHAPE*>( a );
+            PCB_SHAPE* line_b = static_cast<PCB_SHAPE*>( b );
+
+            if( line_a->GetLength() == 0.0 || line_b->GetLength() == 0 )
+                return;
+
+            SEG seg_a( line_a->GetStart(), line_a->GetEnd() );
+            SEG seg_b( line_b->GetStart(), line_b->GetEnd() );
+            VECTOR2I* a_pt;
+            VECTOR2I* b_pt;
+
+            if (seg_a.A == seg_b.A)
+            {
+                a_pt = &seg_a.A;
+                b_pt = &seg_b.A;
+            }
+            else if (seg_a.A == seg_b.B)
+            {
+                a_pt = &seg_a.A;
+                b_pt = &seg_b.B;
+            }
+            else if (seg_a.B == seg_b.A)
+            {
+                a_pt = &seg_a.B;
+                b_pt = &seg_b.A;
+            }
+            else if (seg_a.B == seg_b.B)
+            {
+                a_pt = &seg_a.B;
+                b_pt = &seg_b.B;
+            }
+            else
+                return;
+
+
+            SHAPE_ARC sArc( seg_a, seg_b, filletRadiusIU );
+            VECTOR2I  t1newPoint, t2newPoint;
+
+            auto setIfPointOnSeg =
+                    []( VECTOR2I& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
+                    {
+                        VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
+
+                        // Find out if we are on the segment (minimum precision)
+                        if( segToVec.EuclideanNorm() < SHAPE_ARC::MIN_PRECISION_IU )
+                        {
+                            aPointToSet.x = aVecToTest.x;
+                            aPointToSet.y = aVecToTest.y;
+                            return true;
+                        }
+
+                        return false;
+                    };
+
+            //Do not draw a fillet if the end points of the arc are not within the track segments
+            if( !setIfPointOnSeg( t1newPoint, seg_a, sArc.GetP0() )
+                    && !setIfPointOnSeg( t2newPoint, seg_b, sArc.GetP0() ) )
+            {
+                didOneAttemptFail = true;
+                return;
+            }
+
+            if( !setIfPointOnSeg( t1newPoint, seg_a, sArc.GetP1() )
+                    && !setIfPointOnSeg( t2newPoint, seg_b, sArc.GetP1() ) )
+            {
+                didOneAttemptFail = true;
+                return;
+            }
+
+            PCB_SHAPE* tArc;
+
+            if( m_isFootprintEditor )
+                tArc = new FP_SHAPE( static_cast<FOOTPRINT*>( frame()->GetModel() ), SHAPE_T::ARC );
+            else
+                tArc = new PCB_SHAPE( frame()->GetBoard(), SHAPE_T::ARC );
+
+            tArc->SetArcGeometry( sArc.GetP0(), sArc.GetArcMid(), sArc.GetP1() );
+            tArc->SetWidth( line_a->GetWidth() );
+            tArc->SetLayer( line_a->GetLayer() );
+            tArc->SetLocked( line_a->IsLocked() );
+
+            if( lines_to_add.count( line_a ) )
+            {
+                lines_to_add.erase( line_a );
+                itemsToAddToSelection.push_back( line_a );
+            }
+            else if( !m_isFootprintEditor )
+            {
+                m_commit->Modify( line_a );
+            }
+
+            if( lines_to_add.count( line_b ) )
+            {
+                lines_to_add.erase( line_b );
+                itemsToAddToSelection.push_back( line_b );
+            }
+            else if( !m_isFootprintEditor )
+            {
+                m_commit->Modify( line_b );
+            }
+
+            itemsToAddToSelection.push_back( tArc );
+            *a_pt = t1newPoint;
+            *b_pt = t2newPoint;
+            line_a->SetStart( seg_a.A );
+            line_a->SetEnd( seg_a.B );
+            line_b->SetStart( seg_b.A );
+            line_b->SetEnd( seg_b.B );
+
+            if( m_isFootprintEditor )
+            {
+                static_cast<FP_SHAPE*>( line_a )->SetLocalCoord();
+                static_cast<FP_SHAPE*>( line_b )->SetLocalCoord();
+                static_cast<FP_SHAPE*>( tArc )->SetLocalCoord();
+            }
+
+            operationPerformedOnAtLeastOne = true;
+
+        } );
+
+    for( auto item : items_to_remove )
+    {
+        m_commit->Remove( item );
+        m_selectionTool->RemoveItemFromSel( item, true );
+    }
+
+    //select the newly created arcs
+    for( BOARD_ITEM* item : itemsToAddToSelection )
+    {
+        m_commit->Add( item );
+        m_selectionTool->AddItemToSel( item, true );
+    }
+
+    if( !items_to_remove.empty() )
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+
+    if( !itemsToAddToSelection.empty() )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    // Notify other tools of the changes
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
+    m_commit->Push( _( "Fillet Lines" ) );
+
+    if( !operationPerformedOnAtLeastOne )
+        frame()->ShowInfoBarMsg( _( "Unable to fillet the selected lines." ) );
+    else if( didOneAttemptFail )
+        frame()->ShowInfoBarMsg( _( "Some of the lines could not be filleted." ) );
 
     return 0;
 }
@@ -2280,6 +2560,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::PackAndMoveFootprints, PCB_ACTIONS::packAndMoveFootprints.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackWidth,      PCB_ACTIONS::changeTrackWidth.MakeEvent() );
     Go( &EDIT_TOOL::FilletTracks,          PCB_ACTIONS::filletTracks.MakeEvent() );
+    Go( &EDIT_TOOL::FilletLines,           PCB_ACTIONS::filletLines.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,       ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::copyToClipboard,       PCB_ACTIONS::copyWithReference.MakeEvent() );

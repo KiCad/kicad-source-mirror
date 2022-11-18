@@ -357,6 +357,10 @@ TOOL_ACTION PCB_ACTIONS::filletTracks( "pcbnew.InteractiveEdit.filletTracks",
         AS_GLOBAL, 0, "",
         _( "Fillet Tracks" ), _( "Adds arcs tangent to the selected straight track segments" ) );
 
+TOOL_ACTION PCB_ACTIONS::filletLines( "pcbnew.InteractiveEdit.filletLines",
+        AS_GLOBAL, 0, "",
+        _( "Fillet Lines" ), _( "Adds arcs tangent to the selected lines" ) );
+
 TOOL_ACTION PCB_ACTIONS::deleteFull( "pcbnew.InteractiveEdit.deleteFull",
         AS_GLOBAL,
         MD_SHIFT + WXK_DELETE, LEGACY_HK_NAME( "Delete Full Track" ),

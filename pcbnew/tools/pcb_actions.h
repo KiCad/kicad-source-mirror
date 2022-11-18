@@ -140,6 +140,7 @@ public:
 
     /// Fillet (i.e. adds an arc tangent to) all selected straight tracks by a user defined radius
     static TOOL_ACTION filletTracks;
+    static TOOL_ACTION filletLines;
 
     /// Activation of the edit tool
     static TOOL_ACTION properties;
