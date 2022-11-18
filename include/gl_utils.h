@@ -107,8 +107,9 @@ public:
             if( aVal == -1 && !wxGLCanvas::IsExtensionSupported( "WGL_EXT_swap_control_tear" ) )
                 aVal = 1;
 
-            if( wglSwapIntervalEXT( aVal ) )
-                return aVal;
+            wglSwapIntervalEXT( aVal );
+
+            return wglGetSwapIntervalEXT();
         }
 
 #endif
