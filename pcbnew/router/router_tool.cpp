@@ -608,8 +608,9 @@ void ROUTER_TOOL::saveRouterDebugLog()
     prj->GetProjectFile().SaveAs( cwd, "pns" );
 
     std::vector<PNS::ITEM*> added, removed;
+    auto tmpNode = m_router->GetUpdatedItems( removed, added );
 
-    if( !m_router->GetUpdatedItems( removed, added ) )
+    if( !tmpNode )
     {
         fclose( f );
         return;

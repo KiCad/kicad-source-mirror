@@ -769,7 +769,7 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
     return ret;
 }
 
-bool ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded )
+std::unique_ptr<NODE> ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded )
 {
     NODE *node;
     ITEM_SET current;
@@ -794,10 +794,8 @@ bool ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS
     }
 
     tmpNode->GetUpdatedItems( aRemoved, aAdded );
-
-    //printf("added %d removed %d\n", aRemoved.size(), aAdded.size() );
-
-    return true;
+    
+    return std::move( tmpNode );
 }
 
 void ROUTER::CommitRouting( NODE* aNode )
