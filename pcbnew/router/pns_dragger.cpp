@@ -54,11 +54,11 @@ bool DRAGGER::propagateViaForces( NODE* node, std::set<VIA*>& vias )
     VIA* via = *vias.begin();
 
     VECTOR2I force;
-    VECTOR2I lead = m_mouseTrailTracer.GetTrailLeadVector();
+    VECTOR2I lead = -m_mouseTrailTracer.GetTrailLeadVector();
 
-    bool solidsOnly = false;// ( m_currentMode != RM_Walkaround );
+    const int iterLimit = Settings().ViaForcePropIterationLimit();
 
-    if( via->PushoutForce( node, lead, force, solidsOnly, 40 ) )
+    if( via->PushoutForce( node, lead, force, ITEM::ANY_T, iterLimit ) )
     {
         via->SetPos( via->Pos() + force );
         return true;
