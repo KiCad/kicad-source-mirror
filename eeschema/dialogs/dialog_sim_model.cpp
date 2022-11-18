@@ -336,18 +336,15 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
 {
-    SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
-
     // Change the Type choice to match the current device type.
-    if( !m_prevModel || deviceType != m_prevModel->GetDeviceType() )
+    if( !m_prevModel || m_prevModel != &curModel() )
     {
-        m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
-
+        m_deviceTypeChoice->SetSelection( static_cast<int>( curModel().GetDeviceType() ) );
         m_typeChoice->Clear();
 
         for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
         {
-            if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
+            if( SIM_MODEL::TypeInfo( type ).deviceType == curModel().GetDeviceType() )
             {
                 m_typeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
 
@@ -598,32 +595,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 
     try
     {
-        if( isIbisLoaded() )
-        {
-            wxString ibisTypeString = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::TYPE_FIELD );
-
-            SIM_MODEL::TYPE ibisType = SIM_MODEL::TYPE::KIBIS_DEVICE;
-
-            if( ibisTypeString == "IBISDRIVERDC" )
-                ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER_DC;
-            else if( ibisTypeString == "IBISDRIVERRECT" )
-                ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER_RECT;
-            else if( ibisTypeString == "IBISDRIVRPRBS" )
-                ibisType = SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS;
-
-            std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library )
-                    ->ReadFile( std::string( absolutePath.ToUTF8() ), ibisType );
-            
-            wxArrayString emptyArray;
-            m_ibisModelCombobox->Set( emptyArray );
-            m_ibisPinCombobox->Set( emptyArray );
-            m_ibisModelCombobox->SetSelection( -1 );
-            m_ibisPinCombobox->SetSelection( -1 );
-        }
-        else
-        {
-            m_library->ReadFile( std::string( absolutePath.ToUTF8() ) );
-        }
+        m_library->ReadFile( std::string( absolutePath.ToUTF8() ) );
     }
     catch( const IO_ERROR& e )
     {
@@ -642,7 +614,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
         for( auto& [baseModelName, baseModel] : m_library->GetModels() )
         {
             wxString expectedModelName =
-                    SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::NAME_FIELD );
+                    SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
 
             // Only the current model is initialized from fields. Others have default
             // initialization.
@@ -676,6 +648,15 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 
     m_modelNameCombobox->Set( modelNames );
     m_useLibraryModelRadioButton->SetValue( true );
+
+    if( isIbisLoaded() )
+    {
+        wxArrayString emptyArray;
+        m_ibisModelCombobox->Set( emptyArray );
+        m_ibisPinCombobox->Set( emptyArray );
+        m_ibisModelCombobox->SetSelection( -1 );
+        m_ibisPinCombobox->SetSelection( -1 );
+    }
 }
 
 
