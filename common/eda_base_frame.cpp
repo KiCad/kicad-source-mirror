@@ -1131,14 +1131,14 @@ void EDA_BASE_FRAME::OnDropFiles( wxDropFilesEvent& aEvent )
     for( int nb = 0; nb < aEvent.GetNumberOfFiles(); nb++ )
     {
         const wxFileName fn = wxFileName( files[nb] );
-        for( const auto& [ext, tool] : m_acceptedExts )
-        {
-            if( IsExtensionAccepted( fn.GetExt(), { ext.ToStdString() } ) )
-            {
-                m_AcceptedFiles.emplace( m_AcceptedFiles.end(), fn );
-                break;
-            }
-        }
+        wxString         ext = fn.GetExt();
+
+        // Alias all gerber files as GerberFileExtension
+        if( IsGerberFileExtension( ext ) )
+            ext = GerberFileExtension;
+
+        if( m_acceptedExts.find( ext.ToStdString() ) != m_acceptedExts.end() )
+            m_AcceptedFiles.emplace_back( fn );
     }
 
     DoWithAcceptedFiles();

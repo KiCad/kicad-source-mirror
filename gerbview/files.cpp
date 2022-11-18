@@ -199,10 +199,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFileName )
      * Now (2014) Ucamco (the company which manages the Gerber format) encourages use of .gbr
      * only and the Gerber X2 file format.
      */
-    filetypes = _( "Gerber files (.g* .lgr .pho)" );
-    filetypes << wxT( "|" );
-    filetypes += wxT( "*.g*;*.G*;*.pho;*.PHO" );
-    filetypes << wxT( "|" );
+    filetypes = _( "Gerber files" ) + AddFileExtListToFilter( { "G*", "PHO" } ) + wxT( "|" );
 
     /* Special gerber filetypes */
     filetypes += _( "Top layer" ) + AddFileExtListToFilter( { "GTL" } ) + wxT( "|" );
@@ -680,7 +677,7 @@ void GERBVIEW_FRAME::DoWithAcceptedFiles()
 
     for( const wxFileName& file : m_AcceptedFiles )
     {
-        if( IsExtensionAccepted( file.GetExt(), { ArchiveFileExtension } ) )
+        if( file.GetExt() == ArchiveFileExtension )
         {
             wxString fn = file.GetFullPath();
             // Open zip archive in editor
@@ -695,5 +692,5 @@ void GERBVIEW_FRAME::DoWithAcceptedFiles()
 
     // Open files in editor
     if( !gerbFn.IsEmpty() )
-        m_toolManager->RunAction( *m_acceptedExts.at( DrillFileExtension ), true, &gerbFn );
+        m_toolManager->RunAction( *m_acceptedExts.at( GerberFileExtension ), true, &gerbFn );
 }

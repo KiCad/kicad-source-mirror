@@ -184,37 +184,14 @@ const std::string TextFileExtension( "txt" );
 const std::string MarkdownFileExtension( "md" );
 const std::string CsvFileExtension( "csv" );
 
-/**
- * Gerber files extensions Kicad is to open
- */
-const std::vector<std::string> GerberFileExtensions =
+const wxString GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
+
+
+bool IsGerberFileExtension( const wxString& ext )
 {
-    GerberFileExtension,
-    "gbl", "gbo", "gbp", "gbs", "gko",
-    "gm1", "gm2", "gm3", "gm4", "gm5", "gm6", "gm7", "gm8", "gm9",
-    "g1", "g3",
-    "gpt", "gpb", "gtl", "gto", "gtp", "gts", "pho", "pos"
-};
+    static wxRegEx gerberRE( GerberFileExtensionsRegex, wxRE_ICASE );
 
-const wxString GerberFileExtensionWildCard( "((gbr|(gb|gt)[alops]|g[0-9]{1,2}|gm[0-9]{1,2}|gko)|pho)" );
-
-
-bool IsExtensionAccepted( const wxString& aExt, const std::vector<std::string> acceptedExts )
-{
-    for( auto extPtr = acceptedExts.begin(); extPtr != acceptedExts.end(); extPtr++ )
-    {
-        if( aExt.ToStdString() == *extPtr )
-            return true;
-    }
-    return false;
-}
-
-
-bool IsProtelExtension( const wxString& ext )
-{
-    static wxRegEx protelRE( wxT( "(gm1)|(g[tb][lapos])|(g\\d\\d*)" ), wxRE_ICASE );
-
-    return protelRE.Matches( ext );
+    return gerberRE.Matches( ext );
 }
 
 
@@ -340,12 +317,6 @@ wxString OrCadPcb2NetlistFileWildcard()
 wxString NetlistFileWildcard()
 {
     return _( "KiCad netlist files" ) + AddFileExtListToFilter( { "net" } );
-}
-
-
-wxString GerberFileWildcard()
-{
-    return _( "Gerber files" ) + AddFileExtListToFilter( { "pho" } );
 }
 
 

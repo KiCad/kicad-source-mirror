@@ -231,18 +231,23 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // Init for dropping files
     m_acceptedExts.emplace( ProjectFileExtension, &KICAD_MANAGER_ACTIONS::loadProject );
     m_acceptedExts.emplace( LegacyProjectFileExtension, &KICAD_MANAGER_ACTIONS::loadProject );
-    for( const auto& ext : GerberFileExtensions )
-        m_acceptedExts.emplace( ext, &KICAD_MANAGER_ACTIONS::viewDroppedGerbers );
+
+    // Gerber files
+    // Note that all gerber files are aliased as GerberFileExtension
+    m_acceptedExts.emplace( GerberFileExtension, &KICAD_MANAGER_ACTIONS::viewDroppedGerbers );
     m_acceptedExts.emplace( GerberJobFileExtension, &KICAD_MANAGER_ACTIONS::viewDroppedGerbers );
     m_acceptedExts.emplace( DrillFileExtension, &KICAD_MANAGER_ACTIONS::viewDroppedGerbers );
+
     // Eagle files import
     m_acceptedExts.emplace( EagleSchematicFileExtension,
                             &KICAD_MANAGER_ACTIONS::importNonKicadProj );
     m_acceptedExts.emplace( EaglePcbFileExtension, &KICAD_MANAGER_ACTIONS::importNonKicadProj );
+
     // Cadstar files import
     m_acceptedExts.emplace( CadstarSchematicFileExtension,
                             &KICAD_MANAGER_ACTIONS::importNonKicadProj );
     m_acceptedExts.emplace( CadstarPcbFileExtension, &KICAD_MANAGER_ACTIONS::importNonKicadProj );
+
     DragAcceptFiles( true );
 
     // Ensure the window is on top
@@ -422,11 +427,13 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
     // If not, open files in dedicated app.
     for( const wxFileName& fileName : m_AcceptedFiles )
     {
-        if( IsExtensionAccepted( fileName.GetExt(),
-                                 { ProjectFileExtension, LegacyProjectFileExtension } ) )
+        wxString ext = fileName.GetExt();
+
+        if( ext == ProjectFileExtension || ext == LegacyProjectFileExtension )
         {
             wxString fn = fileName.GetFullPath();
             m_toolManager->RunAction( *m_acceptedExts.at( fileName.GetExt() ), true, &fn );
+
             return;
         }
     }
@@ -435,13 +442,12 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
     wxString gerberFiles;
 
     // Gerbview editor should be able to open Gerber and drill files
-    std::vector<std::string> gerberExts( GerberFileExtensions );
-    gerberExts.push_back( GerberJobFileExtension );
-    gerberExts.push_back( DrillFileExtension );
-
     for( const wxFileName& fileName : m_AcceptedFiles )
     {
-        if( IsExtensionAccepted( fileName.GetExt(), gerberExts ) )
+        wxString ext = fileName.GetExt();
+
+        if( ext == GerberJobFileExtension || ext == DrillFileExtension
+            || IsGerberFileExtension( ext ) )
         {
             gerberFiles += wxT( '\"' );
             gerberFiles += fileName.GetFullPath() + wxT( '\"' );

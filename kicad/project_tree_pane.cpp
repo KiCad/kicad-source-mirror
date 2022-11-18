@@ -258,7 +258,7 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
     case TREE_FILE_TYPE::SEXPR_SCHEMATIC:       return KiCadSchematicFileExtension;
     case TREE_FILE_TYPE::LEGACY_PCB:            return LegacyPcbFileExtension;
     case TREE_FILE_TYPE::SEXPR_PCB:             return KiCadPcbFileExtension;
-    case TREE_FILE_TYPE::GERBER:                return GerberFileExtensionWildCard;
+    case TREE_FILE_TYPE::GERBER:                return GerberFileExtensionsRegex;
     case TREE_FILE_TYPE::GERBER_JOB_FILE:       return GerberJobFileExtension;
     case TREE_FILE_TYPE::HTML:                  return HtmlFileExtension;
     case TREE_FILE_TYPE::PDF:                   return PdfFileExtension;

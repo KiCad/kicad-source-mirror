@@ -527,10 +527,9 @@ public:
             pleditor->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
                                   m_newProjectName, aSrcFilePath, m_errors );
         }
-        else if( ext == GerberFileExtension
-               || ext == GerberJobFileExtension
+        else if( ext == GerberJobFileExtension
                || ext == DrillFileExtension
-               || IsProtelExtension( ext ) )
+               || IsGerberFileExtension(ext) )
         {
             KIFACE* gerbview = m_frame->Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
             gerbview->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
