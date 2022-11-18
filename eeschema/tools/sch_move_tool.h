@@ -84,6 +84,9 @@ private:
     void setTransitions() override;
 
 private:
+    ///< Re-entrancy guard
+    bool                  m_inMoveTool;
+
     ///< Flag determining if anything is being dragged right now
     bool                  m_moveInProgress;
     bool                  m_isDrag;

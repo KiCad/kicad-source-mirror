@@ -217,6 +217,10 @@ void SELECTION_TOOL::onDisambiguationExpire( wxTimerEvent& aEvent )
     if( selection().GetSize() >= 2 )
         return;
 
+    // If another tool has since started running then we don't want to interrupt
+    if( !getEditFrame<EDA_DRAW_FRAME>()->ToolStackIsEmpty() )
+        return;
+
     m_toolMgr->ProcessEvent( EVENTS::DisambiguatePoint );
 }
 
