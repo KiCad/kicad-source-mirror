@@ -71,7 +71,7 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
     VECTOR2I totalForce;
 
     auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
-    PNS_DBG( dbg, AddPoint, Pos(), YELLOW, 100000, wxString::Format( "via-force-init-pos" ) );
+    PNS_DBG( dbg, AddPoint, Pos(), YELLOW, 100000, wxString::Format( "via-force-init-pos, iter %d", aMaxIterations ) );
 
     while( iter < aMaxIterations )
     {
@@ -81,10 +81,19 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
             break;
 
         VECTOR2I force;
-        bool     collFound = PushoutForce( aNode, obs->m_item, force );
+        bool     collFound = mv.PushoutForce( aNode, obs->m_item, force );
 
         if( !collFound )
+        {
+            if( obs )
+            {
+                // might happen (although rarely) that we see a collision, but the MTV
+                // is zero... Assume force propagation has failed in such case.
+                return false;
+            }
+            PNS_DBG( dbg, Message, wxString::Format( "no-coll %d", iter ) );
             break;
+        }
 
         const int threshold = Diameter() / 4; // another stupid heuristic.
         const int forceMag = force.EuclideanNorm();
