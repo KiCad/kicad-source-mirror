@@ -1,0 +1,29 @@
+{
+  "auto_posture": true,
+  "can_violate_drc": false,
+  "corner_mode": 0,
+  "effort": 1,
+  "fix_all_segments": true,
+  "follow_mouse": true,
+  "free_angle_mode": false,
+  "jump_over_obstacles": false,
+  "meta": {
+    "version": 0
+  },
+  "mode": 2,
+  "optimize_dragged_track": true,
+  "remove_loops": true,
+  "shove_iteration_limit": 250,
+  "shove_time_limit": 1000,
+  "shove_vias": true,
+  "smart_pads": true,
+  "smooth_dragged_segments": true,
+  "snap_to_pads": true,
+  "snap_to_tracks": true,
+  "start_diagonal": false,
+  "suggest_finish": false,
+  "via_force_prop_iteration_limit": 40,
+  "walkaround_hug_length_threshold": 1.5,
+  "walkaround_iteration_limit": 40
+}
+
