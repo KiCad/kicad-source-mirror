@@ -47,6 +47,7 @@
 
 SCH_MOVE_TOOL::SCH_MOVE_TOOL() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveMove" ),
+        m_inMoveTool( false ),
         m_moveInProgress( false ),
         m_isDrag( false ),
         m_moveOffset( 0, 0 )
@@ -125,6 +126,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
         return 0;
     }
+
+    if( m_inMoveTool )      // Must come after m_moveInProgress checks above...
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inMoveTool );
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
