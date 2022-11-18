@@ -23,6 +23,7 @@
  */
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
+#include <geometry/shape_compound.h>
 #include <board.h>
 #include <board_item.h>
 #include <footprint.h>
@@ -245,6 +246,17 @@ const BOX2I PCB_GROUP::GetBoundingBox() const
     bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Give a min size to the bbox
 
     return bbox;
+}
+
+
+std::shared_ptr<SHAPE> PCB_GROUP::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+{
+    std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
+
+    for( BOARD_ITEM* item : m_items )
+        shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
+
+    return shape;
 }
 
 

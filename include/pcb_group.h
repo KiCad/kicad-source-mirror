@@ -157,6 +157,10 @@ public:
     ///< @copydoc EDA_ITEM::GetBoundingBox
     const BOX2I GetBoundingBox() const override;
 
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                                              FLASHING aFlash = FLASHING::DEFAULT ) const override;
+
     ///< @copydoc EDA_ITEM::Visit
     INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData,
                           const std::vector<KICAD_T>& aScanTypes ) override;

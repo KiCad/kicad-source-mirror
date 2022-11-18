@@ -750,8 +750,9 @@ public:
      */
     void BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-            FLASHING aFlash = FLASHING::DEFAULT ) const override;
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                                              FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }

@@ -152,8 +152,8 @@ public:
                                   bool ignoreLineWidth = false ) const override;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-            FLASHING aFlash = FLASHING::DEFAULT ) const override;
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                                              FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     /**
      * Function IsPointOnEnds
@@ -334,8 +334,8 @@ public:
     }
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-            FLASHING aFlash = FLASHING::DEFAULT ) const override;
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                                              FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     /**
      * Function GetLength
