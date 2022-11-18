@@ -44,20 +44,22 @@ void SIM_LIB_MGR::Clear()
 }
 
 
-SIM_LIBRARY& SIM_LIB_MGR::CreateLibrary( const std::string& aLibraryPath )
+SIM_LIBRARY& SIM_LIB_MGR::CreateLibrary( const std::string& aLibraryPath, REPORTER* aReporter )
 {
     std::string absolutePath = std::string( m_project.AbsolutePath( aLibraryPath ).ToUTF8() );
 
-    auto it = m_libraries.try_emplace( aLibraryPath, SIM_LIBRARY::Create( absolutePath ) ).first;
+    auto it =
+            m_libraries.try_emplace( aLibraryPath, SIM_LIBRARY::Create( absolutePath, aReporter ) )
+                    .first;
     return *it->second;
 }
 
-SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const std::string& aLibraryPath )
+SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const std::string& aLibraryPath, REPORTER* aReporter  )
 {
     std::string absolutePath = std::string( m_project.AbsolutePath( aLibraryPath ).ToUTF8() );
 
     // May throw an exception.
-    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( absolutePath );
+    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( absolutePath, aReporter );
     
     Clear();
     m_libraries[aLibraryPath] = std::move( library );

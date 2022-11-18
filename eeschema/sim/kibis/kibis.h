@@ -218,7 +218,9 @@ public:
     {
         m_valid = false;
     }; // Constructor for unitialized KIBIS members
-    KIBIS( std::string aFileName );
+    KIBIS( std::string aFileName, IBIS_REPORTER* aReporter = nullptr );
+
+    IBIS_REPORTER*               m_reporter;
     std::vector<KIBIS_COMPONENT> m_components;
     std::vector<KIBIS_MODEL>     m_models;
     KIBIS_FILE                   m_file;

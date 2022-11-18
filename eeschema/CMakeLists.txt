@@ -72,6 +72,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_global_edit_text_and_graphics.cpp
     dialogs/dialog_global_edit_text_and_graphics_base.cpp
     dialogs/dialog_global_sym_lib_table_config.cpp
+    dialogs/dialog_ibis_parser_reporter.cpp
+    dialogs/dialog_ibis_parser_reporter_base.cpp
     dialogs/dialog_image_properties.cpp
     dialogs/dialog_image_properties_base.cpp
     dialogs/dialog_junction_props.cpp

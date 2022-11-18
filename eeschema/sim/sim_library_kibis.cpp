@@ -33,7 +33,7 @@
 void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath )
 {
     SIM_LIBRARY::ReadFile( aFilePath );
-    m_kibis = KIBIS( aFilePath );
+    m_kibis = KIBIS( aFilePath, m_reporter );
 
     if( !m_kibis.m_valid )
     {

@@ -40,6 +40,7 @@
 
 #include <wx/string.h>
 #include <reporter.h>
+#include "widgets/wx_html_report_panel.h"
 //#include "common.h"
 #include <iostream>
 #include <fstream>
@@ -48,19 +49,7 @@
 #include <cstring>
 
 
-class IBIS_REPORTER
-{
-public:
-    /** @brief Print a message
-     *
-     * In the future, this function could do more than just printing a message.
-     * All KIBIS messages are concentrated at a single point in the code.
-     *
-     * @param aMsg Message
-     * @param aSeverity Message sevirity
-     */
-    void Report( std::string aMsg, SEVERITY aSeverity ) { std::cout << aMsg << std::endl; };
-};
+#define IBIS_REPORTER REPORTER
 
 class IBIS_ANY
 {
@@ -78,9 +67,7 @@ public:
     void           Report( std::string aMsg, SEVERITY aSeverity = RPT_SEVERITY_INFO )
     {
         if( m_reporter )
-        {
             m_reporter->Report( aMsg, aSeverity );
-        }
     };
 protected:
     /** @brief Convert a double to string using scientific notation

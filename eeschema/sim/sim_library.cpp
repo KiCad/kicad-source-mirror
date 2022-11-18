@@ -27,7 +27,7 @@
 #include <sim/sim_library_spice.h>
 
 
-std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( std::string aFilePath )
+std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( std::string aFilePath, REPORTER* aReporter )
 {
     std::unique_ptr<SIM_LIBRARY> library;
     wxString wxaFilePath( aFilePath );
@@ -37,6 +37,7 @@ std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( std::string aFilePath )
     else
         library = std::make_unique<SIM_LIBRARY_SPICE>();
 
+    library->m_reporter = aReporter;
     library->ReadFile( aFilePath );
     return library;
 }

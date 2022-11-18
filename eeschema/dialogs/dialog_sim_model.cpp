@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <dialog_ibis_parser_reporter.h>
 #include <dialog_sim_model.h>
 #include <sim/sim_property.h>
 #include <sim/sim_library_kibis.h>
@@ -622,7 +623,32 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForce
     if( !aForceReload && libraries.size() >= 1 && libraries.begin()->first == aLibraryPath )
         return;
 
-    m_libraryModelsMgr.SetLibrary( std::string( aLibraryPath.ToUTF8() ) );
+
+    DIALOG_IBIS_PARSER_REPORTER dlg( this );
+    dlg.m_messagePanel->Clear();
+
+    bool tryingToLoadIbis = false;
+
+    if( aLibraryPath.EndsWith( ".ibs" ) )
+        tryingToLoadIbis = true;
+
+    try
+    {
+        m_libraryModelsMgr.SetLibrary( std::string( aLibraryPath.ToUTF8() ),
+                                          &( dlg.m_messagePanel->Reporter() ) );
+    }
+    catch( const IO_ERROR& e )
+    {
+        if( tryingToLoadIbis )
+        {
+            dlg.m_messagePanel->Flush();
+            dlg.ShowQuasiModal();
+        }
+        else
+            DisplayErrorMessage( this, e.What() );
+
+        return;
+    }
 
     try
     {
