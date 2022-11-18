@@ -1471,8 +1471,8 @@ void VIEW::UpdateItems()
         }
     }
 
-    KI_TRACE( traceGalProfile, "View update: total items %u, geom %u updates %u\n", cntTotal,
-              cntGeomUpdate, cntAnyUpdate );
+    KI_TRACE( traceGalProfile, "View update: total items %u, geom %u anyUpdated %u\n", cntTotal,
+              cntGeomUpdate, (unsigned) anyUpdated );
 }
 
 
