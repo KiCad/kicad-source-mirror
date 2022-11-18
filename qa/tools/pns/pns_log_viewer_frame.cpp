@@ -42,7 +42,7 @@
 #include "router/pns_utils.h"
 #include "router/router_preview_item.h"
 
-
+#include <geometry/shape_compound.h>
 
 class WX_SHAPE_TREE_ITEM_DATA : public wxClientData
 {
@@ -204,6 +204,43 @@ PNS_DEBUG_STAGE* PNS_LOG_VIEWER_FRAME::getCurrentStage()
 }
 
 
+void PNS_LOG_VIEWER_FRAME::drawSimpleShape( SHAPE* aShape, bool aIsSelected, const std::string& aName )
+{
+    switch( aShape->Type() )
+    {
+    case SH_CIRCLE:
+    {
+        auto cir = static_cast<SHAPE_CIRCLE*>( aShape );
+        m_overlay->Circle( cir->GetCenter(), cir->GetRadius() );
+
+        break;
+    }
+    case SH_SEGMENT:
+    {
+        auto seg = static_cast<SHAPE_SEGMENT*>( aShape );
+        m_overlay->Line( seg->GetSeg().A, seg->GetSeg().B );
+
+        break;
+    }
+    case SH_RECT:
+    {
+        auto rect = static_cast<SHAPE_RECT*>( aShape );
+        m_overlay->Rectangle( rect->GetPosition(), rect->GetPosition() + rect->GetSize() );
+
+        break;
+    }
+    case SH_LINE_CHAIN:
+    {
+        auto lc = static_cast<SHAPE_LINE_CHAIN*>( aShape );
+        m_overlay->AnnotatedPolyline( *lc, aName,
+                                      m_showVertices ||  aIsSelected );
+
+        break;
+    }
+    default: break;
+    }
+}
+
 void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 {
     if( !m_logPlayer )
@@ -247,39 +284,18 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
             m_overlay->SetStrokeColor( color );
             m_overlay->SetLineWidth( m_showThinLines ? 10000 : ent->m_width );
 
-            switch( sh->Type() )
+            if( sh->Type() == SH_COMPOUND )
             {
-            case SH_CIRCLE:
-            {
-                auto cir = static_cast<SHAPE_CIRCLE*>( sh );
-                m_overlay->Circle( cir->GetCenter(), cir->GetRadius() );
+                auto cmpnd = static_cast<SHAPE_COMPOUND*>( sh );
 
-                break;
+                for( auto subshape : cmpnd->Shapes() )
+                {
+                    drawSimpleShape( subshape, isSelected, ent->m_name.ToStdString() );
+                }
             }
-            case SH_SEGMENT:
+            else
             {
-                auto seg = static_cast<SHAPE_SEGMENT*>( sh );
-                m_overlay->Line( seg->GetSeg().A, seg->GetSeg().B );
-
-                break;
-            }
-            case SH_RECT:
-            {
-                auto rect = static_cast<SHAPE_RECT*>( sh );
-                m_overlay->Rectangle( rect->GetPosition(), rect->GetPosition() + rect->GetSize() );
-
-                break;
-            }
-            case SH_LINE_CHAIN:
-            {
-                auto lc = static_cast<SHAPE_LINE_CHAIN*>( sh );
-                m_overlay->AnnotatedPolyline( *lc, ent->m_name.ToStdString(), m_showVertices || ( ent->m_hasLabels && isSelected ) );
-
-                break;
-
-            }
-            default:
-                break;
+                drawSimpleShape( sh, isSelected, ent->m_name.ToStdString() );
             }
         }
 

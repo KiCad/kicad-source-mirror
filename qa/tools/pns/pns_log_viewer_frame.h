@@ -78,6 +78,7 @@ private:
     virtual void onShowRPIsChecked( wxCommandEvent& event ) override;
     virtual void onShowVerticesChecked( wxCommandEvent& event ) override;
     virtual void onFilterText( wxCommandEvent& event ) override;
+    void drawSimpleShape( SHAPE* aShape, bool aIsSelected, const std::string& aName );
 
     std::shared_ptr<PNS_LOG_VIEWER_OVERLAY> m_overlay;
     std::shared_ptr<PNS_LOG_FILE>           m_logFile;
@@ -106,6 +107,7 @@ public:
     void DrawAnnotations();
 
 private:
+
 
     std::unique_ptr<LABEL_MANAGER> m_labelMgr;
 };
