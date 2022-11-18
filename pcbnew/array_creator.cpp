@@ -97,6 +97,9 @@ void ARRAY_CREATOR::Invoke()
                 // the first point: we don't own this or add it, but
                 // we might still modify it (position or label)
                 this_item = item;
+
+                commit.Modify( this_item );
+                TransformItem( *array_opts, ptN, *this_item );
             }
             else
             {
@@ -168,15 +171,9 @@ void ARRAY_CREATOR::Invoke()
                                 });
                     }
 
+                    TransformItem( *array_opts, ptN, *this_item );
                     commit.Add( this_item );
                 }
-            }
-
-            // always transform the item
-            if( this_item )
-            {
-                commit.Modify( this_item );
-                TransformItem( *array_opts, ptN, *this_item );
             }
 
             // attempt to renumber items if the array parameters define
