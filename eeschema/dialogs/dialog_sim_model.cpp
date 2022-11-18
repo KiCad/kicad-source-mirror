@@ -349,10 +349,7 @@ void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
         {
             if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
             {
-                wxString description = SIM_MODEL::TypeInfo( type ).description;
-
-                if( !description.IsEmpty() )
-                    m_typeChoice->Append( description );
+                m_typeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
 
                 if( type == curModel().GetType() )
                     m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
