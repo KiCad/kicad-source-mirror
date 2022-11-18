@@ -541,10 +541,6 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
     TYPE type = ReadTypeFromFields( aFields, aSymbolPinCount );
-
-    if( type == TYPE::NONE )
-        THROW_IO_ERROR( wxString::Format( _( "Failed to read simulation model from fields." ) ) );
-
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
     model->ReadDataFields( aSymbolPinCount, &aFields );
