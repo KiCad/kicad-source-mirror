@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-04 23:18+0000\n"
+"PO-Revision-Date: 2022-11-19 08:30+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -32551,157 +32551,136 @@ msgid "Invalid L_pkg value."
 msgstr "Неправильне значення довжини"
 
 #: pcbnew/ibis/ibis_parser.cpp:170
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "Неправильне значення довжини"
+msgstr "Некоректне значення C_pkg."
 
 #: pcbnew/ibis/ibis_parser.cpp:184
 msgid "Checking pin "
 msgstr "Перевірка виводів "
 
 #: pcbnew/ibis/ibis_parser.cpp:189
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "Ім'я звʼязку не може бути пустим."
+msgstr "Поле імені виводу не може бути порожнім."
 
 #: pcbnew/ibis/ibis_parser.cpp:194
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "Імʼя змінної не може бути порожнім."
+msgstr "Поле імені сигналу не може бути порожнім."
 
 #: pcbnew/ibis/ibis_parser.cpp:199
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "Ім'я звʼязку не може бути пустим."
+msgstr "Поле імені моделі не може бути порожнім."
 
 #: pcbnew/ibis/ibis_parser.cpp:204
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Ідентифікатор посадкового місця '%s' недійсний."
+msgstr "Rpin некоректний."
 
 #: pcbnew/ibis/ibis_parser.cpp:209
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Ідентифікатор посадкового місця '%s' недійсний."
+msgstr "Lpin некоректний."
 
 #: pcbnew/ibis/ibis_parser.cpp:214
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Ідентифікатор посадкового місця '%s' недійсний."
+msgstr "Cpin некоректний."
 
 #: pcbnew/ibis/ibis_parser.cpp:228
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "Ім'я звʼязку не може бути пустим."
+msgstr "Поле імені компоненту не може бути порожнім."
 
 #: pcbnew/ibis/ibis_parser.cpp:233
 msgid "Checking component "
 msgstr "Перевірка конфліктів "
 
 #: pcbnew/ibis/ibis_parser.cpp:238
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "Ім'я звʼязку не може бути пустим."
+msgstr "Компонент: моле виробника не може бути порожнім."
 
 #: pcbnew/ibis/ibis_parser.cpp:244
 msgid "Component: Invalid Package."
-msgstr ""
+msgstr "Компонент: некоректний пакет."
 
 #: pcbnew/ibis/ibis_parser.cpp:250
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Файли розміщення компонентів"
+msgstr "Компонент: немає піну"
 
 #: pcbnew/ibis/ibis_parser.cpp:347
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "Неможливо інтерполювати струм на основі цієї IV таблиці."
 
 #: pcbnew/ibis/ibis_parser.cpp:365
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "У IV таблиці є напруга Nan"
 
 #: pcbnew/ibis/ibis_parser.cpp:372
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "У IV таблиці є некоректний струм"
 
 #: pcbnew/ibis/ibis_parser.cpp:415
 msgid "Invalid R_load."
-msgstr ""
+msgstr "Некоректне R_load."
 
 #: pcbnew/ibis/ibis_parser.cpp:419
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "Неправильне значення довжини"
+msgstr "Недійсне падіння dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:424
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "Неправильне значення опору"
+msgstr "Недійсне зростання dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:439
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "Ім'я звʼязку не може бути пустим."
+msgstr "Поле імені моделі не може бути порожнім."
 
 #: pcbnew/ibis/ibis_parser.cpp:444
 msgid "Checking model "
 msgstr "Перевірка міток "
 
 #: pcbnew/ibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Модель лінії"
+msgstr "Невизначений тип моделі"
 
 #: pcbnew/ibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "Неправильне значення довжини"
+msgstr "Недійсне значення Vinh."
 
 #: pcbnew/ibis/ibis_parser.cpp:460
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "Неправильне значення затримки"
+msgstr "Недійсне значення Vinl."
 
 #: pcbnew/ibis/ibis_parser.cpp:465
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "Неправильне значення затримки"
+msgstr "Недійсне значення R_ref."
 
 #: pcbnew/ibis/ibis_parser.cpp:470
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "Неправильне значення затримки"
+msgstr "Недійсне значення C_ref."
 
 #: pcbnew/ibis/ibis_parser.cpp:475
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "Неправильне значення затримки"
+msgstr "Недійсне значення V_ref."
 
 #: pcbnew/ibis/ibis_parser.cpp:480
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "Неправильне значення затримки"
+msgstr "Недійсне значення V_meas."
 
 #: pcbnew/ibis/ibis_parser.cpp:485
 msgid "C_comp is invalid."
-msgstr ""
+msgstr "Недійсне значення C_comp."
 
 #: pcbnew/ibis/ibis_parser.cpp:490
 msgid "Temperature Range is invalid."
-msgstr ""
+msgstr "Діапазон температур некоректний."
 
 #: pcbnew/ibis/ibis_parser.cpp:515
 msgid "Voltage Range is invalid."
-msgstr ""
+msgstr "Діапазон напруги некоректний."
 
 #: pcbnew/ibis/ibis_parser.cpp:521
 msgid "Invalid pulldown."
-msgstr ""
+msgstr "Некорректно pulldown."
 
 #: pcbnew/ibis/ibis_parser.cpp:526
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "Неправильне значення затримки"
+msgstr "Некорректно pullup."
 
 #: pcbnew/ibis/ibis_parser.cpp:531
 msgid "Invalid POWER clamp."
