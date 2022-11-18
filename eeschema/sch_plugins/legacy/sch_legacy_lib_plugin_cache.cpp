@@ -1543,14 +1543,20 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_SHAPE* aBezier, OUTPUTFORMATTER& a
 {
     wxCHECK_RET( aBezier && aBezier->GetShape() == SHAPE_T::BEZIER, "Invalid BEZIER object." );
 
-    aFormatter.Print( 0, "B %u %d %d %d",
-                      (unsigned)aBezier->GetBezierPoints().size(),
+    aFormatter.Print( 0, "B 4 %d %d %d",
                       aBezier->GetUnit(),
                       aBezier->GetConvert(),
                       schIUScale.IUToMils( aBezier->GetWidth() ) );
 
-    for( const VECTOR2I& pt : aBezier->GetBezierPoints() )
-        aFormatter.Print( 0, " %d %d", schIUScale.IUToMils( pt.x ), schIUScale.IUToMils( pt.y ) );
+    aFormatter.Print( 0, " %d %d %d %d %d %d %d %d",
+                      schIUScale.IUToMils( aBezier->GetStart().x ),
+                      schIUScale.IUToMils( aBezier->GetStart().y ),
+                      schIUScale.IUToMils( aBezier->GetBezierC1().x ),
+                      schIUScale.IUToMils( aBezier->GetBezierC1().y ),
+                      schIUScale.IUToMils( aBezier->GetBezierC2().x ),
+                      schIUScale.IUToMils( aBezier->GetBezierC2().y ),
+                      schIUScale.IUToMils( aBezier->GetEnd().x ),
+                      schIUScale.IUToMils( aBezier->GetEnd().y ) );
 
     aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aBezier->GetFillMode() ) - 1 ] );
 }
