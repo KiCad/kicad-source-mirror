@@ -217,24 +217,6 @@ SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
 }
 
 
-void SIM_MODEL_SOURCE::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataSchFields( aFields );
-
-    if( IsInferred() )
-        inferredWriteDataFields( aFields );
-}
-
-
-void SIM_MODEL_SOURCE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataLibFields( aFields );
-
-    if( IsInferred() )
-        inferredWriteDataFields( aFields );
-}
-
-
 void SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
 {
     // Sources are special. All preceding parameter values must be filled. If they are not, fill
@@ -261,27 +243,6 @@ void SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
     }
 
     return SIM_MODEL::SetParamValue( aParamIndex, aValue );
-}
-
-
-template <typename T>
-void SIM_MODEL_SOURCE::inferredWriteDataFields( std::vector<T>& aFields ) const
-{
-    std::string value;
-
-    if( GetTypeInfo().fieldValue != "" )
-    {
-        value = fmt::format( "{} {}",
-                             GetTypeInfo().fieldValue,
-                             GetFieldValue( &aFields, PARAMS_FIELD ) );
-    }
-    else
-        value = fmt::format( "{}", GetFieldValue( &aFields, PARAMS_FIELD ) );
-
-    if( value == "" )
-        value = GetDeviceTypeInfo().fieldValue;
-
-    WriteInferredDataFields( aFields, value );
 }
 
 

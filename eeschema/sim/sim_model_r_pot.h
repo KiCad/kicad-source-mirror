@@ -45,16 +45,10 @@ class SIM_MODEL_R_POT : public SIM_MODEL
 public:
     SIM_MODEL_R_POT();
 
-    void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
-    void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
-
     const PARAM* GetTunerParam() const override { return FindParam( "pos" ); }
     bool HasPrimaryValue() const override { return true; }
 
 private:
-    template <typename T>
-    void inferredWriteDataFields( std::vector<T>& aFields ) const;
-
     std::vector<std::string> getPinNames() const override { return { "+", "wiper", "-" }; }
 
     static const std::vector<PARAM::INFO> makeParamInfos();

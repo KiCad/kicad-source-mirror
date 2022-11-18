@@ -388,11 +388,8 @@ public:
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields, int aSymbolPinCount );
 
-    static DEVICE_TYPE_ InferDeviceTypeFromRef( const std::string& aRef );
-
     template <typename T>
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
-
 
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount );
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel,
@@ -427,15 +424,14 @@ public:
     template <typename T>
     void ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
 
-    // C++ doesn't allow virtual template methods, so we do this:
-    virtual void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields );
-    virtual void ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields );
-
+    virtual void ReadDataSchFields( unsigned aSymbolPinCount,
+                                    const std::vector<SCH_FIELD>* aFields );
+    virtual void ReadDataLibFields( unsigned aSymbolPinCount,
+                                    const std::vector<LIB_FIELD>* aFields );
 
     template <typename T>
     void WriteFields( std::vector<T>& aFields ) const;
 
-    // C++ doesn't allow virtual template methods, so we do this:
     virtual void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const;
     virtual void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const;
 
@@ -513,8 +509,8 @@ public:
     void SetIsEnabled( bool aIsEnabled ) { m_isEnabled = aIsEnabled; }
     bool IsEnabled() const { return m_isEnabled; }
 
-    void SetIsInferred( bool aIsInferred ) { m_isInferred = aIsInferred; }
-    bool IsInferred() const { return m_isInferred; }
+    void SetIsStoredInValue( bool aIsStoredInValue ) { m_isStoredInValue = aIsStoredInValue; }
+    bool IsStoredInValue() const { return m_isStoredInValue; }
 
 protected:
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
@@ -528,12 +524,6 @@ protected:
 
     virtual void CreatePins( unsigned aSymbolPinCount );
 
-    template <typename T>
-    void WriteInferredDataFields( std::vector<T>& aFields, const std::string& aValue = "" ) const;
-
-    template <typename T>
-    void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
-
     std::vector<PARAM> m_params;
     const SIM_MODEL* m_baseModel;
     std::unique_ptr<SIM_SERDE> m_serde;
@@ -543,7 +533,6 @@ private:
                                           const std::string& aLevel = "",
                                           const std::string& aVersion = "",
                                           bool aSkipDefaultLevel = true );
-
 
     template <typename T>
     void doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
@@ -561,7 +550,7 @@ private:
     const TYPE m_type;
     std::vector<PIN> m_pins;
     bool m_isEnabled;
-    bool m_isInferred;
+    bool m_isStoredInValue;
 };
 
 #endif // SIM_MODEL_H

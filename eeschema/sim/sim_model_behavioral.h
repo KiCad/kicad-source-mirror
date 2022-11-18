@@ -39,29 +39,14 @@ public:
 };
 
 
+// Not used for now.
 class SIM_MODEL_BEHAVIORAL : public SIM_MODEL
 {
 public:
     SIM_MODEL_BEHAVIORAL( TYPE aType );
 
-    void ReadDataSchFields( unsigned aSymbolPinCount,
-                            const std::vector<SCH_FIELD>* aFields ) override;
-    void ReadDataLibFields( unsigned aSymbolPinCount,
-                            const std::vector<LIB_FIELD>* aFields ) override;
-
-    void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
-    void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
-
-
 private:
     bool parseValueField( const std::string& aValueField );
-
-    template <typename T>
-    void inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
-
-    template <typename T>
-    void inferredWriteDataFields( std::vector<T>& aFields ) const;
-
     std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
     static PARAM::INFO makeParams( std::string aName, std::string aDescription, std::string aUnit );

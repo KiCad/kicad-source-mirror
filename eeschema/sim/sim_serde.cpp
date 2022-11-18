@@ -183,23 +183,13 @@ void SIM_SERDE::ParseValue( const std::string& aValue )
         {
             if( node->is_type<SIM_SERDE_PARSER::fieldInferValuePrimaryValue>() )
             {
-                if( m_model.HasPrimaryValue() )
+                for( const auto& subnode : node->children )
                 {
-                    for( const auto& subnode : node->children )
+                    if( subnode->is_type<SIM_SERDE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
+                                                                  SIM_VALUE::NOTATION::SI>>() )
                     {
-                        if( subnode->is_type<SIM_SERDE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
-                                                                      SIM_VALUE::NOTATION::SI>>() )
-                        {
-                            m_model.SetParamValue( 0, subnode->string() );
-                        }
+                        m_model.SetParamValue( 0, subnode->string() );
                     }
-                }
-                else
-                {
-                    THROW_IO_ERROR(
-                        wxString::Format( _( "Simulation model of type '%s' cannot have a primary value (which is '%s') in Value field" ),
-                                          m_model.GetTypeInfo().fieldValue,
-                                          node->string() ) );
                 }
             }
             else if( node->is_type<SIM_SERDE_PARSER::fieldParamValuePairs>() )
@@ -210,6 +200,8 @@ void SIM_SERDE::ParseValue( const std::string& aValue )
     {
         THROW_IO_ERROR( e.what() );
     }
+
+    m_model.SetIsStoredInValue( true );
 }
 
 
@@ -314,49 +306,6 @@ void SIM_SERDE::ParseEnable( const std::string& aEnable )
 
     if( c == 'n' || c == 'f' || c == '0' )
         m_model.SetIsEnabled( false );
-}
-
-
-SIM_MODEL::TYPE SIM_SERDE::InferTypeFromRefAndValue( const std::string& aRef,
-                                                     const std::string& aValue,
-                                                     int aSymbolPinCount )
-{
-    std::string typeString;
-
-    try
-    {
-        tao::pegtl::string_input<> in( aValue, VALUE_FIELD );
-        auto root = tao::pegtl::parse_tree::parse<SIM_SERDE_PARSER::fieldInferValueGrammar,
-                                                  SIM_SERDE_PARSER::fieldInferValueSelector,
-                                                  tao::pegtl::nothing,
-                                                  SIM_SERDE_PARSER::control>( in );
-
-        for( const auto& node : root->children )
-        {
-            if( node->is_type<SIM_SERDE_PARSER::fieldInferValueType>() )
-                typeString = node->string();
-        }
-    }
-    catch( const tao::pegtl::parse_error& )
-    {
-    }
-
-    SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::InferDeviceTypeFromRef( aRef );
-
-    // Exception. Potentiometer model is determined from pin count.
-    if( deviceType == SIM_MODEL::DEVICE_TYPE_::R && aSymbolPinCount == 3 )
-        return SIM_MODEL::TYPE::R_POT;
-
-    for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
-    {
-        if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType
-            && SIM_MODEL::TypeInfo( type ).fieldValue == typeString )
-        {
-            return type;
-        }
-    }
-
-    return SIM_MODEL::TYPE::NONE;
 }
 
 

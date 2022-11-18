@@ -462,12 +462,12 @@
   )
 
   (symbol (lib_id "Simulation_SPICE:VPULSE") (at 101.6 81.28 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 347e9fb4-5b9c-424b-a0ef-e3e1d4152813)
     (property "Reference" "V1" (at 105.41 79.375 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "PULSE y2=1 td=1m tr=1u tf=1u tw=1m" (at 105.41 81.915 0)
+    (property "Value" "${SIM_DEVICE} ${SIM_TYPE}" (at 105.41 81.915 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 101.6 81.28 0)
@@ -476,12 +476,21 @@
     (property "Datasheet" "~" (at 101.6 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Sim_Device" "V" (at 101.6 81.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Sim_Type" "PULSE" (at 101.6 81.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Sim_Params" "y2=1 td=1m tr=1u tf=1u tw=1m" (at 121.92 83.82 0)
+      (effects (font (size 1.27 1.27)))
+    )
     (pin "1" (uuid 117dae63-cbae-4915-acae-e6e10531e40e))
     (pin "2" (uuid 9b2185ff-f747-4fa4-8049-8a873f9809b0))
     (instances
       (project "switches"
         (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "V1") (unit 1) (value "PULSE y2=1 td=1m tr=1u tf=1u tw=1m") (footprint "")
+          (reference "V1") (unit 1) (value "${SIM_DEVICE} ${SIM_TYPE}") (footprint "")
         )
       )
     )
@@ -502,6 +511,9 @@
     (property "Datasheet" "~" (at 168.91 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Sim_Device" "V" (at 168.91 96.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0b55c5be-6cf6-4c8b-92f9-3478d772166e))
     (pin "2" (uuid 2397d0b3-3656-47e9-bee9-7c3263dd94b2))
     (instances
@@ -516,7 +528,7 @@
   (symbol (lib_id "power:GND") (at 158.75 91.44 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 3a046e4d-7b2b-4ee1-9196-d1db4ee763bb)
-    (property "Reference" "#PWR?" (at 158.75 97.79 0)
+    (property "Reference" "#PWR0106" (at 158.75 97.79 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 158.75 96.52 0)
@@ -532,33 +544,7 @@
     (instances
       (project "switches"
         (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "Simulation_SPICE:VPULSE") (at 101.6 119.38 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid 4200094f-3f88-44e8-b754-02453ae72796)
-    (property "Reference" "V3" (at 105.41 118.745 0)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Value" "PULSE y2=1 td=3m tr=1u tf=1u tw=1m" (at 105.41 121.285 0)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Footprint" "" (at 101.6 119.38 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "~" (at 101.6 119.38 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 5a04f24f-84ee-415e-9ebb-6a57bc5cb49d))
-    (pin "2" (uuid 6b71e245-55cf-4686-9a3f-ea5b100aa39a))
-    (instances
-      (project "switches"
-        (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "V3") (unit 1) (value "PULSE y2=1 td=3m tr=1u tf=1u tw=1m") (footprint "")
+          (reference "#PWR0106") (unit 1) (value "GND") (footprint "")
         )
       )
     )
@@ -607,7 +593,7 @@
   (symbol (lib_id "power:GND") (at 101.6 88.9 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 66dfc60d-51c9-41a4-8112-e32a54e72e44)
-    (property "Reference" "#PWR?" (at 101.6 95.25 0)
+    (property "Reference" "#PWR0104" (at 101.6 95.25 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 101.6 93.98 0)
@@ -623,7 +609,7 @@
     (instances
       (project "switches"
         (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+          (reference "#PWR0104") (unit 1) (value "GND") (footprint "")
         )
       )
     )
@@ -632,7 +618,7 @@
   (symbol (lib_id "power:GND") (at 158.75 129.54 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 7b412bef-6375-4838-89d0-ef85f2a44f39)
-    (property "Reference" "#PWR?" (at 158.75 135.89 0)
+    (property "Reference" "#PWR0103" (at 158.75 135.89 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 158.75 134.62 0)
@@ -648,7 +634,7 @@
     (instances
       (project "switches"
         (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+          (reference "#PWR0103") (unit 1) (value "GND") (footprint "")
         )
       )
     )
@@ -657,7 +643,7 @@
   (symbol (lib_id "power:GND") (at 184.15 127 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8f3fec1f-a25a-4d2a-835f-873a7617927d)
-    (property "Reference" "#PWR?" (at 184.15 133.35 0)
+    (property "Reference" "#PWR0105" (at 184.15 133.35 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 184.15 132.08 0)
@@ -673,7 +659,7 @@
     (instances
       (project "switches"
         (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+          (reference "#PWR0105") (unit 1) (value "GND") (footprint "")
         )
       )
     )
@@ -682,7 +668,7 @@
   (symbol (lib_id "power:GND") (at 101.6 127 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 925023dd-5312-461f-a25e-dc1614390dac)
-    (property "Reference" "#PWR?" (at 101.6 133.35 0)
+    (property "Reference" "#PWR0101" (at 101.6 133.35 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 101.6 132.08 0)
@@ -698,7 +684,7 @@
     (instances
       (project "switches"
         (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+          (reference "#PWR0101") (unit 1) (value "GND") (footprint "")
         )
       )
     )
@@ -719,6 +705,9 @@
     (property "Datasheet" "~" (at 184.15 85.09 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Sim_Device" "R" (at 184.15 85.09 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ca5b7fb7-b9ed-4675-bf02-833e831d13b1))
     (pin "2" (uuid 44011730-1773-4bd0-9249-a31db1d4c278))
     (instances
@@ -733,7 +722,7 @@
   (symbol (lib_id "power:GND") (at 168.91 139.7 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid af1b7e6e-e3ca-4aef-a5e2-387742769c66)
-    (property "Reference" "#PWR?" (at 168.91 146.05 0)
+    (property "Reference" "#PWR0102" (at 168.91 146.05 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 168.91 144.78 0)
@@ -749,7 +738,7 @@
     (instances
       (project "switches"
         (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+          (reference "#PWR0102") (unit 1) (value "GND") (footprint "")
         )
       )
     )
@@ -795,10 +784,45 @@
     )
   )
 
+  (symbol (lib_id "Simulation_SPICE:VPULSE") (at 101.6 119.38 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid cc5714e1-b7d6-480c-969a-294d5122f327)
+    (property "Reference" "V5" (at 105.41 117.475 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "${SIM_DEVICE} ${SIM_TYPE}" (at 105.41 120.015 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "" (at 101.6 119.38 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 101.6 119.38 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Sim_Device" "V" (at 101.6 119.38 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Sim_Type" "PULSE" (at 101.6 119.38 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Sim_Params" "y2=1 td=3m tr=1u tf=1u tw=1m" (at 121.92 121.92 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (pin "1" (uuid ddd2ffc3-7553-4ad4-936b-0f723731d49a))
+    (pin "2" (uuid d5f77ea6-9917-42cc-9fe2-e5f0a719777c))
+    (instances
+      (project "switches"
+        (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
+          (reference "V5") (unit 1) (value "${SIM_DEVICE} ${SIM_TYPE}") (footprint "")
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "power:GND") (at 168.91 101.6 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid cf6a69fc-ed84-4873-b4dc-81fbde5f83b7)
-    (property "Reference" "#PWR?" (at 168.91 107.95 0)
+    (property "Reference" "#PWR0108" (at 168.91 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 168.91 106.68 0)
@@ -814,7 +838,7 @@
     (instances
       (project "switches"
         (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+          (reference "#PWR0108") (unit 1) (value "GND") (footprint "")
         )
       )
     )
@@ -870,6 +894,9 @@
     (property "Datasheet" "~" (at 168.91 134.62 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Sim_Device" "V" (at 168.91 134.62 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 443fd48c-8d2e-46b1-8fbf-0c210fd528fb))
     (pin "2" (uuid 7020a4d8-768d-428d-9f3e-da14232410f1))
     (instances
@@ -884,7 +911,7 @@
   (symbol (lib_id "power:GND") (at 184.15 91.44 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid efec76b7-311a-4c4c-971c-c6fda250379c)
-    (property "Reference" "#PWR?" (at 184.15 97.79 0)
+    (property "Reference" "#PWR0107" (at 184.15 97.79 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 184.15 96.52 0)
@@ -900,7 +927,7 @@
     (instances
       (project "switches"
         (path "/8c3d4d2c-5107-4b13-88da-bd05d371fd8a"
-          (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+          (reference "#PWR0107") (unit 1) (value "GND") (footprint "")
         )
       )
     )

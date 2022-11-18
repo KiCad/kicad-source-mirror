@@ -94,36 +94,6 @@ SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType ) :
 }
 
 
-void SIM_MODEL_TLINE::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataSchFields( aFields );
-
-    if( IsInferred() )
-        inferredWriteDataFields( aFields );
-}
-
-
-void SIM_MODEL_TLINE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataLibFields( aFields );
-
-    if( IsInferred() )
-        inferredWriteDataFields( aFields );
-}
-
-
-template <typename T>
-void SIM_MODEL_TLINE::inferredWriteDataFields( std::vector<T>& aFields ) const
-{
-    std::string value = GetFieldValue( &aFields, PARAMS_FIELD );
-
-    if( value == "" )
-        value = GetDeviceTypeInfo().fieldValue;
-
-    WriteInferredDataFields( aFields, value );
-}
-
-
 std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;

@@ -73,24 +73,6 @@ SIM_MODEL_R_POT::SIM_MODEL_R_POT() :
 }
 
 
-void SIM_MODEL_R_POT::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataSchFields( aFields );
-
-    if( IsInferred() )
-        WriteInferredDataFields( aFields );
-}
-
-
-void SIM_MODEL_R_POT::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataLibFields( aFields );
-
-    if( IsInferred() )
-        WriteInferredDataFields( aFields );
-}
-
-
 const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_R_POT::makeParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;

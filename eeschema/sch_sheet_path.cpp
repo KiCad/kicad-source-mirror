@@ -1260,116 +1260,86 @@ void SCH_SHEET_LIST::MigrateSimModelNameFields()
         // V6 schematics may specify model names in Value fields, which we don't do in V7.
         // Migrate by adding an equivalent model for these symbols.
 
-        bool mayHaveModelsInValues = false;
-
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_TEXT_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            wxString text = static_cast<SCH_TEXT*>( item )->GetShownText();
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            if( text.StartsWith( ".inc" ) || text.StartsWith( ".lib" )
-                || text.StartsWith( ".model" ) || text.StartsWith( ".subckt" ) )
+            if( !symbol )
             {
-                mayHaveModelsInValues = true;
+                // Shouldn't happen.
+                wxFAIL;
+                continue;
             }
-        }
 
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_TEXTBOX_T ) )
-        {
-            wxString text = static_cast<SCH_TEXTBOX*>( item )->GetShownText();
-
-            if( text.StartsWith( ".inc" ) || text.StartsWith( ".lib" )
-                || text.StartsWith( ".model" ) || text.StartsWith( ".subckt" ) )
+            if( symbol->FindField( "Spice_Primitive" )
+                || symbol->FindField( "Spice_Node_Sequence" )
+                || symbol->FindField( "Spice_Model" )
+                || symbol->FindField( "Spice_Netlist_Enabled" )
+                || symbol->FindField( "Spice_Lib_File" ) )
             {
-                mayHaveModelsInValues = true;
+                // Has a legacy raw (plaintext) model -- this is handled in the SIM_MODEL class.
+                continue;
             }
-        }
 
-        if( mayHaveModelsInValues )
-        {
-            for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+            if( symbol->FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
+                || symbol->FindField( SIM_MODEL::TYPE_FIELD )
+                || symbol->FindField( SIM_MODEL::PINS_FIELD )
+                || symbol->FindField( SIM_MODEL::PARAMS_FIELD ) )
             {
-                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-
-                if( !symbol )
-                {
-                    // Shouldn't happen.
-                    wxFAIL;
-                    continue;
-                }
-
-                if( symbol->FindField( "Spice_Primitive" )
-                    || symbol->FindField( "Spice_Node_Sequence" )
-                    || symbol->FindField( "Spice_Model" )
-                    || symbol->FindField( "Spice_Netlist_Enabled" )
-                    || symbol->FindField( "Spice_Lib_File" ) )
-                {
-                    // Has a legacy raw (plaintext) model -- this is handled in the SIM_MODEL class.
-                    continue;
-                }
-
-                if( symbol->FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
-                    || symbol->FindField( SIM_MODEL::TYPE_FIELD )
-                    || symbol->FindField( SIM_MODEL::PINS_FIELD )
-                    || symbol->FindField( SIM_MODEL::PARAMS_FIELD ) )
-                {
-                    // Has a V7 model field - skip.
-                    continue;
-                }
-
-                // Insert a plaintext model as a substitute.
-
-                wxString refdes = symbol->GetRef( &at( sheetIndex ), true );
-
-                if( refdes.Length() == 0 )
-                    continue; // No refdes? We need the first character to determine type. Skip.
-
-                wxString value = symbol->GetValue( &at( sheetIndex ), true );
-
-                if( refdes.StartsWith( "R" )
-                    || refdes.StartsWith( "C" )
-                    || refdes.StartsWith( "L" ) )
-                {
-                    // This is taken from the former Spice exporter.
-                    wxRegEx passiveVal(
-                        wxT( "^([0-9\\. ]+)([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?([fFhHΩΩ𝛀𝛺𝝮]|ohm)?([-1-9 ]*)$" ) );
-
-                    if( passiveVal.Matches( value ) )
-                    {
-                        wxString prefix( passiveVal.GetMatch( value, 1 ) );
-                        wxString unit( passiveVal.GetMatch( value, 2 ) );
-                        wxString suffix( passiveVal.GetMatch( value, 6 ) );
-
-                        prefix.Trim(); prefix.Trim( false );
-                        unit.Trim(); unit.Trim( false );
-                        suffix.Trim(); suffix.Trim( false );
-
-                        // Make 'mega' units comply with the Spice expectations
-                        if( unit == "M" )
-                            unit = "Meg";
-
-                        std::unique_ptr<SIM_VALUE> simValue =
-                            SIM_VALUE::Create( SIM_VALUE::TYPE_FLOAT );
-                        simValue->FromString( ( prefix + unit + suffix ).ToStdString(),
-                                              SIM_VALUE::NOTATION::SPICE );
-
-                        if( value == simValue->ToString() )
-                            continue; // Can stay the same.
-                    }
-                }
-
-                SCH_FIELD deviceTypeField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
-                                           SIM_MODEL::DEVICE_TYPE_FIELD );
-                deviceTypeField.SetText(
-                    SIM_MODEL::DeviceTypeInfo( SIM_MODEL::DEVICE_TYPE_::SPICE ).fieldValue );
-                symbol->AddField( deviceTypeField );
-
-                SCH_FIELD modelParamsField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
-                                            SIM_MODEL::PARAMS_FIELD );
-                modelParamsField.SetText( wxString::Format( "type=%s model=\"%s\"",
-                                                            refdes.Left( 1 ),
-                                                            value ) );
-                symbol->AddField( modelParamsField );
+                // Has a V7 model field - skip.
+                continue;
             }
+
+            // Insert a plaintext model as a substitute.
+
+            wxString refdes = symbol->GetRef( &at( sheetIndex ), true );
+
+            if( refdes.Length() == 0 )
+                continue; // No refdes? We need the first character to determine type. Skip.
+
+            wxString value = symbol->GetValue( &at( sheetIndex ), true );
+
+            if( refdes.StartsWith( "R" )
+                || refdes.StartsWith( "C" )
+                || refdes.StartsWith( "L" ) )
+            {
+                // This is taken from the former Spice exporter.
+                wxRegEx passiveVal(
+                    wxT( "^([0-9\\. ]+)([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?([fFhHΩΩ𝛀𝛺𝝮]|ohm)?([-1-9 ]*)$" ) );
+
+                if( passiveVal.Matches( value ) )
+                {
+                    wxString prefix( passiveVal.GetMatch( value, 1 ) );
+                    wxString unit( passiveVal.GetMatch( value, 2 ) );
+                    wxString suffix( passiveVal.GetMatch( value, 6 ) );
+
+                    prefix.Trim(); prefix.Trim( false );
+                    unit.Trim(); unit.Trim( false );
+                    suffix.Trim(); suffix.Trim( false );
+
+                    // Make 'mega' units comply with the Spice expectations
+                    if( unit == "M" )
+                        unit = "Meg";
+
+                    std::unique_ptr<SIM_VALUE> simValue =
+                        SIM_VALUE::Create( SIM_VALUE::TYPE_FLOAT );
+                    simValue->FromString( std::string( ( prefix + unit + suffix ).ToUTF8() ),
+                                          SIM_VALUE::NOTATION::SPICE );
+                }
+            }
+
+            SCH_FIELD deviceTypeField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
+                                       SIM_MODEL::DEVICE_TYPE_FIELD );
+            deviceTypeField.SetText(
+                SIM_MODEL::DeviceTypeInfo( SIM_MODEL::DEVICE_TYPE_::SPICE ).fieldValue );
+            symbol->AddField( deviceTypeField );
+
+            SCH_FIELD modelParamsField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
+                                        SIM_MODEL::PARAMS_FIELD );
+            modelParamsField.SetText( wxString::Format( "type=%s model=\"%s\"",
+                                                        refdes.Left( 1 ),
+                                                        value ) );
+            symbol->AddField( modelParamsField );
         }
     }
 }

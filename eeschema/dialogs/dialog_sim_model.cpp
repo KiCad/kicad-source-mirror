@@ -232,10 +232,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     }
 
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
-    m_inferCheckbox->SetValue( curModel().IsInferred() );
-
-    m_inferCheckbox->Show( SIM_MODEL::InferDeviceTypeFromRef( ref )
-                                            != SIM_MODEL::DEVICE_TYPE_::NONE );
 
     onRadioButton( dummyEvent );
     return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
@@ -308,8 +304,6 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
 
     std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
-    m_inferCheckbox->Enable( SIM_MODEL::InferDeviceTypeFromRef( ref ) == curModel().GetDeviceType() );
-    m_inferCheckbox->SetValue( curModel().IsInferred() );
 
     m_modelPanel->Layout();
     m_pinAssignmentsPanel->Layout();
@@ -1201,13 +1195,6 @@ template <typename T>
 void DIALOG_SIM_MODEL<T>::onExcludeCheckbox( wxCommandEvent& aEvent )
 {
     curModel().SetIsEnabled( !m_excludeCheckbox->GetValue() );
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onInferCheckbox( wxCommandEvent& aEvent )
-{
-    curModel().SetIsInferred( m_inferCheckbox->GetValue() );
 }
 
 

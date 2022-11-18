@@ -73,24 +73,6 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType ) :
 }
 
 
-void SIM_MODEL_IDEAL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataSchFields( aFields );
-
-    if( IsInferred() )
-        WriteInferredDataFields( aFields );
-}
-
-
-void SIM_MODEL_IDEAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataLibFields( aFields );
-
-    if( IsInferred() )
-        WriteInferredDataFields( aFields );
-}
-
-
 SIM_MODEL::PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( std::string aName, std::string aDescription,
                                                        std::string aUnit )
 {

@@ -43,13 +43,7 @@ class SIM_MODEL_TLINE : public SIM_MODEL
 public:
     SIM_MODEL_TLINE( TYPE aType );
 
-    void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
-    void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
-
 private:
-    template <typename T>
-    void inferredWriteDataFields( std::vector<T>& aFields ) const;
-
     std::vector<std::string> getPinNames() const override { return { "1+", "1-", "2+", "2-" }; }
 
     static std::vector<PARAM::INFO> makeZ0ParamInfos();

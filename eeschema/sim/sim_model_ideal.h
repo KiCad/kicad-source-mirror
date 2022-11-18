@@ -46,16 +46,10 @@ class SIM_MODEL_IDEAL : public SIM_MODEL
 public:
     SIM_MODEL_IDEAL( TYPE aType );
 
-    void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
-    void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
-
     const PARAM* GetTunerParam() const override { return &GetParam( 0 ); }
     bool HasPrimaryValue() const override { return true; }
 
 private:
-    template <typename T>
-    void inferredWriteDataFields( std::vector<T>& aFields ) const;
-
     std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
     static PARAM::INFO makeParamInfo( std::string aName, std::string aDescription, std::string aUnit );

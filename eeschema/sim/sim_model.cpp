@@ -402,31 +402,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, int aSymbolPi
     if( typeFromLegacyFields != TYPE::NONE )
         return typeFromLegacyFields;
 
-    // Still no type information.
-    // We try to infer the model from the mandatory fields in this case.
-    return SIM_SERDE::InferTypeFromRefAndValue( GetFieldValue( &aFields, REFERENCE_FIELD ),
-                                                GetFieldValue( &aFields, VALUE_FIELD ),
-                                                aSymbolPinCount );
-}
-
-
-DEVICE_TYPE SIM_MODEL::InferDeviceTypeFromRef( const std::string& aRef )
-{
-
-    if( boost::starts_with( aRef, "R" ) )
-        return DEVICE_TYPE::R;
-    else if( boost::starts_with( aRef, "C" ) )
-        return DEVICE_TYPE::C;
-    else if( boost::starts_with( aRef, "L" ) )
-        return DEVICE_TYPE::L;
-    else if( boost::starts_with( aRef, "V" ) )
-        return DEVICE_TYPE::V;
-    else if( boost::starts_with( aRef, "I" ) )
-        return DEVICE_TYPE::I;
-    else if( boost::starts_with( aRef, "TL" ) )
-        return DEVICE_TYPE::TLINE;
-
-    return DEVICE_TYPE::NONE;
+    return TYPE::NONE;
 }
 
 
@@ -477,6 +453,13 @@ void SIM_MODEL::ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<S
 void SIM_MODEL::ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
 {
     doReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+template <typename T>
+void SIM_MODEL::WriteFields( std::vector<T>& aFields ) const
+{
+    doWriteFields( aFields );
 }
 
 
@@ -929,8 +912,7 @@ SIM_MODEL::SIM_MODEL( TYPE aType,
         m_serde( std::move( aSerde ) ),
         m_spiceGenerator( std::move( aSpiceGenerator ) ),
         m_type( aType ),
-        m_isEnabled( true ),
-        m_isInferred( false )
+        m_isEnabled( true )
 {
 }
 
@@ -954,42 +936,6 @@ void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
 }
 
 
-template void SIM_MODEL::WriteInferredDataFields( std::vector<SCH_FIELD>& aFields,
-                                                  const std::string& aValue ) const;
-template void SIM_MODEL::WriteInferredDataFields( std::vector<LIB_FIELD>& aFields,
-                                                  const std::string& aValue ) const;
-
-template <typename T>
-void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const std::string& aValue ) const
-{
-    bool removePinsField = true;
-
-    // Only write Sim_Pins field if the pins are not in the canonical order.
-    for( int i = 0; i < GetPinCount(); ++i )
-    {
-        if( GetPin( i ).symbolPinNumber != fmt::format( "{}", i + 1 ) )
-        {
-            removePinsField = false;
-            break;
-        }
-    }
-
-    if( removePinsField )
-        SetFieldValue( aFields, PINS_FIELD, "" );
-
-    std::string value = aValue;
-
-    if( value == "" )
-        value = m_serde->GenerateValue();
-
-    SetFieldValue( aFields, VALUE_FIELD, value );
-    SetFieldValue( aFields, DEVICE_TYPE_FIELD, "" );
-    SetFieldValue( aFields, TYPE_FIELD, "" );
-    SetFieldValue( aFields, PARAMS_FIELD, "" );
-    SetFieldValue( aFields, ENABLE_FIELD, "" );
-}
-
-
 template <typename T>
 void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
@@ -998,32 +944,12 @@ void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>
     CreatePins( aSymbolPinCount );
     m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
 
-    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
-        m_serde->ParseParams( GetFieldValue( aFields, PARAMS_FIELD ) );
+    std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
+
+    if( paramsField == "" && HasPrimaryValue() )
+        m_serde->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
     else
-        InferredReadDataFields( aSymbolPinCount, aFields );
-}
-
-
-template <typename T>
-void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
-{
-    // TODO: Make a subclass SIM_MODEL_NONE.
-    if( GetType() == SIM_MODEL::TYPE::NONE )
-        return;
-
-    // TODO: Don't call this multiple times.
-    if( SIM_SERDE::InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
-                                             GetFieldValue( aFields, VALUE_FIELD ),
-                                             aSymbolPinCount ) != GetType() )
-    {
-        // Not an inferred model. Nothing to do here.
-        return;
-    }
-
-    m_serde->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
-
-    SetIsInferred( true );
+        m_serde->ParseParams( paramsField );
 }
 
 
@@ -1032,9 +958,14 @@ void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 {
     SetFieldValue( aFields, DEVICE_TYPE_FIELD, m_serde->GenerateDevice() );
     SetFieldValue( aFields, TYPE_FIELD, m_serde->GenerateType() );
-    SetFieldValue( aFields, PINS_FIELD, m_serde->GeneratePins() );
-    SetFieldValue( aFields, PARAMS_FIELD, m_serde->GenerateParams() );
+
     SetFieldValue( aFields, ENABLE_FIELD, m_serde->GenerateEnable() );
+    SetFieldValue( aFields, PINS_FIELD, m_serde->GeneratePins() );
+
+    if( IsStoredInValue() )
+        SetFieldValue( aFields, VALUE_FIELD, m_serde->GenerateValue() );
+    else
+        SetFieldValue( aFields, PARAMS_FIELD, m_serde->GenerateParams() );
 }
 
 

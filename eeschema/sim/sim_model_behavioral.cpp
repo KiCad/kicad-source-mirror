@@ -92,44 +92,6 @@ SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType ) :
 }
 
 
-void SIM_MODEL_BEHAVIORAL::ReadDataSchFields( unsigned aSymbolPinCount,
-                                              const std::vector<SCH_FIELD>* aFields )
-{
-    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
-        SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
-    else
-        inferredReadDataFields( aSymbolPinCount, aFields );
-}
-
-
-void SIM_MODEL_BEHAVIORAL::ReadDataLibFields( unsigned aSymbolPinCount,
-                                              const std::vector<LIB_FIELD>* aFields )
-{
-    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
-        SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
-    else
-        inferredReadDataFields( aSymbolPinCount, aFields );
-}
-
-
-void SIM_MODEL_BEHAVIORAL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataSchFields( aFields );
-
-    if( IsInferred() )
-        inferredWriteDataFields( aFields );
-}
-
-
-void SIM_MODEL_BEHAVIORAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataLibFields( aFields );
-
-    if( IsInferred() )
-        inferredWriteDataFields( aFields );
-}
-
-
 bool SIM_MODEL_BEHAVIORAL::parseValueField( const std::string& aValueField )
 {
     std::string expr = aValueField;
@@ -141,36 +103,6 @@ bool SIM_MODEL_BEHAVIORAL::parseValueField( const std::string& aValueField )
 
     SetParamValue( 0, boost::trim_copy( expr ) );
     return true;
-}
-
-
-template <typename T>
-void SIM_MODEL_BEHAVIORAL::inferredReadDataFields( unsigned aSymbolPinCount,
-                                                   const std::vector<T>* aFields )
-{
-    m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
-
-    if( ( m_serde->InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
-                                             GetFieldValue( aFields, VALUE_FIELD ),
-                                             aSymbolPinCount ) == GetType()
-            && parseValueField( GetFieldValue( aFields, VALUE_FIELD ) ) )
-        // If Value is device type, this is an empty model
-        || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
-    {
-        SetIsInferred( true );
-    }
-}
-
-
-template <typename T>
-void SIM_MODEL_BEHAVIORAL::inferredWriteDataFields( std::vector<T>& aFields ) const
-{
-    std::string value = GetParam( 0 ).value->ToString();
-
-    if( value == "" )
-        value = GetDeviceTypeInfo().fieldValue;
-
-    WriteInferredDataFields( aFields, "=" + value );
 }
 
 

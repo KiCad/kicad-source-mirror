@@ -74,19 +74,12 @@ class SIM_MODEL_SOURCE : public SIM_MODEL
 public:
     SIM_MODEL_SOURCE( TYPE aType );
 
-    void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
-    void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
-
     void SetParamValue( int aParamIndex, const SIM_VALUE& aValue ) override;
 
     bool HasAutofill() const override { return true; }
-    bool HasPrimaryValue() const override { return true; }
+    bool HasPrimaryValue() const override { return GetType() == TYPE::V || GetType() == TYPE::I; }
 
 private:
-    template <typename T>
-    void inferredWriteDataFields( std::vector<T>& aFields ) const;
-
-
     std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
     static const std::vector<PARAM::INFO>& makeParamInfos( TYPE aType );
