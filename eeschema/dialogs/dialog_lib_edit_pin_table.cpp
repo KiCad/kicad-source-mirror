@@ -80,11 +80,13 @@ void getSelectedArea( WX_GRID* aGrid, int* aRowStart, int* aRowCount )
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
 public:
-    PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame, DIALOG_LIB_EDIT_PIN_TABLE* aPinTable ) :
+    PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame, DIALOG_LIB_EDIT_PIN_TABLE* aPinTable,
+                          LIB_SYMBOL* aSymbol ) :
             m_frame( aFrame ),
             m_unitFilter( -1 ),
             m_edited( false ),
-            m_pinTable( aPinTable )
+            m_pinTable( aPinTable ),
+            m_symbol( aSymbol )
     {
         m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
@@ -312,7 +314,7 @@ public:
                 else
                 {
                     // Create new pins
-                    LIB_PIN* newPin = new LIB_PIN( nullptr );
+                    LIB_PIN* newPin = new LIB_PIN( this->m_symbol );
                     LIB_PIN* last = pins.back();
 
                     newPin->SetNumber( pinName );
@@ -321,7 +323,6 @@ public:
                     newPin->SetType( last->GetType() );
                     newPin->SetShape( last->GetShape() );
                     newPin->SetUnit( last->GetUnit() );
-                    newPin->SetParent( last->GetParent() );
 
                     VECTOR2I pos = last->GetPosition();
 
@@ -417,7 +418,7 @@ public:
                 }
                 else
                 {
-                    for( int i = 1; i <= pin->GetParent()->GetUnitCount(); i++ )
+                    for( int i = 1; i <= m_symbol->GetUnitCount(); i++ )
                     {
                         if( value == LIB_SYMBOL::SubReference( i, false ) )
                         {
@@ -692,6 +693,7 @@ private:
     bool                  m_edited;
 
     DIALOG_LIB_EDIT_PIN_TABLE* m_pinTable;
+    LIB_SYMBOL*                m_symbol;    // Parent symbol that the pins belong to.
 
     std::unique_ptr<NUMERIC_EVALUATOR>             m_eval;
     std::map< std::pair<LIB_PINS, int>, wxString > m_evalOriginal;
@@ -704,7 +706,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
         m_editFrame( parent ),
         m_symbol( aSymbol )
 {
-    m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame, this );
+    m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame, this, this->m_symbol );
 
     // Save original columns widths so we can do proportional sizing.
     for( int i = 0; i < COL_COUNT; ++i )
@@ -891,7 +893,6 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataFromWindow()
     // Transfer our pins to the part
     for( LIB_PIN* pin : m_pins )
     {
-        pin->SetParent( m_symbol );
         m_symbol->AddDrawItem( pin );
     }
 
@@ -924,7 +925,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    LIB_PIN* newPin = new LIB_PIN( nullptr );
+    LIB_PIN* newPin = new LIB_PIN( this->m_symbol );
 
     // Copy the settings of the last pin onto the new pin.
     if( m_pins.size() > 0 )
@@ -935,7 +936,6 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
         newPin->SetType( last->GetType() );
         newPin->SetShape( last->GetShape() );
         newPin->SetUnit( last->GetUnit() );
-        newPin->SetParent( last->GetParent() );
 
         VECTOR2I pos = last->GetPosition();
 
