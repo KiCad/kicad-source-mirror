@@ -2696,23 +2696,16 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
 
 bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
-    GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
-    GENERAL_COLLECTOR          collector;
+    const unsigned GRIP_MARGIN = 20;
+    VECTOR2I margin = getView()->ToWorld( VECTOR2I( GRIP_MARGIN, GRIP_MARGIN ), false );
 
-    // Since we're just double-checking, we want a considerably sloppier check than the initial
-    // selection (for which most tools use 5 pixels).  So we increase this to an effective 20
-    // pixels by artificially inflating the value of a pixel by 4X.
-    guide.SetOnePixelInIU( guide.OnePixelInIU() * 4 );
-
-    collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
-                                                    : GENERAL_COLLECTOR::AllBoardItems,
-                       aPoint, guide );
-
-    for( int i = collector.GetCount() - 1; i >= 0; --i )
+    // Check if the point is located within any of the currently selected items bounding boxes
+    for( EDA_ITEM* item : m_selection )
     {
-        BOARD_ITEM* item = collector[i];
+        BOX2I itemBox = item->ViewBBox();
+        itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item
 
-        if( item->IsSelected() && item->HitTest( aPoint, 5 * guide.OnePixelInIU() ) )
+        if( itemBox.Contains( aPoint ) && item->HitTest( aPoint, GRIP_MARGIN ) )
             return true;
     }
 
