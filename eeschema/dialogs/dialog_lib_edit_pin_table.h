@@ -85,7 +85,7 @@ protected:
     bool                  m_initialized = false;
     int                   m_originalColWidths[ COL_COUNT ];
     wxString              m_columnsShown;
-    LIB_SYMBOL*           m_part;
+    LIB_SYMBOL*           m_symbol;
     LIB_PINS              m_pins;       // a copy of the pins owned by me
     bool                  m_modified;   ///< true when there are unsaved changes
     wxSize                m_size;

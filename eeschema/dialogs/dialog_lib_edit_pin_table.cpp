@@ -702,7 +702,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
                                                       LIB_SYMBOL* aSymbol ) :
         DIALOG_LIB_EDIT_PIN_TABLE_BASE( parent ),
         m_editFrame( parent ),
-        m_part( aSymbol )
+        m_symbol( aSymbol )
 {
     m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame, this );
 
@@ -858,12 +858,12 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 {
     // Make a copy of the pins for editing
-    for( LIB_PIN* pin = m_part->GetNextPin( nullptr ); pin; pin = m_part->GetNextPin( pin ) )
+    for( LIB_PIN* pin = m_symbol->GetNextPin( nullptr ); pin; pin = m_symbol->GetNextPin( pin ) )
         m_pins.push_back( new LIB_PIN( *pin ) );
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue(), false );
 
-    if( m_part->IsMulti() )
+    if( m_symbol->IsMulti() )
         m_grid->ShowCol( COL_UNIT );
     else
         m_grid->HideCol( COL_UNIT );
@@ -885,14 +885,14 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataFromWindow()
         return false;
 
     // Delete the part's pins
-    while( LIB_PIN* pin = m_part->GetNextPin( nullptr ) )
-        m_part->RemoveDrawItem( pin );
+    while( LIB_PIN* pin = m_symbol->GetNextPin( nullptr ) )
+        m_symbol->RemoveDrawItem( pin );
 
     // Transfer our pins to the part
     for( LIB_PIN* pin : m_pins )
     {
-        pin->SetParent( m_part );
-        m_part->AddDrawItem( pin );
+        pin->SetParent( m_symbol );
+        m_symbol->AddDrawItem( pin );
     }
 
     m_pins.clear();
