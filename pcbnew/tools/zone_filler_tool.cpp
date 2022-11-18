@@ -38,6 +38,7 @@
 #include <wx/event.h>
 #include <wx/hyperlink.h>
 #include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include "pcb_actions.h"
 #include "zone_filler_tool.h"
 #include "zone_filler.h"
@@ -97,6 +98,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
     }
 
     board()->BuildConnectivity();
+    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
 
     refresh();
 
@@ -173,6 +175,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     }
 
     board()->BuildConnectivity( reporter.get() );
+    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
 
     if( filler.IsDebug() )
         frame->UpdateUserInterface();
@@ -256,6 +259,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
         commit.Revert();
 
     board()->BuildConnectivity( reporter.get() );
+    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
 
     if( filler.IsDebug() )
         frame->UpdateUserInterface();

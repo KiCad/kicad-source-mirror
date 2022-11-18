@@ -1628,6 +1628,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::UnselectedEvent );
     Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::ClearedEvent );
     Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::SelectedItemsModified );
+    Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::ConnectivityChangedEvent );
 
     // Add library by dropping file
     Go( &PCB_CONTROL::DdAddLibrary,         ACTIONS::ddAddLibrary.MakeEvent() );

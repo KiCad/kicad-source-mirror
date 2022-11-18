@@ -26,7 +26,8 @@
 #include <board_design_settings.h>
 #include <board_commit.h>
 #include <bitmaps.h>
-
+#include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include "teardrop.h"
 #include "dialog_teardrop_base.h"
 #include <widgets/unit_binder.h>
@@ -216,6 +217,8 @@ void PCB_EDIT_FRAME::OnRunTeardropTool( wxCommandEvent& event )
 
     int added_count = trdm.SetTeardrops( &committer, dlg.CanUseTwoTracks() );
 
+    GetToolManager()->PostEvent( EVENTS::ConnectivityChangedEvent );
+
     m_infoBar->RemoveAllButtons();
     m_infoBar->AddCloseButton();
     m_infoBar->ShowMessageFor( wxString::Format( _( "%d teardrops created" ), added_count ),
@@ -232,6 +235,7 @@ void PCB_EDIT_FRAME::OnRemoveTeardropTool( wxCommandEvent& event )
 
     GetCanvas()->RedrawRatsnest();
     GetCanvas()->Refresh();
+    GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
 
     m_infoBar->RemoveAllButtons();
     m_infoBar->AddCloseButton();

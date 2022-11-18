@@ -207,6 +207,8 @@ public:
     const static TOOL_EVENT UnselectedEvent;
     const static TOOL_EVENT ClearedEvent;
 
+    const static TOOL_EVENT ConnectivityChangedEvent;
+
     ///< Selected item had a property changed (except movement)
     const static TOOL_EVENT SelectedItemsModified;
 

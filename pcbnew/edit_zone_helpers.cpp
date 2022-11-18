@@ -29,6 +29,8 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <board_commit.h>
+#include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include <zone.h>
 #include <zones.h>
 #include <zones_functions_for_undo_redo.h>
@@ -103,6 +105,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     commit.Push( _( "Modify zone properties" ), SKIP_CONNECTIVITY );
     GetBoard()->BuildConnectivity();
+    GetToolManager()->PostEvent( EVENTS::ConnectivityChangedEvent );
 
     pickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
 }
