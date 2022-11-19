@@ -528,7 +528,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
 
                 // Check if dragging has started within any of selected items bounding box
-                if( selectionContains( evt->Position() ) )
+                if( selectionContains( evt->DragOrigin() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
                     if( m_isSymbolEditor )
