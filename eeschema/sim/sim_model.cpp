@@ -21,6 +21,8 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include <lib_symbol.h>
+#include <confirm.h>
 
 #include <sim/sim_model.h>
 #include <sim/sim_model_behavioral.h>
@@ -38,9 +40,6 @@
 
 #include <sim/sim_library_kibis.h>
 
-#include <lib_symbol.h>
-#include <confirm.h>
-
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string.hpp>
@@ -50,7 +49,6 @@
 
 #include <iterator>
 
-using DEVICE_TYPE = SIM_MODEL::DEVICE_TYPE_;
 using TYPE = SIM_MODEL::TYPE;
 
 
@@ -812,7 +810,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::C:
     case TYPE::L:
         return std::make_unique<SIM_MODEL_IDEAL>( aType );
-    
+
     case TYPE::R_POT:
         return std::make_unique<SIM_MODEL_R_POT>();
 
@@ -903,7 +901,7 @@ SIM_MODEL::SIM_MODEL( TYPE aType,
 
 SIM_MODEL::SIM_MODEL( TYPE aType,
                       std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
-                      std::unique_ptr<SIM_SERDE> aSerde ) : 
+                      std::unique_ptr<SIM_SERDE> aSerde ) :
         m_baseModel( nullptr ),
         m_serde( std::move( aSerde ) ),
         m_spiceGenerator( std::move( aSpiceGenerator ) ),
