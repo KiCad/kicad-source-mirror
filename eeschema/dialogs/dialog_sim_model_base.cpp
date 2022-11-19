@@ -62,19 +62,29 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_ibisPinLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("Pin:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ibisPinLabel->Wrap( -1 );
+	m_ibisPinLabel->Hide();
+
 	gbSizer1->Add( m_ibisPinLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ibisPinCombobox = new wxComboBox( m_modelPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
+	m_ibisPinCombobox->Hide();
+
 	gbSizer1->Add( m_ibisPinCombobox, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
 	m_differentialCheckbox = new wxCheckBox( m_modelPanel, wxID_ANY, _("Differential"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_differentialCheckbox->Hide();
+
 	gbSizer1->Add( m_differentialCheckbox, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 40 );
 
 	m_ibisModelLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ibisModelLabel->Wrap( -1 );
+	m_ibisModelLabel->Hide();
+
 	gbSizer1->Add( m_ibisModelLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ibisModelCombobox = new wxComboBox( m_modelPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
+	m_ibisModelCombobox->Hide();
+
 	gbSizer1->Add( m_ibisModelCombobox, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
 
