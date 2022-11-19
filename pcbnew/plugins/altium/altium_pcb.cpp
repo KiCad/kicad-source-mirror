@@ -907,11 +907,11 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
 
     // read layercount from stackup, because LAYERSETSCOUNT is not always correct?!
     size_t layercount = 0;
-    size_t layer = static_cast<size_t>( ALTIUM_LAYER::TOP_LAYER );
+    size_t layerid = static_cast<size_t>( ALTIUM_LAYER::TOP_LAYER );
 
-    while( layer < elem.stackup.size() && layer != 0 )
+    while( layerid < elem.stackup.size() && layerid != 0 )
     {
-        layer = elem.stackup[ layer - 1 ].nextId;
+        layerid = elem.stackup[ layerid - 1 ].nextId;
         layercount++;
     }
 
