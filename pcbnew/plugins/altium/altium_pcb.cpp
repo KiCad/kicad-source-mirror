@@ -341,7 +341,6 @@ ALTIUM_PCB::ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter )
     m_doneCount = 0;
     m_lastProgressCount = 0;
     m_totalCount = 0;
-    m_num_nets           = 0;
     m_highest_pour_index = 0;
 }
 
@@ -807,15 +806,15 @@ int ALTIUM_PCB::GetNetCode( uint16_t aId ) const
     {
         return NETINFO_LIST::UNCONNECTED;
     }
-    else if( m_num_nets < aId )
+    else if( m_altiumToKicadNetcodes.size() < aId )
     {
         THROW_IO_ERROR( wxString::Format( wxT( "Netcode with id %d does not exist. Only %d nets "
                                                "are known" ),
-                                          aId, m_num_nets ) );
+                                          aId, m_altiumToKicadNetcodes.size() ) );
     }
     else
     {
-        return aId + 1;
+        return m_altiumToKicadNetcodes[ aId ];
     }
 }
 
@@ -1695,13 +1694,16 @@ void ALTIUM_PCB::ParseNets6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
 
     ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
-    wxASSERT( m_num_nets == 0 );
+    wxASSERT( m_altiumToKicadNetcodes.empty() );
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
         checkpoint();
         ANET6 elem( reader );
 
-        m_board->Add( new NETINFO_ITEM( m_board, elem.name, ++m_num_nets ), ADD_MODE::APPEND );
+        NETINFO_ITEM* netInfo = new NETINFO_ITEM( m_board, elem.name, 0 );
+        m_board->Add( netInfo, ADD_MODE::APPEND );
+
+        m_altiumToKicadNetcodes.push_back( netInfo->GetNetCode() );
     }
 
     if( reader.GetRemainingBytes() != 0 )

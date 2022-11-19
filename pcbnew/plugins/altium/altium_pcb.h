@@ -243,7 +243,7 @@ private:
     std::vector<PCB_DIM_RADIAL*>         m_radialDimensions;
     std::map<wxString, wxString>         m_models;
     std::map<uint32_t, wxString>         m_unicodeStrings;
-    size_t                               m_num_nets;
+    std::vector<int>                     m_altiumToKicadNetcodes;
     std::map<ALTIUM_LAYER, PCB_LAYER_ID> m_layermap; // used to correctly map copper layers
     std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> m_rules;
     std::map<ALTIUM_RECORD, std::multimap<int, const AEXTENDED_PRIMITIVE_INFORMATION>>
