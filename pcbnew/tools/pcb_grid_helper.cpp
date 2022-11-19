@@ -133,17 +133,22 @@ VECTOR2I PCB_GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSe
 
 VECTOR2I PCB_GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& aArc )
 {
+    VECTOR2I aligned = Align( aPoint );
+
     if( !m_enableSnap )
-        return aPoint;
+        return aligned;
 
-    const VECTOR2D gridOffset( GetOrigin() );
-    const VECTOR2D gridSize( GetGrid() );
+    std::vector<VECTOR2I> points;
 
-    VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
-                      KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
+    aArc.IntersectLine( SEG( aligned, aligned + VECTOR2( 1, 0 ) ), &points );
+    aArc.IntersectLine( SEG( aligned, aligned + VECTOR2( 0, 1 ) ), &points );
+    aArc.IntersectLine( SEG( aligned, aligned + VECTOR2( 1, 1 ) ), &points );
+    aArc.IntersectLine( SEG( aligned, aligned + VECTOR2( 1, -1 ) ), &points );
 
-    int min_d = std::numeric_limits<int>::max();
+    VECTOR2I nearest = aligned;
+    int      min_d = std::numeric_limits<int>::max();
 
+    // Snap by distance between pointer and endpoints
     for( const VECTOR2I& pt : { aArc.GetP0(), aArc.GetP1() } )
     {
         int d = ( pt - aPoint ).EuclideanNorm();
@@ -153,8 +158,18 @@ VECTOR2I PCB_GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& a
             min_d = d;
             nearest = pt;
         }
-        else
-            break;
+    }
+
+    // Snap by distance between aligned cursor and intersections
+    for( const VECTOR2I& pt : points )
+    {
+        int d = ( pt - aligned ).EuclideanNorm();
+
+        if( d < min_d )
+        {
+            min_d = d;
+            nearest = pt;
+        }
     }
 
     return nearest;
