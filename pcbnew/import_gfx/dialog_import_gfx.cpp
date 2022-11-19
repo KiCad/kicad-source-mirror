@@ -214,9 +214,23 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
         return false;
     }
 
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
     wxString ext = wxFileName( m_textCtrlFileName->GetValue() ).GetExt();
     double   scale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
-    VECTOR2D origin( m_xOrigin.GetValue() / scale, m_yOrigin.GetValue() / scale );
+    double           xscale = scale;
+    double           yscale = scale;
+
+    if( cfg->m_Display.m_DisplayInvertXAxis )
+    {
+        xscale *= -1.0;
+    }
+
+    if( cfg->m_Display.m_DisplayInvertYAxis )
+    {
+        yscale *= -1.0;
+    }
+
+    VECTOR2D origin( m_xOrigin.GetValue() / xscale, m_yOrigin.GetValue() / yscale );
 
     if( std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> plugin = m_gfxImportMgr->GetPluginByExt( ext ) )
     {
