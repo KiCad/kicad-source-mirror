@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -107,7 +107,9 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* sbOtherOptions;
 	sbOtherOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other Options") ), wxVERTICAL );
 
-	m_cbRemoveVirtual = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Ignore virtual components"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRemoveVirtual = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Ignore not mounted components"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRemoveVirtual->SetToolTip( _("Do not show components not in BOM and not in place file") );
+
 	sbOtherOptions->Add( m_cbRemoveVirtual, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbSubstModels = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Substitute similarly named models"), wxDefaultPosition, wxDefaultSize, 0 );

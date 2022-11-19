@@ -932,7 +932,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Ignore virtual components</property>
+                                        <property name="label">Ignore not mounted components</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -953,7 +953,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">Do not show components not in BOM and not in place file</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
