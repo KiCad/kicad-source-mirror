@@ -133,7 +133,7 @@ wxString BOARD_CONNECTED_ITEM::GetNetnameMsg() const
 
 wxString BOARD_CONNECTED_ITEM::GetShortNetname() const
 {
-    return m_netinfo->GetShortNetname();
+    return m_netinfo ? m_netinfo->GetShortNetname() : wxString();
 }
 
 
