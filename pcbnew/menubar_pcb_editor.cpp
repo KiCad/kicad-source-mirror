@@ -115,13 +115,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->Add( PCB_ACTIONS::importNetlist,          ACTION_MENU::NORMAL, _( "Netlist..." ) );
     submenuImport->Add( PCB_ACTIONS::importSpecctraSession,  ACTION_MENU::NORMAL, _( "Specctra Session..." ) );
     submenuImport->Add( PCB_ACTIONS::placeImportedGraphics,  ACTION_MENU::NORMAL, _( "Graphics..." ) );
-
-    if( Kiface().IsSingle() )
-    {
-        submenuImport->Add( _( "Non-KiCad Board File..." ),
-                            _( "Import board file from other applications" ),
-                            ID_IMPORT_NON_KICAD_BOARD, BITMAPS::import_brd_file );
-    }
+    submenuImport->Add( _( "Non-KiCad Board File..." ),
+                        _( "Import board file from other applications" ),
+                        ID_IMPORT_NON_KICAD_BOARD, BITMAPS::import_brd_file );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( submenuImport );
