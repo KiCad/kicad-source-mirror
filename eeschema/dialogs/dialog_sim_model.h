@@ -99,7 +99,7 @@ private:
 
     void removeOrphanedPinAssignments();
 
-    void loadLibrary( const wxString& aFilePath );
+    void loadLibrary( const wxString& aLibraryPath );
 
     void addParamPropertyIfRelevant( int aParamIndex );
     wxPGProperty* newParamProperty( int aParamIndex ) const;
@@ -107,6 +107,7 @@ private:
     int findSymbolPinRow( const wxString& aSymbolPinNumber ) const;
 
     SIM_MODEL& curModel() const;
+    const SIM_LIBRARY* library() const;
 
     wxString getSymbolPinString( int aSymbolPinNumber ) const;
     wxString getModelPinString( int aModelPinIndex ) const;
@@ -133,20 +134,19 @@ private:
     void onParamGridSetFocus( wxFocusEvent& aEvent );
     void onParamGridSelectionChange( wxPropertyGridEvent& aEvent );
 
-    bool isIbisLoaded() { return dynamic_cast<SIM_LIBRARY_KIBIS*>( m_library.get() ); }
+    bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() ); }
 
 private:
     SCH_SYMBOL&            m_symbol;
     std::vector<T>&        m_fields;
 
-    SIM_LIB_MGR                                        m_builtinModelMgr;
+    SIM_LIB_MGR                                        m_libraryModelsMgr;
+    SIM_LIB_MGR                                        m_builtinModelsMgr;
+    const SIM_MODEL*                                   m_prevModel;
+
     std::vector<LIB_PIN*>                              m_sortedSymbolPins;
     std::map<SIM_MODEL::DEVICE_TYPE_, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE                                    m_curModelType;
-
-    std::shared_ptr<SIM_LIBRARY>                       m_library;
-    std::vector<std::unique_ptr<SIM_MODEL>>            m_libraryModels;
-    const SIM_MODEL*                                   m_prevModel;
 
     MODEL_NAME_VALIDATOR   m_modelNameValidator;
     SCINTILLA_TRICKS*      m_scintillaTricks;

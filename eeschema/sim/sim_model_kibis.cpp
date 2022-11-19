@@ -313,7 +313,7 @@ void SIM_MODEL_KIBIS::CreatePins( unsigned aSymbolPinCount )
 }
 
 
-bool SIM_MODEL_KIBIS::ChangePin( SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber )
+bool SIM_MODEL_KIBIS::ChangePin( const SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber )
 {
     KIBIS_COMPONENT* kcomp = aLib.m_kibis.GetComponent( std::string( GetComponentName() ) );
 

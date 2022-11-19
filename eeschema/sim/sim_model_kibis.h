@@ -88,7 +88,7 @@ public:
 
     /** @brief update the list of available models based on the pin number.
      * */
-    bool ChangePin( SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber );
+    bool ChangePin( const SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber );
 
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 

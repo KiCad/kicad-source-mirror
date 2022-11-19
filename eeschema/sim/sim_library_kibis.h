@@ -44,10 +44,10 @@ public:
     void WriteFile( const std::string& aFilePath ) override{};
 
     bool InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName );
-    bool isPinDiff( const std::string& aComp, const std::string& aPinNumber );
+    bool isPinDiff( const std::string& aComp, const std::string& aPinNumber ) const;
 
 protected:
-    KIBIS m_kibis;
+    mutable KIBIS m_kibis;
     std::vector<std::pair<std::string, std::string>> m_diffPins;
 };
 

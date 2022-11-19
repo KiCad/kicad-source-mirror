@@ -79,7 +79,7 @@ bool SIM_LIBRARY_KIBIS::InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName )
 }
 
 
-bool SIM_LIBRARY_KIBIS::isPinDiff( const std::string& aComp, const std::string& aPinNumber )
+bool SIM_LIBRARY_KIBIS::isPinDiff( const std::string& aComp, const std::string& aPinNumber ) const
 {
     for( std::pair<std::string, std::string> aInfo : m_diffPins )
     {

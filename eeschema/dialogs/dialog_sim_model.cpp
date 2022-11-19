@@ -46,10 +46,10 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
     : DIALOG_SIM_MODEL_BASE( aParent ),
       m_symbol( aSymbol ),
       m_fields( aFields ),
-      m_builtinModelMgr( Prj() ),
-      m_curModelType( SIM_MODEL::TYPE::NONE ),
-      m_library( std::make_shared<SIM_LIBRARY_SPICE>() ),
+      m_libraryModelsMgr( Prj() ),
+      m_builtinModelsMgr( Prj() ),
       m_prevModel( nullptr ),
+      m_curModelType( SIM_MODEL::TYPE::NONE ),
       m_scintillaTricks( nullptr ),
       m_wasCodePreviewUpdated( true ),
       m_firstCategory( nullptr ),
@@ -143,7 +143,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     wxCommandEvent dummyEvent;
 
     int         pinCount = m_sortedSymbolPins.size();
-    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
     if( libraryFilename != "" )
@@ -159,7 +158,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         if( isIbisLoaded() && ( m_modelNameCombobox->GetSelection() >= 0 ) )
         {
             SIM_MODEL_KIBIS* kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>(
-                    m_libraryModels.at( m_modelNameCombobox->GetSelection() ).get() );
+                    &m_libraryModelsMgr.GetModels().at( m_modelNameCombobox->GetSelection() ).get() );
 
             if( kibismodel )
             {
@@ -172,9 +171,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                     if( strs.first
                         == SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::PIN_FIELD ) )
                     {
-                        kibismodel->ChangePin(
-                                *( std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library ) ),
-                                strs.first );
+                        auto kibisLibrary = static_cast<const SIM_LIBRARY_KIBIS*>( library() );
+
+                        kibismodel->ChangePin( *kibisLibrary, strs.first );
                         m_ibisPinCombobox->SetSelection( static_cast<int>( i ) );
                         break;
                     }
@@ -214,9 +213,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         try
         {
             if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
-                m_builtinModelMgr.CreateModel( m_fields, m_sortedSymbolPins.size() );
+                m_builtinModelsMgr.CreateModel( m_fields, pinCount );
             else
-                m_builtinModelMgr.CreateModel( type, m_sortedSymbolPins.size() );
+                m_builtinModelsMgr.CreateModel( type, pinCount );
         }
         catch( const IO_ERROR& e )
         {
@@ -256,9 +255,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 
     std::string path;
 
-    if( m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() )
+    if( ( library() && m_useLibraryModelRadioButton->GetValue() ) || isIbisLoaded() )
     {
-        path = m_library->GetFilePath();
+        path = library()->GetFilePath();
         wxFileName fn( path );
 
         if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
@@ -270,7 +269,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
     if( isIbisLoaded() )
     {
         SIM_MODEL_KIBIS* kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>(
-                m_libraryModels.at( m_modelNameCombobox->GetSelection() ).get() );
+                &m_libraryModelsMgr.GetModels().at( m_modelNameCombobox->GetSelection() ).get() );
 
         if( kibismodel )
         {
@@ -584,51 +583,21 @@ void DIALOG_SIM_MODEL<T>::removeOrphanedPinAssignments()
 
 
 template <typename T>
-void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
+void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath )
 {
-    const wxString absolutePath = Prj().AbsolutePath( aFilePath );
-
-    if( absolutePath.EndsWith( ".ibs" ) )
-        m_library = std::make_shared<SIM_LIBRARY_KIBIS>();
-    else
-        m_library = std::make_shared<SIM_LIBRARY_SPICE>();
+    m_libraryModelsMgr.Clear();
+    m_libraryModelsMgr.CreateLibrary( std::string( aLibraryPath.ToUTF8() ) );
 
     try
     {
-        m_library->ReadFile( std::string( absolutePath.ToUTF8() ) );
-    }
-    catch( const IO_ERROR& e )
-    {
-        DisplayErrorMessage( this, wxString::Format( _( "Failed reading model library '%s'." ),
-                                                     absolutePath ),
-                             e.What() );
-        return;
-    }
+        std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
 
-    m_tclibraryPathName->ChangeValue( aFilePath );
-
-    m_libraryModels.clear();
-
-    try
-    {
-        for( auto& [baseModelName, baseModel] : m_library->GetModels() )
+        for( auto& [baseModelName, baseModel] : library()->GetModels() )
         {
-            wxString expectedModelName =
-                    SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
-
-            // Only the current model is initialized from fields. Others have default
-            // initialization.
-            if( baseModelName == expectedModelName )
-            {
-                //TODO: it's not cur model.
-
-                m_libraryModels.push_back(
-                        SIM_MODEL::Create( baseModel, m_sortedSymbolPins.size(), m_fields ) );
-            }
+            if( baseModelName == modelName )
+                m_libraryModelsMgr.CreateModel( baseModel, m_sortedSymbolPins.size(), m_fields );
             else
-            {
-                m_libraryModels.push_back( SIM_MODEL::Create( baseModel, m_sortedSymbolPins.size() ) );
-            }
+                m_libraryModelsMgr.CreateModel( baseModel, m_sortedSymbolPins.size() );
         }
     }
     catch( const IO_ERROR& e )
@@ -638,7 +607,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 
     wxArrayString modelNames;
 
-    for( auto& [modelName, model] : m_library->GetModels() )
+    for( auto& [modelName, model] : library()->GetModels() )
         modelNames.Add( modelName );
 
     auto validator = dynamic_cast<MODEL_NAME_VALIDATOR*>( m_modelNameCombobox->GetValidator() );
@@ -646,6 +615,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
     if( validator )
         validator->SetIncludes( modelNames );
 
+    m_tclibraryPathName->ChangeValue( aLibraryPath );
     m_modelNameCombobox->Set( modelNames );
     m_useLibraryModelRadioButton->SetValue( true );
 
@@ -843,10 +813,20 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
     if( m_useLibraryModelRadioButton->GetValue()
         && m_modelNameCombobox->GetSelection() != wxNOT_FOUND )
     {
-        return *m_libraryModels.at( m_modelNameCombobox->GetSelection() );
+        return m_libraryModelsMgr.GetModels().at( m_modelNameCombobox->GetSelection() ).get();
     }
     else
-        return m_builtinModelMgr.GetModels().at( static_cast<int>( m_curModelType ) );
+        return m_builtinModelsMgr.GetModels().at( static_cast<int>( m_curModelType ) );
+}
+
+
+template <typename T>
+const SIM_LIBRARY* DIALOG_SIM_MODEL<T>::library() const
+{
+    if( m_libraryModelsMgr.GetLibraries().size() == 1 )
+        return &m_libraryModelsMgr.GetLibraries().begin()->second.get();
+
+    return nullptr;
 }
 
 
@@ -1000,24 +980,19 @@ void DIALOG_SIM_MODEL<T>::onIbisPinCombobox( wxCommandEvent& aEvent )
     {
         wxArrayString modelLabels;
 
-        SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
+        SIM_MODEL_KIBIS& kibisModel = static_cast<SIM_MODEL_KIBIS&>( curModel() );
 
-        if( !modelkibis )
-        {
-            wxFAIL;
-            return;
-        }
-
-        std::vector<std::pair<std::string, std::string>> strs = modelkibis->GetIbisPins();
+        std::vector<std::pair<std::string, std::string>> strs = kibisModel.GetIbisPins();
         std::string pinNumber = strs.at( m_ibisPinCombobox->GetSelection() ).first;
 
-        modelkibis->ChangePin( *std::dynamic_pointer_cast<SIM_LIBRARY_KIBIS>( m_library ),
-                               pinNumber );
+        const SIM_LIBRARY_KIBIS* kibisLibrary = dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() );
 
-        modelkibis->m_enableDiff = dynamic_cast<SIM_LIBRARY_KIBIS*>( m_library.get() )
-                                           ->isPinDiff( modelkibis->GetComponentName(), pinNumber );
+        kibisModel.ChangePin( *kibisLibrary, pinNumber );
 
-        for( wxString modelName : modelkibis->GetIbisModels() )
+        kibisModel.m_enableDiff = static_cast<const SIM_LIBRARY_KIBIS*>( library() )
+                ->isPinDiff( kibisModel.GetComponentName(), pinNumber );
+
+        for( wxString modelName : kibisModel.GetIbisModels() )
             modelLabels.Add( modelName );
 
         m_ibisModelCombobox->Set( modelLabels );
@@ -1096,11 +1071,13 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
                      || type == SIM_MODEL::TYPE::KIBIS_DRIVER_RECT
                      || type == SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS ) )
             {
-                SIM_MODEL_KIBIS* kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>(
-                        m_libraryModels.at( m_modelNameCombobox->GetSelection() ).get() );
+                SIM_MODEL_KIBIS& kibisModel = static_cast<SIM_MODEL_KIBIS&>(
+                        m_libraryModelsMgr.GetModels().at( m_modelNameCombobox->GetSelection() ).get() );
 
-                m_libraryModels.at( m_modelNameCombobox->GetSelection() ) =
-                        std::make_unique<SIM_MODEL_KIBIS>( type, *kibismodel, m_fields );
+                m_libraryModelsMgr.SetModel( m_modelNameCombobox->GetSelection(),
+                                             std::make_unique<SIM_MODEL_KIBIS>( type,
+                                                                                kibisModel,
+                                                                                m_fields ) );
             }
 
             m_curModelType = type;
