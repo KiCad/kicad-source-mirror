@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-19 23:00+0000\n"
+"PO-Revision-Date: 2022-11-20 18:07+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -33804,54 +33804,54 @@ msgstr ""
 
 #: pcbnew/pad.cpp:780 pcbnew/pad.cpp:910 pcbnew/pad.cpp:919 pcbnew/pad.cpp:928
 msgid "pad"
-msgstr ""
+msgstr "контактна площадка"
 
 #: pcbnew/pad.cpp:948 pcbnew/pad.cpp:1723
 msgid "Pin Name"
-msgstr ""
+msgstr "Ім'я виводу"
 
 #: pcbnew/pad.cpp:951 pcbnew/pad.cpp:1725
 msgid "Pin Type"
-msgstr ""
+msgstr "Тип виводу"
 
 #: pcbnew/pad.cpp:976
 msgid "BGA"
-msgstr ""
+msgstr "BGA"
 
 #: pcbnew/pad.cpp:977
 msgid "Fiducial global"
-msgstr ""
+msgstr "Глобальна реперна мітка"
 
 #: pcbnew/pad.cpp:978
 msgid "Fiducial local"
-msgstr ""
+msgstr "Локальна реперна точка"
 
 #: pcbnew/pad.cpp:979
 msgid "Test point"
-msgstr ""
+msgstr "Тестова точка"
 
 #: pcbnew/pad.cpp:980
 msgid "Heat sink"
-msgstr ""
+msgstr "Для відводу тепла"
 
 #: pcbnew/pad.cpp:981
 msgid "Castellated"
-msgstr ""
+msgstr "Зубчастий контакт"
 
 #: pcbnew/pad.cpp:1010
 msgid "Length in Package"
-msgstr ""
+msgstr "Довжина в корпусі"
 
 #: pcbnew/pad.cpp:1024
 msgid "Hole X / Y"
-msgstr ""
+msgstr "Отвір Х / Y"
 
 #: pcbnew/pad.cpp:1036 pcbnew/pcb_track.cpp:857 pcbnew/pcb_track.cpp:902
 #: pcbnew/router/router_tool.cpp:2486 pcbnew/router/router_tool.cpp:2503
 #: pcbnew/zone.cpp:615
 #, c-format
 msgid "Min Clearance: %s"
-msgstr ""
+msgstr "Мін. відступ: %s"
 
 #: pcbnew/pad.cpp:1038 pcbnew/pcb_track.cpp:859 pcbnew/pcb_track.cpp:868
 #: pcbnew/pcb_track.cpp:874 pcbnew/pcb_track.cpp:904 pcbnew/pcb_track.cpp:910
@@ -33860,37 +33860,37 @@ msgstr ""
 #: pcbnew/router/router_tool.cpp:2505 pcbnew/zone.cpp:617
 #, c-format
 msgid "(from %s)"
-msgstr ""
+msgstr "(з %s)"
 
 #: pcbnew/pad.cpp:1198
 msgid "Trap"
-msgstr ""
+msgstr "Трапеція"
 
 #: pcbnew/pad.cpp:1199
 msgid "Roundrect"
-msgstr ""
+msgstr "Закруглений прямокутник"
 
 #: pcbnew/pad.cpp:1200
 msgid "Chamferedrect"
-msgstr ""
+msgstr "Скошений прямокутник"
 
 #: pcbnew/pad.cpp:1201
 msgid "CustomShape"
-msgstr ""
+msgstr "Користувацька форма"
 
 #: pcbnew/pad.cpp:1213
 msgid "Conn"
-msgstr ""
+msgstr "З'єднання"
 
 #: pcbnew/pad.cpp:1226
 #, c-format
 msgid "Pad %s of %s on %s"
-msgstr ""
+msgstr "Конт. площадка %s від %s на %s"
 
 #: pcbnew/pad.cpp:1233
 #, c-format
 msgid "NPTH pad of %s"
-msgstr ""
+msgstr "NPTH конт. площадка з %s"
 
 #: pcbnew/pad.cpp:1237
 #, c-format
@@ -33900,140 +33900,139 @@ msgstr "Контактна площадка %s не знайдена в %s."
 #: pcbnew/pad.cpp:1246
 #, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr ""
+msgstr "Конт. площадка %s %s з %s на %s"
 
 #: pcbnew/pad.cpp:1254
 #, c-format
 msgid "NPTH of %s"
-msgstr ""
+msgstr "NPTH на %s"
 
 #: pcbnew/pad.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "Оновлено %s з %s до %s."
+msgstr "PTH конт. площадка %s %s на %s"
 
 #: pcbnew/pad.cpp:1688
 msgid "Edge connector"
-msgstr ""
+msgstr "Крайовий з'єднувач"
 
 #: pcbnew/pad.cpp:1689
 msgid "NPTH, mechanical"
-msgstr ""
+msgstr "NPTH, механічний"
 
 #: pcbnew/pad.cpp:1695
 msgid "Trapezoid"
-msgstr ""
+msgstr "Трапециевидна"
 
 #: pcbnew/pad.cpp:1707
 msgid "Castellated pad"
-msgstr ""
+msgstr "Зубчастий конт. площадка"
 
 #: pcbnew/pad.cpp:1713
 msgid "Pad Type"
-msgstr ""
+msgstr "Тип конт. площадки"
 
 #: pcbnew/pad.cpp:1721
 msgid "Pad Number"
-msgstr ""
+msgstr "Номер конт. площадки"
 
 #: pcbnew/pad.cpp:1730
 msgid "Size X"
-msgstr ""
+msgstr "Розмір X"
 
 #: pcbnew/pad.cpp:1733
 msgid "Size Y"
-msgstr ""
+msgstr "Розмір Y"
 
 #: pcbnew/pad.cpp:1736
 msgid "Hole Size X"
-msgstr ""
+msgstr "Розмір отвору X"
 
 #: pcbnew/pad.cpp:1739
 msgid "Hole Size Y"
-msgstr ""
+msgstr "Розмір отвору Y"
 
 #: pcbnew/pad.cpp:1742 pcbnew/pcb_track.cpp:847
 msgid "Pad To Die Length"
-msgstr ""
+msgstr "Довжина від конт. площадки до чіпу"
 
 #: pcbnew/pad.cpp:1745
 msgid "Soldermask Margin Override"
-msgstr ""
+msgstr "Встановлення відступу паяльної маски"
 
 #: pcbnew/pad.cpp:1753 pcbnew/zone.cpp:1346
 msgid "Thermal Relief Spoke Width"
-msgstr ""
+msgstr "Ширина термічного мостику"
 
 #: pcbnew/pad.cpp:1756
 msgid "Thermal Relief Spoke Angle"
-msgstr ""
+msgstr "Кут термічного мостику"
 
 #: pcbnew/pad.cpp:1759 pcbnew/zone.cpp:1343
 msgid "Thermal Relief Gap"
-msgstr ""
+msgstr "Зазор для термічного мостику"
 
 #: pcbnew/pad.cpp:1762
 msgid "Fabrication Property"
-msgstr ""
+msgstr "Параметр виробництва"
 
 #: pcbnew/pad.cpp:1765
 msgid "Round Radius Ratio"
-msgstr ""
+msgstr "Відносний радіус закруглення"
 
 #: pcbnew/pcb_base_frame.cpp:189
 msgid "Error loading project footprint libraries."
-msgstr ""
+msgstr "Помилка завантаження бібліотеки посадкових місць проекта."
 
 #: pcbnew/pcb_dimension.cpp:297
 msgid "Prefix"
-msgstr ""
+msgstr "Префікс"
 
 #: pcbnew/pcb_dimension.cpp:301
 msgid "Override Text"
-msgstr ""
+msgstr "Перевизначити текст"
 
 #: pcbnew/pcb_dimension.cpp:319
 msgid "Suffix"
-msgstr ""
+msgstr "Суфікс"
 
 #: pcbnew/pcb_dimension.cpp:452
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr ""
+msgstr "Розміри '%s' на %s"
 
 #: pcbnew/pcb_edit_frame.cpp:202
 msgid "KiCad PCB Editor"
-msgstr ""
+msgstr "KiCad PCB редактор"
 
 #: pcbnew/pcb_edit_frame.cpp:208
 msgid "Export netlist used to update schematics"
 msgstr "Експортувати список звʼязків, що використовується для оновлення схем"
 
 #: pcbnew/pcb_edit_frame.cpp:308
-#, fuzzy
 msgid "Search"
-msgstr "Пошук тексту"
+msgstr "Пошук"
 
 #: pcbnew/pcb_edit_frame.cpp:381
 msgid "New PCB file is unsaved"
-msgstr ""
+msgstr "Новий PCB файл не збережений"
 
 #: pcbnew/pcb_edit_frame.cpp:1054
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr ""
+msgstr "Не вдалося видалити файл '%s' автоматичного збереження!"
 
 #: pcbnew/pcb_edit_frame.cpp:1313
 msgid "Board file is read only."
-msgstr ""
+msgstr "Файл плати доступний тільки для читання."
 
 #: pcbnew/pcb_edit_frame.cpp:1348
 msgid "PCB file changes are unsaved"
-msgstr ""
+msgstr "Зміни PCB файлу не збережено"
 
 #: pcbnew/pcb_edit_frame.cpp:1649
 msgid "The schematic for this board cannot be found."
-msgstr ""
+msgstr "Схема для цієї плати не знайдена."
 
 #: pcbnew/pcb_edit_frame.cpp:1673
 msgid ""
