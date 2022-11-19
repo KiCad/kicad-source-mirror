@@ -32,17 +32,18 @@
 #include <kiway.h>
 #include <potracelib.h>
 #include <wildcards_and_files_ext.h>
+#include <tool/tool_manager.h>
+#include <tool/common_control.h>
 #include <wx/clipbrd.h>
 #include <wx/rawbmp.h>
 #include <wx/filedlg.h>
-#include <wx/rawbmp.h>
 #include <wx/msgdlg.h>
 #include <wx/dcclient.h>
 #include <wx/log.h>
 
 
 #include "bitmap2cmp_gui_base.h"
-
+#include "pgm_base.h"
 
 #define DEFAULT_DPI 300     // the image DPI used in formats that do not define a DPI
 
@@ -62,18 +63,11 @@ void IMAGE_SIZE::SetOutputSizeFromInitialImageSize()
 
     // Set the m_outputSize value from the m_originalSizePixels and the selected unit
     if( m_unit == EDA_UNITS::MILLIMETRES )
-    {
         m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI * 25.4;
-    }
     else if( m_unit == EDA_UNITS::INCHES )
-    {
         m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI;
-    }
     else
-    {
         m_outputSize = m_originalDPI;
-    }
-
 }
 
 
@@ -82,17 +76,11 @@ int IMAGE_SIZE::GetOutputDPI()
     int outputDPI;
 
     if( m_unit == EDA_UNITS::MILLIMETRES )
-    {
         outputDPI = GetOriginalSizePixels() / ( m_outputSize / 25.4 );
-    }
     else if( m_unit == EDA_UNITS::INCHES )
-    {
         outputDPI = GetOriginalSizePixels() / m_outputSize;
-    }
     else
-    {
         outputDPI = KiROUND( m_outputSize );
-    }
 
     // Zero is not a DPI, and may cause divide-by-zero errors...
     outputDPI = std::max( 1, outputDPI );
@@ -150,6 +138,11 @@ void IMAGE_SIZE::SetUnit( EDA_UNITS aUnit )
 }
 
 
+BEGIN_EVENT_TABLE( BM2CMP_FRAME, BM2CMP_FRAME_BASE )
+    EVT_MENU( wxID_EXIT, BM2CMP_FRAME::OnExit )
+    EVT_MENU( wxID_OPEN, BM2CMP_FRAME::OnLoadFile )
+END_EVENT_TABLE()
+
 
 BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     BM2CMP_FRAME_BASE( aParent )
@@ -169,11 +162,6 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
     m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
 
-    //Set icon for aspect ratio
-    m_AspectRatioLocked = true;
-    m_AspectRatio = 1;
-    m_AspectRatioLockButton->SetBitmap( KiBitmap( BITMAPS::locked ) );
-
     // Give an icon
     wxIcon icon;
     wxIconBundle icon_bundle;
@@ -186,6 +174,8 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );
+
+    ReCreateMenuBar();
 
     GetSizer()->SetSizeHints( this );
 
@@ -216,6 +206,46 @@ wxWindow* BM2CMP_FRAME::GetToolCanvas() const
 }
 
 
+void BM2CMP_FRAME::ReCreateMenuBar()
+{
+    // wxWidgets handles the Mac Application menu behind the scenes, but that means
+    // we always have to start from scratch with a new wxMenuBar.
+    wxMenuBar* oldMenuBar = GetMenuBar();
+    wxMenuBar* menuBar    = new wxMenuBar();
+
+    wxMenu* fileMenu = new wxMenu;
+
+    wxMenuItem* item = new wxMenuItem( fileMenu, wxID_OPEN, _( "Open..." ) + wxT( "\tCtrl+O" ),
+                                       _( "Load source image" ) );
+
+    fileMenu->Append( item );
+
+#ifndef __WXMAC__
+    // Mac moves Quit to the App menu so we don't need a separator on Mac
+    fileMenu->AppendSeparator();
+#endif
+
+    item = new wxMenuItem( fileMenu, wxID_EXIT, _( "Quit" ) + wxT( "\tCtrl+Q" ),
+                           _( "Quit Image Converter" ) );
+
+    if( Pgm().GetCommonSettings()->m_Appearance.use_icons_in_menus )
+        item->SetBitmap( KiBitmap( BITMAPS::exit ) );
+
+    fileMenu->Append( item );
+
+    menuBar->Append( fileMenu, _( "&File" ) );
+
+    SetMenuBar( menuBar );
+    delete oldMenuBar;
+}
+
+
+void BM2CMP_FRAME::OnExit( wxCommandEvent& event )
+{
+    Destroy();
+}
+
+
 void BM2CMP_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
@@ -236,8 +266,9 @@ void BM2CMP_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     m_Negative = cfg->m_Negative;
     m_checkNegative->SetValue( cfg->m_Negative );
-    m_exportToClipboard = false;
-    m_AspectRatioLocked = false;
+
+    m_AspectRatio = 1.0;
+    m_aspectRatioCheckbox->SetValue( true );
 
     int format = cfg->m_LastFormat;
 
@@ -459,26 +490,19 @@ wxString BM2CMP_FRAME::FormatOutputSize( double aSize )
     wxString text;
 
     if( getUnitFromSelection() == EDA_UNITS::MILLIMETRES )
-    {
         text.Printf( "%.1f", aSize );
-    }
     else if( getUnitFromSelection() == EDA_UNITS::INCHES )
-    {
         text.Printf( "%.2f", aSize );
-    }
     else
-    {
         text.Printf( wxT( "%d" ), KiROUND( aSize ) );
-    }
 
     return text;
 }
 
 void BM2CMP_FRAME::updateImageInfo()
 {
-    // Note: the image resolution text controls are not modified
-    // here, to avoid a race between text change when entered by user and
-    // a text change if it is modified here.
+    // Note: the image resolution text controls are not modified here, to avoid a race between
+    // text change when entered by user and a text change if it is modified here.
 
     if( m_Pict_Bitmap.IsOk() )
     {
@@ -498,18 +522,11 @@ EDA_UNITS BM2CMP_FRAME::getUnitFromSelection()
     // return the EDA_UNITS from the m_PixelUnit choice
     switch( m_PixelUnit->GetSelection() )
     {
-    case 1:
-        return EDA_UNITS::INCHES;
-
-    case 2:
-        return EDA_UNITS::UNSCALED;
-
+    case 1:  return EDA_UNITS::INCHES;
+    case 2:  return EDA_UNITS::UNSCALED;
     case 0:
-    default:
-        break;
+    default: return EDA_UNITS::MILLIMETRES;
     }
-
-    return EDA_UNITS::MILLIMETRES;
 }
 
 
@@ -519,7 +536,7 @@ void BM2CMP_FRAME::OnSizeChangeX( wxCommandEvent& event )
 
     if( m_UnitSizeX->GetValue().ToDouble( &new_size ) )
     {
-        if( m_AspectRatioLocked )
+        if( m_aspectRatioCheckbox->GetValue() )
         {
             double calculatedY = new_size / m_AspectRatio;
 
@@ -548,7 +565,7 @@ void BM2CMP_FRAME::OnSizeChangeY( wxCommandEvent& event )
 
     if( m_UnitSizeY->GetValue().ToDouble( &new_size ) )
     {
-        if( m_AspectRatioLocked )
+        if( m_aspectRatioCheckbox->GetValue() )
         {
             double calculatedX = new_size * m_AspectRatio;
 
@@ -584,19 +601,11 @@ void BM2CMP_FRAME::OnSizeUnitChange( wxCommandEvent& event )
 
 void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
 {
-    m_AspectRatioLocked = !m_AspectRatioLocked;
-
-    if( m_AspectRatioLocked )
+    if( m_aspectRatioCheckbox->GetValue() )
     {
-        m_AspectRatioLockButton->SetBitmap( KiBitmap( BITMAPS::locked ) );
-
-        //Force display update when aspect ratio is locked
+        // Force display update when aspect ratio is locked
         wxCommandEvent dummy;
         OnSizeChangeX( dummy );
-    }
-    else
-    {
-        m_AspectRatioLockButton->SetBitmap( KiBitmap( BITMAPS::unlocked ) );
     }
 }
 
@@ -623,12 +632,10 @@ void BM2CMP_FRAME::Binarize( double aThreshold )
                 pixout = 255;
 
             m_NB_Image.SetRGB( x, y, pixout, pixout, pixout );
-
         }
     }
 
     m_BN_Bitmap = wxBitmap( m_NB_Image );
-
 }
 
 
@@ -674,8 +681,6 @@ void BM2CMP_FRAME::OnThresholdChange( wxScrollEvent& event )
 
 void BM2CMP_FRAME::OnExportToFile( wxCommandEvent& event )
 {
-    m_exportToClipboard = false;
-
     // choices of m_rbOutputFormat are expected to be in same order as
     // OUTPUT_FMT_ID. See bitmap2component.h
     OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_rbOutputFormat->GetSelection();
@@ -685,8 +690,6 @@ void BM2CMP_FRAME::OnExportToFile( wxCommandEvent& event )
 
 void BM2CMP_FRAME::OnExportToClipboard( wxCommandEvent& event )
 {
-    m_exportToClipboard = true;
-
     // choices of m_rbOutputFormat are expected to be in same order as
     // OUTPUT_FMT_ID. See bitmap2component.h
     OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_rbOutputFormat->GetSelection();
@@ -716,26 +719,15 @@ void BM2CMP_FRAME::exportBitmap( OUTPUT_FMT_ID aFormat )
 {
     switch( aFormat )
     {
-    case EESCHEMA_FMT:
-        exportEeschemaFormat();
-        break;
-
-    case PCBNEW_KICAD_MOD:
-        exportPcbnewFormat();
-        break;
-
-    case POSTSCRIPT_FMT:
-        exportPostScriptFormat();
-        break;
-
-    case KICAD_WKS_LOGO:
-        OnExportLogo();
-        break;
+    case EESCHEMA_FMT:     exportEeschemaFormat();   break;
+    case PCBNEW_KICAD_MOD: exportPcbnewFormat();     break;
+    case POSTSCRIPT_FMT:   exportPostScriptFormat(); break;
+    case KICAD_WKS_LOGO:   exportLogo();             break;
     }
 }
 
 
-void BM2CMP_FRAME::OnExportLogo()
+void BM2CMP_FRAME::exportLogo()
 {
     wxFileName  fn( m_ConvertedFileName );
     wxString    path = fn.GetPath();

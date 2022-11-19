@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,15 +24,13 @@
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/choice.h>
-#include <wx/radiobox.h>
 #include <wx/slider.h>
-#include <wx/checkbox.h>
-#include <wx/panel.h>
+#include <wx/radiobox.h>
 #include <wx/statusbr.h>
 #include <wx/frame.h>
 
@@ -51,7 +49,6 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxScrolledWindow* m_InitialPicturePanel;
 		wxScrolledWindow* m_GreyscalePicturePanel;
 		wxScrolledWindow* m_BNPicturePanel;
-		wxPanel* m_panelRight;
 		wxStaticText* m_staticTextISize;
 		wxStaticText* m_SizeXValue;
 		wxStaticText* m_SizeYValue;
@@ -63,41 +60,40 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticTextBPP;
 		wxStaticText* m_BPPValue;
 		wxStaticText* m_BPPunits;
-		wxStaticText* m_textLock;
-		wxBitmapButton* m_AspectRatioLockButton;
+		wxButton* m_buttonLoad;
+		wxCheckBox* m_aspectRatioCheckbox;
 		wxStaticText* m_staticTextOSize;
 		wxTextCtrl* m_UnitSizeX;
 		wxTextCtrl* m_UnitSizeY;
 		wxChoice* m_PixelUnit;
-		wxButton* m_buttonLoad;
-		wxButton* m_buttonExportFile;
-		wxButton* m_buttonExportClipboard;
-		wxRadioBox* m_rbOutputFormat;
 		wxStaticText* m_ThresholdText;
 		wxSlider* m_sliderThreshold;
 		wxCheckBox* m_checkNegative;
 		wxRadioBox* m_rbPCBLayer;
+		wxRadioBox* m_rbOutputFormat;
+		wxButton* m_buttonExportFile;
+		wxButton* m_buttonExportClipboard;
 		wxStatusBar* m_statusBar;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnPaintInit( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnPaintGreyscale( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnPaintBW( wxPaintEvent& event ) { event.Skip(); }
+		virtual void OnLoadFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ToggleAspectRatioLock( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeChangeX( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeChangeY( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeUnitChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnLoadFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExportToFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExportToClipboard( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFormatChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnThresholdChange( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnNegativeClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFormatChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExportToFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExportToClipboard( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
+		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Image Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCLOSE_BOX|wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
 
 		~BM2CMP_FRAME_BASE();
 

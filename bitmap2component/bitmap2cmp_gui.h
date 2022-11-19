@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,12 +91,16 @@ public:
     // overload KIWAY_PLAYER virtual
     bool OpenProjectFiles( const std::vector<wxString>& aFilenames, int aCtl = 0 ) override;
 
+    void OnExit( wxCommandEvent& event );
+    void OnLoadFile( wxCommandEvent& event ) override;
+
+DECLARE_EVENT_TABLE()
+
 private:
     // Event handlers
     void OnPaintInit( wxPaintEvent& event ) override;
     void OnPaintGreyscale( wxPaintEvent& event ) override;
     void OnPaintBW( wxPaintEvent& event ) override;
-    void OnLoadFile( wxCommandEvent& event ) override;
     void OnExportToFile( wxCommandEvent& event ) override;
     void OnExportToClipboard( wxCommandEvent& event ) override;
 
@@ -125,7 +129,7 @@ private:
     /**
      * Generate a file suitable to be copied into a drawing sheet (.kicad_wks) file
      */
-    void OnExportLogo();
+    void exportLogo();
 
     void Binarize( double aThreshold ); // aThreshold = 0.0 (black level) to 1.0 (white level)
     void OnNegativeClicked( wxCommandEvent& event ) override;
@@ -136,7 +140,6 @@ private:
     void OnSizeUnitChange( wxCommandEvent& event ) override;
 
     void ToggleAspectRatioLock( wxCommandEvent& event ) override;
-
 
     void NegateGreyscaleImage();
     /**
@@ -155,6 +158,8 @@ private:
 
     wxWindow* GetToolCanvas() const override;
 
+    void ReCreateMenuBar() override;
+
 private:
     wxImage    m_Pict_Image;
     wxBitmap   m_Pict_Bitmap;
@@ -167,8 +172,6 @@ private:
     bool       m_Negative;
     wxString   m_BitmapFileName;
     wxString   m_ConvertedFileName;
-    bool       m_exportToClipboard;
-    bool       m_AspectRatioLocked;
     double     m_AspectRatio;
 };
 #endif// BITMOP2CMP_GUI_H_
