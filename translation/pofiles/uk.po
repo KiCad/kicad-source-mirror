@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-19 08:30+0000\n"
+"PO-Revision-Date: 2022-11-19 23:00+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -33369,68 +33369,68 @@ msgstr ""
 
 #: pcbnew/microwave/microwave_footprint.cpp:105
 msgid "Incorrect number, abort"
-msgstr ""
+msgstr "Неправильний номер, скасувати"
 
 #: pcbnew/microwave/microwave_inductor.cpp:316
 msgid "Add microwave inductor"
-msgstr ""
+msgstr "Додати мікрохвильовий індуктор"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
 msgid "Length of Trace:"
-msgstr ""
+msgstr "Довжина доріжки:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:376
 msgid "Requested length < minimum length"
-msgstr ""
+msgstr "Запитана довжина < мінімальна довжина"
 
 #: pcbnew/microwave/microwave_inductor.cpp:390
 msgid "Requested length too large"
-msgstr ""
+msgstr "Запитувана довжина занадто велика"
 
 #: pcbnew/microwave/microwave_inductor.cpp:393
 msgid "Requested length too small"
-msgstr ""
+msgstr "Запитувана довжина занадто мала"
 
 #: pcbnew/microwave/microwave_inductor.cpp:396
 msgid "Requested length can't be represented"
-msgstr ""
+msgstr "Запитувана довжина не може бути представлена"
 
 #: pcbnew/microwave/microwave_inductor.cpp:404
 msgid "Component Value:"
-msgstr ""
+msgstr "Значення компонента:"
 
 #: pcbnew/microwave/microwave_polygon.cpp:111
 msgid "Complex Shape"
-msgstr ""
+msgstr "Складна фігура"
 
 #: pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Symmetrical"
-msgstr ""
+msgstr "Симетрично"
 
 #: pcbnew/microwave/microwave_polygon.cpp:136 pcbnew/pcb_target.cpp:155
 #: pcbnew/pcb_target.cpp:200
 msgid "Size"
-msgstr ""
+msgstr "Розмір"
 
 #: pcbnew/microwave/microwave_polygon.cpp:168
 msgid "Read Shape Description File..."
-msgstr ""
+msgstr "Прочитати файл опису форми..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
 msgid "Shape Description File"
-msgstr ""
+msgstr "Файл опису форми"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
-msgstr ""
+msgstr "Форма має нульовий розмір."
 
 #: pcbnew/microwave/microwave_polygon.cpp:320
 msgid "Shape has no points."
-msgstr ""
+msgstr "Форма не має вершин."
 
 #: pcbnew/microwave/microwave_tool.cpp:92
 msgid "Place microwave feature"
-msgstr ""
+msgstr "Розмістити мікрохвильовий елемент"
 
 #: pcbnew/netinfo_item.cpp:135
 msgid "On Board"
@@ -33544,27 +33544,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "Видалений виробничий атрибут 'виключено з переліку елементів' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr ""
-"Встановлення виробничого атрибута 'виключено з переліку елементів' для %s."
+msgstr "Додайте атрибут виготовлення %s 'виключити з файлів позицій'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr ""
-"Виділення виробничого атрибута 'виключено з переліку елементів' для %s."
+msgstr "Видалити атрибут виробництва %s 'виключити з файлів позиції'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr ""
-"Встановлений виробничий атрибут 'виключено з переліку елементів' для %s."
+msgstr "Додано атрибут виробництва %s \"виключити з файлів позиції\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "Видалений виробничий атрибут 'виключено з переліку елементів' для %s."
+msgstr "Видалено атрибут виробництва %s 'виключити з файлів позиції'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:497
 #, c-format
@@ -33714,6 +33711,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Некоректний ID посадкового місця\n"
+"файл: '%s'\n"
+"ряд: %d\n"
+"зміщення: %d"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
@@ -33760,6 +33761,8 @@ msgid ""
 "Error loading netlist.\n"
 "%s"
 msgstr ""
+"Помилка завантаження списку зв'язків.\n"
+"%s"
 
 #: pcbnew/netlist_reader/netlist.cpp:74
 msgid "Netlist Load Error"
@@ -33795,6 +33798,9 @@ msgid ""
 "file: '%s'\n"
 "line: %d"
 msgstr ""
+"Некоректний ID посадкового місця\n"
+"файл: '%s'\n"
+"ряд: %d"
 
 #: pcbnew/pad.cpp:780 pcbnew/pad.cpp:910 pcbnew/pad.cpp:919 pcbnew/pad.cpp:928
 msgid "pad"
