@@ -33,9 +33,9 @@ class SIM_LIBRARY_KIBIS : public SIM_LIBRARY
     friend class SIM_MODEL_KIBIS;
 
 public:
-    static constexpr auto PIN_FIELD = "Ibis_Pin";
-    static constexpr auto MODEL_FIELD = "Ibis_Model";
-    static constexpr auto DIFF_FIELD = "Ibis_Diff";
+    static constexpr auto PIN_FIELD = "Sim.Ibis.Pin";
+    static constexpr auto MODEL_FIELD = "Sim.Ibis.Model";
+    static constexpr auto DIFF_FIELD = "Sim.Ibis.Diff";
 
     // @copydoc SIM_LIBRARY::ReadFile()
     void ReadFile( const std::string& aFilePath ) override;
