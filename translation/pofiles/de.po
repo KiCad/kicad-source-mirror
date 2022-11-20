@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-19 23:00+0000\n"
+"PO-Revision-Date: 2022-11-20 18:07+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3814,7 +3814,7 @@ msgstr "Ignorieren"
 
 #: common/dialogs/panel_setup_severities.cpp:114
 msgid "From Pin Conflicts Map"
-msgstr "Von Pin-Konfliktkarte"
+msgstr "Aus Pin-Konfliktmatrix"
 
 #: common/dialogs/panel_text_variables.cpp:121
 #: common/dialogs/panel_text_variables.cpp:149
@@ -7406,7 +7406,6 @@ msgstr "Footprintbetrachter"
 
 #: cvpcb/display_footprints_frame.cpp:325
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
 msgstr "Automatisch auf Footprint-Änderung zoomen"
 
@@ -8771,7 +8770,7 @@ msgstr "Verstöße werden nicht geprüft oder berichtet"
 
 #: eeschema/dialogs/dialog_erc.cpp:662
 msgid "Edit pin-to-pin conflict map..."
-msgstr "Pin-zu-Pin-Konfliktkarte bearbeiten..."
+msgstr "Pin-zu-Pin-Konfliktmatrix bearbeiten..."
 
 #: eeschema/dialogs/dialog_erc.cpp:666 pcbnew/dialogs/dialog_drc.cpp:640
 msgid "Edit violation severities..."
@@ -8784,7 +8783,7 @@ msgstr "Den Dialog für die Einrichtung des Schaltplans öffnen"
 #: eeschema/dialogs/dialog_erc.cpp:759
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
 msgid "Pin Conflicts Map"
-msgstr "Pin-Konfliktkarte"
+msgstr "Pin-Konfliktmatrix"
 
 #: eeschema/dialogs/dialog_erc.cpp:763 eeschema/dialogs/dialog_erc.cpp:865
 #: eeschema/dialogs/dialog_schematic_setup.cpp:78
@@ -8883,12 +8882,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_field_properties.cpp:676
 #: eeschema/dialogs/dialog_label_properties.cpp:460
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Sichtbarkeit von Querverweisen zu anderen Schaltplanblättern wird global "
+"Sichtbarkeit von Querverweisen zwischen Schaltplanblättern wird global "
 "geregelt unter Schaltplan einrichten > Allgemein > Formatierung"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
@@ -10814,7 +10812,7 @@ msgstr "Feldnamen-Vorlagen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
-msgstr "Pin-Konfliktkarte"
+msgstr "Pin-Konfliktmatrix"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:70
@@ -10922,7 +10920,7 @@ msgstr "Netzklassen"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
 msgid "Bus Alias Definitions"
-msgstr "Bus-Alias-Definitionen"
+msgstr "Bus-Aliase"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -12378,9 +12376,8 @@ msgid "Members of '%s':"
 msgstr "Mitglieder von \"%s\":"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Netz / verschachtelter Bus Name"
+msgstr "Netz / Verschachtelter Bus"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -12422,9 +12419,8 @@ msgid "Default text size:"
 msgstr "Voreinstellung Schriftgröße:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "Bezeichner-Versatz-Verhältnis:"
+msgstr "Bezeichnerversatz-Verhältnis:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
@@ -14390,14 +14386,14 @@ msgstr ""
 "in die KiCad-Bibliothek geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
 msgstr ""
-"Die Teiledefinition '%s' verweist auf das Symbol '%s' (alternativ '%s'), das "
-"in der Symbolbibliothek nicht gefunden werden konnte. Das Teil wurde nicht "
-"in die KiCad-Bibliothek geladen."
+"Teiledefinition '%s' hat eine unvollständige Definition (keine Symbol-"
+"Definitionen sind damit verknüpft). Das Teil wurde nicht in die KiCad-"
+"Bibliothek geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:455
 #, c-format
@@ -16408,17 +16404,16 @@ msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad Symbolbibliotheksbetrachter"
 
 #: eeschema/symbol_viewer_frame.cpp:180
-#, fuzzy
 msgid ""
 "Filter on symbol name, keywords, description and pin count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pin count."
 msgstr ""
-"Filtern Sie nach Footprintnamen, Schlüsselwörtern, Beschreibung und der Pad-"
-"Anzahl.\n"
-"Suchbegriffe werden durch Leerzeichen getrennt. Alle Suchbegriffe müssen "
-"übereinstimmen.\n"
-"Wenn ein Begriff eine Zahl ist, stimmt diese mit der Pad-Anzahl überein."
+"Nach Symbolnamen, Schlüsselwörtern, Beschreibung und der Pin-Anzahl filtern."
+"\n"
+"Suchbegriffe werden durch Leerzeichen getrennt.  Alle Suchbegriffe müssen "
+"zutreffen.\n"
+"Ein Suchbegriff, der eine Zahl ist, wird mit der Pin-Anzahl verglichen."
 
 #: eeschema/symbol_viewer_frame.cpp:1163 pcbnew/footprint_viewer_frame.cpp:1178
 #: pcbnew/footprint_viewer_frame.cpp:1183
@@ -17500,9 +17495,8 @@ msgid "Enter Sheet"
 msgstr "Schaltplan öffnen"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr "Inhalt des ausgewählten Schaltplanblatts im Schaltplaneditor anzeigen"
+msgstr "Zum Inhalt des gewählten Schaltplanblatts im Schaltplaneditor wechseln"
 
 #: eeschema/tools/ee_actions.cpp:769
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -17604,11 +17598,11 @@ msgstr "Nimmt das letzte Segment der aktuellen Linie zurück."
 
 #: eeschema/tools/ee_actions.cpp:863
 msgid "Switch Segment Posture"
-msgstr "Segmentstellung umschalten"
+msgstr "Segmentstellung wechseln"
 
 #: eeschema/tools/ee_actions.cpp:863
 msgid "Switches posture of the current segment."
-msgstr "Schaltet die Stellung des aktuellen Segments um."
+msgstr "Wechselt die Stellung des aktuellen Segments."
 
 #: eeschema/tools/ee_actions.cpp:869
 msgid "Finish Wire or Bus"
@@ -33225,11 +33219,11 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
-"Filtern Sie nach Footprintnamen, Schlüsselwörtern, Beschreibung und der Pad-"
-"Anzahl.\n"
-"Suchbegriffe werden durch Leerzeichen getrennt. Alle Suchbegriffe müssen "
-"übereinstimmen.\n"
-"Wenn ein Begriff eine Zahl ist, stimmt diese mit der Pad-Anzahl überein."
+"Nach Footprintnamen, Schlüsselwörtern, Beschreibung und der Pad-Anzahl "
+"filtern.\n"
+"Suchbegriffe werden durch Leerzeichen getrennt.  Alle Suchbegriffe müssen "
+"zutreffen.\n"
+"Ein Suchbegriff, der eine Zahl ist, wird mit der Pad-Anzahl verglichen."
 
 #: pcbnew/footprint_viewer_frame.cpp:758
 #, c-format
@@ -36817,11 +36811,11 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:163
 msgid "Switch Track Posture"
-msgstr "Leiterbahnstellung ändern"
+msgstr "Leiterbahnstellung wechseln"
 
 #: pcbnew/router/router_tool.cpp:164
 msgid "Switches posture of the currently routed track."
-msgstr "Verändert die Stellung des aktuell gerouteten Leiterzuges."
+msgstr "Wechselt die Stellung des aktuell gerouteten Leiterzuges."
 
 #: pcbnew/router/router_tool.cpp:170
 msgid "Track Corner Mode"
@@ -38340,11 +38334,11 @@ msgstr "Verkleinern der Linienbreite"
 
 #: pcbnew/tools/pcb_actions.cpp:223
 msgid "Switch Arc Posture"
-msgstr "Bogenstellung umschalten"
+msgstr "Bogenstellung wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:223
 msgid "Switch the arc posture"
-msgstr "Ändern der Bogenstellung"
+msgstr "Wechselt die Stellung des Kreisbogens"
 
 #: pcbnew/tools/pcb_actions.cpp:228
 msgid "Delete Last Point"
