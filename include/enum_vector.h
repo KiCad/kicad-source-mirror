@@ -21,6 +21,7 @@
 #ifndef ENUM_VECTOR_H
 #define ENUM_VECTOR_H
 
+#include <iterator>
 #include <type_traits>
 
 /**
@@ -74,6 +75,12 @@ class ENUM_ITERATOR
     int val;
 
 public:
+    using value_type = T;
+    using difference_type = std::ptrdiff_t;
+    using pointer = T*;
+    using reference = T&;
+    using iterator_category = std::input_iterator_tag;
+
     ENUM_ITERATOR( const T& f ) : val( static_cast<val_t>( f ) ) {}
     ENUM_ITERATOR() : val( static_cast<val_t>( beginVal ) ) {}
     ENUM_ITERATOR operator++()
@@ -85,6 +92,7 @@ public:
     T operator*() { return static_cast<T>( val ); }
     ENUM_ITERATOR begin() { return *this; }
     ENUM_ITERATOR end() { return ENUM_ITERATOR( endVal ); }
+    bool operator==( const ENUM_ITERATOR& aIt ) { return val == aIt.val; }
     bool operator!=( const ENUM_ITERATOR& aIt ) { return val != aIt.val; }
 };
 
