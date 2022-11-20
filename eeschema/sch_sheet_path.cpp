@@ -735,7 +735,14 @@ void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
     std::sort( begin(), end(),
         []( SCH_SHEET_PATH a, SCH_SHEET_PATH b ) -> bool
         {
-             return a.ComparePageNum( b ) < 0;
+            int retval = a.ComparePageNum( b );
+
+            if( retval < 0 )
+                return true;
+            else if( retval > 0 )
+                return false;
+            else /// Enforce strict ordering.  If the page numbers are the same, use UUIDs
+                return a.GetCurrentHash() < b.GetCurrentHash();
         } );
 
     if( aUpdateVirtualPageNums )

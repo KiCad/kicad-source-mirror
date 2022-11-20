@@ -531,7 +531,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
         {
             if( afterSheet )
             {
-                if( afterSheet->GetPageNumber() == sheet->GetPageNumber() )
+                if( afterSheet->GetCurrentHash() == sheet->GetCurrentHash() )
                     afterSheet = nullptr;
 
                 continue;
