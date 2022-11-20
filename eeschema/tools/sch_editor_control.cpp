@@ -312,10 +312,6 @@ int SCH_EDITOR_CONTROL::Quit( const TOOL_EVENT& aEvent )
 }
 
 
-// A dummy wxFindReplaceData signaling any marker should be found
-static EDA_SEARCH_DATA g_markersOnly;
-
-
 int SCH_EDITOR_CONTROL::FindAndReplace( const TOOL_EVENT& aEvent )
 {
     m_frame->ShowFindReplaceDialog( aEvent.IsAction( &ACTIONS::findAndReplace ) );
@@ -408,8 +404,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
                 }
                 else
                     return a->GetPosition().x < b->GetPosition().x;
-            }
-        );
+            } );
 
     for( SCH_ITEM* item : sorted_items )
     {
@@ -419,7 +414,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
         }
         else if( past_item )
         {
-            if( &aData == &g_markersOnly && item->Type() == SCH_MARKER_T )
+            if( aData.markersOnly && item->Type() == SCH_MARKER_T )
                 return item;
 
             if( item->Matches( aData, aSheet ) )
@@ -468,7 +463,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
 int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
-    bool searchAllSheets = false;
+    bool             searchAllSheets = false;
+
     try
     {
         const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( data );
@@ -482,15 +478,9 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
     static wxTimer wrapAroundTimer;
 
     if( aEvent.IsAction( &ACTIONS::findNextMarker ) )
-    {
-       // g_markersOnly.SetFlags( data.GetFlags() );
-
-       // data = g_markersOnly;
-    }
+        data.markersOnly = true;
     else if( data.findString.IsEmpty() )
-    {
         return FindAndReplace( ACTIONS::find.MakeEvent() );
-    }
 
     EE_SELECTION& selection       = m_selectionTool->GetSelection();
     SCH_ITEM*     afterItem       = dynamic_cast<SCH_ITEM*>( selection.Front() );
@@ -584,7 +574,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 bool SCH_EDITOR_CONTROL::HasMatch()
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
-    EDA_ITEM*          item = m_selectionTool->GetSelection().Front();
+    EDA_ITEM*        item = m_selectionTool->GetSelection().Front();
 
     return item && item->Matches( data, &m_frame->GetCurrentSheet() );
 }
@@ -593,8 +583,8 @@ bool SCH_EDITOR_CONTROL::HasMatch()
 int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
-    EDA_ITEM*          item = m_selectionTool->GetSelection().Front();
-    SCH_SHEET_PATH*    sheet = &m_frame->GetCurrentSheet();
+    EDA_ITEM*        item = m_selectionTool->GetSelection().Front();
+    SCH_SHEET_PATH*  sheet = &m_frame->GetCurrentSheet();
 
     if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );

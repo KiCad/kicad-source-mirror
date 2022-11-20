@@ -38,9 +38,10 @@ struct EDA_SEARCH_DATA
     wxString findString;
     wxString replaceString;
 
-    bool searchAndReplace;
+    bool     searchAndReplace;
 
-    bool matchCase;
+    bool                  matchCase;
+    bool                  markersOnly;
     EDA_SEARCH_MATCH_MODE matchMode;
 
     EDA_SEARCH_DATA() :
@@ -48,6 +49,7 @@ struct EDA_SEARCH_DATA
             replaceString(),
             searchAndReplace( false ),
             matchCase( false ),
+            markersOnly( false ),
             matchMode( EDA_SEARCH_MATCH_MODE::PLAIN )
     {
     }
