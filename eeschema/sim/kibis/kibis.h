@@ -59,10 +59,10 @@ enum KIBIS_WAVEFORM_TYPE
 };
 
 
-class KIBIS_WAVEFORM
+class KIBIS_WAVEFORM : public KIBIS_ANY
 {
 public:
-    KIBIS_WAVEFORM(){};
+    KIBIS_WAVEFORM( KIBIS* aTopLevel ) : KIBIS_ANY{ aTopLevel } { m_valid = true; };
     KIBIS_WAVEFORM_TYPE GetType() { return m_type; };
     virtual double GetDuration() { return 1; };
     bool                inverted = false; // Used for differential drivers
@@ -74,6 +74,11 @@ public:
         return bits;
     };
 
+    // Check fuction if using waveform data
+    virtual bool Check( IbisWaveform* aRisingWf, IbisWaveform* aFallingWf ) { return true; };
+    // Check fuction if using ramp data
+    virtual bool Check( dvdtTypMinMax aRisingRp, dvdtTypMinMax aFallingRp ) { return true; };
+
 protected:
     KIBIS_WAVEFORM_TYPE m_type = KIBIS_WAVEFORM_TYPE::NONE;
 };
@@ -81,13 +86,20 @@ protected:
 class KIBIS_WAVEFORM_RECTANGULAR : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_RECTANGULAR() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::RECTANGULAR; };
+    KIBIS_WAVEFORM_RECTANGULAR( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    {
+        m_type = KIBIS_WAVEFORM_TYPE::RECTANGULAR;
+    };
     double m_ton = 100e-9;
     double m_toff = 100e-9;
     int    m_cycles = 1;
     double m_delay = 0;
 
+
     std::vector<std::pair<int, double>> GenerateBitSequence() override;
+    bool Check( IbisWaveform* aRisingWf, IbisWaveform* aFallingWf ) override;
+    bool Check( dvdtTypMinMax aRisingRp, dvdtTypMinMax aFallingRp ) override;
+
     double GetDuration() override { return ( m_ton + m_toff ) * m_cycles; };
 };
 
@@ -95,33 +107,48 @@ public:
 class KIBIS_WAVEFORM_PRBS : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_PRBS() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::PRBS; };
+    KIBIS_WAVEFORM_PRBS( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    {
+        m_type = KIBIS_WAVEFORM_TYPE::PRBS;
+    };
     double m_bitrate = 10e6;
     double m_delay = 0;
     double m_bits = 10;
 
     std::vector<std::pair<int, double>> GenerateBitSequence() override;
+    bool Check( IbisWaveform* aRisingWf, IbisWaveform* aFallingWf ) override;
+    bool Check( dvdtTypMinMax aRisingRp, dvdtTypMinMax aFallingRp ) override;
+
     double GetDuration() override { return m_bits / m_bitrate ; };
 };
 
 class KIBIS_WAVEFORM_STUCK_HIGH : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_STUCK_HIGH() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::STUCK_HIGH; };
+    KIBIS_WAVEFORM_STUCK_HIGH( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    {
+        m_type = KIBIS_WAVEFORM_TYPE::STUCK_HIGH;
+    };
     std::vector<std::pair<int, double>> GenerateBitSequence() override;
 };
 
 class KIBIS_WAVEFORM_STUCK_LOW : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_STUCK_LOW() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::STUCK_LOW; };
+    KIBIS_WAVEFORM_STUCK_LOW( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    {
+        m_type = KIBIS_WAVEFORM_TYPE::STUCK_LOW;
+    };
     std::vector<std::pair<int, double>> GenerateBitSequence() override;
 };
 
 class KIBIS_WAVEFORM_HIGH_Z : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_HIGH_Z() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::HIGH_Z; };
+    KIBIS_WAVEFORM_HIGH_Z( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    {
+        m_type = KIBIS_WAVEFORM_TYPE::HIGH_Z;
+    };
     std::vector<std::pair<int, double>> GenerateBitSequence() override;
 };
 

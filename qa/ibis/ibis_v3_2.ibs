@@ -7,8 +7,7 @@
                 source for the files
 [Notes]         We can have some
                 Notes 
-[Copyright]
-/*
+[Copyright] /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
@@ -42,10 +41,10 @@ C_pkg           1m              0.8m            2m
   1     VCC             POWER           1m      0.8m    2m            
   2     GND             GND             1m      0.8m    2m               
   3     X               Input           1m      0.8m    2m
-  4     Y               Ouput           1m      0.8m    2m
-  5     YN              Ouput           1m      0.8m    2m
-  6     Y               Ouput           1m      0.8m    2m
-  7     YN              Ouput           1m      0.8m    2m
+  4     Y               Output          1m      0.8m    2m
+  5     YN              Output          1m      0.8m    2m
+  6     Y               Output          1m      0.8m    2m
+  7     YN              Output          1m      0.8m    2m
 
 [Package Model]     QS-SMT-cer-8-pin-pkgs
 [Pin Mapping]  pulldown_ref     pullup_ref   gnd_clamp_ref  power_clamp_ref
@@ -377,7 +376,7 @@ Off_delay                 5n         6n         4n  | Time from rising edge
      0.000      0.000e+00     0.000e+00     0.000e+00
      5.000      0.000e+00     0.000e+00     0.000e+00
 |
-[POWER Pulse Table]                                 | POWER Clamp offset table                               |
+[POWER Pulse Table]                                 | POWER Clamp offset table|
 |    Time          V(typ)       V(min)        V(max)
 |
        0             0            0             0

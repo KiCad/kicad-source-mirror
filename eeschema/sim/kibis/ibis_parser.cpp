@@ -710,6 +710,7 @@ bool IbisParser::ParseFile( std::string& aFileName )
     ss << ibisFile.rdbuf();
     const std::string& s = ss.str();
     m_buffer = std::vector<char>( s.begin(), s.end() );
+    m_buffer.push_back( 0 );
 
     long size = m_buffer.size();
 
@@ -764,7 +765,7 @@ bool IbisParser::checkEndofLine()
 
     if( m_lineIndex < m_lineLength )
     {
-        Report( _( "A line did not end properly.." ), RPT_SEVERITY_ERROR );
+        Report( _( "A line did not end properly." ), RPT_SEVERITY_ERROR );
         return false;
     }
     return true;
@@ -787,6 +788,14 @@ bool IbisParser::readDvdt( std::string& aString, dvdt& aDest )
 {
     bool status = true;
 
+    if( aString == "NA" )
+    {
+        aDest.m_dv = nan( NAN_NA );
+        aDest.m_dt = nan( NAN_NA );
+
+        return status;
+    }
+
     int i = 0;
 
     for( i = 1; i < (int)aString.length(); i++ )
@@ -800,22 +809,12 @@ bool IbisParser::readDvdt( std::string& aString, dvdt& aDest )
     if( aString.at( i ) == '/' )
     {
         std::string str1 = aString.substr( 0, i );
-        std::string str2 = aString.substr( i + 2, aString.size() );
+        std::string str2 = aString.substr( i + 1, aString.size() - i - 1 );
 
         if( !parseDouble( aDest.m_dv, str1, true ) || !parseDouble( aDest.m_dt, str2, true ) )
         {
             status = false;
         }
-    }
-
-    else if( aString == "NA" )
-    {
-        aDest.m_dv = nan( NAN_NA );
-        aDest.m_dt = nan( NAN_NA );
-    }
-    else
-    {
-        status = false;
     }
 
     return status;
@@ -836,18 +835,19 @@ bool IbisParser::parseDouble( double& aDest, std::string& aStr, bool aAllowModif
     double result;
     size_t size = 0;
 
-    try
+
+    if( str == "NA" )
     {
-        result = std::stod( str, &size );
-        converted = true;
+        result = nan( NAN_NA );
     }
-    catch( ... )
+    else
     {
-        if( str == "NA" )
+        try
         {
-            result = nan( NAN_NA );
+            result = std::stod( str, &size );
+            converted = true;
         }
-        else
+        catch( ... )
         {
             result = nan( NAN_INVALID );
             status = false;
@@ -886,6 +886,9 @@ bool IbisParser::getNextLine()
     long tmpIndex = m_bufferIndex;
 
     m_lineOffset = m_bufferIndex;
+
+    if( m_bufferIndex >= m_buffer.size() )
+        return false;
 
     char c = m_buffer[m_bufferIndex++];
 
@@ -1047,15 +1050,17 @@ bool IbisParser::readString( std::string& aDest )
 
 bool IbisParser::storeString( std::string& aDest, bool aMultiline )
 {
+    bool status = true;
 
     skipWhitespaces();
 
-    readString( aDest );
+    status &= readString( aDest );
 
     m_continue = aMultiline ? IBIS_PARSER_CONTINUE::STRING : IBIS_PARSER_CONTINUE::NONE;
     m_continuingString = &aDest;
 
-    return checkEndofLine();
+    status &= checkEndofLine();
+    return status;
 }
 
 
@@ -1063,10 +1068,10 @@ bool IbisParser::changeCommentChar()
 {
     skipWhitespaces();
 
-    std::string strChar;
+    std::string strChar = "";
 
     // We cannot stop at m_lineLength here, because lineLength could stop before |_char
-    // if the char is remains the same
+    // if the char remains the same
 
     char c = m_buffer[m_lineOffset + m_lineIndex++];
     char d = c;
@@ -1087,7 +1092,7 @@ bool IbisParser::changeCommentChar()
         c = m_buffer[m_lineOffset + m_lineIndex++];
     }
 
-    if( !strcmp( strChar.c_str(), "_char" ) )
+    if( strChar != "_char" )
     {
         Report( _( "Invalid syntax. Should be |_char or &_char, etc..." ), RPT_SEVERITY_ERROR );
         return false;
@@ -1175,13 +1180,13 @@ bool IbisParser::changeContext( std::string& aKeyword )
         {
             m_ibisFile.m_components.push_back( IbisComponent( m_reporter ) );
             m_currentComponent = &( m_ibisFile.m_components.back() );
-            storeString( m_currentComponent->m_name, false );
+            status &= storeString( m_currentComponent->m_name, false );
             m_context = IBIS_PARSER_CONTEXT::COMPONENT;
         }
         else if( compareIbisWord( aKeyword.c_str(), "Model_Selector" ) )
         {
             IbisModelSelector MS( m_reporter );
-            storeString( MS.m_name, false );
+            status &= storeString( MS.m_name, false );
             m_ibisFile.m_modelSelectors.push_back( MS );
             m_currentModelSelector = &( m_ibisFile.m_modelSelectors.back() );
             m_context = IBIS_PARSER_CONTEXT::MODELSELECTOR;
@@ -1193,7 +1198,7 @@ bool IbisParser::changeContext( std::string& aKeyword )
             model.m_temperatureRange.value[IBIS_CORNER::MIN] = 0;
             model.m_temperatureRange.value[IBIS_CORNER::TYP] = 50;
             model.m_temperatureRange.value[IBIS_CORNER::MAX] = 100;
-            storeString( model.m_name, false );
+            status &= storeString( model.m_name, false );
             m_ibisFile.m_models.push_back( model );
             m_currentModel = &( m_ibisFile.m_models.back() );
             m_context = IBIS_PARSER_CONTEXT::MODEL;
@@ -1214,7 +1219,7 @@ bool IbisParser::changeContext( std::string& aKeyword )
             PM.m_capacitanceMatrix->m_dim = -1;
             PM.m_inductanceMatrix->m_dim = -1;
 
-            storeString( PM.m_name, false );
+            status &= storeString( PM.m_name, false );
 
             m_ibisFile.m_packageModels.push_back( PM );
             m_currentPackageModel = &( m_ibisFile.m_packageModels.back() );
@@ -1302,9 +1307,7 @@ bool IbisParser::readRamp()
 
     m_continue = IBIS_PARSER_CONTINUE::RAMP;
 
-    std::string keyword = std::string( "R_load " );
-
-    if( !readNumericSubparam( std::string( "R_load " ), m_currentModel->m_ramp.m_Rload ) )
+    if( !readNumericSubparam( std::string( "R_load" ), m_currentModel->m_ramp.m_Rload ) )
     {
         std::string str;
 
@@ -1312,11 +1315,11 @@ bool IbisParser::readRamp()
         {
             if( !strcmp( str.c_str(), "dV/dt_r" ) )
             {
-                readRampdvdt( m_currentModel->m_ramp.m_rising );
+                status &= readRampdvdt( m_currentModel->m_ramp.m_rising );
             }
             else if( !strcmp( str.c_str(), "dV/dt_f" ) )
             {
-                readRampdvdt( m_currentModel->m_ramp.m_falling );
+                status &= readRampdvdt( m_currentModel->m_ramp.m_falling );
             }
             else
             {
@@ -1703,18 +1706,12 @@ bool IbisParser::readModelSelector()
 
     IbisModelSelectorEntry model;
 
-    if( readWord( model.m_modelName ) )
-    {
-        if( !readString( model.m_modelDescription ) )
-        {
-            status &= false;
-        }
-        m_currentModelSelector->m_models.push_back( model );
-    }
-    else
-    {
-        status = false;
-    }
+    if( !readWord( model.m_modelName ) )
+        return false;
+
+    status &= readString( model.m_modelDescription );
+    m_currentModelSelector->m_models.push_back( model );
+
     return status;
 }
 
@@ -1966,11 +1963,11 @@ bool IbisParser::parseHeader( std::string& aKeyword )
     }
     else if( compareIbisWord( aKeyword.c_str(), "Comment_char" ) )
     {
-        changeCommentChar();
+        status &= changeCommentChar();
     }
     else if( compareIbisWord( aKeyword.c_str(), "File_Name" ) )
     {
-        storeString( m_ibisFile.m_header.m_fileName, false );
+        status &= storeString( m_ibisFile.m_header.m_fileName, false );
     }
     else if( compareIbisWord( aKeyword.c_str(), "File_Rev" ) )
     {
@@ -1978,23 +1975,23 @@ bool IbisParser::parseHeader( std::string& aKeyword )
     }
     else if( compareIbisWord( aKeyword.c_str(), "Source" ) )
     {
-        storeString( m_ibisFile.m_header.m_source, true );
+        status &= storeString( m_ibisFile.m_header.m_source, true );
     }
     else if( compareIbisWord( aKeyword.c_str(), "Notes" ) )
     {
-        storeString( m_ibisFile.m_header.m_notes, true );
+        status &= storeString( m_ibisFile.m_header.m_notes, true );
     }
     else if( compareIbisWord( aKeyword.c_str(), "Disclaimer" ) )
     {
-        storeString( m_ibisFile.m_header.m_disclaimer, true );
+        status &= storeString( m_ibisFile.m_header.m_disclaimer, true );
     }
     else if( compareIbisWord( aKeyword.c_str(), "Copyright" ) )
     {
-        storeString( m_ibisFile.m_header.m_copyright, true );
+        status &= storeString( m_ibisFile.m_header.m_copyright, true );
     }
     else if( compareIbisWord( aKeyword.c_str(), "Date" ) )
     {
-        storeString( m_ibisFile.m_header.m_date, false );
+        status &= storeString( m_ibisFile.m_header.m_date, false );
     }
     else
     {
@@ -2092,36 +2089,23 @@ bool IbisParser::readPackage()
 
     if( (int)fields.size() == ( 4 + extraArg ) )
     {
+        TypMinMaxValue* cValue;
+
         if( fields.at( 0 ) == "R_pkg" )
-        {
-            if( parseDouble( R->value[IBIS_CORNER::TYP], fields.at( 1 ), true ) )
-            {
-                status = false;
-            }
-
-            parseDouble( R->value[IBIS_CORNER::MIN], fields.at( 2 ), true );
-            parseDouble( R->value[IBIS_CORNER::MAX], fields.at( 3 ), true );
-        }
+            cValue = R;
         else if( fields.at( 0 ) == "L_pkg" )
-        {
-            if( parseDouble( L->value[IBIS_CORNER::TYP], fields.at( 1 ), true ) )
-            {
-                status = false;
-            }
-
-            parseDouble( L->value[IBIS_CORNER::MIN], fields.at( 2 ), true );
-            parseDouble( L->value[IBIS_CORNER::MAX], fields.at( 3 ), true );
-        }
+            cValue = L;
         else if( fields.at( 0 ) == "C_pkg" )
+            cValue = C;
+        else
         {
-            if( parseDouble( C->value[IBIS_CORNER::TYP], fields.at( 1 ), true ) )
-            {
-                status = false;
-            }
-
-            parseDouble( C->value[IBIS_CORNER::MIN], fields.at( 2 ), true );
-            parseDouble( C->value[IBIS_CORNER::MAX], fields.at( 3 ), true );
+            Report( "Invalid field in [Package]" );
+            return false;
         }
+        status &= parseDouble( cValue->value[IBIS_CORNER::TYP], fields.at( 1 ), true );
+        // Min / max values are optional, so don't update the status
+        parseDouble( cValue->value[IBIS_CORNER::MIN], fields.at( 2 ), true );
+        parseDouble( cValue->value[IBIS_CORNER::MAX], fields.at( 3 ), true );
     }
     else
     {
@@ -2133,7 +2117,7 @@ bool IbisParser::readPackage()
     }
     m_continue = IBIS_PARSER_CONTINUE::COMPONENT_PACKAGE;
 
-    return true;
+    return status;
 }
 
 
@@ -2475,7 +2459,7 @@ bool IbisParser::onNewLine()
         case IBIS_PARSER_CONTINUE::STRING:
             skipWhitespaces();
             *m_continuingString += '\n';
-            readString( *m_continuingString );
+            status &= readString( *m_continuingString );
             break;
         case IBIS_PARSER_CONTINUE::COMPONENT_PACKAGE: status &= readPackage(); break;
         case IBIS_PARSER_CONTINUE::COMPONENT_PIN: status &= readPin(); break;

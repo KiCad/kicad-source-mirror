@@ -7,8 +7,7 @@
                 source for the files
 [Notes]         We can have some
                 Notes 
-[Copyright]
-/*
+[Copyright] /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
@@ -42,10 +41,10 @@ C_pkg           1m              0.8m            2m
   1     VCC             POWER           1m      0.8m    2m            
   2     GND             GND             1m      0.8m    2m               
   3     X               Input           1m      0.8m    2m
-  4     Y               Ouput           1m      0.8m    2m
-  5     YN              Ouput           1m      0.8m    2m
-  6     Y               Ouput           1m      0.8m    2m
-  7     YN              Ouput           1m      0.8m    2m
+  4     Y               Output           1m      0.8m    2m
+  5     YN              Output           1m      0.8m    2m
+  6     Y               Output           1m      0.8m    2m
+  7     YN              Output           1m      0.8m    2m
 
 [Package Model]     QS-SMT-cer-8-pin-pkgs
 [Pin Mapping]  pulldown_ref     pullup_ref   gnd_clamp_ref  power_clamp_ref
@@ -115,6 +114,41 @@ C_comp          10.0pF          8.0pF          15.0pF
 [Rpower]        150Ohm          100Ohm          NA
 [Rac]           30Ohm           NA              NA
 [Cac]           50pF            NA              NA
+
+[Model]         Output
+Model_type      Output
+Polarity        Non-Inverting
+Enable          Active-High
+C_comp          10.0pF          8.0pF          15.0pF 
+
+[Voltage range]         5.0V            4.5V            5.5V 
+[Pulldown]
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m    -40.0m    -60.0m 
+   0.0V      0         0         0
+   5.0V      50.0m     40.0m     60.0m 
+[Pullup]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m     40.0m     60.0m 
+   0.0V      0         0         0
+   5.0V     -50.0m    -40.0m    -60.0m 
+[GND_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+[POWER_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
 
 
 [Ramp]

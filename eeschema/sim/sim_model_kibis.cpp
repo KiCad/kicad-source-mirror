@@ -143,17 +143,17 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
         if( paramValue == "hi-Z" )
         {
             kparams.m_waveform =
-                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z() );
+                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z( &kibis ) );
         }
         else if( paramValue == "low" )
         {
             kparams.m_waveform =
-                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW() );
+                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW( &kibis ) );
         }
         else if( paramValue == "high" )
         {
             kparams.m_waveform =
-                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH() );
+                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH( &kibis ) );
         }
 
         if( diffMode )
@@ -165,7 +165,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_RECT:
     {
-        KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR();
+        KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR( &kibis );
 
         if ( m_model.FindParam( "ton" ) )
             waveform->m_ton = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "ton" )->value ).Get().value_or( 1 );
@@ -177,7 +177,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
             waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
 
         if ( m_model.FindParam( "cycles" ) )
-            waveform->m_cycles = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "cycles" )->value ).Get().value_or( 0 );
+            waveform->m_cycles = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "cycles" )->value ).Get().value_or( 1 );
 
         kparams.m_waveform = waveform;
 
@@ -190,7 +190,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS:
     {
-        KIBIS_WAVEFORM_PRBS* waveform = new KIBIS_WAVEFORM_PRBS();
+        KIBIS_WAVEFORM_PRBS* waveform = new KIBIS_WAVEFORM_PRBS( &kibis );
 
         if ( m_model.FindParam( "f0" ) )
             waveform->m_bitrate = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "f0" )->value ).Get().value_or( 0 );
