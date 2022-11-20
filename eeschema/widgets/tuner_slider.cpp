@@ -61,7 +61,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
         throw KI_PARAM_ERROR( wxString::Format(
                 _( "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned" ),
                 ref,
-                m_item->model->GetDeviceTypeInfo().fieldValue,
+                m_item->model->GetDeviceInfo().fieldValue,
                 m_item->model->GetTypeInfo().fieldValue ) );
 
 

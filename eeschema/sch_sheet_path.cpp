@@ -1338,7 +1338,7 @@ void SCH_SHEET_LIST::MigrateSimModelNameFields()
             SCH_FIELD deviceTypeField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
                                        SIM_MODEL::DEVICE_TYPE_FIELD );
             deviceTypeField.SetText(
-                SIM_MODEL::DeviceTypeInfo( SIM_MODEL::DEVICE_TYPE_::SPICE ).fieldValue );
+                SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_TYPE_::SPICE ).fieldValue );
             symbol->AddField( deviceTypeField );
 
             SCH_FIELD modelParamsField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,

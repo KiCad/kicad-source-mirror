@@ -90,7 +90,7 @@ public:
     {
         BOOST_TEST_CONTEXT( "Model index: " << aModelIndex
                             << ", Model name: " << aModelName
-                            << ", Model device type: " << aModel.GetDeviceTypeInfo().fieldValue
+                            << ", Model device type: " << aModel.GetDeviceInfo().fieldValue
                             << ", Model type: " << aModel.GetTypeInfo().fieldValue )
         {
             BOOST_CHECK( aModel.GetType() == aType );

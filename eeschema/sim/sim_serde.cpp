@@ -54,7 +54,7 @@ namespace SIM_SERDE_PARSER
 
 std::string SIM_SERDE::GenerateDevice() const
 {
-    return m_model.GetDeviceTypeInfo().fieldValue;
+    return m_model.GetDeviceInfo().fieldValue;
 }
 
 
@@ -90,7 +90,7 @@ std::string SIM_SERDE::GenerateValue() const
     }
 
     if( result == "" )
-        result = m_model.GetDeviceTypeInfo().fieldValue;
+        result = m_model.GetDeviceInfo().fieldValue;
 
     return result;
 }
@@ -158,7 +158,7 @@ SIM_MODEL::TYPE SIM_SERDE::ParseDeviceAndType( const std::string& aDevice,
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
         if( aType == SIM_MODEL::TypeInfo( type ).fieldValue
-            && aDevice == SIM_MODEL::DeviceTypeInfo( SIM_MODEL::TypeInfo( type ).deviceType ).fieldValue )
+            && aDevice == SIM_MODEL::DeviceInfo( SIM_MODEL::TypeInfo( type ).deviceType ).fieldValue )
         {
             return type;
         }

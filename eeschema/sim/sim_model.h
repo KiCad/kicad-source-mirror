@@ -99,6 +99,7 @@ public:
     {
         std::string fieldValue;
         std::string description;
+        bool        isBuiltin;
     };
 
 
@@ -380,7 +381,7 @@ public:
     };
 
 
-    static DEVICE_INFO DeviceTypeInfo( DEVICE_TYPE_ aDeviceType );
+    static DEVICE_INFO DeviceInfo( DEVICE_TYPE_ aDeviceType );
     static INFO TypeInfo( TYPE aType );
     static SPICE_INFO SpiceInfo( TYPE aType );
 
@@ -446,7 +447,7 @@ public:
     int FindModelPinIndex( const std::string& aSymbolPinNumber );
     void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
 
-    DEVICE_INFO GetDeviceTypeInfo() const { return DeviceTypeInfo( GetDeviceType() ); }
+    DEVICE_INFO GetDeviceInfo() const { return DeviceInfo( GetDeviceType() ); }
     INFO GetTypeInfo() const { return TypeInfo( GetType() ); }
 
     DEVICE_TYPE_ GetDeviceType() const { return GetTypeInfo().deviceType; }

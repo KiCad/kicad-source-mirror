@@ -69,9 +69,6 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     m_typeChoice->Clear();
 
-    for( SIM_MODEL::DEVICE_TYPE_ deviceType : SIM_MODEL::DEVICE_TYPE__ITERATOR() )
-        m_deviceTypeChoice->Append( SIM_MODEL::DeviceTypeInfo( deviceType ).description );
-
     m_scintillaTricks = new SCINTILLA_TRICKS( m_codePreview, wxT( "{}" ), false );
 
     m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onParamGridSelectionChange, this );
@@ -338,7 +335,27 @@ void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
     // Change the Type choice to match the current device type.
     if( !m_prevModel || m_prevModel != &curModel() )
     {
-        m_deviceTypeChoice->SetSelection( static_cast<int>( curModel().GetDeviceType() ) );
+        m_deviceTypeChoice->Clear();
+
+        if( m_useLibraryModelRadioButton->GetValue() )
+        {
+            m_deviceTypeChoice->Append( curModel().GetDeviceInfo().description );
+            m_deviceTypeChoice->SetSelection( 0 );
+        }
+        else
+        {
+            for( SIM_MODEL::DEVICE_TYPE_ deviceType : SIM_MODEL::DEVICE_TYPE__ITERATOR() )
+            {
+                if( !SIM_MODEL::DeviceInfo( deviceType ).isBuiltin )
+                    continue;
+
+                m_deviceTypeChoice->Append( SIM_MODEL::DeviceInfo( deviceType ).description );
+
+                if( deviceType == curModel().GetDeviceType() )
+                    m_deviceTypeChoice->SetSelection( m_deviceTypeChoice->GetCount() - 1 );
+            }
+        }
+
         m_typeChoice->Clear();
 
         for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
@@ -504,9 +521,7 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments()
     m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_sortedSymbolPins.size() ) );
 
     for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
-    {
         m_pinAssignmentsGrid->SetCellValue( row, PIN_COLUMN::MODEL, _( "Not Connected" ) );
-    }
 
     // Now set up the grid values in the Model column.
     for( int modelPinIndex = 0; modelPinIndex < curModel().GetPinCount(); ++modelPinIndex )
@@ -1037,6 +1052,7 @@ void DIALOG_SIM_MODEL<T>::onDifferentialCheckbox( wxCommandEvent& aEvent )
         bool             diff = m_differentialCheckbox->GetValue() && modelkibis->CanDifferential();
         modelkibis->SwitchSingleEndedDiff( diff );
     }
+
     updateWidgets();
 }
 
@@ -1044,10 +1060,14 @@ void DIALOG_SIM_MODEL<T>::onDifferentialCheckbox( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 {
-    SIM_MODEL::DEVICE_TYPE_ deviceType =
-        static_cast<SIM_MODEL::DEVICE_TYPE_>( m_deviceTypeChoice->GetSelection() );
-
-    m_curModelType = m_curModelTypeOfDeviceType.at( deviceType );
+    for( SIM_MODEL::DEVICE_TYPE_ deviceType : SIM_MODEL::DEVICE_TYPE__ITERATOR() )
+    {
+        if( SIM_MODEL::DeviceInfo( deviceType ).description == m_deviceTypeChoice->GetStringSelection() )
+        {
+            m_curModelType = m_curModelTypeOfDeviceType.at( deviceType );
+            break;
+        }
+    }
 
     updateWidgets();
 }
@@ -1056,8 +1076,7 @@ void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 {
-    SIM_MODEL::DEVICE_TYPE_ deviceType =
-        static_cast<SIM_MODEL::DEVICE_TYPE_>( m_deviceTypeChoice->GetSelection() );
+    SIM_MODEL::DEVICE_TYPE_ deviceType = curModel().GetDeviceType();
     wxString typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )

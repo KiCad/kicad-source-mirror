@@ -54,37 +54,37 @@ using DEVICE_TYPE = SIM_MODEL::DEVICE_TYPE_;
 using TYPE = SIM_MODEL::TYPE;
 
 
-SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE_ aDeviceType )
+SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceInfo( DEVICE_TYPE_ aDeviceType )
 {
     switch( aDeviceType )
     {
-        case DEVICE_TYPE_::NONE:      return { "",       ""                  };
-        case DEVICE_TYPE_::R:         return { "R",      "Resistor"          };
-        case DEVICE_TYPE_::C:         return { "C",      "Capacitor"         };
-        case DEVICE_TYPE_::L:         return { "L",      "Inductor"          };
-        case DEVICE_TYPE_::TLINE:     return { "TLINE",  "Transmission Line" };
-        case DEVICE_TYPE_::SW:        return { "SW",     "Switch"            };
+        case DEVICE_TYPE_::NONE:      return { "",       "",                  true };
+        case DEVICE_TYPE_::R:         return { "R",      "Resistor",          true };
+        case DEVICE_TYPE_::C:         return { "C",      "Capacitor",         true };
+        case DEVICE_TYPE_::L:         return { "L",      "Inductor",          true };
+        case DEVICE_TYPE_::TLINE:     return { "TLINE",  "Transmission Line", true };
+        case DEVICE_TYPE_::SW:        return { "SW",     "Switch",            true };
 
-        case DEVICE_TYPE_::D:         return { "D",      "Diode"             };
-        case DEVICE_TYPE_::NPN:       return { "NPN",    "NPN BJT"           };
-        case DEVICE_TYPE_::PNP:       return { "PNP",    "PNP BJT"           };
+        case DEVICE_TYPE_::D:         return { "D",      "Diode",             true };
+        case DEVICE_TYPE_::NPN:       return { "NPN",    "NPN BJT",           true };
+        case DEVICE_TYPE_::PNP:       return { "PNP",    "PNP BJT",           true };
 
-        case DEVICE_TYPE_::NJFET:     return { "NJFET",  "N-channel JFET"    };
-        case DEVICE_TYPE_::PJFET:     return { "PJFET",  "P-channel JFET"    };
+        case DEVICE_TYPE_::NJFET:     return { "NJFET",  "N-channel JFET",    true };
+        case DEVICE_TYPE_::PJFET:     return { "PJFET",  "P-channel JFET",    true };
 
-        case DEVICE_TYPE_::NMOS:      return { "NMOS",   "N-channel MOSFET"  };
-        case DEVICE_TYPE_::PMOS:      return { "PMOS",   "P-channel MOSFET"  };
-        case DEVICE_TYPE_::NMES:      return { "NMES",   "N-channel MESFET"  };
-        case DEVICE_TYPE_::PMES:      return { "PMES",   "P-channel MESFET"  };
+        case DEVICE_TYPE_::NMOS:      return { "NMOS",   "N-channel MOSFET",  true };
+        case DEVICE_TYPE_::PMOS:      return { "PMOS",   "P-channel MOSFET",  true };
+        case DEVICE_TYPE_::NMES:      return { "NMES",   "N-channel MESFET",  true };
+        case DEVICE_TYPE_::PMES:      return { "PMES",   "P-channel MESFET",  true };
 
-        case DEVICE_TYPE_::V:         return { "V",      "Voltage Source"    };
-        case DEVICE_TYPE_::I:         return { "I",      "Current Source"    };
+        case DEVICE_TYPE_::V:         return { "V",      "Voltage Source",    true };
+        case DEVICE_TYPE_::I:         return { "I",      "Current Source",    true };
 
-        case DEVICE_TYPE_::KIBIS:     return { "IBIS",  "Ibis Model" };
+        case DEVICE_TYPE_::KIBIS:     return { "IBIS",  "IBIS Model",         false };
 
-        case DEVICE_TYPE_::SUBCKT:    return { "SUBCKT", "Subcircuit"        };
-        case DEVICE_TYPE_::XSPICE:    return { "XSPICE", "XSPICE Code Model" };
-        case DEVICE_TYPE_::SPICE:     return { "SPICE",  "Raw Spice Element" };
+        case DEVICE_TYPE_::SUBCKT:    return { "SUBCKT", "Subcircuit",        false };
+        case DEVICE_TYPE_::XSPICE:    return { "XSPICE", "XSPICE Code Model", true };
+        case DEVICE_TYPE_::SPICE:     return { "SPICE",  "Raw Spice Element", true };
         case DEVICE_TYPE_::_ENUM_END: break;
     }
 
@@ -386,7 +386,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, int aSymbolPi
         {
             if( typeFieldValue == TypeInfo( type ).fieldValue )
             {
-                if( deviceTypeFieldValue == DeviceTypeInfo( TypeInfo( type ).deviceType ).fieldValue )
+                if( deviceTypeFieldValue == DeviceInfo( TypeInfo( type ).deviceType ).fieldValue )
                     return type;
             }
         }
