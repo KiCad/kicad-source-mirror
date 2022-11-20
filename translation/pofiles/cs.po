@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-14 16:47+0000\n"
+"PO-Revision-Date: 2022-11-20 18:07+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -3638,7 +3638,7 @@ msgstr "Je požadována výchozí třída sítě."
 #: common/dialogs/panel_setup_netclasses.cpp:712
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Sítě odpovídající '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -9109,7 +9109,8 @@ msgstr "Průměr:"
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
 #, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
-msgstr "Nastavte průměr na 0 pro použití velikosti uzlu editoru schémat."
+msgstr ""
+"Nastavit průměr na 0 pro použití velikosti propojení z editoru schématu."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:83
@@ -9889,9 +9890,8 @@ msgid "Text Box Properties"
 msgstr "Vlastnosti textového pole"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
-msgstr "Nastavte šířku na 0 pro použití šířek čar Třídy spojů."
+msgstr "Nastavte šířku na 0 pro použití výchozích šířek čar schématu."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:68
 msgid "Line Properties"
@@ -10746,9 +10746,8 @@ msgid "Net Classes"
 msgstr "Třídy spojů"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "Definice sběrnice"
+msgstr "Definice aliasů sběrnice"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10772,9 +10771,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties.cpp:78
 #: eeschema/dialogs/dialog_text_properties.cpp:74
-#, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "Poznámka: Barvy položek jsou v aktuálním barevném motivu přepsány."
+msgstr "Poznámka: Barvy jednotlivých prvků jsou přepsány v Nastavení."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -16399,7 +16397,7 @@ msgstr "Zobrazit čísla vývodů"
 
 #: eeschema/tools/ee_actions.cpp:201
 msgid "Annotate pins with their numbers"
-msgstr "vývody podle jejich čísel"
+msgstr "Očíslování vývodů podle jejich čísel"
 
 #: eeschema/tools/ee_actions.cpp:206
 msgid "Show Symbol Tree"
@@ -17553,9 +17551,8 @@ msgid "New name:"
 msgstr "Nový název:"
 
 #: eeschema/tools/symbol_editor_control.cpp:331
-#, fuzzy
 msgid "Change Symbol Name"
-msgstr "Změnit symboly"
+msgstr "Změnit název symbolu"
 
 #: eeschema/tools/symbol_editor_control.cpp:341
 #, fuzzy
@@ -20460,18 +20457,16 @@ msgid "Append Existing Drawing Sheet..."
 msgstr "Přidat existující soubor výkresového listu..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
-msgstr "Nelze zapsat nárvh rozložení stánky"
+msgstr "Vložit stávající výkresový list do aktuálního souboru"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
 msgstr "Zobrazit inspektora návrhu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show the list of items in the drawing sheet"
-msgstr "Zobrazit seznam položek v rozvržení stránky"
+msgstr "Zobrazit seznam položek ve výkresovém listu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Page Preview Settings..."
@@ -21728,14 +21723,13 @@ msgid "nanoseconds"
 msgstr "nanosekund"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Varování:\n"
-"průměr izolační mezery otvoru.\n"
+"Průměr prokovu >= průměr izolační mezery otvoru.\n"
 "Některé parametry nelze vypočítat pro prokov uvnitř zóny mědi."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
@@ -23891,9 +23885,8 @@ msgid "Constraints Resolution Report"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:206
-#, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
-msgstr "Spoje & prokovy Vlastnosti"
+msgstr "Vlastnosti \"teardrop\" na prokovech/ploškách"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:210
 #, fuzzy
@@ -23901,9 +23894,8 @@ msgid "Teardrop on Tracks Properties"
 msgstr "Nastavit spoje a prokovy Vlastnosti"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:214
-#, fuzzy
 msgid "Teardrop Properties"
-msgstr "Vlastnosti skupiny"
+msgstr "Vlastnosti \"teardrop\""
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:221
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:103
@@ -36322,6 +36314,9 @@ msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
+"Max. poměr mezi velikostí ploška/velikost prokovu a šířkou spoje pro "
+"vytvoření \"teardrop\".\n"
+"100 vždy vytvoří \"teardrop\"."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:120
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:224
@@ -36353,7 +36348,7 @@ msgstr "Via na masce"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:351
 msgid "Add teardrops to vias and pads with holes"
-msgstr ""
+msgstr "Přidat \"teardrops\" na prokovy a plošky s otvory"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:355
 #, fuzzy
@@ -36362,7 +36357,7 @@ msgstr "Spustit simulaci"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:356
 msgid "Add teardrops to round shapes only "
-msgstr ""
+msgstr "Přidat \"teardrops\" pouze do kulatých tvarů "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:360
 #, fuzzy
@@ -36371,7 +36366,7 @@ msgstr "SMD plošky dole"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:362
 msgid "Add teardrops to not driiled pads, like SMD"
-msgstr ""
+msgstr "Přidat \"teardrops\" na podložky bez otvorů, jako jsou plošky SMD"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:366
 #, fuzzy
@@ -36380,7 +36375,7 @@ msgstr "Přichytit ke spojům:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:368
 msgid "Add teardrops to two connected tracks of different widths"
-msgstr ""
+msgstr "Přidat \"teardrops\" ke dvěma spojeným spojům různých šířek"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:378
 #, fuzzy
@@ -36392,16 +36387,20 @@ msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
 msgstr ""
+"Umožňuje \"teardrop\" se rozšířit na 2 spoje, pokud je první segment spoje "
+"příliš krátký"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:384
 msgid "Place teardrops on pads in zones"
-msgstr ""
+msgstr "Umístit \"teardrops\" na plošky v zóně"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:385
 msgid ""
 "Pads inside a  copper zone outline of same net have no teardrop.\n"
 "Check this option to allow teardrop for these pads."
 msgstr ""
+"Podložky uvnitř  zóny mědi obrysy stejné sítě nemají \"teardrop\".\n"
+"Zaškrtněte tuto volbu, chcete-li povolit \"teardrop\" pro tyto plošky."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
 #, fuzzy
@@ -36410,7 +36409,7 @@ msgstr "Bezierova křivka, %d bodů"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:397
 msgid "Number of segments to build a teardrop with curved shape"
-msgstr ""
+msgstr "Počet segmentů pro vytvoření \"teardrop\"se zakřiveným tvarem"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:121
 #, fuzzy
