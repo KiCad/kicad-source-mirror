@@ -588,23 +588,34 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
 
 void SCH_SYMBOL::AddHierarchicalReference( const SYMBOL_INSTANCE_REFERENCE& aInstance )
 {
-    // Search for an existing path and remove it if found (should not occur)
-    for( unsigned ii = 0; ii < m_instanceReferences.size(); ii++ )
+    KIID_PATH searchPath( aInstance.m_Path );
+
+    std::vector<SYMBOL_INSTANCE_REFERENCE>::iterator resultIt;
+
+    do
     {
-        if( m_instanceReferences[ii].m_Path == aInstance.m_Path )
+        resultIt = std::find_if( m_instanceReferences.begin(), m_instanceReferences.end(),
+                                 [searchPath]( const auto& it )
+                                 {
+                                     return it.m_Path == searchPath;
+                                 } );
+
+        if( resultIt != m_instanceReferences.end() )
         {
             wxLogTrace( traceSchSheetPaths, "Removing symbol instance:\n"
-                                            "  sheet path %s\n"
-                                            "  reference %s, unit %d from symbol %s.",
-                                            aInstance.m_Path.AsString(),
-                                            m_instanceReferences[ii].m_Reference,
-                                            m_instanceReferences[ii].m_Unit,
-                                            m_Uuid.AsString() );
+                        "  sheet path %s\n"
+                        "  reference %s, unit %d from symbol %s.",
+                        aInstance.m_Path.AsString(),
+                        resultIt->m_Reference,
+                        resultIt->m_Unit,
+                        m_Uuid.AsString() );
 
-            m_instanceReferences.erase( m_instanceReferences.begin() + ii );
-            ii--;
+            // Instance data should be unique by path.  Double check just in case there was
+            // some buggy code in the past.
+            resultIt = m_instanceReferences.erase( resultIt );
         }
     }
+    while( resultIt != m_instanceReferences.end() );
 
     SYMBOL_INSTANCE_REFERENCE instance = aInstance;
 
