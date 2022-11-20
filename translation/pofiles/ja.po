@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-14 16:47+0000\n"
+"PO-Revision-Date: 2022-11-20 18:07+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -37882,7 +37882,6 @@ msgid ""
 msgstr "リファレンス指定子でフットプリントを選択し、移動用にカーソル直下に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:276
-#, fuzzy
 msgid "Move Individually"
 msgstr "個別に移動"
 
