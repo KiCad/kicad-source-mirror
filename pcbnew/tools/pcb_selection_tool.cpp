@@ -2697,15 +2697,15 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
 bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
     const unsigned GRIP_MARGIN = 20;
-    VECTOR2I margin = getView()->ToWorld( VECTOR2I( GRIP_MARGIN, GRIP_MARGIN ), false );
+    double         margin = getView()->ToWorld( GRIP_MARGIN );
 
-    // Check if the point is located within any of the currently selected items bounding boxes
+    // Check if the point is located close to any of the currently selected items
     for( EDA_ITEM* item : m_selection )
     {
         BOX2I itemBox = item->ViewBBox();
-        itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item
+        itemBox.Inflate( margin ); // Give some margin for gripping an item
 
-        if( itemBox.Contains( aPoint ) && item->HitTest( aPoint, GRIP_MARGIN ) )
+        if( itemBox.Contains( aPoint ) && item->HitTest( aPoint, margin ) )
             return true;
     }
 
