@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-11-18 13:47+0000\n"
+"PO-Revision-Date: 2022-11-21 18:47+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -3524,7 +3524,7 @@ msgstr "Name der Netzklasse wird bereits benutzt."
 
 #: common/dialogs/panel_setup_netclasses.cpp:510
 msgid "Minimum copper clearance"
-msgstr "Mindestkupferabstand"
+msgstr "Minimaler Kupferfreiraum"
 
 #: common/dialogs/panel_setup_netclasses.cpp:511
 msgid "Minimum track width"
@@ -3704,7 +3704,7 @@ msgstr "Ignorieren"
 
 #: common/dialogs/panel_setup_severities.cpp:114
 msgid "From Pin Conflicts Map"
-msgstr "Von Pin-Konfliktkarte"
+msgstr "Aus Pin-Konfliktmatrix"
 
 #: common/dialogs/panel_text_variables.cpp:118
 #: common/dialogs/panel_text_variables.cpp:146
@@ -5297,7 +5297,7 @@ msgstr "Kann Datei '%s' nicht öffnen"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2358
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2656
 msgid "File import cancelled by user."
-msgstr "Dateiimport vom Benutzer abgebrochen."
+msgstr "Dateiimport durch Benutzer abgebrochen."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2374
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2392
@@ -5634,7 +5634,7 @@ msgstr "Interaktives Löschwerkzeug"
 
 #: common/tool/actions.cpp:196
 msgid "Delete clicked items"
-msgstr "Entfernt Elemente, die angeklickt werden"
+msgstr "Elemente durch Anklicken entfernen"
 
 #: common/tool/actions.cpp:203
 msgid "Change Edit Method"
@@ -8240,7 +8240,7 @@ msgstr "%d Symbol(e) benötigen Annotation.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:362
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC vom Benutzer abgebrochen. <br><br>"
+msgstr "-------- ERC durch Benutzer abgebrochen. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:364
 msgid "ERC completed.<br><br>"
@@ -8340,7 +8340,7 @@ msgstr "Verstöße werden nicht geprüft oder berichtet"
 
 #: eeschema/dialogs/dialog_erc.cpp:591
 msgid "Edit pin-to-pin conflict map..."
-msgstr "Pin-zu-Pin-Konfliktkarte bearbeiten..."
+msgstr "Pin-zu-Pin-Konfliktmatrix bearbeiten..."
 
 #: eeschema/dialogs/dialog_erc.cpp:595 pcbnew/dialogs/dialog_drc.cpp:532
 msgid "Edit violation severities..."
@@ -8353,7 +8353,7 @@ msgstr "Den Dialog für die Einrichtung des Schaltplans öffnen"
 #: eeschema/dialogs/dialog_erc.cpp:688
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Pin Conflicts Map"
-msgstr "Pin-Konfliktkarte"
+msgstr "Pin-Konfliktmatrix"
 
 #: eeschema/dialogs/dialog_erc.cpp:692
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -10015,7 +10015,7 @@ msgstr "Feldnamen-Vorlagen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
-msgstr "Pin-Konfliktkarte"
+msgstr "Pin-Konfliktmatrix"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
@@ -15635,7 +15635,7 @@ msgstr "Footprint-Neuverknüpfung benötigt vollständig annotierten Schaltplan.
 
 #: eeschema/tools/backannotate.cpp:306
 msgid "Footprint re-linking cancelled by user."
-msgstr "Footprint-Neuverknüpfung vom Benutzer abgebrochen."
+msgstr "Footprint-Neuverknüpfung durch Benutzer abgebrochen."
 
 #: eeschema/tools/backannotate.cpp:329
 #, c-format
@@ -15906,7 +15906,7 @@ msgstr "Symbolanker verschieben"
 
 #: eeschema/tools/ee_actions.cpp:250
 msgid "Specify a new location for the symbol anchor"
-msgstr "Bestimmen Sie eine neue Position für den Symbolanker"
+msgstr "Eine neue Position für den Symbolanker festlegen"
 
 #: eeschema/tools/ee_actions.cpp:255
 msgid "Finish drawing shape"
@@ -16018,7 +16018,7 @@ msgstr "Einen globalen Bezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:345
 msgid "Add text"
-msgstr "Text hinzufügen"
+msgstr "Ein Textelement hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:350
 msgid "Add Image"
@@ -16026,7 +16026,7 @@ msgstr "Bild hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:350
 msgid "Add bitmap image"
-msgstr "Rastergrafik hinzufügen"
+msgstr "Eine Rastergrafik hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:355
 msgid "Finish Sheet"
@@ -16771,7 +16771,7 @@ msgstr "Klicken Sie auf ein Blatt."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1341
 msgid "Press <ESC> to cancel sheet creation."
-msgstr "Drücken Sie <ESC>, um die Erzeugung des Schaltplanblattes abzubrechen."
+msgstr "Drücken Sie <ESC>, um die Erzeugung des Schaltplanblatts abzubrechen."
 
 #: eeschema/tools/sch_edit_tool.cpp:80
 msgid "Symbol Unit"
@@ -16893,7 +16893,7 @@ msgstr "Bus hat keine Mitglieder"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:621
 msgid "Press <ESC> to cancel drawing."
-msgstr "Drücken Sie <ESC>, um den Zeichenvorgang abzubrechen."
+msgstr "<ESC> drücken, um den Zeichenvorgang abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:398
 msgid "Press <ESC> to cancel drag."
@@ -16902,7 +16902,7 @@ msgstr "<ESC> drücken, um den Ziehvorgang abzubrechen."
 #: eeschema/tools/sch_move_tool.cpp:400
 #: pagelayout_editor/tools/pl_edit_tool.cpp:217
 msgid "Press <ESC> to cancel move."
-msgstr "Drücken Sie <ESC>, um den Verschiebevorgang abzubrechen."
+msgstr "<ESC> drücken, um den Verschiebevorgang abzubrechen."
 
 #: eeschema/tools/symbol_editor_control.cpp:163
 msgid "No symbol library selected."
@@ -19822,7 +19822,7 @@ msgstr "Leiterbahnbreite"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Min clearance"
-msgstr "Mindestabstand"
+msgstr "Min. Freiraum"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diam - drill)"
@@ -22014,11 +22014,12 @@ msgstr "Rückseite"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
-msgstr "Vorderseiten-Referenzbeginn:"
+msgstr "Erste Referenz auf Vorderseite:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
-msgstr "Referenzbezeichnung für Vorderseite starten."
+msgstr ""
+"Nummer, die für die erste Referenz auf der Vorderseite verwendet werden soll."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 #: pcbnew/dialogs/dialog_create_array_base.cpp:96
@@ -22041,7 +22042,7 @@ msgstr "Standard ist 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
 msgid "Back reference start:"
-msgstr "Rückseiten-Referenzbeginn:"
+msgstr "Erste Referenz auf Rückseite:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
@@ -22062,7 +22063,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
 msgid "Remove front prefix"
-msgstr "Vorderseiten-Präfix entfernen"
+msgstr "Präfix auf Vorderseite entfernen"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:233
 msgid ""
@@ -22074,7 +22075,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
 msgid "Remove back prefix"
-msgstr "Rückseiten-Präfix entfernen"
+msgstr "Präfix auf Rückseite entfernen"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:238
 msgid ""
@@ -22086,7 +22087,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:242
 msgid "Front prefix:"
-msgstr "Vorderseiten-Präfix:"
+msgstr "Präfix für Vorderseite:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:244
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
@@ -22096,7 +22097,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
 msgid "Back prefix:"
-msgstr "Rückseiten-Präfix:"
+msgstr "Präfix für Rückseite:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
@@ -22615,7 +22616,8 @@ msgstr "Freiraum:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:188
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
-"Kupfer-Abstand dieser Zone (auf 0 setzen um Wert der Netzklasse zu verwenden)"
+"Kupfer-Freiraum für diese Zone (auf 0 setzen, um Netzklassen-Freiraum zu "
+"verwenden)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -23319,7 +23321,7 @@ msgstr "Designregeln anzeigen."
 
 #: pcbnew/dialogs/dialog_drc.cpp:280
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- DRC vom Benutzer abgebrochen. <br><br>"
+msgstr "-------- DRC durch Benutzer abgebrochen. <br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:282
 msgid "Done.<br><br>"
@@ -24126,7 +24128,7 @@ msgstr "Von Bauteilliste ausschließen"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:213
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
 msgid "Clearances"
-msgstr "Abstände"
+msgstr "Freiräume"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:315
 msgid "Set values to 0 to use Board Setup values."
@@ -27286,7 +27288,7 @@ msgstr "Endlage:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
 msgid "Annular rings:"
-msgstr "Ringbreite:"
+msgstr "Restringe:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "Start, end, and connected layers"
@@ -27415,7 +27417,7 @@ msgstr "Beim Routing anzeigen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing w/ via clearance at end"
-msgstr "Beim Routing mit Via-Abstand am Ende anzeigen"
+msgstr "Beim Routing mit Via-Freiraum am Ende anzeigen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing and editing"
@@ -27427,7 +27429,7 @@ msgstr "Immer anzeigen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
 msgid "Track && Via Clearances"
-msgstr "Leiterbahn- && Via-Abstände"
+msgstr "Leiterbahn- && Via-Freiräume"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -27893,7 +27895,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
 msgid "Minimum clearance:"
-msgstr "Mindestabstand:"
+msgstr "Mindestfreiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:196
 msgid ""
@@ -27921,7 +27923,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
-msgstr "Minimale Ringbreite:"
+msgstr "Minimale Restring-Breite:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:229
 msgid ""
@@ -27947,7 +27949,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper to hole clearance:"
-msgstr "Kupfer-Loch-Abstand:"
+msgstr "Kupfer-zu-Loch-Freiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid ""
@@ -27961,7 +27963,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 msgid "Copper to edge clearance:"
-msgstr "Kupfer-Rand-Abstand:"
+msgstr "Kupfer-zu-Rand-Freiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -27992,7 +27994,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
-msgstr "Loch-zu-Loch-Abstand:"
+msgstr "Loch-zu-Loch-Freiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:334
 msgid ""
@@ -28041,7 +28043,7 @@ msgstr "Bestückungsdruck"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:427
 msgid "Minimum item clearance:"
-msgstr "Mindestabstand:"
+msgstr "Mindestfreiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:432
 msgid ""
@@ -28685,7 +28687,7 @@ msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
-"Ein positiver Abstand bedeutet eine größere Fläche als das Pad (üblich bei "
+"Ein positiver Freiraum bedeutet eine größere Fläche als das Pad (üblich bei "
 "der Lötstoppmaske)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
@@ -28749,7 +28751,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:115
 msgid "Additional clearance as a percentage of the pad size."
-msgstr "Zusätzlicher Abstand als Prozentsatz der Padgröße."
+msgstr "Zusätzlicher Freiraum als Prozentsatz der Padgröße."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
 msgid ""
@@ -29347,7 +29349,7 @@ msgstr "Tesseliere Kupferzonen..."
 #: pcbnew/drc/drc_engine.cpp:802 pcbnew/drc/drc_engine.cpp:812
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Lokale Überschreibung auf %s; Abstand: %s."
+msgstr "Lokale Überschreibung auf %s; Freiraum: %s."
 
 #: pcbnew/drc/drc_engine.cpp:827
 msgid "board minimum"
@@ -29413,7 +29415,7 @@ msgstr "Überprüfe %s."
 
 #: pcbnew/drc/drc_engine.cpp:934
 msgid "Board and netclass clearances apply only between copper items."
-msgstr "Platinen- und Netzklassen-Abstände gelten nur für Kupferelemente."
+msgstr "Platinen- und Netzklassen-Freiräume gelten nur für Kupferelemente."
 
 #: pcbnew/drc/drc_engine.cpp:980
 msgid "Keepout constraint not met."
@@ -29468,7 +29470,7 @@ msgstr "Bedingung nicht erfüllt; Regel ignoriert."
 #: pcbnew/drc/drc_engine.cpp:1119 pcbnew/drc/drc_engine.cpp:1130
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
-msgstr "Lokaler Abstand auf %s; Abstand: %s."
+msgstr "Lokaler Freiraum auf %s; Freiraum: %s."
 
 #: pcbnew/drc/drc_item.cpp:43
 msgid "Electrical"
@@ -29504,7 +29506,7 @@ msgstr "Text (oder Bemaßung) auf Edge.Cuts-Lage"
 
 #: pcbnew/drc/drc_item.cpp:66
 msgid "Clearance violation"
-msgstr "Abstands-Verstoß"
+msgstr "Freiraum-Verstoß"
 
 #: pcbnew/drc/drc_item.cpp:70
 msgid "Tracks crossing"
@@ -29512,7 +29514,7 @@ msgstr "Leiterbahnkreuzung"
 
 #: pcbnew/drc/drc_item.cpp:74
 msgid "Board edge clearance violation"
-msgstr "Platinenkanten-Abstands-Verstoß"
+msgstr "Platinenkanten-Freiraum-Verstoß"
 
 #: pcbnew/drc/drc_item.cpp:78
 msgid "Copper areas intersect"
@@ -29532,7 +29534,7 @@ msgstr "Leiterbahn hat unverbundenes Ende"
 
 #: pcbnew/drc/drc_item.cpp:94
 msgid "Hole clearance violation"
-msgstr "Lochabstand-Verstoß"
+msgstr "Loch-Freiraum-Verstoß"
 
 #: pcbnew/drc/drc_item.cpp:98
 msgid "Drilled holes too close together"
@@ -29548,7 +29550,7 @@ msgstr "Leiterbahnbreite"
 
 #: pcbnew/drc/drc_item.cpp:110
 msgid "Annular width"
-msgstr "Ringbreite"
+msgstr "Restring-Breite"
 
 #: pcbnew/drc/drc_item.cpp:114
 msgid "Drill out of range"
@@ -29636,7 +29638,7 @@ msgstr "Differenzialpaar-Abstand außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:202
 msgid "Differential uncoupled length too long"
-msgstr "Entkoppelte Differenzialpaarlänge zu lang"
+msgstr "Ungekoppelte Länge des Differenzialpaars zu lang"
 
 #: pcbnew/drc/drc_item.cpp:206
 msgid "Footprint type doesn't match footprint pads"
@@ -29769,12 +29771,12 @@ msgstr "Prüfe Via-Restringe ..."
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:129
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr "(%s min Ringbreite %s; tatsächlich %s)"
+msgstr "(%s min Restring-Breite %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:135
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr "(%s maximale Ringbreite %s; tatsächliche %s)"
+msgstr "(%s max Restring-Breite %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:75
 msgid "Checking pad, via and zone connections..."
@@ -29790,15 +29792,15 @@ msgstr "Ermittele Kupfer-Elemente ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
-msgstr "Prüfe Leiterbahn- & Via-Abstände ..."
+msgstr "Prüfe Leiterbahn- & Via-Freiräume ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 msgid "Checking hole clearances..."
-msgstr "Prüfe Lochabstände ..."
+msgstr "Prüfe Loch-Freiräume ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:225
 msgid "Checking pad clearances..."
-msgstr "Prüfe Padabstände ..."
+msgstr "Prüfe Pad-Freiräume ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:233
 msgid "Checking pads..."
@@ -29806,7 +29808,7 @@ msgstr "Prüfe Pads ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:241
 msgid "Checking copper zone clearances..."
-msgstr "Prüfe Abstände von Kupferzonen ..."
+msgstr "Prüfe Freiräume von Kupferzonen ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:248
 msgid "Checking zones..."
@@ -29828,7 +29830,7 @@ msgstr "Prüfe Zonen ..."
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:162
 #, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "(%s Abstand %s; tatsächlich %s)"
+msgstr "(%s Freiraum %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:674
 #, c-format
@@ -29877,11 +29879,11 @@ msgstr "Prüfe Sperrflächen und Verbotseinschränkungen ..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124
 msgid "Checking copper to board edge clearances..."
-msgstr "Prüfe Kupfer-zu-Platinenrand-Abstände ..."
+msgstr "Prüfe Kupfer-zu-Platinenrand-Freiräume ..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:129
 msgid "Checking silk to board edge clearances..."
-msgstr "Prüfe Bestückungsdruck-zu-Platinenrand-Abstände ..."
+msgstr "Prüfe Bestückungsdruck-zu-Platinenrand-Freiräume ..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:77
 msgid "Checking pad holes..."
@@ -29911,7 +29913,7 @@ msgstr "(%s maximale Breite %s; tatsächliche %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:124
 msgid "Checking hole to hole clearances..."
-msgstr "Prüfe Loch-zu-Loch-Abstände ..."
+msgstr "Prüfe Loch-zu-Loch-Freiräume ..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:314
 #, c-format
@@ -30224,7 +30226,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:548
 msgid "Edge Clearance Warning"
-msgstr "Warnung Randabstand"
+msgstr "Warnung zum Rand-Freiraum"
 
 #: pcbnew/files.cpp:579
 #, c-format
@@ -30663,11 +30665,11 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
-"Filtern Sie nach Footprintnamen, Schlüsselwörtern, Beschreibung und der Pad-"
-"Anzahl.\n"
-"Suchbegriffe werden durch Leerzeichen getrennt. Alle Suchbegriffe müssen "
-"übereinstimmen.\n"
-"Wenn ein Begriff eine Zahl ist, stimmt diese mit der Pad-Anzahl überein."
+"Nach Footprintnamen, Schlüsselwörtern, Beschreibung und der Pad-Anzahl "
+"filtern.\n"
+"Suchbegriffe werden durch Leerzeichen getrennt.  Alle Suchbegriffe müssen "
+"zutreffen.\n"
+"Ein Suchbegriff, der eine Zahl ist, wird mit der Pad-Anzahl verglichen."
 
 #: pcbnew/footprint_viewer_frame.cpp:722
 #, c-format
@@ -31594,7 +31596,7 @@ msgstr "Loch X / Y"
 #: pcbnew/router/router_tool.cpp:2141 pcbnew/zone.cpp:640
 #, c-format
 msgid "Min Clearance: %s"
-msgstr "Mindestabstand: %s"
+msgstr "Mindestfreiraum: %s"
 
 #: pcbnew/pad.cpp:1053 pcbnew/pcb_track.cpp:717 pcbnew/pcb_track.cpp:753
 #: pcbnew/pcb_track.cpp:759 pcbnew/router/router_tool.cpp:2129
@@ -31928,7 +31930,7 @@ msgstr "Bohrung"
 #: pcbnew/pcb_track.cpp:757
 #, c-format
 msgid "Min Annular Width: %s"
-msgstr "Min. Ringbreite: %s"
+msgstr "Min Restring-Breite: %s"
 
 #: pcbnew/pcb_track.cpp:774
 msgid "NetCode"
@@ -32028,7 +32030,7 @@ msgstr "Fehler beim Lesen der Datei."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:453
 msgid "Open cancelled by user."
-msgstr "Öffnen vom Benutzer abgebrochen."
+msgstr "Öffnen durch Benutzer abgebrochen."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:490
 #, c-format
@@ -33512,7 +33514,7 @@ msgstr "Angepasst: Versatz "
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Differenzialpaar-Abstand ist kleiner als Mindestabstand der Platine."
+msgstr "Differenzialpaar-Abstand ist kleiner als Mindestfreiraum der Platine."
 
 #: pcbnew/router/pns_router.cpp:238
 msgid "Cannot start routing from a non-plated hole."
@@ -33633,11 +33635,11 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switch Track Posture"
-msgstr "Leiterbahnstellung ändern"
+msgstr "Leiterbahnstellung wechseln"
 
 #: pcbnew/router/router_tool.cpp:157
 msgid "Switches posture of the currently routed track."
-msgstr "Verändert die Stellung des aktuell gerouteten Leiterzuges."
+msgstr "Wechselt die Stellung des aktuell gerouteten Leiterzuges."
 
 #: pcbnew/router/router_tool.cpp:163
 msgid "Track Corner Mode"
@@ -34129,35 +34131,35 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:619
 #, c-format
 msgid "Resolved clearance: %s."
-msgstr "Ermittelter Abstand: %s."
+msgstr "Ermittelter Freiraum: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:186
 #: pcbnew/tools/board_inspection_tool.cpp:305
 msgid "Clearance Report"
-msgstr "Abstandsbericht"
+msgstr "Freiraum-Bericht"
 
 #: pcbnew/tools/board_inspection_tool.cpp:198
 #: pcbnew/tools/board_inspection_tool.cpp:605
 msgid "Edge clearance resolution for:"
-msgstr "Ermittlung Kantenabstände für:"
+msgstr "Ermittlung des Kanten-Freiraums für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
 #: pcbnew/tools/board_inspection_tool.cpp:459
 msgid "Clearance resolution for:"
-msgstr "Ermittlung Abstände für:"
+msgstr "Ermittlung des Freiraums für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:264
 msgid "Select two items for a clearance resolution report."
-msgstr "Wählen Sie zwei Elemente für einen Bericht zur Freigabeauflösung aus."
+msgstr "Wählen Sie zwei Elemente für einen Bericht zur Freiraumermittling aus."
 
 #: pcbnew/tools/board_inspection_tool.cpp:279
 #: pcbnew/tools/board_inspection_tool.cpp:292
 msgid "Cannot generate clearance report on empty group."
-msgstr "Freigabebericht für leere Gruppe kann nicht erstellt werden."
+msgstr "Freiraum-Bericht kann nicht für leere Gruppe erstellt werden."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
 msgid "Zone connection resolution for:"
-msgstr "Ermittlung Zonenverbindungen für:"
+msgstr "Ermittlung der Zonenverbindungen für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -34178,7 +34180,7 @@ msgstr "Überschrieben durch %s; thermische Entlastung: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:414
 #, c-format
 msgid "Zone clearance: %s."
-msgstr "Zonenabstand: %s."
+msgstr "Zonen-Freiraum: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:423
 #, c-format
@@ -34193,19 +34195,19 @@ msgstr "Leiterabstand: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:469
 msgid "Items belong to the same net. Clearance is 0."
-msgstr "Gegenstände gehören zum selben Netz. Der Abstand beträgt 0."
+msgstr "Gegenstände gehören zum selben Netz. Der Freiraum beträgt 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:498
 msgid "Silkscreen clearance resolution for:"
-msgstr "Ermittlung Bestückungsdruckabstände für:"
+msgstr "Ermittlung des Bestückungsdruck-Freiraums für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
 msgid "Courtyard clearance resolution for:"
-msgstr "Ermittlung Abstandsflächen-Freiräume für:"
+msgstr "Ermittlung des Abstandsflächen-Freiraums für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
-msgstr "Ermittlung Lochabstände für:"
+msgstr "Ermittlung des Loch-Freiraums für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
@@ -34223,7 +34225,7 @@ msgstr "Einschränkungsbericht"
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Track width resolution for:"
-msgstr "Ermittle Leiterbahnbreiten für:"
+msgstr "Ermittlung der Leiterbahnbreite für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
 #, c-format
@@ -34236,7 +34238,7 @@ msgstr "Via-Durchmesser"
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
 msgid "Via diameter resolution for:"
-msgstr "Via-Durchmesserermittlung für:"
+msgstr "Ermittlung des Via-Durchmessers für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
 #, c-format
@@ -34245,16 +34247,16 @@ msgstr "Durchmesserbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
-msgstr "Via-Ringbreite"
+msgstr "Via-Restring-Breite"
 
 #: pcbnew/tools/board_inspection_tool.cpp:771
 msgid "Via annular width resolution for:"
-msgstr "Ermittele Via-Ringbreite für:"
+msgstr "Ermittlung der Via-Restring-Breite für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:782
 #, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "Ringbreitenbeschränkungen: min %s; opt %s; max %s."
+msgstr "Restring-Breitenbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
@@ -34262,7 +34264,7 @@ msgstr "Lochgröße"
 
 #: pcbnew/tools/board_inspection_tool.cpp:795
 msgid "Hole diameter resolution for:"
-msgstr "Lochdurchmesserauflösung für:"
+msgstr "Ermittlung des Lochdurchmessers für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:811
 #, c-format
@@ -34275,7 +34277,7 @@ msgstr "Sperrflächen"
 
 #: pcbnew/tools/board_inspection_tool.cpp:818
 msgid "Keepout resolution for:"
-msgstr "Sperrflächen-Lösung für:"
+msgstr "Ermittlung der Sperrfläche für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:830
 msgid "Report may be incomplete: some footprint courtyards are malformed."
@@ -34806,11 +34808,11 @@ msgstr "Verkleinern der Linienbreite"
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Switch Arc Posture"
-msgstr "Bogenstellung umschalten"
+msgstr "Bogenstellung wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Switch the arc posture"
-msgstr "Ändern der Bogenstellung"
+msgstr "Wechselt die Stellung des Kreisbogens"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Delete Last Point"
@@ -35797,13 +35799,13 @@ msgstr "Anzeige der Statistik zur Platine"
 
 #: pcbnew/tools/pcb_actions.cpp:1100
 msgid "Clearance Resolution..."
-msgstr "Abstandsermittlung..."
+msgstr "Freiraumermittlung..."
 
 #: pcbnew/tools/pcb_actions.cpp:1101
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
-"Freigabeauflösung für die aktive Lage zwischen zwei ausgewählten Objekten "
+"Freiraumermittlung für die aktive Lage zwischen zwei ausgewählten Objekten "
 "anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:1106
@@ -36043,7 +36045,7 @@ msgstr "Differenzialpaar-Maße..."
 
 #: pcbnew/tools/pcb_actions.cpp:1335
 msgid "Open Differential Pair Dimension settings"
-msgstr "Öffne Einstellungen für differenzielles Signalpaar"
+msgstr "Öffne Einstellungen für differenzielle Signalpaare"
 
 #: pcbnew/tools/pcb_actions.cpp:1340
 msgid "Router Highlight Mode"
