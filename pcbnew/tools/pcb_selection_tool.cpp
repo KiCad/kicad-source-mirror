@@ -517,6 +517,7 @@ void PCB_SELECTION_TOOL::EnterGroup()
                                        select( titem );
                                    } );
 
+    view()->Hide( m_enteredGroup, true );
     m_enteredGroupOverlay.Add( m_enteredGroup );
     view()->Update( &m_enteredGroupOverlay );
 }
@@ -529,6 +530,7 @@ void PCB_SELECTION_TOOL::ExitGroup( bool aSelectGroup )
         return;
 
     m_enteredGroup->ClearFlags( ENTERED );
+    view()->Hide( m_enteredGroup, false );
     ClearSelection();
 
     if( aSelectGroup )

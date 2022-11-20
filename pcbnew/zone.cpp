@@ -639,8 +639,23 @@ void ZONE::Move( const VECTOR2I& offset )
 
     HatchBorder();
 
+    /* move fills */
     for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& pair : m_FilledPolysList )
         pair.second->Move( offset );
+
+    /*
+     * move boundingbox cache
+     *
+     * While the cache will get nuked at the conclusion of the operation, we use it for some
+     * things (such as drawing the parent group) during the move.
+     */
+    if( GetBoard() )
+    {
+        auto it = GetBoard()->m_ZoneBBoxCache.find( this );
+        
+        if( it != GetBoard()->m_ZoneBBoxCache.end() )
+            it->second.Move( offset );
+    }
 }
 
 
