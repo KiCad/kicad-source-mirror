@@ -28,16 +28,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-10-09 08:03+0000\n"
+"PO-Revision-Date: 2022-11-20 18:07+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -4109,7 +4109,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "폴더 '%s'에 대한 권한이 없습니다."
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4120,9 +4120,10 @@ msgid ""
 msgstr ""
 "이건 정말 난처한 일이네요!\n"
 "마지막으로 파일을 편집한 시간인\n"
-"%s에\n"
-"파일이 제대로 저장되지 않았습니다. 마지막으로 저장한 편집 내용을 복원하시겠습"
-"니까?"
+"%s\n"
+"KiCad는 저장하기 전에 종료되었습니다.\n"
+"\n"
+"대신 자동 저장된 파일을 열시겠습니까?"
 
 #: common/eda_base_frame.cpp:1224
 msgid "The auto save file could not be renamed to the board file name."
@@ -9007,9 +9008,8 @@ msgstr "H 정렬:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "보기 (필드 전용)"
+msgstr "(필드 전용)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
 msgid "V Align:"
@@ -9058,11 +9058,13 @@ msgid "symbol"
 msgstr "심볼"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "심볼 라이브러리 '%s'을(를) 만드는 동안 오류가 발생했습니다."
+msgstr ""
+"심볼 라이브러리 테이블 생성 오류 ‘%s’.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9076,21 +9078,23 @@ msgid "File '%s' not found."
 msgstr "'%s' 파일을 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "심볼 라이브러리 테이블 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
+msgstr ""
+"심볼 라이브러리 테이블 읽기 오류 %s.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "전역 라이브러리 테이블 경로 '%s'을(를) 만들 수 없습니다."
+msgstr "전역 라이브러리 테이블 '%s'을 생성할 수 없습니다."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr "전역 심볼 라이브러리 테이블 파일 '%s'을(를) '%s'에 복사할 수 없음."
+msgstr "전역 심볼 라이브러리 테이블 '%s'을(를) '%s'에 복사할 수 없음."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -10530,9 +10534,8 @@ msgid "Rescue Symbols"
 msgstr "심볼 복구"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "심볼 트리 표시"
+msgstr "심볼 구조 건너뛰기"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -11034,14 +11037,12 @@ msgid "Pin Assignments"
 msgstr "핀 할당"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:242
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "시뮬레이션에서 심볼 비활성화"
+msgstr "시뮬레이션에서 제외"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Store in Reference and Value"
-msgstr "참조 노드"
+msgstr "참조 및 값을 저장"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:116
 msgid "Simulation Model Editor"
@@ -11632,14 +11633,13 @@ msgid "Library '%s' not found."
 msgstr "라이브러리 '%s'을(를) 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"빈 심볼 라이브러리 테이블을 쓰는 중 오류 발생.\n"
-"\n"
-"%s"
+"프로젝트 심볼 라이브러리 테이블을 작성하는 중 오류가 발생했습니다.\n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -13420,7 +13420,7 @@ msgstr "설정 (&r)"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "'%s'에 대한 이름 생성 실패: UINT64_MAX 초과"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:339
 msgid ""
@@ -13433,7 +13433,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:383
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "IBIS 모델을 쓰기 위해 '%s' 파일을 열 수 없음"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, c-format
@@ -15118,14 +15118,13 @@ msgstr ""
 "시뮬레이션 모델 로드 오류: '%s' 라이브러리에서 기본 모델 '%s'를 찾을 수 없음"
 
 #: eeschema/sim/sim_model.cpp:617
-#, fuzzy
 msgid "Failed to read simulation model from fields"
-msgstr "%s 시뮬레이션 모델을 읽지 못했습니다."
+msgstr "필드에서 시뮬레이션 모델을 읽기 실패"
 
 #: eeschema/sim/sim_model.cpp:815 eeschema/sim/sim_model.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a simulation model parameter named '%s'"
-msgstr "사용자 정의 패드 '%s'을(를) 찾을 수 없습니다."
+msgstr "%s인 시뮬레이션 모델 매개 변수를 찾을 수 없습니다"
 
 #: eeschema/sim/sim_model.cpp:1132
 #, c-format
@@ -15137,32 +15136,32 @@ msgstr "%s 설명 %lu 핀, 예상 %u"
 msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
-msgstr ""
+msgstr "시뮬레이션 모델 유형은 기본 클래스 '%s'와 동일해야 하지만 '%s'임"
 
 #: eeschema/sim/sim_model_kibis.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "사용자 정의 패드 '%s'을(를) 찾을 수 없습니다."
+msgstr "IBIS 컴포넌트를 찾을 수 없습니다 ‘%s’"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "사용자 정의 패드 '%s'을(를) 찾을 수 없습니다."
+msgstr "IBIS 핀 %s를 구성 요소 %s에서 찾을 수 없습니다"
 
 #: eeschema/sim/sim_model_kibis.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "잘못된 기호 핀 인덱스: '%s'"
+msgstr "잘못된 IBIS 핀 %s 구성 요소 %s"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "사용자 정의 패드 '%s'을(를) 찾을 수 없습니다."
+msgstr "IBIS 모델을 찾을 수 없습니다’ %s‘"
 
 #: eeschema/sim/sim_model_kibis.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "잘못된 기호 핀 인덱스: '%s'"
+msgstr "잘못된 IBIS 모델 '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:298
 msgid "Power supply"
@@ -19490,18 +19489,16 @@ msgid "Unable to load repository url"
 msgstr "레포지토리 주소를 불러올 수 없습니다"
 
 #: kicad/pcm/pcm.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"레포지토리를 파싱할 수 없습니다:\n"
-"\n"
-"%s"
+msgstr "레포지토리를 파싱할 수 없습니다: %s"
 
 #: kicad/pcm/pcm.cpp:321
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
-msgstr ""
+msgstr "지정된 리포지토리 URL이 유효한 KiCad 패키지 리포지토리처럼 보이지 않습니다. "
+"URL을 다시 확인하십시오."
 
 #: kicad/pcm/pcm.cpp:347
 msgid "Fetching repository packages"
@@ -20540,7 +20537,6 @@ msgstr ""
 "___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -20551,12 +20547,12 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### 분할 감쇠기\n"
-"감쇠는 6 dB입니다  \n"
-"___Z<sub>in</sub>___ 은 원하는 입력 임피던스 &#x2126;  \n"
-"___Z<sub>out</sub>___ 은 원하는 출력 임피던스 &#x2126;  \n"
+"감쇠는 6 dB입니다<br>\n"
+"___Z<sub>in</sub>___ 은 원하는 입력 임피던스 &#x2126; <br>\n"
+"___Z<sub>out</sub>___ 은 원하는 출력 임피던스 &#x2126; <br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>0</sub>___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
@@ -20901,7 +20897,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:124
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "침투깊이 100\\%를 위한 주파수:"
+msgstr "침투깊이 100%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:136
 msgid "Ampacity:"
@@ -23013,9 +23009,8 @@ msgid "(not a closed shape)"
 msgstr "(닫혀 있지 않은 모양)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:489
-#, fuzzy
 msgid "(multiple board outlines not supported)"
-msgstr "보드 파일:"
+msgstr "(여러 보드 외곽선은 지원되지 않음)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -27070,9 +27065,8 @@ msgstr "%s와%s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid "Error: Pad must have a positive size."
-msgstr "오류: 모서리 크기가 음수입니다."
+msgstr "오류: 패드의 크기는 양수여야 합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
@@ -31820,9 +31814,9 @@ msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
 msgstr "(%s 최대 스큐: %s, 실제 값: %s, 평균 네트 길이: %s, 실제 값: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s 최대 개수: %d, 실제 값: %d)"
+msgstr "(%s 최대 개수 %d; 실제 값 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:221
 msgid "Gathering length-constrained connections..."
@@ -32190,10 +32184,12 @@ msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
+"STEP 파일을 생성할 수 없습니다.\n"
+"보드에 유효한 아웃라인과 모델이 있는지 확인하십시오."
 
 #: pcbnew/exporters/step/kicad2step.cpp:268
 msgid "STEP file has been created, but there are warnings."
-msgstr ""
+msgstr "STEP 파일이 생성되었지만 경고가 있습니다."
 
 #: pcbnew/files.cpp:150
 msgid "All KiCad Board Files"
@@ -33613,9 +33609,8 @@ msgid "Add Teardrops..."
 msgstr "Teardrops 추가..."
 
 #: pcbnew/menubar_pcb_editor.cpp:419
-#, fuzzy
 msgid "Remove Teardrops"
-msgstr "눈물 방울 제거"
+msgstr "눈물 방울(Teardrops) 제거"
 
 #: pcbnew/menubar_pcb_editor.cpp:439
 msgid "External Plugins"
@@ -34556,19 +34551,16 @@ msgstr ""
 "설정 메뉴에서 전역 풋프린트 라이브러리 테이블을 편집하세요."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:88
-#, fuzzy
 msgid "Loading board\n"
-msgstr "보드 데이터 로드 중..."
+msgstr "보드 로드 중\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:95
-#, fuzzy
 msgid "Successfully created svg file"
-msgstr "PCB가 성공적으로 다시 주석 처리되었습니다"
+msgstr "성공적으로 svg 파일을 생성함"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:97
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "파일을 읽는 중에 오류가 발생하였습니다."
+msgstr "svg 파일 생성 오류"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -35627,14 +35619,14 @@ msgstr ""
 "행: %d 오프셋: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"잘못된 네트 ID가 발견됨\n"
+"%s에 고정된 잘못된 0 크기의 패드가 있음\n"
 "파일: %s\n"
 "행: %d\n"
 "오프셋: %d"
@@ -36026,15 +36018,13 @@ msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:552 pcbnew/router/pns_kicad_iface.cpp:623
 #: pcbnew/router/router_tool.cpp:722
-#, fuzzy
 msgid "board minimum clearance"
-msgstr "보드 최소 클리어런스: %s."
+msgstr "보드 최소 클리어런스"
 
 #: pcbnew/router/pns_kicad_iface.cpp:556 pcbnew/router/pns_kicad_iface.cpp:622
 #: pcbnew/router/router_tool.cpp:689 pcbnew/router/router_tool.cpp:709
-#, fuzzy
 msgid "board minimum track width"
-msgstr "기판 최소 너비"
+msgstr "기판 최소 트랙 너비"
 
 #: pcbnew/router/pns_kicad_iface.cpp:563
 msgid "existing track"
@@ -36386,9 +36376,9 @@ msgid "Track Width: %s"
 msgstr "배선 너비: %s"
 
 #: pcbnew/router/router_tool.cpp:2491
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "차이 쌍 간격"
+msgstr "차동 쌍 간격: %s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
@@ -36472,12 +36462,12 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "wire_via가 누락된 패드스택 '%s'을(를) 참조합니다."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops created"
 msgstr "%d 눈물방울 생성됨"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops removed."
 msgstr "%d 눈물방울이 제거됨."
 
@@ -40171,21 +40161,19 @@ msgstr "회로도 및 회로 기판 설계를 위한 EDA 제품군"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
-msgstr "보드 인쇄"
+msgstr "회로 기판"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "PcbNew"
 msgstr "PCBNEW"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:40
-#, fuzzy
 msgid "Eeschema"
-msgstr "eeschema"
+msgstr "Eeschema"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
