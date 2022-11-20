@@ -54,11 +54,11 @@ public:
     static constexpr auto REFERENCE_FIELD = "Reference";
     static constexpr auto VALUE_FIELD = "Value";
 
-    static constexpr auto DEVICE_TYPE_FIELD = "Sim_Device";
-    static constexpr auto TYPE_FIELD = "Sim_Type";
-    static constexpr auto PINS_FIELD = "Sim_Pins";
-    static constexpr auto PARAMS_FIELD = "Sim_Params";
-    static constexpr auto ENABLE_FIELD = "Sim_Enable";
+    static constexpr auto DEVICE_TYPE_FIELD = "Sim.Device";
+    static constexpr auto TYPE_FIELD = "Sim.Type";
+    static constexpr auto PINS_FIELD = "Sim.Pins";
+    static constexpr auto PARAMS_FIELD = "Sim.Params";
+    static constexpr auto ENABLE_FIELD = "Sim.Enable";
 
 
     // There's a trailing '_' because `DEVICE_TYPE` collides with something in Windows headers.
