@@ -770,6 +770,10 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
             if( fp->GraphicalItems().size() || fp->Pads().size() || fp->Zones().size() )
                 returnItems.push_back( fp );
         }
+        else if( item->Type() == PCB_GROUP_T )
+        {
+            returnItems.push_back( item );
+        }
         else
         {
             LSET allowed = item->GetLayerSet() & enabledLayers;
@@ -850,7 +854,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 for( PCB_GROUP* group : clipBoard->Groups() )
                 {
-                    group->SetParent( nullptr );
+                    group->SetParent( editorFootprint );
                     pastedItems.push_back( group );
                 }
 
@@ -1148,7 +1152,7 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
     m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &itemsToSel );
 
     // Reannotate duplicate footprints (make sense only in board editor )
-    if( aReannotateDuplicates && m_frame->IsType( FRAME_PCB_EDITOR ) )
+    if( aReannotateDuplicates && m_isBoardEditor )
         m_toolMgr->GetTool<BOARD_REANNOTATE_TOOL>()->ReannotateDuplicatesInSelection();
 
     for( BOARD_ITEM* item : aItems )

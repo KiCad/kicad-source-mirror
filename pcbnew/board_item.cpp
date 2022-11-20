@@ -168,9 +168,6 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
     if( aImage == nullptr )
         return;
 
-    wxASSERT( Type() == aImage->Type() );
-    wxASSERT( m_Uuid == aImage->m_Uuid );
-
     EDA_ITEM*  parent = GetParent();
     PCB_GROUP* group = GetParentGroup();
 
