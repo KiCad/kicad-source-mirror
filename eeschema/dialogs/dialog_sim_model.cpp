@@ -324,7 +324,6 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
     m_ibisPinLabel->Show( isIbisLoaded() );
 
     m_differentialCheckbox->Show( isIbisLoaded() && modelkibis && modelkibis->CanDifferential() );
-
     m_modelNameLabel->SetLabel( isIbisLoaded() ? "Component:" : "Model:" );
 }
 
@@ -369,6 +368,8 @@ void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
             }
         }
     }
+
+    m_typeChoice->Enable( !m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() );
 }
 
 
@@ -918,7 +919,6 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
     m_staticTextDevType->Enable( !fromLibrary );
     m_deviceTypeChoice->Enable( !fromLibrary );
     m_staticTextSpiceType->Enable( !fromLibrary );
-    m_typeChoice->Enable( !fromLibrary || isIbisLoaded() );
 
     updateWidgets();
 }
