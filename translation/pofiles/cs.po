@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-11-13 12:48+0000\n"
+"PO-Revision-Date: 2022-11-21 18:47+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -19271,18 +19271,16 @@ msgid "Append Existing Drawing Sheet..."
 msgstr "Přidat existující soubor výkresového listu..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
-msgstr "Nelze zapsat nárvh rozložení stánky"
+msgstr "Vložit stávající výkresový list do aktuálního souboru"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
 msgstr "Zobrazit inspektora návrhu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show the list of items in the drawing sheet"
-msgstr "Zobrazit seznam položek v rozvržení stránky"
+msgstr "Zobrazit seznam položek ve výkresovém listu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Page Preview Settings..."
@@ -20140,14 +20138,13 @@ msgid "nanoseconds"
 msgstr "nanosekund"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Varování:\n"
-"průměr izolační mezery otvoru.\n"
+"Průměr prokovu >= průměr izolační mezery otvoru.\n"
 "Některé parametry nelze vypočítat pro prokov uvnitř zóny mědi."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
