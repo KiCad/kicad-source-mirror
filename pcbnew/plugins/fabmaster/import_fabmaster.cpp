@@ -2027,7 +2027,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                     if( !IsPcbLayer( layer ) )
                     {
-                        printf("The layer %s is not mapped?\n", ref->layer.c_str() );
+                        wxLogDebug("The layer %s is not mapped?\n", ref->layer.c_str() );
                         continue;
                     }
 
