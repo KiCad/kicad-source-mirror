@@ -19,14 +19,15 @@
 
 #include <base_units.h>
 #include <footprint.h>
-#include <tool/tool_manager.h>
-#include <tools/pcb_actions.h>
 #include <pcb_edit_frame.h>
 #include <pcb_marker.h>
+#include <pcb_painter.h>
 #include <pcb_textbox.h>
 #include <pcb_text.h>
+#include <string_utils.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
 #include <zone.h>
-#include <pcb_painter.h>
 #include "search_handlers.h"
 
 
@@ -147,7 +148,7 @@ wxString ZONE_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
     if( aCol == 0 )
         return zone->GetZoneName();
     if( aCol == 1 )
-        return zone->GetNetname();
+        return UnescapeString( zone->GetNetname() );
     else if( aCol == 2 )
     {
         wxArrayString layers;
@@ -323,7 +324,7 @@ wxString NETS_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
     NETINFO_ITEM* net = m_hitlist[aRow];
 
     if( aCol == 0 )
-        return net->GetNetname();
+        return UnescapeString( net->GetNetname() );
     else if( aCol == 1 )
         return net->GetNetClass()->GetName();
 
