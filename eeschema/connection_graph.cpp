@@ -2885,7 +2885,6 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                     switch( item->Type() )
                     {
                     case SCH_PIN_T:
-                    case SCH_SHEET_PIN_T:
                         ++retval;
                         break;
 
@@ -2947,104 +2946,68 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( label_map.empty() )
         return true;
 
-    wxCHECK_MSG( m_schematic, true, wxT( "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" ) );
+    // This is a hacky way to find the true subgraph net name (why do we not store it?)
+    // TODO: Remove once the actual netname of the subgraph is stored with the subgraph
+    wxString netName = aSubgraph->GetNetName();
+
+    for( auto it = m_net_name_to_subgraphs_map.begin(); it != m_net_name_to_subgraphs_map.end(); ++it )
+    {
+        for( CONNECTION_SUBGRAPH* graph : it->second )
+        {
+            if( graph == aSubgraph )
+            {
+                netName = it->first;
+            }
+        }
+    }
+
+    wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
 
     // Labels that have multiple pins connected are not dangling (may be used for naming segments)
     // so leave them without errors here
     if( pinCount > 1 )
         return true;
 
-    for( const auto& label_pair : label_map )
+    for( auto& [type, label_vec] : label_map )
     {
-        const KICAD_T          type = label_pair.first;
-        std::vector<SCH_TEXT*> label_vec = label_pair.second;
+
         switch( type )
         {
         case SCH_GLOBAL_LABEL_T:
             if( !settings.IsTestEnabled( ERCE_GLOBLABEL ) )
-                break;
-
-            for( SCH_TEXT* text : label_vec )
-            {
-                wxString name = EscapeString( text->GetShownText(), CTX_NETNAME );
-                int allPins = pinCount;
-
-                // If the global label is connected to a subgraph but is not the driver
-                // then there is a driver conflict somewhere that is handled by a different
-                // ERC check.  Here, we are just looking for unconnected elements
-                if( name != aSubgraph->m_driver_connection->Name() )
-                    continue;
-
-                // Global labels are connected if there is another instance of
-                // their name in the circuit
-                auto it = m_net_name_to_subgraphs_map.find( name );
-
-                for( const CONNECTION_SUBGRAPH* neighbor : it->second )
-                {
-                    if( neighbor == aSubgraph )
-                        continue;
-
-                    allPins += hasPins( neighbor );
-                }
-
-                if( allPins < 2 )
-                {
-                    reportError( text, ERCE_GLOBLABEL );
-                    ok = false;
-                }
-            }
-
-            break;
-        case SCH_HIER_LABEL_T:
-            if( !settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED ) )
-                break;
-
-            for( SCH_TEXT* text : label_vec )
-            {
-                if( !aSubgraph->m_hier_parent
-                        || ( !aSubgraph->m_hier_parent->m_strong_driver
-                                && aSubgraph->m_hier_parent->m_drivers.size() <= 1 ) )
-                {
-                    reportError( text, ERCE_LABEL_NOT_CONNECTED );
-                    ok = false;
-                }
-            }
-
-            break;
-        case SCH_LABEL_T:
-
-            if( !settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED ) )
-                break;
-
-            for( SCH_TEXT* text : label_vec )
-            {
-                int allPins = pinCount;
-                wxString name = EscapeString( text->GetShownText(), CTX_NETNAME );
-
-                auto pair = std::make_pair( aSubgraph->m_sheet, name );
-                auto it = m_local_label_cache.find( pair );
-
-                if( it == m_local_label_cache.end() )
-                    continue;
-
-                for( const CONNECTION_SUBGRAPH* neighbor : it->second )
-                {
-                    if( neighbor == aSubgraph )
-                        continue;
-
-                    allPins += hasPins( neighbor );
-                }
-
-                if( allPins < 2 )
-                {
-                    reportError( text, ERCE_LABEL_NOT_CONNECTED );
-                    ok = false;
-                }
-            }
+                continue;
 
             break;
         default:
+            if( !settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED ) )
+                continue;
+
             break;
+        }
+
+        for( SCH_TEXT* text : label_vec )
+        {
+            int allPins = pinCount;
+
+            auto it = m_net_name_to_subgraphs_map.find( netName );
+
+            if( it != m_net_name_to_subgraphs_map.end() )
+            {
+                for( const CONNECTION_SUBGRAPH* neighbor : it->second )
+                {
+                    if( neighbor == aSubgraph )
+                        continue;
+
+                    allPins += hasPins( neighbor );
+                }
+            }
+
+            if( allPins < 2 )
+            {
+                reportError( text,
+                        type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
+                ok = false;
+            }
         }
     }
 
