@@ -2086,6 +2086,27 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS || pasteMode == PASTE_MODE::RESPECT_OPTIONS )
     {
+        pastedSymbols.clear();
+
+        // The symbol references may be changed by adding them to the schematic
+        // if they only exist on the schematic (e.g. from non-standard libraries), so
+        // recreate the pastedSymbols reference list here with the current data
+        for( unsigned i = 0; i < loadedItems.size(); ++i )
+        {
+            if( SCH_SYMBOL* symbol = dyn_cast<SCH_SYMBOL*>( loadedItems[i] ) )
+            {
+                for( SCH_SHEET_PATH& instance : pasteInstances )
+                {
+                    // Ignore pseudo-symbols (e.g. power symbols)
+                    if( symbol->GetRef( &instance )[0] != wxT( '#' ) )
+                    {
+                        SCH_REFERENCE schReference( symbol, symbol->GetLibSymbolRef().get(), instance );
+                        pastedSymbols[instance].AddItem( schReference );
+                    }
+                }
+            }
+        }
+
         for( SCH_SHEET_PATH& instance : pasteInstances )
         {
             pastedSymbols[instance].SortByReferenceOnly();
