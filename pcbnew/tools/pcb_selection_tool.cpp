@@ -2707,8 +2707,25 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
         BOX2I itemBox = item->ViewBBox();
         itemBox.Inflate( margin ); // Give some margin for gripping an item
 
-        if( itemBox.Contains( aPoint ) && item->HitTest( aPoint, margin ) )
-            return true;
+        if( itemBox.Contains( aPoint ) )
+        {
+            if( item->HitTest( aPoint, margin ) )
+                return true;
+
+            if( PCB_GROUP* group = dyn_cast<PCB_GROUP*>( item ) )
+            {
+                bool found = false;
+
+                group->RunOnChildren( [&] ( BOARD_ITEM* aItem )
+                    {
+                        if( aItem->HitTest( aPoint, margin ) )
+                            found = true;
+                    } );
+
+                if( found )
+                    return true;
+            }
+        }
     }
 
     return false;
