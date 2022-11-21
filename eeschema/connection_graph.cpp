@@ -1133,7 +1133,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                 wxLogTrace( ConnTrace, "%ld (%s) is weakly driven and not unique. Changing to %s.",
                             subgraph->m_code, name, new_name );
 
-                alg::delete_matching( *vec, subgraph );
+//                alg::delete_matching( *vec, subgraph );
 
                 m_net_name_to_subgraphs_map[new_name].emplace_back( subgraph );
 
@@ -2200,16 +2200,16 @@ SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember( SCH_CONNECTION* aBusConnection
 void CONNECTION_GRAPH::recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph,
                                             const wxString& aOldName )
 {
-    auto it = m_net_name_to_subgraphs_map.find( aOldName );
-
-    if( it != m_net_name_to_subgraphs_map.end() )
-    {
-        std::vector<CONNECTION_SUBGRAPH*>& vec = it->second;
-        alg::delete_matching( vec, aSubgraph );
-    }
-
-    wxLogTrace( ConnTrace, "recacheSubgraphName: %s => %s", aOldName,
-                aSubgraph->m_driver_connection->Name() );
+//    auto it = m_net_name_to_subgraphs_map.find( aOldName );
+//
+//    if( it != m_net_name_to_subgraphs_map.end() )
+//    {
+//        std::vector<CONNECTION_SUBGRAPH*>& vec = it->second;
+//        alg::delete_matching( vec, aSubgraph );
+//    }
+//
+//    wxLogTrace( ConnTrace, "recacheSubgraphName: %s => %s", aOldName,
+//                aSubgraph->m_driver_connection->Name() );
 
     m_net_name_to_subgraphs_map[aSubgraph->m_driver_connection->Name()].push_back( aSubgraph );
 }
@@ -3080,6 +3080,21 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( label_map.empty() )
         return true;
 
+    // This is a hacky way to find the true subgraph net name (why do we not store it?)
+    // TODO: Remove once the actual netname of the subgraph is stored with the subgraph
+    wxString netName = aSubgraph->GetNetName();
+
+    for( auto it = m_net_name_to_subgraphs_map.begin(); it != m_net_name_to_subgraphs_map.end(); ++it )
+    {
+        for( CONNECTION_SUBGRAPH* graph : it->second )
+        {
+            if( graph == aSubgraph )
+            {
+                netName = it->first;
+            }
+        }
+    }
+
     wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
 
     // Labels that have multiple pins connected are not dangling (may be used for naming segments)
@@ -3108,23 +3123,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         {
             int allPins = pinCount;
 
-            // Labels are connected if there are at least 2 pins on their net
-            const CONNECTION_SUBGRAPH* subgraph = aSubgraph;
-
-            // If there is a hierarchical connection, walk up the hierarchy
-            // to get the top-most subgraph
-            while( subgraph->m_hier_parent )
-                subgraph = subgraph->m_hier_parent;
-
-            wxString name = subgraph->m_driver_connection->Name();
-
-            // If there are local bus connections (a label with the same name as a bus element)
-            // Then get the name from the SCH_CONNECTION element used to map the bus connection
-            // as this is the "true" connection name
-            if( !subgraph->m_bus_parents.empty() )
-                name = subgraph->m_bus_parents.begin()->first->Name();
-
-            auto it = m_net_name_to_subgraphs_map.find( name );
+            auto it = m_net_name_to_subgraphs_map.find( netName );
 
             if( it != m_net_name_to_subgraphs_map.end() )
             {
