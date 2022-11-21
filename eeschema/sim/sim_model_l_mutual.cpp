@@ -22,10 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_model_mutual_inductor.h>
+#include <sim/sim_model_l_mutual.h>
 
 
-std::string SPICE_GENERATOR_MUTUAL_INDUCTOR::ItemParams() const
+std::string SPICE_GENERATOR_L_MUTUAL::ItemParams() const
 {
     std::string result;
 
@@ -36,9 +36,9 @@ std::string SPICE_GENERATOR_MUTUAL_INDUCTOR::ItemParams() const
 }
 
 
-SIM_MODEL_MUTUAL_INDUCTOR::SIM_MODEL_MUTUAL_INDUCTOR() :
+SIM_MODEL_L_MUTUAL::SIM_MODEL_L_MUTUAL() :
     SIM_MODEL( SIM_MODEL::TYPE::L_MUTUAL,
-               std::make_unique<SPICE_GENERATOR_MUTUAL_INDUCTOR>( *this ) )
+               std::make_unique<SPICE_GENERATOR_L_MUTUAL>( *this ) )
 {
     static std::vector<PARAM::INFO> paramInfos = makeParamInfos();
 
@@ -47,7 +47,7 @@ SIM_MODEL_MUTUAL_INDUCTOR::SIM_MODEL_MUTUAL_INDUCTOR() :
 }
 
 
-const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_MUTUAL_INDUCTOR::makeParamInfos()
+const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_L_MUTUAL::makeParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;

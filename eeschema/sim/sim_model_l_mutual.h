@@ -22,14 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_MUTUAL_INDUCTOR_H
-#define SIM_MODEL_MUTUAL_INDUCTOR_H
+#ifndef SIM_MODEL_L_MUTUAL_H
+#define SIM_MODEL_L_MUTUAL_H
 
 #include <sim/sim_model.h>
 #include <sim/spice_generator.h>
 
 
-class SPICE_GENERATOR_MUTUAL_INDUCTOR : public SPICE_GENERATOR
+class SPICE_GENERATOR_L_MUTUAL : public SPICE_GENERATOR
 {
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
@@ -38,14 +38,14 @@ public:
 };
 
 
-class SIM_MODEL_MUTUAL_INDUCTOR : public SIM_MODEL
+class SIM_MODEL_L_MUTUAL : public SIM_MODEL
 {
 public:
 
-    SIM_MODEL_MUTUAL_INDUCTOR();
+    SIM_MODEL_L_MUTUAL();
 
 private:
     static const std::vector<PARAM::INFO> makeParamInfos();
 };
 
-#endif // SIM_MODEL_MUTUAL_INDUCTOR_H
+#endif // SIM_MODEL_L_MUTUAL_H

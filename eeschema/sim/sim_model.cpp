@@ -25,7 +25,7 @@
 #include <sim/sim_model.h>
 #include <sim/sim_model_behavioral.h>
 #include <sim/sim_model_ideal.h>
-#include <sim/sim_model_mutual_inductor.h>
+#include <sim/sim_model_l_mutual.h>
 #include <sim/sim_model_ngspice.h>
 #include <sim/sim_model_r_pot.h>
 #include <sim/sim_model_kibis.h>
@@ -817,7 +817,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
         return std::make_unique<SIM_MODEL_R_POT>();
 
     case TYPE::L_MUTUAL:
-        return std::make_unique<SIM_MODEL_MUTUAL_INDUCTOR>();
+        return std::make_unique<SIM_MODEL_L_MUTUAL>();
 
     case TYPE::R_BEHAVIORAL:
     case TYPE::C_BEHAVIORAL:

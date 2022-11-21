@@ -289,7 +289,7 @@ set( EESCHEMA_SRCS
     sim/sim_model.cpp
     sim/sim_model_behavioral.cpp
     sim/sim_model_ideal.cpp
-    sim/sim_model_mutual_inductor.cpp
+    sim/sim_model_l_mutual.cpp
     sim/sim_model_kibis.cpp
     sim/sim_model_ngspice.cpp
     sim/sim_model_ngspice_data.cpp
