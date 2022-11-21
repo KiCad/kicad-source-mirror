@@ -97,5 +97,3 @@ if(ARGPARSE_INSTALL)
         DESTINATION "${CMAKE_INSTALL_LIBDIR_ARCHIND}/pkgconfig"
   )
 endif()
-
-include(CPack)
