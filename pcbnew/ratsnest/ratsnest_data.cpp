@@ -361,17 +361,17 @@ void RN_NET::optimizeRNEdges()
                 }
 
                 if( closest_item )
-                {
-                    closest_item->AddAnchor( closest_pt );
-                    return closest_item->GetAnchorItem( closest_item->GetAnchorItemCount() - 1 );
-                }
-
-                return aAnchor;
+                    return closest_item->AddAnchor( closest_pt );
+                else
+                    return aAnchor;
             };
 
-    auto findZoneToZoneAnchors =
-            [&]( std::shared_ptr<CN_ANCHOR>& a, std::shared_ptr<CN_ANCHOR>& b )
+    auto optimizeZoneToZoneAnchors =
+            [&]( CN_EDGE& edge )
             {
+                const std::shared_ptr<CN_ANCHOR> a = edge.GetSourceNode();
+                const std::shared_ptr<CN_ANCHOR> b = edge.GetTargetNode();
+
                 for( CN_ITEM* itemA : a->Item()->ConnectedItems() )
                 {
                     CN_ZONE_LAYER* zoneLayerA = dynamic_cast<CN_ZONE_LAYER*>( itemA );
@@ -398,13 +398,11 @@ void RN_NET::optimizeRNEdges()
 
                             VECTOR2I ptA;
                             shapeA->Collide( shapeB, startDist + 10, nullptr, &ptA );
-                            zoneLayerA->AddAnchor( ptA );
-                            a = zoneLayerA->GetAnchorItem( zoneLayerA->GetAnchorItemCount() - 1 );
+                            edge.SetSourceNode( zoneLayerA->AddAnchor( ptA ) );
 
                             VECTOR2I ptB;
                             shapeB->Collide( shapeA, startDist + 10, nullptr, &ptB );
-                            zoneLayerB->AddAnchor( ptB );
-                            b = zoneLayerB->GetAnchorItem( zoneLayerB->GetAnchorItemCount() - 1 );
+                            edge.SetTargetNode( zoneLayerB->AddAnchor( ptB ) );
 
                             return;
                         }
@@ -414,8 +412,8 @@ void RN_NET::optimizeRNEdges()
 
     for( CN_EDGE& edge : m_rnEdges )
     {
-        std::shared_ptr<CN_ANCHOR> source = edge.GetSourceNode();
-        std::shared_ptr<CN_ANCHOR> target = edge.GetTargetNode();
+        const std::shared_ptr<CN_ANCHOR> source = edge.GetSourceNode();
+        const std::shared_ptr<CN_ANCHOR> target = edge.GetTargetNode();
 
         if( source->ConnectedItemsCount() == 0 )
         {
@@ -429,9 +427,7 @@ void RN_NET::optimizeRNEdges()
         }
         else
         {
-            findZoneToZoneAnchors( source, target );
-            edge.SetSourceNode( source );
-            edge.SetTargetNode( target );
+            optimizeZoneToZoneAnchors( edge );
         }
     }
 }
@@ -440,21 +436,16 @@ void RN_NET::optimizeRNEdges()
 void RN_NET::UpdateNet()
 {
     compute();
-    m_dirty = false;
-}
 
-
-void RN_NET::OptimizeNet()
-{
 #ifdef PROFILE
     PROF_TIMER cnt( "optimize" );
 #endif
-
     optimizeRNEdges();
-
 #ifdef PROFILE
     cnt.Show();
 #endif
+
+    m_dirty = false;
 }
 
 

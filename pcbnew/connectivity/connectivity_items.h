@@ -179,9 +179,10 @@ public:
 
     virtual ~CN_ITEM() {};
 
-    void AddAnchor( const VECTOR2I& aPos )
+    std::shared_ptr<CN_ANCHOR> AddAnchor( const VECTOR2I& aPos )
     {
         m_anchors.emplace_back( std::make_shared<CN_ANCHOR>( aPos, this ) );
+        return m_anchors.at( m_anchors.size() - 1 );
     }
 
     std::vector<std::shared_ptr<CN_ANCHOR>>& Anchors() { return m_anchors; }

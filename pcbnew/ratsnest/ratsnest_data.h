@@ -81,7 +81,6 @@ public:
      * Recompute ratsnest for a net.
      */
     void UpdateNet();
-    void OptimizeNet();
     void Clear();
 
     void AddCluster( std::shared_ptr<CN_CLUSTER> aCluster );
