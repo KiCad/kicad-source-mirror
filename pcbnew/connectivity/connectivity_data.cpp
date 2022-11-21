@@ -178,7 +178,14 @@ void CONNECTIVITY_DATA::updateRatsnest()
             [&]( const int a, const int b)
             {
                 for( int ii = a; ii < b; ++ii )
-                    dirty_nets[ii]->Update();
+                    dirty_nets[ ii ]->UpdateNet();
+            }).wait();
+
+    GetKiCadThreadPool().parallelize_loop( 0, dirty_nets.size(),
+            [&]( const int a, const int b)
+            {
+                for( int ii = a; ii < b; ++ii )
+                    dirty_nets[ii]->OptimizeNet();
             }).wait();
 
 #ifdef PROFILE

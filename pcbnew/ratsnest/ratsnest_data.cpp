@@ -437,19 +437,24 @@ void RN_NET::optimizeRNEdges()
 }
 
 
-void RN_NET::Update()
+void RN_NET::UpdateNet()
 {
     compute();
+    m_dirty = false;
+}
 
+
+void RN_NET::OptimizeNet()
+{
 #ifdef PROFILE
     PROF_TIMER cnt( "optimize" );
 #endif
+
     optimizeRNEdges();
+
 #ifdef PROFILE
     cnt.Show();
 #endif
-
-    m_dirty = false;
 }
 
 
