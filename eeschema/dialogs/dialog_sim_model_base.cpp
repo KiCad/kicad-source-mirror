@@ -26,7 +26,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizerMargins;
 	bSizerMargins = new wxBoxSizer( wxVERTICAL );
 
-	m_useLibraryModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("SPICE model from file (*.lib or *.sub)"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_useLibraryModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("SPICE model from file (*.lib, *.sub or *.ibs)"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	bSizerMargins->Add( m_useLibraryModelRadioButton, 0, wxLEFT, 5 );
 
 	wxGridBagSizer* gbSizer1;
