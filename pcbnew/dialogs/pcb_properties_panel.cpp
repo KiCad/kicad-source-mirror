@@ -38,8 +38,21 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
 {
     m_propMgr.Rebuild();
 
-    m_editor = wxPropertyGrid::RegisterEditorClass( new PG_UNIT_EDITOR( m_frame ),
-                                                    wxT( "UnitEditor" ) );
+    m_editor = wxPropertyGrid::RegisterEditorClass( new PG_UNIT_EDITOR( m_frame ) );
+}
+
+
+
+PCB_PROPERTIES_PANEL::~PCB_PROPERTIES_PANEL()
+{
+    auto it = wxPGGlobalVars->m_mapEditorClasses.find( m_editor->GetName() );
+
+    if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
+    {
+        wxPGGlobalVars->m_mapEditorClasses.erase( it );
+
+        delete static_cast<PG_UNIT_EDITOR*>( it->second );
+    }
 }
 
 

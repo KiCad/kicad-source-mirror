@@ -34,9 +34,7 @@ class PCB_PROPERTIES_PANEL : public PROPERTIES_PANEL
 public:
     PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* aFrame );
 
-    virtual ~PCB_PROPERTIES_PANEL()
-    {
-    }
+    virtual ~PCB_PROPERTIES_PANEL();
 
     void UpdateData() override;
 
