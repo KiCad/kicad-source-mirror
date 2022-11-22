@@ -434,7 +434,8 @@ std::string KIBIS_MODEL::SpiceDie( KIBIS_PARAMETER& aParam, int aIndex )
         result += "BKU POWER " + DIE + " i=( -i(VmeasPU) * v(KU) )\n";
     }
 
-    result += "BDIEBUFF " + DIEBUFF + " GND v=v(" + DIE + ")\n";
+    if ( HasPullup() || HasPulldown() )
+        result += "BDIEBUFF " + DIEBUFF + " GND v=v(" + DIE + ")\n";
 
     return result;
 }
