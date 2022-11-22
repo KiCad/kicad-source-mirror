@@ -430,7 +430,7 @@
     (property "Reference" "Cs1" (at 130.81 107.315 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "100uF" (at 130.81 109.855 0)
+    (property "Value" "100u" (at 130.81 109.855 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 127.9652 111.76 0)
@@ -447,7 +447,7 @@
     (instances
       (project "rlc"
         (path "/b0197b4d-36ea-4821-991f-20bf73bcc80c"
-          (reference "Cs1") (unit 1) (value "100uF") (footprint "")
+          (reference "Cs1") (unit 1) (value "100u") (footprint "")
         )
       )
     )
@@ -459,7 +459,7 @@
     (property "Reference" "Rp1" (at 193.04 94.615 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "1KΩ" (at 193.04 97.155 0)
+    (property "Value" "1K" (at 193.04 97.155 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 188.722 95.25 90)
@@ -476,7 +476,7 @@
     (instances
       (project "rlc"
         (path "/b0197b4d-36ea-4821-991f-20bf73bcc80c"
-          (reference "Rp1") (unit 1) (value "1KΩ") (footprint "")
+          (reference "Rp1") (unit 1) (value "1K") (footprint "")
         )
       )
     )
@@ -488,7 +488,7 @@
     (property "Reference" "Lp1" (at 204.47 94.615 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "100uH" (at 204.47 97.155 0)
+    (property "Value" "100u" (at 204.47 97.155 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 203.2 95.25 0)
@@ -505,7 +505,7 @@
     (instances
       (project "rlc"
         (path "/b0197b4d-36ea-4821-991f-20bf73bcc80c"
-          (reference "Lp1") (unit 1) (value "100uH") (footprint "")
+          (reference "Lp1") (unit 1) (value "100u") (footprint "")
         )
       )
     )
@@ -517,7 +517,7 @@
     (property "Reference" "Rs1" (at 129.54 81.915 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "1mΩ" (at 129.54 84.455 0)
+    (property "Value" "1m" (at 129.54 84.455 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 125.222 82.55 90)
@@ -534,7 +534,7 @@
     (instances
       (project "rlc"
         (path "/b0197b4d-36ea-4821-991f-20bf73bcc80c"
-          (reference "Rs1") (unit 1) (value "1mΩ") (footprint "")
+          (reference "Rs1") (unit 1) (value "1m") (footprint "")
         )
       )
     )
@@ -646,7 +646,7 @@
     (property "Reference" "Cp1" (at 219.71 94.615 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "100uF" (at 219.71 97.155 0)
+    (property "Value" "100u" (at 219.71 97.155 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 216.8652 99.06 0)
@@ -663,7 +663,7 @@
     (instances
       (project "rlc"
         (path "/b0197b4d-36ea-4821-991f-20bf73bcc80c"
-          (reference "Cp1") (unit 1) (value "100uF") (footprint "")
+          (reference "Cp1") (unit 1) (value "100u") (footprint "")
         )
       )
     )
@@ -745,7 +745,7 @@
     (property "Reference" "Ls1" (at 128.27 94.615 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "100uH" (at 128.27 97.155 0)
+    (property "Value" "100u" (at 128.27 97.155 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 127 95.25 0)
@@ -762,7 +762,7 @@
     (instances
       (project "rlc"
         (path "/b0197b4d-36ea-4821-991f-20bf73bcc80c"
-          (reference "Ls1") (unit 1) (value "100uH") (footprint "")
+          (reference "Ls1") (unit 1) (value "100u") (footprint "")
         )
       )
     )

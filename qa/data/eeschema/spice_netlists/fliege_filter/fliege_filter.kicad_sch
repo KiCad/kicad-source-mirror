@@ -850,12 +850,12 @@
   )
 
   (symbol (lib_id "Simulation_SPICE:VSIN") (at 114.3 95.25 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom yes) (on_board yes) (dnp no)
     (uuid 88021970-b98d-4b3b-8504-80e76499ab7b)
     (property "Reference" "V1" (at 118.11 93.345 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "ac=1" (at 118.11 95.885 0)
+    (property "Value" "V" (at 118.11 95.885 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 114.3 95.25 0)
@@ -867,12 +867,15 @@
     (property "Sim.Device" "V" (at 114.3 95.25 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Sim.Params" "ac=1" (at 120.65 97.79 0)
+      (effects (font (size 1.27 1.27)))
+    )
     (pin "1" (uuid d18a7be3-befb-4f82-9812-85b576c6ba5e))
     (pin "2" (uuid 9a1a9ed4-ff64-4de9-9d48-d4c40f1612a0))
     (instances
       (project "fliege_filter"
         (path "/1bb7f68e-09b1-4448-8403-97b70f8d3680"
-          (reference "V1") (unit 1) (value "ac=1") (footprint "")
+          (reference "V1") (unit 1) (value "V") (footprint "")
         )
       )
     )
