@@ -146,6 +146,8 @@ public:
 
     void RemoveInstance( const SCH_SHEET_PATH& aInstancePath );
 
+    void RemoveAllInstances() { m_instanceReferences.clear(); }
+
     void SortInstances( bool ( *aSortFunction )( const SYMBOL_INSTANCE_REFERENCE& aLhs,
                                                  const SYMBOL_INSTANCE_REFERENCE& aRhs ) );
 

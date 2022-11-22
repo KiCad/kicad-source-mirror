@@ -669,10 +669,10 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     // Don't leave root page number empty
     SCH_SHEET_PATH rootSheetPath;
-    rootSheetPath.push_back( &m_schematic->Root() );
+
+    rootSheetPath.push_back( rootSheet );
     m_schematic->RootScreen()->SetPageNumber( wxT( "1" ) );
-    m_schematic->Root().AddInstance( rootSheetPath );
-    m_schematic->Root().SetPageNumber( rootSheetPath, wxT( "1" ) );
+    rootSheetPath.SetPageNumber( wxT( "1" ) );
 
     if( GetScreen() == nullptr )
     {

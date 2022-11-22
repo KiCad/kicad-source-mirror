@@ -69,6 +69,9 @@ struct SCH_SHEET_INSTANCE
     KIID_PATH m_Path;
 
     wxString  m_PageNumber;
+
+    // The project name associated with this instance.
+    wxString  m_ProjectName;
 };
 
 
@@ -175,6 +178,11 @@ public:
 
     /// Forwarded method from std::vector
     size_t size() const { return m_sheets.size(); }
+
+    std::vector<SCH_SHEET*>::iterator erase( std::vector<SCH_SHEET*>::const_iterator aPosition )
+    {
+        return m_sheets.erase( aPosition );
+    }
 
     void Rehash();
 

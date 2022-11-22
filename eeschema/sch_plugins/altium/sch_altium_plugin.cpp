@@ -246,9 +246,8 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
         SCH_SHEET_PATH sheetpath;
         sheetpath.push_back( m_rootSheet );
 
-        m_rootSheet->AddInstance( sheetpath );
-        m_rootSheet->SetPageNumber( sheetpath, "#" );   // We'll update later if we find a
-                                                        // pageNumber record for it
+        // We'll update later if we find a pageNumber record for it.
+        sheetpath.SetPageNumber( "#" );
     }
 
     if( !m_rootSheet->GetScreen() )
@@ -1775,8 +1774,7 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessConnector( int aIndex, const std::map<wxStri
         SCH_SHEET_PATH sheetpath = m_sheetPath;
         sheetpath.push_back( sheet );
 
-        sheet->AddInstance( sheetpath );
-        sheet->SetPageNumber( sheetpath, "Harness #" );
+        sheetpath.SetPageNumber( "Harness #" );
 
         m_harnessEntryParent = aIndex + m_harnessOwnerIndexOffset;
         m_sheets.insert( { m_harnessEntryParent, sheet } );
@@ -1945,8 +1943,6 @@ void SCH_ALTIUM_PLUGIN::ParseSheetSymbol( int aIndex,
 
     SCH_SHEET_PATH sheetpath = m_sheetPath;
     sheetpath.push_back( sheet );
-
-    sheet->AddInstance( sheetpath );
 
     // We'll update later if we find a pageNumber record for it.
     sheetpath.SetPageNumber( "#" );
@@ -2891,7 +2887,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
 
         if( paramName == "SHEETNUMBER" )
         {
-            m_rootSheet->SetPageNumber( m_sheetPath, elem.text );
+            m_sheetPath.SetPageNumber( elem.text );
         }
         else if( paramName == "TITLE" )
         {

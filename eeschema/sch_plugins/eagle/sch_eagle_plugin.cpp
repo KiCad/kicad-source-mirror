@@ -709,7 +709,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     SCH_SHEET_PATH rootPath;
     m_rootSheet->AddInstance( m_sheetPath );
-    m_rootSheet->SetPageNumber( m_sheetPath, wxT( "1" ) );
+    rootPath.SetPageNumber( wxT( "1" ) );
 
     int sheetCount = countChildren( sheetNode->GetParent(), wxT( "sheet" ) );
 
@@ -720,7 +720,6 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         x = 1;
         y = 1;
 
-        // Loop through all the sheets
         while( sheetNode )
         {
             VECTOR2I                   pos    = VECTOR2I( x * schIUScale.MilsToIU( 1000 ),
@@ -740,10 +739,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             m_sheetPath.push_back( sheet.get() );
             loadSheet( sheetNode, i );
 
-            sheet->AddInstance( m_sheetPath );
             m_sheetPath.SetPageNumber( pageNo );
-            m_rootSheet->AddInstance( m_sheetPath );
-            m_rootSheet->SetPageNumber( m_sheetPath, pageNo );
             m_sheetPath.pop_back();
 
             SCH_SCREEN* currentScreen = m_rootSheet->GetScreen();

@@ -125,7 +125,7 @@ void HIERARCHY_NAVIG_PANEL::buildHierarchyTree( SCH_SHEET_PATH* aList, const wxT
         aList->push_back( sheet );
 
         wxString sheetName = formatPageString( sheet->GetFields()[SHEETNAME].GetShownText(),
-                                               sheet->GetPageNumber( *aList ) );
+                                               aList->GetPageNumber() );
         wxTreeItemId child = m_tree->AppendItem( aParent, sheetName, 0, 1 );
         m_tree->SetItemData( child, new TREE_ITEM_DATA( *aList ) );
 
@@ -305,7 +305,7 @@ wxString HIERARCHY_NAVIG_PANEL::getRootString()
     SCH_SHEET_PATH rootPath;
     rootPath.push_back( rootSheet );
 
-    return formatPageString ( _( "Root" ), rootSheet->GetPageNumber( rootPath ) );
+    return formatPageString ( _( "Root" ), rootPath.GetPageNumber() );
 }
 
 

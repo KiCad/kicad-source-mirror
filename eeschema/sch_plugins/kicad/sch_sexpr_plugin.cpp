@@ -145,6 +145,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
         std::unique_ptr<SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( aSchematic );
 
         wxFileName relPath( aFileName );
+
         // Do not use wxPATH_UNIX as option in MakeRelativeTo(). It can create incorrect
         // relative paths on Windows, because paths have a disk identifier (C:, D: ...)
         relPath.MakeRelativeTo( aSchematic->Prj().GetProjectPath() );
@@ -472,26 +473,10 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         }
     }
 
-    // If this is the root sheet, save all of the sheet paths.
+    // If this is the root sheet, save the virtual root sheet instance information.
     if( aSheet->IsRootSheet() )
     {
-        SCH_SHEET_LIST sheetPaths( aSheet, true );
-
-        SCH_REFERENCE_LIST symbolInstances;
-
-        for( const SCH_SHEET_PATH& sheetPath : sheetPaths )
-            sheetPath.GetSymbols( symbolInstances, true, true );
-
-        symbolInstances.SortByReferenceOnly();
-
-        saveInstances( sheetPaths.GetSheetInstances(), 1 );
-    }
-    else
-    {
-        // Schematic files (SCH_SCREEN objects) can be shared so we have to save and restore
-        // symbol and sheet instance data even if the file being saved is not the root sheet
-        // because it is possible that the file is the root sheet of another project.
-        saveInstances( screen->m_sheetInstances, 1 );
+        saveInstances( aSheet->GetInstances(), 1 );
     }
 
     m_out->Print( 0, ")\n" );
@@ -499,7 +484,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
 
 void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelectionPath,
-                               const SCHEMATIC& aSchematic, OUTPUTFORMATTER* aFormatter,
+                               SCHEMATIC& aSchematic, OUTPUTFORMATTER* aFormatter,
                                bool aForClipboard )
 {
     wxCHECK( aSelection && aSelectionPath && aFormatter, /* void */ );
@@ -507,6 +492,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
     LOCALE_IO toggle;
     SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
 
+    m_schematic = &aSchematic;
     m_out = aFormatter;
 
     size_t i;
@@ -642,8 +628,6 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
         wxASSERT_MSG( symbolInstance.m_Path.MakeRelativeTo( selectionPath ),
                       "Symbol is not inside the selection path?" );
     }
-
-    saveInstances( sheetinstances, 0 );
 }
 
 
@@ -690,8 +674,10 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
 
     m_out->Print( 0, " (lib_id %s) (at %s %s %s)",
                   m_out->Quotew( aSymbol->GetLibId().Format().wx_str() ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSymbol->GetPosition().x ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSymbol->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aSymbol->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aSymbol->GetPosition().y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
 
     bool mirrorX = aSymbol->GetOrientation() & SYM_MIRROR_X;
@@ -833,7 +819,8 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
                     projectName = aSymbol->GetInstanceReferences()[i].m_ProjectName;
 
                 lastProjectUuid = aSymbol->GetInstanceReferences()[i].m_Path[0];
-                m_out->Print( aNestLevel + 2, "(project %s\n", m_out->Quotew( projectName ).c_str() );
+                m_out->Print( aNestLevel + 2, "(project %s\n",
+                              m_out->Quotew( projectName ).c_str() );
                 project_open = true;
             }
 
@@ -884,8 +871,10 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
     m_out->Print( aNestLevel, "(property %s %s (at %s %s %s)",
                   m_out->Quotew( fieldName ).c_str(),
                   m_out->Quotew( aField->GetText() ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().x ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aField->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aField->GetPosition().y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aField->GetTextAngle() ).c_str() );
 
     if( aField->IsNameShown() )
@@ -917,8 +906,10 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
     wxCHECK_RET( image != nullptr, "wxImage* is NULL" );
 
     m_out->Print( aNestLevel, "(image (at %s %s)",
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBitmap->GetPosition().x ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBitmap->GetPosition().y ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aBitmap->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aBitmap->GetPosition().y ).c_str() );
 
     if( aBitmap->GetImage()->GetScale() != 1.0 )
         m_out->Print( 0, " (scale %g)", aBitmap->GetImage()->GetScale() );
@@ -961,10 +952,14 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
     wxCHECK_RET( aSheet != nullptr && m_out != nullptr, "" );
 
     m_out->Print( aNestLevel, "(sheet (at %s %s) (size %s %s)",
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSheet->GetPosition().x ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSheet->GetPosition().y ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSheet->GetSize().GetWidth() ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSheet->GetSize().GetHeight() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aSheet->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aSheet->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aSheet->GetSize().GetWidth() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aSheet->GetSize().GetHeight() ).c_str() );
 
     if( aSheet->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
         m_out->Print( 0, " (fields_autoplaced)" );
@@ -999,8 +994,10 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
         m_out->Print( aNestLevel + 1, "(pin %s %s (at %s %s %s)\n",
                       EscapedUTF8( pin->GetText() ).c_str(),
                       getSheetPinShapeToken( pin->GetShape() ),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pin->GetPosition().x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pin->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           pin->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           pin->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( getSheetPinAngle( pin->GetSide() ) ).c_str() );
 
         pin->Format( m_out, aNestLevel + 1, 0 );
@@ -1008,6 +1005,67 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
         m_out->Print( aNestLevel + 2, "(uuid %s)\n", TO_UTF8( pin->m_Uuid.AsString() ) );
 
         m_out->Print( aNestLevel + 1, ")\n" );  // Closes pin token.
+    }
+
+    if( !aSheet->GetInstances().empty() )
+    {
+        m_out->Print( aNestLevel + 1, "(instances\n" );
+
+        KIID lastProjectUuid;
+        KIID rootSheetUuid = m_schematic->Root().m_Uuid;
+        SCH_SHEET_LIST fullHierarchy = m_schematic->GetSheets();
+        bool project_open = false;
+
+        for( size_t i = 0; i < aSheet->GetInstances().size(); i++ )
+        {
+            // If the instance data is part of this design but no longer has an associated sheet
+            // path, don't save it.  This prevents large amounts of orphaned instance data for the
+            // current project from accumulating in the schematic files.
+            //
+            // Keep all instance data when copying to the clipboard.  It may be needed on paste.
+            if( ( aSheet->GetInstances()[i].m_Path[0] == rootSheetUuid )
+              && !fullHierarchy.GetSheetPathByKIIDPath( aSheet->GetInstances()[i].m_Path ) )
+            {
+                if( project_open && ( ( i + 1 == aSheet->GetInstances().size() )
+                  || lastProjectUuid != aSheet->GetInstances()[i+1].m_Path[0] ) )
+                {
+                    m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
+                    project_open = false;
+                }
+
+                continue;
+            }
+
+            if( lastProjectUuid != aSheet->GetInstances()[i].m_Path[0] )
+            {
+                wxString projectName;
+
+                if( aSheet->GetInstances()[i].m_Path[0] == rootSheetUuid )
+                    projectName = m_schematic->Prj().GetProjectName();
+                else
+                    projectName = aSheet->GetInstances()[i].m_ProjectName;
+
+                lastProjectUuid = aSheet->GetInstances()[i].m_Path[0];
+                m_out->Print( aNestLevel + 2, "(project %s\n",
+                              m_out->Quotew( projectName ).c_str() );
+                project_open = true;
+            }
+
+            wxString path = aSheet->GetInstances()[i].m_Path.AsString();
+
+            m_out->Print( aNestLevel + 3, "(path %s (page %s))\n",
+                          m_out->Quotew( path ).c_str(),
+                          m_out->Quotew( aSheet->GetInstances()[i].m_PageNumber ).c_str() );
+
+            if( project_open && ( ( i + 1 == aSheet->GetInstances().size() )
+              || lastProjectUuid != aSheet->GetInstances()[i+1].m_Path[0] ) )
+            {
+                m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
+                project_open = false;
+            }
+        }
+
+        m_out->Print( aNestLevel + 1, ")\n" );  // Closes `instances`.
     }
 
     m_out->Print( aNestLevel, ")\n" );          // Closes sheet token.
@@ -1019,9 +1077,12 @@ void SCH_SEXPR_PLUGIN::saveJunction( SCH_JUNCTION* aJunction, int aNestLevel )
     wxCHECK_RET( aJunction != nullptr && m_out != nullptr, "" );
 
     m_out->Print( aNestLevel, "(junction (at %s %s) (diameter %s) (color %d %d %d %s)\n",
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aJunction->GetPosition().x ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aJunction->GetPosition().y ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aJunction->GetDiameter() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aJunction->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aJunction->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aJunction->GetDiameter() ).c_str(),
                   KiROUND( aJunction->GetColor().r * 255.0 ),
                   KiROUND( aJunction->GetColor().g * 255.0 ),
                   KiROUND( aJunction->GetColor().b * 255.0 ),
@@ -1038,8 +1099,10 @@ void SCH_SEXPR_PLUGIN::saveNoConnect( SCH_NO_CONNECT* aNoConnect, int aNestLevel
     wxCHECK_RET( aNoConnect != nullptr && m_out != nullptr, "" );
 
     m_out->Print( aNestLevel, "(no_connect (at %s %s) (uuid %s))\n",
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aNoConnect->GetPosition().x ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aNoConnect->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aNoConnect->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aNoConnect->GetPosition().y ).c_str(),
                   TO_UTF8( aNoConnect->m_Uuid.AsString() ) );
 }
 
@@ -1059,10 +1122,14 @@ void SCH_SEXPR_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLev
     else
     {
         m_out->Print( aNestLevel, "(bus_entry (at %s %s) (size %s %s)\n",
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBusEntry->GetPosition().x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBusEntry->GetPosition().y ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBusEntry->GetSize().GetWidth() ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBusEntry->GetSize().GetHeight() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aBusEntry->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aBusEntry->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aBusEntry->GetSize().GetWidth() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aBusEntry->GetSize().GetHeight() ).c_str() );
 
         aBusEntry->GetStroke().Format( m_out, schIUScale, aNestLevel + 1 );
 
@@ -1131,10 +1198,14 @@ void SCH_SEXPR_PLUGIN::saveLine( SCH_LINE* aLine, int aNestLevel )
 
     m_out->Print( aNestLevel, "(%s (pts (xy %s %s) (xy %s %s))\n",
                   TO_UTF8( lineType ),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aLine->GetStartPoint().x ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aLine->GetStartPoint().y ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aLine->GetEndPoint().x ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aLine->GetEndPoint().y ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aLine->GetStartPoint().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aLine->GetStartPoint().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aLine->GetEndPoint().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                       aLine->GetEndPoint().y ).c_str() );
 
     line_stroke.Format( m_out, schIUScale, aNestLevel + 1 );
     m_out->Print( 0, "\n" );
@@ -1161,7 +1232,8 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         SCH_DIRECTIVE_LABEL* flag = static_cast<SCH_DIRECTIVE_LABEL*>( aText );
 
         m_out->Print( 0, " (length %s)",
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, flag->GetPinLength() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           flag->GetPinLength() ).c_str() );
     }
 
     EDA_ANGLE angle = aText->GetTextAngle();
@@ -1190,16 +1262,20 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
     if( aText->GetText().Length() < 50 )
     {
         m_out->Print( 0, " (at %s %s %s)",
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aText->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aText->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
     }
     else
     {
         m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel + 1, "(at %s %s %s)",
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aText->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aText->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
     }
 

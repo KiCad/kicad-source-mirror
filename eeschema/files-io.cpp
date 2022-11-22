@@ -453,7 +453,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
                 sheetList.UpdateSymbolInstances( Schematic().RootScreen()->GetSymbolInstances() );
 
-            sheetList.UpdateSheetInstances( Schematic().RootScreen()->GetSheetInstances() );
+            if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221110 )
+                sheetList.UpdateSheetInstances( Schematic().RootScreen()->GetSheetInstances() );
         }
 
         Schematic().ConnectionGraph()->Reset();

@@ -2152,17 +2152,19 @@ void SCH_SEXPR_PARSER::parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN
                     NeedSYMBOL();
                     instance.m_PageNumber = FromUTF8();
 
-                    // Whitespaces are not permitted
-                    for( wxString ch : whitespaces )
-                        numReplacements += instance.m_PageNumber.Replace( ch, wxEmptyString );
-
-
                     // Empty page numbers are not permitted
                     if( instance.m_PageNumber.IsEmpty() )
                     {
                         // Use hash character instead
                         instance.m_PageNumber = wxT( "#" );
                         numReplacements++;
+                    }
+                    else
+                    {
+                        // Whitespaces are not permitted
+                        for( wxString ch : whitespaces )
+                            numReplacements += instance.m_PageNumber.Replace( ch, wxEmptyString );
+
                     }
 
                     // Set the file as modified so the user can be warned.
@@ -2177,7 +2179,19 @@ void SCH_SEXPR_PARSER::parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN
                 }
             }
 
-            aScreen->m_sheetInstances.emplace_back( instance );
+            if( ( aScreen->GetFileFormatVersionAtLoad() >= 20221110 )
+              && ( instance.m_Path.empty() ) )
+            {
+                SCH_SHEET_PATH rootSheetPath;
+
+                rootSheetPath.push_back( aRootSheet );
+                rootSheetPath.SetPageNumber( instance.m_PageNumber );
+            }
+            else
+            {
+                aScreen->m_sheetInstances.emplace_back( instance );
+            }
+
             break;
         }
 
@@ -3088,8 +3102,90 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
             sheet->AddPin( parseSchSheetPin( sheet.get() ) );
             break;
 
+        case T_instances:
+        {
+            std::vector<SCH_SHEET_INSTANCE> instances;
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                if( token != T_project )
+                    Expecting( "project" );
+
+                NeedSYMBOL();
+
+                wxString projectName = FromUTF8();
+
+                for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                {
+                    if( token != T_LEFT )
+                        Expecting( T_LEFT );
+
+                    token = NextTok();
+
+                    if( token != T_path )
+                        Expecting( "path" );
+
+                    SCH_SHEET_INSTANCE instance;
+
+                    instance.m_ProjectName = projectName;
+
+                    NeedSYMBOL();
+                    instance.m_Path = KIID_PATH( FromUTF8() );
+
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    {
+                        if( token != T_LEFT )
+                            Expecting( T_LEFT );
+
+                        token = NextTok();
+
+                        switch( token )
+                        {
+                        case T_page:
+                        {
+                            NeedSYMBOL();
+                            instance.m_PageNumber = FromUTF8();
+
+                            // Empty page numbers are not permitted
+                            if( instance.m_PageNumber.IsEmpty() )
+                            {
+                                // Use hash character instead
+                                instance.m_PageNumber = wxT( "#" );
+                            }
+                            else
+                            {
+                                // Whitespaces are not permitted
+                                std::vector<wxString> whitespaces = { wxT( "\r" ), wxT( "\n" ),
+                                    wxT( "\t" ), wxT( " " ) };
+
+                                for( wxString ch : whitespaces )
+                                    instance.m_PageNumber.Replace( ch, wxEmptyString );
+                            }
+
+                            NeedRIGHT();
+                            break;
+                        }
+
+                        default:
+                            Expecting( "page" );
+                        }
+                    }
+
+                    instances.emplace_back( instance );
+                }
+            }
+
+            sheet->SetInstances( instances );
+            break;
+        }
+
         default:
-            Expecting( "at, size, stroke, background, uuid, property, or pin" );
+            Expecting( "at, size, stroke, background, instances, uuid, property, or pin" );
         }
     }
 

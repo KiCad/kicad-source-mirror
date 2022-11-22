@@ -1102,7 +1102,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
     // Make the sheet object a clickable hyperlink (e.g. for PDF plotter)
     std::vector<wxString> properties;
 
-    properties.emplace_back( EDA_TEXT::GotoPageHref( GetPageNumber( findSelf() ) ) );
+    properties.emplace_back( EDA_TEXT::GotoPageHref( getPageNumber( findSelf() ) ) );
 
     for( const SCH_FIELD& field : GetFields() )
     {
@@ -1205,6 +1205,7 @@ bool SCH_SHEET::operator <( const SCH_ITEM& aItem ) const
 bool SCH_SHEET::AddInstance( const SCH_SHEET_PATH& aSheetPath )
 {
     wxCHECK( aSheetPath.IsFullPath(), false );
+    wxCHECK( !aSheetPath.Last() || ( aSheetPath.Last()->m_Uuid != m_Uuid ), false );
 
     for( const SCH_SHEET_INSTANCE& instance : m_instances )
     {
@@ -1227,9 +1228,10 @@ bool SCH_SHEET::AddInstance( const SCH_SHEET_PATH& aSheetPath )
 }
 
 
-wxString SCH_SHEET::GetPageNumber( const SCH_SHEET_PATH& aSheetPath ) const
+wxString SCH_SHEET::getPageNumber( const SCH_SHEET_PATH& aSheetPath ) const
 {
     wxCHECK( aSheetPath.IsFullPath(), wxEmptyString );
+    wxCHECK( !aSheetPath.Last() || ( aSheetPath.Last()->m_Uuid != m_Uuid ), wxEmptyString );
 
     wxString pageNumber;
     KIID_PATH path = aSheetPath.Path();
@@ -1247,9 +1249,10 @@ wxString SCH_SHEET::GetPageNumber( const SCH_SHEET_PATH& aSheetPath ) const
 }
 
 
-void SCH_SHEET::SetPageNumber( const SCH_SHEET_PATH& aSheetPath, const wxString& aPageNumber )
+void SCH_SHEET::setPageNumber( const SCH_SHEET_PATH& aSheetPath, const wxString& aPageNumber )
 {
     wxCHECK( aSheetPath.IsFullPath(), /* void */ );
+    wxCHECK( !aSheetPath.Last() || ( aSheetPath.Last()->m_Uuid != m_Uuid ), /* void */ );
 
     KIID_PATH path = aSheetPath.Path();
 

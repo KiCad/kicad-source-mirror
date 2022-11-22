@@ -1691,8 +1691,6 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
     SCH_SHEET_PATH sheetPath = aPastePath;
     sheetPath.push_back( aSheet );
 
-    aSheet->AddInstance( sheetPath );
-
     wxString pageNum;
 
     if( m_clipboardSheetInstances.count( aClipPath ) > 0 )
@@ -1700,7 +1698,7 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
     else
         pageNum = wxString::Format( "%d", static_cast<int>( aPastedSheetsSoFar->size() ) );
 
-    aSheet->SetPageNumber( sheetPath, pageNum );
+    sheetPath.SetPageNumber( pageNum );
     aPastedSheetsSoFar->push_back( sheetPath );
 
     if( aSheet->GetScreen() == nullptr )
@@ -1793,7 +1791,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
     catch( IO_ERROR& )
     {
-        // If it wasn't content, then paste as content
+        // If it wasn't content, then paste as text object.
         SCH_TEXT* text_item = new SCH_TEXT( wxPoint( 0, 0 ), content );
         text_item->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT ); // Left alignment
         tempScreen->Append( text_item );
@@ -1817,7 +1815,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
-    //
     EDA_ITEMS       loadedItems;
     bool            sheetsPasted = false;
     SCH_SHEET_LIST  hierarchy = m_frame->Schematic().GetSheets();
@@ -1849,8 +1846,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     std::map<KIID, EDA_ITEM*> itemMap;
     hierarchy.FillItemMap( itemMap );
 
-    // Keep track of pasted sheets and symbols for the different
-    // paths to the hierarchy
+    // Keep track of pasted sheets and symbols for the different paths to the hierarchy.
     std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST> pastedSymbols;
     std::map<SCH_SHEET_PATH, SCH_SHEET_LIST>     pastedSheets;
 
@@ -1954,6 +1950,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 number = baseName.Last() + number;
                 baseName.RemoveLast();
             }
+
             // Update hierarchy to include any other sheets we already added, avoiding
             // duplicate sheet names
             hierarchy = m_frame->Schematic().GetSheets();
@@ -2039,8 +2036,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
         }
 
-        // Lines need both ends selected for a move after paste so the whole
-        // line moves
+        // Lines need both ends selected for a move after paste so the whole line moves.
         if( item->Type() == SCH_LINE_T )
             item->SetFlags( STARTPOINT | ENDPOINT );
 
@@ -2049,6 +2045,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         // Reset flags for subsequent move operation
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
+
         // Start out hidden so the pasted items aren't "ghosted" in their original location
         // before being moved to the current location.
         getView()->Hide( item, true );
@@ -2129,9 +2126,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     m_frame->GetCurrentSheet().UpdateAllScreenReferences();
 
-    // Now clear the previous selection, select the pasted items, and fire up the "move"
-    // tool.
-    //
+    // Now clear the previous selection, select the pasted items, and fire up the "move" tool.
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &loadedItems );
 
@@ -2156,7 +2151,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     };
 
             // Prefer connection points (which should remain on grid)
-
             for( EDA_ITEM* item : selection.Items() )
             {
                 SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
@@ -2174,7 +2168,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
 
             // Only process other points if we didn't find any connection points
-
             if( closest_dist == INT_MAX )
             {
                 for( EDA_ITEM* item : selection.Items() )

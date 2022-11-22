@@ -1829,8 +1829,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             {
                 SCH_SHEET_PATH sheetPath = instance;
                 sheetPath.push_back( sheet );
-                sheet->AddInstance( sheetPath );
-                sheet->SetPageNumber( sheetPath, wxString::Format( "%d", pageNum++ ) );
+                instance.SetPageNumber( wxString::Format( "%d", pageNum++ ) );
             }
 
             if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ),

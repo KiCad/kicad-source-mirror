@@ -400,31 +400,6 @@ public:
     bool AddInstance( const SCH_SHEET_PATH& aInstance );
 
     /**
-     * Return the sheet page number for \a aInstance.
-     *
-     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
-     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
-     *          will raise an assertion on debug builds and silently fail and return an empty
-     *          page number on release builds.
-     *
-     * @return the page number for the requested sheet instance.
-     */
-    wxString GetPageNumber( const SCH_SHEET_PATH& aInstance ) const;
-
-    /**
-     * Set the page number for the sheet instance \a aInstance.
-     *
-     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
-     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
-     *          will raise an assertion on debug builds and silently fail and return on release
-     *          builds.
-     *
-     * @param[in] aInstance is the hierarchical path of the sheet.
-     * @param[in] aReference is the new page number for the sheet.
-     */
-    void SetPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& aPageNumber );
-
-    /**
      * Compares page numbers of schematic sheets.
      *
      * @return 0 if the page numbers are equal, -1 if aPageNumberA < aPageNumberB, 1 otherwise
@@ -438,6 +413,33 @@ public:
     static const wxString GetDefaultFieldName( int aFieldNdx, bool aTranslated = true );
 
 protected:
+    friend SCH_SHEET_PATH;
+
+    /**
+     * Return the sheet page number for \a aInstance.
+     *
+     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
+     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
+     *          will raise an assertion on debug builds and silently fail and return an empty
+     *          page number on release builds.
+     *
+     * @return the page number for the requested sheet instance.
+     */
+    wxString getPageNumber( const SCH_SHEET_PATH& aInstance ) const;
+
+    /**
+     * Set the page number for the sheet instance \a aInstance.
+     *
+     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
+     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
+     *          will raise an assertion on debug builds and silently fail and return on release
+     *          builds.
+     *
+     * @param[in] aInstance is the hierarchical path of the sheet.
+     * @param[in] aReference is the new page number for the sheet.
+     */
+    void setPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& aPageNumber );
+
     /**
      * Renumber the sheet pins in the sheet.
      *
