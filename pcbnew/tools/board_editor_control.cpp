@@ -1520,10 +1520,14 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                 }
 
                 canvas()->ForceRefresh();
+                m_frame->UpdateMsgPanel();
             } );
 
     if( dlg.ShowModal() == wxID_OK )
+    {
         board()->SynchronizeNetsAndNetClasses( false );
+        m_frame->UpdateMsgPanel();
+    }
 
     return 0;
 }
