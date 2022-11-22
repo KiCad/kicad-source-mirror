@@ -28,6 +28,7 @@
 #include <sim/sim_library_spice.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_model_raw_spice.h>
+#include <sim/sim_serde.h>
 #include <grid_tricks.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <kiplatform/ui.h>
@@ -227,6 +228,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             m_curModelTypeOfDeviceType[deviceType] = type;
     }
 
+    m_saveInValueCheckbox->SetValue( curModel().IsStoredInValue() );
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
 
     onRadioButton( dummyEvent );
@@ -238,7 +240,6 @@ template <typename T>
 bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 {
     m_pinAssignmentsGrid->CommitPendingChanges();
-
     m_paramGrid->GetGrid()->CommitChangesFromEditor();
 
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
@@ -370,6 +371,15 @@ void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
     }
 
     m_typeChoice->Enable( !m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() );
+
+    if( curModel().HasPrimaryValue() )
+    {
+        m_saveInValueCheckbox->SetLabel( wxString::Format( "Save %s in Value field as \"%s\"",
+                                                           curModel().GetParam( 0 ).info.description,
+                                                           curModel().Serde().GenerateValue() ) );
+    }
+
+    m_saveInValueCheckbox->Show( curModel().HasPrimaryValue() );
 }
 
 
@@ -1162,6 +1172,13 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
     m_pinAssignmentsGrid->SetColSize( PIN_COLUMN::SYMBOL, gridWidth / 2 );
 
     aEvent.Skip();
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onSaveInValueCheckbox( wxCommandEvent& aEvent )
+{
+    curModel().SetIsStoredInValue( m_saveInValueCheckbox->GetValue() );
 }
 
 

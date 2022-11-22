@@ -128,6 +128,7 @@ private:
     void onCodePreviewSetFocus( wxFocusEvent& aEvent ) override;
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
+    void onSaveInValueCheckbox( wxCommandEvent& aEvent ) override;
     void onExcludeCheckbox( wxCommandEvent& aEvent ) override;
     void onDifferentialCheckbox( wxCommandEvent& event ) override;
 

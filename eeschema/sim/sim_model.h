@@ -412,6 +412,7 @@ public:
                                const std::string& aValue );
 
     const SPICE_GENERATOR& SpiceGenerator() const { return *m_spiceGenerator; }
+    const SIM_SERDE& Serde() const { return *m_serde; }
 
 
     // Move semantics.
@@ -504,13 +505,16 @@ public:
 
     // Can modifying a model parameter also modify other parameters?
     virtual bool HasAutofill() const { return false; }
-
     virtual bool HasPrimaryValue() const { return false; }
 
     void SetIsEnabled( bool aIsEnabled ) { m_isEnabled = aIsEnabled; }
     bool IsEnabled() const { return m_isEnabled; }
 
-    void SetIsStoredInValue( bool aIsStoredInValue ) { m_isStoredInValue = aIsStoredInValue; }
+    void SetIsStoredInValue( bool aIsStoredInValue )
+    {
+        if( HasPrimaryValue() )
+            m_isStoredInValue = aIsStoredInValue;
+    }
     bool IsStoredInValue() const { return m_isStoredInValue; }
 
 protected:

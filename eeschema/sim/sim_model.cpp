@@ -908,7 +908,8 @@ SIM_MODEL::SIM_MODEL( TYPE aType,
         m_serde( std::move( aSerde ) ),
         m_spiceGenerator( std::move( aSpiceGenerator ) ),
         m_type( aType ),
-        m_isEnabled( true )
+        m_isEnabled( true ),
+        m_isStoredInValue( false )
 {
 }
 
