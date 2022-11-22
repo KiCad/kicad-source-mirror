@@ -357,7 +357,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
 
         bds.m_DRCEngine = drcEngine;
 
-        m_board->SynchronizeNetsAndNetClasses();
+        m_board->SynchronizeNetsAndNetClasses( true );
 
         drcEngine->SetBoard( m_board.get() );
         drcEngine->SetDesignSettings( &bds );
