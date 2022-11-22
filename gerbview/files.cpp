@@ -506,6 +506,9 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
     while( ( entry = zipArchive.GetNextEntry() ) )
     {
+        if( entry->IsDir() )
+            continue;
+
         wxString fname = entry->GetName();
         wxFileName uzfn = fname;
         wxString curr_ext = uzfn.GetExt().Lower();
