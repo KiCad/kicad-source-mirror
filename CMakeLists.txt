@@ -23,9 +23,6 @@
 
 cmake_minimum_required( VERSION 3.12 FATAL_ERROR )
 
-# Default to honoring the visibility settings for static libraries
-cmake_policy(SET CMP0063 NEW)
-
 # Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
 # http://www.cmake.org/pipermail/cmake/2008-September/023808.html
 if( DEFINED CMAKE_BUILD_TYPE )

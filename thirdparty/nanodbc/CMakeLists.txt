@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(nanodbc CXX)
 
+# Default to honoring the visibility settings for static libraries
+cmake_policy(SET CMP0063 NEW)
+
 # nanodbc specific options
 option(NANODBC_DISABLE_ASYNC "Disable async features entirely" OFF)
 option(NANODBC_DISABLE_LIBCXX "Do not use libc++, if available." OFF)
