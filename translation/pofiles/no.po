@@ -2,13 +2,14 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
 # Petter Reinholdtsen <pere-weblate@hungry.com>, 2022.
+# Håvard Syslak <haavard.syslak@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-09-19 02:29+0000\n"
-"Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
+"PO-Revision-Date: 2022-11-22 20:35+0000\n"
+"Last-Translator: Håvard Syslak <haavard.syslak@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
 "Language: no\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -1843,9 +1844,8 @@ msgstr "Doner"
 
 #: common/dialog_about/dialog_about_base.cpp:69
 #: common/tool/common_control.cpp:278
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "Velkommen til KiCad %s!"
+msgstr "Doner til KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:666
 msgid "&OK"
@@ -5480,7 +5480,7 @@ msgstr "Blind / Begravet Via"
 #: common/layer_id.cpp:165
 #, fuzzy
 msgid "Micro-vias"
-msgstr "Micro vias:"
+msgstr "Mikro vias"
 
 #: common/layer_id.cpp:166
 #, fuzzy
@@ -5808,7 +5808,7 @@ msgstr "Pakk ut filen \"%s\"\n"
 #: kicad/pcm/pcm_task_manager.cpp:292
 #, fuzzy
 msgid "Error extracting file!"
-msgstr "Feil ved utpakking av fil!\n"
+msgstr "Feil ved utpakking av fil!"
 
 #: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:938
 #: eeschema/dialogs/dialog_plot_schematic.cpp:519
@@ -13620,9 +13620,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:1448
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Den automatiske lagringsfilen \"%s\" kunne ikke fjernes!"
+msgstr "Følgene automatisk lagrede fil(er) kunne ikke gjenopprettes\n"
 
 #: eeschema/files-io.cpp:1453
 msgid "Manual recovery will be required to restore the file(s) above."
@@ -16538,8 +16537,9 @@ msgid "Body"
 msgstr "Kropp"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1243
+#, fuzzy
 msgid "Power Symbol"
-msgstr "Strøm Symbol"
+msgstr "Forsynings symbol"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:54
 msgid "Import Symbol"
@@ -32259,9 +32259,8 @@ msgid "Assertion failure"
 msgstr "Tverrsnittsområde:"
 
 #: pcbnew/drc/drc_item.cpp:201
-#, fuzzy
 msgid "Copper sliver"
-msgstr "Kobberlag:"
+msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
@@ -41381,9 +41380,8 @@ msgstr "Gerbview"
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:33
-#, fuzzy
 msgid "KiCad"
-msgstr "Avslutt KiCad"
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
