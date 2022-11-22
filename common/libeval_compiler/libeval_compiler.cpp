@@ -250,6 +250,7 @@ COMPILER::~COMPILER()
     if( m_tree )
     {
         freeTree( m_tree );
+        m_tree = nullptr;
     }
 
     // Allow explicit call to destructor
@@ -694,6 +695,7 @@ void COMPILER::freeTree( LIBEVAL::TREE_NODE *tree )
         freeTree( tree->leaf[1] );
 
     delete tree->uop;
+    tree->uop = nullptr;
 }
 
 
