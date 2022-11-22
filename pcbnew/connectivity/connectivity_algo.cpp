@@ -763,14 +763,14 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
     {
         PAD* pad = static_cast<PAD*>( item );
 
-        if( pad->GetRemoveUnconnected() && pad->ZoneConnectionCache( layer ) == ZLC_UNCONNECTED )
+        if( pad->ConditionallyFlashed( layer ) && pad->ZoneConnectionCache( layer ) == ZLC_UNCONNECTED )
             return;
     }
     else if( item->Type() == PCB_VIA_T )
     {
         PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
-        if( via->GetRemoveUnconnected() && via->ZoneConnectionCache( layer ) == ZLC_UNCONNECTED )
+        if( via->ConditionallyFlashed( layer ) && via->ZoneConnectionCache( layer ) == ZLC_UNCONNECTED )
             return;
     }
 
@@ -897,23 +897,23 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
 
         if( const PAD* pad = dyn_cast<const PAD*>( parentA ) )
         {
-            if( !pad->GetRemoveUnconnected() || ( ( layer == F_Cu || layer == B_Cu ) && pad->GetKeepTopBottom() ) )
+            if( !pad->ConditionallyFlashed( layer ) )
                 flashingA = FLASHING::ALWAYS_FLASHED;
         }
         else if( const PCB_VIA* via = dyn_cast<const PCB_VIA*>( parentA ) )
         {
-            if( !via->GetRemoveUnconnected() || ( ( layer == F_Cu || layer == B_Cu ) && via->GetKeepTopBottom() ) )
+            if( !via->ConditionallyFlashed( layer ) )
                 flashingA = FLASHING::ALWAYS_FLASHED;
         }
 
         if( const PAD* pad = dyn_cast<const PAD*>( parentB ) )
         {
-            if( !pad->GetRemoveUnconnected() || ( ( layer == F_Cu || layer == B_Cu ) && pad->GetKeepTopBottom() ) )
+            if( !pad->ConditionallyFlashed( layer ) )
                 flashingB = FLASHING::ALWAYS_FLASHED;
         }
         else if( const PCB_VIA* via = dyn_cast<const PCB_VIA*>( parentB ) )
         {
-            if( !via->GetRemoveUnconnected() || ( ( layer == F_Cu || layer == B_Cu ) && via->GetKeepTopBottom() ) )
+            if( !via->ConditionallyFlashed( layer ) )
                 flashingB = FLASHING::ALWAYS_FLASHED;
         }
 

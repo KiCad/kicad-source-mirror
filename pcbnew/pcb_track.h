@@ -479,6 +479,17 @@ public:
     void SetKeepTopBottom( bool aSet )      { m_keepTopBottomLayer = aSet; }
     bool GetKeepTopBottom() const           { return m_keepTopBottomLayer; }
 
+    bool ConditionallyFlashed( PCB_LAYER_ID aLayer ) const
+    {
+        if( !m_removeUnconnectedLayer )
+            return false;
+
+        if( m_keepTopBottomLayer && ( aLayer == F_Cu || aLayer == B_Cu ) )
+            return false;
+
+        return true;
+    }
+
     /**
      * Checks to see whether the via should have a pad on the specific layer
      * @param aLayer Layer to check for connectivity

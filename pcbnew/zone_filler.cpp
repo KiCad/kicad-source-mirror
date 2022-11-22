@@ -294,7 +294,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                     {
                         PCB_VIA* via = static_cast<PCB_VIA*>( track );
 
-                        if( !via->IsOnLayer( layer ) || !via->GetRemoveUnconnected() )
+                        if( !via->IsOnLayer( layer ) || !via->ConditionallyFlashed( layer ) )
                             continue;
 
                         if( via->ZoneConnectionCache( layer ) == ZLC_UNRESOLVED
