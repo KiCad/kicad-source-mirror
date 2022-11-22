@@ -90,8 +90,8 @@ public:
     std::shared_ptr<const CN_ANCHOR> GetSourceNode() const { return m_source; }
     std::shared_ptr<const CN_ANCHOR> GetTargetNode() const { return m_target; }
 
-    void ResetSourceNode( const CN_ANCHOR* aNode ) { m_source.reset( aNode ); }
-    void ResetTargetNode( const CN_ANCHOR* aNode ) { m_target.reset( aNode ); }
+    void SetSourceNode( const std::shared_ptr<const CN_ANCHOR>& aNode ) { m_source = aNode; }
+    void SetTargetNode( const std::shared_ptr<const CN_ANCHOR>& aNode ) { m_target = aNode; }
 
     void SetWeight( unsigned weight ) { m_weight = weight; }
     unsigned GetWeight() const { return m_weight; }

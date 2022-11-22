@@ -331,7 +331,9 @@ void RN_NET::compute()
 void RN_NET::optimizeRNEdges()
 {
     auto optimizeZoneAnchor =
-            [&]( const VECTOR2I& aPos, const LSET& aLayerSet, const CN_ANCHOR*& aAnchor )
+            [&]( const VECTOR2I& aPos, const LSET& aLayerSet,
+                 const std::shared_ptr<const CN_ANCHOR>& aAnchor,
+                 std::function<void(const std::shared_ptr<const CN_ANCHOR>&)> setOptimizedTo )
             {
                 SEG::ecoord closest_dist_sq = ( aAnchor->Pos() - aPos ).SquaredEuclideanNorm();
                 VECTOR2I    closest_pt;
@@ -360,16 +362,14 @@ void RN_NET::optimizeRNEdges()
                 }
 
                 if( closest_item )
-                {
-                    aAnchor = closest_item->AddAnchor( closest_pt ).get();
-                    return true;
-                }
-
-                return false;
+                    setOptimizedTo( closest_item->AddAnchor( closest_pt ) );
             };
 
     auto optimizeZoneToZoneAnchors =
-            [&]( const CN_ANCHOR*& a, const CN_ANCHOR*& b )
+            [&]( const std::shared_ptr<const CN_ANCHOR>& a,
+                 const std::shared_ptr<const CN_ANCHOR>& b,
+                 std::function<void(const std::shared_ptr<const CN_ANCHOR>&)> setOptimizedATo,
+                 std::function<void(const std::shared_ptr<const CN_ANCHOR>&)> setOptimizedBTo )
             {
                 for( CN_ITEM* itemA : a->Item()->ConnectedItems() )
                 {
@@ -397,42 +397,48 @@ void RN_NET::optimizeRNEdges()
 
                             VECTOR2I ptA;
                             shapeA->Collide( shapeB, startDist + 10, nullptr, &ptA );
-                            a = zoneLayerA->AddAnchor( ptA ).get();
+                            setOptimizedATo( zoneLayerA->AddAnchor( ptA ) );
 
                             VECTOR2I ptB;
                             shapeB->Collide( shapeA, startDist + 10, nullptr, &ptB );
-                            b = zoneLayerB->AddAnchor( ptB ).get();
-
-                            return true;
+                            setOptimizedBTo( zoneLayerB->AddAnchor( ptB ) );
                         }
                     }
                 }
-
-                return false;
             };
 
     for( CN_EDGE& edge : m_rnEdges )
     {
-        const CN_ANCHOR* source = edge.GetSourceNode().get();
-        const CN_ANCHOR* target = edge.GetTargetNode().get();
+        const std::shared_ptr<const CN_ANCHOR>& source = edge.GetSourceNode();
+        const std::shared_ptr<const CN_ANCHOR>& target = edge.GetTargetNode();
 
         if( source->ConnectedItemsCount() == 0 )
         {
-            if( optimizeZoneAnchor( source->Pos(), source->Parent()->GetLayerSet(), target ) )
-                edge.ResetTargetNode( target );
+            optimizeZoneAnchor( source->Pos(), source->Parent()->GetLayerSet(), target,
+                                [&]( const std::shared_ptr<const CN_ANCHOR>& optimized )
+                                {
+                                    edge.SetTargetNode( optimized );
+                                } );
         }
         else if( target->ConnectedItemsCount() == 0 )
         {
-            if( optimizeZoneAnchor( target->Pos(), target->Parent()->GetLayerSet(), source ) )
-                edge.ResetSourceNode( source );
+            optimizeZoneAnchor( target->Pos(), target->Parent()->GetLayerSet(), source,
+                                [&]( const std::shared_ptr<const CN_ANCHOR>& optimized )
+                                {
+                                    edge.SetSourceNode( optimized );
+                                } );
         }
         else
         {
-            if( optimizeZoneToZoneAnchors( source, target ) )
-            {
-                edge.ResetSourceNode( source );
-                edge.ResetTargetNode( target );
-            }
+            optimizeZoneToZoneAnchors( source, target,
+                                       [&]( const std::shared_ptr<const CN_ANCHOR>& optimized )
+                                       {
+                                           edge.SetSourceNode( optimized );
+                                       },
+                                       [&]( const std::shared_ptr<const CN_ANCHOR>& optimized )
+                                       {
+                                           edge.SetTargetNode( optimized );
+                                       } );
         }
     }
 }
