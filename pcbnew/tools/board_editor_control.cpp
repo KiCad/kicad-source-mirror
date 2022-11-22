@@ -1522,7 +1522,8 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                 canvas()->ForceRefresh();
             } );
 
-    dlg.ShowModal();
+    if( dlg.ShowModal() == wxID_OK )
+        board()->SynchronizeNetsAndNetClasses( false );
 
     return 0;
 }

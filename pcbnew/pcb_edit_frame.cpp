@@ -1123,7 +1123,7 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
-        GetBoard()->SynchronizeNetsAndNetClasses();
+        GetBoard()->SynchronizeNetsAndNetClasses( true );
         SaveProjectSettings();
 
         Kiway().CommonSettingsChanged( false, true );

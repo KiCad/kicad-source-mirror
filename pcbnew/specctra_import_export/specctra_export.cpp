@@ -130,7 +130,7 @@ void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename )
 
     try
     {
-        aBoard->SynchronizeNetsAndNetClasses();
+        aBoard->SynchronizeNetsAndNetClasses( false );
         db.FromBOARD( aBoard );
         db.ExportPCB( aFullFilename, true );
         db.RevertFOOTPRINTs( aBoard );

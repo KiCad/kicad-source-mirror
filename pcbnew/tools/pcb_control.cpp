@@ -1279,7 +1279,7 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 
     // rebuild nets and ratsnest before any use of nets
     brd->BuildListOfNets();
-    brd->SynchronizeNetsAndNetClasses();
+    brd->SynchronizeNetsAndNetClasses( true );
     brd->BuildConnectivity();
 
     // Synchronize layers

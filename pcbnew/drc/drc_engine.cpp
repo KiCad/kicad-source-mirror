@@ -371,7 +371,7 @@ void DRC_ENGINE::loadImplicitRules()
                 }
             };
 
-    m_board->SynchronizeNetsAndNetClasses();
+    m_board->SynchronizeNetsAndNetClasses( false );
     makeNetclassRules( bds.m_NetSettings->m_DefaultNetClass, true );
 
     for( const auto& [ name, netclass ] : bds.m_NetSettings->m_NetClasses )

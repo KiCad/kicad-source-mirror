@@ -164,7 +164,7 @@ void NETINFO_LIST::buildListOfNets()
     for( NETINFO_ITEM* net : *this )
         net->Clear();
 
-    m_parent->SynchronizeNetsAndNetClasses( );
+    m_parent->SynchronizeNetsAndNetClasses( false );
     m_parent->SetAreasNetCodesFromNetNames();
 }
 

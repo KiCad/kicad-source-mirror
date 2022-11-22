@@ -1467,7 +1467,7 @@ void BOARD::SynchronizeProperties()
 }
 
 
-void BOARD::SynchronizeNetsAndNetClasses()
+void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
 {
     if( !m_project )
         return;
@@ -1478,15 +1478,18 @@ void BOARD::SynchronizeNetsAndNetClasses()
     for( NETINFO_ITEM* net : m_NetInfo )
         net->SetNetClass( bds.m_NetSettings->GetEffectiveNetClass( net->GetNetname() ) );
 
-    // Set initial values for custom track width & via size to match the default
-    // netclass settings
-    bds.UseCustomTrackViaSize( false );
-    bds.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
-    bds.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
-    bds.SetCustomViaDrill( defaultNetClass->GetViaDrill() );
-    bds.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
-    bds.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
-    bds.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
+    if( aResetTrackAndViaSizes )
+    {
+        // Set initial values for custom track width & via size to match the default
+        // netclass settings
+        bds.UseCustomTrackViaSize( false );
+        bds.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
+        bds.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
+        bds.SetCustomViaDrill( defaultNetClass->GetViaDrill() );
+        bds.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
+        bds.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
+        bds.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
+    }
 
     InvokeListeners( &BOARD_LISTENER::OnBoardNetSettingsChanged, *this );
 }

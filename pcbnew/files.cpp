@@ -1062,7 +1062,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         SaveProjectSettings();
 
         GetBoard()->SynchronizeProperties();
-        GetBoard()->SynchronizeNetsAndNetClasses();
+        GetBoard()->SynchronizeNetsAndNetClasses( false );
     }
 
     wxString   tempFile = wxFileName::CreateTempFileName( "pcbnew" );
@@ -1167,7 +1167,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
     SaveProjectSettings();
 
-    GetBoard()->SynchronizeNetsAndNetClasses();
+    GetBoard()->SynchronizeNetsAndNetClasses( false );
 
     try
     {

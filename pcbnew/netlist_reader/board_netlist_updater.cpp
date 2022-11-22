@@ -1085,7 +1085,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         // * it is useless because zones will be refilled after placing new footprints
         m_commit.Push( _( "Update netlist" ), m_newFootprintsCount ? ZONE_FILL_OP  : 0 );
 
-        m_board->SynchronizeNetsAndNetClasses();
+        m_board->SynchronizeNetsAndNetClasses( true );
         m_frame->SaveProjectSettings();
     }
 

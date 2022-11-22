@@ -126,7 +126,7 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     BOARD* board = new BOARD;
 
     board->GetDesignSettings() = GetDesignSettings();
-    board->SynchronizeNetsAndNetClasses();
+    board->SynchronizeNetsAndNetClasses( true );
     SetBoard( board );
 
     // This board will only be used to hold a footprint for editing

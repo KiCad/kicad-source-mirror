@@ -189,7 +189,7 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 
         brd->BuildConnectivity();
         brd->BuildListOfNets();
-        brd->SynchronizeNetsAndNetClasses();
+        brd->SynchronizeNetsAndNetClasses( false );
     }
 
     return brd;
@@ -241,7 +241,7 @@ BOARD* CreateEmptyBoard()
 bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat, bool aSkipSettings )
 {
     aBoard->BuildConnectivity();
-    aBoard->SynchronizeNetsAndNetClasses();
+    aBoard->SynchronizeNetsAndNetClasses( false );
 
     // Ensure the "C" locale is temporary set, before saving any file
     // It also avoid wxWidget alerts about locale issues, later, when using Python 3
