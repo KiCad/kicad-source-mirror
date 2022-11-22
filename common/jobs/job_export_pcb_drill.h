@@ -81,8 +81,8 @@ public:
     enum class ZEROS_FORMAT
     {
         DECIMAL,
-        SUPRESS_LEADING,
-        SUPRESS_TRAILING,
+        SUPPRESS_LEADING,
+        SUPPRESS_TRAILING,
         KEEP_ZEROS
     };
 

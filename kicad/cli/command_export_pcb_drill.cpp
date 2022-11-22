@@ -48,7 +48,8 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
 
     m_argParser.add_argument( ARG_EXCELLON_ZEROS_FORMAT )
             .default_value( std::string( "decimal" ) )
-            .help( UTF8STDSTR( _( "Valid options are: decimal,supressleading,surpresstrailing,keep." ) ) );
+            .help( UTF8STDSTR(
+                    _( "Valid options are: decimal,suppressleading,suppresstrailing,keep." ) ) );
 
     m_argParser.add_argument( ARG_DRILL_ORIGIN )
             .default_value( std::string( "absolute" ) )
@@ -147,13 +148,13 @@ int CLI::EXPORT_PCB_DRILL_COMMAND::Perform( KIWAY& aKiway )
     {
         drillJob->m_zeroFormat = JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::DECIMAL;
     }
-    else if( zeroFormat == wxS( "supressleading" ) )
+    else if( zeroFormat == wxS( "suppressleading" ) )
     {
-        drillJob->m_zeroFormat = JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPRESS_LEADING;
+        drillJob->m_zeroFormat = JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_LEADING;
     }
-    else if( zeroFormat == wxS( "surpresstrailing" ) )
+    else if( zeroFormat == wxS( "suppresstrailing" ) )
     {
-        drillJob->m_zeroFormat = JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPRESS_TRAILING;
+        drillJob->m_zeroFormat = JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_TRAILING;
     }
     else if( zeroFormat == wxS( "keep" ) )
     {

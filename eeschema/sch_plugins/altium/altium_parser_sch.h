@@ -648,7 +648,7 @@ struct ASCH_NO_ERC
     VECTOR2I location;
 
     bool isActive;
-    bool supressAll;
+    bool suppressAll;
 
     explicit ASCH_NO_ERC( const std::map<wxString, wxString>& aProps );
 };

@@ -648,7 +648,7 @@ ASCH_NO_ERC::ASCH_NO_ERC( const std::map<wxString, wxString>& aProps )
                          -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
 
     isActive   = ALTIUM_PARSER::ReadBool( aProps, "ISACTIVE", true );
-    supressAll = ALTIUM_PARSER::ReadInt( aProps, "SUPPRESSALL", true );
+    suppressAll = ALTIUM_PARSER::ReadInt( aProps, "SUPPRESSALL", true );
 }
 
 
