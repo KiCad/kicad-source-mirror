@@ -87,11 +87,11 @@ public:
         return m_weight < aOther.m_weight;
     }
 
-    std::shared_ptr<CN_ANCHOR> GetSourceNode() const { return m_source; }
-    std::shared_ptr<CN_ANCHOR> GetTargetNode() const { return m_target; }
+    std::shared_ptr<const CN_ANCHOR> GetSourceNode() const { return m_source; }
+    std::shared_ptr<const CN_ANCHOR> GetTargetNode() const { return m_target; }
 
-    void SetSourceNode( const std::shared_ptr<CN_ANCHOR>& aNode ) { m_source = aNode; }
-    void SetTargetNode( const std::shared_ptr<CN_ANCHOR>& aNode ) { m_target = aNode; }
+    void ResetSourceNode( const CN_ANCHOR* aNode ) { m_source.reset( aNode ); }
+    void ResetTargetNode( const CN_ANCHOR* aNode ) { m_target.reset( aNode ); }
 
     void SetWeight( unsigned weight ) { m_weight = weight; }
     unsigned GetWeight() const { return m_weight; }
@@ -107,10 +107,10 @@ public:
     }
 
 private:
-    std::shared_ptr<CN_ANCHOR> m_source;
-    std::shared_ptr<CN_ANCHOR> m_target;
-    unsigned                   m_weight;
-    bool                       m_visible;
+    std::shared_ptr<const CN_ANCHOR> m_source;
+    std::shared_ptr<const CN_ANCHOR> m_target;
+    unsigned                         m_weight;
+    bool                             m_visible;
 };
 
 

@@ -1501,21 +1501,17 @@ int PCB_SELECTION_TOOL::grabUnconnected( const TOOL_EVENT& aEvent )
         for( const CN_EDGE& edge : edges )
         {
             // Figure out if we are the source or the target node on the ratnest
-            std::shared_ptr<CN_ANCHOR> ourNode = edge.GetSourceNode()->Parent() == pad
-                                                         ? edge.GetSourceNode()
-                                                         : edge.GetTargetNode();
-            std::shared_ptr<CN_ANCHOR> otherNode = edge.GetSourceNode()->Parent() != pad
-                                                           ? edge.GetSourceNode()
-                                                           : edge.GetTargetNode();
+            const CN_ANCHOR* other = edge.GetSourceNode()->Parent() == pad ? edge.GetTargetNode().get()
+                                                                           : edge.GetSourceNode().get();
 
             // We only want to grab footprints, so the ratnest has to point to a pad
-            if( otherNode->Parent()->Type() != PCB_PAD_T )
+            if( other->Parent()->Type() != PCB_PAD_T )
                 continue;
 
             if( edge.GetLength() < currentDistance )
             {
                 currentDistance = edge.GetLength();
-                nearest = static_cast<PAD*>( otherNode->Parent() )->GetParent();
+                nearest = static_cast<PAD*>( other->Parent() )->GetParent();
             }
         }
 

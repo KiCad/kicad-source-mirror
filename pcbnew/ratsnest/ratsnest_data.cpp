@@ -120,8 +120,8 @@ void RN_NET::kruskalMST( const std::vector<CN_EDGE> &aEdges )
 
     for( const CN_EDGE& tmp : aEdges )
     {
-        const std::shared_ptr<CN_ANCHOR>& source = tmp.GetSourceNode();
-        const std::shared_ptr<CN_ANCHOR>& target = tmp.GetTargetNode();
+        const std::shared_ptr<const CN_ANCHOR>& source = tmp.GetSourceNode();
+        const std::shared_ptr<const CN_ANCHOR>& target = tmp.GetTargetNode();
 
         if( dset.unite( source->GetTag(), target->GetTag() ) )
         {
@@ -276,14 +276,14 @@ void RN_NET::compute()
         // Check if the only possible connection exists
         if( m_boardEdges.size() == 0 && m_nodes.size() == 2 )
         {
-            auto last = ++m_nodes.begin();
-
             // There can be only one possible connection, but it is missing
-            CN_EDGE edge ( *m_nodes.begin(), *last );
-            edge.GetSourceNode()->SetTag( 0 );
-            edge.GetTargetNode()->SetTag( 1 );
+            auto                              it = m_nodes.begin();
+            const std::shared_ptr<CN_ANCHOR>& source = *it++;
+            const std::shared_ptr<CN_ANCHOR>& target = *it;
 
-            m_rnEdges.push_back( edge );
+            source->SetTag( 0 );
+            target->SetTag( 1 );
+            m_rnEdges.emplace_back( source, target );
         }
         else
         {
@@ -330,9 +330,8 @@ void RN_NET::compute()
 
 void RN_NET::optimizeRNEdges()
 {
-    auto findZoneAnchor =
-            [&]( const VECTOR2I& aPos, const LSET& aLayerSet,
-                 const std::shared_ptr<CN_ANCHOR> aAnchor )
+    auto optimizeZoneAnchor =
+            [&]( const VECTOR2I& aPos, const LSET& aLayerSet, const CN_ANCHOR*& aAnchor )
             {
                 SEG::ecoord closest_dist_sq = ( aAnchor->Pos() - aPos ).SquaredEuclideanNorm();
                 VECTOR2I    closest_pt;
@@ -361,17 +360,17 @@ void RN_NET::optimizeRNEdges()
                 }
 
                 if( closest_item )
-                    return closest_item->AddAnchor( closest_pt );
-                else
-                    return aAnchor;
+                {
+                    aAnchor = closest_item->AddAnchor( closest_pt ).get();
+                    return true;
+                }
+
+                return false;
             };
 
     auto optimizeZoneToZoneAnchors =
-            [&]( CN_EDGE& edge )
+            [&]( const CN_ANCHOR*& a, const CN_ANCHOR*& b )
             {
-                const std::shared_ptr<CN_ANCHOR> a = edge.GetSourceNode();
-                const std::shared_ptr<CN_ANCHOR> b = edge.GetTargetNode();
-
                 for( CN_ITEM* itemA : a->Item()->ConnectedItems() )
                 {
                     CN_ZONE_LAYER* zoneLayerA = dynamic_cast<CN_ZONE_LAYER*>( itemA );
@@ -398,36 +397,42 @@ void RN_NET::optimizeRNEdges()
 
                             VECTOR2I ptA;
                             shapeA->Collide( shapeB, startDist + 10, nullptr, &ptA );
-                            edge.SetSourceNode( zoneLayerA->AddAnchor( ptA ) );
+                            a = zoneLayerA->AddAnchor( ptA ).get();
 
                             VECTOR2I ptB;
                             shapeB->Collide( shapeA, startDist + 10, nullptr, &ptB );
-                            edge.SetTargetNode( zoneLayerB->AddAnchor( ptB ) );
+                            b = zoneLayerB->AddAnchor( ptB ).get();
 
-                            return;
+                            return true;
                         }
                     }
                 }
+
+                return false;
             };
 
     for( CN_EDGE& edge : m_rnEdges )
     {
-        const std::shared_ptr<CN_ANCHOR> source = edge.GetSourceNode();
-        const std::shared_ptr<CN_ANCHOR> target = edge.GetTargetNode();
+        const CN_ANCHOR* source = edge.GetSourceNode().get();
+        const CN_ANCHOR* target = edge.GetTargetNode().get();
 
         if( source->ConnectedItemsCount() == 0 )
         {
-            edge.SetTargetNode( findZoneAnchor( source->Pos(), source->Parent()->GetLayerSet(),
-                                                target ) );
+            if( optimizeZoneAnchor( source->Pos(), source->Parent()->GetLayerSet(), target ) )
+                edge.ResetTargetNode( target );
         }
         else if( target->ConnectedItemsCount() == 0 )
         {
-            edge.SetSourceNode( findZoneAnchor( target->Pos(), target->Parent()->GetLayerSet(),
-                                                source ) );
+            if( optimizeZoneAnchor( target->Pos(), target->Parent()->GetLayerSet(), source ) )
+                edge.ResetSourceNode( source );
         }
         else
         {
-            optimizeZoneToZoneAnchors( edge );
+            if( optimizeZoneToZoneAnchors( source, target ) )
+            {
+                edge.ResetSourceNode( source );
+                edge.ResetTargetNode( target );
+            }
         }
     }
 }

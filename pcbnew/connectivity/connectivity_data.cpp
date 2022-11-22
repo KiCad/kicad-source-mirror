@@ -356,9 +356,9 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
 
     for( const CN_EDGE& edge : edges )
     {
-        const std::shared_ptr<CN_ANCHOR>& nodeA = edge.GetSourceNode();
-        const std::shared_ptr<CN_ANCHOR>& nodeB = edge.GetTargetNode();
-        RN_DYNAMIC_LINE                   l;
+        const std::shared_ptr<const CN_ANCHOR>& nodeA = edge.GetSourceNode();
+        const std::shared_ptr<const CN_ANCHOR>& nodeB = edge.GetTargetNode();
+        RN_DYNAMIC_LINE l;
 
         // Use the parents' positions
         l.a = nodeA->Parent()->GetPosition() + aInternalOffset;
@@ -913,8 +913,8 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
 
         for( const CN_EDGE& edge : net->GetEdges() )
         {
-            std::shared_ptr<CN_ANCHOR> srcNode = edge.GetSourceNode();
-            std::shared_ptr<CN_ANCHOR> dstNode = edge.GetTargetNode();
+            std::shared_ptr<const CN_ANCHOR> srcNode = edge.GetSourceNode();
+            std::shared_ptr<const CN_ANCHOR> dstNode = edge.GetTargetNode();
 
             BOARD_CONNECTED_ITEM* srcParent = srcNode->Parent();
             BOARD_CONNECTED_ITEM* dstParent = dstNode->Parent();
