@@ -72,7 +72,7 @@ wxString FOOTPRINT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
     if( aCol == 0 )
         return fp->GetReference();
     else if( aCol == 1 )
-        return fp->GetValue();
+        return UnescapeString( fp->GetValue() );
     else if( aCol == 2 )
         return fp->GetLayerName();
     else if( aCol == 3 )
@@ -251,11 +251,11 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
     {
         if( PCB_TEXT::ClassOf( text ) )
         {
-            return dynamic_cast<PCB_TEXT*>( text )->GetText();
+            return UnescapeString( static_cast<PCB_TEXT*>( text )->GetText() );
         }
         else if( PCB_TEXTBOX::ClassOf( text ) )
         {
-            return dynamic_cast<PCB_TEXTBOX*>( text )->GetShownText();
+            return UnescapeString( static_cast<PCB_TEXTBOX*>( text )->GetShownText() );
         }
     }
     if( aCol == 2 )
