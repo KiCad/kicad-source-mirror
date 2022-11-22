@@ -1133,7 +1133,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                 wxLogTrace( ConnTrace, "%ld (%s) is weakly driven and not unique. Changing to %s.",
                             subgraph->m_code, name, new_name );
 
-//                alg::delete_matching( *vec, subgraph );
+                alg::delete_matching( *vec, subgraph );
 
                 m_net_name_to_subgraphs_map[new_name].emplace_back( subgraph );
 
@@ -2200,16 +2200,16 @@ SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember( SCH_CONNECTION* aBusConnection
 void CONNECTION_GRAPH::recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph,
                                             const wxString& aOldName )
 {
-//    auto it = m_net_name_to_subgraphs_map.find( aOldName );
-//
-//    if( it != m_net_name_to_subgraphs_map.end() )
-//    {
-//        std::vector<CONNECTION_SUBGRAPH*>& vec = it->second;
-//        alg::delete_matching( vec, aSubgraph );
-//    }
-//
-//    wxLogTrace( ConnTrace, "recacheSubgraphName: %s => %s", aOldName,
-//                aSubgraph->m_driver_connection->Name() );
+    auto it = m_net_name_to_subgraphs_map.find( aOldName );
+
+    if( it != m_net_name_to_subgraphs_map.end() )
+    {
+        std::vector<CONNECTION_SUBGRAPH*>& vec = it->second;
+        alg::delete_matching( vec, aSubgraph );
+    }
+
+    wxLogTrace( ConnTrace, "recacheSubgraphName: %s => %s", aOldName,
+                aSubgraph->m_driver_connection->Name() );
 
     m_net_name_to_subgraphs_map[aSubgraph->m_driver_connection->Name()].push_back( aSubgraph );
 }
