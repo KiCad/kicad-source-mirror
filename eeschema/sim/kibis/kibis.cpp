@@ -1295,7 +1295,7 @@ bool KIBIS_PIN::writeSpiceDevice( std::string* aDest, std::string aName, KIBIS_M
         result += "RPIN 1 PIN ";
         result += doubleToString( m_Rpin.value[aParam.m_Rpin] );
         result += "\n";
-        result += "LPIN DIE 1 ";
+        result += "LPIN DIE0 1 ";
         result += doubleToString( m_Lpin.value[aParam.m_Lpin] );
         result += "\n";
         result += "CPIN PIN GND ";
