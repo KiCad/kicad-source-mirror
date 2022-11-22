@@ -536,8 +536,6 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 
     // Store the selected sheets instance information
     SCH_SHEET_LIST selectedSheets;
-    selectedSheets.push_back( *aSelectionPath ); // Include the "root" of the selection
-
     SCH_REFERENCE_LIST selectedSymbols;
 
     for( i = 0; i < aSelection->GetSize(); ++i )
@@ -620,6 +618,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
                       "Sheet is not inside the selection path?" );
     }
 
+    selectionPath = aSelectionPath->Path();
     selectedSymbols.SortByReferenceOnly();
     std::vector<SYMBOL_INSTANCE_REFERENCE> symbolInstances = selectedSymbols.GetSymbolInstances();
 
