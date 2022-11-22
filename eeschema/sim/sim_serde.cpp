@@ -45,10 +45,7 @@ namespace SIM_SERDE_PARSER
     template <> struct pinSequenceSelector<pinNumber> : std::true_type {};
 
     template <typename Rule> struct fieldInferValueSelector : std::false_type {};
-    template <> struct fieldInferValueSelector<fieldInferValueType> : std::true_type {};
-    template <> struct fieldInferValueSelector<fieldInferValuePrimaryValue> : std::true_type {};
     template <> struct fieldInferValueSelector<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>> : std::true_type {};
-    template <> struct fieldInferValueSelector<fieldParamValuePairs> : std::true_type {};
 }
 
 
@@ -66,28 +63,8 @@ std::string SIM_SERDE::GenerateType() const
 
 std::string SIM_SERDE::GenerateValue() const
 {
-    std::string result;
-
-    for( int i = 0; i < m_model.GetParamCount(); ++i )
-    {
-        const SIM_MODEL::PARAM& param = m_model.GetUnderlyingParam( i );
-
-        if( i == 0 && m_model.HasPrimaryValue() )
-        {
-            result.append( param.value->ToString() );
-            continue;
-        }
-
-        if( param.value->ToString() == "" )
-            continue;
-
-        std::string paramValuePair = GenerateParamValuePair( param );
-
-        if( paramValuePair == "" )
-            continue; // Prevent adding empty spaces.
-
-        result.append( fmt::format( " {}", paramValuePair ) );
-    }
+    const SIM_MODEL::PARAM& param = m_model.GetUnderlyingParam( 0 );
+    std::string result = param.value->ToString();
 
     if( result == "" )
         result = m_model.GetDeviceInfo().fieldValue;
@@ -103,9 +80,12 @@ std::string SIM_SERDE::GenerateParams() const
 
     for( int i = 0; i < m_model.GetParamCount(); ++i )
     {
+        if( i == 0 && m_model.IsStoredInValue() )
+            continue;
+
         const SIM_MODEL::PARAM& param = m_model.GetUnderlyingParam( i );
 
-        if( param.value->ToString() == "" )
+        if( param.value->ToString() == "" && !( i == 0 && !m_model.IsStoredInValue() ) )
             continue;
 
         std::string paramValuePair = GenerateParamValuePair( param );
@@ -172,7 +152,6 @@ void SIM_SERDE::ParseValue( const std::string& aValue )
 {
     try
     {
-        // TODO: Don't call this multiple times.
         tao::pegtl::string_input<> in( aValue, SIM_MODEL::VALUE_FIELD );
         auto root = tao::pegtl::parse_tree::parse<SIM_SERDE_PARSER::fieldInferValueGrammar,
                                                   SIM_SERDE_PARSER::fieldInferValueSelector,
@@ -181,19 +160,12 @@ void SIM_SERDE::ParseValue( const std::string& aValue )
 
         for( const auto& node : root->children )
         {
-            if( node->is_type<SIM_SERDE_PARSER::fieldInferValuePrimaryValue>() )
+            if( node->is_type<SIM_SERDE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
+                                                       SIM_VALUE::NOTATION::SI>>()
+                && node->string() != "" )
             {
-                for( const auto& subnode : node->children )
-                {
-                    if( subnode->is_type<SIM_SERDE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
-                                                                  SIM_VALUE::NOTATION::SI>>() )
-                    {
-                        m_model.SetParamValue( 0, subnode->string() );
-                    }
-                }
+                m_model.SetParamValue( 0, node->string() );
             }
-            else if( node->is_type<SIM_SERDE_PARSER::fieldParamValuePairs>() )
-                ParseParams( node->string() );
         }
     }
     catch( const tao::pegtl::parse_error& e )
@@ -205,7 +177,7 @@ void SIM_SERDE::ParseValue( const std::string& aValue )
 }
 
 
-void SIM_SERDE::ParseParams( const std::string& aParams )
+bool SIM_SERDE::ParseParams( const std::string& aParams )
 {
     tao::pegtl::string_input<> in( aParams, SIM_MODEL::PARAMS_FIELD );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
@@ -227,6 +199,7 @@ void SIM_SERDE::ParseParams( const std::string& aParams )
     }
 
     std::string paramName;
+    bool isPrimaryValueSet = false;
 
     for( const auto& node : root->children )
     {
@@ -241,6 +214,9 @@ void SIM_SERDE::ParseParams( const std::string& aParams )
             // TODO: Shouldn't be named "...fromSpiceCode" here...
 
             m_model.SetParamValue( paramName, node->string(), SIM_VALUE_GRAMMAR::NOTATION::SI );
+
+            if( paramName == m_model.GetParam( 0 ).info.name )
+                isPrimaryValueSet = true;
         }
         else if( node->is_type<SIM_SERDE_PARSER::quotedString>() )
         {
@@ -256,6 +232,8 @@ void SIM_SERDE::ParseParams( const std::string& aParams )
             wxFAIL;
         }
     }
+
+    return !m_model.HasPrimaryValue() || isPrimaryValueSet;
 }
 
 
@@ -319,7 +297,7 @@ std::string SIM_SERDE::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) 
 
     std::string value = aParam.value->ToString();
     
-    if( value.find( " " ) != std::string::npos )
+    if( value == "" || value.find( " " ) != std::string::npos )
         value = fmt::format( "\"{}\"", value );
 
     return fmt::format( "{}={}", aParam.info.name, value );

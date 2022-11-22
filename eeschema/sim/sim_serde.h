@@ -69,27 +69,8 @@ namespace SIM_SERDE_GRAMMAR
                                               opt<sep>,
                                               tao::pegtl::eof> {};
 
-    struct fieldInferValueType : plus<upper> {};
-    struct fieldInferValuePrimaryValue : seq<// HACK: Because `number` matches empty string,
-                                             // ensure it is not empty.
-                                             at<sor<tao::pegtl::digit,
-                                                    seq<one<'.'>>,
-                                                        tao::pegtl::digit>>,
-                                             // END HACK.
-                                             number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
-                                             // Hackish: match anything until param-value pairs.
-                                             // Because the user may want to write something like
-                                             // "10k 30% 30mW w=0.4", but we care only about the
-                                             // "10k" and "w=0.4".
-                                             star<not_at<sep,
-                                                         try_catch<fieldParamValuePairs>>,
-                                                  any>> {};
-    struct fieldInferValue : sor<seq<fieldInferValueType,
-                                     opt<sep,
-                                         fieldParamValuePairs>>,
-                                 seq<opt<fieldInferValuePrimaryValue>,
-                                     opt<sep>,
-                                     opt<fieldParamValuePairs>>> {};
+    struct fieldInferValue : sor<one<'R', 'C', 'L', 'V', 'I'>,
+                                 number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>> {};
     struct fieldInferValueGrammar : must<opt<sep>,
                                          fieldInferValue,
                                          opt<sep>,
@@ -99,8 +80,6 @@ namespace SIM_SERDE_GRAMMAR
     template <typename> inline constexpr const char* errorMessage = nullptr;
     template <> inline constexpr auto errorMessage<opt<sep>> = "";
     template <> inline constexpr auto errorMessage<opt<pinSequence>> = "";
-    template <> inline constexpr auto errorMessage<opt<sor<fieldInferValueType,
-                                                           fieldInferValuePrimaryValue>>> = "";
     template <> inline constexpr auto errorMessage<one<'='>> =
         "expected '='";
     template <> inline constexpr auto errorMessage<sor<quotedString,
@@ -110,7 +89,7 @@ namespace SIM_SERDE_GRAMMAR
         "expected parameter=value pairs";
     template <> inline constexpr auto errorMessage<opt<fieldParamValuePairs>> = "";
     template <> inline constexpr auto errorMessage<fieldInferValue> =
-        "expected parameter=value pairs, together possibly preceded by a type or primary value";
+        "expected 'R', 'C', 'L', 'V', 'I' or a number";
     template <> inline constexpr auto errorMessage<tao::pegtl::eof> =
         "expected end of string";
 
@@ -151,7 +130,7 @@ public:
     SIM_MODEL::TYPE ParseDeviceAndType( const std::string& aDevice,
                                         const std::string& aType );
     void ParseValue( const std::string& aValue );
-    void ParseParams( const std::string& aParams );
+    bool ParseParams( const std::string& aParams );
     void ParsePins( const std::string& aPins );
     void ParseEnable( const std::string& aEnable );
 

@@ -943,10 +943,8 @@ void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>
 
     std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
 
-    if( paramsField == "" && HasPrimaryValue() )
+    if( !m_serde->ParseParams( paramsField ) )
         m_serde->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
-    else
-        m_serde->ParseParams( paramsField );
 }
 
 
@@ -959,10 +957,10 @@ void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
     SetFieldValue( aFields, ENABLE_FIELD, m_serde->GenerateEnable() );
     SetFieldValue( aFields, PINS_FIELD, m_serde->GeneratePins() );
 
+    SetFieldValue( aFields, PARAMS_FIELD, m_serde->GenerateParams() );
+
     if( IsStoredInValue() )
         SetFieldValue( aFields, VALUE_FIELD, m_serde->GenerateValue() );
-    else
-        SetFieldValue( aFields, PARAMS_FIELD, m_serde->GenerateParams() );
 }
 
 
