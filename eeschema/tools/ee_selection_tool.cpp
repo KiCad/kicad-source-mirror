@@ -1104,6 +1104,20 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             }
             else if( text )
             {
+                if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( text ) )
+                {
+                    if( field->GetParent() && field->GetParent()->Type() == SCH_SYMBOL_T )
+                    {
+                        symbol = static_cast<SCH_SYMBOL*>( field->GetParent() );
+
+                        VECTOR2I relPos = pos - symbol->GetPosition();
+                        relPos = symbol->GetTransform().InverseTransform().TransformCoordinate( relPos );
+                        pos = relPos + symbol->GetPosition();
+
+                        poss = SEG( pos, pos );
+                    }
+                }
+
                 text->GetEffectiveTextShape()->Collide( poss, closestDist, &dist );
             }
             else if( symbol )
