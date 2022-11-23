@@ -5369,7 +5369,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
 
     // File format default is no-token == no-feature.
     via->SetRemoveUnconnected( false );
-    via->SetKeepTopBottom( false );
+    via->SetKeepStartEnd( false );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -5438,7 +5438,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
             break;
 
         case T_keep_end_layers:
-            via->SetKeepTopBottom( true );
+            via->SetKeepStartEnd( true );
             NeedRIGHT();
             break;
 

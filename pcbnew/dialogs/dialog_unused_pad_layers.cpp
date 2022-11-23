@@ -93,7 +93,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
                 via->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
-                via->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+                via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
             }
 
             if( item->Type() == PCB_FOOTPRINT_T && m_cbPads->IsChecked() )
@@ -142,7 +142,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
                 m_commit.Modify( item );
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
                 via->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
-                via->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+                via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
             }
         }
     }

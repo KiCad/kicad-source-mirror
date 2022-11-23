@@ -87,7 +87,7 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
     SetDrillDefault();
 
     m_removeUnconnectedLayer = false;
-    m_keepTopBottomLayer = true;
+    m_keepStartEndLayer = true;
 
     for( size_t ii = 0; ii < arrayDim( m_zoneLayerConnections ); ++ii )
         m_zoneLayerConnections[ ii ] = ZLC_UNCONNECTED;
@@ -615,7 +615,7 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     if( !m_removeUnconnectedLayer )
         return true;
 
-    if( m_keepTopBottomLayer && ( aLayer == m_layer || aLayer == m_bottomLayer ) )
+    if( m_keepStartEndLayer && ( aLayer == m_layer || aLayer == m_bottomLayer ) )
         return true;
 
     // Must be static to keep from raising its ugly head in performance profiles

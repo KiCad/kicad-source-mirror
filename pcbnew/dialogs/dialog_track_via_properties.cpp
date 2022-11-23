@@ -106,7 +106,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             {
                 if( !via->GetRemoveUnconnected() )
                     return 0;
-                else if( via->GetKeepTopBottom() )
+                else if( via->GetKeepStartEnd() )
                     return 1;
                 else
                     return 2;
@@ -607,11 +607,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     break;
                 case 1:
                     v->SetRemoveUnconnected( true );
-                    v->SetKeepTopBottom( true );
+                    v->SetKeepStartEnd( true );
                     break;
                 case 2:
                     v->SetRemoveUnconnected( true );
-                    v->SetKeepTopBottom( false );
+                    v->SetKeepStartEnd( false );
                     break;
                 default:
                     break;

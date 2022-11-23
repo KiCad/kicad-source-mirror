@@ -2146,7 +2146,7 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
         {
             m_out->Print( 0, " (remove_unused_layers)" );
 
-            if( via->GetKeepTopBottom() )
+            if( via->GetKeepStartEnd() )
                 m_out->Print( 0, " (keep_end_layers)" );
         }
 
