@@ -812,7 +812,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
     // TODO: keep it simple for now, and only set position.
     //component->SetOrientation( elem.orientation );
     symbol->SetLibId( libId );
-    symbol->SetUnit( elem.currentpartid );
+    symbol->SetUnit( std::max( 0, elem.currentpartid ) );
 
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
@@ -845,7 +845,7 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     LIB_PIN*    pin = new LIB_PIN( libSymbolIt->second );
     libSymbolIt->second->AddDrawItem( pin );
 
-    pin->SetUnit( elem.ownerpartid );
+    pin->SetUnit( std::max( 0, elem.ownerpartid ) );
 
     pin->SetName( elem.name );
     pin->SetNumber( elem.designator );
@@ -1124,7 +1124,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         LIB_TEXT*   textItem = new LIB_TEXT( libSymbolIt->second );
         libSymbolIt->second->AddDrawItem( textItem );
 
-        textItem->SetUnit( elem.ownerpartid );
+        textItem->SetUnit( std::max( 0, elem.ownerpartid ) );
 
         textItem->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, symbol ) );
         textItem->SetText( elem.text );
@@ -1305,7 +1305,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 LIB_SHAPE* line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
                 libSymbolIt->second->AddDrawItem( line );
 
-                line->SetUnit( elem.ownerpartid );
+                line->SetUnit( std::max( 0, elem.ownerpartid ) );
 
                 for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
                 {
@@ -1324,7 +1324,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 LIB_SHAPE* line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
                 libSymbolIt->second->AddDrawItem( line );
 
-                line->SetUnit( elem.ownerpartid );
+                line->SetUnit( std::max( 0, elem.ownerpartid ) );
 
                 for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
                 {
@@ -1340,7 +1340,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 LIB_SHAPE* bezier = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::BEZIER );
                 libSymbolIt->second->AddDrawItem( bezier );
 
-                bezier->SetUnit( elem.ownerpartid );
+                bezier->SetUnit( std::max( 0, elem.ownerpartid ) );
 
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
@@ -1578,7 +1578,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             LIB_SHAPE* circle = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::CIRCLE );
             libSymbolIt->second->AddDrawItem( circle );
 
-            circle->SetUnit( elem.ownerpartid );
+            circle->SetUnit( std::max( 0, elem.ownerpartid ) );
 
             circle->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
             circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.radius, 0 ) );
@@ -1588,7 +1588,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
         {
             LIB_SHAPE* arc = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::ARC );
             libSymbolIt->second->AddDrawItem( arc );
-            arc->SetUnit( elem.ownerpartid );
+            arc->SetUnit( std::max( 0, elem.ownerpartid ) );
 
             arc->SetCenter( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
 
@@ -1714,7 +1714,7 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
         LIB_SHAPE*  line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
         libSymbolIt->second->AddDrawItem( line );
 
-        line->SetUnit( elem.ownerpartid );
+        line->SetUnit( std::max( 0, elem.ownerpartid ) );
 
         line->AddPoint( GetRelativePosition( elem.point1 + m_sheetOffset, symbol ) );
         line->AddPoint( GetRelativePosition( elem.point2 + m_sheetOffset, symbol ) );
@@ -2834,6 +2834,9 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
 
     SCH_FIELD* field = symbol->GetField( VALUE_FIELD );
 
+    #if 0
+    // I am not sure value and ref should be invisible just because emptyRef is true
+    // I have examples with this criteria fully incorrect.
     if ( emptyRef )
         field->SetVisible( false );
 
@@ -2841,6 +2844,7 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
 
     if ( emptyRef )
         field->SetVisible( false );
+    #endif
 
     field->SetPosition( elem.location + m_sheetOffset );
     SetTextPositioning( field, elem.justification, elem.orientation );
