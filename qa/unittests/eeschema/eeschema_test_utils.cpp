@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,8 +92,11 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
     SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
     // Restore all of the loaded symbol instances from the root sheet screen.
-    sheets.UpdateSymbolInstances( m_schematic.RootScreen()->GetSymbolInstances() );
-    sheets.UpdateSheetInstances( m_schematic.RootScreen()->GetSheetInstances() );
+    if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
+        sheets.UpdateSymbolInstances( m_schematic.RootScreen()->GetSymbolInstances() );
+
+    if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20221110 )
+        sheets.UpdateSheetInstances( m_schematic.RootScreen()->GetSheetInstances() );
 
     sheets.AnnotatePowerSymbols();
 
