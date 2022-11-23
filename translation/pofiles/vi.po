@@ -1,20 +1,21 @@
 # lê văn lập <levanlap2502@gmail.com>, 2020, 2021, 2022.
 # Trần Phi Hải <tranphihai-focus@outlook.com>, 2021, 2022.
+# Bế Trọng Nghĩa <benghia1st@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-09-07 20:50+0000\n"
-"Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"PO-Revision-Date: 2022-11-26 09:53+0000\n"
+"Last-Translator: Bế Trọng Nghĩa <benghia1st@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1874,9 +1875,8 @@ msgstr "Đóng góp"
 
 #: common/dialog_about/dialog_about_base.cpp:69
 #: common/tool/common_control.cpp:278
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "Chào mừng bạn đến với KiCad %s!"
+msgstr "Đóng góp cho KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:666
 msgid "&OK"
