@@ -239,8 +239,13 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
-                edgesTree.Insert( pad, Edge_Cuts, m_largestEdgeClearance );
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->HasHole() )
+            {
+                // edge-clearances are for milling tolerances (drilling tolerances are handled
+                // by hole-clearances)
+                if( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
+                    edgesTree.Insert( pad, Edge_Cuts, m_largestEdgeClearance );
+            }
 
             if( pad->GetProperty() == PAD_PROP::CASTELLATED )
                 m_castellatedPads.push_back( pad );
