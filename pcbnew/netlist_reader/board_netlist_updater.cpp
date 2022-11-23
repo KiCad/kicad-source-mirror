@@ -260,7 +260,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     // Create a copy only if the footprint has not been added during this update
     FOOTPRINT* copy = nullptr;
 
-    if( m_commit.GetStatus( aPcbFootprint ) )
+    if( !m_commit.GetStatus( aPcbFootprint ) )
     {
         copy = static_cast<FOOTPRINT*>( aPcbFootprint->Clone() );
         copy->SetParentGroup( nullptr );
