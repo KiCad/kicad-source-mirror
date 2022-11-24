@@ -202,7 +202,7 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
     switch( PROPERTY_MANAGER::Instance().GetUnits() )
     {
         case EDA_UNITS::INCHES:
-            return wxString::Format( wxT( "%d in" ), pcbIUScale.IUToMils( distanceIU ) / 1000.0 );
+            return wxString::Format( wxT( "%g in" ), pcbIUScale.IUToMils( distanceIU ) / 1000.0 );
 
         case EDA_UNITS::MILS:
             return wxString::Format( wxT( "%d mils" ), pcbIUScale.IUToMils( distanceIU ) );
