@@ -2192,7 +2192,7 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
     PCB_SHAPE* primitive = new PCB_SHAPE();
     primitive->SetShape( listtype[type] );
 
-    if( type == arrayDim( shapelist ) - 1 )
+    if( type == static_cast<int>( arrayDim( shapelist ) ) - 1 )
         primitive->SetIsAnnotationProxy();
 
     primitive->SetStroke( STROKE_PARAMS( m_board->GetDesignSettings().GetLineThickness( F_Cu ),

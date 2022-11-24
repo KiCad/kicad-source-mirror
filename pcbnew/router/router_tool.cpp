@@ -594,7 +594,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
                  evt.sizes.TrackWidthIsExplicit() ? 1: 0,
                  evt.sizes.GetLayerBottom(),
                  evt.sizes.GetLayerTop(),
-                 evt.sizes.ViaType() );
+                 static_cast<int>( evt.sizes.ViaType() ) );
     }
 
     // Export as *.kicad_pcb format, using a strategy which is specifically chosen
