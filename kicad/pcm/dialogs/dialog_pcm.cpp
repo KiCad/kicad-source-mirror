@@ -294,6 +294,9 @@ void DIALOG_PCM::OnInstallFromFileClicked( wxCommandEvent& event )
 
     if( !m_selectedRepositoryId.IsEmpty() )
         setRepositoryData( m_selectedRepositoryId );
+
+    if( task_manager.ColorSettingsChanged() )
+        Pgm().GetSettingsManager().ReloadColorSettings();
 }
 
 
@@ -469,6 +472,9 @@ void DIALOG_PCM::OnApplyChangesClicked( wxCommandEvent& event )
 
     if( !m_selectedRepositoryId.IsEmpty() )
         setRepositoryData( m_selectedRepositoryId );
+
+    if( task_manager.ColorSettingsChanged() )
+        Pgm().GetSettingsManager().ReloadColorSettings();
 }
 
 

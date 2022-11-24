@@ -104,6 +104,11 @@ public:
      */
     void InstallFromFile( wxWindow* aParent, const wxString& aFilePath );
 
+    /**
+     * @return true if color settings were installed or uninstalled by the most recent action
+     */
+    bool ColorSettingsChanged() const;
+
 private:
     /**
      * @brief Download URL to a file
@@ -150,6 +155,7 @@ private:
     SYNC_QUEUE<PCM_TASK>                    m_download_queue;
     SYNC_QUEUE<PCM_TASK>                    m_install_queue;
     std::shared_ptr<PLUGIN_CONTENT_MANAGER> m_pcm;
+    std::atomic_bool                        m_color_themes_changed;
 };
 
 

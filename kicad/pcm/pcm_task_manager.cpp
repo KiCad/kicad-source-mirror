@@ -221,6 +221,9 @@ void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
         }
     }
 
+    if( aPackage.type == PCM_PACKAGE_TYPE::PT_COLORTHEME )
+        m_color_themes_changed.store( true );
+
     m_reporter->PCMReport(
             wxString::Format( _( "Removing downloaded archive '%s'." ), aFilePath.GetFullName() ),
             RPT_SEVERITY_INFO );
@@ -421,6 +424,8 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     m_reporter->KeepRefreshing( false );
     m_reporter->Destroy();
     m_reporter.reset();
+
+    m_color_themes_changed.store( package.type == PCM_PACKAGE_TYPE::PT_COLORTHEME );
 }
 
 
@@ -549,6 +554,9 @@ void PCM_TASK_MANAGER::Uninstall( const PCM_PACKAGE& aPackage )
 
         m_pcm->MarkUninstalled( aPackage );
 
+        if( aPackage.type == PCM_PACKAGE_TYPE::PT_COLORTHEME )
+            m_color_themes_changed.store( true );
+
         m_reporter->PCMReport(
                 wxString::Format( _( "Package %s uninstalled" ), aPackage.identifier ),
                 RPT_SEVERITY_INFO );
@@ -570,6 +578,8 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
     std::mutex              mutex;
     std::condition_variable condvar;
     bool                    download_complete = false;
+
+    m_color_themes_changed.store( false );
 
     std::thread download_thread(
             [&]()
@@ -627,4 +637,10 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
 
     download_thread.join();
     install_thread.join();
+}
+
+
+bool PCM_TASK_MANAGER::ColorSettingsChanged() const
+{
+    return m_color_themes_changed.load();
 }
