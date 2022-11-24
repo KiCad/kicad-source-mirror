@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <eda_draw_frame.h>
 #include <properties/pg_editors.h>
 #include <properties/pg_properties.h>
 #include <widgets/unit_binder.h>
@@ -29,6 +30,7 @@ PG_UNIT_EDITOR::PG_UNIT_EDITOR( EDA_DRAW_FRAME* aFrame ) :
         m_frame( aFrame )
 {
     m_unitBinder = std::make_unique<PROPERTY_EDITOR_UNIT_BINDER>( m_frame );
+    m_unitBinder->SetUnits( m_frame->GetUserUnits() );
 }
 
 
@@ -62,6 +64,7 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
     if( aProperty->UsesAutoUnspecified() && textVal.empty() )
     {
         aVariant.MakeNull();
+        m_unitBinder->SetControl( nullptr );
         return true;
     }
 
@@ -79,6 +82,8 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
     // true here should be enough to trigger it).
     if( !changed && aVariant.IsNull() )
         changed = true;
+
+    m_unitBinder->SetControl( nullptr );
 
     return changed;
 }

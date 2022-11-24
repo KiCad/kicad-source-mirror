@@ -47,9 +47,9 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindo
 
 UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
                           wxStaticText* aLabel, wxWindow* aValueCtrl,
-                          wxStaticText* aUnitLabel, bool allowEval, bool aBindFrameEvents ) :
+                          wxStaticText* aUnitLabel, bool allowEval, bool aBindFocusEvent ) :
         m_frame( aParent ),
-        m_bindFrameEvents( aBindFrameEvents ),
+        m_bindFocusEvent( aBindFocusEvent ),
         m_label( aLabel ),
         m_valueCtrl( aValueCtrl ),
         m_unitLabel( aUnitLabel ),
@@ -87,24 +87,21 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
                               this );
     }
 
-    if( m_bindFrameEvents )
+    if( m_bindFocusEvent )
     {
         Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr,
                  this );
-
-        m_frame->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
-                          nullptr, this );
     }
+
+    m_frame->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+                      nullptr, this );
 }
 
 
 UNIT_BINDER::~UNIT_BINDER()
 {
-    if( m_bindFrameEvents )
-    {
-        m_frame->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
-                             nullptr, this );
-    }
+    m_frame->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+                         nullptr, this );
 }
 
 
