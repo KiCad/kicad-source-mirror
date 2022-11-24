@@ -1,4 +1,4 @@
-# Tokita, Hiroshi <tokita.hiroshi@gmail.com>, 2021.
+# Tokita, Hiroshi <tokita.hiroshi@gmail.com>, 2021, 2022.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>, 2021, 2022.
 # co8 j <co8@nifty.com>, 2022.
@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-20 18:07+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2022-11-26 09:53+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -3034,13 +3034,15 @@ msgstr "この変更は、エディターを再起動すると有効になりま
 
 #: common/dialogs/panel_common_settings_base.cpp:127
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "回路図エディターとPCBエディターの間でマウスの移動に合わせてフォーカスを切り替"
+"える"
 
 #: common/dialogs/panel_common_settings_base.cpp:128
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
-msgstr ""
+msgstr "回路図エディターもしくはPCBエディターのウィンドウの領域にマウスカーソルが重な"
+"ると、ウィンドウを前面化します。"
 
 #: common/dialogs/panel_common_settings_base.cpp:132
 msgid "Icon theme:"
@@ -12248,13 +12250,11 @@ msgstr "ラベル オフセット比:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
-msgstr ""
-"ワイヤーまたはバスの上下にあるテキストをオフセットするために使われるテキスト "
-"サイズのパーセンテージ"
+msgstr "ワイヤー、バス、ピンの上下にあるテキストのオフセット量とするテキスト "
+"サイズに対する比率"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Global label margin:"
@@ -13472,7 +13472,7 @@ msgstr "設定 (&r)"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "'%s' の名前を生成できませんでした: UINT64_MAX を超過しました"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:339
 msgid ""
@@ -13485,7 +13485,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:383
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "IBIS モデルを書き込むためのファイル '%s' を開くことができませんでした"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, c-format
@@ -14133,6 +14133,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"CADSTAR フォントは KiCad のフォントとは異なります。これにより配置の問題が発生"
+"する可能性があります。インポートされたテキスト要素を注意深く確認し、必要に応"
+"じて手動で修正してください。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:265
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -14445,7 +14448,8 @@ msgstr "不正なシンボル ライブラリー識別子"
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
-msgstr ""
+msgstr "シート '%s' をロードできませんでした。これは回路図の階層で直接の先祖として既"
+"に表示されているためです。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1421
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2147
@@ -15054,6 +15058,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"古いバージョンのファイルからロードされた回路図ファイルに階層シートがあり、  "
+"シンボル インスタンス データが欠落しています。   これにより、ロードされた回路"
+"図内のすべてのシンボルがデフォルトのインスタンス設定を使用するか、ライブラリ"
+"ーのシンボルの設定にフォールバックします。   "
+"この回路図ファイルを使用するプロジェクトをロードし、最新のファイル "
+"バージョンに保存すると、この問題は解決します。\n"
+"\n"
+"続けますか?"
 
 #: eeschema/sheet.cpp:240 eeschema/sheet.cpp:268 eeschema/sheet.cpp:309
 #: eeschema/sheet.cpp:358 eeschema/sheet.cpp:419
@@ -15187,7 +15199,8 @@ msgstr "%s は、 %lu ピンを表していて、期待値は %u"
 msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
-msgstr ""
+msgstr "シミュレーション モデル タイプは、その基本クラス '%s' "
+"と同じである必要がありますが、'%s' です"
 
 #: eeschema/sim/sim_model_kibis.cpp:71
 #, c-format
@@ -16816,9 +16829,8 @@ msgid "Assign Netclass..."
 msgstr "ネットクラス割り当て..."
 
 #: eeschema/tools/ee_actions.cpp:488 pcbnew/tools/pcb_actions.cpp:699
-#, fuzzy
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "選択した配線のネットにネットクラスを割り当て"
+msgstr "パターンにマッチしたネットにネットクラスを割り当て"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "De Morgan Conversion"
@@ -17100,13 +17112,12 @@ msgid "Export Symbols to Library..."
 msgstr "シンボルをライブラリにエクスポート..."
 
 #: eeschema/tools/ee_actions.cpp:682
-#, fuzzy
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"基板で使われている全てのフットプリントを既存のライブラリーに追加します。\n"
-"(このライブラリーにある他のフットプリントを削除しません)"
+"回路図で使われている全てのシンボルを既存のライブラリーに追加します。\n"
+"(このライブラリーにある他のシンボルを削除しません)"
 
 #: eeschema/tools/ee_actions.cpp:688
 msgid "Export Symbols to New Library..."
@@ -17174,13 +17185,12 @@ msgid "Line Mode for Wires and Buses"
 msgstr "バス、配線用ラインのモード"
 
 #: eeschema/tools/ee_actions.cpp:723
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "任意の角度で線を描画する"
+msgstr "任意の角度で描画とドラッグ"
 
 #: eeschema/tools/ee_actions.cpp:729
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
-msgstr ""
+msgstr "描画とドラッグを垂直方向か水平方向に制限"
 
 #: eeschema/tools/ee_actions.cpp:735
 msgid ""
@@ -17327,9 +17337,8 @@ msgid "Switch Segment Posture"
 msgstr "セグメントの形状を変更"
 
 #: eeschema/tools/ee_actions.cpp:863
-#, fuzzy
 msgid "Switches posture of the current segment."
-msgstr "現在の配線パターンの姿勢を変更します。"
+msgstr "現在の配線セグメントの姿勢を変更します。"
 
 #: eeschema/tools/ee_actions.cpp:869
 msgid "Finish Wire or Bus"
@@ -19386,13 +19395,14 @@ msgstr "パッケージの変更を適用しています"
 
 #: kicad/pcm/dialogs/panel_package.cpp:65
 msgid "Pin package"
-msgstr "ピンパッケージ"
+msgstr "パッケージをピン留めする"
 
 #: kicad/pcm/dialogs/panel_package.cpp:66
 msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with \"Update All\" button."
-msgstr ""
+msgstr "ピン留めされたパッケージは、利用可能なアップデートの通知には影響せず、[すべて"
+"更新]ボタンで更新されません。"
 
 #: kicad/pcm/dialogs/panel_package.cpp:118
 msgid "Install Pending"
@@ -19520,15 +19530,17 @@ msgid "Automatically remove uninstalled libraries"
 msgstr "アンインストールされたライブラリを自動的に削除"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "ライブラリーのニックネーム:"
+msgstr "ライブラリーのニックネームの前置詞:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
 msgstr ""
+"パッケージをインストール (もしくはアンインストール) した後、グローバル "
+"ライブラリー テーブルの変更を反映するために、KiCad "
+"を再起動する必要がある場合があります。"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19571,7 +19583,8 @@ msgstr "リポジトリーの解析ができません: %s"
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
-msgstr ""
+msgstr "指定されたリポジトリーのURL は、有効な KiCad "
+"パッケージリポジトリーではないようです。URLを再確認してください。"
 
 #: kicad/pcm/pcm.cpp:347
 msgid "Fetching repository packages"
@@ -21093,7 +21106,7 @@ msgstr "チタン"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:43
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "18-9ステンレス"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:45
 msgid "Silver"
@@ -21120,11 +21133,11 @@ msgstr "アルミニウム"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "真鍮"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
-msgstr ""
+msgstr "青銅"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
 msgid "Tin"
@@ -21141,7 +21154,7 @@ msgstr "アルミニウム"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "鋳鉄"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
@@ -21193,11 +21206,18 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"この表は、さまざまな金属や合金の電気化学的なポテンシャルの違いを示しています"
+"。正の数値の場合、行が陽極、列が陰極となります。\n"
+"ガルバニック腐食は、接触中および特定の条件下でさまざまな金属に影響を与えます"
+"。\n"
+"陽極は酸化されて侵食されますが、陰極は溶解した金属でメッキされ保護されます。"
+"\n"
+"EN 50310は、300mV未満の電圧差を推奨しています。既知の慣行では、メインペアの間"
+"に第3の界面金属(すなわちENIG表面仕上げ)を使用します。"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
-#, fuzzy
 msgid "Threshold voltage:"
-msgstr "閾値:"
+msgstr "電圧の閾値:"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:68
 #: pcb_calculator/widgets/unit_selector.cpp:255
@@ -22061,7 +22081,7 @@ msgstr "ボード クラス"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
 msgid "Galvanic Corrosion"
-msgstr ""
+msgstr "ガルバニック腐食"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -23044,9 +23064,8 @@ msgid "Remove track not connected at both ends"
 msgstr "両端が接続されていない配線を削除"
 
 #: pcbnew/cleanup_item.cpp:52
-#, fuzzy
 msgid "Remove via connected on less than 2 layers"
-msgstr "接続しているレイヤーが2つ未満のビアを削除"
+msgstr "2つ以上のレイヤーに接続していないビアを削除"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
@@ -23069,9 +23088,8 @@ msgid "Convert lines to rectangle"
 msgstr "線分を矩形に変換"
 
 #: pcbnew/cleanup_item.cpp:60
-#, fuzzy
 msgid "Merge overlapping shapes into pad"
-msgstr "重なっている配線セグメントのマージ (&M)"
+msgstr "重なっている図形をパッドに結合"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
@@ -23093,9 +23111,8 @@ msgid "(not a closed shape)"
 msgstr "(閉じていない形状)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:489
-#, fuzzy
 msgid "(multiple board outlines not supported)"
-msgstr "基板外形が閉じられていません"
+msgstr "(複数の基板外形はサポートされていません)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -23880,9 +23897,8 @@ msgid "Delete redundant graphics"
 msgstr "冗長なグラフィックスを削除"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:28
-#, fuzzy
 msgid "Merge overlapping graphics into pads"
-msgstr "重なっている配線セグメントのマージ (&M)"
+msgstr "重なっている図形をパッドに結合"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:34
 msgid ""
@@ -25879,7 +25895,6 @@ msgstr ""
 "各パッドの設定値で置き換えられます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -25891,9 +25906,9 @@ msgid ""
 msgstr ""
 "これはフットプリントのパッドとハンダ ペースト間の\n"
 "ローカル クリアランスです。\n"
-"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになりま"
-"す。\n"
-"負値の場合、パッド サイズよりも小さなマスクが使用されます。\n"
+"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになります"
+"。\n"
+"負値の場合、ステンシルの開口部のサイズよりも小さなマスクが使用されます。\n"
 "この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブにある\n"
 "各パッドの設定値で置き換えられます。"
 
@@ -26557,9 +26572,8 @@ msgid "Circle Properties"
 msgstr "円のプロパティ"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:211
-#, fuzzy
 msgid "Center Point"
-msgstr "制御点 1"
+msgstr "中心"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:223
 msgid "Arc Properties"
@@ -27038,9 +27052,8 @@ msgstr "非導体ゾーンのプロパティ"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:146
-#, fuzzy
 msgid "Center Point:"
-msgstr "中心 X:"
+msgstr "中心:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:136
 #: pcbnew/dialogs/dialog_pad_properties.cpp:727
@@ -28719,7 +28732,7 @@ msgstr "選択されたレイヤー上に置くテキストを入力します。
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
 msgid "Knockout"
-msgstr "ノックアウト"
+msgstr "打ち抜き"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
 msgid "Keep text upright"
@@ -31856,19 +31869,19 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "オーバーラップしたコートヤードをチェック..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
 msgstr "(%s 最大非結合長 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum gap %s; actual %s)"
-msgstr "(%s 最小 %s; 現状 %s)"
+msgstr "(%s 最小ギャップ %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum gap %s; actual %s)"
-msgstr "(%s 最大高さ %s; 現状 %s)"
+msgstr "(%s 最大ギャップ %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 msgid "Checking keepouts & disallow constraints..."
@@ -31952,24 +31965,24 @@ msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "フットプリント '%s' が、ライブラリ '%s' のコピーと一致しません。"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length %s; actual %s)"
 msgstr "(%s 最小長さ %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length %s; actual %s)"
 msgstr "(%s 最大長さ %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
-msgstr "(%s 最大遅延: %s; 現状: %s: 平均ネット長 %s; 現状: %s)"
+msgstr "(%s 最大遅延 %s; 現状: %s; 平均ネット長 %s; 現状: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s 最大カウント: %d; 現状 %d)"
+msgstr "(%s 最大カウント %d; 現状 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:221
 msgid "Gathering length-constrained connections..."
@@ -32274,6 +32287,8 @@ msgid ""
 "** Output already exists. Export aborted. **\n"
 "Enable the force overwrite flag to overwrite it."
 msgstr ""
+"** 出力は既に存在しています。エクスポートが中止されました。 **\n"
+"強制上書きフラグを有効にして、上書きしてください。"
 
 #: pcbnew/exporters/step/kicad2step.cpp:194
 #, c-format
@@ -32289,6 +32304,9 @@ msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
+"\n"
+"** STEP ボード "
+"モデルの構築中にエラーが発生しました。エクスポートが中止されました。**\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:222
 msgid "Write STEP file\n"
@@ -32313,10 +32331,14 @@ msgstr ""
 
 #: pcbnew/exporters/step/kicad2step.cpp:244
 #: pcbnew/exporters/step/kicad2step.cpp:249
+#, fuzzy
 msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr ""
+"\n"
+"** STEP ファイルのエクスポート中にエラーが発生しました。エクスポートが中止さ"
+"れました。**\n"
 
 #: pcbnew/exporters/step/kicad2step.cpp:255
 msgid ""
@@ -33969,24 +33991,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "%s の製造属性 '部品表から除外' を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
 msgstr "%s に[部品表から除外]の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
 msgstr "%s の[部品表から除外]の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "%s に製造属性 '部品表から除外' を追加しました。"
+msgstr "%s に [部品表から除外] の製造属性を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "%s の製造属性 '部品表から除外' を削除しました。"
+msgstr "%s から [部品表から除外] の製造属性を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:497
 #, c-format
@@ -35063,6 +35085,9 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
+"CADSTAR フォントは KiCad のフォントとは異なります。これにより、DRCエラーを引"
+"き起こす可能性のある配置の問題が発生する可能性があります。インポートされたテ"
+"キスト要素を注意深く確認し、必要に応じて手動で修正してください。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -35348,6 +35373,8 @@ msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
 msgstr ""
+"CADSTARのデザインにはティアドロップが含まれています。このインポーターはまだそ"
+"れらをサポートしていないため、デザインのティアドロップは無視されます。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2486
 #, c-format
@@ -36188,9 +36215,8 @@ msgstr "基板の最小クリアランス"
 
 #: pcbnew/router/pns_kicad_iface.cpp:556 pcbnew/router/pns_kicad_iface.cpp:622
 #: pcbnew/router/router_tool.cpp:689 pcbnew/router/router_tool.cpp:709
-#, fuzzy
 msgid "board minimum track width"
-msgstr "基板の最小幅"
+msgstr "基板の最小配線幅"
 
 #: pcbnew/router/pns_kicad_iface.cpp:563
 msgid "existing track"
@@ -36563,9 +36589,9 @@ msgid "Unable to export, please fix and try again"
 msgstr "エクスポートできません。問題点を修正してやり直してください"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "値 '%s' のシンボルはリファレンスIDが空です。"
+msgstr "値 '%s' のシンボルはリファレンス指定子が空です。"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
 #, c-format
@@ -36632,12 +36658,12 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "wire_via が失われたパッドスタック '%s' を参照しています。"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops created"
 msgstr "%d 個のティアドロップが作られました"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "%d teardrops removed."
 msgstr "%d 個のティアドロップが削除されました。"
 
@@ -36710,9 +36736,8 @@ msgid "Add teardrops to round shapes only "
 msgstr "円状の図形にのみティアドロップを追加します "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:360
-#, fuzzy
 msgid "SMD pads"
-msgstr "基板裏面の表面実装部品パッド"
+msgstr "SMDパッド"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:362
 msgid "Add teardrops to not driiled pads, like SMD"
@@ -36728,11 +36753,8 @@ msgid "Add teardrops to two connected tracks of different widths"
 msgstr "異なる幅の2つの配線を接続するためにティアドロップを追加します"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:378
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
-msgstr ""
-"最初の配線セグメントが短すぎる場合、ティアドロップが2つの配線に広がることを許"
-"容する"
+msgstr "ティアドロップが2つの配線セグメントを跨ぐことを許容"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:380
 msgid ""
@@ -36935,9 +36957,8 @@ msgid "Selection contains no items with labeled nets."
 msgstr "選択範囲にはラベルが付けられたネットが含まれていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
-#, fuzzy
 msgid "Net Inspection Tools"
-msgstr "ネットインスペクター"
+msgstr "ネット検査ツール"
 
 #: pcbnew/tools/board_inspection_tool.cpp:164
 #, c-format
@@ -37091,9 +37112,8 @@ msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "'physical_hole_clearance' の制約が定義されていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
-#, fuzzy
 msgid "Hole to Hole"
-msgstr "穴から穴へのクリアランス:"
+msgstr "穴から穴"
 
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:960
@@ -37613,7 +37633,6 @@ msgid "Place pad"
 msgstr "パッドを配置"
 
 #: pcbnew/tools/pad_tool.cpp:583
-#, fuzzy
 msgid "Recombine pad"
 msgstr "パッドを再結合"
 
@@ -37886,9 +37905,8 @@ msgid "Move Individually"
 msgstr "個別に移動"
 
 #: pcbnew/tools/pcb_actions.cpp:276
-#, fuzzy
 msgid "Moves the selected items one-by-one"
-msgstr "選択されたアイテムを移動"
+msgstr "選択されたアイテムを一つ一つ移動"
 
 #: pcbnew/tools/pcb_actions.cpp:281
 msgid "Move with Reference"
@@ -37939,14 +37957,12 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "基板の反対側に選択されたアイテムを裏返します"
 
 #: pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Mirrors selected item across the Y axis"
-msgstr "選択したアイテムをミラー"
+msgstr "選択したアイテムをY軸に対して鏡写しに複製"
 
 #: pcbnew/tools/pcb_actions.cpp:336
-#, fuzzy
 msgid "Mirrors selected item across the X axis"
-msgstr "選択したアイテムをミラー"
+msgstr "選択したアイテムをX軸に対して鏡写しに複製"
 
 #: pcbnew/tools/pcb_actions.cpp:348
 #, fuzzy
@@ -38553,14 +38569,12 @@ msgid "Show/hide the appearance manager"
 msgstr "外観マネージャーの表示/非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:855
-#, fuzzy
 msgid "Show Properties Panel"
-msgstr "シート プロパティ"
+msgstr "プロパティを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:855
-#, fuzzy
 msgid "Show/hide the properties panel"
-msgstr "外観マネージャーの表示/非表示"
+msgstr "プロパティの表示/非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:860
 msgid "Flip Board View"
@@ -39254,6 +39268,9 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"警告: "
+"貼り付けたアイテムの一部は、現在の基板に存在しないレイヤーにありました。\n"
+"これらのアイテムを貼り付けることができませんでした。\n"
 
 #: pcbnew/tools/pcb_control.cpp:943
 msgid "Invalid clipboard contents"
