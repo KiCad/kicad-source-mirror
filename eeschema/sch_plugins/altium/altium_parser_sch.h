@@ -397,12 +397,14 @@ struct ASCH_ARC
     int ownerpartid;
     int ownerpartdisplaymode;
 
-    VECTOR2I center;
-    int      radius;
-    double   startAngle;
-    double   endAngle;
+    bool     m_IsElliptical;
+    VECTOR2I m_Center;
+    int      m_Radius;
+    int      m_SecondaryRadius;
+    double   m_StartAngle;
+    double   m_EndAngle;
 
-    int lineWidth;
+    int      m_LineWidth;
 
     explicit ASCH_ARC( const std::map<wxString, wxString>& aProps );
 };

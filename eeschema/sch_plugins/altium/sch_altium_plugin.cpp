@@ -583,8 +583,6 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             break;
 
         case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:
-            break;
-
         case ALTIUM_SCH_RECORD::ARC:
             ParseArc( properties );
             break;
@@ -810,7 +808,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
     symbol->SetPosition( elem.location + m_sheetOffset );
 
     // TODO: keep it simple for now, and only set position.
-    //component->SetOrientation( elem.orientation );
+    // component->SetOrientation( elem.orientation );
     symbol->SetLibId( libId );
     symbol->SetUnit( std::max( 0, elem.currentpartid ) );
 
@@ -1521,36 +1519,47 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
 
 void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aProperties )
 {
+    // The Arc can be ALTIUM_SCH_RECORD::ELLIPTICAL_ARC or ALTIUM_SCH_RECORD::ARC
+    // Elliptical arcs are not handled in kicad. So use an arc instead
+    // TODO: handle elliptical arc better.
+
     ASCH_ARC elem( aProperties );
 
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
 
+    int arc_radius = elem.m_Radius;
+
+    // Try to approxiammate this ellipse by an arc. use the biggest of radius and secondary radius
+    // One can of course use another recipe
+    if( elem.m_IsElliptical )
+        arc_radius = std::max( elem.m_Radius, elem.m_SecondaryRadius );
+
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        if( elem.startAngle == 0 && ( elem.endAngle == 0 || elem.endAngle == 360 ) )
+        if( elem.m_StartAngle == 0 && ( elem.m_EndAngle == 0 || elem.m_EndAngle == 360 ) )
         {
             SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
 
-            circle->SetPosition( elem.center + m_sheetOffset );
-            circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.radius, 0 ) );
-            circle->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+            circle->SetPosition( elem.m_Center + m_sheetOffset );
+            circle->SetEnd( circle->GetPosition() + VECTOR2I( arc_radius, 0 ) );
+            circle->SetStroke( STROKE_PARAMS( elem.m_LineWidth, PLOT_DASH_TYPE::SOLID ) );
 
             screen->Append( circle );
         }
         else
         {
             SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC );
-            EDA_ANGLE  includedAngle( elem.endAngle - elem.startAngle, DEGREES_T );
-            EDA_ANGLE  startAngle( elem.endAngle, DEGREES_T );
-            VECTOR2I   startOffset( KiROUND( elem.radius * startAngle.Cos() ),
-                                   -KiROUND( elem.radius * startAngle.Sin() ) );
+            EDA_ANGLE  includedAngle( elem.m_EndAngle - elem.m_StartAngle, DEGREES_T );
+            EDA_ANGLE  startAngle( elem.m_EndAngle, DEGREES_T );
+            VECTOR2I   startOffset( KiROUND( arc_radius * startAngle.Cos() ),
+                                   -KiROUND( arc_radius * startAngle.Sin() ) );
 
-            arc->SetCenter( elem.center + m_sheetOffset );
-            arc->SetStart( elem.center + startOffset + m_sheetOffset );
+            arc->SetCenter( elem.m_Center + m_sheetOffset );
+            arc->SetStart( elem.m_Center + startOffset + m_sheetOffset );
             arc->SetArcAngleAndEnd( includedAngle.Normalize(), true );
 
-            arc->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+            arc->SetStroke( STROKE_PARAMS( elem.m_LineWidth, PLOT_DASH_TYPE::SOLID ) );
 
             screen->Append( arc );
         }
@@ -1573,16 +1582,16 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
 
-        if( elem.startAngle == 0 && ( elem.endAngle == 0 || elem.endAngle == 360 ) )
+        if( elem.m_StartAngle == 0 && ( elem.m_EndAngle == 0 || elem.m_EndAngle == 360 ) )
         {
             LIB_SHAPE* circle = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::CIRCLE );
             libSymbolIt->second->AddDrawItem( circle );
 
             circle->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-            circle->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
-            circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.radius, 0 ) );
-            circle->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+            circle->SetPosition( GetRelativePosition( elem.m_Center + m_sheetOffset, symbol ) );
+            circle->SetEnd( circle->GetPosition() + VECTOR2I( arc_radius, 0 ) );
+            circle->SetStroke( STROKE_PARAMS( elem.m_LineWidth, PLOT_DASH_TYPE::SOLID ) );
         }
         else
         {
@@ -1590,19 +1599,19 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             libSymbolIt->second->AddDrawItem( arc );
             arc->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-            arc->SetCenter( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
+            arc->SetCenter( GetRelativePosition( elem.m_Center + m_sheetOffset, symbol ) );
 
-            VECTOR2I arcStart( elem.radius, 0 );
-            RotatePoint( arcStart, -EDA_ANGLE( elem.startAngle, DEGREES_T ) );
+            VECTOR2I arcStart( arc_radius, 0 );
+            RotatePoint( arcStart, -EDA_ANGLE( elem.m_StartAngle, DEGREES_T ) );
             arcStart += arc->GetCenter();
             arc->SetStart( arcStart );
 
-            VECTOR2I arcEnd( elem.radius, 0 );
-            RotatePoint( arcEnd, -EDA_ANGLE( elem.endAngle, DEGREES_T ) );
+            VECTOR2I arcEnd( arc_radius, 0 );
+            RotatePoint( arcEnd, -EDA_ANGLE( elem.m_EndAngle, DEGREES_T ) );
             arcEnd += arc->GetCenter();
             arc->SetEnd( arcEnd );
 
-            arc->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+            arc->SetStroke( STROKE_PARAMS( elem.m_LineWidth, PLOT_DASH_TYPE::SOLID ) );
         }
     }
 }
@@ -2463,11 +2472,13 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     SCH_LABEL_BASE* label;
 
     // TODO: detect correct label type depending on sheet settings, etc.
-    //{
-    //    label = new SCH_HIERLABEL( elem.location + m_sheetOffset, elem.name );
-    //}
-
+    #if 0   // Set to 1 to use SCH_HIERLABEL label, 0 to use SCH_GLOBALLABEL
+    {
+        label = new SCH_HIERLABEL label, 0 to use ( position, aElem.Name );
+    }
+    #else
     label = new SCH_GLOBALLABEL( position, aElem.Name );
+    #endif
 
     switch( aElem.IOtype )
     {
@@ -2516,7 +2527,9 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     label->AutoplaceFields( screen, false );
 
     // Default "Sheet References" field should be hidden, at least for now
-    label->GetFields()[0].SetVisible( false );
+    if( label->GetFields().size() > 0 )
+        label->GetFields()[0].SetVisible( false );
+
     label->SetFlags( IS_NEW );
 
     screen->Append( label );
@@ -2832,20 +2845,14 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
     bool emptyRef = elem.text.IsEmpty();
     symbol->SetRef( &m_sheetPath, emptyRef ? "#GRAPHIC" : elem.text );
 
-    SCH_FIELD* field = symbol->GetField( VALUE_FIELD );
-
-    #if 0
     // I am not sure value and ref should be invisible just because emptyRef is true
     // I have examples with this criteria fully incorrect.
-    if ( emptyRef )
-        field->SetVisible( false );
+    bool visible = !emptyRef;
 
-    field = symbol->GetField( REFERENCE_FIELD );
+    symbol->GetField( VALUE_FIELD )->SetVisible( visible );
+    symbol->GetField( REFERENCE_FIELD )->SetVisible( visible );
 
-    if ( emptyRef )
-        field->SetVisible( false );
-    #endif
-
+    SCH_FIELD* field = symbol->GetField( REFERENCE_FIELD );
     field->SetPosition( elem.location + m_sheetOffset );
     SetTextPositioning( field, elem.justification, elem.orientation );
 }
