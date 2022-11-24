@@ -1602,6 +1602,12 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         {
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
+            if( group )
+            {
+                preview.Remove( group );
+                group->RemoveAll();
+            }
+
             for( BOARD_ITEM* item : newItems )
                 delete item;
 
