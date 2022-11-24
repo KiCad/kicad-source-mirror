@@ -56,6 +56,9 @@ private:
 
     bool confirmPadChange( const std::vector<PAD*>& connectedPads );
 
+    int getLayerDepth();
+
+private:
     PCB_BASE_FRAME*      m_frame;
     const PCB_SELECTION& m_items;      // List of items to be modified.
     COMMIT&              m_commit;     // An undo record to add any changes to.

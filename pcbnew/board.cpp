@@ -508,6 +508,18 @@ void BOARD::SetCopperLayerCount( int aCount )
 }
 
 
+int BOARD::LayerDepth( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer ) const
+{
+    if( aStartLayer > aEndLayer )
+        std::swap( aStartLayer, aEndLayer );
+
+    if( aEndLayer == B_Cu )
+        aEndLayer = ToLAYER_ID( F_Cu + GetCopperLayerCount() - 1 );
+
+    return aEndLayer - aStartLayer;
+}
+
+
 LSET BOARD::GetEnabledLayers() const
 {
     return GetDesignSettings().GetEnabledLayers();

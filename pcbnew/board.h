@@ -510,6 +510,8 @@ public:
     int  GetCopperLayerCount() const;
     void SetCopperLayerCount( int aCount );
 
+    int LayerDepth( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer ) const;
+
     /**
      * A proxy function that calls the corresponding function in m_BoardSettings.
      *
