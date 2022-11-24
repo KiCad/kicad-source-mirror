@@ -2653,6 +2653,7 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
     TEST_PT( aFirst->GetPos0(), aSecond->GetPos0() );
     TEST_PT( aFirst->GetSize(), aSecond->GetSize() );
     TEST( aFirst->GetShape(), aSecond->GetShape() );
+    TEST( aFirst->GetLayerSet().Seq(), aSecond->GetLayerSet().Seq() );
 
     TEST( aFirst->m_Uuid, aSecond->m_Uuid );   // should be always the case for valid boards
 
