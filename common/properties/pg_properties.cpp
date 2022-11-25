@@ -159,6 +159,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
         ret->SetLabel( aProperty->Name() );
         ret->SetName( aProperty->Name() );
         ret->Enable( !aProperty->IsReadOnly() );
+        ret->SetHelpString( aProperty->Name() );
         ret->SetClientData( const_cast<PROPERTY_BASE*>( aProperty ) );
     }
 

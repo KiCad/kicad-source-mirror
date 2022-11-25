@@ -580,6 +580,42 @@ public:
     }
     void SetProperty( const wxString& aKey, const wxString& aVal )   { m_properties[ aKey ] = aVal; }
 
+    bool IsBoardOnly() const { return m_attributes & FP_BOARD_ONLY; }
+    void SetBoardOnly( bool aIsBoardOnly = true )
+    {
+        if( aIsBoardOnly )
+            m_attributes |= FP_BOARD_ONLY;
+        else
+            m_attributes &= ~FP_BOARD_ONLY;
+    }
+
+    bool IsExcludedFromPosFiles() const { return m_attributes & FP_EXCLUDE_FROM_POS_FILES; }
+    void SetExcludedFromPosFiles( bool aExclude = true )
+    {
+        if( aExclude )
+            m_attributes |= FP_EXCLUDE_FROM_POS_FILES;
+        else
+            m_attributes &= ~FP_EXCLUDE_FROM_POS_FILES;
+    }
+
+    bool IsExcludedFromBOM() const { return m_attributes & FP_EXCLUDE_FROM_BOM; }
+    void SetExcludedFromBOM( bool aExclude = true )
+    {
+        if( aExclude )
+            m_attributes |= FP_EXCLUDE_FROM_BOM;
+        else
+            m_attributes &= ~FP_EXCLUDE_FROM_BOM;
+    }
+
+    bool AllowMissingCourtyard() const { return m_attributes & FP_ALLOW_MISSING_COURTYARD; }
+    void SetAllowMissingCourtyard( bool aAllow = true )
+    {
+        if( aAllow )
+            m_attributes |= FP_ALLOW_MISSING_COURTYARD;
+        else
+            m_attributes &= ~FP_ALLOW_MISSING_COURTYARD;
+    }
+
     /**
      * Return a #PAD with a matching number.
      *

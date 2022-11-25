@@ -183,6 +183,7 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         m_name( aName ),
         m_display( aDisplay ),
         m_coordType( aCoordType ),
+        m_isInternal( false ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } )
     {
     }
@@ -263,6 +264,9 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
 
     ORIGIN_TRANSFORMS::COORD_TYPES_T CoordType() const { return m_coordType; }
 
+    void SetIsInternal( bool aIsInternal ) { m_isInternal = aIsInternal; }
+    bool IsInternal() const { return m_isInternal; }
+
 protected:
     template<typename T>
     void set( void* aObject, T aValue )
@@ -290,6 +294,9 @@ private:
     const wxString         m_name;
     const PROPERTY_DISPLAY m_display;
     const ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
+
+    /// Internal properties are hidden from the GUI
+    bool m_isInternal;
 
     std::function<bool(INSPECTABLE*)> m_availFunc;   ///< Eval to determine if prop is available
 

@@ -2858,15 +2858,26 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::PT_SIZE ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Solderpaste Margin Ratio Override" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>(
+                    _HKI( "Solderpaste Margin Ratio Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMarginRatio,
-                &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library ID" ),
-                    &FOOTPRINT::SetFPIDAsString, &FOOTPRINT::GetFPIDAsString ) );
+                    &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library link" ),
+                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetFPIDAsString ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Description" ),
-                    &FOOTPRINT::SetDescription, &FOOTPRINT::GetDescription ) );
+                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetDescription ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
-                    &FOOTPRINT::SetKeywords, &FOOTPRINT::GetKeywords ) );
+                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ) );
+
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Not in schematic" ),
+                    &FOOTPRINT::SetBoardOnly, &FOOTPRINT::IsBoardOnly ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude from position files" ),
+                    &FOOTPRINT::SetExcludedFromPosFiles, &FOOTPRINT::IsExcludedFromPosFiles ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude from BOM" ),
+                    &FOOTPRINT::SetExcludedFromBOM, &FOOTPRINT::IsExcludedFromBOM ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>(
+                    _HKI( "Exempt from courtyard requirement" ),
+                    &FOOTPRINT::SetAllowMissingCourtyard, &FOOTPRINT::AllowMissingCourtyard ) );
         // TODO zone connection
     }
 } _FOOTPRINT_DESC;

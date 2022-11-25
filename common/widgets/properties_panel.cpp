@@ -52,6 +52,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     m_grid = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, wxSize( 300, 400 ),
                                  wxPG_AUTO_SORT | wxPG_DEFAULT_STYLE );
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
+    m_grid->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );
     mainSizer->Add( m_grid, 1, wxALL | wxEXPAND, 5 );
 
     m_grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
@@ -106,7 +107,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
     }
     else
     {
-        m_caption->SetLabel( aSelection.Front()->GetTypeDesc() );
+        m_caption->SetLabel( aSelection.Front()->GetFriendlyName() );
     }
 
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -134,6 +135,9 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
     // Find a set of properties that is common to all selected items
     for( const auto& property : commonProps )
     {
+        if( property->IsInternal() )
+            continue;
+
         if( !property->Available( aSelection.Front() ) )
             continue;
 

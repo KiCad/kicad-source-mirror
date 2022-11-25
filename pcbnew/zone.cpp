@@ -517,16 +517,7 @@ bool ZONE::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, int* aHoleI
 
 void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
-
-    if( GetIsRuleArea() )
-        msg = _( "Rule Area" );
-    else if( IsTeardropArea() )
-        msg = _( "Teardrop Area" );
-    else if( IsOnCopperLayer() )
-        msg = _( "Copper Zone" );
-    else
-        msg = _( "Non-copper Zone" );
+    wxString msg = GetFriendlyName();
 
     // Display Cutout instead of Outline for holes inside a zone (i.e. when num contour !=0).
     // Check whether the selected corner is in a hole; i.e., in any contour but the first one.
@@ -656,6 +647,19 @@ void ZONE::Move( const VECTOR2I& offset )
         if( it != GetBoard()->m_ZoneBBoxCache.end() )
             it->second.Move( offset );
     }
+}
+
+
+wxString ZONE::GetFriendlyName() const
+{
+    if( GetIsRuleArea() )
+        return _( "Rule Area" );
+    else if( IsTeardropArea() )
+        return _( "Teardrop Area" );
+    else if( IsOnCopperLayer() )
+        return _( "Copper Zone" );
+    else
+        return _( "Non-copper Zone" );
 }
 
 

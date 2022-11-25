@@ -212,6 +212,8 @@ public:
     {
     }
 
+    virtual wxString GetFriendlyName() const;
+
     /**
      * Test if \a aPosition is inside or on the boundary of this item.
      *
@@ -344,7 +346,7 @@ public:
      * Return a translated description of the type for this EDA_ITEM for display in user facing
      * messages.
      */
-    wxString GetTypeDesc();
+    wxString GetTypeDesc() const;
 
     /**
      * Return the text to display to be used in the selection clarification context menu
