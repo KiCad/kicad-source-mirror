@@ -159,9 +159,13 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
     auto remove_item = [&]( SCH_ITEM* aItem ) -> void
                        {
                            changed = true;
-                           aItem->SetFlags( STRUCT_DELETED );
-                           itemList.PushItem( ITEM_PICKER( aScreen, aItem, UNDO_REDO::DELETED ) );
-                           deletedItems.push_back( aItem );
+
+                           if( !( aItem->GetFlags() & STRUCT_DELETED ) )
+                           {
+                               aItem->SetFlags( STRUCT_DELETED );
+                               itemList.PushItem( ITEM_PICKER( aScreen, aItem, UNDO_REDO::DELETED ) );
+                               deletedItems.push_back( aItem );
+                           }
                        };
 
     BreakSegmentsOnJunctions( aScreen );

@@ -111,7 +111,13 @@ public:
      * Saves the current line angle. Useful when dragging a line and its important to
      * be able to restart the line from length 0 in the correct direction.
      */
-    inline void StoreAngle() { m_storedAngle = Angle(); }
+    inline void StoreAngle()
+    {
+        if( !IsNull() )
+            m_storedAngle = Angle();
+    }
+
+    inline void StoreAngle( const EDA_ANGLE& aAngle ) { m_storedAngle = aAngle; }
 
     /**
      * Returns the angle stored by StoreAngle()

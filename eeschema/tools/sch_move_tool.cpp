@@ -29,13 +29,13 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <ee_actions.h>
-#include <bitmaps.h>
 #include <eda_item.h>
 #include <sch_item.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_line.h>
+#include <sch_junction.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
 #include <pgm_base.h>
@@ -492,7 +492,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             connections = item->GetConnectionPoints();
 
                         for( VECTOR2I point : connections )
-                            getConnectedDragItems( item, point, connectedDragItems );
+                            getConnectedDragItems( item, point, connectedDragItems, appendUndo );
                     }
 
                     for( EDA_ITEM* item : connectedDragItems )
@@ -1053,7 +1053,7 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
 
 
 void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR2I& aPoint,
-                                           EDA_ITEMS& aList )
+                                           EDA_ITEMS& aList, bool& aAppendUndo )
 {
     EE_RTREE&         items = m_frame->GetScreen()->Items();
     EE_RTREE::EE_TYPE itemsOverlappingRTree = items.Overlapping( aSelectedItem->GetBoundingBox() );
@@ -1061,26 +1061,38 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
     bool              ptHasUnselectedJunction = false;
 
     auto makeNewWire =
-            [&]( SCH_ITEM* fixed, SCH_ITEM* selected )
+            [&]( SCH_ITEM* fixed, SCH_ITEM* selected, const VECTOR2I& start, const VECTOR2I& end )
             {
                 SCH_LINE* newWire;
 
                 // Add a new newWire between the fixed item and the selected item so the selected
                 // item can be dragged.
                 if( fixed->GetLayer() == LAYER_BUS_JUNCTION || selected->GetLayer() == LAYER_BUS )
-                    newWire = new SCH_LINE( aPoint, LAYER_BUS );
+                    newWire = new SCH_LINE( start, LAYER_BUS );
                 else
-                    newWire = new SCH_LINE( aPoint, LAYER_WIRE );
+                    newWire = new SCH_LINE( start, LAYER_WIRE );
 
-                newWire->SetFlags(IS_NEW );
+                newWire->SetFlags( IS_NEW );
                 newWire->SetConnectivityDirty( true );
                 newWire->SetLastResolvedState( selected );
+
+                newWire->SetEndPoint( end );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
 
-                newWire->SetFlags(SELECTED_BY_DRAG | STARTPOINT );
-                aList.push_back( newWire );
-
                 return newWire;
+            };
+
+    auto makeNewJunction =
+            [&]( SCH_LINE* line, const VECTOR2I pt )
+            {
+                SCH_JUNCTION* junction = new SCH_JUNCTION( pt );
+                junction->SetFlags( IS_NEW );
+                junction->SetConnectivityDirty( true );
+                junction->SetLastResolvedState( line );
+
+                m_frame->AddToScreen( junction, m_frame->GetScreen() );
+
+                return junction;
             };
 
     for( SCH_ITEM* item : itemsOverlappingRTree )
@@ -1165,17 +1177,40 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                     // selected they'll move together
                     if( line->HitTest( aPoint, 1 ) && !line->HasFlag( SELECTED ) )
                     {
-                        newWire = makeNewWire( line, aSelectedItem );
+                        newWire = makeNewWire( line, aSelectedItem, aPoint, aPoint );
+                        newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
+                        newWire->StoreAngle( ( line->Angle() + ANGLE_90 ).Normalize() );
+                        aList.push_back( newWire );
 
                         if( aPoint != line->GetStartPoint() && aPoint != line->GetEndPoint() )
                         {
-                            newWire->SetEndPoint( line->GetEndPoint() );
-                            line->SetEndPoint( aPoint );
-                        }
+                            // Split line in half
+                            if( !line->IsNew() )
+                            {
+                                saveCopyInUndoList( line, UNDO_REDO::CHANGED, aAppendUndo );
+                                aAppendUndo = true;
+                            }
 
-                        // We need to add a connection reference here because the normal algorithm
-                        // won't find a new line with a point in the middle of an existing line
-                        m_lineConnectionCache[newWire] = { line };
+                            VECTOR2I oldEnd = line->GetEndPoint();
+                            line->SetEndPoint( aPoint );
+
+                            SCH_LINE*     secondHalf = makeNewWire( line, line, aPoint, oldEnd );
+                            SCH_JUNCTION* junction = makeNewJunction( line, aPoint );
+
+                            saveCopyInUndoList( secondHalf, UNDO_REDO::NEWITEM, aAppendUndo );
+                            aAppendUndo = true;
+
+                            saveCopyInUndoList( junction, UNDO_REDO::NEWITEM, aAppendUndo );
+                            aAppendUndo = true;
+
+                            m_frame->AddToScreen( secondHalf, m_frame->GetScreen() );
+                            m_frame->AddToScreen( junction, m_frame->GetScreen() );
+                        }
+                        else
+                        {
+                            m_lineConnectionCache[ newWire ] = { line };
+                            m_lineConnectionCache[ line ] = { newWire };
+                        }
                     }
                     break;
 
@@ -1227,7 +1262,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                     {
                         // Add a new wire between the sheetpin and the selected item so the
                         // selected item can be dragged.
-                        newWire = makeNewWire( pin, aSelectedItem );
+                        newWire = makeNewWire( pin, aSelectedItem, aPoint, aPoint );
+                        newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
+                        aList.push_back( newWire );
                     }
                 }
             }
@@ -1240,7 +1277,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
             {
                 // Add a new wire between the symbol or junction and the selected item so
                 // the selected item can be dragged.
-                newWire = makeNewWire( test, aSelectedItem );
+                newWire = makeNewWire( test, aSelectedItem, aPoint, aPoint );
+                newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
+                aList.push_back( newWire );
             }
 
             break;
@@ -1301,7 +1340,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
             {
                 // Add a new wire between the label and the selected item so the selected item
                 // can be dragged.
-                newWire = makeNewWire( test, aSelectedItem );
+                newWire = makeNewWire( test, aSelectedItem, aPoint, aPoint );
+                newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
+                aList.push_back( newWire );
             }
 
             break;
@@ -1341,7 +1382,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                         else
                             otherEnd = ends[0];
 
-                        getConnectedDragItems( test, otherEnd, aList );
+                        getConnectedDragItems( test, otherEnd, aList, aAppendUndo );
 
                         // No need to test the other end of the bus entry
                         break;
@@ -1442,13 +1483,13 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 {
     EE_GRID_HELPER grid( m_toolMgr);
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
-    bool append_undo = false;
+    bool appendUndo = false;
 
     auto doMoveItem =
             [&]( EDA_ITEM* item, const VECTOR2I& delta )
             {
-                saveCopyInUndoList( item, UNDO_REDO::CHANGED, append_undo );
-                append_undo = true;
+                saveCopyInUndoList( item, UNDO_REDO::CHANGED, appendUndo );
+                appendUndo = true;
 
                 moveItem( item, delta );
                 item->ClearFlags( IS_MOVING );
@@ -1476,8 +1517,8 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
     {
         if( item->Type() == SCH_LINE_T )
         {
-            SCH_LINE* line = static_cast<SCH_LINE*>( item );
-            std::vector<int> flags{ STARTPOINT, ENDPOINT };
+            SCH_LINE*             line = static_cast<SCH_LINE*>( item );
+            std::vector<int>      flags{ STARTPOINT, ENDPOINT };
             std::vector<VECTOR2I> pts{ line->GetStartPoint(), line->GetEndPoint() };
 
             for( int ii = 0; ii < 2; ++ii )
@@ -1486,7 +1527,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                 line->ClearFlags();
                 line->SetFlags( SELECTED );
                 line->SetFlags( flags[ii] );
-                getConnectedDragItems( line, pts[ii], drag_items );
+                getConnectedDragItems( line, pts[ii], drag_items, appendUndo );
                 std::set<EDA_ITEM*> unique_items( drag_items.begin(), drag_items.end() );
 
                 VECTOR2I gridpt = grid.AlignGrid( pts[ii] ) - pts[ii];
@@ -1538,7 +1579,8 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                     if( gridpt != VECTOR2I( 0, 0 ) )
                     {
                         EDA_ITEMS drag_items;
-                        getConnectedDragItems( pin, pin->GetConnectionPoints()[0], drag_items );
+                        getConnectedDragItems( pin, pin->GetConnectionPoints()[0], drag_items,
+                                               appendUndo );
 
                         doMoveItem( pin, gridpt );
 
@@ -1555,16 +1597,16 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
         }
         else
         {
-            std::vector<VECTOR2I> connections;
-            EDA_ITEMS drag_items{ item };
-            connections = static_cast<SCH_ITEM*>( item )->GetConnectionPoints();
+            SCH_ITEM*             schItem = static_cast<SCH_ITEM*>( item );
+            std::vector<VECTOR2I> connections = schItem->GetConnectionPoints();
+            EDA_ITEMS             drag_items{ item };
 
             for( const VECTOR2I& point : connections )
-                getConnectedDragItems( static_cast<SCH_ITEM*>( item ), point, drag_items );
+                getConnectedDragItems( schItem, point, drag_items, appendUndo );
 
             std::map<VECTOR2I, int> shifts;
-            VECTOR2I most_common( 0, 0 );
-            int max_count = 0;
+            VECTOR2I                most_common( 0, 0 );
+            int                     max_count = 0;
 
             for( const VECTOR2I& conn : connections )
             {
