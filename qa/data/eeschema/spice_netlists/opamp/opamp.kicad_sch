@@ -518,7 +518,7 @@
     (property "Sim.Device" "SUBCKT" (at 156.21 88.9 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Sim.Pins" "3 4 5 2 1" (at 156.21 88.9 0)
+    (property "Sim.Pins" "3=+IN 4=-IN 5=VCC 2=VEE 1=OUT" (at 156.21 88.9 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "2" (uuid 5f74e7f3-6e5a-4915-9655-9c0f0523fb0a))

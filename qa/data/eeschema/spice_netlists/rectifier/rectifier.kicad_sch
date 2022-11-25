@@ -357,9 +357,6 @@
     (property "Sim.Params" "ampl=5 f=1k" (at 124.46 104.14 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Sim.Pins" "1 2" (at 134.62 101.6 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
     (pin "1" (uuid a29d8f63-65fa-4d69-b0d4-cfa5c00fc5ab))
     (pin "2" (uuid 8bfe05fb-6889-4435-80ba-ab2128b151d8))
     (instances
@@ -424,7 +421,7 @@
     (property "Sim.Library" "diode.lib" (at 151.765 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Sim.Pins" "2 1" (at 151.765 96.52 0)
+    (property "Sim.Pins" "2=A 1=K" (at 151.765 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid cb1986eb-8b78-41be-ab05-5001090a2a65))
