@@ -29,6 +29,7 @@
 #include <board_connected_item.h>
 #include <properties/pg_properties.h>
 #include <pcb_shape.h>
+#include <pcb_text.h>
 #include <pcb_track.h>
 #include <settings/color_settings.h>
 
@@ -142,6 +143,7 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
         nets.Add( netinfo.second->GetNetname(), netinfo.first );
     }
 
-    auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
+    auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ),
+                                                              _HKI( "Net" ) );
     netProperty->SetChoices( nets );
 }
