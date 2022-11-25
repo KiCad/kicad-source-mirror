@@ -918,4 +918,8 @@ public:
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 };
 
+#ifndef SWIG
+DECLARE_ENUM_TO_WXANY( ZONE_CONNECTION )
+#endif
+
 #endif  // ZONE_H

@@ -1354,20 +1354,24 @@ static struct ZONE_DESC
 {
     ZONE_DESC()
     {
-        ENUM_MAP<ZONE_CONNECTION>::Instance()
-                .Map( ZONE_CONNECTION::INHERITED,   _HKI( "Inherited" ) )
-                .Map( ZONE_CONNECTION::NONE,        _HKI( "None" ) )
-                .Map( ZONE_CONNECTION::THERMAL,     _HKI( "Thermal reliefs" ) )
-                .Map( ZONE_CONNECTION::FULL,        _HKI( "Solid" ) )
-                .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
+        ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
+
+        if( zcMap.Choices().GetCount() == 0 )
+        {
+            zcMap.Undefined( ZONE_CONNECTION::INHERITED );
+            zcMap.Map( ZONE_CONNECTION::INHERITED, _HKI( "Inherited" ) )
+                 .Map( ZONE_CONNECTION::NONE, _HKI( "None" ) )
+                 .Map( ZONE_CONNECTION::THERMAL, _HKI( "Thermal reliefs" ) )
+                 .Map( ZONE_CONNECTION::FULL, _HKI( "Solid" ) )
+                 .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
+        }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( ZONE );
         propMgr.InheritsAfter( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
         propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
                     &ZONE::SetAssignedPriority, &ZONE::GetAssignedPriority ) );
-        //propMgr.AddProperty( new PROPERTY<ZONE, bool>( "Filled",
-                    //&ZONE::SetIsFilled, &ZONE::IsFilled ) );
+
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
                     &ZONE::SetZoneName, &ZONE::GetZoneName ) );
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Clearance Override" ),
@@ -1387,4 +1391,4 @@ static struct ZONE_DESC
     }
 } _ZONE_DESC;
 
-ENUM_TO_WXANY( ZONE_CONNECTION );
+IMPLEMENT_ENUM_TO_WXANY( ZONE_CONNECTION )

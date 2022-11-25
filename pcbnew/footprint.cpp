@@ -2819,6 +2819,18 @@ static struct FOOTPRINT_DESC
 {
     FOOTPRINT_DESC()
     {
+        ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
+
+        if( zcMap.Choices().GetCount() == 0 )
+        {
+            zcMap.Undefined( ZONE_CONNECTION::INHERITED );
+            zcMap.Map( ZONE_CONNECTION::INHERITED, _HKI( "Inherited" ) )
+                 .Map( ZONE_CONNECTION::NONE, _HKI( "None" ) )
+                 .Map( ZONE_CONNECTION::THERMAL, _HKI( "Thermal reliefs" ) )
+                 .Map( ZONE_CONNECTION::FULL, _HKI( "Solid" ) )
+                 .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
+        }
+
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
         if( layerEnum.Choices().GetCount() == 0 )
@@ -2880,6 +2892,8 @@ static struct FOOTPRINT_DESC
                     _HKI( "Solderpaste Margin Ratio Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMarginRatio,
                     &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
-        // TODO zone connection
+        propMgr.AddProperty( new PROPERTY_ENUM<FOOTPRINT, ZONE_CONNECTION>(
+                    _HKI( "Zone Connection Style" ),
+                    &FOOTPRINT::SetZoneConnection, &FOOTPRINT::GetZoneConnection ) );
     }
 } _FOOTPRINT_DESC;
