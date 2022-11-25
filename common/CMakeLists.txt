@@ -459,6 +459,7 @@ set( COMMON_SRCS
     project/project_local_settings.cpp
 
     properties/eda_angle_variant.cpp
+    properties/pg_cell_renderer.cpp
     properties/pg_editors.cpp
     properties/pg_properties.cpp
     properties/property_mgr.cpp

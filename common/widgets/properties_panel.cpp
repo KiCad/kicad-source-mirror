@@ -23,6 +23,7 @@
 #include <eda_base_frame.h>
 #include <eda_item.h>
 #include <import_export.h>
+#include <properties/pg_cell_renderer.h>
 
 #include <algorithm>
 #include <set>
@@ -44,6 +45,9 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     // but others need an explicit init
     if( !wxPGGlobalVars )
         wxPGInitResourceModule();
+
+    delete wxPGGlobalVars->m_defaultRenderer;
+    wxPGGlobalVars->m_defaultRenderer = new PG_CELL_RENDERER();
 
     m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ), wxDefaultPosition,
                                   wxDefaultSize, 0 );

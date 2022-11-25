@@ -57,6 +57,8 @@ public:
         return wxT( "PCB_SHAPE" );
     }
 
+    wxString GetFriendlyName() const override { return EDA_SHAPE::GetFriendlyName(); }
+
     bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override;
 
     void SetPosition( const VECTOR2I& aPos ) override { setPosition( aPos ); }

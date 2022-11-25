@@ -110,7 +110,7 @@ public:
     void SetShape( SHAPE_T aShape )            { m_shape = aShape; }
     SHAPE_T GetShape() const                   { return m_shape; }
 
-    wxString GetFriendlyName() const override;
+    wxString GetFriendlyName() const;
 
     /**
      * Return the starting point of the graphic.
