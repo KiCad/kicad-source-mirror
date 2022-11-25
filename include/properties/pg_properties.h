@@ -146,4 +146,21 @@ protected:
     std::function<wxColour( const wxString& aChoice )> m_colorFunc;
 };
 
+
+class PGPROPERTY_STRING : public wxStringProperty
+{
+public:
+    PGPROPERTY_STRING( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
+                       const wxString& aValue = wxEmptyString ) :
+            wxStringProperty( aLabel, aName, aValue )
+    {}
+
+    virtual ~PGPROPERTY_STRING() = default;
+
+    wxString ValueToString( wxVariant& aValue, int aFlags = 0 ) const override;
+
+    bool StringToValue( wxVariant& aVariant, const wxString& aString,
+                        int aFlags = 0 ) const override;
+};
+
 #endif /* PG_PROPERTIES_H */

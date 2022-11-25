@@ -32,6 +32,7 @@
 #include <pcb_text.h>
 #include <pcb_track.h>
 #include <settings/color_settings.h>
+#include <string_utils.h>
 
 
 PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* aFrame )
@@ -140,7 +141,7 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     // Regenerate nets
     for( const auto& netinfo : aBoard->GetNetInfo().NetsByNetcode() )
     {
-        nets.Add( netinfo.second->GetNetname(), netinfo.first );
+        nets.Add( UnescapeString( netinfo.second->GetNetname() ), netinfo.first );
     }
 
     auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ),

@@ -31,6 +31,7 @@
 #include <properties/pg_properties.h>
 #include <properties/property_mgr.h>
 #include <properties/property.h>
+#include <string_utils.h>
 #include <widgets/color_swatch.h>
 
 // reg-ex describing a signed valid value with a unit
@@ -141,7 +142,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
         }
         else if( typeId == TYPE_HASH( wxString ) )
         {
-            ret = new wxStringProperty();
+            ret = new PGPROPERTY_STRING();
         }
         else
         {
@@ -325,4 +326,21 @@ void PGPROPERTY_COLORENUM::OnCustomPaint( wxDC& aDC, const wxRect& aRect,
     aDC.DrawRectangle( aRect );
 
     aPaintData.m_drawnWidth = aRect.width;
+}
+
+
+wxString PGPROPERTY_STRING::ValueToString( wxVariant& aValue, int aFlags ) const
+{
+    if( aValue.GetType() != wxPG_VARIANT_TYPE_STRING )
+        return wxEmptyString;
+
+    return UnescapeString( aValue.GetString() );
+}
+
+
+bool PGPROPERTY_STRING::StringToValue( wxVariant& aVariant, const wxString& aString,
+                                       int aFlags ) const
+{
+    aVariant = EscapeString( aString, CTX_QUOTED_STR );
+    return true;
 }
