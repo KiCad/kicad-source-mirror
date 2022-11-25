@@ -60,6 +60,8 @@ public:
         return m_displayed;
     }
 
+    void RecalculateSplitterPos();
+
 protected:
     virtual void update( const SELECTION& aSelection );
     virtual wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const = 0;
@@ -73,6 +75,9 @@ protected:
     wxPropertyGrid* m_grid;
     EDA_BASE_FRAME* m_frame;
     wxStaticText* m_caption;
+
+    /// Proportion of the grid column splitter that is used for the key column (0.0 - 1.0)
+    float m_splitter_key_proportion;
 };
 
 #endif /* PROPERTIES_PANEL_H */

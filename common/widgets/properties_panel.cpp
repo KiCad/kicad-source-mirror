@@ -33,8 +33,10 @@
 
 extern APIIMPORT wxPGGlobalVarsClass* wxPGGlobalVars;
 
-PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame )
-    : wxPanel( aParent ), m_frame( aFrame )
+PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
+        wxPanel( aParent ),
+        m_frame( aFrame ),
+        m_splitter_key_proportion( -1 )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -62,6 +64,20 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame )
     Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanged ), NULL, this );
     Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanging ), NULL, this );
     Connect( wxEVT_SHOW, wxShowEventHandler( PROPERTIES_PANEL::onShow ), NULL, this );
+
+    Bind( wxEVT_PG_COL_END_DRAG,
+          [&]( wxPropertyGridEvent& )
+          {
+              m_splitter_key_proportion =
+                      static_cast<float>( m_grid->GetSplitterPosition() ) / m_grid->GetSize().x;
+          } );
+
+    Bind( wxEVT_SIZE,
+          [&]( wxSizeEvent& aEvent )
+          {
+              RecalculateSplitterPos();
+              aEvent.Skip();
+          } );
 }
 
 
@@ -174,7 +190,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
         }
     }
 
-    m_grid->FitColumns();
+    RecalculateSplitterPos();
 }
 
 
@@ -182,4 +198,13 @@ void PROPERTIES_PANEL::onShow( wxShowEvent& aEvent )
 {
     if( aEvent.IsShown() )
         UpdateData();
+}
+
+
+void PROPERTIES_PANEL::RecalculateSplitterPos()
+{
+    if( m_splitter_key_proportion < 0 )
+        m_grid->CenterSplitter();
+    else
+        m_grid->SetSplitterPosition( m_splitter_key_proportion * m_grid->GetSize().x );
 }
