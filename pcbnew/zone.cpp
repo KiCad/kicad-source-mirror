@@ -60,11 +60,11 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
     SetLocalFlags( 0 );               // flags temporary used in zone calculations
     m_fillVersion = 5;                // set the "old" way to build filled polygon areas (< 6.0.x)
 
-    aParent->GetZoneSettings().ExportSetting( *this );
-
     m_ZoneMinThickness = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THICKNESS_MIL );
     m_thermalReliefSpokeWidth = EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
     m_thermalReliefGap = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THERMAL_RELIEF_GAP_MIL );
+
+    aParent->GetZoneSettings().ExportSetting( *this );
 
     m_needRefill = false;   // True only after edits.
 }
