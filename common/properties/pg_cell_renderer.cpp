@@ -47,7 +47,12 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
 
     text = wxControl::Ellipsize( text, aDC, wxELLIPSIZE_MIDDLE, aRect.GetWidth() );
 
-    int imageWidth  = PreDrawCell( aDC, aRect, aGrid, cell, preDrawFlags );
+#if wxCHECK_VERSION( 3, 1, 0 )
+    int imageWidth = PreDrawCell( aDC, aRect, aGrid, cell, preDrawFlags );
+#else
+    int imageWidth = PreDrawCell( aDC, aRect, cell, preDrawFlags );
+#endif
+
     int imageOffset = aProperty->GetImageOffset( imageWidth );
 
     DrawEditorValue( aDC, aRect, imageOffset, text, aProperty, nullptr );
