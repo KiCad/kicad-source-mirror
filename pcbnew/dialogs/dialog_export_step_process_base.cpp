@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,7 @@ DIALOG_EXPORT_STEP_PROCESS_BASE::DIALOG_EXPORT_STEP_PROCESS_BASE( wxWindow* pare
 	m_textCtrlLog = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
 	m_textCtrlLog->SetMinSize( wxSize( 450,250 ) );
 
-	bMainSizer->Add( m_textCtrlLog, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_textCtrlLog, 1, wxALL|wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
