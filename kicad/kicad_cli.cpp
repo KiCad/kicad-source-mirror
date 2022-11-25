@@ -28,6 +28,7 @@
 #include <wx/app.h>
 #include <wx/stdpaths.h>
 #include <wx/msgdlg.h>
+#include <wx/wx.h>
 
 #include <kiway.h>
 #include <macros.h>

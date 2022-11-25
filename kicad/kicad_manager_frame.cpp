@@ -24,8 +24,11 @@
  */
 
 #include "kicad_id.h"
+#include "pcm.h"
 #include "pgm_kicad.h"
 #include "project_tree_pane.h"
+#include "widgets/bitmap_button.h"
+
 #include <advanced_config.h>
 #include <bitmaps.h>
 #include <build_version.h>
@@ -57,6 +60,8 @@
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/dcclient.h>
+#include <wx/dnd.h>
+#include <wx/process.h>
 #include <atomic>
 
 

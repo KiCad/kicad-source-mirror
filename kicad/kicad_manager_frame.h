@@ -25,19 +25,16 @@
 #ifndef KICAD_H
 #define KICAD_H
 
-
-#include <wx/process.h>
 #include <kiway_player.h>
-#include <wx/dnd.h>
-#include "pcm.h"
-#include "widgets/bitmap_button.h"
 
+class ACTION_TOOLBAR;
+class BITMAP_BUTTON;
+class EDA_BASE_FRAME;
+class KICAD_SETTINGS;
+class PANEL_KICAD_LAUNCHER;
+class PLUGIN_CONTENT_MANAGER;
 class PROJECT_TREE;
 class PROJECT_TREE_PANE;
-class ACTION_TOOLBAR;
-class KICAD_SETTINGS;
-class EDA_BASE_FRAME;
-class PANEL_KICAD_LAUNCHER;
 
 /**
  * The main KiCad project manager frame.  It is not a KIWAY_PLAYER.
