@@ -564,23 +564,36 @@ void EDA_SHAPE::SetArcAngleAndEnd( const EDA_ANGLE& aAngle, bool aCheckNegativeA
 }
 
 
+wxString EDA_SHAPE::GetFriendlyName() const
+{
+    switch( m_shape )
+    {
+    case SHAPE_T::CIRCLE:   return _( "Circle" );
+    case SHAPE_T::ARC:      return _( "Arc" );
+    case SHAPE_T::BEZIER:   return _( "Curve" );
+    case SHAPE_T::POLY:     return _( "Polygon" );
+    case SHAPE_T::RECT:     return IsAnnotationProxy() ? _( "Pad Number Box" ) : _( "Rectangle" );
+    case SHAPE_T::SEGMENT:  return _( "Segment" );
+    default:                return _( "Unrecognized" );
+    }
+}
+
+
 void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
     wxString          msg;
 
     wxString shape = _( "Shape" );
+    aList.emplace_back( shape, GetFriendlyName() );
 
     switch( m_shape )
     {
     case SHAPE_T::CIRCLE:
-        aList.emplace_back( shape, _( "Circle" ) );
         aList.emplace_back( _( "Radius" ), aFrame->MessageTextFromValue( GetRadius() ) );
         break;
 
     case SHAPE_T::ARC:
-        aList.emplace_back( shape, _( "Arc" ) );
-
         msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( GetArcAngle() );
         aList.emplace_back( _( "Angle" ), msg );
 
@@ -588,23 +601,15 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         break;
 
     case SHAPE_T::BEZIER:
-        aList.emplace_back( shape, _( "Curve" ) );
         aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( GetLength() ) );
         break;
 
     case SHAPE_T::POLY:
-        aList.emplace_back( shape, _( "Polygon" ) );
-
         msg.Printf( "%d", GetPolyShape().Outline(0).PointCount() );
         aList.emplace_back( _( "Points" ), msg );
         break;
 
     case SHAPE_T::RECT:
-        if( IsAnnotationProxy() )
-            aList.emplace_back( shape, _( "Pad Number Box" ) );
-        else
-            aList.emplace_back( shape, _( "Rectangle" ) );
-
         aList.emplace_back( _( "Width" ),
                             aFrame->MessageTextFromValue( std::abs( GetEnd().x - GetStart().x ) ) );
 
@@ -614,8 +619,6 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     case SHAPE_T::SEGMENT:
     {
-        aList.emplace_back( shape, _( "Segment" ) );
-
         aList.emplace_back( _( "Length" ),
                             aFrame->MessageTextFromValue( GetLineLength( GetStart(), GetEnd() ) ));
 
@@ -627,7 +630,6 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     }
 
     default:
-        aList.emplace_back( shape, _( "Unrecognized" ) );
         break;
     }
 
