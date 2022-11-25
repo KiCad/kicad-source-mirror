@@ -116,13 +116,15 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_
         // as this initial width is sometimes strange depending on the language (wxGrid bug?)
         int min_width =  m_netclassGrid->GetVisibleWidth( i, true, true );
 
-        if( i == GRID_LINESTYLE )
-            min_best_width *= 1.5;
+        int weighted_min_best_width =
+                        ( i == GRID_LINESTYLE )
+                        ? min_best_width * 3 / 2
+                        : min_best_width;
 
         m_netclassGrid->SetColMinimalWidth( i, min_width );
 
         // We use a "best size" >= min_best_width
-        m_originalColWidths[ i ] = std::max( min_width, min_best_width );
+        m_originalColWidths[ i ] = std::max( min_width, weighted_min_best_width );
         m_netclassGrid->SetColSize( i, m_originalColWidths[ i ] );
     }
 
