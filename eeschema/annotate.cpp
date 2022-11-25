@@ -376,7 +376,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
             if( symbol->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s." ),
-                            symbol->GetValue( sheet, true ),
+                            symbol->GetValueFieldText( true ),
                             LIB_SYMBOL::SubReference( symbol->GetUnit(), false ),
                             prevRef,
                             newRef );
@@ -384,7 +384,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
             else
             {
                 msg.Printf( _( "Updated %s from %s to %s." ),
-                            symbol->GetValue( sheet, true ),
+                            symbol->GetValueFieldText( true ),
                             prevRef,
                             newRef );
             }
@@ -394,14 +394,14 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
             if( symbol->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Annotated %s (unit %s) as %s." ),
-                            symbol->GetValue( sheet, true ),
+                            symbol->GetValueFieldText( true ),
                             LIB_SYMBOL::SubReference( symbol->GetUnit(), false ),
                             newRef );
             }
             else
             {
                 msg.Printf( _( "Annotated %s as %s." ),
-                            symbol->GetValue( sheet, true ),
+                            symbol->GetValueFieldText( true ),
                             newRef );
             }
         }

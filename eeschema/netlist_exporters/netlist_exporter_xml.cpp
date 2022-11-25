@@ -135,12 +135,12 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 int unit = symbol2->GetUnitSelection( aSheet );
 
                 // The lowest unit number wins.  User should only set fields in any one unit.
-                candidate = symbol2->GetValue( &sheetList[i], m_resolveTextVars );
+                candidate = symbol2->GetValueFieldText(  m_resolveTextVars );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || value.IsEmpty() ) )
                     value = candidate;
 
-                candidate = symbol2->GetFootprint( &sheetList[i], m_resolveTextVars );
+                candidate = symbol2->GetFootprintFieldText( m_resolveTextVars );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || footprint.IsEmpty() ) )
                     footprint = candidate;
@@ -171,8 +171,8 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     }
     else
     {
-        value = aSymbol->GetValue( aSheet, m_resolveTextVars );
-        footprint = aSymbol->GetFootprint( aSheet, m_resolveTextVars );
+        value = aSymbol->GetValueFieldText( m_resolveTextVars );
+        footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars );
 
         if( m_resolveTextVars )
             datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText();

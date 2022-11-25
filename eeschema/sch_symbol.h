@@ -453,6 +453,12 @@ public:
         m_fields = aFields;     // vector copying, length is changed possibly
     }
 
+    const wxString GetValueFieldText( bool aResolve ) const;
+    void SetValueFieldText( const wxString& aValue );
+
+    const wxString GetFootprintFieldText( bool aResolve ) const;
+    void SetFootprintFieldText( const wxString& aFootprint );
+
     /**
      * Restore fields to the original library values.
      *
@@ -591,9 +597,7 @@ public:
      */
     void AddHierarchicalReference( const KIID_PATH& aPath,
                                    const wxString&  aRef,
-                                   int              aUnit,
-                                   const wxString&  aValue = wxEmptyString,
-                                   const wxString&  aFootprint = wxEmptyString );
+                                   int              aUnit );
 
     void AddHierarchicalReference( const SYMBOL_INSTANCE_REFERENCE& aInstance );
 
@@ -605,26 +609,6 @@ public:
 
     /// Set the selected unit of this symbol for all sheets.
     void SetUnitSelection( int aUnitSelection );
-
-    /// Return the instance-specific value for the given sheet path.
-    const wxString GetValue( const SCH_SHEET_PATH* sheet, bool aResolve ) const;
-    void SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue );
-
-    /// Set the value for all instances (the default GUI behavior).
-    void SetValue( const wxString& aValue )
-    {
-        SetValue( nullptr, aValue );
-    }
-
-    /// Return the instance-specific footprint assignment for the given sheet path.
-    const wxString GetFootprint( const SCH_SHEET_PATH* sheet, bool aResolve ) const;
-    void SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint );
-
-    /// Set the value for all instances (the default GUI behavior).
-    void SetFootprint( const wxString& aFootprint )
-    {
-        SetFootprint( nullptr, aFootprint );
-    }
 
     // Geometric transforms (used in block operations):
 

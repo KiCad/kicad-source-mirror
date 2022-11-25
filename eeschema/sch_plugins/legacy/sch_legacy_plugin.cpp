@@ -1357,8 +1357,6 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
                     instance.m_Path = path;
                     instance.m_Reference = symbol->GetField( REFERENCE_FIELD )->GetText();
                     instance.m_Unit = symbol->GetUnit();
-                    instance.m_Value = symbol->GetField( VALUE_FIELD )->GetText();
-                    instance.m_Footprint = symbol->GetField( FOOTPRINT_FIELD )->GetText();
                     symbol->AddHierarchicalReference( instance );
                 }
                 else
@@ -1366,8 +1364,6 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
                     for( const SYMBOL_INSTANCE_REFERENCE& instance : symbol->GetInstanceReferences() )
                     {
                         SYMBOL_INSTANCE_REFERENCE tmpInstance = instance;
-                        tmpInstance.m_Value = symbol->GetField( VALUE_FIELD )->GetText();
-                        tmpInstance.m_Footprint = symbol->GetField( FOOTPRINT_FIELD )->GetText();
                         symbol->AddHierarchicalReference( tmpInstance );
                     }
                 }

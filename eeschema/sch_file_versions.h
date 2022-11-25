@@ -91,4 +91,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220929  // Don't save property ID
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20221002  // Move instance data back into symbol definition.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20221004  // Move instance data back into symbol definition.
-#define SEXPR_SCHEMATIC_FILE_VERSION 20221110    // Move sheet instance  data to sheet definition.
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20221110  // Move sheet instance  data to sheet definition.
+#define SEXPR_SCHEMATIC_FILE_VERSION 20221126    // Remove value and footprint from instance data.

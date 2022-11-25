@@ -316,8 +316,6 @@ std::vector<SYMBOL_INSTANCE_REFERENCE> SCH_REFERENCE_LIST::GetSymbolInstances() 
         instance.m_Path = ref.GetSheetPath().Path();
         instance.m_Reference = ref.GetRef();
         instance.m_Unit = ref.GetUnit();
-        instance.m_Value = ref.GetValue();
-        instance.m_Footprint = ref.GetFootprint();
 
         retval.push_back( instance );
     }
@@ -818,7 +816,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_SYMBOL* aLibSymbol,
     m_libPart    = aLibSymbol;     // Warning: can be nullptr for orphan symbols
                                    // (i.e. with a symbol library not found)
     m_unit       = aSymbol->GetUnitSelection( &aSheetPath );
-    m_footprint  = aSymbol->GetFootprint( &aSheetPath, true );
+    m_footprint  = aSymbol->GetFootprintFieldText( true );
     m_sheetPath  = aSheetPath;
     m_isNew      = false;
     m_flag       = 0;
@@ -834,10 +832,10 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_SYMBOL* aLibSymbol,
 
     m_numRef = -1;
 
-    if( aSymbol->GetValue( &aSheetPath, false ).IsEmpty() )
-        aSymbol->SetValue( &aSheetPath, wxT( "~" ) );
+    if( aSymbol->GetValueFieldText( false ).IsEmpty() )
+        aSymbol->SetValueFieldText( wxT( "~" ) );
 
-    m_value = aSymbol->GetValue( &aSheetPath, false );
+    m_value = aSymbol->GetValueFieldText( false );
 }
 
 

@@ -663,9 +663,9 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
         if( fieldType == REFERENCE_FIELD )
             symbol->SetRef( aSheetPath, m_text );
         else if( fieldType == VALUE_FIELD )
-            symbol->SetValue( aSheetPath, m_text );
+            symbol->SetValueFieldText( m_text );
         else if( fieldType == FOOTPRINT_FIELD )
-            symbol->SetFootprint( aSheetPath, m_text );
+            symbol->SetFootprintFieldText( m_text );
     }
     else if( parent && parent->Type() == SCH_GLOBAL_LABEL_T )
     {
@@ -746,9 +746,9 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
                                                    appendUndo );
 
                     if( fieldType == VALUE_FIELD )
-                        otherUnit->SetValue( m_text );
+                        otherUnit->SetValueFieldText( m_text );
                     else if( fieldType == FOOTPRINT_FIELD )
-                        otherUnit->SetFootprint( m_text );
+                        otherUnit->SetFootprintFieldText( m_text );
                     else
                         otherUnit->GetField( DATASHEET_FIELD )->SetText( m_text );
 

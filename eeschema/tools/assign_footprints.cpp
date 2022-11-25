@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,7 +88,6 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
 
                     // For backwards-compatibility CvPcb currently updates all instances of a
                     // symbol (even though it lists these instances separately).
-                    SCH_SHEET_PATH* sheetPath = nullptr;    // &refs[ii].GetSheetPath();
                     wxString        oldfp = refs[ii].GetFootprint();
 
                     if( oldfp.IsEmpty() && symbol->GetField( FOOTPRINT_FIELD )->IsVisible() )
@@ -103,7 +102,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
                                                      appendToUndoList, false );
                         appendToUndoList = true;
 
-                        symbol->SetFootprint( sheetPath, footprint );
+                        symbol->SetFootprintFieldText( footprint );
                     }
                 }
             }
@@ -192,10 +191,9 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
                 // We have found a candidate.
                 // Note: it can be not unique (multiple units per part)
                 // So we *do not* stop the search here
-                SCH_SYMBOL*     symbol = referencesList[ ii ].GetSymbol();
-                SCH_SHEET_PATH* sheetPath = &referencesList[ii].GetSheetPath();
+                SCH_SYMBOL* symbol = referencesList[ ii ].GetSymbol();
 
-                symbol->SetFootprint( sheetPath, footprint );
+                symbol->SetFootprintFieldText( footprint );
 
                 if( aForceVisibilityState )
                     symbol->GetField( FOOTPRINT_FIELD )->SetVisible( aVisibilityState );

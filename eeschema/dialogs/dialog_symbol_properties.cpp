@@ -707,9 +707,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // Similar for Value and Footprint, except that the GUI behaviour is that they are kept
     // in sync between multiple instances.
-    m_symbol->SetValue( &GetParent()->GetCurrentSheet(), m_fields->at( VALUE_FIELD ).GetText() );
-    m_symbol->SetFootprint( &GetParent()->GetCurrentSheet(),
-                            m_fields->at( FOOTPRINT_FIELD ).GetText() );
+    m_symbol->SetValueFieldText( m_fields->at( VALUE_FIELD ).GetText() );
+    m_symbol->SetFootprintFieldText(  m_fields->at( FOOTPRINT_FIELD ).GetText() );
 
     m_symbol->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
     m_symbol->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
@@ -748,8 +747,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
             {
                 GetParent()->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED,
                                                  appendUndo );
-                otherUnit->SetValue( m_fields->at( VALUE_FIELD ).GetText() );
-                otherUnit->SetFootprint( m_fields->at( FOOTPRINT_FIELD ).GetText() );
+                otherUnit->SetValueFieldText( m_fields->at( VALUE_FIELD ).GetText() );
+                otherUnit->SetFootprintFieldText( m_fields->at( FOOTPRINT_FIELD ).GetText() );
 
                 for( size_t ii = DATASHEET_FIELD; ii < m_fields->size(); ++ii )
                 {

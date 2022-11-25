@@ -2331,7 +2331,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     // each symbol has its own powerSymbolIt for now
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
     symbol->SetRef( &m_sheetPath, "#PWR?" );
-    symbol->SetValue( &m_sheetPath, elem.text );
+    symbol->SetValueFieldText( elem.text );
     symbol->SetLibId( libId );
     symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
 
@@ -3042,6 +3042,6 @@ void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>&
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
 
-        symbol->SetFootprint( fpLibId.Format() );
+        symbol->SetFootprintFieldText( fpLibId.Format() );
     }
 }

@@ -77,7 +77,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
 
         m_newId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
         m_specifiedReference->ChangeValue( m_symbol->GetRef( currentSheet ) );
-        m_specifiedValue->ChangeValue( m_symbol->GetValue( currentSheet, false ) );
+        m_specifiedValue->ChangeValue( m_symbol->GetValueFieldText( false ) );
         m_specifiedId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
     }
     else
@@ -433,7 +433,7 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
     else if( m_matchByValue->GetValue() )
     {
         return WildCompareString( m_specifiedValue->GetValue(),
-                                  aSymbol->GetValue( aInstance, false ), false );
+                                  aSymbol->GetValueFieldText( false ), false );
     }
     else if( m_matchById )
     {
@@ -624,9 +624,9 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
                 if( i == REFERENCE_FIELD )
                     aSymbol->SetRef( aInstance, UTIL::GetRefDesUnannotated( libField->GetText() ) );
                 else if( i == VALUE_FIELD )
-                    aSymbol->SetValue( aInstance, UnescapeString( libField->GetText() ) );
+                    aSymbol->SetValueFieldText( UnescapeString( libField->GetText() ) );
                 else if( i == FOOTPRINT_FIELD )
-                    aSymbol->SetFootprint( aInstance, libField->GetText() );
+                    aSymbol->SetFootprintFieldText( libField->GetText() );
                 else
                     field.SetText( libField->GetText() );
             }

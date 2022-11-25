@@ -2719,13 +2719,13 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
                 case T_value:
                     NeedSYMBOL();
-                    defaultInstance.m_Value = FromUTF8();
+                    symbol->SetValueFieldText( FromUTF8() );
                     NeedRIGHT();
                     break;
 
                 case T_footprint:
                     NeedSYMBOL();
-                    defaultInstance.m_Footprint = FromUTF8();
+                    symbol->SetFootprintFieldText( FromUTF8() );
                     NeedRIGHT();
                     break;
 
@@ -2792,13 +2792,13 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
                         case T_value:
                             NeedSYMBOL();
-                            instance.m_Value = FromUTF8();
+                            symbol->SetValueFieldText( FromUTF8() );
                             NeedRIGHT();
                             break;
 
                         case T_footprint:
                             NeedSYMBOL();
-                            instance.m_Footprint = FromUTF8();
+                            symbol->SetFootprintFieldText( FromUTF8() );
                             NeedRIGHT();
                             break;
 

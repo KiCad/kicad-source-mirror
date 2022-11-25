@@ -337,8 +337,6 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
         symbol->GetField( REFERENCE_FIELD )->SetText( symbol->GetRef( this ) );
-        symbol->GetField( VALUE_FIELD )->SetText( symbol->GetValue( this, false ) );
-        symbol->GetField( FOOTPRINT_FIELD )->SetText( symbol->GetFootprint( this, false ) );
         symbol->UpdateUnit( symbol->GetUnitSelection( this ) );
         LastScreen()->Update( item );
     }
@@ -570,8 +568,6 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
             newSymbolInstance.m_Reference = symbol->GetLibSymbolRef()->GetReferenceField().GetText();
             newSymbolInstance.m_Reference += wxT( "?" );
             newSymbolInstance.m_Unit = 1;
-            newSymbolInstance.m_Value = symbol->GetLibSymbolRef()->GetValueField().GetText();
-            newSymbolInstance.m_Footprint = symbol->GetLibSymbolRef()->GetFootprintField().GetText();
             symbol->AddHierarchicalReference( newSymbolInstance );
         }
         else
@@ -1113,10 +1109,10 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
 
             // Symbol instance paths are stored and looked up in memory with the root path so use
             // the full path here.
-            symbol->AddHierarchicalReference( sheetPath.Path(),
-                                              it->m_Reference, it->m_Unit, it->m_Value,
-                                              it->m_Footprint );
+            symbol->AddHierarchicalReference( sheetPath.Path(), it->m_Reference, it->m_Unit );
             symbol->GetField( REFERENCE_FIELD )->SetText( it->m_Reference );
+            symbol->SetValueFieldText( it->m_Value );
+            symbol->SetFootprintFieldText( it->m_Footprint );
         }
     }
 
@@ -1298,7 +1294,7 @@ void SCH_SHEET_LIST::migrateSimModel( SCH_SYMBOL& aSymbol, unsigned aSheetIndex 
     }
 
     wxString ref = aSymbol.GetRef( &at( aSheetIndex ), true );
-    wxString value = aSymbol.GetValue( &at( aSheetIndex ), true );
+    wxString value = aSymbol.GetValueFieldText( true );
 
     wxString spiceType;
     wxString spiceModel;

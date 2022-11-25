@@ -1668,8 +1668,6 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
 
         unit = instance.m_Unit;
         reference = instance.m_Reference;
-        value = instance.m_Value;
-        footprint = instance.m_Footprint;
     }
     else
     {
@@ -1691,12 +1689,9 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
     else
         aSymbol->ClearAnnotation( &aPastePath, false );
 
-    // We might clear annotations but always leave the original unit number, value and footprint
-    // from the paste
+    // We might clear annotations but always leave the original unit number from the paste.
     aSymbol->SetUnitSelection( &aPastePath, unit );
     aSymbol->SetUnit( unit );
-    aSymbol->SetValue( &aPastePath, value );
-    aSymbol->SetFootprint( &aPastePath, footprint );
 }
 
 

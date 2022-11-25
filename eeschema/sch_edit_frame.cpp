@@ -1012,7 +1012,7 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
         switch( front->Type() )
         {
         case SCH_SYMBOL_T:
-            findString = static_cast<SCH_SYMBOL*>( front )->GetValue( &GetCurrentSheet(), true );
+            findString = static_cast<SCH_SYMBOL*>( front )->GetValueFieldText( true );
             break;
 
         case SCH_FIELD_T:

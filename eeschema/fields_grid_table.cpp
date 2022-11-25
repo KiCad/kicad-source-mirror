@@ -71,9 +71,9 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
      */
     wxString netlist;
 
-    netlist << EscapeString( aSymbol->GetFootprint( &aSheetPath, true ), CTX_LINE ) << wxS( "\r" );
+    netlist << EscapeString( aSymbol->GetFootprintFieldText( true ), CTX_LINE ) << wxS( "\r" );
     netlist << EscapeString( aSymbol->GetRef( &aSheetPath ), CTX_LINE ) << wxS( "\r" );
-    netlist << EscapeString( aSymbol->GetValue( &aSheetPath, true ), CTX_LINE );
+    netlist << EscapeString( aSymbol->GetValueFieldText( true ), CTX_LINE );
 
     for( SCH_PIN* pin : aSymbol->GetPins( &aSheetPath ) )
     {

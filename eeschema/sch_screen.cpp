@@ -1433,9 +1433,7 @@ void SCH_SCREEN::SetLegacySymbolInstanceData()
         for( const SYMBOL_INSTANCE_REFERENCE& instance : symbol->GetInstanceReferences() )
         {
             symbol->AddHierarchicalReference( instance.m_Path, instance.m_Reference,
-                                              instance.m_Unit,
-                                              symbol->GetField( VALUE_FIELD )->GetText(),
-                                              symbol->GetField( FOOTPRINT_FIELD )->GetText() );
+                                              instance.m_Unit );
         }
     }
 }

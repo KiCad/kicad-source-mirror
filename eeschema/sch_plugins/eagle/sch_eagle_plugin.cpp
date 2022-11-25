@@ -1513,7 +1513,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             symbol->GetField( REFERENCE_FIELD )->SetVisible( false );
     }
 
-    symbol->AddHierarchicalReference( m_sheetPath.Path(), reference, unit, value, footprint );
+    symbol->AddHierarchicalReference( m_sheetPath.Path(), reference, unit );
 
     // Save the pin positions
     SYMBOL_LIB_TABLE& schLibTable = *m_schematic->Prj().SchSymbolLibTable();

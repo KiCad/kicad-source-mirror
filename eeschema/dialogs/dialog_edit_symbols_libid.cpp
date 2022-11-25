@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -762,7 +762,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
 
             // If value is a proxy for the itemName then make sure it gets updated
             if( getName( candidate.m_Symbol->GetLibId() ) == value->GetText() )
-                candidate.m_Symbol->SetValue( getName( id ) );
+                candidate.m_Symbol->SetValueFieldText( getName( id ) );
 
             candidate.m_Symbol->SetLibId( id );
             candidate.m_Symbol->SetLibSymbol( symbol->Flatten().release() );

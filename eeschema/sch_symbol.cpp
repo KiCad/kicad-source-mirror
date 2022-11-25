@@ -135,12 +135,6 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
     if( aSheet )
     {
         SetRef( aSheet, UTIL::GetRefDesUnannotated( m_prefix ) );
-
-        // Value and footprint name are stored in the SCH_SHEET_PATH path manager,
-        // if aSheet != nullptr, not in the symbol itself.
-        // Copy them to the currently displayed field texts
-        SetValue( GetValue( aSheet, false ) );
-        SetFootprint( GetFootprint( aSheet, false ) );
     }
 
     // Inherit the include in bill of materials and board netlist settings from library symbol.
@@ -161,10 +155,6 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet,
     {
         if( i.first == REFERENCE_FIELD )
             SetRef( aSheet, i.second );
-        else if( i.first == VALUE_FIELD )
-            SetValue( aSheet, i.second );
-        else if( i.first == FOOTPRINT_FIELD )
-            SetFootprint( aSheet, i.second );
         else if( SCH_FIELD* field = GetFieldById( i.first ) )
             field->SetText( i.second );
     }
@@ -529,9 +519,7 @@ void SCH_SYMBOL::SortInstances( bool (*aSortFunction)( const SYMBOL_INSTANCE_REF
 }
 
 
-void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxString& aRef,
-                                           int aUnit, const wxString& aValue,
-                                           const wxString& aFootprint )
+void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxString& aRef, int aUnit )
 {
     // Search for an existing path and remove it if found (should not occur)
     for( unsigned ii = 0; ii < m_instanceReferences.size(); ii++ )
@@ -555,22 +543,16 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
     instance.m_Path = aPath;
     instance.m_Reference = aRef;
     instance.m_Unit = aUnit;
-    instance.m_Value = aValue;
-    instance.m_Footprint = aFootprint;
 
     wxLogTrace( traceSchSheetPaths,
                 "Adding symbol '%s' instance:\n"
                 "    sheet path '%s'\n"
                 "    reference '%s'\n"
-                "    unit %d\n"
-                "    value '%s'\n"
-                "    footprint '%s'",
+                "    unit %d\n",
                 m_Uuid.AsString(),
                 aPath.AsString(),
                 aRef,
-                aUnit,
-                aValue,
-                aFootprint );
+                aUnit );
 
     m_instanceReferences.push_back( instance );
 
@@ -579,9 +561,7 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
     if( m_instanceReferences.size() == 1 )
     {
         m_fields[ REFERENCE_FIELD ].SetText( aRef );
-        m_fields[ VALUE_FIELD ].SetText( aValue );
         m_unit = aUnit;
-        m_fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
     }
 }
 
@@ -623,15 +603,11 @@ void SCH_SYMBOL::AddHierarchicalReference( const SYMBOL_INSTANCE_REFERENCE& aIns
                 "Adding symbol '%s' instance:\n"
                 "    sheet path '%s'\n"
                 "    reference '%s'\n"
-                "    unit %d\n"
-                "    value '%s'\n"
-                "    footprint '%s'",
+                "    unit %d\n",
                 m_Uuid.AsString(),
                 instance.m_Path.AsString(),
                 instance.m_Reference,
-                instance.m_Unit,
-                instance.m_Value,
-                instance.m_Footprint );
+                instance.m_Unit );
 
     m_instanceReferences.push_back( instance );
 
@@ -640,9 +616,7 @@ void SCH_SYMBOL::AddHierarchicalReference( const SYMBOL_INSTANCE_REFERENCE& aIns
     if( m_instanceReferences.size() == 1 )
     {
         m_fields[ REFERENCE_FIELD ].SetText( instance.m_Reference );
-        m_fields[ VALUE_FIELD ].SetText( instance.m_Value );
         m_unit = instance.m_Unit;
-        m_fields[ FOOTPRINT_FIELD ].SetText( instance.m_Footprint );
     }
 }
 
@@ -706,8 +680,7 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     }
 
     if( !found )
-        AddHierarchicalReference( path, ref, m_unit, GetField( VALUE_FIELD )->GetText(),
-                                  GetField( FOOTPRINT_FIELD )->GetText() );
+        AddHierarchicalReference( path, ref, m_unit );
 
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
         pin->ClearDefaultNetName( sheet );
@@ -782,128 +755,33 @@ void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 }
 
 
-const wxString SCH_SYMBOL::GetValue( const SCH_SHEET_PATH* sheet, bool aResolve ) const
+const wxString SCH_SYMBOL::GetValueFieldText( bool aResolve ) const
 {
-    KIID_PATH path = sheet->Path();
+    if( aResolve )
+        return GetField( VALUE_FIELD )->GetShownText();
 
-    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
-    {
-        if( instance.m_Path == path && !instance.m_Value.IsEmpty() )
-        {
-            // This can only be overridden by a new value but if we are resolving,
-            // make sure that the symbol returns the fully resolved text
-            if( aResolve )
-            {
-                SCH_SYMBOL new_sym( *this );
-                new_sym.GetField( VALUE_FIELD )->SetText( instance.m_Value );
-                return new_sym.GetField( VALUE_FIELD )->GetShownText();
-            }
-
-            return instance.m_Value;
-        }
-    }
-
-    if( !aResolve )
-        return GetField( VALUE_FIELD )->GetText();
-
-    return GetField( VALUE_FIELD )->GetShownText();
+    return GetField( VALUE_FIELD )->GetText();
 }
 
 
-void SCH_SYMBOL::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue )
+void SCH_SYMBOL::SetValueFieldText( const wxString& aValue )
 {
-    if( sheet == nullptr )
-    {
-        // Set all instances to the updated value
-        for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
-            instance.m_Value = aValue;
-
-        m_fields[ VALUE_FIELD ].SetText( aValue );
-        return;
-    }
-
-    KIID_PATH path = sheet->Path();
-    bool      found = false;
-
-    // check to see if it is already there before inserting it
-    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
-    {
-        if( instance.m_Path == path )
-        {
-            found = true;
-            instance.m_Value = aValue;
-            break;
-        }
-    }
-
-    // didn't find it; better add it
-    if( !found )
-    {
-        AddHierarchicalReference( path, UTIL::GetRefDesUnannotated( m_prefix ), m_unit, aValue,
-                                  wxEmptyString );
-    }
-
-    if( Schematic() && *sheet == Schematic()->CurrentSheet() )
-        m_fields[ VALUE_FIELD ].SetText( aValue );
+    m_fields[ VALUE_FIELD ].SetText( aValue );
 }
 
 
-const wxString SCH_SYMBOL::GetFootprint( const SCH_SHEET_PATH* sheet, bool aResolve ) const
+const wxString SCH_SYMBOL::GetFootprintFieldText(  bool aResolve ) const
 {
-    KIID_PATH path = sheet->Path();
+    if( aResolve )
+        return GetField( FOOTPRINT_FIELD )->GetShownText();
 
-    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
-    {
-        if( instance.m_Path == path && !instance.m_Footprint.IsEmpty() )
-        {
-            // This can only be an override from an Update Schematic from PCB, and therefore
-            // will always be fully resolved.
-            return instance.m_Footprint;
-        }
-    }
-
-    if( !aResolve )
-        return GetField( FOOTPRINT_FIELD )->GetText();
-
-    return GetField( FOOTPRINT_FIELD )->GetShownText();
+    return GetField( FOOTPRINT_FIELD )->GetText();
 }
 
 
-void SCH_SYMBOL::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint )
+void SCH_SYMBOL::SetFootprintFieldText( const wxString& aFootprint )
 {
-    if( sheet == nullptr )
-    {
-        // Set all instances to new footprint value
-        for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
-            instance.m_Footprint = aFootprint;
-
-        m_fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
-        return;
-    }
-
-    KIID_PATH path = sheet->Path();
-    bool      found = false;
-
-    // check to see if it is already there before inserting it
-    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
-    {
-        if( instance.m_Path == path )
-        {
-            found = true;
-            instance.m_Footprint = aFootprint;
-            break;
-        }
-    }
-
-    // didn't find it; better add it
-    if( !found )
-    {
-        AddHierarchicalReference( path, UTIL::GetRefDesUnannotated( m_prefix ), m_unit,
-                                  wxEmptyString, aFootprint );
-    }
-
-    if( Schematic() && *sheet == Schematic()->CurrentSheet() )
-        m_fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
+    m_fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
 }
 
 
@@ -1039,12 +917,12 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
             }
             else if( id == VALUE_FIELD )
             {
-                SetValue( aPath, UnescapeString( libField->GetText() ) );
+                SetValueFieldText( UnescapeString( libField->GetText() ) );
             }
             else if( id == FOOTPRINT_FIELD )
             {
                 if( aResetOtherFields || aUpdateOtherFields )
-                    SetFootprint( aPath, libField->GetText() );
+                    SetFootprintFieldText( libField->GetText() );
             }
             else if( id == DATASHEET_FIELD )
             {
@@ -1206,9 +1084,9 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
             if( i == REFERENCE_FIELD )
                 *token = GetRef( &schematic->CurrentSheet(), true );
             else if( i == VALUE_FIELD )
-                *token = GetValue( &schematic->CurrentSheet(), true );
+                *token = GetValueFieldText( true );
             else if( i == FOOTPRINT_FIELD )
-                *token = GetFootprint( &schematic->CurrentSheet(), true );
+                *token = GetFootprintFieldText( true );
             else
                 *token = m_fields[ i ].GetShownText( aDepth + 1 );
 
@@ -1243,7 +1121,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     {
         wxString footprint;
 
-        footprint = GetFootprint( &schematic->CurrentSheet(), true );
+        footprint = GetFootprintFieldText( true );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -1254,7 +1132,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     {
         wxString footprint;
 
-        footprint = GetFootprint( &schematic->CurrentSheet(), true );
+        footprint = GetFootprintFieldText( true );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -1673,12 +1551,12 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
         {
             if( m_part->IsPower() )
             {
-                aList.emplace_back( _( "Power symbol" ), GetValue( currentSheet, true ) );
+                aList.emplace_back( _( "Power symbol" ), GetValueFieldText( true ) );
             }
             else
             {
                 aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
-                aList.emplace_back( _( "Value" ), GetValue( currentSheet, true ) );
+                aList.emplace_back( _( "Value" ), GetValueFieldText( true ) );
                 aList.emplace_back( _( "Name" ), UnescapeString( GetLibId().GetLibItemName() ) );
             }
 
@@ -1707,7 +1585,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             }
 
             // Display the current associated footprint, if exists.
-            msg = GetFootprint( currentSheet, true );
+            msg = GetFootprintFieldText( true );
 
             if( msg.IsEmpty() )
                 msg = _( "<Unknown>" );
@@ -1723,7 +1601,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     {
         aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
 
-        aList.emplace_back( _( "Value" ), GetValue( currentSheet, true ) );
+        aList.emplace_back( _( "Value" ), GetValueFieldText( true ) );
         aList.emplace_back( _( "Name" ), GetLibId().GetLibItemName() );
 
         wxString libNickname = GetLibId().GetLibNickname();

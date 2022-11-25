@@ -736,11 +736,11 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
             }
             else if( id == VALUE_FIELD )
             {
-                field.SetText( aSymbol->GetInstanceReferences()[0].m_Value );
+                field.SetText( aSymbol->GetValueFieldText( false ) );
             }
             else if( id == FOOTPRINT_FIELD )
             {
-                field.SetText( aSymbol->GetInstanceReferences()[0].m_Footprint );
+                field.SetText( aSymbol->GetFootprintFieldText( false ) );
             }
         }
 
@@ -827,11 +827,9 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
 
             m_out->Print( aNestLevel + 3, "(path %s\n",
                           m_out->Quotew( path ).c_str() );
-            m_out->Print( aNestLevel + 4, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
+            m_out->Print( aNestLevel + 4, "(reference %s) (unit %d)\n",
                           m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Reference ).c_str(),
-                          aSymbol->GetInstanceReferences()[i].m_Unit,
-                          m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Value ).c_str(),
-                          m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Footprint ).c_str() );
+                          aSymbol->GetInstanceReferences()[i].m_Unit );
             m_out->Print( aNestLevel + 3, ")\n" );
 
             if( project_open && ( ( i + 1 == aSymbol->GetInstanceReferences().size() )

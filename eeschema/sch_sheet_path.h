@@ -48,7 +48,8 @@ struct SYMBOL_INSTANCE_REFERENCE
     wxString  m_Reference;
     int       m_Unit = 1;
 
-    // Things that can be back-annotated:
+    // Do not use.  This is left over from the dubious decision to instantiate symbol value
+    // and footprint fields.
     wxString  m_Value;
     wxString  m_Footprint;
 

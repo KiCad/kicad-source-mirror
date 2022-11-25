@@ -352,7 +352,7 @@ void BACK_ANNOTATE::applyChangelist()
             {
                 m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                symbol->SetFootprint( &ref.GetSheetPath(), fpData.m_footprint );
+                symbol->SetFootprintFieldText( fpData.m_footprint );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -370,7 +370,7 @@ void BACK_ANNOTATE::applyChangelist()
             {
                 m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                symbol->SetValue( &ref.GetSheetPath(), fpData.m_value );
+                symbol->SetValueFieldText( fpData.m_value );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );

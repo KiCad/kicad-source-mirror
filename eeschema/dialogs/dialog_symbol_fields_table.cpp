@@ -220,9 +220,9 @@ public:
             wxString val = symbol->GetFieldText( aFieldName );
 
             if( aFieldName == wxT( "Value" ) )
-                val = symbol->GetInstanceReferences()[0].m_Value;
+                val = symbol->GetValueFieldText( true );
             else if( aFieldName == wxT( "Footprint" ) )
-                val = symbol->GetInstanceReferences()[0].m_Footprint;
+                val = symbol->GetFootprintFieldText( true );
 
             m_dataStore[ symbol->m_Uuid ][ aFieldName ] = val;
         }
@@ -694,11 +694,11 @@ public:
                 {
                     // Value field cannot be empty
                     if( !srcValue.IsEmpty() )
-                        symbol.SetValue( srcValue );
+                        symbol.SetValueFieldText( srcValue );
                 }
                 else if( destField->GetId() == FOOTPRINT_FIELD )
                 {
-                    symbol.SetFootprint( srcValue );
+                    symbol.SetFootprintFieldText( srcValue );
                 }
                 else
                 {

@@ -691,22 +691,22 @@ bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
         case VALUE_FIELD:
             wxCHECK_MSG( aAuxData, false, wxT( "Need sheetpath to replace in value field." ) );
 
-            text = parentSymbol->GetValue((SCH_SHEET_PATH*) aAuxData, resolve );
+            text = parentSymbol->GetValueFieldText( resolve );
             isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
             if( isReplaced )
-                parentSymbol->SetValue( (SCH_SHEET_PATH*) aAuxData, text );
+                parentSymbol->SetValueFieldText( text );
 
             break;
 
         case FOOTPRINT_FIELD:
             wxCHECK_MSG( aAuxData, false, wxT( "Need sheetpath to replace in footprint field." ) );
 
-            text = parentSymbol->GetFootprint((SCH_SHEET_PATH*) aAuxData, resolve );
+            text = parentSymbol->GetFootprintFieldText( resolve );
             isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
             if( isReplaced )
-                parentSymbol->SetFootprint( (SCH_SHEET_PATH*) aAuxData, text );
+                parentSymbol->SetFootprintFieldText( text );
 
             break;
 
