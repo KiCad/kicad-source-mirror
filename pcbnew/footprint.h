@@ -190,6 +190,15 @@ public:
     void SetOrientation( const EDA_ANGLE& aNewAngle );
     EDA_ANGLE GetOrientation() const { return m_orient; }
 
+    /**
+     * Used as Layer property setter -- performs a flip if necessary to set the footprint layer
+     * @param aLayer is the target layer (F_Cu or B_Cu)
+     */
+    void SetLayerAndFlip( PCB_LAYER_ID aLayer );
+
+    // to make property magic work
+    PCB_LAYER_ID GetLayer() const override { return BOARD_ITEM::GetLayer(); }
+
     // For property system:
     void SetOrientationDegrees( double aOrientation )
     {

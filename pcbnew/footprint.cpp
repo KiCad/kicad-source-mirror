@@ -1559,6 +1559,15 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
+void FOOTPRINT::SetLayerAndFlip( PCB_LAYER_ID aLayer )
+{
+    wxASSERT( aLayer == F_Cu || aLayer == B_Cu );
+
+    if( aLayer != GetLayer() )
+        Flip( GetPosition(), true );
+}
+
+
 void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     // Move footprint to its final position:
@@ -1578,7 +1587,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     SetPosition( finalPos );
 
     // Flip layer
-    SetLayer( FlipLayer( GetLayer() ) );
+    BOARD_ITEM::SetLayer( FlipLayer( GetLayer() ) );
 
     // Reverse mirror orientation.
     m_orient = -m_orient;
@@ -2829,10 +2838,11 @@ static struct FOOTPRINT_DESC
         propMgr.InheritsAfter( TYPE_HASH( FOOTPRINT ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( FOOTPRINT ), TYPE_HASH( BOARD_ITEM_CONTAINER ) );
 
-        auto layer = new PROPERTY_ENUM<FOOTPRINT, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer" ),
-                    &FOOTPRINT::SetLayer, &FOOTPRINT::GetLayer );
+        auto layer = new PROPERTY_ENUM<FOOTPRINT, PCB_LAYER_ID>( _HKI( "Layer" ),
+                    &FOOTPRINT::SetLayerAndFlip, &FOOTPRINT::GetLayer );
         layer->SetChoices( fpLayers );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
+
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Reference" ),
                     &FOOTPRINT::SetReference, &FOOTPRINT::GetReferenceAsString ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Value" ),
