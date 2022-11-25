@@ -1703,6 +1703,8 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
     m_cachedBoundingBox.Move( delta );
     m_cachedVisibleBBox.Move( delta );
     m_cachedTextExcludedBBox.Move( delta );
+    m_courtyard_cache_back.Move( delta );
+    m_courtyard_cache_front.Move( delta );
     m_cachedHull.Move( delta );
 }
 

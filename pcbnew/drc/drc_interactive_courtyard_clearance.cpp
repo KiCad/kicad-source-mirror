@@ -54,7 +54,6 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
 
         for( FOOTPRINT* fpB : m_FpInMove )
         {
-            fpB->BuildCourtyardCaches();
             BOX2I                 fpBBBox = fpB->GetBoundingBox();
             const SHAPE_POLY_SET& frontB = fpB->GetCourtyard( F_CrtYd );
             const SHAPE_POLY_SET& backB = fpB->GetCourtyard( B_CrtYd );

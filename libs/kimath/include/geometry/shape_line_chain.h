@@ -742,6 +742,8 @@ public:
 
         for( auto& arc : m_arcs )
             arc.Move( aVector );
+
+        m_bbox.Move( aVector );
     }
 
     /**
