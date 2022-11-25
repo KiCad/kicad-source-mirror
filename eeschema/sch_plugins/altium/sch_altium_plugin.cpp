@@ -553,6 +553,8 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             break;
 
         case ALTIUM_SCH_RECORD::IEEE_SYMBOL:
+            m_reporter->Report( _( "Record 'IEEE_SYMBOL' no handled. Skipped." ),
+                                RPT_SEVERITY_INFO );
             break;
 
         case ALTIUM_SCH_RECORD::LABEL:
@@ -576,6 +578,8 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             break;
 
         case ALTIUM_SCH_RECORD::PIECHART:
+            m_reporter->Report( _( "Record 'PIECHART' no handled. Skipped." ),
+                                RPT_SEVERITY_INFO );
             break;
 
         case ALTIUM_SCH_RECORD::ROUND_RECTANGLE:
