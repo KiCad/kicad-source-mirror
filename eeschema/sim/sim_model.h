@@ -443,7 +443,7 @@ public:
     SPICE_INFO GetSpiceInfo() const { return SpiceInfo( GetType() ); }
 
     void AddPin( const PIN& aPin );
-    void DeletePins();
+    void ClearPins();
 
     int FindModelPinIndex( const std::string& aSymbolPinNumber );
     void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
@@ -473,10 +473,8 @@ public:
 
     std::vector<std::reference_wrapper<const PIN>> GetPins() const;
 
-    void SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbolPinNumber )
-    {
-        m_pins.at( aPinIndex ).symbolPinNumber = aSymbolPinNumber;
-    }
+    void SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbolPinNumber );
+    void SetPinSymbolPinNumber( const std::string& aPinName, const std::string& aSymbolPinNumber );
 
 
     int GetParamCount() const { return static_cast<int>( m_params.size() ); }

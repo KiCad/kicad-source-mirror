@@ -652,11 +652,6 @@ public:
     void SetInitialPageNumbers();
 
     /**
-     * Migrate V6 simulator models to V7. Must be called only after UpdateSymbolInstances().
-     */
-    void MigrateSimModelNameFields();
-
-    /**
      * Attempt to add new symbol instances for all symbols in this list of sheet paths prefixed
      * with \a aPrefixSheetPath.
      *
@@ -671,7 +666,17 @@ public:
 
     void RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
 
+    /**
+     * Migrate V6 simulator models to V7. Must be called only after UpdateSymbolInstances().
+     */
+    void MigrateSimModelNameFields();
+
 private:
+    /**
+     * Migrate a single V6 simulator model to V7. Must be called only after UpdateSymbolInstances().
+     */
+    void migrateSimModel( SCH_SYMBOL& aSymbol, unsigned aSheetIndex );
+
     SCH_SHEET_PATH  m_currentSheetPath;
 };
 

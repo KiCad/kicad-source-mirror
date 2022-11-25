@@ -62,29 +62,14 @@ public:
     static constexpr auto LEGACY_ENABLED_FIELD = "Spice_Netlist_Enabled";
     static constexpr auto LEGACY_LIB_FIELD = "Spice_Lib_File";
 
-
     SIM_MODEL_RAW_SPICE();
-
-    //bool ReadSpiceCode( const std::string& aSpiceCode ) override;
-    void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
-    void ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields ) override;
-
-    void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
-    void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;
 
 private:
     static std::vector<PARAM::INFO> makeParamInfos();
-
-    template <typename T>
-    void readLegacyDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
-
-    void parseLegacyPinsField( unsigned aSymbolPinCount, const std::string& aLegacyPinsField );
-
     bool requiresSpiceModelLine() const override { return false; }
-
 
     std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
 };

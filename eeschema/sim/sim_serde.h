@@ -42,8 +42,13 @@ namespace SIM_SERDE_GRAMMAR
                                            tao::pegtl::eof> {};
 
 
-    struct pinNumber : plus<not_at<sep>, any> {};
-    struct pinSequence : list<pinNumber, sep> {};
+    struct pinSymbolPinNumber : plus<not_at<sep>, not_one<'='>> {};
+    struct pinName : plus<not_at<sep>, any> {};
+    struct pinAssignment : seq<pinSymbolPinNumber,
+                               one<'='>,
+                               pinName> {};
+    struct pinSequence : list<pinAssignment,
+                              sep> {};
     struct pinSequenceGrammar : must<opt<sep>,
                                      opt<pinSequence>,
                                      opt<sep>,
@@ -133,10 +138,6 @@ public:
     bool ParseParams( const std::string& aParams );
     void ParsePins( const std::string& aPins );
     void ParseEnable( const std::string& aEnable );
-
-    static SIM_MODEL::TYPE InferTypeFromRefAndValue( const std::string& aRef,
-                                                     const std::string& aValue,
-                                                     int aSymbolPinCount );
 
 protected:
     virtual std::string GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const;

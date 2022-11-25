@@ -627,7 +627,7 @@ void SIM_MODEL::AddPin( const PIN& aPin )
     m_pins.push_back( aPin );
 }
 
-void SIM_MODEL::DeletePins()
+void SIM_MODEL::ClearPins()
 {
     m_pins.clear();
 }
@@ -659,6 +659,33 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL::GetPins() c
         pins.emplace_back( GetPin( modelPinIndex ) );
 
     return pins;
+}
+
+void SIM_MODEL::SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbolPinNumber )
+{
+    m_pins.at( aPinIndex ).symbolPinNumber = aSymbolPinNumber;
+}
+
+
+void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
+                                       const std::string& aSymbolPinNumber )
+{
+    const std::vector<std::reference_wrapper<const PIN>> pins = GetPins();
+
+    auto it = std::find_if( pins.begin(), pins.end(),
+                            [aPinName]( const PIN& aPin )
+                            {
+                                return aPin.name == aPinName;
+                            } );
+
+    if( it == pins.end() )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Could not find a pin named '%s' in simulation model of type '%s'" ),
+                                          aPinName,
+                                          GetTypeInfo().fieldValue ) );
+    }
+
+    SetPinSymbolPinNumber( static_cast<int>( it - pins.begin() ), aSymbolPinNumber );
 }
 
 

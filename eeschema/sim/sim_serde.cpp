@@ -42,7 +42,9 @@ namespace SIM_SERDE_PARSER
 
 
     template <typename Rule> struct pinSequenceSelector : std::false_type {};
-    template <> struct pinSequenceSelector<pinNumber> : std::true_type {};
+    template <> struct pinSequenceSelector<pinAssignment> : std::true_type {};
+    template <> struct pinSequenceSelector<pinSymbolPinNumber> : std::true_type {};
+    template <> struct pinSequenceSelector<pinName> : std::true_type {};
 
     template <typename Rule> struct fieldInferValueSelector : std::false_type {};
     template <> struct fieldInferValueSelector<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>> : std::true_type {};
@@ -113,13 +115,13 @@ std::string SIM_SERDE::GeneratePins() const
     {
         const SIM_MODEL::PIN& pin = m_model.GetPin( i );
 
-        if( i != 0 )
-            result.append( " " );
+        if( pin.symbolPinNumber != "" )
+        {
+            if( i != 0 )
+                result.append( " " );
 
-        if( pin.symbolPinNumber == "" )
-            result.append( "~" );
-        else
-            result.append( pin.symbolPinNumber );
+            result.append( fmt::format( "{}={}", pin.symbolPinNumber, pin.name ) );
+        }
     }
 
     return result;
@@ -251,26 +253,18 @@ void SIM_SERDE::ParsePins( const std::string& aPins )
                                              SIM_SERDE_PARSER::pinSequenceSelector,
                                              tao::pegtl::nothing,
                                              SIM_SERDE_PARSER::control>( in );
+
+        for( const auto& node : root->children )
+        {
+            std::string symbolPinNumber = node->children.at( 0 )->string();
+            std::string pinName = node->children.at( 1 )->string();
+
+            m_model.SetPinSymbolPinNumber( pinName, symbolPinNumber );
+        }
     }
     catch( const tao::pegtl::parse_error& e )
     {
         THROW_IO_ERROR( e.what() );
-    }
-
-    if( static_cast<int>( root->children.size() ) != m_model.GetPinCount() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "%s describes %lu pins, expected %u" ),
-                                          PINS_FIELD,
-                                          root->children.size(),
-                                          m_model.GetPinCount() ) );
-    }
-
-    for( int pinIndex = 0; pinIndex < static_cast<int>( root->children.size() ); ++pinIndex )
-    {
-        if( root->children.at( pinIndex )->string() == "~" )
-            m_model.SetPinSymbolPinNumber( pinIndex, "" );
-        else
-            m_model.SetPinSymbolPinNumber( pinIndex, root->children.at( pinIndex )->string() );
     }
 }
 

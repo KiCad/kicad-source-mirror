@@ -252,7 +252,7 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType ) :
 
 void SIM_MODEL_KIBIS::SwitchSingleEndedDiff( bool aDiff )
 {
-    DeletePins();
+    ClearPins();
 
     if( aDiff )
     {

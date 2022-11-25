@@ -105,7 +105,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "p", 7, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instantaneous power", true );*/
 
 
-        modelInfos[MODEL_TYPE::DIODE] = { "Diode", "D", "", { "Anode", "Cathode" }, "Junction Diode model", {}, {} };
+        modelInfos[MODEL_TYPE::DIODE] = { "Diode", "D", "", { "A", "K" }, "Junction Diode model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "level",  100, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1", "", "Diode level selector" );
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "is",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "A", SIM_MODEL::PARAM::CATEGORY::DC, "1e-14", "", "Saturation current" );
@@ -216,7 +216,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::DIODE].instanceParams.emplace_back( "sens_cplx",  16, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_COMPLEX, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "ac sensitivity", true );
 
 
-        modelInfos[MODEL_TYPE::BJT] = { "BJT", "NPN", "PNP", { "Collector", "Base", "Emitter" }, "Bipolar Junction Transistor", {}, {} };
+        modelInfos[MODEL_TYPE::BJT] = { "BJT", "NPN", "PNP", { "C", "B", "E" }, "Bipolar Junction Transistor", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::BJT].modelParams.emplace_back( "type",  309, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "npn", "pnp", "NPN or PNP" );
         modelInfos[MODEL_TYPE::BJT].modelParams.emplace_back( "npn",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "NaN", "NPN type device" );
@@ -426,7 +426,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::BJT].instanceParams.emplace_back( "dtemp",  8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, U(), "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "instance temperature delta from circuit", true );
 
 
-        modelInfos[MODEL_TYPE::VBIC] = { "VBIC", "NPN", "PNP", { "Collector", "Base", "Emitter" }, "Vertical Bipolar Inter-Company Model", {}, {} };
+        modelInfos[MODEL_TYPE::VBIC] = { "VBIC", "NPN", "PNP", { "C", "B", "E" }, "Vertical Bipolar Inter-Company Model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::VBIC].modelParams.emplace_back( "type",  305, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "npn", "pnp", "NPN or PNP" );
         modelInfos[MODEL_TYPE::VBIC].modelParams.emplace_back( "npn",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "NaN", "NPN type device" );
@@ -593,7 +593,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::VBIC].instanceParams.emplace_back( "cqbx",  249, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, U(), "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Cap. due to charge storage in B-X jct.", true );
 
 
-        modelInfos[MODEL_TYPE::HICUM2] = { "hicum2", "NPN", "PNP", { "Collector", "Base", "Emitter" }, "High Current Model for BJT" , {}, {} };
+        modelInfos[MODEL_TYPE::HICUM2] = { "hicum2", "NPN", "PNP", { "C", "B", "E" }, "High Current Model for BJT" , {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::HICUM2].modelParams.emplace_back( "type", 305, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "npn", "pnp", "For transistor type NPN(+1) or PNP (-1)" );
         modelInfos[MODEL_TYPE::HICUM2].modelParams.emplace_back( "npn", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "NaN", "NPN type device" );
@@ -808,7 +808,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::HICUM2].instanceParams.emplace_back( "p", 305, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Power dissipation", true );
 
 
-        modelInfos[MODEL_TYPE::JFET] = { "JFET", "NJF", "PJF", { "Drain", "Gate", "Source" }, "Junction Field effect transistor", {}, {} };
+        modelInfos[MODEL_TYPE::JFET] = { "JFET", "NJF", "PJF", { "D", "G", "S" }, "Junction Field effect transistor", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::JFET].modelParams.emplace_back( "type",  305, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "njf", "pjf", "N-type or P-type JFET model" );
         modelInfos[MODEL_TYPE::JFET].modelParams.emplace_back( "njf",  111, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "N type JFET model" );
@@ -869,7 +869,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "p",  320, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Power dissipated by the JFET", true );
 
 
-        modelInfos[MODEL_TYPE::JFET2] = { "JFET2", "NJF", "PJF", { "Drain", "Gate", "Source" }, "Short channel field effect transistor", {}, {} };
+        modelInfos[MODEL_TYPE::JFET2] = { "JFET2", "NJF", "PJF", { "D", "G", "S" }, "Short channel field effect transistor", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::JFET2].modelParams.emplace_back( "type", 305, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "njf", "pjf", "N-type or P-type JFET2 model" );
         modelInfos[MODEL_TYPE::JFET2].modelParams.emplace_back( "njf", 102, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "NaN", "N type JFET2 model" );
@@ -950,7 +950,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "vpave", 322, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Quiescent power dissipation", true );
 
 
-        modelInfos[MODEL_TYPE::MES] = { "MES", "NMF", "PMF", { "Drain", "Gate", "Source" }, "GaAs MESFET model", {}, {} };
+        modelInfos[MODEL_TYPE::MES] = { "MES", "NMF", "PMF", { "D", "G", "S" }, "GaAs MESFET model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::MES].modelParams.emplace_back( "type",  305, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "-693161728", "116101380", "N-type or P-type MESfet model" );
         modelInfos[MODEL_TYPE::MES].modelParams.emplace_back( "nmf",  113, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "N type MESfet model" );
@@ -1002,7 +1002,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::MES].instanceParams.emplace_back( "p",  7, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Power dissipated by the mesfet", true );
 
 
-        modelInfos[MODEL_TYPE::MESA] = { "MESA", "NMF", "PMF", { "Drain", "Gate", "Source" }, "GaAs MESFET model", {}, {} };
+        modelInfos[MODEL_TYPE::MESA] = { "MESA", "NMF", "PMF", { "D", "G", "S" }, "GaAs MESFET model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::MESA].modelParams.emplace_back( "type", 165, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "nmf", "nmf", "N-type or P-type MESfet model" );
         modelInfos[MODEL_TYPE::MESA].modelParams.emplace_back( "vto", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "V", SIM_MODEL::PARAM::CATEGORY::DC, "-1.26", "-1.26", "Pinch-off voltage" );
@@ -1108,7 +1108,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "p", 10, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Power dissipated by the mesfet", true );
 
 
-        modelInfos[MODEL_TYPE::HFET1] = { "HFET1", "NMF", "PMF", { "Drain", "Gate", "Source", "Bulk" }, "HFET1 Model", {}, {} };
+        modelInfos[MODEL_TYPE::HFET1] = { "HFET1", "NMF", "PMF", { "D", "G", "S", "B" }, "HFET1 Model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::HFET1].modelParams.emplace_back( "vt0", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "V", SIM_MODEL::PARAM::CATEGORY::DC, "Pinch-off voltage" );
         modelInfos[MODEL_TYPE::HFET1].modelParams.emplace_back( "vto", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, R(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "n.a." );
@@ -1210,7 +1210,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::HFET1].instanceParams.emplace_back( "p", 9, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Power dissipated by the mesfet", true );
 
 
-        modelInfos[MODEL_TYPE::HFET2] = { "HFET2", "NMF", "PMF", { "Drain", "Gate", "Source", "Bulk" }, "HFET2 Model", {}, {} };
+        modelInfos[MODEL_TYPE::HFET2] = { "HFET2", "NMF", "PMF", { "D", "G", "S", "B" }, "HFET2 Model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::HFET2].modelParams.emplace_back( "type", 139, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "664639780", "-1511458520", "NHFET or PHFET" );
         modelInfos[MODEL_TYPE::HFET2].modelParams.emplace_back( "nhfet", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "N type HFET model" );
@@ -1283,7 +1283,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::HFET2].instanceParams.emplace_back( "p", 8, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Power dissipated by the mesfet", true );
 
 
-        modelInfos[MODEL_TYPE::MOS1] = { "Mos1", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Level 1 MOSfet model with Meyer capacitance model", {}, {} };
+        modelInfos[MODEL_TYPE::MOS1] = { "Mos1", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Level 1 MOSfet model with Meyer capacitance model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::MOS1].modelParams.emplace_back( "type",  133, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "nmos", "pmos", "N-channel or P-channel MOS" );
         modelInfos[MODEL_TYPE::MOS1].modelParams.emplace_back( "vto",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Threshold voltage" );
@@ -1399,7 +1399,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::MOS1].instanceParams.emplace_back( "sens_w_cplx",  255, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_COMPLEX, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "ac sensitivity wrt width", true );
 
 
-        modelInfos[MODEL_TYPE::MOS2] = { "Mos2", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Level 2 MOSfet model with Meyer capacitance model", {}, {} };
+        modelInfos[MODEL_TYPE::MOS2] = { "Mos2", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Level 2 MOSfet model with Meyer capacitance model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::MOS2].modelParams.emplace_back( "type",  141, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "nmos", "pmos", "N-channel or P-channel MOS" );
         modelInfos[MODEL_TYPE::MOS2].modelParams.emplace_back( "vto",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Threshold voltage" );
@@ -1522,7 +1522,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::MOS2].instanceParams.emplace_back( "sens_w_cplx",  69, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_COMPLEX, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "ac sensitivity wrt width", true );
 
 
-        modelInfos[MODEL_TYPE::MOS3] = { "Mos3", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Level 3 MOSfet model with Meyer capacitance model", {}, {} };
+        modelInfos[MODEL_TYPE::MOS3] = { "Mos3", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Level 3 MOSfet model with Meyer capacitance model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::MOS3].modelParams.emplace_back( "type",  144, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "nmos", "pmos", "N-channel or P-channel MOS" );
         modelInfos[MODEL_TYPE::MOS3].modelParams.emplace_back( "nmos",  133, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "N type MOSfet model" );
@@ -1656,7 +1656,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::MOS3].instanceParams.emplace_back( "sens_w_cplx",  69, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_COMPLEX, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "ac sensitivity wrt width", true );
 
 
-        modelInfos[MODEL_TYPE::BSIM1] = { "BSIM1", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Berkeley Short Channel IGFET Model", {}, {} };
+        modelInfos[MODEL_TYPE::BSIM1] = { "BSIM1", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Berkeley Short Channel IGFET Model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::BSIM1].modelParams.emplace_back( "vfb",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Flat band voltage" );
         modelInfos[MODEL_TYPE::BSIM1].modelParams.emplace_back( "lvfb",  102, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "m", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Length dependence of vfb" );
@@ -1756,7 +1756,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::BSIM1].instanceParams.emplace_back( "ic",  13, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_FLOAT_VECTOR /*SIM_VALUE::TYPE::VECTOR*/, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Vector of DS,GS,BS initial voltages", true );
 
 
-        modelInfos[MODEL_TYPE::BSIM2] = { "BSIM2", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Berkeley Short Channel IGFET Model", {}, {} };
+        modelInfos[MODEL_TYPE::BSIM2] = { "BSIM2", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Berkeley Short Channel IGFET Model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::BSIM2].modelParams.emplace_back( "vfb",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "V", SIM_MODEL::PARAM::CATEGORY::DC, "-1", "-1", "Flat band voltage" );
         modelInfos[MODEL_TYPE::BSIM2].modelParams.emplace_back( "lvfb",  102, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "m", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Length dependence of vfb" );
@@ -1912,7 +1912,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::BSIM2].instanceParams.emplace_back( "ic",  13, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_FLOAT_VECTOR /*SIM_VALUE::TYPE::VECTOR*/, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Vector of DS,GS,BS initial voltages", true );
 
 
-        modelInfos[MODEL_TYPE::MOS6] = { "Mos6", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Level 6 MOSfet model with Meyer capacitance model", {}, {} };
+        modelInfos[MODEL_TYPE::MOS6] = { "Mos6", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Level 6 MOSfet model with Meyer capacitance model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::MOS6].modelParams.emplace_back( "type",  140, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "nmos", "pmos", "N-channel or P-channel MOS" );
         modelInfos[MODEL_TYPE::MOS6].modelParams.emplace_back( "vto",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Threshold voltage" );
@@ -2037,7 +2037,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::MOS6].instanceParams.emplace_back( "sens_w_cplx",  255, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_COMPLEX, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "ac sensitivity wrt width", true );
 
 
-        modelInfos[MODEL_TYPE::BSIM3] = { "BSIM3", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Berkeley Short Channel IGFET Model Version-3", {}, {} };
+        modelInfos[MODEL_TYPE::BSIM3] = { "BSIM3", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Berkeley Short Channel IGFET Model Version-3", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::BSIM3].modelParams.emplace_back( "capmod",  100, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::CAPACITANCE, "3", "3", "Capacitance model selector" );
         modelInfos[MODEL_TYPE::BSIM3].modelParams.emplace_back( "mobmod",  103, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::DC, "1", "1", "Mobility model selector" );
@@ -2517,7 +2517,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::BSIM3].instanceParams.emplace_back( "capbs",  781, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Capbs", true );
 
 
-        modelInfos[MODEL_TYPE::MOS9] = { "Mos9", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Modified Level 3 MOSfet model", {}, {} };
+        modelInfos[MODEL_TYPE::MOS9] = { "Mos9", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Modified Level 3 MOSfet model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::MOS9].modelParams.emplace_back( "type",  144, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "nmos", "pmos", "N-channel or P-channel MOS" );
         modelInfos[MODEL_TYPE::MOS9].modelParams.emplace_back( "nmos",  133, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "N type MOSfet model" );
@@ -2651,7 +2651,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::MOS9].instanceParams.emplace_back( "sens_w_cplx",  69, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_COMPLEX, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "ac sensitivity wrt width", true );
 
 
-        modelInfos[MODEL_TYPE::B4SOI] = { "B4SOI", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Berkeley SOI MOSFET model version 4.4.0", {}, {} };
+        modelInfos[MODEL_TYPE::B4SOI] = { "B4SOI", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Berkeley SOI MOSFET model version 4.4.0", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::B4SOI].modelParams.emplace_back( "mtrlmod",  100, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "parameter for non-silicon substrate or metal gate selector" );
         modelInfos[MODEL_TYPE::B4SOI].modelParams.emplace_back( "vgstcvmod",  1224, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::DC, "1", "1", "Improved VgsteffCV selector" );
@@ -3645,7 +3645,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::B4SOI].instanceParams.emplace_back( "rbodymod",  34, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "0", "Body R model selector", true );
 
 
-        modelInfos[MODEL_TYPE::BSIM4] = { "BSIM4", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Berkeley Short Channel IGFET Model-4", {}, {} };
+        modelInfos[MODEL_TYPE::BSIM4] = { "BSIM4", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Berkeley Short Channel IGFET Model-4", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::BSIM4].modelParams.emplace_back( "cvchargemod",  76, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::CAPACITANCE, "0", "0", "Capacitance Charge model selector" );
         modelInfos[MODEL_TYPE::BSIM4].modelParams.emplace_back( "capmod",  92, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::CAPACITANCE, "2", "2", "Capacitance model selector" );
@@ -4626,7 +4626,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::BSIM4].instanceParams.emplace_back( "gtau",  1014, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gtau", true );
 
 
-        modelInfos[MODEL_TYPE::B3SOIFD] = { "B3SOIFD", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Berkeley SOI MOSFET (FD) model version 2.1", {}, {} };
+        modelInfos[MODEL_TYPE::B3SOIFD] = { "B3SOIFD", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Berkeley SOI MOSFET (FD) model version 2.1", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::B3SOIFD].modelParams.emplace_back( "capmod",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::CAPACITANCE, "2", "2", "Capacitance model selector" );
         modelInfos[MODEL_TYPE::B3SOIFD].modelParams.emplace_back( "mobmod",  103, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::DC, "1", "1", "Mobility model selector" );
@@ -5051,7 +5051,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::B3SOIFD].instanceParams.emplace_back( "nrb",  18, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of squares in body", true );
 
 
-        modelInfos[MODEL_TYPE::B3SOIDD] = { "B3SOIDD", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Berkeley SOI MOSFET (DD) model version 2.1", {}, {} };
+        modelInfos[MODEL_TYPE::B3SOIDD] = { "B3SOIDD", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Berkeley SOI MOSFET (DD) model version 2.1", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::B3SOIDD].modelParams.emplace_back( "capmod",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::CAPACITANCE, "2", "2", "Capacitance model selector" );
         modelInfos[MODEL_TYPE::B3SOIDD].modelParams.emplace_back( "mobmod",  103, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::DC, "1", "1", "Mobility model selector" );
@@ -5476,7 +5476,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::B3SOIDD].instanceParams.emplace_back( "nrb",  18, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of squares in body", true );
 
 
-        modelInfos[MODEL_TYPE::B3SOIPD] = { "B3SOIPD", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Berkeley SOI (PD) MOSFET model version 2.2.3", {}, {} };
+        modelInfos[MODEL_TYPE::B3SOIPD] = { "B3SOIPD", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Berkeley SOI (PD) MOSFET model version 2.2.3", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::B3SOIPD].modelParams.emplace_back( "capmod",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::CAPACITANCE, "2", "2", "Capacitance model selector" );
         modelInfos[MODEL_TYPE::B3SOIPD].modelParams.emplace_back( "mobmod",  103, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::DC, "1", "1", "Mobility model selector" );
@@ -5987,7 +5987,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::B3SOIPD].instanceParams.emplace_back( "tnodeout",  29, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Flag indicating external temp node", true );
 
 
-        modelInfos[MODEL_TYPE::HISIM2] = { "HiSIM2", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Hiroshima University STARC IGFET Model 2.8.0", {}, {} };
+        modelInfos[MODEL_TYPE::HISIM2] = { "HiSIM2", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Hiroshima University STARC IGFET Model 2.8.0", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::HISIM2].modelParams.emplace_back( "info",  4, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "information level (for debug, etc.)" );
         modelInfos[MODEL_TYPE::HISIM2].modelParams.emplace_back( "noise",  5, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_INT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::NOISE, "1", "1", "noise model selector" );
@@ -6537,7 +6537,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::HISIM2].instanceParams.emplace_back( "capbs",  371, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Capbs", true );
 
 
-        modelInfos[MODEL_TYPE::HISIMHV1] = { "HiSIMHV1", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Hiroshima University STARC IGFET Model - HiSIM_HV v.1", {}, {} };
+        modelInfos[MODEL_TYPE::HISIMHV1] = { "HiSIMHV1", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Hiroshima University STARC IGFET Model - HiSIM_HV v.1", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::HISIMHV1].modelParams.emplace_back( "nmos", 1, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "" );
         modelInfos[MODEL_TYPE::HISIMHV1].modelParams.emplace_back( "pmos", 2, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "" );
@@ -7224,7 +7224,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::HISIMHV1].instanceParams.emplace_back( "capbs", 371, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Capbs", true );
 
 
-        modelInfos[MODEL_TYPE::HISIMHV2] = { "HiSIMHV2", "NMOS", "PMOS", { "Drain", "Gate", "Source", "Bulk" }, "Hiroshima University STARC IGFET Model - HiSIM_HV v.2", {}, {} };
+        modelInfos[MODEL_TYPE::HISIMHV2] = { "HiSIMHV2", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Hiroshima University STARC IGFET Model - HiSIM_HV v.2", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::HISIMHV2].modelParams.emplace_back( "nmos", 1, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "" );
         modelInfos[MODEL_TYPE::HISIMHV2].modelParams.emplace_back( "pmos", 2, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "" );

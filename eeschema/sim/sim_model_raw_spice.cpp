@@ -123,45 +123,10 @@ SIM_MODEL_RAW_SPICE::SIM_MODEL_RAW_SPICE() :
 }
 
 
-void SIM_MODEL_RAW_SPICE::ReadDataSchFields( unsigned aSymbolPinCount,
-                                             const std::vector<SCH_FIELD>* aFields )
-{
-    SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
-    readLegacyDataFields( aSymbolPinCount, aFields );
-}
-
-
-void SIM_MODEL_RAW_SPICE::ReadDataLibFields( unsigned aSymbolPinCount,
-                                             const std::vector<LIB_FIELD>* aFields )
-{
-    SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
-    readLegacyDataFields( aSymbolPinCount, aFields );
-}
-
-
-void SIM_MODEL_RAW_SPICE::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataSchFields( aFields );
-    
-    // Erase the legacy fields.
-    SetFieldValue( aFields, LEGACY_TYPE_FIELD, "" );
-    SetFieldValue( aFields, LEGACY_PINS_FIELD, "" );
-    SetFieldValue( aFields, LEGACY_MODEL_FIELD, "" );
-    SetFieldValue( aFields, LEGACY_ENABLED_FIELD, "" );
-    SetFieldValue( aFields, LEGACY_LIB_FIELD, "" );
-}
-
-
-void SIM_MODEL_RAW_SPICE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataLibFields( aFields );
-}
-
-
 void SIM_MODEL_RAW_SPICE::CreatePins( unsigned aSymbolPinCount )
 {
     for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPinCount; ++symbolPinIndex )
-        AddPin( { "", fmt::format( "{}", symbolPinIndex + 1 ) } );
+        AddPin( { fmt::format( "{}", symbolPinIndex + 1 ), "" } );
 }
 
 
@@ -217,77 +182,4 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_RAW_SPICE::makeParamInfos()
     }
 
     return paramInfos;
-}
-
-
-template <typename T>
-void SIM_MODEL_RAW_SPICE::readLegacyDataFields( unsigned aSymbolPinCount,
-                                                const std::vector<T>* aFields )
-{
-    // Fill in the blanks with the legacy parameters.
-
-    if( GetParam( static_cast<int>( SPICE_PARAM::TYPE ) ).value->ToString() == "" )
-    {
-        SetParamValue( static_cast<int>( SPICE_PARAM::TYPE ),
-                       GetFieldValue( aFields, LEGACY_TYPE_FIELD ) );
-    }
-
-    if( GetFieldValue( aFields, PINS_FIELD ) == "" )
-        parseLegacyPinsField( aSymbolPinCount, GetFieldValue( aFields, LEGACY_PINS_FIELD ) );
-
-    if( GetParam( static_cast<int>( SPICE_PARAM::MODEL ) ).value->ToString() == "" )
-    {
-        SetParamValue( static_cast<int>( SPICE_PARAM::MODEL ),
-                       GetFieldValue( aFields, LEGACY_MODEL_FIELD ) );
-    }
-
-    // If model param is still empty, then use Value field.
-    if( GetParam( static_cast<int>( SPICE_PARAM::MODEL ) ).value->ToString() == "" )
-    {
-        SetParamValue( static_cast<int>( SPICE_PARAM::MODEL ),
-                       GetFieldValue( aFields, SIM_MODEL::VALUE_FIELD ) );
-    }
-
-    if( GetParam( static_cast<int>( SPICE_PARAM::LIB ) ).value->ToString() == "" )
-    {
-        SetParamValue( static_cast<int>( SPICE_PARAM::LIB ),
-                       GetFieldValue( aFields, LEGACY_LIB_FIELD ) );
-    }
-}
-
-
-void SIM_MODEL_RAW_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount,
-                                                const std::string& aLegacyPinsField )
-{
-    if( aLegacyPinsField == "" )
-        return;
-
-    // Initially set all pins to Not Connected to match the legacy behavior.
-    for( int modelPinIndex = 0; modelPinIndex < GetPinCount(); ++modelPinIndex )
-        SetPinSymbolPinNumber( static_cast<int>( modelPinIndex ), "" );
-
-    tao::pegtl::string_input<> in( aLegacyPinsField, PINS_FIELD );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_RAW_SPICE_PARSER::legacyPinSequenceGrammar,
-                                             SIM_MODEL_RAW_SPICE_PARSER::legacyPinSequenceSelector>
-                ( in );
-    }
-    catch( const tao::pegtl::parse_error& e )
-    {
-        THROW_IO_ERROR( e.what() );
-    }
-
-    for( int pinIndex = 0; pinIndex < static_cast<int>( root->children.size() ); ++pinIndex )
-    {
-        std::string symbolPinStr = root->children.at( pinIndex )->string();
-        int symbolPinIndex = std::stoi( symbolPinStr ) - 1;
-
-        if( symbolPinIndex < 0 || symbolPinIndex >= static_cast<int>( aSymbolPinCount ) )
-            THROW_IO_ERROR( wxString::Format( _( "Invalid symbol pin index: '%s'" ), symbolPinStr ) );
-                                              
-        SetPinSymbolPinNumber( pinIndex, root->children.at( pinIndex )->string() );
-    }
 }
