@@ -2852,16 +2852,7 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Orientation" ),
                     &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Clearance Override" ),
-                    &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance,
-                    PROPERTY_DISPLAY::PT_SIZE ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Solderpaste Margin Override" ),
-                    &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
-                    PROPERTY_DISPLAY::PT_SIZE ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>(
-                    _HKI( "Solderpaste Margin Ratio Override" ),
-                    &FOOTPRINT::SetLocalSolderPasteMarginRatio,
-                    &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
+
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library link" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetFPIDAsString ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Description" ),
@@ -2878,6 +2869,17 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>(
                     _HKI( "Exempt from courtyard requirement" ),
                     &FOOTPRINT::SetAllowMissingCourtyard, &FOOTPRINT::AllowMissingCourtyard ) );
+
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Clearance Override" ),
+                    &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance,
+                    PROPERTY_DISPLAY::PT_SIZE ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Solderpaste Margin Override" ),
+                    &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
+                    PROPERTY_DISPLAY::PT_SIZE ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>(
+                    _HKI( "Solderpaste Margin Ratio Override" ),
+                    &FOOTPRINT::SetLocalSolderPasteMarginRatio,
+                    &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
         // TODO zone connection
     }
 } _FOOTPRINT_DESC;

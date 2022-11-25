@@ -54,7 +54,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     mainSizer->Add( m_caption, 0, wxALL | wxEXPAND, 5 );
 
     m_grid = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, wxSize( 300, 400 ),
-                                 wxPG_AUTO_SORT | wxPG_DEFAULT_STYLE );
+                                 wxPG_DEFAULT_STYLE );
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
     m_grid->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );
     mainSizer->Add( m_grid, 1, wxALL | wxEXPAND, 5 );
@@ -107,7 +107,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 
     if( aSelection.Size() > 1 )
     {
-        m_caption->SetLabel( _( "Multiple objects selected" ) );
+        m_caption->SetLabel( wxString::Format( _( "%d objects selected" ), aSelection.Size() ) );
     }
     else
     {

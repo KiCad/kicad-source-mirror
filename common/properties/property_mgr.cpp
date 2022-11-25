@@ -24,8 +24,14 @@
 
 #include <algorithm>
 #include <utility>
+#include <wx/wx.h>
 
 static wxString EMPTY_STRING( wxEmptyString );
+
+const PROPERTY_MANAGER::PROPERTY_GROUP PROPERTY_MANAGER::DEFAULT_GROUP = {
+    0,
+    _( "Other Properties" )
+};
 
 
 void PROPERTY_MANAGER::RegisterType( TYPE_ID aType, const wxString& aName )
@@ -99,12 +105,16 @@ const void* PROPERTY_MANAGER::TypeCast( const void* aSource, TYPE_ID aBase, TYPE
 }
 
 
-void PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty )
+void PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty, const PROPERTY_GROUP& aGroup )
 {
     const wxString& name = aProperty->Name();
     TYPE_ID hash = aProperty->OwnerHash();
     CLASS_DESC& classDesc = getClass( hash );
     classDesc.m_ownProperties.emplace( name, aProperty );
+
+    if( aGroup.id > DEFAULT_GROUP.id && aGroup.id < classDesc.m_groups.size() )
+        aProperty->SetGroup( aGroup.id );
+
     m_dirty = true;
 }
 
@@ -115,6 +125,14 @@ void PROPERTY_MANAGER::ReplaceProperty( size_t aBase, const wxString& aName, PRO
     CLASS_DESC& classDesc = getClass( aNew->OwnerHash() );
     classDesc.m_replaced.insert( std::make_pair( aBase, aName ) );
     AddProperty( aNew );
+}
+
+
+const PROPERTY_MANAGER::PROPERTY_GROUP& PROPERTY_MANAGER::AddPropertyGroup( TYPE_ID aOwner,
+                                                                            const wxString& aName )
+{
+    CLASS_DESC& desc = getClass( aOwner );
+    return desc.m_groups.emplace_back( PROPERTY_GROUP( { desc.m_groups.size(), aName } ) );
 }
 
 

@@ -103,7 +103,8 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( selection.Front() );
-    PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ), aEvent.GetPropertyName() );
+    PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
+                                                     aEvent.GetPropertyName() );
     wxVariant newValue = aEvent.GetPropertyValue();
     BOARD_COMMIT changes( m_frame );
 
@@ -134,7 +135,8 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) )->SetChoices( layersAll );
 
     // Copper only properties
-    m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) )->SetChoices( layersCu );
+    m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ),
+                           _HKI( "Layer" ) )->SetChoices( layersCu );
     m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Top" ) )->SetChoices( layersCu );
     m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Bottom" ) )->SetChoices( layersCu );
 

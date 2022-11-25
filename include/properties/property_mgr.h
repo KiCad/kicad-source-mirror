@@ -123,11 +123,23 @@ public:
     }
 
     /**
+     * Defines a grouping of properties in the editor
+     */
+    struct PROPERTY_GROUP
+    {
+        size_t   id;    ///< Controls the display order of the group (lowest first)
+        wxString name;  ///< Header to display in the properties manager
+    };
+
+    static const PROPERTY_GROUP DEFAULT_GROUP;
+
+    /**
      * Register a property.
      *
      * @param aProperty is the property to register.
+     * @param aGroup is the group to place the property in
      */
-    void AddProperty( PROPERTY_BASE* aProperty );
+    void AddProperty( PROPERTY_BASE* aProperty, const PROPERTY_GROUP& aGroup = DEFAULT_GROUP );
 
     /**
      * Replace an existing property for a specific type.
@@ -193,6 +205,13 @@ public:
 
     std::vector<TYPE_ID> GetMatchingClasses( PROPERTY_BASE* aProperty );
 
+    /**
+     * Defines a named group of properties belonging to a certain class
+     * @param aOwner is the class type that delivers the properties in the group
+     * @param aName will be shown as the group name in the properties manager
+     */
+    const PROPERTY_GROUP& AddPropertyGroup( TYPE_ID aOwner, const wxString& aName );
+
 private:
     PROPERTY_MANAGER() :
             m_dirty( false ),
@@ -207,6 +226,7 @@ private:
         CLASS_DESC( TYPE_ID aId )
             : m_id( aId )
         {
+            m_groups.emplace_back( DEFAULT_GROUP );
         }
 
         ///< Unique type identifier (obtained using TYPE_HASH)
@@ -223,6 +243,8 @@ private:
 
         ///< All properties (both unique to the type and inherited)
         std::vector<PROPERTY_BASE*> m_allProperties;
+
+        std::vector<PROPERTY_GROUP> m_groups;
 
         ///< Replaced properties (TYPE_ID / name)
         PROPERTY_SET m_replaced;
