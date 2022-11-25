@@ -2968,8 +2968,10 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( pinCount > 1 )
         return true;
 
-    for( auto& [type, label_vec] : label_map )
+    for( auto label_el : label_map )
     {
+        KICAD_T type = label_el.first;
+        std::vector<SCH_TEXT*>& label_vec = label_el.second;
 
         switch( type )
         {
@@ -2989,11 +2991,11 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         {
             int allPins = pinCount;
 
-            auto it = m_net_name_to_subgraphs_map.find( netName );
+            auto net_it = m_net_name_to_subgraphs_map.find( netName );
 
-            if( it != m_net_name_to_subgraphs_map.end() )
+            if( net_it != m_net_name_to_subgraphs_map.end() )
             {
-                for( const CONNECTION_SUBGRAPH* neighbor : it->second )
+                for( const CONNECTION_SUBGRAPH* neighbor : net_it->second )
                 {
                     if( neighbor == aSubgraph )
                         continue;
