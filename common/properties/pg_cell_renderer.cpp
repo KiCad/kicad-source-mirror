@@ -33,12 +33,17 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
     if( aColumn > 0 )
         return wxPGDefaultRenderer::Render( aDC, aRect, aGrid, aProperty, aColumn, aItem, aFlags );
 
-    wxPGCell cell = aGrid->GetUnspecifiedValueAppearance();
-
     wxString text;
     int      preDrawFlags = aFlags;
 
+#if wxCHECK_VERSION( 3, 1, 0 )
+    wxPGCell cell = aGrid->GetUnspecifiedValueAppearance();
     aProperty->GetDisplayInfo( aColumn, aItem, aFlags, &text, &cell );
+#else
+    const wxPGCell* cellPtr = nullptr;
+    aProperty->GetDisplayInfo( aColumn, aItem, aFlags, &text, &cellPtr );
+    wxPGCell cell = *cellPtr;
+#endif
 
     text = wxControl::Ellipsize( text, aDC, wxELLIPSIZE_MIDDLE, aRect.GetWidth() );
 
