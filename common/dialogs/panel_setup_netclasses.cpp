@@ -108,15 +108,15 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_
 
     m_originalColWidths = new int[ m_netclassGrid->GetNumberCols() ];
     // Calculate a min best size to handle longest usual numeric values:
-    int min_best_width = m_netclassGrid->GetTextExtent( "555,555555 mils" ).x;
+    int const min_best_width = m_netclassGrid->GetTextExtent( "555,555555 mils" ).x;
 
     for( int i = 0; i < m_netclassGrid->GetNumberCols(); ++i )
     {
         // We calculate the column min size only from texts sizes, not using the initial col width
         // as this initial width is sometimes strange depending on the language (wxGrid bug?)
-        int min_width =  m_netclassGrid->GetVisibleWidth( i, true, true );
+        int const min_width =  m_netclassGrid->GetVisibleWidth( i, true, true );
 
-        int weighted_min_best_width =
+        int const weighted_min_best_width =
                         ( i == GRID_LINESTYLE )
                         ? min_best_width * 3 / 2
                         : min_best_width;
