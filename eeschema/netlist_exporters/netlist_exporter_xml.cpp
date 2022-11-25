@@ -53,12 +53,12 @@ bool NETLIST_EXPORTER_XML::WriteNetlist( const wxString& aOutFileName, unsigned 
     if( !stream.IsOk() )
         return false;
 
-    wxXmlDocument       xdoc;
+    wxXmlDocument xdoc;
 
     unsigned aCtl = aNetlistOptions;
 
     if( aNetlistOptions & GNL_OPT_BOM )
-        aCtl |= ( GNL_SYMBOLS | GNL_HEADER );
+        aCtl |= ( GNL_SYMBOLS | GNL_HEADER | GNL_PARTS );
     else
         aCtl |= GNL_ALL;
 
