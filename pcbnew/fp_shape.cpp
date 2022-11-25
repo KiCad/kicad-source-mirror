@@ -405,6 +405,15 @@ double FP_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
+wxString FP_SHAPE::GetParentAsString() const
+{
+    if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( m_parent ) )
+        return fp->GetReference();
+
+    return m_parent->m_Uuid.AsString();
+}
+
+
 static struct FP_SHAPE_DESC
 {
     FP_SHAPE_DESC()

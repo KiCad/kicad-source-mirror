@@ -510,6 +510,15 @@ void FP_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
 }
 
 
+wxString FP_TEXTBOX::GetParentAsString() const
+{
+    if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( m_parent ) )
+        return fp->GetReference();
+
+    return m_parent->m_Uuid.AsString();
+}
+
+
 static struct FP_TEXTBOX_DESC
 {
     FP_TEXTBOX_DESC()

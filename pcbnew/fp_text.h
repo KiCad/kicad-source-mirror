@@ -77,7 +77,7 @@ public:
         return false;
     }
 
-    wxString GetParentAsString() const { return m_parent->m_Uuid.AsString(); }
+    wxString GetParentAsString() const;
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
     {

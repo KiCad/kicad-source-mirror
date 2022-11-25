@@ -125,7 +125,7 @@ public:
         return wxT( "MGRAPHIC" );
     }
 
-    wxString GetParentAsString() const { return m_parent->m_Uuid.AsString(); }
+    wxString GetParentAsString() const;
 
     wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 

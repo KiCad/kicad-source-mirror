@@ -1669,6 +1669,15 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 }
 
 
+wxString PAD::GetParentAsString() const
+{
+    if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( m_parent ) )
+        return fp->GetReference();
+
+    return m_parent->m_Uuid.AsString();
+}
+
+
 static struct PAD_DESC
 {
     PAD_DESC()
@@ -1712,9 +1721,9 @@ static struct PAD_DESC
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
                     &PAD::SetNumber, &PAD::GetNumber ) );
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Name" ),
-                    &PAD::SetPinFunction, &PAD::GetPinFunction ) );
+                    NO_SETTER( PAD, wxString ), &PAD::GetPinFunction ) );
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
-                    &PAD::SetPinType, &PAD::GetPinType ) );
+                    NO_SETTER( PAD, wxString ), &PAD::GetPinType ) );
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Orientation" ),
                     &PAD::SetOrientationDegrees, &PAD::GetOrientationDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ) );

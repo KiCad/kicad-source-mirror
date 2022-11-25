@@ -503,6 +503,15 @@ void FP_TEXT::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLa
 }
 
 
+wxString FP_TEXT::GetParentAsString() const
+{
+    if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( m_parent ) )
+        return fp->GetReference();
+
+    return m_parent->m_Uuid.AsString();
+}
+
+
 static struct FP_TEXT_DESC
 {
     FP_TEXT_DESC()
