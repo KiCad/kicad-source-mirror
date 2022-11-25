@@ -28,7 +28,6 @@
 #include <symbol_library.h>
 #include <confirm.h>
 #include <eda_doc.h>
-//#include "eda_list_dialog.h"
 #include <wildcards_and_files_ext.h>
 #include <eeschema_settings.h>
 #include <general.h>
@@ -1311,9 +1310,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
         {
             SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
-            // search and highlight the symbol found by reference
-            wxString reference = refs[0].GetRef() + refs[0].GetRefNumber();
-            editor->FindSymbolAndItem( nullptr, &reference, true, HIGHLIGHT_SYMBOL, wxEmptyString );
+            // search and highlight the symbol found by its full path.
+            // It allows select of not yet annotated or duplicaded symbols
+            wxString symbol_path = refs[0].GetFullPath();
+            // wxString reference = refs[0].GetRef() + refs[0].GetRefNumber();  // Not used
+            editor->FindSymbolAndItem( &symbol_path, nullptr, true, HIGHLIGHT_SYMBOL, wxEmptyString );
         }
     }
     else
