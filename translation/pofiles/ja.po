@@ -2,13 +2,14 @@
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>, 2021, 2022.
 # co8 j <co8@nifty.com>, 2022.
+# Keisuke Nakao <chome@argv.org>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
 "PO-Revision-Date: 2022-11-26 09:53+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
+"Last-Translator: Keisuke Nakao <chome@argv.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -14039,7 +14040,7 @@ msgstr "ベジェ曲線に %d の制御点しかありません。少なくと�
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1432
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "(X = %d; Y = %d)にある予期しない円弧がインポートされませんでした。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1671
 #, c-format
