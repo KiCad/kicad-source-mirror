@@ -1120,7 +1120,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
 
     wxString confirm_msg = wxString::Format( _( "Are you sure you want to remove the field '%s'?" ),
                                         fieldName );
-    
+
     if( !IsOK( this, confirm_msg ) )
         return;
 
@@ -1142,7 +1142,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_DELETED,
                                 m_fieldsCtrl->GetItemCount(), 1 );
-   
+
     m_grid->ProcessTableMessage( msg );
 
     // set up attributes on the new quantities column
@@ -1311,10 +1311,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
         {
             SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
-            wxString path = refs[0].GetPath();
+            // search and highlight the symbol found by reference
             wxString reference = refs[0].GetRef() + refs[0].GetRefNumber();
-
-            editor->FindSymbolAndItem( &path, &reference, true, HIGHLIGHT_SYMBOL, wxEmptyString );
+            editor->FindSymbolAndItem( nullptr, &reference, true, HIGHLIGHT_SYMBOL, wxEmptyString );
         }
     }
     else
