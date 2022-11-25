@@ -335,6 +335,19 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             SetAuiPaneSize( m_auimgr, layersManager, settings->m_AuiPanels.right_panel_width, -1 );
         }
 
+        if( settings->m_AuiPanels.properties_panel_width > 0 && m_propertiesPanel )
+        {
+            wxAuiPaneInfo& propertiesPanel = m_auimgr.GetPane( "PropertiesManager" );
+            SetAuiPaneSize( m_auimgr, propertiesPanel,
+                            settings->m_AuiPanels.properties_panel_width, -1 );
+        }
+
+        if( settings->m_AuiPanels.search_panel_height > 0 )
+        {
+            wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
+            SetAuiPaneSize( m_auimgr, searchPane, -1, settings->m_AuiPanels.search_panel_height );
+        }
+
         m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );
     }
 
@@ -1198,11 +1211,17 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
-        cfg->m_AuiPanels.show_properties = m_show_properties;
+
+        if( m_propertiesPanel )
+        {
+            cfg->m_AuiPanels.show_properties        = m_show_properties;
+            cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+        }
 
         // ensure m_show_search is up to date (the pane can be closed)
         m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
         cfg->m_AuiPanels.show_search = m_show_search;
+        cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
     }
 }
 

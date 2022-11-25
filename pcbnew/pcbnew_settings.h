@@ -127,6 +127,8 @@ public:
         bool appearance_expand_layer_display;
         bool appearance_expand_net_display;
         int  right_panel_width;
+        int  properties_panel_width;
+        int  search_panel_height;
         bool show_layer_manager;
         bool show_properties;
         bool show_search;

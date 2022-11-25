@@ -1240,11 +1240,11 @@ static struct TRACK_VIA_DESC
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "Width" ),
             &PCB_TRACK::SetWidth, &PCB_TRACK::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
-            new PROPERTY<PCB_TRACK, int, BOARD_ITEM>( _HKI( "Origin X" ),
+            new PROPERTY<PCB_TRACK, int, BOARD_ITEM>( _HKI( "Start X" ),
             &PCB_TRACK::SetX, &PCB_TRACK::GetX, PROPERTY_DISPLAY::PT_COORD,
             ORIGIN_TRANSFORMS::ABS_X_COORD) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
-            new PROPERTY<PCB_TRACK, int, BOARD_ITEM>( _HKI( "Origin Y" ),
+            new PROPERTY<PCB_TRACK, int, BOARD_ITEM>( _HKI( "Start Y" ),
             &PCB_TRACK::SetY, &PCB_TRACK::GetY, PROPERTY_DISPLAY::PT_COORD,
             ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End X" ),
@@ -1261,11 +1261,11 @@ static struct TRACK_VIA_DESC
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "Width" ),
             &PCB_ARC::SetWidth, &PCB_ARC::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
-            new PROPERTY<PCB_ARC, int, BOARD_ITEM>( _HKI( "Origin X" ),
+            new PROPERTY<PCB_ARC, int, BOARD_ITEM>( _HKI( "Start X" ),
             &PCB_TRACK::SetX, &PCB_ARC::GetX, PROPERTY_DISPLAY::PT_COORD,
             ORIGIN_TRANSFORMS::ABS_X_COORD) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
-            new PROPERTY<PCB_ARC, int, BOARD_ITEM>( _HKI( "Origin Y" ),
+            new PROPERTY<PCB_ARC, int, BOARD_ITEM>( _HKI( "Start Y" ),
             &PCB_TRACK::SetY, &PCB_ARC::GetY, PROPERTY_DISPLAY::PT_COORD,
             ORIGIN_TRANSFORMS::ABS_Y_COORD) );
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End X" ),

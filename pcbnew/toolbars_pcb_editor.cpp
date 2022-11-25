@@ -47,6 +47,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <widgets/appearance_controls.h>
+#include <dialogs/pcb_properties_panel.h>
 #include <widgets/pcb_search_pane.h>
 #include <widgets/wx_aui_utils.h>
 #include <wx/wupdlock.h>
@@ -789,26 +790,50 @@ void PCB_EDIT_FRAME::ToggleLayersManager()
 
 void PCB_EDIT_FRAME::ToggleProperties()
 {
+    if( !m_propertiesPanel )
+        return;
+
+    PCBNEW_SETTINGS* settings = GetPcbNewSettings();
+
     m_show_properties = !m_show_properties;
 
-    m_auimgr.GetPane( "PropertiesManager" ).Show( m_show_properties );
-    m_auimgr.Update();
+    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( "PropertiesManager" );
+    propertiesPaneInfo.Show( m_show_properties );
+
+    if( m_show_properties )
+    {
+        SetAuiPaneSize( m_auimgr, propertiesPaneInfo,
+                        settings->m_AuiPanels.properties_panel_width, -1 );
+    }
+    else
+    {
+        settings->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+        m_auimgr.Update();
+    }
 }
 
 
 void PCB_EDIT_FRAME::ToggleSearch()
 {
+    PCBNEW_SETTINGS* settings = GetPcbNewSettings();
+
     // Ensure m_show_search is up to date (the pane can be closed outside the menu)
     m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
 
     m_show_search = !m_show_search;
 
-    m_auimgr.GetPane( SearchPaneName() ).Show( m_show_search );
-    m_auimgr.Update();
+    wxAuiPaneInfo& searchPaneInfo = m_auimgr.GetPane( SearchPaneName() );
+    searchPaneInfo.Show( m_show_search );
 
     if( m_show_search )
     {
+        SetAuiPaneSize( m_auimgr, searchPaneInfo, -1, settings->m_AuiPanels.search_panel_height );
         m_searchPane->FocusSearch();
+    }
+    else
+    {
+        settings->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
+        m_auimgr.Update();
     }
 }
 
