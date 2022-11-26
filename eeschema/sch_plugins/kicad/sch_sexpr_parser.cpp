@@ -650,7 +650,8 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
                 case T_right:  aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT ); break;
                 case T_top:    aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );    break;
                 case T_bottom: aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM ); break;
-                case T_mirror: aText->SetMirrored( true );                       break;
+                // Do not set mirror property for schematic text elements
+                case T_mirror: break;
                 default:       Expecting( "left, right, top, bottom, or mirror" );
                 }
             }
