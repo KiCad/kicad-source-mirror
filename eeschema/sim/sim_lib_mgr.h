@@ -46,6 +46,7 @@ public:
     void Clear();
 
     SIM_LIBRARY& CreateLibrary( const std::string& aLibraryPath );
+    SIM_LIBRARY& SetLibrary( const std::string& aLibraryPath );
 
     SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, int aSymbolPinCount );
 

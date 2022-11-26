@@ -52,6 +52,18 @@ SIM_LIBRARY& SIM_LIB_MGR::CreateLibrary( const std::string& aLibraryPath )
     return *it->second;
 }
 
+SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const std::string& aLibraryPath )
+{
+    std::string absolutePath = std::string( m_project.AbsolutePath( aLibraryPath ).ToUTF8() );
+
+    // May throw an exception.
+    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( absolutePath );
+    
+    Clear();
+    m_libraries[aLibraryPath] = std::move( library );
+    return *m_libraries.at( aLibraryPath );
+}
+
 
 SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, int aSymbolPinCount )
 {

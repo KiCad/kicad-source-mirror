@@ -613,10 +613,16 @@ void DIALOG_SIM_MODEL<T>::removeOrphanedPinAssignments()
 
 
 template <typename T>
-void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath )
+void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForceReload )
 {
-    m_libraryModelsMgr.Clear();
-    m_libraryModelsMgr.CreateLibrary( std::string( aLibraryPath.ToUTF8() ) );
+    auto libraries = m_libraryModelsMgr.GetLibraries();
+
+    // Loading the same library as previously should normally be a no-op except when done using the
+    // library browse button.
+    if( !aForceReload && libraries.size() >= 1 && libraries.begin()->first == aLibraryPath )
+        return;
+
+    m_libraryModelsMgr.SetLibrary( std::string( aLibraryPath.ToUTF8() ) );
 
     try
     {
@@ -645,7 +651,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath )
     if( validator )
         validator->SetIncludes( modelNames );
 
-    m_tclibraryPathName->ChangeValue( aLibraryPath );
+    m_libraryPathText->ChangeValue( aLibraryPath );
     m_modelNameCombobox->Set( modelNames );
     m_useLibraryModelRadioButton->SetValue( true );
 
@@ -920,7 +926,7 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
     bool fromLibrary = m_useLibraryModelRadioButton->GetValue();
 
     m_pathLabel->Enable( fromLibrary );
-    m_tclibraryPathName->Enable( fromLibrary );
+    m_libraryPathText->Enable( fromLibrary );
     m_browseButton->Enable( fromLibrary );
     m_modelNameLabel->Enable( fromLibrary );
     m_modelNameCombobox->Enable( fromLibrary );
@@ -939,6 +945,38 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
 
 
 template <typename T>
+void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
+{
+    if( m_useLibraryModelRadioButton->GetValue() )
+    {
+        wxString path = m_libraryPathText->GetValue();
+        wxFileName fn( path );
+
+        if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
+            path = fn.GetFullPath();
+
+        try
+        {
+            loadLibrary( path );
+            updateWidgets();
+        }
+        catch( const IO_ERROR& )
+        {
+            // TODO: Add an infobar to report the error?
+        }
+    }
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onLibraryPathTextKillFocus( wxFocusEvent& aEvent )
+{
+    wxCommandEvent dummy;
+    onLibraryPathTextEnter( dummy );
+}
+
+
+template <typename T>
 void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 {
     wxFileDialog dlg( this, _( "Browse Models" ), Prj().GetProjectPath() );
@@ -952,7 +990,7 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
     if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
         path = fn.GetFullPath();
 
-    loadLibrary( path );
+    loadLibrary( path, true );
     updateWidgets();
 }
 

@@ -99,7 +99,7 @@ private:
 
     void removeOrphanedPinAssignments();
 
-    void loadLibrary( const wxString& aLibraryPath );
+    void loadLibrary( const wxString& aLibraryPath, bool aForceReload = false );
 
     void addParamPropertyIfRelevant( int aParamIndex );
     wxPGProperty* newParamProperty( int aParamIndex ) const;
@@ -114,6 +114,8 @@ private:
     int getModelPinIndex( const wxString& aModelPinString ) const;
 
     void onRadioButton( wxCommandEvent& aEvent ) override;
+    void onLibraryPathTextEnter( wxCommandEvent& aEvent ) override;
+    void onLibraryPathTextKillFocus( wxFocusEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;
     void onModelNameCombobox( wxCommandEvent& aEvent ) override;
     void onModelNameComboboxKillFocus( wxFocusEvent& event ) override;
