@@ -29,6 +29,7 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/algorithm/string/predicate.hpp>
+#include <string_utils.h>
 
 
 namespace SIM_SERDE_PARSER
@@ -111,14 +112,27 @@ std::string SIM_SERDE::GeneratePins() const
 {
     std::string result;
 
-    for( int i = 0; i < m_model.GetPinCount(); ++i )
-    {
-        const SIM_MODEL::PIN& pin = m_model.GetPin( i );
+    std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> pins = m_model.GetPins();
 
+    // m_model.GetPins() returns pins in the order they appear in the model, but the keys in the
+    // key=value pairs we create here are symbol pin numbers, so we sort the pins so that they are
+    // ordered by the latter instead.
+    std::sort( pins.begin(), pins.end(),
+               []( const SIM_MODEL::PIN& lhs, const SIM_MODEL::PIN& rhs )
+               {
+                   return StrNumCmp( lhs.symbolPinNumber, rhs.symbolPinNumber, true ) < 0;
+               } );
+
+    bool isFirst = true;
+
+    for( const SIM_MODEL::PIN& pin : pins )
+    {
         if( pin.symbolPinNumber != "" )
         {
-            if( i != 0 )
+            if( !isFirst )
                 result.append( " " );
+            else
+                isFirst = false;
 
             result.append( fmt::format( "{}={}", pin.symbolPinNumber, pin.name ) );
         }
