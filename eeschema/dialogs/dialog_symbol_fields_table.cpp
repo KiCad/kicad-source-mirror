@@ -1302,13 +1302,21 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
         m_grid->ClearSelection();
         m_grid->SetGridCursor( event.GetRow(), event.GetCol() );
 
+        int flag = m_dataModel->GetRowFlags( event.GetRow() );
         m_dataModel->ExpandCollapseRow( event.GetRow() );
         std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( event.GetRow() );
 
         // Focus Eeschema view on the symbol selected in the dialog
-        if( refs.size() == 1 )
+        // TODO: Highlight or select more than one unit
+        if( ( flag == GROUP_SINGLETON || flag == CHILD_ITEM ) && refs.size() >= 1 )
         {
             SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
+
+            std::sort( refs.begin(), refs.end(),
+                       []( const SCH_REFERENCE& a, const SCH_REFERENCE& b )
+                       {
+                           return a.GetUnit() < b.GetUnit();
+                       } );
 
             // search and highlight the symbol found by its full path.
             // It allows select of not yet annotated or duplicaded symbols
