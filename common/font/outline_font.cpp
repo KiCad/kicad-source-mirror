@@ -297,6 +297,22 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 }
 
 
+double OUTLINE_FONT::getOverbarOffset( int ascender, int height, int thickness ) const
+{
+    double thicknessRatio = abs( (double) thickness ) / (double) height;
+    double ascenderRatio = (double) ascender / (double) height;
+
+    if( thicknessRatio < 0.05 )
+        return 0.04;
+    else if( ascenderRatio < 0.78 )
+        return 0.00;
+    else if( ascenderRatio < 0.80 )
+        return -0.03;
+    else
+        return -0.06;
+}
+
+
 VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                                         const wxString& aText, const VECTOR2I& aSize,
                                         const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
@@ -418,6 +434,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
     }
 
     int      ascender = abs( face->size->metrics.ascender * GLYPH_SIZE_SCALER );
+    int      height = abs( face->size->metrics.height * GLYPH_SIZE_SCALER );
     int      descender = abs( face->size->metrics.descender * GLYPH_SIZE_SCALER );
     VECTOR2I extents( cursor.x * scaleFactor.x, ( ascender + descender ) * abs( scaleFactor.y ) );
 
@@ -441,17 +458,18 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 
         // Shorten the bar a little so its rounded ends don't make it over-long
         double barTrim = barThickness / 2.0;
+        double barOffset = getOverbarOffset( ascender, height, barThickness / scaleFactor.y );
 
         VECTOR2I topLeft( aPosition );
         VECTOR2I topRight( aPosition );
 
-        topLeft.y += ascender * scaleFactor.y * ( 1.0 + m_overbarOffsetRatio );
-        topRight.y += ascender * scaleFactor.y * ( 1.0 + m_overbarOffsetRatio );
+        topLeft.y += ascender * scaleFactor.y * ( 1.0 + barOffset );
+        topRight.y = topLeft.y;
 
         topLeft.x += barTrim;
         topRight.x += extents.x - barTrim;
 
-        extents.y *= ( 1.0 + m_overbarOffsetRatio + m_overbarOffsetRatio );
+        extents.y *= ( 1.0 + barOffset + barOffset );
         extents.x += barTrim;
 
         if( IsItalic() )

@@ -44,7 +44,7 @@ using namespace KIFONT;
 
 
 ///< Factor that determines relative vertical position of the overbar.
-static constexpr double OVERBAR_POSITION_FACTOR = 1.33;
+static constexpr double OVERBAR_POSITION_FACTOR = 1.40;
 
 ///< Factor that determines relative vertical position of the underline.
 static constexpr double UNDERLINE_POSITION_FACTOR = -0.16;

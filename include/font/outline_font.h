@@ -114,6 +114,8 @@ public:
 protected:
     FT_Error loadFace( const wxString& aFontFileName );
 
+    double getOverbarOffset( int ascender, int height, int thickness ) const;
+
     BOX2I getBoundingBox( const std::vector<std::unique_ptr<GLYPH>>& aGlyphs ) const;
 
     VECTOR2I getTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
@@ -165,8 +167,6 @@ private:
 
     static constexpr double m_subscriptVerticalOffset   = -0.25;
     static constexpr double m_superscriptVerticalOffset = 0.45;
-    static constexpr double m_overbarOffsetRatio        = -0.15;
-    static constexpr double m_overbarThicknessRatio     = 0.08;
 };
 
 } //namespace KIFONT
