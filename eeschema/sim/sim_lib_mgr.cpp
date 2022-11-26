@@ -83,7 +83,7 @@ template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel, int a
 
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
 {
-    return CreateModel( aSymbol.GetFields(), static_cast<int>( aSymbol.GetLibPins().size() ) );
+    return CreateModel( aSymbol.GetFields(), static_cast<int>( aSymbol.GetRawPins().size() ) );
 }
 
 template <typename T>

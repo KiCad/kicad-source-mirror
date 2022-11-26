@@ -59,8 +59,11 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
     m_modelNameCombobox->SetValidator( m_modelNameValidator );
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
-    m_sortedSymbolPins = m_symbol.GetLibPins();
-    std::sort( m_sortedSymbolPins.begin(), m_sortedSymbolPins.end(),
+    // Note that to get ALL pins, not only of the current part, you need to use
+    // m_symbol.GetRawPins().
+    m_sortedPartPins = m_symbol.GetLibPins();
+
+    std::sort( m_sortedPartPins.begin(), m_sortedPartPins.end(),
                []( const LIB_PIN* lhs, const LIB_PIN* rhs )
                {
                    // We sort by StrNumCmp because SIM_MODEL_BASE sorts with it too.
@@ -140,7 +143,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 {
     wxCommandEvent dummyEvent;
 
-    int         pinCount = m_sortedSymbolPins.size();
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
     if( libraryFilename != "" )
@@ -203,7 +205,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     {
         // The model is sourced from the instance.
         m_useInstanceModelRadioButton->SetValue( true );
-        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, pinCount );
+        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, m_symbol.GetRawPins().size() );
     }
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
@@ -211,9 +213,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         try
         {
             if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
-                m_builtinModelsMgr.CreateModel( m_fields, pinCount );
+                m_builtinModelsMgr.CreateModel( m_fields, m_symbol.GetRawPins().size() );
             else
-                m_builtinModelsMgr.CreateModel( type, pinCount );
+                m_builtinModelsMgr.CreateModel( type, m_symbol.GetRawPins().size() );
         }
         catch( const IO_ERROR& e )
         {
@@ -529,7 +531,7 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments()
     // Reset the grid.
 
     m_pinAssignmentsGrid->ClearRows();
-    m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_sortedSymbolPins.size() ) );
+    m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_sortedPartPins.size() ) );
 
     for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
         m_pinAssignmentsGrid->SetCellValue( row, PIN_COLUMN::MODEL, _( "Not Connected" ) );
@@ -542,9 +544,13 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments()
         if( symbolPinNumber == "" )
             continue;
 
+        int symbolPinRow = findSymbolPinRow( symbolPinNumber );
+
+        if( symbolPinRow == -1 )
+            continue;
+
         wxString modelPinString = getModelPinString( modelPinIndex );
-        m_pinAssignmentsGrid->SetCellValue( findSymbolPinRow( symbolPinNumber ), PIN_COLUMN::MODEL,
-                                            modelPinString );
+        m_pinAssignmentsGrid->SetCellValue( symbolPinRow, PIN_COLUMN::MODEL, modelPinString );
     }
 
     // Set up the Symbol column grid values and Model column cell editors with dropdown options.
@@ -591,19 +597,17 @@ void DIALOG_SIM_MODEL<T>::removeOrphanedPinAssignments()
     for( int i = 0; i < curModel().GetPinCount(); ++i )
     {
         const SIM_MODEL::PIN& modelPin   = curModel().GetPin( i );
-        bool                  isOrphaned = true;
+        const std::vector<std::unique_ptr<SCH_PIN>>& allPins = m_symbol.GetRawPins();
 
-        for( const LIB_PIN* symbolPin : m_sortedSymbolPins )
+        if( std::none_of( allPins.begin(), allPins.end(),
+                          [modelPin]( const std::unique_ptr<SCH_PIN>& symbolPin )
+                          {
+                              return modelPin.symbolPinNumber == symbolPin->GetNumber();
+                          } ) )
         {
-            if( modelPin.symbolPinNumber == symbolPin->GetNumber() )
-            {
-                isOrphaned = false;
-                break;
-            }
-        }
-
-        if( isOrphaned )
+            // Is orphaned.
             curModel().SetPinSymbolPinNumber( i, "" );
+        }
     }
 }
 
@@ -621,9 +625,9 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath )
         for( auto& [baseModelName, baseModel] : library()->GetModels() )
         {
             if( baseModelName == modelName )
-                m_libraryModelsMgr.CreateModel( baseModel, m_sortedSymbolPins.size(), m_fields );
+                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetRawPins().size(), m_fields );
             else
-                m_libraryModelsMgr.CreateModel( baseModel, m_sortedSymbolPins.size() );
+                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetRawPins().size() );
         }
     }
     catch( const IO_ERROR& e )
@@ -821,9 +825,9 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 template <typename T>
 int DIALOG_SIM_MODEL<T>::findSymbolPinRow( const wxString& aSymbolPinNumber ) const
 {
-    for( int row = 0; row < static_cast<int>( m_sortedSymbolPins.size() ); ++row )
+    for( int row = 0; row < static_cast<int>( m_sortedPartPins.size() ); ++row )
     {
-        LIB_PIN* pin = m_sortedSymbolPins[row];
+        LIB_PIN* pin = m_sortedPartPins[row];
 
         if( pin->GetNumber() == aSymbolPinNumber )
             return row;
@@ -859,7 +863,7 @@ const SIM_LIBRARY* DIALOG_SIM_MODEL<T>::library() const
 template <typename T>
 wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
 {
-    LIB_PIN* pin = m_sortedSymbolPins.at( symbolPinIndex );
+    LIB_PIN* pin = m_sortedPartPins.at( symbolPinIndex );
     wxString pinNumber;
     wxString pinName;
 
@@ -1153,7 +1157,7 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
     if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
     {
         curModel().SetPinSymbolPinNumber( modelPinIndex,
-            std::string( m_sortedSymbolPins.at( symbolPinIndex )->GetShownNumber().ToUTF8() ) );
+            std::string( m_sortedPartPins.at( symbolPinIndex )->GetShownNumber().ToUTF8() ) );
     }
 
     updatePinAssignments();
