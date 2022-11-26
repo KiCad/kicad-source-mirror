@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-11-08 17:08+0000\n"
+"PO-Revision-Date: 2022-11-26 21:48+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -8330,7 +8330,7 @@ msgstr "Poista merkit"
 
 #: eeschema/dialogs/dialog_erc_base.h:87 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr "Sähköisten Sääntöjen Tarkistaja"
+msgstr "Sähkösääntöjen tarkistaja"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
 msgid "Power symbol value field text cannot be changed."
@@ -15500,7 +15500,7 @@ msgstr "Lisää nimike \"%s\" komponentin %s nastan %s verkkoon."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
-msgstr "Suorita sähkömääräysten tarkistus"
+msgstr "Suorita sähkösääntöjen tarkistus"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Symbol Checker"
