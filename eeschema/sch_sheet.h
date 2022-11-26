@@ -99,6 +99,7 @@ public:
     void SetFields( const std::vector<SCH_FIELD>& aFields );
 
     wxString GetName() const { return m_fields[ SHEETNAME ].GetText(); }
+    void SetName( const wxString& aName ) { m_fields[ SHEETNAME ].SetText( aName ); }
 
     SCH_SCREEN* GetScreen() const { return m_screen; }
 

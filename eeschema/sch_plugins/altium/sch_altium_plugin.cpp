@@ -373,7 +373,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
         {
             sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
             SCH_SCREEN* screen = sheet->GetScreen();
-
+            sheet->SetName( loadAltiumFileName.GetName() );
             wxCHECK2( screen, continue );
 
             m_sheetPath.push_back( sheet );
@@ -793,8 +793,17 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
     auto pair = m_altiumComponents.insert( { aIndex, ASCH_SYMBOL( aProperties ) } );
     const ASCH_SYMBOL& elem = pair.first->second;
 
+    SCH_SHEET* currentSheet = m_sheetPath.Last();
+    wxCHECK( currentSheet, /* void */ );
+
+    wxString sheetName = currentSheet->GetName();
+
+    if( sheetName.IsEmpty() )
+        sheetName = wxT( "root" );
+
     // TODO: this is a hack until we correctly apply all transformations to every element
-    wxString name = wxString::Format( "%d%s_%s",
+    wxString name = wxString::Format( "%s_%d%s_%s",
+                                      sheetName,
                                       elem.orientation,
                                       elem.isMirrored ? "_mirrored" : "",
                                       elem.libreference );
