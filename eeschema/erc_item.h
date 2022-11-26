@@ -99,6 +99,10 @@ private:
     static ERC_ITEM libSymbolIssues;
     static ERC_ITEM unannotated;
     static ERC_ITEM extraUnits;
+    static ERC_ITEM missingUnits;
+    static ERC_ITEM missingInputPin;
+    static ERC_ITEM missingBidiPin;
+    static ERC_ITEM missingPowerInputPin;
     static ERC_ITEM differentUnitValue;
     static ERC_ITEM duplicateReference;
     static ERC_ITEM busEntryNeeded;

@@ -51,6 +51,10 @@ enum ERCE_T
     ERCE_SIMILAR_LABELS,          ///< 2 labels are equal for case insensitive comparisons.
     ERCE_DIFFERENT_UNIT_FP,       ///< Different units of the same symbol have different
                                   ///< footprints assigned.
+    ERCE_MISSING_POWER_INPUT_PIN, ///< Symbol has power input pins that are not placed on the schematic
+    ERCE_MISSING_INPUT_PIN,       ///< Symbol has input pins that are not placed
+    ERCE_MISSING_BIDI_PIN,        ///< Symbol has bi-directional pins that are not placed
+    ERCE_MISSING_UNIT,            ///< Symbol has units that are not placed on the schematic
     ERCE_DIFFERENT_UNIT_NET,      ///< Shared pin in a multi-unit symbol is connected to
                                   ///< more than one net.
     ERCE_BUS_ALIAS_CONFLICT,      ///< Conflicting bus alias definitions across sheets.

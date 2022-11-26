@@ -103,6 +103,9 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES]       = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_NOCONNECT_CONNECTED]     = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_NOCONNECT_NOT_CONNECTED] = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_MISSING_UNIT]            = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_MISSING_INPUT_PIN]       = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_MISSING_BIDI_PIN]        = RPT_SEVERITY_WARNING;
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "rule_severities",
             [&]() -> nlohmann::json

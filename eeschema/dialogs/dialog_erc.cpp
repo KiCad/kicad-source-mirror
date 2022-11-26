@@ -485,11 +485,21 @@ void DIALOG_ERC::testErc()
     m_parent->RecalculateConnections( NO_CLEANUP );
     sch->ConnectionGraph()->RunERC();
 
+    AdvancePhase( _( "Checking units..." ) );
+
     // Test is all units of each multiunit symbol have the same footprint assigned.
     if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
     {
         AdvancePhase( _( "Checking footprints..." ) );
         tester.TestMultiunitFootprints();
+    }
+
+    if( settings.IsTestEnabled( ERCE_MISSING_UNIT )
+            || settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN )
+            || settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN )
+            || settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
+    {
+        tester.TestMissingUnits();
     }
 
     AdvancePhase( _( "Checking pins..." ) );

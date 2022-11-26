@@ -139,6 +139,10 @@ public:
      */
     int TestSimModelIssues();
 
+    /**
+     * Test for uninstantiated units of multi unit symbols
+     */
+    int TestMissingUnits();
 private:
 
     SCHEMATIC* m_schematic;

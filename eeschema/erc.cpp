@@ -23,6 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+#include <numeric>
+
 #include "connection_graph.h"
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
@@ -400,6 +403,146 @@ int ERC_TESTER::TestMultiunitFootprints()
 
                 ++errors;
             }
+        }
+    }
+
+    return errors;
+}
+
+
+int ERC_TESTER::TestMissingUnits()
+{
+    ERC_SETTINGS&  settings = m_schematic->ErcSettings();
+    SCH_SHEET_LIST sheets = m_schematic->GetSheets();
+
+    int errors = 0;
+    SCH_MULTI_UNIT_REFERENCE_MAP refMap;
+    sheets.GetMultiUnitSymbols( refMap, true );
+
+    for( std::pair<const wxString, SCH_REFERENCE_LIST>& symbol : refMap )
+    {
+        SCH_REFERENCE_LIST& refList = symbol.second;
+
+        wxCHECK2( refList.GetCount(), continue );
+
+        // Reference unit
+        SCH_REFERENCE& base_ref = refList.GetItem( 0 );
+        SCH_SYMBOL* unit = base_ref.GetSymbol();
+        LIB_SYMBOL* libSymbol = base_ref.GetLibPart();
+
+        if( static_cast<ssize_t>( refList.GetCount() ) == libSymbol->GetUnitCount() )
+            continue;
+
+        std::set<int> lib_units;
+        std::set<int> instance_units;
+        std::set<int> missing_units;
+
+        auto report_missing = [&]( std::set<int>& aMissingUnits, wxString aErrorMsg, int aErrorCode )
+        {
+            wxString msg;
+            wxString missing_pin_units = wxT( "[ " );
+            int ii = 0;
+
+            for( int missing_unit : aMissingUnits )
+            {
+                if( ii++ == 3 )
+                {
+                    missing_pin_units += wxT( "....." );
+                    break;
+                }
+
+                missing_pin_units += libSymbol->GetUnitDisplayName( missing_unit ) + ", " ;
+            }
+
+            missing_pin_units.Truncate( missing_pin_units.length() - 2 );
+            missing_pin_units += wxT( " ]" );
+
+            msg.Printf( aErrorMsg, symbol.first, missing_pin_units );
+
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( aErrorCode );
+            ercItem->SetErrorMessage( msg );
+            ercItem->SetItems( unit );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, unit->GetPosition() );
+            base_ref.GetSheetPath().LastScreen()->Append( marker );
+
+            ++errors;
+        };
+
+        for( int ii = 1; ii <= libSymbol->GetUnitCount(); ++ii )
+            lib_units.insert( lib_units.end(), ii );
+
+        for( size_t ii = 0; ii < refList.GetCount(); ++ii )
+            instance_units.insert( instance_units.end(), refList.GetItem( ii ).GetUnit() );
+
+        std::set_difference( lib_units.begin(), lib_units.end(),
+                             instance_units.begin(), instance_units.end(),
+                             std::inserter( missing_units, missing_units.begin() ) );
+
+        if( !missing_units.empty() && settings.IsTestEnabled( ERCE_MISSING_UNIT ) )
+        {
+            report_missing( missing_units, _( "Symbol %s has unplaced units %s" ),
+                    ERCE_MISSING_UNIT );
+        }
+
+        std::set<int> missing_power;
+        std::set<int> missing_input;
+        std::set<int> missing_bidi;
+
+        for( int missing_unit : missing_units )
+        {
+            LIB_PINS pins;
+            int convert = 0;
+
+            for( size_t ii = 0; ii < refList.GetCount(); ++ii )
+            {
+                if( refList.GetItem( ii ).GetUnit() == missing_unit )
+                {
+                    convert = refList.GetItem( ii ).GetSymbol()->GetConvert();
+                    break;
+                }
+            }
+
+            libSymbol->GetPins( pins, missing_unit, convert );
+
+            for( auto pin : pins )
+            {
+                switch( pin->GetType() )
+                {
+                case ELECTRICAL_PINTYPE::PT_POWER_IN:
+                    missing_power.insert( missing_unit );
+                    break;
+
+                case ELECTRICAL_PINTYPE::PT_BIDI:
+                    missing_bidi.insert( missing_unit );
+                    break;
+
+                case ELECTRICAL_PINTYPE::PT_INPUT:
+                    missing_input.insert( missing_unit );
+                    break;
+
+                default:
+                    break;
+                }
+            }
+        }
+
+        if( !missing_power.empty() && settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN ) )
+        {
+            report_missing( missing_power, _( "Symbol %s has input power pins in units %s that are not placed." ),
+                     ERCE_MISSING_POWER_INPUT_PIN );
+        }
+
+        if( !missing_input.empty() && settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN ) )
+        {
+           report_missing( missing_input, _( "Symbol %s has input pins in units %s that are not placed." ),
+                   ERCE_MISSING_INPUT_PIN );
+        }
+
+        if( !missing_bidi.empty() && settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
+        {
+            report_missing( missing_bidi, _( "Symbol %s has bidirectional pins in units %s that are not placed." ),
+                    ERCE_MISSING_BIDI_PIN );
         }
     }
 

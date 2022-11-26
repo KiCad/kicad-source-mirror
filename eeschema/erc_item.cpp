@@ -154,6 +154,22 @@ ERC_ITEM ERC_ITEM::extraUnits( ERCE_EXTRA_UNITS,
         _( "Symbol has more units than are defined" ),
         wxT( "extra_units" ) );
 
+ERC_ITEM ERC_ITEM::missingUnits( ERCE_MISSING_UNIT,
+        _( "Symbol has units that are not placed" ),
+        wxT( "missing_unit" ) );
+
+ERC_ITEM ERC_ITEM::missingInputPin( ERCE_MISSING_INPUT_PIN,
+        _( "Symbol has input pins that are not placed" ),
+        wxT( "missing_input_pin" ) );
+
+ERC_ITEM ERC_ITEM::missingBidiPin( ERCE_MISSING_BIDI_PIN,
+        _( "Symbol has bidirectional pins that are not placed" ),
+        wxT( "missing_bidi_pin" ) );
+
+ERC_ITEM ERC_ITEM::missingPowerInputPin( ERCE_MISSING_POWER_INPUT_PIN,
+        _( "Symbol has power input pins that are not placed" ),
+        wxT( "missing_power_pin" ) );
+
 ERC_ITEM ERC_ITEM::differentUnitValue( ERCE_DIFFERENT_UNIT_VALUE,
         _( "Units of same symbol have different values" ),
         wxT( "unit_value_mismatch" ) );
@@ -200,6 +216,10 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::busLabelSyntax,
                  ERC_ITEM::libSymbolIssues,
                  ERC_ITEM::extraUnits,
+                 ERC_ITEM::missingUnits,
+                 ERC_ITEM::missingInputPin,
+                 ERC_ITEM::missingBidiPin,
+                 ERC_ITEM::missingPowerInputPin
          } );
 
 
@@ -239,6 +259,10 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_DIFFERENT_UNIT_VALUE:    return std::make_shared<ERC_ITEM>( differentUnitValue );
     case ERCE_DUPLICATE_REFERENCE:     return std::make_shared<ERC_ITEM>( duplicateReference );
     case ERCE_BUS_ENTRY_NEEDED:        return std::make_shared<ERC_ITEM>( busEntryNeeded );
+    case ERCE_MISSING_UNIT:            return std::make_shared<ERC_ITEM>( missingUnits );
+    case ERCE_MISSING_INPUT_PIN:       return std::make_shared<ERC_ITEM>( missingInputPin );
+    case ERCE_MISSING_POWER_INPUT_PIN: return std::make_shared<ERC_ITEM>( missingPowerInputPin );
+    case ERCE_MISSING_BIDI_PIN:        return std::make_shared<ERC_ITEM>( missingBidiPin );
     case ERCE_UNSPECIFIED:
     default:
         wxFAIL_MSG( "Unknown ERC error code" );
