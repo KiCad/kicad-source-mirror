@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-04 23:18+0000\n"
+"PO-Revision-Date: 2022-11-30 00:09+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -5612,7 +5612,7 @@ msgstr "Virhe ladatessa projektin jalanjälkikirjastotaulua."
 
 #: common/project/net_settings.cpp:61 pcbnew/board.cpp:108
 msgid "This is the default net class."
-msgstr "Tämä on oletuskytkentäverkkoluokka."
+msgstr "Tämä on oletus verkkoluokka."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:327
 msgid "Could not open archive file."
@@ -8699,7 +8699,7 @@ msgstr "Nastojen Ristiriita Kartta"
 #: pcbnew/dialogs/dialog_board_setup.cpp:113 pcbnew/dialogs/dialog_drc.cpp:803
 #: pcbnew/dialogs/dialog_drc.cpp:818
 msgid "Violation Severity"
-msgstr "Rikkomisen vakavuus"
+msgstr "Rikkomuksen Vakavuus"
 
 #: eeschema/dialogs/dialog_erc.cpp:860
 msgid "Edit ignored violations..."
@@ -8769,7 +8769,7 @@ msgstr "Poista merkki"
 
 #: eeschema/dialogs/dialog_erc_base.h:100 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr "Sähköisten Sääntöjen Tarkistaja"
+msgstr "Sähkösääntöjen tarkistaja"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:190
 msgid "Power symbol value field text cannot be changed."
@@ -10715,7 +10715,7 @@ msgstr "Kiinnitä ristiriitakartta"
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:70
 msgid "Violation severities"
-msgstr "Rikkomisen vakavuus"
+msgstr "Rikkomuksen vakavuudet"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:67
@@ -10814,7 +10814,7 @@ msgstr "Projekti"
 #: pcbnew/widgets/appearance_controls.cpp:2229
 #: pcbnew/widgets/appearance_controls_base.cpp:118
 msgid "Net Classes"
-msgstr "Net-luokat"
+msgstr "Verkkoluokat"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
 msgid "Bus Alias Definitions"
@@ -11935,7 +11935,7 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
-"Joillakin kohteilla on sama väri kuin taustalla\n"
+"Joillakin kohteilla on sama väri, kuin taustalla\n"
 "eivätkä ne näy näytöllä. Oletko\n"
 "haluatko varmasti käyttää näitä värejä?"
 
@@ -13500,7 +13500,7 @@ msgstr "Symbolit uuteen kirjastoon..."
 #: gerbview/menubar.cpp:188 pagelayout_editor/menubar.cpp:119
 #: pcbnew/menubar_footprint_editor.cpp:138 pcbnew/menubar_pcb_editor.cpp:254
 msgid "&Units"
-msgstr "& Yksiköt"
+msgstr "&Yksiköt"
 
 #: eeschema/menubar.cpp:317
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
@@ -16368,7 +16368,7 @@ msgstr "Lisää nimike \"%s\" komponentin %s nastan %s verkkoon."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
-msgstr "Suorita sähkömääräysten tarkistus"
+msgstr "Suorita sähkösääntöjen tarkistus"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Symbol Checker"
@@ -16560,7 +16560,7 @@ msgid ""
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"Synkronoitu Nastojen Tila\n"
+"Synkronoitujen Nastojen Tila\n"
 "Kun tämä on käytössä, kaikki muutokset (lukuunottamatta nastanumerot) "
 "levitetään muille yksiköille.\n"
 "Kytketty oletuksena käyttöön moniyksikköisille osille, joissa on "
@@ -16894,7 +16894,7 @@ msgstr "Päivitä symboli sisällyttääksesi muutokset kirjastosta"
 
 #: eeschema/tools/ee_actions.cpp:488 pcbnew/tools/pcb_actions.cpp:699
 msgid "Assign Netclass..."
-msgstr "Määritä Netclass ..."
+msgstr "Määritä Verkkoluokka..."
 
 #: eeschema/tools/ee_actions.cpp:488 pcbnew/tools/pcb_actions.cpp:699
 msgid "Assign a netclass to nets matching a pattern"
@@ -17227,7 +17227,7 @@ msgstr "Näytä ERC Varoitukset"
 
 #: eeschema/tools/ee_actions.cpp:710
 msgid "Show markers for electrical rules checker warnings"
-msgstr "Näytä merkinnät sähköisten sääntöjen tarkastusvaroituksista"
+msgstr "Näytä merkinnät sähkösääntöjen tarkastusvaroituksista"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Show ERC Errors"
@@ -17235,7 +17235,7 @@ msgstr "Näytä ERC Virheet"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Show markers for electrical rules checker errors"
-msgstr "Näytä merkinnät sähköisten sääntöjen tarkastusvirheistä"
+msgstr "Näytä merkinnät sähkösääntöjen tarkastusvirheistä"
 
 #: eeschema/tools/ee_actions.cpp:718
 msgid "Show ERC Exclusions"
@@ -17243,7 +17243,7 @@ msgstr "Näytä ERC Poikkeukset"
 
 #: eeschema/tools/ee_actions.cpp:719
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "Näytä merkinnät sähköisten sääntöjen tarkastusrikkeistä"
+msgstr "Näytä merkinnät sähkösääntöjen tarkastusrikkeistä"
 
 #: eeschema/tools/ee_actions.cpp:723 eeschema/tools/ee_actions.cpp:728
 #: eeschema/tools/ee_actions.cpp:734 eeschema/tools/ee_actions.cpp:740
@@ -20040,7 +20040,7 @@ msgstr "Muunna bittikarttakuvat kytkentäkaavioiksi tai piirilevykomponenteiksi"
 #: kicad/tools/kicad_manager_actions.cpp:115
 #: pcb_calculator/pcb_calculator_frame.cpp:53
 msgid "Calculator Tools"
-msgstr "Laskin-työkalut"
+msgstr "Laskintyökalut"
 
 #: kicad/tools/kicad_manager_actions.cpp:115
 msgid "Run component calculations, track width calculations, etc."
@@ -21827,7 +21827,7 @@ msgstr "välysreiän halkaisija:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "välysreiän halkaisija maatasossa"
+msgstr "Välysreiän halkaisija maatasossa"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -23518,7 +23518,7 @@ msgstr "Viitenumero"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 msgid "Round locations to:"
-msgstr "Pyöreät sijainnit:"
+msgstr "Pyöristä sijainnit kohteeseen:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:144
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:151
@@ -23682,7 +23682,7 @@ msgstr "Kortin kerrospino"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:92
 msgid "Board Editor Layers"
-msgstr "Hallituseditorin tasot"
+msgstr "Levyeditorin Kerrokset"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:95
 msgid "Physical Stackup"
@@ -23695,7 +23695,7 @@ msgstr "Piirilevyn pinnoite"
 #: pcbnew/dialogs/dialog_board_setup.cpp:101
 #: pcbnew/dialogs/dialog_plot.cpp:1141
 msgid "Solder Mask/Paste"
-msgstr "Juotosnaamio / liitä"
+msgstr "Juotosmaski/Liitä"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:103
 msgid "Text & Graphics"
@@ -24627,7 +24627,7 @@ msgstr "Tekstikehys:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:41
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:49
 msgid "Draw a shape around the leader text"
-msgstr "Piirrä muoto johtajatekstin ympärille"
+msgstr "Piirrä muoto päätekstin ympärille"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:76
@@ -24676,8 +24676,8 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
-"Tämän ulottuvuuden yksiköt (\"automaattinen\" seuraamaan editorissa "
-"valittuja yksiköitä)"
+"Tämän mittojen yksiköt (\"automaattinen\" seuraamaan editorissa valittuja "
+"yksiköitä)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
@@ -25351,7 +25351,7 @@ msgstr "Tulostustila"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr "Vie mustina elementteinä valkoisella pohjalla"
+msgstr "Vie mustina elementteinä valkoiselle taustalle"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -26303,7 +26303,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Drill Units"
-msgstr "Poraa yksiköt"
+msgstr "Poraa Yksiköt"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Decimal format (recommended)"
@@ -26891,12 +26891,12 @@ msgstr "Kierrä kohteen ankkurin ympärillä"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:107
 msgid "Rotate around selection center"
-msgstr "Kierrä valintakeskuksen ympäri"
+msgstr "Kierrä valinnan keskuksen ympäri"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:110
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around local coordinates origin"
-msgstr "Kierrä paikallisten koordinaattien alkuperän ympäri"
+msgstr "Kierrä paikallisten koordinaattien alkupisteen ympäri"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:113
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
@@ -26928,7 +26928,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
-msgstr "Kierrä valinnan keskiosaa"
+msgstr "Kierrä valinnan keskikohdan ympäri"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:84
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:116
@@ -27012,7 +27012,7 @@ msgstr "Ilmoita tiedosto"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:28
 msgid "Net name filter:"
-msgstr "Nettosuodatin:"
+msgstr "Verkon nimisuodatin:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:35
 msgid "Show zero pad nets"
@@ -27487,7 +27487,7 @@ msgstr "Viistetty suorakulmio"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:100
 msgid "Chamfered with other corners rounded"
-msgstr "Viistetty muiden kulmien kanssa pyöristettynä"
+msgstr "Viistetty, muut kulmat pyöristetyt"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:100
 msgid "Custom (circular base)"
@@ -28412,7 +28412,7 @@ msgstr "Tila"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:28
 msgid "Free angle mode (no shove/walkaround)"
-msgstr "Vapaa kulmatila (ei työntöä / kiertämistä)"
+msgstr "Vapaa kulmatila (ei työntöä/kiertämistä)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Shove vias"
@@ -28947,7 +28947,7 @@ msgstr "Läpiviennin reikä:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
-msgstr "Käytä nettoluokkakokoja"
+msgstr "Käytä Verkkoluokkakokoja"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 msgid "Via type:"
@@ -31576,7 +31576,7 @@ msgstr "Kappaleen pää on yhdistämätön"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
-msgstr "Reiän raivaaminen"
+msgstr "Reiän välyksen rikkomus"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
@@ -32258,7 +32258,7 @@ msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
-"Tiedosto sisältää anturamuotoja joita Hyperlynx-vienti ei tue (tuettuja "
+"Tiedosto sisältää anturamuotoja, joita Hyperlynx-vienti ei tue. (Tuettuja "
 "muotoja ovat ovaali, pyöristetty suorakulmio ja ympyrä)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:175
@@ -34508,7 +34508,7 @@ msgstr "Valmistusominaisuus"
 
 #: pcbnew/pad.cpp:1765
 msgid "Round Radius Ratio"
-msgstr "Pyöreän säteen suhde"
+msgstr "Pyöreän Säteen Suhde"
 
 #: pcbnew/pcb_base_frame.cpp:189
 msgid "Error loading project footprint libraries."
@@ -38505,7 +38505,7 @@ msgstr "Lisää jalanjäljen"
 
 #: pcbnew/tools/pcb_actions.cpp:719
 msgid "Drill/Place File Origin"
-msgstr "Poraa / aseta tiedoston alkuperä"
+msgstr "Pora/Aseta Tiedoston Alkupiste"
 
 #: pcbnew/tools/pcb_actions.cpp:720
 msgid "Place origin point for drill files and component placement files"
@@ -38639,7 +38639,7 @@ msgstr "Näytä verkkotarkastaja"
 
 #: pcbnew/tools/pcb_actions.cpp:850
 msgid "Show Appearance Manager"
-msgstr "Näytä Ulkoasun hallinta"
+msgstr "Näytä Ulkoasun Hallintapaneeli"
 
 #: pcbnew/tools/pcb_actions.cpp:850
 msgid "Show/hide the appearance manager"
@@ -38655,7 +38655,7 @@ msgstr "Näytä/piilota ominaisuuspaneeli"
 
 #: pcbnew/tools/pcb_actions.cpp:860
 msgid "Flip Board View"
-msgstr "Kääntötaulunäkymä"
+msgstr "Käännä Piirilevyn Näkymä"
 
 #: pcbnew/tools/pcb_actions.cpp:860
 msgid "View board from the opposite side"
@@ -39240,7 +39240,7 @@ msgstr "Vaihda reititin työntötilaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1439
 msgid "Router Walkaround Mode"
-msgstr "Reitittimen kävelytila"
+msgstr "Reitittimen Kävelytila"
 
 #: pcbnew/tools/pcb_actions.cpp:1439
 msgid "Switch router to walkaround mode"
@@ -39788,7 +39788,7 @@ msgstr "Ei-aktiiviset tasot piilotetaan"
 #: pcbnew/widgets/appearance_controls.cpp:646
 #: pcbnew/widgets/appearance_controls.cpp:1708
 msgid "Flip board view"
-msgstr "Kääntötaulunäkymä"
+msgstr "Käännä piirilevyn näkymä"
 
 #: pcbnew/widgets/appearance_controls.cpp:668
 #: pcbnew/widgets/appearance_controls.cpp:2367
