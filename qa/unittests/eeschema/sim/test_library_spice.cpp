@@ -125,9 +125,88 @@ public:
 BOOST_FIXTURE_TEST_SUITE( SimLibrarySpice, TEST_SIM_LIBRARY_SPICE_FIXTURE )
 
 
+BOOST_AUTO_TEST_CASE( Subckts )
+{
+    LOCALE_IO toggle;
+
+    LoadLibrary( "subckts" );
+
+    const std::vector<SIM_LIBRARY::MODEL> models = m_library->GetModels();
+
+    BOOST_CHECK_EQUAL( models.size(), 6 );
+
+    for( int i = 0; i < models.size(); ++i )
+    {
+        const auto& [modelName, model] = models.at( i );
+
+        switch( i )
+        {
+        case 0:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::SUBCKT );
+            BOOST_CHECK_EQUAL( modelName, "NO_PARAMS_0" );
+            break;
+
+        case 1:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::SUBCKT );
+            BOOST_CHECK_EQUAL( modelName, "ONE_PARAM_1" );
+            BOOST_REQUIRE_EQUAL( model.GetParamCount(), 1 );
+            BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.name, "PARAM1" );
+            BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.defaultValue, "1" );
+            BOOST_REQUIRE_EQUAL( model.GetPinCount(), 2 );
+            BOOST_CHECK_EQUAL( model.GetPin( 0 ).name, "1" );
+            BOOST_CHECK_EQUAL( model.GetPin( 1 ).name, "2" );
+            break;
+
+        case 2:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::SUBCKT );
+            BOOST_CHECK_EQUAL( modelName, "ONE_PARAM_SHORT_FORM_2" );
+            BOOST_REQUIRE_EQUAL( model.GetParamCount(), 1 );
+            BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.name, "PARAM1" );
+            BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.defaultValue, "1.0" );
+            BOOST_CHECK_EQUAL( model.GetPin( 0 ).name, "1" );
+            BOOST_CHECK_EQUAL( model.GetPin( 1 ).name, "2" );
+            break;
+
+        case 3:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::SUBCKT );
+            BOOST_CHECK_EQUAL( modelName, "two_params_3" );
+            BOOST_REQUIRE_EQUAL( model.GetParamCount(), 2 );
+            BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.name, "param1" );
+            BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.defaultValue, "1.1e+1" );
+            BOOST_CHECK_EQUAL( model.GetParam( 1 ).info.name, "param2" );
+            BOOST_CHECK_EQUAL( model.GetParam( 1 ).info.defaultValue, "2.2e+2" );
+            BOOST_REQUIRE_EQUAL( model.GetPinCount(), 2 );
+            BOOST_CHECK_EQUAL( model.GetPin( 0 ).name, "1" );
+            BOOST_CHECK_EQUAL( model.GetPin( 1 ).name, "2" );
+            break;
+
+        case 4:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::SUBCKT );
+            BOOST_CHECK_EQUAL( modelName, "two_params_short_form_4" );
+            BOOST_REQUIRE_EQUAL( model.GetParamCount(), 2 );
+            BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.name, "param1" );
+            BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.defaultValue, "1.1E+1" );
+            BOOST_CHECK_EQUAL( model.GetParam( 1 ).info.name, "param2" );
+            BOOST_CHECK_EQUAL( model.GetParam( 1 ).info.defaultValue, "2.2E+2" );
+            BOOST_REQUIRE_EQUAL( model.GetPinCount(), 2 );
+            BOOST_CHECK_EQUAL( model.GetPin( 0 ).name, "1" );
+            BOOST_CHECK_EQUAL( model.GetPin( 1 ).name, "2" );
+            break;
+
+        case 5:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::SUBCKT );
+            BOOST_CHECK_EQUAL( modelName, "NOTHING_5" );
+            BOOST_CHECK_EQUAL( model.GetParamCount(), 0 );
+            BOOST_CHECK_EQUAL( model.GetPinCount(), 0 );
+            break;
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( Diodes )
 {
-    LOCALE_IO dummy;
+    LOCALE_IO toggle;
 
     LoadLibrary( "diodes" );
 
@@ -141,129 +220,129 @@ BOOST_AUTO_TEST_CASE( Diodes )
 
         switch( i )
         {
-            case 0:
-                BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
-                BOOST_CHECK_EQUAL( modelName, "1N4148" );
-                BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "100" );
-                BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "4p" );
-                BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100u" );
-                BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "4n" );
-                BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "330m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2" );
-                BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "500m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "10n" );
-                BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value->ToString(), "800m" );
-                break;
+        case 0:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
+            BOOST_CHECK_EQUAL( modelName, "1N4148" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "100" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "4p" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100u" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "4n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "330m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "500m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "10n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value->ToString(), "800m" );
+            break;
 
-            case 1:
-                BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
-                BOOST_CHECK_EQUAL( modelName, "D1" );
-                BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "1.23n" );
-                BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "1.23" );
-                BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "789m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "12.34m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
-                BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.23" );
-                BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "900f" );
-                BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "560m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value->ToString(), "780m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value->ToString(), "900m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "isr" )->value->ToString(), "12.34n" );
-                BOOST_CHECK_EQUAL( model.FindParam( "nr" )->value->ToString(), "2.345" );
-                BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "100" );
-                BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100u" );
-                BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "12.34n" );
-                break;
+        case 1:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
+            BOOST_CHECK_EQUAL( modelName, "D1" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "1.23n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "1.23" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "789m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "12.34m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.23" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "900f" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "560m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value->ToString(), "780m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value->ToString(), "900m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "isr" )->value->ToString(), "12.34n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "nr" )->value->ToString(), "2.345" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "100" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100u" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "12.34n" );
+            break;
 
-            case 2:
-            case 3:
-                CompareToUsualDiodeModel( model, modelName, i );
-                break;
+        case 2:
+        case 3:
+            CompareToUsualDiodeModel( model, modelName, i );
+            break;
 
-            case 4:
-                BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
-                BOOST_CHECK_EQUAL( modelName, "D4" );
-                BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "100f" );
-                BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "2" );
-                BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "3p" );
-                BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "45n" );
-                BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "678" );
-                BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100f" );
-                break;
+        case 4:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
+            BOOST_CHECK_EQUAL( modelName, "D4" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "100f" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "3p" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "45n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "678" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100f" );
+            break;
 
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                CompareToEmptyModel( model, modelName, i );
-                break;
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            CompareToEmptyModel( model, modelName, i );
+            break;
 
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-                CompareToUsualDiodeModel( model, modelName, i );
-                break;
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+            CompareToUsualDiodeModel( model, modelName, i );
+            break;
 
-            case 18:
-                BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
-                BOOST_CHECK_EQUAL( modelName, "D<>/?:\\|[]!@#$%^&-_18" );
-                BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "-1.1" );
-                BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "2.2" );
-                BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "-3.3m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "44k" );
-                BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "55u" );
-                BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "6.6M" );
-                break;
+        case 18:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
+            BOOST_CHECK_EQUAL( modelName, "D<>/?:\\|[]!@#$%^&-_18" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "-1.1" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "2.2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "-3.3m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "44k" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "55u" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "6.6M" );
+            break;
 
-            case 19:
-            case 20:
-            case 21:
-                CompareToUsualDiodeModel( model, modelName, i );
-                break;
+        case 19:
+        case 20:
+        case 21:
+            CompareToUsualDiodeModel( model, modelName, i );
+            break;
 
-            case 22:
-                BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
-                BOOST_CHECK_EQUAL( modelName, "D22" );
-                BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "11.1n" );
-                BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2.2" );
-                BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "33.3m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "99.9" );
-                BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
-                BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.1" );
-                break;
+        case 22:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
+            BOOST_CHECK_EQUAL( modelName, "D22" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "11.1n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2.2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "33.3m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "99.9" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.1" );
+            break;
 
-            case 23:
-                BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
-                BOOST_CHECK_EQUAL( modelName, "D23" );
-                BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "11.1n" );
-                BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2.2" );
-                BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "33.3m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "111.1" );
-                BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
-                BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "2.2" );
-                BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "300m" );
-                break;
+        case 23:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
+            BOOST_CHECK_EQUAL( modelName, "D23" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "11.1n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2.2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "33.3m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "111.1" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "2.2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "300m" );
+            break;
 
-            case 24:
-                BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
-                BOOST_CHECK_EQUAL( modelName, "D24" );
-                BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "11.1n" );
-                BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "1.1" );
-                BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "33.3m" );
-                BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "99.9" );
-                BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
-                BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.1" );
-                break;
+        case 24:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
+            BOOST_CHECK_EQUAL( modelName, "D24" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "11.1n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "1.1" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "33.3m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "99.9" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.1" );
+            break;
 
-            default:
-                BOOST_FAIL( "Unknown parameter index" );
-                break;
+        default:
+            BOOST_FAIL( "Unknown parameter index" );
+            break;
         }
     }
 }
@@ -271,7 +350,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
 
 BOOST_AUTO_TEST_CASE( Bjts )
 {
-    LOCALE_IO dummy;
+    LOCALE_IO toggle;
 
     LoadLibrary( "bjts" );
 
@@ -331,7 +410,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
 
 BOOST_AUTO_TEST_CASE( Fets )
 {
-    LOCALE_IO dummy;
+    LOCALE_IO toggle;
 
     LoadLibrary( "fets" );
 

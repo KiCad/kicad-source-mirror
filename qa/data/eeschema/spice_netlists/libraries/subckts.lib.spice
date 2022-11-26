@@ -1,0 +1,36 @@
+*
+* subckts.lib.spice
+*
+
+.SUBCKT NO_PARAMS_0 1 2
+
+R1 1 2 1K
+
+.ENDS
+
+
+.subckt ONE_PARAM_1 1 2 PARAMS: PARAM1=1
+
+R1 1 2 1K
+
+.endsubckt
+
+
+.SUBCKT ONE_PARAM_SHORT_FORM_2 1 2 PARAM1=1.0
+
+R1 1 2 1K
+
+.ENDSUBCKT
+
+
+.subckt two_params_3 1 2 Params: param1=1.1e+1 param2=2.2e+2
+R1 1 2 1K
+.ends
+
+.subckt two_params_short_form_4 1 2 param1=1.1E+1 param2=2.2E+2
+R1 1 2 1K
+.ends
+
+.subckt NOTHING_5
+R1 1 2 1K
+.ends
