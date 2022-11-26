@@ -41,6 +41,7 @@ namespace SIM_MODEL_SUBCKT_SPICE_PARSER
     template <> struct spiceUnitSelector<dotSubcktPinName> : std::true_type {};
     template <> struct spiceUnitSelector<dotSubcktParams> : std::true_type {};
     template <> struct spiceUnitSelector<param> : std::true_type {};
+    template <> struct spiceUnitSelector<paramValue> : std::true_type {};
     template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE_INT, NOTATION::SPICE>>
         : std::true_type {};
     template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SPICE>>
@@ -111,21 +112,16 @@ void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
 
                             model.AddParam( *model.m_paramInfos.back() );
                         }
+                        else if( subsubnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::paramValue>() )
+                        {
+                            wxASSERT( model.m_paramInfos.size() > 0 );
+                            model.m_paramInfos.back()->defaultValue = subsubnode->string();
+                        }
                         else
                         {
                             wxFAIL_MSG( "Unhandled parse tree subsubnode" );
                         }
                     }
-                }
-                else if( subnode->is_type<
-                        SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE_INT,
-                            SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>()
-                    || subnode->is_type<
-                        SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
-                            SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>() )
-                {
-                    wxASSERT( model.m_paramInfos.size() > 0 );
-                    model.m_paramInfos.back()->defaultValue = subnode->string();
                 }
             }
         }

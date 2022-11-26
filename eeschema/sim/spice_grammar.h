@@ -110,7 +110,6 @@ namespace SPICE_GRAMMAR
     // Param names cannot be `token` because LTspice models contain spurious values without
     // parameter names, which we need to skip.
     struct param : identifier {};
-
     struct paramValue : token {};
 
     struct paramValuePair : seq<param,
@@ -145,12 +144,20 @@ namespace SPICE_GRAMMAR
                                      
 
 
-    struct dotSubcktPinName : seq<not_at<TAO_PEGTL_ISTRING( "params:" )>,
+    struct dotSubcktParamValuePair : seq<param,
+                                         // TODO: Check if these `star<space>`s match Ngspice's
+                                         // behavior.
+                                         star<space>,
+                                         one<'='>,
+                                         star<space>,
+                                         paramValue> {};
+    struct dotSubcktParamValuePairs : list<dotSubcktParamValuePair, sep> {};
+    struct dotSubcktParams : seq<opt<TAO_PEGTL_ISTRING( "params:" ),
+                                     opt<sep>>,
+                                 dotSubcktParamValuePairs> {};
+    struct dotSubcktPinName : seq<not_at<dotSubcktParams>,
                                   plus<not_at<space>, any>> {};
     struct dotSubcktPinSequence : list<dotSubcktPinName, sep> {};
-    struct dotSubcktParams : seq<TAO_PEGTL_ISTRING( "params:" ),
-                                 sep,
-                                 paramValuePairs> {};
     struct dotSubcktEnd : seq<TAO_PEGTL_ISTRING( ".ends" ),
                               until<newline>> {};
     struct spiceUnit;
