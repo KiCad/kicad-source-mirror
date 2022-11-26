@@ -612,18 +612,26 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             if( padShape->Collide( otherShape.get(), std::max( 0, clearance - m_drcEpsilon ),
                                    &actual, &pos ) )
             {
-                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
-                wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                          constraint.GetName(),
-                                          clearance,
-                                          actual );
+                if( m_drcEngine->IsNetTieExclusion( pad->GetNetCode(), aLayer, pos, other ) )
+                {
+                    // Pads connected to pads of a net-tie footprint are allowed to collide
+                    // with the net-tie footprint's graphics.
+                }
+                else
+                {
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                              constraint.GetName(),
+                                              clearance,
+                                              actual );
 
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                drce->SetItems( pad, other );
-                drce->SetViolatingRule( constraint.GetParentRule() );
+                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                    drce->SetItems( pad, other );
+                    drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, pos, aLayer );
-                testHoles = false;  // No need for multiple violations
+                    reportViolation( drce, pos, aLayer );
+                    testHoles = false;  // No need for multiple violations
+                }
             }
         }
     }
