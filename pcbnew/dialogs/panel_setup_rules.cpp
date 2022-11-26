@@ -406,7 +406,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
         else if( sexprs.top() == wxT( "zone_connection" ) )
         {
-            tokens = wxT( "none|solid|thermal_relief" );
+            tokens = wxT( "none|solid|thermal_reliefs" );
         }
         else if( sexprs.top() == wxT( "min_resolved_spokes" ) )
         {
