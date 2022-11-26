@@ -216,13 +216,16 @@ PCB_TRACK* TEARDROP_MANAGER::findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_
 
         if( match )
         {
-            // if faced with a Y junction, stop here
+            // if faced with a Y junction, choose the track longest segment as candidate
             matches++;
 
             if( matches > 1 )
             {
-                aMatchType = 0;
-                return nullptr;
+                double previous_len = candidate->GetLength();
+                double curr_len = curr_track->GetLength();
+
+                if( previous_len >= curr_len )
+                    continue;
             }
 
             aMatchType = match;
@@ -692,6 +695,10 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( TEARDROP_PARAMETERS* aCurrP
     // Note: aTrack can be modified if the initial track is too short
     if( !findAnchorPointsOnTrack( aCurrParams, start, end, aTrack, aViaPad, &track_stub_len,
                                   aFollowTracks, aTrackLookupList ) )
+        return false;
+
+    // The start and end points must be different to calculate a valid polygon shape
+    if( start == end )
         return false;
 
     VECTOR2D vecT = NormalizeVector(end - start);
