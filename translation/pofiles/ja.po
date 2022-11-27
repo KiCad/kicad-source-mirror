@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-26 09:53+0000\n"
-"Last-Translator: Keisuke Nakao <chome@argv.org>\n"
+"PO-Revision-Date: 2022-11-30 00:09+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -28733,7 +28733,7 @@ msgstr "選択されたレイヤー上に置くテキストを入力します。
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
 msgid "Knockout"
-msgstr "打ち抜き"
+msgstr "白抜き文字"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
 msgid "Keep text upright"
