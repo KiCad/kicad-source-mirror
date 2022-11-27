@@ -34,6 +34,7 @@ namespace PNS
 // Settings for the CONVERT_TOOL.
 struct CONVERT_SETTINGS
 {
+    bool m_StrokeHulls;
     bool m_IgnoreLineWidths;
     bool m_DeleteOriginals;
 };

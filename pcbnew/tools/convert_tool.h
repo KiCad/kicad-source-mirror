@@ -90,8 +90,9 @@ private:
      * @param aItems is a list of items to process.
      * @return a #SHAPE_POLY_SET containing any polygons that were created.
      */
-    SHAPE_POLY_SET makePolysFromGraphics( const std::deque<EDA_ITEM*>& aItems,
-                                          bool aIgnoreLineWidths );
+    SHAPE_POLY_SET makePolysFromOpenGraphics( const std::deque<EDA_ITEM*>& aItems );
+    SHAPE_POLY_SET makePolysFromClosedGraphics( const std::deque<EDA_ITEM*>& aItems,
+                                                bool aIgnoreLineWidths );
 
     PCB_SELECTION_TOOL* m_selectionTool;
     CONDITIONAL_MENU*   m_menu;

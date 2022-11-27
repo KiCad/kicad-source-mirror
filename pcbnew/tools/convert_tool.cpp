@@ -45,6 +45,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <trigo.h>
+#include <macros.h>
 #include <zone.h>
 
 #include "convert_tool.h"
@@ -203,7 +204,6 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
     PCB_LAYER_ID                destLayer = m_frame->GetActiveLayer();
     FOOTPRINT*                  parentFootprint = nullptr;
     bool                        foundChainedSegs = false;
-    bool                        foundFilledShape = false;
 
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -219,23 +219,28 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
                 polys.clear();
 
                 for( EDA_ITEM* item : selection )
-                {
                     item->ClearTempFlags();
 
-                    if( item->Type() == PCB_SHAPE_T || item->Type() == PCB_FP_SHAPE_T )
-                        foundFilledShape = static_cast<PCB_SHAPE*>( item )->IsFilled();
-                }
-
                 SHAPE_POLY_SET polySet;
+                SHAPE_POLY_SET temp;
 
-                if( convertSettings.m_IgnoreLineWidths )
+                polySet.Append( makePolysFromClosedGraphics( selection.GetItems(),
+                                                             convertSettings.m_IgnoreLineWidths ) );
+
+                temp = makePolysFromChainedSegs( selection.GetItems() );
+
+                if( !temp.IsEmpty() )
                 {
-                    polySet.Append( makePolysFromChainedSegs( selection.GetItems() ) );
-                    foundChainedSegs = polySet.OutlineCount() > 0;
+                    polySet.Append( temp );
+                    foundChainedSegs = true;
+                }
+                else
+                {
+                    for( EDA_ITEM* item : selection )
+                        item->ClearTempFlags();
                 }
 
-                polySet.Append( makePolysFromGraphics( selection.GetItems(),
-                                                       convertSettings.m_IgnoreLineWidths ) );
+                polySet.Append( makePolysFromOpenGraphics( selection.GetItems() ) );
 
                 if( polySet.IsEmpty() )
                     return false;
@@ -257,8 +262,8 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
     // to true.
     // We also use the pre-flight to keep from putting up any of the dialogs if there's nothing
     // to convert.
-    convertSettings.m_IgnoreLineWidths = true;
-    convertSettings.m_DeleteOriginals = false;
+    convertSettings.m_IgnoreLineWidths = false;
+    convertSettings.m_DeleteOriginals = true;
 
     if( !getPolys() )
         return 0;
@@ -294,7 +299,6 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
             PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
 
             graphic->SetShape( SHAPE_T::POLY );
-            graphic->SetFilled( !convertSettings.m_IgnoreLineWidths || foundFilledShape );
             graphic->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID, COLOR4D::UNSPECIFIED ) );
             graphic->SetLayer( destLayer );
             graphic->SetPolyShape( poly );
@@ -572,8 +576,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
 }
 
 
-SHAPE_POLY_SET CONVERT_TOOL::makePolysFromGraphics( const std::deque<EDA_ITEM*>& aItems,
-                                                    bool aIgnoreLineWidths )
+SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITEM*>& aItems )
 {
     BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
     SHAPE_POLY_SET         poly;
@@ -590,9 +593,46 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromGraphics( const std::deque<EDA_ITEM*>&
         {
             PCB_SHAPE* temp = static_cast<PCB_SHAPE*>( item->Clone() );
 
-            if( aIgnoreLineWidths )
-                temp->SetFilled( true );
+            if( temp->IsClosed() )
+                continue;
 
+            temp->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
+                                           false );
+            item->SetFlags( SKIP_STRUCT );
+            break;
+        }
+
+        default:
+            continue;
+        }
+    }
+
+    return poly;
+}
+
+
+SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_ITEM*>& aItems,
+                                                        bool aIgnoreLineWidths )
+{
+    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
+    SHAPE_POLY_SET         poly;
+
+    for( EDA_ITEM* item : aItems )
+    {
+        if( item->GetFlags() & SKIP_STRUCT )
+            continue;
+
+        switch( item->Type() )
+        {
+        case PCB_SHAPE_T:
+        case PCB_FP_SHAPE_T:
+        {
+            PCB_SHAPE* temp = static_cast<PCB_SHAPE*>( item->Clone() );
+
+            if( !temp->IsClosed() )
+                continue;
+
+            temp->SetFilled( true );
             temp->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
                                            aIgnoreLineWidths );
             item->SetFlags( SKIP_STRUCT );

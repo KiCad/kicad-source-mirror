@@ -138,6 +138,38 @@ double EDA_SHAPE::GetLength() const
 }
 
 
+bool EDA_SHAPE::IsClosed() const
+{
+    switch( m_shape )
+    {
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::RECT:
+        return true;
+
+    case SHAPE_T::ARC:
+    case SHAPE_T::SEGMENT:
+        return false;
+
+    case SHAPE_T::POLY:
+        if( m_poly.IsEmpty() )
+            return false;
+        else
+            return m_poly.Outline( 0 ).IsClosed();
+
+    case SHAPE_T::BEZIER:
+        if( m_bezierPoints.size() < 3 )
+            return false;
+        else
+            return m_bezierPoints[0] == m_bezierPoints[ m_bezierPoints.size() - 1 ];
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+        return false;
+    }
+}
+
+
+
 void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
 {
     switch ( m_shape )

@@ -100,6 +100,8 @@ public:
     void SetFillMode( FILL_T aFill )           { m_fill = aFill; }
     FILL_T GetFillMode() const                 { return m_fill; }
 
+    bool IsClosed() const;
+
     COLOR4D GetFillColor() const               { return m_fillColor; }
     void SetFillColor( const COLOR4D& aColor ) { m_fillColor = aColor; }
 
