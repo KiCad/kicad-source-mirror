@@ -78,6 +78,9 @@ protected:
 
     /// Proportion of the grid column splitter that is used for the key column (0.0 - 1.0)
     float m_splitter_key_proportion;
+
+    /// Skips one call to update()
+    bool m_skipNextUpdate;
 };
 
 #endif /* PROPERTIES_PANEL_H */

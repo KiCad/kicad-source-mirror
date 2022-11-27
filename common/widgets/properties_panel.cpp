@@ -37,7 +37,8 @@ extern APIIMPORT wxPGGlobalVarsClass* wxPGGlobalVars;
 PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         wxPanel( aParent ),
         m_frame( aFrame ),
-        m_splitter_key_proportion( -1 )
+        m_splitter_key_proportion( -1 ),
+        m_skipNextUpdate( false )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -88,6 +89,15 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
 
 void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 {
+    if( m_skipNextUpdate )
+    {
+        m_skipNextUpdate = false;
+        return;
+    }
+
+    if( m_grid->IsEditorFocused() )
+        m_grid->CommitChangesFromEditor();
+
     m_grid->Clear();
     m_displayed.clear();
 

@@ -115,6 +115,9 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
         item->Set( property, newValue );
     }
 
+    // Pushing the commit will result in a SelectedItemsModified event, which we want to skip
+    m_skipNextUpdate = true;
+
     changes.Push( _( "Change property" ) );
     m_frame->Refresh();
 }
