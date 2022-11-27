@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-11-21 18:47+0000\n"
+"PO-Revision-Date: 2022-11-30 01:23+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -27331,7 +27331,7 @@ msgstr "Povolit mikro prokov (uVia)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:55
 msgid "Arc/circle approximated by segments"
-msgstr ""
+msgstr "Oblouk/kružnice aproximovaná po segmentech"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:68
 msgid "Max allowed deviation:"
@@ -27410,6 +27410,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální izolační mezera mezi měděnými prvky, které nepatří do stejné "
+"sítě.  Je-li definován, jedná se o absolutní minimum, které nelze snížit "
+"třídou spojů, vlastními pravidly nebo jinými parametry."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -27420,6 +27423,9 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální šířka spoje.  Pokud je to nastaveno, jedná se o absolutní minimum "
+"a nelze jej snížit pomocí Tříd spojů, vlastních pravidel nebo jiných "
+"nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -27430,6 +27436,8 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální šířka prstence.  Je-li nastaveno, jedná se o absolutní minimum a "
+"nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -27440,6 +27448,8 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální průměr prokovu.  Je-li nastaveno, jedná se o absolutní minimum a "
+"nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper to hole clearance:"
@@ -27451,6 +27461,9 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"Minimální izolační mezera mezi otvorem a neasociovaným měděným prvkem.  "
+"Pokud je definován, jedná se o absolutní minimum, které nelze snížit "
+"vlastními pravidly nebo jinými parametry."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 msgid "Copper to edge clearance:"
@@ -27462,6 +27475,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"Minimální izolační mezera mezi hranou desky a jakoukoli položkou mědi.  Je-"
+"li nastaveno, jedná se o absolutní minimum a nelze jej redukovat vlastními "
+"pravidly nebo jiným nastavením."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -27476,6 +27492,9 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"Minimální velikost průchozí díry.  Je-li nastaveno, jedná se o absolutní "
+"minimum a nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných "
+"nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
@@ -27487,6 +27506,9 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"Minimální vzdálenost mezi dvěma vyvrtanými otvory.   Je-li nastaveno, jedná "
+"se o absolutní minimum a nelze jej redukovat vlastními pravidly nebo jiným "
+"nastavením. (Poznámka: nevztahuje se na frézované otvory.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -27501,6 +27523,9 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální průměr pro mikro-prokovy.  Je-li nastaveno, jedná se o absolutní "
+"minimum a nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných "
+"nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
@@ -27511,6 +27536,9 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální velikost otvoru mikro-prokovu.  Je-li nastaveno, jedná se o "
+"absolutní minimum a nelze jej snížit pomocí tříd spojů, vlastních pravidel "
+"nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
