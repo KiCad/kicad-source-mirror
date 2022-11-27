@@ -287,11 +287,11 @@ VECTOR2I FONT::StringBoundaryLimits( const wxString& aText, const VECTOR2I& aSiz
     if( IsStroke() )
     {
         // Inflate by a bit more than thickness/2 to catch diacriticals, descenders, etc.
-        boundingBox.Inflate( KiROUND( aThickness * 0.75 ) );
+        boundingBox.Inflate( KiROUND( aThickness * 1.5 ) );
     }
     else if( IsOutline() )
     {
-        // Outline fonts have thickness built in
+        // Outline fonts have thickness built in, and *usually* stay within their ascent/descent
     }
 
     return boundingBox.GetSize();
