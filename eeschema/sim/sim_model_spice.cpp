@@ -22,8 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <confirm.h>
-
 // Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
 // (especially on msys2 + wxWidgets 3.0.x)
 #include <sim/sim_model_spice.h>
@@ -59,18 +57,13 @@ std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const
 std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
                                                           const std::string& aSpiceCode )
 {
-    auto model = static_cast<SIM_MODEL_SPICE*>(
+    auto model = dynamic_cast<SIM_MODEL_SPICE*>(
             SIM_MODEL::Create( SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode ) ).release() );
 
-    try
-    {
-        model->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
-    }
-    catch( const IO_ERROR& e )
-    {
-        DisplayErrorMessage( nullptr, e.What() );
-    }
+    if( !model )
+        THROW_IO_ERROR( "Could not determine Spice model type" );
 
+    model->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
     return std::unique_ptr<SIM_MODEL_SPICE>( model );
 }
 
