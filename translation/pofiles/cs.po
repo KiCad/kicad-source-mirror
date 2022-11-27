@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-20 18:07+0000\n"
+"PO-Revision-Date: 2022-11-30 00:08+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -3279,6 +3279,20 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad umí vývojářům anonymně hlásit pády a speciální data událostí, aby "
+"efektivněji napomohl identifikaci kritických chyb napříč uživatelskou "
+"základnou a pomohl funkcionalitě profilu usměrňovat vylepšení.\n"
+"\n"
+"Pro propojení automatických sestav ze stejné instalace KiCadu se vygeneruje "
+"jedinečný identifikátor, který je zcela náhodný, používá se pouze pro účely "
+"hlášení pádu. K tomuto identifikátoru nejsou ukládány ani připojeny žádné "
+"osobně identifikovatelné informace (PII) včetně adresy IP. S poskytnutým "
+"tlačítkem můžete toto ID kdykoliv resetovat.\n"
+"\n"
+"Pokud se rozhodnete pro dobrovolnou účast, KiCad bude automaticky "
+"zpracovávat odesílání zmíněných hlášení, když dojde k haváriím nebo "
+"událostem. Návrhové soubory jako schématai nebo DPS nejsou v tomto procesu "
+"sdíleny."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -5428,7 +5442,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:362
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "Sběr dat pouze na vyžádání"
 
 #: common/pgm_base.cpp:426
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -12236,9 +12250,8 @@ msgstr ""
 "Procento velikosti textu k odsazení textu nad nebo pod vodičem nebo sběrnicí"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Global label margin:"
-msgstr "Globální označení velikost:"
+msgstr "Rozpětí globálních označení:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:83
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:88
@@ -12785,7 +12798,7 @@ msgstr "Duplicitní názvy listů v daném listu"
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
-msgstr ""
+msgstr "Vývod symbolu nebo spoj mimo mřížku"
 
 #: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
@@ -13451,7 +13464,7 @@ msgstr "N&astavení"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "Nepodařilo se vygenerovat název pro '%s': překročen UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:339
 msgid ""
@@ -13464,7 +13477,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:383
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "Nelze otevřít soubor '%s' pro zápis modelu IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:433
 #, c-format
@@ -14111,6 +14124,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"Písma CADSTAR se liší od těch v programu KiCad. Pravděpodobně to bude zdroj "
+"problémů s vyrovnáváním. Pečlivě si prohlédněte importované textové prvky a "
+"v případě potřeby je opravte ručně."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:265
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -16372,8 +16388,9 @@ msgid "Update symbol to match changes made in parent symbol"
 msgstr "Aktualizovat symbol se změnami provedenými v nadřazeném symbolu"
 
 #: eeschema/tools/ee_actions.cpp:186
+#, fuzzy
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "Nastavit zobrazovaný název jednotky..."
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
@@ -17118,9 +17135,8 @@ msgid "Line Mode for Wires and Buses"
 msgstr "Vynutit H/V spoje a sběrnice"
 
 #: eeschema/tools/ee_actions.cpp:723
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "Kreslit obdélník"
+msgstr "Kreslit a táhnout v libovolném úhlu"
 
 #: eeschema/tools/ee_actions.cpp:729
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
@@ -17615,9 +17631,8 @@ msgstr ""
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:37
-#, fuzzy
 msgid "Do not update library tables"
-msgstr "Upravit tabulku knihoven součástek"
+msgstr "Neaktualizovat tabulky knihoven"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:35
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:42
@@ -17719,9 +17734,8 @@ msgid "Switch"
 msgstr "Přepínaná"
 
 #: eeschema/widgets/tuner_slider_base.cpp:70
-#, fuzzy
 msgid "Characteristic Curve"
-msgstr "Charakteristická impedance"
+msgstr "Charakteristická křivka"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -23947,9 +23961,8 @@ msgid "No layer selected."
 msgstr "Není vybrána žádná vrstva."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:878
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
-msgstr "Výběr <žádná síť> vytvoří izolovaný ostrov mědi."
+msgstr "<žádná síť> vytvoří izolovaný ostrovůvek mědi."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid ""
@@ -24176,9 +24189,8 @@ msgid "Isolated islands smaller than this will be removed"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:395
-#, fuzzy
 msgid "Export Settings to Other Similar Zones"
-msgstr "Exportovat nastavení do ostatních zón"
+msgstr "Exportovat nastavení do dalších podobných zón"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:396
 #, fuzzy
@@ -25586,9 +25598,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:600
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid "Solder mask expansion:"
-msgstr "Pájecí maska nahoře:"
+msgstr "Rozšíření pájecí masky:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
 msgid ""
@@ -27070,9 +27081,8 @@ msgstr "počet rohů %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:744
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2179
-#, fuzzy
 msgid "Number box"
-msgstr "Číslo"
+msgstr "Rámeček s číslem"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:753
 msgid "Unknown primitive"
@@ -27100,19 +27110,16 @@ msgstr "%s a %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid "Error: Pad must have a positive size."
-msgstr "Chyba: Záporná velikost rohu."
+msgstr "Chyba: Ploška musí mít kladnou velikost."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
-#, fuzzy
 msgid "Warning: Pad hole not inside pad shape."
-msgstr "Varování: Velikost plošky je menší než nula."
+msgstr "Varování: Díra na plošce není uvnitř tvaru plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1290
-#, fuzzy
 msgid "Warning: Pad hole will leave no copper."
-msgstr "Varování: Velikost plošky je menší než nula."
+msgstr "Varování: Díra plošky nezanechává žádnou měď."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1295
 msgid "Warning: Negative local clearance values will have no effect."
@@ -29279,6 +29286,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální izolační mezera mezi měděnými prvky, které nepatří do stejné "
+"sítě.  Je-li definován, jedná se o absolutní minimum, které nelze snížit "
+"třídou spojů, vlastními pravidly nebo jinými parametry."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
@@ -29289,6 +29299,9 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální šířka spoje.  Pokud je to nastaveno, jedná se o absolutní minimum "
+"a nelze jej snížit pomocí Tříd spojů, vlastních pravidel nebo jiných "
+"nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 #, fuzzy
@@ -29309,6 +29322,8 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální šířka prstence.  Je-li nastaveno, jedná se o absolutní minimum a "
+"nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
@@ -29319,6 +29334,8 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální průměr prokovu.  Je-li nastaveno, jedná se o absolutní minimum a "
+"nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
@@ -29330,6 +29347,9 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"Minimální izolační mezera mezi otvorem a neasociovaným měděným prvkem.  "
+"Pokud je definován, jedná se o absolutní minimum, které nelze snížit "
+"vlastními pravidly nebo jinými parametry."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
@@ -29341,6 +29361,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"Minimální izolační mezera mezi hranou desky a jakoukoli položkou mědi.  Je-"
+"li nastaveno, jedná se o absolutní minimum a nelze jej redukovat vlastními "
+"pravidly nebo jiným nastavením."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
 msgid "Holes"
@@ -29355,6 +29378,9 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"Minimální velikost průchozí díry.  Je-li nastaveno, jedná se o absolutní "
+"minimum a nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných "
+"nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
@@ -29366,6 +29392,9 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"Minimální vzdálenost mezi dvěma vyvrtanými otvory.   Je-li nastaveno, jedná "
+"se o absolutní minimum a nelze jej redukovat vlastními pravidly nebo jiným "
+"nastavením. (Poznámka: nevztahuje se na frézované otvory.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:226
 msgid "uVias"
@@ -29380,6 +29409,9 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální průměr pro mikro-prokovy.  Je-li nastaveno, jedná se o absolutní "
+"minimum a nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných "
+"nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
 msgid "Minimum uVia hole:"
@@ -29390,6 +29422,9 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimální velikost otvoru mikro-prokovu.  Je-li nastaveno, jedná se o "
+"absolutní minimum a nelze jej snížit pomocí tříd spojů, vlastních pravidel "
+"nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
 msgid "Silkscreen"
@@ -29416,7 +29451,7 @@ msgstr "Minimální tloušťka textu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:355
 msgid "Arc/circle approximated by segments"
-msgstr ""
+msgstr "Oblouk/kružnice aproximovaná po segmentech"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:368
 msgid "Max allowed deviation:"
