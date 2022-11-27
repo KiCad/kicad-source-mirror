@@ -94,6 +94,11 @@ namespace SPICE_GRAMMAR
 
     struct dotModelType : plus<alpha> {};
 
+    struct numparamBracedExpr : seq<one<'{'>,
+                                    star<sor<numparamBracedExpr,
+                                             not_one<'}'>>>,
+                                    one<'}'>> {};
+
     // Ngspice has some heuristic logic to allow + and - in tokens. We replicate that here.
     struct tokenStart : seq<opt<one<'+', '-'>>,
                             opt<seq<star<sor<tao::pegtl::digit,
@@ -110,7 +115,8 @@ namespace SPICE_GRAMMAR
     // Param names cannot be `token` because LTspice models contain spurious values without
     // parameter names, which we need to skip.
     struct param : identifier {};
-    struct paramValue : token {};
+    struct paramValue : sor<numparamBracedExpr,
+                            token> {};
 
     struct paramValuePair : seq<param,
                                 sep,
@@ -255,7 +261,7 @@ namespace SPICE_GRAMMAR
     template <> inline constexpr auto errorMessage<newline> =
         "expected newline not followed by a line continuation";
     template <> inline constexpr auto errorMessage<sep> =
-        "expected token separator (typ. one or more whitespace, parenthesis, '=', ',', line continuation)";
+        "expected token separator (one or more whitespace, parenthesis, '=', ',', line continuation)";
     template <> inline constexpr auto errorMessage<opt<sep>> = "";
     template <> inline constexpr auto errorMessage<modelName> = "expected model name";
     template <> inline constexpr auto errorMessage<dotModelType> = "expected model type";
