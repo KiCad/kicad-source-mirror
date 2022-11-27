@@ -2884,6 +2884,11 @@ void APPEARANCE_CONTROLS::OnColorSwatchChanged( wxCommandEvent& aEvent )
     if( IsCopperLayer( layer ) )
         view->UpdateLayerColor( ZONE_LAYER_FOR( layer ) );
 
+    if( layer == F_Cu )
+        view->UpdateLayerColor( LAYER_PAD_FR );
+    else if( layer == B_Cu )
+        view->UpdateLayerColor( LAYER_PAD_BK );
+
     // Update the bitmap of the layer box
     if( m_frame->IsType( FRAME_PCB_EDITOR ) )
         static_cast<PCB_EDIT_FRAME*>( m_frame )->ReCreateLayerBox( false );
