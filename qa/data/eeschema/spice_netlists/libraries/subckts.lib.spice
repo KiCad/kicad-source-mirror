@@ -27,10 +27,23 @@ R1 1 2 1K
 R1 1 2 1K
 .ends
 
+
 .subckt two_params_short_form_4 1 2 param1=1.1E+1 param2=2.2E+2
 R1 1 2 1K
 .ends
 
+
 .subckt NOTHING_5
 R1 1 2 1K
+.ends
+
+
+.subckt Numparam_inside_6 1 2
+
+.param a = 10
+.param b = 20
+.model DIODE D kf={PWR(a,0.25)*b/10}
+
+D1 1 2 DIODE
+
 .ends

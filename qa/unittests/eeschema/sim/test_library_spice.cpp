@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE( Subckts )
 
     const std::vector<SIM_LIBRARY::MODEL> models = m_library->GetModels();
 
-    BOOST_CHECK_EQUAL( models.size(), 6 );
+    BOOST_CHECK_EQUAL( models.size(), 7 );
 
     for( int i = 0; i < models.size(); ++i )
     {
@@ -198,6 +198,13 @@ BOOST_AUTO_TEST_CASE( Subckts )
             BOOST_CHECK_EQUAL( modelName, "NOTHING_5" );
             BOOST_CHECK_EQUAL( model.GetParamCount(), 0 );
             BOOST_CHECK_EQUAL( model.GetPinCount(), 0 );
+            break;
+
+        case 6:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::SUBCKT );
+            BOOST_CHECK_EQUAL( modelName, "Numparam_inside_6" );
+            BOOST_CHECK_EQUAL( model.GetParamCount(), 0 );
+            BOOST_CHECK_EQUAL( model.GetPinCount(), 2 );
             break;
         }
     }
