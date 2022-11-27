@@ -38,7 +38,6 @@
 #include <dialog_find.h>
 #include <dialog_footprint_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
-#include <pcb_properties_panel.h>
 #include <dialog_board_setup.h>
 #include <invoke_pcb_dialog.h>
 #include <board.h>
@@ -99,6 +98,7 @@
 #include <widgets/pcb_search_pane.h>
 #include <widgets/infobar.h>
 #include <widgets/panel_selection_filter.h>
+#include <widgets/pcb_properties_panel.h>
 #include <widgets/wx_aui_utils.h>
 #include <kiplatform/app.h>
 #include <profile.h>

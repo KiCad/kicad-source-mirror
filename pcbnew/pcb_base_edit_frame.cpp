@@ -38,8 +38,8 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/pcb_properties_panel.h>
 #include <dialogs/eda_view_switcher.h>
-#include <pcb_properties_panel.h>
 #include <wildcards_and_files_ext.h>
 #include <collectors.h>
 

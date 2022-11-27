@@ -186,7 +186,6 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_text_and_graphics_base.cpp
     dialogs/panel_setup_tracks_and_vias.cpp
     dialogs/panel_setup_tracks_and_vias_base.cpp
-    dialogs/pcb_properties_panel.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     footprint_wizard_frame_functions.cpp
@@ -375,6 +374,7 @@ set( PCBNEW_CLASS_SRCS
     widgets/appearance_controls_base.cpp
     widgets/panel_selection_filter.cpp
     widgets/panel_selection_filter_base.cpp
+    widgets/pcb_properties_panel.cpp
     widgets/pcb_search_pane.cpp
     widgets/search_handlers.cpp
 

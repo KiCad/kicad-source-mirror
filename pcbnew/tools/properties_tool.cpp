@@ -19,7 +19,7 @@
  */
 
 #include "properties_tool.h"
-#include <pcb_properties_panel.h>
+#include <widgets/pcb_properties_panel.h>
 #include <tool/actions.h>
 
 
