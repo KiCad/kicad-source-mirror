@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-11-22 20:35+0000\n"
+"PO-Revision-Date: 2022-11-30 01:23+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v6/es/>\n"
 "Language: es\n"
@@ -26816,9 +26816,9 @@ msgid "<none selected>"
 msgstr "<nada seleccionado>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Referencia '%s'"
+msgstr "Elemento de referencia: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -30309,9 +30309,8 @@ msgid "Thermal Relief Gap"
 msgstr "Espacio del alivio térmico"
 
 #: pcbnew/footprint.cpp:2400
-#, fuzzy
 msgid "Library ID"
-msgstr "Biblioteca <"
+msgstr "ID de biblioteca"
 
 #: pcbnew/footprint.h:219
 #, c-format
@@ -30768,6 +30767,7 @@ msgstr "Importar archivo de gráficos vectoriales"
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr ""
+"Se acabó la memoria tratando ce cargar el DXF, puede ser demasiado grande."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
@@ -31781,9 +31781,8 @@ msgid "removed annular ring"
 msgstr "anillo anular eliminado"
 
 #: pcbnew/pcb_track.cpp:674
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Pista "
+msgstr "Pista (arco)"
 
 #: pcbnew/pcb_track.cpp:689
 msgid "Segment Length"
@@ -31938,14 +31937,12 @@ msgid "File not found: '%s'."
 msgstr "Archivo no encontrado: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:710
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Cargando regiones de placa..."
+msgstr "Cargando datos de placa..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:888
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "Cargando redes..."
+msgstr "Cargando clases de redes..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:910
 #, c-format
@@ -31953,14 +31950,12 @@ msgid "Duplicate netclass name '%s'."
 msgstr "Nombre de clase de red '%s' duplicado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:927
-#, fuzzy
 msgid "Loading components..."
-msgstr "Cargando redes..."
+msgstr "Cargando componentes..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:974
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "Cargando modelos 3D..."
+msgstr "Cargando modelos 3D componentes..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1051
 #: pcbnew/plugins/altium/altium_pcb.cpp:1137
@@ -31976,9 +31971,8 @@ msgstr ""
 "de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1330
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "Cargando cadenas unicode..."
+msgstr "Cargando dibujos de dimensión..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1351
 #: pcbnew/plugins/altium/altium_pcb.cpp:1358
@@ -32323,9 +32317,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "La definición de pad de CADSTAR '%s' tiene errores de importación: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1256
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "No se ha podido encontrar un visor de PDF para '%s'."
+msgstr "No se ha podido encontrar el índice de pad '%d' en la huella '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1289
 #, c-format
@@ -33974,28 +33968,27 @@ msgstr "Desbloquear"
 
 #: pcbnew/tools/board_editor_control.cpp:1397
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Las zonas tienen un solapamiento insuficiente para la unión."
 
 #: pcbnew/tools/board_editor_control.cpp:1443
 msgid "Some zone netcodes did not match and were not merged."
-msgstr ""
+msgstr "Algunos códigos de red de zona no coincidieron y no fueron unidos."
 
 #: pcbnew/tools/board_editor_control.cpp:1449
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
+msgstr "Algunas prioridades de zona no coincidieron y no fueron unidas."
 
 #: pcbnew/tools/board_editor_control.cpp:1455
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
+msgstr "Algunas zonas fueron áreas de reglas y no fueron unidas."
 
 #: pcbnew/tools/board_editor_control.cpp:1461
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Capa de reglas '%s' no coincide; regla ignorada."
+msgstr "Algunos conjuntos de capas de zona no coincidieron y no fueron unidos."
 
 #: pcbnew/tools/board_editor_control.cpp:1478
 msgid "Some zones did not intersect and were not merged."
-msgstr ""
+msgstr "Algunas zonas no se intersecan y no fueron unidos."
 
 #: pcbnew/tools/board_editor_control.cpp:1547
 msgid "Duplicate zone"
