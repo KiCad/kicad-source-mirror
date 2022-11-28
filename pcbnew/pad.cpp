@@ -52,6 +52,8 @@
 
 #include <memory>
 #include <macros.h>
+#include "kiface_base.h"
+#include "pcbnew_settings.h"
 
 using KIGFX::PCB_PAINTER;
 using KIGFX::PCB_RENDER_SETTINGS;
@@ -1435,12 +1437,14 @@ const BOX2I PAD::ViewBBox() const
     int      solderMaskMargin  = std::max( GetSolderMaskExpansion(), 0 );
     VECTOR2I solderPasteMargin = VECTOR2D( GetSolderPasteMargin() );
     BOX2I    bbox              = GetBoundingBox();
+    int      clearance         = 0;
 
-    // get the biggest possible clearance
-    int clearance = 0;
-
-    for( PCB_LAYER_ID layer : GetLayerSet().Seq() )
-        clearance = std::max( clearance, GetOwnClearance( layer ) );
+    // If we're drawing clearance lines then get the biggest possible clearance
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        if( cfg && cfg->m_Display.m_PadClearance && GetBoard() )
+            clearance = GetBoard()->GetDesignSettings().GetBiggestClearanceValue();
+    }
 
     // Look for the biggest possible bounding box
     int xMargin = std::max( solderMaskMargin, solderPasteMargin.x ) + clearance;
