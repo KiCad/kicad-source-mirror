@@ -151,8 +151,9 @@ private:
      * It is mostly used for notifying the tools that the cursor position in the world
      * coordinates has changed, whereas the screen coordinates remained the same (e.g.
      * frame edge autopanning).
+     * @param aSetModifiers If false, don't change the modifiers (they were set using the keyboard motion)
      */
-    void refreshMouse();
+    void refreshMouse( bool aSetModifiers);
 
     /**
      * Get the cursor position in the screen coordinates.
