@@ -31,6 +31,7 @@
 #include <dialog_rule_area_properties_base.h>
 #include <widgets/unit_binder.h>
 #include <wx/statbox.h>
+#include <wx/radiobut.h>
 
 #define LAYER_LIST_COLUMN_CHECK 0
 #define LAYER_LIST_COLUMN_ICON 1
@@ -58,7 +59,8 @@ private:
     bool              m_isFpEditor;
 
     CONVERT_SETTINGS* m_convertSettings;
-    wxCheckBox*       m_cbIgnoreLineWidths;
+    wxRadioButton*    m_rbCenterline;
+    wxRadioButton*    m_rbEnvelope;
     wxCheckBox*       m_cbDeleteOriginals;
 };
 
@@ -79,7 +81,8 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_outlineHatchPitch( aParent, m_stBorderHatchPitchText,
                              m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
         m_convertSettings( aConvertSettings ),
-        m_cbIgnoreLineWidths( nullptr ),
+        m_rbCenterline( nullptr ),
+        m_rbEnvelope( nullptr ),
         m_cbDeleteOriginals( nullptr )
 {
     m_parent = aParent;
@@ -89,18 +92,18 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( aConvertSettings )
     {
-        wxBoxSizer* bConvertSizer = new wxBoxSizer( wxVERTICAL  );
+        wxStaticBox*      bConvertBox = new wxStaticBox( this, wxID_ANY, _( "Conversion Settings" ) );
+        wxStaticBoxSizer* bConvertSizer = new wxStaticBoxSizer( bConvertBox, wxVERTICAL  );
 
-        wxStaticText* conversionSettingsLabel = new wxStaticText( this, wxID_ANY,
-                                                                  _( "Conversion settings:" ) );
-        bConvertSizer->Add( conversionSettingsLabel, 0, wxLEFT|wxRIGHT|wxEXPAND, 5 );
+        m_rbCenterline = new wxRadioButton( this, wxID_ANY, _( "Use centerlines" ) );
+        bConvertSizer->Add( m_rbCenterline, 0, wxLEFT|wxRIGHT, 5 );
 
-        m_cbIgnoreLineWidths = new wxCheckBox( this, wxID_ANY,
-                                               _( "Ignore source object line widths" )  );
-        bConvertSizer->Add( m_cbIgnoreLineWidths, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+        bConvertSizer->AddSpacer( 2 );
+        m_rbEnvelope = new wxRadioButton( this, wxID_ANY, _( "Create bounding hull" ) );
+        bConvertSizer->Add( m_rbEnvelope, 0, wxLEFT|wxRIGHT, 5 );
 
-        m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY,
-                                              _( "Delete source objects after conversion" ) );
+        bConvertSizer->AddSpacer( 6 );
+        m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY, _( "Delete source objects after conversion" ) );
         bConvertSizer->Add( m_cbDeleteOriginals, 0, wxALL, 5 );
 
         GetSizer()->Insert( 0, bConvertSizer, 0, wxALL|wxEXPAND, 10 );
@@ -129,7 +132,11 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
 {
     if( m_convertSettings )
     {
-        m_cbIgnoreLineWidths->SetValue( m_convertSettings->m_IgnoreLineWidths );
+        if( m_convertSettings->m_Strategy == BOUNDING_HULL )
+            m_rbEnvelope->SetValue( true );
+        else
+            m_rbCenterline->SetValue( true );
+
         m_cbDeleteOriginals->SetValue( m_convertSettings->m_DeleteOriginals );
     }
 
@@ -190,7 +197,11 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
 {
     if( m_convertSettings )
     {
-        m_convertSettings->m_IgnoreLineWidths = m_cbIgnoreLineWidths->GetValue();
+        if( m_rbEnvelope->GetValue() )
+            m_convertSettings->m_Strategy = BOUNDING_HULL;
+        else
+            m_convertSettings->m_Strategy = CENTERLINE;
+
         m_convertSettings->m_DeleteOriginals = m_cbDeleteOriginals->GetValue();
     }
 

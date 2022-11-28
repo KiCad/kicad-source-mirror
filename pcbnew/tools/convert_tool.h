@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 
 #include <geometry/shape_poly_set.h>
 #include <tool/tool_interactive.h>
+#include <pcbnew_settings.h>
 
 class CONDITIONAL_MENU;
 class PCB_SELECTION_TOOL;
@@ -70,7 +71,7 @@ private:
      * @param aItem is an item that has a start and end point.
      * @return a segment from start to end, or std::nullopt if invalid.
      */
-    static std::optional<SEG> getStartEndPoints( EDA_ITEM* aItem, int* aWidth );
+    static std::optional<SEG> getStartEndPoints( EDA_ITEM* aItem );
 
     /**
      * Try to make polygons from chained segments in the selected items.
@@ -82,7 +83,8 @@ private:
      * @param aItems is a list of items to process.
      * @return a #SHAPE_POLY_SET containing any polygons that were created.
      */
-    SHAPE_POLY_SET makePolysFromChainedSegs( const std::deque<EDA_ITEM*>& aItems );
+    SHAPE_POLY_SET makePolysFromChainedSegs( const std::deque<EDA_ITEM*>& aItems,
+                                             CONVERT_STRATEGY aStrategy );
 
     /**
      * Make polygons from graphic shapes and zones.
@@ -92,7 +94,7 @@ private:
      */
     SHAPE_POLY_SET makePolysFromOpenGraphics( const std::deque<EDA_ITEM*>& aItems );
     SHAPE_POLY_SET makePolysFromClosedGraphics( const std::deque<EDA_ITEM*>& aItems,
-                                                bool aIgnoreLineWidths );
+                                                CONVERT_STRATEGY aStrategy );
 
     PCB_SELECTION_TOOL* m_selectionTool;
     CONDITIONAL_MENU*   m_menu;

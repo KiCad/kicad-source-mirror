@@ -32,11 +32,18 @@ namespace PNS
 
 
 // Settings for the CONVERT_TOOL.
+enum CONVERT_STRATEGY
+{
+    COPY_LINEWIDTH,
+    CENTERLINE,
+    BOUNDING_HULL
+};
+
+
 struct CONVERT_SETTINGS
 {
-    bool m_StrokeHulls;
-    bool m_IgnoreLineWidths;
-    bool m_DeleteOriginals;
+    CONVERT_STRATEGY m_Strategy;
+    bool             m_DeleteOriginals;
 };
 
 
