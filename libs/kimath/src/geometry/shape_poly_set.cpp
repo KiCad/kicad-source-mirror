@@ -2710,6 +2710,9 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
                 bool triangulationValid = false;
                 int pass = 0;
 
+                if( polySet.IsSelfIntersecting() )
+                    polySet.Simplify( PM_FAST );
+
                 while( polySet.OutlineCount() > 0 )
                 {
                     if( !dest.empty() && dest.back()->GetTriangleCount() == 0 )
