@@ -188,18 +188,22 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetEndX( shape->GetStartX() );
                     edges.back()->SetStroke( stroke );
+                    edges.back()->SetParentGroup( nullptr );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetEndY( shape->GetStartY() );
                     edges.back()->SetStroke( stroke );
+                    edges.back()->SetParentGroup( nullptr );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetStartX( shape->GetEndX() );
                     edges.back()->SetStroke( stroke );
+                    edges.back()->SetParentGroup( nullptr );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetStartY( shape->GetEndY() );
                     edges.back()->SetStroke( stroke );
+                    edges.back()->SetParentGroup( nullptr );
                 }
                 else if( shape->GetShape() == SHAPE_T::POLY && !shape->IsFilled() )
                 {
@@ -215,12 +219,14 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                         edges.back()->SetStart( seg.A );
                         edges.back()->SetEnd( seg.B );
                         edges.back()->SetStroke( stroke );
+                        edges.back()->SetParentGroup( nullptr );
                     }
                 }
                 else
                 {
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetStroke( stroke );
+                    edges.back()->SetParentGroup( nullptr );
                 }
 
                 return true;

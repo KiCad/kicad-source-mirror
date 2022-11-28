@@ -354,6 +354,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
     {
         std::unique_ptr<FOOTPRINT> temp( static_cast<FOOTPRINT*>( Clone() ) );
         temp->Flip( {0,0}, false );
+        temp->SetParentGroup( nullptr );
         return temp->FootprintNeedsUpdate( aLibFootprint );
     }
 
