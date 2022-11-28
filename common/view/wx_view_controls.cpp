@@ -381,7 +381,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 
         // Refresh the zoom level and mouse position on message panel
         // (mouse position has not changed, only the zoom level has changed):
-        refreshMouse();
+        refreshMouse( true );
     }
     else
     {
@@ -399,7 +399,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         VECTOR2D delta( scrollX, scrollY );
 
         m_view->SetCenter( m_view->GetCenter() + delta );
-        refreshMouse();
+        refreshMouse( true );
     }
 
     // Do not skip this event, otherwise wxWidgets will fire
@@ -579,7 +579,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         dir = m_view->ToWorld( dir, false );
         m_view->SetCenter( m_view->GetCenter() + dir );
 
-        refreshMouse();
+        refreshMouse( true );
 
         m_panTimer.Start();
     }
@@ -802,7 +802,9 @@ void WX_VIEW_CONTROLS::WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCo
         KIPLATFORM::UI::WarpPointer( m_parentPanel, aPosition.x, aPosition.y );
     }
 
-    refreshMouse();
+    // If we are not refreshing because of mouse movement, don't set the modifiers
+    // because we are refreshing for keyboard movement, which uses the same modifiers for other actions
+    refreshMouse( m_updateCursor );
 }
 
 
@@ -962,7 +964,7 @@ void WX_VIEW_CONTROLS::handleCursorCapture( int x, int y )
 }
 
 
-void WX_VIEW_CONTROLS::refreshMouse()
+void WX_VIEW_CONTROLS::refreshMouse( bool aSetModifiers )
 {
     // Notify tools that the cursor position has changed in the world coordinates
     wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );
@@ -970,10 +972,13 @@ void WX_VIEW_CONTROLS::refreshMouse()
     moveEvent.SetX( msp.x );
     moveEvent.SetY( msp.y );
 
-    // Set the modifiers state
-    moveEvent.SetControlDown( wxGetKeyState( WXK_CONTROL ) );
-    moveEvent.SetShiftDown( wxGetKeyState( WXK_SHIFT ) );
-    moveEvent.SetAltDown( wxGetKeyState( WXK_ALT ) );
+    if( aSetModifiers )
+    {
+        // Set the modifiers state
+        moveEvent.SetControlDown( wxGetKeyState( WXK_CONTROL ) );
+        moveEvent.SetShiftDown( wxGetKeyState( WXK_SHIFT ) );
+        moveEvent.SetAltDown( wxGetKeyState( WXK_ALT ) );
+    }
 
     m_cursorPos = GetClampedCoords( m_view->ToWorld( VECTOR2D( msp.x, msp.y ) ) );
     wxPostEvent( m_parentPanel, moveEvent );
@@ -1022,7 +1027,7 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
         // Trigger a mouse refresh to get the canvas update in GTK (re-draws the scrollbars).
         // Note that this causes an infinite loop on OSX and Windows (in certain cases) as it
         // generates a paint event.
-        refreshMouse();
+        refreshMouse( false );
 #endif
     }
 }
