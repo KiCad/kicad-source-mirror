@@ -54,6 +54,15 @@ common/pcb_keywords.cpp
 include/pcb_lexer.h
 fp-info-cache
 
+# .md generated files
+eeschema/dialogs/dialog_bom_help_md.h
+pcb_calculator/attenuators/bridget_tee_formula.h
+pcb_calculator/attenuators/pi_formula.h
+pcb_calculator/attenuators/splitter_formula.h
+pcb_calculator/attenuators/tee_formula.h
+pcb_calculator/eserie_help.h
+pcb_calculator/tracks_width_versus_current_formula.h
+
 # demo project auxiliary files
 demos/**/*-bak
 demos/**/_autosave-*
