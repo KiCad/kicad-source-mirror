@@ -2500,9 +2500,9 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     SCH_LABEL_BASE* label;
 
     // TODO: detect correct label type depending on sheet settings, etc.
-    #if 0   // Set to 1 to use SCH_HIERLABEL label, 0 to use SCH_GLOBALLABEL
+    #if 1   // Set to 1 to use SCH_HIERLABEL label, 0 to use SCH_GLOBALLABEL
     {
-        label = new SCH_HIERLABEL label, 0 to use ( position, aElem.Name );
+        label = new SCH_HIERLABEL( position, aElem.Name );
     }
     #else
     label = new SCH_GLOBALLABEL( position, aElem.Name );
