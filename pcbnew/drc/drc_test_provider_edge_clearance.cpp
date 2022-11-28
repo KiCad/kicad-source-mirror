@@ -161,18 +161,22 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetEndX( shape->GetStartX() );
                     edges.back()->SetWidth( 0 );
+                    edges.back()->SetParentGroup( nullptr );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetEndY( shape->GetStartY() );
                     edges.back()->SetWidth( 0 );
+                    edges.back()->SetParentGroup( nullptr );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetStartX( shape->GetEndX() );
                     edges.back()->SetWidth( 0 );
+                    edges.back()->SetParentGroup( nullptr );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetStartY( shape->GetEndY() );
                     edges.back()->SetWidth( 0 );
+                    edges.back()->SetParentGroup( nullptr );
                     return true;
                 }
                 else if( shape->GetShape() == SHAPE_T::POLY )
@@ -189,11 +193,13 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                         edges.back()->SetStart((wxPoint) seg.A );
                         edges.back()->SetEnd((wxPoint) seg.B );
                         edges.back()->SetWidth( 0 );
+                        edges.back()->SetParentGroup( nullptr );
                     }
                 }
 
                 edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                 edges.back()->SetWidth( 0 );
+                edges.back()->SetParentGroup( nullptr );
                 return true;
             };
 
