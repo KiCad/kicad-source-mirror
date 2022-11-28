@@ -144,3 +144,82 @@
 
 * AKO model, LTspice parameters.
 .model D24 ako: D22 D(n=1.1 mfg=KiCad type=Silicon)
+
+* Model with all parameters set (except for a few ones like `level` that are not actually parameters) in the original order.
+.model D25 D
+*level
++is=000.000E+07
+*js
++jsw=100.001E+07
++tnom=200.002E+07
+*tref
++rs=300.003E+07
++trs=400.004E+07
+*trs1
++trs2=500.005E+07
++n=600.006E+07
++ns=700.007E+07
++tt=800.008E+07
++ttt1=900.009E+07
++ttt2=000.000E+07
++cjo=100.001E+07
+*cj0
+*cj
++vj=200.002E+07
+*pb
++m=300.003E+07
+*mj
++tm1=400.004E+07
++tm2=500.005E+07
++cjp=600.006E+07
+*cjsw
++php=700.007E+07
++mjsw=800.008E+07
++ikf=900.009E+07
+*ik
++ikr=000.000E+07
++nbv=100.001E+07
++area=200.002E+07
++pj=300.003E+07
++tlev=4 ;400.004E+07
++tlevc=5 ;500.005E+07
++eg=600.006E+07
++xti=700.007E+07
++cta=800.008E+07
+*ctc
++ctp=900.009E+07
++tpb=000.000E+07
+*tvj
++tphp=100.001E+07
++jtun=200.002E+07
++jtunsw=300.003E+07
++ntun=400.004E+07
++xtitun=500.005E+07
++keg=600.006E+07
++kf=700.007E+07
++af=800.008E+07
++fc=900.009E+07
++fcs=000.000E+07
++bv=100.001E+07
++ibv=200.002E+07
+*ib
++tcv=300.003E+07
++cond=400.004E+07
++isr=500.005E+07
++nr=600.006E+07
++fv_max=700.007E+07
++bv_max=800.008E+07
++id_max=900.009E+07
++te_max=000.000E+07
++pd_max=100.001E+07
++rth0=200.002E+07
++cth0=300.003E+07
++lm=400.004E+07
++lp=500.005E+07
++wm=600.006E+07
++wp=700.007E+07
++xom=800.008E+07
++xoi=900.009E+07
++xm=000.000E+07
++xp=100.001E+07
+*d

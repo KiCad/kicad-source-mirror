@@ -219,7 +219,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
 
     const std::vector<SIM_LIBRARY::MODEL> models = m_library->GetModels();
 
-    BOOST_CHECK_EQUAL( models.size(), 25 );
+    BOOST_CHECK_EQUAL( models.size(), 26 );
 
     for( int i = 0; i < models.size(); ++i )
     {
@@ -345,6 +345,87 @@ BOOST_AUTO_TEST_CASE( Diodes )
             BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "99.9" );
             BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
             BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.1" );
+            break;
+
+        case 25:
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
+            BOOST_CHECK_EQUAL( modelName, "D25" );
+            //level
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "0" );
+            //js
+            BOOST_CHECK_EQUAL( model.FindParam( "jsw" )->value->ToString(), "1.00001G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tnom" )->value->ToString(), "2.00002G" );
+            //tref
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "3.00003G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "trs" )->value->ToString(), "4.00004G" );
+            //trs1
+            BOOST_CHECK_EQUAL( model.FindParam( "trs2" )->value->ToString(), "5.00005G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "6.00006G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ns" )->value->ToString(), "7.00007G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "8.00008G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ttt1" )->value->ToString(), "9.00009G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ttt2" )->value->ToString(), "0" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "1.00001G" );
+            //cj0
+            //cj
+            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value->ToString(), "2.00002G" );
+            //pb
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "3.00003G" );
+            //mj
+            BOOST_CHECK_EQUAL( model.FindParam( "tm1" )->value->ToString(), "4.00004G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tm2" )->value->ToString(), "5.00005G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjp" )->value->ToString(), "6.00006G" );
+            //cjsw
+            BOOST_CHECK_EQUAL( model.FindParam( "php" )->value->ToString(), "7.00007G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "mjsw" )->value->ToString(), "8.00008G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "9.00009G" );
+            //ik
+            BOOST_CHECK_EQUAL( model.FindParam( "ikr" )->value->ToString(), "0" );
+            BOOST_CHECK_EQUAL( model.FindParam( "nbv" )->value->ToString(), "1.00001G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "area_" )->value->ToString(), "2.00002G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "pj_" )->value->ToString(), "3.00003G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tlev" )->value->ToString(), "4" ); //"4.00004G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tlevc" )->value->ToString(), "5" ); //"5.00005G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "6.00006G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "7.00007G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cta" )->value->ToString(), "8.00008G" );
+            //ctc
+            BOOST_CHECK_EQUAL( model.FindParam( "ctp" )->value->ToString(), "9.00009G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tpb" )->value->ToString(), "0" );
+            //tvj
+            BOOST_CHECK_EQUAL( model.FindParam( "tphp" )->value->ToString(), "1.00001G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "jtun" )->value->ToString(), "2.00002G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "jtunsw" )->value->ToString(), "3.00003G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ntun" )->value->ToString(), "4.00004G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xtitun" )->value->ToString(), "5.00005G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "keg" )->value->ToString(), "6.00006G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "kf" )->value->ToString(), "7.00007G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "af" )->value->ToString(), "8.00008G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value->ToString(), "9.00009G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "fcs" )->value->ToString(), "0" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "1.00001G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "2.00002G" );
+            //ib
+            BOOST_CHECK_EQUAL( model.FindParam( "tcv" )->value->ToString(), "3.00003G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cond" )->value->ToString(), "4.00004G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "isr" )->value->ToString(), "5.00005G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "nr" )->value->ToString(), "6.00006G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "fv_max" )->value->ToString(), "7.00007G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv_max" )->value->ToString(), "8.00008G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "id_max" )->value->ToString(), "9.00009G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "te_max" )->value->ToString(), "0" );
+            BOOST_CHECK_EQUAL( model.FindParam( "pd_max" )->value->ToString(), "1.00001G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rth0" )->value->ToString(), "2.00002G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cth0" )->value->ToString(), "3.00003G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "lm_" )->value->ToString(), "4.00004G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "lp_" )->value->ToString(), "5.00005G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "wm_" )->value->ToString(), "6.00006G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "wp_" )->value->ToString(), "7.00007G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xom" )->value->ToString(), "8.00008G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xoi" )->value->ToString(), "9.00009G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xm" )->value->ToString(), "0" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xp" )->value->ToString(), "1.00001G" );
+            //d
             break;
 
         default:
