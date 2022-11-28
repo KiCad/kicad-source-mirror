@@ -30,14 +30,47 @@
 #include <widgets/msgpanel.h>
 #include <view/view.h>
 
+#include <wx/debug.h>
+
 PCB_GROUP::PCB_GROUP( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_GROUP_T )
 {
 }
 
 
+bool PCB_GROUP::IsGroupableType( KICAD_T aType )
+{
+    switch ( aType )
+    {
+    case PCB_FOOTPRINT_T:
+    case PCB_PAD_T:
+    case PCB_SHAPE_T:
+    case PCB_TEXT_T:
+    case PCB_FP_TEXT_T:
+    case PCB_FP_SHAPE_T:
+    case PCB_FP_ZONE_T:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
+    case PCB_ARC_T:
+    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_ZONE_T:
+        return true;
+    default:
+        return false;
+    }
+}
+
+
 bool PCB_GROUP::AddItem( BOARD_ITEM* aItem )
 {
+    wxCHECK_MSG( IsGroupableType( aItem->Type() ), false,
+            wxT( "Invalid item type added to group: " )
+                + aItem->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
+
     // Items can only be in one group at a time
     if( aItem->GetParentGroup() )
         aItem->GetParentGroup()->RemoveItem( aItem );

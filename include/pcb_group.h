@@ -221,6 +221,13 @@ public:
      */
     void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const;
 
+    /**
+     * Check if the proposed type can be added to a group
+     * @param aType KICAD_T type to check
+     * @return true if the type can belong to a group, false otherwise
+     */
+    static bool IsGroupableType( KICAD_T aType );
+
 private:
     std::unordered_set<BOARD_ITEM*> m_items;     // Members of the group
     wxString                        m_name;      // Optional group name
