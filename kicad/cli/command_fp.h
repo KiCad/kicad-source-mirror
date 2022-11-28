@@ -18,23 +18,19 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCBNEW_JOBS_HANDLER_H
-#define PCBNEW_JOBS_HANDLER_H
+#ifndef COMMAND_FP_H
+#define COMMAND_FP_H
 
-#include <jobs/job_dispatcher.h>
+#include "command.h"
 
-class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
+namespace CLI
 {
-public:
-    PCBNEW_JOBS_HANDLER();
-    int JobExportStep( JOB* aJob );
-    int JobExportSvg( JOB* aJob );
-    int JobExportDxf( JOB* aJob );
-    int JobExportPdf( JOB* aJob );
-    int JobExportGerber( JOB* aJob );
-    int JobExportDrill( JOB* aJob );
-    int JobExportPos( JOB* aJob );
-    int JobExportFpUpgrade( JOB* aJob );
+struct FP_COMMAND : public COMMAND
+{
+    FP_COMMAND();
+
+    int Perform( KIWAY& aKiway ) override;
 };
+}
 
 #endif

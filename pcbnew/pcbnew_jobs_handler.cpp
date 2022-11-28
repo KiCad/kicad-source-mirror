@@ -19,6 +19,7 @@
  */
 
 #include "pcbnew_jobs_handler.h"
+#include <jobs/job_fp_upgrade.h>
 #include <jobs/job_export_pcb_gerber.h>
 #include <jobs/job_export_pcb_drill.h>
 #include <jobs/job_export_pcb_dxf.h>
@@ -42,6 +43,7 @@
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
 #include <wildcards_and_files_ext.h>
+#include <plugins/kicad/pcb_plugin.h>
 
 #include "pcbnew_scripting_helpers.h"
 
@@ -56,8 +58,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerber, this, std::placeholders::_1 ) );
     Register( "drill",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrill, this, std::placeholders::_1 ) );
-    Register( "pos",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportPos, this, std::placeholders::_1 ) );
+    Register( "pos", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPos, this, std::placeholders::_1 ) );
+    Register( "fpupgrade", std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpUpgrade, this, std::placeholders::_1 ) );
 }
 
 
@@ -459,6 +461,65 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
             gbrLayer = B_Cu;
 
         exporter.CreatePlaceFile( aPosJob->m_outputFile, gbrLayer, aPosJob->m_gerberBoardEdge );
+    }
+
+    return CLI::EXIT_CODES::OK;
+}
+
+extern FOOTPRINT* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFileType,
+                                      const wxString& aName );
+
+
+int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
+{
+    JOB_FP_UPGRADE* upgradeJob = dynamic_cast<JOB_FP_UPGRADE*>( aJob );
+
+    if( upgradeJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( aJob->IsCli() )
+        wxPrintf( _( "Loading board\n" ) );
+
+    PCB_PLUGIN  pcb_io( CTL_FOR_LIBRARY );
+    FP_CACHE   fpLib( &pcb_io, upgradeJob->m_libraryPath );
+
+    try
+    {
+        fpLib.Load();
+    }
+    catch(...)
+    {
+        wxFprintf( stderr, _( "Unable to load library\n" ) );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    bool shouldSave = upgradeJob->m_force;
+
+    for( const auto& footprint : fpLib.GetFootprints() )
+    {
+        if( footprint.second->GetFootprint()->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION )
+        {
+            shouldSave = true;
+        }
+    }
+
+    if( shouldSave )
+    {
+        wxPrintf( _( "Saving footprint library\n" ) );
+
+        try
+        {
+            fpLib.Save();
+        }
+        catch( ... )
+        {
+            wxFprintf( stderr, _( "Unable to save library\n" ) );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+    }
+    else
+    {
+        wxPrintf( _( "Footprint library was not updated\n" ) );
     }
 
     return CLI::EXIT_CODES::OK;

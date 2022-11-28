@@ -3621,6 +3621,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             NeedRIGHT();
             m_requiredVersion = std::max( m_requiredVersion, this_version );
             m_tooRecent       = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
+            footprint->SetFileFormatVersionAtLoad( this_version );
             break;
         }
 

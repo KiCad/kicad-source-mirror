@@ -18,23 +18,25 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCBNEW_JOBS_HANDLER_H
-#define PCBNEW_JOBS_HANDLER_H
+#ifndef JOB_FP_UPGRADE_H
+#define JOB_FP_UPGRADE_H
 
-#include <jobs/job_dispatcher.h>
+#include <wx/string.h>
+#include "job.h"
 
-class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
+class JOB_FP_UPGRADE : public JOB
 {
 public:
-    PCBNEW_JOBS_HANDLER();
-    int JobExportStep( JOB* aJob );
-    int JobExportSvg( JOB* aJob );
-    int JobExportDxf( JOB* aJob );
-    int JobExportPdf( JOB* aJob );
-    int JobExportGerber( JOB* aJob );
-    int JobExportDrill( JOB* aJob );
-    int JobExportPos( JOB* aJob );
-    int JobExportFpUpgrade( JOB* aJob );
+    JOB_FP_UPGRADE( bool aIsCli ) :
+            JOB( "fpupgrade", aIsCli ),
+            m_libraryPath(),
+            m_force( false )
+    {
+    }
+
+    wxString m_libraryPath;
+
+    bool m_force;
 };
 
 #endif

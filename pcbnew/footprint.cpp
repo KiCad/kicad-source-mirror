@@ -73,6 +73,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_localSolderPasteMargin      = 0;
     m_localSolderPasteMarginRatio = 0.0;
     m_zoneConnection              = ZONE_CONNECTION::INHERITED;
+    m_fileFormatVersionAtLoad     = 0;
 
     // These are special and mandatory text fields
     m_reference = new FP_TEXT( this, FP_TEXT::TEXT_is_REFERENCE );
@@ -109,6 +110,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_localSolderPasteMarginRatio    = aFootprint.m_localSolderPasteMarginRatio;
     m_zoneConnection                 = aFootprint.m_zoneConnection;
     m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
+    m_fileFormatVersionAtLoad        = aFootprint.m_fileFormatVersionAtLoad;
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 

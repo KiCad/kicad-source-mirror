@@ -616,6 +616,9 @@ public:
             m_attributes &= ~FP_ALLOW_MISSING_COURTYARD;
     }
 
+    void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
+    int GetFileFormatVersionAtLoad() const { return m_fileFormatVersionAtLoad; }
+
     /**
      * Return a #PAD with a matching number.
      *
@@ -834,6 +837,7 @@ private:
     LIB_ID          m_fpid;              // The #LIB_ID of the FOOTPRINT.
     int             m_attributes;        // Flag bits (see FOOTPRINT_ATTR_T)
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
+    int             m_fileFormatVersionAtLoad;
 
     // Bounding box caching strategy:
     // While we attempt to notice the low-hanging fruit operations and update the bounding boxes

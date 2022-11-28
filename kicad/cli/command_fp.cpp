@@ -18,23 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCBNEW_JOBS_HANDLER_H
-#define PCBNEW_JOBS_HANDLER_H
+#include "command_fp.h"
 
-#include <jobs/job_dispatcher.h>
-
-class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
+CLI::FP_COMMAND::FP_COMMAND() : COMMAND( "fp" )
 {
-public:
-    PCBNEW_JOBS_HANDLER();
-    int JobExportStep( JOB* aJob );
-    int JobExportSvg( JOB* aJob );
-    int JobExportDxf( JOB* aJob );
-    int JobExportPdf( JOB* aJob );
-    int JobExportGerber( JOB* aJob );
-    int JobExportDrill( JOB* aJob );
-    int JobExportPos( JOB* aJob );
-    int JobExportFpUpgrade( JOB* aJob );
-};
+}
 
-#endif
+int CLI::FP_COMMAND::Perform( KIWAY& aKiway )
+{
+    std::cout << m_argParser;
+
+    return 1;
+}

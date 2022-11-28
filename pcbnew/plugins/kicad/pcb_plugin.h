@@ -28,6 +28,8 @@
 #include <io_mgr.h>
 #include <string>
 #include <layer_ids.h>
+#include <boost/ptr_container/ptr_map.hpp>
+#include <wx_filename.h>
 #include "widgets/report_severity.h"
 
 class BOARD;
@@ -51,7 +53,7 @@ class PCB_TEXT;
 class PCB_TEXTBOX;
 class EDA_TEXT;
 class SHAPE_LINE_CHAIN;
-
+class PCB_PLUGIN;   // forward decl
 
 /// Current s-expression file format version.  2 was the last legacy format version.
 
@@ -159,6 +161,92 @@ class SHAPE_LINE_CHAIN;
 /// The zero arg constructor when PCB_PLUGIN is used for PLUGIN::Load() and PLUGIN::Save()ing
 /// a BOARD file underneath IO_MGR.
 #define CTL_FOR_BOARD               (CTL_OMIT_INITIAL_COMMENTS|CTL_OMIT_FOOTPRINT_VERSION)
+
+/**
+ * Helper class for creating a footprint library cache.
+ *
+ * The new footprint library design is a file path of individual footprint files that contain
+ * a single footprint per file.  This class is a helper only for the footprint portion of the
+ * PLUGIN API, and only for the #PCB_PLUGIN plugin.  It is private to this implementation file so
+ * it is not placed into a header.
+ */
+class FP_CACHE_ITEM
+{
+    WX_FILENAME                m_filename;
+    std::unique_ptr<FOOTPRINT> m_footprint;
+
+public:
+    FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
+
+    const WX_FILENAME& GetFileName() const { return m_filename; }
+    const FOOTPRINT*   GetFootprint() const { return m_footprint.get(); }
+};
+
+typedef boost::ptr_map<wxString, FP_CACHE_ITEM> FP_CACHE_FOOTPRINT_MAP;
+
+class FP_CACHE
+{
+    PCB_PLUGIN*   m_owner;        // Plugin object that owns the cache.
+    wxFileName    m_lib_path;     // The path of the library.
+    wxString      m_lib_raw_path; // For quick comparisons.
+    FP_CACHE_FOOTPRINT_MAP m_footprints;   // Map of footprint filename to FOOTPRINT*.
+
+    bool m_cache_dirty;          // Stored separately because it's expensive to check
+                                 // m_cache_timestamp against all the files.
+    long long m_cache_timestamp; // A hash of the timestamps for all the footprint
+                                 // files.
+
+public:
+    FP_CACHE( PCB_PLUGIN* aOwner, const wxString& aLibraryPath );
+
+    wxString GetPath() const { return m_lib_raw_path; }
+
+    bool IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
+
+    bool Exists() const { return m_lib_path.IsOk() && m_lib_path.DirExists(); }
+
+    FP_CACHE_FOOTPRINT_MAP& GetFootprints() { return m_footprints; }
+
+    // Most all functions in this class throw IO_ERROR exceptions.  There are no
+    // error codes nor user interface calls from here, nor in any PLUGIN.
+    // Catch these exceptions higher up please.
+
+    /**
+     * Save the footprint cache or a single footprint from it to disk
+     *
+     * @param aFootprint if set, save only this footprint, otherwise, save the full library
+     */
+    void Save( FOOTPRINT* aFootprint = nullptr );
+
+    void Load();
+
+    void Remove( const wxString& aFootprintName );
+
+    /**
+     * Generate a timestamp representing all source files in the cache (including the
+     * parent directory).
+     * Timestamps should not be considered ordered.  They either match or they don't.
+     */
+    static long long GetTimestamp( const wxString& aLibPath );
+
+    /**
+     * Return true if the cache is not up-to-date.
+     */
+    bool IsModified();
+
+    /**
+     * Check if \a aPath is the same as the current cache path.
+     *
+     * This tests paths by converting \a aPath using the native separators.  Internally
+     * #FP_CACHE stores the current path using native separators.  This prevents path
+     * miscompares on Windows due to the fact that paths can be stored with / instead of \\
+     * in the footprint library table.
+     *
+     * @param aPath is the library path to test against.
+     * @return true if \a aPath is the same as the cache path.
+     */
+    bool IsPath( const wxString& aPath ) const;
+};
 
 
 /**

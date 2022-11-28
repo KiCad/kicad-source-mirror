@@ -26,7 +26,6 @@
 #include <base_units.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
 #include <core/arraydim.h>
@@ -54,7 +53,6 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/dir.h>
 #include <wx/log.h>
-#include <wx_filename.h>
 #include <zone.h>
 #include <zones.h>
 
@@ -68,99 +66,10 @@
 using namespace PCB_KEYS_T;
 
 
-/**
- * Helper class for creating a footprint library cache.
- *
- * The new footprint library design is a file path of individual footprint files that contain
- * a single footprint per file.  This class is a helper only for the footprint portion of the
- * PLUGIN API, and only for the #PCB_PLUGIN plugin.  It is private to this implementation file so
- * it is not placed into a header.
- */
-class FP_CACHE_ITEM
-{
-    WX_FILENAME                m_filename;
-    std::unique_ptr<FOOTPRINT> m_footprint;
-
-public:
-    FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
-
-    const WX_FILENAME& GetFileName() const { return m_filename; }
-    const FOOTPRINT* GetFootprint()  const { return m_footprint.get(); }
-};
-
-
 FP_CACHE_ITEM::FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName ) :
         m_filename( aFileName ),
         m_footprint( aFootprint )
 { }
-
-
-typedef boost::ptr_map< wxString, FP_CACHE_ITEM >   FOOTPRINT_MAP;
-
-
-class FP_CACHE
-{
-    PCB_PLUGIN*         m_owner;            // Plugin object that owns the cache.
-    wxFileName      m_lib_path;         // The path of the library.
-    wxString        m_lib_raw_path;     // For quick comparisons.
-    FOOTPRINT_MAP   m_footprints;       // Map of footprint filename to FOOTPRINT*.
-
-    bool            m_cache_dirty;      // Stored separately because it's expensive to check
-                                        // m_cache_timestamp against all the files.
-    long long       m_cache_timestamp;  // A hash of the timestamps for all the footprint
-                                        // files.
-
-public:
-    FP_CACHE( PCB_PLUGIN* aOwner, const wxString& aLibraryPath );
-
-    wxString GetPath() const { return m_lib_raw_path; }
-
-    bool IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
-
-    bool Exists() const { return m_lib_path.IsOk() && m_lib_path.DirExists(); }
-
-    FOOTPRINT_MAP& GetFootprints() { return m_footprints; }
-
-    // Most all functions in this class throw IO_ERROR exceptions.  There are no
-    // error codes nor user interface calls from here, nor in any PLUGIN.
-    // Catch these exceptions higher up please.
-
-    /**
-     * Save the footprint cache or a single footprint from it to disk
-     *
-     * @param aFootprint if set, save only this footprint, otherwise, save the full library
-     */
-    void Save( FOOTPRINT* aFootprint = nullptr );
-
-    void Load();
-
-    void Remove( const wxString& aFootprintName );
-
-    /**
-     * Generate a timestamp representing all source files in the cache (including the
-     * parent directory).
-     * Timestamps should not be considered ordered.  They either match or they don't.
-     */
-    static long long GetTimestamp( const wxString& aLibPath );
-
-    /**
-     * Return true if the cache is not up-to-date.
-     */
-    bool IsModified();
-
-    /**
-     * Check if \a aPath is the same as the current cache path.
-     *
-     * This tests paths by converting \a aPath using the native separators.  Internally
-     * #FP_CACHE stores the current path using native separators.  This prevents path
-     * miscompares on Windows due to the fact that paths can be stored with / instead of \\
-     * in the footprint library table.
-     *
-     * @param aPath is the library path to test against.
-     * @return true if \a aPath is the same as the cache path.
-     */
-    bool IsPath( const wxString& aPath ) const;
-};
 
 
 FP_CACHE::FP_CACHE( PCB_PLUGIN* aOwner, const wxString& aLibraryPath )
@@ -189,7 +98,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
                                           m_lib_raw_path ) );
     }
 
-    for( FOOTPRINT_MAP::iterator it = m_footprints.begin(); it != m_footprints.end(); ++it )
+    for( FP_CACHE_FOOTPRINT_MAP::iterator it = m_footprints.begin(); it != m_footprints.end(); ++it )
     {
         if( aFootprint && aFootprint != it->second->GetFootprint() )
             continue;
@@ -300,7 +209,7 @@ void FP_CACHE::Load()
 
 void FP_CACHE::Remove( const wxString& aFootprintName )
 {
-    FOOTPRINT_MAP::const_iterator it = m_footprints.find( aFootprintName );
+    FP_CACHE_FOOTPRINT_MAP::const_iterator it = m_footprints.find( aFootprintName );
 
     if( it == m_footprints.end() )
     {
@@ -2571,8 +2480,8 @@ const FOOTPRINT* PCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
         // do nothing with the error
     }
 
-    FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
-    FOOTPRINT_MAP::const_iterator it = footprints.find( aFootprintName );
+    FP_CACHE_FOOTPRINT_MAP&       footprints = m_cache->GetFootprints();
+    FP_CACHE_FOOTPRINT_MAP::const_iterator it = footprints.find( aFootprintName );
 
     if( it == footprints.end() )
         return nullptr;
@@ -2665,7 +2574,7 @@ void PCB_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* a
 
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
 
-    FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
+    FP_CACHE_FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
 
     // Quietly overwrite footprint and delete footprint file from path for any by same name.
     wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
@@ -2688,7 +2597,7 @@ void PCB_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* a
 
     wxString fullPath = fn.GetFullPath();
     wxString fullName = fn.GetFullName();
-    FOOTPRINT_MAP::const_iterator it = footprints.find( footprintName );
+    FP_CACHE_FOOTPRINT_MAP::const_iterator it = footprints.find( footprintName );
 
     if( it != footprints.end() )
     {
