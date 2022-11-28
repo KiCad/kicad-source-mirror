@@ -135,6 +135,9 @@ public:
     /// Pack and start moving selected footprints
     static TOOL_ACTION packAndMoveFootprints;
 
+    // Compound Action Tool actions, e.g. Move Individually
+    static TOOL_ACTION skip;
+
     /// Update selected tracks & vias to the current track & via dimensions
     static TOOL_ACTION changeTrackWidth;
 

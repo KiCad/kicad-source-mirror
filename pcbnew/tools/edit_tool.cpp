@@ -166,6 +166,12 @@ bool EDIT_TOOL::Init()
                 return frame()->GetBoard() && !frame()->GetBoard()->IsEmpty();
             };
 
+    auto isSkippable =
+            [ this ]( const SELECTION& aSelection )
+            {
+                return frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
+            };
+
     static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T,
                                                    PCB_ARC_T,
                                                    PCB_VIA_T,
@@ -197,6 +203,7 @@ bool EDIT_TOOL::Init()
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::moveIndividually,  SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && notMovingCondition );
+    menu.AddItem( PCB_ACTIONS::skip,              isSkippable );
     menu.AddItem( PCB_ACTIONS::breakTrack,        SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
     menu.AddItem( PCB_ACTIONS::drag45Degree,      SELECTION_CONDITIONS::Count( 1 )
