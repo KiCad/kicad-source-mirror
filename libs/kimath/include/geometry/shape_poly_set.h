@@ -508,8 +508,9 @@ public:
      * in partition calculations the grid size is hard coded to 1e7.
      * This is a good value for Pcbnew: 1cm, in internal units.
      * But not good for Gerbview (1e7 = 10cm), however using a partition is not useful.
+     * @param aSimplify = force the algorithm to simplify the POLY_SET before triangulating
      */
-    void CacheTriangulation( bool aPartition = true );
+    void CacheTriangulation( bool aPartition = true, bool aSimplify = false );
     bool IsTriangulationUpToDate() const;
 
     MD5_HASH GetHash() const;

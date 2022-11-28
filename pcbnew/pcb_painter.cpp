@@ -1701,7 +1701,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                     // draw the polygon solid shape on Opengl.  GLU tessellation is much slower,
                     // so currently we are using our tessellation.
                     if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
-                        shape.CacheTriangulation();
+                        shape.CacheTriangulation( true, true );
 
                     m_gal->DrawPolygon( shape );
                 }

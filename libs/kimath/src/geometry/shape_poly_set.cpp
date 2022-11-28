@@ -2681,7 +2681,7 @@ static SHAPE_POLY_SET partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aP
 }
 
 
-void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
+void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 {
     bool recalculate = !m_hash.IsValid();
     MD5_HASH hash;
@@ -2752,18 +2752,34 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
         {
             // This partitions into regularly-sized grids (1cm in Pcbnew)
             SHAPE_POLY_SET flattened( Outline( ii ) );
+
+            for( int jj = 0; jj < HoleCount( ii ); ++jj )
+                flattened.AddHole( Hole( ii, jj ) );
+
             flattened.ClearArcs();
+
+            if( flattened.HasHoles() )
+                flattened.Fracture( PM_FAST );
+            else if( aSimplify )
+                flattened.Simplify( PM_FAST );
+
             SHAPE_POLY_SET partitions = partitionPolyIntoRegularCellGrid( flattened, 1e7 );
 
-            m_triangulationValid &= triangulate( partitions, ii, m_triangulatedPolys );
+            // This pushes the triangulation for all polys in partitions
+            // to be referenced to the ii-th polygon
+            m_triangulationValid &= triangulate( partitions, ii , m_triangulatedPolys );
         }
     }
     else
     {
         SHAPE_POLY_SET tmpSet( *this );
 
+        tmpSet.ClearArcs();
+
         if( tmpSet.HasHoles() )
             tmpSet.Fracture( PM_FAST );
+        else if( aSimplify )
+            tmpSet.Simplify( PM_FAST );
 
         m_triangulationValid = triangulate( tmpSet, -1, m_triangulatedPolys );
     }
