@@ -156,7 +156,8 @@ bool EDIT_TOOL::Init()
             [ this ]( const SELECTION& aSelection )
             {
                 return !frame()->IsCurrentTool( PCB_ACTIONS::move )
-                       && !frame()->IsCurrentTool( PCB_ACTIONS::moveWithReference );
+                       && !frame()->IsCurrentTool( PCB_ACTIONS::moveWithReference )
+                       && !frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
             };
 
     auto noItemsCondition =
@@ -192,8 +193,9 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::unrouteSelected,   SELECTION_CONDITIONS::NotEmpty
-                                                      && SELECTION_CONDITIONS::OnlyTypes( unroutableTypes ) );
-    menu.AddItem( PCB_ACTIONS::moveIndividually,  SELECTION_CONDITIONS::NotEmpty
+                                                      && SELECTION_CONDITIONS::OnlyTypes( unroutableTypes )
+                                                      && notMovingCondition );
+    menu.AddItem( PCB_ACTIONS::moveIndividually,  SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::breakTrack,        SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
@@ -212,7 +214,7 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::mirrorV,           SELECTION_CONDITIONS::NotEmpty
                                                       && !singleFootprintCondition );
     menu.AddItem( PCB_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ) );
-    menu.AddItem( PCB_ACTIONS::packAndMoveFootprints, SELECTION_CONDITIONS::MoreThan( 1 ) 
+    menu.AddItem( PCB_ACTIONS::packAndMoveFootprints, SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
 
     menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
