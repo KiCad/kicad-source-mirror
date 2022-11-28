@@ -246,8 +246,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         {
         case CHT_ADD:
         {
-            if( selTool && selTool->GetEnteredGroup() && !boardItem->GetParentGroup() )
+            if( selTool && selTool->GetEnteredGroup() && !boardItem->GetParentGroup()
+                    && PCB_GROUP::IsGroupableType( boardItem->Type() ) )
+            {
                 selTool->GetEnteredGroup()->AddItem( boardItem );
+            }
 
             if( m_isFootprintEditor )
             {
