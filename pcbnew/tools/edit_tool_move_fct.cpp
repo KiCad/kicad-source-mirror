@@ -66,7 +66,7 @@
 
 int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
-    if( isRouterActive() || m_dragging )
+    if( isRouterActive() )
     {
         wxBell();
         return 0;
@@ -179,7 +179,8 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_commit->Push( _( "Swap" ) );
+    if( !m_dragging )
+        m_commit->Push( _( "Swap" ) );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
