@@ -1281,18 +1281,20 @@ static struct TRACK_VIA_DESC
 
         // TODO layerset for vias?
         // TODO test drill, use getdrillvalue?
+        const wxString groupVia = _( "Via Properties" );
+
         propMgr.ReplaceProperty( TYPE_HASH( PCB_TRACK ), _HKI( "Width" ),
             new PROPERTY<PCB_VIA, int, PCB_TRACK>( _HKI( "Diameter" ),
             &PCB_VIA::SetWidth, &PCB_VIA::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Hole" ),
-            &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::PT_SIZE ) );
+            &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
             new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer Top" ),
-            &PCB_VIA::SetLayer, &PCB_VIA::GetLayer ) );
+            &PCB_VIA::SetLayer, &PCB_VIA::GetLayer ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Layer Bottom" ),
-            &PCB_VIA::SetBottomLayer, &PCB_VIA::BottomLayer ) );
+            &PCB_VIA::SetBottomLayer, &PCB_VIA::BottomLayer ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, VIATYPE>( _HKI( "Via Type" ),
-            &PCB_VIA::SetViaType, &PCB_VIA::GetViaType ) );
+            &PCB_VIA::SetViaType, &PCB_VIA::GetViaType ), groupVia );
     }
 } _TRACK_VIA_DESC;
 

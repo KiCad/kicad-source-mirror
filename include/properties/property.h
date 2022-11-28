@@ -184,7 +184,6 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         m_display( aDisplay ),
         m_coordType( aCoordType ),
         m_isInternal( false ),
-        m_groupId( -1 ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } )
     {
     }
@@ -268,8 +267,8 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
     void SetIsInternal( bool aIsInternal ) { m_isInternal = aIsInternal; }
     bool IsInternal() const { return m_isInternal; }
 
-    void SetGroup( int aGroup ) { m_groupId = aGroup; }
-    int Group() const { return m_groupId; }
+    wxString Group() const { return m_group; }
+    void SetGroup( const wxString& aGroup ) { m_group = aGroup; }
 
 protected:
     template<typename T>
@@ -302,7 +301,8 @@ private:
     /// Internal properties are hidden from the GUI
     bool m_isInternal;
 
-    int m_groupId;
+    /// Optional group identifier
+    wxString m_group;
 
     std::function<bool(INSPECTABLE*)> m_availFunc;   ///< Eval to determine if prop is available
 

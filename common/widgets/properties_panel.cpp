@@ -132,10 +132,34 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
     const PROPERTY_LIST& allProperties = propMgr.GetProperties( *types.begin() );
     copy( allProperties.begin(), allProperties.end(), inserter( commonProps, commonProps.begin() ) );
 
+    PROPERTY_DISPLAY_ORDER displayOrder = propMgr.GetDisplayOrder( *types.begin() );
+
+    std::vector<wxString> groupDisplayOrder = propMgr.GetGroupDisplayOrder( *types.begin() );
+    std::set<wxString> groups( groupDisplayOrder.begin(), groupDisplayOrder.end() );
+
+    std::map<wxPGProperty*, int> pgPropOrders;
+    std::map<wxString, std::vector<wxPGProperty*>> pgPropGroups;
+
     // Get all possible properties
     for( const auto& type : types )
     {
         const PROPERTY_LIST& itemProps = propMgr.GetProperties( type );
+
+        const PROPERTY_DISPLAY_ORDER& itemDisplayOrder = propMgr.GetDisplayOrder( type );
+
+        copy( itemDisplayOrder.begin(), itemDisplayOrder.end(),
+              inserter( displayOrder, displayOrder.begin() ) );
+
+        const std::vector<wxString>& itemGroups = propMgr.GetGroupDisplayOrder( type );
+
+        for( const wxString& group : itemGroups )
+        {
+            if( !groups.count( group ) )
+            {
+                groupDisplayOrder.emplace_back( group );
+                groups.insert( group );
+            }
+        }
 
         for( auto it = commonProps.begin(); it != commonProps.end(); /* ++it in the loop */ )
         {
@@ -202,10 +226,35 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
             if( pgProp )
             {
                 pgProp->SetValue( commonVal );
-                m_grid->Append( pgProp );
                 m_displayed.push_back( property );
+
+                wxASSERT( displayOrder.count( property ) );
+                pgPropOrders[pgProp] = displayOrder[property];
+                pgPropGroups[property->Group()].emplace_back( pgProp );
             }
         }
+    }
+
+    const wxString unspecifiedGroupCaption = _( "Basic Properties" );
+
+    for( const wxString& groupName : groupDisplayOrder )
+    {
+        wxASSERT( pgPropGroups.count( groupName ) );
+        std::vector<wxPGProperty*>& properties = pgPropGroups[groupName];
+
+        auto groupItem = new wxPropertyCategory( groupName == wxEmptyString ?
+                                                 unspecifiedGroupCaption : groupName );
+
+        m_grid->Append( groupItem );
+
+        std::sort( properties.begin(), properties.end(),
+                   [&]( wxPGProperty*& aFirst, wxPGProperty*& aSecond )
+                   {
+                       return pgPropOrders[aFirst] < pgPropOrders[aSecond];
+                   } );
+
+        for( wxPGProperty* property : properties )
+            m_grid->Append( property );
     }
 
     RecalculateSplitterPos();

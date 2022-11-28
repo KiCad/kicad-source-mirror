@@ -1374,20 +1374,28 @@ static struct ZONE_DESC
 
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
                     &ZONE::SetZoneName, &ZONE::GetZoneName ) );
+
+        const wxString groupOverrides = _( "Overrides" );
+
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Clearance Override" ),
                     &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
-                    PROPERTY_DISPLAY::PT_SIZE ) );
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupOverrides );
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Min Width" ),
                     &ZONE::SetMinThickness, &ZONE::GetMinThickness,
-                    PROPERTY_DISPLAY::PT_SIZE ) );
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupOverrides );
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
-                    &ZONE::SetPadConnection, &ZONE::GetPadConnection ) );
+                    &ZONE::SetPadConnection, &ZONE::GetPadConnection ),
+                    groupOverrides );
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Gap" ),
                     &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap,
-                    PROPERTY_DISPLAY::PT_SIZE ) );
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupOverrides );
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Spoke Width" ),
                     &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth,
-                    PROPERTY_DISPLAY::PT_SIZE ) );
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupOverrides );
     }
 } _ZONE_DESC;
 

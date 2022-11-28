@@ -28,6 +28,7 @@
 
 #include <wx/string.h>
 
+#include <list>
 #include <map>
 #include <unordered_map>
 #include <set>
@@ -45,6 +46,8 @@ using TYPE_ID = size_t;
 using PROPERTY_LIST = std::vector<PROPERTY_BASE*>;
 
 using PROPERTY_SET = std::set<std::pair<size_t, wxString>>;
+
+using PROPERTY_DISPLAY_ORDER = std::map<PROPERTY_BASE*, int>;
 
 /**
  * Provide class metadata. Each class handled by PROPERTY_MANAGER
@@ -104,6 +107,10 @@ public:
      */
     const PROPERTY_LIST& GetProperties( TYPE_ID aType ) const;
 
+    const PROPERTY_DISPLAY_ORDER& GetDisplayOrder( TYPE_ID aType ) const;
+
+    const std::vector<wxString>& GetGroupDisplayOrder( TYPE_ID aType ) const;
+
     /**
      * Cast a type to another type. Used for correct type-casting of types with
      * multi-inheritance. Requires registration of an appropriate converter (AddTypeCast).
@@ -123,23 +130,16 @@ public:
     }
 
     /**
-     * Defines a grouping of properties in the editor
-     */
-    struct PROPERTY_GROUP
-    {
-        size_t   id;    ///< Controls the display order of the group (lowest first)
-        wxString name;  ///< Header to display in the properties manager
-    };
-
-    static const PROPERTY_GROUP DEFAULT_GROUP;
-
-    /**
      * Register a property.
+     * Properties for a given item will be shown in the order they are added.
+     * If a group name is supplied, the group will be created if it does not yet exists.
+     * Groups will likewise be shown in the order they are added (so, groups first added by a base
+     * class will appear before those of a child class).
      *
      * @param aProperty is the property to register.
-     * @param aGroup is the group to place the property in
+     * @param aGroup is an optional grouping key for the property
      */
-    void AddProperty( PROPERTY_BASE* aProperty, const PROPERTY_GROUP& aGroup = DEFAULT_GROUP );
+    void AddProperty( PROPERTY_BASE* aProperty, const wxString& aGroup = wxEmptyString );
 
     /**
      * Replace an existing property for a specific type.
@@ -150,8 +150,10 @@ public:
      * @param aBase is the base class type the delivers the original property.
      * @param aName is the name of the replaced property.
      * @param aNew is the property replacing the inherited one.
+     * @param aGroup is the group to set for the replaced property.
      */
-    void ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew );
+    void ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew,
+                          const wxString& aGroup = wxEmptyString );
 
     /**
      * Register a type converter. Required prior TypeCast() usage.
@@ -205,13 +207,6 @@ public:
 
     std::vector<TYPE_ID> GetMatchingClasses( PROPERTY_BASE* aProperty );
 
-    /**
-     * Defines a named group of properties belonging to a certain class
-     * @param aOwner is the class type that delivers the properties in the group
-     * @param aName will be shown as the group name in the properties manager
-     */
-    const PROPERTY_GROUP& AddPropertyGroup( TYPE_ID aOwner, const wxString& aName );
-
 private:
     PROPERTY_MANAGER() :
             m_dirty( false ),
@@ -226,7 +221,8 @@ private:
         CLASS_DESC( TYPE_ID aId )
             : m_id( aId )
         {
-            m_groups.emplace_back( DEFAULT_GROUP );
+            m_groupDisplayOrder.emplace_back( wxEmptyString );
+            m_groups.insert( wxEmptyString );
         }
 
         ///< Unique type identifier (obtained using TYPE_HASH)
@@ -244,7 +240,11 @@ private:
         ///< All properties (both unique to the type and inherited)
         std::vector<PROPERTY_BASE*> m_allProperties;
 
-        std::vector<PROPERTY_GROUP> m_groups;
+        PROPERTY_DISPLAY_ORDER m_displayOrder;
+
+        std::vector<wxString> m_groupDisplayOrder;
+
+        std::set<wxString> m_groups;
 
         ///< Replaced properties (TYPE_ID / name)
         PROPERTY_SET m_replaced;
@@ -254,7 +254,8 @@ private:
 
         ///< Traverses the class inheritance hierarchy bottom-to-top, gathering
         ///< all properties available to a type
-        void collectPropsRecur( PROPERTY_LIST& aResult, PROPERTY_SET& aReplaced ) const;
+        void collectPropsRecur( PROPERTY_LIST& aResult, PROPERTY_SET& aReplaced,
+                                PROPERTY_DISPLAY_ORDER& aDisplayOrder ) const;
     };
 
     ///< Returns metadata for a specific type
