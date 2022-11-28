@@ -49,6 +49,7 @@ bool PCB_GROUP::IsGroupableType( KICAD_T aType )
     case PCB_FP_TEXT_T:
     case PCB_FP_SHAPE_T:
     case PCB_FP_ZONE_T:
+    case PCB_GROUP_T:
     case PCB_TRACE_T:
     case PCB_VIA_T:
     case PCB_ARC_T:
