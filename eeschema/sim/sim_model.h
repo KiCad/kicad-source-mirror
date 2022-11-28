@@ -156,6 +156,9 @@ public:
         PMES_HFET2,
 
 
+        NMOS_VDMOS,
+        PMOS_VDMOS,
+
         NMOS_MOS1,
         PMOS_MOS1,
 

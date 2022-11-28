@@ -139,6 +139,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::NMES_HFET2:           return { DEVICE_TYPE_::NMES,   "HFET2",          "HFET2"                      };
     case TYPE::PMES_HFET2:           return { DEVICE_TYPE_::PMES,   "HFET2",          "HFET2"                      };
 
+    case TYPE::NMOS_VDMOS:           return { DEVICE_TYPE_::NMOS,   "VDMOS",          "VDMOS"                      };
+    case TYPE::PMOS_VDMOS:           return { DEVICE_TYPE_::PMOS,   "VDMOS",          "VDMOS"                      };
     case TYPE::NMOS_MOS1:            return { DEVICE_TYPE_::NMOS,   "MOS1",           "Classical quadratic (MOS1)" };
     case TYPE::PMOS_MOS1:            return { DEVICE_TYPE_::PMOS,   "MOS1",           "Classical quadratic (MOS1)" };
     case TYPE::NMOS_MOS2:            return { DEVICE_TYPE_::NMOS,   "MOS2",           "Grove-Frohman (MOS2)"       };
@@ -232,117 +234,119 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 {
     switch( aType )
     {
-    case TYPE::R:                    return { "R", ""        };
-    case TYPE::R_POT:                return { "A", ""        };
-    case TYPE::R_BEHAVIORAL:         return { "R", "",       "",        "0",   false, true   };
+    case TYPE::R:                    return { "R", ""             };
+    case TYPE::R_POT:                return { "A", ""             };
+    case TYPE::R_BEHAVIORAL:         return { "R", "",            "",        "0",  false, true   };
 
-    case TYPE::C:                    return { "C", ""        };
-    case TYPE::C_BEHAVIORAL:         return { "C", "",       "",        "0",   false, true   };
+    case TYPE::C:                    return { "C", ""             };
+    case TYPE::C_BEHAVIORAL:         return { "C", "",            "",        "0",  false, true   };
 
-    case TYPE::L:                    return { "L", ""        };
-    case TYPE::L_MUTUAL:             return { "K", ""        };
-    case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        "0",   false, true   };
+    case TYPE::L:                    return { "L", ""             };
+    case TYPE::L_MUTUAL:             return { "K", ""             };
+    case TYPE::L_BEHAVIORAL:         return { "L", "",            "",        "0",  false, true   };
 
     //case TYPE::TLINE_Z0:             return { "T"  };
-    case TYPE::TLINE_Z0:             return { "O", "LTRA"    };
-    case TYPE::TLINE_RLGC:           return { "O", "LTRA"    };
+    case TYPE::TLINE_Z0:             return { "O", "LTRA"         };
+    case TYPE::TLINE_RLGC:           return { "O", "LTRA"         };
 
-    case TYPE::SW_V:                 return { "S", "SW"  };
-    case TYPE::SW_I:                 return { "W", "CSW" };
+    case TYPE::SW_V:                 return { "S", "SW"           };
+    case TYPE::SW_I:                 return { "W", "CSW"          };
 
-    case TYPE::D:                    return { "D", "D"       };
+    case TYPE::D:                    return { "D", "D"            };
 
-    case TYPE::NPN_GUMMELPOON:       return { "Q", "NPN",    "",        "1",  true   };
-    case TYPE::PNP_GUMMELPOON:       return { "Q", "PNP",    "",        "1",  true   };
+    case TYPE::NPN_GUMMELPOON:       return { "Q", "NPN",         "",        "1",  true   };
+    case TYPE::PNP_GUMMELPOON:       return { "Q", "PNP",         "",        "1",  true   };
 
-    case TYPE::NPN_VBIC:             return { "Q", "NPN",    "",        "4"   };
-    case TYPE::PNP_VBIC:             return { "Q", "PNP",    "",        "4"   };
+    case TYPE::NPN_VBIC:             return { "Q", "NPN",         "",        "4"   };
+    case TYPE::PNP_VBIC:             return { "Q", "PNP",         "",        "4"   };
 
-    case TYPE::NPN_HICUM2:           return { "Q", "NPN",    "",        "8"   };
-    case TYPE::PNP_HICUM2:           return { "Q", "PNP",    "",        "8"   };
+    case TYPE::NPN_HICUM2:           return { "Q", "NPN",         "",        "8"   };
+    case TYPE::PNP_HICUM2:           return { "Q", "PNP",         "",        "8"   };
 
-    case TYPE::NJFET_SHICHMANHODGES: return { "M", "NJF",    "",        "1"   };
-    case TYPE::PJFET_SHICHMANHODGES: return { "M", "PJF",    "",        "1"   };
-    case TYPE::NJFET_PARKERSKELLERN: return { "M", "NJF",    "",        "2"   };
-    case TYPE::PJFET_PARKERSKELLERN: return { "M", "PJF",    "",        "2"   };
+    case TYPE::NJFET_SHICHMANHODGES: return { "M", "NJF",         "",        "1"   };
+    case TYPE::PJFET_SHICHMANHODGES: return { "M", "PJF",         "",        "1"   };
+    case TYPE::NJFET_PARKERSKELLERN: return { "M", "NJF",         "",        "2"   };
+    case TYPE::PJFET_PARKERSKELLERN: return { "M", "PJF",         "",        "2"   };
 
-    case TYPE::NMES_STATZ:           return { "Z", "NMF",    "",        "1"   };
-    case TYPE::PMES_STATZ:           return { "Z", "PMF",    "",        "1"   };
-    case TYPE::NMES_YTTERDAL:        return { "Z", "NMF",    "",        "2"   };
-    case TYPE::PMES_YTTERDAL:        return { "Z", "PMF",    "",        "2"   };
-    case TYPE::NMES_HFET1:           return { "Z", "NMF",    "",        "5"   };
-    case TYPE::PMES_HFET1:           return { "Z", "PMF",    "",        "5"   };
-    case TYPE::NMES_HFET2:           return { "Z", "NMF",    "",        "6"   };
-    case TYPE::PMES_HFET2:           return { "Z", "PMF",    "",        "6"   };
+    case TYPE::NMES_STATZ:           return { "Z", "NMF",         "",        "1"   };
+    case TYPE::PMES_STATZ:           return { "Z", "PMF",         "",        "1"   };
+    case TYPE::NMES_YTTERDAL:        return { "Z", "NMF",         "",        "2"   };
+    case TYPE::PMES_YTTERDAL:        return { "Z", "PMF",         "",        "2"   };
+    case TYPE::NMES_HFET1:           return { "Z", "NMF",         "",        "5"   };
+    case TYPE::PMES_HFET1:           return { "Z", "PMF",         "",        "5"   };
+    case TYPE::NMES_HFET2:           return { "Z", "NMF",         "",        "6"   };
+    case TYPE::PMES_HFET2:           return { "Z", "PMF",         "",        "6"   };
 
-    case TYPE::NMOS_MOS1:            return { "M", "NMOS",   "",        "1"   };
-    case TYPE::PMOS_MOS1:            return { "M", "PMOS",   "",        "1"   };
-    case TYPE::NMOS_MOS2:            return { "M", "NMOS",   "",        "2"   };
-    case TYPE::PMOS_MOS2:            return { "M", "PMOS",   "",        "2"   };
-    case TYPE::NMOS_MOS3:            return { "M", "NMOS",   "",        "3"   };
-    case TYPE::PMOS_MOS3:            return { "M", "PMOS",   "",        "3"   };
-    case TYPE::NMOS_BSIM1:           return { "M", "NMOS",   "",        "4"   };
-    case TYPE::PMOS_BSIM1:           return { "M", "PMOS",   "",        "4"   };
-    case TYPE::NMOS_BSIM2:           return { "M", "NMOS",   "",        "5"   };
-    case TYPE::PMOS_BSIM2:           return { "M", "PMOS",   "",        "5"   };
-    case TYPE::NMOS_MOS6:            return { "M", "NMOS",   "",        "6"   };
-    case TYPE::PMOS_MOS6:            return { "M", "PMOS",   "",        "6"   };
-    case TYPE::NMOS_BSIM3:           return { "M", "NMOS",   "",        "8"   };
-    case TYPE::PMOS_BSIM3:           return { "M", "PMOS",   "",        "8"   };
-    case TYPE::NMOS_MOS9:            return { "M", "NMOS",   "",        "9"   };
-    case TYPE::PMOS_MOS9:            return { "M", "PMOS",   "",        "9"   };
-    case TYPE::NMOS_B4SOI:           return { "M", "NMOS",   "",        "10"  };
-    case TYPE::PMOS_B4SOI:           return { "M", "PMOS",   "",        "10"  };
-    case TYPE::NMOS_BSIM4:           return { "M", "NMOS",   "",        "14"  };
-    case TYPE::PMOS_BSIM4:           return { "M", "PMOS",   "",        "14"  };
+    case TYPE::NMOS_VDMOS:           return { "M", "VDMOS NCHAN", };
+    case TYPE::PMOS_VDMOS:           return { "M", "VDMOS PCHAN", };
+    case TYPE::NMOS_MOS1:            return { "M", "NMOS",        "",        "1"   };
+    case TYPE::PMOS_MOS1:            return { "M", "PMOS",        "",        "1"   };
+    case TYPE::NMOS_MOS2:            return { "M", "NMOS",        "",        "2"   };
+    case TYPE::PMOS_MOS2:            return { "M", "PMOS",        "",        "2"   };
+    case TYPE::NMOS_MOS3:            return { "M", "NMOS",        "",        "3"   };
+    case TYPE::PMOS_MOS3:            return { "M", "PMOS",        "",        "3"   };
+    case TYPE::NMOS_BSIM1:           return { "M", "NMOS",        "",        "4"   };
+    case TYPE::PMOS_BSIM1:           return { "M", "PMOS",        "",        "4"   };
+    case TYPE::NMOS_BSIM2:           return { "M", "NMOS",        "",        "5"   };
+    case TYPE::PMOS_BSIM2:           return { "M", "PMOS",        "",        "5"   };
+    case TYPE::NMOS_MOS6:            return { "M", "NMOS",        "",        "6"   };
+    case TYPE::PMOS_MOS6:            return { "M", "PMOS",        "",        "6"   };
+    case TYPE::NMOS_BSIM3:           return { "M", "NMOS",        "",        "8"   };
+    case TYPE::PMOS_BSIM3:           return { "M", "PMOS",        "",        "8"   };
+    case TYPE::NMOS_MOS9:            return { "M", "NMOS",        "",        "9"   };
+    case TYPE::PMOS_MOS9:            return { "M", "PMOS",        "",        "9"   };
+    case TYPE::NMOS_B4SOI:           return { "M", "NMOS",        "",        "10"  };
+    case TYPE::PMOS_B4SOI:           return { "M", "PMOS",        "",        "10"  };
+    case TYPE::NMOS_BSIM4:           return { "M", "NMOS",        "",        "14"  };
+    case TYPE::PMOS_BSIM4:           return { "M", "PMOS",        "",        "14"  };
     //case TYPE::NMOS_EKV2_6:          return {};
     //case TYPE::PMOS_EKV2_6:          return {};
     //case TYPE::NMOS_PSP:             return {};
     //case TYPE::PMOS_PSP:             return {};
-    case TYPE::NMOS_B3SOIFD:         return { "M", "NMOS",   "",        "55"  };
-    case TYPE::PMOS_B3SOIFD:         return { "M", "PMOS",   "",        "55"  };
-    case TYPE::NMOS_B3SOIDD:         return { "M", "NMOS",   "",        "56"  };
-    case TYPE::PMOS_B3SOIDD:         return { "M", "PMOS",   "",        "56"  };
-    case TYPE::NMOS_B3SOIPD:         return { "M", "NMOS",   "",        "57"  };
-    case TYPE::PMOS_B3SOIPD:         return { "M", "PMOS",   "",        "57"  };
+    case TYPE::NMOS_B3SOIFD:         return { "M", "NMOS",        "",        "55"  };
+    case TYPE::PMOS_B3SOIFD:         return { "M", "PMOS",        "",        "55"  };
+    case TYPE::NMOS_B3SOIDD:         return { "M", "NMOS",        "",        "56"  };
+    case TYPE::PMOS_B3SOIDD:         return { "M", "PMOS",        "",        "56"  };
+    case TYPE::NMOS_B3SOIPD:         return { "M", "NMOS",        "",        "57"  };
+    case TYPE::PMOS_B3SOIPD:         return { "M", "PMOS",        "",        "57"  };
     //case TYPE::NMOS_STAG:            return {};
     //case TYPE::PMOS_STAG:            return {};
-    case TYPE::NMOS_HISIM2:          return { "M", "NMOS",   "",        "68"  };
-    case TYPE::PMOS_HISIM2:          return { "M", "PMOS",   "",        "68"  };
-    case TYPE::NMOS_HISIMHV1:        return { "M", "NMOS",   "",        "73", true,  false, "1.2.4" };
-    case TYPE::PMOS_HISIMHV1:        return { "M", "PMOS",   "",        "73", true,  false, "1.2.4" };
-    case TYPE::NMOS_HISIMHV2:        return { "M", "NMOS",   "",        "73", true,  false, "2.2.0" };
-    case TYPE::PMOS_HISIMHV2:        return { "M", "PMOS",   "",        "73", true,  false, "2.2.0" };
+    case TYPE::NMOS_HISIM2:          return { "M", "NMOS",        "",        "68"  };
+    case TYPE::PMOS_HISIM2:          return { "M", "PMOS",        "",        "68"  };
+    case TYPE::NMOS_HISIMHV1:        return { "M", "NMOS",        "",        "73", true,  false, "1.2.4" };
+    case TYPE::PMOS_HISIMHV1:        return { "M", "PMOS",        "",        "73", true,  false, "1.2.4" };
+    case TYPE::NMOS_HISIMHV2:        return { "M", "NMOS",        "",        "73", true,  false, "2.2.0" };
+    case TYPE::PMOS_HISIMHV2:        return { "M", "PMOS",        "",        "73", true,  false, "2.2.0" };
 
-    case TYPE::V:                    return { "V", ""        };
-    case TYPE::V_SIN:                return { "V", "",       "SIN"      };
-    case TYPE::V_PULSE:              return { "V", "",       "PULSE"    };
-    case TYPE::V_EXP:                return { "V", "",       "EXP"      };
+    case TYPE::V:                    return { "V", ""             };
+    case TYPE::V_SIN:                return { "V", "",            "SIN"      };
+    case TYPE::V_PULSE:              return { "V", "",            "PULSE"    };
+    case TYPE::V_EXP:                return { "V", "",            "EXP"      };
     /*case TYPE::V_SFAM:               return { "V", "",       "AM"       };
     case TYPE::V_SFFM:               return { "V", "",       "SFFM"     };*/
-    case TYPE::V_PWL:                return { "V", "",       "PWL"      };
-    case TYPE::V_WHITENOISE:         return { "V", "",       "TRNOISE"  };
-    case TYPE::V_PINKNOISE:          return { "V", "",       "TRNOISE"  };
-    case TYPE::V_BURSTNOISE:         return { "V", "",       "TRNOISE"  };
-    case TYPE::V_RANDUNIFORM:        return { "V", "",       "TRRANDOM" };
-    case TYPE::V_RANDNORMAL:         return { "V", "",       "TRRANDOM" };
-    case TYPE::V_RANDEXP:            return { "V", "",       "TRRANDOM" };
+    case TYPE::V_PWL:                return { "V", "",            "PWL"      };
+    case TYPE::V_WHITENOISE:         return { "V", "",            "TRNOISE"  };
+    case TYPE::V_PINKNOISE:          return { "V", "",            "TRNOISE"  };
+    case TYPE::V_BURSTNOISE:         return { "V", "",            "TRNOISE"  };
+    case TYPE::V_RANDUNIFORM:        return { "V", "",            "TRRANDOM" };
+    case TYPE::V_RANDNORMAL:         return { "V", "",            "TRRANDOM" };
+    case TYPE::V_RANDEXP:            return { "V", "",            "TRRANDOM" };
     //case TYPE::V_RANDPOISSON:        return { "V", "",       "TRRANDOM" };
     case TYPE::V_BEHAVIORAL:         return { "B"  };
 
-    case TYPE::I:                    return { "I", ""        };
-    case TYPE::I_PULSE:              return { "I", "",       "PULSE"    };
-    case TYPE::I_SIN:                return { "I", "",       "SIN"      };
-    case TYPE::I_EXP:                return { "I", "",       "EXP"      };
+    case TYPE::I:                    return { "I", ""             };
+    case TYPE::I_PULSE:              return { "I", "",            "PULSE"    };
+    case TYPE::I_SIN:                return { "I", "",            "SIN"      };
+    case TYPE::I_EXP:                return { "I", "",            "EXP"      };
     /*case TYPE::I_SFAM:               return { "V", "",       "AM"       };
     case TYPE::I_SFFM:               return { "V", "",       "SFFM"     };*/
-    case TYPE::I_PWL:                return { "I", "",       "PWL"      };
-    case TYPE::I_WHITENOISE:         return { "I", "",       "TRNOISE"  };
-    case TYPE::I_PINKNOISE:          return { "I", "",       "TRNOISE"  };
-    case TYPE::I_BURSTNOISE:         return { "I", "",       "TRNOISE"  };
-    case TYPE::I_RANDUNIFORM:        return { "I", "",       "TRRANDOM" };
-    case TYPE::I_RANDNORMAL:         return { "I", "",       "TRRANDOM" };
-    case TYPE::I_RANDEXP:            return { "I", "",       "TRRANDOM" };
+    case TYPE::I_PWL:                return { "I", "",            "PWL"      };
+    case TYPE::I_WHITENOISE:         return { "I", "",            "TRNOISE"  };
+    case TYPE::I_PINKNOISE:          return { "I", "",            "TRNOISE"  };
+    case TYPE::I_BURSTNOISE:         return { "I", "",            "TRNOISE"  };
+    case TYPE::I_RANDUNIFORM:        return { "I", "",            "TRRANDOM" };
+    case TYPE::I_RANDNORMAL:         return { "I", "",            "TRRANDOM" };
+    case TYPE::I_RANDEXP:            return { "I", "",            "TRRANDOM" };
     //case TYPE::I_RANDPOISSON:        return { "I", "",       "TRRANDOM" };
     case TYPE::I_BEHAVIORAL:         return { "B"  };
 

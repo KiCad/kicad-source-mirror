@@ -72,6 +72,7 @@ protected:
         MESA,
         HFET1,
         HFET2,
+        VDMOS,
         MOS1,
         MOS2,
         MOS3,

@@ -144,6 +144,11 @@ BOOST_AUTO_TEST_CASE( Models )
             BOOST_CHECK_EQUAL( modelParamCount, 40 );
             BOOST_CHECK_EQUAL( instanceParamCount, 28 );
             break;
+
+        case MODEL_TYPE::VDMOS:
+            BOOST_CHECK_EQUAL( modelParamCount, 69 );
+            BOOST_CHECK_EQUAL( instanceParamCount, 36 );
+            break;
         
         case MODEL_TYPE::MOS1:
             BOOST_CHECK_EQUAL( modelParamCount, 35 );
