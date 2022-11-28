@@ -136,6 +136,7 @@ ASCH_SYMBOL::ASCH_SYMBOL( const std::map<wxString, wxString>& aProps )
 
     partcount        = ALTIUM_PARSER::ReadInt( aProps, "PARTCOUNT", 0 );
     displaymodecount = ALTIUM_PARSER::ReadInt( aProps, "DISPLAYMODECOUNT", 0 );
+    m_indexInSheet   = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", -1 );
     displaymode      = ALTIUM_PARSER::ReadInt( aProps, "DISPLAYMODE", 0 );
 }
 

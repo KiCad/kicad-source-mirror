@@ -480,8 +480,8 @@ void SCH_ALTIUM_PLUGIN::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             break;
 
         default:
-            m_reporter->Report( wxString::Format( _( "Unknown or unexpected record found inside "
-                                                     "\"Additional\" section, Record id: %d." ),
+            m_reporter->Report( wxString::Format( _( "Unknown or unexpected record ID %d found "
+                                                     "inside \"Additional\" section." ),
                                                   recordId ),
                                 RPT_SEVERITY_ERROR );
             break;
@@ -553,7 +553,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             break;
 
         case ALTIUM_SCH_RECORD::IEEE_SYMBOL:
-            m_reporter->Report( _( "Record 'IEEE_SYMBOL' no handled. Skipped." ),
+            m_reporter->Report( _( "Record 'IEEE_SYMBOL' not handled." ),
                                 RPT_SEVERITY_INFO );
             break;
 
@@ -578,7 +578,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             break;
 
         case ALTIUM_SCH_RECORD::PIECHART:
-            m_reporter->Report( _( "Record 'PIECHART' no handled. Skipped." ),
+            m_reporter->Report( _( "Record 'PIECHART' not handled." ),
                                 RPT_SEVERITY_INFO );
             break;
 
@@ -704,8 +704,8 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             break;
 
         default:
-            m_reporter->Report( wxString::Format( _( "Unknown or unexpected record found inside "
-                                                     "\"FileHeader\" section, Record id: %d." ),
+            m_reporter->Report( wxString::Format( _( "Unknown or unexpected record id %d found "
+                                                     "inside \"FileHeader\" section." ),
                                                   recordId ),
                                 RPT_SEVERITY_ERROR );
             break;
@@ -746,7 +746,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
         ParsePort( port );
 
     m_altiumPortsCurrentSheet.clear();
-
+    m_altiumComponents.clear();
     m_symbols.clear();
     m_libSymbols.clear();
 
@@ -790,9 +790,6 @@ const ASCH_STORAGE_FILE* SCH_ALTIUM_PLUGIN::GetFileFromStorage( const wxString& 
 void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
                                         const std::map<wxString, wxString>& aProperties )
 {
-    auto pair = m_altiumComponents.insert( { aIndex, ASCH_SYMBOL( aProperties ) } );
-    const ASCH_SYMBOL& elem = pair.first->second;
-
     SCH_SHEET* currentSheet = m_sheetPath.Last();
     wxCHECK( currentSheet, /* void */ );
 
@@ -800,6 +797,24 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
 
     if( sheetName.IsEmpty() )
         sheetName = wxT( "root" );
+
+    ASCH_SYMBOL altiumSymbol( aProperties );
+
+    if( m_altiumComponents.count( aIndex ) )
+    {
+        const ASCH_SYMBOL& currentSymbol = m_altiumComponents.at( aIndex );
+
+        m_reporter->Report( wxString::Format( _( "Symbol \"%s\" in sheet \"%s\" at index %d "
+                                                 "replaced with symbol \"%s\"." ),
+                                              currentSymbol.libreference,
+                                              sheetName,
+                                              aIndex,
+                                              altiumSymbol.libreference ),
+                            RPT_SEVERITY_ERROR );
+    }
+
+    auto pair = m_altiumComponents.insert( { aIndex, altiumSymbol } );
+    const ASCH_SYMBOL& elem = pair.first->second;
 
     // TODO: this is a hack until we correctly apply all transformations to every element
     wxString name = wxString::Format( "%s_%d%s_%s",

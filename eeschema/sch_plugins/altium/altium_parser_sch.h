@@ -133,6 +133,7 @@ struct ASCH_SHAPE_INTERFACE
 struct ASCH_SYMBOL
 {
     int      currentpartid;
+    int      m_indexInSheet;
     wxString libreference;
     wxString sourcelibraryname;
     wxString componentdescription;
