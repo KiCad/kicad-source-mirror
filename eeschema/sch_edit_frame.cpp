@@ -708,7 +708,10 @@ void SCH_EDIT_FRAME::HardRedraw()
         item->ClearCaches();
 
     for( std::pair<const wxString, LIB_SYMBOL*>& libSymbol : screen->GetLibSymbols() )
-        libSymbol.second->ClearCaches();
+    {
+        if( libSymbol.second )
+            libSymbol.second->ClearCaches();
+    }
 
     RecalculateConnections( LOCAL_CLEANUP );
 
