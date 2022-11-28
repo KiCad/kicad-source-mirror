@@ -54,6 +54,7 @@ PCB_PROPERTIES_PANEL::~PCB_PROPERTIES_PANEL()
         wxPGGlobalVars->m_mapEditorClasses.erase( it );
 
         delete static_cast<PG_UNIT_EDITOR*>( it->second );
+        it->second = nullptr;
     }
 }
 
