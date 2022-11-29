@@ -92,7 +92,12 @@ namespace SPICE_GRAMMAR
 
     struct modelName : plus<not_at<garbageOrEolf>, any> {};
 
-    struct dotModelType : plus<alpha> {};
+    struct dotModelType : sor<// VDMOS models have a special syntax.
+                              seq<TAO_PEGTL_ISTRING( "vdmos" ),
+                                  sep,
+                                  sor<TAO_PEGTL_ISTRING( "nchan" ),
+                                      TAO_PEGTL_ISTRING( "pchan" )>>,
+                              plus<alpha>> {};
 
     struct numparamBracedExpr : seq<one<'{'>,
                                     star<sor<numparamBracedExpr,
