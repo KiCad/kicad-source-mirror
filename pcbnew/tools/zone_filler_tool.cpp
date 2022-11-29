@@ -42,7 +42,7 @@
 #include "pcb_actions.h"
 #include "zone_filler_tool.h"
 #include "zone_filler.h"
-
+#include <profile.h>
 
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
     PCB_TOOL_BASE( "pcbnew.ZoneFiller" ),
@@ -207,6 +207,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     if( m_fillInProgress )
         return 0;
 
+    unsigned startTime = GetRunningMicroSecs();
     m_fillInProgress = true;
 
     m_dirtyZoneIDs.clear();
@@ -260,6 +261,27 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
 
     board()->BuildConnectivity( reporter.get() );
     m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
+
+    if( GetRunningMicroSecs() - startTime > 1000000 )
+    {
+        WX_INFOBAR* infobar = frame->GetInfoBar();
+
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Open Preferences" ),
+                                                       wxEmptyString );
+
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                [this]( wxHyperlinkEvent& aEvent )
+                {
+                    getEditFrame<PCB_EDIT_FRAME>()->ShowPreferences( _( "Editing Options" ),
+                                                                     _( "PCB Editor" ) );
+                } ) );
+
+        infobar->RemoveAllButtons();
+        infobar->AddButton( button );
+        infobar->ShowMessage( _( "Automatic refill of zones can be turned off in Preferences "
+                                 "if it becomes too slow." ),
+                              wxICON_INFORMATION );
+    }
 
     if( filler.IsDebug() )
         frame->UpdateUserInterface();

@@ -980,8 +980,16 @@ void EDA_BASE_FRAME::OnKicadAbout( wxCommandEvent& event )
 
 void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 {
+    ShowPreferences( wxEmptyString, wxEmptyString );
+}
+
+
+void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParentPage )
+{
+    wxBeginBusyCursor( wxHOURGLASS_CURSOR );
+
     PAGED_DIALOG dlg( this, _( "Preferences" ), true );
-    wxTreebook* book = dlg.GetTreebook();
+    wxTreebook*  book = dlg.GetTreebook();
 
     PANEL_HOTKEYS_EDITOR*   hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
     KIFACE*                 kiface = nullptr;
@@ -1113,6 +1121,11 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 
     for( int page : expand )
         book->ExpandNode( page );
+
+    if( !aStartPage.IsEmpty() )
+        dlg.SetInitialPage( aStartPage, aStartParentPage );
+
+    wxEndBusyCursor();
 
     if( dlg.ShowModal() == wxID_OK )
     {
