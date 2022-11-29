@@ -112,6 +112,7 @@ protected:
     void clearAnchors()
     {
         m_anchors.clear();
+        m_snapItem = nullptr;
     }
 
     /**
