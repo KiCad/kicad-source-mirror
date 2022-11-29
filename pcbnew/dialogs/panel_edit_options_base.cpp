@@ -378,7 +378,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	m_autoRefillZones = new wxCheckBox( sbSizerMisc->GetStaticBox(), wxID_ANY, _("Auto-refill zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_autoRefillZones->SetValue(true);
-	m_autoRefillZones->SetToolTip( _("If checked, zones will be re-filled after editing the properties of the zone using the Zone Properties dialog") );
+	m_autoRefillZones->SetToolTip( _("If checked, zones will be re-filled after each edit operation") );
 
 	sbSizerMisc->Add( m_autoRefillZones, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
