@@ -160,7 +160,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Use45DegreeLimit, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.auto_fill_zones",
-            &m_AutoRefillZones, false ) );
+            &m_AutoRefillZones, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.allow_free_pads",
             &m_AllowFreePads, false ) );

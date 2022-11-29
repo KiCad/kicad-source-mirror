@@ -276,9 +276,84 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
 }
 
 
+int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
+{
+    if( m_fillInProgress )
+    {
+        wxBell();
+        return -1;
+    }
+
+    m_fillInProgress = true;
+
+    std::vector<ZONE*> toFill;
+
+    if( ZONE* passedZone = aEvent.Parameter<ZONE*>() )
+    {
+        toFill.push_back( passedZone );
+    }
+    else
+    {
+        for( EDA_ITEM* item : selection() )
+        {
+            if( ZONE* zone = dynamic_cast<ZONE*>( item ) )
+                toFill.push_back( zone );
+        }
+    }
+
+    BOARD_COMMIT                          commit( this );
+    std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
+    ZONE_FILLER                           filler( board(), &commit );
+
+    reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill Zone" ), 5 );
+    filler.SetProgressReporter( reporter.get() );
+
+    if( filler.Fill( toFill ) )
+    {
+        reporter->AdvancePhase();
+        commit.Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
+    }
+    else
+    {
+        commit.Revert();
+    }
+
+    board()->BuildConnectivity( reporter.get() );
+    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
+
+    refresh();
+
+    m_fillInProgress = false;
+    return 0;
+}
+
+
 int ZONE_FILLER_TOOL::ZoneFillAll( const TOOL_EVENT& aEvent )
 {
     FillAllZones( frame() );
+    return 0;
+}
+
+
+int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
+{
+    BOARD_COMMIT commit( this );
+
+    for( EDA_ITEM* item : selection() )
+    {
+        assert( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T );
+
+        ZONE* zone = static_cast<ZONE*>( item );
+
+        commit.Modify( zone );
+
+        zone->UnFill();
+    }
+
+    commit.Push( _( "Unfill Zone" ), ZONE_FILL_OP );
+
+    refresh();
+
     return 0;
 }
 
@@ -334,7 +409,9 @@ bool ZONE_FILLER_TOOL::IsZoneFillAction( const TOOL_EVENT* aEvent )
 void ZONE_FILLER_TOOL::setTransitions()
 {
     // Zone actions
-    Go( &ZONE_FILLER_TOOL::ZoneFillAll,    PCB_ACTIONS::zoneFillAll.MakeEvent() );
-    Go( &ZONE_FILLER_TOOL::ZoneFillDirty,  PCB_ACTIONS::zoneFillDirty.MakeEvent() );
-    Go( &ZONE_FILLER_TOOL::ZoneUnfillAll,  PCB_ACTIONS::zoneUnfillAll.MakeEvent() );
+    Go( &ZONE_FILLER_TOOL::ZoneFill,      PCB_ACTIONS::zoneFill.MakeEvent() );
+    Go( &ZONE_FILLER_TOOL::ZoneFillAll,   PCB_ACTIONS::zoneFillAll.MakeEvent() );
+    Go( &ZONE_FILLER_TOOL::ZoneFillDirty, PCB_ACTIONS::zoneFillDirty.MakeEvent() );
+    Go( &ZONE_FILLER_TOOL::ZoneUnfill,    PCB_ACTIONS::zoneUnfill.MakeEvent() );
+    Go( &ZONE_FILLER_TOOL::ZoneUnfillAll, PCB_ACTIONS::zoneUnfillAll.MakeEvent() );
 }

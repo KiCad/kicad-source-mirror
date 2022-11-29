@@ -85,7 +85,9 @@ public:
         SetIcon( BITMAPS::add_zone );
         SetTitle( _( "Zones" ) );
 
+        Add( PCB_ACTIONS::zoneFill );
         Add( PCB_ACTIONS::zoneFillAll );
+        Add( PCB_ACTIONS::zoneUnfill );
         Add( PCB_ACTIONS::zoneUnfillAll );
 
         AppendSeparator();
@@ -188,10 +190,10 @@ bool BOARD_EDITOR_CONTROL::Init()
     // Finally, add the standard zoom & grid items
     getEditFrame<PCB_BASE_FRAME>()->AddStandardSubMenus( m_menu );
 
-    auto zoneMenu = std::make_shared<ZONE_CONTEXT_MENU>();
+    std::shared_ptr<ZONE_CONTEXT_MENU> zoneMenu = std::make_shared<ZONE_CONTEXT_MENU>();
     zoneMenu->SetTool( this );
 
-    auto lockMenu = std::make_shared<LOCK_CONTEXT_MENU>();
+    std::shared_ptr<LOCK_CONTEXT_MENU> lockMenu = std::make_shared<LOCK_CONTEXT_MENU>();
     lockMenu->SetTool( this );
 
     // Add the PCB control menus to relevant other tools
@@ -212,7 +214,7 @@ bool BOARD_EDITOR_CONTROL::Init()
 
         menu.AddMenu( lockMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
 
-        menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T } ), 200 );
+        menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T } ), 100 );
     }
 
     DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<DRAWING_TOOL>();
@@ -235,7 +237,7 @@ bool BOARD_EDITOR_CONTROL::Init()
                            };
                 };
 
-        menu.AddMenu( zoneMenu.get(), toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ), 200 );
+        menu.AddMenu( zoneMenu.get(), toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ), 300 );
     }
 
     return true;
