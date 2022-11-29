@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:26-0700\n"
-"PO-Revision-Date: 2022-11-21 18:47+0000\n"
+"PO-Revision-Date: 2022-11-30 01:23+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -79,7 +79,7 @@ msgstr "Leiterbahnen und Vias erstellen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:682
 msgid "Create zones"
-msgstr "Flächen erstellen"
+msgstr "Zonen erstellen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:751
 msgid "Simplifying copper layers polygons"
@@ -546,7 +546,7 @@ msgstr "3D-Achsen anzeigen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:247
 msgid "Toggle zone display"
-msgstr "Anzeige von Flächen umschalten"
+msgstr "Anzeige von Zonen umschalten"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:252
 msgid "Toggle adhesive display"
@@ -720,7 +720,7 @@ msgstr "Platinenkörper anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
-msgstr "Ausgefüllte Flächenbereiche anzeigen"
+msgstr "Ausgefüllte Zonenbereiche anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
@@ -8369,7 +8369,7 @@ msgstr "Protokolldatei \"%s\" erstellt."
 #: eeschema/dialogs/dialog_erc.cpp:840
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
-msgstr "ERC-Report (%s, UTF8-kodiert)\n"
+msgstr "ERC-Bericht (%s, UTF8-kodiert)\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:855
 #, c-format
@@ -14583,15 +14583,16 @@ msgid ""
 "remapped before it can be imported into the current project."
 msgstr ""
 "Die Symbol-Bibliothekstabelle des Schaltplans \"%s\" ist noch nicht neu "
-"zugeordnet worden. Das Projekt, zu dem der Schaltplan gehört, muss zuerst "
-"neu zugeordnet werden bevor er ins aktuelle Projekt importiert werden kann."
+"zugeordnet worden.  Das Projekt, zu dem dieser Schaltplan gehört, muss "
+"zuerst neu zugeordnet werden bevor er ins aktuelle Projekt importiert werden "
+"kann."
 
 #: eeschema/sheet.cpp:147
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
 msgstr ""
-"Der gesamte Schaltplan konnte nicht geladen werden. Beim Laden der "
+"Der gesamte Schaltplan konnte nicht geladen werden.  Beim Laden der "
 "hierarchischen Schaltplanblätter sind Fehler aufgetreten."
 
 #: eeschema/sheet.cpp:150
@@ -21563,7 +21564,7 @@ msgstr "Anbieter und Referenz"
 
 #: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:98
 msgid "Checking zone fills..."
-msgstr "Prüfe Füllung der Kupferflächen..."
+msgstr "Prüfe Füllung der Kupferzonen..."
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove track shorting two nets"
@@ -22312,7 +22313,7 @@ msgstr "NPTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:664
 msgid "Save Report File"
-msgstr "Speichere Protokolldatei"
+msgstr "Protokolldatei speichern"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 msgid ""
@@ -22496,7 +22497,7 @@ msgstr "Leiterbahnen und Vias aufräumen"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
-msgstr "Bericht zur Lösung von Einschränkungen"
+msgstr "Bericht zur Einschränkungsermittlung"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:362
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:156
@@ -22561,9 +22562,9 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
-"Auf jeder Kupferlage werden Flächen gemäß der Prioritätsreihenfolge "
-"ausgefüllt, Level 3 hat eine höhere Priorität als Level 2.\n"
-"Wenn sich also eine Fläche innerhalb einer anderen befindet:\n"
+"Auf jeder Kupferlage werden Zonen gemäß der Prioritätsreihenfolge "
+"ausgefüllt, z.B. hat Level 3 eine höhere Priorität als Level 2.\n"
+"Falls sich eine Zone innerhalb einer anderen Zone befindet:\n"
 "* Wenn ihre Priorität höher ist: Ihr Umriss wird von der anderen Lage "
 "entfernt.\n"
 "* Wenn ihre Prioritäten gleich sind: Ein DRC-Fehler wird gesetzt."
@@ -22582,13 +22583,13 @@ msgstr "Umrissdarstellung:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111 pcbnew/zone.cpp:626
 msgid "Hatched"
-msgstr "Gitter"
+msgstr "Schraffiert"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:137
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
 msgid "Fully hatched"
-msgstr "Vollständiges Gitter"
+msgstr "Vollständig schraffiert"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:146
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:78
@@ -23329,7 +23330,7 @@ msgstr "Fertig. <br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:505
 msgid "Run clearance resolution tool..."
-msgstr "Freiraumermittlungs-Werkzeug ausführen..."
+msgstr "Werkzeug für Freiraumermittlung starten..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:532
 msgid "Open the Board Setup... dialog"
@@ -23354,7 +23355,7 @@ msgstr "nicht gestartet"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr "Alle Flächen ausfüllen vor dem Ausführen des DRC"
+msgstr "Alle Zonen ausfüllen vor dem DRC"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -24117,7 +24118,7 @@ msgstr "Nicht im Schaltplan"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:288
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:191
 msgid "Exclude from position files"
-msgstr "Aus Positionsdateien ausschließen"
+msgstr "Von Positionsdateien ausschließen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:291
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:194
@@ -24261,17 +24262,17 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:300
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:703
 msgid "Connection to Copper Zones"
-msgstr "Verbindung zu Kupferflächen"
+msgstr "Verbindung zu Kupferzonen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:402
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:302
 msgid "Pad connection to zones:"
-msgstr "Padverbindung zu Flächen:"
+msgstr "Padverbindung zu Zonen:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:306
 msgid "Use zone setting"
-msgstr "Verwende Flächeneinstellungen"
+msgstr "Zoneneinstellung verwenden"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:306
@@ -24283,7 +24284,7 @@ msgstr "Thermische Entlastung"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:319
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
 msgid "Clearance Overrides and Settings"
-msgstr "Freiraum-Überschreibungen und -Einstellungen"
+msgstr "Freiraum"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
 msgid ""
@@ -24562,7 +24563,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:458
 msgid "Save Drill Report File"
-msgstr "Bohrplan Protokolldatei speichern"
+msgstr "Bohrplan-Protokolldatei speichern"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
 msgid "Output folder:"
@@ -24761,7 +24762,7 @@ msgstr "Zu löschende Elemente"
 #: pcbnew/widgets/panel_selection_filter.cpp:192
 #: pcbnew/widgets/panel_selection_filter_base.cpp:53
 msgid "Zones"
-msgstr "Flächen"
+msgstr "Zonen"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:31
 msgid "Board outlines"
@@ -26334,7 +26335,7 @@ msgstr "Negativer Plot"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Check zone fills before plotting"
-msgstr "Kupferflächen vor dem Plotten prüfen"
+msgstr "Füllung von Kupferzonen vor dem Plotten prüfen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
@@ -27046,7 +27047,7 @@ msgstr "Kupferfüllungen sperren"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:64
 msgid "Zones will not fill copper into this area"
-msgstr "Zonen werden dieses Gebiet nicht mit Kupfer füllen"
+msgstr "Zonen werden kein Kupfer in diesen Bereich füllen"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:68
 msgid "Keep out footprints"
@@ -29340,7 +29341,7 @@ msgstr "Sperrfläche"
 #: pcbnew/drc/drc_engine.cpp:428
 #, c-format
 msgid "keepout area '%s'"
-msgstr "Sperrbereich '%s''"
+msgstr "Sperrbereich \"%s\""
 
 #: pcbnew/drc/drc_engine.cpp:693
 msgid "Tessellating copper zones..."
@@ -29372,7 +29373,7 @@ msgstr "Platinen-Mindestabstand zwischen Bohrungen: %s."
 #: pcbnew/drc/drc_engine.cpp:870
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "Überprüfe %s Freiraum: %s."
+msgstr "Prüfe %s Freiraum: %s."
 
 #: pcbnew/drc/drc_engine.cpp:882 pcbnew/drc/drc_engine.cpp:883
 #: pcbnew/drc/drc_engine.cpp:884 pcbnew/tools/board_inspection_tool.cpp:647
@@ -29406,12 +29407,12 @@ msgstr "Überprüfe %s %s: %s."
 #: pcbnew/drc/drc_engine.cpp:915
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "Überprüfe %s: min %s; opt %s; max %s."
+msgstr "Prüfe %s: min %s; opt %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:926
 #, c-format
 msgid "Checking %s."
-msgstr "Überprüfe %s."
+msgstr "Prüfe %s."
 
 #: pcbnew/drc/drc_engine.cpp:934
 msgid "Board and netclass clearances apply only between copper items."
@@ -30466,7 +30467,7 @@ msgstr "Dateiname für Footprint Grafik"
 
 #: pcbnew/footprint_editor_utils.cpp:220
 msgid "Edit Zone"
-msgstr "Fläche bearbeiten"
+msgstr "Zone bearbeiten"
 
 #: pcbnew/footprint_editor_utils.cpp:294
 #, c-format
@@ -32333,7 +32334,7 @@ msgid ""
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
 msgstr ""
-"Die Zonenfüllprioritäten für die Lage '%s' konnten nicht bestimmt werden. "
+"Die Zonenfüllprioritäten für die Lage \"%s\" konnten nicht bestimmt werden. "
 "Trotz größter Mühe ist möglich, dass DRC-Fehler vorliegen und eine manuelle "
 "Korrektur der Zonenprioritäten erforderlich ist."
 
@@ -32399,7 +32400,7 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"Der CADSTAR-Bereich '%s' in der Bibliothekskomponente '%s' hat kein KiCad-"
+"Der CADSTAR-Bereich \"%s\" in der Bibliothekskomponente '%s' hat kein KiCad-"
 "Äquivalent. Der Bereich ist weder ein Sperrbereich für Leiterbahnen noch für "
 "Vias. Der Bereich wurde nicht importiert."
 
@@ -32563,9 +32564,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"Die CADSTAR-Vorlage '%s' verfügt über unterschiedliche Einstellungen für "
-"'Eingegossenes Kupfer beibehalten - disjunkt' und 'Eingegossenes Kupfer "
-"beibehalten - isoliert'. KiCad unterscheidet diese beiden Einstellungen "
+"Die CADSTAR-Vorlage \"%s\" verfügt über unterschiedliche Einstellungen für "
+"\"Eingegossenes Kupfer beibehalten - disjunkt\" und \"Eingegossenes Kupfer "
+"beibehalten - isoliert\". KiCad unterscheidet diese beiden Einstellungen "
 "nicht. Die Einstellung für disjunktes Kupfer wurde als minimale Inselfläche "
 "der KiCad-Zone angewandt."
 
@@ -32589,7 +32590,7 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"Die CADSTAR-Vorlage '%s' hat im ursprünglichen Design thermische "
+"Die CADSTAR-Vorlage \"%s\" hat im ursprünglichen Design thermische "
 "Entlastungen, aber die Speichenbreite (%.2f mm) ist dünner als die "
 "Mindestdicke der Zone (%.2f mm). KiCad verlangt, dass die Mindestdicke der "
 "Zone beibehalten wird. Daher wurde die Mindestdicke als neue Speichenbreite "
@@ -32602,7 +32603,7 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
-"Die CADSTAR-Lage '%s' ist als Lage der Leistungsebene definiert. Es "
+"Die CADSTAR-Lage \"%s\" ist als Lage der Leistungsebene definiert. Es "
 "existiert jedoch kein Netz mit einem solchen Namen. Die Lage wurde geladen, "
 "aber es wurde keine Kupferzone erstellt."
 
@@ -32614,9 +32615,9 @@ msgid ""
 "closed)."
 msgstr ""
 "Das CADSTAR-Design enthält COPPER-Elemente, die kein direktes KiCad-"
-"Äquivalent haben. Diese wurden als KiCad-Zone importiert, wenn sie fest oder "
-"gegittert sind, oder als KiCad-Leiterbahn, wenn die Form eine ungefüllte "
-"Kontur war (offen oder geschlossen)."
+"Äquivalent haben. Diese wurden als KiCad-Zone importiert, wenn sie "
+"ausgefüllt oder gegittert sind, oder als KiCad-Leiterbahn, wenn die Form "
+"eine ungefüllte Kontur war (offen oder geschlossen)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2201
 #, c-format
@@ -33179,7 +33180,7 @@ msgstr "Unbekannter Via-Typ %d"
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2090
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr "Unbekannter Glättungsyp für Eckflächen %d"
+msgstr "unbekannter Zonenecken-Glättungstyp %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2360
 msgid "This file does not contain a PCB."
@@ -33479,7 +33480,7 @@ msgid ""
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 "Diese Zone kann nicht vom Router behandelt werden.\n"
-"Stellen Sie bitte sicher, dass es kein selbst überschneidendes Polygon ist."
+"Stellen Sie bitte sicher, dass es kein selbst-schneidendes Polygon ist."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1694 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
@@ -34078,35 +34079,34 @@ msgstr "Entsperren"
 
 #: pcbnew/tools/board_editor_control.cpp:1397
 msgid "Zones have insufficient overlap for merging."
-msgstr "Flächen haben unzureichende Überlappung für Vereinigung."
+msgstr "Zonen haben unzureichende Überlappung für Vereinigung."
 
 #: pcbnew/tools/board_editor_control.cpp:1443
 msgid "Some zone netcodes did not match and were not merged."
-msgstr ""
-"Einige Flächen-Netzcodes stimmten nicht überein und wurden nicht vereint."
+msgstr "Einige Zonen-Netzcodes stimmten nicht überein und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1449
 msgid "Some zone priorities did not match and were not merged."
 msgstr ""
-"Einige Flächen-Prioritäten stimmten nicht überein und wurden nicht vereint."
+"Einige Zonen-Prioritäten stimmten nicht überein und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1455
 msgid "Some zones were rule areas and were not merged."
-msgstr "Einige Flächen waren Regelbereiche und wurden nicht vereint."
+msgstr "Einige Zonen waren Regelbereiche und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1461
 msgid "Some zone layer sets did not match and were not merged."
 msgstr ""
-"Einige Flächen-Lagenkombinationen stimmten nicht überein und wurden nicht "
+"Einige Zonen-Lagenkombinationen stimmten nicht überein und wurden nicht "
 "vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1478
 msgid "Some zones did not intersect and were not merged."
-msgstr "Einige Flächen hatten keine Schnittfläche und wurden nicht vereint."
+msgstr "Einige Zonen hatten keine Schnittfläche und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1547
 msgid "Duplicate zone"
-msgstr "Fläche duplizieren"
+msgstr "Zone duplizieren"
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
 msgid "Net Tools"
@@ -34150,7 +34150,8 @@ msgstr "Ermittlung des Freiraums für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:264
 msgid "Select two items for a clearance resolution report."
-msgstr "Wählen Sie zwei Elemente für einen Bericht zur Freiraumermittling aus."
+msgstr ""
+"Wählen Sie zwei Elemente für einen Bericht zur Ermittlung des Freiraums aus."
 
 #: pcbnew/tools/board_inspection_tool.cpp:279
 #: pcbnew/tools/board_inspection_tool.cpp:292
@@ -34170,7 +34171,7 @@ msgstr "Thermische Entlastung der Zone: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:421 pcbnew/zone.cpp:335
 #: pcbnew/zone.cpp:350 pcbnew/zone.cpp:498 pcbnew/zone.cpp:758
 msgid "zone"
-msgstr "Fläche"
+msgstr "Zone"
 
 #: pcbnew/tools/board_inspection_tool.cpp:404
 #, c-format
@@ -34216,12 +34217,12 @@ msgstr "Elemente haben keine gemeinsamen Lagen:"
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
 msgstr ""
-"Wählen Sie ein Element für einen Bericht zur Auflösung von Einschränkungen "
-"aus."
+"Wählen Sie ein einzelnes Element für einen Bericht zur Ermittlung von "
+"Einschränkungen aus."
 
 #: pcbnew/tools/board_inspection_tool.cpp:685
 msgid "Constraints Report"
-msgstr "Einschränkungsbericht"
+msgstr "Bericht zu Einschränkungen"
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Track width resolution for:"
@@ -34451,7 +34452,7 @@ msgstr "Via hinzufügen"
 
 #: pcbnew/tools/drc_tool.cpp:151
 msgid "Refilling all zones..."
-msgstr "Fülle alle Flächen aus ..."
+msgstr "Fülle alle Zonen aus ..."
 
 #: pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
@@ -34617,11 +34618,11 @@ msgstr "Erzeugt aus der Auswahl ein grafisches Polygon"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Create Zone from Selection"
-msgstr "Fläche aus Auswahl erzeugen"
+msgstr "Zone aus Auswahl erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
-msgstr "Erzeugt aus der Auswahl eine Kupferfläche"
+msgstr "Erzeugt aus der Auswahl eine Kupferzone"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Create Rule Area from Selection"
@@ -34734,11 +34735,11 @@ msgstr "Hinweislinienbemaßung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add Filled Zone"
-msgstr "Gefüllte Fläche hinzufügen"
+msgstr "Gefüllte Zone hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add a filled zone"
-msgstr "Eine gefüllte Fläche hinzufügen"
+msgstr "Eine gefüllte Zone hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:161
 msgid "Add Vias"
@@ -34758,21 +34759,20 @@ msgstr "Einen Regelbereich (Sperrfläche) hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:173
 msgid "Add a Zone Cutout"
-msgstr "Flächenaussparung hinzufügen"
+msgstr "Zonenaussparung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:173
 msgid "Add a cutout area of an existing zone"
-msgstr "Einen Aussparungsbereich zu einer bestehenden Fläche hinzufügen"
+msgstr "Einen Aussparungsbereich zu einer bestehenden Zone hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:179
 msgid "Add a Similar Zone"
-msgstr "Ähnliche Fläche hinzufügen"
+msgstr "Ähnliche Zone hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:179
 msgid "Add a zone with the same settings as an existing zone"
 msgstr ""
-"Eine Fläche mit den gleichen Einstellungen wie eine bestehende Fläche "
-"hinzufügen"
+"Eine Zone mit den gleichen Einstellungen wie eine bestehende Zone hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Import Graphics..."
@@ -35281,7 +35281,7 @@ msgstr "Erzeugen von Bauteilplatzierungsdatei(en) für Pick and Place"
 
 #: pcbnew/tools/pcb_actions.cpp:607
 msgid "Footprint Report (.rpt)..."
-msgstr "Footprint Reportdatei (.rpt)..."
+msgstr "Footprint-Bericht (.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:608
 msgid "Create report of all footprints from current board"
@@ -35337,19 +35337,19 @@ msgstr "Via-Größe auf die vorhergehende vordefinierte Größe setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Merge Zones"
-msgstr "Flächen verbinden"
+msgstr "Zonen verbinden"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Merge zones"
-msgstr "Flächen verbinden"
+msgstr "Verbindet Zonen"
 
 #: pcbnew/tools/pcb_actions.cpp:654
 msgid "Duplicate Zone onto Layer..."
-msgstr "Fläche auf Lage duplizieren..."
+msgstr "Zone auf Lage duplizieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:654
 msgid "Duplicate zone outline onto a different layer"
-msgstr "Dupliziert die Fläche auf eine andere Lage"
+msgstr "Dupliziert die Zone auf eine andere Lage"
 
 #: pcbnew/tools/pcb_actions.cpp:659
 msgid "Add Layer Alignment Target"
@@ -35602,16 +35602,16 @@ msgstr "Zonen-Füllungen zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:861
 msgid "Show filled areas of zones"
-msgstr "Flächenbereiche ausgefüllt darstellen"
+msgstr "Zonenbereiche ausgefüllt darstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:866
 msgid "Draw Zone Outlines"
-msgstr "Zonen-Konturen zeichnen"
+msgstr "Zonenkonturen zeichnen"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: pcbnew/tools/pcb_actions.cpp:866
 msgid "Show only zone boundaries"
-msgstr "Zeige nur Umriss von Flächen"
+msgstr "Zeigt nur Umriss von Zonen"
 
 #: pcbnew/tools/pcb_actions.cpp:871
 msgid "Draw Zone Fill Fracture Borders"
@@ -35623,11 +35623,11 @@ msgstr "Triangulation der Zonenfüllung zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:882
 msgid "Toggle Zone Display"
-msgstr "Flächenanzeige umschalten"
+msgstr "Zonenanzeige umschalten"
 
 #: pcbnew/tools/pcb_actions.cpp:883
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr "Anzeige wechseln zwischen ausgefüllten Flächen und nur deren Konturen"
+msgstr "Anzeige wechseln zwischen ausgefüllten Zonen und nur deren Konturen"
 
 #: pcbnew/tools/pcb_actions.cpp:891
 msgid "Switch to Component (F.Cu) layer"
@@ -35805,17 +35805,16 @@ msgstr "Freiraumermittlung..."
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
-"Freiraumermittlung für die aktive Lage zwischen zwei ausgewählten Objekten "
-"anzeigen"
+"Zeigt die Ermittlung des Freiraums für die aktive Lage zwischen zwei "
+"ausgewählten Objekten an"
 
 #: pcbnew/tools/pcb_actions.cpp:1106
 msgid "Constraints Resolution..."
-msgstr "Beschränkungsermittlung..."
+msgstr "Einschränkungsermittlung..."
 
 #: pcbnew/tools/pcb_actions.cpp:1107
 msgid "Show constraints resolution for the selected object"
-msgstr ""
-"Zeigen Sie die Auflösung von Einschränkungen für das ausgewählte Objekt an"
+msgstr "Zeigt die Ermittlung der Einschränkungen für das ausgewählte Objekt an"
 
 #: pcbnew/tools/pcb_actions.cpp:1113
 msgid "Geographical Reannotate..."
@@ -35967,15 +35966,15 @@ msgstr "Elemente nach Typ aus der Auswahl entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:1278 pcbnew/tools/zone_filler_tool.cpp:211
 msgid "Fill Zone"
-msgstr "Fläche füllen"
+msgstr "Zone füllen"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
 msgid "Update copper fill of selected zone(s)"
-msgstr "Aktualisiert Kupferfüllungen in ausgewählten Flächen"
+msgstr "Aktualisiert Kupferfüllungen in ausgewählten Zonen"
 
 #: pcbnew/tools/pcb_actions.cpp:1284 pcbnew/tools/zone_filler_tool.cpp:153
 msgid "Fill All Zones"
-msgstr "Alle Flächen füllen"
+msgstr "Alle Zonen füllen"
 
 #: pcbnew/tools/pcb_actions.cpp:1284
 msgid "Update copper fill of all zones"
@@ -35983,15 +35982,15 @@ msgstr "Aktualisiert Kupferfüllungen in allen Zonen"
 
 #: pcbnew/tools/pcb_actions.cpp:1289 pcbnew/tools/zone_filler_tool.cpp:250
 msgid "Unfill Zone"
-msgstr "Flächenfüllung entfernen"
+msgstr "Zonenfüllung entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:1289
 msgid "Remove copper fill from selected zone(s)"
-msgstr "Entfernt Kupferfüllflächen aus ausgewählten Zonen"
+msgstr "Entfernt Kupferfüllungen aus ausgewählten Zonen"
 
 #: pcbnew/tools/pcb_actions.cpp:1295 pcbnew/tools/zone_filler_tool.cpp:268
 msgid "Unfill All Zones"
-msgstr "Alle Flächenfüllungen entfernen"
+msgstr "Alle Zonenfüllungen entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:1295
 msgid "Remove copper fill from all zones"
@@ -36135,7 +36134,7 @@ msgid ""
 "all fills."
 msgstr ""
 "Nicht alle Zonen sind gefüllt. Verwenden Sie Bearbeiten > Alle Zonen füllen "
-"(%s), wenn Sie alle Füllflächen sehen möchten."
+"(%s), wenn Sie alle Füllungen sehen möchten."
 
 #: pcbnew/tools/pcb_control.cpp:586
 msgid "Item locked."
@@ -36172,7 +36171,7 @@ msgstr "Ecke ziehen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2060
 msgid "Add a zone corner"
-msgstr "Ecke zur Fläche hinzufügen"
+msgstr "Ecke zur Zone hinzufügen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2097
 msgid "Split segment"
@@ -36180,7 +36179,7 @@ msgstr "Segment teilen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2168
 msgid "Remove a zone/polygon corner"
-msgstr "Gefüllte Fläche/Polygon entfernen"
+msgstr "Ecke von Zone/Polygon entfernen"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:73
 msgid "Select"
@@ -36232,11 +36231,11 @@ msgstr "Bezugselement anklicken ..."
 
 #: pcbnew/tools/zone_create_helper.cpp:176
 msgid "Add a zone cutout"
-msgstr "Eine gefüllte Fläche hinzufügen"
+msgstr "Zonenausschnitt hinzufügen"
 
 #: pcbnew/tools/zone_create_helper.cpp:215
 msgid "Add a zone"
-msgstr "Eine Fläche hinzufügen"
+msgstr "Eine Zone hinzufügen"
 
 #: pcbnew/tools/zone_create_helper.cpp:246
 msgid "Add a graphical polygon"
@@ -36244,12 +36243,12 @@ msgstr "Ein grafisches Polygon hinzufügen"
 
 #: pcbnew/tools/zone_filler_tool.cpp:81
 msgid "Checking Zones"
-msgstr "Flächen prüfen"
+msgstr "Zonen prüfen"
 
 #: pcbnew/tools/zone_filler_tool.cpp:88 pcbnew/tools/zone_filler_tool.cpp:161
 #: pcbnew/tools/zone_filler_tool.cpp:217
 msgid "Fill Zone(s)"
-msgstr "Fläche(n) ausfüllen"
+msgstr "Zone(n) ausfüllen"
 
 #: pcbnew/tools/zone_filler_tool.cpp:130
 msgid "Show DRC rules"
@@ -36876,11 +36875,11 @@ msgstr "Regelbereich"
 
 #: pcbnew/zone.cpp:552
 msgid "Copper Zone"
-msgstr "Kupferfläche"
+msgstr "Kupferzone"
 
 #: pcbnew/zone.cpp:554
 msgid "Non-copper Zone"
-msgstr "Nicht-Kupfer-Fläche"
+msgstr "Nicht-Kupfer-Zone"
 
 #: pcbnew/zone.cpp:559
 msgid "Cutout"
@@ -36900,7 +36899,7 @@ msgstr "Keine Pads"
 
 #: pcbnew/zone.cpp:577
 msgid "No copper zones"
-msgstr "Keine Kupferflächen"
+msgstr "Keine Kupferzonen"
 
 #: pcbnew/zone.cpp:580
 msgid "No footprints"
@@ -36965,7 +36964,7 @@ msgstr "Padverbindungen"
 
 #: pcbnew/zone_filler.cpp:99
 msgid "Building zone fills..."
-msgstr "Erstelle Füllung der Kupferflächen ..."
+msgstr "Erstelle Füllung der Kupferzonen ..."
 
 #: pcbnew/zone_filler.cpp:305
 msgid "Removing isolated copper islands..."
@@ -36973,7 +36972,7 @@ msgstr "Entferne isolierte Kupferinseln ..."
 
 #: pcbnew/zone_filler.cpp:428
 msgid "Zone fills are out-of-date. Refill?"
-msgstr "Ausgefüllte Flächen sind nicht mehr aktuell. Neu ausfüllen?"
+msgstr "Zonenfüllungen sind nicht mehr aktuell. Neu ausfüllen?"
 
 #: pcbnew/zone_filler.cpp:430
 msgid "Refill"
