@@ -269,8 +269,8 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Open Preferences" ),
                                                        wxEmptyString );
 
-        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                [this]( wxHyperlinkEvent& aEvent )
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& )>(
+                [this]( wxHyperlinkEvent& )
                 {
                     getEditFrame<PCB_EDIT_FRAME>()->ShowPreferences( _( "Editing Options" ),
                                                                      _( "PCB Editor" ) );
