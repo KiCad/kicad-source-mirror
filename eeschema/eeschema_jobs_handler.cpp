@@ -24,6 +24,7 @@
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_pdf.h>
 #include <jobs/job_export_sch_svg.h>
+#include <jobs/job_sym_upgrade.h>
 #include <pgm_base.h>
 #include <sch_plotter.h>
 #include <schematic.h>
@@ -36,6 +37,9 @@
 #include <wildcards_and_files_ext.h>
 
 #include <settings/settings_manager.h>
+
+#include <sch_file_versions.h>
+#include <sch_plugins/kicad/sch_sexpr_lib_plugin_cache.h>
 
 #include <netlist.h>
 #include <netlist_exporter_base.h>
@@ -57,6 +61,8 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER()
               std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPdf, this, std::placeholders::_1 ) );
     Register( "svg",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ) );
+    Register( "symupgrade",
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportSymLibUpgrade, this, std::placeholders::_1 ) );
 }
 
 
@@ -309,4 +315,47 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     }
 
     return CLI::EXIT_CODES::ERR_UNKNOWN;
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobExportSymLibUpgrade( JOB* aJob )
+{
+    JOB_SYM_UPGRADE* upgradeJob = dynamic_cast<JOB_SYM_UPGRADE*>( aJob );
+
+    SCH_SEXPR_PLUGIN_CACHE schLibrary( upgradeJob->m_libraryPath );
+
+    try
+    {
+        schLibrary.Load();
+    }
+    catch( ... )
+    {
+        wxFprintf( stderr, _( "Unable to load library\n" ) );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    bool shouldSave = upgradeJob->m_force
+                      || schLibrary.GetFileFormatVersionAtLoad() < SEXPR_SYMBOL_LIB_FILE_VERSION;
+
+    if( shouldSave )
+    {
+        wxPrintf( _( "Saving symbol library in updated format\n" ) );
+
+        try
+        {
+            schLibrary.SetModified();
+            schLibrary.Save();
+        }
+        catch( ... )
+        {
+            wxFprintf( stderr, _( "Unable to save library\n" ) );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+    }
+    else
+    {
+        wxPrintf( _( "Symbol library was not updated\n" ) );
+    }
+
+    return CLI::EXIT_CODES::OK;
 }

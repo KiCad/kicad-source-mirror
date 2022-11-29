@@ -56,8 +56,13 @@ public:
     static void SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
                             int aNestLevel = 0, const wxString& aLibName = wxEmptyString );
 
+    void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
+    int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
+
 private:
     friend SCH_SEXPR_PLUGIN;
+
+    int m_fileFormatVersionAtLoad;
 
     static void saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
                                     int aNestLevel );
@@ -69,8 +74,6 @@ private:
 
     static void saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
                                      int& aNextFreeFieldId, int aNestLevel );
-
-    int             m_versionMajor;
 };
 
 #endif    // _SCH_SEXPR_LIB_PLUGIN_CACHE_

@@ -38,7 +38,7 @@
 SCH_SEXPR_PLUGIN_CACHE::SCH_SEXPR_PLUGIN_CACHE( const wxString& aFullPathAndFileName ) :
     SCH_LIB_PLUGIN_CACHE( aFullPathAndFileName )
 {
-    m_versionMajor = -1;
+    m_fileFormatVersionAtLoad = 0;
 }
 
 
@@ -76,6 +76,7 @@ void SCH_SEXPR_PLUGIN_CACHE::Load()
     // Remember the file modification time of library file when the cache snapshot was made,
     // so that in a networked environment we will reload the cache as needed.
     m_fileModTime = GetLibModificationTime();
+    SetFileFormatVersionAtLoad( parser.GetParsedRequiredVersion() );
 }
 
 

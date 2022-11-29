@@ -108,6 +108,8 @@ public:
     void ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyablyOnly = false,
                          int aFileVersion = SEXPR_SCHEMATIC_FILE_VERSION );
 
+    int GetParsedRequiredVersion() const { return m_requiredVersion; }
+
 private:
     void checkpoint();
 

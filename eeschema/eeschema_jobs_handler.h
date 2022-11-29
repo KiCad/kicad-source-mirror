@@ -43,6 +43,7 @@ public:
     int JobExportNetlist( JOB* aJob );
     int JobExportPdf( JOB* aJob );
     int JobExportSvg( JOB* aJob );
+    int JobExportSymLibUpgrade( JOB* aJob );
 
     /**
      * Configures the SCH_RENDER_SETTINGS object with the correct data to be used with plotting

@@ -18,9 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "command_fp_upgrade.h"
+#include "command_sym_upgrade.h"
 #include <cli/exit_codes.h>
-#include "jobs/job_fp_upgrade.h"
+#include "jobs/job_sym_upgrade.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
 #include <wx/crt.h>
@@ -30,29 +30,29 @@
 
 #define ARG_FORCE "--force"
 
-CLI::FP_UPGRADE_COMMAND::FP_UPGRADE_COMMAND() : EXPORT_PCB_BASE_COMMAND( "upgrade" )
+CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : EXPORT_PCB_BASE_COMMAND( "upgrade" )
 {
     m_argParser.add_argument( ARG_FORCE )
             .help( UTF8STDSTR(
-                    _( "Forces the footprint library to be resaved regardless of versioning" ) ) )
+                    _( "Forces the symbol library to be resaved regardless of versioning" ) ) )
             .implicit_value( true )
             .default_value( false );
 }
 
 
-int CLI::FP_UPGRADE_COMMAND::Perform( KIWAY& aKiway )
+int CLI::SYM_UPGRADE_COMMAND::Perform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_FP_UPGRADE> fpJob = std::make_unique<JOB_FP_UPGRADE>( true );
+    std::unique_ptr<JOB_SYM_UPGRADE> symJob = std::make_unique<JOB_SYM_UPGRADE>( true );
 
-    fpJob->m_libraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
+    symJob->m_libraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
 
-    if( !wxDir::Exists( fpJob->m_libraryPath ) )
+    if( !wxFile::Exists( symJob->m_libraryPath ) )
     {
-        wxFprintf( stderr, _( "Footprint path does not exist or is not accessible\n" ) );
+        wxFprintf( stderr, _( "Symbol file does not exist or is not accessible\n" ) );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, fpJob.get() );
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, symJob.get() );
 
     return exitCode;
 }
