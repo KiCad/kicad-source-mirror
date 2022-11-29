@@ -39,9 +39,27 @@ PG_UNIT_EDITOR::~PG_UNIT_EDITOR()
 }
 
 
+void PG_UNIT_EDITOR::UpdateFrame( EDA_DRAW_FRAME* aFrame )
+{
+    m_frame = aFrame;
+
+    if( aFrame )
+    {
+        m_unitBinder = std::make_unique<PROPERTY_EDITOR_UNIT_BINDER>( m_frame );
+        m_unitBinder->SetUnits( m_frame->GetUserUnits() );
+    }
+    else
+    {
+        m_unitBinder = nullptr;
+    }
+}
+
+
 wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGProperty* aProperty,
                                                const wxPoint& aPos, const wxSize& aSize ) const
 {
+    wxASSERT( m_unitBinder );
+
     wxPGWindowList ret = wxPGTextCtrlEditor::CreateControls( aPropGrid, aProperty, aPos, aSize );
 
     m_unitBinder->SetControl( ret.m_primary );
@@ -57,6 +75,8 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
 bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aProperty,
                                           wxWindow* aCtrl ) const
 {
+    wxASSERT( m_unitBinder );
+
     wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl );
     wxCHECK_MSG( textCtrl, false, "PG_UNIT_EDITOR requires a text control!" );
     wxString textVal = textCtrl->GetValue();

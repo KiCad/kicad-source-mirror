@@ -27,7 +27,7 @@ class SELECTION;
 class BOARD;
 class PCB_EDIT_FRAME;
 class PROPERTY_MANAGER;
-class wxPGEditor;
+class PG_UNIT_EDITOR;
 
 class PCB_PROPERTIES_PANEL : public PROPERTIES_PANEL
 {
@@ -48,7 +48,7 @@ protected:
 
     PCB_EDIT_FRAME* m_frame;
     PROPERTY_MANAGER& m_propMgr;
-    wxPGEditor* m_editor;
+    PG_UNIT_EDITOR* m_editor;
 
     wxPGChoices m_nets;
 };

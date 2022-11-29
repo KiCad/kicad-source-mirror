@@ -39,23 +39,35 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
     : PROPERTIES_PANEL( aParent, aFrame ), m_frame( aFrame ), m_propMgr( PROPERTY_MANAGER::Instance() )
 {
     m_propMgr.Rebuild();
+    bool found = false;
 
-    m_editor = wxPropertyGrid::RegisterEditorClass( new PG_UNIT_EDITOR( m_frame ) );
+    PG_UNIT_EDITOR* new_editor = new PG_UNIT_EDITOR( m_frame );
+
+    if( wxPGGlobalVars )
+    {
+        auto it = wxPGGlobalVars->m_mapEditorClasses.find( new_editor->GetName() );
+
+        if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
+        {
+            m_editor = static_cast<PG_UNIT_EDITOR*>( it->second );
+            m_editor->UpdateFrame( m_frame );
+            found = true;
+        }
+    }
+
+    if( found )
+        delete new_editor;
+    else
+        m_editor = static_cast<PG_UNIT_EDITOR*>( wxPropertyGrid::RegisterEditorClass( new_editor ) );
+
+
 }
 
 
 
 PCB_PROPERTIES_PANEL::~PCB_PROPERTIES_PANEL()
 {
-    auto it = wxPGGlobalVars->m_mapEditorClasses.find( m_editor->GetName() );
-
-    if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
-    {
-        wxPGGlobalVars->m_mapEditorClasses.erase( it );
-
-        delete static_cast<PG_UNIT_EDITOR*>( it->second );
-        it->second = nullptr;
-    }
+    m_editor->UpdateFrame( nullptr );
 }
 
 
