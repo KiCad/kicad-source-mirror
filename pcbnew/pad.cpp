@@ -1726,6 +1726,10 @@ static struct PAD_DESC
         REGISTER_TYPE( PAD );
         propMgr.InheritsAfter( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
+        propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Orientation" ),
+                    &PAD::SetOrientationDegrees, &PAD::GetOrientationDegrees,
+                    PROPERTY_DISPLAY::PT_DEGREE ) );
+
         const wxString groupPad = _( "Pad Properties" );
 
         auto padType = new PROPERTY_ENUM<PAD, PAD_ATTRIB>( _HKI( "Pad Type" ),
@@ -1744,9 +1748,6 @@ static struct PAD_DESC
                     NO_SETTER( PAD, wxString ), &PAD::GetPinFunction ), groupPad );
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
                     NO_SETTER( PAD, wxString ), &PAD::GetPinType ), groupPad);
-        propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Orientation" ),
-                    &PAD::SetOrientationDegrees, &PAD::GetOrientationDegrees,
-                    PROPERTY_DISPLAY::PT_DEGREE ), groupPad );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
                     &PAD::SetSizeX, &PAD::GetSizeX,
                     PROPERTY_DISPLAY::PT_SIZE ), groupPad );

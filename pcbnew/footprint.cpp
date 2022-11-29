@@ -2859,6 +2859,10 @@ static struct FOOTPRINT_DESC
         layer->SetChoices( fpLayers );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
 
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Orientation" ),
+                    &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
+                    PROPERTY_DISPLAY::PT_DEGREE ) );
+
         const wxString groupFootprint = _( "Footprint Properties" );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Reference" ),
@@ -2866,10 +2870,6 @@ static struct FOOTPRINT_DESC
                     groupFootprint );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Value" ),
                     &FOOTPRINT::SetValue, &FOOTPRINT::GetValueAsString ),
-                    groupFootprint );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Orientation" ),
-                    &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
-                    PROPERTY_DISPLAY::PT_DEGREE ),
                     groupFootprint );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library link" ),
