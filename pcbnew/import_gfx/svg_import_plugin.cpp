@@ -73,10 +73,16 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
 
 bool SVG_IMPORT_PLUGIN::Import()
 {
+    auto alpha =
+            []( unsigned int color )
+            {
+                return color >> 24;
+            };
+
     for( NSVGshape* shape = m_parsedImage->shapes; shape != nullptr; shape = shape->next )
     {
         double lineWidth = shape->strokeWidth;
-        bool   filled = shape->fill.type != NSVG_PAINT_NONE;
+        bool   filled = shape->fill.type != NSVG_PAINT_NONE && alpha( shape->fill.color ) > 0;
 
         GRAPHICS_IMPORTER::POLY_FILL_RULE rule = GRAPHICS_IMPORTER::PF_NONZERO;
 
