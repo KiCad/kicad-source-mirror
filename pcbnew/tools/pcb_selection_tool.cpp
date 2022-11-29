@@ -517,6 +517,8 @@ void PCB_SELECTION_TOOL::EnterGroup()
                                        select( titem );
                                    } );
 
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
     view()->Hide( m_enteredGroup, true );
     m_enteredGroupOverlay.Add( m_enteredGroup );
     view()->Update( &m_enteredGroupOverlay );
@@ -534,7 +536,10 @@ void PCB_SELECTION_TOOL::ExitGroup( bool aSelectGroup )
     ClearSelection();
 
     if( aSelectGroup )
+    {
         select( m_enteredGroup );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    }
 
     m_enteredGroupOverlay.Clear();
     m_enteredGroup = nullptr;
