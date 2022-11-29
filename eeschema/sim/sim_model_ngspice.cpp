@@ -221,10 +221,10 @@ SIM_MODEL_NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
     case TYPE::NONE:                 return MODEL_TYPE::NONE;
     case TYPE::D:                    return MODEL_TYPE::DIODE;
 
-    case TYPE::NPN_GUMMELPOON:
-    case TYPE::PNP_GUMMELPOON:       return MODEL_TYPE::BJT;
     case TYPE::NPN_VBIC:
     case TYPE::PNP_VBIC:             return MODEL_TYPE::VBIC;
+    case TYPE::NPN_GUMMELPOON:
+    case TYPE::PNP_GUMMELPOON:       return MODEL_TYPE::BJT;
     case TYPE::NPN_HICUM2:
     case TYPE::PNP_HICUM2:           return MODEL_TYPE::HICUM2;
 

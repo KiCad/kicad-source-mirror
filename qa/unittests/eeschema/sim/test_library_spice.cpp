@@ -475,95 +475,8 @@ BOOST_AUTO_TEST_CASE( Bjts )
 
         switch( i )
         {
+
         case 0:
-            TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NPN_GUMMELPOON,
-            {
-                "is",
-                "nf",
-                "ise",
-                "ne",
-                "bf",
-                "ikf",
-                "vaf",
-                "nr",
-                "isc",
-                "nc",
-                "br",
-                "ikr",
-                "var",
-                "rb",
-                "irb",
-                "rbm",
-                "re",
-                "rc",
-                "xtb",
-                "eg",
-                "xti",
-                "cje",
-                "vje",
-                "mje",
-                "tf",
-                "xtf",
-                "vtf",
-                "itf",
-                "ptf",
-                "cjc",
-                "vjc",
-                "mjc",
-                "xcjc",
-                "tr",
-                "cjs",
-                "vjs",
-                "mjs",
-                "fc"
-            } );
-            break;
-
-        case 1:
-            TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PNP_GUMMELPOON,
-            {
-                "is",
-                "nf",
-                "ise",
-                "ne",
-                "bf",
-                "ikf",
-                "vaf",
-                "nr",
-                "isc",
-                "nc",
-                "br",
-                "ikr",
-                "var",
-                "rb",
-                "irb",
-                "rbm",
-                "re",
-                "rc",
-                "xtb",
-                "eg",
-                "xti",
-                "cje",
-                "vje",
-                "mje",
-                "tf",
-                "xtf",
-                "vtf",
-                "itf",
-                "ptf",
-                "cjc",
-                "vjc",
-                "mjc",
-                "xcjc",
-                "tr",
-                "cjs",
-                "vjs",
-                "mjs",
-                "fc"
-            } );
-            break;
-
-        case 2:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NPN_VBIC,
             {
                 "rcx",
@@ -681,7 +594,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
             } );
             break;
 
-        case 3:
+        case 1:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PNP_VBIC,
             {
                 "rcx",
@@ -796,6 +709,94 @@ BOOST_AUTO_TEST_CASE( Bjts )
                 "vbe_max",
                 "vbc_max",
                 "vce_max"
+            } );
+            break;
+
+        case 2:
+            TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NPN_GUMMELPOON,
+            {
+                "is",
+                "nf",
+                "ise",
+                "ne",
+                "bf",
+                "ikf",
+                "vaf",
+                "nr",
+                "isc",
+                "nc",
+                "br",
+                "ikr",
+                "var",
+                "rb",
+                "irb",
+                "rbm",
+                "re",
+                "rc",
+                "xtb",
+                "eg",
+                "xti",
+                "cje",
+                "vje",
+                "mje",
+                "tf",
+                "xtf",
+                "vtf",
+                "itf",
+                "ptf",
+                "cjc",
+                "vjc",
+                "mjc",
+                "xcjc",
+                "tr",
+                "cjs",
+                "vjs",
+                "mjs",
+                "fc"
+            } );
+            break;
+
+        case 3:
+            TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PNP_GUMMELPOON,
+            {
+                "is",
+                "nf",
+                "ise",
+                "ne",
+                "bf",
+                "ikf",
+                "vaf",
+                "nr",
+                "isc",
+                "nc",
+                "br",
+                "ikr",
+                "var",
+                "rb",
+                "irb",
+                "rbm",
+                "re",
+                "rc",
+                "xtb",
+                "eg",
+                "xti",
+                "cje",
+                "vje",
+                "mje",
+                "tf",
+                "xtf",
+                "vtf",
+                "itf",
+                "ptf",
+                "cjc",
+                "vjc",
+                "mjc",
+                "xcjc",
+                "tr",
+                "cjs",
+                "vjs",
+                "mjs",
+                "fc"
             } );
             break;
 

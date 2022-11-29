@@ -125,10 +125,10 @@ public:
 
         D,
 
-        NPN_GUMMELPOON,
-        PNP_GUMMELPOON,
         NPN_VBIC,
         PNP_VBIC,
+        NPN_GUMMELPOON,
+        PNP_GUMMELPOON,
         //NPN_MEXTRAM,
         //PNP_MEXTRAM,
         NPN_HICUM2,

@@ -5,96 +5,10 @@
 * All parameter values are made up and physically nonsensical.
 * Commented out some parameters to avoid making test code overly long.
 
-* First, Gummel-Poon.
-
-*
-.MODEL _0_NPN_GUMMELPOON NPN(  
-+     IS   = 000.000E+07
-+     NF   = 100.001E+07
-+     ISE  = 200.002E+07
-+     NE   = 300.003E+07
-+     BF   = 400.004E+07
-+     IKF  = 500.005E+07
-+     VAF  = 600.006E+07
-+     NR   = 700.007E+07
-+     ISC  = 800.008E+07
-+     NC   = 900.009E+07
-+     BR   = 000.000E+07
-+     IKR  = 100.001E+07
-+     VAR  = 200.002E+07
-+     RB   = 300.003E+07
-+     IRB  = 400.004E+07
-+     RBM  = 500.005E+07
-+     RE   = 600.006E+07
-+     RC   = 700.007E+07
-+     XTB  = 800.008E+07
-+     EG   = 900.009E+07
-+     XTI  = 000.000E+07
-+     CJE  = 100.001E+07
-+     VJE  = 200.002E+07
-+     MJE  = 300.003E+07
-+     TF   = 400.004E+07
-+     XTF  = 500.005E+07
-+     VTF  = 600.006E+07
-+     ITF  = 700.007E+07
-+     PTF  = 800.008E+07
-+     CJC  = 900.009E+07
-+     VJC  = 000.000E+07
-+     MJC  = 100.001E+07
-+     XCJC = 200.002E+07
-+     TR   = 300.003E+07
-+     CJS  = 400.004E+07
-+     VJS  = 500.005E+07
-+     MJS  = 600.006E+07
-+     FC   = 700.007E+07
-+)
-
-*
-.MODEL _1_PNP_GUMMELPOON PNP( level = 1. ; Decimal separator must be accepted too.
-+     IS   = 000.000E+07
-+     NF   = 100.001E+07
-+     ISE  = 200.002E+07
-+     NE   = 300.003E+07
-+     BF   = 400.004E+07
-+     IKF  = 500.005E+07
-+     VAF  = 600.006E+07
-+     NR   = 700.007E+07
-+     ISC  = 800.008E+07
-+     NC   = 900.009E+07
-+     BR   = 000.000E+07
-+     IKR  = 100.001E+07
-+     VAR  = 200.002E+07
-+     RB   = 300.003E+07
-+     IRB  = 400.004E+07
-+     RBM  = 500.005E+07
-+     RE   = 600.006E+07
-+     RC   = 700.007E+07
-+     XTB  = 800.008E+07
-+     EG   = 900.009E+07
-+     XTI  = 000.000E+07
-+     CJE  = 100.001E+07
-+     VJE  = 200.002E+07
-+     MJE  = 300.003E+07
-+     TF   = 400.004E+07
-+     XTF  = 500.005E+07
-+     VTF  = 600.006E+07
-+     ITF  = 700.007E+07
-+     PTF  = 800.008E+07
-+     CJC  = 900.009E+07
-+     VJC  = 000.000E+07
-+     MJC  = 100.001E+07
-+     XCJC = 200.002E+07
-+     TR   = 300.003E+07
-+     CJS  = 400.004E+07
-+     VJS  = 500.005E+07
-+     MJS  = 600.006E+07
-+     FC   = 700.007E+07
-+)
-
 
 * VBIC.
 
-.model _2_NPN_VBIC NPN( level=4
+.model _0_NPN_VBIC NPN( level=4
 + rcx             = 000.000E+07
 + rci             = 100.001E+07
 + vo              = 200.002E+07
@@ -209,7 +123,7 @@
 + vce_max         = 100.001E+07
 +)
 
-.model _3_PNP_VBIC PNP( level=4.0
+.model _1_PNP_VBIC PNP( level=4.0
 + rcx             = 000.000E+07
 + rci             = 100.001E+07
 + vo              = 200.002E+07
@@ -325,7 +239,95 @@
 +)
 
 
-* HICUM/L2
+* SPICE Gummel-Poon.
+
+*
+.MODEL _2_NPN_GUMMELPOON NPN(  
++     IS   = 000.000E+07
++     NF   = 100.001E+07
++     ISE  = 200.002E+07
++     NE   = 300.003E+07
++     BF   = 400.004E+07
++     IKF  = 500.005E+07
++     VAF  = 600.006E+07
++     NR   = 700.007E+07
++     ISC  = 800.008E+07
++     NC   = 900.009E+07
++     BR   = 000.000E+07
++     IKR  = 100.001E+07
++     VAR  = 200.002E+07
++     RB   = 300.003E+07
++     IRB  = 400.004E+07
++     RBM  = 500.005E+07
++     RE   = 600.006E+07
++     RC   = 700.007E+07
++     XTB  = 800.008E+07
++     EG   = 900.009E+07
++     XTI  = 000.000E+07
++     CJE  = 100.001E+07
++     VJE  = 200.002E+07
++     MJE  = 300.003E+07
++     TF   = 400.004E+07
++     XTF  = 500.005E+07
++     VTF  = 600.006E+07
++     ITF  = 700.007E+07
++     PTF  = 800.008E+07
++     CJC  = 900.009E+07
++     VJC  = 000.000E+07
++     MJC  = 100.001E+07
++     XCJC = 200.002E+07
++     TR   = 300.003E+07
++     CJS  = 400.004E+07
++     VJS  = 500.005E+07
++     MJS  = 600.006E+07
++     FC   = 700.007E+07
++)
+
+
+*
+.MODEL _3_PNP_GUMMELPOON PNP( level = 1. ; Decimal separator must be accepted too.
++     IS   = 000.000E+07
++     NF   = 100.001E+07
++     ISE  = 200.002E+07
++     NE   = 300.003E+07
++     BF   = 400.004E+07
++     IKF  = 500.005E+07
++     VAF  = 600.006E+07
++     NR   = 700.007E+07
++     ISC  = 800.008E+07
++     NC   = 900.009E+07
++     BR   = 000.000E+07
++     IKR  = 100.001E+07
++     VAR  = 200.002E+07
++     RB   = 300.003E+07
++     IRB  = 400.004E+07
++     RBM  = 500.005E+07
++     RE   = 600.006E+07
++     RC   = 700.007E+07
++     XTB  = 800.008E+07
++     EG   = 900.009E+07
++     XTI  = 000.000E+07
++     CJE  = 100.001E+07
++     VJE  = 200.002E+07
++     MJE  = 300.003E+07
++     TF   = 400.004E+07
++     XTF  = 500.005E+07
++     VTF  = 600.006E+07
++     ITF  = 700.007E+07
++     PTF  = 800.008E+07
++     CJC  = 900.009E+07
++     VJC  = 000.000E+07
++     MJC  = 100.001E+07
++     XCJC = 200.002E+07
++     TR   = 300.003E+07
++     CJS  = 400.004E+07
++     VJS  = 500.005E+07
++     MJS  = 600.006E+07
++     FC   = 700.007E+07
++)
+
+
+* HICUM/L2.
 
 .model _4_NPN_HICUML2 NPN( level=8.00
 + c10             = 000.000E+07

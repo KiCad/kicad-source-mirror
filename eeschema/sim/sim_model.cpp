@@ -116,10 +116,10 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
 
     case TYPE::D:                    return { DEVICE_TYPE_::D,      "",               ""                           };
 
-    case TYPE::NPN_GUMMELPOON:       return { DEVICE_TYPE_::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
-    case TYPE::PNP_GUMMELPOON:       return { DEVICE_TYPE_::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::NPN_VBIC:             return { DEVICE_TYPE_::NPN,    "VBIC",           "VBIC"                       };
     case TYPE::PNP_VBIC:             return { DEVICE_TYPE_::PNP,    "VBIC",           "VBIC"                       };
+    case TYPE::NPN_GUMMELPOON:       return { DEVICE_TYPE_::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
+    case TYPE::PNP_GUMMELPOON:       return { DEVICE_TYPE_::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
     //case TYPE::BJT_MEXTRAM:          return {};
     case TYPE::NPN_HICUM2:           return { DEVICE_TYPE_::NPN,    "HICUML2",        "HICUM level 2"              };
     case TYPE::PNP_HICUM2:           return { DEVICE_TYPE_::PNP,    "HICUML2",        "HICUM level 2"              };
@@ -254,12 +254,10 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 
     case TYPE::D:                    return { "D", "D"            };
 
-    case TYPE::NPN_GUMMELPOON:       return { "Q", "NPN",         "",        "1",  true   };
-    case TYPE::PNP_GUMMELPOON:       return { "Q", "PNP",         "",        "1",  true   };
-
     case TYPE::NPN_VBIC:             return { "Q", "NPN",         "",        "4"   };
     case TYPE::PNP_VBIC:             return { "Q", "PNP",         "",        "4"   };
-
+    case TYPE::NPN_GUMMELPOON:       return { "Q", "NPN",         "",        "1",  true   };
+    case TYPE::PNP_GUMMELPOON:       return { "Q", "PNP",         "",        "1",  true   };
     case TYPE::NPN_HICUM2:           return { "Q", "NPN",         "",        "8"   };
     case TYPE::PNP_HICUM2:           return { "Q", "PNP",         "",        "8"   };
 
