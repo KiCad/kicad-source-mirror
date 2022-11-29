@@ -345,6 +345,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         reportError( msg );
     }
 
+    bool unitless = c.m_Type == VIA_COUNT_CONSTRAINT
+                    || c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT;
+
     if( c.m_Type == DISALLOW_CONSTRAINT )
     {
         for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -416,15 +419,10 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     }
     else if( c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT )
     {
-        // We don't use a min/max/opt structure here for two reasons:
-        //
-        // 1) The min/max/opt parser can't handle unitless numbers, and if we make it handle
-        //    them then it will no longer catch the more common case of forgetting to add a unit
-        //    and getting an ineffective rule because the distances are in nanometers.
-        //
-        // 2) Min/max/opt gives a strong implication that you could specify the optimal number
-        //    of spokes.  We don't want to open that door because the spoke generator is highly
-        //    optimized around being able to "cheat" off of a cartesian coordinate system.
+        // We don't use a min/max/opt structure here because it would give a strong implication
+        // that you could specify the optimal number of spokes.  We don't want to open that door
+        // because the spoke generator is highly optimized around being able to "cheat" off of a
+        // cartesian coordinate system.
 
         token = NextTok();
 
@@ -491,7 +489,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value );
+            parseValueWithUnits( FromUTF8(), value, unitless );
             c.m_Value.SetMin( value );
 
             if( (int) NextTok() != DSN_RIGHT )
@@ -511,7 +509,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value );
+            parseValueWithUnits( FromUTF8(), value, unitless );
+
             c.m_Value.SetMax( value );
 
             if( (int) NextTok() != DSN_RIGHT )
@@ -531,7 +530,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value );
+            parseValueWithUnits( FromUTF8(), value, unitless );
             c.m_Value.SetOpt( value );
 
             if( (int) NextTok() != DSN_RIGHT )
@@ -562,7 +561,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 }
 
 
-void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult )
+void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult, bool aUnitless )
 {
     auto errorHandler = [&]( const wxString& aMessage, int aOffset )
     {
@@ -585,7 +584,8 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult 
         }
     };
 
-    PCB_EXPR_EVALUATOR evaluator;
+    PCB_EXPR_EVALUATOR evaluator( aUnitless ? (LIBEVAL::UNIT_RESOLVER*) new PCB_UNITLESS_RESOLVER()
+                                            : (LIBEVAL::UNIT_RESOLVER*) new PCB_UNIT_RESOLVER() );
     evaluator.SetErrorCallback( errorHandler );
 
     evaluator.Evaluate( aExpr );

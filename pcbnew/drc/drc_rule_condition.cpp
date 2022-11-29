@@ -88,7 +88,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
 bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset )
 {
-    PCB_EXPR_COMPILER compiler;
+    PCB_EXPR_COMPILER compiler( new PCB_UNIT_RESOLVER() );
 
     if( aReporter )
     {

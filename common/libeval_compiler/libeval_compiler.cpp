@@ -1003,16 +1003,25 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             }
             else if( son && son->op == TR_UNIT )
             {
+                if( m_unitResolver->GetSupportedUnits().empty() )
+                {
+                    msg.Printf( _( "Unexpected units for '%s'" ), *node->value.str );
+                    reportError( CST_CODEGEN, msg, node->srcPos );
+                }
+
                 int units = son->value.idx;
                 value =  m_unitResolver->Convert( *node->value.str, units );
                 son->isVisited = true;
             }
             else
             {
-                msg.Printf( _( "Missing units for '%s'| (%s)" ),
-                            *node->value.str,
-                            m_unitResolver->GetSupportedUnitsMessage() );
-                reportError( CST_CODEGEN, msg, node->srcPos );
+                if( !m_unitResolver->GetSupportedUnitsMessage().empty() )
+                {
+                    msg.Printf( _( "Missing units for '%s'| (%s)" ),
+                                *node->value.str,
+                                m_unitResolver->GetSupportedUnitsMessage() );
+                    reportError( CST_CODEGEN, msg, node->srcPos );
+                }
 
                 value = EDA_UNIT_UTILS::UI::DoubleValueFromString( *node->value.str );
             }

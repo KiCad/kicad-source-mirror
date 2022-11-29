@@ -13,9 +13,10 @@
 
 #include <profile.h>
 
-bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool expectError = false, BOARD_ITEM* itemA = nullptr, BOARD_ITEM* itemB = nullptr )
+bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool expectError = false,
+                   BOARD_ITEM* itemA = nullptr, BOARD_ITEM* itemB = nullptr )
 {
-    PCB_EXPR_COMPILER compiler;
+    PCB_EXPR_COMPILER compiler( new PCB_UNIT_RESOLVER() );
     PCB_EXPR_UCODE ucode;
     bool ok = true;
 
