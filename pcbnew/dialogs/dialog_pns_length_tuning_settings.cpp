@@ -72,6 +72,7 @@ bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataToWindow()
     m_minAmpl.SetValue( m_settings.m_minAmplitude );
     m_maxAmpl.SetValue( m_settings.m_maxAmplitude );
     m_spacing.SetValue( m_settings.m_spacing );
+    m_singleSidedCheck->SetValue( m_settings.m_singleSided );
     m_miterStyle->SetSelection( m_settings.m_cornerStyle == PNS::MEANDER_STYLE_ROUND ? 1 : 0 );
 
     switch( m_mode )
@@ -140,6 +141,7 @@ bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataFromWindow()
     if( m_settings.m_maxAmplitude < m_settings.m_minAmplitude )
         m_settings.m_maxAmplitude = m_settings.m_minAmplitude;
 
+    m_settings.m_singleSided = m_singleSidedCheck->GetValue();
     m_settings.m_cornerStyle = m_miterStyle->GetSelection() ?
         PNS::MEANDER_STYLE_ROUND : PNS::MEANDER_STYLE_CHAMFER;
 

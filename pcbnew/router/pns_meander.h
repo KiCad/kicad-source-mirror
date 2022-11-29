@@ -70,6 +70,7 @@ public:
         m_targetSkew = 0;
         m_cornerStyle = MEANDER_STYLE_ROUND;
         m_cornerRadiusPercentage = 100;
+        m_singleSided = false;
         m_lengthTolerance = 100000;
     }
 
@@ -96,6 +97,9 @@ public:
 
     ///< Rounding percentage (0 - 100).
     int m_cornerRadiusPercentage;
+
+    ///< Place meanders on one side.
+    bool m_singleSided;
 
     ///< Allowable tuning error.
     int m_lengthTolerance;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,6 +27,7 @@ class TEXT_CTRL_EVAL;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -62,6 +63,7 @@ class DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_spacingUnit;
 		wxStaticText* m_staticText14;
 		wxChoice* m_miterStyle;
+		wxCheckBox* m_singleSidedCheck;
 		wxStaticText* m_radiusLabel;
 		TEXT_CTRL_EVAL* m_radiusText;
 		wxStaticText* m_radiusUnit;
@@ -72,6 +74,7 @@ class DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Trace Length Tuning"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE();
 
 };

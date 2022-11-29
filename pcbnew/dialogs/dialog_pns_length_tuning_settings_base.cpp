@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -150,6 +150,15 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_miterStyle = new wxChoice( sbSizerLower->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_miterStyleNChoices, m_miterStyleChoices, 0 );
 	m_miterStyle->SetSelection( 0 );
 	fgSizer3->Add( m_miterStyle, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_singleSidedCheck = new wxCheckBox( sbSizerLower->GetStaticBox(), wxID_ANY, _("Single-sided"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_singleSidedCheck, 0, wxALL|wxEXPAND, 5 );
 
 
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );

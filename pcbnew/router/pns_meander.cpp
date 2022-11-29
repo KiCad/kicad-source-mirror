@@ -48,7 +48,8 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
 
     SHAPE_LINE_CHAIN lc;
 
-    bool side = aSide;
+    bool     singleSided = Settings().m_singleSided;
+    bool     side = aSide;
     VECTOR2D dir( aBase.B - aBase.A );
 
     if( !m_dual )
@@ -72,28 +73,32 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
         double remaining = base_len - ( m_last - aBase.A ).EuclideanNorm();
 
         auto addSingleIfFits = [&]()
-                               {
-                                   fail = true;
+        {
+            fail = true;
 
-                                   for( int i = 0; i < 2; i++ )
-                                   {
-                                       bool checkSide = ( i == 0 ) ? side : !side;
+            if( m.Fit( MT_SINGLE, aBase, m_last, side ) )
+            {
+                AddMeander( new MEANDER_SHAPE( m ) );
+                fail = false;
+                started = false;
+            }
 
-                                       if( m.Fit( MT_SINGLE, aBase, m_last, checkSide ) )
-                                       {
-                                           AddMeander( new MEANDER_SHAPE( m ) );
-                                           fail = false;
-                                           started = false;
-                                           side = !checkSide;
-                                           break;
-                                       }
-                                   }
-                               };
+            if( !singleSided )
+            {
+                if( m.Fit( MT_SINGLE, aBase, m_last, !side ) )
+                {
+                    AddMeander( new MEANDER_SHAPE( m ) );
+                    fail = false;
+                    started = false;
+                    side = !side;
+                }
+            }
+        };
 
         if( remaining < Settings( ).m_step )
             break;
 
-        if( remaining > 3.0 * thr )
+        if( !singleSided && remaining > 3.0 * thr )
         {
             if( !turning )
             {
@@ -135,7 +140,7 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
                 side = !side;
             }
         }
-        else if( started )
+        else if( !singleSided && started )
         {
             bool rv = m.Fit( MT_FINISH, aBase, m_last, side );
 
