@@ -887,7 +887,7 @@ bool IbisParser::getNextLine()
 
     m_lineOffset = m_bufferIndex;
 
-    if( m_bufferIndex >= m_buffer.size() )
+    if( m_bufferIndex >= (int)m_buffer.size() )
         return false;
 
     char c = m_buffer[m_bufferIndex++];

@@ -87,8 +87,8 @@ IBIS_CORNER ReverseLogic( IBIS_CORNER aIn )
 
 KIBIS::KIBIS( std::string aFileName, IBIS_REPORTER* aReporter ) :
         KIBIS_ANY( this ),
-        m_file( this ),
-        m_reporter( aReporter )
+        m_reporter( aReporter ),
+        m_file( this )
 {
     IbisParser    parser( m_reporter );
     bool          status = true;
