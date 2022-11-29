@@ -239,7 +239,9 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 
     for( const wxString& groupName : groupDisplayOrder )
     {
-        wxASSERT( pgPropGroups.count( groupName ) );
+        if( !pgPropGroups.count( groupName ) )
+            continue;
+
         std::vector<wxPGProperty*>& properties = pgPropGroups[groupName];
 
         auto groupItem = new wxPropertyCategory( groupName == wxEmptyString ?
