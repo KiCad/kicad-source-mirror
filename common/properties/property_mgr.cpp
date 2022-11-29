@@ -244,7 +244,7 @@ void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
      * the list (which will have been added by a subclass of us)
      */
     int displayOrderStart = aResult.empty() ? 0 :
-                            aDisplayOrder[ aResult[0] ] - m_ownProperties.size();
+                            aDisplayOrder.begin()->second - m_ownProperties.size();
     int idx = 0;
 
     for( const std::pair<const wxString, std::unique_ptr<PROPERTY_BASE>>& prop : m_ownProperties )
