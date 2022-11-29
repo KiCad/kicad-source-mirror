@@ -18,15 +18,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "command_sch.h"
+#include "command.h"
+#include <cli/exit_codes.h>
+#include <wx/crt.h>
+#include <macros.h>
 
-CLI::SCH_COMMAND::SCH_COMMAND() : COMMAND( "sch" )
+#include <sstream>
+
+int CLI::COMMAND::Perform( KIWAY& aKiway )
 {
-}
+    std::stringstream ss;
+    ss << m_argParser;
+    wxPrintf( FROM_UTF8( ss.str().c_str() ) );
 
-int CLI::SCH_COMMAND::Perform( KIWAY& aKiway )
-{
-    std::cout << m_argParser;
-
-    return 1;
+    return EXIT_CODES::OK;
 }

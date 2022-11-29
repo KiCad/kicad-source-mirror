@@ -27,9 +27,7 @@ namespace CLI
 {
 struct FP_COMMAND : public COMMAND
 {
-    FP_COMMAND();
-
-    int Perform( KIWAY& aKiway ) override;
+    FP_COMMAND() : COMMAND( "fp" ) {}
 };
 }
 

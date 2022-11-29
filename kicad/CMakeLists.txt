@@ -16,6 +16,7 @@ include_directories(
     )
 
 set( KICAD_SRCS
+    cli/command.cpp
     cli/command_export_pcb_base.cpp
     cli/command_export_pcb_drill.cpp
     cli/command_export_pcb_dxf.cpp
@@ -24,15 +25,12 @@ set( KICAD_SRCS
     cli/command_export_pcb_pos.cpp
     cli/command_export_pcb_step.cpp
     cli/command_export_pcb_svg.cpp
-    cli/command_fp.cpp
     cli/command_fp_upgrade.cpp
-    cli/command_pcb.cpp
     cli/command_pcb_export.cpp
     cli/command_export_sch_bom.cpp
     cli/command_export_sch_netlist.cpp
     cli/command_export_sch_pdf.cpp
     cli/command_export_sch_svg.cpp
-    cli/command_sch.cpp
     cli/command_sch_export.cpp
     dialogs/dialog_template_selector_base.cpp
     dialogs/dialog_template_selector.cpp

@@ -27,9 +27,7 @@ namespace CLI
 {
 struct PCB_COMMAND : public COMMAND
 {
-    PCB_COMMAND();
-
-    int Perform( KIWAY& aKiway ) override;
+    PCB_COMMAND() : COMMAND( "pcb" ) {}
 };
 }
 

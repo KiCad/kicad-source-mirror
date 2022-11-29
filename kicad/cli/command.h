@@ -37,7 +37,7 @@ public:
             m_name( aName ),
             m_argParser( aName, "", aDefaultArgs ){};
 
-    virtual int Perform( KIWAY& aKiway ) = 0;
+    virtual int Perform( KIWAY& aKiway );
 
     virtual ~COMMAND() = default;
 

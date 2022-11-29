@@ -27,9 +27,7 @@ namespace CLI
 {
 struct SCH_COMMAND : public COMMAND
 {
-    SCH_COMMAND();
-
-    int Perform( KIWAY& aKiway ) override;
+    SCH_COMMAND() : COMMAND( "sch" ) { }
 };
 }
 
