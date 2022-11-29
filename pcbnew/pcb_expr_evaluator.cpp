@@ -1144,49 +1144,57 @@ BOARD* PCB_EXPR_CONTEXT::GetBoard() const
 }
 
 
-class PCB_UNIT_RESOLVER : public LIBEVAL::UNIT_RESOLVER
+const std::vector<wxString>& PCB_UNIT_RESOLVER::GetSupportedUnits() const
 {
-public:
-    virtual ~PCB_UNIT_RESOLVER()
-    {
-    }
+    static const std::vector<wxString> pcbUnits = { wxT( "mil" ), wxT( "mm" ), wxT( "in" ) };
 
-    virtual const std::vector<wxString>& GetSupportedUnits() const override
-    {
-        static const std::vector<wxString> pcbUnits = { wxT( "mil" ), wxT( "mm" ), wxT( "in" ) };
-
-        return pcbUnits;
-    }
-
-    virtual wxString GetSupportedUnitsMessage() const override
-    {
-        return _( "must be mm, in, or mil" );
-    }
-
-    virtual double Convert( const wxString& aString, int unitId ) const override
-    {
-        double v = wxAtof( aString );
-
-        switch( unitId )
-        {
-        case 0:  return DoubleValueFromString( EDA_UNITS::MILS, aString );
-        case 1:  return DoubleValueFromString( EDA_UNITS::MILLIMETRES, aString );
-        case 2:  return DoubleValueFromString( EDA_UNITS::INCHES, aString );
-        default: return v;
-        }
-    };
-};
-
-
-PCB_EXPR_COMPILER::PCB_EXPR_COMPILER()
-{
-    m_unitResolver = std::make_unique<PCB_UNIT_RESOLVER>();
+    return pcbUnits;
 }
 
 
-PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR() :
+wxString PCB_UNIT_RESOLVER::GetSupportedUnitsMessage() const
+{
+    return _( "must be mm, in, or mil" );
+}
+
+
+double PCB_UNIT_RESOLVER::Convert( const wxString& aString, int unitId ) const
+{
+    double v = wxAtof( aString );
+
+    switch( unitId )
+    {
+    case 0:  return DoubleValueFromString( EDA_UNITS::MILS, aString );
+    case 1:  return DoubleValueFromString( EDA_UNITS::MILLIMETRES, aString );
+    case 2:  return DoubleValueFromString( EDA_UNITS::INCHES, aString );
+    default: return v;
+    }
+};
+
+
+const std::vector<wxString>& PCB_UNITLESS_RESOLVER::GetSupportedUnits() const
+{
+    static const std::vector<wxString> emptyUnits;
+
+    return emptyUnits;
+}
+
+
+double PCB_UNITLESS_RESOLVER::Convert( const wxString& aString, int unitId ) const
+{
+    return wxAtof( aString );
+};
+
+
+PCB_EXPR_COMPILER::PCB_EXPR_COMPILER( LIBEVAL::UNIT_RESOLVER* aUnitResolver )
+{
+    m_unitResolver.reset( aUnitResolver );
+}
+
+
+PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR( LIBEVAL::UNIT_RESOLVER* aUnitResolver ) :
     m_result( 0 ),
-    m_compiler(),
+    m_compiler( aUnitResolver ),
     m_ucode(),
     m_errorStatus()
 {

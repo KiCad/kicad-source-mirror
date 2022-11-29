@@ -297,6 +297,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         reportError( msg );
     }
 
+    bool unitless = c.m_Type == VIA_COUNT_CONSTRAINT;
+
     if( c.m_Type == DISALLOW_CONSTRAINT )
     {
         for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -355,7 +357,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value );
+            parseValueWithUnits( FromUTF8(), value, unitless );
             c.m_Value.SetMin( value );
 
             if( (int) NextTok() != DSN_RIGHT )
@@ -375,7 +377,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value );
+            parseValueWithUnits( FromUTF8(), value, unitless );
+
             c.m_Value.SetMax( value );
 
             if( (int) NextTok() != DSN_RIGHT )
@@ -395,7 +398,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value );
+            parseValueWithUnits( FromUTF8(), value, unitless );
             c.m_Value.SetOpt( value );
 
             if( (int) NextTok() != DSN_RIGHT )
@@ -426,7 +429,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 }
 
 
-void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult )
+void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult, bool aUnitless )
 {
     auto errorHandler = [&]( const wxString& aMessage, int aOffset )
     {
@@ -449,7 +452,8 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult 
         }
     };
 
-    PCB_EXPR_EVALUATOR evaluator;
+    PCB_EXPR_EVALUATOR evaluator( aUnitless ? (LIBEVAL::UNIT_RESOLVER*) new PCB_UNITLESS_RESOLVER()
+                                            : (LIBEVAL::UNIT_RESOLVER*) new PCB_UNIT_RESOLVER() );
     evaluator.SetErrorCallback( errorHandler );
 
     evaluator.Evaluate( aExpr );

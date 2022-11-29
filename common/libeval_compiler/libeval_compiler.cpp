@@ -1008,10 +1008,13 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             }
             else
             {
-                msg.Printf( _( "Missing units for '%s'| (%s)" ),
-                            *node->value.str,
-                            m_unitResolver->GetSupportedUnitsMessage() );
-                reportError( CST_CODEGEN, msg, node->srcPos );
+                if( !m_unitResolver->GetSupportedUnitsMessage().empty() )
+                {
+                    msg.Printf( _( "Missing units for '%s'| (%s)" ),
+                                *node->value.str,
+                                m_unitResolver->GetSupportedUnitsMessage() );
+                    reportError( CST_CODEGEN, msg, node->srcPos );
+                }
 
                 value = DoubleValueFromString( EDA_UNITS::UNSCALED, *node->value.str );
             }

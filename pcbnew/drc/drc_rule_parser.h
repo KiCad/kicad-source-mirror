@@ -49,7 +49,7 @@ private:
     DRC_RULE* parseDRC_RULE();
 
     void parseConstraint( DRC_RULE* aRule );
-    void parseValueWithUnits( const wxString& aExpr, int& aResult );
+    void parseValueWithUnits( const wxString& aExpr, int& aResult, bool aUnitless = false );
     LSET parseLayer();
     void parseUnknown();
 

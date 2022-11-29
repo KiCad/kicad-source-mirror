@@ -196,17 +196,37 @@ private:
 };
 
 
+class PCB_UNIT_RESOLVER : public LIBEVAL::UNIT_RESOLVER
+{
+public:
+    const std::vector<wxString>& GetSupportedUnits() const override;
+
+    wxString GetSupportedUnitsMessage() const override;
+
+    double Convert( const wxString& aString, int unitId ) const override;
+};
+
+
+class PCB_UNITLESS_RESOLVER : public LIBEVAL::UNIT_RESOLVER
+{
+public:
+    const std::vector<wxString>& GetSupportedUnits() const override;
+
+    double Convert( const wxString& aString, int unitId ) const override;
+};
+
+
 class PCB_EXPR_COMPILER : public LIBEVAL::COMPILER
 {
 public:
-    PCB_EXPR_COMPILER();
+    PCB_EXPR_COMPILER( LIBEVAL::UNIT_RESOLVER* aUnitResolver );
 };
 
 
 class PCB_EXPR_EVALUATOR
 {
 public:
-    PCB_EXPR_EVALUATOR( );
+    PCB_EXPR_EVALUATOR( LIBEVAL::UNIT_RESOLVER* aUnitResolver );
     ~PCB_EXPR_EVALUATOR();
 
     bool Evaluate( const wxString& aExpr );

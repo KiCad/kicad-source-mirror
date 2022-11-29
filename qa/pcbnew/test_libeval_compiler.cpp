@@ -89,7 +89,7 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
                           bool expectError = false, BOARD_ITEM* itemA = nullptr,
                           BOARD_ITEM* itemB = nullptr )
 {
-    PCB_EXPR_COMPILER compiler;
+    PCB_EXPR_COMPILER compiler( new PCB_UNIT_RESOLVER() );
     PCB_EXPR_UCODE    ucode;
     PCB_EXPR_CONTEXT  context( NULL_CONSTRAINT, UNDEFINED_LAYER );
     PCB_EXPR_CONTEXT  preflightContext( NULL_CONSTRAINT, UNDEFINED_LAYER );
