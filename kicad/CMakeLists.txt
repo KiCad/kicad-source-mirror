@@ -223,7 +223,6 @@ if( APPLE )
         ${OSX_BUNDLE_OVERRIDE_PATHS}
 
         # do all the work
-        include( ${CMAKE_MODULE_PATH}/BundleUtilities.cmake )
 
         if ( ${PYTHON_FRAMEWORK_HELPER} )
             # This idea here is to repair anything that fixup_bundle doesn't handle
