@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-17 10:06-0700\n"
-"PO-Revision-Date: 2022-11-04 23:18+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"PO-Revision-Date: 2022-11-30 00:09+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -10644,6 +10644,7 @@ msgid "Rescue Symbols"
 msgstr "Спасение символов"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
+#, fuzzy
 msgid "Skip Symbol Rescue"
 msgstr "Пропустить восстановления символа"
 
@@ -11541,7 +11542,7 @@ msgstr "Добавить поле..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:37
 msgid "Remove Field..."
-msgstr "Удалить файл..."
+msgstr "Удалить поле..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
 msgid "Group symbols"
