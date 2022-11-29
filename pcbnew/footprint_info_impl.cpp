@@ -98,7 +98,15 @@ bool FOOTPRINT_LIST_IMPL::CatchErrors( const std::function<void()>& aFunc )
 bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname,
                                               PROGRESS_REPORTER* aProgressReporter )
 {
-    long long int generatedTimestamp = aTable->GenerateTimestamp( aNickname );
+    long long int generatedTimestamp = 0;
+
+    if( !CatchErrors( [&]()
+                 {
+                     generatedTimestamp = aTable->GenerateTimestamp( aNickname );
+                 } ) )
+    {
+        return false;
+    }
 
     if( generatedTimestamp == m_list_timestamp )
         return true;
