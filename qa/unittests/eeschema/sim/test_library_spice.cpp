@@ -489,7 +489,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
                 "re",
                 "rs",
                 "rbp",
-                "is",
+                "is_",
                 "nf",
                 "nr",
                 "fc",
@@ -585,7 +585,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
                 "tvbbe2",
                 "tnbbe",
                 "ebbe",
-                "dtemp",
+                "dtemp_",
                 "vers",
                 "vref",
                 "vbe_max",
@@ -607,7 +607,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
                 "re",
                 "rs",
                 "rbp",
-                "is",
+                "is_",
                 "nf",
                 "nr",
                 "fc",
@@ -703,7 +703,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
                 "tvbbe2",
                 "tnbbe",
                 "ebbe",
-                "dtemp",
+                "dtemp_",
                 "vers",
                 "vref",
                 "vbe_max",
@@ -715,7 +715,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
         case 2:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NPN_GUMMELPOON,
             {
-                "is",
+                "is_",
                 "nf",
                 "ise",
                 "ne",
@@ -759,7 +759,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
         case 3:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PNP_GUMMELPOON,
             {
-                "is",
+                "is_",
                 "nf",
                 "ise",
                 "ne",
@@ -1102,7 +1102,7 @@ BOOST_AUTO_TEST_CASE( Bjts )
         case 6:
         case 7:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NPN_GUMMELPOON,
-                            { "is", "nf", "ise", "ne", "bf", "ikf", "vaf", "nr", "isc", "nc" } );
+                            { "is_", "nf", "ise", "ne", "bf", "ikf", "vaf", "nr", "isc", "nc" } );
             break;
         }
     }
@@ -1129,13 +1129,13 @@ BOOST_AUTO_TEST_CASE( Fets )
         {
         case 0:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NJFET_SHICHMANHODGES,
-                            { "vt0", "beta", "lambda", "rd", "rs", "cgs", "cgd", "pb", "is",
+                            { "vt0", "beta", "lambda", "rd", "rs", "cgs", "cgd", "pb", "is_",
                               "fc" } );
             break;
 
         case 1:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PJFET_SHICHMANHODGES,
-                            { "vt0", "beta", "lambda", "rd", "rs", "cgs", "cgd", "pb", "is",
+                            { "vt0", "beta", "lambda", "rd", "rs", "cgs", "cgd", "pb", "is_",
                               "fc" } );
             break;
 
@@ -1153,13 +1153,13 @@ BOOST_AUTO_TEST_CASE( Fets )
 
         case 4:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NMES_STATZ,
-                            { "vt0", "alpha", "beta", "lambda", "b", "rd", "rs", "cgs", "cgd",
+                            { "vt0", "alpha", "beta", "lambda", "b", "rd", "rs", "cgs", "cgd_",
                               "pb" } );
             break;
 
         case 5:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PMES_STATZ,
-                            { "vt0", "alpha", "beta", "lambda", "b", "rd", "rs", "cgs", "cgd",
+                            { "vt0", "alpha", "beta", "lambda", "b", "rd", "rs", "cgs", "cgd_",
                               "pb" } );
             break;
 
@@ -1209,8 +1209,8 @@ BOOST_AUTO_TEST_CASE( Fets )
                 "phi",
                 "lambda",
                 "theta",
-                "rd",
-                "rs",
+                "rd_",
+                "rs_",
                 "rg",
                 "tnom",
                 "kf",
@@ -1248,7 +1248,7 @@ BOOST_AUTO_TEST_CASE( Fets )
                 "tt",
                 "eg",
                 "xti",
-                "is",
+                "is_",
                 "vj",
                 "cjo",
                 "m",
@@ -1256,7 +1256,7 @@ BOOST_AUTO_TEST_CASE( Fets )
                 "cgdmin",
                 "cgdmax",
                 "a",
-                "cgs",
+                "cgs_",
                 "rthjc",
                 "rthca",
                 "cthj",
@@ -1284,8 +1284,8 @@ BOOST_AUTO_TEST_CASE( Fets )
                 "phi",
                 "lambda",
                 "theta",
-                "rd",
-                "rs",
+                "rd_",
+                "rs_",
                 "rg",
                 "tnom",
                 "kf",
@@ -1323,7 +1323,7 @@ BOOST_AUTO_TEST_CASE( Fets )
                 "tt",
                 "eg",
                 "xti",
-                "is",
+                "is_",
                 "vj",
                 "cjo",
                 "m",
@@ -1331,7 +1331,7 @@ BOOST_AUTO_TEST_CASE( Fets )
                 "cgdmin",
                 "cgdmax",
                 "a",
-                "cgs",
+                "cgs_",
                 "rthjc",
                 "rthca",
                 "cthj",
@@ -1351,38 +1351,38 @@ BOOST_AUTO_TEST_CASE( Fets )
 
         case 14:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NMOS_MOS1,
-                            { "vto", "kp", "gamma", "phi", "lambda", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "kp", "gamma", "phi", "lambda", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 15:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PMOS_MOS1,
-                            { "vto", "kp", "gamma", "phi", "lambda", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "kp", "gamma", "phi", "lambda", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 16:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NMOS_MOS2,
-                            { "vto", "kp", "gamma", "phi", "lambda", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "kp", "gamma", "phi", "lambda", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 17:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PMOS_MOS2,
-                            { "vto", "kp", "gamma", "phi", "lambda", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "kp", "gamma", "phi", "lambda", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 18:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NMOS_MOS3,
-                            { "vto", "theta", "gamma", "phi", "eta", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "theta", "gamma", "phi", "eta", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 19:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PMOS_MOS3,
-                            { "vto", "theta", "gamma", "phi", "eta", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "theta", "gamma", "phi", "eta", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 20:
@@ -1411,14 +1411,14 @@ BOOST_AUTO_TEST_CASE( Fets )
 
         case 24:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NMOS_MOS6,
-                            { "vto", "nvth", "gamma", "phi", "lambda", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "nvth", "gamma", "phi", "lambda", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 25:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PMOS_MOS6,
-                            { "vto", "nvth", "gamma", "phi", "lambda", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "nvth", "gamma", "phi", "lambda", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 26:
@@ -1435,14 +1435,14 @@ BOOST_AUTO_TEST_CASE( Fets )
 
         case 28:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NMOS_MOS9,
-                            { "vto", "theta", "gamma", "phi", "eta", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "theta", "gamma", "phi", "eta", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 29:
             TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PMOS_MOS9,
-                            { "vto", "theta", "gamma", "phi", "eta", "rd", "rs", "cbd", "cbs",
-                              "is" } );
+                            { "vto", "theta", "gamma", "phi", "eta", "rd_", "rs_", "cbd_", "cbs_",
+                              "is_" } );
             break;
 
         case 30:

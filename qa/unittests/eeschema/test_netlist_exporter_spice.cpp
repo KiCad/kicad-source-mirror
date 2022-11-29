@@ -196,7 +196,7 @@ public:
     {
         // The default aMaxRelError is fairly large because we have some problems with determinism
         // in QA pipeline. We don't need to fix this for now because, if this has to be fixed in
-        // the first place, this would have to be done from Ngspice's side.
+        // the first place, this has to be done from Ngspice's side.
 
         BOOST_TEST_CONTEXT( "X vector name: " << aXVectorName << ", X value: " << aXValue )
         {
