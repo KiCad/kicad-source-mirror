@@ -294,7 +294,7 @@ int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
     m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS );
 
     DIALOG_PAGES_SETTINGS dlg( m_frame, pcbIUScale.IU_PER_MILS, wxSize( MAX_PAGE_SIZE_PCBNEW_MILS,
-                                                             MAX_PAGE_SIZE_PCBNEW_MILS ) );
+                                                                        MAX_PAGE_SIZE_PCBNEW_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
     if( dlg.ShowModal() == wxID_OK )
@@ -302,20 +302,12 @@ int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
-                    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+                    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
 
-                    if( !item )
-                        return false;
+                    if( text && text->HasTextVars() )
+                        return true;
 
-                    switch( item->Type() )
-                    {
-                    case PCB_TEXT_T:
-                    case PCB_FP_TEXT_T:
-                        return true;        // text variables
-
-                    default:
-                        return false;
-                    }
+                    return false;
                 } );
 
         m_frame->OnModify();

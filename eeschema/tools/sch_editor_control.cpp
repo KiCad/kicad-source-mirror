@@ -45,6 +45,8 @@
 #include <sch_edit_frame.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <sch_line.h>
+#include <sch_junction.h>
+#include <sch_bus_entry.h>
 #include <sch_shape.h>
 #include <sch_painter.h>
 #include <sch_sheet.h>
@@ -1282,7 +1284,23 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
             getView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
                     []( KIGFX::VIEW_ITEM* aItem ) -> bool
                     {
-                        return dynamic_cast<SCH_LINE*>( aItem );
+                        // Netclass coloured items
+                        //
+                        if( dynamic_cast<SCH_LINE*>( aItem ) )
+                            return true;
+                        else if( dynamic_cast<SCH_JUNCTION*>( aItem ) )
+                            return true;
+                        else if( dynamic_cast<SCH_BUS_ENTRY_BASE*>( aItem ) )
+                            return true;
+
+                        // Items that might reference an item's netclass name
+                        //
+                        EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                        if( text && text->HasTextVars() )
+                            return true;
+
+                        return false;
                     } );
         }
     }

@@ -2148,8 +2148,15 @@ void DIALOG_NET_INSPECTOR::onDeleteNet( wxCommandEvent& aEvent )
                     m_frame->GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
                             [removedCode]( KIGFX::VIEW_ITEM* aItem ) -> bool
                             {
-                                if( auto bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
-                                    return bci->GetNetCode() == removedCode;
+                                auto boardItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
+
+                                if( boardItem && boardItem->GetNetCode() == removedCode )
+                                    return true;
+
+                                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                                if( text && text->HasTextVars() )
+                                    return true;
 
                                 return false;
                             } );

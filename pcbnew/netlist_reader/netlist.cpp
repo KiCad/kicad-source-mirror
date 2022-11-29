@@ -87,10 +87,31 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
 
     SetMsgPanel( board );
 
-    // Update rendered tracks and vias net labels
-    // TODO is there a way to extract information about which nets were modified?
-    for( auto track : board->Tracks() )
-        GetCanvas()->GetView()->Update( track );
+    // Update rendered track/via/pad net labels, and any text items that might reference a
+    // netName or netClass
+    int netNamesCfg = GetPcbNewSettings()->m_Display.m_NetNames;
+
+    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+            {
+                if( dynamic_cast<PCB_TRACK*>( aItem ) )
+                {
+                    if( netNamesCfg == 2 || netNamesCfg == 3 )
+                        return true;
+                }
+                else if( dynamic_cast<PAD*>( aItem ) )
+                {
+                    if( netNamesCfg == 1 || netNamesCfg == 3 )
+                        return true;
+                }
+
+                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                if( text && text->HasTextVars() )
+                    return true;
+
+                return false;
+            } );
 
     // Spread new footprints.
     std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedFootprints();
