@@ -126,6 +126,7 @@ public:
             wxEnumProperty( aLabel, aName, const_cast<wxPGChoices&>( aChoices ), aValue ),
             m_colorFunc( []( const wxString& aChoice ) { return wxNullColour; } )
     {
+        SetFlag( wxPG_PROP_CUSTOMIMAGE );
     }
 
     wxSize OnMeasureImage( int aItem = -1 ) const override;
