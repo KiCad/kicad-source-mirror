@@ -97,6 +97,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 {
     JOB_EXPORT_SCH_PDF* aPdfJob = dynamic_cast<JOB_EXPORT_SCH_PDF*>( aJob );
 
+    if( !aPdfJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aPdfJob->m_filename, SCH_IO_MGR::SCH_KICAD );
 
     if( sch == nullptr )
@@ -130,6 +133,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 {
     JOB_EXPORT_SCH_SVG* aSvgJob = dynamic_cast<JOB_EXPORT_SCH_SVG*>( aJob );
 
+    if( !aSvgJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aSvgJob->m_filename, SCH_IO_MGR::SCH_KICAD );
 
     if( sch == nullptr )
@@ -162,6 +168,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 {
     JOB_EXPORT_SCH_NETLIST* aNetJob = dynamic_cast<JOB_EXPORT_SCH_NETLIST*>( aJob );
+
+    if( !aNetJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD );
 
