@@ -904,9 +904,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &selectionCopy );
         m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selectionCopy );
 
-        m_frame->RecalculateConnections( LOCAL_CLEANUP );
-        m_frame->TestDanglingEnds();
+        // This needs to run prior to `RecalculateConnections` because we need to identify
+        // the lines that are newly dangling
+        trimDanglingLines();
 
+        m_frame->RecalculateConnections( LOCAL_CLEANUP );
         m_frame->OnModify();
     }
 
@@ -920,6 +922,37 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     m_moveInProgress = false;
     m_frame->PopTool( aEvent );
     return 0;
+}
+
+
+void SCH_MOVE_TOOL::trimDanglingLines()
+{
+    // Need a local cleanup first to ensure we remove unneeded junctions
+    m_frame->SchematicCleanUp( m_frame->GetScreen() );
+
+    std::set<SCH_ITEM*> danglers;
+
+    std::function<void( SCH_ITEM* )> changeHandler =
+            [&]( SCH_ITEM* aChangedItem ) -> void
+            {
+                m_toolMgr->GetView()->Update( aChangedItem, KIGFX::REPAINT );
+
+                // Delete newly dangling lines
+                if( aChangedItem->IsDangling() && aChangedItem->IsType( {SCH_LINE_T } ) )
+                    danglers.insert( aChangedItem );
+            };
+
+    m_frame->GetScreen()->TestDanglingEnds( nullptr, &changeHandler );
+
+    for( SCH_ITEM* line : danglers )
+    {
+        line->SetFlags( STRUCT_DELETED );
+        saveCopyInUndoList( line, UNDO_REDO::DELETED, true );
+
+        updateItem( line, false );
+
+        m_frame->RemoveFromScreen( line, m_frame->GetScreen() );
+    }
 }
 
 

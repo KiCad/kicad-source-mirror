@@ -84,6 +84,9 @@ private:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
+    ///< Cleanup dangling lines left after a drag
+    void trimDanglingLines();
+
 private:
     ///< Re-entrancy guard
     bool                  m_inMoveTool;
