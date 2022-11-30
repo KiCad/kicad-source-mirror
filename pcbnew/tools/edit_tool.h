@@ -200,6 +200,9 @@ private:
     bool pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
 
+    ///< Rebuilds the ratsnest for operations that require it outside the commit rebuild
+    void rebuildConnectivity();
+
 private:
     PCB_SELECTION_TOOL*           m_selectionTool;
     std::unique_ptr<BOARD_COMMIT> m_commit;

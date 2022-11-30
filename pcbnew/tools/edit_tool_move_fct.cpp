@@ -742,6 +742,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent )
                 if( isSkip )
                     orig_items[itemIdx]->SetPosition( originalPos );
 
+                rebuildConnectivity();
+
                 if( ++itemIdx < orig_items.size() )
                 {
                     m_selectionTool->ClearSelection();

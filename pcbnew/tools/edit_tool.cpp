@@ -2545,6 +2545,14 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 }
 
 
+void EDIT_TOOL::rebuildConnectivity()
+{
+    board()->BuildConnectivity();
+    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
+    canvas()->RedrawRatsnest();
+}
+
+
 void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::GetAndPlace,           PCB_ACTIONS::getAndPlace.MakeEvent() );
