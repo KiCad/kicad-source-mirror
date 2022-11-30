@@ -357,30 +357,39 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
     TopoDS_Edge             edge;
     bool                    success = true;
 
+    gp_Pnt start = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
+                           -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), 0.0 );
+
     for( int j = 0; j < aChain.PointCount(); j++ )
     {
-        gp_Pnt start = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( j ).x - aOrigin.x ),
-                               -pcbIUScale.IUTomm( aChain.CPoint( j ).y - aOrigin.y ), 0.0 );
+        int next = j+1;
 
         gp_Pnt end;
-        if( j >= aChain.PointCount() )
+
+        if( next >= aChain.PointCount() )
         {
             end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
                           -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), 0.0 );
         }
         else
         {
-            end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( j + 1 ).x - aOrigin.x ),
-                          -pcbIUScale.IUTomm( aChain.CPoint( j + 1 ).y - aOrigin.y ), 0.0 );
+            end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( next ).x - aOrigin.x ),
+                          -pcbIUScale.IUTomm( aChain.CPoint( next ).y - aOrigin.y ), 0.0 );
         }
+
+        // Do not export very small segments: they can create broken outlines
+        double seg_len = std::abs( end.X() - start.X()) + std::abs(start.Y() - end.Y() );
+        double min_len = 0.0001;    // In mm, i.e. 0.1 micron
+
+        if( seg_len < min_len )
+            continue;
 
         try
         {
             edge = BRepBuilderAPI_MakeEdge( start, end );
-
             wire.Add( edge );
 
-            if( BRepBuilderAPI_DisconnectedWire == wire.Error() )
+            if( BRepBuilderAPI_WireDone != wire.Error() )
             {
                 ReportMessage( wxT( "failed to add curve\n" ) );
                 return false;
@@ -389,7 +398,7 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
         catch( const Standard_Failure& e )
         {
             ReportMessage(
-                    wxString::Format( wxT( "Exception caught: %s\n" ), e.GetMessageString() ) );
+                    wxString::Format( wxT( "OCC exception: %s\n" ), e.GetMessageString() ) );
             success = false;
         }
 
@@ -398,10 +407,23 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
             ReportMessage( wxS( "failed to add edge\n" ) );
             return false;
         }
+
+        start = end;
     }
 
+    BRepBuilderAPI_MakeFace face;
 
-    TopoDS_Face face = BRepBuilderAPI_MakeFace( wire );
+    try
+    {
+        face = BRepBuilderAPI_MakeFace( wire );
+    }
+    catch(  const Standard_Failure& e )
+    {
+        ReportMessage(
+                wxString::Format( wxT( "OCC exception: %s\n" ), e.GetMessageString() ) );
+        return false;
+    }
+
     aShape = BRepPrimAPI_MakePrism( face, gp_Vec( 0, 0, aThickness ) );
 
     if( aShape.IsNull() )
@@ -433,16 +455,28 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     {
         const SHAPE_LINE_CHAIN& outline = aOutline.COutline( cnt );
 
+        ReportMessage( wxString::Format( wxT( "Build board main outline %d with %d points.\n" ),
+                                         cnt+1, outline.PointCount() ) );
+
         TopoDS_Shape curr_brd;
 
         if( !MakeShape( curr_brd, outline, m_thickness, aOrigin ) )
         {
             // Error
+            ReportMessage( wxString::Format(
+                           wxT( "OCC error adding main outline polygon %d with %d points.\n" ),
+                           cnt+1, outline.PointCount() ) );
         }
         else
             board_outlines.push_back( curr_brd );
 
-        // Generate board holes from outlines:
+        // Generate board cutouts in current main outline:
+        if( aOutline.HoleCount( cnt ) > 0 )
+        {
+            ReportMessage( wxString::Format( wxT( "Add cutouts in outline %d (%d cutout(s)).\n" ),
+                                             cnt+1, aOutline.HoleCount( cnt ) ) );
+        }
+
         for( int ii = 0; ii < aOutline.HoleCount( cnt ); ii++ )
         {
             const SHAPE_LINE_CHAIN& holeOutline = aOutline.Hole( cnt, ii );
@@ -458,7 +492,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     // subtract cutouts (if any)
     if( m_cutouts.size() )
     {
-        ReportMessage( wxString::Format( wxT( "Build board cutouts and holes (%d holes).\n" ),
+        ReportMessage( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s)).\n" ),
                                          (int) m_cutouts.size() ) );
 
         TopTools_ListOfShape holelist;
