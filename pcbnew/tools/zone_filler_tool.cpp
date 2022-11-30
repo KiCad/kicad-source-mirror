@@ -258,7 +258,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     rebuildConnectivity();
     refresh();
 
-    if( GetRunningMicroSecs() - startTime > 1000000 )
+    if( GetRunningMicroSecs() - startTime > 3000000 )   // 3 seconds
     {
         WX_INFOBAR* infobar = frame->GetInfoBar();
 
@@ -274,9 +274,9 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
 
         infobar->RemoveAllButtons();
         infobar->AddButton( button );
-        infobar->ShowMessage( _( "Automatic refill of zones can be turned off in Preferences "
-                                 "if it becomes too slow." ),
-                              wxICON_INFORMATION );
+        infobar->ShowMessageFor( _( "Automatic refill of zones can be turned off in Preferences "
+                                    "if it becomes too slow." ),
+                                 10000, wxICON_INFORMATION, WX_INFOBAR::MESSAGE_TYPE::GENERIC );
     }
 
     if( filler.IsDebug() )
