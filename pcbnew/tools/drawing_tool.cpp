@@ -603,7 +603,13 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        cursorPos = GetClampedCoords(
+                grid.BestSnapAnchor( m_controls->GetMousePosition(), m_frame->GetActiveLayer() ),
+                COORDS_PADDING );
+        m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
         {
@@ -780,6 +786,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
     BOARD_COMMIT                 commit( m_frame );
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TEXT );
+    PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     auto cleanup =
             [&]()
@@ -828,7 +835,13 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        VECTOR2I cursorPos = GetClampedCoords(
+                grid.BestSnapAnchor( m_controls->GetMousePosition(), m_frame->GetActiveLayer() ),
+                COORDS_PADDING );
+        m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
         {
@@ -1517,6 +1530,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     PCB_SELECTION            preview;
     BOARD_COMMIT             commit( m_frame );
     PCB_GROUP*               group = nullptr;
+    PCB_LAYER_ID             layer = F_Cu;
 
     if( dlg.ShouldGroupItems() )
     {
@@ -1560,6 +1574,8 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    layer = newItems.front()->GetLayer();
+
     m_view->Add( &preview );
 
     // Clear the current selection then select the drawings so that edit tools work on them
@@ -1582,6 +1598,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     setCursor();
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
+    PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     // Now move the new items to the current cursor position:
     VECTOR2I cursorPos = m_controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
@@ -1596,7 +1613,13 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        cursorPos = m_controls->GetCursorPosition( !evt->DisableGridSnapping() );
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        cursorPos = GetClampedCoords(
+                grid.BestSnapAnchor( m_controls->GetMousePosition(), layer ),
+                COORDS_PADDING );
+        m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
