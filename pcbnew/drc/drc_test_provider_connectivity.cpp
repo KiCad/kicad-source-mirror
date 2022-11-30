@@ -83,7 +83,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     }
 
     // Rebuild (from scratch, ignoring dirty flags) just in case. This really needs to be reliable.
-    connectivity->Clear();
+    connectivity->ClearRatsnest();
     connectivity->Build( board, m_drcEngine->GetProgressReporter() );
     connectivity->FindIsolatedCopperIslands( islandsList, true );
 

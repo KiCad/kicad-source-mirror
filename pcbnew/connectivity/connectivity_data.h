@@ -154,7 +154,7 @@ public:
      * Function Clear()
      * Erases the connectivity database.
      */
-    void Clear();
+    void ClearRatsnest();
 
     /**
      * Function GetNetCount()

@@ -175,6 +175,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     if( Empty() )
         return;
 
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
+
     // Note:
     // frame == nullptr happens in QA tests
     // in this case m_isBoardEditor and m_isFootprintEditor are set to false
@@ -448,8 +450,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
             {
-                std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
-
                 if( ent.m_copy )
                     connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
 
@@ -504,24 +504,28 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     {
         size_t num_changes = m_changes.size();
 
-        if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
+        if( aCommitFlags & SKIP_CONNECTIVITY )
         {
-            std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
-
+            connectivity->ClearRatsnest();
+            connectivity->ClearLocalRatsnest();
+        }
+        else
+        {
             if( m_resolveNetConflicts )
                 connectivity->PropagateNets( this, PROPAGATE_MODE::RESOLVE_CONFLICTS );
 
             connectivity->RecalculateRatsnest( this );
             board->UpdateRatsnestExclusions();
             connectivity->ClearLocalRatsnest();
+
+            if( frame )
+                frame->GetCanvas()->RedrawRatsnest();
         }
 
-        if( frame )
+        if( solderMaskDirty )
         {
-            if( solderMaskDirty )
+            if( frame )
                 frame->HideSolderMask();
-
-            frame->GetCanvas()->RedrawRatsnest();
         }
 
         // Log undo items for any connectivity changes

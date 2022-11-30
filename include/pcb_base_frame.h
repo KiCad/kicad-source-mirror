@@ -397,6 +397,8 @@ protected:
 
     virtual void unitsChangeRefresh() override;
 
+    void rebuildConnectivity();
+
 protected:
     BOARD*                  m_pcb;
     PCB_DISPLAY_OPTIONS     m_displayOptions;

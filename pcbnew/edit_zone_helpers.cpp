@@ -104,8 +104,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     commit.Stage( pickedList );
 
     commit.Push( _( "Modify zone properties" ), SKIP_CONNECTIVITY );
-    GetBoard()->BuildConnectivity();
-    GetToolManager()->PostEvent( EVENTS::ConnectivityChangedEvent );
+    rebuildConnectivity();
 
     pickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
 }

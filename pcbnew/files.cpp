@@ -987,8 +987,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         if( filler.Fill( toFill ) )
             commit.Push( _( "Convert Zone(s)" ), SKIP_CONNECTIVITY );
 
-        GetBoard()->BuildConnectivity( &progressReporter );
-        GetToolManager()->PostEvent( EVENTS::ConnectivityChangedEvent );
+        rebuildConnectivity();
     }
 
     // from EDA_APPL which was first loaded BOARD only:

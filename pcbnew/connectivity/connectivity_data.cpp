@@ -63,7 +63,10 @@ CONNECTIVITY_DATA::CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems, bo
 
 CONNECTIVITY_DATA::~CONNECTIVITY_DATA()
 {
-    Clear();
+    for( RN_NET* net : m_nets )
+        delete net;
+
+    m_nets.clear();
 }
 
 
@@ -494,12 +497,10 @@ unsigned int CONNECTIVITY_DATA::GetUnconnectedCount( bool aVisibleOnly ) const
 }
 
 
-void CONNECTIVITY_DATA::Clear()
+void CONNECTIVITY_DATA::ClearRatsnest()
 {
     for( RN_NET* net : m_nets )
-        delete net;
-
-    m_nets.clear();
+        net->Clear();
 }
 
 

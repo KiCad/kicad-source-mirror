@@ -81,7 +81,7 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
         return false;
     }
 
-    GetBoard()->GetConnectivity()->Clear();
+    GetBoard()->GetConnectivity()->ClearRatsnest();
     GetBoard()->BuildConnectivity();
 
     OnModify();

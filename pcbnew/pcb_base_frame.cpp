@@ -1006,6 +1006,14 @@ void PCB_BASE_FRAME::OnModify()
 }
 
 
+void PCB_BASE_FRAME::rebuildConnectivity()
+{
+    GetBoard()->BuildConnectivity();
+    GetToolManager()->PostEvent( EVENTS::ConnectivityChangedEvent );
+    GetCanvas()->RedrawRatsnest();
+}
+
+
 PCB_DRAW_PANEL_GAL* PCB_BASE_FRAME::GetCanvas() const
 {
     return static_cast<PCB_DRAW_PANEL_GAL*>( EDA_DRAW_FRAME::GetCanvas() );

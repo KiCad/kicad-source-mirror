@@ -97,9 +97,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
         commit.Revert();
     }
 
-    board()->BuildConnectivity();
-    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
-
+    rebuildConnectivity();
     refresh();
 
     m_fillInProgress = false;
@@ -174,13 +172,11 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         commit.Revert();
     }
 
-    board()->BuildConnectivity( reporter.get() );
-    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
+    rebuildConnectivity();
+    refresh();
 
     if( filler.IsDebug() )
         frame->UpdateUserInterface();
-
-    refresh();
 
     m_fillInProgress = false;
 
@@ -259,8 +255,8 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     else
         commit.Revert();
 
-    board()->BuildConnectivity( reporter.get() );
-    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
+    rebuildConnectivity();
+    refresh();
 
     if( GetRunningMicroSecs() - startTime > 1000000 )
     {
@@ -285,8 +281,6 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
 
     if( filler.IsDebug() )
         frame->UpdateUserInterface();
-
-    refresh();
 
     m_fillInProgress = false;
 
@@ -340,9 +334,7 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
         commit.Revert();
     }
 
-    board()->BuildConnectivity( reporter.get() );
-    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
-
+    rebuildConnectivity();
     refresh();
 
     m_fillInProgress = false;
@@ -396,6 +388,14 @@ int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
     refresh();
 
     return 0;
+}
+
+
+void ZONE_FILLER_TOOL::rebuildConnectivity()
+{
+    board()->BuildConnectivity();
+    m_toolMgr->PostEvent( EVENTS::ConnectivityChangedEvent );
+    canvas()->RedrawRatsnest();
 }
 
 
