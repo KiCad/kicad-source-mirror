@@ -650,6 +650,10 @@ int SIM_MODEL::FindModelPinIndex( const std::string& aSymbolPinNumber )
 void SIM_MODEL::AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant )
 {
     m_params.emplace_back( aInfo, aIsOtherVariant );
+
+    // Enums are initialized with their default values.
+    if( aInfo.enumValues.size() >= 1 )
+        m_params.back().value->FromString( aInfo.defaultValue );
 }
 
 

@@ -41,16 +41,6 @@ public:
 };
 
 
-class SIM_SERDE_SWITCH : public SIM_SERDE
-{
-public:
-    using SIM_SERDE::SIM_SERDE;
-
-protected:
-    std::string GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const override;
-};
-
-
 class SIM_MODEL_SWITCH : public SIM_MODEL
 {
 public:

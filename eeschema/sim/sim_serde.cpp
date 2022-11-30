@@ -94,6 +94,10 @@ std::string SIM_SERDE::GenerateParams() const
             continue;
         }
 
+        // If the parameter is an enum and the value is default, don't write anything.
+        if( param.info.enumValues.size() >= 1 && param.value->ToString() == param.info.defaultValue )
+            continue;
+
         std::string paramValuePair = GenerateParamValuePair( param );
 
         if( paramValuePair == "" )
