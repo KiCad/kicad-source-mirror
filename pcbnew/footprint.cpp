@@ -1558,6 +1558,7 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
     m_hullCacheTimeStamp = 0;
+    m_courtyard_cache_timestamp = 0;
 }
 
 
@@ -1646,6 +1647,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     m_boundingBoxCacheTimeStamp = 0;
     m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
+    m_courtyard_cache_timestamp = 0;
 
     m_cachedHull.Mirror( aFlipLeftRight, !aFlipLeftRight, m_pos );
 
@@ -1833,6 +1835,7 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     m_boundingBoxCacheTimeStamp = 0;
     m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
+    m_courtyard_cache_timestamp = 0;
 
     m_cachedHull.Rotate( angleChange, GetPosition() );
 }
