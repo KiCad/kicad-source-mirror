@@ -180,17 +180,18 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
             }
             else
             {
-                auto oldFlags = newItem->GetFlags();
-                newItem->ClearFlags();
+                BOARD_ITEM*    newBoardItem = newItem.release();
+                EDA_ITEM_FLAGS oldFlags = newBoardItem->GetFlags();
 
-                if( !aPlacer->PlaceItem( newItem.get(), commit ) )
+                newBoardItem->ClearFlags();
+
+                if( !aPlacer->PlaceItem( newBoardItem, commit ) )
                 {
-                    newItem->SetFlags( oldFlags );
+                    newBoardItem->SetFlags( oldFlags );
                     continue;
                 }
 
                 preview.Clear();
-                newItem.release();
                 commit.Push( aCommitMessage );
 
                 controls()->CaptureCursor( false );
@@ -244,7 +245,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
             else if( evt->IsAction( &ACTIONS::refreshPreview ) )
             {
                 preview.Clear();
-                newItem.release();
+                newItem.reset();
 
                 makeNewItem( cursorPos );
                 aPlacer->SnapItem( newItem.get() );
