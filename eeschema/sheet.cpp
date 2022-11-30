@@ -108,8 +108,6 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     wxASSERT( aSheet && aHierarchy );
 
     wxString    msg;
-    wxString    topLevelSheetPath;
-    wxFileName  tmp;
     wxFileName  currentSheetFileName;
     bool        libTableChanged = false;
     SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( aFileName );
@@ -168,36 +166,45 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         return false;
     }
 
-    tmp = fileName;
-
     // If the loaded schematic is in a different folder from the current project and
     // it contains hierarchical sheets, the hierarchical sheet paths need to be updated.
     if( fileName.GetPathWithSep() != Prj().GetProjectPath() && newSheet->CountSheets() )
     {
-        // Give the user the option to choose relative path if possible.
-        if( tmp.MakeRelativeTo( Prj().GetProjectPath() ) )
-            topLevelSheetPath = tmp.GetPathWithSep();
-        else
-            topLevelSheetPath = fileName.GetPathWithSep();
+        SCH_SHEET_LIST loadedSheets( newSheet.get() );
 
-        if( wxFileName::GetPathSeparator() == '\\' )
-            topLevelSheetPath.Replace( "\\", "/" );
-
-        // Update the paths to the loaded sheets.
-        std::vector< SCH_ITEM* > sheetsInLoadedSchematic;
-
-        newSheet->GetScreen()->GetSheets( &sheetsInLoadedSchematic );
-
-        for( SCH_ITEM* item : sheetsInLoadedSchematic )
+        for( const SCH_SHEET_PATH& sheetPath : loadedSheets )
         {
-            SCH_SHEET* sheet = static_cast< SCH_SHEET* >( item );
+            // Skip the loaded sheet since the user already determined if the file path should
+            // be relative or absolute.
+            if( sheetPath.size() == 1 )
+                continue;
 
-            wxCHECK2( sheet, continue );
+            wxString lastSheetPath = fileName.GetPathWithSep();
 
-            wxFileName loadedSheetFileName = sheet->GetFileName();
-            wxString newSheetFilePath = topLevelSheetPath + loadedSheetFileName.GetFullName();
+            for( unsigned i = 1; i < sheetPath.size(); i++ )
+            {
+                SCH_SHEET* sheet = sheetPath.at( i );
+                wxCHECK2( sheet, continue );
 
-            sheet->SetFileName( newSheetFilePath );
+                SCH_SCREEN* screen = sheet->GetScreen();
+                wxCHECK2( screen, continue );
+
+                // Use the screen file name which should always be absolute.
+                wxFileName loadedSheetFileName = screen->GetFileName();
+                wxCHECK2( loadedSheetFileName.IsAbsolute(), continue );
+
+                wxFileName tmp = loadedSheetFileName;
+                wxString sheetFileName;
+
+                if( tmp.MakeRelativeTo( lastSheetPath ) )
+                    sheetFileName = tmp.GetFullPath();
+                else
+                    sheetFileName = loadedSheetFileName.GetFullPath();
+
+                sheetFileName.Replace( wxT( "\\" ), wxT( "/" ) );
+                sheet->SetFileName( sheetFileName );
+                lastSheetPath = loadedSheetFileName.GetPath();
+            }
         }
     }
 
