@@ -1584,7 +1584,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
 
     // Now move the new items to the current cursor position:
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I cursorPos = m_controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
     VECTOR2I delta = cursorPos - static_cast<BOARD_ITEM*>( preview.Front() )->GetPosition();
 
     for( BOARD_ITEM* item : selectedItems )
@@ -1596,7 +1596,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        cursorPos = m_controls->GetCursorPosition();
+        cursorPos = m_controls->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
