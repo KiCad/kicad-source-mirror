@@ -420,7 +420,10 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
     // different, so this remains a separate algorithm.  It might be nice to analyze the dfiferences
     // in requirements and refactor this.
 
-    int chainingEpsilon = pcbIUScale.mmToIU( 0.02 ); // max dist from one endPt to next startPt
+    // Using a large epsilon here to allow for sloppy drawing can cause the algorithm to miss very
+    // short segments in a converted bezier.  So use an epsilon only large enough to cover for
+    // rouding errors in the conversion.
+    int chainingEpsilon = 100; // max dist from one endPt to next startPt in IU
 
     BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
     SHAPE_POLY_SET         poly;
