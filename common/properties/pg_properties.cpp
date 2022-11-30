@@ -29,6 +29,7 @@
 #include <eda_units.h>
 #include <properties/eda_angle_variant.h>
 #include <properties/pg_properties.h>
+#include <properties/pg_editors.h>
 #include <properties/property_mgr.h>
 #include <properties/property.h>
 #include <string_utils.h>
@@ -86,13 +87,13 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
     {
     case PROPERTY_DISPLAY::PT_SIZE:
         ret = new PGPROPERTY_SIZE();
-        ret->SetEditor( wxT( "UnitEditor" ) );
+        ret->SetEditor( PG_UNIT_EDITOR::EDITOR_NAME );
         break;
 
     case PROPERTY_DISPLAY::PT_COORD:
         ret = new PGPROPERTY_COORD();
         static_cast<PGPROPERTY_COORD*>( ret )->SetCoordType( aProperty->CoordType() );
-        ret->SetEditor( wxT( "UnitEditor" ) );
+        ret->SetEditor( PG_UNIT_EDITOR::EDITOR_NAME );
         break;
 
     case PROPERTY_DISPLAY::PT_DECIDEGREE:

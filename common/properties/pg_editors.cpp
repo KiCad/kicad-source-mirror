@@ -24,6 +24,8 @@
 
 #include <wx/log.h>
 
+const wxString PG_UNIT_EDITOR::EDITOR_NAME = wxS( "KiCadUnitEditor" );
+
 
 PG_UNIT_EDITOR::PG_UNIT_EDITOR( EDA_DRAW_FRAME* aFrame ) :
         wxPGTextCtrlEditor(),

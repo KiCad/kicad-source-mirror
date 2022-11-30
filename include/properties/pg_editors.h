@@ -31,11 +31,13 @@ class PROPERTY_EDITOR_UNIT_BINDER;
 class PG_UNIT_EDITOR : public wxPGTextCtrlEditor
 {
 public:
+    static const wxString EDITOR_NAME;
+
     PG_UNIT_EDITOR( EDA_DRAW_FRAME* aFrame );
 
     virtual ~PG_UNIT_EDITOR();
 
-    wxString GetName() const override { return wxT( "KiCadUnitEditor" ); }
+    wxString GetName() const override { return EDITOR_NAME; }
 
     wxPGWindowList CreateControls( wxPropertyGrid* aPropGrid, wxPGProperty* aProperty,
                                    const wxPoint& aPos, const wxSize& aSize ) const override;
