@@ -137,6 +137,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_gridSize( 0, 0 ),
     m_lastRequestedSize( 0, 0 )
 {
+    SetEvtHandlerEnabled( false );
     // Create the 3D models page
     m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_NoteBook );
     m_NoteBook->AddPage( m_3dPanel, _("3D Models"), false );
@@ -221,6 +222,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     SetupStandardButtons();
 
     finishDialogSettings();
+    SetEvtHandlerEnabled( true );
 }
 
 
