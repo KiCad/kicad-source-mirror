@@ -1602,7 +1602,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     // Now move the new items to the current cursor position:
     VECTOR2I cursorPos = m_controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
-    VECTOR2I delta = cursorPos - static_cast<BOARD_ITEM*>( preview.Front() )->GetPosition();
+    VECTOR2I delta = cursorPos - static_cast<BOARD_ITEM*>( preview.GetTopLeftItem() )->GetPosition();
 
     for( BOARD_ITEM* item : selectedItems )
         item->Move( delta );
@@ -1638,7 +1638,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMotion() )
         {
-            delta = cursorPos - static_cast<BOARD_ITEM*>( preview.Front() )->GetPosition();
+            delta = cursorPos - static_cast<BOARD_ITEM*>( preview.GetTopLeftItem() )->GetPosition();
 
             for( BOARD_ITEM* item : selectedItems )
                 item->Move( delta );
