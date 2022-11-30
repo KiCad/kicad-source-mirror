@@ -52,12 +52,6 @@ class SIM_MODEL_KIBIS : public SIM_MODEL
 {
     friend class SIM_LIBRARY_KIBIS;
 
-    static constexpr auto DRIVER_RECT = "rect";
-    static constexpr auto DRIVER_STUCKH = "stuck high";
-    static constexpr auto DRIVER_STUCKL = "stuck low";
-    static constexpr auto DRIVER_HIGHZ = "high Z";
-    static constexpr auto DRIVER_PRBS = "prbs";
-
 public:
     SIM_MODEL_KIBIS( TYPE aType );
 
@@ -86,8 +80,9 @@ public:
         return m_params.at( aParamIndex );
     };
 
-    /** @brief update the list of available models based on the pin number.
-     * */
+    /** 
+     * @brief update the list of available models based on the pin number.
+     */
     bool ChangePin( const SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber );
 
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;

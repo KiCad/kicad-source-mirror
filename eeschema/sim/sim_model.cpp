@@ -215,10 +215,10 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::SUBCKT:               return { DEVICE_TYPE_::SUBCKT, "",               ""                           };
     case TYPE::XSPICE:               return { DEVICE_TYPE_::XSPICE, "",               ""                           };
 
-    case TYPE::KIBIS_DEVICE:         return { DEVICE_TYPE_::KIBIS,  "IBISDEVICE",     "Device"                     };
-    case TYPE::KIBIS_DRIVER_DC:      return { DEVICE_TYPE_::KIBIS,  "IBISDRIVERDC",   "DC driver"                  };
-    case TYPE::KIBIS_DRIVER_RECT:    return { DEVICE_TYPE_::KIBIS,  "IBISDRIVERRECT", "Rectangular wave driver"    };
-    case TYPE::KIBIS_DRIVER_PRBS:    return { DEVICE_TYPE_::KIBIS,  "IBISDRIVERPRBS", "PRBS driver"                };
+    case TYPE::KIBIS_DEVICE:         return { DEVICE_TYPE_::KIBIS,  "DEVICE",         "Device"                     };
+    case TYPE::KIBIS_DRIVER_DC:      return { DEVICE_TYPE_::KIBIS,  "DCDRIVER",       "DC driver"                  };
+    case TYPE::KIBIS_DRIVER_RECT:    return { DEVICE_TYPE_::KIBIS,  "RECTDRIVER",     "Rectangular wave driver"    };
+    case TYPE::KIBIS_DRIVER_PRBS:    return { DEVICE_TYPE_::KIBIS,  "PRBSDRIVER",     "PRBS driver"                };
 
     case TYPE::RAWSPICE:             return { DEVICE_TYPE_::SPICE,  "",               ""                           };
 

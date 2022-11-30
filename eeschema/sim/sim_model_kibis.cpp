@@ -353,40 +353,40 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeParamInfos( TYPE aType 
     paramInfo.type = SIM_VALUE::TYPE_STRING;
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "TYP";
+    paramInfo.defaultValue = "typ";
     paramInfo.description = _( "Power supply" );
     paramInfo.spiceModelName = "";
-    paramInfo.enumValues = { "TYP", "MIN", "MAX" };
+    paramInfo.enumValues = { "typ", "min", "max" };
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "rpin";
     paramInfo.type = SIM_VALUE::TYPE_STRING;
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "TYP";
-    paramInfo.description = _( "Parasitic Resistance" );
+    paramInfo.defaultValue = "typ";
+    paramInfo.description = _( "Parasitic pin resistance" );
     paramInfo.spiceModelName = "";
-    paramInfo.enumValues = { "TYP", "MIN", "MAX" };
+    paramInfo.enumValues = { "typ", "min", "max" };
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "lpin";
     paramInfo.type = SIM_VALUE::TYPE_STRING;
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "TYP";
-    paramInfo.description = _( "Parasitic Pin Inductance" );
+    paramInfo.defaultValue = "typ";
+    paramInfo.description = _( "Parasitic pin inductance" );
     paramInfo.spiceModelName = "";
-    paramInfo.enumValues = { "TYP", "MIN", "MAX" };
+    paramInfo.enumValues = { "typ", "min", "max" };
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "cpin";
     paramInfo.type = SIM_VALUE::TYPE_STRING;
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "TYP";
-    paramInfo.description = _( "Parasitic Pin Capacitance" );
+    paramInfo.defaultValue = "typ";
+    paramInfo.description = _( "Parasitic pin capacitance" );
     paramInfo.spiceModelName = "";
-    paramInfo.enumValues = { "TYP", "MIN", "MAX" };
+    paramInfo.enumValues = { "typ", "min", "max" };
     paramInfos.push_back( paramInfo );
 
     std::vector<PARAM::INFO> dc = makeDcWaveformParamInfos();
@@ -457,7 +457,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeRectWaveformParamInfos(
     paramInfo.description = _( "OFF time" );
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "delay";
+    paramInfo.name = "td";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = PARAM::CATEGORY::WAVEFORM;
@@ -465,12 +465,12 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeRectWaveformParamInfos(
     paramInfo.description = _( "Delay" );
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "cycles";
+    paramInfo.name = "n";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::WAVEFORM;
     paramInfo.defaultValue = "1";
-    paramInfo.description = _( "cycles" );
+    paramInfo.description = _( "Number of cycles" );
     paramInfos.push_back( paramInfo );
 
     return paramInfos;
@@ -490,7 +490,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makePrbsWaveformParamInfos(
     paramInfo.description = _( "Bitrate" );
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "bits";
+    paramInfo.name = "n";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::WAVEFORM;
