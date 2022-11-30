@@ -153,6 +153,8 @@ CONVERT_TOOL::CONVERT_TOOL() :
     m_menu( nullptr ),
     m_frame( nullptr )
 {
+    m_convertSettings.m_Strategy = CENTERLINE;
+    m_convertSettings.m_DeleteOriginals = true;
 }
 
 
@@ -225,12 +227,8 @@ bool CONVERT_TOOL::Init()
 int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 {
     std::vector<SHAPE_POLY_SET> polys;
-    CONVERT_SETTINGS            convertSettings;
     PCB_LAYER_ID                destLayer = m_frame->GetActiveLayer();
     FOOTPRINT*                  parentFootprint = nullptr;
-
-    convertSettings.m_Strategy = BOUNDING_HULL;   // Required for preflight at least
-    convertSettings.m_DeleteOriginals = true;
 
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -241,7 +239,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         return 0;
 
     auto getPolys =
-            [&]()
+            [&]( CONVERT_STRATEGY strategy )
             {
                 polys.clear();
 
@@ -250,13 +248,11 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
                 SHAPE_POLY_SET polySet;
 
-                polySet.Append( makePolysFromClosedGraphics( selection.GetItems(),
-                                                             convertSettings.m_Strategy) );
+                polySet.Append( makePolysFromClosedGraphics( selection.GetItems(), strategy ) );
 
-                polySet.Append( makePolysFromChainedSegs( selection.GetItems(),
-                                                          convertSettings.m_Strategy) );
+                polySet.Append( makePolysFromChainedSegs( selection.GetItems(), strategy ) );
 
-                if( convertSettings.m_Strategy == BOUNDING_HULL )
+                if( strategy == BOUNDING_HULL )
                     polySet.Append( makePolysFromOpenGraphics( selection.GetItems() ) );
 
                 if( polySet.IsEmpty() )
@@ -276,7 +272,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
             };
 
     // Pre-flight getPolys() to see if there's anything to convert.
-    if( !getPolys() )
+    if( !getPolys( BOUNDING_HULL ) )
         return 0;
 
     bool isFootprint = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
@@ -297,12 +293,12 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &PCB_ACTIONS::convertToPoly ) )
     {
-        CONVERT_SETTINGS_DIALOG dlg( m_frame, &convertSettings );
+        CONVERT_SETTINGS_DIALOG dlg( m_frame, &m_convertSettings );
 
         if( dlg.ShowModal() != wxID_OK )
             return 0;
 
-        if( !getPolys() )
+        if( !getPolys( m_convertSettings.m_Strategy ) )
             return 0;
 
         for( const SHAPE_POLY_SET& poly : polys )
@@ -310,7 +306,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
             PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
             int        width = bds.m_LineThickness[ bds.GetLayerClass( layer ) ];
 
-            if( convertSettings.m_Strategy == COPY_LINEWIDTH )
+            if( m_convertSettings.m_Strategy == COPY_LINEWIDTH )
             {
                 BOARD_ITEM* topLeftItem = nullptr;
                 VECTOR2I    pos;
@@ -357,26 +353,30 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
         int ret;
 
+        // No copy-line-width option for zones/keepouts
+        if( m_convertSettings.m_Strategy == COPY_LINEWIDTH )
+            m_convertSettings.m_Strategy = CENTERLINE;
+
         if( aEvent.IsAction( &PCB_ACTIONS::convertToKeepout ) )
         {
             zoneInfo.SetIsRuleArea( true );
-            ret = InvokeRuleAreaEditor( frame, &zoneInfo, &convertSettings );
+            ret = InvokeRuleAreaEditor( frame, &zoneInfo, &m_convertSettings );
         }
         else if( nonCopper )
         {
             zoneInfo.SetIsRuleArea( false );
-            ret = InvokeNonCopperZonesEditor( frame, &zoneInfo, &convertSettings );
+            ret = InvokeNonCopperZonesEditor( frame, &zoneInfo, &m_convertSettings );
         }
         else
         {
             zoneInfo.SetIsRuleArea( false );
-            ret = InvokeCopperZonesEditor( frame, &zoneInfo, &convertSettings );
+            ret = InvokeCopperZonesEditor( frame, &zoneInfo, &m_convertSettings );
         }
 
         if( ret == wxID_CANCEL )
             return 0;
 
-        if( !getPolys() )
+        if( !getPolys( m_convertSettings.m_Strategy ) )
             return 0;
 
         for( const SHAPE_POLY_SET& poly : polys )
@@ -392,7 +392,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( convertSettings.m_DeleteOriginals )
+    if( m_convertSettings.m_DeleteOriginals )
     {
         PCB_SELECTION selectionCopy = selection;
         m_selectionTool->ClearSelection();

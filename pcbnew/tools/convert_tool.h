@@ -96,9 +96,11 @@ private:
     SHAPE_POLY_SET makePolysFromClosedGraphics( const std::deque<EDA_ITEM*>& aItems,
                                                 CONVERT_STRATEGY aStrategy );
 
+private:
     PCB_SELECTION_TOOL* m_selectionTool;
     CONDITIONAL_MENU*   m_menu;
     PCB_BASE_FRAME*     m_frame;
+    CONVERT_SETTINGS    m_convertSettings;
 };
 
 #endif
