@@ -88,8 +88,11 @@ std::string SIM_SERDE::GenerateParams() const
 
         const SIM_MODEL::PARAM& param = m_model.GetUnderlyingParam( i );
 
-        if( param.value->ToString() == "" && !( i == 0 && !m_model.IsStoredInValue() ) )
+        if( param.value->ToString() == ""
+            && !( i == 0 && m_model.HasPrimaryValue() && !m_model.IsStoredInValue() ) )
+        {
             continue;
+        }
 
         std::string paramValuePair = GenerateParamValuePair( param );
 
