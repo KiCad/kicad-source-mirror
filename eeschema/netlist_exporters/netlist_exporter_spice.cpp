@@ -127,7 +127,11 @@ bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsign
 
     writeIncludes( aFormatter, aNetlistOptions );
     writeModels( aFormatter );
-    WriteDirectives( aFormatter, aNetlistOptions );
+
+    // Skip this if there is no netlist to avoid an ngspice segfault
+    if( !m_items.empty() )
+        WriteDirectives( aFormatter, aNetlistOptions );
+
     writeItems( aFormatter );
 
     WriteTail( aFormatter, aNetlistOptions );
