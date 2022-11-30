@@ -262,10 +262,13 @@ void BOARD::UpdateRatsnestExclusions()
     GetConnectivity()->RunOnUnconnectedEdges(
             [&]( CN_EDGE& aEdge )
             {
-                std::pair<KIID, KIID> ids = { aEdge.GetSourceNode()->Parent()->m_Uuid,
-                                              aEdge.GetTargetNode()->Parent()->m_Uuid };
+                if( aEdge.GetSourceNode() && aEdge.GetTargetNode() )
+                {
+                    std::pair<KIID, KIID> ids = { aEdge.GetSourceNode()->Parent()->m_Uuid,
+                                                  aEdge.GetTargetNode()->Parent()->m_Uuid };
 
-                aEdge.SetVisible( m_ratsnestExclusions.count( ids ) == 0 );
+                    aEdge.SetVisible( m_ratsnestExclusions.count( ids ) == 0 );
+                }
 
                 return true;
             } );
