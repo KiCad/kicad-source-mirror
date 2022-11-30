@@ -437,7 +437,6 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     }
 
     int LastReferenceNumber = 0;
-    int NumberOfUnits, Unit;
 
     /* calculate index of the first symbol with the same reference prefix
      * than the current symbol.  All symbols having the same reference
@@ -517,9 +516,6 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             ref_unit.m_isNew = false;
             continue;
         }
-
-        // Annotation of multi-unit parts ( n units per part ) (complex case)
-        NumberOfUnits = ref_unit.GetLibPart()->GetUnitCount();
 
         // If this symbol is in aLockedUnitMap, copy the annotation to all
         // symbols that are not it
