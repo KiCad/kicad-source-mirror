@@ -722,7 +722,7 @@ void DRAWING_TOOL::constrainDimension( PCB_DIMENSION_BASE* aDim )
 
 int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
-    if( m_isFootprintEditor && !m_frame->GetModel() )
+    if( m_isFootprintEditor )
         return 0;
 
     if( m_inDrawingTool )
