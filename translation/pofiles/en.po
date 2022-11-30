@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-17 10:26-0700\n"
+"POT-Creation-Date: 2022-11-29 17:25-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -23981,12 +23981,12 @@ msgid "Routing Diff Pair: %s"
 msgstr "Routing Diff Pair: %s"
 
 #, c-format
-msgid "Routing Track: %s"
-msgstr "Routing Track: %s"
-
-#, c-format
 msgid "Net Class: %s"
 msgstr "Net Class: %s"
+
+#, c-format
+msgid "Routing Track: %s"
+msgstr "Routing Track: %s"
 
 msgid "Routing Track"
 msgstr "Routing Track"
