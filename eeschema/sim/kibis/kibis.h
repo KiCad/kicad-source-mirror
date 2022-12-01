@@ -113,7 +113,7 @@ public:
     };
     double m_bitrate = 10e6;
     double m_delay = 0;
-    double m_bits = 10;
+    int m_bits = 10;
 
     std::vector<std::pair<int, double>> GenerateBitSequence() override;
     bool Check( IbisWaveform* aRisingWf, IbisWaveform* aFallingWf ) override;

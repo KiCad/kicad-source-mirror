@@ -173,11 +173,11 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
         if ( m_model.FindParam( "toff" ) )
             waveform->m_toff = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "toff" )->value ).Get().value_or( 1 );
 
-        if ( m_model.FindParam( "delay" ) )
-            waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
+        if ( m_model.FindParam( "td" ) )
+            waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value ).Get().value_or( 0 );
 
-        if ( m_model.FindParam( "cycles" ) )
-            waveform->m_cycles = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "cycles" )->value ).Get().value_or( 1 );
+        if ( m_model.FindParam( "n" ) )
+            waveform->m_cycles = static_cast<SIM_VALUE_INT&>( *m_model.FindParam( "n" )->value ).Get().value_or( 1 );
 
         kparams.m_waveform = waveform;
 
@@ -195,11 +195,11 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
         if ( m_model.FindParam( "f0" ) )
             waveform->m_bitrate = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "f0" )->value ).Get().value_or( 0 );
 
-        if ( m_model.FindParam( "bits" ) )
-        waveform->m_bits = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "bits" )->value ).Get().value_or( 0 );
+        if ( m_model.FindParam( "td" ) )
+            waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value ).Get().value_or( 0 );
 
-        if ( m_model.FindParam( "delay" ) )
-        waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "delay" )->value ).Get().value_or( 0 );
+        if ( m_model.FindParam( "n" ) )
+            waveform->m_bits = static_cast<SIM_VALUE_INT&>( *m_model.FindParam( "n" )->value ).Get().value_or( 0 );
 
         kparams.m_waveform = waveform;
 
@@ -466,7 +466,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeRectWaveformParamInfos(
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "n";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE_INT;
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::WAVEFORM;
     paramInfo.defaultValue = "1";
@@ -490,8 +490,15 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makePrbsWaveformParamInfos(
     paramInfo.description = _( "Bitrate" );
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "n";
+    paramInfo.name = "td";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "s";
+    paramInfo.category = PARAM::CATEGORY::WAVEFORM;
+    paramInfo.description = _( "Delay" );
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "n";
+    paramInfo.type = SIM_VALUE::TYPE_INT;
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::WAVEFORM;
     paramInfo.defaultValue = "";
