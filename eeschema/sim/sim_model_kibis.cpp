@@ -494,6 +494,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makePrbsWaveformParamInfos(
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = PARAM::CATEGORY::WAVEFORM;
+    paramInfo.defaultValue = "";
     paramInfo.description = _( "Delay" );
     paramInfos.push_back( paramInfo );
 
@@ -507,6 +508,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makePrbsWaveformParamInfos(
 
     return paramInfos;
 }
+
 
 void SIM_MODEL_KIBIS::ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
 {

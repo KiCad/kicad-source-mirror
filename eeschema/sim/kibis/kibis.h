@@ -92,8 +92,8 @@ public:
     };
     double m_ton = 100e-9;
     double m_toff = 100e-9;
-    int    m_cycles = 1;
     double m_delay = 0;
+    int    m_cycles = 1;
 
 
     std::vector<std::pair<int, double>> GenerateBitSequence() override;
