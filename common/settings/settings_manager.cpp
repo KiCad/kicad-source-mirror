@@ -70,8 +70,16 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
 
 SETTINGS_MANAGER::~SETTINGS_MANAGER()
 {
+    for( std::unique_ptr<PROJECT>& project : m_projects_list )
+        project.reset();
+
     m_projects.clear();
+
+    for( std::unique_ptr<JSON_SETTINGS>& settings : m_settings )
+        settings.reset();
+
     m_settings.clear();
+
     m_color_settings.clear();
 }
 
