@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:25-0800\n"
-"PO-Revision-Date: 2022-11-30 01:23+0000\n"
+"PO-Revision-Date: 2022-12-02 20:47+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v6/es/>\n"
 "Language: es\n"
@@ -7391,7 +7391,7 @@ msgstr "Ayuda para la generación de la Lista de Materiales"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr "Scripts de generador de BOM:"
+msgstr "Scripts generadores de BOM:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
@@ -7427,7 +7427,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
-"Restablecer la lista de scripts del generador de BOM a la configuración por "
+"Restablecer la lista de scripts generadores de BOM a la configuración por "
 "defecto"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
@@ -34374,12 +34374,12 @@ msgstr "Se deben seleccionar al menos dos segmentos rectos de pista."
 
 #: pcbnew/tools/edit_tool.cpp:1239
 msgid "Enter fillet radius:"
-msgstr "Ingrese el radio del filete:"
+msgstr "Ingrese el radio del redondeo:"
 
 #: pcbnew/tools/edit_tool.cpp:1239 pcbnew/tools/edit_tool.cpp:1401
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Fillet Tracks"
-msgstr "Pistas de filete"
+msgstr "Redondear pistas"
 
 #: pcbnew/tools/edit_tool.cpp:1249
 msgid ""
@@ -34387,15 +34387,15 @@ msgid ""
 "The fillet operation was not performed."
 msgstr ""
 "Se ingresó un radio de cero.\n"
-"La operación de fileteado no fue realizada."
+"La operación de redondeado no fue realizada."
 
 #: pcbnew/tools/edit_tool.cpp:1408
 msgid "Unable to fillet the selected track segments."
-msgstr "No se puede filetear los segmentos de pista seleccionados."
+msgstr "No se pueden redondear los segmentos de pista seleccionados."
 
 #: pcbnew/tools/edit_tool.cpp:1410
 msgid "Some of the track segments could not be filleted."
-msgstr "Algunos de los segmentos de pista no pudieron ser fileteados."
+msgstr "Algunos de los segmentos de pista no pudieron ser redondeados."
 
 #: pcbnew/tools/edit_tool.cpp:1555
 msgid "Rotate"
