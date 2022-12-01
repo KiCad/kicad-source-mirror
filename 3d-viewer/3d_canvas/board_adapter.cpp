@@ -374,7 +374,8 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                 switch( item->GetType() )
                 {
                 case BS_ITEM_TYPE_DIELECTRIC:
-                    thickness += item->GetThickness();
+                    for( int sublayer = 0; sublayer < item->GetSublayersCount(); sublayer++ )
+                        thickness += item->GetThickness( sublayer );
                     break;
 
                 case BS_ITEM_TYPE_COPPER:
