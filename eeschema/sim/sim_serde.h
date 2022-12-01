@@ -123,6 +123,7 @@ public:
     static constexpr auto PARAMS_FIELD = "Sim.Params";
     static constexpr auto ENABLE_FIELD = "Sim.Enable";
 
+    virtual ~SIM_SERDE() = default;
     SIM_SERDE( SIM_MODEL& aModel ) : m_model( aModel ) {}
 
     std::string GenerateDevice() const;
