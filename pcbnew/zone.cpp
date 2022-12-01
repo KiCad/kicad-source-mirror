@@ -1369,6 +1369,26 @@ static struct ZONE_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( ZONE );
         propMgr.InheritsAfter( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
+
+        // Mask layer and position properties; they aren't useful in current form
+        auto posX = new PROPERTY<BOARD_ITEM, int>( _HKI( "Position X" ), &ZONE::SetX, &ZONE::GetX,
+                                                   PROPERTY_DISPLAY::PT_COORD,
+                                                   ORIGIN_TRANSFORMS::ABS_X_COORD );
+        posX->SetIsInternal( true );
+
+        auto posY = new PROPERTY<BOARD_ITEM, int>( _HKI( "Position Y" ), &ZONE::SetY,
+                                                   &ZONE::GetY, PROPERTY_DISPLAY::PT_COORD,
+                                                   ORIGIN_TRANSFORMS::ABS_Y_COORD );
+        posY->SetIsInternal( true );
+
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ), posX );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ), posY );
+        
+        auto layer = new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
+                    &ZONE::SetLayer, &ZONE::GetLayer );
+        layer->SetIsInternal( true );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ), layer );
+
         propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
                     &ZONE::SetAssignedPriority, &ZONE::GetAssignedPriority ) );
 
@@ -1381,7 +1401,7 @@ static struct ZONE_DESC
                     &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides );
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Min Width" ),
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Minimum Width" ),
                     &ZONE::SetMinThickness, &ZONE::GetMinThickness,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides );
