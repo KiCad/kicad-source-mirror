@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:25-0800\n"
-"PO-Revision-Date: 2022-11-30 01:23+0000\n"
+"PO-Revision-Date: 2022-12-02 20:47+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -8579,7 +8579,7 @@ msgstr "Numero"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:155
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:266
 msgid "Electrical Type"
-msgstr "Sähköinen tyyppi"
+msgstr "Sähkötyyppi"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:71
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
