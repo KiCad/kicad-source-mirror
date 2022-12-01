@@ -56,7 +56,7 @@
 #include "cli/command_export_pcb_pos.h"
 #include "cli/command_export_pcb_svg.h"
 #include "cli/command_export_pcb_step.h"
-#include "cli/command_export_sch_bom.h"
+#include "cli/command_export_sch_pythonbom.h"
 #include "cli/command_export_sch_netlist.h"
 #include "cli/command_export_sch_pdf.h"
 #include "cli/command_export_sch_svg.h"
@@ -113,25 +113,25 @@ struct COMMAND_ENTRY
             handler( aHandler ), subCommands( aSub ){};
 };
 
-static CLI::EXPORT_PCB_DRILL_COMMAND   exportPcbDrillCmd{};
-static CLI::EXPORT_PCB_DXF_COMMAND     exportPcbDxfCmd{};
-static CLI::EXPORT_PCB_STEP_COMMAND    exportPcbStepCmd{};
-static CLI::EXPORT_PCB_SVG_COMMAND     exportPcbSvgCmd{};
-static CLI::EXPORT_PCB_PDF_COMMAND     exportPcbPdfCmd{};
-static CLI::EXPORT_PCB_POS_COMMAND     exportPcbPosCmd{};
-static CLI::EXPORT_PCB_GERBER_COMMAND  exportPcbGerberCmd{};
-static CLI::EXPORT_PCB_COMMAND         exportPcbCmd{};
-static CLI::PCB_COMMAND                pcbCmd{};
-static CLI::EXPORT_SCH_COMMAND         exportSchCmd{};
-static CLI::SCH_COMMAND                schCmd{};
-static CLI::EXPORT_SCH_BOM_COMMAND     exportSchBomCmd{};
-static CLI::EXPORT_SCH_NETLIST_COMMAND exportSchNetlistCmd{};
-static CLI::EXPORT_SCH_PDF_COMMAND     exportSchPdfCmd{};
-static CLI::EXPORT_SCH_SVG_COMMAND     exportSchSvgCmd{};
-static CLI::FP_COMMAND                 fpCmd{};
-static CLI::FP_UPGRADE_COMMAND         fpUpgradeCmd{};
-static CLI::SYM_COMMAND                symCmd{};
-static CLI::SYM_UPGRADE_COMMAND        symUpgradeCmd{};
+static CLI::EXPORT_PCB_DRILL_COMMAND     exportPcbDrillCmd{};
+static CLI::EXPORT_PCB_DXF_COMMAND       exportPcbDxfCmd{};
+static CLI::EXPORT_PCB_STEP_COMMAND      exportPcbStepCmd{};
+static CLI::EXPORT_PCB_SVG_COMMAND       exportPcbSvgCmd{};
+static CLI::EXPORT_PCB_PDF_COMMAND       exportPcbPdfCmd{};
+static CLI::EXPORT_PCB_POS_COMMAND       exportPcbPosCmd{};
+static CLI::EXPORT_PCB_GERBER_COMMAND    exportPcbGerberCmd{};
+static CLI::EXPORT_PCB_COMMAND           exportPcbCmd{};
+static CLI::PCB_COMMAND                  pcbCmd{};
+static CLI::EXPORT_SCH_COMMAND           exportSchCmd{};
+static CLI::SCH_COMMAND                  schCmd{};
+static CLI::EXPORT_SCH_PYTHONBOM_COMMAND exportSchPythonBomCmd{};
+static CLI::EXPORT_SCH_NETLIST_COMMAND   exportSchNetlistCmd{};
+static CLI::EXPORT_SCH_PDF_COMMAND       exportSchPdfCmd{};
+static CLI::EXPORT_SCH_SVG_COMMAND       exportSchSvgCmd{};
+static CLI::FP_COMMAND                   fpCmd{};
+static CLI::FP_UPGRADE_COMMAND           fpUpgradeCmd{};
+static CLI::SYM_COMMAND                  symCmd{};
+static CLI::SYM_UPGRADE_COMMAND          symUpgradeCmd{};
 
 static std::vector<COMMAND_ENTRY> commandStack = {
     {
@@ -163,9 +163,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
         {
             { &exportSchCmd,
                 {
-                    &exportSchBomCmd,
                     &exportSchNetlistCmd,
                     &exportSchPdfCmd,
+                    &exportSchPythonBomCmd,
                     &exportSchSvgCmd
                 }
             }

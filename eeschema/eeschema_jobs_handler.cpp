@@ -20,7 +20,7 @@
 
 #include "eeschema_jobs_handler.h"
 #include <cli/exit_codes.h>
-#include <jobs/job_export_sch_bom.h>
+#include <jobs/job_export_sch_pythonbom.h>
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_pdf.h>
 #include <jobs/job_export_sch_svg.h>
@@ -53,8 +53,8 @@
 
 EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER()
 {
-    Register( "bom",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ) );
+    Register( "pythonbom",
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ) );
     Register( "netlist",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ) );
     Register( "pdf",
@@ -261,9 +261,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 }
 
 
-int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
+int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 {
-    JOB_EXPORT_SCH_BOM* aNetJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( aJob );
+    JOB_EXPORT_SCH_PYTHONBOM* aNetJob = dynamic_cast<JOB_EXPORT_SCH_PYTHONBOM*>( aJob );
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD );
 
@@ -297,33 +297,28 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         wxPrintf( _( "Warning: duplicate sheet names.\n" ) );
     }
 
-    if( aNetJob->format == JOB_EXPORT_SCH_BOM::FORMAT::XML )
+    std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist =
+            std::make_unique<NETLIST_EXPORTER_XML>( sch );
+
+    wxString fileExt = wxS( "xml" );
+
+    if( aNetJob->m_outputFile.IsEmpty() )
     {
-        std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist =
-                std::make_unique<NETLIST_EXPORTER_XML>( sch );
+        wxFileName fn = sch->GetFileName();
+        fn.SetName( fn.GetName() + "-bom" );
+        fn.SetExt( fileExt );
 
-        wxString fileExt = wxS( "xml" );
-
-        if( aNetJob->m_outputFile.IsEmpty() )
-        {
-            wxFileName fn = sch->GetFileName();
-            fn.SetName( fn.GetName() + "-bom" );
-            fn.SetExt( fileExt );
-
-            aNetJob->m_outputFile = fn.GetFullName();
-        }
-
-        bool res = xmlNetlist->WriteNetlist( aNetJob->m_outputFile, GNL_OPT_BOM, *this );
-
-        if( !res )
-        {
-            return CLI::EXIT_CODES::ERR_UNKNOWN;
-        }
-
-        return CLI::EXIT_CODES::OK;
+        aNetJob->m_outputFile = fn.GetFullName();
     }
 
-    return CLI::EXIT_CODES::ERR_UNKNOWN;
+    bool res = xmlNetlist->WriteNetlist( aNetJob->m_outputFile, GNL_OPT_BOM, *this );
+
+    if( !res )
+    {
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    return CLI::EXIT_CODES::OK;
 }
 
 

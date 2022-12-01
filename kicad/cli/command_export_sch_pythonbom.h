@@ -18,32 +18,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_EXPORT_SCH_BOM_H
-#define JOB_EXPORT_SCH_BOM_H
+#ifndef COMMAND_EXPORT_SCH_PYTHONBOM_H
+#define COMMAND_EXPORT_SCH_PYTHONBOM_H
 
-#include <wx/string.h>
-#include "job.h"
+#include "command_export_pcb_base.h"
 
-class JOB_EXPORT_SCH_BOM : public JOB
+namespace CLI
+{
+class EXPORT_SCH_PYTHONBOM_COMMAND : public EXPORT_PCB_BASE_COMMAND
 {
 public:
-    JOB_EXPORT_SCH_BOM( bool aIsCli ) :
-            JOB( "bom", aIsCli ),
-            m_filename(),
-            m_outputFile()
-    {
-        format = FORMAT::XML;
-    }
+    EXPORT_SCH_PYTHONBOM_COMMAND();
 
-    wxString m_filename;
-    wxString m_outputFile;
-
-    enum class FORMAT
-    {
-        XML
-    };
-
-    FORMAT format;
+    int Perform( KIWAY& aKiway ) override;
 };
+} // namespace CLI
 
 #endif

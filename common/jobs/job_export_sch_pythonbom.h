@@ -18,20 +18,24 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_SCH_BOM_H
-#define COMMAND_EXPORT_SCH_BOM_H
+#ifndef JOB_EXPORT_SCH_PYTHONBOM_H
+#define JOB_EXPORT_SCH_PYTHONBOM_H
 
-#include "command_export_pcb_base.h"
+#include <wx/string.h>
+#include "job.h"
 
-namespace CLI
-{
-class EXPORT_SCH_BOM_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class JOB_EXPORT_SCH_PYTHONBOM : public JOB
 {
 public:
-    EXPORT_SCH_BOM_COMMAND();
+    JOB_EXPORT_SCH_PYTHONBOM( bool aIsCli ) :
+            JOB( "pythonbom", aIsCli ),
+            m_filename(),
+            m_outputFile()
+    {
+    }
 
-    int Perform( KIWAY& aKiway ) override;
+    wxString m_filename;
+    wxString m_outputFile;
 };
-} // namespace CLI
 
 #endif

@@ -27,7 +27,7 @@ set( KICAD_SRCS
     cli/command_export_pcb_svg.cpp
     cli/command_fp_upgrade.cpp
     cli/command_pcb_export.cpp
-    cli/command_export_sch_bom.cpp
+    cli/command_export_sch_pythonbom.cpp
     cli/command_export_sch_netlist.cpp
     cli/command_export_sch_pdf.cpp
     cli/command_export_sch_svg.cpp
