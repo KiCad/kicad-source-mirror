@@ -656,9 +656,9 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 
             if( item->IsColorEditable() && uptodate )
             {
-                if( IsPrmSpecified( item->GetColor() ) )
+                if( IsPrmSpecified( item->GetColor( sub_idx ) ) )
                 {
-                    wxString colorName = item->GetColor();
+                    wxString colorName = item->GetColor( sub_idx );
 
                     if( colorName.StartsWith( wxT( "#" ) ) ) // This is a user defined color.
                     {

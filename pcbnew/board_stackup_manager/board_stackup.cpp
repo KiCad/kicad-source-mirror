@@ -48,6 +48,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 
     case BS_ITEM_TYPE_DIELECTRIC:
         m_TypeName = KEY_CORE;          // or prepreg
+        SetColor( NotSpecifiedPrm() );
         SetMaterial( wxT( "FR4" ) );    // or other dielectric name
         SetLossTangent( 0.02 );         // for FR4
         SetEpsilonR( 4.5 );             // for FR4
@@ -59,7 +60,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 
     case BS_ITEM_TYPE_SOLDERMASK:
         m_TypeName = wxT( "soldermask" );
-        m_Color = NotSpecifiedPrm();
+        SetColor( NotSpecifiedPrm() );
         SetMaterial( NotSpecifiedPrm() ); // or other solder mask material name
         SetThickness( GetMaskDefaultThickness() );
         SetEpsilonR( DEFAULT_EPSILON_R_SOLDERMASK );
@@ -67,7 +68,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 
     case BS_ITEM_TYPE_SILKSCREEN:
         m_TypeName = wxT( "silkscreen" );
-        m_Color = NotSpecifiedPrm();
+        SetColor( NotSpecifiedPrm() );
         SetMaterial( NotSpecifiedPrm() ); // or other silkscreen material name
         SetEpsilonR( DEFAULT_EPSILON_R_SILKSCREEN );
         break;
@@ -87,7 +88,6 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( const BOARD_STACKUP_ITEM& aOther )
     m_DielectricPrmsList = aOther.m_DielectricPrmsList;
     m_TypeName = aOther.m_TypeName;
     m_LayerName = aOther.m_LayerName;
-    m_Color = aOther.GetColor();
 }
 
 
@@ -131,6 +131,13 @@ int BOARD_STACKUP_ITEM::GetMaskDefaultThickness()
 
 
 // Getters:
+wxString BOARD_STACKUP_ITEM::GetColor( int aDielectricSubLayer ) const
+{
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
+    return m_DielectricPrmsList[aDielectricSubLayer].m_Color;
+}
+
 int BOARD_STACKUP_ITEM::GetThickness( int aDielectricSubLayer ) const
 {
     wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
@@ -172,6 +179,15 @@ wxString BOARD_STACKUP_ITEM::GetMaterial( int aDielectricSubLayer ) const
 
 
 // Setters:
+void BOARD_STACKUP_ITEM::SetColor(  const wxString& aColorName , int aDielectricSubLayer )
+{
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
+    if( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() )
+        m_DielectricPrmsList[aDielectricSubLayer].m_Color = aColorName;
+}
+
+
 void BOARD_STACKUP_ITEM::SetThickness( int aThickness, int aDielectricSubLayer )
 {
     wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
@@ -645,6 +661,12 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
             {
                 aFormatter->Print( 0, "\n" );
                 aFormatter->Print( nest_level+1, "addsublayer" );
+            }
+
+            if( item->IsColorEditable() && IsPrmSpecified( item->GetColor( idx ) ) )
+            {
+                aFormatter->Print( 0, " (color %s)",
+                                   aFormatter->Quotew( item->GetColor( idx ) ).c_str() );
             }
 
             if( item->IsThicknessEditable() )

@@ -1570,7 +1570,7 @@ void PCB_PARSER::parseBoardStackup()
                                          wx_color.Alpha() );
                         }
 
-                        item->SetColor( name );
+                        item->SetColor( name, sublayer_idx );
                         NeedRIGHT();
                         break;
 

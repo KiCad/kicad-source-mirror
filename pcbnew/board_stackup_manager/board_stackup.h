@@ -78,6 +78,7 @@ private:
                             /// (for impedance controlled purposes), unused for other layers
     double m_EpsilonR;      /// For dielectric (and solder mask) the dielectric constant
     double m_LossTangent;   /// For dielectric (and solder mask) the dielectric loss
+    wxString m_Color;       /// mainly for silkscreen and solder mask
 };
 
 
@@ -151,11 +152,11 @@ public:
 
     BOARD_STACKUP_ITEM_TYPE GetType() const { return m_Type; }
     PCB_LAYER_ID GetBrdLayerId() const { return m_LayerId; }
-    wxString GetColor() const { return m_Color; }
     wxString GetLayerName() const { return m_LayerName; }
     wxString GetTypeName() const { return m_TypeName; }
     int GetDielectricLayerId() const { return m_DielectricLayerId; }
 
+    wxString GetColor( int aDielectricSubLayer = 0 ) const;
     int GetThickness( int aDielectricSubLayer = 0 ) const;
     bool IsThicknessLocked( int aDielectricSubLayer = 0 ) const;
     double GetEpsilonR( int aDielectricSubLayer = 0 ) const;
@@ -165,11 +166,11 @@ public:
     // Setters:
     void SetEnabled( bool aEnable) { m_enabled = aEnable; }
     void SetBrdLayerId( PCB_LAYER_ID aBrdLayerId ) { m_LayerId = aBrdLayerId; }
-    void SetColor( const wxString& aColorName ){ m_Color = aColorName; }
     void SetLayerName( const wxString& aName ) { m_LayerName = aName; }
     void SetTypeName( const wxString& aName ) { m_TypeName = aName; }
     void SetDielectricLayerId( int aLayerId ) { m_DielectricLayerId = aLayerId; }
 
+    void SetColor( const wxString& aColorName, int aDielectricSubLayer = 0 );
     void SetThickness( int aThickness, int aDielectricSubLayer = 0 );
     void SetThicknessLocked( bool aLocked, int aDielectricSubLayer = 0 );
     void SetEpsilonR( double aEpsilon, int aDielectricSubLayer = 0 );
@@ -180,7 +181,6 @@ private:
     BOARD_STACKUP_ITEM_TYPE m_Type;
     wxString m_LayerName;   /// name of layer as shown in layer manager. Useful to create reports
     wxString m_TypeName;    /// type name of layer (copper, silk screen, core, prepreg ...)
-    wxString m_Color;       /// mainly for silkscreen and solder mask
     PCB_LAYER_ID m_LayerId; /// the layer id (F.Cu to B.Cu, F.Silk, B.silk, F.Mask, B.Mask)
                             /// and UNDEFINED_LAYER (-1) for dielectric layers that are not
                             /// really layers for the board editor

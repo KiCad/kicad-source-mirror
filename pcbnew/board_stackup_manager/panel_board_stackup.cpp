@@ -631,9 +631,9 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             auto bm_combo = dynamic_cast<wxBitmapComboBox*>( ui_row_item.m_ColorCtrl );
             int  selected = 0;  // The "not specified" item
 
-            if( item->GetColor().StartsWith( wxT( "#" ) ) )  // User defined color
+            if( item->GetColor( sub_item ).StartsWith( wxT( "#" ) ) )  // User defined color
             {
-                COLOR4D custom_color( item->GetColor() );
+                COLOR4D custom_color( item->GetColor( sub_item ) );
 
                 ui_row_item.m_UserColor = custom_color;
 
@@ -641,7 +641,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
                 if( bm_combo )      // Update user color shown in the wxBitmapComboBox
                 {
-                    bm_combo->SetString( selected, item->GetColor() );
+                    bm_combo->SetString( selected, item->GetColor( sub_item ) );
                     wxBitmap layerbmp( m_colorSwatchesSize.x, m_colorSwatchesSize.y );
                     LAYER_SELECTOR::DrawColorSwatch( layerbmp, COLOR4D(), custom_color );
                     bm_combo->SetItemBitmap( selected, layerbmp );
@@ -655,7 +655,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
                     // translated.
                     for( int ii = 0; ii < GetStandardColorCount( item->GetType()); ii++ )
                     {
-                        if( GetStandardColorName( item->GetType(), ii ) == item->GetColor() )
+                        if( GetStandardColorName( item->GetType(), ii ) == item->GetColor( sub_item ) )
                         {
                             selected = ii;
                             break;
@@ -888,9 +888,9 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
     if( item->IsColorEditable() )
     {
-        if( item->GetColor().StartsWith( wxT( "#" ) ) )  // User defined color
+        if( item->GetColor( aSublayerIdx ).StartsWith( wxT( "#" ) ) )  // User defined color
         {
-            ui_row_item.m_UserColor = COLOR4D( item->GetColor() ).ToColour();
+            ui_row_item.m_UserColor = COLOR4D( item->GetColor( aSublayerIdx ) ).ToColour();
         }
         else
             ui_row_item.m_UserColor = GetDefaultUserColor( item->GetType() );
@@ -900,17 +900,17 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
         m_fgGridSizer->Add( bm_combo, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
 
-        if( item->GetColor().StartsWith( wxT( "#" ) ) )
+        if( item->GetColor( aSublayerIdx ).StartsWith( wxT( "#" ) ) )
         {
             selected = GetColorUserDefinedListIdx( item->GetType() );
-            bm_combo->SetString( selected, item->GetColor() );
+            bm_combo->SetString( selected, item->GetColor( aSublayerIdx ) );
         }
         else
         {
             // Note: don't use bm_combo->FindString() because the combo strings are translated.
             for( int ii = 0; ii < GetStandardColorCount( item->GetType()); ii++ )
             {
-                if( GetStandardColorName( item->GetType(), ii ) == item->GetColor() )
+                if( GetStandardColorName( item->GetType(), ii ) == item->GetColor( aSublayerIdx ) )
                 {
                     selected = ii;
                     break;
@@ -1203,7 +1203,7 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
             }
         }
 
-        if( sub_item == 0 && item->IsColorEditable() )
+        if( item->IsColorEditable() )
         {
             wxBitmapComboBox* choice = dynamic_cast<wxBitmapComboBox*>( ui_item.m_ColorCtrl );
 
@@ -1212,9 +1212,9 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
                 int idx = choice->GetSelection();
 
                 if( IsCustomColorIdx( item->GetType(), idx ) )
-                    item->SetColor( ui_item.m_UserColor.ToHexString() );
+                    item->SetColor( ui_item.m_UserColor.ToHexString(), sub_item );
                 else
-                    item->SetColor( GetStandardColorName( item->GetType(), idx ) );
+                    item->SetColor( GetStandardColorName( item->GetType(), idx ), sub_item );
             }
         }
 
@@ -1444,25 +1444,25 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
     textCtrl->ChangeValue( item->GetMaterial( sub_item ) );
 
     if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC
-            && !item->GetColor().StartsWith( "#" ) /* User defined color */ )
+            && !item->GetColor( sub_item ).StartsWith( "#" ) /* User defined color */ )
     {
         if( substrate.m_Name.IsSameAs( "PTFE" )
               || substrate.m_Name.IsSameAs( "Teflon" ) )
         {
-            item->SetColor( "PTFE natural" );
+            item->SetColor( "PTFE natural", sub_item );
         }
         else if( substrate.m_Name.IsSameAs( "Polyimide" )
               || substrate.m_Name.IsSameAs( "Kapton" ) )
         {
-            item->SetColor( "Polyimide" );
+            item->SetColor( "Polyimide", sub_item );
         }
         else if( substrate.m_Name.IsSameAs( "Al" ) )
         {
-            item->SetColor( "Aluminum" );
+            item->SetColor( "Aluminum", sub_item );
         }
         else
         {
-            item->SetColor( "FR4 natural" );
+            item->SetColor( "FR4 natural", sub_item );
         }
     }
 
@@ -1470,7 +1470,7 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
 
     for( int ii = 0; ii < GetStandardColorCount( item->GetType()); ii++ )
     {
-        if( GetStandardColorName( item->GetType(), ii ) == item->GetColor() )
+        if( GetStandardColorName( item->GetType(), ii ) == item->GetColor( sub_item ) )
         {
             picker->SetSelection( ii );
             break;
