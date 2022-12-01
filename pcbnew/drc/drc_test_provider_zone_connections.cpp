@@ -176,7 +176,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
                 drce->SetItems( aZone, pad );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, pad->GetPosition(), UNDEFINED_LAYER );
+                reportViolation( drce, pad->GetPosition(), aLayer );
             }
         }
     }

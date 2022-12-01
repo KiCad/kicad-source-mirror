@@ -94,8 +94,6 @@ PCB_MARKER::~PCB_MARKER()
 
 wxString PCB_MARKER::Serialize() const
 {
-    wxString lastItem;
-
     if( m_rcItem->GetErrorCode() == DRCE_COPPER_SLIVER )
     {
         return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
@@ -103,6 +101,16 @@ wxString PCB_MARKER::Serialize() const
                                  m_Pos.x,
                                  m_Pos.y,
                                  m_rcItem->GetMainItemID().AsString(),
+                                 LayerName( m_layer ) );
+    }
+    else if( m_rcItem->GetErrorCode() == DRCE_STARVED_THERMAL )
+    {
+        return wxString::Format( wxT( "%s|%d|%d|%s|%s|%s" ),
+                                 m_rcItem->GetSettingsKey(),
+                                 m_Pos.x,
+                                 m_Pos.y,
+                                 m_rcItem->GetMainItemID().AsString(),
+                                 m_rcItem->GetAuxItemID().AsString(),
                                  LayerName( m_layer ) );
     }
     else if( m_rcItem->GetErrorCode() == DRCE_UNRESOLVED_VARIABLE
@@ -130,6 +138,18 @@ wxString PCB_MARKER::Serialize() const
 
 PCB_MARKER* PCB_MARKER::Deserialize( const wxString& data )
 {
+    auto getMarkerLayer =
+            []( const wxString& layerName ) -> int
+            {
+                for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+                {
+                    if( LayerName( ToLAYER_ID( layer ) ) == layerName )
+                        return layer;
+                }
+
+                return F_Cu;
+            };
+
     wxArrayString props = wxSplit( data, '|' );
     int           markerLayer = F_Cu;
     VECTOR2I      markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
@@ -143,15 +163,15 @@ PCB_MARKER* PCB_MARKER::Deserialize( const wxString& data )
     if( drcItem->GetErrorCode() == DRCE_COPPER_SLIVER )
     {
         drcItem->SetItems( KIID( props[3] ) );
+        markerLayer = getMarkerLayer( props[4] );
+    }
+    else if( drcItem->GetErrorCode() == DRCE_STARVED_THERMAL )
+    {
+        drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
 
-        for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
-        {
-            if( LayerName( ToLAYER_ID( layer ) ) == props[4] )
-            {
-                markerLayer = layer;
-                break;
-            }
-        }
+        // Pre-7.0 versions didn't differentiate between layers
+        if( props.size() == 6 )
+            markerLayer = getMarkerLayer( props[5] );
     }
     else if( drcItem->GetErrorCode() == DRCE_UNRESOLVED_VARIABLE
             && props[3].IsEmpty() && props[4].IsEmpty() )

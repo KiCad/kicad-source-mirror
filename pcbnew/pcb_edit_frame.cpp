@@ -962,7 +962,7 @@ void PCB_EDIT_FRAME::RecordDRCExclusions()
 
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
-        if( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION )
+        if( marker->IsExcluded() )
             bds.m_DrcExclusions.insert( marker->Serialize() );
     }
 }
