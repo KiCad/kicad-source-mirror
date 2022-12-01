@@ -32,6 +32,7 @@
 #include "ibis_parser.h"
 
 #include <sstream>
+#include <cstring> //for memcmp
 #include <iterator>
 #include <locale_io.h> // KiCad header
 
@@ -134,7 +135,7 @@ bool IBIS_MATRIX_SPARSE::Check()
 bool isNumberNA( double aNumber )
 {
     double NA = nan( NAN_NA );
-    return *reinterpret_cast<std::uint64_t*>(&aNumber) == *reinterpret_cast<std::uint64_t*>( &NA );
+    return std::memcmp( &aNumber, &NA, sizeof NA ) == 0;
 }
 
 bool TypMinMaxValue::Check()
