@@ -535,7 +535,7 @@ bool PGM_BASE::setExecutablePath()
 
     wxFileName fn( m_bin_dir );
 
-    if( fn.GetName() == wxT( "kicad" ) )
+    if( fn.GetName() == wxT( "kicad" ) || fn.GetName() == wxT( "kicad-cli" ) )
     {
         // kicad launcher, so just remove the Contents/MacOS part
         fn.RemoveLastDir();
