@@ -55,14 +55,10 @@
 class CONVERT_SETTINGS_DIALOG : public DIALOG_SHIM
 {
 public:
-    CONVERT_SETTINGS_DIALOG( wxWindow* aParent, CONVERT_SETTINGS* aSettings ) :
+    CONVERT_SETTINGS_DIALOG( EDA_DRAW_FRAME* aParent, CONVERT_SETTINGS* aSettings ) :
             DIALOG_SHIM( aParent, wxID_ANY, _( "Conversion Settings" ), wxDefaultPosition,
                          wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
-            m_settings( aSettings ),
-            m_rbMimicLineWidth( nullptr ),
-            m_rbCenterline( nullptr ),
-            m_rbEnvelope( nullptr ),
-            m_cbDeleteOriginals( nullptr )
+            m_settings( aSettings )
     {
         wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
         wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
@@ -153,8 +149,9 @@ CONVERT_TOOL::CONVERT_TOOL() :
     m_menu( nullptr ),
     m_frame( nullptr )
 {
-    m_convertSettings.m_Strategy = CENTERLINE;
-    m_convertSettings.m_DeleteOriginals = true;
+    m_userSettings.m_Strategy = CENTERLINE;
+    m_userSettings.m_LineWidth = 0;
+    m_userSettings.m_DeleteOriginals = true;
 }
 
 
@@ -239,7 +236,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         return 0;
 
     auto getPolys =
-            [&]( CONVERT_STRATEGY strategy )
+            [&]( CONVERT_SETTINGS cfg )
             {
                 polys.clear();
 
@@ -248,11 +245,11 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
                 SHAPE_POLY_SET polySet;
 
-                polySet.Append( makePolysFromClosedGraphics( selection.GetItems(), strategy ) );
+                polySet.Append( makePolysFromClosedGraphics( selection.GetItems(), cfg.m_Strategy ) );
 
-                polySet.Append( makePolysFromChainedSegs( selection.GetItems(), strategy ) );
+                polySet.Append( makePolysFromChainedSegs( selection.GetItems(), cfg.m_Strategy ) );
 
-                if( strategy == BOUNDING_HULL )
+                if( cfg.m_Strategy == BOUNDING_HULL )
                     polySet.Append( makePolysFromOpenGraphics( selection.GetItems() ) );
 
                 if( polySet.IsEmpty() )
@@ -272,7 +269,10 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
             };
 
     // Pre-flight getPolys() to see if there's anything to convert.
-    if( !getPolys( BOUNDING_HULL ) )
+    CONVERT_SETTINGS preflightSettings = m_userSettings;
+    preflightSettings.m_Strategy = BOUNDING_HULL;
+
+    if( !getPolys( preflightSettings ) )
         return 0;
 
     bool isFootprint = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
@@ -293,20 +293,24 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &PCB_ACTIONS::convertToPoly ) )
     {
-        CONVERT_SETTINGS_DIALOG dlg( m_frame, &m_convertSettings );
+        CONVERT_SETTINGS_DIALOG dlg( m_frame, &m_userSettings );
 
         if( dlg.ShowModal() != wxID_OK )
             return 0;
 
-        if( !getPolys( m_convertSettings.m_Strategy ) )
+        CONVERT_SETTINGS resolvedSettings = m_userSettings;
+
+        if( resolvedSettings.m_LineWidth == 0 )
+            resolvedSettings.m_LineWidth = bds.m_LineThickness[ bds.GetLayerClass( layer ) ];
+
+        if( !getPolys( resolvedSettings ) )
             return 0;
 
         for( const SHAPE_POLY_SET& poly : polys )
         {
             PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
-            int        width = bds.m_LineThickness[ bds.GetLayerClass( layer ) ];
 
-            if( m_convertSettings.m_Strategy == COPY_LINEWIDTH )
+            if( resolvedSettings.m_Strategy == COPY_LINEWIDTH )
             {
                 BOARD_ITEM* topLeftItem = nullptr;
                 VECTOR2I    pos;
@@ -325,7 +329,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
                                         && pos.y < topLeftItem->GetPosition().y ) )
                             {
                                 topLeftItem = candidate;
-                                width = topLeftItem->GetStroke().GetWidth();
+                                resolvedSettings.m_LineWidth = topLeftItem->GetStroke().GetWidth();
                             }
                         }
                     }
@@ -333,7 +337,8 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
             }
 
             graphic->SetShape( SHAPE_T::POLY );
-            graphic->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID, COLOR4D::UNSPECIFIED ) );
+            graphic->SetStroke( STROKE_PARAMS( resolvedSettings.m_LineWidth, PLOT_DASH_TYPE::SOLID,
+                                               COLOR4D::UNSPECIFIED ) );
             graphic->SetLayer( destLayer );
             graphic->SetPolyShape( poly );
 
@@ -354,29 +359,29 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         int ret;
 
         // No copy-line-width option for zones/keepouts
-        if( m_convertSettings.m_Strategy == COPY_LINEWIDTH )
-            m_convertSettings.m_Strategy = CENTERLINE;
+        if( m_userSettings.m_Strategy == COPY_LINEWIDTH )
+            m_userSettings.m_Strategy = CENTERLINE;
 
         if( aEvent.IsAction( &PCB_ACTIONS::convertToKeepout ) )
         {
             zoneInfo.SetIsRuleArea( true );
-            ret = InvokeRuleAreaEditor( frame, &zoneInfo, &m_convertSettings );
+            ret = InvokeRuleAreaEditor( frame, &zoneInfo, &m_userSettings );
         }
         else if( nonCopper )
         {
             zoneInfo.SetIsRuleArea( false );
-            ret = InvokeNonCopperZonesEditor( frame, &zoneInfo, &m_convertSettings );
+            ret = InvokeNonCopperZonesEditor( frame, &zoneInfo, &m_userSettings );
         }
         else
         {
             zoneInfo.SetIsRuleArea( false );
-            ret = InvokeCopperZonesEditor( frame, &zoneInfo, &m_convertSettings );
+            ret = InvokeCopperZonesEditor( frame, &zoneInfo, &m_userSettings );
         }
 
         if( ret == wxID_CANCEL )
             return 0;
 
-        if( !getPolys( m_convertSettings.m_Strategy ) )
+        if( !getPolys( m_userSettings ) )
             return 0;
 
         for( const SHAPE_POLY_SET& poly : polys )
@@ -392,7 +397,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( m_convertSettings.m_DeleteOriginals )
+    if( m_userSettings.m_DeleteOriginals )
     {
         PCB_SELECTION selectionCopy = selection;
         m_selectionTool->ClearSelection();
@@ -654,8 +659,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
             if( shape->IsClosed() )
                 continue;
 
-            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
-                                            false );
+            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError,
+                                            ERROR_INSIDE, false );
             shape->SetFlags( SKIP_STRUCT );
 
             break;
@@ -667,8 +672,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
         {
             PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-            track->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
-                                            false );
+            track->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError,
+                                            ERROR_INSIDE, false );
             track->SetFlags( SKIP_STRUCT );
 
             break;
