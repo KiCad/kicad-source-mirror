@@ -83,7 +83,7 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
                 started = false;
             }
 
-            if( !singleSided )
+            if( fail && !singleSided )
             {
                 if( m.Fit( MT_SINGLE, aBase, m_last, !side ) )
                 {
