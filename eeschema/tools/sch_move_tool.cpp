@@ -877,9 +877,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     m_anchorPos.reset();
 
-    for( EDA_ITEM* item : selection )
-        item->ClearEditFlags();
-
     if( restore_state )
     {
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
@@ -906,11 +903,15 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
         // This needs to run prior to `RecalculateConnections` because we need to identify
         // the lines that are newly dangling
-        trimDanglingLines();
+        if( m_isDrag )
+            trimDanglingLines();
 
         m_frame->RecalculateConnections( LOCAL_CLEANUP );
         m_frame->OnModify();
     }
+
+    for( EDA_ITEM* item : selectionCopy )
+        item->ClearEditFlags();
 
     if( unselect )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -937,9 +938,15 @@ void SCH_MOVE_TOOL::trimDanglingLines()
             {
                 m_toolMgr->GetView()->Update( aChangedItem, KIGFX::REPAINT );
 
-                // Delete newly dangling lines
-                if( aChangedItem->IsDangling() && aChangedItem->IsType( {SCH_LINE_T } ) )
+                // Delete newly dangling lines:
+                // Find split segments (one segment is new, the other is changed) that
+                // we aren't dragging and don't have selected
+                if( aChangedItem->IsDangling() && !aChangedItem->IsSelected()
+                    && ( aChangedItem->IsNew() || !aChangedItem->IsDragging() )
+                    && aChangedItem->IsType( { SCH_LINE_T } ) )
+                {
                     danglers.insert( aChangedItem );
+                }
             };
 
     m_frame->GetScreen()->TestDanglingEnds( nullptr, &changeHandler );
