@@ -378,7 +378,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 #endif
 
     appK2S.SetName( wxT( "kicad-cli" ) );
-    appK2S.Normalize( wxPATH_NORM_ALL );
+    appK2S.Normalize( FN_NORMALIZE_FLAGS );
 
     wxString cmdK2S = wxT( "\"" );
     cmdK2S.Append( appK2S.GetFullPath() );
