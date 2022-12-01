@@ -275,6 +275,18 @@ protected:
     void set( void* aObject, T aValue )
     {
         wxAny a = aValue;
+
+        // wxVariant will be type "long" even if the property is supposed to be
+        // unsigned.  Let's trust that we're coming from the property grid where
+        // we used a UInt editor.
+        if( std::is_same<T, wxVariant>::value )
+        {
+            wxAny pv = getter( aObject );
+
+            if( pv.CheckType<unsigned>() )
+                a = static_cast<unsigned>( static_cast<wxVariant>( aValue ).GetLong() );
+        }
+
         setter( aObject, a );
     }
 
