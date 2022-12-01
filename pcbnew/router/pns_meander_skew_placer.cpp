@@ -107,13 +107,11 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     if ( m_originPair.NetP() == m_originLine.Net() )
     {
-        m_padToDieLength = m_padToDieP;
         m_coupledLength = m_padToDieN + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
         m_tunedPath = m_tunedPathP;
     }
     else
     {
-        m_padToDieLength = m_padToDieN;
         m_coupledLength = m_padToDieP + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
         m_tunedPath = m_tunedPathN;
     }
@@ -125,9 +123,9 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 long long int MEANDER_SKEW_PLACER::origPathLength() const
 {
     if ( m_originPair.NetP() == m_originLine.Net() )
-        return m_padToDieLength + lineLength( m_tunedPath, m_startPad_p, m_endPad_p );
+        return m_padToDieP + lineLength( m_tunedPath, m_startPad_p, m_endPad_p );
 
-    return m_padToDieLength + lineLength( m_tunedPath, m_startPad_n, m_endPad_n );
+    return m_padToDieN + lineLength( m_tunedPath, m_startPad_n, m_endPad_n );
 
 }
 

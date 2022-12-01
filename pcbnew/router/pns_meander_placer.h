@@ -118,6 +118,9 @@ protected:
     MEANDERED_LINE   m_result;
     LINKED_ITEM*     m_initialSegment;
 
+    ///< Total length added by pad to die size.
+    int m_padToDieLength;
+
     long long int m_lastLength;
     TUNING_STATUS m_lastStatus;
 };

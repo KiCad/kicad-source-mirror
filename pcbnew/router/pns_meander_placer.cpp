@@ -40,6 +40,7 @@ MEANDER_PLACER::MEANDER_PLACER( ROUTER* aRouter ) :
     m_initialSegment = nullptr;
     m_lastLength = 0;
     m_lastStatus = TOO_SHORT;
+    m_padToDieLength = 0;
 }
 
 

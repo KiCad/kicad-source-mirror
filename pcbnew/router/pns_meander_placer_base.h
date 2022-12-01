@@ -154,9 +154,6 @@ protected:
     ///< Pointer to world to search colliding items.
     NODE* m_world;
 
-    ///< Total length added by pad to die size.
-    int m_padToDieLength;
-
     ///< Width of the meandered trace(s).
     int m_currentWidth;
 

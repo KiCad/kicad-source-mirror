@@ -120,8 +120,6 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     if( m_endPad_n )
         m_padToDieN += m_endPad_n->GetPadToDie();
 
-    m_padToDieLength = std::max( m_padToDieP, m_padToDieN );
-
     m_world->Remove( m_originPair.PLine() );
     m_world->Remove( m_originPair.NLine() );
 
