@@ -19,10 +19,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-11-30 00:08+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2022-12-03 01:48+0000\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -302,9 +302,9 @@ msgstr "&Einstellungen"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2728
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Ansichten (Alt+Tab):"
+msgstr "Ansichten (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2737
@@ -1246,9 +1246,8 @@ msgid "Open..."
 msgstr "Öffnen..."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
-#, fuzzy
 msgid "Load source image"
-msgstr "Als Spiegelbild anzeigen"
+msgstr "Ausgangsbild laden"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1256,9 +1255,8 @@ msgid "Quit"
 msgstr "Beenden"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:229
-#, fuzzy
 msgid "Quit Image Converter"
-msgstr "Bildumwandler"
+msgstr "Bildumwandler beenden"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:570
@@ -1323,19 +1321,16 @@ msgid "Greyscale Picture"
 msgstr "Grauwertbild"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:30
-#, fuzzy
 msgid "Black && White Picture"
 msgstr "Schwarz-Weiß-Bild"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:38
-#, fuzzy
 msgid "Image Information"
-msgstr "Bitmap-Informationen"
+msgstr "Bildinformationen"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
-#, fuzzy
 msgid "Image size:"
-msgstr "Seitengröße:"
+msgstr "Bildgröße:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1350,9 +1345,8 @@ msgid "pixels"
 msgstr "Pixel"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
-#, fuzzy
 msgid "Image PPI:"
-msgstr "Bitmap PPI:"
+msgstr "Bild PPI:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
@@ -1367,17 +1361,14 @@ msgid "bits"
 msgstr "Bits"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
-#, fuzzy
 msgid "Load Source Image"
-msgstr "Bild auswählen"
+msgstr "Ausgangsbild laden"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
-#, fuzzy
 msgid "Output Size"
-msgstr "Ausgangspin"
+msgstr "Ausgabegröße"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
 msgstr "Verhältnis Höhe/Breite sperren"
 
@@ -1409,7 +1400,6 @@ msgid "Options"
 msgstr "Optionen"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
-#, fuzzy
 msgid "Black / white threshold:"
 msgstr "Schwarz/Weiß-Schwellwert:"
 
@@ -5465,7 +5455,7 @@ msgstr "Schatten gesperrter Elemente"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "Schatten kollidierender Abstandsflächen"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -5531,9 +5521,9 @@ msgid "Unrecognized function '%s'"
 msgstr "Nicht erkannte Funktion '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "Unerwartetes \"%s\""
+msgstr "Unerwartete Einheiten für '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -6755,14 +6745,13 @@ msgid "No objects selected"
 msgstr "Keine Objekte ausgewählt"
 
 #: common/widgets/properties_panel.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Keine Objekte ausgewählt"
+msgstr "%d Objekte ausgewählt"
 
 #: common/widgets/properties_panel.cpp:238
-#, fuzzy
 msgid "Basic Properties"
-msgstr "%s-Eigenschaften"
+msgstr "Grundlegende Eigenschaften"
 
 #: common/widgets/unit_binder.cpp:274
 #, c-format
@@ -7928,7 +7917,6 @@ msgid "Generator file name not found."
 msgstr "Generator-Dateiname nicht gefunden."
 
 #: eeschema/dialogs/dialog_bom.cpp:459
-#, fuzzy
 msgid "Bill of Materials Generation Help"
 msgstr "Hilfe zur BOM-Erstellung"
 
@@ -7974,7 +7962,6 @@ msgstr ""
 "Liste der Skripte zur Bauteillistenerzeugung auf Standardwerte zurücksetzen"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
 msgstr "Bauteilliste (BOM)"
 
@@ -8432,9 +8419,8 @@ msgid "Checking conflicts..."
 msgstr "Prüfe Konflikte ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:488
-#, fuzzy
 msgid "Checking units..."
-msgstr "Prüfe Pins ..."
+msgstr "Prüfe Einheiten ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:493
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
@@ -8454,9 +8440,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Prüfe nicht-aufgelöste Variablen ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:534
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "Prüfe Zonen ..."
+msgstr "Prüfe SPICE-Modelle ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
@@ -9018,11 +9003,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Ibis-Parser-Protokoll"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:47
 msgid "Ibis parser"
-msgstr ""
+msgstr "Ibis-Parser"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9588,9 +9573,8 @@ msgid "Fields must have a name."
 msgstr "Felder müssen einen Namen haben."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:274
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "Für das Alias-Symbol muss ein übergeordnetes Element ausgewählt sein"
+msgstr "Abgeleitetes Symbol muss ein übergeordnetes Element ausgewählt haben"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 msgid "Delete extra units from symbol?"
@@ -10862,9 +10846,8 @@ msgid "Add signal by name:"
 msgstr "Signal nach Name hinzufügen:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:223
-#, fuzzy
 msgid "Failed to read simulation model from fields."
-msgstr "Fehler beim Lesen des Simulationsmodells aus den Feldern"
+msgstr "Fehler beim Lesen des Simulationsmodells aus den Feldern."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:401 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1147 eeschema/sch_label.cpp:880
@@ -10896,7 +10879,7 @@ msgstr "Kein Modell namens \"%s\" in der Bibliothek."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:29
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "SPICE-Modell aus Datei (*.lib, *.sub oder *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:53
 #: eeschema/dialogs/dialog_sim_model_base.cpp:79
@@ -10908,13 +10891,12 @@ msgid "Pin:"
 msgstr "Pin:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:74
-#, fuzzy
 msgid "Differential"
-msgstr "Differenzielle Paare"
+msgstr "Differential"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:98
 msgid "Built-in SPICE model"
-msgstr ""
+msgstr "Integriertes SPICE-Modell"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:107
 msgid "Device:"
@@ -12084,9 +12066,8 @@ msgid "Alias name '%s' already in use."
 msgstr "Aliasname \"%s\" wird bereits verwendet."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:289
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Netz-/Aliasname des Busmitglieds darf nicht leer sein."
+msgstr "Netz-/Aliasname des Mitglieds darf nicht leer sein."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
 msgid "Bus definitions:"
@@ -12609,9 +12590,8 @@ msgstr "Fehler beim Laden der Symbol-Bibliothekstabelle \"%s\"."
 #: eeschema/eeschema_jobs_handler.cpp:137
 #: eeschema/eeschema_jobs_handler.cpp:170
 #: eeschema/eeschema_jobs_handler.cpp:263
-#, fuzzy
 msgid "Failed to load schematic file\n"
-msgstr "Konnte Schaltplan \"%s\" nicht laden"
+msgstr "Konnte Schaltplandatei nicht laden\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:181
 #: eeschema/eeschema_jobs_handler.cpp:278
@@ -12619,37 +12599,33 @@ msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
+"Warnung: Schaltplan hat Annotationsfehler, die mit dem Schaltplaneditor "
+"behoben werden müssen\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:190
 #: eeschema/eeschema_jobs_handler.cpp:288
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "Warnung: Doppelte Aliasnamen"
+msgstr "Warnung: Doppelte Schaltplanblattnamen.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:230
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "Unbekannter Waveform-Typ"
+msgstr "Unbekanntes Netzlistenformat.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:333 pcbnew/pcbnew_jobs_handler.cpp:492
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "Datei %s kann nicht geladen werden"
+msgstr "Bibliothek kann nicht geladen werden\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:342
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "Ungültige Symbolbibliothek-ID"
+msgstr "Speichere Symbolbibliothek im aktualisierten Format\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:351 pcbnew/pcbnew_jobs_handler.cpp:516
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "Konnte die Sicherungsbibliothek %s nicht speichern."
+msgstr "Bibliothek kann nicht gespeichert werden\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:357
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "Symbolbibliothek nicht aktiviert."
+msgstr "Symbolbibliothek wurde nicht aktualisiert\n"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Input Pin"
@@ -12714,24 +12690,24 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Unterschiedliche Footprints zugewiesen zu %s und %s"
 
 #: eeschema/erc.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "Symbol \"%s\" existiert bereits in \"%s\"."
+msgstr "Symbol %s hat unplatzierte Einheiten %s"
 
 #: eeschema/erc.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "Symbol hat mehr Einheiten als definiert sind"
+msgstr "Symbol %s hat in den Einheiten %s unplatzierte Stromversorgungs-Pins."
 
 #: eeschema/erc.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "Symbol hat mehr Einheiten als definiert sind"
+msgstr "Symbol %s hat in den Einheiten %s unplatzierte Eingangs-Pins."
 
 #: eeschema/erc.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "Symbol hat mehr Einheiten als definiert sind"
+msgstr "Symbol %s hat in den Einheiten %s unplatzierte bidirektionale Pins."
 
 #: eeschema/erc.cpp:583
 msgid "Pins with 'no connection' type are connected"
@@ -12874,9 +12850,8 @@ msgid "Unresolved text variable"
 msgstr "Nicht aufgelöste Textvariable"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "SPICE model issue"
-msgstr "SPICE Netzlistendatei"
+msgstr "SPICE-Modell-Problem"
 
 #: eeschema/erc_item.cpp:142
 msgid "Wires not connected to anything"
@@ -12895,24 +12870,20 @@ msgid "Symbol has more units than are defined"
 msgstr "Symbol hat mehr Einheiten als definiert sind"
 
 #: eeschema/erc_item.cpp:158
-#, fuzzy
 msgid "Symbol has units that are not placed"
-msgstr "Symbol hat mehr Einheiten als definiert sind"
+msgstr "Symbol hat Einheiten, die nicht platziert sind"
 
 #: eeschema/erc_item.cpp:162
-#, fuzzy
 msgid "Symbol has input pins that are not placed"
-msgstr "Symbol hat mehr Einheiten als definiert sind"
+msgstr "Symbol hat Eingangs-Pins, die nicht platziert sind"
 
 #: eeschema/erc_item.cpp:166
-#, fuzzy
 msgid "Symbol has bidirectional pins that are not placed"
-msgstr "Symbol hat mehr Einheiten als definiert sind"
+msgstr "Symbol hat bidirektionale Pins, die nicht platziert sind"
 
 #: eeschema/erc_item.cpp:170
-#, fuzzy
 msgid "Symbol has power input pins that are not placed"
-msgstr "Symbol hat mehr Einheiten als definiert sind"
+msgstr "Symbol hat Stromversorgungs-Pins, die nicht platziert sind"
 
 #: eeschema/erc_item.cpp:174
 msgid "Units of same symbol have different values"
@@ -12944,12 +12915,10 @@ msgid "Vertical"
 msgstr "Vertikal"
 
 #: eeschema/fields_grid_table.cpp:341
-#, fuzzy
 msgid "Show Name"
-msgstr "Netz anzeigen"
+msgstr "Name anzeigen"
 
 #: eeschema/fields_grid_table.cpp:352
-#, fuzzy
 msgid "Allow Autoplacement"
 msgstr "Autoplatzierung erlauben"
 
@@ -13256,9 +13225,8 @@ msgstr ""
 "jedes Mal angezeigt, wenn der Schaltplaneditor gestartet wird."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1698
-#, fuzzy
 msgid "Derived from"
-msgstr "Ableiten vom Symbol:"
+msgstr "Abgeleitet von"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
 #: kicad/pcm/pcm.cpp:798 pcbnew/footprint.cpp:1023 pcbnew/zone.cpp:595
@@ -13332,14 +13300,14 @@ msgid "Pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
 
 #: eeschema/lib_pin.cpp:1349
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
-msgstr "Pin %s [%s, %s, %s]"
+msgstr "Versteckter Pin %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1357
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s]"
-msgstr "Pin %s [%s, %s]"
+msgstr "Versteckter Pin %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:457 eeschema/sch_shape.cpp:407
 #, c-format
@@ -13514,18 +13482,22 @@ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr "Konnte keinen Namen für \"%s\" erstellen: UINT64_MAX überschritten"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
-msgstr "Fehler beim Laden der Simulationsmodellbibliothek \"%s\": %s"
+msgstr ""
+"Fehler beim Lesen des Simulationsmodells vom Symbol '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model library '%s':\n"
 "%s"
-msgstr "Fehler beim Laden der Simulationsmodellbibliothek \"%s\": %s"
+msgstr ""
+"Fehler beim Laden der Simulationsmodellbibliothek '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:402
 #, c-format
@@ -14084,8 +14056,8 @@ msgstr "Datei nicht vollständig gelesen (%d Bytes verbleiben)."
 #, fuzzy, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
-"Unbekannter oder unerwarteter Datensatz im Abschnitt \"Additional\"; "
-"Datensatz-ID: %d."
+"Unbekannte oder unerwartete Datensatz-ID %d im Abschnitt \"Additional\" "
+"gefunden."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:556
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -14100,11 +14072,11 @@ msgid "Compile mask not currently supported."
 msgstr "Compile mask wird derzeit nicht unterstützt."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:707
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
-"Unbekannter oder unerwarteter Datensatz im Abschnitt \"FileHeader\"; "
-"Datensatz-ID: %d."
+"Unbekannte oder unerwartete Datensatz-ID %d im Abschnitt \"FileHeader\" "
+"gefunden."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:807
 #, c-format
@@ -14149,9 +14121,8 @@ msgstr ""
 "importiert. Bitte überprüfen Sie den importierten Schaltplan."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2260
-#, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "Power Port hat unbekannten Stil, benutze stattdessen 'bar'."
+msgstr "Power Port mit unbekanntem Stil als 'Bar' importiert."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2301
 #, c-format
@@ -15314,19 +15285,16 @@ msgid "Checking pin "
 msgstr "Prüfe Pin "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:189
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "Der Netzname darf nicht leer sein."
+msgstr "Der Pin-Name darf nicht leer sein."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:194
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "Der Variablenname darf nicht leer sein."
+msgstr "Der Signal-Name darf nicht leer sein."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:199
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "Der Netzname darf nicht leer sein."
+msgstr "Der Modell-Name darf nicht leer sein."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:204
 msgid "Rpin is not valid."
@@ -15341,27 +15309,24 @@ msgid "Cpin is not valid."
 msgstr "Cpin ist ungültig."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:228
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "Der Netzname darf nicht leer sein."
+msgstr "Der Komponentenname darf nicht leer sein."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:233
 msgid "Checking component "
 msgstr "Prüfe Bauteil "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:238
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "Der Netzname darf nicht leer sein."
+msgstr "Komponente: Hersteller darf nicht leer sein."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:244
 msgid "Component: Invalid Package."
 msgstr "Bauteil: Ungültige Bauform."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:250
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Komponente:"
+msgstr "Komponente: kein Pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:347
 msgid "Cannot interpolate the current based on this IV table."
@@ -15396,9 +15361,8 @@ msgid "Checking model "
 msgstr "Prüfe Modell "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Nicht definierte Lagen:"
+msgstr "Undefinierter Modelltyp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
 msgid "Invalid Vinh value."
