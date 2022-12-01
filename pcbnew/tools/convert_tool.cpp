@@ -182,26 +182,28 @@ bool CONVERT_TOOL::Init()
 
     auto graphicToTrack = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_ARC_T } );
 
-    auto trackLines = S_C::MoreThan( 1 ) && S_C::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T } )
+    auto anyTracks = S_C::MoreThan( 0 ) && S_C::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } )
                             && P_S_C::SameLayer();
 
-    auto anyLines = graphicLines || trackLines;
     auto anyPolys = S_C::OnlyTypes( { PCB_ZONE_T, PCB_FP_ZONE_T,
                                       PCB_SHAPE_LOCATE_POLY_T, PCB_SHAPE_LOCATE_RECT_T } );
 
-    auto lineToArc = S_C::Count( 1 ) && S_C::OnlyTypes( { PCB_TRACE_T, PCB_SHAPE_LOCATE_SEGMENT_T } );
-
-    auto canCreateArray = S_C::MoreThan( 0 );
-
-    auto showConvertMenu   = anyPolys || anyLines || lineToArc || canCreateArray;
-
-    auto canCreatePolyType = anyLines || anyPolys;
+    auto canCreateArcs     = S_C::Count( 1 )
+                                && S_C::OnlyTypes( { PCB_TRACE_T, PCB_SHAPE_LOCATE_SEGMENT_T } );
+    auto canCreateArray    = S_C::MoreThan( 0 );
+    auto canCreatePolyType = graphicLines || anyPolys || anyTracks;
+    auto canCreateLines    = anyPolys;
     auto canCreateTracks   = anyPolys || graphicToTrack;
+    auto canCreate         = canCreatePolyType
+                                || canCreateLines
+                                || canCreateTracks
+                                || canCreateArcs
+                                || canCreateArray;
 
     m_menu->AddItem( PCB_ACTIONS::convertToPoly, canCreatePolyType );
     m_menu->AddItem( PCB_ACTIONS::convertToZone, canCreatePolyType );
     m_menu->AddItem( PCB_ACTIONS::convertToKeepout, canCreatePolyType );
-    m_menu->AddItem( PCB_ACTIONS::convertToLines, anyPolys );
+    m_menu->AddItem( PCB_ACTIONS::convertToLines, canCreateLines );
     m_menu->AppendSeparator();
 
     // Currently the code exists, but tracks are not really existing in footprints
@@ -209,13 +211,13 @@ bool CONVERT_TOOL::Init()
     if( m_frame->IsType( FRAME_PCB_EDITOR ) )
         m_menu->AddItem( PCB_ACTIONS::convertToTracks, canCreateTracks );
 
-    m_menu->AddItem( PCB_ACTIONS::convertToArc, lineToArc );
+    m_menu->AddItem( PCB_ACTIONS::convertToArc, canCreateArcs );
 
     m_menu->AppendSeparator();
     m_menu->AddItem( PCB_ACTIONS::createArray, canCreateArray );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
-    selToolMenu.AddMenu( m_menu, showConvertMenu, 100 );
+    selToolMenu.AddMenu( m_menu, canCreate, 100 );
 
     return true;
 }
