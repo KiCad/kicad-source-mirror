@@ -902,9 +902,10 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
             EDA_ITEM_FLAGS flags = 0;
+            bool           isLine = aCollector[i]->Type() == SCH_LINE_T;
 
             // Handle line ends specially
-            if( aCollector[i]->Type() == SCH_LINE_T )
+            if( isLine )
             {
                 SCH_LINE* line = (SCH_LINE*) aCollector[i];
 
@@ -916,9 +917,15 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
                     flags = STARTPOINT | ENDPOINT;
             }
 
-            if( aSubtract || ( aExclusiveOr && aCollector[i]->IsSelected() ) )
+            if( aSubtract
+                || ( aExclusiveOr && aCollector[i]->IsSelected()
+                     && ( !isLine || ( isLine && aCollector[i]->HasFlag( flags ) ) ) ) )
             {
                 aCollector[i]->ClearFlags( flags );
+
+                // Need to update end shadows after ctrl-click unselecting one of two selected endpoints
+                if( isLine )
+                    getView()->Update( aCollector[i] );
 
                 if( !aCollector[i]->HasFlag( STARTPOINT ) && !aCollector[i]->HasFlag( ENDPOINT ) )
                 {
