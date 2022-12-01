@@ -43,6 +43,7 @@ enum CONVERT_STRATEGY
 struct CONVERT_SETTINGS
 {
     CONVERT_STRATEGY m_Strategy;
+    int              m_Gap;
     int              m_LineWidth;
     bool             m_DeleteOriginals;
 };

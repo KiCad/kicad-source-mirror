@@ -28,6 +28,7 @@
 #include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/radiobut.h>
+#include <widgets/unit_binder.h>
 #include <board.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
@@ -67,15 +68,37 @@ public:
         m_rbMimicLineWidth = new wxRadioButton( this, wxID_ANY, _( "Copy line width of first object" ) );
         topSizer->Add( m_rbMimicLineWidth, 0, wxLEFT|wxRIGHT, 5 );
 
-        topSizer->AddSpacer( 2 );
+        topSizer->AddSpacer( 6 );
         m_rbCenterline = new wxRadioButton( this, wxID_ANY, _( "Use centerlines" ) );
         topSizer->Add( m_rbCenterline, 0, wxLEFT|wxRIGHT, 5 );
 
-        topSizer->AddSpacer( 2 );
+        topSizer->AddSpacer( 6 );
         m_rbEnvelope = new wxRadioButton( this, wxID_ANY, _( "Create bounding hull" ) );
         topSizer->Add( m_rbEnvelope, 0, wxLEFT|wxRIGHT, 5 );
 
-        topSizer->AddSpacer( 8 );
+        m_gapLabel = new wxStaticText( this, wxID_ANY, _( "Gap:" ) );
+        m_gapCtrl = new wxTextCtrl( this, wxID_ANY );
+        m_gapUnits = new wxStaticText( this, wxID_ANY, _( "mm" ) );
+        m_gap = new UNIT_BINDER( aParent, m_gapLabel, m_gapCtrl, m_gapUnits );
+
+        m_widthLabel = new wxStaticText( this, wxID_ANY, _( "Line width:" ) );
+        m_widthCtrl = new wxTextCtrl( this, wxID_ANY );
+        m_widthUnits = new wxStaticText( this, wxID_ANY, _( "mm" ) );
+        m_width = new UNIT_BINDER( aParent, m_widthLabel, m_widthCtrl, m_widthUnits );
+
+        wxBoxSizer* hullParamsSizer = new wxBoxSizer( wxHORIZONTAL );
+        hullParamsSizer->Add( m_gapLabel, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+        hullParamsSizer->Add( m_gapCtrl, 1, wxALIGN_CENTRE_VERTICAL|wxLEFT|wxRIGHT, 3 );
+        hullParamsSizer->Add( m_gapUnits, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+        hullParamsSizer->AddSpacer( 18 );
+        hullParamsSizer->Add( m_widthLabel, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+        hullParamsSizer->Add( m_widthCtrl, 1, wxALIGN_CENTRE_VERTICAL|wxLEFT|wxRIGHT, 3 );
+        hullParamsSizer->Add( m_widthUnits, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+
+        topSizer->AddSpacer( 2 );
+        topSizer->Add( hullParamsSizer, 0, wxLEFT, 26 );
+
+        topSizer->AddSpacer( 15 );
         m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY, _( "Delete source objects after conversion" ) );
         topSizer->Add( m_cbDeleteOriginals, 0, wxALL, 5 );
 
@@ -100,11 +123,24 @@ public:
 
         SetupStandardButtons();
 
+        m_rbMimicLineWidth->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED,
+                                     wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ),
+                                     nullptr, this );
+        m_rbCenterline->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED,
+                                 wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ),
+                                 nullptr, this );
+        m_rbEnvelope->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED,
+                               wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ),
+                               nullptr, this );
+
         finishDialogSettings();
     }
 
     ~CONVERT_SETTINGS_DIALOG()
-    {};
+    {
+        delete m_gap;
+        delete m_width;
+    };
 
 protected:
     bool TransferDataToWindow() override
@@ -115,6 +151,11 @@ protected:
         case CENTERLINE:     m_rbCenterline->SetValue( true );     break;
         case BOUNDING_HULL:  m_rbEnvelope->SetValue( true );       break;
         }
+
+        m_gap->Enable( m_rbEnvelope->GetValue() );
+        m_width->Enable( m_rbEnvelope->GetValue() );
+        m_gap->SetValue( m_settings->m_Gap );
+        m_width->SetValue( m_settings->m_LineWidth );
 
         m_cbDeleteOriginals->SetValue( m_settings->m_DeleteOriginals );
         return true;
@@ -129,8 +170,17 @@ protected:
         else
             m_settings->m_Strategy = COPY_LINEWIDTH;
 
+        m_settings->m_Gap = m_gap->GetValue();
+        m_settings->m_LineWidth = m_width->GetValue();
+
         m_settings->m_DeleteOriginals = m_cbDeleteOriginals->GetValue();
         return true;
+    }
+
+    void onRadioButton( wxCommandEvent& aEvent )
+    {
+        m_gap->Enable( m_rbEnvelope->GetValue() );
+        m_width->Enable( m_rbEnvelope->GetValue() );
     }
 
 private:
@@ -139,6 +189,14 @@ private:
     wxRadioButton*    m_rbMimicLineWidth;
     wxRadioButton*    m_rbCenterline;
     wxRadioButton*    m_rbEnvelope;
+    wxStaticText*     m_gapLabel;
+    wxTextCtrl*       m_gapCtrl;
+    wxStaticText*     m_gapUnits;
+    UNIT_BINDER*      m_gap;
+    wxStaticText*     m_widthLabel;
+    wxTextCtrl*       m_widthCtrl;
+    wxStaticText*     m_widthUnits;
+    UNIT_BINDER*      m_width;
     wxCheckBox*       m_cbDeleteOriginals;
 };
 
@@ -150,6 +208,7 @@ CONVERT_TOOL::CONVERT_TOOL() :
     m_frame( nullptr )
 {
     m_userSettings.m_Strategy = CENTERLINE;
+    m_userSettings.m_Gap = 0;
     m_userSettings.m_LineWidth = 0;
     m_userSettings.m_DeleteOriginals = true;
 }
@@ -252,7 +311,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
                 polySet.Append( makePolysFromChainedSegs( selection.GetItems(), cfg.m_Strategy ) );
 
                 if( cfg.m_Strategy == BOUNDING_HULL )
-                    polySet.Append( makePolysFromOpenGraphics( selection.GetItems() ) );
+                    polySet.Append( makePolysFromOpenGraphics( selection.GetItems(), cfg.m_Gap ) );
 
                 if( polySet.IsEmpty() )
                     return false;
@@ -308,6 +367,12 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
         if( resolvedSettings.m_LineWidth == 0 )
             resolvedSettings.m_LineWidth = bds.m_LineThickness[ bds.GetLayerClass( layer ) ];
+
+        if( resolvedSettings.m_Strategy == BOUNDING_HULL )
+        {
+            if( resolvedSettings.m_Gap > 0 )
+                resolvedSettings.m_Gap += KiROUND( (double) resolvedSettings.m_LineWidth / 2 );
+        }
 
         if( !getPolys( resolvedSettings ) )
             return 0;
@@ -644,7 +709,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
 }
 
 
-SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITEM*>& aItems )
+SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITEM*>& aItems,
+                                                        int aGap )
 {
     BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
     SHAPE_POLY_SET         poly;
@@ -664,7 +730,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
             if( shape->IsClosed() )
                 continue;
 
-            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError,
+            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, bds.m_MaxError,
                                             ERROR_INSIDE, false );
             shape->SetFlags( SKIP_STRUCT );
 
@@ -677,7 +743,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
         {
             PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-            track->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError,
+            track->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, bds.m_MaxError,
                                             ERROR_INSIDE, false );
             track->SetFlags( SKIP_STRUCT );
 
