@@ -661,6 +661,19 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
             break;
         }
 
+        case PCB_TRACE_T:
+        case PCB_ARC_T:
+        case PCB_VIA_T:
+        {
+            PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
+
+            track->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
+                                            false );
+            track->SetFlags( SKIP_STRUCT );
+
+            break;
+        }
+
         default:
             continue;
         }
