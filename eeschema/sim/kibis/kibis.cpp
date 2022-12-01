@@ -766,25 +766,11 @@ std::string KIBIS_PIN::KuKdDriver( KIBIS_MODEL&                            aMode
     simul += std::to_string( aIndex );
     simul += " POWER GND PIN \n"; // 1: POWER, 2:GND, 3:PIN
 
-    if( ( aPair.first->m_R_dut == 0 ) && ( aPair.first->m_L_dut == 0 )
-                && ( aPair.first->m_C_dut == 0 )
-        || true )
+    simul += "Vdummy 2 PIN 0\n";
+
+    if( ( aPair.first->m_R_dut != 0 ) || ( aPair.first->m_L_dut != 0 )
+        || ( aPair.first->m_C_dut != 0 ) )
     {
-        simul += "Vdummy 2 PIN 0\n";
-    }
-    else
-    {
-        /*
-        simul += "RPIN 1 PIN ";
-        simul << aPair.first->m_R_dut;
-        simul += "\n";
-        simul += "LPIN 2 1 ";
-        simul << aPair.first->m_L_dut;
-        simul += "\n";
-        simul += "CPIN PIN GND ";
-        simul << aPair.first->m_C_dut;
-        simul += "\n";
-        */
         Report( _( "Kibis does not support DUT values yet. "
                    "https://ibis.org/summits/nov16a/chen.pdf" ),
                 RPT_SEVERITY_WARNING );
