@@ -185,7 +185,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
 
         contours.emplace_back();
 
-        int  ii = contours.size() - 1;
+        SHAPE_LINE_CHAIN& currContour = contours.back();
         bool firstPt = true;
 
         // Circles, rects and polygons are closed shapes unto themselves (and do not combine
@@ -207,7 +207,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 RotatePoint( pt, orientation );
                 pt += offset;
 
-                contours[ ii ].Append( pt );
+                currContour.Append( pt );
 
                 if( firstPt )
                     firstPt = false;
@@ -217,7 +217,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 prevPt = pt;
             }
 
-            contours[ ii ].SetClosed( true );
+            currContour.SetClosed( true );
         }
         else if( graphic->GetShape() == SHAPE_T::CIRCLE )
         {
@@ -234,7 +234,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
             {
                 nextPt = start;
                 RotatePoint( nextPt, center, ANGLE_360 * step / steps );
-                contours[ ii ].Append( nextPt );
+                currContour.Append( nextPt );
 
                 if( firstPt )
                     firstPt = false;
@@ -244,7 +244,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 prevPt = nextPt;
             }
 
-            contours[ ii ].SetClosed( true );
+            currContour.SetClosed( true );
         }
         else if( graphic->GetShape() == SHAPE_T::RECT )
         {
@@ -252,7 +252,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
 
             for( const VECTOR2I& pt : pts )
             {
-                contours[ ii ].Append( pt );
+                currContour.Append( pt );
 
                 if( firstPt )
                     firstPt = false;
@@ -262,7 +262,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 prevPt = pt;
             }
 
-            contours[ ii ].SetClosed( true );
+            currContour.SetClosed( true );
         }
         else
         {
@@ -271,7 +271,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
 
             VECTOR2I startPt = graphic->GetEnd();
             prevPt = startPt;
-            contours[ ii ].Append( prevPt );
+            currContour.Append( prevPt );
 
             // do not append the other end point yet, this first 'graphic' might be an arc
             for(;;)
@@ -307,7 +307,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                         else
                             nextPt = graphic->GetStart();
 
-                        contours[ ii ].Append( nextPt );
+                        currContour.Append( nextPt );
                         shapeOwners[ std::make_pair( prevPt, nextPt ) ] = graphic;
                         prevPt = nextPt;
                     }
@@ -340,13 +340,13 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
 
                             RotatePoint( pt, pcenter, rotation );
 
-                            contours[ ii ].Append( pt );
+                            currContour.Append( pt );
                             shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
                             prevPt = pt;
                         }
 
                         // Append the last arc end point
-                        contours[ ii ].Append( pend );
+                        currContour.Append( pend );
                         shapeOwners[ std::make_pair( prevPt, pend ) ] = graphic;
                         prevPt = pend;
                     }
@@ -377,7 +377,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                             for( int jj = graphic->GetBezierPoints().size()-1; jj >= 0; jj-- )
                             {
                                 const VECTOR2I& pt = graphic->GetBezierPoints()[jj];
-                                contours[ ii ].Append( pt );
+                                currContour.Append( pt );
                                 shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
                                 prevPt = pt;
                             }
@@ -386,7 +386,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                         {
                             for( const VECTOR2I& pt : graphic->GetBezierPoints() )
                             {
-                                contours[ ii ].Append( pt );
+                                currContour.Append( pt );
                                 shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
                                 prevPt = pt;
                             }
@@ -418,7 +418,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
 
                 if( close_enough( startPt, prevPt, aChainingEpsilon ) )
                 {
-                    contours[ ii ].SetClosed( true );
+                    currContour.SetClosed( true );
                     break;
                 }
                 else if( nextGraphic )  // encountered already-used segment, but not at the start
