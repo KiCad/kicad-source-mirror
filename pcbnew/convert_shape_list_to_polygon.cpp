@@ -132,6 +132,34 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const VECTOR2I& aPoint,
 }
 
 
+bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape )
+{
+    bool padOutside = false;
+
+    for( PAD* pad : aFootprint->Pads() )
+    {
+        SHAPE_POLY_SET poly = aShape.CloneDropTriangulation();
+
+        poly.BooleanIntersection( *pad->GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
+
+        if( poly.OutlineCount() == 0 )
+        {
+            VECTOR2I padPos = pad->GetPosition();
+            wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): outside" ),
+                        padPos.x, padPos.y );
+            padOutside = true;
+            break;
+        }
+
+        VECTOR2I padPos = pad->GetPosition();
+        wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): not outside" ),
+                    padPos.x, padPos.y );
+    }
+
+    return padOutside;
+}
+
+
 /**
  * Function ConvertOutlineToPolygon
  * Build a polygon (with holes) from a PCB_SHAPE list, which is expected to be a closed main
@@ -579,16 +607,62 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
     PCB_TYPE_COLLECTOR  items;
     bool                success = false;
 
+    SHAPE_POLY_SET      fpHoles;
+
     // Get all the PCB and FP shapes into 'items', then keep only those on layer == Edge_Cuts.
     items.Collect( aBoard, { PCB_SHAPE_T, PCB_FP_SHAPE_T } );
+
+    for( int ii = 0; ii < items.GetCount(); ++ii )
+        items[ii]->ClearFlags( SKIP_STRUCT );
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        PCB_TYPE_COLLECTOR fpItems;
+        fpItems.Collect( fp, { PCB_SHAPE_T, PCB_FP_SHAPE_T } );
+
+        std::vector<PCB_SHAPE*> fpSegList;
+
+        for( int ii = 0; ii < fpItems.GetCount(); ii++ )
+        {
+            PCB_SHAPE* fpSeg = static_cast<PCB_SHAPE*>( fpItems[ii] );
+
+            if( fpSeg->GetLayer() == Edge_Cuts )
+                fpSegList.push_back( fpSeg );
+        }
+
+        if( !fpSegList.empty() )
+        {
+            SHAPE_POLY_SET fpOutlines;
+            success = ConvertOutlineToPolygon( fpSegList, fpOutlines, aErrorMax, aChainingEpsilon,
+                                               false, aErrorHandler );
+
+            if( success && isCopperOutside( fp, fpOutlines ) )
+            {
+                fpHoles.Append( fpOutlines );
+            }
+            else
+            {
+                // If it wasn't a closed area, or wasn't a hole, the we want to keep the fpSegs
+                // in contention for the board outline builds.
+                for( int ii = 0; ii < fpItems.GetCount(); ++ii )
+                    fpItems[ii]->ClearFlags( SKIP_STRUCT );
+            }
+        }
+    }
 
     // Make a working copy of aSegList, because the list is modified during calculations
     std::vector<PCB_SHAPE*> segList;
 
     for( int ii = 0; ii < items.GetCount(); ii++ )
     {
-        if( items[ii]->GetLayer() == Edge_Cuts )
-            segList.push_back( static_cast<PCB_SHAPE*>( items[ii] ) );
+        PCB_SHAPE* seg = static_cast<PCB_SHAPE*>( items[ii] );
+
+        // Skip anything already used to generate footprint holes (above)
+        if( seg->GetFlags() & SKIP_STRUCT )
+            continue;
+
+        if( seg->GetLayer() == Edge_Cuts )
+            segList.push_back( seg );
     }
 
     if( segList.size() )
@@ -628,6 +702,15 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
         corner.x = bbbox.GetEnd().x;
         corner.y = bbbox.GetOrigin().y;
         aOutlines.Append( corner );
+    }
+
+    for( int ii = 0; ii < fpHoles.OutlineCount(); ++ii )
+    {
+        for( int jj = 0; jj < aOutlines.OutlineCount(); ++jj )
+        {
+            if( aOutlines.Outline( jj ).Intersects( fpHoles.Outline( ii ) ) )
+                aOutlines.AddHole( fpHoles.Outline( ii ), jj );
+        }
     }
 
     return success;
@@ -670,34 +753,6 @@ void buildBoardBoundingBoxPoly( const BOARD* aBoard, SHAPE_POLY_SET& aOutline )
 
     aOutline.RemoveAllContours();
     aOutline.AddOutline( chain );
-}
-
-
-bool isCopperOutside( const FOOTPRINT* aMod, SHAPE_POLY_SET& aShape )
-{
-    bool padOutside = false;
-
-    for( PAD* pad : aMod->Pads() )
-    {
-        SHAPE_POLY_SET poly = aShape.CloneDropTriangulation();
-
-        poly.BooleanIntersection( *pad->GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
-
-        if( poly.OutlineCount() == 0 )
-        {
-            VECTOR2I padPos = pad->GetPosition();
-            wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): outside" ),
-                        padPos.x, padPos.y );
-            padOutside = true;
-            break;
-        }
-
-        VECTOR2I padPos = pad->GetPosition();
-        wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): not outside" ),
-                    padPos.x, padPos.y );
-    }
-
-    return padOutside;
 }
 
 
