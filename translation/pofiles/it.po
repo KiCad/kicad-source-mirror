@@ -103,12 +103,13 @@
 # mc: - knockout = TT (le parti di supporto di C.S. nella pannellizzazione per separare e facilitare la manifattura)
 # mc: - web = reticolo, cioè la parte di anima interna di supporto del C.S., se ci sono altre denominazioni in italiano, fatemelo sapere...
 # mc: - teardrop = arr. a goccia
+# mc: - unspecified = imprecisato
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-06-06 19:26+0200\n"
+"PO-Revision-Date: 2022-12-02 08:13+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -221,24 +222,24 @@ msgid "Last render time %.0f ms"
 msgstr "Ultimo tempo di rendering %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Coll %s\tNetClass %s"
+msgstr "Col %s\tNet class %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s e %s"
+msgstr "Piaz %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:709
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Area regole su %s"
+msgstr "Area regole %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Zone"
+msgstr "Zona %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:464
 msgid "Load OpenGL: board"
@@ -391,9 +392,9 @@ msgstr "&Preferenze"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2728
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Viste (Alt+Tab):"
+msgstr "Viste (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2737
@@ -649,23 +650,20 @@ msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr "Commuta modelli 3D del tipo 'Montaggio superficiale'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle unspecified 3D models"
-msgstr "Commuta altri modelli 3D"
+msgstr "Commuta modelli 3D imprecisati"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "Commuta modelli 3D del tipo 'Altro'"
+msgstr "Commuta modelli 3D per componenti di tipo 'imprecisato'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
-#, fuzzy
 msgid "Toggle 3D models not in pos file"
-msgstr "Commuta modelli 3D del tipo 'Altro'"
+msgstr "Commuta modelli 3D non in file pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
-msgstr "Mostra perimetri delimitazione modello"
+msgstr "Mostra perimetri modello"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:238
 msgid "Toggle realistic mode"
@@ -1186,9 +1184,8 @@ msgid "Opacity"
 msgstr "Opacità"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "Spessore scheda: "
+msgstr "Spessore scheda"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:152
@@ -1337,9 +1334,8 @@ msgid "Open..."
 msgstr "Apri..."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
-#, fuzzy
 msgid "Load source image"
-msgstr "Mostra come immagine speculare"
+msgstr "Carica immagine sorgente"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1347,9 +1343,8 @@ msgid "Quit"
 msgstr "Esci"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:229
-#, fuzzy
 msgid "Quit Image Converter"
-msgstr "Convertitore immagini"
+msgstr "Esci dal convertitore immagini"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:570
@@ -1414,19 +1409,16 @@ msgid "Greyscale Picture"
 msgstr "Immagine in scala di grigi"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:30
-#, fuzzy
 msgid "Black && White Picture"
 msgstr "Immagine in bianco e nero"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:38
-#, fuzzy
 msgid "Image Information"
-msgstr "Informazioni bitmap"
+msgstr "Informazioni immagine"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
-#, fuzzy
 msgid "Image size:"
-msgstr "Dimensioni pagina:"
+msgstr "Dimensioni immagine:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1441,9 +1433,8 @@ msgid "pixels"
 msgstr "Pixels"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
-#, fuzzy
 msgid "Image PPI:"
-msgstr "PPI bitmap:"
+msgstr "PPI immagine:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
@@ -1458,17 +1449,14 @@ msgid "bits"
 msgstr "Bits"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
-#, fuzzy
 msgid "Load Source Image"
-msgstr "Scegli immagine"
+msgstr "Carica immagine sorgente"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
-#, fuzzy
 msgid "Output Size"
-msgstr "Pin Uscita"
+msgstr "Dimensione in uscita"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
 msgstr "Blocca rapporto altezza/larghezza"
 
@@ -1500,7 +1488,6 @@ msgid "Options"
 msgstr "Opzioni"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
-#, fuzzy
 msgid "Black / white threshold:"
 msgstr "Soglia bianco / nero:"
 
@@ -1650,9 +1637,8 @@ msgid "Warning"
 msgstr "Attenzione"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Errore apertura file"
+msgstr "Avvertimento apertura file"
 
 #: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
@@ -2986,14 +2972,12 @@ msgid "Items:"
 msgstr "Elementi:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:25
-#, fuzzy
 msgid "Available:"
-msgstr "Percorsi disponibili:"
+msgstr "Disponibili:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
-#, fuzzy
 msgid ">>"
-msgstr ">"
+msgstr ">>"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:43
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
@@ -3001,9 +2985,8 @@ msgid "<<"
 msgstr "<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
-#, fuzzy
 msgid "Enabled:"
-msgstr "Disabilitato"
+msgstr "Abilitati:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:65
 #: eeschema/dialogs/dialog_label_properties_base.cpp:123
@@ -3199,9 +3182,8 @@ msgid "Show icons in menus"
 msgstr "Mostra le icone nei menu"
 
 #: common/dialogs/panel_common_settings_base.cpp:121
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "Mostra le icone nei menu"
+msgstr "Mostra le barre di scorrimento negli editor"
 
 #: common/dialogs/panel_common_settings_base.cpp:123
 msgid "This change takes effect when relaunching the editor."
@@ -3926,14 +3908,12 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Imposta il colore a trasparente per usare il colore KiCad predefinito."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:100
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Assegnamento schema"
+msgstr "Assegnamento netclass:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
-#, fuzzy
 msgid "Pattern"
-msgstr "Motivo tratteggiato"
+msgstr "Motivo"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114 pcbnew/pcb_marker.cpp:179
@@ -4307,7 +4287,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Permessi insufficienti per la cartella '%s'."
 
 #: common/eda_base_frame.cpp:1230
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4319,7 +4299,9 @@ msgstr ""
 "Questo è potenzialmente imbarazzante!\n"
 "L'ultima volta che è stato modificato il file\n"
 "%s\n"
-"non è stato salvato correttamente. Recuperare le ultime modifiche effettuate?"
+"KiCad si è chiuso prima di salvare.\n"
+"\n"
+"Recuperare il file autosalvato?"
 
 #: common/eda_base_frame.cpp:1247
 msgid "The auto save file could not be renamed to the board file name."
@@ -4565,9 +4547,8 @@ msgstr "Elemento disegno"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "Numero"
+msgstr "Riquadro numero"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1206
 msgid "Rect"
@@ -4606,9 +4587,8 @@ msgid "Curve"
 msgstr "Curva"
 
 #: common/eda_shape.cpp:607
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Numero piazzola"
+msgstr "Riquadro numero piazzola"
 
 #: common/eda_shape.cpp:608 common/eda_shape.cpp:1662
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
@@ -4829,9 +4809,8 @@ msgid "Text Properties"
 msgstr "Proprietà testo"
 
 #: common/eda_text.cpp:1032
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "Coll. Web"
 
 #: common/eda_text.cpp:1036
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5052,9 +5031,8 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr "I file fp-lib-table non contengono librerie con denominazione '%s'."
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:568
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "Gestione plugin e contenuti"
+msgstr "Aggiunto dalla gestione plugin e contenuti"
 
 #: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:596
 #, c-format
@@ -5311,9 +5289,8 @@ msgid "Schematic text && graphics"
 msgstr "Testi e grafiche schema"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "Testi e grafiche schema"
+msgstr "Testi e grafiche schema simbolo"
 
 #: common/layer_id.cpp:126
 msgid "Schematic text && graphics backgrounds"
@@ -5546,14 +5523,12 @@ msgid "Illegal character found in logical library name"
 msgstr "Carattere illegale trovato nel nome libreria logici"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "Nessuna forma selezionata"
+msgstr "Attiva selezionati"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Elimina celle selezionate"
+msgstr "Disattiva selezionati"
 
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:130
@@ -5607,9 +5582,9 @@ msgid "Unrecognized function '%s'"
 msgstr "Funzione non riconosciuta \"%s\""
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "Imprevisto '%s'"
+msgstr "Unità impreviste per '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -5674,19 +5649,19 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Il file KiCad di supporto per questa lingua non è installato."
 
 #: common/plotters/PDF_plotter.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Pagina 1"
+msgstr "Pagina %s"
 
 #: common/plotters/PDF_plotter.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(pagina %s)"
+msgstr "%s (pagina %s)"
 
 #: common/plotters/PDF_plotter.cpp:1195
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Mostra i limiti di pagina"
+msgstr "Mostra pagina %s"
 
 #: common/plotters/PDF_plotter.cpp:1206
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:805
@@ -6049,9 +6024,8 @@ msgid "Paste Special..."
 msgstr "Incolla speciale..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Incolla gli elementi dagli appunti con opzioni"
+msgstr "Incolla elementi dagli appunti con opzioni di annotazione"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -6082,14 +6056,12 @@ msgid "Change edit method constraints"
 msgstr "Cambia vincoli metodo modifica"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "Proprietà foglio"
+msgstr "Mostra pannello ricerca"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Mostra/nascondi il gestore aspetto"
+msgstr "Mostra/nascondi il pannello ricerca"
 
 #: common/tool/actions.cpp:215 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -6195,9 +6167,8 @@ msgid "Zoom Out"
 msgstr "Rimpicciolisci"
 
 #: common/tool/actions.cpp:336 common/widgets/mathplot.cpp:1665
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Centra e sposta il puntatore con lo zoom"
+msgstr "Centra sul puntatore"
 
 #: common/tool/actions.cpp:342
 msgid "Zoom to Selection"
@@ -6308,9 +6279,8 @@ msgid "Show Grid"
 msgstr "Mostra griglia"
 
 #: common/tool/actions.cpp:486
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "Mostra i punti o le linee della griglia nella finestra di modifica"
+msgstr "Mostra griglia di sfondo nella finestra di modifica"
 
 #: common/tool/actions.cpp:491
 msgid "Grid Properties..."
@@ -6352,9 +6322,8 @@ msgid "Use millimeters"
 msgstr "Usa i millimetri"
 
 #: common/tool/actions.cpp:517 common/widgets/lib_tree.cpp:665
-#, fuzzy
 msgid "Select Columns"
-msgstr "Selezione nulla"
+msgstr "Seleziona colonne"
 
 #: common/tool/actions.cpp:522
 msgid "Switch units"
@@ -6826,19 +6795,17 @@ msgstr "Reimposta %s ai predefiniti"
 
 #: common/widgets/properties_panel.cpp:53
 #: common/widgets/properties_panel.cpp:106
-#, fuzzy
 msgid "No objects selected"
-msgstr "Nessun bus selezionato"
+msgstr "Nessun oggetto selezionato"
 
 #: common/widgets/properties_panel.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Nessun bus selezionato"
+msgstr "%d oggetti selezionati"
 
 #: common/widgets/properties_panel.cpp:238
-#, fuzzy
 msgid "Basic Properties"
-msgstr "Proprietà %s"
+msgstr "Proprietà di base"
 
 #: common/widgets/unit_binder.cpp:274
 #, c-format
@@ -7004,9 +6971,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "File obsoleti di librerie di simboli KiCad"
 
 #: common/wildcards_and_files_ext.cpp:225
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "File di librerie di simboli KiCad"
+msgstr "File librerie di db di KiCad"
 
 #: common/wildcards_and_files_ext.cpp:232
 msgid "All KiCad symbol library files"
@@ -7768,19 +7734,19 @@ msgstr ""
 "non trovato. Script non disponibile."
 
 #: eeschema/component_references_lister.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Elemento non annotato: %s%s (unità %d)\n"
+msgstr "Elemento non annotato: %s%s (unità %d)"
 
 #: eeschema/component_references_lister.cpp:696
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Elemento non annotato: %s%s\n"
+msgstr "Elemento non annotato: %s%s"
 
 #: eeschema/component_references_lister.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr "Errore: il simbolo %s%s%s (unità %d) eccede le unità definite (%d)\n"
+msgstr "Errore: il simbolo %s%s%s (unità %d) eccede le unità definite (%d)"
 
 #: eeschema/component_references_lister.cpp:753
 #, c-format
@@ -7788,9 +7754,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Elementi duplicati %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Valori differenti per %s%d%s (%s) e %s%d%s (%s)"
+msgstr "Numero unità diverse per elemento %s%s%s e %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:793
 #, c-format
@@ -7992,7 +7958,6 @@ msgid "Generator file name not found."
 msgstr "Nome file generatore non trovato."
 
 #: eeschema/dialogs/dialog_bom.cpp:459
-#, fuzzy
 msgid "Bill of Materials Generation Help"
 msgstr "Aiuto generazione distinta base"
 
@@ -8040,9 +8005,8 @@ msgstr ""
 "predefinite"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
-msgstr "Elenco materiali"
+msgstr "Distinta di base"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -8495,9 +8459,8 @@ msgid "Checking conflicts..."
 msgstr "Controllo conflitti..."
 
 #: eeschema/dialogs/dialog_erc.cpp:488
-#, fuzzy
 msgid "Checking units..."
-msgstr "Controllo pin..."
+msgstr "Controllo unità..."
 
 #: eeschema/dialogs/dialog_erc.cpp:493
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
@@ -8517,9 +8480,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Controllo variabili non risolte..."
 
 #: eeschema/dialogs/dialog_erc.cpp:534
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "Controllo zone..."
+msgstr "Controllo modelli SPICE..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
@@ -8726,23 +8688,20 @@ msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:93
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:298
-#, fuzzy
 msgid "Show field name"
-msgstr "Nuovo nome campo:"
+msgstr "Mostra nome campo"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:95
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Mostra il nome campo oltre al suo valore"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:102
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "Autopiazza componenti"
+msgstr "Permetti autopiazzamento"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:105
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "Esegue la disposizione automatica dei componenti selezionati"
+msgstr "Permette la disposizione automatica di questo campo nello schema"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:118
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
@@ -8984,22 +8943,19 @@ msgid "-- leave unchanged --"
 msgstr "-- abbandona i cambiamenti --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
-#, fuzzy
 msgid "H Align:"
-msgstr "All. Oriz."
+msgstr "All. Oriz.:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:267
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "Visibile (solo campi)"
+msgstr "(solo campi)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
-#, fuzzy
 msgid "V Align:"
-msgstr "All. Vert."
+msgstr "All. Vert.:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:323
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:353
@@ -9044,11 +9000,13 @@ msgid "symbol"
 msgstr "simbolo"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Errore durante la creazione della libreria simboli '%s'."
+msgstr ""
+"Errore creando la tabella librerie di simboli '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9059,34 +9017,34 @@ msgstr "Selezionare il file tabella librerie simboli."
 #: pcbnew/footprint_libraries_utils.cpp:257
 #, c-format
 msgid "File '%s' not found."
-msgstr "File \"%s\" non trovato."
+msgstr "File '%s' non trovato."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "Errore nel caricamento tabella librerie di simboli \"%s\"."
+msgstr ""
+"Errore leggendo la tabella librerie di simboli '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "Impossibile creare il percorso tabella librerie globale '%s'."
+msgstr "Impossibile creare la tabella librerie globale '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr ""
-"Impossibile copiare il file tabella librerie di simboli globale \"%s\" a "
-"\"%s\"."
+msgstr "Impossibile copiare la tabella librerie di simboli globale '%s' su '%s'."
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Log dell'analizzatore Ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:47
 msgid "Ibis parser"
-msgstr ""
+msgstr "Analizzatore Ibis"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9650,9 +9608,8 @@ msgid "Fields must have a name."
 msgstr "I campi devono avere un nome."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:274
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "Un simbolo alias deve avere un parente selezionato"
+msgstr "Un simbolo derivato deve avere un parente selezionato"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 msgid "Delete extra units from symbol?"
@@ -9849,9 +9806,8 @@ msgid "Footprint Filters"
 msgstr "Filtri impronte"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:337
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "Modifica modello Spice..."
+msgstr "Modifica modello di simulazione..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
@@ -9946,33 +9902,29 @@ msgstr "La simulazione richiede uno schema completamente annotato."
 
 #: eeschema/dialogs/dialog_netlist.cpp:352
 #: eeschema/dialogs/dialog_netlist.cpp:399
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Solo foglio corrente"
+msgstr "Usa il foglio corrente come radice"
 
 #: eeschema/dialogs/dialog_netlist.cpp:353
 #: eeschema/dialogs/dialog_netlist.cpp:400
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Esporta su altri fogli"
+msgstr "Esporta la netlist solo per il foglio corrente"
 
 #: eeschema/dialogs/dialog_netlist.cpp:358
-#, fuzzy
 msgid "Save all voltages"
-msgstr "Salva tutti i cambiamenti"
+msgstr "Salva tutte le tensioni"
 
 #: eeschema/dialogs/dialog_netlist.cpp:359
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Scrive una direttiva per salvare tutte le tensioni (.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:364
-#, fuzzy
 msgid "Save all currents"
-msgstr "Salva tutti i cambiamenti"
+msgstr "Salva tutte le correnti"
 
 #: eeschema/dialogs/dialog_netlist.cpp:365
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Scrive una direttiva per salvare tutte le correnti (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:371
 msgid "External simulator command:"
@@ -10087,14 +10039,13 @@ msgid "Alternate pin definitions must have a name."
 msgstr "Le definizioni di pin alternative devono avere un nome."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"Questo pin non è su una griglia di %d mils e ciò renderà\n"
-"difficile la sua connessione in uno schema elettrico.\n"
+"Questo pin non è su una griglia di %d mils e ciò renderà difficile connetterlo in uno schema elettrico.\n"
 "Continuare?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:444
@@ -10404,18 +10355,16 @@ msgid "Pen width:"
 msgstr "Spessore penna:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:158
-#, fuzzy
 msgid "Other options"
 msgstr "Altre opzioni"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:160
-#, fuzzy
 msgid "Open file after plot"
-msgstr "Battere il testo filtrato"
+msgstr "Aprire il file dopo la tracciatura"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:162
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "Apre il file in uscita con l'applicazione associata a fine tracciatura"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
@@ -10497,9 +10446,8 @@ msgid "Rescue Symbols"
 msgstr "Recupera simboli"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Mostra albero dei simboli"
+msgstr "Salta recupero dei simboli"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -10701,9 +10649,8 @@ msgid "Net Classes"
 msgstr "Netclass"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "Definizioni bus"
+msgstr "Definizioni alias di bus"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10920,9 +10867,8 @@ msgid "Add signal by name:"
 msgstr "Aggiungi segnale per nome:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:223
-#, fuzzy
 msgid "Failed to read simulation model from fields."
-msgstr "Fallita creazione file libreria simboli \"%s\"."
+msgstr "Fallita la lettura delo modello di simulazione dai campi."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:401 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1147 eeschema/sch_label.cpp:880
@@ -10940,23 +10886,21 @@ msgstr "Tipo"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:538
 #: eeschema/dialogs/dialog_sim_model.cpp:581
-#, fuzzy
 msgid "Not Connected"
 msgstr "Non connesso"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1008
-#, fuzzy
 msgid "Browse Models"
-msgstr "Modello codice"
+msgstr "Scorri modelli"
 
 #: eeschema/dialogs/dialog_sim_model.h:63
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "Nome collegamento \"%s\" già in uso."
+msgstr "Nessun modello \"%s\" in libreria."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:29
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "Modello SPICE da file (*.lib, *.sub o *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:53
 #: eeschema/dialogs/dialog_sim_model_base.cpp:79
@@ -10965,21 +10909,19 @@ msgstr "Modello:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:63
 msgid "Pin:"
-msgstr ""
+msgstr "Pin:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:74
-#, fuzzy
 msgid "Differential"
-msgstr "Coppia differenziale"
+msgstr "Differenziale"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:98
 msgid "Built-in SPICE model"
-msgstr ""
+msgstr "Modello SPICE incorporato"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:107
-#, fuzzy
 msgid "Device:"
-msgstr "Direttive Spice:"
+msgstr "Dispositivo:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:116
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -10988,9 +10930,8 @@ msgid "Type:"
 msgstr "Tipo:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:138
-#, fuzzy
 msgid "Page"
-msgstr "Pagina 1"
+msgstr "Pagina"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:145
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -11002,42 +10943,36 @@ msgid "Parameters"
 msgstr "Parametri"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:192
-#, fuzzy
 msgid "Code"
-msgstr "DCode:"
+msgstr "Codice"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:206
 msgid "Model"
 msgstr "Modello"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:225
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "Unità simbolo"
+msgstr "Pin simbolo"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
-#, fuzzy
 msgid "Model Pin"
-msgstr "Modello"
+msgstr "Pin modello"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:245
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "Assegnamenti pin alternativi"
+msgstr "Assegnamenti pin"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:252
 msgid "Save {} in Value field as \"{}\""
-msgstr ""
+msgstr "Salva {} nel campo valore come \"{}\""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:260
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Disabilita il simbolo per la simulazione"
+msgstr "Escludi dalla simulazione"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:124
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Editor modello spice"
+msgstr "Editor modello simulazione"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11389,12 +11324,12 @@ msgstr "Il campo deve avere un nome."
 #: eeschema/dialogs/dialog_symbol_properties.cpp:838
 #, c-format
 msgid "Field name '%s' already in use."
-msgstr "Nome campo \"%s\" già in uso."
+msgstr "Nome campo '%s' già in uso."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "Cancellare gli elementi selezionati?"
+msgstr "Sicuri di voler rimuovere il campo '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1379
 msgid "Unsaved data"
@@ -11538,9 +11473,8 @@ msgstr ""
 "contenitori"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:208
-#, fuzzy
 msgid "Do not populate"
-msgstr "Non esportare"
+msgstr "Non popolare"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:220
 msgid "Update Symbol from Library..."
@@ -11578,9 +11512,8 @@ msgid "Library link:"
 msgstr "Collegamento libreria:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:323
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "Simulatore..."
+msgstr "Modello di simulazione..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:108
 msgid "Symbol Properties"
@@ -11630,14 +11563,13 @@ msgid "Library '%s' not found."
 msgstr "Libreria \"%s\" non trovata."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"Errore nella scrittura tabella librerie simboli vuota.\n"
-"\n"
-"%s"
+"Errore nella scrittura della tabella librerie simboli del progetto.\n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -11718,24 +11650,24 @@ msgid "<root sheet>"
 msgstr "<foglio radice>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Va a pagina %s (%s)"
+msgstr "Pagina %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:493
 msgid ""
 "Invalid hyperlink destination. Please enter either a valid URL (e.g. file:// "
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
-msgstr ""
+msgstr "Destinazione del collegamento ipertestuale non valida. Inserire un URL valido (ad es. file:// o http(s)://) o \"#<numero pagina>\" per creare un collegamento ipertestuale a una pagina in questo schema."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:288
 msgid "Link:"
-msgstr ""
+msgstr "Collegamento:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:290
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Rende questo testo un collegamento ipertestuale"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_netlist.cpp:75 pcbnew/dialogs/dialog_update_pcb.cpp:49
@@ -11922,14 +11854,12 @@ msgid "Cross-probing"
 msgstr "Analisi-incrociata"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
-#, fuzzy
 msgid "Highlight symbols when footprints selected"
-msgstr "Un simbolo alias deve avere un parente selezionato"
+msgstr "Evidenzia i simboli quando vengono selezionate le impronte"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "Evidenzia tutti gli elementi in rame sui collegamenti selezionati"
+msgstr "Evidenzia i simboli corrispondenti alle impronte selezionate"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 #: pcbnew/dialogs/panel_display_options_base.cpp:78
@@ -11938,7 +11868,7 @@ msgstr "Centra la vista sugli elementi sottoposti ad analisi-incrociata"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr ""
+msgstr "Assicura che i simboli sottoposti ad analisi incrociata siano visibili nella vista corrente"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
@@ -11992,14 +11922,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Cancella evidenziazioni collegamenti"
+msgstr "<ESC> toglie l'evidenziazione dei collegamenti"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
-msgstr ""
+msgstr "Il primo <ESC> nello strumento di selezione cancella la selezione, il successivo cancella l'evidenziazione del collegamento"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -12138,38 +12067,34 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Mostra anteprime impronte nel selettore simboli"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "Nome campo \"%s\" già in uso."
+msgstr "Nome alias '%s' già in uso."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:289
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Il nome collegamento non può essere vuoto."
+msgstr "Il nome alias/collegamento non può essere vuoto."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "Definizioni bus"
+msgstr "Definizioni bus:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:40
 msgid "Alias"
 msgstr "Alias"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "Sorgente"
+msgstr "(sorgente)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "serve un numero per '%s'"
+msgstr "Membri di '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Nome connessione o bus"
+msgstr "Nome connessione / bus annidato"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -12211,24 +12136,19 @@ msgid "Default text size:"
 msgstr "Dimensione testo predefinita:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "Rapporto spostamento testo:"
+msgstr "Rapporto spostameto etichetta:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
-msgstr ""
-"La percentuale della dimensione del testo con la quale spostare il testo "
-"sopra o sotto un filo o bus"
+msgstr "Percentuale della dimensione del testo con cui spostare il testo sopra (o sotto) un filo, bus o pin"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Global label margin:"
-msgstr "Dimensione etichette globali:"
+msgstr "Margine etichette globali:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:83
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:88
@@ -12672,47 +12592,40 @@ msgstr "Errore nel caricamento tabella librerie di simboli \"%s\"."
 #: eeschema/eeschema_jobs_handler.cpp:137
 #: eeschema/eeschema_jobs_handler.cpp:170
 #: eeschema/eeschema_jobs_handler.cpp:263
-#, fuzzy
 msgid "Failed to load schematic file\n"
-msgstr "Fallito il salvataggio dello schema \"%s\""
+msgstr "Fallito caricamento file schema\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:181
 #: eeschema/eeschema_jobs_handler.cpp:278
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
-msgstr ""
+msgstr "Attenzione: lo schema ha errori di annotazione, modificare lo schema per sistemarli\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:190
 #: eeschema/eeschema_jobs_handler.cpp:288
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "Attenzione: denominatori duplicati"
+msgstr "Attenzione: nomi fogli duplicati.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:230
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "tipo via sconosciuto %d"
+msgstr "Formato netlist sconosciuto.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:333 pcbnew/pcbnew_jobs_handler.cpp:492
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "Impossibile caricare il file %s"
+msgstr "Impossibile caricare la libreria\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:342
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "Identificatore di libreria di simboli non valido"
+msgstr "Salvataggio libreria di simboli in formato aggiornato\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:351 pcbnew/pcbnew_jobs_handler.cpp:516
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "Fallito il salvataggio della libreria \"%s\"."
+msgstr "Impossibile salvare la libreria\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:357
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "Libreria di simboli non abilitata."
+msgstr "Libreria di simboli non aggiornata\n"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Input Pin"
@@ -12763,7 +12676,6 @@ msgid "No Connection"
 msgstr "Non connesso"
 
 #: eeschema/erc.cpp:288
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
 msgstr "Variabile testo non risolta nel foglio di disegno."
 
@@ -12778,29 +12690,28 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Impronte diverse assegnate a %s e %s"
 
 #: eeschema/erc.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "Simbolo %s non trovato nella libreria '%s'."
+msgstr "Il simbolo %s ha unità non piazzate %s"
 
 #: eeschema/erc.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "Il simbolo ha più unità di quelle definite"
+msgstr "Il simbolo %s ha piedini di potenza in ingresso nelle unità %s non piazzati."
 
 #: eeschema/erc.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "Il simbolo ha più unità di quelle definite"
+msgstr "Il simbolo %s ha piedini in ingresso in unità %s non piazzati."
 
 #: eeschema/erc.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "Il simbolo ha più unità di quelle definite"
+msgstr "Il simbolo %s ha piedini bidirezionali in unità %s non piazzati."
 
 #: eeschema/erc.cpp:583
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
-msgstr "Pin di tipo \"non connesso\" sono connessi"
+msgstr "Pin di tipo 'non connesso' sono connessi"
 
 #: eeschema/erc.cpp:708
 #, c-format
@@ -12813,24 +12724,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Il pin %s è connesso sia a %s che a %s"
 
 #: eeschema/erc.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "La configurazione corrente non include la libreria \"%s\"."
+msgstr "La configurazione corrente non include la libreria '%s'"
 
 #: eeschema/erc.cpp:891
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "La libreria \"%s\" non è abilitata nella configurazione corrente."
+msgstr "La libreria '%s' non è abilitata nella configurazione corrente"
 
 #: eeschema/erc.cpp:906
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Simbolo %s non trovato nella libreria '%s'."
+msgstr "Simbolo '%s' non trovato nella libreria di simboli '%s'"
 
 #: eeschema/erc.cpp:922
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "Simbolo %s non trovato nella libreria '%s'."
+msgstr "Simbolo '%s' modificato nella libreria '%s'"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -12911,9 +12822,8 @@ msgid "More than one name given to this bus or net"
 msgstr "Più di un nome dato a questo bus o connessione"
 
 #: eeschema/erc_item.cpp:114
-#, fuzzy
 msgid "Conflicting netclass assignments"
-msgstr "Assegnamenti impronte"
+msgstr "Assegnamenti netclass con conflitti"
 
 #: eeschema/erc_item.cpp:118
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -12958,24 +12868,20 @@ msgid "Symbol has more units than are defined"
 msgstr "Il simbolo ha più unità di quelle definite"
 
 #: eeschema/erc_item.cpp:158
-#, fuzzy
 msgid "Symbol has units that are not placed"
-msgstr "Il simbolo ha più unità di quelle definite"
+msgstr "Il simbolo ha unità non piazzate"
 
 #: eeschema/erc_item.cpp:162
-#, fuzzy
 msgid "Symbol has input pins that are not placed"
-msgstr "Il simbolo ha più unità di quelle definite"
+msgstr "Il simbolo ha pin di ingresso non piazzati"
 
 #: eeschema/erc_item.cpp:166
-#, fuzzy
 msgid "Symbol has bidirectional pins that are not placed"
-msgstr "Il simbolo ha più unità di quelle definite"
+msgstr "Il simbolo ha pin bidirezionali non piazzati"
 
 #: eeschema/erc_item.cpp:170
-#, fuzzy
 msgid "Symbol has power input pins that are not placed"
-msgstr "Il simbolo ha più unità di quelle definite"
+msgstr "Il simbolo ha pin di potenza non piazzati"
 
 #: eeschema/erc_item.cpp:174
 msgid "Units of same symbol have different values"
@@ -13564,31 +13470,35 @@ msgstr "P&referenze"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:92
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "Fallita la generazione del nome per '%s': exceeded UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
-msgstr "Errore nel caricamento della libreria di simboli '%s'."
+msgstr ""
+"Errore leggendo il modello di simulazione dal simbolo '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model library '%s':\n"
 "%s"
-msgstr "Errore nel caricamento della libreria di simboli '%s'."
+msgstr ""
+"Errore leggendo la libreria di modelli di simulazione '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:402
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr ""
+msgstr "Impossibile aprire il file '%s' per scrivere il modello IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:454
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "Non trovato il file di libreria %s."
+msgstr "Impossibile trovare il file di libreria '%s'"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:145
 #, c-format
@@ -13816,9 +13726,8 @@ msgstr "Tipo voce bus"
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:912
 #: eeschema/sch_line.cpp:912 pcbnew/pad.cpp:966 pcbnew/pcb_track.cpp:930
 #: pcbnew/tools/pcb_control.cpp:1529 pcbnew/zone.cpp:557
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "Netclass assegnata"
+msgstr "Netclass risolta"
 
 #: eeschema/sch_connection.cpp:410
 msgid "Connection Name"
@@ -13963,14 +13872,12 @@ msgid "Net"
 msgstr "Collegamento"
 
 #: eeschema/sch_label.cpp:964 eeschema/sch_line.cpp:855
-#, fuzzy
 msgid "Resolved netclass"
-msgstr "Netclass assegnata"
+msgstr "Netclass risolta"
 
 #: eeschema/sch_label.cpp:979
-#, fuzzy
 msgid "Hierarchical Labels"
-msgstr "Etichetta gerarchica"
+msgstr "Etichette gerarchiche"
 
 #: eeschema/sch_label.cpp:1064
 #, c-format
@@ -13978,19 +13885,19 @@ msgid "Label '%s'"
 msgstr "Etichetta \"%s\""
 
 #: eeschema/sch_label.cpp:1241
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Etichetta direttiva"
+msgstr "Etichetta direttiva [%s %s]"
 
 #: eeschema/sch_label.cpp:1517
 #, c-format
 msgid "Global Label '%s'"
-msgstr "Etichetta globale \"%s\""
+msgstr "Etichetta globale '%s'"
 
 #: eeschema/sch_label.cpp:1650
 #, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "Etichetta gerarchica \"%s\""
+msgstr "Etichetta gerarchica '%s'"
 
 #: eeschema/sch_label.cpp:1667 pcbnew/dialogs/panel_setup_rules.cpp:662
 msgid "Syntax Help"
@@ -14430,9 +14337,9 @@ msgstr ""
 "foglio figlio ma non c'è una figura definita."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Errore leggendo l'immagine %s."
+msgstr "Errore leggendo la tabella database %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:185
 #, c-format
@@ -14482,9 +14389,9 @@ msgstr "Nome simbolo non valido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:202
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2616
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "Simbolo %s non trovato nella libreria '%s'."
+msgstr "Il simbolo %s contiene il carattere non valido '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:209
 msgid "Invalid library identifier"
@@ -14524,9 +14431,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "Numero simbolo convertito %s non valido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Numero pin non valido"
+msgstr "URL ipertestuale '%s' non valido "
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:743
 msgid "Invalid pin names definition"
@@ -14733,19 +14640,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "Punto di connessione gerarchico %s"
 
 #: eeschema/sch_symbol.cpp:1295
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "Escludi dalla DIBA"
+msgstr "Escluso dalla DIBA"
 
 #: eeschema/sch_symbol.cpp:1300
-#, fuzzy
 msgid "Excluded from board"
-msgstr "Escludi dalla scheda"
+msgstr "Escluso dalla scheda"
 
 #: eeschema/sch_symbol.cpp:1305
-#, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1676
 msgid "Power symbol"
@@ -15175,79 +15079,64 @@ msgid "There are NaN elements in a matrix."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:160
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Valore lunghezza non valido"
+msgstr "Valore R_pkg non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:165
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "Valore lunghezza non valido"
+msgstr "Valore L_pkg non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:170
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "Valore lunghezza non valido"
+msgstr "Valore C_pkg non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:184
-#, fuzzy
 msgid "Checking pin "
-msgstr "Controllo pin..."
+msgstr "Controllo pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:189
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "Il nome collegamento non può essere vuoto."
+msgstr "Il nome pin non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:194
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "Il nome variabile non può essere vuoto."
+msgstr "Il nome segnale non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:199
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "Il nome collegamento non può essere vuoto."
+msgstr "Il nome modello non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:204
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "L'ID impronta \"%s\" non è valido."
+msgstr "Rpin non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:209
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "L'ID impronta \"%s\" non è valido."
+msgstr "Lpin non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:214
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "L'ID impronta \"%s\" non è valido."
+msgstr "Cpin non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:228
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "Il nome collegamento non può essere vuoto."
+msgstr "Il nome componente non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:233
-#, fuzzy
 msgid "Checking component "
-msgstr "Controllo zone"
+msgstr "Controllo componente"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:238
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "Il nome collegamento non può essere vuoto."
+msgstr "Componente: il fabbricante non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:244
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "Valore componente:"
+msgstr "Componente: pacchetto non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:250
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Tipo componente:"
+msgstr "Componente: nessun pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:347
 msgid "Cannot interpolate the current based on this IV table."
@@ -15262,88 +15151,72 @@ msgid "There is an invalid current in an IV table"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:415
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "Invalido"
+msgstr "R_load non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:419
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "Valore lunghezza non valido"
+msgstr "dv/dt non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:424
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "Valore resistenza non valido"
+msgstr "Salita dv/dt non valida."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:439
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "Il nome collegamento non può essere vuoto."
+msgstr "Il nome modello non può essere vuoto"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:444
-#, fuzzy
 msgid "Checking model "
-msgstr "Controllo zone"
+msgstr "Controllo modello"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Strati non definiti:"
+msgstr "Tipo modello non definito"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "Valore lunghezza non valido"
+msgstr "Valore Vinh non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:460
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "Valore ritardo non valido"
+msgstr "Valore Vinl non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:465
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "Valore ritardo non valido"
+msgstr "Valore R_ref non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "Valore ritardo non valido"
+msgstr "Valore C_ref non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:475
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "Valore ritardo non valido"
+msgstr "Valore V_ref non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:480
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "Valore ritardo non valido"
+msgstr "Valore V_meas non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:485
 msgid "C_comp is invalid."
-msgstr ""
+msgstr "C_comp non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:490
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Incremento temperatura"
+msgstr "Campo di temperatura non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Tipo pagina '%s' non valido."
+msgstr "Campo di tensione non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:521
-#, fuzzy
 msgid "Invalid pulldown."
-msgstr "Nome pin non valido"
+msgstr "Pulldown non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:526
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "Valore ritardo non valido"
+msgstr "Pullup non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:531
 #, fuzzy
@@ -15356,32 +15229,28 @@ msgid "Invalid GND clamp."
 msgstr "Nome pin non valido"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:545
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "Invalido"
+msgstr "Rampa non valida"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:555
-#, fuzzy
 msgid "Checking Header..."
-msgstr "Controllo piazzole..."
+msgstr "Controllo intestazione..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:559
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "Mancante [Ver IBIS]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:565
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "L'analizzatore non gestisce questa versione di IBIS"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:571
-#, fuzzy
 msgid "Missing [File Rev]"
-msgstr "Nome regola mancante."
+msgstr "Mancante [Rev File]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:577
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "Nome regola mancante."
+msgstr "Mancante [Nome File]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:600
 #, fuzzy
@@ -15389,9 +15258,8 @@ msgid "Package model name cannot be empty."
 msgstr "Il nome del simbolo non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:605
-#, fuzzy
 msgid "Checking package model "
-msgstr "Controllo fori piazzole..."
+msgstr "Controllo modello pacchetto..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:610
 #, fuzzy
@@ -15399,389 +15267,345 @@ msgid "Manufacturer cannot be empty."
 msgstr "Il nome collegamento non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:616
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "Il testo non può essere vuoto."
+msgstr "OEM non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:622
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "Numero di punti"
+msgstr "Numero di pin negativo."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:636
-#, fuzzy
 msgid "Empty pin number"
-msgstr "Era atteso un numero."
+msgstr "Numero pin vuoto"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:644
-#, fuzzy
 msgid "Resistance matrix is incorrect"
-msgstr "Resistenza per unità di lunghezza"
+msgstr "La matrice di resistenze è sbagliata"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:652
-#, fuzzy
 msgid "Capacitance matrix is undefined"
-msgstr "Capacità per unità di lunghezza"
+msgstr "La matrice di capacità è indefinita"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:658
-#, fuzzy
 msgid "Capacitance matrix is incorrect"
-msgstr "Capacità per unità di lunghezza"
+msgstr "La matrice di capacità è sbagliata"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:664
-#, fuzzy
 msgid "Capacitance matrix is nullptr"
-msgstr "Capacità per unità di lunghezza"
+msgstr "La matrice di capacità è nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:672
-#, fuzzy
 msgid "Inductance matrix is undefined"
-msgstr "Induttanza per unità di lunghezza"
+msgstr "La matrice di induttanza è indefinita"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:678
-#, fuzzy
 msgid "Inductance matrix is incorrect"
-msgstr "Induttanza per unità di lunghezza"
+msgstr "La matrice di induttanza è sbagliata"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:684
-#, fuzzy
 msgid "Inductance matrix is nullptr"
-msgstr "Induttanza per unità di lunghezza"
+msgstr "La matrice di induttanza è nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:700
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Impossibile aprire il file \"%s\""
+msgstr "Impossibile aprire il file "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:706
-#, fuzzy
 msgid "Reading file "
-msgstr "Caricamento file..."
+msgstr "Lettura file "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:728
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Fine file non prevista."
+msgstr "Fine file non prevista. Manca [END] ?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:740
-#, fuzzy
 msgid "Error on line "
-msgstr "Errore info inizializzazione stampante"
+msgstr "Errore alla riga "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:768
-#, fuzzy
 msgid "A line did not end properly."
-msgstr "Elementi del file importato non possono essere gestiti correttamente."
+msgstr "Una riga non finisce correttamente."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:904
 #: eeschema/sim/kibis/ibis_parser.cpp:921
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "Una riga eccede la lunghezza massima."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:947
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "Impossibile creare la cartella '%s'."
+msgstr "Impossibile leggere un elemento double."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:953
 #: eeschema/sim/kibis/ibis_parser.cpp:997
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "Fallito caricamento di \"%s\"."
+msgstr "Impossibile leggere un elemento word."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:990
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "Simbolo non annotato"
+msgstr "Il numero non è un intero"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1034
-#, fuzzy
 msgid "Unable to read string, input is empty."
-msgstr "Impossibile leggere il file dati \"%s\"."
+msgstr "Impossibile leggere una stringa, l'ingresso è vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1084
 msgid "New comment character is invalid."
-msgstr ""
+msgstr "Carattere del nuovo commento non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1097
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Sintassi non valida. Dovrebbe essere |_char o &_char, ecc..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1108
 msgid "No extra argument was expected"
-msgstr ""
+msgstr "Non era previsto nessun argomento extra"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1260
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Id record sconosciuto: %d."
+msgstr "Parolachiave sconosciuta in "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1260
-#, fuzzy
 msgid " context: "
-msgstr "Passo testo:"
+msgstr " contesto: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1326
-#, fuzzy
 msgid "Invalid ramp data"
-msgstr "Nome pin non valido"
+msgstr "Dati rampa non validi"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1410
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "Impossibile specificare una banda passante per quel tipo di matrice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1429
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "Definizione riga non valida"
+msgstr "Riga non valida nella matrice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1459
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "Troppi dati per questa riga di matrice."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1467
 msgid "Too much data for this matrix."
-msgstr ""
+msgstr "Troppi dati per questa matrice."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1472
 #: eeschema/sim/kibis/ibis_parser.cpp:1505
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Impossibile leggere un elemento matrice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1510
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Impossibile un indice matrice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1578
-#, fuzzy
 msgid "Unknown matrix type"
-msgstr "tipo via sconosciuto %d"
+msgstr "Tipo matrice sconosciuto"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1586
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "Valore massimo mancante."
+msgstr "Tipo matrice mancante"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1592
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
-msgstr ""
+msgstr " La matrice è già init. Ma m_continue non è stata impostata (errore interno)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1618
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Tentativo di leggere una riga da una matrice non definita"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1624
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "il puntatore matrice è null"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1773
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "I valori Typ-Min-Max richiedono almeno Typ."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1866
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Metodo sconosciuto"
+msgstr "Model_type sconosciuto"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1873
 msgid "Internal Error while reading model_type"
-msgstr ""
+msgstr "Errore interno durante la lettura di model_type"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1888
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Strato C.S. %u sconosciuto"
+msgstr "Enable sconosciuto: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1895
 #: eeschema/sim/kibis/ibis_parser.cpp:1917
 msgid "Internal Error while reading Enable"
-msgstr ""
+msgstr "Errore interno durante la lettura di Enable"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1910
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Primitiva sconosciuta"
+msgstr "Polarità sconosciuta"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1947
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "Si è continuato a leggere un modello non cominciato. (errore interno)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2114
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "Una riga [Package] richiede esattamente 4 elementi."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2167
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Voce pin non valida: 6 elementi per una tabella con soli 3."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2177
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "Impossibile leggere un valore R, L o C per un pin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2200
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "Definizione nome pin non valida"
+msgstr "Campo nome pin non valido in [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2207
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "Genitore mancante"
+msgstr "Argomento mancante in [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2242
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Numero errato di colonne per la mappatura dei pin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2282
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "Scala errata"
+msgstr "Errato nome pin diff"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2287
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "Scala errata"
+msgstr "Errato nome inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2367
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "tipo via sconosciuto %d"
+msgstr "Tipo forma d'onda sconosciuta"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2378
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "Rilevato errore interno, una forma d'onda deve esistere"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2443
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "Errore interno: contesto analizzatore malformato."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2480
-#, fuzzy
 msgid "Missing keyword."
-msgstr "\"(\" mancante."
+msgstr "Parolachiave mancante."
 
 #: eeschema/sim/kibis/kibis.cpp:454
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "La forma non ha punti."
+msgstr "la forma d'onda ha meno di due punti"
 
 #: eeschema/sim/kibis/kibis.cpp:675 eeschema/sim/kibis/kibis.cpp:740
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr "Impossibile rinominare il file temporaneo '%s' in '%s'"
+msgstr "Impossibile rimuovere il file temporaneo di uscita"
 
 #: eeschema/sim/kibis/kibis.cpp:726
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "Errore nel leggere il file."
+msgstr "Errore nel leggere il file temporaneo"
 
 #: eeschema/sim/kibis/kibis.cpp:735
-#, fuzzy
 msgid "Error while creating temporary output file"
-msgstr "Fallita creazione file temporaneo \"%s\"."
+msgstr "Errore nella creazione del file temporaneo d'uscita"
 
 #: eeschema/sim/kibis/kibis.cpp:788
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
-msgstr ""
+msgstr "Kibis non supporta ancora valori DUT. https://ibis.org/summits/nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:891
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "Il modello ha solo un paio di forme d'onda, accuratezza ridotta"
 
 #: eeschema/sim/kibis/kibis.cpp:911 eeschema/sim/kibis/kibis.cpp:1116
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "Il driver necessita di almeno un pullup o un pulldown"
 
 #: eeschema/sim/kibis/kibis.cpp:1099 eeschema/sim/kibis/kibis.cpp:1108
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
-msgstr ""
+msgstr "Ci sono due paia di forme d'onda, ma solo un transistor. Più equazioni delle sconosciute."
 
 #: eeschema/sim/kibis/kibis.cpp:1216
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
-msgstr ""
+msgstr "Il modello non ha paia di forme d'onda, uso alternativo di [Ramp], scarsa accuratezza"
 
 #: eeschema/sim/kibis/kibis.cpp:1229
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "Il modello ha più di due coppie di forme d'onda, uso delle prime due."
 
 #: eeschema/sim/kibis/kibis.cpp:1267
 msgid "Invalid model type for a driver."
-msgstr ""
+msgstr "Tipo modello non valido per un driver."
 
 #: eeschema/sim/kibis/kibis.cpp:1319
-#, fuzzy
 msgid "Invalid model type for a device"
-msgstr "Valore ritardo non valido"
+msgstr "Tipo modello non valido per un dispositivo"
 
 #: eeschema/sim/kibis/kibis.cpp:1539 eeschema/sim/kibis/kibis.cpp:1585
-#, fuzzy
 msgid "Number of cycles should be greater than 0."
-msgstr "Lo spazio piste deve essere maggiore di 0."
+msgstr "Il numero di cicli deve essere maggiore di 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1545 eeschema/sim/kibis/kibis.cpp:1591
-#, fuzzy
 msgid "ON time should be greater than 0."
-msgstr "Lo spazio piste deve essere maggiore di 0."
+msgstr "Il tempo ON deve essere maggiore di 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1551 eeschema/sim/kibis/kibis.cpp:1597
-#, fuzzy
 msgid "OFF time should be greater than 0."
-msgstr "Lo spazio piste deve essere maggiore di 0."
+msgstr "Il tempo OFF deve essere maggiore di 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1559
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "Il fronte di salita è più lungo del tempo on."
 
 #: eeschema/sim/kibis/kibis.cpp:1568
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "Il fronte di discesa è più lungo del tempo off."
 
 #: eeschema/sim/kibis/kibis.cpp:1605
 msgid "Rising edge is longer than ON time."
-msgstr ""
+msgstr "Il fronte di salita è più lungo del tempo ON."
 
 #: eeschema/sim/kibis/kibis.cpp:1613
 msgid "Falling edge is longer than OFF time."
-msgstr ""
+msgstr "Il fronte di discesa è più lungo del tempo OFF."
 
 #: eeschema/sim/kibis/kibis.cpp:1627 eeschema/sim/kibis/kibis.cpp:1658
-#, fuzzy
 msgid "Bitrate should be greater than 0."
-msgstr "Lo spazio piste deve essere maggiore di 0."
+msgstr "Il bitrate deve essere maggiore di 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1633 eeschema/sim/kibis/kibis.cpp:1664
-#, fuzzy
 msgid "Number of bits should be greater than 0."
-msgstr "Lo spazio piste deve essere maggiore di 0."
+msgstr "Il numero di bit deve essere maggiore di 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1645
 msgid "Bitrate is too high for rising / falling edges"
-msgstr ""
+msgstr "Il Bitrate è troppo alto per i fronti di salita / discesa"
 
 #: eeschema/sim/kibis/kibis.cpp:1672
 msgid "Bitrate could be too high for rising / falling edges"
-msgstr ""
+msgstr "Il bitrate può essere troppo alto per i fronti di salita / discesa"
 
 #: eeschema/sim/sim_lib_mgr.cpp:142
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "Errore nel caricamento della libreria di simboli '%s'."
+msgstr "Errore nel caricare la libreria modelli di simulazione '%s': %s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "Errore nel caricamento dello schema \"%s\"."
+msgstr "Errore nel caricare il modello di simulazione: nessun campo '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "Errore nel caricare il simbolo \"%s\" dalla libreria %s."
+msgstr "Errore nel caricare il modello di simulazione: impossibile trovare il modello base '%s' nella libreria '%s'"
 
 #: eeschema/sim/sim_model.cpp:685
 #, fuzzy, c-format
@@ -24706,9 +24530,8 @@ msgid "SMD:"
 msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "Imprecisato"
+msgstr "Imprecisato:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -24828,9 +24651,8 @@ msgid "Subtract holes from board area"
 msgstr "Sottrai fori dall'area scheda"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
-#, fuzzy
 msgid "Exclude footprints with no pads"
-msgstr "Escludi tutte le impronte senza piazzole passanti"
+msgstr "Escludi impronte senza piazzole"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "X Size"
@@ -40910,1598 +40732,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#, fuzzy
-#~ msgid "Viewports (Shift+Tab):"
-#~ msgstr "Viste (Alt+Tab):"
-
-#~ msgid "Bitmap size:"
-#~ msgstr "Dimensione bitmap:"
-
-#~ msgid "Output Parameters"
-#~ msgstr "Parametri d'uscita"
-
-#~ msgid "Load Bitmap"
-#~ msgstr "Carica bitmap"
-
-#~ msgid "Image Options"
-#~ msgstr "Opzioni immagine"
-
-#~ msgid "Conflicting items shadow"
-#~ msgstr "Ombra elementi in conflitto"
-
-#, fuzzy
-#~ msgid "Multiple objects selected"
-#~ msgstr "Nessun bus selezionato"
-
-#~ msgid ""
-#~ "# 1 - Full documentation\n"
-#~ "\n"
-#~ "The Eeschema documentation (*eeschema.html*) describes this intermediate "
-#~ "netlist and gives examples(chapter ***creating customized netlists and "
-#~ "bom files***).\n"
-#~ "\n"
-#~ "# 2 - The intermediate Netlist File\n"
-#~ "\n"
-#~ "BOM files (and netlist files) can be created from an *Intermediate "
-#~ "netlist file* created by Eeschema.\n"
-#~ "\n"
-#~ "This file uses XML syntax and is called the intermediate netlist. The "
-#~ "intermediate netlist includes a large amount of data about your board and "
-#~ "because of this, it can be used with post-processing to create a BOM or "
-#~ "other reports.\n"
-#~ "\n"
-#~ "Depending on the output (BOM or netlist), different subsets of the "
-#~ "complete Intermediate Netlist file will be used in the post-processing.\n"
-#~ "\n"
-#~ "# 3 - Conversion to a new format\n"
-#~ "\n"
-#~ "By applying a post-processing filter to the Intermediate netlist file you "
-#~ "can generate foreign netlist files as well as BOM files. Because this "
-#~ "conversion is a text to text transformation, this post-processing filter "
-#~ "can be written using *Python*, *XSLT*, or any other tool capable of "
-#~ "taking XML as input.\n"
-#~ "\n"
-#~ "XSLT itself is a XML language suitable for XML transformations. There is "
-#~ "a free program called `xsltproc` that you can download and install. The "
-#~ "`xsltproc` program can be used to read the Intermediate XML netlist input "
-#~ "file, apply a style-sheet to transform the input, and save the results in "
-#~ "an output file. Use of `xsltproc` requires a style-sheet file using XSLT "
-#~ "conventions. The full conversion process is handled by Eeschema, after it "
-#~ "is configured once to run `xsltproc` in a specific way.\n"
-#~ "\n"
-#~ "A Python script is somewhat more easy to create.\n"
-#~ "\n"
-#~ "# 4 - Initialization of the dialog window\n"
-#~ "\n"
-#~ "You should add a new plugin (a script) in the plugin list by clicking on "
-#~ "the Add Plugin button.\n"
-#~ "\n"
-#~ "## 4.1 - Plugin Configuration Parameters\n"
-#~ "\n"
-#~ "The Eeschema plug-in configuration dialog requires the following "
-#~ "information:\n"
-#~ "\n"
-#~ " * The title: for instance, the name of the netlist format.\n"
-#~ " * The command line to launch the converter (usually a script).\n"
-#~ "\n"
-#~ "***Note (Windows only):***\n"
-#~ "*By default, the command line runs with hidden console window and output "
-#~ "is redirected to \"Plugin info\" field. To show the window of the running "
-#~ "command, set the checkbox \"Show console window\".*\n"
-#~ "\n"
-#~ "Once you click on the generate button the following will happen:\n"
-#~ "\n"
-#~ "1. Eeschema creates an intermediate netlist file \\*.xml, for instance "
-#~ "`test.xml`.\n"
-#~ "2. Eeschema runs the script from the command line to create the final "
-#~ "output file.\n"
-#~ "\n"
-#~ "## 4.2 - Generate netlist files with the command line\n"
-#~ "\n"
-#~ "Assuming we are using the program `xsltproc.exe` to apply the sheet style "
-#~ "to the intermediate file, `xsltproc.exe` is executed with the following "
-#~ "command.\n"
-#~ "\n"
-#~ "```\n"
-#~ "xsltproc.exe -o <output filename> <style-sheet filename> <input XML file "
-#~ "to convert>\n"
-#~ "```\n"
-#~ "\n"
-#~ "On Windows the command line is the following.\n"
-#~ "\n"
-#~ "```\n"
-#~ "f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl "
-#~ "\"%I\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "On Linux the command becomes as following.\n"
-#~ "\n"
-#~ "```\n"
-#~ "xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/myconverter .xsl \"%I\"\n"
-#~ "```\n"
-#~ "where `myconverter.xsl` is the style-sheet that you are applying.\n"
-#~ "\n"
-#~ "Do not forget the double quotes around the file names, this allows them "
-#~ "to have spaces after the substitution by Eeschema.\n"
-#~ "\n"
-#~ "If a Python script is used, the command line is something like (depending "
-#~ "on the Python script):\n"
-#~ "\n"
-#~ "```\n"
-#~ "python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "or\n"
-#~ "\n"
-#~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" "
-#~ "\"%O\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "The command line format accepts parameters for filenames. The supported "
-#~ "formatting parameters are:\n"
-#~ "\n"
-#~ " * `%B`: base filename of selected output file, minus path and "
-#~ "extension.\n"
-#~ " * `%P`: project directory, without name and without trailing '/'.\n"
-#~ " * `%I`: complete filename and path of the temporary input file\n"
-#~ "(the intermediate net file).\n"
-#~ " * `%O`: complete filename and path (but without extension) of the user\n"
-#~ "chosen output file.\n"
-#~ "\n"
-#~ "`%I` will be replaced by the actual intermediate file name (usually the "
-#~ "full root sheet filename with extension \".xml\").\n"
-#~ "`%O` will be replaced by the actual output file name (the full root sheet "
-#~ "filename minus extension).\n"
-#~ "`%B` will be replaced by the actual output short file name (the short "
-#~ "root sheet filename minus extension).\n"
-#~ "`%P` will be replaced by the actual current project path.\n"
-#~ "\n"
-#~ "## 4.3 - Command line format:\n"
-#~ "\n"
-#~ "### 4.3.1 - Remark:\n"
-#~ "\n"
-#~ "Most of time, the created file must have an extension, depending on its "
-#~ "type.\n"
-#~ "Therefore you have to add to the option ***%O*** the right file "
-#~ "extension.\n"
-#~ "\n"
-#~ "For instance:\n"
-#~ "\n"
-#~ " * **%O.csv** to create a .csv file (comma separated value file).\n"
-#~ " * **%O.htm** to create a .html file.\n"
-#~ " * **%O.bom** to create a .bom file.\n"
-#~ "\n"
-#~ "### 4.3.2 Example for xsltproc:\n"
-#~ "\n"
-#~ "The command line format for xsltproc is the following:\n"
-#~ "\n"
-#~ "```\n"
-#~ "<path of xsltproc> xsltproc <xsltproc parameters>\n"
-#~ "```\n"
-#~ "\n"
-#~ "On Windows:\n"
-#~ "```\n"
-#~ "f:/kicad/bin/xsltproc.exe -o \"%O.bom\" f:/kicad/bin/plugins/"
-#~ "netlist_form_pads-pcb.xsl \"%I\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "On Linux:\n"
-#~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "The above examples assume `xsltproc` is installed on your PC under "
-#~ "Windows and xsl files located in `<path_to_kicad>/kicad/bin/plugins/`.\n"
-#~ "\n"
-#~ "\n"
-#~ "### 4.3.3 Example for Python scripts:\n"
-#~ "\n"
-#~ "Assuming python is installed on your PC, and python scripts are located "
-#~ "in\n"
-#~ "\n"
-#~ " `<path_to_kicad>/kicad/bin/plugins/bom-in-python/`,\n"
-#~ "\n"
-#~ "the command line format for python is something like:\n"
-#~ "\n"
-#~ "```\n"
-#~ "python <script file name> <input filename> <output filename>\n"
-#~ "```\n"
-#~ "\n"
-#~ "On Windows:\n"
-#~ "```\n"
-#~ "python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
-#~ "\"%O.html\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "On Linux:\n"
-#~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
-#~ "```\n"
-#~ msgstr ""
-#~ "# 1 - Completa documentazione\n"
-#~ "\n"
-#~ "La documentazione Eeschema (*eeschema.html*) descrive questa netlist "
-#~ "intermedia e fornisce degli esempi (capitolo ***Creazione file di netlist "
-#~ "e diba personalizzate***).\n"
-#~ "\n"
-#~ "# 2 - Il file netlist intermedio\n"
-#~ "\n"
-#~ "I file DIBA (e i file netlist) possono venir creati da un *File netlist "
-#~ "intermedio* creato da Eeschema.\n"
-#~ "\n"
-#~ "Questo file usa la sintassi XML e viene chiamato file netlist intermedio. "
-#~ "Esso comprende una grande quantità di dati sulla scheda e per questo "
-#~ "motivo, può venire usato per la post-elaborazione per creare DIBA (file "
-#~ "distinta base) o altri tipi di rapporti.\n"
-#~ "\n"
-#~ "A seconda del risultato (DIBA o netlist), nella post-elaborazione "
-#~ "verranno usati sottoinsiemi diversi dell'intero file di netlist "
-#~ "intermedio.\n"
-#~ "\n"
-#~ "# 3 - Conversione in un nuovo formato\n"
-#~ "\n"
-#~ "Applicando un filtro di post-elaborazione al file di netlist intermedio "
-#~ "si può generare file di netlist per applicazioni esterne o anche file "
-#~ "DIBA. Dato che questa conversione è una trasformazione da testo a testo, "
-#~ "questo filtro di post-elaborazione può essere scritto in *Python*, "
-#~ "*XSLT*, o in qualsiasi altro strumento in grado di ricevere XML come "
-#~ "ingresso.\n"
-#~ "\n"
-#~ "L'XSLT in sé è un linguaggio XML adatto alle trasformazioni XML. Esiste "
-#~ "un software libero di nome `xsltproc` scaricabile ed installabile "
-#~ "(gratuitamente). L'eseguibile `xsltproc` si può usare per leggere il file "
-#~ "netlist intermedio XML, applicarvi un foglio di stile per trasformarlo, e "
-#~ "salvare il risultato in un file in uscita. L'uso di `xsltproc` richiede "
-#~ "un file foglio di stile che usi le convenzioni XSLT. Il completo processo "
-#~ "di conversione viene gestito da Eeschema, una volta configurato per "
-#~ "eseguire `xsltproc` correttamente.\n"
-#~ "\n"
-#~ "Uno script Python è in genere più semplice da creare.\n"
-#~ "\n"
-#~ "# 4 - Inizializzazione della finestra di dialogo\n"
-#~ "\n"
-#~ "Si dovrebbe aggiungere un nuovo plugin (uno script) nell'elenco facendo "
-#~ "clic sul pulsante Aggiungi plugin.\n"
-#~ "\n"
-#~ "## 4.1 - Parametri di configurazione dei plugin\n"
-#~ "\n"
-#~ "La finestra di configurazione dei plugin di Eeschema richiede le seguenti "
-#~ "informazioni:\n"
-#~ "\n"
-#~ " * Il titolo: per esempio, il nome del formato della netlist.\n"
-#~ " * La riga di comando per eseguire il convertitore (solitamente uno "
-#~ "script).\n"
-#~ "\n"
-#~ "***Nota (solo per Windows):***\n"
-#~ "*Per impostazione predefinita, la riga di comando esegue con la finestra "
-#~ "di console nascosta e l'uscita viene rediretta al campo \"Info plugin\". "
-#~ "Per mostrare la finestra del comando in esecuzione, mettere la spunta "
-#~ "alla casella \"Mostra finestra console\".*\n"
-#~ "\n"
-#~ "Una volta fatto clic sul pulsante di generazione, accade il seguito:\n"
-#~ "\n"
-#~ "1. Eeschema crea un file netlist intermedio \\*.xml, per esempio `test."
-#~ "xml`.\n"
-#~ "2. Eeschema esegue lo script a riga di comando per creare il file "
-#~ "finale.\n"
-#~ "\n"
-#~ "## 4.2 - Creare i file netlist a riga di comando\n"
-#~ "\n"
-#~ "Assumendo che si stia usando il programma `xsltproc.exe` per applicare il "
-#~ "foglio di stile al file intermedio, `xsltproc.exe` viene eseguito con il "
-#~ "comando seguente.\n"
-#~ "\n"
-#~ "```\n"
-#~ "xsltproc.exe -o <nomefile risultato> <nomefile foglio di stile> <file XML "
-#~ "da convertire>\n"
-#~ "```\n"
-#~ "\n"
-#~ "Su Windows la riga di comando è la seguente.\n"
-#~ "\n"
-#~ "```\n"
-#~ "f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl "
-#~ "\"%I\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "Su Linux il comando diventa il seguente.\n"
-#~ "\n"
-#~ "```\n"
-#~ "xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/myconverter .xsl \"%I\"\n"
-#~ "```\n"
-#~ "dove `myconverter.xsl` è il foglio di stile che si sta applicando.\n"
-#~ "\n"
-#~ "Non si dimentichi le virgolette attorno ai nomi dei file, che permettono "
-#~ "di avere spazi dopo la sostituzione delle variabili da parte di "
-#~ "Eeschema.\n"
-#~ "\n"
-#~ "Se si usa uno script Python, la riga di comando somiglierà a (a seconda "
-#~ "dello script Python):\n"
-#~ "\n"
-#~ "```\n"
-#~ "python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "o\n"
-#~ "\n"
-#~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" "
-#~ "\"%O\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "Il formato della riga di comando accetta parametri per i nomi dei file. I "
-#~ "parametri supportati sono:\n"
-#~ "\n"
-#~ " * `%B`: la base del nome del file del file d'uscita selezionato, senza "
-#~ "percorso ed estensione.\n"
-#~ " * `%P`: cartella del progetto, senza nome e senza '/' iniziale.\n"
-#~ " * `%I`: nome e percorso file completi del file temporaneo d'ingresso\n"
-#~ " (il netfile intermedio).\n"
-#~ " * `%O`: nome e percorso file completi (ma senza estensione) del file "
-#~ "d'uscita\n"
-#~ " scelto dall'utente.\n"
-#~ "\n"
-#~ "`%I` verrà rimpiazzato dal nome del file intermedio corrente (di solito "
-#~ "il nomefile completo del foglio radice con estensione \".xml\").\n"
-#~ "`%O` verrà rimpiazzato dal nome del file d'uscita corrente (il nomefile "
-#~ "completo del foglio radice senza estensione).\n"
-#~ "`%B` verrà rimpiazzato dal nome corto del file d'uscita corrente (il nome "
-#~ "corto del foglio radice senza estensione).\n"
-#~ "`%P` verrà rimpiazzato dal percorso del progetto corrente.\n"
-#~ "\n"
-#~ "## 4.3 - Formato riga di comando:\n"
-#~ "\n"
-#~ "### 4.3.1 - Nota:\n"
-#~ "\n"
-#~ "Solitamente, il file creato deve avere un'estensione, a seconda del suo "
-#~ "tipo.\n"
-#~ "Perciò sarà necessario aggiungere all'opzione ***%O*** la corretta "
-#~ "estensione file.\n"
-#~ "\n"
-#~ "Per esempio:\n"
-#~ "\n"
-#~ " * **%O.csv** per creare un file .csv (file di valori separati da "
-#~ "virgole).\n"
-#~ " * **%O.htm** per creare un file .html .\n"
-#~ " * **%O.bom** per creare un file diba .bom .\n"
-#~ "\n"
-#~ "### 4.3.2 Esempio per xsltproc:\n"
-#~ "\n"
-#~ "Il formato della riga di comando per xsltproc è il seguente:\n"
-#~ "\n"
-#~ "```\n"
-#~ "<percorso di xsltproc> xsltproc <parametri xsltproc>\n"
-#~ "```\n"
-#~ "\n"
-#~ "Su Windows:\n"
-#~ "```\n"
-#~ "f:/kicad/bin/xsltproc.exe -o \"%O.bom\" f:/kicad/bin/plugins/"
-#~ "netlist_form_pads-pcb.xsl \"%I\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "Su Linux:\n"
-#~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "Gli esempi sopra assumono che `xsltproc` sia installato sul proprio PC su "
-#~ "Windows e che i file xsl siano posizionati in `<percorso_kicad>/kicad/bin/"
-#~ "plugins/`.\n"
-#~ "\n"
-#~ "\n"
-#~ "### 4.3.3 Esempio per script Python:\n"
-#~ "\n"
-#~ "Assumendo che python sia installato sul PC, e che gli script python siano "
-#~ "posizionati in\n"
-#~ "\n"
-#~ " `<percorso_kicad>/kicad/bin/plugins/bom-in-python/`,\n"
-#~ "\n"
-#~ "il formato della riga di comando per python è simile a:\n"
-#~ "\n"
-#~ "```\n"
-#~ "python <nome file script> <nomefile in ingresso> <nomefile in uscita>\n"
-#~ "```\n"
-#~ "\n"
-#~ "Su Windows:\n"
-#~ "```\n"
-#~ "python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
-#~ "\"%O.html\"\n"
-#~ "```\n"
-#~ "\n"
-#~ "Su Linux:\n"
-#~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
-#~ "```\n"
-
-#, fuzzy, c-format
-#~ msgid "Failed reading model library '%s'."
-#~ msgstr "Fallita creazione file libreria simboli \"%s\"."
-
-#~ msgid "Source"
-#~ msgstr "Sorgente"
-
-#, fuzzy
-#~ msgid "Instance"
-#~ msgstr "Induttanza:"
-
-#~ msgid "Library:"
-#~ msgstr "Libreria:"
-
-#, fuzzy
-#~ msgid "Store in Reference and Value"
-#~ msgstr "Nodo di riferimento"
-
-#~ msgid "Alias of"
-#~ msgstr "Alias di"
-
-#~ msgid ""
-#~ "Multiple symbols have the same reference designator.\n"
-#~ "Annotation must be corrected before simulating."
-#~ msgstr ""
-#~ "Più simboli hanno lo stesso riferimento.\n"
-#~ "L'annotazione deve essere corretta prima della simulazione."
-
-#, fuzzy, c-format
-#~ msgid "Invalid symbol pin index: '%s'"
-#~ msgstr "Numero unità simbolo %s non valido"
-
-#~ msgid "10A Log"
-#~ msgstr "10A Log"
-
-#~ msgid "15A Log"
-#~ msgstr "15A Log"
-
-#~ msgid "15A Log S"
-#~ msgstr "15A Log S"
-
-#~ msgid "10C Rev Log"
-#~ msgstr "10C Rev Log"
-
-#~ msgid "15C Rev Log"
-#~ msgstr "15C Rev Log"
-
-#~ msgid "15C Rev Log S"
-#~ msgstr "15C Rev Log S"
-
-#~ msgid "0B Lin"
-#~ msgstr "0B Lin"
-
-#~ msgid "4B S-Curve"
-#~ msgstr "4B S-Curve"
-
-#~ msgid "5B S-Curve"
-#~ msgstr "5B S-Curve"
-
-#~ msgid "Switch"
-#~ msgstr "Commuta"
-
-#~ msgid "Characteristic Curve"
-#~ msgstr "Curva caratteristica"
-
-#~ msgid "Gerber files (.g* .lgr .pho)"
-#~ msgstr "File Gerber (.g* .lgr .pho)"
-
-#, fuzzy
-#~ msgid "Ignore source object line widths"
-#~ msgstr "Aumenta la larghezza linea"
-
-#, fuzzy
-#~ msgid "Conversion settings:"
-#~ msgstr "Impostazioni enumerazione piazzole"
-
-#~ msgid "Graphics Editing"
-#~ msgstr "Modifica grafiche"
-
-#~ msgid "Limit actions to 45 degrees from start"
-#~ msgstr "Limita le azioni a 45 gradi dalla partenza"
-
-#, fuzzy, c-format
-#~ msgid "No such file: %s"
-#~ msgstr "File progetto: \"%s\""
-
-#, fuzzy, c-format
-#~ msgid "Read file: '%s'\n"
-#~ msgstr "Creato file '%s'"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "** Error reading kicad_pcb file. **\n"
-#~ msgstr "Errore nel leggere il file."
-
-#~ msgid "Library ID"
-#~ msgstr "ID libreria"
-
-#, fuzzy
-#~ msgid "Cannot remove temporary input file"
-#~ msgstr "Impossibile rinominare il file temporaneo '%s' in '%s'"
-
-#~ msgid "Origin X"
-#~ msgstr "X origine"
-
-#~ msgid "Origin Y"
-#~ msgstr "Y origine"
-
-#~ msgid "Self-intersecting polygons are not allowed"
-#~ msgstr "I poligoni autointersecanti non permessi"
-
-#~ msgid "Self-intersecting polygons are not allowed."
-#~ msgstr "I poligoni autointersecanti non permessi."
-
-#~ msgid "Shadow on Locked Items"
-#~ msgstr "Ombra sugli elementi bloccati"
-
-#~ msgid "Shadow on Conflicts"
-#~ msgstr "Ombra sui conflitti"
-
-#~ msgid "Show a shadow on overlapping courtyards while moving footprints"
-#~ msgstr ""
-#~ "Mostra un'ombra sugli ingombri sovrapposti durante lo spostamento delle "
-#~ "impronte"
-
-#~ msgid "Layer presets"
-#~ msgstr "Preimpostazioni strati"
-
-#, fuzzy
-#~ msgid "Circuit board"
-#~ msgstr "Circuito stampato"
-
-#, fuzzy
-#~ msgid "Eeschema"
-#~ msgstr "eeschema"
-
-#~ msgid "3D configuration directory is unknown"
-#~ msgstr "cartella di configurazione 3D sconosciuta"
-
-#~ msgid "Write 3D search path list"
-#~ msgstr "Scrivi elenco percorsi di ricerca 3D"
-
-#~ msgid "Could not open configuration file"
-#~ msgstr "Impossibile aprire il file di configurazione"
-
-#~ msgid "Problems writing configuration file"
-#~ msgstr "Problemi durante la scrittura del file di configurazione"
-
-#~ msgid "H Align (fields only):"
-#~ msgstr "Allineamento O (solo campi):"
-
-#~ msgid "V Align (fields only):"
-#~ msgstr "Allineamento V (solo campi):"
-
-#, c-format
-#~ msgid ""
-#~ "'%s' is not a valid symbol library table.\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Il file \"%s\" non è un file tabella librerie di simboli valido.\n"
-#~ "\n"
-#~ "%s"
-
-#, c-format
-#~ msgid ""
-#~ "Error loading global symbol library table.\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Errore nel salvare la tabella librerie simboli globale:\n"
-#~ "\n"
-#~ "%s"
-
-#, c-format
-#~ msgid ""
-#~ "Failed to write project symbol library table. Error:\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Fallita scrittura file tabella librerie simboli progetto. Errore:\n"
-#~ "  %s"
-
-#, fuzzy, c-format
-#~ msgid "Failed to infer model from Value '%s'"
-#~ msgstr "Impossibile creare la cartella '%s'."
-
-#, fuzzy, c-format
-#~ msgid "Failed to set parameter '%s' to '%s' in model '%s'"
-#~ msgstr "Impossibile analizzare \"%s\" in \"%s\""
-
-#~ msgid "Warning: Pad size is less than zero."
-#~ msgstr "Attenzione: dimensione piazzola minore di zero."
-
-#, fuzzy
-#~ msgid "pcb_filename"
-#~ msgstr "Nome file:"
-
-#, fuzzy
-#~ msgid "display this message"
-#~ msgstr "Nascondi questo messaggio."
-
-#, fuzzy
-#~ msgid "Kicad2step Converter"
-#~ msgstr "Convertitore immagini KiCad"
-
-#, fuzzy
-#~ msgid "Alias:"
-#~ msgstr "Alias: "
-
-#, c-format
-#~ msgid "Duplicate items %s%s\n"
-#~ msgstr "Elementi duplicati %s%s\n"
-
-#, fuzzy
-#~ msgid "Spice type:"
-#~ msgstr "Tipo di forma:"
-
-#~ msgid "Default for all sheet instances"
-#~ msgstr "Predefinito per tutte le istanze foglio"
-
-#~ msgid ""
-#~ "Check to make the unit and reference, value, and\n"
-#~ "footprint fields the default for all sheet instances\n"
-#~ "of this symbol"
-#~ msgstr ""
-#~ "Selezionare per rendere i campi unità, riferimento,\n"
-#~ "valore e impronta i predefiniti per tutte le instanze\n"
-#~ "foglio di questo simbolo"
-
-#~ msgid "Spice Model..."
-#~ msgstr "Modello Spice..."
-
-#~ msgid "Bus has no members to assign netclass to."
-#~ msgstr "Bus senza membri ai quali assegnare netclass."
-
-#, c-format
-#~ msgid "minimum gap: %s; "
-#~ msgstr "spazio minimo: %s; "
-
-#, c-format
-#~ msgid "maximum gap: %s; "
-#~ msgstr "spazio massimo: %s "
-
-#, c-format
-#~ msgid "actual: %s)"
-#~ msgstr "corrente: %s)"
-
-#, c-format
-#~ msgid "(expected 'Other'; actual '%s')"
-#~ msgstr "(atteso 'Altro'; effettivo '%s')"
-
-#, fuzzy
-#~ msgid "Remove Teardrops..."
-#~ msgstr "Rimuovi arr. a goccia"
-
-#~ msgid "File Browser..."
-#~ msgstr "Esplora file..."
-
-#~ msgid "3D Search Paths"
-#~ msgstr "Percorsi di ricerca 3D"
-
-#, fuzzy
-#~ msgid "Search for items"
-#~ msgstr "Cerca altri elementi testo"
-
-#~ msgid "Exclude components with no pins"
-#~ msgstr "Escludi componenti senza pin"
-
-#~ msgid "Pads with different numbers overlap"
-#~ msgstr "Piazzole con numeri diversi si sovrappongono"
-
-#~ msgid "ring"
-#~ msgstr "anello"
-
-#~ msgid "circle"
-#~ msgstr "cerchio"
-
-#~ msgid "Select PCB grid units"
-#~ msgstr "Seleziona unità griglia C.S."
-
-#~ msgid "No-connects"
-#~ msgstr "Non connessi"
-
-#~ msgid "User Fields"
-#~ msgstr "Campi utente"
-
-#~ msgid "Delete Field"
-#~ msgstr "Elimina campo"
-
-#~ msgid "Select field:"
-#~ msgstr "Seleziona campo:"
-
-#, c-format
-#~ msgid "Pin's owner (%d) not found."
-#~ msgstr "Proprietario pin (%d) non trovato."
-
-#, c-format
-#~ msgid "Label's owner (%d) not found."
-#~ msgstr "Proprietario etichetta (%d) non trovato."
-
-#, c-format
-#~ msgid "Bezier's owner (%d) not found."
-#~ msgstr "Proprietario Bezier (%d) non trovato."
-
-#, c-format
-#~ msgid "Polyline's owner (%d) not found."
-#~ msgstr "Proprietario polilinea (%d) non trovato."
-
-#, c-format
-#~ msgid "Polygon's owner (%d) not found."
-#~ msgstr "Proprietario poligono (%d) non trovato."
-
-#, c-format
-#~ msgid "Rounded rectangle's owner (%d) not found."
-#~ msgstr "Proprietario rettangolo arrotondato (%d) non trovato."
-
-#, c-format
-#~ msgid "Arc's owner (%d) not found."
-#~ msgstr "Proprietario arco (%d) non trovato."
-
-#, c-format
-#~ msgid "Line's owner (%d) not found."
-#~ msgstr "Proprietario linea (%d) non trovato."
-
-#, fuzzy
-#~ msgid "Signal harness, belonging to the part is not currently supported."
-#~ msgstr "La maschera di compilazione non è attualmente supportata."
-
-#, fuzzy, c-format
-#~ msgid "Harness entry's parent (%d) not found."
-#~ msgstr "Proprietario voce foglio (%d) non trovato."
-
-#, fuzzy, c-format
-#~ msgid "Harness type's parent (%d) not found."
-#~ msgstr "Proprietario linea (%d) non trovato."
-
-#, c-format
-#~ msgid "Rectangle's owner (%d) not found."
-#~ msgstr "Proprietario rettangolo (%d) non trovato."
-
-#, c-format
-#~ msgid "Sheet entry's owner (%d) not found."
-#~ msgstr "Proprietario voce foglio (%d) non trovato."
-
-#, c-format
-#~ msgid "Sheetname's owner (%d) not found."
-#~ msgstr "Proprietarion nomefoglio (%d) non trovato."
-
-#, c-format
-#~ msgid "Filename's owner (%d) not found."
-#~ msgstr "Proprietario nomefile (%d) non trovato."
-
-#, c-format
-#~ msgid "Designator's owner (%d) not found."
-#~ msgstr "Proprietarioo riferimento (%d) non trovato."
-
-#, c-format
-#~ msgid "Implementation's owner (%d) not found."
-#~ msgstr "Proprietario implementazione (%d) non trovato."
-
-#, c-format
-#~ msgid "Footprint's owner (%d) not found."
-#~ msgstr "Proprietario impronta (%d) non trovato."
-
-#~ msgid "Lines drawn horizontally and vertically"
-#~ msgstr "Linee disegnate orizzontalmente e verticalmente"
-
-#~ msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
-#~ msgstr "Linee disegnate orizzontalmente e verticalmente, e a 45 gradi"
-
-#~ msgid "Separate sense pin"
-#~ msgstr "Piedino di rilevamento separato"
-
-#~ msgid "3 terminals regulator"
-#~ msgstr "Regolatore a tre terminali"
-
-#~ msgid "Loss Tg"
-#~ msgstr "Tg perd"
-
-#~ msgid "Loss Tg:"
-#~ msgstr "Tg perd:"
-
-#~ msgid "Show pad <no net> indicator"
-#~ msgstr "Mostra indicatore piazzola <senza connessione>"
-
-#~ msgid "No-Connects"
-#~ msgstr "Non collegati"
-
-#~ msgid "Show a marker on pads which have no net connected"
-#~ msgstr "Mostra un marcatore sulle piazzole che non hanno connessione"
-
-#~ msgid "Item"
-#~ msgstr "Elemento"
-
-#, c-format
-#~ msgid "Could not find library file %s."
-#~ msgstr "Non trovato il file di libreria %s."
-
-#~ msgid "&Vias"
-#~ msgstr "&Via"
-
-#~ msgid "&Pads"
-#~ msgstr "&Piazzole"
-
-#, c-format
-#~ msgid "Through hole pad %s of %s"
-#~ msgstr "Piazzola passante %s di %s"
-
-#, c-format
-#~ msgid "Through hole pad %s %s of %s"
-#~ msgstr "Piazzola passante %s %s di %s"
-
-#~ msgid "Net Tools"
-#~ msgstr "Strumenti collegamenti"
-
-#~ msgid "Special Tools"
-#~ msgstr "Strumenti speciali"
-
-#, fuzzy
-#~ msgid "Highlight Selected Net"
-#~ msgstr "Evidenzia il collegamento selezionato"
-
-#~ msgid "Hide Net"
-#~ msgstr "Nascondi net"
-
-#~ msgid "Hide the ratsnest for the selected net"
-#~ msgstr "Nascondi la ratsnest del collegamento selezionato"
-
-#~ msgid "Show the ratsnest for the selected net"
-#~ msgstr "Mostra la ratsnest del collegamento selezionato"
-
-#~ msgid "Bus Aliases"
-#~ msgstr "Alias bus"
-
-#~ msgid "Alias Name"
-#~ msgstr "Nome alias"
-
-#~ msgid "Rename"
-#~ msgstr "Rinomina"
-
-#~ msgid "Alias Members"
-#~ msgstr "Membri alias"
-
-#~ msgid "Member Name"
-#~ msgstr "Nome membro"
-
-#~ msgid "Bus Alias Name"
-#~ msgstr "Nome alias bus"
-
-#, fuzzy, c-format
-#~ msgid ""
-#~ "Error parsing spice code <%s>\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Errore nel salvataggio del file schema \"%s\".\n"
-#~ "%s"
-
-#, fuzzy, c-format
-#~ msgid ""
-#~ "Error parsing param <%s>\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Errore nel salvataggio del file scheda '%s'.\n"
-#~ "%s"
-
-#, fuzzy, c-format
-#~ msgid ""
-#~ "Error parsing pin field <%s>\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Errore nel salvataggio del file scheda '%s'.\n"
-#~ "%s"
-
-#~ msgid "Bus Definitions..."
-#~ msgstr "Definizioni bus..."
-
-#~ msgid "Manage bus definitions"
-#~ msgstr "Gestisci le definizioni dei bus"
-
-#~ msgid "Navigate to page"
-#~ msgstr "Naviga alla pagina"
-
-#~ msgid "NetName"
-#~ msgstr "Nome collegamento"
-
-#~ msgid "NetClass"
-#~ msgstr "Netclass"
-
-#~ msgid ""
-#~ "Do not allow position of pad relative to parent footprint to be changed"
-#~ msgstr ""
-#~ "Non consentire la modifica della posizione della piazzola rispetto "
-#~ "all'impronta genitore"
-
-#~ msgid "Environment Variable Help"
-#~ msgstr "Aiuto variabile ambiente"
-
-#~ msgid "Filter Nets"
-#~ msgstr "Filtra collegamenti"
-
-#~ msgid "Net class filter:"
-#~ msgstr "Filtro netclass:"
-
-#~ msgid "Apply Filters"
-#~ msgstr "Applica filtri"
-
-#~ msgid "Assign Net Class"
-#~ msgstr "Assegna netclass"
-
-#~ msgid "New net class:"
-#~ msgstr "Nuova netclass:"
-
-#~ msgid "Assign To All Listed Nets"
-#~ msgstr "Assegna a tutti i collegamenti elencati"
-
-#~ msgid "Assign To Selected Nets"
-#~ msgstr "Assegna ai collegamenti selezionati"
-
-#, c-format
-#~ msgid "Unknown Record id: %d."
-#~ msgstr "Id record sconosciuto: %d."
-
-#~ msgid "Floating point number with incorrect locale"
-#~ msgstr "Numero in virgola mobile con locale non valido"
-
-#~ msgid "Missing floating point number"
-#~ msgstr "Numero in virgola mobile mancante"
-
-#~ msgid "Netclasses"
-#~ msgstr "Netclass"
-
-#~ msgid "Assign Netclass"
-#~ msgstr "Assegna netclass"
-
-#~ msgid "Select netclass:"
-#~ msgstr "Seleziona netclass:"
-
-#~ msgid "Edit Symbol Name"
-#~ msgstr "Modifica nome simbolo"
-
-#~ msgid "Auto-finish Track"
-#~ msgstr "Auto-finisci pista"
-
-#~ msgid "Automatically finishes laying the current track."
-#~ msgstr "Finisce automaticamente la pista in corso di sbroglio."
-
-#, c-format
-#~ msgid "Net Class: %s"
-#~ msgstr "Netclass: %s"
-
-#, c-format
-#~ msgid "Multiple symbols have identical reference IDs of '%s'."
-#~ msgstr "Più simboli hanno lo stesso ID di riferimento '%s'."
-
-#, c-format
-#~ msgid "Session file uses invalid layer id \"%s\""
-#~ msgstr ""
-#~ "Il file della sessione usa un'identificazione dello strato non valida "
-#~ "\"%s\""
-
-#~ msgid "Max height"
-#~ msgstr "Altezza max"
-
-#~ msgid "percent of d"
-#~ msgstr "percento di d"
-
-#~ msgid "Max height/d"
-#~ msgstr "Altezza max/d"
-
-#~ msgid "percent of H/d"
-#~ msgstr "percento di H/d"
-
-#~ msgid "Not drilled pads"
-#~ msgstr "No piazzole forate"
-
-#~ msgid "Style for round shapes"
-#~ msgstr "Stile per le forme tonde"
-
-#~ msgid "Style for rect shapes"
-#~ msgstr "Stile per le forme rettangolari"
-
-#~ msgid "Style for tracks"
-#~ msgstr "Stile per piste"
-
-#~ msgid "Allows use two tracks"
-#~ msgstr "Permetti usi di due piste"
-
-#~ msgid "Teardrop Settings"
-#~ msgstr "Impostazioni teardrop"
-
-#, c-format
-#~ msgid "Net %s\tNetClass %s\tPadName %s"
-#~ msgstr "Coll %s\tNetClass %s\tNomePiaz %s"
-
-#~ msgid "Reformat passive symbol values"
-#~ msgstr "Riformatta i valori dei simboli passivi"
-
-#~ msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-#~ msgstr "Riformatta i valori dei simboli passivi come ad es. 1M -> 1Meg"
-
-#~ msgid "Diode"
-#~ msgstr "Diodo"
-
-#~ msgid "BJT"
-#~ msgstr "BJT"
-
-#~ msgid "MOSFET"
-#~ msgstr "MOSFET"
-
-#~ msgid "JFET"
-#~ msgstr "JFET"
-
-#~ msgid "Subcircuit"
-#~ msgstr "Subcircuito"
-
-#~ msgid ""
-#~ "Symbol pin numbering don't always match the required SPICE pin order\n"
-#~ "Check the symbol and use \"Alternate node sequence\" to reorder the pins, "
-#~ "if necessary"
-#~ msgstr ""
-#~ "La numerazione pin del simbolo non sempre corrisponde all'ordine pin "
-#~ "richiesto da SPICE\n"
-#~ "Controllare il simbolo e usare \"Sequenza nodo alternativa\" per "
-#~ "riordinare i pin, se necessario"
-
-#~ msgid "For a Diode, pin order is anode, cathode"
-#~ msgstr "Per un diodo, l'ordine dei pin è anodo, catodo"
-
-#~ msgid ""
-#~ "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-#~ msgstr ""
-#~ "Per un BJT, l'ordine dei pin è collettore, base, emettitore, substrato "
-#~ "(opzionale)"
-
-#~ msgid "For a MOSFET, pin order is drain, gate, source"
-#~ msgstr "Per un MOSFET, l'ordine dei pin è drain, gate, source"
-
-#~ msgid "For a JFET, pin order is drain, gate, source"
-#~ msgstr "Per un JFET, l'ordine dei pin è drain, gate, source"
-
-#~ msgid "Invalid Impedance value"
-#~ msgstr "Valore impedenza non valido"
-
-#~ msgid "Invalid delay value"
-#~ msgstr "Valore ritardo non valido"
-
-#~ msgid "Invalid frequency value"
-#~ msgstr "Valore frequenza non valido"
-
-#~ msgid "Invalid length in wavelength value"
-#~ msgstr "Valore lunghezza in lunghezza d'onda non valido"
-
-#~ msgid "Invalid resistance value"
-#~ msgstr "Valore resistenza non valido"
-
-#~ msgid "Invalid capacitance value"
-#~ msgstr "Valore capacità non valido"
-
-#~ msgid "Invalid inductance value"
-#~ msgstr "Valore induttanza non valido"
-
-#~ msgid "Invalid conductance value"
-#~ msgstr "Valore conduttanza non valido"
-
-#~ msgid "Invalid length value"
-#~ msgstr "Valore lunghezza non valido"
-
-#, c-format
-#~ msgid ""
-#~ "You need to specify at least the first %d parameters for the transient "
-#~ "source"
-#~ msgstr ""
-#~ "Devi specificare almeno i primi %d parametri per l'origine transitoria"
-
-#~ msgid ""
-#~ "You cannot leave interleaved empty fields when defining a transient source"
-#~ msgstr ""
-#~ "Non è possibile lasciare campi vuoti intercalati quando si definisce "
-#~ "un'origine transitoria"
-
-#~ msgid "Select library"
-#~ msgstr "Seleziona libreria"
-
-#~ msgid "Range:"
-#~ msgstr "Campo:"
-
-#~ msgid "Offset:"
-#~ msgstr "Scostamento:"
-
-#~ msgid "Standard deviation:"
-#~ msgstr "Deviazione standard:"
-
-#~ msgid "Mean:"
-#~ msgstr "Media:"
-
-#~ msgid "Lambda:"
-#~ msgstr "Lambda:"
-
-#~ msgid "type of random generator for source is invalid"
-#~ msgstr "tipo di generatore casuale per la sorgente non valido"
-
-#~ msgid "Resistor"
-#~ msgstr "Resistenza"
-
-#~ msgid "Capacitor"
-#~ msgstr "Capacità"
-
-#~ msgid "Inductor"
-#~ msgstr "Induttanza"
-
-#~ msgid "Passive type"
-#~ msgstr "Tipo passivo"
-
-#~ msgid "Spice value in simulation"
-#~ msgstr "Valore Spice in simulazione"
-
-#~ msgid ""
-#~ "In Spice values, the decimal separator is the point.\n"
-#~ "Values can use Spice unit symbols."
-#~ msgstr ""
-#~ "Nei valori Spice, il separatore decimale è il punto.\n"
-#~ "I valori possono usare i simboli delle unità Spice."
-
-#~ msgid "Spice unit symbols in values (case insensitive):"
-#~ msgstr ""
-#~ "Simboli unità Spice nei valori (indifferente se maiuscole o minuscole):"
-
-#~ msgid "Select file..."
-#~ msgstr "Seleziona file..."
-
-#~ msgid "Note:"
-#~ msgstr "Nota:"
-
-#~ msgid "note"
-#~ msgstr "nota"
-
-#~ msgid "DC/AC Analysis"
-#~ msgstr "Analisi DC/AC"
-
-#~ msgid "DC:"
-#~ msgstr "DC:"
-
-#~ msgid "Volts/Amps"
-#~ msgstr "Volt/Amp"
-
-#~ msgid "AC magnitude:"
-#~ msgstr "Magnitudo AC:"
-
-#~ msgid "radians"
-#~ msgstr "radianti"
-
-#~ msgid "Transient Analysis"
-#~ msgstr "Analisi del transiente"
-
-#~ msgid "Initial value:"
-#~ msgstr "Valore iniziale:"
-
-#~ msgid "Pulsed value:"
-#~ msgstr "Valore pulsato:"
-
-#~ msgid "Delay time:"
-#~ msgstr "Ritardo:"
-
-#~ msgid "Rise time:"
-#~ msgstr "Tempo di salita:"
-
-#~ msgid "Pulse width:"
-#~ msgstr "Larghezza impulso:"
-
-#~ msgid "Pulse"
-#~ msgstr "Impulso"
-
-#~ msgid "DC offset:"
-#~ msgstr "Offset DC:"
-
-#~ msgid "Amplitude:"
-#~ msgstr "Ampiezza:"
-
-#~ msgid "Damping factor:"
-#~ msgstr "Fattore di dump:"
-
-#~ msgid "1/seconds"
-#~ msgstr "1/secondi"
-
-#~ msgid "Sinusoidal"
-#~ msgstr "Sinusoidale"
-
-#~ msgid "Rise delay time:"
-#~ msgstr "Tempo di salita:"
-
-#~ msgid "Rise time constant:"
-#~ msgstr "Costante del tempo di salita:"
-
-#~ msgid "Fall delay time:"
-#~ msgstr "Tempo di discesa:"
-
-#~ msgid "Fall time constant:"
-#~ msgstr "Costante del tempo di discesa:"
-
-#~ msgid "Exponential"
-#~ msgstr "Esponenziale"
-
-#~ msgid "Piece-wise linear"
-#~ msgstr "Lineare a tratti"
-
-#~ msgid "Time:"
-#~ msgstr "Tempo:"
-
-#~ msgid "second"
-#~ msgstr "secondi"
-
-#~ msgid "Piece-wise Linear"
-#~ msgstr "Lineare a tratti"
-
-#~ msgid "Carrier frequency:"
-#~ msgstr "Frequenza portante:"
-
-#~ msgid "Modulation index:"
-#~ msgstr "Indice di modulazione:"
-
-#~ msgid "Signal frequency:"
-#~ msgstr "Frequenza segnale:"
-
-#~ msgid "Carrier phase:"
-#~ msgstr "Fase portante:"
-
-#~ msgid "degrees"
-#~ msgstr "gradi"
-
-#~ msgid "Signal phase:"
-#~ msgstr "Fase segnale:"
-
-#~ msgid "FM"
-#~ msgstr "FM"
-
-#~ msgid "Modulating frequency:"
-#~ msgstr "Frequenza di modulazione:"
-
-#~ msgid "Signal delay:"
-#~ msgstr "Ritardo segnale:"
-
-#~ msgid "AM"
-#~ msgstr "AM"
-
-#~ msgid "Transient noise"
-#~ msgstr "Disturbo transiente"
-
-#~ msgid "Uniform"
-#~ msgstr "Uniforme"
-
-#~ msgid "Gaussian"
-#~ msgstr "Gaussiana"
-
-#~ msgid "Poisson"
-#~ msgstr "Poisson"
-
-#~ msgid "Individual value duration:"
-#~ msgstr "Durata valore individuale:"
-
-#~ msgid "Time delay:"
-#~ msgstr "Ritardo:"
-
-#~ msgid "Random"
-#~ msgstr "Casuale"
-
-#~ msgid "External data"
-#~ msgstr "Dati esterni"
-
-#~ msgid "Source Type"
-#~ msgstr "Tipo sorgente"
-
-#~ msgid "Line model"
-#~ msgstr "Modello linea"
-
-#~ msgid "Propagation delay"
-#~ msgstr "Ritardo di propagazione"
-
-#~ msgid "Length in wavelength"
-#~ msgstr "Lunghezza in lunghezza d'onda"
-
-#~ msgid "Use time delay"
-#~ msgstr "Usa tempo di ritardo"
-
-#~ msgid "Use frequency and number of wavelength"
-#~ msgstr "Usa frequenza e numero di lunghezze d'onda"
-
-#~ msgid "Delay / Electrical length"
-#~ msgstr "Ritardo / Lunghezza elettrica"
-
-#~ msgid "Lossless"
-#~ msgstr "Senza perdite"
-
-#~ msgid "Resistance per unit length"
-#~ msgstr "Resistenza per unità di lunghezza"
-
-#~ msgid "ohm / unit"
-#~ msgstr "ohm / unità"
-
-#~ msgid "Inductance per unit length"
-#~ msgstr "Induttanza per unità di lunghezza"
-
-#~ msgid "henry / unit"
-#~ msgstr "henry / unità"
-
-#~ msgid "Capacitance per unit length"
-#~ msgstr "Capacità per unità di lunghezza"
-
-#~ msgid "farad / unit"
-#~ msgstr "farad / unità"
-
-#~ msgid "Conductance per unit length"
-#~ msgstr "Conduttanza per unità di lunghezza"
-
-#~ msgid "siemens / unit"
-#~ msgstr "siemens / unità"
-
-#~ msgid "Extra parameters"
-#~ msgstr "Parametri extra"
-
-#~ msgid ""
-#~ "The following types of lines have been implemented so far:\n"
-#~ "\n"
-#~ "- RLC\n"
-#~ "- RC\n"
-#~ "- LC\n"
-#~ "- RG\n"
-#~ "\n"
-#~ "Any other combination will yield erroneous results and should not be "
-#~ "tried."
-#~ msgstr ""
-#~ "Fino ad ora sono stati implementati i tipi linee seguenti:\n"
-#~ "\n"
-#~ "- RLC\n"
-#~ "- RC\n"
-#~ "- LC\n"
-#~ "- RG\n"
-#~ "\n"
-#~ "Ogni altra combinazione genererà risultati errati e non va utilizzata."
-
-#~ msgid "Lossy"
-#~ msgstr "Con perdite"
-
-#~ msgid "Transmission Line"
-#~ msgstr "Linea di trasmissione"
-
-#~ msgid "Alternate node sequence:"
-#~ msgstr "Sequenza nodi alternativa:"
-
-#~ msgid "GerbView"
-#~ msgstr "GerbView"
-
-#~ msgid "Fomatting"
-#~ msgstr "Formattazione"
-
-#~ msgid "HatchBorder Lines"
-#~ msgstr "Linee tratteggio"
-
-#~ msgid "Image Editor"
-#~ msgstr "Editor immagine"
-
-#~ msgid "The radius cannot be zero."
-#~ msgstr "Il raggio non può essere zero."
-
-#~ msgid "Allowed features"
-#~ msgstr "Caratteristiche permesse"
-
-#~ msgid "Allow blind/buried vias"
-#~ msgstr "Consenti via ciechi/sepolti"
-
-#~ msgid "Allow micro vias (uVias)"
-#~ msgstr "Consenti microvia (uVia)"
-
-#~ msgid "Show board setup"
-#~ msgstr "Mostra impostazioni scheda"
-
-#~ msgid ""
-#~ "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
-#~ "Constraints."
-#~ msgstr ""
-#~ "I via ciechi/sepolti devono prima essere abilitati in Impostazioni scheda "
-#~ "> Regole di progettazione > Vincoli."
-
-#~ msgid ""
-#~ "Microvias must first be enabled in Board Setup > Design Rules > "
-#~ "Constraints."
-#~ msgstr ""
-#~ "I microvia devono prima essere abilitati in Impostazioni scheda > Regole "
-#~ "di progettazione > Vincoli."
-
-#~ msgid "Cross-probe on selection"
-#~ msgstr "Analisi-incrociata alla selezione"
-
-#~ msgid "Scroll cross-probed items into view"
-#~ msgstr "Centra la vista sugli elementi sottoposti ad analisi-incrociata"
-
-#~ msgid "F.Cu"
-#~ msgstr "F.Cu"
-
-#~ msgid "In1.Cu"
-#~ msgstr "In1.Cu"
-
-#~ msgid "In2.Cu"
-#~ msgstr "In2.Cu"
-
-#~ msgid "In3.Cu"
-#~ msgstr "In3.Cu"
-
-#~ msgid "In4.Cu"
-#~ msgstr "In4.Cu"
-
-#~ msgid "In5.Cu"
-#~ msgstr "In5.Cu"
-
-#~ msgid "In6.Cu"
-#~ msgstr "In6.Cu"
-
-#~ msgid "In7.Cu"
-#~ msgstr "In7.Cu"
-
-#~ msgid "In8.Cu"
-#~ msgstr "In8.Cu"
-
-#~ msgid "In9.Cu"
-#~ msgstr "In9.Cu"
-
-#~ msgid "In10.Cu"
-#~ msgstr "In10.Cu"
-
-#~ msgid "In11.Cu"
-#~ msgstr "In11.Cu"
-
-#~ msgid "In12.Cu"
-#~ msgstr "In12.Cu"
-
-#~ msgid "In13.Cu"
-#~ msgstr "In13.Cu"
-
-#~ msgid "In14.Cu"
-#~ msgstr "In14.Cu"
-
-#~ msgid "In15.Cu"
-#~ msgstr "In15.Cu"
-
-#~ msgid "In16.Cu"
-#~ msgstr "In16.Cu"
-
-#~ msgid "In17.Cu"
-#~ msgstr "In17.Cu"
-
-#~ msgid "In18.Cu"
-#~ msgstr "In18.Cu"
-
-#~ msgid "In19.Cu"
-#~ msgstr "In19.Cu"
-
-#~ msgid "In20.Cu"
-#~ msgstr "In20.Cu"
-
-#~ msgid "In21.Cu"
-#~ msgstr "In21.Cu"
-
-#~ msgid "In22.Cu"
-#~ msgstr "In22.Cu"
-
-#~ msgid "In23.Cu"
-#~ msgstr "In23.Cu"
-
-#~ msgid "In24.Cu"
-#~ msgstr "In24.Cu"
-
-#~ msgid "In25.Cu"
-#~ msgstr "In25.Cu"
-
-#~ msgid "In26.Cu"
-#~ msgstr "In26.Cu"
-
-#~ msgid "In27.Cu"
-#~ msgstr "In27.Cu"
-
-#~ msgid "In28.Cu"
-#~ msgstr "In28.Cu"
-
-#~ msgid "In29.Cu"
-#~ msgstr "In29.Cu"
-
-#~ msgid "In30.Cu"
-#~ msgstr "In30.Cu"
-
-#~ msgid "B.Cu"
-#~ msgstr "B.Cu"
-
-#~ msgid "B.Adhesive"
-#~ msgstr "B.Adhesive"
-
-#~ msgid "F.Adhesive"
-#~ msgstr "F.Adhesive"
-
-#~ msgid "B.Paste"
-#~ msgstr "B.Paste"
-
-#~ msgid "F.Paste"
-#~ msgstr "F.Paste"
-
-#~ msgid "B.Silkscreen"
-#~ msgstr "B.Silkscreen"
-
-#~ msgid "F.Silkscreen"
-#~ msgstr "F.Silkscreen"
-
-#~ msgid "B.Mask"
-#~ msgstr "B.Mask"
-
-#~ msgid "F.Mask"
-#~ msgstr "F.Mask"
-
-#~ msgid "User.Drawings"
-#~ msgstr "User.Drawings"
-
-#~ msgid "User.Comments"
-#~ msgstr "User.Comments"
-
-#~ msgid "User.Eco1"
-#~ msgstr "User.Eco1"
-
-#~ msgid "User.Eco2"
-#~ msgstr "User.Eco2"
-
-#~ msgid "Edge.Cuts"
-#~ msgstr "Edge.Cuts"
-
-#~ msgid "F.Courtyard"
-#~ msgstr "F.Courtyard"
-
-#~ msgid "B.Courtyard"
-#~ msgstr "B.Courtyard"
-
-#~ msgid "F.Fab"
-#~ msgstr "F.Fab"
-
-#~ msgid "B.Fab"
-#~ msgstr "B.Fab"
-
-#~ msgid "User.1"
-#~ msgstr "User.1"
-
-#~ msgid "User.2"
-#~ msgstr "User.2"
-
-#~ msgid "User.3"
-#~ msgstr "User.3"
-
-#~ msgid "User.4"
-#~ msgstr "User.4"
-
-#~ msgid "User.5"
-#~ msgstr "User.5"
-
-#~ msgid "User.6"
-#~ msgstr "User.6"
-
-#~ msgid "User.7"
-#~ msgstr "User.7"
-
-#~ msgid "User.8"
-#~ msgstr "User.8"
-
-#~ msgid "User.9"
-#~ msgstr "User.9"
-
-#, c-format
-#~ msgid "Violations (%d)"
-#~ msgstr "Violazioni (%d)"
-
-#, c-format
-#~ msgid "Ignored Tests (%d)"
-#~ msgstr "Test ignorati (%d)"
-
-#~ msgid "135 deg Angle"
-#~ msgstr "Angolo 135°"
-
-#, c-format
-#~ msgid "Unit %c"
-#~ msgstr "Unità %c"
-
-#~ msgid "DPs evaluated:"
-#~ msgstr "CD elaborate:"
