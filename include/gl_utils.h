@@ -28,6 +28,10 @@
 #include <wx/glcanvas.h>
 #include <wx/utils.h>
 
+#ifdef _WIN32
+#pragma optimize( "", off )
+#endif
+
 class GL_UTILS
 {
 public:
@@ -107,14 +111,37 @@ public:
             if( aVal == -1 && !wxGLCanvas::IsExtensionSupported( "WGL_EXT_swap_control_tear" ) )
                 aVal = 1;
 
-            wglSwapIntervalEXT( aVal );
+            const GLubyte* vendor = glGetString( GL_VENDOR );
+            const GLubyte* renderer = glGetString( GL_RENDERER );
 
-            return wglGetSwapIntervalEXT();
+            HDC   hdc = wglGetCurrentDC();
+            HGLRC hglrc = wglGetCurrentContext();
+
+            if( hdc && hglrc )
+            {
+                // Mostly for debugging
+                wxString vendor_wx = vendor;
+                wxString renderer_wx = renderer;
+
+                int currentInterval = wglGetSwapIntervalEXT();
+
+                if( currentInterval != aVal )
+                {
+                    wglSwapIntervalEXT( aVal );
+                    currentInterval = wglGetSwapIntervalEXT();
+                }
+
+                return currentInterval;
+            }
         }
 
 #endif
         return 0;
     }
 };
+
+#ifdef _WIN32
+#pragma optimize( "", on )
+#endif
 
 #endif /* GL_CONTEXT_MANAGER_H */
