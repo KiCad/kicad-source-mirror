@@ -281,7 +281,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
     {
         BOARD_STACKUP_ITEM* stackup_item = layers.at( i );
 
-        for( int j = 0; j < stackup_item->GetSublayersCount(); j++ )
+        for( int sublayer_id = 0; sublayer_id < stackup_item->GetSublayersCount(); sublayer_id++ )
         {
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
 
@@ -313,25 +313,25 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
             colType.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( stackup_item->GetMaterial( j ) );
+            t->SetText( stackup_item->GetMaterial( sublayer_id ) );
             colMaterial.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( m_frame->StringFromValue( stackup_item->GetThickness( j ), true ) );
+            t->SetText( m_frame->StringFromValue( stackup_item->GetThickness( sublayer_id ), true ) );
             colThickness.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( stackup_item->GetColor() );
+            t->SetText( stackup_item->GetColor( sublayer_id ) );
             colColor.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
             t->SetText( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
-                                                             stackup_item->GetEpsilonR( j ), false ) );
+                                                             stackup_item->GetEpsilonR( sublayer_id ), false ) );
             colEpsilon.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
             t->SetText( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
-                                                             stackup_item->GetLossTangent( j ), false ) );
+                                                             stackup_item->GetLossTangent( sublayer_id ), false ) );
             colTanD.push_back( t );
         }
     }
