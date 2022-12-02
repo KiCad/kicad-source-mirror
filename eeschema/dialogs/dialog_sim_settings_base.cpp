@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -432,9 +432,6 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	wxBoxSizer* bSizer88;
 	bSizer88 = new wxBoxSizer( wxVERTICAL );
-
-	m_fixPassiveVals = new wxCheckBox( this, wxID_ANY, _("Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer88->Add( m_fixPassiveVals, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	m_fixIncludePaths = new wxCheckBox( this, wxID_ANY, _("Add full path for .include library directives"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fixIncludePaths->SetValue(true);

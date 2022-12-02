@@ -300,7 +300,6 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
     updateNetlistOpts();
 
-    m_settings->SetFixPassiveVals( m_netlistOpts & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS );
     m_settings->SetFixIncludePaths( m_netlistOpts & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS );
 
     return true;
@@ -313,7 +312,6 @@ bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
     if( empty( m_customTxt ) )
         loadDirectives();
 
-    m_fixPassiveVals->SetValue( m_settings->GetFixPassiveVals() );
     m_fixIncludePaths->SetValue( m_settings->GetFixIncludePaths() );
     updateNetlistOpts();
 
@@ -612,9 +610,6 @@ void DIALOG_SIM_SETTINGS::loadDirectives()
 void DIALOG_SIM_SETTINGS::updateNetlistOpts()
 {
     m_netlistOpts = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
-
-    if( !m_fixPassiveVals->IsChecked() )
-        m_netlistOpts &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS;
 
     if( !m_fixIncludePaths->IsChecked() )
         m_netlistOpts &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;

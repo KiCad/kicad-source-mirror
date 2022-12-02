@@ -308,9 +308,6 @@ void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
     wxFileName fn = m_Parent->Schematic().GetFileName();
     fn.SetExt( SpiceFileExtension );
 
-    if( settings.m_SpiceAdjustPassiveValues )
-        netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS;
-
     if( settings.m_SpiceSaveAllVoltages )
         netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
 
