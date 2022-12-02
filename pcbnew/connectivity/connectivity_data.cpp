@@ -177,12 +177,15 @@ void CONNECTIVITY_DATA::updateRatsnest()
                 return aNet->IsDirty() && aNet->GetNodeCount() > 0;
             } );
 
-    GetKiCadThreadPool().parallelize_loop( 0, dirty_nets.size(),
+    thread_pool& tp = GetKiCadThreadPool();
+
+    tp.push_loop( dirty_nets.size(),
             [&]( const int a, const int b)
             {
                 for( int ii = a; ii < b; ++ii )
                     dirty_nets[ii]->UpdateNet();
-            } ).wait();
+            } );
+    tp.wait_for_tasks();
 
 #ifdef PROFILE
     rnUpdate.Show();
@@ -347,12 +350,15 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
         }
     };
 
-    GetKiCadThreadPool().parallelize_loop( 1, aDynamicData->m_nets.size(),
+    thread_pool& tp = GetKiCadThreadPool();
+
+    tp.push_loop( 1, aDynamicData->m_nets.size(),
             [&]( const int a, const int b)
             {
                 for( int ii = a; ii < b; ++ii )
                     update_lambda( ii );
-            }).wait();
+            });
+    tp.wait_for_tasks();
 
     // This gets the ratsnest for internal connections in the moving set
     const std::vector<CN_EDGE>& edges = GetRatsnestForItems( aItems );
