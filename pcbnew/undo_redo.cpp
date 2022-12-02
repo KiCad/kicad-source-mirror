@@ -381,6 +381,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     PCB_GROUP* group = nullptr;
 
+    GetBoard()->IncrementTimeStamp();   // clear caches
+
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
 
