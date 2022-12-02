@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:25-0800\n"
-"PO-Revision-Date: 2022-06-09 19:41+0200\n"
+"PO-Revision-Date: 2022-12-02 08:21+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -24818,14 +24818,12 @@ msgstr "L'angolo dell'arco non può essere zero."
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:408
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:420
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:426
-#, fuzzy
 msgid "The item thickness must be greater than zero."
-msgstr "Lo spazio piste deve essere maggiore di 0."
+msgstr "Lo spessore dell'elemento deve essere maggiore di 0."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:395
-#, fuzzy
 msgid "The radius must be greater than zero."
-msgstr "Lo spazio piste deve essere maggiore di 0."
+msgstr "Il raggio deve essere maggiore di 0."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:405
 msgid "The rectangle cannot be empty."
@@ -24833,7 +24831,7 @@ msgstr "Il rettangolo non può essere vuoto."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:414
 msgid "The polygon outline thickness must be >= 0."
-msgstr ""
+msgstr "Lo spessore del contorno del poligono deve essere >= 0."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:437
 msgid "Error List"
@@ -36589,202 +36587,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#, fuzzy, c-format
-#~ msgid "Unable to locate padstack %s in file %s\n"
-#~ msgstr "Impossibile caricare il file %s"
-
-#, fuzzy, c-format
-#~ msgid "Width Constraints: min %s, max %s"
-#~ msgstr "Vincoli larghezza: min %s; opz %s; max %s."
-
-#, fuzzy, c-format
-#~ msgid "Width Constraints: min %s"
-#~ msgstr "Vincolo foro: min %s."
-
-#~ msgid "The radius cannot be zero."
-#~ msgstr "Il raggio non può essere zero."
-
-#, c-format
-#~ msgid "Unit %c"
-#~ msgstr "Unità %c"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
-
-#~ msgid "F.Cu"
-#~ msgstr "F.Cu"
-
-#~ msgid "In1.Cu"
-#~ msgstr "In1.Cu"
-
-#~ msgid "In2.Cu"
-#~ msgstr "In2.Cu"
-
-#~ msgid "In3.Cu"
-#~ msgstr "In3.Cu"
-
-#~ msgid "In4.Cu"
-#~ msgstr "In4.Cu"
-
-#~ msgid "In5.Cu"
-#~ msgstr "In5.Cu"
-
-#~ msgid "In6.Cu"
-#~ msgstr "In6.Cu"
-
-#~ msgid "In7.Cu"
-#~ msgstr "In7.Cu"
-
-#~ msgid "In8.Cu"
-#~ msgstr "In8.Cu"
-
-#~ msgid "In9.Cu"
-#~ msgstr "In9.Cu"
-
-#~ msgid "In10.Cu"
-#~ msgstr "In10.Cu"
-
-#~ msgid "In11.Cu"
-#~ msgstr "In11.Cu"
-
-#~ msgid "In12.Cu"
-#~ msgstr "In12.Cu"
-
-#~ msgid "In13.Cu"
-#~ msgstr "In13.Cu"
-
-#~ msgid "In14.Cu"
-#~ msgstr "In14.Cu"
-
-#~ msgid "In15.Cu"
-#~ msgstr "In15.Cu"
-
-#~ msgid "In16.Cu"
-#~ msgstr "In16.Cu"
-
-#~ msgid "In17.Cu"
-#~ msgstr "In17.Cu"
-
-#~ msgid "In18.Cu"
-#~ msgstr "In18.Cu"
-
-#~ msgid "In19.Cu"
-#~ msgstr "In19.Cu"
-
-#~ msgid "In20.Cu"
-#~ msgstr "In20.Cu"
-
-#~ msgid "In21.Cu"
-#~ msgstr "In21.Cu"
-
-#~ msgid "In22.Cu"
-#~ msgstr "In22.Cu"
-
-#~ msgid "In23.Cu"
-#~ msgstr "In23.Cu"
-
-#~ msgid "In24.Cu"
-#~ msgstr "In24.Cu"
-
-#~ msgid "In25.Cu"
-#~ msgstr "In25.Cu"
-
-#~ msgid "In26.Cu"
-#~ msgstr "In26.Cu"
-
-#~ msgid "In27.Cu"
-#~ msgstr "In27.Cu"
-
-#~ msgid "In28.Cu"
-#~ msgstr "In28.Cu"
-
-#~ msgid "In29.Cu"
-#~ msgstr "In29.Cu"
-
-#~ msgid "In30.Cu"
-#~ msgstr "In30.Cu"
-
-#~ msgid "B.Cu"
-#~ msgstr "B.Cu"
-
-#~ msgid "B.Adhesive"
-#~ msgstr "B.Adhesive"
-
-#~ msgid "F.Adhesive"
-#~ msgstr "F.Adhesive"
-
-#~ msgid "B.Paste"
-#~ msgstr "B.Paste"
-
-#~ msgid "F.Paste"
-#~ msgstr "F.Paste"
-
-#~ msgid "B.Silkscreen"
-#~ msgstr "B.Silkscreen"
-
-#~ msgid "F.Silkscreen"
-#~ msgstr "F.Silkscreen"
-
-#~ msgid "B.Mask"
-#~ msgstr "B.Mask"
-
-#~ msgid "F.Mask"
-#~ msgstr "F.Mask"
-
-#~ msgid "User.Drawings"
-#~ msgstr "User.Drawings"
-
-#~ msgid "User.Comments"
-#~ msgstr "User.Comments"
-
-#~ msgid "User.Eco1"
-#~ msgstr "User.Eco1"
-
-#~ msgid "User.Eco2"
-#~ msgstr "User.Eco2"
-
-#~ msgid "Edge.Cuts"
-#~ msgstr "Edge.Cuts"
-
-#~ msgid "F.Courtyard"
-#~ msgstr "F.Courtyard"
-
-#~ msgid "B.Courtyard"
-#~ msgstr "B.Courtyard"
-
-#~ msgid "F.Fab"
-#~ msgstr "F.Fab"
-
-#~ msgid "B.Fab"
-#~ msgstr "B.Fab"
-
-#~ msgid "User.1"
-#~ msgstr "User.1"
-
-#~ msgid "User.2"
-#~ msgstr "User.2"
-
-#~ msgid "User.3"
-#~ msgstr "User.3"
-
-#~ msgid "User.4"
-#~ msgstr "User.4"
-
-#~ msgid "User.5"
-#~ msgstr "User.5"
-
-#~ msgid "User.6"
-#~ msgstr "User.6"
-
-#~ msgid "User.7"
-#~ msgstr "User.7"
-
-#~ msgid "User.8"
-#~ msgstr "User.8"
-
-#~ msgid "User.9"
-#~ msgstr "User.9"
