@@ -183,6 +183,16 @@ void PROPERTY_MANAGER::InheritsAfter( TYPE_ID aDerived, TYPE_ID aBase )
 }
 
 
+void PROPERTY_MANAGER::Mask( TYPE_ID aDerived, TYPE_ID aBase, const wxString& aName )
+{
+    wxASSERT_MSG( aDerived != aBase, "Class cannot mask from itself" );
+
+    CLASS_DESC& derived = getClass( aDerived );
+    derived.m_maskedBaseProperties.insert( std::make_pair( aBase, aName ) );
+    m_dirty = true;
+}
+
+
 bool PROPERTY_MANAGER::IsOfType( TYPE_ID aDerived, TYPE_ID aBase ) const
 {
     if( aDerived == aBase )
@@ -226,7 +236,7 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
 {
     PROPERTY_SET replaced( m_replaced );
     m_allProperties.clear();
-    collectPropsRecur( m_allProperties, replaced, m_displayOrder );
+    collectPropsRecur( m_allProperties, replaced, m_displayOrder, m_maskedBaseProperties );
     // We need to keep properties sorted to be able to use std::set_* functions
     sort( m_allProperties.begin(), m_allProperties.end() );
 }
@@ -234,7 +244,8 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
 
 void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
                                                       PROPERTY_SET& aReplaced,
-                                                      PROPERTY_DISPLAY_ORDER& aDisplayOrder ) const
+                                                      PROPERTY_DISPLAY_ORDER& aDisplayOrder,
+                                                      const PROPERTY_SET& aMasked ) const
 {
     for( const std::pair<size_t, wxString>& replacedEntry : m_replaced )
         aReplaced.emplace( replacedEntry );
@@ -250,17 +261,22 @@ void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
     for( const std::pair<const wxString, std::unique_ptr<PROPERTY_BASE>>& prop : m_ownProperties )
     {
         PROPERTY_BASE* property = prop.second.get();
-
+        PROPERTY_SET::key_type propertyKey = std::make_pair( property->OwnerHash(),
+                                                             property->Name() );
         // Do not store replaced properties
-        if( aReplaced.count( std::make_pair( property->OwnerHash(), property->Name() ) ) == 0 )
-        {
-            aDisplayOrder[property] = displayOrderStart + idx++;
-            aResult.push_back( property );
-        }
+        if( aReplaced.count( propertyKey ) )
+            continue;
+
+        // Do not store masked properties
+        if( aMasked.count( propertyKey ) )
+            continue;
+
+        aDisplayOrder[property] = displayOrderStart + idx++;
+        aResult.push_back( property );
     }
 
     for( const std::reference_wrapper<CLASS_DESC>& base : m_bases )
-        base.get().collectPropsRecur( aResult, aReplaced, aDisplayOrder );
+        base.get().collectPropsRecur( aResult, aReplaced, aDisplayOrder, aMasked );
 }
 
 

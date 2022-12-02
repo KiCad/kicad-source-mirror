@@ -171,6 +171,15 @@ public:
     void InheritsAfter( TYPE_ID aDerived, TYPE_ID aBase );
 
     /**
+     * Sets a base class property as masked in a derived class.  Masked properties are hidden from
+     * the list of editable properties for this class.
+     * @param aDerived is the type to apply the mask for.
+     * @param aBase is the type that aName belongs to.
+     * @param aName is the name of a property.
+     */
+    void Mask( TYPE_ID aDerived, TYPE_ID aBase, const wxString& aName );
+
+    /**
      * Return true if aDerived is inherited from aBase.
      */
     bool IsOfType( TYPE_ID aDerived, TYPE_ID aBase ) const;
@@ -237,6 +246,9 @@ private:
         ///< Type converters available for this type
         std::map<TYPE_ID, std::unique_ptr<TYPE_CAST_BASE>> m_typeCasts;
 
+        ///< Properties from bases that should be masked (hidden) on this subclass
+        PROPERTY_SET m_maskedBaseProperties;
+
         ///< All properties (both unique to the type and inherited)
         std::vector<PROPERTY_BASE*> m_allProperties;
 
@@ -255,7 +267,8 @@ private:
         ///< Traverses the class inheritance hierarchy bottom-to-top, gathering
         ///< all properties available to a type
         void collectPropsRecur( PROPERTY_LIST& aResult, PROPERTY_SET& aReplaced,
-                                PROPERTY_DISPLAY_ORDER& aDisplayOrder ) const;
+                                PROPERTY_DISPLAY_ORDER& aDisplayOrder,
+                                const PROPERTY_SET& aMasked ) const;
     };
 
     ///< Returns metadata for a specific type
