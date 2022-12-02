@@ -239,6 +239,37 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
     collectPropsRecur( m_allProperties, replaced, m_displayOrder, m_maskedBaseProperties );
     // We need to keep properties sorted to be able to use std::set_* functions
     sort( m_allProperties.begin(), m_allProperties.end() );
+
+    std::vector<wxString> displayOrder;
+    std::set<wxString> groups;
+
+    auto collectGroups =
+            [&]( std::set<wxString>& aSet, std::vector<wxString>& aResult )
+    {
+        auto collectGroupsRecursive =
+                []( auto& aSelf, std::set<wxString>& aSetR, std::vector<wxString>& aResultR,
+                    const CLASS_DESC& aClassR ) -> void
+        {
+            for( const wxString& group : aClassR.m_groups )
+            {
+                if( !aSetR.count( group ) )
+                {
+                    aSetR.insert( group );
+                    aResultR.emplace_back( group );
+                }
+            }
+
+            for( const CLASS_DESC& base : aClassR.m_bases )
+                aSelf( aSelf, aSetR, aResultR, base );
+        };
+
+        collectGroupsRecursive( collectGroupsRecursive, aSet, aResult, *this );
+    };
+
+    // TODO(JE): This currently relies on rebuild() happening after all properties are added
+    // separate out own groups vs. all groups to fix
+    collectGroups( groups, displayOrder );
+    m_groupDisplayOrder = displayOrder;
 }
 
 
