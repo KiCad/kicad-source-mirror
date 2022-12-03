@@ -2758,7 +2758,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 
             flattened.ClearArcs();
 
-            if( flattened.HasHoles() )
+            if( flattened.HasHoles() || flattened.IsSelfIntersecting() )
                 flattened.Fracture( PM_FAST );
             else if( aSimplify )
                 flattened.Simplify( PM_FAST );
@@ -2776,7 +2776,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 
         tmpSet.ClearArcs();
 
-        if( tmpSet.HasHoles() )
+        if( tmpSet.HasHoles() || tmpSet.IsSelfIntersecting() )
             tmpSet.Fracture( PM_FAST );
         else if( aSimplify )
             tmpSet.Simplify( PM_FAST );
