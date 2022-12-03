@@ -1023,6 +1023,10 @@ static struct EDA_TEXT_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_TEXT );
 
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, double>( _HKI( "Orientation" ),
+                &EDA_TEXT::SetTextAngleDegrees, &EDA_TEXT::GetTextAngleDegrees,
+                PROPERTY_DISPLAY::PT_DEGREE ) );
+
         const wxString textProps = _( "Text Properties" );
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Text" ),

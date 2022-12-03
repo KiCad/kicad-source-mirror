@@ -119,6 +119,13 @@ public:
     virtual void SetTextAngle( const EDA_ANGLE& aAngle );
     const EDA_ANGLE& GetTextAngle() const       { return m_attributes.m_Angle; }
 
+    // For property system:
+    void SetTextAngleDegrees( double aOrientation )
+    {
+        SetTextAngle( EDA_ANGLE( aOrientation, DEGREES_T ) );
+    }
+    double GetTextAngleDegrees() const          { return m_attributes.m_Angle.AsDegrees(); }
+
     void SetItalic( bool aItalic );
     bool IsItalic() const                       { return m_attributes.m_Italic; }
 
