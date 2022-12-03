@@ -45,6 +45,11 @@ public:
     bool GetValueFromControl( wxVariant& aVariant, wxPGProperty* aProperty,
                               wxWindow* aCtrl ) const override;
 
+    void UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const override;
+
+    bool OnEvent( wxPropertyGrid* aPropGrid, wxPGProperty* aProperty, wxWindow* aCtrl,
+                  wxEvent& aEvent ) const override;
+
     /**
      * When restarting an editor, the instance of PG_UNIT_EDITOR may be the same
      * but the referenced frame is different.  This re-binds the frame to the editor

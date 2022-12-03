@@ -244,6 +244,8 @@ protected:
     long              m_selStart;       ///< Selection start and end of the original text
     long              m_selEnd;
 
+    bool              m_unitsInValue;   ///< Units label should be included in value text
+
     /// A reference to an ORIGIN_TRANSFORMS object
     ORIGIN_TRANSFORMS&               m_originTransforms;
 

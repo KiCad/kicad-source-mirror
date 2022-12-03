@@ -74,10 +74,33 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
 }
 
 
+void PG_UNIT_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const
+{
+    m_unitBinder->ChangeValue( aProperty->GetValueAsString() );
+}
+
+
+bool PG_UNIT_EDITOR::OnEvent( wxPropertyGrid* aPropGrid, wxPGProperty* aProperty,
+                              wxWindow* aCtrl, wxEvent& aEvent ) const
+{
+    if( aEvent.GetEventType() == wxEVT_LEFT_UP )
+    {
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl ) )
+        {
+            textCtrl->SelectAll();
+            return false;
+        }
+    }
+
+    return wxPGTextCtrlEditor::OnEvent( aPropGrid, aProperty, aCtrl, aEvent );
+}
+
+
 bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aProperty,
                                           wxWindow* aCtrl ) const
 {
-    wxASSERT( m_unitBinder );
+    if( !m_unitBinder )
+        return false;
 
     wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl );
     wxCHECK_MSG( textCtrl, false, "PG_UNIT_EDITOR requires a text control!" );
@@ -86,7 +109,6 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
     if( aProperty->UsesAutoUnspecified() && textVal.empty() )
     {
         aVariant.MakeNull();
-        m_unitBinder->SetControl( nullptr );
         return true;
     }
 
@@ -104,8 +126,6 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
     // true here should be enough to trigger it).
     if( !changed && aVariant.IsNull() )
         changed = true;
-
-    m_unitBinder->SetControl( nullptr );
 
     return changed;
 }
