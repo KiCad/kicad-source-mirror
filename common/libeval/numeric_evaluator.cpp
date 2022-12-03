@@ -138,9 +138,6 @@ bool NUMERIC_EVALUATOR::Process( const wxString& aString )
     m_parseFinished = false;
     Token tok;
 
-    FILE* f = fopen( "C:\\Users\\jon\\log.txt", "w" );
-    numEval::ParseTrace( f, "parser: " );
-
     if( aString.IsEmpty() )
     {
         m_parseFinished = true;
@@ -159,8 +156,6 @@ bool NUMERIC_EVALUATOR::Process( const wxString& aString )
             break;
         }
     } while( tok.token );
-
-    fclose( f );
 
     return !m_parseError;
 }
