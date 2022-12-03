@@ -29,6 +29,7 @@
 #include <sch_io_mgr.h>
 #include <locale_io.h>
 #include <wx/app.h>
+#include <sch_label.h>
 #include <connection_graph.h>
 
 SCH_EDIT_FRAME*   EESCHEMA_HELPERS::s_SchEditFrame = nullptr;
@@ -151,7 +152,13 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
     schematic->ConnectionGraph()->Reset();
 
     schematic->SetSheetNumberAndCount();
-    schematic->RecomputeIntersheetRefs( true, []( SCH_GLOBALLABEL* ) { } );
+    schematic->RecomputeIntersheetRefs( []( SCH_GLOBALLABEL* aGlobal )
+                                        {
+                                            for( SCH_FIELD& field : aGlobal->GetFields() )
+                                                field.ClearBoundingBoxCache();
+
+                                            aGlobal->ClearBoundingBoxCache();
+                                        } );
 
     for( SCH_SHEET_PATH& sheet : sheetList )
     {

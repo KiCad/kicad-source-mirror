@@ -436,13 +436,14 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
     {
         gvconfig()->m_Appearance.show_negative_objects = aNewState;
 
-        view->UpdateAllItemsConditionally( KIGFX::REPAINT, []( KIGFX::VIEW_ITEM* aItem )
-        {
-            GERBER_DRAW_ITEM* item = dynamic_cast<GERBER_DRAW_ITEM*>( aItem );
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                []( KIGFX::VIEW_ITEM* aItem )
+                {
+                    GERBER_DRAW_ITEM* item = dynamic_cast<GERBER_DRAW_ITEM*>( aItem );
 
-            // GetLayerPolarity() returns true for negative items
-            return ( item && item->GetLayerPolarity() );
-        } );
+                    // GetLayerPolarity() returns true for negative items
+                    return ( item && item->GetLayerPolarity() );
+                } );
 
         break;
     }

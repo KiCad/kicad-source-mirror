@@ -1148,29 +1148,33 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
         PCBNEW_SETTINGS* settings = GetPcbNewSettings();
         static LSET      maskAndPasteLayers = LSET( 4, F_Mask, F_Paste, B_Mask, B_Paste );
 
-        GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+        GetCanvas()->GetView()->UpdateAllItemsConditionally(
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> int
                 {
                     if( dynamic_cast<PCB_TRACK*>( aItem ) )
                     {
                         if( settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
-                            return true;
+                            return KIGFX::REPAINT;
                     }
                     else if( dynamic_cast<PAD*>( aItem ) )
                     {
                         if( settings->m_Display.m_PadClearance )
-                            return true;
+                            return KIGFX::REPAINT;
 
                         if( ( GetBoard()->GetVisibleLayers() & maskAndPasteLayers ).any() )
-                            return true;
+                            return KIGFX::REPAINT;
                     }
 
                     EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
 
                     if( text && text->HasTextVars() )
-                        return true;
+                    {
+                        text->ClearRenderCache();
+                        text->ClearBoundingBoxCache();
+                        return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    }
 
-                    return false;
+                    return 0;
                 } );
 
         GetCanvas()->Refresh();

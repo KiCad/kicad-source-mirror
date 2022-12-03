@@ -1500,6 +1500,17 @@ void VIEW::UpdateAllItemsConditionally( int aUpdateFlags,
 }
 
 
+void VIEW::UpdateAllItemsConditionally( std::function<int( VIEW_ITEM* )> aItemFlagsProvider )
+{
+    for( VIEW_ITEM* item : *m_allItems )
+    {
+        if( item->viewPrivData() )
+            item->viewPrivData()->m_requiredUpdate |= aItemFlagsProvider( item );
+    }
+}
+
+
+
 std::unique_ptr<VIEW> VIEW::DataReference() const
 {
     std::unique_ptr<VIEW> ret = std::make_unique<VIEW>();

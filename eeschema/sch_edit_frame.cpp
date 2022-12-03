@@ -1470,8 +1470,8 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
     Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler );
 
-    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-            []( KIGFX::VIEW_ITEM* aItem )
+    GetCanvas()->GetView()->UpdateAllItemsConditionally(
+            []( KIGFX::VIEW_ITEM* aItem ) -> int
             {
                 SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem );
                 SCH_CONNECTION* connection = item ? item->Connection() : nullptr;
@@ -1479,15 +1479,19 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
                 if( connection && connection->HasDriverChanged() )
                 {
                     connection->ClearDriverChanged();
-                    return true;
+                    return KIGFX::REPAINT;
                 }
 
                 EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
 
                 if( text && text->HasTextVars() )
-                    return true;
+                {
+                    text->ClearRenderCache();
+                    text->ClearBoundingBoxCache();
+                    return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                }
 
-                return false;
+                return 0;
             } );
 
     if( highlightedItem )
@@ -1495,20 +1499,22 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 }
 
 
-void SCH_EDIT_FRAME::RecomputeIntersheetRefs( bool autoplaceUninitialized )
+void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
 {
-    Schematic().RecomputeIntersheetRefs( autoplaceUninitialized,
-                                         [&]( SCH_GLOBALLABEL* label )
+    Schematic().RecomputeIntersheetRefs( [&]( SCH_GLOBALLABEL* label )
                                          {
+                                             for( SCH_FIELD& field : label->GetFields() )
+                                                 field.ClearBoundingBoxCache();
+
+                                             label->ClearBoundingBoxCache();
                                              GetCanvas()->GetView()->Update( label );
-                                         });
+                                         } );
 }
 
 
 void SCH_EDIT_FRAME::ShowAllIntersheetRefs( bool aShow )
 {
-    if( aShow )
-        RecomputeIntersheetRefs( true );
+    RecomputeIntersheetRefs();
 
     GetCanvas()->GetView()->SetLayerVisible( LAYER_INTERSHEET_REFS, aShow );
 }

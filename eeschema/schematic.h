@@ -200,8 +200,7 @@ public:
      * Update the schematic's page reference map for all global labels, and refresh the labels
      * so that they are redrawn with up-to-date references.
      */
-    void RecomputeIntersheetRefs( bool autoplaceUninitialized,
-                                  const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback );
+    void RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}

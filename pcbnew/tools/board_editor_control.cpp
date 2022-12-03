@@ -301,15 +301,19 @@ int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
 
     if( dlg.ShowModal() == wxID_OK )
     {
-        m_frame->GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+        m_frame->GetCanvas()->GetView()->UpdateAllItemsConditionally(
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> int
                 {
                     EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
 
                     if( text && text->HasTextVars() )
-                        return true;
+                    {
+                        text->ClearRenderCache();
+                        text->ClearBoundingBoxCache();
+                        return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    }
 
-                    return false;
+                    return 0;
                 } );
 
         m_frame->OnModify();

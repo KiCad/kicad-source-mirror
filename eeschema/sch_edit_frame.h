@@ -801,7 +801,7 @@ public:
      * Update the schematic's page reference map for all global labels, and refresh the labels
      * so that they are redrawn with up-to-date references.
      */
-    void RecomputeIntersheetRefs( bool autoplaceUninitialized = false );
+    void RecomputeIntersheetRefs();
 
     void ShowAllIntersheetRefs( bool aShow );
 

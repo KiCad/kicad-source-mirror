@@ -2145,20 +2145,24 @@ void DIALOG_NET_INSPECTOR::onDeleteNet( wxCommandEvent& aEvent )
                     // outside the netlist updater where you can remove a net from a BOARD.
                     int removedCode = i->GetNetCode();
 
-                    m_frame->GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                            [removedCode]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                    m_frame->GetCanvas()->GetView()->UpdateAllItemsConditionally(
+                            [removedCode]( KIGFX::VIEW_ITEM* aItem ) -> int
                             {
                                 auto boardItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
 
                                 if( boardItem && boardItem->GetNetCode() == removedCode )
-                                    return true;
+                                    return KIGFX::REPAINT;
 
                                 EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
 
                                 if( text && text->HasTextVars() )
-                                    return true;
+                                {
+                                    text->ClearRenderCache();
+                                    text->ClearBoundingBoxCache();
+                                    return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                                }
 
-                                return false;
+                                return 0;
                             } );
 
                     m_brd->Remove( i->GetNet() );

@@ -499,7 +499,7 @@ void SCHEMATIC::SetSheetNumberAndCount()
 }
 
 
-void SCHEMATIC::RecomputeIntersheetRefs( bool autoplaceUninitialized, const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback )
+void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback )
 {
     std::map<wxString, std::set<int>>& pageRefsMap = GetPageRefsMap();
 
@@ -538,12 +538,12 @@ void SCHEMATIC::RecomputeIntersheetRefs( bool autoplaceUninitialized, const std:
     // Refresh all global labels.  Note that we have to collect them first as the
     // SCH_SCREEN::Update() call is going to invalidate the RTree iterator.
 
-    std::vector<SCH_GLOBALLABEL*> globalLabels;
+    std::vector<SCH_GLOBALLABEL*> currentSheetGlobalLabels;
 
     for( EDA_ITEM* item : CurrentSheet().LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
-        globalLabels.push_back( static_cast<SCH_GLOBALLABEL*>( item ) );
+        currentSheetGlobalLabels.push_back( static_cast<SCH_GLOBALLABEL*>( item ) );
 
-    for( SCH_GLOBALLABEL* globalLabel : globalLabels )
+    for( SCH_GLOBALLABEL* globalLabel : currentSheetGlobalLabels )
     {
         std::vector<SCH_FIELD>& fields = globalLabel->GetFields();
 

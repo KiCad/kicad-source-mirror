@@ -91,26 +91,30 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     // netName or netClass
     int netNamesCfg = GetPcbNewSettings()->m_Display.m_NetNames;
 
-    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-            [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+    GetCanvas()->GetView()->UpdateAllItemsConditionally(
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
                 if( dynamic_cast<PCB_TRACK*>( aItem ) )
                 {
                     if( netNamesCfg == 2 || netNamesCfg == 3 )
-                        return true;
+                        return KIGFX::REPAINT;
                 }
                 else if( dynamic_cast<PAD*>( aItem ) )
                 {
                     if( netNamesCfg == 1 || netNamesCfg == 3 )
-                        return true;
+                        return KIGFX::REPAINT;
                 }
 
                 EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
 
                 if( text && text->HasTextVars() )
-                    return true;
+                {
+                    text->ClearRenderCache();
+                    text->ClearBoundingBoxCache();
+                    return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                }
 
-                return false;
+                return 0;
             } );
 
     // Spread new footprints.

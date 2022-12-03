@@ -675,6 +675,13 @@ public:
                                       std::function<bool( VIEW_ITEM* )> aCondition );
 
     /**
+     * Update items in the view according to the flags returned by the callback.
+     * @param aItemFlagsProvider is a function returning any KIGFX::VIEW_UPDATE_FLAGS that should
+     *                           be set on the VIEW_ITEM.
+     */
+    void UpdateAllItemsConditionally( std::function<int( VIEW_ITEM* )> aItemFlagsProvider );
+
+    /**
      * @return true if draw priority is being respected while redrawing.
      */
     bool IsUsingDrawPriority() const

@@ -1281,26 +1281,30 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
         if( dlg.ShowModal() )
         {
-            getView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                    []( KIGFX::VIEW_ITEM* aItem ) -> bool
+            getView()->UpdateAllItemsConditionally(
+                    []( KIGFX::VIEW_ITEM* aItem ) -> int
                     {
                         // Netclass coloured items
                         //
                         if( dynamic_cast<SCH_LINE*>( aItem ) )
-                            return true;
+                            return KIGFX::REPAINT;
                         else if( dynamic_cast<SCH_JUNCTION*>( aItem ) )
-                            return true;
+                            return KIGFX::REPAINT;
                         else if( dynamic_cast<SCH_BUS_ENTRY_BASE*>( aItem ) )
-                            return true;
+                            return KIGFX::REPAINT;
 
                         // Items that might reference an item's netclass name
                         //
                         EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
 
                         if( text && text->HasTextVars() )
-                            return true;
+                        {
+                            text->ClearRenderCache();
+                            text->ClearBoundingBoxCache();
+                            return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                        }
 
-                        return false;
+                        return 0;
                     } );
         }
     }
