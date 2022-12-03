@@ -45,6 +45,10 @@ public:
 
     static wxVariantData* VariantDataFactory( const wxAny& aAny );
 
+    const EDA_ANGLE& Angle() { return m_angle; }
+
+    void SetAngle( const EDA_ANGLE& aAngle ) { m_angle = aAngle;  }
+
 protected:
     EDA_ANGLE m_angle;
 };

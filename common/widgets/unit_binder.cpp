@@ -346,8 +346,13 @@ void UNIT_BINDER::SetValue( const wxString& aValue )
     wxString value = aValue;
 
     if( m_unitsInValue )
-        value += wxT( " " ) + EDA_UNIT_UTILS::GetLabel( m_units, m_dataType );
+    {
+        if( !( m_units == EDA_UNITS::DEGREES || m_units == EDA_UNITS::PERCENT ) )
+            value += wxT( " " );
 
+        value += EDA_UNIT_UTILS::GetLabel( m_units, m_dataType );
+    }
+ 
     if( textEntry )
         textEntry->SetValue( value );
     else if( staticText )
@@ -404,7 +409,12 @@ void UNIT_BINDER::ChangeValue( const wxString& aValue )
     wxString value = aValue;
 
     if( m_unitsInValue )
-        value += wxT( " " ) + EDA_UNIT_UTILS::GetLabel( m_units, m_dataType );
+    {
+        if( !( m_units == EDA_UNITS::DEGREES || m_units == EDA_UNITS::PERCENT ) )
+            value += wxT( " " );
+
+        value += EDA_UNIT_UTILS::GetLabel( m_units, m_dataType );
+    }
 
     if( textEntry )
         textEntry->ChangeValue( value );

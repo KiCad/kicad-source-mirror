@@ -93,7 +93,7 @@ namespace numEval
 
 class NUMERIC_EVALUATOR
 {
-    enum class Unit { Invalid, MM, CM, Inch, Mil };
+    enum class Unit { Invalid, MM, CM, Inch, Mil, Degrees };
 
 public:
     NUMERIC_EVALUATOR( EDA_UNITS aUnits );

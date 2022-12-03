@@ -18,6 +18,7 @@
  */
 
 #include <eda_draw_frame.h>
+#include <properties/eda_angle_variant.h>
 #include <properties/pg_editors.h>
 #include <properties/pg_properties.h>
 #include <widgets/unit_binder.h>
@@ -69,6 +70,8 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
 
     if( PGPROPERTY_DISTANCE* prop = dynamic_cast<PGPROPERTY_DISTANCE*>( aProperty ) )
         m_unitBinder->SetCoordType( prop->CoordType() );
+    else if( PGPROPERTY_ANGLE* prop = dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) )
+        m_unitBinder->SetUnits( EDA_UNITS::DEGREES );
 
     return ret;
 }
@@ -87,10 +90,16 @@ bool PG_UNIT_EDITOR::OnEvent( wxPropertyGrid* aPropGrid, wxPGProperty* aProperty
     {
         if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl ) )
         {
-            textCtrl->SelectAll();
-            return false;
+            if( !textCtrl->HasFocus() )
+            {
+                textCtrl->SelectAll();
+                return false;
+            }
         }
     }
+    
+    if( aEvent.GetEventType() == wxEVT_KILL_FOCUS )
+        wxLogDebug( "test" );
 
     return wxPGTextCtrlEditor::OnEvent( aPropGrid, aProperty, aCtrl, aEvent );
 }
@@ -111,15 +120,29 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
         aVariant.MakeNull();
         return true;
     }
+    bool changed = false;
 
-    long result = m_unitBinder->GetValue();
-
-    bool changed = ( aVariant.IsNull() || result != aVariant.GetLong() );
-
-    if( changed )
+    if( dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) )
     {
-        aVariant = result;
-        m_unitBinder->SetValue( result );
+        double result = m_unitBinder->GetAngleValue().AsDegrees();
+        changed = ( aVariant.IsNull() || result != aVariant.GetDouble() );
+
+        if( changed )
+        {
+            aVariant = result;
+            m_unitBinder->SetValue( result );
+        }
+    }
+    else
+    {
+        long result = m_unitBinder->GetValue();
+        changed = ( aVariant.IsNull() || result != aVariant.GetLong() );
+
+        if( changed )
+        {
+            aVariant = result;
+            m_unitBinder->SetValue( result );
+        }
     }
 
     // Changing unspecified always causes event (returning

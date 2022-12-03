@@ -83,10 +83,11 @@ void NUMERIC_EVALUATOR::SetDefaultUnits( EDA_UNITS aUnits )
 {
     switch( aUnits )
     {
-    case EDA_UNITS::MILLIMETRES: m_defaultUnits = Unit::MM;   break;
-    case EDA_UNITS::MILS:        m_defaultUnits = Unit::Mil;  break;
-    case EDA_UNITS::INCHES:      m_defaultUnits = Unit::Inch; break;
-    default:                     m_defaultUnits = Unit::MM;   break;
+    case EDA_UNITS::MILLIMETRES: m_defaultUnits = Unit::MM;      break;
+    case EDA_UNITS::MILS:        m_defaultUnits = Unit::Mil;     break;
+    case EDA_UNITS::INCHES:      m_defaultUnits = Unit::Inch;    break;
+    case EDA_UNITS::DEGREES:     m_defaultUnits = Unit::Degrees; break;
+    default:                     m_defaultUnits = Unit::MM;      break;
     }
 }
 
@@ -137,6 +138,9 @@ bool NUMERIC_EVALUATOR::Process( const wxString& aString )
     m_parseFinished = false;
     Token tok;
 
+    FILE* f = fopen( "C:\\Users\\jon\\log.txt", "w" );
+    numEval::ParseTrace( f, "parser: " );
+
     if( aString.IsEmpty() )
     {
         m_parseFinished = true;
@@ -156,6 +160,8 @@ bool NUMERIC_EVALUATOR::Process( const wxString& aString )
         }
     } while( tok.token );
 
+    fclose( f );
+
     return !m_parseError;
 }
 
@@ -165,10 +171,10 @@ void NUMERIC_EVALUATOR::newString( const wxString& aString )
     Clear();
 
     m_originalText = aString;
-    m_token.inputLen = aString.length();
+    m_token.input = aString.mb_str();
+    m_token.inputLen = strlen( m_token.input );
     m_token.outputLen = std::max<std::size_t>( 64, m_token.inputLen + 1 );
     m_token.pos = 0;
-    m_token.input = aString.mb_str();
     m_token.token = new char[m_token.outputLen]();
     m_token.token[0] = '0';
 
@@ -248,6 +254,13 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
                 // Do not use strcasecmp() as it is not available on all platforms
                 const char* cptr = &m_token.input[ m_token.pos ];
                 const auto sizeLeft = m_token.inputLen - m_token.pos;
+
+                // We should really give this unicode support
+                if( sizeLeft >= 2 && ch == '\xC2' && cptr[1] == '\xB0' )
+                {
+                    m_token.pos += 2;
+                    return Unit::Degrees;
+                }
 
                 if( sizeLeft >= 2 && ch == 'm' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
                 {
@@ -352,6 +365,10 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             case Unit::CM:   retval.value.dValue = 1000.0 / 2.54; break;
             case Unit::Invalid:                                   break;
             }
+        }
+        else if( m_defaultUnits == Unit::Degrees && convertFrom == Unit::Degrees )
+        {
+            retval.value.dValue = 1.0;
         }
     }
     else if( isalpha( ch ) )

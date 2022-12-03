@@ -105,6 +105,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
             prop->SetScale( 10.0 );
 
         ret = prop;
+        ret->SetEditor( PG_UNIT_EDITOR::EDITOR_NAME );
         break;
     }
 
@@ -235,8 +236,7 @@ PGPROPERTY_SIZE::PGPROPERTY_SIZE( const wxString& aLabel, const wxString& aName,
 
 wxValidator* PGPROPERTY_SIZE::DoGetValidator() const
 {
-    //return m_regExValidator.get();
-            return nullptr;
+    return nullptr;
 }
 
 
@@ -250,7 +250,6 @@ PGPROPERTY_COORD::PGPROPERTY_COORD( const wxString& aLabel, const wxString& aNam
 
 wxValidator* PGPROPERTY_COORD::DoGetValidator() const
 {
-    //return m_regExValidator.get();
     return nullptr;
 }
 
@@ -294,6 +293,12 @@ wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant, int aArgFlags ) c
     {
         wxCHECK_MSG( false, wxEmptyString, "Unexpected variant type in PGPROPERTY_ANGLE" );
     }
+}
+
+
+wxValidator* PGPROPERTY_ANGLE::DoGetValidator() const
+{
+    return nullptr;
 }
 
 

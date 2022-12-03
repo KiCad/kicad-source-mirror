@@ -111,6 +111,8 @@ public:
         m_scale = aScale;
     }
 
+    wxValidator* DoGetValidator() const override;
+
 protected:
     ///> Scale factor to convert between raw and displayed value
     double m_scale;
