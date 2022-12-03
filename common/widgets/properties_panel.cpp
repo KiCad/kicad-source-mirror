@@ -62,6 +62,11 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
 
     m_grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 
+#ifdef __WXGTK__
+    // Needed for dark mode, on wx 3.0 at least.
+    m_grid->SetCaptionTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_CAPTIONTEXT ) );
+#endif
+
     SetSizer( mainSizer );
     Layout();
 
