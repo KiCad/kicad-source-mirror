@@ -815,6 +815,9 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent )
         // reverted state.
         m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
 
+        // Property panel needs to know about the reselect
+        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+
         if( hasRedrawn3D )
             editFrame->Update3DView( false, true );
     }
