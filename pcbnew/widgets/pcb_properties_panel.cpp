@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -59,8 +60,6 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
         delete new_editor;
     else
         m_editor = static_cast<PG_UNIT_EDITOR*>( wxPropertyGrid::RegisterEditorClass( new_editor ) );
-
-
 }
 
 
@@ -88,8 +87,8 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
     {
         wxASSERT( aProperty->HasChoices() );
 
-        PGPROPERTY_COLORENUM* ret = new PGPROPERTY_COLORENUM( wxPG_LABEL, wxPG_LABEL,
-                const_cast<wxPGChoices&>( aProperty->Choices() ) );
+        auto ret = new PGPROPERTY_COLORENUM( wxPG_LABEL, wxPG_LABEL,
+                                             const_cast<wxPGChoices&>( aProperty->Choices() ) );
 
         ret->SetColorFunc(
                 [&]( const wxString& aChoice ) -> wxColour
@@ -157,12 +156,9 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Bottom" ) )->SetChoices( layersCu );
 
     // Regenerate nets
-    for( const auto& netinfo : aBoard->GetNetInfo().NetsByNetcode() )
-    {
-        nets.Add( UnescapeString( netinfo.second->GetNetname() ), netinfo.first );
-    }
+    for( const auto& [ netCode, netInfo ] : aBoard->GetNetInfo().NetsByNetcode() )
+        nets.Add( UnescapeString( netInfo->GetNetname() ), netCode );
 
-    auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ),
-                                                              _HKI( "Net" ) );
+    auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
     netProperty->SetChoices( nets );
 }

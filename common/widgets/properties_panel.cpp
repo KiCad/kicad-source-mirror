@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -50,14 +51,15 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     delete wxPGGlobalVars->m_defaultRenderer;
     wxPGGlobalVars->m_defaultRenderer = new PG_CELL_RENDERER();
 
-    m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ), wxDefaultPosition,
-                                  wxDefaultSize, 0 );
+    m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ) );
     mainSizer->Add( m_caption, 0, wxALL | wxEXPAND, 5 );
 
     m_grid = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, wxSize( 300, 400 ),
                                  wxPG_DEFAULT_STYLE );
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
     m_grid->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );
+    m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
+    m_grid->DedicateKey( WXK_RETURN );
     mainSizer->Add( m_grid, 1, wxALL | wxEXPAND, 5 );
 
     m_grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
@@ -72,9 +74,10 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
 
     m_grid->CenterSplitter();
 
-    Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanged ), NULL, this );
-    Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanging ), NULL, this );
-    Connect( wxEVT_SHOW, wxShowEventHandler( PROPERTIES_PANEL::onShow ), NULL, this );
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PROPERTIES_PANEL::onCharHook ), nullptr, this );
+    Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanged ), nullptr, this );
+    Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanging ), nullptr, this );
+    Connect( wxEVT_SHOW, wxShowEventHandler( PROPERTIES_PANEL::onShow ), nullptr, this );
 
     Bind( wxEVT_PG_COL_END_DRAG,
           [&]( wxPropertyGridEvent& )
@@ -146,7 +149,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
     std::map<wxString, std::vector<wxPGProperty*>> pgPropGroups;
 
     // Get all possible properties
-    for( const auto& type : types )
+    for( const TYPE_ID& type : types )
     {
         const PROPERTY_LIST& itemProps = propMgr.GetProperties( type );
 
@@ -176,7 +179,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
     }
 
     // Find a set of properties that is common to all selected items
-    for( const auto& property : commonProps )
+    for( PROPERTY_BASE* property : commonProps )
     {
         if( property->IsInternal() )
             continue;
@@ -249,8 +252,8 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 
         std::vector<wxPGProperty*>& properties = pgPropGroups[groupName];
 
-        auto groupItem = new wxPropertyCategory( groupName == wxEmptyString ?
-                                                 unspecifiedGroupCaption : groupName );
+        auto groupItem = new wxPropertyCategory( groupName.IsEmpty() ? unspecifiedGroupCaption
+                                                                     : groupName );
 
         m_grid->Append( groupItem );
 
@@ -272,6 +275,15 @@ void PROPERTIES_PANEL::onShow( wxShowEvent& aEvent )
 {
     if( aEvent.IsShown() )
         UpdateData();
+}
+
+
+void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ShiftDown() )
+        m_grid->CommitChangesFromEditor();
+    else
+        aEvent.Skip();
 }
 
 
