@@ -106,23 +106,40 @@ public:
 
 #elif defined( _WIN32 )
 
+        const GLubyte* vendor = glGetString( GL_VENDOR );
+        const GLubyte* renderer = glGetString( GL_RENDERER );
+        const GLubyte* version = glGetString( GL_VERSION );
+
         if( wglSwapIntervalEXT && wxGLCanvas::IsExtensionSupported( "WGL_EXT_swap_control" ) )
         {
-            if( aVal == -1 && !wxGLCanvas::IsExtensionSupported( "WGL_EXT_swap_control_tear" ) )
+            wxString vendorStr = vendor;
+            wxString versionStr = version;
+
+            if( aVal == -1 && ( !wxGLCanvas::IsExtensionSupported( "WGL_EXT_swap_control_tear" ) ) )
                 aVal = 1;
 
-            const GLubyte* vendor = glGetString( GL_VENDOR );
-            const GLubyte* renderer = glGetString( GL_RENDERER );
+            // Trying to enable adaptive swapping on AMD drivers from 2017 or older leads to crash
+            if( aVal == -1 && vendorStr == wxS( "ATI Technologies Inc." ) )
+            {
+                wxArrayString parts = wxSplit( versionStr.AfterLast( ' ' ), '.', NULL );
+
+                if( parts.size() == 4 )
+                {
+                    int majorVer = 0;
+
+                    if( parts[0].ToInt( &majorVer ) )
+                    {
+                        if( majorVer <= 22 )
+                            aVal = 1;
+                    }
+                }
+            }
 
             HDC   hdc = wglGetCurrentDC();
             HGLRC hglrc = wglGetCurrentContext();
 
             if( hdc && hglrc )
             {
-                // Mostly for debugging
-                wxString vendor_wx = vendor;
-                wxString renderer_wx = renderer;
-
                 int currentInterval = wglGetSwapIntervalEXT();
 
                 if( currentInterval != aVal )
