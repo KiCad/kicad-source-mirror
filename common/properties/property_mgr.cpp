@@ -285,8 +285,20 @@ void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
      * We want to insert our own properties in forward order, but earlier than anything already in
      * the list (which will have been added by a subclass of us)
      */
-    int displayOrderStart = aResult.empty() ? 0 :
-                            aDisplayOrder.begin()->second - m_ownProperties.size();
+    int displayOrderStart = 0;
+
+    if( !aDisplayOrder.empty() )
+    {
+        int firstSoFar = std::min_element( aDisplayOrder.begin(), aDisplayOrder.end(),
+                                           []( const std::pair<PROPERTY_BASE*, int>& aFirst,
+                                               const std::pair<PROPERTY_BASE*, int>& aSecond )
+                                           {
+                                               return aFirst.second < aSecond.second;
+                                           } )->second;
+
+        displayOrderStart = firstSoFar - m_ownProperties.size();
+    }
+
     int idx = 0;
 
     for( const std::pair<const wxString, std::unique_ptr<PROPERTY_BASE>>& prop : m_ownProperties )
