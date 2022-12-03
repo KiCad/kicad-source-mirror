@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:25-0800\n"
-"PO-Revision-Date: 2022-10-17 12:00+0000\n"
+"PO-Revision-Date: 2022-12-04 15:47+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -7298,7 +7298,8 @@ msgstr "(fil saknas)"
 #: eeschema/dialogs/dialog_bom.cpp:295
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Det valda BOM-generatorskriptet %s kunde inte hittas."
+msgstr ""
+"Det valda skriptet %s för generering av komponentlista kunde inte hittas."
 
 #: eeschema/dialogs/dialog_bom.cpp:300
 #, c-format
@@ -7318,8 +7319,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom.cpp:346
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"För att generera en materiallista (BOM) krävs ett fullständigt numrerat "
-"schema."
+"För att generera en komponentlista krävs ett fullständigt numrerat schema."
 
 #: eeschema/dialogs/dialog_bom.cpp:383 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -7348,11 +7348,11 @@ msgstr "Hjälp med Generering av Materialförteckning"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr "BOM-generatorskript:"
+msgstr "Skript för att generera komponentlista:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "Lägg till en ny BOM-generator och dess kommandorad i listan"
+msgstr "Lägg till en ny komponentlistegenerator och dess kommandorad i listan"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
@@ -7383,7 +7383,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
-"Återställ listan över skript som genererar materiallista till "
+"Återställ listan över skript som genererar komponentlista till "
 "standardinställningarna"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
@@ -8989,11 +8989,11 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"Om du ställer in detta alternativ visas symbolen i fråga i\n"
-"dialogrutan \"lägg till kraftport\". Det låser värdetexten för att skydda "
+"Om du ställer in detta alternativ visas symbolen i fråga i dialogrutan \n"
+"\"lägg till strömförsörjningsport\". Det låser värdetexten för att skydda "
 "den\n"
-"från redigering i Eeschema. Symbolen ingår inte i\n"
-"BOM och kan inte tilldelas ett fotavtryck."
+"från redigering i kretsschemaredigeraren. Symbolen ingår inte i\n"
+"komponentlistan och kan inte tilldelas ett fotavtryck."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:187
 msgid "Number of Units:"
@@ -11142,7 +11142,7 @@ msgid ""
 msgstr ""
 "Det här är användbart för att lägga till symboler kopplade till fotavtryck "
 "på mönsterkortet som man inte vill få\n"
-" med i komponentlistan för bestyckning (BOM), till exempel referenspunkter "
+"med i komponentlistan för bestyckning (BOM), till exempel referenspunkter "
 "(siktmärken) och logotyper"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:200
@@ -16224,7 +16224,7 @@ msgstr "Exportera fil som innehåller nätlista i ett av flera format"
 
 #: eeschema/tools/ee_actions.cpp:631
 msgid "Generate BOM..."
-msgstr "Skapa stycklista ..."
+msgstr "Skapa komponentlista..."
 
 #: eeschema/tools/ee_actions.cpp:631
 msgid "Generate a bill of materials for the current schematic"
@@ -21311,7 +21311,8 @@ msgstr "Inte angiven"
 #: pcbnew/build_BOM_from_board.cpp:81
 msgid "Cannot export BOM: there are no footprints on the PCB."
 msgstr ""
-"Det går inte att exportera BOM: det finns inga fotavtryck på kretskortet."
+"Det går inte att exportera komponentlista: det finns inga fotavtryck på "
+"mönsterkortet."
 
 #: pcbnew/build_BOM_from_board.cpp:91
 msgid "Save Bill of Materials"
@@ -23874,7 +23875,7 @@ msgstr "Uteslut från positionsfiler"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:291
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:194
 msgid "Exclude from BOM"
-msgstr "Uteslut från BOM"
+msgstr "Uteslut från komponentlistan"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:313
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:213
@@ -29781,7 +29782,7 @@ msgstr "exkludera från pos-filer"
 
 #: pcbnew/footprint.cpp:989
 msgid "exclude from BOM"
-msgstr "exkludera från BOM"
+msgstr "exkludera från komponentlistan"
 
 #: pcbnew/footprint.cpp:991
 msgid "Status: "
@@ -30701,22 +30702,22 @@ msgstr "Uppdaterade %s egenskaper."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Lägg till %s 'exkludera från BOM' tillverkningsattribut."
+msgstr "Lägg till tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:370
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Ta bort %s 'exkludera från BOM' tillverkningsattribut."
+msgstr "Ta bort tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:381
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Lade till %s 'exkludera från BOM' tillverkningsattribut."
+msgstr "Lade till tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:387
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "Tog bort %s 'exkludera från BOM' tillverkningsattribut."
+msgstr "Tog bort tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:456
 #, c-format
@@ -34640,7 +34641,7 @@ msgstr "Skapa IPC-D-356 nätlistefil"
 
 #: pcbnew/tools/pcb_actions.cpp:618
 msgid "BOM..."
-msgstr "BOM ..."
+msgstr "Komponentlista..."
 
 #: pcbnew/tools/pcb_actions.cpp:618
 msgid "Create bill of materials from board"
