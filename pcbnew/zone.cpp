@@ -1386,39 +1386,58 @@ static struct ZONE_DESC
 
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ), posX );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ), posY );
+
+        auto isCopperZone =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+                        return !zone->GetIsRuleArea() && IsCopperLayer( zone->GetFirstLayer() );
+                };
         
         auto layer = new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
                     &ZONE::SetLayer, &ZONE::GetLayer );
         layer->SetIsInternal( true );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ), layer );
 
-        propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
-                    &ZONE::SetAssignedPriority, &ZONE::GetAssignedPriority ) );
+        auto priority = new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
+                    &ZONE::SetAssignedPriority, &ZONE::GetAssignedPriority );
+        priority->SetAvailableFunc( isCopperZone );
+        propMgr.AddProperty( priority );
 
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
                     &ZONE::SetZoneName, &ZONE::GetZoneName ) );
 
         const wxString groupOverrides = _( "Overrides" );
 
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Clearance Override" ),
+        auto clearanceOverride = new PROPERTY<ZONE, int>( _HKI( "Clearance Override" ),
                     &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
-                    PROPERTY_DISPLAY::PT_SIZE ),
-                    groupOverrides );
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Minimum Width" ),
+                    PROPERTY_DISPLAY::PT_SIZE );
+        clearanceOverride->SetAvailableFunc( isCopperZone );
+        
+        auto minWidth = new PROPERTY<ZONE, int>( _HKI( "Minimum Width" ),
                     &ZONE::SetMinThickness, &ZONE::GetMinThickness,
-                    PROPERTY_DISPLAY::PT_SIZE ),
-                    groupOverrides );
-        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
-                    &ZONE::SetPadConnection, &ZONE::GetPadConnection ),
-                    groupOverrides );
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Gap" ),
+                    PROPERTY_DISPLAY::PT_SIZE );
+        minWidth->SetAvailableFunc( isCopperZone );
+        
+        auto padConnections = new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
+                    &ZONE::SetPadConnection, &ZONE::GetPadConnection );
+        padConnections->SetAvailableFunc( isCopperZone );
+
+        auto thermalGap = new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Gap" ),
                     &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap,
-                    PROPERTY_DISPLAY::PT_SIZE ),
-                    groupOverrides );
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Spoke Width" ),
+                    PROPERTY_DISPLAY::PT_SIZE );
+        thermalGap->SetAvailableFunc( isCopperZone );
+
+        auto thermalSpokeWidth = new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Spoke Width" ),
                     &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth,
-                    PROPERTY_DISPLAY::PT_SIZE ),
-                    groupOverrides );
+                    PROPERTY_DISPLAY::PT_SIZE );
+        thermalSpokeWidth->SetAvailableFunc( isCopperZone );
+
+        propMgr.AddProperty( clearanceOverride, groupOverrides );
+        propMgr.AddProperty( minWidth, groupOverrides );
+        propMgr.AddProperty( padConnections, groupOverrides );
+        propMgr.AddProperty( thermalGap, groupOverrides );
+        propMgr.AddProperty( thermalSpokeWidth, groupOverrides );
     }
 } _ZONE_DESC;
 
