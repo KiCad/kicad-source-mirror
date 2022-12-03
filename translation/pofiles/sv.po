@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-12-03 01:49+0000\n"
+"PO-Revision-Date: 2022-12-07 22:48+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -1347,7 +1347,6 @@ msgid "Output Size"
 msgstr "Utmatningsstorlek"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
 msgstr "Lås höjd/bredd-förhållande"
 
@@ -7787,7 +7786,8 @@ msgstr "(fil saknas)"
 #: eeschema/dialogs/dialog_bom.cpp:293
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Det valda BOM-generatorskriptet %s kunde inte hittas."
+msgstr ""
+"Det valda skriptet %s för generering av komponentlista kunde inte hittas."
 
 #: eeschema/dialogs/dialog_bom.cpp:298
 #, c-format
@@ -7807,8 +7807,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom.cpp:344
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"För att generera en materiallista (BOM) krävs ett fullständigt numrerat "
-"schema."
+"För att generera en komponentlista krävs ett fullständigt numrerat schema."
 
 #: eeschema/dialogs/dialog_bom.cpp:381 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -7837,11 +7836,11 @@ msgstr "Hjälp för generering av materialförteckning"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr "BOM-generatorskript:"
+msgstr "Skript för att generera komponentlista:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "Lägg till en ny BOM-generator och dess kommandorad i listan"
+msgstr "Lägg till en ny komponentlistegenerator och dess kommandorad i listan"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
@@ -7872,13 +7871,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
-"Återställ listan över skript som genererar materiallista till "
+"Återställ listan över skript som genererar komponentlista till "
 "standardinställningarna"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
-msgstr "Materialförteckning"
+msgstr "Komponentlista"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -7962,6 +7960,91 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"# 1. Sammanfattning\n"
+"\n"
+"Verktyget komponentlista skapar en komponentlista som innehåller "
+"konstruktionens samtliga komponenter.\n"
+"\n"
+"Verktyget använder ett externt skript för att generera komponentlistan i det "
+"önskade formatet. Val av ett annat skript ändrar komponentlistans "
+"formattering.\n"
+"\n"
+"Kretsschemaredigerarens manual ger mer detaljerad information om generering "
+"av komponentlista.\n"
+"\n"
+"# 2. Användning\n"
+"\n"
+"Välj ett skript för generering i listan av **skript för generering av "
+"komponentlista**. Detaljinformation om det valda skriptet visas på "
+"dialogrutans högra sida.\n"
+"\n"
+"Klick på knappen **Generera** skapar en komponentlistefil med hjälp av det "
+"valda skriptet.\n"
+"\n"
+"Förinställningarna visar flera skript för generering av komponentlista, men "
+"några ytterligare skript installeras med KiCad och kan läggas till i listan "
+"med hjälp av **+** knappen.\n"
+"\n"
+"**Notera:** I Windows finns en ytterligare option **Visa kommandofönster**. "
+"När denna option inte är markerad, körs komponentlisteskriptet i ett dolt "
+"kommandofönster och all utmatning leds om och skrivs ut i dialogrutan. När "
+"denna option är markerad körs komponentlisteskriptet i ett synligt "
+"kommandofönster.\n"
+"\n"
+"# 3. Anpassade genereringsskript och kommandorader\n"
+"\n"
+"KiCad skapar internt en intermediär nätlistefil i XML-format, som innehåller "
+"information om alla konstruktionens komponenter. Ett skript för generering "
+"av komponentlista konverterar den intermediära nätlistefilen till det "
+"önskade utmatningsformatet. KiCad kör skriptet för generering av "
+"komponentlistan enligt den kommandorad som matats in i nedre delen av "
+"dialogrutan för komponentlista.\n"
+"\n"
+"Kommandoradsformatet accepterar parametrar för filnamn. Varje "
+"formatteringsparameter ersätts med en projektspecifik sökväg eller filnamn. "
+"Formatteringsparametrarna som stöds är:\n"
+"\n"
+" * `%I`: absolut sökväg och filnamn för den intermediära nätlistefilen, som "
+"utgör inmatning till komponentlistegeneratorn\n"
+" * `%O`: absolut sökväg och filnamn för den utmatade komponentlistefilen ("
+"utan filnamnstillägg)\n"
+" * `%B`: grundfilnamn för den utmatade komponentlistefilen (utan "
+"filnamnstillägg)\n"
+" * `%P`: absolut sökväg för projektbiblioteket, utan avslutande snedstreck\n"
+"\n"
+"**Notera:** utmatningsfilparametern `%O` inkluderar inte ett "
+"filnamnstillägg. KiCad försöker lägga till ett lämpligt filnamnstillägg till "
+"kommandoraden automatiskt, men det kan också läggas till manuellt.\n"
+"\n"
+"Python är det rekommenderade verktyget för komponentlistegeneratorskript, "
+"men andra verktyg kan också användas.\n"
+"\n"
+"## Example på kommandorader för Python-skript\n"
+"\n"
+"Kommandoradsformatet för ett Python-skript har formen:\n"
+"\n"
+"```\n"
+"python <skriptets filnamn> <inmatningsfilnamn> <utmatningsfilnamn>\n"
+"```\n"
+"\n"
+"Om det önskade skriptet för att generera en CSV-komponentlista i Windows är: "
+"`C:\\Users\\username\\kicad\\my_python_script.py`, skulle kommandoraden vara:"
+"\n"
+"\n"
+"```\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
+"```\n"
+"\n"
+"Om det önskade skriptet för att generera en CSV-komponentlista i Linux är: `/"
+"home/username/kicad/my_python_script.py`, skulle kommandoraden vara:\n"
+"\n"
+"```\n"
+"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
+"\n"
+"Dubbla citattecken (`\"`) rekommenderas kring de filnamn som innehåller "
+"mellanslag eller specialtecken.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -8912,11 +8995,11 @@ msgstr "Det går inte att kopiera global symbolbibliotekstabell '%s' till '%s'."
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Ibis-tolkningslogg"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:47
 msgid "Ibis parser"
-msgstr ""
+msgstr "Ibis-tolk"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9481,9 +9564,8 @@ msgid "Fields must have a name."
 msgstr "Fält måste ha ett namn."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:274
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "Alias-symbolen måste ha en förälder vald"
+msgstr "Härledd symbolen måste ha en vald överordnad symbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 msgid "Delete extra units from symbol?"
@@ -9576,11 +9658,11 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"Om du ställer in detta alternativ visas symbolen i fråga i\n"
-"dialogrutan \"lägg till kraftport\". Det låser värdetexten för att skydda "
+"Om du ställer in detta alternativ visas symbolen i fråga i dialogrutan \n"
+"\"lägg till strömförsörjningsport\". Det låser värdetexten för att skydda "
 "den\n"
-"från redigering i Eeschema. Symbolen ingår inte i\n"
-"BOM och kan inte tilldelas ett fotavtryck."
+"från redigering i kretsschemaredigeraren. Symbolen ingår inte i\n"
+"komponentlistan och kan inte tilldelas ett fotavtryck."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:191
 msgid "Number of Units:"
@@ -11335,7 +11417,7 @@ msgid ""
 msgstr ""
 "Det här är användbart för att lägga till symboler kopplade till fotavtryck "
 "på mönsterkortet som man inte vill få\n"
-" med i komponentlistan för bestyckning (BOM), till exempel referenspunkter "
+"med i komponentlistan för bestyckning (BOM), till exempel referenspunkter "
 "(siktmärken) och logotyper"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:204
@@ -12791,7 +12873,6 @@ msgid "Show Name"
 msgstr "Visa namn"
 
 #: eeschema/fields_grid_table.cpp:352
-#, fuzzy
 msgid "Allow Autoplacement"
 msgstr "Tillåt automatisk placering"
 
@@ -13963,7 +14044,7 @@ msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Ellips som ej stöds importerades inte vid (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1904
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
@@ -14515,7 +14596,7 @@ msgstr "Hierarkiskt arkstift %s"
 
 #: eeschema/sch_symbol.cpp:1295
 msgid "Excluded from BOM"
-msgstr "Uteslut från materiallista (BOM)"
+msgstr "Uteslut från komponentlistan"
 
 #: eeschema/sch_symbol.cpp:1300
 msgid "Excluded from board"
@@ -17571,7 +17652,7 @@ msgstr "Exportera fil som innehåller nätlista i ett av flera format"
 
 #: eeschema/tools/ee_actions.cpp:676
 msgid "Generate BOM..."
-msgstr "Skapa stycklista ..."
+msgstr "Skapa komponentlista..."
 
 #: eeschema/tools/ee_actions.cpp:676
 msgid "Generate a bill of materials for the current schematic"
@@ -19429,7 +19510,6 @@ msgstr "Misslyckades med utmatning av data"
 
 #: kicad/cli/command_export_pcb_base.cpp:35
 #: kicad/cli/command_export_pcb_step.cpp:87
-#, fuzzy
 msgid "Output file name"
 msgstr "Filnamn för utmatning"
 
@@ -19710,7 +19790,7 @@ msgstr ""
 
 #: kicad/cli/command_export_sch_bom.cpp:36
 msgid "Bom output format, valid options: xml"
-msgstr "Materiallistans utmatningsformat; giltigt alternativ: xml"
+msgstr "Komponentlistans utmatningsformat; giltigt alternativ: xml"
 
 #: kicad/cli/command_export_sch_bom.cpp:50
 #: kicad/cli/command_export_sch_netlist.cpp:50
@@ -19739,7 +19819,7 @@ msgstr "Undvik att ställa in en bakgrundsfärg (oavsett tema)"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
-msgstr ""
+msgstr "Tvingar att spara om fotavtrycksbiblioteket oberoende av version"
 
 #: kicad/cli/command_fp_upgrade.cpp:51
 msgid "Footprint path does not exist or is not accessible\n"
@@ -19747,7 +19827,7 @@ msgstr "Fotavtryckets sökväg existerar inte eller är inte tillgänglig\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
-msgstr ""
+msgstr "Tvingar symbolbiblioteket att sparas om oberoende av version"
 
 #: kicad/cli/command_sym_upgrade.cpp:51
 msgid "Symbol file does not exist or is not accessible\n"
@@ -23808,7 +23888,8 @@ msgstr "Inte angiven"
 #: pcbnew/build_BOM_from_board.cpp:79
 msgid "Cannot export BOM: there are no footprints on the PCB."
 msgstr ""
-"Det går inte att exportera BOM: det finns inga fotavtryck på kretskortet."
+"Det går inte att exportera komponentlista: det finns inga fotavtryck på "
+"mönsterkortet."
 
 #: pcbnew/build_BOM_from_board.cpp:89
 msgid "Save Bill of Materials"
@@ -26007,7 +26088,7 @@ msgstr "Ignorera komponenter som ej monteras"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:111
 msgid "Do not show components not in BOM and not in place file"
 msgstr ""
-"Visa inte komponenter som inte är med i materiallistan ocn inte är med i "
+"Visa inte komponenter som inte är med i komponentlistan och inte är med i "
 "placeringsfilen"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
@@ -26458,7 +26539,7 @@ msgstr "Uteslut från positionsfiler"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:207
 #: pcbnew/footprint.cpp:2892
 msgid "Exclude from BOM"
-msgstr "Uteslut från BOM"
+msgstr "Uteslut från komponentlistan"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
@@ -26565,7 +26646,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Relativ marginal för lodpasta:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -28577,7 +28658,6 @@ msgid "Pad shape"
 msgstr "Lödytans form"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:712
-#, fuzzy
 msgid "Pad convex hull"
 msgstr "Lödyta konvex form"
 
@@ -33351,7 +33431,7 @@ msgstr "exkludera från pos-filer"
 
 #: pcbnew/footprint.cpp:1056
 msgid "exclude from BOM"
-msgstr "exkludera från BOM"
+msgstr "exkludera från komponentlistan"
 
 #: pcbnew/footprint.cpp:1058
 msgid "Status: "
@@ -34313,47 +34393,42 @@ msgstr "Uppdaterade %s egenskaper."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:372
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Lägg till %s 'exkludera från BOM' tillverkningsattribut."
+msgstr "Lägg till tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:377
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Ta bort %s 'exkludera från BOM' tillverkningsattribut."
+msgstr "Ta bort tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:388
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Lade till %s 'exkludera från BOM' tillverkningsattribut."
+msgstr "Lade till tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:394
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "Tog bort %s 'exkludera från BOM' tillverkningsattribut."
+msgstr "Tog bort tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:412
 #, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr ""
-"Lägg till tillverkningsattribut 'exkludera från materiallista (BOM)' för "
-"'%s'."
+msgstr "Lägg till tillverkningsattribut 'exkludera från positionsfil' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:417
 #, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "Ta bort tillverkningsattribut 'exkludera från BOM' för '%s'."
+msgstr "Ta bort tillverkningsattribut 'exkludera från positionsfil' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
 #, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr ""
-"Lade till tillverkningsattribut 'exkludera från materiallista (BOM)' för "
-"'%s'."
+msgstr "Lade till tillverkningsattribut 'exkludera från positionsfil' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:434
 #, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr ""
-"Tog bort tillverkningsattribut 'exkludera från materiallista (BOM)' för '%s'."
+msgstr "Tog bort tillverkningsattribut 'exkludera från positionsfil' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:510
 #, c-format
@@ -38764,7 +38839,7 @@ msgstr "Skapa IPC-D-356 nätlistefil"
 
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "BOM..."
-msgstr "BOM ..."
+msgstr "Komponentlista..."
 
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "Create bill of materials from board"
@@ -39457,16 +39532,15 @@ msgid "Remove items from the selection by type"
 msgstr "Avmarkera objekt efter typ"
 
 #: pcbnew/tools/pcb_actions.cpp:1374
-#, fuzzy
 msgid "Draft Fill Selected Zone(s)"
-msgstr "Uppdatera valda zoners kopparfyllning"
+msgstr "Preliminär fyllning av vald(a) kopparzon(er)"
 
 #: pcbnew/tools/pcb_actions.cpp:1375
-#, fuzzy
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
-msgstr "Uppdatera valda zoners kopparfyllning"
+msgstr ""
+"Uppdatera valda zoners kopparfyllning utan att ta hänsyn till andra zoner"
 
 #: pcbnew/tools/pcb_actions.cpp:1381 pcbnew/tools/zone_filler_tool.cpp:161
 msgid "Fill All Zones"
@@ -40023,7 +40097,6 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Visa origo (ankare) för fotavtryck och text som ett kors"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Locked Item Shadow"
 msgstr "Låsta objekts skuggning"
 
