@@ -252,7 +252,10 @@ private:
 
             std::sort( queue.begin(), queue.end(), []( const Vertex* a, const Vertex* b )
             {
-                return a->z < b->z;
+                return a->z < b->z || ( a->z == b->z
+                            && ( ( a->x < b->x )
+                              || ( a->y < b->y )
+                              || ( a->i < b->i ) ) );
             } );
 
             Vertex* prev_elem = nullptr;
@@ -309,39 +312,15 @@ private:
         return x | ( y << 1 );
     }
 
-    /**
-     * Checks to see if there is a "substantial" protrusion in each polygon produced by the cut from
-     * aA to aB.  Substantial in this case means that the polygon bulges out to a wider cross-section
-     * than the distance from aA to aB
-     * @param aA Starting point in the polygon
-     * @param aB Ending point in the polygon
-     * @return True if the two polygons are both "substantial"
-     */
-    bool isSubstantial( Vertex* aA, Vertex* aB ) const
+    constexpr bool same_point( const Vertex* aA, const Vertex* aB ) const
     {
-        // `directions` is a bitfield where
-        // bit 0 = pos y
-        // bit 1 = neg y
-        // bit 2 = pos x
-        // bit 3 = neg x
-        // So, once directions = 15, we have all directions
-        int directions = 0;
+        return aA && aB && aA->x == aB->x && aA->y == aB->y;
+    }
 
-        // This is a failsafe in case of invalid lists.  Never check
-        // more than the total number of points in m_vertices
-        size_t checked = 0;
-        size_t total_pts = m_vertices.size();
-
-        Vertex* p0 = aA;
-        Vertex* p;
-        Vertex* nz = p0->nextZ;
-        Vertex* pz = p0->prevZ;
-
-        auto same_point =
-                []( const Vertex* a, const Vertex* b ) -> bool
-                {
-                    return a && b && a->x == b->x && a->y == b->y;
-                };
+    Vertex* getNextOutlineVertex( const Vertex* aPt ) const
+    {
+        Vertex* nz = aPt->nextZ;
+        Vertex* pz = aPt->prevZ;
 
         // If we hit a fracture point, we want to continue around the
         // edge we are working on and not switch to the pair edge
@@ -350,22 +329,76 @@ private:
         // a new fracture point, then we know that we are proceeding
         // in the wrong direction from the fracture and should
         // fall through to the next point
-        if( same_point( p0, nz )
+        if( same_point( aPt, nz )
                 && !( same_point( nz->next, nz->next->prevZ ) || same_point( nz->next, nz->next->nextZ ) ) )
         {
-            p = nz->next;
+            return nz->next;
         }
-        else if( same_point( p0, pz )
+        else if( same_point( aPt, pz )
                 && !( same_point( pz->next, pz->next->prevZ ) || same_point( pz->next, pz->next->nextZ ) ) )
         {
-            p = pz->next;
-        }
-        else
-        {
-            p = p0->next;
+            return pz->next;
         }
 
-        while( p0 != aB && checked < total_pts && directions != 0b1111 )
+        return aPt->next;
+    }
+
+    Vertex* getPrevOutlineVertex( const Vertex* aPt ) const
+    {
+        Vertex* nz = aPt->nextZ;
+        Vertex* pz = aPt->prevZ;
+
+        // If we hit a fracture point, we want to continue around the
+        // edge we are working on and not switch to the pair edge
+        // However, this will depend on which direction the initial
+        // fracture hit is.  If we find that we skip directly to
+        // a new fracture point, then we know that we are proceeding
+        // in the wrong direction from the fracture and should
+        // fall through to the next point
+        if( same_point( aPt, nz )
+                && !( same_point( nz->prev, nz->prev->nextZ ) || same_point( nz->prev, nz->prev->prevZ ) ) )
+        {
+            return nz->prev;
+        }
+        else if( same_point( aPt, pz )
+                && !( same_point( pz->prev, pz->prev->nextZ ) || same_point( pz->prev, pz->prev->prevZ ) ) )
+        {
+            return pz->prev;
+        }
+
+        return aPt->prev;
+
+    }
+
+    /**
+     * Checks to see if there is a "substantial" protrusion in each polygon produced by the cut from
+     * aA to aB.  Substantial in this case means that the polygon bulges out to a wider cross-section
+     * than the distance from aA to aB
+     * @param aA Starting point in the polygon
+     * @param aB Ending point in the polygon
+     * @return True if the two polygons are both "substantial"
+     */
+    bool isSubstantial( const Vertex* aA, const Vertex* aB ) const
+    {
+        // `directions` is a bitfield where
+        // bit 0 = pos y
+        // bit 1 = neg y
+        // bit 2 = pos x
+        // bit 3 = neg x
+        // So, once directions = 15, we have all directions
+        int directions = 0;
+        constexpr int all_dirs = 0b1111;
+
+        // This is a failsafe in case of invalid lists.  Never check
+        // more than the total number of points in m_vertices
+        size_t checked = 0;
+        size_t total_pts = m_vertices.size();
+
+        const Vertex* p0 = aA;
+        const Vertex* p = getNextOutlineVertex( p0 );
+
+
+        while( !same_point( p0, aB ) && checked < total_pts && directions != all_dirs )
         {
             double diff_x = std::abs( p->x - p0->x );
             double diff_y = std::abs( p->y - p0->y );
@@ -396,32 +429,16 @@ private:
 
         wxCHECK_MSG( checked < total_pts, false, wxT( "Invalid polygon detected.  Missing points to check" ) );
 
-        if( directions != 15 )
+        if( directions != all_dirs )
             return false;
 
         p0 = aA;
-        nz = p0->nextZ;
-        pz = p0->prevZ;
-
-        if( nz && same_point( p0, nz )
-                && !( same_point( nz->prev, nz->prev->nextZ ) || same_point( nz->prev, nz->prev->prevZ ) ) )
-        {
-            p = nz->prev;
-        }
-        else if( pz && same_point( p0, pz )
-                && !( same_point( pz->prev, pz->prev->nextZ ) || same_point( pz->prev, pz->prev->prevZ ) ) )
-        {
-            p = pz->prev;
-        }
-        else
-        {
-            p = p0->prev;
-        }
+        p = getPrevOutlineVertex( p0 );
 
         directions = 0;
         checked = 0;
 
-        while( p0 != aB && checked < total_pts && directions != 0b1111 )
+        while( !same_point( p0, aB ) && checked < total_pts && directions != all_dirs )
         {
             double diff_x = std::abs( p->x - p0->x );
             double diff_y = std::abs( p->y - p0->y );
@@ -452,7 +469,7 @@ private:
 
         wxCHECK_MSG( checked < total_pts, false, wxT( "Invalid polygon detected.  Missing points to check" ) );
 
-        return ( directions == 15 );
+        return ( directions == all_dirs );
     }
 
     /**
@@ -564,10 +581,13 @@ private:
      */
     bool locallyInside( const Vertex* a, const Vertex* b ) const
     {
-        if( area( a->prev, a, a->next ) < 0 )
-            return area( a, b, a->next ) >= 0 && area( a, a->prev, b ) >= 0;
+        const Vertex* an = getNextOutlineVertex( a );
+        const Vertex* ap = getPrevOutlineVertex( a );
+
+        if( area( ap, a, an ) < 0 )
+            return area( a, b, an ) >= 0 && area( a, ap, b ) >= 0;
         else
-            return area( a, b, a->prev ) < 0 || area( a, a->next, b ) < 0;
+            return area( a, b, ap ) < 0 || area( a, an, b ) < 0;
     }
 
     /**
