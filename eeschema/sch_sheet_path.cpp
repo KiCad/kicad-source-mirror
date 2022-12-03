@@ -26,6 +26,7 @@
 #include <sch_screen.h>
 #include <sch_item.h>
 #include <sch_marker.h>
+#include <sch_label.h>
 #include <sch_reference_list.h>
 #include <symbol_library.h>
 #include <sch_sheet_path.h>
@@ -323,22 +324,33 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
 
 void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 {
-    std::vector<SCH_ITEM*> symbols;
+    std::vector<SCH_ITEM*> items;
 
-    std::copy_if( LastScreen()->Items().begin(),
-                  LastScreen()->Items().end(),
-                  std::back_inserter( symbols ),
+    std::copy_if( LastScreen()->Items().begin(), LastScreen()->Items().end(),
+                  std::back_inserter( items ),
             []( SCH_ITEM* aItem )
             {
-                return ( aItem->Type() == SCH_SYMBOL_T );
+                return ( aItem->Type() == SCH_SYMBOL_T || aItem->Type() == SCH_GLOBAL_LABEL_T );
             } );
 
-    for( SCH_ITEM* item : symbols )
+    for( SCH_ITEM* item : items )
     {
-        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-        symbol->GetField( REFERENCE_FIELD )->SetText( symbol->GetRef( this ) );
-        symbol->UpdateUnit( symbol->GetUnitSelection( this ) );
-        LastScreen()->Update( item );
+        if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            symbol->GetField( REFERENCE_FIELD )->SetText( symbol->GetRef( this ) );
+            symbol->UpdateUnit( symbol->GetUnitSelection( this ) );
+            LastScreen()->Update( item );
+        }
+        else if( item->Type() == SCH_GLOBAL_LABEL_T )
+        {
+            SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
+            SCH_FIELD&       intersheetRefs = label->GetFields()[0];
+
+            intersheetRefs.SetVisible( label->Schematic()->Settings().m_IntersheetRefsShow );
+            LastScreen()->Update( &intersheetRefs );
+        }
     }
 }
 
