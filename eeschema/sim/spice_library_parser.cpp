@@ -22,12 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <confirm.h>
+
 #include <sim/spice_library_parser.h>
 #include <sim/sim_library_spice.h>
 #include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>
 #include <ki_exception.h>
-#include <confirm.h>
 
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
