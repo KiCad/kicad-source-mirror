@@ -58,9 +58,9 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
         m_dataType( EDA_DATA_TYPE::DISTANCE ),
         m_precision( 0 ),
         m_eval( aParent->GetUserUnits() ),
+        m_unitsInValue( false ),
         m_originTransforms( aParent->GetOriginTransforms() ),
-        m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD ),
-        m_unitsInValue( false )
+        m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
     init();
     m_allowEval = allowEval && ( !m_valueCtrl || dynamic_cast<wxTextEntry*>( m_valueCtrl ) );

@@ -1392,6 +1392,8 @@ static struct ZONE_DESC
                 {
                     if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
                         return !zone->GetIsRuleArea() && IsCopperLayer( zone->GetFirstLayer() );
+
+                    return false;
                 };
         
         auto layer = new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),

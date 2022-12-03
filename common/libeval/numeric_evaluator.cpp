@@ -336,6 +336,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             case Unit::Mil:  retval.value.dValue = 25.4 / 1000.0; break;
             case Unit::MM:   retval.value.dValue = 1.0;           break;
             case Unit::CM:   retval.value.dValue = 10.0;          break;
+            default:
             case Unit::Invalid:                                   break;
             }
         }
@@ -347,6 +348,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             case Unit::Mil:  retval.value.dValue = 1.0 / 1000.0; break;
             case Unit::MM:   retval.value.dValue = 1.0 / 25.4;   break;
             case Unit::CM:   retval.value.dValue = 1.0 / 2.54;   break;
+            default:
             case Unit::Invalid:                                  break;
             }
         }
@@ -358,6 +360,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             case Unit::Mil:  retval.value.dValue = 1.0;           break;
             case Unit::MM:   retval.value.dValue = 1000.0 / 25.4; break;
             case Unit::CM:   retval.value.dValue = 1000.0 / 2.54; break;
+            default:
             case Unit::Invalid:                                   break;
             }
         }
