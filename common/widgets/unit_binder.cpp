@@ -26,8 +26,6 @@
 #include <wx/clipbrd.h>
 #include <wx/stattext.h>
 #include <wx/textentry.h>
-#include <limits>
-#include <base_units.h>
 #include <eda_units.h>
 #include <eda_draw_frame.h>
 #include <confirm.h>
@@ -40,30 +38,30 @@ wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
 
 UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindow* aValueCtrl,
                           wxStaticText* aUnitLabel, bool allowEval, bool aBindFrameEvents ) :
-        UNIT_BINDER( aParent, aParent->GetIuScale(), aLabel, aValueCtrl, aUnitLabel, allowEval,
-                     aBindFrameEvents )
+        UNIT_BINDER( aParent, aParent, aLabel, aValueCtrl, aUnitLabel, allowEval, aBindFrameEvents )
 {
 }
 
-UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
-                          wxStaticText* aLabel, wxWindow* aValueCtrl,
-                          wxStaticText* aUnitLabel, bool allowEval, bool aBindFocusEvent ) :
-        m_frame( aParent ),
+UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource,
+                          wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
+                          bool aAllowEval, bool aBindFocusEvent ) :
+        m_unitsProvider( aUnitsProvider ),
+        m_eventSource( aEventSource ),
         m_bindFocusEvent( aBindFocusEvent ),
         m_label( aLabel ),
         m_valueCtrl( aValueCtrl ),
         m_unitLabel( aUnitLabel ),
-        m_iuScale( aIUScale ),
+        m_iuScale( m_unitsProvider->GetIuScale() ),
         m_negativeZero( false ),
         m_dataType( EDA_DATA_TYPE::DISTANCE ),
         m_precision( 0 ),
-        m_eval( aParent->GetUserUnits() ),
+        m_eval( m_unitsProvider->GetUserUnits() ),
         m_unitsInValue( false ),
-        m_originTransforms( aParent->GetOriginTransforms() ),
+        m_originTransforms( aUnitsProvider->GetOriginTransforms() ),
         m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
     init();
-    m_allowEval = allowEval && ( !m_valueCtrl || dynamic_cast<wxTextEntry*>( m_valueCtrl ) );
+    m_allowEval = aAllowEval && ( !m_valueCtrl || dynamic_cast<wxTextEntry*>( m_valueCtrl ) );
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
     if( textEntry )
@@ -84,8 +82,8 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
                               nullptr, this );
         m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
                               nullptr, this );
-        m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ), nullptr,
-                              this );
+        m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ),
+                              nullptr, this );
     }
 
     if( m_bindFocusEvent )
@@ -94,21 +92,33 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
                  this );
     }
 
-    m_frame->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
-                      nullptr, this );
+    if( m_eventSource )
+    {
+        m_eventSource->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+                                nullptr, this );
+    }
 }
 
 
 UNIT_BINDER::~UNIT_BINDER()
 {
-    m_frame->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
-                         nullptr, this );
+    if( m_bindFocusEvent )
+    {
+        Disconnect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr,
+                    this );
+    }
+
+    if( m_eventSource )
+    {
+        m_eventSource->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+                                   nullptr, this );
+    }
 }
 
 
 void UNIT_BINDER::init()
 {
-    m_units     = m_frame->GetUserUnits();
+    m_units     = m_unitsProvider->GetUserUnits();
     m_needsEval = false;
     m_selStart  = 0;
     m_selEnd    = 0;
@@ -149,7 +159,7 @@ void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
     {
         int temp = (int) GetValue();
 
-        SetUnits( m_frame->GetUserUnits() );
+        SetUnits( m_unitsProvider->GetUserUnits() );
 
         SetValue( temp );
     }

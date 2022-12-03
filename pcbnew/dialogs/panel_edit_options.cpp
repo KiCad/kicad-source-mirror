@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,11 +30,11 @@
 #include <panel_edit_options.h>
 
 
-PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, EDA_BASE_FRAME* aUnitsProvider,
-                                        bool isFootprintEditor ) :
+PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider,
+                                        wxWindow* aEventSource, bool isFootprintEditor ) :
         PANEL_EDIT_OPTIONS_BASE( aParent ),
         m_isFootprintEditor( isFootprintEditor ),
-        m_rotationAngle( aUnitsProvider, pcbIUScale, m_rotationAngleLabel, m_rotationAngleCtrl,
+        m_rotationAngle( aUnitsProvider, aEventSource, m_rotationAngleLabel, m_rotationAngleCtrl,
                          m_rotationAngleUnits )
 {
     m_magneticPads->Show( m_isFootprintEditor );

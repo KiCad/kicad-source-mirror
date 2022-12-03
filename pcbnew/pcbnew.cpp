@@ -69,12 +69,13 @@ extern "C" PyObject* PyInit__pcbnew( void );
 
 namespace PCB {
 
-static struct IFACE : public KIFACE_BASE
+static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 {
     // Of course all are virtual overloads, implementations of the KIFACE.
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
-            KIFACE_BASE( aName, aType )
+            KIFACE_BASE( aName, aType ),
+            UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MILLIMETRES )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
@@ -146,35 +147,35 @@ static struct IFACE : public KIFACE_BASE
         }
 
         case PANEL_FP_EDIT_OPTIONS:
+        {
+            EDA_BASE_FRAME* frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_PCB_EDITOR, false );
+
+            if( frame )
+                return new PANEL_EDIT_OPTIONS( aParent, frame, frame, true );
+            else
+                return new PANEL_EDIT_OPTIONS( aParent, this, nullptr, true );
+        }
+
         case PANEL_FP_DEFAULT_VALUES:
         {
-            EDA_BASE_FRAME* unitsProvider = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
+            EDA_BASE_FRAME* frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
 
-            if( !unitsProvider )
-                unitsProvider = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
+            if( !frame )
+                frame = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
 
-            if( !unitsProvider )
-                unitsProvider = aKiway->Player( FRAME_PCB_EDITOR, false );
+            if( !frame )
+                frame = aKiway->Player( FRAME_PCB_EDITOR, false );
 
-            if( !unitsProvider )
-            {
-                // If we can't find a pcb-type frame we'll have to make do with whatever FRAME
-                // we _can_ find.
-                for( unsigned i = 0; !unitsProvider && i < KIWAY_PLAYER_COUNT;  ++i )
-                    unitsProvider = aKiway->Player( (FRAME_T) i, false );
-            }
-
-            if( !unitsProvider )
-            {
-                wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
-                unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
-                wxASSERT( unitsProvider );
-            }
-
-            if( aClassId == PANEL_FP_EDIT_OPTIONS )
-                return new PANEL_EDIT_OPTIONS( aParent, unitsProvider, true );
+            if( frame )
+                return new PANEL_FP_EDITOR_DEFAULTS( aParent, frame );
             else
-                return new PANEL_FP_EDITOR_DEFAULTS( aParent, unitsProvider );
+                return new PANEL_FP_EDITOR_DEFAULTS( aParent, this );
         }
 
         case PANEL_FP_COLORS:
@@ -190,29 +191,18 @@ static struct IFACE : public KIFACE_BASE
 
         case PANEL_PCB_EDIT_OPTIONS:
         {
-            EDA_BASE_FRAME* unitsProvider = aKiway->Player( FRAME_PCB_EDITOR, false );
+            EDA_BASE_FRAME* frame = aKiway->Player( FRAME_PCB_EDITOR, false );
 
-            if( !unitsProvider )
-                unitsProvider = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
+            if( !frame )
+                frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
 
-            if( !unitsProvider )
-                unitsProvider = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
+            if( !frame )
+                frame = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
 
-            if( !unitsProvider )
-            {
-                // If we can't find an eeschema frame we'll have to make do with the units
-                // defined in whatever FRAME we _can_ find.
-                for( unsigned i = 0; !unitsProvider && i < KIWAY_PLAYER_COUNT;  ++i )
-                    unitsProvider = aKiway->Player( (FRAME_T) i, false );
-            }
-
-            if( !unitsProvider )
-            {
-                wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
-                unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
-            }
-
-            return new PANEL_EDIT_OPTIONS( aParent, unitsProvider, false );
+            if( frame )
+                return new PANEL_EDIT_OPTIONS( aParent, frame, frame, false );
+            else
+                return new PANEL_EDIT_OPTIONS( aParent, this, nullptr, false );
         }
 
         case PANEL_PCB_COLORS:

@@ -127,7 +127,10 @@ public:
     /**
      * Return a reference to the default ORIGIN_TRANSFORMS object
      */
-    virtual ORIGIN_TRANSFORMS& GetOriginTransforms() { return m_originTransforms; }
+    ORIGIN_TRANSFORMS& GetOriginTransforms() override
+    {
+        return m_originTransforms;
+    }
 
 
     SETTINGS_MANAGER* GetSettingsManager() const { return m_settingsManager; }

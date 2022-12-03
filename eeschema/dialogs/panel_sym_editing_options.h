@@ -29,7 +29,8 @@ class EDA_DRAW_FRAME;
 class PANEL_SYM_EDITING_OPTIONS : public PANEL_SYM_EDITING_OPTIONS_BASE
 {
 public:
-    PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow, EDA_BASE_FRAME* aUnitsProvider );
+    PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow, UNITS_PROVIDER* aUnitsProvider,
+                               wxWindow* aEventSource );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

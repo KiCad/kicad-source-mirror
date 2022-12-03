@@ -51,7 +51,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
         m_boardAdapter(),
         m_currentCamera( m_trackBallCamera ),
         m_trackBallCamera( 2 * RANGE_SCALE_3D ),
-        m_boardThickness( aFrame, aFrame->GetIuScale(), nullptr, m_boardThicknessCtrl, m_boardThicknessUnits )
+        m_boardThickness( aFrame, nullptr, m_boardThicknessCtrl, m_boardThicknessUnits )
 {
     m_userUnits = aFrame->GetUserUnits();
 

@@ -27,7 +27,7 @@
 #define __UNIT_BINDER_H_
 
 #include <base_units.h>
-#include <origin_transforms.h>
+#include <units_provider.h>
 #include <libeval/numeric_evaluator.h>
 #include <wx/event.h>
 
@@ -47,18 +47,19 @@ public:
      * @param aLabel is the static text used to label the text input widget (note: the label
      *               text, trimmed of its colon, will also be used in error messages)
      * @param aValueCtrl is the control used to edit or display the given value (wxTextCtrl,
-     *               wxComboBox, wxStaticText, etc.).
-     * @param aUnitLabel is the units label displayed after the text input widget
-     * Can be nullptr.
+     *                   wxComboBox, wxStaticText, etc.).
+     * @param aUnitLabel (optional) is the units label displayed after the text input widget
      * @param aAllowEval indicates \a aTextInput's content should be eval'ed before storing
+     * @param aBindFocusEvent indicates the control should respond to DELAY_FOCUS from the
+     *                        parent frame
      */
     UNIT_BINDER( EDA_DRAW_FRAME* aParent,
                  wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
                  bool aAllowEval = true, bool aBindFocusEvent = true );
 
-    UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale, wxStaticText* aLabel,
-                 wxWindow* aValueCtrl, wxStaticText* aUnitLabel, bool aAllowEval = true,
-                 bool aBindFocusEvent = true );
+    UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource,
+                 wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
+                 bool aAllowEval = true, bool aBindFocusEvent = true );
 
     virtual ~UNIT_BINDER() override;
 
@@ -220,34 +221,36 @@ protected:
      */
     double setPrecision( double aValue, bool aValueUsesUserUnits );
 
-    EDA_BASE_FRAME*   m_frame;
-    bool              m_bindFocusEvent;
+protected:
+    UNITS_PROVIDER*     m_unitsProvider;
+    wxWindow*           m_eventSource;
+    bool                m_bindFocusEvent;
 
     ///< The bound widgets
-    wxStaticText*     m_label;
-    wxWindow*         m_valueCtrl;
-    wxStaticText*     m_unitLabel;      ///< Can be nullptr
+    wxStaticText*       m_label;
+    wxWindow*           m_valueCtrl;
+    wxStaticText*       m_unitLabel;      ///< Can be nullptr
 
     ///< Currently used units.
     const EDA_IU_SCALE& m_iuScale;
-    EDA_UNITS         m_units;
-    bool              m_negativeZero;   ///< Indicates "-0" should be displayed for 0.
-    EDA_DATA_TYPE     m_dataType;
-    int               m_precision;      ///< 0 to 6
+    EDA_UNITS           m_units;
+    bool                m_negativeZero;   ///< Indicates "-0" should be displayed for 0.
+    EDA_DATA_TYPE       m_dataType;
+    int                 m_precision;      ///< 0 to 6
 
-    wxString          m_errorMessage;
+    wxString            m_errorMessage;
 
-    NUMERIC_EVALUATOR m_eval;
-    bool              m_allowEval;
-    bool              m_needsEval;
+    NUMERIC_EVALUATOR   m_eval;
+    bool                m_allowEval;
+    bool                m_needsEval;
 
-    long              m_selStart;       ///< Selection start and end of the original text
-    long              m_selEnd;
+    long                m_selStart;       ///< Selection start and end of the original text
+    long                m_selEnd;
 
-    bool              m_unitsInValue;   ///< Units label should be included in value text
+    bool                m_unitsInValue;   ///< Units label should be included in value text
 
     /// A reference to an ORIGIN_TRANSFORMS object
-    ORIGIN_TRANSFORMS&               m_originTransforms;
+    ORIGIN_TRANSFORMS&  m_originTransforms;
 
     /// Type of coordinate for display origin transforms
     ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;

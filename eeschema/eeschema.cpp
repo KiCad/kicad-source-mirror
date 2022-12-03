@@ -123,12 +123,13 @@ bool generateSchematicNetlist( const wxString& aFilename, wxString& aNetlist )
 }
 
 
-static struct IFACE : public KIFACE_BASE
+static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 {
     // Of course all are virtual overloads, implementations of the KIFACE.
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
-            KIFACE_BASE( aName, aType )
+            KIFACE_BASE( aName, aType ),
+            UNITS_PROVIDER( schIUScale, EDA_UNITS::MILLIMETRES )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
@@ -191,29 +192,18 @@ static struct IFACE : public KIFACE_BASE
 
         case PANEL_SYM_EDIT_OPTIONS:
         {
-            EDA_BASE_FRAME* unitsProvider = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
+            EDA_BASE_FRAME* frame = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
 
-            if( !unitsProvider )
-                unitsProvider = aKiway->Player( FRAME_SCH_VIEWER, false );
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH_VIEWER, false );
 
-            if( !unitsProvider )
-                unitsProvider = aKiway->Player( FRAME_SCH, false );
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH, false );
 
-            if( !unitsProvider )
-            {
-                // If we can't find an eeschema unitsProvider we'll have to make do with the units
-                // defined in whatever FRAME we _can_ find.
-                for( unsigned i = 0; !unitsProvider && i < KIWAY_PLAYER_COUNT; ++i )
-                    unitsProvider = aKiway->Player( (FRAME_T) i, false );
-            }
-
-            if( !unitsProvider )
-            {
-                wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
-                unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
-            }
-
-            return new PANEL_SYM_EDITING_OPTIONS( aParent, unitsProvider );
+            if( frame )
+                return new PANEL_SYM_EDITING_OPTIONS( aParent, frame, frame );
+            else
+                return new PANEL_SYM_EDITING_OPTIONS( aParent, this, nullptr );
         }
 
         case PANEL_SYM_COLORS:
@@ -229,29 +219,18 @@ static struct IFACE : public KIFACE_BASE
 
         case PANEL_SCH_EDIT_OPTIONS:
         {
-            EDA_BASE_FRAME* unitsProvider = aKiway->Player( FRAME_SCH, false );
+            EDA_BASE_FRAME* frame = aKiway->Player( FRAME_SCH, false );
 
-            if( !unitsProvider )
-                unitsProvider = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
 
-            if( !unitsProvider )
-                unitsProvider = aKiway->Player( FRAME_SCH_VIEWER, false );
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH_VIEWER, false );
 
-            if( !unitsProvider )
-            {
-                // If we can't find an eeschema frame we'll have to make do with the units
-                // defined in whatever FRAME we _can_ find.
-                for( unsigned i = 0; !unitsProvider && i < KIWAY_PLAYER_COUNT;  ++i )
-                    unitsProvider = aKiway->Player( (FRAME_T) i, false );
-            }
-
-            if( !unitsProvider )
-            {
-                wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
-                unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
-            }
-
-            return new PANEL_EESCHEMA_EDITING_OPTIONS( aParent, unitsProvider );
+            if( frame )
+                return new PANEL_EESCHEMA_EDITING_OPTIONS( aParent, frame, frame );
+            else
+                return new PANEL_EESCHEMA_EDITING_OPTIONS( aParent, this, nullptr );
         }
 
         case PANEL_SCH_ANNO_OPTIONS:

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,10 +30,11 @@
 
 
 PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindow,
-                                                                EDA_BASE_FRAME* aUnitsProvider ) :
+                                                                UNITS_PROVIDER* aUnitsProvider,
+                                                                wxWindow* aEventSource ) :
         PANEL_EESCHEMA_EDITING_OPTIONS_BASE( aWindow ),
-        m_hPitch( aUnitsProvider, schIUScale, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits ),
-        m_vPitch( aUnitsProvider, schIUScale, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits )
+        m_hPitch( aUnitsProvider, aEventSource, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits ),
+        m_vPitch( aUnitsProvider, aEventSource, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits )
 {
     // Make the color swatch show "Clear Color" instead
     m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,8 @@ class EDA_BASE_FRAME;
 class PANEL_EDIT_OPTIONS : public PANEL_EDIT_OPTIONS_BASE
 {
 public:
-    PANEL_EDIT_OPTIONS( wxWindow* aParent, EDA_BASE_FRAME* aUnitsProvider, bool isFootprintEditor );
+    PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource,
+                        bool isFootprintEditor );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

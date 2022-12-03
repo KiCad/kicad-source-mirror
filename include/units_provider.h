@@ -25,6 +25,8 @@
 #define  UNITS_PROVIDER_H
 
 #include <eda_units.h>
+#include <origin_transforms.h>
+
 
 class UNITS_PROVIDER
 {
@@ -39,6 +41,13 @@ public:
 
     const EDA_IU_SCALE& GetIuScale() const { return m_iuScale; }
     // No SetIuScale(); scale is invariant
+
+    virtual ORIGIN_TRANSFORMS& GetOriginTransforms()
+    {
+        static ORIGIN_TRANSFORMS identityTransform;
+
+        return identityTransform;
+    }
 
     /**
      * Converts \a aValue in internal units into a united string.
