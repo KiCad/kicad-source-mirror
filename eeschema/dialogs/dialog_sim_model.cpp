@@ -377,12 +377,20 @@ void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
 
     if( curModel().HasPrimaryValue() )
     {
-        m_saveInValueCheckbox->SetLabel( wxString::Format( "Save %s in Value field as \"%s\"",
-                                                           curModel().GetParam( 0 ).info.description,
-                                                           curModel().Serde().GenerateValue() ) );
-    }
+        const SIM_MODEL::PARAM& primary = curModel().GetParam( 0 );
 
-    m_saveInValueCheckbox->Show( curModel().HasPrimaryValue() );
+        m_saveInValueCheckbox->SetLabel( wxString::Format( _( "Save parameter '%s (%s)' in Value "
+                                                              "field" ),
+                                                           primary.info.description,
+                                                           primary.info.name ) );
+        m_saveInValueCheckbox->Enable( true );
+    }
+    else
+    {
+        m_saveInValueCheckbox->SetLabel( _( "Save primary parameter in Value field" ) );
+        m_saveInValueCheckbox->SetValue( false );
+        m_saveInValueCheckbox->Enable( false );
+    }
 }
 
 
@@ -396,6 +404,7 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 
         m_paramGridMgr->SetColumnCount( PARAM_COLUMN::END_ );
 
+        m_paramGridMgr->SetColumnTitle( PARAM_COLUMN::DESCRIPTION, _( "Parameter" ) );
         m_paramGridMgr->SetColumnTitle( PARAM_COLUMN::UNIT, _( "Unit" ) );
         m_paramGridMgr->SetColumnTitle( PARAM_COLUMN::DEFAULT, _( "Default" ) );
         m_paramGridMgr->SetColumnTitle( PARAM_COLUMN::TYPE, _( "Type" ) );
@@ -943,6 +952,32 @@ int DIALOG_SIM_MODEL<T>::getModelPinIndex( const wxString& aModelPinString ) con
     aModelPinString.Mid( 0, length ).ToCLong( &result );
 
     return static_cast<int>( result - 1 );
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onKeyDown( wxKeyEvent& aEvent )
+{
+    // Because wxPropertyGrid has special handling for the tab key, wxPropertyGrid::DedicateKey()
+    // and wxPropertyGrid::AddActionTrigger() don't work for it. So instead we translate it to an
+    // (up or down) arrow key, which has proper handling (select next or previous property) defined
+    // by the aforementioned functions.
+
+    if( aEvent.GetKeyCode() == WXK_TAB )
+    {
+        wxWindow*       focus = FindFocus();
+        wxPropertyGrid* pg = focus ? dynamic_cast<wxPropertyGrid*>( focus->GetParent() ) : nullptr;
+
+        if( pg )
+        {
+            pg->CommitChangesFromEditor();
+
+            aEvent.m_keyCode = aEvent.ShiftDown() ? WXK_UP : WXK_DOWN;
+            aEvent.m_shiftDown = false;
+        }
+    }
+
+    aEvent.Skip();
 }
 
 

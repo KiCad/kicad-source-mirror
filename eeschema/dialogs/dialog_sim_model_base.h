@@ -75,15 +75,16 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxPropertyGridPage* m_paramGrid;
 		wxPanel* m_codePanel;
 		wxStyledTextCtrl* m_codePreview;
+		wxCheckBox* m_saveInValueCheckbox;
 		wxPanel* m_pinAssignmentsPanel;
 		WX_GRID* m_pinAssignmentsGrid;
-		wxCheckBox* m_saveInValueCheckbox;
 		wxCheckBox* m_excludeCheckbox;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onKeyDown( wxKeyEvent& event ) { event.Skip(); }
 		virtual void onRadioButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLibraryPathLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onLibraryPathTextKillFocus( wxFocusEvent& event ) { event.Skip(); }
@@ -111,9 +112,9 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onTypeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onParamGridChanged( wxPropertyGridEvent& event ) { event.Skip(); }
 		virtual void onCodePreviewSetFocus( wxFocusEvent& event ) { event.Skip(); }
+		virtual void onSaveInValueCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridSize( wxSizeEvent& event ) { event.Skip(); }
-		virtual void onSaveInValueCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onExcludeCheckbox( wxCommandEvent& event ) { event.Skip(); }
 
 
