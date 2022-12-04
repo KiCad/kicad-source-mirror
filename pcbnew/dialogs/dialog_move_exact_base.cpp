@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -82,7 +82,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	bBottomSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_polarCoords = new wxCheckBox( this, wxID_ANY, _("Use polar coordinates"), wxDefaultPosition, wxDefaultSize, 0 );
-	bBottomSizer->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
+	bBottomSizer->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );

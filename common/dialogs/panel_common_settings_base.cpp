@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -131,7 +131,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_stIconTheme = new wxStaticText( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Icon theme:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stIconTheme->Wrap( -1 );
-	m_gbUserInterface->Add( m_stIconTheme, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_gbUserInterface->Add( m_stIconTheme, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_rbIconThemeLight = new wxRadioButton( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Light"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbIconThemeLight->SetToolTip( _("Use icons designed for light window backgrounds") );
@@ -225,7 +225,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_cbRememberOpenFiles = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, _("Remember open files for next project launch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRememberOpenFiles->SetValue(true);
-	m_cbRememberOpenFiles->SetToolTip( _("If checked, launching a project will also launch tools such as the schematic and board editors with previously open files") );
+	m_cbRememberOpenFiles->SetToolTip( _("If checked, launching a project will also launch tools such as eeschema and pcbnew with previously open files") );
 
 	sbSizer5->Add( m_cbRememberOpenFiles, 0, wxBOTTOM|wxRIGHT, 5 );
 
