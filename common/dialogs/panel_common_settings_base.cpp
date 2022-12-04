@@ -225,7 +225,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_cbRememberOpenFiles = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, _("Remember open files for next project launch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRememberOpenFiles->SetValue(true);
-	m_cbRememberOpenFiles->SetToolTip( _("If checked, launching a project will also launch tools such as eeschema and pcbnew with previously open files") );
+	m_cbRememberOpenFiles->SetToolTip( _("If checked, launching a project will also launch tools such as the schematic and board editors with previously open files") );
 
 	sbSizer5->Add( m_cbRememberOpenFiles, 0, wxBOTTOM|wxRIGHT, 5 );
 

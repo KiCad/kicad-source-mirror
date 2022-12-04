@@ -175,7 +175,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	sbSizerSymbol->Add( m_AsConvertButt, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_OptionPower = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Define as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptionPower->SetToolTip( _("Setting this option makes the symbol in question appear in the\n\"add power port\" dialog.  It will lock the value text to protect it\nfrom editing in Eeschema.  The symbol will not be included in\nthe BOM and cannot be assigned a footprint.") );
+	m_OptionPower->SetToolTip( _("Setting this option makes the symbol in question appear in the\n\"add power symbol\" dialog.  It will lock the value text to protect it\nfrom editing in the schematic.  The symbol will not be included in\nthe BOM and cannot be assigned a footprint.") );
 
 	sbSizerSymbol->Add( m_OptionPower, 0, wxALL, 5 );
 

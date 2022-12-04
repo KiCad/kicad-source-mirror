@@ -289,10 +289,10 @@ TOOL_ACTION EE_ACTIONS::placeSymbol( "eeschema.InteractiveDrawing.placeSymbol",
         _( "Add Symbol" ), _( "Add a symbol" ),
         BITMAPS::add_component, AF_ACTIVATE );
 
-TOOL_ACTION EE_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort",
+TOOL_ACTION EE_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerSymbol",
         AS_GLOBAL,
         'P', LEGACY_HK_NAME( "Add Power" ),
-        _( "Add Power" ), _( "Add a power port" ),
+        _( "Add Power" ), _( "Add a power symbol" ),
         BITMAPS::add_power, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeNoConnect( "eeschema.InteractiveDrawing.placeNoConnect",
@@ -625,7 +625,7 @@ TOOL_ACTION EE_ACTIONS::assignFootprints( "eeschema.EditorControl.assignFootprin
 TOOL_ACTION EE_ACTIONS::importFPAssignments( "eeschema.EditorControl.importFPAssignments",
         AS_GLOBAL, 0, "",
         _( "Import Footprint Assignments..." ),
-        _( "Import symbol footprint assignments from .cmp file created by Pcbnew" ),
+        _( "Import symbol footprint assignments from .cmp file created by board editor" ),
         BITMAPS::import_footprint_names );
 
 TOOL_ACTION EE_ACTIONS::annotate( "eeschema.EditorControl.annotate",

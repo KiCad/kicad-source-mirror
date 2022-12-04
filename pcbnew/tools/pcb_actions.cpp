@@ -827,7 +827,7 @@ TOOL_ACTION PCB_ACTIONS::showNetInRatsnest( "pcbnew.EditorControl.showNet",
 
 TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
         AS_GLOBAL, 0, "",
-        _( "Switch to Schematic Editor" ), _( "Open schematic in Eeschema" ),
+        _( "Switch to Schematic Editor" ), _( "Open in schematic editor" ),
         BITMAPS::icon_eeschema_24 );
 
 
