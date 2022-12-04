@@ -405,8 +405,9 @@ public:
         blocks blks(first_index, index_after_last, num_blocks ? num_blocks : thread_count);
         if (blks.get_total_size() > 0)
         {
+            F internal_loop = loop;
             for (size_t i = 0; i < blks.get_num_blocks(); ++i)
-                push_task(std::forward<F>(loop), blks.start(i), blks.end(i));
+                push_task(std::forward<F>(internal_loop), blks.start(i), blks.end(i));
         }
     }
 
