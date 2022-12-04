@@ -232,10 +232,11 @@ void SCH_PLOTTER::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
 
         wxString sheetName = m_schematic->CurrentSheet().Last()->GetName();
         wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
+        const PAGE_INFO& actualPage = aScreen->GetPageSettings(); // page size selected in schematic
 
         PlotDrawingSheet( aPlotter, &aScreen->Schematic()->Prj(),
                           m_schematic->RootScreen()->GetTitleBlock(),
-                          aPlotter->PageSettings(),
+                          actualPage,
                           aScreen->Schematic()->GetProperties(),
                           aScreen->GetPageNumber(), aScreen->GetPageCount(), sheetName, sheetPath,
                           aScreen->GetFileName(), color, aScreen->GetVirtualPageNumber() == 1 );
@@ -358,7 +359,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
             if( !plotFileName.IsOk() )
                 return;
 
-            if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aRenderSettings, plotPage,
+            if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aRenderSettings, actualPage,
                                 plot_offset, scale, aPlotSettings ) )
             {
                 if( aReporter )
@@ -561,14 +562,37 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
                                    RENDER_SETTINGS*         aRenderSettings,
                                    const SCH_PLOT_SETTINGS& aPlotSettings )
 {
-    const PAGE_INFO& pageInfo = aScreen->GetPageSettings();
+    PAGE_INFO plotPage;
+    // Adjust page size and scaling requests
+    const PAGE_INFO& actualPage = aScreen->GetPageSettings(); // page size selected in schematic
+
+    switch( aPlotSettings.m_pageSizeSelect )
+    {
+    case PAGE_SIZE_A:
+        plotPage.SetType( wxT( "A" ) );
+        plotPage.SetPortrait( actualPage.IsPortrait() );
+        break;
+
+    case PAGE_SIZE_A4:
+        plotPage.SetType( wxT( "A4" ) );
+        plotPage.SetPortrait( actualPage.IsPortrait() );
+        break;
+
+    case PAGE_SIZE_AUTO:
+    default:
+        plotPage = actualPage;
+        break;
+    }
 
     SVG_PLOTTER* plotter = new SVG_PLOTTER();
     plotter->SetRenderSettings( aRenderSettings );
-    plotter->SetPageSettings( pageInfo );
+    plotter->SetPageSettings( plotPage );
     plotter->SetColorMode( aPlotSettings.m_blackAndWhite ? false : true );
     wxPoint plot_offset;
-    double  scale = 1.0;
+
+    double  scalex = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
+    double  scaley = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
+    double  scale = std::min( scalex, scaley );
 
     // Currently, plot units are in decimil
     plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, scale, false );
@@ -602,7 +626,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
 
         PlotDrawingSheet( plotter, &aScreen->Schematic()->Prj(),
                           m_schematic->RootScreen()->GetTitleBlock(),
-                          pageInfo, aScreen->Schematic()->GetProperties(), aScreen->GetPageNumber(),
+                          actualPage, aScreen->Schematic()->GetProperties(), aScreen->GetPageNumber(),
                           aScreen->GetPageCount(), sheetName, sheetPath, aScreen->GetFileName(),
                           plotter->GetColorMode() ? color : COLOR4D::BLACK,
                           aScreen->GetVirtualPageNumber() == 1 );
@@ -691,7 +715,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
             LOCALE_IO toggle;
 
-            if( plotOneSheetHpgl( plotFileName.GetFullPath(), screen, plotPage, aRenderSettings,
+            if( plotOneSheetHpgl( plotFileName.GetFullPath(), screen, curPage, aRenderSettings,
                                   plotOffset, plot_scale, aPlotSettings ) )
             {
                 if( aReporter )
@@ -803,6 +827,7 @@ bool SCH_PLOTTER::plotOneSheetHpgl( const wxString& aFileName,
     aScreen->Plot( plotter );
 
     plotter->EndPlot();
+
     delete plotter;
 
     return true;
