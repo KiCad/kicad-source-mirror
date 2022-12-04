@@ -417,9 +417,6 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 
     wxInitAllImageHandlers();
 
-    // Without this the wxPropertyGridManager segfaults on Windows.
-    wxPGInitResourceModule();
-
 #ifndef __WINDOWS__
     if( wxString( wxGetenv( "HOME" ) ).IsEmpty() )
     {
