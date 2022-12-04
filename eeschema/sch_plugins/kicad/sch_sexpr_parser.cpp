@@ -3733,10 +3733,6 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
         wxCHECK_MSG( false, nullptr, "Cannot parse " + GetTokenString( CurTok() ) + " as text." );
     }
 
-    // Clear any auto-created fields; we want what's in the file and only what's in the file
-    if( text->Type() != SCH_TEXT_T )
-        static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().clear();
-
     // We'll reset this if we find a fields_autoplaced token
     text->ClearFieldsAutoplaced();
 
