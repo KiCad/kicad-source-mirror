@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-10-21 15:03+0000\n"
+"PO-Revision-Date: 2022-12-07 22:48+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -294,9 +294,9 @@ msgstr "&Preferências"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2728
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Janelas de visualização (Alt+Tab):"
+msgstr "Portas de visualização (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2737
@@ -316,6 +316,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Salve e restaure a orientação e o zoom da exibição.\n"
+"Use %s+Tab para ativar o seletor.\n"
+"Guias sucessivas enquanto mantém %s pressionado percorrerão os visores no "
+"pop-up."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -1235,9 +1239,8 @@ msgid "Open..."
 msgstr "Abrir…"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
-#, fuzzy
 msgid "Load source image"
-msgstr "Mostra as imagens do usuário"
+msgstr "Carrega a imagem da origem"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1245,9 +1248,8 @@ msgid "Quit"
 msgstr "Encerrar"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:229
-#, fuzzy
 msgid "Quit Image Converter"
-msgstr "Conversor de imagem"
+msgstr "Encerra o conversor de imagem"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:570
@@ -1312,19 +1314,16 @@ msgid "Greyscale Picture"
 msgstr "Imagem em escala de cinza"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:30
-#, fuzzy
 msgid "Black && White Picture"
-msgstr "Imagem em &&preto-e-branco"
+msgstr "Imagem em preto e branco"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:38
-#, fuzzy
 msgid "Image Information"
-msgstr "Informação do bitmap"
+msgstr "Informação da imagem"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
-#, fuzzy
 msgid "Image size:"
-msgstr "Tamanho da página:"
+msgstr "Tamanho da imagem:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1339,9 +1338,8 @@ msgid "pixels"
 msgstr "pontos"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
-#, fuzzy
 msgid "Image PPI:"
-msgstr "PPI bitmap:"
+msgstr "Imagem PPI:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
@@ -1356,19 +1354,16 @@ msgid "bits"
 msgstr "bits"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
-#, fuzzy
 msgid "Load Source Image"
-msgstr "Escolher uma imagem"
+msgstr "Carrega uma imagem da origem"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
-#, fuzzy
 msgid "Output Size"
-msgstr "Saída do pino"
+msgstr "Tamanho da saída"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
-msgstr "Travar a relação entre a altura/largura"
+msgstr "Travar a relação entre a altura / largura"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:115
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1398,9 +1393,8 @@ msgid "Options"
 msgstr "Opções"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
-#, fuzzy
 msgid "Black / white threshold:"
-msgstr "Limite do Preto / Branco:"
+msgstr "Limiar entre preto / branco:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid ""
@@ -5446,7 +5440,7 @@ msgstr "Sombra do item bloqueado"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "Sombra de colisão do pedaço"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -5512,9 +5506,9 @@ msgid "Unrecognized function '%s'"
 msgstr "Função desconhecida '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "'%s' inesperado"
+msgstr "Unidades não esperadas para '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -6733,14 +6727,13 @@ msgid "No objects selected"
 msgstr "Nenhum objeto foi selecionado"
 
 #: common/widgets/properties_panel.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Nenhum objeto foi selecionado"
+msgstr "%d objetos selecionados"
 
 #: common/widgets/properties_panel.cpp:238
-#, fuzzy
 msgid "Basic Properties"
-msgstr "%s Propriedades"
+msgstr "Propriedades básicas"
 
 #: common/widgets/unit_binder.cpp:274
 #, c-format
@@ -7905,9 +7898,8 @@ msgid "Generator file name not found."
 msgstr "O nome do gerador do arquivo não foi encontrado."
 
 #: eeschema/dialogs/dialog_bom.cpp:459
-#, fuzzy
 msgid "Bill of Materials Generation Help"
-msgstr "Ajuda da geração da lista de materiais"
+msgstr "Assistência para a geração da lista de materiais"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
@@ -7951,7 +7943,6 @@ msgstr ""
 "Redefina a lista dos scripts do gerador BOM para as configurações padrão"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
 msgstr "Lista de materiais"
 
@@ -8407,9 +8398,8 @@ msgid "Checking conflicts..."
 msgstr "Verificando os conflitos..."
 
 #: eeschema/dialogs/dialog_erc.cpp:488
-#, fuzzy
 msgid "Checking units..."
-msgstr "Verificando os pinos..."
+msgstr "Verificando as unidades..."
 
 #: eeschema/dialogs/dialog_erc.cpp:493
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
@@ -8429,9 +8419,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Verificando as variáveis que não foram resolvidas..."
 
 #: eeschema/dialogs/dialog_erc.cpp:534
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "Verificando as zonas..."
+msgstr "Verificando os modelos SPICE..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
@@ -8992,11 +8981,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Registro do analisador Ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:47
 msgid "Ibis parser"
-msgstr ""
+msgstr "Analisador ibis"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9562,9 +9551,8 @@ msgid "Fields must have a name."
 msgstr "Os campos devem ter um nome."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:274
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "O símbolo com o apelido deve ter uma origem selecionada"
+msgstr "O símbolo derivado deve ter um principal selecionado"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 msgid "Delete extra units from symbol?"
