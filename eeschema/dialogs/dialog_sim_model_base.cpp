@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -246,9 +246,6 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	bSizer8->Add( m_notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer8->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
-
 	m_saveInValueCheckbox = new wxCheckBox( this, wxID_ANY, _("Save {} in Value field as \"{}\""), wxDefaultPosition, wxDefaultSize, 0 );
 	m_saveInValueCheckbox->Hide();
 
@@ -261,7 +258,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer81->Add( m_excludeCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer81->Add( 30, 0, 1, wxEXPAND, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -273,7 +270,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer81->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
-	bSizer8->Add( bSizer81, 0, wxEXPAND, 5 );
+	bSizer8->Add( bSizer81, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( bSizer8 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,6 @@ class WX_GRID;
 #include <wx/stc/stc.h>
 #include <wx/notebook.h>
 #include <wx/grid.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -78,7 +77,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxStyledTextCtrl* m_codePreview;
 		wxPanel* m_pinAssignmentsPanel;
 		WX_GRID* m_pinAssignmentsGrid;
-		wxStaticLine* m_staticline1;
 		wxCheckBox* m_saveInValueCheckbox;
 		wxCheckBox* m_excludeCheckbox;
 		wxStdDialogButtonSizer* m_sdbSizer1;
