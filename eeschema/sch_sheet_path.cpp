@@ -346,10 +346,14 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
         else if( item->Type() == SCH_GLOBAL_LABEL_T )
         {
             SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
-            SCH_FIELD&       intersheetRefs = label->GetFields()[0];
 
-            intersheetRefs.SetVisible( label->Schematic()->Settings().m_IntersheetRefsShow );
-            LastScreen()->Update( &intersheetRefs );
+            if( label->GetFields().size() > 0 ) // Can be not the case when reading a old .sch schematic
+            {
+                SCH_FIELD&       intersheetRefs = label->GetFields()[0];
+
+                intersheetRefs.SetVisible( label->Schematic()->Settings().m_IntersheetRefsShow );
+                LastScreen()->Update( &intersheetRefs );
+            }
         }
     }
 }
