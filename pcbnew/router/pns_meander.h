@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -129,6 +129,7 @@ public:
         // Do not leave uninitialized members, and keep static analyzer quiet:
         m_type = MT_SINGLE;
         m_amplitude = 0;
+        m_targetBaseLen = 0;
         m_side = false;
         m_baseIndex = 0;
         m_currentTarget = nullptr;
@@ -273,7 +274,17 @@ public:
     /**
      * @return the length of the fitted line chain.
      */
-    int MaxTunableLength() const;
+    long long int CurrentLength() const;
+
+    /**
+     * @return the minumum tunable length according to settings.
+     */
+    long long int MinTunableLength() const;
+
+    /**
+     * @return the minumum possible amplitude according to settings.
+     */
+    int MinAmplitude() const;
 
     /**
      * @return the current meandering settings.
@@ -299,6 +310,14 @@ public:
         m_baselineOffset = aOffset;
     }
 
+    /**
+     * Sets the target length of the baseline. When resizing, the meander will try to
+     * fit the baseline length into the specified value.
+     *
+     * @param aLength the minimum baseline length.
+     */
+    void SetTargetBaselineLength( int aLength ) { m_targetBaseLen = aLength; }
+
 private:
     friend class MEANDERED_LINE;
 
@@ -322,7 +341,7 @@ private:
 
     ///< Produce a meander shape of given type.
     SHAPE_LINE_CHAIN genMeanderShape( const VECTOR2D& aP, const VECTOR2D& aDir, bool aSide,
-                                      MEANDER_TYPE aType, int aAmpl, int aBaselineOffset = 0 );
+                                      MEANDER_TYPE aType, int aBaselineOffset = 0 );
 
     ///< Recalculate the clipped baseline after the parameters of the meander have been changed.
     void updateBaseSegment();
@@ -353,6 +372,9 @@ private:
 
     ///< Average radius of meander corners (for correction of DP meanders).
     int m_meanCornerRadius;
+
+    ///< Minimum length of the base segment to target when resizing.
+    int m_targetBaseLen;
 
     ///< First point of the meandered line.
     VECTOR2I m_p0;

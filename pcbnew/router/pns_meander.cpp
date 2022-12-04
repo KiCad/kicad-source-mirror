@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -127,6 +127,7 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
                 {
                     m.Fit( MT_TURN, aBase, m_last, side );
                     AddMeander( new MEANDER_SHAPE( m ) );
+                    side = !side;
                     started = true;
                 }
                 else
@@ -136,8 +137,6 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
                     AddMeander( new MEANDER_SHAPE( m ) );
                     turning = false;
                 }
-
-                side = !side;
             }
         }
         else if( !singleSided && started )
@@ -188,12 +187,33 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
 }
 
 
+int MEANDER_SHAPE::MinAmplitude() const
+{
+    int minAmplitude = Settings().m_minAmplitude;
+
+    // DP meanders don't really support smaller amplitudes
+    minAmplitude = std::max( minAmplitude, std::abs( m_baselineOffset ) * 2 );
+
+    // The path length won't be correct with very small arcs
+    if( m_placer->MeanderSettings().m_cornerStyle == MEANDER_STYLE_ROUND )
+        minAmplitude = std::max( minAmplitude, m_width + std::abs( m_baselineOffset ) * 2 );
+
+    return minAmplitude;
+}
+
+
 int MEANDER_SHAPE::cornerRadius() const
 {
     // TODO: fix diff-pair meandering so we can use non-100% radii
     int rPercent = m_dual ? 100 : Settings().m_cornerRadiusPercentage;
 
-    return (int64_t) spacing() * rPercent / 200;
+    int optCr = (int64_t) spacing() * rPercent / 200;
+    int minCr = std::abs( m_baselineOffset );
+    int maxCr = std::min( m_amplitude / 2, spacing() / 2 );
+
+    int cr = std::clamp( optCr, minCr, maxCr );
+
+    return cr;
 }
 
 
@@ -316,12 +336,14 @@ void MEANDER_SHAPE::uShape( int aSides, int aCorner, int aTop )
 
 
 SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTOR2D& aDir,
-                                                 bool aSide, MEANDER_TYPE aType, int aAmpl,
+                                                 bool aSide, MEANDER_TYPE aType,
                                                  int aBaselineOffset )
 {
     int cr = cornerRadius();
     int offset = aBaselineOffset;
     int spc = spacing();
+    int amplitude = m_amplitude;
+    int targetBaseLen = m_targetBaseLen;
 
     if( aSide )
         offset *= -1;
@@ -329,9 +351,9 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
     VECTOR2D dir_u_b( aDir.Resize( offset ) );
     VECTOR2D dir_v_b( dir_u_b.Perpendicular() );
 
-    if( 2 * cr > aAmpl )
+    if( 2 * cr > amplitude )
     {
-        cr = aAmpl / 2;
+        cr = amplitude / 2;
     }
 
     if( 2 * cr > spc )
@@ -339,7 +361,18 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
         cr = spc / 2;
     }
 
+    if( cr - offset < 0 )
+    {
+        cr = offset;
+    }
+
     m_meanCornerRadius = cr;
+
+    int sCorner = cr - offset;
+    int uCorner = cr + offset;
+    int startSide = amplitude - 2 * cr + std::abs( offset );
+    int turnSide = amplitude - cr;
+    int top = spc - 2 * cr;
 
     SHAPE_LINE_CHAIN lc;
 
@@ -354,45 +387,62 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
     }
     case MT_START:
     {
-        miter( cr - offset, false );
-        uShape( aAmpl - 2 * cr + std::abs( offset ), cr + offset, spc - 2 * cr );
-        forward( std::min( cr - offset, cr + offset ) );
+        if( targetBaseLen )
+            top = std::max( top, targetBaseLen - sCorner - uCorner * 2 + offset );
+
+        miter( sCorner, false );
+        uShape( startSide, uCorner, top );
+        forward( std::min( sCorner, uCorner ) );
         forward( std::abs( offset ) );
         break;
     }
 
     case MT_FINISH:
     {
+        if( targetBaseLen )
+            top = std::max( top, targetBaseLen - cr - spc );
+
         start( &lc, aP - dir_u_b, aDir );
         turn( -ANGLE_90 );
-        forward( std::min( cr - offset, cr + offset ) );
+        forward( std::min( sCorner, uCorner ) );
         forward( std::abs( offset ) );
-        uShape( aAmpl - 2 * cr + std::abs( offset ), cr + offset, spc - 2 * cr );
-        miter( cr - offset, false );
+        uShape( startSide, uCorner, top );
+        miter( sCorner, false );
+
+        if( targetBaseLen >= spc + cr )
+            lc.Append( aP + dir_v_b + aDir.Resize( targetBaseLen ) );
+        else
+            lc.Append( aP + dir_v_b + aDir.Resize( 2 * spc - cr ) );
+
         break;
     }
 
     case MT_TURN:
     {
+        if( targetBaseLen )
+            top = std::max( top, targetBaseLen - uCorner * 2 + offset * 2 );
+
         start( &lc, aP - dir_u_b, aDir );
         turn( -ANGLE_90 );
         forward( std::abs( offset ) );
-        uShape( aAmpl - cr, cr + offset, spc - 2 * cr );
+        uShape( turnSide, uCorner, top );
         forward( std::abs( offset ) );
         break;
     }
 
     case MT_SINGLE:
     {
-        miter( cr - offset, false );
-        uShape( aAmpl - 2 * cr + std::abs( offset ), cr + offset, spc - 2 * cr );
-        miter( cr - offset, false );
+        if( targetBaseLen )
+            top = std::max( top, ( targetBaseLen - sCorner * 2 - uCorner * 2 ) / 2 );
+
+        miter( sCorner, false );
+        uShape( startSide, uCorner, top );
+        miter( sCorner, false );
         lc.Append( aP + dir_v_b + aDir.Resize( 2 * spc ) );
         break;
     }
 
-    default:
-        break;
+    default: break;
     }
 
     if( aSide )
@@ -490,34 +540,27 @@ bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP
         }
     }
 
-    int minAmpl = st.m_minAmplitude;
-    int maxAmpl = st.m_maxAmplitude;
-
-    if( m_dual )
-    {
-        minAmpl = std::max( minAmpl, 2 * std::abs( m_baselineOffset ) );
-        maxAmpl = std::max( maxAmpl, 2 * std::abs( m_baselineOffset ) );
-    }
+    int minAmpl = MinAmplitude();
+    int maxAmpl = std::max( st.m_maxAmplitude, minAmpl );
 
     for( int ampl = maxAmpl; ampl >= minAmpl; ampl -= st.m_step )
     {
+        m_amplitude = ampl;
+
         if( m_dual )
         {
-            m_shapes[0] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, ampl,
-                                           m_baselineOffset );
-            m_shapes[1] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, ampl,
-                                           -m_baselineOffset );
+            m_shapes[0] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, m_baselineOffset );
+            m_shapes[1] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, -m_baselineOffset );
         }
         else
         {
-            m_shapes[0] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, ampl, 0 );
+            m_shapes[0] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, 0 );
         }
 
         m_type = aType;
         m_baseSeg = aSeg;
         m_p0 = aP;
         m_side = aSide;
-        m_amplitude = ampl;
 
         updateBaseSegment();
 
@@ -531,12 +574,12 @@ bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP
 
 void MEANDER_SHAPE::Recalculate()
 {
-    m_shapes[0] = genMeanderShape( m_p0, m_baseSeg.B - m_baseSeg.A, m_side, m_type, m_amplitude,
+    m_shapes[0] = genMeanderShape( m_p0, m_baseSeg.B - m_baseSeg.A, m_side, m_type,
                                    m_dual ? m_baselineOffset : 0 );
 
     if( m_dual )
         m_shapes[1] = genMeanderShape( m_p0, m_baseSeg.B - m_baseSeg.A, m_side, m_type,
-                                       m_amplitude, -m_baselineOffset );
+                                       -m_baselineOffset );
 
     updateBaseSegment();
 }
@@ -560,11 +603,12 @@ void MEANDER_SHAPE::MakeEmpty()
     VECTOR2I dir = m_clippedBaseSeg.B - m_clippedBaseSeg.A;
 
     m_type = MT_EMPTY;
+    m_amplitude = 0;
 
-    m_shapes[0] = genMeanderShape( m_p0, dir, m_side, m_type, 0, m_dual ? m_baselineOffset : 0 );
+    m_shapes[0] = genMeanderShape( m_p0, dir, m_side, m_type, m_dual ? m_baselineOffset : 0 );
 
     if( m_dual )
-        m_shapes[1] = genMeanderShape( m_p0, dir, m_side, m_type, 0, -m_baselineOffset );
+        m_shapes[1] = genMeanderShape( m_p0, dir, m_side, m_type, -m_baselineOffset );
 }
 
 
@@ -654,9 +698,20 @@ int MEANDER_SHAPE::BaselineLength() const
 }
 
 
-int MEANDER_SHAPE::MaxTunableLength() const
+long long int MEANDER_SHAPE::CurrentLength() const
 {
     return CLine( 0 ).Length();
+}
+
+
+long long int MEANDER_SHAPE::MinTunableLength() const
+{
+    MEANDER_SHAPE copy = *this;
+
+    copy.SetTargetBaselineLength( BaselineLength() );
+    copy.Resize( copy.MinAmplitude() );
+
+    return copy.CurrentLength();
 }
 
 

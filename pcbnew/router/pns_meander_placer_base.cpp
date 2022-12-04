@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -26,6 +26,8 @@
 #include "pns_arc.h"
 
 namespace PNS {
+
+const int LENGTH_TARGET_TOLERANCE = 20;
 
 MEANDER_PLACER_BASE::MEANDER_PLACER_BASE( ROUTER* aRouter ) :
         PLACEMENT_ALGO( aRouter )
@@ -131,31 +133,111 @@ void MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin, const V
 }
 
 
+int findAmplitudeBinarySearch( MEANDER_SHAPE& aCopy, int targetLength, int minAmp, int maxAmp )
+{
+    if( minAmp == maxAmp )
+        return maxAmp;
+
+    aCopy.Resize( minAmp );
+    int minLen = aCopy.CurrentLength();
+
+    aCopy.Resize( maxAmp );
+    int maxLen = aCopy.CurrentLength();
+
+    if( minLen > targetLength )
+        return 0;
+
+    if( maxLen < targetLength )
+        return 0;
+
+    int minError = minLen - targetLength;
+    int maxError = maxLen - targetLength;
+
+    if( std::abs( minError ) < LENGTH_TARGET_TOLERANCE
+        || std::abs( maxError ) < LENGTH_TARGET_TOLERANCE )
+    {
+        return std::abs( minError ) < std::abs( maxError ) ? minAmp : maxAmp;
+    }
+    else
+    {
+        int left =
+                findAmplitudeBinarySearch( aCopy, targetLength, minAmp, ( minAmp + maxAmp ) / 2 );
+
+        if( left )
+            return left;
+
+        int right =
+                findAmplitudeBinarySearch( aCopy, targetLength, ( minAmp + maxAmp ) / 2, maxAmp );
+
+        if( right )
+            return right;
+    }
+
+    return 0;
+}
+
+
+int findAmplitudeForLength( MEANDER_SHAPE* m, int targetLength, int minAmp, int maxAmp )
+{
+    MEANDER_SHAPE copy = *m;
+
+    // Try to keep the same baseline length
+    copy.SetTargetBaselineLength( m->BaselineLength() );
+
+    long long initialGuess = m->Amplitude() - ( m->CurrentLength() - targetLength ) / 2;
+
+    if( initialGuess >= minAmp && initialGuess <= maxAmp )
+    {
+        copy.Resize( minAmp );
+
+        if( std::abs( copy.CurrentLength() - targetLength ) < LENGTH_TARGET_TOLERANCE )
+            return initialGuess;
+    }
+
+    // The length is non-trivial, use binary search
+    return findAmplitudeBinarySearch( copy, targetLength, minAmp, maxAmp );
+}
+
+
 void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int aElongation )
 {
-    long long int remaining = aElongation;
-    bool finished = false;
+    long long int maxElongation = 0;
+    long long int minElongation = 0;
+    bool          finished = false;
 
     for( MEANDER_SHAPE* m : aTuned.Meanders() )
     {
         if( m->Type() != MT_CORNER && m->Type() != MT_ARC )
         {
-            if( remaining >= 0 )
-                remaining -= m->MaxTunableLength() - m->BaselineLength();
+            MEANDER_SHAPE end = *m;
+            MEANDER_TYPE  endType;
 
-            if( remaining < 0 )
+            if( m->Type() == MT_START || m->Type() == MT_SINGLE )
+                endType = MT_SINGLE;
+            else
+                endType = MT_FINISH;
+
+            end.SetType( endType );
+            end.Recalculate();
+
+            long long int maxEndElongation = end.CurrentLength() - end.BaselineLength();
+
+            if( maxElongation + maxEndElongation > aElongation )
             {
                 if( !finished )
                 {
-                    MEANDER_TYPE newType;
-
-                    if( m->Type() == MT_START || m->Type() == MT_SINGLE )
-                        newType = MT_SINGLE;
-                    else
-                        newType = MT_FINISH;
-
-                    m->SetType( newType );
+                    m->SetType( endType );
                     m->Recalculate();
+
+                    if( endType == MT_SINGLE )
+                    {
+                        // Check if we need to fit this meander
+                        long long int endMinElongation =
+                                ( m->MinTunableLength() - m->BaselineLength() );
+
+                        if( minElongation + endMinElongation >= aElongation )
+                            m->MakeEmpty();
+                    }
 
                     finished = true;
                 }
@@ -164,38 +246,52 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int 
                     m->MakeEmpty();
                 }
             }
+
+            maxElongation += m->CurrentLength() - m->BaselineLength();
+            minElongation += m->MinTunableLength() - m->BaselineLength();
         }
     }
 
-    remaining = aElongation;
-    int meanderCount = 0;
+    long long int remainingElongation = aElongation;
+    int           meanderCount = 0;
 
     for( MEANDER_SHAPE* m : aTuned.Meanders() )
     {
         if( m->Type() != MT_CORNER && m->Type() != MT_ARC && m->Type() != MT_EMPTY )
         {
-            if(remaining >= 0)
-            {
-                remaining -= m->MaxTunableLength() - m->BaselineLength();
-                meanderCount ++;
-            }
+            remainingElongation -= m->CurrentLength() - m->BaselineLength();
+            meanderCount++;
         }
     }
 
-    long long int balance = 0;
+    long long int lenReductionLeft = -remainingElongation;
+    int           meandersLeft = meanderCount;
 
-    if( meanderCount )
-        balance = -remaining / meanderCount;
+    if( lenReductionLeft < 0 || !meandersLeft )
+        return;
 
-    if( balance >= 0 )
+    for( MEANDER_SHAPE* m : aTuned.Meanders() )
     {
-        for( MEANDER_SHAPE* m : aTuned.Meanders() )
+        if( m->Type() != MT_CORNER && m->Type() != MT_ARC && m->Type() != MT_EMPTY )
         {
-            if( m->Type() != MT_CORNER && m->Type() != MT_ARC && m->Type() != MT_EMPTY )
-            {
-                m->Resize( std::max( m->Amplitude() - balance / 2,
-                           (long long int) m_settings.m_minAmplitude ) );
-            }
+            long long int lenReductionHere = lenReductionLeft / meandersLeft;
+            long long int initialLen = m->CurrentLength();
+            int           minAmpl = m->MinAmplitude();
+
+            int amp = findAmplitudeForLength( m, initialLen - lenReductionHere, minAmpl,
+                                              m->Amplitude() );
+
+            if( amp < minAmpl )
+                amp = minAmpl;
+
+            m->SetTargetBaselineLength( m->BaselineLength() );
+            m->Resize( amp );
+
+            lenReductionLeft -= initialLen - m->CurrentLength();
+            meandersLeft--;
+
+            if( !meandersLeft )
+                break;
         }
     }
 }
