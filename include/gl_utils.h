@@ -107,7 +107,7 @@ public:
 #elif defined( _WIN32 )
 
         const GLubyte* vendor = glGetString( GL_VENDOR );
-        const GLubyte* renderer = glGetString( GL_RENDERER );
+        //const GLubyte* renderer = glGetString( GL_RENDERER );
         const GLubyte* version = glGetString( GL_VERSION );
 
         if( wglSwapIntervalEXT && wxGLCanvas::IsExtensionSupported( "WGL_EXT_swap_control" ) )
@@ -121,13 +121,13 @@ public:
             // Trying to enable adaptive swapping on AMD drivers from 2017 or older leads to crash
             if( aVal == -1 && vendorStr == wxS( "ATI Technologies Inc." ) )
             {
-                wxArrayString parts = wxSplit( versionStr.AfterLast( ' ' ), '.', NULL );
+                wxArrayString parts = wxSplit( versionStr.AfterLast( ' ' ), '.', 0 );
 
                 if( parts.size() == 4 )
                 {
-                    int majorVer = 0;
+                    long majorVer = 0;
 
-                    if( parts[0].ToInt( &majorVer ) )
+                    if( parts[0].ToLong( &majorVer ) )
                     {
                         if( majorVer <= 22 )
                             aVal = 1;
