@@ -129,8 +129,16 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
             args.append( getParamValueString( "dt", "0" ) + " " );
             args.append( getParamValueString( "td", "0" ) + " " );
 
-            auto min = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "max" )->value );
-            auto max = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "min" )->value );
+            SIM_VALUE_FLOAT min = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "max" )->value );
+
+            if( !min.HasValue() )
+                min.FromString( "0" );
+
+            SIM_VALUE_FLOAT max = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "min" )->value );
+
+            if( !max.HasValue() )
+                max.FromString( "0" );
+
             SIM_VALUE_FLOAT range = max - min;
             SIM_VALUE_FLOAT offset = ( max + min ) / SIM_VALUE_FLOAT( 2 );
 
