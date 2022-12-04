@@ -72,13 +72,12 @@ void SPICE_LIBRARY_PARSER::ReadFile( const std::string& aFilePath )
                 try
                 {
                     m_library.m_models.push_back( SIM_MODEL_SPICE::Create( m_library, node->string() ) );
+                    m_library.m_modelNames.emplace_back( node->children.at( 0 )->string() );
                 }
                 catch( const IO_ERROR& e )
                 {
                     DisplayErrorMessage( nullptr, e.What() );
                 }
-
-                m_library.m_modelNames.emplace_back( node->children.at( 0 )->string() );
             }
             else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::unknownLine>() )
             {
