@@ -97,9 +97,6 @@ bool PG_UNIT_EDITOR::OnEvent( wxPropertyGrid* aPropGrid, wxPGProperty* aProperty
             }
         }
     }
-    
-    if( aEvent.GetEventType() == wxEVT_KILL_FOCUS )
-        wxLogDebug( "test" );
 
     return wxPGTextCtrlEditor::OnEvent( aPropGrid, aProperty, aCtrl, aEvent );
 }
