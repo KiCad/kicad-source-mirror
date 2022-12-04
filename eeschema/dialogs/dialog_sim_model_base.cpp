@@ -125,8 +125,8 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	bSizerMargins->Add( fgSizer16, 0, wxEXPAND|wxLEFT, 24 );
 
-	m_notebook4 = new wxNotebook( m_modelPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_parametersPanel = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_modelNotebook = new wxNotebook( m_modelPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_parametersPanel = new wxPanel( m_modelNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_parametersPanel->SetMinSize( wxSize( 500,-1 ) );
 
 	wxBoxSizer* bSizer12;
@@ -142,8 +142,8 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_parametersPanel->SetSizer( bSizer12 );
 	m_parametersPanel->Layout();
 	bSizer12->Fit( m_parametersPanel );
-	m_notebook4->AddPage( m_parametersPanel, _("Parameters"), true );
-	m_codePanel = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_modelNotebook->AddPage( m_parametersPanel, _("Parameters"), true );
+	m_codePanel = new wxPanel( m_modelNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 
@@ -189,9 +189,9 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_codePanel->SetSizer( bSizer5 );
 	m_codePanel->Layout();
 	bSizer5->Fit( m_codePanel );
-	m_notebook4->AddPage( m_codePanel, _("Code"), false );
+	m_modelNotebook->AddPage( m_codePanel, _("Code"), false );
 
-	bSizerMargins->Add( m_notebook4, 1, wxEXPAND|wxTOP, 10 );
+	bSizerMargins->Add( m_modelNotebook, 1, wxEXPAND|wxTOP, 10 );
 
 	m_saveInValueCheckbox = new wxCheckBox( m_modelPanel, wxID_ANY, _("Save {} in Value field as \"{}\""), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_saveInValueCheckbox, 0, wxALL, 6 );

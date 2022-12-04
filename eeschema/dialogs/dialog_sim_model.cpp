@@ -375,6 +375,11 @@ void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
 
     m_typeChoice->Enable( !m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() );
 
+    if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( &curModel() ) )
+        m_modelNotebook->SetSelection( 1 );
+    else
+        m_modelNotebook->SetSelection( 0 );
+
     if( curModel().HasPrimaryValue() )
     {
         const SIM_MODEL::PARAM& primary = curModel().GetParam( 0 );
@@ -489,46 +494,21 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
 {
+    wxString   text;
     SPICE_ITEM item;
     item.modelName = m_modelNameCombobox->GetStringSelection();
 
     if( m_useInstanceModelRadioButton->GetValue() || item.modelName == "" )
         item.modelName = m_fields.at( REFERENCE_FIELD ).GetText();
 
-    m_codePreview->SetEditable( true ); // ???
+    SIM_MODEL& model = curModel();
 
-    if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( &curModel() ) )
-    {
-        // For raw Spice models display the whole file instead.
+    text << model.SpiceGenerator().Preview( item );
 
-        wxString   path = curModel().FindParam( "lib" )->value->ToString();
-        wxString   absolutePath = Prj().AbsolutePath( path );
-        wxTextFile file;
-        wxString   text;
+    if( SIM_MODEL_RAW_SPICE* rawSpice = dynamic_cast<SIM_MODEL_RAW_SPICE*>( &model ) )
+        text << rawSpice->GetSource();
 
-        text << curModel().SpiceGenerator().Preview( item );
-        text << "\n";
-        text << "--- FILE SOURCE (" << path << ") ---\n";
-        text << "\n";
-
-        if( wxFileExists( absolutePath ) && file.Open( absolutePath ) )
-        {
-            for( text << file.GetFirstLine() << "\n";
-                 !file.Eof();
-                 text << file.GetNextLine() << "\n" )
-            {
-            }
-
-            file.Close();
-            m_codePreview->SetText( text );
-        }
-    }
-    else
-    {
-        m_codePreview->SetText( curModel().SpiceGenerator().Preview( item ) );
-    }
-
-    m_codePreview->SetEditable( false ); // ???
+    m_codePreview->SetText( text );
     m_wasCodePreviewUpdated = true;
 }
 
@@ -644,7 +624,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForce
     try
     {
         m_libraryModelsMgr.SetLibrary( std::string( aLibraryPath.ToUTF8() ),
-                                          &( dlg.m_messagePanel->Reporter() ) );
+                                       &dlg.m_messagePanel->Reporter() );
     }
     catch( const IO_ERROR& e )
     {
@@ -654,7 +634,9 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForce
             dlg.ShowQuasiModal();
         }
         else
+        {
             DisplayErrorMessage( this, e.What() );
+        }
 
         return;
     }
@@ -887,7 +869,9 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
         return m_libraryModelsMgr.GetModels().at( m_modelNameCombobox->GetSelection() ).get();
     }
     else
+    {
         return m_builtinModelsMgr.GetModels().at( static_cast<int>( m_curModelType ) );
+    }
 }
 
 
@@ -1064,11 +1048,7 @@ void DIALOG_SIM_MODEL<T>::onModelNameCombobox( wxCommandEvent& aEvent )
         wxArrayString    pinLabels;
         SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
 
-        if( !modelkibis )
-        {
-            wxFAIL;
-            return;
-        }
+        wxCHECK2( modelkibis, return );
 
         for( std::pair<wxString, wxString> strs : modelkibis->GetIbisPins() )
             pinLabels.Add( strs.first + wxT( " - " ) + strs.second );

@@ -69,7 +69,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxChoice* m_deviceTypeChoice;
 		wxStaticText* m_staticTextSpiceType;
 		wxChoice* m_typeChoice;
-		wxNotebook* m_notebook4;
+		wxNotebook* m_modelNotebook;
 		wxPanel* m_parametersPanel;
 		wxPropertyGridManager* m_paramGridMgr;
 		wxPropertyGridPage* m_paramGrid;

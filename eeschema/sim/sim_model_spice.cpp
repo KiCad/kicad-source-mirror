@@ -54,30 +54,36 @@ std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const
 }
 
 
-std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
-                                                          const std::string& aSpiceCode )
+std::unique_ptr<SIM_MODEL> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
+                                                    const std::string& aSpiceCode )
 {
-    auto model = dynamic_cast<SIM_MODEL_SPICE*>(
-            SIM_MODEL::Create( SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode ) ).release() );
+    SIM_MODEL::TYPE modelType = SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode );
+    SIM_MODEL*      model = SIM_MODEL::Create( modelType ).release();
 
-    if( !model )
-        THROW_IO_ERROR( "Could not determine Spice model type" );
+    if( SIM_MODEL_SPICE* spiceModel = dynamic_cast<SIM_MODEL_SPICE*>( model ) )
+    {
+        spiceModel->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
+        return std::unique_ptr<SIM_MODEL_SPICE>( spiceModel );
+    }
+    else if( SIM_MODEL_RAW_SPICE* rawSpice = dynamic_cast<SIM_MODEL_RAW_SPICE*>( model ) )
+    {
+        rawSpice->SetSource( aSpiceCode );
+        return std::unique_ptr<SIM_MODEL_RAW_SPICE>( rawSpice );
+    }
 
-    model->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
-    return std::unique_ptr<SIM_MODEL_SPICE>( model );
+    delete model;
+    THROW_IO_ERROR( "Could not determine Spice model modelType" );
 }
 
 
-SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType,
-                                  std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
+SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
     SIM_MODEL( aType, std::move( aSpiceGenerator ) ),
     m_spiceModelParser( std::make_unique<SPICE_MODEL_PARSER>( *this ) )
 {
 }
 
 
-SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType,
-                                  std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
+SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
                                   std::unique_ptr<SPICE_MODEL_PARSER> aSpiceModelParser ) :
     SIM_MODEL( aType, std::move( aSpiceGenerator ) ),
     m_spiceModelParser( std::move( aSpiceModelParser ) )

@@ -64,6 +64,16 @@ public:
 
     SIM_MODEL_RAW_SPICE();
 
+    void SetSource( const std::string& aSpiceSource ) { m_spiceCode = aSpiceSource; }
+
+    std::string GetSource() const
+    {
+        if( m_baseModel )
+            return static_cast<const SIM_MODEL_RAW_SPICE*>( m_baseModel )->GetSource();
+
+        return m_spiceCode;
+    }
+
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;
 
@@ -71,7 +81,8 @@ private:
     static std::vector<PARAM::INFO> makeParamInfos();
     bool requiresSpiceModelLine() const override { return false; }
 
-    std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
+private:
+    std::string m_spiceCode;
 };
 
 #endif // SIM_MODEL_RAW_SPICE_H
