@@ -79,6 +79,7 @@ static const wxChar DRCEpsilon[] = wxT( "DRCEpsilon" );
  * Angle and width tolerances for copper and solder mask sliver detection.
  */
 static const wxChar DRCSliverWidthTolerance[] = wxT( "DRCSliverWidthTolerance" );
+static const wxChar DRCSliverMinimumLength[] = wxT( "DRCSliverMinimumLength" );
 static const wxChar DRCSliverAngleTolerance[] = wxT( "DRCSliverAngleTolerance" );
 
 /**
@@ -298,6 +299,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DRCEpsilon                = 0.0005;   // 0.5um is small enough not to materially violate
                                             // any constraints.
     m_SliverWidthTolerance      = 0.08;
+    m_SliverMinimumLength       = 0.0005;
     m_SliverAngleTolerance      = 20.0;
 
     m_HoleWallThickness         = 0.020;    // IPC-6012 says 15-18um; Cadence says at least
@@ -379,6 +381,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverWidthTolerance,
                                                   &m_SliverWidthTolerance, m_SliverWidthTolerance, 0.01, 0.25 ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverMinimumLength,
+                                                  &m_SliverMinimumLength, m_SliverMinimumLength, 1e-9, 10 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverAngleTolerance,
                                                   &m_SliverAngleTolerance, m_SliverAngleTolerance, 1.0, 90.0 ) );

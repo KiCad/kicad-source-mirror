@@ -105,6 +105,7 @@ public:
      * Sliver tolerances for DRC.  Units are mm and deg.
      */
     double m_SliverWidthTolerance;
+    double m_SliverMinimumLength;
     double m_SliverAngleTolerance;
 
     /**

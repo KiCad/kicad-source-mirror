@@ -197,7 +197,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
         // We skip very small vertices: one cannot really compute a valid orientation of
         // such a vertex
         // So skip points near than min_len (in internal units).
-        const int min_len = 3;
+        const int min_len = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SliverMinimumLength );
 
         for( int jj = 0; jj < poly.OutlineCount(); ++jj )
         {
