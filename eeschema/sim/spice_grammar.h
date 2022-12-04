@@ -264,29 +264,31 @@ namespace SPICE_GRAMMAR
 
     template <typename> inline constexpr const char* errorMessage = nullptr;
     template <> inline constexpr auto errorMessage<newline> =
-        "expected newline not followed by a line continuation";
+            "expected newline";
     template <> inline constexpr auto errorMessage<sep> =
-        "expected token separator (one or more whitespace, parenthesis, '=', ',', line continuation)";
-    template <> inline constexpr auto errorMessage<opt<sep>> = "";
-    template <> inline constexpr auto errorMessage<modelName> = "expected model name";
-    template <> inline constexpr auto errorMessage<dotModelType> = "expected model type";
-    template <> inline constexpr auto errorMessage<opt<sep,
-                                                       dotModelType>> = "";
-    template <> inline constexpr auto errorMessage<opt<sep,
-                                                       paramValuePairs>> = "";
-    template <> inline constexpr auto errorMessage<opt<sep,
-                                                       dotSubcktPinSequence>> = "";
-    template <> inline constexpr auto errorMessage<opt<sep,
-                                                       dotSubcktParams>> = "";
-    template <> inline constexpr auto errorMessage<until<dotSubcktEnd,
-                                                         spiceUnit>> =
-        "expected (possibly empty) sequence of Spice lines followed by an .ends line";
+            "expected token separator (one or more whitespace, parenthesis, '=', ',', or line continuation)";
+    template <> inline constexpr auto errorMessage<opt<sep>> = 
+            "";
+    template <> inline constexpr auto errorMessage<modelName> = 
+            "expected model name";
+    template <> inline constexpr auto errorMessage<dotModelType> = 
+            "expected model type";
+    template <> inline constexpr auto errorMessage<opt<sep, dotModelType>> = 
+            "";
+    template <> inline constexpr auto errorMessage<opt<sep, paramValuePairs>> = 
+            "";
+    template <> inline constexpr auto errorMessage<opt<sep, dotSubcktPinSequence>> = 
+            "";
+    template <> inline constexpr auto errorMessage<opt<sep, dotSubcktParams>> = 
+            "";
+    template <> inline constexpr auto errorMessage<until<dotSubcktEnd, spiceUnit>> =
+            "expected (possibly empty) sequence of Spice lines followed by an .ends line";
     template <> inline constexpr auto errorMessage<spiceUnit> =
-        "expected Spice directive, item, subcircuit definitions, or empty or commented out line";
+            "expected Spice directive, item, subcircuit definitions, or empty or commented-out line";
     template <> inline constexpr auto errorMessage<spiceSource> =
-        "expected zero or more Spice directives, items, subcircuit definitions, or empty or commented out lines";
+            "expected zero or more Spice directives, items, subcircuit definitions, or empty or commented-out lines";
     template <> inline constexpr auto errorMessage<spiceSourceNothrow> =
-        "expected zero or more Spice directives, items, subcircuit definitions, or empty or commented out lines";
+            "expected zero or more Spice directives, items, subcircuit definitions, or empty or commented-out lines";
 
     // We create a custom PEGTL control to modify the parser error messages.
     struct error
