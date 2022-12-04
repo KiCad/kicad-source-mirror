@@ -33,3 +33,32 @@ void print_log_value<wxPoint>::operator()( std::ostream& os, wxPoint const& aPt 
 
 }
 BOOST_TEST_PRINT_NAMESPACE_CLOSE
+
+
+
+#ifndef QA_EESCHEMA_DATA_LOCATION
+#define QA_EESCHEMA_DATA_LOCATION "???"
+#endif
+
+std::string KI_TEST::GetEeschemaTestDataDir()
+{
+    const char* env = std::getenv( "KICAD_TEST_EESCHEMA_DATA_DIR" );
+    std::string fn;
+
+    if( !env )
+    {
+        // Use the compiled-in location of the data dir
+        // (i.e. where the files were at build time)
+        fn = QA_EESCHEMA_DATA_LOCATION;
+    }
+    else
+    {
+        // Use whatever was given in the env var
+        fn = env;
+    }
+
+    // Ensure the string ends in / to force a directory interpretation
+    fn += "/";
+
+    return fn;
+}

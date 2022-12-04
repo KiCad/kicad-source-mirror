@@ -48,11 +48,6 @@ target_compile_definitions( qa_schematic_utils
     PUBLIC EESCHEMA
 )
 
-# Pass in the default data location
-set_source_files_properties( schematic_file_util.cpp PROPERTIES
-    COMPILE_DEFINITIONS "QA_EESCHEMA_DATA_LOCATION=(\"${CMAKE_SOURCE_DIR}/qa/data/eeschema\")"
-)
-
 target_include_directories( qa_schematic_utils PRIVATE
     $<TARGET_PROPERTY:eeschema_kiface_objects,INTERFACE_INCLUDE_DIRECTORIES>
     )

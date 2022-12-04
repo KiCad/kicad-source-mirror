@@ -52,6 +52,7 @@ set( QA_COMMON_SRCS
 
     plugins/altium/test_altium_parser.cpp
     plugins/altium/test_altium_parser_utils.cpp
+    plugins/cadstar/test_cadstar_parts_parser.cpp
 
     plugins/cadstar/test_cadstar_archive_parser.cpp
 

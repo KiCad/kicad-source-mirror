@@ -32,9 +32,11 @@
 #include <qa_utils/wx_utils/wx_assert.h>
 
 #include <functional>
+#include <optional>
 #include <set>
 
 #include <wx/gdicmn.h>
+
 /**
  * If HAVE_EXPECTED_FAILURES is defined, this means that
  * boost::unit_test::expected_failures is available.
@@ -160,6 +162,21 @@ struct print_log_value<std::vector<T>>
 };
 
 /**
+ * Boost print helper for std::optional
+ */
+template <class T>
+struct print_log_value<std::optional<T>>
+{
+    inline void operator()( std::ostream& os, std::optional<T> const& aOptional )
+    {
+        if( aOptional.has_value() )
+            print_log_value<T>()( os, aOptional.value() );
+        else
+            os << "nullopt";
+    }
+};
+
+/**
  * Boost print helper for wxPoint. Note operator<< for this type doesn't
  * exist in non-DEBUG builds.
  */
@@ -168,6 +185,7 @@ struct print_log_value<wxPoint>
 {
     void operator()( std::ostream& os, wxPoint const& aVec );
 };
+
 }
 BOOST_TEST_PRINT_NAMESPACE_CLOSE
 
@@ -298,6 +316,16 @@ bool CollectionHasNoDuplicates( const T& aCollection )
 #else
 #define CHECK_WX_ASSERT( STATEMENT )
 #endif
+
+/**
+ * Get the configured location of Eeschema test data.
+ *
+ * By default, this is the test data in the source tree, but can be overridden
+ * by the KICAD_TEST_EESCHEMA_DATA_DIR environment variable.
+ *
+ * @return a filename referring to the test data dir to use.
+ */
+std::string GetEeschemaTestDataDir();
 
 } // namespace KI_TEST
 

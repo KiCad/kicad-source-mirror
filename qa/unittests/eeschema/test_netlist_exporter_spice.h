@@ -86,7 +86,7 @@ public:
 
     wxFileName GetSchematicPath( const wxString& aBaseName ) override
     {
-        wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
+        wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
         fn.AppendDir( "spice_netlists" );
         fn.AppendDir( aBaseName );
         fn.SetName( aBaseName );

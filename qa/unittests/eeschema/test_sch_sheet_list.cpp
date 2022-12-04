@@ -32,7 +32,7 @@ protected:
 
 wxFileName TEST_SCH_SHEET_LIST_FIXTURE::GetSchematicPath( const wxString& aRelativePath )
 {
-    wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
+    wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
     fn.AppendDir( "netlists" );
 
     wxString path = fn.GetFullPath();

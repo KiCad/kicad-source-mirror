@@ -151,10 +151,5 @@ target_compile_definitions( qa_eeschema
     PUBLIC EESCHEMA
 )
 
-# Pass in the default data location
-set_source_files_properties( eeschema_test_utils.cpp PROPERTIES
-    COMPILE_DEFINITIONS "QA_EESCHEMA_DATA_LOCATION=(\"${CMAKE_SOURCE_DIR}/qa/data/eeschema\")"
-)
-
 kicad_add_boost_test( qa_eeschema qa_eeschema )
 

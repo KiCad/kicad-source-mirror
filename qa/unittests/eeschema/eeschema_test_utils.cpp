@@ -34,34 +34,6 @@
 #include <eeschema/connection_graph.h>
 
 
-#ifndef QA_EESCHEMA_DATA_LOCATION
-    #define QA_EESCHEMA_DATA_LOCATION "???"
-#endif
-
-wxFileName KI_TEST::GetEeschemaTestDataDir()
-{
-    const char* env = std::getenv( "KICAD_TEST_EESCHEMA_DATA_DIR" );
-    wxString fn;
-
-    if( !env )
-    {
-        // Use the compiled-in location of the data dir
-        // (i.e. where the files were at build time)
-        fn << QA_EESCHEMA_DATA_LOCATION;
-    }
-    else
-    {
-        // Use whatever was given in the env var
-        fn << env;
-    }
-
-    // Ensure the string ends in / to force a directory interpretation
-    fn << "/";
-
-    return wxFileName{ fn };
-}
-
-
 void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
 {
     wxFileName fn = GetSchematicPath( aBaseName );
@@ -122,7 +94,7 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
 
 wxFileName KI_TEST::SCHEMATIC_TEST_FIXTURE::GetSchematicPath( const wxString& aBaseName )
 {
-    wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
+    wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
     fn.AppendDir( "netlists" );
     fn.AppendDir( aBaseName );
     fn.SetName( aBaseName );

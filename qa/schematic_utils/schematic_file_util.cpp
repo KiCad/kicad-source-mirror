@@ -19,6 +19,7 @@
  */
 
 #include <schematic_file_util.h>
+#include <qa_utils/wx_utils/unit_test_utils.h> // GetEeschemaTestDataDir()
 
 #include <settings/settings_manager.h>
 
@@ -36,33 +37,6 @@
 
 namespace KI_TEST
 {
-
-#ifndef QA_EESCHEMA_DATA_LOCATION
-    #define QA_EESCHEMA_DATA_LOCATION "???"
-#endif
-
-std::string getEeschemaTestDataDir()
-{
-    const char* env = std::getenv( "KICAD_TEST_EESCHEMA_DATA_DIR" );
-    std::string fn;
-
-    if( !env )
-    {
-        // Use the compiled-in location of the data dir (i.e. where the files were at build time)
-        fn = QA_EESCHEMA_DATA_LOCATION;
-    }
-    else
-    {
-        // Use whatever was given in the env var
-        fn = env;
-    }
-
-    // Ensure the string ends in / to force a directory interpretation
-    fn += "/";
-
-    return fn;
-}
-
 
 void DumpSchematicToFile( SCHEMATIC& aSchematic, SCH_SHEET& aSheet, const std::string& aFilename )
 {
@@ -155,7 +129,7 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
         aSchematic->Reset();
     }
 
-    std::string absPath = getEeschemaTestDataDir() + aRelPath.ToStdString();
+    std::string absPath = GetEeschemaTestDataDir() + aRelPath.ToStdString();
     wxFileName  projectFile( absPath + ".kicad_pro" );
     wxFileName  legacyProject( absPath + ".pro" );
     std::string schematicPath = absPath + ".kicad_sch";

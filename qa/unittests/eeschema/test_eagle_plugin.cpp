@@ -46,8 +46,9 @@ BOOST_AUTO_TEST_CASE( FindPlugin )
  */
 static wxFileName getEagleTestSchematic( const wxString& sch_file )
 {
-    wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
-    fn.AppendDir( "eagle_schematics" );
+    wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( "plugins" );
+    fn.AppendDir( "eagle" );
     fn.SetFullName( sch_file );
 
     return fn;

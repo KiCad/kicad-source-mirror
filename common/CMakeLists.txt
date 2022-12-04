@@ -262,6 +262,7 @@ set( PLUGINS_ALTIUM_SRCS
 
 set( PLUGINS_CADSTAR_SRCS
     plugins/cadstar/cadstar_archive_parser.cpp
+    plugins/cadstar/cadstar_parts_lib_parser.cpp
     )
 
 set( PLUGINS_EAGLE_SRCS

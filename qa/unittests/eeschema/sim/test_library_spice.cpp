@@ -35,7 +35,7 @@ class TEST_SIM_LIBRARY_SPICE_FIXTURE
 public:
     std::string GetLibraryPath( const std::string& aBaseName )
     {
-        wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
+        wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
         fn.AppendDir( "spice_netlists" );
         fn.AppendDir( "libraries" );
         fn.SetName( aBaseName );

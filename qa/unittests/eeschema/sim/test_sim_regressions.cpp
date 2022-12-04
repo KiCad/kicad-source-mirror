@@ -46,7 +46,7 @@ public:
 
     wxFileName GetSchematicPath( const wxString& aBaseName ) override
     {
-        wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
+        wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
         fn.SetName( aBaseName );
         fn.SetExt( KiCadSchematicFileExtension );
 
