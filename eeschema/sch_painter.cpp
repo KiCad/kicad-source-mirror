@@ -856,8 +856,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDimmed )
     }
     else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
     {
-        if( aShape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR
-                || aShape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+        if( aShape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
@@ -866,14 +865,6 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDimmed )
     }
     else if( aLayer == LAYER_DEVICE || aLayer == LAYER_PRIVATE_NOTES )
     {
-        if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE
-                || aShape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
-        {
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
-            drawShape( aShape );
-        }
-
         int lineWidth = getLineWidth( aShape, drawingShadows );
 
         if( lineWidth > 0 )
@@ -907,6 +898,14 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDimmed )
                 for( SHAPE* shape : shapes )
                     delete shape;
             }
+        }
+
+        if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE
+                || aShape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+        {
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
+            drawShape( aShape );
         }
     }
 }
