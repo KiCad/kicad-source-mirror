@@ -327,7 +327,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
 
-    m_UseClipper2               = false;
+    m_UseClipper2               = true;
 
     loadFromConfigFile();
 }
