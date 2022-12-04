@@ -252,10 +252,16 @@ private:
         ///< All properties (both unique to the type and inherited)
         std::vector<PROPERTY_BASE*> m_allProperties;
 
+        ///< Compiled display order for all properties
         PROPERTY_DISPLAY_ORDER m_displayOrder;
 
+        ///< List of property groups provided by this class in display order
         std::vector<wxString> m_groupDisplayOrder;
 
+        ///< Non-owning list of classes's direct properties in display order
+        std::vector<PROPERTY_BASE*> m_ownDisplayOrder;
+
+        ///< The property groups provided by this class
         std::set<wxString> m_groups;
 
         ///< Replaced properties (TYPE_ID / name)

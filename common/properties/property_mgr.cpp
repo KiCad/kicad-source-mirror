@@ -136,6 +136,7 @@ void PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty, const wxString& aG
     TYPE_ID hash = aProperty->OwnerHash();
     CLASS_DESC& classDesc = getClass( hash );
     classDesc.m_ownProperties.emplace( name, aProperty );
+    classDesc.m_ownDisplayOrder.emplace_back( aProperty );
 
     aProperty->SetGroup( aGroup );
 
@@ -301,9 +302,8 @@ void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
 
     int idx = 0;
 
-    for( const std::pair<const wxString, std::unique_ptr<PROPERTY_BASE>>& prop : m_ownProperties )
+    for( PROPERTY_BASE* property : m_ownDisplayOrder )
     {
-        PROPERTY_BASE* property = prop.second.get();
         PROPERTY_SET::key_type propertyKey = std::make_pair( property->OwnerHash(),
                                                              property->Name() );
         // Do not store replaced properties
