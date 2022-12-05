@@ -37,7 +37,6 @@ class wxTextEntry;
 class wxSpinButton;
 class wxStaticText;
 
-
 class UNIT_BINDER : public wxEvtHandler
 {
 public:
@@ -266,7 +265,7 @@ public:
 
     virtual ~PROPERTY_EDITOR_UNIT_BINDER();
 
-    void SetControl( wxWindow* aControl ) { m_valueCtrl = aControl; }
+    void SetControl( wxWindow* aControl );
 };
 
 #endif /* __UNIT_BINDER_H_ */

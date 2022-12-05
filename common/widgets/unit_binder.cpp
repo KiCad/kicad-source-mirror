@@ -619,3 +619,28 @@ PROPERTY_EDITOR_UNIT_BINDER::PROPERTY_EDITOR_UNIT_BINDER( EDA_DRAW_FRAME* aParen
 PROPERTY_EDITOR_UNIT_BINDER::~PROPERTY_EDITOR_UNIT_BINDER()
 {
 }
+
+void PROPERTY_EDITOR_UNIT_BINDER::SetControl( wxWindow* aControl )
+{
+    if( m_valueCtrl )
+    {
+        m_valueCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( PROPERTY_EDITOR_UNIT_BINDER::onSetFocus ),
+                              nullptr, this );
+        m_valueCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PROPERTY_EDITOR_UNIT_BINDER::onKillFocus ),
+                              nullptr, this );
+        m_valueCtrl->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( PROPERTY_EDITOR_UNIT_BINDER::onClick ),
+                              nullptr, this );
+    }
+
+    m_valueCtrl = aControl;
+
+    if( m_valueCtrl )
+    {
+        m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( PROPERTY_EDITOR_UNIT_BINDER::onSetFocus ),
+                              nullptr, this );
+        m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PROPERTY_EDITOR_UNIT_BINDER::onKillFocus ),
+                              nullptr, this );
+        m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( PROPERTY_EDITOR_UNIT_BINDER::onClick ),
+                              nullptr, this );
+    }
+}
