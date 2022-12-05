@@ -417,6 +417,11 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         }
     }
 
+    // Make sure the threads are not running
+    for( auto& ret : returns )
+        if( ret.first.valid() )
+            ret.first.wait();
+
     // Now update the connectivity to check for isolated copper islands
     // (NB: FindIsolatedCopperIslands() is multi-threaded)
     //
