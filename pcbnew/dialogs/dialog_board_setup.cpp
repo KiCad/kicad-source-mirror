@@ -65,7 +65,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
     m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, aFrame, m_layers );
-    m_boardFinish = new PANEL_SETUP_BOARD_FINISH( this, board );
+    m_boardFinish = new PANEL_SETUP_BOARD_FINISH( this, aFrame );
 
     m_severities = new PANEL_SETUP_SEVERITIES( this, DRC_ITEM::GetItemsWithSeverities(),
                                                bds.m_DRCSeverities );

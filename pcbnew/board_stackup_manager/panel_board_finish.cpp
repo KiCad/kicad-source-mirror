@@ -31,11 +31,12 @@
 #include <wx/treebook.h>
 
 
-PANEL_SETUP_BOARD_FINISH::PANEL_SETUP_BOARD_FINISH( PAGED_DIALOG* aParent, BOARD* aBoard ) :
+PANEL_SETUP_BOARD_FINISH::PANEL_SETUP_BOARD_FINISH( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_BOARD_FINISH_BASE( aParent->GetTreebook() )
 {
     m_parentDialog = aParent;
-    m_board = aBoard;
+    m_frame = aFrame;
+    m_board = m_frame->GetBoard();
     m_brdSettings = &m_board->GetDesignSettings();
 
     // Get the translated list of choices and init m_choiceFinish
@@ -84,13 +85,19 @@ bool PANEL_SETUP_BOARD_FINISH::TransferDataFromWindow()
 
     wxArrayString finish_list = GetStandardCopperFinishes( false );
     int finish = m_choiceFinish->GetSelection() >= 0 ? m_choiceFinish->GetSelection() : 0;
+    bool modified = brd_stackup.m_FinishType == finish_list[finish];
     brd_stackup.m_FinishType = finish_list[finish];
 
-    int edge = m_choiceEdgeConn->GetSelection();;
+    int edge = m_choiceEdgeConn->GetSelection();
+    modified |= brd_stackup.m_EdgeConnectorConstraints == (BS_EDGE_CONNECTOR_CONSTRAINTS) edge;
     brd_stackup.m_EdgeConnectorConstraints = (BS_EDGE_CONNECTOR_CONSTRAINTS) edge;
 
     brd_stackup.m_CastellatedPads = m_cbCastellatedPads->GetValue();
+    modified |= brd_stackup.m_EdgePlating == m_cbEgdesPlated->GetValue();
     brd_stackup.m_EdgePlating = m_cbEgdesPlated->GetValue();
+
+    if( modified )
+        m_frame->OnModify();
 
     return true;
 }

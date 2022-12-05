@@ -36,7 +36,7 @@ class PCB_EDIT_FRAME;
 class PANEL_SETUP_BOARD_FINISH : public PANEL_SETUP_BOARD_FINISH_BASE
 {
 public:
-    PANEL_SETUP_BOARD_FINISH( PAGED_DIALOG* aParent, BOARD* aBoard );
+    PANEL_SETUP_BOARD_FINISH( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_BOARD_FINISH();
 
     void ImportSettingsFrom( BOARD* aBoard );
@@ -49,6 +49,7 @@ private:
 
 private:
     PAGED_DIALOG*           m_parentDialog;
+    PCB_EDIT_FRAME*         m_frame;
     BOARD*                  m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;
 };
