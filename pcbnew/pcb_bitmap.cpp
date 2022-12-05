@@ -219,3 +219,23 @@ void PCB_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
     aCount = 1;
     aLayers[0] = BITMAP_LAYER_FOR( m_layer );
 }
+
+
+static struct PCB_BITMAP_DESC
+{
+    PCB_BITMAP_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_BITMAP );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_BITMAP ), TYPE_HASH( BOARD_ITEM ) );
+
+        const wxString groupBitmap = _( "Bitmap Properties" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_BITMAP, double>( _HKI( "Scale" ),
+                             &PCB_BITMAP::SetImageScale, &PCB_BITMAP::GetImageScale ),
+                             groupBitmap );
+
+        // For future use
+        const wxString greyscale = _HKI( "Greyscale" );
+    }
+} _PCB_BITMAP_DESC;
