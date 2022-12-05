@@ -199,7 +199,7 @@ public:
     }
 
 protected:
-    void init();
+    void init( UNITS_PROVIDER* aProvider );
     void onClick( wxMouseEvent& aEvent );
 
     void onSetFocus( wxFocusEvent& aEvent );
@@ -222,7 +222,6 @@ protected:
     double setPrecision( double aValue, bool aValueUsesUserUnits );
 
 protected:
-    UNITS_PROVIDER*     m_unitsProvider;
     wxWindow*           m_eventSource;
     bool                m_bindFocusEvent;
 

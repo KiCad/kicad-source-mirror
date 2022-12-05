@@ -45,22 +45,21 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindo
 UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource,
                           wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
                           bool aAllowEval, bool aBindFocusEvent ) :
-        m_unitsProvider( aUnitsProvider ),
         m_eventSource( aEventSource ),
         m_bindFocusEvent( aBindFocusEvent ),
         m_label( aLabel ),
         m_valueCtrl( aValueCtrl ),
         m_unitLabel( aUnitLabel ),
-        m_iuScale( m_unitsProvider->GetIuScale() ),
+        m_iuScale( aUnitsProvider->GetIuScale() ),
         m_negativeZero( false ),
         m_dataType( EDA_DATA_TYPE::DISTANCE ),
         m_precision( 0 ),
-        m_eval( m_unitsProvider->GetUserUnits() ),
+        m_eval( aUnitsProvider->GetUserUnits() ),
         m_unitsInValue( false ),
         m_originTransforms( aUnitsProvider->GetOriginTransforms() ),
         m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
-    init();
+    init( aUnitsProvider );
     m_allowEval = aAllowEval && ( !m_valueCtrl || dynamic_cast<wxTextEntry*>( m_valueCtrl ) );
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
@@ -116,9 +115,9 @@ UNIT_BINDER::~UNIT_BINDER()
 }
 
 
-void UNIT_BINDER::init()
+void UNIT_BINDER::init( UNITS_PROVIDER* aProvider )
 {
-    m_units     = m_unitsProvider->GetUserUnits();
+    m_units     = aProvider->GetUserUnits();
     m_needsEval = false;
     m_selStart  = 0;
     m_selEnd    = 0;
@@ -153,13 +152,15 @@ void UNIT_BINDER::SetDataType( EDA_DATA_TYPE aDataType )
 
 void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
 {
+    UNITS_PROVIDER* provider = static_cast<UNITS_PROVIDER*>( aEvent.GetClientData() );
+
     if( m_units != EDA_UNITS::UNSCALED
             && m_units != EDA_UNITS::DEGREES
             && m_units != EDA_UNITS::PERCENT )
     {
         int temp = (int) GetValue();
 
-        SetUnits( m_unitsProvider->GetUserUnits() );
+        SetUnits( provider->GetUserUnits() );
 
         SetValue( temp );
     }

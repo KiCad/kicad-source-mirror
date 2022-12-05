@@ -1336,6 +1336,7 @@ void EDA_BASE_FRAME::ChangeUserUnits( EDA_UNITS aUnits )
     unitsChangeRefresh();
 
     wxCommandEvent e( UNITS_CHANGED );
+    e.SetClientData( this );
     ProcessEventLocally( e );
 }
 
