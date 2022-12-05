@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:25-0800\n"
-"PO-Revision-Date: 2022-08-28 17:17+0000\n"
-"Last-Translator: Vitan Košpenda <kospendavitan@gmail.com>\n"
+"PO-Revision-Date: 2022-12-07 22:47+0000\n"
+"Last-Translator: Sašo Domadenik <saso.doma@gmail.com>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/v6/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
-"n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Poedit-Keywords: _\n"
 "X-Poedit-Basepath: c:\\kicad\\kicad-dev\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -25,7 +25,6 @@ msgstr ""
 "X-Poedit-SearchPath-5: common\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Vse datoteke"
 
@@ -1786,9 +1785,8 @@ msgstr "Shrani"
 
 #: common/confirm.cpp:184 common/confirm.cpp:220
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
-#, fuzzy
 msgid "Discard Changes"
-msgstr "_Zavrzi spremembe"
+msgstr "Zavrzi spremembe"
 
 #: common/confirm.cpp:187 common/confirm.cpp:266
 #, fuzzy
@@ -3970,12 +3968,12 @@ msgstr ""
 #: common/dialogs/panel_mouse_settings_base.cpp:268
 #, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Ponastavi na pri_vzeto"
+msgstr "Ponastavi na privzeto"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
 #, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Ponastavi na pri_vzeto"
+msgstr "Ponastavi na privzeto"
 
 #: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1639
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
@@ -4066,9 +4064,8 @@ msgid "Schematic wire thickness"
 msgstr "PinSheet Properties:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:519
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Debelina avtobusa"
+msgstr "Debelina žice vodila"
 
 #: common/dialogs/panel_setup_netclasses.cpp:520
 #, fuzzy
@@ -4149,9 +4146,8 @@ msgid "Wire Thickness"
 msgstr "Debelina žice"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
-#, fuzzy
 msgid "Bus Thickness"
-msgstr "Debelina avtobusa"
+msgstr "Debelina vodila"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53 eeschema/sch_line.cpp:940
 #, fuzzy
@@ -4763,9 +4759,8 @@ msgid "Wire Entry"
 msgstr "Žični vstop"
 
 #: common/eda_item.cpp:340
-#, fuzzy
 msgid "Bus Entry"
-msgstr "Avtobusni vstop"
+msgstr "Vhod vodila"
 
 #: common/eda_item.cpp:342 eeschema/sch_bitmap.cpp:201
 #, fuzzy
@@ -5610,14 +5605,13 @@ msgid "Wires"
 msgstr "Žice"
 
 #: common/layer_id.cpp:109
-#, fuzzy
 msgid "Buses"
-msgstr "Avtobusi"
+msgstr "Vodila"
 
 #: common/layer_id.cpp:110
 #, fuzzy
 msgid "Bus junctions"
-msgstr "Avtobusna križišča"
+msgstr "Spoji vodil"
 
 #: common/layer_id.cpp:111
 #, fuzzy
@@ -6325,9 +6319,8 @@ msgid "Save all changes"
 msgstr "Shrani vse spremembe"
 
 #: common/tool/actions.cpp:91
-#, fuzzy
 msgid "Throw away changes"
-msgstr "Zavrzite spremembe"
+msgstr "Zavrzi spremembe"
 
 #: common/tool/actions.cpp:96
 #, fuzzy
@@ -7303,9 +7296,9 @@ msgid "Reset to Defaults"
 msgstr "Ponastavi na privzete nastavitve"
 
 #: common/widgets/paged_dialog.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Ponastavi na pri_vzeto"
+msgstr "Ponastavi %s na privzeto"
 
 #: common/widgets/unit_binder.cpp:222
 #, fuzzy, c-format
@@ -14247,9 +14240,8 @@ msgid "Label attached to bus item does not describe a bus"
 msgstr "Oznaka, priložena elementu vodila, ne opisuje vodila"
 
 #: eeschema/erc_item.cpp:118
-#, fuzzy
 msgid "Buses are graphically connected but share no bus members"
-msgstr "Avtobusi so grafično povezani, vendar nimajo nobenega člana vodila"
+msgstr "Vodila so grafično povezana, vendar nimajo skupnih članov"
 
 #: eeschema/erc_item.cpp:122
 #, fuzzy
@@ -14292,9 +14284,8 @@ msgid "Duplicate reference designators"
 msgstr "Označevalci parcel"
 
 #: eeschema/erc_item.cpp:154
-#, fuzzy
 msgid "Bus Entry needed"
-msgstr "Potreben je vstop v avtobus"
+msgstr "Potreben je vhod vodila"
 
 #: eeschema/fields_grid_table.cpp:136 eeschema/files-io.cpp:822
 #: eeschema/tools/sch_editor_control.cpp:102
@@ -15087,14 +15078,12 @@ msgstr ""
 "%s"
 
 #: eeschema/sch_bus_entry.cpp:457
-#, fuzzy
 msgid "Bus to Wire Entry"
-msgstr "Avtobus do žičnega vhoda"
+msgstr "Vhod vodila na žico"
 
 #: eeschema/sch_bus_entry.cpp:463
-#, fuzzy
 msgid "Bus to Bus Entry"
-msgstr "Avtobus do vstopa na avtobus"
+msgstr "Vhod vodila na vodilo"
 
 #: eeschema/sch_bus_entry.cpp:528 eeschema/sch_line.cpp:928
 #, fuzzy
@@ -15107,9 +15096,8 @@ msgid "Bus"
 msgstr "Vodilo"
 
 #: eeschema/sch_bus_entry.cpp:532
-#, fuzzy
 msgid "Bus Entry Type"
-msgstr "Vrsta vstopa v avtobus"
+msgstr "Vrsta vhoda vodila"
 
 #: eeschema/sch_bus_entry.cpp:552 eeschema/sch_line.cpp:960
 #: eeschema/sch_text.cpp:829
@@ -15292,9 +15280,9 @@ msgid "Wire, length %s"
 msgstr "Žica, dolžina %s"
 
 #: eeschema/sch_line.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Bus, length %s"
-msgstr "Avtobus, dolžina %s"
+msgstr "Vodilo, dolžina %s"
 
 #: eeschema/sch_line.cpp:790
 #, fuzzy, c-format
@@ -16639,7 +16627,6 @@ msgid "Create New Sheet"
 msgstr "Ustvari nov list"
 
 #: eeschema/sheet.cpp:575
-#, fuzzy
 msgid "Discard New Sheet"
 msgstr "Zavrzi nov list"
 
@@ -18103,14 +18090,12 @@ msgid "Add a junction"
 msgstr "Dodajte spoj"
 
 #: eeschema/tools/ee_actions.cpp:305
-#, fuzzy
 msgid "Add Wire to Bus Entry"
-msgstr "Dodajte vhod na avtobus"
+msgstr "Dodajte vhod na vodilo"
 
 #: eeschema/tools/ee_actions.cpp:305
-#, fuzzy
 msgid "Add a wire entry to a bus"
-msgstr "Avtobusu dodajte žični vhod"
+msgstr "Vodilu dodajte žični vhod"
 
 #: eeschema/tools/ee_actions.cpp:311
 #, fuzzy
@@ -18781,12 +18766,12 @@ msgstr "Dodajte vodilo"
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:134
 #, fuzzy
 msgid "Unfold from Bus"
-msgstr "Odvijte iz avtobusa"
+msgstr "Odvijte iz vodila"
 
 #: eeschema/tools/ee_actions.cpp:719
 #, fuzzy
 msgid "Break a wire out of a bus"
-msgstr "Iz avtobusa prekinite žico"
+msgstr "Iz vodila izpeljite žico"
 
 #: eeschema/tools/ee_actions.cpp:732
 #, fuzzy
@@ -20877,7 +20862,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:78
 #, fuzzy
 msgid "Add repository"
-msgstr "Dodajte vhod na avtobus"
+msgstr "Dodajte repozitorij"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:61
 #, fuzzy
@@ -20976,9 +20961,8 @@ msgid "Repository"
 msgstr "Poročilo"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
-#, fuzzy
 msgid "Discard action"
-msgstr "_Zavrzi spremembe"
+msgstr "Zavrzi spremembe"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
 #, fuzzy
