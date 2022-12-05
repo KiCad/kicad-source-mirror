@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:25-0800\n"
-"PO-Revision-Date: 2022-12-02 20:47+0000\n"
+"PO-Revision-Date: 2022-12-07 22:47+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -156,7 +156,7 @@ msgstr "Ladataan 3D-malleja..."
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:942
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "Uudellen latausaika %.3f s"
+msgstr "Latausaika %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:933
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:427
@@ -22812,12 +22812,12 @@ msgstr "Kerros:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:87
 msgid "Dimension Format"
-msgstr "Mitan muoto"
+msgstr "Mittamuodot"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
 msgid "Measured value of this dimension"
-msgstr "Tämän ulottuvuuden mitattu arvo"
+msgstr "Tämän mitan mitattu arvo"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
 msgid "Override value"
@@ -22881,7 +22881,7 @@ msgstr "1234 (mm)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
 msgid "Text to print after the dimension value"
-msgstr "Tulostettava teksti ulottuvuusarvon jälkeen"
+msgstr "Tulostettava teksti mitta-arvon jälkeen"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:164
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
@@ -22938,7 +22938,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
 msgid "Dimension Text"
-msgstr "Muototeksti"
+msgstr "Mittateksti"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:111
@@ -23033,7 +23033,7 @@ msgstr "Manuaalinen"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
 msgid "Choose how to position the text relative to the dimension line"
-msgstr "Valitse, kuinka teksti sijoitetaan suhteessa mittariviin"
+msgstr "Valitse, kuinka teksti sijoitetaan suhteessa mittaviivaan"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:344
 msgid "Dimension Line"
@@ -28883,7 +28883,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
-msgstr "Uusien ulottuvuusobjektien oletusominaisuudet:"
+msgstr "Uusien mittaobjektien oletusominaisuudet:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:93
 msgid ""
@@ -31345,7 +31345,7 @@ msgstr "Jälkiliite"
 #: pcbnew/pcb_dimension.cpp:441
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr "Ulottuvuus '%s' %s"
+msgstr "Mitta '%s' kohteessa %s"
 
 #: pcbnew/pcb_edit_frame.cpp:195
 msgid "KiCad PCB Editor"
@@ -31708,7 +31708,7 @@ msgstr "Ladataan piirustuksen mittoja..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:1358
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr "Dimensio tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1400
 msgid "No 3D-models will be imported."
@@ -32067,8 +32067,8 @@ msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
-"Ulottuvuus ID %s on vapaan kulman ulottuvuus, jolle ei ole vastaavuutta "
-"KiCad:issa. Ulottuvuus korvattiin vaaka/pystysuoralla ulottuvuudella."
+"Mittatunnus %s on kulmamitta, jolla ei ole KiCad-vastinetta. Sen sijaan "
+"ladattiin tasattu mitta."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1383
 #, c-format
@@ -32077,9 +32077,9 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
-"Dimensiotunnuksella %s on \"ulkoinen\" tyyli CADSTARissa. Ulkoisia "
-"ulottuvuustyylejä ei vielä tueta KiCadissa. Dimension-objekti tuotiin sen "
-"sijaan sisäisellä ulottuvuustyylillä."
+"Mittatunnuksella %s on \"ulkoinen\" tyyli CADSTARissa. Ulkoisia mittatyylejä "
+"ei vielä tueta KiCadissa. Mitta-objekti tuotiin sen sijaan sisäisellä "
+"mittatyylillä."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1439
 #, c-format
@@ -32227,7 +32227,7 @@ msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
 msgstr ""
-"Netto %s viittaa komponenttitunnukseen '%s', jota ei ole olemassa. Tämä on "
+"Verkko %s viittaa komponenttitunnukseen '%s', jota ei ole olemassa. Tämä on "
 "jätetty huomiotta."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2207
@@ -32450,8 +32450,7 @@ msgstr "Odotetaan anturan asetusarvoja, mutta löydettiin %s: %s riviltä %zu."
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:644
 #, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr ""
-"Tuntematon juotospisteen muodon nimi '%s' kerroksessa \"%s\" rivillä %zu."
+msgstr "Tuntematon anturamuodon nimi \"%s\" kerroksessa \"%s\" rivillä %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:966
 #, c-format
@@ -32472,7 +32471,7 @@ msgstr "Tunnistamaton anturamuotoprimitiivi '%s' rivillä %zu."
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1124
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "Virheellinen tunnuksen määrä. Odotettiin 8, mutta löydettiin %zu."
+msgstr "Virheellinen tunnusmäärä. Odotettiin 8, mutta löydettiin %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1259
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1448
@@ -32858,7 +32857,8 @@ msgstr "Huono ZSmoothing mallille CZONE_CONTAINER \"%s\""
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2540
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
-msgstr "Virheellinen ZClearance-lisäosa mallille CZONE_CONTAINER \"%s\""
+msgstr ""
+"Virheellinen ZClearance-anturavaihtoehto kohteelle CZONE_CONTAINER \"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2825
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2864
@@ -32982,7 +32982,7 @@ msgstr "Pienennä mutkittelijan amplitudia yhdellä askeleella."
 
 #: pcbnew/router/length_tuner_tool.cpp:99
 msgid "Length Tuner"
-msgstr "Pituuden Viritin"
+msgstr "Pituusviritin"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:475
 msgid ""
@@ -33290,15 +33290,15 @@ msgstr "Läpivienti %s"
 
 #: pcbnew/router/router_tool.cpp:317
 msgid "Select Differential Pair Dimensions"
-msgstr "Valitse Differential Pair Dimensions"
+msgstr "Valitse Differentiaaliparin mitat"
 
 #: pcbnew/router/router_tool.cpp:334
 msgid "Use differential pair dimensions from the net class"
-msgstr "Käytä verkkoluokan differentiaalisia parimittoja"
+msgstr "Käytä mittoja verkkoluokasta differentiaaliparille"
 
 #: pcbnew/router/router_tool.cpp:339
 msgid "Specify custom differential pair dimensions"
-msgstr "Määritä mukautetut differentiaaliparin mitat"
+msgstr "Määritä mukautetut differentiaaliparimitat"
 
 #: pcbnew/router/router_tool.cpp:356
 #, c-format
@@ -34288,11 +34288,11 @@ msgstr "Lisää keskimitta"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add Orthogonal Dimension"
-msgstr "Lisää Kohtisuora Mitta"
+msgstr "Lisää Kohtisuoramitta"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add an orthogonal dimension"
-msgstr "Lisää kohtisuora mitta"
+msgstr "Lisää kohtisuoramitta"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add Leader"
@@ -34300,7 +34300,7 @@ msgstr "Lisää Selite"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add a leader dimension"
-msgstr "Lisää selitemitat"
+msgstr "Lisää selitemitta"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add Filled Zone"
@@ -36276,23 +36276,23 @@ msgstr "Piilota kaikki ei-kupariset kerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1733
 msgid "Show Only Front Assembly Layers"
-msgstr "Näytä vain etuasennuksen kerrokset"
+msgstr "Näytä vain Etukokopanokerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1736
 msgid "Show Only Front Layers"
-msgstr "Näytä vain etukerrokset"
+msgstr "Näytä vain Etukerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1742
 msgid "Show Only Inner Layers"
-msgstr "Näytä vain sisäiset kerrokset"
+msgstr "Näytä vain Sisäkerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1746
 msgid "Show Only Back Layers"
-msgstr "Näytä vain takakerrokset"
+msgstr "Näytä vain Takakerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1749
 msgid "Show Only Back Assembly Layers"
-msgstr "Näytä vain takakokoonpanokerrokset"
+msgstr "Näytä vain Takakokoonpanokerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:2068
 #, c-format
@@ -36613,7 +36613,7 @@ msgstr "Itsenäinen piirilevyeditori KiCad alustoille"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "pcbnew"
-msgstr "pcbnew()"
+msgstr "pcbuusi"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
