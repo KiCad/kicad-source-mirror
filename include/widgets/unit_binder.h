@@ -231,7 +231,7 @@ protected:
     wxStaticText*       m_unitLabel;      ///< Can be nullptr
 
     ///< Currently used units.
-    const EDA_IU_SCALE& m_iuScale;
+    const EDA_IU_SCALE* m_iuScale;
     EDA_UNITS           m_units;
     bool                m_negativeZero;   ///< Indicates "-0" should be displayed for 0.
     EDA_DATA_TYPE       m_dataType;

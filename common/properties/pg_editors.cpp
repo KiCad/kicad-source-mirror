@@ -63,9 +63,11 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
 {
     wxASSERT( m_unitBinder );
 
-    wxPGWindowList ret = wxPGTextCtrlEditor::CreateControls( aPropGrid, aProperty, aPos, aSize );
+    wxString text = aProperty->GetValueAsString( wxPG_EDITABLE_VALUE );
+    wxWindow* win = aPropGrid->GenerateEditorTextCtrl(aPos, aSize, text, nullptr, 0, aProperty->GetMaxLength() );
+    wxPGWindowList ret( win, nullptr );
 
-    m_unitBinder->SetControl( ret.m_primary );
+    m_unitBinder->SetControl( win );
     m_unitBinder->RequireEval();
 
     if( PGPROPERTY_DISTANCE* prop = dynamic_cast<PGPROPERTY_DISTANCE*>( aProperty ) )
