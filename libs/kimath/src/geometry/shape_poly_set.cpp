@@ -808,6 +808,7 @@ void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SE
     c.Execute( aType, Clipper2Lib::FillRule::NonZero, solution );
 
     importTree( solution, zValues, arcBuffer );
+    solution.Clear(); // Free used memory (not done in dtor)
 }
 
 
@@ -1059,6 +1060,7 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
     c2.Execute(ClipType::Union, FillRule::Positive, tree);
 
     importTree( tree, zValues, arcBuffer );
+    tree.Clear();
 }
 
 
