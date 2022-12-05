@@ -418,9 +418,22 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     }
 
     // Make sure that all futures have finished.
+    // This can happen when the user cancels the above operation
     for( auto& ret : returns )
+    {
         if( ret.first.valid() )
-            ret.first.wait();
+        {
+            std::future_status status = ret.first.wait_for( std::chrono::seconds( 0 ) );
+
+            while( status != std::future_status::ready )
+            {
+                if( m_progressReporter )
+                    m_progressReporter->KeepRefreshing();
+
+                status = ret.first.wait_for( std::chrono::milliseconds( 100 ) );
+            }
+        }
+    }
 
     // Now update the connectivity to check for isolated copper islands
     // (NB: FindIsolatedCopperIslands() is multi-threaded)
