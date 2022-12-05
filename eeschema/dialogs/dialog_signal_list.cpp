@@ -73,11 +73,11 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
 
         if( simType == ST_TRANSIENT || simType == ST_DC )
         {
-            for( const auto& item : m_circuitModel->GetItems() )
+            for( const SPICE_ITEM& item : m_circuitModel->GetItems() )
             {
                 // Add all possible currents for the primitive.
-                for( const auto& currentName : item.model->SpiceGenerator().CurrentNames( item ) )
-                    m_signals->Append( currentName );
+                for( const std::string& name : item.model->SpiceGenerator().CurrentNames( item ) )
+                    m_signals->Append( name );
             }
         }
     }

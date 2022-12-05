@@ -759,8 +759,8 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
     if( xAxisName.IsEmpty() )
         return false;
 
-    auto data_x = m_simulator->GetMagPlot( (const char*) xAxisName.c_str() );
-    unsigned int size = data_x.size();
+    std::vector<double> data_x = m_simulator->GetMagPlot( (const char*) xAxisName.c_str() );
+    unsigned int        size = data_x.size();
 
     if( data_x.empty() )
         return false;
@@ -868,11 +868,11 @@ void SIM_PLOT_FRAME::updateSignalList()
     else
         m_signalsIconColorList->RemoveAll();
 
-    for( const auto& trace : GetCurrentPlot()->GetTraces() )
+    for( const auto& [name, trace] : GetCurrentPlot()->GetTraces() )
     {
         wxBitmap bitmap( isize, isize );
         bmDC.SelectObject( bitmap );
-        wxColour tcolor = trace.second->GetPen().GetColour();
+        wxColour tcolor = trace->GetPen().GetColour();
 
         wxColour bgColor = m_signals->wxWindow::GetBackgroundColour();
         bmDC.SetPen( wxPen( bgColor ) );
@@ -903,9 +903,9 @@ void SIM_PLOT_FRAME::updateSignalList()
     // calculated from the trace name index
     int imgidx = 0;
 
-    for( const auto& trace : plotPanel->GetTraces() )
+    for( const auto& [name, trace] : plotPanel->GetTraces() )
     {
-        m_signals->InsertItem( imgidx, trace.first, imgidx );
+        m_signals->InsertItem( imgidx, name, imgidx );
         imgidx++;
     }
 }
@@ -913,7 +913,7 @@ void SIM_PLOT_FRAME::updateSignalList()
 
 void SIM_PLOT_FRAME::updateTuners()
 {
-    const auto& spiceItems = m_circuitModel->GetItems();
+    const std::list<SPICE_ITEM>& spiceItems = m_circuitModel->GetItems();
 
     for( auto it = m_tuners.begin(); it != m_tuners.end(); /* iteration inside the loop */ )
     {
@@ -921,9 +921,10 @@ void SIM_PLOT_FRAME::updateTuners()
 
         if( std::find_if( spiceItems.begin(), spiceItems.end(),
                           [&]( const SPICE_ITEM& item )
-                {
-                    return item.refName == ref;
-                }) == spiceItems.end() )
+                          {
+                              return item.refName == ref;
+                          }
+                         ) == spiceItems.end() )
         {
             // The component does not exist anymore, remove the associated tuner
             TUNER_SLIDER* tuner = *it;
@@ -940,7 +941,7 @@ void SIM_PLOT_FRAME::updateTuners()
 
 void SIM_PLOT_FRAME::applyTuners()
 {
-    for( auto& tuner : m_tuners )
+    for( const TUNER_SLIDER* tuner : m_tuners )
         m_simulator->Command( tuner->GetTunerCommand() );
 }
 
@@ -1095,11 +1096,11 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
 
         file.AddLine( wxString::Format( wxT( "%llu" ), plotPanel->GetTraces().size() ) );
 
-        for( const auto& trace : plotPanel->GetTraces() )
+        for( const auto& [name, trace] : plotPanel->GetTraces() )
         {
-            file.AddLine( wxString::Format( wxT( "%d" ), trace.second->GetType() ) );
-            file.AddLine( trace.second->GetName() );
-            file.AddLine( trace.second->GetParam() );
+            file.AddLine( wxString::Format( wxT( "%d" ), trace->GetType() ) );
+            file.AddLine( trace->GetName() );
+            file.AddLine( trace->GetParam() );
         }
     }
 
@@ -1258,11 +1259,8 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
     wxString xAxisName( m_simulator->GetXAxis( simType ) );
     out.Write( wxString::Format( wxT( "%s%c" ), xAxisName, SEPARATOR ) );
 
-    for( const auto& trace : traces )
-    {
-        wxString yAxisName = trace.first;
-        out.Write( wxString::Format( wxT( "%s%c" ), yAxisName, SEPARATOR ) );
-    }
+    for( const auto& [name, trace] : traces )
+        out.Write( wxString::Format( wxT( "%s%c" ), name, SEPARATOR ) );
 
     out.Write( wxS( "\r\n" ) );
 
@@ -1272,9 +1270,9 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
         double xAxisValue = traces.begin()->second->GetDataX().at( curRow );
         out.Write( wxString::Format( wxT( "%g%c" ), xAxisValue, SEPARATOR ) );
 
-        for( const auto& trace : traces )
+        for( const auto& [name, trace] : traces )
         {
-            double yAxisValue = trace.second->GetDataY().at( curRow );
+            double yAxisValue = trace->GetDataY().at( curRow );
             out.Write( wxString::Format( wxT( "%g%c" ), yAxisValue, SEPARATOR ) );
         }
 
@@ -1731,16 +1729,16 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
     // Update cursor values
     int itemidx = 0;
 
-    for( const auto& trace : plotPanel->GetTraces() )
+    for( const auto& [name, trace] : plotPanel->GetTraces() )
     {
-        if( CURSOR* cursor = trace.second->GetCursor() )
+        if( CURSOR* cursor = trace->GetCursor() )
         {
-           // Find the right icon color in list.
+            // Find the right icon color in list.
             // It is the icon used in m_signals list for the same trace
-            long iconColor = m_signals->FindItem( -1, trace.first );
+            long iconColor = m_signals->FindItem( -1, name );
 
             const wxRealPoint coords = cursor->GetCoords();
-            long idx = m_cursors->InsertItem( itemidx++, trace.first, iconColor );
+            long              idx = m_cursors->InsertItem( itemidx++, name, iconColor );
             m_cursors->SetItem( idx, X_COL, SPICE_VALUE( coords.x ).ToSpiceString() );
             m_cursors->SetItem( idx, Y_COL, SPICE_VALUE( coords.y ).ToSpiceString() );
         }
@@ -1804,16 +1802,16 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         std::vector<struct TRACE_DESC> traceInfo;
 
         // Get information about all the traces on the plot, remove and add again
-        for( auto& trace : plotPanel->GetTraces() )
+        for( auto& [name, trace] : plotPanel->GetTraces() )
         {
             struct TRACE_DESC placeholder;
-            placeholder.m_name = trace.second->GetName();
-            placeholder.m_type = trace.second->GetType();
+            placeholder.m_name = trace->GetName();
+            placeholder.m_type = trace->GetType();
 
             traceInfo.push_back( placeholder );
         }
 
-        for( auto& trace : traceInfo )
+        for( const struct TRACE_DESC& trace : traceInfo )
         {
             if( !updatePlot( trace.m_name, trace.m_type, plotPanel ) )
                 removePlot( trace.m_name );
@@ -1828,7 +1826,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
         m_simConsole->SetInsertionPointEnd();
 
-        for( const auto& vec : m_simulator->AllPlots() )
+        for( const std::string& vec : m_simulator->AllPlots() )
         {
             std::vector<double> val_list = m_simulator->GetRealPlot( vec, 1 );
 
