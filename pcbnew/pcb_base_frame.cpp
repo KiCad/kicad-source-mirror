@@ -5,6 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 CERN
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +104,10 @@ bool PCB_BASE_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
     if( viewer3D )
         viewer3D->Close( true );
+
+    // Similarly, wxConvBrokenFileNames uses some statically allocated variables that make it
+    // crash when run later from a d'tor.
+    Prj().Cleanup3DCache();
 
     return true;
 }

@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 CERN
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -194,19 +195,6 @@ S3D_CACHE::S3D_CACHE()
 
 S3D_CACHE::~S3D_CACHE()
 {
-    FlushCache();
-
-    // We'll delete ".3dc" cache files older than this many days
-    int clearCacheInterval = 0;
-
-    if( Pgm().GetCommonSettings() )
-        clearCacheInterval = Pgm().GetCommonSettings()->m_System.clear_3d_cache_interval;
-
-    // An interval of zero means the user doesn't want to ever clear the cache
-
-    if( clearCacheInterval > 0 )
-        CleanCacheDir( clearCacheInterval );
-
     delete m_FNResolver;
     delete m_Plugins;
 }
@@ -706,6 +694,29 @@ void S3D_CACHE::CleanCacheDir( int aNumDaysOld )
                 }
             }
         }
+    }
+}
+
+
+void PROJECT::Cleanup3DCache()
+{
+    std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
+
+    // Get the existing cache from the project
+    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( GetElem( ELEM_3DCACHE ) );
+
+    if( cache )
+    {
+        // We'll delete ".3dc" cache files older than this many days
+        int clearCacheInterval = 0;
+
+        if( Pgm().GetCommonSettings() )
+            clearCacheInterval = Pgm().GetCommonSettings()->m_System.clear_3d_cache_interval;
+
+        // An interval of zero means the user doesn't want to ever clear the cache
+
+        if( clearCacheInterval > 0 )
+            cache->CleanCacheDir( clearCacheInterval );
     }
 }
 

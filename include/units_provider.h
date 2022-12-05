@@ -36,6 +36,9 @@ public:
             m_userUnits( aUnits )
     {}
 
+    virtual ~UNITS_PROVIDER()
+    {}
+
     EDA_UNITS GetUserUnits() const { return m_userUnits; }
     void SetUserUnits( EDA_UNITS aUnits ) { m_userUnits = aUnits; }
 

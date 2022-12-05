@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 CERN
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,6 +281,8 @@ public:
      * @return a pointer to an instance of the 3D cache manager or NULL on failure.
      */
     S3D_CACHE* Get3DCacheManager( bool updateProjDir = false );
+
+    void Cleanup3DCache();
 
     /// Accessor for 3D path resolver
     FILENAME_RESOLVER* Get3DFilenameResolver();
