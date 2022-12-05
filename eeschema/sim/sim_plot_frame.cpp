@@ -172,8 +172,8 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             KiBitmap( BITMAPS::sim_probe ), _( "Probe signals on the schematic" ), wxITEM_NORMAL );
     m_toolTune = m_toolBar->AddTool( ID_SIM_TUNE, _( "Tune" ),
             KiBitmap( BITMAPS::sim_tune ), _( "Tune component values" ), wxITEM_NORMAL );
-    m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Sim Parameters" ),
-            KiBitmap( BITMAPS::config ), _( "Simulation parameters and settings" ), wxITEM_NORMAL );
+    m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Sim Command" ),
+            KiBitmap( BITMAPS::config ), _( "Simulation command and settings" ), wxITEM_NORMAL );
 
     // Start all toolbar buttons except settings as disabled
     m_toolSimulate->Enable( false );
