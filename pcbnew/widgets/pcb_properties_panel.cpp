@@ -36,8 +36,10 @@
 #include <string_utils.h>
 
 
-PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* aFrame )
-    : PROPERTIES_PANEL( aParent, aFrame ), m_frame( aFrame ), m_propMgr( PROPERTY_MANAGER::Instance() )
+PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* aFrame ) :
+        PROPERTIES_PANEL( aParent, aFrame ),
+        m_frame( aFrame ),
+        m_propMgr( PROPERTY_MANAGER::Instance() )
 {
     m_propMgr.Rebuild();
     bool found = false;

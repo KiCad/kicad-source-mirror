@@ -243,6 +243,10 @@ template <typename T>
 bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 {
     m_pinAssignmentsGrid->CommitPendingChanges();
+
+    // This should have been done in wxPGTextCtrlEditor::OnTextCtrlEvent(), but something must
+    // be clearing it before we get here, resulting in CommitChangesFromEditor() doing nothing
+    m_paramGrid->GetGrid()->EditorsValueWasModified();
     m_paramGrid->GetGrid()->CommitChangesFromEditor();
 
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
@@ -277,12 +281,14 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
             SIM_MODEL::SetFieldValue(
                     m_fields, SIM_LIBRARY_KIBIS::PIN_FIELD,
                     kibismodel->GetIbisPins().at( m_ibisPinCombobox->GetSelection() ).first );
-            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD,
-                                      std::string( m_ibisModelCombobox->GetValue().c_str() ) );
+
+            SIM_MODEL::SetFieldValue(
+                    m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD,
+                    std::string( m_ibisModelCombobox->GetValue().c_str() ) );
+
             SIM_MODEL::SetFieldValue(
                     m_fields, SIM_LIBRARY_KIBIS::DIFF_FIELD,
-                    ( kibismodel->CanDifferential() && m_differentialCheckbox->GetValue() ) ? "1"
-                                                                                            : "" );
+                    ( kibismodel->CanDifferential() && m_differentialCheckbox->GetValue() ) ? "1" : "" );
         }
     }
 
@@ -644,13 +650,14 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForce
     try
     {
         std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
+        int         pinCount = m_symbol.GetRawPins().size();
 
         for( auto& [baseModelName, baseModel] : library()->GetModels() )
         {
             if( baseModelName == modelName )
-                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetRawPins().size(), m_fields );
+                m_libraryModelsMgr.CreateModel( baseModel, pinCount, m_fields );
             else
-                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetRawPins().size() );
+                m_libraryModelsMgr.CreateModel( baseModel, pinCount );
         }
     }
     catch( const IO_ERROR& e )
@@ -800,7 +807,7 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
         else
         {
             prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, curModel(),
-                                          aParamIndex, SIM_VALUE::TYPE_STRING );
+                                          aParamIndex );
         }
         break;
 
@@ -936,32 +943,6 @@ int DIALOG_SIM_MODEL<T>::getModelPinIndex( const wxString& aModelPinString ) con
     aModelPinString.Mid( 0, length ).ToCLong( &result );
 
     return static_cast<int>( result - 1 );
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onKeyDown( wxKeyEvent& aEvent )
-{
-    // Because wxPropertyGrid has special handling for the tab key, wxPropertyGrid::DedicateKey()
-    // and wxPropertyGrid::AddActionTrigger() don't work for it. So instead we translate it to an
-    // (up or down) arrow key, which has proper handling (select next or previous property) defined
-    // by the aforementioned functions.
-
-    if( aEvent.GetKeyCode() == WXK_TAB )
-    {
-        wxWindow*       focus = FindFocus();
-        wxPropertyGrid* pg = focus ? dynamic_cast<wxPropertyGrid*>( focus->GetParent() ) : nullptr;
-
-        if( pg )
-        {
-            pg->CommitChangesFromEditor();
-
-            aEvent.m_keyCode = aEvent.ShiftDown() ? WXK_UP : WXK_DOWN;
-            aEvent.m_shiftDown = false;
-        }
-    }
-
-    aEvent.Skip();
 }
 
 
@@ -1187,8 +1168,7 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
                         m_libraryModelsMgr.GetModels().at( m_modelNameCombobox->GetSelection() ).get() );
 
                 m_libraryModelsMgr.SetModel( m_modelNameCombobox->GetSelection(),
-                                             std::make_unique<SIM_MODEL_KIBIS>( type,
-                                                                                kibisModel,
+                                             std::make_unique<SIM_MODEL_KIBIS>( type, kibisModel,
                                                                                 m_fields ) );
             }
 

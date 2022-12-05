@@ -31,51 +31,15 @@
 #include <wx/propgrid/props.h>
 
 #include <sim/sim_model.h>
+#include "libeval/numeric_evaluator.h"
 
 
 class SIM_VALIDATOR : public wxValidator
 {
 private:
-    void navigate( int flags );
-
-    void onKeyDown( wxKeyEvent& aEvent );
-
-    wxDECLARE_EVENT_TABLE();
-};
-
-
-class SIM_STRING_VALIDATOR : public SIM_VALIDATOR
-{
-public:
-    SIM_STRING_VALIDATOR( SIM_VALUE::TYPE aValueType, SIM_VALUE_GRAMMAR::NOTATION aNotation );
-    SIM_STRING_VALIDATOR( const SIM_STRING_VALIDATOR& aValidator ) = default;
-
-    wxObject* Clone() const override;
-
-    bool Validate( wxWindow* aParent ) override;
-    bool TransferToWindow() override;
-    bool TransferFromWindow() override;
-
-private:
-    bool isValid( const wxString& aString );
-
-    wxTextEntry* getTextEntry();
-
-    SIM_VALUE::TYPE             m_valueType;
-    SIM_VALUE_GRAMMAR::NOTATION m_notation;
-};
-
-
-class SIM_BOOL_VALIDATOR : public SIM_VALIDATOR
-{
-public:
-    SIM_BOOL_VALIDATOR() : SIM_VALIDATOR() {}
-    SIM_BOOL_VALIDATOR( const SIM_BOOL_VALIDATOR& aValidator ) = default;
-
-    bool Validate( wxWindow* aParent ) override;
-
-private:
-    wxDECLARE_EVENT_TABLE();
+    bool Validate( wxWindow* aParent ) override { return true; }
+    bool TransferToWindow() override { return true; }
+    bool TransferFromWindow() override { return true; }
 };
 
 
@@ -91,7 +55,11 @@ public:
 protected:
     SIM_MODEL&                   m_model;
     int                          m_paramIndex;
-    bool                         m_disabled; // If true, never access the models.
+
+    bool                         m_needsEval;
+    mutable NUMERIC_EVALUATOR    m_eval;
+
+    bool                         m_disabled;   ///< If true, never access the models.
 };
 
 
@@ -124,6 +92,8 @@ public:
     bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 )
         const override;
 
+    bool OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event ) override;
+
 protected:
     SIM_VALUE::TYPE              m_valueType;
     SIM_VALUE_GRAMMAR::NOTATION  m_notation;
@@ -133,11 +103,8 @@ protected:
 class SIM_ENUM_PROPERTY : public wxEnumProperty, public SIM_PROPERTY
 {
 public:
-    SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
-                       SIM_MODEL& aModel,
-                       int aParamIndex,
-                       SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT,
-                       SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
+    SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName, SIM_MODEL& aModel,
+                       int aParamIndex );
 
     bool IntToValue( wxVariant& aVariant, int aNumber, int aArgFlags = 0 ) const override;
 };

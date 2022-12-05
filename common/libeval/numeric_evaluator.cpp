@@ -87,6 +87,7 @@ void NUMERIC_EVALUATOR::SetDefaultUnits( EDA_UNITS aUnits )
     case EDA_UNITS::MILS:        m_defaultUnits = Unit::Mil;     break;
     case EDA_UNITS::INCHES:      m_defaultUnits = Unit::Inch;    break;
     case EDA_UNITS::DEGREES:     m_defaultUnits = Unit::Degrees; break;
+    case EDA_UNITS::UNSCALED:    m_defaultUnits = Unit::SI;      break;
     default:                     m_defaultUnits = Unit::MM;      break;
     }
 }
@@ -196,47 +197,82 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
     if( m_token.pos >= m_token.inputLen )
         return retval;
 
+    // Support for old school decimal separators (ie: "2K2")
+    auto isOldSchoolDecimalSeparator =
+            []( char ch, double* siScaler ) -> bool
+            {
+                switch( ch )
+                {
+                case 'a': *siScaler = 1.0e-18; return true;
+                case 'f': *siScaler = 1.0e-15; return true;
+                case 'p': *siScaler = 1.0e-12; return true;
+                case 'n': *siScaler = 1.0e-9;  return true;
+                case 'u': *siScaler = 1.0e-6;  return true;
+                case 'm': *siScaler = 1.0e-3;  return true;
+                case 'k':
+                case 'K': *siScaler = 1.0e3;   return true;
+                case 'M': *siScaler = 1.0e6;   return true;
+                case 'G': *siScaler = 1.0e9;   return true;
+                case 'T': *siScaler = 1.0e12;  return true;
+                case 'P': *siScaler = 1.0e15;  return true;
+                case 'E': *siScaler = 1.0e18;  return true;
+                default:                       return false;
+                }
+            };
+
     auto isDecimalSeparator =
             [&]( char ch ) -> bool
             {
-                return ( ch == m_localeDecimalSeparator || ch == '.' || ch == ',' );
+                double dummy;
+
+                if( ch == m_localeDecimalSeparator || ch == '.' || ch == ',' )
+                    return true;
+
+                if( m_defaultUnits == Unit::SI && isOldSchoolDecimalSeparator( ch, &dummy ) )
+                    return true;
+
+                return false;
             };
 
     // Lambda: get value as string, store into clToken.token and update current index.
     auto extractNumber =
-            [&]()
+            [&]( double* aScaler )
             {
-                bool haveSeparator = false;
+                bool   haveSeparator = false;
+                double siScaler = 1.0;
+                char   ch = m_token.input[ m_token.pos ];
+
                 idx = 0;
-                char ch = m_token.input[ m_token.pos ];
 
                 do
                 {
-                    if( isDecimalSeparator( ch ) && haveSeparator )
-                        break;
-
-                    m_token.token[ idx++ ] = ch;
-
                     if( isDecimalSeparator( ch ) )
-                        haveSeparator = true;
+                    {
+                        if( haveSeparator )
+                            break;
+                        else
+                            haveSeparator = true;
+
+                        if( isOldSchoolDecimalSeparator( ch, &siScaler ) )
+                            *aScaler = siScaler;
+
+                        m_token.token[ idx++ ] = m_localeDecimalSeparator;
+                    }
+                    else
+                    {
+                        m_token.token[ idx++ ] = ch;
+                    }
 
                     ch = m_token.input[ ++m_token.pos ];
                 } while( isdigit( ch ) || isDecimalSeparator( ch ) );
 
                 m_token.token[ idx ] = 0;
-
-                // Ensure that the systems decimal separator is used
-                for( int i = strlen( m_token.token ); i; i-- )
-                {
-                    if( isDecimalSeparator( m_token.token[ i - 1 ] ) )
-                        m_token.token[ i - 1 ] = m_localeDecimalSeparator;
-                }
             };
 
     // Lamda: Get unit for current token.
     // Valid units are ", in, mm, mil and thou.  Returns Unit::Invalid otherwise.
     auto checkUnit =
-            [this]() -> Unit
+            [&]( double* siScaler ) -> Unit
             {
                 char ch = m_token.input[ m_token.pos ];
 
@@ -289,6 +325,13 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
                     return Unit::Mil;
                 }
 
+                if( m_defaultUnits == Unit::SI && sizeLeft >= 1
+                        && isOldSchoolDecimalSeparator( ch, siScaler ) )
+                {
+                    m_token.pos++;
+                    return Unit::SI;
+                }
+
                 return Unit::Invalid;
             };
 
@@ -305,20 +348,21 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             break;
     }
 
-    Unit convertFrom;
+    double siScaler;
+    Unit   convertFrom;
 
     if( ch == 0 )
     {
         /* End of input */
     }
-    else if( isdigit( ch ) || isDecimalSeparator( ch ))
+    else if( isdigit( ch ) || isDecimalSeparator( ch ) )
     {
         // VALUE
-        extractNumber();
+        extractNumber( &siScaler );
         retval.token = VALUE;
-        retval.value.dValue = atof( m_token.token );
+        retval.value.dValue = atof( m_token.token ) * siScaler;
     }
-    else if( ( convertFrom = checkUnit() ) != Unit::Invalid )
+    else if( ( convertFrom = checkUnit( &siScaler ) ) != Unit::Invalid )
     {
         // UNIT
         // Units are appended to a VALUE.
@@ -367,6 +411,10 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         else if( m_defaultUnits == Unit::Degrees && convertFrom == Unit::Degrees )
         {
             retval.value.dValue = 1.0;
+        }
+        else if( m_defaultUnits == Unit::SI )
+        {
+            retval.value.dValue = siScaler;
         }
     }
     else if( isalpha( ch ) )

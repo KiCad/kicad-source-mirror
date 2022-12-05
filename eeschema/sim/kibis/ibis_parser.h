@@ -210,7 +210,12 @@ public:
 class IbisComponentPin : public IBIS_INPUT
 {
 public:
-    IbisComponentPin( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IbisComponentPin( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
+    virtual ~IbisComponentPin()
+    {};
 
     std::string m_pinName;
     std::string m_signalName;
@@ -232,7 +237,13 @@ public:
 class IbisComponentPinMapping : public IBIS_INPUT
 {
 public:
-    IbisComponentPinMapping( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IbisComponentPinMapping( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
+    virtual ~IbisComponentPinMapping()
+    {};
+
     std::string m_pinName;
     std::string m_PDref;
     std::string m_PUref;
@@ -247,7 +258,13 @@ public:
 class IbisDiffPinEntry : public IBIS_INPUT
 {
 public:
-    IbisDiffPinEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), tdelay( aReporter ){};
+    IbisDiffPinEntry( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter ),
+            tdelay( aReporter )
+    {};
+
+    virtual ~IbisDiffPinEntry()
+    {};
 
     std::string     pinA;
     std::string     pinB;
@@ -259,7 +276,10 @@ public:
 class IbisDiffPin : IBIS_INPUT
 {
 public:
-    IbisDiffPin( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IbisDiffPin( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
     std::vector<IbisDiffPinEntry> m_entries;
 };
 
@@ -267,10 +287,13 @@ class IbisComponent : public IBIS_INPUT
 {
 public:
     IbisComponent( IBIS_REPORTER* aReporter ) :
-        IBIS_INPUT( aReporter ),
-        m_package( aReporter ),
-        m_diffPin( aReporter )
-        {};
+            IBIS_INPUT( aReporter ),
+            m_package( aReporter ),
+            m_diffPin( aReporter )
+    {};
+
+    virtual ~IbisComponent()
+    {};
 
     std::string                             m_name = "";
     std::string                             m_manufacturer = "";
@@ -297,7 +320,13 @@ public:
 class IbisModelSelector : public IBIS_INPUT
 {
 public:
-    IbisModelSelector( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IbisModelSelector( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
+    virtual ~IbisModelSelector()
+    {};
+
     std::string                            m_name;
     std::vector<IbisModelSelectorEntry> m_models;
 
@@ -308,7 +337,14 @@ public:
 class IVtableEntry : public IBIS_INPUT
 {
 public:
-    IVtableEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), I( aReporter ){};
+    IVtableEntry( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter ),
+            I( aReporter )
+    {};
+
+    virtual ~IVtableEntry()
+    {};
+
     double         V = 0;
     TypMinMaxValue I;
 };
@@ -317,7 +353,10 @@ public:
 class IVtable : public IBIS_INPUT
 {
 public:
-    IVtable( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IVtable( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
     std::vector<IVtableEntry> m_entries;
 
     bool Check() override;
@@ -345,7 +384,7 @@ public:
      * @return Multline spice directives
      */
     std::string Spice( int aN, std::string aPort1, std::string aPort2, std::string aModelName,
-                    IBIS_CORNER aCorner );
+                       IBIS_CORNER aCorner );
 
 private:
 };
@@ -353,7 +392,14 @@ private:
 class VTtableEntry : public IBIS_INPUT
 {
 public:
-    VTtableEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), V( aReporter ){};
+    VTtableEntry( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter ),
+            V( aReporter )
+    {};
+
+    virtual ~VTtableEntry()
+    {};
+
     double         t = 0;
     TypMinMaxValue V = 0;
 };
@@ -361,7 +407,10 @@ public:
 class VTtable : public IBIS_INPUT
 {
 public:
-    VTtable( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    VTtable( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
     std::vector<VTtableEntry> m_entries;
 };
 
@@ -468,23 +517,27 @@ enum class IBIS_MODEL_POLARITY
 class IbisModel : IBIS_INPUT
 {
 public:
-    IbisModel( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ),
-    m_C_comp( aReporter ),
-    m_voltageRange( aReporter ),
-    m_temperatureRange( aReporter ),
-    m_pullupReference( aReporter ),
-    m_pulldownReference( aReporter ),
-    m_GNDClampReference( aReporter ),
-    m_POWERClampReference( aReporter ),
-    m_Rgnd( aReporter ),
-    m_Rpower( aReporter ),
-    m_Rac( aReporter ),
-    m_Cac( aReporter ),
-    m_GNDClamp( aReporter ),
-    m_POWERClamp( aReporter ),
-    m_pullup( aReporter ),
-    m_pulldown( aReporter ),
-    m_ramp( aReporter )
+    IbisModel( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter ),
+            m_C_comp( aReporter ),
+            m_voltageRange( aReporter ),
+            m_temperatureRange( aReporter ),
+            m_pullupReference( aReporter ),
+            m_pulldownReference( aReporter ),
+            m_GNDClampReference( aReporter ),
+            m_POWERClampReference( aReporter ),
+            m_Rgnd( aReporter ),
+            m_Rpower( aReporter ),
+            m_Rac( aReporter ),
+            m_Cac( aReporter ),
+            m_GNDClamp( aReporter ),
+            m_POWERClamp( aReporter ),
+            m_pullup( aReporter ),
+            m_pulldown( aReporter ),
+            m_ramp( aReporter )
+    {};
+
+    virtual ~IbisModel()
     {};
 
     std::string        m_name;
@@ -527,7 +580,12 @@ public:
 class IbisPackageModel : public IBIS_INPUT
 {
 public:
-    IbisPackageModel( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IbisPackageModel( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
+    virtual ~IbisPackageModel()
+    {};
 
     std::string              m_name;
     std::string              m_manufacturer;
@@ -546,7 +604,13 @@ public:
 class IbisFile : public IBIS_INPUT
 {
 public:
-    IbisFile( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_header( aReporter ){};
+    IbisFile( IBIS_REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter ),
+            m_header( aReporter )
+    {};
+
+    virtual ~IbisFile()
+    {};
 
     IbisHeader                      m_header;
     std::vector<IbisComponent>      m_components;

@@ -95,9 +95,21 @@ template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel, int a
                                               const std::vector<LIB_FIELD>& aFields );
 
 
-SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( SCH_SYMBOL& aSymbol )
+SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol )
 {
-    return CreateModel( aSymbol.GetFields(), static_cast<int>( aSymbol.GetRawPins().size() ) );
+    std::vector<SCH_FIELD> fields;
+
+    for( int i = 0; i < aSymbol.GetFieldCount(); ++i )
+    {
+        fields.emplace_back( VECTOR2I(), i, &aSymbol, aSymbol.GetFields()[ i ].GetName() );
+
+        if( i == REFERENCE_FIELD )
+            fields.back().SetText( aSymbol.GetRef( aSheetPath ) );
+        else
+            fields.back().SetText( aSymbol.GetFields()[ i ].GetShownText( 0, false ) );
+    }
+
+    return CreateModel( fields, static_cast<int>( aSymbol.GetRawPins().size() ) );
 }
 
 template <typename T>
@@ -154,10 +166,10 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::string& aLibraryPath,
 
     if( !baseModel )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Error loading simulation model: could not find base model '%s' in library '%s'" ),
-                                  aBaseModelName,
-                                  absolutePath ) );
+        THROW_IO_ERROR( wxString::Format( _( "Error loading simulation model: could not find "
+                                             "base model '%s' in library '%s'" ),
+                                          aBaseModelName,
+                                          absolutePath ) );
     }
 
     m_models.push_back( SIM_MODEL::Create( *baseModel, aSymbolPinCount, aFields ) );

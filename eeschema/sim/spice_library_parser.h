@@ -33,7 +33,12 @@ class SIM_LIBRARY_SPICE;
 class SPICE_LIBRARY_PARSER
 {
 public:
-    SPICE_LIBRARY_PARSER( SIM_LIBRARY_SPICE& aLibrary ) : m_library( aLibrary ) {}
+    SPICE_LIBRARY_PARSER( SIM_LIBRARY_SPICE& aLibrary ) :
+            m_library( aLibrary )
+    {};
+
+    virtual ~SPICE_LIBRARY_PARSER()
+    {};
 
     virtual void ReadFile( const std::string& aFilePath );
 

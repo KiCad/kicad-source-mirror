@@ -57,7 +57,7 @@ public:
                             const std::vector<T>& aFields );
 
     // TODO: The argument can be made const.
-    SIM_LIBRARY::MODEL CreateModel( SCH_SYMBOL& aSymbol );
+    SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol );
 
     template <typename T>
     SIM_LIBRARY::MODEL CreateModel( const std::vector<T>& aFields, int aSymbolPinCount );

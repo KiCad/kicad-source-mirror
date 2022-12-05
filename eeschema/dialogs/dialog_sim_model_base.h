@@ -84,7 +84,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void onKeyDown( wxKeyEvent& event ) { event.Skip(); }
 		virtual void onRadioButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLibraryPathLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onLibraryPathTextKillFocus( wxFocusEvent& event ) { event.Skip(); }

@@ -482,7 +482,13 @@ bool SIM_VALUE_INT::FromString( const std::string& aString, NOTATION aNotation )
 template <>
 bool SIM_VALUE_FLOAT::FromString( const std::string& aString, NOTATION aNotation )
 {
-    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
+    wxString buf( aString );
+
+    // Convert any entered decimal point separators to the one our PEGTL grammar expects
+    buf.Replace( wxT( "," ), wxT( "." ) );
+
+    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( buf.ToStdString(),
+                                                                          aNotation );
     m_value = std::nullopt;
 
     if( !parseResult.isOk )
@@ -513,8 +519,7 @@ bool SIM_VALUE_FLOAT::FromString( const std::string& aString, NOTATION aNotation
 
 
 template <>
-bool SIM_VALUE_COMPLEX::FromString( const std::string& aString,
-                                                           NOTATION aNotation )
+bool SIM_VALUE_COMPLEX::FromString( const std::string& aString, NOTATION aNotation )
 {
     // TODO
 

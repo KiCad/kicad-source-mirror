@@ -499,8 +499,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCou
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
-                                              unsigned         aSymbolPinCount )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount )
 {
     std::unique_ptr<SIM_MODEL> model = Create( aBaseModel.GetType() );
 

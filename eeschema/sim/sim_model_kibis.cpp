@@ -61,11 +61,11 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const SPICE_ITEM& 
 std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const std::string aCwd,
                                                const std::string aCacheDir ) const
 {
-    std::string ibisLibFilename = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
-    std::string ibisCompName    = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY::NAME_FIELD  );
-    std::string ibisPinName     = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::PIN_FIELD );
-    std::string ibisModelName   = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
-    bool diffMode = SIM_MODEL::GetFieldValue( aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
+    std::string ibisLibFilename = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
+    std::string ibisCompName    = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::NAME_FIELD  );
+    std::string ibisPinName     = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::PIN_FIELD );
+    std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
+    bool diffMode = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
 
     wxFileName libPath = wxFileName( wxString( ibisLibFilename ) );
 
@@ -77,8 +77,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const st
 
     if( !kibis.m_valid )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS file '%s'" ),
-                                          ibisLibFilename ) );
+        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS file '%s'" ), ibisLibFilename ) );
     }
 
     KIBIS_COMPONENT* kcomp = kibis.GetComponent( std::string( ibisCompName ) );
@@ -267,7 +266,8 @@ void SIM_MODEL_KIBIS::SwitchSingleEndedDiff( bool aDiff )
     }
 }
 
-SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) : SIM_MODEL_KIBIS( aType )
+SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) :
+        SIM_MODEL_KIBIS( aType )
 {
     for( PARAM& param1 : m_params )
     {

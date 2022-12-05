@@ -32,13 +32,13 @@ class SCH_FIELD;
 
 struct SPICE_ITEM
 {
-    std::string refName;
+    std::string              refName;
     std::vector<std::string> pinNumbers;
     std::vector<std::string> pinNetNames;
-    std::string baseModelName;
-    std::string modelName;
-    const SIM_MODEL* model = nullptr;
-    const std::vector<SCH_FIELD>* fields = nullptr;
+    std::string              baseModelName;
+    std::string              modelName;
+    const SIM_MODEL*         model = nullptr;
+    std::vector<SCH_FIELD>   fields;
 };
 
 

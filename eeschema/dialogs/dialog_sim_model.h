@@ -113,7 +113,6 @@ private:
     wxString getModelPinString( int aModelPinIndex ) const;
     int getModelPinIndex( const wxString& aModelPinString ) const;
 
-    void onKeyDown( wxKeyEvent& aEvent ) override;
     void onRadioButton( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextEnter( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextKillFocus( wxFocusEvent& aEvent ) override;

@@ -373,8 +373,8 @@ public:
         };
 
         std::unique_ptr<SIM_VALUE> value;
-        const INFO& info;
-        bool isOtherVariant = false; // Legacy.
+        const INFO&                info;
+        bool                       isOtherVariant = false; // Legacy.
 
         PARAM( const INFO& aInfo, bool aIsOtherVariant = false )
             : value( SIM_VALUE::Create( aInfo.type ) ),
@@ -395,9 +395,9 @@ public:
     template <typename T>
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
 
+
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount );
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel,
-                                              unsigned         aSymbolPinCount );
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount );
 
     template <typename T>
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,

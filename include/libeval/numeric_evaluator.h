@@ -76,7 +76,6 @@ Supported units are millimeters (mm), Mil (mil) and inch (")
 // This namespace is used for the lemon parser
 namespace numEval
 {
-
     struct TokenType
     {
         union
@@ -93,7 +92,7 @@ namespace numEval
 
 class NUMERIC_EVALUATOR
 {
-    enum class Unit { Invalid, MM, CM, Inch, Mil, Degrees };
+    enum class Unit { Invalid, MM, CM, Inch, Mil, Degrees, SI };
 
 public:
     NUMERIC_EVALUATOR( EDA_UNITS aUnits );
@@ -162,16 +161,19 @@ private:
     struct TokenStat
     {
         TokenStat() :
-            input( nullptr ), token( nullptr ), inputLen( 0 ), outputLen( 0 ), pos( 0 )
-            { /* empty */ }
+            input( nullptr ),
+            token( nullptr ),
+            inputLen( 0 ),
+            outputLen( 0 ),
+            pos( 0 )
+        {};
 
         const char* input;      // current input string ("var=4")
         char*       token;      // output token ("var", type:VAR; "4", type:VALUE)
         size_t      inputLen;   // strlen(input)
         size_t      outputLen;  // At least 64, up to input length
         size_t      pos;        // current index
-    }
-            m_token;
+    }    m_token;
 
     char m_localeDecimalSeparator;
 

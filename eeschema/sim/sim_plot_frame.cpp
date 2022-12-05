@@ -592,6 +592,7 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
     }
 }
 
+
 void SIM_PLOT_FRAME::UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aValue )
 {
     for( EDA_ITEM* item : m_schematicFrame->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
@@ -599,7 +600,8 @@ void SIM_PLOT_FRAME::UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aVal
         if( item == aSymbol )
         {
             SIM_LIB_MGR mgr( Prj() );
-            SIM_MODEL&  model = mgr.CreateModel( *aSymbol ).model;
+            SIM_MODEL&  model = mgr.CreateModel( &m_schematicFrame->GetCurrentSheet(),
+                                                 *aSymbol ).model;
 
             const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
 

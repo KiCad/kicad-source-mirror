@@ -59,11 +59,12 @@ expr(A) ::= expr(B) PLUS expr(C).         { A.dValue = B.dValue + C.dValue; A.va
 expr(A) ::= expr(B) MINUS expr(C).        { A.dValue = B.dValue - C.dValue; A.valid=C.valid; }
 expr(A) ::= expr(B) MULT expr(C).         { A.dValue = B.dValue * C.dValue; A.valid=C.valid; }
 expr(A) ::= expr(B) DIVIDE expr(C).       {
-   if (C.dValue != 0.0) {
-      A.dValue = B.dValue / C.dValue;
-   }
-   else pEval->parseError("Div by zero");
-   A.valid=C.valid; 
-}
-expr(A) ::= PARENL expr(B) PARENR.        { A.dValue = B.dValue; A.valid=B.valid; }
+                                              if( C.dValue != 0.0 )
+                                                  A.dValue = B.dValue / C.dValue;
+                                              else
+                                                  pEval->parseError( "Divide by zero" );
+
+                                              A.valid = C.valid;
+                                          }
+expr(A) ::= PARENL expr(B) PARENR.        { A.dValue = B.dValue; A.valid = B.valid; }
 
