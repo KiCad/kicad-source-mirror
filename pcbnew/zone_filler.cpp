@@ -417,7 +417,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         }
     }
 
-    // Make sure the threads are not running
+    // Make sure that all futures have finished.
     for( auto& ret : returns )
         if( ret.first.valid() )
             ret.first.wait();
