@@ -195,6 +195,8 @@ S3D_CACHE::S3D_CACHE()
 
 S3D_CACHE::~S3D_CACHE()
 {
+    FlushCache();
+
     delete m_FNResolver;
     delete m_Plugins;
 }
