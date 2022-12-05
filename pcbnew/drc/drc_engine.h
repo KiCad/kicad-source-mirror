@@ -83,7 +83,7 @@ class DRC_ENGINE : public UNITS_PROVIDER
 {
 public:
     DRC_ENGINE( BOARD* aBoard = nullptr, BOARD_DESIGN_SETTINGS* aSettings = nullptr );
-    ~DRC_ENGINE();
+    virtual ~DRC_ENGINE();
 
     void SetBoard( BOARD* aBoard ) { m_board = aBoard; }
     BOARD* GetBoard() const { return m_board; }

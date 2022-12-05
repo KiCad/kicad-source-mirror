@@ -348,8 +348,8 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             break;
     }
 
-    double siScaler;
-    Unit   convertFrom;
+    double siScaler = 1.0;
+    Unit   convertFrom = Unit::Invalid;
 
     if( ch == 0 )
     {
