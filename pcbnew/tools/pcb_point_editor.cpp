@@ -110,7 +110,7 @@ PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     m_hoveredPoint( nullptr ),
     m_original( VECTOR2I( 0, 0 ) ),
     m_refill( false ),
-    m_altEditMethod( false ),
+    m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
     m_altConstrainer( VECTOR2I( 0, 0 ) )
 {
 }
@@ -504,9 +504,15 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         if( editFrame->IsType( FRAME_PCB_EDITOR ) )
+        {
             useAltContraint = editFrame->GetPcbNewSettings()->m_Use45DegreeLimit;
+            m_arcEditMode = editFrame->GetPcbNewSettings()->m_ArcEditMode;
+        }
         else
+        {
             useAltContraint = editFrame->GetFootprintEditorSettings()->m_Use45Limit;
+            m_arcEditMode = editFrame->GetFootprintEditorSettings()->m_ArcEditMode;
+        }
 
         if( !m_editPoints || evt->IsSelectionEvent() ||
                 evt->Matches( EVENTS::InhibitSelectionEditing ) )
@@ -1158,7 +1164,7 @@ void PCB_POINT_EDITOR::updateItem() const
             {
                 const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition( false );
 
-                if( m_altEditMethod )
+                if( m_arcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION )
                     editArcMidKeepEndpoints( shape, start, end, cursorPos );
                 else
                     editArcMidKeepCenter( shape, center, start, mid, end, cursorPos );
@@ -1168,7 +1174,7 @@ void PCB_POINT_EDITOR::updateItem() const
             {
                 const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition();
 
-                if( m_altEditMethod )
+                if( m_arcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION )
                     editArcEndpointKeepTangent( shape, center, start, mid, end, cursorPos );
                 else
                     editArcEndpointKeepCenter( shape, center, start, mid, end, cursorPos );
@@ -2364,9 +2370,37 @@ int PCB_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_POINT_EDITOR::changeEditMethod( const TOOL_EVENT& aEvent )
+int PCB_POINT_EDITOR::changeArcEditMode( const TOOL_EVENT& aEvent )
 {
-    m_altEditMethod = !m_altEditMethod;
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    if( aEvent.Matches( ACTIONS::cycleArcEditMode.MakeEvent() ) )
+    {
+        if( editFrame->IsType( FRAME_PCB_EDITOR ) )
+            m_arcEditMode = editFrame->GetPcbNewSettings()->m_ArcEditMode;
+        else
+            m_arcEditMode = editFrame->GetFootprintEditorSettings()->m_ArcEditMode;
+
+        switch( m_arcEditMode )
+        {
+        case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
+            m_arcEditMode = ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+            break;
+        case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
+            m_arcEditMode = ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+            break;
+        }
+    }
+    else
+    {
+        m_arcEditMode = aEvent.Parameter<ARC_EDIT_MODE>();
+    }
+
+    if( editFrame->IsType( FRAME_PCB_EDITOR ) )
+        editFrame->GetPcbNewSettings()->m_ArcEditMode = m_arcEditMode;
+    else
+        editFrame->GetFootprintEditorSettings()->m_ArcEditMode = m_arcEditMode;
+
     return 0;
 }
 
@@ -2375,13 +2409,14 @@ void PCB_POINT_EDITOR::setTransitions()
 {
     Go( &PCB_POINT_EDITOR::OnSelectionChange, ACTIONS::activatePointEditor.MakeEvent() );
     Go( &PCB_POINT_EDITOR::addCorner,         PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
-    Go( &PCB_POINT_EDITOR::removeCorner,      PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepCenter.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepEndpoint.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::changeArcEditMode, ACTIONS::cycleArcEditMode.MakeEvent() );
     Go( &PCB_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
     Go( &PCB_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsMoved );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::PointSelectedEvent );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
-    Go( &PCB_POINT_EDITOR::changeEditMethod,  ACTIONS::changeEditMethod.MakeEvent() );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::InhibitSelectionEditing );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::UninhibitSelectionEditing );
 }

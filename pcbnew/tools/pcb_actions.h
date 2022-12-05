@@ -245,6 +245,10 @@ public:
     static TOOL_ACTION pointEditorAddCorner;
     static TOOL_ACTION pointEditorRemoveCorner;
 
+    static TOOL_ACTION pointEditorArcKeepCenter;
+    static TOOL_ACTION pointEditorArcKeepEndpoint;
+
+
     // Group Tool
     static TOOL_ACTION groupProperties;
     static TOOL_ACTION pickNewGroupMember;

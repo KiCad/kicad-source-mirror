@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,10 +21,10 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/choice.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/panel.h>
-#include <wx/choice.h>
 #include <wx/radiobut.h>
 #include <wx/simplebook.h>
 
@@ -38,6 +38,7 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
+		wxBoxSizer* m_sizerBoardEdit;
 		wxCheckBox* m_flipLeftRight;
 		wxCheckBox* m_allowFreePads;
 		wxStaticLine* m_staticline3;
@@ -45,6 +46,9 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_rotationAngleLabel;
 		wxTextCtrl* m_rotationAngleCtrl;
 		wxStaticText* m_rotationAngleUnits;
+		wxStaticLine* m_staticline4;
+		wxStaticText* m_arcEditModeLabel;
+		wxChoice* m_arcEditMode;
 		wxStaticBoxSizer* m_mouseCmdsWinLin;
 		wxStaticText* m_staticText181;
 		wxRadioBox* m_rbCtrlClickAction;

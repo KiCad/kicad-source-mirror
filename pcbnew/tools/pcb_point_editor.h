@@ -29,6 +29,7 @@
 
 #include <tool/tool_interactive.h>
 #include "tool/edit_points.h"
+#include <pcbnew_settings.h>
 #include <status_popup.h>
 
 #include <memory>
@@ -159,8 +160,8 @@ private:
                                const VECTOR2I& aMid, const VECTOR2I& aEnd,
                                const VECTOR2I& aCursor ) const;
 
-    ///< Change the edit method to an alternative method ( currently, arcs only )
-    int changeEditMethod( const TOOL_EVENT& aEvent );
+    ///< Change the edit method for arcs.
+    int changeArcEditMode( const TOOL_EVENT& aEvent );
 
     PCB_SELECTION_TOOL*                        m_selectionTool;
     mutable std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
@@ -172,7 +173,8 @@ private:
     EDIT_POINT          m_original;        ///< Original position for the current drag point.
 
     bool                m_refill;
-    bool                m_altEditMethod;
+
+    ARC_EDIT_MODE       m_arcEditMode;
 
     // Alternative constraint, enabled while a modifier key is held
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_altConstraint;

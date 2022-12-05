@@ -374,6 +374,8 @@ public:
 
     TRACK_DRAG_ACTION m_TrackDragAction;
 
+    ARC_EDIT_MODE m_ArcEditMode;
+
     bool m_CtrlClickHighlight;
 
     bool m_Use45DegreeLimit;            // True to constrain tool actions to horizontal,

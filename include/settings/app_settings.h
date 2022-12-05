@@ -64,6 +64,15 @@ struct GRID_SETTINGS
 };
 
 /**
+* Settings for arc editing. Used by pcbnew and footprint editor
+*/
+enum class ARC_EDIT_MODE
+{
+    KEEP_CENTER_ADJUST_ANGLE_RADIUS,
+    KEEP_ENDPOINTS_OR_START_DIRECTION
+};
+
+/**
 * Stores the window positioning/state
 */
 struct WINDOW_STATE

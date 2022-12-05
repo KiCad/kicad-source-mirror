@@ -67,6 +67,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_FootprintWizard(),
           m_Display(),
           m_TrackDragAction( TRACK_DRAG_ACTION::DRAG ),
+          m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
           m_CtrlClickHighlight( false ),
           m_Use45DegreeLimit( false ),
           m_FlipLeftRight( false ),
@@ -152,6 +153,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "editing.track_drag_action",
             reinterpret_cast<int*>( &m_TrackDragAction ),
             static_cast<int>( TRACK_DRAG_ACTION::DRAG ) ) );
+
+    m_params.emplace_back( new PARAM<int>( "editing.arc_edit_mode",
+            reinterpret_cast<int*>( &m_ArcEditMode ),
+            static_cast<int>( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.ctrl_click_highlight",
             &m_CtrlClickHighlight, false ) );

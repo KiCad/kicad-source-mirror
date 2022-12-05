@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,22 +23,21 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* bOptionsSizer;
 	bOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing Options") ), wxVERTICAL );
 
-	wxBoxSizer* bSizerBoardEdit;
-	bSizerBoardEdit = new wxBoxSizer( wxVERTICAL );
+	m_sizerBoardEdit = new wxBoxSizer( wxVERTICAL );
 
 	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBoardEdit->Add( m_flipLeftRight, 0, wxBOTTOM|wxLEFT, 5 );
+	m_sizerBoardEdit->Add( m_flipLeftRight, 0, wxBOTTOM|wxLEFT, 5 );
 
 	m_allowFreePads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allowFreePads->SetToolTip( _("If checked, pads can be moved with respect to the rest of the footprint.") );
 
-	bSizerBoardEdit->Add( m_allowFreePads, 0, wxBOTTOM|wxLEFT, 5 );
+	m_sizerBoardEdit->Add( m_allowFreePads, 0, wxBOTTOM|wxLEFT, 5 );
 
 	m_staticline3 = new wxStaticLine( bOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerBoardEdit->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 4 );
+	m_sizerBoardEdit->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 4 );
 
 
-	bOptionsSizer->Add( bSizerBoardEdit, 0, wxEXPAND, 5 );
+	bOptionsSizer->Add( m_sizerBoardEdit, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerUniversal;
 	bSizerUniversal = new wxBoxSizer( wxVERTICAL );
@@ -65,6 +64,25 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 
 	bSizerUniversal->Add( bSizerRotationStep, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer101;
+	bSizer101 = new wxBoxSizer( wxVERTICAL );
+
+	m_staticline4 = new wxStaticLine( bOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer101->Add( m_staticline4, 0, wxBOTTOM|wxEXPAND|wxTOP, 4 );
+
+	m_arcEditModeLabel = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Arc editing mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_arcEditModeLabel->Wrap( -1 );
+	bSizer101->Add( m_arcEditModeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxString m_arcEditModeChoices[] = { _("Keep center, adjust radius"), _("Keep endpoints or direction of starting point") };
+	int m_arcEditModeNChoices = sizeof( m_arcEditModeChoices ) / sizeof( wxString );
+	m_arcEditMode = new wxChoice( bOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_arcEditModeNChoices, m_arcEditModeChoices, 0 );
+	m_arcEditMode->SetSelection( 0 );
+	bSizer101->Add( m_arcEditMode, 0, wxBOTTOM|wxTOP, 5 );
+
+
+	bSizerUniversal->Add( bSizer101, 1, wxEXPAND, 5 );
 
 
 	bOptionsSizer->Add( bSizerUniversal, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );

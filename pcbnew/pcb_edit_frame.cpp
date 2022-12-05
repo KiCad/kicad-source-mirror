@@ -817,6 +817,20 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::showProperties,       CHECK( propertiesCond ) );
     mgr->SetConditions( PCB_ACTIONS::showSearch,           CHECK( searchPaneCond ) );
 
+    auto isArcKeepCenterMode = [this]( const SELECTION& )
+    {
+        return GetPcbNewSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+    };
+
+    auto isArcKeepEndpointMode = [this]( const SELECTION& )
+    {
+        return GetPcbNewSettings()->m_ArcEditMode
+               == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+    };
+
+    mgr->SetConditions( PCB_ACTIONS::pointEditorArcKeepCenter,   CHECK( isArcKeepCenterMode ) );
+    mgr->SetConditions( PCB_ACTIONS::pointEditorArcKeepEndpoint, CHECK( isArcKeepEndpointMode ) );
+
     auto isHighlightMode =
             [this]( const SELECTION& )
             {

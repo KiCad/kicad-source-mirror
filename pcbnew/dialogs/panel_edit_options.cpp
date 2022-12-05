@@ -39,8 +39,7 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnit
 {
     m_magneticPads->Show( m_isFootprintEditor );
     m_magneticGraphics->Show( m_isFootprintEditor );
-    m_flipLeftRight->Show( !m_isFootprintEditor );
-    m_allowFreePads->Show( !m_isFootprintEditor );
+    m_sizerBoardEdit->Show( !m_isFootprintEditor );
 
     m_rotationAngle.SetUnits( EDA_UNITS::DEGREES );
 
@@ -69,6 +68,8 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_flipLeftRight->SetValue( aCfg->m_FlipLeftRight );
     m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45DegreeLimit );
     m_cbCourtyardCollisions->SetValue( aCfg->m_ShowCourtyardCollisions );
+    m_arcEditMode->SetSelection(
+            aCfg->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ? 0 : 1 );
 
     /* Set display options */
     m_OptDisplayCurvedRatsnestLines->SetValue( aCfg->m_Display.m_DisplayRatsnestLinesCurved );
@@ -101,6 +102,8 @@ void PANEL_EDIT_OPTIONS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
     m_magneticPads->SetValue( aCfg->m_MagneticItems.pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
     m_magneticGraphics->SetValue( aCfg->m_MagneticItems.graphics );
     m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45Limit );
+    m_arcEditMode->SetSelection(
+            aCfg->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ? 0 : 1 );
 }
 
 
@@ -140,6 +143,10 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_MagneticItems.graphics = m_magneticGraphics->GetValue();
 
         cfg->m_Use45Limit = m_cbConstrainHV45Mode->GetValue();
+
+        cfg->m_ArcEditMode = m_arcEditMode->GetSelection() == 0
+                                     ? ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS
+                                     : ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
     }
     else
     {
@@ -175,6 +182,10 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 
         cfg->m_Use45DegreeLimit = m_cbConstrainHV45Mode->GetValue();
         cfg->m_ShowCourtyardCollisions = m_cbCourtyardCollisions->GetValue();
+
+        cfg->m_ArcEditMode = m_arcEditMode->GetSelection() == 0
+                                     ? ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS
+                                     : ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
     }
 
     return true;

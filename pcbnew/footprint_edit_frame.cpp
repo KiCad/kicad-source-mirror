@@ -1186,6 +1186,19 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::repairFootprint,       ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::cleanupGraphics,       ENABLE( haveFootprintCond ) );
 
+    auto isArcKeepCenterMode = [this]( const SELECTION& )
+    {
+        return GetSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+    };
+
+    auto isArcKeepEndpointMode = [this]( const SELECTION& )
+    {
+        return GetSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+    };
+
+    mgr->SetConditions( PCB_ACTIONS::pointEditorArcKeepCenter,   CHECK( isArcKeepCenterMode ) );
+    mgr->SetConditions( PCB_ACTIONS::pointEditorArcKeepEndpoint, CHECK( isArcKeepEndpointMode ) );
+
 
 // Only enable a tool if the part is edtable
 #define CURRENT_EDIT_TOOL( action ) mgr->SetConditions( action, \

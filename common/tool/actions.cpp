@@ -200,8 +200,9 @@ TOOL_ACTION ACTIONS::deleteTool( "common.Interactive.deleteTool",
 TOOL_ACTION ACTIONS::activatePointEditor( "common.Control.activatePointEditor",
         AS_GLOBAL );
 
-TOOL_ACTION ACTIONS::changeEditMethod( "common.Interactive.changeEditMethod", AS_GLOBAL,
-        MD_CTRL + ' ', "", _( "Change Edit Method" ), _( "Change edit method constraints" ) );
+TOOL_ACTION ACTIONS::cycleArcEditMode( "common.Interactive.cycleArcEditMode", AS_GLOBAL,
+        MD_CTRL + ' ', "", _( "Cycle arc editing mode" ),
+        _( "Switch to a different method of editing arcs" ) );
 
 TOOL_ACTION ACTIONS::showSearch( "common.Interactive.search",
         AS_GLOBAL,

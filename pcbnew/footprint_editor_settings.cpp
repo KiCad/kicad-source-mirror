@@ -46,6 +46,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_PolarCoords( false ),
         m_RotationAngle( ANGLE_90 ),
         m_Use45Limit( true ),
+        m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
         m_LibWidth( 250 ),
         m_LastImportExportPath(),
         m_FootprintTextShownColumns()

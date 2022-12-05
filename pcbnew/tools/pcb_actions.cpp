@@ -1251,6 +1251,18 @@ TOOL_ACTION PCB_ACTIONS::pointEditorRemoveCorner( "pcbnew.PointEditor.removeCorn
         _( "Remove Corner" ), _( "Remove corner" ),
         BITMAPS::delete_cursor );
 
+TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepCenter( "pcbnew.PointEditor.arcKeepCenter",
+        AS_GLOBAL, 0, "",
+        _( "Keep arc center, adjust radius" ),
+        _( "Switch arc editing mode to keep center, adjust radius and endpoints" ),
+        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS );
+
+TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepEndpoint( "pcbnew.PointEditor.arcKeepEndpoint",
+        AS_GLOBAL, 0, "",
+        _( "Keep arc endpoints or direction of starting point" ),
+        _( "Switch arc editing mode to keep endpoints, or to keep direction of the other point" ),
+        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION );
+
 
 // GROUP_TOOL
 //

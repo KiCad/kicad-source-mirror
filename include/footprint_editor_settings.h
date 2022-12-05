@@ -69,6 +69,8 @@ public:
 
     bool m_Use45Limit;
 
+    ARC_EDIT_MODE m_ArcEditMode;
+
     int m_LibWidth;
 
     wxString m_LastImportExportPath;

@@ -170,7 +170,7 @@ public:
     // Internal
     static TOOL_ACTION updateMenu;
     static TOOL_ACTION activatePointEditor;
-    static TOOL_ACTION changeEditMethod;
+    static TOOL_ACTION cycleArcEditMode;
     static TOOL_ACTION updatePreferences;
     static TOOL_ACTION selectColumns;
 
