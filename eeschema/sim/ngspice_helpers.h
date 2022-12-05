@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 CERN
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -77,9 +77,13 @@ public:
     /**
      * Override the simulation command directive.
      */
-    void SetSimCommand( const wxString& aCmd )
+    void SetSimCommandOverride( const wxString& aCmd )
     {
-        m_simCommand = aCmd;
+        if( aCmd != m_simCommand )
+        {
+            m_lastSheetSimCommand = GetSheetSimCommand();
+            m_simCommand = aCmd;
+        }
     }
 
     /**
@@ -94,20 +98,12 @@ public:
     /**
      * Return the simulation command directive if stored separately (not as a sheet directive).
      */
-    wxString GetUnderlyingSimCommand() const { return m_simCommand; }
-
-    /**
-     * Clear the simulation command directive.
-     */
-    void ClearSimCommand()
-    {
-        m_simCommand.Clear();
-    }
+    wxString GetSimCommandOverride() const { return m_simCommand; }
 
     /**
      * Return simulation type basing on the simulation command directives.
      *
-     * Simulation directives set using SetSimCommand() have priority over the ones placed in
+     * Simulation directives set using SetSimCommandOverride() have priority over the ones placed in
      * schematic sheets.
      */
     SIM_TYPE GetSimType();
@@ -116,6 +112,13 @@ public:
      * Return simulation command directives placed in schematic sheets (if any).
      */
     wxString GetSheetSimCommand();
+
+    /**
+     * Return the sim command present as a sheet directive when the sim command override was last
+     * updated.
+     * @return
+     */
+    wxString GetLastSheetSimCommand() const { return m_lastSheetSimCommand; }
 
     /**
      * Parse a two-source .dc command directive into its symbols.
@@ -145,7 +148,11 @@ protected:
 private:
     ///< Custom simulation command (has priority over the schematic sheet simulation commands)
     wxString m_simCommand;
-    int m_options;
+
+    ///< Value of schematic sheet simulation command when override was last updated
+    wxString m_lastSheetSimCommand;
+
+    int      m_options;
 };
 
 #endif /* NETLIST_EXPORTER_PSPICE_SIM_H */

@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 CERN
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -56,12 +56,6 @@ public:
 
         return res;
     }
-
-    int GetNetlistOptions() const
-    {
-        return m_netlistOpts;
-    }
-
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -158,31 +152,22 @@ private:
     {
         switch( aOption )
         {
-        case DECADE:
-            return wxString( "dec" );
-
-        case OCTAVE:
-            return wxString( "oct" );
-
-        case LINEAR:
-            return wxString( "lin" );
+        case DECADE: return wxString( "dec" );
+        case OCTAVE: return wxString( "oct" );
+        case LINEAR: return wxString( "lin" );
+        default:     wxFAIL_MSG( "Unhandled scale type" ); return wxEmptyString;
         }
-
-        wxASSERT_MSG( false, "Unhandled scale type" );
-
-        return wxEmptyString;
     }
 
     void loadDirectives();
-    void updateNetlistOpts();
 
-    wxString m_simCommand;
-    int m_netlistOpts;
-    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
+private:
+    wxString                                  m_simCommand;
+    std::shared_ptr<NGSPICE_CIRCUIT_MODEL>    m_circuitModel;
     std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
-    SPICE_VALIDATOR m_spiceValidator;
-    SPICE_VALIDATOR m_spiceEmptyValidator;
-    wxIntegerValidator<int> m_posIntValidator;
+    SPICE_VALIDATOR                           m_spiceValidator;
+    SPICE_VALIDATOR                           m_spiceEmptyValidator;
+    wxIntegerValidator<int>                   m_posIntValidator;
 };
 
 #endif /* DIALOG_SIM_SETTINGS_H */

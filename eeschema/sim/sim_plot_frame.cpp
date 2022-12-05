@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2022 CERN
  * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -155,12 +155,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_reporter = new SIM_THREAD_REPORTER( this );
     m_simulator->SetReporter( m_reporter );
 
-    // the settings dialog will be created later, on demand.
-    // if created in the ctor, for some obscure reason, there is an issue
-    // on Windows: when open it, the simulator frame is sent to the background.
-    // instead of being behind the dialog frame (as it does)
-    m_settingsDlg = nullptr;
-
     m_circuitModel.reset( new NGSPICE_CIRCUIT_MODEL( &m_schematicFrame->Schematic() ) );
 
     Bind( EVT_SIM_UPDATE, &SIM_PLOT_FRAME::onSimUpdate, this );
@@ -249,9 +243,6 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
     m_simulator->SetReporter( nullptr );
     delete m_reporter;
     delete m_signalsIconColorList;
-
-    if( m_settingsDlg )
-        m_settingsDlg->Destroy();
 }
 
 
@@ -463,22 +454,20 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     wxCHECK_RET( m_circuitModel->CommandToSimType( getCurrentSimCommand() ) != ST_UNKNOWN,
                  wxT( "Unknown simulation type" ) );
 
-    if( !m_settingsDlg )
-        m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_circuitModel, m_simulator->Settings() );
-
     m_simConsole->Clear();
 
     if( aSimCommand != wxEmptyString )
-        m_circuitModel->SetSimCommand( aSimCommand );
-    else if( m_circuitModel->GetSheetSimCommand() != getCurrentSimCommand() )
-        m_circuitModel->SetSimCommand( getCurrentSimCommand() );
-    else
-        m_circuitModel->SetSimCommand( wxEmptyString );
+        m_circuitModel->SetSimCommandOverride( aSimCommand );
 
-    // Make .save all and .probe alli permanent for now.
-    m_circuitModel->SetOptions( m_settingsDlg->GetNetlistOptions()
-            | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES
-            | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS );
+    // Make .save all and .probe all permanent for now.
+    int options = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS
+                    | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES
+                    | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+
+    if( !m_simulator->Settings()->GetFixIncludePaths() )
+        options &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
+
+    m_circuitModel->SetOptions( options );
 
     wxString           errors;
     WX_STRING_REPORTER reporter( &errors );
@@ -489,6 +478,27 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
         DisplayErrorMessage( this, _( "Errors during netlist generation; simulation aborted.\n\n" )
                                    + errors );
         return;
+    }
+
+    SIM_PANEL_BASE* plotWindow = getCurrentPlotWindow();
+    wxString        sheetSimCommand = m_circuitModel->GetSheetSimCommand();
+
+    if( plotWindow
+            && plotWindow->GetType() == NGSPICE_CIRCUIT_MODEL::CommandToSimType( sheetSimCommand ) )
+    {
+        if( m_circuitModel->GetSimCommandOverride().IsEmpty() )
+        {
+            m_workbook->SetSimCommand( plotWindow, sheetSimCommand );
+        }
+        else if( sheetSimCommand != m_circuitModel->GetLastSheetSimCommand() )
+        {
+            if( IsOK( this, _( "Schematic sheet simulation command directive has changed.  Do you "
+                               "wish to update the Simulation Command?" ) ) )
+            {
+                m_circuitModel->SetSimCommandOverride( wxEmptyString );
+                m_workbook->SetSimCommand( plotWindow, sheetSimCommand );
+            }
+        }
     }
 
     std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
@@ -1477,13 +1487,10 @@ void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 {
-    SIM_PANEL_BASE* plotPanelWindow = getCurrentPlotWindow();
-
-    if( !m_settingsDlg )
-        m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_circuitModel, m_simulator->Settings() );
-
-    wxString           errors;
-    WX_STRING_REPORTER reporter( &errors );
+    SIM_PANEL_BASE*     plotPanelWindow = getCurrentPlotWindow();
+    DIALOG_SIM_SETTINGS dlg( this, m_circuitModel, m_simulator->Settings() );
+    wxString            errors;
+    WX_STRING_REPORTER  reporter( &errors );
 
     if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
                                                     reporter ) )
@@ -1494,9 +1501,9 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
     }
 
     if( m_workbook->GetPageIndex( plotPanelWindow ) != wxNOT_FOUND )
-        m_settingsDlg->SetSimCommand( m_workbook->GetSimCommand( plotPanelWindow ) );
+        dlg.SetSimCommand( m_workbook->GetSimCommand( plotPanelWindow ) );
 
-    if( m_settingsDlg->ShowModal() == wxID_OK )
+    if( dlg.ShowModal() == wxID_OK )
     {
         wxString oldCommand;
 
@@ -1505,7 +1512,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
         else
             oldCommand = wxString();
 
-        wxString newCommand = m_settingsDlg->GetSimCommand();
+        wxString newCommand = dlg.GetSimCommand();
         SIM_TYPE newSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( newCommand );
 
         // If it is a new simulation type, open a new plot
@@ -1521,6 +1528,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
         else
         {
             // Update simulation command in the current plot
+            m_circuitModel->SetSimCommandOverride( newCommand );
             m_workbook->SetSimCommand( plotPanelWindow, newCommand );
         }
 

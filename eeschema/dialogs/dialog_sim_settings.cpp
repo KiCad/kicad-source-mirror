@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2021 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 CERN
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -100,7 +100,6 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent,
         m_compatibilityMode->Show( false );
 
     SetupStandardButtons();
-    updateNetlistOpts();
 }
 
 wxString DIALOG_SIM_SETTINGS::evaluateDCControls( wxChoice* aDcSource, wxTextCtrl* aDcStart,
@@ -298,9 +297,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     if( previousSimCommand != m_simCommand )
         m_simCommand.Trim();
 
-    updateNetlistOpts();
-
-    m_settings->SetFixIncludePaths( m_netlistOpts & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS );
+    m_settings->SetFixIncludePaths( m_fixIncludePaths->GetValue() );
 
     return true;
 }
@@ -313,7 +310,6 @@ bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
         loadDirectives();
 
     m_fixIncludePaths->SetValue( m_settings->GetFixIncludePaths() );
-    updateNetlistOpts();
 
     NGSPICE_SIMULATOR_SETTINGS* ngspiceSettings =
             dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( m_settings.get() );
@@ -607,10 +603,3 @@ void DIALOG_SIM_SETTINGS::loadDirectives()
 }
 
 
-void DIALOG_SIM_SETTINGS::updateNetlistOpts()
-{
-    m_netlistOpts = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
-
-    if( !m_fixIncludePaths->IsChecked() )
-        m_netlistOpts &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
-}

@@ -1,10 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
- * @author Maciej Suminski <maciej.suminski@cern.ch>
- *
+ * Copyright (C) 2016-2022 CERN
  * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,6 +151,6 @@ void NGSPICE_CIRCUIT_MODEL::WriteDirectives( OUTPUTFORMATTER& aFormatter,
 {
     NETLIST_EXPORTER_SPICE::WriteDirectives( aFormatter, aNetlistOptions );
 
-    if( GetUnderlyingSimCommand() != "" )
-        aFormatter.Print( 0, "%s\n", TO_UTF8( GetUnderlyingSimCommand() ) );
+    if( GetSimCommandOverride() != "" )
+        aFormatter.Print( 0, "%s\n", TO_UTF8( GetSimCommandOverride() ) );
 }
