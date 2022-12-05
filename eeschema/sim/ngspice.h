@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2022 CERN
  * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -155,14 +155,12 @@ private:
     // Assure ngspice is in a valid state and reinitializes it if need be.
     void validate();
 
-    ///< Error flag indicating that ngspice needs to be reloaded.
-    bool m_error;
+private:
+    bool        m_error;            ///< Error flag indicating that ngspice needs to be reloaded.
 
-    ///< Ngspice should be initialized only once.
-    static bool m_initialized;
+    static bool m_initialized;      ///< Ngspice should be initialized only once.
 
-    ///< Current netlist
-    std::string m_netlist;
+    std::string m_netlist;          ///< Current netlist
 };
 
 #endif /* NGSPICE_H */

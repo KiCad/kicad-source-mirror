@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2018 CERN
+ * Copyright (C) 2016-2022 CERN
  * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -277,9 +277,9 @@ bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, REPORTER&
 
 bool NGSPICE::LoadNetlist( const string& aNetlist )
 {
-    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
+    LOCALE_IO     c_locale;       // ngspice works correctly only with C locale
     vector<char*> lines;
-    stringstream ss( aNetlist );
+    stringstream  ss( aNetlist );
 
     m_netlist = "";
 
@@ -296,7 +296,7 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
     Command( "remcirc" );
     bool success = !m_ngSpice_Circ( lines.data() );
 
-    for( auto line : lines )
+    for( char* line : lines )
         free( line );
 
     return success;
