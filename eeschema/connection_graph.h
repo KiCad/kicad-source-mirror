@@ -348,6 +348,13 @@ public:
 
     CONNECTION_SUBGRAPH* GetSubgraphForItem( SCH_ITEM* aItem );
 
+    /**
+     * Returns the fully-resolved netname for a given subgraph
+     * @param aSubGraph Reference to the subgraph
+     * @return Netname string usable with m_net_name_to_subgraphs_map
+     */
+    wxString GetResolvedSubgraphName( const CONNECTION_SUBGRAPH* aSubGraph ) const;
+
 private:
     /**
      * Updates the graphical connectivity between items (i.e. where they touch)
@@ -555,6 +562,13 @@ private:
      * @return                the number of errors found
      */
     int ercCheckHierSheets();
+
+    /**
+     * Get the number of pins in a given subgraph
+     * @param aLocSubgraph Subgraph to search
+     * @return total number of pins in the subgraph
+     */
+    size_t hasPins( const CONNECTION_SUBGRAPH* aLocSubgraph );
 
 public:
     // TODO(JE) Remove this when pressure valve is removed

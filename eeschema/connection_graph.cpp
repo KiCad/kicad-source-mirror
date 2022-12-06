@@ -2280,6 +2280,31 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
 }
 
 
+wxString CONNECTION_GRAPH::GetResolvedSubgraphName( const CONNECTION_SUBGRAPH* aSubGraph ) const
+{
+    wxString retval = aSubGraph->GetNetName();
+    bool found = false;
+
+    // This is a hacky way to find the true subgraph net name (why do we not store it?)
+    // TODO: Remove once the actual netname of the subgraph is stored with the subgraph
+
+    for( auto it = m_net_name_to_subgraphs_map.begin(); it != m_net_name_to_subgraphs_map.end() && !found; ++it )
+    {
+        for( CONNECTION_SUBGRAPH* graph : it->second )
+        {
+            if( graph == aSubGraph )
+            {
+                retval = it->first;
+                found = true;
+                break;
+            }
+        }
+    }
+
+    return retval;
+}
+
+
 CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindSubgraphByName( const wxString& aNetName,
                                                            const SCH_SHEET_PATH& aPath )
 {
@@ -2787,44 +2812,65 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         SCH_PIN* pin = nullptr;
         std::set<SCH_ITEM*> unique_items;
 
-        // Any subgraph that contains both a pin and a no-connect should not
-        // contain any other driving items.
+        wxString netName = GetResolvedSubgraphName( aSubgraph );
 
-        for( SCH_ITEM* item : aSubgraph->m_items )
+        auto process_subgraph = [&]( const CONNECTION_SUBGRAPH* aProcessGraph )
         {
-            switch( item->Type() )
-            {
-            case SCH_PIN_T:
-            {
-                pin = static_cast<SCH_PIN*>( item );
+            // Any subgraph that contains a no-connect should not
+            // more than one pin (which would indicate it is connected
 
-                // Insert the pin's parent so that we don't flag stacked pins
-                if( auto [existing, success] = unique_items.insert(
-                        static_cast<SCH_ITEM*>( pin->GetParent() ) ); !success )
+            for( SCH_ITEM* item : aProcessGraph->m_items )
+            {
+                switch( item->Type() )
                 {
-                    SCH_PIN* ex_pin = static_cast<SCH_PIN*>( *existing );
+                case SCH_PIN_T:
+                {
+                    pin = static_cast<SCH_PIN*>( item );
 
-                    // Stacked pins don't count as connected
-                    // but if they are not stacked, but still in the same symbol
-                    // flag this for an error
-                    if( !pin->IsStacked( ex_pin ) )
-                        unique_items.insert( ex_pin );
+                    // Insert the pin's parent so that we don't flag stacked pins
+                    if( auto [existing, success] = unique_items.insert(
+                            static_cast<SCH_ITEM*>( pin->GetParent() ) ); !success )
+                    {
+                        SCH_PIN* ex_pin = static_cast<SCH_PIN*>( *existing );
+
+                        // Stacked pins don't count as connected
+                        // but if they are not stacked, but still in the same symbol
+                        // flag this for an error
+                        if( !pin->IsStacked( ex_pin ) )
+                            unique_items.insert( ex_pin );
+                    }
+
+                    break;
                 }
 
-                break;
+                case SCH_LABEL_T:
+                case SCH_GLOBAL_LABEL_T:
+                case SCH_HIER_LABEL_T:
+                    unique_items.insert( item );
+                    KI_FALLTHROUGH;
+                default:
+                    break;
+                }
             }
+        };
 
-            case SCH_LINE_T:
-            case SCH_JUNCTION_T:
-            case SCH_NO_CONNECT_T:
-                break;
+        auto it = m_net_name_to_subgraphs_map.find( netName );
 
-            default:
-                unique_items.insert( item );
+        if( it != m_net_name_to_subgraphs_map.end() )
+        {
+            for( const CONNECTION_SUBGRAPH* subgraph : it->second )
+            {
+                process_subgraph( subgraph );
             }
         }
+        else
+        {
+            process_subgraph( aSubgraph );
+        }
 
-        if( unique_items.size() > 1 && pin && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
+        if( std::count_if( unique_items.begin(), unique_items.end(),
+                    []( SCH_ITEM* aItem ){ return aItem->Type() == SCH_PIN_T; } ) > 1
+                && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) && screen->CheckIfOnDrawList( pin ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
             ercItem->SetItems( pin );
@@ -2867,8 +2913,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
                     for( SCH_PIN* other_pin  : pins )
                     {
-                        if( other_pin->GetParent() != pin->GetParent()
-                                || other_pin->GetPosition() != pin->GetPosition() )
+                        if( !pin->IsStacked( other_pin ) )
                         {
                             has_other_connections = true;
                             break;
@@ -2891,6 +2936,16 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         // For many checks, we can just use the first pin
         SCH_PIN* pin = pins.empty() ? nullptr : pins[0];
+
+        // But if there is a power pin, it might be connected elsewhere
+        for( SCH_PIN* test_pin : pins )
+        {
+            if( test_pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
+            {
+                pin = test_pin;
+                break;
+            }
+        }
 
         // Check if invisible power input pins connect to anything else via net name,
         // but not for power symbols as the ones in the standard library all have invisible pins
@@ -3090,20 +3145,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( label_map.empty() )
         return true;
 
-    // This is a hacky way to find the true subgraph net name (why do we not store it?)
-    // TODO: Remove once the actual netname of the subgraph is stored with the subgraph
-    wxString netName = aSubgraph->GetNetName();
-
-    for( auto it = m_net_name_to_subgraphs_map.begin(); it != m_net_name_to_subgraphs_map.end(); ++it )
-    {
-        for( CONNECTION_SUBGRAPH* graph : it->second )
-        {
-            if( graph == aSubgraph )
-            {
-                netName = it->first;
-            }
-        }
-    }
+    wxString netName = GetResolvedSubgraphName( aSubgraph );
 
     wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
 
@@ -3111,6 +3153,8 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     // so leave them without errors here
     if( pinCount > 1 )
         return true;
+
+    bool has_nc = false;
 
     for( auto& [type, label_vec] : label_map )
     {
@@ -3142,11 +3186,14 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                     if( neighbor == aSubgraph )
                         continue;
 
+                    if( neighbor->m_no_connect )
+                        has_nc = true;
+
                     allPins += hasPins( neighbor );
                 }
             }
 
-            if( allPins < 2 )
+            if( allPins < 2 && !has_nc )
             {
                 reportError( text,
                         type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
