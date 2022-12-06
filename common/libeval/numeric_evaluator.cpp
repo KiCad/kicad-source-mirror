@@ -46,8 +46,7 @@ namespace numEval
 
 NUMERIC_EVALUATOR::NUMERIC_EVALUATOR( EDA_UNITS aUnits )
 {
-    struct lconv* lc = localeconv();
-    m_localeDecimalSeparator = *lc->decimal_point;
+    LocaleChanged();
 
     m_parseError = false;
     m_parseFinished = false;
@@ -90,6 +89,13 @@ void NUMERIC_EVALUATOR::SetDefaultUnits( EDA_UNITS aUnits )
     case EDA_UNITS::UNSCALED:    m_defaultUnits = Unit::SI;      break;
     default:                     m_defaultUnits = Unit::MM;      break;
     }
+}
+
+
+void NUMERIC_EVALUATOR::LocaleChanged()
+{
+    struct lconv* lc = localeconv();
+    m_localeDecimalSeparator = *lc->decimal_point;
 }
 
 

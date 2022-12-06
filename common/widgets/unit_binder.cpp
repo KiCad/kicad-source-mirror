@@ -139,6 +139,7 @@ void UNIT_BINDER::SetUnits( EDA_UNITS aUnits )
     m_units = aUnits;
 
     m_eval.SetDefaultUnits( m_units );
+    m_eval.LocaleChanged();  // In case locale changed since last run
 
     if( m_unitLabel )
         m_unitLabel->SetLabel( EDA_UNIT_UTILS::GetLabel( m_units, m_dataType ) );

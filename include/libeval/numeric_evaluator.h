@@ -105,6 +105,8 @@ public:
 
     void SetDefaultUnits( EDA_UNITS aUnits );
 
+    void LocaleChanged();
+
     /* Used by the lemon parser */
     void parseError(const char* s);
     void parseOk();
