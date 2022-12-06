@@ -61,7 +61,7 @@ protected:
                                   bool aIgnorePads = false,
                                   const std::vector<ITEM*> aAvoidItems = {} );
 
-    virtual void highlightNet( bool aEnabled, int aNetcode = -1 );
+    virtual void highlightNets( bool aEnabled, std::set<int> aNetcodes = {} );
 
     virtual void updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads = false );
     virtual void updateEndItem( const TOOL_EVENT& aEvent );
@@ -69,7 +69,7 @@ protected:
     SIZES_SETTINGS   m_savedSizes;       // Stores sizes settings between router invocations
     ITEM*            m_startItem;
     VECTOR2I         m_startSnapPoint;
-    bool             m_startHighlight;   // Was net highlighted before routing?
+    std::set<int>    m_startHighlightNetcodes; // The set of nets highlighted before routing
 
     ITEM*            m_endItem;
     VECTOR2I         m_endSnapPoint;

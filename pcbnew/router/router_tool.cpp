@@ -1184,11 +1184,6 @@ bool ROUTER_TOOL::prepareInteractive()
         editFrame->GetCanvas()->Refresh();
     }
 
-    if( m_startItem && m_startItem->Net() > 0 )
-        highlightNet( true, m_startItem->Net() );
-
-    controls()->SetAutoPan( true );
-
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
 
     m_iface->SetStartLayer( routingLayer );
@@ -1200,13 +1195,28 @@ bool ROUTER_TOOL::prepareInteractive()
 
     m_router->UpdateSizes( sizes );
 
+    if( m_startItem && m_startItem->Net() > 0 )
+    {
+        if( m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
+        {
+            if( int coupledNet = m_router->GetRuleResolver()->DpCoupledNet( m_startItem->Net() ) )
+                highlightNets( true, { m_startItem->Net(), coupledNet } );
+        }
+        else
+        {
+            highlightNets( true, { m_startItem->Net() } );
+        }
+    }
+
+    controls()->SetAutoPan( true );
+
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
     {
         // It would make more sense to leave the net highlighted as the higher-contrast mode
         // makes the router clearances more visible.  However, since we just started routing
         // the conversion of the screen from low contrast to high contrast is a bit jarring and
         // makes the infobar coming up less noticeable.
-        highlightNet( false );
+        highlightNets( false );
 
         frame()->ShowInfoBarError( m_router->FailureReason(), true,
                                    [&]()
@@ -1241,7 +1251,7 @@ bool ROUTER_TOOL::finishInteractive()
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->UndoRedoBlock( false );
-    highlightNet( false );
+    highlightNets( false );
 
     return true;
 }
@@ -1819,7 +1829,7 @@ void ROUTER_TOOL::performDragging( int aMode )
 
         m_gridHelper->SetAuxAxes( false );
         ctls->ForceCursorPosition( false );
-        highlightNet( false );
+        highlightNets( false );
 
         m_cancelled = true;
 
@@ -1834,7 +1844,7 @@ void ROUTER_TOOL::performDragging( int aMode )
         return;
 
     if( m_startItem && m_startItem->Net() > 0 )
-        highlightNet( true, m_startItem->Net() );
+        highlightNets( true, { m_startItem->Net() } );
 
     ctls->SetAutoPan( true );
     m_gridHelper->SetAuxAxes( true, m_startSnapPoint );
@@ -1916,7 +1926,7 @@ void ROUTER_TOOL::performDragging( int aMode )
     frame()->UndoRedoBlock( false );
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
-    highlightNet( false );
+    highlightNets( false );
 }
 
 
@@ -2100,7 +2110,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         m_startItem = startItem;
 
         if( m_startItem && m_startItem->Net() > 0 )
-            highlightNet( true, m_startItem->Net() );
+            highlightNets( true, { m_startItem->Net() } );
     }
     else if( footprint )
     {
@@ -2333,7 +2343,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->UndoRedoBlock( false );
-    highlightNet( false );
+    highlightNets( false );
 
     return 0;
 }

@@ -49,7 +49,6 @@ TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
     m_cancelled = false;
 
     m_startItem = nullptr;
-    m_startHighlight = false;
 
     m_endItem = nullptr;
     m_gridHelper = nullptr;
@@ -221,25 +220,37 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
 }
 
 
-void TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
+void TOOL_BASE::highlightNets( bool aEnabled, std::set<int> aNetcodes )
 {
     RENDER_SETTINGS* rs = getView()->GetPainter()->GetSettings();
 
-    if( aNetcode >= 0 && aEnabled )
+    if( aNetcodes.size() > 0 && aEnabled )
     {
-        // If the user has previously set the current net to be highlighted,
-        // we assume they want to keep it highlighted after routing
-        m_startHighlight = ( rs->IsHighlightEnabled()
-                                && rs->GetHighlightNetCodes().count( aNetcode ) );
+        // If the user has previously set some of the routed nets to be highlighted,
+        // we assume they want to keep them highlighted after routing
 
-        rs->SetHighlight( true, aNetcode );
+        const std::set<int>& currentNetCodes = rs->GetHighlightNetCodes();
+        bool                 keep = false;
+
+        for( const int& netcode : aNetcodes )
+        {
+            if( currentNetCodes.find( netcode ) != currentNetCodes.end() )
+            {
+                keep = true;
+                break;
+            }
+        }
+
+        if( rs->IsHighlightEnabled() && keep )
+            m_startHighlightNetcodes = currentNetCodes;
+        else
+            m_startHighlightNetcodes.clear();
+
+        rs->SetHighlight( aNetcodes, true );
     }
     else
     {
-        if( !m_startHighlight )
-            rs->SetHighlight( false );
-
-        m_startHighlight = false;
+        rs->SetHighlight( m_startHighlightNetcodes, m_startHighlightNetcodes.size() > 0 );
     }
 
     // Do not remove this call.  This is required to update the layers when we highlight a net.
@@ -317,9 +328,9 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     controls()->ForceCursorPosition( false );
-    
+
     VECTOR2I mousePos = controls()->GetMousePosition();
-    
+
     if( m_router->GetState() == ROUTER::ROUTE_TRACK && aEvent.IsDrag() )
     {
         // If the user is moving the mouse quickly while routing then clicks will come in as

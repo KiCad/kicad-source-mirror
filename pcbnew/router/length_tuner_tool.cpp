@@ -142,7 +142,7 @@ void LENGTH_TUNER_TOOL::performTuning()
         frame()->SetActiveLayer( ToLAYER_ID ( m_startItem->Layers().Start() ) );
 
         if( m_startItem->Net() >= 0 )
-            highlightNet( true, m_startItem->Net() );
+            highlightNets( true, { m_startItem->Net() } );
     }
 
     controls()->ForceCursorPosition( false );
@@ -153,7 +153,7 @@ void LENGTH_TUNER_TOOL::performTuning()
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, layer ) )
     {
         frame()->ShowInfoBarMsg( m_router->FailureReason() );
-        highlightNet( false );
+        highlightNets( false );
         return;
     }
 
@@ -259,7 +259,7 @@ void LENGTH_TUNER_TOOL::performTuning()
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    highlightNet( false );
+    highlightNets( false );
 }
 
 
