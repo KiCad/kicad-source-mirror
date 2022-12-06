@@ -59,10 +59,12 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
     m_grid->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
+    m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_NUMPAD_ENTER );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_DOWN );
     m_grid->AddActionTrigger( wxPG_ACTION_PREV_PROPERTY, WXK_UP );
     m_grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_SPACE );
     m_grid->DedicateKey( WXK_RETURN );
+    m_grid->DedicateKey( WXK_NUMPAD_ENTER );
     m_grid->DedicateKey( WXK_DOWN );
     m_grid->DedicateKey( WXK_UP );
     mainSizer->Add( m_grid, 1, wxALL | wxEXPAND, 5 );
@@ -304,6 +306,12 @@ void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
                 return;
             }
         }
+    }
+
+    if( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
+    {
+        m_grid->CommitChangesFromEditor();
+        /* don't skip this one; if we're not the last property we'll also go to the next row */
     }
     
     aEvent.Skip();
