@@ -61,6 +61,7 @@
 // TODO(JE) Debugging only
 #include <profile.h>
 #include "sch_bus_entry.h"
+#include "sim/sim_model_ideal.h"
 
 SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
     BASE_SCREEN( aParent, SCH_SCREEN_T ),
@@ -1950,6 +1951,53 @@ void SCH_SCREEN::migrateSimModel( SCH_SYMBOL& aSymbol )
     }
     else
     {
+        // Auto convert some legacy fields used in the middle of 7.0 development...
+
+        if( SCH_FIELD* legacyDevice = aSymbol.FindField( wxT( "Sim_Type" ) ) )
+        {
+            legacyDevice->SetName( SIM_MODEL::TYPE_FIELD );
+        }
+
+        if( SCH_FIELD* legacyDevice = aSymbol.FindField( wxT( "Sim_Device" ) ) )
+        {
+            legacyDevice->SetName( SIM_MODEL::DEVICE_TYPE_FIELD );
+        }
+
+        if( SCH_FIELD* legacyPins = aSymbol.FindField( wxT( "Sim_Pins" ) ) )
+        {
+            // Migrate pins from array of indexes to name-value-pairs
+            wxArrayString pinIndexes;
+            wxString      pins;
+
+            wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
+
+            if( SIM_MODEL_IDEAL::InferSimParams( prefix, value ).length() )
+            {
+                if( pinIndexes[0] == wxT( "2" ) )
+                    pins = "1=- 2=+";
+                else
+                    pins = "1=+ 2=-";
+            }
+            else
+            {
+                for( unsigned ii = 0; ii < pinIndexes.size(); ++ii )
+                {
+                    if( ii > 0 )
+                        pins.Append( wxS( " " ) );
+
+                    pins.Append( wxString::Format( wxT( "%u=%s" ), ii + 1, pinIndexes[ ii ] ) );
+                }
+            }
+
+            legacyPins->SetName( SIM_MODEL::PINS_FIELD );
+            legacyPins->SetText( pins );
+        }
+
+        if( SCH_FIELD* legacyPins = aSymbol.FindField( wxT( "Sim_Params" ) ) )
+        {
+            legacyPins->SetName( SIM_MODEL::PARAMS_FIELD );
+        }
+
         return;
     }
 
@@ -1979,12 +2027,12 @@ void SCH_SCREEN::migrateSimModel( SCH_SYMBOL& aSymbol )
     {
         wxString pins;
 
-        for( unsigned i = 0; i < aSymbol.GetLibPins().size(); ++i )
+        for( unsigned ii = 0; ii < aSymbol.GetLibPins().size(); ++ii )
         {
-            if( i != 0 )
-                pins.Append( " " );
+            if( ii > 0 )
+                pins.Append( wxS( " " ) );
 
-            pins.Append( wxString::Format( "%u=%u", i + 1, i + 1 ) );
+            pins.Append( wxString::Format( wxT( "%u=%u" ), ii + 1, ii + 1 ) );
         }
 
         SCH_FIELD pinsField( VECTOR2I( 0, 0 ), aSymbol.GetFieldCount(), &aSymbol,

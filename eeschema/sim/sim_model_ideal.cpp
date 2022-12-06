@@ -77,7 +77,9 @@ wxString SIM_MODEL_IDEAL::InferSimParams( const wxString& aPrefix, const wxStrin
 {
     wxString spiceModel;
 
-    if( aPrefix == wxT( "R" ) || aPrefix == wxT( "L" ) || aPrefix == wxT( "C" ) )
+    if( aPrefix.StartsWith( wxT( "R" ) )
+        || aPrefix.StartsWith( wxT( "L" ) )
+        || aPrefix.StartsWith( wxT( "C" ) ) )
     {
         wxRegEx passiveVal(
             wxT( "^([0-9\\. ]+)([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?([fFhHΩΩ𝛀𝛺𝝮]|ohm)?([-1-9 ]*)$" ) );
@@ -88,8 +90,8 @@ wxString SIM_MODEL_IDEAL::InferSimParams( const wxString& aPrefix, const wxStrin
             wxString valueUnits( passiveVal.GetMatch( aValue, 2 ) );
             wxString valueSuffix( passiveVal.GetMatch( aValue, 6 ) );
 
-            if( valueUnits == "M" )
-                valueUnits = "Meg";
+            if( valueUnits == wxT( "M" ) )
+                valueUnits = wxT( "Meg" );
 
             spiceModel = valuePrefix + valueUnits;
         }
