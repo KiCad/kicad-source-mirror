@@ -354,6 +354,8 @@ void EDA_DRAW_FRAME::UpdateGridSelectBox()
     m_gridSelectBox->Clear();
     wxArrayString gridsList;
 
+    wxCHECK( config(), /* void */ );
+
     GRID_MENU::BuildChoiceList( &gridsList, config(), this );
 
     for( const wxString& grid : gridsList )
@@ -373,6 +375,8 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
     if( m_gridSelectBox == nullptr )
         return;
 
+    wxCHECK( config(), /* void */ );
+
     int idx = config()->m_Window.grid.last_size_idx;
     idx = std::max( 0, std::min( idx, (int) m_gridSelectBox->GetCount() - 1 ) );
 
@@ -390,6 +394,9 @@ void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
         return;
 
     double zoom = GetCanvas()->GetGAL()->GetZoomFactor();
+
+    wxCHECK( config(), /* void */ );
+
     const std::vector<double>& zoomList = config()->m_Window.zoom_factors;
     int curr_selection = m_zoomSelectBox->GetSelection();
     int new_selection = 0;      // select zoom auto
@@ -471,12 +478,16 @@ void EDA_DRAW_FRAME::OnGridSettings( wxCommandEvent& aEvent )
 
 bool EDA_DRAW_FRAME::IsGridVisible() const
 {
+    wxCHECK( config(), true );
+
     return config()->m_Window.grid.show;
 }
 
 
 void EDA_DRAW_FRAME::SetGridVisibility( bool aVisible )
 {
+    wxCHECK( config(), /* void */ );
+
     config()->m_Window.grid.show = aVisible;
 
     // Update the display with the new grid
@@ -505,6 +516,8 @@ void EDA_DRAW_FRAME::UpdateZoomSelectBox()
     m_zoomSelectBox->Clear();
     m_zoomSelectBox->Append( _( "Zoom Auto" ) );
     m_zoomSelectBox->SetSelection( 0 );
+
+    wxCHECK( config(), /* void */ );
 
     for( unsigned i = 0;  i < config()->m_Window.zoom_factors.size();  ++i )
     {

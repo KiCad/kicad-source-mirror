@@ -342,9 +342,14 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
         // Parse "Additional" because sheet is set up during "FileHeader" parsing.
         ParseAdditional( altiumSchFile );
     }
-    catch( CFB::CFBException& exception )
+    catch( const CFB::CFBException& exception )
     {
         THROW_IO_ERROR( exception.what() );
+    }
+    catch( const std::exception& exc )
+    {
+        wxLogDebug( wxT( "Unhandled exception in Altium schematic parsers: %s." ), exc.what() );
+        throw;
     }
 
     SCH_SCREEN* currentScreen = getCurrentScreen();
@@ -361,6 +366,17 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
         // The assumption is that all of the Altium schematic files will be in the same
         // path as the parent sheet path.
         wxFileName loadAltiumFileName( parentFileName.GetPath(), sheet->GetFileName() );
+
+        if( loadAltiumFileName.GetFullName().IsEmpty() || !loadAltiumFileName.IsFileReadable() )
+        {
+            wxString msg;
+
+            msg.Printf( _( "The file name for sheet %s is undefined, this is probably an"
+                           "Altium signal harness that got converted to a sheet." ),
+                        sheet->GetName() );
+            m_reporter->Report( msg );
+            continue;
+        }
 
         m_rootSheet->SearchHierarchy( loadAltiumFileName.GetFullPath(), &loadedScreen );
 
@@ -1548,7 +1564,7 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
 void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aProperties )
 {
     // The Arc can be ALTIUM_SCH_RECORD::ELLIPTICAL_ARC or ALTIUM_SCH_RECORD::ARC
-    // Elliptical arcs are not handled in kicad. So use an arc instead
+    // Elliptical arcs are not handled in KiCad. So use an arc instead
     // TODO: handle elliptical arc better.
 
     ASCH_ARC elem( aProperties );
@@ -1558,7 +1574,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 
     int arc_radius = elem.m_Radius;
 
-    // Try to approxiammate this ellipse by an arc. use the biggest of radius and secondary radius
+    // Try to approximate this ellipse by an arc. use the biggest of radius and secondary radius
     // One can of course use another recipe
     if( elem.m_IsElliptical )
         arc_radius = std::max( elem.m_Radius, elem.m_SecondaryRadius );
@@ -1803,6 +1819,7 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessConnector( int aIndex, const std::map<wxStri
         SCH_SHEET* sheet = new SCH_SHEET( getCurrentSheet(), elem.Location + m_sheetOffset,
                                           elem.Size );
 
+        sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
         sheet->SetBackgroundColor( GetColorFromInt( elem.AreaColor ) );
         sheet->SetBorderColor( GetColorFromInt( elem.Color ) );
 
@@ -1900,6 +1917,19 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessType( const std::map<wxString, wxString>& aP
     SetTextPositioning( &sheetNameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT,
                         ASCH_RECORD_ORIENTATION::RIGHTWARDS );
     sheetNameField.SetTextColor( GetColorFromInt( elem.Color ) );
+
+    SCH_FIELD& sheetFileName = sheetIt->second->GetFields()[SHEETFILENAME];
+    sheetFileName.SetText( elem.Text + wxT( "." ) + KiCadSchematicFileExtension );
+
+    wxFileName fn( m_schematic->Prj().GetProjectPath(), elem.Text, KiCadSchematicFileExtension );
+    wxString fullPath = fn.GetFullPath();
+
+    fullPath.Replace( wxT( "\\" ), wxT( "/" ) );
+
+    SCH_SCREEN* screen = sheetIt->second->GetScreen();
+
+    wxCHECK( screen, /* void */ );
+    screen->SetFileName( fullPath );
 
     m_reporter->Report( wxString::Format( _( "Altium's harness connector (%s) was imported as a "
                                              "hierarchical sheet. Please review the imported "

@@ -1276,6 +1276,20 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             return false;
         }
+        catch( const std::exception& exc )
+        {
+            CreateScreens();
+            m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+
+            wxString msg = wxString::Format( _( "Unhandled excpetion occurred loading schematic "
+                                                "'%s'." ), aFileName );
+            DisplayErrorMessage( this, msg, exc.what() );
+
+            msg.Printf( _( "Failed to load '%s'." ), aFileName );
+            SetMsgPanel( wxEmptyString, msg );
+
+            return false;
+        }
 
         return true;
 

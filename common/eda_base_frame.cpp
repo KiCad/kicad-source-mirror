@@ -762,6 +762,8 @@ void EDA_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void EDA_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
+    wxCHECK( config(), /* void */ );
+
     SaveWindowSettings( GetWindowSettings( aCfg ) );
 
     bool fileOpen = m_isClosing && m_isNonUserClose;
