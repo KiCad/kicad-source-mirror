@@ -89,7 +89,10 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     Bind( wxEVT_SIZE,
           [&]( wxSizeEvent& aEvent )
           {
-              RecalculateSplitterPos();
+              CallAfter( [&]()
+                         {
+                            RecalculateSplitterPos();
+                         } );
               aEvent.Skip();
           } );
 }
