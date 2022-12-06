@@ -59,7 +59,12 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
     m_grid->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
+    m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_DOWN );
+    m_grid->AddActionTrigger( wxPG_ACTION_PREV_PROPERTY, WXK_UP );
+    m_grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_SPACE );
     m_grid->DedicateKey( WXK_RETURN );
+    m_grid->DedicateKey( WXK_DOWN );
+    m_grid->DedicateKey( WXK_UP );
     mainSizer->Add( m_grid, 1, wxALL | wxEXPAND, 5 );
 
     m_grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
@@ -284,9 +289,24 @@ void PROPERTIES_PANEL::onShow( wxShowEvent& aEvent )
 void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
 {
     if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ShiftDown() )
+    {
         m_grid->CommitChangesFromEditor();
-    else
-        aEvent.Skip();
+        return;
+    }
+
+    if( aEvent.GetKeyCode() == WXK_SPACE )
+    {
+        if( wxPGProperty* prop = m_grid->GetSelectedProperty() )
+        {
+            if( prop->GetValueType() == wxT( "bool" ) )
+            {
+                m_grid->SetPropertyValue( prop, !prop->GetValue().GetBool() );
+                return;
+            }
+        }
+    }
+    
+    aEvent.Skip();
 }
 
 
