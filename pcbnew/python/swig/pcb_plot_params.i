@@ -25,6 +25,7 @@
  * @file pcb_plot_params.i
  */
 
+%include plotprint_opts.h
 %include pcb_plot_params.h
 
 %extend PCB_PLOT_PARAMS
