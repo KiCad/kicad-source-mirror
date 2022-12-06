@@ -4,13 +4,14 @@
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
 # Richard Jonsson <richard_jonsson@hotmail.com>, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022.
+# Hanna Breisand <weblate.org@breisand.se>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
 "PO-Revision-Date: 2022-12-07 22:48+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -9546,7 +9547,7 @@ msgstr "Gemensamt för alla & enheter i symbol"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:149
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:156
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Gemensamt för alla kroppar och stilar (De Morgan)"
+msgstr "Gemensamt för alla symbolvarianter (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:88
 msgid "Drawing Properties"
@@ -9639,7 +9640,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:172
 msgid "Has alternate body style (De Morgan)"
-msgstr "Har alternativ kroppsstil (De Morgan)"
+msgstr "Har alternativ symbol (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -10027,7 +10028,7 @@ msgstr "Pin & namn:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:50
 msgid "Pin num&ber:"
-msgstr "Pinkod:"
+msgstr "Pin-nummer:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:52
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
@@ -13504,11 +13505,11 @@ msgstr "Strömingång"
 
 #: eeschema/pin_type.cpp:60 eeschema/pin_type.cpp:252
 msgid "Power output"
-msgstr "Uteffekt"
+msgstr "Strömutgång"
 
 #: eeschema/pin_type.cpp:61 eeschema/pin_type.cpp:253
 msgid "Open collector"
-msgstr "Öppen samlare"
+msgstr "Öppen kollektor"
 
 #: eeschema/pin_type.cpp:62 eeschema/pin_type.cpp:254
 msgid "Open emitter"
@@ -25774,7 +25775,7 @@ msgstr "Ta bort undantag"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1275
 msgid "not run"
-msgstr "Spring inte"
+msgstr "inte körd"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
