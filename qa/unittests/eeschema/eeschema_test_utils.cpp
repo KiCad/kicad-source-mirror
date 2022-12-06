@@ -87,16 +87,21 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
     SCH_SCREENS screens( m_schematic.Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
         screen->UpdateLocalLibSymbolLinks();
+
+        if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
+            screen->MigrateSimModels();
+    }
 
     SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
     // Restore all of the loaded symbol instances from the root sheet screen.
     if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
-        sheets.UpdateSymbolInstances( m_schematic.RootScreen()->GetSymbolInstances() );
+        sheets.UpdateSymbolInstanceData( m_schematic.RootScreen()->GetSymbolInstances());
 
     if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20221110 )
-        sheets.UpdateSheetInstances( m_schematic.RootScreen()->GetSheetInstances() );
+        sheets.UpdateSheetInstanceData( m_schematic.RootScreen()->GetSheetInstances());
 
     sheets.AnnotatePowerSymbols();
 

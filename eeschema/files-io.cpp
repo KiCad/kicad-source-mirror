@@ -447,14 +447,19 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
 
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+            {
                 screen->UpdateLocalLibSymbolLinks();
+
+                if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
+                    screen->MigrateSimModels();
+            }
 
             // Restore all of the loaded symbol and sheet instances from the root sheet.
             if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
-                sheetList.UpdateSymbolInstances( Schematic().RootScreen()->GetSymbolInstances() );
+                sheetList.UpdateSymbolInstanceData( Schematic().RootScreen()->GetSymbolInstances());
 
             if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221110 )
-                sheetList.UpdateSheetInstances( Schematic().RootScreen()->GetSheetInstances() );
+                sheetList.UpdateSheetInstanceData( Schematic().RootScreen()->GetSheetInstances());
         }
 
         Schematic().ConnectionGraph()->Reset();

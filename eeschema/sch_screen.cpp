@@ -52,6 +52,9 @@
 #include <schematic.h>
 #include <symbol_lib_table.h>
 #include <tool/common_tools.h>
+#include <sim/sim_model.h> // For V6 to V7 simulation model migration.
+#include <sim/sim_value.h> //
+#include <locale_io.h>
 
 #include <algorithm>
 
@@ -1839,4 +1842,155 @@ void SCH_SCREENS::SetLegacySymbolInstanceData()
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
         screen->SetLegacySymbolInstanceData();
+}
+
+
+void SCH_SCREEN::MigrateSimModels()
+{
+    LOCALE_IO toggle;
+
+    // V6 schematics may specify model names in Value fields, which we don't do in V7.
+    // Migrate by adding an equivalent model for these symbols.
+
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+        migrateSimModel( *symbol );
+    }
+}
+
+
+void SCH_SCREEN::migrateSimModel( SCH_SYMBOL& aSymbol )
+{
+    if( aSymbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
+        || aSymbol.FindField( SIM_MODEL::TYPE_FIELD )
+        || aSymbol.FindField( SIM_MODEL::PINS_FIELD )
+        || aSymbol.FindField( SIM_MODEL::PARAMS_FIELD ) )
+    {
+        // Has a V7 model field -- skip.
+        return;
+    }
+
+    wxString prefix = aSymbol.GetPrefix();
+    wxString value = aSymbol.GetValueFieldText( true );
+
+    wxString spiceType;
+    wxString spiceModel;
+    wxString spiceLib;
+    wxString pinMap;
+
+    if( aSymbol.FindField( "Spice_Primitive" )
+        || aSymbol.FindField( "Spice_Node_Sequence" )
+        || aSymbol.FindField( "Spice_Model" )
+        || aSymbol.FindField( "Spice_Netlist_Enabled" )
+        || aSymbol.FindField( "Spice_Lib_File" ) )
+    {
+        if( SCH_FIELD* primitiveField = aSymbol.FindField( "Spice_Primitive" ) )
+        {
+            spiceType = primitiveField->GetText();
+            aSymbol.RemoveField( "Spice_Primitive" );
+        }
+
+        if( SCH_FIELD* nodeSequenceField = aSymbol.FindField( "Spice_Node_Sequence" ) )
+        {
+            const wxString  delimiters( "{:,; }" );
+            const wxString& nodeSequence = nodeSequenceField->GetText();
+
+            if( nodeSequence != "" )
+            {
+                wxStringTokenizer tkz( nodeSequence, delimiters );
+
+                for( long modelPinNumber = 1; tkz.HasMoreTokens(); ++modelPinNumber )
+                {
+                    long symbolPinNumber = 1;
+                    tkz.GetNextToken().ToLong( &symbolPinNumber );
+
+                    if( modelPinNumber != 1 )
+                        pinMap.Append( " " );
+
+                    pinMap.Append( wxString::Format( "%ld=%ld", symbolPinNumber, modelPinNumber ) );
+                }
+            }
+
+            aSymbol.RemoveField( "Spice_Node_Sequence" );
+        }
+
+        if( SCH_FIELD* modelField = aSymbol.FindField( "Spice_Model" ) )
+        {
+            spiceModel = modelField->GetText();
+            aSymbol.RemoveField( "Spice_Model" );
+        }
+        else
+        {
+            spiceModel = aSymbol.FindField( "Value" )->GetText();
+        }
+
+        if( SCH_FIELD* netlistEnabledField = aSymbol.FindField( "Spice_Netlist_Enabled" ) )
+        {
+            wxString netlistEnabled = netlistEnabledField->GetText().Lower();
+
+            if( netlistEnabled.StartsWith( "0" )
+                || netlistEnabled.StartsWith( "n" )
+                || netlistEnabled.StartsWith( "f" ) )
+            {
+                SCH_FIELD enableField( VECTOR2I( 0, 0 ), aSymbol.GetFieldCount(), &aSymbol,
+                                       SIM_MODEL::ENABLE_FIELD );
+            }
+        }
+
+        if( SCH_FIELD* libFileField = aSymbol.FindField( "Spice_Lib_File" ) )
+        {
+            spiceLib = libFileField->GetText();
+            aSymbol.RemoveField( "Spice_Lib_File" );
+        }
+    }
+    else if( prefix == wxT( "V" ) || prefix == wxT( "I" ) )
+    {
+        spiceModel = value;
+    }
+    else
+    {
+        return;
+    }
+
+    // Insert a plaintext model as a substitute.
+
+    SCH_FIELD deviceTypeField( VECTOR2I( 0, 0 ), aSymbol.GetFieldCount(), &aSymbol,
+                               SIM_MODEL::DEVICE_TYPE_FIELD );
+    deviceTypeField.SetText(
+        SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_TYPE_::SPICE ).fieldValue );
+    aSymbol.AddField( deviceTypeField );
+
+    SCH_FIELD paramsField( VECTOR2I( 0, 0 ), aSymbol.GetFieldCount(), &aSymbol,
+                           SIM_MODEL::PARAMS_FIELD );
+    paramsField.SetText( wxString::Format( "type=\"%s\" model=\"%s\" lib=\"%s\"",
+                                           spiceType, spiceModel, spiceLib ) );
+    aSymbol.AddField( paramsField );
+
+    // Legacy models by default get linear pin mapping.
+    if( pinMap != "" )
+    {
+        SCH_FIELD pinsField( VECTOR2I( 0, 0 ), aSymbol.GetFieldCount(), &aSymbol,
+                             SIM_MODEL::PINS_FIELD );
+
+        pinsField.SetText( pinMap );
+        aSymbol.AddField( pinsField );
+    }
+    else
+    {
+        wxString pins;
+
+        for( unsigned i = 0; i < aSymbol.GetLibPins().size(); ++i )
+        {
+            if( i != 0 )
+                pins.Append( " " );
+
+            pins.Append( wxString::Format( "%u=%u", i + 1, i + 1 ) );
+        }
+
+        SCH_FIELD pinsField( VECTOR2I( 0, 0 ), aSymbol.GetFieldCount(), &aSymbol,
+                             SIM_MODEL::PINS_FIELD );
+        pinsField.SetText( pins );
+        aSymbol.AddField( pinsField );
+    }
 }

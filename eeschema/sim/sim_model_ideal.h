@@ -49,6 +49,8 @@ public:
     const PARAM* GetTunerParam() const override { return &GetParam( 0 ); }
     bool HasPrimaryValue() const override { return true; }
 
+    static wxString InferSimParams( const wxString& aPrefix, const wxString& aValue );
+
 private:
     std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 

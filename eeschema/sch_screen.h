@@ -515,14 +515,9 @@ public:
 #endif
 
     /**
-     * last value for the zoom level, useful in Eeschema when changing the current displayed
-     * sheet to reuse the same zoom level when back to the sheet using this screen
+     * Migrate any symbols having V6 simulation models to their V7 equivalents.
      */
-    double m_LastZoomLevel;
-
-private:
-    bool doIsJunction( const VECTOR2I& aPosition, bool aBreakCrossings,
-                       bool* aHasExplicitJunctionDot, bool* aHasBusEntry ) const;
+    void MigrateSimModels();
 
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
@@ -530,8 +525,24 @@ private:
     friend SCH_SEXPR_PLUGIN;   // Only to save the loaded instance information to schematic file.
     friend SCH_ALTIUM_PLUGIN;
 
+    bool doIsJunction( const VECTOR2I& aPosition, bool aBreakCrossings,
+                       bool* aHasExplicitJunctionDot, bool* aHasBusEntry ) const;
+
     void clearLibSymbols();
 
+    /**
+     * Migrate the symbol's V6 simulation model SCH_FIELDs to their V7 equivalents
+     */
+    void migrateSimModel( SCH_SYMBOL& aSymbol );
+
+public:
+    /**
+     * last value for the zoom level, useful in Eeschema when changing the current displayed
+     * sheet to reuse the same zoom level when back to the sheet using this screen
+     */
+    double m_LastZoomLevel;
+
+private:
     wxString    m_fileName;                 // File used to load the screen.
     int         m_fileFormatVersionAtLoad;
     int         m_refCount;                 // Number of sheets referencing this screen.

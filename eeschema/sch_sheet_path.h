@@ -614,7 +614,7 @@ public:
      * WARNING: Do not call this on anything other than the full hierarchy.
      * @param aSymbolInstances is the symbol path information loaded from the root schematic.
      */
-    void UpdateSymbolInstances( const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbolInstances );
+    void UpdateSymbolInstanceData( const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbolInstances );
 
     /**
      * Update all of the sheet instance information using \a aSheetInstances.
@@ -623,7 +623,7 @@ public:
      *
      * @param aSymbolInstances is the symbol path information loaded from the root schematic.
      */
-    void UpdateSheetInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheetInstances );
+    void UpdateSheetInstanceData( const std::vector<SCH_SHEET_INSTANCE>& aSheetInstances );
 
     std::vector<KIID_PATH> GetPaths() const;
 
@@ -667,17 +667,7 @@ public:
 
     void RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
 
-    /**
-     * Migrate V6 simulator models to V7. Must be called only after UpdateSymbolInstances().
-     */
-    void MigrateSimModelNameFields();
-
 private:
-    /**
-     * Migrate a single V6 simulator model to V7. Must be called only after UpdateSymbolInstances().
-     */
-    void migrateSimModel( SCH_SYMBOL& aSymbol, unsigned aSheetIndex );
-
     SCH_SHEET_PATH  m_currentSheetPath;
 };
 

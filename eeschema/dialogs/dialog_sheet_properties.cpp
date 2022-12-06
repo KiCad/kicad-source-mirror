@@ -642,10 +642,10 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         if( restoreSheet )
             currentSheet.LastScreen()->Append( m_sheet );
 
-        // The full hierarchy needs to be reloaded because due to the addition of a new sheet.
+        // The full hierarchy needs to be reloaded due to the addition of a new sheet.
         fullHierarchy = schematic.GetFullHierarchy();
-        fullHierarchy.UpdateSheetInstances( sheetInstances );
-        fullHierarchy.UpdateSymbolInstances( symbolInstances );
+        fullHierarchy.UpdateSheetInstanceData( sheetInstances );
+        fullHierarchy.UpdateSymbolInstanceData( symbolInstances );
     }
 
     if( m_clearAnnotationNewItems )

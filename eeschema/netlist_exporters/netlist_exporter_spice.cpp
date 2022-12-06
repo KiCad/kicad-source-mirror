@@ -27,6 +27,7 @@
 #include "netlist_exporter_spice.h"
 #include <sim/sim_library_spice.h>
 #include <sim/sim_model_raw_spice.h>
+#include <sim/sim_model_ideal.h>
 #include <sim/spice_grammar.h>
 #include <common.h>
 #include <confirm.h>
@@ -226,6 +227,23 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                     spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
                 else
                     spiceItem.fields.back().SetText( symbol->GetFields()[i].GetShownText( 0, false ) );
+            }
+
+            // Infer RLC passive models if they aren't specified
+            if( !symbol->FindField( SIM_MODEL::DEVICE_TYPE_FIELD, false )
+                    && !symbol->FindField( SIM_MODEL::PARAMS_FIELD, false ) )
+            {
+                wxString simParams = SIM_MODEL_IDEAL::InferSimParams( symbol->GetPrefix(),
+                                                                      symbol->GetValueFieldText( true ) );
+
+                if( !simParams.IsEmpty() )
+                {
+                    spiceItem.fields.emplace_back( VECTOR2I(), -1, symbol, SIM_MODEL::DEVICE_TYPE_FIELD );
+                    spiceItem.fields.back().SetText( symbol->GetPrefix() );
+
+                    spiceItem.fields.emplace_back( VECTOR2I(), -1, symbol, SIM_MODEL::PARAMS_FIELD );
+                    spiceItem.fields.back().SetText( simParams );
+                }
             }
 
             try

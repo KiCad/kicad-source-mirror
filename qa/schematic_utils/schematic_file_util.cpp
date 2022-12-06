@@ -108,7 +108,7 @@ std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename, 
 
 
 void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
-                std::unique_ptr<SCHEMATIC>& aSchematic )
+                    std::unique_ptr<SCHEMATIC>& aSchematic )
 {
     if( aSchematic )
     {
@@ -140,13 +140,18 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
    SCH_SCREENS screens( aSchematic->Root() );
 
    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+   {
        screen->UpdateLocalLibSymbolLinks();
+
+       if( aSchematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
+           screen->MigrateSimModels();
+   }
 
    SCH_SHEET_LIST sheets = aSchematic->GetSheets();
 
    // Restore all of the loaded symbol instances from the root sheet screen.
-   sheets.UpdateSymbolInstances( aSchematic->RootScreen()->GetSymbolInstances() );
-   sheets.UpdateSheetInstances( aSchematic->RootScreen()->GetSheetInstances() );
+   sheets.UpdateSymbolInstanceData( aSchematic->RootScreen()->GetSymbolInstances() );
+   sheets.UpdateSheetInstanceData( aSchematic->RootScreen()->GetSheetInstances() );
 
    sheets.AnnotatePowerSymbols();
 

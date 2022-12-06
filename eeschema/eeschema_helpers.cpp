@@ -136,16 +136,20 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
     }
 
     SCH_SHEET_LIST sheetList = schematic->GetSheets();
-    SCH_SCREENS    schematicScreenRoot( schematic->Root() );
+    SCH_SCREENS    screens( schematic->Root() );
 
-    for( SCH_SCREEN* screen = schematicScreenRoot.GetFirst(); screen;
-         screen = schematicScreenRoot.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
         screen->UpdateLocalLibSymbolLinks();
 
-    if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
-        sheetList.UpdateSymbolInstances( schematic->RootScreen()->GetSymbolInstances() );
+        if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
+            screen->MigrateSimModels();
+    }
 
-    sheetList.UpdateSheetInstances( schematic->RootScreen()->GetSheetInstances() );
+    if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
+        sheetList.UpdateSymbolInstanceData( schematic->RootScreen()->GetSymbolInstances());
+
+    sheetList.UpdateSheetInstanceData( schematic->RootScreen()->GetSheetInstances());
 
     sheetList.AnnotatePowerSymbols();
 

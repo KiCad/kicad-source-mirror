@@ -26,7 +26,7 @@
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 #include <fmt/core.h>
-
+#include <wx/regex.h>
 
 std::string SPICE_GENERATOR_IDEAL::ModelLine( const SPICE_ITEM& aItem ) const
 {
@@ -70,6 +70,39 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType ) :
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_IDEAL" );
     }
+}
+
+
+wxString SIM_MODEL_IDEAL::InferSimParams( const wxString& aPrefix, const wxString& aValue )
+{
+    wxString spiceModel;
+
+    if( aPrefix == wxT( "R" ) || aPrefix == wxT( "L" ) || aPrefix == wxT( "C" ) )
+    {
+        wxRegEx passiveVal(
+            wxT( "^([0-9\\. ]+)([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?([fFhHΩΩ𝛀𝛺𝝮]|ohm)?([-1-9 ]*)$" ) );
+
+        if( passiveVal.Matches( aValue ) )
+        {
+            wxString valuePrefix( passiveVal.GetMatch( aValue, 1 ) );
+            wxString valueUnits( passiveVal.GetMatch( aValue, 2 ) );
+            wxString valueSuffix( passiveVal.GetMatch( aValue, 6 ) );
+
+            if( valueUnits == "M" )
+                valueUnits = "Meg";
+
+            spiceModel = valuePrefix + valueUnits;
+        }
+        else
+        {
+            spiceModel = aValue;
+        }
+    }
+
+    if( !spiceModel.IsEmpty() )
+        return wxString::Format( wxT( "%s=\"%s\"" ), aPrefix.Lower(), spiceModel );
+    else
+        return wxEmptyString;
 }
 
 

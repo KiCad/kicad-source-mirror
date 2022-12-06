@@ -31,6 +31,8 @@
 #include <sim/sim_lib_mgr.h>
 #include <sim/sim_library.h>
 #include <sim/sim_model.h>
+#include <sim/sim_model_ideal.h>
+
 
 SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT& aPrj ) : m_project( aPrj )
 {
@@ -107,6 +109,23 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
             fields.back().SetText( aSymbol.GetRef( aSheetPath ) );
         else
             fields.back().SetText( aSymbol.GetFields()[ i ].GetShownText( 0, false ) );
+    }
+
+    // Infer RLC passive models if they aren't specified
+    if( !aSymbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD, false )
+            && !aSymbol.FindField( SIM_MODEL::PARAMS_FIELD, false ) )
+    {
+        wxString simParams = SIM_MODEL_IDEAL::InferSimParams( aSymbol.GetPrefix(),
+                                                              aSymbol.GetValueFieldText( true ) );
+
+        if( !simParams.IsEmpty() )
+        {
+            fields.emplace_back( VECTOR2I(), -1, &aSymbol, SIM_MODEL::DEVICE_TYPE_FIELD );
+            fields.back().SetText( aSymbol.GetPrefix() );
+
+            fields.emplace_back( VECTOR2I(), -1, &aSymbol, SIM_MODEL::PARAMS_FIELD );
+            fields.back().SetText( simParams );
+        }
     }
 
     return CreateModel( fields, static_cast<int>( aSymbol.GetRawPins().size() ) );
