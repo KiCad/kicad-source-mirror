@@ -1286,7 +1286,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             CreateScreens();
             m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
-            wxString msg = wxString::Format( _( "Unhandled excpetion occurred loading schematic "
+            wxString msg = wxString::Format( _( "Unhandled exception occurred loading schematic "
                                                 "'%s'." ), aFileName );
             DisplayErrorMessage( this, msg, exc.what() );
 
