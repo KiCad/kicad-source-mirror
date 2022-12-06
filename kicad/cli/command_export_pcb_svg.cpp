@@ -55,6 +55,7 @@ CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
     m_argParser.add_argument( ARG_PAGE_SIZE )
             .help( UTF8STDSTR( _( "Set page sizing mode (0 = page with frame and title block, 1 = "
                                 "current page size, 2 = board area only)" ) ) )
+            .scan<'i', int>()
             .default_value( 0 );
 }
 

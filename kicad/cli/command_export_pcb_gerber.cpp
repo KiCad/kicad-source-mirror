@@ -78,6 +78,7 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND() : EXPORT_PCB_BASE_CO
     m_argParser.add_argument( ARG_PRECISION )
             .help( UTF8STDSTR(
                     _( "Precision of gerber coordinates, valid options: 5 or 6" ) ) )
+            .scan<'i', int>()
             .default_value( 6 );
 }
 
