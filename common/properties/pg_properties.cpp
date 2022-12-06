@@ -194,7 +194,6 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
 wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFlags ) const
 {
     wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG, wxEmptyString );
-    // TODO(JE) This should be handled by UNIT_BINDER
 
     long distanceIU = aVariant.GetLong();
 

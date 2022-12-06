@@ -76,13 +76,28 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
     else if( dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) )
         m_unitBinder->SetUnits( EDA_UNITS::DEGREES );
 
+    UpdateControl( aProperty, win );
+
     return ret;
 }
 
 
 void PG_UNIT_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const
 {
-    m_unitBinder->ChangeValue( aProperty->GetValueAsString() );
+    wxVariant var = aProperty->GetValue();
+
+    if( var.GetType() == wxPG_VARIANT_TYPE_LONG )
+    {
+        m_unitBinder->ChangeValue( var.GetLong() );
+    }
+    else if( var.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
+    {
+        m_unitBinder->ChangeValue( var.GetDouble() );
+    }
+    else
+    {
+        wxFAIL_MSG( wxT( "PG_UNIT_EDITOR should only be used with numeric properties!" ) );
+    }    
 }
 
 

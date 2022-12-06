@@ -236,7 +236,18 @@ void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
         if( m_eval.Process( textEntry->GetValue() ) )
         {
             textEntry->GetSelection( &m_selStart, &m_selEnd );
-            textEntry->ChangeValue( m_eval.Result() );
+
+            wxString value = m_eval.Result();
+
+            if( m_unitsInValue )
+            {
+                if( !( m_units == EDA_UNITS::DEGREES || m_units == EDA_UNITS::PERCENT ) )
+                    value += wxT( " " );
+
+                value += EDA_UNIT_UTILS::GetLabel( m_units, m_dataType );
+            }
+
+            textEntry->ChangeValue( value );
 
 #ifdef __WXGTK__
             // Manually copy the selected text to the primary selection clipboard
