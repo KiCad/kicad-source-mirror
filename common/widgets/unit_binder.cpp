@@ -642,7 +642,6 @@ void PROPERTY_EDITOR_UNIT_BINDER::SetControl( wxWindow* aControl )
                               nullptr, this );
         m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( PROPERTY_EDITOR_UNIT_BINDER::onClick ),
                               nullptr, this );
-        m_valueCtrl->Bind( wxEVT_SET_FOCUS, &PROPERTY_EDITOR_UNIT_BINDER::onSetFocus, this );
 
         m_valueCtrl->Bind( wxEVT_SHOW,
                            [&]( wxShowEvent& e )
