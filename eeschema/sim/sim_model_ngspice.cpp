@@ -32,26 +32,26 @@ std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const SPICE_ITEM
 {
     switch( m_model.GetTypeInfo().deviceType )
     {
-        case SIM_MODEL::DEVICE_TYPE_::NPN:
-        case SIM_MODEL::DEVICE_TYPE_::PNP:
+        case SIM_MODEL::DEVICE_T::NPN:
+        case SIM_MODEL::DEVICE_T::PNP:
             return { fmt::format( "I({}:c)", aItem.refName ),
                      fmt::format( "I({}:b)", aItem.refName ),
                      fmt::format( "I({}:e)", aItem.refName ) };
 
-        case SIM_MODEL::DEVICE_TYPE_::NJFET:
-        case SIM_MODEL::DEVICE_TYPE_::PJFET:
-        case SIM_MODEL::DEVICE_TYPE_::NMES:
-        case SIM_MODEL::DEVICE_TYPE_::PMES:
-        case SIM_MODEL::DEVICE_TYPE_::NMOS:
-        case SIM_MODEL::DEVICE_TYPE_::PMOS:
+        case SIM_MODEL::DEVICE_T::NJFET:
+        case SIM_MODEL::DEVICE_T::PJFET:
+        case SIM_MODEL::DEVICE_T::NMES:
+        case SIM_MODEL::DEVICE_T::PMES:
+        case SIM_MODEL::DEVICE_T::NMOS:
+        case SIM_MODEL::DEVICE_T::PMOS:
             return { fmt::format( "I({}:d)", aItem.refName ),
                      fmt::format( "I({}:g)", aItem.refName ),
                      fmt::format( "I({}:s)", aItem.refName ) };
 
-        case SIM_MODEL::DEVICE_TYPE_::R:
-        case SIM_MODEL::DEVICE_TYPE_::C:
-        case SIM_MODEL::DEVICE_TYPE_::L:
-        case SIM_MODEL::DEVICE_TYPE_::D:
+        case SIM_MODEL::DEVICE_T::R:
+        case SIM_MODEL::DEVICE_T::C:
+        case SIM_MODEL::DEVICE_T::L:
+        case SIM_MODEL::DEVICE_T::D:
             return SPICE_GENERATOR::CurrentNames( aItem );
 
         default:
@@ -167,7 +167,7 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
     if( aParamName == "mfg" || aParamName == "type" )
         return true;
 
-    if( GetDeviceType() == DEVICE_TYPE_::D )
+    if( GetDeviceType() == DEVICE_T::D )
     {
         if( aParamName == "perim"
             || aParamName == "isw"
@@ -182,7 +182,7 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
         }
     }
 
-    if( GetDeviceType() == DEVICE_TYPE_::NPN || GetDeviceType() == DEVICE_TYPE_::PNP )
+    if( GetDeviceType() == DEVICE_T::NPN || GetDeviceType() == DEVICE_T::PNP )
     {
         // Ignore the purely informative LTspice-specific parameters "icrating" and "vceo".
         if( aParamName == "icrating" || aParamName == "vceo" )

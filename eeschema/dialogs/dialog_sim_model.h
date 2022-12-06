@@ -143,13 +143,13 @@ private:
     SCH_SYMBOL&            m_symbol;
     std::vector<T>&        m_fields;
 
-    SIM_LIB_MGR                                        m_libraryModelsMgr;
-    SIM_LIB_MGR                                        m_builtinModelsMgr;
-    const SIM_MODEL*                                   m_prevModel;
+    SIM_LIB_MGR                                    m_libraryModelsMgr;
+    SIM_LIB_MGR                                    m_builtinModelsMgr;
+    const SIM_MODEL*                               m_prevModel;
 
-    std::vector<LIB_PIN*>                              m_sortedPartPins; //< Pins of the current part.
-    std::map<SIM_MODEL::DEVICE_TYPE_, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
-    SIM_MODEL::TYPE                                    m_curModelType;
+    std::vector<LIB_PIN*>                          m_sortedPartPins; //< Pins of the current part.
+    std::map<SIM_MODEL::DEVICE_T, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
+    SIM_MODEL::TYPE                                m_curModelType;
 
     MODEL_NAME_VALIDATOR   m_modelNameValidator;
     SCINTILLA_TRICKS*      m_scintillaTricks;

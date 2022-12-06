@@ -225,7 +225,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                                        + e.What() );
         }
 
-        SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+        SIM_MODEL::DEVICE_T deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
 
         if( !m_curModelTypeOfDeviceType.count( deviceType ) )
             m_curModelTypeOfDeviceType[deviceType] = type;
@@ -353,7 +353,7 @@ void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
         }
         else
         {
-            for( SIM_MODEL::DEVICE_TYPE_ deviceType : SIM_MODEL::DEVICE_TYPE__ITERATOR() )
+            for( SIM_MODEL::DEVICE_T deviceType : SIM_MODEL::DEVICE_T_ITERATOR() )
             {
                 if( !SIM_MODEL::DeviceInfo( deviceType ).isBuiltin )
                     continue;
@@ -1134,7 +1134,7 @@ void DIALOG_SIM_MODEL<T>::onDifferentialCheckbox( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 {
-    for( SIM_MODEL::DEVICE_TYPE_ deviceType : SIM_MODEL::DEVICE_TYPE__ITERATOR() )
+    for( SIM_MODEL::DEVICE_T deviceType : SIM_MODEL::DEVICE_T_ITERATOR() )
     {
         if( SIM_MODEL::DeviceInfo( deviceType ).description == m_deviceTypeChoice->GetStringSelection() )
         {
@@ -1150,8 +1150,8 @@ void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 {
-    SIM_MODEL::DEVICE_TYPE_ deviceType = curModel().GetDeviceType();
-    wxString typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
+    SIM_MODEL::DEVICE_T deviceType = curModel().GetDeviceType();
+    wxString            typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {

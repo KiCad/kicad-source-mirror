@@ -62,7 +62,7 @@ public:
 
 
     // There's a trailing '_' because `DEVICE_TYPE` collides with something in Windows headers.
-    DEFINE_ENUM_CLASS_WITH_ITERATOR( DEVICE_TYPE_,
+    DEFINE_ENUM_CLASS_WITH_ITERATOR( DEVICE_T,
         NONE,
 
         R,
@@ -262,7 +262,7 @@ public:
 
     struct INFO
     {
-        DEVICE_TYPE_ deviceType;
+        DEVICE_T    deviceType;
         std::string fieldValue;
         std::string description;
     };
@@ -384,7 +384,7 @@ public:
     };
 
 
-    static DEVICE_INFO DeviceInfo( DEVICE_TYPE_ aDeviceType );
+    static DEVICE_INFO DeviceInfo( DEVICE_T aDeviceType );
     static INFO TypeInfo( TYPE aType );
     static SPICE_INFO SpiceInfo( TYPE aType );
 
@@ -454,7 +454,7 @@ public:
     DEVICE_INFO GetDeviceInfo() const { return DeviceInfo( GetDeviceType() ); }
     INFO GetTypeInfo() const { return TypeInfo( GetType() ); }
 
-    DEVICE_TYPE_ GetDeviceType() const { return GetTypeInfo().deviceType; }
+    DEVICE_T GetDeviceType() const { return GetTypeInfo().deviceType; }
     TYPE GetType() const { return m_type; }
 
     const SIM_MODEL* GetBaseModel() const { return m_baseModel; }

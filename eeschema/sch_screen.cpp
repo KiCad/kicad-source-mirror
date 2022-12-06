@@ -1879,19 +1879,19 @@ void SCH_SCREEN::migrateSimModel( SCH_SYMBOL& aSymbol )
     wxString spiceLib;
     wxString pinMap;
 
-    if( aSymbol.FindField( "Spice_Primitive" )
-        || aSymbol.FindField( "Spice_Node_Sequence" )
-        || aSymbol.FindField( "Spice_Model" )
-        || aSymbol.FindField( "Spice_Netlist_Enabled" )
-        || aSymbol.FindField( "Spice_Lib_File" ) )
+    if( aSymbol.FindField( wxT( "Spice_Primitive" ) )
+        || aSymbol.FindField( wxT( "Spice_Node_Sequence" ) )
+        || aSymbol.FindField( wxT( "Spice_Model" ) )
+        || aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) )
+        || aSymbol.FindField( wxT( "Spice_Lib_File" ) ) )
     {
-        if( SCH_FIELD* primitiveField = aSymbol.FindField( "Spice_Primitive" ) )
+        if( SCH_FIELD* primitiveField = aSymbol.FindField( wxT( "Spice_Primitive" ) ) )
         {
             spiceType = primitiveField->GetText();
-            aSymbol.RemoveField( "Spice_Primitive" );
+            aSymbol.RemoveField( wxT( "Spice_Primitive" ) );
         }
 
-        if( SCH_FIELD* nodeSequenceField = aSymbol.FindField( "Spice_Node_Sequence" ) )
+        if( SCH_FIELD* nodeSequenceField = aSymbol.FindField( wxT( "Spice_Node_Sequence" ) ) )
         {
             const wxString  delimiters( "{:,; }" );
             const wxString& nodeSequence = nodeSequenceField->GetText();
@@ -1912,36 +1912,36 @@ void SCH_SCREEN::migrateSimModel( SCH_SYMBOL& aSymbol )
                 }
             }
 
-            aSymbol.RemoveField( "Spice_Node_Sequence" );
+            aSymbol.RemoveField( wxT( "Spice_Node_Sequence" ) );
         }
 
-        if( SCH_FIELD* modelField = aSymbol.FindField( "Spice_Model" ) )
+        if( SCH_FIELD* modelField = aSymbol.FindField( wxT( "Spice_Model" ) ) )
         {
             spiceModel = modelField->GetText();
-            aSymbol.RemoveField( "Spice_Model" );
+            aSymbol.RemoveField( wxT( "Spice_Model" ) );
         }
         else
         {
-            spiceModel = aSymbol.FindField( "Value" )->GetText();
+            spiceModel = aSymbol.FindField( wxT( "Value" ) )->GetText();
         }
 
-        if( SCH_FIELD* netlistEnabledField = aSymbol.FindField( "Spice_Netlist_Enabled" ) )
+        if( SCH_FIELD* netlistEnabledField = aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) ) )
         {
             wxString netlistEnabled = netlistEnabledField->GetText().Lower();
 
-            if( netlistEnabled.StartsWith( "0" )
-                || netlistEnabled.StartsWith( "n" )
-                || netlistEnabled.StartsWith( "f" ) )
+            if( netlistEnabled.StartsWith( wxT( "0" ) )
+                || netlistEnabled.StartsWith( wxT( "n" ) )
+                || netlistEnabled.StartsWith( wxT( "f" ) ) )
             {
                 SCH_FIELD enableField( VECTOR2I( 0, 0 ), aSymbol.GetFieldCount(), &aSymbol,
                                        SIM_MODEL::ENABLE_FIELD );
             }
         }
 
-        if( SCH_FIELD* libFileField = aSymbol.FindField( "Spice_Lib_File" ) )
+        if( SCH_FIELD* libFileField = aSymbol.FindField( wxT( "Spice_Lib_File" ) ) )
         {
             spiceLib = libFileField->GetText();
-            aSymbol.RemoveField( "Spice_Lib_File" );
+            aSymbol.RemoveField( wxT( "Spice_Lib_File" ) );
         }
     }
     else if( prefix == wxT( "V" ) || prefix == wxT( "I" ) )
@@ -1957,8 +1957,7 @@ void SCH_SCREEN::migrateSimModel( SCH_SYMBOL& aSymbol )
 
     SCH_FIELD deviceTypeField( VECTOR2I( 0, 0 ), aSymbol.GetFieldCount(), &aSymbol,
                                SIM_MODEL::DEVICE_TYPE_FIELD );
-    deviceTypeField.SetText(
-        SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_TYPE_::SPICE ).fieldValue );
+    deviceTypeField.SetText( SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_T::SPICE ).fieldValue );
     aSymbol.AddField( deviceTypeField );
 
     SCH_FIELD paramsField( VECTOR2I( 0, 0 ), aSymbol.GetFieldCount(), &aSymbol,

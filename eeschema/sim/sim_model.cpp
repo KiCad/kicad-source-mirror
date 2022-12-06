@@ -52,38 +52,38 @@
 using TYPE = SIM_MODEL::TYPE;
 
 
-SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceInfo( DEVICE_TYPE_ aDeviceType )
+SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceInfo( DEVICE_T aDeviceType )
 {
     switch( aDeviceType )
     {
-        case DEVICE_TYPE_::NONE:      return { "",       "",                  true };
-        case DEVICE_TYPE_::R:         return { "R",      "Resistor",          true };
-        case DEVICE_TYPE_::C:         return { "C",      "Capacitor",         true };
-        case DEVICE_TYPE_::L:         return { "L",      "Inductor",          true };
-        case DEVICE_TYPE_::TLINE:     return { "TLINE",  "Transmission Line", true };
-        case DEVICE_TYPE_::SW:        return { "SW",     "Switch",            true };
+        case DEVICE_T::NONE:      return { "",       "",                  true };
+        case DEVICE_T::R:         return { "R",      "Resistor",          true };
+        case DEVICE_T::C:         return { "C",      "Capacitor",         true };
+        case DEVICE_T::L:         return { "L",      "Inductor",          true };
+        case DEVICE_T::TLINE:     return { "TLINE",  "Transmission Line", true };
+        case DEVICE_T::SW:        return { "SW",     "Switch",            true };
 
-        case DEVICE_TYPE_::D:         return { "D",      "Diode",             true };
-        case DEVICE_TYPE_::NPN:       return { "NPN",    "NPN BJT",           true };
-        case DEVICE_TYPE_::PNP:       return { "PNP",    "PNP BJT",           true };
+        case DEVICE_T::D:         return { "D",      "Diode",             true };
+        case DEVICE_T::NPN:       return { "NPN",    "NPN BJT",           true };
+        case DEVICE_T::PNP:       return { "PNP",    "PNP BJT",           true };
 
-        case DEVICE_TYPE_::NJFET:     return { "NJFET",  "N-channel JFET",    true };
-        case DEVICE_TYPE_::PJFET:     return { "PJFET",  "P-channel JFET",    true };
+        case DEVICE_T::NJFET:     return { "NJFET",  "N-channel JFET",    true };
+        case DEVICE_T::PJFET:     return { "PJFET",  "P-channel JFET",    true };
 
-        case DEVICE_TYPE_::NMOS:      return { "NMOS",   "N-channel MOSFET",  true };
-        case DEVICE_TYPE_::PMOS:      return { "PMOS",   "P-channel MOSFET",  true };
-        case DEVICE_TYPE_::NMES:      return { "NMES",   "N-channel MESFET",  true };
-        case DEVICE_TYPE_::PMES:      return { "PMES",   "P-channel MESFET",  true };
+        case DEVICE_T::NMOS:      return { "NMOS",   "N-channel MOSFET",  true };
+        case DEVICE_T::PMOS:      return { "PMOS",   "P-channel MOSFET",  true };
+        case DEVICE_T::NMES:      return { "NMES",   "N-channel MESFET",  true };
+        case DEVICE_T::PMES:      return { "PMES",   "P-channel MESFET",  true };
 
-        case DEVICE_TYPE_::V:         return { "V",      "Voltage Source",    true };
-        case DEVICE_TYPE_::I:         return { "I",      "Current Source",    true };
+        case DEVICE_T::V:         return { "V",      "Voltage Source",    true };
+        case DEVICE_T::I:         return { "I",      "Current Source",    true };
 
-        case DEVICE_TYPE_::KIBIS:     return { "IBIS",  "IBIS Model",         false };
+        case DEVICE_T::KIBIS:     return { "IBIS",  "IBIS Model",         false };
 
-        case DEVICE_TYPE_::SUBCKT:    return { "SUBCKT", "Subcircuit",        false };
-        case DEVICE_TYPE_::XSPICE:    return { "XSPICE", "XSPICE Code Model", true };
-        case DEVICE_TYPE_::SPICE:     return { "SPICE",  "Raw Spice Element", true };
-        case DEVICE_TYPE_::_ENUM_END: break;
+        case DEVICE_T::SUBCKT:    return { "SUBCKT", "Subcircuit",        false };
+        case DEVICE_T::XSPICE:    return { "XSPICE", "XSPICE Code Model", true };
+        case DEVICE_T::SPICE:     return { "SPICE",  "Raw Spice Element", true };
+        case DEVICE_T::_ENUM_END: break;
     }
 
     wxFAIL;
@@ -95,132 +95,132 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
 {
     switch( aType )
     {
-    case TYPE::NONE:                 return { DEVICE_TYPE_::NONE,   "",               ""                           };
+    case TYPE::NONE:                 return { DEVICE_T::NONE,   "",               ""                           };
 
-    case TYPE::R:                    return { DEVICE_TYPE_::R,      "",               "Ideal"                      };
-    case TYPE::R_POT:                return { DEVICE_TYPE_::R,      "POT",            "Potentiometer"              };
-    case TYPE::R_BEHAVIORAL:         return { DEVICE_TYPE_::R,      "=",              "Behavioral"                 };
+    case TYPE::R:                    return { DEVICE_T::R,      "",               "Ideal"                      };
+    case TYPE::R_POT:                return { DEVICE_T::R,      "POT",            "Potentiometer"              };
+    case TYPE::R_BEHAVIORAL:         return { DEVICE_T::R,      "=",              "Behavioral"                 };
 
-    case TYPE::C:                    return { DEVICE_TYPE_::C,      "",               "Ideal"                      };
-    case TYPE::C_BEHAVIORAL:         return { DEVICE_TYPE_::C,      "=",              "Behavioral"                 };
+    case TYPE::C:                    return { DEVICE_T::C,      "",               "Ideal"                      };
+    case TYPE::C_BEHAVIORAL:         return { DEVICE_T::C,      "=",              "Behavioral"                 };
 
-    case TYPE::L:                    return { DEVICE_TYPE_::L,      "",               "Ideal"                      };
-    case TYPE::L_MUTUAL:             return { DEVICE_TYPE_::L,      "MUTUAL",         "Mutual"                     };
-    case TYPE::L_BEHAVIORAL:         return { DEVICE_TYPE_::L,      "=",              "Behavioral"                 };
+    case TYPE::L:                    return { DEVICE_T::L,      "",               "Ideal"                      };
+    case TYPE::L_MUTUAL:             return { DEVICE_T::L,      "MUTUAL",         "Mutual"                     };
+    case TYPE::L_BEHAVIORAL:         return { DEVICE_T::L,      "=",              "Behavioral"                 };
 
-    case TYPE::TLINE_Z0:             return { DEVICE_TYPE_::TLINE,  "",               "Characteristic impedance"   };
-    case TYPE::TLINE_RLGC:           return { DEVICE_TYPE_::TLINE,  "RLGC",           "RLGC"                       };
+    case TYPE::TLINE_Z0:             return { DEVICE_T::TLINE,  "",               "Characteristic impedance"   };
+    case TYPE::TLINE_RLGC:           return { DEVICE_T::TLINE,  "RLGC",           "RLGC"                       };
 
-    case TYPE::SW_V:                 return { DEVICE_TYPE_::SW,     "V",              "Voltage-controlled"         };
-    case TYPE::SW_I:                 return { DEVICE_TYPE_::SW,     "I",              "Current-controlled"         };
+    case TYPE::SW_V:                 return { DEVICE_T::SW,     "V",              "Voltage-controlled"         };
+    case TYPE::SW_I:                 return { DEVICE_T::SW,     "I",              "Current-controlled"         };
 
-    case TYPE::D:                    return { DEVICE_TYPE_::D,      "",               ""                           };
+    case TYPE::D:                    return { DEVICE_T::D,      "",               ""                           };
 
-    case TYPE::NPN_VBIC:             return { DEVICE_TYPE_::NPN,    "VBIC",           "VBIC"                       };
-    case TYPE::PNP_VBIC:             return { DEVICE_TYPE_::PNP,    "VBIC",           "VBIC"                       };
-    case TYPE::NPN_GUMMELPOON:       return { DEVICE_TYPE_::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
-    case TYPE::PNP_GUMMELPOON:       return { DEVICE_TYPE_::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
+    case TYPE::NPN_VBIC:             return { DEVICE_T::NPN,    "VBIC",           "VBIC"                       };
+    case TYPE::PNP_VBIC:             return { DEVICE_T::PNP,    "VBIC",           "VBIC"                       };
+    case TYPE::NPN_GUMMELPOON:       return { DEVICE_T::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
+    case TYPE::PNP_GUMMELPOON:       return { DEVICE_T::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
     //case TYPE::BJT_MEXTRAM:          return {};
-    case TYPE::NPN_HICUM2:           return { DEVICE_TYPE_::NPN,    "HICUML2",        "HICUM level 2"              };
-    case TYPE::PNP_HICUM2:           return { DEVICE_TYPE_::PNP,    "HICUML2",        "HICUM level 2"              };
+    case TYPE::NPN_HICUM2:           return { DEVICE_T::NPN,    "HICUML2",        "HICUM level 2"              };
+    case TYPE::PNP_HICUM2:           return { DEVICE_T::PNP,    "HICUML2",        "HICUM level 2"              };
     //case TYPE::BJT_HICUM_L0:         return {};
 
-    case TYPE::NJFET_SHICHMANHODGES: return { DEVICE_TYPE_::NJFET,  "SHICHMANHODGES", "Shichman-Hodges"            };
-    case TYPE::PJFET_SHICHMANHODGES: return { DEVICE_TYPE_::PJFET,  "SHICHMANHODGES", "Shichman-Hodges"            };
-    case TYPE::NJFET_PARKERSKELLERN: return { DEVICE_TYPE_::NJFET,  "PARKERSKELLERN", "Parker-Skellern"            };
-    case TYPE::PJFET_PARKERSKELLERN: return { DEVICE_TYPE_::PJFET,  "PARKERSKELLERN", "Parker-Skellern"            };
+    case TYPE::NJFET_SHICHMANHODGES: return { DEVICE_T::NJFET,  "SHICHMANHODGES", "Shichman-Hodges"            };
+    case TYPE::PJFET_SHICHMANHODGES: return { DEVICE_T::PJFET,  "SHICHMANHODGES", "Shichman-Hodges"            };
+    case TYPE::NJFET_PARKERSKELLERN: return { DEVICE_T::NJFET,  "PARKERSKELLERN", "Parker-Skellern"            };
+    case TYPE::PJFET_PARKERSKELLERN: return { DEVICE_T::PJFET,  "PARKERSKELLERN", "Parker-Skellern"            };
 
-    case TYPE::NMES_STATZ:           return { DEVICE_TYPE_::NMES,   "STATZ",          "Statz"                      };
-    case TYPE::PMES_STATZ:           return { DEVICE_TYPE_::PMES,   "STATZ",          "Statz"                      };
-    case TYPE::NMES_YTTERDAL:        return { DEVICE_TYPE_::NMES,   "YTTERDAL",       "Ytterdal"                   };
-    case TYPE::PMES_YTTERDAL:        return { DEVICE_TYPE_::PMES,   "YTTERDAL",       "Ytterdal"                   };
-    case TYPE::NMES_HFET1:           return { DEVICE_TYPE_::NMES,   "HFET1",          "HFET1"                      };
-    case TYPE::PMES_HFET1:           return { DEVICE_TYPE_::PMES,   "HFET1",          "HFET1"                      };
-    case TYPE::NMES_HFET2:           return { DEVICE_TYPE_::NMES,   "HFET2",          "HFET2"                      };
-    case TYPE::PMES_HFET2:           return { DEVICE_TYPE_::PMES,   "HFET2",          "HFET2"                      };
+    case TYPE::NMES_STATZ:           return { DEVICE_T::NMES,   "STATZ",          "Statz"                      };
+    case TYPE::PMES_STATZ:           return { DEVICE_T::PMES,   "STATZ",          "Statz"                      };
+    case TYPE::NMES_YTTERDAL:        return { DEVICE_T::NMES,   "YTTERDAL",       "Ytterdal"                   };
+    case TYPE::PMES_YTTERDAL:        return { DEVICE_T::PMES,   "YTTERDAL",       "Ytterdal"                   };
+    case TYPE::NMES_HFET1:           return { DEVICE_T::NMES,   "HFET1",          "HFET1"                      };
+    case TYPE::PMES_HFET1:           return { DEVICE_T::PMES,   "HFET1",          "HFET1"                      };
+    case TYPE::NMES_HFET2:           return { DEVICE_T::NMES,   "HFET2",          "HFET2"                      };
+    case TYPE::PMES_HFET2:           return { DEVICE_T::PMES,   "HFET2",          "HFET2"                      };
 
-    case TYPE::NMOS_VDMOS:           return { DEVICE_TYPE_::NMOS,   "VDMOS",          "VDMOS"                      };
-    case TYPE::PMOS_VDMOS:           return { DEVICE_TYPE_::PMOS,   "VDMOS",          "VDMOS"                      };
-    case TYPE::NMOS_MOS1:            return { DEVICE_TYPE_::NMOS,   "MOS1",           "Classical quadratic (MOS1)" };
-    case TYPE::PMOS_MOS1:            return { DEVICE_TYPE_::PMOS,   "MOS1",           "Classical quadratic (MOS1)" };
-    case TYPE::NMOS_MOS2:            return { DEVICE_TYPE_::NMOS,   "MOS2",           "Grove-Frohman (MOS2)"       };
-    case TYPE::PMOS_MOS2:            return { DEVICE_TYPE_::PMOS,   "MOS2",           "Grove-Frohman (MOS2)"       };
-    case TYPE::NMOS_MOS3:            return { DEVICE_TYPE_::NMOS,   "MOS3",           "MOS3"                       };
-    case TYPE::PMOS_MOS3:            return { DEVICE_TYPE_::PMOS,   "MOS3",           "MOS3"                       };
-    case TYPE::NMOS_BSIM1:           return { DEVICE_TYPE_::NMOS,   "BSIM1",          "BSIM1"                      };
-    case TYPE::PMOS_BSIM1:           return { DEVICE_TYPE_::PMOS,   "BSIM1",          "BSIM1"                      };
-    case TYPE::NMOS_BSIM2:           return { DEVICE_TYPE_::NMOS,   "BSIM2",          "BSIM2"                      };
-    case TYPE::PMOS_BSIM2:           return { DEVICE_TYPE_::PMOS,   "BSIM2",          "BSIM2"                      };
-    case TYPE::NMOS_MOS6:            return { DEVICE_TYPE_::NMOS,   "MOS6",           "MOS6"                       };
-    case TYPE::PMOS_MOS6:            return { DEVICE_TYPE_::PMOS,   "MOS6",           "MOS6"                       };
-    case TYPE::NMOS_BSIM3:           return { DEVICE_TYPE_::NMOS,   "BSIM3",          "BSIM3"                      };
-    case TYPE::PMOS_BSIM3:           return { DEVICE_TYPE_::PMOS,   "BSIM3",          "BSIM3"                      };
-    case TYPE::NMOS_MOS9:            return { DEVICE_TYPE_::NMOS,   "MOS9",           "MOS9"                       };
-    case TYPE::PMOS_MOS9:            return { DEVICE_TYPE_::PMOS,   "MOS9",           "MOS9"                       };
-    case TYPE::NMOS_B4SOI:           return { DEVICE_TYPE_::NMOS,   "B4SOI",          "BSIM4 SOI (B4SOI)"          };
-    case TYPE::PMOS_B4SOI:           return { DEVICE_TYPE_::PMOS,   "B4SOI",          "BSIM4 SOI (B4SOI)"          };
-    case TYPE::NMOS_BSIM4:           return { DEVICE_TYPE_::NMOS,   "BSIM4",          "BSIM4"                      };
-    case TYPE::PMOS_BSIM4:           return { DEVICE_TYPE_::PMOS,   "BSIM4",          "BSIM4"                      };
+    case TYPE::NMOS_VDMOS:           return { DEVICE_T::NMOS,   "VDMOS",          "VDMOS"                      };
+    case TYPE::PMOS_VDMOS:           return { DEVICE_T::PMOS,   "VDMOS",          "VDMOS"                      };
+    case TYPE::NMOS_MOS1:            return { DEVICE_T::NMOS,   "MOS1",           "Classical quadratic (MOS1)" };
+    case TYPE::PMOS_MOS1:            return { DEVICE_T::PMOS,   "MOS1",           "Classical quadratic (MOS1)" };
+    case TYPE::NMOS_MOS2:            return { DEVICE_T::NMOS,   "MOS2",           "Grove-Frohman (MOS2)"       };
+    case TYPE::PMOS_MOS2:            return { DEVICE_T::PMOS,   "MOS2",           "Grove-Frohman (MOS2)"       };
+    case TYPE::NMOS_MOS3:            return { DEVICE_T::NMOS,   "MOS3",           "MOS3"                       };
+    case TYPE::PMOS_MOS3:            return { DEVICE_T::PMOS,   "MOS3",           "MOS3"                       };
+    case TYPE::NMOS_BSIM1:           return { DEVICE_T::NMOS,   "BSIM1",          "BSIM1"                      };
+    case TYPE::PMOS_BSIM1:           return { DEVICE_T::PMOS,   "BSIM1",          "BSIM1"                      };
+    case TYPE::NMOS_BSIM2:           return { DEVICE_T::NMOS,   "BSIM2",          "BSIM2"                      };
+    case TYPE::PMOS_BSIM2:           return { DEVICE_T::PMOS,   "BSIM2",          "BSIM2"                      };
+    case TYPE::NMOS_MOS6:            return { DEVICE_T::NMOS,   "MOS6",           "MOS6"                       };
+    case TYPE::PMOS_MOS6:            return { DEVICE_T::PMOS,   "MOS6",           "MOS6"                       };
+    case TYPE::NMOS_BSIM3:           return { DEVICE_T::NMOS,   "BSIM3",          "BSIM3"                      };
+    case TYPE::PMOS_BSIM3:           return { DEVICE_T::PMOS,   "BSIM3",          "BSIM3"                      };
+    case TYPE::NMOS_MOS9:            return { DEVICE_T::NMOS,   "MOS9",           "MOS9"                       };
+    case TYPE::PMOS_MOS9:            return { DEVICE_T::PMOS,   "MOS9",           "MOS9"                       };
+    case TYPE::NMOS_B4SOI:           return { DEVICE_T::NMOS,   "B4SOI",          "BSIM4 SOI (B4SOI)"          };
+    case TYPE::PMOS_B4SOI:           return { DEVICE_T::PMOS,   "B4SOI",          "BSIM4 SOI (B4SOI)"          };
+    case TYPE::NMOS_BSIM4:           return { DEVICE_T::NMOS,   "BSIM4",          "BSIM4"                      };
+    case TYPE::PMOS_BSIM4:           return { DEVICE_T::PMOS,   "BSIM4",          "BSIM4"                      };
     //case TYPE::NMOS_EKV2_6:          return {};
     //case TYPE::PMOS_EKV2_6:          return {};
     //case TYPE::NMOS_PSP:             return {};
     //case TYPE::PMOS_PSP:             return {};
-    case TYPE::NMOS_B3SOIFD:         return { DEVICE_TYPE_::NMOS,   "B3SOIFD",        "B3SOIFD (BSIM3 FD-SOI)"     };
-    case TYPE::PMOS_B3SOIFD:         return { DEVICE_TYPE_::PMOS,   "B3SOIFD",        "B3SOIFD (BSIM3 FD-SOI)"     };
-    case TYPE::NMOS_B3SOIDD:         return { DEVICE_TYPE_::NMOS,   "B3SOIDD",        "B3SOIDD (BSIM3 SOI)"        };
-    case TYPE::PMOS_B3SOIDD:         return { DEVICE_TYPE_::PMOS,   "B3SOIDD",        "B3SOIDD (BSIM3 SOI)"        };
-    case TYPE::NMOS_B3SOIPD:         return { DEVICE_TYPE_::NMOS,   "B3SOIPD",        "B3SOIPD (BSIM3 PD-SOI)"     };
-    case TYPE::PMOS_B3SOIPD:         return { DEVICE_TYPE_::PMOS,   "B3SOIPD",        "B3SOIPD (BSIM3 PD-SOI)"     };
+    case TYPE::NMOS_B3SOIFD:         return { DEVICE_T::NMOS,   "B3SOIFD",        "B3SOIFD (BSIM3 FD-SOI)"     };
+    case TYPE::PMOS_B3SOIFD:         return { DEVICE_T::PMOS,   "B3SOIFD",        "B3SOIFD (BSIM3 FD-SOI)"     };
+    case TYPE::NMOS_B3SOIDD:         return { DEVICE_T::NMOS,   "B3SOIDD",        "B3SOIDD (BSIM3 SOI)"        };
+    case TYPE::PMOS_B3SOIDD:         return { DEVICE_T::PMOS,   "B3SOIDD",        "B3SOIDD (BSIM3 SOI)"        };
+    case TYPE::NMOS_B3SOIPD:         return { DEVICE_T::NMOS,   "B3SOIPD",        "B3SOIPD (BSIM3 PD-SOI)"     };
+    case TYPE::PMOS_B3SOIPD:         return { DEVICE_T::PMOS,   "B3SOIPD",        "B3SOIPD (BSIM3 PD-SOI)"     };
     //case TYPE::NMOS_STAG:            return {};
     //case TYPE::PMOS_STAG:            return {};
-    case TYPE::NMOS_HISIM2:          return { DEVICE_TYPE_::NMOS,   "HISIM2",         "HiSIM2"                     };
-    case TYPE::PMOS_HISIM2:          return { DEVICE_TYPE_::PMOS,   "HISIM2",         "HiSIM2"                     };
-    case TYPE::NMOS_HISIMHV1:        return { DEVICE_TYPE_::NMOS,   "HISIMHV1",       "HiSIM_HV1"                  };
-    case TYPE::PMOS_HISIMHV1:        return { DEVICE_TYPE_::PMOS,   "HISIMHV1",       "HiSIM_HV1"                  };
-    case TYPE::NMOS_HISIMHV2:        return { DEVICE_TYPE_::NMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
-    case TYPE::PMOS_HISIMHV2:        return { DEVICE_TYPE_::PMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
+    case TYPE::NMOS_HISIM2:          return { DEVICE_T::NMOS,   "HISIM2",         "HiSIM2"                     };
+    case TYPE::PMOS_HISIM2:          return { DEVICE_T::PMOS,   "HISIM2",         "HiSIM2"                     };
+    case TYPE::NMOS_HISIMHV1:        return { DEVICE_T::NMOS,   "HISIMHV1",       "HiSIM_HV1"                  };
+    case TYPE::PMOS_HISIMHV1:        return { DEVICE_T::PMOS,   "HISIMHV1",       "HiSIM_HV1"                  };
+    case TYPE::NMOS_HISIMHV2:        return { DEVICE_T::NMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
+    case TYPE::PMOS_HISIMHV2:        return { DEVICE_T::PMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
 
-    case TYPE::V:                    return { DEVICE_TYPE_::V,      "",               "DC",                        };
-    case TYPE::V_SIN:                return { DEVICE_TYPE_::V,      "SIN",            "Sine"                       };
-    case TYPE::V_PULSE:              return { DEVICE_TYPE_::V,      "PULSE",          "Pulse"                      };
-    case TYPE::V_EXP:                return { DEVICE_TYPE_::V,      "EXP",            "Exponential"                };
+    case TYPE::V:                    return { DEVICE_T::V,      "",               "DC",                        };
+    case TYPE::V_SIN:                return { DEVICE_T::V,      "SIN",            "Sine"                       };
+    case TYPE::V_PULSE:              return { DEVICE_T::V,      "PULSE",          "Pulse"                      };
+    case TYPE::V_EXP:                return { DEVICE_T::V,      "EXP",            "Exponential"                };
     /*case TYPE::V_SFAM:               return { DEVICE_TYPE::V,      "SFAM",           "Single-frequency AM"        };
     case TYPE::V_SFFM:               return { DEVICE_TYPE::V,      "SFFM",           "Single-frequency FM"        };*/
-    case TYPE::V_PWL:                return { DEVICE_TYPE_::V,      "PWL",            "Piecewise linear"           };
-    case TYPE::V_WHITENOISE:         return { DEVICE_TYPE_::V,      "WHITENOISE",     "White noise"                };
-    case TYPE::V_PINKNOISE:          return { DEVICE_TYPE_::V,      "PINKNOISE",      "Pink noise (1/f)"           };
-    case TYPE::V_BURSTNOISE:         return { DEVICE_TYPE_::V,      "BURSTNOISE",     "Burst noise"                };
-    case TYPE::V_RANDUNIFORM:        return { DEVICE_TYPE_::V,      "RANDUNIFORM",    "Random uniform"             };
-    case TYPE::V_RANDNORMAL:         return { DEVICE_TYPE_::V,      "RANDNORMAL",     "Random normal"              };
-    case TYPE::V_RANDEXP:            return { DEVICE_TYPE_::V,      "RANDEXP",        "Random exponential"         };
+    case TYPE::V_PWL:                return { DEVICE_T::V,      "PWL",            "Piecewise linear"           };
+    case TYPE::V_WHITENOISE:         return { DEVICE_T::V,      "WHITENOISE",     "White noise"                };
+    case TYPE::V_PINKNOISE:          return { DEVICE_T::V,      "PINKNOISE",      "Pink noise (1/f)"           };
+    case TYPE::V_BURSTNOISE:         return { DEVICE_T::V,      "BURSTNOISE",     "Burst noise"                };
+    case TYPE::V_RANDUNIFORM:        return { DEVICE_T::V,      "RANDUNIFORM",    "Random uniform"             };
+    case TYPE::V_RANDNORMAL:         return { DEVICE_T::V,      "RANDNORMAL",     "Random normal"              };
+    case TYPE::V_RANDEXP:            return { DEVICE_T::V,      "RANDEXP",        "Random exponential"         };
     //case TYPE::V_RANDPOISSON:        return { DEVICE_TYPE::V,      "RANDPOISSON",    "Random Poisson"             };
-    case TYPE::V_BEHAVIORAL:         return { DEVICE_TYPE_::V,      "=",              "Behavioral"                 };
+    case TYPE::V_BEHAVIORAL:         return { DEVICE_T::V,      "=",              "Behavioral"                 };
 
-    case TYPE::I:                    return { DEVICE_TYPE_::I,      "",               "DC",                        };
-    case TYPE::I_SIN:                return { DEVICE_TYPE_::I,      "SIN",            "Sine"                       };
-    case TYPE::I_PULSE:              return { DEVICE_TYPE_::I,      "PULSE",          "Pulse"                      };
-    case TYPE::I_EXP:                return { DEVICE_TYPE_::I,      "EXP",            "Exponential"                };
+    case TYPE::I:                    return { DEVICE_T::I,      "",               "DC",                        };
+    case TYPE::I_SIN:                return { DEVICE_T::I,      "SIN",            "Sine"                       };
+    case TYPE::I_PULSE:              return { DEVICE_T::I,      "PULSE",          "Pulse"                      };
+    case TYPE::I_EXP:                return { DEVICE_T::I,      "EXP",            "Exponential"                };
     /*case TYPE::I_SFAM:               return { DEVICE_TYPE::I,      "SFAM",           "Single-frequency AM"        };
     case TYPE::I_SFFM:               return { DEVICE_TYPE::I,      "SFFM",           "Single-frequency FM"        };*/
-    case TYPE::I_PWL:                return { DEVICE_TYPE_::I,      "PWL",            "Piecewise linear"           };
-    case TYPE::I_WHITENOISE:         return { DEVICE_TYPE_::I,      "WHITENOISE",     "White noise"                };
-    case TYPE::I_PINKNOISE:          return { DEVICE_TYPE_::I,      "PINKNOISE",      "Pink noise (1/f)"           };
-    case TYPE::I_BURSTNOISE:         return { DEVICE_TYPE_::I,      "BURSTNOISE",     "Burst noise"                };
-    case TYPE::I_RANDUNIFORM:        return { DEVICE_TYPE_::I,      "RANDUNIFORM",    "Random uniform"             };
-    case TYPE::I_RANDNORMAL:         return { DEVICE_TYPE_::I,      "RANDNORMAL",     "Random normal"              };
-    case TYPE::I_RANDEXP:            return { DEVICE_TYPE_::I,      "RANDEXP",        "Random exponential"         };
+    case TYPE::I_PWL:                return { DEVICE_T::I,      "PWL",            "Piecewise linear"           };
+    case TYPE::I_WHITENOISE:         return { DEVICE_T::I,      "WHITENOISE",     "White noise"                };
+    case TYPE::I_PINKNOISE:          return { DEVICE_T::I,      "PINKNOISE",      "Pink noise (1/f)"           };
+    case TYPE::I_BURSTNOISE:         return { DEVICE_T::I,      "BURSTNOISE",     "Burst noise"                };
+    case TYPE::I_RANDUNIFORM:        return { DEVICE_T::I,      "RANDUNIFORM",    "Random uniform"             };
+    case TYPE::I_RANDNORMAL:         return { DEVICE_T::I,      "RANDNORMAL",     "Random normal"              };
+    case TYPE::I_RANDEXP:            return { DEVICE_T::I,      "RANDEXP",        "Random exponential"         };
     //case TYPE::I_RANDPOISSON:        return { DEVICE_TYPE::I,      "RANDPOISSON",    "Random Poisson"             };
-    case TYPE::I_BEHAVIORAL:         return { DEVICE_TYPE_::I,      "=",              "Behavioral"                 };
+    case TYPE::I_BEHAVIORAL:         return { DEVICE_T::I,      "=",              "Behavioral"                 };
 
-    case TYPE::SUBCKT:               return { DEVICE_TYPE_::SUBCKT, "",               ""                           };
-    case TYPE::XSPICE:               return { DEVICE_TYPE_::XSPICE, "",               ""                           };
+    case TYPE::SUBCKT:               return { DEVICE_T::SUBCKT, "",               ""                           };
+    case TYPE::XSPICE:               return { DEVICE_T::XSPICE, "",               ""                           };
 
-    case TYPE::KIBIS_DEVICE:         return { DEVICE_TYPE_::KIBIS,  "DEVICE",         "Device"                     };
-    case TYPE::KIBIS_DRIVER_DC:      return { DEVICE_TYPE_::KIBIS,  "DCDRIVER",       "DC driver"                  };
-    case TYPE::KIBIS_DRIVER_RECT:    return { DEVICE_TYPE_::KIBIS,  "RECTDRIVER",     "Rectangular wave driver"    };
-    case TYPE::KIBIS_DRIVER_PRBS:    return { DEVICE_TYPE_::KIBIS,  "PRBSDRIVER",     "PRBS driver"                };
+    case TYPE::KIBIS_DEVICE:         return { DEVICE_T::KIBIS,  "DEVICE",         "Device"                     };
+    case TYPE::KIBIS_DRIVER_DC:      return { DEVICE_T::KIBIS,  "DCDRIVER",       "DC driver"                  };
+    case TYPE::KIBIS_DRIVER_RECT:    return { DEVICE_T::KIBIS,  "RECTDRIVER",     "Rectangular wave driver"    };
+    case TYPE::KIBIS_DRIVER_PRBS:    return { DEVICE_T::KIBIS,  "PRBSDRIVER",     "PRBS driver"                };
 
-    case TYPE::RAWSPICE:             return { DEVICE_TYPE_::SPICE,  "",               ""                           };
+    case TYPE::RAWSPICE:             return { DEVICE_T::SPICE,  "",               ""                           };
 
     case TYPE::_ENUM_END:            break;
     }
