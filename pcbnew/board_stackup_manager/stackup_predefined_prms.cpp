@@ -56,7 +56,7 @@ static wxString copperFinishType[] =
 // .gbrjob files.
 // For other colors (user defined), the defined value is the html color syntax in .kicad_pcb files
 // and R<integer>G<integer>B<integer> in .gbrjob file.
-static FAB_LAYER_COLOR gbrjobColors[]  =
+static std::vector<FAB_LAYER_COLOR> gbrjobColors  =
 {
     { NotSpecifiedPrm(),      wxColor(  80,  80,  80 ) },  // Not specified, not in .gbrjob file
     { _HKI( "Green" ),        wxColor(  60, 150,  80 ) },  // used in .gbrjob file
@@ -70,9 +70,9 @@ static FAB_LAYER_COLOR gbrjobColors[]  =
 };
 
 
-// These are used primarily as a source for the 3D renderer.  They are not (at present) written
-// to the .gbrjob file.
-static FAB_LAYER_COLOR dielectricColors[] =
+// These are used primarily as a source for the 3D renderer.  They are written
+// as R<integer>G<integer>B<integer>  to the .gbrjob file.
+static std::vector<FAB_LAYER_COLOR> dielectricColors =
 {
     { NotSpecifiedPrm(),          wxColor(  80,  80,  80, 255 ) },
     { _HKI( "FR4 natural" ),      wxColor( 109, 116,  75, 212 ) },
@@ -94,27 +94,15 @@ wxArrayString GetStandardCopperFinishes( bool aTranslate )
     return list;
 }
 
-
-const FAB_LAYER_COLOR* GetStandardColors( BOARD_STACKUP_ITEM_TYPE aType )
+std::vector<FAB_LAYER_COLOR> dummy;
+const std::vector<FAB_LAYER_COLOR>& GetStandardColors( BOARD_STACKUP_ITEM_TYPE aType )
 {
     switch( aType )
     {
     case BS_ITEM_TYPE_SILKSCREEN: return gbrjobColors;
     case BS_ITEM_TYPE_SOLDERMASK: return gbrjobColors;
     case BS_ITEM_TYPE_DIELECTRIC: return dielectricColors;
-    default:                      return nullptr;
-    }
-}
-
-
-int GetStandardColorCount( BOARD_STACKUP_ITEM_TYPE aType )
-{
-    switch( aType )
-    {
-    case BS_ITEM_TYPE_SILKSCREEN: return arrayDim( gbrjobColors );
-    case BS_ITEM_TYPE_SOLDERMASK: return arrayDim( gbrjobColors );
-    case BS_ITEM_TYPE_DIELECTRIC: return arrayDim( dielectricColors );
-    default:                      return 0;
+    default:                      return dummy;
     }
 }
 
@@ -122,5 +110,33 @@ int GetStandardColorCount( BOARD_STACKUP_ITEM_TYPE aType )
 int GetColorUserDefinedListIdx( BOARD_STACKUP_ITEM_TYPE aType )
 {
     // this is the last item in list
-    return GetStandardColorCount( aType ) - 1;
+    return GetStandardColors( aType ).size() - 1;
+}
+
+
+bool IsColorNameNormalized( const wxString& aName )
+{
+    static std::vector<wxString> list =
+    {
+        wxT( "Green" ), wxT( "Red" ), wxT( "Blue" ),
+        wxT( "Black" ), wxT( "White" ), wxT( "Yellow" )
+    };
+
+   for( wxString& candidate : list )
+   {
+       if( candidate.CmpNoCase( aName ) == 0 )
+           return true;
+   }
+
+   return false;
+}
+
+
+const wxString FAB_LAYER_COLOR::GetColorAsString() const
+{
+    if( IsColorNameNormalized( m_colorName ) )
+        return m_colorName;
+
+    return wxString::Format( wxT( "R%dG%dB%d" ),
+                             int( m_color.r*255 ), int( m_color.g*255 ), int( m_color.b*255 ) );
 }

@@ -660,14 +660,36 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 {
                     wxString colorName = item->GetColor( sub_idx );
 
-                    if( colorName.StartsWith( wxT( "#" ) ) ) // This is a user defined color.
+                    if( colorName.StartsWith( wxT( "#" ) ) )    // This is a user defined color,
+                                                                // not in standard color list.
                     {
                         // In job file a color can be given by its RGB values (0...255)
+                        // like R<number><G<number>B<number> notation
                         wxColor color( COLOR4D( colorName ).ToColour() );
                         colorName.Printf( wxT( "R%dG%dB%d" ),
                                           color.Red(),
                                           color.Green(),
                                           color.Blue() );
+                    }
+                    else
+                    {
+                        const std::vector<FAB_LAYER_COLOR>& color_list =
+                                                    GetStandardColors( item->GetType() );
+
+                        // Colors for dielectric use a color list that is mainly not normalized in
+                        // job file names. So if a color is in the dielectric standard color list
+                        // it can be a standard name or not.
+                        // Colors for solder mask and silk screen use a mainly normalized
+                        // color list, but this list can also contain not normalized colors.
+                        // If not normalized, use the R<number><G<number>B<number> notation
+                        for( const FAB_LAYER_COLOR& prm_color : color_list  )
+                        {
+                            if( colorName == prm_color.GetName() )
+                            {
+                                colorName = prm_color.GetColorAsString();
+                                break;
+                            }
+                        }
                     }
 
                     layer_json["Color"] = colorName;

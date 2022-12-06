@@ -93,10 +93,18 @@ public:
             return m_color.WithAlpha( 1.0 );
     }
 
+    /**
+     * @return a color name acceptable in gerber job file
+     * one of normalized color name, or the string R<integer>G<integer>B<integer>
+     * integer is a decimal value from 0 to 255
+     */
+    const wxString GetColorAsString() const;
+
 private:
-    wxString       m_colorName;   // the name (in job file) of the color
-                                  // User values are the HTML coding #rrggbbaa hexadecimal value.
-    KIGFX::COLOR4D m_color;
+    wxString        m_colorName;    // the name (in job file) of the color
+                                    // User values are the HTML encoded "#rrggbbaa"
+                                    // RGB hexa value.
+    KIGFX::COLOR4D  m_color;
 };
 
 
@@ -109,12 +117,7 @@ wxArrayString GetStandardCopperFinishes( bool aTranslate );
 /**
  * @return a list of standard FAB_LAYER_COLOR items for silkscreen and solder mask.
  */
-const FAB_LAYER_COLOR* GetStandardColors( BOARD_STACKUP_ITEM_TYPE aType );
-
-/**
- * @return the count of colors in ColorStandardList
- */
-int GetStandardColorCount( BOARD_STACKUP_ITEM_TYPE aType );
+const std::vector<FAB_LAYER_COLOR>& GetStandardColors( BOARD_STACKUP_ITEM_TYPE aType );
 
 /**
  * @return the index of the user defined color in ColorStandardList
@@ -140,6 +143,12 @@ inline bool IsCustomColorIdx( BOARD_STACKUP_ITEM_TYPE aType, int aIdx )
 {
     return aIdx == GetColorUserDefinedListIdx( aType );
 }
+
+/**
+ * @return true if aName is a color name acceptable in gerber job files
+ * @param aName is a color name like red, blue... (case insensitive)
+ */
+bool IsColorNameNormalized( const wxString& aName );
 
 
 #endif      // #ifndef STACKUP_PREDEFINED_PRMS_H

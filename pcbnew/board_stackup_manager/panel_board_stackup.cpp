@@ -653,7 +653,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
                 {
                     // Note: don't use bm_combo->FindString() because the combo strings are
                     // translated.
-                    for( int ii = 0; ii < GetStandardColorCount( item->GetType()); ii++ )
+                    for( size_t ii = 0; ii < GetStandardColors( item->GetType() ).size(); ii++ )
                     {
                         if( GetStandardColorName( item->GetType(), ii ) == item->GetColor( sub_item ) )
                         {
@@ -908,7 +908,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
         else
         {
             // Note: don't use bm_combo->FindString() because the combo strings are translated.
-            for( int ii = 0; ii < GetStandardColorCount( item->GetType()); ii++ )
+            for( size_t ii = 0; ii < GetStandardColors( item->GetType() ).size(); ii++ )
             {
                 if( GetStandardColorName( item->GetType(), ii ) == item->GetColor( aSublayerIdx ) )
                 {
@@ -1339,7 +1339,7 @@ void PANEL_SETUP_BOARD_STACKUP::onColorSelected( wxCommandEvent& event )
     int                 row = item_id - ID_ITEM_COLOR;
     BOARD_STACKUP_ITEM* item = m_rowUiItemsList[row].m_Item;
 
-    if( idx == GetStandardColorCount( item->GetType()) - 1 )   // Set user color is the last option in list
+    if( IsCustomColorIdx( item->GetType(), idx ) )   // user color is the last option in list
     {
         DIALOG_COLOR_PICKER dlg( this, m_rowUiItemsList[row].m_UserColor, true, nullptr,
                                  GetDefaultUserColor( m_rowUiItemsList[row].m_Item->GetType() ) );
@@ -1468,7 +1468,7 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
 
     wxBitmapComboBox* picker = static_cast<wxBitmapComboBox*>( m_rowUiItemsList[row].m_ColorCtrl );
 
-    for( int ii = 0; ii < GetStandardColorCount( item->GetType()); ii++ )
+    for( size_t ii = 0; ii < GetStandardColors( item->GetType() ).size(); ii++ )
     {
         if( GetStandardColorName( item->GetType(), ii ) == item->GetColor( sub_item ) )
         {
@@ -1588,7 +1588,7 @@ wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createColorBox( BOARD_STACKUP_ITEM*
     BOARD_STACKUP_ITEM_TYPE itemType = aStackupItem ? aStackupItem->GetType()
                                                     : BS_ITEM_TYPE_SILKSCREEN;
 
-    for( int ii = 0; ii < GetStandardColorCount( itemType ); ii++ )
+    for( size_t ii = 0; ii < GetStandardColors( itemType ).size(); ii++ )
     {
         wxString label;
         COLOR4D  curr_color;
