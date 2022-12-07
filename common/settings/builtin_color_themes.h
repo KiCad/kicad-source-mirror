@@ -158,7 +158,7 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_PAD_PLATEDHOLES,        CSS_COLOR( 194, 194, 0, 1 ) },
             { LAYER_PADS_TH,                CSS_COLOR( 227, 183, 46,  1 ) },
             { LAYER_NON_PLATEDHOLES,        CSS_COLOR( 26,  196, 210, 1 ) },
-            { LAYER_RATSNEST,               CSS_COLOR( 245, 255, 213, 0.6 ) },
+            { LAYER_RATSNEST,               CSS_COLOR( 0,   248, 255, 0.35 ) },
             { LAYER_SELECT_OVERLAY,         CSS_COLOR( 4,   255, 67,  1 ) },
             { LAYER_VIA_THROUGH,            CSS_COLOR( 236, 236, 236, 1 ) },
             { LAYER_VIA_BBLIND,             CSS_COLOR( 187, 151, 38,  1 ) },

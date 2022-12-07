@@ -78,12 +78,13 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
-    COLOR4D    defaultColor = rs->GetColor( nullptr, LAYER_RATSNEST );
-    COLOR4D    color        = defaultColor;
-    const bool colorByNet   = rs->GetNetColorMode() != NET_COLOR_MODE::OFF;
-
     std::set<int>        highlightedNets = rs->GetHighlightNetCodes();
     const std::set<int>& hiddenNets      = rs->GetHiddenNets();
+
+    COLOR4D    defaultColor = rs->GetColor( nullptr, LAYER_RATSNEST );
+    COLOR4D    color = defaultColor;
+    const bool colorByNet = rs->GetNetColorMode() != NET_COLOR_MODE::OFF;
+    const bool dimStatic = m_data->GetLocalRatsnest().size() > 0 || highlightedNets.size() > 0;
 
     std::map<int, KIGFX::COLOR4D>&      netColors = rs->GetNetColorMap();
     std::map<wxString, KIGFX::COLOR4D>& ncColors  = rs->GetNetclassColorMap();
@@ -124,7 +125,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         if( color == COLOR4D::UNSPECIFIED )
             color = defaultColor;
 
-        gal->SetStrokeColor( color.Brightened( 0.5 ).WithAlpha( std::min( 1.0, color.a + 0.4 ) ) );
+        gal->SetStrokeColor( color.Brightened( 0.5 ).WithAlpha( std::min( 1.0, color.a + 0.3 ) ) );
 
         if( l.a == l.b )
         {
@@ -170,9 +171,13 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         if( color == COLOR4D::UNSPECIFIED )
             color = defaultColor;
 
+        if( dimStatic )
+            color = color.WithAlpha( std::max( 0.0, color.a / 2 ) );
+
         // Draw the "static" ratsnest
         if( highlightedNets.count( i ) )
-            gal->SetStrokeColor( color.Brightened( 0.8 ) );
+            gal->SetStrokeColor(
+                    color.Brightened( 0.8 ).WithAlpha( std::min( 1.0, color.a + 0.4 ) ) );
         else
             gal->SetStrokeColor( color );  // using the default ratsnest color for not highlighted
 
