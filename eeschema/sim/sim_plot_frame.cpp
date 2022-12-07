@@ -378,8 +378,6 @@ void SIM_PLOT_FRAME::setIconsForMenuItems()
         { wxID_NEW, BITMAPS::simulator },
         { wxID_OPEN, BITMAPS::directory_open },
         { wxID_SAVE, BITMAPS::save },
-        { ID_SAVE_AS_IMAGE, BITMAPS::export_file },
-        { ID_SAVE_AS_CSV, BITMAPS::export_file },
         { wxID_CLOSE, BITMAPS::exit },
 
         // simulator menu:

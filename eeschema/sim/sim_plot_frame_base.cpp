@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,26 +22,16 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_fileMenu->AppendSeparator();
 
 	wxMenuItem* m_openWorkbook;
-	m_openWorkbook = new wxMenuItem( m_fileMenu, wxID_OPEN, wxString( _("Open...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_openWorkbook = new wxMenuItem( m_fileMenu, wxID_OPEN, wxString( _("Open Workbook...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_openWorkbook );
 
 	wxMenuItem* m_saveWorkbook;
-	m_saveWorkbook = new wxMenuItem( m_fileMenu, wxID_SAVE, wxString( _("Save") ) , wxEmptyString, wxITEM_NORMAL );
+	m_saveWorkbook = new wxMenuItem( m_fileMenu, wxID_SAVE, wxString( _("Save Workbook") ) , wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_saveWorkbook );
 
 	wxMenuItem* m_saveWorkbookAs;
-	m_saveWorkbookAs = new wxMenuItem( m_fileMenu, wxID_SAVEAS, wxString( _("Save As...") ) + wxT('\t') + wxT("SHIFT+CTRL+S"), wxEmptyString, wxITEM_NORMAL );
+	m_saveWorkbookAs = new wxMenuItem( m_fileMenu, wxID_SAVEAS, wxString( _("Save Workbook As...") ) + wxT('\t') + wxT("SHIFT+CTRL+S"), wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_saveWorkbookAs );
-
-	m_fileMenu->AppendSeparator();
-
-	wxMenuItem* m_saveImage;
-	m_saveImage = new wxMenuItem( m_fileMenu, ID_SAVE_AS_IMAGE, wxString( _("Save as Image") ) , wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_saveImage );
-
-	wxMenuItem* m_saveCsv;
-	m_saveCsv = new wxMenuItem( m_fileMenu, ID_SAVE_AS_CSV, wxString( _("Save as .csv File") ) , wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_saveCsv );
 
 	m_fileMenu->AppendSeparator();
 
@@ -280,8 +270,6 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuOpenWorkbook ), this, m_openWorkbook->GetId());
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbook ), this, m_saveWorkbook->GetId());
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbookAs ), this, m_saveWorkbookAs->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveImage ), this, m_saveImage->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveCsv ), this, m_saveCsv->GetId());
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ), this, m_exitSim->GetId());
 	this->Connect( m_runSimulation->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuSimulateUpdate ) );
 	this->Connect( m_addSignals->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuAddSignalsUpdate ) );

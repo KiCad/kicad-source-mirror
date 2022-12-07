@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,18 +35,16 @@ class wxListView;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_SAVE_AS_IMAGE 1000
-#define ID_SAVE_AS_CSV 1001
-#define ID_MENU_RUN_SIM 1002
-#define ID_MENU_ADD_SIGNAL 1003
-#define ID_MENU_PROBE_SIGNALS 1004
-#define ID_MENU_TUNE_SIGNALS 1005
-#define ID_MENU_SHOW_NETLIST 1006
-#define ID_MENU_SET_SIMUL 1007
-#define ID_MENU_SHOW_GRID 1008
-#define ID_MENU_SHOW_LEGEND 1009
-#define ID_MENU_DOTTED 1010
-#define ID_MENU_WHITE_BG 1011
+#define ID_MENU_RUN_SIM 1000
+#define ID_MENU_ADD_SIGNAL 1001
+#define ID_MENU_PROBE_SIGNALS 1002
+#define ID_MENU_TUNE_SIGNALS 1003
+#define ID_MENU_SHOW_NETLIST 1004
+#define ID_MENU_SET_SIMUL 1005
+#define ID_MENU_SHOW_GRID 1006
+#define ID_MENU_SHOW_LEGEND 1007
+#define ID_MENU_DOTTED 1008
+#define ID_MENU_WHITE_BG 1009
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class SIM_PLOT_FRAME_BASE
@@ -98,8 +96,6 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuOpenWorkbook( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuSaveWorkbook( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuSaveWorkbookAs( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuSaveImage( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuSaveCsv( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuExit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuSimulateUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void menuAddSignalsUpdate( wxUpdateUIEvent& event ) { event.Skip(); }

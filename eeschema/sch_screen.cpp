@@ -1923,7 +1923,7 @@ void SCH_SCREEN::migrateSimModel( SCH_SYMBOL& aSymbol )
         }
         else
         {
-            spiceModel = aSymbol.FindField( wxT( "Value" ) )->GetText();
+            spiceModel = aSymbol.GetValueFieldText( true );
         }
 
         if( SCH_FIELD* netlistEnabledField = aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) ) )
