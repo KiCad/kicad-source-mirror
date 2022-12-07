@@ -1362,6 +1362,7 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
     }
 
     std::vector<double> coords;
+    tinyspline::BSpline beziers;
     try
     {
 	    tinyspline::BSpline dxfspline( m_curr_entity.m_SplineControlPointList.size(),
@@ -1369,7 +1370,7 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
 
 	    dxfspline.setControlPoints( ctrlp );
 	    dxfspline.setKnots( m_curr_entity.m_SplineKnotsList );
-	    tinyspline::BSpline beziers( dxfspline.toBeziers() );
+        beziers = tinyspline::BSpline( dxfspline.toBeziers() );
 
         coords = beziers.controlPoints();
     }
@@ -1380,28 +1381,37 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
         return;
     }
 
-    if( coords.size() % 8 != 0 )
-    {
-        // somehow we generated a bad Bezier curve
-        reportMsg( _( "Invalid Bezier curve created" ) );
-        return;
-    }
+    size_t order = beziers.order();
+    size_t dim = beziers.dimension();
+    size_t numBeziers = ( coords.size() / dim ) / order;
 
-    // Each Bezier curve uses 4 vertices (a start point, 2 control points and a end point).
-    // So we can have more than one Bezier curve ( there are one curve each four vertices)
-    // However, one can have one Bezier curve with end point = ctrl point 2, having only 3
-    // defined points in list.
-    for( unsigned ii = 0; ii < coords.size(); ii += 8 )
+	for( size_t i = 0; i < numBeziers; i++ )
     {
-        VECTOR2D start( mapX( coords[ii] ), mapY( coords[ii+1] ) );
-        VECTOR2D bezierControl1( mapX( coords[ii+2] ), mapY( coords[ii+3] ) );
-        VECTOR2D bezierControl2( mapX( coords[ii+4] ), mapY( coords[ii+5] ) );
-        VECTOR2D end;
+        size_t ii = i * dim * order;
+        VECTOR2D start( mapX( coords[ ii ] ), mapY( coords[ ii + 1 ] ) );
 
-        if( ii+7 < coords.size() )
-            end = VECTOR2D( mapX( coords[ii+6] ), mapY( coords[ii+7] ) );
+        VECTOR2D bezierControl1( mapX( coords[ii + 2] ), mapY( coords[ii + 3] ) );
+
+        // not sure why this happens, but it seems to sometimes slip degree on the final bezier
+        VECTOR2D bezierControl2;
+        if( ii + 4 >= coords.size() )
+        {
+            bezierControl2 = bezierControl1;
+        }
         else
+        {
+            bezierControl2 = VECTOR2D( mapX( coords[ii + 4] ), mapY( coords[ii + 5] ) );
+        }
+
+        VECTOR2D end;
+        if( ii + 6 >= coords.size() )
+        {
             end = bezierControl2;
+        }
+        else
+        {
+            end = VECTOR2D( mapX( coords[ii + 6] ), mapY( coords[ii + 7] ) );
+        }
 
         GRAPHICS_IMPORTER_BUFFER* bufferToUse =
                 ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
