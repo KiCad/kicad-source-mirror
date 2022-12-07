@@ -1100,7 +1100,7 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
         {
             file.AddLine( wxString::Format( wxT( "%d" ), trace->GetType() ) );
             file.AddLine( trace->GetName() );
-            file.AddLine( trace->GetParam() );
+            file.AddLine( trace->GetParam().IsEmpty() ? wxS( " " ) : trace->GetParam() );
         }
     }
 
