@@ -24,7 +24,7 @@
  */
 
 #include "dialog_sim_settings.h"
-#include <sim/ngspice_helpers.h>
+#include <sim/ngspice_circuit_model.h>
 #include <sim/ngspice.h>
 
 #include <confirm.h>

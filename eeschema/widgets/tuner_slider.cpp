@@ -28,7 +28,7 @@
 #include <sim/sim_plot_frame.h>
 #include <sch_symbol.h>
 #include <template_fieldnames.h>
-#include <sim/ngspice_helpers.h>
+#include <sim/ngspice_circuit_model.h>
 
 #include <cmath>   // log log1p expm1
 #include <complex> // norm

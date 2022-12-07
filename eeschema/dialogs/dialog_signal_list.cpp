@@ -28,7 +28,7 @@
 #include <string_utils.h>
 #include <sim/sim_plot_frame.h>
 
-#include <sim/ngspice_helpers.h>
+#include <sim/ngspice_circuit_model.h>
 #include <sim/spice_generator.h>
 
 

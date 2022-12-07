@@ -27,7 +27,7 @@
 #include "sim_panel_base.h"
 
 #include "sim_plot_frame.h"
-#include "ngspice_helpers.h"
+#include "ngspice_circuit_model.h"
 
 
 SIM_PANEL_BASE::SIM_PANEL_BASE() : m_simCommand( wxEmptyString )

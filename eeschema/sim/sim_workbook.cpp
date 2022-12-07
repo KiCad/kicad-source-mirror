@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Mikołaj Wielgus <wielgusmikolaj@gmail.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,8 @@ SIM_WORKBOOK::SIM_WORKBOOK() : wxAuiNotebook()
 
 
 SIM_WORKBOOK::SIM_WORKBOOK( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize&
-        aSize, long aStyle ) : wxAuiNotebook( aParent, aId, aPos, aSize, aStyle )
+                            aSize, long aStyle ) :
+        wxAuiNotebook( aParent, aId, aPos, aSize, aStyle )
 {
     m_modified = false;
 }
@@ -40,33 +41,49 @@ SIM_WORKBOOK::SIM_WORKBOOK( wxWindow* aParent, wxWindowID aId, const wxPoint& aP
 
 bool SIM_WORKBOOK::AddPage( wxWindow* page, const wxString& caption, bool select, const wxBitmap& bitmap )
 {
-    bool res = wxAuiNotebook::AddPage( page, caption, select, bitmap );
-    setModified( res );
-    return res;
+    if(  wxAuiNotebook::AddPage( page, caption, select, bitmap ) )
+    {
+        setModified();
+        return true;
+    }
+
+    return false;
 }
 
 
 bool SIM_WORKBOOK::AddPage( wxWindow* page, const wxString& text, bool select, int imageId )
 {
-    bool res = wxAuiNotebook::AddPage( page, text, select, imageId );
-    setModified( res );
-    return res;
+    if(  wxAuiNotebook::AddPage( page, text, select, imageId ) )
+    {
+        setModified();
+        return true;
+    }
+
+    return false;
 }
 
 
 bool SIM_WORKBOOK::DeleteAllPages()
 {
-    bool res = wxAuiNotebook::DeleteAllPages();
-    setModified( res );
-    return res;
+    if( wxAuiNotebook::DeleteAllPages() )
+    {
+        setModified();
+        return true;
+    }
+
+    return false;
 }
 
 
 bool SIM_WORKBOOK::DeletePage( size_t page )
 {
-    bool res = wxAuiNotebook::DeletePage( page );
-    setModified( res );
-    return res;
+    if( wxAuiNotebook::DeletePage( page ) )
+    {
+        setModified();
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -74,18 +91,27 @@ bool SIM_WORKBOOK::AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aTitle,
                              const wxString& aName, int aPoints, const double* aX, const double* aY,
                              SIM_PLOT_TYPE aType )
 {
-    bool res = aPlotPanel->addTrace( aTitle, aName, aPoints, aX, aY, aType );
-    setModified( res );
-    return res;
+    if( aPlotPanel->addTrace( aTitle, aName, aPoints, aX, aY, aType ) )
+    {
+        setModified();
+        return true;
+    }
+
+    return false;
 }
 
 
 bool SIM_WORKBOOK::DeleteTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName )
 {
-    bool res = aPlotPanel->deleteTrace( aName );
-    setModified( res );
-    return res;
+    if( aPlotPanel->deleteTrace( aName ) )
+    {
+        setModified();
+        return true;
+    }
+
+    return false;
 }
+
 
 void SIM_WORKBOOK::ClrModified()
 {
@@ -93,11 +119,13 @@ void SIM_WORKBOOK::ClrModified()
     wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_CLR_MODIFIED ) );
 }
 
-void SIM_WORKBOOK::setModified( bool value )
+
+void SIM_WORKBOOK::setModified()
 {
-    m_modified = value;
+    m_modified = true;
     wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_MODIFIED ) );
 }
+
 
 wxDEFINE_EVENT( EVT_WORKBOOK_MODIFIED, wxCommandEvent );
 wxDEFINE_EVENT( EVT_WORKBOOK_CLR_MODIFIED, wxCommandEvent );

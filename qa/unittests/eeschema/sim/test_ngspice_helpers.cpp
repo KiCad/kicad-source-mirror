@@ -36,7 +36,7 @@
 #include <project.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
-#include <sim/ngspice_helpers.h>
+#include <sim/ngspice_circuit_model.h>
 
 class TEST_NGSPICE_HELPERS
 {

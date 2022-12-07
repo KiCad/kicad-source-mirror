@@ -67,7 +67,7 @@ public:
     bool IsModified() const { return m_modified; }
 
 private:
-    void setModified( bool value = true );
+    void setModified();
 
     ///< Dirty bit, indicates something in the workbook has changed
     bool m_modified;

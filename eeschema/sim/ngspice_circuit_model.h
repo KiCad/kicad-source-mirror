@@ -24,8 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef NETLIST_EXPORTER_PSPICE_SIM_H
-#define NETLIST_EXPORTER_PSPICE_SIM_H
+#ifndef NGSPICE_CIRCUIT_MODEL_H
+#define NGSPICE_CIRCUIT_MODEL_H
 
 #include <netlist_exporters/netlist_exporter_spice.h>
 #include <vector>
@@ -155,4 +155,4 @@ private:
     int      m_options;
 };
 
-#endif /* NETLIST_EXPORTER_PSPICE_SIM_H */
+#endif /* NGSPICE_CIRCUIT_MODEL_H */

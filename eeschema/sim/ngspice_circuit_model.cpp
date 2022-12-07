@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "ngspice_helpers.h"
+#include "ngspice_circuit_model.h"
 #include <macros.h>     // for TO_UTF8 def
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
@@ -149,8 +149,11 @@ bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAM
 void NGSPICE_CIRCUIT_MODEL::WriteDirectives( OUTPUTFORMATTER& aFormatter,
                                              unsigned         aNetlistOptions ) const
 {
+    if( GetSimCommandOverride().IsEmpty() )
+        aNetlistOptions |= OPTION_SIM_COMMAND;
+
     NETLIST_EXPORTER_SPICE::WriteDirectives( aFormatter, aNetlistOptions );
 
-    if( GetSimCommandOverride() != "" )
+    if( !GetSimCommandOverride().IsEmpty() )
         aFormatter.Print( 0, "%s\n", TO_UTF8( GetSimCommandOverride() ) );
 }
