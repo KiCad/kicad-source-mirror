@@ -586,8 +586,8 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
                                                           editFrame->GetConvert() ).GetSize();
 
         // Add a small margin to the plot bounding box
-        pageTemp.SetWidthMils(  int( symbolSize.x * 1.2 ) );
-        pageTemp.SetHeightMils( int( symbolSize.y * 1.2 ) );
+        pageTemp.SetWidthMils( schIUScale.IUToMils( symbolSize.x * 1.2 ) );
+        pageTemp.SetHeightMils( schIUScale.IUToMils( symbolSize.y * 1.2 ) );
 
         editFrame->GetScreen()->SetPageSettings( pageTemp );
         editFrame->SVGPlotSymbol( fullFileName );
