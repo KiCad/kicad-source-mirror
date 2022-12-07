@@ -264,7 +264,7 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
 }
 
 
-const wxString ExpandEnvVarSubstitutions( const wxString& aString, PROJECT* aProject )
+const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject )
 {
     // wxGetenv( wchar_t* ) is not re-entrant on linux.
     // Put a lock on multithreaded use of wxGetenv( wchar_t* ), called from wxEpandEnvVars(),

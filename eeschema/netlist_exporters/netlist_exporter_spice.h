@@ -144,7 +144,7 @@ private:
     void readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem, int& aNcCounter );
 
     void writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
-                       const std::string& aPath );
+                       const wxString& aPath );
 
     void writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions );
     void writeModels( OUTPUTFORMATTER& aFormatter );
@@ -156,7 +156,7 @@ private:
     std::string                      m_title;              ///< Spice simulation title found in the schematic sheet
     std::vector<std::string>         m_directives;         ///< Spice directives found in the schematic sheet
     //std::map<std::string, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
-    std::set<std::string>            m_rawIncludes;        ///< include directives found in symbols
+    std::set<wxString>               m_rawIncludes;        ///< include directives found in symbols
     std::set<std::string>            m_nets;
     std::list<SPICE_ITEM>            m_items;              ///< Items representing schematic symbols in Spice world
 };

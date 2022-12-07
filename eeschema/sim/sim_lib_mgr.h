@@ -45,8 +45,7 @@ public:
 
     void Clear();
 
-    SIM_LIBRARY& CreateLibrary( const std::string& aLibraryPath, REPORTER* aReporter = nullptr  );
-    SIM_LIBRARY& SetLibrary( const std::string& aLibraryPath, REPORTER* aReporter = nullptr  );
+    SIM_LIBRARY& CreateLibrary( const wxString& aLibraryPath, REPORTER* aReporter );
 
     SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, int aSymbolPinCount );
 
@@ -63,20 +62,18 @@ public:
     SIM_LIBRARY::MODEL CreateModel( const std::vector<T>& aFields, int aSymbolPinCount );
 
     template <typename T>
-    SIM_LIBRARY::MODEL CreateModel( const std::string& aLibraryPath,
-                                    const std::string& aBaseModelName,
-                                    const std::vector<T>& aFields,
-                                    int aSymbolPinCount );
+    SIM_LIBRARY::MODEL CreateModel( const wxString& aLibraryPath, const std::string& aBaseModelName,
+                                    const std::vector<T>& aFields, int aSymbolPinCount );
 
     void SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel );
 
-    std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> GetLibraries() const;
+    std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> GetLibraries() const;
     std::vector<std::reference_wrapper<SIM_MODEL>> GetModels() const;
 
 private:
-    const PROJECT& m_project;
-    std::map<std::string, std::unique_ptr<SIM_LIBRARY>> m_libraries;
-    std::vector<std::unique_ptr<SIM_MODEL>>             m_models;
+    const PROJECT&                                   m_project;
+    std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries;
+    std::vector<std::unique_ptr<SIM_MODEL>>          m_models;
 };
 
 

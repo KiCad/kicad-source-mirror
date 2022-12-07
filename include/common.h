@@ -76,7 +76,7 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
  * @param aString a string containing (perhaps) references to env var
  * @return the expanded environment variable.
  */
-const wxString ExpandEnvVarSubstitutions( const wxString& aString, PROJECT* aProject );
+const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject );
 
 /**
  * Expand '${var-name}' templates in text.  The LocalResolver is given first crack at it,

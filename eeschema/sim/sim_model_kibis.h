@@ -41,8 +41,8 @@ public:
     std::string ModelLine( const SPICE_ITEM& aItem ) const override;
     std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const override;
 
-    std::string IbisDevice( const SPICE_ITEM& aItem, const std::string aCwd,
-                            const std::string aCacheDir ) const;
+    std::string IbisDevice( const SPICE_ITEM& aItem, const PROJECT& aProject,
+                            const wxString& aCacheDir ) const;
 
 protected:
     std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const override;

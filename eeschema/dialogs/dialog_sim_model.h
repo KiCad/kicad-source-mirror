@@ -114,8 +114,10 @@ private:
     int getModelPinIndex( const wxString& aModelPinString ) const;
 
     void onRadioButton( wxCommandEvent& aEvent ) override;
+    void onLibraryPathText( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextEnter( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextKillFocus( wxFocusEvent& aEvent ) override;
+    void onLibraryPathTextSetFocus( wxFocusEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;
     void onModelNameCombobox( wxCommandEvent& aEvent ) override;
     void onModelNameComboboxKillFocus( wxFocusEvent& event ) override;
@@ -157,6 +159,8 @@ private:
 
     wxPGProperty*          m_firstCategory;            // Used to add principal parameters to root.
     wxPGProperty*          m_prevParamGridSelection;
+
+    bool                   m_inKillFocus;
 };
 
 #endif /* DIALOG_SIM_MODEL_H */

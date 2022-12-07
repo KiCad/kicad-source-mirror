@@ -52,8 +52,8 @@ public:
      * @param aReporter The reporter the library reports to
      * @return The library loaded in a newly constructed object.
      */
-    static std::unique_ptr<SIM_LIBRARY> Create( std::string aFilePath,
-                                                REPORTER*   aReporter = nullptr );
+    static std::unique_ptr<SIM_LIBRARY> Create( const wxString& aFilePath,
+                                                REPORTER* aReporter = nullptr );
 
     /**
      * Read library from a source file. Must be in the format appropriate to the subclass, e.g.

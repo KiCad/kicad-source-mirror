@@ -359,7 +359,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, REPORTER&
 
                     try
                     {
-                        m_libMgr.CreateLibrary( path );
+                        m_libMgr.CreateLibrary( path, &aReporter );
                     }
                     catch( const IO_ERROR& e )
                     {
@@ -407,37 +407,34 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
     // FIXME: Don't have special cases for raw Spice models and KIBIS.
     if( auto rawSpiceModel = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model ) )
     {
-        int libParamIndex = static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
-        std::string path = rawSpiceModel->GetParam( libParamIndex ).value->ToString();
+        int      libParamIndex = static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
+        wxString path = rawSpiceModel->GetParam( libParamIndex ).value->ToString();
 
-        if( path != "" )
+        if( !path.IsEmpty() )
             m_rawIncludes.insert( path );
     }
     else if( auto kibisModel = dynamic_cast<const SIM_MODEL_KIBIS*>( aItem.model ) )
     {
-        wxFileName cacheDir;
-        cacheDir.AssignDir( PATHS::GetUserCachePath() );
-        cacheDir.AppendDir( wxT( "ibis" ) );
+        wxFileName cacheFn;
+        cacheFn.AssignDir( PATHS::GetUserCachePath() );
+        cacheFn.AppendDir( wxT( "ibis" ) );
+        cacheFn.SetFullName( aSymbol.GetRef( &aSheet ) + wxT( ".cache" ) );
 
-        std::string libraryPath = fmt::format( "{}/{}.cache",
-                                               std::string( cacheDir.GetPath() ),
-                                               std::string( aSymbol.GetRef( &aSheet ) ) );
-        wxFile cacheFile( libraryPath, wxFile::write );
+        wxFile cacheFile( cacheFn.GetFullPath(), wxFile::write );
 
         if( !cacheFile.IsOpened() )
         {
-            DisplayErrorMessage( nullptr,
-                    wxString::Format( _( "Could not open file '%s' to write IBIS model" ),
-                                      libraryPath ) );
+            DisplayErrorMessage( nullptr, wxString::Format( _( "Could not open file '%s' to write "
+                                                               "IBIS model" ),
+                                                            cacheFn.GetFullPath() ) );
         }
 
         auto spiceGenerator = static_cast<const SPICE_GENERATOR_KIBIS&>( kibisModel->SpiceGenerator() );
-        std::string modelData = spiceGenerator.IbisDevice(
-                aItem, std::string( m_schematic->Prj().GetProjectPath().c_str() ),
-                std::string( cacheDir.GetPath( wxPATH_GET_SEPARATOR ) ).c_str() );
+        std::string modelData = spiceGenerator.IbisDevice( aItem, m_schematic->Prj(),
+                                                           cacheFn.GetPath( wxPATH_GET_SEPARATOR ) );
 
         cacheFile.Write( wxString( modelData ) );
-        m_rawIncludes.insert( libraryPath );
+        m_rawIncludes.insert( cacheFn.GetFullPath() );
     }
 }
 
@@ -464,7 +461,7 @@ void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& a
 
 
 void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
-                                           const std::string& aPath )
+                                           const wxString& aPath )
 {
     // First, expand env vars, if any.
     wxString expandedPath = ExpandEnvVarSubstitutions( aPath, &m_schematic->Prj() );
@@ -495,13 +492,13 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
 
 void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
-    for( auto&& [path, library] : m_libMgr.GetLibraries() )
+    for( auto& [path, library] : m_libMgr.GetLibraries() )
     {
         if( dynamic_cast<const SIM_LIBRARY_SPICE*>( &library.get() ) )
             writeInclude( aFormatter, aNetlistOptions, path );
     }
 
-    for( const std::string& path : m_rawIncludes )
+    for( const wxString& path : m_rawIncludes )
         writeInclude( aFormatter, aNetlistOptions, path );
 }
 

@@ -24,6 +24,7 @@
 
 #include <pgm_base.h>
 #include <string>
+#include <common.h>
 #include <sch_symbol.h>
 
 // Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
@@ -32,7 +33,6 @@
 #include <sim/sim_library.h>
 #include <sim/sim_model.h>
 #include <sim/sim_model_ideal.h>
-
 
 SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT& aPrj ) : m_project( aPrj )
 {
@@ -46,26 +46,18 @@ void SIM_LIB_MGR::Clear()
 }
 
 
-SIM_LIBRARY& SIM_LIB_MGR::CreateLibrary( const std::string& aLibraryPath, REPORTER* aReporter )
+SIM_LIBRARY& SIM_LIB_MGR::CreateLibrary( const wxString& aLibraryPath, REPORTER* aReporter )
 {
-    std::string absolutePath = std::string( m_project.AbsolutePath( aLibraryPath ).ToUTF8() );
-
-    auto it =
-            m_libraries.try_emplace( aLibraryPath, SIM_LIBRARY::Create( absolutePath, aReporter ) )
-                    .first;
-    return *it->second;
-}
-
-SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const std::string& aLibraryPath, REPORTER* aReporter  )
-{
-    std::string absolutePath = std::string( m_project.AbsolutePath( aLibraryPath ).ToUTF8() );
+    wxString path = ExpandEnvVarSubstitutions( aLibraryPath, &m_project );
+    wxString absolutePath = m_project.AbsolutePath( path );
 
     // May throw an exception.
-    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( absolutePath, aReporter );
+    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( m_project.AbsolutePath( path ),
+                                                                aReporter );
     
     Clear();
-    m_libraries[aLibraryPath] = std::move( library );
-    return *m_libraries.at( aLibraryPath );
+    m_libraries[path] = std::move( library );
+    return *m_libraries.at( path );
 }
 
 
@@ -153,18 +145,18 @@ template SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<LIB_FIEL
 
 
 template <typename T>
-SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::string& aLibraryPath,
+SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
                                              const std::string& aBaseModelName,
                                              const std::vector<T>& aFields,
                                              int aSymbolPinCount )
 {
-    std::string  absolutePath = std::string( m_project.AbsolutePath( aLibraryPath ).ToUTF8() );
+    wxString     path = ExpandEnvVarSubstitutions( aLibraryPath, &m_project );
+    wxString     absolutePath = m_project.AbsolutePath( path );
     SIM_LIBRARY* library = nullptr;
 
     try
     {
-        auto it = m_libraries.try_emplace( aLibraryPath,
-                SIM_LIBRARY::Create( absolutePath ) ).first;
+        auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( absolutePath ) ).first;
         library = &*it->second;
     }
     catch( const IO_ERROR& e )
@@ -203,9 +195,9 @@ void SIM_LIB_MGR::SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel )
 }
 
 
-std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> SIM_LIB_MGR::GetLibraries() const
+std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> SIM_LIB_MGR::GetLibraries() const
 {
-    std::map<std::string, std::reference_wrapper<const SIM_LIBRARY>> libraries;
+    std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> libraries;
 
     for( auto& [path, library] : m_libraries )
         libraries.try_emplace( path, *library );

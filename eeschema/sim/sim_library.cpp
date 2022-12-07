@@ -27,18 +27,17 @@
 #include <sim/sim_library_spice.h>
 
 
-std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( std::string aFilePath, REPORTER* aReporter )
+std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString& aFilePath, REPORTER* aReporter )
 {
     std::unique_ptr<SIM_LIBRARY> library;
-    wxString wxaFilePath( aFilePath );
 
-    if( wxaFilePath.EndsWith( ".ibs" ) )
+    if( aFilePath.EndsWith( ".ibs" ) )
         library = std::make_unique<SIM_LIBRARY_KIBIS>();
     else
         library = std::make_unique<SIM_LIBRARY_SPICE>();
 
     library->m_reporter = aReporter;
-    library->ReadFile( aFilePath );
+    library->ReadFile( std::string( aFilePath.c_str() ) );
     return library;
 }
 

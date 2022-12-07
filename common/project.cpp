@@ -306,6 +306,11 @@ const wxString PROJECT::AbsolutePath( const wxString& aFileName ) const
 {
     wxFileName fn = aFileName;
 
+    // Paths which start with an unresolved variable reference are more likely to be
+    // absolute than relative.
+    if( aFileName.StartsWith( wxT( "${" ) ) )
+        return aFileName;
+
     if( !fn.IsAbsolute() )
     {
         wxString pro_dir = wxPathOnly( GetProjectFullName() );

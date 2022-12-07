@@ -55,7 +55,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
       m_scintillaTricks( nullptr ),
       m_wasCodePreviewUpdated( true ),
       m_firstCategory( nullptr ),
-      m_prevParamGridSelection( nullptr )
+      m_prevParamGridSelection( nullptr ),
+      m_inKillFocus( false )
 {
     m_modelNameCombobox->SetValidator( m_modelNameValidator );
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
@@ -262,7 +263,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 
     if( ( library() && m_useLibraryModelRadioButton->GetValue() ) || isIbisLoaded() )
     {
-        path = library()->GetFilePath();
+        path = m_libraryPathText->GetValue();
         wxFileName fn( path );
 
         if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
@@ -618,23 +619,16 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForce
     if( !aForceReload && libraries.size() >= 1 && libraries.begin()->first == aLibraryPath )
         return;
 
-
     DIALOG_IBIS_PARSER_REPORTER dlg( this );
     dlg.m_messagePanel->Clear();
 
-    bool tryingToLoadIbis = false;
-
-    if( aLibraryPath.EndsWith( ".ibs" ) )
-        tryingToLoadIbis = true;
-
     try
     {
-        m_libraryModelsMgr.SetLibrary( std::string( aLibraryPath.ToUTF8() ),
-                                       &dlg.m_messagePanel->Reporter() );
+        m_libraryModelsMgr.CreateLibrary( aLibraryPath, &dlg.m_messagePanel->Reporter() );
     }
     catch( const IO_ERROR& e )
     {
-        if( tryingToLoadIbis )
+        if( dlg.m_messagePanel->Reporter().HasMessage() )
         {
             dlg.m_messagePanel->Flush();
             dlg.ShowQuasiModal();
@@ -976,29 +970,47 @@ void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
     if( m_useLibraryModelRadioButton->GetValue() )
     {
         wxString path = m_libraryPathText->GetValue();
-        wxFileName fn( path );
 
-        if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
-            path = fn.GetFullPath();
-
-        try
+        if( !path.IsEmpty() )
         {
-            loadLibrary( path );
-            updateWidgets();
-        }
-        catch( const IO_ERROR& )
-        {
-            // TODO: Add an infobar to report the error?
+            try
+            {
+                loadLibrary( path );
+                updateWidgets();
+            }
+            catch( const IO_ERROR& )
+            {
+                // TODO: Add an infobar to report the error?
+            }
         }
     }
 }
 
 
 template <typename T>
+void DIALOG_SIM_MODEL<T>::onLibraryPathText( wxCommandEvent& aEvent )
+{
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onLibraryPathTextSetFocus( wxFocusEvent& aEvent )
+{
+}
+
+
+template <typename T>
 void DIALOG_SIM_MODEL<T>::onLibraryPathTextKillFocus( wxFocusEvent& aEvent )
 {
-    wxCommandEvent dummy;
-    onLibraryPathTextEnter( dummy );
+    if( !m_inKillFocus )
+    {
+        m_inKillFocus = true;
+
+        wxCommandEvent dummy;
+        onLibraryPathTextEnter( dummy );
+
+        m_inKillFocus = false;
+    }
 }
 
 

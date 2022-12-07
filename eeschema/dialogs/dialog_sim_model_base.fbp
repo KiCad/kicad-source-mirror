@@ -407,8 +407,9 @@
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
                                                                     <event name="OnKillFocus">onLibraryPathTextKillFocus</event>
+                                                                    <event name="OnSetFocus">onLibraryPathTextSetFocus</event>
+                                                                    <event name="OnText">onLibraryPathText</event>
                                                                     <event name="OnTextEnter">onLibraryPathTextEnter</event>
-                                                                    <event name="OnUpdateUI">onLibraryPathUpdate</event>
                                                                 </object>
                                                             </object>
                                                             <object class="sizeritem" expanded="1">

@@ -24,7 +24,7 @@
 #include <sim/kibis/kibis.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_library_kibis.h>
-#include <paths.h>
+#include <common.h>
 #include <fmt/core.h>
 #include <wx/filename.h>
 #include <kiway.h>
@@ -58,22 +58,20 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const SPICE_ITEM& 
 }
 
 
-std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const std::string aCwd,
-                                               const std::string aCacheDir ) const
+std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PROJECT& aProject,
+                                               const wxString& aCacheDir ) const
 {
     std::string ibisLibFilename = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string ibisCompName    = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::NAME_FIELD  );
     std::string ibisPinName     = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::PIN_FIELD );
     std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
-    bool diffMode = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
+    bool        diffMode        = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
 
-    wxFileName libPath = wxFileName( wxString( ibisLibFilename ) );
+    wxString path = ExpandEnvVarSubstitutions( ibisLibFilename, &aProject );
+    wxString absolutePath = aProject.AbsolutePath( path );
 
-    if( !libPath.IsAbsolute() )
-        libPath.MakeAbsolute( aCwd );
-
-    KIBIS kibis( std::string( libPath.GetFullPath().c_str() ) );
-    kibis.m_cacheDir = aCacheDir;
+    KIBIS kibis( std::string( absolutePath.c_str() ) );
+    kibis.m_cacheDir = std::string( aCacheDir.c_str() );
 
     if( !kibis.m_valid )
     {
