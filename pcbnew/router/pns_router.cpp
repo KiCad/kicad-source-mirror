@@ -540,13 +540,16 @@ bool ROUTER::Finish()
     if( !getNearestRatnestAnchor( otherEnd, otherEndLayers ) )
         return false;
 
-    // Keep moving until we don't change position
+    // Keep moving until we don't change position or hit the limit
+    int      triesLeft = 5;
     VECTOR2I moveResultPoint;
+
     do
     {
         moveResultPoint = Placer()->CurrentEnd();
         Move( otherEnd, &current );
-    } while( Placer()->CurrentEnd() != moveResultPoint );
+        triesLeft--;
+    } while( Placer()->CurrentEnd() != moveResultPoint && triesLeft );
 
     // If we've made it, fix the route and we're done
     if( moveResultPoint == otherEnd && otherEndLayers.Overlaps( GetCurrentLayer() ) )
@@ -794,7 +797,7 @@ std::unique_ptr<NODE> ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved
     }
 
     tmpNode->GetUpdatedItems( aRemoved, aAdded );
-    
+
     return std::move( tmpNode );
 }
 
