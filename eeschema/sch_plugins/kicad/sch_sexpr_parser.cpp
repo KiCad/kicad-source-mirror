@@ -2829,37 +2829,13 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
                 field->SetId( nextAvailableId );
             }
 
-            // Set the default symbol reference prefix.
-            if( field->GetId() == REFERENCE_FIELD )
-            {
-                wxString refDesignator = field->GetText();
-
-                refDesignator.Replace( "~", " " );
-
-                wxString prefix = refDesignator;
-
-                while( prefix.Length() )
-                {
-                    if( ( prefix.Last() < '0' || prefix.Last() > '9' ) && prefix.Last() != '?' )
-                        break;
-
-                    prefix.RemoveLast();
-                }
-
-                // Avoid a prefix containing trailing/leading spaces
-                prefix.Trim( true );
-                prefix.Trim( false );
-
-                if( prefix.IsEmpty() )
-                    symbol->SetPrefix( wxString( "U" ) );
-                else
-                    symbol->SetPrefix( prefix );
-            }
-
             if( symbol->GetFieldById( field->GetId() ) )
                 *symbol->GetFieldById( field->GetId() ) = *field;
             else
                 symbol->AddField( *field );
+
+            if( field->GetId() == REFERENCE_FIELD )
+                symbol->UpdatePrefix();
 
             m_fieldIDsRead.insert( field->GetId() );
 

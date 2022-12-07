@@ -87,12 +87,7 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
     SCH_SCREENS screens( m_schematic.Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-    {
         screen->UpdateLocalLibSymbolLinks();
-
-        if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
-            screen->MigrateSimModels();
-    }
 
     SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
@@ -102,6 +97,12 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
 
     if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20221110 )
         sheets.UpdateSheetInstanceData( m_schematic.RootScreen()->GetSheetInstances());
+
+    if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
+    {
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+            screen->MigrateSimModels();
+    }
 
     sheets.AnnotatePowerSymbols();
 

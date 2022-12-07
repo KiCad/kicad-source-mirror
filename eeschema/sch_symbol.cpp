@@ -713,6 +713,31 @@ bool SCH_SYMBOL::IsAnnotated( const SCH_SHEET_PATH* aSheet )
 }
 
 
+void SCH_SYMBOL::UpdatePrefix()
+{
+    wxString refDesignator = GetField( REFERENCE_FIELD )->GetText();
+
+    refDesignator.Replace( "~", " " );
+
+    wxString prefix = refDesignator;
+
+    while( prefix.Length() )
+    {
+        if( ( prefix.Last() < '0' || prefix.Last() > '9' ) && prefix.Last() != '?' )
+            break;
+
+        prefix.RemoveLast();
+    }
+
+    // Avoid a prefix containing trailing/leading spaces
+    prefix.Trim( true );
+    prefix.Trim( false );
+
+    if( !prefix.IsEmpty() )
+        SetPrefix( prefix );
+}
+
+
 int SCH_SYMBOL::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 {
     KIID_PATH path = aSheet->Path();

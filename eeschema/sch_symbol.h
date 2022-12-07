@@ -274,6 +274,11 @@ public:
 
     void SetPrefix( const wxString& aPrefix ) { m_prefix = aPrefix; }
 
+    /**
+     * Set the prefix based on the current reference designator.
+     */
+    void UpdatePrefix();
+
     TRANSFORM& GetTransform() { return m_transform; }
     const TRANSFORM& GetTransform() const { return m_transform; }
 

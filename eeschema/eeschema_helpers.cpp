@@ -139,17 +139,18 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
     SCH_SCREENS    screens( schematic->Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-    {
         screen->UpdateLocalLibSymbolLinks();
-
-        if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
-            screen->MigrateSimModels();
-    }
 
     if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
         sheetList.UpdateSymbolInstanceData( schematic->RootScreen()->GetSymbolInstances());
 
     sheetList.UpdateSheetInstanceData( schematic->RootScreen()->GetSheetInstances());
+
+    if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
+    {
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+            screen->MigrateSimModels();
+    }
 
     sheetList.AnnotatePowerSymbols();
 

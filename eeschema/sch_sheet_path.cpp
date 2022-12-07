@@ -1123,6 +1123,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstanceData(
             symbol->GetField( REFERENCE_FIELD )->SetText( it->m_Reference );
             symbol->SetValueFieldText( it->m_Value );
             symbol->SetFootprintFieldText( it->m_Footprint );
+            symbol->UpdatePrefix();
         }
     }
 }

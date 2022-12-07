@@ -137,21 +137,22 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
 
     aSchematic->CurrentSheet().push_back( &aSchematic->Root() );
 
-   SCH_SCREENS screens( aSchematic->Root() );
+    SCH_SCREENS screens( aSchematic->Root() );
 
-   for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-   {
-       screen->UpdateLocalLibSymbolLinks();
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        screen->UpdateLocalLibSymbolLinks();
 
-       if( aSchematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
-           screen->MigrateSimModels();
-   }
+    SCH_SHEET_LIST sheets = aSchematic->GetSheets();
 
-   SCH_SHEET_LIST sheets = aSchematic->GetSheets();
+    // Restore all of the loaded symbol instances from the root sheet screen.
+    sheets.UpdateSymbolInstanceData( aSchematic->RootScreen()->GetSymbolInstances() );
+    sheets.UpdateSheetInstanceData( aSchematic->RootScreen()->GetSheetInstances() );
 
-   // Restore all of the loaded symbol instances from the root sheet screen.
-   sheets.UpdateSymbolInstanceData( aSchematic->RootScreen()->GetSymbolInstances() );
-   sheets.UpdateSheetInstanceData( aSchematic->RootScreen()->GetSheetInstances() );
+    if( aSchematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
+    {
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+            screen->MigrateSimModels();
+    }
 
    sheets.AnnotatePowerSymbols();
 
