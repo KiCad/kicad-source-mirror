@@ -35,6 +35,16 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_fileMenu->AppendSeparator();
 
+	wxMenuItem* m_saveImage;
+	m_saveImage = new wxMenuItem( m_fileMenu, ID_SAVE_AS_IMAGE, wxString( _("Export Current Plot as PNG...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_saveImage );
+
+	wxMenuItem* m_saveCsv;
+	m_saveCsv = new wxMenuItem( m_fileMenu, ID_SAVE_AS_CSV, wxString( _("Export Current Plot as CSV...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_saveCsv );
+
+	m_fileMenu->AppendSeparator();
+
 	wxMenuItem* m_exitSim;
 	m_exitSim = new wxMenuItem( m_fileMenu, wxID_CLOSE, wxString( _("Close") ) + wxT('\t') + wxT("CTRL+W"), wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_exitSim );
@@ -270,6 +280,8 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuOpenWorkbook ), this, m_openWorkbook->GetId());
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbook ), this, m_saveWorkbook->GetId());
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbookAs ), this, m_saveWorkbookAs->GetId());
+	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveImage ), this, m_saveImage->GetId());
+	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveCsv ), this, m_saveCsv->GetId());
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ), this, m_exitSim->GetId());
 	this->Connect( m_runSimulation->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuSimulateUpdate ) );
 	this->Connect( m_addSignals->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuAddSignalsUpdate ) );

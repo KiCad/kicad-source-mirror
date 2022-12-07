@@ -107,7 +107,7 @@
                         <property name="help"></property>
                         <property name="id">wxID_OPEN</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Open...</property>
+                        <property name="label">Open Workbook...</property>
                         <property name="name">m_openWorkbook</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
@@ -121,7 +121,7 @@
                         <property name="help"></property>
                         <property name="id">wxID_SAVE</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Save</property>
+                        <property name="label">Save Workbook</property>
                         <property name="name">m_saveWorkbook</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
@@ -135,7 +135,7 @@
                         <property name="help"></property>
                         <property name="id">wxID_SAVEAS</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Save As...</property>
+                        <property name="label">Save Workbook As...</property>
                         <property name="name">m_saveWorkbookAs</property>
                         <property name="permission">none</property>
                         <property name="shortcut">SHIFT+CTRL+S</property>
@@ -153,7 +153,7 @@
                         <property name="help"></property>
                         <property name="id">ID_SAVE_AS_IMAGE</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Save as Image</property>
+                        <property name="label">Export Current Plot as PNG...</property>
                         <property name="name">m_saveImage</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
@@ -167,7 +167,7 @@
                         <property name="help"></property>
                         <property name="id">ID_SAVE_AS_CSV</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Save as .csv File</property>
+                        <property name="label">Export Current Plot as CSV...</property>
                         <property name="name">m_saveCsv</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>

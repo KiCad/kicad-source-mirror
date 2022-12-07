@@ -45,7 +45,8 @@ public:
 
     void Clear();
 
-    SIM_LIBRARY& CreateLibrary( const wxString& aLibraryPath, REPORTER* aReporter );
+    SIM_LIBRARY& AddLibrary( const wxString& aLibraryPath, REPORTER* aReporter );
+    SIM_LIBRARY& SetLibrary( const wxString& aLibraryPath, REPORTER* aReporter );
 
     SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, int aSymbolPinCount );
 
@@ -69,6 +70,8 @@ public:
 
     std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> GetLibraries() const;
     std::vector<std::reference_wrapper<SIM_MODEL>> GetModels() const;
+
+    static wxString ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT& aProject );
 
 private:
     const PROJECT&                                   m_project;

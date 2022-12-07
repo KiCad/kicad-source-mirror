@@ -359,7 +359,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, REPORTER&
 
                     try
                     {
-                        m_libMgr.CreateLibrary( path, &aReporter );
+                        m_libMgr.AddLibrary( path, &aReporter );
                     }
                     catch( const IO_ERROR& e )
                     {

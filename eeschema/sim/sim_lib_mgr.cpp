@@ -46,14 +46,51 @@ void SIM_LIB_MGR::Clear()
 }
 
 
-SIM_LIBRARY& SIM_LIB_MGR::CreateLibrary( const wxString& aLibraryPath, REPORTER* aReporter )
+wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT& aProject )
 {
-    wxString path = ExpandEnvVarSubstitutions( aLibraryPath, &m_project );
-    wxString absolutePath = m_project.AbsolutePath( path );
+    wxString   expandedPath = ExpandEnvVarSubstitutions( aLibraryPath, &aProject );
+    wxFileName fn( expandedPath );
+
+    if( fn.IsAbsolute() )
+        return fn.GetFullPath();
+
+    wxFileName projectFn( aProject.AbsolutePath( expandedPath ) );
+
+    if( projectFn.Exists() )
+        return projectFn.GetFullPath();
+
+    wxFileName spiceLibFn( expandedPath );
+    wxString   spiceLibDir;
+
+    wxGetEnv( wxT( "SPICE_LIB_DIR" ), &spiceLibDir );
+
+    if( !spiceLibDir.IsEmpty() && spiceLibFn.MakeAbsolute( spiceLibDir ) && spiceLibFn.Exists() )
+        return spiceLibFn.GetFullPath();
+
+    THROW_IO_ERROR( wxString::Format( _( "Simulation model library not found at '%s' or '%s'" ),
+                                      projectFn.GetFullPath(),
+                                      spiceLibFn.GetFullPath() ) );
+}
+
+
+SIM_LIBRARY& SIM_LIB_MGR::AddLibrary( const wxString& aLibraryPath, REPORTER* aReporter )
+{
+    // May throw an exception.
+    wxString path = ResolveLibraryPath( aLibraryPath, m_project );
 
     // May throw an exception.
-    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( m_project.AbsolutePath( path ),
-                                                                aReporter );
+    auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path, aReporter ) ) .first;
+    return *it->second;
+}
+
+
+SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER* aReporter  )
+{
+    // May throw an exception.
+    wxString path = ResolveLibraryPath( aLibraryPath, m_project );
+
+    // May throw an exception.
+    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, aReporter );
     
     Clear();
     m_libraries[path] = std::move( library );
@@ -150,21 +187,19 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
                                              const std::vector<T>& aFields,
                                              int aSymbolPinCount )
 {
-    wxString     path = ExpandEnvVarSubstitutions( aLibraryPath, &m_project );
-    wxString     absolutePath = m_project.AbsolutePath( path );
+    wxString     path = ResolveLibraryPath( aLibraryPath, m_project );
     SIM_LIBRARY* library = nullptr;
 
     try
     {
-        auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( absolutePath ) ).first;
+        auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path ) ).first;
         library = &*it->second;
     }
     catch( const IO_ERROR& e )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Error loading simulation model library '%s': %s" ),
-                                  absolutePath,
-                                  e.What() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Error loading simulation model library '%s': %s" ),
+                                          path,
+                                          e.What() ) );
     }
 
     if( aBaseModelName == "" )
@@ -180,7 +215,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
         THROW_IO_ERROR( wxString::Format( _( "Error loading simulation model: could not find "
                                              "base model '%s' in library '%s'" ),
                                           aBaseModelName,
-                                          absolutePath ) );
+                                          path ) );
     }
 
     m_models.push_back( SIM_MODEL::Create( *baseModel, aSymbolPinCount, aFields ) );

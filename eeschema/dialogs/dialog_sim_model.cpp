@@ -614,17 +614,12 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForce
 {
     auto libraries = m_libraryModelsMgr.GetLibraries();
 
-    // Loading the same library as previously should normally be a no-op except when done using the
-    // library browse button.
-    if( !aForceReload && libraries.size() >= 1 && libraries.begin()->first == aLibraryPath )
-        return;
-
     DIALOG_IBIS_PARSER_REPORTER dlg( this );
     dlg.m_messagePanel->Clear();
 
     try
     {
-        m_libraryModelsMgr.CreateLibrary( aLibraryPath, &dlg.m_messagePanel->Reporter() );
+        m_libraryModelsMgr.SetLibrary( aLibraryPath, &dlg.m_messagePanel->Reporter() );
     }
     catch( const IO_ERROR& e )
     {

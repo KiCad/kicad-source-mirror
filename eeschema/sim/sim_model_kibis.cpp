@@ -28,6 +28,7 @@
 #include <fmt/core.h>
 #include <wx/filename.h>
 #include <kiway.h>
+#include "sim_lib_mgr.h"
 
 std::string SPICE_GENERATOR_KIBIS::ModelName( const SPICE_ITEM& aItem ) const
 {
@@ -67,16 +68,13 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
     std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
     bool        diffMode        = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
 
-    wxString path = ExpandEnvVarSubstitutions( ibisLibFilename, &aProject );
-    wxString absolutePath = aProject.AbsolutePath( path );
+    wxString path = SIM_LIB_MGR::ResolveLibraryPath( ibisLibFilename, aProject );
 
-    KIBIS kibis( std::string( absolutePath.c_str() ) );
+    KIBIS kibis( std::string( path.c_str() ) );
     kibis.m_cacheDir = std::string( aCacheDir.c_str() );
 
     if( !kibis.m_valid )
-    {
         THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS file '%s'" ), ibisLibFilename ) );
-    }
 
     KIBIS_COMPONENT* kcomp = kibis.GetComponent( std::string( ibisCompName ) );
 
@@ -87,10 +85,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
 
 
     if( !kcomp->m_valid )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS component '%s'" ),
-                                          ibisCompName ) );
-    }
+        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS component '%s'" ), ibisCompName ) );
 
     if( !kpin )
     {
@@ -139,18 +134,15 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
 
         if( paramValue == "hi-Z" )
         {
-            kparams.m_waveform =
-                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z( &kibis ) );
+            kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z( &kibis ) );
         }
         else if( paramValue == "low" )
         {
-            kparams.m_waveform =
-                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW( &kibis ) );
+            kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW( &kibis ) );
         }
         else if( paramValue == "high" )
         {
-            kparams.m_waveform =
-                    static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH( &kibis ) );
+            kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH( &kibis ) );
         }
 
         if( diffMode )
