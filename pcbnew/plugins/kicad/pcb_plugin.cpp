@@ -238,7 +238,7 @@ void FP_CACHE::SetPath( const wxString& aPath )
     m_lib_path.SetPath( aPath );
 
 
-    for( auto& footprint : GetFootprints() )
+    for( const auto& footprint : GetFootprints() )
     {
         footprint.second->SetFilePath( aPath );
     }
