@@ -30,11 +30,13 @@ public:
     JOB_FP_UPGRADE( bool aIsCli ) :
             JOB( "fpupgrade", aIsCli ),
             m_libraryPath(),
+            m_outputLibraryPath(),
             m_force( false )
     {
     }
 
     wxString m_libraryPath;
+    wxString m_outputLibraryPath;
 
     bool m_force;
 };

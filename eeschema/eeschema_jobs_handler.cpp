@@ -338,6 +338,15 @@ int EESCHEMA_JOBS_HANDLER::JobExportSymLibUpgrade( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
+    if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
+    {
+        if( wxFile::Exists( upgradeJob->m_outputLibraryPath ) )
+        {
+            wxFprintf( stderr, _( "Output path must not conflict with existing path\n" ) );
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
+    }
+
     bool shouldSave = upgradeJob->m_force
                       || schLibrary.GetFileFormatVersionAtLoad() < SEXPR_SYMBOL_LIB_FILE_VERSION;
 
@@ -347,6 +356,11 @@ int EESCHEMA_JOBS_HANDLER::JobExportSymLibUpgrade( JOB* aJob )
 
         try
         {
+            if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
+            {
+                schLibrary.SetFileName( upgradeJob->m_outputLibraryPath );
+            }
+
             schLibrary.SetModified();
             schLibrary.Save();
         }

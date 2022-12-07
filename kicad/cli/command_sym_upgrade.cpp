@@ -45,6 +45,8 @@ int CLI::SYM_UPGRADE_COMMAND::Perform( KIWAY& aKiway )
     std::unique_ptr<JOB_SYM_UPGRADE> symJob = std::make_unique<JOB_SYM_UPGRADE>( true );
 
     symJob->m_libraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
+    symJob->m_outputLibraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    symJob->m_force = m_argParser.get<bool>( ARG_FORCE );
 
     if( !wxFile::Exists( symJob->m_libraryPath ) )
     {

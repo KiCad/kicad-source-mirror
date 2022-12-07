@@ -37,6 +37,13 @@ void WX_FILENAME::SetFullName( const wxString& aFileNameAndExtension )
 }
 
 
+void WX_FILENAME::SetPath( const wxString& aPath )
+{
+    m_fn.SetPath( aPath );
+    m_path = aPath;
+}
+
+
 wxString WX_FILENAME::GetName() const
 {
     size_t dot = m_fullName.find_last_of( wxT( '.' ) );

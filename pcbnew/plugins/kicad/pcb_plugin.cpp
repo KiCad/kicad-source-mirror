@@ -232,6 +232,19 @@ bool FP_CACHE::IsPath( const wxString& aPath ) const
 }
 
 
+void FP_CACHE::SetPath( const wxString& aPath )
+{
+    m_lib_raw_path = aPath;
+    m_lib_path.SetPath( aPath );
+
+
+    for( auto& footprint : GetFootprints() )
+    {
+        footprint.second->SetFilePath( aPath );
+    }
+}
+
+
 bool FP_CACHE::IsModified()
 {
     m_cache_dirty = m_cache_dirty || GetTimestamp( m_lib_path.GetFullPath() ) != m_cache_timestamp;

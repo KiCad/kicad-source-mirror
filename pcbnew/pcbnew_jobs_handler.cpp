@@ -39,6 +39,7 @@
 #include <board_design_settings.h>
 #include <pcbnew_settings.h>
 #include <wx/crt.h>
+#include <wx/dir.h>
 #include <pcb_plot_svg.h>
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
@@ -480,6 +481,16 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
     if( aJob->IsCli() )
         wxPrintf( _( "Loading board\n" ) );
 
+    if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
+    {
+        if( wxFile::Exists( upgradeJob->m_outputLibraryPath ) ||
+            wxDir::Exists( upgradeJob->m_outputLibraryPath) )
+        {
+            wxFprintf( stderr, _( "Output path must not conflict with existing path\n" ) );
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
+    }
+
     PCB_PLUGIN  pcb_io( CTL_FOR_LIBRARY );
     FP_CACHE   fpLib( &pcb_io, upgradeJob->m_libraryPath );
 
@@ -509,6 +520,11 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
 
         try
         {
+            if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
+            {
+                fpLib.SetPath( upgradeJob->m_outputLibraryPath );
+            }
+
             fpLib.Save();
         }
         catch( ... )

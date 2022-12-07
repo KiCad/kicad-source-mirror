@@ -179,6 +179,7 @@ public:
     FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
 
     const WX_FILENAME& GetFileName() const { return m_filename; }
+    void               SetFilePath( const wxString& aFilePath ) { m_filename.SetPath( aFilePath ); }
     const FOOTPRINT*   GetFootprint() const { return m_footprint.get(); }
 };
 
@@ -246,6 +247,8 @@ public:
      * @return true if \a aPath is the same as the cache path.
      */
     bool IsPath( const wxString& aPath ) const;
+
+    void SetPath( const wxString& aPath );
 };
 
 

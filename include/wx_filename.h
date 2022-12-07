@@ -51,6 +51,7 @@ public:
     WX_FILENAME( const wxString& aPath, const wxString& aFilename );
 
     void SetFullName( const wxString& aFileNameAndExtension );
+    void SetPath( const wxString& aPath );
 
     wxString GetName() const;
     wxString GetFullName() const;
