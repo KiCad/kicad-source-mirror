@@ -1,6 +1,7 @@
 set(TINYSPLINE_LIB_SRCS
     tinyspline.c
-    tinysplinecpp.cpp
+    tinysplinecxx.cxx
+    parson.c
     )
 
 add_library(tinyspline_lib STATIC ${TINYSPLINE_LIB_SRCS})

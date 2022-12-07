@@ -1316,7 +1316,7 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
 }
 
 
-#include "tinysplinecpp.h"
+#include "tinysplinecxx.h"
 
 void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
 {
@@ -1367,11 +1367,11 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
 	    tinyspline::BSpline dxfspline( m_curr_entity.m_SplineControlPointList.size(),
                                        /* coord dim */ 2, m_curr_entity.m_SplineDegree );
 
-	    dxfspline.setCtrlp( ctrlp );
+	    dxfspline.setControlPoints( ctrlp );
 	    dxfspline.setKnots( m_curr_entity.m_SplineKnotsList );
 	    tinyspline::BSpline beziers( dxfspline.toBeziers() );
 
-        coords = beziers.ctrlp();
+        coords = beziers.controlPoints();
     }
     catch( const std::runtime_error& )  //tinyspline throws everything including data validation as runtime errors
     {
