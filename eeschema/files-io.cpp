@@ -456,11 +456,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221110 )
                 sheetList.UpdateSheetInstanceData( Schematic().RootScreen()->GetSheetInstances());
 
-            if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
-            {
-                for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
-                    screen->MigrateSimModels();
-            }
+            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+                screen->MigrateSimModels();
         }
 
         Schematic().ConnectionGraph()->Reset();

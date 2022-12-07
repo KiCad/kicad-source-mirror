@@ -166,9 +166,6 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         return false;
     }
 
-    if( newSheet->GetScreen()->GetFileFormatVersionAtLoad() < 20221206 )
-        newSheet->GetScreen()->MigrateSimModels();
-
     // If the loaded schematic is in a different folder from the current project and
     // it contains hierarchical sheets, the hierarchical sheet paths need to be updated.
     if( fileName.GetPathWithSep() != Prj().GetProjectPath() && newSheet->CountSheets() )
@@ -504,6 +501,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
             sheetHierarchy.UpdateSymbolInstanceData( newScreen->GetSymbolInstances());
         }
     }
+
+    newScreen->MigrateSimModels();
 
     // Attempt to create new symbol instances using the instance data loaded above.
     sheetHierarchy.AddNewSymbolInstances( *aHierarchy );

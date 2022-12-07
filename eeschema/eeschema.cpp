@@ -96,11 +96,8 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
     // Restore all of the loaded symbol instances from the root sheet screen.
     sheets.UpdateSymbolInstanceData( schematic->RootScreen()->GetSymbolInstances() );
 
-    if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
-    {
-        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-            screen->MigrateSimModels();
-    }
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        screen->MigrateSimModels();
 
     sheets.AnnotatePowerSymbols();
 

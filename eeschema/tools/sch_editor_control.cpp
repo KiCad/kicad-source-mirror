@@ -1815,6 +1815,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // Save loaded screen instances to m_clipboardSheetInstances
     setClipboardInstances( tempScreen );
 
+    tempScreen->MigrateSimModels();
+
     PASTE_MODE pasteMode = annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS
                                               : PASTE_MODE::REMOVE_ANNOTATIONS;
 
