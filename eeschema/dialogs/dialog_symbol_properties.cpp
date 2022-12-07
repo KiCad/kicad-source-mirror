@@ -380,19 +380,11 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
 
     // wxFormBuilder doesn't include this event...
-    m_fieldsGrid->Connect( wxEVT_GRID_CELL_CHANGING,
-                           wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                           nullptr, this );
-
-    m_pinGrid->Connect( wxEVT_GRID_COL_SORT,
-                        wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort ),
-                        nullptr, this );
-
-    Connect( SYMBOL_DELAY_FOCUS,
-            wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus ), nullptr, this );
-    Connect( SYMBOL_DELAY_SELECTION,
-            wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection ), nullptr,
-            this );
+    m_fieldsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging,
+                        this );
+    m_pinGrid->Bind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort, this );
+    Bind( SYMBOL_DELAY_FOCUS, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus, this );
+    Bind( SYMBOL_DELAY_SELECTION, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection, this );
 
     QueueEvent( new wxCommandEvent( SYMBOL_DELAY_SELECTION ) );
     wxCommandEvent *evt = new wxCommandEvent( SYMBOL_DELAY_FOCUS );
@@ -416,13 +408,11 @@ DIALOG_SYMBOL_PROPERTIES::~DIALOG_SYMBOL_PROPERTIES()
     if( m_dataModel )
         m_pinGrid->DestroyTable( m_dataModel );
 
-    m_fieldsGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                              wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                              nullptr, this );
-
-    m_pinGrid->Disconnect( wxEVT_GRID_COL_SORT,
-                           wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort ),
-                           nullptr, this );
+    m_fieldsGrid->Unbind( wxEVT_GRID_CELL_CHANGING, &DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging,
+                          this );
+    m_pinGrid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort, this );
+    Unbind( SYMBOL_DELAY_FOCUS, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus, this );
+    Unbind( SYMBOL_DELAY_SELECTION, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection, this );
 
     // Delete the GRID_TRICKS.
     m_fieldsGrid->PopEventHandler( true );
