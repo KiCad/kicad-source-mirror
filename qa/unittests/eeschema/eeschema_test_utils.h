@@ -94,7 +94,7 @@ class TEST_NETLIST_EXPORTER_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {
 public:
     virtual wxString GetNetlistPath( bool aTest = false );
-    virtual unsigned GetNetlistOptions() { return NETLIST_EXPORTER_SPICE::OPTION_SIM_COMMAND; }
+    virtual unsigned GetNetlistOptions() { return 0; }
 
     void WriteNetlist();
 
