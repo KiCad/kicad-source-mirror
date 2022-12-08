@@ -372,7 +372,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
             wxString msg;
 
             msg.Printf( _( "The file name for sheet %s is undefined, this is probably an"
-                           "Altium signal harness that got converted to a sheet." ),
+                           " Altium signal harness that got converted to a sheet." ),
                         sheet->GetName() );
             m_reporter->Report( msg );
             continue;
