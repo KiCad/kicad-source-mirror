@@ -1683,7 +1683,9 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
 
     if( drawingDangling || drawingShadows )
     {
-        if( aLine->IsStartDangling() && aLine->IsWire() )
+        if( ( aLine->IsWire() && aLine->IsStartDangling() )
+            || ( aLine->IsGraphicLine() && aLine->IsSelected() && !aLine->IsNew()
+                 && !aLine->HasFlag( STARTPOINT ) ) )
         {
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( STARTPOINT ) ) ? color.Inverted() : color;
@@ -1692,7 +1694,9 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
                                 aLine->IsBrightened() );
         }
 
-        if( aLine->IsEndDangling() && aLine->IsWire() )
+        if( ( aLine->IsWire() && aLine->IsEndDangling() )
+            || ( aLine->IsGraphicLine() && aLine->IsSelected() && !aLine->IsNew()
+                 && !aLine->HasFlag( ENDPOINT ) ) )
         {
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( ENDPOINT ) ) ? color.Inverted() : color;
