@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:25-0800\n"
-"PO-Revision-Date: 2022-12-07 22:47+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2022-12-08 12:06+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -9841,7 +9841,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
 msgid "Rescue Symbols"
-msgstr "Pelastussymbolit"
+msgstr "Pelasta symbolit"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
@@ -13067,7 +13067,8 @@ msgstr ""
 #: eeschema/project_rescue.cpp:305 eeschema/project_rescue.cpp:484
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "Pelastussymboli %s löytyy vain välimuistikirjastosta osoitteeseen %s."
+msgstr ""
+"Pelasta symboli %s, joka löytyy vain välimuistikirjastosta, osoitteeseen %s."
 
 #: eeschema/project_rescue.cpp:308 eeschema/project_rescue.cpp:490
 #, c-format
@@ -16182,7 +16183,7 @@ msgstr "Muokkaa nykyisen tai valitun taulukon sivunumeroa"
 
 #: eeschema/tools/ee_actions.cpp:599
 msgid "Rescue Symbols..."
-msgstr "Pelastussymbolit ..."
+msgstr "Pelasta symbolit..."
 
 #: eeschema/tools/ee_actions.cpp:600
 msgid "Find old symbols in project and rename/rescue them"
@@ -24321,7 +24322,7 @@ msgstr "Excellon()"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Mirror Y axis"
-msgstr "Peili Y-akseli"
+msgstr "Käännä Y-akseli"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:51
 msgid ""
@@ -24360,7 +24361,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
-msgstr "Käytä reittikomentoa (suositus)"
+msgstr "Käytä jyrsinkomentoa (suositus)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use alternate drill mode"
@@ -24378,8 +24379,9 @@ msgid ""
 "(Use it only if the recommended command does not work)"
 msgstr ""
 "Soikeat reiät aiheuttavat usein ongelmia piirilevyvalmistajille.\n"
-"\"Käytä reittikomentoa\" käyttää tavallista G00-reittikomentoa (suositus)\n"
-" \"Käytä vaihtoehtoista tilaa\" käyttää toista pora / reitti-komentoa (G85)\n"
+"\"Käytä jyrsinkomentoa\" käyttää tavallista G00-jyrsinkomentoa (suositus)\n"
+" \"Käytä vaihtoehtoista poraustilaa\" käyttää toista pora- / jyrsinkomentoa "
+"(G85)\n"
 "(Käytä sitä vain, jos suositeltu komento ei toimi)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
