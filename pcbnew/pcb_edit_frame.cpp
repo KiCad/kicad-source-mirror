@@ -246,7 +246,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateOptToolbar();
 
     if( ADVANCED_CFG::GetCfg().m_ShowPropertiesPanel )
+    {
         m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
+
+        float proportion = GetPcbNewSettings()->m_AuiPanels.properties_splitter_proportion;
+        m_propertiesPanel->SetSplitterProportion( proportion );
+    }
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
@@ -1240,6 +1245,9 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         {
             cfg->m_AuiPanels.show_properties        = m_show_properties;
             cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+
+            cfg->m_AuiPanels.properties_splitter_proportion =
+                    m_propertiesPanel->SplitterProportion();
         }
 
         // ensure m_show_search is up to date (the pane can be closed)

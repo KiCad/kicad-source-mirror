@@ -137,6 +137,7 @@ public:
         bool appearance_expand_net_display;
         int  right_panel_width;
         int  properties_panel_width;
+        float properties_splitter_proportion;
         int  search_panel_height;
         bool show_layer_manager;
         bool show_properties;

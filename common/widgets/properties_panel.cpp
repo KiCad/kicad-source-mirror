@@ -325,3 +325,10 @@ void PROPERTIES_PANEL::RecalculateSplitterPos()
     else
         m_grid->SetSplitterPosition( m_splitter_key_proportion * m_grid->GetSize().x );
 }
+
+
+void PROPERTIES_PANEL::SetSplitterProportion( float aProportion )
+{
+    m_splitter_key_proportion = aProportion;
+    RecalculateSplitterPos();
+}
