@@ -220,7 +220,7 @@ void SELECTION_TOOL::onDisambiguationExpire( wxTimerEvent& aEvent )
 {
     // If there is a multiple selection then it's more likely that we're seeing a paused drag
     // than a long-click.
-    if( selection().GetSize() >= 2 )
+    if( selection().GetSize() >= 2 && !hasModifier() )
         return;
 
     // If another tool has since started running then we don't want to interrupt
