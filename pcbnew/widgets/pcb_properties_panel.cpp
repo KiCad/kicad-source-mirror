@@ -44,16 +44,15 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
     m_propMgr.Rebuild();
     bool found = false;
 
-    if( wxPGGlobalVars )
-    {
-        auto it = wxPGGlobalVars->m_mapEditorClasses.find( PG_UNIT_EDITOR::EDITOR_NAME );
+    wxASSERT( wxPGGlobalVars );
 
-        if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
-        {
-            m_editor = static_cast<PG_UNIT_EDITOR*>( it->second );
-            m_editor->UpdateFrame( m_frame );
-            found = true;
-        }
+    auto it = wxPGGlobalVars->m_mapEditorClasses.find( PG_UNIT_EDITOR::EDITOR_NAME );
+
+    if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
+    {
+        m_editor = static_cast<PG_UNIT_EDITOR*>( it->second );
+        m_editor->UpdateFrame( m_frame );
+        found = true;
     }
 
     if( !found )

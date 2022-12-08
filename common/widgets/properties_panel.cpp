@@ -31,6 +31,7 @@
 
 #include <wx/settings.h>
 #include <wx/stattext.h>
+#include <wx/propgrid/advprops.h>
 
 
 extern APIIMPORT wxPGGlobalVarsClass* wxPGGlobalVars;
@@ -47,6 +48,20 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     // but others need an explicit init
     if( !wxPGGlobalVars )
         wxPGInitResourceModule();
+
+    // See https://gitlab.com/kicad/code/kicad/-/issues/12297
+    // and https://github.com/wxWidgets/wxWidgets/issues/11787
+    if( wxPGGlobalVars->m_mapEditorClasses.empty() )
+    {
+        wxPGEditor_TextCtrl = nullptr;
+        wxPGEditor_Choice = nullptr;
+        wxPGEditor_ComboBox = nullptr;
+        wxPGEditor_TextCtrlAndButton = nullptr;
+        wxPGEditor_CheckBox = nullptr;
+        wxPGEditor_ChoiceAndButton = nullptr;
+        wxPGEditor_SpinCtrl = nullptr;
+        wxPGEditor_DatePickerCtrl = nullptr;
+    }
 
     delete wxPGGlobalVars->m_defaultRenderer;
     wxPGGlobalVars->m_defaultRenderer = new PG_CELL_RENDERER();
