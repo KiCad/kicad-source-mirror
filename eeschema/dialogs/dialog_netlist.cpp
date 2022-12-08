@@ -508,6 +508,8 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
     {
     case NET_TYPE_SPICE:
         // Set spice netlist options:
+        netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SIM_COMMAND;
+
         if( currPage->m_SaveAllVoltages->GetValue() )
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
         if( currPage->m_SaveAllCurrents->GetValue() )

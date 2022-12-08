@@ -201,6 +201,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
 
     std::unique_ptr<NETLIST_EXPORTER_BASE> helper;
+    unsigned netlistOption = 0;
 
     wxString fileExt;
 
@@ -223,6 +224,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE:
         fileExt = SpiceFileExtension;
+        netlistOption = NETLIST_EXPORTER_SPICE::OPTION_SIM_COMMAND;
         helper = std::make_unique<NETLIST_EXPORTER_SPICE>( sch );
         break;
 
@@ -250,7 +252,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         aNetJob->m_outputFile = fn.GetFullName();
     }
 
-    bool res = helper->WriteNetlist( aNetJob->m_outputFile, 0, *this );
+    bool res = helper->WriteNetlist( aNetJob->m_outputFile, netlistOption, *this );
 
     if(!res)
     {
