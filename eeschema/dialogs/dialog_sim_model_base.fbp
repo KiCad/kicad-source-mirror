@@ -1488,7 +1488,7 @@
                                                                         <property name="maximum_size"></property>
                                                                         <property name="min_size"></property>
                                                                         <property name="minimize_button">0</property>
-                                                                        <property name="minimum_size"></property>
+                                                                        <property name="minimum_size">440,-1</property>
                                                                         <property name="moveable">1</property>
                                                                         <property name="name">m_paramGridMgr</property>
                                                                         <property name="pane_border">1</property>
@@ -1508,6 +1508,7 @@
                                                                         <property name="window_name"></property>
                                                                         <property name="window_style"></property>
                                                                         <event name="OnPropertyGridChanged">onParamGridChanged</event>
+                                                                        <event name="OnSize">onSizeParamGrid</event>
                                                                         <object class="propGridPage" expanded="0">
                                                                             <property name="bitmap"></property>
                                                                             <property name="label">Page</property>

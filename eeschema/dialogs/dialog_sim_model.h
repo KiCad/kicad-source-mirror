@@ -135,9 +135,12 @@ private:
     void onSaveInValueCheckbox( wxCommandEvent& aEvent ) override;
     void onExcludeCheckbox( wxCommandEvent& aEvent ) override;
     void onDifferentialCheckbox( wxCommandEvent& event ) override;
+    void onSizeParamGrid( wxSizeEvent& event ) override;
 
     void onParamGridSetFocus( wxFocusEvent& aEvent );
     void onParamGridSelectionChange( wxPropertyGridEvent& aEvent );
+
+    void adjustParamGridColumns( int aWidth, bool aForce );
 
     bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() ); }
 
@@ -160,6 +163,7 @@ private:
     wxPGProperty*          m_firstCategory;            // Used to add principal parameters to root.
     wxPGProperty*          m_prevParamGridSelection;
 
+    int                    m_lastParamGridWidth;
     bool                   m_inKillFocus;
 };
 

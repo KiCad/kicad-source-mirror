@@ -56,6 +56,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
       m_wasCodePreviewUpdated( true ),
       m_firstCategory( nullptr ),
       m_prevParamGridSelection( nullptr ),
+      m_lastParamGridWidth( 0 ),
       m_inKillFocus( false )
 {
     m_modelNameCombobox->SetValidator( m_modelNameValidator );
@@ -83,33 +84,22 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
                                                | wxPG_VFB_BEEP
                                                | wxPG_VFB_MARK_CELL );
 
-    m_paramGrid->SetColumnProportion( PARAM_COLUMN::DESCRIPTION, 50 );
-    m_paramGrid->SetColumnProportion( PARAM_COLUMN::VALUE, 18 );
-    m_paramGrid->SetColumnProportion( PARAM_COLUMN::UNIT, 10 );
-    m_paramGrid->SetColumnProportion( PARAM_COLUMN::DEFAULT, 12 );
-    m_paramGrid->SetColumnProportion( PARAM_COLUMN::TYPE, 10 );
+    wxPropertyGrid* grid = m_paramGrid->GetGrid();
 
-    if( wxPropertyGrid* grid = m_paramGrid->GetGrid() )
-    {
-        //grid->SetCellBackgroundColour( grid->GetPropertyDefaultCell().GetBgCol() );
-        //grid->SetCellTextColour( grid->GetPropertyDefaultCell().GetFgCol();
+    //grid->SetCellBackgroundColour( grid->GetPropertyDefaultCell().GetBgCol() );
+    //grid->SetCellTextColour( grid->GetPropertyDefaultCell().GetFgCol();
 
-        // In wx 3.0 the color will be wrong sometimes.
-        grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+    // In wx 3.0 the color will be wrong sometimes.
+    grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 
-        grid->Bind( wxEVT_SET_FOCUS, &DIALOG_SIM_MODEL::onParamGridSetFocus, this );
+    grid->Bind( wxEVT_SET_FOCUS, &DIALOG_SIM_MODEL::onParamGridSetFocus, this );
 
-        grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
-        grid->DedicateKey( WXK_RETURN );
-        grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
+    grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
+    grid->DedicateKey( WXK_RETURN );
+    grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
 
-        grid->DedicateKey( WXK_UP );
-        grid->DedicateKey( WXK_DOWN );
-    }
-    else
-    {
-        wxFAIL;
-    }
+    grid->DedicateKey( WXK_UP );
+    grid->DedicateKey( WXK_DOWN );
 
     m_pinAssignmentsGrid->PushEventHandler( new GRID_TRICKS( m_pinAssignmentsGrid ) );
 
@@ -468,6 +458,8 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         m_paramGrid->Expand( "AC" );
         m_paramGrid->Expand( "Waveform" );
     }
+
+    adjustParamGridColumns( m_paramGrid->GetGrid()->GetSize().GetX(), true );
 
     // Set all properties to default colors.
     // Update properties in models that have autofill.
@@ -1343,6 +1335,60 @@ void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEven
     editorControl->SetFocus();
     m_prevParamGridSelection = grid->GetSelection();
 }
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::adjustParamGridColumns( int aWidth, bool aForce )
+{
+    wxPropertyGrid* grid = m_paramGridMgr->GetGrid();
+    int             margin = 15;
+    int             indent = 20;
+
+    if( aWidth != m_lastParamGridWidth || aForce )
+    {
+        m_lastParamGridWidth = aWidth;
+
+        grid->FitColumns();
+
+        std::vector<int> colWidths;
+
+        for( size_t ii = 0; ii < grid->GetColumnCount(); ii++ )
+        {
+            if( ii == 0 )
+                colWidths.push_back( grid->GetState()->GetColumnWidth( ii ) + margin + indent );
+            else if( ii == 1 )
+                colWidths.push_back( grid->GetState()->GetColumnWidth( ii ) + margin );
+            else
+                colWidths.push_back( 50 );
+
+            aWidth -= colWidths[ ii ];
+        }
+
+        // Account for scroll bars
+        aWidth -= ( grid->GetSize().x - grid->GetClientSize().x );
+
+        if( aWidth > 0 )
+            colWidths[ PARAM_COLUMN::VALUE ] += aWidth;
+
+        for( size_t ii = 0; ii < grid->GetColumnCount(); ii++ )
+            grid->SetColumnProportion( ii, colWidths[ ii ] );
+
+        grid->ResetColumnSizes();
+        grid->RefreshEditor();
+    }
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onSizeParamGrid( wxSizeEvent& event )
+{
+    adjustParamGridColumns( event.GetSize().GetX(), false );
+
+    event.Skip();
+}
+
+
+
 
 template class DIALOG_SIM_MODEL<SCH_FIELD>;
 template class DIALOG_SIM_MODEL<LIB_FIELD>;
