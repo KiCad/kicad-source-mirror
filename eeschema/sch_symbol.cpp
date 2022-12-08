@@ -723,10 +723,12 @@ void SCH_SYMBOL::UpdatePrefix()
 
     while( prefix.Length() )
     {
-        if( ( prefix.Last() < '0' || prefix.Last() > '9' ) && prefix.Last() != '?' )
-            break;
+        wxUniCharRef last = prefix.Last();
 
-        prefix.RemoveLast();
+        if( ( last >= '0' && last <= '9' ) || last == '?' || last == '*' )
+            prefix.RemoveLast();
+        else
+            break;
     }
 
     // Avoid a prefix containing trailing/leading spaces

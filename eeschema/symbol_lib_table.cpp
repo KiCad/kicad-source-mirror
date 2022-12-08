@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 CERN
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +35,7 @@
 #include <lib_symbol.h>
 
 #include <wx/dir.h>
-
+#include "sim/sim_model.h"
 
 #define OPT_SEP     '|'         ///< options separator character
 
@@ -393,16 +394,18 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStr
     LIB_SYMBOL* symbol = row->plugin->LoadSymbol( row->GetFullURI( true ), aSymbolName,
                                                   row->GetProperties() );
 
-    // The library cannot know its own name, because it might have been renamed or moved.
-    // Therefore footprints cannot know their own library nickname when residing in
-    // a symbol library.
-    // Only at this API layer can we tell the symbol about its actual library nickname.
     if( symbol )
     {
+        // The library cannot know its own name, because it might have been renamed or moved.
+        // Therefore footprints cannot know their own library nickname when residing in
+        // a symbol library.
+        // Only at this API layer can we tell the symbol about its actual library nickname.
         LIB_ID id = symbol->GetLibId();
 
         id.SetLibNickname( row->GetNickName() );
         symbol->SetLibId( id );
+
+        SIM_MODEL::MigrateSimModel<LIB_SYMBOL, LIB_FIELD>( *symbol );
     }
 
     return symbol;

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2022 CERN
  * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -39,11 +40,12 @@
 #include <settings/color_settings.h>
 
 
-LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId ) :
+LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId, const wxString& aName ) :
     LIB_ITEM( LIB_FIELD_T, aParent ),
     EDA_TEXT( schIUScale )
 {
     Init( aId );
+    m_name = aName;
 }
 
 

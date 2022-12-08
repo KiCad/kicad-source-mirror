@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
+ * Copyright (C) 2022 CERN
  * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -518,6 +519,9 @@ public:
     }
     bool IsStoredInValue() const { return m_isStoredInValue; }
 
+    template <class T_symbol, class T_field>
+    static void MigrateSimModel( T_symbol& aSymbol );
+
 protected:
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
 
@@ -535,11 +539,6 @@ protected:
     std::unique_ptr<SIM_SERDE> m_serde;
 
 private:
-    static TYPE readTypeFromSpiceStrings( const std::string& aTypeString,
-                                          const std::string& aLevel = "",
-                                          const std::string& aVersion = "",
-                                          bool aSkipDefaultLevel = true );
-
     template <typename T>
     void doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
 

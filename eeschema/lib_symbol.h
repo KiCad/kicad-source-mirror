@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2022 CERN
  * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -276,6 +277,8 @@ public:
      */
     void AddField( LIB_FIELD* aField );
 
+    void AddField( LIB_FIELD& aField ) { AddField( new LIB_FIELD( aField ) ); }
+
     /**
      * Find a field within this symbol matching \a aFieldName and returns it
      * or NULL if not found.
@@ -303,6 +306,8 @@ public:
 
     /** Return reference to the datasheet field. */
     LIB_FIELD& GetDatasheetField();
+
+    wxString GetPrefix();
 
     /**
      * Order optional field indices.
@@ -384,6 +389,8 @@ public:
      * @param aItem - Draw item to remove from list.
      */
     void RemoveDrawItem( LIB_ITEM* aItem );
+
+    void RemoveField( LIB_FIELD* aField ) { RemoveDrawItem( aField ); }
 
     /**
      * Return the next draw object pointer.

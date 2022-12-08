@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
+ * Copyright (C) 2022 CERN
  * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -22,7 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <lib_symbol.h>
+#include <sch_symbol.h>
 #include <confirm.h>
+#include <string_utils.h>
 
 #include <sim/sim_model.h>
 #include <sim/sim_model_behavioral.h>
@@ -628,6 +631,7 @@ void SIM_MODEL::AddPin( const PIN& aPin )
     m_pins.push_back( aPin );
 }
 
+
 void SIM_MODEL::ClearPins()
 {
     m_pins.clear();
@@ -916,23 +920,19 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
 
 
 SIM_MODEL::SIM_MODEL( TYPE aType ) :
-        SIM_MODEL( aType,
-                   std::make_unique<SPICE_GENERATOR>( *this ),
-                   std::make_unique<SIM_SERDE>( *this ) )
-{
-}
-
-SIM_MODEL::SIM_MODEL( TYPE aType,
-                      std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
-        SIM_MODEL( aType,
-                   std::move( aSpiceGenerator ),
+        SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ),
                    std::make_unique<SIM_SERDE>( *this ) )
 {
 }
 
 
-SIM_MODEL::SIM_MODEL( TYPE aType,
-                      std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
+SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
+        SIM_MODEL( aType, std::move( aSpiceGenerator ), std::make_unique<SIM_SERDE>( *this ) )
+{
+}
+
+
+SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
                       std::unique_ptr<SIM_SERDE> aSerde ) :
         m_baseModel( nullptr ),
         m_serde( std::move( aSerde ) ),
@@ -1004,3 +1004,189 @@ bool SIM_MODEL::requiresSpiceModelLine() const
 
     return false;
 }
+
+
+template <typename T_symbol, typename T_field>
+void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
+{
+    if( aSymbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
+        || aSymbol.FindField( SIM_MODEL::TYPE_FIELD )
+        || aSymbol.FindField( SIM_MODEL::PINS_FIELD )
+        || aSymbol.FindField( SIM_MODEL::PARAMS_FIELD ) )
+    {
+        // Has a V7 model field -- skip.
+        return;
+    }
+
+    wxString prefix = aSymbol.GetPrefix();
+    wxString value;
+
+    // Yes, the Value field is always present, but Coverity doesn't know that...
+    if( T_field* valueField = aSymbol.FindField( wxT( "Value" ) ) )
+        value = valueField->GetText();
+
+    wxString spiceType;
+    wxString spiceModel;
+    wxString spiceLib;
+    wxString pinMap;
+
+    if( aSymbol.FindField( wxT( "Spice_Primitive" ) )
+        || aSymbol.FindField( wxT( "Spice_Node_Sequence" ) )
+        || aSymbol.FindField( wxT( "Spice_Model" ) )
+        || aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) )
+        || aSymbol.FindField( wxT( "Spice_Lib_File" ) ) )
+    {
+        if( T_field* primitiveField = aSymbol.FindField( wxT( "Spice_Primitive" ) ) )
+        {
+            spiceType = primitiveField->GetText();
+            aSymbol.RemoveField( primitiveField );
+        }
+
+        if( T_field* nodeSequenceField = aSymbol.FindField( wxT( "Spice_Node_Sequence" ) ) )
+        {
+            const wxString  delimiters( "{:,; }" );
+            const wxString& nodeSequence = nodeSequenceField->GetText();
+
+            if( nodeSequence != "" )
+            {
+                wxStringTokenizer tkz( nodeSequence, delimiters );
+
+                for( long modelPinNumber = 1; tkz.HasMoreTokens(); ++modelPinNumber )
+                {
+                    long symbolPinNumber = 1;
+                    tkz.GetNextToken().ToLong( &symbolPinNumber );
+
+                    if( modelPinNumber != 1 )
+                        pinMap.Append( " " );
+
+                    pinMap.Append( wxString::Format( "%ld=%ld", symbolPinNumber, modelPinNumber ) );
+                }
+            }
+
+            aSymbol.RemoveField( nodeSequenceField );
+        }
+
+        if( T_field* modelField = aSymbol.FindField( wxT( "Spice_Model" ) ) )
+        {
+            spiceModel = modelField->GetText();
+            aSymbol.RemoveField( modelField );
+        }
+        else
+        {
+            spiceModel = value;
+        }
+
+        if( T_field* netlistEnabledField = aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) ) )
+        {
+            wxString netlistEnabled = netlistEnabledField->GetText().Lower();
+
+            if( netlistEnabled.StartsWith( wxT( "0" ) )
+                || netlistEnabled.StartsWith( wxT( "n" ) )
+                || netlistEnabled.StartsWith( wxT( "f" ) ) )
+            {
+                T_field enableField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::ENABLE_FIELD );
+            }
+        }
+
+        if( T_field* libFileField = aSymbol.FindField( wxT( "Spice_Lib_File" ) ) )
+        {
+            spiceLib = libFileField->GetText();
+            aSymbol.RemoveField( libFileField );
+        }
+    }
+    else if( prefix == wxT( "V" ) || prefix == wxT( "I" ) )
+    {
+        spiceModel = value;
+    }
+    else
+    {
+        // Auto convert some legacy fields used in the middle of 7.0 development...
+
+        if( T_field* legacyDevice = aSymbol.FindField( wxT( "Sim_Type" ) ) )
+        {
+            legacyDevice->SetName( SIM_MODEL::TYPE_FIELD );
+        }
+
+        if( T_field* legacyDevice = aSymbol.FindField( wxT( "Sim_Device" ) ) )
+        {
+            legacyDevice->SetName( SIM_MODEL::DEVICE_TYPE_FIELD );
+        }
+
+        if( T_field* legacyPins = aSymbol.FindField( wxT( "Sim_Pins" ) ) )
+        {
+            // Migrate pins from array of indexes to name-value-pairs
+            wxArrayString pinIndexes;
+            wxString      pins;
+
+            wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
+
+            if( SIM_MODEL_IDEAL::InferSimParams( prefix, value ).length() )
+            {
+                if( pinIndexes[0] == wxT( "2" ) )
+                    pins = "1=- 2=+";
+                else
+                    pins = "1=+ 2=-";
+            }
+            else
+            {
+                for( unsigned ii = 0; ii < pinIndexes.size(); ++ii )
+                {
+                    if( ii > 0 )
+                        pins.Append( wxS( " " ) );
+
+                    pins.Append( wxString::Format( wxT( "%u=%s" ), ii + 1, pinIndexes[ ii ] ) );
+                }
+            }
+
+            legacyPins->SetName( SIM_MODEL::PINS_FIELD );
+            legacyPins->SetText( pins );
+        }
+
+        if( T_field* legacyPins = aSymbol.FindField( wxT( "Sim_Params" ) ) )
+        {
+            legacyPins->SetName( SIM_MODEL::PARAMS_FIELD );
+        }
+
+        return;
+    }
+
+    // Insert a plaintext model as a substitute.
+
+    T_field deviceTypeField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::DEVICE_TYPE_FIELD );
+    deviceTypeField.SetText( SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_T::SPICE ).fieldValue );
+    aSymbol.AddField( deviceTypeField );
+
+    T_field paramsField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::PARAMS_FIELD );
+    paramsField.SetText( wxString::Format( "type=\"%s\" model=\"%s\" lib=\"%s\"",
+                                           spiceType, spiceModel, spiceLib ) );
+    aSymbol.AddField( paramsField );
+
+    // Legacy models by default get linear pin mapping.
+    if( pinMap != "" )
+    {
+        T_field pinsField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::PINS_FIELD );
+
+        pinsField.SetText( pinMap );
+        aSymbol.AddField( pinsField );
+    }
+    else
+    {
+        wxString pins;
+
+        for( unsigned ii = 0; ii < aSymbol.GetPinCount(); ++ii )
+        {
+            if( ii > 0 )
+                pins.Append( wxS( " " ) );
+
+            pins.Append( wxString::Format( wxT( "%u=%u" ), ii + 1, ii + 1 ) );
+        }
+
+        T_field pinsField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::PINS_FIELD );
+        pinsField.SetText( pins );
+        aSymbol.AddField( pinsField );
+    }
+}
+
+
+template void SIM_MODEL::MigrateSimModel<SCH_SYMBOL, SCH_FIELD>( SCH_SYMBOL& aSymbol );
+template void SIM_MODEL::MigrateSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymbol );

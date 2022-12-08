@@ -73,6 +73,12 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
 }
 
 
+SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, int aFieldId, const wxString& aName ) :
+    SCH_FIELD( VECTOR2I(), aFieldId, aParent, aName )
+{
+}
+
+
 SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
     SCH_ITEM( aField ),
     EDA_TEXT( aField )

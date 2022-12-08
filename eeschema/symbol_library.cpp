@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2004-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2022 CERN
  * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -43,6 +44,7 @@
 #include <wx/log.h>
 #include <wx/progdlg.h>
 #include <wx/tokenzr.h>
+#include "sim/sim_model.h"
 
 SYMBOL_LIB::SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
                         SCH_IO_MGR::SCH_FILE_T aPluginType ) :
@@ -159,11 +161,16 @@ LIB_SYMBOL* SYMBOL_LIB::FindSymbol( const wxString& aName ) const
 {
     LIB_SYMBOL* symbol = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
 
-    // Set the library to this even though technically the legacy cache plugin owns the
-    // symbols.  This allows the symbol library table conversion tool to determine the
-    // correct library where the symbol was found.
-    if( symbol && !symbol->GetLib() )
-        symbol->SetLib( const_cast<SYMBOL_LIB*>( this ) );
+    if( symbol )
+    {
+        // Set the library to this even though technically the legacy cache plugin owns the
+        // symbols.  This allows the symbol library table conversion tool to determine the
+        // correct library where the symbol was found.
+        if( !symbol->GetLib() )
+            symbol->SetLib( const_cast<SYMBOL_LIB*>( this ) );
+
+        SIM_MODEL::MigrateSimModel<LIB_SYMBOL, LIB_FIELD>( *symbol );
+    }
 
     return symbol;
 }

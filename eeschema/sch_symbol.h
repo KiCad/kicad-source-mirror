@@ -4,6 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2022 CERN
  * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -438,6 +439,8 @@ public:
      */
     void RemoveField( const wxString& aFieldName );
 
+    void RemoveField( SCH_FIELD* aField ) { RemoveField( aField->GetName() ); }
+
     /**
      * Search for a #SCH_FIELD with \a aFieldName
      *
@@ -520,6 +523,8 @@ public:
      * @return List of the pins
      */
     std::vector<LIB_PIN*> GetLibPins() const;
+
+    size_t GetPinCount() { return GetLibPins().size(); }
 
     SCH_PIN* GetPin( LIB_PIN* aLibPin ) const;
 

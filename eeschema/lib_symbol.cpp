@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2022 CERN
  * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -1178,6 +1179,32 @@ LIB_FIELD& LIB_SYMBOL::GetDatasheetField()
     LIB_FIELD* field = GetFieldById( DATASHEET_FIELD );
     wxASSERT( field != nullptr );
     return *field;
+}
+
+
+wxString LIB_SYMBOL::GetPrefix()
+{
+    wxString refDesignator = GetFieldById( REFERENCE_FIELD )->GetText();
+
+    refDesignator.Replace( "~", " " );
+
+    wxString prefix = refDesignator;
+
+    while( prefix.Length() )
+    {
+        wxUniCharRef last = prefix.Last();
+
+        if( ( last >= '0' && last <= '9' ) || last == '?' || last == '*' )
+            prefix.RemoveLast();
+        else
+            break;
+    }
+
+    // Avoid a prefix containing trailing/leading spaces
+    prefix.Trim( true );
+    prefix.Trim( false );
+
+    return prefix;
 }
 
 

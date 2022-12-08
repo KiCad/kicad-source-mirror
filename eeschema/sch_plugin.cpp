@@ -83,7 +83,7 @@ void SCH_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                  const STRING_UTF8_MAP* aProperties )
+                                    const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
