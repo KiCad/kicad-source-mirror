@@ -31,7 +31,7 @@ add_executable( ibis_proto
     qaIbisParser.cpp
     ${CMAKE_SOURCE_DIR}/eeschema/sim/kibis/ibis_parser.cpp
     ${CMAKE_SOURCE_DIR}/eeschema/sim/kibis/kibis.cpp
-    ${CMAKE_SOURCE_DIR}/eeschema/sim/ngspice_helpers.cpp
+    ${CMAKE_SOURCE_DIR}/eeschema/sim/ngspice_circuit_model.cpp
     ${CMAKE_SOURCE_DIR}/eeschema/sim/ngspice.cpp
 )
 

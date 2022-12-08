@@ -24,8 +24,8 @@
  */
 
 #include <sim/kibis/kibis.h>
-#include "netlist_exporter_spice.h"
-#include "sim/ngspice_circuit_model.h"
+#include <netlist_exporter_spice.h>
+#include <sim/ngspice_circuit_model.h>
 #include <sim/sim_library_spice.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_ideal.h>
@@ -538,12 +538,14 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
 
     for( const std::string& directive : m_directives )
     {
+#ifdef KICAD_SPICE
         if( NGSPICE_CIRCUIT_MODEL::IsSimCommand( directive ) )
         {
             if( aNetlistOptions & OPTION_SIM_COMMAND )
                 aFormatter.Print( 0, "%s\n", directive.c_str() );
         }
         else
+#endif
         {
             aFormatter.Print( 0, "%s\n", directive.c_str() );
         }
