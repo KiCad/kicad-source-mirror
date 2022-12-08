@@ -239,6 +239,8 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
     NULL_REPORTER devnull;
 
+    m_simulator->Settings() = nullptr;
+
     m_simulator->Attach( nullptr, devnull );
     m_simulator->SetReporter( nullptr );
     delete m_reporter;
