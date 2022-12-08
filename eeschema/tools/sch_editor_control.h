@@ -239,6 +239,9 @@ private:
 
     // A map of KIID_PATH --> sheet instances for the clipboard contents.
     std::map<KIID_PATH, SCH_SHEET_INSTANCE> m_clipboardSheetInstances;
+
+    // A timer during which a subsequent FindNext will result in a wrap-around
+    wxTimer m_wrapAroundTimer;
 };
 
 

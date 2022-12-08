@@ -476,9 +476,6 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
     {
     }
 
-    // A timer during which a subsequent FindNext will result in a wrap-around
-    static wxTimer wrapAroundTimer;
-
     if( aEvent.IsAction( &ACTIONS::findNextMarker ) )
         data.markersOnly = true;
     else if( data.findString.IsEmpty() )
@@ -490,11 +487,11 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 
     SCH_SHEET_PATH* afterSheet    = &m_frame->GetCurrentSheet();
 
-    if( wrapAroundTimer.IsRunning() )
+    if( m_wrapAroundTimer.IsRunning() )
     {
         afterSheet = nullptr;
         afterItem = nullptr;
-        wrapAroundTimer.Stop();
+        m_wrapAroundTimer.Stop();
         m_frame->ClearFindReplaceStatus();
     }
 
@@ -566,7 +563,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
        // Show the popup during the time period the user can wrap the search
         m_frame->ShowFindReplaceStatus( msg + wxS( " " ) +
                                         _( "Find again to wrap around to the start." ), 4000 );
-        wrapAroundTimer.StartOnce( 4000 );
+        m_wrapAroundTimer.StartOnce( 4000 );
     }
 
     return 0;
