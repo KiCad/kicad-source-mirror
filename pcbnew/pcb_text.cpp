@@ -345,5 +345,17 @@ static struct PCB_TEXT_DESC
         propMgr.AddProperty( new PROPERTY<PCB_TEXT, bool, BOARD_ITEM>( _HKI( "Knockout" ),
                 &BOARD_ITEM::SetIsKnockout, &BOARD_ITEM::IsKnockout ),
                 _HKI( "Text Properties" ) );
+
+        auto isFootprintText =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_TEXT* text = dynamic_cast<PCB_TEXT*>( aItem ) )
+                        return text->GetParentFootprint();
+
+                    return false;
+                };
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Visible" ), isFootprintText );
     }
 } _PCB_TEXT_DESC;
