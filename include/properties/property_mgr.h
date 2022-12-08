@@ -39,6 +39,7 @@
 class PROPERTY_BASE;
 class TYPE_CAST_BASE;
 class ORIGIN_TRANSFORMS;
+class INSPECTABLE;
 
 ///< Unique type identifier
 using TYPE_ID = size_t;
@@ -46,6 +47,11 @@ using TYPE_ID = size_t;
 using PROPERTY_LIST = std::vector<PROPERTY_BASE*>;
 
 using PROPERTY_SET = std::set<std::pair<size_t, wxString>>;
+
+template<typename ValueType>
+using PROPERTY_MAP = std::map<std::pair<size_t, wxString>, ValueType>;
+
+using PROPERTY_FUNCTOR_MAP = PROPERTY_MAP<std::function<bool( INSPECTABLE* )>>;
 
 using PROPERTY_DISPLAY_ORDER = std::map<PROPERTY_BASE*, int>;
 
@@ -173,11 +179,31 @@ public:
     /**
      * Sets a base class property as masked in a derived class.  Masked properties are hidden from
      * the list of editable properties for this class.
+     * 
      * @param aDerived is the type to apply the mask for.
      * @param aBase is the type that aName belongs to.
-     * @param aName is the name of a property.
+     * @param aName is the name of a property on the base class.
      */
     void Mask( TYPE_ID aDerived, TYPE_ID aBase, const wxString& aName );
+
+    /**
+     * Sets an override availability functor for a base class property of a given derived class.
+     * 
+     * @param aDerived is the type to apply the mask for.
+     * @param aBase is the type that aName belongs to.
+     * @param aName is the name of a property on the base class.
+     * @param aFunc is the new availability functor to apply.
+     */
+    void OverrideAvailability( TYPE_ID aDerived, TYPE_ID aBase, const wxString& aName,
+                               std::function<bool( INSPECTABLE* )> aFunc );
+
+    /**
+     * Checks overriden availability and original availability of a property, returns false
+     * if the property is unavailable in either case.
+     * 
+     * TODO: This isn't the cleanest API, consider how to merge with PROPERTY_BASE::Available
+     */
+    bool IsAvailableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp, INSPECTABLE* aItem );
 
     /**
      * Return true if aDerived is inherited from aBase.
@@ -248,6 +274,9 @@ private:
 
         ///< Properties from bases that should be masked (hidden) on this subclass
         PROPERTY_SET m_maskedBaseProperties;
+
+        ///< Overrides for base class property availabilities
+        PROPERTY_FUNCTOR_MAP m_availabilityOverrides;
 
         ///< All properties (both unique to the type and inherited)
         std::vector<PROPERTY_BASE*> m_allProperties;

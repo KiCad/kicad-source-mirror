@@ -1401,6 +1401,11 @@ static struct ZONE_DESC
         layer->SetIsInternal( true );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ), layer );
 
+        propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
+                                      _HKI( "Net" ), isCopperZone );
+        propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
+                                      _HKI( "Net Class" ), isCopperZone );
+
         auto priority = new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
                     &ZONE::SetAssignedPriority, &ZONE::GetAssignedPriority );
         priority->SetAvailableFunc( isCopperZone );

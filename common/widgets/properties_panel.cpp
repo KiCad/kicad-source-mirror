@@ -194,7 +194,8 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
         if( property->IsInternal() )
             continue;
 
-        if( !property->Available( aSelection.Front() ) )
+        if( !propMgr.IsAvailableFor( TYPE_HASH( *aSelection.Front() ), property,
+                                     aSelection.Front() ) )
             continue;
 
         // Either determine the common value for a property or "<...>" to indicate multiple values
@@ -203,7 +204,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 
         for( EDA_ITEM* item : aSelection )
         {
-            if( !property->Available( item ) )
+            if( !propMgr.IsAvailableFor( TYPE_HASH( *item ), property, item ) )
                 break; // there is an item that does not have this property, so do not display it
 
             wxVariant& value = commonVal.IsNull() ? commonVal : itemVal;
