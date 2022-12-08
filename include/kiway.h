@@ -155,8 +155,9 @@ struct KIFACE
 
     virtual ~KIFACE() throw() {}
 
-#define KFCTL_STANDALONE        (1<<0)  ///< Running as a standalone Top.
-#define KFCTL_CPP_PROJECT_SUITE (1<<1)  ///< Running under C++ project mgr, possibly with others.
+#define KFCTL_STANDALONE ( 1 << 0 )        ///< Running as a standalone Top.
+#define KFCTL_CPP_PROJECT_SUITE ( 1 << 1 ) ///< Running under C++ project mgr, possibly with others.
+#define KFCTL_CLI ( 1 << 2 )               ///< Running as CLI app
 
 
     /**

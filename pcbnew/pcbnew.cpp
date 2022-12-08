@@ -62,6 +62,7 @@
 #include <wildcards_and_files_ext.h>
 #include "pcbnew_jobs_handler.h"
 
+#include <wx/crt.h>
 
 /* init functions defined by swig */
 
@@ -350,9 +351,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     if( !fn.FileExists() )
     {
-        DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG fpDialog( nullptr );
+        if( !( aCtlBits & KFCTL_CLI ) )
+        {
+            DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG fpDialog( nullptr );
 
-        fpDialog.ShowModal();
+            fpDialog.ShowModal();
+        }
     }
     else
     {

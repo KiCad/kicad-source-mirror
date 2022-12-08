@@ -357,7 +357,7 @@ void PGM_KICAD::Destroy()
 }
 
 
-KIWAY Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE );
+KIWAY Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE | KFCTL_CLI );
 
 
 /**

@@ -26,6 +26,7 @@
 #include <wx/stockitem.h>
 #include <wx/richmsgdlg.h>
 #include <wx/choicdlg.h>
+#include <wx/crt.h>
 #include <confirm.h>
 #include <dialogs/html_message_box.h>
 #include <functional>
@@ -285,6 +286,12 @@ void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
         return;
     }
 
+    if( !wxTheApp->IsGUI() )
+    {
+        wxFprintf( stderr, aText );
+        return;
+    }
+
     wxMessageDialog* dlg;
     int              icon = aDisplayTime > 0 ? wxICON_INFORMATION : wxICON_ERROR;
 
@@ -301,6 +308,12 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
     if( !wxTheApp || !wxTheApp->IsMainLoopRunning() )
     {
         wxLogError( "%s %s", aText, aExtraInfo );
+        return;
+    }
+
+    if( !wxTheApp->IsGUI() )
+    {
+        wxFprintf( stderr, aText );
         return;
     }
 
@@ -322,6 +335,12 @@ void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxSt
     if( !wxTheApp || !wxTheApp->GetTopWindow() )
     {
         wxLogDebug( "%s %s", aMessage, aExtraInfo );
+        return;
+    }
+
+    if( !wxTheApp->IsGUI() )
+    {
+        wxFprintf( stdout, "%s %s", aMessage, aExtraInfo );
         return;
     }
 

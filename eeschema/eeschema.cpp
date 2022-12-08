@@ -61,6 +61,8 @@
 #include <panel_sym_display_options.h>
 #include <sim/sim_plot_frame.h>
 
+#include <wx/crt.h>
+
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = nullptr;
 
@@ -341,9 +343,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     if( !fn.FileExists() )
     {
-        DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG fpDialog( nullptr );
+        if( !( aCtlBits & KFCTL_CLI ) )
+        {
+            DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG fpDialog( nullptr );
 
-        fpDialog.ShowModal();
+            fpDialog.ShowModal();
+        }
     }
     else
     {
@@ -360,10 +365,9 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
             // if we are here, a incorrect global symbol library table was found.
             // Incorrect global symbol library table is not a fatal error:
             // the user just has to edit the (partially) loaded table.
-            wxString msg = _(
-                "An error occurred attempting to load the global symbol library table.\n"
-                "Please edit this global symbol library table in Preferences menu."
-                );
+            wxString msg =
+                    _( "An error occurred attempting to load the global symbol library table.\n"
+                       "Please edit this global symbol library table in Preferences menu." );
 
             DisplayErrorMessage( nullptr, msg, ioe.What() );
         }
