@@ -1732,6 +1732,20 @@ static struct PAD_DESC
                     &PAD::SetOrientationDegrees, &PAD::GetOrientationDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ) );
 
+        auto isCopperPad =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                        return pad->GetAttribute() != PAD_ATTRIB::NPTH;
+
+                    return false;
+                };
+
+        propMgr.OverrideAvailability( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
+                                      _HKI( "Net" ), isCopperPad );
+        propMgr.OverrideAvailability( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
+                                      _HKI( "Net Class" ), isCopperPad );
+
         const wxString groupPad = _( "Pad Properties" );
 
         auto padType = new PROPERTY_ENUM<PAD, PAD_ATTRIB>( _HKI( "Pad Type" ),
@@ -1744,12 +1758,17 @@ static struct PAD_DESC
 
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Parent" ),
                      NO_SETTER( PAD, wxString ), &PAD::GetParentAsString ), groupPad );
-        propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
-                    &PAD::SetNumber, &PAD::GetNumber ), groupPad);
+
+        auto padNumber = new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
+                                                      &PAD::SetNumber, &PAD::GetNumber );
+        padNumber->SetAvailableFunc( isCopperPad );
+        propMgr.AddProperty( padNumber, groupPad );
+
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Name" ),
                     NO_SETTER( PAD, wxString ), &PAD::GetPinFunction ), groupPad );
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
-                    NO_SETTER( PAD, wxString ), &PAD::GetPinType ), groupPad);
+                    NO_SETTER( PAD, wxString ), &PAD::GetPinType ), groupPad );
+
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
                     &PAD::SetSizeX, &PAD::GetSizeX,
                     PROPERTY_DISPLAY::PT_SIZE ), groupPad );
@@ -1775,9 +1794,12 @@ static struct PAD_DESC
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
                     &PAD::SetProperty, &PAD::GetProperty ), groupPad );
-        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Pad To Die Length" ),
-                    &PAD::SetPadToDieLength, &PAD::GetPadToDieLength,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupPad );
+
+        auto padToDie = new PROPERTY<PAD, int>( _HKI( "Pad To Die Length" ),
+                                                &PAD::SetPadToDieLength, &PAD::GetPadToDieLength,
+                                                PROPERTY_DISPLAY::PT_SIZE );
+        padToDie->SetAvailableFunc( isCopperPad );
+        propMgr.AddProperty( padToDie, groupPad );
 
         const wxString groupOverrides = _( "Overrides" );
 
