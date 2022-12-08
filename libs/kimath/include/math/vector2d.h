@@ -29,8 +29,8 @@
 #define VECTOR2D_H_
 
 #include <limits>
-#include <ostream>
-#include <string>
+#include <iostream>
+#include <sstream>
 #include <type_traits>
 
 #include <math/util.h>
@@ -407,7 +407,11 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
 template <class T>
 const std::string VECTOR2<T>::Format() const
 {
-    return std::string( "( xy " ) + std::to_string( x ) + " " + std::to_string( y ) + " )";
+    std::stringstream ss;
+
+    ss << "( xy " << x << " " << y << " )";
+
+    return ss.str();
 }
 
 
