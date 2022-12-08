@@ -134,9 +134,9 @@ VECTOR2<T> GetVectorSnapped45( const VECTOR2<T>& aVec, bool only45 = false )
 /**
  * Clamps a vector to values that can be negated, respecting numeric limits
  * of coordinates data type with specified padding.
- * 
+ *
  * Numeric limits are (-2^31 + 1) to (2^31 - 1).
- * 
+ *
  * Takes care of rounding in case of floating point to integer conversion.
  *
  * @param aCoord - vector to clamp.
@@ -145,7 +145,7 @@ VECTOR2<T> GetVectorSnapped45( const VECTOR2<T>& aVec, bool only45 = false )
  */
 template <typename in_type, typename ret_type = in_type, typename pad_type = unsigned int,
           typename = typename std::enable_if<std::is_unsigned<pad_type>::value>::type>
-VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aPadding = 0u )
+VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aPadding = 1u )
 {
     typedef std::numeric_limits<int> coord_limits;
 
