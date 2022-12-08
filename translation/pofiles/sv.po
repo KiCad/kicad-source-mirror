@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-12-07 22:48+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
+"PO-Revision-Date: 2022-12-08 12:07+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -4704,7 +4704,7 @@ msgstr "Tjocklek"
 
 #: common/eda_text.cpp:1048 pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Mirrored"
-msgstr "Speglad"
+msgstr "Spegelvänd"
 
 #: common/eda_text.cpp:1052
 #: eeschema/dialogs/dialog_field_properties_base.cpp:87
@@ -6490,7 +6490,7 @@ msgstr "Signalnamn får inte innehålla blanksteg"
 
 #: common/view/view.cpp:537
 msgid "Mirroring for Y axis is not supported yet"
-msgstr "Spegling för Y-axeln stöds inte än"
+msgstr "Spegelvändning av Y-axeln stöds inte än"
 
 #: common/widgets/font_choice.cpp:58
 msgid "<not found>"
@@ -8600,7 +8600,7 @@ msgstr "Ta bort markör"
 
 #: eeschema/dialogs/dialog_erc_base.h:100 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr "Elektriska reglerkontroll"
+msgstr "Kontrollera elektriska regler"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:190
 msgid "Power symbol value field text cannot be changed."
@@ -9033,7 +9033,7 @@ msgstr "Globala etikettegenskaper"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:100
 msgid "Hierarchical Label Properties"
-msgstr "Hierarkiska egenskaper för etiketter"
+msgstr "Egenskaper för hierarkiska etiketter"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:101
 #: eeschema/dialogs/dialog_label_properties_base.h:117
@@ -10402,7 +10402,7 @@ msgstr "Referens"
 #: eeschema/dialogs/dialog_rescue_each.cpp:150
 #: eeschema/dialogs/dialog_rescue_each.cpp:300
 msgid "Rescue Symbols"
-msgstr "Räddningssymboler"
+msgstr "Rädda symboler"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
 msgid "Skip Symbol Rescue"
@@ -10684,9 +10684,9 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
-"Användandet av relativa sökvägar för hierarkiska blad förbättrar "
-"portabilitet över olika system och plattformar. Användandet av absoluta "
-"sökvägar kan orsaka portabilitetsproblem."
+"Användandet av relativa sökvägar för hierarkiska ark förbättrar portabilitet "
+"över olika system och plattformar. Användandet av absoluta sökvägar kan "
+"orsaka portabilitetsproblem."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:307
 msgid "Use Relative Path"
@@ -10810,7 +10810,7 @@ msgstr "Sida nummer:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:195
 msgid "Hierarchical path:"
-msgstr "Hierarkisk väg:"
+msgstr "Hierarkisk sökväg:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
 msgid "path"
@@ -11377,11 +11377,11 @@ msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
 msgid "Mirror:"
-msgstr "Spegla:"
+msgstr "Spegelvänd:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:160
 msgid "Not mirrored"
-msgstr "Inte speglad"
+msgstr "Inte spegelvänd"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:160
 msgid "Around X axis"
@@ -12904,8 +12904,7 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
-"Hela schemat kunde inte laddas. Fel uppstod vid inläsning av hierarkiska "
-"blad."
+"Hela schemat kunde inte laddas. Fel uppstod vid inläsning av hierarkiska ark."
 
 #: eeschema/files-io.cpp:249 eeschema/files-io.cpp:257
 #: eeschema/files-io.cpp:1271 eeschema/sheet.cpp:162
@@ -13694,7 +13693,7 @@ msgstr "KiCads kretsschemaredigerare"
 
 #: eeschema/sch_edit_frame.cpp:178
 msgid "Schematic Hierarchy"
-msgstr "Schematisk hierarki"
+msgstr "Kretsschemahierarki"
 
 #: eeschema/sch_edit_frame.cpp:269
 msgid "New schematic file is unsaved"
@@ -14459,7 +14458,7 @@ msgid ""
 "the schematic hierarchy."
 msgstr ""
 "Kunde inte läsa in ark '%s' eftersom det redan förekommer som direkt "
-"förälder i schemahierarkin."
+"förälder i kretsschemahierarkin."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1496
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2174
@@ -14575,7 +14574,7 @@ msgstr "Arknamn"
 
 #: eeschema/sch_sheet.cpp:790
 msgid "Hierarchical Path"
-msgstr "Hierarkisk väg"
+msgstr "Hierarkisk sökväg"
 
 #: eeschema/sch_sheet.cpp:793
 msgid "File Name"
@@ -15018,8 +15017,8 @@ msgid ""
 "schematic hierarchy."
 msgstr ""
 "Arkändringarna kan inte genomföras eftersom destinationsarket redan har ark "
-"'%s' eller ett av dess underark som förälder någonstans i den schematiska "
-"hierarkin."
+"'%s' eller ett av dess underark som förälder någonstans i "
+"kretsschemahierarkin."
 
 #: eeschema/sheet.cpp:84
 #, c-format
@@ -15890,7 +15889,7 @@ msgstr "Fel: simuleringstyp stöder inte plottning!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:732
 msgid " (mag)"
-msgstr ""
+msgstr " (magnitud)"
 
 #: eeschema/sim/sim_plot_frame.cpp:734
 msgid " (phase)"
@@ -17204,7 +17203,7 @@ msgstr "Importera stift"
 
 #: eeschema/tools/ee_actions.cpp:341 eeschema/tools/ee_actions.cpp:346
 msgid "Import a hierarchical sheet pin"
-msgstr "Importera en hierarkisk arknål"
+msgstr "Importera ett hierarkisk arkstift"
 
 #: eeschema/tools/ee_actions.cpp:352
 msgid "Add Global Label"
@@ -17288,7 +17287,7 @@ msgstr "Rotera valda objekt moturs"
 
 #: eeschema/tools/ee_actions.cpp:417 pcbnew/tools/pcb_actions.cpp:336
 msgid "Mirror Vertically"
-msgstr "Spegla vertikalt"
+msgstr "Spegelvänd vertikalt"
 
 #: eeschema/tools/ee_actions.cpp:417
 msgid "Flips selected item(s) from top to bottom"
@@ -17296,7 +17295,7 @@ msgstr "Vänd markerade objekt från topp till botten"
 
 #: eeschema/tools/ee_actions.cpp:423 pcbnew/tools/pcb_actions.cpp:331
 msgid "Mirror Horizontally"
-msgstr "Spegla horisontellt"
+msgstr "Spegelvänd horisontellt"
 
 #: eeschema/tools/ee_actions.cpp:423
 msgid "Flips selected item(s) from left to right"
@@ -17609,7 +17608,7 @@ msgstr "Redigera sidnumret för det aktuella eller valda arket"
 
 #: eeschema/tools/ee_actions.cpp:649
 msgid "Rescue Symbols..."
-msgstr "Räddningssymboler ..."
+msgstr "Rädda symboler ..."
 
 #: eeschema/tools/ee_actions.cpp:650
 msgid "Find old symbols in project and rename/rescue them"
@@ -17844,7 +17843,7 @@ msgstr "Flytta till nästa ark enligt numrering"
 
 #: eeschema/tools/ee_actions.cpp:810
 msgid "Hierarchy Navigator"
-msgstr "Hierarki Navigator"
+msgstr "Hierarkinavigator"
 
 #: eeschema/tools/ee_actions.cpp:810
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -18450,7 +18449,7 @@ msgstr "Skiktval"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:94
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:246
 msgid "Print mirrored"
-msgstr "Utskrift speglad"
+msgstr "Skriv ut spegelvänd"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:179
 msgid "Included Layers"
@@ -18506,9 +18505,9 @@ msgid "Negative Objects"
 msgstr "Negativa objekt"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Layer %d"
-msgstr "Grafiskt lager %d"
+msgstr "Grafiklager %d"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:30
 msgid "Show D codes"
@@ -18914,7 +18913,7 @@ msgstr "Polaritet"
 #: pcbnew/fp_textbox.cpp:312 pcbnew/pcb_text.cpp:138 pcbnew/pcb_textbox.cpp:305
 #: pcbnew/tools/edit_tool.cpp:1699
 msgid "Mirror"
-msgstr "Spegla"
+msgstr "Spegelvänd"
 
 #: gerbview/gerber_draw_item.cpp:701
 msgid "AB axis"
@@ -19554,7 +19553,7 @@ msgstr "Utmatningens måttenhet; giltiga alternativ: in,mm"
 #: kicad/cli/command_export_pcb_drill.cpp:63
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Mirror Y axis"
-msgstr "Spela Y-axel"
+msgstr "Spegelvänd Y-axel"
 
 #: kicad/cli/command_export_pcb_drill.cpp:68
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:55
@@ -19596,9 +19595,8 @@ msgid "Invalid units specified\n"
 msgstr "Ogiltiga enheter specificerade\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:165
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "Ogiltig noll-format specificerat\n"
+msgstr "Ogiltigt nollformat specificerat\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:193
 msgid "Invalid map format specified\n"
@@ -24897,9 +24895,8 @@ msgstr "Använd centrumlinjer"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:112
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
 #: pcbnew/tools/convert_tool.cpp:79
-#, fuzzy
 msgid "Create bounding hull"
-msgstr "Skapa logotypfil"
+msgstr "Skapa begränsningskropp"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:116
@@ -25590,7 +25587,7 @@ msgstr "0,00000 / 0,00 / 0,0000"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
 msgid "Suppress trailing zeroes"
-msgstr "Dämpa efterföljande nollor"
+msgstr "Undertryck avslutande nollor"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:181
 msgid ""
@@ -25811,7 +25808,7 @@ msgstr "Oanslutna objekt (%s)"
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
 #, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Schematisk paritet (%s)"
+msgstr "Kretsschemaparitet (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
 msgid "Edit ignored tests"
@@ -26195,7 +26192,7 @@ msgstr "SVG-sidstorlek"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:95
 msgid "Print the layer(s) horizontally mirrored"
-msgstr "Skriv ut lagret / lagren horisontellt speglat"
+msgstr "Skriv ut lagret / lagren horisontellt spegelvänt"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:252
@@ -27128,7 +27125,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
-msgstr "Använd ruttkommando (rekommenderas)"
+msgstr "Använd fräskommando (rekommenderas)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use alternate drill mode"
@@ -27146,9 +27143,8 @@ msgid ""
 "(Use it only if the recommended command does not work)"
 msgstr ""
 "Ovala hål skapar ofta problem för mönsterkortstillverkare.\n"
-"\"Använd route-kommando\" använder det vanliga G00-kommandot "
-"(rekommenderas)\n"
-" \"Använd alternativt läge\" använder ett annat drill/route-kommando (G85)\n"
+"\"Använd fräskommando\" använder det vanliga G00-kommandot (rekommenderas)\n"
+"\"Använd alternativt borrläge\" använder ett annat borr-/fräskommando (G85)\n"
 "(Använd bara om det rekommenderade kommandot inte fungerar)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
@@ -27189,11 +27185,11 @@ msgstr "Decimalformat (rekommenderas)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Suppress leading zeros"
-msgstr "Undertrycka ledande nollor"
+msgstr "Undertryck inledande nollor"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Suppress trailing zeros"
-msgstr "Dämpa efterföljande nollor"
+msgstr "Undertryck avslutande nollor"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Keep zeros"
@@ -28079,7 +28075,7 @@ msgstr "Fotavtryck %s (%s), %s, roterad %g grader"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:500
 #: pcbnew/dialogs/dialog_text_properties.cpp:249
 msgid "back side (mirrored)"
-msgstr "baksida (speglad)"
+msgstr "baksida (spegelvänd)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:500
 #: pcbnew/dialogs/dialog_text_properties.cpp:249
@@ -32405,7 +32401,7 @@ msgstr "Design för tillverkning"
 
 #: pcbnew/drc/drc_item.cpp:47
 msgid "Schematic Parity"
-msgstr "Schematisk paritet"
+msgstr "Kretsschemaparitet"
 
 #: pcbnew/drc/drc_item.cpp:48
 msgid "Signal Integrity"
@@ -34153,11 +34149,10 @@ msgid "Footprint Association (.cmp) File..."
 msgstr "Footprint Association (.cmp) -fil ..."
 
 #: pcbnew/menubar_pcb_editor.cpp:142
-#, fuzzy
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Exportera associeringsfil för fotavtryck (*.cmp) för back-annotation till "
-"kretsschema"
+"Exportera associeringsfil för fotavtryck (*.cmp) för överföring av numrering "
+"till kretsschema"
 
 #: pcbnew/menubar_pcb_editor.cpp:144
 msgid "Hyperlynx..."
@@ -38419,11 +38414,11 @@ msgstr "Vänd markerade objekt till motsatt sida av mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:331
 msgid "Mirrors selected item across the Y axis"
-msgstr "Speglar valt objekt över Y-axeln"
+msgstr "Spegelvänder valt objekt över Y-axeln"
 
 #: pcbnew/tools/pcb_actions.cpp:336
 msgid "Mirrors selected item across the X axis"
-msgstr "Speglar valt objekt över X-axeln"
+msgstr "Spegelvänder valt objekt över X-axeln"
 
 #: pcbnew/tools/pcb_actions.cpp:348
 msgid "Pack and Move Footprints"
@@ -38454,9 +38449,8 @@ msgid "Adds arcs tangent to the selected straight track segments"
 msgstr "Lägger till bågar som tangerar de valda raka ledarsegmenten"
 
 #: pcbnew/tools/pcb_actions.cpp:368
-#, fuzzy
 msgid "Adds arcs tangent to the selected lines"
-msgstr "Lägger till bågar som tangerar de valda raka ledarsegmenten"
+msgstr "Lägger till bågar som tangerar de valda linjerna"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Delete Full Track"
@@ -39042,12 +39036,10 @@ msgid "Show/hide the appearance manager"
 msgstr "Visa / dölj utseendehanteraren"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show Properties Manager"
 msgstr "Visa dialogruta för egenskaper"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show/hide the properties manager"
 msgstr "Visa / dölj dialogruta för egenskaper"
 
