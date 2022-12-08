@@ -36,6 +36,16 @@
 static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
 
 
+bool IsGUI()
+{
+#if wxCHECK_VERSION( 3, 1, 6 )
+    return wxTheApp->IsGUI();
+#else
+    return dynamic_cast<wxAppBase*>( wxTheApp );
+#endif
+}
+
+
 KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption,
                     long aStyle )
     : wxRichMessageDialog( aParent, aMessage, aCaption, aStyle | wxCENTRE | wxSTAY_ON_TOP ),
@@ -286,7 +296,7 @@ void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
         return;
     }
 
-    if( !wxTheApp->IsGUI() )
+    if( !IsGUI() )
     {
         wxFprintf( stderr, aText );
         return;
@@ -311,7 +321,7 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
         return;
     }
 
-    if( !wxTheApp->IsGUI() )
+    if( !IsGUI() )
     {
         wxFprintf( stderr, aText );
         return;
@@ -338,7 +348,7 @@ void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxSt
         return;
     }
 
-    if( !wxTheApp->IsGUI() )
+    if( !IsGUI() )
     {
         wxFprintf( stdout, "%s %s", aMessage, aExtraInfo );
         return;
