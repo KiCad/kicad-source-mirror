@@ -104,15 +104,17 @@ int GetCircleToPolyCorrection( int aMaxError );
 template<typename T>
 VECTOR2<T> GetVectorSnapped45( const VECTOR2<T>& aVec, bool only45 = false )
 {
+    using ext_type = typename VECTOR2<T>::extended_type;
+
     auto             newVec = aVec;
     const VECTOR2<T> absVec{ std::abs( aVec.x ), std::abs( aVec.y ) };
 
-    if( !only45 && absVec.x > VECTOR2<T>::extended_type( absVec.y ) * 2 )
+    if( !only45 && absVec.x > ext_type( absVec.y ) * 2 )
     {
         // snap along x-axis
         newVec.y = 0;
     }
-    else if( !only45 && absVec.y > VECTOR2<T>::extended_type( absVec.x ) * 2 )
+    else if( !only45 && absVec.y > ext_type( absVec.x ) * 2 )
     {
         // snap onto y-axis
         newVec.x = 0;
