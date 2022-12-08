@@ -272,7 +272,6 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),
                            evt->Modifier( MD_ALT ) );
 
-        bool            modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
         PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
         bool            brd_editor = frame && frame->IsType( FRAME_PCB_EDITOR );
         ROUTER_TOOL*    router = m_toolMgr->GetTool<ROUTER_TOOL>();
@@ -370,7 +369,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_frame->FocusOnItem( nullptr );
             m_toolMgr->ProcessEvent( EVENTS::InhibitSelectionEditing );
 
-            if( modifier_enabled || dragAction == MOUSE_DRAG_ACTION::SELECT )
+            if( hasModifier() || dragAction == MOUSE_DRAG_ACTION::SELECT )
             {
                 selectMultiple();
             }
@@ -477,7 +476,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
         {
             // move cursor prediction
-            if( !modifier_enabled
+            if( !hasModifier()
                     && dragAction == MOUSE_DRAG_ACTION::DRAG_SELECTED
                     && !m_selection.Empty()
                     && evt->HasPosition()

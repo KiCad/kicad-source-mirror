@@ -83,6 +83,12 @@ void SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool 
 }
 
 
+bool SELECTION_TOOL::hasModifier()
+{
+    return m_subtractive || m_additive || m_exclusive_or;
+}
+
+
 int SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 {
     ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();

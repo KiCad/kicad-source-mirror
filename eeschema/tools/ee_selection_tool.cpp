@@ -344,8 +344,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),
                            evt->Modifier( MD_ALT ) );
 
-        bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
-
         MOUSE_DRAG_ACTION drag_action = m_frame->GetDragAction();
         EE_GRID_HELPER grid( m_toolMgr );
 
@@ -354,7 +352,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             // Avoid triggering when running under other tools
             // Distinguish point editor from selection modification by checking modifiers
             if( m_frame->ToolStackIsEmpty() && m_toolMgr->GetTool<EE_POINT_EDITOR>()
-                && ( !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint() || modifier_enabled ) )
+                && ( !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint() || hasModifier() ) )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );
@@ -381,7 +379,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             CollectHits( collector, evt->Position() );
             narrowSelection( collector, evt->Position(), false );
 
-            if( collector.GetCount() == 1 && !m_isSymbolEditor && !modifier_enabled )
+            if( collector.GetCount() == 1 && !m_isSymbolEditor && !hasModifier() )
             {
                 OPT_TOOL_EVENT autostart = autostartEvent( evt, grid, collector[0] );
 
@@ -498,7 +496,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
-            if( modifier_enabled || drag_action == MOUSE_DRAG_ACTION::SELECT )
+            if( hasModifier() || drag_action == MOUSE_DRAG_ACTION::SELECT )
             {
                 selectMultiple();
             }
@@ -611,7 +609,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 narrowSelection( collector, evt->Position(), false );
 
-                if( collector.GetCount() == 1 && !modifier_enabled )
+                if( collector.GetCount() == 1 && !hasModifier() )
                 {
                     OPT_TOOL_EVENT autostartEvt = autostartEvent( evt, grid, collector[0] );
 

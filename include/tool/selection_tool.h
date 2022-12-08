@@ -117,6 +117,11 @@ protected:
     void setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState );
 
     /**
+     * True if a selection modifier is enabled, false otherwise.
+     */
+    bool hasModifier();
+
+    /**
      * Determines if ctrl-click is highlight net or XOR selection.
      */
     virtual bool ctrlClickHighlights() { return false; }

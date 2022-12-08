@@ -89,8 +89,6 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),
                            evt->Modifier( MD_ALT ) );
 
-        bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
-
         if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
@@ -144,7 +142,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             m_disambiguateTimer.Stop();
 
-            if( modifier_enabled || m_selection.Empty() )
+            if( hasModifier() || m_selection.Empty() )
             {
                 selectMultiple();
             }
@@ -187,7 +185,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         if( m_frame->ToolStackIsEmpty() )
         {
-            if( !modifier_enabled
+            if( !hasModifier()
                     && !m_selection.Empty()
                     && m_frame->GetDragAction() == MOUSE_DRAG_ACTION::DRAG_SELECTED
                     && evt->HasPosition()
