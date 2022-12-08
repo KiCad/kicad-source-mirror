@@ -67,6 +67,7 @@
 #include "cli/command_sym.h"
 #include "cli/command_sym_upgrade.h"
 #include "cli/exit_codes.h"
+#include "cli/cli_names.h"
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_base.h>
@@ -218,7 +219,10 @@ static COMMAND_ENTRY* recurseArgParserSubCommandUsed( argparse::ArgumentParser& 
 bool PGM_KICAD::OnPgmInit()
 {
     PGM_BASE::BuildArgvUtf8();
-    App().SetAppDisplayName( wxT( "KiCad" ) );
+    App().SetAppDisplayName( wxT( "KiCad-cli" ) );
+    // App name can be used by internal code to know if this is a
+    // kicad CLI app or a GUI app that is running
+    App().SetClassName( KICAD_CLI_APP_NAME );
 
 #if defined( DEBUG )
     wxString absoluteArgv0 = wxStandardPaths::Get().GetExecutablePath();
