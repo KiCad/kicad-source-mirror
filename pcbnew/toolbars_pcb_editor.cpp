@@ -381,10 +381,8 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
 
     // Tools to show/hide toolbars:
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager,    ACTION_TOOLBAR::TOGGLE  );
-
-    if( ADVANCED_CFG::GetCfg().m_ShowPropertiesPanel )
-        m_optionsToolBar->Add( PCB_ACTIONS::showProperties,       ACTION_TOOLBAR::TOGGLE  );
+    m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager,    ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::showProperties,       ACTION_TOOLBAR::TOGGLE );
 
     PCB_SELECTION_TOOL*          selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );

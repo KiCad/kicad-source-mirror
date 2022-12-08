@@ -245,13 +245,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    if( ADVANCED_CFG::GetCfg().m_ShowPropertiesPanel )
-    {
-        m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
 
-        float proportion = GetPcbNewSettings()->m_AuiPanels.properties_splitter_proportion;
-        m_propertiesPanel->SetSplitterProportion( proportion );
-    }
+    m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
+
+    float proportion = GetPcbNewSettings()->m_AuiPanels.properties_splitter_proportion;
+    m_propertiesPanel->SetSplitterProportion( proportion );
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
@@ -295,12 +293,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
-    if( ADVANCED_CFG::GetCfg().m_ShowPropertiesPanel )
-    {
-        m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( "PropertiesManager" )
-                          .Left().Layer( 5 ).Caption( _( "Properties" ) )
-                          .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
-    }
+    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( "PropertiesManager" )
+                      .Left().Layer( 5 ).Caption( _( "Properties" ) )
+                      .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
@@ -321,9 +316,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
-
-    bool showProperties = ADVANCED_CFG::GetCfg().m_ShowPropertiesPanel && m_show_properties;
-    m_auimgr.GetPane( "PropertiesManager" ).Show( showProperties );
+    m_auimgr.GetPane( "PropertiesManager" ).Show( m_show_properties );
 
     m_auimgr.GetPane( SearchPaneName() ).Show( m_show_search );
 

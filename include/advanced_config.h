@@ -222,7 +222,7 @@ public:
     bool m_AllowManualCanvasScale;
 
     /**
-     * Show the properties panel in PcbNew
+     * Show the properties panel in applications that it hasn't been fully released for
      */
     bool m_ShowPropertiesPanel;
 

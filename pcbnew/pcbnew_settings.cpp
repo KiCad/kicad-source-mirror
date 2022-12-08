@@ -113,7 +113,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_AuiPanels.appearance_expand_net_display, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "aui.show_properties",
-            &m_AuiPanels.show_properties, true ) );
+            &m_AuiPanels.show_properties, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "aui.show_search",
             &m_AuiPanels.show_search, false ) );
