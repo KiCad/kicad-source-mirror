@@ -192,7 +192,7 @@ private:
     bool invokeInlineRouter( int aDragMode );
     bool isRouterActive() const;
 
-    int doMoveSelection( const TOOL_EVENT& aEvent );
+    int doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommitMessage );
 
     VECTOR2I getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSourceBBox,
                               const VECTOR2D& aBBoxOffset );

@@ -214,20 +214,17 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
     if( footprintsToPack.empty() )
         return 0;
 
-    BOARD_COMMIT commit( editFrame );
-    BOX2I        footprintsBbox;
+    BOX2I footprintsBbox;
 
     for( FOOTPRINT* item : footprintsToPack )
     {
-        commit.Modify( item );
+        m_commit->Modify( item );
         footprintsBbox.Merge( item->GetBoundingBox( false, false ) );
     }
 
     SpreadFootprints( &footprintsToPack, footprintsBbox.Normalize().GetOrigin(), false );
 
-    commit.Push( _( "Pack footprints" ) );
-
-    return doMoveSelection( aEvent );
+    return doMoveSelection( aEvent, _( "Pack footprints" ) );
 }
 
 
@@ -239,7 +236,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    return doMoveSelection( aEvent );
+    return doMoveSelection( aEvent, _( "Move" ) );
 }
 
 
@@ -277,7 +274,7 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 }
 
 
-int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent )
+int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommitMessage )
 {
     bool moveWithReference = aEvent.IsAction( &PCB_ACTIONS::moveWithReference );
     bool moveIndividually = aEvent.IsAction( &PCB_ACTIONS::moveIndividually );
@@ -567,9 +564,10 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent )
             {
                 // Prepare to start dragging
                 if( !evt->IsAction( &PCB_ACTIONS::move )
-                        && !evt->IsAction( &PCB_ACTIONS::moveWithReference )
-                        && !evt->IsAction( &PCB_ACTIONS::moveIndividually )
-                        && cfg->m_TrackDragAction != TRACK_DRAG_ACTION::MOVE )
+                    && !evt->IsAction( &PCB_ACTIONS::moveWithReference )
+                    && !evt->IsAction( &PCB_ACTIONS::moveIndividually )
+                    && !evt->IsAction( &PCB_ACTIONS::packAndMoveFootprints )
+                    && cfg->m_TrackDragAction != TRACK_DRAG_ACTION::MOVE )
                 {
                     if( invokeInlineRouter( PNS::DM_ANY ) )
                         break;
@@ -823,7 +821,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_commit->Push( _( "Drag" ) );
+        m_commit->Push( aCommitMessage );
         m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
     }
 
