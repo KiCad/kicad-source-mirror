@@ -473,10 +473,12 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         }
     }
 
-    // If this is the root sheet, save the virtual root sheet instance information.
-    if( aSheet->IsRootSheet() )
+    if( aSheet->HasRootInstance() )
     {
-        saveInstances( aSheet->GetInstances(), 1 );
+        std::vector< SCH_SHEET_INSTANCE> instances;
+
+        instances.emplace_back( aSheet->GetRootInstance() );
+        saveInstances( instances, 1 );
     }
 
     m_out->Print( 0, ")\n" );
@@ -1004,7 +1006,20 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
         m_out->Print( aNestLevel + 1, ")\n" );  // Closes pin token.
     }
 
-    if( !aSheet->GetInstances().empty() )
+    // We all sheet instances here except the root sheet instance.
+    std::vector< SCH_SHEET_INSTANCE > sheetInstances = aSheet->GetInstances();
+
+    auto it = sheetInstances.begin();
+
+    while( it != sheetInstances.end() )
+    {
+        if( it->m_Path.size() == 0 )
+            it = sheetInstances.erase( it );
+        else
+            it++;
+    }
+
+    if( !sheetInstances.empty() )
     {
         m_out->Print( aNestLevel + 1, "(instances\n" );
 
@@ -1013,18 +1028,18 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
         SCH_SHEET_LIST fullHierarchy = m_schematic->GetSheets();
         bool project_open = false;
 
-        for( size_t i = 0; i < aSheet->GetInstances().size(); i++ )
+        for( size_t i = 0; i < sheetInstances.size(); i++ )
         {
             // If the instance data is part of this design but no longer has an associated sheet
             // path, don't save it.  This prevents large amounts of orphaned instance data for the
             // current project from accumulating in the schematic files.
             //
             // Keep all instance data when copying to the clipboard.  It may be needed on paste.
-            if( ( aSheet->GetInstances()[i].m_Path[0] == rootSheetUuid )
-              && !fullHierarchy.GetSheetPathByKIIDPath( aSheet->GetInstances()[i].m_Path ) )
+            if( ( sheetInstances[i].m_Path[0] == rootSheetUuid )
+              && !fullHierarchy.GetSheetPathByKIIDPath( sheetInstances[i].m_Path ) )
             {
-                if( project_open && ( ( i + 1 == aSheet->GetInstances().size() )
-                  || lastProjectUuid != aSheet->GetInstances()[i+1].m_Path[0] ) )
+                if( project_open && ( ( i + 1 == sheetInstances.size() )
+                  || lastProjectUuid != sheetInstances[i+1].m_Path[0] ) )
                 {
                     m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
                     project_open = false;
@@ -1033,29 +1048,29 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                 continue;
             }
 
-            if( lastProjectUuid != aSheet->GetInstances()[i].m_Path[0] )
+            if( lastProjectUuid != sheetInstances[i].m_Path[0] )
             {
                 wxString projectName;
 
-                if( aSheet->GetInstances()[i].m_Path[0] == rootSheetUuid )
+                if( sheetInstances[i].m_Path[0] == rootSheetUuid )
                     projectName = m_schematic->Prj().GetProjectName();
                 else
-                    projectName = aSheet->GetInstances()[i].m_ProjectName;
+                    projectName = sheetInstances[i].m_ProjectName;
 
-                lastProjectUuid = aSheet->GetInstances()[i].m_Path[0];
+                lastProjectUuid = sheetInstances[i].m_Path[0];
                 m_out->Print( aNestLevel + 2, "(project %s\n",
                               m_out->Quotew( projectName ).c_str() );
                 project_open = true;
             }
 
-            wxString path = aSheet->GetInstances()[i].m_Path.AsString();
+            wxString path = sheetInstances[i].m_Path.AsString();
 
             m_out->Print( aNestLevel + 3, "(path %s (page %s))\n",
                           m_out->Quotew( path ).c_str(),
-                          m_out->Quotew( aSheet->GetInstances()[i].m_PageNumber ).c_str() );
+                          m_out->Quotew( sheetInstances[i].m_PageNumber ).c_str() );
 
-            if( project_open && ( ( i + 1 == aSheet->GetInstances().size() )
-              || lastProjectUuid != aSheet->GetInstances()[i+1].m_Path[0] ) )
+            if( project_open && ( ( i + 1 == sheetInstances.size() )
+              || lastProjectUuid != sheetInstances[i+1].m_Path[0] ) )
             {
                 m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
                 project_open = false;
@@ -1345,15 +1360,15 @@ void SCH_SEXPR_PLUGIN::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNes
 }
 
 
-void SCH_SEXPR_PLUGIN::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheets,
+void SCH_SEXPR_PLUGIN::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aInstances,
                                       int aNestLevel )
 {
-    if( aSheets.size() )
+    if( aInstances.size() )
     {
         m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel, "(sheet_instances\n" );
 
-        for( const SCH_SHEET_INSTANCE& instance : aSheets )
+        for( const SCH_SHEET_INSTANCE& instance : aInstances )
         {
             wxString path = instance.m_Path.AsString();
 
@@ -1370,7 +1385,8 @@ void SCH_SEXPR_PLUGIN::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSh
 }
 
 
-void SCH_SEXPR_PLUGIN::cacheLib( const wxString& aLibraryFileName, const STRING_UTF8_MAP* aProperties )
+void SCH_SEXPR_PLUGIN::cacheLib( const wxString& aLibraryFileName,
+                                 const STRING_UTF8_MAP* aProperties )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {

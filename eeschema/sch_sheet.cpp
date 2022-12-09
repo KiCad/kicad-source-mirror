@@ -1228,6 +1228,34 @@ bool SCH_SHEET::AddInstance( const SCH_SHEET_PATH& aSheetPath )
 }
 
 
+bool SCH_SHEET::HasRootInstance() const
+{
+    for( const SCH_SHEET_INSTANCE& instance : m_instances )
+    {
+        if( instance.m_Path.size() == 0 )
+            return true;
+    }
+
+    return false;
+}
+
+
+const SCH_SHEET_INSTANCE& SCH_SHEET::GetRootInstance() const
+{
+    for( const SCH_SHEET_INSTANCE& instance : m_instances )
+    {
+        if( instance.m_Path.size() == 0 )
+            return instance;
+    }
+
+    wxFAIL;
+
+    static SCH_SHEET_INSTANCE dummy;
+
+    return dummy;
+}
+
+
 wxString SCH_SHEET::getPageNumber( const SCH_SHEET_PATH& aSheetPath ) const
 {
     wxCHECK( aSheetPath.IsFullPath(), wxEmptyString );

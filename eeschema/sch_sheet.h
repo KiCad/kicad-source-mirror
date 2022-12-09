@@ -401,6 +401,27 @@ public:
     bool AddInstance( const SCH_SHEET_PATH& aInstance );
 
     /**
+     * Check to see if this sheet has a root sheet instance.
+     *
+     * @note It is possible for sheets to contain both sheet instances from other projects as
+     *       well as a root sheet instance for this schematic.  This will happen with a
+     *       shared schematic is opened by the schematic editor in stand alone model.
+     *
+     * @return true if the instance data contains a root sheet instance.
+     */
+    bool HasRootInstance() const;
+
+    /**
+     * Return the root sheet instance data.
+     *
+     * @note If no root sheet instance data exists, an assertion will be raise in debug builds
+     *       and an empty instance will be returned.
+     *
+     * @return the root sheet instance data.
+     */
+    const SCH_SHEET_INSTANCE& GetRootInstance() const;
+
+    /**
      * Compares page numbers of schematic sheets.
      *
      * @return 0 if the page numbers are equal, -1 if aPageNumberA < aPageNumberB, 1 otherwise
