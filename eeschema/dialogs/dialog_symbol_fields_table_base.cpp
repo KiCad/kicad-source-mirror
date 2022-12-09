@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_groupSymbolsBox->SetValue(true);
 	m_groupSymbolsBox->SetToolTip( _("Group symbols together based on common properties") );
 
-	bGroupSizer->Add( m_groupSymbolsBox, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bGroupSizer->Add( m_groupSymbolsBox, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bGroupSizer->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -103,7 +103,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bButtonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_buttonApply = new wxButton( this, wxID_ANY, _("Apply, Save Schematic && Continue"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonApply, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_buttonApply, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -112,10 +112,10 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bButtonsSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
+	bButtonsSizer->Add( m_sdbSizer, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bButtonsSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bMainSizer );
