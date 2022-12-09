@@ -136,12 +136,7 @@ template <typename T_symbol, typename T_field>
 bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
 {
     wxCommandEvent dummyEvent;
-
-    wxString value;
-
-    // Yes, the Value field is always present, but Coverity doesn't know that...
-    if( T_field* valueField = m_symbol.FindField( wxT( "Value" ) ) )
-        value = valueField->GetText();
+    T_field*       valueField = m_symbol.FindField( wxT( "Value" ) );
 
     // Infer RLC models if they aren't specified
     if( !m_symbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
@@ -149,7 +144,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     {
         // pair.first: wxString sim model type
         // pair.second: wxString sim model parameters
-        auto model = SIM_MODEL::InferSimModel( m_symbol.GetPrefix(), value );
+        auto model = SIM_MODEL::InferSimModel( m_symbol.GetPrefix(), valueField->GetText() );
 
         if( !model.second.IsEmpty() )
         {
@@ -164,6 +159,8 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
 
             m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PARAMS_FIELD );
             m_fields.back().SetText( model.second );
+
+            m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
         }
     }
 

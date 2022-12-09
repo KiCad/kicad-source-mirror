@@ -1065,11 +1065,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
     }
 
     wxString prefix = aSymbol.GetPrefix();
-    wxString value;
-
-    // Yes, the Value field is always present, but Coverity doesn't know that...
-    if( T_field* valueField = aSymbol.FindField( wxT( "Value" ) ) )
-        value = valueField->GetText();
+    T_field* valueField = aSymbol.FindField( wxT( "Value" ) );
 
     wxString spiceType;
     wxString spiceModel;
@@ -1119,7 +1115,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
         }
         else
         {
-            spiceModel = value;
+            spiceModel = valueField->GetText();
+            valueField->SetText( wxT( "${SIM.PARAMS}" ) );
         }
 
         if( T_field* netlistEnabledField = aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) ) )
@@ -1142,7 +1139,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
     }
     else if( prefix == wxT( "V" ) || prefix == wxT( "I" ) )
     {
-        spiceModel = value;
+        spiceModel = valueField->GetText();
+        valueField->SetText( wxT( "${SIM.PARAMS}" ) );
     }
     else
     {
@@ -1166,7 +1164,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
 
             wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
 
-            if( SIM_MODEL::InferSimModel( prefix, value ).second.length() )
+            if( SIM_MODEL::InferSimModel( prefix, valueField->GetText() ).second.length() )
             {
                 if( pinIndexes[0] == wxT( "2" ) )
                     pins = "1=- 2=+";
