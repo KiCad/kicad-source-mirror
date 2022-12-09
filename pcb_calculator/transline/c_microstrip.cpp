@@ -713,7 +713,7 @@ void C_MICROSTRIP::Z0_dispersion()
     /* normalized frequency [GHz * mm] */
     f_n = m_parameters[FREQUENCY_PRM] * m_parameters[H_PRM] / 1e06;
 
-    e_r_eff_single_f = aux_ms->er_eff;
+    e_r_eff_single_f = aux_ms->m_parameters[EPSILON_EFF_PRM];
     e_r_eff_single_0 = aux_ms->er_eff_0;
     Z0_single_f      = aux_ms->m_parameters[Z0_PRM];
 

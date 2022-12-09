@@ -129,9 +129,6 @@ public:
 
 protected:
     double m_parameters[EXTRA_PRMS_COUNT];
-    double len;         // length of line
-    double er_eff;      // effective dielectric constant
-    double ang_l;       // Electrical length in angle
 
     bool   minimizeZ0Error1D( double* );
     double skin_depth();

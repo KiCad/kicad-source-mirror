@@ -304,7 +304,7 @@ void MICROSTRIP::dispersion()
     D    = Z0_dispersion( u, e_r, e_r_eff_0, e_r_eff_f, f_n );
     Z0_f = Z0_0 * D;
 
-    er_eff               = e_r_eff_f;
+    m_parameters[EPSILON_EFF_PRM] = e_r_eff_f;
     m_parameters[Z0_PRM] = Z0_f;
 }
 
@@ -432,7 +432,7 @@ void MICROSTRIP::line_angle()
     double e_r_eff;
     double v, lambda_g;
 
-    e_r_eff = er_eff;
+    e_r_eff = m_parameters[EPSILON_EFF_PRM];
 
     /* velocity */
     v = C0 / sqrt( e_r_eff * mur_eff );
@@ -463,7 +463,7 @@ void MICROSTRIP::show_results()
     setProperty( Z0_PRM, m_parameters[Z0_PRM] );
     setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
 
-    setResult( 0, er_eff, "" );
+    setResult( 0, m_parameters[EPSILON_EFF_PRM], "" );
     setResult( 1, atten_cond, "dB" );
     setResult( 2, atten_dielectric, "dB" );
 
@@ -516,6 +516,7 @@ void MICROSTRIP::showAnalyze()
  */
 void MICROSTRIP::calcSynthesize()
 {
+    double const er_eff = m_parameters[EPSILON_EFF_PRM];
     double angl_dest, z0_dest;
     z0_dest   = m_parameters[Z0_PRM];
     angl_dest = m_parameters[ANG_L_PRM];
