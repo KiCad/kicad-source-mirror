@@ -112,6 +112,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 
 
 %include <plotcontroller.h>
+%include <plotprint_opts.h>
 %include <pcb_plot_params.h>
 %include <plotters/plotter.h>
 %include <exporters/export_d356.h>

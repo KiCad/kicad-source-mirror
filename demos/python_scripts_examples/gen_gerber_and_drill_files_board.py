@@ -62,7 +62,7 @@ popt.SetUseAuxOrigin(True)
 # This by gerbers only
 popt.SetSubtractMaskFromSilk(False)
 # Disable plot pad holes
-popt.SetDrillMarksType( PCB_PLOT_PARAMS.NO_DRILL_SHAPE );
+popt.SetDrillMarksType( DRILL_MARKS_NO_DRILL_SHAPE );
 # Skip plot pad NPTH when possible: when drill size and shape == pad size and shape
 # usually sel to True for copper layers
 popt.SetSkipPlotNPTH_Pads( False );
