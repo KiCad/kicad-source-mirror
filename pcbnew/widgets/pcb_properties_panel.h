@@ -38,6 +38,8 @@ public:
 
     void UpdateData() override;
 
+    void AfterCommit() override;
+
 protected:
     wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const override;
 

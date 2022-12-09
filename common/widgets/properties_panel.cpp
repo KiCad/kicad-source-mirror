@@ -225,10 +225,16 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
         bool available = true;
         wxVariant commonVal, itemVal;
 
+        bool writeable = property->Writeable( aSelection.Front() );
+
         for( EDA_ITEM* item : aSelection )
         {
             if( !propMgr.IsAvailableFor( TYPE_HASH( *item ), property, item ) )
                 break; // there is an item that does not have this property, so do not display it
+
+            // If read-only for any of the selection, read-only for the whole selection.
+            if( !property->Writeable( item ) )
+                writeable = false;
 
             wxVariant& value = commonVal.IsNull() ? commonVal : itemVal;
             const wxAny& any = item->Get( property );
@@ -268,6 +274,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
             if( pgProp )
             {
                 pgProp->SetValue( commonVal );
+                pgProp->Enable( writeable );
                 m_displayed.push_back( property );
 
                 wxASSERT( displayOrder.count( property ) );

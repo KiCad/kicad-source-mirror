@@ -81,6 +81,30 @@ void PCB_PROPERTIES_PANEL::UpdateData()
 }
 
 
+void PCB_PROPERTIES_PANEL::AfterCommit()
+{
+    PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    const SELECTION& selection = selectionTool->GetSelection();
+    BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( selection.Front() );
+
+    for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
+    {
+        wxPGProperty* pgProp = it.GetProperty();
+
+        PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
+                                                         pgProp->GetName() );
+        wxASSERT( property );
+
+        bool writeable = true;
+
+        for( EDA_ITEM* edaItem : selection )
+            writeable &= property->Writeable( edaItem );
+
+        pgProp->Enable( writeable );
+    }
+}
+
+
 wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProperty ) const
 {
     if( aProperty->TypeHash() == TYPE_HASH( PCB_LAYER_ID ) )
@@ -100,7 +124,6 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
 
         ret->SetLabel( wxGetTranslation( aProperty->Name() ) );
         ret->SetName( aProperty->Name() );
-        ret->Enable( !aProperty->IsReadOnly() );
         ret->SetHelpString( wxGetTranslation( aProperty->Name() ) );
         ret->SetClientData( const_cast<PROPERTY_BASE*>( aProperty ) );
 
@@ -133,6 +156,9 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
     changes.Push( _( "Change property" ) );
     m_frame->Refresh();
+
+    // Perform grid updates as necessary based on value change
+    AfterCommit();
 }
 
 

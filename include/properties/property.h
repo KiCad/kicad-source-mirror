@@ -26,6 +26,7 @@
 
 #include <core/wx_stl_compat.h>
 #include <origin_transforms.h>
+#include <properties/eda_angle_variant.h>
 
 #include <wx/any.h>
 #include <wx/string.h>
@@ -184,7 +185,8 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         m_display( aDisplay ),
         m_coordType( aCoordType ),
         m_isInternal( false ),
-        m_availFunc( [](INSPECTABLE*)->bool { return true; } )
+        m_availFunc( [](INSPECTABLE*)->bool { return true; } ),
+        m_writeableFunc( [](INSPECTABLE*)->bool { return true; } )
     {
     }
 
@@ -240,6 +242,16 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         m_availFunc = aFunc;
     }
 
+    virtual bool Writeable( INSPECTABLE* aObject ) const
+    {
+        return m_writeableFunc( aObject );
+    }
+
+    void SetWriteableFunc( std::function<bool(INSPECTABLE*)> aFunc )
+    {
+        m_writeableFunc = aFunc;
+    }
+
     /**
      * Return type-id of the Owner class.
      */
@@ -254,8 +266,6 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
      * Return type-id of the property type.
      */
     virtual size_t TypeHash() const = 0;
-
-    virtual bool IsReadOnly() const = 0;
 
     PROPERTY_DISPLAY Display() const
     {
@@ -281,10 +291,18 @@ protected:
         // we used a UInt editor.
         if( std::is_same<T, wxVariant>::value )
         {
+            wxVariant var = static_cast<wxVariant>( aValue );
             wxAny pv = getter( aObject );
 
             if( pv.CheckType<unsigned>() )
-                a = static_cast<unsigned>( static_cast<wxVariant>( aValue ).GetLong() );
+            {
+                a = static_cast<unsigned>( var.GetLong() );
+            }
+            else if( pv.CheckType<EDA_ANGLE>() )
+            {
+                EDA_ANGLE_VARIANT_DATA* ad = static_cast<EDA_ANGLE_VARIANT_DATA*>( var.GetData() );
+                a = ad->Angle();
+            }
         }
 
         setter( aObject, a );
@@ -317,6 +335,8 @@ private:
     wxString m_group;
 
     std::function<bool(INSPECTABLE*)> m_availFunc;   ///< Eval to determine if prop is available
+
+    std::function<bool(INSPECTABLE*)> m_writeableFunc;   ///< Eval to determine if prop is read-only
 
     friend class INSPECTABLE;
 };
@@ -363,9 +383,9 @@ public:
         return m_typeHash;
     }
 
-    bool IsReadOnly() const override
+    bool Writeable( INSPECTABLE* aObject ) const override
     {
-        return !m_setter;
+        return m_setter && PROPERTY_BASE::Writeable( aObject );
     }
 
 protected:
@@ -381,7 +401,7 @@ protected:
 
     virtual void setter( void* obj, wxAny& v ) override
     {
-        wxCHECK( !IsReadOnly(), /*void*/ );
+        wxCHECK( m_setter, /*void*/ );
 
         if( !v.CheckType<T>() )
             throw std::invalid_argument( "Invalid type requested" );
@@ -450,7 +470,7 @@ public:
 
     void setter( void* obj, wxAny& v ) override
     {
-        wxCHECK( !( PROPERTY<Owner, T, Base>::IsReadOnly() ), /*void*/ );
+        wxCHECK( ( PROPERTY<Owner, T, Base>::m_setter ), /*void*/ );
         Owner* o = reinterpret_cast<Owner*>( obj );
 
         if( v.CheckType<T>() )

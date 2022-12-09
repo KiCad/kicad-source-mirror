@@ -1366,6 +1366,15 @@ static struct ZONE_DESC
                  .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
         }
 
+        ENUM_MAP<ZONE_FILL_MODE>& zfmMap = ENUM_MAP<ZONE_FILL_MODE>::Instance();
+
+        if( zfmMap.Choices().GetCount() == 0 )
+        {
+            zfmMap.Undefined( ZONE_FILL_MODE::POLYGONS );
+            zfmMap.Map( ZONE_FILL_MODE::POLYGONS, _HKI( "Solid fill" ) )
+                  .Map( ZONE_FILL_MODE::HATCH_PATTERN, _HKI( "Hatch pattern" ) );
+        }
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( ZONE );
         propMgr.InheritsAfter( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
@@ -1395,6 +1404,15 @@ static struct ZONE_DESC
 
                     return false;
                 };
+
+        auto isHatchedFill =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+                        return zone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN;
+
+                    return false;
+                };
         
         auto layer = new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
                     &ZONE::SetLayer, &ZONE::GetLayer );
@@ -1413,6 +1431,35 @@ static struct ZONE_DESC
 
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
                     &ZONE::SetZoneName, &ZONE::GetZoneName ) );
+
+        const wxString groupFill = _( "Fill Style" );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>( _HKI( "Fill Mode" ),
+                    &ZONE::SetFillMode, &ZONE::GetFillMode ), groupFill );
+
+        auto hatchOrientation = new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Orientation" ),
+                    &ZONE::SetHatchOrientation, &ZONE::GetHatchOrientation,
+                    PROPERTY_DISPLAY::PT_DEGREE );
+        hatchOrientation->SetWriteableFunc( isHatchedFill );
+        propMgr.AddProperty( hatchOrientation, groupFill );
+
+        //TODO: Switch to translated
+        auto hatchWidth = new PROPERTY<ZONE, int>( wxT( "Hatch Width" ),
+                    &ZONE::SetHatchThickness, &ZONE::GetHatchThickness,
+                    PROPERTY_DISPLAY::PT_SIZE );
+        hatchWidth->SetWriteableFunc( isHatchedFill );
+        propMgr.AddProperty( hatchWidth, groupFill );
+
+        //TODO: Switch to translated
+        auto hatchGap = new PROPERTY<ZONE, int>( wxT( "Hatch Gap" ),
+                    &ZONE::SetHatchGap, &ZONE::GetHatchGap,
+                    PROPERTY_DISPLAY::PT_SIZE );
+        hatchGap->SetWriteableFunc( isHatchedFill );
+        propMgr.AddProperty( hatchGap, groupFill );
+
+        // TODO: Smoothing effort needs to change to enum (in dialog too)
+        // TODO: Smoothing amount (double)
+        // Unexposed properties (HatchHoleMinArea / HatchBorderAlgorithm)?
 
         const wxString groupOverrides = _( "Overrides" );
 
@@ -1449,3 +1496,4 @@ static struct ZONE_DESC
 } _ZONE_DESC;
 
 IMPLEMENT_ENUM_TO_WXANY( ZONE_CONNECTION )
+IMPLEMENT_ENUM_TO_WXANY( ZONE_FILL_MODE )

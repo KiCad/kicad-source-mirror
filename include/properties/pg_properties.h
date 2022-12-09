@@ -113,6 +113,9 @@ public:
 
     wxValidator* DoGetValidator() const override;
 
+    ///> Do not perform PG validation; the UX is not what we want.
+    bool ValidateValue( wxVariant&, wxPGValidationInfo& ) const override { return true; }
+
 protected:
     ///> Scale factor to convert between raw and displayed value
     double m_scale;

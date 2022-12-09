@@ -73,7 +73,7 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
 
     if( PGPROPERTY_DISTANCE* prop = dynamic_cast<PGPROPERTY_DISTANCE*>( aProperty ) )
         m_unitBinder->SetCoordType( prop->CoordType() );
-    else if( dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) )
+    else if( dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) != nullptr )
         m_unitBinder->SetUnits( EDA_UNITS::DEGREES );
 
     UpdateControl( aProperty, win );
@@ -93,6 +93,11 @@ void PG_UNIT_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) c
     else if( var.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
     {
         m_unitBinder->ChangeValue( var.GetDouble() );
+    }
+    else if( var.GetType() == wxT( "EDA_ANGLE" ) )
+    {
+        EDA_ANGLE_VARIANT_DATA* angleData = static_cast<EDA_ANGLE_VARIANT_DATA*>( var.GetData() );
+        m_unitBinder->ChangeAngleValue( angleData->Angle() );
     }
     else if( !aProperty->IsValueUnspecified() )
     {
@@ -135,17 +140,32 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
         aVariant.MakeNull();
         return true;
     }
-    bool changed = false;
+    bool changed;
 
-    if( dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) )
+    if( dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) != nullptr )
     {
-        double result = m_unitBinder->GetAngleValue().AsDegrees();
-        changed = ( aVariant.IsNull() || result != aVariant.GetDouble() );
+        EDA_ANGLE angle = m_unitBinder->GetAngleValue();
 
-        if( changed )
+        if( aVariant.GetType() == wxT( "EDA_ANGLE" ) )
         {
-            aVariant = result;
-            m_unitBinder->SetValue( result );
+            EDA_ANGLE_VARIANT_DATA* ad = static_cast<EDA_ANGLE_VARIANT_DATA*>( aVariant.GetData() );
+            changed = ( aVariant.IsNull() || angle != ad->Angle() );
+
+            if( changed )
+            {
+                ad->SetAngle( angle );
+                m_unitBinder->SetAngleValue( angle );
+            }
+        }
+        else
+        {
+            changed = ( aVariant.IsNull() || angle.AsDegrees() != aVariant.GetDouble() );
+
+            if( changed )
+            {
+                aVariant = angle.AsDegrees();
+                m_unitBinder->SetValue( angle.AsDegrees() );
+            }
         }
     }
     else

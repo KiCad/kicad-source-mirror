@@ -45,6 +45,8 @@ public:
 
     virtual void UpdateData() = 0;
 
+    virtual void AfterCommit() {}
+
     wxPropertyGrid* GetPropertyGrid()
     {
         return m_grid;
