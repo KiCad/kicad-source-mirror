@@ -128,6 +128,13 @@ template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel, int a
 
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol )
 {
+    // Note: currently this creates a resolved model (all Kicad variables references are resolved
+    // before building the model).
+    //
+    // That's not what we want if this is ever called from the Simulation Model Editor (or other
+    // editors, but it is what we want if called to generate a netlist or other exported items.
+
+
     std::vector<SCH_FIELD> fields;
 
     for( int i = 0; i < aSymbol.GetFieldCount(); ++i )
@@ -146,21 +153,21 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
     {
         // pair.first: wxString sim model type
         // pair.second: wxString sim model parameters
-        auto model = SIM_MODEL_IDEAL::InferSimModel( aSymbol.GetPrefix(),
-                                                     aSymbol.GetValueFieldText( true ) );
+        auto model = SIM_MODEL::InferSimModel( aSymbol.GetPrefix(),
+                                               aSymbol.GetValueFieldText( true ) );
 
         if( !model.second.IsEmpty() )
         {
-            fields.emplace_back( VECTOR2I(), -1, &aSymbol, SIM_MODEL::DEVICE_TYPE_FIELD );
+            fields.emplace_back( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
             fields.back().SetText( aSymbol.GetPrefix() );
 
             if( !model.first.IsEmpty() )
             {
-                fields.emplace_back( VECTOR2I(), -1, &aSymbol, SIM_MODEL::TYPE_FIELD );
+                fields.emplace_back( &aSymbol, -1, SIM_MODEL::TYPE_FIELD );
                 fields.back().SetText( model.first );
             }
 
-            fields.emplace_back( VECTOR2I(), -1, &aSymbol, SIM_MODEL::PARAMS_FIELD );
+            fields.emplace_back( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
             fields.back().SetText( model.second );
         }
     }
@@ -175,7 +182,9 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<T>& aFields, int 
     std::string baseModelName = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD );
 
     if( libraryPath != "" )
+    {
         return CreateModel( libraryPath, baseModelName, aFields, aSymbolPinCount );
+    }
     else
     {
         m_models.push_back( SIM_MODEL::Create( aSymbolPinCount, aFields ) );

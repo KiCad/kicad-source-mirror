@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
+ * Copyright (C) 2022 CERN
  * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +28,7 @@
 #include <sim/sim_property.h>
 #include <sim/sim_library_kibis.h>
 #include <sim/sim_library_spice.h>
+#include <sim/sim_model.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_serde.h>
@@ -42,18 +44,18 @@
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
 
-template <typename T>
-DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
-                                       std::vector<T>& aFields )
+template <typename T_symbol, typename T_field>
+DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symbol& aSymbol,
+                                                       std::vector<T_field>& aFields )
     : DIALOG_SIM_MODEL_BASE( aParent ),
       m_symbol( aSymbol ),
       m_fields( aFields ),
+      m_fieldsOrigin( aFields ),
       m_libraryModelsMgr( Prj() ),
       m_builtinModelsMgr( Prj() ),
       m_prevModel( nullptr ),
       m_curModelType( SIM_MODEL::TYPE::NONE ),
       m_scintillaTricks( nullptr ),
-      m_wasCodePreviewUpdated( true ),
       m_firstCategory( nullptr ),
       m_prevParamGridSelection( nullptr ),
       m_lastParamGridWidth( 0 ),
@@ -108,8 +110,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 }
 
 
-template <typename T>
-DIALOG_SIM_MODEL<T>::~DIALOG_SIM_MODEL()
+template <typename T_symbol, typename T_field>
+DIALOG_SIM_MODEL<T_symbol, T_field>::~DIALOG_SIM_MODEL()
 {
     // Disable all properties. This is necessary because some of their methods are called after
     // destruction of DIALOG_SIM_MODEL, oddly. When disabled, they never access their models.
@@ -130,10 +132,40 @@ DIALOG_SIM_MODEL<T>::~DIALOG_SIM_MODEL()
 }
 
 
-template <typename T>
-bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
+template <typename T_symbol, typename T_field>
+bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
 {
     wxCommandEvent dummyEvent;
+
+    wxString value;
+
+    // Yes, the Value field is always present, but Coverity doesn't know that...
+    if( T_field* valueField = m_symbol.FindField( wxT( "Value" ) ) )
+        value = valueField->GetText();
+
+    // Infer RLC models if they aren't specified
+    if( !m_symbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
+            && !m_symbol.FindField( SIM_MODEL::PARAMS_FIELD ) )
+    {
+        // pair.first: wxString sim model type
+        // pair.second: wxString sim model parameters
+        auto model = SIM_MODEL::InferSimModel( m_symbol.GetPrefix(), value );
+
+        if( !model.second.IsEmpty() )
+        {
+            m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
+            m_fields.back().SetText( m_symbol.GetPrefix() );
+
+            if( !model.first.IsEmpty() )
+            {
+                m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::TYPE_FIELD );
+                m_fields.back().SetText( model.first );
+            }
+
+            m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PARAMS_FIELD );
+            m_fields.back().SetText( model.second );
+        }
+    }
 
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
@@ -197,7 +229,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     {
         // The model is sourced from the instance.
         m_useInstanceModelRadioButton->SetValue( true );
-        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, m_symbol.GetRawPins().size() );
+        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, m_symbol.GetPinCount() );
     }
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
@@ -205,9 +237,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         try
         {
             if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
-                m_builtinModelsMgr.CreateModel( m_fields, m_symbol.GetRawPins().size() );
+                m_builtinModelsMgr.CreateModel( m_fields, m_symbol.GetPinCount() );
             else
-                m_builtinModelsMgr.CreateModel( type, m_symbol.GetRawPins().size() );
+                m_builtinModelsMgr.CreateModel( type, m_symbol.GetPinCount() );
         }
         catch( const IO_ERROR& e )
         {
@@ -230,8 +262,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 }
 
 
-template <typename T>
-bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
+template <typename T_symbol, typename T_field>
+bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
 {
     m_pinAssignmentsGrid->CommitPendingChanges();
 
@@ -285,12 +317,14 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 
     curModel().WriteFields( m_fields );
 
+    m_fieldsOrigin = m_fields;
+
     return true;
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::updateWidgets()
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
 {
     updateIbisWidgets();
     updateInstanceWidgets();
@@ -313,8 +347,8 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateIbisWidgets()
 {
     SIM_MODEL_KIBIS* modelkibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() )
                                                  : nullptr;
@@ -329,11 +363,11 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets()
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets()
 {
     // Change the Type choice to match the current device type.
-    if( !m_prevModel || m_prevModel != &curModel() )
+    if( &curModel() != m_prevModel )
     {
         m_deviceTypeChoice->Clear();
 
@@ -396,8 +430,8 @@ void DIALOG_SIM_MODEL<T>::updateInstanceWidgets()
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelParamsTab()
 {
     if( &curModel() != m_prevModel )
     {
@@ -490,8 +524,8 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab()
 {
     wxString   text;
     SPICE_ITEM item;
@@ -508,12 +542,12 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
         text << rawSpice->GetSource();
 
     m_codePreview->SetText( text );
-    m_wasCodePreviewUpdated = true;
+    m_codePreview->SelectNone();
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::updatePinAssignments()
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments()
 {
     removeOrphanedPinAssignments();
 
@@ -580,29 +614,19 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments()
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::removeOrphanedPinAssignments()
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::removeOrphanedPinAssignments()
 {
     for( int i = 0; i < curModel().GetPinCount(); ++i )
     {
-        const SIM_MODEL::PIN& modelPin   = curModel().GetPin( i );
-        const std::vector<std::unique_ptr<SCH_PIN>>& allPins = m_symbol.GetRawPins();
-
-        if( std::none_of( allPins.begin(), allPins.end(),
-                          [modelPin]( const std::unique_ptr<SCH_PIN>& symbolPin )
-                          {
-                              return modelPin.symbolPinNumber == symbolPin->GetNumber();
-                          } ) )
-        {
-            // Is orphaned.
+        if( !m_symbol.GetPin( curModel().GetPin( i ).symbolPinNumber ) )
             curModel().SetPinSymbolPinNumber( i, "" );
-        }
     }
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForceReload )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryPath, bool aForceReload )
 {
     auto libraries = m_libraryModelsMgr.GetLibraries();
 
@@ -631,14 +655,13 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForce
     try
     {
         std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
-        int         pinCount = m_symbol.GetRawPins().size();
 
         for( auto& [baseModelName, baseModel] : library()->GetModels() )
         {
             if( baseModelName == modelName )
-                m_libraryModelsMgr.CreateModel( baseModel, pinCount, m_fields );
+                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetPinCount(), m_fields );
             else
-                m_libraryModelsMgr.CreateModel( baseModel, pinCount );
+                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetPinCount() );
         }
     }
     catch( const IO_ERROR& e )
@@ -671,8 +694,8 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForce
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::addParamPropertyIfRelevant( int aParamIndex )
 {
     if( curModel().GetParam( aParamIndex ).info.dir == SIM_MODEL::PARAM::DIR_OUT )
         return;
@@ -745,8 +768,8 @@ void DIALOG_SIM_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
 }
 
 
-template <typename T>
-wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
+template <typename T_symbol, typename T_field>
+wxPGProperty* DIALOG_SIM_MODEL<T_symbol, T_field>::newParamProperty( int aParamIndex ) const
 {
     const SIM_MODEL::PARAM& param = curModel().GetParam( aParamIndex );
     wxString paramDescription;
@@ -833,8 +856,8 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 }
 
 
-template <typename T>
-int DIALOG_SIM_MODEL<T>::findSymbolPinRow( const wxString& aSymbolPinNumber ) const
+template <typename T_symbol, typename T_field>
+int DIALOG_SIM_MODEL<T_symbol, T_field>::findSymbolPinRow( const wxString& aSymbolPinNumber ) const
 {
     for( int row = 0; row < static_cast<int>( m_sortedPartPins.size() ); ++row )
     {
@@ -848,8 +871,8 @@ int DIALOG_SIM_MODEL<T>::findSymbolPinRow( const wxString& aSymbolPinNumber ) co
 }
 
 
-template <typename T>
-SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
+template <typename T_symbol, typename T_field>
+SIM_MODEL& DIALOG_SIM_MODEL<T_symbol, T_field>::curModel() const
 {
     if( m_useLibraryModelRadioButton->GetValue()
         && m_modelNameCombobox->GetSelection() != wxNOT_FOUND )
@@ -863,8 +886,8 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
 }
 
 
-template <typename T>
-const SIM_LIBRARY* DIALOG_SIM_MODEL<T>::library() const
+template <typename T_symbol, typename T_field>
+const SIM_LIBRARY* DIALOG_SIM_MODEL<T_symbol, T_field>::library() const
 {
     if( m_libraryModelsMgr.GetLibraries().size() == 1 )
         return &m_libraryModelsMgr.GetLibraries().begin()->second.get();
@@ -873,8 +896,8 @@ const SIM_LIBRARY* DIALOG_SIM_MODEL<T>::library() const
 }
 
 
-template <typename T>
-wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
+template <typename T_symbol, typename T_field>
+wxString DIALOG_SIM_MODEL<T_symbol, T_field>::getSymbolPinString( int symbolPinIndex ) const
 {
     LIB_PIN* pin = m_sortedPartPins.at( symbolPinIndex );
     wxString pinNumber;
@@ -893,8 +916,8 @@ wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
 }
 
 
-template <typename T>
-wxString DIALOG_SIM_MODEL<T>::getModelPinString( int aModelPinIndex ) const
+template <typename T_symbol, typename T_field>
+wxString DIALOG_SIM_MODEL<T_symbol, T_field>::getModelPinString( int aModelPinIndex ) const
 {
     const wxString& pinName = curModel().GetPin( aModelPinIndex ).name;
 
@@ -909,8 +932,8 @@ wxString DIALOG_SIM_MODEL<T>::getModelPinString( int aModelPinIndex ) const
 }
 
 
-template <typename T>
-int DIALOG_SIM_MODEL<T>::getModelPinIndex( const wxString& aModelPinString ) const
+template <typename T_symbol, typename T_field>
+int DIALOG_SIM_MODEL<T_symbol, T_field>::getModelPinIndex( const wxString& aModelPinString ) const
 {
     if( aModelPinString == "Not Connected" )
         return SIM_MODEL::PIN::NOT_CONNECTED;
@@ -927,8 +950,8 @@ int DIALOG_SIM_MODEL<T>::getModelPinIndex( const wxString& aModelPinString ) con
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onRadioButton( wxCommandEvent& aEvent )
 {
     bool fromLibrary = m_useLibraryModelRadioButton->GetValue();
 
@@ -951,8 +974,8 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
 {
     if( m_useLibraryModelRadioButton->GetValue() )
     {
@@ -974,20 +997,8 @@ void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryPathText( wxCommandEvent& aEvent )
-{
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryPathTextSetFocus( wxFocusEvent& aEvent )
-{
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryPathTextKillFocus( wxFocusEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibraryPathTextKillFocus( wxFocusEvent& aEvent )
 {
     if( !m_inKillFocus )
     {
@@ -1001,8 +1012,8 @@ void DIALOG_SIM_MODEL<T>::onLibraryPathTextKillFocus( wxFocusEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onBrowseButtonClick( wxCommandEvent& aEvent )
 {
     wxFileDialog dlg( this, _( "Browse Models" ), Prj().GetProjectPath() );
 
@@ -1020,8 +1031,8 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onModelNameCombobox( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onModelNameCombobox( wxCommandEvent& aEvent )
 {
     if( isIbisLoaded() )
     {
@@ -1043,8 +1054,8 @@ void DIALOG_SIM_MODEL<T>::onModelNameCombobox( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onModelNameComboboxKillFocus( wxFocusEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onModelNameComboboxKillFocus( wxFocusEvent& aEvent )
 {
     m_modelNameCombobox->SetSelection(
         m_modelNameCombobox->FindString( m_modelNameCombobox->GetValue() ) );
@@ -1052,8 +1063,8 @@ void DIALOG_SIM_MODEL<T>::onModelNameComboboxKillFocus( wxFocusEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onModelNameComboboxTextEnter( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onModelNameComboboxTextEnter( wxCommandEvent& aEvent )
 {
     m_modelNameCombobox->SetSelection(
         m_modelNameCombobox->FindString( m_modelNameCombobox->GetValue() ) );
@@ -1061,8 +1072,8 @@ void DIALOG_SIM_MODEL<T>::onModelNameComboboxTextEnter( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onIbisPinCombobox( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onIbisPinCombobox( wxCommandEvent& aEvent )
 {
     if( isIbisLoaded() )
     {
@@ -1090,8 +1101,8 @@ void DIALOG_SIM_MODEL<T>::onIbisPinCombobox( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onIbisPinComboboxTextEnter( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onIbisPinComboboxTextEnter( wxCommandEvent& aEvent )
 {
     m_ibisPinCombobox->SetSelection(
             m_ibisPinCombobox->FindString( m_ibisPinCombobox->GetValue() ) );
@@ -1100,15 +1111,15 @@ void DIALOG_SIM_MODEL<T>::onIbisPinComboboxTextEnter( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onIbisModelCombobox( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onIbisModelCombobox( wxCommandEvent& aEvent )
 {
     updateWidgets();
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onIbisModelComboboxTextEnter( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onIbisModelComboboxTextEnter( wxCommandEvent& aEvent )
 {
     m_ibisModelCombobox->SetSelection(
             m_ibisModelCombobox->FindString( m_ibisModelCombobox->GetValue() ) );
@@ -1116,8 +1127,8 @@ void DIALOG_SIM_MODEL<T>::onIbisModelComboboxTextEnter( wxCommandEvent& aEvent )
     onIbisPinCombobox( aEvent );
 }
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onDifferentialCheckbox( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onDifferentialCheckbox( wxCommandEvent& aEvent )
 {
     if( isIbisLoaded() )
     {
@@ -1130,8 +1141,8 @@ void DIALOG_SIM_MODEL<T>::onDifferentialCheckbox( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 {
     for( SIM_MODEL::DEVICE_T deviceType : SIM_MODEL::DEVICE_T_ITERATOR() )
     {
@@ -1146,8 +1157,8 @@ void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
 {
     SIM_MODEL::DEVICE_T deviceType = curModel().GetDeviceType();
     wxString            typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
@@ -1181,26 +1192,15 @@ void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onParamGridChanged( wxPropertyGridEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onParamGridChanged( wxPropertyGridEvent& aEvent )
 {
     updateWidgets();
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onCodePreviewSetFocus( wxFocusEvent& aEvent )
-{
-    // For some reason all text gets selected for me -Mikolaj
-    if( m_wasCodePreviewUpdated )
-        m_codePreview->SelectNone();
-
-    m_wasCodePreviewUpdated = false;
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
 {
     int      symbolPinIndex = aEvent.GetRow();
     wxString oldModelPinName = aEvent.GetString();
@@ -1224,8 +1224,8 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
 {
     wxGridUpdateLocker deferRepaintsTillLeavingScope( m_pinAssignmentsGrid );
 
@@ -1237,22 +1237,22 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onSaveInValueCheckbox( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onSaveInValueCheckbox( wxCommandEvent& aEvent )
 {
     curModel().SetIsStoredInValue( m_saveInValueCheckbox->GetValue() );
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onExcludeCheckbox( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onExcludeCheckbox( wxCommandEvent& aEvent )
 {
     curModel().SetIsEnabled( !m_excludeCheckbox->GetValue() );
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onParamGridSetFocus( wxFocusEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onParamGridSetFocus( wxFocusEvent& aEvent )
 {
     // By default, when a property grid is focused, the textbox is not immediately focused until
     // Tab key is pressed. This is inconvenient, so we fix that here.
@@ -1273,8 +1273,8 @@ void DIALOG_SIM_MODEL<T>::onParamGridSetFocus( wxFocusEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onParamGridSelectionChange( wxPropertyGridEvent& aEvent )
 {
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
 
@@ -1337,8 +1337,8 @@ void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEven
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::adjustParamGridColumns( int aWidth, bool aForce )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::adjustParamGridColumns( int aWidth, bool aForce )
 {
     wxPropertyGrid* grid = m_paramGridMgr->GetGrid();
     int             margin = 15;
@@ -1379,8 +1379,8 @@ void DIALOG_SIM_MODEL<T>::adjustParamGridColumns( int aWidth, bool aForce )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onSizeParamGrid( wxSizeEvent& event )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onSizeParamGrid( wxSizeEvent& event )
 {
     adjustParamGridColumns( event.GetSize().GetX(), false );
 
@@ -1389,6 +1389,5 @@ void DIALOG_SIM_MODEL<T>::onSizeParamGrid( wxSizeEvent& event )
 
 
 
-
-template class DIALOG_SIM_MODEL<SCH_FIELD>;
-template class DIALOG_SIM_MODEL<LIB_FIELD>;
+template class DIALOG_SIM_MODEL<SCH_SYMBOL, SCH_FIELD>;
+template class DIALOG_SIM_MODEL<LIB_SYMBOL, LIB_FIELD>;

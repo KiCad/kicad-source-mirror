@@ -103,7 +103,8 @@ public:
 
     LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary = nullptr );
 
-    virtual ~LIB_SYMBOL();
+    virtual ~LIB_SYMBOL()
+    {}
 
     ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
     LIB_SYMBOL_SPTR SharedPtr() const { return m_me; }
@@ -254,15 +255,11 @@ public:
     bool UnitsLocked() const { return m_unitsLocked; }
 
     /**
-     * Overwrite all the existing fields in this symbol with fields supplied
-     * in \a aFieldsList.
-     *
-     * The only known caller of this function is the library symbol field editor, and it
-     * establishes needed behavior.
+     * Overwrite all the existing fields in this symbol with fields supplied in \a aFieldsList.
      *
      * @param aFieldsList is a set of fields to import, removing all previous fields.
      */
-    void SetFields( const std::vector <LIB_FIELD>& aFieldsList );
+    void SetFields( const std::vector<LIB_FIELD>& aFieldsList );
 
     /**
      * Return a list of fields within this symbol.
@@ -435,6 +432,8 @@ public:
      *                   get pins from any convert of symbol.
      */
     void GetPins( LIB_PINS& aList, int aUnit = 0, int aConvert = 0 ) const;
+
+    std::vector<LIB_PIN*> GetLibPins() const;
 
     /**
      * Return pin object with the requested pin \a aNumber.

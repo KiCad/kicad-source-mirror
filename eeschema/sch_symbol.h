@@ -456,7 +456,7 @@ public:
      *
      * @param aFields are the fields to set in this symbol.
      */
-    void SetFields( const SCH_FIELDS& aFields )
+    void SetFields( std::vector<SCH_FIELD>& aFields )
     {
         m_fields = aFields;     // vector copying, length is changed possibly
     }

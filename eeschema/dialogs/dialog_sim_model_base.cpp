@@ -283,8 +283,6 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_useLibraryModelRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_pathLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathLabelUpdate ), NULL, this );
 	m_libraryPathText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextKillFocus ), NULL, this );
-	m_libraryPathText->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextSetFocus ), NULL, this );
-	m_libraryPathText->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathText ), NULL, this );
 	m_libraryPathText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextEnter ), NULL, this );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonClick ), NULL, this );
 	m_browseButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
@@ -313,7 +311,6 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_typeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_paramGridMgr->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SIM_MODEL_BASE::onParamGridChanged ), NULL, this );
 	m_paramGridMgr->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onSizeParamGrid ), NULL, this );
-	m_codePreview->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onCodePreviewSetFocus ), NULL, this );
 	m_saveInValueCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onSaveInValueCheckbox ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
@@ -326,8 +323,6 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	m_useLibraryModelRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_pathLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathLabelUpdate ), NULL, this );
 	m_libraryPathText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextKillFocus ), NULL, this );
-	m_libraryPathText->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextSetFocus ), NULL, this );
-	m_libraryPathText->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathText ), NULL, this );
 	m_libraryPathText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextEnter ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonClick ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
@@ -356,7 +351,6 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	m_typeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_paramGridMgr->Disconnect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SIM_MODEL_BASE::onParamGridChanged ), NULL, this );
 	m_paramGridMgr->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onSizeParamGrid ), NULL, this );
-	m_codePreview->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onCodePreviewSetFocus ), NULL, this );
 	m_saveInValueCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onSaveInValueCheckbox ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );

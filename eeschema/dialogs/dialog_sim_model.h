@@ -41,7 +41,7 @@
 //    wxPG_NATIVE_DOUBLE_BUFFERING flag is not set.
 // 2. wxPropertyGridManager->ShowHeader() segfaults when called from this dialog's constructor.
 
-template <typename T>
+template <typename T_symbol, typename T_field>
 class DIALOG_SIM_MODEL : public DIALOG_SIM_MODEL_BASE
 {
 public:
@@ -82,7 +82,7 @@ public:
         MODEL
     };
 
-    DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol, std::vector<T>& aSchFields );
+    DIALOG_SIM_MODEL( wxWindow* aParent, T_symbol& aSymbol, std::vector<T_field>& aSchFields );
 
     ~DIALOG_SIM_MODEL();
 
@@ -114,10 +114,8 @@ private:
     int getModelPinIndex( const wxString& aModelPinString ) const;
 
     void onRadioButton( wxCommandEvent& aEvent ) override;
-    void onLibraryPathText( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextEnter( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextKillFocus( wxFocusEvent& aEvent ) override;
-    void onLibraryPathTextSetFocus( wxFocusEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;
     void onModelNameCombobox( wxCommandEvent& aEvent ) override;
     void onModelNameComboboxKillFocus( wxFocusEvent& event ) override;
@@ -129,7 +127,6 @@ private:
     void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
     void onTypeChoice( wxCommandEvent& aEvent ) override;
     void onParamGridChanged( wxPropertyGridEvent& aEvent ) override;
-    void onCodePreviewSetFocus( wxFocusEvent& aEvent ) override;
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
     void onSaveInValueCheckbox( wxCommandEvent& aEvent ) override;
@@ -145,12 +142,13 @@ private:
     bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() ); }
 
 private:
-    SCH_SYMBOL&            m_symbol;
-    std::vector<T>&        m_fields;
+    T_symbol&              m_symbol;
+    std::vector<T_field>   m_fields;            // Local copy of the fields
+    std::vector<T_field>&  m_fieldsOrigin;      // Pointer back to the source copy of the fields
 
-    SIM_LIB_MGR                                    m_libraryModelsMgr;
-    SIM_LIB_MGR                                    m_builtinModelsMgr;
-    const SIM_MODEL*                               m_prevModel;
+    SIM_LIB_MGR            m_libraryModelsMgr;
+    SIM_LIB_MGR            m_builtinModelsMgr;
+    const SIM_MODEL*       m_prevModel;
 
     std::vector<LIB_PIN*>                          m_sortedPartPins; //< Pins of the current part.
     std::map<SIM_MODEL::DEVICE_T, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
@@ -158,7 +156,6 @@ private:
 
     MODEL_NAME_VALIDATOR   m_modelNameValidator;
     SCINTILLA_TRICKS*      m_scintillaTricks;
-    bool                   m_wasCodePreviewUpdated;
 
     wxPGProperty*          m_firstCategory;            // Used to add principal parameters to root.
     wxPGProperty*          m_prevParamGridSelection;

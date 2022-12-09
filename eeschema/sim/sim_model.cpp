@@ -1198,11 +1198,11 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
 
     // Insert a plaintext model as a substitute.
 
-    T_field deviceTypeField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::DEVICE_TYPE_FIELD );
+    T_field deviceTypeField( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
     deviceTypeField.SetText( SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_T::SPICE ).fieldValue );
     aSymbol.AddField( deviceTypeField );
 
-    T_field paramsField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::PARAMS_FIELD );
+    T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
     paramsField.SetText( wxString::Format( "type=\"%s\" model=\"%s\" lib=\"%s\"",
                                            spiceType, spiceModel, spiceLib ) );
     aSymbol.AddField( paramsField );
@@ -1210,7 +1210,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
     // Legacy models by default get linear pin mapping.
     if( pinMap != "" )
     {
-        T_field pinsField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::PINS_FIELD );
+        T_field pinsField( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
 
         pinsField.SetText( pinMap );
         aSymbol.AddField( pinsField );

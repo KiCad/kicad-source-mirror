@@ -181,11 +181,6 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
 }
 
 
-LIB_SYMBOL::~LIB_SYMBOL()
-{
-}
-
-
 const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 {
     if( &aSymbol == this )
@@ -881,6 +876,16 @@ void LIB_SYMBOL::GetPins( LIB_PINS& aList, int aUnit, int aConvert ) const
 }
 
 
+std::vector<LIB_PIN*> LIB_SYMBOL::GetLibPins() const
+{
+    std::vector<LIB_PIN*> pinList;
+
+    GetPins( pinList );
+    return pinList;
+}
+
+
+
 LIB_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aConvert ) const
 {
     LIB_PINS pinList;
@@ -1061,14 +1066,14 @@ void LIB_SYMBOL::AddField( LIB_FIELD* aField )
 }
 
 
-void LIB_SYMBOL::SetFields( const std::vector <LIB_FIELD>& aFields )
+void LIB_SYMBOL::SetFields( const std::vector<LIB_FIELD>& aFields )
 {
     deleteAllFields();
 
-    for( unsigned i=0;  i<aFields.size();  ++i )
+    for( size_t ii = 0; ii < aFields.size(); ++ii )
     {
         // drawings is a ptr_vector, new and copy an object on the heap.
-        LIB_FIELD* field = new LIB_FIELD( aFields[i] );
+        LIB_FIELD* field = new LIB_FIELD( aFields[ ii ] );
 
         field->SetParent( this );
         m_drawings.push_back( field );

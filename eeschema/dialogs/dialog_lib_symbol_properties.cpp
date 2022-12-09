@@ -607,9 +607,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
-    auto symbol = SCH_SYMBOL( *m_libEntry, m_libEntry->GetLibId(), nullptr, 0 );
 
-    DIALOG_SIM_MODEL dialog( this, symbol, *m_fields );
+    DIALOG_SIM_MODEL dialog( this, *m_libEntry, *m_fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;

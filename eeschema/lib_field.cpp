@@ -66,11 +66,6 @@ LIB_FIELD::LIB_FIELD( int aId, const wxString& aName ) :
 }
 
 
-LIB_FIELD::~LIB_FIELD()
-{
-}
-
-
 LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
 {
     m_id             = field.m_id;
@@ -90,8 +85,6 @@ LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
 
 void LIB_FIELD::Init( int aId )
 {
-    wxCHECK2( aId >= 0, aId = MANDATORY_FIELDS );
-
     m_id = aId;
 
     SetTextAngle( ANGLE_HORIZONTAL );    // constructor already did this.
@@ -114,7 +107,6 @@ void LIB_FIELD::Init( int aId )
 
 void LIB_FIELD::SetId( int aId )
 {
-    wxCHECK2( aId >= 0, aId = MANDATORY_FIELDS );
     m_id = aId;
 }
 

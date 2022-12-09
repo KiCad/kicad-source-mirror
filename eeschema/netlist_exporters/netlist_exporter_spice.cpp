@@ -236,21 +236,21 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             {
                 // pair.first: wxString sim model type
                 // pair.second: wxString sim model parameters
-                auto model = SIM_MODEL_IDEAL::InferSimModel( symbol->GetPrefix(),
-                                                             symbol->GetValueFieldText( true ) );
+                auto model = SIM_MODEL::InferSimModel( symbol->GetPrefix(),
+                                                       symbol->GetValueFieldText( true ) );
 
                 if( !model.second.IsEmpty() )
                 {
-                    spiceItem.fields.emplace_back( VECTOR2I(), -1, symbol, SIM_MODEL::DEVICE_TYPE_FIELD );
+                    spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
                     spiceItem.fields.back().SetText( symbol->GetPrefix() );
 
                     if( !model.first.IsEmpty() )
                     {
-                        spiceItem.fields.emplace_back( VECTOR2I(), -1, symbol, SIM_MODEL::TYPE_FIELD );
+                        spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::TYPE_FIELD );
                         spiceItem.fields.back().SetText( model.first );
                     }
 
-                    spiceItem.fields.emplace_back( VECTOR2I(), -1, symbol, SIM_MODEL::PARAMS_FIELD );
+                    spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PARAMS_FIELD );
                     spiceItem.fields.back().SetText( model.second );
                 }
             }

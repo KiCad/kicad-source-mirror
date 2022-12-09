@@ -407,8 +407,6 @@
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
                                                                     <event name="OnKillFocus">onLibraryPathTextKillFocus</event>
-                                                                    <event name="OnSetFocus">onLibraryPathTextSetFocus</event>
-                                                                    <event name="OnText">onLibraryPathText</event>
                                                                     <event name="OnTextEnter">onLibraryPathTextEnter</event>
                                                                 </object>
                                                             </object>
@@ -1645,7 +1643,6 @@
                                                                         <property name="window_extra_style"></property>
                                                                         <property name="window_name"></property>
                                                                         <property name="window_style"></property>
-                                                                        <event name="OnSetFocus">onCodePreviewSetFocus</event>
                                                                     </object>
                                                                 </object>
                                                             </object>
