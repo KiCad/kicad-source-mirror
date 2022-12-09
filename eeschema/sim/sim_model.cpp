@@ -51,6 +51,7 @@
 #include <pegtl/contrib/parse_tree.hpp>
 
 #include <iterator>
+#include "wx/regex.h"
 
 using TYPE = SIM_MODEL::TYPE;
 
@@ -1006,6 +1007,51 @@ bool SIM_MODEL::requiresSpiceModelLine() const
 }
 
 
+std::pair<wxString, wxString> SIM_MODEL::InferSimModel( const wxString& aPrefix,
+                                                        const wxString& aValue )
+{
+    wxString spiceModelType;
+    wxString spiceModelParams;
+
+    if( !aValue.IsEmpty() )
+    {
+        if( aPrefix.StartsWith( wxT( "R" ) )
+            || aPrefix.StartsWith( wxT( "L" ) )
+            || aPrefix.StartsWith( wxT( "C" ) ) )
+        {
+            wxRegEx passiveVal( wxT( "^"
+                                     "([0-9\\. ]+)"
+                                     "([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?"
+                                     "([fFhHΩΩ𝛀𝛺𝝮]|ohm)?"
+                                     "([-1-9 ]*)"
+                                     "$" ) );
+
+            if( passiveVal.Matches( aValue ) )
+            {
+                wxString valuePrefix( passiveVal.GetMatch( aValue, 1 ) );
+                wxString valueUnits( passiveVal.GetMatch( aValue, 2 ) );
+                wxString valueSuffix( passiveVal.GetMatch( aValue, 6 ) );
+
+                if( valueUnits == wxT( "M" ) )
+                    valueUnits = wxT( "Meg" );
+
+                spiceModelParams = wxString::Format( wxT( "%s=\"%s%s\"" ),
+                                                     aPrefix.Lower(),
+                                                     valuePrefix,
+                                                     valueUnits );
+            }
+            else
+            {
+                spiceModelType = wxT( "=" );
+                spiceModelParams = wxString::Format( wxT( "%s=\"%s\"" ), aPrefix.Lower(), aValue );
+            }
+        }
+    }
+
+    return std::make_pair( spiceModelType, spiceModelParams );
+}
+
+
 template <typename T_symbol, typename T_field>
 void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
 {
@@ -1120,7 +1166,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
 
             wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
 
-            if( SIM_MODEL_IDEAL::InferSimParams( prefix, value ).length() )
+            if( SIM_MODEL::InferSimModel( prefix, value ).second.length() )
             {
                 if( pinIndexes[0] == wxT( "2" ) )
                     pins = "1=- 2=+";

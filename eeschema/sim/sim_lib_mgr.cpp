@@ -140,20 +140,28 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
             fields.back().SetText( aSymbol.GetFields()[ i ].GetShownText( 0, false ) );
     }
 
-    // Infer RLC passive models if they aren't specified
+    // Infer RLC models if they aren't specified
     if( !aSymbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD, false )
             && !aSymbol.FindField( SIM_MODEL::PARAMS_FIELD, false ) )
     {
-        wxString simParams = SIM_MODEL_IDEAL::InferSimParams( aSymbol.GetPrefix(),
-                                                              aSymbol.GetValueFieldText( true ) );
+        // pair.first: wxString sim model type
+        // pair.second: wxString sim model parameters
+        auto model = SIM_MODEL_IDEAL::InferSimModel( aSymbol.GetPrefix(),
+                                                     aSymbol.GetValueFieldText( true ) );
 
-        if( !simParams.IsEmpty() )
+        if( !model.second.IsEmpty() )
         {
             fields.emplace_back( VECTOR2I(), -1, &aSymbol, SIM_MODEL::DEVICE_TYPE_FIELD );
             fields.back().SetText( aSymbol.GetPrefix() );
 
+            if( !model.first.IsEmpty() )
+            {
+                fields.emplace_back( VECTOR2I(), -1, &aSymbol, SIM_MODEL::TYPE_FIELD );
+                fields.back().SetText( model.first );
+            }
+
             fields.emplace_back( VECTOR2I(), -1, &aSymbol, SIM_MODEL::PARAMS_FIELD );
-            fields.back().SetText( simParams );
+            fields.back().SetText( model.second );
         }
     }
 

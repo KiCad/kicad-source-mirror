@@ -73,41 +73,6 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType ) :
 }
 
 
-wxString SIM_MODEL_IDEAL::InferSimParams( const wxString& aPrefix, const wxString& aValue )
-{
-    wxString spiceModel;
-
-    if( aPrefix.StartsWith( wxT( "R" ) )
-        || aPrefix.StartsWith( wxT( "L" ) )
-        || aPrefix.StartsWith( wxT( "C" ) ) )
-    {
-        wxRegEx passiveVal(
-            wxT( "^([0-9\\. ]+)([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?([fFhHΩΩ𝛀𝛺𝝮]|ohm)?([-1-9 ]*)$" ) );
-
-        if( passiveVal.Matches( aValue ) )
-        {
-            wxString valuePrefix( passiveVal.GetMatch( aValue, 1 ) );
-            wxString valueUnits( passiveVal.GetMatch( aValue, 2 ) );
-            wxString valueSuffix( passiveVal.GetMatch( aValue, 6 ) );
-
-            if( valueUnits == wxT( "M" ) )
-                valueUnits = wxT( "Meg" );
-
-            spiceModel = valuePrefix + valueUnits;
-        }
-        else
-        {
-            spiceModel = aValue;
-        }
-    }
-
-    if( !spiceModel.IsEmpty() )
-        return wxString::Format( wxT( "%s=\"%s\"" ), aPrefix.Lower(), spiceModel );
-    else
-        return wxEmptyString;
-}
-
-
 SIM_MODEL::PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( std::string aName, std::string aDescription,
                                                        std::string aUnit )
 {

@@ -519,6 +519,9 @@ public:
     }
     bool IsStoredInValue() const { return m_isStoredInValue; }
 
+    static std::pair<wxString, wxString> InferSimModel( const wxString& aPrefix,
+                                                        const wxString& aValue );
+
     template <class T_symbol, class T_field>
     static void MigrateSimModel( T_symbol& aSymbol );
 
