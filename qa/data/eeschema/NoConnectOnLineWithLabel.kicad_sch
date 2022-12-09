@@ -1,4 +1,4 @@
-(kicad_sch (version 20210621) (generator eeschema)
+(kicad_sch (version 20211123) (generator eeschema)
 
   (uuid dbcbba47-5568-4743-853c-61930ab05049)
 
@@ -28,7 +28,10 @@
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "TestPoint_0_1"
-        (circle (center 0 3.302) (radius 0.762) (stroke (width 0)) (fill (type none)))
+        (circle (center 0 3.302) (radius 0.762)
+          (stroke (width 0) (type default) (color 0 0 0 0))
+          (fill (type none))
+        )
       )
       (symbol "TestPoint_1_1"
         (pin passive line (at 0 0 90) (length 2.54)
@@ -40,16 +43,35 @@
   )
 
 
+  (no_connect (at 43.18 35.56) (uuid 5390cdcb-0b60-4cf2-ac73-75bc3f3db96f))
+  (no_connect (at 43.18 25.4) (uuid dc8a70cf-6e4e-4231-b6be-1dcc1d97485c))
   (no_connect (at 25.4 35.56) (uuid ecd200e1-9ed6-4c4a-9585-915c7b7ccdd8))
 
   (wire (pts (xy 25.4 25.4) (xy 25.4 35.56))
     (stroke (width 0) (type solid) (color 0 0 0 0))
     (uuid 01236e64-2a69-4078-80f1-bc0398fb7c9f)
   )
+  (wire (pts (xy 43.18 25.4) (xy 43.18 35.56))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+    (uuid 73f97079-eef5-4ec4-adbc-83ef78607567)
+  )
 
-  (label "test" (at 25.4 31.75 90)
+  (text "1 error with unconnected label" (at 46.99 54.61 90)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 3e4e1fda-b57b-4929-8735-d7c559505ec0)
+  )
+  (text "No error with pin" (at 26.67 55.88 90)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 53efe433-3175-4976-ad3e-6c38960fd2d6)
+  )
+
+  (label "test_OK" (at 25.4 31.75 90)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 03e214cc-bc77-4985-a9e8-8e508ac46a57)
+  )
+  (label "test_err" (at 43.18 34.29 90)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 611e8228-959f-4611-a3b6-e1c3cf8cd158)
   )
 
   (symbol (lib_id "Connector:TestPoint") (at 25.4 25.4 0) (unit 1)
