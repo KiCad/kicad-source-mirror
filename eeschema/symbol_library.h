@@ -302,7 +302,7 @@ public:
      * @return SYMBOL_LIB* is the allocated and loaded SYMBOL_LIB, which is owned by the caller.
      * @throw IO_ERROR if there's any problem loading the library.
      */
-    static SYMBOL_LIB* LoadLibrary( const wxString& aFileName );
+    static SYMBOL_LIB* LoadSymbolLibrary( const wxString& aFileName );
 
 private:
     SCH_LIB_TYPE    type;           ///< Library type indicator.

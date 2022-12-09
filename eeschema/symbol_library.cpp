@@ -235,7 +235,7 @@ LIB_SYMBOL* SYMBOL_LIB::ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewS
 }
 
 
-SYMBOL_LIB* SYMBOL_LIB::LoadLibrary( const wxString& aFileName )
+SYMBOL_LIB* SYMBOL_LIB::LoadSymbolLibrary( const wxString& aFileName )
 {
     std::unique_ptr<SYMBOL_LIB> lib = std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
                                                                     aFileName );
@@ -272,7 +272,7 @@ SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName )
 
     try
     {
-        lib = SYMBOL_LIB::LoadLibrary( aFileName );
+        lib = SYMBOL_LIB::LoadSymbolLibrary( aFileName );
         push_back( lib );
 
         return lib;
@@ -295,7 +295,7 @@ SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName, SYMBOL_LIBS::ite
 
     try
     {
-        lib = SYMBOL_LIB::LoadLibrary( aFileName );
+        lib = SYMBOL_LIB::LoadSymbolLibrary( aFileName );
 
         if( aIterator >= begin() && aIterator < end() )
             insert( aIterator, lib );
