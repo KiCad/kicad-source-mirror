@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,16 +56,17 @@ public:
      * @param aLockedInPts - the "fixed points" of the outline
      * @param aLeaderPts - the lines from the last fixed point to
      *        another point, eg the cursor.
+     * @param aLoopPts - the lines from the cursor to the start point.
      */
-    void SetPoints( const SHAPE_LINE_CHAIN& aLockedInPts,
-                    const SHAPE_LINE_CHAIN& aLeaderPts );
+    void SetPoints( const SHAPE_LINE_CHAIN& aLockedInPts, const SHAPE_LINE_CHAIN& aLeaderPts,
+                    const SHAPE_LINE_CHAIN& aLoopPts );
 
 private:
     ///< Draw rectangle and center line onto GAL
     void drawPreviewShape( KIGFX::VIEW* aView ) const override;
 
-    ///< complete polyline of locked in and leader points
-    SHAPE_LINE_CHAIN m_lockedChain, m_leaderChain;
+    ///< complete polyline of locked in, leader and looping points
+    SHAPE_LINE_CHAIN m_lockedChain, m_leaderChain, m_loopChain;
 
     ///< polygon fill
     SHAPE_POLY_SET m_polyfill;

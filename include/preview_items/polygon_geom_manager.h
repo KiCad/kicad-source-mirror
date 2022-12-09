@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -174,14 +174,23 @@ public:
         return m_leaderPts;
     }
 
+    /**
+     * Get the points from the current cursor position
+     * to the polygon start point
+     */
+    const SHAPE_LINE_CHAIN& GetLoopLinePoints() const
+    {
+        return m_loopPts;
+    }
+
 private:
 
     /**
-     * Update the leader line points based on a new endpoint (probably
+     * Update the leader and loop lines points based on a new endpoint (probably
      * a cursor position)
      */
-    void updateLeaderPoints( const VECTOR2I& aEndPoint,
-                             LEADER_MODE aModifier = LEADER_MODE::DIRECT );
+    void updateTemporaryLines( const VECTOR2I& aEndPoint,
+                               LEADER_MODE     aModifier = LEADER_MODE::DIRECT );
 
     ///< The "user" of the polygon data that is informed when the geometry changes
     CLIENT& m_client;
@@ -197,6 +206,9 @@ private:
 
     ///< Points in the temporary "leader" line(s)
     SHAPE_LINE_CHAIN m_leaderPts;
+
+    ///< Points between the cursor and start point
+    SHAPE_LINE_CHAIN m_loopPts;
 };
 
 #endif // PREVIEW_POLYGON_GEOM_MANAGER__H_

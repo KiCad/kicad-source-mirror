@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,10 +36,11 @@ POLYGON_ITEM::POLYGON_ITEM() :
 
 
 void POLYGON_ITEM::SetPoints( const SHAPE_LINE_CHAIN& aLockedInPts,
-                              const SHAPE_LINE_CHAIN& aLeaderPts )
+                              const SHAPE_LINE_CHAIN& aLeaderPts, const SHAPE_LINE_CHAIN& aLoopPts )
 {
     m_lockedChain = aLockedInPts;
     m_leaderChain = aLeaderPts;
+    m_loopChain = aLoopPts;
 
     m_polyfill.RemoveAllContours();
     m_polyfill.NewOutline();
@@ -49,6 +50,9 @@ void POLYGON_ITEM::SetPoints( const SHAPE_LINE_CHAIN& aLockedInPts,
 
     for( int i = 0; i < aLeaderPts.PointCount(); ++i )
         m_polyfill.Append( aLeaderPts.CPoint( i ) );
+
+    for( int i = 0; i < aLoopPts.PointCount(); ++i )
+        m_polyfill.Append( aLoopPts.CPoint( i ) );
 }
 
 
@@ -69,6 +73,8 @@ void POLYGON_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
         gal.SetStrokeColor( renderSettings->GetLayerColor( LAYER_AUX_ITEMS ) );
         gal.DrawPolyline( m_leaderChain );
     }
+
+    gal.SetIsStroke( false );
 
     for( int j = 0; j < m_polyfill.OutlineCount(); ++j )
     {

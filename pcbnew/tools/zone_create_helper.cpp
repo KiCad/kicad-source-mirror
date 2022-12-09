@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -320,7 +320,8 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 void ZONE_CREATE_HELPER::OnGeometryChange( const POLYGON_GEOM_MANAGER& aMgr )
 {
     // send the points to the preview item
-    m_previewItem.SetPoints( aMgr.GetLockedInPoints(), aMgr.GetLeaderLinePoints() );
+    m_previewItem.SetPoints( aMgr.GetLockedInPoints(), aMgr.GetLeaderLinePoints(),
+                             aMgr.GetLoopLinePoints() );
     m_parentView.Update( &m_previewItem, KIGFX::GEOMETRY );
 }
 
@@ -349,9 +350,13 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         // 45 constraint
         if( aMgr.GetLeaderMode() == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 )
         {
-            const auto& pts = aMgr.GetLeaderLinePoints();
-            for( int i = 1; i < pts.PointCount(); i++ )
-                outline->Append( pts.CPoint( i ) );
+            const SHAPE_LINE_CHAIN leaderPts = aMgr.GetLeaderLinePoints();
+            for( int i = 1; i < leaderPts.PointCount(); i++ )
+                outline->Append( leaderPts.CPoint( i ) );
+
+            const SHAPE_LINE_CHAIN loopPts = aMgr.GetLoopLinePoints();
+            for( int i = 1; i < loopPts.PointCount(); i++ )
+                outline->Append( loopPts.CPoint( i ) );
         }
 
         outline->Outline( 0 ).SetClosed( true );

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,9 +46,10 @@ bool POLYGON_GEOM_MANAGER::AddPoint( const VECTOR2I& aPt )
     if( m_leaderPts.PointCount() > 1 )
     {
         // there are enough leader points - the next
-        // locked-in point is the end of the first leader
+        // locked-in point is the end of the last leader
         // segment
-        m_lockedPoints.Append( m_leaderPts.CPoint( 1 ) );
+        m_lockedPoints.Append( m_leaderPts.CPoint( -2 ) );
+        m_lockedPoints.Append( m_leaderPts.CPoint( -1 ) );
     }
     else
     {
@@ -62,6 +63,9 @@ bool POLYGON_GEOM_MANAGER::AddPoint( const VECTOR2I& aPt )
         m_lockedPoints.Remove( m_lockedPoints.PointCount() - 1 );
         return false;
     }
+
+    if( m_lockedPoints.PointCount() > 0 )
+        updateTemporaryLines( aPt );
 
     m_client.OnGeometryChange( *this );
     return true;
@@ -103,7 +107,7 @@ bool POLYGON_GEOM_MANAGER::IsSelfIntersecting( bool aIncludeLeaderPts ) const
 
 void POLYGON_GEOM_MANAGER::SetCursorPosition( const VECTOR2I& aPos )
 {
-    updateLeaderPoints( aPos );
+    updateTemporaryLines( aPos );
 }
 
 
@@ -127,7 +131,7 @@ void POLYGON_GEOM_MANAGER::DeleteLastCorner()
     // update the new last segment (was previously
     // locked in), reusing last constraints
     if( m_lockedPoints.PointCount() > 0 )
-        updateLeaderPoints( m_leaderPts.CLastPoint() );
+        updateTemporaryLines( m_leaderPts.CLastPoint() );
 
     m_client.OnGeometryChange( *this );
 }
@@ -142,67 +146,93 @@ void POLYGON_GEOM_MANAGER::Reset()
 }
 
 
-void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER_MODE aModifier )
+SHAPE_LINE_CHAIN build45DegLeader( const VECTOR2I& aEndPoint, SHAPE_LINE_CHAIN aLastPoints )
+{
+    if( aLastPoints.PointCount() < 1 )
+        return SHAPE_LINE_CHAIN();
+
+    const VECTOR2I lastPt = aLastPoints.CPoint( -1 );
+    const VECTOR2D endpointD = aEndPoint;
+    const VECTOR2D lineVec = endpointD - lastPt;
+
+    if( aLastPoints.SegmentCount() < 1 )
+        return SHAPE_LINE_CHAIN(
+                std::vector<VECTOR2I>{ lastPt, lastPt + GetVectorSnapped45( lineVec ) } );
+
+    EDA_ANGLE lineA( lineVec );
+    EDA_ANGLE prevA( GetVectorSnapped45( lastPt - aLastPoints.CPoint( -2 ) ) );
+
+    bool vertical = std::abs( lineVec.y ) > std::abs( lineVec.x );
+    bool horizontal = std::abs( lineVec.y ) < std::abs( lineVec.x );
+
+    double angDiff = std::abs( ( lineA - prevA ).Normalize180().AsDegrees() );
+
+    bool bendEnd = ( angDiff < 45 ) || ( angDiff > 90 && angDiff < 135 );
+
+    if( prevA.Normalize90() == ANGLE_45 || prevA.Normalize90() == -ANGLE_45 )
+        bendEnd = !bendEnd;
+
+    VECTOR2D mid = endpointD;
+
+    if( bendEnd )
+    {
+        if( vertical )
+        {
+            if( lineVec.y > 0 )
+                mid = VECTOR2D( lastPt.x, endpointD.y - std::abs( lineVec.x ) );
+            else
+                mid = VECTOR2D( lastPt.x, endpointD.y + std::abs( lineVec.x ) );
+        }
+        else if( horizontal )
+        {
+            if( lineVec.x > 0 )
+                mid = VECTOR2D( endpointD.x - std::abs( lineVec.y ), lastPt.y );
+            else
+                mid = VECTOR2D( endpointD.x + std::abs( lineVec.y ), lastPt.y );
+        }
+    }
+    else
+    {
+        if( vertical )
+        {
+            if( lineVec.y > 0 )
+                mid = VECTOR2D( endpointD.x, lastPt.y + std::abs( lineVec.x ) );
+            else
+                mid = VECTOR2D( endpointD.x, lastPt.y - std::abs( lineVec.x ) );
+        }
+        else if( horizontal )
+        {
+            if( lineVec.x > 0 )
+                mid = VECTOR2D( lastPt.x + std::abs( lineVec.y ), endpointD.y );
+            else
+                mid = VECTOR2D( lastPt.x - std::abs( lineVec.y ), endpointD.y );
+        }
+    }
+
+    const VECTOR2I midInt = { KiROUND( mid.x ), KiROUND( mid.y ) };
+
+    return SHAPE_LINE_CHAIN( std::vector<VECTOR2I>{ lastPt, midInt, aEndPoint } );
+}
+
+
+void POLYGON_GEOM_MANAGER::updateTemporaryLines( const VECTOR2I& aEndPoint, LEADER_MODE aModifier )
 {
     wxCHECK( m_lockedPoints.PointCount() > 0, /*void*/ );
     const VECTOR2I& last_pt = m_lockedPoints.CLastPoint();
 
     if( m_leaderMode == LEADER_MODE::DEG45 || aModifier == LEADER_MODE::DEG45 )
     {
-        const VECTOR2I line_vec( aEndPoint - last_pt );
-        // get a restricted 45/H/V line from the last fixed point to the cursor
-        auto new_end = last_pt + GetVectorSnapped45( line_vec );
-        OPT_VECTOR2I pt;
-
-        if( m_lockedPoints.SegmentCount() > 1 )
+        if( m_lockedPoints.PointCount() > 0 )
         {
-            const VECTOR2I& start_pt = m_lockedPoints.CPoint( 0 );
-            VECTOR2I completed_vec( start_pt - new_end );
-
-            if( completed_vec != GetVectorSnapped45( completed_vec ) )
-            {
-                SEG v_first( new_end, VECTOR2I( new_end.x, start_pt.y ) );
-                SEG h_first( new_end, VECTOR2I( start_pt.x, new_end.y ) );
-
-                SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
-                auto v_hits = m_lockedPoints.Intersect( v_first, intersections );
-                v_hits += m_lockedPoints.Intersect( SEG( v_first.B, start_pt ), intersections );
-                pt = v_first.B;
-
-                if( v_hits > 0 )
-                {
-                    intersections.clear();
-                    auto h_hits = m_lockedPoints.Intersect( h_first, intersections );
-                    h_hits += m_lockedPoints.Intersect( SEG( h_first.B, start_pt ), intersections );
-
-                    if( h_hits < v_hits )
-                        pt = h_first.B;
-                }
-            }
-        }
-
-        m_leaderPts = SHAPE_LINE_CHAIN( { last_pt, new_end } );
-
-        if( pt )
-        {
-            SEG drawn( last_pt, new_end );
-            SEG completed( new_end, *pt );
-
-            /*
-             * Check for backtracking from the point to intersection.  If the snapped path to
-             * completion is shorter than what the user actually drew, we want to discard the
-             * drawn point and just use the snapped completion point.
-             */
-            if( drawn.Collinear( completed ) && drawn.SquaredLength() > completed.SquaredLength() )
-                m_leaderPts = SHAPE_LINE_CHAIN( { last_pt, *pt } );
-            else
-                m_leaderPts.Append( *pt );
+            m_leaderPts = build45DegLeader( aEndPoint, m_lockedPoints );
+            m_loopPts = build45DegLeader( aEndPoint, m_lockedPoints.Reverse() ).Reverse();
         }
     }
     else
     {
         // direct segment
         m_leaderPts = SHAPE_LINE_CHAIN( { last_pt, aEndPoint } );
+        m_loopPts.Clear();
     }
 
     m_client.OnGeometryChange( *this );
