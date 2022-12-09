@@ -551,9 +551,9 @@ private:
     virtual std::vector<std::string> getPinNames() const { return {}; }
 
 protected:
-    std::vector<PARAM>         m_params;
-    const SIM_MODEL*           m_baseModel;
-    std::unique_ptr<SIM_SERDE> m_serde;
+    std::vector<PARAM>               m_params;
+    const SIM_MODEL*                 m_baseModel;
+    std::unique_ptr<SIM_SERDE>       m_serde;
 
 private:
     std::unique_ptr<SPICE_GENERATOR> m_spiceGenerator;
