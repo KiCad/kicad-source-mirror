@@ -143,20 +143,9 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     VECTOR2I sheetSizeMils = m_settings.m_pageInfo.GetSizeMils();
     VECTOR2I sheetSizeIU( milsToIU( sheetSizeMils.x ),
                           milsToIU( sheetSizeMils.y ) );
-    BOX2I    bBox;
+    BOX2I    bBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( sheetSizeIU ) );
 
-    // Determine printout bounding box
-    if( m_settings.PrintBorderAndTitleBlock() )
-    {
-        bBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( sheetSizeIU ) );
-        view->SetLayerVisible( LAYER_DRAWINGSHEET, true );
-    }
-    else
-    {
-        bBox = getBoundingBox();
-        view->SetLayerVisible( LAYER_DRAWINGSHEET, false );
-    }
-
+    view->SetLayerVisible( LAYER_DRAWINGSHEET, m_settings.PrintBorderAndTitleBlock() );
 
     // Fit to page
     if( m_settings.m_scale <= 0.0 )
@@ -166,10 +155,17 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
             // Nothing to print
             m_settings.m_scale = 1.0;
         }
+        else if( !m_settings.PrintBorderAndTitleBlock() )
+        {
+            BOX2I content_box = getBoundingBox();
+            double scaleX = (double) pageSizeIU.x / content_box.GetWidth();
+            double scaleY = (double) pageSizeIU.y / content_box.GetHeight();
+            m_settings.m_scale = std::min( scaleX, scaleY );
+        }
         else
         {
-            double scaleX = (double) pageSizeIU.x / bBox.GetWidth();
-            double scaleY = (double) pageSizeIU.y / bBox.GetHeight();
+            double scaleX = (double) pageSizeIU.x / sheetSizeIU.x;
+            double scaleY = (double) pageSizeIU.y / sheetSizeIU.y;
             m_settings.m_scale = std::min( scaleX, scaleY );
         }
     }
