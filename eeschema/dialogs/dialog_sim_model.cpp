@@ -142,23 +142,23 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     if( !m_symbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
             && !m_symbol.FindField( SIM_MODEL::PARAMS_FIELD ) )
     {
-        // pair.first: wxString sim model type
-        // pair.second: wxString sim model parameters
-        auto model = SIM_MODEL::InferSimModel( m_symbol.GetPrefix(), valueField->GetText() );
+        // std::pair<wxString, wxString> [ Sim.Type, Sim.Params ]
+        auto inferredModel = SIM_MODEL::InferSimModel( m_symbol.GetPrefix(), valueField->GetText(),
+                                                       SIM_VALUE_GRAMMAR::NOTATION::SI );
 
-        if( !model.second.IsEmpty() )
+        if( !inferredModel.second.IsEmpty() )
         {
             m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
             m_fields.back().SetText( m_symbol.GetPrefix() );
 
-            if( !model.first.IsEmpty() )
+            if( !inferredModel.first.IsEmpty() )
             {
                 m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::TYPE_FIELD );
-                m_fields.back().SetText( model.first );
+                m_fields.back().SetText( inferredModel.first );
             }
 
             m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PARAMS_FIELD );
-            m_fields.back().SetText( model.second );
+            m_fields.back().SetText( inferredModel.second );
 
             m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
         }
@@ -226,7 +226,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     {
         // The model is sourced from the instance.
         m_useInstanceModelRadioButton->SetValue( true );
-        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, m_symbol.GetPinCount() );
+        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields );
     }
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )

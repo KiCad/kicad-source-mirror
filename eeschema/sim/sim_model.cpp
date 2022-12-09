@@ -26,6 +26,7 @@
 #include <sch_symbol.h>
 #include <confirm.h>
 #include <string_utils.h>
+#include <wx/regex.h>
 
 #include <sim/sim_model.h>
 #include <sim/sim_model_behavioral.h>
@@ -44,14 +45,10 @@
 #include <sim/sim_library_kibis.h>
 
 #include <boost/algorithm/string/case_conv.hpp>
-#include <boost/algorithm/string/trim.hpp>
-#include <boost/algorithm/string.hpp>
 #include <fmt/core.h>
-#include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
 #include <iterator>
-#include "wx/regex.h"
 
 using TYPE = SIM_MODEL::TYPE;
 
@@ -87,11 +84,9 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceInfo( DEVICE_T aDeviceType )
         case DEVICE_T::SUBCKT:    return { "SUBCKT", "Subcircuit",        false };
         case DEVICE_T::XSPICE:    return { "XSPICE", "XSPICE Code Model", true };
         case DEVICE_T::SPICE:     return { "SPICE",  "Raw Spice Element", true };
-        case DEVICE_T::_ENUM_END: break;
-    }
 
-    wxFAIL;
-    return {};
+        default:    wxFAIL;       return {};
+    }
 }
 
 
@@ -226,11 +221,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
 
     case TYPE::RAWSPICE:             return { DEVICE_T::SPICE,  "",               ""                           };
 
-    case TYPE::_ENUM_END:            break;
+    default:       wxFAIL;           return {};
     }
-
-    wxFAIL;
-    return {};
 }
 
 
@@ -361,25 +353,18 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::KIBIS_DRIVER_PRBS:    return { "X"  };
 
     case TYPE::NONE:
-    case TYPE::RAWSPICE:
-        return {};
+    case TYPE::RAWSPICE:             return {};
 
-    case TYPE::_ENUM_END:
-        break;
+    default:       wxFAIL;           return {};
     }
-
-    wxFAIL;
-    return {};
 }
 
 
-template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields,
-                                             int aSymbolPinCount );
-template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFields,
-                                             int aSymbolPinCount );
+template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields );
+template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFields );
 
 template <typename T>
-TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, int aSymbolPinCount )
+TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
 {
     std::string deviceTypeFieldValue = GetFieldValue( &aFields, DEVICE_TYPE_FIELD );
     std::string typeFieldValue = GetFieldValue( &aFields, TYPE_FIELD );
@@ -517,7 +502,7 @@ template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
-    TYPE type = ReadTypeFromFields( aFields, aSymbolPinCount );
+    TYPE type = ReadTypeFromFields( aFields );
 
     // If the model has a specified type, it takes priority over the type of its base class.
     if( type == TYPE::NONE )
@@ -543,7 +528,7 @@ template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
-    TYPE type = ReadTypeFromFields( aFields, aSymbolPinCount );
+    TYPE type = ReadTypeFromFields( aFields );
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
     model->ReadDataFields( aSymbolPinCount, &aFields );
@@ -1007,8 +992,10 @@ bool SIM_MODEL::requiresSpiceModelLine() const
 }
 
 
+// Returns [ Sim.Type, Sim.Params ]
 std::pair<wxString, wxString> SIM_MODEL::InferSimModel( const wxString& aPrefix,
-                                                        const wxString& aValue )
+                                                        const wxString& aValue,
+                                                        SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     wxString spiceModelType;
     wxString spiceModelParams;
@@ -1032,8 +1019,16 @@ std::pair<wxString, wxString> SIM_MODEL::InferSimModel( const wxString& aPrefix,
                 wxString valueUnits( passiveVal.GetMatch( aValue, 2 ) );
                 wxString valueSuffix( passiveVal.GetMatch( aValue, 6 ) );
 
-                if( valueUnits == wxT( "M" ) )
-                    valueUnits = wxT( "Meg" );
+                if( aNotation == SIM_VALUE_GRAMMAR::NOTATION::SPICE )
+                {
+                    if( valueUnits == wxT( "M" ) )
+                        valueUnits = wxT( "Meg" );
+                }
+                else if( aNotation == SIM_VALUE_GRAMMAR::NOTATION::SI )
+                {
+                    if( valueUnits == wxT( "Meg" ) || valueUnits == wxT( "MEG" ) )
+                        valueUnits = wxT( "M" );
+                }
 
                 spiceModelParams = wxString::Format( wxT( "%s=\"%s%s\"" ),
                                                      aPrefix.Lower(),
@@ -1066,6 +1061,18 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
 
     wxString prefix = aSymbol.GetPrefix();
     T_field* valueField = aSymbol.FindField( wxT( "Value" ) );
+
+    auto getSIValue =
+            []( T_field* aField )
+            {
+                wxRegEx  regex( wxT( "([^a-z])(M)(e|E)(g|G)($|[^a-z])" ) );
+                wxString value = aField->GetText();
+
+                // Keep prefix, M, and suffix, but drop e|E and g|G
+                regex.ReplaceAll( &value, wxT( "\\1\\2\\5" ) );
+
+                return value;
+            };
 
     wxString spiceType;
     wxString spiceModel;
@@ -1115,7 +1122,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
         }
         else
         {
-            spiceModel = valueField->GetText();
+            spiceModel = getSIValue( valueField );
             valueField->SetText( wxT( "${SIM.PARAMS}" ) );
         }
 
@@ -1139,7 +1146,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
     }
     else if( prefix == wxT( "V" ) || prefix == wxT( "I" ) )
     {
-        spiceModel = valueField->GetText();
+        spiceModel = getSIValue( valueField );
         valueField->SetText( wxT( "${SIM.PARAMS}" ) );
     }
     else
@@ -1158,13 +1165,18 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
 
         if( T_field* legacyPins = aSymbol.FindField( wxT( "Sim_Pins" ) ) )
         {
+            // std::pair<wxString, wxString> [ Sim.Type, Sim.Params ]
+            auto inferredModel = SIM_MODEL::InferSimModel( prefix, valueField->GetText(),
+                                                           SIM_VALUE_GRAMMAR::NOTATION::SI );
+            bool isPassive = !inferredModel.second.IsEmpty();
+
             // Migrate pins from array of indexes to name-value-pairs
             wxArrayString pinIndexes;
             wxString      pins;
 
             wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
 
-            if( SIM_MODEL::InferSimModel( prefix, valueField->GetText() ).second.length() )
+            if( isPassive )
             {
                 if( pinIndexes[0] == wxT( "2" ) )
                     pins = "1=- 2=+";
@@ -1201,8 +1213,17 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
     aSymbol.AddField( deviceTypeField );
 
     T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
-    paramsField.SetText( wxString::Format( "type=\"%s\" model=\"%s\" lib=\"%s\"",
-                                           spiceType, spiceModel, spiceLib ) );
+
+    if( spiceType.IsEmpty() && spiceLib.IsEmpty() )
+    {
+        paramsField.SetText( spiceModel );
+    }
+    else
+    {
+        paramsField.SetText( wxString::Format( "type=\"%s\" model=\"%s\" lib=\"%s\"",
+                                               spiceType, spiceModel, spiceLib ) );
+    }
+
     aSymbol.AddField( paramsField );
 
     // Legacy models by default get linear pin mapping.

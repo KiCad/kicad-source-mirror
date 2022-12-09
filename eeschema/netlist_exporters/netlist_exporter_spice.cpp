@@ -234,24 +234,24 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             if( !symbol->FindField( SIM_MODEL::DEVICE_TYPE_FIELD, false )
                     && !symbol->FindField( SIM_MODEL::PARAMS_FIELD, false ) )
             {
-                // pair.first: wxString sim model type
-                // pair.second: wxString sim model parameters
-                auto model = SIM_MODEL::InferSimModel( symbol->GetPrefix(),
-                                                       symbol->GetValueFieldText( true ) );
+                // std::pair<wxString, wxString> [ Sim.Type, Sim.Params ]
+                auto inferredModel = SIM_MODEL::InferSimModel( symbol->GetPrefix(),
+                                                               symbol->GetValueFieldText( true ),
+                                                               SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
-                if( !model.second.IsEmpty() )
+                if( !inferredModel.second.IsEmpty() )
                 {
                     spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
                     spiceItem.fields.back().SetText( symbol->GetPrefix() );
 
-                    if( !model.first.IsEmpty() )
+                    if( !inferredModel.first.IsEmpty() )
                     {
                         spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::TYPE_FIELD );
-                        spiceItem.fields.back().SetText( model.first );
+                        spiceItem.fields.back().SetText( inferredModel.first );
                     }
 
                     spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PARAMS_FIELD );
-                    spiceItem.fields.back().SetText( model.second );
+                    spiceItem.fields.back().SetText( inferredModel.second );
                 }
             }
 

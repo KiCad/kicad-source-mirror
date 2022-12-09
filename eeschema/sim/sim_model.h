@@ -391,7 +391,7 @@ public:
 
 
     template <typename T>
-    static TYPE ReadTypeFromFields( const std::vector<T>& aFields, int aSymbolPinCount );
+    static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
 
     template <typename T>
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
@@ -519,8 +519,12 @@ public:
     }
     bool IsStoredInValue() const { return m_isStoredInValue; }
 
+    /**
+     * Returns std::pair of [ Sim.Type, Sim.Params ]
+     */
     static std::pair<wxString, wxString> InferSimModel( const wxString& aPrefix,
-                                                        const wxString& aValue );
+                                                        const wxString& aValue,
+                                                        SIM_VALUE_GRAMMAR::NOTATION aNotation );
 
     template <class T_symbol, class T_field>
     static void MigrateSimModel( T_symbol& aSymbol );
@@ -529,17 +533,11 @@ protected:
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
 
     SIM_MODEL( TYPE aType );
-    SIM_MODEL( TYPE aType,
-               std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
-    SIM_MODEL( TYPE aType,
-               std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
+    SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
+    SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
                std::unique_ptr<SIM_SERDE> aSerde );
 
     virtual void CreatePins( unsigned aSymbolPinCount );
-
-    std::vector<PARAM> m_params;
-    const SIM_MODEL* m_baseModel;
-    std::unique_ptr<SIM_SERDE> m_serde;
 
 private:
     template <typename T>
@@ -552,13 +550,18 @@ private:
 
     virtual std::vector<std::string> getPinNames() const { return {}; }
 
+protected:
+    std::vector<PARAM>         m_params;
+    const SIM_MODEL*           m_baseModel;
+    std::unique_ptr<SIM_SERDE> m_serde;
 
+private:
     std::unique_ptr<SPICE_GENERATOR> m_spiceGenerator;
 
-    const TYPE m_type;
-    std::vector<PIN> m_pins;
-    bool m_isEnabled;
-    bool m_isStoredInValue;
+    const TYPE                       m_type;
+    std::vector<PIN>                 m_pins;
+    bool                             m_isEnabled;
+    bool                             m_isStoredInValue;
 };
 
 #endif // SIM_MODEL_H

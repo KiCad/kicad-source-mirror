@@ -151,24 +151,24 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
     if( !aSymbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD, false )
             && !aSymbol.FindField( SIM_MODEL::PARAMS_FIELD, false ) )
     {
-        // pair.first: wxString sim model type
-        // pair.second: wxString sim model parameters
-        auto model = SIM_MODEL::InferSimModel( aSymbol.GetPrefix(),
-                                               aSymbol.GetValueFieldText( true ) );
+        // std::pair<wxString, wxString> [ Sim.Type, Sim.Params ]
+        auto inferredModel = SIM_MODEL::InferSimModel( aSymbol.GetPrefix(),
+                                                       aSymbol.GetValueFieldText( true ),
+                                                       SIM_VALUE_GRAMMAR::NOTATION::SI );
 
-        if( !model.second.IsEmpty() )
+        if( !inferredModel.second.IsEmpty() )
         {
             fields.emplace_back( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
             fields.back().SetText( aSymbol.GetPrefix() );
 
-            if( !model.first.IsEmpty() )
+            if( !inferredModel.first.IsEmpty() )
             {
                 fields.emplace_back( &aSymbol, -1, SIM_MODEL::TYPE_FIELD );
-                fields.back().SetText( model.first );
+                fields.back().SetText( inferredModel.first );
             }
 
             fields.emplace_back( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
-            fields.back().SetText( model.second );
+            fields.back().SetText( inferredModel.second );
         }
     }
 
