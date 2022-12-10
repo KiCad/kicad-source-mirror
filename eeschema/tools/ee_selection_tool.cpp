@@ -1360,34 +1360,26 @@ bool EE_SELECTION_TOOL::selectMultiple()
             bool anySubtracted = false;
 
             auto selectItem =
-                    [&]( EDA_ITEM* aItem )
+                    [&]( EDA_ITEM* aItem, EDA_ITEM_FLAGS flags )
                     {
-                        EDA_ITEM_FLAGS flags = 0;
-
-                        // Handle line ends specially
-                        if( aItem->Type() == SCH_LINE_T )
-                        {
-                            SCH_LINE* line = (SCH_LINE*) aItem;
-
-                            if( selectionRect.Contains( line->GetStartPoint() ) || isGreedy )
-                                flags |= STARTPOINT;
-
-                            if( selectionRect.Contains( line->GetEndPoint() ) || isGreedy )
-                                flags |= ENDPOINT;
-
-                            // If no ends were selected, select whole line (both ends)
-                            if( !( flags & STARTPOINT ) && !( flags & ENDPOINT ) )
-                                flags = STARTPOINT | ENDPOINT;
-                        }
-
                         if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
                         {
-                            aItem->ClearFlags( flags );
+                            if ( m_exclusive_or )
+                                aItem->XorFlags( flags );
+                            else
+                                aItem->ClearFlags( flags );
 
                             if( !aItem->HasFlag( STARTPOINT ) && !aItem->HasFlag( ENDPOINT ) )
                             {
                                 unselect( aItem );
                                 anySubtracted = true;
+                            }
+
+                            // We changed one line endpoint on a selected line,
+                            // update the view at least.
+                            if( flags && !anySubtracted )
+                            {
+                                getView()->Update( aItem );
                             }
                         }
                         else
@@ -1400,14 +1392,56 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
             for( EDA_ITEM* item : nearbyItems )
             {
+                bool           selected = false;
+                EDA_ITEM_FLAGS flags    = 0;
+
                 if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
                     item->SetFlags( SHOW_ELEC_TYPE );
 
-                if( Selectable( item ) && item->HitTest( selectionRect, !isGreedy ) )
+                if( Selectable( item ) )
+                {
+                    if( item->Type() == SCH_LINE_T )
+                    {
+                        SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+                        if( isGreedy && line->HitTest( selectionRect, false ) )
+                        {
+                            selected = true;
+                            flags |= STARTPOINT | ENDPOINT;
+                        }
+                        else if( !isGreedy )
+                        {
+                            if( selectionRect.Contains( line->GetStartPoint() ) )
+                            {
+                                selected = true;
+                                flags |= STARTPOINT;
+                            }
+
+                            if( selectionRect.Contains( line->GetEndPoint() ) )
+                            {
+                                selected = true;
+                                flags |= ENDPOINT;
+                            }
+
+                            if( ( selected && selectionRect.Contains( line->GetMidPoint() ) )
+                                || ( !selected && line->HitTest( selectionRect, false ) ) )
+                            {
+                                selected = true;
+                                flags |= STARTPOINT | ENDPOINT;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        selected = item->HitTest( selectionRect, !isGreedy );
+                    }
+                }
+
+                if( selected )
                 {
                     item->SetFlags( CANDIDATE );
                     flaggedItems.push_back( item );
-                    selectItem( item );
+                    selectItem( item, flags );
                 }
 
                 item->ClearFlags( SHOW_ELEC_TYPE );
@@ -1422,7 +1456,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                         && !item->GetParent()->HasFlag( CANDIDATE )
                         && item->HitTest( selectionRect, !isGreedy ) )
                 {
-                    selectItem( item );
+                    selectItem( item, 0 );
                 }
 
                 item->ClearFlags( SHOW_ELEC_TYPE );

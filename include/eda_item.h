@@ -140,6 +140,7 @@ public:
     void           SetStatus( EDA_ITEM_FLAGS aStatus ) { m_status = aStatus; }
 
     void           SetFlags( EDA_ITEM_FLAGS aMask ) { m_flags |= aMask; }
+    void           XorFlags( EDA_ITEM_FLAGS aMask ) { m_flags ^= aMask; }
     void           ClearFlags( EDA_ITEM_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_flags &= ~aMask; }
     EDA_ITEM_FLAGS GetFlags() const { return m_flags; }
     bool           HasFlag( EDA_ITEM_FLAGS aFlag ) const { return ( m_flags & aFlag ) == aFlag; }
