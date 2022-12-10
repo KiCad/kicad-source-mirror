@@ -109,7 +109,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-12-10 00:40+0100\n"
+"PO-Revision-Date: 2022-12-10 23:22+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -407,13 +407,16 @@ msgid "Delete viewport..."
 msgstr "Cancella vista..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Save and restore view orientation and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Save and restore view orientation and zoom.\n"
+"Use %s+Tab to activate selector.\n"
+"Successive Tabs while holding %s down will cycle through viewports in the popup."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -1967,7 +1970,7 @@ msgstr "Segnala"
 
 #: common/dialogs/dialog_assign_netclass.cpp:92
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>Collegamenti attualmente corrispondenti:</b>"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -3187,17 +3190,17 @@ msgstr "Mostra le barre di scorrimento negli editor"
 
 #: common/dialogs/panel_common_settings_base.cpp:123
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "Questo cambiamento avrà effetto dopo il riavvio dell'editor."
 
 #: common/dialogs/panel_common_settings_base.cpp:127
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Il fuoco segue il mouse tra gli editor dello schema e del C.S."
 
 #: common/dialogs/panel_common_settings_base.cpp:128
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
-msgstr ""
+msgstr "Se il puntatore del mouse viene spostato sopra l'area di lavoro delle finestre di modifica di uno schema o di un circuito stampato, la finestra corrispondente si porta in primo piano."
 
 #: common/dialogs/panel_common_settings_base.cpp:132
 msgid "Icon theme:"
@@ -3819,7 +3822,7 @@ msgstr "Le netclass predefinita è necessaria."
 #: common/dialogs/panel_setup_netclasses.cpp:699
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Collegamenti corrispondenti a '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -5516,7 +5519,7 @@ msgstr "Ombra elementi bloccati"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "Ombra collisione ingombri"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -6743,7 +6746,7 @@ msgstr "Seleziona percorso"
 
 #: common/widgets/lib_tree.cpp:289
 msgid "recent searches"
-msgstr ""
+msgstr "ricerche recenti"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -8009,6 +8012,7 @@ msgid "Bill of Materials"
 msgstr "Distinta di base"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
+#, fuzzy
 msgid ""
 "# 1. Summary\n"
 "\n"
@@ -8090,6 +8094,60 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"# 1. Summary\n"
+"\n"
+"The Bill of Materials tool creates a BOM which lists all of the components in the design.\n"
+"\n"
+"The tool uses an external script to generate a BOM in the desired output format. Choosing a different script changes how the BOM is formatted.\n"
+"\n"
+"Generating a BOM is described in more detail in the Schematic Editor manual.\n"
+"\n"
+"# 2. Usage\n"
+"\n"
+"Select a generator script in the **BOM generator scripts** list. Details for the selected generator are shown on the right of the dialog.\n"
+"\n"
+"Clicking the **Generate** button creates a BOM file with the selected generator.\n"
+"\n"
+"The default settings present several generator script options, although some additional scripts are installed with KiCad and can be added to the list with the **+** button.\n"
+"\n"
+"**Note:** On Windows, there is an additional option **Show console window**. When this option is unchecked, BOM generators run in a hidden console window and any output is redirected and printed in the dialog. When this option is checked, BOM generators run in a visisble console window.\n"
+"\n"
+"# 3. Custom generators and command lines\n"
+"\n"
+"Internally, KiCad creates an intermediate netlist file in XML format that contains information about all of the components in the design. A BOM generator script converts the intermediate netlist file to the desired output format. KiCad runs the BOM generator scripts according to the command line entered at the bottom of the BOM dialog.\n"
+"\n"
+"The command line format accepts parameters for filenames. Each formatting parameter is replaced with a project-specific path or filename. The supported formatting parameters are:\n"
+"\n"
+" * `%I`: absolute path and filename of the intermediate netlist file, which is the input to the BOM generator\n"
+" * `%O`: absolute path and filename of the output BOM file (without file extension)\n"
+" * `%B`: base filename of the output BOM file (without file extension)\n"
+" * `%P`: absolute path of the project directory, without trailing slash\n"
+"\n"
+"**Note:** the `%O` output file parameter does not include a file extension. KiCad will attempt to add an appropriate extension to the command line automatically, but an extension may need to be added by hand.\n"
+"\n"
+"Python is the recommended tool for BOM generator scripts, but other tools can also be used.\n"
+"\n"
+"## Example command lines for Python scripts\n"
+"\n"
+"The command line format for a Python script is of the form:\n"
+"\n"
+"```\n"
+"python <script file name> <input filename> <output filename>\n"
+"```\n"
+"\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"\n"
+"```\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
+"\n"
+"On Linux, if the desired generator script for a CSV BOM is `/home/username/kicad/my_python_script.py`, the command line would be:\n"
+"\n"
+"```\n"
+"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
+"\n"
+"Double quotes (`\"`) around the arguments are recommended in case filenames contain spaces or special characters.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -8666,10 +8724,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_field_properties.cpp:676
 #: eeschema/dialogs/dialog_label_properties.cpp:460
+#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr ""
+msgstr "Intersheet reference visibility is controlled globally from Schematic Setup > General > Formatting"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -12577,7 +12636,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
-msgstr ""
+msgstr "Impossibile copiare il file '%s' dato che verrà sovrascritto dal nuovo file foglio radice."
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -14034,31 +14093,33 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "File magazzino non analizzato completamente (%d byte rimanenti)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:483
-#, c-format
+#, c-format, fuzzy
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
-msgstr ""
+msgstr "Unknown or unexpected record ID %d found inside \"Additional\" section."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:556
+#, fuzzy
 msgid "Record 'IEEE_SYMBOL' not handled."
-msgstr ""
+msgstr "Record 'IEEE_SYMBOL' not handled."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:581
+#, fuzzy
 msgid "Record 'PIECHART' not handled."
-msgstr ""
+msgstr "Record 'PIECHART' not handled."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:700
 msgid "Compile mask not currently supported."
 msgstr "La maschera di compilazione non è attualmente supportata."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:707
-#, c-format
+#, c-format, fuzzy
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
-msgstr ""
+msgstr "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:807
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
-msgstr ""
+msgstr "Simbolo \"%s\" in foglio \"%s\" indice %d rimpiazzato con simbolo \"%s\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:911
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2373
@@ -14083,16 +14144,16 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "La Bezier ha %d punti di controllo. Sono richiesti almeno 2."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1658
-#, c-format
+#, c-format, fuzzy
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1904
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
-msgstr ""
+msgstr "Altium's harness connector (%s) was imported as a hierarchical sheet. Please review the imported schematic."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2260
 msgid "Power Port with unknown style imported as 'Bar' type."
@@ -14104,11 +14165,11 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Il simbolo di potenza crea una etichetta globale con nome '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2437
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
-msgstr ""
+msgstr "Altium's harness port (%s) was imported as a text box. Please review the imported schematic."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2494
 #, c-format
@@ -14175,11 +14236,12 @@ msgstr ""
 "l'importazione."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:260
+#, fuzzy
 msgid ""
 "CADSTAR fonts are different to the ones in KiCad. This will likely result in "
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
-msgstr ""
+msgstr "CADSTAR fonts are different to the ones in KiCad. This will likely result in alignment issues. Please review the imported text elements carefully and correct manually if required."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:265
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -14331,14 +14393,14 @@ msgid "Error reading database table %s: %s"
 msgstr "Errore leggendo la tabella database %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:185
-#, c-format
+#, c-format, fuzzy
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr ""
+msgstr "Could not load database library: settings file %s missing or invalid"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:245
-#, c-format
+#, c-format, fuzzy
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
+msgstr "Could not load database library: could not connect to database %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:452
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -14485,11 +14547,11 @@ msgid "Invalid symbol library ID"
 msgstr "ID libreria di simboli non valido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:210
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
-msgstr ""
+msgstr "Could not load sheet '%s' because it already appears as a direct ancestor in the schematic hierarchy."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1496
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2174
@@ -14679,6 +14741,7 @@ msgid "Graphic Text"
 msgstr "Testo grafico"
 
 #: eeschema/sch_text_help_md.h:2
+#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14820,6 +14883,137 @@ msgid ""
 "<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Result</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Bus Definition</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>Resultant Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Note that markup has precedence over bus definitions.</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -14951,6 +15145,7 @@ msgid "Cancel Load"
 msgstr "Annulla caricamento"
 
 #: eeschema/sheet.cpp:233
+#, fuzzy
 msgid ""
 "There hierarchical sheets in the loaded schematic file from an older file "
 "version resulting in  missing symbol instance data.  This will result in all "
@@ -14961,6 +15156,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"There hierarchical sheets in the loaded schematic file from an older file version resulting in  missing symbol instance data.  This will result in all of the symbols in the loaded schematic to use either the default instance setting or fall back to the library symbol settings.  Loading the project that uses this schematic file and saving to the lastest file version will resolve this issue.\n"
+"\n"
+"Do you wish to continue?"
 
 #: eeschema/sheet.cpp:240 eeschema/sheet.cpp:268 eeschema/sheet.cpp:309
 #: eeschema/sheet.cpp:358 eeschema/sheet.cpp:419
@@ -15056,16 +15254,16 @@ msgstr "Abbandona il nuovo foglio"
 #: eeschema/sim/kibis/ibis_parser.cpp:65 eeschema/sim/kibis/ibis_parser.cpp:94
 #: eeschema/sim/kibis/ibis_parser.cpp:117
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "Le dimensioni della matrice devono essere >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:71
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "La banda passante delle matrici di banda deve essere >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:79 eeschema/sim/kibis/ibis_parser.cpp:102
 #: eeschema/sim/kibis/ibis_parser.cpp:125
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "Ci sono elementi NaN in una matrice."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:160
 msgid "Invalid R_pkg value."
@@ -15129,15 +15327,15 @@ msgstr "Componente: nessun pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:347
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "Impossibile interpolare la corrente basandosi su questa tabella IV."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:365
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "C'è una tensione Nan in una tabella IV"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:372
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "C'è una corrente non valida in una tabella IV"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:415
 msgid "Invalid R_load."
@@ -15764,7 +15962,7 @@ msgstr "Errore: il tipo di simulazione non supporta la tracciatura!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:732
 msgid " (mag)"
-msgstr ""
+msgstr " (amp)"
 
 #: eeschema/sim/sim_plot_frame.cpp:734
 msgid " (phase)"
@@ -16013,11 +16211,11 @@ msgstr ""
 "%s\n"
 
 #: eeschema/symbol_checker.cpp:61
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
-msgstr ""
+msgstr "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues if saved in a symbol library"
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -16862,11 +17060,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:186
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "Imposta nome visualizzato unità..."
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr ""
+msgstr "Imposta il nome visualizzato per una unità"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -17178,7 +17376,7 @@ msgstr "Scambia gli elementi selezionati da destra a sinistra"
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/edit_tool_move_fct.cpp:183
 #: pcbnew/tools/pcb_actions.cpp:342
 msgid "Swap"
-msgstr ""
+msgstr "Scambia"
 
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/pcb_actions.cpp:342
 msgid "Swaps selected items' positions"
@@ -18073,7 +18271,7 @@ msgstr "Inserire il nome mostrato per l'unità %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:672
 msgid "Set Unit Display Name"
-msgstr "Imposta nome mostrato unità"
+msgstr "Imposta nome visualizzato unità"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -18159,14 +18357,14 @@ msgstr ""
 "intero per prevenire i duplicati nelle voci della tabella."
 
 #: eeschema/widgets/tuner_slider.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find Spice item with reference '%s'"
-msgstr "Non trovata piazzola personalizzata di nome '%s'."
+msgstr "Impossibile trovare elemento Spice con riferimento '%s'"
 
 #: eeschema/widgets/tuner_slider.cpp:62
-#, c-format, fuzzy
+#, c-format
 msgid "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
-msgstr "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
+msgstr "Il simbolo '%s' ha un modello di simulazione di tipo '%s %s', che non può essere regolato"
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
@@ -18371,7 +18569,7 @@ msgid "Negative Objects"
 msgstr "Oggetti negativi"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Layer %d"
 msgstr "Strato grafico %d"
 
@@ -19169,19 +19367,16 @@ msgid "Show in Differential Mode"
 msgstr "Mostra in modalità differenziale"
 
 #: gerbview/tools/gerbview_actions.cpp:191
-#, fuzzy
 msgid "Show layers in differential compare mode"
-msgstr "Mostra strati in modalità diff (compara)"
+msgstr "Mostra strati in modalità comparativa differenziale"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show in XOR Mode"
-msgstr "Mostra D code"
+msgstr "Mostra in modalità XOR"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show layers in exclusive-or compare mode"
-msgstr "Mostra strati in modalità diff (compara)"
+msgstr "Mostra strati in modalità comparativa EXOR"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Flip Gerber View"
@@ -19398,10 +19593,9 @@ msgid "Invalid layer name \"%s\"\n"
 msgstr "Nome strato \"%s\" non valido\n"
 
 #: kicad/cli/command_export_pcb_base.cpp:91
-#, fuzzy
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
-msgstr "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
+msgstr "Elenco separato da virgole di nomi di strati non tradotti da includere come F.Cu,B.Cu"
 
 #: kicad/cli/command_export_pcb_base.cpp:107
 msgid "At least one or more layers must be specified\n"
@@ -19614,43 +19808,37 @@ msgid "Exclude 3D models for components with 'virtual' attribute"
 msgstr "Escludi i modelli 3D  per i componenti con attributo 'virtual'"
 
 #: kicad/cli/command_export_pcb_step.cpp:63
-#, fuzzy
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
-msgstr "Substitute STEP or IGS models with the same name in place of VRML models"
+msgstr "Sostituisci i modelli STEP o IGS con lo stesso nome al posto dei modelli VRML"
 
 #: kicad/cli/command_export_pcb_step.cpp:68
 msgid "Overwrite output file"
 msgstr "Sovrascrivi file d'uscita"
 
 #: kicad/cli/command_export_pcb_step.cpp:73
-#, fuzzy
 msgid "Only generate a board with no components"
-msgstr "Only generate a board with no components"
+msgstr "Genera solo una scheda senza componenti"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
-#, fuzzy
 msgid "Minimum distance between points to treat them as separate ones"
-msgstr "Minimum distance between points to treat them as separate ones"
+msgstr "Distanza minima tra punti necessaria a considerarli come separati"
 
 #: kicad/cli/command_export_pcb_step.cpp:83
-#, fuzzy
 msgid ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
-msgstr "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm)"
+msgstr "Origine dei risultati personalizzata es. 1x1in, 1x1inch, 25.4x25.4mm (unità predefinita mm)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:42
-#, fuzzy
 msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr "Mirror the board (useful for trying to show bottom layers)"
+msgstr "Rendi speculare la scheda (utile a mostrare gli strati inferiori)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:56
-#, fuzzy
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
-msgstr "Set page sizing mode (0 = page with frame and title block, 1 = current page size, 2 = board area only)"
+msgstr "Imposta la modalità dimensionamento pagina (0 = pagina con bordi e riquadro iscrizioni, 1 = dimensione pagina corrente, 2 = solo area scheda)"
 
 #: kicad/cli/command_export_sch_bom.cpp:36
 msgid "Bom output format, valid options: xml"
@@ -19664,11 +19852,10 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Il file schema non esiste o non è accessibile\n"
 
 #: kicad/cli/command_export_sch_netlist.cpp:36
-#, fuzzy
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
-msgstr "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, orcadpcb2, spice, spicemodel"
+msgstr "Formato di uscita netlist, opzioni valide: kicadsexpr, kicadxml, cadstar, orcadpcb2, spice, spicemodel"
 
 #: kicad/cli/command_export_sch_pdf.cpp:46
 #: kicad/cli/command_export_sch_svg.cpp:46
@@ -19677,29 +19864,24 @@ msgstr "Nessun foglio di disegno"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
-#, fuzzy
 msgid "Avoid setting a background color (regardless of theme)"
-msgstr "Avoid setting a background color (regardless of theme)"
+msgstr "Evita di impostare un colore di sfondo (indipendentemente dal tema)"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
-#, fuzzy
 msgid "Forces the footprint library to be resaved regardless of versioning"
-msgstr "Forces the footprint library to be resaved regardless of versioning"
+msgstr "Forza l'ulteriore salvataggio della libreria di impronte indipendentemente dal controllo versioni"
 
 #: kicad/cli/command_fp_upgrade.cpp:51
-#, fuzzy
 msgid "Footprint path does not exist or is not accessible\n"
-msgstr "Footprint path does not exist or is not accessible\n"
+msgstr "Il percorso impronta non esiste o non è accessibile\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
-#, fuzzy
 msgid "Forces the symbol library to be resaved regardless of versioning"
-msgstr "Forces the symbol library to be resaved regardless of versioning"
+msgstr "Forza l'ulteriore salvataggio della libreria di simboli indipendentemente dal controllo versioni"
 
 #: kicad/cli/command_sym_upgrade.cpp:51
-#, fuzzy
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "Symbol file does not exist or is not accessible\n"
+msgstr "Il file simbolo non esiste o non è accessibile\n"
 
 #: kicad/dialogs/dialog_template_selector.cpp:148
 msgid "<h1>Template Selector</h1>"
@@ -19877,9 +20059,8 @@ msgid "Restoring '%s'"
 msgstr "Recupero '%s'"
 
 #: kicad/kicad_manager_frame.cpp:895
-#, fuzzy
 msgid "Would you like to automatically check for plugin updates on startup?"
-msgstr "Would you like to automatically check for plugin updates on startup?"
+msgstr "Controllare automaticamente gli aggiornamenti dei plugin all'avvio?"
 
 #: kicad/kicad_manager_frame.cpp:896
 msgid "Check for updates"
@@ -19990,14 +20171,13 @@ msgid "Color themes (%d)"
 msgstr "Temi colori (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:75
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "Chiudere la gestione pacchetti ed annullare i cambiamenti pendenti?"
+msgstr "Sicuri di voler aggiornare il pacchetto bloccato dalla versione %s alla %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:78
-#, fuzzy
 msgid "Confirm update"
-msgstr "Conferma i cambiamenti"
+msgstr "Conferma aggiornamenti"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:99 kicad/pcm/dialogs/panel_package.cpp:97
 #: kicad/pcm/dialogs/panel_package.cpp:103
@@ -20244,26 +20424,22 @@ msgid "Library package handling"
 msgstr "Gestione pacchetti libreria"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "Aggiungere la libreria alla tabella librerie globale?"
+msgstr "Aggiungere automaticamente le librerie installate alla tabella librerie globale"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Comincia automaticamente collegamenti su pin non connessi"
+msgstr "Rimuovere automaticamente le librerie disinstallate"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Errore denominazione libreria"
+msgstr "Prefisso denominazione libreria:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
-#, fuzzy
 msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
-msgstr "After packages are (un)installed KiCad may need to be restarted to reflect changes in the global library table."
+msgstr "Dopo la (dis)installazione pacchetti, potrebbe essere necessario riavviare KiCad per mostrare i cambiamenti nella tabella librerie globale."
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -20298,19 +20474,15 @@ msgid "Unable to load repository url"
 msgstr "Impossibile caricare url repository"
 
 #: kicad/pcm/pcm.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"Impossibile analizzare repository:\n"
-"\n"
-"%s"
+msgstr "Impossibile analizzare il repository: %s"
 
 #: kicad/pcm/pcm.cpp:324
-#, fuzzy
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
-msgstr "The given repository URL does not look like a valid KiCad package repository. Please double check the URL."
+msgstr "L'URL repository non sembra un repository pacchetti KiCad valido. Prego ricontrollare l'URL."
 
 #: kicad/pcm/pcm.cpp:350
 msgid "Fetching repository packages"
@@ -20402,9 +20574,9 @@ msgstr ""
 "problema persiste segnalarlo ai responsabili del repository."
 
 #: kicad/pcm/pcm_task_manager.cpp:201 kicad/pcm/pcm_task_manager.cpp:413
-#, c-format, fuzzy
+#, c-format
 msgid "Removing previous version of package '%s'."
-msgstr "Removing previous version of package '%s'."
+msgstr "Rimozione della versione precedente del pacchetto '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:209
 #, c-format
@@ -20444,13 +20616,11 @@ msgid "Archive metadata must have a single version defined"
 msgstr "I metadati archivio devono avere una singola versione definita"
 
 #: kicad/pcm/pcm_task_manager.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
-msgstr ""
-"Un pacchetto con identificatore %s è già installato, è necessario prima "
-"disinstallare questo pacchetto."
+msgstr "Un pacchetto con identificatore %s è già installato. Aggiornarlo alla versione del file selezionato?"
 
 #: kicad/pcm/pcm_task_manager.cpp:399
 msgid "Update package"
@@ -21658,14 +21828,12 @@ msgid "Temperature coefficient"
 msgstr "Coefficiente di temperatura"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
-#, fuzzy
 msgid "Wire properties"
-msgstr "Proprietà cerchio"
+msgstr "Proprietà filo"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "Tipo standard"
+msgstr "Dimensione standard:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:107
@@ -21677,14 +21845,12 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Conductor resistivity:"
-msgstr "Resistività rame:"
+msgstr "Resistività conduttore:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
-#, fuzzy
 msgid "Specific resistance in Ohm*m at 20 deg C"
-msgstr "Resistività specifica in Ohm x metro"
+msgstr "Resistività specifica in Ohm*m a 20°C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:103
@@ -21858,7 +22024,7 @@ msgstr "Rame-Alluminio"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "Ottone"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
@@ -21878,7 +22044,7 @@ msgstr "Alluminio-Rame"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "Ghisa"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
@@ -21918,6 +22084,7 @@ msgid "Copper (Cu)"
 msgstr "Rame (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:54
+#, fuzzy
 msgid ""
 "This table shows the difference in electrochemical potential between various "
 "metals and alloys. A positive number indicates that the row is anodic and "
@@ -21930,10 +22097,14 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"This table shows the difference in electrochemical potential between various metals and alloys. A positive number indicates that the row is anodic and the column is cathodic.\n"
+"Galvanic corrosion affects different metals in contact and under certain conditions.\n"
+"The anode of an electrochemical pair gets oxidized and eaten away, while the cathode gets dissolved metals plated onto it but stays protected.\n"
+"EN 50310 suggests a voltage difference below 300mV. Known practices make use of a third interface metal in between the main pair(ie the ENIG surface finish)."
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
 msgid "Threshold voltage:"
-msgstr ""
+msgstr "Tensione di soglia:"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:68
 #: pcb_calculator/widgets/unit_selector.cpp:255
@@ -22107,7 +22278,7 @@ msgstr "Soluzione 4R:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:228
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "Il calcolo della corrente sta sottostimando a causa del lungo tempo di fusione."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
 msgid "Ambient temperature:"
@@ -22723,6 +22894,7 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tqualunque combinazione di cui sopra\n"
 
 #: pcb_calculator/fusing_current_help.h:2
+#, fuzzy
 msgid ""
 "You can use the this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -22734,6 +22906,12 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"You can use the this calculator to check if a small track can handle a large current for a short period of time.<br>\n"
+"This tool allows you to design a track fuse but should be used as an estimate only.\n"
+"\n"
+"The calculator estimates the energy required to heat the wire up<br>\n"
+"to its melting point as well as the energy required for the change of phase.<br>\n"
+"This energy is then compared to the one dissipated by the wire resistance."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:80
 msgid "General system design"
@@ -22793,7 +22971,7 @@ msgstr "Classi schede"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
 msgid "Galvanic Corrosion"
-msgstr ""
+msgstr "Corrosione galvanica"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:268
 msgid "Write Data Failed"
@@ -26703,7 +26881,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
 msgid "Net Ties"
-msgstr ""
+msgstr "Connessioni net"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:340
 msgid "Pad groups allowed to short different nets:"
@@ -29866,18 +30044,17 @@ msgid "Show pad clearance"
 msgstr "Mostra distanza piazzole"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:72
-#, fuzzy
 msgid "Highlight footprints when symbols selected"
-msgstr "Cancella impronte senza simboli"
+msgstr "Evidenzia impronte con simboli selezionati"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
-#, fuzzy
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "Assegna impronta al simbolo selezionato"
+msgstr "Evidenzia le impronte corrispondenti ai simboli selezionati"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
+#, fuzzy
 msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr ""
+msgstr "Ensures that cross-probed footprints are visible in the current view"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -30047,8 +30224,9 @@ msgid "Draw an outline to show the sheet size."
 msgstr "Disegna un contorno per mostrare la dimensione del foglio."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:375
+#, fuzzy
 msgid "Show courtyard collisions when moving/dragging"
-msgstr ""
+msgstr "Show courtyard collisions when moving/dragging"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:379
 msgid "Auto-refill zones"
@@ -31196,6 +31374,7 @@ msgid "Check rule syntax"
 msgstr "Controlla la sintassi regole"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
+#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -31519,6 +31698,320 @@ msgid ""
 "        (constraint connection_width (min 0.8mm))\n"
 "        (condition \"A.NetClass == 'Power'\"))"
 msgstr ""
+"### Top-level Clauses\n"
+"\n"
+"    (version <number>)\n"
+"\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
+"### Rule Clauses\n"
+"\n"
+"    (constraint <constraint_type> ...)\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
+"    (severity <severity_name>)\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
+"### Constraint Types\n"
+"\n"
+" * annular\\_width\n"
+" * assertion\n"
+" * clearance\n"
+" * connection\\_width\n"
+" * courtyard_clearance\n"
+" * diff\\_pair\\_gap\n"
+" * diff\\_pair\\_uncoupled\n"
+" * disallow\n"
+" * edge\\_clearance\n"
+" * length\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * min\\_resolved\\_spokes\n"
+" * physical\\_clearance\n"
+" * physical\\_hole\\_clearance\n"
+" * silk\\_clearance\n"
+" * skew\n"
+" * text\\_height\n"
+" * text\\_thickness\n"
+" * thermal\\_relief\\_gap\n"
+" * thermal\\_spoke\\_width\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
+" * zone\\_connection\n"
+"\n"
+"Note: `clearance` and `hole_clearance` rules are not run against items of the same net; `physical_clearance` and `physical_hole_clearance` rules are.\n"
+"<br><br>\n"
+"\n"
+"### Items\n"
+"\n"
+" * `A` &nbsp;&nbsp; _the first (or only) item under test_\n"
+" * `B` &nbsp;&nbsp; _the second item under test (for binary tests)_\n"
+" * `L` &nbsp;&nbsp; _the layer currently under test_\n"
+"\n"
+"<br>\n"
+"\n"
+"### Item Types\n"
+"\n"
+" * buried\\_via\n"
+" * graphic\n"
+" * hole\n"
+" * micro\\_via\n"
+" * pad\n"
+" * text\n"
+" * track\n"
+" * via\n"
+" * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Zone Connections\n"
+"\n"
+" * solid\n"
+" * thermal\\_reliefs\n"
+" * none\n"
+"\n"
+"<br>\n"
+"\n"
+"### Severity Names\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
+"\n"
+"<br>\n"
+"\n"
+"### Examples\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"<br><br>\n"
+"\n"
+"### Notes\n"
+"\n"
+"Version clause must be the first clause.  It indicates the syntax version of the file so that \n"
+"future rules parsers can perform automatic updates.  It should be\n"
+"set to \"1\".\n"
+"\n"
+"Rules should be ordered by specificity.  Later rules take\n"
+"precedence over earlier rules; once a matching rule is found\n"
+"no further rules will be checked.\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"<br><br><br>\n"
+"\n"
+"### Expression functions\n"
+"\n"
+"All function parameters support simple wildcards (`*` and `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's principal courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's front courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsBackCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's back courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsArea('<zone_name>')\n"
+"True if any part of `A` lies within the given zone's outline.\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"True if all of `A` lies within the given zone's outline.  \n"
+"\n"
+"NB: this is potentially a more expensive call than `intersectsArea()`.  Use `intersectsArea()` \n"
+"where possible.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"True if `A` has a hole which is plated.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<net_name>')\n"
+"True if `A` has a net that is part of the specified differential pair.\n"
+"`<net_name>` is the base name of the differential pair.  For example, `inDiffPair('/CLK')`\n"
+"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"True if `A` and `B` are members of the same diff pair.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOf('<group_name>')\n"
+"True if `A` is a member of the given group. Includes nested membership.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"True if `A` exists on the given layer.  The layer name can be\n"
+"either the name assigned in Board Setup > Board Editor Layers or\n"
+"the canonical name (ie: `F.Cu`).\n"
+"\n"
+"NB: this returns true if `A` is on the given layer, independently\n"
+"of whether or not the rule is being evaluated for that layer.\n"
+"For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsFrontCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsBackCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"Deprecated; use `intersectsArea()` instead.\n"
+"<br><br><br>\n"
+"\n"
+"### More Examples\n"
+"\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # prevent silk over tented vias\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))\n"
+"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"\n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Specify an optimal gap for a particular diff-pair\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
+"\n"
+"    # Specify a larger clearance around any diff-pair\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Don't use thermal reliefs on heatsink pads\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Require all four thermal relief spokes to connect to parent zone\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Set thermal relief gap & spoke width for all zones\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Override thermal relief gap & spoke width for GND and PWR zones\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"\n"
+"\n"
+"    # Prevent solder wicking from SMD pads\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Disallow solder mask margin overrides\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # Enforce a mechanical clearance between components and board edge\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Check current-carrying capacity\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -32735,12 +33228,11 @@ msgstr "Esportazione VRML fallita: impossibile aggiungere fori ai contorni."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1241
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "Nessun progetto esportando su file VRML"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1301
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "Esportazione IDF fallita:\n"
+msgstr "Esportazione VRML fallita:\n"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:127
 #, c-format
@@ -32764,53 +33256,53 @@ msgstr "Impostazioni stackup non aggiornate."
 
 #: pcbnew/exporters/step/exporter_step.cpp:318
 msgid "Determining PCB data\n"
-msgstr ""
+msgstr "Determinazione dati PCB\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:323
 msgid "Build STEP data\n"
-msgstr ""
+msgstr "Crea dati STEP\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:327
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
-msgstr ""
+msgstr "\n** Errore creando il modello scheda STEP. Esportazione annullata. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:331
-#, fuzzy
 msgid "Writing STEP file\n"
-msgstr "File STEP"
+msgstr "Scrittura file STEP\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:335
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Errore nello scrivere il file '%s'."
+msgstr "\nErrore nello scrivere il file STEP.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:340
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "File rapporto \"%s\" creato."
+msgstr "\nFile STEP '%s' creato.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:346
 #: pcbnew/exporters/step/exporter_step.cpp:351
 msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
-msgstr ""
+msgstr "\n** Errore esportando il file STEP. Esportazione annullata. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:361
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
+"Impossibile creare file STEP.\n"
+"Controllare che la scheda abbia un bordo e modelli validi."
 
 #: pcbnew/exporters/step/exporter_step.cpp:366
 msgid "STEP file has been created, but there are warnings."
-msgstr ""
+msgstr "File STEP creato, ma con messaggi di avvertimento."
 
 #: pcbnew/files.cpp:150
 msgid "All KiCad Board Files"
@@ -33046,25 +33538,25 @@ msgstr "(foro piazzola PTH senza rame)"
 
 #: pcbnew/footprint.cpp:2382
 msgid "(SMD pad appears on both front and back copper)"
-msgstr ""
+msgstr "(la piazzola SMD compare su entrambi, superiore e inferiore, i lati rame)"
 
 #: pcbnew/footprint.cpp:2389 pcbnew/footprint.cpp:2402
 msgid "(SMD pad copper and mask layers don't match)"
-msgstr ""
+msgstr "(gli strati rame e maschera della piazzola SMD non corrispondono)"
 
 #: pcbnew/footprint.cpp:2394 pcbnew/footprint.cpp:2407
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr ""
+msgstr "(gli strati rame e pastasalda della piazzola SMD non corrispondono)"
 
 #: pcbnew/footprint.cpp:2583
-#, c-format
+#, c-format, fuzzy
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr ""
+msgstr "(net-tie pad group contains unknown pad number %s)"
 
 #: pcbnew/footprint.cpp:2588
-#, c-format
+#, c-format, fuzzy
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr ""
+msgstr "(pad %s appears in more than one net-tie pad group)"
 
 #: pcbnew/footprint.cpp:2829 pcbnew/pad.cpp:1718 pcbnew/zone.cpp:1362
 msgid "Inherited"
@@ -33075,9 +33567,8 @@ msgid "Thermal reliefs for PTH"
 msgstr "Raccordi termici per fori metallizzati"
 
 #: pcbnew/footprint.cpp:2875
-#, fuzzy
 msgid "Library link"
-msgstr "Collegamento libreria:"
+msgstr "Collegamento libreria"
 
 #: pcbnew/footprint.cpp:2896 pcbnew/pad.cpp:1780 pcbnew/zone.cpp:1378
 #, fuzzy
@@ -33097,9 +33588,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "Scavalcamento rapporto margine pastasalda"
 
 #: pcbnew/footprint.cpp:2916 pcbnew/pad.cpp:1795
-#, fuzzy
 msgid "Zone Connection Style"
-msgstr "Non connesso"
+msgstr "Stile connessione zona"
 
 #: pcbnew/footprint.h:236
 #, c-format
@@ -34077,11 +34567,11 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "La zona rame su strato \"%s\" a (%s, %s) non ha piazzole connesse."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:861
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
-msgstr ""
+msgstr "Symbol %s has pins with no number.  These pins can not be matched to pads in %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:871
 #, c-format
@@ -35082,11 +35572,12 @@ msgstr ""
 "Solo la variante \"%s\" è stata caricata."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:165
+#, fuzzy
 msgid ""
 "CADSTAR fonts are different to the ones in KiCad. This will likely result in "
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
-msgstr ""
+msgstr "CADSTAR fonts are different to the ones in KiCad. This will likely result in alignment issues that may cause DRC errors. Please review the imported text elements carefully and correct manually if required."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -35374,10 +35865,11 @@ msgstr ""
 "alcun progetto."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2454
+#, fuzzy
 msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
-msgstr ""
+msgstr "The CADSTAR design contains teardrops. This importer does not yet support them, so the teardrops in the design have been ignored."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2485
 #, c-format
@@ -35518,6 +36010,8 @@ msgid ""
 "Invalid zero-sized pad ignored in\n"
 "file: %s"
 msgstr ""
+"Piazzola di dimensione zero non valida ignorata nel\n"
+"file: %s"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2038
 #, c-format
@@ -37250,9 +37744,9 @@ msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr "Nessun vincolo 'diff_pair_uncoupled' definito."
 
 #: pcbnew/tools/board_inspection_tool.cpp:842
-#, c-format
+#, c-format, fuzzy
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr ""
+msgstr "Nota: %s è tented; la distanza sarà applicata solamente ai fori."
 
 #: pcbnew/tools/board_inspection_tool.cpp:859
 msgid "Silkscreen clearance resolution for:"
@@ -37342,7 +37836,7 @@ msgstr "Asserzioni per:"
 
 #: pcbnew/tools/convert_tool.cpp:71
 msgid "Copy line width of first object"
-msgstr ""
+msgstr "Copia larghezza linea del primo oggetto"
 
 #: pcbnew/tools/convert_tool.cpp:177
 msgid "Create from Selection"
@@ -39345,11 +39839,14 @@ msgid "Item locked."
 msgstr "Elemento bloccato."
 
 #: pcbnew/tools/pcb_control.cpp:791
+#, fuzzy
 msgid ""
 "Warning: some pasted items were on layers which are not present in the "
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"Warning: some pasted items were on layers which are not present in the current board.\n"
+"These items could not be pasted.\n"
 
 #: pcbnew/tools/pcb_control.cpp:976
 msgid "Invalid clipboard contents"
@@ -39517,7 +40014,7 @@ msgstr "Apri preferenze"
 msgid ""
 "Automatic refill of zones can be turned off in Preferences if it becomes too "
 "slow."
-msgstr ""
+msgstr "Lo riempimento automatico delle zone può essere spento nelle Preferenze se rallenta troppo."
 
 #: pcbnew/tools/zone_filler_tool.cpp:330
 msgid "Fill Zone"
@@ -39737,22 +40234,28 @@ msgid "Back Assembly View"
 msgstr "Vista assemblaggio retro"
 
 #: pcbnew/widgets/appearance_controls.cpp:436
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Save and restore layer visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"Save and restore layer visibility combinations.\n"
+"Use %s+Tab to activate selector.\n"
+"Successive Tabs while holding %s down will cycle through presets in the popup."
 
 #: pcbnew/widgets/appearance_controls.cpp:443
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Save and restore view location and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Save and restore view location and zoom.\n"
+"Use %s+Tab to activate selector.\n"
+"Successive Tabs while holding %s down will cycle through viewports in the popup."
 
 #: pcbnew/widgets/appearance_controls.cpp:458
 msgid "Filter nets"
