@@ -133,6 +133,8 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         {
             SYMBOL_LIB_TABLE_ROW* row = m_libs->FindRow( pair.first );
 
+            wxCHECK2( row, continue );
+
             if( !row->GetIsVisible() )
                 continue;
 

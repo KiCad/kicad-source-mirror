@@ -355,9 +355,10 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     wxString options = row->GetOptions();
 
     if( aPowerSymbolsOnly )
-            row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
+        row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
 
     row->SetLoaded( false );
+    row->plugin->SetLibTable( this );
     row->plugin->EnumerateSymbolLib( aSymbolList, row->GetFullURI( true ), row->GetProperties() );
     row->SetLoaded( true );
 
