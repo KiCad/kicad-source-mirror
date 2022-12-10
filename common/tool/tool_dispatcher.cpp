@@ -289,7 +289,7 @@ bool isKeySpecialCode( int aKeyCode )
 // that is not used alone in kicad
 static bool isKeyModifierOnly( int aKeyCode )
 {
-    const std::vector<enum wxKeyCode> special_keys =
+    static std::vector<enum wxKeyCode> special_keys =
     {
         WXK_CONTROL, WXK_RAW_CONTROL, WXK_SHIFT, WXK_ALT
     };
