@@ -100,7 +100,13 @@ bool GRAPHICS_CLEANER::isNullShape( PCB_SHAPE* aShape )
 
     case SHAPE_T::BEZIER:
         aShape->RebuildBezierToSegmentsPointsList( aShape->GetWidth() );
-        return aShape->GetBezierPoints().empty();
+
+        // If the Bezier points list contains 2 points, it is equivalent to a segment
+        if( aShape->GetBezierPoints().size() == 2 )
+            return equivalent( aShape->GetStart(), aShape->GetEnd(), m_epsilon );
+
+        // If the Bezier points list contains 1 points, it is equivalent to a point
+        return aShape->GetBezierPoints().size() < 2;
 
     default:
         UNIMPLEMENTED_FOR( aShape->SHAPE_T_asString() );
