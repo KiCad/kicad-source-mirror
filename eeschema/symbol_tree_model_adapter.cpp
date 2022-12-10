@@ -153,7 +153,9 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
                 for( const wxString& lib : subLibraries )
                 {
-                    wxString name = wxString::Format( wxT( "%s - %s" ), pair.first, lib );
+                    wxString suffix = lib.IsEmpty() ? wxT( "" )
+                                                    : wxString::Format( wxT( " - %s" ), lib );
+                    wxString name = wxString::Format( wxT( "%s%s" ), pair.first, suffix );
                     wxString desc;
 
                     if( !parentDesc.IsEmpty() )

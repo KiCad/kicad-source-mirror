@@ -90,7 +90,8 @@ void SCH_DATABASE_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolL
             if( !result.count( table.key_col ) )
                 continue;
 
-            wxString name( fmt::format( "{}/{}", table.name,
+            std::string prefix = table.name.empty() ? "" : fmt::format( "{}/", table.name );
+            wxString name( fmt::format( "{}{}", prefix,
                                         std::any_cast<std::string>( result[table.key_col] ) ) );
 
             LIB_SYMBOL* symbol = loadSymbolFromRow( name, table, result );
@@ -110,36 +111,60 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::LoadSymbol( const wxString&   aLibraryPath,
     ensureSettings( aLibraryPath );
     ensureConnection();
 
-    const DATABASE_LIB_TABLE* table = nullptr;
+    /*
+     * Table names are tricky, in order to allow maximum flexibility to the user.
+     * The slash character is used as a separator between a table name and symbol name, but symbol
+     * names may also contain slashes and table names may now also be empty (which results in the
+     * slash being dropped in the symbol name when placing a new symbol).  So, if a slash is found,
+     * we check if the string before the slash is a valid table name.  If not, we assume the table
+     * name is blank if our config has an entry for the null table.
+     */
 
-    std::string tableName( aAliasName.BeforeFirst( '/' ).ToUTF8() );
-    std::string symbolName( aAliasName.AfterFirst( '/' ).ToUTF8() );
+    std::string tableName = "";
+    std::string symbolName( aAliasName.ToUTF8() );
+
+    if( aAliasName.Contains( '/' ) )
+    {
+        tableName = std::string( aAliasName.BeforeFirst( '/' ).ToUTF8() );
+        symbolName = std::string( aAliasName.AfterFirst( '/' ).ToUTF8() );
+    }
+
+    std::vector<const DATABASE_LIB_TABLE*> tablesToTry;
 
     for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
     {
         if( tableIter.name == tableName )
+            tablesToTry.emplace_back( &tableIter );
+    }
+
+    if( tablesToTry.empty() )
+    {
+        wxLogTrace( traceDatabase, wxT( "LoadSymbol: table '%s' not found in config" ), tableName );
+        return nullptr;
+    }
+
+    const DATABASE_LIB_TABLE* foundTable = nullptr;
+    DATABASE_CONNECTION::ROW result;
+
+    for( const DATABASE_LIB_TABLE* table : tablesToTry )
+    {
+        if( m_conn->SelectOne( table->table, std::make_pair( table->key_col, symbolName ),
+                               result ) )
         {
-            table = &tableIter;
-            break;
+            foundTable = table;
+            wxLogTrace( traceDatabase, wxT( "LoadSymbol: SelectOne (%s, %s) found in %s" ),
+                        table->key_col, symbolName, table->table );
+        }
+        else
+        {
+            wxLogTrace( traceDatabase, wxT( "LoadSymbol: SelectOne (%s, %s) failed for table %s" ),
+                        table->key_col, symbolName, table->table );
         }
     }
 
-    if( !table )
-    {
-        wxLogTrace( traceDatabase, wxT( "LoadSymbol: table %s not found in config" ), tableName );
-        return nullptr;
-    }
+    wxCHECK( foundTable, nullptr );
 
-    DATABASE_CONNECTION::ROW result;
-
-    if( !m_conn->SelectOne( table->table, std::make_pair( table->key_col, symbolName ), result ) )
-    {
-        wxLogTrace( traceDatabase, wxT( "LoadSymbol: SelectOne (%s, %s) failed" ), table->key_col,
-                    symbolName );
-        return nullptr;
-    }
-
-    return loadSymbolFromRow( aAliasName, *table, result );
+    return loadSymbolFromRow( aAliasName, *foundTable, result );
 }
 
 
@@ -149,8 +174,16 @@ void SCH_DATABASE_PLUGIN::GetSubLibraryNames( std::vector<wxString>& aNames )
 
     aNames.clear();
 
+    std::set<wxString> tableNames;
+
     for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
+    {
+        if( tableNames.count( tableIter.name ) )
+            continue;
+
         aNames.emplace_back( tableIter.name );
+        tableNames.insert( tableIter.name );
+    }
 }
 
 
