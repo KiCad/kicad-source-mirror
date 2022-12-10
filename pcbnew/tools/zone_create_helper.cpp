@@ -355,12 +355,24 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
                 outline->Append( leaderPts.CPoint( i ) );
 
             const SHAPE_LINE_CHAIN loopPts = aMgr.GetLoopLinePoints();
-            for( int i = 1; i < loopPts.PointCount(); i++ )
+            for( int i = 1; i < loopPts.PointCount() - 1; i++ )
                 outline->Append( loopPts.CPoint( i ) );
         }
 
-        outline->Outline( 0 ).SetClosed( true );
-        outline->Outline( 0 ).Simplify( true );
+        SHAPE_LINE_CHAIN& chain = outline->Outline( 0 );
+
+        chain.SetClosed( true );
+        chain.Simplify( true );
+
+        // Remove the start point if it lies on the line between neighbouring points.
+        // Simplify doesn't handle that currently.
+        if( chain.PointCount() >= 3 )
+        {
+            SEG seg( chain.CPoint( -1 ), chain.CPoint( 1 ) );
+
+            if( seg.LineDistance( chain.CPoint( 0 ) ) <= 1 )
+                chain.Remove( 0 );
+        }
 
         // hand the zone over to the committer
         commitZone( std::move( m_zone ) );
