@@ -626,6 +626,8 @@ void BOARD_COMMIT::Revert()
     BOARD*                             board = (BOARD*) m_toolMgr->GetModel();
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
+    board->IncrementTimeStamp();   // clear caches
+
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
