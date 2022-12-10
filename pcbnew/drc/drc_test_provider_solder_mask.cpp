@@ -336,7 +336,10 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
                                                        PCB_LAYER_ID aTestLayer, int aTestNet,
                                                        BOARD_ITEM** aCollidingItem )
 {
-    if( !IsCopperLayer( aTestLayer ) )
+    if( aTestLayer == F_Mask && !aTestItem->IsOnLayer( F_Cu ) )
+        return false;
+
+    if( aTestLayer == B_Mask && !aTestItem->IsOnLayer( B_Cu ) )
         return false;
 
     FOOTPRINT* fp = static_cast<FOOTPRINT*>( aMaskItem->GetParentFootprint() );
