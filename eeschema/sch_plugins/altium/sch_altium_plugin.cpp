@@ -375,6 +375,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
                            " Altium signal harness that got converted to a sheet." ),
                         sheet->GetName() );
             m_reporter->Report( msg );
+            sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
             continue;
         }
 
