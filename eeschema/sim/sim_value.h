@@ -31,6 +31,14 @@
 #include <memory>
 #include <pegtl.hpp>
 
+// Undef some annoying defines in windows headers added by pegtl.hpp
+// that can create issues in .cpp files, mainly on msys2
+#if defined (__MINGW32__)
+#if defined ( LoadLibrary )
+#undef LoadLibrary
+#endif
+#endif
+
 
 namespace SIM_VALUE_GRAMMAR
 {
@@ -161,7 +169,7 @@ namespace SIM_VALUE_GRAMMAR
 
     template <SIM_VALUE::TYPE ValueType>
     struct significand;
-    
+
     template <> struct significand<SIM_VALUE::TYPE_FLOAT> :
         sor<seq<intPart, one<'.'>, fracPart>,
             seq<intPart, one<'.'>>,
