@@ -43,7 +43,7 @@ void SEARCH_PANE::OnLanguageChange()
         SEARCH_PANE_TAB* tab = dynamic_cast<SEARCH_PANE_TAB*>( page );
 
         tab->RefreshColumnNames();
-        m_notebook->SetPageText( i, _( tab->GetSearchHandler()->GetName() ) );
+        m_notebook->SetPageText( i, wxGetTranslation( tab->GetSearchHandler()->GetName() ) );
     }
 }
 
@@ -52,7 +52,7 @@ void SEARCH_PANE::AddSearcher( SEARCH_HANDLER* aHandler )
 {
     SEARCH_PANE_TAB* tab = new SEARCH_PANE_TAB( aHandler, m_notebook );
 
-    m_notebook->AddPage( tab, _( aHandler->GetName() ) );
+    m_notebook->AddPage( tab, wxGetTranslation( aHandler->GetName() ) );
     m_handlers.push_back( aHandler );
     m_tabs.push_back( tab );
 }

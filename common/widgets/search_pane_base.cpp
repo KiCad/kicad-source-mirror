@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,7 +11,6 @@
 
 SEARCH_PANE_BASE::SEARCH_PANE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	this->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	this->SetMinSize( wxSize( 360,100 ) );
 
 	m_sizerOuter = new wxBoxSizer( wxVERTICAL );
@@ -21,7 +20,7 @@ SEARCH_PANE_BASE::SEARCH_PANE_BASE( wxWindow* parent, wxWindowID id, const wxPoi
 	m_searchCtrl1->ShowSearchButton( true );
 	#endif
 	m_searchCtrl1->ShowCancelButton( false );
-	m_sizerOuter->Add( m_searchCtrl1, 0, wxALL|wxEXPAND, 5 );
+	m_sizerOuter->Add( m_searchCtrl1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 

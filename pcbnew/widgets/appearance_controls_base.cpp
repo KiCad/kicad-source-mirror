@@ -150,7 +150,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_netsTabOuterSizer->Fit( m_panelNetsAndClasses );
 	m_notebook->AddPage( m_panelNetsAndClasses, _("Nets"), false );
 
-	m_sizerOuter->Add( m_notebook, 1, wxEXPAND, 5 );
+	m_sizerOuter->Add( m_notebook, 1, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bBottomMargin;
 	bBottomMargin = new wxBoxSizer( wxVERTICAL );
@@ -191,7 +191,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	bBottomMargin->Add( bViewports, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	m_sizerOuter->Add( bBottomMargin, 0, wxBOTTOM|wxEXPAND, 2 );
+	m_sizerOuter->Add( bBottomMargin, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 
 	this->SetSizer( m_sizerOuter );

@@ -657,11 +657,11 @@ void APPEARANCE_CONTROLS::createControls()
 
     m_layerDisplaySeparator = new wxStaticLine( layerDisplayPane, wxID_ANY, wxDefaultPosition,
                                                 wxDefaultSize, wxLI_HORIZONTAL );
-    layerDisplayOptionsSizer->Add( m_layerDisplaySeparator, 0, wxEXPAND | wxTOP | wxBOTTOM, 5 );
+    layerDisplayOptionsSizer->Add( m_layerDisplaySeparator, 0, wxEXPAND, 5 );
 
     m_cbFlipBoard = new wxCheckBox( layerDisplayPane, wxID_ANY, _( "Flip board view" ) );
     m_cbFlipBoard->SetFont( infoFont );
-    layerDisplayOptionsSizer->Add( m_cbFlipBoard, 0, 0, 5 );
+    layerDisplayOptionsSizer->Add( m_cbFlipBoard, 0, wxTOP | wxBOTTOM, 5 );
 
     layerDisplayPane->SetSizer( layerDisplayOptionsSizer );
     layerDisplayPane->Layout();

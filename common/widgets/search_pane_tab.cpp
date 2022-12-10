@@ -56,7 +56,8 @@ void SEARCH_PANE_LISTVIEW::GetSelectRowsList( std::vector<long>& aSelectedList )
     aSelectedList.emplace_back( idx );
 
     idx = GetNextSelected( idx );
-    while( idx > 0 )
+
+    while( idx >= 0 )
     {
         aSelectedList.emplace_back( idx );
         idx = GetNextSelected( idx );
@@ -66,9 +67,13 @@ void SEARCH_PANE_LISTVIEW::GetSelectRowsList( std::vector<long>& aSelectedList )
 
 void SEARCH_PANE_LISTVIEW::OnItemSelected( wxListEvent& aEvent )
 {
-    std::vector<long> list;
-    GetSelectRowsList( list );
-    m_handler->SelectItems( list );
+    CallAfter(
+            [&]()
+            {
+                std::vector<long> list;
+                GetSelectRowsList( list );
+                m_handler->SelectItems( list );
+            } );
 
     aEvent.Skip();
 }
@@ -76,9 +81,15 @@ void SEARCH_PANE_LISTVIEW::OnItemSelected( wxListEvent& aEvent )
 
 void SEARCH_PANE_LISTVIEW::OnItemDeselected( wxListEvent& aEvent )
 {
-    std::vector<long> list;
-    GetSelectRowsList( list );
-    m_handler->SelectItems( list );
+    CallAfter(
+            [&]()
+            {
+                std::vector<long> list;
+                GetSelectRowsList( list );
+                m_handler->SelectItems( list );
+            } );
+
+    aEvent.Skip();
 }
 
 
@@ -87,11 +98,15 @@ void SEARCH_PANE_LISTVIEW::RefreshColumnNames()
     Freeze();
     DeleteAllColumns();
 
-    std::vector<wxString> columns = m_handler->GetColumnNames();
-    for( wxString& columnName : columns )
-    {
-        AppendColumn( _( columnName ) );
-    }
+    std::vector<std::pair<wxString, int>> columns = m_handler->GetColumns();
+
+    for( auto& [ columnName, colProportion ] : columns )
+        AppendColumn( wxGetTranslation( columnName ) );
+
+    int widthUnit = GetClientSize().GetWidth() / 4;
+
+    for( int ii = 0; ii < (int) columns.size(); ++ii )
+        SetColumnWidth( ii, widthUnit * columns[ ii ].second );
 
     Thaw();
 }
@@ -99,7 +114,7 @@ void SEARCH_PANE_LISTVIEW::RefreshColumnNames()
 
 wxString SEARCH_PANE_LISTVIEW::OnGetItemText( long item, long column ) const
 {
-    return m_handler->GetResultCell( item, column );
+    return m_handler->GetResultCell( (int) item, (int) column );
 }
 
 

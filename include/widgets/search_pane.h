@@ -34,7 +34,7 @@ public:
 
     wxString GetName() const { return m_name; }
 
-    std::vector<wxString> GetColumnNames() const { return m_columnNames; }
+    std::vector<std::pair<wxString, int>> GetColumns() const { return m_columns; }
 
     virtual int Search( const wxString& string ) = 0;
     virtual wxString GetResultCell( int row, int col ) = 0;
@@ -42,8 +42,8 @@ public:
     virtual void SelectItems( std::vector<long>& aItemRows ) {}
 
 protected:
-    wxString              m_name;
-    std::vector<wxString> m_columnNames;
+    wxString                              m_name;
+    std::vector<std::pair<wxString, int>> m_columns;
 };
 
 class SEARCH_PANE : public SEARCH_PANE_BASE

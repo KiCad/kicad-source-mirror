@@ -17,7 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <base_units.h>
 #include <footprint.h>
 #include <pcb_edit_frame.h>
 #include <pcb_marker.h>
@@ -32,13 +31,14 @@
 
 
 FOOTPRINT_SEARCH_HANDLER::FOOTPRINT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( wxT( "Footprint" ) ), m_frame( aFrame )
+        SEARCH_HANDLER( wxT( "Footprints" ) ),
+        m_frame( aFrame )
 {
-    m_columnNames.emplace_back( wxT( "Reference" ) );
-    m_columnNames.emplace_back( wxT( "Value" ) );
-    m_columnNames.emplace_back( wxT( "Layer" ) );
-    m_columnNames.emplace_back( wxT( "X" ) );
-    m_columnNames.emplace_back( wxT( "Y" ) );
+    m_columns.emplace_back( wxT( "Reference" ), 1 );
+    m_columns.emplace_back( wxT( "Value" ), 2 );
+    m_columns.emplace_back( wxT( "Layer" ), 1 );
+    m_columns.emplace_back( wxT( "X" ), 1 );
+    m_columns.emplace_back( wxT( "Y" ), 1 );
 }
 
 
@@ -53,15 +53,15 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     for( FOOTPRINT* fp : board->Footprints() )
     {
-        if( aQuery.IsEmpty() ||
-            ( fp->Reference().Matches( frp, nullptr )
-            || fp->Value().Matches( frp, nullptr ) ) )
+        if( aQuery.IsEmpty()
+            || fp->Reference().Matches( frp, nullptr )
+            || fp->Value().Matches( frp, nullptr ) )
         {
             m_hitlist.push_back( fp );
         }
     }
 
-    return m_hitlist.size();
+    return (int) m_hitlist.size();
 }
 
 
@@ -90,7 +90,7 @@ void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
     for( long row : aItemRows )
     {
-        if( row >= 0 && row < (long)m_hitlist.size() )
+        if( row >= 0 && row < (long) m_hitlist.size() )
         {
             FOOTPRINT* fp = m_hitlist[row];
             selectedItems.push_back( fp );
@@ -102,19 +102,20 @@ void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     if( selectedItems.size() )
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 
-    m_frame->GetCanvas()->Refresh(0);
+    m_frame->GetCanvas()->Refresh( false );
 }
 
 
 ZONE_SEARCH_HANDLER::ZONE_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( wxT( "Zones" ) ), m_frame( aFrame )
+        SEARCH_HANDLER( wxT( "Zones" ) ),
+        m_frame( aFrame )
 {
-    m_columnNames.emplace_back( wxT( "Name" ) );
-    m_columnNames.emplace_back( wxT( "Net" ) );
-    m_columnNames.emplace_back( wxT( "Layer" ) );
-    m_columnNames.emplace_back( wxT( "Priority" ) );
-    m_columnNames.emplace_back( wxT( "X" ) );
-    m_columnNames.emplace_back( wxT( "Y" ) );
+    m_columns.emplace_back( wxT( "Name" ), 2 );
+    m_columns.emplace_back( wxT( "Net" ), 1 );
+    m_columns.emplace_back( wxT( "Layer" ), 1 );
+    m_columns.emplace_back( wxT( "Priority" ), 1 );
+    m_columns.emplace_back( wxT( "X" ), 1 );
+    m_columns.emplace_back( wxT( "Y" ), 1 );
 }
 
 
@@ -132,12 +133,10 @@ int ZONE_SEARCH_HANDLER::Search( const wxString& aQuery )
         ZONE* zoneItem = dynamic_cast<ZONE*>( item );
 
         if( zoneItem && ( aQuery.IsEmpty() || zoneItem->Matches( frp, nullptr ) ) )
-        {
             m_hitlist.push_back( zoneItem );
-        }
     }
 
-    return m_hitlist.size();
+    return (int) m_hitlist.size();
 }
 
 
@@ -155,9 +154,7 @@ wxString ZONE_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
         BOARD*        board = m_frame->GetBoard();
 
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-        {
             layers.Add( board->GetLayerName( layer ) );
-        }
 
         return wxJoin( layers, ',' );
     }
@@ -175,9 +172,10 @@ wxString ZONE_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 {
     std::vector<EDA_ITEM*> selectedItems;
+
     for( long row : aItemRows )
     {
-        if( row >= 0 && row < (long)m_hitlist.size() )
+        if( row >= 0 && row < (long) m_hitlist.size() )
         {
             ZONE* zone = m_hitlist[row];
             selectedItems.push_back( zone );
@@ -189,18 +187,19 @@ void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     if( selectedItems.size() )
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 
-    m_frame->GetCanvas()->Refresh(0);
+    m_frame->GetCanvas()->Refresh( false );
 }
 
 
 TEXT_SEARCH_HANDLER::TEXT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( wxT( "Text" ) ), m_frame( aFrame )
+        SEARCH_HANDLER( wxT( "Text" ) ),
+        m_frame( aFrame )
 {
-    m_columnNames.emplace_back( wxT( "Type" ) );
-    m_columnNames.emplace_back( wxT( "Text" ) );
-    m_columnNames.emplace_back( wxT( "Layer" ) );
-    m_columnNames.emplace_back( wxT( "X" ) );
-    m_columnNames.emplace_back( wxT( "Y" ) );
+    m_columns.emplace_back( wxT( "Type" ), 1 );
+    m_columns.emplace_back( wxT( "Text" ), 3 );
+    m_columns.emplace_back( wxT( "Layer" ), 1 );
+    m_columns.emplace_back( wxT( "X" ), 1 );
+    m_columns.emplace_back( wxT( "Y" ), 1 );
 }
 
 
@@ -219,16 +218,12 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
         PCB_TEXTBOX* textBoxItem = dynamic_cast<PCB_TEXTBOX*>( item );
 
         if( textItem && ( aQuery.IsEmpty() || textItem->Matches( frp, nullptr ) ) )
-        {
             m_hitlist.push_back( textItem );
-        }
         else if( textBoxItem && ( aQuery.IsEmpty() || textBoxItem->Matches( frp, nullptr ) ) )
-        {
             m_hitlist.push_back( textBoxItem );
-        }
     }
 
-    return m_hitlist.size();
+    return (int) m_hitlist.size();
 }
 
 
@@ -239,24 +234,16 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
     if( aCol == 0 )
     {
         if( PCB_TEXT::ClassOf( text ) )
-        {
             return _( "Text" );
-        }
         else if( PCB_TEXTBOX::ClassOf( text ) )
-        {
             return _( "Textbox" );
-        }
     }
     else if( aCol == 1 )
     {
         if( PCB_TEXT::ClassOf( text ) )
-        {
             return UnescapeString( static_cast<PCB_TEXT*>( text )->GetText() );
-        }
         else if( PCB_TEXTBOX::ClassOf( text ) )
-        {
             return UnescapeString( static_cast<PCB_TEXTBOX*>( text )->GetShownText() );
-        }
     }
     if( aCol == 2 )
         return text->GetLayerName();
@@ -272,9 +259,10 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 {
     std::vector<EDA_ITEM*> selectedItems;
+
     for( long row : aItemRows )
     {
-        if( row >= 0 && row < (long)m_hitlist.size() )
+        if( row >= 0 && row < (long) m_hitlist.size() )
         {
             BOARD_ITEM* text = m_hitlist[row];
             selectedItems.push_back( text );
@@ -286,15 +274,16 @@ void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     if( selectedItems.size() )
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 
-    m_frame->GetCanvas()->Refresh(0);
+    m_frame->GetCanvas()->Refresh( false );
 }
 
 
 NETS_SEARCH_HANDLER::NETS_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( wxT( "Nets" ) ), m_frame( aFrame )
+        SEARCH_HANDLER( wxT( "Nets" ) ),
+        m_frame( aFrame )
 {
-    m_columnNames.emplace_back( wxT( "Name" ) );
-    m_columnNames.emplace_back( wxT( "Class" ) );
+    m_columns.emplace_back( wxT( "Name" ), 2 );
+    m_columns.emplace_back( wxT( "Class" ), 2 );
 }
 
 
@@ -307,15 +296,14 @@ int NETS_SEARCH_HANDLER::Search( const wxString& aQuery )
     frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
 
     BOARD* board = m_frame->GetBoard();
+
     for( NETINFO_ITEM* net : board->GetNetInfo() )
     {
         if( net && ( aQuery.IsEmpty() || net->Matches( frp, nullptr ) ) )
-        {
             m_hitlist.push_back( net );
-        }
     }
 
-    return m_hitlist.size();
+    return (int) m_hitlist.size();
 }
 
 
@@ -338,6 +326,7 @@ void NETS_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     ps->SetHighlight( false );
 
     std::vector<NETINFO_ITEM*> selectedItems;
+
     for( long row : aItemRows )
     {
         if( row >= 0 && row < (long) m_hitlist.size() )
