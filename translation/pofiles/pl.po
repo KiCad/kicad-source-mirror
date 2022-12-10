@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-12-07 22:47+0000\n"
+"PO-Revision-Date: 2022-12-11 20:19+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -30932,7 +30932,7 @@ msgstr "sygnałowa"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "power plane"
-msgstr "plan zasilania"
+msgstr "zasilająca"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -30967,7 +30967,7 @@ msgstr "plan zasilania"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "mixed"
-msgstr "łączona"
+msgstr "mieszana"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
