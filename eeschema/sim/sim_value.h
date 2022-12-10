@@ -35,7 +35,10 @@
 // that can create issues in .cpp files, mainly on msys2
 #if defined (__MINGW32__)
 #if defined ( LoadLibrary )
-#undef LoadLibrary
+    #undef LoadLibrary
+#endif
+#if defined ( GetClassInfo )
+    #undef GetClassInfo
 #endif
 #endif
 
