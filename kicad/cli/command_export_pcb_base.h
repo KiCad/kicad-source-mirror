@@ -37,18 +37,20 @@ namespace CLI
 
 struct EXPORT_PCB_BASE_COMMAND : public COMMAND
 {
-    EXPORT_PCB_BASE_COMMAND( std::string aName );
+    EXPORT_PCB_BASE_COMMAND( const std::string& aName );
 
     int Perform( KIWAY& aKiway ) override;
 
 protected:
-    LSET convertLayerStringList( wxString& aLayerString ) const;
+    LSET convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const;
     void addLayerArg( bool aRequire );
 
     std::map<std::string, LSET> m_layerMasks;
     LSET                        m_selectedLayers;
+    bool                        m_selectedLayersSet;
 
-    bool m_requireLayers;
+    bool                        m_hasLayerArg;
+    bool                        m_requireLayers;
 };
 } // namespace CLI
 

@@ -22,6 +22,9 @@
 #define PCBNEW_JOBS_HANDLER_H
 
 #include <jobs/job_dispatcher.h>
+#include <pcb_plot_params.h>
+
+class JOB_EXPORT_PCB_GERBER;
 
 class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
 {
@@ -32,9 +35,13 @@ public:
     int JobExportDxf( JOB* aJob );
     int JobExportPdf( JOB* aJob );
     int JobExportGerber( JOB* aJob );
+    int JobExportGerbers( JOB* aJob );
     int JobExportDrill( JOB* aJob );
     int JobExportPos( JOB* aJob );
     int JobExportFpUpgrade( JOB* aJob );
+
+private:
+    void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS& aPlotOpts, JOB_EXPORT_PCB_GERBER* aJob );
 };
 
 #endif

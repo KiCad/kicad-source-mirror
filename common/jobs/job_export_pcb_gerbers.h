@@ -18,32 +18,29 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_PCB_GERBER_H
-#define COMMAND_EXPORT_PCB_GERBER_H
+#ifndef JOB_EXPORT_PCB_GERBERS_H
+#define JOB_EXPORT_PCB_GERBERS_H
 
-#include "command_export_pcb_base.h"
+#include "job_export_pcb_gerber.h"
+#include <layer_ids.h>
+#include <wx/string.h>
+#include "job.h"
 
-class JOB_EXPORT_PCB_GERBER;
-
-namespace CLI
-{
-#define ARG_NO_X2 "--no-x2"
-#define ARG_NO_NETLIST "--no-netlist"
-#define ARG_SUBTRACT_SOLDERMASK "--subtract-soldermask"
-#define ARG_DISABLE_APERTURE_MACROS "--disable-aperture-macros"
-#define ARG_PRECISION "--precision"
-
-class EXPORT_PCB_GERBER_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class JOB_EXPORT_PCB_GERBERS : public JOB_EXPORT_PCB_GERBER
 {
 public:
-    EXPORT_PCB_GERBER_COMMAND( const std::string& aName );
-    EXPORT_PCB_GERBER_COMMAND();
+    JOB_EXPORT_PCB_GERBERS( bool aIsCli ) :
+            JOB_EXPORT_PCB_GERBER( "gerbers", aIsCli ),
+            m_layersIncludeOnAll(),
+            m_layersIncludeOnAllSet( false ),
+            m_useBoardPlotParams( false )
+    {
+    }
 
-    int Perform( KIWAY& aKiway ) override;
+    LSET m_layersIncludeOnAll;
 
-protected:
-    int populateJob( JOB_EXPORT_PCB_GERBER* aJob );
+    bool m_layersIncludeOnAllSet;
+    bool m_useBoardPlotParams;
 };
-} // namespace CLI
 
 #endif

@@ -28,8 +28,8 @@
 class JOB_EXPORT_PCB_GERBER : public JOB
 {
 public:
-    JOB_EXPORT_PCB_GERBER( bool aIsCli ) :
-            JOB( "gerber", aIsCli ),
+    JOB_EXPORT_PCB_GERBER( const std::string& aType, bool aIsCli ) :
+            JOB( aType, aIsCli ),
             m_filename(),
             m_outputFile(),
             m_plotFootprintValues( true ),
@@ -41,6 +41,11 @@ public:
             m_disableApertureMacros( false ),
             m_precision( 5 ),
             m_printMaskLayer()
+    {
+    }
+
+    JOB_EXPORT_PCB_GERBER( bool aIsCli ) :
+            JOB_EXPORT_PCB_GERBER( "gerber", aIsCli )
     {
     }
 

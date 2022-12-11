@@ -18,31 +18,19 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_PCB_GERBER_H
-#define COMMAND_EXPORT_PCB_GERBER_H
+#ifndef COMMAND_EXPORT_PCB_GERBERS_H
+#define COMMAND_EXPORT_PCB_GERBERS_H
 
-#include "command_export_pcb_base.h"
-
-class JOB_EXPORT_PCB_GERBER;
+#include "command_export_pcb_gerber.h"
 
 namespace CLI
 {
-#define ARG_NO_X2 "--no-x2"
-#define ARG_NO_NETLIST "--no-netlist"
-#define ARG_SUBTRACT_SOLDERMASK "--subtract-soldermask"
-#define ARG_DISABLE_APERTURE_MACROS "--disable-aperture-macros"
-#define ARG_PRECISION "--precision"
-
-class EXPORT_PCB_GERBER_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class EXPORT_PCB_GERBERS_COMMAND : public EXPORT_PCB_GERBER_COMMAND
 {
 public:
-    EXPORT_PCB_GERBER_COMMAND( const std::string& aName );
-    EXPORT_PCB_GERBER_COMMAND();
+    EXPORT_PCB_GERBERS_COMMAND();
 
     int Perform( KIWAY& aKiway ) override;
-
-protected:
-    int populateJob( JOB_EXPORT_PCB_GERBER* aJob );
 };
 } // namespace CLI
 

@@ -21,6 +21,7 @@
 #include "pcbnew_jobs_handler.h"
 #include <jobs/job_fp_upgrade.h>
 #include <jobs/job_export_pcb_gerber.h>
+#include <jobs/job_export_pcb_gerbers.h>
 #include <jobs/job_export_pcb_drill.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_pdf.h>
@@ -57,6 +58,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
     Register( "pdf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPdf, this, std::placeholders::_1 ) );
     Register( "gerber",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerber, this, std::placeholders::_1 ) );
+    Register( "gerbers",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerbers, this, std::placeholders::_1 ) );
     Register( "drill",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrill, this, std::placeholders::_1 ) );
     Register( "pos", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPos, this, std::placeholders::_1 ) );
@@ -241,6 +244,108 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 }
 
 
+int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
+{
+    JOB_EXPORT_PCB_GERBERS* aGerberJob = dynamic_cast<JOB_EXPORT_PCB_GERBERS*>( aJob );
+
+    if( aGerberJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( aJob->IsCli() )
+        wxPrintf( _( "Loading board\n" ) );
+
+    BOARD*          brd = LoadBoard( aGerberJob->m_filename );
+    PCB_PLOT_PARAMS boardPlotOptions = brd->GetPlotOptions();
+    LSET            plotOnAllLayersSelection = boardPlotOptions.GetPlotOnAllLayersSelection();
+
+    wxString fileExt;
+
+    if( aGerberJob->m_useBoardPlotParams )
+    {
+        aGerberJob->m_printMaskLayer = boardPlotOptions.GetLayerSelection();
+        aGerberJob->m_layersIncludeOnAll = boardPlotOptions.GetPlotOnAllLayersSelection();
+    }
+    else
+    {
+        // default to the board enabled layers
+        if( aGerberJob->m_printMaskLayer == 0 )
+            aGerberJob->m_printMaskLayer = brd->GetEnabledLayers();
+
+        if( aGerberJob->m_layersIncludeOnAllSet )
+            aGerberJob->m_layersIncludeOnAll = plotOnAllLayersSelection;
+    }
+
+    for( LSEQ seq = aGerberJob->m_printMaskLayer.UIOrder(); seq; ++seq )
+    {
+        LSEQ plotSequence;
+
+        // Base layer always gets plotted first.
+        plotSequence.push_back( *seq );
+
+        // Now all the "include on all" layers
+        for( LSEQ seqAll = aGerberJob->m_layersIncludeOnAll.UIOrder(); seqAll; ++seqAll )
+        {
+            // Don't plot the same layer more than once;
+            if( find( plotSequence.begin(), plotSequence.end(), *seqAll ) != plotSequence.end() )
+                continue;
+
+            plotSequence.push_back( *seqAll );
+        }
+
+        // Pick the basename from the board file
+        wxFileName fn( brd->GetFileName() );
+        PCB_LAYER_ID layer = *seq;
+        fileExt = GetGerberProtelExtension( layer );
+
+        PCB_PLOT_PARAMS plotOpts;
+
+        if( aGerberJob->m_useBoardPlotParams )
+            plotOpts = boardPlotOptions;
+        else
+            populateGerberPlotOptionsFromJob( plotOpts, aGerberJob );
+
+        BuildPlotFileName( &fn, aGerberJob->m_outputFile, brd->GetLayerName( layer ), fileExt );
+        wxString fullname = fn.GetFullName();
+
+        // We are feeding it one layer at the start here to silence a logic check
+        GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard(
+                brd, &plotOpts, layer, fullname, wxEmptyString, wxEmptyString );
+
+        if( plotter )
+        {
+            wxPrintf( _( "Plotted to '%s'.\n" ), fn.GetFullPath() );
+            PlotBoardLayers( brd, plotter, plotSequence, plotOpts );
+            plotter->EndPlot();
+        }
+
+        delete plotter;
+    }
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&       aPlotOpts,
+                                                            JOB_EXPORT_PCB_GERBER* aJob )
+{
+    aPlotOpts.SetFormat( PLOT_FORMAT::GERBER );
+
+    aPlotOpts.SetPlotFrameRef( aJob->m_plotBorderTitleBlocks );
+    aPlotOpts.SetPlotValue( aJob->m_plotFootprintValues );
+    aPlotOpts.SetPlotReference( aJob->m_plotRefDes );
+
+    aPlotOpts.SetSubtractMaskFromSilk( aJob->m_subtractSolderMaskFromSilk );
+    // Always disable plot pad holes
+    aPlotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
+
+    aPlotOpts.SetDisableGerberMacros( aJob->m_disableApertureMacros );
+    aPlotOpts.SetUseGerberX2format( aJob->m_useX2Format );
+    aPlotOpts.SetIncludeGerberNetlistInfo( aJob->m_includeNetlistAttributes );
+
+    aPlotOpts.SetGerberPrecision( aJob->m_precision );
+}
+
+
 int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 {
     JOB_EXPORT_PCB_GERBER* aGerberJob = dynamic_cast<JOB_EXPORT_PCB_GERBER*>( aJob );
@@ -263,23 +368,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     }
 
     PCB_PLOT_PARAMS plotOpts;
-    plotOpts.SetFormat( PLOT_FORMAT::GERBER );
-
-    plotOpts.SetPlotFrameRef( aGerberJob->m_plotBorderTitleBlocks );
-    plotOpts.SetPlotValue( aGerberJob->m_plotFootprintValues );
-    plotOpts.SetPlotReference( aGerberJob->m_plotRefDes );
-
+    populateGerberPlotOptionsFromJob( plotOpts, aGerberJob );
     plotOpts.SetLayerSelection( aGerberJob->m_printMaskLayer );
-
-    plotOpts.SetSubtractMaskFromSilk( aGerberJob->m_subtractSolderMaskFromSilk );
-    // Always disable plot pad holes
-    plotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
-
-    plotOpts.SetDisableGerberMacros( aGerberJob->m_disableApertureMacros );
-    plotOpts.SetUseGerberX2format( aGerberJob->m_useX2Format );
-    plotOpts.SetIncludeGerberNetlistInfo( aGerberJob->m_includeNetlistAttributes );
-
-    plotOpts.SetGerberPrecision( aGerberJob->m_precision );
 
     // We are feeding it one layer at the start here to silence a logic check
     GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard(
