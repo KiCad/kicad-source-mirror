@@ -38,13 +38,9 @@ static wxString formatFloat( double x, int nDigits )
     wxString rv, fmt;
 
     if( nDigits )
-    {
         fmt.Printf( "%%.0%df", nDigits );
-    }
     else
-    {
         fmt = wxT( "%.0f" );
-    }
 
     rv.Printf( fmt, x );
 
@@ -58,7 +54,7 @@ static void getSISuffix( double x, const wxString& unit, int& power, wxString& s
 
     const struct
     {
-        double exponent;
+        int  exponent;
         char suffix;
     } powers[] =
     {
@@ -133,28 +129,32 @@ template <typename parent>
 class LIN_SCALE : public parent
 {
 public:
-    LIN_SCALE( wxString name, wxString unit, int flags ) : parent( name, flags ), m_unit( unit ){};
+    LIN_SCALE( const wxString& name, const wxString& unit, int flags ) :
+            parent( name, flags ),
+            m_unit( unit )
+    {};
 
     void formatLabels() override
     {
-        double maxVis = parent::AbsVisibleMaxValue();
+        double        maxVis = parent::AbsVisibleMaxValue();
 
-        wxString suffix;
-        int power, digits = 0;
+        wxString      suffix;
+        int           power = 0;
+        int           digits = 0;
         int constexpr DIGITS = 3;
 
         getSISuffix( maxVis, m_unit, power, suffix );
 
         double sf = pow( 10.0, power );
 
-        for( auto& l : parent::TickLabels() )
+        for( mpScaleBase::TickLabel& l : parent::TickLabels() )
         {
             int k = countDecimalDigits( l.pos / sf, DIGITS );
 
             digits = std::max( digits, k );
         }
 
-        for( auto& l : parent::TickLabels() )
+        for( mpScaleBase::TickLabel& l : parent::TickLabels() )
         {
             l.label = formatFloat( l.pos / sf, digits ) + suffix;
             l.visible = true;
@@ -170,14 +170,17 @@ template <typename parent>
 class LOG_SCALE : public parent
 {
 public:
-    LOG_SCALE( wxString name, wxString unit, int flags ) : parent( name, flags ), m_unit( unit ){};
+    LOG_SCALE( const wxString& name, const wxString& unit, int flags ) :
+            parent( name, flags ),
+            m_unit( unit )
+    {};
 
     void formatLabels() override
     {
         wxString suffix;
         int      power;
 
-        for( auto& l : parent::TickLabels() )
+        for( mpScaleBase::TickLabel& l : parent::TickLabels() )
         {
             getSISuffix( l.pos, m_unit, power, suffix );
             double sf = pow( 10.0, power );
@@ -347,8 +350,7 @@ void SIM_PLOT_PANEL::updateAxes()
         case ST_AC:
             m_axis_x = new LOG_SCALE<mpScaleXLog>( _( "Frequency" ), wxT( "Hz" ), mpALIGN_BOTTOM );
             m_axis_y1 = new LIN_SCALE<mpScaleY>( _( "Gain" ), wxT( "dBV" ), mpALIGN_LEFT );
-            m_axis_y2 = new LIN_SCALE<mpScaleY>( _( "Phase" ), wxT( "\u00B0" ),
-                                                 mpALIGN_RIGHT ); // degree sign
+            m_axis_y2 = new LIN_SCALE<mpScaleY>( _( "Phase" ), wxT( "°" ), mpALIGN_RIGHT );
             m_axis_y2->SetMasterScale( m_axis_y1 );
             break;
 
@@ -419,19 +421,19 @@ void SIM_PLOT_PANEL::prepareDCAxes()
         // Make sure that we have a reliable default (even if incorrectly labeled)
         default:
         case 'v':
-            m_axis_x =
-                    new LIN_SCALE<mpScaleX>( _( "Voltage (swept)" ), wxT( "V" ), mpALIGN_BOTTOM );
+            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Voltage (swept)" ), wxT( "V" ),
+                                                mpALIGN_BOTTOM );
             break;
         case 'i':
-            m_axis_x =
-                    new LIN_SCALE<mpScaleX>( _( "Current (swept)" ), wxT( "A" ), mpALIGN_BOTTOM );
+            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Current (swept)" ), wxT( "A" ),
+                                                mpALIGN_BOTTOM );
             break;
         case 'r':
-            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Resistance (swept)" ), wxT( "\u03A9" ),
+            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Resistance (swept)" ), wxT( "Ω" ),
                                                 mpALIGN_BOTTOM );
             break;
         case 't':
-            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Temperature (swept)" ), wxT( "\u00B0C" ),
+            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Temperature (swept)" ), wxT( "°C" ),
                                                 mpALIGN_BOTTOM );
             break;
         }
@@ -450,10 +452,11 @@ void SIM_PLOT_PANEL::UpdatePlotColors()
                                m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ) );
 
     // Update color of all traces
-    for( auto& t : m_traces )
-        if( t.second->GetCursor() )
-            t.second->GetCursor()->SetPen(
-                    wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
+    for( auto& [ name, trace ] : m_traces )
+    {
+        if( CURSOR* cursor = trace->GetCursor() )
+            cursor->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
+    }
 
     m_plotWin->UpdateAll();
 }
@@ -473,12 +476,11 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
                                const double* aX, const double* aY, SIM_PLOT_TYPE aType )
 {
     TRACE* trace = nullptr;
-    wxString name = aTitle;
 
     updateAxes();
 
     // Find previous entry, if there is one
-    auto prev = m_traces.find( name );
+    auto prev = m_traces.find( aTitle );
     bool addedNewEntry = ( prev == m_traces.end() );
 
     if( addedNewEntry )
@@ -506,7 +508,7 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
         trace = new TRACE( aName, aType );
         trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
         UpdateTraceStyle( trace );
-        m_traces[name] = trace;
+        m_traces[ aTitle ] = trace;
 
         // It is a trick to keep legend & coords always on the top
         for( mpLayer* l : m_topLevel )
@@ -577,25 +579,6 @@ bool SIM_PLOT_PANEL::deleteTrace( const wxString& aName )
 }
 
 
-void SIM_PLOT_PANEL::deleteAllTraces()
-{
-    for( auto& t : m_traces )
-    {
-        deleteTrace( t.first );
-    }
-
-    m_traces.clear();
-}
-
-
-bool SIM_PLOT_PANEL::HasCursorEnabled( const wxString& aName ) const
-{
-    TRACE* t = GetTrace( aName );
-
-    return t ? t->HasCursor() : false;
-}
-
-
 void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
 {
     TRACE* t = GetTrace( aName );
@@ -638,8 +621,8 @@ void SIM_PLOT_PANEL::ResetScales()
     if( m_axis_y2 )
         m_axis_y2->ResetDataRange();
 
-    for( auto& t : m_traces )
-        t.second->UpdateScales();
+    for( auto& [ name, trace ] : m_traces )
+        trace->UpdateScales();
 }
 
 

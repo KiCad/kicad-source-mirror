@@ -268,9 +268,6 @@ public:
         return m_dotted_cp;
     }
 
-    ///< Returns true if the trace has cursor shown.
-    bool HasCursorEnabled( const wxString& aName ) const;
-
     ///< Toggle cursor for a particular trace.
     void EnableCursor( const wxString& aName, bool aEnable );
 
@@ -294,8 +291,6 @@ protected:
                    const double* aY, SIM_PLOT_TYPE aType );
 
     bool deleteTrace( const wxString& aName );
-
-    void deleteAllTraces();
 
 private:
     ///< @brief Construct the plot axes for DC simulation plot.
