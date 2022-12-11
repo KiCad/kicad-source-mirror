@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-29 17:25-0800\n"
+"POT-Creation-Date: 2022-12-11 12:20-0800\n"
 "PO-Revision-Date: 2022-09-29 15:54+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v6/th/>\n"
@@ -1900,7 +1900,7 @@ msgstr "ตัวแปรสภาพแวดล้อม"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:46
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:56
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:50
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:704
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:52
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:43
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
@@ -3700,7 +3700,7 @@ msgstr "ไม่สามารถอ่านไฟล์กระดาษเ
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
 #: common/eda_item.cpp:319 common/eda_item.cpp:343 common/eda_item.cpp:363
 #: common/eda_text.cpp:728 eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/lib_field.cpp:460 eeschema/lib_text.cpp:350 eeschema/lib_text.h:55
+#: eeschema/lib_field.cpp:461 eeschema/lib_text.cpp:350 eeschema/lib_text.h:55
 #: eeschema/sch_field.cpp:583
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:145
@@ -3962,7 +3962,7 @@ msgstr "ไลบรารีใหม่"
 msgid "Screen"
 msgstr "จอภาพ"
 
-#: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:970
+#: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:976
 #: eeschema/sch_symbol.cpp:1485
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:117
 #: pcbnew/fp_text.cpp:279 pcbnew/load_select_footprint.cpp:372
@@ -4055,8 +4055,8 @@ msgstr "ป้ายชื่อส่วนกลาง"
 msgid "Hierarchical Label"
 msgstr "ป้ายชื่อลำดับขั้น"
 
-#: common/eda_item.cpp:347 eeschema/dialogs/dialog_symbol_fields_table.cpp:696
-#: eeschema/lib_field.cpp:457 eeschema/lib_field.h:79
+#: common/eda_item.cpp:347 eeschema/dialogs/dialog_symbol_fields_table.cpp:702
+#: eeschema/lib_field.cpp:458 eeschema/lib_field.h:79
 msgid "Field"
 msgstr "ช่อง"
 
@@ -4287,7 +4287,7 @@ msgstr "หนา+เอียง"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/fields_grid_table.cpp:159 eeschema/fields_grid_table.cpp:408
-#: eeschema/fields_grid_table.cpp:520 eeschema/lib_field.cpp:471
+#: eeschema/fields_grid_table.cpp:520 eeschema/lib_field.cpp:472
 #: eeschema/lib_text.cpp:359 eeschema/pin_type.cpp:128
 #: eeschema/sch_field.cpp:594
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:89
@@ -4305,7 +4305,7 @@ msgstr "ซ้าย"
 #: eeschema/fields_grid_table.cpp:152 eeschema/fields_grid_table.cpp:160
 #: eeschema/fields_grid_table.cpp:409 eeschema/fields_grid_table.cpp:419
 #: eeschema/fields_grid_table.cpp:522 eeschema/fields_grid_table.cpp:533
-#: eeschema/lib_field.cpp:472 eeschema/lib_field.cpp:481
+#: eeschema/lib_field.cpp:473 eeschema/lib_field.cpp:482
 #: eeschema/lib_text.cpp:360 eeschema/lib_text.cpp:369
 #: eeschema/sch_field.cpp:595 eeschema/sch_field.cpp:604
 #: gerbview/gerber_file_image.cpp:356 gerbview/gerber_file_image.cpp:359
@@ -4323,7 +4323,7 @@ msgstr "กลาง"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/fields_grid_table.cpp:161 eeschema/fields_grid_table.cpp:410
-#: eeschema/fields_grid_table.cpp:524 eeschema/lib_field.cpp:473
+#: eeschema/fields_grid_table.cpp:524 eeschema/lib_field.cpp:474
 #: eeschema/lib_text.cpp:361 eeschema/pin_type.cpp:127
 #: eeschema/sch_field.cpp:596
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:89
@@ -4336,7 +4336,7 @@ msgstr "ขวา"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:177
 #: eeschema/fields_grid_table.cpp:151 eeschema/fields_grid_table.cpp:418
-#: eeschema/fields_grid_table.cpp:531 eeschema/lib_field.cpp:480
+#: eeschema/fields_grid_table.cpp:531 eeschema/lib_field.cpp:481
 #: eeschema/lib_text.cpp:368 eeschema/sch_field.cpp:603
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:105
 msgid "Top"
@@ -4346,7 +4346,7 @@ msgstr "บน"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:177
 #: eeschema/fields_grid_table.cpp:153 eeschema/fields_grid_table.cpp:420
-#: eeschema/fields_grid_table.cpp:535 eeschema/lib_field.cpp:482
+#: eeschema/fields_grid_table.cpp:535 eeschema/lib_field.cpp:483
 #: eeschema/lib_text.cpp:370 eeschema/sch_field.cpp:605
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:105
 msgid "Bottom"
@@ -4372,7 +4372,7 @@ msgstr "กลับกระจกแล้ว"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:82
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:44
-#: eeschema/lib_field.cpp:462 eeschema/sch_field.cpp:585
+#: eeschema/lib_field.cpp:463 eeschema/sch_field.cpp:585
 #: eeschema/sch_pin.cpp:210
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:133
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:103
@@ -5307,7 +5307,7 @@ msgstr "ค่าปริยาย KiCad"
 msgid "KiCad Classic"
 msgstr "KiCad ดั่งเดิม"
 
-#: common/template_fieldnames.cpp:72
+#: common/template_fieldnames.cpp:58
 #, c-format
 msgid "Field%d"
 msgstr "ช่อง%d"
@@ -6731,7 +6731,7 @@ msgstr "ตัวแปรสภาพแวดล้อมที่มีอย
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:57
 #: eeschema/dialogs/dialog_rescue_each.cpp:136
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:51
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:969
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:975
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_sym_lib_table.cpp:300
 #: eeschema/fields_grid_table.cpp:213 eeschema/sch_symbol.cpp:1449
@@ -7025,56 +7025,56 @@ msgstr ""
 "%s\n"
 "ไม่พบ. สคริปต์ไม่พร้อมใช้งาน"
 
-#: eeschema/component_references_lister.cpp:627
+#: eeschema/component_references_lister.cpp:623
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "ชิ้นส่วนยังไม่ทำอธิบายประกอบ: %s%s (หน่วย %d)\n"
 
-#: eeschema/component_references_lister.cpp:634
+#: eeschema/component_references_lister.cpp:630
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "ชิ้นส่วนยังไม่ทำคำอธิบายประกอบ: %s %s\n"
 
-#: eeschema/component_references_lister.cpp:652
+#: eeschema/component_references_lister.cpp:648
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr "ข้อผิดพลาด: สัญลักษณ์ %s%s%s (หน่วย %d) เกินหน่วยที่กำหนด (%d)\n"
 
-#: eeschema/component_references_lister.cpp:689
-#: eeschema/component_references_lister.cpp:717
+#: eeschema/component_references_lister.cpp:685
+#: eeschema/component_references_lister.cpp:713
 #, c-format
 msgid "Duplicate items %s%s%s\n"
 msgstr "ชิ้นส่วนซ้ำ %s%s%s\n"
 
-#: eeschema/component_references_lister.cpp:696
-#: eeschema/component_references_lister.cpp:724
+#: eeschema/component_references_lister.cpp:692
+#: eeschema/component_references_lister.cpp:720
 #, c-format
 msgid "Duplicate items %s%s\n"
 msgstr "ชิ้นส่วนซ้ำ %s%s\n"
 
-#: eeschema/component_references_lister.cpp:736
+#: eeschema/component_references_lister.cpp:732
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "ค่าที่แตกต่างกันสําหรับ %s%d%s (%s) และ %s%d%s (%s)"
 
-#: eeschema/connection_graph.cpp:2352 eeschema/connection_graph.cpp:2385
+#: eeschema/connection_graph.cpp:2377 eeschema/connection_graph.cpp:2410
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "ทั้ง %s และ %s ติดเข้ากับชิ้นส่วนเดียวกัน; %s จะถูกใช้ในรายการเน็ต"
 
-#: eeschema/connection_graph.cpp:2611
+#: eeschema/connection_graph.cpp:2636
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "เน็ต %s เชื่อมต่อกับบัสแบบกราฟิก %s แต่ไม่ได้เป็นสมาชิกของบัส"
 
-#: eeschema/connection_graph.cpp:3077
+#: eeschema/connection_graph.cpp:3109
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "ชีตพิน %s ไม่มีป้ายชื่อลำดับขั้นที่ตรงกันภายในแผ่นวงจร"
 
-#: eeschema/connection_graph.cpp:3094
+#: eeschema/connection_graph.cpp:3126
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "ป้ายชื่อตามลำดับขั้น %s ไม่มีชีตพินที่ตรงกันในแผ่นวงจรต้นกำเนิด"
@@ -8194,20 +8194,20 @@ msgstr "ลบมาร์คเกอร์"
 msgid "Electrical Rules Checker"
 msgstr "ผู้ตรวจสอบกฏทางไฟฟ้า"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:131
+#: eeschema/dialogs/dialog_field_properties.cpp:129
 msgid "Power symbol value field text cannot be changed."
 msgstr "ช่องค่าของสัญลักษณ์พาวเวอร์ ไม่สามารถเปลี่ยนแปลง"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:246
+#: eeschema/dialogs/dialog_field_properties.cpp:244
 msgid "Illegal reference designator value!"
 msgstr "ค่าอักษรอ้างอิงไม่ถูกต้อง!"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:254
+#: eeschema/dialogs/dialog_field_properties.cpp:252
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:121
 msgid "Value may not be empty."
 msgstr "ค่าไม่สามารถว่างเปล่า"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:336
+#: eeschema/dialogs/dialog_field_properties.cpp:334
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "ชื่อไฟล์ของแผ่นชีตสามารถเปลี่ยนได้ในกรอบสนทนาคุณสมบัติแผ่นชีตเท่านั้น"
 
@@ -8500,7 +8500,7 @@ msgid "Read Only"
 msgstr "อ่านเท่านั้น"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:777
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1219
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1225
 msgid "Save changes?"
 msgstr "บันทึการเปลี่ยนแปลง?"
 
@@ -8738,7 +8738,7 @@ msgstr "ช่อง"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:52
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:703
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
 #: eeschema/fields_grid_table.cpp:214
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
@@ -8767,7 +8767,7 @@ msgstr "เรียงตาม V"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
-#: eeschema/fields_grid_table.cpp:219 eeschema/lib_field.cpp:466
+#: eeschema/fields_grid_table.cpp:219 eeschema/lib_field.cpp:467
 #: eeschema/lib_text.cpp:354 eeschema/sch_field.cpp:589
 #: eeschema/sch_text.cpp:798
 msgid "Text Size"
@@ -9652,7 +9652,7 @@ msgid "Action Taken"
 msgstr "รับคำสั่ง"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:132
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:968
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:974
 #: eeschema/sch_symbol.cpp:1447 eeschema/sch_symbol.cpp:1494
 #: pcbnew/footprint.cpp:2391 pcbnew/fp_text.cpp:271
 msgid "Reference"
@@ -10058,7 +10058,7 @@ msgstr "เส้นทางลำดับขั้น: "
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:129
-#: eeschema/lib_field.cpp:464 eeschema/lib_pin.cpp:1046
+#: eeschema/lib_field.cpp:465 eeschema/lib_pin.cpp:1046
 #: eeschema/lib_pin.cpp:1048 eeschema/lib_text.cpp:352
 #: eeschema/sch_field.cpp:587 eeschema/sch_pin.cpp:208
 #: eeschema/sch_text.cpp:796
@@ -10837,37 +10837,37 @@ msgid "Show datasheet in browser"
 msgstr "แสดงดาต้าชีตในบราวเซอร์"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:129
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1052
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1058
 msgid "The Reference column cannot be hidden."
 msgstr "ไม่สามารถซ่อนคอลัมน์อ้างอิง"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:234
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:244
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:248
 msgid "Qty"
 msgstr "จำนวน"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:699
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:705
 msgid "Group By"
 msgstr "จับกลุ่มโดย"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:971
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:977
 #: eeschema/symbol_editor/symbol_editor.cpp:1283
 msgid "Datasheet"
 msgstr "ดาต้าชีต"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:993
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:999
 msgid "New field name:"
 msgstr "ชื่อช่องใหม่:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:993
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:999
 msgid "Add Field"
 msgstr "เพิ่มช่อง"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1002
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1008
 msgid "Field must have a name."
 msgstr "ช่องต้องมีชื่อ"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1010
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1016
 #: eeschema/dialogs/dialog_symbol_properties.cpp:834
 #, c-format
 msgid "Field name '%s' already in use."
@@ -12466,23 +12466,23 @@ msgstr ""
 "ไฟล์ '%s' ไม่สามารถเปิด\n"
 "จำเป็นต้องใช้การแก้ไขด้วยตนเอง สำหรับไฟล์บันทึกอัตโนมัติ"
 
-#: eeschema/files-io.cpp:1438
+#: eeschema/files-io.cpp:1443
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr "ไฟล์บันทึกอัตโนมัติต่อไปนี้ ไม่สามารถกู้กลับคืน\n"
 
-#: eeschema/files-io.cpp:1443
+#: eeschema/files-io.cpp:1448
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "ต้องทำการกู้คืนด้วยต้นเอง สำหรับไฟล์ด้านบน"
 
-#: eeschema/files-io.cpp:1465
+#: eeschema/files-io.cpp:1468
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "ไฟล์บันทึกอัตโนมัติตามนี้ ไม่สามารถลบออก\n"
 
-#: eeschema/files-io.cpp:1470
+#: eeschema/files-io.cpp:1473
 msgid "Manual removal will be required for the file(s) above."
 msgstr "ต้องทำการลบไฟล์ด้านบน ด้วยตนเอง"
 
-#: eeschema/files-io.cpp:1481
+#: eeschema/files-io.cpp:1484
 #, c-format
 msgid ""
 "The automatic save master file\n"
@@ -12493,7 +12493,7 @@ msgstr ""
 "'%s'\n"
 "ไม่สามารถลบออก"
 
-#: eeschema/files-io.cpp:1489
+#: eeschema/files-io.cpp:1492
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
@@ -12523,7 +12523,7 @@ msgstr "รูต"
 msgid "(page %s)"
 msgstr "(หน้า %s)"
 
-#: eeschema/lib_field.cpp:462 eeschema/lib_pin.cpp:1048
+#: eeschema/lib_field.cpp:463 eeschema/lib_pin.cpp:1048
 #: eeschema/sch_field.cpp:585 eeschema/sch_pin.cpp:210
 #: gerbview/gerber_draw_item.cpp:733 gerbview/gerber_draw_item.cpp:734
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
@@ -12535,7 +12535,7 @@ msgstr "(หน้า %s)"
 msgid "Yes"
 msgstr "ใช่"
 
-#: eeschema/lib_field.cpp:462 eeschema/lib_pin.cpp:1048
+#: eeschema/lib_field.cpp:463 eeschema/lib_pin.cpp:1048
 #: eeschema/sch_field.cpp:585 eeschema/sch_pin.cpp:210
 #: gerbview/gerber_draw_item.cpp:733 gerbview/gerber_draw_item.cpp:734
 #: pcbnew/fp_text.cpp:291 pcbnew/fp_text.cpp:296 pcbnew/pcb_text.cpp:122
@@ -12546,12 +12546,12 @@ msgstr "ใช่"
 msgid "No"
 msgstr "ไม่ใช่"
 
-#: eeschema/lib_field.cpp:476 eeschema/lib_text.cpp:364
+#: eeschema/lib_field.cpp:477 eeschema/lib_text.cpp:364
 #: eeschema/sch_field.cpp:599
 msgid "H Justification"
 msgstr "จัดพอเหมาะตาม H"
 
-#: eeschema/lib_field.cpp:485 eeschema/lib_text.cpp:373
+#: eeschema/lib_field.cpp:486 eeschema/lib_text.cpp:373
 #: eeschema/sch_field.cpp:608
 msgid "V Justification"
 msgstr "จัดพอเหมาะตาม V"
@@ -13699,19 +13699,19 @@ msgstr "ถอยกลับไปที่แคชเพื่อตั้ง
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr "ไม่พบไลบรารีสัญลักษณ์สําหรับสัญลักษณ์วงจร '%s %s'"
 
-#: eeschema/sch_sheet.cpp:771
+#: eeschema/sch_sheet.cpp:756
 msgid "Sheet Name"
 msgstr "ชื่อชีต"
 
-#: eeschema/sch_sheet.cpp:778
+#: eeschema/sch_sheet.cpp:763
 msgid "Hierarchical Path"
 msgstr "เส้นทางแบบลำดับขั้น"
 
-#: eeschema/sch_sheet.cpp:781
+#: eeschema/sch_sheet.cpp:766
 msgid "File Name"
 msgstr "ชื่อไฟล์"
 
-#: eeschema/sch_sheet.cpp:1010
+#: eeschema/sch_sheet.cpp:995
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "ชีตลำดับขั้น %s"
@@ -16294,28 +16294,28 @@ msgstr "สัญลักษณ์ไม่ใช่หลายหน่วย
 msgid "Label value cannot go below zero"
 msgstr "ค่าป้ายกำกับต้องไม่ต่ำกว่าศูนย์"
 
-#: eeschema/tools/sch_edit_tool.cpp:1125 eeschema/tools/sch_edit_tool.cpp:1127
+#: eeschema/tools/sch_edit_tool.cpp:1128 eeschema/tools/sch_edit_tool.cpp:1131
 #: eeschema/tools/symbol_editor_edit_tool.cpp:513
 #, c-format
 msgid "Edit %s Field"
 msgstr "แก้ไขฟิลด์ %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1129
+#: eeschema/tools/sch_edit_tool.cpp:1133
 #: eeschema/tools/symbol_editor_edit_tool.cpp:515
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "แก้ไขฟิลด์ %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1751
+#: eeschema/tools/sch_edit_tool.cpp:1755
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "คุณต้องการลบขาที่ไม่ได้อ้างอิงออกจากแผ่นชีตนี้หรือไม่?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1811
+#: eeschema/tools/sch_edit_tool.cpp:1815
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "ป้อนหมายเลขหน้าสำหรับเส้นทางแผ่นชีต%s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1814
+#: eeschema/tools/sch_edit_tool.cpp:1818
 msgid "Edit Sheet Page Number"
 msgstr "แก้ไขหมายเลขหน้าแผ่นชีต"
 
@@ -23332,7 +23332,7 @@ msgid "Footprint Checker"
 msgstr "ตัวตรวจสอบฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:75
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:75
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:76
 msgid "3D Models"
 msgstr "โมเดล 3 มิติ"
 
@@ -23350,17 +23350,17 @@ msgstr ""
 "และสามารถเลือกได้เฉพาะเมื่อเปิดใช้งานช่องกาเครื่องหมาย 'ชิ้นส่วนที่ถูกล็อค' ในตัวกรองการเลือก"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:403
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:323
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:325
 msgid "Text items must have some content."
 msgstr "ข้อความต้องมีเนื้อหาบางส่วน"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:536
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:450
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:452
 msgid "Modify footprint properties"
 msgstr "แก้ไขคุณสมบัติฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:595
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:527
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:529
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:414
 msgid "Reference and value are mandatory."
 msgstr "อ้างอิงและค่าเป็นสิ่งบังคับ"
@@ -23650,11 +23650,11 @@ msgstr ""
 msgid "Footprint Properties"
 msgstr "คุณสมบัติฟุ้ทพรินท์"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:277
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:279
 msgid "Footprint must have a name."
 msgstr "ฟุ้ทพรินท์ต้องมีชื่อ"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:282
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:284
 #, c-format
 msgid "Footprint name may not contain '%s'."
 msgstr "ชื่อฟุ้ทพรินท์ต้องไม่มี '%s'"

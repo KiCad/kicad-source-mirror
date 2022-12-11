@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-29 17:25-0800\n"
+"POT-Creation-Date: 2022-12-11 12:20-0800\n"
 "PO-Revision-Date: 2022-11-24 07:48+0000\n"
 "Last-Translator: Bế Trọng Nghĩa <benghia1st@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v6/vi/"
@@ -2025,7 +2025,7 @@ msgstr "Biến môi trường"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:46
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:56
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:50
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:704
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:52
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:43
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
@@ -3970,7 +3970,7 @@ msgstr "Tệp \"%s\" chưa được đọc đầy đủ"
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
 #: common/eda_item.cpp:319 common/eda_item.cpp:343 common/eda_item.cpp:363
 #: common/eda_text.cpp:728 eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/lib_field.cpp:460 eeschema/lib_text.cpp:350 eeschema/lib_text.h:55
+#: eeschema/lib_field.cpp:461 eeschema/lib_text.cpp:350 eeschema/lib_text.h:55
 #: eeschema/sch_field.cpp:583
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:145
@@ -4247,7 +4247,7 @@ msgstr "Thư viện mới"
 msgid "Screen"
 msgstr "Màn hình"
 
-#: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:970
+#: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:976
 #: eeschema/sch_symbol.cpp:1485
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:117
 #: pcbnew/fp_text.cpp:279 pcbnew/load_select_footprint.cpp:372
@@ -4356,8 +4356,8 @@ msgstr "Global Label"
 msgid "Hierarchical Label"
 msgstr "Hierarchical Label"
 
-#: common/eda_item.cpp:347 eeschema/dialogs/dialog_symbol_fields_table.cpp:696
-#: eeschema/lib_field.cpp:457 eeschema/lib_field.h:79
+#: common/eda_item.cpp:347 eeschema/dialogs/dialog_symbol_fields_table.cpp:702
+#: eeschema/lib_field.cpp:458 eeschema/lib_field.h:79
 msgid "Field"
 msgstr "Trường"
 
@@ -4606,7 +4606,7 @@ msgstr "In đậm + Nghiêng"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/fields_grid_table.cpp:159 eeschema/fields_grid_table.cpp:408
-#: eeschema/fields_grid_table.cpp:520 eeschema/lib_field.cpp:471
+#: eeschema/fields_grid_table.cpp:520 eeschema/lib_field.cpp:472
 #: eeschema/lib_text.cpp:359 eeschema/pin_type.cpp:128
 #: eeschema/sch_field.cpp:594
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:89
@@ -4624,7 +4624,7 @@ msgstr "Trái"
 #: eeschema/fields_grid_table.cpp:152 eeschema/fields_grid_table.cpp:160
 #: eeschema/fields_grid_table.cpp:409 eeschema/fields_grid_table.cpp:419
 #: eeschema/fields_grid_table.cpp:522 eeschema/fields_grid_table.cpp:533
-#: eeschema/lib_field.cpp:472 eeschema/lib_field.cpp:481
+#: eeschema/lib_field.cpp:473 eeschema/lib_field.cpp:482
 #: eeschema/lib_text.cpp:360 eeschema/lib_text.cpp:369
 #: eeschema/sch_field.cpp:595 eeschema/sch_field.cpp:604
 #: gerbview/gerber_file_image.cpp:356 gerbview/gerber_file_image.cpp:359
@@ -4642,7 +4642,7 @@ msgstr "Trung tâm"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/fields_grid_table.cpp:161 eeschema/fields_grid_table.cpp:410
-#: eeschema/fields_grid_table.cpp:524 eeschema/lib_field.cpp:473
+#: eeschema/fields_grid_table.cpp:524 eeschema/lib_field.cpp:474
 #: eeschema/lib_text.cpp:361 eeschema/pin_type.cpp:127
 #: eeschema/sch_field.cpp:596
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:89
@@ -4655,7 +4655,7 @@ msgstr "Phải"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:177
 #: eeschema/fields_grid_table.cpp:151 eeschema/fields_grid_table.cpp:418
-#: eeschema/fields_grid_table.cpp:531 eeschema/lib_field.cpp:480
+#: eeschema/fields_grid_table.cpp:531 eeschema/lib_field.cpp:481
 #: eeschema/lib_text.cpp:368 eeschema/sch_field.cpp:603
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:105
 #, fuzzy
@@ -4666,7 +4666,7 @@ msgstr "Trên"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:177
 #: eeschema/fields_grid_table.cpp:153 eeschema/fields_grid_table.cpp:420
-#: eeschema/fields_grid_table.cpp:535 eeschema/lib_field.cpp:482
+#: eeschema/fields_grid_table.cpp:535 eeschema/lib_field.cpp:483
 #: eeschema/lib_text.cpp:370 eeschema/sch_field.cpp:605
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:105
 #, fuzzy
@@ -4695,7 +4695,7 @@ msgstr "Mirrored"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:82
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:44
-#: eeschema/lib_field.cpp:462 eeschema/sch_field.cpp:585
+#: eeschema/lib_field.cpp:463 eeschema/sch_field.cpp:585
 #: eeschema/sch_pin.cpp:210
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:133
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:103
@@ -5753,7 +5753,7 @@ msgstr "Mặc định Kicad"
 msgid "KiCad Classic"
 msgstr "KiCad cổ điển"
 
-#: common/template_fieldnames.cpp:72
+#: common/template_fieldnames.cpp:58
 #, c-format
 msgid "Field%d"
 msgstr "Trường%d"
@@ -7243,7 +7243,7 @@ msgstr "Các biến môi trường có sẵn cho đường dẫn tương đối:
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:57
 #: eeschema/dialogs/dialog_rescue_each.cpp:136
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:51
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:969
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:975
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_sym_lib_table.cpp:300
 #: eeschema/fields_grid_table.cpp:213 eeschema/sch_symbol.cpp:1449
@@ -7559,39 +7559,39 @@ msgstr ""
 "%s\n"
 "không tìm thấy. Tập lệnh không có sẵn."
 
-#: eeschema/component_references_lister.cpp:627
+#: eeschema/component_references_lister.cpp:623
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Mục không có chú thích: %s%s (đơn vị %d)\n"
 
-#: eeschema/component_references_lister.cpp:634
+#: eeschema/component_references_lister.cpp:630
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Mục không có chú thích: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:652
+#: eeschema/component_references_lister.cpp:648
 #, fuzzy, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr "Lỗi: symbol %s %s đơn vị %d và symbol chỉ có %d đơn vị được xác định\n"
 
-#: eeschema/component_references_lister.cpp:689
-#: eeschema/component_references_lister.cpp:717
+#: eeschema/component_references_lister.cpp:685
+#: eeschema/component_references_lister.cpp:713
 #, fuzzy, c-format
 msgid "Duplicate items %s%s%s\n"
 msgstr "Nhiều mục %s%s\n"
 
-#: eeschema/component_references_lister.cpp:696
-#: eeschema/component_references_lister.cpp:724
+#: eeschema/component_references_lister.cpp:692
+#: eeschema/component_references_lister.cpp:720
 #, fuzzy, c-format
 msgid "Duplicate items %s%s\n"
 msgstr "Nhiều mục %s%s\n"
 
-#: eeschema/component_references_lister.cpp:736
+#: eeschema/component_references_lister.cpp:732
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Các giá trị khác nhau cho %s %d %s (%s) và %s %d %s (%s)"
 
-#: eeschema/connection_graph.cpp:2352 eeschema/connection_graph.cpp:2385
+#: eeschema/connection_graph.cpp:2377 eeschema/connection_graph.cpp:2410
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -7599,7 +7599,7 @@ msgstr ""
 "Cả %s và %s đều được gắn vào các mục giống nhau; %s sẽ được sử dụng trong "
 "netlist"
 
-#: eeschema/connection_graph.cpp:2611
+#: eeschema/connection_graph.cpp:2636
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -7607,13 +7607,13 @@ msgstr ""
 "Net %s được kết nối bằng đồ thị với bus %s nhưng không phải là thành viên "
 "của bus đó"
 
-#: eeschema/connection_graph.cpp:3077
+#: eeschema/connection_graph.cpp:3109
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "chân pin trang tính %s không có nhãn phân cấp phù hợp bên trong trang tính"
 
-#: eeschema/connection_graph.cpp:3094
+#: eeschema/connection_graph.cpp:3126
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -8767,21 +8767,21 @@ msgstr "Xóa điểm đánh dấu"
 msgid "Electrical Rules Checker"
 msgstr "Trình kiểm tra các luật điện tử"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:131
+#: eeschema/dialogs/dialog_field_properties.cpp:129
 #, fuzzy
 msgid "Power symbol value field text cannot be changed."
 msgstr "Văn bản trường giá trị biểu tượng nguồn không thể thay đổi."
 
-#: eeschema/dialogs/dialog_field_properties.cpp:246
+#: eeschema/dialogs/dialog_field_properties.cpp:244
 msgid "Illegal reference designator value!"
 msgstr "Giá trị chỉ định tham chiếu bất hợp pháp!"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:254
+#: eeschema/dialogs/dialog_field_properties.cpp:252
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:121
 msgid "Value may not be empty."
 msgstr "Giá trị không được để trống."
 
-#: eeschema/dialogs/dialog_field_properties.cpp:336
+#: eeschema/dialogs/dialog_field_properties.cpp:334
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr ""
 "Tên tệp trang vẽ chỉ có thể được sửa đổi trong hộp thoại Thuộc tính Trang vẽ."
@@ -9072,7 +9072,7 @@ msgid "Read Only"
 msgstr "Chỉ đọc"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:777
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1219
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1225
 msgid "Save changes?"
 msgstr "Lưu thay đổi?"
 
@@ -9323,7 +9323,7 @@ msgstr "Các trường"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:52
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:703
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
 #: eeschema/fields_grid_table.cpp:214
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
@@ -9352,7 +9352,7 @@ msgstr "Căn chỉnh V"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
-#: eeschema/fields_grid_table.cpp:219 eeschema/lib_field.cpp:466
+#: eeschema/fields_grid_table.cpp:219 eeschema/lib_field.cpp:467
 #: eeschema/lib_text.cpp:354 eeschema/sch_field.cpp:589
 #: eeschema/sch_text.cpp:798
 msgid "Text Size"
@@ -10250,7 +10250,7 @@ msgid "Action Taken"
 msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:132
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:968
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:974
 #: eeschema/sch_symbol.cpp:1447 eeschema/sch_symbol.cpp:1494
 #: pcbnew/footprint.cpp:2391 pcbnew/fp_text.cpp:271
 msgid "Reference"
@@ -10648,7 +10648,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:129
-#: eeschema/lib_field.cpp:464 eeschema/lib_pin.cpp:1046
+#: eeschema/lib_field.cpp:465 eeschema/lib_pin.cpp:1046
 #: eeschema/lib_pin.cpp:1048 eeschema/lib_text.cpp:352
 #: eeschema/sch_field.cpp:587 eeschema/sch_pin.cpp:208
 #: eeschema/sch_text.cpp:796
@@ -11424,38 +11424,38 @@ msgid "Show datasheet in browser"
 msgstr "Hiển thị Datasheet trong trình duyệt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:129
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1052
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1058
 msgid "The Reference column cannot be hidden."
 msgstr "cột giá trị Tham chiếu không thể bị ẩn."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:234
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:244
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:248
 #, fuzzy
 msgid "Qty"
 msgstr "SL"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:699
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:705
 msgid "Group By"
 msgstr "Nhóm theo"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:971
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:977
 #: eeschema/symbol_editor/symbol_editor.cpp:1283
 msgid "Datasheet"
 msgstr "Bảng dữ liệu"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:993
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:999
 msgid "New field name:"
 msgstr "Tên trường mới:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:993
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:999
 msgid "Add Field"
 msgstr "Thêm Trường"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1002
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1008
 msgid "Field must have a name."
 msgstr "Trường phải có tên."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1010
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1016
 #: eeschema/dialogs/dialog_symbol_properties.cpp:834
 #, fuzzy, c-format
 msgid "Field name '%s' already in use."
@@ -13038,25 +13038,25 @@ msgid ""
 "Manual recovery of automatically saved files is required."
 msgstr ""
 
-#: eeschema/files-io.cpp:1438
+#: eeschema/files-io.cpp:1443
 #, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp in bo mạch."
 
-#: eeschema/files-io.cpp:1443
+#: eeschema/files-io.cpp:1448
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
 
-#: eeschema/files-io.cpp:1465
+#: eeschema/files-io.cpp:1468
 #, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp in bo mạch."
 
-#: eeschema/files-io.cpp:1470
+#: eeschema/files-io.cpp:1473
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
-#: eeschema/files-io.cpp:1481
+#: eeschema/files-io.cpp:1484
 #, fuzzy, c-format
 msgid ""
 "The automatic save master file\n"
@@ -13064,7 +13064,7 @@ msgid ""
 "could not be deleted."
 msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp in bo mạch."
 
-#: eeschema/files-io.cpp:1489
+#: eeschema/files-io.cpp:1492
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
@@ -13092,7 +13092,7 @@ msgstr ""
 msgid "(page %s)"
 msgstr ""
 
-#: eeschema/lib_field.cpp:462 eeschema/lib_pin.cpp:1048
+#: eeschema/lib_field.cpp:463 eeschema/lib_pin.cpp:1048
 #: eeschema/sch_field.cpp:585 eeschema/sch_pin.cpp:210
 #: gerbview/gerber_draw_item.cpp:733 gerbview/gerber_draw_item.cpp:734
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
@@ -13104,7 +13104,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: eeschema/lib_field.cpp:462 eeschema/lib_pin.cpp:1048
+#: eeschema/lib_field.cpp:463 eeschema/lib_pin.cpp:1048
 #: eeschema/sch_field.cpp:585 eeschema/sch_pin.cpp:210
 #: gerbview/gerber_draw_item.cpp:733 gerbview/gerber_draw_item.cpp:734
 #: pcbnew/fp_text.cpp:291 pcbnew/fp_text.cpp:296 pcbnew/pcb_text.cpp:122
@@ -13115,13 +13115,13 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: eeschema/lib_field.cpp:476 eeschema/lib_text.cpp:364
+#: eeschema/lib_field.cpp:477 eeschema/lib_text.cpp:364
 #: eeschema/sch_field.cpp:599
 #, fuzzy
 msgid "H Justification"
 msgstr "Vertical Justification"
 
-#: eeschema/lib_field.cpp:485 eeschema/lib_text.cpp:373
+#: eeschema/lib_field.cpp:486 eeschema/lib_text.cpp:373
 #: eeschema/sch_field.cpp:608
 #, fuzzy
 msgid "V Justification"
@@ -14259,19 +14259,19 @@ msgstr ""
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr ""
 
-#: eeschema/sch_sheet.cpp:771
+#: eeschema/sch_sheet.cpp:756
 msgid "Sheet Name"
 msgstr ""
 
-#: eeschema/sch_sheet.cpp:778
+#: eeschema/sch_sheet.cpp:763
 msgid "Hierarchical Path"
 msgstr ""
 
-#: eeschema/sch_sheet.cpp:781
+#: eeschema/sch_sheet.cpp:766
 msgid "File Name"
 msgstr ""
 
-#: eeschema/sch_sheet.cpp:1010
+#: eeschema/sch_sheet.cpp:995
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr ""
@@ -16711,28 +16711,28 @@ msgstr ""
 msgid "Label value cannot go below zero"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:1125 eeschema/tools/sch_edit_tool.cpp:1127
+#: eeschema/tools/sch_edit_tool.cpp:1128 eeschema/tools/sch_edit_tool.cpp:1131
 #: eeschema/tools/symbol_editor_edit_tool.cpp:513
 #, c-format
 msgid "Edit %s Field"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:1129
+#: eeschema/tools/sch_edit_tool.cpp:1133
 #: eeschema/tools/symbol_editor_edit_tool.cpp:515
 #, fuzzy, c-format
 msgid "Edit '%s' Field"
 msgstr "Chỉnh sửa tập tin"
 
-#: eeschema/tools/sch_edit_tool.cpp:1751
+#: eeschema/tools/sch_edit_tool.cpp:1755
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:1811
+#: eeschema/tools/sch_edit_tool.cpp:1815
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:1814
+#: eeschema/tools/sch_edit_tool.cpp:1818
 msgid "Edit Sheet Page Number"
 msgstr ""
 
@@ -23641,7 +23641,7 @@ msgid "Footprint Checker"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:75
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:75
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:76
 #, fuzzy
 msgid "3D Models"
 msgstr "Mô hình 3D bởi"
@@ -23658,17 +23658,17 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:403
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:323
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:325
 msgid "Text items must have some content."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:536
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:450
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:452
 msgid "Modify footprint properties"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:595
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:527
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:529
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:414
 msgid "Reference and value are mandatory."
 msgstr ""
@@ -23941,11 +23941,11 @@ msgstr ""
 msgid "Footprint Properties"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:277
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:279
 msgid "Footprint must have a name."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:282
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:284
 #, fuzzy, c-format
 msgid "Footprint name may not contain '%s'."
 msgstr "Tên tín hiệu không được chứa khoảng trắng"
