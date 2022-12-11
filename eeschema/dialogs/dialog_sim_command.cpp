@@ -105,8 +105,11 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
 wxString DIALOG_SIM_COMMAND::evaluateDCControls( wxChoice* aDcSource, wxTextCtrl* aDcStart,
                                                   wxTextCtrl* aDcStop, wxTextCtrl* aDcIncr )
 {
-    wxString  dcSource = aDcSource->GetString( aDcSource->GetSelection() );
+    wxString  dcSource;
     wxWindow* ctrlWithError = nullptr;
+
+    if( aDcSource->GetSelection() >= 0 )
+        dcSource = aDcSource->GetString( aDcSource->GetSelection() );
 
     if( dcSource.IsEmpty() )
     {
@@ -393,13 +396,12 @@ void DIALOG_SIM_COMMAND::updateDCSources( wxChar aType, wxChoice* aSource )
 
     if( aType != 'T' )
     {
-        for( const auto& item : m_circuitModel->GetItems() )
+        for( const SPICE_ITEM& item : m_circuitModel->GetItems() )
         {
             if( ( aType == 'R' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_T::R )
-            ||  ( aType == 'C' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_T::C )
-            ||  ( aType == 'L' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_T::L ) )
+            ||  ( aType == 'V' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_T::V )
+            ||  ( aType == 'I' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_T::I ) )
             {
-                // TODO: VSOURCE, ISOURCE.
                 sourcesList.insert( item.refName );
             }
         }
@@ -444,9 +446,9 @@ bool DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 
             if( tkn == "dec" )
                 m_acScale->SetSelection( 0 );
-            if( tkn == "oct" )
+            else if( tkn == "oct" )
                 m_acScale->SetSelection( 1 );
-            if( tkn == "lin" )
+            else if( tkn == "lin" )
                 m_acScale->SetSelection( 2 );
             else
                 return false;
@@ -458,13 +460,13 @@ bool DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         }
         else if( tkn == ".dc" )
         {
+            m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );
+
             SPICE_DC_PARAMS src1, src2;
             src2.m_vincrement = SPICE_VALUE( -1 );
 
             if( !m_circuitModel->ParseDCCommand( aCommand, &src1, &src2 ) )
                 return false;
-
-            m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );
 
             if( src1.m_source.IsSameAs( wxT( "TEMP" ), false ) )
                 setStringSelection( m_dcSourceType1, wxT( "TEMP" ) );

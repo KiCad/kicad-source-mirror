@@ -40,7 +40,7 @@ class DIALOG_SIM_COMMAND : public DIALOG_SIM_COMMAND_BASE
 {
 public:
     DIALOG_SIM_COMMAND( wxWindow* aParent, std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
-                         std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings );
+                        std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings );
 
     const wxString& GetSimCommand() const
     {

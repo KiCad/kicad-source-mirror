@@ -134,6 +134,8 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	gbSizer1->Add( m_staticText5, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_dcStart1 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_dcStart1->SetMinSize( wxSize( 100,-1 ) );
+
 	gbSizer1->Add( m_dcStart1, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_src1DCStartValUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -143,6 +145,8 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	gbSizer1->Add( m_src1DCStartValUnit, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_dcStart2 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_dcStart2->SetMinSize( wxSize( 100,-1 ) );
+
 	gbSizer1->Add( m_dcStart2, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_src2DCStartValUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );

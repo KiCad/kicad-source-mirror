@@ -1508,8 +1508,8 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
         else
             oldCommand = wxString();
 
-        wxString newCommand = dlg.GetSimCommand();
-        SIM_TYPE newSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( newCommand );
+        const wxString& newCommand = dlg.GetSimCommand();
+        SIM_TYPE        newSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( newCommand );
 
         // If it is a new simulation type, open a new plot
         // For the DC sim, check if sweep source type has changed (char 4 will contain 'v',
