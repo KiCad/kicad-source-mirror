@@ -98,6 +98,12 @@ public:
 
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
 
+    /**
+     * @param aPin Comparison Pin
+     * @return True if aPin is stacked with this pin
+     */
+    bool IsStacked( const SCH_PIN* aPin ) const;
+
     bool IsPointClickableAnchor( const wxPoint& aPos ) const override
     {
         return m_isDangling && GetPosition() == aPos;

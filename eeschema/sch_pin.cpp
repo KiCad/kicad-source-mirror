@@ -233,6 +233,16 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 }
 
 
+bool SCH_PIN::IsStacked( const SCH_PIN* aPin ) const
+{
+    return m_parent == aPin->GetParent()
+            && GetTransformedPosition() == aPin->GetTransformedPosition()
+            && ( ( GetType() == aPin->GetType() )
+                    || ( GetType() == ELECTRICAL_PINTYPE::PT_PASSIVE )
+                    || ( aPin->GetType() == ELECTRICAL_PINTYPE::PT_PASSIVE ) );
+}
+
+
 void SCH_PIN::ClearDefaultNetName( const SCH_SHEET_PATH* aPath )
 {
     std::lock_guard<std::recursive_mutex> lock( m_netmap_mutex );
