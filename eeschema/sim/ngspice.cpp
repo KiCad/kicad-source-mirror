@@ -439,9 +439,9 @@ void NGSPICE::init_dll()
     wxFileName dllFile( "", NGSPICE_DLL_FILE );
 #if defined(__WINDOWS__)
   #if defined( _MSC_VER )
-    const std::vector<string> dllPaths = { "" };
+    const std::vector<std::string> dllPaths = { "" };
   #else
-    const std::vector<string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
+    const std::vector<std::string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
   #endif
 #elif defined(__WXMAC__)
     const std::vector<std::string> dllPaths = {
