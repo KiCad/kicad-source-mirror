@@ -7,17 +7,17 @@
 
 #include "widgets/wx_html_report_panel.h"
 
-#include "dialog_netlist_base.h"
+#include "dialog_export_netlist_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( NETLIST_DIALOG_BASE, DIALOG_SHIM )
-	EVT_NOTEBOOK_PAGE_CHANGED( ID_CHANGE_NOTEBOOK_PAGE, NETLIST_DIALOG_BASE::_wxFB_OnNetlistTypeSelection )
-	EVT_BUTTON( ID_ADD_PLUGIN, NETLIST_DIALOG_BASE::_wxFB_OnAddGenerator )
-	EVT_BUTTON( ID_DEL_PLUGIN, NETLIST_DIALOG_BASE::_wxFB_OnDelGenerator )
+BEGIN_EVENT_TABLE( DIALOG_EXPORT_NETLIST_BASE, DIALOG_SHIM )
+	EVT_NOTEBOOK_PAGE_CHANGED( ID_CHANGE_NOTEBOOK_PAGE, DIALOG_EXPORT_NETLIST_BASE::_wxFB_OnNetlistTypeSelection )
+	EVT_BUTTON( ID_ADD_PLUGIN, DIALOG_EXPORT_NETLIST_BASE::_wxFB_OnAddGenerator )
+	EVT_BUTTON( ID_DEL_PLUGIN, DIALOG_EXPORT_NETLIST_BASE::_wxFB_OnDelGenerator )
 END_EVENT_TABLE()
 
-NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_EXPORT_NETLIST_BASE::DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -31,18 +31,18 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	m_NoteBook->SetMinSize( wxSize( 540,-1 ) );
 
 
-	bUpperSizer->Add( m_NoteBook, 0, wxEXPAND | wxALL, 5 );
+	bUpperSizer->Add( m_NoteBook, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bSizerMsgPanel;
 	bSizerMsgPanel = new wxBoxSizer( wxVERTICAL );
 
 	m_MessagesBox = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_MessagesBox->SetMinSize( wxSize( 300,150 ) );
+	m_MessagesBox->SetMinSize( wxSize( 600,150 ) );
 
 	bSizerMsgPanel->Add( m_MessagesBox, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bUpperSizer->Add( bSizerMsgPanel, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bSizerMsgPanel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
@@ -75,7 +75,7 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	this->Centre( wxBOTH );
 }
 
-NETLIST_DIALOG_BASE::~NETLIST_DIALOG_BASE()
+DIALOG_EXPORT_NETLIST_BASE::~DIALOG_EXPORT_NETLIST_BASE()
 {
 }
 

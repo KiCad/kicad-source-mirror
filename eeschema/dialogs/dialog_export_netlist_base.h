@@ -32,9 +32,9 @@ class WX_HTML_REPORT_PANEL;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class NETLIST_DIALOG_BASE
+/// Class DIALOG_EXPORT_NETLIST_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class NETLIST_DIALOG_BASE : public DIALOG_SHIM
+class DIALOG_EXPORT_NETLIST_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -70,9 +70,9 @@ class NETLIST_DIALOG_BASE : public DIALOG_SHIM
 
 	public:
 
-		NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~NETLIST_DIALOG_BASE();
+		~DIALOG_EXPORT_NETLIST_BASE();
 
 };
 

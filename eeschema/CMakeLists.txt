@@ -96,8 +96,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_line_properties_base.cpp
     dialogs/dialog_migrate_buses.cpp
     dialogs/dialog_migrate_buses_base.cpp
-    dialogs/dialog_netlist.cpp
-    dialogs/dialog_netlist_base.cpp
+        dialogs/dialog_export_netlist.cpp
+        dialogs/dialog_export_netlist_base.cpp
     dialogs/dialog_pin_properties.cpp
     dialogs/dialog_pin_properties_base.cpp
     dialogs/dialog_plot_schematic.cpp

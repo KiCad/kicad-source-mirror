@@ -71,8 +71,8 @@ int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 
 
 /**
- * Create and shows NETLIST_DIALOG and returns whatever
- * NETLIST_DIALOG::ShowModal() returns.
+ * Create and shows DIALOG_EXPORT_NETLIST and returns whatever
+ * DIALOG_EXPORT_NETLIST::ShowModal() returns.
  *
  * @param int - NET_PLUGIN_CHANGE means user added or deleted a plugin,
  *              wxID_OK, or wxID_CANCEL.

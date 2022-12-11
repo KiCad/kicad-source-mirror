@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013-2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,9 +38,8 @@
 #include <gestfich.h>
 #include <widgets/wx_html_report_panel.h>
 #include <sch_edit_frame.h>
-#include <general.h>
 #include <netlist.h>
-#include <dialogs/dialog_netlist_base.h>
+#include <dialogs/dialog_export_netlist_base.h>
 #include <wildcards_and_files_ext.h>
 #include <invoke_sch_dialog.h>
 #include <netlist_exporters/netlist_exporter_spice.h>
@@ -72,7 +71,7 @@ enum panel_netlist_index {
 
 
 /* wxPanels for creating the NoteBook pages for each netlist format: */
-class NETLIST_PAGE_DIALOG : public wxPanel
+class EXPORT_NETLIST_PAGE : public wxPanel
 {
 
 public:
@@ -85,9 +84,9 @@ public:
      * @param title is the title of the notebook page.
      * @param id_NetType is the netlist ID type.
      */
-    NETLIST_PAGE_DIALOG( wxNotebook* aParent, const wxString& aTitle,
+    EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& aTitle,
                          NETLIST_TYPE_ID aIdNetType, bool aCustom );
-    ~NETLIST_PAGE_DIALOG() { };
+    ~EXPORT_NETLIST_PAGE() { };
 
     /**
      * @return the name of the netlist format for this page.
@@ -116,18 +115,15 @@ private:
 
 
 /* Dialog frame for creating netlists */
-class NETLIST_DIALOG : public NETLIST_DIALOG_BASE
+class DIALOG_EXPORT_NETLIST : public DIALOG_EXPORT_NETLIST_BASE
 {
 public:
-    NETLIST_DIALOG( SCH_EDIT_FRAME* parent );
-    ~NETLIST_DIALOG() { };
+    DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent );
+    ~DIALOG_EXPORT_NETLIST() { };
 
 private:
-    friend class NETLIST_PAGE_DIALOG;
-
     void InstallCustomPages();
-    NETLIST_PAGE_DIALOG* AddOneCustomPage( const wxString & aTitle,
-                                           const wxString & aCommandString,
+    EXPORT_NETLIST_PAGE* AddOneCustomPage( const wxString& aTitle, const wxString& aCommandString,
                                            NETLIST_TYPE_ID aNetTypeId );
     void InstallPageSpice();
     void InstallPageSpiceModel();
@@ -180,14 +176,14 @@ private:
 
 public:
     SCH_EDIT_FRAME*      m_Parent;
-    NETLIST_PAGE_DIALOG* m_PanelNetType[5 + CUSTOMPANEL_COUNTMAX];
+    EXPORT_NETLIST_PAGE* m_PanelNetType[5 + CUSTOMPANEL_COUNTMAX];
 };
 
 
 class NETLIST_DIALOG_ADD_GENERATOR : public NETLIST_DIALOG_ADD_GENERATOR_BASE
 {
 public:
-    NETLIST_DIALOG_ADD_GENERATOR( NETLIST_DIALOG* parent );
+    NETLIST_DIALOG_ADD_GENERATOR( DIALOG_EXPORT_NETLIST* parent );
 
     const wxString GetGeneratorTitle()  { return m_textCtrlName->GetValue(); }
     const wxString GetGeneratorTCommandLine() { return m_textCtrlCommand->GetValue(); }
@@ -200,7 +196,7 @@ private:
      */
     void OnBrowseGenerators( wxCommandEvent& event ) override;
 
-   NETLIST_DIALOG* m_Parent;
+    DIALOG_EXPORT_NETLIST* m_Parent;
 };
 
 
@@ -214,13 +210,13 @@ enum id_netlist {
 };
 
 
-BEGIN_EVENT_TABLE( NETLIST_DIALOG, NETLIST_DIALOG_BASE )
-    EVT_BUTTON( ID_RUN_SIMULATOR, NETLIST_DIALOG::OnRunExternSpiceCommand )
-    EVT_UPDATE_UI( ID_RUN_SIMULATOR, NETLIST_DIALOG::OnRunSpiceButtUI )
+BEGIN_EVENT_TABLE( DIALOG_EXPORT_NETLIST, DIALOG_EXPORT_NETLIST_BASE )
+    EVT_BUTTON( ID_RUN_SIMULATOR, DIALOG_EXPORT_NETLIST::OnRunExternSpiceCommand )
+    EVT_UPDATE_UI( ID_RUN_SIMULATOR, DIALOG_EXPORT_NETLIST::OnRunSpiceButtUI )
 END_EVENT_TABLE()
 
 
-NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* aParent, const wxString& aTitle,
+EXPORT_NETLIST_PAGE::EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& aTitle,
                                           NETLIST_TYPE_ID aIdNetType, bool aCustom ) :
         wxPanel( aParent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
 {
@@ -251,25 +247,25 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* aParent, const wxString& a
 }
 
 
-NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
-    NETLIST_DIALOG_BASE( parent )
+DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent ) :
+        DIALOG_EXPORT_NETLIST_BASE( parent )
 {
     m_Parent = parent;
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
-    for( NETLIST_PAGE_DIALOG*& page : m_PanelNetType)
+    for( EXPORT_NETLIST_PAGE*& page : m_PanelNetType)
         page = nullptr;
 
     // Add notebook pages:
-    m_PanelNetType[PANELPCBNEW] =
-            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "KiCad" ), NET_TYPE_PCBNEW, false );
+    m_PanelNetType[PANELPCBNEW] = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "KiCad" ),
+                                                           NET_TYPE_PCBNEW, false );
 
-    m_PanelNetType[PANELORCADPCB2] =
-            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "OrcadPCB2" ), NET_TYPE_ORCADPCB2, false );
+    m_PanelNetType[PANELORCADPCB2] = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "OrcadPCB2" ),
+                                                              NET_TYPE_ORCADPCB2, false );
 
-    m_PanelNetType[PANELCADSTAR] =
-            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "CadStar" ), NET_TYPE_CADSTAR, false );
+    m_PanelNetType[PANELCADSTAR] = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "CadStar" ),
+                                                            NET_TYPE_CADSTAR, false );
 
     InstallPageSpice();
     InstallPageSpiceModel();
@@ -294,7 +290,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 }
 
 
-void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
+void DIALOG_EXPORT_NETLIST::OnRunExternSpiceCommand( wxCommandEvent& event )
 {
     // Run the external spice simulator command
     NetlistUpdateOpt();
@@ -331,22 +327,22 @@ void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
 }
 
 
-void NETLIST_DIALOG::OnRunSpiceButtUI( wxUpdateUIEvent& aEvent )
+void DIALOG_EXPORT_NETLIST::OnRunSpiceButtUI( wxUpdateUIEvent& aEvent )
 {
     bool disable = m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->IsEmpty();
     aEvent.Enable( !disable );
 }
 
 
-void NETLIST_DIALOG::InstallPageSpice()
+void DIALOG_EXPORT_NETLIST::InstallPageSpice()
 {
-    NETLIST_PAGE_DIALOG* page = m_PanelNetType[PANELSPICE] =
-            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "Spice" ), NET_TYPE_SPICE, false );
+    EXPORT_NETLIST_PAGE* page = m_PanelNetType[PANELSPICE] =
+            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Spice" ), NET_TYPE_SPICE, false );
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
     page->m_CurSheetAsRoot = new wxCheckBox( page, ID_CUR_SHEET_AS_ROOT,
-                                               _( "Use current sheet as root" ) );
+                                             _( "Use current sheet as root" ) );
     page->m_CurSheetAsRoot->SetToolTip( _( "Export netlist only for the current sheet" ) );
     page->m_CurSheetAsRoot->SetValue( settings.m_SpiceCurSheetAsRoot );
     page->m_LeftBoxSizer->Add( page->m_CurSheetAsRoot, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
@@ -385,33 +381,31 @@ void NETLIST_DIALOG::InstallPageSpice()
 }
 
 
-void NETLIST_DIALOG::InstallPageSpiceModel()
+void DIALOG_EXPORT_NETLIST::InstallPageSpiceModel()
 {
-    NETLIST_PAGE_DIALOG* page = m_PanelNetType[PANELSPICEMODEL] =
-            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "Spice Model" ), NET_TYPE_SPICE_MODEL, false );
+    EXPORT_NETLIST_PAGE* page = m_PanelNetType[PANELSPICEMODEL] =
+            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Spice Model" ), NET_TYPE_SPICE_MODEL, false );
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
     page->m_CurSheetAsRoot = new wxCheckBox( page, ID_CUR_SHEET_AS_ROOT,
-                                               _( "Use current sheet as root" ) );
+                                             _( "Use current sheet as root" ) );
     page->m_CurSheetAsRoot->SetToolTip( _( "Export netlist only for the current sheet" ) );
     page->m_CurSheetAsRoot->SetValue( settings.m_SpiceModelCurSheetAsRoot );
     page->m_LeftBoxSizer->Add( page->m_CurSheetAsRoot, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
 }
 
 
-void NETLIST_DIALOG::InstallCustomPages()
+void DIALOG_EXPORT_NETLIST::InstallCustomPages()
 {
-    NETLIST_PAGE_DIALOG* currPage;
+    EXPORT_NETLIST_PAGE* currPage;
 
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
     if( cfg )
     {
-        for( size_t i = 0;
-             i < CUSTOMPANEL_COUNTMAX && i < cfg->m_NetlistPanel.plugins.size();
-             i++ )
+        for( size_t i = 0; i < CUSTOMPANEL_COUNTMAX && i < cfg->m_NetlistPanel.plugins.size(); i++ )
         {
             // pairs of (title, command) are stored
             wxString title = cfg->m_NetlistPanel.plugins[i].name;
@@ -430,11 +424,11 @@ void NETLIST_DIALOG::InstallCustomPages()
 }
 
 
-NETLIST_PAGE_DIALOG* NETLIST_DIALOG::AddOneCustomPage( const wxString& aTitle,
+EXPORT_NETLIST_PAGE* DIALOG_EXPORT_NETLIST::AddOneCustomPage( const wxString& aTitle,
                                                        const wxString& aCommandString,
                                                        NETLIST_TYPE_ID aNetTypeId )
 {
-    NETLIST_PAGE_DIALOG* currPage = new NETLIST_PAGE_DIALOG( m_NoteBook, aTitle, aNetTypeId, true );
+    EXPORT_NETLIST_PAGE* currPage = new EXPORT_NETLIST_PAGE( m_NoteBook, aTitle, aNetTypeId, true );
 
     currPage->m_LowBoxSizer->Add( new wxStaticText( currPage, -1, _( "Title:" ) ), 0,
                                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
@@ -460,13 +454,13 @@ NETLIST_PAGE_DIALOG* NETLIST_DIALOG::AddOneCustomPage( const wxString& aTitle,
 }
 
 
-void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
+void DIALOG_EXPORT_NETLIST::OnNetlistTypeSelection( wxNotebookEvent& event )
 {
     updateGeneratorButtons();
 }
 
 
-void NETLIST_DIALOG::NetlistUpdateOpt()
+void DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
 {
     bool saveAllVoltages =  m_PanelNetType[ PANELSPICE ]->m_SaveAllVoltages->IsChecked();
     bool saveAllCurrents =  m_PanelNetType[ PANELSPICE ]->m_SaveAllCurrents->IsChecked();
@@ -485,7 +479,7 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
 }
 
 
-bool NETLIST_DIALOG::TransferDataFromWindow()
+bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
 {
     wxFileName  fn;
     wxString    fileWildcard;
@@ -494,8 +488,8 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
 
     NetlistUpdateOpt();
 
-    NETLIST_PAGE_DIALOG* currPage;
-    currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
+    EXPORT_NETLIST_PAGE* currPage;
+    currPage = (EXPORT_NETLIST_PAGE*) m_NoteBook->GetCurrentPage();
 
     unsigned netlist_opt = 0;
 
@@ -512,15 +506,19 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
 
         if( currPage->m_SaveAllVoltages->GetValue() )
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
+
         if( currPage->m_SaveAllCurrents->GetValue() )
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+
         if( currPage->m_CurSheetAsRoot->GetValue() )
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_CUR_SHEET_AS_ROOT;
+
         break;
 
     case NET_TYPE_SPICE_MODEL:
         if( currPage->m_CurSheetAsRoot->GetValue() )
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_CUR_SHEET_AS_ROOT;
+
         break;
 
     case NET_TYPE_CADSTAR:
@@ -575,7 +573,7 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
 }
 
 
-bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt, wxString * aWildCard )
+bool DIALOG_EXPORT_NETLIST::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt, wxString * aWildCard )
 {
     wxString fileExt;
     wxString fileWildcard;
@@ -618,7 +616,7 @@ bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt, wxStr
 }
 
 
-void NETLIST_DIALOG::WriteCurrentNetlistSetup()
+void DIALOG_EXPORT_NETLIST::WriteCurrentNetlistSetup()
 {
     NetlistUpdateOpt();
 
@@ -633,7 +631,7 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
     // Update existing custom pages
     for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
     {
-        NETLIST_PAGE_DIALOG* currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
+        EXPORT_NETLIST_PAGE* currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
 
         if( currPage == nullptr )
             break;
@@ -650,9 +648,9 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
 }
 
 
-void NETLIST_DIALOG::OnDelGenerator( wxCommandEvent& event )
+void DIALOG_EXPORT_NETLIST::OnDelGenerator( wxCommandEvent& event )
 {
-    NETLIST_PAGE_DIALOG* currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
+    EXPORT_NETLIST_PAGE* currPage = (EXPORT_NETLIST_PAGE*) m_NoteBook->GetCurrentPage();
 
     if( !currPage->IsCustom() )
         return;
@@ -669,7 +667,7 @@ void NETLIST_DIALOG::OnDelGenerator( wxCommandEvent& event )
 }
 
 
-void NETLIST_DIALOG::OnAddGenerator( wxCommandEvent& event )
+void DIALOG_EXPORT_NETLIST::OnAddGenerator( wxCommandEvent& event )
 {
     NETLIST_DIALOG_ADD_GENERATOR dlg( this );
 
@@ -681,7 +679,7 @@ void NETLIST_DIALOG::OnAddGenerator( wxCommandEvent& event )
 
     // Verify it does not exists
     int netTypeId = PANELCUSTOMBASE;    // the first not used type id
-    NETLIST_PAGE_DIALOG* currPage;
+    EXPORT_NETLIST_PAGE* currPage;
 
     for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
     {
@@ -710,7 +708,7 @@ void NETLIST_DIALOG::OnAddGenerator( wxCommandEvent& event )
 }
 
 
-NETLIST_DIALOG_ADD_GENERATOR::NETLIST_DIALOG_ADD_GENERATOR( NETLIST_DIALOG* parent ) :
+NETLIST_DIALOG_ADD_GENERATOR::NETLIST_DIALOG_ADD_GENERATOR( DIALOG_EXPORT_NETLIST* parent ) :
     NETLIST_DIALOG_ADD_GENERATOR_BASE( parent )
 {
     m_Parent = parent;
@@ -781,9 +779,9 @@ void NETLIST_DIALOG_ADD_GENERATOR::OnBrowseGenerators( wxCommandEvent& event )
 }
 
 
-void NETLIST_DIALOG::updateGeneratorButtons()
+void DIALOG_EXPORT_NETLIST::updateGeneratorButtons()
 {
-    NETLIST_PAGE_DIALOG* currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
+    EXPORT_NETLIST_PAGE* currPage = (EXPORT_NETLIST_PAGE*) m_NoteBook->GetCurrentPage();
 
     if( currPage == nullptr )
         return;
@@ -794,7 +792,7 @@ void NETLIST_DIALOG::updateGeneratorButtons()
 
 int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller )
 {
-    NETLIST_DIALOG dlg( aCaller );
+    DIALOG_EXPORT_NETLIST dlg( aCaller );
 
     int ret = dlg.ShowModal();
     aCaller->SaveProjectSettings();
