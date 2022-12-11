@@ -51,6 +51,7 @@
 #include <pegtl/contrib/parse_tree.hpp>
 #include <wx/dir.h>
 #include <locale_io.h>
+#include "markup_parser.h"
 
 namespace NETLIST_EXPORTER_SPICE_PARSER
 {
@@ -280,11 +281,45 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 }
 
 
-void NETLIST_EXPORTER_SPICE::ReplaceForbiddenChars( std::string& aNetName )
+void NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( std::string& aNetName )
 {
-    boost::replace_all( aNetName, "(", "_" );
-    boost::replace_all( aNetName, ")", "_" );
-    boost::replace_all( aNetName, " ", "_" );
+    MARKUP::MARKUP_PARSER         markupParser( aNetName );
+    std::unique_ptr<MARKUP::NODE> root = markupParser.Parse();
+    std::string                   converted;
+
+    std::function<void( const std::unique_ptr<MARKUP::NODE>&)> convertMarkup =
+            [&]( const std::unique_ptr<MARKUP::NODE>& aNode )
+            {
+                if( aNode )
+                {
+                    if( !aNode->is_root() )
+                    {
+                        if( aNode->isOverbar() )
+                        {
+                            // ~{CLK} is a different signal than CLK
+                            converted += '~';
+                        }
+                        else if( aNode->isSubscript() || aNode->isSuperscript() )
+                        {
+                            // V_{OUT} is just a pretty-printed version of VOUT
+                        }
+
+                        if( aNode->has_content() )
+                            converted += aNode->string();
+                    }
+
+                    for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
+                        convertMarkup( child );
+                }
+            };
+
+    convertMarkup( root );
+
+    boost::replace_all( converted, "(", "_" );
+    boost::replace_all( converted, ")", "_" );
+    boost::replace_all( converted, " ", "_" );
+
+    aNetName = converted;
 }
 
 
@@ -560,7 +595,7 @@ std::string NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( const std::string& a
 {
     std::string netName = aNetName;
 
-    ReplaceForbiddenChars( netName );
+    ConvertToSpiceMarkup( netName );
     netName = std::string( UnescapeString( netName ).ToUTF8() );
 
     if( netName == "" )

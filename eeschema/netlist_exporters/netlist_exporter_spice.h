@@ -93,9 +93,9 @@ public:
     virtual bool ReadSchematicAndLibraries( unsigned aNetlistOptions, REPORTER& aReporter );
 
     /**
-     * Replace illegal spice net name characters with underscores.
+     * Remove formatting wrappers and replace illegal spice net name characters with underscores.
      */
-    static void ReplaceForbiddenChars( std::string& aNetName );
+    static void ConvertToSpiceMarkup( std::string& aNetName );
 
     /**
      * Return the list of nets.

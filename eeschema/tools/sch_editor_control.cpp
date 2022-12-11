@@ -911,7 +911,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
                     {
                         std::string spiceNet = std::string( UnescapeString( conn->Name() ).ToUTF8() );
-                        NETLIST_EXPORTER_SPICE::ReplaceForbiddenChars( spiceNet );
+                        NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( spiceNet );
 
                         simFrame->AddVoltagePlot( wxString::Format( "V(%s)", spiceNet ) );
                     }
