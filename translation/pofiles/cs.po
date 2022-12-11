@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:25-0800\n"
-"PO-Revision-Date: 2022-11-30 01:23+0000\n"
+"PO-Revision-Date: 2022-12-11 20:19+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -26060,9 +26060,8 @@ msgid "DXF Options"
 msgstr "Možnosti DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
-#, fuzzy
 msgid "Plot graphic items using their contours"
-msgstr "Zobrazit pouze obrys grafických prvků"
+msgstr "Vykreslit grafické prvky pomocí jejich obrysů"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:336
 msgid "Uncheck to plot graphic items using their center lines"
