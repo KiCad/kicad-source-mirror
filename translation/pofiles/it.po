@@ -104,15 +104,15 @@
 # mc: - web = reticolo, cioè la parte di anima interna di supporto del C.S., se ci sono altre denominazioni in italiano, fatemelo sapere...
 # mc: - teardrop = arr. a goccia
 # mc: - unspecified = imprecisato
+# mc: - tented = tendato
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-12-10 23:22+0100\n"
+"PO-Revision-Date: 2022-12-11 21:54+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -407,16 +407,16 @@ msgid "Delete viewport..."
 msgstr "Cancella vista..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Save and restore view orientation and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Save and restore view orientation and zoom.\n"
-"Use %s+Tab to activate selector.\n"
-"Successive Tabs while holding %s down will cycle through viewports in the popup."
+"Salva e ripristina orientazione vista e zoom.\n"
+"Usare %s+Tab per attivare il selettore.\n"
+"Tab successivi mantenendo premuto %s cicleranno tra le viste nella finestra a scomparsa."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -5376,9 +5376,8 @@ msgid "Cursor"
 msgstr "Puntatore"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "Elementi bloccati"
+msgstr "Elementi sospesi"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -8094,60 +8093,60 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
-"# 1. Summary\n"
+"# 1. Riepilogo\n"
 "\n"
-"The Bill of Materials tool creates a BOM which lists all of the components in the design.\n"
+"Lo strumento Distinta materiali crea una distinta materiali che elenca tutti i componenti del progetto.\n"
 "\n"
-"The tool uses an external script to generate a BOM in the desired output format. Choosing a different script changes how the BOM is formatted.\n"
+"Lo strumento utilizza uno script esterno per generare una distinta materiali nel formato desiderato. La scelta di uno script diverso modifica il modo in cui viene formattata la distinta materiali.\n"
 "\n"
-"Generating a BOM is described in more detail in the Schematic Editor manual.\n"
+"La generazione di una distinta materiali è descritta in maggior dettaglio nel manuale dell'editor degli schemi.\n"
 "\n"
-"# 2. Usage\n"
+"# 2. Modalità d'uso\n"
 "\n"
-"Select a generator script in the **BOM generator scripts** list. Details for the selected generator are shown on the right of the dialog.\n"
+"Selezionare uno script generatore nell'elenco **Script generatori DIBA**. I dettagli per il generatore selezionato sono mostrati a destra della finestra di dialogo.\n"
 "\n"
-"Clicking the **Generate** button creates a BOM file with the selected generator.\n"
+"Facendo clic sul pulsante **Genera** viene creato un file DIBA con il generatore selezionato.\n"
 "\n"
-"The default settings present several generator script options, although some additional scripts are installed with KiCad and can be added to the list with the **+** button.\n"
+"Le impostazioni predefinite presentano diverse opzioni per lo script generatore, sebbene alcuni script aggiuntivi siano già installati con KiCad e possano essere aggiunti all'elenco con il pulsante **+**.\n"
 "\n"
-"**Note:** On Windows, there is an additional option **Show console window**. When this option is unchecked, BOM generators run in a hidden console window and any output is redirected and printed in the dialog. When this option is checked, BOM generators run in a visisble console window.\n"
+"**Nota:** su Windows è disponibile un'opzione aggiuntiva **Mostra finestra console**. Quando questa opzione è deselezionata, i generatori DIBA vengono eseguiti in una finestra della console nascosta e qualsiasi output viene reindirizzato e stampato nella finestra di dialogo. Quando questa opzione è selezionata, i generatori DIBA vengono eseguiti in una finestra della console visibile.\n"
 "\n"
-"# 3. Custom generators and command lines\n"
+"# 3. Generatori personalizzati e righe di comando\n"
 "\n"
-"Internally, KiCad creates an intermediate netlist file in XML format that contains information about all of the components in the design. A BOM generator script converts the intermediate netlist file to the desired output format. KiCad runs the BOM generator scripts according to the command line entered at the bottom of the BOM dialog.\n"
+"Internamente, KiCad crea un file netlist intermedio in formato XML che contiene informazioni su tutti i componenti del progetto. Uno script generatore DIBA converte il file netlist intermedio nel formato desiderato. KiCad esegue gli script del generatore DIBA in base alla riga di comando immessa nella parte inferiore della finestra di dialogo DIBA.\n"
 "\n"
-"The command line format accepts parameters for filenames. Each formatting parameter is replaced with a project-specific path or filename. The supported formatting parameters are:\n"
+"Il formato della riga di comando accetta parametri per i nomi di file. Ogni parametro di formattazione viene sostituito con un percorso o nome file specifico del progetto. I parametri di formattazione supportati sono:\n"
 "\n"
-" * `%I`: absolute path and filename of the intermediate netlist file, which is the input to the BOM generator\n"
-" * `%O`: absolute path and filename of the output BOM file (without file extension)\n"
-" * `%B`: base filename of the output BOM file (without file extension)\n"
-" * `%P`: absolute path of the project directory, without trailing slash\n"
+"  * `%I`: percorso assoluto e nome file del file netlist intermedio, che è l'ingresso per il generatore DIBA\n"
+"  * `%O`: percorso assoluto e nome file del file DIBA in uscita (senza estensione file)\n"
+"  * `%B`: nome file base del file DIBA in uscita (senza estensione file)\n"
+"  * `%P`: percorso assoluto della cartella del progetto, senza barra finale\n"
 "\n"
-"**Note:** the `%O` output file parameter does not include a file extension. KiCad will attempt to add an appropriate extension to the command line automatically, but an extension may need to be added by hand.\n"
+"**Nota:** il parametro del file di uscita `%O` non include un'estensione file. KiCad tenterà di aggiungere automaticamente un'estensione appropriata alla riga di comando, ma potrebbe essere necessario aggiungere manualmente un'estensione.\n"
 "\n"
-"Python is the recommended tool for BOM generator scripts, but other tools can also be used.\n"
+"Python è lo strumento consigliato per gli script del generatore DIBA, ma è possibile utilizzare anche altri strumenti.\n"
 "\n"
-"## Example command lines for Python scripts\n"
+"## Righe di comando di esempio per script Python\n"
 "\n"
-"The command line format for a Python script is of the form:\n"
-"\n"
-"```\n"
-"python <script file name> <input filename> <output filename>\n"
-"```\n"
-"\n"
-"On Windows, if the desired generator script for a CSV BOM is `C:\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"Il formato della riga di comando per uno script Python è della forma:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\"\n"
+"python <nome file script> <nome file in ingresso> <nome file in uscita>\n"
 "```\n"
 "\n"
-"On Linux, if the desired generator script for a CSV BOM is `/home/username/kicad/my_python_script.py`, the command line would be:\n"
+"Su Windows, se lo script del generatore desiderato per una distinta materiali CSV è `C:\\Users\\username\\kicad\\my_python_script.py`, la riga di comando sarà:\n"
 "\n"
 "```\n"
-"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"python.exe C:\\Utenti\\nomeutente\\kicad\\my_python_script.py \"%I\" \"%O.csv\"\n"
 "```\n"
 "\n"
-"Double quotes (`\"`) around the arguments are recommended in case filenames contain spaces or special characters.\n"
+"Su Linux, se lo script del generatore desiderato per una DIBA CSV è `/home/username/kicad/my_python_script.py`, la riga di comando sarà:\n"
+"\n"
+"```\n"
+"python /home/nomeutente/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
+"\n"
+"Le virgolette doppie (`\"`) intorno agli argomenti sono consigliate nel caso in cui i nomi dei file contengano spazi o caratteri speciali.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -8724,11 +8723,10 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_field_properties.cpp:676
 #: eeschema/dialogs/dialog_label_properties.cpp:460
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr "Intersheet reference visibility is controlled globally from Schematic Setup > General > Formatting"
+msgstr "La visibilità di riferimento interfoglio è controllata globalmente da: Impostazione schema > Generale > Formattazione"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -14093,28 +14091,26 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "File magazzino non analizzato completamente (%d byte rimanenti)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:483
-#, c-format, fuzzy
+#, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
-msgstr "Unknown or unexpected record ID %d found inside \"Additional\" section."
+msgstr "ID record sconosciuto o inatteso %d trovato dentro la sezione \"Additional\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:556
-#, fuzzy
 msgid "Record 'IEEE_SYMBOL' not handled."
-msgstr "Record 'IEEE_SYMBOL' not handled."
+msgstr "Record 'IEEE_SYMBOL' non gestito."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:581
-#, fuzzy
 msgid "Record 'PIECHART' not handled."
-msgstr "Record 'PIECHART' not handled."
+msgstr "Record 'PIECHART' non gestito."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:700
 msgid "Compile mask not currently supported."
 msgstr "La maschera di compilazione non è attualmente supportata."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:707
-#, c-format, fuzzy
+#, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
-msgstr "Unknown or unexpected record id %d found inside \"FileHeader\" section."
+msgstr "ID record sconosciuto o inatteso %d trovato dentro la sezione \"FileHeader\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:807
 #, c-format
@@ -14144,16 +14140,16 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "La Bezier ha %d punti di controllo. Sono richiesti almeno 2."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1658
-#, c-format, fuzzy
+#, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr "Unsupported ellipse was not imported at (X = %d; Y = %d)."
+msgstr "Ellisse non supportata non importata in (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1904
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
-msgstr "Altium's harness connector (%s) was imported as a hierarchical sheet. Please review the imported schematic."
+msgstr "L'harness connector di Altium (%s) è stato importato come foglio gerarchico. Controllare lo schema importato."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2260
 msgid "Power Port with unknown style imported as 'Bar' type."
@@ -14165,11 +14161,11 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Il simbolo di potenza crea una etichetta globale con nome '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2437
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
-msgstr "Altium's harness port (%s) was imported as a text box. Please review the imported schematic."
+msgstr "L'harness port di Altium (%s) è stato importato come riquadro di testo. Controllare lo schema importato."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2494
 #, c-format
@@ -14236,12 +14232,11 @@ msgstr ""
 "l'importazione."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:260
-#, fuzzy
 msgid ""
 "CADSTAR fonts are different to the ones in KiCad. This will likely result in "
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
-msgstr "CADSTAR fonts are different to the ones in KiCad. This will likely result in alignment issues. Please review the imported text elements carefully and correct manually if required."
+msgstr "I font CADSTAR sono diversi da quelli in KiCad. Ciò può provocare problemi di allineamento. Controllare accuratamente gli elementi di testo importati e correggere manualmente se necessario."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:265
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -14393,14 +14388,14 @@ msgid "Error reading database table %s: %s"
 msgstr "Errore leggendo la tabella database %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:185
-#, c-format, fuzzy
+#, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr "Could not load database library: settings file %s missing or invalid"
+msgstr "Impossibile caricare la libreria database: file impostazioni %s mancante o non valido"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:245
-#, c-format, fuzzy
+#, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr "Could not load database library: could not connect to database %s (%s)"
+msgstr "Impossibile caricare la libreria database: impossibile connettersi al database %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:452
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -14547,11 +14542,11 @@ msgid "Invalid symbol library ID"
 msgstr "ID libreria di simboli non valido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:210
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
-msgstr "Could not load sheet '%s' because it already appears as a direct ancestor in the schematic hierarchy."
+msgstr "Impossibile caricare il foglio '%s' perché esso appare già come parente diretto nella gerarchia degli schemi."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1496
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2174
@@ -15145,7 +15140,6 @@ msgid "Cancel Load"
 msgstr "Annulla caricamento"
 
 #: eeschema/sheet.cpp:233
-#, fuzzy
 msgid ""
 "There hierarchical sheets in the loaded schematic file from an older file "
 "version resulting in  missing symbol instance data.  This will result in all "
@@ -15156,9 +15150,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"There hierarchical sheets in the loaded schematic file from an older file version resulting in  missing symbol instance data.  This will result in all of the symbols in the loaded schematic to use either the default instance setting or fall back to the library symbol settings.  Loading the project that uses this schematic file and saving to the lastest file version will resolve this issue.\n"
+"Sono presenti fogli gerarchici nel file schema caricato provenienti da una versione precedente del file, con conseguente mancanza di dati di istanza dei simboli. Ciò significa che tutti i simboli dello schema caricato useranno l'impostazione dell'istanza predefinita o torneranno alle impostazioni dei simboli di libreria. Caricando il progetto che usa questo file schema e salvandolo nell'ultima versione del file si risolverà il problema.\n"
 "\n"
-"Do you wish to continue?"
+"Continuare?"
 
 #: eeschema/sheet.cpp:240 eeschema/sheet.cpp:268 eeschema/sheet.cpp:309
 #: eeschema/sheet.cpp:358 eeschema/sheet.cpp:419
@@ -16211,11 +16205,11 @@ msgstr ""
 "%s\n"
 
 #: eeschema/symbol_checker.cpp:61
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
-msgstr "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues if saved in a symbol library"
+msgstr "<b>Avvertimento: prefisso riferimento</b><br>un prefisso che finisca per '%s' può creare problemi se salvato in una libreria di simboli"
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -21494,7 +21488,6 @@ msgstr ""
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21514,15 +21507,14 @@ msgstr ""
 "___Z<sub>in</sub>___ è l'impenedenza d'ingresso desiderata in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ è l'impedenza d'uscita desiderata in &#x2126;<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = (&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
-"sub> / L)___<br>\n"
+"___R2 = (&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</sub> / L)___<br>\n"
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -21533,7 +21525,7 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### Attenuatore partitivo\n"
-"L'attenuazione è 6dB  \n"
+"L'attenuazione è 6 dB  \n"
 "___Z<sub>in</sub>___ impedenza d'ingresso desiderata in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ impedenza d'uscita desiderata in &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
@@ -21541,7 +21533,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21561,10 +21552,10 @@ msgstr ""
 "___Z<sub>in</sub>___ è l'impenedenza d'ingresso desiderata in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ è l'impedenza d'uscita desiderata in &#x2126;<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = 2&middot;&radic; (L &middot; Z<sub>in</sub> &middot; Z<sub>out</"
-"sub>) / (L&minus;1)___<br>\n"
+"___R2 = 2&middot;&radic; (L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) / (L&minus;1)___<br>\n"
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
@@ -22084,7 +22075,6 @@ msgid "Copper (Cu)"
 msgstr "Rame (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:54
-#, fuzzy
 msgid ""
 "This table shows the difference in electrochemical potential between various "
 "metals and alloys. A positive number indicates that the row is anodic and "
@@ -22097,10 +22087,10 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
-"This table shows the difference in electrochemical potential between various metals and alloys. A positive number indicates that the row is anodic and the column is cathodic.\n"
-"Galvanic corrosion affects different metals in contact and under certain conditions.\n"
-"The anode of an electrochemical pair gets oxidized and eaten away, while the cathode gets dissolved metals plated onto it but stays protected.\n"
-"EN 50310 suggests a voltage difference below 300mV. Known practices make use of a third interface metal in between the main pair(ie the ENIG surface finish)."
+"Questa tabella mostra la differenza nel potenziale elettrochimico tra vari metalli e leghe. Un numero positivo indica che la riga è anodica e la colonna è catodica.\n"
+"La corrosione galvanica colpisce diversi metalli in contatto e in certe condizioni.\n"
+"L'anodo di una coppia elettrochimica viene ossidato e mangiato, mentre il catodo si platina di metalli dissolti ma rimane protetto.\n"
+"EN 50310 suggerisce una differenza di tensione sotto i 300mV. Pratica comune suggerisce di usare un terzo metallo di interfaccia tra la coppia principale (per es. la finitura superficiale ENIG)."
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
 msgid "Threshold voltage:"
@@ -22894,7 +22884,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tqualunque combinazione di cui sopra\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use the this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -22906,12 +22895,12 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"You can use the this calculator to check if a small track can handle a large current for a short period of time.<br>\n"
-"This tool allows you to design a track fuse but should be used as an estimate only.\n"
+"Si può usare questa calcolatrice per verificare se una minuscola pista è in grado di gestire una grande corrente per un breve periodo di tempo.<br>\n"
+"Questo strumento consente di progettare una pista fusibile, ma deve essere usato solo come stima.\n"
 "\n"
-"The calculator estimates the energy required to heat the wire up<br>\n"
-"to its melting point as well as the energy required for the change of phase.<br>\n"
-"This energy is then compared to the one dissipated by the wire resistance."
+"La calcolatrice stima l'energia necessaria per riscaldare il filo<br>\n"
+"al suo punto di fusione così come l'energia necessaria per il cambio di fase.<br>\n"
+"Questa energia viene poi confrontata con quella dissipata dalla resistenza del filo."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:80
 msgid "General system design"
@@ -24793,11 +24782,10 @@ msgid "Merge overlapping graphics into pads"
 msgstr "Fondi grafiche sovrapposte nella piazzola"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:34
-#, fuzzy
 msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
-msgstr "(Pads which appear in a Net Tie pad group will not be considered for merging.)"
+msgstr "(Piazzole che appaiono in un gruppo piazzole Net Tie non verranno considerate per la fusione.)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -24898,17 +24886,15 @@ msgstr "Proprietà arrotondamenti a goccia"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:95
 #: pcbnew/tools/convert_tool.cpp:59
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "Impostazioni enumerazione piazzole"
+msgstr "Impostazioni di conversione"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:226
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:108
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
 #: pcbnew/tools/convert_tool.cpp:75
-#, fuzzy
 msgid "Use centerlines"
-msgstr "Usa pollici"
+msgstr "Usa lineecentrali"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:230
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:112
@@ -24922,14 +24908,12 @@ msgstr "Crea file del Logo"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:116
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:106
 #: pcbnew/tools/convert_tool.cpp:83
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "Elimina i file ed i loro contenuti"
+msgstr "Elimina gli oggetti sorgenti dopo la conversione"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:243
-#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "Connessione a zone in rame"
+msgstr "Converti a zona rame"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:426
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -24954,9 +24938,8 @@ msgid "No layer selected."
 msgstr "Nessuno strato selezionato."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:891
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
-msgstr "Selezionanto <no net> si creerà un'isola di rame isolata."
+msgstr "Selezionando <no net> si otterrà un'isola di rame isolata."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid ""
@@ -25843,9 +25826,8 @@ msgid "Schematic Parity (%s)"
 msgstr "Parità schema (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "Modifica violazioni ignorate..."
+msgstr "Modifica testi ignorati"
 
 #: pcbnew/dialogs/dialog_drc_base.h:108 pcbnew/tools/pcb_actions.cpp:240
 msgid "Design Rules Checker"
@@ -26774,9 +26756,9 @@ msgid "The text width must be between %s and %s."
 msgstr "La larghezza testo deve essere tra %s e %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "Mancata corrispondenza di tipo tra \"%s\" e %lf"
+msgstr "L'altezza testo deve essere tra %s e %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:454
 #: pcbnew/dialogs/dialog_text_properties.cpp:421
@@ -26881,7 +26863,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
 msgid "Net Ties"
-msgstr "Connessioni net"
+msgstr "Net Ties"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:340
 msgid "Pad groups allowed to short different nets:"
@@ -28152,7 +28134,6 @@ msgid "angle"
 msgstr "angolo"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:731
-#, fuzzy
 msgid "at"
 msgstr "a"
 
@@ -28907,7 +28888,7 @@ msgstr "Marcatori foratura:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Actual size"
-msgstr "Dimensione attuale"
+msgstr "Dimensione effettiva"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Scaling:"
@@ -30052,9 +30033,8 @@ msgid "Highlight footprints corresponding to selected symbols"
 msgstr "Evidenzia le impronte corrispondenti ai simboli selezionati"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
-#, fuzzy
 msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr "Ensures that cross-probed footprints are visible in the current view"
+msgstr "Accerta che le impronte incrociate siano visibili nella vista corrente"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -30088,9 +30068,8 @@ msgstr ""
 "Se selezionato, le piazzole sono movibili rispetto al resto dell'impronta."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:46
-#, fuzzy
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "Blocca a O, V e 45 gradi"
+msgstr "Limita azioni a O, V e 45 gradi"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:52
 msgid "Step for &rotate commands:"
@@ -30114,9 +30093,8 @@ msgstr "Seleziona elementi."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:135
 #: pcbnew/dialogs/panel_edit_options_base.cpp:207
-#, fuzzy
 msgid "Toggle selection."
-msgstr "<nessuna selezione>"
+msgstr "Commuta selezioni."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:135
 #: pcbnew/dialogs/panel_edit_options_base.cpp:207
@@ -30224,20 +30202,16 @@ msgid "Draw an outline to show the sheet size."
 msgstr "Disegna un contorno per mostrare la dimensione del foglio."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:375
-#, fuzzy
 msgid "Show courtyard collisions when moving/dragging"
-msgstr "Show courtyard collisions when moving/dragging"
+msgstr "Mostra collisioni ingombri negli spostamenti"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:379
 msgid "Auto-refill zones"
 msgstr "Zone ad autoriempimento"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:381
-#, fuzzy
 msgid "If checked, zones will be re-filled after each edit operation"
-msgstr ""
-"Se selezionata, le zone verranno riempite nuovamente dopo aver modificato le "
-"proprietà della zona utilizzando la finestra di dialogo Proprietà zona"
+msgstr "Se selezionata, le zone verranno riempite nuovamente dopo ogni modifica"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:115
 msgid "Internal Layers"
@@ -30420,14 +30394,12 @@ msgstr ""
 "essere ridotto da netclass, regole personalizzate, o altre impostazioni."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
-#, fuzzy
 msgid "Minimum connection width:"
-msgstr "Larghezza minima anello:"
+msgstr "Larghezza minima connessione:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
-#, fuzzy
 msgid "The minimum copper width of connected copper items."
-msgstr "Scegli cosa fare con le isole di rame non connesse"
+msgstr "Larghezza minima rame degli elementi rame connessi."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -32319,9 +32291,9 @@ msgid "Checking board setup constraints clearance: min %s."
 msgstr "Controllo vincoli impostazioni scheda distanza: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole to hole: min %s."
-msgstr "Controllo vincoli impostazioni scheda dimensione foro: min %s."
+msgstr "Controllo vincoli impostazioni scheda foro a foro: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1030 pcbnew/drc/drc_engine.cpp:1056
 #: pcbnew/drc/drc_engine.cpp:1488
@@ -32361,9 +32333,9 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "Strato regola non abbinato; regola ignorata."
 
 #: pcbnew/drc/drc_engine.cpp:1180
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a drilled hole; rule ignored."
-msgstr "Condizione non soddisfatta; regola ignorata."
+msgstr "%s non è un foro trapanato; regola ignorata."
 
 #: pcbnew/drc/drc_engine.cpp:1192
 msgid "Unconditional constraint applied."
@@ -32518,9 +32490,8 @@ msgid "Drilled holes co-located"
 msgstr "Fori troppo vicini tra loro"
 
 #: pcbnew/drc/drc_item.cpp:113
-#, fuzzy
 msgid "Copper connection too narrow"
-msgstr "Connessione piazzola alle zone:"
+msgstr "Connessione rame troppo stretta"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Track width"
@@ -32653,9 +32624,8 @@ msgid "Differential uncoupled length too long"
 msgstr "Lunghezza coppia differenziale non accoppiata troppo lunga"
 
 #: pcbnew/drc/drc_item.cpp:249
-#, fuzzy
 msgid "Footprint is not valid"
-msgstr "L'ID impronta \"%s\" non è valido."
+msgstr "L'impronta non è valida"
 
 #: pcbnew/drc/drc_item.cpp:253
 msgid "Footprint component type doesn't match footprint pads"
@@ -32803,29 +32773,27 @@ msgid "Missing severity name."
 msgstr "Nome importanza mancante."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "Controllo anelli via circolari..."
+msgstr "Controllo anelli via e piazzole..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr "(%s larghezza anello min %s; corrente %s)"
+msgstr "(%s larghezza anello min %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:256
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr "(%s larghezza anello max %s; corrente %s)"
+msgstr "(%s larghezza anello max %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:620
-#, fuzzy
 msgid "Checking nets for minimum connection width..."
-msgstr "Controllo connessioni..."
+msgstr "Controllo larghezze minime connessioni..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum connection width %s; actual %s)"
-msgstr "(%s larg. min %s; effettivo %s)"
+msgstr "(%s larghezza minima connessione %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -32877,7 +32845,7 @@ msgstr "Controllo distanze zone in rame..."
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:278
 #, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "(%s distanza %s; attuale %s)"
+msgstr "(%s distanza %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:592
 #, c-format
@@ -32897,19 +32865,19 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Controllo sovrapposizione ingombri impronte..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "(%s lunghezza non accoppiata max: %s; corrente: %s)"
+msgstr "(%s lunghezza non accoppiata max %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum gap %s; actual %s)"
-msgstr "(%s min %s; effettivo %s)"
+msgstr "(%s spazio min %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum gap %s; actual %s)"
-msgstr "(%s alt. max %s; effettivo %s)"
+msgstr "(%s spazio max %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 msgid "Checking keepouts & disallow constraints..."
@@ -32940,14 +32908,14 @@ msgstr "Controllo fori micro-via..."
 #: pcbnew/drc/drc_test_provider_track_width.cpp:131
 #, c-format
 msgid "(%s min width %s; actual %s)"
-msgstr "(%s larg. min %s; effettivo %s)"
+msgstr "(%s larg. min %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:165
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:234
 #: pcbnew/drc/drc_test_provider_track_width.cpp:138
 #, c-format
 msgid "(%s max width %s; actual %s)"
-msgstr "(%s larg. max %s; effettivo %s)"
+msgstr "(%s larg. max %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -32956,7 +32924,7 @@ msgstr "Controllo distanze da foro a foro..."
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:304
 #, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "(%s min %s; effettivo %s)"
+msgstr "(%s min %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:459
 msgid "No project loaded, skipping library parity tests."
@@ -32991,25 +32959,24 @@ msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "I'impronta '%s' non corrisponde alla copia nella libreria '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s lungh. min: %s; effettivo: %s)"
+msgstr "(%s lungh. min: %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s lungh. max: %s; effettivo: %s)"
+msgstr "(%s lungh. max: %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
-msgstr ""
-"(%s skew max %s; effettivo: %s; lung. collegamento media: %s; effettivo: %s)"
+msgstr "(%s skew max %s; reale %s; lung. collegamento media: %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s conteggio max: %d; effettivo %d)"
+msgstr "(%s conteggio max %d; reale %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:221
 msgid "Gathering length-constrained connections..."
@@ -33049,18 +33016,17 @@ msgid "Checking assertions..."
 msgstr "Controllo asserzioni..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:108
-#, fuzzy
 msgid "Gathering physical items..."
-msgstr "Raccolta elementi..."
+msgstr "Raccolta elementi fisici..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:176
 msgid "Checking physical clearances..."
 msgstr "Controllo distanze fisiche..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Distanza locale su %s; distanza: %s."
+msgstr "Violazione distanza interna (%s distanza %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -33549,14 +33515,14 @@ msgid "(SMD pad copper and paste layers don't match)"
 msgstr "(gli strati rame e pastasalda della piazzola SMD non corrispondono)"
 
 #: pcbnew/footprint.cpp:2583
-#, c-format, fuzzy
+#, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr "(net-tie pad group contains unknown pad number %s)"
+msgstr "(gruppo piazzole net-tie contiene numero piazzola sconosciuto %s)"
 
 #: pcbnew/footprint.cpp:2588
-#, c-format, fuzzy
+#, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr "(pad %s appears in more than one net-tie pad group)"
+msgstr "(piazzola %s appare in più di un gruppo piazzole net-tie)"
 
 #: pcbnew/footprint.cpp:2829 pcbnew/pad.cpp:1718 pcbnew/zone.cpp:1362
 msgid "Inherited"
@@ -33571,9 +33537,8 @@ msgid "Library link"
 msgstr "Collegamento libreria"
 
 #: pcbnew/footprint.cpp:2896 pcbnew/pad.cpp:1780 pcbnew/zone.cpp:1378
-#, fuzzy
 msgid "Overrides"
-msgstr "Sovrascrivere"
+msgstr "Scavalcamenti"
 
 #: pcbnew/footprint.cpp:2902 pcbnew/pad.cpp:1782 pcbnew/zone.cpp:1380
 msgid "Clearance Override"
@@ -34567,11 +34532,11 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "La zona rame su strato \"%s\" a (%s, %s) non ha piazzole connesse."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:861
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
-msgstr "Symbol %s has pins with no number.  These pins can not be matched to pads in %s."
+msgstr "Il simbolo %s ha pin senza numeri.  Questi pin non possono essere associati alle piazzole in %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:871
 #, c-format
@@ -35572,12 +35537,11 @@ msgstr ""
 "Solo la variante \"%s\" è stata caricata."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:165
-#, fuzzy
 msgid ""
 "CADSTAR fonts are different to the ones in KiCad. This will likely result in "
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
-msgstr "CADSTAR fonts are different to the ones in KiCad. This will likely result in alignment issues that may cause DRC errors. Please review the imported text elements carefully and correct manually if required."
+msgstr "I font CADSTAR sono diversi da quelli in KiCad. Ciò può provocare problemi di allineamento che possono causare errori di DRC. Controllare accuratamente gli elementi di testo importati e correggere manualmente se necessario."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -35865,11 +35829,10 @@ msgstr ""
 "alcun progetto."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2454
-#, fuzzy
 msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
-msgstr "The CADSTAR design contains teardrops. This importer does not yet support them, so the teardrops in the design have been ignored."
+msgstr "Il progetto CADSTAR contiene arrotondamenti a goccia. Questo importatore non li supporta ancora, perciò vengono ignorati."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2485
 #, c-format
@@ -37744,9 +37707,9 @@ msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr "Nessun vincolo 'diff_pair_uncoupled' definito."
 
 #: pcbnew/tools/board_inspection_tool.cpp:842
-#, c-format, fuzzy
+#, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr "Nota: %s è tented; la distanza sarà applicata solamente ai fori."
+msgstr "Nota: %s è tendato; la distanza sarà applicata solamente ai fori."
 
 #: pcbnew/tools/board_inspection_tool.cpp:859
 msgid "Silkscreen clearance resolution for:"
@@ -39839,14 +39802,13 @@ msgid "Item locked."
 msgstr "Elemento bloccato."
 
 #: pcbnew/tools/pcb_control.cpp:791
-#, fuzzy
 msgid ""
 "Warning: some pasted items were on layers which are not present in the "
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
-"Warning: some pasted items were on layers which are not present in the current board.\n"
-"These items could not be pasted.\n"
+"Attenzione: alcuni elementi incollati stavano su strati non presenti nella scheda corrente.\n"
+"Questi elementi non possono essere incollati.\n"
 
 #: pcbnew/tools/pcb_control.cpp:976
 msgid "Invalid clipboard contents"
@@ -40234,28 +40196,28 @@ msgid "Back Assembly View"
 msgstr "Vista assemblaggio retro"
 
 #: pcbnew/widgets/appearance_controls.cpp:436
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Save and restore layer visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Save and restore layer visibility combinations.\n"
-"Use %s+Tab to activate selector.\n"
-"Successive Tabs while holding %s down will cycle through presets in the popup."
+"Salva e ripristina le combinazioni di visibilità degli strati.\n"
+"Usare %s+Tab per attivare il selettore.\n"
+"Tab successivi tenento premuto %s cicleranno tra le preimpostazioni nella finestra a scomparsa."
 
 #: pcbnew/widgets/appearance_controls.cpp:443
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Save and restore view location and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Save and restore view location and zoom.\n"
-"Use %s+Tab to activate selector.\n"
-"Successive Tabs while holding %s down will cycle through viewports in the popup."
+"Salva e ripristina posizioni di vista e zoom.\n"
+"Usare %s+Tab per attivare il selettore.\n"
+"Tab successivi tenendo premuto %s cicleranno tra le viste nella finestra a scomparsa."
 
 #: pcbnew/widgets/appearance_controls.cpp:458
 msgid "Filter nets"
