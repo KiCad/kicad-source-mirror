@@ -26,26 +26,22 @@
  */
 
 #include <config.h>     // Needed for MSW compilation
-#include <wx/log.h>
+#include <common.h>
+#include <locale_io.h>
+#include <fmt/core.h>
+#include <paths.h>
 
 #include "ngspice_circuit_model.h"
 #include "ngspice.h"
 #include "spice_reporter.h"
 #include "spice_settings.h"
 
-#include <common.h>
-#include <locale_io.h>
-
-#include <paths.h>
-
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
+#include <wx/log.h>
 
 #include <stdexcept>
-
 #include <algorithm>
-
-using namespace std;
 
 
 /**
@@ -88,14 +84,14 @@ void NGSPICE::Init( const SPICE_SIMULATOR_SETTINGS* aSettings )
 }
 
 
-vector<string> NGSPICE::AllPlots() const
+std::vector<std::string> NGSPICE::AllPlots() const
 {
     LOCALE_IO c_locale; // ngspice works correctly only with C locale
     char*     currentPlot = m_ngSpice_CurPlot();
     char**    allPlots    = m_ngSpice_AllVecs( currentPlot );
     int       noOfPlots   = 0;
 
-    vector<string> retVal;
+    std::vector<std::string> retVal;
 
     if( allPlots != nullptr )
     {
@@ -106,7 +102,7 @@ vector<string> NGSPICE::AllPlots() const
 
         for( int i = 0; i < noOfPlots; i++, allPlots++ )
         {
-            string vec = *allPlots;
+            std::string vec = *allPlots;
             retVal.push_back( vec );
         }
     }
@@ -116,11 +112,11 @@ vector<string> NGSPICE::AllPlots() const
 }
 
 
-vector<COMPLEX> NGSPICE::GetPlot( const string& aName, int aMaxLen )
+std::vector<COMPLEX> NGSPICE::GetPlot( const std::string& aName, int aMaxLen )
 {
-    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
-    vector<COMPLEX> data;
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    LOCALE_IO            c_locale;       // ngspice works correctly only with C locale
+    std::vector<COMPLEX> data;
+    vector_info*         vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
     if( vi )
     {
@@ -143,11 +139,11 @@ vector<COMPLEX> NGSPICE::GetPlot( const string& aName, int aMaxLen )
 }
 
 
-vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
+std::vector<double> NGSPICE::GetRealPlot( const std::string& aName, int aMaxLen )
 {
-    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
-    vector<double> data;
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    LOCALE_IO           c_locale;       // ngspice works correctly only with C locale
+    std::vector<double> data;
+    vector_info*        vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
     if( vi )
     {
@@ -157,9 +153,7 @@ vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
         if( vi->v_realdata )
         {
             for( int i = 0; i < length; i++ )
-            {
                 data.push_back( vi->v_realdata[i] );
-            }
         }
         else if( vi->v_compdata )
         {
@@ -175,11 +169,11 @@ vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
 }
 
 
-vector<double> NGSPICE::GetImagPlot( const string& aName, int aMaxLen )
+std::vector<double> NGSPICE::GetImagPlot( const std::string& aName, int aMaxLen )
 {
-    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
-    vector<double> data;
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    LOCALE_IO           c_locale;       // ngspice works correctly only with C locale
+    std::vector<double> data;
+    vector_info*        vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
     if( vi )
     {
@@ -189,9 +183,7 @@ vector<double> NGSPICE::GetImagPlot( const string& aName, int aMaxLen )
         if( vi->v_compdata )
         {
             for( int i = 0; i < length; i++ )
-            {
                 data.push_back( vi->v_compdata[i].cx_imag );
-            }
         }
     }
 
@@ -199,11 +191,11 @@ vector<double> NGSPICE::GetImagPlot( const string& aName, int aMaxLen )
 }
 
 
-vector<double> NGSPICE::GetMagPlot( const string& aName, int aMaxLen )
+std::vector<double> NGSPICE::GetMagPlot( const std::string& aName, int aMaxLen )
 {
-    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
-    vector<double> data;
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    LOCALE_IO           c_locale;       // ngspice works correctly only with C locale
+    std::vector<double> data;
+    vector_info*        vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
     if( vi )
     {
@@ -226,10 +218,10 @@ vector<double> NGSPICE::GetMagPlot( const string& aName, int aMaxLen )
 }
 
 
-vector<double> NGSPICE::GetPhasePlot( const string& aName, int aMaxLen )
+std::vector<double> NGSPICE::GetPhasePlot( const std::string& aName, int aMaxLen )
 {
     LOCALE_IO c_locale;       // ngspice works correctly only with C locale
-    vector<double> data;
+    std::vector<double> data;
     vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
     if( vi )
@@ -275,11 +267,11 @@ bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, REPORTER&
 }
 
 
-bool NGSPICE::LoadNetlist( const string& aNetlist )
+bool NGSPICE::LoadNetlist( const std::string& aNetlist )
 {
-    LOCALE_IO     c_locale;       // ngspice works correctly only with C locale
-    vector<char*> lines;
-    stringstream  ss( aNetlist );
+    LOCALE_IO          c_locale;       // ngspice works correctly only with C locale
+    std::vector<char*> lines;
+    std::stringstream  ss( aNetlist );
 
     m_netlist = "";
 
@@ -339,7 +331,7 @@ bool NGSPICE::IsRunning()
 }
 
 
-bool NGSPICE::Command( const string& aCmd )
+bool NGSPICE::Command( const std::string& aCmd )
 {
     LOCALE_IO c_locale;               // ngspice works correctly only with C locale
     validate();
@@ -347,37 +339,37 @@ bool NGSPICE::Command( const string& aCmd )
 }
 
 
-string NGSPICE::GetXAxis( SIM_TYPE aType ) const
+std::string NGSPICE::GetXAxis( SIM_TYPE aType ) const
 {
     switch( aType )
     {
     case ST_AC:
     case ST_NOISE:
-        return string( "frequency" );
+        return std::string( "frequency" );
 
     case ST_DC:
         // find plot, which ends with "-sweep"
         for( auto& plot : AllPlots() )
         {
-            const string sweepEnding = "-sweep";
+            const std::string sweepEnding = "-sweep";
             unsigned int len = sweepEnding.length();
 
             if( plot.length() > len
-              && plot.substr( plot.length() - len, len ).compare( sweepEnding ) == 0 )
+                && plot.substr( plot.length() - len, len ).compare( sweepEnding ) == 0 )
             {
-                return string( plot );
+                return std::string( plot );
             }
         }
         break;
 
     case ST_TRANSIENT:
-        return string( "time" );
+        return std::string( "time" );
 
     default:
         break;
     }
 
-    return string( "" );
+    return std::string( "" );
 }
 
 
@@ -447,12 +439,12 @@ void NGSPICE::init_dll()
     wxFileName dllFile( "", NGSPICE_DLL_FILE );
 #if defined(__WINDOWS__)
   #if defined( _MSC_VER )
-    const vector<string> dllPaths = { "" };
+    const std::vector<string> dllPaths = { "" };
   #else
-    const vector<string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
+    const std::vector<string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
   #endif
 #elif defined(__WXMAC__)
-    const vector<string> dllPaths = {
+    const std::vector<std::string> dllPaths = {
         PATHS::GetOSXKicadUserDataDir().ToStdString() + "/PlugIns/ngspice",
         PATHS::GetOSXKicadMachineDataDir().ToStdString() + "/PlugIns/ngspice",
 
@@ -464,7 +456,7 @@ void NGSPICE::init_dll()
                 "/../../../../../Contents/PlugIns/sim"
     };
 #else   // Unix systems
-    const vector<string> dllPaths = { "/usr/local/lib" };
+    const std::vector<string> dllPaths = { "/usr/local/lib" };
 #endif
 
 #if defined(__WINDOWS__) || (__WXMAC__)
@@ -520,7 +512,7 @@ void NGSPICE::init_dll()
     m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll.GetSymbol( "ngSpice_AllVecs" );
     m_ngSpice_Running = (ngSpice_Running) m_dll.GetSymbol( "ngSpice_running" ); // it is not a typo
 
-    m_ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL,
+    m_ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, nullptr, nullptr,
                     &cbBGThreadRunning, this );
 
     // Load a custom spinit file, to fix the problem with loading .cm files
@@ -530,14 +522,14 @@ void NGSPICE::init_dll()
     wxSetWorkingDirectory( exeDir.GetPath() );
 
     // Find *.cm files
-    string cmPath = findCmPath();
+    std::string cmPath = findCmPath();
 
     // __CMPATH is used in custom spinit file to point to the codemodels directory
     if( !cmPath.empty() )
         Command( "set __CMPATH=\"" + cmPath + "\"" );
 
     // Possible relative locations for spinit file
-    const vector<string> spiceinitPaths =
+    const std::vector<std::string> spiceinitPaths =
     {
         ".",
 #ifdef __WXMAC__
@@ -582,7 +574,7 @@ void NGSPICE::init_dll()
     // reset and remcirc give an error if no circuit is loaded, so load an empty circuit at the
     // start.
 
-    vector<char*> lines;
+    std::vector<char*> lines;
     lines.push_back( strdup( "*" ) );
     lines.push_back( strdup( ".end" ) );
     lines.push_back( nullptr ); // Sentinel.
@@ -596,7 +588,7 @@ void NGSPICE::init_dll()
 }
 
 
-bool NGSPICE::loadSpinit( const string& aFileName )
+bool NGSPICE::loadSpinit( const std::string& aFileName )
 {
     if( !wxFileName::FileExists( aFileName ) )
         return false;
@@ -613,9 +605,9 @@ bool NGSPICE::loadSpinit( const string& aFileName )
 }
 
 
-string NGSPICE::findCmPath() const
+std::string NGSPICE::findCmPath() const
 {
-    const vector<string> cmPaths =
+    const std::vector<std::string> cmPaths =
     {
 #ifdef __WXMAC__
         "/Applications/ngspice/lib/ngspice",
@@ -642,17 +634,17 @@ string NGSPICE::findCmPath() const
         }
     }
 
-    return string();
+    return std::string();
 }
 
 
-bool NGSPICE::loadCodemodels( const string& aPath )
+bool NGSPICE::loadCodemodels( const std::string& aPath )
 {
     wxArrayString cmFiles;
     size_t count = wxDir::GetAllFiles( aPath, &cmFiles );
 
     for( const auto& cm : cmFiles )
-        Command( "codemodel " + cm.ToStdString() );
+        Command( fmt::format( "codemodel '{}'", cm.ToStdString() ) );
 
     return count != 0;
 }
@@ -667,7 +659,9 @@ int NGSPICE::cbSendChar( char* aWhat, int aId, void* aUser )
         // strip stdout/stderr from the line
         if( ( strncasecmp( aWhat, "stdout ", 7 ) == 0 )
                 || ( strncasecmp( aWhat, "stderr ", 7 ) == 0 ) )
+        {
             aWhat += 7;
+        }
 
         sim->m_reporter->Report( aWhat );
     }
@@ -693,7 +687,8 @@ int NGSPICE::cbBGThreadRunning( NG_BOOL aFinished, int aId, void* aUser )
 }
 
 
-int NGSPICE::cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQuit, int aId, void* aUser )
+int NGSPICE::cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQuit, int aId,
+                               void* aUser )
 {
     // Something went wrong, reload the dll
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( aUser );
