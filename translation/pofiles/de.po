@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:25-0800\n"
-"PO-Revision-Date: 2022-11-30 01:23+0000\n"
+"PO-Revision-Date: 2022-12-11 20:19+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -14742,11 +14742,11 @@ msgstr "Signale im Schaltplan untersuchen"
 
 #: eeschema/sim/sim_plot_frame.cpp:176 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr "Anpassen"
+msgstr "Abstimmung"
 
 #: eeschema/sim/sim_plot_frame.cpp:177
 msgid "Tune component values"
-msgstr "Bauteilwerte anpassen"
+msgstr "Werte von Bauteilen abstimmen"
 
 #: eeschema/sim/sim_plot_frame.cpp:178
 msgid "Sim Parameters"
@@ -14862,7 +14862,7 @@ msgstr "Tastkopf aus Schaltplan"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:69
 msgid "Tune Component Value"
-msgstr "Symbolwert ändern"
+msgstr "Bauteilwert abstimmen"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Show SPICE Netlist..."
@@ -16272,7 +16272,7 @@ msgstr "Simulator-Tastkopf hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:528
 msgid "Select a value to be tuned"
-msgstr "Abstimmungswert wählen"
+msgstr "Einen Wert wählen, der abgestimmt werden soll"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Highlight net under cursor"
@@ -24332,9 +24332,9 @@ msgid ""
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
 "Dies ist der lokale Netz-Freiraum für alle Pads dieses Footprints.\n"
-"Wenn auf 0 gesetzt werden die Werte der Netzklasse verwendet.\n"
-"Dieser Wert kann für jedes Pad im Reiter \"Freiraum-Überschreibungen\n"
-"und -Einstellungen\" der Pad-Eigenschaften überschrieben werden."
+"Wenn auf 0 gesetzt, werden die Werte der Netzklasse verwendet.\n"
+"Dieser Wert kann für jedes Pad im Reiter \"Freiraum\" der\n"
+"Pad-Eigenschaften überschrieben werden."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:248
 msgid ""
@@ -24344,11 +24344,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Dies ist der lokale Freiraum zwischen Pads und Lötstoppmaske\n"
-"für diesen Footprint.\n"
+"Dies ist der lokale Freiraum zwischen Pads und Lötstoppmaske für\n"
+"diesen Footprint.\n"
 "Wenn auf 0 gesetzt, wird der globale Wert verwendet.\n"
 "Dieser Wert kann überschrieben werden durch den Wert im Reiter\n"
-"'Freiraum-Überschreibungen und -Einstellungen' im Dialog 'Pad-Eigenschaften'."
+"\"Freiraum\" im Dialog \"Pad-Eigenschaften\"."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:261
 msgid ""
@@ -24546,7 +24546,7 @@ msgstr "Bohrdatei generieren"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:78
 msgid "Generate Map File"
-msgstr "Mapdatei generieren"
+msgstr "Bohrplan-Datei erzeugen"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:320
 msgid "Cannot make path relative (target volume different from file volume)!"
@@ -24558,7 +24558,7 @@ msgstr ""
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
 msgstr ""
-"Konnte die Bohr- und/oder Map-Dateien nicht in das Verzeichnis \"%s\" "
+"Konnte die Bohr- und/oder Bohrplan-Dateien nicht in das Verzeichnis \"%s\" "
 "schreiben."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:458
@@ -26638,11 +26638,11 @@ msgstr "Länge/Versatz"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:30
 msgid "Tune from:"
-msgstr "Anpassen von:"
+msgstr "Abstimmen von:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:46
 msgid "Tune to:"
-msgstr "Anpassen nach:"
+msgstr "Abstimmen bis:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:62
 msgid "Constraint:"
@@ -32012,7 +32012,7 @@ msgstr "Unbekannte Zuordnung der Altium-Lage \"%s\"."
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:694
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr "Pads6-Stream hat unerwartete Länge für Subrecord 6: %d."
+msgstr "Pads6-Stream hat unerwartete Länge für Unter-Datensatz 6: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:76
 msgid "Error reading file: cannot determine length."
@@ -33420,7 +33420,7 @@ msgstr ""
 #: pcbnew/router/pns_dp_meander_placer.cpp:76
 #: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
-msgstr "Bitte eine Leiterbahn auswählen dessen Länge Sie anpassen wollen."
+msgstr "Bitte eine Leiterbahn auswählen, deren Länge abgestimmt werden soll."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:90
 msgid ""
@@ -33445,7 +33445,7 @@ msgstr "Zu kurz: "
 #: pcbnew/router/pns_dp_meander_placer.cpp:441
 #: pcbnew/router/pns_meander_placer.cpp:280
 msgid "Tuned: "
-msgstr "Angepasst: "
+msgstr "Abgestimmt: "
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:444
 #: pcbnew/router/pns_meander_placer.cpp:283
@@ -33489,7 +33489,8 @@ msgstr "Interaktiver Router"
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
 msgstr ""
-"Bitte ein differenzielles Signalpaar auswählen welches angepasst werden soll."
+"Bitte eine Differenzialpaar-Leiterbahn auswählen, welche abgestimmt werden "
+"soll."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:70
 msgid ""
@@ -33511,7 +33512,7 @@ msgstr "Zu kurz: Versatz "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:172
 msgid "Tuned: skew "
-msgstr "Angepasst: Versatz "
+msgstr "Abgestimmt: Versatz "
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Diff pair gap is less than board minimum clearance."
@@ -36091,15 +36092,15 @@ msgstr "Das aktive Lagenpaar zum Routen auswählen"
 
 #: pcbnew/tools/pcb_actions.cpp:1367
 msgid "Tune length of a single track"
-msgstr "Länge einer einzelnen Leiterbahn anpassen"
+msgstr "Länge einer einzelnen Leiterbahn abstimmen"
 
 #: pcbnew/tools/pcb_actions.cpp:1374
 msgid "Tune length of a differential pair"
-msgstr "Länge eines Differenzialpaares anpassen"
+msgstr "Länge eines Differenzialpaares abstimmen"
 
 #: pcbnew/tools/pcb_actions.cpp:1381
 msgid "Tune skew of a differential pair"
-msgstr "Versatz und Abstimmung eines Differenzialpaares anpassen"
+msgstr "Versatz eines Differenzialpaares abstimmen"
 
 #: pcbnew/tools/pcb_actions.cpp:1390
 msgid "Undo Last Segment"
