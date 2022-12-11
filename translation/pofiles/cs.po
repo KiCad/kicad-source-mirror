@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-12-07 22:47+0000\n"
+"PO-Revision-Date: 2022-12-11 20:19+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -282,9 +282,9 @@ msgstr "&Nastavení"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2728
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Okna zobrazení (%s+Tab)"
+msgstr "Okna zobrazení (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2737
@@ -13851,9 +13851,8 @@ msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:581
-#, fuzzy
 msgid "Record 'PIECHART' not handled."
-msgstr "Horká klávesa nebyla obsloužena"
+msgstr "Záznam 'PIECHART' není zpracován."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:700
 msgid "Compile mask not currently supported."
@@ -15134,7 +15133,7 @@ msgstr "Neplatná hodnota C_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:475
 msgid "invalid V_ref value."
-msgstr "Neplatná hodnota V_ref."
+msgstr "neplatná hodnota V_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:480
 msgid "Invalid V_meas value."
@@ -15735,11 +15734,12 @@ msgid "Spice Simulator"
 msgstr "Spice Simulátor"
 
 #: eeschema/sim/sim_plot_frame.cpp:489 eeschema/sim/sim_plot_frame.cpp:1489
-#, fuzzy
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
-msgstr "Během exportu netlistu došlo k chybám, přerušeno."
+msgstr ""
+"Chyby během generování netlistu; simulace přerušena.\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:508 eeschema/sim/sim_plot_frame.cpp:1887
 msgid "Another simulation is already running."
@@ -18018,9 +18018,8 @@ msgid "Change Symbol Name"
 msgstr "Změnit název symbolu"
 
 #: eeschema/tools/symbol_editor_control.cpp:341
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Název symbolu nemůže být prázdný."
 
 #: eeschema/tools/symbol_editor_control.cpp:529
 #: eeschema/tools/symbol_editor_control.cpp:567
@@ -19244,9 +19243,8 @@ msgid "Show drawing sheet border and title block"
 msgstr "Zobrazit okraj listu a rohové razítko"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:140
-#, fuzzy
 msgid "Show drawing sheet page limits"
-msgstr "Zobrazit okraje strany"
+msgstr "Zobrazit okraje strannek kreslicího listu"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:142
 msgid "PCB Background"
@@ -19375,9 +19373,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_export_pcb_base.cpp:107
-#, fuzzy
 msgid "At least one or more layers must be specified\n"
-msgstr "Některé soubory projektu nelze zálohovat."
+msgstr "Musí být zadána alespoň jedna nebo více vrstev\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:47
 msgid "Valid options excellon, gerber."
@@ -19406,9 +19403,8 @@ msgid "Minimal header"
 msgstr "Minimální hlavička"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files file"
-msgstr "PTH a NPTH v jednom souboru"
+msgstr "PTH a NPTH v samostatných souborech"
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
 msgid "Generate map / summary of drill hits"
@@ -19419,45 +19415,38 @@ msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_drill.cpp:87
-#, fuzzy
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr "Vytvořit soubor pozic pouzder pro výběr a umístění"
+msgstr "Generovat nezávislé soubory pro díry NPTH a PTH"
 
 #: kicad/cli/command_export_pcb_drill.cpp:92
 msgid "Precision of gerber coordinates (5 or 6)"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_drill.cpp:109
-#, fuzzy
 msgid "Output must be a directory\n"
-msgstr "Výstupní adresář:"
+msgstr "Výstup musí být adresář\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
-#, fuzzy
 msgid "Invalid drill format\n"
-msgstr "Neplatný formát souboru archívu."
+msgstr "Neplatný formát vrtání\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:141
 #: kicad/cli/command_export_pcb_dxf.cpp:97
 #: kicad/cli/command_export_pcb_pos.cpp:140
-#, fuzzy
 msgid "Invalid units specified\n"
-msgstr "Neplatný prefix jednotky"
+msgstr "Zadány neplatné jednotky\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:165
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "Uvedeno neplatné pouzdro"
+msgstr "Zadán neplatný formát nul\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:193
-#, fuzzy
 msgid "Invalid map format specified\n"
-msgstr "Uvedeno neplatné pouzdro"
+msgstr "Zadán neplatný formát mapy\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
-#, fuzzy
 msgid "Invalid origin mode specified\n"
-msgstr "Uvedeno neplatné pouzdro"
+msgstr "Zadán neplatný režim počátku\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:220
 #: kicad/cli/command_export_pcb_gerber.cpp:113
@@ -19467,22 +19456,19 @@ msgstr ""
 #: kicad/cli/command_export_pcb_dxf.cpp:44
 #: kicad/cli/command_export_pcb_gerber.cpp:44
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Include the reference designator text"
-msgstr "Vykreslit označení reference"
+msgstr "Zahrnout označení reference"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:49
 #: kicad/cli/command_export_pcb_gerber.cpp:49
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Include the value text"
-msgstr "Zahrnout t&extové položky"
+msgstr "Zahrnout textové hodnoty"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:325
-#, fuzzy
 msgid "Plot graphic items using their contours"
-msgstr "Zobrazit pouze obrys grafických prvků"
+msgstr "Vykreslit grafické prvky pomocí jejich obrysů"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:60
 msgid "Output units, valid options: mm, in"
@@ -19493,9 +19479,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_pdf.cpp:78
 #: kicad/cli/command_export_pcb_pos.cpp:99
 #: kicad/cli/command_export_pcb_svg.cpp:80
-#, fuzzy
 msgid "Board file does not exist or is not accessible\n"
-msgstr "Deska \"%s\" neexistuje. Chcete ji vytvořit?"
+msgstr "Soubor desky neexistuje nebo není přístupný\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:54
 #: kicad/cli/command_export_pcb_pdf.cpp:49
@@ -19504,14 +19489,12 @@ msgid "Include the border and title block"
 msgstr "Kreslit hranice a název bloku"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:59
-#, fuzzy
 msgid "Do not use the extended X2 format"
-msgstr "Použít rozšířený formát X2 (doporučeno)"
+msgstr "Nepoužívat rozšířený formát X2"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:64
-#, fuzzy
 msgid "Do not generate netlist attributes"
-msgstr "Zahrnout atributy netlist"
+msgstr "Negenerovat atributy netlistu"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:69
 #: pcbnew/dialogs/dialog_plot_base.cpp:207
@@ -19519,9 +19502,8 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Odečíst pájecí masku z potisku"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:74
-#, fuzzy
 msgid "Disable aperature macros"
-msgstr "Zakázat makra otvorů (nedoporučuje se)"
+msgstr "Zakázat makra apertur"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:80
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
@@ -19531,9 +19513,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_svg.cpp:51
 #: kicad/cli/command_export_sch_pdf.cpp:41
 #: kicad/cli/command_export_sch_svg.cpp:41
-#, fuzzy
 msgid "Black and white only"
-msgstr "Černobíle"
+msgstr "Pouze černobílá"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:61
 #: kicad/cli/command_export_pcb_svg.cpp:48
@@ -19561,55 +19542,46 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:64
-#, fuzzy
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr "Použít soubor vrtání/umístění jako počátek"
+msgstr "Použít soubor vrtání/umístění jako počátek (pouze ascii nebo csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:69
-#, fuzzy
 msgid "Include only SMD footprints (ascii or csv only)"
-msgstr "Zahrnout pouze SMD pouzdra"
+msgstr "Zahrnout pouze SMD pouzdra (pouze ascii nebo csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:75
-#, fuzzy
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr "Vyloučit všechna pouzdra s průchozí dírou plošek"
+msgstr "Vyloučit všechna pouzdra s průchozí dírou plošek (pouze ascii nebo csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:80
-#, fuzzy
 msgid "Include board edge layer (gerber only)"
-msgstr "Zahrnout vrstvu okraje desky"
+msgstr "Zahrnout vrstvu okraje desky (pouze Gerber)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:124
 #: kicad/cli/command_export_sch_bom.cpp:61
 #: kicad/cli/command_export_sch_netlist.cpp:81
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "Neplatná šířka spoje"
+msgstr "Neplatný formát\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:150
 msgid "\"both\" not supported for gerber format\n"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:166
-#, fuzzy
 msgid "Invalid side specified\n"
-msgstr "Uvedeno neplatné pouzdro"
+msgstr "Zadána neplatná strana\n"
 
 #: kicad/cli/command_export_pcb_step.cpp:48
-#, fuzzy
 msgid "Use Drill Origin for output origin"
-msgstr "Použít soubor vrtání/umístění jako počátek"
+msgstr "Použít počáteční bod vrtání pro výstupní počáteční bod"
 
 #: kicad/cli/command_export_pcb_step.cpp:53
-#, fuzzy
 msgid "Use Grid Origin for output origin"
-msgstr "Použít počátek mřížky"
+msgstr "Použít počáteční bod mřížky pro výstupní počáteční bod"
 
 #: kicad/cli/command_export_pcb_step.cpp:58
-#, fuzzy
 msgid "Exclude 3D models for components with 'virtual' attribute"
-msgstr "Přepnout zobrazení 3D modelů 'virtuálního' typu"
+msgstr "Vyloučit 3D modely pro komponenty s atributem 'virtual'"
 
 #: kicad/cli/command_export_pcb_step.cpp:63
 msgid ""
@@ -19617,14 +19589,12 @@ msgid ""
 msgstr "Nahradit modely STEP nebo IGS se stejným názvem namísto modelů VRML"
 
 #: kicad/cli/command_export_pcb_step.cpp:68
-#, fuzzy
 msgid "Overwrite output file"
-msgstr "Přepsat starý soubor"
+msgstr "Přepsat výstupní soubor"
 
 #: kicad/cli/command_export_pcb_step.cpp:73
-#, fuzzy
 msgid "Only generate a board with no components"
-msgstr "Vytvořit soubory pro zhotovení"
+msgstr "Generovat pouze desku bez komponent"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Minimum distance between points to treat them as separate ones"
@@ -19654,9 +19624,8 @@ msgstr ""
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_pdf.cpp:69
 #: kicad/cli/command_export_sch_svg.cpp:69
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "Schéma '%s' neexistuje.  Chcete ho vytvořit?"
+msgstr "Soubor schématu neexistuje nebo není přístupný\n"
 
 #: kicad/cli/command_export_sch_netlist.cpp:36
 msgid ""
@@ -19680,9 +19649,8 @@ msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr ""
 
 #: kicad/cli/command_fp_upgrade.cpp:51
-#, fuzzy
 msgid "Footprint path does not exist or is not accessible\n"
-msgstr "Cesta knihovny pouzder '%s' neexistuje (nebo není adresář)."
+msgstr "Cesta pouzdra neexistuje nebo není přístupná\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -21300,7 +21268,6 @@ msgstr ""
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21320,6 +21287,7 @@ msgstr ""
 "___Z<sub>vst</sub>__ požadovaná vstupní impedance v &#x2126;<br>\n"
 "___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
 "\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
 "___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>vst</sub> &middot; Z<sub>vyst</"
@@ -21346,7 +21314,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21366,10 +21333,11 @@ msgstr ""
 "___Z<sub>vst</sub>___ požadovaná vstupní impedance v &#x2126;<br>\n"
 "___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
 "\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = 2&middot;&radic;(L &middot; Z<sub>vst</sub> &middot; Z<sub>vyst</"
-"sub>) / (L&minus;1)___<br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>vst</sub> &middot; "
+"Z<sub>vyst</sub>) / (L&minus;1)___<br>\n"
 "___R1 = Z<sub>vst</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>vyst</sub> &middot; A &minus; R2___\n"
 
@@ -34663,14 +34631,12 @@ msgid "Error creating svg file"
 msgstr "Chyba čtení souboru."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:508
-#, fuzzy
 msgid "Saving footprint library\n"
-msgstr "Spravovat knihovny pouzder"
+msgstr "Ukládání knihovny pouzder\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:522
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "Knihovna pouzdra není povolena."
+msgstr "Knihovna pouzdra nebyla aktualizována\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
