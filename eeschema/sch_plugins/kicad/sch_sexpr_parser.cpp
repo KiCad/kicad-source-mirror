@@ -3839,7 +3839,13 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
             SCH_FIELD* field = parseSchField( text.get() );
 
-            static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().emplace_back( *field );
+            if( text->Type() == SCH_GLOBAL_LABEL_T && field->GetInternalName() == wxT( "Intersheetrefs") )
+            {
+                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
+                label->GetFields()[0] = *field;
+            }
+            else
+                static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().emplace_back( *field );
 
             delete field;
             break;

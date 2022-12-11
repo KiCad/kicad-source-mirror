@@ -1254,7 +1254,7 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const VECTOR2I& pos, const wxString& text ) :
 
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 
-    m_fields.emplace_back( SCH_FIELD( pos, 0, this, _( "Sheet References" ) ) );
+    m_fields.emplace_back( SCH_FIELD( pos, 0, this, wxT( "Sheet References" ) ) );
     m_fields[0].SetText( wxT( "${INTERSHEET_REFS}" ) );
     m_fields[0].SetVisible( false );
     m_fields[0].SetLayer( LAYER_INTERSHEET_REFS );

@@ -116,6 +116,12 @@ public:
 
     void SetName( const wxString& aName ) { m_name = aName; }
 
+    /**
+     * Get the initial name of the field set at creation (or set by SetName()).
+     * This is the raw field name with no translation and no change.
+     */
+    const wxString& GetInternalName() { return m_name; }
+
     int GetId() const { return m_id; }
 
     void SetId( int aId );
