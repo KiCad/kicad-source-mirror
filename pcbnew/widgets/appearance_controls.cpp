@@ -625,7 +625,7 @@ void APPEARANCE_CONTROLS::createControls()
     m_inactiveLayersLabel = new wxStaticText( layerDisplayPane, wxID_ANY, msg );
     m_inactiveLayersLabel->SetFont( infoFont );
     m_inactiveLayersLabel->Wrap( -1 );
-    layerDisplayOptionsSizer->Add( m_inactiveLayersLabel, 0, wxEXPAND | wxBOTTOM | wxLEFT, 2 );
+    layerDisplayOptionsSizer->Add( m_inactiveLayersLabel, 0, wxEXPAND | wxBOTTOM, 2 );
 
     wxBoxSizer* contrastModeSizer;
     contrastModeSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -657,7 +657,7 @@ void APPEARANCE_CONTROLS::createControls()
 
     m_layerDisplaySeparator = new wxStaticLine( layerDisplayPane, wxID_ANY, wxDefaultPosition,
                                                 wxDefaultSize, wxLI_HORIZONTAL );
-    layerDisplayOptionsSizer->Add( m_layerDisplaySeparator, 0, wxEXPAND, 5 );
+    layerDisplayOptionsSizer->Add( m_layerDisplaySeparator, 0, wxEXPAND | wxBOTTOM, 3 );
 
     m_cbFlipBoard = new wxCheckBox( layerDisplayPane, wxID_ANY, _( "Flip board view" ) );
     m_cbFlipBoard->SetFont( infoFont );
@@ -667,7 +667,7 @@ void APPEARANCE_CONTROLS::createControls()
     layerDisplayPane->Layout();
     layerDisplayOptionsSizer->Fit( layerDisplayPane );
 
-    m_panelLayersSizer->Add( m_paneLayerDisplayOptions, 0, wxEXPAND | wxTOP, 5 );
+    m_panelLayersSizer->Add( m_paneLayerDisplayOptions, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );
 
     m_paneLayerDisplayOptions->Bind( WX_COLLAPSIBLE_PANE_CHANGED,
                                      [&]( wxCommandEvent& aEvent )
