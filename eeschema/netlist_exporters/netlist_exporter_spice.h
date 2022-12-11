@@ -137,7 +137,7 @@ protected:
     SCH_SHEET_LIST GetSheets( unsigned aNetlistOptions = 0 ) const;
 
 private:
-    bool readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
+    void readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                       std::set<std::string>& aRefNames );
     void readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem );
     void readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem );

@@ -197,12 +197,12 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
     thisFile.SetPath( dirName ); // Set the base path to the cache folder
 
-    int numFilesFound = dir.GetAllFiles( dirName, &fileList, fileSpec );
+    size_t numFilesFound = wxDir::GetAllFiles( dirName, &fileList, fileSpec );
 
-    for( int i = 0; i < numFilesFound; i++ )
+    for( size_t ii = 0; ii < numFilesFound; ii++ )
     {
         // Completes path to specific file so we can get its "last access" date
-        thisFile.SetFullName( fileList[i] );
+        thisFile.SetFullName( fileList[ii] );
         wxRemoveFile( thisFile.GetFullPath() );
     }
 
@@ -257,11 +257,8 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
             try
             {
-                if( !readRefName( sheet, *symbol, spiceItem, refNames ) )
-                    return false;
-
+                readRefName( sheet, *symbol, spiceItem, refNames );
                 readModel( sheet, *symbol, spiceItem );
-
                 readPinNumbers( *symbol, spiceItem );
                 readPinNetNames( *symbol, spiceItem, ncCounter );
 
@@ -387,7 +384,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, REPORTER&
 }
 
 
-bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
+void NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
                                           SPICE_ITEM& aItem,
                                           std::set<std::string>& aRefNames )
 {
@@ -395,8 +392,6 @@ bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 
     if( !aRefNames.insert( aItem.refName ).second )
         wxASSERT( wxT( "Duplicate refdes encountered; what happened to ReadyToNetlist()?" ) );
-
-    return true;
 }
 
 
@@ -483,9 +478,8 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
 
         if( fullPath.IsEmpty() )
         {
-            DisplayErrorMessage( nullptr,
-                                 wxString::Format( _( "Could not find library file '%s'" ),
-                                                   expandedPath ) );
+            DisplayErrorMessage( nullptr, wxString::Format( _( "Could not find library file '%s'" ),
+                                                            expandedPath ) );
             fullPath = expandedPath;
         }
     }

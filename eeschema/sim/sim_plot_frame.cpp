@@ -1666,10 +1666,15 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
                 filename.SetFullName( Prj().GetProjectName() + wxT( ".wbk" ) );
         }
 
+#if 0 // TODO: Enable once 8.0 opens for dev
+        wxString msg = _( "Save changes to workbook?" );
+#else
         wxString fullFilename = filename.GetFullName();
         wxString msg = _( "Save changes to '%s' before closing?" );
+        msg.Printf( msg, fullFilename );
+#endif
 
-        return HandleUnsavedChanges( this, wxString::Format( msg, fullFilename ),
+        return HandleUnsavedChanges( this, msg,
                                      [&]() -> bool
                                      {
                                          return saveWorkbook( Prj().AbsolutePath( fullFilename ) );

@@ -575,7 +575,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
      * At this point the rectangle origin is the text origin (m_Pos).  This is correct only for
      * left and top justified, non-mirrored, non-overbarred texts. Recalculate for all others.
      */
-    int italicOffset = IsItalic() ? fontSize.y * ITALIC_TILT : 0;
+    int italicOffset = IsItalic() ? KiROUND( fontSize.y * ITALIC_TILT ) : 0;
 
     switch( GetHorizJustify() )
     {
@@ -656,7 +656,7 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
 
         positions.reserve( strings.Count() );
 
-        GetLinePositions( positions, strings.Count() );
+        GetLinePositions( positions, (int) strings.Count() );
 
         for( unsigned ii = 0; ii < strings.Count(); ii++ )
             printOneLineOfText( aSettings, aOffset, aColor, aFillMode, strings[ii], positions[ii] );
@@ -987,7 +987,7 @@ bool EDA_TEXT::ValidateHyperlink( const wxString& aURL )
 
     if( uri.Create( aURL ) && uri.HasScheme() )
     {
-        wxString scheme = uri.GetScheme();
+        const wxString& scheme = uri.GetScheme();
         return scheme == wxT( "file" )  || scheme == wxT( "http" ) || scheme == wxT( "https" );
     }
 
