@@ -82,7 +82,7 @@ public:
         MODEL
     };
 
-    DIALOG_SIM_MODEL( wxWindow* aParent, T_symbol& aSymbol, std::vector<T_field>& aSchFields );
+    DIALOG_SIM_MODEL( wxWindow* aParent, T_symbol& aSymbol, std::vector<T_field>& aFields );
 
     ~DIALOG_SIM_MODEL();
 
@@ -143,8 +143,7 @@ private:
 
 private:
     T_symbol&              m_symbol;
-    std::vector<T_field>   m_fields;            // Local copy of the fields
-    std::vector<T_field>&  m_fieldsOrigin;      // Pointer back to the source copy of the fields
+    std::vector<T_field>&  m_fields;
 
     SIM_LIB_MGR            m_libraryModelsMgr;
     SIM_LIB_MGR            m_builtinModelsMgr;

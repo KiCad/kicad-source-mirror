@@ -606,24 +606,67 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
 #ifdef KICAD_SPICE
-    int diff = m_fields->size();
+    if( !m_grid->CommitPendingChanges() )
+        return;
 
-    DIALOG_SIM_MODEL dialog( this, *m_libEntry, *m_fields );
+    std::vector<LIB_FIELD> fields;
+
+    for( const LIB_FIELD& field : *m_fields )
+        fields.emplace_back( field );
+
+    DIALOG_SIM_MODEL dialog( this, *m_libEntry, fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;
 
-    diff = (int) m_fields->size() - diff;
+    // Add in any new fields
+    for( const LIB_FIELD& editedField : fields )
+    {
+        bool found = false;
 
-    if( diff > 0 )
-    {
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, diff );
-        m_grid->ProcessTableMessage( msg );
+        for( LIB_FIELD& existingField : *m_fields )
+        {
+            if( existingField.GetName() == editedField.GetName() )
+            {
+                found = true;
+                existingField.SetText( editedField.GetText() );
+                break;
+            }
+        }
+
+        if( !found )
+        {
+            m_fields->emplace_back( editedField );
+            wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+            m_grid->ProcessTableMessage( msg );
+        }
     }
-    else if( diff < 0 )
+
+    // Remove any deleted fields
+    for( int ii = (int) m_fields->size() - 1; ii >= 0; /* advance in loop */ )
     {
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, -diff );
-        m_grid->ProcessTableMessage( msg );
+        LIB_FIELD& existingField = m_fields->at( ii );
+        bool       found = false;
+
+        for( LIB_FIELD& editedField : fields )
+        {
+            if( editedField.GetName() == existingField.GetName() )
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if( found )
+        {
+            ii--;
+        }
+        else
+        {
+            m_fields->erase( m_fields->begin() + ii );
+            wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, ii, 1 );
+            m_grid->ProcessTableMessage( msg );
+        }
     }
 
     OnModify();

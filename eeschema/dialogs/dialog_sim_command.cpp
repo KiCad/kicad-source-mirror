@@ -362,22 +362,22 @@ int DIALOG_SIM_COMMAND::ShowModal()
         { m_noiseRef, m_noiseRef->GetStringSelection() }
     };
 
-    for( auto& c : cmbNet )
+    for( const std::pair<wxComboBox* const, wxString>& c : cmbNet )
         c.first->Clear();
 
-    for( const auto& net : m_circuitModel->GetNets() )
+    for( const std::string& net : m_circuitModel->GetNets() )
     {
-        for( auto& c : cmbNet )
+        for( const std::pair<wxComboBox* const, wxString>& c : cmbNet )
             c.first->Append( net );
     }
 
     // Try to restore the previous selection, if possible
-    for( auto& c : cmbNet )
+    for( const std::pair<wxComboBox* const, wxString>& c : cmbNet )
     {
         int idx = c.first->FindString( c.second );
 
         if( idx != wxNOT_FOUND )
-                c.first->SetSelection( idx );
+            c.first->SetSelection( idx );
     }
 
     return DIALOG_SIM_COMMAND_BASE::ShowModal();

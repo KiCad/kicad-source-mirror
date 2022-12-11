@@ -50,7 +50,6 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
     : DIALOG_SIM_MODEL_BASE( aParent ),
       m_symbol( aSymbol ),
       m_fields( aFields ),
-      m_fieldsOrigin( aFields ),
       m_libraryModelsMgr( Prj() ),
       m_builtinModelsMgr( Prj() ),
       m_prevModel( nullptr ),
@@ -313,8 +312,6 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
     }
 
     curModel().WriteFields( m_fields );
-
-    m_fieldsOrigin = m_fields;
 
     return true;
 }
