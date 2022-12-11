@@ -456,7 +456,7 @@ void NGSPICE::init_dll()
                 "/../../../../../Contents/PlugIns/sim"
     };
 #else   // Unix systems
-    const std::vector<string> dllPaths = { "/usr/local/lib" };
+    const std::vector<std::string> dllPaths = { "/usr/local/lib" };
 #endif
 
 #if defined(__WINDOWS__) || (__WXMAC__)
