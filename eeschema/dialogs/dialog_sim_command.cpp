@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "dialog_sim_settings.h"
+#include "dialog_sim_command.h"
 #include <sim/ngspice_circuit_model.h>
 #include <sim/ngspice.h>
 
@@ -56,10 +56,10 @@ static wxString getStringSelection( const wxChoice* aCtrl )
 }
 
 
-DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent,
+DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
                                           std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
                                           std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings ) :
-        DIALOG_SIM_SETTINGS_BASE( aParent ),
+        DIALOG_SIM_COMMAND_BASE( aParent ),
         m_circuitModel( aCircuitModel ),
         m_settings( aSettings ),
         m_spiceEmptyValidator( true )
@@ -102,7 +102,7 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent,
     SetupStandardButtons();
 }
 
-wxString DIALOG_SIM_SETTINGS::evaluateDCControls( wxChoice* aDcSource, wxTextCtrl* aDcStart,
+wxString DIALOG_SIM_COMMAND::evaluateDCControls( wxChoice* aDcSource, wxTextCtrl* aDcStart,
                                                   wxTextCtrl* aDcStop, wxTextCtrl* aDcIncr )
 {
     wxString  dcSource = aDcSource->GetString( aDcSource->GetSelection() );
@@ -156,7 +156,7 @@ wxString DIALOG_SIM_SETTINGS::evaluateDCControls( wxChoice* aDcSource, wxTextCtr
 }
 
 
-bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
+bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
@@ -303,7 +303,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 }
 
 
-bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
+bool DIALOG_SIM_COMMAND::TransferDataToWindow()
 {
     /// @todo one day it could interpret the sim command and fill out appropriate fields.
     if( empty( m_customTxt ) )
@@ -350,7 +350,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
 }
 
 
-int DIALOG_SIM_SETTINGS::ShowModal()
+int DIALOG_SIM_COMMAND::ShowModal()
 {
     // Fill out comboboxes that allows one to select nets
     // Map comoboxes to their current values
@@ -377,11 +377,11 @@ int DIALOG_SIM_SETTINGS::ShowModal()
                 c.first->SetSelection( idx );
     }
 
-    return DIALOG_SIM_SETTINGS_BASE::ShowModal();
+    return DIALOG_SIM_COMMAND_BASE::ShowModal();
 }
 
 
-void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
+void DIALOG_SIM_COMMAND::updateDCSources( wxChar aType, wxChoice* aSource )
 {
     wxString prevSelection;
 
@@ -426,7 +426,7 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
 }
 
 
-bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
+bool DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 {
     if( aCommand.IsEmpty() )
         return false;
@@ -528,7 +528,7 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
 }
 
 
-void DIALOG_SIM_SETTINGS::onSwapDCSources( wxCommandEvent& event )
+void DIALOG_SIM_COMMAND::onSwapDCSources( wxCommandEvent& event )
 {
     std::vector<std::pair<wxTextEntry*, wxTextEntry*>> textCtrl = { { m_dcStart1, m_dcStart2 },
                                                                     { m_dcStop1, m_dcStop2 },
@@ -561,7 +561,7 @@ void DIALOG_SIM_SETTINGS::onSwapDCSources( wxCommandEvent& event )
 }
 
 
-void DIALOG_SIM_SETTINGS::onDCEnableSecondSource( wxCommandEvent& event )
+void DIALOG_SIM_COMMAND::onDCEnableSecondSource( wxCommandEvent& event )
 {
     bool   is2ndSrcEnabled = m_dcEnable2->IsChecked();
     wxChar type = getStringSelection( m_dcSourceType2 ).Upper().GetChar( 0 );
@@ -574,7 +574,7 @@ void DIALOG_SIM_SETTINGS::onDCEnableSecondSource( wxCommandEvent& event )
 }
 
 
-void DIALOG_SIM_SETTINGS::updateDCUnits( wxChar aType, wxChoice* aSource,
+void DIALOG_SIM_COMMAND::updateDCUnits( wxChar aType, wxChoice* aSource,
                                          wxStaticText* aStartValUnit, wxStaticText* aEndValUnit,
                                          wxStaticText* aStepUnit )
 {
@@ -596,7 +596,7 @@ void DIALOG_SIM_SETTINGS::updateDCUnits( wxChar aType, wxChoice* aSource,
 }
 
 
-void DIALOG_SIM_SETTINGS::loadDirectives()
+void DIALOG_SIM_COMMAND::loadDirectives()
 {
     if( m_circuitModel )
         m_customTxt->SetValue( m_circuitModel->GetSheetSimCommand() );

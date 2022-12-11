@@ -38,7 +38,7 @@
 #include "sim_types.h"
 
 #include <kiway_player.h>
-#include <dialogs/dialog_sim_settings.h>
+#include <dialogs/dialog_sim_command.h>
 
 #include <wx/event.h>
 

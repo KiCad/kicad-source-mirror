@@ -25,7 +25,7 @@
 #ifndef __SIM_WORKBOOK__
 #define __SIM_WORKBOOK__
 
-#include <dialog_sim_settings.h>
+#include <dialog_sim_command.h>
 #include <sim/sim_panel_base.h>
 #include <sim/sim_plot_panel.h>
 

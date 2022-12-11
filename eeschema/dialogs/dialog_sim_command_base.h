@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,8 +27,8 @@
 #include <wx/icon.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
-#include <wx/button.h>
 #include <wx/gbsizer.h>
+#include <wx/button.h>
 #include <wx/combobox.h>
 #include <wx/notebook.h>
 #include <wx/statline.h>
@@ -38,9 +38,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_SIM_SETTINGS_BASE
+/// Class DIALOG_SIM_COMMAND_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
+class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -103,15 +103,15 @@ class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
 		wxPanel* m_pgSensitivity;
 		wxPanel* m_pgTransferFunction;
 		wxPanel* m_pgTransient;
-		wxStaticText* m_staticText151;
+		wxStaticText* m_timeLabel;
 		wxTextCtrl* m_transStep;
-		wxStaticText* m_staticText1511;
-		wxStaticText* m_staticText161;
+		wxStaticText* m_timeUnits;
+		wxStaticText* m_transFinalLabel;
 		wxTextCtrl* m_transFinal;
-		wxStaticText* m_staticText1512;
-		wxStaticText* m_staticText17;
+		wxStaticText* m_transFinalUnits;
+		wxStaticText* m_transInitialLabel;
 		wxTextCtrl* m_transInitial;
-		wxStaticText* m_staticText1513;
+		wxStaticText* m_transInitialUnits;
 		wxStaticText* m_staticText24;
 		wxPanel* m_pgCustom;
 		wxStaticText* m_staticText18;
@@ -136,9 +136,9 @@ class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation Command"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation Command"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~DIALOG_SIM_SETTINGS_BASE();
+		~DIALOG_SIM_COMMAND_BASE();
 
 };
 

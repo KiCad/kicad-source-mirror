@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_sim_settings_base.h"
+#include "dialog_sim_command_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -21,41 +21,37 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 
-
-	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	wxString m_acScaleChoices[] = { _("Decade"), _("Octave"), _("Linear") };
 	int m_acScaleNChoices = sizeof( m_acScaleChoices ) / sizeof( wxString );
 	m_acScale = new wxRadioBox( m_pgAC, wxID_ANY, _("Frequency scale"), wxDefaultPosition, wxDefaultSize, m_acScaleNChoices, m_acScaleChoices, 1, wxRA_SPECIFY_COLS );
 	m_acScale->SetSelection( 0 );
 	m_acScale->Hide();
 
-	bSizer3->Add( m_acScale, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
-
-
-	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer3->Add( m_acScale, 0, wxALL|wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 5, 0 );
+	fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticText1 = new wxStaticText( m_pgAC, wxID_ANY, _("Number of points per decade:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_acPointsNumber = new wxTextCtrl( m_pgAC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_acPointsNumber, 0, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( m_acPointsNumber, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticText2 = new wxStaticText( m_pgAC, wxID_ANY, _("Start frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_acFreqStart = new wxTextCtrl( m_pgAC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_acFreqStart, 0, wxALL|wxEXPAND, 5 );
+	m_acFreqStart->SetMinSize( wxSize( 100,-1 ) );
+
+	fgSizer1->Add( m_acFreqStart, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_staticText19 = new wxStaticText( m_pgAC, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText19->Wrap( -1 );
@@ -63,17 +59,17 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	m_staticText3 = new wxStaticText( m_pgAC, wxID_ANY, _("Stop frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	fgSizer1->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer1->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_acFreqStop = new wxTextCtrl( m_pgAC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_acFreqStop, 0, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( m_acFreqStop, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_staticText110 = new wxStaticText( m_pgAC, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText110->Wrap( -1 );
 	fgSizer1->Add( m_staticText110, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
 
-	bSizer3->Add( fgSizer1, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer3->Add( fgSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -87,123 +83,122 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer82;
 	bSizer82 = new wxBoxSizer( wxVERTICAL );
 
-
-	bSizer82->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1 = new wxGridBagSizer( 5, 0 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_dcEnable2 = new wxCheckBox( m_pgDC, wxID_ANY, _("Source 2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dcEnable2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	gbSizer1->Add( m_dcEnable2, wxGBPosition( 0, 3 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( m_dcEnable2, wxGBPosition( 0, 3 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_dcSourceType1Choices[] = { _("V"), _("I"), _("R"), _("TEMP") };
 	int m_dcSourceType1NChoices = sizeof( m_dcSourceType1Choices ) / sizeof( wxString );
 	m_dcSourceType1 = new wxChoice( m_pgDC, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dcSourceType1NChoices, m_dcSourceType1Choices, 0 );
 	m_dcSourceType1->SetSelection( 0 );
-	gbSizer1->Add( m_dcSourceType1, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( m_dcSourceType1, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_dcSourceType2Choices[] = { _("V"), _("I"), _("R"), _("TEMP") };
 	int m_dcSourceType2NChoices = sizeof( m_dcSourceType2Choices ) / sizeof( wxString );
 	m_dcSourceType2 = new wxChoice( m_pgDC, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dcSourceType2NChoices, m_dcSourceType2Choices, 0 );
 	m_dcSourceType2->SetSelection( 0 );
-	gbSizer1->Add( m_dcSourceType2, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( m_dcSourceType2, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_staticText4 = new wxStaticText( m_pgDC, wxID_ANY, _("Source:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	gbSizer1->Add( m_staticText4, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_staticText4, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_staticText41 = new wxStaticText( m_pgDC, wxID_ANY, _("Sweep type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText41->Wrap( -1 );
-	gbSizer1->Add( m_staticText41, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( m_staticText41, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT, 5 );
 
 	m_staticText411 = new wxStaticText( m_pgDC, wxID_ANY, _("Source 1"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText411->Wrap( -1 );
 	m_staticText411->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	gbSizer1->Add( m_staticText411, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( m_staticText411, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_dcSource1Choices;
 	m_dcSource1 = new wxChoice( m_pgDC, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dcSource1Choices, 0 );
 	m_dcSource1->SetSelection( 0 );
-	gbSizer1->Add( m_dcSource1, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( m_dcSource1, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_dcSource2Choices;
 	m_dcSource2 = new wxChoice( m_pgDC, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dcSource2Choices, 0 );
 	m_dcSource2->SetSelection( 0 );
-	gbSizer1->Add( m_dcSource2, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( m_dcSource2, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_staticText5 = new wxStaticText( m_pgDC, wxID_ANY, _("Starting value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
-	gbSizer1->Add( m_staticText5, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_staticText5, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_dcStart1 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_dcStart1, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_dcStart1, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_src1DCStartValUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_src1DCStartValUnit->Wrap( -1 );
 	m_src1DCStartValUnit->SetMinSize( wxSize( 80,-1 ) );
 
-	gbSizer1->Add( m_src1DCStartValUnit, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_src1DCStartValUnit, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_dcStart2 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_dcStart2, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_dcStart2, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_src2DCStartValUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_src2DCStartValUnit->Wrap( -1 );
-	gbSizer1->Add( m_src2DCStartValUnit, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_src2DCStartValUnit, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText6 = new wxStaticText( m_pgDC, wxID_ANY, _("Final value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
-	gbSizer1->Add( m_staticText6, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_staticText6, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_dcStop1 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_dcStop1, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_dcStop1, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_src1DCEndValUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_src1DCEndValUnit->Wrap( -1 );
 	m_src1DCEndValUnit->SetMinSize( wxSize( 80,-1 ) );
 
-	gbSizer1->Add( m_src1DCEndValUnit, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_src1DCEndValUnit, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_dcStop2 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_dcStop2, wxGBPosition( 4, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_dcStop2, wxGBPosition( 4, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_src2DCEndValUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_src2DCEndValUnit->Wrap( -1 );
-	gbSizer1->Add( m_src2DCEndValUnit, wxGBPosition( 4, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_src2DCEndValUnit, wxGBPosition( 4, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText7 = new wxStaticText( m_pgDC, wxID_ANY, _("Increment step:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
-	gbSizer1->Add( m_staticText7, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_staticText7, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_dcIncr1 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_dcIncr1, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_dcIncr1, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_src1DCStepUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_src1DCStepUnit->Wrap( -1 );
 	m_src1DCStepUnit->SetMinSize( wxSize( 80,-1 ) );
 
-	gbSizer1->Add( m_src1DCStepUnit, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_src1DCStepUnit, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_dcIncr2 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_dcIncr2, wxGBPosition( 5, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_dcIncr2, wxGBPosition( 5, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_src2DCStepUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_src2DCStepUnit->Wrap( -1 );
-	gbSizer1->Add( m_src2DCStepUnit, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_src2DCStepUnit, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	bSizer82->Add( gbSizer1, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxBOTTOM, 5 );
+
+
+	bSizer82->Add( 0, 5, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_swapDCSources = new wxButton( m_pgDC, wxID_ANY, _("Swap sources"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_swapDCSources, wxGBPosition( 6, 0 ), wxGBSpan( 1, 5 ), wxALL|wxEXPAND, 5 );
+	m_swapDCSources->SetMinSize( wxSize( 132,-1 ) );
 
-
-	bSizer82->Add( gbSizer1, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
-
-
-	bSizer82->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer82->Add( m_swapDCSources, 0, wxALL, 5 );
 
 
 	m_pgDC->SetSizer( bSizer82 );
@@ -344,68 +339,64 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer81;
 	bSizer81 = new wxBoxSizer( wxVERTICAL );
 
-
-	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	wxFlexGridSizer* fgSizer6;
-	fgSizer6 = new wxFlexGridSizer( 0, 4, 0, 0 );
+	fgSizer6 = new wxFlexGridSizer( 0, 4, 5, 0 );
 	fgSizer6->SetFlexibleDirection( wxBOTH );
 	fgSizer6->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText151 = new wxStaticText( m_pgTransient, wxID_ANY, _("Time step:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText151->Wrap( -1 );
-	fgSizer6->Add( m_staticText151, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_timeLabel = new wxStaticText( m_pgTransient, wxID_ANY, _("Time step:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_timeLabel->Wrap( -1 );
+	fgSizer6->Add( m_timeLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_transStep = new wxTextCtrl( m_pgTransient, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer6->Add( m_transStep, 0, wxALL, 5 );
+	m_transStep->SetMinSize( wxSize( 100,-1 ) );
 
-	m_staticText1511 = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1511->Wrap( -1 );
-	fgSizer6->Add( m_staticText1511, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer6->Add( m_transStep, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_timeUnits = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_timeUnits->Wrap( -1 );
+	fgSizer6->Add( m_timeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
 
 	fgSizer6->Add( 0, 0, 0, wxEXPAND, 5 );
 
-	m_staticText161 = new wxStaticText( m_pgTransient, wxID_ANY, _("Final time:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText161->Wrap( -1 );
-	fgSizer6->Add( m_staticText161, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_transFinalLabel = new wxStaticText( m_pgTransient, wxID_ANY, _("Final time:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_transFinalLabel->Wrap( -1 );
+	fgSizer6->Add( m_transFinalLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_transFinal = new wxTextCtrl( m_pgTransient, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer6->Add( m_transFinal, 0, wxALL, 5 );
+	fgSizer6->Add( m_transFinal, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_staticText1512 = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1512->Wrap( -1 );
-	fgSizer6->Add( m_staticText1512, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	m_transFinalUnits = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_transFinalUnits->Wrap( -1 );
+	fgSizer6->Add( m_transFinalUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
 
 	fgSizer6->Add( 0, 0, 0, wxEXPAND, 5 );
 
-	m_staticText17 = new wxStaticText( m_pgTransient, wxID_ANY, _("Initial time:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText17->Wrap( -1 );
-	fgSizer6->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_transInitialLabel = new wxStaticText( m_pgTransient, wxID_ANY, _("Initial time:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_transInitialLabel->Wrap( -1 );
+	fgSizer6->Add( m_transInitialLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_transInitial = new wxTextCtrl( m_pgTransient, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer6->Add( m_transInitial, 0, wxALL, 5 );
+	fgSizer6->Add( m_transInitial, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_staticText1513 = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1513->Wrap( -1 );
-	fgSizer6->Add( m_staticText1513, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
+	m_transInitialUnits = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_transInitialUnits->Wrap( -1 );
+	fgSizer6->Add( m_transInitialUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
 
 	m_staticText24 = new wxStaticText( m_pgTransient, wxID_ANY, _("(optional; default 0)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText24->Wrap( -1 );
 	fgSizer6->Add( m_staticText24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	bSizer81->Add( fgSizer6, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-
-	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer81->Add( fgSizer6, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_pgTransient->SetSizer( bSizer81 );
 	m_pgTransient->Layout();
 	bSizer81->Fit( m_pgTransient );
-	m_simPages->AddPage( m_pgTransient, _("Transient"), false );
+	m_simPages->AddPage( m_pgTransient, _("Transient"), true );
 	m_pgCustom = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
@@ -428,7 +419,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer2->Fit( m_pgCustom );
 	m_simPages->AddPage( m_pgCustom, _("Custom"), false );
 
-	bSizer1->Add( m_simPages, 1, wxALL|wxEXPAND, 5 );
+	bSizer1->Add( m_simPages, 1, wxALL|wxEXPAND, 10 );
 
 	wxBoxSizer* bSizer88;
 	bSizer88 = new wxBoxSizer( wxVERTICAL );
@@ -457,7 +448,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer88->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer1->Add( bSizer88, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer1->Add( bSizer88, 0, wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -476,22 +467,22 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SIM_SETTINGS_BASE::onInitDlg ) );
-	m_dcEnable2->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCEnableSecondSource ), NULL, this );
-	m_dcSourceType1->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource1Selected ), NULL, this );
-	m_dcSourceType2->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource2Selected ), NULL, this );
-	m_swapDCSources->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onSwapDCSources ), NULL, this );
-	m_loadDirectives->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onLoadDirectives ), NULL, this );
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SIM_COMMAND_BASE::onInitDlg ) );
+	m_dcEnable2->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCEnableSecondSource ), NULL, this );
+	m_dcSourceType1->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource1Selected ), NULL, this );
+	m_dcSourceType2->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource2Selected ), NULL, this );
+	m_swapDCSources->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onSwapDCSources ), NULL, this );
+	m_loadDirectives->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onLoadDirectives ), NULL, this );
 }
 
-DIALOG_SIM_SETTINGS_BASE::~DIALOG_SIM_SETTINGS_BASE()
+DIALOG_SIM_COMMAND_BASE::~DIALOG_SIM_COMMAND_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SIM_SETTINGS_BASE::onInitDlg ) );
-	m_dcEnable2->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCEnableSecondSource ), NULL, this );
-	m_dcSourceType1->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource1Selected ), NULL, this );
-	m_dcSourceType2->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource2Selected ), NULL, this );
-	m_swapDCSources->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onSwapDCSources ), NULL, this );
-	m_loadDirectives->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onLoadDirectives ), NULL, this );
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SIM_COMMAND_BASE::onInitDlg ) );
+	m_dcEnable2->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCEnableSecondSource ), NULL, this );
+	m_dcSourceType1->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource1Selected ), NULL, this );
+	m_dcSourceType2->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource2Selected ), NULL, this );
+	m_swapDCSources->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onSwapDCSources ), NULL, this );
+	m_loadDirectives->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onLoadDirectives ), NULL, this );
 
 }

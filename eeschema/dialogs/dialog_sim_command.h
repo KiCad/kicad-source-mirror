@@ -24,10 +24,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_SIM_SETTINGS_H
-#define DIALOG_SIM_SETTINGS_H
+#ifndef DIALOG_SIM_COMMAND_H
+#define DIALOG_SIM_COMMAND_H
 
-#include "dialog_sim_settings_base.h"
+#include "dialog_sim_command_base.h"
 #include <sim/spice_value.h>
 
 #include <wx/valnum.h>
@@ -36,10 +36,10 @@ class NGSPICE_CIRCUIT_MODEL;
 class SPICE_SIMULATOR_SETTINGS;
 
 
-class DIALOG_SIM_SETTINGS : public DIALOG_SIM_SETTINGS_BASE
+class DIALOG_SIM_COMMAND : public DIALOG_SIM_COMMAND_BASE
 {
 public:
-    DIALOG_SIM_SETTINGS( wxWindow* aParent, std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
+    DIALOG_SIM_COMMAND( wxWindow* aParent, std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
                          std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings );
 
     const wxString& GetSimCommand() const
@@ -170,4 +170,4 @@ private:
     wxIntegerValidator<int>                   m_posIntValidator;
 };
 
-#endif /* DIALOG_SIM_SETTINGS_H */
+#endif /* DIALOG_SIM_COMMAND_H */

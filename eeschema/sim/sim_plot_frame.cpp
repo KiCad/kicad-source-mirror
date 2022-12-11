@@ -1484,7 +1484,7 @@ void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 {
     SIM_PANEL_BASE*     plotPanelWindow = getCurrentPlotWindow();
-    DIALOG_SIM_SETTINGS dlg( this, m_circuitModel, m_simulator->Settings() );
+    DIALOG_SIM_COMMAND  dlg( this, m_circuitModel, m_simulator->Settings() );
     wxString            errors;
     WX_STRING_REPORTER  reporter( &errors );
 

@@ -345,8 +345,8 @@ if( KICAD_SPICE )
         ${EESCHEMA_SRCS}
         dialogs/dialog_signal_list.cpp
         dialogs/dialog_signal_list_base.cpp
-        dialogs/dialog_sim_settings.cpp
-        dialogs/dialog_sim_settings_base.cpp
+            dialogs/dialog_sim_command.cpp
+            dialogs/dialog_sim_command_base.cpp
         dialogs/dialog_sim_model.cpp
         dialogs/dialog_sim_model_base.cpp
         sim/ngspice_circuit_model.cpp
