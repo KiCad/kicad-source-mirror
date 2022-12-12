@@ -257,7 +257,11 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
                 if( polySet.IsEmpty() )
                     return false;
 
-                polySet.Simplify( SHAPE_POLY_SET::PM_FAST );
+                if( cfg.m_Strategy == BOUNDING_HULL )
+                {
+                    polySet.ClearArcs();
+                    polySet.Simplify( SHAPE_POLY_SET::PM_FAST );
+                }
 
                 for( int ii = 0; ii < polySet.OutlineCount(); ++ii )
                 {
@@ -621,7 +625,6 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
         }
 
         outline.SetClosed( true );
-        outline.Simplify();
 
         poly.AddOutline( outline );
 

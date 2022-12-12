@@ -1227,6 +1227,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                             // Split line in half
                             if( !line->IsNew() )
                             {
+                                line->SetFlags( SELECTED_BY_DRAG );
                                 saveCopyInUndoList( line, UNDO_REDO::CHANGED, aAppendUndo );
                                 aAppendUndo = true;
                             }
@@ -1237,9 +1238,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                             SCH_LINE*     secondHalf = makeNewWire( line, line, aPoint, oldEnd );
                             SCH_JUNCTION* junction = makeNewJunction( line, aPoint );
 
+                            secondHalf->SetFlags( SELECTED_BY_DRAG );
                             saveCopyInUndoList( secondHalf, UNDO_REDO::NEWITEM, aAppendUndo );
                             aAppendUndo = true;
 
+                            junction->SetFlags( SELECTED_BY_DRAG );
                             saveCopyInUndoList( junction, UNDO_REDO::NEWITEM, aAppendUndo );
                             aAppendUndo = true;
 
