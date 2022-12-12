@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -323,7 +323,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bPanelFpFilterBoxSizer->Fit( m_PanelFootprintFilter );
 	m_NoteBook->AddPage( m_PanelFootprintFilter, _("Footprint Filters"), false );
 
-	bUpperSizer->Add( m_NoteBook, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );

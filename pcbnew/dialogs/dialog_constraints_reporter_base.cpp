@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,7 @@ DIALOG_CONSTRAINTS_REPORTER_BASE::DIALOG_CONSTRAINTS_REPORTER_BASE( wxWindow* pa
 	m_notebook->SetMinSize( wxSize( 550,480 ) );
 
 
-	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

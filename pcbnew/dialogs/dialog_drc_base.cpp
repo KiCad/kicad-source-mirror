@@ -148,7 +148,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer15->Fit( m_panelIgnored );
 	m_Notebook->AddPage( m_panelIgnored, _("Ignored Tests (%s)"), false );
 
-	bSizer13->Add( m_Notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer13->Add( m_Notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	results->SetSizer( bSizer13 );

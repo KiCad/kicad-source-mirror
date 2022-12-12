@@ -155,7 +155,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bMainSizer->Add( bSizer11, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer1->Add( bMainSizer, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	bSizer1->Add( bMainSizer, 1, wxEXPAND|wxALL, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

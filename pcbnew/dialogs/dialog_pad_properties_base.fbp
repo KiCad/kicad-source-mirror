@@ -72,7 +72,7 @@
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
+                            <property name="border">10</property>
                             <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxNotebook" expanded="1">
@@ -9860,16 +9860,6 @@
                                 <property name="name">bSizerDisplayPad</property>
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="permission">none</property>
-                                <object class="sizeritem" expanded="0">
-                                    <property name="border">3</property>
-                                    <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
-                                    <property name="proportion">0</property>
-                                    <object class="spacer" expanded="0">
-                                        <property name="height">0</property>
-                                        <property name="permission">protected</property>
-                                        <property name="width">0</property>
-                                    </object>
-                                </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>

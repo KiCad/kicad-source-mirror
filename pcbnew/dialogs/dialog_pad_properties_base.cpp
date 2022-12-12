@@ -836,15 +836,12 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_bSizerPanelPrimitives->Fit( m_panelCustomShapePrimitives );
 	m_notebook->AddPage( m_panelCustomShapePrimitives, _("Custom Shape Primitives"), false );
 
-	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
 
 	wxBoxSizer* bSizerDisplayPad;
 	bSizerDisplayPad = new wxBoxSizer( wxVERTICAL );
 
 	bSizerDisplayPad->SetMinSize( wxSize( 290,-1 ) );
-
-	bSizerDisplayPad->Add( 0, 0, 0, wxBOTTOM|wxEXPAND|wxTOP, 3 );
-
 
 	bSizerDisplayPad->Add( 0, 10, 0, wxEXPAND, 5 );
 

@@ -93,7 +93,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerMargins->Add( gbSizer1, 0, wxEXPAND|wxLEFT, 28 );
 
 
-	bSizerMargins->Add( 0, 18, 0, wxEXPAND, 5 );
+	bSizerMargins->Add( 0, 20, 0, wxEXPAND, 5 );
 
 	m_useInstanceModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("Built-in SPICE model"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_useInstanceModelRadioButton, 0, wxBOTTOM|wxLEFT, 5 );
@@ -124,6 +124,9 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 
 	bSizerMargins->Add( fgSizer16, 0, wxEXPAND|wxLEFT, 24 );
+
+
+	bSizerMargins->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	m_modelNotebook = new wxNotebook( m_modelPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_parametersPanel = new wxPanel( m_modelNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -193,7 +196,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer5->Fit( m_codePanel );
 	m_modelNotebook->AddPage( m_codePanel, _("Code"), false );
 
-	bSizerMargins->Add( m_modelNotebook, 1, wxEXPAND|wxTOP, 10 );
+	bSizerMargins->Add( m_modelNotebook, 1, wxEXPAND|wxALL, 5 );
 
 	m_saveInValueCheckbox = new wxCheckBox( m_modelPanel, wxID_ANY, _("Save {} in Value field as \"{}\""), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_saveInValueCheckbox, 0, wxALL, 6 );
@@ -249,13 +252,13 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer10->Fit( m_pinAssignmentsPanel );
 	m_notebook->AddPage( m_pinAssignmentsPanel, _("Pin Assignments"), false );
 
-	bSizer8->Add( m_notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer8->Add( m_notebook, 1, wxEXPAND|wxALL, 10 );
 
 	wxBoxSizer* bSizer81;
 	bSizer81 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_excludeCheckbox = new wxCheckBox( this, wxID_ANY, _("Exclude from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer81->Add( m_excludeCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizer81->Add( m_excludeCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer81->Add( 30, 0, 1, wxEXPAND, 5 );
