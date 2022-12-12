@@ -1455,10 +1455,10 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
 
-        if( aItem->HasFlag( STARTPOINT ) )
+        if( aItem->HasFlag( STARTPOINT ) || !m_isDrag )
             line->MoveStart( aDelta );
 
-        if( aItem->HasFlag( ENDPOINT ) )
+        if( aItem->HasFlag( ENDPOINT ) || !m_isDrag )
             line->MoveEnd( aDelta );
 
         break;
