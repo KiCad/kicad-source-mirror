@@ -29,6 +29,9 @@
 ///< The size of the rectangle indicating an unconnected wire or label
 #define DANGLING_SYMBOL_SIZE 12
 
+///< The size of the rectangle indicating a connected, unselected wire end
+#define UNSELECTED_END_SIZE 4
+
 ///< The default pin len value when creating pins(can be changed in preference menu)
 #define DEFAULT_PIN_LENGTH 100
 

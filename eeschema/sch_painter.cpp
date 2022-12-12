@@ -1624,10 +1624,15 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
 // Draw the target (an open square) for a wire or label which has no connection or is
 // being moved.
 void SCH_PAINTER::drawDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
-                                      bool aDrawingShadows, bool aBrightened )
+                                      bool aDangling, bool aDrawingShadows, bool aBrightened )
 {
-    VECTOR2I radius( aWidth + schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ),
-                     aWidth + schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ) );
+    int size = aDangling ? DANGLING_SYMBOL_SIZE : UNSELECTED_END_SIZE;
+
+    if( !aDangling )
+        aWidth /= 2;
+
+    VECTOR2I radius( aWidth + schIUScale.MilsToIU( size / 2 ),
+                     aWidth + schIUScale.MilsToIU( size / 2 ) );
 
     // Dangling symbols must be drawn in a slightly different colour so they can be seen when
     // they overlap with a junction dot.
@@ -1684,24 +1689,26 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
     if( drawingDangling || drawingShadows )
     {
         if( ( aLine->IsWire() && aLine->IsStartDangling() )
-            || ( aLine->IsGraphicLine() && aLine->IsSelected() && !aLine->IsNew()
+            || ( drawingShadows && aLine->IsSelected() && !aLine->IsNew()
                  && !aLine->HasFlag( STARTPOINT ) ) )
         {
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( STARTPOINT ) ) ? color.Inverted() : color;
             drawDanglingSymbol( aLine->GetStartPoint(), danglingColor,
-                                getLineWidth( aLine, drawingShadows ), drawingShadows,
+                                getLineWidth( aLine, drawingShadows ),
+                                aLine->IsWire() && aLine->IsStartDangling(), drawingShadows,
                                 aLine->IsBrightened() );
         }
 
         if( ( aLine->IsWire() && aLine->IsEndDangling() )
-            || ( aLine->IsGraphicLine() && aLine->IsSelected() && !aLine->IsNew()
+            || ( drawingShadows && aLine->IsSelected() && !aLine->IsNew()
                  && !aLine->HasFlag( ENDPOINT ) ) )
         {
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( ENDPOINT ) ) ? color.Inverted() : color;
             drawDanglingSymbol( aLine->GetEndPoint(), danglingColor,
-                                getLineWidth( aLine, drawingShadows ), drawingShadows,
+                                getLineWidth( aLine, drawingShadows ),
+                                aLine->IsWire() && aLine->IsEndDangling(), drawingShadows,
                                 aLine->IsBrightened() );
         }
 
@@ -1914,8 +1921,8 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         if( aText->IsDangling() )
         {
             drawDanglingSymbol( aText->GetTextPos(), color,
-                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), drawingShadows,
-                                aText->IsBrightened() );
+                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
+                                drawingShadows, aText->IsBrightened() );
         }
 
         return;
@@ -2514,7 +2521,8 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL *aLabel, int aLayer )
     {
         if( aLabel->IsDangling() )
         {
-            drawDanglingSymbol( aLabel->GetTextPos(), color, schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ),
+            drawDanglingSymbol( aLabel->GetTextPos(), color,
+                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
                                 drawingShadows, aLabel->IsBrightened() );
         }
 
