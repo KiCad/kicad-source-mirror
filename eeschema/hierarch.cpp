@@ -277,12 +277,12 @@ void HIERARCHY_NAVIG_PANEL::onRightClick( wxTreeEvent& aEvent )
     if( GetPopupMenuSelectionFromUser( ctxMenu ) == 1 )
     {
         wxString msg;
-        wxString sheetPath = itemData->m_SheetPath.PathHumanReadable( false );
+        wxString sheetPath = itemData->m_SheetPath.PathHumanReadable( false, true );
         wxString pageNumber = itemData->m_SheetPath.GetPageNumber();
 
         msg.Printf( _( "Enter page number for sheet path %s" ),
-                    ( sheetPath.Length() > 20 ) ? wxS( "  \n" ) + sheetPath + wxT( ":  " )
-                                                : sheetPath + wxT( ":  " ) );
+                    ( sheetPath.Length() > 20 ) ? wxS( "   \n" ) + sheetPath + wxT( ":   " )
+                                                : sheetPath + wxT( ":   " ) );
 
         wxTextEntryDialog dlg( m_frame, msg, _( "Edit Sheet Page Number" ), pageNumber );
 

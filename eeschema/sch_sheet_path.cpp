@@ -288,7 +288,8 @@ KIID_PATH SCH_SHEET_PATH::Path() const
 }
 
 
-wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
+wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
+                                            bool aStripTrailingSeparator ) const
 {
     wxString s;
 
@@ -311,6 +312,9 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
     // Start at 1 since we've already processed the root sheet.
     for( unsigned i = 1; i < size(); i++ )
         s << at( i )->GetFields()[SHEETNAME].GetShownText() << wxS( "/" );
+
+    if( aStripTrailingSeparator && s.EndsWith( "/" ) )
+        s = s.Left( s.length() - 1 );
 
     return s;
 }
