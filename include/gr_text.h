@@ -89,14 +89,14 @@ inline void InferBold( TEXT_ATTRIBUTES* aAttrs )
 
 
 /**
- * Returns the margin for knockout text.
+ * Returns the margin for knocking out text.
  *
  * Note that this is not a perfect calculation as fonts (especially outline fonts) vary greatly
  * in how well ascender and descender heights are enforced.
  */
 inline int GetKnockoutTextMargin( const VECTOR2I& aSize, int aThickness )
 {
-    return std::max( aThickness, KiROUND( aSize.y / 4.0 ) );
+    return std::max( KiROUND( aThickness / 2 ), KiROUND( aSize.y / 7.0 ) );
 }
 
 

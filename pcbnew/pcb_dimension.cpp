@@ -997,7 +997,7 @@ void PCB_DIM_LEADER::updateGeometry()
     // Now that we have the text updated, we can determine how to draw the second line
     // First we need to create an appropriate bounding polygon to collide with
     BOX2I textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
-                                                 m_text.GetEffectiveTextPenWidth() * 1.8 );
+                                                 m_text.GetEffectiveTextPenWidth() * 2 );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
