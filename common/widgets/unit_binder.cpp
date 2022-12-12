@@ -31,6 +31,7 @@
 #include <confirm.h>
 
 #include "widgets/unit_binder.h"
+#include "wx/dcclient.h"
 
 
 wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
@@ -65,6 +66,13 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
 
     if( textEntry )
     {
+        wxClientDC dc( m_valueCtrl );
+        wxSize     minSize = m_valueCtrl->GetMinSize();
+        int        minWidth = dc.GetTextExtent( wxT( "XXX.XXXXXXX" ) ).GetWidth();
+
+        if( minSize.GetWidth() < minWidth )
+            m_valueCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+
         // Use ChangeValue() instead of SetValue() so we don't generate events.
         if( m_negativeZero )
             textEntry->ChangeValue( wxT( "-0" ) );
