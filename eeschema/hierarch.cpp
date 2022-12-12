@@ -260,21 +260,29 @@ void HIERARCHY_NAVIG_PANEL::onSelectSheetPath( wxTreeEvent& aEvent )
 
 void HIERARCHY_NAVIG_PANEL::onRightClick( wxTreeEvent& aEvent )
 {
+    wxTreeItemId  itemSel = m_tree->GetFocusedItem();
+
+    if( !itemSel.IsOk() )
+        return;
+
+    TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( itemSel ) );
+
+    if( !itemData )
+        return;
+
     wxMenu ctxMenu;
 
     ctxMenu.Append( 1, _( "Edit Page Number" ) );
 
     if( GetPopupMenuSelectionFromUser( ctxMenu ) == 1 )
     {
-        wxTreeItemId  itemSel = m_tree->GetSelection();
-        TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( itemSel ) );
-
         wxString msg;
         wxString sheetPath = itemData->m_SheetPath.PathHumanReadable( false );
         wxString pageNumber = itemData->m_SheetPath.GetPageNumber();
 
-        msg.Printf( _( "Enter page number for sheet path%s" ),
-                    ( sheetPath.Length() > 20 ) ? "\n" + sheetPath : " " + sheetPath );
+        msg.Printf( _( "Enter page number for sheet path %s" ),
+                    ( sheetPath.Length() > 20 ) ? wxS( "  \n" ) + sheetPath + wxT( ":  " )
+                                                : sheetPath + wxT( ":  " ) );
 
         wxTextEntryDialog dlg( m_frame, msg, _( "Edit Sheet Page Number" ), pageNumber );
 
