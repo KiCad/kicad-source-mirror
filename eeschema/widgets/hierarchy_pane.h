@@ -25,19 +25,19 @@
  */
 
 
-#ifndef HIERARCH_H
-#define HIERARCH_H
+#ifndef HIERARCHY_PANE_H
+#define HIERARCHY_PANE_H
 
 #include <wx/imaglist.h>
 #include <wx/object.h> // wxRTTI macros
 #include <wx/treectrl.h>
-#include <widgets/wx_panel.h>
+#include "widgets/wx_panel.h"
 
 
 class SCH_EDIT_FRAME;
 class SCH_SHEET_PATH;
 
-class HIERARCHY_NAVIG_PANEL;
+class HIERARCHY_PANE;
 
 
 /**
@@ -49,7 +49,7 @@ class HIERARCHY_NAVIG_PANEL;
 class HIERARCHY_TREE : public wxTreeCtrl
 {
 public:
-    HIERARCHY_TREE( HIERARCHY_NAVIG_PANEL* parent ) :
+    HIERARCHY_TREE( HIERARCHY_PANE* parent ) :
             wxTreeCtrl( (wxWindow*) parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                         wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
     {
@@ -64,12 +64,12 @@ private:
 };
 
 
-class HIERARCHY_NAVIG_PANEL : public WX_PANEL
+class HIERARCHY_PANE : public WX_PANEL
 {
 public:
-    HIERARCHY_NAVIG_PANEL( SCH_EDIT_FRAME* aParent );
+    HIERARCHY_PANE( SCH_EDIT_FRAME* aParent );
 
-    ~HIERARCHY_NAVIG_PANEL();
+    ~HIERARCHY_PANE();
 
     /**
      * Update the hierarchical tree of the schematic.
@@ -121,4 +121,4 @@ private:
     bool            m_events_bound;
 };
 
-#endif // HIERARCH_H
+#endif // HIERARCHY_PANE_H

@@ -156,6 +156,7 @@ set( EESCHEMA_DLGS
     )
 
 set( EESCHEMA_WIDGETS
+    widgets/hierarchy_pane.cpp
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp
     widgets/symbol_preview_widget.cpp
@@ -202,7 +203,6 @@ set( EESCHEMA_SRCS
     files-io.cpp
     generate_alias_info.cpp
     picksymbol.cpp
-    hierarch.cpp
     lib_field.cpp
     lib_item.cpp
     lib_pin.cpp

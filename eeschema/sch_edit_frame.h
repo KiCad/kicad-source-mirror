@@ -57,7 +57,7 @@ class SCHEMATIC;
 class DIALOG_SCH_FIND;
 class wxFindReplaceData;
 class RESCUER;
-class HIERARCHY_NAVIG_PANEL;
+class HIERARCHY_PANE;
 
 // @todo Move this to transform alone with all of the transform manipulation code.
 /// enum used in RotationMiroir()
@@ -933,7 +933,7 @@ private:
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
 
-    HIERARCHY_NAVIG_PANEL*  m_hierarchy;
+    HIERARCHY_PANE*         m_hierarchy;
 
 	bool m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB
 };

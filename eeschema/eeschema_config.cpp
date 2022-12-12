@@ -31,7 +31,7 @@
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <schematic.h>
-#include <hierarch.h>
+#include <widgets/hierarchy_pane.h>
 #include <settings/app_settings.h>
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>

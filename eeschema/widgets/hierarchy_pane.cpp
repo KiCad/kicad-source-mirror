@@ -31,7 +31,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 
-#include <hierarch.h>
+#include <hierarchy_pane.h>
 #include <kiface_base.h>
 #include <eeschema_settings.h>
 
@@ -69,7 +69,7 @@ int HIERARCHY_TREE::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemI
 }
 
 
-HIERARCHY_NAVIG_PANEL::HIERARCHY_NAVIG_PANEL( SCH_EDIT_FRAME* aParent ) :
+HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
         WX_PANEL( aParent )
 {
     wxASSERT( dynamic_cast<SCH_EDIT_FRAME*>( aParent ) );
@@ -98,23 +98,23 @@ HIERARCHY_NAVIG_PANEL::HIERARCHY_NAVIG_PANEL( SCH_EDIT_FRAME* aParent ) :
     UpdateHierarchyTree();
 
     // Enable selection events
-    Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-    Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-    Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
+    Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
+    Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
+    Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
 
     m_events_bound = true;
 }
 
 
-HIERARCHY_NAVIG_PANEL::~HIERARCHY_NAVIG_PANEL()
+HIERARCHY_PANE::~HIERARCHY_PANE()
 {
-    Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-    Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-    Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
+    Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
+    Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
+    Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
 }
 
 
-void HIERARCHY_NAVIG_PANEL::buildHierarchyTree( SCH_SHEET_PATH* aList, const wxTreeItemId& aParent )
+void HIERARCHY_PANE::buildHierarchyTree( SCH_SHEET_PATH* aList, const wxTreeItemId& aParent )
 {
     std::vector<SCH_ITEM*> sheetChildren;
     aList->LastScreen()->GetSheets( &sheetChildren );
@@ -137,16 +137,16 @@ void HIERARCHY_NAVIG_PANEL::buildHierarchyTree( SCH_SHEET_PATH* aList, const wxT
 }
 
 
-void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
+void HIERARCHY_PANE::UpdateHierarchySelection()
 {
     bool eventsWereBound = m_events_bound;
 
     if( eventsWereBound )
     {
         // Disable selection events
-        Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-        Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
+        Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
+        Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
+        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
 
         m_events_bound = false;
     }
@@ -195,16 +195,16 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
     if( eventsWereBound )
     {
         // Enable selection events
-        Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-        Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
+        Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
+        Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
+        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
 
         m_events_bound = true;
     }
 }
 
 
-void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
+void HIERARCHY_PANE::UpdateHierarchyTree()
 {
     Freeze();
 
@@ -213,9 +213,9 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
     if( eventsWereBound )
     {
         // Disable selection events
-        Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-        Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
+        Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
+        Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
+        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
 
         m_events_bound = false;
     }
@@ -236,9 +236,9 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
     if( eventsWereBound )
     {
         // Enable selection events
-        Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-        Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_NAVIG_PANEL::onRightClick, this );
+        Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
+        Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
+        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
 
         m_events_bound = true;
     }
@@ -247,7 +247,7 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
 }
 
 
-void HIERARCHY_NAVIG_PANEL::onSelectSheetPath( wxTreeEvent& aEvent )
+void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
 {
     wxTreeItemId  itemSel = m_tree->GetSelection();
     TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( itemSel ) );
@@ -258,7 +258,7 @@ void HIERARCHY_NAVIG_PANEL::onSelectSheetPath( wxTreeEvent& aEvent )
 }
 
 
-void HIERARCHY_NAVIG_PANEL::onRightClick( wxTreeEvent& aEvent )
+void HIERARCHY_PANE::onRightClick( wxTreeEvent& aEvent )
 {
     wxTreeItemId  itemSel = m_tree->GetFocusedItem();
 
@@ -307,7 +307,7 @@ void HIERARCHY_NAVIG_PANEL::onRightClick( wxTreeEvent& aEvent )
 }
 
 
-wxString HIERARCHY_NAVIG_PANEL::getRootString()
+wxString HIERARCHY_PANE::getRootString()
 {
     SCH_SHEET*     rootSheet = &m_frame->Schematic().Root();
     SCH_SHEET_PATH rootPath;
@@ -317,7 +317,7 @@ wxString HIERARCHY_NAVIG_PANEL::getRootString()
 }
 
 
-wxString HIERARCHY_NAVIG_PANEL::formatPageString( const wxString& aName, const wxString& aPage )
+wxString HIERARCHY_PANE::formatPageString( const wxString& aName, const wxString& aPage )
 {
     return aName + wxT( " " ) + wxString::Format( _( "(page %s)" ), aPage );
 }

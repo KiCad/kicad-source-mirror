@@ -31,7 +31,6 @@
 #include <eeschema_id.h>
 #include <executable_names.h>
 #include <gestfich.h>
-#include <hierarch.h>
 #include <dialogs/html_message_box.h>
 #include <ignore.h>
 #include <invoke_sch_dialog.h>
@@ -79,6 +78,7 @@
 #include <tools/sch_navigate_tool.h>
 #include <view/view_controls.h>
 #include <widgets/infobar.h>
+#include <widgets/hierarchy_pane.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
 #include <wx/app.h>
@@ -154,7 +154,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    m_hierarchy = new HIERARCHY_NAVIG_PANEL( this );
+    m_hierarchy = new HIERARCHY_PANE( this );
 
     // Initialize common print setup dialog settings.
     m_pageSetupData.GetPrintData().SetPrintMode( wxPRINT_MODE_PRINTER );
