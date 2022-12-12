@@ -190,8 +190,6 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
 {
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {

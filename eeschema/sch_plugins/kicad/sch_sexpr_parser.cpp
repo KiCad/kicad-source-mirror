@@ -3839,10 +3839,16 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
             SCH_FIELD* field = parseSchField( text.get() );
 
-            if( text->Type() == SCH_GLOBAL_LABEL_T && field->GetInternalName() == wxT( "Intersheetrefs") )
+            if( text->Type() == SCH_GLOBAL_LABEL_T )
             {
-                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
-                label->GetFields()[0] = *field;
+                // If the field is a Intersheetrefs it is not handled like other fields:
+                // It always exists and is the first in list
+                if( field->GetInternalName() == wxT( "Intersheetrefs") ||       // Current name
+                    field->GetInternalName() == wxT( "Intersheet References") ) // old name in V6.0
+                {
+                    SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
+                    label->GetFields()[0] = *field;
+                }
             }
             else
                 static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().emplace_back( *field );
