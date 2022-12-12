@@ -244,11 +244,6 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             points->AddPoint( shape->GetStart() );
             points->AddPoint( shape->GetArcMid() );
             points->AddPoint( shape->GetEnd() );
-
-            points->Point( ARC_MID ).SetGridConstraint( IGNORE_GRID );
-            points->Point( ARC_START ).SetGridConstraint( SNAP_TO_GRID );
-            points->Point( ARC_CENTER ).SetGridConstraint( SNAP_BY_GRID );
-            points->Point( ARC_END ).SetGridConstraint( SNAP_TO_GRID );
             break;
 
         case SHAPE_T::CIRCLE:
@@ -828,6 +823,53 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
 }
 
 
+void PCB_POINT_EDITOR::editArcCenterKeepEndpoints( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
+                                                   const VECTOR2I& aStart, const VECTOR2I& aMid,
+                                                   const VECTOR2I& aEnd ) const
+{
+    const int c_snapEpsilon_sq = 4;
+
+    VECTOR2I m = ( aStart / 2 + aEnd / 2 );
+    VECTOR2I perp = ( aEnd - aStart ).Perpendicular().Resize( INT_MAX / 2 );
+
+    SEG legal( m - perp, m + perp );
+
+    OPT_VECTOR2I hIntersect = legal.IntersectLines( SEG( aCenter, aCenter + VECTOR2( 1, 0 ) ) );
+    OPT_VECTOR2I vIntersect = legal.IntersectLines( SEG( aCenter, aCenter + VECTOR2( 0, 1 ) ) );
+
+    const SEG testSegments[] = { SEG( aCenter, aCenter + VECTOR2( 1, 0 ) ),
+                                 SEG( aCenter, aCenter + VECTOR2( 0, 1 ) ) };
+
+    std::vector<VECTOR2I> points = { legal.A, legal.B };
+
+    for( const SEG& seg : testSegments )
+    {
+        OPT_VECTOR2I vec = legal.IntersectLines( seg );
+
+        if( vec && legal.SquaredDistance( *vec ) <= c_snapEpsilon_sq )
+            points.push_back( *vec );
+    }
+
+    OPT_VECTOR2I nearest;
+    SEG::ecoord  min_d_sq = VECTOR2I::ECOORD_MAX;
+
+    // Snap by distance between cursor and intersections
+    for( const VECTOR2I& pt : points )
+    {
+        SEG::ecoord d_sq = ( pt - aCenter ).SquaredEuclideanNorm();
+
+        if( d_sq < min_d_sq - c_snapEpsilon_sq )
+        {
+            min_d_sq = d_sq;
+            nearest = pt;
+        }
+    }
+
+    if( nearest )
+        aArc->SetCenter( *nearest );
+}
+
+
 /**
  * Update the coordinates of 4 corners of a rectangle, according to pad constraints and the
  * moved corner
@@ -1153,8 +1195,15 @@ void PCB_POINT_EDITOR::updateItem() const
 
             if( isModified( m_editPoints->Point( ARC_CENTER ) ) )
             {
-                VECTOR2I moveVector = VECTOR2I( center.x, center.y ) - shape->GetCenter();
-                shape->Move( moveVector );
+                if( m_arcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION )
+                {
+                    editArcCenterKeepEndpoints( shape, center, start, mid, end );
+                }
+                else
+                {
+                    VECTOR2I moveVector = VECTOR2I( center.x, center.y ) - shape->GetCenter();
+                    shape->Move( moveVector );
+                }
             }
             else if( isModified( m_editPoints->Point( ARC_MID ) ) )
             {

@@ -148,6 +148,13 @@ private:
                                     const VECTOR2I& aEnd, const VECTOR2I& aCursor ) const;
 
     /**
+     * Move the arc center but keep endpoint locations.
+     */
+    void editArcCenterKeepEndpoints( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
+                                     const VECTOR2I& aStart, const VECTOR2I& aMid,
+                                     const VECTOR2I& aEnd ) const;
+
+    /**
      * Move the mid point of the arc, while keeping the two endpoints.
      */
     void editArcMidKeepEndpoints( PCB_SHAPE* aArc, const VECTOR2I& aStart, const VECTOR2I& aEnd,
