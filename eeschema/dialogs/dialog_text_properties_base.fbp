@@ -487,7 +487,7 @@
                             <property name="flag">wxEXPAND|wxTOP</property>
                             <property name="row">2</property>
                             <property name="rowspan">1</property>
-                            <object class="wxBoxSizer" expanded="0">
+                            <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizeCtrlSizer</property>
                                 <property name="orient">wxHORIZONTAL</property>
@@ -1139,7 +1139,7 @@
                                         <property name="style">wxBORDER_NONE</property>
                                         <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Align left</property>
+                                        <property name="tooltip">Align top</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -1212,7 +1212,7 @@
                                         <property name="style">wxBORDER_NONE</property>
                                         <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Align left</property>
+                                        <property name="tooltip">Align vertical center</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -1285,7 +1285,7 @@
                                         <property name="style">wxBORDER_NONE</property>
                                         <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Align left</property>
+                                        <property name="tooltip">Align bottom</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -1431,7 +1431,7 @@
                                         <property name="style">wxBORDER_NONE</property>
                                         <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Align bottom</property>
+                                        <property name="tooltip">Horizontal text</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -1504,7 +1504,7 @@
                                         <property name="style">wxBORDER_NONE</property>
                                         <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Align vertical center</property>
+                                        <property name="tooltip">Vertical text</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
