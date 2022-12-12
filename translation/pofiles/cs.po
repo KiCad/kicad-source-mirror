@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-11-30 00:08+0000\n"
+"PO-Revision-Date: 2022-12-11 20:19+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -282,9 +282,9 @@ msgstr "&Nastavení"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2728
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Přednastavuje (Ctrl+Tab):"
+msgstr "Okna zobrazení (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2737
@@ -1218,9 +1218,8 @@ msgid "Open..."
 msgstr "Otevřít..."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
-#, fuzzy
 msgid "Load source image"
-msgstr "Zobrazit jako zrcadlový obraz"
+msgstr "Načíst zdrojový obrázek"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1228,9 +1227,8 @@ msgid "Quit"
 msgstr "Ukončit"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:229
-#, fuzzy
 msgid "Quit Image Converter"
-msgstr "Převod obrázků"
+msgstr "Ukončit konvertor obrázků"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:570
@@ -1295,19 +1293,16 @@ msgid "Greyscale Picture"
 msgstr "Obrázek ve stupních šedi"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:30
-#, fuzzy
 msgid "Black && White Picture"
-msgstr "Černo&bílý obrázek"
+msgstr "Černo && bílý obrázek"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:38
-#, fuzzy
 msgid "Image Information"
-msgstr "Bitmapa info"
+msgstr "Informace o obrázku"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
-#, fuzzy
 msgid "Image size:"
-msgstr "Velikost stránky:"
+msgstr "Velikost obrázku:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1322,9 +1317,8 @@ msgid "pixels"
 msgstr "pixelů"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
-#, fuzzy
 msgid "Image PPI:"
-msgstr "Bitmapa PPI:"
+msgstr "PPI obrázku:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
@@ -1339,19 +1333,16 @@ msgid "bits"
 msgstr "bitů"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
-#, fuzzy
 msgid "Load Source Image"
-msgstr "Vyberte obrázek"
+msgstr "Načíst zdrojový obrázek"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
-#, fuzzy
 msgid "Output Size"
-msgstr "Výstupní vývod"
+msgstr "Výstupní velikost"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
-msgstr "Zamknout poměr výška/šířka"
+msgstr "Zamknout poměr výška / šířka"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:115
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1381,9 +1372,8 @@ msgid "Options"
 msgstr "Možnosti"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
-#, fuzzy
 msgid "Black / white threshold:"
-msgstr "Černá/bílá prahová hodnota:"
+msgstr "Černá / bílá prahová hodnota:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid ""
@@ -5446,9 +5436,9 @@ msgid "Unrecognized function '%s'"
 msgstr "Nerozpoznaná funkce '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "Neočekáváno '%s'"
+msgstr "Neočekávané jednotky pro '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -6659,14 +6649,13 @@ msgid "No objects selected"
 msgstr "Žádné vybrané objekty"
 
 #: common/widgets/properties_panel.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Žádné vybrané objekty"
+msgstr "Vybráno %d objektů"
 
 #: common/widgets/properties_panel.cpp:238
-#, fuzzy
 msgid "Basic Properties"
-msgstr "%s vlastnosti"
+msgstr "Základní vlastnosti"
 
 #: common/widgets/unit_binder.cpp:274
 #, c-format
@@ -7808,9 +7797,8 @@ msgid "Generator file name not found."
 msgstr "Název souboru generátoru nebyl nalezen."
 
 #: eeschema/dialogs/dialog_bom.cpp:459
-#, fuzzy
 msgid "Bill of Materials Generation Help"
-msgstr "Nápověda generace kusovníku"
+msgstr "Nápověda při generování seznamu materiálu"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
@@ -7851,7 +7839,6 @@ msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr "Resetovat seznam skriptů BOM generátoru na výchozí nastavení"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
 msgstr "Rozpiska materiálu"
 
@@ -8305,9 +8292,8 @@ msgid "Checking conflicts..."
 msgstr "Kontrola konfliktů..."
 
 #: eeschema/dialogs/dialog_erc.cpp:488
-#, fuzzy
 msgid "Checking units..."
-msgstr "Kontrola vývodů..."
+msgstr "Kontrola jednotek..."
 
 #: eeschema/dialogs/dialog_erc.cpp:493
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
@@ -8327,9 +8313,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Kontrola nevyřešených proměnných ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:534
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "Kontrola zón..."
+msgstr "Kontrola modelů SPICE..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
@@ -8899,10 +8884,8 @@ msgid "Diameter:"
 msgstr "Průměr:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
-msgstr ""
-"Nastavit průměr na 0 pro použití velikosti propojení z editoru schématu."
+msgstr "Nastavit průměr na 0 pro použití velikosti tečky uzlu schématu."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:83
@@ -9455,9 +9438,8 @@ msgid "Fields must have a name."
 msgstr "Pole musí mít název."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:274
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "Aliasy symbol musí mít vybraného rodiče"
+msgstr "Odvozený symbol musí mít vybraný nadřazený symbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 msgid "Delete extra units from symbol?"
@@ -10712,9 +10694,8 @@ msgid "Add signal by name:"
 msgstr "Přidat signál podle názvu:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:223
-#, fuzzy
 msgid "Failed to read simulation model from fields."
-msgstr "Nepodařilo se načíst simulační model z polí"
+msgstr "Nepodařilo se načíst simulační model z polí."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:401 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1147 eeschema/sch_label.cpp:880
@@ -10758,9 +10739,8 @@ msgid "Pin:"
 msgstr "Vývod:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:74
-#, fuzzy
 msgid "Differential"
-msgstr "Diferenciální páry"
+msgstr "Diferenciální"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:98
 msgid "Built-in SPICE model"
@@ -11909,14 +11889,13 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Zobrazit náhled pouzdra při výběru symbolu"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "Název pole '%s' již používán."
+msgstr "Název aliasu '%s' je již používán."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:289
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Název sítě/aliasu nemůže být prázdný."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
 msgid "Bus definitions:"
@@ -11936,9 +11915,8 @@ msgid "Members of '%s':"
 msgstr "Členové '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Název sítě nebo sběrnice"
+msgstr "Název sítě / vnořené sběrnice"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -12434,9 +12412,8 @@ msgstr "Chyba při načítání tabulky '%s' knihoven symbolů došlo k chybě."
 #: eeschema/eeschema_jobs_handler.cpp:137
 #: eeschema/eeschema_jobs_handler.cpp:170
 #: eeschema/eeschema_jobs_handler.cpp:263
-#, fuzzy
 msgid "Failed to load schematic file\n"
-msgstr "Selhalo načtení schématu \"%s\""
+msgstr "Nelze načíst soubor schématu\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:181
 #: eeschema/eeschema_jobs_handler.cpp:278
@@ -12447,34 +12424,28 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:190
 #: eeschema/eeschema_jobs_handler.cpp:288
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "Varování: Zdvojené jméno"
+msgstr "Varování: duplicitní název listu.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:230
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "Neznámý formát souboru <%s>"
+msgstr "Neznámý formát netlistu.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:333 pcbnew/pcbnew_jobs_handler.cpp:492
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "Nelze načíst soubor %s"
+msgstr "Nelze načíst knihovnu\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:342
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "Neplatný identifikátor knihovny symbolů"
+msgstr "Ukládání knihovny symbolů v aktualizovaném formátu\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:351 pcbnew/pcbnew_jobs_handler.cpp:516
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "žádná aktivní knihovna"
+msgstr "Nelze uložit knihovnu\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:357
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "Knihovna symbolů není povolena."
+msgstr "Knihovna symbolů nebyla aktualizována\n"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Input Pin"
@@ -12539,24 +12510,25 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Různé pouzdra přiřazené k %s a %s"
 
 #: eeschema/erc.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "Symbol \"%s\" již existuje v \"%s\"."
+msgstr "Symbol %s má neumístěné jednotky %s"
 
 #: eeschema/erc.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "Symbol má více jednotek než je definováno"
+msgstr ""
+"Symbol %s má vstupní napájecí vývody na jednotkách %s, které nejsou umístěny."
 
 #: eeschema/erc.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "Symbol má více jednotek než je definováno"
+msgstr "Symbol %s má vstupní vývody na jednotkách %s, které nejsou umístěny."
 
 #: eeschema/erc.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "Symbol má více jednotek než je definováno"
+msgstr "Symbol %s má obousměrné vývody na jednotkách %s, které nejsou umístěny."
 
 #: eeschema/erc.cpp:583
 msgid "Pins with 'no connection' type are connected"
@@ -12690,9 +12662,8 @@ msgid "Unresolved text variable"
 msgstr "Nevyřešená textová proměnná"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "SPICE model issue"
-msgstr "Soubor netlistu SPICE"
+msgstr "Problém modelu SPICE"
 
 #: eeschema/erc_item.cpp:142
 msgid "Wires not connected to anything"
@@ -12711,24 +12682,20 @@ msgid "Symbol has more units than are defined"
 msgstr "Symbol má více jednotek než je definováno"
 
 #: eeschema/erc_item.cpp:158
-#, fuzzy
 msgid "Symbol has units that are not placed"
-msgstr "Symbol má více jednotek než je definováno"
+msgstr "Symbol má jednotky, které nejsou umístěny"
 
 #: eeschema/erc_item.cpp:162
-#, fuzzy
 msgid "Symbol has input pins that are not placed"
-msgstr "Symbol má více jednotek než je definováno"
+msgstr "Symbol má vstupní vývody, které nejsou umístěny"
 
 #: eeschema/erc_item.cpp:166
-#, fuzzy
 msgid "Symbol has bidirectional pins that are not placed"
-msgstr "Symbol má více jednotek než je definováno"
+msgstr "Symbol má obousměrné vývody, které nejsou umístěny"
 
 #: eeschema/erc_item.cpp:170
-#, fuzzy
 msgid "Symbol has power input pins that are not placed"
-msgstr "Symbol má více jednotek než je definováno"
+msgstr "Symbol má napájecí vstupní vývody, které nejsou umístěny"
 
 #: eeschema/erc_item.cpp:174
 msgid "Units of same symbol have different values"
@@ -12760,12 +12727,10 @@ msgid "Vertical"
 msgstr "Vertikální"
 
 #: eeschema/fields_grid_table.cpp:341
-#, fuzzy
 msgid "Show Name"
-msgstr "Zobrazit síť"
+msgstr "Zobrazit název"
 
 #: eeschema/fields_grid_table.cpp:352
-#, fuzzy
 msgid "Allow Autoplacement"
 msgstr "Povolit automatické umístění"
 
@@ -13058,9 +13023,8 @@ msgstr ""
 "zobrazena pokaždé při spuštění editoru schémat."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1698
-#, fuzzy
 msgid "Derived from"
-msgstr "Odvozeno od symbolu:"
+msgstr "Odvozeno od"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
 #: kicad/pcm/pcm.cpp:798 pcbnew/footprint.cpp:1023 pcbnew/zone.cpp:595
@@ -13135,14 +13099,14 @@ msgid "Pin %s [%s, %s]"
 msgstr "Vývod %s [%s, %s]"
 
 #: eeschema/lib_pin.cpp:1349
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
-msgstr "Vývod %s [%s, %s, %s]"
+msgstr "Skrytý vývod %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1357
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s]"
-msgstr "Vývod %s [%s, %s]"
+msgstr "Skrytý vývod %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:457 eeschema/sch_shape.cpp:407
 #, c-format
@@ -13313,18 +13277,22 @@ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr "Nepodařilo se vygenerovat název pro '%s': překročen UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
-msgstr "Chyba načítání knihovny simulačních modelů '%s': %s"
+msgstr ""
+"Chyba čtení simulačního modelu ze symbolu '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model library '%s':\n"
 "%s"
-msgstr "Chyba načítání knihovny simulačních modelů '%s': %s"
+msgstr ""
+"Chyba při čtení knihovny simulačních modelů '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:402
 #, c-format
@@ -13883,9 +13851,8 @@ msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:581
-#, fuzzy
 msgid "Record 'PIECHART' not handled."
-msgstr "Horká klávesa nebyla obsloužena"
+msgstr "Záznam 'PIECHART' není zpracován."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:700
 msgid "Compile mask not currently supported."
@@ -15051,38 +15018,32 @@ msgid "There are NaN elements in a matrix."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:160
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatná hodnota R_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:165
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatná hodnota L_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:170
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatná hodnota C_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:184
 msgid "Checking pin "
 msgstr "Kontrola vývodů "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:189
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Název vývodu nesmí být prázdný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:194
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "Název proměnné nemůže být prázdný."
+msgstr "Název signálu nemůže být prázdný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:199
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Název modelu nemůže být prázdný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:204
 msgid "Rpin is not valid."
@@ -15097,23 +15058,20 @@ msgid "Cpin is not valid."
 msgstr "Cpin není platný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:228
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Název součásti nemůže být prázdný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:233
 msgid "Checking component "
 msgstr "Kontrola komponent "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:238
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Součástka: výrobce nemůže být prázdný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:244
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "Hodnota součástky"
+msgstr "Součástka: Neplatné pouzdro."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:250
 msgid "Component: no pin"
@@ -15132,9 +15090,8 @@ msgid "There is an invalid current in an IV table"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:415
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "Neplatný"
+msgstr "Neplatný R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:419
 #, fuzzy
@@ -15147,9 +15104,8 @@ msgid "Invalid rising dv/dt."
 msgstr "Neplatná hodnota vlastnosti"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:439
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Název modelu nemůže být prázdný"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:444
 msgid "Checking model "
@@ -15160,57 +15116,48 @@ msgid "Undefined model type"
 msgstr "Nedefinovaný typ modelu"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatná hodnota Vinh."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:460
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatná hodnota Vinl."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:465
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatná hodnota R_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatná hodnota C_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:475
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "neplatná hodnota V_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:480
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatná hodnota V_meas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:485
 msgid "C_comp is invalid."
 msgstr "C_comp je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:490
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Zvýšení teploty"
+msgstr "Rozsah teplot je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:515
 msgid "Voltage Range is invalid."
 msgstr "Rozsah napětí je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:521
-#, fuzzy
 msgid "Invalid pulldown."
-msgstr "Neplatné jméno vývodu"
+msgstr "Neplatný pulldown."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:526
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatný pullup."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:531
 #, fuzzy
@@ -15659,9 +15606,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sim/sim_model_kibis.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS file '%s'"
-msgstr "Neplatný IBIS model '%s'"
+msgstr "Neplatný soubor IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:87
 #, c-format
@@ -15787,11 +15734,12 @@ msgid "Spice Simulator"
 msgstr "Spice Simulátor"
 
 #: eeschema/sim/sim_plot_frame.cpp:489 eeschema/sim/sim_plot_frame.cpp:1489
-#, fuzzy
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
-msgstr "Během exportu netlistu došlo k chybám, přerušeno."
+msgstr ""
+"Chyby během generování netlistu; simulace přerušena.\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:508 eeschema/sim/sim_plot_frame.cpp:1887
 msgid "Another simulation is already running."
@@ -15812,12 +15760,11 @@ msgstr "Chyba: typ simulace nepodporuje vykreslování!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:732
 msgid " (mag)"
-msgstr ""
+msgstr " (mag)"
 
 #: eeschema/sim/sim_plot_frame.cpp:734
-#, fuzzy
 msgid " (phase)"
-msgstr "AC fáze:"
+msgstr " (fáze)"
 
 #: eeschema/sim/sim_plot_frame.cpp:846 eeschema/sim/sim_plot_frame.cpp:1706
 msgid "Signal"
@@ -18071,9 +18018,8 @@ msgid "Change Symbol Name"
 msgstr "Změnit název symbolu"
 
 #: eeschema/tools/symbol_editor_control.cpp:341
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Název symbolu nemůže být prázdný."
 
 #: eeschema/tools/symbol_editor_control.cpp:529
 #: eeschema/tools/symbol_editor_control.cpp:567
@@ -19297,9 +19243,8 @@ msgid "Show drawing sheet border and title block"
 msgstr "Zobrazit okraj listu a rohové razítko"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:140
-#, fuzzy
 msgid "Show drawing sheet page limits"
-msgstr "Zobrazit okraje strany"
+msgstr "Zobrazit okraje strannek kreslicího listu"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:142
 msgid "PCB Background"
@@ -19409,20 +19354,18 @@ msgstr "Selhaly výstupní data"
 
 #: kicad/cli/command_export_pcb_base.cpp:35
 #: kicad/cli/command_export_pcb_step.cpp:87
-#, fuzzy
 msgid "Output file name"
-msgstr "Názvy souborů listu"
+msgstr "Název výstupního souboru"
 
 #: kicad/cli/command_export_pcb_base.cpp:37
 #: kicad/cli/command_export_pcb_step.cpp:89
-#, fuzzy
 msgid "Input file"
-msgstr "Vstupní vývod"
+msgstr "Vstupní soubor"
 
 #: kicad/cli/command_export_pcb_base.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name \"%s\"\n"
-msgstr "Neplatný název vlastnosti"
+msgstr "Neplatný název vrstvy \"%s\"\n"
 
 #: kicad/cli/command_export_pcb_base.cpp:91
 msgid ""
@@ -19430,9 +19373,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_export_pcb_base.cpp:107
-#, fuzzy
 msgid "At least one or more layers must be specified\n"
-msgstr "Některé soubory projektu nelze zálohovat."
+msgstr "Musí být zadána alespoň jedna nebo více vrstev\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:47
 msgid "Valid options excellon, gerber."
@@ -19461,9 +19403,8 @@ msgid "Minimal header"
 msgstr "Minimální hlavička"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files file"
-msgstr "PTH a NPTH v jednom souboru"
+msgstr "PTH a NPTH v samostatných souborech"
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
 msgid "Generate map / summary of drill hits"
@@ -19474,45 +19415,38 @@ msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_drill.cpp:87
-#, fuzzy
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr "Vytvořit soubor pozic pouzder pro výběr a umístění"
+msgstr "Generovat nezávislé soubory pro díry NPTH a PTH"
 
 #: kicad/cli/command_export_pcb_drill.cpp:92
 msgid "Precision of gerber coordinates (5 or 6)"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_drill.cpp:109
-#, fuzzy
 msgid "Output must be a directory\n"
-msgstr "Výstupní adresář:"
+msgstr "Výstup musí být adresář\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
-#, fuzzy
 msgid "Invalid drill format\n"
-msgstr "Neplatný formát souboru archívu."
+msgstr "Neplatný formát vrtání\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:141
 #: kicad/cli/command_export_pcb_dxf.cpp:97
 #: kicad/cli/command_export_pcb_pos.cpp:140
-#, fuzzy
 msgid "Invalid units specified\n"
-msgstr "Neplatný prefix jednotky"
+msgstr "Zadány neplatné jednotky\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:165
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "Uvedeno neplatné pouzdro"
+msgstr "Zadán neplatný formát nul\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:193
-#, fuzzy
 msgid "Invalid map format specified\n"
-msgstr "Uvedeno neplatné pouzdro"
+msgstr "Zadán neplatný formát mapy\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
-#, fuzzy
 msgid "Invalid origin mode specified\n"
-msgstr "Uvedeno neplatné pouzdro"
+msgstr "Zadán neplatný režim počátku\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:220
 #: kicad/cli/command_export_pcb_gerber.cpp:113
@@ -19522,22 +19456,19 @@ msgstr ""
 #: kicad/cli/command_export_pcb_dxf.cpp:44
 #: kicad/cli/command_export_pcb_gerber.cpp:44
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Include the reference designator text"
-msgstr "Vykreslit označení reference"
+msgstr "Zahrnout označení reference"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:49
 #: kicad/cli/command_export_pcb_gerber.cpp:49
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Include the value text"
-msgstr "Zahrnout t&extové položky"
+msgstr "Zahrnout textové hodnoty"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:325
-#, fuzzy
 msgid "Plot graphic items using their contours"
-msgstr "Zobrazit pouze obrys grafických prvků"
+msgstr "Vykreslit grafické prvky pomocí jejich obrysů"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:60
 msgid "Output units, valid options: mm, in"
@@ -19548,9 +19479,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_pdf.cpp:78
 #: kicad/cli/command_export_pcb_pos.cpp:99
 #: kicad/cli/command_export_pcb_svg.cpp:80
-#, fuzzy
 msgid "Board file does not exist or is not accessible\n"
-msgstr "Deska \"%s\" neexistuje. Chcete ji vytvořit?"
+msgstr "Soubor desky neexistuje nebo není přístupný\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:54
 #: kicad/cli/command_export_pcb_pdf.cpp:49
@@ -19559,14 +19489,12 @@ msgid "Include the border and title block"
 msgstr "Kreslit hranice a název bloku"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:59
-#, fuzzy
 msgid "Do not use the extended X2 format"
-msgstr "Použít rozšířený formát X2 (doporučeno)"
+msgstr "Nepoužívat rozšířený formát X2"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:64
-#, fuzzy
 msgid "Do not generate netlist attributes"
-msgstr "Zahrnout atributy netlist"
+msgstr "Negenerovat atributy netlistu"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:69
 #: pcbnew/dialogs/dialog_plot_base.cpp:207
@@ -19574,9 +19502,8 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Odečíst pájecí masku z potisku"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:74
-#, fuzzy
 msgid "Disable aperature macros"
-msgstr "Zakázat makra otvorů (nedoporučuje se)"
+msgstr "Zakázat makra apertur"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:80
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
@@ -19586,9 +19513,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_svg.cpp:51
 #: kicad/cli/command_export_sch_pdf.cpp:41
 #: kicad/cli/command_export_sch_svg.cpp:41
-#, fuzzy
 msgid "Black and white only"
-msgstr "Černobíle"
+msgstr "Pouze černobílá"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:61
 #: kicad/cli/command_export_pcb_svg.cpp:48
@@ -19616,55 +19542,46 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:64
-#, fuzzy
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr "Použít soubor vrtání/umístění jako počátek"
+msgstr "Použít soubor vrtání/umístění jako počátek (pouze ascii nebo csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:69
-#, fuzzy
 msgid "Include only SMD footprints (ascii or csv only)"
-msgstr "Zahrnout pouze SMD pouzdra"
+msgstr "Zahrnout pouze SMD pouzdra (pouze ascii nebo csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:75
-#, fuzzy
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr "Vyloučit všechna pouzdra s průchozí dírou plošek"
+msgstr "Vyloučit všechna pouzdra s průchozí dírou plošek (pouze ascii nebo csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:80
-#, fuzzy
 msgid "Include board edge layer (gerber only)"
-msgstr "Zahrnout vrstvu okraje desky"
+msgstr "Zahrnout vrstvu okraje desky (pouze Gerber)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:124
 #: kicad/cli/command_export_sch_bom.cpp:61
 #: kicad/cli/command_export_sch_netlist.cpp:81
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "Neplatná šířka spoje"
+msgstr "Neplatný formát\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:150
 msgid "\"both\" not supported for gerber format\n"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:166
-#, fuzzy
 msgid "Invalid side specified\n"
-msgstr "Uvedeno neplatné pouzdro"
+msgstr "Zadána neplatná strana\n"
 
 #: kicad/cli/command_export_pcb_step.cpp:48
-#, fuzzy
 msgid "Use Drill Origin for output origin"
-msgstr "Použít soubor vrtání/umístění jako počátek"
+msgstr "Použít počáteční bod vrtání pro výstupní počáteční bod"
 
 #: kicad/cli/command_export_pcb_step.cpp:53
-#, fuzzy
 msgid "Use Grid Origin for output origin"
-msgstr "Použít počátek mřížky"
+msgstr "Použít počáteční bod mřížky pro výstupní počáteční bod"
 
 #: kicad/cli/command_export_pcb_step.cpp:58
-#, fuzzy
 msgid "Exclude 3D models for components with 'virtual' attribute"
-msgstr "Přepnout zobrazení 3D modelů 'virtuálního' typu"
+msgstr "Vyloučit 3D modely pro komponenty s atributem 'virtual'"
 
 #: kicad/cli/command_export_pcb_step.cpp:63
 msgid ""
@@ -19672,14 +19589,12 @@ msgid ""
 msgstr "Nahradit modely STEP nebo IGS se stejným názvem namísto modelů VRML"
 
 #: kicad/cli/command_export_pcb_step.cpp:68
-#, fuzzy
 msgid "Overwrite output file"
-msgstr "Přepsat starý soubor"
+msgstr "Přepsat výstupní soubor"
 
 #: kicad/cli/command_export_pcb_step.cpp:73
-#, fuzzy
 msgid "Only generate a board with no components"
-msgstr "Vytvořit soubory pro zhotovení"
+msgstr "Generovat pouze desku bez komponent"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Minimum distance between points to treat them as separate ones"
@@ -19709,9 +19624,8 @@ msgstr ""
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_pdf.cpp:69
 #: kicad/cli/command_export_sch_svg.cpp:69
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "Schéma '%s' neexistuje.  Chcete ho vytvořit?"
+msgstr "Soubor schématu neexistuje nebo není přístupný\n"
 
 #: kicad/cli/command_export_sch_netlist.cpp:36
 msgid ""
@@ -19735,9 +19649,8 @@ msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr ""
 
 #: kicad/cli/command_fp_upgrade.cpp:51
-#, fuzzy
 msgid "Footprint path does not exist or is not accessible\n"
-msgstr "Cesta knihovny pouzder '%s' neexistuje (nebo není adresář)."
+msgstr "Cesta pouzdra neexistuje nebo není přístupná\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -21355,7 +21268,6 @@ msgstr ""
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21375,6 +21287,7 @@ msgstr ""
 "___Z<sub>vst</sub>__ požadovaná vstupní impedance v &#x2126;<br>\n"
 "___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
 "\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
 "___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>vst</sub> &middot; Z<sub>vyst</"
@@ -21401,7 +21314,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21421,10 +21333,11 @@ msgstr ""
 "___Z<sub>vst</sub>___ požadovaná vstupní impedance v &#x2126;<br>\n"
 "___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
 "\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = 2&middot;&radic;(L &middot; Z<sub>vst</sub> &middot; Z<sub>vyst</"
-"sub>) / (L&minus;1)___<br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>vst</sub> &middot; "
+"Z<sub>vyst</sub>) / (L&minus;1)___<br>\n"
 "___R1 = Z<sub>vst</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>vyst</sub> &middot; A &minus; R2___\n"
 
@@ -34718,14 +34631,12 @@ msgid "Error creating svg file"
 msgstr "Chyba čtení souboru."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:508
-#, fuzzy
 msgid "Saving footprint library\n"
-msgstr "Spravovat knihovny pouzder"
+msgstr "Ukládání knihovny pouzder\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:522
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "Knihovna pouzdra není povolena."
+msgstr "Knihovna pouzdra nebyla aktualizována\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"

@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-29 17:28-0800\n"
-"PO-Revision-Date: 2022-11-30 00:09+0000\n"
+"PO-Revision-Date: 2022-12-03 01:49+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -277,9 +277,9 @@ msgstr "設定 (&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2728
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "ビューポート(Alt+Tab):"
+msgstr "ビューポート(%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2737
@@ -12449,9 +12449,8 @@ msgstr "シンボル ライブラリー テーブル '%s' のロード中にエ�
 #: eeschema/eeschema_jobs_handler.cpp:137
 #: eeschema/eeschema_jobs_handler.cpp:170
 #: eeschema/eeschema_jobs_handler.cpp:263
-#, fuzzy
 msgid "Failed to load schematic file\n"
-msgstr "回路図 \"%s\" のロードに失敗しました"
+msgstr "回路図 \"%s\" のロードに失敗しました\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:181
 #: eeschema/eeschema_jobs_handler.cpp:278
@@ -12462,19 +12461,16 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:190
 #: eeschema/eeschema_jobs_handler.cpp:288
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "警告: 重複したニックネーム"
+msgstr "警告: 重複したニックネーム.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:230
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "未知の波形タイプです"
+msgstr "未知のフォーマットのネットリストです。\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:333 pcbnew/pcbnew_jobs_handler.cpp:492
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "ファイル %s をロードできません"
+msgstr "ライブラリーをロードできません\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:342
 #, fuzzy
@@ -12482,14 +12478,12 @@ msgid "Saving symbol library in updated format\n"
 msgstr "不正なシンボル ライブラリー識別子"
 
 #: eeschema/eeschema_jobs_handler.cpp:351 pcbnew/pcbnew_jobs_handler.cpp:516
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "アクティブなライブラリーがありません"
+msgstr "ライブラリーを保存できません\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:357
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "シンボル ライブラリーが有効になっていません。"
+msgstr "シンボル ライブラリーは更新されていません\n"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Input Pin"
@@ -19494,9 +19488,8 @@ msgid "Output must be a directory\n"
 msgstr "出力ディレクトリー:"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
-#, fuzzy
 msgid "Invalid drill format\n"
-msgstr "不正なアーカイブ ファイル フォーマットです。"
+msgstr "不正なドリル フォーマットです\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:141
 #: kicad/cli/command_export_pcb_dxf.cpp:97
@@ -19553,9 +19546,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_pdf.cpp:78
 #: kicad/cli/command_export_pcb_pos.cpp:99
 #: kicad/cli/command_export_pcb_svg.cpp:80
-#, fuzzy
 msgid "Board file does not exist or is not accessible\n"
-msgstr "基板 \"%s\" は存在しません。新規作成しますか?"
+msgstr "基板ファイルは存在しないかアクセス不可です\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:54
 #: kicad/cli/command_export_pcb_pdf.cpp:49
@@ -19644,9 +19636,8 @@ msgstr "基板外形レイヤーを含む"
 #: kicad/cli/command_export_pcb_pos.cpp:124
 #: kicad/cli/command_export_sch_bom.cpp:61
 #: kicad/cli/command_export_sch_netlist.cpp:81
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "不正な ramp データ"
+msgstr "不正な フォーマットです\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:150
 msgid "\"both\" not supported for gerber format\n"
@@ -19716,9 +19707,8 @@ msgstr ""
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_pdf.cpp:69
 #: kicad/cli/command_export_sch_svg.cpp:69
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "回路図 '%s' は存在しません。新規作成しますか?"
+msgstr "回路図ファイルは存在しないかアクセス不可です\n"
 
 #: kicad/cli/command_export_sch_netlist.cpp:36
 msgid ""
@@ -19742,11 +19732,8 @@ msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr ""
 
 #: kicad/cli/command_fp_upgrade.cpp:51
-#, fuzzy
 msgid "Footprint path does not exist or is not accessible\n"
-msgstr ""
-"フットプリント ライブラリー パス '%s' は存在しません。(あるいはディレクトリで"
-"はありません)"
+msgstr "フットプリントのパスが存在しないか、アクセス不可です\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -33105,14 +33092,13 @@ msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:346
 #: pcbnew/exporters/step/exporter_step.cpp:351
-#, fuzzy
 msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr ""
 "\n"
-"** STEP ファイルのエクスポート中にエラーが発生しました。エクスポートが中止さ"
-"れました。**\n"
+"** STEP ファイルのエクスポート中にエラーが発生しました。エクスポートの処理は"
+"中止されました。**\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:361
 msgid ""
@@ -35062,14 +35048,12 @@ msgid "Error creating svg file"
 msgstr "svg ファイルの作成中にエラーが発生しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:508
-#, fuzzy
 msgid "Saving footprint library\n"
-msgstr "フットプリント ライブラリーを管理"
+msgstr "フットプリント ライブラリーを保存\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:522
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "フットプリント ライブラリーが有効になっていません。"
+msgstr "フットプリント ライブラリーが更新できませんでした\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -40414,9 +40398,9 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "%s のネットのラッツネストを表示/非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:2473
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
-msgstr "プリセット (Ctrl+Tab):"
+msgstr "プリセット (%s+Tab):"
 
 #: pcbnew/widgets/appearance_controls.cpp:2495
 msgid "Save preset..."
