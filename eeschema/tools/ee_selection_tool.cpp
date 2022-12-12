@@ -1422,13 +1422,6 @@ bool EE_SELECTION_TOOL::selectMultiple()
                                 selected = true;
                                 flags |= ENDPOINT;
                             }
-
-                            if( ( selected && selectionRect.Contains( line->GetMidPoint() ) )
-                                || ( !selected && line->HitTest( selectionRect, false ) ) )
-                            {
-                                selected = true;
-                                flags |= STARTPOINT | ENDPOINT;
-                            }
                         }
                     }
                     else
