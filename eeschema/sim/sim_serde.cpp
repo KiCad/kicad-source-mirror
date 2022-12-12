@@ -315,5 +315,5 @@ std::string SIM_SERDE::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) 
     if( value == "" || value.find( " " ) != std::string::npos )
         value = fmt::format( "\"{}\"", value );
 
-    return fmt::format( "{}={}", aParam.info.name, value );
+    return fmt::format( "{}={}", name, value );
 }
