@@ -1404,20 +1404,24 @@ bool EE_SELECTION_TOOL::selectMultiple()
                     {
                         SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
-                        if( isGreedy && line->HitTest( selectionRect, false ) )
+                        if( ( isGreedy && line->HitTest( selectionRect, false ) )
+                            || ( selectionRect.Contains( line->GetEndPoint() )
+                                 && selectionRect.Contains( line->GetStartPoint() ) ) )
                         {
                             selected = true;
                             flags |= STARTPOINT | ENDPOINT;
                         }
                         else if( !isGreedy )
                         {
-                            if( selectionRect.Contains( line->GetStartPoint() ) )
+                            if( selectionRect.Contains( line->GetStartPoint() )
+                                && line->IsStartDangling() )
                             {
                                 selected = true;
                                 flags |= STARTPOINT;
                             }
 
-                            if( selectionRect.Contains( line->GetEndPoint() ) )
+                            if( selectionRect.Contains( line->GetEndPoint() )
+                                && line->IsEndDangling() )
                             {
                                 selected = true;
                                 flags |= ENDPOINT;
