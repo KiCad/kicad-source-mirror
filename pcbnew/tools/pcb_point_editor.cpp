@@ -684,8 +684,6 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
                                                    const VECTOR2I& aEnd,
                                                    const VECTOR2I& aCursor ) const
 {
-    VECTOR2I start = aStart;
-    VECTOR2I end = aEnd;
     VECTOR2I center = aCenter;
     bool     movingStart;
     bool     arcValid = true;
@@ -695,7 +693,6 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
 
     if( aStart != aArc->GetStart() )
     {
-        start       = aCursor;
         p1          = aEnd;
         p2          = aStart;
         p3          = aMid;
@@ -703,7 +700,6 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
     }
     else if( aEnd != aArc->GetEnd() )
     {
-        end         = aCursor;
         p1          = aStart;
         p2          = aEnd;
         p3          = aMid;
@@ -824,9 +820,9 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
             aArc->SetCenter( center );
 
             if( movingStart )
-                aArc->SetStart( start );
+                aArc->SetStart( aStart );
             else
-                aArc->SetEnd( end );
+                aArc->SetEnd( aEnd );
         }
     }
 }
