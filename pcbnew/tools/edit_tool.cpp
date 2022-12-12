@@ -738,6 +738,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference, bool aRe
     KIGFX::VIEW_CONTROLS* controls  = getViewControls();
     VECTOR2I              originalCursorPos = controls->GetCursorPosition();
 
+    std::string tool = aEvent.GetCommandStr().get();
+    editFrame->PushTool( tool );
+
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. KiCad old-style hover selection)
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
@@ -751,7 +754,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference, bool aRe
             frame()->Settings().m_AllowFreePads && !m_isFootprintEditor );
 
     if( m_dragging || selection.Empty() )
+    {
+        editFrame->PopTool( tool );
         return 0;
+    }
 
     LSET     item_layers = selection.GetSelectionLayers();
     bool     is_hover    = selection.IsHover(); // N.B. This must be saved before the second call
@@ -777,10 +783,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference, bool aRe
     }
 
     if( selection.Empty() )
+    {
+        editFrame->PopTool( tool );
         return 0;
-
-    std::string tool = aEvent.GetCommandStr().get();
-    editFrame->PushTool( tool );
+    }
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
