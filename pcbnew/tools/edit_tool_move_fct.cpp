@@ -290,6 +290,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
     wxString              status;
     size_t                itemIdx = 0;
 
+    editFrame->PushTool( aEvent );
+
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. KiCad old-style hover selection)
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
@@ -303,7 +305,10 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
             !m_isFootprintEditor && cfg->m_AllowFreePads );
 
     if( m_dragging || selection.Empty() )
+    {
+        editFrame->PopTool( aEvent );
         return 0;
+    }
 
     LSET     item_layers = selection.GetSelectionLayers();
     bool     is_hover    = selection.IsHover(); // N.B. This must be saved before the second call
@@ -325,9 +330,10 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
     }
 
     if( selection.Empty() )
+    {
+        editFrame->PopTool( aEvent );
         return 0;
-
-    editFrame->PushTool( aEvent );
+    }
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
