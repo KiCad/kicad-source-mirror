@@ -27,9 +27,7 @@ namespace CLI
 {
 struct EXPORT_SCH_COMMAND : public COMMAND
 {
-    EXPORT_SCH_COMMAND();
-
-    int Perform( KIWAY& aKiway ) override;
+    EXPORT_SCH_COMMAND() : COMMAND( "export" ) {}
 };
 }
 

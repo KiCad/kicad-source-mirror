@@ -27,9 +27,7 @@ namespace CLI
 {
 struct EXPORT_PCB_COMMAND : public COMMAND
 {
-    EXPORT_PCB_COMMAND();
-
-    int Perform( KIWAY& aKiway ) override;
+    EXPORT_PCB_COMMAND() : COMMAND( "export" ) {}
 };
 }
 
