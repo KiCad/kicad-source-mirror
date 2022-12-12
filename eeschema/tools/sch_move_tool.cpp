@@ -529,6 +529,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     for( EDA_ITEM* item : selection )
                         static_cast<SCH_ITEM*>( item )->UpdateDanglingState( internalPoints );
                 }
+
                 // Generic setup
                 //
                 for( EDA_ITEM* item : selection )
@@ -550,17 +551,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     if( item->IsNew() )
                     {
-                        if( item->HasFlag( SELECTED_BY_DRAG ) && m_isDrag )
-                        {
-                            // Item was added in getConnectedDragItems
-                            saveCopyInUndoList( (SCH_ITEM*) item, UNDO_REDO::NEWITEM, appendUndo );
-                            appendUndo = true;
-                        }
-                        else
-                        {
-                            // Item was added in a previous command (and saved to undo by
-                            // that command)
-                        }
+                        // Item was added in a previous command (and saved to undo by
+                        // that command)
                     }
                     else if( item->GetParent() && item->GetParent()->IsSelected() )
                     {
@@ -1183,7 +1175,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                 line->SetFlags( STARTPOINT );
 
                 if( line->HasFlag( SELECTED ) || line->HasFlag( SELECTED_BY_DRAG ) )
+                {
                     continue;
+                }
                 else
                 {
                     line->SetFlags( SELECTED_BY_DRAG );
@@ -1195,7 +1189,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                 line->SetFlags( ENDPOINT );
 
                 if( line->HasFlag( SELECTED ) || line->HasFlag( SELECTED_BY_DRAG ) )
+                {
                     continue;
+                }
                 else
                 {
                     line->SetFlags( SELECTED_BY_DRAG );
@@ -1222,6 +1218,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                         newWire->StoreAngle( ( line->Angle() + ANGLE_90 ).Normalize() );
                         aList.push_back( newWire );
 
+                        saveCopyInUndoList( newWire, UNDO_REDO::NEWITEM, aAppendUndo );
+                        aAppendUndo = true;
+
                         if( aPoint != line->GetStartPoint() && aPoint != line->GetEndPoint() )
                         {
                             // Split line in half
@@ -1245,9 +1244,6 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                             junction->SetFlags( SELECTED_BY_DRAG );
                             saveCopyInUndoList( junction, UNDO_REDO::NEWITEM, aAppendUndo );
                             aAppendUndo = true;
-
-                            m_frame->AddToScreen( secondHalf, m_frame->GetScreen() );
-                            m_frame->AddToScreen( junction, m_frame->GetScreen() );
                         }
                         else
                         {
@@ -1308,6 +1304,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                         newWire = makeNewWire( pin, aSelectedItem, aPoint, aPoint );
                         newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
                         aList.push_back( newWire );
+
+                        saveCopyInUndoList( newWire, UNDO_REDO::NEWITEM, aAppendUndo );
+                        aAppendUndo = true;
                     }
                 }
             }
@@ -1323,6 +1322,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                 newWire = makeNewWire( test, aSelectedItem, aPoint, aPoint );
                 newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
                 aList.push_back( newWire );
+
+                saveCopyInUndoList( newWire, UNDO_REDO::NEWITEM, aAppendUndo );
+                aAppendUndo = true;
             }
 
             break;
@@ -1386,6 +1388,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                 newWire = makeNewWire( test, aSelectedItem, aPoint, aPoint );
                 newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
                 aList.push_back( newWire );
+
+                saveCopyInUndoList( newWire, UNDO_REDO::NEWITEM, aAppendUndo );
+                aAppendUndo = true;
             }
 
             break;
