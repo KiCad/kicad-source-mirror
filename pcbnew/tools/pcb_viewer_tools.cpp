@@ -33,8 +33,6 @@
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_viewer_tools.h>
-#include <view/view_controls.h>
-#include <wx/debug.h>
 
 
 bool PCB_VIEWER_TOOLS::Init()

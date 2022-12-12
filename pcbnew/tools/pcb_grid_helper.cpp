@@ -378,10 +378,10 @@ std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
     std::set<BOARD_ITEM*> items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
 
-    KIGFX::VIEW*                  view = m_toolMgr->GetView();
-    RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
-    const std::set<unsigned int>& activeLayers = settings->GetHighContrastLayers();
-    bool                          isHighContrast = settings->GetHighContrast();
+    KIGFX::VIEW*         view = m_toolMgr->GetView();
+    RENDER_SETTINGS*     settings = view->GetPainter()->GetSettings();
+    const std::set<int>& activeLayers = settings->GetHighContrastLayers();
+    bool                 isHighContrast = settings->GetHighContrast();
 
     view->Query( aArea, selectedItems );
 
@@ -415,10 +415,10 @@ std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
 void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom,
                                       const SELECTION_FILTER_OPTIONS* aSelectionFilter )
 {
-    KIGFX::VIEW*                  view = m_toolMgr->GetView();
-    RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
-    const std::set<unsigned int>& activeLayers = settings->GetHighContrastLayers();
-    bool                          isHighContrast = settings->GetHighContrast();
+    KIGFX::VIEW*         view = m_toolMgr->GetView();
+    RENDER_SETTINGS*     settings = view->GetPainter()->GetSettings();
+    const std::set<int>& activeLayers = settings->GetHighContrastLayers();
+    bool                 isHighContrast = settings->GetHighContrast();
 
     auto handlePadShape =
             [&]( PAD* aPad )

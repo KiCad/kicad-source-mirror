@@ -384,8 +384,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         []( const VECTOR2I& aWhere, GENERAL_COLLECTOR& aCollector,
                             PCB_SELECTION_TOOL* aTool )
                         {
-                            VECTOR2I location = aWhere;
-                            int      accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+                            int accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
                             std::set<EDA_ITEM*> remove;
 
                             for( EDA_ITEM* item : aCollector )
@@ -394,8 +393,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                                 {
                                     ZONE* zone = static_cast<ZONE*>( item );
 
-                                    if( !zone->HitTestForCorner( location, accuracy * 2 )
-                                            && !zone->HitTestForEdge( location, accuracy ) )
+                                    if( !zone->HitTestForCorner( aWhere, accuracy * 2 )
+                                            && !zone->HitTestForEdge( aWhere, accuracy ) )
                                     {
                                         remove.insert( zone );
                                     }
@@ -649,7 +648,7 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
 
         if( !lockedItems.empty() )
         {
-            DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), lockedItems.size() );
+            DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), (int) lockedItems.size() );
 
             switch( dlg.ShowModal() )
             {
@@ -1208,7 +1207,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
     PROF_TIMER refreshTimer;
     double     refreshIntervalMs = 500; // Refresh display with this interval to indicate progress
-    int        lastSelectionSize = m_selection.GetSize();
+    int        lastSelectionSize = (int) m_selection.GetSize();
 
     auto connectivity = board()->GetConnectivity();
 
@@ -1300,7 +1299,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
         {
             expand = false;
 
-            for( int i = activePts.size() - 1; i >= 0; --i )
+            for( int i = (int) activePts.size() - 1; i >= 0; --i )
             {
                 VECTOR2I pt = activePts[i].first;
                 LSET     layerSetCu = activePts[i].second & allCuMask;
@@ -1546,7 +1545,7 @@ int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
     bool select = aEvent.IsAction( &PCB_ACTIONS::selectNet );
 
     // If we've been passed an argument, just select that netcode1
-    int netcode = aEvent.Parameter<intptr_t>();
+    int netcode = (int) aEvent.Parameter<intptr_t>();
 
     if( netcode > 0 )
     {
@@ -1847,7 +1846,7 @@ void PCB_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
 #endif // DEFAULT_PCBNEW_CODE
 
 #ifndef DEFAULT_PCBNEW_CODE // Do the scaled zoom
-    auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+    auto bbSize = bbox.Inflate( KiROUND( bbox.GetWidth() * 0.2 ) ).GetSize();
     auto screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
 
     // This code tries to come up with a zoom factor that doesn't simply zoom in
@@ -2345,10 +2344,10 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
     if( settings->GetHighContrast() )
     {
-        std::set<unsigned int> activeLayers = settings->GetHighContrastLayers();
-        bool                   onActiveLayer = false;
+        const std::set<int> activeLayers = settings->GetHighContrastLayers();
+        bool                onActiveLayer = false;
 
-        for( unsigned int layer : activeLayers )
+        for( int layer : activeLayers )
         {
             // NOTE: Only checking the regular layers (not GAL meta-layers)
             if( layer < PCB_LAYER_ID_COUNT && aItem->IsOnLayer( ToLAYER_ID( layer ) ) )
@@ -2699,7 +2698,7 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
 bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
     const unsigned GRIP_MARGIN = 20;
-    double         margin = getView()->ToWorld( GRIP_MARGIN );
+    int            margin = KiROUND( getView()->ToWorld( GRIP_MARGIN ) );
 
     // Check if the point is located close to any of the currently selected items
     for( EDA_ITEM* item : m_selection )
@@ -2889,7 +2888,8 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     // Prefer exact hits to sloppy ones
     constexpr int MAX_SLOP = 5;
 
-    int pixel = (int) aCollector.GetGuide()->OnePixelInIU();
+    int singlePixel = KiROUND( aCollector.GetGuide()->OnePixelInIU() );
+    int maxSlop = KiROUND( MAX_SLOP * aCollector.GetGuide()->OnePixelInIU() );
     int minSlop = INT_MAX;
 
     std::map<BOARD_ITEM*, int> itemsBySloppiness;
@@ -2897,7 +2897,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {
         BOARD_ITEM* item = aCollector[i];
-        int         itemSlop = hitTestDistance( where, item, MAX_SLOP * pixel );
+        int         itemSlop = hitTestDistance( where, item, maxSlop );
 
         itemsBySloppiness[ item ] = itemSlop;
 
@@ -2910,7 +2910,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     {
         for( std::pair<BOARD_ITEM*, int> pair : itemsBySloppiness )
         {
-            if( pair.second > minSlop + pixel )
+            if( pair.second > minSlop + singlePixel )
                 aCollector.Transfer( pair.first );
         }
     }
@@ -2927,16 +2927,16 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         double      area = 0.0;
 
         if( ( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
-                && static_cast<ZONE*>( item )->HitTestForEdge( where, MAX_SLOP * pixel / 2 ) )
+                && static_cast<ZONE*>( item )->HitTestForEdge( where, maxSlop / 2 ) )
         {
             // Zone borders are very specific, so make them "small"
-            area = MAX_SLOP * SEG::Square( pixel );
+            area = (double) SEG::Square( singlePixel ) * MAX_SLOP;
         }
         else if( item->Type() == PCB_VIA_T )
         {
             // Vias rarely hide other things, and we don't want them deferring to short track
             // segments underneath them -- so artificially reduce their size from πr² to 1.5r².
-            area = SEG::Square( static_cast<PCB_VIA*>( item )->GetDrill() / 2 ) * 1.5;
+            area = (double) SEG::Square( static_cast<PCB_VIA*>( item )->GetDrill() / 2 ) * 1.5;
         }
         else if( item->Type() == PCB_BITMAP_T )
         {

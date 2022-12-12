@@ -87,7 +87,7 @@ public:
     /**
      * Returns the set of currently high-contrast layers.
      */
-    const std::set<unsigned int> GetHighContrastLayers() const
+    const std::set<int> GetHighContrastLayers() const
     {
         return m_highContrastLayers;
     }
@@ -307,7 +307,7 @@ protected:
 
     PCB_LAYER_ID           m_activeLayer;        // The active layer (as shown by appearance mgr)
     wxString               m_layerName;
-    std::set<unsigned int> m_highContrastLayers; // High-contrast layers (both board layers and
+    std::set<int>          m_highContrastLayers; // High-contrast layers (both board layers and
                                                  //   synthetic GAL layers)
     COLOR4D m_layerColors[LAYER_ID_COUNT];       // Layer colors
     COLOR4D m_layerColorsHi[LAYER_ID_COUNT];     // Layer colors for highlighted objects
