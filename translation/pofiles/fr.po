@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 13:32+0100\n"
+"POT-Creation-Date: 2022-12-12 08:39-0800\n"
 "PO-Revision-Date: 2022-12-09 13:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -1525,7 +1525,7 @@ msgstr "Question"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:452
 #: eeschema/dialogs/dialog_plot_schematic.cpp:465
 #: eeschema/dialogs/dialog_plot_schematic.cpp:487
-#: eeschema/dialogs/dialog_sim_settings.cpp:279
+#: eeschema/dialogs/dialog_sim_command.cpp:282
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:146
 #: eeschema/files-io.cpp:407 eeschema/sheet.cpp:640
 #: eeschema/symbol_editor/symbol_editor.cpp:472
@@ -1618,7 +1618,7 @@ msgstr "Information"
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: common/confirm.cpp:395 eeschema/lib_field.cpp:542 eeschema/lib_pin.cpp:1150
+#: common/confirm.cpp:395 eeschema/lib_field.cpp:534 eeschema/lib_pin.cpp:1150
 #: eeschema/sch_field.cpp:766 eeschema/sch_pin.cpp:222
 #: gerbview/gerber_draw_item.cpp:695 gerbview/gerber_draw_item.cpp:696
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
@@ -1631,7 +1631,7 @@ msgstr "Confirmation"
 msgid "Yes"
 msgstr "Oui"
 
-#: common/confirm.cpp:395 eeschema/lib_field.cpp:542 eeschema/lib_pin.cpp:1150
+#: common/confirm.cpp:395 eeschema/lib_field.cpp:534 eeschema/lib_pin.cpp:1150
 #: eeschema/sch_field.cpp:766 eeschema/sch_pin.cpp:222
 #: gerbview/gerber_draw_item.cpp:695 gerbview/gerber_draw_item.cpp:696
 #: pcbnew/fp_text.cpp:299 pcbnew/fp_text.cpp:304 pcbnew/fp_textbox.cpp:312
@@ -2641,7 +2641,7 @@ msgid "Revision:"
 msgstr "Révision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
-#: eeschema/dialogs/dialog_netlist.cpp:439
+#: eeschema/dialogs/dialog_export_netlist.cpp:433
 msgid "Title:"
 msgstr "Titre:"
 
@@ -2737,8 +2737,8 @@ msgstr "Prévisualisation"
 #: eeschema/dialogs/dialog_annotate.cpp:94 eeschema/dialogs/dialog_bom.cpp:135
 #: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_erc.cpp:100 eeschema/dialogs/dialog_erc.cpp:429
+#: eeschema/dialogs/dialog_export_netlist.cpp:275
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
-#: eeschema/dialogs/dialog_netlist.cpp:279
 #: eeschema/dialogs/dialog_plot_schematic.cpp:75
 #: eeschema/dialogs/dialog_print_using_printer.cpp:146
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:130
@@ -3802,10 +3802,10 @@ msgstr "Style de Ligne"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:411
+#: eeschema/dialogs/dialog_sim_model.cpp:439
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
-#: eeschema/lib_field.cpp:544 eeschema/lib_text.cpp:400
+#: eeschema/lib_field.cpp:536 eeschema/lib_text.cpp:400
 #: eeschema/lib_textbox.cpp:470 eeschema/sch_field.cpp:768
 #: eeschema/sch_label.cpp:882 eeschema/sch_text.cpp:504
 #: eeschema/sch_textbox.cpp:449 include/stroke_params.h:80
@@ -3878,14 +3878,14 @@ msgstr "La feuille de dessin '%s' n'a pas été complètement  lue."
 #: common/drawing_sheet/ds_draw_item.cpp:121 common/eda_item.cpp:329
 #: common/eda_item.cpp:331 common/eda_item.cpp:362 common/eda_item.cpp:383
 #: common/eda_text.cpp:1032 eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/lib_field.cpp:540 eeschema/lib_text.cpp:398 eeschema/lib_text.h:55
+#: eeschema/lib_field.cpp:532 eeschema/lib_text.cpp:398 eeschema/lib_text.h:55
 #: eeschema/sch_field.cpp:764
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:145
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 pcbnew/fp_text.cpp:279
 #: pcbnew/fp_text.cpp:291 pcbnew/widgets/panel_selection_filter.cpp:187
 #: pcbnew/widgets/panel_selection_filter_base.cpp:33
-#: pcbnew/widgets/search_handlers.cpp:243
+#: pcbnew/widgets/search_handlers.cpp:237
 msgid "Text"
 msgstr "Texte"
 
@@ -4114,7 +4114,7 @@ msgid "Colors"
 msgstr "Couleurs"
 
 #: common/eda_base_frame.cpp:1031 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:139 eeschema/sch_edit_frame.cpp:1418
+#: eeschema/menubar.cpp:139 eeschema/sch_edit_frame.cpp:1422
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "Editeur de Schématique"
@@ -4252,7 +4252,7 @@ msgid "Inches"
 msgstr "Pouces"
 
 #: common/eda_draw_frame.cpp:150 pagelayout_editor/pl_editor_frame.cpp:164
-#: pcbnew/tools/drawing_tool.cpp:297 pcbnew/tools/edit_tool_move_fct.cpp:342
+#: pcbnew/tools/drawing_tool.cpp:297 pcbnew/tools/edit_tool_move_fct.cpp:341
 #: pcbnew/tools/pcb_actions.cpp:742
 msgid "Constrain to H, V, 45"
 msgstr "Contraindre à H, V, 45"
@@ -4420,7 +4420,7 @@ msgid "Hierarchical Label"
 msgstr "Label Hiérarchique"
 
 #: common/eda_item.cpp:368 eeschema/dialogs/dialog_symbol_fields_table.cpp:766
-#: eeschema/lib_field.cpp:537 eeschema/lib_field.h:80
+#: eeschema/lib_field.cpp:529 eeschema/lib_field.h:78
 #: eeschema/sch_label.cpp:190
 msgid "Field"
 msgstr "Champ"
@@ -4675,7 +4675,7 @@ msgstr "Gras+Italique"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:221
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:261
 #: eeschema/fields_grid_table.cpp:244 eeschema/fields_grid_table.cpp:584
-#: eeschema/fields_grid_table.cpp:729 eeschema/lib_field.cpp:552
+#: eeschema/fields_grid_table.cpp:729 eeschema/lib_field.cpp:544
 #: eeschema/lib_text.cpp:408 eeschema/pin_type.cpp:128
 #: eeschema/sch_field.cpp:776
 msgid "Left"
@@ -4687,7 +4687,7 @@ msgstr "Gauche"
 #: eeschema/fields_grid_table.cpp:237 eeschema/fields_grid_table.cpp:245
 #: eeschema/fields_grid_table.cpp:585 eeschema/fields_grid_table.cpp:595
 #: eeschema/fields_grid_table.cpp:731 eeschema/fields_grid_table.cpp:743
-#: eeschema/lib_field.cpp:553 eeschema/lib_field.cpp:562
+#: eeschema/lib_field.cpp:545 eeschema/lib_field.cpp:554
 #: eeschema/lib_text.cpp:409 eeschema/lib_text.cpp:418
 #: eeschema/sch_field.cpp:777 eeschema/sch_field.cpp:786
 #: gerbview/gerber_file_image.cpp:342 gerbview/gerber_file_image.cpp:345
@@ -4698,7 +4698,7 @@ msgstr "Centrer"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:221
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:261
 #: eeschema/fields_grid_table.cpp:246 eeschema/fields_grid_table.cpp:586
-#: eeschema/fields_grid_table.cpp:733 eeschema/lib_field.cpp:554
+#: eeschema/fields_grid_table.cpp:733 eeschema/lib_field.cpp:546
 #: eeschema/lib_text.cpp:410 eeschema/pin_type.cpp:127
 #: eeschema/sch_field.cpp:778
 msgid "Right"
@@ -4707,7 +4707,7 @@ msgstr "Droite"
 #: common/eda_text.cpp:1019
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:285
 #: eeschema/fields_grid_table.cpp:236 eeschema/fields_grid_table.cpp:594
-#: eeschema/fields_grid_table.cpp:741 eeschema/lib_field.cpp:561
+#: eeschema/fields_grid_table.cpp:741 eeschema/lib_field.cpp:553
 #: eeschema/lib_text.cpp:417 eeschema/sch_field.cpp:785
 msgid "Top"
 msgstr "Dessus"
@@ -4715,7 +4715,7 @@ msgstr "Dessus"
 #: common/eda_text.cpp:1021
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:285
 #: eeschema/fields_grid_table.cpp:238 eeschema/fields_grid_table.cpp:596
-#: eeschema/fields_grid_table.cpp:745 eeschema/lib_field.cpp:563
+#: eeschema/fields_grid_table.cpp:745 eeschema/lib_field.cpp:555
 #: eeschema/lib_text.cpp:419 eeschema/sch_field.cpp:787
 msgid "Bottom"
 msgstr "Dessous"
@@ -4765,7 +4765,7 @@ msgstr "Miroir"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:129
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:98
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
-#: eeschema/lib_field.cpp:542 eeschema/sch_field.cpp:766
+#: eeschema/lib_field.cpp:534 eeschema/sch_field.cpp:766
 #: eeschema/sch_pin.cpp:222 include/lib_table_grid.h:194
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:134
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:87 pcbnew/pcb_text.cpp:359
@@ -4967,11 +4967,11 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr ""
 "la table de librairies ne contient pas de librairie de nom logique '%s'."
 
-#: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:571
+#: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:572
 msgid "Added by Plugin and Content Manager"
 msgstr "Ajouté par le Gestionnaire de Plugin et de Contenu"
 
-#: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:599
+#: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:600
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Impossible de créer le chemin de la table des librairie globale '%s'."
@@ -5473,7 +5473,7 @@ msgstr "Désactiver la sélection"
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:130
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:410 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:438 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1233
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -6722,8 +6722,8 @@ msgid "<create net>"
 msgstr "<créer net>"
 
 #: common/widgets/net_selector.cpp:84
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:659
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:702
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:701
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:744
 msgid "Filter:"
 msgstr "Filtre:"
 
@@ -7906,7 +7906,8 @@ msgstr "Ajouter Générateur"
 msgid "Nickname '%s' already in use."
 msgstr "Un nom logique '%s' existe déjà."
 
-#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:753
+#: eeschema/dialogs/dialog_bom.cpp:419
+#: eeschema/dialogs/dialog_export_netlist.cpp:751
 msgid "Generator File"
 msgstr "Fichier Générateur"
 
@@ -8695,6 +8696,121 @@ msgstr "Effacer Marqueur"
 msgid "Electrical Rules Checker"
 msgstr "Contrôle des Règles Electriques"
 
+#: eeschema/dialogs/dialog_export_netlist.cpp:274
+#: eeschema/dialogs/dialog_export_netlist_base.h:73
+msgid "Export Netlist"
+msgstr "Exporter Netliste"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:317
+#: eeschema/sim/sim_plot_frame.cpp:473
+msgid "Simulator requires a fully annotated schematic."
+msgstr "La simulation nécessite un schéma complètement numéroté."
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:345
+#: eeschema/dialogs/dialog_export_netlist.cpp:392
+msgid "Use current sheet as root"
+msgstr "Utiliser la feuille actuelle comme racine"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:346
+#: eeschema/dialogs/dialog_export_netlist.cpp:393
+msgid "Export netlist only for the current sheet"
+msgstr "Exporter la netliste uniquement pour la feuille courante"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:351
+msgid "Save all voltages"
+msgstr "Sauvegarder toutes les tensions"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:352
+msgid "Write a directive to save all voltages (.save all)"
+msgstr "Ecrire une directive pour sauvegarder toutes les tensions (.save all)"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:357
+msgid "Save all currents"
+msgstr "Sauvegarder tous les courants"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:358
+msgid "Write a directive to save all currents (.probe alli)"
+msgstr "Ecrire une directive pour sauvegarder tous les courants (.probe alli)"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:364
+msgid "External simulator command:"
+msgstr "Commande simulateur externe :"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:365
+msgid ""
+"Enter the command line to run spice\n"
+"Usually <path to spice binary> %I\n"
+"%I will be replaced by the actual spice netlist name"
+msgstr ""
+"Entrez la ligne de commande pour exécuter spice\n"
+"Habituellement <path to spice binary> %I\n"
+"%I sera remplacé par le nom réel de la netliste spice</path>"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:379
+msgid "Create Netlist and Run Simulator Command"
+msgstr "Créer la Netlist et Exécuter la commande de simulation"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:443
+msgid "Netlist command:"
+msgstr "Commande netliste:"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:487
+msgid "Save Netlist File"
+msgstr "Sauver Fichier Netliste"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:535
+#, c-format
+msgid "%s Export"
+msgstr "Export %s"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:564
+#: eeschema/netlist_exporters/netlist_generator.cpp:55
+msgid "Exporting netlist requires a fully annotated schematic."
+msgstr ""
+"L'exportation de la net liste nécessite un schéma complètement numéroté."
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:694
+msgid "This plugin already exists."
+msgstr "Ce plugin existe déjà."
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:727
+msgid "You must provide a netlist generator command string"
+msgstr ""
+"Vous devez fournir une ligne de commande pour le générateur de netliste"
+
+#: eeschema/dialogs/dialog_export_netlist.cpp:733
+msgid "You must provide a netlist generator title"
+msgstr "Vous devez fournir un titre pour le générateur de netliste"
+
+#: eeschema/dialogs/dialog_export_netlist_base.cpp:52
+msgid "Add Generator..."
+msgstr "Ajouter Générateur..."
+
+#: eeschema/dialogs/dialog_export_netlist_base.cpp:55
+msgid "Remove Generator"
+msgstr "Supprimer Générateur"
+
+#: eeschema/dialogs/dialog_export_netlist_base.cpp:96
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
+#: eeschema/symbol_editor/symbol_editor.cpp:554
+#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
+#: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
+#: pcbnew/footprint_libraries_utils.cpp:1063
+msgid "Name:"
+msgstr "Nom:"
+
+#: eeschema/dialogs/dialog_export_netlist_base.cpp:103
+msgid "Command line to run the generator:"
+msgstr "Ligne de commande pour exécuter le générateur:"
+
+#: eeschema/dialogs/dialog_export_netlist_base.cpp:118
+msgid "Browse Generators..."
+msgstr "Examiner les Générateurs..."
+
+#: eeschema/dialogs/dialog_export_netlist_base.h:112
+msgid "Script Generator Properties"
+msgstr "Propriétés du Script Générateur"
+
 #: eeschema/dialogs/dialog_field_properties.cpp:190
 msgid "Power symbol value field text cannot be changed."
 msgstr "Le texte de la valeur des symboles  Power ne peut pas être modifié."
@@ -9221,7 +9337,7 @@ msgstr "Alignement V"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
-#: eeschema/fields_grid_table.cpp:346 eeschema/lib_field.cpp:548
+#: eeschema/fields_grid_table.cpp:346 eeschema/lib_field.cpp:540
 #: eeschema/lib_text.cpp:404 eeschema/lib_textbox.cpp:476
 #: eeschema/sch_field.cpp:772 eeschema/sch_label.cpp:888
 #: eeschema/sch_text.cpp:510 eeschema/sch_textbox.cpp:455
@@ -9253,7 +9369,7 @@ msgstr "Position Y"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:350 eeschema/lib_field.cpp:544
+#: eeschema/fields_grid_table.cpp:350 eeschema/lib_field.cpp:536
 #: eeschema/lib_text.cpp:400 eeschema/lib_textbox.cpp:470
 #: eeschema/sch_field.cpp:768 eeschema/sch_label.cpp:882
 #: eeschema/sch_text.cpp:504 eeschema/sch_textbox.cpp:449
@@ -9638,13 +9754,13 @@ msgid "Drawing Properties"
 msgstr "Propriétés de l'Élément Graphique"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:237
-#: eeschema/dialogs/dialog_symbol_properties.cpp:590
+#: eeschema/dialogs/dialog_symbol_properties.cpp:630
 msgid "References must start with a letter."
 msgstr "Les références doivent commencer par une lettre."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:257
 #: eeschema/dialogs/dialog_sheet_properties.cpp:200
-#: eeschema/dialogs/dialog_symbol_properties.cpp:607
+#: eeschema/dialogs/dialog_symbol_properties.cpp:647
 msgid "Fields must have a name."
 msgstr "Les champs doivent avoir un nom."
 
@@ -9675,16 +9791,16 @@ msgstr "Le nom '%s' est déjà utilisé."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:524
 #: eeschema/dialogs/dialog_sheet_properties.cpp:737
-#: eeschema/dialogs/dialog_symbol_properties.cpp:899
+#: eeschema/dialogs/dialog_symbol_properties.cpp:939
 #, c-format
 msgid "The first %d fields are mandatory."
 msgstr "Les %d premiers champs sont obligatoires."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:659
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:701
 msgid "Add Footprint Filter"
 msgstr "Ajouter Filtre Empreintes"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:702
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:744
 msgid "Edit Footprint Filter"
 msgstr "Éditer Filtre d'Empreintes"
 
@@ -9938,120 +10054,6 @@ msgstr "Accepter Nom"
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
 msgid "Migrate Buses"
 msgstr "Migration des Bus"
-
-#: eeschema/dialogs/dialog_netlist.cpp:278
-#: eeschema/dialogs/dialog_netlist_base.h:73
-msgid "Export Netlist"
-msgstr "Exporter Netliste"
-
-#: eeschema/dialogs/dialog_netlist.cpp:321 eeschema/sim/sim_plot_frame.cpp:475
-msgid "Simulator requires a fully annotated schematic."
-msgstr "La simulation nécessite un schéma complètement numéroté."
-
-#: eeschema/dialogs/dialog_netlist.cpp:349
-#: eeschema/dialogs/dialog_netlist.cpp:396
-msgid "Use current sheet as root"
-msgstr "Utiliser la feuille actuelle comme racine"
-
-#: eeschema/dialogs/dialog_netlist.cpp:350
-#: eeschema/dialogs/dialog_netlist.cpp:397
-msgid "Export netlist only for the current sheet"
-msgstr "Exporter la netliste uniquement pour la feuille courante"
-
-#: eeschema/dialogs/dialog_netlist.cpp:355
-msgid "Save all voltages"
-msgstr "Sauvegarder toutes les tensions"
-
-#: eeschema/dialogs/dialog_netlist.cpp:356
-msgid "Write a directive to save all voltages (.save all)"
-msgstr "Ecrire une directive pour sauvegarder toutes les tensions (.save all)"
-
-#: eeschema/dialogs/dialog_netlist.cpp:361
-msgid "Save all currents"
-msgstr "Sauvegarder tous les courants"
-
-#: eeschema/dialogs/dialog_netlist.cpp:362
-msgid "Write a directive to save all currents (.probe alli)"
-msgstr "Ecrire une directive pour sauvegarder tous les courants (.probe alli)"
-
-#: eeschema/dialogs/dialog_netlist.cpp:368
-msgid "External simulator command:"
-msgstr "Commande simulateur externe :"
-
-#: eeschema/dialogs/dialog_netlist.cpp:369
-msgid ""
-"Enter the command line to run spice\n"
-"Usually <path to spice binary> %I\n"
-"%I will be replaced by the actual spice netlist name"
-msgstr ""
-"Entrez la ligne de commande pour exécuter spice\n"
-"Habituellement <path to spice binary> %I\n"
-"%I sera remplacé par le nom réel de la netliste spice</path>"
-
-#: eeschema/dialogs/dialog_netlist.cpp:383
-msgid "Create Netlist and Run Simulator Command"
-msgstr "Créer la Netlist et Exécuter la commande de simulation"
-
-#: eeschema/dialogs/dialog_netlist.cpp:449
-msgid "Netlist command:"
-msgstr "Commande netliste:"
-
-#: eeschema/dialogs/dialog_netlist.cpp:493
-msgid "Save Netlist File"
-msgstr "Sauver Fichier Netliste"
-
-#: eeschema/dialogs/dialog_netlist.cpp:537
-#, c-format
-msgid "%s Export"
-msgstr "Export %s"
-
-#: eeschema/dialogs/dialog_netlist.cpp:566
-#: eeschema/netlist_exporters/netlist_generator.cpp:55
-msgid "Exporting netlist requires a fully annotated schematic."
-msgstr ""
-"L'exportation de la net liste nécessite un schéma complètement numéroté."
-
-#: eeschema/dialogs/dialog_netlist.cpp:696
-msgid "This plugin already exists."
-msgstr "Ce plugin existe déjà."
-
-#: eeschema/dialogs/dialog_netlist.cpp:729
-msgid "You must provide a netlist generator command string"
-msgstr ""
-"Vous devez fournir une ligne de commande pour le générateur de netliste"
-
-#: eeschema/dialogs/dialog_netlist.cpp:735
-msgid "You must provide a netlist generator title"
-msgstr "Vous devez fournir un titre pour le générateur de netliste"
-
-#: eeschema/dialogs/dialog_netlist_base.cpp:52
-msgid "Add Generator..."
-msgstr "Ajouter Générateur..."
-
-#: eeschema/dialogs/dialog_netlist_base.cpp:55
-msgid "Remove Generator"
-msgstr "Supprimer Générateur"
-
-#: eeschema/dialogs/dialog_netlist_base.cpp:96
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
-#: eeschema/symbol_editor/symbol_editor.cpp:554
-#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
-#: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
-#: pcbnew/footprint_libraries_utils.cpp:1063
-msgid "Name:"
-msgstr "Nom:"
-
-#: eeschema/dialogs/dialog_netlist_base.cpp:103
-msgid "Command line to run the generator:"
-msgstr "Ligne de commande pour exécuter le générateur:"
-
-#: eeschema/dialogs/dialog_netlist_base.cpp:118
-msgid "Browse Generators..."
-msgstr "Examiner les Générateurs..."
-
-#: eeschema/dialogs/dialog_netlist_base.h:112
-msgid "Script Generator Properties"
-msgstr "Propriétés du Script Générateur"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:52
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
@@ -10432,6 +10434,7 @@ msgid "An error occurred attempting to print the schematic."
 msgstr "Une erreur s'est produite lors de l'impression."
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:365
+#: eeschema/eeschema_printout.cpp:94
 #, c-format
 msgid "Print page %d"
 msgstr "Imprimer page %d"
@@ -10882,7 +10885,7 @@ msgid "A sheet must have a file specified."
 msgstr "Une feuille doit avoir un fichier spécifié."
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:127
-#: eeschema/lib_field.cpp:546 eeschema/lib_pin.cpp:1148
+#: eeschema/lib_field.cpp:538 eeschema/lib_pin.cpp:1148
 #: eeschema/lib_pin.cpp:1150 eeschema/lib_text.cpp:402
 #: eeschema/lib_textbox.cpp:474 eeschema/sch_field.cpp:770
 #: eeschema/sch_label.cpp:886 eeschema/sch_pin.cpp:220
@@ -10926,25 +10929,316 @@ msgstr "Propriétés de la feuille"
 msgid "Add signal by name:"
 msgstr "Ajouter signal par nom:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:214
+#: eeschema/dialogs/dialog_sim_command.cpp:116
+msgid "You need to select DC source"
+msgstr "Vous devez sélectionner la source DC"
+
+#: eeschema/dialogs/dialog_sim_command.cpp:220
+msgid "Source 1 and Source 2 must be different"
+msgstr "Source 1 et  Source 2 doivent être differentes"
+
+#: eeschema/dialogs/dialog_sim_command.cpp:282
+msgid "No valid simulation is configured."
+msgstr "Aucune simulation valide n’est configurée."
+
+#: eeschema/dialogs/dialog_sim_command.cpp:285
+msgid ""
+"A valid simulation can be configured by selecting a simulation tab, setting "
+"the simulation parameters and clicking the OK button with the tab selected."
+msgstr ""
+"Une simulation valide peut être configurée en sélectionnant un onglet de "
+"simulation, en définissant les paramètres de simulation et en cliquant sur "
+"le bouton OK avec l’onglet sélectionné."
+
+#: eeschema/dialogs/dialog_sim_command.cpp:289
+msgid "Exit Without Valid Simulation"
+msgstr "Sortie Sans Simulation Valide"
+
+#: eeschema/dialogs/dialog_sim_command.cpp:290
+msgid "Configure Valid Simulation"
+msgstr "Configurer Simulation Valide"
+
+#: eeschema/dialogs/dialog_sim_command.cpp:587
+#: eeschema/dialogs/dialog_sim_command_base.cpp:141
+#: eeschema/dialogs/dialog_sim_command_base.cpp:152
+#: eeschema/dialogs/dialog_sim_command_base.cpp:163
+#: eeschema/dialogs/dialog_sim_command_base.cpp:172
+#: eeschema/dialogs/dialog_sim_command_base.cpp:183
+#: eeschema/dialogs/dialog_sim_command_base.cpp:192
+msgid "Volts"
+msgstr "Volts"
+
+#: eeschema/dialogs/dialog_sim_command.cpp:588
+msgid "Amperes"
+msgstr "Ampères"
+
+#: eeschema/dialogs/dialog_sim_command.cpp:589
+#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:66
+#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:77
+#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:115
+#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:126
+#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:137
+msgid "Ohms"
+msgstr "Ohms"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:24
+#: eeschema/dialogs/dialog_sim_command_base.cpp:265
+msgid "Decade"
+msgstr "Decade"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:24
+#: eeschema/dialogs/dialog_sim_command_base.cpp:265
+msgid "Octave"
+msgstr "Octave"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:24
+#: eeschema/dialogs/dialog_sim_command_base.cpp:265
+msgid "Linear"
+msgstr "Lineaire"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:26
+#: eeschema/dialogs/dialog_sim_command_base.cpp:267
+msgid "Frequency scale"
+msgstr "Echelle de fréquence"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:37
+msgid "Number of points per decade:"
+msgstr "Nombre de points par décade:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:47
+msgid "Start frequency:"
+msgstr "Fréquence de départ:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:56
+#: eeschema/dialogs/dialog_sim_command_base.cpp:67
+msgid "Hertz"
+msgstr "Hertz"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:60
+msgid "Stop frequency:"
+msgstr "Fréquence de fin:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:81
+msgid "AC"
+msgstr "AC"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:91
+msgid "Source 2"
+msgstr "Source 2"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:96
+#: eeschema/dialogs/dialog_sim_command_base.cpp:102
+#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:120
+#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:136
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:170
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:268
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:244
+#: pcb_calculator/widgets/unit_selector.cpp:256
+msgid "V"
+msgstr "V"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:96
+#: eeschema/dialogs/dialog_sim_command_base.cpp:102
+msgid "I"
+msgstr "I"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:96
+#: eeschema/dialogs/dialog_sim_command_base.cpp:102
+msgid "R"
+msgstr "R"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:96
+#: eeschema/dialogs/dialog_sim_command_base.cpp:102
+msgid "TEMP"
+msgstr "TEMP"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:108
+msgid "Source:"
+msgstr "Source:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:112
+msgid "Sweep type:"
+msgstr "Type de balayage:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:116
+msgid "Source 1"
+msgstr "Source 1"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:132
+msgid "Starting value:"
+msgstr "Valeur de départ:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:156
+msgid "Final value:"
+msgstr "Valeur finale:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:176
+msgid "Increment step:"
+msgstr "Pas d'incrémentation:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:202
+msgid "Swap sources"
+msgstr "Permuter sources"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:211
+msgid "DC Transfer"
+msgstr "Transfert  DC"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:213
+#: eeschema/sim/spice_simulator.cpp:69
+msgid "Distortion"
+msgstr "Distorsion"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:228
+msgid "Measured node"
+msgstr "Nœud mesuré"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:238
+msgid "Reference node"
+msgstr "Nœud de référence"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:245
+msgid "(optional; default GND)"
+msgstr "(optionnel; défaut GND)"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:249
+msgid "Noise source"
+msgstr "Source de bruit"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:279
+msgid "Number of points"
+msgstr "Nombre de points"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:286
+msgid "Start frequency [Hz]"
+msgstr "Fréquence de départ [Hz]"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:293
+msgid "Stop frequency [Hz]"
+msgstr "Fréquence de fin [Hz]"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:310
+#: eeschema/sim/spice_simulator.cpp:72
+msgid "Noise"
+msgstr "Bruit"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:318
+msgid "This tab has no settings"
+msgstr "Cet onglet n'a pas de paramètres"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:329
+#: eeschema/sim/spice_simulator.cpp:57
+msgid "Operating Point"
+msgstr "Point de Fonctionement"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:333
+msgid "Pole-Zero"
+msgstr "Pole-Zéro"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:337
+#: eeschema/sim/spice_simulator.cpp:78
+msgid "Sensitivity"
+msgstr "Sensibilité"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:341
+msgid "Transfer Function"
+msgstr "Fonction de Transfert"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:351
+msgid "Time step:"
+msgstr "Incrément de temps:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:360
+#: eeschema/dialogs/dialog_sim_command_base.cpp:374
+#: eeschema/dialogs/dialog_sim_command_base.cpp:388
+msgid "seconds"
+msgstr "secondes"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:367
+msgid "Final time:"
+msgstr "Temps final:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:381
+msgid "Initial time:"
+msgstr "Temps initial:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:392
+msgid "(optional; default 0)"
+msgstr "(optionnel; défaut 0)"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:403
+#: eeschema/sim/spice_simulator.cpp:66
+msgid "Transient"
+msgstr "Transitoire"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:408
+msgid "Spice directives:"
+msgstr "Directives Spice:"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:417
+msgid "Load directives from schematic"
+msgstr "Charger les directives a partir du schéma"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:424 pcbnew/pad.cpp:1702
+msgid "Custom"
+msgstr "Personnalisé"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:431
+msgid "Add full path for .include library directives"
+msgstr ""
+"Ajouter le chemin d’accès complet pour les directives .include de librairies"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:438
+msgid "Compatibility mode:"
+msgstr "Mode compatibilité :"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:442
+msgid "User configuration"
+msgstr "Configuration utilisateur"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:442
+msgid "Spice"
+msgstr "Spice"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:442
+msgid "PSpice"
+msgstr "PSpice"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:442
+msgid "LTSpice"
+msgstr "LTSpice"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:442
+msgid "PSpice and LTSpice"
+msgstr "PSpice et LTSpice"
+
+#: eeschema/dialogs/dialog_sim_command_base.cpp:442
+msgid "HSpice"
+msgstr "HSpice"
+
+#: eeschema/dialogs/dialog_sim_command_base.h:139
+msgid "Simulation Command"
+msgstr "Commande de Simulation"
+
+#: eeschema/dialogs/dialog_sim_model.cpp:242
 msgid "Failed to read simulation model from fields."
 msgstr "Échec de la lecture du modèle de simulation à partir des champs."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:384
+#: eeschema/dialogs/dialog_sim_model.cpp:412
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "Sauver le paramètre '%s (%s)' dans le champ Valeur"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:392
+#: eeschema/dialogs/dialog_sim_model.cpp:420
 msgid "Save primary parameter in Value field"
 msgstr "Sauver le paramètre primaire dans le champ Valeur"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:409
+#: eeschema/dialogs/dialog_sim_model.cpp:437
 #: pcbnew/footprint_wizard_frame.cpp:322
 msgid "Parameter"
 msgstr "Paramètre"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:412 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:440 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1147 eeschema/sch_label.cpp:880
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1247
@@ -10958,12 +11252,12 @@ msgstr "Paramètre"
 msgid "Type"
 msgstr "Type"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:526
-#: eeschema/dialogs/dialog_sim_model.cpp:569
+#: eeschema/dialogs/dialog_sim_model.cpp:554
+#: eeschema/dialogs/dialog_sim_model.cpp:597
 msgid "Not Connected"
 msgstr "Non Connecté"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1007
+#: eeschema/dialogs/dialog_sim_model.cpp:1012
 msgid "Browse Models"
 msgstr "Examiner les Modèles"
 
@@ -11044,300 +11338,9 @@ msgstr "Affectation de Pin"
 msgid "Exclude from simulation"
 msgstr "Exclure de la simulation"
 
-#: eeschema/dialogs/dialog_sim_model_base.h:124
+#: eeschema/dialogs/dialog_sim_model_base.h:121
 msgid "Simulation Model Editor"
 msgstr "Éditeur de Modèle de Simulation"
-
-#: eeschema/dialogs/dialog_sim_settings.cpp:113
-msgid "You need to select DC source"
-msgstr "Vous devez sélectionner la source DC"
-
-#: eeschema/dialogs/dialog_sim_settings.cpp:217
-msgid "Source 1 and Source 2 must be different"
-msgstr "Source 1 et  Source 2 doivent être differentes"
-
-#: eeschema/dialogs/dialog_sim_settings.cpp:279
-msgid "No valid simulation is configured."
-msgstr "Aucune simulation valide n’est configurée."
-
-#: eeschema/dialogs/dialog_sim_settings.cpp:282
-msgid ""
-"A valid simulation can be configured by selecting a simulation tab, setting "
-"the simulation parameters and clicking the OK button with the tab selected."
-msgstr ""
-"Une simulation valide peut être configurée en sélectionnant un onglet de "
-"simulation, en définissant les paramètres de simulation et en cliquant sur "
-"le bouton OK avec l’onglet sélectionné."
-
-#: eeschema/dialogs/dialog_sim_settings.cpp:286
-msgid "Exit Without Valid Simulation"
-msgstr "Sortie Sans Simulation Valide"
-
-#: eeschema/dialogs/dialog_sim_settings.cpp:287
-msgid "Configure Valid Simulation"
-msgstr "Configurer Simulation Valide"
-
-#: eeschema/dialogs/dialog_sim_settings.cpp:585
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:146
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:155
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:166
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:175
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:186
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:195
-msgid "Volts"
-msgstr "Volts"
-
-#: eeschema/dialogs/dialog_sim_settings.cpp:586
-msgid "Amperes"
-msgstr "Ampères"
-
-#: eeschema/dialogs/dialog_sim_settings.cpp:587
-#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:66
-#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:77
-#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:115
-#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:126
-#: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:137
-msgid "Ohms"
-msgstr "Ohms"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:27
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:266
-msgid "Decade"
-msgstr "Decade"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:27
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:266
-msgid "Octave"
-msgstr "Octave"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:27
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:266
-msgid "Linear"
-msgstr "Lineaire"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:29
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:268
-msgid "Frequency scale"
-msgstr "Echelle de fréquence"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:43
-msgid "Number of points per decade:"
-msgstr "Nombre de points par décade:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:53
-msgid "Start frequency:"
-msgstr "Fréquence de départ:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:60
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:71
-msgid "Hertz"
-msgstr "Hertz"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:64
-msgid "Stop frequency:"
-msgstr "Fréquence de fin:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:85
-msgid "AC"
-msgstr "AC"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:98
-msgid "Source 2"
-msgstr "Source 2"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:103
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:109
-#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:120
-#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:136
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:170
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:268
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:244
-#: pcb_calculator/widgets/unit_selector.cpp:256
-msgid "V"
-msgstr "V"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:103
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:109
-msgid "I"
-msgstr "I"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:103
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:109
-msgid "R"
-msgstr "R"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:103
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:109
-msgid "TEMP"
-msgstr "TEMP"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:115
-msgid "Source:"
-msgstr "Source:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:119
-msgid "Sweep type:"
-msgstr "Type de balayage:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:123
-msgid "Source 1"
-msgstr "Source 1"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:139
-msgid "Starting value:"
-msgstr "Valeur de départ:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:159
-msgid "Final value:"
-msgstr "Valeur finale:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:179
-msgid "Increment step:"
-msgstr "Pas d'incrémentation:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:199
-msgid "Swap sources"
-msgstr "Permuter sources"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:212
-msgid "DC Transfer"
-msgstr "Transfert  DC"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:214
-#: eeschema/sim/spice_simulator.cpp:69
-msgid "Distortion"
-msgstr "Distorsion"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:229
-msgid "Measured node"
-msgstr "Nœud mesuré"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:239
-msgid "Reference node"
-msgstr "Nœud de référence"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:246
-msgid "(optional; default GND)"
-msgstr "(optionnel; défaut GND)"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:250
-msgid "Noise source"
-msgstr "Source de bruit"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:280
-msgid "Number of points"
-msgstr "Nombre de points"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:287
-msgid "Start frequency [Hz]"
-msgstr "Fréquence de départ [Hz]"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:294
-msgid "Stop frequency [Hz]"
-msgstr "Fréquence de fin [Hz]"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:311
-#: eeschema/sim/spice_simulator.cpp:72
-msgid "Noise"
-msgstr "Bruit"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:319
-msgid "This tab has no settings"
-msgstr "Cet onglet n'a pas de paramètres"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:330
-#: eeschema/sim/spice_simulator.cpp:57
-msgid "Operating Point"
-msgstr "Point de Fonctionement"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:334
-msgid "Pole-Zero"
-msgstr "Pole-Zéro"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:338
-#: eeschema/sim/spice_simulator.cpp:78
-msgid "Sensitivity"
-msgstr "Sensibilité"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:342
-msgid "Transfer Function"
-msgstr "Fonction de Transfert"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:355
-msgid "Time step:"
-msgstr "Incrément de temps:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:362
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:376
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:390
-msgid "seconds"
-msgstr "secondes"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:369
-msgid "Final time:"
-msgstr "Temps final:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:383
-msgid "Initial time:"
-msgstr "Temps initial:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:394
-msgid "(optional; default 0)"
-msgstr "(optionnel; défaut 0)"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:408
-#: eeschema/sim/spice_simulator.cpp:66
-msgid "Transient"
-msgstr "Transitoire"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:413
-msgid "Spice directives:"
-msgstr "Directives Spice:"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:422
-msgid "Load directives from schematic"
-msgstr "Charger les directives a partir du schéma"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1702
-msgid "Custom"
-msgstr "Personnalisé"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:436
-msgid "Add full path for .include library directives"
-msgstr ""
-"Ajouter le chemin d’accès complet pour les directives .include de librairies"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:443
-msgid "Compatibility mode:"
-msgstr "Mode compatibilité :"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:447
-msgid "User configuration"
-msgstr "Configuration utilisateur"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:447
-msgid "Spice"
-msgstr "Spice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:447
-msgid "PSpice"
-msgstr "PSpice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:447
-msgid "LTSpice"
-msgstr "LTSpice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:447
-msgid "PSpice and LTSpice"
-msgstr "PSpice et LTSpice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:447
-msgid "HSpice"
-msgstr "HSpice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.h:139
-msgid "Simulation Command"
-msgstr "Commande de Simulation"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:86
 #: eeschema/fields_grid_table.cpp:863
@@ -11392,7 +11395,7 @@ msgid "Field must have a name."
 msgstr "Le champ doit avoir un nom."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1082
-#: eeschema/dialogs/dialog_symbol_properties.cpp:827
+#: eeschema/dialogs/dialog_symbol_properties.cpp:867
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr "Nom de champ '%s' déjà existant."
@@ -12712,11 +12715,11 @@ msgstr "Attention : noms de feuilles en double.\n"
 msgid "Unknown netlist format.\n"
 msgstr "Format de listliste inconnu.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:339 pcbnew/pcbnew_jobs_handler.cpp:503
+#: eeschema/eeschema_jobs_handler.cpp:339 pcbnew/pcbnew_jobs_handler.cpp:593
 msgid "Unable to load library\n"
 msgstr "Impossible de charger la librairie\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:347 pcbnew/pcbnew_jobs_handler.cpp:489
+#: eeschema/eeschema_jobs_handler.cpp:347 pcbnew/pcbnew_jobs_handler.cpp:579
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 "Le chemin de sortie ne doit pas entrer en conflit avec un chemin existant\n"
@@ -12725,13 +12728,17 @@ msgstr ""
 msgid "Saving symbol library in updated format\n"
 msgstr "Sauvegarde de la librairie de symboles dans un format actualisé\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:371 pcbnew/pcbnew_jobs_handler.cpp:532
+#: eeschema/eeschema_jobs_handler.cpp:371 pcbnew/pcbnew_jobs_handler.cpp:622
 msgid "Unable to save library\n"
 msgstr "Impossible de sauver la librairie\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:377
 msgid "Symbol library was not updated\n"
 msgstr "La librairie de symboles n'a pas été mise à jour\n"
+
+#: eeschema/eeschema_printout.cpp:83 pcbnew/pcbnew_printout.cpp:113
+msgid "Multiple Layers"
+msgstr "Couches Multiples"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Input Pin"
@@ -13348,34 +13355,12 @@ msgstr "Dérivé de"
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: eeschema/hierarch.cpp:265
-msgid "Edit Page Number"
-msgstr "Editer Numéro de Page"
-
-#: eeschema/hierarch.cpp:276 eeschema/tools/sch_edit_tool.cpp:2306
-#, c-format
-msgid "Enter page number for sheet path%s"
-msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
-
-#: eeschema/hierarch.cpp:279 eeschema/tools/sch_edit_tool.cpp:2309
-msgid "Edit Sheet Page Number"
-msgstr "Editer Numéro de Page de la Feuille"
-
-#: eeschema/hierarch.cpp:308 eeschema/sch_plotter.cpp:175
-msgid "Root"
-msgstr "Racine"
-
-#: eeschema/hierarch.cpp:314
-#, c-format
-msgid "(page %s)"
-msgstr "(page %s)"
-
-#: eeschema/lib_field.cpp:557 eeschema/lib_text.cpp:413
+#: eeschema/lib_field.cpp:549 eeschema/lib_text.cpp:413
 #: eeschema/sch_field.cpp:781
 msgid "H Justification"
 msgstr "Justification H"
 
-#: eeschema/lib_field.cpp:566 eeschema/lib_text.cpp:422
+#: eeschema/lib_field.cpp:558 eeschema/lib_text.cpp:422
 #: eeschema/sch_field.cpp:790
 msgid "V Justification"
 msgstr "Justification V"
@@ -13444,7 +13429,7 @@ msgstr "Poly-ligne, %d points"
 msgid "Bezier Curve, %d points"
 msgstr "Courbe de Bézier, %d points"
 
-#: eeschema/lib_symbol.cpp:412 eeschema/sch_symbol.cpp:430
+#: eeschema/lib_symbol.cpp:407 eeschema/sch_symbol.cpp:430
 #: eeschema/tools/sch_edit_tool.cpp:115
 #, c-format
 msgid "Unit %s"
@@ -13591,12 +13576,12 @@ msgstr "&Outils"
 msgid "P&references"
 msgstr "P&références"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:94
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:95
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr "Échec de la génération d'un nom pour '%s' : dépassement de UINT64_MAX"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:266
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:272
 #, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
@@ -13605,7 +13590,7 @@ msgstr ""
 "Erreur de lecture du modèle de simulation à partir du symbole '%s' :\n"
 "%s"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:366
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:406
 #, c-format
 msgid ""
 "Error reading simulation model library '%s':\n"
@@ -13614,12 +13599,12 @@ msgstr ""
 "Erreur de lecture de la librairie de modèles de simulation '%s' :\n"
 "%s"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:427
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:465
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Impossible d'ouvrir le fichier '%s' pour écrire le modèle IBIS"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:479
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:516
 #, c-format
 msgid "Could not find library file '%s'"
 msgstr "Impossible de trouver le fichier de librairie '%s'"
@@ -13875,7 +13860,7 @@ msgstr "Hiérarchie Schématique"
 msgid "New schematic file is unsaved"
 msgstr "Le nouveau fichier schématique n'est pas sauvé"
 
-#: eeschema/sch_edit_frame.cpp:782 eeschema/sim/sim_plot_frame.cpp:1672
+#: eeschema/sch_edit_frame.cpp:782 eeschema/sim/sim_plot_frame.cpp:1673
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1153
 #: pagelayout_editor/pl_editor_frame.cpp:381
@@ -13896,6 +13881,7 @@ msgstr ""
 "devrez lancer Kicad manager et créez un projet."
 
 #: eeschema/sch_edit_frame.cpp:1085 eeschema/sch_plotter.cpp:1026
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -13920,22 +13906,22 @@ msgstr "L'appairage des empreintes nécessite un schéma complètement numérot�
 msgid "Could not open CvPcb"
 msgstr "Ne peut pas ouvrir CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1408 eeschema/sim/sim_plot_frame.cpp:353
+#: eeschema/sch_edit_frame.cpp:1412 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:774 pcbnew/footprint_edit_frame.cpp:896
 #: pcbnew/pcb_edit_frame.cpp:1534
 msgid "[Read Only]"
 msgstr "[Lecture Seule]"
 
-#: eeschema/sch_edit_frame.cpp:1411 eeschema/sim/sim_plot_frame.cpp:356
+#: eeschema/sch_edit_frame.cpp:1415 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:905 pcbnew/pcb_edit_frame.cpp:1537
 msgid "[Unsaved]"
 msgstr "[Non sauvé]"
 
-#: eeschema/sch_edit_frame.cpp:1415
+#: eeschema/sch_edit_frame.cpp:1419
 msgid "[no schematic loaded]"
 msgstr "[pas de schématique chargée]"
 
-#: eeschema/sch_edit_frame.cpp:1594
+#: eeschema/sch_edit_frame.cpp:1598
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Net en Surbrillance: %s"
@@ -13950,7 +13936,6 @@ msgid "Back to Previous Selected Sheet"
 msgstr "Revenir à la Feuille Sélectionnée Précédente"
 
 #: eeschema/sch_field.cpp:892 eeschema/sch_label.cpp:186
-#: eeschema/sch_label.cpp:1257
 msgid "Sheet References"
 msgstr "Références de Feuilles"
 
@@ -14097,7 +14082,11 @@ msgstr "Marqueur ERC"
 msgid "No Connect"
 msgstr "Non Connexion"
 
-#: eeschema/sch_plotter.cpp:206
+#: eeschema/sch_plotter.cpp:175 eeschema/widgets/hierarchy_pane.cpp:316
+msgid "Root"
+msgstr "Racine"
+
+#: eeschema/sch_plotter.cpp:206 pcbnew/pcbnew_jobs_handler.cpp:316
 #, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Tracé en '%s'\n"
@@ -14170,71 +14159,71 @@ msgstr ""
 "Le nom du fichier pour la feuille %s est indéfini, il s'agit probablement "
 "d'un harnais de signaux Altium qui a été converti en feuille."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:439
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr ""
 "Le fichier de stockage n’a pas été entièrement analysé (%d octets restant)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:499
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
 "Enregistrement %d inconnu ou inattendu trouvé dans la section \"Additional\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:572
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Enregistrement 'IEEE_SYMBOL' non traité."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:597
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
 msgstr "Enregistrement 'PIECHART' non traité."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:716
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
 msgstr "Masque de compilation non pris en charge actuellement."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:723
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
 "Enregistrement %d inconnu ou inattendu trouvé dans la section \"FileHeader\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:823
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 "Le symbole \"%s\" de la feuille \"%s\" à l'index %d a été remplacé par le "
 "symbole \"%s\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:927
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2403
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2404
 msgid "Pin has unexpected orientation."
 msgstr "La pin a une orientation inattendue."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:974
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
 msgid "Pin has unexpected electrical type."
 msgstr "La pin a un type électrique inattendu."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:979
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 msgid "Pin has unexpected outer edge type."
 msgstr "La pin a un type de bord extérieur inattendu."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:982
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
 msgid "Pin has unexpected inner edge type."
 msgstr "La pin a un type de bord intérieur inattendu."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1271
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "La courbe de Bézier a %d points de contrôle. Au moins 2 sont attendus."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1674
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Une ellipse non supportée n'a pas été importée à (X = %d ; Y = %d)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1934
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1935
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -14243,16 +14232,16 @@ msgstr ""
 "Le \"harnais\" de connextion d'Altium (%s) a été importé en tant que feuille "
 "hiérarchique. Veuillez revoir le schéma importé."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2290
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "Symbole d'alimentation avec style inconnu, importé comme 'barre'."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2331
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2332
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Le symbole d'alimentation crée un label global de nom '%s'"
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2467
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2468
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -14261,23 +14250,23 @@ msgstr ""
 "Le harnais d'Altium (%s) a été importé en tant que boite de texte. Veuillez "
 "revoir le schéma importé."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2524
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2525
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Port %s n’a aucune connexion."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2738
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2739
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "Fichier incorporé %s introuvable dans le stockage."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2755
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2774
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2756
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2775
 #, c-format
 msgid "Error reading image %s."
 msgstr "Erreur lors de la lecture de l'mage '%s'."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2768
 #, c-format
 msgid "File not found %s."
 msgstr "Fichier non trouvé %s."
@@ -14490,14 +14479,14 @@ msgstr ""
 msgid "Error reading database table %s: %s"
 msgstr "Erreur de lecture de la table de base de données %s : %s"
 
-#: eeschema/sch_plugins/database/sch_database_plugin.cpp:185
+#: eeschema/sch_plugins/database/sch_database_plugin.cpp:218
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
 "Impossible de charger la librairie base de données : le fichier de "
 "paramètres %s est manquant ou non valide"
 
-#: eeschema/sch_plugins/database/sch_database_plugin.cpp:245
+#: eeschema/sch_plugins/database/sch_database_plugin.cpp:278
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
@@ -14657,13 +14646,13 @@ msgstr ""
 "Impossible de charger la feuille '%s' car elle apparaît déjà comme un "
 "ancêtre direct dans la hiérarchie des schémas."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1494
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1510
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2170
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "La librairie de symboles '%s' existe déjà."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1520
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1536
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2196
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
@@ -15920,18 +15909,18 @@ msgid "Simulation model library not found at '%s' or '%s'"
 msgstr ""
 "La librairie du modèle de simulation n'a pas été trouvée en '%s' ou '%s'"
 
-#: eeschema/sim/sim_lib_mgr.cpp:200
+#: eeschema/sim/sim_lib_mgr.cpp:217
 #, c-format
 msgid "Error loading simulation model library '%s': %s"
 msgstr ""
 "Erreur de chargement de la librairie de modèles de simulation '%s' : %s"
 
-#: eeschema/sim/sim_lib_mgr.cpp:207
+#: eeschema/sim/sim_lib_mgr.cpp:224
 #, c-format
 msgid "Error loading simulation model: no '%s' field"
 msgstr "Erreur de chargement du modèle de simulation : pas de champ '%s'"
 
-#: eeschema/sim/sim_lib_mgr.cpp:215
+#: eeschema/sim/sim_lib_mgr.cpp:232
 #, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
@@ -15940,14 +15929,14 @@ msgstr ""
 "Erreur de chargement du modèle de simulation : Impossible de trouver le "
 "modèle de base '%s' dans la librairie '%s'"
 
-#: eeschema/sim/sim_model.cpp:692
+#: eeschema/sim/sim_model.cpp:678
 #, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
 msgstr ""
 "Impossible de trouver une pin nommée '%s' dans le modèle de simulation de "
 "type '%s'"
 
-#: eeschema/sim/sim_model.cpp:779 eeschema/sim/sim_model.cpp:795
+#: eeschema/sim/sim_model.cpp:765 eeschema/sim/sim_model.cpp:781
 #, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
 msgstr ""
@@ -16089,11 +16078,11 @@ msgstr "Commande Simulation"
 msgid "Simulation command and settings"
 msgstr "Commande et paramètres de la simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:358 eeschema/sim/sim_plot_frame_base.h:129
+#: eeschema/sim/sim_plot_frame.cpp:356 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
 msgstr "Simulateur Spice"
 
-#: eeschema/sim/sim_plot_frame.cpp:478 eeschema/sim/sim_plot_frame.cpp:1496
+#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1494
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
@@ -16101,7 +16090,7 @@ msgstr ""
 "Erreurs lors de la génération de la netliste. simulation interrompue.\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:495
+#: eeschema/sim/sim_plot_frame.cpp:493
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
@@ -16109,60 +16098,65 @@ msgstr ""
 "La directive relative à la commande de simulation des feuilles de schémas a "
 "changé.  Souhaitez-vous mettre à jour la commande de simulation ?"
 
-#: eeschema/sim/sim_plot_frame.cpp:518 eeschema/sim/sim_plot_frame.cpp:1895
+#: eeschema/sim/sim_plot_frame.cpp:516 eeschema/sim/sim_plot_frame.cpp:1901
 msgid "Another simulation is already running."
 msgstr "Une autre simulation est déjà en cours."
 
-#: eeschema/sim/sim_plot_frame.cpp:546
+#: eeschema/sim/sim_plot_frame.cpp:544
 #, c-format
 msgid "Plot%u - "
 msgstr "Tracé%u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:671
+#: eeschema/sim/sim_plot_frame.cpp:669
 msgid "Error: simulation type not defined!\n"
 msgstr "Erreur : type de simulation non défini !\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:677
+#: eeschema/sim/sim_plot_frame.cpp:675
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Erreur : le type de simulation ne prend pas en charge le tracé!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:744
+#: eeschema/sim/sim_plot_frame.cpp:742
 msgid " (mag)"
 msgstr " (mag)"
 
-#: eeschema/sim/sim_plot_frame.cpp:746
+#: eeschema/sim/sim_plot_frame.cpp:744
 msgid " (phase)"
 msgstr " (phase)"
 
-#: eeschema/sim/sim_plot_frame.cpp:858 eeschema/sim/sim_plot_frame.cpp:1714
+#: eeschema/sim/sim_plot_frame.cpp:856 eeschema/sim/sim_plot_frame.cpp:1720
 msgid "Signal"
 msgstr "Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1130
+#: eeschema/sim/sim_plot_frame.cpp:1128
 msgid "noname"
 msgstr "sansnom"
 
-#: eeschema/sim/sim_plot_frame.cpp:1179
+#: eeschema/sim/sim_plot_frame.cpp:1177
 msgid "Open simulation workbook"
 msgstr "Ouvrir le classeur de travail de simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:1208
+#: eeschema/sim/sim_plot_frame.cpp:1206
 msgid "Save Simulation Workbook As"
 msgstr "Sauver Classeur de Travail de Simulation Sous"
 
-#: eeschema/sim/sim_plot_frame.cpp:1224
+#: eeschema/sim/sim_plot_frame.cpp:1222
 msgid "Save Plot as Image"
 msgstr "Sauver Tracé comme Fichier Image"
 
-#: eeschema/sim/sim_plot_frame.cpp:1241
+#: eeschema/sim/sim_plot_frame.cpp:1239
 msgid "Save Plot Data"
 msgstr "Sauver Données de Tracé"
 
-#: eeschema/sim/sim_plot_frame.cpp:1546
+#: eeschema/sim/sim_plot_frame.cpp:1544
 msgid "You need to run plot-providing simulation first."
 msgstr "Vous devez exécuter la simulation en premier."
 
-#: eeschema/sim/sim_plot_frame.cpp:1826
+#: eeschema/sim/sim_plot_frame.cpp:1670
+#, fuzzy
+msgid "Save changes to workbook?"
+msgstr "Sauver changements dans le PCB"
+
+#: eeschema/sim/sim_plot_frame.cpp:1832
 msgid ""
 "\n"
 "\n"
@@ -16174,19 +16168,19 @@ msgstr ""
 "Résultats de simulation:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1915
+#: eeschema/sim/sim_plot_frame.cpp:1921
 msgid "Hide Signal"
 msgstr "Masquer le Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1915
+#: eeschema/sim/sim_plot_frame.cpp:1921
 msgid "Erase the signal from plot screen"
 msgstr "Supprimer le signal de l’écran de tracé"
 
-#: eeschema/sim/sim_plot_frame.cpp:1921
+#: eeschema/sim/sim_plot_frame.cpp:1927
 msgid "Hide Cursor"
 msgstr "Masquer le Curseur"
 
-#: eeschema/sim/sim_plot_frame.cpp:1923
+#: eeschema/sim/sim_plot_frame.cpp:1929
 msgid "Show Cursor"
 msgstr "Afficher le Curseur"
 
@@ -16276,52 +16270,52 @@ msgstr "Signaux"
 msgid "Cursors"
 msgstr "Curseurs"
 
-#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
+#: eeschema/sim/sim_plot_panel.cpp:351 eeschema/sim/sim_plot_panel.cpp:362
 #: pcb_calculator/transline_ident.cpp:108
 msgid "Frequency"
 msgstr "Fréquence"
 
-#: eeschema/sim/sim_plot_panel.cpp:349
+#: eeschema/sim/sim_plot_panel.cpp:352
 msgid "Gain"
 msgstr "Gain"
 
-#: eeschema/sim/sim_plot_panel.cpp:350
+#: eeschema/sim/sim_plot_panel.cpp:353
 msgid "Phase"
 msgstr "Phase"
 
-#: eeschema/sim/sim_plot_panel.cpp:361
+#: eeschema/sim/sim_plot_panel.cpp:363
 msgid "noise [(V or A)^2/Hz]"
 msgstr "bruit [(V or A)^2/Hz]"
 
-#: eeschema/sim/sim_plot_panel.cpp:365
+#: eeschema/sim/sim_plot_panel.cpp:367
 msgid "Time"
 msgstr "Temps"
 
-#: eeschema/sim/sim_plot_panel.cpp:366
+#: eeschema/sim/sim_plot_panel.cpp:368
 msgid "Voltage"
 msgstr "Voltage"
 
-#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
+#: eeschema/sim/sim_plot_panel.cpp:369 eeschema/sim/sim_plot_panel.cpp:442
 msgid "Current"
 msgstr "Courant"
 
-#: eeschema/sim/sim_plot_panel.cpp:423
+#: eeschema/sim/sim_plot_panel.cpp:424
 msgid "Voltage (swept)"
 msgstr "Tension (balayée)"
 
-#: eeschema/sim/sim_plot_panel.cpp:427
+#: eeschema/sim/sim_plot_panel.cpp:428
 msgid "Current (swept)"
 msgstr "Courant (balayé)"
 
-#: eeschema/sim/sim_plot_panel.cpp:430
+#: eeschema/sim/sim_plot_panel.cpp:432
 msgid "Resistance (swept)"
 msgstr "Résistance (balayée)"
 
-#: eeschema/sim/sim_plot_panel.cpp:434
+#: eeschema/sim/sim_plot_panel.cpp:436
 msgid "Temperature (swept)"
 msgstr "Température (balayée)"
 
-#: eeschema/sim/sim_plot_panel.cpp:439
+#: eeschema/sim/sim_plot_panel.cpp:441
 msgid "Voltage (measured)"
 msgstr "Voltage (mesuré)"
 
@@ -16925,7 +16919,7 @@ msgstr ""
 "Nom logique de librairie dupliqué '%s' dans la table des librairies de "
 "symboles ligne %d"
 
-#: eeschema/symbol_library.cpp:556 eeschema/symbol_tree_model_adapter.cpp:210
+#: eeschema/symbol_library.cpp:556 eeschema/symbol_tree_model_adapter.cpp:214
 #, c-format
 msgid "Error loading symbol library '%s'."
 msgstr "Erreur lors du chargement de la librairie de symboles %s."
@@ -18206,7 +18200,7 @@ msgstr "Finir les lignes connectée avec le segment actuel"
 
 #: eeschema/tools/ee_actions.cpp:893 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/dialogs/panel_edit_options_base.cpp:359
-#: pcbnew/tools/pcb_actions.cpp:270
+#: pcbnew/tools/edit_tool_move_fct.cpp:241 pcbnew/tools/pcb_actions.cpp:270
 msgid "Move"
 msgstr "Déplacer"
 
@@ -18215,7 +18209,7 @@ msgstr "Déplacer"
 msgid "Moves the selected item(s)"
 msgstr "Déplace l'élément sélectionné"
 
-#: eeschema/tools/ee_actions.cpp:898 pcbnew/tools/edit_tool_move_fct.cpp:826
+#: eeschema/tools/ee_actions.cpp:898
 msgid "Drag"
 msgstr "Drag"
 
@@ -18341,6 +18335,16 @@ msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
 
+#: eeschema/tools/sch_edit_tool.cpp:2306
+#, c-format
+msgid "Enter page number for sheet path%s"
+msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
+
+#: eeschema/tools/sch_edit_tool.cpp:2309
+#: eeschema/widgets/hierarchy_pane.cpp:287
+msgid "Edit Sheet Page Number"
+msgstr "Editer Numéro de Page de la Feuille"
+
 #: eeschema/tools/sch_editor_control.cpp:147
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
@@ -18428,11 +18432,11 @@ msgstr "Le bus n’a pas de membres"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Appuyez <ESC> sur pour annuler le dessin."
 
-#: eeschema/tools/sch_move_tool.cpp:759
+#: eeschema/tools/sch_move_tool.cpp:751
 msgid "Press <ESC> to cancel drag."
 msgstr "Appuyez <ESC> pour annuler le \"drag\"."
 
-#: eeschema/tools/sch_move_tool.cpp:761
+#: eeschema/tools/sch_move_tool.cpp:753
 #: pagelayout_editor/tools/pl_edit_tool.cpp:217
 msgid "Press <ESC> to cancel move."
 msgstr "Appuyez <ESC> sur pour annuler le déplacement."
@@ -18503,6 +18507,20 @@ msgstr "Placer Pin de toute Façon"
 #: eeschema/widgets/legacyfiledlg_save_project.h:34
 msgid "Create a new project for this schematic"
 msgstr "Créer un nouveau projet pour cette schématique"
+
+#: eeschema/widgets/hierarchy_pane.cpp:275
+msgid "Edit Page Number"
+msgstr "Editer Numéro de Page"
+
+#: eeschema/widgets/hierarchy_pane.cpp:283
+#, fuzzy, c-format
+msgid "Enter page number for sheet path %s"
+msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
+
+#: eeschema/widgets/hierarchy_pane.cpp:322
+#, c-format
+msgid "(page %s)"
+msgstr "(page %s)"
 
 #: eeschema/widgets/legacyfiledlg_save_project.h:36
 msgid ""
@@ -19801,29 +19819,29 @@ msgstr "-- valeurs mixtées --"
 msgid "Failed to output data"
 msgstr "Impossible de générer les données"
 
-#: kicad/cli/command_export_pcb_base.cpp:35
+#: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
 msgid "Output file name"
 msgstr "Nom fichier de sortie"
 
-#: kicad/cli/command_export_pcb_base.cpp:37
+#: kicad/cli/command_export_pcb_base.cpp:41
 #: kicad/cli/command_export_pcb_step.cpp:89
 msgid "Input file"
 msgstr "Fichier d'entrée"
 
-#: kicad/cli/command_export_pcb_base.cpp:77
+#: kicad/cli/command_export_pcb_base.cpp:82
 #, c-format
 msgid "Invalid layer name \"%s\"\n"
 msgstr "Nom de couche \"%s\" invalide\n"
 
-#: kicad/cli/command_export_pcb_base.cpp:91
+#: kicad/cli/command_export_pcb_base.cpp:96
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 msgstr ""
 "Liste séparée par des virgules des noms  non traduits de couches à inclure, "
 "tels que F.Cu,B.Cu"
 
-#: kicad/cli/command_export_pcb_base.cpp:107
+#: kicad/cli/command_export_pcb_base.cpp:113
 msgid "At least one or more layers must be specified\n"
 msgstr "Au moins une ou plusieurs couches doivent être spécifiées\n"
 
@@ -19900,18 +19918,18 @@ msgid "Invalid origin mode specified\n"
 msgstr "Le mode d'origine de tracé spécifié n'est pas valide\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:220
-#: kicad/cli/command_export_pcb_gerber.cpp:114
+#: kicad/cli/command_export_pcb_gerber.cpp:109
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr "La précision des coordonnées Gerber doit être de 5 ou 6\n"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:44
-#: kicad/cli/command_export_pcb_gerber.cpp:44
+#: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
 msgid "Include the reference designator text"
 msgstr "Inclure références schématiques"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:49
-#: kicad/cli/command_export_pcb_gerber.cpp:49
+#: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
 msgid "Include the value text"
 msgstr "Inclure le texte valeur"
@@ -19926,38 +19944,51 @@ msgid "Output units, valid options: mm, in"
 msgstr "Unités de sortie, options valables : mm, in"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:77
-#: kicad/cli/command_export_pcb_gerber.cpp:99
+#: kicad/cli/command_export_pcb_gerber.cpp:103
 #: kicad/cli/command_export_pcb_pdf.cpp:78
 #: kicad/cli/command_export_pcb_pos.cpp:99
 #: kicad/cli/command_export_pcb_svg.cpp:81
 msgid "Board file does not exist or is not accessible\n"
 msgstr "Le fichier PCB n'existe pas ou n'est pas accessible\n"
 
-#: kicad/cli/command_export_pcb_gerber.cpp:54
+#: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:49
 msgid "Include the border and title block"
 msgstr "Inclure cartouche et encadrement"
 
-#: kicad/cli/command_export_pcb_gerber.cpp:59
+#: kicad/cli/command_export_pcb_gerber.cpp:55
 msgid "Do not use the extended X2 format"
 msgstr "Ne pas utiliser le format X2 étendu"
 
-#: kicad/cli/command_export_pcb_gerber.cpp:64
+#: kicad/cli/command_export_pcb_gerber.cpp:60
 msgid "Do not generate netlist attributes"
 msgstr "Ne pas générer les attributs de netliste"
 
-#: kicad/cli/command_export_pcb_gerber.cpp:69
+#: kicad/cli/command_export_pcb_gerber.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:207
 msgid "Subtract soldermask from silkscreen"
 msgstr "Soustraire masque de la couche sérigraphie"
 
-#: kicad/cli/command_export_pcb_gerber.cpp:74
+#: kicad/cli/command_export_pcb_gerber.cpp:70
 msgid "Disable aperature macros"
 msgstr "Désactiver les aperture macro"
 
-#: kicad/cli/command_export_pcb_gerber.cpp:80
+#: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Précision des coordonnées Gerber, options valables : 5 ou 6"
+
+#: kicad/cli/command_export_pcb_gerbers.cpp:44
+#, fuzzy
+msgid ""
+"Layers to include on each plot, comma separated list of untranslated layer "
+"names to include such as F.Cu,B.Cu"
+msgstr ""
+"Liste séparée par des virgules des noms  non traduits de couches à inclure, "
+"tels que F.Cu,B.Cu"
+
+#: kicad/cli/command_export_pcb_gerbers.cpp:48
+msgid "Use the gerber plot settings already configured in the board file"
+msgstr ""
 
 #: kicad/cli/command_export_pcb_pdf.cpp:54
 #: kicad/cli/command_export_pcb_svg.cpp:51
@@ -23728,6 +23759,7 @@ msgid "Tessellating copper zones..."
 msgstr "Découpage des zone de cuivre..."
 
 #: pcbnew/board.cpp:913
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "PCB"
 
@@ -24274,17 +24306,17 @@ msgid "Updating nets..."
 msgstr "Mise à jour nets..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:317
-#: pcbnew/convert_shape_list_to_polygon.cpp:471
-#: pcbnew/convert_shape_list_to_polygon.cpp:587
-#: pcbnew/convert_shape_list_to_polygon.cpp:601
+#: pcbnew/convert_shape_list_to_polygon.cpp:455
+#: pcbnew/convert_shape_list_to_polygon.cpp:571
+#: pcbnew/convert_shape_list_to_polygon.cpp:585
 msgid "(self-intersecting)"
 msgstr "(auto intersectant)"
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:478
+#: pcbnew/convert_shape_list_to_polygon.cpp:462
 msgid "(not a closed shape)"
 msgstr "(n'est pas une forme fermée)"
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:533
+#: pcbnew/convert_shape_list_to_polygon.cpp:517
 msgid "(multiple board outlines not supported)"
 msgstr "(multiples contours du circuit non supportés)"
 
@@ -29152,6 +29184,7 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -33367,28 +33400,28 @@ msgstr "<non contraint>"
 msgid "Checking length constraints..."
 msgstr "Vérification des contraintes de longueur..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:114
+#: pcbnew/drc/drc_test_provider_misc.cpp:113
 msgid "(no edges found on Edge.Cuts layer)"
 msgstr "(Aucun contour trouvé sur couche Contour)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:200
+#: pcbnew/drc/drc_test_provider_misc.cpp:199
 #, c-format
 msgid "(layer %s)"
 msgstr "(couche %s)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:342
+#: pcbnew/drc/drc_test_provider_misc.cpp:341
 msgid "Checking board outline..."
 msgstr "Vérification du contour du PCB..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:350
+#: pcbnew/drc/drc_test_provider_misc.cpp:349
 msgid "Checking disabled layers..."
 msgstr "Vérifications couches inactives..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:358
+#: pcbnew/drc/drc_test_provider_misc.cpp:357
 msgid "Checking text variables..."
 msgstr "Vérification variables texte..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:366
+#: pcbnew/drc/drc_test_provider_misc.cpp:365
 msgid "Checking assertions..."
 msgstr "Vérification des assertions..."
 
@@ -33446,29 +33479,29 @@ msgstr "Détection des angles vifs sur des couches de cuivre..."
 msgid "board setup solder mask min width"
 msgstr "configuration largeur min masque de soudure"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:507
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:601
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:510
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:604
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr ""
 "L’ouverture du masque de soudure de dessus relie des éléments de différents "
 "nets"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:509
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:603
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:512
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:606
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
 "L’ouverture du masque de soudure de dessous relie des éléments de différents "
 "nets"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:726
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:729
 msgid "Building solder mask..."
 msgstr "Construction du masque de soudure..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:734
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:737
 msgid "Checking solder mask to silk clearance..."
 msgstr "Vérification marge masque de soudure à sérigraphie..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:739
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:742
 msgid "Checking solder mask web integrity..."
 msgstr "Vérification de l’intégrité du masque de soudure..."
 
@@ -35599,32 +35632,29 @@ msgstr ""
 "SVP éditer cette table globale des librairies d'empreintes dans le menu "
 "Préférences."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:75 pcbnew/pcbnew_jobs_handler.cpp:126
-#: pcbnew/pcbnew_jobs_handler.cpp:150 pcbnew/pcbnew_jobs_handler.cpp:206
-#: pcbnew/pcbnew_jobs_handler.cpp:252 pcbnew/pcbnew_jobs_handler.cpp:312
-#: pcbnew/pcbnew_jobs_handler.cpp:409 pcbnew/pcbnew_jobs_handler.cpp:482
+#: pcbnew/pcbnew_jobs_handler.cpp:78 pcbnew/pcbnew_jobs_handler.cpp:129
+#: pcbnew/pcbnew_jobs_handler.cpp:153 pcbnew/pcbnew_jobs_handler.cpp:209
+#: pcbnew/pcbnew_jobs_handler.cpp:255 pcbnew/pcbnew_jobs_handler.cpp:357
+#: pcbnew/pcbnew_jobs_handler.cpp:402 pcbnew/pcbnew_jobs_handler.cpp:499
+#: pcbnew/pcbnew_jobs_handler.cpp:572
 msgid "Loading board\n"
 msgstr "Chargement du PCB\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:133
+#: pcbnew/pcbnew_jobs_handler.cpp:136
 msgid "Successfully created svg file"
 msgstr "Le fichier svg a été créé avec succès"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:135
+#: pcbnew/pcbnew_jobs_handler.cpp:138
 msgid "Error creating svg file"
 msgstr "Erreur de création du fichier svg"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:519
+#: pcbnew/pcbnew_jobs_handler.cpp:609
 msgid "Saving footprint library\n"
 msgstr "Sauvegarde de librairie d'empreintes\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:538
+#: pcbnew/pcbnew_jobs_handler.cpp:628
 msgid "Footprint library was not updated\n"
 msgstr "La librairie d'empreintes n'a pas été mise à jour\n"
-
-#: pcbnew/pcbnew_printout.cpp:113
-msgid "Multiple Layers"
-msgstr "Couches Multiples"
 
 #: pcbnew/plugin.cpp:149
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -38228,19 +38258,19 @@ msgstr "Copier la largeur de ligne du premier objet"
 msgid "Create from Selection"
 msgstr "Créer à partir de la Sélection"
 
-#: pcbnew/tools/convert_tool.cpp:415
+#: pcbnew/tools/convert_tool.cpp:419
 msgid "Convert shapes to polygon"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:417
+#: pcbnew/tools/convert_tool.cpp:421
 msgid "Convert shapes to zone"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:972
+#: pcbnew/tools/convert_tool.cpp:975
 msgid "Convert polygons to lines"
 msgstr "Convertir les polygones en lignes"
 
-#: pcbnew/tools/convert_tool.cpp:1060
+#: pcbnew/tools/convert_tool.cpp:1063
 msgid "Create arc from line segment"
 msgstr "Créer arc à partir du segment"
 
@@ -38482,11 +38512,11 @@ msgstr "Sélection copiée"
 msgid "Copy canceled"
 msgstr "Copie annulée"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:228
+#: pcbnew/tools/edit_tool_move_fct.cpp:229
 msgid "Pack footprints"
 msgstr "Grouper Empreintes"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:349
+#: pcbnew/tools/edit_tool_move_fct.cpp:348
 #, c-format
 msgid ""
 "Click to place %s (item %ld of %ld)\n"
@@ -38495,12 +38525,12 @@ msgstr ""
 "Cliquez pour placer %s (élément %ld de %ld)\n"
 "Appuyez sur <esc>pour tout annuler; double-cliquez pour terminer"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:362
+#: pcbnew/tools/edit_tool_move_fct.cpp:361
 #, c-format
 msgid "%s pad %s"
 msgstr "%s pad %s"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:399
+#: pcbnew/tools/edit_tool_move_fct.cpp:398
 msgid "Select reference point for move..."
 msgstr "Sélectionnez le point de référence pour le déplacement..."
 
@@ -40333,19 +40363,19 @@ msgstr "Isolation pour la couche \"margin\" résolue"
 msgid "Selected Items"
 msgstr "Éléments Sélectionnés"
 
-#: pcbnew/tools/pcb_point_editor.cpp:638
+#: pcbnew/tools/pcb_point_editor.cpp:633
 msgid "Drag a corner"
 msgstr "Déplacer un sommet"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2245
+#: pcbnew/tools/pcb_point_editor.cpp:2290
 msgid "Add a zone corner"
 msgstr "Ajouter un sommet à la zone"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2282
+#: pcbnew/tools/pcb_point_editor.cpp:2327
 msgid "Split segment"
 msgstr "Diviser le segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2353
+#: pcbnew/tools/pcb_point_editor.cpp:2398
 msgid "Remove a zone/polygon corner"
 msgstr "Supprimer un sommet de la zone ou polygone"
 
@@ -41194,7 +41224,7 @@ msgstr "Autres éléments"
 msgid "Change property"
 msgstr "Modification propriété"
 
-#: pcbnew/widgets/search_handlers.cpp:247
+#: pcbnew/widgets/search_handlers.cpp:239
 msgid "Textbox"
 msgstr "Boîte de Texte"
 
@@ -41335,11 +41365,6 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -41354,10 +41379,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -41371,10 +41395,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -41384,9 +41407,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -41401,10 +41424,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -41416,11 +41435,6 @@ msgstr "PCB Calculator"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -41434,9 +41448,22 @@ msgstr "Éditeur de circuit imprimé"
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+#, fuzzy
+msgid "Circuit board"
+msgstr "Imprimer PCB"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -41486,6 +41513,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid "Save as Image"
 #~ msgstr "Sauver comme Image"
@@ -51289,9 +51322,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgid "Settings for sheet size and frame references"
 #~ msgstr "Sélection de la dimension de la page et des textes du cartouche"
 
-#~ msgid "Print board"
-#~ msgstr "Imprimer PCB"
-
 #~ msgid "P&lot..."
 #~ msgstr "&Tracer..."
 
@@ -52569,9 +52599,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "&Footprint (.rpt) Report..."
 #~ msgstr "&Rapport (.rpt) sur Empreintes..."
-
-#~ msgid "Save changes to board"
-#~ msgstr "Sauver changements dans le PCB"
 
 #~ msgid ""
 #~ "Corner radius.\n"

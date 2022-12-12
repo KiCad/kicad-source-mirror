@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-29 17:28-0800\n"
+"POT-Creation-Date: 2022-12-12 08:39-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1919,11 +1919,11 @@ msgid "Remember open files for next project launch"
 msgstr "Remember open files for next project launch"
 
 msgid ""
-"If checked, launching a project will also launch tools such as eeschema and "
-"pcbnew with previously open files"
+"If checked, launching a project will also launch tools such as the schematic "
+"and board editors with previously open files"
 msgstr ""
-"If checked, launching a project will also launch tools such as eeschema and "
-"pcbnew with previously open files"
+"If checked, launching a project will also launch tools such as the schematic "
+"and board editors with previously open files"
 
 msgid "&Auto save:"
 msgstr "&Auto save:"
@@ -2815,6 +2815,9 @@ msgstr "Top"
 msgid "Bottom"
 msgstr "Bottom"
 
+msgid "Orientation"
+msgstr "Orientation"
+
 msgid "Text Properties"
 msgstr "Text Properties"
 
@@ -3676,11 +3679,11 @@ msgstr "Interactive Delete Tool"
 msgid "Delete clicked items"
 msgstr "Delete clicked items"
 
-msgid "Change Edit Method"
-msgstr "Change Edit Method"
+msgid "Cycle arc editing mode"
+msgstr "Cycle arc editing mode"
 
-msgid "Change edit method constraints"
-msgstr "Change edit method constraints"
+msgid "Switch to a different method of editing arcs"
+msgstr "Switch to a different method of editing arcs"
 
 msgid "Show Search Panel"
 msgstr "Show Search Panel"
@@ -5645,6 +5648,85 @@ msgstr "Delete Marker"
 msgid "Electrical Rules Checker"
 msgstr "Electrical Rules Checker"
 
+msgid "Export Netlist"
+msgstr "Export Netlist"
+
+msgid "Simulator requires a fully annotated schematic."
+msgstr "Simulator requires a fully annotated schematic."
+
+msgid "Use current sheet as root"
+msgstr "Use current sheet as root"
+
+msgid "Export netlist only for the current sheet"
+msgstr "Export netlist only for the current sheet"
+
+msgid "Save all voltages"
+msgstr "Save all voltages"
+
+msgid "Write a directive to save all voltages (.save all)"
+msgstr "Write a directive to save all voltages (.save all)"
+
+msgid "Save all currents"
+msgstr "Save all currents"
+
+msgid "Write a directive to save all currents (.probe alli)"
+msgstr "Write a directive to save all currents (.probe alli)"
+
+msgid "External simulator command:"
+msgstr "External simulator command:"
+
+msgid ""
+"Enter the command line to run spice\n"
+"Usually <path to spice binary> %I\n"
+"%I will be replaced by the actual spice netlist name"
+msgstr ""
+"Enter the command line to run spice\n"
+"Usually <path to spice binary> %I\n"
+"%I will be replaced by the actual spice netlist name"
+
+msgid "Create Netlist and Run Simulator Command"
+msgstr "Create Netlist and Run Simulator Command"
+
+msgid "Netlist command:"
+msgstr "Netlist command:"
+
+msgid "Save Netlist File"
+msgstr "Save Netlist File"
+
+#, c-format
+msgid "%s Export"
+msgstr "%s Export"
+
+msgid "Exporting netlist requires a fully annotated schematic."
+msgstr "Exporting netlist requires a fully annotated schematic."
+
+msgid "This plugin already exists."
+msgstr "This plugin already exists."
+
+msgid "You must provide a netlist generator command string"
+msgstr "You must provide a netlist generator command string"
+
+msgid "You must provide a netlist generator title"
+msgstr "You must provide a netlist generator title"
+
+msgid "Add Generator..."
+msgstr "Add Generator..."
+
+msgid "Remove Generator"
+msgstr "Remove Generator"
+
+msgid "Name:"
+msgstr "Name:"
+
+msgid "Command line to run the generator:"
+msgstr "Command line to run the generator:"
+
+msgid "Browse Generators..."
+msgstr "Browse Generators..."
+
+msgid "Script Generator Properties"
+msgstr "Script Generator Properties"
+
 msgid "Power symbol value field text cannot be changed."
 msgstr "Power symbol value field text cannot be changed."
 
@@ -5926,9 +6008,6 @@ msgstr "V Align"
 
 msgid "Text Size"
 msgstr "Text Size"
-
-msgid "Orientation"
-msgstr "Orientation"
 
 msgid "X Position"
 msgstr "X Position"
@@ -6215,13 +6294,13 @@ msgstr "Define as power symbol"
 
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
-"\"add power port\" dialog.  It will lock the value text to protect it\n"
-"from editing in Eeschema.  The symbol will not be included in\n"
+"\"add power symbol\" dialog.  It will lock the value text to protect it\n"
+"from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
 "Setting this option makes the symbol in question appear in the\n"
-"“add power port” dialog.  It will lock the value text to protect it\n"
-"from editing in Eeschema.  The symbol will not be included in\n"
+"\"add power symbol\" dialog.  It will lock the value text to protect it\n"
+"from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 
 msgid "Number of Units:"
@@ -6347,85 +6426,6 @@ msgstr "Accept Name"
 
 msgid "Migrate Buses"
 msgstr "Migrate Buses"
-
-msgid "Export Netlist"
-msgstr "Export Netlist"
-
-msgid "Simulator requires a fully annotated schematic."
-msgstr "Simulator requires a fully annotated schematic."
-
-msgid "Use current sheet as root"
-msgstr "Use current sheet as root"
-
-msgid "Export netlist only for the current sheet"
-msgstr "Export netlist only for the current sheet"
-
-msgid "Save all voltages"
-msgstr "Save all voltages"
-
-msgid "Write a directive to save all voltages (.save all)"
-msgstr "Write a directive to save all voltages (.save all)"
-
-msgid "Save all currents"
-msgstr "Save all currents"
-
-msgid "Write a directive to save all currents (.probe alli)"
-msgstr "Write a directive to save all currents (.probe alli)"
-
-msgid "External simulator command:"
-msgstr "External simulator command:"
-
-msgid ""
-"Enter the command line to run spice\n"
-"Usually <path to spice binary> %I\n"
-"%I will be replaced by the actual spice netlist name"
-msgstr ""
-"Enter the command line to run spice\n"
-"Usually <path to spice binary> %I\n"
-"%I will be replaced by the actual spice netlist name"
-
-msgid "Create Netlist and Run Simulator Command"
-msgstr "Create Netlist and Run Simulator Command"
-
-msgid "Netlist command:"
-msgstr "Netlist command:"
-
-msgid "Save Netlist File"
-msgstr "Save Netlist File"
-
-#, c-format
-msgid "%s Export"
-msgstr "%s Export"
-
-msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Exporting netlist requires a fully annotated schematic."
-
-msgid "This plugin already exists."
-msgstr "This plugin already exists."
-
-msgid "You must provide a netlist generator command string"
-msgstr "You must provide a netlist generator command string"
-
-msgid "You must provide a netlist generator title"
-msgstr "You must provide a netlist generator title"
-
-msgid "Add Generator..."
-msgstr "Add Generator..."
-
-msgid "Remove Generator"
-msgstr "Remove Generator"
-
-msgid "Name:"
-msgstr "Name:"
-
-msgid "Command line to run the generator:"
-msgstr "Command line to run the generator:"
-
-msgid "Browse Generators..."
-msgstr "Browse Generators..."
-
-msgid "Script Generator Properties"
-msgstr "Script Generator Properties"
 
 msgid "Alternate Pin Name"
 msgstr "Alternate Pin Name"
@@ -7024,73 +7024,6 @@ msgstr "Sheet Properties"
 msgid "Add signal by name:"
 msgstr "Add signal by name:"
 
-msgid "Failed to read simulation model from fields."
-msgstr "Failed to read simulation model from fields."
-
-msgid "Type"
-msgstr "Type"
-
-msgid "Not Connected"
-msgstr "Not Connected"
-
-msgid "Browse Models"
-msgstr "Browse Models"
-
-#, c-format
-msgid "No model named '%s' in library."
-msgstr "No model named '%s' in library."
-
-msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr "SPICE model from file (*.lib, *.sub or *.ibs)"
-
-msgid "Model:"
-msgstr "Model:"
-
-msgid "Pin:"
-msgstr "Pin:"
-
-msgid "Differential"
-msgstr "Differential"
-
-msgid "Built-in SPICE model"
-msgstr "Built-in SPICE model"
-
-msgid "Device:"
-msgstr "Device:"
-
-msgid "Type:"
-msgstr "Type:"
-
-msgid "Page"
-msgstr "Page"
-
-msgid "Parameters"
-msgstr "Parameters"
-
-msgid "Code"
-msgstr "Code"
-
-msgid "Model"
-msgstr "Model"
-
-msgid "Symbol Pin"
-msgstr "Symbol Pin"
-
-msgid "Model Pin"
-msgstr "Model Pin"
-
-msgid "Pin Assignments"
-msgstr "Pin Assignments"
-
-msgid "Save {} in Value field as \"{}\""
-msgstr "Save {} in Value field as \"{}\""
-
-msgid "Exclude from simulation"
-msgstr "Exclude from simulation"
-
-msgid "Simulation Model Editor"
-msgstr "Simulation Model Editor"
-
 msgid "You need to select DC source"
 msgstr "You need to select DC source"
 
@@ -7134,8 +7067,8 @@ msgstr "Linear"
 msgid "Frequency scale"
 msgstr "Frequency scale"
 
-msgid "Number of points:"
-msgstr "Number of points:"
+msgid "Number of points per decade:"
+msgstr "Number of points per decade:"
 
 msgid "Start frequency:"
 msgstr "Start frequency:"
@@ -7257,9 +7190,6 @@ msgstr "Load directives from schematic"
 msgid "Custom"
 msgstr "Custom"
 
-msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
-msgstr "Adjust passive symbol values (e.g. M → Meg; 100 nF → 100n)"
-
 msgid "Add full path for .include library directives"
 msgstr "Add full path for .include library directives"
 
@@ -7284,8 +7214,85 @@ msgstr "PSpice and LTSpice"
 msgid "HSpice"
 msgstr "HSpice"
 
-msgid "Simulation settings"
-msgstr "Simulation settings"
+msgid "Simulation Command"
+msgstr "Simulation Command"
+
+msgid "Failed to read simulation model from fields."
+msgstr "Failed to read simulation model from fields."
+
+#, c-format
+msgid "Save parameter '%s (%s)' in Value field"
+msgstr "Save parameter '%s (%s)' in Value field"
+
+msgid "Save primary parameter in Value field"
+msgstr "Save primary parameter in Value field"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Not Connected"
+msgstr "Not Connected"
+
+msgid "Browse Models"
+msgstr "Browse Models"
+
+#, c-format
+msgid "No model named '%s' in library."
+msgstr "No model named '%s' in library."
+
+msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
+msgstr "SPICE model from file (*.lib, *.sub or *.ibs)"
+
+msgid "Model:"
+msgstr "Model:"
+
+msgid "Pin:"
+msgstr "Pin:"
+
+msgid "Differential"
+msgstr "Differential"
+
+msgid "Built-in SPICE model"
+msgstr "Built-in SPICE model"
+
+msgid "Device:"
+msgstr "Device:"
+
+msgid "Type:"
+msgstr "Type:"
+
+msgid "Page"
+msgstr "Page"
+
+msgid "Parameters"
+msgstr "Parameters"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Save {} in Value field as \"{}\""
+msgstr "Save {} in Value field as \"{}\""
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Symbol Pin"
+msgstr "Symbol Pin"
+
+msgid "Model Pin"
+msgstr "Model Pin"
+
+msgid "Pin Assignments"
+msgstr "Pin Assignments"
+
+msgid "Exclude from simulation"
+msgstr "Exclude from simulation"
+
+msgid "Simulation Model Editor"
+msgstr "Simulation Model Editor"
 
 msgid "Select Footprint..."
 msgstr "Select Footprint…"
@@ -8237,6 +8244,9 @@ msgstr "Unknown netlist format.\n"
 msgid "Unable to load library\n"
 msgstr "Unable to load library\n"
 
+msgid "Output path must not conflict with existing path\n"
+msgstr "Output path must not conflict with existing path\n"
+
 msgid "Saving symbol library in updated format\n"
 msgstr "Saving symbol library in updated format\n"
 
@@ -8245,6 +8255,9 @@ msgstr "Unable to save library\n"
 
 msgid "Symbol library was not updated\n"
 msgstr "Symbol library was not updated\n"
+
+msgid "Multiple Layers"
+msgstr "Multiple Layers"
 
 msgid "Input Pin"
 msgstr "Input Pin"
@@ -8642,6 +8655,10 @@ msgstr "Abort Project Save"
 msgid "Importing Schematic"
 msgstr "Importing Schematic"
 
+#, c-format
+msgid "Unhandled exception occurred loading schematic '%s'."
+msgstr "Unhandled exception occurred loading schematic '%s'."
+
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "The current schematic has been modified.  Save changes?"
 
@@ -8700,23 +8717,6 @@ msgstr "Derived from"
 
 msgid "Unknown"
 msgstr "Unknown"
-
-msgid "Edit Page Number"
-msgstr "Edit Page Number"
-
-#, c-format
-msgid "Enter page number for sheet path%s"
-msgstr "Enter page number for sheet path%s"
-
-msgid "Edit Sheet Page Number"
-msgstr "Edit Sheet Page Number"
-
-msgid "Root"
-msgstr "Root"
-
-#, c-format
-msgid "(page %s)"
-msgstr "(page %s)"
 
 msgid "H Justification"
 msgstr "H Justification"
@@ -9241,6 +9241,9 @@ msgstr "ERC Marker"
 msgid "No Connect"
 msgstr "No Connect"
 
+msgid "Root"
+msgstr "Root"
+
 #, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Plotted to '%s'.\n"
@@ -9283,6 +9286,14 @@ msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 msgstr ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
+
+#, c-format
+msgid ""
+"The file name for sheet %s is undefined, this is probably an Altium signal "
+"harness that got converted to a sheet."
+msgstr ""
+"The file name for sheet %s is undefined, this is probably an Altium signal "
+"harness that got converted to a sheet."
 
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
@@ -10677,6 +10688,10 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Bitrate could be too high for rising / falling edges"
 
 #, c-format
+msgid "Simulation model library not found at '%s' or '%s'"
+msgstr "Simulation model library not found at '%s' or '%s'"
+
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
 msgstr "Error loading simulation model library '%s': %s"
 
@@ -10739,14 +10754,14 @@ msgstr "Invalid IBIS model '%s'"
 msgid "Power supply"
 msgstr "Power supply"
 
-msgid "Parasitic Resistance"
-msgstr "Parasitic Resistance"
+msgid "Parasitic pin resistance"
+msgstr "Parasitic pin resistance"
 
-msgid "Parasitic Pin Inductance"
-msgstr "Parasitic Pin Inductance"
+msgid "Parasitic pin inductance"
+msgstr "Parasitic pin inductance"
 
-msgid "Parasitic Pin Capacitance"
-msgstr "Parasitic Pin Capacitance"
+msgid "Parasitic pin capacitance"
+msgstr "Parasitic pin capacitance"
 
 msgid "DC Value"
 msgstr "DC Value"
@@ -10760,8 +10775,8 @@ msgstr "OFF time"
 msgid "Delay"
 msgstr "Delay"
 
-msgid "cycles"
-msgstr "cycles"
+msgid "Number of cycles"
+msgstr "Number of cycles"
 
 msgid "Bitrate"
 msgstr "Bitrate"
@@ -10798,11 +10813,11 @@ msgstr "Tune"
 msgid "Tune component values"
 msgstr "Tune component values"
 
-msgid "Sim Parameters"
-msgstr "Sim Parameters"
+msgid "Sim Command"
+msgstr "Sim Command"
 
-msgid "Simulation parameters and settings"
-msgstr "Simulation parameters and settings"
+msgid "Simulation command and settings"
+msgstr "Simulation command and settings"
 
 msgid "Spice Simulator"
 msgstr "Spice Simulator"
@@ -10813,6 +10828,13 @@ msgid ""
 msgstr ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
+
+msgid ""
+"Schematic sheet simulation command directive has changed.  Do you wish to "
+"update the Simulation Command?"
+msgstr ""
+"Schematic sheet simulation command directive has changed.  Do you wish to "
+"update the Simulation Command?"
 
 msgid "Another simulation is already running."
 msgstr "Another simulation is already running."
@@ -10854,6 +10876,9 @@ msgstr "Save Plot Data"
 msgid "You need to run plot-providing simulation first."
 msgstr "You need to run plot-providing simulation first."
 
+msgid "Save changes to workbook?"
+msgstr "Save changes to workbook?"
+
 msgid ""
 "\n"
 "\n"
@@ -10880,11 +10905,20 @@ msgstr "Show Cursor"
 msgid "New Plot"
 msgstr "New Plot"
 
-msgid "Save as Image"
-msgstr "Save as Image"
+msgid "Open Workbook..."
+msgstr "Open Workbook..."
 
-msgid "Save as .csv File"
-msgstr "Save as .csv File"
+msgid "Save Workbook"
+msgstr "Save Workbook"
+
+msgid "Save Workbook As..."
+msgstr "Save Workbook As..."
+
+msgid "Export Current Plot as PNG..."
+msgstr "Export Current Plot as PNG..."
+
+msgid "Export Current Plot as CSV..."
+msgstr "Export Current Plot as CSV..."
 
 msgid "File"
 msgstr "File"
@@ -11756,8 +11790,8 @@ msgstr "Add a symbol"
 msgid "Add Power"
 msgstr "Add Power"
 
-msgid "Add a power port"
-msgstr "Add a power port"
+msgid "Add a power symbol"
+msgstr "Add a power symbol"
 
 msgid "Add No Connect Flag"
 msgstr "Add No Connect Flag"
@@ -12083,8 +12117,10 @@ msgstr "Run footprint assignment tool"
 msgid "Import Footprint Assignments..."
 msgstr "Import Footprint Assignments..."
 
-msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
-msgstr "Import symbol footprint assignments from .cmp file created by Pcbnew"
+msgid ""
+"Import symbol footprint assignments from .cmp file created by board editor"
+msgstr ""
+"Import symbol footprint assignments from .cmp file created by board editor"
 
 msgid "Annotate Schematic..."
 msgstr "Annotate Schematic..."
@@ -12439,6 +12475,13 @@ msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Do you wish to delete the unreferenced pins from this sheet?"
 
 #, c-format
+msgid "Enter page number for sheet path%s"
+msgstr "Enter page number for sheet path%s"
+
+msgid "Edit Sheet Page Number"
+msgstr "Edit Sheet Page Number"
+
+#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Revert '%s' (and all sub-sheets) to last version saved?"
 
@@ -12551,6 +12594,17 @@ msgstr "Place Pin Anyway"
 
 msgid "Create a new project for this schematic"
 msgstr "Create a new project for this schematic"
+
+msgid "Edit Page Number"
+msgstr "Edit Page Number"
+
+#, c-format
+msgid "Enter page number for sheet path %s"
+msgstr "Enter page number for sheet path %s"
+
+#, c-format
+msgid "(page %s)"
+msgstr "(page %s)"
 
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
@@ -13552,6 +13606,16 @@ msgstr "Disable aperature macros"
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Precision of gerber coordinates, valid options: 5 or 6"
 
+msgid ""
+"Layers to include on each plot, comma separated list of untranslated layer "
+"names to include such as F.Cu,B.Cu"
+msgstr ""
+"Layers to include on each plot, comma separated list of untranslated layer "
+"names to include such as F.Cu,B.Cu"
+
+msgid "Use the gerber plot settings already configured in the board file"
+msgstr "Use the gerber plot settings already configured in the board file"
+
 msgid "Black and white only"
 msgstr "Black and white only"
 
@@ -13635,18 +13699,15 @@ msgstr ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
 
-msgid "Bom output format, valid options: xml"
-msgstr "Bom output format, valid options: xml"
-
-msgid "Schematic file does not exist or is not accessible\n"
-msgstr "Schematic file does not exist or is not accessible\n"
-
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
 msgstr ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
+
+msgid "Schematic file does not exist or is not accessible\n"
+msgstr "Schematic file does not exist or is not accessible\n"
 
 msgid "No drawing sheet"
 msgstr "No drawing sheet"
@@ -20496,6 +20557,9 @@ msgstr "45 degree"
 msgid "arc"
 msgstr "arc"
 
+msgid "Single-sided"
+msgstr "Single-sided"
+
 msgid "Miter radius (r):"
 msgstr "Miter radius (r):"
 
@@ -21093,6 +21157,15 @@ msgstr "Step for &rotate commands:"
 
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr "Set increment (in degrees) for context menu and hotkey rotation."
+
+msgid "Arc editing mode:"
+msgstr "Arc editing mode:"
+
+msgid "Keep center, adjust radius"
+msgstr "Keep center, adjust radius"
+
+msgid "Keep endpoints or direction of starting point"
+msgstr "Keep endpoints or direction of starting point"
 
 msgid "No modifier"
 msgstr "No modifier"
@@ -23957,9 +24030,6 @@ msgstr ""
 msgid "Footprint Wizard"
 msgstr "Footprint Wizard"
 
-msgid "Parameter"
-msgstr "Parameter"
-
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: 3D Viewer [%s]"
@@ -24086,9 +24156,6 @@ msgstr "Memory was exhausted trying to load the DXF, it may be too large."
 
 msgid "Invalid spline definition encountered"
 msgstr "Invalid spline definition encountered"
-
-msgid "Invalid Bezier curve created"
-msgstr "Invalid Bezier curve created"
 
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
@@ -24748,6 +24815,12 @@ msgstr "Thermal Relief Gap"
 msgid "Error loading project footprint libraries."
 msgstr "Error loading project footprint libraries."
 
+msgid "Bitmap Properties"
+msgstr "Bitmap Properties"
+
+msgid "Greyscale"
+msgstr "Greyscale"
+
 msgid "Prefix"
 msgstr "Prefix"
 
@@ -24997,9 +25070,6 @@ msgstr "Saving footprint library\n"
 
 msgid "Footprint library was not updated\n"
 msgstr "Footprint library was not updated\n"
-
-msgid "Multiple Layers"
-msgstr "Multiple Layers"
 
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -27916,8 +27986,8 @@ msgstr "Show the selected net in the ratsnest of unconnected net lines/arcs"
 msgid "Switch to Schematic Editor"
 msgstr "Switch to Schematic Editor"
 
-msgid "Open schematic in Eeschema"
-msgstr "Open schematic in Eeschema"
+msgid "Open in schematic editor"
+msgstr "Open in schematic editor"
 
 msgid "Local Ratsnest"
 msgstr "Local Ratsnest"
@@ -28232,6 +28302,22 @@ msgstr "Distribute Vertically"
 
 msgid "Distributes selected items along the vertical axis"
 msgstr "Distributes selected items along the vertical axis"
+
+msgid "Keep arc center, adjust radius"
+msgstr "Keep arc center, adjust radius"
+
+msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
+msgstr "Switch arc editing mode to keep center, adjust radius and endpoints"
+
+msgid "Keep arc endpoints or direction of starting point"
+msgstr "Keep arc endpoints or direction of starting point"
+
+msgid ""
+"Switch arc editing mode to keep endpoints, or to keep direction of the other "
+"point"
+msgstr ""
+"Switch arc editing mode to keep endpoints, or to keep direction of the other "
+"point"
 
 msgid "Position Relative To..."
 msgstr "Position Relative To…"
@@ -29202,8 +29288,8 @@ msgstr "Rule Area on %s"
 msgid "Zone %s on %s"
 msgstr "Zone %s on %s"
 
-msgid "Min Width"
-msgstr "Min Width"
+msgid "Minimum Width"
+msgstr "Minimum Width"
 
 msgid "Pad Connections"
 msgstr "Pad Connections"
@@ -29307,6 +29393,12 @@ msgstr "pcbnew"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
+msgid "EDA"
+msgstr "EDA"
+
+msgid "Circuit board"
+msgstr "Circuit board"
+
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -29345,6 +29437,82 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid ""
+#~ "If checked, launching a project will also launch tools such as eeschema "
+#~ "and pcbnew with previously open files"
+#~ msgstr ""
+#~ "If checked, launching a project will also launch tools such as eeschema "
+#~ "and pcbnew with previously open files"
+
+#~ msgid "Change Edit Method"
+#~ msgstr "Change Edit Method"
+
+#~ msgid "Change edit method constraints"
+#~ msgstr "Change edit method constraints"
+
+#~ msgid ""
+#~ "Setting this option makes the symbol in question appear in the\n"
+#~ "\"add power port\" dialog.  It will lock the value text to protect it\n"
+#~ "from editing in Eeschema.  The symbol will not be included in\n"
+#~ "the BOM and cannot be assigned a footprint."
+#~ msgstr ""
+#~ "Setting this option makes the symbol in question appear in the\n"
+#~ "“add power port” dialog.  It will lock the value text to protect it\n"
+#~ "from editing in Eeschema.  The symbol will not be included in\n"
+#~ "the BOM and cannot be assigned a footprint."
+
+#~ msgid "Number of points:"
+#~ msgstr "Number of points:"
+
+#~ msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
+#~ msgstr "Adjust passive symbol values (e.g. M → Meg; 100 nF → 100n)"
+
+#~ msgid "Simulation settings"
+#~ msgstr "Simulation settings"
+
+#~ msgid "Parasitic Resistance"
+#~ msgstr "Parasitic Resistance"
+
+#~ msgid "Parasitic Pin Inductance"
+#~ msgstr "Parasitic Pin Inductance"
+
+#~ msgid "Parasitic Pin Capacitance"
+#~ msgstr "Parasitic Pin Capacitance"
+
+#~ msgid "cycles"
+#~ msgstr "cycles"
+
+#~ msgid "Sim Parameters"
+#~ msgstr "Sim Parameters"
+
+#~ msgid "Simulation parameters and settings"
+#~ msgstr "Simulation parameters and settings"
+
+#~ msgid "Save as Image"
+#~ msgstr "Save as Image"
+
+#~ msgid "Save as .csv File"
+#~ msgstr "Save as .csv File"
+
+#~ msgid "Add a power port"
+#~ msgstr "Add a power port"
+
+#~ msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
+#~ msgstr ""
+#~ "Import symbol footprint assignments from .cmp file created by Pcbnew"
+
+#~ msgid "Bom output format, valid options: xml"
+#~ msgstr "Bom output format, valid options: xml"
+
+#~ msgid "Invalid Bezier curve created"
+#~ msgstr "Invalid Bezier curve created"
+
+#~ msgid "Open schematic in Eeschema"
+#~ msgstr "Open schematic in Eeschema"
+
+#~ msgid "Min Width"
+#~ msgstr "Min Width"
 
 #~ msgid "Viewports (Shift+Tab):"
 #~ msgstr "Viewports (Shift+Tab):"
@@ -30695,12 +30863,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Layer presets"
 #~ msgstr "Layer presets"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit board"
 
 #~ msgid "PcbNew"
 #~ msgstr "PcbNew"
@@ -43451,9 +43613,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Open Workbook"
 #~ msgstr "Open Workbook"
-
-#~ msgid "Save Workbook"
-#~ msgstr "Save Workbook"
 
 #~ msgid "Close Simulation"
 #~ msgstr "Close Simulation"
