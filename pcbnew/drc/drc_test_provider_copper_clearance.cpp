@@ -79,6 +79,14 @@ public:
     }
 
 private:
+    /**
+     * Checks for track/via/hole <-> clearance
+     * @param track Track to text
+     * @param trackShape Primitive track shape
+     * @param layer Which layer to test (in case of vias this can be multiple
+     * @param other item against which to test the track item
+     * @return false if there is a clearance violation reported, true if there is none
+     */
     bool testTrackAgainstItem( PCB_TRACK* track, SHAPE* trackShape, PCB_LAYER_ID layer,
                                BOARD_ITEM* other );
 
@@ -91,6 +99,18 @@ private:
     void testZonesToZones();
 
     void testItemAgainstZone( BOARD_ITEM* aItem, ZONE* aZone, PCB_LAYER_ID aLayer );
+
+    typedef struct checked
+    {
+        checked()
+            : layers(), has_error( false ) {}
+
+        checked( PCB_LAYER_ID aLayer )
+            : layers( aLayer ), has_error( false ) {}
+
+        LSET layers;
+        bool has_error;
+    } layers_checked;
 
 private:
     int m_drcEpsilon;
@@ -171,6 +191,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
     int            clearance = -1;
     int            actual;
     VECTOR2I       pos;
+    bool           has_error = false;
 
     std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( layer );
 
@@ -204,7 +225,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
 
                 reportViolation( drcItem, *intersection, layer );
 
-                return m_drcEngine->GetReportAllTrackErrors();
+                return false;
             }
         }
 
@@ -228,6 +249,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drce, pos, layer );
+                has_error = true;
 
                 if( !m_drcEngine->GetReportAllTrackErrors() )
                     return false;
@@ -241,9 +263,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
         std::array<BOARD_ITEM*, 2> b{ other, track };
         std::array<SHAPE*, 2>      a_shape{ trackShape, otherShape.get() };
 
-        bool has_error = false;
-
-        for( size_t ii = 0; ii < 2 && !has_error; ++ii )
+        for( size_t ii = 0; ii < 2; ++ii )
         {
             std::shared_ptr<SHAPE_SEGMENT> holeShape;
 
@@ -282,16 +302,13 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
                     reportViolation( drce, pos, layer );
-                    has_error = true;
-
-                    if( !m_drcEngine->GetReportAllTrackErrors() )
-                        return false;
+                    return false;
                 }
             }
         }
     }
 
-    return !m_drcEngine->IsCancelled();
+    return !has_error;
 }
 
 
@@ -419,8 +436,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     reportAux( wxT( "Testing %d tracks & vias..." ), m_board->Tracks().size() );
 
-    std::map<BOARD_ITEM*, int>                  freePadsUsageMap;
-    std::unordered_map<PTR_PTR_CACHE_KEY, LSET> checkedPairs;
+    std::map<BOARD_ITEM*, int>                            freePadsUsageMap;
+    std::unordered_map<PTR_PTR_CACHE_KEY, layers_checked> checkedPairs;
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
@@ -450,13 +467,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
                         auto it = checkedPairs.find( { a, b } );
 
-                        if( it != checkedPairs.end() && it->second.test( layer ) )
+                        if( it != checkedPairs.end() && ( it->second.layers.test( layer )
+                                || ( it->second.has_error && !m_drcEngine->GetReportAllTrackErrors() ) ) )
                         {
                             return false;
                         }
                         else
                         {
-                            checkedPairs[ { a, b } ].set( layer );
+                            checkedPairs[ { a, b } ].layers.set( layer );
                             return true;
                         }
                     },
@@ -481,7 +499,27 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                             }
                         }
 
-                        return testTrackAgainstItem( track, trackShape.get(), layer, other );
+                        BOARD_ITEM* a = track;
+                        BOARD_ITEM* b = other;
+
+                        // store canonical order so we don't collide in both directions
+                        // (a:b and b:a)
+                        if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                            std::swap( a, b );
+
+                        auto it = checkedPairs.find( { a, b } );
+
+                        // If we get an error, mark the pair as having a clearance error already
+                        // Only continue if we are reporting all track errors
+                        if( !testTrackAgainstItem( track, trackShape.get(), layer, other ) )
+                        {
+                            if( it != checkedPairs.end() )
+                                it->second.has_error = true;
+
+                            return m_drcEngine->GetReportAllTrackErrors() && !m_drcEngine->IsCancelled();
+                        }
+
+                        return !m_drcEngine->IsCancelled();
                     },
                     m_board->m_DRCMaxClearance );
 
