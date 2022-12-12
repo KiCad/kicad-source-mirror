@@ -48,7 +48,7 @@ DIALOG_ASSIGN_NETCLASS_BASE::DIALOG_ASSIGN_NETCLASS_BASE( wxWindow* parent, wxWi
 
 	bLowerSizer->Add( m_matchingNets, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_info = new wxStaticText( this, wxID_ANY, wxT("Note: complete netclass assignments can be edited in Schemtaic Setup > Project."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_info = new wxStaticText( this, wxID_ANY, wxT("Note: complete netclass assignments can be edited in Schematic Setup > Project."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_info->Wrap( -1 );
 	bLowerSizer->Add( m_info, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
