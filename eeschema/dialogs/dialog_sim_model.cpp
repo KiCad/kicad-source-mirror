@@ -353,7 +353,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateIbisWidgets()
     m_ibisPinLabel->Show( isIbisLoaded() );
 
     m_differentialCheckbox->Show( isIbisLoaded() && modelkibis && modelkibis->CanDifferential() );
-    m_modelNameLabel->SetLabel( isIbisLoaded() ? "Component:" : "Model:" );
+    m_modelNameLabel->SetLabel( isIbisLoaded() ? _( "Component:" ) : _( "Model:" ) );
 }
 
 
