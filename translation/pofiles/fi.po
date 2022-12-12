@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-12 08:39-0800\n"
-"PO-Revision-Date: 2022-12-08 12:07+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2022-12-14 15:48+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3201,13 +3201,12 @@ msgid "Remember open files for next project launch"
 msgstr "Muista avoimet tiedostot seuraavaa projektin käynnistämistä varten"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"Jos tämä on valittu, projektin käynnistäminen käynnistää myös työkalut, "
-"kuten eeschema ja pcbnew aiemmin avoimilla tiedostoilla"
+"Jos tämä on valittuna, projektin käynnistäminen käynnistää myös työkalut, "
+"kuten kytkentäkaavio- ja piirilevyeditorit aiemmin avoimilla tiedostoilla"
 
 #: common/dialogs/panel_common_settings_base.cpp:241
 msgid "&Auto save:"
@@ -5959,13 +5958,12 @@ msgid "Delete clicked items"
 msgstr "Poista napsautetut kohteet"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "Vaihda realistinen tila"
+msgstr "Vaihda kaaren muokkaustila"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Vaihda toiseen tapaan muokataksesi kaaria"
 
 #: common/tool/actions.cpp:210
 msgid "Show Search Panel"
@@ -9781,18 +9779,17 @@ msgid "Define as power symbol"
 msgstr "Määritä tehosymboliksi"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
-#, fuzzy
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"Tämän asetuksen asettaminen tuo kyseisen symbolin näkyviin\n"
-"\"lisää virtaportti\" -valintaikkuna. Se lukitsee arvotekstin sen "
+"Tämän vaihtoehdon asettaminen saa kyseisen symbolin kysymyksen näkyviin\n"
+"\"lisää tehosymboli\" -valintaikkunassa. Se lukitsee arvotekstin sen "
 "suojaamiseksi\n"
-"muokkauksesta Eeschemassa. Symbolia ei sisälly\n"
-"BOM: lle eikä sille voida antaa jalanjälkeä."
+"muokkaamiselta kytkentäkaaviossa. Symbolia ei sisällytetä \n"
+"materiaaliluetteloon, eikä sille voi määrittää jalanjälkeä."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:191
 msgid "Number of Units:"
@@ -10916,9 +10913,8 @@ msgid "Frequency scale"
 msgstr "Taajuusasteikko"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "Yksikkömäärä pakkausta kohti:"
+msgstr "Pisteiden määrä dekadia kohti:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -11131,9 +11127,8 @@ msgid "HSpice"
 msgstr "HSpice(simulaatio)"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "Simulointi"
+msgstr "Simulaatiokomento"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:242
 msgid "Failed to read simulation model from fields."
@@ -11142,11 +11137,11 @@ msgstr "Simulaatiomallin lukeminen kentistä epäonnistui."
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "Tallenna parametri '%s (%s)' Arvo-kenttään"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:420
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "Tallenna ensisijainen parametri Arvo-kenttään"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:437
 #: pcbnew/footprint_wizard_frame.cpp:322
@@ -12606,7 +12601,7 @@ msgstr "Kirjastoa ei voi ladata\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:347 pcbnew/pcbnew_jobs_handler.cpp:579
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "Lähtöpolku ei saa olla ristiriidassa olemassa olevan polun kanssa\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:357
 msgid "Saving symbol library in updated format\n"
@@ -13149,9 +13144,9 @@ msgid "Importing Schematic"
 msgstr "Tuodaan Kytkentäkaaviota"
 
 #: eeschema/files-io.cpp:1287
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "Muisti ehtyi ladatessa kytkentäkaaviota '%s'."
+msgstr "Käsittelemätön poikkeus tapahtui ladattaessa kytkentäkaaviota '%s'."
 
 #: eeschema/files-io.cpp:1321
 msgid "The current schematic has been modified.  Save changes?"
@@ -14024,6 +14019,8 @@ msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
+"Tiedostonimi arkille %s on määrittämättä, tämä on mahdollisesti Altium "
+"signaalijohtosarja, joka on muutettu arkiksi."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
@@ -15740,9 +15737,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Bittinopeus voi olla liian korkea nouseville / laskeville reunoille"
 
 #: eeschema/sim/sim_lib_mgr.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr "Virhe ladattaessa simulaatiomallikirjastoa '%s': %s"
+msgstr "Simulaatiomallikirjastoa ei löydy kohteesta '%s' tai '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:217
 #, c-format
@@ -15822,19 +15819,16 @@ msgid "Power supply"
 msgstr "Virtalähde"
 
 #: eeschema/sim/sim_model_kibis.cpp:357
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "Parasiittiresistenssi"
+msgstr "Parasiittinastan resistanssi"
 
 #: eeschema/sim/sim_model_kibis.cpp:367
-#, fuzzy
 msgid "Parasitic pin inductance"
-msgstr "Parasiittinen nasta induktanssi"
+msgstr "Parasiittinastan induktanssi"
 
 #: eeschema/sim/sim_model_kibis.cpp:377
-#, fuzzy
 msgid "Parasitic pin capacitance"
-msgstr "Parasiittisten pintojen kapasitanssi"
+msgstr "Parasiittinastan kapasitanssi"
 
 #: eeschema/sim/sim_model_kibis.cpp:421
 msgid "DC Value"
@@ -15853,9 +15847,8 @@ msgid "Delay"
 msgstr "Viive"
 
 #: eeschema/sim/sim_model_kibis.cpp:463
-#, fuzzy
 msgid "Number of cycles"
-msgstr "Näytteiden määrä"
+msgstr "Jaksojen lukumäärä"
 
 #: eeschema/sim/sim_model_kibis.cpp:480
 msgid "Bitrate"
@@ -15903,14 +15896,12 @@ msgid "Tune component values"
 msgstr "Viritä komponenttien arvot"
 
 #: eeschema/sim/sim_plot_frame.cpp:175
-#, fuzzy
 msgid "Sim Command"
-msgstr "Käsky"
+msgstr "Simulaatiokomento"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
-#, fuzzy
 msgid "Simulation command and settings"
-msgstr "Simulaatioparametrit ja -asetukset"
+msgstr "Simulaatiokomento ja asetukset"
 
 #: eeschema/sim/sim_plot_frame.cpp:356 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
@@ -15929,6 +15920,8 @@ msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
+"Kytkentäkaavioarkin simulointikomentodirektiivi on muuttunut.  Haluatko "
+"päivittää simulaatiokomennon?"
 
 #: eeschema/sim/sim_plot_frame.cpp:516 eeschema/sim/sim_plot_frame.cpp:1901
 msgid "Another simulation is already running."
@@ -15984,9 +15977,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Sinun on ensin suoritettava piirustuksen-antava simulointi."
 
 #: eeschema/sim/sim_plot_frame.cpp:1670
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Tallenna nykyinen levytiedosto"
+msgstr "Tallennetaanko muutokset työkirjaan?"
 
 #: eeschema/sim/sim_plot_frame.cpp:1832
 msgid ""
@@ -16021,28 +16013,24 @@ msgid "New Plot"
 msgstr "Uusi Piirustus"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Avaa työkirja"
+msgstr "Avaa Työkirja..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 msgid "Save Workbook"
 msgstr "Tallenna työkirja"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "Tallenna työkirja"
+msgstr "Tallenna Työkirja Nimellä..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "Vie Nykyinen Näkymä PNG-muodossa..."
+msgstr "Vie Nykyinen Piirros PNG-muodossa..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "Vie Nykyinen Näkymä PNG-muodossa..."
+msgstr "Vie Nykyinen Piirros CVS-muodossa..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -17215,9 +17203,8 @@ msgid "Add Power"
 msgstr "Lisää Virta"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "Lisää symboli"
+msgstr "Lisää tehosymboli"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -17656,10 +17643,11 @@ msgid "Import Footprint Assignments..."
 msgstr "Tuo Jalanjäljen Määritykset ..."
 
 #: eeschema/tools/ee_actions.cpp:628
-#, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr "Tuo symbolijalanjälkimääritykset Pcbnewin luomasta .cmp-tiedostosta"
+msgstr ""
+"Tuo symbolien jalanjälkimääritykset piirilevyeditorin luomasta .cmp-"
+"tiedostosta"
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Annotate Schematic..."
@@ -18315,9 +18303,9 @@ msgid "Edit Page Number"
 msgstr "Muokkaa sivunumeroa"
 
 #: eeschema/widgets/hierarchy_pane.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Enter page number for sheet path %s"
-msgstr "Syötä arkin polun sivunumero %s"
+msgstr "Anna sivunumero arkin polulle %s"
 
 #: eeschema/widgets/hierarchy_pane.cpp:322
 #, c-format
@@ -19775,17 +19763,18 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Gerber-koordinaattien tarkkuus, hyväksytyt vaihtoehdot: 5 tai 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
-#, fuzzy
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
 msgstr ""
-"Pilkuilla eroteltu luettelo kääntämättömistä kerrosnimistä, sisältää "
-"sellaisia kuten F.Cu,B.Cu"
+"Kerrokset sisällytettävät jokaiseen piirrokseen, pilkuilla eroteltu luettelo "
+"sisällyttämättömistä kääntämättömistä tasojen nimistä, kuten F.Cu,B.Cu"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
 msgstr ""
+"Käytä gerber piirtoasetuksia, jotka on valmiiksi määritetty "
+"piirilevytiedostossa"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:54
 #: kicad/cli/command_export_pcb_svg.cpp:51
@@ -29358,9 +29347,8 @@ msgid "arc"
 msgstr "kaari"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:160
-#, fuzzy
 msgid "Single-sided"
-msgstr "Yksi sivu"
+msgstr "Yksipuoleinen"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:166
 msgid "Miter radius (r):"
@@ -30151,18 +30139,16 @@ msgstr ""
 "Aseta lisäys (asteina) kontekstivalikon ja pikanäppäinten kiertämistä varten."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "Sijaintitila:"
+msgstr "Kaarimuokkaustila:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
-#, fuzzy
 msgid "Keep center, adjust radius"
-msgstr "Ympyrän keskipiste (%s, %s), säde %s"
+msgstr "Pidä keskellä, säädä sädettä"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "Säilytä päätepisteet tai aloituspisteen suunta"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
@@ -34943,14 +34929,12 @@ msgid "Error loading project footprint libraries."
 msgstr "Virhe projektin jalanjälkikirjastojen lataamisessa."
 
 #: pcbnew/pcb_bitmap.cpp:232
-#, fuzzy
 msgid "Bitmap Properties"
-msgstr "Läpiviennin Ominaisuudet"
+msgstr "Bittikartan Ominaisuudet"
 
 #: pcbnew/pcb_bitmap.cpp:239
-#, fuzzy
 msgid "Greyscale"
-msgstr "Harmaasävykuva"
+msgstr "Harmaasävy"
 
 #: pcbnew/pcb_dimension.cpp:298
 msgid "Prefix"
@@ -39111,9 +39095,8 @@ msgid "Switch to Schematic Editor"
 msgstr "Vaihda Kytkentäkaavioeditoriin"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Open in schematic editor"
-msgstr "Avaa olemassa oleva kytkentäkaavioprojekti"
+msgstr "Avaa kytkentäkaavioeditorissa"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Local Ratsnest"
@@ -39535,23 +39518,26 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "Levittää valitut kohteet pitkin pysty-akselia"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
-#, fuzzy
 msgid "Keep arc center, adjust radius"
-msgstr "Kaaren keskipiste (%s, %s), säde %s"
+msgstr "Pidä kaari keskellä, säädä sädettä"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
 msgstr ""
+"Vaihda kaaren muokkaustilaa säilyttääksesi keskipisteen, säätääksesi sädettä "
+"ja päätepisteitä"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Keep arc endpoints or direction of starting point"
-msgstr ""
+msgstr "Säilytä kaaren päätepisteet tai aloituspisteen suunta"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
 msgstr ""
+"Vaihda kaaren muokkaustilaa säilyttääksesi päätepisteet tai pitääksesi "
+"toisen pisteen suunnan"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
@@ -40868,9 +40854,8 @@ msgid "Zone %s on %s"
 msgstr "Vyöhyke %s paikassa %s"
 
 #: pcbnew/zone.cpp:1424
-#, fuzzy
 msgid "Minimum Width"
-msgstr "Vähimmäisleveys:"
+msgstr "Vähimmäisleveys"
 
 #: pcbnew/zone.cpp:1429
 msgid "Pad Connections"
