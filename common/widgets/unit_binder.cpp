@@ -174,7 +174,8 @@ void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
         SetUnits( provider->GetUserUnits() );
         m_iuScale = &provider->GetIuScale();
 
-        SetValue( temp );
+        if( !IsIndeterminate() )
+            SetValue( temp );
     }
 
     aEvent.Skip();
