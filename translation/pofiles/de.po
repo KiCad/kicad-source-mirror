@@ -19,10 +19,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-12 08:39-0800\n"
-"PO-Revision-Date: 2022-12-11 20:19+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2022-12-14 15:48+0000\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15354,15 +15354,16 @@ msgstr "Komponente: kein Pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:348
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "Der Strom kann anhand dieser IV-Tabelle nicht interpoliert werden."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:366
+#, fuzzy
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "Es gibt eine Nan-Spannung in einer IV-Tabelle"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:373
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "Es gibt einen ungültigen Strom in einer IV-Tabelle"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:416
 msgid "Invalid R_load."
@@ -20041,6 +20042,8 @@ msgstr ""
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr ""
+"Erzwingt das erneute Speichern der Footprint-Bibliothek unabhängig von der "
+"Versionierung"
 
 #: kicad/cli/command_fp_upgrade.cpp:53
 msgid "Footprint path does not exist or is not accessible\n"
@@ -20050,10 +20053,12 @@ msgstr ""
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
 msgstr ""
+"Erzwingt das erneute Speichern der Symbolbibliothek unabhängig von der "
+"Versionierung"
 
 #: kicad/cli/command_sym_upgrade.cpp:53
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr ""
+msgstr "Symboldatei existiert nicht oder kann nicht geöffnet werden\n"
 
 #: kicad/dialogs/dialog_template_selector.cpp:148
 msgid "<h1>Template Selector</h1>"
@@ -22293,6 +22298,17 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"Diese Tabelle zeigt den Unterschied im elektrochemischen Potential zwischen "
+"verschiedenen Metallen und Legierungen. Eine positive Zahl zeigt an, dass "
+"die Zeile anodisch und die Spalte kathodisch ist.\n"
+"Galvanische Korrosion betrifft verschiedene Metalle in Kontakt und unter "
+"bestimmten Bedingungen.\n"
+"Die Anode eines elektrochemischen Paares wird oxidiert und weggefressen, "
+"während die Kathode mit gelösten Metallen plattiert wird, aber geschützt "
+"bleibt.\n"
+"EN 50310 empfiehlt eine Spannungsdifferenz von unter 300mV. Bekannte "
+"Verfahren verwenden ein drittes Grenzflächenmetall zwischen dem Hauptpaar ("
+"siehe beispielsweise die ENIG-Oberflächenbeschichtung)."
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
 msgid "Threshold voltage:"
@@ -23146,7 +23162,7 @@ msgstr "Übertragungsleitungen"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:110
 msgid "Memo"
-msgstr ""
+msgstr "Merkblatt"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:113
 msgid "E-Series"
@@ -29359,33 +29375,31 @@ msgid "SVG Options"
 msgstr "SVG-Optionen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:375
-#, fuzzy
 msgid ""
 "This number defines how many digits are exported that are below 1 mm.\n"
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
-"Wie groß eine SVG-Benutzereinheit ist.\n"
-"Die Zahl bestimmt, wie viele Ziffern exportiert werden, die unter 1 mm oder "
-"1 Zoll liegen.\n"
-"Die Benutzereinheit ist 10^-<N> mm oder 10^-<N> Zoll.\n"
-"Verwenden Sie 6, wenn Sie sich nicht sicher sind."
+"Die Zahl bestimmt, wie viele Ziffern exportiert werden, die unter 1 mm "
+"liegen.\n"
+"Die Benutzereinheit ist 10^-<N> mm.\n"
+"Verwenden Sie 4, wenn Sie sich nicht sicher sind."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:379
 #: pcbnew/dialogs/dialog_plot_base.cpp:392
-#, fuzzy
 msgid "Plot in black and white"
-msgstr "Nur &schwarz/weiß drucken"
+msgstr "Nur in Schwarz-Weiß drucken"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
 #: pcbnew/dialogs/dialog_plot_base.cpp:393
 msgid "When disabled, the color from the chosen layer will be used to plot."
 msgstr ""
+"Wenn deaktiviert, wird die Farbe der ausgewählten Ebene zum Plotten "
+"verwendet."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:390
-#, fuzzy
 msgid "PDF Options"
-msgstr "Optionen DXF"
+msgstr "PDF-Optionen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:419
 msgid "Run DRC..."
