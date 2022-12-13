@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-11 12:20-0800\n"
-"PO-Revision-Date: 2022-12-08 12:06+0000\n"
+"PO-Revision-Date: 2022-12-14 00:52+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -4593,7 +4593,6 @@ msgid "This path:"
 msgstr "Denna sökväg:"
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
 msgstr "Befintlig sökväg:"
 
@@ -25246,7 +25245,7 @@ msgstr "Välj ett hörn att radera."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:168
 #: pcbnew/dialogs/dialog_pad_properties_base.h:265
 msgid "Pad Properties"
-msgstr "Pad Egenskaper"
+msgstr "Lödyteegenskaper"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:175
 msgid "Default Pad Properties for Add Pad Tool"
@@ -26715,7 +26714,7 @@ msgstr "Ändra inte lödytor av en annan typ"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
-msgstr "Push Pad Egenskaper"
+msgstr "Använd lödyteegenskaper"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:155
 msgid "No layers selected."
@@ -27017,7 +27016,7 @@ msgstr "Ledarbredd och Via-storlek"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:146
 msgid "Set Unused Pad Properties"
-msgstr "Ställ in oanvända padegenskaper"
+msgstr "Ställ in oanvända lödyteegenskaper"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
@@ -29294,7 +29293,6 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "Kontrollerar innergårdens definitioner ..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:94
-#, fuzzy
 msgid "Gathering footprint courtyards..."
 msgstr "Samlar fotavtryckens gårdsplaner..."
 
@@ -34487,7 +34485,7 @@ msgstr "Kopiera lödytans egenskaper till standardegenskaperna för lödytor"
 
 #: pcbnew/tools/pcb_actions.cpp:503
 msgid "Copy current pad's properties"
-msgstr "Kopiera den aktuella padens egenskaper"
+msgstr "Kopiera den aktuella lödytans egenskaper"
 
 #: pcbnew/tools/pcb_actions.cpp:508
 msgid "Paste Default Pad Properties to Selected"
@@ -34496,7 +34494,7 @@ msgstr "Klistra in standardegenskaperna för lödytor till valda objekt"
 #: pcbnew/tools/pcb_actions.cpp:509
 msgid "Replace the current pad's properties with those copied earlier"
 msgstr ""
-"Ersätt den aktuella padens egenskaper med de som har kopierats tidigare"
+"Ersätt den aktuella lödytans egenskaper med dem som har kopierats tidigare"
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Push Pad Properties to Other Pads..."
@@ -34504,7 +34502,7 @@ msgstr "Överför lödyte-egenskaper till andra lödytor..."
 
 #: pcbnew/tools/pcb_actions.cpp:515
 msgid "Copy the current pad's properties to other pads"
-msgstr "Kopiera den aktuella padens egenskaper till andra pad"
+msgstr "Kopiera den aktuella lödytans egenskaper till andra lödytor"
 
 #: pcbnew/tools/pcb_actions.cpp:520
 msgid "Renumber Pads..."
