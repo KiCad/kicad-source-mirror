@@ -583,7 +583,7 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         PAGE_INFO pageTemp = pageSave;
 
         VECTOR2I symbolSize = symbol->GetUnitBoundingBox( editFrame->GetUnit(),
-                                                          editFrame->GetConvert() ).GetSize();
+                                                          editFrame->GetConvert(), false ).GetSize();
 
         // Add a small margin to the plot bounding box
         pageTemp.SetWidthMils( schIUScale.IUToMils( symbolSize.x * 1.2 ) );

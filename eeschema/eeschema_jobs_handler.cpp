@@ -362,7 +362,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
         }
 
         // Get the symbol bounding box to fit the plot page to it
-        BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, convert );
+        BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, convert, false );
         PAGE_INFO pageInfo( PAGE_INFO::Custom );
         pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
         pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );

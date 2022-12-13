@@ -971,7 +971,8 @@ bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums,
 }
 
 
-const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aConvert ) const
+const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aConvert,
+                                            bool aIgnoreHiddenFields ) const
 {
     BOX2I bBox;     // Start with a fresh BOX2I so the Merge algorithm works
 
@@ -988,7 +989,8 @@ const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aConvert ) const
         if( item.m_convert > 0 && aConvert > 0 && aConvert != item.m_convert )
             continue;
 
-        if ( ( item.Type() == LIB_FIELD_T ) && !( ( LIB_FIELD& ) item ).IsVisible() )
+        if( aIgnoreHiddenFields && ( item.Type() == LIB_FIELD_T )
+            && !( (LIB_FIELD&) item ).IsVisible() )
             continue;
 
         bBox.Merge( item.GetBoundingBox() );

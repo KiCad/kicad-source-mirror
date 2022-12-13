@@ -214,9 +214,9 @@ public:
      * @param aConvert = 0, 1 or 2
      *  If aUnit == 0, unit is not used
      *  if aConvert == 0 Convert is non used
-     *  Invisible fields are not taken in account
+     * @param aIgnoreHiddenFields default true, ignores any hidden fields
      **/
-    const BOX2I GetUnitBoundingBox( int aUnit, int aConvert ) const;
+    const BOX2I GetUnitBoundingBox( int aUnit, int aConvert, bool aIgnoreHiddenFields = true ) const;
 
     /**
      * Get the symbol bounding box excluding fields.
