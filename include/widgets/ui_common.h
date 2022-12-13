@@ -61,6 +61,7 @@ wxFont GetMonospacedUIFont();
 
 wxFont GetControlFont( wxWindow* aWindow );
 wxFont GetInfoFont( wxWindow* aWindow );
+wxFont GetDockedPaneFont( wxWindow* aWindow );
 wxFont GetStatusFont( wxWindow* aWindow );
 
 /**

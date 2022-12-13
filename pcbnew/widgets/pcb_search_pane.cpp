@@ -36,7 +36,7 @@ PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
     m_pcbFrame->Connect( BOARD_CHANGED, wxCommandEventHandler( PCB_SEARCH_PANE::onBoardChanged ),
                          nullptr, this );
 
-    wxFont infoFont = KIUI::GetInfoFont( this );
+    wxFont infoFont = KIUI::GetDockedPaneFont( this );
     SetFont( infoFont );
     m_notebook->SetFont( infoFont );
 

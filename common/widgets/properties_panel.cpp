@@ -82,7 +82,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     m_grid->DedicateKey( WXK_NUMPAD_ENTER );
     m_grid->DedicateKey( WXK_DOWN );
     m_grid->DedicateKey( WXK_UP );
-    mainSizer->Add( m_grid, 1, wxALL | wxEXPAND, 5 );
+    mainSizer->Add( m_grid, 1, wxEXPAND, 5 );
 
     m_grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 
@@ -90,6 +90,8 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     // Needed for dark mode, on wx 3.0 at least.
     m_grid->SetCaptionTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_CAPTIONTEXT ) );
 #endif
+
+    SetFont( KIUI::GetDockedPaneFont( this ) );
 
     SetSizer( mainSizer );
     Layout();

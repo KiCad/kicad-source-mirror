@@ -141,6 +141,18 @@ wxFont KIUI::GetStatusFont( wxWindow* aWindow )
 }
 
 
+wxFont KIUI::GetDockedPaneFont( wxWindow* aWindow )
+{
+#ifdef __WXMAC__
+    int scale = -1;
+#else
+    int scale = 0;
+#endif
+
+    return getGUIFont( aWindow, scale );
+}
+
+
 wxFont KIUI::GetInfoFont( wxWindow* aWindow )
 {
     return getGUIFont( aWindow, -1 );
