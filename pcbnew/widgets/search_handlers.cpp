@@ -314,7 +314,7 @@ wxString NETS_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
     if( net->GetNetCode() == 0 )
     {
         if( aCol == 0 )
-            return wxT( "No Net" );
+            return _( "No Net" );
         else if( aCol == 1 )
             return wxT( "" );
     }
