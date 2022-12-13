@@ -16,23 +16,6 @@ include_directories(
     )
 
 set( KICAD_SRCS
-    cli/command.cpp
-    cli/command_export_pcb_base.cpp
-    cli/command_export_pcb_drill.cpp
-    cli/command_export_pcb_dxf.cpp
-    cli/command_export_pcb_gerber.cpp
-    cli/command_export_pcb_gerbers.cpp
-    cli/command_export_pcb_pdf.cpp
-    cli/command_export_pcb_pos.cpp
-    cli/command_export_pcb_step.cpp
-    cli/command_export_pcb_svg.cpp
-    cli/command_fp_upgrade.cpp
-    cli/command_export_sch_pythonbom.cpp
-    cli/command_export_sch_netlist.cpp
-    cli/command_export_sch_pdf.cpp
-    cli/command_export_sch_svg.cpp
-    cli/command_sym_export_svg.cpp
-    cli/command_sym_upgrade.cpp
     dialogs/dialog_template_selector_base.cpp
     dialogs/dialog_template_selector.cpp
     dialogs/panel_kicad_launcher_base.cpp
@@ -50,6 +33,26 @@ set( KICAD_SRCS
     tools/kicad_manager_control.cpp
     )
 
+set( KICAD_CLI_SRCS
+    cli/command.cpp
+    cli/command_export_pcb_base.cpp
+    cli/command_export_pcb_drill.cpp
+    cli/command_export_pcb_dxf.cpp
+    cli/command_export_pcb_gerber.cpp
+    cli/command_export_pcb_gerbers.cpp
+    cli/command_export_pcb_pdf.cpp
+    cli/command_export_pcb_pos.cpp
+    cli/command_export_pcb_step.cpp
+    cli/command_export_pcb_svg.cpp
+    cli/command_fp_upgrade.cpp
+    cli/command_export_sch_pythonbom.cpp
+    cli/command_export_sch_netlist.cpp
+    cli/command_export_sch_pdf.cpp
+    cli/command_export_sch_svg.cpp
+    cli/command_sym_export_svg.cpp
+    cli/command_sym_upgrade.cpp
+    )
+    
 if( WIN32 )
     if( MINGW )
         # KICAD_RESOURCES variable is set by the macro.
@@ -81,7 +84,7 @@ add_executable( kicad WIN32 MACOSX_BUNDLE
 
 add_executable( kicad-cli WIN32
     kicad_cli.cpp
-    ${KICAD_SRCS}
+    ${KICAD_CLI_SRCS}
     ${KICAD_EXTRA_SRCS}
     ${KICAD_RESOURCES}
     )
