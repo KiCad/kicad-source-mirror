@@ -311,6 +311,14 @@ wxString NETS_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 {
     NETINFO_ITEM* net = m_hitlist[aRow];
 
+    if( net->GetNetCode() == 0 )
+    {
+        if( aCol == 0 )
+            return wxT( "No Net" );
+        else if( aCol == 1 )
+            return wxT( "" );
+    }
+
     if( aCol == 0 )
         return UnescapeString( net->GetNetname() );
     else if( aCol == 1 )
