@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-12 08:39-0800\n"
-"PO-Revision-Date: 2022-12-03 01:49+0000\n"
+"PO-Revision-Date: 2022-12-14 15:48+0000\n"
 "Last-Translator: Eric <hamburger1024@duck.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -3154,12 +3154,10 @@ msgid "Remember open files for next project launch"
 msgstr "启动时打开的上一次的工程"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
-msgstr ""
-"如果选中，启动工程时还将使用 eesschema 和 pcbnew 等工具打开以前打开的文件"
+msgstr "如果选中，启动项目也会启动工具，例如原理图和电路板编辑器以及之前打开的文件"
 
 #: common/dialogs/panel_common_settings_base.cpp:241
 msgid "&Auto save:"
@@ -5860,13 +5858,12 @@ msgid "Delete clicked items"
 msgstr "删除单击的项目"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "切换真实模式"
+msgstr "循环圆弧编辑模式"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "切换到另一种编辑圆弧的方法"
 
 #: common/tool/actions.cpp:210
 msgid "Show Search Panel"
@@ -9557,17 +9554,16 @@ msgid "Define as power symbol"
 msgstr "定义为电源符号"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
-#, fuzzy
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"设置此选项，会使该符号出现在\n"
-"“添加电源端口”对话框中。 \n"
-"它将锁定值文本，防止其在 Eeschema 中被编辑。 \n"
-"该符号将不包括在BOM 中，并且无法关联封装。"
+"设置此选项，会使相关符号出现在\n"
+"“添加电源符号”对话框中。 \n"
+"它将锁定值文本，防止其在原理图中被编辑。 \n"
+"该符号将不包括在BOM 中，并且无法分配封装。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:191
 msgid "Number of Units:"
@@ -10669,9 +10665,8 @@ msgid "Frequency scale"
 msgstr "频率刻度"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "每封装单元数："
+msgstr "每十进制点数："
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -10884,9 +10879,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "仿真"
+msgstr "仿真命令"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:242
 msgid "Failed to read simulation model from fields."
@@ -10895,11 +10889,11 @@ msgstr "从字段读取仿真模型失败。"
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "在值字段中保存参数 '%s (%s)'"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:420
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "在值字段中保存主参数"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:437
 #: pcbnew/footprint_wizard_frame.cpp:322
@@ -12324,7 +12318,7 @@ msgstr "无法加载库\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:347 pcbnew/pcbnew_jobs_handler.cpp:579
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "输出路径不得与现有路径冲突\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:357
 msgid "Saving symbol library in updated format\n"
@@ -12849,9 +12843,9 @@ msgid "Importing Schematic"
 msgstr "导入原理图"
 
 #: eeschema/files-io.cpp:1287
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "加载原理图文件 \"%s\" 时内存耗尽。"
+msgstr "加载原理图文件 \"%s\" 时发生了未处理的异常。"
 
 #: eeschema/files-io.cpp:1321
 msgid "The current schematic has been modified.  Save changes?"
@@ -13705,7 +13699,7 @@ msgstr "输入实现 SCH_PLUGIN::Symbol*() 函数的 Python 符号。"
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
-msgstr ""
+msgstr "图框 %s 的文件名未定义，这可能是转换为图框的 Altium 信号线束。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
@@ -15362,9 +15356,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "比特率对于上升/下降缘可能过高"
 
 #: eeschema/sim/sim_lib_mgr.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr "加载仿真模型库“%s”出错：%s"
+msgstr "在 '%s' or '%s' 没有找到仿真模型库"
 
 #: eeschema/sim/sim_lib_mgr.cpp:217
 #, c-format
@@ -15440,17 +15434,14 @@ msgid "Power supply"
 msgstr "供电"
 
 #: eeschema/sim/sim_model_kibis.cpp:357
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "寄生电阻"
+msgstr "寄生引脚电阻"
 
 #: eeschema/sim/sim_model_kibis.cpp:367
-#, fuzzy
 msgid "Parasitic pin inductance"
 msgstr "寄生引脚电感"
 
 #: eeschema/sim/sim_model_kibis.cpp:377
-#, fuzzy
 msgid "Parasitic pin capacitance"
 msgstr "寄生引脚电容"
 
@@ -15471,9 +15462,8 @@ msgid "Delay"
 msgstr "延时"
 
 #: eeschema/sim/sim_model_kibis.cpp:463
-#, fuzzy
 msgid "Number of cycles"
-msgstr "采样数"
+msgstr "循环数"
 
 #: eeschema/sim/sim_model_kibis.cpp:480
 msgid "Bitrate"
@@ -15521,14 +15511,12 @@ msgid "Tune component values"
 msgstr "调整元件的值"
 
 #: eeschema/sim/sim_plot_frame.cpp:175
-#, fuzzy
 msgid "Sim Command"
-msgstr "命令"
+msgstr "Sim 命令"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
-#, fuzzy
 msgid "Simulation command and settings"
-msgstr "仿真参数和设置"
+msgstr "仿真命令和设置"
 
 #: eeschema/sim/sim_plot_frame.cpp:356 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
@@ -15546,7 +15534,7 @@ msgstr ""
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
-msgstr ""
+msgstr "原理图表仿真命令指令已更改。 你要更新仿真命令吗？"
 
 #: eeschema/sim/sim_plot_frame.cpp:516 eeschema/sim/sim_plot_frame.cpp:1901
 msgid "Another simulation is already running."
@@ -15602,9 +15590,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "您需要先运行绘制提供仿真。"
 
 #: eeschema/sim/sim_plot_frame.cpp:1670
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "保存更改到库"
+msgstr "保存对工作簿的更改？"
 
 #: eeschema/sim/sim_plot_frame.cpp:1832
 msgid ""
@@ -15639,28 +15626,24 @@ msgid "New Plot"
 msgstr "新建绘制"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "打开工作簿"
+msgstr "打开工作簿…"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 msgid "Save Workbook"
 msgstr "保存工作簿"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "保存工作簿"
+msgstr "另存工作簿为…"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "导出当前视图为 PNG..."
+msgstr "导出当前绘图为 PNG..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "导出当前视图为 PNG..."
+msgstr "导出当前绘图为 CSV..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -16801,9 +16784,8 @@ msgid "Add Power"
 msgstr "添加电源端口"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "添加符号"
+msgstr "添加电源符号"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -17240,10 +17222,9 @@ msgid "Import Footprint Assignments..."
 msgstr "导入封装关联..."
 
 #: eeschema/tools/ee_actions.cpp:628
-#, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr "从 Pcbnew 创建的 .cmp 文件中导入符号封装关联"
+msgstr "从电路板编辑器创建的 .cmp 文件中导入符号封装分配"
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Annotate Schematic..."
@@ -17887,7 +17868,7 @@ msgid "Edit Page Number"
 msgstr "编辑页码"
 
 #: eeschema/widgets/hierarchy_pane.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Enter page number for sheet path %s"
 msgstr "输入图框路径 %s 的页码"
 
@@ -19331,15 +19312,14 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "gerber 坐标精度，有效值：5 或 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
-#, fuzzy
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
-msgstr "要包括的英文逗号分隔的未翻译的图层名，如 F.Cu,B.Cu"
+msgstr "要包含在每张图上的图层，要包含的未翻译图层名称，用英文逗号分隔，如 F.Cu,B.Cu"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
-msgstr ""
+msgstr "使用已经在电路板文件中配置的 Gerber 图设置"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:54
 #: kicad/cli/command_export_pcb_svg.cpp:51
@@ -24466,9 +24446,8 @@ msgstr "使用中心线"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:112
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
 #: pcbnew/tools/convert_tool.cpp:75
-#, fuzzy
 msgid "Create bounding hull"
-msgstr "创建受约束的 hull"
+msgstr "创建边界哈氏槽"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:116
@@ -28731,7 +28710,7 @@ msgstr "圆弧"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:160
 msgid "Single-sided"
-msgstr ""
+msgstr "单侧的"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:166
 msgid "Miter radius (r):"
@@ -29497,18 +29476,16 @@ msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr "设置上下文菜单和热键旋转的增量（以度为单位）。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "位置模式："
+msgstr "圆弧编辑模式："
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
-#, fuzzy
 msgid "Keep center, adjust radius"
-msgstr "圆弧中心 (%s, %s), 半径 %s"
+msgstr "保持中心，调整半径"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "保持端点或起点的方向"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
@@ -34260,14 +34237,12 @@ msgid "Error loading project footprint libraries."
 msgstr "加载工程封装库时出错。"
 
 #: pcbnew/pcb_bitmap.cpp:232
-#, fuzzy
 msgid "Bitmap Properties"
-msgstr "过孔属性"
+msgstr "位图属性"
 
 #: pcbnew/pcb_bitmap.cpp:239
-#, fuzzy
 msgid "Greyscale"
-msgstr "灰度图片"
+msgstr "灰度"
 
 #: pcbnew/pcb_dimension.cpp:298
 msgid "Prefix"
@@ -38319,9 +38294,8 @@ msgid "Switch to Schematic Editor"
 msgstr "切换到原理图编辑器"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Open in schematic editor"
-msgstr "打开原理图"
+msgstr "在原理图编辑器中打开"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Local Ratsnest"
@@ -38739,23 +38713,22 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "所选项沿垂直轴分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
-#, fuzzy
 msgid "Keep arc center, adjust radius"
-msgstr "圆弧中心 (%s, %s), 半径 %s"
+msgstr "保持圆弧中心，调整半径"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
-msgstr ""
+msgstr "切换圆弧编辑模式到保持中心、调整半径和端点"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Keep arc endpoints or direction of starting point"
-msgstr ""
+msgstr "保持圆弧端点或起点方向"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
-msgstr ""
+msgstr "切换圆弧编辑模式为保持端点，或保持另一点的方向"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
@@ -40041,9 +40014,8 @@ msgid "Zone %s on %s"
 msgstr "%s 上的敷铜%s"
 
 #: pcbnew/zone.cpp:1424
-#, fuzzy
 msgid "Minimum Width"
-msgstr "最小宽度："
+msgstr "最小宽度"
 
 #: pcbnew/zone.cpp:1429
 msgid "Pad Connections"
