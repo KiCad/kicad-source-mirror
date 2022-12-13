@@ -35,6 +35,10 @@ class wxButton;
  * Specifically:
  *     * It has a border
  *     * It has no hover/focused state
+ *
+ * In wxWidgets 3.2 the native button control is used on Mac for wxBitmapButton with or without
+ * text.  Said widget has margins that are more than twice what previous versions had.  This class
+ * allows our bitmap buttons to match the layout of our SPLIT_BUTTON.
  */
 
 class STD_BITMAP_BUTTON : public wxPanel
