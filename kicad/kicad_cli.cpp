@@ -355,12 +355,7 @@ void PGM_KICAD::OnPgmExit()
 void PGM_KICAD::MacOpenFile( const wxString& aFileName )
 {
 #if defined( __WXMAC__ )
-
-    KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) App().GetTopWindow();
-
-    if( !aFileName.empty() && wxFileExists( aFileName ) )
-        frame->LoadProject( wxFileName( aFileName ) );
-
+    wxFAIL_MSG( "kicad-cli should not call MacOpenFile" );
 #endif
 }
 
