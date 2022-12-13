@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Andrew Lutsenko, anlutsenko at gmail dot com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,11 +19,12 @@
  */
 
 #include "dialog_manage_repositories.h"
-#include "bitmaps/bitmap_types.h"
-#include "bitmaps/bitmaps_list.h"
-#include "grid_tricks.h"
-#include "settings/kicad_settings.h"
-#include "widgets/wx_grid.h"
+#include <bitmaps/bitmap_types.h>
+#include <bitmaps/bitmaps_list.h>
+#include <grid_tricks.h>
+#include <settings/kicad_settings.h>
+#include <widgets/wx_grid.h>
+#include <widgets/std_bitmap_button.h>
 
 
 #define GRID_CELL_MARGIN 4

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -50,9 +52,9 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextName;
 		wxTextCtrl* m_textCtrlName;
 		wxTextCtrl* m_Messages;
-		wxBitmapButton* m_buttonAddGenerator;
-		wxBitmapButton* m_buttonEdit;
-		wxBitmapButton* m_buttonDelGenerator;
+		STD_BITMAP_BUTTON* m_buttonAddGenerator;
+		STD_BITMAP_BUTTON* m_buttonEdit;
+		STD_BITMAP_BUTTON* m_buttonDelGenerator;
 		wxStaticText* m_staticTextCmd;
 		wxTextCtrl* m_textCtrlCommand;
 		wxCheckBox* m_checkBoxShowConsole;
@@ -63,7 +65,7 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 		wxButton* m_sdbSizerHelp;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
 		virtual void OnGeneratorSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNameEdited( wxCommandEvent& event ) { event.Skip(); }
@@ -79,6 +81,7 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bill of Materials"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_BOM_BASE();
 
 };

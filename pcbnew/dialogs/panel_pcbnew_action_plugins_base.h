@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include <wx/colour.h>
@@ -37,13 +38,13 @@ class PANEL_PCBNEW_ACTION_PLUGINS_BASE : public wxPanel
 
 	protected:
 		WX_GRID* m_grid;
-		wxBitmapButton* m_moveUpButton;
-		wxBitmapButton* m_moveDownButton;
-		wxBitmapButton* m_openDirectoryButton;
-		wxBitmapButton* m_reloadButton;
-		wxBitmapButton* m_showErrorsButton;
+		STD_BITMAP_BUTTON* m_moveUpButton;
+		STD_BITMAP_BUTTON* m_moveDownButton;
+		STD_BITMAP_BUTTON* m_openDirectoryButton;
+		STD_BITMAP_BUTTON* m_reloadButton;
+		STD_BITMAP_BUTTON* m_showErrorsButton;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnGridCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnMoveUpButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDownButtonClick( wxCommandEvent& event ) { event.Skip(); }
@@ -55,6 +56,7 @@ class PANEL_PCBNEW_ACTION_PLUGINS_BASE : public wxPanel
 	public:
 
 		PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_PCBNEW_ACTION_PLUGINS_BASE();
 
 };

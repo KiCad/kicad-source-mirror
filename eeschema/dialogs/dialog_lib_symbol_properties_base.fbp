@@ -359,7 +359,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">; forward_declare</property>
+                                                                    <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip">Add field</property>
                                                                     <property name="validator_data_type"></property>
@@ -433,7 +433,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">; forward_declare</property>
+                                                                    <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip">Move up</property>
                                                                     <property name="validator_data_type"></property>
@@ -507,7 +507,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">; forward_declare</property>
+                                                                    <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip">Move down</property>
                                                                     <property name="validator_data_type"></property>
@@ -591,7 +591,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">; forward_declare</property>
+                                                                    <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip">Delete field</property>
                                                                     <property name="validator_data_type"></property>
@@ -2347,7 +2347,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size">-1,-1</property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">; forward_declare</property>
+                                                                    <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip">Add footprint filter</property>
                                                                     <property name="validator_data_type"></property>
@@ -2421,7 +2421,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size">-1,-1</property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">; forward_declare</property>
+                                                                    <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip">Edit footprint filter</property>
                                                                     <property name="validator_data_type"></property>
@@ -2505,7 +2505,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size">-1,-1</property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">; forward_declare</property>
+                                                                    <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip">Delete footprint filter</property>
                                                                     <property name="validator_data_type"></property>

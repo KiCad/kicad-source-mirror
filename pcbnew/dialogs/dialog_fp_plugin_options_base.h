@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "html_window.h"
@@ -43,8 +44,8 @@ class DIALOG_FP_PLUGIN_OPTIONS_BASE : public DIALOG_SHIM
 
 	protected:
 		WX_GRID* m_grid;
-		wxBitmapButton* m_append_button;
-		wxBitmapButton* m_delete_button;
+		STD_BITMAP_BUTTON* m_append_button;
+		STD_BITMAP_BUTTON* m_delete_button;
 		wxListBox* m_listbox;
 		wxButton* m_append_choice_button;
 		HTML_WINDOW* m_html;

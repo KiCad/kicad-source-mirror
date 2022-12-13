@@ -27,6 +27,7 @@
 #include <bitmaps.h>
 #include <common.h>     // For ExpandEnvVarSubstitutions
 #include "widgets/wx_html_report_panel.h"
+#include <widgets/std_bitmap_button.h>
 #include <dialog_plot_schematic.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>

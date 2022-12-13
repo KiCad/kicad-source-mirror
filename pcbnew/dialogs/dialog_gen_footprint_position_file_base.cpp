@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_html_report_panel.h"
 
 #include "dialog_gen_footprint_position_file_base.h"
@@ -33,8 +34,8 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 
 	bSizerdirBrowse->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerdirBrowse->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	bSizerdirBrowse->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bUpperSizer->Add( bSizerdirBrowse, 1, wxEXPAND|wxALL, 10 );

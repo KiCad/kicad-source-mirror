@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 class WX_HTML_REPORT_BOX;
 
@@ -43,15 +44,15 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		wxSplitterWindow* m_splitter;
 		wxPanel* m_netclassesPane;
 		WX_GRID* m_netclassGrid;
-		wxBitmapButton* m_addButton;
-		wxBitmapButton* m_removeButton;
+		STD_BITMAP_BUTTON* m_addButton;
+		STD_BITMAP_BUTTON* m_removeButton;
 		wxStaticText* m_colorDefaultHelpText;
 		wxPanel* m_membershipPane;
 		wxStaticText* m_staticText5;
 		WX_GRID* m_assignmentGrid;
 		WX_HTML_REPORT_BOX* m_matchingNets;
-		wxBitmapButton* m_addAssignmentButton;
-		wxBitmapButton* m_removeAssignmentButton;
+		STD_BITMAP_BUTTON* m_addAssignmentButton;
+		STD_BITMAP_BUTTON* m_removeAssignmentButton;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }

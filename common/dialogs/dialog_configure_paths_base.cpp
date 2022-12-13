@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "dialog_configure_paths_base.h"
@@ -56,13 +57,13 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerEnvVarBtns;
 	bSizerEnvVarBtns = new wxBoxSizer( wxHORIZONTAL );
 
-	m_btnAddEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnAddEnvVar = new STD_BITMAP_BUTTON( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerEnvVarBtns->Add( m_btnAddEnvVar, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizerEnvVarBtns->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_btnDeleteEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnDeleteEnvVar = new STD_BITMAP_BUTTON( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerEnvVarBtns->Add( m_btnDeleteEnvVar, 0, wxBOTTOM, 5 );
 
 

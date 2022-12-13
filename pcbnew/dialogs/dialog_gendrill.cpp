@@ -24,6 +24,7 @@
 
 #include <confirm.h>
 #include <core/arraydim.h>
+#include <widgets/std_bitmap_button.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
@@ -315,7 +316,8 @@ void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     {
         if( !dirName.MakeRelativeTo( defaultPath ) )
         {
-            wxMessageBox( _( "Cannot make path relative (target volume different from file volume)!" ),
+            wxMessageBox( _( "Cannot make path relative (target volume different from board "
+                             "file volume)!" ),
                           _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
         }
     }

@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "dialog_manage_repositories_base.h"
@@ -57,16 +58,16 @@ DIALOG_MANAGE_REPOSITORIES_BASE::DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* pare
 	m_buttonAdd = new SPLIT_BUTTON( this, wxID_ANY, _( "Add Existing" ) );
 	bButtonsSizer->Add( m_buttonAdd, 0, wxRIGHT, 5 );
 
-	m_buttonMoveUp = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonMoveUp = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonsSizer->Add( m_buttonMoveUp, 0, wxRIGHT, 5 );
 
-	m_buttonMoveDown = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonMoveDown = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonsSizer->Add( m_buttonMoveDown, 0, wxRIGHT, 5 );
 
 
 	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_buttonRemove = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonRemove = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonsSizer->Add( m_buttonRemove, 0, 0, 5 );
 
 

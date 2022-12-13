@@ -64,7 +64,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">10</property>
-                    <property name="flag">wxEXPAND|wxTOP</property>
+                    <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -73,7 +73,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">10</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -198,7 +198,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">7</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxBitmapButton" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -255,9 +255,9 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size"></property>
+                                <property name="size">-1,-1</property>
                                 <property name="style"></property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -273,7 +273,7 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">2</property>
+                    <property name="border">8</property>
                     <property name="flag">wxEXPAND|wxTOP</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">

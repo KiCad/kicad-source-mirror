@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -49,10 +50,10 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxNotebook* m_notebook1;
 		wxPanel* generalPage;
 		WX_GRID* m_fieldsGrid;
-		wxBitmapButton* m_bpAdd;
-		wxBitmapButton* m_bpMoveUp;
-		wxBitmapButton* m_bpMoveDown;
-		wxBitmapButton* m_bpDelete;
+		STD_BITMAP_BUTTON* m_bpAdd;
+		STD_BITMAP_BUTTON* m_bpMoveUp;
+		STD_BITMAP_BUTTON* m_bpMoveDown;
+		STD_BITMAP_BUTTON* m_bpDelete;
 		wxStaticText* m_unitLabel;
 		wxChoice* m_unitChoice;
 		wxCheckBox* m_cbAlternateSymbol;

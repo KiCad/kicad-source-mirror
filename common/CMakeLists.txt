@@ -196,6 +196,7 @@ set( COMMON_WIDGET_SRCS
     widgets/search_pane_base.cpp
     widgets/search_pane_tab.cpp
     widgets/split_button.cpp
+    widgets/std_bitmap_button.cpp
     widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp
     widgets/ui_common.cpp

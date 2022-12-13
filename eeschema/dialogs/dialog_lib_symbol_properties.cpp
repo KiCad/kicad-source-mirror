@@ -32,6 +32,7 @@
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
+#include <widgets/std_bitmap_button.h>
 #include <string_utils.h>
 
 #ifdef KICAD_SPICE

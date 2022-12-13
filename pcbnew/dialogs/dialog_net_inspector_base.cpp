@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/std_bitmap_button.h"
 
 #include "dialog_net_inspector_base.h"
 
@@ -70,16 +72,16 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizerListButtons;
 	bSizerListButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addNet = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_addNet = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerListButtons->Add( m_addNet, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_renameNet = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_renameNet = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerListButtons->Add( m_renameNet, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizerListButtons->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_deleteNet = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_deleteNet = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerListButtons->Add( m_deleteNet, 0, wxALL, 5 );
 
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
@@ -45,7 +46,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_MainSizer;
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxRadioBox* m_rbFormat;
 		wxRadioBox* m_radioBoxUnits;
 		wxRadioBox* m_radioBoxFilesCount;

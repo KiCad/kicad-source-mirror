@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include <wx/string.h>
@@ -40,17 +41,17 @@ class PANEL_SETUP_TRACKS_AND_VIAS_BASE : public wxPanel
 	protected:
 		wxStaticText* m_label;
 		WX_GRID* m_trackWidthsGrid;
-		wxBitmapButton* m_trackWidthsAddButton;
-		wxBitmapButton* m_trackWidthsSortButton;
-		wxBitmapButton* m_trackWidthsRemoveButton;
+		STD_BITMAP_BUTTON* m_trackWidthsAddButton;
+		STD_BITMAP_BUTTON* m_trackWidthsSortButton;
+		STD_BITMAP_BUTTON* m_trackWidthsRemoveButton;
 		WX_GRID* m_viaSizesGrid;
-		wxBitmapButton* m_viaSizesAddButton;
-		wxBitmapButton* m_viaSizesSortButton;
-		wxBitmapButton* m_viaSizesRemoveButton;
+		STD_BITMAP_BUTTON* m_viaSizesAddButton;
+		STD_BITMAP_BUTTON* m_viaSizesSortButton;
+		STD_BITMAP_BUTTON* m_viaSizesRemoveButton;
 		WX_GRID* m_diffPairsGrid;
-		wxBitmapButton* m_diffPairsAddButton;
-		wxBitmapButton* m_diffPairsSortButton;
-		wxBitmapButton* m_diffPairsRemoveButton;
+		STD_BITMAP_BUTTON* m_diffPairsAddButton;
+		STD_BITMAP_BUTTON* m_diffPairsSortButton;
+		STD_BITMAP_BUTTON* m_diffPairsRemoveButton;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnAddTrackWidthsClick( wxCommandEvent& event ) { event.Skip(); }

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 CERN
- * Copyright (C) 2013-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <fp_lib_table.h>
 #include <grid_tricks.h>
 #include <widgets/wx_grid.h>
+#include <widgets/std_bitmap_button.h>
 #include <bitmaps.h>
 #include <macros.h>
 

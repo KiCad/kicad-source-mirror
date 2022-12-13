@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class PinShapeComboBox;
 class PinTypeComboBox;
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 class WX_INFOBAR;
 class wxBitmapComboBox;
@@ -83,8 +84,8 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_panelShowPin;
 		wxCollapsiblePane* m_alternatesTurndown;
 		WX_GRID* m_alternatesGrid;
-		wxBitmapButton* m_addAlternate;
-		wxBitmapButton* m_deleteAlternate;
+		STD_BITMAP_BUTTON* m_addAlternate;
+		STD_BITMAP_BUTTON* m_deleteAlternate;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
@@ -95,7 +96,6 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPropertiesChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
-		virtual void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void OnAddAlternate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAlternate( wxCommandEvent& event ) { event.Skip(); }
 

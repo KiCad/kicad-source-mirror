@@ -25,6 +25,7 @@
 
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <widgets/std_bitmap_button.h>
 #include <widgets/color_swatch.h>
 #include <settings/color_settings.h>
 #include <sch_edit_frame.h>

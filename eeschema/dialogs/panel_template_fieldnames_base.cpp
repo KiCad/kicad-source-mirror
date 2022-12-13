@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "panel_template_fieldnames_base.h"
@@ -39,10 +40,10 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	m_grid->SetColSize( 2, 60 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelValue( 0, _("Name") );
 	m_grid->SetColLabelValue( 1, _("Visible") );
 	m_grid->SetColLabelValue( 2, _("URL") );
+	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -61,13 +62,13 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_addFieldButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer10->Add( m_addFieldButton, 0, wxTOP|wxRIGHT, 5 );
 
 
 	bSizer10->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_deleteFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_deleteFieldButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer10->Add( m_deleteFieldButton, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 

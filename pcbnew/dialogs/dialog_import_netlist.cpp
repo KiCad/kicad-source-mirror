@@ -32,10 +32,11 @@
 #include <tools/pcb_actions.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/std_bitmap_button.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
-#include <dialog_export_netlist.h>
+#include <dialog_import_netlist.h>
 #include <widgets/wx_html_report_panel.h>
 #include <wx/filedlg.h>
 
@@ -44,18 +45,19 @@ void PCB_EDIT_FRAME::InstallNetlistFrame()
 {
     wxString netlistName = GetLastPath( LAST_PATH_NETLIST );
 
-    DIALOG_NETLIST_IMPORT dlg( this, netlistName );
+    DIALOG_IMPORT_NETLIST dlg( this, netlistName );
 
     dlg.ShowModal();
 
     SetLastPath( LAST_PATH_NETLIST, netlistName );
 }
 
-bool DIALOG_NETLIST_IMPORT::m_matchByUUID = false;
+bool DIALOG_IMPORT_NETLIST::m_matchByUUID = false;
 
 
-DIALOG_NETLIST_IMPORT::DIALOG_NETLIST_IMPORT( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename )
-    : DIALOG_NETLIST_IMPORT_BASE( aParent ),
+DIALOG_IMPORT_NETLIST::DIALOG_IMPORT_NETLIST( PCB_EDIT_FRAME* aParent,
+                                              wxString& aNetlistFullFilename )
+    : DIALOG_IMPORT_NETLIST_BASE( aParent ),
       m_parent( aParent ),
       m_netlistPath( aNetlistFullFilename ),
       m_initialized( false ),
@@ -85,7 +87,7 @@ DIALOG_NETLIST_IMPORT::DIALOG_NETLIST_IMPORT( PCB_EDIT_FRAME* aParent, wxString&
     m_initialized = true;
 }
 
-DIALOG_NETLIST_IMPORT::~DIALOG_NETLIST_IMPORT()
+DIALOG_IMPORT_NETLIST::~DIALOG_IMPORT_NETLIST()
 {
     m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
 
@@ -105,7 +107,7 @@ DIALOG_NETLIST_IMPORT::~DIALOG_NETLIST_IMPORT()
 }
 
 
-void DIALOG_NETLIST_IMPORT::onBrowseNetlistFiles( wxCommandEvent& event )
+void DIALOG_IMPORT_NETLIST::onBrowseNetlistFiles( wxCommandEvent& event )
 {
     wxString dirPath = wxFileName( Prj().GetProjectFullName() ).GetPath();
 
@@ -129,13 +131,14 @@ void DIALOG_NETLIST_IMPORT::onBrowseNetlistFiles( wxCommandEvent& event )
 }
 
 
-void DIALOG_NETLIST_IMPORT::onImportNetlist( wxCommandEvent& event )
+
+void DIALOG_IMPORT_NETLIST::onImportNetlist( wxCommandEvent& event )
 {
     onFilenameChanged( true );
 }
 
 
-void DIALOG_NETLIST_IMPORT::onUpdatePCB( wxCommandEvent& event )
+void DIALOG_IMPORT_NETLIST::onUpdatePCB( wxCommandEvent& event )
 {
     wxFileName fn = m_NetlistFilenameCtrl->GetValue();
 
@@ -159,13 +162,13 @@ void DIALOG_NETLIST_IMPORT::onUpdatePCB( wxCommandEvent& event )
 }
 
 
-void DIALOG_NETLIST_IMPORT::OnFilenameKillFocus( wxFocusEvent& event )
+void DIALOG_IMPORT_NETLIST::OnFilenameKillFocus( wxFocusEvent& event )
 {
     event.Skip();
 }
 
 
-void DIALOG_NETLIST_IMPORT::onFilenameChanged( bool aLoadNetlist )
+void DIALOG_IMPORT_NETLIST::onFilenameChanged( bool aLoadNetlist )
 {
     if( m_initialized )
     {
@@ -191,21 +194,21 @@ void DIALOG_NETLIST_IMPORT::onFilenameChanged( bool aLoadNetlist )
 }
 
 
-void DIALOG_NETLIST_IMPORT::OnMatchChanged( wxCommandEvent& event )
+void DIALOG_IMPORT_NETLIST::OnMatchChanged( wxCommandEvent& event )
 {
     if( m_initialized )
         loadNetlist( true );
 }
 
 
-void DIALOG_NETLIST_IMPORT::OnOptionChanged( wxCommandEvent& event )
+void DIALOG_IMPORT_NETLIST::OnOptionChanged( wxCommandEvent& event )
 {
     if( m_initialized )
         loadNetlist( true );
 }
 
 
-void DIALOG_NETLIST_IMPORT::loadNetlist( bool aDryRun )
+void DIALOG_IMPORT_NETLIST::loadNetlist( bool aDryRun )
 {
     wxString netlistFileName = m_NetlistFilenameCtrl->GetValue();
     wxFileName fn = netlistFileName;

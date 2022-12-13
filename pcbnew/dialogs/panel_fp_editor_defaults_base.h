@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "widgets/resettable_panel.h"
@@ -41,12 +42,12 @@ class PANEL_FP_EDITOR_DEFAULTS_BASE : public RESETTABLE_PANEL
 	protected:
 		wxStaticText* defaultTextItemsLabel;
 		WX_GRID* m_textItemsGrid;
-		wxBitmapButton* m_bpAdd;
-		wxBitmapButton* m_bpDelete;
+		STD_BITMAP_BUTTON* m_bpAdd;
+		STD_BITMAP_BUTTON* m_bpDelete;
 		wxStaticText* m_staticTextInfo;
 		WX_GRID* m_graphicsGrid;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddTextItem( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteTextItem( wxCommandEvent& event ) { event.Skip(); }
@@ -55,6 +56,7 @@ class PANEL_FP_EDITOR_DEFAULTS_BASE : public RESETTABLE_PANEL
 	public:
 
 		PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_FP_EDITOR_DEFAULTS_BASE();
 
 };

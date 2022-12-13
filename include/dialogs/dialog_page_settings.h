@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,6 +23,7 @@
 #include <page_info.h>
 #include <title_block.h>
 #include <widgets/unit_binder.h>
+#include <widgets/std_bitmap_button.h>
 #include <dialog_page_settings_base.h>
 
 class DS_DATA_MODEL;

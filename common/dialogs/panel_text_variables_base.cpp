@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "panel_text_variables_base.h"
@@ -33,9 +34,9 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	m_TextVars->SetColSize( 1, 454 );
 	m_TextVars->EnableDragColMove( false );
 	m_TextVars->EnableDragColSize( true );
-	m_TextVars->SetColLabelSize( 22 );
 	m_TextVars->SetColLabelValue( 0, _("Variable Name") );
 	m_TextVars->SetColLabelValue( 1, _("Text Substitution") );
+	m_TextVars->SetColLabelSize( 22 );
 	m_TextVars->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -54,13 +55,13 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizerEnvVarBtns;
 	bSizerEnvVarBtns = new wxBoxSizer( wxHORIZONTAL );
 
-	m_btnAddTextVar = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnAddTextVar = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerEnvVarBtns->Add( m_btnAddTextVar, 0, wxRIGHT, 5 );
 
 
 	bSizerEnvVarBtns->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_btnDeleteTextVar = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnDeleteTextVar = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerEnvVarBtns->Add( m_btnDeleteTextVar, 0, wxRIGHT|wxLEFT, 5 );
 
 

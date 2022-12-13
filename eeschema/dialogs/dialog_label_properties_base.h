@@ -13,6 +13,7 @@
 class BITMAP_BUTTON;
 class COLOR_SWATCH;
 class FONT_CHOICE;
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -62,10 +63,10 @@ class DIALOG_LABEL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxComboBox* m_valueCombo;
 		wxHyperlinkCtrl* m_syntaxHelp;
 		WX_GRID* m_grid;
-		wxBitmapButton* m_bpAdd;
-		wxBitmapButton* m_bpMoveUp;
-		wxBitmapButton* m_bpMoveDown;
-		wxBitmapButton* m_bpDelete;
+		STD_BITMAP_BUTTON* m_bpAdd;
+		STD_BITMAP_BUTTON* m_bpMoveUp;
+		STD_BITMAP_BUTTON* m_bpMoveDown;
+		STD_BITMAP_BUTTON* m_bpDelete;
 		wxStaticBoxSizer* m_shapeSizer;
 		wxRadioButton* m_input;
 		wxRadioButton* m_output;

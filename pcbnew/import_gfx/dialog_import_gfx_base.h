@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class PCB_LAYER_BOX_SELECTOR;
+class STD_BITMAP_BUTTON;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -48,7 +49,7 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextFile;
 		wxTextCtrl* m_textCtrlFileName;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxRadioButton* m_rbInteractivePlacement;
 		wxRadioButton* m_rbAbsolutePlacement;
 		wxStaticText* m_xLabel;

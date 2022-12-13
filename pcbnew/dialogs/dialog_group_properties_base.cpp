@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/std_bitmap_button.h"
 
 #include "dialog_group_properties_base.h"
 
@@ -52,10 +54,13 @@ DIALOG_GROUP_PROPERTIES_BASE::DIALOG_GROUP_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bMembershipButtons;
 	bMembershipButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bpAddMember = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAddMember = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bMembershipButtons->Add( m_bpAddMember, 0, wxALL, 5 );
 
-	m_bpRemoveMember = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+
+	bMembershipButtons->Add( 10, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_bpRemoveMember = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bMembershipButtons->Add( m_bpRemoveMember, 0, wxALL, 5 );
 
 

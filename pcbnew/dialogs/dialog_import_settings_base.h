@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -40,7 +42,7 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 	protected:
 		wxBoxSizer* m_MainSizer;
 		wxTextCtrl* m_filePathCtrl;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_buttonsSizer;
 		wxButton* m_selectAllButton;
@@ -48,7 +50,7 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckboxClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectAll( wxCommandEvent& event ) { event.Skip(); }
@@ -65,6 +67,7 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_SeveritiesOpt;
 
 		DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_IMPORT_SETTINGS_BASE();
 
 };

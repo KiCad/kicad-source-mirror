@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include <wx/colour.h>
@@ -46,14 +47,14 @@ class PANEL_FP_LIB_TABLE_BASE : public wxPanel
 		wxPanel* m_project_panel;
 		WX_GRID* m_project_grid;
 		wxPanel* m_buttonsPanel;
-		wxBitmapButton* m_append_button;
+		STD_BITMAP_BUTTON* m_append_button;
 		SPLIT_BUTTON* m_browseButton;
-		wxBitmapButton* m_move_up_button;
-		wxBitmapButton* m_move_down_button;
-		wxBitmapButton* m_delete_button;
+		STD_BITMAP_BUTTON* m_move_up_button;
+		STD_BITMAP_BUTTON* m_move_down_button;
+		STD_BITMAP_BUTTON* m_delete_button;
 		WX_GRID* m_path_subs_grid;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }
@@ -65,6 +66,7 @@ class PANEL_FP_LIB_TABLE_BASE : public wxPanel
 	public:
 
 		PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_FP_LIB_TABLE_BASE();
 
 };

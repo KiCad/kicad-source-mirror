@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class STD_BITMAP_BUTTON;
 class TEXT_CTRL_EVAL;
 class WX_GRID;
 class wxListView;
@@ -374,8 +375,8 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 
 	protected:
 		WX_GRID* m_gridCornersList;
-		wxBitmapButton* m_addButton;
-		wxBitmapButton* m_deleteButton;
+		STD_BITMAP_BUTTON* m_addButton;
+		STD_BITMAP_BUTTON* m_deleteButton;
 		wxStaticText* m_thicknessLabel;
 		TEXT_CTRL_EVAL* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;

@@ -31,7 +31,7 @@
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/wx_grid.h>
-
+#include <widgets/std_bitmap_button.h>
 
 
 #define GRID_CELL_MARGIN 4

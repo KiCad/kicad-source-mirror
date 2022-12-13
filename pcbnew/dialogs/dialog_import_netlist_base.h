@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
@@ -35,15 +36,15 @@ class WX_HTML_REPORT_PANEL;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_NETLIST_IMPORT_BASE
+/// Class DIALOG_IMPORT_NETLIST_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_NETLIST_IMPORT_BASE : public DIALOG_SHIM
+class DIALOG_IMPORT_NETLIST_BASE : public DIALOG_SHIM
 {
 	private:
 
 	protected:
 		wxTextCtrl* m_NetlistFilenameCtrl;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxRadioBox* m_matchByTimestamp;
 		wxCheckBox* m_cbUpdateFootprints;
 		wxCheckBox* m_cbDeleteExtraFootprints;
@@ -66,9 +67,9 @@ class DIALOG_NETLIST_IMPORT_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_NETLIST_IMPORT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_IMPORT_NETLIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~DIALOG_NETLIST_IMPORT_BASE();
+		~DIALOG_IMPORT_NETLIST_BASE();
 
 };
 

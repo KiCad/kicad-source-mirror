@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include <wx/colour.h>
@@ -39,9 +40,9 @@ class PANEL_FP_PROPERTIES_3D_MODEL_BASE : public wxPanel
 	protected:
 		wxBoxSizer* bSizerMain3D;
 		WX_GRID* m_modelsGrid;
-		wxBitmapButton* m_button3DShapeAdd;
-		wxBitmapButton* m_button3DShapeBrowse;
-		wxBitmapButton* m_button3DShapeRemove;
+		STD_BITMAP_BUTTON* m_button3DShapeAdd;
+		STD_BITMAP_BUTTON* m_button3DShapeBrowse;
+		STD_BITMAP_BUTTON* m_button3DShapeRemove;
 		wxButton* m_buttonConfig3DPaths;
 		wxBoxSizer* m_LowerSizer3D;
 

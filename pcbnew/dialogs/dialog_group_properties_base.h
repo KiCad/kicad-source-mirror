@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -45,14 +47,14 @@ class DIALOG_GROUP_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_locked;
 		wxStaticText* m_membersLabel;
 		wxListBox* m_membersList;
-		wxBitmapButton* m_bpAddMember;
-		wxBitmapButton* m_bpRemoveMember;
+		STD_BITMAP_BUTTON* m_bpAddMember;
+		STD_BITMAP_BUTTON* m_bpRemoveMember;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnMemberSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddMember( wxCommandEvent& event ) { event.Skip(); }
@@ -62,6 +64,7 @@ class DIALOG_GROUP_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_GROUP_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Group Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_GROUP_PROPERTIES_BASE();
 
 };

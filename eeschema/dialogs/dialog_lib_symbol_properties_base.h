@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -52,10 +53,10 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_PanelBasic;
 		WX_GRID* m_grid;
 		wxBoxSizer* bButtonSize;
-		wxBitmapButton* m_bpAdd;
-		wxBitmapButton* m_bpMoveUp;
-		wxBitmapButton* m_bpMoveDown;
-		wxBitmapButton* m_bpDelete;
+		STD_BITMAP_BUTTON* m_bpAdd;
+		STD_BITMAP_BUTTON* m_bpMoveUp;
+		STD_BITMAP_BUTTON* m_bpMoveDown;
+		STD_BITMAP_BUTTON* m_bpDelete;
 		wxTextCtrl* m_SymbolNameCtrl;
 		wxTextCtrl* m_DescCtrl;
 		wxStaticText* staticKeywordsLabel;
@@ -79,9 +80,9 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_PanelFootprintFilter;
 		wxStaticText* m_staticTextFootprints;
 		wxListBox* m_FootprintFilterListBox;
-		wxBitmapButton* m_addFilterButton;
-		wxBitmapButton* m_editFilterButton;
-		wxBitmapButton* m_deleteFilterButton;
+		STD_BITMAP_BUTTON* m_addFilterButton;
+		STD_BITMAP_BUTTON* m_editFilterButton;
+		STD_BITMAP_BUTTON* m_deleteFilterButton;
 		wxButton* m_spiceFieldsButton;
 		wxStdDialogButtonSizer* m_stdSizerButton;
 		wxButton* m_stdSizerButtonOK;

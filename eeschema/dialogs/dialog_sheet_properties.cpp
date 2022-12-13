@@ -31,7 +31,7 @@
 #include <validators.h>
 #include <wx_filename.h>
 #include <wildcards_and_files_ext.h>
-#include <widgets/tab_traversal.h>
+#include <widgets/std_bitmap_button.h>
 #include <kiplatform/ui.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>

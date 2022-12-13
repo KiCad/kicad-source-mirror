@@ -39,13 +39,11 @@
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/text_ctrl_eval.h>
+#include <widgets/std_bitmap_button.h>
 #include <settings/settings_manager.h>
-
 #include <panel_fp_properties_3d_model.h>
-
-#include "dialogs/3d_cache_dialogs.h"
-#include "dialogs/panel_preview_3d_model.h"
-
+#include <dialogs/3d_cache_dialogs.h>
+#include <dialogs/panel_preview_3d_model.h>
 #include <dialog_footprint_properties.h>
 
 

@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "panel_fp_lib_table_base.h"
@@ -99,7 +100,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_append_button = new wxBitmapButton( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_append_button = new STD_BITMAP_BUTTON( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_append_button->SetToolTip( _("Add empty row to table") );
 
 	bButtonsSizer->Add( m_append_button, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -107,12 +108,12 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_browseButton = new SPLIT_BUTTON( m_buttonsPanel, wxID_ANY, _( "Add Existing" ), wxDefaultPosition );
 	bButtonsSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
-	m_move_up_button = new wxBitmapButton( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_move_up_button = new STD_BITMAP_BUTTON( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_move_up_button->SetToolTip( _("Move up") );
 
 	bButtonsSizer->Add( m_move_up_button, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_move_down_button = new wxBitmapButton( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_move_down_button = new STD_BITMAP_BUTTON( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_move_down_button->SetToolTip( _("Move down") );
 
 	bButtonsSizer->Add( m_move_down_button, 0, wxBOTTOM|wxRIGHT, 5 );
@@ -120,7 +121,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 
 	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_delete_button = new wxBitmapButton( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_delete_button = new STD_BITMAP_BUTTON( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_delete_button->SetToolTip( _("Remove library from table") );
 
 	bButtonsSizer->Add( m_delete_button, 0, wxBOTTOM|wxRIGHT, 5 );

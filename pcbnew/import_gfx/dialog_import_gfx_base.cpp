@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "pcb_layer_box_selector.h"
+#include "widgets/std_bitmap_button.h"
 
 #include "dialog_import_gfx_base.h"
 
@@ -31,10 +32,10 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	m_textCtrlFileName->SetToolTip( _("Only vectors will be imported.  Bitmaps and fonts will be ignored.") );
 	m_textCtrlFileName->SetMinSize( wxSize( 300,-1 ) );
 
-	bSizerFile->Add( m_textCtrlFileName, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerFile->Add( m_textCtrlFileName, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerFile->Add( m_browseButton, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	bSizerFile->Add( m_browseButton, 0, wxTOP|wxBOTTOM, 5 );
 
 
 	bSizerMain->Add( bSizerFile, 0, wxALL|wxEXPAND, 10 );

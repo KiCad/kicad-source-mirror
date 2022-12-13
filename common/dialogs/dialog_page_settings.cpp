@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,12 +32,12 @@
 #include <macros.h>
 #include <math/util.h>      // for KiROUND, Clamp
 #include <project.h>
-#include <title_block.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_painter.h>
+#include <widgets/std_bitmap_button.h>
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
 #include <wx/filedlg.h>

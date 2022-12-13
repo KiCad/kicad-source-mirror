@@ -37,7 +37,8 @@
 #include <board.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_base.h>
-#include "widgets/wx_html_report_panel.h"
+#include <widgets/wx_html_report_panel.h>
+#include <widgets/std_bitmap_button.h>
 #include <dialog_gen_footprint_position_file_base.h>
 #include <exporters/place_file_exporter.h>
 #include "gerber_placefile_writer.h"

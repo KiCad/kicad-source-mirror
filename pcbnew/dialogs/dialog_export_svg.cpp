@@ -36,7 +36,7 @@
 #include <board.h>
 #include <dialog_export_svg_base.h>
 #include <bitmaps.h>
-#include <widgets/unit_binder.h>
+#include <widgets/std_bitmap_button.h>
 #include <widgets/wx_html_report_panel.h>
 #include <plotters/plotters_pslike.h>
 #include <wx/dirdlg.h>

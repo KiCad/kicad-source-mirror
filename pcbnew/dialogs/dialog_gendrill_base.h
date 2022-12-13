@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -43,7 +45,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* staticTextOutputDir;
 		wxTextCtrl* m_outputDirectoryName;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxRadioButton* m_rbExcellon;
 		wxCheckBox* m_Check_Mirror;
 		wxCheckBox* m_Check_Minimal;

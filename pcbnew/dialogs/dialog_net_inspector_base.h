@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -48,9 +50,9 @@ class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_groupByText;
 		wxComboBox* m_groupByKind;
 		wxDataViewCtrl* m_netsList;
-		wxBitmapButton* m_addNet;
-		wxBitmapButton* m_renameNet;
-		wxBitmapButton* m_deleteNet;
+		STD_BITMAP_BUTTON* m_addNet;
+		STD_BITMAP_BUTTON* m_renameNet;
+		STD_BITMAP_BUTTON* m_deleteNet;
 		wxButton* m_ReportButt;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;

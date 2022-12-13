@@ -29,6 +29,7 @@
 
 
 #include <bitmaps.h>
+#include <widgets/std_bitmap_button.h>
 #include <bom_plugins.h>
 #include <confirm.h>
 #include <dialog_bom_base.h>

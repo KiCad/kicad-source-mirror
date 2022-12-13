@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -46,11 +48,11 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_antialiasingFallbackLabel;
 		wxChoice* m_antialiasingFallback;
 		wxTextCtrl* m_textEditorPath;
-		wxBitmapButton* m_textEditorBtn;
+		STD_BITMAP_BUTTON* m_textEditorBtn;
 		wxRadioButton* m_defaultPDFViewer;
 		wxRadioButton* m_otherPDFViewer;
 		wxTextCtrl* m_PDFViewerPath;
-		wxBitmapButton* m_pdfViewerBtn;
+		STD_BITMAP_BUTTON* m_pdfViewerBtn;
 		wxStaticBoxSizer* m_sbUserInterface;
 		wxGridBagSizer* m_gbUserInterface;
 		wxCheckBox* m_checkBoxIconsInMenus;

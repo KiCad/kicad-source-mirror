@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/text_ctrl_eval.h"
 #include "widgets/wx_grid.h"
 
@@ -81,13 +82,13 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	wxBoxSizer* bButtonSize;
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bpAdd = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAdd = new STD_BITMAP_BUTTON( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonSize->Add( m_bpAdd, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bButtonSize->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_bpDelete = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDelete = new STD_BITMAP_BUTTON( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonSize->Add( m_bpDelete, 0, wxRIGHT, 5 );
 
 
@@ -164,13 +165,13 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	wxBoxSizer* bButtonSize1;
 	bButtonSize1 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bpAddLayer = new wxBitmapButton( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAddLayer = new STD_BITMAP_BUTTON( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonSize1->Add( m_bpAddLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bButtonSize1->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_bpDeleteLayer = new wxBitmapButton( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDeleteLayer = new STD_BITMAP_BUTTON( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonSize1->Add( m_bpDeleteLayer, 0, wxRIGHT, 5 );
 
 
@@ -373,13 +374,13 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	wxBoxSizer* bButtonSize2;
 	bButtonSize2 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bpAddPadGroup = new wxBitmapButton( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAddPadGroup = new STD_BITMAP_BUTTON( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonSize2->Add( m_bpAddPadGroup, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bButtonSize2->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_bpRemovePadGroup = new wxBitmapButton( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpRemovePadGroup = new STD_BITMAP_BUTTON( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonSize2->Add( m_bpRemovePadGroup, 0, wxRIGHT, 5 );
 
 

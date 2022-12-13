@@ -1,8 +1,3 @@
-/**
- * @file dialog_pad_basicshapes_properties.cpp
- * @brief basic shapes for pads crude editor.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -34,6 +29,7 @@
 #include <pcb_base_frame.h>
 #include <base_units.h>
 #include <widgets/wx_grid.h>
+#include <widgets/std_bitmap_button.h>
 #include <footprint.h>
 #include <math/util.h>      // for KiROUND
 

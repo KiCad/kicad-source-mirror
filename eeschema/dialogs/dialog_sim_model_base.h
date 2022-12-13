@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -56,7 +57,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxRadioButton* m_useLibraryModelRadioButton;
 		wxStaticText* m_pathLabel;
 		wxTextCtrl* m_libraryPathText;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticText* m_modelNameLabel;
 		wxComboBox* m_modelNameCombobox;
 		wxStaticText* m_ibisPinLabel;

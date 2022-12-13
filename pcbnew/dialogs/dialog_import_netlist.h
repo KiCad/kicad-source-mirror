@@ -1,7 +1,3 @@
-/**
- * @file pcbnew/dialogs/dialog_netlist.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -25,21 +21,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_NETLIST_IMPORT_H_
-#define _DIALOG_NETLIST_IMPORT_H_
+#ifndef DIALOG_IMPORT_NETLIST_H
+#define DIALOG_IMPORT_NETLIST_H
 
-#include <dialog_netlist_base.h>
+#include <dialog_import_netlist_base.h>
 
 
 class FOOTPRINT;
 class NETLIST;
 
 
-class DIALOG_NETLIST_IMPORT : public DIALOG_NETLIST_IMPORT_BASE
+class DIALOG_IMPORT_NETLIST : public DIALOG_IMPORT_NETLIST_BASE
 {
 public:
-    DIALOG_NETLIST_IMPORT( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename );
-    ~DIALOG_NETLIST_IMPORT();
+    DIALOG_IMPORT_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename );
+    ~DIALOG_IMPORT_NETLIST();
 
 private:
     void onFilenameChanged( bool aLoadNetlist );
@@ -65,4 +61,4 @@ private:
 };
 
 
-#endif      // _DIALOG_NETLIST_IMPORT_H_
+#endif      // DIALOG_IMPORT_NETLIST_H

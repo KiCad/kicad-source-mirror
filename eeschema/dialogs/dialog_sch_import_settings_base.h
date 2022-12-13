@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -39,7 +41,7 @@ class DIALOG_SCH_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 	protected:
 		wxBoxSizer* m_MainSizer;
 		wxTextCtrl* m_filePathCtrl;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxBoxSizer* m_buttonsSizer;
 		wxButton* m_selectAllButton;
 		wxStdDialogButtonSizer* m_sdbSizer1;

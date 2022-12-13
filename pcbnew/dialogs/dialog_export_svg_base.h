@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
@@ -45,7 +46,7 @@ class DIALOG_EXPORT_SVG_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticText* m_staticTextCopperLayers;
 		wxCheckListBox* m_CopperLayersList;
 		wxStaticText* m_staticTextTechLayers;

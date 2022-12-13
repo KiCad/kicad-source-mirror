@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include <wx/string.h>
@@ -26,7 +27,6 @@ class WX_GRID;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
-#include <wx/treebook.h>
 #include <wx/simplebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,15 +43,15 @@ class PANEL_SETUP_BUSES_BASE : public wxPanel
 		wxBoxSizer* bLeftCol;
 		wxStaticText* m_busesLabel;
 		WX_GRID* m_aliasesGrid;
-		wxBitmapButton* m_addAlias;
-		wxBitmapButton* m_deleteAlias;
+		STD_BITMAP_BUTTON* m_addAlias;
+		STD_BITMAP_BUTTON* m_deleteAlias;
 		wxStaticText* m_source;
 		wxSimplebook* m_membersBook;
 		wxPanel* membersPanel;
 		wxStaticText* m_membersLabel;
 		WX_GRID* m_membersGrid;
-		wxBitmapButton* m_addMember;
-		wxBitmapButton* m_removeMember;
+		STD_BITMAP_BUTTON* m_addMember;
+		STD_BITMAP_BUTTON* m_removeMember;
 		wxPanel* emptyPanel;
 
 		// Virtual event handlers, override them in your derived class

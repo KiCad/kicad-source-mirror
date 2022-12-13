@@ -31,6 +31,7 @@
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
+#include <widgets/std_bitmap_button.h>
 #include <footprint.h>
 #include <fp_lib_table.h>
 #include <footprint_edit_frame.h>

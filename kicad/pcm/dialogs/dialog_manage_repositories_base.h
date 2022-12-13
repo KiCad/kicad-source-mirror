@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -41,9 +42,9 @@ class DIALOG_MANAGE_REPOSITORIES_BASE : public DIALOG_SHIM
 	protected:
 		WX_GRID* m_grid;
 		SPLIT_BUTTON* m_buttonAdd;
-		wxBitmapButton* m_buttonMoveUp;
-		wxBitmapButton* m_buttonMoveDown;
-		wxBitmapButton* m_buttonRemove;
+		STD_BITMAP_BUTTON* m_buttonMoveUp;
+		STD_BITMAP_BUTTON* m_buttonMoveDown;
+		STD_BITMAP_BUTTON* m_buttonRemove;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1Save;
 		wxButton* m_sdbSizer1Cancel;

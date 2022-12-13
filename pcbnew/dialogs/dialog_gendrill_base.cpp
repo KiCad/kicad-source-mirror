@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/std_bitmap_button.h"
 
 #include "dialog_gendrill_base.h"
 
@@ -21,16 +23,16 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 	staticTextOutputDir = new wxStaticText( this, wxID_ANY, _("Output folder:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticTextOutputDir->Wrap( -1 );
-	bupperSizer->Add( staticTextOutputDir, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
+	bupperSizer->Add( staticTextOutputDir, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bupperSizer->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 0 );
 
-	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bupperSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 7 );
+	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	bupperSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL, 7 );
 
 
-	bMainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP, 10 );
+	bMainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bmiddlerSizer;
 	bmiddlerSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -196,7 +198,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bmiddlerSizer->Add( bRightBoxSizer, 0, wxEXPAND|wxTOP, 5 );
 
 
-	bMainSizer->Add( bmiddlerSizer, 0, wxEXPAND|wxTOP, 2 );
+	bMainSizer->Add( bmiddlerSizer, 0, wxEXPAND|wxTOP, 8 );
 
 	wxStaticBoxSizer* bMsgSizer;
 	bMsgSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages") ), wxVERTICAL );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -49,12 +50,12 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextDuplicatePins;
 		wxStaticText* m_duplicate_pins;
 		WX_GRID* m_grid;
-		wxBitmapButton* m_addButton;
-		wxBitmapButton* m_deleteButton;
+		STD_BITMAP_BUTTON* m_addButton;
+		STD_BITMAP_BUTTON* m_deleteButton;
 		BITMAP_BUTTON* m_divider1;
 		wxCheckBox* m_cbGroup;
 		wxButton* m_groupSelected;
-		wxBitmapButton* m_refreshButton;
+		STD_BITMAP_BUTTON* m_refreshButton;
 		BITMAP_BUTTON* m_divider2;
 		wxCheckBox* m_cbFilterByUnit;
 		wxChoice* m_unitFilter;
@@ -62,7 +63,7 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxButton* m_ButtonsOK;
 		wxButton* m_ButtonsCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) = 0;
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) = 0;
 		virtual void OnCellEdited( wxGridEvent& event ) = 0;
@@ -79,6 +80,7 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_LIB_EDIT_PIN_TABLE_BASE();
 
 };

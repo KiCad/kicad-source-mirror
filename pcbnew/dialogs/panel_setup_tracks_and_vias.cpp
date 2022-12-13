@@ -26,6 +26,7 @@
 #include <board_design_settings.h>
 #include <bitmaps.h>
 #include <widgets/wx_grid.h>
+#include <widgets/std_bitmap_button.h>
 #include <wx/treebook.h>
 #include <grid_tricks.h>
 

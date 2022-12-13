@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -8,6 +8,7 @@
 #include "pin_shape_combobox.h"
 #include "pin_type_combobox.h"
 #include "widgets/infobar.h"
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 #include "wx/bmpcbox.h"
 
@@ -208,10 +209,10 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_alternatesGrid->SetColSize( 2, 140 );
 	m_alternatesGrid->EnableDragColMove( false );
 	m_alternatesGrid->EnableDragColSize( false );
-	m_alternatesGrid->SetColLabelSize( 22 );
 	m_alternatesGrid->SetColLabelValue( 0, _("Alternate Pin Name") );
 	m_alternatesGrid->SetColLabelValue( 1, _("Electrical Type") );
 	m_alternatesGrid->SetColLabelValue( 2, _("Graphic Style") );
+	m_alternatesGrid->SetColLabelSize( 22 );
 	m_alternatesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -233,13 +234,13 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addAlternate = new wxBitmapButton( m_alternatesTurndown->GetPane(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_addAlternate = new STD_BITMAP_BUTTON( m_alternatesTurndown->GetPane(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonSizer->Add( m_addAlternate, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
 	bButtonSizer->Add( 20, 0, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_deleteAlternate = new wxBitmapButton( m_alternatesTurndown->GetPane(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_deleteAlternate = new STD_BITMAP_BUTTON( m_alternatesTurndown->GetPane(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonSizer->Add( m_deleteAlternate, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
@@ -288,7 +289,6 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_checkApplyToAllConversions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkShow->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_panelShowPin->Connect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPaintShowPanel ), NULL, this );
-	m_alternatesTurndown->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnCollapsiblePaneChanged ), NULL, this );
 	m_addAlternate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnAddAlternate ), NULL, this );
 	m_deleteAlternate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnDeleteAlternate ), NULL, this );
 }
@@ -310,7 +310,6 @@ DIALOG_PIN_PROPERTIES_BASE::~DIALOG_PIN_PROPERTIES_BASE()
 	m_checkApplyToAllConversions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkShow->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_panelShowPin->Disconnect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPaintShowPanel ), NULL, this );
-	m_alternatesTurndown->Disconnect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnCollapsiblePaneChanged ), NULL, this );
 	m_addAlternate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnAddAlternate ), NULL, this );
 	m_deleteAlternate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnDeleteAlternate ), NULL, this );
 

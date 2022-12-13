@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -40,8 +41,8 @@ class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 
 	protected:
 		WX_GRID* m_EnvVars;
-		wxBitmapButton* m_btnAddEnvVar;
-		wxBitmapButton* m_btnDeleteEnvVar;
+		STD_BITMAP_BUTTON* m_btnAddEnvVar;
+		STD_BITMAP_BUTTON* m_btnDeleteEnvVar;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

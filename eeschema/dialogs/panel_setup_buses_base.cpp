@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "panel_setup_buses_base.h"
@@ -57,13 +58,13 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addAlias = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_addAlias = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer10->Add( m_addAlias, 0, wxTOP, 5 );
 
 
 	bSizer10->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_deleteAlias = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_deleteAlias = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer10->Add( m_deleteAlias, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
@@ -124,13 +125,13 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizer101;
 	bSizer101 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addMember = new wxBitmapButton( membersPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_addMember = new STD_BITMAP_BUTTON( membersPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer101->Add( m_addMember, 0, wxTOP, 5 );
 
 
 	bSizer101->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_removeMember = new wxBitmapButton( membersPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_removeMember = new STD_BITMAP_BUTTON( membersPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer101->Add( m_removeMember, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 

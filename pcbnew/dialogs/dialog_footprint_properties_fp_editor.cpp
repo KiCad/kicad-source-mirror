@@ -34,6 +34,7 @@
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
+#include <widgets/std_bitmap_button.h>
 #include <widgets/text_ctrl_eval.h>
 #include <footprint.h>
 #include <footprint_edit_frame.h>

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHOR.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHOR.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __dialog_lib_edit_pin__
-#define __dialog_lib_edit_pin__
+#ifndef DIALOG_PIN_PROPERTIES_H
+#define DIALOG_PIN_PROPERTIES_H
 
 #include <wx/bmpcbox.h>
 #include <wx/dcclient.h>
@@ -61,7 +61,6 @@ public:
 
     void OnPaintShowPanel( wxPaintEvent& event ) override;
     void OnPropertiesChange( wxCommandEvent& event ) override;
-    void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event ) override;
     void OnAddAlternate( wxCommandEvent& event ) override;
     void OnDeleteAlternate( wxCommandEvent& event ) override;
     void OnSize( wxSizeEvent& event ) override;
@@ -97,4 +96,4 @@ private:
     inline static bool  s_alternatesTurndownOpen = false;
 };
 
-#endif // __dialog_lib_edit_pin__
+#endif // DIALOG_PIN_PROPERTIES_H

@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 #include "widgets/wx_html_report_box.h"
 
@@ -70,13 +71,13 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addButton = new wxBitmapButton( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_addButton = new STD_BITMAP_BUTTON( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer->Add( m_addButton, 0, wxBOTTOM|wxLEFT, 2 );
 
 
 	buttonBoxSizer->Add( 5, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_removeButton = new wxBitmapButton( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_removeButton = new STD_BITMAP_BUTTON( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer->Add( m_removeButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
@@ -149,13 +150,13 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* buttonBoxSizer1;
 	buttonBoxSizer1 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addAssignmentButton = new wxBitmapButton( m_membershipPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_addAssignmentButton = new STD_BITMAP_BUTTON( m_membershipPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer1->Add( m_addAssignmentButton, 0, 0, 2 );
 
 
 	buttonBoxSizer1->Add( 5, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_removeAssignmentButton = new wxBitmapButton( m_membershipPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_removeAssignmentButton = new STD_BITMAP_BUTTON( m_membershipPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer1->Add( m_removeAssignmentButton, 0, wxRIGHT|wxLEFT, 5 );
 
 

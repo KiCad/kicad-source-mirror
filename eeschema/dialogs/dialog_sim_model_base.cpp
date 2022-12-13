@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "dialog_sim_model_base.h"
@@ -42,9 +43,9 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_libraryPathText = new wxTextCtrl( m_modelPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	bSizer7->Add( m_libraryPathText, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	bSizer7->Add( m_libraryPathText, 1, wxALIGN_CENTER_VERTICAL, 3 );
 
-	m_browseButton = new wxBitmapButton( m_modelPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_browseButton = new STD_BITMAP_BUTTON( m_modelPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer7->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 

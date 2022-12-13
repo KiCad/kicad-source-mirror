@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_html_report_panel.h"
 
 #include "dialog_export_svg_base.h"
@@ -31,8 +32,8 @@ DIALOG_EXPORT_SVG_BASE::DIALOG_EXPORT_SVG_BASE( wxWindow* parent, wxWindowID id,
 
 	bSizer4->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer4->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	bSizer4->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bMainSizer->Add( bSizer4, 0, wxEXPAND|wxALL, 10 );

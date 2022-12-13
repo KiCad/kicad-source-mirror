@@ -33,6 +33,7 @@
 #include <widgets/wx_grid.h>
 #include <grid_tricks.h>
 #include <widgets/grid_icon_text_helpers.h>
+#include <widgets/std_bitmap_button.h>
 #include <wx/hyperlink.h>
 
 class ALT_PIN_DATA_MODEL : public wxGridTableBase, public std::vector<LIB_PIN::ALT>
@@ -431,12 +432,6 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
 
     m_panelShowPin->Refresh();
 }
-
-void DIALOG_PIN_PROPERTIES::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event )
-{
-    s_alternatesTurndownOpen = !event.GetCollapsed();
-}
-
 
 wxString DIALOG_PIN_PROPERTIES::getSyncPinsMessage()
 {

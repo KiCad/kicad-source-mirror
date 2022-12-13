@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 class WX_INFOBAR;
 
@@ -48,10 +49,10 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 		WX_INFOBAR* m_infoBar;
 		wxBoxSizer* m_longForm;
 		WX_GRID* m_grid;
-		wxBitmapButton* m_bpAdd;
-		wxBitmapButton* m_bpMoveUp;
-		wxBitmapButton* m_bpMoveDown;
-		wxBitmapButton* m_bpDelete;
+		STD_BITMAP_BUTTON* m_bpAdd;
+		STD_BITMAP_BUTTON* m_bpMoveUp;
+		STD_BITMAP_BUTTON* m_bpMoveDown;
+		STD_BITMAP_BUTTON* m_bpDelete;
 		wxStaticText* m_borderWidthLabel;
 		wxTextCtrl* m_borderWidthCtrl;
 		wxStaticText* m_borderWidthUnits;
@@ -69,7 +70,7 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_stdDialogButtonSizerOK;
 		wxButton* m_stdDialogButtonSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
@@ -82,6 +83,7 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Sheet Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
+
 		~DIALOG_SHEET_PROPERTIES_BASE();
 
 };

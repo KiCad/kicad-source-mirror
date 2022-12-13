@@ -5,13 +5,14 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_html_report_panel.h"
 
-#include "dialog_netlist_base.h"
+#include "dialog_import_netlist_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_NETLIST_IMPORT_BASE::DIALOG_NETLIST_IMPORT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_IMPORT_NETLIST_BASE::DIALOG_IMPORT_NETLIST_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -27,15 +28,13 @@ DIALOG_NETLIST_IMPORT_BASE::DIALOG_NETLIST_IMPORT_BASE( wxWindow* parent, wxWind
 	bSizerNetlistFilename->Add( staticTextNetlistFile, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_NetlistFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerNetlistFilename->Add( m_NetlistFilenameCtrl, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerNetlistFilename->Add( m_NetlistFilenameCtrl, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_browseButton->SetMinSize( wxSize( 30,28 ) );
-
-	bSizerNetlistFilename->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 2 );
+	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	bSizerNetlistFilename->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL, 2 );
 
 
-	bMainSizer->Add( bSizerNetlistFilename, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( bSizerNetlistFilename, 0, wxEXPAND|wxALL, 10 );
 
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -98,26 +97,26 @@ DIALOG_NETLIST_IMPORT_BASE::DIALOG_NETLIST_IMPORT_BASE( wxWindow* parent, wxWind
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	m_NetlistFilenameCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnFilenameKillFocus ), NULL, this );
-	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::onBrowseNetlistFiles ), NULL, this );
-	m_matchByTimestamp->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnMatchChanged ), NULL, this );
-	m_cbUpdateFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteExtraFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteShortingTracks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnOptionChanged ), NULL, this );
-	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::onUpdatePCB ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::onImportNetlist ), NULL, this );
+	m_NetlistFilenameCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnFilenameKillFocus ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onBrowseNetlistFiles ), NULL, this );
+	m_matchByTimestamp->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnMatchChanged ), NULL, this );
+	m_cbUpdateFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
+	m_cbDeleteExtraFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
+	m_cbDeleteShortingTracks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
+	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onUpdatePCB ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onImportNetlist ), NULL, this );
 }
 
-DIALOG_NETLIST_IMPORT_BASE::~DIALOG_NETLIST_IMPORT_BASE()
+DIALOG_IMPORT_NETLIST_BASE::~DIALOG_IMPORT_NETLIST_BASE()
 {
 	// Disconnect Events
-	m_NetlistFilenameCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnFilenameKillFocus ), NULL, this );
-	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::onBrowseNetlistFiles ), NULL, this );
-	m_matchByTimestamp->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnMatchChanged ), NULL, this );
-	m_cbUpdateFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteExtraFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteShortingTracks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::OnOptionChanged ), NULL, this );
-	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::onUpdatePCB ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_IMPORT_BASE::onImportNetlist ), NULL, this );
+	m_NetlistFilenameCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnFilenameKillFocus ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onBrowseNetlistFiles ), NULL, this );
+	m_matchByTimestamp->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnMatchChanged ), NULL, this );
+	m_cbUpdateFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
+	m_cbDeleteExtraFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
+	m_cbDeleteShortingTracks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
+	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onUpdatePCB ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onImportNetlist ), NULL, this );
 
 }

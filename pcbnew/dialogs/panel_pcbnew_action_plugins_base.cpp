@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "panel_pcbnew_action_plugins_base.h"
@@ -32,13 +33,13 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	m_grid->AutoSizeColumns();
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelValue( 0, _("Icon") );
 	m_grid->SetColLabelValue( 1, _("Show button") );
 	m_grid->SetColLabelValue( 2, _("Name") );
 	m_grid->SetColLabelValue( 3, _("Category") );
 	m_grid->SetColLabelValue( 4, _("Description") );
 	m_grid->SetColLabelValue( 5, _("Path") );
+	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -58,12 +59,12 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_moveUpButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_moveUpButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_moveUpButton->SetToolTip( _("Move Up") );
 
 	bButtonsSizer->Add( m_moveUpButton, 0, wxLEFT|wxRIGHT, 5 );
 
-	m_moveDownButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_moveDownButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_moveDownButton->SetToolTip( _("Move Down") );
 
 	bButtonsSizer->Add( m_moveDownButton, 0, wxRIGHT, 5 );
@@ -71,17 +72,17 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 
 	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_openDirectoryButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_openDirectoryButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_openDirectoryButton->SetToolTip( _("Open Plugin Directory") );
 
 	bButtonsSizer->Add( m_openDirectoryButton, 0, wxLEFT|wxRIGHT, 5 );
 
-	m_reloadButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_reloadButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_reloadButton->SetToolTip( _("Reload Plugins") );
 
 	bButtonsSizer->Add( m_reloadButton, 0, wxRIGHT, 5 );
 
-	m_showErrorsButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_showErrorsButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_showErrorsButton->SetToolTip( _("Show Plugin Errors") );
 
 	bButtonsSizer->Add( m_showErrorsButton, 0, wxRIGHT, 5 );

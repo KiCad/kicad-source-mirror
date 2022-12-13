@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class TEXT_CTRL_EVAL;
 class WX_GRID;
 
@@ -54,8 +55,8 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelGeneral;
 		WX_GRID* m_itemsGrid;
-		wxBitmapButton* m_bpAdd;
-		wxBitmapButton* m_bpDelete;
+		STD_BITMAP_BUTTON* m_bpAdd;
+		STD_BITMAP_BUTTON* m_bpDelete;
 		wxStaticText* m_XPosLabel;
 		wxTextCtrl* m_ModPositionX;
 		wxStaticText* m_XPosUnit;

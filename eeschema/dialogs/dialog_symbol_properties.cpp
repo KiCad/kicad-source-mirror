@@ -36,6 +36,7 @@
 #include <kiplatform/ui.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
+#include <widgets/std_bitmap_button.h>
 #include <settings/settings_manager.h>
 #include <ee_collectors.h>
 #include <symbol_library.h>

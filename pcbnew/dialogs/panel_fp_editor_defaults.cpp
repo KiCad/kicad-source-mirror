@@ -26,6 +26,7 @@
 #include <footprint_editor_settings.h>
 #include <widgets/wx_grid.h>
 #include <widgets/paged_dialog.h>
+#include <widgets/std_bitmap_button.h>
 #include <grid_tricks.h>
 #include <eda_base_frame.h>
 #include <panel_fp_editor_defaults.h>

@@ -25,7 +25,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <eeschema_settings.h>
-#include <widgets/wx_grid.h>
+#include <widgets/std_bitmap_button.h>
 #include <template_fieldnames.h>
 #include <grid_tricks.h>
 #include <bitmaps.h>

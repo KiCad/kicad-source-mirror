@@ -45,6 +45,7 @@
 #include <settings/settings_manager.h>
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <widgets/std_bitmap_button.h>
 #include <sch_file_versions.h>
 #include <wx/filedlg.h>
 

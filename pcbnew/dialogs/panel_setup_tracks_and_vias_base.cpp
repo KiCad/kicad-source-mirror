@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "panel_setup_tracks_and_vias_base.h"
@@ -64,16 +65,16 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_trackWidthsAddButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_trackWidthsAddButton = new STD_BITMAP_BUTTON( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer3->Add( m_trackWidthsAddButton, 0, wxLEFT|wxRIGHT, 5 );
 
-	m_trackWidthsSortButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_trackWidthsSortButton = new STD_BITMAP_BUTTON( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer3->Add( m_trackWidthsSortButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer3->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_trackWidthsRemoveButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_trackWidthsRemoveButton = new STD_BITMAP_BUTTON( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer3->Add( m_trackWidthsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
@@ -124,16 +125,16 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_viaSizesAddButton = new wxBitmapButton( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_viaSizesAddButton = new STD_BITMAP_BUTTON( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer4->Add( m_viaSizesAddButton, 0, wxLEFT|wxRIGHT, 5 );
 
-	m_viaSizesSortButton = new wxBitmapButton( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_viaSizesSortButton = new STD_BITMAP_BUTTON( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer4->Add( m_viaSizesSortButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer4->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_viaSizesRemoveButton = new wxBitmapButton( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_viaSizesRemoveButton = new STD_BITMAP_BUTTON( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer4->Add( m_viaSizesRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
@@ -186,16 +187,16 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_diffPairsAddButton = new wxBitmapButton( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_diffPairsAddButton = new STD_BITMAP_BUTTON( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer5->Add( m_diffPairsAddButton, 0, wxLEFT|wxRIGHT, 5 );
 
-	m_diffPairsSortButton = new wxBitmapButton( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_diffPairsSortButton = new STD_BITMAP_BUTTON( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer5->Add( m_diffPairsSortButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer5->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_diffPairsRemoveButton = new wxBitmapButton( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_diffPairsRemoveButton = new STD_BITMAP_BUTTON( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer5->Add( m_diffPairsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
 
 

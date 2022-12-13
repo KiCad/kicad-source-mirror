@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
@@ -46,7 +47,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextOutputDirectory;
 		wxTextCtrl* m_outputDirectoryName;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxBoxSizer* m_optionsSizer;
 		wxRadioBox* m_plotFormatOpt;
 		wxStaticText* m_staticText4;

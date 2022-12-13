@@ -36,6 +36,7 @@
 #include <widgets/grid_combobox.h>
 #include <widgets/wx_grid.h>
 #include <widgets/bitmap_button.h>
+#include <widgets/std_bitmap_button.h>
 #include <settings/settings_manager.h>
 #include <wx/tokenzr.h>
 #include <string_utils.h>

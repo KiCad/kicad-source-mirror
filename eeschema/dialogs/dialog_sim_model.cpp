@@ -34,6 +34,7 @@
 #include <sim/sim_serde.h>
 #include <grid_tricks.h>
 #include <widgets/grid_icon_text_helpers.h>
+#include <widgets/std_bitmap_button.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <string_utils.h>

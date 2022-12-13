@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class TEXT_CTRL_EVAL;
 class WX_GRID;
 
@@ -52,15 +53,15 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelGeneral;
 		WX_GRID* m_itemsGrid;
-		wxBitmapButton* m_bpAdd;
-		wxBitmapButton* m_bpDelete;
+		STD_BITMAP_BUTTON* m_bpAdd;
+		STD_BITMAP_BUTTON* m_bpDelete;
 		wxTextCtrl* m_FootprintNameCtrl;
 		wxTextCtrl* m_DocCtrl;
 		wxStaticText* staticKeywordsLabel;
 		wxTextCtrl* m_KeywordCtrl;
 		WX_GRID* m_privateLayersGrid;
-		wxBitmapButton* m_bpAddLayer;
-		wxBitmapButton* m_bpDeleteLayer;
+		STD_BITMAP_BUTTON* m_bpAddLayer;
+		STD_BITMAP_BUTTON* m_bpDeleteLayer;
 		wxStaticText* m_componentTypeLabel;
 		wxChoice* m_componentType;
 		wxCheckBox* m_boardOnly;
@@ -88,8 +89,8 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxChoice* m_ZoneConnectionChoice;
 		wxStaticText* m_padGroupsLabel;
 		WX_GRID* m_padGroupsGrid;
-		wxBitmapButton* m_bpAddPadGroup;
-		wxBitmapButton* m_bpRemovePadGroup;
+		STD_BITMAP_BUTTON* m_bpAddPadGroup;
+		STD_BITMAP_BUTTON* m_bpRemovePadGroup;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;

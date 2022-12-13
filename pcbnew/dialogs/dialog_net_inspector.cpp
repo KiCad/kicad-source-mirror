@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@
 #include <dialogs/dialog_text_entry.h>
 #include <validators.h>
 #include <bitmaps.h>
+#include <widgets/std_bitmap_button.h>
 
 #include <wx/tokenzr.h>
 #include <wx/filedlg.h>

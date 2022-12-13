@@ -20,6 +20,7 @@
  */
 
 #include <widgets/wx_grid.h>
+#include <widgets/std_bitmap_button.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>

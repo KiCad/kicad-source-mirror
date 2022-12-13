@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <pgm_base.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <widgets/std_bitmap_button.h>
 
 #include <algorithm>
 #include <wx/dirdlg.h>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  9 2019)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -45,7 +47,7 @@ class DIALOG_MIGRATE_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText2;
 		wxRadioButton* m_btnPrevVer;
 		wxComboBox* m_cbPath;
-		wxBitmapButton* m_btnCustomPath;
+		STD_BITMAP_BUTTON* m_btnCustomPath;
 		wxStaticText* m_lblPathError;
 		wxCheckBox* m_cbCopyLibraryTables;
 		wxRadioButton* m_btnUseDefaults;
@@ -65,6 +67,7 @@ class DIALOG_MIGRATE_SETTINGS_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure KiCad Settings Path"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION );
+
 		~DIALOG_MIGRATE_SETTINGS_BASE();
 
 };

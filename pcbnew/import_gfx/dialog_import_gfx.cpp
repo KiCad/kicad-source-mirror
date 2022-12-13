@@ -31,6 +31,7 @@
 #include <pcb_layer_box_selector.h>
 #include <wildcards_and_files_ext.h>
 #include <bitmaps.h>
+#include <widgets/std_bitmap_button.h>
 #include <map>
 #include "dxf_import_plugin.h"
 #include <wx/filedlg.h>

@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "dialog_lib_symbol_properties_base.h"
@@ -85,17 +86,17 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bpAdd = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAdd = new STD_BITMAP_BUTTON( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpAdd->SetToolTip( _("Add field") );
 
 	bButtonSize->Add( m_bpAdd, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_bpMoveUp = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveUp = new STD_BITMAP_BUTTON( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpMoveUp->SetToolTip( _("Move up") );
 
 	bButtonSize->Add( m_bpMoveUp, 0, wxRIGHT, 5 );
 
-	m_bpMoveDown = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveDown = new STD_BITMAP_BUTTON( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpMoveDown->SetToolTip( _("Move down") );
 
 	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT, 5 );
@@ -103,7 +104,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	bButtonSize->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_bpDelete = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDelete = new STD_BITMAP_BUTTON( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpDelete->SetToolTip( _("Delete field") );
 
 	bButtonSize->Add( m_bpDelete, 0, wxRIGHT|wxLEFT, 10 );
@@ -293,12 +294,12 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	wxBoxSizer* bFpFilterRightBoxSizer;
 	bFpFilterRightBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_addFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_addFilterButton->SetToolTip( _("Add footprint filter") );
 
 	bFpFilterRightBoxSizer->Add( m_addFilterButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_editFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_editFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_editFilterButton->SetToolTip( _("Edit footprint filter") );
 
 	bFpFilterRightBoxSizer->Add( m_editFilterButton, 0, wxALL, 5 );
@@ -306,7 +307,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	bFpFilterRightBoxSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_deleteFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_deleteFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_deleteFilterButton->SetToolTip( _("Delete footprint filter") );
 
 	bFpFilterRightBoxSizer->Add( m_deleteFilterButton, 0, wxALL, 5 );

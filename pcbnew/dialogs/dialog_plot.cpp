@@ -43,6 +43,7 @@
 #include <dialog_plot.h>
 #include <dialog_gendrill.h>
 #include <widgets/wx_html_report_panel.h>
+#include <widgets/std_bitmap_button.h>
 #include <tool/tool_manager.h>
 #include <tools/zone_filler_tool.h>
 #include <tools/drc_tool.h>
