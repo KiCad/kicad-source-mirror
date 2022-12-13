@@ -24,17 +24,22 @@
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_pdf.h>
 #include <jobs/job_export_sch_svg.h>
+#include <jobs/job_sym_export_svg.h>
 #include <jobs/job_sym_upgrade.h>
 #include <pgm_base.h>
 #include <sch_plotter.h>
 #include <schematic.h>
 #include <wx/crt.h>
+#include <wx/dir.h>
+#include <wx/file.h>
 #include <memory>
 #include <connection_graph.h>
 #include "eeschema_helpers.h"
 #include <sch_painter.h>
+#include <locale_io.h>
 #include <erc.h>
 #include <wildcards_and_files_ext.h>
+#include <plotters/plotters_pslike.h>
 
 #include <settings/settings_manager.h>
 
@@ -62,7 +67,9 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER()
     Register( "svg",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ) );
     Register( "symupgrade",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportSymLibUpgrade, this, std::placeholders::_1 ) );
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobSymUpgrade, this, std::placeholders::_1 ) );
+    Register( "symsvg",
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobSymExportSvg, this, std::placeholders::_1 ) );
 }
 
 
@@ -302,13 +309,11 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist =
             std::make_unique<NETLIST_EXPORTER_XML>( sch );
 
-    wxString fileExt = wxS( "xml" );
-
     if( aNetJob->m_outputFile.IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() + "-bom" );
-        fn.SetExt( fileExt );
+        fn.SetExt( XmlFileExtension );
 
         aNetJob->m_outputFile = fn.GetFullName();
     }
@@ -324,7 +329,158 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 }
 
 
-int EESCHEMA_JOBS_HANDLER::JobExportSymLibUpgrade( JOB* aJob )
+int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
+                                        KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,
+                                        LIB_SYMBOL*                 symbol )
+{
+    wxASSERT( symbol != nullptr );
+
+    if( symbol == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    // iterate from unit 1, unit 0 would be "all units" which we don't want
+    for( int unit = 1; unit < symbol->GetUnitCount() + 1; unit++ )
+    {
+        int convert = 0;
+
+        wxFileName fn;
+
+        fn.SetPath( aSvgJob->m_outputDirectory );
+        fn.SetExt( SVGFileExtension );
+
+        //simplify the name if its single unit
+        if( symbol->IsMulti() )
+        {
+            fn.SetName( wxString::Format( "%s_%d", symbol->GetName().Lower(), unit ) );
+            wxPrintf( _( "Plotting symbol '%s' unit %d to '%s'\n" ), symbol->GetName(), unit,
+                      fn.GetFullPath() );
+        }
+        else
+        {
+            fn.SetName( symbol->GetName().Lower() );
+            wxPrintf( _( "Plotting symbol '%s' to '%s'\n" ), symbol->GetName(), fn.GetFullPath() );
+        }
+
+        // Get the symbol bounding box to fit the plot page to it
+        BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, convert );
+        PAGE_INFO pageInfo( PAGE_INFO::Custom );
+        pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
+        pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );
+
+        SVG_PLOTTER* plotter = new SVG_PLOTTER();
+        plotter->SetRenderSettings( aRenderSettings );
+        plotter->SetPageSettings( pageInfo );
+        plotter->SetColorMode( !aSvgJob->m_blackAndWhite );
+
+        wxPoint      plot_offset;
+        const double scale = 1.0;
+
+        // Currently, plot units are in decimil
+        plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, scale, false );
+
+        plotter->SetCreator( wxT( "Eeschema-SVG" ) );
+
+        if( !plotter->OpenFile( fn.GetFullPath() ) )
+        {
+            wxFprintf( stderr, _( "Unable to open destination '%s'" ), fn.GetFullPath() );
+
+            delete plotter;
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
+        LOCALE_IO toggle;
+
+        plotter->StartPlot( wxT( "1" ) );
+
+        if( symbol )
+        {
+            constexpr bool background = true;
+            TRANSFORM      temp; // Uses default transform
+            VECTOR2I        plotPos;
+
+            plotPos.x = pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
+            plotPos.y = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
+
+            symbol->Plot( plotter, unit, convert, background, plotPos, temp, false );
+
+            // Plot lib fields, not plotted by m_symbol->Plot():
+            symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false );
+
+            symbol->Plot( plotter, unit, convert, !background, plotPos, temp, false );
+
+            // Plot lib fields, not plotted by m_symbol->Plot():
+            symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false );
+        }
+
+        plotter->EndPlot();
+        delete plotter;
+    }
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
+{
+    JOB_SYM_EXPORT_SVG* svgJob = dynamic_cast<JOB_SYM_EXPORT_SVG*>( aJob );
+
+    SCH_SEXPR_PLUGIN_CACHE schLibrary( svgJob->m_libraryPath );
+
+    try
+    {
+        schLibrary.Load();
+    }
+    catch( ... )
+    {
+        wxFprintf( stderr, _( "Unable to load library\n" ) );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    LIB_SYMBOL* symbol = nullptr;
+    if( !svgJob->m_symbol.IsEmpty() )
+    {
+        // See if the selected symbol exists
+        symbol = schLibrary.GetSymbol( svgJob->m_symbol );
+        if( !symbol )
+        {
+            wxFprintf( stderr, _( "There is no symbol selected to save." ) );
+            return CLI::EXIT_CODES::ERR_ARGS;
+        }
+    }
+
+    if( !svgJob->m_outputDirectory.IsEmpty() && !wxDir::Exists( svgJob->m_outputDirectory ) )
+    {
+        wxFileName::Mkdir( svgJob->m_outputDirectory );
+    }
+
+    KIGFX::SCH_RENDER_SETTINGS renderSettings;
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings( svgJob->m_colorTheme );
+    renderSettings.LoadColors( cs );
+    renderSettings.SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * schIUScale.IU_PER_MILS );
+
+    int exitCode = CLI::EXIT_CODES::OK;
+    if( symbol )
+    {
+        exitCode = doSymExportSvg( svgJob, &renderSettings, symbol );
+    }
+    else
+    {
+        // Just plot all the symbols we can
+        const LIB_SYMBOL_MAP& libSymMap = schLibrary.GetSymbolMap();
+
+        for( const std::pair<const wxString, LIB_SYMBOL*>& entry : libSymMap )
+        {
+            exitCode = doSymExportSvg( svgJob, &renderSettings, entry.second );
+            if( exitCode != CLI::EXIT_CODES::OK )
+                break;
+        }
+    }
+
+    return exitCode;
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
 {
     JOB_SYM_UPGRADE* upgradeJob = dynamic_cast<JOB_SYM_UPGRADE*>( aJob );
 

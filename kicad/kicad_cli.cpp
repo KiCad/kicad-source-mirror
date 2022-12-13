@@ -66,6 +66,8 @@
 #include "cli/command_sch.h"
 #include "cli/command_sch_export.h"
 #include "cli/command_sym.h"
+#include "cli/command_sym_export.h"
+#include "cli/command_sym_export_svg.h"
 #include "cli/command_sym_upgrade.h"
 #include "cli/exit_codes.h"
 #include "cli/cli_names.h"
@@ -134,6 +136,8 @@ static CLI::EXPORT_SCH_SVG_COMMAND       exportSchSvgCmd{};
 static CLI::FP_COMMAND                   fpCmd{};
 static CLI::FP_UPGRADE_COMMAND           fpUpgradeCmd{};
 static CLI::SYM_COMMAND                  symCmd{};
+static CLI::SYM_EXPORT_COMMAND           symExportCmd{};
+static CLI::SYM_EXPORT_SVG_COMMAND       symExportSvgCmd{};
 static CLI::SYM_UPGRADE_COMMAND          symUpgradeCmd{};
 
 static std::vector<COMMAND_ENTRY> commandStack = {
@@ -148,7 +152,8 @@ static std::vector<COMMAND_ENTRY> commandStack = {
     {
         &pcbCmd,
         {
-            { &exportPcbCmd,
+            {
+                &exportPcbCmd,
                 {
                     &exportPcbDrillCmd,
                     &exportPcbDxfCmd,
@@ -165,7 +170,8 @@ static std::vector<COMMAND_ENTRY> commandStack = {
     {
         &schCmd,
         {
-            { &exportSchCmd,
+            {
+                &exportSchCmd,
                 {
                     &exportSchNetlistCmd,
                     &exportSchPdfCmd,
@@ -178,6 +184,12 @@ static std::vector<COMMAND_ENTRY> commandStack = {
     {
         &symCmd,
         {
+            {
+                &symExportCmd,
+                {
+                    &symExportSvgCmd
+                }
+            },
             {
                 &symUpgradeCmd
             }

@@ -68,6 +68,8 @@ public:
 
     virtual void DeleteSymbol( const wxString& aName ) = 0;
 
+    virtual LIB_SYMBOL* GetSymbol( const wxString& aName );
+
     // If m_libFileName is a symlink follow it to the real source file
     wxFileName GetRealFile() const;
 
@@ -84,6 +86,8 @@ public:
     void SetFileName( const wxString& aFileName ) { m_libFileName = aFileName; }
 
     wxString GetFileName() const { return m_libFileName.GetFullPath(); }
+
+    const LIB_SYMBOL_MAP& GetSymbolMap() const { return m_symbols; }
 
 protected:
     LIB_SYMBOL* removeSymbol( LIB_SYMBOL* aAlias );

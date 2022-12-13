@@ -173,3 +173,16 @@ void SCH_LIB_PLUGIN_CACHE::AddSymbol( const LIB_SYMBOL* aSymbol )
     m_isModified = true;
     IncrementModifyHash();
 }
+
+
+LIB_SYMBOL* SCH_LIB_PLUGIN_CACHE::GetSymbol( const wxString& aName )
+{
+    LIB_SYMBOL_MAP::iterator it = m_symbols.find( aName );
+
+    if( it != m_symbols.end() )
+    {
+        return it->second;
+    }
+
+    return nullptr;
+}

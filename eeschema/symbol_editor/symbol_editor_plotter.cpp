@@ -40,7 +40,7 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( true );
 
-    wxPoint plot_offset;
+    VECTOR2I plot_offset;
     const double scale = 1.0;
 
     // Currently, plot units are in decimil

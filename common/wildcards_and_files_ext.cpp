@@ -183,6 +183,7 @@ const std::string JpegFileExtension( "jpg" );
 const std::string TextFileExtension( "txt" );
 const std::string MarkdownFileExtension( "md" );
 const std::string CsvFileExtension( "csv" );
+const std::string XmlFileExtension( "xml" );
 
 const wxString GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
 

@@ -31,6 +31,7 @@ set( KICAD_SRCS
     cli/command_export_sch_netlist.cpp
     cli/command_export_sch_pdf.cpp
     cli/command_export_sch_svg.cpp
+    cli/command_sym_export_svg.cpp
     cli/command_sym_upgrade.cpp
     dialogs/dialog_template_selector_base.cpp
     dialogs/dialog_template_selector.cpp

@@ -169,6 +169,7 @@ extern const std::string JpegFileExtension;
 extern const std::string TextFileExtension;
 extern const std::string MarkdownFileExtension;
 extern const std::string CsvFileExtension;
+extern const std::string XmlFileExtension;
 
 extern const wxString GerberFileExtensionsRegex;
 

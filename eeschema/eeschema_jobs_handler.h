@@ -31,6 +31,8 @@ class SCH_RENDER_SETTINGS;
 };
 
 class SCHEMATIC;
+class JOB_SYM_EXPORT_SVG;
+class LIB_SYMBOL;
 
 /**
  * Handles eeschema job dispatches
@@ -43,7 +45,10 @@ public:
     int JobExportNetlist( JOB* aJob );
     int JobExportPdf( JOB* aJob );
     int JobExportSvg( JOB* aJob );
-    int JobExportSymLibUpgrade( JOB* aJob );
+    int JobSymUpgrade( JOB* aJob );
+    int JobSymExportSvg( JOB* aJob );
+
+    int doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, KIGFX::SCH_RENDER_SETTINGS* aRenderSettings, LIB_SYMBOL* symbol );
 
     /**
      * Configures the SCH_RENDER_SETTINGS object with the correct data to be used with plotting
