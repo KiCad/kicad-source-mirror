@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-12 08:39-0800\n"
-"PO-Revision-Date: 2022-12-08 12:07+0000\n"
+"PO-Revision-Date: 2022-12-14 15:48+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3187,13 +3187,13 @@ msgid "Remember open files for next project launch"
 msgstr "Kom ihåg öppna filer till nästa gång projektet öppnas"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"Om det är markerat kommer öppnandet av ett projekt också att starta verktyg "
-"som eeschema och pcbnew med tidigare öppna filer"
+"Om detta alternativ är markerat kommer öppnandet av ett projekt också att "
+"starta verktyg som kretsschema- och mönsterkortsredigerare med tidigare "
+"öppna filer"
 
 #: common/dialogs/panel_common_settings_base.cpp:241
 msgid "&Auto save:"
@@ -5942,13 +5942,12 @@ msgid "Delete clicked items"
 msgstr "Radera objekt med klickning"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "Växla realistiskt läge"
+msgstr "Växla redigeringsläge för båge"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Byt till en annan metod att redigera bågar"
 
 #: common/tool/actions.cpp:210
 msgid "Show Search Panel"
@@ -9769,7 +9768,6 @@ msgid "Define as power symbol"
 msgstr "Definiera som kraftsymbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
-#, fuzzy
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
@@ -9777,7 +9775,7 @@ msgid ""
 "the BOM and cannot be assigned a footprint."
 msgstr ""
 "Om du ställer in detta alternativ visas symbolen i fråga i dialogrutan \n"
-"\"lägg till strömförsörjningsport\". Det låser värdetexten för att skydda "
+"\"lägg till strömförsörjningssybol\". Det låser värdetexten för att skydda "
 "den\n"
 "från redigering i kretsschemaredigeraren. Symbolen ingår inte i\n"
 "komponentlistan och kan inte tilldelas ett fotavtryck."
@@ -10902,9 +10900,8 @@ msgid "Frequency scale"
 msgstr "Frekvensskala"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "Antal enheter per paket:"
+msgstr "Antal punkter per dekad:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -11117,9 +11114,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "Simulering"
+msgstr "Simuleringskommando"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:242
 msgid "Failed to read simulation model from fields."
@@ -11128,11 +11124,11 @@ msgstr "Det gick inte att läsa in simulationsmodell från fält."
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "Spara parameter '%s (%s)' i värde-fältet"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:420
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "Spara primär parameter i värde-fältet"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:437
 #: pcbnew/footprint_wizard_frame.cpp:322
@@ -12594,7 +12590,7 @@ msgstr "Det gick inte att läsa in bibliotek\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:347 pcbnew/pcbnew_jobs_handler.cpp:579
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "Utmatningssökvägen får inte vara i konflikt med existerande sökväg\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:357
 msgid "Saving symbol library in updated format\n"
@@ -13133,9 +13129,9 @@ msgid "Importing Schematic"
 msgstr "Importerar schema"
 
 #: eeschema/files-io.cpp:1287
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "Slut på minne vid inläsning av schema '%s'."
+msgstr "Ohanterat undantag inträffade vid inläsning av kretsschema '%s'."
 
 #: eeschema/files-io.cpp:1321
 msgid "The current schematic has been modified.  Save changes?"
@@ -14006,6 +14002,8 @@ msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
+"Filnamnet för ark %s är inte definierat; detta är förmodligen en Altium "
+"signalkabelstam som blivit konverterad till ett ark."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
@@ -15719,9 +15717,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Bithastigheten kan vara för hög för stigande / fallande flanker"
 
 #: eeschema/sim/sim_lib_mgr.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr "Fel vid inläsning av simulationsmodellbibliotek '%s': %s"
+msgstr "Simulationsmodellbibliotek hittades inte på '%s' eller '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:217
 #, c-format
@@ -15802,17 +15800,14 @@ msgid "Power supply"
 msgstr "Strömförsörjning"
 
 #: eeschema/sim/sim_model_kibis.cpp:357
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "Parasitisk resistans"
+msgstr "Stiftets parasitiska resistans"
 
 #: eeschema/sim/sim_model_kibis.cpp:367
-#, fuzzy
 msgid "Parasitic pin inductance"
 msgstr "Stiftets parasitiska induktans"
 
 #: eeschema/sim/sim_model_kibis.cpp:377
-#, fuzzy
 msgid "Parasitic pin capacitance"
 msgstr "Stiftets parasitiska kapacitans"
 
@@ -15833,9 +15828,8 @@ msgid "Delay"
 msgstr "Fördröjning"
 
 #: eeschema/sim/sim_model_kibis.cpp:463
-#, fuzzy
 msgid "Number of cycles"
-msgstr "Antal prover"
+msgstr "Antal cykler"
 
 #: eeschema/sim/sim_model_kibis.cpp:480
 msgid "Bitrate"
@@ -15883,14 +15877,12 @@ msgid "Tune component values"
 msgstr "Ställ in komponentvärden"
 
 #: eeschema/sim/sim_plot_frame.cpp:175
-#, fuzzy
 msgid "Sim Command"
-msgstr "Kommando"
+msgstr "Simulationskommando"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
-#, fuzzy
 msgid "Simulation command and settings"
-msgstr "Simuleringsparametrar och -inställningar"
+msgstr "Simuleringskommando och -inställningar"
 
 #: eeschema/sim/sim_plot_frame.cpp:356 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
@@ -15909,6 +15901,8 @@ msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
+"Kretsschemaarkets simulationskommandodirektiv har ändrats.  Vill du "
+"uppdatera simulationskommandot?"
 
 #: eeschema/sim/sim_plot_frame.cpp:516 eeschema/sim/sim_plot_frame.cpp:1901
 msgid "Another simulation is already running."
@@ -15964,9 +15958,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Du måste köra plot-tillhandahållande simulering först."
 
 #: eeschema/sim/sim_plot_frame.cpp:1670
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Spara nuvarande aktiva kretskort"
+msgstr "Spara ändringar till arbetsboken?"
 
 #: eeschema/sim/sim_plot_frame.cpp:1832
 msgid ""
@@ -16001,28 +15994,24 @@ msgid "New Plot"
 msgstr "Ny plot"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Öppna arbetsbok"
+msgstr "Öppna arbetsbok..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 msgid "Save Workbook"
 msgstr "Spara arbetsbok"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "Spara arbetsbok"
+msgstr "Spara arbetsbok som..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "Exportera Aktuell Vy som PNG..."
+msgstr "Exportera aktuell plott som PNG..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "Exportera Aktuell Vy som PNG..."
+msgstr "Exportera aktuell plott som CSV..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -17199,9 +17188,8 @@ msgid "Add Power"
 msgstr "Lägg till strömkälla"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "Lägg till en symbol"
+msgstr "Lägg till en strömförsörjningssymbol"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -17639,10 +17627,11 @@ msgid "Import Footprint Assignments..."
 msgstr "Importera tilldelningar av fotavtryck ..."
 
 #: eeschema/tools/ee_actions.cpp:628
-#, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr "Importera symbolavtryckstilldelningar från .cmp-fil skapad av Pcbnew"
+msgstr ""
+"Importera symbolernas fotavtryckstilldelningar från .cmp-fil skapad av "
+"mönsterkortsredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Annotate Schematic..."
@@ -18302,9 +18291,9 @@ msgid "Edit Page Number"
 msgstr "Redigera sidnummer"
 
 #: eeschema/widgets/hierarchy_pane.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Enter page number for sheet path %s"
-msgstr "Ange sidnummer för arkväg %s"
+msgstr "Ange sidnummer för arksökväg %s"
 
 #: eeschema/widgets/hierarchy_pane.cpp:322
 #, c-format
@@ -19757,17 +19746,18 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Gerberkoordinaternas precision; giltiga alternativ: 5 eller 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
-#, fuzzy
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
 msgstr ""
-"Kommaseparerad lista av icke översatta namn på lager att inkludera, så som F."
-"Cu,B.Cu"
+"Lager att inkludera i varje plott; kommaseparerad lista av icke översatta "
+"namn på lager att inkludera, så som F.Cu,B.Cu"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
 msgstr ""
+"Använd inställningar för gerber-plottning som redan är definierade i "
+"mönsterkortsfilen"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:54
 #: kicad/cli/command_export_pcb_svg.cpp:51
@@ -28159,7 +28149,7 @@ msgstr "Välj ett hörn att radera."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:168
 #: pcbnew/dialogs/dialog_pad_properties_base.h:271 pcbnew/pad.cpp:1749
 msgid "Pad Properties"
-msgstr "Pad Egenskaper"
+msgstr "Lödyteegenskaper"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:175
 msgid "Default Pad Properties for Add Pad Tool"
@@ -29357,7 +29347,7 @@ msgstr "båge"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:160
 msgid "Single-sided"
-msgstr ""
+msgstr "Enkelsidig"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:166
 msgid "Miter radius (r):"
@@ -29670,7 +29660,7 @@ msgstr "Ändra inte lödytor av en annan typ"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
-msgstr "Push Pad Egenskaper"
+msgstr "Använd lödyteegenskaper"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:115
 msgid "Convert to Rule Area"
@@ -29971,7 +29961,7 @@ msgstr "Fördefinierade ledar- och viadimensioner"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:150
 msgid "Set Unused Pad Properties"
-msgstr "Ställ in oanvända padegenskaper"
+msgstr "Ställ in oanvända lödyteegenskaper"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Remove unused layers"
@@ -30144,17 +30134,16 @@ msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr "Ställ in steg (i grader) för snabbmenyn och snabbtangentrotation."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "Positionsläge:"
+msgstr "Bågredigeringsläge:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
 msgid "Keep center, adjust radius"
-msgstr ""
+msgstr "Behåll centrum, justera radie"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "Behåll ändpunkter eller riktning för startpunkt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
@@ -32954,7 +32943,6 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "Kontrollerar innergårdens definitioner ..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
-#, fuzzy
 msgid "Gathering footprint courtyards..."
 msgstr "Samlar fotavtryckens gårdsplaner..."
 
@@ -34967,14 +34955,12 @@ msgid "Error loading project footprint libraries."
 msgstr "Fel vid inläsning av projektets fotavtrycksbibliotek."
 
 #: pcbnew/pcb_bitmap.cpp:232
-#, fuzzy
 msgid "Bitmap Properties"
-msgstr "Viaegenskaper"
+msgstr "Bitmappegenskaper"
 
 #: pcbnew/pcb_bitmap.cpp:239
-#, fuzzy
 msgid "Greyscale"
-msgstr "Bild i Gråskala"
+msgstr "Gråskala"
 
 #: pcbnew/pcb_dimension.cpp:298
 msgid "Prefix"
@@ -38799,7 +38785,7 @@ msgstr "Kopiera lödytans egenskaper till standardegenskaperna för lödytor"
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Copy current pad's properties"
-msgstr "Kopiera den aktuella padens egenskaper"
+msgstr "Kopiera den aktuella lödytans egenskaper"
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Paste Default Pad Properties to Selected"
@@ -38808,7 +38794,7 @@ msgstr "Klistra in standardegenskaperna för lödytor till valda objekt"
 #: pcbnew/tools/pcb_actions.cpp:568
 msgid "Replace the current pad's properties with those copied earlier"
 msgstr ""
-"Ersätt den aktuella padens egenskaper med de som har kopierats tidigare"
+"Ersätt den aktuella lödytans egenskaper med dem som har kopierats tidigare"
 
 #: pcbnew/tools/pcb_actions.cpp:573
 msgid "Push Pad Properties to Other Pads..."
@@ -38816,7 +38802,7 @@ msgstr "Överför lödyte-egenskaper till andra lödytor..."
 
 #: pcbnew/tools/pcb_actions.cpp:574
 msgid "Copy the current pad's properties to other pads"
-msgstr "Kopiera den aktuella padens egenskaper till andra pad"
+msgstr "Kopiera den aktuella lödytans egenskaper till andra lödytor"
 
 #: pcbnew/tools/pcb_actions.cpp:579
 msgid "Renumber Pads..."
@@ -39130,9 +39116,8 @@ msgid "Switch to Schematic Editor"
 msgstr "Byt till kretsschemaredigerare"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Open in schematic editor"
-msgstr "Öppna existerande projekt"
+msgstr "Öppna i kretsschemaredigeraren"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Local Ratsnest"
@@ -39552,21 +39537,25 @@ msgstr "Distribuerar valda objekt längs den vertikala axeln"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Keep arc center, adjust radius"
-msgstr ""
+msgstr "Behåll bågens centrum, justera radien"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
 msgstr ""
+"Byt bågredigeringsläge till att behålla centrum och justera radie och "
+"slutpunkter"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Keep arc endpoints or direction of starting point"
-msgstr ""
+msgstr "Behåll bågens slutpunkter eller riktning för startpunkt"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
 msgstr ""
+"Byt bågredigeringsläge till att behålla slutpunkter eller behålla riktning "
+"av den andra punkten"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
@@ -40874,9 +40863,8 @@ msgid "Zone %s on %s"
 msgstr "Zon %s på %s"
 
 #: pcbnew/zone.cpp:1424
-#, fuzzy
 msgid "Minimum Width"
-msgstr "Minsta bredd:"
+msgstr "Minsta bredd"
 
 #: pcbnew/zone.cpp:1429
 msgid "Pad Connections"
