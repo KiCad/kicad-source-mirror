@@ -760,8 +760,8 @@ TOOL_ACTION EE_ACTIONS::showPythonConsole( "eeschema.EditorControl.showPythonCon
 // SCH_NAVIGATE_TOOL
 //
 TOOL_ACTION EE_ACTIONS::changeSheet( "eeschema.NavigateTool.changeSheet",
-        AS_GLOBAL, 0, "",
-        _( "Enter Sheet" ), _( "Change to provided sheet's contents in the schematic editor" ),
+        AS_CONTEXT, 0, "",
+        _( "Change Sheet" ), _( "Change to provided sheet's contents in the schematic editor" ),
         BITMAPS::enter_sheet );
 
 TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.NavigateTool.enterSheet",
