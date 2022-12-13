@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-12 08:39-0800\n"
-"PO-Revision-Date: 2022-12-11 20:19+0000\n"
+"PO-Revision-Date: 2022-12-14 15:48+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3190,13 +3190,13 @@ msgid "Remember open files for next project launch"
 msgstr "Zapamiętaj otwarte pliki do następnego uruchomienia projektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
 "Jeśli zaznaczone, uruchomienie projektu spowoduje również uruchomienie "
-"narzędzi takich jak Eeschema i Pcbnew z wcześniej otwartymi plikami"
+"narzędzi takich jak edytor schematów i obwodów drukowanych z wcześniej "
+"otwartymi plikami"
 
 #: common/dialogs/panel_common_settings_base.cpp:241
 msgid "&Auto save:"
@@ -5952,13 +5952,12 @@ msgid "Delete clicked items"
 msgstr "Usuwa wybierane elementy"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "Przełącza w tryb realistyczny"
+msgstr "Przełącza tryb edycji łuków"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Przełącza na odmienną metodę edycji łuków"
 
 #: common/tool/actions.cpp:210
 msgid "Show Search Panel"
@@ -9801,7 +9800,6 @@ msgid "Define as power symbol"
 msgstr "Utwórz symbol jako symbol zasilania"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
-#, fuzzy
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
@@ -9809,8 +9807,9 @@ msgid ""
 "the BOM and cannot be assigned a footprint."
 msgstr ""
 "Zaznaczenie tej opcji powoduje, że dany symbol pojawia się wyłącznie\n"
-"w oknie dialogowym \"Dodaj port zasilania\".  Zablokuje to również\n"
-"możliwość edycji jego wartości.  Symbol ten nie będzie uwzględniany w\n"
+"w oknie dialogowym \"Dodaj port zasilania\".   Zablokuje to również\n"
+"możliwość edycji jego wartości na schemacie.   Symbol ten nie będzie "
+"uwzględniany w\n"
 "zestawieniu materiałowym oraz nie będzie można mu przydzielić footprintu."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:191
@@ -10940,9 +10939,8 @@ msgid "Frequency scale"
 msgstr "Skala częstotliwości"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "Liczba części składowych w paczce:"
+msgstr "Liczba punktów na dekadę:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -11156,9 +11154,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "Symulacja"
+msgstr "Polecenie symulacji"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:242
 msgid "Failed to read simulation model from fields."
@@ -11167,11 +11164,11 @@ msgstr "Nie można odczytać modelu symulacji z odpowiednich pól."
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "Zapisz parametr '%s (%s)' w polu Wartość"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:420
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "Zapisz pierwotny parametr w polu Wartość"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:437
 #: pcbnew/footprint_wizard_frame.cpp:322
@@ -12642,7 +12639,7 @@ msgstr "Nie można załadować biblioteki\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:347 pcbnew/pcbnew_jobs_handler.cpp:579
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "Ścieżka wyjściowa nie może kolidować z istniejącą\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:357
 msgid "Saving symbol library in updated format\n"
@@ -13195,9 +13192,9 @@ msgid "Importing Schematic"
 msgstr "Importowanie schematu"
 
 #: eeschema/files-io.cpp:1287
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "Wyczerpano pamięć przy ładowaniu schematu '%s'."
+msgstr "Wystąpił nieobsługiwany wyjątek przy ładowaniu schematu '%s'."
 
 #: eeschema/files-io.cpp:1321
 msgid "The current schematic has been modified.  Save changes?"
@@ -14070,6 +14067,8 @@ msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
+"Nazwa pliku dla arkusza %s nie jest zdefiniowana, prawdopodobnie jest to "
+"wiązka sygnałów Altium, która została skonwertowana na arkusz."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
@@ -15806,9 +15805,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Bitrate może być zbyt duży dla zboczy narastających / opadających"
 
 #: eeschema/sim/sim_lib_mgr.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr "Wystąpił błąd podczas ładowania biblioteki modelu '%s': %s"
+msgstr "Nie znaleziono biblioteki z modelem symulacji na '%s' lub '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:217
 #, c-format
@@ -15889,17 +15888,14 @@ msgid "Power supply"
 msgstr "Symbol zasilania"
 
 #: eeschema/sim/sim_model_kibis.cpp:357
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "Rezystancja pasożytnicza"
+msgstr "Pasożytnicza rezystancja wyprowadzenia"
 
 #: eeschema/sim/sim_model_kibis.cpp:367
-#, fuzzy
 msgid "Parasitic pin inductance"
-msgstr "Pasożytnicza impedancja wyprowadzenia"
+msgstr "Pasożytnicza indukcyjność wyprowadzenia"
 
 #: eeschema/sim/sim_model_kibis.cpp:377
-#, fuzzy
 msgid "Parasitic pin capacitance"
 msgstr "Pasożytnicza pojemność wyprowadzenia"
 
@@ -15920,9 +15916,8 @@ msgid "Delay"
 msgstr "Opóźnienie"
 
 #: eeschema/sim/sim_model_kibis.cpp:463
-#, fuzzy
 msgid "Number of cycles"
-msgstr "Liczba próbek"
+msgstr "Liczba cykli"
 
 #: eeschema/sim/sim_model_kibis.cpp:480
 msgid "Bitrate"
@@ -15972,12 +15967,10 @@ msgid "Tune component values"
 msgstr "Dostrajanie wartości komponentów"
 
 #: eeschema/sim/sim_plot_frame.cpp:175
-#, fuzzy
 msgid "Sim Command"
-msgstr "Polecenie"
+msgstr "Polecenie symulacji"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
-#, fuzzy
 msgid "Simulation command and settings"
 msgstr "Parametry oraz ustawienia symulacji"
 
@@ -15998,6 +15991,8 @@ msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
+"Zmieniono dyrektywę polecenia symulacji arkusza schematu.   Czy chcesz "
+"zaktualizować polecenie symulacji?"
 
 #: eeschema/sim/sim_plot_frame.cpp:516 eeschema/sim/sim_plot_frame.cpp:1901
 msgid "Another simulation is already running."
@@ -16053,9 +16048,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Musisz najpierw uruchomić symulację generującą wykresy."
 
 #: eeschema/sim/sim_plot_frame.cpp:1670
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Zapisz zmiany w bibliotece"
+msgstr "Zapisać zmiany w skoroszycie?"
 
 #: eeschema/sim/sim_plot_frame.cpp:1832
 msgid ""
@@ -16090,28 +16084,24 @@ msgid "New Plot"
 msgstr "Nowy wykres"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Otwórz skoroszyt"
+msgstr "Otwórz skoroszyt..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 msgid "Save Workbook"
 msgstr "Zapisz skoroszyt"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "Zapisz skoroszyt"
+msgstr "Zapisz skoroszyt jako..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "Eksportuj bieżący widok jako plik PNG..."
+msgstr "Eksportuj bieżący wykres jako plik PNG..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "Eksportuj bieżący widok jako plik PNG..."
+msgstr "Eksportuj bieżący wykres jako plik CSV..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -17292,9 +17282,8 @@ msgid "Add Power"
 msgstr "Dodaj port zasilania"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "Dodaje symbol"
+msgstr "Dodaj symbol zasilania"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -17734,12 +17723,11 @@ msgid "Import Footprint Assignments..."
 msgstr "Importuj przypisania footprintów..."
 
 #: eeschema/tools/ee_actions.cpp:628
-#, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
 msgstr ""
-"Importuje dane o przydziale footprintów z pliku .cmp utworzonego w programie "
-"Pcbnew"
+"Importuje dane o przydziale footprintów z pliku .cmp utworzonego w edytorze "
+"obwodów drukowanych"
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Annotate Schematic..."
@@ -18397,7 +18385,7 @@ msgid "Edit Page Number"
 msgstr "Edycja numeru strony"
 
 #: eeschema/widgets/hierarchy_pane.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Enter page number for sheet path %s"
 msgstr "Wprowadź numer strony dla ścieżki arkusza %s"
 
@@ -19858,17 +19846,16 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Precyzja współrzędnych plików Gerber, poprawne opcje: 5 lub 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
-#, fuzzy
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
 msgstr ""
-"Rozdzielona przecinkami lista nieprzetłumaczonych nazw warstw do dołączenia, "
-"na przykład F.Cu,B.Cu"
+"Rozdzielona przecinkami lista nieprzetłumaczonych nazw warstw do dołączenia "
+"na każdym rysunku, na przykład F.Cu, B.Cu"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
-msgstr ""
+msgstr "Użyj ustawień rysunku w formacie Gerber skonfigurowanych już na płytce"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:54
 #: kicad/cli/command_export_pcb_svg.cpp:51
@@ -29486,7 +29473,7 @@ msgstr "łukowate"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:160
 msgid "Single-sided"
-msgstr ""
+msgstr "Jednostronne"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:166
 msgid "Miter radius (r):"
@@ -30283,18 +30270,16 @@ msgstr ""
 "klawiszowych."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "Tryb pozycjonowania:"
+msgstr "Tryb edycji łuków:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
-#, fuzzy
 msgid "Keep center, adjust radius"
-msgstr "Okrąg o centrum w (%s, %s), promień %s"
+msgstr "Zachowaj punkt centralny, reguluj promień"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "Zachowaj punkty końcowe lub kierunek z punktu początkowego"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
@@ -35115,12 +35100,10 @@ msgid "Error loading project footprint libraries."
 msgstr "Błąd podczas wczytywania bibliotek footprintów projektu."
 
 #: pcbnew/pcb_bitmap.cpp:232
-#, fuzzy
 msgid "Bitmap Properties"
-msgstr "Właściwości przelotki"
+msgstr "Właściwości mapy bitowej"
 
 #: pcbnew/pcb_bitmap.cpp:239
-#, fuzzy
 msgid "Greyscale"
 msgstr "Skala szarości"
 
@@ -39325,9 +39308,8 @@ msgid "Switch to Schematic Editor"
 msgstr "Przełącz na edytor schematów"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Open in schematic editor"
-msgstr "nie na schemacie"
+msgstr "Otwórz w edytorze schematów"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Local Ratsnest"
@@ -39751,23 +39733,26 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "Rozkłada wybrane elementy względem pionowej osi"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
-#, fuzzy
 msgid "Keep arc center, adjust radius"
-msgstr "Łuk o centrum w (%s, %s), promień %s"
+msgstr "Zachowaj punkt centralny łuku, reguluj promień"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
 msgstr ""
+"Przełącza tryb edycji łuku, aby zachować środek, dostosowuje promień i "
+"punkty końcowe"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Keep arc endpoints or direction of starting point"
-msgstr ""
+msgstr "Zachowaj punkty końcowe łuku lub kierunek z punktu początkowego"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
 msgstr ""
+"Przełącz tryb edycji łuku, aby zachować punkty końcowe lub kierunek do "
+"innego punktu"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
@@ -41091,9 +41076,8 @@ msgid "Zone %s on %s"
 msgstr "Strefa %s na %s"
 
 #: pcbnew/zone.cpp:1424
-#, fuzzy
 msgid "Minimum Width"
-msgstr "Szerokość minimalna:"
+msgstr "Szerokość minimalna"
 
 #: pcbnew/zone.cpp:1429
 msgid "Pad Connections"
