@@ -2873,7 +2873,11 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         if( unique_pins.size() > 1 && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
-            ercItem->SetItems( pin, aSubgraph->m_no_connect );
+
+            if( pin )
+                ercItem->SetItems( pin, aSubgraph->m_no_connect );
+            else
+                ercItem->SetItems( aSubgraph->m_no_connect );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
             screen->Append( marker );
