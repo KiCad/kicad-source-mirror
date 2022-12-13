@@ -934,7 +934,8 @@ void SCH_MOVE_TOOL::trimDanglingLines()
                 // Find split segments (one segment is new, the other is changed) that
                 // we aren't dragging and don't have selected
                 if( aChangedItem->IsDangling() && !aChangedItem->IsSelected()
-                    && ( aChangedItem->IsNew() || !aChangedItem->IsDragging() )
+                    && ( aChangedItem->IsNew()
+                         || ( !aChangedItem->IsDragging() && aChangedItem->IsModified() ) )
                     && aChangedItem->IsType( { SCH_LINE_T } ) )
                 {
                     danglers.insert( aChangedItem );

@@ -309,6 +309,9 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
     SaveCopyInUndoList( aScreen, newSegment, UNDO_REDO::NEWITEM, true );
     SaveCopyInUndoList( aScreen, aSegment, UNDO_REDO::CHANGED, true );
 
+    aSegment->SetFlags( IS_CHANGED );
+    newSegment->SetFlags( IS_NEW );
+
     UpdateItem( aSegment, false, true );
     aSegment->SetEndPoint( aPoint );
 
