@@ -952,15 +952,22 @@ void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
 template <typename T>
 void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
-    m_serde->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
+    try
+    {
+        m_serde->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
 
-    CreatePins( aSymbolPinCount );
-    m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
+        CreatePins( aSymbolPinCount );
+        m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
 
-    std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
+        std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
 
-    if( !m_serde->ParseParams( paramsField ) )
-        m_serde->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
+        if( !m_serde->ParseParams( paramsField ) )
+            m_serde->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
+    }
+    catch( IO_ERROR& err )
+    {
+        DisplayErrorMessage( nullptr, err.What() );
+    }
 }
 
 
