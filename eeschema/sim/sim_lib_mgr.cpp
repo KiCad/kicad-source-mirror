@@ -90,8 +90,39 @@ SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER* aR
     // May throw an exception.
     wxString path = ResolveLibraryPath( aLibraryPath, m_project );
 
-    // May throw an exception.
-    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, aReporter );
+    std::function<std::string(const std::string&, const std::string&)> f2 =
+            [&]( const std::string& aLibPath, const std::string& aRelativeLib ) -> std::string
+        {
+        wxFileName testPath( aLibPath );
+        wxString fullPath( aLibPath );
+
+        if( !testPath.IsAbsolute() && !aRelativeLib.empty() )
+        {
+            wxString relLib( aRelativeLib );
+
+            try
+            {
+                relLib = ResolveLibraryPath( relLib, m_project );
+            }
+            catch( ... )
+            {}
+
+            wxFileName fn( relLib );
+
+            fullPath = testPath.GetAbsolutePath( fn.GetPath( true ) );
+        }
+
+        try
+        {
+            fullPath = ResolveLibraryPath( fullPath, m_project );
+        }
+        catch( ... )
+        {}
+
+        return fullPath.ToStdString();
+        };
+
+    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, aReporter, &f2 );
     
     Clear();
     m_libraries[path] = std::move( library );

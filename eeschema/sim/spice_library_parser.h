@@ -29,11 +29,10 @@
 
 class SIM_LIBRARY_SPICE;
 
-
 class SPICE_LIBRARY_PARSER
 {
 public:
-    SPICE_LIBRARY_PARSER( SIM_LIBRARY_SPICE& aLibrary ) :
+    SPICE_LIBRARY_PARSER( SIM_LIBRARY_SPICE &aLibrary ) :
             m_library( aLibrary )
     {};
 
@@ -41,6 +40,9 @@ public:
     {};
 
     virtual void ReadFile( const std::string& aFilePath );
+
+protected:
+    void readElement( const std::string& aFilePath );
 
 private:
     SIM_LIBRARY_SPICE& m_library;

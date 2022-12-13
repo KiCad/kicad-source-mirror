@@ -53,7 +53,8 @@ public:
      * @return The library loaded in a newly constructed object.
      */
     static std::unique_ptr<SIM_LIBRARY> Create( const wxString& aFilePath,
-                                                REPORTER* aReporter = nullptr );
+                                                REPORTER* aReporter = nullptr,
+                                                std::function<std::string(const std::string&, const std::string&)>* aResolver = nullptr);
 
     /**
      * Read library from a source file. Must be in the format appropriate to the subclass, e.g.
@@ -81,6 +82,8 @@ public:
 protected:
     std::vector<std::string>                m_modelNames;
     std::vector<std::unique_ptr<SIM_MODEL>> m_models;
+
+    std::function<std::string( const std::string&, const std::string& )>* m_pathResolver;
 
     std::string m_filePath;
 
