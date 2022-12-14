@@ -1305,6 +1305,23 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         pinsField.SetText( pinMap );
         aSymbol.AddField( pinsField );
     }
+    else
+    {
+        // Generate a 1:1 pin map.  We don't necessarily know the pinNames, so just use indexes.
+        wxString pins;
+
+        for( unsigned ii = 0; ii < aSymbol.GetPinCount(); ++ii )
+        {
+            if( ii > 0 )
+                pins.Append( wxS( " " ) );
+
+            pins.Append( wxString::Format( wxT( "%u=%u" ), ii + 1, ii + 1 ) );
+        }
+
+        T_field pinsField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::PINS_FIELD );
+        pinsField.SetText( pins );
+        aSymbol.AddField( pinsField );
+    }
 }
 
 
