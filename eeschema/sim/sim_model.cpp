@@ -492,7 +492,15 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsig
 {
     std::unique_ptr<SIM_MODEL> model = Create( aBaseModel.GetType() );
 
-    model->SetBaseModel( aBaseModel );
+    try
+    {
+        model->SetBaseModel( aBaseModel );
+    }
+    catch( IO_ERROR& err )
+    {
+        DisplayErrorMessage( nullptr, err.What() );
+    }
+
     model->ReadDataFields( aSymbolPinCount, static_cast<const std::vector<void>*>( nullptr ) );
     return model;
 }
@@ -510,7 +518,14 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsig
 
     std::unique_ptr<SIM_MODEL> model = Create( type );
 
-    model->SetBaseModel( aBaseModel );
+    try
+    {
+        model->SetBaseModel( aBaseModel );
+    }
+    catch( IO_ERROR& err )
+    {
+        DisplayErrorMessage( nullptr, err.What() );
+    }
     model->ReadDataFields( aSymbolPinCount, &aFields );
     return model;
 }
@@ -1306,7 +1321,13 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         aSymbol.AddField( paramsField );
 
         if( modelFromValueField )
-            valueField->SetText( wxT( "${SIM.PARAMS}" ) );
+        {
+            // Get the current Value field, after previous changes.
+            valueField = aSymbol.FindField( wxT( "Value" ) );
+
+            if( valueField )
+                valueField->SetText( wxT( "${SIM.PARAMS}" ) );
+        }
     }
 
     if( !pinMap.IsEmpty() )
