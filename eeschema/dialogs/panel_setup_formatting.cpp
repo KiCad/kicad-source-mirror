@@ -40,7 +40,7 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
         m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits )
 {
     wxSize minSize = m_dashLengthCtrl->GetMinSize();
-    int    minWidth = m_dashLengthCtrl->GetTextExtent( wxT( "XX.XXX" ) ).GetWidth();
+    int    minWidth = m_dashLengthCtrl->GetTextExtent( wxT( "XXX.XXX" ) ).GetWidth();
 
     m_dashLengthCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
     m_gapLengthCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );

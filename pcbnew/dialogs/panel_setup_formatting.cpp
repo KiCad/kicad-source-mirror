@@ -34,6 +34,11 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( PAGED_DIALOG* aParent, PCB_EDIT_
         PANEL_SETUP_FORMATTING_BASE( aParent->GetTreebook() ),
         m_frame( aFrame )
 {
+    wxSize minSize = m_dashLengthCtrl->GetMinSize();
+    int    minWidth = m_dashLengthCtrl->GetTextExtent( wxT( "XXX.XXX" ) ).GetWidth();
+
+    m_dashLengthCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+    m_gapLengthCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
 }
 
 
