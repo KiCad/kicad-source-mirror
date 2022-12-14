@@ -3063,7 +3063,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             aCommit.Add( via );
 
-            if( track )
+            // If the user explicitly disables snap (using shift), then don't break the tracks into
+            // a chevron.  This will prevent PNS from being able to connect the via and track but
+            // it is explicitly requested by the user
+            if( track && m_gridHelper.GetSnap() )
             {
                 VECTOR2I trackStart = track->GetStart();
                 VECTOR2I trackEnd = track->GetEnd();
