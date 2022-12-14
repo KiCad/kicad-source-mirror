@@ -354,7 +354,7 @@ static void selectAllInTextCtrls( wxWindowList& children )
             {
                 // Respect an existing selection
             }
-            else
+            else if( !scintilla->GetText().Contains( wxT( "\n") ) )
             {
                 scintilla->SelectAll();
             }

@@ -1621,7 +1621,6 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
             textCtrl->SetWrapMode( wxSTC_WRAP_WORD );
 
             textCtrl->SetText( source );
-            textCtrl->ClearSelections();
 
             textCtrl->SetLexer( wxSTC_LEX_SPICE );
 
