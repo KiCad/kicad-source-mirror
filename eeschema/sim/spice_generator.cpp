@@ -47,7 +47,7 @@ std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
     if( !m_model.HasSpiceNonInstanceOverrides() && !m_model.requiresSpiceModelLine() )
         return "";
 
-    std::string result = "";
+    std::string result;
 
     result.append( fmt::format( ".model {} ", aItem.modelName ) );
     size_t indentLength = result.length();
@@ -59,15 +59,32 @@ std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
         if( param.info.isSpiceInstanceParam )
             continue;
 
-        std::string name = ( param.info.spiceModelName == "" ) ?
-            param.info.name : param.info.spiceModelName;
-        std::string value = param.value->ToSpiceString();
+        std::string name;
+        std::string value;
+
+        if( !param.info.spiceModelName.empty() )
+        {
+            name = param.info.spiceModelName;
+        }
+        else
+        {
+            // Because of collisions with instance parameters, we append some model parameters
+            // with "_".
+            if( boost::ends_with( param.info.name, "_" ) )
+                name = name.substr( 0, param.info.name.length() - 1 );
+            else
+                name = param.info.name;
+        }
+
+        value = param.value->ToSpiceString();
 
         if( value == "" )
             continue;
 
-        result.append( fmt::format( "+{}{}={}\n", std::string( indentLength - 1, ' ' ),
-                                    name, value ) );
+        result.append( fmt::format( "+{}{}={}\n",
+                                    std::string( indentLength - 1, ' ' ),
+                                    name,
+                                    value ) );
     }
 
     return result;
