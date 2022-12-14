@@ -393,6 +393,9 @@ bool SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
             {
                 break;
             }
+
+            getView()->UpdateItems();
+            getEditFrame<EDA_DRAW_FRAME>()->GetCanvas()->Refresh();
         }
     } while( expandSelection );
 
