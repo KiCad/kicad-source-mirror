@@ -147,6 +147,8 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
                 // system colours return the right values, nor does wxRendererNative draw
                 // the borders correctly.  So we add some empirically chosen hacks here.
 
+                // NOTE: KEEP THESE HACKS IN SYNC WITH SPLIT_BUTTON
+
                 wxColor fg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT );
                 wxColor bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
 
@@ -181,7 +183,7 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     // wxRendereNative doesn't handle dark mode on OSX.
     drawBackground( r1 );
 #else
-    r1.width += 2;
+    r1.width += 1;
     wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
 #endif
 

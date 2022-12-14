@@ -217,6 +217,8 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
                 // system colours return the right values, nor does wxRendererNative draw
                 // the borders correctly.  So we add some empirically chosen hacks here.
 
+                // NOTE: KEEP THESE HACKS IN SYNC WITH STD_BITMAP_BUTTON
+
                 wxColor fg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT );
                 wxColor bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
 
