@@ -41,6 +41,7 @@
 class SIM_LIBRARY;
 class SPICE_GENERATOR;
 class SIM_SERDE;
+class PROJECT;
 
 
 class SIM_MODEL
@@ -60,6 +61,8 @@ public:
     static constexpr auto PINS_FIELD = "Sim.Pins";
     static constexpr auto PARAMS_FIELD = "Sim.Params";
     static constexpr auto ENABLE_FIELD = "Sim.Enable";
+    static constexpr auto LIBRARY_FIELD = "Sim.Library";
+    static constexpr auto NAME_FIELD = "Sim.Name";
 
 
     // There's a trailing '_' because `DEVICE_TYPE` collides with something in Windows headers.
@@ -490,7 +493,7 @@ public:
 
     std::vector<std::reference_wrapper<const PARAM>> GetParams() const;
 
-    const PARAM& GetUnderlyingParam( unsigned aParamIndex ) const; // Return the actual parameter.
+    const PARAM& GetParamOverride( unsigned aParamIndex ) const; // Return the actual parameter.
     const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
 
 
@@ -527,7 +530,7 @@ public:
                                                         SIM_VALUE_GRAMMAR::NOTATION aNotation );
 
     template <class T_symbol, class T_field>
-    static void MigrateSimModel( T_symbol& aSymbol );
+    static void MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject );
 
 protected:
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType );

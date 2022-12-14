@@ -406,7 +406,7 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStr
         id.SetLibNickname( row->GetNickName() );
         symbol->SetLibId( id );
 
-        SIM_MODEL::MigrateSimModel<LIB_SYMBOL, LIB_FIELD>( *symbol );
+        SIM_MODEL::MigrateSimModel<LIB_SYMBOL, LIB_FIELD>( *symbol, nullptr );
     }
 
     return symbol;

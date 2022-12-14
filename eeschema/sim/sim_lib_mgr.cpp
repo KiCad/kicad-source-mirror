@@ -34,7 +34,8 @@
 #include <sim/sim_model.h>
 #include <sim/sim_model_ideal.h>
 
-SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT& aPrj ) : m_project( aPrj )
+SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj ) :
+        m_project( aPrj )
 {
 }
 
@@ -46,15 +47,15 @@ void SIM_LIB_MGR::Clear()
 }
 
 
-wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT& aProject )
+wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject )
 {
-    wxString   expandedPath = ExpandEnvVarSubstitutions( aLibraryPath, &aProject );
+    wxString   expandedPath = ExpandEnvVarSubstitutions( aLibraryPath, aProject );
     wxFileName fn( expandedPath );
 
     if( fn.IsAbsolute() )
         return fn.GetFullPath();
 
-    wxFileName projectFn( aProject.AbsolutePath( expandedPath ) );
+    wxFileName projectFn( aProject ? aProject->AbsolutePath( expandedPath ) : expandedPath );
 
     if( projectFn.Exists() )
         return projectFn.GetFullPath();

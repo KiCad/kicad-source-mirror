@@ -40,7 +40,7 @@ class SCH_SYMBOL;
 class SIM_LIB_MGR
 {
 public:
-    SIM_LIB_MGR( const PROJECT& aPrj );
+    SIM_LIB_MGR( const PROJECT* aPrj );
     virtual ~SIM_LIB_MGR() = default;
 
     void Clear();
@@ -71,10 +71,10 @@ public:
     std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> GetLibraries() const;
     std::vector<std::reference_wrapper<SIM_MODEL>> GetModels() const;
 
-    static wxString ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT& aProject );
+    static wxString ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject );
 
 private:
-    const PROJECT&                                   m_project;
+    const PROJECT*                                   m_project;
     std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries;
     std::vector<std::unique_ptr<SIM_MODEL>>          m_models;
 };

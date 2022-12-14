@@ -1856,6 +1856,6 @@ void SCH_SCREEN::MigrateSimModels()
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-        SIM_MODEL::MigrateSimModel<SCH_SYMBOL, SCH_FIELD>( *symbol );
+        SIM_MODEL::MigrateSimModel<SCH_SYMBOL, SCH_FIELD>( *symbol, &Schematic()->Prj() );
     }
 }

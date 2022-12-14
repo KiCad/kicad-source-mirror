@@ -99,7 +99,7 @@ std::string NAME_GENERATOR::Generate( const std::string& aProposedName )
 
 NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic ) :
     NETLIST_EXPORTER_BASE( aSchematic ),
-    m_libMgr( aSchematic->Prj() )
+    m_libMgr( &aSchematic->Prj() )
 {
 }
 

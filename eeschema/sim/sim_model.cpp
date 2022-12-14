@@ -41,7 +41,7 @@
 #include <sim/sim_model_switch.h>
 #include <sim/sim_model_tline.h>
 #include <sim/sim_model_xspice.h>
-
+#include <sim/sim_lib_mgr.h>
 #include <sim/sim_library_kibis.h>
 
 #include <boost/algorithm/string/case_conv.hpp>
@@ -665,22 +665,39 @@ void SIM_MODEL::SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbol
 void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
                                        const std::string& aSymbolPinNumber )
 {
+    int aPinIndex = -1;
+
     const std::vector<std::reference_wrapper<const PIN>> pins = GetPins();
 
-    auto it = std::find_if( pins.begin(), pins.end(),
-                            [aPinName]( const PIN& aPin )
-                            {
-                                return aPin.name == aPinName;
-                            } );
-
-    if( it == pins.end() )
+    for( int ii = 0; ii < (int) pins.size(); ++ii )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Could not find a pin named '%s' in simulation model of type '%s'" ),
+        if( pins.at( ii ).get().name == aPinName )
+        {
+            aPinIndex = ii;
+            break;
+        }
+    }
+
+    if( aPinIndex < 0 )
+    {
+        // If aPinName wasn't in fact a name, see if it's a raw (1-based) index.  This is
+        // required for legacy files which didn't use pin names.
+        aPinIndex = (int) strtol( aPinName.c_str(), nullptr, 10 );
+
+        // Convert to 0-based.  (Note that this will also convert the error state to -1, which
+        // means we don't have to check for it separately.)
+        aPinIndex--;
+    }
+
+    if( aPinIndex < 0 )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Could not find a pin named '%s' in "
+                                             "simulation model of type '%s'" ),
                                           aPinName,
                                           GetTypeInfo().fieldValue ) );
     }
 
-    SetPinSymbolPinNumber( static_cast<int>( it - pins.begin() ), aSymbolPinNumber );
+    SetPinSymbolPinNumber( aPinIndex, aSymbolPinNumber );
 }
 
 
@@ -721,7 +738,7 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SIM_MODEL::GetParams
 }
 
 
-const SIM_MODEL::PARAM& SIM_MODEL::GetUnderlyingParam( unsigned aParamIndex ) const
+const SIM_MODEL::PARAM& SIM_MODEL::GetParamOverride( unsigned aParamIndex ) const
 {
     return m_params.at( aParamIndex );
 }
@@ -762,7 +779,8 @@ void SIM_MODEL::SetParamValue( const std::string& aParamName, const SIM_VALUE& a
 
     if( it == params.end() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Could not find a parameter named '%s' in simulation model of type '%s'" ),
+        THROW_IO_ERROR( wxString::Format( _( "Could not find a parameter named '%s' in "
+                                             "simulation model of type '%s'" ),
                                           aParamName,
                                           GetTypeInfo().fieldValue ) );
     }
@@ -778,7 +796,8 @@ void SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string&
 
     if( !param )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Could not find a parameter named '%s' in simulation model of type '%s'" ),
+        THROW_IO_ERROR( wxString::Format( _( "Could not find a parameter named '%s' in "
+                                             "simulation model of type '%s'" ),
                                           aParamName,
                                           GetTypeInfo().fieldValue ) );
     }
@@ -1055,7 +1074,7 @@ std::pair<wxString, wxString> SIM_MODEL::InferSimModel( const wxString& aPrefix,
 
 
 template <typename T_symbol, typename T_field>
-void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
+void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 {
     if( aSymbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
         || aSymbol.FindField( SIM_MODEL::TYPE_FIELD )
@@ -1085,6 +1104,9 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
     wxString spiceModel;
     wxString spiceLib;
     wxString pinMap;
+    wxString spiceParams;
+    bool     modelFromValueField = false;
+    bool     modelFromLib = false;
 
     if( aSymbol.FindField( wxT( "Spice_Primitive" ) )
         || aSymbol.FindField( wxT( "Spice_Node_Sequence" ) )
@@ -1130,7 +1152,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
         else
         {
             spiceModel = getSIValue( valueField );
-            valueField->SetText( wxT( "${SIM.PARAMS}" ) );
+            modelFromValueField = true;
         }
 
         if( T_field* netlistEnabledField = aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) ) )
@@ -1149,12 +1171,13 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
         {
             spiceLib = libFileField->GetText();
             aSymbol.RemoveField( libFileField );
+            modelFromLib = true;
         }
     }
     else if( prefix == wxT( "V" ) || prefix == wxT( "I" ) )
     {
         spiceModel = getSIValue( valueField );
-        valueField->SetText( wxT( "${SIM.PARAMS}" ) );
+        modelFromValueField = true;
     }
     else
     {
@@ -1205,60 +1228,87 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol )
             legacyPins->SetText( pins );
         }
 
-        if( T_field* legacyPins = aSymbol.FindField( wxT( "Sim_Params" ) ) )
+        if( T_field* legacyParams = aSymbol.FindField( wxT( "Sim_Params" ) ) )
         {
-            legacyPins->SetName( SIM_MODEL::PARAMS_FIELD );
+            legacyParams->SetName( SIM_MODEL::PARAMS_FIELD );
         }
 
         return;
     }
 
-    // Insert a plaintext model as a substitute.
-
-    T_field deviceTypeField( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
-    deviceTypeField.SetText( SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_T::SPICE ).fieldValue );
-    aSymbol.AddField( deviceTypeField );
-
-    T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
-
-    if( spiceType.IsEmpty() && spiceLib.IsEmpty() )
+    if( modelFromLib )
     {
-        paramsField.SetText( spiceModel );
+        SIM_LIB_MGR libMgr( aProject );
+
+        try
+        {
+            std::vector<T_field> emptyFields;
+            SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
+                                                           emptyFields, aSymbol.GetPinCount() );
+
+            spiceParams = wxString( model.model.GetBaseModel()->Serde().GenerateParams() );
+        }
+        catch( ... )
+        {
+            // Fall back to raw spice model
+            modelFromLib = false;
+        }
+    }
+
+    if( modelFromLib )
+    {
+        T_field libraryField( &aSymbol, -1, SIM_MODEL::LIBRARY_FIELD );
+        libraryField.SetText( spiceLib );
+        aSymbol.AddField( libraryField );
+
+        T_field nameField( &aSymbol, -1, SIM_MODEL::NAME_FIELD );
+        nameField.SetText( spiceModel );
+        aSymbol.AddField( nameField );
+
+        T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
+        paramsField.SetText( spiceParams );
+        aSymbol.AddField( paramsField );
+
+        if( modelFromValueField )
+            valueField->SetText( wxT( "${SIM.NAME}" ) );
     }
     else
     {
-        paramsField.SetText( wxString::Format( "type=\"%s\" model=\"%s\" lib=\"%s\"",
-                                               spiceType, spiceModel, spiceLib ) );
+        // Insert a raw spice model as a substitute.
+
+        if( spiceType.IsEmpty() && spiceLib.IsEmpty() )
+        {
+            spiceParams = spiceModel;
+        }
+        else
+        {
+            spiceParams.Printf( wxT( "type=\"%s\" model=\"%s\" lib=\"%s\"" ),
+                                spiceType, spiceModel, spiceLib );
+        }
+
+        T_field deviceTypeField( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
+        deviceTypeField.SetText( SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_T::SPICE ).fieldValue );
+        aSymbol.AddField( deviceTypeField );
+
+        T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
+        paramsField.SetText( spiceParams );
+        aSymbol.AddField( paramsField );
+
+        if( modelFromValueField )
+            valueField->SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
-    aSymbol.AddField( paramsField );
-
-    // Legacy models by default get linear pin mapping.
-    if( pinMap != "" )
+    if( !pinMap.IsEmpty() )
     {
         T_field pinsField( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
 
         pinsField.SetText( pinMap );
         aSymbol.AddField( pinsField );
     }
-    else
-    {
-        wxString pins;
-
-        for( unsigned ii = 0; ii < aSymbol.GetPinCount(); ++ii )
-        {
-            if( ii > 0 )
-                pins.Append( wxS( " " ) );
-
-            pins.Append( wxString::Format( wxT( "%u=%u" ), ii + 1, ii + 1 ) );
-        }
-
-        T_field pinsField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::PINS_FIELD );
-        pinsField.SetText( pins );
-        aSymbol.AddField( pinsField );
-    }
 }
 
 
-template void SIM_MODEL::MigrateSimModel<SCH_SYMBOL, SCH_FIELD>( SCH_SYMBOL& aSymbol );
-template void SIM_MODEL::MigrateSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymbol );
+template void SIM_MODEL::MigrateSimModel<SCH_SYMBOL, SCH_FIELD>( SCH_SYMBOL& aSymbol,
+                                                                 const PROJECT* aProject );
+template void SIM_MODEL::MigrateSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymbol,
+                                                                 const PROJECT* aProject );

@@ -79,7 +79,7 @@ public:
             {
                 BOOST_TEST_CONTEXT( "Param name: " << aModel.GetParam( i ).info.name )
                 {
-                    BOOST_CHECK_EQUAL( aModel.GetUnderlyingParam( i ).value->ToString(), "" );
+                    BOOST_CHECK_EQUAL( aModel.GetParamOverride( i ).value->ToString(), "" );
                 }
             }
         }

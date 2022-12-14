@@ -66,7 +66,7 @@ std::string SIM_SERDE::GenerateType() const
 
 std::string SIM_SERDE::GenerateValue() const
 {
-    const SIM_MODEL::PARAM& param = m_model.GetUnderlyingParam( 0 );
+    const SIM_MODEL::PARAM& param = m_model.GetParamOverride( 0 );
     std::string result = param.value->ToString();
 
     if( result == "" )
@@ -86,7 +86,7 @@ std::string SIM_SERDE::GenerateParams() const
         if( i == 0 && m_model.IsStoredInValue() )
             continue;
 
-        const SIM_MODEL::PARAM& param = m_model.GetUnderlyingParam( i );
+        const SIM_MODEL::PARAM& param = m_model.GetParamOverride( i );
 
         if( param.value->ToString() == ""
             && !( i == 0 && m_model.HasPrimaryValue() && !m_model.IsStoredInValue() ) )
