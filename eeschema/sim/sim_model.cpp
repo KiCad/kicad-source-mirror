@@ -1202,30 +1202,41 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
             // Migrate pins from array of indexes to name-value-pairs
             wxArrayString pinIndexes;
-            wxString      pins;
 
             wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
 
-            if( isPassive )
+            std::vector<LIB_PIN*> sourcePins = aSymbol.GetLibPins();
+
+            if( isPassive && pinIndexes.size() == 2 && sourcePins.size() == 2 )
             {
                 if( pinIndexes[0] == wxT( "2" ) )
-                    pins = "1=- 2=+";
+                {
+                    pinMap.Printf( wxT( "%s=- %s=+" ),
+                                   sourcePins[0]->GetNumber(),
+                                   sourcePins[1]->GetNumber() );
+                }
                 else
-                    pins = "1=+ 2=-";
+                {
+                    pinMap.Printf( wxT( "%s=+ %s=-" ),
+                                   sourcePins[0]->GetNumber(),
+                                   sourcePins[1]->GetNumber() );
+                }
             }
             else
             {
                 for( unsigned ii = 0; ii < pinIndexes.size(); ++ii )
                 {
                     if( ii > 0 )
-                        pins.Append( wxS( " " ) );
+                        pinMap.Append( wxS( " " ) );
 
-                    pins.Append( wxString::Format( wxT( "%u=%s" ), ii + 1, pinIndexes[ ii ] ) );
+                    pinMap.Append( wxString::Format( wxT( "%s=%u" ),
+                                                     sourcePins[ii]->GetNumber(),
+                                                     pinIndexes[ ii ] ) );
                 }
             }
 
             legacyPins->SetName( SIM_MODEL::PINS_FIELD );
-            legacyPins->SetText( pins );
+            legacyPins->SetText( pinMap );
         }
 
         if( T_field* legacyParams = aSymbol.FindField( wxT( "Sim_Params" ) ) )
@@ -1307,19 +1318,22 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     }
     else
     {
-        // Generate a 1:1 pin map.  We don't necessarily know the pinNames, so just use indexes.
-        wxString pins;
+        // Generate a 1:1 pin map.  We don't necessarily know the SPICE model pinNames, so just
+        // use indexes.
+        std::vector<LIB_PIN*> sourcePins = aSymbol.GetLibPins();
 
-        for( unsigned ii = 0; ii < aSymbol.GetPinCount(); ++ii )
+        for( unsigned ii = 0; ii < sourcePins.size(); ++ii )
         {
             if( ii > 0 )
-                pins.Append( wxS( " " ) );
+                pinMap.Append( wxS( " " ) );
 
-            pins.Append( wxString::Format( wxT( "%u=%u" ), ii + 1, ii + 1 ) );
+            pinMap.Append( wxString::Format( wxT( "%s=%u" ),
+                                             sourcePins[ii]->GetNumber(),
+                                             ii + 1 ) );
         }
 
         T_field pinsField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::PINS_FIELD );
-        pinsField.SetText( pins );
+        pinsField.SetText( pinMap );
         aSymbol.AddField( pinsField );
     }
 }
