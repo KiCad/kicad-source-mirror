@@ -18,35 +18,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCBNEW_JOBS_HANDLER_H
-#define PCBNEW_JOBS_HANDLER_H
+#ifndef COMMAND_FP_EXPORT_SVG_H
+#define COMMAND_FP_EXPORT_SVG_H
 
-#include <jobs/job_dispatcher.h>
-#include <pcb_plot_params.h>
+#include "command_export_pcb_base.h"
 
-class JOB_EXPORT_PCB_GERBER;
-class JOB_FP_EXPORT_SVG;
-class FOOTPRINT;
-
-class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
+namespace CLI
+{
+class FP_EXPORT_SVG_COMMAND : public EXPORT_PCB_BASE_COMMAND
 {
 public:
-    PCBNEW_JOBS_HANDLER();
-    int JobExportStep( JOB* aJob );
-    int JobExportSvg( JOB* aJob );
-    int JobExportDxf( JOB* aJob );
-    int JobExportPdf( JOB* aJob );
-    int JobExportGerber( JOB* aJob );
-    int JobExportGerbers( JOB* aJob );
-    int JobExportDrill( JOB* aJob );
-    int JobExportPos( JOB* aJob );
-    int JobExportFpUpgrade( JOB* aJob );
-    int JobExportFpSvg( JOB* aJob );
+    FP_EXPORT_SVG_COMMAND();
 
-private:
-    void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&       aPlotOpts,
-                                           JOB_EXPORT_PCB_GERBER* aJob );
-    int  doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPRINT* aFootprint );
+    int Perform( KIWAY& aKiway ) override;
 };
+} // namespace CLI
 
 #endif

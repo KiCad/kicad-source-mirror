@@ -18,35 +18,32 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCBNEW_JOBS_HANDLER_H
-#define PCBNEW_JOBS_HANDLER_H
+#ifndef JOB_FP_EXPORT_SVG_H
+#define JOB_FP_EXPORT_SVG_H
 
-#include <jobs/job_dispatcher.h>
-#include <pcb_plot_params.h>
+#include <wx/string.h>
+#include "job.h"
 
-class JOB_EXPORT_PCB_GERBER;
-class JOB_FP_EXPORT_SVG;
-class FOOTPRINT;
-
-class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
+class JOB_FP_EXPORT_SVG : public JOB
 {
 public:
-    PCBNEW_JOBS_HANDLER();
-    int JobExportStep( JOB* aJob );
-    int JobExportSvg( JOB* aJob );
-    int JobExportDxf( JOB* aJob );
-    int JobExportPdf( JOB* aJob );
-    int JobExportGerber( JOB* aJob );
-    int JobExportGerbers( JOB* aJob );
-    int JobExportDrill( JOB* aJob );
-    int JobExportPos( JOB* aJob );
-    int JobExportFpUpgrade( JOB* aJob );
-    int JobExportFpSvg( JOB* aJob );
+    JOB_FP_EXPORT_SVG( bool aIsCli ) :
+            JOB( "fpsvg", aIsCli ),
+            m_libraryPath(),
+            m_footprint(),
+            m_outputDirectory(),
+            m_blackAndWhite( false )
+    {
+    }
 
-private:
-    void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&       aPlotOpts,
-                                           JOB_EXPORT_PCB_GERBER* aJob );
-    int  doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPRINT* aFootprint );
+    wxString m_libraryPath;
+    wxString m_footprint;
+
+    wxString m_outputDirectory;
+
+    wxString m_colorTheme;
+
+    bool m_blackAndWhite;
 };
 
 #endif

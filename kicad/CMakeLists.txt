@@ -44,6 +44,7 @@ set( KICAD_CLI_SRCS
     cli/command_export_pcb_pos.cpp
     cli/command_export_pcb_step.cpp
     cli/command_export_pcb_svg.cpp
+    cli/command_fp_export_svg.cpp
     cli/command_fp_upgrade.cpp
     cli/command_export_sch_pythonbom.cpp
     cli/command_export_sch_netlist.cpp
@@ -52,7 +53,7 @@ set( KICAD_CLI_SRCS
     cli/command_sym_export_svg.cpp
     cli/command_sym_upgrade.cpp
     )
-    
+
 if( WIN32 )
     if( MINGW )
         # KICAD_RESOURCES variable is set by the macro.

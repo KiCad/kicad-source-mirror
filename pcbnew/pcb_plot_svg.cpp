@@ -34,7 +34,7 @@ bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOpti
     PCB_PLOT_PARAMS plot_opts;
     wxString        outputFile = aSvgPlotOptions.m_outputFile;
 
-    plot_opts.SetPlotFrameRef( aSvgPlotOptions.m_pageSizeMode );
+    plot_opts.SetPlotFrameRef( aSvgPlotOptions.m_plotFrame );
 
     // Adding drill marks, for copper layers
     if( ( aSvgPlotOptions.m_printMaskLayer & LSET::AllCuMask() ).any() )
@@ -78,17 +78,6 @@ bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOpti
     PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
     plot_opts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
-
-    COLOR_SETTINGS* theme = nullptr;
-    if( !aSvgPlotOptions.m_colorTheme.IsEmpty() )
-    {
-        theme = mgr.GetColorSettings( aSvgPlotOptions.m_colorTheme );
-    }
-
-    if( !theme )
-    {
-        theme = mgr.GetColorSettings( cfg->m_ColorTheme );
-    }
 
     LOCALE_IO toggle;
 

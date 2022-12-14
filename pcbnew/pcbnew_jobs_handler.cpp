@@ -19,6 +19,7 @@
  */
 
 #include "pcbnew_jobs_handler.h"
+#include <jobs/job_fp_export_svg.h>
 #include <jobs/job_fp_upgrade.h>
 #include <jobs/job_export_pcb_gerber.h>
 #include <jobs/job_export_pcb_gerbers.h>
@@ -38,6 +39,7 @@
 #include <pgm_base.h>
 #include <pcbplot.h>
 #include <board_design_settings.h>
+#include <pad.h>
 #include <pcbnew_settings.h>
 #include <wx/crt.h>
 #include <wx/dir.h>
@@ -63,7 +65,10 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
     Register( "drill",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrill, this, std::placeholders::_1 ) );
     Register( "pos", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPos, this, std::placeholders::_1 ) );
-    Register( "fpupgrade", std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpUpgrade, this, std::placeholders::_1 ) );
+    Register( "fpupgrade",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpUpgrade, this, std::placeholders::_1 ) );
+    Register( "fpsvg",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpSvg, this, std::placeholders::_1 ) );
 }
 
 
@@ -124,6 +129,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     svgPlotOptions.m_mirror = aSvgJob->m_mirror;
     svgPlotOptions.m_pageSizeMode = aSvgJob->m_pageSizeMode;
     svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
+    svgPlotOptions.m_plotFrame = aSvgJob->m_plotDrawingSheet;
 
     if( aJob->IsCli() )
         wxPrintf( _( "Loading board\n" ) );
@@ -569,7 +575,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading board\n" ) );
+        wxPrintf( _( "Loading footprint library\n" ) );
 
     if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
     {
@@ -627,6 +633,120 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
     {
         wxPrintf( _( "Footprint library was not updated\n" ) );
     }
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
+{
+    JOB_FP_EXPORT_SVG* svgJob = dynamic_cast<JOB_FP_EXPORT_SVG*>( aJob );
+
+    if( svgJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( aJob->IsCli() )
+        wxPrintf( _( "Loading footprint library\n" ) );
+
+    PCB_PLUGIN pcb_io( CTL_FOR_LIBRARY );
+    FP_CACHE   fpLib( &pcb_io, svgJob->m_libraryPath );
+
+    try
+    {
+        fpLib.Load();
+    }
+    catch( ... )
+    {
+        wxFprintf( stderr, _( "Unable to load library\n" ) );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    FOOTPRINT* symbol = nullptr;
+    if( !svgJob->m_outputDirectory.IsEmpty() && !wxDir::Exists( svgJob->m_outputDirectory ) )
+    {
+        wxFileName::Mkdir( svgJob->m_outputDirectory );
+    }
+
+    int exitCode = CLI::EXIT_CODES::OK;
+
+    // Just plot all the symbols we can
+    FP_CACHE_FOOTPRINT_MAP& footprintMap = fpLib.GetFootprints();
+
+    bool singleFpPlotted = false;
+    for( FP_CACHE_FOOTPRINT_MAP::iterator it = footprintMap.begin(); it != footprintMap.end();
+         ++it )
+    {
+        const FOOTPRINT* fp = it->second->GetFootprint();
+        if( !svgJob->m_footprint.IsEmpty() )
+        {
+            if( fp->GetFPID().GetLibItemName().wx_str() != svgJob->m_footprint )
+            {
+                // skip until we find the right footprint
+                continue;
+            }
+            else
+            {
+                singleFpPlotted = true;
+            }
+        }
+
+        exitCode = doFpExportSvg( svgJob, fp );
+        if( exitCode != CLI::EXIT_CODES::OK )
+            break;
+    }
+
+    if( !svgJob->m_footprint.IsEmpty() && !singleFpPlotted )
+        wxFprintf( stderr, _( "The given footprint could not be found to export." ) );
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPRINT* aFootprint )
+{
+    // the hack for now is we create fake boards containing the footprint and plot the board
+    // until we refactor better plot api later
+    std::unique_ptr<BOARD> brd;
+    brd.reset( CreateEmptyBoard() );
+
+    FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aFootprint->Clone() );
+
+    fp->SetLink( niluuid );
+    fp->SetFlags( IS_NEW );
+    fp->SetParent( brd.get() );
+
+    for( PAD* pad : fp->Pads() )
+    {
+        pad->SetLocalRatsnestVisible( false );
+        pad->SetNetCode( 0 );
+    }
+
+    fp->SetOrientation( ANGLE_0 );
+    fp->SetPosition( VECTOR2I( 0, 0 ) );
+
+    brd->Add( fp, ADD_MODE::INSERT, true );
+
+    wxFileName outputFile;
+    outputFile.SetPath( aSvgJob->m_outputDirectory );
+    outputFile.SetName( aFootprint->GetFPID().GetLibItemName().wx_str() );
+    outputFile.SetExt( SVGFileExtension );
+
+    wxPrintf( _( "Plotting footprint '%s' to '%s'\n" ),
+              aFootprint->GetFPID().GetLibItemName().wx_str(), outputFile.GetFullPath() );
+
+
+    PCB_PLOT_SVG_OPTIONS svgPlotOptions;
+    svgPlotOptions.m_blackAndWhite = aSvgJob->m_blackAndWhite;
+    svgPlotOptions.m_colorTheme = aSvgJob->m_colorTheme;
+    svgPlotOptions.m_outputFile = outputFile.GetFullPath();
+    svgPlotOptions.m_mirror = false;
+    svgPlotOptions.m_pageSizeMode = 2; // board bounding box
+    svgPlotOptions.m_printMaskLayer = LSET::AllLayersMask();
+    svgPlotOptions.m_plotFrame = false;
+
+    if( !PCB_PLOT_SVG::Plot( brd.get(), svgPlotOptions ) )
+        wxFprintf( stderr, _( "Error creating svg file" ) );
+
 
     return CLI::EXIT_CODES::OK;
 }

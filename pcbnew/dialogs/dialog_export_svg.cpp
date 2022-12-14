@@ -286,6 +286,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
     svgPlotOptions.m_pageSizeMode = m_rbSvgPageSizeOpt->GetSelection();
     svgPlotOptions.m_colorTheme = "";   // will use default
     svgPlotOptions.m_mirror = m_printMirror;
+    svgPlotOptions.m_plotFrame = svgPlotOptions.m_pageSizeMode == 0;
 
     for( LSEQ seq = all_selected.Seq();  seq;  ++seq )
     {

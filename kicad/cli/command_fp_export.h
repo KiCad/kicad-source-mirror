@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -18,27 +18,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCB_PLOT_SVG_H
-#define PCB_PLOT_SVG_H
+#ifndef COMMAND_FP_EXPORT_H
+#define COMMAND_FP_EXPORT_H
 
-struct PCB_PLOT_SVG_OPTIONS
+#include "command.h"
+
+namespace CLI
 {
-    wxString m_outputFile;
-    wxString m_colorTheme;
-
-    bool m_mirror;
-    bool m_blackAndWhite;
-    bool m_plotFrame;
-
-    int m_pageSizeMode;
-
-    LSET m_printMaskLayer;
-};
-
-class PCB_PLOT_SVG
+struct FP_EXPORT_COMMAND : public COMMAND
 {
-public:
-    static bool Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOptions );
+    FP_EXPORT_COMMAND() : COMMAND( "export" ) {}
 };
+}
 
 #endif

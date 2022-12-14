@@ -62,6 +62,8 @@
 #include "cli/command_export_sch_pdf.h"
 #include "cli/command_export_sch_svg.h"
 #include "cli/command_fp.h"
+#include "cli/command_fp_export.h"
+#include "cli/command_fp_export_svg.h"
 #include "cli/command_fp_upgrade.h"
 #include "cli/command_sch.h"
 #include "cli/command_sch_export.h"
@@ -134,6 +136,8 @@ static CLI::EXPORT_SCH_NETLIST_COMMAND   exportSchNetlistCmd{};
 static CLI::EXPORT_SCH_PDF_COMMAND       exportSchPdfCmd{};
 static CLI::EXPORT_SCH_SVG_COMMAND       exportSchSvgCmd{};
 static CLI::FP_COMMAND                   fpCmd{};
+static CLI::FP_EXPORT_COMMAND            fpExportCmd{};
+static CLI::FP_EXPORT_SVG_COMMAND        fpExportSvgCmd{};
 static CLI::FP_UPGRADE_COMMAND           fpUpgradeCmd{};
 static CLI::SYM_COMMAND                  symCmd{};
 static CLI::SYM_EXPORT_COMMAND           symExportCmd{};
@@ -144,6 +148,12 @@ static std::vector<COMMAND_ENTRY> commandStack = {
     {
         &fpCmd,
         {
+            {
+                &fpExportCmd,
+                {
+                    &fpExportSvgCmd
+                }
+            },
             {
                 &fpUpgradeCmd
             }

@@ -30,6 +30,7 @@
 #include <macros.h>
 #include <wx/tokenzr.h>
 
+#define ARG_EXCLUDE_DRAWING_SHEET "--exclude-drawing-sheet"
 #define ARG_PAGE_SIZE "--page-size-mode"
 #define ARG_MIRROR "--mirror"
 
@@ -57,6 +58,11 @@ CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
                                 "current page size, 2 = board area only)" ) ) )
             .scan<'i', int>()
             .default_value( 0 );
+
+    m_argParser.add_argument( ARG_EXCLUDE_DRAWING_SHEET )
+            .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
+            .implicit_value( true )
+            .default_value( false );
 }
 
 
@@ -75,6 +81,7 @@ int CLI::EXPORT_PCB_SVG_COMMAND::Perform( KIWAY& aKiway )
     svgJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     svgJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
     svgJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+    svgJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
 
     if( !wxFile::Exists( svgJob->m_filename ) )
     {
