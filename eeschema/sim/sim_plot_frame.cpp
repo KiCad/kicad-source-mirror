@@ -1599,39 +1599,40 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
             wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
         }
 
-        NETLIST_VIEW_DIALOG( wxWindow* parent, wxString source) :
+        NETLIST_VIEW_DIALOG( wxWindow* parent, const wxString& source) :
                 DIALOG_SHIM( parent, wxID_ANY, wxT( "SPICE Netlist" ), wxDefaultPosition,
                              wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
         {
-            wxStyledTextCtrl* text = new wxStyledTextCtrl( this, wxID_ANY );
-            text->SetMinSize( wxSize( 600, 400 ) );
+            wxStyledTextCtrl* textCtrl = new wxStyledTextCtrl( this, wxID_ANY );
+            textCtrl->SetMinSize( wxSize( 600, 400 ) );
 
-            text->SetMarginWidth( MARGIN_LINE_NUMBERS, 50 );
-            text->StyleSetForeground( wxSTC_STYLE_LINENUMBER, wxColour( 75, 75, 75 ) );
-            text->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
-            text->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
+            textCtrl->SetMarginWidth( MARGIN_LINE_NUMBERS, 50 );
+            textCtrl->StyleSetForeground( wxSTC_STYLE_LINENUMBER, wxColour( 75, 75, 75 ) );
+            textCtrl->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
+            textCtrl->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
 
             wxFont fixedFont = KIUI::GetMonospacedUIFont();
 
-            for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
-                text->StyleSetFont( i, fixedFont );
+            for( int i = 0; i < wxSTC_STYLE_MAX; ++i )
+                textCtrl->StyleSetFont( i, fixedFont );
 
-            text->StyleClearAll();  // Addresses a bug in wx3.0 where styles are not correctly set
+            textCtrl->StyleClearAll();  // Addresses a bug in wx3.0 where styles are not correctly set
 
-            text->SetWrapMode( wxSTC_WRAP_WORD );
+            textCtrl->SetWrapMode( wxSTC_WRAP_WORD );
 
-            text->SetText( source );
+            textCtrl->SetText( source );
+            textCtrl->ClearSelections();
 
-            text->SetLexer( wxSTC_LEX_SPICE );
+            textCtrl->SetLexer( wxSTC_LEX_SPICE );
 
             wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-            sizer->Add( text, 1, wxEXPAND | wxALL, 5 );
+            sizer->Add( textCtrl, 1, wxEXPAND | wxALL, 5 );
             SetSizer( sizer );
 
             Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ),
                      nullptr, this );
 
-            m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( text, wxT( "{}" ), false );
+            m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( textCtrl, wxT( "{}" ), false );
 
             finishDialogSettings();
         }
