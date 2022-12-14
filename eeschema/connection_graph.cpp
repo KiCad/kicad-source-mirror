@@ -1706,7 +1706,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     auto checkNetclassDrivers =
             [&]( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs )
             {
-                const CONNECTION_SUBGRAPH* driverSubgraph;
+                const CONNECTION_SUBGRAPH* driverSubgraph = nullptr;
                 wxString                   netclass;
 
                 for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
@@ -1719,7 +1719,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                             break;
                     }
 
-                    if( !netclass.IsEmpty() )
+                    if( !netclass.IsEmpty() || !driverSubgraph )
                     {
                         driverSubgraph = subgraph;
                         break;
