@@ -247,7 +247,6 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
                                                                   PCB_BASE_FRAME* aFrame,
                                                                   PCB_SHAPE* aShape ) :
         DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( aParent ),
-        m_frame( aFrame ),
         m_shape( aShape ),
         m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits )
 {

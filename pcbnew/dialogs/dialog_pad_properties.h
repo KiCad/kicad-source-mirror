@@ -256,7 +256,6 @@ private:
     bool doValidate( bool aRemoveRedundantCorners );
 
 private:
-    PCB_BASE_FRAME*       m_frame;
     PCB_SHAPE*            m_shape;
 
     std::vector<VECTOR2I> m_currPoints;    // The working copy of the data being edited
