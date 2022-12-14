@@ -31,6 +31,11 @@
 
 PANEL_PCM_SETTINGS::PANEL_PCM_SETTINGS( wxWindow* parent ) : PANEL_PCM_SETTINGS_BASE( parent )
 {
+    wxSize minSize = m_libPrefix->GetMinSize();
+    int    minWidth = m_libPrefix->GetTextExtent( wxT( "XXX.XXX" ) ).GetWidth();
+
+    m_libPrefix->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+
     m_libHelp->SetFont( KIUI::GetInfoFont( this ).Italic() );
 }
 

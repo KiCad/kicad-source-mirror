@@ -189,6 +189,11 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
                                     wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
                                     nullptr, this );
     }
+
+    wxSize minSize = m_highContrastCtrl->GetMinSize();
+    int    minWidth = m_highContrastCtrl->GetTextExtent( wxT( "XXX.XXX" ) ).GetWidth();
+
+    m_highContrastCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
 }
 
 

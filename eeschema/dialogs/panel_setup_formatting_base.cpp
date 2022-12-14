@@ -195,14 +195,18 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	fgSizer4->Add( m_prefixLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_prefixCtrl = new wxTextCtrl( sbSizerIREf->GetStaticBox(), wxID_ANY, _("["), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer4->Add( m_prefixCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_prefixCtrl->SetMinSize( wxSize( 160,-1 ) );
+
+	fgSizer4->Add( m_prefixCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_suffixLabel = new wxStaticText( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Suffix:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_suffixLabel->Wrap( -1 );
 	fgSizer4->Add( m_suffixLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_suffixCtrl = new wxTextCtrl( sbSizerIREf->GetStaticBox(), wxID_ANY, _("]"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer4->Add( m_suffixCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_suffixCtrl->SetMinSize( wxSize( 160,-1 ) );
+
+	fgSizer4->Add( m_suffixCtrl, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerMargins->Add( fgSizer4, 1, wxEXPAND, 5 );
