@@ -1072,14 +1072,16 @@ std::pair<wxString, wxString> SIM_MODEL::InferSimModel( const wxString& aPrefix,
                 }
 
                 spiceModelParams = wxString::Format( wxT( "%s=\"%s%s\"" ),
-                                                     aPrefix.Lower(),
+                                                     aPrefix.Left(1).Lower(),
                                                      valuePrefix,
                                                      valueUnits );
             }
             else
             {
                 spiceModelType = wxT( "=" );
-                spiceModelParams = wxString::Format( wxT( "%s=\"%s\"" ), aPrefix.Lower(), aValue );
+                spiceModelParams = wxString::Format( wxT( "%s=\"%s\"" ),
+                                                     aPrefix.Left(1).Lower(),
+                                                     aValue );
             }
         }
     }

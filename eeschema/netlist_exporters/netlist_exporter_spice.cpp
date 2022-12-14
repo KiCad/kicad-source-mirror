@@ -243,7 +243,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                 if( !inferredModel.second.IsEmpty() )
                 {
                     spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
-                    spiceItem.fields.back().SetText( symbol->GetPrefix() );
+                    spiceItem.fields.back().SetText( symbol->GetPrefix().Left( 1 ) );
 
                     if( !inferredModel.first.IsEmpty() )
                     {
