@@ -235,24 +235,28 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             if( !symbol->FindField( SIM_MODEL::DEVICE_TYPE_FIELD, false )
                     && !symbol->FindField( SIM_MODEL::PARAMS_FIELD, false ) )
             {
-                // std::pair<wxString, wxString> [ Sim.Type, Sim.Params ]
-                auto inferredModel = SIM_MODEL::InferSimModel( symbol->GetPrefix(),
-                                                               symbol->GetValueFieldText( true ),
-                                                               SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+                wxString modelType;
+                wxString modelParams;
+                wxString pinMap;
 
-                if( !inferredModel.second.IsEmpty() )
+                if( SIM_MODEL::InferPassiveSimModel( *symbol, true,
+                                                     SIM_VALUE_GRAMMAR::NOTATION::SPICE,
+                                                     &modelType, &modelParams, &pinMap ) )
                 {
                     spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
                     spiceItem.fields.back().SetText( symbol->GetPrefix().Left( 1 ) );
 
-                    if( !inferredModel.first.IsEmpty() )
+                    if( !modelType.IsEmpty() )
                     {
                         spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::TYPE_FIELD );
-                        spiceItem.fields.back().SetText( inferredModel.first );
+                        spiceItem.fields.back().SetText( modelType );
                     }
 
                     spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PARAMS_FIELD );
-                    spiceItem.fields.back().SetText( inferredModel.second );
+                    spiceItem.fields.back().SetText( modelParams );
+
+                    spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PINS_FIELD );
+                    spiceItem.fields.back().SetText( pinMap );
                 }
             }
 

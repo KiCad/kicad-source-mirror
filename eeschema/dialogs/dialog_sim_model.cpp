@@ -136,29 +136,32 @@ template <typename T_symbol, typename T_field>
 bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
 {
     wxCommandEvent dummyEvent;
-    T_field*       valueField = m_symbol.FindField( wxT( "Value" ) );
 
     // Infer RLC models if they aren't specified
     if( !m_symbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
             && !m_symbol.FindField( SIM_MODEL::PARAMS_FIELD ) )
     {
-        // std::pair<wxString, wxString> [ Sim.Type, Sim.Params ]
-        auto inferredModel = SIM_MODEL::InferSimModel( m_symbol.GetPrefix(), valueField->GetText(),
-                                                       SIM_VALUE_GRAMMAR::NOTATION::SI );
+        wxString modelType;
+        wxString modelParams;
+        wxString pinMap;
 
-        if( !inferredModel.second.IsEmpty() )
+        if( SIM_MODEL::InferPassiveSimModel( m_symbol, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
+                                             &modelType, &modelParams, &pinMap ) )
         {
             m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
-            m_fields.back().SetText( m_symbol.GetPrefix() );
+            m_fields.back().SetText( m_symbol.GetPrefix().Left( 1 ) );
 
-            if( !inferredModel.first.IsEmpty() )
+            if( !modelType.IsEmpty() )
             {
                 m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::TYPE_FIELD );
-                m_fields.back().SetText( inferredModel.first );
+                m_fields.back().SetText( modelType );
             }
 
             m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PARAMS_FIELD );
-            m_fields.back().SetText( inferredModel.second );
+            m_fields.back().SetText( modelParams );
+
+            m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PINS_FIELD );
+            m_fields.back().SetText( pinMap );
 
             m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
         }

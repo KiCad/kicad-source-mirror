@@ -522,12 +522,10 @@ public:
     }
     bool IsStoredInValue() const { return m_isStoredInValue; }
 
-    /**
-     * Returns std::pair of [ Sim.Type, Sim.Params ]
-     */
-    static std::pair<wxString, wxString> InferSimModel( const wxString& aPrefix,
-                                                        const wxString& aValue,
-                                                        SIM_VALUE_GRAMMAR::NOTATION aNotation );
+    template <class T>
+    static bool InferPassiveSimModel( T& aSymbol, bool aResolve,
+                                      SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aModelType,
+                                      wxString* aModelParams, wxString* aPinMap );
 
     template <class T_symbol, class T_field>
     static void MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject );

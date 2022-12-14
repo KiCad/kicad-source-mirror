@@ -1033,13 +1033,18 @@ bool SIM_MODEL::requiresSpiceModelLine() const
 }
 
 
-// Returns [ Sim.Type, Sim.Params ]
-std::pair<wxString, wxString> SIM_MODEL::InferSimModel( const wxString& aPrefix,
-                                                        const wxString& aValue,
-                                                        SIM_VALUE_GRAMMAR::NOTATION aNotation )
+template <class T>
+bool SIM_MODEL::InferPassiveSimModel( T& aSymbol, bool aResolve,
+                                      SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aModelType,
+                                      wxString* aModelParams, wxString* aPinMap )
 {
-    wxString spiceModelType;
-    wxString spiceModelParams;
+    wxString aPrefix = aSymbol.GetPrefix();
+    wxString aValue;
+
+    if( aResolve )
+        aValue = aSymbol.FindField( VALUE_FIELD )->GetShownText();
+    else
+        aValue = aSymbol.FindField( VALUE_FIELD )->GetText();
 
     if( !aValue.IsEmpty() )
     {
@@ -1047,18 +1052,18 @@ std::pair<wxString, wxString> SIM_MODEL::InferSimModel( const wxString& aPrefix,
             || aPrefix.StartsWith( wxT( "L" ) )
             || aPrefix.StartsWith( wxT( "C" ) ) )
         {
-            wxRegEx passiveVal( wxT( "^"
-                                     "([0-9\\. ]+)"
-                                     "([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?"
-                                     "([fFhHΩΩ𝛀𝛺𝝮]|ohm)?"
-                                     "([-1-9 ]*)"
-                                     "$" ) );
+            wxRegEx idealVal( wxT( "^"
+                                   "([0-9\\. ]+)"
+                                   "([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?"
+                                   "([fFhHΩΩ𝛀𝛺𝝮]|ohm)?"
+                                   "([-1-9 ]*)"
+                                   "$" ) );
 
-            if( passiveVal.Matches( aValue ) )
+            if( idealVal.Matches( aValue ) )      // Ideal
             {
-                wxString valuePrefix( passiveVal.GetMatch( aValue, 1 ) );
-                wxString valueUnits( passiveVal.GetMatch( aValue, 2 ) );
-                wxString valueSuffix( passiveVal.GetMatch( aValue, 6 ) );
+                wxString valuePrefix( idealVal.GetMatch( aValue, 1 ) );
+                wxString valueUnits( idealVal.GetMatch( aValue, 2 ) );
+                wxString valueSuffix( idealVal.GetMatch( aValue, 6 ) );
 
                 if( aNotation == SIM_VALUE_GRAMMAR::NOTATION::SPICE )
                 {
@@ -1071,23 +1076,60 @@ std::pair<wxString, wxString> SIM_MODEL::InferSimModel( const wxString& aPrefix,
                         valueUnits = wxT( "M" );
                 }
 
-                spiceModelParams = wxString::Format( wxT( "%s=\"%s%s\"" ),
-                                                     aPrefix.Left(1).Lower(),
-                                                     valuePrefix,
-                                                     valueUnits );
+                aModelParams->Printf( wxT( "%s=\"%s%s\"" ),
+                                      aPrefix.Left(1).Lower(),
+                                      valuePrefix,
+                                      valueUnits );
+            }
+            else        // Behavioral
+            {
+                *aModelType = wxT( "=" );
+                aModelParams->Printf( wxT( "%s=\"%s\"" ),
+                                     aPrefix.Left(1).Lower(),
+                                     aValue );
+            }
+
+            std::vector<LIB_PIN*> pins = aSymbol.GetLibPins();
+
+            if( pins.size() == 2 )
+            {
+                aPinMap->Printf( wxT( "%s=+ %s=-" ),
+                                 pins[0]->GetNumber(),
+                                 pins[1]->GetNumber() );
             }
             else
             {
-                spiceModelType = wxT( "=" );
-                spiceModelParams = wxString::Format( wxT( "%s=\"%s\"" ),
-                                                     aPrefix.Left(1).Lower(),
-                                                     aValue );
+                *aPinMap = wxEmptyString;
+
+                for( unsigned ii = 0; ii < pins.size(); ++ii )
+                {
+                    if( ii > 0 )
+                        aPinMap->Append( wxS( " " ) );
+
+                    aPinMap->Append( wxString::Format( wxT( "%s=%u" ),
+                                                       pins[ii]->GetNumber(),
+                                                       ii ) );
+                }
             }
+
+            return true;
         }
     }
 
-    return std::make_pair( spiceModelType, spiceModelParams );
+    return false;
 }
+
+
+template bool SIM_MODEL::InferPassiveSimModel<SCH_SYMBOL>( SCH_SYMBOL& aSymbol, bool aResolve,
+                                                           SIM_VALUE_GRAMMAR::NOTATION aNotation,
+                                                           wxString* aModelType,
+                                                           wxString* aModelParams,
+                                                           wxString* aPinMap );
+template bool SIM_MODEL::InferPassiveSimModel<LIB_SYMBOL>( LIB_SYMBOL& aSymbol, bool aResolve,
+                                                           SIM_VALUE_GRAMMAR::NOTATION aNotation,
+                                                           wxString* aModelType,
+                                                           wxString* aModelParams,
+                                                           wxString* aPinMap );
 
 
 template <typename T_symbol, typename T_field>
@@ -1180,7 +1222,12 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 || netlistEnabled.StartsWith( wxT( "n" ) )
                 || netlistEnabled.StartsWith( wxT( "f" ) ) )
             {
-                T_field enableField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::ENABLE_FIELD );
+                netlistEnabledField->SetName( SIM_MODEL::ENABLE_FIELD );
+                netlistEnabledField->SetText( wxT( "0" ) );
+            }
+            else
+            {
+                aSymbol.RemoveField( netlistEnabledField );
             }
         }
 
@@ -1212,10 +1259,9 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
         if( T_field* legacyPins = aSymbol.FindField( wxT( "Sim_Pins" ) ) )
         {
-            // std::pair<wxString, wxString> [ Sim.Type, Sim.Params ]
-            auto inferredModel = SIM_MODEL::InferSimModel( prefix, valueField->GetText(),
-                                                           SIM_VALUE_GRAMMAR::NOTATION::SI );
-            bool isPassive = !inferredModel.second.IsEmpty();
+            bool isPassive =   prefix.StartsWith( wxT( "R" ) )
+                            || prefix.StartsWith( wxT( "L" ) )
+                            || prefix.StartsWith( wxT( "C" ) );
 
             // Migrate pins from array of indexes to name-value-pairs
             wxArrayString pinIndexes;
