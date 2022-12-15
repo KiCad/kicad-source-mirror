@@ -109,6 +109,13 @@ extern const wxChar* const traceSchLibMem;
 /**
  * Flag to enable legacy schematic plugin debug output.
  *
+ * Use "KICAD_SCH_PLUGIN" to enable.
+ */
+extern const wxChar* const traceSchPlugin;
+
+/**
+ * Flag to enable legacy schematic plugin debug output.
+ *
  * Use "KICAD_SCH_LEGACY_PLUGIN" to enable.
  */
 extern const wxChar* const traceSchLegacyPlugin;

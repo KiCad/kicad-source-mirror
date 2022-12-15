@@ -39,6 +39,7 @@ const wxChar* const kicadTraceCoroutineStack = wxT( "KICAD_COROUTINE_STACK" );
 const wxChar* const traceSchLibMem = wxT( "KICAD_SCH_LIB_MEM" );
 const wxChar* const traceFindItem = wxT( "KICAD_FIND_ITEM" );
 const wxChar* const traceSchLegacyPlugin = wxT( "KICAD_SCH_LEGACY_PLUGIN" );
+const wxChar* const traceSchPlugin = wxT( "KICAD_SCH_PLUGIN" );
 const wxChar* const traceGedaPcbPlugin = wxT( "KICAD_GEDA_PLUGIN" );
 const wxChar* const traceKicadPcbPlugin = wxT( "KICAD_PCB_PLUGIN" );
 const wxChar* const tracePrinting = wxT( "KICAD_PRINT" );
