@@ -115,7 +115,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     if( aAppendToMe )
     {
         m_appending = true;
-        wxLogTrace( traceSchLegacyPlugin, "Append \"%s\" to sheet \"%s\".",
+        wxLogTrace( traceSchPlugin, "Append \"%s\" to sheet \"%s\".",
                     aFileName, aAppendToMe->GetFileName() );
 
         wxFileName normedFn = aAppendToMe->GetFileName();
@@ -129,7 +129,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
         if( m_path.IsEmpty() )
             m_path = aSchematic->Prj().GetProjectPath();
 
-        wxLogTrace( traceSchLegacyPlugin, "Normalized append path \"%s\".", m_path );
+        wxLogTrace( traceSchPlugin, "Normalized append path \"%s\".", m_path );
     }
     else
     {
@@ -178,6 +178,8 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
 void SCH_SEXPR_PLUGIN::loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, SCH_SHEET* aSheet )
 {
+    m_currentSheetPath.push_back( aSheet );
+
     SCH_SCREEN* screen = nullptr;
 
     if( !aSheet->GetScreen() )
@@ -193,10 +195,10 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, SC
         // Save the current path so that it gets restored when descending and ascending the
         // sheet hierarchy which allows for sheet schematic files to be nested in folders
         // relative to the last path a schematic was loaded from.
-        wxLogTrace( traceSchLegacyPlugin, "Saving path    '%s'", m_currentPath.top() );
+        wxLogTrace( traceSchPlugin, "Saving path    '%s'", m_currentPath.top() );
         m_currentPath.push( fileName.GetPath() );
-        wxLogTrace( traceSchLegacyPlugin, "Current path   '%s'", m_currentPath.top() );
-        wxLogTrace( traceSchLegacyPlugin, "Loading        '%s'", fileName.GetFullPath() );
+        wxLogTrace( traceSchPlugin, "Current path   '%s'", m_currentPath.top() );
+        wxLogTrace( traceSchPlugin, "Loading        '%s'", fileName.GetFullPath() );
 
         SCH_SHEET_PATH ancestorSheetPath = aParentSheetPath;
 
@@ -221,7 +223,12 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, SC
         }
 
         if( ancestorSheetPath.empty() )
-            m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen );
+        {
+            // Existing schematics could be either in the root sheet path or the current sheet
+            // load path so we have to check both.
+            if( !m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen ) )
+                m_currentSheetPath.at( 0 )->SearchHierarchy( fileName.GetFullPath(), &screen );
+        }
 
         if( screen )
         {
@@ -278,8 +285,10 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, SC
         }
 
         m_currentPath.pop();
-        wxLogTrace( traceSchLegacyPlugin, "Restoring path \"%s\"", m_currentPath.top() );
+        wxLogTrace( traceSchPlugin, "Restoring path \"%s\"", m_currentPath.top() );
     }
+
+    m_currentSheetPath.pop_back();
 }
 
 
