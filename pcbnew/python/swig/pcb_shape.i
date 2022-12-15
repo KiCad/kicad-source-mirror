@@ -10,6 +10,33 @@
 %include eda_shape.h
 %include pcb_shape.h
 
+%extend EDA_ANGLE
+{
+    /* Implement common operators that use outside-class definition in C++ */
+    %pythoncode
+    %{
+    def __add__(self, other):
+        n = EDA_ANGLE(self.AsDegrees(), DEGREES_T)
+        n += other
+        return n
+
+    def __sub__(self, other):
+        n = EDA_ANGLE(self.AsDegrees(), DEGREES_T)
+        n -= other
+        return n
+
+    def __mul__(self, other):
+        return EDA_ANGLE(self.AsDegrees() * other, DEGREES_T)
+
+    def __rmul__(self, other):
+        return EDA_ANGLE(other * self.AsDegrees(), DEGREES_T)
+
+    def __truediv__(self, other):
+        return EDA_ANGLE(self.AsDegrees() / other, DEGREES_T)
+    %}
+}
+
+
 %extend PCB_SHAPE
 {
     EDA_ANGLE GetArcAngleStart()
