@@ -466,47 +466,9 @@ endif()
 add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
                     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
 
-    DEPENDS pcbcommon
-    DEPENDS plotcontroller.h
-    DEPENDS exporters/gendrill_Excellon_writer.h
-    DEPENDS exporters/export_vrml.h
-    DEPENDS python/swig/pcb_item_containers.i
     DEPENDS python/swig/pcbnew.i
-    DEPENDS python/swig/board.i
-    DEPENDS python/swig/board_connected_item.i
-    DEPENDS python/swig/board_design_settings.i
-    DEPENDS python/swig/board_item.i
-    DEPENDS python/swig/board_item_container.i
-    DEPENDS python/swig/connectivity.i
-    DEPENDS python/swig/pcb_dimension.i
-    DEPENDS python/swig/pcb_shape.i
-    DEPENDS python/swig/fp_shape.i
-    DEPENDS python/swig/pcb_marker.i
-    DEPENDS python/swig/pcb_target.i
-    DEPENDS python/swig/pcb_plot_params.i
-    DEPENDS python/swig/footprint.i
-    DEPENDS python/swig/netinfo.i
-    DEPENDS python/swig/pad.i
-    DEPENDS python/swig/pcb_group.i
-    DEPENDS python/swig/pcb_bitmap.i
-    DEPENDS python/swig/pcb_text.i
-    DEPENDS python/swig/pcb_group.i
-    DEPENDS python/swig/plugins.i
-    DEPENDS python/swig/fp_text.i
-    DEPENDS python/swig/track.i
-    DEPENDS python/swig/units.i
-    DEPENDS python/swig/typeinfo.i
-    DEPENDS python/swig/version.i
-    DEPENDS python/swig/zone.i
-    DEPENDS python/swig/zone_settings.i
 
-    DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/kicad.i
-    DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/wx.i
-    DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/math.i
-    DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/shape.i
-    DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/ki_exception.i
-    DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/netclass.i
-    DEPENDS ${CMAKE_SOURCE_DIR}/scripting/kicadplugins.i
+    DEPFILE ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.d
 
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docstrings
 
@@ -514,7 +476,7 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/docstrings/docstrings.i
 
     COMMAND ${SWIG_EXECUTABLE}
-        ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx ${CMAKE_SOURCE_DIR}/pcbnew/python/swig/pcbnew.i
+        ${SWIG_OPTS} -MMD -MF ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.d -MT pcbnew/pcbnew_wrap.cxx -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx ${CMAKE_SOURCE_DIR}/pcbnew/python/swig/pcbnew.i
 
     # was needed only with SWIG version < 4 to disable a python section "def swig_import_helper()"
     # found in pcbnew.py but not existing in SWIG version >= 4
@@ -522,7 +484,7 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     #COMMAND ${PYTHON_EXECUTABLE}
     #    ${CMAKE_SOURCE_DIR}/tools/build/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
 
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 
 if( UNIX AND NOT APPLE )
