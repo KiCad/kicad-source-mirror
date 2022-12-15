@@ -1560,14 +1560,17 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
 }
 
 
-bool SCH_EDITOR_CONTROL::doCopy( bool aUseLocalClipboard )
+bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->RequestSelection();
     SCHEMATIC&         schematic = m_frame->Schematic();
 
-    if( !selection.GetSize() )
+    if( selection.Empty() )
         return false;
+
+    if( aUseDuplicateClipboard )
+        m_duplicateIsHoverSelection = selection.IsHover();
 
     selection.SetScreen( m_frame->GetScreen() );
     m_supplementaryClipboard.clear();
@@ -1588,9 +1591,12 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseLocalClipboard )
 
     plugin.Format( &selection, &selPath, schematic, &formatter, true );
 
-    if( aUseLocalClipboard )
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+    if( aUseDuplicateClipboard )
     {
-        m_localClipboard = formatter.GetString();
+        m_duplicateClipboard = formatter.GetString();
         return true;
     }
 
@@ -1778,7 +1784,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     VECTOR2I           eventPos;
 
     if( aEvent.IsAction( &ACTIONS::duplicate ) )
-        content = m_localClipboard;
+        content = m_duplicateClipboard;
     else
         content = m_toolMgr->GetClipboardUTF8();
 
@@ -2233,6 +2239,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     }
                 }
             }
+
+            selection.SetIsHover( m_duplicateIsHoverSelection );
         }
         else
         {
@@ -2257,6 +2265,9 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() >= 1 )
         symbol = (SCH_SYMBOL*) selection.Front();
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     if( !symbol || symbol->GetEditFlags() != 0 )
         return 0;

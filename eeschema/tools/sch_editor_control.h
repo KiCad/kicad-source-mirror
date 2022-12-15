@@ -166,8 +166,8 @@ public:
                                  const wxString& aSearchText );
 
 private:
-    ///< copy selection to clipboard or to m_localClipboard if aUseLocalClipboard is true
-    bool doCopy( bool aUseLocalClipboard = false );
+    ///< copy selection to clipboard or to m_duplicateClipboard
+    bool doCopy( bool aUseDuplicateClipboard = false );
 
     bool rescueProject( RESCUER& aRescuer, bool aRunningOnDemand );
 
@@ -228,7 +228,8 @@ private:
     EDA_ITEM* m_pickerItem;      // Current item for picker highlighting.
 
     // Temporary storage location for Duplicate action
-    std::string m_localClipboard;
+    std::string m_duplicateClipboard;
+    bool        m_duplicateIsHoverSelection;
 
     // A map of sheet filename --> screens for the clipboard contents.  We use these to hook up
     // cut/paste operations for unsaved sheet content.
