@@ -115,6 +115,11 @@ SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER* aR
 
         try
         {
+            wxFileName fn( fullPath );
+
+            if( !fn.Exists() )
+                fullPath = aLibPath;
+
             fullPath = ResolveLibraryPath( fullPath, m_project );
         }
         catch( ... )
