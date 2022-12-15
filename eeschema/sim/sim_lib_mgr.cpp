@@ -25,6 +25,7 @@
 #include <pgm_base.h>
 #include <string>
 #include <common.h>
+#include <functional>
 #include <sch_symbol.h>
 
 // Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
@@ -74,13 +75,54 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PR
 }
 
 
+std::string SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const std::string& aLibPath, const std::string& aRelativeLib )
+{
+    wxFileName testPath( aLibPath );
+    wxString fullPath( aLibPath );
+
+    if( !testPath.IsAbsolute() && !aRelativeLib.empty() )
+    {
+        wxString relLib( aRelativeLib );
+
+        try
+        {
+            relLib = ResolveLibraryPath( relLib, m_project );
+        }
+        catch( ... )
+        {}
+
+        wxFileName fn( relLib );
+
+        testPath.MakeAbsolute( fn.GetPath( true ) );
+        fullPath = testPath.GetFullPath();
+    }
+
+    try
+    {
+        wxFileName fn( fullPath );
+
+        if( !fn.Exists() )
+            fullPath = aLibPath;
+
+        fullPath = ResolveLibraryPath( fullPath, m_project );
+    }
+    catch( ... )
+    {}
+
+    return fullPath.ToStdString();
+}
+
+
 SIM_LIBRARY& SIM_LIB_MGR::AddLibrary( const wxString& aLibraryPath, REPORTER* aReporter )
 {
     // May throw an exception.
     wxString path = ResolveLibraryPath( aLibraryPath, m_project );
 
+    std::function<std::string(const std::string&, const std::string&)> f2 =
+            std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, std::placeholders::_1, std::placeholders::_2 );
+
     // May throw an exception.
-    auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path, aReporter ) ) .first;
+    auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path, aReporter, &f2 ) ).first;
     return *it->second;
 }
 
@@ -91,42 +133,7 @@ SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER* aR
     wxString path = ResolveLibraryPath( aLibraryPath, m_project );
 
     std::function<std::string(const std::string&, const std::string&)> f2 =
-            [&]( const std::string& aLibPath, const std::string& aRelativeLib ) -> std::string
-        {
-        wxFileName testPath( aLibPath );
-        wxString fullPath( aLibPath );
-
-        if( !testPath.IsAbsolute() && !aRelativeLib.empty() )
-        {
-            wxString relLib( aRelativeLib );
-
-            try
-            {
-                relLib = ResolveLibraryPath( relLib, m_project );
-            }
-            catch( ... )
-            {}
-
-            wxFileName fn( relLib );
-
-            testPath.MakeAbsolute( fn.GetPath( true ) );
-            fullPath = testPath.GetFullPath();
-        }
-
-        try
-        {
-            wxFileName fn( fullPath );
-
-            if( !fn.Exists() )
-                fullPath = aLibPath;
-
-            fullPath = ResolveLibraryPath( fullPath, m_project );
-        }
-        catch( ... )
-        {}
-
-        return fullPath.ToStdString();
-        };
+            std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, std::placeholders::_1, std::placeholders::_2 );
 
     std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, aReporter, &f2 );
     
@@ -248,9 +255,12 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
     wxString     path = ResolveLibraryPath( aLibraryPath, m_project );
     SIM_LIBRARY* library = nullptr;
 
+    std::function<std::string(const std::string&, const std::string&)> f2 =
+            std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, std::placeholders::_1, std::placeholders::_2 );
+
     try
     {
-        auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path ) ).first;
+        auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path, nullptr, &f2 ) ).first;
         library = &*it->second;
     }
     catch( const IO_ERROR& e )

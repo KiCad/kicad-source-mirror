@@ -73,6 +73,8 @@ public:
 
     static wxString ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject );
 
+    std::string ResolveEmbeddedLibraryPath( const std::string& aLibPath, const std::string& aRelativeLib );
+
 private:
     const PROJECT*                                   m_project;
     std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries;
