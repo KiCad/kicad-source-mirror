@@ -938,7 +938,11 @@ bool PCB_SELECTION_TOOL::selectMultiple()
                 if( !greedySelection && selectionRect.Contains( group->GetBoundingBox() )
                         && newset.size() )
                 {
-                    collector.Append( *newset.begin() );
+                    for( BOARD_ITEM* group_item : newset )
+                    {
+                        if( Selectable( group_item ) )
+                            collector.Append( *newset.begin() );
+                    }
                 }
 
                 for( BOARD_ITEM* group_item : newset )
