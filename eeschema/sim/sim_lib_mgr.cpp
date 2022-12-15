@@ -109,7 +109,8 @@ SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER* aR
 
             wxFileName fn( relLib );
 
-            fullPath = testPath.GetAbsolutePath( fn.GetPath( true ) );
+            testPath.MakeAbsolute( fn.GetPath( true ) );
+            fullPath = testPath.GetFullPath();
         }
 
         try
