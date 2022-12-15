@@ -359,13 +359,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  wasDragging = m_moveInProgress && m_isDrag;
+    bool                  isSlice = false;
 
     m_anchorPos.reset();
 
     if( aEvent.IsAction( &EE_ACTIONS::move ) )
         m_isDrag = false;
     else if( aEvent.IsAction( &EE_ACTIONS::drag ) )
+    {
         m_isDrag = true;
+        isSlice = aEvent.Parameter<bool>();
+    }
     else if( aEvent.IsAction( &EE_ACTIONS::moveActivate ) )
         m_isDrag = !cfg->m_Input.drag_is_move;
     else
@@ -455,7 +459,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
                 SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
-                bool      appendUndo = sch_item && sch_item->IsNew();
+                bool      appendUndo = ( sch_item && sch_item->IsNew() ) || isSlice;
                 bool      placingNewItems = sch_item && sch_item->IsNew();
 
                 //------------------------------------------------------------------------
@@ -475,7 +479,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         it->ClearFlags( STARTPOINT | ENDPOINT );
                 }
 
-                if( m_isDrag )
+                // Drag of split items start over top of their other segment so
+                // we want to skip grabbing the segments we split from
+                if( m_isDrag && !isSlice )
                 {
                     EDA_ITEMS connectedDragItems;
 
@@ -895,7 +901,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
         // This needs to run prior to `RecalculateConnections` because we need to identify
         // the lines that are newly dangling
-        if( m_isDrag )
+        if( m_isDrag && !isSlice )
             trimDanglingLines();
 
         m_frame->RecalculateConnections( LOCAL_CLEANUP );

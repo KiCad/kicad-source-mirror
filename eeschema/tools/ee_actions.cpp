@@ -555,14 +555,13 @@ TOOL_ACTION EE_ACTIONS::pinTable( "eeschema.InteractiveEdit.pinTable",
 
 TOOL_ACTION EE_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
         AS_GLOBAL, 0, "",
-        _( "Break Wire" ), _( "Divide a wire into segments which can be dragged independently" ),
+        _( "Break" ), _( "Divide into connected segments" ),
         BITMAPS::break_line );
 
-TOOL_ACTION EE_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
+TOOL_ACTION EE_ACTIONS::slice( "eeschema.InteractiveEdit.slice",
         AS_GLOBAL, 0, "",
-        _( "Break Bus" ), _( "Divide a bus into segments which can be dragged independently" ),
-        BITMAPS::break_line );
-
+        _( "Slice" ), _( "Divide into unconnected segments" ),
+        BITMAPS::slice_line );
 
 // SCH_EDITOR_CONTROL
 //

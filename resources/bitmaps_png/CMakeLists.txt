@@ -459,6 +459,7 @@ set( BMAPS_MID
     sim_tune
     sim_probe
     sim_add_signal
+    slice_line
     search_tree
     set_origin
     show_dcodenumber

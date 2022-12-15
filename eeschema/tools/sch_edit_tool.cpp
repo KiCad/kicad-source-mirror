@@ -2195,7 +2195,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
+    bool          isSlice   = aEvent.Matches( EE_ACTIONS::slice.MakeEvent() );
+    VECTOR2I      cursorPos = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
 
     std::vector<SCH_LINE*> lines;
@@ -2214,11 +2215,30 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
     for( SCH_LINE* line : lines )
     {
-        m_frame->BreakSegment( line, cursorPos );
+        SCH_LINE* newLine;
 
-        VECTOR2I v = line->GetEndPoint() - line->GetStartPoint();
-        v = v.Resize( v.EuclideanNorm() - 10 );
-        line->SetEndPoint( line->GetStartPoint() + v );
+        // We let the user select the break point if they're on a single line
+        if( lines.size() == 1 && line->HitTest( cursorPos ) )
+            m_frame->BreakSegment( line, cursorPos, &newLine );
+        else
+            m_frame->BreakSegment( line, line->GetMidPoint(), &newLine );
+
+        // Make sure both endpoints are deselected
+        newLine->ClearFlags();
+
+        m_selectionTool->AddItemToSel( line );
+        line->SetFlags( ENDPOINT );
+
+        // If we're a break, we want to drag both wires.
+        // Side note: the drag/move tool only checks whether the first item is
+        // new to determine if it should append undo or not, someday this should
+        // be cleaned up and explictly controlled but for now the newLine
+        // selection addition must be after the existing line.
+        if( !isSlice )
+        {
+            m_selectionTool->AddItemToSel( newLine );
+            newLine->SetFlags( STARTPOINT );
+        }
     }
 
     if( !lines.empty() )
@@ -2228,7 +2248,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
         m_frame->OnModify();
         m_frame->GetCanvas()->Refresh();
 
-        m_toolMgr->RunAction( EE_ACTIONS::drag );
+        m_toolMgr->RunAction( EE_ACTIONS::drag, false, true );
     }
 
     return 0;
@@ -2367,7 +2387,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toTextBox.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakWire.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakBus.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::slice.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::CleanupSheetPins,   EE_ACTIONS::cleanupSheetPins.MakeEvent() );
     Go( &SCH_EDIT_TOOL::GlobalEdit,         EE_ACTIONS::editTextAndGraphics.MakeEvent() );

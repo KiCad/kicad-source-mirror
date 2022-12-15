@@ -525,6 +525,7 @@ enum class BITMAPS : unsigned int
     sim_stop,
     sim_tune,
     simulator,
+    slice_line,
     small_down,
     small_edit,
     small_folder,

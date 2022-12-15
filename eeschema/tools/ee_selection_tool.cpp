@@ -179,8 +179,8 @@ bool EE_SELECTION_TOOL::Init()
         m_isSymbolViewer = symbolViewerFrame != nullptr;
     }
 
-    auto wireSelection =         E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T } );
-    auto busSelection =          E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_ITEM_LOCATE_BUS_T  });
+    auto linesSelection =        E_C::MoreThan( 0 ) && E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
+                                                                         SCH_ITEM_LOCATE_GRAPHIC_LINE_T } );
     auto wireOrBusSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } );
     auto connectedSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( connectedTypes );
     auto sheetSelection =        E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_SHEET_T } );
@@ -266,8 +266,8 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::placeClassLabel,    wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeGlobalLabel,   wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeHierLabel,     wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::breakWire,          wireSelection && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::breakBus,           busSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::breakWire,          linesSelection     && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::slice,              linesSelection     && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::importSingleSheetPin, sheetSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::assignNetclass,     connectedSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::editPageNumber,     schEditSheetPageNumberCondition, 250 );

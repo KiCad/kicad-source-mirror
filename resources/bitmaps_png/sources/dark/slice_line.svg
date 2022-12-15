@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="slice_line.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1049"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="11.053739"
+     inkscape:cx="12.077361"
+     inkscape:cy="3.6639185"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:pagecheckerboard="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>break_line</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs116256">
+    <style
+       id="style116254">.cls-1,.cls-2,.cls-3,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2{stroke:#8f8f8f;stroke-width:0.5px;}.cls-2{stroke-dasharray:1.662 1.662;}.cls-3{stroke:#DED3DD;}.cls-4{stroke:#42B8EB;}.cls-5{fill:#DED3DD;}</style>
+  </defs>
+  <title
+     id="title116258">break_line</title>
+  <line
+     class="cls-3"
+     x1="2"
+     y1="12.010201"
+     x2="10"
+     y2="12.007999"
+     id="line116272"
+     style="opacity:1;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
+  <path
+     id="line116274"
+     style="fill:none;stroke:#42B8EB;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="m 14,12 8,0.008"
+     sodipodi:nodetypes="cc" />
+  <path
+     id="line11"
+     style="fill:none;stroke:#42b8eb;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 16.5,16.5 -9,-9"
+     sodipodi:nodetypes="cc" />
+  <path
+     id="line9"
+     style="fill:none;stroke:#42b8eb;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 16.5,7.5 -9,9"
+     sodipodi:nodetypes="cc" />
+  <path
+     class="cls-5"
+     d="m 14,11.5 v 10.763724 l 2.388017,-2.246815 c 0.313049,0.729733 0.771993,1.807325 1.173453,2.748038 0.26289,0.615616 0.975695,0.90077 1.590646,0.636332 v 0 c 0.613964,-0.262516 0.899148,-0.972818 0.637179,-1.587016 -0.401388,-0.940895 -0.860899,-2.020203 -1.174642,-2.752127 l 3.274221,-0.180982 z"
+     id="path116278"
+     sodipodi:nodetypes="ccccsscccc"
+     style="stroke-width:1" />
+</svg>

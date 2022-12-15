@@ -482,6 +482,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::sim_tune].emplace_back( BITMAPS::sim_tune, wxT( "sim_tune_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::sim_probe].emplace_back( BITMAPS::sim_probe, wxT( "sim_probe_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::sim_add_signal].emplace_back( BITMAPS::sim_add_signal, wxT( "sim_add_signal_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::slice_line].emplace_back( BITMAPS::slice_line, wxT( "slice_line_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::search_tree].emplace_back( BITMAPS::search_tree, wxT( "search_tree_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::set_origin].emplace_back( BITMAPS::set_origin, wxT( "set_origin_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::show_dcodenumber].emplace_back( BITMAPS::show_dcodenumber, wxT( "show_dcodenumber_24.png" ), 24, wxT( "light" ) );
@@ -864,6 +865,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::sim_tune].emplace_back( BITMAPS::sim_tune, wxT( "sim_tune_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::sim_probe].emplace_back( BITMAPS::sim_probe, wxT( "sim_probe_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::sim_add_signal].emplace_back( BITMAPS::sim_add_signal, wxT( "sim_add_signal_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::slice_line].emplace_back( BITMAPS::slice_line, wxT( "slice_line_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::search_tree].emplace_back( BITMAPS::search_tree, wxT( "search_tree_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::set_origin].emplace_back( BITMAPS::set_origin, wxT( "set_origin_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::show_dcodenumber].emplace_back( BITMAPS::show_dcodenumber, wxT( "show_dcodenumber_dark_24.png" ), 24, wxT( "dark" ) );
