@@ -1150,6 +1150,9 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     auto getSIValue =
             []( T_field* aField )
             {
+                if( !aField )   // no, not really, but it keeps Coverity happy
+                    return wxString( wxEmptyString );
+
                 wxRegEx  regex( wxT( "([^a-z])(M)(e|E)(g|G)($|[^a-z])" ) );
                 wxString value = aField->GetText();
 
