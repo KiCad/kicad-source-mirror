@@ -12,12 +12,12 @@
 
 %extend PCB_SHAPE
 {
-    double GetArcAngleStart()
+    EDA_ANGLE GetArcAngleStart()
     {
         EDA_ANGLE startAngle;
         EDA_ANGLE endAngle;
         $self->CalcArcAngles( startAngle, endAngle );
-        return startAngle.AsTenthsOfADegree();
+        return startAngle;
     }
 
     %pythoncode
