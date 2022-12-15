@@ -45,27 +45,6 @@ template <typename T_symbol, typename T_field>
 class DIALOG_SIM_MODEL : public DIALOG_SIM_MODEL_BASE
 {
 public:
-    class MODEL_NAME_VALIDATOR : public wxTextValidator
-    {
-    public:
-        MODEL_NAME_VALIDATOR() : wxTextValidator( wxFILTER_INCLUDE_LIST )
-        {
-        }
-
-        wxObject* Clone() const override
-        {
-            return new MODEL_NAME_VALIDATOR( *this );
-        }
-
-        wxString IsValid( const wxString& aStr ) const override
-        {
-            if( m_includes.Index( aStr ) == wxNOT_FOUND )
-                return wxString::Format( _( "No model named '%s' in library." ), aStr );
-
-            return wxString();
-        }
-    };
-
     enum PARAM_COLUMN
     {
         DESCRIPTION = 0,
@@ -117,9 +96,7 @@ private:
     void onLibraryPathTextEnter( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextKillFocus( wxFocusEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;
-    void onModelNameCombobox( wxCommandEvent& aEvent ) override;
-    void onModelNameComboboxKillFocus( wxFocusEvent& event ) override;
-    void onModelNameComboboxTextEnter( wxCommandEvent& event ) override;
+    void onModelNameChoice( wxCommandEvent& aEvent ) override;
     void onIbisPinCombobox( wxCommandEvent& event ) override;
     void onIbisPinComboboxTextEnter( wxCommandEvent& event ) override;
     void onIbisModelCombobox( wxCommandEvent& event ) override;
@@ -153,7 +130,6 @@ private:
     std::map<SIM_MODEL::DEVICE_T, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE                                m_curModelType;
 
-    MODEL_NAME_VALIDATOR   m_modelNameValidator;
     SCINTILLA_TRICKS*      m_scintillaTricks;
 
     wxPGProperty*          m_firstCategory;            // Used to add principal parameters to root.

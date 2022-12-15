@@ -28,10 +28,10 @@ class WX_GRID;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/choice.h>
 #include <wx/combobox.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
-#include <wx/choice.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/manager.h>
 #include <wx/propgrid/advprops.h>
@@ -59,7 +59,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_libraryPathText;
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticText* m_modelNameLabel;
-		wxComboBox* m_modelNameCombobox;
+		wxChoice* m_modelNameChoice;
 		wxStaticText* m_ibisPinLabel;
 		wxComboBox* m_ibisPinCombobox;
 		wxCheckBox* m_differentialCheckbox;
@@ -92,13 +92,12 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onBrowseButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBrowseButtonUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onModelNameLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onModelNameCombobox( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onModelNameComboboxKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void onModelNameComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onModelNameComboboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onModelNameChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisPinLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onIbisPinCombobox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onModelNameComboboxKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onIbisPinComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onModelNameComboboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onDifferentialCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOverrideCheckboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onIbisModelLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
