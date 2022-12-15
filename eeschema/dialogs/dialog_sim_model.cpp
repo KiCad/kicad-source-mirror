@@ -176,7 +176,18 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
 
         // Must be set before curModel() is used since the latter checks the combobox value.
         std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
-        m_modelNameChoice->SetStringSelection( modelName );
+        int         modelIdx = m_modelNameChoice->FindString( modelName );
+
+        if( modelIdx == wxNOT_FOUND )
+        {
+            DisplayErrorMessage( this, wxString::Format( _( "No model named '%s' in library." ),
+                                                         modelName ) );
+            m_modelNameChoice->SetSelection( -1 );
+        }
+        else
+        {
+            m_modelNameChoice->SetSelection( modelIdx );
+        }
 
         if( isIbisLoaded() && ( m_modelNameChoice->GetSelection() >= 0 ) )
         {
