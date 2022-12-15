@@ -141,6 +141,7 @@ void POLYGON_GEOM_MANAGER::Reset()
 {
     m_lockedPoints.Clear();
     m_leaderPts.Clear();
+    m_loopPts.Clear();
 
     m_client.OnGeometryChange( *this );
 }
