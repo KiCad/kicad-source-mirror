@@ -1243,7 +1243,7 @@ void EDA_BASE_FRAME::DoWithAcceptedFiles()
     for( const wxFileName& file : m_AcceptedFiles )
     {
         wxString fn = file.GetFullPath();
-        m_toolManager->RunAction( *m_acceptedExts.at( file.GetExt() ), true, &fn );
+        m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( file.GetExt() ), true, &fn );
     }
 }
 

@@ -1519,7 +1519,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
         if( item )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, item );
+            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, item );
     }
     m_frame->m_probingSchToPcb = false;
 
@@ -1815,7 +1815,7 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 }
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     return 0;
 }

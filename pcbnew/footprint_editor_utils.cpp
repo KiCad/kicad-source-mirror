@@ -29,6 +29,7 @@
 #include <fp_lib_table.h>
 #include <functional>
 #include <kiway_express.h>
+#include <pcb_group.h>
 #include <pcb_marker.h>
 #include <pcb_textbox.h>
 #include <pcb_shape.h>
@@ -250,7 +251,8 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     }
 
     case PCB_GROUP_T:
-        m_toolManager->RunAction( PCB_ACTIONS::groupProperties, true, aItem );
+        m_toolManager->RunAction<PCB_GROUP*>( PCB_ACTIONS::groupProperties, true,
+                                              static_cast<PCB_GROUP*>( aItem ) );
         break;
 
     case PCB_MARKER_T:

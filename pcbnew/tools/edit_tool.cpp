@@ -283,7 +283,7 @@ int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
     if( fp )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
+        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, fp );
 
         selectionTool->GetSelection().SetReferencePoint( fp->GetPosition() );
         m_toolMgr->RunAction( PCB_ACTIONS::move, false );
@@ -1857,7 +1857,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                         canvas()->Refresh();
 
                         // Restore the selection on the original zone
-                        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, zone );
+                        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, zone );
 
                         break;
                     }

@@ -200,7 +200,7 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
     statusPopup.Popup();
     canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     while( !done )
     {

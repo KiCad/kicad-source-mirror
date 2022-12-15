@@ -33,6 +33,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <zone.h>
+#include <pcb_group.h>
 #include <pcb_target.h>
 #include <pcb_dimension.h>
 #include <pcb_textbox.h>
@@ -166,7 +167,8 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         break;
 
     case PCB_GROUP_T:
-        m_toolManager->RunAction( PCB_ACTIONS::groupProperties, true, aItem );
+        m_toolManager->RunAction<PCB_GROUP*>( PCB_ACTIONS::groupProperties, true,
+                                              static_cast<PCB_GROUP*>( aItem ) );
         break;
 
     case PCB_MARKER_T:

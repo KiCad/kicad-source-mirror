@@ -313,7 +313,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
 
     // If selected make sure all the now-included pins are selected
     if( aSymbol->IsSelected() )
-        m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, aSymbol );
+        m_toolManager->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, true, aSymbol );
 
     UpdateItem( aSymbol, false, true );
     OnModify();

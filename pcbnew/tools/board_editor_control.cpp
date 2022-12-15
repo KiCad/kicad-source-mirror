@@ -1024,7 +1024,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     {
         m_placingFootprint = true;
         fp->SetPosition( cursorPos );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
+        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, fp );
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
     else if( aEvent.HasPosition() )
@@ -1044,7 +1044,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         cursorPos = controls->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( reselect && fp )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
+            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, fp );
 
         if( evt->IsCancelInteractive() )
         {
@@ -1128,7 +1128,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 fp->GetField( FOOTPRINT_FIELD )->SetText( UnescapeString( fp->GetFPIDAsString() ) );
 
                 commit.Add( fp );
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
+                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, fp );
 
                 m_toolMgr->RunAction( ACTIONS::refreshPreview );
             }
@@ -1592,7 +1592,7 @@ int BOARD_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
             return false;   // drill origin is a one-shot; don't continue with tool
         } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     return 0;
 }

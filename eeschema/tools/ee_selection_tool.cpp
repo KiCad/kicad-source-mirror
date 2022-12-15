@@ -585,7 +585,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                      && *evt->GetCommandId() <= ID_POPUP_SCH_UNFOLD_BUS_END )
             {
                 wxString* net = new wxString( *evt->Parameter<wxString*>() );
-                m_toolMgr->RunAction( EE_ACTIONS::unfoldBus, true, net );
+                m_toolMgr->RunAction<wxString*>( EE_ACTIONS::unfoldBus, true, net );
             }
         }
         else if( evt->IsCancelInteractive() )
@@ -907,7 +907,7 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
         // Try to call selectionMenu via RunAction() to avoid event-loop contention
         // But it we cannot handle the event, then we don't have an active tool loop, so
         // handle it directly.
-        if( !m_toolMgr->RunAction( EE_ACTIONS::selectionMenu, true, &aCollector ) )
+        if( !m_toolMgr->RunAction<COLLECTOR*>( EE_ACTIONS::selectionMenu, true, &aCollector ) )
         {
             if( !doSelectionMenu( &aCollector ) )
                 aCollector.m_MenuCancelled = true;

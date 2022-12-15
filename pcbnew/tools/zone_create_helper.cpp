@@ -213,7 +213,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     else
     {
         m_params.m_sourceZone = newZones[0];
-        toolMgr->RunAction( PCB_ACTIONS::selectItem, true, newZones[0] );
+        toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, newZones[0] );
     }
 
 }
@@ -238,7 +238,8 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             commit.Add( aZone.get() );
             commit.Push( _( "Add a zone" ) );
 
-            m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, aZone.release() );
+            m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true,
+                                                       aZone.release() );
             break;
         }
 
@@ -262,7 +263,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             poly->SetPolyShape( *aZone->Outline() );
 
             commit.Add( poly );
-            m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, poly );
+            m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, poly );
 
             commit.Push( _( "Add a graphical polygon" ) );
 

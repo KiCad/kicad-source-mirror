@@ -659,7 +659,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     return 0;
 }
@@ -749,7 +749,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     return 0;
 }
@@ -1196,7 +1196,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
             return highlightNet( m_toolMgr, aPos );
         } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     return 0;
 }
@@ -1855,7 +1855,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     // Now clear the previous selection, select the pasted items, and fire up the "move" tool.
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &loadedItems );
+    m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, true, &loadedItems );
 
     EE_SELECTION& selection = selTool->GetSelection();
 

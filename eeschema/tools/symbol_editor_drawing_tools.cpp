@@ -657,7 +657,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         if( pin )
-            m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, pin );
+            m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, true, pin );
     }
 
     return 0;

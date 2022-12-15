@@ -476,7 +476,7 @@ int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PL_ACTIONS::selectionActivate, false );
         } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     return 0;
 }

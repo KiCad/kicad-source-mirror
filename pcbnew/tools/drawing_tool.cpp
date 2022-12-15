@@ -410,7 +410,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
                 commit.Add( rect );
                 commit.Push( isTextBox ? _( "Draw a text box" ) : _( "Draw a rectangle" ) );
 
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, rect );
+                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, rect );
             }
         }
 
@@ -458,7 +458,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
             commit.Add( circle );
             commit.Push( _( "Draw a circle" ) );
 
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, circle );
+            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, circle );
         }
 
         circle = new PCB_SHAPE( parent );
@@ -505,7 +505,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
             commit.Add( arc );
             commit.Push( _( "Draw an arc" ) );
 
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, arc );
+            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, arc );
         }
 
         arc = new PCB_SHAPE( parent );
@@ -705,7 +705,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                 commit.Add( image );
                 commit.Push( _( "Place an image" ) );
 
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, image );
+                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, image );
 
                 image = nullptr;
                 m_toolMgr->RunAction( ACTIONS::activatePointEditor );
@@ -934,7 +934,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                         m_frame->GetCanvas()->Refresh();
                     }
 
-                    m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
+                    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, text );
                     m_view->Update( &selection() );
 
                     // update the cursor so it looks correct before another event
@@ -950,7 +950,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 commit.Add( text );
                 commit.Push( _( "Place a text" ) );
 
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
+                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, text );
 
                 text = nullptr;
             }
@@ -1291,7 +1291,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     m_toolMgr->RunAction( PCB_ACTIONS::properties, true, dimension );
                 }
 
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, dimension );
+                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, dimension );
 
                 break;
             }
@@ -2020,7 +2020,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                     {
                         commit.Add( graphic );
                         commit.Push( _( "Draw a line segment" ) );
-                        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, graphic );
+                        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, graphic );
                     }
                     else
                     {

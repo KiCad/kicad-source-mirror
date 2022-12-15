@@ -73,7 +73,7 @@ void ARRAY_CREATOR::Invoke()
 
     ARRAY_PAD_NUMBER_PROVIDER pad_number_provider( fp, *array_opts );
 
-    std::vector<EDA_ITEM*> all_added_items;
+    EDA_ITEMS all_added_items;
 
     // The first item in list is the original item. We do not modify it
     for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++ )
@@ -206,7 +206,7 @@ void ARRAY_CREATOR::Invoke()
     }
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &all_added_items );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &all_added_items );
 
     commit.Push( _( "Create an array" ) );
 }

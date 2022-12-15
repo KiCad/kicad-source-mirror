@@ -1269,7 +1269,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                                      schIUScale.MilsToIU( cfg->m_Drawing.default_repeat_offset_y ) ) );
         }
 
-        m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newItem );
+        m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, true, newItem );
         newItem->SetFlags( IS_NEW );
         m_frame->AddToScreen( newItem, m_frame->GetScreen() );
         commit.Added( newItem, m_frame->GetScreen() );
@@ -1500,7 +1500,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     return 0;
 }
@@ -2315,7 +2315,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             }
 
             if( selected )
-                m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, item );
+                m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::removeItemFromSel, true, item );
 
             SCH_COMMIT commit( m_toolMgr );
 
@@ -2331,7 +2331,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             commit.Push( _( "Change Item Type" ) );
 
             if( selected )
-                m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newtext );
+                m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, true, newtext );
 
             // Otherwise, pointer is owned by the undo stack
             if( item->IsNew() )

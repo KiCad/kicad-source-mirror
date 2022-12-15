@@ -393,7 +393,7 @@ void DIALOG_FIND::search( bool aDirection )
     }
     else
     {
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, *m_it );
+        m_frame->GetToolManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, *m_it );
 
         msg.Printf( _( "'%s' found" ), searchString );
         m_frame->SetStatusText( msg );

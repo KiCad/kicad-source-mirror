@@ -402,7 +402,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     return 0;
 }
@@ -871,7 +871,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     }
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &newItems );
+    m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, true, &newItems );
 
     selection.SetReferencePoint( mapCoords( getViewControls()->GetCursorPosition( true ) ) );
     m_toolMgr->RunAction( EE_ACTIONS::move, true, &commit );

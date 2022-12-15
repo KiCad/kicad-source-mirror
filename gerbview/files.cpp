@@ -687,7 +687,7 @@ void GERBVIEW_FRAME::DoWithAcceptedFiles()
         {
             wxString fn = file.GetFullPath();
             // Open zip archive in editor
-            m_toolManager->RunAction( *m_acceptedExts.at( ArchiveFileExtension ), true, &fn );
+            m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( ArchiveFileExtension ), true, &fn );
         }
         else
         {
@@ -698,5 +698,5 @@ void GERBVIEW_FRAME::DoWithAcceptedFiles()
 
     // Open files in editor
     if( !gerbFn.IsEmpty() )
-        m_toolManager->RunAction( *m_acceptedExts.at( GerberFileExtension ), true, &gerbFn );
+        m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( GerberFileExtension ), true, &gerbFn );
 }

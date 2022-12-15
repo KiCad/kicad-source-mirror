@@ -192,9 +192,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         bbox = footprint->GetBoundingBox( true, false ); // No invisible text in bbox calc
 
         if( pad )
-            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, pad );
+            m_toolManager->RunAction<BOARD_ITEM*>( PCB_ACTIONS::highlightItem, true, pad );
         else
-            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, footprint );
+            m_toolManager->RunAction<BOARD_ITEM*>( PCB_ACTIONS::highlightItem, true, footprint );
     }
     else if( netcode > 0 || multiHighlight )
     {

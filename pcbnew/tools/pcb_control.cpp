@@ -570,7 +570,7 @@ int PCB_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
                     return false;   // drill origin is a one-shot; don't continue with tool
                 } );
 
-        m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+        m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
     }
 
     return 0;
@@ -683,7 +683,7 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->Refresh();
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
 
     return 0;
 }
