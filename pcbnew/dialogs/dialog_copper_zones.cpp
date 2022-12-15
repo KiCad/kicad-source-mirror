@@ -394,7 +394,7 @@ void DIALOG_COPPER_ZONE::readNetInformation()
     m_netInfoItemList.reserve( netInfoList.GetNetCount() );
 
     m_netNameToNetCode.clear();
-    m_netNameToNetCode[wxT( "<no net>" )] = INVALID_NET_CODE;
+    m_netNameToNetCode[ _( "<no net>" ) ] = INVALID_NET_CODE;
 
     m_maxNetCode = INVALID_NET_CODE;
 
@@ -803,7 +803,7 @@ wxArrayString DIALOG_COPPER_ZONE::buildListOfNetsToDisplay()
         }
     }
 
-    netNames.Insert( wxT( "<no net>" ), INVALID_NET_CODE );
+    netNames.Insert( _( "<no net>" ), INVALID_NET_CODE );
 
     return netNames;
 }

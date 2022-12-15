@@ -714,7 +714,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
         net_msg << wxS( " " );
 
         if( m_netAttributes.m_Netname.IsEmpty() )
-            net_msg << wxT( "<no net>" );
+            net_msg << _( "<no net>" );
         else
             net_msg << UnescapeString( m_netAttributes.m_Netname );
     }
