@@ -47,6 +47,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     SCHEMATIC&          schematic = aFrame->Schematic();
     SCHEMATIC_SETTINGS& settings = schematic.Settings();
 
+    SetEvtHandlerEnabled( false );
+
     m_formatting = new PANEL_SETUP_FORMATTING( m_treebook, aFrame );
 
     m_fieldNameTemplates = new PANEL_TEMPLATE_FIELDNAMES( m_treebook,
@@ -85,6 +87,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
+
+    SetEvtHandlerEnabled( true );
 
     finishDialogSettings();
 

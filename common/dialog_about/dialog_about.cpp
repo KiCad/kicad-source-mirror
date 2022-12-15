@@ -55,6 +55,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
 {
     wxASSERT( aParent != nullptr );
 
+    SetEvtHandlerEnabled( false );
     // TODO: Change these to 16x16 versions when available
     m_images = new wxImageList( 24, 24, false, 9 );
 
@@ -96,6 +97,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     SetTitle( wxString::Format( _( "About %s" ), m_titleName ) );
     createNotebooks();
 
+    SetEvtHandlerEnabled( true );
     GetSizer()->SetSizeHints( this );
     SetFocus();
     Centre();

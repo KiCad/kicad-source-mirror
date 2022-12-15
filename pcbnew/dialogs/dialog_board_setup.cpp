@@ -53,6 +53,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
                       _( "Import Settings from Another Board..." ) ),
         m_frame( aFrame )
 {
+    SetEvtHandlerEnabled( false );
     PROJECT_FILE&          project = aFrame->Prj().GetProjectFile();
     BOARD*                 board = aFrame->GetBoard();
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
@@ -116,6 +117,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         m_treebook->ExpandNode( i );
 
     m_treebook->SetMinSize( wxSize( -1, 580 ) );
+    SetEvtHandlerEnabled( true );
 
     finishDialogSettings();
 

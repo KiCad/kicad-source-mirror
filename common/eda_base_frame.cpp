@@ -991,6 +991,8 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
     wxBeginBusyCursor( wxHOURGLASS_CURSOR );
 
     PAGED_DIALOG dlg( this, _( "Preferences" ), true );
+
+    dlg.SetEvtHandlerEnabled( false );
     wxTreebook*  book = dlg.GetTreebook();
 
     PANEL_HOTKEYS_EDITOR*   hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
@@ -1127,6 +1129,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
     if( !aStartPage.IsEmpty() )
         dlg.SetInitialPage( aStartPage, aStartParentPage );
 
+    dlg.SetEvtHandlerEnabled( true );
     wxEndBusyCursor();
 
     if( dlg.ShowModal() == wxID_OK )
