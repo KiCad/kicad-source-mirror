@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -493,7 +493,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
     engine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2D aPos, int aLayer )
             {
-                if(    aItem->GetErrorCode() == DRCE_MISSING_FOOTPRINT
+                if( aItem->GetErrorCode() == DRCE_MISSING_FOOTPRINT
                     || aItem->GetErrorCode() == DRCE_DUPLICATE_FOOTPRINT
                     || aItem->GetErrorCode() == DRCE_EXTRA_FOOTPRINT
                     || aItem->GetErrorCode() == DRCE_NET_CONFLICT )
@@ -533,7 +533,8 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     for( const std::shared_ptr<DRC_ITEM>& item : violations )
     {
-        SEVERITY severity = item->GetParent()->GetSeverity();
+        SEVERITY severity = item->GetParent() ? item->GetParent()->GetSeverity()
+                                              : RPT_SEVERITY_UNDEFINED;
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
     }
 
