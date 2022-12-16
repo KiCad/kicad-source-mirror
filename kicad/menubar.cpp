@@ -42,7 +42,7 @@
 #include <wx/dir.h>
 
 
-void KICAD_MANAGER_FRAME::ReCreateMenuBar()
+void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 {
     KICAD_MANAGER_CONTROL* controlTool = m_toolManager->GetTool<KICAD_MANAGER_CONTROL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means

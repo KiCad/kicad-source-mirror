@@ -144,7 +144,6 @@ public:
      * Functions to rebuild the toolbars and menubars
      */
     void ReCreateHToolbar();
-    void ReCreateMenuBar() override;
 
     void ShowChangedLanguage() override;
 
@@ -303,6 +302,8 @@ public:
 
 protected:
     CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent );
+
+    void doReCreateMenuBar() override;
 
     void setupUIConditions() override;
 

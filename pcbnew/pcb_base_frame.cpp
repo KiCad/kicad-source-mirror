@@ -665,7 +665,7 @@ BOX2I PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 
 
 // Virtual function
-void PCB_BASE_FRAME::ReCreateMenuBar()
+void PCB_BASE_FRAME::doReCreateMenuBar()
 {
 }
 

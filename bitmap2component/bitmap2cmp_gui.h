@@ -158,7 +158,8 @@ private:
 
     wxWindow* GetToolCanvas() const override;
 
-    void ReCreateMenuBar() override;
+protected:
+    void doReCreateMenuBar() override;
 
 private:
     wxImage    m_Pict_Image;

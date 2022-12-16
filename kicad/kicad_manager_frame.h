@@ -63,7 +63,6 @@ public:
     void OnClearFileHistory( wxCommandEvent& aEvent );
     void OnExit( wxCommandEvent& event );
 
-    void ReCreateMenuBar() override;
     void RecreateBaseHToolbar();
 
     wxString GetCurrentFileName() const override
@@ -158,6 +157,8 @@ public:
 
 protected:
     virtual void setupUIConditions() override;
+
+    void doReCreateMenuBar() override;
 
 private:
     void setupTools();

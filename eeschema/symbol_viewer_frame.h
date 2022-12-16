@@ -93,7 +93,6 @@ public:
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override {}
-    void ReCreateMenuBar() override;
 
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnSymbolList( wxCommandEvent& event );
@@ -144,6 +143,8 @@ public:
 
 protected:
     void setupUIConditions() override;
+
+    void doReCreateMenuBar() override;
 
 private:
     // Set up the tool framework.

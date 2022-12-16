@@ -97,7 +97,7 @@ void SYMBOL_VIEWER_FRAME::ReCreateVToolbar()
 }
 
 
-void SYMBOL_VIEWER_FRAME::ReCreateMenuBar()
+void SYMBOL_VIEWER_FRAME::doReCreateMenuBar()
 {
     SYMBOL_EDITOR_CONTROL* libControl = m_toolManager->GetTool<SYMBOL_EDITOR_CONTROL>();
     // wxWidgets handles the OSX Application menu behind the scenes, but that means

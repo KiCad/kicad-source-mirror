@@ -159,7 +159,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
+void FOOTPRINT_VIEWER_FRAME::doReCreateMenuBar()
 {
     PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
 

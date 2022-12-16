@@ -34,7 +34,7 @@
 #include <widgets/wx_menubar.h>
 
 
-void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
+void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means

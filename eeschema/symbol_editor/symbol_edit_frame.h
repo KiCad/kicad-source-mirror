@@ -118,8 +118,6 @@ public:
 
     SELECTION& GetCurrentSelection() override;
 
-    void ReCreateMenuBar() override;
-
     // See comments for m_SyncPinEdit.
     bool SynchronizePins();
 
@@ -391,6 +389,8 @@ public:
 
 protected:
     void setupUIConditions() override;
+
+    void doReCreateMenuBar() override;
 
 private:
     // Set up the tool framework

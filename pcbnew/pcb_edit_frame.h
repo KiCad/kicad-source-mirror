@@ -245,7 +245,6 @@ public:
     void ReCreateAuxiliaryToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
-    void ReCreateMenuBar() override;
     void UpdateToolbarControlSizes() override;
 
     /**
@@ -725,6 +724,8 @@ protected:
     };
 
     LAYER_TOOLBAR_ICON_VALUES m_prevIconVal;
+
+    void doReCreateMenuBar() override;
 
     // The Tool Framework initialization
     void setupTools();

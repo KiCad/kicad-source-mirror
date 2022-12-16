@@ -142,8 +142,6 @@ public:
      */
     void    ReCreateOptToolbar() override;
 
-    void    ReCreateMenuBar() override;
-
     const PL_EDITOR_LAYOUT& GetPageLayout() const { return m_pageLayout; }
     PL_EDITOR_LAYOUT& GetPageLayout() { return m_pageLayout; }
 
@@ -275,6 +273,8 @@ protected:
     bool saveCurrentPageLayout();
 
     void setupUIConditions() override;
+
+    void doReCreateMenuBar() override;
 
     DECLARE_EVENT_TABLE();
 

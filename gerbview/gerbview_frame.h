@@ -87,7 +87,6 @@ public:
      */
     void ReCreateOptToolbar() override;
 
-    void ReCreateMenuBar() override;
     void UpdateStatusBar() override;
     void UpdateToolbarControlSizes() override;
 
@@ -474,6 +473,7 @@ public:
 
 protected:
     void setupUIConditions() override;
+    void doReCreateMenuBar() override;
 
 private:
     void updateComponentListSelectBox();

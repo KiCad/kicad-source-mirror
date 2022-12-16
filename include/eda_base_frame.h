@@ -435,7 +435,7 @@ public:
      *
      * Needed when the language or icons are changed
      */
-    virtual void ReCreateMenuBar();
+    void ReCreateMenuBar();
 
     /**
      * Adds the standard KiCad help menu to the menubar.
@@ -601,6 +601,8 @@ protected:
     {
         return wxT( "_autosave-" );
     }
+
+    virtual void doReCreateMenuBar() {}
 
     /**
      * Handle the auto save timer event.

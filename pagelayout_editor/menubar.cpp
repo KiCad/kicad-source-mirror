@@ -38,7 +38,7 @@
 #include "tools/pl_selection_tool.h"
 
 
-void PL_EDITOR_FRAME::ReCreateMenuBar()
+void PL_EDITOR_FRAME::doReCreateMenuBar()
 {
     PL_SELECTION_TOOL* selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means

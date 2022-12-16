@@ -132,7 +132,6 @@ public:
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
-    void ReCreateMenuBar() override;
 
     void setupUIConditions() override;
 
@@ -836,6 +835,8 @@ protected:
      * @return true if the auto save was successful otherwise false.
      */
     bool doAutoSave() override;
+
+    void doReCreateMenuBar() override;
 
     /**
      * Send the KiCad netlist over to CVPCB.

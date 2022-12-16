@@ -445,6 +445,17 @@ void EDA_BASE_FRAME::setupUIConditions()
 
 void EDA_BASE_FRAME::ReCreateMenuBar()
 {
+    /**
+     * As of wxWidgets 3.2, recreating the menubar from within an event handler of that menubar
+     * will result in memory corruption on macOS.  In order to minimize the chance of programmer
+     * error causing regressions here, we always wrap calls to ReCreateMenuBar in a CallAfter to
+     * ensure that they do not occur within the same event handling call stack.
+     */
+
+    CallAfter( [=]()
+               {
+                   doReCreateMenuBar();
+               } );
 }
 
 

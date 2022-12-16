@@ -91,6 +91,8 @@ protected:
 
     void setupUIConditions() override;
 
+    void doReCreateMenuBar() override;
+
 private:
     const wxString      getCurNickname();
     void                setCurNickname( const wxString& aNickname );
@@ -117,7 +119,6 @@ private:
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
-    void ReCreateMenuBar() override;
 
     void OnLibFilter( wxCommandEvent& aEvent );
     void OnFPFilter( wxCommandEvent& aEvent );

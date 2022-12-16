@@ -206,7 +206,7 @@ wxWindow* BM2CMP_FRAME::GetToolCanvas() const
 }
 
 
-void BM2CMP_FRAME::ReCreateMenuBar()
+void BM2CMP_FRAME::doReCreateMenuBar()
 {
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.

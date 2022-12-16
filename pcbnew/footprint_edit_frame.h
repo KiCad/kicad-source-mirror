@@ -118,11 +118,6 @@ public:
     void UpdateToolbarControlSizes() override;
 
     /**
-     * @brief (Re)Create the menubar for the Footprint Editor frame
-     */
-    void ReCreateMenuBar() override;
-
-    /**
      * Re create the layer Box by clearing the old list, and building a new one from the new
      * layers names and layer colors..
      *
@@ -338,6 +333,11 @@ protected:
 
     void restoreLastFootprint();
     void retainLastFootprint();
+
+    /**
+     * @brief (Re)Create the menubar for the Footprint Editor frame
+     */
+    void doReCreateMenuBar() override;
 
     /**
      * Run the Footprint Properties dialog and handle changes made in it.

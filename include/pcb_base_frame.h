@@ -210,7 +210,6 @@ public:
     // General
     virtual void ReCreateOptToolbar() override { }
     virtual void ShowChangedLanguage() override;
-    virtual void ReCreateMenuBar() override;
     virtual void UpdateStatusBar() override;
 
     PCB_SCREEN* GetScreen() const override { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
@@ -383,6 +382,8 @@ protected:
     void handleActivateEvent( wxActivateEvent& aEvent ) override;
 
     void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
+
+    virtual void doReCreateMenuBar() override;
 
     /**
      * Attempts to load \a aFootprintId from the footprint library table.
