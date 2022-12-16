@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -73,7 +73,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	m_arcEditModeLabel = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Arc editing mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_arcEditModeLabel->Wrap( -1 );
-	bSizer101->Add( m_arcEditModeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizer101->Add( m_arcEditModeLabel, 0, wxRIGHT, 5 );
 
 	wxString m_arcEditModeChoices[] = { _("Keep center, adjust radius"), _("Keep endpoints or direction of starting point") };
 	int m_arcEditModeNChoices = sizeof( m_arcEditModeChoices ) / sizeof( wxString );
