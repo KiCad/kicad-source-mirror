@@ -29,6 +29,7 @@
 #include <wx/menu.h>
 #include <wx/renderer.h>
 #include <wx/settings.h>
+#include <wx/version.h> 
 #include <kiplatform/ui.h>
 
 
@@ -39,7 +40,11 @@ STD_BITMAP_BUTTON::STD_BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId,
 {
     if( aSize == wxDefaultSize )
     {
-        wxSize defaultSize = wxButton::GetDefaultSize( aParent );
+        #if wxCHECK_VERSION( 3, 1, 3 )
+            wxSize defaultSize = wxButton::GetDefaultSize( aParent );
+        #else 
+            wxSize defaultSize = wxButton::GetDefaultSize();
+        #endif
 
         SetMinSize( wxSize( defaultSize.GetWidth() + 1, defaultSize.GetHeight() + 1 ) );
     }

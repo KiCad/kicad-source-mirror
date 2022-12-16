@@ -30,6 +30,7 @@
 #include <wx/menu.h>
 #include <wx/renderer.h>
 #include <wx/settings.h>
+#include <wx/version.h> 
 #include <kiplatform/ui.h>
 
 SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
@@ -39,7 +40,11 @@ SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& a
 {
     if( aSize == wxDefaultSize )
     {
-        wxSize defaultSize = wxButton::GetDefaultSize( aParent );
+        #if wxCHECK_VERSION( 3, 1, 3 )
+            wxSize defaultSize = wxButton::GetDefaultSize( aParent );
+        #else 
+            wxSize defaultSize = wxButton::GetDefaultSize();
+        #endif
 
         wxSize textSize = GetTextExtent( m_label );
         SetMinSize( wxSize( std::max( textSize.GetWidth(), defaultSize.GetWidth() + 1 ),
