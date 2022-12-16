@@ -146,7 +146,7 @@ public:
             m_items.push_back( aItem );
         }
 
-        const std::list<CN_ITEM*> GetItems() const
+        const std::list<CN_ITEM*>& GetItems() const
         {
             return m_items;
         }

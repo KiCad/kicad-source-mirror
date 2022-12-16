@@ -695,9 +695,9 @@ static int getMinDist( BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aPoint )
 }
 
 
-bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* aPos )
+bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* aPos ) const
 {
-    std::list<CN_ITEM*> items = GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
+    const std::list<CN_ITEM*>& items = GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
 
     // Not in the connectivity system.  This is a bug!
     if( items.empty() )

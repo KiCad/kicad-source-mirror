@@ -229,7 +229,7 @@ public:
 
     void RunOnUnconnectedEdges( std::function<bool( CN_EDGE& )> aFunc );
 
-    bool TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* aPos = nullptr );
+    bool TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* aPos = nullptr ) const;
 
     /**
      * Function ClearLocalRatsnest()
