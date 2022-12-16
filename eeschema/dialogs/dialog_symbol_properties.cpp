@@ -1241,7 +1241,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnUnitChoice( wxCommandEvent& event )
         m_dataModel->SortRows( COL_NUMBER, true );
         m_dataModel->BuildAttrs();
 
-        m_symbol->SetUnit(old_unit );
+        m_symbol->SetUnit( old_unit );
 
         // Restore m_Flag modified by SetUnit()
         m_symbol->ClearFlags();

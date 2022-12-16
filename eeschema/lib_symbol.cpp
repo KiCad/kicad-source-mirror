@@ -685,7 +685,7 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
         }
         else if( item.Type() == LIB_FIELD_T )
         {
-            item.Print( aSettings, aOffset, (void*) NULL, aOpts.transform, aDimmed );
+            item.Print( aSettings, aOffset, nullptr, aOpts.transform, aDimmed );
         }
         else if( item.Type() == LIB_SHAPE_T )
         {
@@ -878,11 +878,11 @@ void LIB_SYMBOL::GetPins( LIB_PINS& aList, int aUnit, int aConvert ) const
 }
 
 
-std::vector<LIB_PIN*> LIB_SYMBOL::GetLibPins() const
+std::vector<LIB_PIN*> LIB_SYMBOL::GetAllLibPins() const
 {
     std::vector<LIB_PIN*> pinList;
 
-    GetPins( pinList );
+    GetPins( pinList, 0, 0 );
     return pinList;
 }
 
@@ -894,12 +894,12 @@ LIB_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aConvert ) 
 
     GetPins( pinList, aUnit, aConvert );
 
-    for( size_t i = 0; i < pinList.size(); i++ )
+    for( LIB_PIN* pin : pinList )
     {
-        wxASSERT( pinList[i]->Type() == LIB_PIN_T );
+        wxASSERT( pin->Type() == LIB_PIN_T );
 
-        if( aNumber == pinList[i]->GetNumber() )
-            return pinList[i];
+        if( aNumber == pin->GetNumber() )
+            return pin;
     }
 
     return nullptr;

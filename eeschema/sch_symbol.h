@@ -518,14 +518,19 @@ public:
     void GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const;
 
     /**
-     * Return a vector with all the pins from the library object.
-     *
-     * @return List of the pins
+     * @return a list of pin pointers for all units / converts.  Used primarily for SPICE where
+     * we want to treat all units together as a single SPICE element.
      */
-    std::vector<LIB_PIN*> GetLibPins() const;
+    std::vector<LIB_PIN*> GetAllLibPins() const;
 
-    size_t GetPinCount() { return GetLibPins().size(); }
+    /**
+     * @return a count of pins for all units / converts.
+     */
+    size_t GetFullPinCount() { return GetAllLibPins().size(); }
 
+    /**
+     * @return the SCH_PIN associated with a particular LIB_PIN.
+     */
     SCH_PIN* GetPin( LIB_PIN* aLibPin ) const;
 
     /**

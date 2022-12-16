@@ -166,6 +166,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
     m_nets.clear();
     m_items.clear();
+    m_referencesAlreadyFound.Clear();
     m_libParts.clear();
 
     wxFileName cacheDir;

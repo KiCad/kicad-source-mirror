@@ -63,9 +63,7 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
 {
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
-    // Note that to get ALL pins, not only of the current part, you need to use
-    // m_symbol.GetRawPins().
-    m_sortedPartPins = m_symbol.GetLibPins();
+    m_sortedPartPins = m_symbol.GetAllLibPins();
 
     std::sort( m_sortedPartPins.begin(), m_sortedPartPins.end(),
                []( const LIB_PIN* lhs, const LIB_PIN* rhs )
@@ -247,9 +245,9 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         try
         {
             if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
-                m_builtinModelsMgr.CreateModel( m_fields, m_symbol.GetPinCount() );
+                m_builtinModelsMgr.CreateModel( m_fields, m_symbol.GetFullPinCount() );
             else
-                m_builtinModelsMgr.CreateModel( type, m_symbol.GetPinCount() );
+                m_builtinModelsMgr.CreateModel( type, m_symbol.GetFullPinCount() );
         }
         catch( const IO_ERROR& e )
         {
@@ -665,9 +663,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
         for( auto& [baseModelName, baseModel] : library()->GetModels() )
         {
             if( baseModelName == modelName )
-                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetPinCount(), m_fields );
+                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetFullPinCount(), m_fields );
             else
-                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetPinCount() );
+                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetFullPinCount() );
         }
     }
     catch( const IO_ERROR& e )

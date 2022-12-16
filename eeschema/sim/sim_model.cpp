@@ -1089,7 +1089,7 @@ bool SIM_MODEL::InferPassiveSimModel( T& aSymbol, bool aResolve,
                                      aValue );
             }
 
-            std::vector<LIB_PIN*> pins = aSymbol.GetLibPins();
+            std::vector<LIB_PIN*> pins = aSymbol.GetAllLibPins();
 
             if( pins.size() == 2 )
             {
@@ -1271,7 +1271,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
             wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
 
-            std::vector<LIB_PIN*> sourcePins = aSymbol.GetLibPins();
+            std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
 
             if( isPassive && pinIndexes.size() == 2 && sourcePins.size() == 2 )
             {
@@ -1321,7 +1321,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         {
             std::vector<T_field> emptyFields;
             SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
-                                                           emptyFields, aSymbol.GetPinCount() );
+                                                           emptyFields, aSymbol.GetFullPinCount() );
 
             spiceParams = wxString( model.model.GetBaseModel()->Serde().GenerateParams() );
         }
@@ -1392,7 +1392,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     {
         // Generate a 1:1 pin map.  We don't necessarily know the SPICE model pinNames, so just
         // use indexes.
-        std::vector<LIB_PIN*> sourcePins = aSymbol.GetLibPins();
+        std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
 
         for( unsigned ii = 0; ii < sourcePins.size(); ++ii )
         {

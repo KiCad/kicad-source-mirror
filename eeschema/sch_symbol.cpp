@@ -37,6 +37,8 @@
 #include <refdes_utils.h>
 #include <wx/log.h>
 #include <string_utils.h>
+
+#include <utility>
 #include "plotters/plotter.h"
 
 
@@ -997,11 +999,13 @@ void SCH_SYMBOL::GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const
 }
 
 
-std::vector<LIB_PIN*> SCH_SYMBOL::GetLibPins() const
+std::vector<LIB_PIN*> SCH_SYMBOL::GetAllLibPins() const
 {
     std::vector<LIB_PIN*> pinList;
 
-    GetLibPins( pinList );
+    if( m_part )
+        m_part->GetPins( pinList, 0, 0 );
+
     return pinList;
 }
 
@@ -1040,7 +1044,7 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 
 void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 {
-    wxCHECK_RET( (aItem != nullptr) && (aItem->Type() == SCH_SYMBOL_T),
+    wxCHECK_RET( aItem != nullptr && aItem->Type() == SCH_SYMBOL_T,
                  wxT( "Cannot swap data with invalid symbol." ) );
 
     SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
@@ -1048,7 +1052,7 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
     std::swap( m_lib_id, symbol->m_lib_id );
 
     LIB_SYMBOL* libSymbol = symbol->m_part.release();
-    symbol->m_part.reset( m_part.release() );
+    symbol->m_part = std::move( m_part );
     symbol->UpdatePins();
     m_part.reset( libSymbol );
     UpdatePins();

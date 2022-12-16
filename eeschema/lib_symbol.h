@@ -409,8 +409,8 @@ public:
      *
      * This is just a pin object specific version of GetNextDrawItem().
      *
-     * @param aItem - Pointer to the previous pin item, or NULL to get the
-     *                first pin in the draw object list.
+     * @param aItem - Pointer to the previous pin item, or NULL to get the first pin in the draw
+     *                object list.
      * @return - The next pin object in the list if found, otherwise NULL.
      */
     LIB_PIN* GetNextPin( LIB_PIN* aItem = nullptr )
@@ -421,36 +421,41 @@ public:
     /**
      * Return a list of pin object pointers from the draw item list.
      *
-     * Note pin objects are owned by the draw list of the symbol.
-     * Deleting any of the objects will leave list in a unstable state
-     * and will likely segfault when the list is destroyed.
+     * Note pin objects are owned by the draw list of the symbol.  Deleting any of the objects
+     * will leave list in a unstable state and will likely segfault when the list is destroyed.
      *
      * @param aList - Pin list to place pin object pointers into.
-     * @param aUnit - Unit number of pin to add to list.  Set to 0 to
-     *                get pins from any symbol unit.
-     * @param aConvert - Convert number of pin to add to list.  Set to 0 to
-     *                   get pins from any convert of symbol.
+     * @param aUnit - Unit number of pins to collect.  Set to 0 to get pins from any symbol unit.
+     * @param aConvert - Convert number of pins to collect.  Set to 0 to get pins from any
+     *                   DeMorgan variant of symbol.
      */
     void GetPins( LIB_PINS& aList, int aUnit = 0, int aConvert = 0 ) const;
 
-    std::vector<LIB_PIN*> GetLibPins() const;
+    /**
+     * Return a list of pin pointers for all units / converts.  Used primarily for SPICE where
+     * we want to treat all unit as a single part.
+     */
+    std::vector<LIB_PIN*> GetAllLibPins() const;
+
+    /**
+     * @return a count of pins for all units / converts.
+     */
+    size_t GetFullPinCount() { return GetAllLibPins().size(); }
 
     /**
      * Return pin object with the requested pin \a aNumber.
      *
      * @param aNumber - Number of the pin to find.
-     * @param aUnit - Unit of the symbol to find.  Set to 0 if a specific
-     *                unit number is not required.
-     * @param aConvert - Alternate body style filter (DeMorgan).  Set to 0 if
-     *                   no alternate body style is required.
+     * @param aUnit - Unit filter.  Set to 0 if a specific unit number is not required.
+     * @param aConvert - DeMorgan variant filter.  Set to 0 if no specific DeMorgan variant is
+     *                   required.
      * @return The pin object if found.  Otherwise NULL.
      */
     LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aConvert = 0 ) const;
 
     /**
-     * Return true if this symbol's pins do not match another symbol's pins. This
-     * is used to detect whether the project cache is out of sync with the
-     * system libs.
+     * Return true if this symbol's pins do not match another symbol's pins. This is used to
+     * detect whether the project cache is out of sync with the system libs.
      *
      * @param aOtherSymbol - The other library symbol to test
      * @param aTestNums - Whether two pins at the same point must have the same number.

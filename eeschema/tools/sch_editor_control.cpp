@@ -874,7 +874,6 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     {
                         LIB_PIN* pin = static_cast<SCH_PIN*>( item )->GetLibPin();
                         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
-                        std::vector<LIB_PIN*> pins = symbol->GetLibPins();
 
                         SIM_LIB_MGR mgr( &m_frame->Prj() );
                         SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol ).model;
