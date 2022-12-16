@@ -1394,6 +1394,12 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         // use indexes.
         std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
 
+        std::sort( sourcePins.begin(), sourcePins.end(),
+                   []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+                   {
+                       return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+                   } );
+
         for( unsigned ii = 0; ii < sourcePins.size(); ++ii )
         {
             if( ii > 0 )
