@@ -26,7 +26,6 @@
 #include <widgets/std_bitmap_button.h>
 #include <wx/button.h>
 #include <wx/dcclient.h>
-#include <wx/dcmemory.h>
 #include <wx/menu.h>
 #include <wx/renderer.h>
 #include <wx/settings.h>
@@ -40,7 +39,7 @@ STD_BITMAP_BUTTON::STD_BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId,
 {
     if( aSize == wxDefaultSize )
     {
-        wxSize defaultSize = wxButton::GetDefaultSize();
+        wxSize defaultSize = wxButton::GetDefaultSize( aParent );
 
         SetMinSize( wxSize( defaultSize.GetWidth() + 1, defaultSize.GetHeight() + 1 ) );
     }

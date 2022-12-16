@@ -39,10 +39,11 @@ SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& a
 {
     if( aSize == wxDefaultSize )
     {
-        wxSize defaultSize = wxButton::GetDefaultSize();
+        wxSize defaultSize = wxButton::GetDefaultSize( aParent );
 
         wxSize textSize = GetTextExtent( m_label );
-        SetMinSize( wxSize( textSize.GetWidth(), defaultSize.GetHeight() + 1 ) );
+        SetMinSize( wxSize( std::max( textSize.GetWidth(), defaultSize.GetWidth() + 1 ),
+                            defaultSize.GetHeight() + 1 ) );
     }
 
     Bind( wxEVT_PAINT, &SPLIT_BUTTON::OnPaint, this );
