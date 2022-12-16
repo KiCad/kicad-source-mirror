@@ -6,7 +6,7 @@ validate_linux_metadata:
   needs: []
   interruptible: false
   # This is the only CI image with the utilities needed for this test
-  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:36
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:37
   # Due to bug https://github.com/hughsie/appstream-glib/issues/381, this doesn't think our description tag
   # is localized even though it actually is.
   allow_failure: true
@@ -31,7 +31,6 @@ validate_linux_metadata:
       -DCMAKE_BUILD_TYPE=Debug
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
       -DKICAD_SCRIPTING_WXPYTHON=ON
-      -DKICAD_USE_OCC=ON
       -DKICAD_SPICE=ON
       -DKICAD_BUILD_I18N=ON
       ../../

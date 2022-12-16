@@ -39,7 +39,7 @@ Coverity:
   tags:
     - coverity
   stage: build
-  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:36
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:37
   only:
     refs:
       - schedules
@@ -59,7 +59,6 @@ Coverity:
       -DCMAKE_BUILD_TYPE=Debug
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
       -DKICAD_SCRIPTING_WXPYTHON=ON
-      -DKICAD_USE_OCC=ON
       -DKICAD_SPICE=ON
     - coverity/bin/cov-build --dir cov-int make -j8
     - *coverity_submit
