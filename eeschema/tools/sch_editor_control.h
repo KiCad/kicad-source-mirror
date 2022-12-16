@@ -41,7 +41,8 @@ public:
     SCH_EDITOR_CONTROL()  :
             EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
             m_probingPcbToSch( false ),
-            m_pickerItem( nullptr )
+            m_pickerItem( nullptr ),
+            m_duplicateIsHoverSelection( false )
     { }
 
     ~SCH_EDITOR_CONTROL() { }
