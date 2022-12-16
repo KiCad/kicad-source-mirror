@@ -187,13 +187,8 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
 #endif
 
-    SetForegroundColour( m_bIsEnable ? wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT )
-                                     : wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-
     if( m_bitmap.IsOk() )
     {
-        wxMemoryDC mdc( m_bitmap );
-
         r1.x = ( size.GetWidth() - m_bitmap.GetWidth() ) / 2;
 
         if( r1.x < 0 )
@@ -201,7 +196,7 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
         r1.y += ( size.GetHeight() - m_bitmap.GetHeight() ) / 2;
 
-        dc.Blit( wxPoint( r1.x, r1.y ), m_bitmap.GetSize(), &mdc, wxPoint( 0, 0 ), wxCOPY, true );
+        dc.DrawBitmap( m_bIsEnable ? m_bitmap : m_bitmap.ConvertToDisabled(), r1.x, r1.y, true );
     }
 }
 
