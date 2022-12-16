@@ -161,8 +161,8 @@ std::string SPICE_GENERATOR::ItemParams() const
 
     for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
     {
-        std::string name = ( param.info.spiceInstanceName == "" ) ?
-            param.info.name : param.info.spiceInstanceName;
+        std::string name = param.info.spiceInstanceName.empty() ? param.info.name
+                                                                : param.info.spiceInstanceName;
         std::string value = param.value->ToSpiceString();
 
         if( value != "" )

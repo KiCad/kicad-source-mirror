@@ -579,7 +579,8 @@ std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const std::
 
 // This specialization is used when no fields are passed.
 template <>
-std::string SIM_MODEL::GetFieldValue( const std::vector<void>* aFields, const std::string& aFieldName )
+std::string SIM_MODEL::GetFieldValue( const std::vector<void>* aFields,
+                                      const std::string& aFieldName )
 {
     return "";
 }
@@ -727,13 +728,27 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetParam( unsigned aParamIndex ) const
 
 const SIM_MODEL::PARAM* SIM_MODEL::FindParam( const std::string& aParamName ) const
 {
+    std::string lowerParamName = boost::to_lower_copy( aParamName );
+
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
     auto it = std::find_if( params.begin(), params.end(),
-                            [aParamName]( const PARAM& param )
+                            [lowerParamName]( const PARAM& param )
                             {
-                                return param.info.name == boost::to_lower_copy( aParamName );
+                                return param.info.name == lowerParamName;
                             } );
+
+    // Also check for model params that had to be escaped due to collisions with instance
+    // params.
+    if( it == params.end() )
+    {
+        it = std::find_if( params.begin(), params.end(),
+                           [lowerParamName]( const PARAM& param )
+                           {
+                               return param.info.name == lowerParamName + "_";
+                           } );
+
+    }
 
     if( it == params.end() )
         return nullptr;
@@ -784,13 +799,27 @@ void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
 
 void SIM_MODEL::SetParamValue( const std::string& aParamName, const SIM_VALUE& aValue )
 {
+    std::string lowerParamName = boost::to_lower_copy( aParamName );
+
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
     auto it = std::find_if( params.begin(), params.end(),
-                            [aParamName]( const PARAM& param )
+                            [lowerParamName]( const PARAM& param )
                             {
-                                return param.info.name == boost::to_lower_copy( aParamName );
+                                return param.info.name == lowerParamName;
                             } );
+
+    // Also check for model params that had to be escaped due to collisions with instance
+    // params.
+    if( it == params.end() )
+    {
+        it = std::find_if( params.begin(), params.end(),
+                           [lowerParamName]( const PARAM& param )
+                           {
+                               return param.info.name == lowerParamName + "_";
+                           } );
+
+    }
 
     if( it == params.end() )
     {

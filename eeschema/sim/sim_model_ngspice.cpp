@@ -95,15 +95,17 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     // First we try to use the name as is. Note that you can't set instance parameters from this
     // function, it's for ".model" cards, not for instantiations.
 
+    std::string lowerParamName = boost::to_lower_copy( paramName );
+
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
     auto paramIt = std::find_if( params.begin(), params.end(),
-                                 [paramName]( const PARAM& param )
+                                 [lowerParamName]( const PARAM& param )
                                  {
                                       return !param.info.isSpiceInstanceParam
                                           && param.info.category != PARAM::CATEGORY::SUPERFLUOUS
-                                          && ( param.info.name == boost::to_lower_copy( paramName )
-                                               || param.info.name == boost::to_lower_copy( paramName ) + "_" );
+                                          && ( param.info.name == lowerParamName
+                                               || param.info.name == lowerParamName + "_" );
                                  } );
 
     if( paramIt != params.end() )
@@ -118,11 +120,11 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     std::vector<PARAM::INFO> ngspiceParams = ModelInfo( getModelType() ).modelParams;
 
     auto ngspiceParamIt = std::find_if( ngspiceParams.begin(), ngspiceParams.end(),
-                                        [paramName]( const PARAM& param )
+                                        [lowerParamName]( const PARAM& param )
                                         {
                                             // Now we search without excluding Spice instance
                                             // parameters and superfluous parameters.
-                                            return param.info.name == boost::to_lower_copy( paramName );
+                                            return param.info.name == lowerParamName;
                                         } );
 
     if( ngspiceParamIt == ngspiceParams.end() )
