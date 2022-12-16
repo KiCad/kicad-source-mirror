@@ -254,7 +254,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
     m_netclassGrid->AppendRows( 1 );
     buildRow( row++, settings->m_DefaultNetClass );
 
-    m_netclassGrid->AppendRows( settings->m_NetClasses.size() );
+    m_netclassGrid->AppendRows( (int) settings->m_NetClasses.size() );
 
     for( const auto& [ name, netclass ] : settings->m_NetClasses )
         buildRow( row++, netclass );

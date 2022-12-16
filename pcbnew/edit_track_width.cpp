@@ -53,7 +53,12 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
         // Get the drill value, regardless it is default or specific
         initial_drill = via->GetDrillValue();
 
-        if( aUseNetclassValue || via->GetViaType() == VIATYPE::MICROVIA )
+        if( via->GetViaType() == VIATYPE::MICROVIA )
+        {
+            new_width = aTrackItem->GetEffectiveNetClass()->GetuViaDiameter();
+            new_drill = aTrackItem->GetEffectiveNetClass()->GetuViaDrill();
+        }
+        else if( aUseNetclassValue )
         {
             new_width = aTrackItem->GetEffectiveNetClass()->GetViaDiameter();
             new_drill = aTrackItem->GetEffectiveNetClass()->GetViaDrill();
