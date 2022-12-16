@@ -77,6 +77,11 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
         m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
 
+    wxSize minSize = m_pageNumberTextCtrl->GetMinSize();
+    int    minWidth = m_pageNumberTextCtrl->GetTextExtent( wxT( "XXX.XXX" ) ).GetWidth();
+
+    m_pageNumberTextCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+
     wxToolTip::Enable( true );
     SetupStandardButtons();
 

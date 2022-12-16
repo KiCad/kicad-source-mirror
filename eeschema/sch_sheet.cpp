@@ -1102,7 +1102,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
     // Make the sheet object a clickable hyperlink (e.g. for PDF plotter)
     std::vector<wxString> properties;
 
-    properties.emplace_back( EDA_TEXT::GotoPageHref( getPageNumber( findSelf() ) ) );
+    properties.emplace_back( EDA_TEXT::GotoPageHref( findSelf().GetPageNumber() ) );
 
     for( const SCH_FIELD& field : GetFields() )
     {
