@@ -709,6 +709,9 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
 
 bool PGM_BASE::SetDefaultLanguage( wxString& aErrMsg )
 {
+    // Suppress error popups from wxLocale
+    wxLogNull doNotLog;
+
     setLanguageId( wxLANGUAGE_DEFAULT );
 
     // dictionary file name without extend (full name is kicad.mo)
