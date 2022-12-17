@@ -27,6 +27,7 @@
 
 #include <trace_helpers.h>
 
+#include <kiplatform/ui.h>
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
 #include <cvpcb_id.h>
@@ -37,14 +38,16 @@ SYMBOLS_LISTBOX::SYMBOLS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
     ITEMS_LISTBOX_BASE( parent, id ), 
     m_warningAttr( std::make_unique<wxListItemAttr>() )
 {
-    m_warningAttr->SetBackgroundColour( *wxYELLOW );
+    m_warningAttr->SetBackgroundColour( KIPLATFORM::UI::IsDarkTheme()
+                                        ? wxColour( 112, 96, 32 )
+                                        : *wxYELLOW );
 }
 
 
 SYMBOLS_LISTBOX::~SYMBOLS_LISTBOX()
 {
 }
-
+;
 
 BEGIN_EVENT_TABLE( SYMBOLS_LISTBOX, ITEMS_LISTBOX_BASE )
     EVT_CHAR( SYMBOLS_LISTBOX::OnChar )
