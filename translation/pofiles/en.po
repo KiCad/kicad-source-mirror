@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-12 08:39-0800\n"
+"POT-Creation-Date: 2022-12-17 11:15-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -7217,8 +7217,18 @@ msgstr "HSpice"
 msgid "Simulation Command"
 msgstr "Simulation Command"
 
+#, c-format
+msgid "No model named '%s' in library."
+msgstr "No model named '%s' in library."
+
 msgid "Failed to read simulation model from fields."
 msgstr "Failed to read simulation model from fields."
+
+msgid "Component:"
+msgstr "Component:"
+
+msgid "Model:"
+msgstr "Model:"
 
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
@@ -7239,15 +7249,8 @@ msgstr "Not Connected"
 msgid "Browse Models"
 msgstr "Browse Models"
 
-#, c-format
-msgid "No model named '%s' in library."
-msgstr "No model named '%s' in library."
-
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
 msgstr "SPICE model from file (*.lib, *.sub or *.ibs)"
-
-msgid "Model:"
-msgstr "Model:"
 
 msgid "Pin:"
 msgstr "Pin:"
@@ -8241,8 +8244,23 @@ msgstr "Warning: duplicate sheet names.\n"
 msgid "Unknown netlist format.\n"
 msgstr "Unknown netlist format.\n"
 
+#, c-format
+msgid "Plotting symbol '%s' unit %d to '%s'\n"
+msgstr "Plotting symbol '%s' unit %d to '%s'\n"
+
+#, c-format
+msgid "Plotting symbol '%s' to '%s'\n"
+msgstr "Plotting symbol '%s' to '%s'\n"
+
+#, c-format
+msgid "Unable to open destination '%s'"
+msgstr "Unable to open destination '%s'"
+
 msgid "Unable to load library\n"
 msgstr "Unable to load library\n"
+
+msgid "There is no symbol selected to save."
+msgstr "There is no symbol selected to save."
 
 msgid "Output path must not conflict with existing path\n"
 msgstr "Output path must not conflict with existing path\n"
@@ -8255,9 +8273,6 @@ msgstr "Unable to save library\n"
 
 msgid "Symbol library was not updated\n"
 msgstr "Symbol library was not updated\n"
-
-msgid "Multiple Layers"
-msgstr "Multiple Layers"
 
 msgid "Input Pin"
 msgstr "Input Pin"
@@ -11406,9 +11421,6 @@ msgstr "Symbol library file '%s' is empty."
 msgid "Symbol %s already exists in library '%s'."
 msgstr "Symbol %s already exists in library '%s'."
 
-msgid "There is no symbol selected to save."
-msgstr "There is no symbol selected to save."
-
 msgid "Export Symbol"
 msgstr "Export Symbol"
 
@@ -12273,11 +12285,14 @@ msgstr "Scripting Console"
 msgid "Show the Python scripting console"
 msgstr "Show the Python scripting console"
 
-msgid "Enter Sheet"
-msgstr "Enter Sheet"
+msgid "Change Sheet"
+msgstr "Change Sheet"
 
 msgid "Change to provided sheet's contents in the schematic editor"
 msgstr "Change to provided sheet's contents in the schematic editor"
+
+msgid "Enter Sheet"
+msgstr "Enter Sheet"
 
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "Display the selected sheet's contents in the schematic editor"
@@ -13699,6 +13714,9 @@ msgstr ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
 
+msgid "No drawing sheet"
+msgstr "No drawing sheet"
+
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
@@ -13709,11 +13727,14 @@ msgstr ""
 msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Schematic file does not exist or is not accessible\n"
 
-msgid "No drawing sheet"
-msgstr "No drawing sheet"
-
 msgid "Avoid setting a background color (regardless of theme)"
 msgstr "Avoid setting a background color (regardless of theme)"
+
+msgid "Specific symbol to export within the library"
+msgstr "Specific symbol to export within the library"
+
+msgid "Footprint library does not exist or is not accessible\n"
+msgstr "Footprint library does not exist or is not accessible\n"
 
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr "Forces the footprint library to be resaved regardless of versioning"
@@ -13721,11 +13742,11 @@ msgstr "Forces the footprint library to be resaved regardless of versioning"
 msgid "Footprint path does not exist or is not accessible\n"
 msgstr "Footprint path does not exist or is not accessible\n"
 
-msgid "Forces the symbol library to be resaved regardless of versioning"
-msgstr "Forces the symbol library to be resaved regardless of versioning"
-
 msgid "Symbol file does not exist or is not accessible\n"
 msgstr "Symbol file does not exist or is not accessible\n"
+
+msgid "Forces the symbol library to be resaved regardless of versioning"
+msgstr "Forces the symbol library to be resaved regardless of versioning"
 
 msgid "<h1>Template Selector</h1>"
 msgstr "<h1>Template Selector</h1>"
@@ -18954,9 +18975,6 @@ msgstr "Generate Drill File"
 msgid "Generate Map File"
 msgstr "Generate Map File"
 
-msgid "Cannot make path relative (target volume different from file volume)!"
-msgstr "Cannot make path relative (target volume different from file volume)!"
-
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
 msgstr "Could not write drill and/or map files to folder '%s'."
@@ -19360,6 +19378,64 @@ msgstr "Group members:"
 msgid "Group Properties"
 msgstr "Group Properties"
 
+msgid "Load and Test Netlist"
+msgstr "Load and Test Netlist"
+
+msgid "Select Netlist"
+msgstr "Select Netlist"
+
+msgid "Please choose a valid netlist file."
+msgstr "Please choose a valid netlist file."
+
+msgid "The netlist file does not exist."
+msgstr "The netlist file does not exist."
+
+msgid "Changes Applied to PCB"
+msgstr "Changes Applied to PCB"
+
+#, c-format
+msgid "Reading netlist file '%s'.\n"
+msgstr "Reading netlist file '%s'.\n"
+
+msgid "Using reference designators to match symbols and footprints.\n"
+msgstr "Using reference designators to match symbols and footprints.\n"
+
+msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
+msgstr "Using tstamps (unique IDs) to match symbols and footprints.\n"
+
+msgid "Netlist file:"
+msgstr "Netlist file:"
+
+msgid "Link footprints using component tstamps (unique ids)"
+msgstr "Link footprints using component tstamps (unique ids)"
+
+msgid "Link footprints using reference designators"
+msgstr "Link footprints using reference designators"
+
+msgid "Link Method"
+msgstr "Link Method"
+
+msgid ""
+"Select whether to update footprint references to match their currently-"
+"assigned symbols, or to re-assign footprints to symbols which match their "
+"current references."
+msgstr ""
+"Select whether to update footprint references to match their currently-"
+"assigned symbols, or to re-assign footprints to symbols which match their "
+"current references."
+
+msgid "Replace footprints with those specified in netlist"
+msgstr "Replace footprints with those specified in netlist"
+
+msgid "Delete footprints with no components in netlist"
+msgstr "Delete footprints with no components in netlist"
+
+msgid "Delete tracks shorting multiple nets"
+msgstr "Delete tracks shorting multiple nets"
+
+msgid "Import Netlist"
+msgstr "Import Netlist"
+
 msgid "Deselect All"
 msgstr "Deselect All"
 
@@ -19559,64 +19635,6 @@ msgstr "Create Report…"
 
 msgid "Net Inspector"
 msgstr "Net Inspector"
-
-msgid "Load and Test Netlist"
-msgstr "Load and Test Netlist"
-
-msgid "Select Netlist"
-msgstr "Select Netlist"
-
-msgid "Please choose a valid netlist file."
-msgstr "Please choose a valid netlist file."
-
-msgid "The netlist file does not exist."
-msgstr "The netlist file does not exist."
-
-msgid "Changes Applied to PCB"
-msgstr "Changes Applied to PCB"
-
-#, c-format
-msgid "Reading netlist file '%s'.\n"
-msgstr "Reading netlist file '%s'.\n"
-
-msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "Using reference designators to match symbols and footprints.\n"
-
-msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr "Using tstamps (unique IDs) to match symbols and footprints.\n"
-
-msgid "Netlist file:"
-msgstr "Netlist file:"
-
-msgid "Link footprints using component tstamps (unique ids)"
-msgstr "Link footprints using component tstamps (unique ids)"
-
-msgid "Link footprints using reference designators"
-msgstr "Link footprints using reference designators"
-
-msgid "Link Method"
-msgstr "Link Method"
-
-msgid ""
-"Select whether to update footprint references to match their currently-"
-"assigned symbols, or to re-assign footprints to symbols which match their "
-"current references."
-msgstr ""
-"Select whether to update footprint references to match their currently-"
-"assigned symbols, or to re-assign footprints to symbols which match their "
-"current references."
-
-msgid "Replace footprints with those specified in netlist"
-msgstr "Replace footprints with those specified in netlist"
-
-msgid "Delete footprints with no components in netlist"
-msgstr "Delete footprints with no components in netlist"
-
-msgid "Delete tracks shorting multiple nets"
-msgstr "Delete tracks shorting multiple nets"
-
-msgid "Import Netlist"
-msgstr "Import Netlist"
 
 msgid "Convert to Non Copper Zone"
 msgstr "Convert to Non Copper Zone"
@@ -25065,11 +25083,24 @@ msgstr "Successfully created svg file"
 msgid "Error creating svg file"
 msgstr "Error creating svg file"
 
+msgid "Loading footprint library\n"
+msgstr "Loading footprint library\n"
+
 msgid "Saving footprint library\n"
 msgstr "Saving footprint library\n"
 
 msgid "Footprint library was not updated\n"
 msgstr "Footprint library was not updated\n"
+
+msgid "The given footprint could not be found to export."
+msgstr "The given footprint could not be found to export."
+
+#, c-format
+msgid "Plotting footprint '%s' to '%s'\n"
+msgstr "Plotting footprint '%s' to '%s'\n"
+
+msgid "Multiple Layers"
+msgstr "Multiple Layers"
 
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -29223,6 +29254,9 @@ msgstr "Change property"
 msgid "Textbox"
 msgstr "Textbox"
 
+msgid "No Net"
+msgstr "No Net"
+
 msgid "Cutout"
 msgstr "Cutout"
 
@@ -29437,6 +29471,11 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid ""
+#~ "Cannot make path relative (target volume different from file volume)!"
+#~ msgstr ""
+#~ "Cannot make path relative (target volume different from file volume)!"
 
 #~ msgid ""
 #~ "If checked, launching a project will also launch tools such as eeschema "
@@ -38494,9 +38533,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Validate"
 #~ msgstr "Validate"
-
-#~ msgid "Component:"
-#~ msgstr "Component:"
 
 #~ msgid "Show when creating tracks"
 #~ msgstr "Show when creating tracks"

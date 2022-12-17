@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-16 19:45+0100\n"
+"POT-Creation-Date: 2022-12-17 11:15-0800\n"
 "PO-Revision-Date: 2022-12-16 19:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -209,7 +209,7 @@ msgstr "Exporter la Vue en Cours en PNG..."
 msgid "Export Current View as JPEG..."
 msgstr "Exporter la Vue en Cours en JPEG..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1073
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1084
 #: common/hotkey_store.cpp:76 common/tool/actions.cpp:590
 #: pcbnew/footprint_viewer_frame.cpp:1133 pcbnew/pcb_base_frame.cpp:691
 msgid "3D Viewer"
@@ -358,7 +358,7 @@ msgid "3D Image File Name"
 msgstr "Nom du fichier Image 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:794
-#: common/eda_base_frame.cpp:1201 common/eda_base_frame.cpp:1205
+#: common/eda_base_frame.cpp:1212 common/eda_base_frame.cpp:1216
 #: pcbnew/plugins/altium/altium_pcb.cpp:1669
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
@@ -1859,7 +1859,7 @@ msgid "&Save"
 msgstr "&Sauver"
 
 #: common/dialog_shim.cpp:672 common/dialog_shim.cpp:673
-#: common/eda_base_frame.cpp:467
+#: common/eda_base_frame.cpp:478
 msgid "&Help"
 msgstr "Ai&de"
 
@@ -3803,7 +3803,7 @@ msgstr "Style de Ligne"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:449
+#: eeschema/dialogs/dialog_sim_model.cpp:457
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:536 eeschema/lib_text.cpp:400
@@ -4058,104 +4058,104 @@ msgstr ""
 msgid "Invalid floating point number"
 msgstr "Nombre flottant non valide"
 
-#: common/eda_base_frame.cpp:464
+#: common/eda_base_frame.cpp:475
 msgid "&About KiCad"
 msgstr "&Au Sujet de KiCad"
 
-#: common/eda_base_frame.cpp:942
+#: common/eda_base_frame.cpp:953
 #, c-format
 msgid "File '%s' was not found."
 msgstr "Le fichier '%s' n'a pas été trouvé."
 
-#: common/eda_base_frame.cpp:993
+#: common/eda_base_frame.cpp:1004
 msgid "Preferences"
 msgstr "Préférences"
 
-#: common/eda_base_frame.cpp:1004 common/hotkey_store.cpp:71
+#: common/eda_base_frame.cpp:1015 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
 msgstr "Commun"
 
-#: common/eda_base_frame.cpp:1005
+#: common/eda_base_frame.cpp:1016
 msgid "Mouse and Touchpad"
 msgstr "Souris et Pavé Tactile"
 
-#: common/eda_base_frame.cpp:1006
+#: common/eda_base_frame.cpp:1017
 msgid "Hotkeys"
 msgstr "Raccourcis"
 
-#: common/eda_base_frame.cpp:1009
+#: common/eda_base_frame.cpp:1020
 msgid "Data Collection"
 msgstr "Données Collectées"
 
-#: common/eda_base_frame.cpp:1025 common/tool/actions.cpp:600
+#: common/eda_base_frame.cpp:1036 common/tool/actions.cpp:600
 #: eeschema/symbol_editor/symbol_editor.cpp:86
 #: kicad/tools/kicad_manager_actions.cpp:86
 msgid "Symbol Editor"
 msgstr "Éditeur de Symbole"
 
-#: common/eda_base_frame.cpp:1026 common/eda_base_frame.cpp:1034
-#: common/eda_base_frame.cpp:1055 common/eda_base_frame.cpp:1064
-#: common/eda_base_frame.cpp:1093 common/eda_base_frame.cpp:1110
+#: common/eda_base_frame.cpp:1037 common/eda_base_frame.cpp:1045
+#: common/eda_base_frame.cpp:1066 common/eda_base_frame.cpp:1075
+#: common/eda_base_frame.cpp:1104 common/eda_base_frame.cpp:1121
 msgid "Display Options"
 msgstr "Options d'Affichage"
 
-#: common/eda_base_frame.cpp:1027 common/eda_base_frame.cpp:1035
-#: common/eda_base_frame.cpp:1056 common/eda_base_frame.cpp:1065
+#: common/eda_base_frame.cpp:1038 common/eda_base_frame.cpp:1046
+#: common/eda_base_frame.cpp:1067 common/eda_base_frame.cpp:1076
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
 #: pcbnew/tools/zone_filler_tool.cpp:271
 msgid "Editing Options"
 msgstr "Options d'Edition"
 
-#: common/eda_base_frame.cpp:1028 common/eda_base_frame.cpp:1037
-#: common/eda_base_frame.cpp:1057 common/eda_base_frame.cpp:1066
-#: common/eda_base_frame.cpp:1077 common/eda_base_frame.cpp:1094
-#: common/eda_base_frame.cpp:1111
+#: common/eda_base_frame.cpp:1039 common/eda_base_frame.cpp:1048
+#: common/eda_base_frame.cpp:1068 common/eda_base_frame.cpp:1077
+#: common/eda_base_frame.cpp:1088 common/eda_base_frame.cpp:1105
+#: common/eda_base_frame.cpp:1122
 msgid "Colors"
 msgstr "Couleurs"
 
-#: common/eda_base_frame.cpp:1033 common/hotkey_store.cpp:73
+#: common/eda_base_frame.cpp:1044 common/hotkey_store.cpp:73
 #: eeschema/menubar.cpp:139 eeschema/sch_edit_frame.cpp:1422
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "Editeur de Schématique"
 
-#: common/eda_base_frame.cpp:1036
+#: common/eda_base_frame.cpp:1047
 msgid "Annotation Options"
 msgstr "Options de numérotation"
 
-#: common/eda_base_frame.cpp:1039
+#: common/eda_base_frame.cpp:1050
 #: eeschema/dialogs/dialog_schematic_setup.cpp:77
 msgid "Field Name Templates"
 msgstr "Modèles de Nom de Champs"
 
-#: common/eda_base_frame.cpp:1054 common/tool/actions.cpp:610
+#: common/eda_base_frame.cpp:1065 common/tool/actions.cpp:610
 #: kicad/tools/kicad_manager_actions.cpp:98 pcbnew/footprint_edit_frame.cpp:912
 #: pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Éditeur d'Empreintes"
 
-#: common/eda_base_frame.cpp:1058
+#: common/eda_base_frame.cpp:1069
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:465
 msgid "Default Values"
 msgstr "Valeurs par Défaut"
 
-#: common/eda_base_frame.cpp:1063 common/hotkey_store.cpp:74
+#: common/eda_base_frame.cpp:1074 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:92 pcbnew/menubar_pcb_editor.cpp:185
 #: pcbnew/pcb_edit_frame.cpp:182 pcbnew/pcb_edit_frame.cpp:1539
 #: pcbnew/tools/zone_filler_tool.cpp:272
 msgid "PCB Editor"
 msgstr "Éditeur de PCB KiCad"
 
-#: common/eda_base_frame.cpp:1067
+#: common/eda_base_frame.cpp:1078
 msgid "Action Plugins"
 msgstr "Plugins d'Action"
 
-#: common/eda_base_frame.cpp:1068
+#: common/eda_base_frame.cpp:1079
 msgid "Origins & Axes"
 msgstr "Origines et Axes"
 
-#: common/eda_base_frame.cpp:1074
+#: common/eda_base_frame.cpp:1085
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:277
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:123
@@ -4169,41 +4169,41 @@ msgstr "Origines et Axes"
 msgid "General"
 msgstr "Général"
 
-#: common/eda_base_frame.cpp:1075
+#: common/eda_base_frame.cpp:1086
 msgid "Realtime Renderer"
 msgstr "Rendu temps réel"
 
-#: common/eda_base_frame.cpp:1076
+#: common/eda_base_frame.cpp:1087
 msgid "Raytracing Renderer"
 msgstr "Rendu Raytracing"
 
-#: common/eda_base_frame.cpp:1092 common/hotkey_store.cpp:77
+#: common/eda_base_frame.cpp:1103 common/hotkey_store.cpp:77
 #: gerbview/gerbview_frame.cpp:611 gerbview/gerbview_frame.cpp:635
 #: gerbview/menubar.cpp:160 kicad/tools/kicad_manager_actions.cpp:104
 msgid "Gerber Viewer"
 msgstr "Visionneuse de fichiers Gerber"
 
-#: common/eda_base_frame.cpp:1095
+#: common/eda_base_frame.cpp:1106
 msgid "Excellon Options"
 msgstr "Options Excellon"
 
-#: common/eda_base_frame.cpp:1109 common/hotkey_store.cpp:75
+#: common/eda_base_frame.cpp:1120 common/hotkey_store.cpp:75
 #: kicad/tools/kicad_manager_actions.cpp:121 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:550
 msgid "Drawing Sheet Editor"
 msgstr "Editeur de Feuille de dessin"
 
-#: common/eda_base_frame.cpp:1113 kicad/pcm/dialogs/dialog_pcm.cpp:204
+#: common/eda_base_frame.cpp:1124 kicad/pcm/dialogs/dialog_pcm.cpp:204
 #: kicad/tools/kicad_manager_actions.cpp:127
 msgid "Plugin and Content Manager"
 msgstr "Gestionnaire de Plugin et de Contenu"
 
-#: common/eda_base_frame.cpp:1197
+#: common/eda_base_frame.cpp:1208
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Autorisations insuffisantes pour le dossier '%s'."
 
-#: common/eda_base_frame.cpp:1235
+#: common/eda_base_frame.cpp:1246
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -4220,7 +4220,7 @@ msgstr ""
 "\n"
 "Voulez-vous ouvrir le fichier sauvegardé automatiquement à la place ?"
 
-#: common/eda_base_frame.cpp:1252
+#: common/eda_base_frame.cpp:1263
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Le fichier de sauvegarde automatique n'a pas pu être renommé comme le "
@@ -5474,7 +5474,7 @@ msgstr "Désactiver la sélection"
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:448 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:456 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1233
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -5585,7 +5585,7 @@ msgstr "La variable d'environnement HOME est vide.  Impossible de continuer."
 msgid "This language is not supported by the operating system."
 msgstr "Ce langage n’est pas pris en charge par le système d’exploitation."
 
-#: common/pgm_base.cpp:702 common/pgm_base.cpp:740
+#: common/pgm_base.cpp:702 common/pgm_base.cpp:743
 msgid "The KiCad language file for this language is not installed."
 msgstr "Le fichier dictionnaire KiCad pour cette langue n’est pas installé."
 
@@ -9762,7 +9762,7 @@ msgid "References must start with a letter."
 msgstr "Les références doivent commencer par une lettre."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:258
-#: eeschema/dialogs/dialog_sheet_properties.cpp:200
+#: eeschema/dialogs/dialog_sheet_properties.cpp:205
 #: eeschema/dialogs/dialog_symbol_properties.cpp:645
 msgid "Fields must have a name."
 msgstr "Les champs doivent avoir un nom."
@@ -9793,7 +9793,7 @@ msgid "The name '%s' is already in use."
 msgstr "Le nom '%s' est déjà utilisé."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:525
-#: eeschema/dialogs/dialog_sheet_properties.cpp:737
+#: eeschema/dialogs/dialog_sheet_properties.cpp:742
 #: eeschema/dialogs/dialog_symbol_properties.cpp:937
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -10766,23 +10766,23 @@ msgstr "Propriétés %s"
 msgid "Sheet Pin Properties"
 msgstr "Propriétés de la Pin de Hiérarchie"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:255
+#: eeschema/dialogs/dialog_sheet_properties.cpp:260
 msgid "A sheet must have a valid file name."
 msgstr "Une feuille doit avoir un nom de fichier valide."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:265
+#: eeschema/dialogs/dialog_sheet_properties.cpp:270
 msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "Le fichier relatif à la feuille doit avoir une extension '.kicad_sch'."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:299
+#: eeschema/dialogs/dialog_sheet_properties.cpp:304
 msgid "Use relative path for sheet file?"
 msgstr "Utiliser un chemin relatif pour le fichier de feuille?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:300
+#: eeschema/dialogs/dialog_sheet_properties.cpp:305
 msgid "Sheet File Path"
 msgstr "Chemin du Fichier de Feuille"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:303
+#: eeschema/dialogs/dialog_sheet_properties.cpp:308
 msgid ""
 "Using relative hierarchical sheet file name paths improves schematic "
 "portability across systems and platforms.  Using absolute paths can result "
@@ -10792,25 +10792,25 @@ msgstr ""
 "améliore la portabilité des schéma entre les systèmes et les plates-formes.  "
 "L’utilisation de chemins absolus peut entraîner des problèmes de portabilité."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:307
+#: eeschema/dialogs/dialog_sheet_properties.cpp:312
 msgid "Use Relative Path"
 msgstr "Utiliser un Chemin Relatif"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:308
+#: eeschema/dialogs/dialog_sheet_properties.cpp:313
 msgid "Use Absolute Path"
 msgstr "Utiliser un Chemin Absolu"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:339
+#: eeschema/dialogs/dialog_sheet_properties.cpp:344
 msgid "Untitled Sheet"
 msgstr "Feuille sans Nom"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:365
+#: eeschema/dialogs/dialog_sheet_properties.cpp:370
 msgid "Note: item colors are overridden in the current color theme."
 msgstr ""
 "Remarque : les couleurs des éléments sont forcées dans le thème de couleur "
 "actuel."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:367
+#: eeschema/dialogs/dialog_sheet_properties.cpp:372
 #, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
@@ -10819,16 +10819,16 @@ msgstr ""
 "Pour voir les couleurs d’objets individuels décocher '%s'\n"
 "dans Préférences > Eeschema > Couleurs."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:409
+#: eeschema/dialogs/dialog_sheet_properties.cpp:414
 #, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
 msgstr "Le fichier '%s' ne semble pas être un fichier schématique valide."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:411
+#: eeschema/dialogs/dialog_sheet_properties.cpp:416
 msgid "Invalid Schematic File"
 msgstr "Fichier Schématique Invalide"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:435
+#: eeschema/dialogs/dialog_sheet_properties.cpp:440
 #, c-format
 msgid ""
 "Cannot normalize new sheet schematic file path:\n"
@@ -10842,47 +10842,47 @@ msgstr ""
 "par rapport au chemin de fichier schématique de feuille parente :\n"
 "'%s'."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:477
+#: eeschema/dialogs/dialog_sheet_properties.cpp:482
 #: kicad/tools/kicad_manager_control.cpp:659
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' existe déjà."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:480
+#: eeschema/dialogs/dialog_sheet_properties.cpp:485
 #, c-format
 msgid "Link '%s' to this file?"
 msgstr "Lier '%s' à ce fichier?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:520
+#: eeschema/dialogs/dialog_sheet_properties.cpp:525
 #, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
 msgstr "Changer le lien %s de '%s' en '%s'?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:525
-#: eeschema/dialogs/dialog_sheet_properties.cpp:542
+#: eeschema/dialogs/dialog_sheet_properties.cpp:530
+#: eeschema/dialogs/dialog_sheet_properties.cpp:547
 msgid "This action cannot be undone."
 msgstr "Cette action est irréversible."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:537
+#: eeschema/dialogs/dialog_sheet_properties.cpp:542
 #, c-format
 msgid "Create new file '%s' with contents of '%s'?"
 msgstr "Créer un nouveau fichier '%s' avec le contenu de '%s'?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:575
+#: eeschema/dialogs/dialog_sheet_properties.cpp:580
 #, c-format
 msgid "Error occurred saving schematic file '%s'."
 msgstr "Une erreur s'est produite en sauvant le fichier schématique '%s'."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:579
+#: eeschema/dialogs/dialog_sheet_properties.cpp:584
 #, c-format
 msgid "Failed to save schematic '%s'"
 msgstr "Impossible de sauver le schéma '%s'"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:671
+#: eeschema/dialogs/dialog_sheet_properties.cpp:676
 msgid "A sheet must have a name."
 msgstr "Une feuille doit avoir un nom."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:679
+#: eeschema/dialogs/dialog_sheet_properties.cpp:684
 msgid "A sheet must have a file specified."
 msgstr "Une feuille doit avoir un fichier spécifié."
 
@@ -11227,35 +11227,35 @@ msgstr "Commande de Simulation"
 msgid "No model named '%s' in library."
 msgstr "Aucun modèle nommé '%s' dans la librairie."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:254
+#: eeschema/dialogs/dialog_sim_model.cpp:262
 msgid "Failed to read simulation model from fields."
 msgstr "Échec de la lecture du modèle de simulation à partir des champs."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:366
+#: eeschema/dialogs/dialog_sim_model.cpp:374
 msgid "Component:"
 msgstr "Composant:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:366
+#: eeschema/dialogs/dialog_sim_model.cpp:374
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr "Modèle:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:422
+#: eeschema/dialogs/dialog_sim_model.cpp:430
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "Sauver le paramètre '%s (%s)' dans le champ Valeur"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:430
+#: eeschema/dialogs/dialog_sim_model.cpp:438
 msgid "Save primary parameter in Value field"
 msgstr "Sauver le paramètre primaire dans le champ Valeur"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:447
+#: eeschema/dialogs/dialog_sim_model.cpp:455
 #: pcbnew/footprint_wizard_frame.cpp:322
 msgid "Parameter"
 msgstr "Paramètre"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:450 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:458 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1147 eeschema/sch_label.cpp:880
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1247
@@ -11269,12 +11269,12 @@ msgstr "Paramètre"
 msgid "Type"
 msgstr "Type"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:564
-#: eeschema/dialogs/dialog_sim_model.cpp:607
+#: eeschema/dialogs/dialog_sim_model.cpp:572
+#: eeschema/dialogs/dialog_sim_model.cpp:615
 msgid "Not Connected"
 msgstr "Non Connecté"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1019
+#: eeschema/dialogs/dialog_sim_model.cpp:1035
 msgid "Browse Models"
 msgstr "Examiner les Modèles"
 
@@ -13907,6 +13907,7 @@ msgstr ""
 "devrez lancer Kicad manager et créez un projet."
 
 #: eeschema/sch_edit_frame.cpp:1085 eeschema/sch_plotter.cpp:1026
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -15928,24 +15929,24 @@ msgstr ""
 "Le débit binaire pourrait être trop élevé pour les fronts montants/"
 "descendants"
 
-#: eeschema/sim/sim_lib_mgr.cpp:72
+#: eeschema/sim/sim_lib_mgr.cpp:73
 #, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
 msgstr ""
 "La librairie du modèle de simulation n'a pas été trouvée en '%s' ou '%s'"
 
-#: eeschema/sim/sim_lib_mgr.cpp:268
+#: eeschema/sim/sim_lib_mgr.cpp:283
 #, c-format
 msgid "Error loading simulation model library '%s': %s"
 msgstr ""
 "Erreur de chargement de la librairie de modèles de simulation '%s' : %s"
 
-#: eeschema/sim/sim_lib_mgr.cpp:275
+#: eeschema/sim/sim_lib_mgr.cpp:290
 #, c-format
 msgid "Error loading simulation model: no '%s' field"
 msgstr "Erreur de chargement du modèle de simulation : pas de champ '%s'"
 
-#: eeschema/sim/sim_lib_mgr.cpp:283
+#: eeschema/sim/sim_lib_mgr.cpp:298
 #, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
@@ -15954,21 +15955,21 @@ msgstr ""
 "Erreur de chargement du modèle de simulation : Impossible de trouver le "
 "modèle de base '%s' dans la librairie '%s'"
 
-#: eeschema/sim/sim_model.cpp:710
+#: eeschema/sim/sim_model.cpp:700
 #, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
 msgstr ""
 "Impossible de trouver une pin nommée '%s' dans le modèle de simulation de "
 "type '%s'"
 
-#: eeschema/sim/sim_model.cpp:826 eeschema/sim/sim_model.cpp:843
+#: eeschema/sim/sim_model.cpp:816 eeschema/sim/sim_model.cpp:833
 #, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
 msgstr ""
 "Impossible de trouver un paramètre nommé '%s' dans le modèle de simulation "
 "de type '%s'"
 
-#: eeschema/sim/sim_model.h:470
+#: eeschema/sim/sim_model.h:467
 #, c-format
 msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
@@ -23799,6 +23800,7 @@ msgid "Tessellating copper zones..."
 msgstr "Découpage des zone de cuivre..."
 
 #: pcbnew/board.cpp:913
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "PCB"
 
@@ -24345,17 +24347,17 @@ msgid "Updating nets..."
 msgstr "Mise à jour nets..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:317
-#: pcbnew/convert_shape_list_to_polygon.cpp:476
-#: pcbnew/convert_shape_list_to_polygon.cpp:592
-#: pcbnew/convert_shape_list_to_polygon.cpp:606
+#: pcbnew/convert_shape_list_to_polygon.cpp:455
+#: pcbnew/convert_shape_list_to_polygon.cpp:571
+#: pcbnew/convert_shape_list_to_polygon.cpp:585
 msgid "(self-intersecting)"
 msgstr "(auto intersectant)"
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:483
+#: pcbnew/convert_shape_list_to_polygon.cpp:462
 msgid "(not a closed shape)"
 msgstr "(n'est pas une forme fermée)"
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:538
+#: pcbnew/convert_shape_list_to_polygon.cpp:517
 msgid "(multiple board outlines not supported)"
 msgstr "(multiples contours du circuit non supportés)"
 
@@ -29220,6 +29222,7 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -33435,28 +33438,28 @@ msgstr "<non contraint>"
 msgid "Checking length constraints..."
 msgstr "Vérification des contraintes de longueur..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:114
+#: pcbnew/drc/drc_test_provider_misc.cpp:113
 msgid "(no edges found on Edge.Cuts layer)"
 msgstr "(Aucun contour trouvé sur couche Contour)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:200
+#: pcbnew/drc/drc_test_provider_misc.cpp:199
 #, c-format
 msgid "(layer %s)"
 msgstr "(couche %s)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:342
+#: pcbnew/drc/drc_test_provider_misc.cpp:341
 msgid "Checking board outline..."
 msgstr "Vérification du contour du PCB..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:350
+#: pcbnew/drc/drc_test_provider_misc.cpp:349
 msgid "Checking disabled layers..."
 msgstr "Vérifications couches inactives..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:358
+#: pcbnew/drc/drc_test_provider_misc.cpp:357
 msgid "Checking text variables..."
 msgstr "Vérification variables texte..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:366
+#: pcbnew/drc/drc_test_provider_misc.cpp:365
 msgid "Checking assertions..."
 msgstr "Vérification des assertions..."
 
@@ -41420,11 +41423,6 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -41439,10 +41437,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -41456,10 +41453,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -41469,9 +41465,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -41486,10 +41482,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -41501,11 +41493,6 @@ msgstr "PCB Calculator"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -41519,9 +41506,22 @@ msgstr "Éditeur de circuit imprimé"
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+#, fuzzy
+msgid "Circuit board"
+msgstr "Imprimer PCB"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -41571,6 +41571,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid ""
 #~ "Cannot make path relative (target volume different from file volume)!"
@@ -51376,9 +51382,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Settings for sheet size and frame references"
 #~ msgstr "Sélection de la dimension de la page et des textes du cartouche"
-
-#~ msgid "Print board"
-#~ msgstr "Imprimer PCB"
 
 #~ msgid "P&lot..."
 #~ msgstr "&Tracer..."
