@@ -812,16 +812,14 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
 #if wxCHECK_VERSION( 3, 1, 7 )
         FILEDLG_HOOK_SAVE_PROJECT newProjectHook;
-        bool                     checkHook = false;
 #endif
 
+        // Add a "Create a project" checkbox in standalone mode and one isn't loaded
         if( Kiface().IsSingle() || aSaveAs )
         {
 #if wxCHECK_VERSION( 3, 1, 7 )
             dlg.SetCustomizeHook( newProjectHook );
-            checkHook = true;
 #else
-            // Add a "Create a project" checkbox in standalone mode and one isn't loaded
             dlg.SetExtraControlCreator( &LEGACYFILEDLG_SAVE_PROJECT::Create );
 #endif
         }
@@ -847,7 +845,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         }
 
 #if wxCHECK_VERSION( 3, 1, 7 )
-        if( checkHook )
+        if( newProjectHook.IsAttachedToDialog() )
             createNewProject = newProjectHook.GetCreateNewProject();
 #else
         if( wxWindow* ec = dlg.GetExtraControl() )
