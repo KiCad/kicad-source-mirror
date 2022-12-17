@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
-"PO-Revision-Date: 2022-12-17 19:13+0000\n"
+"PO-Revision-Date: 2022-12-20 15:47+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -12686,19 +12686,19 @@ msgid "Unknown netlist format.\n"
 msgstr "Formato de netlist desconocido.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Cambiar el símbolo %s de '%s' a '%s'"
+msgstr "Trazando el símbolo '%s' unidad %d a '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Cambiar el símbolo %s de '%s' a '%s'"
+msgstr "Trazando el símbolo '%s' a '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "No puede interpretarse '%s' en '%s'"
+msgstr "No se puede abrir el destino '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:435
 #: eeschema/eeschema_jobs_handler.cpp:495 pcbnew/pcbnew_jobs_handler.cpp:599
@@ -19857,11 +19857,11 @@ msgstr ""
 
 #: kicad/cli/command_export_pcb_drill.cpp:56
 msgid "Valid options are: absolute,plot"
-msgstr ""
+msgstr "Las opciones válidas son: absoluto,trazar"
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
 msgid "Output units, valid options:in,mm"
-msgstr ""
+msgstr "Unidades de salida, opciones válidas:in,mm"
 
 #: kicad/cli/command_export_pcb_drill.cpp:63
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:52
@@ -19880,7 +19880,7 @@ msgstr "Taladros con y sin plateado en un único archivo"
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
 msgid "Generate map / summary of drill hits"
-msgstr ""
+msgstr "Generar mapa/resumen de impactos de perforación"
 
 #: kicad/cli/command_export_pcb_drill.cpp:84
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -19900,7 +19900,6 @@ msgid "Output must be a directory\n"
 msgstr "La salida debe ser un directorio\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
-#, fuzzy
 msgid "Invalid drill format\n"
 msgstr "Formato de perforación inválido\n"
 
@@ -35703,9 +35702,9 @@ msgstr ""
 "de búsqueda."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "Huella %s cambiada de '%s' a '%s'"
+msgstr "Trazando la huella '%s' a '%s'\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
