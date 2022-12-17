@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 12:20-0800\n"
+"POT-Creation-Date: 2022-12-17 11:14-0800\n"
 "PO-Revision-Date: 2022-10-17 12:00+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -153,7 +153,7 @@ msgstr "重新载入时间 %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:933
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:427
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:718
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:727
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:771
 #: eeschema/symbol_library.cpp:507 pcbnew/plugins/eagle/eagle_plugin.cpp:363
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
@@ -3939,7 +3939,7 @@ msgid "Inches"
 msgstr "英寸"
 
 #: common/eda_draw_frame.cpp:147 pagelayout_editor/pl_editor_frame.cpp:164
-#: pcbnew/tools/drawing_tool.cpp:266 pcbnew/tools/edit_tool.cpp:803
+#: pcbnew/tools/drawing_tool.cpp:266 pcbnew/tools/edit_tool.cpp:809
 #: pcbnew/tools/pcb_actions.cpp:683
 msgid "Constrain to H, V, 45"
 msgstr "约束为水平、垂直或 45 度"
@@ -4603,7 +4603,7 @@ msgstr "无法复制文件 '%s'。"
 
 #: common/grid_tricks.cpp:278 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/dialogs/panel_setup_rules.cpp:112
-#: pcbnew/tools/edit_tool.cpp:1949
+#: pcbnew/tools/edit_tool.cpp:1955
 msgid "Cut"
 msgstr "剪切"
 
@@ -4631,7 +4631,7 @@ msgstr "将剪贴板内容粘贴到当前单元格位置"
 
 #: common/grid_tricks.cpp:284 common/tool/actions.cpp:191
 #: kicad/project_tree_pane.cpp:771 pcbnew/dialogs/panel_setup_rules.cpp:115
-#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:1951
+#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:1957
 msgid "Delete"
 msgstr "删除"
 
@@ -7080,12 +7080,12 @@ msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "网络 %s 以图形方式连接到总线 %s，但不是总线的成员"
 
-#: eeschema/connection_graph.cpp:3109
+#: eeschema/connection_graph.cpp:3113
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "图框引脚 %s 在图框内没有匹配的分层标签"
 
-#: eeschema/connection_graph.cpp:3126
+#: eeschema/connection_graph.cpp:3130
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "层次标签 %s 在父图框内没有匹配的图框引脚"
@@ -12228,7 +12228,7 @@ msgid "Schematic file changes are unsaved"
 msgstr "原理图文件变更未保存"
 
 #: eeschema/files-io.cpp:267
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:629
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:631
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
@@ -12236,7 +12236,7 @@ msgstr "无法加载整张原理图。 尝试加载分层表时发生错误。"
 
 #: eeschema/files-io.cpp:274 eeschema/files-io.cpp:282
 #: eeschema/files-io.cpp:1262
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:636 eeschema/sheet.cpp:162
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:638 eeschema/sheet.cpp:162
 #, c-format
 msgid "Error loading schematic '%s'."
 msgstr "加载原理图 '%s' 时出错。"
@@ -13560,25 +13560,25 @@ msgstr "无效的符号库名"
 msgid "Invalid symbol library ID"
 msgstr "无效的符号库 ID"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1731
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1740
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2602
 #, c-format
 msgid "Library file '%s' not found."
 msgstr "未找到库文件 \"%s\"。"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2149
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2158
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4292
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "库 %s 不包含名为 %s 的符号"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2317
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2326
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4472
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "符号库 \"%s\" 已经存在。"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2343
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2352
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4498
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
@@ -16087,7 +16087,7 @@ msgstr "移动"
 msgid "Moves the selected item(s)"
 msgstr "移动选择项"
 
-#: eeschema/tools/ee_actions.cpp:761 pcbnew/tools/edit_tool.cpp:1132
+#: eeschema/tools/ee_actions.cpp:761 pcbnew/tools/edit_tool.cpp:1138
 msgid "Drag"
 msgstr "拖动"
 
@@ -17011,7 +17011,7 @@ msgid "Polarity"
 msgstr "极性"
 
 #: gerbview/gerber_draw_item.cpp:735 pcbnew/fp_text.cpp:296
-#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1702
+#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1708
 #: pcbnew/tools/pcb_actions.cpp:310
 msgid "Mirror"
 msgstr "镜像"
@@ -28968,43 +28968,43 @@ msgstr "正在检查焊盘、过孔和敷铜连接..."
 msgid "Checking net connections..."
 msgstr "正在检查网络连接..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:194
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:214
 msgid "Gathering copper items..."
 msgstr "正在收集铜项目..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:230
 msgid "Checking track & via clearances..."
 msgstr "正在检查布线和过孔间隙..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:237
 msgid "Checking hole clearances..."
 msgstr "正在检查孔间隙..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:225
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:245
 msgid "Checking pad clearances..."
 msgstr "正在检查焊盘间隙..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:233
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:253
 msgid "Checking pads..."
 msgstr "正在检查焊盘..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:241
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:261
 msgid "Checking copper zone clearances..."
 msgstr "正在检查敷铜区间隙..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:248
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:268
 msgid "Checking zones..."
 msgstr "正在检查敷铜..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:312
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:378
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:463
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:509
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:720
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:749
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:772
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:798
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1036
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:333
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:398
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:480
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:526
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:758
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:787
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:810
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:836
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1074
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:214
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:242
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:101
@@ -29014,7 +29014,7 @@ msgstr "正在检查敷铜..."
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s 间隙 %s; 实际 %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:695
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:733
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(网络 %s 和 %s)"
@@ -33452,28 +33452,28 @@ msgstr "无法将圆弧导线角度调整 %.1f 度或更多。"
 msgid "Drag Arc Track"
 msgstr "拖拉圆弧线路"
 
-#: pcbnew/tools/edit_tool.cpp:790
+#: pcbnew/tools/edit_tool.cpp:796
 msgid "Select reference point for move..."
 msgstr "选择要移动的参考点..."
 
-#: pcbnew/tools/edit_tool.cpp:1200
+#: pcbnew/tools/edit_tool.cpp:1206
 msgid "Edit track width/via size"
 msgstr "编辑布线宽度/过孔尺寸"
 
-#: pcbnew/tools/edit_tool.cpp:1235
+#: pcbnew/tools/edit_tool.cpp:1241
 msgid "At least two straight track segments must be selected."
 msgstr "必须至少选择两个直线布线段。"
 
-#: pcbnew/tools/edit_tool.cpp:1239
+#: pcbnew/tools/edit_tool.cpp:1245
 msgid "Enter fillet radius:"
 msgstr "输入圆角半径："
 
-#: pcbnew/tools/edit_tool.cpp:1239 pcbnew/tools/edit_tool.cpp:1401
+#: pcbnew/tools/edit_tool.cpp:1245 pcbnew/tools/edit_tool.cpp:1407
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Fillet Tracks"
 msgstr "弧形布线"
 
-#: pcbnew/tools/edit_tool.cpp:1249
+#: pcbnew/tools/edit_tool.cpp:1255
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
@@ -33481,40 +33481,40 @@ msgstr ""
 "输入的半径为零。\n"
 "未执行圆角操作。"
 
-#: pcbnew/tools/edit_tool.cpp:1408
+#: pcbnew/tools/edit_tool.cpp:1414
 msgid "Unable to fillet the selected track segments."
 msgstr "无法对选定的布线段进行圆角处理。"
 
-#: pcbnew/tools/edit_tool.cpp:1410
+#: pcbnew/tools/edit_tool.cpp:1416
 msgid "Some of the track segments could not be filleted."
 msgstr "某些布线段无法圆角。"
 
-#: pcbnew/tools/edit_tool.cpp:1555
+#: pcbnew/tools/edit_tool.cpp:1561
 msgid "Rotate"
 msgstr "旋转"
 
-#: pcbnew/tools/edit_tool.cpp:1779 pcbnew/tools/pcb_actions.cpp:305
+#: pcbnew/tools/edit_tool.cpp:1785 pcbnew/tools/pcb_actions.cpp:305
 msgid "Change Side / Flip"
 msgstr "更改所在面 / 翻转"
 
-#: pcbnew/tools/edit_tool.cpp:2126
+#: pcbnew/tools/edit_tool.cpp:2132
 msgid "Move exact"
 msgstr "精确移动"
 
-#: pcbnew/tools/edit_tool.cpp:2259
+#: pcbnew/tools/edit_tool.cpp:2265
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "复制 %d 项"
 
-#: pcbnew/tools/edit_tool.cpp:2482
+#: pcbnew/tools/edit_tool.cpp:2488
 msgid "Select reference point for the copy..."
 msgstr "为副本选择参考点..."
 
-#: pcbnew/tools/edit_tool.cpp:2483 pcbnew/tools/edit_tool.cpp:2500
+#: pcbnew/tools/edit_tool.cpp:2489 pcbnew/tools/edit_tool.cpp:2506
 msgid "Selection copied"
 msgstr "选择已复制"
 
-#: pcbnew/tools/edit_tool.cpp:2484
+#: pcbnew/tools/edit_tool.cpp:2490
 msgid "Copy canceled"
 msgstr "已取消复制"
 

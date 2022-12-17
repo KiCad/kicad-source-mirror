@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 12:20-0800\n"
+"POT-Creation-Date: 2022-12-17 11:14-0800\n"
 "PO-Revision-Date: 2022-08-28 17:17+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v6/ru/>\n"
@@ -162,7 +162,7 @@ msgstr "Время обновления %.3f с"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:933
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:427
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:718
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:727
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:771
 #: eeschema/symbol_library.cpp:507 pcbnew/plugins/eagle/eagle_plugin.cpp:363
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
@@ -4029,7 +4029,7 @@ msgid "Inches"
 msgstr "Дюймы"
 
 #: common/eda_draw_frame.cpp:147 pagelayout_editor/pl_editor_frame.cpp:164
-#: pcbnew/tools/drawing_tool.cpp:266 pcbnew/tools/edit_tool.cpp:803
+#: pcbnew/tools/drawing_tool.cpp:266 pcbnew/tools/edit_tool.cpp:809
 #: pcbnew/tools/pcb_actions.cpp:683
 msgid "Constrain to H, V, 45"
 msgstr "Ограничить ортогонально и под углом 45°"
@@ -4704,7 +4704,7 @@ msgstr "Не удалось скопировать файл '%s'."
 
 #: common/grid_tricks.cpp:278 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/dialogs/panel_setup_rules.cpp:112
-#: pcbnew/tools/edit_tool.cpp:1949
+#: pcbnew/tools/edit_tool.cpp:1955
 msgid "Cut"
 msgstr "Вырезать"
 
@@ -4733,7 +4733,7 @@ msgstr "Вставить элементы из буфера обмена в те
 
 #: common/grid_tricks.cpp:284 common/tool/actions.cpp:191
 #: kicad/project_tree_pane.cpp:771 pcbnew/dialogs/panel_setup_rules.cpp:115
-#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:1951
+#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:1957
 msgid "Delete"
 msgstr "Удалить"
 
@@ -7213,13 +7213,13 @@ msgid ""
 msgstr ""
 "Цепь %s графически подключена к шине %s, но она не является членом этой шины"
 
-#: eeschema/connection_graph.cpp:3109
+#: eeschema/connection_graph.cpp:3113
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Выводу листа %s не соответствует ни одна иерархическая метка внутри листа"
 
-#: eeschema/connection_graph.cpp:3126
+#: eeschema/connection_graph.cpp:3130
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Иерархическая метка %s не соответствует ни одному выводу листа"
@@ -12447,7 +12447,7 @@ msgid "Schematic file changes are unsaved"
 msgstr "Изменения файла схемы не сохранены"
 
 #: eeschema/files-io.cpp:267
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:629
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:631
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
@@ -12457,7 +12457,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:274 eeschema/files-io.cpp:282
 #: eeschema/files-io.cpp:1262
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:636 eeschema/sheet.cpp:162
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:638 eeschema/sheet.cpp:162
 #, c-format
 msgid "Error loading schematic '%s'."
 msgstr "Ошибка загрузки схемы '%s'."
@@ -13819,25 +13819,25 @@ msgstr "Неверное имя библиотеки символов"
 msgid "Invalid symbol library ID"
 msgstr "Неверный идентификатор библиотеки символов"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1731
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1740
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2602
 #, c-format
 msgid "Library file '%s' not found."
 msgstr "Файл библиотеки '%s' не найден."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2149
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2158
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4292
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "библиотека %s не содержит символ с именем %s"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2317
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2326
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4472
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Библиотека '%s' уже существует."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2343
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2352
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4498
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
@@ -16376,7 +16376,7 @@ msgstr "Переместить"
 msgid "Moves the selected item(s)"
 msgstr "Переместить выбранные элементы"
 
-#: eeschema/tools/ee_actions.cpp:761 pcbnew/tools/edit_tool.cpp:1132
+#: eeschema/tools/ee_actions.cpp:761 pcbnew/tools/edit_tool.cpp:1138
 msgid "Drag"
 msgstr "Перетащить"
 
@@ -17315,7 +17315,7 @@ msgid "Polarity"
 msgstr "Полярность"
 
 #: gerbview/gerber_draw_item.cpp:735 pcbnew/fp_text.cpp:296
-#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1702
+#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1708
 #: pcbnew/tools/pcb_actions.cpp:310
 msgid "Mirror"
 msgstr "Отразить"
@@ -29469,43 +29469,43 @@ msgstr "Проверка соединений конт.пл., перех.отв.
 msgid "Checking net connections..."
 msgstr "Проверка соединений цепей..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:194
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:214
 msgid "Gathering copper items..."
 msgstr "Сбор элементов меди..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:230
 msgid "Checking track & via clearances..."
 msgstr "Проверка зазоров дорожек и перех.отв..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:237
 msgid "Checking hole clearances..."
 msgstr "Проверка зазоров между отверстиями..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:225
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:245
 msgid "Checking pad clearances..."
 msgstr "Проверка зазоров конт.пл..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:233
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:253
 msgid "Checking pads..."
 msgstr "Проверка конт.пл..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:241
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:261
 msgid "Checking copper zone clearances..."
 msgstr "Проверка зазоров зон меди..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:248
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:268
 msgid "Checking zones..."
 msgstr "Проверка зон..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:312
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:378
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:463
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:509
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:720
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:749
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:772
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:798
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1036
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:333
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:398
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:480
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:526
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:758
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:787
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:810
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:836
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1074
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:214
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:242
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:101
@@ -29515,7 +29515,7 @@ msgstr "Проверка зон..."
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s зазор %s; текущий %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:695
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:733
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(цепи %s и %s)"
@@ -34086,28 +34086,28 @@ msgstr "Нельзя установить размер для дуговой д�
 msgid "Drag Arc Track"
 msgstr "Перетащить кривую дорожку"
 
-#: pcbnew/tools/edit_tool.cpp:790
+#: pcbnew/tools/edit_tool.cpp:796
 msgid "Select reference point for move..."
 msgstr "Выбор опорной точку для перемещения..."
 
-#: pcbnew/tools/edit_tool.cpp:1200
+#: pcbnew/tools/edit_tool.cpp:1206
 msgid "Edit track width/via size"
 msgstr "Редактировать размеры ширина дорожки/перех.отв."
 
-#: pcbnew/tools/edit_tool.cpp:1235
+#: pcbnew/tools/edit_tool.cpp:1241
 msgid "At least two straight track segments must be selected."
 msgstr "Как минимум два прямых отрезка дорожки должны быть выделены."
 
-#: pcbnew/tools/edit_tool.cpp:1239
+#: pcbnew/tools/edit_tool.cpp:1245
 msgid "Enter fillet radius:"
 msgstr "Радиус скругления:"
 
-#: pcbnew/tools/edit_tool.cpp:1239 pcbnew/tools/edit_tool.cpp:1401
+#: pcbnew/tools/edit_tool.cpp:1245 pcbnew/tools/edit_tool.cpp:1407
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Fillet Tracks"
 msgstr "Скруглённые дорожки"
 
-#: pcbnew/tools/edit_tool.cpp:1249
+#: pcbnew/tools/edit_tool.cpp:1255
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
@@ -34115,40 +34115,40 @@ msgstr ""
 "Введено нулевое значение радиуса.\n"
 "Скругление не выполнено."
 
-#: pcbnew/tools/edit_tool.cpp:1408
+#: pcbnew/tools/edit_tool.cpp:1414
 msgid "Unable to fillet the selected track segments."
 msgstr "Не удалось скруглить выбранные сегменты дорожки."
 
-#: pcbnew/tools/edit_tool.cpp:1410
+#: pcbnew/tools/edit_tool.cpp:1416
 msgid "Some of the track segments could not be filleted."
 msgstr "Не все отрезки дорожки удалось скруглить."
 
-#: pcbnew/tools/edit_tool.cpp:1555
+#: pcbnew/tools/edit_tool.cpp:1561
 msgid "Rotate"
 msgstr "Повернуть"
 
-#: pcbnew/tools/edit_tool.cpp:1779 pcbnew/tools/pcb_actions.cpp:305
+#: pcbnew/tools/edit_tool.cpp:1785 pcbnew/tools/pcb_actions.cpp:305
 msgid "Change Side / Flip"
 msgstr "Сменить сторону/перевернуть"
 
-#: pcbnew/tools/edit_tool.cpp:2126
+#: pcbnew/tools/edit_tool.cpp:2132
 msgid "Move exact"
 msgstr "Переместить точно"
 
-#: pcbnew/tools/edit_tool.cpp:2259
+#: pcbnew/tools/edit_tool.cpp:2265
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Дублировано %d элемент(ов)"
 
-#: pcbnew/tools/edit_tool.cpp:2482
+#: pcbnew/tools/edit_tool.cpp:2488
 msgid "Select reference point for the copy..."
 msgstr "Выбор опорной точку для копии..."
 
-#: pcbnew/tools/edit_tool.cpp:2483 pcbnew/tools/edit_tool.cpp:2500
+#: pcbnew/tools/edit_tool.cpp:2489 pcbnew/tools/edit_tool.cpp:2506
 msgid "Selection copied"
 msgstr "Выделение скопировано"
 
-#: pcbnew/tools/edit_tool.cpp:2484
+#: pcbnew/tools/edit_tool.cpp:2490
 msgid "Copy canceled"
 msgstr "Копирование отменено"
 
