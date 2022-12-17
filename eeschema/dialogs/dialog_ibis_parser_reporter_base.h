@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,7 +35,6 @@ class DIALOG_IBIS_PARSER_REPORTER_BASE : public DIALOG_SHIM
 	protected:
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
-		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnCloseClick( wxCommandEvent& event ) { event.Skip(); }
