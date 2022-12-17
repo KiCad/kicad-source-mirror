@@ -438,6 +438,12 @@ double SHAPE_ARC::GetLength() const
 
 double SHAPE_ARC::GetCentralAngle() const
 {
+    // Arcs with same start and end points can be 0 deg or 360 deg arcs.
+    // However, they are expected to be circles.
+    // So return 360 degrees as central arc:
+    if( m_start == m_end )
+        return 360.0;
+
     VECTOR2I center = GetCenter();
     VECTOR2I p0 = m_start - center;
     VECTOR2I p1 = m_mid - center;
