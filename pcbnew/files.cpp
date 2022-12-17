@@ -34,7 +34,8 @@
 #include <kiface_base.h>
 #include <macros.h>
 #include <trace_helpers.h>
-#include <lockfile.cpp>
+#include <lockfile.h>
+#include <wx/snglinst.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <pcbnew_id.h>
 #include <io_mgr.h>
