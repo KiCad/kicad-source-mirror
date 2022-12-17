@@ -123,9 +123,9 @@ SIM_MODEL_RAW_SPICE::SIM_MODEL_RAW_SPICE() :
 }
 
 
-void SIM_MODEL_RAW_SPICE::CreatePins( unsigned aSymbolPinCount )
+void SIM_MODEL_RAW_SPICE::CreatePins( const std::vector<LIB_PIN*>& aSymbolPins )
 {
-    for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPinCount; ++symbolPinIndex )
+    for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPins.size(); ++symbolPinIndex )
         AddPin( { fmt::format( "{}", symbolPinIndex + 1 ), "" } );
 }
 

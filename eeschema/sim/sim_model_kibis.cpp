@@ -278,23 +278,28 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) :
     m_enableDiff = aSource.CanDifferential();
 }
 
-SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
-                                  const std::vector<LIB_FIELD>& aFields ) :
-        SIM_MODEL_KIBIS( aType, aSource )
-{
-    ReadDataFields( 2, &aFields );
-}
 
 SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
-                                  const std::vector<SCH_FIELD>& aFields ) :
+                                  const std::vector<LIB_FIELD>& aFields,
+                                  const std::vector<LIB_PIN*>& aPins  ) :
         SIM_MODEL_KIBIS( aType, aSource )
 {
+    ReadDataFields( &aFields, aPins );
 }
 
 
-void SIM_MODEL_KIBIS::CreatePins( unsigned aSymbolPinCount )
+SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
+                                  const std::vector<SCH_FIELD>& aFields,
+                                  const std::vector<LIB_PIN*>& aPins  ) :
+        SIM_MODEL_KIBIS( aType, aSource )
 {
-    SIM_MODEL::CreatePins( aSymbolPinCount );
+    ReadDataFields( &aFields, aPins );
+}
+
+
+void SIM_MODEL_KIBIS::CreatePins( const std::vector<LIB_PIN*>& aSymbolPins )
+{
+    SIM_MODEL::CreatePins( aSymbolPins );
 
     // Reset the pins to Not Connected. Linear order is not as common, and reordering the pins is
     // more effort in the GUI than assigning them from scratch.

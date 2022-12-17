@@ -75,7 +75,7 @@ public:
     }
 
 protected:
-    void CreatePins( unsigned aSymbolPinCount ) override;
+    void CreatePins( const std::vector<LIB_PIN*>& aSymbolPins ) override;
 
 private:
     static std::vector<PARAM::INFO> makeParamInfos();

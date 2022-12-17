@@ -1159,8 +1159,15 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onDeviceTypeChoice( wxCommandEvent& aE
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
 {
-    SIM_MODEL::DEVICE_T deviceType = curModel().GetDeviceType();
-    wxString            typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
+    SIM_MODEL::DEVICE_T   deviceType = curModel().GetDeviceType();
+    wxString              typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
+    std::vector<LIB_PIN*> sourcePins = m_symbol.GetAllLibPins();
+
+    std::sort( sourcePins.begin(), sourcePins.end(),
+               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+               {
+                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+               } );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
@@ -1177,7 +1184,8 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
 
                 auto& kibisModel = static_cast<SIM_MODEL_KIBIS&>( m_libraryModelsMgr.GetModels().at( idx ).get() );
 
-                m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_KIBIS>( type, kibisModel, m_fields ) );
+                m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_KIBIS>( type, kibisModel,
+                                                                                     m_fields, sourcePins ) );
             }
 
             m_curModelType = type;

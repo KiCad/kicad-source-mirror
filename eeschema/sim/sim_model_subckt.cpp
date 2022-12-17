@@ -157,9 +157,9 @@ void SIM_MODEL_SUBCKT::SetBaseModel( const SIM_MODEL& aBaseModel )
 }
 
 
-void SIM_MODEL_SUBCKT::CreatePins( unsigned aSymbolPinCount )
+void SIM_MODEL_SUBCKT::CreatePins( const std::vector<LIB_PIN*>& aSymbolPins )
 {
-    SIM_MODEL::CreatePins( aSymbolPinCount );
+    SIM_MODEL::CreatePins( aSymbolPins );
 
     // Reset the pins to Not Connected. Linear order is not as common, and reordering the pins is
     // more effort in the GUI than assigning them from scratch.

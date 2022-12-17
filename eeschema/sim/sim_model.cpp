@@ -413,20 +413,6 @@ TYPE SIM_MODEL::InferTypeFromLegacyFields( const std::vector<T>& aFields )
 
 
 template <>
-void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
-{
-    doReadDataFields( aSymbolPinCount, aFields );
-}
-
-
-template <>
-void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
-{
-    doReadDataFields( aSymbolPinCount, aFields );
-}
-
-
-template <>
 void SIM_MODEL::ReadDataFields( const std::vector<SCH_FIELD>* aFields,
                                 const std::vector<LIB_PIN*>& aPins )
 {
@@ -983,7 +969,7 @@ SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerat
 }
 
 
-void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
+void SIM_MODEL::CreatePins( const std::vector<LIB_PIN*>& aSymbolPins )
 {
     // Default pin sequence: model pins are the same as symbol pins.
     // Excess model pins are set as Not Connected.
@@ -992,64 +978,19 @@ void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
     // SIM_MODEL pins must be ordered by symbol pin numbers -- this is assumed by the code that
     // accesses them.
 
-    for( unsigned modelPinIndex = 0; modelPinIndex < getPinNames().size(); ++modelPinIndex )
-    {
-        if( modelPinIndex < aSymbolPinCount )
-            AddPin( { getPinNames().at( modelPinIndex ), fmt::format( "{}", modelPinIndex + 1 ) } );
-        else
-            AddPin( { getPinNames().at( modelPinIndex ), "" } );
-    }
-}
+    std::vector<std::string> pinNames = getPinNames();
 
-
-void SIM_MODEL::CreatePins( const std::vector<LIB_PIN*> aSymbolPins )
-{
-    // Default pin sequence: model pins are the same as symbol pins.
-    // Excess model pins are set as Not Connected.
-    // Note that intentionally nothing is added if `getPinNames()` returns an empty vector.
-
-    // SIM_MODEL pins must be ordered by symbol pin numbers -- this is assumed by the code that
-    // accesses them.
-
-    for( unsigned modelPinIndex = 0; modelPinIndex < getPinNames().size(); ++modelPinIndex )
+    for( unsigned modelPinIndex = 0; modelPinIndex < pinNames.size(); ++modelPinIndex )
     {
         if( modelPinIndex < aSymbolPins.size() )
         {
-            AddPin( { getPinNames().at( modelPinIndex ),
+            AddPin( { pinNames.at( modelPinIndex ),
                       aSymbolPins[ modelPinIndex ]->GetNumber().ToStdString() } );
         }
         else
         {
-            AddPin( { getPinNames().at( modelPinIndex ), "" } );
+            AddPin( { pinNames.at( modelPinIndex ), "" } );
         }
-    }
-}
-
-
-// TODO: remove this API.  If we have symbol fields, then we have symbol pins and we should be
-// creating a model with the real symbol pin names, not indexes...
-
-template <typename T>
-void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
-{
-    bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
-    SwitchSingleEndedDiff( diffMode );
-
-    try
-    {
-        m_serde->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
-
-        CreatePins( aSymbolPinCount );
-        m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
-
-        std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
-
-        if( !m_serde->ParseParams( paramsField ) )
-            m_serde->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
-    }
-    catch( IO_ERROR& err )
-    {
-        DisplayErrorMessage( nullptr, err.What() );
     }
 }
 
@@ -1387,6 +1328,10 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         return;
     }
 
+    spiceDeviceType = spiceDeviceType.Trim( true ).Trim( false );
+    spiceModel = spiceModel.Trim( true ).Trim( false );
+    spiceType = spiceType.Trim( true ).Trim( false );
+
     bool libraryModel = false;
     bool internalModel = false;
 
@@ -1417,10 +1362,10 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     }
     else
     {
-        // Convert functional SPICE model syntax to name=value pairs.  For instance, "dc(1)"
-        // needs to go to "dc=1", while "sin(0, 1, 60)" needs to go to "dc=0 ampl=1 f=60".
+        // See if we have a function-style SPICE model (ie: "sin(0 1 60)") that can be handled
+        // by a built-in SIM_MODEL.
 
-        wxRegEx  regex( wxT( "^[a-z]+\\(.*\\)$" ) );
+        wxRegEx  regex( wxT( "^[a-zA-Z]+\\(.*\\)$" ) );
 
         if( regex.Matches( spiceModel ) )
         {

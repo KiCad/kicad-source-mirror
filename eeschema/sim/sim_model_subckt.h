@@ -58,7 +58,7 @@ public:
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
 protected:
-    void CreatePins( unsigned aSymbolPinCount ) override;
+    void CreatePins( const std::vector<LIB_PIN*>& aSymbolPins ) override;
 
 private:
     bool requiresSpiceModelLine() const override { return true; }

@@ -434,9 +434,6 @@ public:
     SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
 
     template <typename T>
-    void ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
-
-    template <typename T>
     void ReadDataFields( const std::vector<T>* aFields, const std::vector<LIB_PIN*>& aPins );
 
     template <typename T>
@@ -537,13 +534,9 @@ protected:
     SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
                std::unique_ptr<SIM_SERDE> aSerde );
 
-    virtual void CreatePins( unsigned aSymbolPinCount );
-    virtual void CreatePins( const std::vector<LIB_PIN*> aSymbolPins );
+    virtual void CreatePins( const std::vector<LIB_PIN*>& aSymbolPins );
 
 private:
-    template <typename T>
-    void doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
-
     template <typename T>
     void doReadDataFields( const std::vector<T>* aFields, const std::vector<LIB_PIN*>& aPins );
 

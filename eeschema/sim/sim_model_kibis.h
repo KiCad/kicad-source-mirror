@@ -59,8 +59,10 @@ public:
     // creates a a model with aType, but tries to match parameters from aSource.
     SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource );
 
-    SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<LIB_FIELD>& aFields );
-    SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<SCH_FIELD>& aFields );
+    SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<LIB_FIELD>& aFields,
+                     const std::vector<LIB_PIN*>& aPins );
+    SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource, const std::vector<SCH_FIELD>& aFields,
+                         const std::vector<LIB_PIN*>& aPins );
 
     std::vector<std::pair<std::string, std::string>> GetIbisPins() const
     {
@@ -92,7 +94,7 @@ public:
     bool m_enableDiff;
 
 protected:
-    void CreatePins( unsigned aSymbolPinCount ) override;
+    void CreatePins( const std::vector<LIB_PIN*>& aSymbolPins ) override;
 
 private:
     bool requiresSpiceModelLine() const override { return true; }
