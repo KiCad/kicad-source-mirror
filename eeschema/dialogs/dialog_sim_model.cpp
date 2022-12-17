@@ -1199,9 +1199,14 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::onParamGridChanged( wxPropertyGridEvent& aEvent )
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onPageChanging( wxBookCtrlEvent& event )
 {
-    updateWidgets();
+    // This should have been done in wxPGTextCtrlEditor::OnTextCtrlEvent(), but something must
+    // be clearing it before we get here, resulting in CommitChangesFromEditor() doing nothing
+    m_paramGrid->GetGrid()->EditorsValueWasModified();
+    m_paramGrid->GetGrid()->CommitChangesFromEditor();
+
+    updateModelCodeTab();
 }
 
 

@@ -170,9 +170,6 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     else
         evaledText = aText;
 
-    wxString baseParamValue = m_model.GetBaseParam( m_paramIndex ).value->ToString();
-    aVariant = evaledText;
-
     m_model.SetParamValue( m_paramIndex, std::string( evaledText.ToUTF8() ) );
     aVariant = GetParam().value->ToString();
 

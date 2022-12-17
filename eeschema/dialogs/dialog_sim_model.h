@@ -103,7 +103,7 @@ private:
     void onIbisModelComboboxTextEnter( wxCommandEvent& event ) override;
     void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
     void onTypeChoice( wxCommandEvent& aEvent ) override;
-    void onParamGridChanged( wxPropertyGridEvent& aEvent ) override;
+    void onPageChanging( wxNotebookEvent& event ) override;
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
     void onSaveInValueCheckbox( wxCommandEvent& aEvent ) override;

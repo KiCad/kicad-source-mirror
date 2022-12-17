@@ -1393,6 +1393,7 @@
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
+                                                    <event name="OnNotebookPageChanging">onPageChanging</event>
                                                     <object class="notebookpage" expanded="1">
                                                         <property name="bitmap"></property>
                                                         <property name="label">Parameters</property>
@@ -1511,7 +1512,6 @@
                                                                         <property name="window_extra_style"></property>
                                                                         <property name="window_name"></property>
                                                                         <property name="window_style"></property>
-                                                                        <event name="OnPropertyGridChanged">onParamGridChanged</event>
                                                                         <event name="OnSize">onSizeParamGrid</event>
                                                                         <object class="propGridPage" expanded="0">
                                                                             <property name="bitmap"></property>
