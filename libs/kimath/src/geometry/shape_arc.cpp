@@ -447,6 +447,12 @@ double SHAPE_ARC::GetLength() const
 
 EDA_ANGLE SHAPE_ARC::GetCentralAngle() const
 {
+    // Arcs with same start and end points can be 0 deg or 360 deg arcs.
+    // However, they are expected to be circles.
+    // So return 360 degrees as central arc:
+    if( m_start == m_end )
+        return ANGLE_360;
+
     VECTOR2I  center = GetCenter();
     EDA_ANGLE angle1 = EDA_ANGLE( m_mid - center ) - EDA_ANGLE( m_start - center );
     EDA_ANGLE angle2 = EDA_ANGLE( m_end - center ) - EDA_ANGLE( m_mid - center );
