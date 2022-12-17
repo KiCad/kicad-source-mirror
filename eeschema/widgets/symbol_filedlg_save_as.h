@@ -67,12 +67,12 @@ public:
     SYMBOL_SAVEAS_TYPE GetOption() const { return m_option; }
 
 private:
-    SYMBOL_SAVEAS_TYPE m_option;
+    SYMBOL_SAVEAS_TYPE m_option = SYMBOL_SAVEAS_TYPE::NORMAL_SAVE_AS;
 
-    wxFileDialogRadioButton* m_simpleSaveAs;
-    wxFileDialogRadioButton* m_replaceTableEntry;
-    wxFileDialogRadioButton* m_addGlobalTableEntry;
-    wxFileDialogRadioButton* m_addProjectTableEntry;
+    wxFileDialogRadioButton* m_simpleSaveAs         = nullptr;
+    wxFileDialogRadioButton* m_replaceTableEntry    = nullptr;
+    wxFileDialogRadioButton* m_addGlobalTableEntry  = nullptr;
+    wxFileDialogRadioButton* m_addProjectTableEntry = nullptr;
 
     wxDECLARE_NO_COPY_CLASS( SYMBOL_FILEDLG_SAVE_AS );
 };

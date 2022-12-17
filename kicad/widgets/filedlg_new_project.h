@@ -42,9 +42,9 @@ public:
     bool GetCreateNewDir() const { return m_createNewDir; }
 
 private:
-    bool m_createNewDir;
+    bool m_createNewDir = true;
 
-    wxFileDialogCheckBox* m_cb;
+    wxFileDialogCheckBox* m_cb = nullptr;
 
     wxDECLARE_NO_COPY_CLASS( FILEDLG_NEW_PROJECT );
 };
