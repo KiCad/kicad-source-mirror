@@ -499,20 +499,3 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makePrbsWaveformParamInfos(
     return paramInfos;
 }
 
-
-void SIM_MODEL_KIBIS::ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
-{
-    bool diffMode = SIM_MODEL::GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
-    SwitchSingleEndedDiff( diffMode );
-
-    SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
-}
-
-
-void SIM_MODEL_KIBIS::ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
-{
-    bool diffMode = SIM_MODEL::GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
-    SwitchSingleEndedDiff( diffMode );
-
-    SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
-}

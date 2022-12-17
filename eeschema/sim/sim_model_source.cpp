@@ -185,10 +185,14 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
             break;
         }
 
-        item.modelName.append( fmt::format( "{}( {})", m_model.GetSpiceInfo().inlineTypeString, args ) );
+        item.modelName.append( fmt::format( "{}( {})",
+                                            m_model.GetSpiceInfo().inlineTypeString,
+                                            args ) );
     }
     else
+    {
         item.modelName.append( m_model.GetParam( 0 ).value->ToSpiceString() );
+    }
 
     return SPICE_GENERATOR::ItemLine( item );
 }

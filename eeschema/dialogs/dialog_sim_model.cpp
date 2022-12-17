@@ -240,14 +240,22 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields );
     }
 
+    std::vector<LIB_PIN*> sourcePins = m_symbol.GetAllLibPins();
+
+    std::sort( sourcePins.begin(), sourcePins.end(),
+               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+               {
+                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+               } );
+
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
         try
         {
             if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
-                m_builtinModelsMgr.CreateModel( m_fields, m_symbol.GetFullPinCount() );
+                m_builtinModelsMgr.CreateModel( m_fields, sourcePins );
             else
-                m_builtinModelsMgr.CreateModel( type, m_symbol.GetFullPinCount() );
+                m_builtinModelsMgr.CreateModel( type, sourcePins );
         }
         catch( const IO_ERROR& e )
         {
@@ -656,6 +664,14 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
         return;
     }
 
+    std::vector<LIB_PIN*> sourcePins = m_symbol.GetAllLibPins();
+
+    std::sort( sourcePins.begin(), sourcePins.end(),
+               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+               {
+                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+               } );
+
     try
     {
         std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
@@ -663,9 +679,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
         for( auto& [baseModelName, baseModel] : library()->GetModels() )
         {
             if( baseModelName == modelName )
-                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetFullPinCount(), m_fields );
+                m_libraryModelsMgr.CreateModel( baseModel, sourcePins, m_fields );
             else
-                m_libraryModelsMgr.CreateModel( baseModel, m_symbol.GetFullPinCount() );
+                m_libraryModelsMgr.CreateModel( baseModel, sourcePins );
         }
     }
     catch( const IO_ERROR& e )

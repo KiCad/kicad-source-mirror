@@ -87,14 +87,9 @@ public:
 
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
-    void SwitchSingleEndedDiff( bool aDiff );
+    void SwitchSingleEndedDiff( bool aDiff ) override;
     bool CanDifferential() const { return m_enableDiff; } ;
     bool m_enableDiff;
-
-    void ReadDataSchFields( unsigned aSymbolPinCount,
-                            const std::vector<SCH_FIELD>* aFields ) override;
-    void ReadDataLibFields( unsigned aSymbolPinCount,
-                            const std::vector<LIB_FIELD>* aFields ) override;
 
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;

@@ -48,23 +48,26 @@ public:
     SIM_LIBRARY& AddLibrary( const wxString& aLibraryPath, REPORTER* aReporter );
     SIM_LIBRARY& SetLibrary( const wxString& aLibraryPath, REPORTER* aReporter );
 
-    SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, int aSymbolPinCount );
+    SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins );
 
-    SIM_MODEL& CreateModel( const SIM_MODEL& aBaseModel, int aSymbolPinCount );
+    SIM_MODEL& CreateModel( const SIM_MODEL& aBaseModel, const std::vector<LIB_PIN*>& aPins );
 
     template <typename T>
-    SIM_MODEL& CreateModel( const SIM_MODEL& aBaseModel, int aSymbolPinCount,
+    SIM_MODEL& CreateModel( const SIM_MODEL& aBaseModel, const std::vector<LIB_PIN*>& aPins,
                             const std::vector<T>& aFields );
 
     // TODO: The argument can be made const.
     SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol );
 
     template <typename T>
-    SIM_LIBRARY::MODEL CreateModel( const std::vector<T>& aFields, int aSymbolPinCount );
+    SIM_LIBRARY::MODEL CreateModel( const std::vector<T>& aFields,
+                                    const std::vector<LIB_PIN*>& aPins );
 
     template <typename T>
-    SIM_LIBRARY::MODEL CreateModel( const wxString& aLibraryPath, const std::string& aBaseModelName,
-                                    const std::vector<T>& aFields, int aSymbolPinCount );
+    SIM_LIBRARY::MODEL CreateModel( const wxString& aLibraryPath,
+                                    const std::string& aBaseModelName,
+                                    const std::vector<T>& aFields,
+                                    const std::vector<LIB_PIN*>& aPins );
 
     void SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel );
 

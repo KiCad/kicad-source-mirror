@@ -24,6 +24,7 @@
 
 #include <pgm_base.h>
 #include <string>
+#include <string_utils.h>
 #include <common.h>
 #include <functional>
 #include <sch_symbol.h>
@@ -143,31 +144,35 @@ SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER* aR
 }
 
 
-SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, int aSymbolPinCount )
+SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins )
 {
-    m_models.push_back( SIM_MODEL::Create( aType, aSymbolPinCount ) );
+    m_models.push_back( SIM_MODEL::Create( aType, aPins ) );
     return *m_models.back();
 }
 
 
-SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel, int aSymbolPinCount )
+SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel,
+                                     const std::vector<LIB_PIN*>& aPins )
 {
-    m_models.push_back( SIM_MODEL::Create( aBaseModel, aSymbolPinCount ) );
+    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins ) );
     return *m_models.back();
 }
 
 
 template <typename T>
-SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel, int aSymbolPinCount,
+SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel,
+                                     const std::vector<LIB_PIN*>& aPins,
                                      const std::vector<T>& aFields )
 {
-    m_models.push_back( SIM_MODEL::Create( aBaseModel, aSymbolPinCount, aFields ) );
+    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, aFields ) );
     return *m_models.back();
 }
 
-template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel, int aSymbolPinCount,
+template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel,
+                                              const std::vector<LIB_PIN*>& aPins,
                                               const std::vector<SCH_FIELD>& aFields );
-template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel, int aSymbolPinCount,
+template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel,
+                                              const std::vector<LIB_PIN*>& aPins,
                                               const std::vector<LIB_FIELD>& aFields );
 
 
@@ -220,37 +225,47 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
         }
     }
 
-    return CreateModel( fields, static_cast<int>( aSymbol.GetRawPins().size() ) );
+    std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
+
+    std::sort( sourcePins.begin(), sourcePins.end(),
+               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+               {
+                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+               } );
+
+    return CreateModel( fields, sourcePins );
 }
 
+
 template <typename T>
-SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<T>& aFields, int aSymbolPinCount )
+SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<T>& aFields,
+                                             const std::vector<LIB_PIN*>& aPins )
 {
     std::string libraryPath = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string baseModelName = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD );
 
     if( libraryPath != "" )
     {
-        return CreateModel( libraryPath, baseModelName, aFields, aSymbolPinCount );
+        return CreateModel( libraryPath, baseModelName, aFields, aPins );
     }
     else
     {
-        m_models.push_back( SIM_MODEL::Create( aSymbolPinCount, aFields ) );
+        m_models.push_back( SIM_MODEL::Create( aFields, aPins ) );
         return { baseModelName, *m_models.back() };
     }
 }
 
 template SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFields,
-                                                      int aSymbolPinCount );
+                                                      const std::vector<LIB_PIN*>& aPins );
 template SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<LIB_FIELD>& aFields,
-                                                      int aSymbolPinCount );
+                                                      const std::vector<LIB_PIN*>& aPins );
 
 
 template <typename T>
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
                                              const std::string& aBaseModelName,
                                              const std::vector<T>& aFields,
-                                             int aSymbolPinCount )
+                                             const std::vector<LIB_PIN*>& aPins )
 {
     wxString     path = ResolveLibraryPath( aLibraryPath, m_project );
     SIM_LIBRARY* library = nullptr;
@@ -286,7 +301,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
                                           path ) );
     }
 
-    m_models.push_back( SIM_MODEL::Create( *baseModel, aSymbolPinCount, aFields ) );
+    m_models.push_back( SIM_MODEL::Create( *baseModel, aPins, aFields ) );
 
     return { aBaseModelName, *m_models.back() };
 }

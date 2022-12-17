@@ -28,6 +28,7 @@
 #include <locale_io.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
+#include <lib_pin.h>
 
 
 void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath )
@@ -36,16 +37,17 @@ void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath )
     m_kibis = KIBIS( aFilePath, m_reporter );
 
     if( !m_kibis.m_valid )
-    {
         THROW_IO_ERROR( wxString::Format( "Invalid ibis file" ) );
-        return;
-    }
 
-    unsigned pinNumber = 2;
+    LIB_PIN pinA( nullptr );
+    LIB_PIN pinB( nullptr );
+    pinA.SetNumber( wxT( "1" ) );
+    pinB.SetNumber( wxT( "2" ) );
+    std::vector<LIB_PIN*> pins = { &pinA, &pinB };
 
     for( KIBIS_COMPONENT& kcomp : m_kibis.m_components )
     {
-        m_models.push_back( SIM_MODEL::Create( SIM_MODEL::TYPE::KIBIS_DEVICE, pinNumber ) );
+        m_models.push_back( SIM_MODEL::Create( SIM_MODEL::TYPE::KIBIS_DEVICE, pins ) );
         m_modelNames.emplace_back( kcomp.m_name );
 
         SIM_MODEL_KIBIS* libcomp = dynamic_cast<SIM_MODEL_KIBIS*>( m_models.back().get() );

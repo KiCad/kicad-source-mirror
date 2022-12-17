@@ -400,16 +400,19 @@ public:
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
 
 
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount );
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount );
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<LIB_PIN*>& aPins );
+
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel,
+                                              const std::vector<LIB_PIN*>& aPins );
 
     template <typename T>
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel,
+                                              const std::vector<LIB_PIN*>& aPins,
                                               const std::vector<T>& aFields );
 
     template <typename T>
-    static std::unique_ptr<SIM_MODEL> Create( unsigned aSymbolPinCount,
-                                              const std::vector<T>& aFields );
+    static std::unique_ptr<SIM_MODEL> Create( const std::vector<T>& aFields,
+                                              const std::vector<LIB_PIN*>& aPins );
 
     template <typename T>
     static std::string GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName );
@@ -433,17 +436,11 @@ public:
     template <typename T>
     void ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
 
-    virtual void ReadDataSchFields( unsigned aSymbolPinCount,
-                                    const std::vector<SCH_FIELD>* aFields );
-    virtual void ReadDataLibFields( unsigned aSymbolPinCount,
-                                    const std::vector<LIB_FIELD>* aFields );
+    template <typename T>
+    void ReadDataFields( const std::vector<T>* aFields, const std::vector<LIB_PIN*>& aPins );
 
     template <typename T>
     void WriteFields( std::vector<T>& aFields ) const;
-
-    virtual void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const;
-    virtual void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const;
-
 
     virtual bool HasToIncludeSpiceLibrary() const { return GetBaseModel() && !HasOverrides(); }
 
@@ -522,6 +519,8 @@ public:
     }
     bool IsStoredInValue() const { return m_isStoredInValue; }
 
+    virtual void SwitchSingleEndedDiff( bool aDiff ) { };
+
     template <class T>
     static bool InferPassiveSimModel( T& aSymbol, bool aResolve,
                                       SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aModelType,
@@ -539,10 +538,14 @@ protected:
                std::unique_ptr<SIM_SERDE> aSerde );
 
     virtual void CreatePins( unsigned aSymbolPinCount );
+    virtual void CreatePins( const std::vector<LIB_PIN*> aSymbolPins );
 
 private:
     template <typename T>
     void doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
+
+    template <typename T>
+    void doReadDataFields( const std::vector<T>* aFields, const std::vector<LIB_PIN*>& aPins );
 
     template <typename T>
     void doWriteFields( std::vector<T>& aFields ) const;

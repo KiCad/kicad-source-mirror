@@ -179,7 +179,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::NMOS_HISIMHV2:        return { DEVICE_T::NMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
     case TYPE::PMOS_HISIMHV2:        return { DEVICE_T::PMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
 
-    case TYPE::V:                    return { DEVICE_T::V,      "",               "DC",                        };
+    case TYPE::V:                    return { DEVICE_T::V,      "DC",             "DC",                        };
     case TYPE::V_SIN:                return { DEVICE_T::V,      "SIN",            "Sine"                       };
     case TYPE::V_PULSE:              return { DEVICE_T::V,      "PULSE",          "Pulse"                      };
     case TYPE::V_EXP:                return { DEVICE_T::V,      "EXP",            "Exponential"                };
@@ -195,7 +195,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     //case TYPE::V_RANDPOISSON:        return { DEVICE_TYPE::V,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::V_BEHAVIORAL:         return { DEVICE_T::V,      "=",              "Behavioral"                 };
 
-    case TYPE::I:                    return { DEVICE_T::I,      "",               "DC",                        };
+    case TYPE::I:                    return { DEVICE_T::I,      "DC",             "DC",                        };
     case TYPE::I_SIN:                return { DEVICE_T::I,      "SIN",            "Sine"                       };
     case TYPE::I_PULSE:              return { DEVICE_T::I,      "PULSE",          "Pulse"                      };
     case TYPE::I_EXP:                return { DEVICE_T::I,      "EXP",            "Exponential"                };
@@ -312,12 +312,12 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::NMOS_HISIMHV2:        return { "M", "NMOS",        "",        "73", true,  false, "2.2.0" };
     case TYPE::PMOS_HISIMHV2:        return { "M", "PMOS",        "",        "73", true,  false, "2.2.0" };
 
-    case TYPE::V:                    return { "V", ""             };
+    case TYPE::V:                    return { "V", "",            "DC"       };
     case TYPE::V_SIN:                return { "V", "",            "SIN"      };
     case TYPE::V_PULSE:              return { "V", "",            "PULSE"    };
     case TYPE::V_EXP:                return { "V", "",            "EXP"      };
-    /*case TYPE::V_SFAM:               return { "V", "",       "AM"       };
-    case TYPE::V_SFFM:               return { "V", "",       "SFFM"     };*/
+    //case TYPE::V_SFAM:               return { "V", "",            "AM"       };
+    //case TYPE::V_SFFM:               return { "V", "",            "SFFM"     };
     case TYPE::V_PWL:                return { "V", "",            "PWL"      };
     case TYPE::V_WHITENOISE:         return { "V", "",            "TRNOISE"  };
     case TYPE::V_PINKNOISE:          return { "V", "",            "TRNOISE"  };
@@ -325,15 +325,15 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::V_RANDUNIFORM:        return { "V", "",            "TRRANDOM" };
     case TYPE::V_RANDNORMAL:         return { "V", "",            "TRRANDOM" };
     case TYPE::V_RANDEXP:            return { "V", "",            "TRRANDOM" };
-    //case TYPE::V_RANDPOISSON:        return { "V", "",       "TRRANDOM" };
+    //case TYPE::V_RANDPOISSON:        return { "V", "",            "TRRANDOM" };
     case TYPE::V_BEHAVIORAL:         return { "B"  };
 
-    case TYPE::I:                    return { "I", ""             };
+    case TYPE::I:                    return { "I", "",            "DC"       };
     case TYPE::I_PULSE:              return { "I", "",            "PULSE"    };
     case TYPE::I_SIN:                return { "I", "",            "SIN"      };
     case TYPE::I_EXP:                return { "I", "",            "EXP"      };
-    /*case TYPE::I_SFAM:               return { "V", "",       "AM"       };
-    case TYPE::I_SFFM:               return { "V", "",       "SFFM"     };*/
+    //case TYPE::I_SFAM:               return { "V", "",            "AM"       };
+    //case TYPE::I_SFFM:               return { "V", "",            "SFFM"     };
     case TYPE::I_PWL:                return { "I", "",            "PWL"      };
     case TYPE::I_WHITENOISE:         return { "I", "",            "TRNOISE"  };
     case TYPE::I_PINKNOISE:          return { "I", "",            "TRNOISE"  };
@@ -341,7 +341,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::I_RANDUNIFORM:        return { "I", "",            "TRRANDOM" };
     case TYPE::I_RANDNORMAL:         return { "I", "",            "TRRANDOM" };
     case TYPE::I_RANDEXP:            return { "I", "",            "TRRANDOM" };
-    //case TYPE::I_RANDPOISSON:        return { "I", "",       "TRRANDOM" };
+    //case TYPE::I_RANDPOISSON:        return { "I", "",            "TRRANDOM" };
     case TYPE::I_BEHAVIORAL:         return { "B"  };
 
     case TYPE::SUBCKT:               return { "X"  };
@@ -412,83 +412,62 @@ TYPE SIM_MODEL::InferTypeFromLegacyFields( const std::vector<T>& aFields )
 }
 
 
-template <typename T>
-void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
-{
-    doReadDataFields( aSymbolPinCount, aFields );
-}
-
-
 template <>
 void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
 {
-    ReadDataSchFields( aSymbolPinCount, aFields );
+    doReadDataFields( aSymbolPinCount, aFields );
 }
 
 
 template <>
 void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
 {
-    ReadDataLibFields( aSymbolPinCount, aFields );
-}
-
-
-void SIM_MODEL::ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
-{
     doReadDataFields( aSymbolPinCount, aFields );
 }
 
 
-void SIM_MODEL::ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
+template <>
+void SIM_MODEL::ReadDataFields( const std::vector<SCH_FIELD>* aFields,
+                                const std::vector<LIB_PIN*>& aPins )
 {
-    doReadDataFields( aSymbolPinCount, aFields );
+    doReadDataFields( aFields, aPins );
 }
 
 
-template <typename T>
-void SIM_MODEL::WriteFields( std::vector<T>& aFields ) const
+template <>
+void SIM_MODEL::ReadDataFields( const std::vector<LIB_FIELD>* aFields,
+                                const std::vector<LIB_PIN*>& aPins )
 {
-    doWriteFields( aFields );
+    doReadDataFields( aFields, aPins );
 }
 
 
 template <>
 void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields ) const
 {
-    WriteDataSchFields( aFields );
+    doWriteFields( aFields );
 }
 
 
 template <>
 void SIM_MODEL::WriteFields( std::vector<LIB_FIELD>& aFields ) const
 {
-    WriteDataLibFields( aFields );
-}
-
-
-void SIM_MODEL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
-{
     doWriteFields( aFields );
 }
 
 
-void SIM_MODEL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    doWriteFields( aFields );
-}
-
-
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCount )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_PIN*>& aPins )
 {
     std::unique_ptr<SIM_MODEL> model = Create( aType );
 
     // Passing nullptr to ReadDataFields will make it act as if all fields were empty.
-    model->ReadDataFields( aSymbolPinCount, static_cast<const std::vector<void>*>( nullptr ) );
+    model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
     return model;
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
+                                              const std::vector<LIB_PIN*>& aPins)
 {
     std::unique_ptr<SIM_MODEL> model = Create( aBaseModel.GetType() );
 
@@ -501,13 +480,14 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsig
         DisplayErrorMessage( nullptr, err.What() );
     }
 
-    model->ReadDataFields( aSymbolPinCount, static_cast<const std::vector<void>*>( nullptr ) );
+    model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
     return model;
 }
 
 
 template <typename T>
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
+                                              const std::vector<LIB_PIN*>& aPins,
                                               const std::vector<T>& aFields )
 {
     TYPE type = ReadTypeFromFields( aFields );
@@ -526,34 +506,35 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsig
     {
         DisplayErrorMessage( nullptr, err.What() );
     }
-    model->ReadDataFields( aSymbolPinCount, &aFields );
+
+    model->ReadDataFields( &aFields, aPins );
     return model;
 }
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
-                                                       unsigned aSymbolPinCount,
+                                                       const std::vector<LIB_PIN*>& aPins,
                                                        const std::vector<SCH_FIELD>& aFields );
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
-                                                       unsigned aSymbolPinCount,
+                                                       const std::vector<LIB_PIN*>& aPins,
                                                        const std::vector<LIB_FIELD>& aFields );
 
 
 template <typename T>
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
-                                              const std::vector<T>& aFields )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
+                                              const std::vector<LIB_PIN*>& aPins )
 {
     TYPE type = ReadTypeFromFields( aFields );
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
-    model->ReadDataFields( aSymbolPinCount, &aFields );
+    model->ReadDataFields( &aFields, aPins );
     return model;
 }
 
-template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
-                                                       const std::vector<SCH_FIELD>& aFields );
-template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
-                                                       const std::vector<LIB_FIELD>& aFields );
+template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFields,
+                                                       const std::vector<LIB_PIN*>& aPins );
+template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<LIB_FIELD>& aFields,
+                                                       const std::vector<LIB_PIN*>& aPins );
 
 
 template <typename T>
@@ -619,11 +600,20 @@ void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const std::string& aFiel
         aFields.emplace_back( wxPoint(), aFields.size(), parent, aFieldName );
     }
     else if constexpr( std::is_same<T, LIB_FIELD>::value )
+    {
         aFields.emplace_back( aFields.size(), aFieldName );
+    }
 
     aFields.back().SetText( aValue );
 }
 
+
+template void SIM_MODEL::SetFieldValue<SCH_FIELD>( std::vector<SCH_FIELD>& aFields,
+                                                   const std::string& aFieldName,
+                                                   const std::string& aValue );
+template void SIM_MODEL::SetFieldValue<LIB_FIELD>( std::vector<LIB_FIELD>& aFields,
+                                                   const std::string& aFieldName,
+                                                   const std::string& aValue );
 
 SIM_MODEL::~SIM_MODEL() = default;
 
@@ -1012,14 +1002,70 @@ void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
 }
 
 
+void SIM_MODEL::CreatePins( const std::vector<LIB_PIN*> aSymbolPins )
+{
+    // Default pin sequence: model pins are the same as symbol pins.
+    // Excess model pins are set as Not Connected.
+    // Note that intentionally nothing is added if `getPinNames()` returns an empty vector.
+
+    // SIM_MODEL pins must be ordered by symbol pin numbers -- this is assumed by the code that
+    // accesses them.
+
+    for( unsigned modelPinIndex = 0; modelPinIndex < getPinNames().size(); ++modelPinIndex )
+    {
+        if( modelPinIndex < aSymbolPins.size() )
+        {
+            AddPin( { getPinNames().at( modelPinIndex ),
+                      aSymbolPins[ modelPinIndex ]->GetNumber().ToStdString() } );
+        }
+        else
+        {
+            AddPin( { getPinNames().at( modelPinIndex ), "" } );
+        }
+    }
+}
+
+
+// TODO: remove this API.  If we have symbol fields, then we have symbol pins and we should be
+// creating a model with the real symbol pin names, not indexes...
+
 template <typename T>
 void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
+    bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
+    SwitchSingleEndedDiff( diffMode );
+
     try
     {
         m_serde->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
 
         CreatePins( aSymbolPinCount );
+        m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
+
+        std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
+
+        if( !m_serde->ParseParams( paramsField ) )
+            m_serde->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
+    }
+    catch( IO_ERROR& err )
+    {
+        DisplayErrorMessage( nullptr, err.What() );
+    }
+}
+
+
+template <typename T>
+void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
+                                  const std::vector<LIB_PIN*>& aPins )
+{
+    bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
+    SwitchSingleEndedDiff( diffMode );
+
+    try
+    {
+        m_serde->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
+
+        CreatePins( aPins );
         m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
 
         std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
@@ -1173,9 +1219,6 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         return;
     }
 
-    wxString prefix = aSymbol.GetPrefix();
-    T_field* valueField = aSymbol.FindField( wxT( "Value" ) );
-
     auto getSIValue =
             []( T_field* aField )
             {
@@ -1191,13 +1234,23 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 return value;
             };
 
-    wxString spiceType;
+    wxString              prefix = aSymbol.GetPrefix();
+    T_field*              valueField = aSymbol.FindField( wxT( "Value" ) );
+    std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
+
+    std::sort( sourcePins.begin(), sourcePins.end(),
+               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+               {
+                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+               } );
+
+    wxString spiceDeviceType;
     wxString spiceModel;
+    wxString spiceType;
     wxString spiceLib;
     wxString pinMap;
     wxString spiceParams;
     bool     modelFromValueField = false;
-    bool     modelFromLib = false;
 
     if( aSymbol.FindField( wxT( "Spice_Primitive" ) )
         || aSymbol.FindField( wxT( "Spice_Node_Sequence" ) )
@@ -1207,7 +1260,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     {
         if( T_field* primitiveField = aSymbol.FindField( wxT( "Spice_Primitive" ) ) )
         {
-            spiceType = primitiveField->GetText();
+            spiceDeviceType = primitiveField->GetText();
             aSymbol.RemoveField( primitiveField );
         }
 
@@ -1237,7 +1290,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
         if( T_field* modelField = aSymbol.FindField( wxT( "Spice_Model" ) ) )
         {
-            spiceModel = modelField->GetText();
+            spiceModel = getSIValue( modelField );
             aSymbol.RemoveField( modelField );
         }
         else
@@ -1267,13 +1320,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         {
             spiceLib = libFileField->GetText();
             aSymbol.RemoveField( libFileField );
-            modelFromLib = true;
         }
-    }
-    else if( prefix == wxT( "V" ) || prefix == wxT( "I" ) )
-    {
-        spiceModel = getSIValue( valueField );
-        modelFromValueField = true;
     }
     else
     {
@@ -1299,8 +1346,6 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             wxArrayString pinIndexes;
 
             wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
-
-            std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
 
             if( isPassive && pinIndexes.size() == 2 && sourcePins.size() == 2 )
             {
@@ -1342,7 +1387,10 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         return;
     }
 
-    if( modelFromLib )
+    bool libraryModel = false;
+    bool internalModel = false;
+
+    if( !spiceLib.IsEmpty() )
     {
         SIM_LIB_MGR libMgr( aProject );
 
@@ -1350,18 +1398,78 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         {
             std::vector<T_field> emptyFields;
             SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
-                                                           emptyFields, aSymbol.GetFullPinCount() );
+                                                           emptyFields, sourcePins );
 
             spiceParams = wxString( model.model.GetBaseModel()->Serde().GenerateParams() );
+            libraryModel = true;
+
+            if( pinMap.IsEmpty() )
+            {
+                // Generate a default pin map
+                model.model.CreatePins( sourcePins );
+                pinMap = wxString( model.model.Serde().GeneratePins() );
+            }
         }
         catch( ... )
         {
             // Fall back to raw spice model
-            modelFromLib = false;
+        }
+    }
+    else
+    {
+        // Convert functional SPICE model syntax to name=value pairs.  For instance, "dc(1)"
+        // needs to go to "dc=1", while "sin(0, 1, 60)" needs to go to "dc=0 ampl=1 f=60".
+
+        wxRegEx  regex( wxT( "^[a-z]+\\(.*\\)$" ) );
+
+        if( regex.Matches( spiceModel ) )
+        {
+            wxString paramSet;
+
+            spiceType = spiceModel.BeforeFirst( '(', &paramSet );
+            paramSet = paramSet.BeforeLast( ')' );
+
+            wxStringTokenizer tokenizer( paramSet, wxT( " " ), wxTOKEN_STRTOK );
+
+            spiceType.MakeUpper();
+
+            for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+            {
+                if( spiceDeviceType == SIM_MODEL::SpiceInfo( type ).itemType
+                        && spiceType == SIM_MODEL::SpiceInfo( type ).inlineTypeString )
+                {
+                    try
+                    {
+                        std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
+
+                        for( int ii = 0; tokenizer.HasMoreTokens(); ++ii )
+                        {
+                            model->SetParamValue( ii, tokenizer.GetNextToken().ToStdString(),
+                                                  SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+                        }
+
+                        spiceParams = wxString( model->Serde().GenerateParams() );
+                        internalModel = true;
+
+                        if( pinMap.IsEmpty() )
+                        {
+                            // Generate a default pin map
+                            model->CreatePins( sourcePins );
+                            pinMap = wxString( model->Serde().GeneratePins() );
+                        }
+                    }
+                    catch( ... )
+                    {
+                        // Fall back to raw spice model
+                    }
+
+                    break;
+                }
+            }
         }
     }
 
-    if( modelFromLib )
+    if( libraryModel )
     {
         T_field libraryField( &aSymbol, -1, SIM_MODEL::LIBRARY_FIELD );
         libraryField.SetText( spiceLib );
@@ -1378,18 +1486,33 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         if( modelFromValueField )
             valueField->SetText( wxT( "${SIM.NAME}" ) );
     }
-    else
+    else if( internalModel )
     {
-        // Insert a raw spice model as a substitute.
+        T_field deviceTypeField( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
+        deviceTypeField.SetText( spiceDeviceType );
+        aSymbol.AddField( deviceTypeField );
 
-        if( spiceType.IsEmpty() && spiceLib.IsEmpty() )
+        T_field typeField( &aSymbol, -1, SIM_MODEL::TYPE_FIELD );
+        typeField.SetText( spiceType );
+        aSymbol.AddField( typeField );
+
+        T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
+        paramsField.SetText( spiceParams );
+        aSymbol.AddField( paramsField );
+
+        if( modelFromValueField )
+            valueField->SetText( wxT( "${SIM.PARAMS}" ) );
+    }
+    else    // Insert a raw spice model as a substitute.
+    {
+        if( spiceDeviceType.IsEmpty() && spiceLib.IsEmpty() )
         {
             spiceParams = spiceModel;
         }
         else
         {
             spiceParams.Printf( wxT( "type=\"%s\" model=\"%s\" lib=\"%s\"" ),
-                                spiceType, spiceModel, spiceLib );
+                                spiceDeviceType, spiceModel, spiceLib );
         }
 
         T_field deviceTypeField( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
@@ -1408,41 +1531,25 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             if( valueField )
                 valueField->SetText( wxT( "${SIM.PARAMS}" ) );
         }
-    }
 
-    if( !pinMap.IsEmpty() )
-    {
-        T_field pinsField( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
-
-        pinsField.SetText( pinMap );
-        aSymbol.AddField( pinsField );
-    }
-    else
-    {
-        // Generate a 1:1 pin map.  We don't necessarily know the SPICE model pinNames, so just
-        // use indexes.
-        std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
-
-        std::sort( sourcePins.begin(), sourcePins.end(),
-                   []( const LIB_PIN* lhs, const LIB_PIN* rhs )
-                   {
-                       return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
-                   } );
-
-        for( unsigned ii = 0; ii < sourcePins.size(); ++ii )
+        if( pinMap.IsEmpty() )
         {
-            if( ii > 0 )
-                pinMap.Append( wxS( " " ) );
+            // Generate a 1:1 pin map.  We don't know the SPICE model pinNames, so just use indexes.
+            for( unsigned ii = 0; ii < sourcePins.size(); ++ii )
+            {
+                if( ii > 0 )
+                    pinMap.Append( wxS( " " ) );
 
-            pinMap.Append( wxString::Format( wxT( "%s=%u" ),
-                                             sourcePins[ii]->GetNumber(),
-                                             ii + 1 ) );
+                pinMap.Append( wxString::Format( wxT( "%s=%u" ),
+                                                 sourcePins[ii]->GetNumber(),
+                                                 ii + 1 ) );
+            }
         }
-
-        T_field pinsField( &aSymbol, aSymbol.GetFieldCount(), SIM_MODEL::PINS_FIELD );
-        pinsField.SetText( pinMap );
-        aSymbol.AddField( pinsField );
     }
+
+    T_field pinsField( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
+    pinsField.SetText( pinMap );
+    aSymbol.AddField( pinsField );
 }
 
 
