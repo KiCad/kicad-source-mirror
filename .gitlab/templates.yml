@@ -11,7 +11,7 @@
     - schedules
 
 ##########################################################################
-# Define a template for all the unit tests, since each one is run in a separate
+# Define a template for all the unit tests, since each one is run in a separate
 # job to make the display nicer.
 ##########################################################################
 .unit_test:
