@@ -31,6 +31,8 @@ public:
     {
         m_cb = customizer.AddCheckBox( _( "Create a new project for this board" ) );
         m_cb->SetValue( true );
+
+        m_controlsAttached = true;
     }
 
     virtual void TransferDataFromCustomControls() override
@@ -41,10 +43,14 @@ public:
     ///< Gets the selected state of the create new project option
     bool GetCreateNewProject() const { return m_createNewProject; }
 
-private:
-    bool m_createNewProject;
+    ///< Gets if this hook has attached controls to a dialog box
+    bool IsAttachedToDialog() const { return m_controlsAttached; }
 
-    wxFileDialogCheckBox* m_cb;
+private:
+    bool m_createNewProject = true;
+    bool m_controlsAttached = false;
+
+    wxFileDialogCheckBox* m_cb = nullptr;
 
     wxDECLARE_NO_COPY_CLASS( FILEDLG_HOOK_SAVE_PROJECT );
 };

@@ -227,16 +227,13 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
     wxFileDialog dlg( aParent, _( "Save Board File As" ), fn.GetPath(), fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+// Add a "Create a project" checkbox in standalone mode and one isn't loaded
 #if wxCHECK_VERSION( 3, 1, 7 )
     FILEDLG_HOOK_SAVE_PROJECT newProjectHook;
-    bool                      checkHook = false;
-#endif
 
-#if wxCHECK_VERSION( 3, 1, 7 )
-    dlg.SetCustomizeHook( newProjectHook );
-    checkHook = true;
+    if( Kiface().IsSingle() && aParent->Prj().IsNullProject() )
+        dlg.SetCustomizeHook( newProjectHook );
 #else
-    // Add a "Create a project" checkbox in standalone mode and one isn't loaded
     if( Kiface().IsSingle() && aParent->Prj().IsNullProject() )
         dlg.SetExtraControlCreator( &LEGACYFILEDLG_SAVE_PROJECT::Create );
 #endif
@@ -253,7 +250,7 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
     *aFileName = fn.GetFullPath();
 
 #if wxCHECK_VERSION( 3, 1, 7 )
-    if( checkHook )
+    if( newProjectHook.IsAttachedToDialog() )
         *aCreateProject = newProjectHook.GetCreateNewProject();
     else if( !aParent->Prj().IsNullProject() )
         *aCreateProject = true;
