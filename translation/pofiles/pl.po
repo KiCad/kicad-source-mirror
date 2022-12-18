@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
-"PO-Revision-Date: 2022-12-14 15:48+0000\n"
+"PO-Revision-Date: 2022-12-20 15:47+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -11169,9 +11169,8 @@ msgid "Failed to read simulation model from fields."
 msgstr "Nie można odczytać modelu symulacji z odpowiednich pól."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
-#, fuzzy
 msgid "Component:"
-msgstr "Symbol"
+msgstr "Komponent:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
@@ -12643,19 +12642,19 @@ msgid "Unknown netlist format.\n"
 msgstr "Nieprawidłowy format listy sieci.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Zmień symbol %s z '%s' na '%s'"
+msgstr "Rysuję symbol '%s' element %d na '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Zmień symbol %s z '%s' na '%s'"
+msgstr "Rysuję symbol '%s' na '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "Nie można przetworzyć '%s' w '%s'"
+msgstr "Nie można otworzyć docelowego '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:435
 #: eeschema/eeschema_jobs_handler.cpp:495 pcbnew/pcbnew_jobs_handler.cpp:599
@@ -17955,9 +17954,8 @@ msgid "Show the Python scripting console"
 msgstr "Pokaż konsolę skryptów Python"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Change Sheet"
-msgstr "Zmień sieci"
+msgstr "Zmień arkusz"
 
 #: eeschema/tools/ee_actions.cpp:764
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -20032,14 +20030,12 @@ msgstr "Unikaj ustawiania koloru tła (niezależnie od motywu)"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:42
-#, fuzzy
 msgid "Specific symbol to export within the library"
-msgstr "Nie można wyeksportować do schowka"
+msgstr "Konkretny symbol do wyeksportowania w bibliotece"
 
 #: kicad/cli/command_fp_export_svg.cpp:62
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "Ścieżka do footprintu nie istnieje lub nie jest dostępna\n"
+msgstr "Biblioteka footprintów nie istnieje lub nie jest dostępna\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
@@ -35470,9 +35466,8 @@ msgid "Error creating svg file"
 msgstr "Błąd podczas tworzenia pliku SVG"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:578 pcbnew/pcbnew_jobs_handler.cpp:649
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "Zapisywanie tabeli bibliotek footprintów\n"
+msgstr "Wczytywanie biblioteki footprintów\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:615
 msgid "Saving footprint library\n"
@@ -35483,14 +35478,13 @@ msgid "Footprint library was not updated\n"
 msgstr "Biblioteka footprintów nie została uaktualniona\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:699
-#, fuzzy
 msgid "The given footprint could not be found to export."
-msgstr "Nie znaleziono pliku automatycznego przydzielania '%s'."
+msgstr "Nie znaleziono danego footprintu w celu jego eksportu."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "Zmieniono footprint %s z '%s' na '%s'"
+msgstr "Rysowanie footprintu '%s' na '%s'\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -41051,9 +41045,8 @@ msgid "Textbox"
 msgstr "Ramka tekstowa"
 
 #: pcbnew/widgets/search_handlers.cpp:317
-#, fuzzy
 msgid "No Net"
-msgstr "Nowa sieć"
+msgstr "Brak sieci"
 
 #: pcbnew/zone.cpp:525
 msgid "Cutout"
