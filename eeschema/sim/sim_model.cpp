@@ -1310,7 +1310,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                     if( ii > 0 )
                         pinMap.Append( wxS( " " ) );
 
-                    pinMap.Append( wxString::Format( wxT( "%s=%u" ),
+                    pinMap.Append( wxString::Format( wxT( "%s=%s" ),
                                                      sourcePins[ii]->GetNumber(),
                                                      pinIndexes[ ii ] ) );
                 }
