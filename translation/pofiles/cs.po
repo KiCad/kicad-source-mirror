@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
-"PO-Revision-Date: 2022-12-11 20:19+0000\n"
+"PO-Revision-Date: 2022-12-20 15:47+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -3176,13 +3176,12 @@ msgid "Remember open files for next project launch"
 msgstr "Pamatovat si otevřené soubory v projektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:230
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"Je-li zaškrtnuto, spuštění projektu také spustí nástroje jako eeschema a "
-"pcbnew s dříve otevřenými soubory"
+"Je-li zaškrtnuto, spustí se při spuštění projektu také nástroje, jako jsou "
+"editory schémat a desek s dříve otevřenými soubory"
 
 #: common/dialogs/panel_common_settings_base.cpp:243
 msgid "&Auto save:"
@@ -5917,9 +5916,8 @@ msgid "Delete clicked items"
 msgstr "Odstranit položky, na které jste klikli"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "Přepnout realistický režim"
+msgstr "Přepíná režim edice oblouků"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
@@ -10988,9 +10986,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "Simulace"
+msgstr "Příkaz simulace"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:181
 #, c-format
@@ -11002,9 +10999,8 @@ msgid "Failed to read simulation model from fields."
 msgstr "Nepodařilo se načíst simulační model z polí."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
-#, fuzzy
 msgid "Component:"
-msgstr "Součástka"
+msgstr "Součástka:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
@@ -11063,7 +11059,7 @@ msgstr "Diferenciální"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:101
 msgid "Built-in SPICE model"
-msgstr ""
+msgstr "Vestavěný model SPICE"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:110
 msgid "Device:"
@@ -12459,19 +12455,19 @@ msgid "Unknown netlist format.\n"
 msgstr "Neznámý formát netlistu.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Změnit symbol %s z '%s' na '%s'"
+msgstr "Vykreslování symbolu '%s' jednotky %d do '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Změnit symbol %s z '%s' na '%s'"
+msgstr "Vykreslování symbolu '%s' do '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "Nelze analyzovat '%s' na '%s'"
+msgstr "Nelze otevřít cíl '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:435
 #: eeschema/eeschema_jobs_handler.cpp:495 pcbnew/pcbnew_jobs_handler.cpp:599
@@ -15145,14 +15141,12 @@ msgid "Invalid R_load."
 msgstr "Neplatný R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:420
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatná sestupná dv/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:425
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatné náběžné dv/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:440
 msgid "Model name cannot be empty"
@@ -15211,24 +15205,20 @@ msgid "Invalid pullup."
 msgstr "Neplatný pullup."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:532
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "Neplatné měřítko Y"
+msgstr "Neplatná svorka POWER."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:537
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "Neplatné měřítko Y"
+msgstr "Neplatná svorka GND."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:546
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "Neplatný"
+msgstr "Neplatný Ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:556
-#, fuzzy
 msgid "Checking Header..."
-msgstr "Kontrola plošek..."
+msgstr "Kontroluji hlavičku..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:560
 msgid "Missing [IBIS Ver]"
@@ -15239,14 +15229,12 @@ msgid "The parser does not handle this IBIS version"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:572
-#, fuzzy
 msgid "Missing [File Rev]"
-msgstr "Chybí název pravidla."
+msgstr "Chybí [soubor rev]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:578
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "Chybí název pravidla."
+msgstr "Chybí [název souboru]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
 #, fuzzy
@@ -15258,24 +15246,20 @@ msgid "Checking package model "
 msgstr "Kontrola modelu balíčku "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:611
-#, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "Název sítě nemůže být prázdný."
+msgstr "Výrobce nemůže být prázdný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:617
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "%s nemůže být prázdné."
+msgstr "OEM nemůže být prázdný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:623
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "Počet bodů"
+msgstr "Záporný počet vývodů."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:637
-#, fuzzy
 msgid "Empty pin number"
-msgstr "Očekává se číslo."
+msgstr "Prázdné číslo vývodu"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:645
 msgid "Resistance matrix is incorrect"
@@ -15294,19 +15278,16 @@ msgid "Capacitance matrix is nullptr"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:673
-#, fuzzy
 msgid "Inductance matrix is undefined"
-msgstr "Délka vodiče:"
+msgstr "Matice indukcí je nesprávná"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:679
-#, fuzzy
 msgid "Inductance matrix is incorrect"
-msgstr "Délka vodiče:"
+msgstr "Indukční matice je nesprávná"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:685
-#, fuzzy
 msgid "Inductance matrix is nullptr"
-msgstr "Délka vodiče:"
+msgstr "Indukční matice je nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:701
 msgid "Cannot open file "
@@ -15325,9 +15306,8 @@ msgid "Error on line "
 msgstr "Chyba na řádku "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:769
-#, fuzzy
 msgid "A line did not end properly."
-msgstr "Položky v importovaném souboru nelze správně zpracovat."
+msgstr "Řádek neskončil správně."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:905
 #: eeschema/sim/kibis/ibis_parser.cpp:922
@@ -15335,39 +15315,33 @@ msgid "Line exceeds maximum length."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:948
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "Nepodařilo se vytvořit složku '%s'."
+msgstr "Chyba při čtení double hodnoty."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:954
 #: eeschema/sim/kibis/ibis_parser.cpp:998
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "Nepodařilo se načíst '%s'."
+msgstr "Chyba čtení hodnoty slova."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:991
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "Nečíslovaný symbol"
+msgstr "Číslo není celé číslo"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1035
-#, fuzzy
 msgid "Unable to read string, input is empty."
-msgstr "Nelze číst soubor dat '%s'."
+msgstr "Nelze číst řetězec, vstup je prázdný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1085
-#, fuzzy
 msgid "New comment character is invalid."
-msgstr "parametr počet lomené čáry %d není platný"
+msgstr "Nový znak komentáře je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1098
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1109
-#, fuzzy
 msgid "No extra argument was expected"
-msgstr "Síť není zvolena"
+msgstr "Nebyl očekáván žádný další argument"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1261
 msgid "Unknown keyword in "
@@ -15378,27 +15352,24 @@ msgid " context: "
 msgstr " kontext: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1327
-#, fuzzy
 msgid "Invalid ramp data"
-msgstr "Neplatná šířka spoje"
+msgstr "Neplatná ramp data"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1411
 msgid "Cannot specify a bandwidth for that kind of matrix"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "Neplatná definice řádku"
+msgstr "Neplatný řádek v matici"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1460
 msgid "Too much data for this matrix row."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1468
-#, fuzzy
 msgid "Too much data for this matrix."
-msgstr "Žádný vývod pro toto pouzdro."
+msgstr "Příliš mnoho dat pro tuto matici."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1473
 #: eeschema/sim/kibis/ibis_parser.cpp:1506
@@ -15410,14 +15381,12 @@ msgid "Can't read a matrix index"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1579
-#, fuzzy
 msgid "Unknown matrix type"
-msgstr "neznámý prokov typu %d"
+msgstr "Neznámý typ matice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1587
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "Chybí max hodnota."
+msgstr "Chybí typ matice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1593
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
@@ -15449,9 +15418,8 @@ msgstr "Neznámé povolení: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1896
 #: eeschema/sim/kibis/ibis_parser.cpp:1918
-#, fuzzy
 msgid "Internal Error while reading Enable"
-msgstr "%d chyb při čtení Gerber souboru [%s]"
+msgstr "Vnitřní chyba při čtení povolení"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1911
 msgid "Unknown polarity "
@@ -15474,33 +15442,28 @@ msgid "Can't read a R, L or C value for a pin."
 msgstr "Nelze číst hodnotu R, L nebo C pro vývod."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2201
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "Neplatná definice názvů vývodů"
+msgstr "Neplatný název pole v [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2208
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "Chybějící zdroj"
+msgstr "V [Pin] chybí argument"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2243
 msgid "Wrong number of columns for pin mapping."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2283
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "Nesprávné číslo rozsahu"
+msgstr "Nesprávné jméno diff_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2288
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "Nesprávné číslo rozsahu"
+msgstr "Nesprávný název inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2368
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "neznámý prokov typu %d"
+msgstr "Neznámý typ tvaru vlny"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2379
 msgid "Internal error detected, a waveform should exist"
@@ -15508,31 +15471,27 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2444
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "Vnitřní chyba: Špatně zpracovaný kontext."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2481
 msgid "Missing keyword."
 msgstr "Chybí klíčové slovo."
 
 #: eeschema/sim/kibis/kibis.cpp:454
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "Tvar nemá žádné body."
+msgstr "tvar vlny má méně než dva body"
 
 #: eeschema/sim/kibis/kibis.cpp:675 eeschema/sim/kibis/kibis.cpp:740
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr "Nelze přejmenovat dočasný soubor '%s' na '%s'"
+msgstr "Nelze odstranit dočasný výstupní soubor"
 
 #: eeschema/sim/kibis/kibis.cpp:726
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "%d chyb při čtení Gerber souboru [%s]"
+msgstr "Chyba při čtení dočasného souboru"
 
 #: eeschema/sim/kibis/kibis.cpp:735
-#, fuzzy
 msgid "Error while creating temporary output file"
-msgstr "%d chyb při čtení Gerber souboru [%s]"
+msgstr "Chyba při vytváření dočasného výstupního souboru"
 
 #: eeschema/sim/kibis/kibis.cpp:774
 msgid ""
@@ -15567,24 +15526,20 @@ msgid "Invalid model type for a driver."
 msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:1305
-#, fuzzy
 msgid "Invalid model type for a device"
-msgstr "Neplatná hodnota vlastnosti"
+msgstr "Neplatný typ modelu pro zařízení"
 
 #: eeschema/sim/kibis/kibis.cpp:1525 eeschema/sim/kibis/kibis.cpp:1571
-#, fuzzy
 msgid "Number of cycles should be greater than 0."
-msgstr "Mezera spoje musí být větší než nula."
+msgstr "Počet cyklů by měl být větší než 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1531 eeschema/sim/kibis/kibis.cpp:1577
-#, fuzzy
 msgid "ON time should be greater than 0."
-msgstr "Mezera spoje musí být větší než nula."
+msgstr "Čas ON by měl být větší než 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1537 eeschema/sim/kibis/kibis.cpp:1583
-#, fuzzy
 msgid "OFF time should be greater than 0."
-msgstr "Mezera spoje musí být větší než nula."
+msgstr "Čas OFF by měl být větší než 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1545
 msgid "Rising edge is longer than on time."
@@ -15603,14 +15558,12 @@ msgid "Falling edge is longer than OFF time."
 msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:1613 eeschema/sim/kibis/kibis.cpp:1644
-#, fuzzy
 msgid "Bitrate should be greater than 0."
-msgstr "Mezera spoje musí být větší než nula."
+msgstr "Datový tok by měl být větší než 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1619 eeschema/sim/kibis/kibis.cpp:1650
-#, fuzzy
 msgid "Number of bits should be greater than 0."
-msgstr "Mezera spoje musí být větší než nula."
+msgstr "Počet bitů by měl být větší než 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1631
 msgid "Bitrate is too high for rising / falling edges"
@@ -15621,9 +15574,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr ""
 
 #: eeschema/sim/sim_lib_mgr.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr "Chyba načítání knihovny simulačních modelů '%s': %s"
+msgstr "Knihovna simulačních modelů nebyla nalezena na '%s' nebo '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:283
 #, c-format
@@ -15645,14 +15598,14 @@ msgstr ""
 "knihovně '%s'"
 
 #: eeschema/sim/sim_model.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
-msgstr "Nelze najít parametr simulačního modelu s názvem '%s'"
+msgstr "Nelze najít vývod s názvem '%s' v simulačním modelu typu '%s'"
 
 #: eeschema/sim/sim_model.cpp:816 eeschema/sim/sim_model.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
-msgstr "Nelze najít parametr simulačního modelu s názvem '%s'"
+msgstr "Nelze najít parametr s názvem '%s' v simulačním modelu typu '%s'"
 
 #: eeschema/sim/sim_model.h:467
 #, c-format
@@ -15672,9 +15625,9 @@ msgid "Could not find IBIS component '%s'"
 msgstr "Nelze najít komponentu IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS component '%s'"
-msgstr "Neplatný IBIS model '%s'"
+msgstr "Neplatná součást IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
 #, c-format
@@ -15701,19 +15654,16 @@ msgid "Power supply"
 msgstr "Napájecí zdroj"
 
 #: eeschema/sim/sim_model_kibis.cpp:357
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "Parazitní odpor"
+msgstr "Parazitní odpor pin"
 
 #: eeschema/sim/sim_model_kibis.cpp:367
-#, fuzzy
 msgid "Parasitic pin inductance"
-msgstr "Parazitní odpor"
+msgstr "Parazitní indukčnost pin"
 
 #: eeschema/sim/sim_model_kibis.cpp:377
-#, fuzzy
 msgid "Parasitic pin capacitance"
-msgstr "Parazitní odpor"
+msgstr "Parazitní kapacita pin"
 
 #: eeschema/sim/sim_model_kibis.cpp:421
 msgid "DC Value"
@@ -15732,9 +15682,8 @@ msgid "Delay"
 msgstr "Zpoždění"
 
 #: eeschema/sim/sim_model_kibis.cpp:463
-#, fuzzy
 msgid "Number of cycles"
-msgstr "Počet vzorků"
+msgstr "Počet cyklů"
 
 #: eeschema/sim/sim_model_kibis.cpp:480
 msgid "Bitrate"
@@ -15782,14 +15731,12 @@ msgid "Tune component values"
 msgstr "Ladit hodnoty součástek"
 
 #: eeschema/sim/sim_plot_frame.cpp:175
-#, fuzzy
 msgid "Sim Command"
-msgstr "Příkaz"
+msgstr "Příkaz Sim"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
-#, fuzzy
 msgid "Simulation command and settings"
-msgstr "Parametry a nastavení simulace"
+msgstr "Příkaz a parametry simulace"
 
 #: eeschema/sim/sim_plot_frame.cpp:356 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
@@ -15863,9 +15810,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Nejdříve musíte spustit simulaci, která generuje grafy."
 
 #: eeschema/sim/sim_plot_frame.cpp:1670
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Uložit změny na desku"
+msgstr "Uložit změny do sešitu?"
 
 #: eeschema/sim/sim_plot_frame.cpp:1832
 msgid ""
@@ -15900,28 +15846,24 @@ msgid "New Plot"
 msgstr "Nově kreslit"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Otevřít sešit"
+msgstr "Otevřít sešit..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 msgid "Save Workbook"
 msgstr "Uložit sešit"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "Uložit sešit"
+msgstr "Uložit sešit jako..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "Exportovat aktuální pohled jako PNG..."
+msgstr "Exportovat aktuální graf jako PNG..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "Exportovat aktuální pohled jako PNG..."
+msgstr "Exportovat aktuální graf jako CSV..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -16101,6 +16043,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
+"<b>Varování: Předpona reference</b><br>předpona končící '%s' může vytvořit "
+"problémy, pokud je uložena v knihovně symbolů"
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -17071,9 +17015,8 @@ msgid "Add Power"
 msgstr "Přidat napájení"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "Přidat symbol"
+msgstr "Přidat symbol napájení"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -17510,10 +17453,9 @@ msgid "Import Footprint Assignments..."
 msgstr "Importovat přiřazení pouzdra..."
 
 #: eeschema/tools/ee_actions.cpp:628
-#, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr "Import přiřazení pouzder ze souboru .cmp vytvořeného programem Pcbnew"
+msgstr "Import přiřazení pouzder ze souboru .cmp vytvořeného editorem desky"
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Annotate Schematic..."
@@ -17665,9 +17607,8 @@ msgstr "Zobrazit značky pro existující výjimky kontroly pravidel návrhu"
 
 #: eeschema/tools/ee_actions.cpp:723 eeschema/tools/ee_actions.cpp:728
 #: eeschema/tools/ee_actions.cpp:734 eeschema/tools/ee_actions.cpp:740
-#, fuzzy
 msgid "Line Mode for Wires and Buses"
-msgstr "Vynutit H/V spoje a sběrnice"
+msgstr "Režim kreslení pro spoje a sběrnice"
 
 #: eeschema/tools/ee_actions.cpp:723
 msgid "Draw and drag at any angle"
@@ -17714,9 +17655,8 @@ msgid "Show the Python scripting console"
 msgstr "Zobrazit Python skriptovací konzoli"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Change Sheet"
-msgstr "Změnit sítě"
+msgstr "Změnit list"
 
 #: eeschema/tools/ee_actions.cpp:764
 #, fuzzy
@@ -19080,7 +19020,7 @@ msgstr "Otevřít automaticky detekovaný soubor(y)..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
-msgstr ""
+msgstr "Otevřít automaticky detekovaný soubor(y) v nové vrstvě."
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Gerber Plot File(s)..."
@@ -19489,6 +19429,8 @@ msgstr "Neplatný název vrstvy \"%s\"\n"
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 msgstr ""
+"Čárkou oddělený seznam nepřeložených názvů vrstev tak, aby obsahovaly "
+"například F.Cu,B.Cu"
 
 #: kicad/cli/command_export_pcb_base.cpp:113
 msgid "At least one or more layers must be specified\n"
@@ -19653,7 +19595,7 @@ msgstr "Pouze černobílá"
 #: kicad/cli/command_fp_export_svg.cpp:38
 #: kicad/cli/command_sym_export_svg.cpp:38
 msgid "Color theme to use (will default to pcbnew settings)"
-msgstr ""
+msgstr "Barevné téma k použití (bude výchozí v nastavení pcbnew)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:47
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
@@ -35488,6 +35430,8 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
 msgstr ""
+"ID kóty %s používá typ jednotky, který není podporován v KiCadu. Místo toho "
+"byly použity milimetry."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3952
 msgid ""
