@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
-"PO-Revision-Date: 2022-12-17 00:49+0000\n"
+"PO-Revision-Date: 2022-12-20 15:47+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -11208,9 +11208,8 @@ msgid "Failed to read simulation model from fields."
 msgstr "Houve uma falha ao ler o modelo de simulação a partir dos campos."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
-#, fuzzy
 msgid "Component:"
-msgstr "Componente"
+msgstr "Componente:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
@@ -12690,19 +12689,19 @@ msgid "Unknown netlist format.\n"
 msgstr "Tipo desconhecido do formato da netlist\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Altere o símbolo %s de '%s' para '%s'"
+msgstr "Plotagem do símbolo '%s' unidade %d para '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Altere o símbolo %s de '%s' para '%s'"
+msgstr "Plotagem do símbolo '%s' para '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "Impossível interpretar '%s' em '%s'"
+msgstr "Não é possível abrir o destino '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:435
 #: eeschema/eeschema_jobs_handler.cpp:495 pcbnew/pcbnew_jobs_handler.cpp:599
@@ -18036,9 +18035,8 @@ msgid "Show the Python scripting console"
 msgstr "Mostra o console do script Python"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Change Sheet"
-msgstr "Altera redes"
+msgstr "Altera a folha"
 
 #: eeschema/tools/ee_actions.cpp:764
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -20119,14 +20117,12 @@ msgstr "Evite definir uma cor de fundo (independente do tema)"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:42
-#, fuzzy
 msgid "Specific symbol to export within the library"
-msgstr "Não foi possível exportar para a área de transferência"
+msgstr "Símbolo específico para exportar dentro da biblioteca"
 
 #: kicad/cli/command_fp_export_svg.cpp:62
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "O caminho do footprint não existe ou não está acessível\n"
+msgstr "O caminho da biblioteca do footprint não existe ou não está acessível\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
@@ -31710,7 +31706,6 @@ msgid "Check rule syntax"
 msgstr "Verifique a sintaxe da regra"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -32059,6 +32054,7 @@ msgstr ""
 "### Tipos de restrição\n"
 "\n"
 " * annular\\_width\n"
+" * assertion\n"
 " * clearance\n"
 " * connection\\_width\n"
 " * courtyard_clearance\n"
@@ -32236,10 +32232,10 @@ msgstr ""
 "Editor de camadas da placa ou o seu nome canônico (ex.: `F.Cu`).\n"
 "\n"
 "NB: isso retorna verdadeiro caso `A` esteja numa determinada\n"
-"camada, independentemente se a regra foi ou não avaliada para aquela "
-"camada.\n"
-"Para este último, use uma cláusula `(layer \"layer_name\")` dentro da "
-"regra.\n"
+"camada, independentemente se a regra foi ou não avaliada para aquela camada."
+"\n"
+"Para este último, use uma cláusula `(layer \"layer_name\")` dentro da regra."
+"\n"
 "<br><br>\n"
 "\n"
 "    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
@@ -32279,13 +32275,13 @@ msgstr ""
 "\n"
 "    (rule \"Distância entre as vias das diferentes nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Espaço entre as ilhas das diferentes nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Furo da ilha para monitorar a folga\"\n"
@@ -35622,9 +35618,8 @@ msgid "Error creating svg file"
 msgstr "Houve um erro ao criar o arquivo svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:578 pcbnew/pcbnew_jobs_handler.cpp:649
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "Salvando a biblioteca footprint\n"
+msgstr "Carregando a biblioteca do footprint\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:615
 msgid "Saving footprint library\n"
@@ -35635,14 +35630,13 @@ msgid "Footprint library was not updated\n"
 msgstr "A biblioteca footprint não foi atualizada\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:699
-#, fuzzy
 msgid "The given footprint could not be found to export."
-msgstr "O arquivo de equivalência '%s' não pode ser encontrado."
+msgstr "O footprint informado não pôde ser encontrado para a exportação."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "Footprints que foram alterados %s de '%s' para '%s'"
+msgstr "Plotando o footprint '%s' para '%s'\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -41216,9 +41210,8 @@ msgid "Textbox"
 msgstr "Textbox"
 
 #: pcbnew/widgets/search_handlers.cpp:317
-#, fuzzy
 msgid "No Net"
-msgstr "Nova rede"
+msgstr "Nenhuma rede"
 
 #: pcbnew/zone.cpp:525
 msgid "Cutout"
