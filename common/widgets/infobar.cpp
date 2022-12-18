@@ -174,6 +174,9 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags, MESSAGE_TYPE
 
 void WX_INFOBAR::Dismiss()
 {
+    if( !IsShown() )
+        return;
+
     // Don't do anything if we requested the UI update
     if( m_updateLock )
         return;
