@@ -518,10 +518,10 @@ public:
 
     virtual void SwitchSingleEndedDiff( bool aDiff ) { };
 
-    template <class T>
-    static bool InferPassiveSimModel( T& aSymbol, bool aResolve,
-                                      SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aModelType,
-                                      wxString* aModelParams, wxString* aPinMap );
+    template <class T_symbol, class T_field>
+    static bool InferSimModel( T_symbol& aSymbol, bool aResolve,
+                               SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
+                               wxString* aModelType, wxString* aModelParams, wxString* aPinMap );
 
     template <class T_symbol, class T_field>
     static void MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject );

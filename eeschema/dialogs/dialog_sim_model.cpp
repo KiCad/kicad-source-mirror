@@ -133,35 +133,31 @@ template <typename T_symbol, typename T_field>
 bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
 {
     wxCommandEvent dummyEvent;
+    wxString       deviceType;
+    wxString       modelType;
+    wxString       modelParams;
+    wxString       pinMap;
 
-    // Infer RLC models if they aren't specified
-    if( !m_symbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
-            && !m_symbol.FindField( SIM_MODEL::PARAMS_FIELD ) )
+    // Infer RLC and VI models if they aren't specified
+    if( SIM_MODEL::InferSimModel<T_symbol, T_field>( m_symbol, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
+                                                     &deviceType, &modelType, &modelParams, &pinMap ) )
     {
-        wxString modelType;
-        wxString modelParams;
-        wxString pinMap;
+        m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
+        m_fields.back().SetText( deviceType );
 
-        if( SIM_MODEL::InferPassiveSimModel( m_symbol, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
-                                             &modelType, &modelParams, &pinMap ) )
+        if( !modelType.IsEmpty() )
         {
-            m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
-            m_fields.back().SetText( m_symbol.GetPrefix().Left( 1 ) );
-
-            if( !modelType.IsEmpty() )
-            {
-                m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::TYPE_FIELD );
-                m_fields.back().SetText( modelType );
-            }
-
-            m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PARAMS_FIELD );
-            m_fields.back().SetText( modelParams );
-
-            m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PINS_FIELD );
-            m_fields.back().SetText( pinMap );
-
-            m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
+            m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::TYPE_FIELD );
+            m_fields.back().SetText( modelType );
         }
+
+        m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PARAMS_FIELD );
+        m_fields.back().SetText( modelParams );
+
+        m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PINS_FIELD );
+        m_fields.back().SetText( pinMap );
+
+        m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
@@ -264,10 +260,10 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
                                        + e.What() );
         }
 
-        SIM_MODEL::DEVICE_T deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+        SIM_MODEL::DEVICE_T deviceTypeT = SIM_MODEL::TypeInfo( type ).deviceType;
 
-        if( !m_curModelTypeOfDeviceType.count( deviceType ) )
-            m_curModelTypeOfDeviceType[deviceType] = type;
+        if( !m_curModelTypeOfDeviceType.count( deviceTypeT ) )
+            m_curModelTypeOfDeviceType[deviceTypeT] = type;
     }
 
     m_saveInValueCheckbox->SetValue( curModel().IsStoredInValue() );

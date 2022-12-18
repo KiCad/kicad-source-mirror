@@ -232,33 +232,31 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                     spiceItem.fields.back().SetText( symbol->GetFields()[i].GetShownText( 0, false ) );
             }
 
-            // Infer RLC models if they aren't specified
-            if( !symbol->FindField( SIM_MODEL::DEVICE_TYPE_FIELD, false )
-                    && !symbol->FindField( SIM_MODEL::PARAMS_FIELD, false ) )
+            wxString deviceType;
+            wxString modelType;
+            wxString modelParams;
+            wxString pinMap;
+
+            // Infer RLC and VI models if they aren't specified
+            if( SIM_MODEL::InferSimModel<SCH_SYMBOL, SCH_FIELD>( *symbol, true,
+                                                                 SIM_VALUE_GRAMMAR::NOTATION::SPICE,
+                                                                 &deviceType, &modelType,
+                                                                 &modelParams, &pinMap ) )
             {
-                wxString modelType;
-                wxString modelParams;
-                wxString pinMap;
+                spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
+                spiceItem.fields.back().SetText( deviceType );
 
-                if( SIM_MODEL::InferPassiveSimModel( *symbol, true,
-                                                     SIM_VALUE_GRAMMAR::NOTATION::SPICE,
-                                                     &modelType, &modelParams, &pinMap ) )
+                if( !modelType.IsEmpty() )
                 {
-                    spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
-                    spiceItem.fields.back().SetText( symbol->GetPrefix().Left( 1 ) );
-
-                    if( !modelType.IsEmpty() )
-                    {
-                        spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::TYPE_FIELD );
-                        spiceItem.fields.back().SetText( modelType );
-                    }
-
-                    spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PARAMS_FIELD );
-                    spiceItem.fields.back().SetText( modelParams );
-
-                    spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PINS_FIELD );
-                    spiceItem.fields.back().SetText( pinMap );
+                    spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::TYPE_FIELD );
+                    spiceItem.fields.back().SetText( modelType );
                 }
+
+                spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PARAMS_FIELD );
+                spiceItem.fields.back().SetText( modelParams );
+
+                spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PINS_FIELD );
+                spiceItem.fields.back().SetText( pinMap );
             }
 
             try

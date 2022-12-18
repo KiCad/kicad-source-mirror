@@ -1049,103 +1049,184 @@ bool SIM_MODEL::requiresSpiceModelLine() const
 }
 
 
-template <class T>
-bool SIM_MODEL::InferPassiveSimModel( T& aSymbol, bool aResolve,
-                                      SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aModelType,
-                                      wxString* aModelParams, wxString* aPinMap )
+template <class T_symbol, class T_field>
+bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
+                               SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
+                               wxString* aModelType, wxString* aModelParams, wxString* aPinMap )
 {
-    wxString aPrefix = aSymbol.GetPrefix();
-    wxString aValue;
+    auto convertNotation =
+            [&]( const wxString& units ) -> wxString
+            {
+                if( aNotation == SIM_VALUE_GRAMMAR::NOTATION::SPICE )
+                {
+                    if( units == wxT( "M" ) )
+                        return wxT( "Meg" );
+                }
+                else if( aNotation == SIM_VALUE_GRAMMAR::NOTATION::SI )
+                {
+                    if( units == wxT( "Meg" ) || units == wxT( "MEG" ) )
+                        return wxT( "M" );
+                }
 
-    if( aResolve )
-        aValue = aSymbol.FindField( VALUE_FIELD )->GetShownText();
-    else
-        aValue = aSymbol.FindField( VALUE_FIELD )->GetText();
+                return units;
+            };
 
-    if( !aValue.IsEmpty() )
+    auto getFieldValue =
+            [&]( const wxString& fieldName ) -> wxString
+            {
+                T_field* field = aSymbol.FindField( fieldName );
+
+                if( field )
+                {
+                    if( aResolve )
+                        return field->GetShownText();
+                    else
+                        return field->GetText();
+                }
+
+                return wxEmptyString;
+            };
+
+    wxString              prefix = aSymbol.GetPrefix();
+    wxString              value = getFieldValue( VALUE_FIELD );
+    std::vector<LIB_PIN*> pins = aSymbol.GetAllLibPins();
+
+    *aDeviceType = getFieldValue( DEVICE_TYPE_FIELD );
+    *aModelType = getFieldValue( TYPE_FIELD );
+    *aModelParams = getFieldValue( PARAMS_FIELD );
+    *aPinMap = getFieldValue( PINS_FIELD );
+
+    if( pins.size() != 2 )
+        return false;
+
+    if( aDeviceType->IsEmpty()
+        && aModelType->IsEmpty()
+        && !value.IsEmpty()
+        && ( prefix.StartsWith( "R" ) || prefix.StartsWith( "L" ) || prefix.StartsWith( "C" ) ) )
     {
-        if( aPrefix.StartsWith( wxT( "R" ) )
-            || aPrefix.StartsWith( wxT( "L" ) )
-            || aPrefix.StartsWith( wxT( "C" ) ) )
+        if( aDeviceType->IsEmpty() )
+            *aDeviceType = prefix.Left( 1 );
+
+        if( aModelParams->IsEmpty() )
         {
             wxRegEx idealVal( wxT( "^"
                                    "([0-9\\. ]+)"
                                    "([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?"
-                                   "([fFhHΩΩ𝛀𝛺𝝮]|ohm)?"
+                                   "([fFhHΩΩ𝛀𝛺𝝮rR]|ohm)?"
                                    "([-1-9 ]*)"
+                                   "([fFhHΩΩ𝛀𝛺𝝮rR]|ohm)?"
                                    "$" ) );
 
-            if( idealVal.Matches( aValue ) )      // Ideal
+            if( idealVal.Matches( value ) )      // Ideal
             {
-                wxString valuePrefix( idealVal.GetMatch( aValue, 1 ) );
-                wxString valueUnits( idealVal.GetMatch( aValue, 2 ) );
-                wxString valueSuffix( idealVal.GetMatch( aValue, 6 ) );
+                wxString valueMantissa( idealVal.GetMatch( value, 1 ) );
+                wxString valueNotation( idealVal.GetMatch( value, 2 ) );
+                wxString valueFraction( idealVal.GetMatch( value, 6 ) );
 
-                if( aNotation == SIM_VALUE_GRAMMAR::NOTATION::SPICE )
+                if( valueMantissa.Contains( wxT( "." ) ) )
                 {
-                    if( valueUnits == wxT( "M" ) )
-                        valueUnits = wxT( "Meg" );
+                    aModelParams->Printf( wxT( "%s=\"%s%s\"" ),
+                                          prefix.Left(1).Lower(),
+                                          valueMantissa, convertNotation( valueNotation ) );
                 }
-                else if( aNotation == SIM_VALUE_GRAMMAR::NOTATION::SI )
+                else
                 {
-                    if( valueUnits == wxT( "Meg" ) || valueUnits == wxT( "MEG" ) )
-                        valueUnits = wxT( "M" );
+                    aModelParams->Printf( wxT( "%s=\"%s.%s%s\"" ),
+                                          prefix.Left(1).Lower(),
+                                          valueMantissa,
+                                          valueFraction,
+                                          convertNotation( valueNotation ) );
                 }
-
-                aModelParams->Printf( wxT( "%s=\"%s%s\"" ),
-                                      aPrefix.Left(1).Lower(),
-                                      valuePrefix,
-                                      valueUnits );
             }
             else        // Behavioral
             {
                 *aModelType = wxT( "=" );
-                aModelParams->Printf( wxT( "%s=\"%s\"" ),
-                                     aPrefix.Left(1).Lower(),
-                                     aValue );
+                aModelParams->Printf( wxT( "%s=\"%s\"" ), prefix.Left(1).Lower(), value );
             }
+        }
 
-            std::vector<LIB_PIN*> pins = aSymbol.GetAllLibPins();
+        if( aPinMap->IsEmpty() )
+            aPinMap->Printf( wxT( "%s=+ %s=-" ), pins[0]->GetNumber(), pins[1]->GetNumber() );
 
-            if( pins.size() == 2 )
+        return true;
+    }
+
+    bool inferDCSource = false;
+
+    if( ( ( *aDeviceType == wxT( "V" ) || *aDeviceType == wxT( "I" ) )
+          && aModelType->IsEmpty() )
+
+        ||
+
+        ( aDeviceType->IsEmpty()
+         && aModelType->IsEmpty()
+         && !value.IsEmpty()
+         && ( prefix.StartsWith( "V" ) || prefix.StartsWith( "I" ) ) )  )
+    {
+        if( aDeviceType->IsEmpty() )
+            *aDeviceType = prefix.Left( 1 );
+
+        if( aModelType->IsEmpty() )
+            *aModelType = wxT( "DC" );
+
+        if( aModelParams->IsEmpty() )
+        {
+            wxRegEx sourceVal( wxT( "^"
+                                    "([0-9\\. ]+)"
+                                    "([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?"
+                                    "([vVaA])?"
+                                    "([-1-9 ]*)"
+                                    "([vVaA])?"
+                                    "$" ) );
+
+            if( sourceVal.Matches( value ) )
             {
-                aPinMap->Printf( wxT( "%s=+ %s=-" ),
-                                 pins[0]->GetNumber(),
-                                 pins[1]->GetNumber() );
+                wxString valueMantissa( sourceVal.GetMatch( value, 1 ) );
+                wxString valueNotation( sourceVal.GetMatch( value, 2 ) );
+                wxString valueFraction( sourceVal.GetMatch( value, 6 ) );
+
+                if( valueMantissa.Contains( wxT( "." ) ) )
+                {
+                    aModelParams->Printf( wxT( "dc=\"%s%s\"" ),
+                                          valueMantissa,
+                                          convertNotation( valueNotation ) );
+                }
+                else
+                {
+                    aModelParams->Printf( wxT( "dc=\"%s.%s%s\"" ),
+                                          valueMantissa,
+                                          valueFraction,
+                                          convertNotation( valueNotation ) );
+                }
             }
             else
             {
-                *aPinMap = wxEmptyString;
-
-                for( unsigned ii = 0; ii < pins.size(); ++ii )
-                {
-                    if( ii > 0 )
-                        aPinMap->Append( wxS( " " ) );
-
-                    aPinMap->Append( wxString::Format( wxT( "%s=%u" ),
-                                                       pins[ii]->GetNumber(),
-                                                       ii ) );
-                }
+                aModelParams->Printf( wxT( "dc=\"%s\"" ), value );
             }
-
-            return true;
         }
+
+        if( aPinMap->IsEmpty() )
+            aPinMap->Printf( wxT( "%s=+ %s=-" ), pins[0]->GetNumber(), pins[1]->GetNumber() );
+
+        return true;
     }
 
     return false;
 }
 
 
-template bool SIM_MODEL::InferPassiveSimModel<SCH_SYMBOL>( SCH_SYMBOL& aSymbol, bool aResolve,
-                                                           SIM_VALUE_GRAMMAR::NOTATION aNotation,
-                                                           wxString* aModelType,
-                                                           wxString* aModelParams,
-                                                           wxString* aPinMap );
-template bool SIM_MODEL::InferPassiveSimModel<LIB_SYMBOL>( LIB_SYMBOL& aSymbol, bool aResolve,
-                                                           SIM_VALUE_GRAMMAR::NOTATION aNotation,
-                                                           wxString* aModelType,
-                                                           wxString* aModelParams,
-                                                           wxString* aPinMap );
+template bool SIM_MODEL::InferSimModel<SCH_SYMBOL, SCH_FIELD>( SCH_SYMBOL& aSymbol, bool aResolve,
+                                                               SIM_VALUE_GRAMMAR::NOTATION aNotation,
+                                                               wxString* aDeviceType,
+                                                               wxString* aModelType,
+                                                               wxString* aModelParams,
+                                                               wxString* aPinMap );
+template bool SIM_MODEL::InferSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymbol, bool aResolve,
+                                                               SIM_VALUE_GRAMMAR::NOTATION aNotation,
+                                                               wxString* aDeviceType,
+                                                               wxString* aModelType,
+                                                               wxString* aModelParams,
+                                                               wxString* aPinMap );
 
 
 template <typename T_symbol, typename T_field>

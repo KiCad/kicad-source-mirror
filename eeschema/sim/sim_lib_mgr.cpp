@@ -197,32 +197,31 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
             fields.back().SetText( aSymbol.GetFields()[ i ].GetShownText( 0, false ) );
     }
 
-    // Infer RLC models if they aren't specified
-    if( !aSymbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD, false )
-            && !aSymbol.FindField( SIM_MODEL::PARAMS_FIELD, false ) )
+    wxString deviceType;
+    wxString modelType;
+    wxString modelParams;
+    wxString pinMap;
+
+    // Infer RLC and VI models if they aren't specified
+    if( SIM_MODEL::InferSimModel<SCH_SYMBOL, SCH_FIELD>( aSymbol, true,
+                                                         SIM_VALUE_GRAMMAR::NOTATION::SI,
+                                                         &deviceType, &modelType, &modelParams,
+                                                         &pinMap ) )
     {
-        wxString modelType;
-        wxString modelParams;
-        wxString pinMap;
+        fields.emplace_back( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
+        fields.back().SetText( deviceType );
 
-        if( SIM_MODEL::InferPassiveSimModel( aSymbol, true, SIM_VALUE_GRAMMAR::NOTATION::SI,
-                                             &modelType, &modelParams, &pinMap ) )
+        if( !modelType.IsEmpty() )
         {
-            fields.emplace_back( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
-            fields.back().SetText( aSymbol.GetPrefix().Left( 1 ) );
-
-            if( !modelType.IsEmpty() )
-            {
-                fields.emplace_back( &aSymbol, -1, SIM_MODEL::TYPE_FIELD );
-                fields.back().SetText( modelType );
-            }
-
-            fields.emplace_back( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
-            fields.back().SetText( modelParams );
-
-            fields.emplace_back( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
-            fields.back().SetText( pinMap );
+            fields.emplace_back( &aSymbol, -1, SIM_MODEL::TYPE_FIELD );
+            fields.back().SetText( modelType );
         }
+
+        fields.emplace_back( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
+        fields.back().SetText( modelParams );
+
+        fields.emplace_back( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
+        fields.back().SetText( pinMap );
     }
 
     std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
