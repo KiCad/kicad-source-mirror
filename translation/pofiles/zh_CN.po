@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
-"PO-Revision-Date: 2022-12-14 15:48+0000\n"
+"PO-Revision-Date: 2022-12-20 15:47+0000\n"
 "Last-Translator: Eric <hamburger1024@duck.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -10895,9 +10895,8 @@ msgid "Failed to read simulation model from fields."
 msgstr "从字段读取仿真模型失败。"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
-#, fuzzy
 msgid "Component:"
-msgstr "元件"
+msgstr "元件："
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
@@ -12323,19 +12322,19 @@ msgid "Unknown netlist format.\n"
 msgstr "未知的网表格式。\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "将符号 %s 从 '%s' 替换为 '%s'"
+msgstr "将符号 '%s' 单元 %d 绘制到 '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "将符号 %s 从 '%s' 替换为 '%s'"
+msgstr "将符号 '%s' 绘制到 '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "无法分析 '%s' (在 '%s' 中)"
+msgstr "打不开目标 '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:435
 #: eeschema/eeschema_jobs_handler.cpp:495 pcbnew/pcbnew_jobs_handler.cpp:599
@@ -17444,9 +17443,8 @@ msgid "Show the Python scripting console"
 msgstr "显示 Python 脚本控制台"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Change Sheet"
-msgstr "修改网络"
+msgstr "修改图框"
 
 #: eeschema/tools/ee_actions.cpp:764
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -19490,14 +19488,12 @@ msgstr "避免设置背景色（无论什么主题）"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:42
-#, fuzzy
 msgid "Specific symbol to export within the library"
-msgstr "无法导出到剪贴板"
+msgstr "要在库中导出的特定符号"
 
 #: kicad/cli/command_fp_export_svg.cpp:62
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "封装路径不存在或无法访问\n"
+msgstr "封装库不存在或无法访问\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
@@ -34606,9 +34602,8 @@ msgid "Error creating svg file"
 msgstr "创建 svg 文件出错"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:578 pcbnew/pcbnew_jobs_handler.cpp:649
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "保存封装库\n"
+msgstr "加载封装库\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:615
 msgid "Saving footprint library\n"
@@ -34619,14 +34614,13 @@ msgid "Footprint library was not updated\n"
 msgstr "封装库未更新\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:699
-#, fuzzy
 msgid "The given footprint could not be found to export."
-msgstr "找不到等价文件 \"%s\"。"
+msgstr "找不到给定封装来导出。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "将封装 %s 从“%s”更改为“%s”"
+msgstr "将封装从 '%s' 绘制到 '%s'\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -39993,9 +39987,8 @@ msgid "Textbox"
 msgstr "文本框"
 
 #: pcbnew/widgets/search_handlers.cpp:317
-#, fuzzy
 msgid "No Net"
-msgstr "新建网络"
+msgstr "无网络"
 
 #: pcbnew/zone.cpp:525
 msgid "Cutout"
