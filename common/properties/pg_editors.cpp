@@ -94,10 +94,10 @@ void PG_UNIT_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) c
     {
         m_unitBinder->ChangeValue( var.GetDouble() );
     }
-    else
+    else if( !aProperty->IsValueUnspecified() )
     {
         wxFAIL_MSG( wxT( "PG_UNIT_EDITOR should only be used with numeric properties!" ) );
-    }    
+    }
 }
 
 
