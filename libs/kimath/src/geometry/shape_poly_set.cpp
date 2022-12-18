@@ -463,23 +463,43 @@ bool SHAPE_POLY_SET::GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int*
 
 bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex ) const
 {
-    CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles( aPolygonIndex );
-    CONST_SEGMENT_ITERATOR innerIterator;
+    std::vector<SEG> segments;
+    segments.reserve( FullPointCount() );
 
-    for( iterator = CIterateSegmentsWithHoles( aPolygonIndex ); iterator; iterator++ )
+    for( CONST_SEGMENT_ITERATOR it = CIterateSegmentsWithHoles( aPolygonIndex ); it; it++ )
+        segments.emplace_back( *it );
+
+    std::sort( segments.begin(), segments.end(), []( const SEG& a, const SEG& b )
+            {
+                int min_a_x = std::min( a.A.x, a.B.x );
+                int min_b_x = std::min( b.A.x, b.B.x );
+
+                return min_a_x < min_b_x || ( min_a_x == min_b_x && std::min( a.A.y, a.B.y ) < std::min( b.A.y, b.B.y ) );
+            } );
+
+    for( auto it = segments.begin(); it != segments.end(); ++it )
     {
-        SEG firstSegment = *iterator;
+        SEG& firstSegment = *it;
 
         // Iterate through all remaining segments.
-        innerIterator = iterator;
+        auto innerIterator = it;
+        int max_x = std::max( firstSegment.A.x, firstSegment.B.x );
+        int max_y = std::max( firstSegment.A.y, firstSegment.B.y );
 
         // Start in the next segment, we don't want to check collision between a segment and itself
-        for( innerIterator++; innerIterator; innerIterator++ )
+        for( innerIterator++; innerIterator != segments.end(); innerIterator++ )
         {
-            SEG secondSegment = *innerIterator;
+            SEG& secondSegment = *innerIterator;
+            int min_x = std::min( secondSegment.A.x, secondSegment.B.x );
+            int min_y = std::min( secondSegment.A.y, secondSegment.B.y );
+
+            // We are ordered in minimum point order, so checking the static max (first segment) against
+            // the ordered min will tell us if any of the following segments are withing the BBox
+            if( max_x < min_x || ( max_x == min_x && max_y < min_y ) )
+                break;
 
             // Check whether the two segments built collide, only when they are not adjacent.
-            if( !iterator.IsAdjacent( innerIterator ) && firstSegment.Collide( secondSegment, 0 ) )
+            if( !firstSegment.IsAdjacent( secondSegment ) && !firstSegment.Collide( secondSegment, 0 ) )
                 return true;
         }
     }

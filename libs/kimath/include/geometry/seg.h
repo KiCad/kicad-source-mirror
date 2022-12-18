@@ -358,6 +358,13 @@ public:
         return SEG( B, A );
     }
 
+    bool IsAdjacent( SEG& aOther ) const
+    {
+        int diff = m_index - aOther.m_index;
+
+        return diff == 1 || diff == -1;
+    }
+
     ///< Returns the center point of the line
     VECTOR2I Center() const
     {
