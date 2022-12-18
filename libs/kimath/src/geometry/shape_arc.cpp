@@ -404,7 +404,7 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
     if( dist <= minDist )
     {
         if( aLocation )
-            *aLocation = ( aP + GetCenter() ) / 2;
+            *aLocation = nearestPt;
 
         if( aActual )
             *aActual = std::max( 0, dist - m_width / 2 );
