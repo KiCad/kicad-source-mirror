@@ -311,7 +311,11 @@ namespace Clipper2Lib {
 
 		void Clear() override
 		{
-			for (const PolyPath64* child : childs_) delete child;
+			for (PolyPath64* child : childs_)
+			{
+			    child->Clear();
+			    delete child;
+			}
 			childs_.resize(0);
 		}
 
