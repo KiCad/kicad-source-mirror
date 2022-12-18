@@ -29,8 +29,12 @@
 
 
 
-%include board_item.h         // generate code for this interface
+%include board_item.h             // generate code for this interface
 %include eda_item_flags.h         // generate code for this interface
+// Provide also interface for UNIT_PROVIDER as BOARD_ITEM uses it
+%include base_units.h
+%include eda_units.h
+%include units_provider.h
 
 %rename(Get) operator       BOARD_ITEM*;
 
