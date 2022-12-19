@@ -732,7 +732,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        previewItem = createSheetPin( sheet, label );
+        previewItem = createSheetPin( sheet, label, cursorPos );
     }
         break;
 
@@ -743,9 +743,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    cursorPos = static_cast<wxPoint>( aEvent.HasPosition() ?
-                                      aEvent.Position() :
-                                      controls->GetMousePosition() );
+    cursorPos = static_cast<wxPoint>( aEvent.HasPosition() ? aEvent.Position()
+                                                           : controls->GetMousePosition() );
 
     m_frame->PushTool( aEvent );
 
@@ -1071,7 +1070,8 @@ SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
 }
 
 
-SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel )
+SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel,
+                                                  const VECTOR2I& aPosition )
 {
     SCHEMATIC_SETTINGS& settings = aSheet->Schematic()->Settings();
     wxString            text;
@@ -1101,7 +1101,7 @@ SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLAB
 
     m_lastSheetPinType = sheetPin->GetShape();
 
-    sheetPin->SetPosition( (VECTOR2I) getViewControls()->GetCursorPosition() );
+    sheetPin->SetPosition( aPosition );
 
     return sheetPin;
 }
@@ -1360,7 +1360,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         }
                         else
                         {
-                            item = createSheetPin( sheet, label );
+                            item = createSheetPin( sheet, label, cursorPos );
 
                             if( item->Type() == SCH_SHEET_PIN_T )
                             {

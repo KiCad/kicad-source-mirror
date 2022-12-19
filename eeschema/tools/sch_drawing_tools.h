@@ -66,7 +66,8 @@ private:
 
     SCH_HIERLABEL* importHierLabel( SCH_SHEET* aSheet );
 
-    SCH_SHEET_PIN* createSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel );
+    SCH_SHEET_PIN* createSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel,
+                                   const VECTOR2I& aPosition );
 
     void sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos );
 
