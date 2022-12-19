@@ -50,13 +50,15 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
     SPICE_ITEM item = aItem;
     item.modelName = "";
 
+    std::string inlineType = m_model.GetSpiceInfo().inlineTypeString;
     std::string ac = m_model.FindParam( "ac" )->value->ToSpiceString();
     std::string ph = m_model.FindParam( "ph" )->value->ToSpiceString();
 
     if( ac != "" )
         item.modelName.append( fmt::format( "AC {} {} ", ac, ph ) );
 
-    if( m_model.GetSpiceInfo().inlineTypeString != "" )
+
+    if( inlineType != "" && inlineType != "DC" )
     {
         std::string args = "";
         
