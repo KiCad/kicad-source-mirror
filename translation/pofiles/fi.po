@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
-"PO-Revision-Date: 2022-12-14 15:48+0000\n"
+"PO-Revision-Date: 2022-12-20 15:47+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -11142,9 +11142,8 @@ msgid "Failed to read simulation model from fields."
 msgstr "Simulaatiomallin lukeminen kentistä epäonnistui."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
-#, fuzzy
 msgid "Component:"
-msgstr "Komponentti"
+msgstr "Komponentti:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
@@ -12605,19 +12604,19 @@ msgid "Unknown netlist format.\n"
 msgstr "Tuntematon verkkolista formaatti.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Muuta symboli %s arvosta '%s' arvoon '%s'"
+msgstr "Piirrä symboli '%s' yksikkö %d '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Muuta symboli %s arvosta '%s' arvoon '%s'"
+msgstr "Piirrä symboli '%s' kohteeseen '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "Kohteen %s jäsentäminen ryhmässä %s ei onnistu"
+msgstr "Kohdetta %s ei voi avata"
 
 #: eeschema/eeschema_jobs_handler.cpp:435
 #: eeschema/eeschema_jobs_handler.cpp:495 pcbnew/pcbnew_jobs_handler.cpp:599
@@ -17875,9 +17874,8 @@ msgid "Show the Python scripting console"
 msgstr "Näytä Python-komentosarjakonsoli"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Change Sheet"
-msgstr "Vaihda Verkot"
+msgstr "Vaihda Arkki"
 
 #: eeschema/tools/ee_actions.cpp:764
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -19956,14 +19954,12 @@ msgstr "Vältä taustavärin asettamista (teemasta riippumatta)"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:42
-#, fuzzy
 msgid "Specific symbol to export within the library"
-msgstr "Vienti leikepöydälle epäonnistui"
+msgstr "Erityinen kirjaston mukana vietävä symboli"
 
 #: kicad/cli/command_fp_export_svg.cpp:62
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "Jalanjälkipolkua ei ole olemassa tai se ei ole käytettävissä\n"
+msgstr "Jalanjälkikirjastoa ei ole olemassa tai se ei ole käytettävissä\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
@@ -35296,9 +35292,8 @@ msgid "Error creating svg file"
 msgstr "Virhe luotaessa svg-tiedostoa"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:578 pcbnew/pcbnew_jobs_handler.cpp:649
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "Jalanjälkikirjastoa tallennetaan\n"
+msgstr "Ladataan jalanjälkikirjastoa\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:615
 msgid "Saving footprint library\n"
@@ -35309,14 +35304,13 @@ msgid "Footprint library was not updated\n"
 msgstr "Jalanjälkikirjastoa ei päivitetty\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:699
-#, fuzzy
 msgid "The given footprint could not be found to export."
-msgstr "Liitoskuvakirjastoa <%s> ei löytynyt mistään hakupoluista."
+msgstr "Annettua jalanjälkeä ei löytynyt vietäväksi."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "Vaihdettu jalanjälki %s tästä %s tähän %s"
+msgstr "Piirretään jalanjälki '%s' kohteeseen '%s'\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -40829,9 +40823,8 @@ msgid "Textbox"
 msgstr "Tekstilaatikko"
 
 #: pcbnew/widgets/search_handlers.cpp:317
-#, fuzzy
 msgid "No Net"
-msgstr "Uusi Verkko"
+msgstr "Ei Verkkoa"
 
 #: pcbnew/zone.cpp:525
 msgid "Cutout"
