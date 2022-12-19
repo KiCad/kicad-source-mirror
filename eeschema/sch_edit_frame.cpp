@@ -1759,35 +1759,51 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
 {
     bool appendToUndo = false;
 
-    SCH_SHEET_PATH sheetPath;
-    SCH_ITEM*      item = Schematic().GetSheets().GetItem( aSchematicSymbolUUID, &sheetPath );
+    SCH_SHEET_PATH principalPath;
+    SCH_ITEM*      item = Schematic().GetSheets().GetItem( aSchematicSymbolUUID, &principalPath );
+    SCH_SYMBOL*    principalSymbol = dynamic_cast<SCH_SYMBOL*>( item );
 
-    if( item )
+    if( !principalSymbol )
+        return;
+
+    wxString principalRef;
+
+    if( principalSymbol->IsAnnotated( &principalPath ) )
+        principalRef = principalSymbol->GetRef( &principalPath, false );
+
+    for( const SCH_SHEET_PATH& path : Schematic().GetSheets() )
     {
-        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
-
-        wxCHECK( symbol, /* void */ );
-
-        // This needs to be done before the LIB_SYMBOL is changed to prevent stale library
-        // symbols in the schematic file.
-        sheetPath.LastScreen()->Remove( symbol );
-
-        if( !symbol->IsNew() )
+        for( SCH_ITEM* candidate : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SaveCopyInUndoList( sheetPath.LastScreen(), symbol, UNDO_REDO::CHANGED, appendToUndo );
-            appendToUndo = true;
+            SCH_SYMBOL* candidateSymbol = static_cast<SCH_SYMBOL*>( candidate );
+
+            if( candidateSymbol == principalSymbol
+                || ( candidateSymbol->IsAnnotated( &path )
+                     && candidateSymbol->GetRef( &path, false ) == principalRef ) )
+            {
+                // This needs to be done before the LIB_SYMBOL is changed to prevent stale
+                // library symbols in the schematic file.
+                path.LastScreen()->Remove( candidateSymbol );
+
+                if( !candidateSymbol->IsNew() )
+                {
+                    SaveCopyInUndoList( path.LastScreen(), candidateSymbol,
+                                        UNDO_REDO::CHANGED, appendToUndo );
+                    appendToUndo = true;
+                }
+
+                candidateSymbol->SetLibSymbol( aSymbol.Flatten().release() );
+                candidateSymbol->UpdateFields( &GetCurrentSheet(),
+                                               true, /* update style */
+                                               true, /* update ref */
+                                               true, /* update other fields */
+                                               false, /* reset ref */
+                                               false /* reset other fields */ );
+
+                path.LastScreen()->Append( candidateSymbol );
+                GetCanvas()->GetView()->Update( candidateSymbol );
+            }
         }
-
-        symbol->SetLibSymbol( aSymbol.Flatten().release() );
-        symbol->UpdateFields( &GetCurrentSheet(),
-                              true, /* update style */
-                              true, /* update ref */
-                              true, /* update other fields */
-                              false, /* reset ref */
-                              false /* reset other fields */ );
-
-        sheetPath.LastScreen()->Append( symbol );
-        GetCanvas()->GetView()->Update( symbol );
     }
 
     GetCanvas()->Refresh();
