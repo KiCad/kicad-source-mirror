@@ -1100,7 +1100,7 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
         if( aModelParams->IsEmpty() )
         {
             wxRegEx idealVal( wxT( "^"
-                                   "([0-9\\. ]+)"
+                                   "([0-9\\,\\. ]+)"
                                    "([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?"
                                    "([fFhHΩΩ𝛀𝛺𝝮rR]|ohm)?"
                                    "([-1-9 ]*)"
@@ -1112,6 +1112,9 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
                 wxString valueMantissa( idealVal.GetMatch( value, 1 ) );
                 wxString valueExponent( idealVal.GetMatch( value, 2 ) );
                 wxString valueFraction( idealVal.GetMatch( value, 6 ) );
+
+                // Remove any thousands separators
+                valueMantissa.Replace( wxT( "," ), wxEmptyString );
 
                 if( valueMantissa.Contains( wxT( "." ) ) || valueFraction.IsEmpty() )
                 {
@@ -1174,6 +1177,9 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
                 wxString valueMantissa( sourceVal.GetMatch( value, 1 ) );
                 wxString valueExponent( sourceVal.GetMatch( value, 2 ) );
                 wxString valueFraction( sourceVal.GetMatch( value, 6 ) );
+
+                // Remove any thousands separators
+                valueMantissa.Replace( wxT( "," ), wxEmptyString );
 
                 if( valueMantissa.Contains( wxT( "." ) ) || valueFraction.IsEmpty() )
                 {
