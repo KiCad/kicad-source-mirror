@@ -1256,6 +1256,27 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 return value;
             };
 
+    auto generateDefaultPinMapFromSymbol =
+            []( const std::vector<LIB_PIN*>& sourcePins )
+            {
+                wxString pinMap;
+
+                // If we're creating the pinMap from the symbol it means we don't know what the
+                // SIM_MODEL's pin names are, so just use indexes.
+
+                for( unsigned ii = 0; ii < sourcePins.size(); ++ii )
+                {
+                    if( ii > 0 )
+                        pinMap.Append( wxS( " " ) );
+
+                    pinMap.Append( wxString::Format( wxT( "%s=%u" ),
+                                                     sourcePins[ii]->GetNumber(),
+                                                     ii + 1 ) );
+                }
+
+                return pinMap;
+            };
+
     wxString              prefix = aSymbol.GetPrefix();
     T_field*              valueField = aSymbol.FindField( wxT( "Value" ) );
     std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
@@ -1436,9 +1457,14 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
             if( pinMap.IsEmpty() )
             {
-                // Generate a default pin map
+                // Try to generate a default pin map from the SIM_MODEL's pins; if that fails,
+                // generate one from the symbol's pins
+
                 model.model.SIM_MODEL::CreatePins( sourcePins );
                 pinMap = wxString( model.model.Serde().GeneratePins() );
+
+                if( pinMap.IsEmpty() )
+                    pinMap = generateDefaultPinMapFromSymbol( sourcePins );
             }
         }
         catch( ... )
@@ -1493,7 +1519,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
                         if( pinMap.IsEmpty() )
                         {
-                            // Generate a default pin map
+                            // Generate a default pin map from the SIM_MODEL's pins
                             model->CreatePins( sourcePins );
                             pinMap = wxString( model->Serde().GeneratePins() );
                         }
@@ -1577,19 +1603,11 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 valueField->SetText( wxT( "${SIM.PARAMS}" ) );
         }
 
-        if( pinMap.IsEmpty() )
-        {
-            // Generate a 1:1 pin map.  We don't know the SPICE model pinNames, so just use indexes.
-            for( unsigned ii = 0; ii < sourcePins.size(); ++ii )
-            {
-                if( ii > 0 )
-                    pinMap.Append( wxS( " " ) );
+        // We know nothing about the SPICE model here, so we've got no choice but to generate
+        // the default pin map from the symbol's pins.
 
-                pinMap.Append( wxString::Format( wxT( "%s=%u" ),
-                                                 sourcePins[ii]->GetNumber(),
-                                                 ii + 1 ) );
-            }
-        }
+        if( pinMap.IsEmpty() )
+            pinMap = generateDefaultPinMapFromSymbol( sourcePins );
     }
 
     if( !pinMap.IsEmpty() )
