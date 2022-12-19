@@ -573,8 +573,8 @@ void GERBVIEW_FRAME::UpdateXORLayers()
     {
         view->SetLayerDiff( GERBER_DRAW_LAYER( i ), gvconfig()->m_Display.m_XORMode );
 
-        // Caching doesn't work with layered rendering of diff'd layers
-        if( gvconfig()->m_Display.m_DiffMode )
+        // Caching doesn't work with layered rendering of XOR'd layers
+        if( gvconfig()->m_Display.m_XORMode )
             view->SetLayerTarget( GERBER_DRAW_LAYER( i ), KIGFX::TARGET_NONCACHED );
         else
             view->SetLayerTarget( GERBER_DRAW_LAYER( i ), target );
@@ -1081,10 +1081,10 @@ void GERBVIEW_FRAME::setupUIConditions()
         };
 
     auto xorModeCond =
-            [this] ( const SELECTION& )
-            {
-                return gvconfig()->m_Display.m_XORMode;
-            };
+        [this] ( const SELECTION& )
+        {
+            return gvconfig()->m_Display.m_XORMode;
+        };
 
     auto highContrastModeCond =
         [this] ( const SELECTION& )

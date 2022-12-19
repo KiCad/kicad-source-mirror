@@ -309,10 +309,9 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
         cfg->m_Display.m_DiffMode = !cfg->m_Display.m_DiffMode;
 
         if( cfg->m_Display.m_DiffMode && cfg->m_Display.m_XORMode )
-        {
             cfg->m_Display.m_XORMode = false;
-            m_frame->UpdateXORLayers();
-        }
+
+        m_frame->UpdateXORLayers();
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::toggleXORMode ) )
     {
