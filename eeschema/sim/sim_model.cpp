@@ -1437,7 +1437,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             if( pinMap.IsEmpty() )
             {
                 // Generate a default pin map
-                model.model.CreatePins( sourcePins );
+                model.model.SIM_MODEL::CreatePins( sourcePins );
                 pinMap = wxString( model.model.Serde().GeneratePins() );
             }
         }
@@ -1592,9 +1592,12 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         }
     }
 
-    T_field pinsField( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
-    pinsField.SetText( pinMap );
-    aSymbol.AddField( pinsField );
+    if( !pinMap.IsEmpty() )
+    {
+        T_field pinsField( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
+        pinsField.SetText( pinMap );
+        aSymbol.AddField( pinsField );
+    }
 }
 
 
