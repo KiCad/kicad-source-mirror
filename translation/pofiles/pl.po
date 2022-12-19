@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
 "PO-Revision-Date: 2022-12-20 15:47+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -39297,7 +39297,7 @@ msgstr "Usuwa elementy z grupy"
 
 #: pcbnew/tools/pcb_actions.cpp:773
 msgid "Enter Group"
-msgstr "Wprowadź grupę"
+msgstr "Wejdź do grupy"
 
 #: pcbnew/tools/pcb_actions.cpp:773
 msgid "Enter the group to edit items"
