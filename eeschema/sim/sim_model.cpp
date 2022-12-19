@@ -1120,14 +1120,15 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
             if( idealVal.Matches( value ) )      // Ideal
             {
                 wxString valueMantissa( idealVal.GetMatch( value, 1 ) );
-                wxString valueNotation( idealVal.GetMatch( value, 2 ) );
+                wxString valueExponent( idealVal.GetMatch( value, 2 ) );
                 wxString valueFraction( idealVal.GetMatch( value, 6 ) );
 
                 if( valueMantissa.Contains( wxT( "." ) ) )
                 {
                     aModelParams->Printf( wxT( "%s=\"%s%s\"" ),
                                           prefix.Left(1).Lower(),
-                                          valueMantissa, convertNotation( valueNotation ) );
+                                          valueMantissa,
+                                          convertNotation( valueExponent ) );
                 }
                 else
                 {
@@ -1135,7 +1136,7 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
                                           prefix.Left(1).Lower(),
                                           valueMantissa,
                                           valueFraction,
-                                          convertNotation( valueNotation ) );
+                                          convertNotation( valueExponent ) );
                 }
             }
             else        // Behavioral
@@ -1181,21 +1182,21 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
             if( sourceVal.Matches( value ) )
             {
                 wxString valueMantissa( sourceVal.GetMatch( value, 1 ) );
-                wxString valueNotation( sourceVal.GetMatch( value, 2 ) );
+                wxString valueExponent( sourceVal.GetMatch( value, 2 ) );
                 wxString valueFraction( sourceVal.GetMatch( value, 6 ) );
 
                 if( valueMantissa.Contains( wxT( "." ) ) )
                 {
                     aModelParams->Printf( wxT( "dc=\"%s%s\"" ),
                                           valueMantissa,
-                                          convertNotation( valueNotation ) );
+                                          convertNotation( valueExponent ) );
                 }
                 else
                 {
                     aModelParams->Printf( wxT( "dc=\"%s.%s%s\"" ),
                                           valueMantissa,
                                           valueFraction,
-                                          convertNotation( valueNotation ) );
+                                          convertNotation( valueExponent ) );
                 }
             }
             else
