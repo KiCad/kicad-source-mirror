@@ -524,7 +524,8 @@ template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<LIB_FIE
 
 
 template <typename T>
-std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName )
+std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName,
+                                      bool aResolve )
 {
     static_assert( std::is_same<T, SCH_FIELD>::value || std::is_same<T, LIB_FIELD>::value );
 
@@ -537,17 +538,19 @@ std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const std::
                                 return field.GetName() == aFieldName;
                             } );
 
-    if( it != aFields->end() )
+    if( it == aFields->end() )
+        return "";
+    else if( aResolve )
+        return std::string( it->GetShownText().ToUTF8() );
+    else
         return std::string( it->GetText().ToUTF8() );
-
-    return "";
 }
 
 
 // This specialization is used when no fields are passed.
 template <>
 std::string SIM_MODEL::GetFieldValue( const std::vector<void>* aFields,
-                                      const std::string& aFieldName )
+                                      const std::string& aFieldName, bool aResolve )
 {
     return "";
 }
@@ -1050,7 +1053,7 @@ bool SIM_MODEL::requiresSpiceModelLine() const
 
 
 template <class T_symbol, class T_field>
-bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
+bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields, bool aResolve,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
                                wxString* aModelType, wxString* aModelParams, wxString* aPinMap )
 {
@@ -1071,38 +1074,25 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
                 return units;
             };
 
-    auto getFieldValue =
-            [&]( const wxString& fieldName ) -> wxString
-            {
-                T_field* field = aSymbol.FindField( fieldName );
-
-                if( field )
-                {
-                    if( aResolve )
-                        return field->GetShownText();
-                    else
-                        return field->GetText();
-                }
-
-                return wxEmptyString;
-            };
-
     wxString              prefix = aSymbol.GetPrefix();
-    wxString              value = getFieldValue( VALUE_FIELD );
+    wxString              value = GetFieldValue( aFields, VALUE_FIELD, aResolve );
     std::vector<LIB_PIN*> pins = aSymbol.GetAllLibPins();
 
-    *aDeviceType = getFieldValue( DEVICE_TYPE_FIELD );
-    *aModelType = getFieldValue( TYPE_FIELD );
-    *aModelParams = getFieldValue( PARAMS_FIELD );
-    *aPinMap = getFieldValue( PINS_FIELD );
+    *aDeviceType = GetFieldValue( aFields, DEVICE_TYPE_FIELD, aResolve );
+    *aModelType = GetFieldValue( aFields, TYPE_FIELD, aResolve );
+    *aModelParams = GetFieldValue( aFields, PARAMS_FIELD, aResolve );
+    *aPinMap = GetFieldValue( aFields, PINS_FIELD, aResolve );
 
     if( pins.size() != 2 )
         return false;
 
-    if( aDeviceType->IsEmpty()
-        && aModelType->IsEmpty()
-        && !value.IsEmpty()
-        && ( prefix.StartsWith( "R" ) || prefix.StartsWith( "L" ) || prefix.StartsWith( "C" ) ) )
+    if(   ( ( *aDeviceType == "R" || *aDeviceType == "L" || *aDeviceType == "C" )
+            && aModelType->IsEmpty() )
+       ||
+          ( aDeviceType->IsEmpty()
+            && aModelType->IsEmpty()
+            && !value.IsEmpty()
+            && ( prefix.StartsWith( "R" ) || prefix.StartsWith( "L" ) || prefix.StartsWith( "C" ) ) ) )
     {
         if( aDeviceType->IsEmpty() )
             *aDeviceType = prefix.Left( 1 );
@@ -1123,7 +1113,7 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
                 wxString valueExponent( idealVal.GetMatch( value, 2 ) );
                 wxString valueFraction( idealVal.GetMatch( value, 6 ) );
 
-                if( valueMantissa.Contains( wxT( "." ) ) )
+                if( valueMantissa.Contains( wxT( "." ) ) || valueFraction.IsEmpty() )
                 {
                     aModelParams->Printf( wxT( "%s=\"%s%s\"" ),
                                           prefix.Left(1).Lower(),
@@ -1152,13 +1142,13 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
         return true;
     }
 
-    if(     ( ( *aDeviceType == wxT( "V" ) || *aDeviceType == wxT( "I" ) )
-              && aModelType->IsEmpty() )
-        ||
-            ( aDeviceType->IsEmpty()
-              && aModelType->IsEmpty()
-              && !value.IsEmpty()
-              && ( prefix.StartsWith( "V" ) || prefix.StartsWith( "I" ) ) )  )
+    if(   ( ( *aDeviceType == wxT( "V" ) || *aDeviceType == wxT( "I" ) )
+            && aModelType->IsEmpty() )
+       ||
+          ( aDeviceType->IsEmpty()
+            && aModelType->IsEmpty()
+            && !value.IsEmpty()
+            && ( prefix.StartsWith( "V" ) || prefix.StartsWith( "I" ) ) )  )
     {
         if( aDeviceType->IsEmpty() )
             *aDeviceType = prefix.Left( 1 );
@@ -1185,7 +1175,7 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
                 wxString valueExponent( sourceVal.GetMatch( value, 2 ) );
                 wxString valueFraction( sourceVal.GetMatch( value, 6 ) );
 
-                if( valueMantissa.Contains( wxT( "." ) ) )
+                if( valueMantissa.Contains( wxT( "." ) ) || valueFraction.IsEmpty() )
                 {
                     aModelParams->Printf( wxT( "dc=\"%s%s\"" ),
                                           valueMantissa,
@@ -1215,13 +1205,17 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
 }
 
 
-template bool SIM_MODEL::InferSimModel<SCH_SYMBOL, SCH_FIELD>( SCH_SYMBOL& aSymbol, bool aResolve,
+template bool SIM_MODEL::InferSimModel<SCH_SYMBOL, SCH_FIELD>( SCH_SYMBOL& aSymbol,
+                                                               std::vector<SCH_FIELD>* aFields,
+                                                               bool aResolve,
                                                                SIM_VALUE_GRAMMAR::NOTATION aNotation,
                                                                wxString* aDeviceType,
                                                                wxString* aModelType,
                                                                wxString* aModelParams,
                                                                wxString* aPinMap );
-template bool SIM_MODEL::InferSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymbol, bool aResolve,
+template bool SIM_MODEL::InferSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymbol,
+                                                               std::vector<LIB_FIELD>* aFields,
+                                                               bool aResolve,
                                                                SIM_VALUE_GRAMMAR::NOTATION aNotation,
                                                                wxString* aDeviceType,
                                                                wxString* aModelType,

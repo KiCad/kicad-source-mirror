@@ -415,7 +415,8 @@ public:
                                               const std::vector<LIB_PIN*>& aPins );
 
     template <typename T>
-    static std::string GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName );
+    static std::string GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName,
+                                      bool aResolve = true );
 
     template <typename T>
     static void SetFieldValue( std::vector<T>& aFields, const std::string& aFieldName,
@@ -519,7 +520,7 @@ public:
     virtual void SwitchSingleEndedDiff( bool aDiff ) { };
 
     template <class T_symbol, class T_field>
-    static bool InferSimModel( T_symbol& aSymbol, bool aResolve,
+    static bool InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields, bool aResolve,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
                                wxString* aModelType, wxString* aModelParams, wxString* aPinMap );
 

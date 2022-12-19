@@ -509,6 +509,8 @@ bool SIM_VALUE_FLOAT::FromString( const std::string& aString, NOTATION aNotation
 
     try
     {
+        LOCALE_IO toggle;
+
         m_value = std::stod( parseResult.significand ) * std::pow( 10, exponent );
     }
     catch( const std::invalid_argument& )

@@ -238,10 +238,9 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             wxString pinMap;
 
             // Infer RLC and VI models if they aren't specified
-            if( SIM_MODEL::InferSimModel<SCH_SYMBOL, SCH_FIELD>( *symbol, true,
-                                                                 SIM_VALUE_GRAMMAR::NOTATION::SPICE,
-                                                                 &deviceType, &modelType,
-                                                                 &modelParams, &pinMap ) )
+            if( SIM_MODEL::InferSimModel( *symbol, &spiceItem.fields, true,
+                                          SIM_VALUE_GRAMMAR::NOTATION::SPICE, &deviceType,
+                                          &modelType, &modelParams, &pinMap ) )
             {
                 spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
                 spiceItem.fields.back().SetText( deviceType );

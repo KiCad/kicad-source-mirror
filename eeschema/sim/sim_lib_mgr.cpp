@@ -203,10 +203,8 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
     wxString pinMap;
 
     // Infer RLC and VI models if they aren't specified
-    if( SIM_MODEL::InferSimModel<SCH_SYMBOL, SCH_FIELD>( aSymbol, true,
-                                                         SIM_VALUE_GRAMMAR::NOTATION::SI,
-                                                         &deviceType, &modelType, &modelParams,
-                                                         &pinMap ) )
+    if( SIM_MODEL::InferSimModel( aSymbol, &fields, true, SIM_VALUE_GRAMMAR::NOTATION::SI,
+                                  &deviceType, &modelType, &modelParams, &pinMap ) )
     {
         fields.emplace_back( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
         fields.back().SetText( deviceType );

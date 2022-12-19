@@ -139,8 +139,8 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     wxString       pinMap;
 
     // Infer RLC and VI models if they aren't specified
-    if( SIM_MODEL::InferSimModel<T_symbol, T_field>( m_symbol, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
-                                                     &deviceType, &modelType, &modelParams, &pinMap ) )
+    if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
+                                  &deviceType, &modelType, &modelParams, &pinMap ) )
     {
         m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
         m_fields.back().SetText( deviceType );
