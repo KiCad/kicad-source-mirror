@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <memory>
+
 #include <tools/sch_drawing_tools.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_grid_helper.h>
@@ -725,7 +727,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
         if( !label )
         {
-            m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
+            m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
             m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
             m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
             m_statusPopup->PopupFor( 2000 );
@@ -1340,7 +1342,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                     if( !sheet )
                     {
-                        m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
+                        m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
                         m_statusPopup->SetText( _( "Click over a sheet." ) );
                         m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
                         m_statusPopup->PopupFor( 2000 );
@@ -1352,7 +1354,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                         if( !label )
                         {
-                            m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
+                            m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
                             m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
                             m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
                             m_statusPopup->PopupFor( 2000 );
