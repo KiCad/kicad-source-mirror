@@ -47,13 +47,12 @@ void SIM_PROPERTY::Disable()
 }
 
 
-SIM_BOOL_PROPERTY::SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName,
-                                      SIM_MODEL& aModel, int aParamIndex ) :
+SIM_BOOL_PROPERTY::SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName, SIM_MODEL& aModel,
+                                      int aParamIndex ) :
         wxBoolProperty( aLabel, aName ),
         SIM_PROPERTY( aModel, aParamIndex )
 {
-    auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>(
-        m_model.GetParam( m_paramIndex ).value.get() );
+    auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>( m_model.GetParam( m_paramIndex ).value.get() );
 
     wxCHECK( simValue, /*void*/ );
 
@@ -74,8 +73,7 @@ void SIM_BOOL_PROPERTY::OnSetValue()
     if( m_disabled )
         return;
 
-    auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>(
-        m_model.GetParam( m_paramIndex ).value.get() );
+    auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>( m_model.GetParam( m_paramIndex ).value.get() );
 
     wxCHECK( simValue, /*void*/ );
 
@@ -86,9 +84,8 @@ void SIM_BOOL_PROPERTY::OnSetValue()
 }
 
 
-SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName,
-                                          SIM_MODEL& aModel, int aParamIndex,
-                                          SIM_VALUE::TYPE aValueType,
+SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName, SIM_MODEL& aModel,
+                                          int aParamIndex, SIM_VALUE::TYPE aValueType,
                                           SIM_VALUE_GRAMMAR::NOTATION aNotation ) :
         wxStringProperty( aLabel, aName ),
         SIM_PROPERTY( aModel, aParamIndex ),
@@ -157,8 +154,7 @@ wxValidator* SIM_STRING_PROPERTY::DoGetValidator() const
 }
 
 
-bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText,
-                                         int aArgFlags ) const
+bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
 {
     if( m_disabled )
         return false;
@@ -188,8 +184,8 @@ static wxArrayString convertStringsToWx( const std::vector<std::string>& aString
 }
 
 
-SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
-                                      SIM_MODEL& aModel, int aParamIndex ) :
+SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName, SIM_MODEL& aModel,
+                                      int aParamIndex ) :
         wxEnumProperty( aLabel, aName, convertStringsToWx( aModel.GetParam( aParamIndex ).info.enumValues ) ),
         SIM_PROPERTY( aModel, aParamIndex )
 {

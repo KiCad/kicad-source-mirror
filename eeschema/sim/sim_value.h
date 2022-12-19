@@ -76,7 +76,7 @@ public:
         TYPE_COMPLEX_VECTOR
     };
 
-    static std::unique_ptr<SIM_VALUE> Create( TYPE aType, std::string aString,
+    static std::unique_ptr<SIM_VALUE> Create( TYPE aType, const std::string& aString,
                                               NOTATION aNotation = NOTATION::SI );
     static std::unique_ptr<SIM_VALUE> Create( TYPE aType );
 
@@ -87,8 +87,8 @@ public:
 
     virtual bool HasValue() const = 0;
 
-    void operator=( const std::string& aString );
-    virtual void operator=( const SIM_VALUE& aValue ) = 0;
+    SIM_VALUE& operator=( const std::string& aString );
+    virtual SIM_VALUE& operator=( const SIM_VALUE& aValue ) = 0;
     virtual bool operator==( const SIM_VALUE& aOther ) const = 0;
     bool operator!=( const SIM_VALUE& aOther ) const;
 
@@ -117,8 +117,7 @@ public:
     std::string ToString( NOTATION aNotation = NOTATION::SI ) const override;
     std::string ToSimpleString() const override;
 
-    void operator=( const SIM_VALUE& aOther ) override;
-    void operator=( const T& aValue );
+    SIM_VALUE_INST& operator=( const SIM_VALUE& aOther ) override;
     bool operator==( const T& aOther ) const;
     bool operator==( const SIM_VALUE& aOther ) const override;
 

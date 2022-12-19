@@ -359,7 +359,8 @@ std::string SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, int& aRe
 }
 
 
-std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType, std::string aString, NOTATION aNotation )
+std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType, const std::string& aString,
+                                              NOTATION aNotation )
 {
     std::unique_ptr<SIM_VALUE> value = SIM_VALUE::Create( aType );
     value->FromString( aString, aNotation );
@@ -387,9 +388,10 @@ std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType )
 }
 
 
-void SIM_VALUE::operator=( const std::string& aString )
+SIM_VALUE& SIM_VALUE::operator=( const std::string& aString )
 {
     FromString( aString );
+    return *this;
 }
 
 
@@ -548,7 +550,7 @@ std::string SIM_VALUE_INST<T>::ToString( NOTATION aNotation ) const
 {
     static_assert( std::is_same<T, std::vector<T>>::value );
 
-    std::string string = "";
+    std::string string;
 
     for( auto it = m_value.cbegin(); it != m_value.cend(); it++ )
     {
@@ -657,10 +659,11 @@ std::string SIM_VALUE_COMPLEX::ToSimpleString() const
 
 
 template <typename T>
-void SIM_VALUE_INST<T>::operator=( const SIM_VALUE& aOther )
+SIM_VALUE_INST<T>& SIM_VALUE_INST<T>::operator=( const SIM_VALUE& aOther )
 {
     auto other = dynamic_cast<const SIM_VALUE_INST<T>*>( &aOther );
     m_value = other->m_value;
+    return *this;
 }
 
 
