@@ -475,12 +475,25 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     wxString drcRulesPath = prj->AbsolutePath( fn.GetFullName() );
 
+    // Rebuild The Instance of ENUM_MAP<PCB_LAYER_ID> (layer names list), because the DRC
+    // engine can use layer names (canonical and/or user names)
+    ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+    layerEnum.Choices().Clear();
+    layerEnum.Undefined( UNDEFINED_LAYER );
+
+    for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+    {
+        layerEnum.Map( *seq, LSET::Name( *seq ) );              // Add Canonical name
+        layerEnum.Map( *seq, aBoard->GetLayerName( *seq ) );    // Add User name
+    }
+
     try
     {
         engine->InitEngine( drcRulesPath );
     }
-    catch( PARSE_ERROR& )
+    catch( PARSE_ERROR& err )
     {
+        fprintf( stderr, "Init DRC engine: err <%s>\n", TO_UTF8( err.What() ) ); fflush( stderr);
         return false;
     }
 
