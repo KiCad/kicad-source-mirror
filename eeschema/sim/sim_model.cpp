@@ -1151,17 +1151,13 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
         return true;
     }
 
-    bool inferDCSource = false;
-
-    if( ( ( *aDeviceType == wxT( "V" ) || *aDeviceType == wxT( "I" ) )
-          && aModelType->IsEmpty() )
-
+    if(     ( ( *aDeviceType == wxT( "V" ) || *aDeviceType == wxT( "I" ) )
+              && aModelType->IsEmpty() )
         ||
-
-        ( aDeviceType->IsEmpty()
-         && aModelType->IsEmpty()
-         && !value.IsEmpty()
-         && ( prefix.StartsWith( "V" ) || prefix.StartsWith( "I" ) ) )  )
+            ( aDeviceType->IsEmpty()
+              && aModelType->IsEmpty()
+              && !value.IsEmpty()
+              && ( prefix.StartsWith( "V" ) || prefix.StartsWith( "I" ) ) )  )
     {
         if( aDeviceType->IsEmpty() )
             *aDeviceType = prefix.Left( 1 );
@@ -1169,8 +1165,11 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, bool aResolve,
         if( aModelType->IsEmpty() )
             *aModelType = wxT( "DC" );
 
-        if( aModelParams->IsEmpty() )
+        if( aModelParams->IsEmpty() && !value.IsEmpty() )
         {
+            if( value.StartsWith( wxT( "DC " ) ) )
+                value = value.Right( value.Length() - 3 );
+
             wxRegEx sourceVal( wxT( "^"
                                     "([0-9\\. ]+)"
                                     "([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?"
@@ -1275,6 +1274,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     bool     modelFromValueField = false;
 
     if( aSymbol.FindField( wxT( "Spice_Primitive" ) )
+        || aSymbol.FindField( wxT( "SpiceMapping" ) )
         || aSymbol.FindField( wxT( "Spice_Node_Sequence" ) )
         || aSymbol.FindField( wxT( "Spice_Model" ) )
         || aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) )
@@ -1285,6 +1285,9 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             spiceDeviceType = primitiveField->GetText();
             aSymbol.RemoveField( primitiveField );
         }
+
+        if( T_field* spiceMapping = aSymbol.FindField( wxT( "SpiceMapping" ) ) )
+            spiceMapping->SetName( wxT( "Spice_Node_Sequence" ) );
 
         if( T_field* nodeSequenceField = aSymbol.FindField( wxT( "Spice_Node_Sequence" ) ) )
         {
@@ -1348,9 +1351,9 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     {
         // Auto convert some legacy fields used in the middle of 7.0 development...
 
-        if( T_field* legacyDevice = aSymbol.FindField( wxT( "Sim_Type" ) ) )
+        if( T_field* legacyType = aSymbol.FindField( wxT( "Sim_Type" ) ) )
         {
-            legacyDevice->SetName( SIM_MODEL::TYPE_FIELD );
+            legacyType->SetName( SIM_MODEL::TYPE_FIELD );
         }
 
         if( T_field* legacyDevice = aSymbol.FindField( wxT( "Sim_Device" ) ) )
@@ -1414,6 +1417,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     spiceType = spiceType.Trim( true ).Trim( false );
 
     bool libraryModel = false;
+    bool inferredModel = false;
     bool internalModel = false;
 
     if( !spiceLib.IsEmpty() )
@@ -1441,22 +1445,22 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             // Fall back to raw spice model
         }
     }
+    else if( ( spiceDeviceType == "R" || spiceDeviceType == "L" || spiceDeviceType == "C" )
+            && prefix.StartsWith( spiceDeviceType )
+            && modelFromValueField )
+    {
+        inferredModel = true;
+    }
     else
     {
-        // See if we have a function-style SPICE model (ie: "sin(0 1 60)") that can be handled
+        // See if we have a SPICE model such as "sin(0 1 60)" or "sin 0 1 60" that can be handled
         // by a built-in SIM_MODEL.
 
-        wxRegEx  regex( wxT( "^[a-zA-Z]+\\(.*\\)$" ) );
+        wxStringTokenizer tokenizer( spiceModel, wxT( "() " ), wxTOKEN_STRTOK );
 
-        if( regex.Matches( spiceModel ) )
+        if( tokenizer.HasMoreTokens() )
         {
-            wxString paramSet;
-
-            spiceType = spiceModel.BeforeFirst( '(', &paramSet );
-            paramSet = paramSet.BeforeLast( ')' );
-
-            wxStringTokenizer tokenizer( paramSet, wxT( " " ), wxTOKEN_STRTOK );
-
+            spiceType = tokenizer.GetNextToken();
             spiceType.MakeUpper();
 
             for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
@@ -1468,13 +1472,22 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                     {
                         std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
-                        for( int ii = 0; tokenizer.HasMoreTokens(); ++ii )
+                        if( spiceType == wxT( "DC" ) && tokenizer.CountTokens() == 1 )
                         {
-                            model->SetParamValue( ii, tokenizer.GetNextToken().ToStdString(),
-                                                  SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+                            valueField->SetText( tokenizer.GetNextToken() );
+                            modelFromValueField = false;
+                        }
+                        else
+                        {
+                            for( int ii = 0; tokenizer.HasMoreTokens(); ++ii )
+                            {
+                                model->SetParamValue( ii, tokenizer.GetNextToken().ToStdString(),
+                                                      SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+                            }
+
+                            spiceParams = wxString( model->Serde().GenerateParams() );
                         }
 
-                        spiceParams = wxString( model->Serde().GenerateParams() );
                         internalModel = true;
 
                         if( pinMap.IsEmpty() )
@@ -1511,6 +1524,11 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
         if( modelFromValueField )
             valueField->SetText( wxT( "${SIM.NAME}" ) );
+    }
+    else if( inferredModel )
+    {
+        // DeviceType is left in the reference designator and Model is left in the value field,
+        // so there's nothing to do here....
     }
     else if( internalModel )
     {
