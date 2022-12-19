@@ -1296,7 +1296,6 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     bool     modelFromValueField = false;
 
     if( aSymbol.FindField( wxT( "Spice_Primitive" ) )
-        || aSymbol.FindField( wxT( "SpiceMapping" ) )
         || aSymbol.FindField( wxT( "Spice_Node_Sequence" ) )
         || aSymbol.FindField( wxT( "Spice_Model" ) )
         || aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) )
@@ -1307,9 +1306,6 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             spiceDeviceType = primitiveField->GetText();
             aSymbol.RemoveField( primitiveField );
         }
-
-        if( T_field* spiceMapping = aSymbol.FindField( wxT( "SpiceMapping" ) ) )
-            spiceMapping->SetName( wxT( "Spice_Node_Sequence" ) );
 
         if( T_field* nodeSequenceField = aSymbol.FindField( wxT( "Spice_Node_Sequence" ) ) )
         {
