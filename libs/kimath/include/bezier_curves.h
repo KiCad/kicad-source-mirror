@@ -27,6 +27,8 @@
 #include <vector>
 #include <math/vector2d.h>
 
+template <typename T> class ELLIPSE;
+
 /**
  * Bezier curves to polygon converter.
  *
@@ -64,5 +66,37 @@ private:
     ///< Control points
     std::vector<VECTOR2D> m_ctrlPts;
 };
+
+
+// TODO: Refactor BEZIER_POLY to use BEZIER
+
+/**
+ * Generic cubic Bezier representation
+ */
+template <typename NumericType>
+class BEZIER
+{
+public:
+    BEZIER() = default;
+
+    BEZIER( VECTOR2<NumericType> aStart, VECTOR2<NumericType> aC1, VECTOR2<NumericType> aC2,
+            VECTOR2<NumericType> aEnd ) :
+            Start( aStart ),
+            C1( aC1 ),
+            C2( aC2 ),
+            End( aEnd )
+    {}
+
+    VECTOR2<NumericType> Start;
+    VECTOR2<NumericType> C1;
+    VECTOR2<NumericType> C2;
+    VECTOR2<NumericType> End;
+};
+
+/**
+ * Transforms an ellipse or elliptical arc into a set of quadratic Bezier curves that approximate it
+ */
+template<typename T>
+void TransformEllipseToBeziers( const ELLIPSE<T>& aEllipse, std::vector<BEZIER<T>>& aBeziers );
 
 #endif  // BEZIER_CURVES_H

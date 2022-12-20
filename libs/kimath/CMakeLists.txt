@@ -5,6 +5,7 @@ set( KIMATH_SRCS
     src/trigo.cpp
 
 	src/geometry/eda_angle.cpp
+	src/geometry/ellipse.cpp
     src/geometry/circle.cpp
     src/geometry/convex_hull.cpp
     src/geometry/direction_45.cpp

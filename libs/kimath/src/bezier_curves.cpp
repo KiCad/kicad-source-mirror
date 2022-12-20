@@ -26,6 +26,8 @@
 /************************************/
 
 #include <bezier_curves.h>
+#include <geometry/ellipse.h>
+#include <trigo.h>
 #include <math/vector2d.h>  // for VECTOR2D, operator*, VECTOR2
 #include <wx/debug.h>       // for wxASSERT
 
@@ -105,3 +107,99 @@ void BEZIER_POLY::GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen, in
     if( aOutput.back() != m_ctrlPts[3] )
         aOutput.push_back( m_ctrlPts[3] );
 }
+
+
+template<typename T>
+void TransformEllipseToBeziers( const ELLIPSE<T>& aEllipse, std::vector<BEZIER<T>>& aBeziers )
+{
+    EDA_ANGLE arcAngle = -( aEllipse.EndAngle - aEllipse.StartAngle );
+
+    if( arcAngle >= ANGLE_0 )
+        arcAngle -= ANGLE_360;
+
+    /*
+     * KiCad does not natively support ellipses or elliptical arcs.  So, we convert them to Bezier
+     * splines as these are the nearest thing we have that represents them in a way that is both
+     * editable and preserves their curvature accurately (enough).
+     *
+     * Credit to Kliment for developing and documenting this method.
+     */
+    /// Minimum number of Beziers to use for a full circle to keep error manageable.
+    const int minBeziersPerCircle = 4;
+
+    /// The number of Beziers needed for the given arc
+    const int numBeziers = std::ceil( std::abs( arcAngle.AsRadians() /
+                                                ( 2 * M_PI / minBeziersPerCircle ) ) );
+
+    /// Angle occupied by each Bezier
+    const double angleIncrement = arcAngle.AsRadians() / numBeziers;
+
+    /*
+     * Now, let's assume a circle of radius 1, centered on origin, with angle startangle
+     * x-axis-aligned. We'll move, scale, and rotate it later. We're creating Bezier curves that hug
+     * this circle as closely as possible, with the angles that will be used on the final ellipse
+     * too.
+     *
+     * Thanks to the beautiful and excellent https://pomax.github.io/bezierinfo we know how to
+     * define a curve that hugs a circle as closely as possible.
+     *
+     * We need the value k, which is the optimal distance from the endpoint to the control point to
+     * make the curve match the circle for a given circle arc angle.
+     *
+     * k = 4/3 * tan(θ/4), where θ is the angle of the arc. In our case, θ=angleIncrement
+     */
+    double theta = angleIncrement;
+    double k     = ( 4. / 3. ) * std::tan( theta / 4 );
+
+    /*
+     * Define our Bezier:
+     * - Start point is on the circle at the x-axis
+     * - First control point just uses k as the y-value
+     * - Second control point is offset from the end point
+     * - End point is defined by the angle of the arc segment
+     * Note that we use double here no matter what the template param is; round at the end only.
+     */
+    BEZIER<double> first = { { 1, 0 },
+                             { 1, k },
+                             { std::cos( theta ) + k * std::sin( theta ),
+                               std::sin( theta ) - k * std::cos( theta ) },
+                             { std::cos( theta ), std::sin( theta ) } };
+
+    /*
+     * Now construct the actual segments by transforming/rotating the first one
+     */
+    auto transformPoint =
+            [&]( VECTOR2D aPoint, const double aAngle ) -> VECTOR2D
+            {
+                // Bring to the actual starting angle
+                RotatePoint( aPoint,
+                             -EDA_ANGLE( aAngle - aEllipse.StartAngle.AsRadians(), RADIANS_T ) );
+
+                // Then scale to the major and minor radiuses of the ellipse
+                aPoint *= VECTOR2D( aEllipse.MajorRadius, aEllipse.MinorRadius );
+
+                // Now rotate to the ellipse coordinate system
+                RotatePoint( aPoint, -aEllipse.Rotation );
+
+                // And finally offset to the center location of the ellipse
+                aPoint += aEllipse.Center;
+
+                return aPoint;
+            };
+
+    for( int i = 0; i < numBeziers; i++ )
+    {
+        aBeziers.emplace_back( BEZIER<T>( {
+                transformPoint( first.Start, i * angleIncrement ),
+                transformPoint( first.C1,    i * angleIncrement ),
+                transformPoint( first.C2,    i * angleIncrement ),
+                transformPoint( first.End,   i * angleIncrement )
+        } ) );
+    }
+}
+
+
+template void TransformEllipseToBeziers( const ELLIPSE<double>& aEllipse,
+                                         std::vector<BEZIER<double>>& aBeziers );
+template void TransformEllipseToBeziers( const ELLIPSE<int>& aEllipse,
+                                         std::vector<BEZIER<int>>& aBeziers );

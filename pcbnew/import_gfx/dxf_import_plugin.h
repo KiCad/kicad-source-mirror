@@ -418,11 +418,12 @@ private:
 
     virtual void addCircle( const DL_CircleData& aData ) override;
     virtual void addArc( const DL_ArcData& aData ) override;
+    void addEllipse( const DL_EllipseData& aData ) override;
     //virtual void addLWPolyline( const DRW_LWPolyline& aData ) override;
     virtual void addText( const DL_TextData& aData ) override;
     virtual void addPolyline( const DL_PolylineData& aData ) override;
 
-    /* Inserts blocks where specified by insert data */
+            /* Inserts blocks where specified by insert data */
     virtual void addInsert( const DL_InsertData& aData ) override;
 
     /**

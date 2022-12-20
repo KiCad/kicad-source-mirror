@@ -27,6 +27,7 @@ set( QA_KIMATH_SRCS
 
     test_kimath.cpp
 
+    geometry/test_ellipse_to_bezier.cpp
     geometry/test_fillet.cpp
     geometry/test_circle.cpp
     geometry/test_segment.cpp

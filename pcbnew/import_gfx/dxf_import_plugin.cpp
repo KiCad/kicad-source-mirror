@@ -32,6 +32,8 @@
 #include "dxf_import_plugin.h"
 #include <wx/arrstr.h>
 #include <wx/regex.h>
+#include <geometry/ellipse.h>
+#include <bezier_curves.h>
 
 #include <trigo.h>
 #include <macros.h>
@@ -558,6 +560,72 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 
     updateImageLimits( center + radiusDelta );
     updateImageLimits( center - radiusDelta );
+}
+
+
+void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
+{
+    DXF_ARBITRARY_AXIS arbAxis      = getArbitraryAxis( getExtrusion() );
+    VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
+    VECTOR3D           majorCoords  = ocsToWcs( arbAxis, VECTOR3D( aData.mx, aData.my, aData.mz ) );
+
+    // DXF ellipses store the minor axis length as a ratio to the major axis.
+    // The major coords are relative to the center point.
+    // For now, we assume ellipses in the XY plane.
+
+    VECTOR2D center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
+    VECTOR2D major( mapX( majorCoords.x ), mapY( majorCoords.y ) );
+
+    // DXF elliptical arcs store their angles in radians (unlike circular arcs which use degrees)
+    // The arcs wind CCW as in KiCad.  The end angle must be greater than the start angle, and if
+    // the extrusion direction is negative, the arc winding is CW instead!  Note that this is a
+    // simplification that assumes the DXF is representing a 2D drawing, and would need to be
+    // revisited if we want to import true 3D drawings and "flatten" them to the 2D KiCad plane
+    // internally.
+    EDA_ANGLE startAngle( aData.angle1, RADIANS_T );
+    EDA_ANGLE endAngle( aData.angle2, RADIANS_T );
+
+    if( startAngle > endAngle )
+        endAngle += ANGLE_360;
+
+    // TODO: testcases for negative extrusion vector; handle it here
+
+    if( aData.ratio == 1.0 )
+    {
+        double radius = major.EuclideanNorm();
+
+        if( startAngle == endAngle )
+        {
+            DL_CircleData circle( aData.cx, aData.cy, aData.cz, radius );
+            addCircle( circle );
+            return;
+        }
+        else
+        {
+            DL_ArcData arc( aData.cx, aData.cy, aData.cz, radius,
+                            startAngle.AsDegrees(), endAngle.AsDegrees() );
+            addArc( arc );
+            return;
+        }
+    }
+
+    std::vector<BEZIER<double>> splines;
+    ELLIPSE<double> ellipse( center, major, aData.ratio, startAngle, endAngle );
+
+    TransformEllipseToBeziers( ellipse, splines );
+
+    DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
+    double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                           : &m_internalImporter;
+
+    for( const BEZIER<double>& b : splines )
+        bufferToUse->AddSpline( b.Start, b.C1, b.C2, b.End, lineWidth );
+
+    // Naive bounding
+    updateImageLimits( center + major );
+    updateImageLimits( center - major );
 }
 
 
