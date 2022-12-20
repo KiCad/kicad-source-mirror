@@ -50,6 +50,15 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
 }
 
 
+void FOOTPRINT_TREE_PANE::FocusSearchFieldIfExists()
+{
+    if( m_tree )
+    {
+        m_tree->FocusSearchFieldIfExists();
+    }
+}
+
+
 FOOTPRINT_TREE_PANE::~FOOTPRINT_TREE_PANE()
 {
     m_tree->Destroy();

@@ -47,6 +47,11 @@ public:
         return m_tree;
     }
 
+    /**
+     * Focus the search widget if it exists
+     */
+    void FocusSearchFieldIfExists();
+
 protected:
     void onComponentSelected( wxCommandEvent& aEvent );
     void onUpdateUI( wxUpdateUIEvent& aEvent );

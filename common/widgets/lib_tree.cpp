@@ -325,6 +325,15 @@ wxWindow* LIB_TREE::GetFocusTarget()
 }
 
 
+void LIB_TREE::FocusSearchFieldIfExists()
+{
+    if( m_query_ctrl )
+    {
+        m_query_ctrl->SetFocus();
+    }
+}
+
+
 void LIB_TREE::toggleExpand( const wxDataViewItem& aTreeId )
 {
     if( !aTreeId.IsOk() )

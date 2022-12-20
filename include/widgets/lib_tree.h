@@ -139,6 +139,11 @@ public:
 
     wxWindow* GetFocusTarget();
 
+    /**
+     * Focus the search widget if it exists
+     */
+    void FocusSearchFieldIfExists();
+
 protected:
     /**
      * Expand or collapse a node, switching it to the opposite state.
