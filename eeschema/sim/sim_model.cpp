@@ -532,18 +532,13 @@ std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const std::
     if( !aFields )
         return ""; // Should not happen, T=void specialization will be called instead.
 
-    auto it = std::find_if( aFields->begin(), aFields->end(),
-                            [aFieldName]( const T& field )
-                            {
-                                return field.GetName() == aFieldName;
-                            } );
+    for( const T& field : *aFields )
+    {
+        if( field.GetName() == aFieldName )
+            return aResolve ? field.GetShownText().ToStdString() : field.GetText().ToStdString();
+    }
 
-    if( it == aFields->end() )
-        return "";
-    else if( aResolve )
-        return std::string( it->GetShownText().ToUTF8() );
-    else
-        return std::string( it->GetText().ToUTF8() );
+    return "";
 }
 
 
@@ -660,39 +655,30 @@ void SIM_MODEL::SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbol
 void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
                                        const std::string& aSymbolPinNumber )
 {
-    int aPinIndex = -1;
-
     const std::vector<std::reference_wrapper<const PIN>> pins = GetPins();
 
     for( int ii = 0; ii < (int) pins.size(); ++ii )
     {
         if( pins.at( ii ).get().name == aPinName )
         {
-            aPinIndex = ii;
-            break;
+            SetPinSymbolPinNumber( ii, aSymbolPinNumber );
+            return;
         }
     }
 
-    if( aPinIndex < 0 )
-    {
-        // If aPinName wasn't in fact a name, see if it's a raw (1-based) index.  This is
-        // required for legacy files which didn't use pin names.
-        aPinIndex = (int) strtol( aPinName.c_str(), nullptr, 10 );
+    // If aPinName wasn't in fact a name, see if it's a raw (1-based) index.  This is required
+    // for legacy files which didn't use pin names.
+    int aPinIndex = (int) strtol( aPinName.c_str(), nullptr, 10 );
 
-        // Convert to 0-based.  (Note that this will also convert the error state to -1, which
-        // means we don't have to check for it separately.)
-        aPinIndex--;
-    }
-
-    if( aPinIndex < 0 )
+    if( aPinIndex < 1 )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Could not find a pin named '%s' in "
-                                             "simulation model of type '%s'" ),
+        THROW_IO_ERROR( wxString::Format( _( "Could not find a pin named '%s' in simulation "
+                                             "model of type '%s'" ),
                                           aPinName,
                                           GetTypeInfo().fieldValue ) );
     }
 
-    SetPinSymbolPinNumber( aPinIndex, aSymbolPinNumber );
+    SetPinSymbolPinNumber( --aPinIndex /* convert to 0-based */, aSymbolPinNumber );
 }
 
 
@@ -705,34 +691,27 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetParam( unsigned aParamIndex ) const
 }
 
 
-const SIM_MODEL::PARAM* SIM_MODEL::FindParam( const std::string& aParamName ) const
+int SIM_MODEL::doFindParam( const std::string& aParamName ) const
 {
     std::string lowerParamName = boost::to_lower_copy( aParamName );
 
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
-    auto it = std::find_if( params.begin(), params.end(),
-                            [lowerParamName]( const PARAM& param )
-                            {
-                                return param.info.name == lowerParamName;
-                            } );
-
-    // Also check for model params that had to be escaped due to collisions with instance
-    // params.
-    if( it == params.end() )
+    for( int ii = 0; ii < (int) params.size(); ++ii )
     {
-        it = std::find_if( params.begin(), params.end(),
-                           [lowerParamName]( const PARAM& param )
-                           {
-                               return param.info.name == lowerParamName + "_";
-                           } );
-
+        if( params[ii].get().info.name == lowerParamName )
+            return ii;
     }
 
-    if( it == params.end() )
-        return nullptr;
+    return -1;
+}
 
-    return &it->get();
+
+const SIM_MODEL::PARAM* SIM_MODEL::FindParam( const std::string& aParamName ) const
+{
+    int idx = doFindParam( aParamName );
+
+    return idx >= 0 ? &GetParam( idx ) : nullptr;
 }
 
 
@@ -776,48 +755,12 @@ void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
 }
 
 
-void SIM_MODEL::SetParamValue( const std::string& aParamName, const SIM_VALUE& aValue )
-{
-    std::string lowerParamName = boost::to_lower_copy( aParamName );
-
-    std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
-
-    auto it = std::find_if( params.begin(), params.end(),
-                            [lowerParamName]( const PARAM& param )
-                            {
-                                return param.info.name == lowerParamName;
-                            } );
-
-    // Also check for model params that had to be escaped due to collisions with instance
-    // params.
-    if( it == params.end() )
-    {
-        it = std::find_if( params.begin(), params.end(),
-                           [lowerParamName]( const PARAM& param )
-                           {
-                               return param.info.name == lowerParamName + "_";
-                           } );
-
-    }
-
-    if( it == params.end() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Could not find a parameter named '%s' in "
-                                             "simulation model of type '%s'" ),
-                                          aParamName,
-                                          GetTypeInfo().fieldValue ) );
-    }
-
-    SetParamValue( static_cast<int>( it - params.begin() ), aValue );
-}
-
-
 void SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string& aValue,
                                SIM_VALUE::NOTATION aNotation )
 {
-    const PARAM* param = FindParam( aParamName );
+    int idx = doFindParam( aParamName );
 
-    if( !param )
+    if( idx < 0 )
     {
         THROW_IO_ERROR( wxString::Format( _( "Could not find a parameter named '%s' in "
                                              "simulation model of type '%s'" ),
@@ -825,8 +768,7 @@ void SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string&
                                           GetTypeInfo().fieldValue ) );
     }
 
-    const SIM_VALUE& value = *FindParam( aParamName )->value;
-    SetParamValue( aParamName, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
+    SetParamValue( idx, aValue, aNotation );
 }
 
 

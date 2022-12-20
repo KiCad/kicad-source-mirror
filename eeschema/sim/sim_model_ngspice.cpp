@@ -81,8 +81,28 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
 }
 
 
+int SIM_MODEL_NGSPICE::doFindParam( const std::string& aParamName ) const
+{
+    // Special case to allow escaped model parameters (suffixed with "_")
+
+    std::string lowerParamName = boost::to_lower_copy( aParamName );
+
+    std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
+
+    for( int ii = 0; ii < (int) params.size(); ++ii )
+    {
+        const PARAM& param = params[ii];
+
+        if( param.info.name == lowerParamName || param.info.name == lowerParamName + "_" )
+            return ii;
+    }
+
+    return -1;
+}
+
+
 void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
-                                               const std::string& aParamValue,
+                                               const std::string& aValue,
                                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     std::string paramName = boost::to_lower_copy( aParamName );
@@ -99,67 +119,54 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
 
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
-    auto paramIt = std::find_if( params.begin(), params.end(),
-                                 [lowerParamName]( const PARAM& param )
-                                 {
-                                      return !param.info.isSpiceInstanceParam
-                                          && param.info.category != PARAM::CATEGORY::SUPERFLUOUS
-                                          && ( param.info.name == lowerParamName
-                                               || param.info.name == lowerParamName + "_" );
-                                 } );
-
-    if( paramIt != params.end() )
+    for( int ii = 0; ii < (int) params.size(); ++ii )
     {
-        SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue, aNotation );
-        return;
-    }
+        const PARAM& param = params[ii];
 
+        if( !param.info.isSpiceInstanceParam
+            && param.info.category != PARAM::CATEGORY::SUPERFLUOUS
+            && ( param.info.name == lowerParamName || param.info.name == lowerParamName + "_" ) )
+        {
+            const SIM_VALUE& value = *GetParam( ii ).value;
+            SetParamValue( ii, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
+            return;
+        }
+    }
 
     // One Spice param can have multiple names, we need to take this into account.
 
-    std::vector<PARAM::INFO> ngspiceParams = ModelInfo( getModelType() ).modelParams;
+    // Now we search the base model parameters without excluding superfluous parameters (which
+    // may be aliases to non-superfluous parameters).
 
-    auto ngspiceParamIt = std::find_if( ngspiceParams.begin(), ngspiceParams.end(),
-                                        [lowerParamName]( const PARAM& param )
-                                        {
-                                            // Now we search without excluding Spice instance
-                                            // parameters and superfluous parameters.
-                                            return param.info.name == lowerParamName;
-                                        } );
-
-    if( ngspiceParamIt == ngspiceParams.end() )
+    for( const PARAM::INFO& ngspiceParamInfo : ModelInfo( getModelType() ).modelParams )
     {
-        if( canSilentlyIgnoreParam( paramName ) )
-            return;
+        if( ngspiceParamInfo.name == lowerParamName )
+        {
+            // Find an actual parameter with the same id.  Even if the ngspiceParam was
+            // superfluous, its alias target might not be.
+            for( int ii = 0; ii < (int) params.size(); ++ii )
+            {
+                const PARAM& param = params[ii];
 
-        THROW_IO_ERROR( wxString::Format( "Failed to set parameter '%s' to value '%s'",
-                                          aParamName,
-                                          aParamValue ) );
+                if( param.info.id == ngspiceParamInfo.id
+                        && param.info.category != PARAM::CATEGORY::SUPERFLUOUS )
+                {
+                    const SIM_VALUE& value = *GetParam( ii ).value;
+                    SetParamValue( ii, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
+                    return;
+                }
+            }
+
+            break;
+        }
     }
 
-
-    // We obtain the id of the Ngspice param that is to be set. We use this id to address the
-    // parameter to be set here because a superfluous parameter may be an alias: this will
-    // dereference it.
-    unsigned id = ngspiceParamIt->id;
-
-    // Find an actual parameter with the same id.
-    paramIt = std::find_if( params.begin(), params.end(),
-                            [id]( const PARAM& param )
-                            {
-                                // Look for any non-superfluous parameter with the same id.
-                                return param.info.id == id
-                                    && param.info.category != PARAM::CATEGORY::SUPERFLUOUS;
-                            } );
-    
-    if( paramIt == params.end() )
+    if( !canSilentlyIgnoreParam( paramName ) )
     {
         THROW_IO_ERROR( wxString::Format( "Failed to set parameter '%s' to value '%s'",
                                           aParamName,
-                                          aParamValue ) );
+                                          aValue ) );
     }
-
-    SIM_MODEL::SetParamValue( static_cast<int>( paramIt - params.begin() ), aParamValue, aNotation );
 }
 
 

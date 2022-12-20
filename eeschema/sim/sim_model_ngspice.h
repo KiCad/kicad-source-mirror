@@ -46,7 +46,7 @@ public:
 
     SIM_MODEL_NGSPICE( TYPE aType );
 
-    void SetParamFromSpiceCode( const std::string& aParamName, const std::string& aParamValue,
+    void SetParamFromSpiceCode( const std::string& aParamName, const std::string& aValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;
 
     // Protected because it's accessed by QA tests.
@@ -103,6 +103,8 @@ protected:
     };
 
     static const MODEL_INFO& ModelInfo( MODEL_TYPE aType );
+
+    int doFindParam( const std::string& aParamName ) const override;
 
 private:
     bool requiresSpiceModelLine() const override { return false; }

@@ -495,7 +495,6 @@ public:
     virtual void SetParamValue( int aParamIndex, const SIM_VALUE& aValue );
     void SetParamValue( int aParamIndex, const std::string& aValue,
                         SIM_VALUE::NOTATION aNotation = SIM_VALUE::NOTATION::SI );
-    void SetParamValue( const std::string& aParamName, const SIM_VALUE& aValue );
     void SetParamValue( const std::string& aParamName, const std::string& aValue,
                         SIM_VALUE::NOTATION aNotation = SIM_VALUE::NOTATION::SI );
 
@@ -536,6 +535,8 @@ protected:
                std::unique_ptr<SIM_SERDE> aSerde );
 
     virtual void CreatePins( const std::vector<LIB_PIN*>& aSymbolPins );
+
+    virtual int doFindParam( const std::string& aParamName ) const;
 
 private:
     template <typename T>
