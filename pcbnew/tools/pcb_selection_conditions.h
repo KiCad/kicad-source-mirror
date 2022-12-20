@@ -56,6 +56,16 @@ public:
      */
     static SELECTION_CONDITION SameLayer();
 
+    /**
+     * Test if any selected items are locked.
+     */
+    static bool HasLockedItems( const SELECTION& aSelection );
+
+    /**
+     * Test if any selected items are unlocked.
+     */
+    static bool HasUnlockedItems( const SELECTION& aSelection );
+
 private:
     ///< Helper function used by SameNet()
     static bool sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected );

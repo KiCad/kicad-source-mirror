@@ -58,6 +58,7 @@
 #include <tools/drawing_tool.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_picker_tool.h>
+#include <tools/pcb_selection_conditions.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/edit_tool.h>
 #include <tools/tool_event_utils.h>
@@ -106,23 +107,23 @@ protected:
 };
 
 
-class LOCK_CONTEXT_MENU : public ACTION_MENU
+class LOCK_CONTEXT_MENU : public CONDITIONAL_MENU
 {
 public:
-    LOCK_CONTEXT_MENU() :
-        ACTION_MENU( true )
+    LOCK_CONTEXT_MENU( TOOL_INTERACTIVE* aTool ) :
+        CONDITIONAL_MENU( aTool )
     {
         SetIcon( BITMAPS::locked );
         SetTitle( _( "Locking" ) );
 
-        Add( PCB_ACTIONS::lock );
-        Add( PCB_ACTIONS::unlock );
-        Add( PCB_ACTIONS::toggleLock );
+        AddItem( PCB_ACTIONS::lock, PCB_SELECTION_CONDITIONS::HasUnlockedItems );
+        AddItem( PCB_ACTIONS::unlock, PCB_SELECTION_CONDITIONS::HasLockedItems );
+        AddItem( PCB_ACTIONS::toggleLock, SELECTION_CONDITIONS::ShowAlways );
     }
 
     ACTION_MENU* create() const override
     {
-        return new LOCK_CONTEXT_MENU();
+        return new LOCK_CONTEXT_MENU( this->m_tool );
     }
 };
 
@@ -193,8 +194,7 @@ bool BOARD_EDITOR_CONTROL::Init()
     std::shared_ptr<ZONE_CONTEXT_MENU> zoneMenu = std::make_shared<ZONE_CONTEXT_MENU>();
     zoneMenu->SetTool( this );
 
-    std::shared_ptr<LOCK_CONTEXT_MENU> lockMenu = std::make_shared<LOCK_CONTEXT_MENU>();
-    lockMenu->SetTool( this );
+    std::shared_ptr<LOCK_CONTEXT_MENU> lockMenu = std::make_shared<LOCK_CONTEXT_MENU>( this );
 
     // Add the PCB control menus to relevant other tools
 

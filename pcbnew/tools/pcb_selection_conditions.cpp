@@ -43,6 +43,34 @@ SELECTION_CONDITION PCB_SELECTION_CONDITIONS::SameLayer()
 }
 
 
+bool PCB_SELECTION_CONDITIONS::HasLockedItems( const SELECTION& aSelection )
+{
+    for( EDA_ITEM* item : aSelection.Items() )
+    {
+        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+
+        if( boardItem && boardItem->IsLocked() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool PCB_SELECTION_CONDITIONS::HasUnlockedItems( const SELECTION& aSelection )
+{
+    for( EDA_ITEM* item : aSelection.Items() )
+    {
+        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+
+        if( boardItem && !boardItem->IsLocked() )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool PCB_SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected )
 {
     if( aSelection.Empty() )
@@ -107,5 +135,3 @@ bool PCB_SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
 
     return true;
 }
-
-
