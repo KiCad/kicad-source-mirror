@@ -1596,14 +1596,20 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
     case SCH_SYMBOL_T:
     {
-        SCH_SYMBOL*              symbol = static_cast<SCH_SYMBOL*>( curr_item );
-        DIALOG_SYMBOL_PROPERTIES symbolPropsDialog( m_frame, symbol );
+        int         retval;
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( curr_item );
 
-        // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
-        // frame. Therefore this dialog as a modal frame parent, MUST be run under
-        // quasimodal mode for the quasimodal frame support to work.  So don't use
-        // the QUASIMODAL macros here.
-        int retval = symbolPropsDialog.ShowQuasiModal();
+        // This needs to be scoped so the dialog destructor removes blocking status
+        // before we launch the next dialog.
+        {
+            DIALOG_SYMBOL_PROPERTIES symbolPropsDialog( m_frame, symbol );
+
+            // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
+            // frame. Therefore this dialog as a modal frame parent, MUST be run under
+            // quasimodal mode for the quasimodal frame support to work.  So don't use
+            // the QUASIMODAL macros here.
+            retval = symbolPropsDialog.ShowQuasiModal();
+        }
 
         if( retval == SYMBOL_PROPS_EDIT_OK )
         {
