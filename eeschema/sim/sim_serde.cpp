@@ -193,7 +193,9 @@ void SIM_SERDE::ParseValue( const std::string& aValue )
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        THROW_IO_ERROR( e.what() );
+        wxString msg;
+        msg.Printf( wxT( "ParseValue: parse <%s>, error <%s>" ), aValue.c_str(), e.what() );
+        THROW_IO_ERROR( msg );
     }
 
     m_model.SetIsStoredInValue( true );
@@ -218,7 +220,9 @@ bool SIM_SERDE::ParseParams( const std::string& aParams )
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        THROW_IO_ERROR( e.what() );
+        wxString msg;
+        msg.Printf( wxT( "ParseParams: parse <%s>, error <%s>" ), aParams.c_str(), e.what() );
+        THROW_IO_ERROR( msg );
     }
 
     std::string paramName;
@@ -285,7 +289,9 @@ void SIM_SERDE::ParsePins( const std::string& aPins )
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        THROW_IO_ERROR( e.what() );
+        wxString msg;
+        msg.Printf( wxT( "ParsePins: parse <%s>, error <%s>" ), aPins.c_str(), e.what() );
+        THROW_IO_ERROR( msg );
     }
 }
 
@@ -311,7 +317,7 @@ std::string SIM_SERDE::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) 
         name = aParam.info.name.substr( 0, aParam.info.name.length() - 1 );
 
     std::string value = aParam.value->ToString();
-    
+
     if( value == "" || value.find( " " ) != std::string::npos )
         value = fmt::format( "\"{}\"", value );
 
