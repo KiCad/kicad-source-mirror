@@ -96,6 +96,7 @@ POSITIONING_TOOLS_MENU::POSITIONING_TOOLS_MENU( TOOL_INTERACTIVE* aTool ) :
 
     AddItem( PCB_ACTIONS::moveExact,         SELECTION_CONDITIONS::ShowAlways );
     AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::ShowAlways );
+    AddItem( PCB_ACTIONS::copyWithReference, SELECTION_CONDITIONS::ShowAlways );
     AddItem( PCB_ACTIONS::positionRelative,  SELECTION_CONDITIONS::ShowAlways );
 }
 
