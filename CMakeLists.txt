@@ -23,6 +23,9 @@
 
 cmake_minimum_required( VERSION 3.21 FATAL_ERROR )
 
+# Generate DEPFILES without transforming relative paths
+cmake_policy( SET CMP0116 OLD )
+
 # Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
 # http://www.cmake.org/pipermail/cmake/2008-September/023808.html
 if( DEFINED CMAKE_BUILD_TYPE )
