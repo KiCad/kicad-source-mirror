@@ -124,14 +124,12 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     auto distA = ( aP - aSeg->Seg().A ).EuclideanNorm();
     auto distB = ( aP - aSeg->Seg().B ).EuclideanNorm();
 
-    if( distA <= w2 )
+    if( distA < w2 || distB < w2 )
     {
         m_mode = DM_CORNER;
-    }
-    else if( distB <= w2 )
-    {
-        m_draggedSegmentIndex++;
-        m_mode = DM_CORNER;
+
+        if( distB <= distA )
+            m_draggedSegmentIndex++;
     }
     else if( m_freeAngleMode )
     {
