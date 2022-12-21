@@ -214,20 +214,36 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
-                    wxString msg;
+                    DRC_RULE*                 rule = constraint.GetParentRule();
+                    VECTOR2I                  pos = item->GetPosition();
+                    PCB_LAYER_ID              layer = UNDEFINED_LAYER;
+                    wxString                  msg;
 
                     msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ), constraint.GetName() );
 
                     drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( item );
-                    drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                    PCB_LAYER_ID   layer = UNDEFINED_LAYER;
+                    drcItem->SetViolatingRule( rule );
 
                     if( item->GetLayerSet().count() )
                         layer = item->GetLayerSet().Seq().front();
 
-                    reportViolation( drcItem, item->GetPosition(), layer );
+                    if( rule->m_Implicit )
+                    {
+                        // Provide a better location for keepout area collisions.
+                        BOARD_ITEM* ruleItem = board->GetItem( rule->m_ImplicitItemId );
+
+                        if( ZONE* keepout = dynamic_cast<ZONE*>( ruleItem ) )
+                        {
+                            std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( layer );
+                            int                    dummyActual;
+
+                            keepout->Outline()->Collide( shape.get(), board->m_DRCMaxClearance,
+                                                         &dummyActual, &pos );
+                        }
+                    }
+
+                    reportViolation( drcItem, pos, layer );
                 }
             };
 

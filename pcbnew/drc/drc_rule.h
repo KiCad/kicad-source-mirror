@@ -24,6 +24,7 @@
 #ifndef DRC_RULE_PROTO_H
 #define DRC_RULE_PROTO_H
 
+#include <kiid.h>
 #include <core/typeinfo.h>
 #include <optional>
 #include <core/minoptmax.h>
@@ -107,6 +108,7 @@ public:
 public:
     bool                        m_Unary;
     bool                        m_Implicit;
+    KIID                        m_ImplicitItemId;
     wxString                    m_Name;
     wxString                    m_LayerSource;
     LSET                        m_LayerCondition;

@@ -423,7 +423,9 @@ void DRC_ENGINE::loadImplicitRules()
         else
             rule = createImplicitRule( wxString::Format( _( "keepout area '%s'" ), name ) );
 
-        rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( wxT( "A.insideArea('%s')" ),
+        rule->m_ImplicitItemId = zone->m_Uuid;
+
+        rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( wxT( "A.intersectsArea('%s')" ),
                                                                       zone->m_Uuid.AsString() ) );
 
         rule->m_LayerCondition = zone->GetLayerSet();

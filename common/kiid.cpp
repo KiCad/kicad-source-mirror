@@ -101,13 +101,17 @@ KIID::KIID()
 }
 
 
-KIID::KIID( int null ) : m_uuid( nilGenerator() ), m_cached_timestamp( 0 )
+KIID::KIID( int null ) :
+        m_uuid( nilGenerator() ),
+        m_cached_timestamp( 0 )
 {
     wxASSERT( null == 0 );
 }
 
 
-KIID::KIID( const std::string& aString ) : m_uuid(), m_cached_timestamp( 0 )
+KIID::KIID( const std::string& aString ) :
+        m_uuid(),
+        m_cached_timestamp( 0 )
 {
     if( aString.length() == 8
         && std::all_of( aString.begin(), aString.end(),
@@ -160,12 +164,14 @@ KIID::KIID( const std::string& aString ) : m_uuid(), m_cached_timestamp( 0 )
 }
 
 
-KIID::KIID( const char* aString ) : KIID( std::string( aString ) )
+KIID::KIID( const char* aString ) :
+        KIID( std::string( aString ) )
 {
 }
 
 
-KIID::KIID( const wxString& aString ) : KIID( std::string( aString.ToUTF8() ) )
+KIID::KIID( const wxString& aString ) :
+        KIID( std::string( aString.ToUTF8() ) )
 {
 }
 
