@@ -571,16 +571,6 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
             else if( !m_dragging && !evt->IsAction( &ACTIONS::refreshPreview ) )
             {
                 // Prepare to start dragging
-                if( !evt->IsAction( &PCB_ACTIONS::move )
-                    && !evt->IsAction( &PCB_ACTIONS::moveWithReference )
-                    && !evt->IsAction( &PCB_ACTIONS::moveIndividually )
-                    && !evt->IsAction( &PCB_ACTIONS::packAndMoveFootprints )
-                    && cfg->m_TrackDragAction != TRACK_DRAG_ACTION::MOVE )
-                {
-                    if( invokeInlineRouter( PNS::DM_ANY ) )
-                        break;
-                }
-
                 editFrame->HideSolderMask();
 
                 m_dragging = true;
