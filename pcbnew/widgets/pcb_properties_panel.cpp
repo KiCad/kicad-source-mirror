@@ -98,7 +98,7 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
                     return m_frame->GetColorSettings()->GetColor( l ).ToColour();
                 } );
 
-        ret->SetLabel( aProperty->Name() );
+        ret->SetLabel( wxGetTranslation( aProperty->Name() ) );
         ret->SetName( aProperty->Name() );
         ret->Enable( !aProperty->IsReadOnly() );
         ret->SetClientData( const_cast<PROPERTY_BASE*>( aProperty ) );

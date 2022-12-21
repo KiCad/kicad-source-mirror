@@ -65,6 +65,8 @@ public:
     void SetSplitterProportion( float aProportion );
     float SplitterProportion() const { return m_splitter_key_proportion; }
 
+    void OnLanguageChanged();
+
 protected:
     virtual void update( const SELECTION& aSelection );
     virtual wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const = 0;

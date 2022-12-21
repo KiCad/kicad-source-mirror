@@ -122,6 +122,12 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
 }
 
 
+void PROPERTIES_PANEL::OnLanguageChanged()
+{
+    UpdateData();
+}
+
+
 void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 {
     if( m_skipNextUpdate )

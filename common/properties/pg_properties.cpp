@@ -159,7 +159,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
 
     if( ret )
     {
-        ret->SetLabel( aProperty->Name() );
+        ret->SetLabel( wxGetTranslation( aProperty->Name() ) );
         ret->SetName( aProperty->Name() );
         ret->Enable( !aProperty->IsReadOnly() );
         ret->SetHelpString( aProperty->Name() );
