@@ -31,6 +31,7 @@
 #endif
 
 #include <widgets/mathplot.h>
+#include <wx/graphics.h>
 #include <wx/module.h>
 #include <wx/image.h>
 
@@ -1633,6 +1634,16 @@ mpWindow::mpWindow() : wxWindow(),
         m_movingInfoLayer( nullptr ),
         m_zooming( false )
 {
+    if( wxGraphicsContext *ctx = m_buff_dc.GetGraphicsContext() )
+    {
+        if( !ctx->SetInterpolationQuality( wxINTERPOLATION_BEST )
+                || !ctx->SetInterpolationQuality( wxINTERPOLATION_GOOD ) )
+        {
+            ctx->SetInterpolationQuality( wxINTERPOLATION_FAST );
+        }
+
+        ctx->SetAntialiasMode( wxANTIALIAS_DEFAULT );
+    }
 }
 
 mpWindow::mpWindow( wxWindow* parent,
@@ -1679,6 +1690,17 @@ mpWindow::mpWindow( wxWindow* parent,
 
     // J.L.Blanco: Eliminates the "flick" with the double buffer.
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
+
+    if( wxGraphicsContext* ctx = m_buff_dc.GetGraphicsContext() )
+    {
+        if( !ctx->SetInterpolationQuality( wxINTERPOLATION_BEST )
+                || !ctx->SetInterpolationQuality( wxINTERPOLATION_GOOD ) )
+        {
+            ctx->SetInterpolationQuality( wxINTERPOLATION_FAST );
+        }
+
+        ctx->SetAntialiasMode( wxANTIALIAS_DEFAULT );
+    }
 
     UpdateAll();
 }
@@ -2345,6 +2367,18 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
 
     // Draw background:
     // trgDc->SetDeviceOrigin(0,0);
+
+    if( wxGraphicsContext* ctx = trgDc->GetGraphicsContext() )
+    {
+        if( !ctx->SetInterpolationQuality( wxINTERPOLATION_BEST )
+                || !ctx->SetInterpolationQuality( wxINTERPOLATION_GOOD ) )
+        {
+            ctx->SetInterpolationQuality( wxINTERPOLATION_FAST );
+        }
+
+        ctx->SetAntialiasMode( wxANTIALIAS_DEFAULT );
+    }
+
     trgDc->SetPen( *wxTRANSPARENT_PEN );
     wxBrush brush( GetBackgroundColour() );
     trgDc->SetBrush( brush );
