@@ -201,7 +201,8 @@ bool EDIT_TOOL::Init()
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::unrouteSelected,   SELECTION_CONDITIONS::NotEmpty
                                                       && SELECTION_CONDITIONS::OnlyTypes( unroutableTypes )
-                                                      && notMovingCondition );
+                                                      && notMovingCondition
+                                                      && !inFootprintEditor );
     menu.AddItem( PCB_ACTIONS::moveIndividually,  SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::skip,              isSkippable );
