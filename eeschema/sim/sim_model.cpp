@@ -891,21 +891,22 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
 
 SIM_MODEL::SIM_MODEL( TYPE aType ) :
         SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ),
-                   std::make_unique<SIM_SERDE>( *this ) )
+                   std::make_unique<SIM_MODEL_SERIALIZER>( *this ) )
 {
 }
 
 
 SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
-        SIM_MODEL( aType, std::move( aSpiceGenerator ), std::make_unique<SIM_SERDE>( *this ) )
+        SIM_MODEL( aType, std::move( aSpiceGenerator ),
+                   std::make_unique<SIM_MODEL_SERIALIZER>( *this ) )
 {
 }
 
 
 SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
-                      std::unique_ptr<SIM_SERDE> aSerde ) :
+                      std::unique_ptr<SIM_MODEL_SERIALIZER> aSerializer ) :
         m_baseModel( nullptr ),
-        m_serde( std::move( aSerde ) ),
+        m_serializer( std::move( aSerializer ) ),
         m_spiceGenerator( std::move( aSpiceGenerator ) ),
         m_type( aType ),
         m_isEnabled( true ),
@@ -949,15 +950,15 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
 
     try
     {
-        m_serde->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
+        m_serializer->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
 
         CreatePins( aPins );
-        m_serde->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
+        m_serializer->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
 
         std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
 
-        if( !m_serde->ParseParams( paramsField ) )
-            m_serde->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
+        if( !m_serializer->ParseParams( paramsField ) )
+            m_serializer->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
     }
     catch( IO_ERROR& err )
     {
@@ -969,16 +970,16 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
 template <typename T>
 void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 {
-    SetFieldValue( aFields, DEVICE_TYPE_FIELD, m_serde->GenerateDevice() );
-    SetFieldValue( aFields, TYPE_FIELD, m_serde->GenerateType() );
+    SetFieldValue( aFields, DEVICE_TYPE_FIELD, m_serializer->GenerateDevice() );
+    SetFieldValue( aFields, TYPE_FIELD, m_serializer->GenerateType() );
 
-    SetFieldValue( aFields, ENABLE_FIELD, m_serde->GenerateEnable() );
-    SetFieldValue( aFields, PINS_FIELD, m_serde->GeneratePins() );
+    SetFieldValue( aFields, ENABLE_FIELD, m_serializer->GenerateEnable() );
+    SetFieldValue( aFields, PINS_FIELD, m_serializer->GeneratePins() );
 
-    SetFieldValue( aFields, PARAMS_FIELD, m_serde->GenerateParams() );
+    SetFieldValue( aFields, PARAMS_FIELD, m_serializer->GenerateParams() );
 
     if( IsStoredInValue() )
-        SetFieldValue( aFields, VALUE_FIELD, m_serde->GenerateValue() );
+        SetFieldValue( aFields, VALUE_FIELD, m_serializer->GenerateValue() );
 }
 
 
@@ -1390,7 +1391,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
                                                            emptyFields, sourcePins );
 
-            spiceParams = wxString( model.model.GetBaseModel()->Serde().GenerateParams() );
+            spiceParams = wxString( model.model.GetBaseModel()->Serializer().GenerateParams() );
             libraryModel = true;
 
             if( pinMap.IsEmpty() )
@@ -1399,7 +1400,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 // generate one from the symbol's pins
 
                 model.model.SIM_MODEL::CreatePins( sourcePins );
-                pinMap = wxString( model.model.Serde().GeneratePins() );
+                pinMap = wxString( model.model.Serializer().GeneratePins() );
 
                 if( pinMap.IsEmpty() )
                     pinMap = generateDefaultPinMapFromSymbol( sourcePins );
@@ -1450,7 +1451,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                                                       SIM_VALUE_GRAMMAR::NOTATION::SPICE );
                             }
 
-                            spiceParams = wxString( model->Serde().GenerateParams() );
+                            spiceParams = wxString( model->Serializer().GenerateParams() );
                         }
 
                         internalModel = true;
@@ -1459,7 +1460,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                         {
                             // Generate a default pin map from the SIM_MODEL's pins
                             model->CreatePins( sourcePins );
-                            pinMap = wxString( model->Serde().GeneratePins() );
+                            pinMap = wxString( model->Serializer().GeneratePins() );
                         }
                     }
                     catch( ... )

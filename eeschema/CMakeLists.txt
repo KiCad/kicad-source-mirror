@@ -287,7 +287,7 @@ set( EESCHEMA_SRCS
     sim/sim_library_spice.cpp
     sim/sim_library_kibis.cpp
     sim/sim_lib_mgr.cpp
-    sim/sim_serde.cpp
+        sim/sim_model_serializer.cpp
     sim/sim_model.cpp
     sim/sim_model_behavioral.cpp
     sim/sim_model_ideal.cpp

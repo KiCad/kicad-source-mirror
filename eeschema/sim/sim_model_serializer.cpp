@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_serde.h>
+#include <sim/sim_model_serializer.h>
 #include <fmt/core.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
@@ -32,9 +32,9 @@
 #include <string_utils.h>
 
 
-namespace SIM_SERDE_PARSER
+namespace SIM_MODEL_SERIALIZER_PARSER
 {
-    using namespace SIM_SERDE_GRAMMAR;
+    using namespace SIM_MODEL_SERIALIZER_GRAMMAR;
 
     template <typename Rule> struct fieldParamValuePairsSelector : std::false_type {};
     template <> struct fieldParamValuePairsSelector<param> : std::true_type {};
@@ -52,19 +52,19 @@ namespace SIM_SERDE_PARSER
 }
 
 
-std::string SIM_SERDE::GenerateDevice() const
+std::string SIM_MODEL_SERIALIZER::GenerateDevice() const
 {
     return m_model.GetDeviceInfo().fieldValue;
 }
 
 
-std::string SIM_SERDE::GenerateType() const
+std::string SIM_MODEL_SERIALIZER::GenerateType() const
 {
     return m_model.GetTypeInfo().fieldValue;
 }
 
 
-std::string SIM_SERDE::GenerateValue() const
+std::string SIM_MODEL_SERIALIZER::GenerateValue() const
 {
     const SIM_MODEL::PARAM& param = m_model.GetParamOverride( 0 );
     std::string result = param.value->ToString();
@@ -76,7 +76,7 @@ std::string SIM_SERDE::GenerateValue() const
 }
 
 
-std::string SIM_SERDE::GenerateParams() const
+std::string SIM_MODEL_SERIALIZER::GenerateParams() const
 {
     std::string result;
     bool        isFirst = true;
@@ -115,7 +115,7 @@ std::string SIM_SERDE::GenerateParams() const
 }
 
 
-std::string SIM_SERDE::GeneratePins() const
+std::string SIM_MODEL_SERIALIZER::GeneratePins() const
 {
     std::string result;
 
@@ -149,14 +149,14 @@ std::string SIM_SERDE::GeneratePins() const
 }
 
 
-std::string SIM_SERDE::GenerateEnable() const
+std::string SIM_MODEL_SERIALIZER::GenerateEnable() const
 {
     return m_model.IsEnabled() ? "" : "0";
 }
 
 
-SIM_MODEL::TYPE SIM_SERDE::ParseDeviceAndType( const std::string& aDevice,
-                                               const std::string& aType )
+SIM_MODEL::TYPE SIM_MODEL_SERIALIZER::ParseDeviceAndType( const std::string& aDevice,
+                                                          const std::string& aType )
 {
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
@@ -171,20 +171,22 @@ SIM_MODEL::TYPE SIM_SERDE::ParseDeviceAndType( const std::string& aDevice,
 }
 
 
-void SIM_SERDE::ParseValue( const std::string& aValue )
+void SIM_MODEL_SERIALIZER::ParseValue( const std::string& aValue )
 {
     try
     {
         tao::pegtl::string_input<> in( aValue, SIM_MODEL::VALUE_FIELD );
-        auto root = tao::pegtl::parse_tree::parse<SIM_SERDE_PARSER::fieldInferValueGrammar,
-                                                  SIM_SERDE_PARSER::fieldInferValueSelector,
-                                                  tao::pegtl::nothing,
-                                                  SIM_SERDE_PARSER::control>( in );
+        auto root =
+                tao::pegtl::parse_tree::parse<SIM_MODEL_SERIALIZER_PARSER::fieldInferValueGrammar,
+                                              SIM_MODEL_SERIALIZER_PARSER::fieldInferValueSelector,
+                                              tao::pegtl::nothing,
+                                              SIM_MODEL_SERIALIZER_PARSER::control>
+                ( in );
 
         for( const auto& node : root->children )
         {
-            if( node->is_type<SIM_SERDE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
-                                                       SIM_VALUE::NOTATION::SI>>()
+            if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::number<SIM_VALUE::TYPE_FLOAT,
+                                                                  SIM_VALUE::NOTATION::SI>>()
                 && node->string() != "" )
             {
                 m_model.SetParamValue( 0, node->string() );
@@ -202,7 +204,7 @@ void SIM_SERDE::ParseValue( const std::string& aValue )
 }
 
 
-bool SIM_SERDE::ParseParams( const std::string& aParams )
+bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
 {
     tao::pegtl::string_input<> in( aParams, SIM_MODEL::PARAMS_FIELD );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
@@ -211,11 +213,10 @@ bool SIM_SERDE::ParseParams( const std::string& aParams )
     {
         // Using parse tree instead of actions because we don't care about performance that much,
         // and having a tree greatly simplifies things.
-        root = tao::pegtl::parse_tree::parse<
-            SIM_SERDE_PARSER::fieldParamValuePairsGrammar,
-            SIM_SERDE_PARSER::fieldParamValuePairsSelector,
-            tao::pegtl::nothing,
-            SIM_SERDE_PARSER::control>
+        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SERIALIZER_PARSER::fieldParamValuePairsGrammar,
+                                             SIM_MODEL_SERIALIZER_PARSER::fieldParamValuePairsSelector,
+                                             tao::pegtl::nothing,
+                                             SIM_MODEL_SERIALIZER_PARSER::control>
                 ( in );
     }
     catch( const tao::pegtl::parse_error& e )
@@ -230,12 +231,12 @@ bool SIM_SERDE::ParseParams( const std::string& aParams )
 
     for( const auto& node : root->children )
     {
-        if( node->is_type<SIM_SERDE_PARSER::param>() )
+        if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::param>() )
             paramName = node->string();
         // TODO: Do something with number<SIM_VALUE::TYPE_INT, ...>.
         // It doesn't seem too useful?
-        else if( node->is_type<SIM_SERDE_PARSER::quotedStringContent>()
-            || node->is_type<SIM_SERDE_PARSER::unquotedString>() )
+        else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::quotedStringContent>()
+            || node->is_type<SIM_MODEL_SERIALIZER_PARSER::unquotedString>() )
         {
             wxASSERT( paramName != "" );
             // TODO: Shouldn't be named "...fromSpiceCode" here...
@@ -245,7 +246,7 @@ bool SIM_SERDE::ParseParams( const std::string& aParams )
             if( paramName == m_model.GetParam( 0 ).info.name )
                 isPrimaryValueSet = true;
         }
-        else if( node->is_type<SIM_SERDE_PARSER::quotedString>() )
+        else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::quotedString>() )
         {
             std::string str = node->string();
 
@@ -264,7 +265,7 @@ bool SIM_SERDE::ParseParams( const std::string& aParams )
 }
 
 
-void SIM_SERDE::ParsePins( const std::string& aPins )
+void SIM_MODEL_SERIALIZER::ParsePins( const std::string& aPins )
 {
     if( aPins == "" )
         return;
@@ -274,10 +275,11 @@ void SIM_SERDE::ParsePins( const std::string& aPins )
 
     try
     {
-        root = tao::pegtl::parse_tree::parse<SIM_SERDE_PARSER::pinSequenceGrammar,
-                                             SIM_SERDE_PARSER::pinSequenceSelector,
+        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SERIALIZER_PARSER::pinSequenceGrammar,
+                                             SIM_MODEL_SERIALIZER_PARSER::pinSequenceSelector,
                                              tao::pegtl::nothing,
-                                             SIM_SERDE_PARSER::control>( in );
+                                             SIM_MODEL_SERIALIZER_PARSER::control>
+                ( in );
 
         for( const auto& node : root->children )
         {
@@ -296,7 +298,7 @@ void SIM_SERDE::ParsePins( const std::string& aPins )
 }
 
 
-void SIM_SERDE::ParseEnable( const std::string& aEnable )
+void SIM_MODEL_SERIALIZER::ParseEnable( const std::string& aEnable )
 {
     if( aEnable == "" )
         return;
@@ -308,7 +310,7 @@ void SIM_SERDE::ParseEnable( const std::string& aEnable )
 }
 
 
-std::string SIM_SERDE::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const
+std::string SIM_MODEL_SERIALIZER::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const
 {
     std::string name = aParam.info.name;
 
@@ -317,8 +319,8 @@ std::string SIM_SERDE::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) 
         name = aParam.info.name.substr( 0, aParam.info.name.length() - 1 );
 
     std::string value = aParam.value->ToString();
-
-    if( value == "" || value.find( " " ) != std::string::npos )
+    
+    if( value == "" || value.find( ' ' ) != std::string::npos )
         value = fmt::format( "\"{}\"", value );
 
     return fmt::format( "{}={}", name, value );

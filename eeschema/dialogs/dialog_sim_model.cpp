@@ -31,7 +31,6 @@
 #include <sim/sim_model.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_model_raw_spice.h>
-#include <sim/sim_serde.h>
 #include <grid_tricks.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/std_bitmap_button.h>

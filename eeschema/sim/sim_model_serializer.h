@@ -22,13 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_SERDE_H
-#define SIM_SERDE_H
+#ifndef SIM_MODEL_SERIALIZER_H
+#define SIM_MODEL_SERIALIZER_H
 
 #include <sim/sim_model.h>
 
 
-namespace SIM_SERDE_GRAMMAR
+namespace SIM_MODEL_SERIALIZER_GRAMMAR
 {
     using namespace SIM_VALUE_GRAMMAR;
 
@@ -109,9 +109,9 @@ namespace SIM_SERDE_GRAMMAR
 
 
 /**
- * SerDe = Serializer-Deserializer
+ * Serializes/deserializes a SIM_MODEL for storage in LIB_FIELDs/SCH_FIELDs.
  */
-class SIM_SERDE
+class SIM_MODEL_SERIALIZER
 {
 public:
     static constexpr auto REFERENCE_FIELD = "Reference";
@@ -123,8 +123,8 @@ public:
     static constexpr auto PARAMS_FIELD = "Sim.Params";
     static constexpr auto ENABLE_FIELD = "Sim.Enable";
 
-    virtual ~SIM_SERDE() = default;
-    SIM_SERDE( SIM_MODEL& aModel ) : m_model( aModel ) {}
+    virtual ~SIM_MODEL_SERIALIZER() = default;
+    SIM_MODEL_SERIALIZER( SIM_MODEL& aModel ) : m_model( aModel ) {}
 
     std::string GenerateDevice() const;
     std::string GenerateType() const;
@@ -147,4 +147,4 @@ private:
     SIM_MODEL& m_model;
 };
 
-#endif // SIM_SERDE_H
+#endif // SIM_MODEL_SERIALIZER_H

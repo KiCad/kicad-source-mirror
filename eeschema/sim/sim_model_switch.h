@@ -27,7 +27,6 @@
 
 #include <sim/sim_model.h>
 #include <sim/spice_generator.h>
-#include <sim/sim_serde.h>
 
 
 class SPICE_GENERATOR_SWITCH : public SPICE_GENERATOR

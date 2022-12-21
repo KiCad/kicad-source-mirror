@@ -23,7 +23,6 @@
  */
 
 #include <sim/sim_model_behavioral.h>
-#include <sim/sim_serde.h>
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/trim.hpp>

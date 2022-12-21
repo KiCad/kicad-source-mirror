@@ -40,7 +40,7 @@
 
 class SIM_LIBRARY;
 class SPICE_GENERATOR;
-class SIM_SERDE;
+class SIM_MODEL_SERIALIZER;
 class PROJECT;
 
 
@@ -423,7 +423,7 @@ public:
                                const std::string& aValue );
 
     const SPICE_GENERATOR& SpiceGenerator() const { return *m_spiceGenerator; }
-    const SIM_SERDE& Serde() const { return *m_serde; }
+    const SIM_MODEL_SERIALIZER& Serializer() const { return *m_serializer; }
 
 
     // Move semantics.
@@ -532,7 +532,7 @@ protected:
     SIM_MODEL( TYPE aType );
     SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
     SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
-               std::unique_ptr<SIM_SERDE> aSerde );
+               std::unique_ptr<SIM_MODEL_SERIALIZER> aSerializer );
 
     virtual void CreatePins( const std::vector<LIB_PIN*>& aSymbolPins );
 
@@ -550,17 +550,17 @@ private:
     virtual std::vector<std::string> getPinNames() const { return {}; }
 
 protected:
-    std::vector<PARAM>               m_params;
-    const SIM_MODEL*                 m_baseModel;
-    std::unique_ptr<SIM_SERDE>       m_serde;
+    std::vector<PARAM>                    m_params;
+    const SIM_MODEL*                      m_baseModel;
+    std::unique_ptr<SIM_MODEL_SERIALIZER> m_serializer;
 
 private:
-    std::unique_ptr<SPICE_GENERATOR> m_spiceGenerator;
+    std::unique_ptr<SPICE_GENERATOR>      m_spiceGenerator;
 
-    const TYPE                       m_type;
-    std::vector<PIN>                 m_pins;
-    bool                             m_isEnabled;
-    bool                             m_isStoredInValue;
+    const TYPE                            m_type;
+    std::vector<PIN>                      m_pins;
+    bool                                  m_isEnabled;
+    bool                                  m_isStoredInValue;
 };
 
 #endif // SIM_MODEL_H

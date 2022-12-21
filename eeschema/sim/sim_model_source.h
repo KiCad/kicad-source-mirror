@@ -26,13 +26,13 @@
 #define SIM_MODEL_SOURCE_H
 
 #include <sim/sim_model.h>
-#include <sim/sim_serde.h>
+#include <sim/sim_model_serializer.h>
 #include <sim/spice_generator.h>
 
 
 namespace SIM_MODEL_SOURCE_GRAMMAR
 {
-    using namespace SIM_SERDE_GRAMMAR;
+    using namespace SIM_MODEL_SERIALIZER_GRAMMAR;
 
     struct pwlSep : plus<space> {};
     struct pwlValues : seq<opt<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>>,
@@ -59,10 +59,10 @@ private:
 };
 
 
-class SIM_SERDE_SOURCE : public SIM_SERDE
+class SIM_MODEL_SOURCE_SERIALIZER : public SIM_MODEL_SERIALIZER
 {
 public:
-    using SIM_SERDE::SIM_SERDE;
+    using SIM_MODEL_SERIALIZER::SIM_MODEL_SERIALIZER;
 
 protected:
     std::string GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const override;
