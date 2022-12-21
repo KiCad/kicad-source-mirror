@@ -742,18 +742,21 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
 
                 if( ++itemIdx < orig_items.size() )
                 {
+                    BOARD_ITEM* nextItem = orig_items[itemIdx];
+
                     m_selectionTool->ClearSelection();
-                    m_selectionTool->AddItemToSel( orig_items[ itemIdx ] );
-                    selection.ClearReferencePoint();
+
+                    originalPos = nextItem->GetPosition();
+                    m_selectionTool->AddItemToSel( nextItem );
+                    selection.SetReferencePoint( originalPos );
 
                     sel_items.clear();
-                    sel_items.push_back( orig_items[ itemIdx ] );
-                    updateStatusPopup( orig_items[ itemIdx ], itemIdx + 1, orig_items.size() );
+                    sel_items.push_back( nextItem );
+                    updateStatusPopup( nextItem, itemIdx + 1, orig_items.size() );
 
                     // Pick up new item
-                    m_dragging = false;
-                    controls->ForceCursorPosition( false );
-                    m_toolMgr->RunAction( PCB_ACTIONS::move );
+                    m_commit->Modify( nextItem );
+                    nextItem->SetPosition( controls->GetMousePosition( true ) );
 
                     continue;
                 }
@@ -763,6 +766,10 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
         }
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
+            // The first click will move the new item, so put it back
+            if( moveIndividually )
+                orig_items[itemIdx]->SetPosition( originalPos );
+
             break; // finish
         }
         else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )
