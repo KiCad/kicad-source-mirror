@@ -905,6 +905,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     // Enables Texture Env so it can combine model transparency with each footprint opacity
     glEnable( GL_TEXTURE_2D );
     glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, m_circleTexture ); // Uses an existent texture so the glTexEnv operations will work
 
     glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE );
     glTexEnvf( GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_INTERPOLATE );
