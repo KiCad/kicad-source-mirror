@@ -287,7 +287,7 @@ set( EESCHEMA_SRCS
     sim/sim_library_spice.cpp
     sim/sim_library_kibis.cpp
     sim/sim_lib_mgr.cpp
-        sim/sim_model_serializer.cpp
+    sim/sim_model_serializer.cpp
     sim/sim_model.cpp
     sim/sim_model_behavioral.cpp
     sim/sim_model_ideal.cpp
@@ -345,8 +345,8 @@ if( KICAD_SPICE )
         ${EESCHEMA_SRCS}
         dialogs/dialog_signal_list.cpp
         dialogs/dialog_signal_list_base.cpp
-            dialogs/dialog_sim_command.cpp
-            dialogs/dialog_sim_command_base.cpp
+        dialogs/dialog_sim_command.cpp
+        dialogs/dialog_sim_command_base.cpp
         dialogs/dialog_sim_model.cpp
         dialogs/dialog_sim_model_base.cpp
         sim/ngspice_circuit_model.cpp

@@ -1000,6 +1000,33 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
                                wxString* aModelType, wxString* aModelParams, wxString* aPinMap )
 {
+    // SPICE notation is case-insensitive and locale-insensitve.  This means it uses "Meg" for
+    // mega (as both 'M' and 'm' must mean milli), and "." (always) for a decimal separator.
+    //
+    // KiCad's GUI uses the SI-standard 'M' for mega and 'm' for milli, and a locale-dependent
+    // decimal separator.
+    //
+    // KiCad's Sim.* fields are in-between, using SI notation but a fixed decimal separator.
+    //
+    // So where does that leave inferred value fields?  Behavioural models must be passed in
+    // straight, because we don't (at present) know how to parse them.
+    //
+    // However, behavioural models _look_ like SPICE code, so it's not a stretch to expect them
+    // to _be_ SPICE code.  A passive capacitor model on the other hand, just looks like a
+    // capacitance.  Some users might expect 3,3u to work, while others might expect 3,300uF to
+    // work.
+    //
+    // Checking the locale isn't reliable because it assumes the current computer's locale is
+    // the same as the locale the schematic was authored in -- something that isn't true, for
+    // instance, when sharing designs over DIYAudio.com.
+    //
+    // However, even the E192 series of preferred values uses only 3 significant digits, so a ','
+    // or '.' followed by 3 digits _could_ reasonably-reliably be interpreted as a thousands
+    // separator.
+    //
+    // Or we could just say inferred values are locale-independent, with "." used as a decimal
+    // separator and "," used as a thousands separator.  3,300uF works, but 3,3 does not.
+
     auto convertNotation =
             [&]( const wxString& units ) -> wxString
             {
@@ -1010,11 +1037,61 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
                 }
                 else if( aNotation == SIM_VALUE_GRAMMAR::NOTATION::SI )
                 {
-                    if( units == wxT( "Meg" ) || units == wxT( "MEG" ) )
+                    if( units.Capitalize() == wxT( "Meg" ) )
                         return wxT( "M" );
                 }
 
                 return units;
+            };
+
+    auto convertSeparators =
+            []( wxString* mantissa )
+            {
+                mantissa->Replace( wxS( " " ), wxEmptyString );
+
+                wxChar thousandsSeparator = '?';
+                wxChar decimalSeparator = '?';
+                int    length = (int) mantissa->length();
+                int    radix = length;
+
+                for( int ii = length - 1; ii >= 0; --ii )
+                {
+                    wxChar c = mantissa->GetChar( ii );
+
+                    if( c == '.' || c == ',' )
+                    {
+                        if( ( radix - ii ) % 4 == 0 )
+                        {
+                            if( thousandsSeparator == '?' )
+                            {
+                                thousandsSeparator = c;
+                                decimalSeparator = c == '.' ? ',' : '.';
+                            }
+                            else if( thousandsSeparator != c )
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            if( decimalSeparator == '?' )
+                            {
+                                decimalSeparator = c;
+                                thousandsSeparator = c == '.' ? ',' : '.';
+                                radix = ii;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                mantissa->Replace( thousandsSeparator, wxEmptyString );
+                mantissa->Replace( decimalSeparator, '.' );
+
+                return true;
             };
 
     wxString              prefix = aSymbol.GetPrefix();
@@ -1037,9 +1114,6 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
             && !value.IsEmpty()
             && ( prefix.StartsWith( "R" ) || prefix.StartsWith( "L" ) || prefix.StartsWith( "C" ) ) ) )
     {
-        if( aDeviceType->IsEmpty() )
-            *aDeviceType = prefix.Left( 1 );
-
         if( aModelParams->IsEmpty() )
         {
             wxRegEx idealVal( wxT( "^"
@@ -1056,8 +1130,8 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
                 wxString valueExponent( idealVal.GetMatch( value, 2 ) );
                 wxString valueFraction( idealVal.GetMatch( value, 6 ) );
 
-                // Remove any thousands separators
-                valueMantissa.Replace( wxT( "," ), wxEmptyString );
+                if( !convertSeparators( &valueMantissa ) )
+                    return false;
 
                 if( valueMantissa.Contains( wxT( "." ) ) || valueFraction.IsEmpty() )
                 {
@@ -1082,6 +1156,9 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
             }
         }
 
+        if( aDeviceType->IsEmpty() )
+            *aDeviceType = prefix.Left( 1 );
+
         if( aPinMap->IsEmpty() )
             aPinMap->Printf( wxT( "%s=+ %s=-" ), pins[0]->GetNumber(), pins[1]->GetNumber() );
 
@@ -1096,19 +1173,13 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
             && !value.IsEmpty()
             && ( prefix.StartsWith( "V" ) || prefix.StartsWith( "I" ) ) )  )
     {
-        if( aDeviceType->IsEmpty() )
-            *aDeviceType = prefix.Left( 1 );
-
-        if( aModelType->IsEmpty() )
-            *aModelType = wxT( "DC" );
-
         if( aModelParams->IsEmpty() && !value.IsEmpty() )
         {
             if( value.StartsWith( wxT( "DC " ) ) )
                 value = value.Right( value.Length() - 3 );
 
             wxRegEx sourceVal( wxT( "^"
-                                    "([0-9\\. ]+)"
+                                    "([0-9\\,\\. ]+)"
                                     "([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?"
                                     "([vVaA])?"
                                     "([-1-9 ]*)"
@@ -1121,8 +1192,8 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
                 wxString valueExponent( sourceVal.GetMatch( value, 2 ) );
                 wxString valueFraction( sourceVal.GetMatch( value, 6 ) );
 
-                // Remove any thousands separators
-                valueMantissa.Replace( wxT( "," ), wxEmptyString );
+                if( !convertSeparators( &valueMantissa ) )
+                    return false;
 
                 if( valueMantissa.Contains( wxT( "." ) ) || valueFraction.IsEmpty() )
                 {
@@ -1143,6 +1214,12 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
                 aModelParams->Printf( wxT( "dc=\"%s\"" ), value );
             }
         }
+
+        if( aDeviceType->IsEmpty() )
+            *aDeviceType = prefix.Left( 1 );
+
+        if( aModelType->IsEmpty() )
+            *aModelType = wxT( "DC" );
 
         if( aPinMap->IsEmpty() )
             aPinMap->Printf( wxT( "%s=+ %s=-" ), pins[0]->GetNumber(), pins[1]->GetNumber() );
