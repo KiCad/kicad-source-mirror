@@ -174,6 +174,7 @@ public:
     }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    wxString GetFriendlyName() const override;
 
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
                           const std::vector<KICAD_T>& aScanTypes ) override;
