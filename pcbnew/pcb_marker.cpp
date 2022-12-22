@@ -344,3 +344,23 @@ const BOX2I PCB_MARKER::ViewBBox() const
 }
 
 
+static struct PCB_MARKER_DESC
+{
+    PCB_MARKER_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_MARKER );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_MARKER, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_MARKER, MARKER_BASE> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_MARKER ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_MARKER ), TYPE_HASH( MARKER_BASE ) );
+
+        // Markers cannot be locked and have no user-accessible layer control
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_MARKER ), TYPE_HASH( BOARD_ITEM ),
+                                      _HKI( "Layer" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_MARKER ), TYPE_HASH( BOARD_ITEM ),
+                                      _HKI( "Locked" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+    }
+} _PCB_MARKER_DESC;
