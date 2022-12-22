@@ -118,8 +118,9 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     wxPlatformInfo platform;
     aMsg << "Application: " << aTitle;
-
-    #if defined( KICAD_BUILD_ARCH_X64 )
+    #if wxCHECK_VERSION( 3, 1, 6 )
+    aMsg << " " << wxGetCpuArchitectureName() << " on " << wxGetNativeCpuArchitectureName();
+    #elif defined( KICAD_BUILD_ARCH_X64 )
     aMsg << " (64-bit)";
     #elif defined( KICAD_BUILD_ARCH_X86 )
     aMsg << " (32-bit)";
@@ -146,7 +147,12 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     aMsg << eol;
 
-    aMsg << "Platform: " << wxGetOsDescription() << ", "
+    aMsg << "Platform: "
+#if __LINUX__
+         << wxGetLinuxDistributionInfo().Description << ", "
+#else
+         << wxGetOsDescription() << ", "
+#endif
          << GetPlatformGetBitnessName() << ", "
          << platform.GetEndiannessName() << ", "
          << platform.GetPortIdName();
