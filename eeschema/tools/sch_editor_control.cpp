@@ -1187,123 +1187,136 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         m_frame->RecalculateConnections( NO_CLEANUP );
     }
 
+    const SCH_CONNECTION* conn = nullptr;
+    VECTOR2D connPos;
+
+    for( EDA_ITEM* item : selectionTool->GetSelection() )
+    {
+        conn    = static_cast<SCH_ITEM*>( item )->Connection();
+        connPos = item->GetPosition();
+
+        if( conn )
+            break;
+    }
+
+    if( !conn )
+    {
+        m_frame->ShowInfoBarError( _( "No net selected." ) );
+        return 0;
+    }
+
     // Remove selection in favor of highlighting so the whole net is highlighted
     selectionTool->ClearSelection();
-    highlightNet( m_toolMgr, cursorPos );
+    highlightNet( m_toolMgr, connPos );
 
-    const SCH_CONNECTION* conn = m_frame->GetHighlightedConnection();
+    wxString netName = conn->Name();
 
-    if( conn )
+    if( conn->IsBus() )
     {
-        wxString netName = conn->Name();
+        wxString prefix;
 
-        if( conn->IsBus() )
+        if( NET_SETTINGS::ParseBusVector( netName, &prefix, nullptr ) )
         {
-            wxString prefix;
-
-            if( NET_SETTINGS::ParseBusVector( netName, &prefix, nullptr ) )
-            {
-                netName = prefix + wxT( "*" );
-            }
-            else if( NET_SETTINGS::ParseBusGroup( netName, &prefix, nullptr ) )
-            {
-                netName = prefix + wxT( ".*" );
-            }
+            netName = prefix + wxT( "*" );
         }
-        else if( !conn->Driver() || CONNECTION_SUBGRAPH::GetDriverPriority( conn->Driver() )
-                                                    < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN )
+        else if( NET_SETTINGS::ParseBusGroup( netName, &prefix, nullptr ) )
         {
-            m_frame->ShowInfoBarError( _( "Net must be labeled to assign a netclass." ) );
-            highlightNet( m_toolMgr, CLEAR );
-            return 0;
+            netName = prefix + wxT( ".*" );
         }
+    }
+    else if( !conn->Driver() || CONNECTION_SUBGRAPH::GetDriverPriority( conn->Driver() )
+                                                < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN )
+    {
+        m_frame->ShowInfoBarError( _( "Net must be labeled to assign a netclass." ) );
+        highlightNet( m_toolMgr, CLEAR );
+        return 0;
+    }
 
-        DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, schematic.GetNetClassAssignmentCandidates(),
-                [&]( const std::vector<wxString>& aNetNames )
+    DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, schematic.GetNetClassAssignmentCandidates(),
+            [&]( const std::vector<wxString>& aNetNames )
+            {
+                for( SCH_ITEM* item : screen->Items() )
                 {
-                    for( SCH_ITEM* item : screen->Items() )
+                    bool            redraw   = item->IsBrightened();
+                    SCH_CONNECTION* itemConn = item->Connection();
+
+                    if( itemConn && alg::contains( aNetNames, itemConn->Name() ) )
+                        item->SetBrightened();
+                    else
+                        item->ClearBrightened();
+
+                    redraw |= item->IsBrightened();
+
+                    if( item->Type() == SCH_SYMBOL_T )
                     {
-                        bool            redraw   = item->IsBrightened();
-                        SCH_CONNECTION* itemConn = item->Connection();
+                        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-                        if( itemConn && alg::contains( aNetNames, itemConn->Name() ) )
-                            item->SetBrightened();
-                        else
-                            item->ClearBrightened();
+                        redraw |= symbol->HasBrightenedPins();
 
-                        redraw |= item->IsBrightened();
+                        symbol->ClearBrightenedPins();
 
-                        if( item->Type() == SCH_SYMBOL_T )
+                        for( SCH_PIN* pin : symbol->GetPins() )
                         {
-                            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                            SCH_CONNECTION* pin_conn = pin->Connection();
 
-                            redraw |= symbol->HasBrightenedPins();
-
-                            symbol->ClearBrightenedPins();
-
-                            for( SCH_PIN* pin : symbol->GetPins() )
+                            if( pin_conn && alg::contains( aNetNames, pin_conn->Name() ) )
                             {
-                                SCH_CONNECTION* pin_conn = pin->Connection();
-
-                                if( pin_conn && alg::contains( aNetNames, pin_conn->Name() ) )
-                                {
-                                    pin->SetBrightened();
-                                    redraw = true;
-                                }
+                                pin->SetBrightened();
+                                redraw = true;
                             }
                         }
-                        else if( item->Type() == SCH_SHEET_T )
+                    }
+                    else if( item->Type() == SCH_SHEET_T )
+                    {
+                        for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
                         {
-                            for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
-                            {
-                                SCH_CONNECTION* pin_conn = pin->Connection();
+                            SCH_CONNECTION* pin_conn = pin->Connection();
 
-                                redraw |= pin->IsBrightened();
+                            redraw |= pin->IsBrightened();
 
-                                if( pin_conn && alg::contains( aNetNames, pin_conn->Name() ) )
-                                    pin->SetBrightened();
-                                else
-                                    pin->ClearBrightened();
+                            if( pin_conn && alg::contains( aNetNames, pin_conn->Name() ) )
+                                pin->SetBrightened();
+                            else
+                                pin->ClearBrightened();
 
-                                redraw |= pin->IsBrightened();
-                            }
+                            redraw |= pin->IsBrightened();
                         }
-
-                        if( redraw )
-                            getView()->Update( item, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
                     }
 
-                    m_frame->GetCanvas()->ForceRefresh();
-                } );
+                    if( redraw )
+                        getView()->Update( item, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
+                }
 
-        if( dlg.ShowModal() )
-        {
-            getView()->UpdateAllItemsConditionally(
-                    []( KIGFX::VIEW_ITEM* aItem ) -> int
+                m_frame->GetCanvas()->ForceRefresh();
+            } );
+
+    if( dlg.ShowModal() )
+    {
+        getView()->UpdateAllItemsConditionally(
+                []( KIGFX::VIEW_ITEM* aItem ) -> int
+                {
+                    // Netclass coloured items
+                    //
+                    if( dynamic_cast<SCH_LINE*>( aItem ) )
+                        return KIGFX::REPAINT;
+                    else if( dynamic_cast<SCH_JUNCTION*>( aItem ) )
+                        return KIGFX::REPAINT;
+                    else if( dynamic_cast<SCH_BUS_ENTRY_BASE*>( aItem ) )
+                        return KIGFX::REPAINT;
+
+                    // Items that might reference an item's netclass name
+                    //
+                    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                    if( text && text->HasTextVars() )
                     {
-                        // Netclass coloured items
-                        //
-                        if( dynamic_cast<SCH_LINE*>( aItem ) )
-                            return KIGFX::REPAINT;
-                        else if( dynamic_cast<SCH_JUNCTION*>( aItem ) )
-                            return KIGFX::REPAINT;
-                        else if( dynamic_cast<SCH_BUS_ENTRY_BASE*>( aItem ) )
-                            return KIGFX::REPAINT;
+                        text->ClearRenderCache();
+                        text->ClearBoundingBoxCache();
+                        return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    }
 
-                        // Items that might reference an item's netclass name
-                        //
-                        EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
-
-                        if( text && text->HasTextVars() )
-                        {
-                            text->ClearRenderCache();
-                            text->ClearBoundingBoxCache();
-                            return KIGFX::GEOMETRY | KIGFX::REPAINT;
-                        }
-
-                        return 0;
-                    } );
-        }
+                    return 0;
+                } );
     }
 
     highlightNet( m_toolMgr, CLEAR );
