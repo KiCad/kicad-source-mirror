@@ -101,6 +101,7 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
         ret->SetLabel( wxGetTranslation( aProperty->Name() ) );
         ret->SetName( aProperty->Name() );
         ret->Enable( !aProperty->IsReadOnly() );
+        ret->SetHelpString( wxGetTranslation( aProperty->Name() ) );
         ret->SetClientData( const_cast<PROPERTY_BASE*>( aProperty ) );
 
         return ret;

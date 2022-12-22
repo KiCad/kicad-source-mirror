@@ -285,9 +285,10 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
             continue;
 
         std::vector<wxPGProperty*>& properties = pgPropGroups[groupName];
+        wxString groupCaption = wxGetTranslation( groupName );
 
         auto groupItem = new wxPropertyCategory( groupName.IsEmpty() ? unspecifiedGroupCaption
-                                                                     : groupName );
+                                                                     : groupCaption );
 
         m_grid->Append( groupItem );
 
