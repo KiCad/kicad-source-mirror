@@ -477,6 +477,8 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  E_C::SingleSymbolOrPower && E_C::Idle, 200 );
     selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbolOrPower, 200 );
     selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbolOrPower, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::changeSymbols,    E_C::MultipleSymbolsOrPower, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::updateSymbols,    E_C::MultipleSymbolsOrPower, 200 );
 
     CONDITIONAL_MENU* convertToSubMenu = new CONDITIONAL_MENU( m_selectionTool );
     convertToSubMenu->SetTitle( _( "Change To" ) );

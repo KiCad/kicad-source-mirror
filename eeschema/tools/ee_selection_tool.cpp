@@ -119,6 +119,12 @@ SELECTION_CONDITION EE_CONDITIONS::SingleNonExcludedMarker = []( const SELECTION
 };
 
 
+SELECTION_CONDITION EE_CONDITIONS::MultipleSymbolsOrPower = []( const SELECTION& aSel )
+{
+    return aSel.GetSize() > 1 && aSel.OnlyContains( { SCH_SYMBOL_T } );
+};
+
+
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
