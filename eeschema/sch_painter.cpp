@@ -591,8 +591,8 @@ void SCH_PAINTER::bitmapText( const wxString& aText, const VECTOR2D& aPosition,
 {
     // Bitmap font has different metrics from the stroke font so we compensate a bit before
     // stroking
-    m_gal->SetGlyphSize( VECTOR2I( aAttrs.m_Size.x, aAttrs.m_Size.y * 1.05 ) );
-    m_gal->SetLineWidth( aAttrs.m_StrokeWidth * 1.35 );
+    m_gal->SetGlyphSize( VECTOR2I( aAttrs.m_Size.x, KiROUND( aAttrs.m_Size.y * 1.05 ) ) );
+    m_gal->SetLineWidth( (float) aAttrs.m_StrokeWidth * 1.35f );
 
     m_gal->SetHorizontalJustify( aAttrs.m_Halign );
     m_gal->SetVerticalJustify( aAttrs.m_Valign );
@@ -865,7 +865,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDimmed )
     }
     else if( aLayer == LAYER_DEVICE || aLayer == LAYER_PRIVATE_NOTES )
     {
-        int lineWidth = getLineWidth( aShape, drawingShadows );
+        float lineWidth = getLineWidth( aShape, drawingShadows );
 
         if( lineWidth > 0 )
         {
@@ -884,7 +884,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDimmed )
 
                 for( SHAPE* shape : shapes )
                 {
-                    STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &m_schSettings,
+                    STROKE_PARAMS::Stroke( shape, lineStyle, KiROUND( lineWidth ), &m_schSettings,
                             [&]( const VECTOR2I& a, const VECTOR2I& b )
                             {
                                 // DrawLine has problem with 0 length lines so enforce minimum
@@ -955,7 +955,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer, bool aDimmed )
 
     if( drawingShadows )
     {
-        bbox.Inflate( getTextThickness( aField ) * 2 );
+        bbox.Inflate( KiROUND( getTextThickness( aField ) * 2 ) );
 
         m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
@@ -968,7 +968,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer, bool aDimmed )
 
         attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
-        attrs.m_StrokeWidth = getTextThickness( aField );
+        attrs.m_StrokeWidth = KiROUND( getTextThickness( aField ) );
 
         strokeText( UnescapeString( aField->GetShownText() ), textpos, attrs );
     }
@@ -1013,7 +1013,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
 
     if( drawingShadows )
     {
-        bBox.Inflate( getTextThickness( aText ) * 2 );
+        bBox.Inflate( KiROUND( getTextThickness( aText ) * 2 ) );
 
         m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
@@ -1025,7 +1025,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
         VECTOR2D        pos = bBox.Centre();
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
-        attrs.m_StrokeWidth = getTextThickness( aText );
+        attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
 
         if( attrs.m_Angle == ANGLE_VERTICAL )
         {
@@ -1079,7 +1079,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                 TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
 
                 attrs.m_Angle = aTextBox->GetDrawRotation();
-                attrs.m_StrokeWidth = getTextThickness( aTextBox );
+                attrs.m_StrokeWidth = KiROUND( getTextThickness( aTextBox ) );
 
                 strokeText( shownText, aTextBox->GetDrawPos(), attrs );
             };
@@ -1142,7 +1142,8 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
 
                 for( SHAPE* shape : shapes )
                 {
-                    STROKE_PARAMS::Stroke( shape, borderStyle, borderWidth, &m_schSettings,
+                    STROKE_PARAMS::Stroke( shape, borderStyle, KiROUND( borderWidth ),
+                            &m_schSettings,
                             [&]( const VECTOR2I& a, const VECTOR2I& b )
                             {
                                 // DrawLine has problem with 0 length lines so enforce minimum
@@ -1238,8 +1239,8 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
 
     VECTOR2I p0;
     VECTOR2I dir;
-    int len = aPin->GetLength();
-    int orient = aPin->GetOrientation();
+    int      len = aPin->GetLength();
+    int      orient = aPin->GetOrientation();
 
     switch( orient )
     {
@@ -1410,13 +1411,13 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), true );
     numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), true );
 
-    int PIN_TEXT_MARGIN = KiROUND( 24 * m_schSettings.m_TextOffsetRatio );
+    float PIN_TEXT_MARGIN = schIUScale.MilsToIU( KiROUND( 24 * m_schSettings.m_TextOffsetRatio ) );
 
     // Four locations around a pin where text can be drawn
     enum { INSIDE = 0, OUTSIDE, ABOVE, BELOW };
-    int size[4] = { 0, 0, 0, 0 };
-    float thickness[4] = { numStrokeWidth, numStrokeWidth, numStrokeWidth, numStrokeWidth };
-    COLOR4D colour[4];
+    int      size[4] = { 0, 0, 0, 0 };
+    float    thickness[4] = { numStrokeWidth, numStrokeWidth, numStrokeWidth, numStrokeWidth };
+    COLOR4D  colour[4];
     wxString text[4];
 
     // TextOffset > 0 means pin NAMES on inside, pin NUMBERS above and nothing below
@@ -1448,8 +1449,8 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
 
     if( m_schSettings.m_ShowPinsElectricalType )
     {
-        size[OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
-        thickness[OUTSIDE] = float( size[OUTSIDE] ) / 8.0F;
+        size     [OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
+        thickness[OUTSIDE] = float( size[OUTSIDE] ) / 8.0f;
         colour   [OUTSIDE] = getRenderColor( aPin, LAYER_PRIVATE_NOTES, drawingShadows, aDimmed );
         text     [OUTSIDE] = aPin->GetElectricalTypeName();
     }
@@ -1471,13 +1472,13 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
             c = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
     }
 
-    float insideOffset  = textOffset                                     - thickness[INSIDE]  / 2.0;
-    float outsideOffset = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + TARGET_PIN_RADIUS - thickness[OUTSIDE] / 2.0;
-    float aboveOffset   = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + penWidth / 2.0    + thickness[ABOVE]   / 2.0;
-    float belowOffset   = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + penWidth / 2.0    + thickness[BELOW]   / 2.0;
+    float insideOffset  = (float) textOffset                  - thickness[INSIDE]  / 2.0f;
+    float outsideOffset = PIN_TEXT_MARGIN + TARGET_PIN_RADIUS - thickness[OUTSIDE] / 2.0f;
+    float aboveOffset   = PIN_TEXT_MARGIN + penWidth / 2.0f   + thickness[ABOVE]   / 2.0f;
+    float belowOffset   = PIN_TEXT_MARGIN + penWidth / 2.0f   + thickness[BELOW]   / 2.0f;
 
     if( isDangling )
-        outsideOffset += TARGET_PIN_RADIUS / 2.0;
+        outsideOffset += TARGET_PIN_RADIUS / 2.0f;
 
     if( drawingShadows )
     {
@@ -1503,7 +1504,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
                 attrs.m_Halign = hAlign;
                 attrs.m_Valign = vAlign;
                 attrs.m_Angle = aAngle;
-                attrs.m_StrokeWidth = thickness[i];
+                attrs.m_StrokeWidth = KiROUND( thickness[i] );
 
                 if( drawingShadows )
                 {
@@ -1526,7 +1527,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     case PIN_LEFT:
         if( size[INSIDE] )
         {
-            drawText( INSIDE, pos + VECTOR2D( -insideOffset - len, 0 ),
+            drawText( INSIDE, pos + VECTOR2D( -insideOffset - (float) len, 0 ),
                       GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
         }
         if( size[OUTSIDE] )
@@ -1549,7 +1550,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     case PIN_RIGHT:
         if( size[INSIDE] )
         {
-            drawText( INSIDE, pos + VECTOR2D( insideOffset + len, 0 ),
+            drawText( INSIDE, pos + VECTOR2D( insideOffset + (float) len, 0 ),
                       GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
         }
         if( size[OUTSIDE] )
@@ -1572,7 +1573,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     case PIN_DOWN:
         if( size[INSIDE] )
         {
-            drawText( INSIDE, pos + VECTOR2D( 0, insideOffset + len ),
+            drawText( INSIDE, pos + VECTOR2D( 0, insideOffset + (float) len ),
                       GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
         }
         if( size[OUTSIDE] )
@@ -1595,7 +1596,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     case PIN_UP:
         if( size[INSIDE] )
         {
-            drawText( INSIDE, pos + VECTOR2D( 0, -insideOffset - len ),
+            drawText( INSIDE, pos + VECTOR2D( 0, -insideOffset - (float) len ),
                       GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
         }
         if( size[OUTSIDE] )
@@ -1695,7 +1696,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( STARTPOINT ) ) ? color.Inverted() : color;
             drawDanglingSymbol( aLine->GetStartPoint(), danglingColor,
-                                getLineWidth( aLine, drawingShadows ),
+                                KiROUND( getLineWidth( aLine, drawingShadows ) ),
                                 aLine->IsWire() && aLine->IsStartDangling(), drawingShadows,
                                 aLine->IsBrightened() );
         }
@@ -1707,7 +1708,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( ENDPOINT ) ) ? color.Inverted() : color;
             drawDanglingSymbol( aLine->GetEndPoint(), danglingColor,
-                                getLineWidth( aLine, drawingShadows ),
+                                KiROUND( getLineWidth( aLine, drawingShadows ) ),
                                 aLine->IsWire() && aLine->IsEndDangling(), drawingShadows,
                                 aLine->IsBrightened() );
         }
@@ -1728,7 +1729,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
     {
         SHAPE_SEGMENT line( aLine->GetStartPoint(), aLine->GetEndPoint() );
 
-        STROKE_PARAMS::Stroke( &line, lineStyle, width, &m_schSettings,
+        STROKE_PARAMS::Stroke( &line, lineStyle, KiROUND( width ), &m_schSettings,
                                [&]( const VECTOR2I& a, const VECTOR2I& b )
                                {
                                     // DrawLine has problem with 0 length lines
@@ -1839,7 +1840,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
     }
     else if( aLayer == LAYER_NOTES )
     {
-        int lineWidth = getLineWidth( aShape, drawingShadows );
+        float lineWidth = getLineWidth( aShape, drawingShadows );
 
         if( lineWidth > 0 )
         {
@@ -1858,7 +1859,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
 
                 for( SHAPE* shape : shapes )
                 {
-                    STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &m_schSettings,
+                    STROKE_PARAMS::Stroke( shape, lineStyle, KiROUND( lineWidth ), &m_schSettings,
                             [&]( const VECTOR2I& a, const VECTOR2I& b )
                             {
                                 // DrawLine has problem with 0 length lines so enforce minimum
@@ -1934,7 +1935,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     if( drawingShadows )
     {
         BOX2I bBox = aText->GetBoundingBox();
-        bBox.Inflate( getTextThickness( aText ) * 2 );
+        bBox.Inflate( KiROUND( getTextThickness( aText ) * 2 ) );
         bBox.RevertYAxis();
 
         m_gal->SetIsStroke( false );
@@ -1948,7 +1949,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
         attrs.m_Angle = aText->GetDrawRotation();
-        attrs.m_StrokeWidth = getTextThickness( aText );
+        attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
 
         if( aText->IsHypertext() && aText->IsRollover() )
         {
@@ -1995,7 +1996,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
             if( cache )
             {
                 for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                    m_gal->DrawGlyph( *glyph.get() );
+                    m_gal->DrawGlyph( *glyph );
             }
             else
             {
@@ -2029,7 +2030,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
                 TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
 
                 attrs.m_Angle = aTextBox->GetDrawRotation();
-                attrs.m_StrokeWidth = getTextThickness( aTextBox );
+                attrs.m_StrokeWidth = KiROUND( getTextThickness( aTextBox ) );
 
                 if( aTextBox->IsHypertext() && aTextBox->IsRollover() )
                 {
@@ -2046,7 +2047,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
                 if( cache )
                 {
                     for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                        m_gal->DrawGlyph( *glyph.get() );
+                        m_gal->DrawGlyph( *glyph );
                 }
                 else
                 {
@@ -2109,7 +2110,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
                 for( SHAPE* shape : shapes )
                 {
-                    STROKE_PARAMS::Stroke( shape, borderStyle, borderWidth, &m_schSettings,
+                    STROKE_PARAMS::Stroke( shape, borderStyle, KiROUND( borderWidth ),
+                            &m_schSettings,
                             [&]( const VECTOR2I& a, const VECTOR2I& b )
                             {
                                 // DrawLine has problem with 0 length lines so enforce minimum
@@ -2326,7 +2328,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     if( drawingShadows )
     {
         BOX2I shadow_box = bbox;
-        shadow_box.Inflate( getTextThickness( aField ) * 2 );
+        shadow_box.Inflate( KiROUND( getTextThickness( aField ) * 2 ) );
         shadow_box.RevertYAxis();
 
         m_gal->SetIsStroke( false );
@@ -2340,7 +2342,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 
         attributes.m_Halign = GR_TEXT_H_ALIGN_CENTER;
         attributes.m_Valign = GR_TEXT_V_ALIGN_CENTER;
-        attributes.m_StrokeWidth = getTextThickness( aField );
+        attributes.m_StrokeWidth = KiROUND( getTextThickness( aField ) );
         attributes.m_Angle = orient;
 
         if( aField->IsHypertext() && aField->IsRollover() )
@@ -2365,7 +2367,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             if( cache )
             {
                 for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                    m_gal->DrawGlyph( *glyph.get() );
+                    m_gal->DrawGlyph( *glyph );
             }
             else
             {
@@ -2675,7 +2677,7 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     line.SetStartPoint( aEntry->GetPosition() );
     line.SetEndPoint( aEntry->GetEnd() );
     line.SetStroke( aEntry->GetStroke() );
-    line.SetLineWidth( getLineWidth( aEntry, drawingShadows ) );
+    line.SetLineWidth( KiROUND( getLineWidth( aEntry, drawingShadows ) ) );
 
     COLOR4D color = getRenderColor( aEntry, LAYER_WIRE, drawingShadows );
 
