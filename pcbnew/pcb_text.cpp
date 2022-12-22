@@ -357,5 +357,9 @@ static struct PCB_TEXT_DESC
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Visible" ), isFootprintText );
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
     }
 } _PCB_TEXT_DESC;
