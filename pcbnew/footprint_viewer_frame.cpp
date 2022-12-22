@@ -216,9 +216,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     LoadSettings( config() );
     GetGalDisplayOptions().m_axesEnabled = true;
 
-    // Call resolveCanvasType after loading settings:
-    resolveCanvasType();
-
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
@@ -248,6 +245,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     ReCreateLibraryList();
     UpdateTitle();
+
+    // Call resolveCanvasType after loading settings:
+    resolveCanvasType();
 
     // If a footprint was previously loaded, reload it
     if( getCurNickname().size() && getCurFootprintName().size() )
