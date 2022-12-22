@@ -65,6 +65,17 @@ bool DIALOG_ASSIGN_NETCLASS::TransferDataFromWindow()
     if( m_patternCtrl->GetValue().IsEmpty() )
         return true;
 
+    // Replace existing assignment if we have one
+    for( auto& assignment : netSettings->m_NetClassPatternAssignments )
+    {
+        if( assignment.first->GetPattern() == m_patternCtrl->GetValue() )
+        {
+            assignment.second = m_netclassCtrl->GetStringSelection();
+            return true;
+        }
+    }
+
+    // No assignment, add a new one
     netSettings->m_NetClassPatternAssignments.push_back(
             {
                 std::make_unique<EDA_COMBINED_MATCHER>( m_patternCtrl->GetValue(), CTX_NETCLASS ),
