@@ -414,6 +414,9 @@ public:
     static std::unique_ptr<SIM_MODEL> Create( const std::vector<T>& aFields,
                                               const std::vector<LIB_PIN*>& aPins );
 
+    static std::unique_ptr<SIM_MODEL> CreateFallback( TYPE aType,
+                                                      const std::string& aSpiceCode = "" );
+
     template <typename T>
     static std::string GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName,
                                       bool aResolve = true );
@@ -476,7 +479,8 @@ public:
     std::vector<std::reference_wrapper<const PIN>> GetPins() const;
 
     void SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbolPinNumber );
-    void SetPinSymbolPinNumber( const std::string& aPinName, const std::string& aSymbolPinNumber );
+    virtual void SetPinSymbolPinNumber( const std::string& aPinName,
+                                        const std::string& aSymbolPinNumber );
 
 
     int GetParamCount() const { return static_cast<int>( m_params.size() ); }
@@ -534,7 +538,7 @@ protected:
     SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
                std::unique_ptr<SIM_MODEL_SERIALIZER> aSerializer );
 
-    virtual void CreatePins( const std::vector<LIB_PIN*>& aSymbolPins );
+    void createPins( const std::vector<LIB_PIN*>& aSymbolPins );
 
     virtual int doFindParam( const std::string& aParamName ) const;
 
@@ -551,6 +555,7 @@ private:
 
 protected:
     std::vector<PARAM>                    m_params;
+    std::vector<PIN>                      m_pins;
     const SIM_MODEL*                      m_baseModel;
     std::unique_ptr<SIM_MODEL_SERIALIZER> m_serializer;
 
@@ -558,7 +563,6 @@ private:
     std::unique_ptr<SPICE_GENERATOR>      m_spiceGenerator;
 
     const TYPE                            m_type;
-    std::vector<PIN>                      m_pins;
     bool                                  m_isEnabled;
     bool                                  m_isStoredInValue;
 };

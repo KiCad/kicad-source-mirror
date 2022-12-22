@@ -137,7 +137,9 @@ std::string SPICE_GENERATOR::ItemPins( const SPICE_ITEM& aItem ) const
                              pin.symbolPinNumber );
 
         if( it == aItem.pinNumbers.end() )
+        {
             result.append( fmt::format( " NC-{}-{}", aItem.refName, ncCounter++ ) );
+        }
         else
         {
             long symbolPinIndex = std::distance( aItem.pinNumbers.begin(), it );

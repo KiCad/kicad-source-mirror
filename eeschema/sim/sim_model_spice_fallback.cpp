@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 Mikolaj Wielgus
  * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -22,45 +21,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_SUBCIRCUIT_H
-#define SIM_MODEL_SUBCIRCUIT_H
-
-#include <sim/sim_model_spice.h>
-#include <sim/spice_generator.h>
+#include <sim/sim_model_spice_fallback.h>
+#include <fmt/format.h>
 
 
-class SPICE_GENERATOR_SUBCKT : public SPICE_GENERATOR
+SIM_MODEL_SPICE_FALLBACK::SIM_MODEL_SPICE_FALLBACK( TYPE aType, const std::string& aRawSpiceCode ) :
+        SIM_MODEL_SPICE( aType, std::make_unique<SPICE_GENERATOR_SPICE>( *this ) )
 {
-public:
-    using SPICE_GENERATOR::SPICE_GENERATOR;
-
-    std::string ModelLine( const SPICE_ITEM& aItem ) const override;
-    std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const override;
-};
+    m_spiceCode = aRawSpiceCode;
+}
 
 
-class SPICE_MODEL_PARSER_SUBCKT : public SPICE_MODEL_PARSER
+void SIM_MODEL_SPICE_FALLBACK::SetPinSymbolPinNumber( const std::string& aPinName,
+                                                      const std::string& aSymbolPinNumber )
 {
-public:
-    using SPICE_MODEL_PARSER::SPICE_MODEL_PARSER;
+    for( PIN& pin : m_pins )
+    {
+        if( pin.name == aPinName )
+        {
+            pin.symbolPinNumber = aSymbolPinNumber;
+            return;
+        }
+    }
 
-    void ReadModel( const SIM_LIBRARY_SPICE& aLibrary, const std::string& aSpiceCode ) override;
-};
+    m_pins.push_back( { aPinName, aSymbolPinNumber } );
+}
 
 
-class SIM_MODEL_SUBCKT : public SIM_MODEL_SPICE
-{
-public:
-    friend class SPICE_MODEL_PARSER_SUBCKT;
-
-    SIM_MODEL_SUBCKT();
-
-    void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
-
-private:
-    bool requiresSpiceModelLine() const override { return true; }
-
-    std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
-};
-
-#endif // SIM_MODEL_SUBCIRCUIT_H

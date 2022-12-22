@@ -47,8 +47,8 @@ public:
     friend class SPICE_GENERATOR_SPICE;
     friend class SPICE_MODEL_PARSER;
 
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_LIBRARY_SPICE& aLibrary,
-                                              const std::string& aSpiceCode );
+    static std::unique_ptr<SIM_MODEL_SPICE> Create( const SIM_LIBRARY_SPICE& aLibrary,
+                                                    const std::string& aSpiceCode );
 
     SIM_MODEL_SPICE( TYPE aType,
                      std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );

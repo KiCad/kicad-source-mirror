@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 Mikolaj Wielgus
  * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -22,45 +21,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_SUBCIRCUIT_H
-#define SIM_MODEL_SUBCIRCUIT_H
+#ifndef SIM_MODEL_SPICE_FALLBACK_H
+#define SIM_MODEL_SPICE_FALLBACK_H
 
 #include <sim/sim_model_spice.h>
-#include <sim/spice_generator.h>
 
 
-class SPICE_GENERATOR_SUBCKT : public SPICE_GENERATOR
+class SIM_MODEL_SPICE_FALLBACK : public SIM_MODEL_SPICE
 {
 public:
-    using SPICE_GENERATOR::SPICE_GENERATOR;
+    SIM_MODEL_SPICE_FALLBACK( TYPE aType, const std::string& aRawSpiceCode = "" );
 
-    std::string ModelLine( const SPICE_ITEM& aItem ) const override;
-    std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const override;
+    void SetPinSymbolPinNumber( const std::string& aPinName,
+                                const std::string& aSymbolPinNumber ) override;
 };
 
-
-class SPICE_MODEL_PARSER_SUBCKT : public SPICE_MODEL_PARSER
-{
-public:
-    using SPICE_MODEL_PARSER::SPICE_MODEL_PARSER;
-
-    void ReadModel( const SIM_LIBRARY_SPICE& aLibrary, const std::string& aSpiceCode ) override;
-};
-
-
-class SIM_MODEL_SUBCKT : public SIM_MODEL_SPICE
-{
-public:
-    friend class SPICE_MODEL_PARSER_SUBCKT;
-
-    SIM_MODEL_SUBCKT();
-
-    void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
-
-private:
-    bool requiresSpiceModelLine() const override { return true; }
-
-    std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
-};
-
-#endif // SIM_MODEL_SUBCIRCUIT_H
+#endif // SIM_MODEL_SPICE_FALLBACK_H

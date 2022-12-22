@@ -93,9 +93,6 @@ public:
     bool CanDifferential() const { return m_enableDiff; } ;
     bool m_enableDiff;
 
-protected:
-    void CreatePins( const std::vector<LIB_PIN*>& aSymbolPins ) override;
-
 private:
     bool requiresSpiceModelLine() const override { return true; }
 

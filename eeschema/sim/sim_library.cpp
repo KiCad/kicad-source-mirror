@@ -25,6 +25,7 @@
 #include <sim/sim_library_kibis.h>
 #include <sim/sim_library.h>
 #include <sim/sim_library_spice.h>
+#include <boost/algorithm/string/case_conv.hpp>
 
 
 std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString &aFilePath, REPORTER *aReporter,
@@ -52,11 +53,11 @@ void SIM_LIBRARY::ReadFile( const std::string& aFilePath )
 
 SIM_MODEL* SIM_LIBRARY::FindModel( const std::string& aModelName ) const
 {
+    std::string lowerName = boost::to_lower_copy( aModelName );
+
     for( int i = 0; i < static_cast<int>( m_modelNames.size() ); ++i )
     {
-        const std::string& modelName = m_modelNames.at( i );
-
-        if( modelName == aModelName )
+        if( boost::to_lower_copy( m_modelNames.at( i ) ) == lowerName )
             return m_models.at( i ).get();
     }
 

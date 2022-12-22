@@ -31,6 +31,7 @@
 #include <sim/sim_model.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_model_raw_spice.h>
+#include <sim/sim_model_spice_fallback.h>
 #include <grid_tricks.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/std_bitmap_button.h>
@@ -40,6 +41,7 @@
 #include <locale_io.h>
 #include <wx/filedlg.h>
 #include <wx/textfile.h>
+#include "fmt/format.h"
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
@@ -227,6 +229,8 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
                 }
             }
         }
+
+        m_curModelType = curModel().GetType();
     }
     else
     {
@@ -413,10 +417,15 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets()
 
     m_typeChoice->Enable( !m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() );
 
-    if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( &curModel() ) )
+    if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( &curModel() )
+            || dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &curModel() ) )
+    {
         m_modelNotebook->SetSelection( 1 );
+    }
     else
+    {
         m_modelNotebook->SetSelection( 0 );
+    }
 
     if( curModel().HasPrimaryValue() )
     {
@@ -535,8 +544,15 @@ template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab()
 {
     wxString   text;
+    wxString   pin( _( "Pin" ) );
     SPICE_ITEM item;
     item.modelName = m_modelNameChoice->GetStringSelection();
+
+    for( size_t ii = 1; ii <= m_symbol.GetFullPinCount(); ++ii )
+    {
+        item.pinNumbers.push_back( fmt::format( "{}", ii ) );
+        item.pinNetNames.push_back( pin.ToStdString() + fmt::format( "{}", ii ) );
+    }
 
     if( m_useInstanceModelRadioButton->GetValue() || item.modelName == "" )
         item.modelName = m_fields.at( REFERENCE_FIELD ).GetText();

@@ -25,7 +25,7 @@
 // Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
 // (especially on msys2 + wxWidgets 3.0.x)
 #include <sim/sim_model_spice.h>
-#include <sim/sim_model_raw_spice.h>
+#include <sim/sim_model_spice_fallback.h>
 #include <sim/spice_model_parser.h>
 #include <sim/sim_library_spice.h>
 
@@ -46,47 +46,49 @@ std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const
     item.refName = "";
     std::string itemLine = ItemLine( item );
 
-    if( spiceCode != "" )
-        spiceCode.append( "\n" );
+    if( spiceCode != "" && itemLine != "" )
+        spiceCode.append( "\n\n" );
 
     spiceCode.append( itemLine );
     return boost::trim_copy( spiceCode );
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
-                                                    const std::string& aSpiceCode )
+std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
+                                                          const std::string& aSpiceCode )
 {
-    SIM_MODEL::TYPE modelType = SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode );
-    SIM_MODEL*      model = SIM_MODEL::Create( modelType ).release();
+    SIM_MODEL::TYPE            modelType = SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode );
+    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( modelType );
 
-    if( SIM_MODEL_SPICE* spiceModel = dynamic_cast<SIM_MODEL_SPICE*>( model ) )
+    if( SIM_MODEL_SPICE* spiceModel = dynamic_cast<SIM_MODEL_SPICE*>( model.release() ) )
     {
-        spiceModel->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
-        return std::unique_ptr<SIM_MODEL_SPICE>( spiceModel );
-    }
-    else if( SIM_MODEL_RAW_SPICE* rawSpice = dynamic_cast<SIM_MODEL_RAW_SPICE*>( model ) )
-    {
-        rawSpice->SetSource( aSpiceCode );
-        return std::unique_ptr<SIM_MODEL_RAW_SPICE>( rawSpice );
+        try
+        {
+            spiceModel->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
+            return std::unique_ptr<SIM_MODEL_SPICE>( spiceModel );
+        }
+        catch( const IO_ERROR& e )
+        {
+            // Fall back to raw spice code
+        }
     }
 
-    delete model;
-    THROW_IO_ERROR( "Could not determine Spice model modelType" );
+    // Fall back to raw spice code
+    return std::make_unique<SIM_MODEL_SPICE_FALLBACK>( modelType, aSpiceCode );
 }
 
 
 SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
-    SIM_MODEL( aType, std::move( aSpiceGenerator ) ),
-    m_spiceModelParser( std::make_unique<SPICE_MODEL_PARSER>( *this ) )
+        SIM_MODEL( aType, std::move( aSpiceGenerator ) ),
+        m_spiceModelParser( std::make_unique<SPICE_MODEL_PARSER>( *this ) )
 {
 }
 
 
 SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
                                   std::unique_ptr<SPICE_MODEL_PARSER> aSpiceModelParser ) :
-    SIM_MODEL( aType, std::move( aSpiceGenerator ) ),
-    m_spiceModelParser( std::move( aSpiceModelParser ) )
+        SIM_MODEL( aType, std::move( aSpiceGenerator ) ),
+        m_spiceModelParser( std::move( aSpiceModelParser ) )
 {
 }
 

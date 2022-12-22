@@ -49,6 +49,7 @@
 #include <pegtl/contrib/parse_tree.hpp>
 
 #include <iterator>
+#include "sim_model_spice_fallback.h"
 
 using TYPE = SIM_MODEL::TYPE;
 
@@ -442,6 +443,13 @@ void SIM_MODEL::WriteFields( std::vector<LIB_FIELD>& aFields ) const
 }
 
 
+std::unique_ptr<SIM_MODEL> SIM_MODEL::CreateFallback( TYPE aType, const std::string& aSpiceCode )
+{
+    std::unique_ptr<SIM_MODEL> model( new SIM_MODEL_SPICE_FALLBACK( aType, aSpiceCode ) );
+    return model;
+}
+
+
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_PIN*>& aPins )
 {
     std::unique_ptr<SIM_MODEL> model = Create( aType );
@@ -455,7 +463,12 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins)
 {
-    std::unique_ptr<SIM_MODEL> model = Create( aBaseModel.GetType() );
+    std::unique_ptr<SIM_MODEL> model;
+
+    if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( &aBaseModel ) )
+        model = CreateFallback( aBaseModel.GetType() );
+    else
+        model = Create( aBaseModel.GetType() );
 
     try
     {
@@ -482,7 +495,12 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
     if( type == TYPE::NONE )
         type = aBaseModel.GetType();
 
-    std::unique_ptr<SIM_MODEL> model = Create( type );
+    std::unique_ptr<SIM_MODEL> model;
+
+    if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( &aBaseModel ) )
+        model = CreateFallback( type );
+    else
+        model = Create( type );
 
     try
     {
@@ -655,13 +673,11 @@ void SIM_MODEL::SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbol
 void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
                                        const std::string& aSymbolPinNumber )
 {
-    const std::vector<std::reference_wrapper<const PIN>> pins = GetPins();
-
-    for( int ii = 0; ii < (int) pins.size(); ++ii )
+    for( PIN& pin : m_pins )
     {
-        if( pins.at( ii ).get().name == aPinName )
+        if( pin.name == aPinName )
         {
-            SetPinSymbolPinNumber( ii, aSymbolPinNumber );
+            pin.symbolPinNumber = aSymbolPinNumber;
             return;
         }
     }
@@ -678,7 +694,7 @@ void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
                                           GetTypeInfo().fieldValue ) );
     }
 
-    SetPinSymbolPinNumber( --aPinIndex /* convert to 0-based */, aSymbolPinNumber );
+    m_pins[ --aPinIndex /* convert to 0-based */ ].symbolPinNumber = aSymbolPinNumber;
 }
 
 
@@ -915,7 +931,7 @@ SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerat
 }
 
 
-void SIM_MODEL::CreatePins( const std::vector<LIB_PIN*>& aSymbolPins )
+void SIM_MODEL::createPins( const std::vector<LIB_PIN*>& aSymbolPins )
 {
     // Default pin sequence: model pins are the same as symbol pins.
     // Excess model pins are set as Not Connected.
@@ -952,7 +968,7 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
     {
         m_serializer->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
 
-        CreatePins( aPins );
+        createPins( aPins );
         m_serializer->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
 
         std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
@@ -1476,7 +1492,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 // Try to generate a default pin map from the SIM_MODEL's pins; if that fails,
                 // generate one from the symbol's pins
 
-                model.model.SIM_MODEL::CreatePins( sourcePins );
+                model.model.SIM_MODEL::createPins( sourcePins );
                 pinMap = wxString( model.model.Serializer().GeneratePins() );
 
                 if( pinMap.IsEmpty() )
@@ -1536,7 +1552,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                         if( pinMap.IsEmpty() )
                         {
                             // Generate a default pin map from the SIM_MODEL's pins
-                            model->CreatePins( sourcePins );
+                            model->createPins( sourcePins );
                             pinMap = wxString( model->Serializer().GeneratePins() );
                         }
                     }

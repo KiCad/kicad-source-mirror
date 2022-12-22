@@ -122,10 +122,19 @@ SIM_MODEL_RAW_SPICE::SIM_MODEL_RAW_SPICE() :
 }
 
 
-void SIM_MODEL_RAW_SPICE::CreatePins( const std::vector<LIB_PIN*>& aSymbolPins )
+void SIM_MODEL_RAW_SPICE::SetPinSymbolPinNumber( const std::string& aPinName,
+                                                 const std::string& aSymbolPinNumber )
 {
-    for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPins.size(); ++symbolPinIndex )
-        AddPin( { fmt::format( "{}", symbolPinIndex + 1 ), "" } );
+    for( PIN& pin : m_pins )
+    {
+        if( pin.name == aPinName )
+        {
+            pin.symbolPinNumber = aSymbolPinNumber;
+            return;
+        }
+    }
+
+    m_pins.push_back( { aPinName, aSymbolPinNumber } );
 }
 
 

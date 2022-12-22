@@ -140,7 +140,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_paramGridMgr = new wxPropertyGridManager(m_parametersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxPGMAN_DEFAULT_STYLE|wxPG_SPLITTER_AUTO_CENTER);
 	m_paramGridMgr->SetExtraStyle( wxPG_EX_MODE_BUTTONS|wxPG_EX_NATIVE_DOUBLE_BUFFERING );
-	m_paramGridMgr->SetMinSize( wxSize( 440,-1 ) );
+	m_paramGridMgr->SetMinSize( wxSize( 500,-1 ) );
 
 
 	m_paramGrid = m_paramGridMgr->AddPage( _("Page"), wxNullBitmap );

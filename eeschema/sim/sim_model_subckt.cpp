@@ -136,8 +136,7 @@ void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
 
 
 SIM_MODEL_SUBCKT::SIM_MODEL_SUBCKT() :
-    SIM_MODEL_SPICE( TYPE::SUBCKT,
-                     std::make_unique<SPICE_GENERATOR_SUBCKT>( *this ),
+    SIM_MODEL_SPICE( TYPE::SUBCKT, std::make_unique<SPICE_GENERATOR_SUBCKT>( *this ),
                      std::make_unique<SPICE_MODEL_PARSER_SUBCKT>( *this ) )
 {
 }
@@ -156,13 +155,3 @@ void SIM_MODEL_SUBCKT::SetBaseModel( const SIM_MODEL& aBaseModel )
         AddParam( param.info );
 }
 
-
-void SIM_MODEL_SUBCKT::CreatePins( const std::vector<LIB_PIN*>& aSymbolPins )
-{
-    SIM_MODEL::CreatePins( aSymbolPins );
-
-    // Reset the pins to Not Connected. Linear order is not as common, and reordering the pins is
-    // more effort in the GUI than assigning them from scratch.
-    for( int pinIndex = 0; pinIndex < GetPinCount(); ++pinIndex )
-        SetPinSymbolPinNumber( pinIndex, "" );
-}

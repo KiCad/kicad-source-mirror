@@ -74,8 +74,8 @@ public:
         return m_spiceCode;
     }
 
-protected:
-    void CreatePins( const std::vector<LIB_PIN*>& aSymbolPins ) override;
+    void SetPinSymbolPinNumber( const std::string& aPinName,
+                                const std::string& aSymbolPinNumber ) override;
 
 private:
     static std::vector<PARAM::INFO> makeParamInfos();

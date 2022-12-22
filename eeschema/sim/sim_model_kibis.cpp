@@ -24,7 +24,6 @@
 #include <sim/kibis/kibis.h>
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_library_kibis.h>
-#include <common.h>
 #include <fmt/core.h>
 #include <wx/filename.h>
 #include <kiway.h>
@@ -294,17 +293,6 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
         SIM_MODEL_KIBIS( aType, aSource )
 {
     ReadDataFields( &aFields, aPins );
-}
-
-
-void SIM_MODEL_KIBIS::CreatePins( const std::vector<LIB_PIN*>& aSymbolPins )
-{
-    SIM_MODEL::CreatePins( aSymbolPins );
-
-    // Reset the pins to Not Connected. Linear order is not as common, and reordering the pins is
-    // more effort in the GUI than assigning them from scratch.
-    for( int pinIndex = 0; pinIndex < GetPinCount(); ++pinIndex )
-        SetPinSymbolPinNumber( pinIndex, "" );
 }
 
 

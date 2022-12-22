@@ -299,6 +299,7 @@ set( EESCHEMA_SRCS
     sim/sim_model_raw_spice.cpp
     sim/sim_model_source.cpp
     sim/sim_model_spice.cpp
+    sim/sim_model_spice_fallback.cpp
     sim/sim_model_subckt.cpp
     sim/sim_model_switch.cpp
     sim/sim_model_tline.cpp
