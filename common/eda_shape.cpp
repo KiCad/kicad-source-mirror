@@ -1715,5 +1715,26 @@ static struct EDA_SHAPE_DESC
                     return aItem->Get<SHAPE_T>( shape ) == SHAPE_T::ARC;
                 } );
         propMgr.AddProperty( angle );
+
+        auto filled = new PROPERTY<EDA_SHAPE, bool>( _HKI( "Filled" ),
+                                                     &EDA_SHAPE::SetFilled, &EDA_SHAPE::IsFilled );
+        filled->SetAvailableFunc(
+                      [=]( INSPECTABLE* aItem ) -> bool
+                      {
+                          SHAPE_T itemShape = aItem->Get<SHAPE_T>( shape );
+
+                          switch( itemShape )
+                          {
+                          case SHAPE_T::POLY:
+                          case SHAPE_T::RECT:
+                          case SHAPE_T::CIRCLE:
+                              return true;
+
+                          default:
+                              return false;
+                          }
+                      } );
+
+        propMgr.AddProperty( filled );
     }
 } _EDA_SHAPE_DESC;
