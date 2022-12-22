@@ -348,6 +348,10 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
         m_lastError = e.what();
         wxLogTrace( traceDatabase, wxT( "Exception while preparing statement for SelectOne: %s" ),
                     m_lastError );
+
+        // Exception may be due to a connection error; nanodbc won't auto-reconnect
+        m_conn->disconnect();
+
         return false;
     }
 
@@ -365,6 +369,10 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
         m_lastError = e.what();
         wxLogTrace( traceDatabase, wxT( "Exception while executing statement for SelectOne: %s" ),
                     m_lastError );
+
+        // Exception may be due to a connection error; nanodbc won't auto-reconnect
+        m_conn->disconnect();
+
         return false;
     }
 
@@ -434,6 +442,10 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, std::vector<ROW>
         m_lastError = e.what();
         wxLogTrace( traceDatabase, wxT( "Exception while preparing query for SelectAll: %s" ),
                     m_lastError );
+
+        // Exception may be due to a connection error; nanodbc won't auto-reconnect
+        m_conn->disconnect();
+
         return false;
     }
 
@@ -448,6 +460,10 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, std::vector<ROW>
         m_lastError = e.what();
         wxLogTrace( traceDatabase, wxT( "Exception while executing query for SelectAll: %s" ),
                     m_lastError );
+
+        // Exception may be due to a connection error; nanodbc won't auto-reconnect
+        m_conn->disconnect();
+
         return false;
     }
 

@@ -251,6 +251,9 @@ void SCH_DATABASE_PLUGIN::ensureConnection()
 {
     wxCHECK_RET( m_settings, "Call ensureSettings before ensureConnection!" );
 
+    if( m_conn && !m_conn->IsConnected() )
+        m_conn.reset();
+
     if( !m_conn )
     {
         if( m_settings->m_Source.connection_string.empty() )
