@@ -65,6 +65,7 @@ bool DIALOG_ASSIGN_NETCLASS::TransferDataFromWindow()
     if( m_patternCtrl->GetValue().IsEmpty() )
         return true;
 
+    // TODO: Rework when we support multiple netclass assignments
     // Replace existing assignment if we have one
     for( auto& assignment : netSettings->m_NetClassPatternAssignments )
     {
