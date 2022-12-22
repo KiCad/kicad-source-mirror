@@ -1175,8 +1175,6 @@ int SCH_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL*    selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
     SCHEMATIC&            schematic = m_frame->Schematic();
     SCH_SCREEN*           screen = m_frame->GetCurrentSheet().LastScreen();
 

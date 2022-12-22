@@ -435,22 +435,13 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             else if( !m_selection.GetBoundingBox().Inflate( grid.GetGrid().x, grid.GetGrid().y )
                         .Contains( evt->Position() ) )
             {
-                EE_SELECTION saved_selection = m_selection;
+                EE_COLLECTOR collector;
 
-                for( EDA_ITEM* item : saved_selection )
-                    RemoveItemFromSel( item, true );
-
-                SelectPoint( evt->Position(), { SCH_LOCATE_ANY_T }, nullptr, &selCancelled );
-
-                if( m_selection.Empty() )
+                if( CollectHits( collector, evt->Position(), { SCH_LOCATE_ANY_T } ) )
                 {
-                    m_selection.SetIsHover( false );
+                    ClearSelection();
 
-                    for( EDA_ITEM* item : saved_selection )
-                        AddItemToSel( item,  true);
-                }
-                else
-                {
+                    SelectPoint( evt->Position(), { SCH_LOCATE_ANY_T }, nullptr, &selCancelled );
                     m_selection.SetIsHover( true );
                 }
             }
