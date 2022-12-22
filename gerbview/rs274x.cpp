@@ -865,6 +865,16 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                     double param = ReadDouble( aText );
                     dcode->AppendParam( param );
 
+                    if( !( isspace( *aText ) || *aText == 'X' || *aText == 'x' || *aText == '*' ) )
+                    {
+                        msg.Printf( wxT( "RS274X: aperture macro %s has invalid template "
+                                         "parameters\n" ),
+                                    TO_UTF8( am_lookup.name ) );
+                        AddMessageToList( msg );
+                        ok = false;
+                        break;
+                    }
+
                     while( isspace( *aText ) )
                         aText++;
 
