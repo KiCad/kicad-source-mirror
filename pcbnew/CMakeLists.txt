@@ -505,6 +505,8 @@ if( DOXYGEN_FOUND )
         DEPENDS Doxyfile_xml
         COMMENT "building doxygen docs into directory doxygen-python/html"
         )
+        
+    add_dependencies( doxygen-python-xml version_header )
 
     # create .i files from XML doxygen parsing, docstrings.i will include all of them
     add_custom_target( xml-to-docstrings
@@ -515,8 +517,9 @@ if( DOXYGEN_FOUND )
         COMMENT "building docstring files"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS pcbnew.py
-        DEPENDS doxygen-python-xml
         )
+        
+    add_dependencies( xml-to-docstrings doxygen-python-xml )
 
     # The sources to give to the Python Doxygen target
     set( DOXYGEN_PYTHON_SOURCES
@@ -536,10 +539,11 @@ if( DOXYGEN_FOUND )
             ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS Doxyfile_python
-        DEPENDS xml-to-docstrings
         DEPENDS ${DOXYGEN_PYTHON_SOURCES}
         COMMENT "building doxygen docs into directory doxygen-python/html"
         )
+        
+    add_dependencies( doxygen-python version_header xml-to-docstrings )
 endif()
 
 if( WIN32 )
