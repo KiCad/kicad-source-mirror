@@ -776,6 +776,30 @@ public:
     }
 
     /**
+     * Return the visible grid size in x and y directions
+     *
+     * @return A vector containing the spacing of visible grid marks
+     */
+    inline VECTOR2D GetVisibleGridSize() const
+    {
+        VECTOR2D gridScreenSize( m_gridSize );
+
+        double gridThreshold = computeMinGridSpacing() / m_worldScale;
+
+        if( m_gridStyle == GRID_STYLE::SMALL_CROSS )
+            gridThreshold *= 2.0;
+
+        // If we cannot display the grid density, scale down by a tick size and
+        // try again.  Eventually, we get some representation of the grid
+        while( std::min( gridScreenSize.x, gridScreenSize.y ) <= gridThreshold )
+        {
+            gridScreenSize = gridScreenSize * static_cast<double>( m_gridTick );
+        }
+
+        return gridScreenSize;
+    }
+
+    /**
      * Set the grid color.
      *
      * @param aGridColor is the grid color, it should have a low alpha value for the best effect.

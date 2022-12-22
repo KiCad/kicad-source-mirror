@@ -56,6 +56,14 @@ VECTOR2I GRID_HELPER::GetGrid() const
 }
 
 
+VECTOR2I GRID_HELPER::GetVisibleGrid() const
+{
+    VECTOR2D size = m_toolMgr->GetView()->GetGAL()->GetVisibleGridSize();
+
+    return VECTOR2I( KiROUND( size.x ), KiROUND( size.y ) );
+}
+
+
 VECTOR2I GRID_HELPER::GetOrigin() const
 {
     VECTOR2D origin = m_toolMgr->GetView()->GetGAL()->GetGridOrigin();

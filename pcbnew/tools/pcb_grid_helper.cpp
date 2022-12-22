@@ -285,9 +285,10 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     // points that are visible can always be snapped to.
     // see https://gitlab.com/kicad/code/kicad/-/issues/5638
     // see https://gitlab.com/kicad/code/kicad/-/issues/7125
-    double snapScale = snapSize / m_toolMgr->GetView()->GetGAL()->GetWorldScale();
-    int    snapRange = std::min( KiROUND( snapScale ), GetGrid().x );
-    int    snapDist = snapRange;
+    // see https://gitlab.com/kicad/code/kicad/-/issues/12303
+    int snapScale = KiROUND( snapSize / m_toolMgr->GetView()->GetGAL()->GetWorldScale() );
+    int snapRange = m_enableGrid ? std::min( snapScale, GetVisibleGrid().x ) : snapScale;
+    int snapDist = snapRange;
 
     //Respect limits of coordinates representation
     BOX2I bb;

@@ -1605,23 +1605,11 @@ void OPENGL_GAL::DrawGrid()
     if( !m_gridVisibility || m_gridSize.x == 0 || m_gridSize.y == 0 )
         return;
 
-    VECTOR2D gridScreenSize( m_gridSize );
-
-    double gridThreshold = computeMinGridSpacing() / m_worldScale;
-
-    if( m_gridStyle == GRID_STYLE::SMALL_CROSS )
-        gridThreshold *= 2.0;
-
-    // If we cannot display the grid density, scale down by a tick size and
-    // try again.  Eventually, we get some representation of the grid
-    while( std::min( gridScreenSize.x, gridScreenSize.y ) <= gridThreshold )
-    {
-        gridScreenSize = gridScreenSize * static_cast<double>( m_gridTick );
-    }
+    VECTOR2D gridScreenSize = GetVisibleGridSize();
 
     // Compute grid starting and ending indexes to draw grid points on the
     // visible screen area
-    // Note: later any point coordinate will be offsetted by m_gridOrigin
+    // Note: later any point coordinate will be offset by m_gridOrigin
     int gridStartX = KiROUND( ( worldStartPoint.x - m_gridOrigin.x ) / gridScreenSize.x );
     int gridEndX = KiROUND( ( worldEndPoint.x - m_gridOrigin.x ) / gridScreenSize.x );
     int gridStartY = KiROUND( ( worldStartPoint.y - m_gridOrigin.y ) / gridScreenSize.y );
