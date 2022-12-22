@@ -280,7 +280,7 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
                 []( auto& aSelf, std::set<wxString>& aSetR, std::vector<wxString>& aResultR,
                     const CLASS_DESC& aClassR ) -> void
         {
-            for( const wxString& group : aClassR.m_groups )
+            for( const wxString& group : aClassR.m_groupDisplayOrder )
             {
                 if( !aSetR.count( group ) )
                 {
