@@ -523,6 +523,7 @@ if( DOXYGEN_FOUND )
 
     # The sources to give to the Python Doxygen target
     set( DOXYGEN_PYTHON_SOURCES
+        ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         ${CMAKE_CURRENT_SOURCE_DIR}/python/plugins/FootprintWizardBase.py
         ${CMAKE_CURRENT_SOURCE_DIR}/python/plugins/PadArray.py )
 
