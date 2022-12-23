@@ -286,13 +286,16 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
             constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, b[ii], a[ii], layer );
             clearance = constraint.GetValue().Min();
 
-            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
+            // Test for hole to item clearance even if clearance is 0, because the item cannot be
+            // inside (or intersect) the hole.
+            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
             {
                 if( a_shape[ii]->Collide( holeShape.get(), std::max( 0, clearance - m_drcEpsilon ),
                                           &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                    wxString msg = formatMsg( clearance ? _( "(%s clearance %s; actual %s)" )
+                                                        : _( "(%s clearance %s; actual < 0)" ),
                                               constraint.GetName(),
                                               clearance,
                                               actual );
