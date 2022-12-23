@@ -27,7 +27,7 @@
 #include <locale_io.h>
 #include <plotters/plotters_pslike.h>
 
-void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
+void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName, VECTOR2I aOffset )
 {
     KIGFX::SCH_RENDER_SETTINGS renderSettings;
     renderSettings.LoadColors( GetColorSettings() );
@@ -65,8 +65,8 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
         TRANSFORM      temp;                 // Uses default transform
         wxPoint        plotPos;
 
-        plotPos.x = pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
-        plotPos.y = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
+        plotPos.x = aOffset.x;
+        plotPos.y = aOffset.y;
 
         m_symbol->Plot( plotter, GetUnit(), GetConvert(), background, plotPos, temp, false );
 
