@@ -93,17 +93,9 @@ public:
 
         switch( aNewState )
         {
-        case SIM_IDLE:
-            event = new wxCommandEvent( EVT_SIM_FINISHED );
-            break;
-
-        case SIM_RUNNING:
-            event = new wxCommandEvent( EVT_SIM_STARTED );
-            break;
-
-        default:
-            wxFAIL;
-            return;
+        case SIM_IDLE:    event = new wxCommandEvent( EVT_SIM_FINISHED ); break;
+        case SIM_RUNNING: event = new wxCommandEvent( EVT_SIM_STARTED );  break;
+        default:          wxFAIL;                                         return;
         }
 
         wxQueueEvent( m_parent, event );
@@ -505,8 +497,8 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     {
         wxBusyCursor toggle;
 
-        updateTuners();
         applyTuners();
+
         // Prevents memory leak on succeding simulations by deleting old vectors
         m_simulator->Clean();
         m_simulator->Run();
@@ -561,35 +553,31 @@ void SIM_PLOT_FRAME::AddCurrentPlot( const wxString& aDeviceName )
 }
 
 
-void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
+void SIM_PLOT_FRAME::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol )
 {
     SIM_PANEL_BASE* plotPanel = getCurrentPlotWindow();
 
     if( !plotPanel )
         return;
 
-    wxString ref = aSymbol->GetField( REFERENCE_FIELD )->GetShownText();
+    wxString ref = aSymbol->GetRef( &aSheetPath );
 
     // Do not add multiple instances for the same component.
-    auto tunerIt = std::find_if( m_tuners.begin(), m_tuners.end(),
-                                 [ref]( const TUNER_SLIDER* tuner )
-                                 {
-                                     return tuner->GetComponentName() == ref;
-                                 } );
+    for( TUNER_SLIDER* tuner : m_tuners )
+    {
+        if( tuner->GetSymbolRef() == ref )
+            return;
+    }
 
-    if( tunerIt != m_tuners.end() )
-        return; // We already have it.
-
-    const SPICE_ITEM*       item = GetExporter()->FindItem( std::string( ref.ToUTF8() ) );
-    const SIM_MODEL::PARAM* tunerParam = item->model->GetTunerParam();
+    const SPICE_ITEM* item = GetExporter()->FindItem( std::string( ref.ToUTF8() ) );
 
     // Do nothing if the symbol is not tunable.
-    if( !tunerParam )
+    if( !item || !item->model->GetTunerParam() )
         return;
 
     try
     {
-        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_tunePanel, aSymbol );
+        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_tunePanel, aSheetPath, aSymbol );
         m_tuneSizer->Add( tuner );
         m_tuners.push_back( tuner );
         m_tunePanel->Layout();
@@ -601,28 +589,40 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
 }
 
 
-void SIM_PLOT_FRAME::UpdateTunerValue( const KIID& aSymbol, const wxString& aValue )
+void SIM_PLOT_FRAME::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const KIID& aSymbol,
+                                       const wxString& aRef, const wxString& aValue )
 {
-    SCH_SHEET_PATH sheet;
-    SCH_ITEM*      item = m_schematicFrame->Schematic().GetSheets().GetItem( aSymbol, &sheet );
-    SCH_SYMBOL*    symbol = dynamic_cast<SCH_SYMBOL*>( item );
+    SCH_ITEM*   item = aSheetPath.GetItem( aSymbol );
+    SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
-    if( symbol )
+    if( !symbol )
     {
-        SIM_LIB_MGR mgr( &Prj() );
-        SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol ).model;
-
-        const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
-
-        if( !tunerParam )
-            return;
-
-        model.SetParamValue( tunerParam->info.name, std::string( aValue.ToUTF8() ) );
-        model.WriteFields( symbol->GetFields() );
-
-        m_schematicFrame->UpdateItem( symbol, false, true );
-        m_schematicFrame->OnModify();
+        // TODO: 8.0: wxT() --> _()
+        DisplayErrorMessage( this, wxString::Format( wxT( "Could not apply tuned value.\n"
+                                                          "%s not found." ),
+                                                     aRef ) );
+        return;
     }
+
+    SIM_LIB_MGR mgr( &Prj() );
+    SIM_MODEL&  model = mgr.CreateModel( &aSheetPath, *symbol ).model;
+
+    const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
+
+    if( !tunerParam )
+    {
+        // TODO: 8.0: wxT() --> _()
+        DisplayErrorMessage( this, wxString::Format( wxT( "Could not apply tuned value.\n"
+                                                          "%s is not tunable." ),
+                                                     aRef ) );
+        return;
+    }
+
+    model.SetParamValue( tunerParam->info.name, std::string( aValue.ToUTF8() ) );
+    model.WriteFields( symbol->GetFields() );
+
+    m_schematicFrame->UpdateItem( symbol, false, true );
+    m_schematicFrame->OnModify();
 }
 
 
@@ -640,23 +640,14 @@ SIM_PLOT_PANEL* SIM_PLOT_FRAME::GetCurrentPlot() const
 {
     SIM_PANEL_BASE* curPage = getCurrentPlotWindow();
 
-    return ( ( !curPage || curPage->GetType() == ST_UNKNOWN ) ?
-                     nullptr :
-                     dynamic_cast<SIM_PLOT_PANEL*>( curPage ) );
+    return !curPage || curPage->GetType() == ST_UNKNOWN ? nullptr
+                                                        : dynamic_cast<SIM_PLOT_PANEL*>( curPage );
 }
 
 
 const NGSPICE_CIRCUIT_MODEL* SIM_PLOT_FRAME::GetExporter() const
 {
     return m_circuitModel.get();
-}
-
-
-std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& SIM_PLOT_FRAME::GetSimulatorSettings()
-{
-    wxASSERT( m_simulator->Settings() );
-
-    return m_simulator->Settings();
 }
 
 
@@ -708,9 +699,7 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType )
     }
 
     if( updated )
-    {
         updateSignalList();
-    }
 }
 
 
@@ -909,38 +898,42 @@ void SIM_PLOT_FRAME::updateSignalList()
 }
 
 
-void SIM_PLOT_FRAME::updateTuners()
-{
-    const std::list<SPICE_ITEM>& spiceItems = m_circuitModel->GetItems();
-
-    for( auto it = m_tuners.begin(); it != m_tuners.end(); /* iteration inside the loop */ )
-    {
-        const wxString& ref = (*it)->GetComponentName();
-
-        if( std::find_if( spiceItems.begin(), spiceItems.end(),
-                          [&]( const SPICE_ITEM& item )
-                          {
-                              return item.refName == ref;
-                          }
-                         ) == spiceItems.end() )
-        {
-            // The component does not exist anymore, remove the associated tuner
-            TUNER_SLIDER* tuner = *it;
-            it = m_tuners.erase( it );
-            RemoveTuner( tuner, false );
-        }
-        else
-        {
-            ++it;
-        }
-    }
-}
-
-
 void SIM_PLOT_FRAME::applyTuners()
 {
+    wxString            errors;
+    WX_STRING_REPORTER  reporter( &errors );
+
     for( const TUNER_SLIDER* tuner : m_tuners )
-        m_simulator->Command( tuner->GetTunerCommand() );
+    {
+        SCH_SHEET_PATH sheetPath;
+        wxString       ref = tuner->GetSymbolRef();
+        KIID           symbolId = tuner->GetSymbol( &sheetPath );
+        SCH_ITEM*      schItem = sheetPath.GetItem( symbolId );
+        SCH_SYMBOL*    symbol = dynamic_cast<SCH_SYMBOL*>( schItem );
+
+        if( !symbol )
+        {
+            reporter.Report( wxString::Format( _( "%s not found." ), ref ) );
+            continue;
+        }
+
+        const SPICE_ITEM* item = GetExporter()->FindItem( tuner->GetSymbolRef().ToStdString() );
+
+        if( !item || !item->model->GetTunerParam() )
+        {
+            // TODO: 8.0: wxT() --> _()
+            reporter.Report( wxString::Format( wxT( "%s is not tunable." ), ref ) );
+            continue;
+        }
+
+        SIM_VALUE_FLOAT floatVal( tuner->GetValue().ToDouble() );
+
+        m_simulator->Command( item->model->SpiceGenerator().TunerCommand( *item, floatVal ) );
+    }
+
+    // TODO: 8.0: wxT() --> _()
+    if( reporter.HasMessage() )
+        DisplayErrorMessage( this, wxT( "Errors applying tuned values.\n\n" ) + errors );
 }
 
 
@@ -1903,7 +1896,9 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
             m_simulator->Run();
         }
         else
+        {
             DisplayErrorMessage( this, _( "Another simulation is already running." ) );
+        }
     }
     updateInProgress = false;
 }
@@ -1944,17 +1939,9 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
 
     switch( aEvent.GetId() )
     {
-    case HIDE_SIGNAL:
-        m_plotFrame->removePlot( m_signal );
-        break;
-
-    case SHOW_CURSOR:
-        plot->EnableCursor( m_signal, true );
-        break;
-
-    case HIDE_CURSOR:
-        plot->EnableCursor( m_signal, false );
-        break;
+    case HIDE_SIGNAL: m_plotFrame->removePlot( m_signal );   break;
+    case SHOW_CURSOR: plot->EnableCursor( m_signal, true );  break;
+    case HIDE_CURSOR: plot->EnableCursor( m_signal, false ); break;
     }
 }
 

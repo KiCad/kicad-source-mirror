@@ -268,6 +268,11 @@ public:
     SCH_SCREEN* LastScreen() const;
 
     /**
+     * Fetch a SCH_ITEM by ID.
+     */
+    SCH_ITEM* GetItem( const KIID& aID ) const;
+
+    /**
      * Return the path of time stamps which do not changes even when editing sheet parameters.
      *
      * A path is something like / (root) or /34005677 or /34005677/00AE4523.

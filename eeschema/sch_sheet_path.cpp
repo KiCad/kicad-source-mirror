@@ -826,39 +826,43 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut ) c
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
-        SCH_SCREEN* screen = sheet.LastScreen();
+        SCH_ITEM* item = sheet.GetItem( aID );
 
-        for( SCH_ITEM* aItem : screen->Items() )
+        if( item )
         {
-            if( aItem->m_Uuid == aID )
-            {
-                if( aPathOut )
-                    *aPathOut = sheet;
+            if( aPathOut )
+                *aPathOut = sheet;
 
-                return aItem;
-            }
-
-            SCH_ITEM* childMatch = nullptr;
-
-            aItem->RunOnChildren(
-                    [&]( SCH_ITEM* aChild )
-                    {
-                        if( aChild->m_Uuid == aID )
-                            childMatch = aChild;
-                    } );
-
-            if( childMatch )
-            {
-                if( aPathOut )
-                    *aPathOut = sheet;
-
-                return childMatch;
-            }
+            return item;
         }
     }
 
     // Not found; weak reference has been deleted.
     return DELETED_SHEET_ITEM::GetInstance();
+}
+
+
+SCH_ITEM* SCH_SHEET_PATH::GetItem( const KIID& aID ) const
+{
+    for( SCH_ITEM* aItem : LastScreen()->Items() )
+    {
+        if( aItem->m_Uuid == aID )
+            return aItem;
+
+        SCH_ITEM* childMatch = nullptr;
+
+        aItem->RunOnChildren(
+                [&]( SCH_ITEM* aChild )
+                {
+                    if( aChild->m_Uuid == aID )
+                        childMatch = aChild;
+                } );
+
+        if( childMatch )
+            return childMatch;
+    }
+
+    return nullptr;
 }
 
 

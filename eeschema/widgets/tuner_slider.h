@@ -43,9 +43,10 @@ class SCH_SYMBOL;
 class TUNER_SLIDER : public TUNER_SLIDER_BASE
 {
 public:
-    TUNER_SLIDER( SIM_PLOT_FRAME *aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol );
+    TUNER_SLIDER( SIM_PLOT_FRAME *aFrame, wxWindow* aParent, const SCH_SHEET_PATH& aSheetPath,
+                  SCH_SYMBOL* aSymbol );
 
-    wxString GetComponentName() const
+    wxString GetSymbolRef() const
     {
         return m_name->GetLabel();
     }
@@ -60,7 +61,16 @@ public:
         return m_max;
     }
 
-    std::string GetTunerCommand() const;
+    const SPICE_VALUE& GetValue() const
+    {
+        return m_value;
+    }
+
+    KIID GetSymbol( SCH_SHEET_PATH* aSheetPath ) const
+    {
+        *aSheetPath = m_sheetPath;
+        return m_symbol;
+    }
 
     bool SetValue( const SPICE_VALUE& aVal );
     bool SetMin( const SPICE_VALUE& aVal );
@@ -92,15 +102,15 @@ private:
     ///< Timer that restarts the simulation after the slider value has changed
     wxTimer m_simTimer;
 
-    KIID              m_symbol;
-    const SPICE_ITEM* m_item;
+    KIID            m_symbol;
+    SCH_SHEET_PATH  m_sheetPath;
 
-    SPICE_VALUE       m_min;
-    SPICE_VALUE       m_max;
-    SPICE_VALUE       m_value;
-    bool              m_changed;
+    SPICE_VALUE     m_min;
+    SPICE_VALUE     m_max;
+    SPICE_VALUE     m_value;
+    bool            m_changed;
 
-    SIM_PLOT_FRAME*   m_frame;
+    SIM_PLOT_FRAME* m_frame;
 };
 
 #endif /* TUNER_SLIDER_H */

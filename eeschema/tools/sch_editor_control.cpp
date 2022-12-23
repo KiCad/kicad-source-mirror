@@ -1019,15 +1019,16 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                         return false;
                 }
 
-                SCH_SYMBOL*   symbol = static_cast<SCH_SYMBOL*>( item );
-                KIWAY_PLAYER* simFrame = m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+                SCH_SYMBOL*    symbol = static_cast<SCH_SYMBOL*>( item );
+                SCH_SHEET_PATH sheetPath = symbol->Schematic()->CurrentSheet();
+                KIWAY_PLAYER*  simFrame = m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
                 if( simFrame )
                 {
                     if( wxWindow* blocking_win = simFrame->Kiway().GetBlockingDialog() )
                         blocking_win->Close( true );
 
-                    static_cast<SIM_PLOT_FRAME*>( simFrame )->AddTuner( symbol );
+                    static_cast<SIM_PLOT_FRAME*>( simFrame )->AddTuner( sheetPath, symbol );
                 }
 
                 // We do not really want to keep a symbol selected in schematic,

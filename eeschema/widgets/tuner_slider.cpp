@@ -36,19 +36,20 @@
 // Must be after other includes to avoid conflict with a window header on msys2
 #include "tuner_slider.h"
 
-TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol ) :
+TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent,
+                            const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol ) :
     TUNER_SLIDER_BASE( aParent ),
-    m_symbol( aSymbol->m_Uuid ),
+    m_symbol( aSymbol->m_Uuid ), m_sheetPath( aSheetPath ),
     m_min( 0.0 ),
     m_max( 0.0 ),
     m_value( 0.0 ),
     m_changed( false ),
     m_frame ( aFrame )
 {
-    wxString ref = aSymbol->GetField( REFERENCE_FIELD )->GetShownText();
-    m_item = aFrame->GetExporter()->FindItem( std::string( ref.ToUTF8() ) );
+    wxString          ref = aSymbol->GetRef( &m_sheetPath );
+    const SPICE_ITEM* item = aFrame->GetExporter()->FindItem( std::string( ref.ToUTF8() ) );
 
-    if( !m_item )
+    if( !item )
     {
         throw KI_PARAM_ERROR( wxString::Format( _( "Could not find Spice item with reference '%s'" ),
                                                 ref ) );
@@ -57,21 +58,21 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
     m_name->SetLabel( ref );
     m_closeBtn->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
-    const SIM_MODEL::PARAM* tunerParam = m_item->model->GetTunerParam();
+    const SIM_MODEL::PARAM* tunerParam = item->model->GetTunerParam();
 
     if( !tunerParam )
     {
         throw KI_PARAM_ERROR( wxString::Format( _( "Symbol '%s' has simulation model of type '%s %s', "
                                                    "which cannot be tuned" ),
                                                 ref,
-                                                m_item->model->GetDeviceInfo().fieldValue,
-                                                m_item->model->GetTypeInfo().fieldValue ) );
+                                                item->model->GetDeviceInfo().fieldValue,
+                                                item->model->GetTypeInfo().fieldValue ) );
     }
 
     // Special case for potentiometers because we don't have value ranges implemented yet.
-    if( m_item->model->GetType() == SIM_MODEL::TYPE::R_POT )
+    if( item->model->GetType() == SIM_MODEL::TYPE::R_POT )
     {
-        std::string valueStr = m_item->model->GetTunerParam()->value->ToSpiceString();
+        std::string valueStr = item->model->GetTunerParam()->value->ToSpiceString();
 
         if( valueStr != "" )
             m_value = SPICE_VALUE( valueStr );
@@ -83,7 +84,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
     }
     else
     {
-        m_value = SPICE_VALUE( m_item->model->GetTunerParam()->value->ToSpiceString() );
+        m_value = SPICE_VALUE( item->model->GetTunerParam()->value->ToSpiceString() );
         m_min = SPICE_VALUE( 0.5 ) * m_value;
         m_max = SPICE_VALUE( 2.0 ) * m_value;
     }
@@ -98,13 +99,6 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
     Connect( wxEVT_TIMER, wxTimerEventHandler( TUNER_SLIDER::onSimTimer ), nullptr, this );
 
     Layout();
-}
-
-
-std::string TUNER_SLIDER::GetTunerCommand() const
-{
-    return m_item->model->SpiceGenerator().TunerCommand( *m_item,
-                                                         SIM_VALUE_FLOAT( m_value.ToDouble() ) );
 }
 
 
@@ -235,7 +229,7 @@ void TUNER_SLIDER::onClose( wxCommandEvent& event )
 
 void TUNER_SLIDER::onSave( wxCommandEvent& event )
 {
-    m_frame->UpdateTunerValue( m_symbol, m_value.ToOrigString() );
+    m_frame->UpdateTunerValue( m_sheetPath, m_symbol, GetSymbolRef(), m_value.ToOrigString() );
 }
 
 
