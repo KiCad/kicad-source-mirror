@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
-"PO-Revision-Date: 2022-11-26 09:53+0000\n"
+"PO-Revision-Date: 2022-12-24 04:08+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -272,9 +272,9 @@ msgstr "&Налаштування"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2728
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Набори (Alt+Tab):"
+msgstr "Набори (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2737
@@ -294,6 +294,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Зберегти і відновити орієнтацію і масштабування вигляду.\n"
+"Використовуйте %s+Tab що б активувати селектор.\n"
+"Послідовні вкладки, утримуючи %s вниз перемикатиметься між вікнами перегляду "
+"у спливаючому вікні."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -1215,9 +1219,8 @@ msgid "Open..."
 msgstr "Відкрити..."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
-#, fuzzy
 msgid "Load source image"
-msgstr "Показати зображення користувача"
+msgstr "Завантажити вихідне зображення"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1225,9 +1228,8 @@ msgid "Quit"
 msgstr "Вийти"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:229
-#, fuzzy
 msgid "Quit Image Converter"
-msgstr "Конвертер зображень"
+msgstr "Вийти з конвертера зображень"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:570
@@ -1292,19 +1294,16 @@ msgid "Greyscale Picture"
 msgstr "Зображення в відтінках сірого"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:30
-#, fuzzy
 msgid "Black && White Picture"
-msgstr "Чорно&&Біле Зображення"
+msgstr "Чорно && Біле Зображення"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:38
-#, fuzzy
 msgid "Image Information"
 msgstr "Інформація про зображення"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
-#, fuzzy
 msgid "Image size:"
-msgstr "Розмір аркуша:"
+msgstr "Розмір зображення:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1319,7 +1318,6 @@ msgid "pixels"
 msgstr "пікс"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
-#, fuzzy
 msgid "Image PPI:"
 msgstr "PPI зображення:"
 
@@ -1336,19 +1334,16 @@ msgid "bits"
 msgstr "біт"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
-#, fuzzy
 msgid "Load Source Image"
-msgstr "Виберіть зображення"
+msgstr "Завантажити вихідне зображення"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
-#, fuzzy
 msgid "Output Size"
-msgstr "Вивід виходу"
+msgstr "Вихідне зовбраження"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
-msgstr "Зберегти відношення висота/ширину"
+msgstr "Зберегти відношення висота/ширину до повороту"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:115
 #: common/dialogs/dialog_page_settings_base.cpp:34
@@ -1378,7 +1373,6 @@ msgid "Options"
 msgstr "Опції"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
-#, fuzzy
 msgid "Black / white threshold:"
 msgstr "Поріг чорного / білого:"
 
@@ -3188,13 +3182,12 @@ msgid "Remember open files for next project launch"
 msgstr "Пам’ятати файли для наступного запуску проєкту"
 
 #: common/dialogs/panel_common_settings_base.cpp:230
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"Якщо відмічено, запуск проєкту також запустить такі інструменти, як eeschema "
-"та pcbnew з раніше відкритими файлами"
+"Якщо позначено, запуск проекту також запускатиме такі інструменти, як "
+"редактори схем і плат з раніше відкритими файлами"
 
 #: common/dialogs/panel_common_settings_base.cpp:243
 msgid "&Auto save:"
@@ -5405,7 +5398,7 @@ msgstr "Тіні для заблокованого елементу"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "Затемнити колізії меж елементів"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -5471,9 +5464,9 @@ msgid "Unrecognized function '%s'"
 msgstr "Нерозпізнана функція '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "Неочікуваний '%s'"
+msgstr "Неочікувані елементи для '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -5934,13 +5927,12 @@ msgid "Delete clicked items"
 msgstr "Видалення елементів за допомогою клацання мишкою"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "Перемкнути реалістичний режим"
+msgstr "Режим редагування циклічної дуги"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Перейти до іншого методу редагування дуг"
 
 #: common/tool/actions.cpp:210
 msgid "Show Search Panel"
@@ -6688,14 +6680,13 @@ msgid "No objects selected"
 msgstr "Об'єкти не вибрано"
 
 #: common/widgets/properties_panel.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Об'єкти не вибрано"
+msgstr "%d об'єкти вибрано"
 
 #: common/widgets/properties_panel.cpp:274
-#, fuzzy
 msgid "Basic Properties"
-msgstr "Властивості %s"
+msgstr "Базові властивості"
 
 #: common/widgets/unit_binder.cpp:318
 #, c-format
@@ -7849,7 +7840,6 @@ msgid "Generator file name not found."
 msgstr "Ім'я файлу плагіну не знайдено."
 
 #: eeschema/dialogs/dialog_bom.cpp:460
-#, fuzzy
 msgid "Bill of Materials Generation Help"
 msgstr "Допомога у формуванні переліку елементів (BOM)"
 
@@ -7892,9 +7882,8 @@ msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr "Скинути список скриптів генератора BOM до параметрів за замовчуванням"
 
 #: eeschema/dialogs/dialog_bom_base.h:83
-#, fuzzy
 msgid "Bill of Materials"
-msgstr "Перелік Елементів"
+msgstr "Перелік Елементів (BOM)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -8347,9 +8336,8 @@ msgid "Checking conflicts..."
 msgstr "Перевірка конфліктів..."
 
 #: eeschema/dialogs/dialog_erc.cpp:488
-#, fuzzy
 msgid "Checking units..."
-msgstr "Перевірка виводів..."
+msgstr "Перевірка елементів..."
 
 #: eeschema/dialogs/dialog_erc.cpp:493
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
@@ -8369,9 +8357,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Перевірка невирішених змінних..."
 
 #: eeschema/dialogs/dialog_erc.cpp:534
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "Перевірка зон..."
+msgstr "Перевірка SPICE моделей..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
@@ -9041,11 +9028,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Логування парсеру Ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:47
 msgid "Ibis parser"
-msgstr ""
+msgstr "Парсер Ibis"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9595,9 +9582,8 @@ msgid "Fields must have a name."
 msgstr "Поля повинні мати назву."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:275
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "Для символу псевдоніма потрібно вибрати батька"
+msgstr "Похідний символ повинен мати вибраний батьківський елемент"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
 msgid "Delete extra units from symbol?"
@@ -9684,7 +9670,6 @@ msgid "Define as power symbol"
 msgstr "Створити як символ живлення"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:179
-#, fuzzy
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
@@ -9692,10 +9677,10 @@ msgid ""
 "the BOM and cannot be assigned a footprint."
 msgstr ""
 "Якщо налаштувати цей параметр, відповідний символ з’явиться в\n"
-"діалогове вікно «додати порт живлення». Він заблокує текст значення, щоб "
-"захистити його\n"
-"від редагування в Eeschema. Символ не буде включено в\n"
-"BOM і не може бути призначено посадкового місця."
+"діалогове вікно «додати символ потужності».  Він заблокує текст значення, "
+"щоб захистити його\n"
+"від редагування в схемі. Символ не буде включено в\n"
+"BOM і не може бути призначене посадкове місце."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:192
 msgid "Number of Units:"
@@ -10813,9 +10798,8 @@ msgid "Frequency scale"
 msgstr "Частотна шкала"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "Кількість частин на один корпус:"
+msgstr "Кількість точок на декаду:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -11028,9 +11012,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "Симуляція"
+msgstr "Команди симуляції"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:181
 #, c-format
@@ -11038,14 +11021,12 @@ msgid "No model named '%s' in library."
 msgstr "У бібліотеці немає моделі з назвою '%s'."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:262
-#, fuzzy
 msgid "Failed to read simulation model from fields."
 msgstr "Неможливо прочитати модель симуляції з відповідних полів."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
-#, fuzzy
 msgid "Component:"
-msgstr "Компоненти"
+msgstr "Компоненти:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:374
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
@@ -11056,16 +11037,16 @@ msgstr "Модель:"
 #: eeschema/dialogs/dialog_sim_model.cpp:430
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "Зберегти параметр '%s (%s)' в полі значення"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:438
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "Зберегти основний параметр в полі значення"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:455
 #: pcbnew/footprint_wizard_frame.cpp:322
 msgid "Parameter"
-msgstr ""
+msgstr "Параметр"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:458 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1147 eeschema/sch_label.cpp:880
@@ -11092,20 +11073,19 @@ msgstr "Вибір моделей"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:30
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "SPICE модель з файлу (*.lib, *.sub or *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:66
 msgid "Pin:"
 msgstr "Вивід:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:77
-#, fuzzy
 msgid "Differential"
-msgstr "Диференціальні пари"
+msgstr "Диференціал"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:101
 msgid "Built-in SPICE model"
-msgstr ""
+msgstr "Вбудована модель SPICE"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:110
 msgid "Device:"
@@ -11136,7 +11116,7 @@ msgstr "Код"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:204
 msgid "Save {} in Value field as \"{}\""
-msgstr ""
+msgstr "Зберегти {} в полі значення як \"{}\""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:217
 msgid "Model"
@@ -12487,9 +12467,8 @@ msgstr "Помилка завантаження таблиці з символа
 #: eeschema/eeschema_jobs_handler.cpp:150
 #: eeschema/eeschema_jobs_handler.cpp:186
 #: eeschema/eeschema_jobs_handler.cpp:281
-#, fuzzy
 msgid "Failed to load schematic file\n"
-msgstr "Не вдалося зберегти схему '%s'"
+msgstr "Помилка завантаження файлу схеми\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:197
 #: eeschema/eeschema_jobs_handler.cpp:296
@@ -12497,39 +12476,38 @@ msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
+"Попередження: схема містить помилки анотації, скористайтеся редактором схем, "
+"щоб виправити їх\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:206
 #: eeschema/eeschema_jobs_handler.cpp:306
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "Попередження: Дублювання унікальних імен"
+msgstr "Попередження: Дублювання імені аркуша\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:248
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "Невідомий батько властивості"
+msgstr "Невідомий формат списку зв'язків.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Змінити символ %s з '%s' на '%s'"
+msgstr "Створення символу '%s' елементу %d в '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Змінити символ %s з '%s' на '%s'"
+msgstr "Створення символу '%s' в '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "Не вдалося обробити '%s' в '%s'"
+msgstr "Неможливо відкрити місце призначення '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:435
 #: eeschema/eeschema_jobs_handler.cpp:495 pcbnew/pcbnew_jobs_handler.cpp:599
 #: pcbnew/pcbnew_jobs_handler.cpp:660
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "Не вдалося завантажити файл %s"
+msgstr "Не вдалося завантажити бібліотеку\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:446
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:121
@@ -12538,22 +12516,19 @@ msgstr "Немає вибраного символу для збереження
 
 #: eeschema/eeschema_jobs_handler.cpp:503 pcbnew/pcbnew_jobs_handler.cpp:585
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "Вихідний шлях не повинен конфліктувати з існуючим шляхом\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:513
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "Неправильний ідентифікатор бібліотеки символів"
+msgstr "Збереження бібліотеки символів в оновленому форматі\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:527 pcbnew/pcbnew_jobs_handler.cpp:628
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "Не вдалося зберегти бібліотеку %s."
+msgstr "Не вдалося зберегти бібліотеку\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:533
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "Бібліотека Символів не ввімкнена."
+msgstr "Бібліотеку символів не оновлено\n"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Input Pin"
@@ -12618,24 +12593,25 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Різні посадкові місця назначені %s та %s"
 
 #: eeschema/erc.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "Символ '%s' було змінено в бібліотеці '%s'"
+msgstr "Символ %s має нерозміщені одиниці %s"
 
 #: eeschema/erc.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "Символ має більше одиниць вимірювання, ніж задано"
+msgstr ""
+"Символ %s має вхідні контакти живлення в елементах %s, які не розміщені."
 
 #: eeschema/erc.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "Символ має більше одиниць вимірювання, ніж задано"
+msgstr "Символ %s має вхідні контакти в елементах %s, які не розміщені."
 
 #: eeschema/erc.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "Символ має більше одиниць вимірювання, ніж задано"
+msgstr "Символ %s має двунаправленні контакти в елементах %s, які не розміщені."
 
 #: eeschema/erc.cpp:583
 msgid "Pins with 'no connection' type are connected"
@@ -12770,9 +12746,8 @@ msgid "Unresolved text variable"
 msgstr "Невизначена текстова змінна"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "SPICE model issue"
-msgstr "SPICE файл зв'язку"
+msgstr "Помилка моделі SPICE"
 
 #: eeschema/erc_item.cpp:142
 msgid "Wires not connected to anything"
@@ -12791,24 +12766,20 @@ msgid "Symbol has more units than are defined"
 msgstr "Символ має більше одиниць вимірювання, ніж задано"
 
 #: eeschema/erc_item.cpp:158
-#, fuzzy
 msgid "Symbol has units that are not placed"
-msgstr "Символ має більше одиниць вимірювання, ніж задано"
+msgstr "Символ має елементи, які не розміщені"
 
 #: eeschema/erc_item.cpp:162
-#, fuzzy
 msgid "Symbol has input pins that are not placed"
-msgstr "Символ має більше одиниць вимірювання, ніж задано"
+msgstr "Символ має вхідні контакти що не розміщені"
 
 #: eeschema/erc_item.cpp:166
-#, fuzzy
 msgid "Symbol has bidirectional pins that are not placed"
-msgstr "Символ має більше одиниць вимірювання, ніж задано"
+msgstr "Символ має двунаправлені контакти що не розміщені"
 
 #: eeschema/erc_item.cpp:170
-#, fuzzy
 msgid "Symbol has power input pins that are not placed"
-msgstr "Символ має більше одиниць вимірювання, ніж задано"
+msgstr "Символ має вхідні контакти живлення що не розміщені"
 
 #: eeschema/erc_item.cpp:174
 msgid "Units of same symbol have different values"
@@ -12840,12 +12811,10 @@ msgid "Vertical"
 msgstr "Вертикаль"
 
 #: eeschema/fields_grid_table.cpp:341
-#, fuzzy
 msgid "Show Name"
-msgstr "Показати звʼязок"
+msgstr "Показати ім'я"
 
 #: eeschema/fields_grid_table.cpp:352
-#, fuzzy
 msgid "Allow Autoplacement"
 msgstr "Дозволити автоматичне розміщення"
 
@@ -13079,9 +13048,9 @@ msgid "Importing Schematic"
 msgstr "Імпорт схеми"
 
 #: eeschema/files-io.cpp:1287
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "Пам'ять вичерпано під час завантаження схеми '%s."
+msgstr "Сталася виняткова ситуація під час завантаження схеми '%s."
 
 #: eeschema/files-io.cpp:1321
 msgid "The current schematic has been modified.  Save changes?"
@@ -13146,9 +13115,8 @@ msgstr ""
 "відображається кожного разу, коли запускається редактор схем."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1607
-#, fuzzy
 msgid "Derived from"
-msgstr "Батьківський символ:"
+msgstr "Походить з"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
 #: kicad/pcm/pcm.cpp:798 pcbnew/footprint.cpp:1023 pcbnew/zone.cpp:595
@@ -13200,14 +13168,14 @@ msgid "Pin %s [%s, %s]"
 msgstr "Вивід %s [%s, %s]"
 
 #: eeschema/lib_pin.cpp:1349
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
-msgstr "Вивід %s [%s, %s, %s]"
+msgstr "Приховати контакт %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1357
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s]"
-msgstr "Вивід %s [%s, %s]"
+msgstr "Приховати контакт %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:457 eeschema/sch_shape.cpp:407
 #, c-format
@@ -13378,18 +13346,22 @@ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr "Помилка генерування імені для'%s': перевищено UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
-msgstr "Помилка завантаження бібліотеки символів '%s':%s"
+msgstr ""
+"Помилка читання модель симуляції з символу '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model library '%s':\n"
 "%s"
-msgstr "Помилка завантаження бібліотеки символів '%s':%s"
+msgstr ""
+"Помилка читання модель симуляції з бібліотеки '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:470
 #, c-format
@@ -13942,6 +13914,8 @@ msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
+"Ім'я файлу для аркуша %s не визначено, це, ймовірно, группа сигналів Altium, "
+"який було конвертовано на аркуш."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
@@ -13949,35 +13923,35 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Файл сховища не повністю оброблений (залишилося%d байт)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
-"У розділі «Додатково» знайдено невідомий або неочікуваний запис, "
-"ідентифікатор запису: %d."
+"Невідомий або неочікуваний запис ID %d знаходиться в розділі \"Додатково\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
-msgstr ""
+msgstr "Запис 'IEEE_SYMBOL' не обробляється."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
-msgstr ""
+msgstr "Запис 'PIECHART' не обробляється."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
 msgstr "Компіляція в даний час не підтримується."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
-"У розділі «Заголовку файла» знайдено невідомий або неочікуваний запис, "
-"ідентифікатор запису: %d."
+"Невідомий або неочікуваний запис id %d знайдено в середині секції "
+"\"FileHeader\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
+"Символ \"%s\" на аркуші \"%s\" з індексом %d замінено з символом \"%s\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2404
@@ -14007,13 +13981,13 @@ msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Непідтримуваний еліпс не було імпортовано в (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1935
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
 "З’єднувач групи сигналів Altium (%s) було імпортовано як ієрархічний аркуш. "
-"Перегляньте імпортовану схему."
+"Будь ласка перегляньте імпортовану схему."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
 msgid "Power Port with unknown style imported as 'Bar' type."
@@ -14892,6 +14866,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"У завантаженому файлі схеми зі старішої версії файлу є ієрархічні аркуші, що "
+"призводить до відсутності даних екземпляра символу. Це призведе до того, що "
+"всі символи в завантаженій схемі використовуватимуть налаштування екземпляра "
+"за замовчуванням або повернуться до налаштувань символів бібліотеки. Цю "
+"проблему вирішить завантаження проекту, який використовує цей файл схеми, і "
+"збереження до останньої версії файлу.\n"
+"\n"
+"Ви бажаєте продовжити?"
 
 #: eeschema/sheet.cpp:247 eeschema/sheet.cpp:275 eeschema/sheet.cpp:316
 #: eeschema/sheet.cpp:365 eeschema/sheet.cpp:426
@@ -14988,26 +14970,24 @@ msgstr "Відхилити новий лист"
 #: eeschema/sim/kibis/ibis_parser.cpp:66 eeschema/sim/kibis/ibis_parser.cpp:95
 #: eeschema/sim/kibis/ibis_parser.cpp:118
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "Розмір матриці повинен бути >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:72
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "Пропускна здатність матриць повинна бути >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:80 eeschema/sim/kibis/ibis_parser.cpp:103
 #: eeschema/sim/kibis/ibis_parser.cpp:126
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "У матриці є елементи NaN."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:161
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Неправильне значення довжини"
+msgstr "Неправильне значення R_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:166
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "Неправильне значення довжини"
+msgstr "Неправильне значення L_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:171
 msgid "Invalid C_pkg value."
@@ -15143,102 +15123,87 @@ msgstr "Некорректно pullup."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:532
 msgid "Invalid POWER clamp."
-msgstr ""
+msgstr "Неправильний термінал POWER."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:537
 msgid "Invalid GND clamp."
-msgstr ""
+msgstr "Неправильний термінал GND."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:546
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "Некоректна назва сигналу"
+msgstr "Неправильний Ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:556
-#, fuzzy
 msgid "Checking Header..."
-msgstr "Перевірка міток..."
+msgstr "Перевірка заголовку..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:560
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "Відсутнє [IBIS Ver]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:566
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "Парсер не обробляє цю версію IBIS"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:572
 msgid "Missing [File Rev]"
-msgstr ""
+msgstr "Відсутнє [File Rev]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:578
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "Відсутнє джерело"
+msgstr "Відсутнє [File Name]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
-#, fuzzy
 msgid "Package model name cannot be empty."
-msgstr "Імʼя змінної не може бути порожнім."
+msgstr "Імʼя пакету моделі не може бути порожнім."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:606
 msgid "Checking package model "
-msgstr ""
+msgstr "Перевірити пакет моделі "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:611
-#, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "Ім'я звʼязку не може бути пустим."
+msgstr "Виробник не може бути незаповненим."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:617
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "Текст не може бути порожнім."
+msgstr "OEM не можу бути незаповненим."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:623
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "Кількість точок"
+msgstr "Від'ємна кількість контактів."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:637
-#, fuzzy
 msgid "Empty pin number"
-msgstr "Показувати номер виводу"
+msgstr "Пустий номер контакту"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:645
-#, fuzzy
 msgid "Resistance matrix is incorrect"
-msgstr "Опір на одиницю довжини"
+msgstr "Матриця опору некоректна"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:653
-#, fuzzy
 msgid "Capacitance matrix is undefined"
-msgstr "Ємність на одиницю довжини"
+msgstr "Ємність матриці не визначено"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:659
-#, fuzzy
 msgid "Capacitance matrix is incorrect"
-msgstr "Ємність на одиницю довжини"
+msgstr "Ємність матриці некоректна"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:665
-#, fuzzy
 msgid "Capacitance matrix is nullptr"
-msgstr "Ємність на одиницю довжини"
+msgstr "Ємність матриці має порожній індикатор"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:673
-#, fuzzy
 msgid "Inductance matrix is undefined"
-msgstr "Індуктивність на одиницю довжини"
+msgstr "Індуктивність матриці не визначено"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:679
-#, fuzzy
 msgid "Inductance matrix is incorrect"
-msgstr "Індуктивність на одиницю довжини"
+msgstr "Індуктивність матриці не коректна"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:685
-#, fuzzy
 msgid "Inductance matrix is nullptr"
-msgstr "Індуктивність на одиницю довжини"
+msgstr "Індуктивність матриці має порожній індикатор"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:701
 msgid "Cannot open file "
@@ -15250,7 +15215,7 @@ msgstr "Читання файлу "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:729
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr ""
+msgstr "Неочікуваний кінець файлу. Відсутній [END] ?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:741
 msgid "Error on line "
@@ -15258,23 +15223,21 @@ msgstr "Помилка у рядку "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:769
 msgid "A line did not end properly."
-msgstr ""
+msgstr "Рядок не закінчиний належним чином."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:905
 #: eeschema/sim/kibis/ibis_parser.cpp:922
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "Лінія перевищує максимальну довжину."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:948
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося прочитати дубль."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:954
 #: eeschema/sim/kibis/ibis_parser.cpp:998
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося прочитати слово."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:991
 msgid "Number is not an integer"
@@ -15282,19 +15245,19 @@ msgstr "Число не є цілим"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1035
 msgid "Unable to read string, input is empty."
-msgstr ""
+msgstr "Неможливо прочитати рядок, введені дані порожні."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1085
 msgid "New comment character is invalid."
-msgstr ""
+msgstr "Новий символ коментаря недійсний."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1098
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Некоректний синтаксис. Повинно бути |_char або &_char, і т.д..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1109
 msgid "No extra argument was expected"
-msgstr ""
+msgstr "Зайвих аргументів не очікується"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1261
 msgid "Unknown keyword in "
@@ -15302,80 +15265,79 @@ msgstr "Невідомий вузол '%s' в '%s' "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1261
 msgid " context: "
-msgstr ""
+msgstr " контекст: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1327
-#, fuzzy
 msgid "Invalid ramp data"
-msgstr "Неправильне значення імпедансу"
+msgstr "Недійсні дані зростання"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1411
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "Неможливо вказати пропускну здатність для такого типу матриці"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "Невірний формат архіву."
+msgstr "Недійсний рядок у матриці"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1460
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "Забагато даних для цього рядка матриці."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1468
 msgid "Too much data for this matrix."
-msgstr ""
+msgstr "Забагато даних для цієї матриці."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1473
 #: eeschema/sim/kibis/ibis_parser.cpp:1506
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Не можна прочитати елемент матриці"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1511
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Не можливо прочитати індекс матриці"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1579
 msgid "Unknown matrix type"
-msgstr ""
+msgstr "Невідомий тим матриці"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1587
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "Відсутнє джерело"
+msgstr "Відсутній тип матриці"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1593
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
+" Матриця вже ініційована. Але m_continue не встановлено (внутрішня помилка)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1619
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Спроба прочитати рядок із невизначеної матриці"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1625
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "вказівник матриці є нульовим"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1774
 msgid "Typ-Min-Max Values requires at least Typ."
 msgstr ""
+"Значення Типове-Мінімальне-Максимальне вимагають принаймні найменше типове."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1867
 msgid "Unknown Model_type "
-msgstr ""
+msgstr "Невідома Model_type "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1874
 msgid "Internal Error while reading model_type"
-msgstr ""
+msgstr "Внутрішня помилка читання model_type"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1889
 msgid "Unknown Enable: "
-msgstr ""
+msgstr "Невідоме Enable: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1896
 #: eeschema/sim/kibis/ibis_parser.cpp:1918
 msgid "Internal Error while reading Enable"
-msgstr ""
+msgstr "Внутрішня помилка під час читання Enable"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1911
 msgid "Unknown polarity "
@@ -15383,171 +15345,161 @@ msgstr "Невідома полярність "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1948
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "Продовження читання моделі не починалося. ( внутрішня помилка )"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2115
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "Для рядка [Package] потрібно рівно 4 елементи."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2168
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Недійсний вхід контакту: 6 значень із таблиці лише 3."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2178
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "Неможливо прочитати значення R, L або C для контакту."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2201
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "Некоректна назва сигналу"
+msgstr "Некоректне назва поля в [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2208
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "Відсутнє джерело"
+msgstr "Бракує аргументу [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2243
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Неправильна кількість стовпців для зіставлення контактів."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2283
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "Хибний номер масштабу"
+msgstr "Некоректна назва пари контактів"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2288
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "Хибний номер масштабу"
+msgstr "Некоректна назва inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2368
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "Невідомий батько властивості"
+msgstr "Невідомий тип форми сигналу"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2379
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "Виявлено внутрішню помилку, має бути сигнал"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2444
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "Внутрішня помилка: поганий контекст парсеру."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2481
-#, fuzzy
 msgid "Missing keyword."
-msgstr "Відсутнє джерело"
+msgstr "Відсутнє слово."
 
 #: eeschema/sim/kibis/kibis.cpp:454
 msgid "waveform has less than two points"
-msgstr ""
+msgstr "форма сигналу має менше двох точок"
 
 #: eeschema/sim/kibis/kibis.cpp:675 eeschema/sim/kibis/kibis.cpp:740
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr "Неможливо записати звіт у файл '%s."
+msgstr "Неможливо видалити тимчасовий вихідний файл"
 
 #: eeschema/sim/kibis/kibis.cpp:726
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "Помилка читання файлу."
+msgstr "Помилка під час читання тимчасового файлу"
 
 #: eeschema/sim/kibis/kibis.cpp:735
-#, fuzzy
 msgid "Error while creating temporary output file"
-msgstr "Помилка під час створення тимчасового файлу"
+msgstr "Помилка під час створення тимчасового вихідного файлу"
 
 #: eeschema/sim/kibis/kibis.cpp:774
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"Kibis не підтримує значення DUT. https://ibis.org/summits/nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:877
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "Модель має лише одну пару сигналів, знижена точність"
 
 #: eeschema/sim/kibis/kibis.cpp:897 eeschema/sim/kibis/kibis.cpp:1102
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "Драйверу потрібне принаймні підтягування вверх чи підтягування вниз"
 
 #: eeschema/sim/kibis/kibis.cpp:1085 eeschema/sim/kibis/kibis.cpp:1094
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"Є дві пари сигналів, але тільки один транзистор. Більше порівнянь чим "
+"невідомих."
 
 #: eeschema/sim/kibis/kibis.cpp:1202
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"Модель не має пари сигналів, замість цього використовується [Ramp], низька "
+"точність"
 
 #: eeschema/sim/kibis/kibis.cpp:1215
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "Модель має більше ніж 2 пари сигналів, використовуючи перші дві."
 
 #: eeschema/sim/kibis/kibis.cpp:1253
 msgid "Invalid model type for a driver."
-msgstr ""
+msgstr "Некоректний тип моделі для драйверу."
 
 #: eeschema/sim/kibis/kibis.cpp:1305
-#, fuzzy
 msgid "Invalid model type for a device"
-msgstr "Неправильне значення затримки"
+msgstr "Недійсний тип моделі пристрою"
 
 #: eeschema/sim/kibis/kibis.cpp:1525 eeschema/sim/kibis/kibis.cpp:1571
-#, fuzzy
 msgid "Number of cycles should be greater than 0."
-msgstr "Відступ між доріжками повинен бути більшим за 0."
+msgstr "Кількість циклів має бути більше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1531 eeschema/sim/kibis/kibis.cpp:1577
-#, fuzzy
 msgid "ON time should be greater than 0."
-msgstr "Відступ між доріжками повинен бути більшим за 0."
+msgstr "Час увімкнення має бути більше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1537 eeschema/sim/kibis/kibis.cpp:1583
-#, fuzzy
 msgid "OFF time should be greater than 0."
-msgstr "Відступ між доріжками повинен бути більшим за 0."
+msgstr "Час вимкнення має бути більше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1545
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "Наростаючий фронт довший, ніж за часом."
 
 #: eeschema/sim/kibis/kibis.cpp:1554
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "Падаючий фронт довше, ніж час вимкнення."
 
 #: eeschema/sim/kibis/kibis.cpp:1591
 msgid "Rising edge is longer than ON time."
-msgstr ""
+msgstr "Наростаючий фронт довший за час увімкнення."
 
 #: eeschema/sim/kibis/kibis.cpp:1599
 msgid "Falling edge is longer than OFF time."
-msgstr ""
+msgstr "Спадаючий фронт довший за час вимкнення."
 
 #: eeschema/sim/kibis/kibis.cpp:1613 eeschema/sim/kibis/kibis.cpp:1644
-#, fuzzy
 msgid "Bitrate should be greater than 0."
-msgstr "Відступ між доріжками повинен бути більшим за 0."
+msgstr "Бітрейт має бути більше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1619 eeschema/sim/kibis/kibis.cpp:1650
-#, fuzzy
 msgid "Number of bits should be greater than 0."
-msgstr "Відступ між доріжками повинен бути більшим за 0."
+msgstr "Кількість бітів має бути більше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1631
 msgid "Bitrate is too high for rising / falling edges"
-msgstr ""
+msgstr "Бітрейт занадто високий для наростаючих/спадаючих фронтів"
 
 #: eeschema/sim/kibis/kibis.cpp:1658
 msgid "Bitrate could be too high for rising / falling edges"
-msgstr ""
+msgstr "Бітрейт може бути занадто високим для наростаючих/спадаючих фронтів"
 
 #: eeschema/sim/sim_lib_mgr.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr "Помилка завантаження бібліотеки символів '%s':%s"
+msgstr "Модель симуляції не знайдена в бібліотеці '%s' або '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:283
 #, c-format
@@ -15569,14 +15521,14 @@ msgstr ""
 "бібліотеці '%s'"
 
 #: eeschema/sim/sim_model.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
-msgstr "Помилка завантаження параметру імені моделі симуляції '%s'"
+msgstr "Не знайдено імені контакту '%s' в типі моделі симуляції '%s'"
 
 #: eeschema/sim/sim_model.cpp:816 eeschema/sim/sim_model.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
-msgstr "Помилка завантаження параметру імені моделі симуляції '%s'"
+msgstr "Не знайдено параметру назв '%s' в моделі симуляції тип моделі '%s'"
 
 #: eeschema/sim/sim_model.h:467
 #, c-format
@@ -15588,9 +15540,9 @@ msgstr ""
 "'%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS file '%s'"
-msgstr "Помилкова IBIS модель '%s'"
+msgstr "Некоректний файл IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:82
 #, c-format
@@ -15598,9 +15550,9 @@ msgid "Could not find IBIS component '%s'"
 msgstr "Не знайдемо IBIS компонент '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS component '%s'"
-msgstr "Помилкова IBIS модель '%s'"
+msgstr "Некоректний IBIS компонент '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:92
 #, c-format
@@ -15627,19 +15579,16 @@ msgid "Power supply"
 msgstr "Блок живлення"
 
 #: eeschema/sim/sim_model_kibis.cpp:357
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "Паразитарний опір"
+msgstr "Паразитний опір контакту"
 
 #: eeschema/sim/sim_model_kibis.cpp:367
-#, fuzzy
 msgid "Parasitic pin inductance"
-msgstr "Паразитарна індуктивність виводу"
+msgstr "Паразитна індуктивність контакту"
 
 #: eeschema/sim/sim_model_kibis.cpp:377
-#, fuzzy
 msgid "Parasitic pin capacitance"
-msgstr "Паразитарна ємність виводу"
+msgstr "Паразитна ємність контакту"
 
 #: eeschema/sim/sim_model_kibis.cpp:421
 msgid "DC Value"
@@ -15658,9 +15607,8 @@ msgid "Delay"
 msgstr "Затримка"
 
 #: eeschema/sim/sim_model_kibis.cpp:463
-#, fuzzy
 msgid "Number of cycles"
-msgstr "Кількість Проходів"
+msgstr "Кількість циклів"
 
 #: eeschema/sim/sim_model_kibis.cpp:480
 msgid "Bitrate"
@@ -15710,31 +15658,32 @@ msgid "Tune component values"
 msgstr "Підлаштовувати значення компонентів"
 
 #: eeschema/sim/sim_plot_frame.cpp:175
-#, fuzzy
 msgid "Sim Command"
-msgstr "Команда"
+msgstr "Команда симуляції"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
-#, fuzzy
 msgid "Simulation command and settings"
-msgstr "Параметри та налаштування симулювання"
+msgstr "Параметри та налаштування команд симулювання"
 
 #: eeschema/sim/sim_plot_frame.cpp:356 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
 msgstr "Spice симулятор"
 
 #: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1494
-#, fuzzy
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
-msgstr "Сталися помилки під час експорту списку звʼязків, перервано."
+msgstr ""
+"Помилки під час створення списку зв'язків; моделювання перервано.\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:493
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
+"Змінено директиву команд моделювання схеми. Ви бажаєте оновити команду "
+"симуляції?"
 
 #: eeschema/sim/sim_plot_frame.cpp:516 eeschema/sim/sim_plot_frame.cpp:1901
 msgid "Another simulation is already running."
@@ -15755,12 +15704,11 @@ msgstr "Помилка: тип симуляції не підтримує діа
 
 #: eeschema/sim/sim_plot_frame.cpp:742
 msgid " (mag)"
-msgstr ""
+msgstr " (mag)"
 
 #: eeschema/sim/sim_plot_frame.cpp:744
-#, fuzzy
 msgid " (phase)"
-msgstr "AC фаза:"
+msgstr " (фаза)"
 
 #: eeschema/sim/sim_plot_frame.cpp:856 eeschema/sim/sim_plot_frame.cpp:1720
 msgid "Signal"
@@ -15791,9 +15739,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Спершу потрібно запустити симуляцію."
 
 #: eeschema/sim/sim_plot_frame.cpp:1670
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Зберегти зміни?"
+msgstr "Зберегти зміни в робочій книзі?"
 
 #: eeschema/sim/sim_plot_frame.cpp:1832
 msgid ""
@@ -15828,29 +15775,24 @@ msgid "New Plot"
 msgstr "Нова діаграма"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Відкрити проект..."
+msgstr "Відкрити робочу книгу..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
-#, fuzzy
 msgid "Save Workbook"
-msgstr "Зберегти робочу симуляцію"
+msgstr "Зберегти робочу книгу"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "Зберегти робочу симуляцію"
+msgstr "Зберегти робочу книгу як..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "Експорт Поточного Виду в PNG..."
+msgstr "Експортувати поточний графік як PNG..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "Експорт Поточного Виду в PNG..."
+msgstr "Експортувати поточний графік як CSV..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -17024,9 +16966,8 @@ msgid "Add Power"
 msgstr "Додати живлення"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "Додати символ"
+msgstr "Додати символ живлення"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -17463,10 +17404,11 @@ msgid "Import Footprint Assignments..."
 msgstr "Імпортувати назначені посадкові місця..."
 
 #: eeschema/tools/ee_actions.cpp:628
-#, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr "Імпортуйте призначення символів із файлу .cmp, створеного Pcbnew"
+msgstr ""
+"Імпортувати призначення посадкового місця символу з файлу .cmp, створеного "
+"редактором друкованої плати"
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Annotate Schematic..."
@@ -17672,9 +17614,8 @@ msgid "Show the Python scripting console"
 msgstr "Показати консоль скриптів Python"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Change Sheet"
-msgstr "Змінити звʼязки"
+msgstr "Змінити аркуш"
 
 #: eeschema/tools/ee_actions.cpp:764
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -18129,9 +18070,9 @@ msgid "Edit Page Number"
 msgstr "Редагувати номер сторінки"
 
 #: eeschema/widgets/hierarchy_pane.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Enter page number for sheet path %s"
-msgstr "Введіть номер сторінки для листа%s"
+msgstr "Введіть номер сторінки для шляху до аркушу %s"
 
 #: eeschema/widgets/hierarchy_pane.cpp:322
 #, c-format
@@ -18205,14 +18146,15 @@ msgstr ""
 "ціле число, щоб запобігти дублюванню записів таблиці."
 
 #: eeschema/widgets/tuner_slider.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find Spice item with reference '%s'"
-msgstr "Не знайдено IBIS модель '%s'"
+msgstr "Не вдалося знайти продукт Spice із посиланням на \"%s\""
 
 #: eeschema/widgets/tuner_slider.cpp:62
 #, c-format
 msgid "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
 msgstr ""
+"Символ '%s' має імітаційну модель типу '%s %s', яку неможливо налаштувати"
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
@@ -19215,19 +19157,16 @@ msgid "Show in Differential Mode"
 msgstr "Показати в диференційному режимі"
 
 #: gerbview/tools/gerbview_actions.cpp:191
-#, fuzzy
 msgid "Show layers in differential compare mode"
-msgstr "Відображати шари в диференційному режимі (порівняння)"
+msgstr "Показати шари в режимі порівняння відмінностей"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show in XOR Mode"
-msgstr "Показати D коди"
+msgstr "Показати в XOR режимі"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show layers in exclusive-or compare mode"
-msgstr "Відображати шари в диференційному режимі (порівняння)"
+msgstr "Показувати шари в ексклюзивному режимі або в режимі порівняння"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Flip Gerber View"
@@ -19430,46 +19369,45 @@ msgstr "Помилка виведення даних"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
-#, fuzzy
 msgid "Output file name"
-msgstr "Імена файлів аркушів"
+msgstr "Ім'я вихідного файлу"
 
 #: kicad/cli/command_export_pcb_base.cpp:41
 #: kicad/cli/command_export_pcb_step.cpp:89
-#, fuzzy
 msgid "Input file"
-msgstr "Вивід входу"
+msgstr "Вхідний файл"
 
 #: kicad/cli/command_export_pcb_base.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name \"%s\"\n"
-msgstr "Некоректна назва властивостей"
+msgstr "Некоректна назва шару \"%s\"\n"
 
 #: kicad/cli/command_export_pcb_base.cpp:96
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 msgstr ""
+"Список розділених комами неперекладених назв шарів, які слід включити, "
+"наприклад F.Cu, B.Cu"
 
 #: kicad/cli/command_export_pcb_base.cpp:113
-#, fuzzy
 msgid "At least one or more layers must be specified\n"
-msgstr "Необхідно вибрати принаймні два прямі сегменти доріжки."
+msgstr "Потрібно вказати принаймні один або кілька шарів\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:47
 msgid "Valid options excellon, gerber."
-msgstr ""
+msgstr "Допустимі варіанти excellon, gerber."
 
 #: kicad/cli/command_export_pcb_drill.cpp:52
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
-msgstr ""
+msgstr "Допустимі варіанти є: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:56
 msgid "Valid options are: absolute,plot"
-msgstr ""
+msgstr "Допустимі варіанти: absolute,plot"
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
 msgid "Output units, valid options:in,mm"
-msgstr ""
+msgstr "Вихідні величини, допустимі значення:in,mm"
 
 #: kicad/cli/command_export_pcb_drill.cpp:63
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:52
@@ -19482,76 +19420,67 @@ msgid "Minimal header"
 msgstr "Мінімальний заголовок"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files file"
-msgstr "PTH і NPTH в одному файлі"
+msgstr "PTH і NPTH в розділених файлах"
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
 msgid "Generate map / summary of drill hits"
-msgstr ""
+msgstr "Генерувати мапу/ зведені результати свердління"
 
 #: kicad/cli/command_export_pcb_drill.cpp:84
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
-msgstr ""
+msgstr "Допустимі варіанти: pdf,gerberx2,ps,dxf,svg"
 
 #: kicad/cli/command_export_pcb_drill.cpp:87
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr ""
+msgstr "Створення незалежних файлів для отворів NPTH і PTH"
 
 #: kicad/cli/command_export_pcb_drill.cpp:92
 msgid "Precision of gerber coordinates (5 or 6)"
-msgstr ""
+msgstr "Точність координат для Gerber (5 або 6)"
 
 #: kicad/cli/command_export_pcb_drill.cpp:109
-#, fuzzy
 msgid "Output must be a directory\n"
-msgstr "Каталог призначення:"
+msgstr "Місцем призначення повинен бути каталог\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
-#, fuzzy
 msgid "Invalid drill format\n"
-msgstr "Невірний формат архіву."
+msgstr "Невірний формат для свердління\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:141
 #: kicad/cli/command_export_pcb_dxf.cpp:97
 #: kicad/cli/command_export_pcb_pos.cpp:140
-#, fuzzy
 msgid "Invalid units specified\n"
-msgstr "Неправильний префікс одиниці"
+msgstr "Вказано недійсні одиниці\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:165
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "Виділене недопустиме посадкове місце"
+msgstr "Некоректний нульовий формат\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:193
-#, fuzzy
 msgid "Invalid map format specified\n"
-msgstr "Виділене недопустиме посадкове місце"
+msgstr "Вказано недійсний формат мапи\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
-#, fuzzy
 msgid "Invalid origin mode specified\n"
-msgstr "Виділене недопустиме посадкове місце"
+msgstr "Вказано некоректний режим\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:220
 #: kicad/cli/command_export_pcb_gerber.cpp:109
 msgid "Gerber coordinate precision should be either 5 or 6\n"
-msgstr ""
+msgstr "Точність Gerber координат повинно бути 5 або 6\n"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:44
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Include the reference designator text"
-msgstr "Креслити позначення"
+msgstr "Додати текст з позначених полів"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:49
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Include the value text"
-msgstr "Включно з елементами тексту"
+msgstr "Додати текст значення"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
@@ -19560,7 +19489,7 @@ msgstr "Креслити графічні елементи в контурном
 
 #: kicad/cli/command_export_pcb_dxf.cpp:60
 msgid "Output units, valid options: mm, in"
-msgstr ""
+msgstr "Вихідні одиниці, допустимі варіанти: mm, in"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:77
 #: kicad/cli/command_export_pcb_gerber.cpp:103
@@ -19568,23 +19497,20 @@ msgstr ""
 #: kicad/cli/command_export_pcb_pos.cpp:99
 #: kicad/cli/command_export_pcb_svg.cpp:88
 msgid "Board file does not exist or is not accessible\n"
-msgstr ""
+msgstr "Файл друкованої плати не існує або недоступний\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:49
-#, fuzzy
 msgid "Include the border and title block"
-msgstr "Креслити рамку і титульний блок"
+msgstr "Додати рамку та блок заголовку"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:55
-#, fuzzy
 msgid "Do not use the extended X2 format"
-msgstr "Використовувати формат X2 (рекомендовано)"
+msgstr "Не використовуйте розширений формат X2"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:60
-#, fuzzy
 msgid "Do not generate netlist attributes"
-msgstr "Включити атрибути списку звʼязків"
+msgstr "Не створювати атрибути списку зв'язків"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
@@ -19592,23 +19518,24 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Відняти паяльну маску з шару шовкографії"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
-#, fuzzy
 msgid "Disable aperature macros"
-msgstr "Вимкнути макроси апертури (не рекомендовано)"
+msgstr "Вимкнути макроси апертури"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
-msgstr ""
+msgstr "Точність координат gerber, допустимі варіанти: 5 або 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
 msgstr ""
+"Шари, які потрібно включити на кожне креслення, список неперекладених імен "
+"шарів, розділених комами, таких як F.Cu, B.Cu"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
-msgstr ""
+msgstr "Використати параметри креслення gerber, уже налаштовані у файлі плати"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:54
 #: kicad/cli/command_export_pcb_svg.cpp:52
@@ -19616,9 +19543,8 @@ msgstr ""
 #: kicad/cli/command_export_sch_svg.cpp:41
 #: kicad/cli/command_fp_export_svg.cpp:45
 #: kicad/cli/command_sym_export_svg.cpp:45
-#, fuzzy
 msgid "Black and white only"
-msgstr "Чорно-білий"
+msgstr "Тільки чорне і біле"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:61
 #: kicad/cli/command_export_pcb_svg.cpp:49
@@ -19627,163 +19553,160 @@ msgstr "Чорно-білий"
 #: kicad/cli/command_fp_export_svg.cpp:38
 #: kicad/cli/command_sym_export_svg.cpp:38
 msgid "Color theme to use (will default to pcbnew settings)"
-msgstr ""
+msgstr "Використати кольорову тему (по замовчуванню pcbnew налаштування)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:47
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
 msgstr ""
+"Допустимі варіанти: front,back,both. Gerber формат підтримує тільки \"both\"."
 
 #: kicad/cli/command_export_pcb_pos.cpp:51
 msgid "Valid options: ascii,csv,gerber"
-msgstr ""
+msgstr "Допустимі варіанти: ascii,csv,gerber"
 
 #: kicad/cli/command_export_pcb_pos.cpp:55
 msgid "Output units; ascii or csv format only; valid options: in,mm"
-msgstr ""
+msgstr "Вихідні одиниці; ascii або csv формат тільки; допустимі варіанти: in,mm"
 
 #: kicad/cli/command_export_pcb_pos.cpp:58
-#, fuzzy
 msgid ""
 "Use negative X coordinates for footprints on bottom layer (ascii or csv "
 "formats only)"
 msgstr ""
-"Використовуйте негативні координати X для посадкових місць на нижньому шарі"
+"Використовуйте негативні координати X для відбитків на нижньому шарі (тільки "
+"у форматах ascii або csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:64
-#, fuzzy
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr "Використовувати початок координат сверловки/розміщення"
+msgstr "Використовуйте вихідний файл свердління/позиції (тільки ascii або csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:69
-#, fuzzy
 msgid "Include only SMD footprints (ascii or csv only)"
-msgstr "Включити тільки SMD посадкові місця"
+msgstr "Включити тільки SMD посадкові місця (тільки ascii або csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:75
-#, fuzzy
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr "Виключати всі посадкові місця зі наскрізними отворами"
+msgstr ""
+"Виключити всі посадкові місця з наскрізними отворами (тільки ASCII або CSV)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:80
-#, fuzzy
 msgid "Include board edge layer (gerber only)"
-msgstr "Включити шар контура плати"
+msgstr "Включити шар контура плати (лише gerber)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:124
 #: kicad/cli/command_export_sch_netlist.cpp:81
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "Неправильне значення імпедансу"
+msgstr "Некоректне значення\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:150
 msgid "\"both\" not supported for gerber format\n"
-msgstr ""
+msgstr "\"both\" не підтримується gerber форматом\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:166
-#, fuzzy
 msgid "Invalid side specified\n"
-msgstr "Виділене недопустиме посадкове місце"
+msgstr "Вказана недійсна сторона\n"
 
 #: kicad/cli/command_export_pcb_step.cpp:48
-#, fuzzy
 msgid "Use Drill Origin for output origin"
-msgstr "Використовувати початок координат сверловки/розміщення"
+msgstr "Використовуйте базову точку свердління як базову точку вихідного файлу"
 
 #: kicad/cli/command_export_pcb_step.cpp:53
-#, fuzzy
 msgid "Use Grid Origin for output origin"
-msgstr "Використовувати базову сітку"
+msgstr "Використовуйте базову точку сітки як базову точку вихідного файлу"
 
 #: kicad/cli/command_export_pcb_step.cpp:58
 msgid "Exclude 3D models for components with 'virtual' attribute"
-msgstr ""
+msgstr "Виключити 3D-моделі для компонентів з атрибутом 'віртуальний'"
 
 #: kicad/cli/command_export_pcb_step.cpp:63
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
-msgstr ""
+msgstr "Замініть моделі STEP або IGS з такою ж назвою замість моделей VRML"
 
 #: kicad/cli/command_export_pcb_step.cpp:68
-#, fuzzy
 msgid "Overwrite output file"
-msgstr "Перезаписати старий файл"
+msgstr "Перезаписати вихідний файл"
 
 #: kicad/cli/command_export_pcb_step.cpp:73
 msgid "Only generate a board with no components"
-msgstr ""
+msgstr "Генерувати тільки плату без компонентів"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Minimum distance between points to treat them as separate ones"
-msgstr ""
+msgstr "Мінімальна дистанція між точками розглядати їх як окремі"
 
 #: kicad/cli/command_export_pcb_step.cpp:83
 msgid ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
 msgstr ""
+"Визначене користувачем вихідне значення 1x1in, 1x1inch, 25.4x25.4mm (по "
+"замовчуванню mm)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:43
 msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr ""
+msgstr "Віддзеркалити плату (корисно для спроб показати нижні шари)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:57
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
 msgstr ""
+"Встановити режим розміру сторінки (0 = сторінка з рамкою і заголовком, 1 = "
+"поточний розмір сторінки, 2 = лише площа дошки)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:63
 #: kicad/cli/command_export_sch_pdf.cpp:46
 #: kicad/cli/command_export_sch_svg.cpp:46
-#, fuzzy
 msgid "No drawing sheet"
-msgstr "Креслити форматну рамку"
+msgstr "Не креслити аркуш"
 
 #: kicad/cli/command_export_sch_netlist.cpp:36
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
 msgstr ""
+"Формат виведення списку зв'язків, допустимі параметри: kicadsexpr, kicadxml, "
+"cadstar, orcadpcb2, spice, spicemodel"
 
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_pdf.cpp:69
 #: kicad/cli/command_export_sch_pythonbom.cpp:47
 #: kicad/cli/command_export_sch_svg.cpp:69
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "Схема '%s' не існує. Ви хочете його створити?"
+msgstr "Файл схеми не існує або недоступний\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
 msgid "Avoid setting a background color (regardless of theme)"
-msgstr ""
+msgstr "Уникайте встановлення кольору фону (незалежно від теми)"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:42
-#, fuzzy
 msgid "Specific symbol to export within the library"
-msgstr "Не вдалося експортувати до Буфера Обміну"
+msgstr "Спеціальний символ для експорту в бібліотеку"
 
 #: kicad/cli/command_fp_export_svg.cpp:62
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "Схема '%s' не існує. Ви хочете його створити?"
+msgstr "Бібліотека посадкового місця не існує або недоступна\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr ""
+"Примусово повторне збереження бібліотеки посадкових місць незалежно від "
+"версії"
 
 #: kicad/cli/command_fp_upgrade.cpp:53
 msgid "Footprint path does not exist or is not accessible\n"
-msgstr ""
+msgstr "Шлях посадкового місця не існує або недоступний\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:62 kicad/cli/command_sym_upgrade.cpp:53
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr ""
+msgstr "Файл символу не існує або недоступний\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
-msgstr ""
+msgstr "Примусово повторне збереження бібліотеки символів незалежно від версії"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
@@ -20206,13 +20129,12 @@ msgid "Pin package"
 msgstr "Пакет виводів"
 
 #: kicad/pcm/dialogs/panel_package.cpp:68
-#, fuzzy
 msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with 'Update All' button."
 msgstr ""
 "Закріплені пакети не впливають на сповіщення про доступні оновлення та не "
-"оновлюються за допомогою кнопки «Оновити все»."
+"можуть бути оновлювати за допомогою кнопки 'Оновити все'."
 
 #: kicad/pcm/dialogs/panel_package.cpp:120
 msgid "Install Pending"
@@ -20384,18 +20306,17 @@ msgid "Unable to load repository url"
 msgstr "Неможливо завантажити url репозиторію"
 
 #: kicad/pcm/pcm.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"Не вдалося проаналізувати сховище:\n"
-"\n"
-"%s"
+msgstr "Неможливо обробити репозиторій: %s"
 
 #: kicad/pcm/pcm.cpp:324
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
+"Наведена URL-адреса репозиторію не схожа на дійсне сховище пакетів KiCad. "
+"Перевірте URL-адресу."
 
 #: kicad/pcm/pcm.cpp:350
 msgid "Fetching repository packages"
@@ -21405,7 +21326,6 @@ msgstr ""
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21420,20 +21340,20 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
-"### Pi атенюатор\n"
+"### Pi Атенюатор\n"
 "___a___ є затухання в dB<br>\n"
-"___Z<sub>in</sub>___ бажаний вхідний опір в &#x2126;<br>\n"
-"___Z<sub>out</sub>___ бажаний вихідний опір в &#x2126;<br>\n"
+"___Z<sub>вхід</sub>___ бажаний вхідний опір в &#x2126;<br>\n"
+"___Z<sub>вихід</sub>___ бажаний вихідний опір в &#x2126;<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>в</sub> &middot; Z<sub>вихід</"
-"sub> / L)___<br>\n"
-"___R1 = 1 / (A/Z<sub>в</sub> &minus; 1/R2)___<br>\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>вхід</sub> &middot; "
+"Z<sub>вихід</sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>вхід</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>вихід</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -21445,14 +21365,13 @@ msgid ""
 msgstr ""
 "### Розділений атенюатор\n"
 "Згасання є 6 dB  \n"
-"___Z<sub>in</sub>___ бажаний вхідний опір в &#x2126;  \n"
-"___Z<sub>out</sub>___ бажаний вихідний опір в &#x2126;  \n"
+"___Z<sub>вхід</sub>___ бажаний вхідний опір в &#x2126;\n"
+"___Z<sub>вихід</sub>___ бажаний вихідний опір в &#x2126;\n"
 "___Z<sub>0</sub> = Z<sub>в</sub> = Z<sub>вихід</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21467,17 +21386,17 @@ msgid ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
-"### Трійник Атенюатор\n"
+"### Тип Атенюатора\n"
 "___a___ — затухання в дБ<br>\n"
-"___Z<sub>in</sub>___ бажаний вхідний опір у &#x2126;<br>\n"
-"___Z<sub>out</sub>___ бажаний вихідний опір у &#x2126;<br>\n"
+"___Z<sub>вхід</sub>___ бажаний вхідний опір у &#x2126;<br>\n"
+"___Z<sub>вихід</sub>___ бажаний вихідний опір у &#x2126;<br>\n"
 "\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</"
-"sub>) / (L&minus;1)___<br>\n"
-"___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
-"___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>вхід</sub> &middot; "
+"Z<sub>вихід</sub>) / (L&minus;1)___<br>\n"
+"___R1 = Z<sub>вхід</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>вихід</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:221
 #, c-format
@@ -21897,34 +21816,32 @@ msgid "Multiplier"
 msgstr "Множник"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:40
-#, fuzzy
 msgid "Platinum"
-msgstr "Алюміній"
+msgstr "Платина"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:41
 msgid "Gold"
-msgstr ""
+msgstr "Золото"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:42
 msgid "Titanium"
-msgstr ""
+msgstr "Титан"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:43
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "Нержавіюча сталь 18-9"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:45
 msgid "Silver"
-msgstr ""
+msgstr "Срібло"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:46
 msgid "Mercury"
-msgstr ""
+msgstr "Меркурій"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:47
-#, fuzzy
 msgid "Nickel"
-msgstr "Псевдонім"
+msgstr "Нікель"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:48
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:839
@@ -21933,69 +21850,64 @@ msgid "Copper"
 msgstr "Мідь"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:49
-#, fuzzy
 msgid "Copper-Aluminium"
-msgstr "Алюміній"
+msgstr "Мідь-Алюміній"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "Латунь"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:51
 msgid "Bronze"
-msgstr ""
+msgstr "Бронза"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:52
-#, fuzzy
 msgid "Tin"
-msgstr "Вивід"
+msgstr "Цинк"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:53
-#, fuzzy
 msgid "Lead"
-msgstr "Виносна лінія"
+msgstr "Олово"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:54
-#, fuzzy
 msgid "Aluminium-Copper"
-msgstr "Алюміній"
+msgstr "Алюміній-Мідь"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "Залізо"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:56
 msgid "Carbon steel"
-msgstr ""
+msgstr "Вуглецева сталь"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:57
-#, fuzzy
 msgid "Aluminium"
 msgstr "Алюміній"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:58
 msgid "Cadmium"
-msgstr ""
+msgstr "Кадмій"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:59
 msgid "Iron"
-msgstr ""
+msgstr "Залізо"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:60
 msgid "Chrome"
-msgstr ""
+msgstr "Хром"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:61
 msgid "Zinc"
-msgstr ""
+msgstr "Цинк"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:62
 msgid "Manganese"
-msgstr ""
+msgstr "Марганець"
 
 #: pcb_calculator/calculator_panels/panel_corrosion.cpp:63
 msgid "Magnesium"
-msgstr ""
+msgstr "Магній"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:39
@@ -22015,10 +21927,19 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"Ця таблиця показує різницю електрохімічного потенціалу між різними металами "
+"та сплавами. Позитивне число вказує на те, що рядок анодний, а колонка "
+"катодна.\n"
+"Гальванічна корозія впливає на різні метали при контакті та за певних умов.\n"
+"Анод електрохімічної пари окислюється та з'їдається, тоді як катод отримує "
+"розчинені метали, нанесені на нього, але залишається захищеним.\n"
+"EN 50310 передбачає різницю напруги нижче 300 мВ. У відомих практиках "
+"використовується третій метал між основною парою (тобто покриття поверхні "
+"ENIG)."
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:61
 msgid "Threshold voltage:"
-msgstr ""
+msgstr "Порогова напруга:"
 
 #: pcb_calculator/calculator_panels/panel_corrosion_base.cpp:68
 #: pcb_calculator/widgets/unit_selector.cpp:255
@@ -22882,7 +22803,6 @@ msgid "Board Classes"
 msgstr "Класи плати"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:119
-#, fuzzy
 msgid "Galvanic Corrosion"
 msgstr "Гальванічна корозія"
 
@@ -23915,7 +23835,7 @@ msgstr "(не замкнута форма)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:517
 msgid "(multiple board outlines not supported)"
-msgstr ""
+msgstr "(декілька контурів дошки не підтримуються)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -24824,17 +24744,15 @@ msgstr "Налаштування перетворення"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:108
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
 #: pcbnew/tools/convert_tool.cpp:71
-#, fuzzy
 msgid "Use centerlines"
-msgstr "Використовувати дюйми"
+msgstr "Використовуйте центральні лінії"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:230
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:112
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
 #: pcbnew/tools/convert_tool.cpp:75
-#, fuzzy
 msgid "Create bounding hull"
-msgstr "Створити файл логотипу"
+msgstr "Створіть обмежувальну оболонку"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:116
@@ -26020,13 +25938,12 @@ msgid "Other Options"
 msgstr "Інші опції"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
-#, fuzzy
 msgid "Ignore not mounted components"
-msgstr "Ігнорувати віртуальні компоненти"
+msgstr "Ігноруйте не змонтовані компоненти"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:111
 msgid "Do not show components not in BOM and not in place file"
-msgstr ""
+msgstr "Не показувати компоненти в BOM і не в файлі позицій"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
 msgid "Substitute similarly named models"
@@ -26759,6 +26676,14 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
+"Це локальний зазор між колодками та паяльною пастою для\n"
+"цього посадкового місця.\n"
+"Остаточне значення зазору є сумою цього значення та співвідношення величини "
+"зазору.\n"
+"Від’ємне значення означає менший розмір отвору трафарету, ніж розмір панелі."
+"\n"
+"Це значення можна змінювати окремо в локальній панелі\n"
+"Вкладка зазори і налаштування» в властивості панелі."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:288
 #, c-format
@@ -26773,6 +26698,17 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
+"Це коефіцієнт локального зазору, застосований у відсотках від ширини та "
+"висоти майданчика для цього посадкового місця.\n"
+"Значення 10 означає, що значення горизонтального зазору становить 10% від "
+"ширини контактної площадки, а значення вертикального зазору становить 10% "
+"від висоти контактної площадки.\n"
+"Остаточне значення зазору є сумою цього значення та абсолютного значення "
+"зазору.\n"
+"Від’ємне значення означає менший розмір отвору трафарету, ніж розмір "
+"контактної площадки.\n"
+"Це значення можна перевизначити окремо для кожної панелі на вкладці "
+"локальний зазор і налаштування в властивості панелі."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:339
 msgid "Net Ties"
@@ -26845,13 +26781,13 @@ msgstr "<<    Додати вибраний параметр"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
 msgid "Generate Position File"
-msgstr ""
+msgstr "Генерувати файл позицій"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:303
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:435
 #, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr ""
+msgstr "Передній (верхній) файл розміщення: '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:306
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:328
@@ -26859,34 +26795,34 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:484
 #, c-format
 msgid "Component count: %d."
-msgstr ""
+msgstr "Кількість компонентів: %d."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:325
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:481
 #, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr ""
+msgstr "Задній (нижній) файл розміщення: '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:332
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:491
 #, c-format
 msgid "Full component count: %d."
-msgstr ""
+msgstr "Повне кількість компонентів: %d."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:335
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:444
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:495
 msgid "File generation successful."
-msgstr ""
+msgstr "Генерація файлу завершена."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:362
 msgid "No footprint for automated placement."
-msgstr ""
+msgstr "Немає посадкових місць для автоматичного розміщення."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:433
 #, c-format
 msgid "Placement file: '%s'."
-msgstr ""
+msgstr "Файл розміщення: '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:568
 #, c-format
@@ -26894,10 +26830,12 @@ msgid ""
 "Footprint report file created:\n"
 "'%s'."
 msgstr ""
+"Файл звіту посадкових місць створено:\n"
+"'%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:569
 msgid "Footprint Report"
-msgstr ""
+msgstr "Звіт посадкових місць"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
 msgid "ASCII"
@@ -27462,9 +27400,8 @@ msgid "Circle Properties"
 msgstr "Властивості кола"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:211
-#, fuzzy
 msgid "Center Point"
-msgstr "Початкова точка"
+msgstr "Центральна точка"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:223
 msgid "Arc Properties"
@@ -27951,9 +27888,8 @@ msgstr "Властивості не мідної зони"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:113
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:142
-#, fuzzy
 msgid "Center Point:"
-msgstr "Центр:"
+msgstr "Центральна точка:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:132
 #: pcbnew/dialogs/dialog_pad_properties.cpp:727
@@ -28046,9 +27982,8 @@ msgid "angle"
 msgstr "кут"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:731
-#, fuzzy
 msgid "at"
-msgstr "Шлях"
+msgstr "на"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
 msgid "radius"
@@ -28061,9 +27996,8 @@ msgstr "кількість кутів %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:744
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2179
-#, fuzzy
 msgid "Number box"
-msgstr "Номер"
+msgstr "Числове поле"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:753
 msgid "Unknown primitive"
@@ -28091,9 +28025,8 @@ msgstr "%s і %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid "Error: Pad must have a positive size."
-msgstr "Помилка: від'ємне значення розміру закруглення."
+msgstr "Помилка: контактна площадка повинна мати додатковий розмір."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
@@ -28476,6 +28409,17 @@ msgid ""
 "Castellated specify castellated through hole pads on a board edge\n"
 "These properties are specified in Gerber X2  files."
 msgstr ""
+"Додаткова властивість для визначення спеціального призначення або обмеження "
+"у файлах виготовлення:\n"
+"Атрибут BGA призначений для посадкових місцях BGA\n"
+"Локальна реперна точка є реперною точкою для батьківського сліду\n"
+"Реперна глобальна точка є реперної точкою для всієї плати\n"
+"Панель тестової точки корисна для визначення контрольних точок у файлах "
+"Gerber\n"
+"Термічна контактна площадка вказує термічну контактну площадку\n"
+"Зубчасті контактні площадки  вказують на контактну площадку з зубчастими "
+"наскрізними отворами на краю дошки\n"
+"Ці властивості вказані у файлах Gerber X2."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:545 pcbnew/pad.cpp:1706
 msgid "BGA pad"
