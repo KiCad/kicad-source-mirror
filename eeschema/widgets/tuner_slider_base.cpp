@@ -39,8 +39,8 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	wxBoxSizer* bSizerSlider;
 	bSizerSlider = new wxBoxSizer( wxVERTICAL );
 
-	m_slider = new wxSlider( m_panel1, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_INVERSE|wxSL_LEFT|wxSL_VERTICAL );
-	bSizerSlider->Add( m_slider, 1, wxTOP|wxBOTTOM, 5 );
+	m_slider = new wxSlider( m_panel1, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LEFT|wxSL_VERTICAL );
+	bSizerSlider->Add( m_slider, 1, wxALL, 5 );
 
 
 	bSizerMiddle->Add( bSizerSlider, 0, wxEXPAND, 5 );
