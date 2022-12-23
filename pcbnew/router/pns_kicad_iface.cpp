@@ -1206,7 +1206,30 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
     solid->SetLayer( aLayer );
     solid->SetNet( -1 );
     solid->SetParent( dynamic_cast<BOARD_ITEM*>( aText ) );
-    solid->SetShape( aText->GetEffectiveTextShape()->Clone() );
+
+    PCB_TEXT* pcb_text = dynamic_cast<PCB_TEXT*>( aText );
+
+    if( pcb_text && pcb_text->IsKnockout() )
+    {
+        TEXT_ATTRIBUTES attrs = pcb_text->GetAttributes();
+        SHAPE_POLY_SET buffer;
+        int margin = attrs.m_StrokeWidth * 1.5
+                     + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
+        pcb_text->TransformBoundingBoxToPolygon( &buffer, margin );
+        // buffer should contain a single rectangular polygon
+        SHAPE_SIMPLE* rectShape = new SHAPE_SIMPLE;
+
+        for( int ii = 0; ii < buffer.Outline(0).PointCount(); ii++ )
+        {
+            VECTOR2I point = buffer.Outline(0).CPoint(ii);
+            rectShape->Append( point );
+        }
+
+        solid->SetShape( rectShape );
+    }
+    else
+        solid->SetShape( aText->GetEffectiveTextShape()->Clone() );
+
     solid->SetRoutable( false );
 
     aWorld->Add( std::move( solid ) );
@@ -1214,7 +1237,6 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
     return true;
 
     /* A coarser (but faster) method:
-     *
     SHAPE_POLY_SET outline;
     SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
@@ -1231,7 +1253,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
     solid->SetRoutable( false );
     aWorld->Add( std::move( solid ) );
     return true;
-     */
+    */
 }
 
 
