@@ -28,7 +28,7 @@
 #include <sim/sim_plot_frame.h>
 #include <sch_symbol.h>
 #include <template_fieldnames.h>
-#include <sim/ngspice_circuit_model.h>
+#include <widgets/std_bitmap_button.h>
 
 #include <cmath>   // log log1p expm1
 #include <complex> // norm
@@ -49,21 +49,24 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
     m_item = aFrame->GetExporter()->FindItem( std::string( ref.ToUTF8() ) );
 
     if( !m_item )
+    {
         throw KI_PARAM_ERROR( wxString::Format( _( "Could not find Spice item with reference '%s'" ),
                                                 ref ) );
+    }
 
     m_name->SetLabel( ref );
-
+    m_closeBtn->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     const SIM_MODEL::PARAM* tunerParam = m_item->model->GetTunerParam();
 
     if( !tunerParam )
-        throw KI_PARAM_ERROR( wxString::Format(
-                _( "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned" ),
-                ref,
-                m_item->model->GetDeviceInfo().fieldValue,
-                m_item->model->GetTypeInfo().fieldValue ) );
-
+    {
+        throw KI_PARAM_ERROR( wxString::Format( _( "Symbol '%s' has simulation model of type '%s %s', "
+                                                   "which cannot be tuned" ),
+                                                ref,
+                                                m_item->model->GetDeviceInfo().fieldValue,
+                                                m_item->model->GetTypeInfo().fieldValue ) );
+    }
 
     // Special case for potentiometers because we don't have value ranges implemented yet.
     if( m_item->model->GetType() == SIM_MODEL::TYPE::R_POT )
@@ -93,6 +96,8 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
 
     m_simTimer.SetOwner( this );
     Connect( wxEVT_TIMER, wxTimerEventHandler( TUNER_SLIDER::onSimTimer ), nullptr, this );
+
+    Layout();
 }
 
 
