@@ -276,26 +276,28 @@ STRING_LINE_READER::STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint
 char* STRING_LINE_READER::ReadLine()
 {
     size_t  nlOffset = m_lines.find( '\n', m_ndx );
+    unsigned new_length;
 
     if( nlOffset == std::string::npos )
-        m_length = m_lines.length() - m_ndx;
+        new_length = m_lines.length() - m_ndx;
     else
-        m_length = nlOffset - m_ndx + 1;     // include the newline, so +1
+        new_length = nlOffset - m_ndx + 1;     // include the newline, so +1
 
-    if( m_length )
+    if( new_length )
     {
-        if( m_length >= m_maxLineLength )
+        if( new_length >= m_maxLineLength )
             THROW_IO_ERROR( _("Line length exceeded") );
 
-        if( m_length+1 > m_capacity )   // +1 for terminating nul
-            expandCapacity( m_length+1 );
+        if( new_length+1 > m_capacity )   // +1 for terminating nul
+            expandCapacity( new_length+1 );
 
-        wxASSERT( m_ndx + m_length <= m_lines.length() );
+        wxASSERT( m_ndx + new_length <= m_lines.length() );
 
-        memcpy( m_line, &m_lines[m_ndx], m_length );
-        m_ndx += m_length;
+        memcpy( m_line, &m_lines[m_ndx], new_length );
+        m_ndx += new_length;
     }
 
+    m_length = new_length;
     ++m_lineNum;      // this gets incremented even if no bytes were read
     m_line[m_length] = 0;
 
