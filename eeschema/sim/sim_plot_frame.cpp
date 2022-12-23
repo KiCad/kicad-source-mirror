@@ -601,27 +601,27 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
 }
 
 
-void SIM_PLOT_FRAME::UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aValue )
+void SIM_PLOT_FRAME::UpdateTunerValue( const KIID& aSymbol, const wxString& aValue )
 {
-    for( EDA_ITEM* item : m_schematicFrame->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    SCH_SHEET_PATH sheet;
+    SCH_ITEM*      item = m_schematicFrame->Schematic().GetSheets().GetItem( aSymbol, &sheet );
+    SCH_SYMBOL*    symbol = dynamic_cast<SCH_SYMBOL*>( item );
+
+    if( symbol )
     {
-        if( item == aSymbol )
-        {
-            SIM_LIB_MGR mgr( &Prj() );
-            SIM_MODEL&  model = mgr.CreateModel( &m_schematicFrame->GetCurrentSheet(),
-                                                 *aSymbol ).model;
+        SIM_LIB_MGR mgr( &Prj() );
+        SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol ).model;
 
-            const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
+        const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
 
-            if( !tunerParam )
-                return;
+        if( !tunerParam )
+            return;
 
-            model.SetParamValue( tunerParam->info.name, std::string( aValue.ToUTF8() ) );
-            model.WriteFields( aSymbol->GetFields() );
+        model.SetParamValue( tunerParam->info.name, std::string( aValue.ToUTF8() ) );
+        model.WriteFields( symbol->GetFields() );
 
-            m_schematicFrame->UpdateItem( aSymbol, false, true );
-            m_schematicFrame->OnModify();
-        }
+        m_schematicFrame->UpdateItem( symbol, false, true );
+        m_schematicFrame->OnModify();
     }
 }
 

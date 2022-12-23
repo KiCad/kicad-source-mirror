@@ -112,11 +112,11 @@ public:
      * Safely update a field of the associated symbol without dereferencing
      * the symbol.
      *
-     * @param aSymbol pointer to the symbol needing updating
+     * @param aSymbol id of the symbol needing updating
      * @param aId id of the symbol field
      * @param aValue new value of the symbol field
      */
-    void UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aValue );
+    void UpdateTunerValue( const KIID& aSymbol, const wxString& aValue );
 
     /**
      * Return the currently opened plot panel (or NULL if there is none).

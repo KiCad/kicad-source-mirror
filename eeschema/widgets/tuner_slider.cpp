@@ -38,7 +38,7 @@
 
 TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol ) :
     TUNER_SLIDER_BASE( aParent ),
-    m_symbol( aSymbol ),
+    m_symbol( aSymbol->m_Uuid ),
     m_min( 0.0 ),
     m_max( 0.0 ),
     m_value( 0.0 ),
