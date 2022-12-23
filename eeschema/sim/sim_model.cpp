@@ -1484,7 +1484,6 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
                                                            emptyFields, sourcePins );
 
-            spiceParams = wxString( model.model.GetBaseModel()->Serializer().GenerateParams() );
             libraryModel = true;
 
             if( pinMap.IsEmpty() )
@@ -1577,9 +1576,13 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         nameField.SetText( spiceModel );
         aSymbol.AddField( nameField );
 
-        T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
-        paramsField.SetText( spiceParams );
-        aSymbol.AddField( paramsField );
+        // Don't write a paramsField unless we actually have overrides
+        if( !spiceParams.IsEmpty() )
+        {
+            T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
+            paramsField.SetText( spiceParams );
+            aSymbol.AddField( paramsField );
+        }
 
         if( modelFromValueField )
             valueField->SetText( wxT( "${SIM.NAME}" ) );
