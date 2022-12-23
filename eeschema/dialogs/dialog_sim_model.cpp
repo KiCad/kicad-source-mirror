@@ -138,6 +138,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     wxString       modelType;
     wxString       modelParams;
     wxString       pinMap;
+    bool           storeInValue = false;
 
     // Infer RLC and VI models if they aren't specified
     if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
@@ -158,6 +159,10 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PINS_FIELD );
         m_fields.back().SetText( pinMap );
 
+        storeInValue = true;
+
+        // In case the storeInValue checkbox is turned off (if it's left on then we'll overwrite
+        // this field with the actual value):
         m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
@@ -268,6 +273,8 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         if( !m_curModelTypeOfDeviceType.count( deviceTypeT ) )
             m_curModelTypeOfDeviceType[deviceTypeT] = type;
     }
+
+    curModel().SetIsStoredInValue( storeInValue );
 
     m_saveInValueCheckbox->SetValue( curModel().IsStoredInValue() );
     m_excludeCheckbox->SetValue( !curModel().IsEnabled() );

@@ -201,6 +201,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
     wxString modelType;
     wxString modelParams;
     wxString pinMap;
+    bool     storeInValue = false;
 
     // Infer RLC and VI models if they aren't specified
     if( SIM_MODEL::InferSimModel( aSymbol, &fields, true, SIM_VALUE_GRAMMAR::NOTATION::SI,
@@ -220,6 +221,8 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
 
         fields.emplace_back( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
         fields.back().SetText( pinMap );
+
+        storeInValue = true;
     }
 
     std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
@@ -230,7 +233,11 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
                } );
 
-    return CreateModel( fields, sourcePins );
+    SIM_LIBRARY::MODEL model = CreateModel( fields, sourcePins );
+
+    model.model.SetIsStoredInValue( storeInValue );
+
+    return model;
 }
 
 
