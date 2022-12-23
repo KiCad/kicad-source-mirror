@@ -71,7 +71,7 @@ std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
             // Because of collisions with instance parameters, we append some model parameters
             // with "_".
             if( boost::ends_with( param.info.name, "_" ) )
-                name = name.substr( 0, param.info.name.length() - 1 );
+                name = param.info.name.substr( 0, param.info.name.length() - 1 );
             else
                 name = param.info.name;
         }
