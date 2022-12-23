@@ -42,6 +42,7 @@ private:
     void onSignalAdd( wxCommandEvent& event ) override
     {
         addSelectionToPlotFrame();
+        m_sdbSizerCancel->SetLabel( _( "Done" ) );
     }
 
     void addSelectionToPlotFrame();

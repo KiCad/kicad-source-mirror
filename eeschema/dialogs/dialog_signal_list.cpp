@@ -109,7 +109,9 @@ bool DIALOG_SIGNAL_LIST::addSignalToPlotFrame( const wxString& aPlotName )
             return false;
     }
     else
+    {
         return false;
+    }
 
     return true;
 }
@@ -117,7 +119,7 @@ bool DIALOG_SIGNAL_LIST::addSignalToPlotFrame( const wxString& aPlotName )
 
 void DIALOG_SIGNAL_LIST::addSelectionToPlotFrame()
 {
-    for( unsigned int i = 0; i < m_signals->GetCount(); ++i )
+    for( int i = 0; i < (int) m_signals->GetCount(); ++i )
     {
         if( m_signals->IsSelected( i ) )
         {
