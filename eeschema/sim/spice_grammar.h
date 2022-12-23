@@ -159,7 +159,9 @@ namespace SPICE_GRAMMAR
                                          // TODO: Check if these `star<space>`s match Ngspice's
                                          // behavior.
                                          star<space>,
+                                         opt<plusContinuation>,
                                          one<'='>,
+                                         opt<plusContinuation>,
                                          star<space>,
                                          paramValue> {};
     struct dotSubcktParamValuePairs : list<dotSubcktParamValuePair, sep> {};
