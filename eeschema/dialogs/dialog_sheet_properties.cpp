@@ -65,7 +65,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to user's preference
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
     if( cfg )
@@ -99,18 +99,20 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
                      wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
                      nullptr, this );
-
-    finishDialogSettings();
 }
 
 
 DIALOG_SHEET_PROPERTIES::~DIALOG_SHEET_PROPERTIES()
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
     if( cfg )
+    {
         cfg->m_Appearance.edit_sheet_visible_columns = m_grid->GetShownColumns();
+        cfg->m_Appearance.edit_sheet_width = GetSize().x;
+        cfg->m_Appearance.edit_sheet_height = GetSize().y;
+    }
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
@@ -180,8 +182,6 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     wxString nextPageNumber = instance.GetPageNumber();
 
     m_pageNumberTextCtrl->ChangeValue( nextPageNumber );
-
-    Layout();
 
     return true;
 }
@@ -914,4 +914,10 @@ void DIALOG_SHEET_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+    if( cfg && cfg->m_Appearance.edit_sheet_width > 0 && cfg->m_Appearance.edit_sheet_height > 0 )
+        SetSize( cfg->m_Appearance.edit_sheet_width, cfg->m_Appearance.edit_sheet_height );
+
 }

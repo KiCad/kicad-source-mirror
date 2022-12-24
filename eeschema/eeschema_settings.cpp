@@ -82,11 +82,29 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "appearance.edit_symbol_visible_columns",
             &m_Appearance.edit_symbol_visible_columns, "0 1 2 3 4 5 6 7" ) );
 
+    m_params.emplace_back( new PARAM<int>( "appearance.edit_symbol_width",
+            &m_Appearance.edit_symbol_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "appearance.edit_symbol_height",
+            &m_Appearance.edit_symbol_height, -1 ) );
+
     m_params.emplace_back( new PARAM<wxString>( "appearance.edit_sheet_visible_columns",
             &m_Appearance.edit_sheet_visible_columns, "0 1 2 3 4 5 6 7" ) );
 
+    m_params.emplace_back( new PARAM<int>( "appearance.edit_sheet_width",
+            &m_Appearance.edit_sheet_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "appearance.edit_sheet_height",
+            &m_Appearance.edit_sheet_height, -1 ) );
+
     m_params.emplace_back( new PARAM<wxString>( "appearance.edit_label_visible_columns",
             &m_Appearance.edit_label_visible_columns, "0 1 2 3 4 5 6 7" ) );
+
+    m_params.emplace_back( new PARAM<int>( "appearance.edit_label_width",
+            &m_Appearance.edit_label_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "appearance.edit_label_height",
+            &m_Appearance.edit_label_height, -1 ) );
 
     m_params.emplace_back( new PARAM<int>( "appearance.erc_severities",
             &m_Appearance.erc_severities, RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ) );

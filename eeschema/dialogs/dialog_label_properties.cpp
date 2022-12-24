@@ -215,6 +215,9 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+
+    if( cfg && cfg->m_Appearance.edit_label_width > 0 && cfg->m_Appearance.edit_label_height > 0 )
+        SetSize( cfg->m_Appearance.edit_label_width, cfg->m_Appearance.edit_label_height );
 }
 
 
@@ -224,7 +227,11 @@ DIALOG_LABEL_PROPERTIES::~DIALOG_LABEL_PROPERTIES()
     wxASSERT( cfg );
 
     if( cfg )
-        cfg->m_Appearance.edit_sheet_visible_columns = m_grid->GetShownColumns();
+    {
+        cfg->m_Appearance.edit_label_visible_columns = m_grid->GetShownColumns();
+        cfg->m_Appearance.edit_label_width = GetSize().x;
+        cfg->m_Appearance.edit_label_height = GetSize().y;
+    }
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );

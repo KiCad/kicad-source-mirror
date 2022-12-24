@@ -401,7 +401,11 @@ DIALOG_SYMBOL_PROPERTIES::~DIALOG_SYMBOL_PROPERTIES()
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( cfg )
+    {
         cfg->m_Appearance.edit_symbol_visible_columns = m_fieldsGrid->GetShownColumns();
+        cfg->m_Appearance.edit_symbol_width = GetSize().x;
+        cfg->m_Appearance.edit_symbol_height = GetSize().y;
+    }
 
     // Prevents crash bug in wxGrid's d'tor
     m_fieldsGrid->DestroyTable( m_fields );
@@ -1209,6 +1213,11 @@ void DIALOG_SYMBOL_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+    if( cfg && cfg->m_Appearance.edit_symbol_width > 0 && cfg->m_Appearance.edit_symbol_height > 0 )
+        SetSize( cfg->m_Appearance.edit_symbol_width, cfg->m_Appearance.edit_symbol_height );
 }
 
 

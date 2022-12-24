@@ -46,8 +46,14 @@ public:
     struct APPEARANCE
     {
         wxString edit_symbol_visible_columns;
+        int edit_symbol_width;
+        int edit_symbol_height;
         wxString edit_sheet_visible_columns;
+        int edit_sheet_width;
+        int edit_sheet_height;
         wxString edit_label_visible_columns;
+        int edit_label_width;
+        int edit_label_height;
         int  erc_severities;
         bool footprint_preview;
         bool print_sheet_reference;
