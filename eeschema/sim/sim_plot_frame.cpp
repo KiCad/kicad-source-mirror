@@ -597,10 +597,8 @@ void SIM_PLOT_FRAME::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const K
 
     if( !symbol )
     {
-        // TODO: 8.0: wxT() --> _()
-        DisplayErrorMessage( this, wxString::Format( wxT( "Could not apply tuned value.\n"
-                                                          "%s not found." ),
-                                                     aRef ) );
+        DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( " " )
+                                   + wxString::Format( _( "%s not found" ), aRef ) );
         return;
     }
 
@@ -611,10 +609,8 @@ void SIM_PLOT_FRAME::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const K
 
     if( !tunerParam )
     {
-        // TODO: 8.0: wxT() --> _()
-        DisplayErrorMessage( this, wxString::Format( wxT( "Could not apply tuned value.\n"
-                                                          "%s is not tunable." ),
-                                                     aRef ) );
+        DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( " " )
+                                   + wxString::Format( _( "%s is not tunable" ), aRef ) );
         return;
     }
 
@@ -913,7 +909,7 @@ void SIM_PLOT_FRAME::applyTuners()
 
         if( !symbol )
         {
-            reporter.Report( wxString::Format( _( "%s not found." ), ref ) );
+            reporter.Report( wxString::Format( _( "%s not found" ), ref ) );
             continue;
         }
 
@@ -921,8 +917,7 @@ void SIM_PLOT_FRAME::applyTuners()
 
         if( !item || !item->model->GetTunerParam() )
         {
-            // TODO: 8.0: wxT() --> _()
-            reporter.Report( wxString::Format( wxT( "%s is not tunable." ), ref ) );
+            reporter.Report( wxString::Format( _( "%s is not tunable" ), ref ) );
             continue;
         }
 
@@ -931,9 +926,8 @@ void SIM_PLOT_FRAME::applyTuners()
         m_simulator->Command( item->model->SpiceGenerator().TunerCommand( *item, floatVal ) );
     }
 
-    // TODO: 8.0: wxT() --> _()
     if( reporter.HasMessage() )
-        DisplayErrorMessage( this, wxT( "Errors applying tuned values.\n\n" ) + errors );
+        DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( "\n\n" ) + errors );
 }
 
 
@@ -1598,7 +1592,7 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
         }
 
         NETLIST_VIEW_DIALOG( wxWindow* parent, const wxString& source) :
-                DIALOG_SHIM( parent, wxID_ANY, wxT( "SPICE Netlist" ), wxDefaultPosition,
+                DIALOG_SHIM( parent, wxID_ANY, _( "SPICE Netlist" ), wxDefaultPosition,
                              wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
         {
             wxStyledTextCtrl* textCtrl = new wxStyledTextCtrl( this, wxID_ANY );
