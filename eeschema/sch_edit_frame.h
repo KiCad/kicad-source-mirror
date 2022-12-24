@@ -231,9 +231,8 @@ public:
      * @param aPoint Point at which to break the segment
      * @param aNewSegment Pointer to the newly created segment (if given and created)
      * @param aScreen is the screen to examine, or nullptr to examine the current screen.
-     * @return True if any wires or buses were broken.
      */
-    bool BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
+    void BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
                        SCH_LINE** aNewSegment = nullptr, SCH_SCREEN* aScreen = nullptr );
 
     /**

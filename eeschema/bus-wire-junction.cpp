@@ -118,20 +118,20 @@ bool SCH_EDIT_FRAME::TrimWire( const VECTOR2I& aStart, const VECTOR2I& aEnd )
             continue;
         }
 
-        // Step 1: break the segment on one end.  return_line remains line if not broken.
+        // Step 1: break the segment on one end.
         // Ensure that *line points to the segment containing aEnd
-        SCH_LINE* return_line = line;
-        BreakSegment( line, aStart, &return_line );
+        SCH_LINE* new_line;
+        BreakSegment( line, aStart, &new_line );
 
-        if( IsPointOnSegment( return_line->GetStartPoint(), return_line->GetEndPoint(), aEnd ) )
-            line = return_line;
+        if( IsPointOnSegment( new_line->GetStartPoint(), new_line->GetEndPoint(), aEnd ) )
+            line = new_line;
 
-        // Step 2: break the remaining segment.  return_line remains line if not broken.
+        // Step 2: break the remaining segment.
         // Ensure that *line _also_ contains aStart.  This is our overlapping segment
-        BreakSegment( line, aEnd, &return_line );
+        BreakSegment( line, aEnd, &new_line );
 
-        if( IsPointOnSegment( return_line->GetStartPoint(), return_line->GetEndPoint(), aStart ) )
-            line = return_line;
+        if( IsPointOnSegment( new_line->GetStartPoint(), new_line->GetEndPoint(), aStart ) )
+            line = new_line;
 
         SaveCopyInUndoList( screen, line, UNDO_REDO::DELETED, true );
         RemoveFromScreen( line, screen );
@@ -294,7 +294,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 }
 
 
-bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
+void SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
                                    SCH_LINE** aNewSegment, SCH_SCREEN* aScreen )
 {
     if( aScreen == nullptr )
@@ -310,15 +310,12 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
     SaveCopyInUndoList( aScreen, aSegment, UNDO_REDO::CHANGED, true );
 
     aSegment->SetFlags( IS_CHANGED );
-    newSegment->SetFlags( IS_NEW );
 
     UpdateItem( aSegment, false, true );
     aSegment->SetEndPoint( aPoint );
 
     if( aNewSegment )
         *aNewSegment = newSegment;
-
-    return true;
 }
 
 
@@ -345,7 +342,10 @@ bool SCH_EDIT_FRAME::BreakSegments( const VECTOR2I& aPoint, SCH_SCREEN* aScreen 
     }
 
     for( SCH_LINE* wire : wires )
-        brokenSegments |= BreakSegment( wire, aPoint, nullptr, aScreen );
+    {
+        BreakSegment( wire, aPoint, nullptr, aScreen );
+        brokenSegments = true;
+    }
 
     return brokenSegments;
 }
@@ -370,9 +370,11 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
         point_set.insert( entry->GetEnd() );
     }
 
-
     for( const VECTOR2I& pt : point_set )
-        brokenSegments |= BreakSegments( pt, aScreen );
+    {
+        BreakSegments( pt, aScreen );
+        brokenSegments = true;
+    }
 
     return brokenSegments;
 }
