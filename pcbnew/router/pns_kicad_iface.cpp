@@ -448,8 +448,8 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         }
     }
 
-    if( aUseClearanceEpsilon )
-        rv -= m_clearanceEpsilon;
+    if( aUseClearanceEpsilon && rv > 0 )
+        rv = std::max( 0, rv - m_clearanceEpsilon );
 
     m_clearanceCache[ key ] = rv;
     return rv;
@@ -477,8 +477,18 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleClearance( const PNS::ITEM* aA, const PNS::ITE
     if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
         rv = constraint.m_Value.Min();
 
-    if( aUseClearanceEpsilon )
-        rv -= m_clearanceEpsilon;
+#define HAS_PLATED_HOLE( a ) ( a )->IsRoutable()
+
+    if( IsCopperLayer( layer )
+            && ( HAS_PLATED_HOLE( aA ) || HAS_PLATED_HOLE( aB ) )
+            && QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint )
+            && constraint.m_Value.Min() > rv )
+    {
+        rv = constraint.m_Value.Min();
+    }
+
+    if( aUseClearanceEpsilon && rv > 0 )
+        rv = std::max( 0, rv - m_clearanceEpsilon );
 
     m_holeClearanceCache[ key ] = rv;
     return rv;
@@ -506,8 +516,8 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleToHoleClearance( const PNS::ITEM* aA, const PN
     if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
         rv = constraint.m_Value.Min();
 
-    if( aUseClearanceEpsilon )
-        rv -= m_clearanceEpsilon;
+    if( aUseClearanceEpsilon && rv > 0 )
+        rv = std::max( 0, rv - m_clearanceEpsilon );
 
     m_holeToHoleClearanceCache[ key ] = rv;
     return rv;
@@ -1035,17 +1045,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
     if( aPad->GetDrillSize().x > 0 )
-    {
-        SHAPE_SEGMENT* slot = (SHAPE_SEGMENT*) aPad->GetEffectiveHoleShape()->Clone();
-
-        if( aPad->GetAttribute() != PAD_ATTRIB::NPTH )
-        {
-            BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-            slot->SetWidth( slot->GetWidth() );
-        }
-
-        solid->SetHole( slot );
-    }
+        solid->SetHole( aPad->GetEffectiveHoleShape()->Clone() );
 
     // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and then
     // perform layer-specific flashing tests internally.
