@@ -26,6 +26,10 @@ cmake_minimum_required( VERSION 3.21 FATAL_ERROR )
 # Generate DEPFILES without transforming relative paths
 cmake_policy( SET CMP0116 OLD )
 
+# Needed to allow the doxygen-python process that depends on swig generation running twice to occur
+# The current structure requires the add_custom_command to get called twice, the NEW behavior deduplicates it
+cmake_policy( SET CMP0113 OLD )
+
 # Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
 # http://www.cmake.org/pipermail/cmake/2008-September/023808.html
 if( DEFINED CMAKE_BUILD_TYPE )
