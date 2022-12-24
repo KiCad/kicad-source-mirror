@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-17 11:15-0800\n"
+"POT-Creation-Date: 2022-12-23 20:09-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2787,6 +2787,9 @@ msgstr "End Y"
 
 msgid "Line Width"
 msgstr "Line Width"
+
+msgid "Filled"
+msgstr "Filled"
 
 msgid "Normal"
 msgstr "Normal"
@@ -7021,8 +7024,14 @@ msgstr "path"
 msgid "Sheet Properties"
 msgstr "Sheet Properties"
 
+msgid "Done"
+msgstr "Done"
+
 msgid "Add signal by name:"
 msgstr "Add signal by name:"
+
+msgid "Add Signals"
+msgstr "Add Signals"
 
 msgid "You need to select DC source"
 msgstr "You need to select DC source"
@@ -9270,9 +9279,6 @@ msgstr "Done."
 msgid "Plotted to '%s'."
 msgstr "Plotted to '%s'."
 
-msgid "Done"
-msgstr "Done"
-
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Failed to write plot files to folder '%s'."
@@ -10810,9 +10816,6 @@ msgstr "Run/Stop Simulation"
 msgid "Run Simulation"
 msgstr "Run Simulation"
 
-msgid "Add Signals"
-msgstr "Add Signals"
-
 msgid "Add signals to plot"
 msgstr "Add signals to plot"
 
@@ -10872,6 +10875,10 @@ msgstr " (phase)"
 
 msgid "Signal"
 msgstr "Signal"
+
+#, c-format
+msgid "%s not found."
+msgstr "%s not found."
 
 msgid "noname"
 msgstr "noname"
@@ -12066,17 +12073,17 @@ msgstr "Pin Table..."
 msgid "Displays pin table for bulk editing of pins"
 msgstr "Displays pin table for bulk editing of pins"
 
-msgid "Break Wire"
-msgstr "Break Wire"
+msgid "Break"
+msgstr "Break"
 
-msgid "Divide a wire into segments which can be dragged independently"
-msgstr "Divide a wire into segments which can be dragged independently"
+msgid "Divide into connected segments"
+msgstr "Divide into connected segments"
 
-msgid "Break Bus"
-msgstr "Break Bus"
+msgid "Slice"
+msgstr "Slice"
 
-msgid "Divide a bus into segments which can be dragged independently"
-msgstr "Divide a bus into segments which can be dragged independently"
+msgid "Divide into unconnected segments"
+msgstr "Divide into unconnected segments"
 
 msgid "Add a simulator probe"
 msgstr "Add a simulator probe"
@@ -12519,6 +12526,9 @@ msgstr "Update symbols in schematic to refer to new library?"
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Error: duplicate sub-sheet names found in current sheet."
 
+msgid "No net selected."
+msgstr "No net selected."
+
 msgid "Net must be labeled to assign a netclass."
 msgstr "Net must be labeled to assign a netclass."
 
@@ -12682,9 +12692,6 @@ msgstr "Could not find Spice item with reference '%s'"
 msgid "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
 msgstr ""
 "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
-
-msgid " X "
-msgstr " X "
 
 msgid "Current data will be lost?"
 msgstr "Current data will be lost?"
@@ -20292,9 +20299,6 @@ msgstr "3:1"
 msgid "Plot mode:"
 msgstr "Plot mode:"
 
-msgid "Filled"
-msgstr "Filled"
-
 msgid "Sketch"
 msgstr "Sketch"
 
@@ -23283,6 +23287,10 @@ msgstr "Checking copper zone clearances..."
 #, c-format
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s clearance %s; actual %s)"
+
+#, c-format
+msgid "(%s clearance %s; actual < 0)"
+msgstr "(%s clearance %s; actual < 0)"
 
 #, c-format
 msgid "(nets %s and %s)"
@@ -29471,6 +29479,21 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Break Wire"
+#~ msgstr "Break Wire"
+
+#~ msgid "Divide a wire into segments which can be dragged independently"
+#~ msgstr "Divide a wire into segments which can be dragged independently"
+
+#~ msgid "Break Bus"
+#~ msgstr "Break Bus"
+
+#~ msgid "Divide a bus into segments which can be dragged independently"
+#~ msgstr "Divide a bus into segments which can be dragged independently"
+
+#~ msgid " X "
+#~ msgstr " X "
 
 #~ msgid ""
 #~ "Cannot make path relative (target volume different from file volume)!"

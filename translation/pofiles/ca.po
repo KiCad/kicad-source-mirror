@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-17 11:15-0800\n"
+"POT-Creation-Date: 2022-12-23 20:09-0800\n"
 "PO-Revision-Date: 2022-11-04 23:18+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
@@ -357,7 +357,7 @@ msgstr "No tens permisos d'escriptura per a desar el fitxer '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:795 common/confirm.cpp:148
 #: common/confirm.cpp:338 common/dialogs/panel_setup_severities.cpp:43
-#: eeschema/files-io.cpp:842 eeschema/files-io.cpp:914
+#: eeschema/files-io.cpp:840 eeschema/files-io.cpp:912
 #: kicad/import_proj.cpp:153 kicad/import_project.cpp:101 kicad/kicad.cpp:313
 #: kicad/tools/kicad_manager_control.cpp:172
 #: kicad/tools/kicad_manager_control.cpp:238
@@ -1241,13 +1241,13 @@ msgid "Quit Image Converter"
 msgstr "Convertit"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:374
-#: eeschema/tools/sch_drawing_tools.cpp:570
+#: eeschema/tools/sch_drawing_tools.cpp:572
 #: pagelayout_editor/pl_editor_frame.cpp:842 pcbnew/tools/drawing_tool.cpp:665
 msgid "Choose Image"
 msgstr "Tria la imatge"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:375
-#: eeschema/tools/sch_drawing_tools.cpp:571
+#: eeschema/tools/sch_drawing_tools.cpp:573
 #: pagelayout_editor/pl_editor_frame.cpp:843 pcbnew/tools/drawing_tool.cpp:666
 msgid "Image Files"
 msgstr "Fitxers d'imatges"
@@ -1576,7 +1576,7 @@ msgstr "Si no ho deseu, tots els vostres canvis es perdran per sempre."
 
 #: common/confirm.cpp:202 common/confirm.cpp:238 common/tool/actions.cpp:67
 #: eeschema/symbol_editor/symbol_editor.cpp:550
-#: eeschema/widgets/tuner_slider_base.cpp:66
+#: eeschema/widgets/tuner_slider_base.cpp:75
 #: pcbnew/footprint_libraries_utils.cpp:1059
 msgid "Save"
 msgstr "Desa"
@@ -1875,7 +1875,7 @@ msgstr "A&juda"
 msgid "Report"
 msgstr "Informe"
 
-#: common/dialogs/dialog_assign_netclass.cpp:92
+#: common/dialogs/dialog_assign_netclass.cpp:104
 msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Xarxes coincidents actualment:</b>"
 
@@ -2027,7 +2027,7 @@ msgstr "Variables d'entorn"
 #: eeschema/sch_pin.cpp:217 eeschema/sch_symbol.cpp:1591
 #: eeschema/sch_symbol.cpp:1636 eeschema/symbol_editor/symbol_editor.cpp:1220
 #: eeschema/symbol_viewer_frame.cpp:451
-#: eeschema/widgets/tuner_slider_base.cpp:20
+#: eeschema/widgets/tuner_slider_base.cpp:26
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:39
 #: kicad/pcm/dialogs/panel_package_base.cpp:50
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:42
@@ -3802,7 +3802,7 @@ msgstr "Estil de línia"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:457
+#: eeschema/dialogs/dialog_sim_model.cpp:468
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:536 eeschema/lib_text.cpp:400
@@ -4130,7 +4130,7 @@ msgid "Field Name Templates"
 msgstr "Plantilles dels noms dels camps"
 
 #: common/eda_base_frame.cpp:1065 common/tool/actions.cpp:610
-#: kicad/tools/kicad_manager_actions.cpp:98 pcbnew/footprint_edit_frame.cpp:912
+#: kicad/tools/kicad_manager_actions.cpp:98 pcbnew/footprint_edit_frame.cpp:914
 #: pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Editor d'empremtes"
@@ -4142,7 +4142,7 @@ msgstr "Valors predeterminats"
 
 #: common/eda_base_frame.cpp:1074 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:92 pcbnew/menubar_pcb_editor.cpp:185
-#: pcbnew/pcb_edit_frame.cpp:182 pcbnew/pcb_edit_frame.cpp:1539
+#: pcbnew/pcb_edit_frame.cpp:182 pcbnew/pcb_edit_frame.cpp:1528
 #: pcbnew/tools/zone_filler_tool.cpp:272
 msgid "PCB Editor"
 msgstr "Editor de PCB's"
@@ -4356,12 +4356,12 @@ msgstr "Fletxa"
 msgid "Zone"
 msgstr "Zona"
 
-#: common/eda_item.cpp:340 common/eda_item.cpp:341 pcbnew/pcb_track.cpp:827
+#: common/eda_item.cpp:340 common/eda_item.cpp:341 pcbnew/pcb_track.cpp:822
 msgid "Track"
 msgstr "Pista"
 
 #: common/eda_item.cpp:342 pcbnew/dialogs/dialog_board_statistics.cpp:501
-#: pcbnew/pcb_track.cpp:899
+#: pcbnew/pcb_track.cpp:902
 msgid "Via"
 msgstr "Via"
 
@@ -4431,7 +4431,8 @@ msgstr "Camp"
 msgid "Symbol"
 msgstr "Símbol"
 
-#: common/eda_item.cpp:370 common/eda_item.cpp:385 eeschema/lib_pin.h:71
+#: common/eda_item.cpp:370 common/eda_item.cpp:385
+#: eeschema/dialogs/dialog_sim_model.cpp:554 eeschema/lib_pin.h:71
 #: eeschema/sch_pin.cpp:206
 msgid "Pin"
 msgstr "Pin"
@@ -4533,7 +4534,7 @@ msgstr "Forma"
 
 #: common/eda_shape.cpp:637 common/eda_shape.cpp:644
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:213
-#: pcbnew/pcb_track.cpp:839
+#: pcbnew/pcb_track.cpp:842
 msgid "Radius"
 msgstr "Radi"
 
@@ -4563,9 +4564,8 @@ msgstr "Punts"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:161
 #: pcbnew/fp_text.cpp:311 pcbnew/fp_text_grid_table.cpp:102 pcbnew/pad.cpp:1002
 #: pcbnew/pcb_bitmap.cpp:211 pcbnew/pcb_target.cpp:156
-#: pcbnew/pcb_target.cpp:201 pcbnew/pcb_text.cpp:144 pcbnew/pcb_track.cpp:834
-#: pcbnew/pcb_track.cpp:1240 pcbnew/pcb_track.cpp:1261
-#: pcbnew/pcb_track.cpp:1291
+#: pcbnew/pcb_target.cpp:201 pcbnew/pcb_text.cpp:144 pcbnew/pcb_track.cpp:837
+#: pcbnew/pcb_track.cpp:1243 pcbnew/pcb_track.cpp:1273
 msgid "Width"
 msgstr "Amplada"
 
@@ -4588,22 +4588,22 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1693 pcbnew/pcb_textbox.cpp:529
-#: pcbnew/pcb_track.cpp:1243 pcbnew/pcb_track.cpp:1265
+#: pcbnew/pcb_track.cpp:1246
 msgid "Start X"
 msgstr "Inici X"
 
 #: common/eda_shape.cpp:1696 pcbnew/pcb_textbox.cpp:530
-#: pcbnew/pcb_track.cpp:1247 pcbnew/pcb_track.cpp:1270
+#: pcbnew/pcb_track.cpp:1250
 msgid "Start Y"
 msgstr "Inici Y"
 
 #: common/eda_shape.cpp:1699 pcbnew/pcb_textbox.cpp:531
-#: pcbnew/pcb_track.cpp:1250 pcbnew/pcb_track.cpp:1274
+#: pcbnew/pcb_track.cpp:1253
 msgid "End X"
 msgstr "Final X"
 
 #: common/eda_shape.cpp:1702 pcbnew/pcb_textbox.cpp:532
-#: pcbnew/pcb_track.cpp:1253 pcbnew/pcb_track.cpp:1278
+#: pcbnew/pcb_track.cpp:1256
 msgid "End Y"
 msgstr "Final Y"
 
@@ -4611,6 +4611,10 @@ msgstr "Final Y"
 #: pcbnew/pcb_textbox.cpp:533
 msgid "Line Width"
 msgstr "Amplada de la línia"
+
+#: common/eda_shape.cpp:1719 pcbnew/dialogs/dialog_plot_base.cpp:132
+msgid "Filled"
+msgstr "Omplert"
 
 #: common/eda_text.cpp:747 eeschema/lib_textbox.cpp:472
 #: eeschema/sch_label.cpp:884 eeschema/sch_text.cpp:506
@@ -4744,7 +4748,7 @@ msgstr "Orientació"
 msgid "Text Properties"
 msgstr "Propietats del text"
 
-#: common/eda_text.cpp:1036
+#: common/eda_text.cpp:1036 pcbnew/pcb_text.cpp:362
 msgid "Hyperlink"
 msgstr ""
 
@@ -4996,7 +5000,7 @@ msgstr "No es pot copiar el fitxer '%s'."
 
 #: common/grid_tricks.cpp:325 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:157 pcbnew/dialogs/panel_setup_rules.cpp:111
-#: pcbnew/tools/edit_tool.cpp:1971
+#: pcbnew/tools/edit_tool.cpp:1973
 msgid "Cut"
 msgstr "Retalla"
 
@@ -5026,7 +5030,7 @@ msgstr "Enganxa les cel·les del porta-retalls a la matriu en la cel·la actual"
 
 #: common/grid_tricks.cpp:331 common/tool/actions.cpp:192
 #: kicad/project_tree_pane.cpp:762 pcbnew/dialogs/panel_setup_rules.cpp:114
-#: pcbnew/plugins/kicad/pcb_parser.cpp:923 pcbnew/tools/edit_tool.cpp:1973
+#: pcbnew/plugins/kicad/pcb_parser.cpp:923 pcbnew/tools/edit_tool.cpp:1975
 msgid "Delete"
 msgstr "Elimina"
 
@@ -5065,7 +5069,7 @@ msgstr "Acaba el dibuix"
 msgid "Add to Selection"
 msgstr "Afegeix a la selecció"
 
-#: common/hotkey_store.cpp:47 eeschema/tools/ee_actions.cpp:583
+#: common/hotkey_store.cpp:47 eeschema/tools/ee_actions.cpp:582
 #: gerbview/tools/gerbview_actions.cpp:119 pcbnew/tools/pcb_actions.cpp:790
 #: pcbnew/tools/pcb_actions.cpp:810
 msgid "Highlight Net"
@@ -5471,7 +5475,7 @@ msgstr "Elimina la fila seleccionada"
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:456 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:467 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1233
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -5790,15 +5794,15 @@ msgstr "Error: "
 msgid "Unable to open %s for reading."
 msgstr "No s'ha pogut obrir el fitxer %s per a la lectura."
 
-#: common/richio.cpp:226 common/richio.cpp:322
+#: common/richio.cpp:226 common/richio.cpp:324
 msgid "Maximum line length exceeded"
 msgstr "S'ha superat la longitud màxima de la línia"
 
-#: common/richio.cpp:288
+#: common/richio.cpp:289
 msgid "Line length exceeded"
 msgstr "S'ha superat la longitud de la línia"
 
-#: common/richio.cpp:571
+#: common/richio.cpp:573
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "Error d'escriptura OUTPUTSTREAM_OUTPUTFORMATTER"
 
@@ -6099,19 +6103,19 @@ msgstr "Amplia fins al cursor"
 msgid "Zoom Out at Cursor"
 msgstr "Redueix al voltant cursor"
 
-#: common/tool/actions.cpp:325 common/widgets/mathplot.cpp:1667
+#: common/tool/actions.cpp:325 common/widgets/mathplot.cpp:1678
 #: eeschema/sim/sim_plot_frame_base.cpp:87
 #: pcbnew/dialogs/panel_setup_rules.cpp:122
 msgid "Zoom In"
 msgstr "Amplia"
 
-#: common/tool/actions.cpp:331 common/widgets/mathplot.cpp:1668
+#: common/tool/actions.cpp:331 common/widgets/mathplot.cpp:1679
 #: eeschema/sim/sim_plot_frame_base.cpp:91
 #: pcbnew/dialogs/panel_setup_rules.cpp:123
 msgid "Zoom Out"
 msgstr "Redueix"
 
-#: common/tool/actions.cpp:337 common/widgets/mathplot.cpp:1665
+#: common/tool/actions.cpp:337 common/widgets/mathplot.cpp:1676
 #, fuzzy
 msgid "Center on Cursor"
 msgstr "Centra la cota"
@@ -6268,7 +6272,7 @@ msgstr "Mil·límetres"
 msgid "Use millimeters"
 msgstr "Utilitza mil·límetres"
 
-#: common/tool/actions.cpp:518 common/widgets/lib_tree.cpp:665
+#: common/tool/actions.cpp:518 common/widgets/lib_tree.cpp:674
 #, fuzzy
 msgid "Select Columns"
 msgstr "Desselecciona"
@@ -6695,23 +6699,23 @@ msgstr "Selecciona Camí"
 msgid "recent searches"
 msgstr "Llista dels camins de cerca actuals"
 
-#: common/widgets/mathplot.cpp:1665
+#: common/widgets/mathplot.cpp:1676
 msgid "Center plot view to this position"
 msgstr "Centra la vista del ploteig a aquesta posició"
 
-#: common/widgets/mathplot.cpp:1666 eeschema/sim/sim_plot_frame_base.cpp:95
+#: common/widgets/mathplot.cpp:1677 eeschema/sim/sim_plot_frame_base.cpp:95
 msgid "Fit on Screen"
 msgstr "Ajusta a la pantalla"
 
-#: common/widgets/mathplot.cpp:1666
+#: common/widgets/mathplot.cpp:1677
 msgid "Set plot view to show all items"
 msgstr "Estableix la vista de ploteig per mostrar tots els elements"
 
-#: common/widgets/mathplot.cpp:1667
+#: common/widgets/mathplot.cpp:1678
 msgid "Zoom in plot view."
 msgstr "Augmenta el zoom a la vista del ploteig."
 
-#: common/widgets/mathplot.cpp:1668
+#: common/widgets/mathplot.cpp:1679
 msgid "Zoom out plot view."
 msgstr "Redueix el zoom a la vista del ploteig."
 
@@ -6746,17 +6750,17 @@ msgid "Reset %s to Defaults"
 msgstr "Restableix %s al valor predeterminat"
 
 #: common/widgets/properties_panel.cpp:69
-#: common/widgets/properties_panel.cpp:141
+#: common/widgets/properties_panel.cpp:147
 #, fuzzy
 msgid "No objects selected"
 msgstr "Cap bus seleccionat"
 
-#: common/widgets/properties_panel.cpp:155
+#: common/widgets/properties_panel.cpp:161
 #, fuzzy, c-format
 msgid "%d objects selected"
 msgstr "Cap bus seleccionat"
 
-#: common/widgets/properties_panel.cpp:274
+#: common/widgets/properties_panel.cpp:280
 #, fuzzy
 msgid "Basic Properties"
 msgstr "%s Propietats"
@@ -7313,7 +7317,7 @@ msgstr ""
 msgid "Configuration Error"
 msgstr "Erros de configuració"
 
-#: cvpcb/cvpcb_mainframe.cpp:910 pcbnew/footprint_edit_frame.cpp:937
+#: cvpcb/cvpcb_mainframe.cpp:910 pcbnew/footprint_edit_frame.cpp:939
 #: pcbnew/load_select_footprint.cpp:225
 msgid "Loading Footprint Libraries"
 msgstr "S'estan carregant les biblioteques d'empremtes"
@@ -7744,13 +7748,13 @@ msgstr ""
 "La xarxa %s està connectada gràficament al bus %s però no és membre d'aquest "
 "bus"
 
-#: eeschema/connection_graph.cpp:3259
+#: eeschema/connection_graph.cpp:3266
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "El pin de la fulla %s no té una etiqueta jeràrquica corresponent a la fulla"
 
-#: eeschema/connection_graph.cpp:3276
+#: eeschema/connection_graph.cpp:3283
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "L'etiqueta jeràrquica %s no està connectada a la fulla pare"
@@ -8622,7 +8626,7 @@ msgid "Export Netlist"
 msgstr "Exporta llista de xarxes"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:317
-#: eeschema/sim/sim_plot_frame.cpp:473
+#: eeschema/sim/sim_plot_frame.cpp:465
 msgid "Simulator requires a fully annotated schematic."
 msgstr "El simulador necessita un esquemàtic completament anotat."
 
@@ -9140,7 +9144,7 @@ msgstr ""
 msgid "Ibis parser log"
 msgstr ""
 
-#: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:47
+#: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
 msgstr ""
 
@@ -9956,7 +9960,7 @@ msgstr "Nova etiqueta"
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/fp_text.cpp:297
 #: pcbnew/fp_textbox.cpp:309 pcbnew/pad.cpp:970 pcbnew/pcb_dimension.cpp:363
 #: pcbnew/pcb_group.cpp:403 pcbnew/pcb_shape.cpp:307 pcbnew/pcb_text.cpp:134
-#: pcbnew/pcb_textbox.cpp:303 pcbnew/pcb_track.cpp:948 pcbnew/zone.cpp:569
+#: pcbnew/pcb_textbox.cpp:303 pcbnew/pcb_track.cpp:951 pcbnew/zone.cpp:569
 msgid "Status"
 msgstr "Estat"
 
@@ -10862,9 +10866,18 @@ msgstr "camí"
 msgid "Sheet Properties"
 msgstr "Propietats de la fulla"
 
+#: eeschema/dialogs/dialog_signal_list.h:45 eeschema/sch_plotter.cpp:547
+msgid "Done"
+msgstr "Fet"
+
 #: eeschema/dialogs/dialog_signal_list_base.cpp:27
 msgid "Add signal by name:"
 msgstr "Afegeix senyal pel nom:"
+
+#: eeschema/dialogs/dialog_signal_list_base.h:50
+#: eeschema/sim/sim_plot_frame.cpp:161
+msgid "Add Signals"
+msgstr "Afegeix senyals"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:116
 msgid "You need to select DC source"
@@ -11158,42 +11171,42 @@ msgstr "HSpice"
 msgid "Simulation Command"
 msgstr "Simulació"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:181
+#: eeschema/dialogs/dialog_sim_model.cpp:183
 #, fuzzy, c-format
 msgid "No model named '%s' in library."
 msgstr "No s'ha pogut trobar la peça «%s» a la biblioteca"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:262
+#: eeschema/dialogs/dialog_sim_model.cpp:266
 #, fuzzy
 msgid "Failed to read simulation model from fields."
 msgstr "No s'ha pogut crear el fitxer de la biblioteca de símbols '%s'."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:374
+#: eeschema/dialogs/dialog_sim_model.cpp:380
 #, fuzzy
 msgid "Component:"
 msgstr "Component"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:374
+#: eeschema/dialogs/dialog_sim_model.cpp:380
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr "Model:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:430
+#: eeschema/dialogs/dialog_sim_model.cpp:441
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:438
+#: eeschema/dialogs/dialog_sim_model.cpp:449
 msgid "Save primary parameter in Value field"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:455
+#: eeschema/dialogs/dialog_sim_model.cpp:466
 #: pcbnew/footprint_wizard_frame.cpp:322
 msgid "Parameter"
 msgstr "Paràmetre"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:458 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:469 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1147 eeschema/sch_label.cpp:880
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1247
@@ -11202,18 +11215,18 @@ msgstr "Paràmetre"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:78
 #: pcbnew/fp_text.cpp:294 pcbnew/pcb_marker.cpp:193 pcbnew/pcb_shape.cpp:304
-#: pcbnew/pcb_track.cpp:826 pcbnew/pcb_track.cpp:902
+#: pcbnew/pcb_track.cpp:831 pcbnew/pcb_track.cpp:905
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:249 pcbnew/zone.cpp:527
 msgid "Type"
 msgstr "Tipus"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:572
-#: eeschema/dialogs/dialog_sim_model.cpp:615
+#: eeschema/dialogs/dialog_sim_model.cpp:590
+#: eeschema/dialogs/dialog_sim_model.cpp:633
 #, fuzzy
 msgid "Not Connected"
 msgstr "No connexió"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1035
+#: eeschema/dialogs/dialog_sim_model.cpp:1053
 #, fuzzy
 msgid "Browse Models"
 msgstr "Navega pels fitxers"
@@ -11524,7 +11537,7 @@ msgid "Edit Symbol..."
 msgstr "Edita Símbol..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:233
-#: eeschema/tools/ee_actions.cpp:607
+#: eeschema/tools/ee_actions.cpp:606
 msgid "Edit Library Symbol..."
 msgstr "Edita biblioteca de símbols..."
 
@@ -11835,8 +11848,8 @@ msgid "/path/to/sheet"
 msgstr "/cami/a/la/fulla"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
-#: pcbnew/footprint_edit_frame.cpp:227 pcbnew/footprint_edit_frame.cpp:832
-#: pcbnew/pcb_edit_frame.cpp:288 pcbnew/pcb_edit_frame.cpp:1446
+#: pcbnew/footprint_edit_frame.cpp:227 pcbnew/footprint_edit_frame.cpp:834
+#: pcbnew/pcb_edit_frame.cpp:288 pcbnew/pcb_edit_frame.cpp:1434
 msgid "Appearance"
 msgstr "Aparença"
 
@@ -13033,7 +13046,7 @@ msgstr "Mostra totes les capes"
 msgid "Allow Autoplacement"
 msgstr "Posiciona automàticament els camps"
 
-#: eeschema/files-io.cpp:101 eeschema/files-io.cpp:1199
+#: eeschema/files-io.cpp:101 eeschema/files-io.cpp:1197
 #, c-format
 msgid "Schematic '%s' is already open."
 msgstr "L'esquemàtic '%s' ja està obert."
@@ -13064,7 +13077,7 @@ msgstr ""
 "carregar fulles jeràrquiques."
 
 #: eeschema/files-io.cpp:249 eeschema/files-io.cpp:257
-#: eeschema/files-io.cpp:1274 eeschema/sheet.cpp:160
+#: eeschema/files-io.cpp:1272 eeschema/sheet.cpp:160
 #, c-format
 msgid "Error loading schematic '%s'."
 msgstr "Error en carregar l'esquemàtic '%s'."
@@ -13074,8 +13087,8 @@ msgstr "Error en carregar l'esquemàtic '%s'."
 msgid "Memory exhausted loading schematic '%s'."
 msgstr "Memòria exhaurida en carregar l'esquemàtic '%s'."
 
-#: eeschema/files-io.cpp:284 eeschema/files-io.cpp:1277
-#: eeschema/files-io.cpp:1291 eeschema/sheet.cpp:163
+#: eeschema/files-io.cpp:284 eeschema/files-io.cpp:1275
+#: eeschema/files-io.cpp:1289 eeschema/sheet.cpp:163
 #, c-format
 msgid "Failed to load '%s'."
 msgstr "No s'ha pogut carregar '%s'."
@@ -13147,7 +13160,7 @@ msgid "Abort"
 msgstr "S'està avortant"
 
 #: eeschema/files-io.cpp:427 eeschema/files-io.cpp:444
-#: pagelayout_editor/files.cpp:258 pcbnew/files.cpp:837
+#: pagelayout_editor/files.cpp:258 pcbnew/files.cpp:835
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13173,7 +13186,7 @@ msgstr ""
 "\n"
 "Vols desar el document actual abans de continuar?"
 
-#: eeschema/files-io.cpp:615 pcbnew/files.cpp:169
+#: eeschema/files-io.cpp:615 pcbnew/files.cpp:170
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
 msgid "All supported formats|"
 msgstr "Tots els formats suportats|"
@@ -13196,7 +13209,7 @@ msgstr ""
 "S'ha produït un error en desar el fitxer de l'esquemàtic '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:711 pcbnew/files.cpp:1083
+#: eeschema/files-io.cpp:711 pcbnew/files.cpp:1081
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "No s'ha pogut crear el fitxer temporal '%s'."
@@ -13210,13 +13223,13 @@ msgstr ""
 "Error en desar el fitxer de l'esquemàtic '%s'.\n"
 "No s'ha pogut canviar el nom del fitxer temporal '%s'."
 
-#: eeschema/files-io.cpp:734 pcbnew/files.cpp:1101
+#: eeschema/files-io.cpp:734 pcbnew/files.cpp:1099
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "No s'ha pogut canviar el nom del fitxer temporal '%s'."
 
 #: eeschema/files-io.cpp:757 pagelayout_editor/files.cpp:185
-#: pcbnew/files.cpp:1134
+#: pcbnew/files.cpp:1132
 #, c-format
 msgid "File '%s' saved."
 msgstr "S'ha desat el fitxer '%s'."
@@ -13225,7 +13238,7 @@ msgstr "S'ha desat el fitxer '%s'."
 msgid "File write operation failed."
 msgstr "Ha fallat l'operació d'escriptura de fitxer."
 
-#: eeschema/files-io.cpp:838 eeschema/files-io.cpp:910
+#: eeschema/files-io.cpp:836 eeschema/files-io.cpp:908
 #: kicad/tools/kicad_manager_control.cpp:117
 #: kicad/tools/kicad_manager_control.cpp:225
 #, c-format
@@ -13239,15 +13252,15 @@ msgstr ""
 "Si us plau, confirma que tens permisos d'escriptura i intenta-ho un altre "
 "cop."
 
-#: eeschema/files-io.cpp:979
+#: eeschema/files-io.cpp:977
 msgid "Saving will overwrite existing files."
 msgstr "Desar sobreescriurà els fitxers existents."
 
-#: eeschema/files-io.cpp:980
+#: eeschema/files-io.cpp:978
 msgid "Save Warning"
 msgstr "Alerta de desat"
 
-#: eeschema/files-io.cpp:983
+#: eeschema/files-io.cpp:981
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
@@ -13255,28 +13268,28 @@ msgstr ""
 "Els següents fitxers es sobreescriuran:\n"
 "\n"
 
-#: eeschema/files-io.cpp:984
+#: eeschema/files-io.cpp:982
 msgid "Overwrite Files"
 msgstr "Sobreescriu fitxers"
 
-#: eeschema/files-io.cpp:985
+#: eeschema/files-io.cpp:983
 msgid "Abort Project Save"
 msgstr "Avorta desar el projecte"
 
-#: eeschema/files-io.cpp:1209
+#: eeschema/files-io.cpp:1207
 msgid "Importing Schematic"
 msgstr "S'està important un esquemàtic"
 
-#: eeschema/files-io.cpp:1287
+#: eeschema/files-io.cpp:1285
 #, fuzzy, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
 msgstr "Memòria exhaurida en carregar l'esquemàtic '%s'."
 
-#: eeschema/files-io.cpp:1321
+#: eeschema/files-io.cpp:1319
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "L'esquemàtic actual ha estat modificat.  Vols desar els canvis?"
 
-#: eeschema/files-io.cpp:1407
+#: eeschema/files-io.cpp:1405
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -13289,7 +13302,7 @@ msgstr ""
 "no es van desar correctament. Vols recuperar les darreres edicions que vas "
 "realitzar?"
 
-#: eeschema/files-io.cpp:1418
+#: eeschema/files-io.cpp:1416
 #, c-format
 msgid ""
 "The file '%s` could not be opened.\n"
@@ -13298,24 +13311,24 @@ msgstr ""
 "No s'ha pogut obrir el fitxer '%s'.\n"
 "Es requereix la recuperació manual dels fitxers desats automàticament."
 
-#: eeschema/files-io.cpp:1469
+#: eeschema/files-io.cpp:1467
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr "El següent fitxer desat automàticament no pot ser restaurat\n"
 
-#: eeschema/files-io.cpp:1474
+#: eeschema/files-io.cpp:1472
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
 "Es requereix la recuperació manual per restaurar el(s) fitxer(s) anterior(s)."
 
-#: eeschema/files-io.cpp:1494
+#: eeschema/files-io.cpp:1492
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "El següent fitxer(s) desat automàticament no ha pogut ser tret\n"
 
-#: eeschema/files-io.cpp:1499
+#: eeschema/files-io.cpp:1497
 msgid "Manual removal will be required for the file(s) above."
 msgstr "Es requereix l'eliminació manual pel(s) fitxer(s) anterior(s)."
 
-#: eeschema/files-io.cpp:1510
+#: eeschema/files-io.cpp:1508
 #, c-format
 msgid ""
 "The automatic save master file\n"
@@ -13326,7 +13339,7 @@ msgstr ""
 "'%s'\n"
 "no s'ha pogut esborrar."
 
-#: eeschema/files-io.cpp:1518
+#: eeschema/files-io.cpp:1516
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
@@ -13575,26 +13588,26 @@ msgstr "P&referències"
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr ""
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:277
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:274
 #, fuzzy, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
 msgstr "Error en carregar la biblioteca de símbols '%s'."
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:411
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:408
 #, fuzzy, c-format
 msgid ""
 "Error reading simulation model library '%s':\n"
 "%s"
 msgstr "Error en carregar la biblioteca de símbols '%s'."
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:470
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:467
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr ""
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:521
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:518
 #, fuzzy, c-format
 msgid "Could not find library file '%s'"
 msgstr "No s'ha pogut trobar el fitxer de biblioteca %s."
@@ -13827,7 +13840,7 @@ msgid "Bus Entry Type"
 msgstr "Tipus d'entrada de bus"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:912
-#: eeschema/sch_line.cpp:912 pcbnew/pad.cpp:966 pcbnew/pcb_track.cpp:930
+#: eeschema/sch_line.cpp:912 pcbnew/pad.cpp:966 pcbnew/pcb_track.cpp:933
 #: pcbnew/tools/pcb_control.cpp:1529 pcbnew/zone.cpp:557
 #, fuzzy
 msgid "Resolved Netclass"
@@ -13856,12 +13869,12 @@ msgstr "Mida de l'esquemàtic"
 msgid "New schematic file is unsaved"
 msgstr "El nou fitxer d'esquemàtic no s'ha desat"
 
-#: eeschema/sch_edit_frame.cpp:782 eeschema/sim/sim_plot_frame.cpp:1673
+#: eeschema/sch_edit_frame.cpp:782 eeschema/sim/sim_plot_frame.cpp:1671
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1153
 #: pagelayout_editor/pl_editor_frame.cpp:381
-#: pcbnew/footprint_edit_frame.cpp:685 pcbnew/footprint_edit_frame.cpp:725
-#: pcbnew/pcb_edit_frame.cpp:1052
+#: pcbnew/footprint_edit_frame.cpp:687 pcbnew/footprint_edit_frame.cpp:727
+#: pcbnew/pcb_edit_frame.cpp:1040
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "Vols desar els canvis a '%s' abans de tancar?"
@@ -13902,14 +13915,14 @@ msgstr "Per assignar empremtes es necessita un esquemàtic completament anotat."
 msgid "Could not open CvPcb"
 msgstr "No s'ha pogut obrir el CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1412 eeschema/sim/sim_plot_frame.cpp:351
-#: kicad/kicad_manager_frame.cpp:774 pcbnew/footprint_edit_frame.cpp:896
-#: pcbnew/pcb_edit_frame.cpp:1534
+#: eeschema/sch_edit_frame.cpp:1412 eeschema/sim/sim_plot_frame.cpp:343
+#: kicad/kicad_manager_frame.cpp:774 pcbnew/footprint_edit_frame.cpp:898
+#: pcbnew/pcb_edit_frame.cpp:1523
 msgid "[Read Only]"
 msgstr "[Només lectura]"
 
-#: eeschema/sch_edit_frame.cpp:1415 eeschema/sim/sim_plot_frame.cpp:354
-#: pcbnew/footprint_edit_frame.cpp:905 pcbnew/pcb_edit_frame.cpp:1537
+#: eeschema/sch_edit_frame.cpp:1415 eeschema/sim/sim_plot_frame.cpp:346
+#: pcbnew/footprint_edit_frame.cpp:907 pcbnew/pcb_edit_frame.cpp:1526
 msgid "[Unsaved]"
 msgstr "[No desat]"
 
@@ -13970,9 +13983,9 @@ msgstr "Justificació"
 #: pcbnew/board_connected_item.cpp:166
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:963 pcbnew/pad.cpp:964
-#: pcbnew/pad.cpp:1745 pcbnew/pcb_track.cpp:928
+#: pcbnew/pad.cpp:1745 pcbnew/pcb_track.cpp:931
 #: pcbnew/tools/pcb_control.cpp:1526
-#: pcbnew/widgets/pcb_properties_panel.cpp:162 pcbnew/zone.cpp:555
+#: pcbnew/widgets/pcb_properties_panel.cpp:163 pcbnew/zone.cpp:555
 #: pcbnew/zone.cpp:1405
 msgid "Net"
 msgstr "Xarxa"
@@ -14105,10 +14118,6 @@ msgstr "Fet."
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Plotejat a '%s'."
-
-#: eeschema/sch_plotter.cpp:547
-msgid "Done"
-msgstr "Fet"
 
 #: eeschema/sch_plotter.cpp:1034
 #, c-format
@@ -14470,7 +14479,7 @@ msgstr "Error al llegir la imatge %s."
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
 
-#: eeschema/sch_plugins/database/sch_database_plugin.cpp:278
+#: eeschema/sch_plugins/database/sch_database_plugin.cpp:281
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
@@ -15892,124 +15901,124 @@ msgstr ""
 msgid "Simulation model library not found at '%s' or '%s'"
 msgstr "Error en carregar la biblioteca de símbols '%s'."
 
-#: eeschema/sim/sim_lib_mgr.cpp:283
+#: eeschema/sim/sim_lib_mgr.cpp:287
 #, fuzzy, c-format
 msgid "Error loading simulation model library '%s': %s"
 msgstr "Error en carregar la biblioteca de símbols '%s'."
 
-#: eeschema/sim/sim_lib_mgr.cpp:290
+#: eeschema/sim/sim_lib_mgr.cpp:294
 #, fuzzy, c-format
 msgid "Error loading simulation model: no '%s' field"
 msgstr "Error en carregar l'esquemàtic '%s'."
 
-#: eeschema/sim/sim_lib_mgr.cpp:298
+#: eeschema/sim/sim_lib_mgr.cpp:302
 #, fuzzy, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
 msgstr "Error al carregar el símbol %s des de la biblioteca '%s'."
 
-#: eeschema/sim/sim_model.cpp:700
+#: eeschema/sim/sim_model.cpp:691
 #, fuzzy, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
 msgstr "No s'ha trobat el pad personalitzat '%s'."
 
-#: eeschema/sim/sim_model.cpp:816 eeschema/sim/sim_model.cpp:833
+#: eeschema/sim/sim_model.cpp:781
 #, fuzzy, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
 msgstr "No s'ha trobat el pad personalitzat '%s'."
 
-#: eeschema/sim/sim_model.h:467
+#: eeschema/sim/sim_model.h:468
 #, c-format
 msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
 
-#: eeschema/sim/sim_model_kibis.cpp:77
+#: eeschema/sim/sim_model_kibis.cpp:76
 #, fuzzy, c-format
 msgid "Invalid IBIS file '%s'"
 msgstr "Número d'unitat de símbol invàlid %s"
 
-#: eeschema/sim/sim_model_kibis.cpp:82
+#: eeschema/sim/sim_model_kibis.cpp:81
 #, fuzzy, c-format
 msgid "Could not find IBIS component '%s'"
 msgstr "No s'ha trobat el pad personalitzat '%s'."
 
-#: eeschema/sim/sim_model_kibis.cpp:88
+#: eeschema/sim/sim_model_kibis.cpp:87
 #, fuzzy, c-format
 msgid "Invalid IBIS component '%s'"
 msgstr "Número d'unitat de símbol invàlid %s"
 
-#: eeschema/sim/sim_model_kibis.cpp:92
+#: eeschema/sim/sim_model_kibis.cpp:91
 #, fuzzy, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
 msgstr "No s'ha trobat el pad personalitzat '%s'."
 
-#: eeschema/sim/sim_model_kibis.cpp:99
+#: eeschema/sim/sim_model_kibis.cpp:98
 #, fuzzy, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
 msgstr "Número d'unitat de símbol invàlid %s"
 
-#: eeschema/sim/sim_model_kibis.cpp:107
+#: eeschema/sim/sim_model_kibis.cpp:106
 #, fuzzy, c-format
 msgid "Could not find IBIS model '%s'"
 msgstr "No s'ha trobat el pad personalitzat '%s'."
 
-#: eeschema/sim/sim_model_kibis.cpp:110
+#: eeschema/sim/sim_model_kibis.cpp:109
 #, fuzzy, c-format
 msgid "Invalid IBIS model '%s'"
 msgstr "Número d'unitat de símbol invàlid %s"
 
-#: eeschema/sim/sim_model_kibis.cpp:347
+#: eeschema/sim/sim_model_kibis.cpp:340
 #, fuzzy
 msgid "Power supply"
 msgstr "Símbol d'alimentació"
 
-#: eeschema/sim/sim_model_kibis.cpp:357
+#: eeschema/sim/sim_model_kibis.cpp:350
 #, fuzzy
 msgid "Parasitic pin resistance"
 msgstr "Resistència específica"
 
-#: eeschema/sim/sim_model_kibis.cpp:367
+#: eeschema/sim/sim_model_kibis.cpp:360
 #, fuzzy
 msgid "Parasitic pin inductance"
 msgstr "Resistència específica"
 
-#: eeschema/sim/sim_model_kibis.cpp:377
+#: eeschema/sim/sim_model_kibis.cpp:370
 #, fuzzy
 msgid "Parasitic pin capacitance"
 msgstr "Resistència específica"
 
-#: eeschema/sim/sim_model_kibis.cpp:421
+#: eeschema/sim/sim_model_kibis.cpp:414
 #, fuzzy
 msgid "DC Value"
 msgstr "Valor"
 
-#: eeschema/sim/sim_model_kibis.cpp:439
+#: eeschema/sim/sim_model_kibis.cpp:432
 msgid "ON time"
 msgstr ""
 
-#: eeschema/sim/sim_model_kibis.cpp:447
+#: eeschema/sim/sim_model_kibis.cpp:440
 #, fuzzy
 msgid "OFF time"
 msgstr "Temps de baixada:"
 
-#: eeschema/sim/sim_model_kibis.cpp:455 eeschema/sim/sim_model_kibis.cpp:488
+#: eeschema/sim/sim_model_kibis.cpp:448 eeschema/sim/sim_model_kibis.cpp:481
 #, fuzzy
 msgid "Delay"
 msgstr "Retard:"
 
-#: eeschema/sim/sim_model_kibis.cpp:463
+#: eeschema/sim/sim_model_kibis.cpp:456
 #, fuzzy
 msgid "Number of cycles"
 msgstr "Nombre de Mostres"
 
-#: eeschema/sim/sim_model_kibis.cpp:480
+#: eeschema/sim/sim_model_kibis.cpp:473
 msgid "Bitrate"
 msgstr ""
 
-#: eeschema/sim/sim_model_kibis.cpp:496
+#: eeschema/sim/sim_model_kibis.cpp:489
 #, fuzzy
 msgid "Number of bits"
 msgstr "Nombre d'unitats:"
@@ -16019,125 +16028,126 @@ msgid ""
 "This simulation provide no plots. Please refer to console window for results"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:167
+#: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
 msgstr "Executa/atura la simulació"
 
-#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:160 eeschema/sim/sim_plot_frame_base.cpp:55
 msgid "Run Simulation"
 msgstr "Executa la simulació"
 
-#: eeschema/sim/sim_plot_frame.cpp:169
-msgid "Add Signals"
-msgstr "Afegeix senyals"
-
-#: eeschema/sim/sim_plot_frame.cpp:170
+#: eeschema/sim/sim_plot_frame.cpp:162
 msgid "Add signals to plot"
 msgstr "Afegeix senyals al ploteig"
 
-#: eeschema/sim/sim_plot_frame.cpp:171
+#: eeschema/sim/sim_plot_frame.cpp:163
 msgid "Probe"
 msgstr "Prova"
 
-#: eeschema/sim/sim_plot_frame.cpp:172
+#: eeschema/sim/sim_plot_frame.cpp:164
 msgid "Probe signals on the schematic"
 msgstr "Prova els senyals en l'esquemàtic"
 
-#: eeschema/sim/sim_plot_frame.cpp:173 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:165 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:174
+#: eeschema/sim/sim_plot_frame.cpp:166
 msgid "Tune component values"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:175
+#: eeschema/sim/sim_plot_frame.cpp:167
 #, fuzzy
 msgid "Sim Command"
 msgstr "Ordre"
 
-#: eeschema/sim/sim_plot_frame.cpp:176
+#: eeschema/sim/sim_plot_frame.cpp:168
 #, fuzzy
 msgid "Simulation command and settings"
 msgstr "Ajustaments i paràmetres de la simulació"
 
-#: eeschema/sim/sim_plot_frame.cpp:356 eeschema/sim/sim_plot_frame_base.h:129
+#: eeschema/sim/sim_plot_frame.cpp:348 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
 msgstr "Simulador Spice"
 
-#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1494
+#: eeschema/sim/sim_plot_frame.cpp:468 eeschema/sim/sim_plot_frame.cpp:1487
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:493
+#: eeschema/sim/sim_plot_frame.cpp:485
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:516 eeschema/sim/sim_plot_frame.cpp:1901
+#: eeschema/sim/sim_plot_frame.cpp:508 eeschema/sim/sim_plot_frame.cpp:1900
 msgid "Another simulation is already running."
 msgstr "Hi ha una altra simulació en marxa."
 
-#: eeschema/sim/sim_plot_frame.cpp:544
+#: eeschema/sim/sim_plot_frame.cpp:536
 #, c-format
 msgid "Plot%u - "
 msgstr "Ploteja%u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:669
+#: eeschema/sim/sim_plot_frame.cpp:660
 msgid "Error: simulation type not defined!\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:675
+#: eeschema/sim/sim_plot_frame.cpp:666
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:742
+#: eeschema/sim/sim_plot_frame.cpp:731
 msgid " (mag)"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:744
+#: eeschema/sim/sim_plot_frame.cpp:733
 #, fuzzy
 msgid " (phase)"
 msgstr "Fase CA:"
 
-#: eeschema/sim/sim_plot_frame.cpp:856 eeschema/sim/sim_plot_frame.cpp:1720
+#: eeschema/sim/sim_plot_frame.cpp:845 eeschema/sim/sim_plot_frame.cpp:1718
 msgid "Signal"
 msgstr "Senyal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1128
+#: eeschema/sim/sim_plot_frame.cpp:916
+#, fuzzy, c-format
+msgid "%s not found."
+msgstr "%s no trobat"
+
+#: eeschema/sim/sim_plot_frame.cpp:1121
 msgid "noname"
 msgstr "sensenom"
 
-#: eeschema/sim/sim_plot_frame.cpp:1177
+#: eeschema/sim/sim_plot_frame.cpp:1170
 msgid "Open simulation workbook"
 msgstr "Obre el llibre de treball de la simulació"
 
-#: eeschema/sim/sim_plot_frame.cpp:1206
+#: eeschema/sim/sim_plot_frame.cpp:1199
 msgid "Save Simulation Workbook As"
 msgstr "Desa el llibre de treball de la simulació com a"
 
-#: eeschema/sim/sim_plot_frame.cpp:1222
+#: eeschema/sim/sim_plot_frame.cpp:1215
 msgid "Save Plot as Image"
 msgstr "Desa el plotejat com a una imatge"
 
-#: eeschema/sim/sim_plot_frame.cpp:1239
+#: eeschema/sim/sim_plot_frame.cpp:1232
 msgid "Save Plot Data"
 msgstr "Desa les dades del plotejat"
 
-#: eeschema/sim/sim_plot_frame.cpp:1544
+#: eeschema/sim/sim_plot_frame.cpp:1542
 #, fuzzy
 msgid "You need to run plot-providing simulation first."
 msgstr "Primeu heu d'executar la simulació."
 
-#: eeschema/sim/sim_plot_frame.cpp:1670
+#: eeschema/sim/sim_plot_frame.cpp:1668
 #, fuzzy
 msgid "Save changes to workbook?"
 msgstr "Desa la placa actual"
 
-#: eeschema/sim/sim_plot_frame.cpp:1832
+#: eeschema/sim/sim_plot_frame.cpp:1830
 msgid ""
 "\n"
 "\n"
@@ -16314,7 +16324,7 @@ msgstr "Augment de temperatura"
 msgid "Voltage (measured)"
 msgstr "Caiguda de voltatge"
 
-#: eeschema/sim/sim_value.cpp:385
+#: eeschema/sim/sim_value.cpp:386
 #, fuzzy
 msgid "Unknown SIM_VALUE type"
 msgstr "Desconegut"
@@ -16527,7 +16537,7 @@ msgid "Loading Symbol Libraries"
 msgstr "Càrrega de biblioteques de símbols"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:191
-#: pcbnew/footprint_edit_frame.cpp:218 pcbnew/footprint_edit_frame.cpp:828
+#: pcbnew/footprint_edit_frame.cpp:218 pcbnew/footprint_edit_frame.cpp:830
 msgid "Libraries"
 msgstr "Biblioteques"
 
@@ -16651,7 +16661,7 @@ msgstr "Cap entrada seleccionada"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:115
 #: eeschema/symbol_editor/symbol_editor.cpp:448
-#: eeschema/tools/symbol_editor_control.cpp:646
+#: eeschema/tools/symbol_editor_control.cpp:651
 msgid "No schematic currently open."
 msgstr "Actualment no hi ha cap esquemàtic obert."
 
@@ -16759,7 +16769,7 @@ msgstr "Selecciona-ho tot"
 msgid "Keep Symbol"
 msgstr "Símbol d'alimentació"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:908 pcbnew/files.cpp:364
+#: eeschema/symbol_editor/symbol_editor.cpp:908 pcbnew/files.cpp:362
 #: pcbnew/footprint_libraries_utils.cpp:1205
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -17308,12 +17318,12 @@ msgstr "Afegeix un text"
 msgid "Add a text box item"
 msgstr "Afegeix un text"
 
-#: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:851
+#: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:850
 #, fuzzy
 msgid "Add Lines"
 msgstr "Afegeix una línia"
 
-#: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:851
+#: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:850
 #, fuzzy
 msgid "Add connected graphic lines"
 msgstr "Afegeix una línia gràfica"
@@ -17777,204 +17787,206 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:558
-msgid "Break Wire"
-msgstr "Talla el fil"
-
-#: eeschema/tools/ee_actions.cpp:558
-msgid "Divide a wire into segments which can be dragged independently"
-msgstr ""
-
-#: eeschema/tools/ee_actions.cpp:563
-msgid "Break Bus"
+#, fuzzy
+msgid "Break"
 msgstr "Talla el bus"
 
+#: eeschema/tools/ee_actions.cpp:558
+#, fuzzy
+msgid "Divide into connected segments"
+msgstr "No connectat"
+
 #: eeschema/tools/ee_actions.cpp:563
-msgid "Divide a bus into segments which can be dragged independently"
+msgid "Slice"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:574
+#: eeschema/tools/ee_actions.cpp:563
+msgid "Divide into unconnected segments"
+msgstr ""
+
+#: eeschema/tools/ee_actions.cpp:573
 msgid "Add a simulator probe"
 msgstr "Afegeix una prova de simulació"
 
-#: eeschema/tools/ee_actions.cpp:578
+#: eeschema/tools/ee_actions.cpp:577
 msgid "Select a value to be tuned"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:583 pcbnew/tools/pcb_actions.cpp:790
+#: eeschema/tools/ee_actions.cpp:582 pcbnew/tools/pcb_actions.cpp:790
 #, fuzzy
 msgid "Highlight net under cursor"
 msgstr "Ressalta la xarxa"
 
-#: eeschema/tools/ee_actions.cpp:588 pcbnew/tools/pcb_actions.cpp:800
+#: eeschema/tools/ee_actions.cpp:587 pcbnew/tools/pcb_actions.cpp:800
 #, fuzzy
 msgid "Clear Net Highlighting"
 msgstr "Neteja el ressaltament"
 
-#: eeschema/tools/ee_actions.cpp:588 pcbnew/tools/pcb_actions.cpp:800
+#: eeschema/tools/ee_actions.cpp:587 pcbnew/tools/pcb_actions.cpp:800
 #, fuzzy
 msgid "Clear any existing net highlighting"
 msgstr "Neteja el ressaltament"
 
-#: eeschema/tools/ee_actions.cpp:595
+#: eeschema/tools/ee_actions.cpp:594
 #, fuzzy
 msgid "Highlight Nets"
 msgstr "Ressalta la xarxa"
 
-#: eeschema/tools/ee_actions.cpp:595
+#: eeschema/tools/ee_actions.cpp:594
 #, fuzzy
 msgid "Highlight wires and pins of a net"
 msgstr "Ressalta la xarxa específica"
 
-#: eeschema/tools/ee_actions.cpp:601
+#: eeschema/tools/ee_actions.cpp:600
 #, fuzzy
 msgid "Edit with Symbol Editor"
 msgstr "Edita amb l'editor de components"
 
-#: eeschema/tools/ee_actions.cpp:601
+#: eeschema/tools/ee_actions.cpp:600
 #, fuzzy
 msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Obre l'empremta seleccionada a l'editor d'empremtes"
 
-#: eeschema/tools/ee_actions.cpp:607
+#: eeschema/tools/ee_actions.cpp:606
 #, fuzzy
 msgid "Open the library symbol in the Symbol Editor"
 msgstr "Tanca el visualitzador del component esquemàtic"
 
-#: eeschema/tools/ee_actions.cpp:612
+#: eeschema/tools/ee_actions.cpp:611
 msgid "Edit Symbol Fields..."
 msgstr "Edita els camps del símbol..."
 
-#: eeschema/tools/ee_actions.cpp:612
+#: eeschema/tools/ee_actions.cpp:611
 #, fuzzy
 msgid "Bulk-edit fields of all symbols in schematic"
 msgstr "Insereix el component a l'esquemàtic"
 
-#: eeschema/tools/ee_actions.cpp:617
+#: eeschema/tools/ee_actions.cpp:616
 #, fuzzy
 msgid "Edit Symbol Library Links..."
 msgstr "Edita la taula de les biblioteques de símbols."
 
-#: eeschema/tools/ee_actions.cpp:617
+#: eeschema/tools/ee_actions.cpp:616
 msgid "Edit links between schematic and library symbols"
 msgstr "Edita els enllaços entre l'esquemàtic i la biblioteca de símbols"
 
-#: eeschema/tools/ee_actions.cpp:622
+#: eeschema/tools/ee_actions.cpp:621
 msgid "Assign Footprints..."
 msgstr "Assigna empremtes..."
 
-#: eeschema/tools/ee_actions.cpp:622
+#: eeschema/tools/ee_actions.cpp:621
 #, fuzzy
 msgid "Run footprint assignment tool"
 msgstr "Desa el fitxer de l'associació de l'empremta"
 
-#: eeschema/tools/ee_actions.cpp:627
+#: eeschema/tools/ee_actions.cpp:626
 msgid "Import Footprint Assignments..."
 msgstr "Importa les assignacions de l'empremta..."
 
-#: eeschema/tools/ee_actions.cpp:628
+#: eeschema/tools/ee_actions.cpp:627
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:633
+#: eeschema/tools/ee_actions.cpp:632
 msgid "Annotate Schematic..."
 msgstr "Anota l'esquemàtic..."
 
-#: eeschema/tools/ee_actions.cpp:633
+#: eeschema/tools/ee_actions.cpp:632
 #, fuzzy
 msgid "Fill in schematic symbol reference designators"
 msgstr "Substitueix els designadors de les referències dels componen&ts"
 
-#: eeschema/tools/ee_actions.cpp:638
+#: eeschema/tools/ee_actions.cpp:637
 msgid "Schematic Setup..."
 msgstr "Configuració de l'esquemàtic..."
 
-#: eeschema/tools/ee_actions.cpp:639
+#: eeschema/tools/ee_actions.cpp:638
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:644
+#: eeschema/tools/ee_actions.cpp:643
 msgid "Edit Sheet Page Number..."
 msgstr "Edita el número de pàgina de la fulla..."
 
-#: eeschema/tools/ee_actions.cpp:645
+#: eeschema/tools/ee_actions.cpp:644
 msgid "Edit the page number of the current or selected sheet"
 msgstr "Edita el número de pàgina de la fulla actual o seleccionada"
 
-#: eeschema/tools/ee_actions.cpp:649
+#: eeschema/tools/ee_actions.cpp:648
 msgid "Rescue Symbols..."
 msgstr "Recupera símbols..."
 
-#: eeschema/tools/ee_actions.cpp:650
+#: eeschema/tools/ee_actions.cpp:649
 msgid "Find old symbols in project and rename/rescue them"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:655
+#: eeschema/tools/ee_actions.cpp:654
 #, fuzzy
 msgid "Remap Legacy Library Symbols..."
 msgstr "Anomena i desa la biblioteca a&ctual..."
 
-#: eeschema/tools/ee_actions.cpp:656
+#: eeschema/tools/ee_actions.cpp:655
 #, fuzzy
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr "Suprimeix una biblioteca PCB d'aquesta taula de biblioteques"
 
-#: eeschema/tools/ee_actions.cpp:661
+#: eeschema/tools/ee_actions.cpp:660
 #, fuzzy
 msgid "Export Drawing to Clipboard"
 msgstr "Exporta els dibuixos al porta-retalls"
 
-#: eeschema/tools/ee_actions.cpp:661
+#: eeschema/tools/ee_actions.cpp:660
 #, fuzzy
 msgid "Export drawing of current sheet to clipboard"
 msgstr "Exporta els dibuixos al porta-retalls"
 
-#: eeschema/tools/ee_actions.cpp:666
+#: eeschema/tools/ee_actions.cpp:665
 #, fuzzy
 msgid "Switch to PCB Editor"
 msgstr "Canvia a la capa prèvia"
 
-#: eeschema/tools/ee_actions.cpp:666
+#: eeschema/tools/ee_actions.cpp:665
 #, fuzzy
 msgid "Open PCB in board editor"
 msgstr "&Obre l'editor del PCB"
 
-#: eeschema/tools/ee_actions.cpp:671
+#: eeschema/tools/ee_actions.cpp:670
 msgid "Export Netlist..."
 msgstr "Exporta llista de xarxes..."
 
-#: eeschema/tools/ee_actions.cpp:671
+#: eeschema/tools/ee_actions.cpp:670
 msgid "Export file containing netlist in one of several formats"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:676
+#: eeschema/tools/ee_actions.cpp:675
 msgid "Generate BOM..."
 msgstr "Genera BOM..."
 
-#: eeschema/tools/ee_actions.cpp:676
+#: eeschema/tools/ee_actions.cpp:675
 #, fuzzy
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Genera la llista dels materials"
 
-#: eeschema/tools/ee_actions.cpp:681
+#: eeschema/tools/ee_actions.cpp:680
 #, fuzzy
 msgid "Export Symbols to Library..."
 msgstr "Actualitza Símbols des de la biblioteca..."
 
-#: eeschema/tools/ee_actions.cpp:682
+#: eeschema/tools/ee_actions.cpp:681
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:688
+#: eeschema/tools/ee_actions.cpp:687
 #, fuzzy
 msgid "Export Symbols to New Library..."
 msgstr "Actualitza Símbols des de la biblioteca..."
 
-#: eeschema/tools/ee_actions.cpp:689
+#: eeschema/tools/ee_actions.cpp:688
 #, fuzzy
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
@@ -17983,334 +17995,334 @@ msgstr ""
 "Arxiva totes les empremtes en una biblioteca nova\n"
 "(en el cas que ja existeix aquesta biblioteca, aquesta s'eliminarà)"
 
-#: eeschema/tools/ee_actions.cpp:695
+#: eeschema/tools/ee_actions.cpp:694
 #, fuzzy
 msgid "Select on PCB"
 msgstr "Selecciona els elements del PCB"
 
-#: eeschema/tools/ee_actions.cpp:696
+#: eeschema/tools/ee_actions.cpp:695
 #, fuzzy
 msgid "Select corresponding items in PCB editor"
 msgstr "Ressalta la xarxa específica"
 
-#: eeschema/tools/ee_actions.cpp:701
+#: eeschema/tools/ee_actions.cpp:700
 #, fuzzy
 msgid "Show Hidden Pins"
 msgstr "Mostra els pins ocults"
 
-#: eeschema/tools/ee_actions.cpp:701
+#: eeschema/tools/ee_actions.cpp:700
 #, fuzzy
 msgid "Toggle display of hidden pins"
 msgstr "Mostra els pins ocults"
 
-#: eeschema/tools/ee_actions.cpp:706
+#: eeschema/tools/ee_actions.cpp:705
 #, fuzzy
 msgid "Show Hidden Fields"
 msgstr "Mostra els pins ocults"
 
-#: eeschema/tools/ee_actions.cpp:706
+#: eeschema/tools/ee_actions.cpp:705
 #, fuzzy
 msgid "Toggle display of hidden text fields"
 msgstr "Mostra les capes de pasta de soldadura"
 
-#: eeschema/tools/ee_actions.cpp:710
+#: eeschema/tools/ee_actions.cpp:709
 #, fuzzy
 msgid "Show ERC Warnings"
 msgstr "Advertències"
 
-#: eeschema/tools/ee_actions.cpp:710
+#: eeschema/tools/ee_actions.cpp:709
 msgid "Show markers for electrical rules checker warnings"
 msgstr ""
 "Mostra marcadors per les alertes en la comprovació de normes elèctriques"
 
-#: eeschema/tools/ee_actions.cpp:714
+#: eeschema/tools/ee_actions.cpp:713
 #, fuzzy
 msgid "Show ERC Errors"
 msgstr "Propietats del pin"
 
-#: eeschema/tools/ee_actions.cpp:714
+#: eeschema/tools/ee_actions.cpp:713
 msgid "Show markers for electrical rules checker errors"
 msgstr "Mostra marcadors pels errors en la comprovació de normes elèctriques"
 
-#: eeschema/tools/ee_actions.cpp:718
+#: eeschema/tools/ee_actions.cpp:717
 #, fuzzy
 msgid "Show ERC Exclusions"
 msgstr "Exclusions DRC"
 
-#: eeschema/tools/ee_actions.cpp:719
+#: eeschema/tools/ee_actions.cpp:718
 msgid "Show markers for excluded electrical rules checker violations"
 msgstr ""
 "Mostra marcadors per les infraccions en la comprovació de normes elèctriques "
 "excloses"
 
-#: eeschema/tools/ee_actions.cpp:723 eeschema/tools/ee_actions.cpp:728
-#: eeschema/tools/ee_actions.cpp:734 eeschema/tools/ee_actions.cpp:740
+#: eeschema/tools/ee_actions.cpp:722 eeschema/tools/ee_actions.cpp:727
+#: eeschema/tools/ee_actions.cpp:733 eeschema/tools/ee_actions.cpp:739
 #, fuzzy
 msgid "Line Mode for Wires and Buses"
 msgstr "Orientació HV per a les línies i els busos"
 
-#: eeschema/tools/ee_actions.cpp:723
+#: eeschema/tools/ee_actions.cpp:722
 #, fuzzy
 msgid "Draw and drag at any angle"
 msgstr "Traça un rectangle"
 
-#: eeschema/tools/ee_actions.cpp:729
+#: eeschema/tools/ee_actions.cpp:728
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:735
+#: eeschema/tools/ee_actions.cpp:734
 #, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr "L&imita les línies gràfiques a 45 graus"
 
-#: eeschema/tools/ee_actions.cpp:740
+#: eeschema/tools/ee_actions.cpp:739
 #, fuzzy
 msgid "Switch to next line mode"
 msgstr "Canvia a la següent quadrícula"
 
-#: eeschema/tools/ee_actions.cpp:745
+#: eeschema/tools/ee_actions.cpp:744
 #, fuzzy
 msgid "Annotate Automatically"
 msgstr "Ajusta automàticament"
 
-#: eeschema/tools/ee_actions.cpp:745
+#: eeschema/tools/ee_actions.cpp:744
 msgid "Toggle automatic annotation of new parts symbols"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:750
+#: eeschema/tools/ee_actions.cpp:749
 #, fuzzy
 msgid "Repair Schematic"
 msgstr "Imprimeix l'esquemàtic"
 
-#: eeschema/tools/ee_actions.cpp:751
+#: eeschema/tools/ee_actions.cpp:750
 msgid "Run various diagnostics and attempt to repair schematic"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:757 pcbnew/tools/pcb_actions.cpp:855
+#: eeschema/tools/ee_actions.cpp:756 pcbnew/tools/pcb_actions.cpp:855
 #, fuzzy
 msgid "Scripting Console"
 msgstr "Con&sola de seqüències d'ordres"
 
-#: eeschema/tools/ee_actions.cpp:757 pcbnew/tools/pcb_actions.cpp:855
+#: eeschema/tools/ee_actions.cpp:756 pcbnew/tools/pcb_actions.cpp:855
 #, fuzzy
 msgid "Show the Python scripting console"
 msgstr "Mostra o oculta la consola de seqüències d'ordres de Python"
 
-#: eeschema/tools/ee_actions.cpp:764
+#: eeschema/tools/ee_actions.cpp:763
 #, fuzzy
 msgid "Change Sheet"
 msgstr "Canvia el tipus"
 
-#: eeschema/tools/ee_actions.cpp:764
+#: eeschema/tools/ee_actions.cpp:763
 #, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
 msgstr "Obre l'empremta seleccionada a l'editor d'empremtes"
 
-#: eeschema/tools/ee_actions.cpp:769
+#: eeschema/tools/ee_actions.cpp:768
 msgid "Enter Sheet"
 msgstr "Introdueix el full"
 
-#: eeschema/tools/ee_actions.cpp:769
+#: eeschema/tools/ee_actions.cpp:768
 #, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "Obre l'empremta seleccionada a l'editor d'empremtes"
 
-#: eeschema/tools/ee_actions.cpp:775
+#: eeschema/tools/ee_actions.cpp:774
 msgid "Leave Sheet"
 msgstr "Deixa el full"
 
-#: eeschema/tools/ee_actions.cpp:775
+#: eeschema/tools/ee_actions.cpp:774
 #, fuzzy
 msgid "Display the parent sheet in the schematic editor"
 msgstr "Insereix el component a l'esquemàtic"
 
-#: eeschema/tools/ee_actions.cpp:780
+#: eeschema/tools/ee_actions.cpp:779
 #, fuzzy
 msgid "Navigate Up"
 msgstr "Ajusta a la pàgina"
 
-#: eeschema/tools/ee_actions.cpp:780
+#: eeschema/tools/ee_actions.cpp:779
 msgid "Navigate up one sheet in the hierarchy"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:786
+#: eeschema/tools/ee_actions.cpp:785
 #, fuzzy
 msgid "Navigate Back"
 msgstr "Ajusta a la pàgina"
 
-#: eeschema/tools/ee_actions.cpp:786
+#: eeschema/tools/ee_actions.cpp:785
 msgid "Move forward in sheet navigation history"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:792
+#: eeschema/tools/ee_actions.cpp:791
 #, fuzzy
 msgid "Navigate Forward"
 msgstr "Navegador"
 
-#: eeschema/tools/ee_actions.cpp:792
+#: eeschema/tools/ee_actions.cpp:791
 msgid "Move backward in sheet navigation history"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:798
+#: eeschema/tools/ee_actions.cpp:797
 #, fuzzy
 msgid "Previous Sheet"
 msgstr "Canvia a la capa prèvia"
 
-#: eeschema/tools/ee_actions.cpp:798
+#: eeschema/tools/ee_actions.cpp:797
 msgid "Move to previous sheet by number"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:804
+#: eeschema/tools/ee_actions.cpp:803
 #, fuzzy
 msgid "Next Sheet"
 msgstr "Introdueix el full"
 
-#: eeschema/tools/ee_actions.cpp:804
+#: eeschema/tools/ee_actions.cpp:803
 msgid "Move to next sheet by number"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:810
+#: eeschema/tools/ee_actions.cpp:809
 #, fuzzy
 msgid "Hierarchy Navigator"
 msgstr "Mostra el navegador &jeràrquic"
 
-#: eeschema/tools/ee_actions.cpp:810
+#: eeschema/tools/ee_actions.cpp:809
 #, fuzzy
 msgid "Show or hide the schematic sheet hierarchy navigator"
 msgstr "Navega per la jerarquia de l'esquemàtic"
 
-#: eeschema/tools/ee_actions.cpp:818
+#: eeschema/tools/ee_actions.cpp:817
 msgid "Add Junctions to Selection where needed"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:831
+#: eeschema/tools/ee_actions.cpp:830
 #, fuzzy
 msgid "Add Wire"
 msgstr "Afegeix un fil"
 
-#: eeschema/tools/ee_actions.cpp:831
+#: eeschema/tools/ee_actions.cpp:830
 #, fuzzy
 msgid "Add a wire"
 msgstr "Afegeix un fil"
 
-#: eeschema/tools/ee_actions.cpp:838
+#: eeschema/tools/ee_actions.cpp:837
 #, fuzzy
 msgid "Add Bus"
 msgstr "Afegeix bus"
 
-#: eeschema/tools/ee_actions.cpp:838
+#: eeschema/tools/ee_actions.cpp:837
 #, fuzzy
 msgid "Add a bus"
 msgstr "Afegeix bus"
 
-#: eeschema/tools/ee_actions.cpp:844
+#: eeschema/tools/ee_actions.cpp:843
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:76
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:132
 msgid "Unfold from Bus"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:844
+#: eeschema/tools/ee_actions.cpp:843
 msgid "Break a wire out of a bus"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:857 pcbnew/tools/pcb_actions.cpp:1502
+#: eeschema/tools/ee_actions.cpp:856 pcbnew/tools/pcb_actions.cpp:1502
 #, fuzzy
 msgid "Undo Last Segment"
 msgstr "Desfés l'última edició"
 
-#: eeschema/tools/ee_actions.cpp:857
+#: eeschema/tools/ee_actions.cpp:856
 #, fuzzy
 msgid "Walks the current line back one segment."
 msgstr "Recorre la pista actual un segment cap endarrere."
 
-#: eeschema/tools/ee_actions.cpp:863
+#: eeschema/tools/ee_actions.cpp:862
 #, fuzzy
 msgid "Switch Segment Posture"
 msgstr "Canvia el posicionament de la pista"
 
-#: eeschema/tools/ee_actions.cpp:863
+#: eeschema/tools/ee_actions.cpp:862
 msgid "Switches posture of the current segment."
 msgstr "Commuta la postura del segment actual."
 
-#: eeschema/tools/ee_actions.cpp:869
+#: eeschema/tools/ee_actions.cpp:868
 msgid "Finish Wire or Bus"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:869
+#: eeschema/tools/ee_actions.cpp:868
 #, fuzzy
 msgid "Complete drawing at current segment"
 msgstr "El text (o valor) del camp seleccionat en aquest moment"
 
-#: eeschema/tools/ee_actions.cpp:874
+#: eeschema/tools/ee_actions.cpp:873
 #, fuzzy
 msgid "Finish Wire"
 msgstr "Acabat"
 
-#: eeschema/tools/ee_actions.cpp:874
+#: eeschema/tools/ee_actions.cpp:873
 msgid "Complete wire with current segment"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:879
+#: eeschema/tools/ee_actions.cpp:878
 #, fuzzy
 msgid "Finish Bus"
 msgstr "Finlandès"
 
-#: eeschema/tools/ee_actions.cpp:879
+#: eeschema/tools/ee_actions.cpp:878
 #, fuzzy
 msgid "Complete bus with current segment"
 msgstr "Desa únicament el full de l'esquemàtic actual"
 
-#: eeschema/tools/ee_actions.cpp:884
+#: eeschema/tools/ee_actions.cpp:883
 #, fuzzy
 msgid "Finish Lines"
 msgstr "Acabat"
 
-#: eeschema/tools/ee_actions.cpp:884
+#: eeschema/tools/ee_actions.cpp:883
 msgid "Complete connected lines with current segment"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:893 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:892 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/dialogs/panel_edit_options_base.cpp:359
 #: pcbnew/tools/edit_tool_move_fct.cpp:241 pcbnew/tools/pcb_actions.cpp:270
 msgid "Move"
 msgstr "Mou"
 
-#: eeschema/tools/ee_actions.cpp:893 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:892 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:270
 msgid "Moves the selected item(s)"
 msgstr "Mou els elements seleccionats"
 
-#: eeschema/tools/ee_actions.cpp:898
+#: eeschema/tools/ee_actions.cpp:897
 msgid "Drag"
 msgstr "Arrossega"
 
-#: eeschema/tools/ee_actions.cpp:898
+#: eeschema/tools/ee_actions.cpp:897
 #, fuzzy
 msgid "Drags the selected item(s)"
 msgstr "Mou els elements seleccionats"
 
-#: eeschema/tools/ee_actions.cpp:902
+#: eeschema/tools/ee_actions.cpp:901
 #, fuzzy
 msgid "Move Activate"
 msgstr "Mou l'element"
 
-#: eeschema/tools/ee_actions.cpp:906
+#: eeschema/tools/ee_actions.cpp:905
 #, fuzzy
 msgid "Symbol Move Activate"
 msgstr "Propietats de l'etiqueta"
 
-#: eeschema/tools/ee_actions.cpp:910
+#: eeschema/tools/ee_actions.cpp:909
 #, fuzzy
 msgid "Align Elements to Grid"
 msgstr "Alinea a la dreta"
 
-#: eeschema/tools/ee_actions.cpp:916
+#: eeschema/tools/ee_actions.cpp:915
 msgid "Save Current Sheet Copy As..."
 msgstr "Desa una còpia de la fulla actual com a..."
 
-#: eeschema/tools/ee_actions.cpp:916
+#: eeschema/tools/ee_actions.cpp:915
 #, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Desa una còpia del document actual a un altre lloc"
@@ -18328,40 +18340,40 @@ msgstr "Símbol"
 msgid "No datasheet defined."
 msgstr "No hi ha una fulla de dades definida."
 
-#: eeschema/tools/sch_drawing_tools.cpp:280
+#: eeschema/tools/sch_drawing_tools.cpp:282
 msgid "Press <ESC> to cancel symbol creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:548 pcbnew/tools/drawing_tool.cpp:643
+#: eeschema/tools/sch_drawing_tools.cpp:550 pcbnew/tools/drawing_tool.cpp:643
 msgid "Press <ESC> to cancel image creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:599
+#: eeschema/tools/sch_drawing_tools.cpp:601
 #: pagelayout_editor/pl_editor_frame.cpp:854
 #: pagelayout_editor/pl_editor_frame.cpp:862 pcbnew/tools/drawing_tool.cpp:695
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr "No es pot carregar la imatge de '%s'."
 
-#: eeschema/tools/sch_drawing_tools.cpp:729
-#: eeschema/tools/sch_drawing_tools.cpp:1356
+#: eeschema/tools/sch_drawing_tools.cpp:731
+#: eeschema/tools/sch_drawing_tools.cpp:1358
 msgid "No new hierarchical labels found."
 msgstr "No s'han trobat etiquetes jeràrquiques noves."
 
-#: eeschema/tools/sch_drawing_tools.cpp:812
+#: eeschema/tools/sch_drawing_tools.cpp:813
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1233
+#: eeschema/tools/sch_drawing_tools.cpp:1235
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:175
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1344
+#: eeschema/tools/sch_drawing_tools.cpp:1346
 msgid "Click over a sheet."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1756
+#: eeschema/tools/sch_drawing_tools.cpp:1758
 msgid "Press <ESC> to cancel sheet creation."
 msgstr ""
 
@@ -18385,42 +18397,42 @@ msgstr "el símbol no és multi-unitat"
 msgid "Edit Main Fields"
 msgstr "Edita el camp %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:482
+#: eeschema/tools/sch_edit_tool.cpp:484
 #, fuzzy
 msgid "Change To"
 msgstr "Canvia"
 
-#: eeschema/tools/sch_edit_tool.cpp:1106
+#: eeschema/tools/sch_edit_tool.cpp:1108
 msgid "Label value cannot go below zero"
 msgstr "El valor de l'etiqueta no pot estar per sota de zero"
 
-#: eeschema/tools/sch_edit_tool.cpp:1375 eeschema/tools/sch_edit_tool.cpp:1378
+#: eeschema/tools/sch_edit_tool.cpp:1377 eeschema/tools/sch_edit_tool.cpp:1380
 #: eeschema/tools/symbol_editor_edit_tool.cpp:531
 #, c-format
 msgid "Edit %s Field"
 msgstr "Edita el camp %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1380
+#: eeschema/tools/sch_edit_tool.cpp:1382
 #: eeschema/tools/symbol_editor_edit_tool.cpp:533
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Edita el camp '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:1910 eeschema/tools/sch_edit_tool.cpp:1999
+#: eeschema/tools/sch_edit_tool.cpp:1918 eeschema/tools/sch_edit_tool.cpp:2007
 #, fuzzy
 msgid "<empty>"
 msgstr "En blanc"
 
-#: eeschema/tools/sch_edit_tool.cpp:2246
+#: eeschema/tools/sch_edit_tool.cpp:2274
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:2306
+#: eeschema/tools/sch_edit_tool.cpp:2334
 #, fuzzy, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "necessita un NÚMERO per «%s»"
 
-#: eeschema/tools/sch_edit_tool.cpp:2309
+#: eeschema/tools/sch_edit_tool.cpp:2337
 #: eeschema/widgets/hierarchy_pane.cpp:287
 #, fuzzy
 msgid "Edit Sheet Page Number"
@@ -18455,15 +18467,19 @@ msgstr ""
 "Vols actualitzar les empremtes de la placa per associar-les a la nova "
 "biblioteca?"
 
-#: eeschema/tools/sch_editor_control.cpp:1102
+#: eeschema/tools/sch_editor_control.cpp:1103
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:1216
+#: eeschema/tools/sch_editor_control.cpp:1203
+msgid "No net selected."
+msgstr "Cap xarxa seleccionada."
+
+#: eeschema/tools/sch_editor_control.cpp:1229
 msgid "Net must be labeled to assign a netclass."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:1892
+#: eeschema/tools/sch_editor_control.cpp:1904
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18471,26 +18487,26 @@ msgid ""
 "subsheets as a parent."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2276
+#: eeschema/tools/sch_editor_control.cpp:2288
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "No es pot eliminar la biblioteca de símbols '%s'."
 
-#: eeschema/tools/sch_editor_control.cpp:2570
+#: eeschema/tools/sch_editor_control.cpp:2582
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:705
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d ID duplicats substituïts.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2577
+#: eeschema/tools/sch_editor_control.cpp:2589
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:720
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "S'han reparat %d problemes potencials."
 
-#: eeschema/tools/sch_editor_control.cpp:2584
+#: eeschema/tools/sch_editor_control.cpp:2596
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "No s'han trobat errors."
@@ -18507,11 +18523,11 @@ msgstr ""
 msgid "Press <ESC> to cancel drawing."
 msgstr ""
 
-#: eeschema/tools/sch_move_tool.cpp:751
+#: eeschema/tools/sch_move_tool.cpp:757
 msgid "Press <ESC> to cancel drag."
 msgstr ""
 
-#: eeschema/tools/sch_move_tool.cpp:753
+#: eeschema/tools/sch_move_tool.cpp:759
 #: pagelayout_editor/tools/pl_edit_tool.cpp:217
 msgid "Press <ESC> to cancel move."
 msgstr ""
@@ -18660,19 +18676,15 @@ msgid ""
 "an integer to prevent duplicate table entries."
 msgstr ""
 
-#: eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/widgets/tuner_slider.cpp:54
 #, fuzzy, c-format
 msgid "Could not find Spice item with reference '%s'"
 msgstr "No s'ha trobat el pad personalitzat '%s'."
 
-#: eeschema/widgets/tuner_slider.cpp:62
+#: eeschema/widgets/tuner_slider.cpp:65
 #, c-format
 msgid "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
 msgstr ""
-
-#: eeschema/widgets/tuner_slider_base.cpp:24
-msgid " X "
-msgstr " X "
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -18850,15 +18862,16 @@ msgstr "Selecciona capa: %s"
 #: pcbnew/fp_text_grid_table.cpp:106 pcbnew/fp_textbox.cpp:311
 #: pcbnew/pad.cpp:974 pcbnew/pad.cpp:1729 pcbnew/pcb_bitmap.cpp:213
 #: pcbnew/pcb_dimension.cpp:365 pcbnew/pcb_dimension.cpp:1093
-#: pcbnew/pcb_shape.cpp:311 pcbnew/pcb_shape.cpp:408 pcbnew/pcb_shape.cpp:410
-#: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:136 pcbnew/pcb_textbox.cpp:305
-#: pcbnew/pcb_track.cpp:832 pcbnew/pcb_track.cpp:906 pcbnew/pcb_track.cpp:1289
-#: pcbnew/pcb_track.cpp:1296 pcbnew/tools/board_inspection_tool.cpp:199
+#: pcbnew/pcb_marker.cpp:360 pcbnew/pcb_shape.cpp:311 pcbnew/pcb_shape.cpp:408
+#: pcbnew/pcb_shape.cpp:410 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:136
+#: pcbnew/pcb_textbox.cpp:305 pcbnew/pcb_track.cpp:835 pcbnew/pcb_track.cpp:909
+#: pcbnew/pcb_track.cpp:1271 pcbnew/pcb_track.cpp:1278
+#: pcbnew/tools/board_inspection_tool.cpp:199
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:213
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:224
-#: pcbnew/widgets/pcb_properties_panel.cpp:149
 #: pcbnew/widgets/pcb_properties_panel.cpp:150
-#: pcbnew/widgets/pcb_properties_panel.cpp:154 pcbnew/zone.cpp:586
+#: pcbnew/widgets/pcb_properties_panel.cpp:151
+#: pcbnew/widgets/pcb_properties_panel.cpp:155 pcbnew/zone.cpp:586
 #: pcbnew/zone.cpp:1399 pcbnew/zone.cpp:1402
 msgid "Layer"
 msgstr "Capa"
@@ -19291,7 +19304,7 @@ msgstr "Polaritat"
 
 #: gerbview/gerber_draw_item.cpp:697 pcbnew/fp_text.cpp:304
 #: pcbnew/fp_textbox.cpp:312 pcbnew/pcb_text.cpp:138 pcbnew/pcb_textbox.cpp:306
-#: pcbnew/tools/edit_tool.cpp:1699
+#: pcbnew/tools/edit_tool.cpp:1701
 msgid "Mirror"
 msgstr "Reflexió"
 
@@ -21426,8 +21439,8 @@ msgid "Application failed to load:\n"
 msgstr "Pcbnew no ha pogut carregar:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:756
-#: kicad/tools/kicad_manager_control.cpp:763 pcbnew/pcb_edit_frame.cpp:1799
-#: pcbnew/pcb_edit_frame.cpp:1829
+#: kicad/tools/kicad_manager_control.cpp:763 pcbnew/pcb_edit_frame.cpp:1788
+#: pcbnew/pcb_edit_frame.cpp:1818
 msgid "KiCad Error"
 msgstr "Error de KiCad"
 
@@ -21788,7 +21801,7 @@ msgid "coord origin: Right Bottom page corner"
 msgstr ""
 
 #: pagelayout_editor/pl_editor_frame.cpp:188 pcbnew/pcb_edit_frame.cpp:297
-#: pcbnew/pcb_edit_frame.cpp:1448
+#: pcbnew/pcb_edit_frame.cpp:1436
 msgid "Properties"
 msgstr "Propietats"
 
@@ -23984,13 +23997,13 @@ msgstr "Altres"
 msgid "no layers"
 msgstr "Sense capes"
 
-#: pcbnew/board_item.cpp:280 pcbnew/pcb_track.cpp:1242
-#: pcbnew/pcb_track.cpp:1264 pcbnew/zone.cpp:1374 pcbnew/zone.cpp:1387
+#: pcbnew/board_item.cpp:280 pcbnew/pcb_track.cpp:1245 pcbnew/zone.cpp:1374
+#: pcbnew/zone.cpp:1387
 msgid "Position X"
 msgstr "Posició X"
 
-#: pcbnew/board_item.cpp:283 pcbnew/pcb_track.cpp:1246
-#: pcbnew/pcb_track.cpp:1269 pcbnew/zone.cpp:1381 pcbnew/zone.cpp:1388
+#: pcbnew/board_item.cpp:283 pcbnew/pcb_track.cpp:1249 pcbnew/zone.cpp:1381
+#: pcbnew/zone.cpp:1388
 msgid "Position Y"
 msgstr "Posició Y"
 
@@ -24005,8 +24018,8 @@ msgstr "Posició Y"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:46
 #: pcbnew/footprint.cpp:1044 pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:309
 #: pcbnew/pad.cpp:970 pcbnew/pcb_dimension.cpp:363 pcbnew/pcb_group.cpp:403
-#: pcbnew/pcb_shape.cpp:307 pcbnew/pcb_text.cpp:134 pcbnew/pcb_textbox.cpp:303
-#: pcbnew/pcb_track.cpp:948 pcbnew/zone.cpp:569
+#: pcbnew/pcb_marker.cpp:363 pcbnew/pcb_shape.cpp:307 pcbnew/pcb_text.cpp:134
+#: pcbnew/pcb_textbox.cpp:303 pcbnew/pcb_track.cpp:951 pcbnew/zone.cpp:569
 msgid "Locked"
 msgstr "Bloquejat"
 
@@ -25042,7 +25055,7 @@ msgstr "Mida del traç"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:113
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
-#: pcbnew/dialogs/dialog_drc.cpp:230 pcbnew/pcb_edit_frame.cpp:1998
+#: pcbnew/dialogs/dialog_drc.cpp:230 pcbnew/pcb_edit_frame.cpp:1987
 msgid "Custom Rules"
 msgstr "Normes personalitzades"
 
@@ -25057,7 +25070,7 @@ msgid ""
 "Associated project file %s could not be loaded"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:194 pcbnew/files.cpp:641
+#: pcbnew/dialogs/dialog_board_setup.cpp:194 pcbnew/files.cpp:639
 #: pcbnew/tools/pcb_control.cpp:1257
 msgid "Loading PCB"
 msgstr "S'està carregant la PCB"
@@ -27838,7 +27851,7 @@ msgid "Items to Delete"
 msgstr "Elements a eliminar"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
-#: pcbnew/tools/board_editor_control.cpp:86
+#: pcbnew/tools/board_editor_control.cpp:87
 #: pcbnew/widgets/appearance_controls.cpp:335
 #: pcbnew/widgets/panel_selection_filter.cpp:192
 #: pcbnew/widgets/panel_selection_filter_base.cpp:53
@@ -28085,7 +28098,7 @@ msgid "Set Track and Via Properties"
 msgstr "Propietats de la pista i via"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
-#: pcbnew/drc/drc_engine.cpp:1391
+#: pcbnew/drc/drc_engine.cpp:1393
 msgid "footprint"
 msgstr "empremta"
 
@@ -29552,10 +29565,6 @@ msgid "Plot mode:"
 msgstr "Mode de ploteig:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:132
-msgid "Filled"
-msgstr "Omplert"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:132
 msgid "Sketch"
 msgstr "Esbós"
 
@@ -29809,8 +29818,8 @@ msgstr "El radi ha de ser més gran que zero."
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:65
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:66
-#: pcbnew/router/pns_kicad_iface.cpp:608 pcbnew/router/pns_kicad_iface.cpp:681
-#: pcbnew/router/pns_kicad_iface.cpp:682
+#: pcbnew/router/pns_kicad_iface.cpp:624 pcbnew/router/pns_kicad_iface.cpp:697
+#: pcbnew/router/pns_kicad_iface.cpp:698
 #, fuzzy
 msgid "user choice"
 msgstr "Emmagatzema la tria"
@@ -30489,17 +30498,17 @@ msgid "Via type:"
 msgstr "Tipus de via:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1220
+#: pcbnew/pcb_track.cpp:1223
 msgid "Through"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1222
+#: pcbnew/pcb_track.cpp:1225
 msgid "Micro"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1221
+#: pcbnew/pcb_track.cpp:1224
 msgid "Blind/buried"
 msgstr ""
 
@@ -32355,12 +32364,12 @@ msgid "7"
 msgstr "A7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:101 pcbnew/pad.cpp:998
-#: pcbnew/pcb_track.cpp:907 pcbnew/pcb_track.cpp:1292
+#: pcbnew/pcb_track.cpp:910 pcbnew/pcb_track.cpp:1274
 msgid "Diameter"
 msgstr "Diàmetre"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:102 pcbnew/pad.cpp:1027
-#: pcbnew/pcb_track.cpp:908 pcbnew/pcb_track.cpp:1294
+#: pcbnew/pcb_track.cpp:911 pcbnew/pcb_track.cpp:1276
 #: pcbnew/tools/board_inspection_tool.cpp:921
 #: pcbnew/tools/board_inspection_tool.cpp:950
 msgid "Hole"
@@ -32442,288 +32451,288 @@ msgstr "àrea restringida"
 msgid "keepout area '%s'"
 msgstr "àrea restringida '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:616
+#: pcbnew/drc/drc_engine.cpp:618
 #, c-format
 msgid "Resolved zone connection type: %s."
 msgstr "Tipus de connexió de la zona resolta: %s."
 
-#: pcbnew/drc/drc_engine.cpp:634
+#: pcbnew/drc/drc_engine.cpp:636
 #, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:733 pcbnew/drc/drc_engine.cpp:743
+#: pcbnew/drc/drc_engine.cpp:735 pcbnew/drc/drc_engine.cpp:745
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:758 pcbnew/drc/drc_engine.cpp:1356
-#: pcbnew/drc/drc_engine.cpp:1371
+#: pcbnew/drc/drc_engine.cpp:760 pcbnew/drc/drc_engine.cpp:1358
+#: pcbnew/drc/drc_engine.cpp:1373
 #, fuzzy
 msgid "board minimum"
 msgstr "Amplada màxima"
 
-#: pcbnew/drc/drc_engine.cpp:761 pcbnew/drc/drc_engine.cpp:1350
-#: pcbnew/drc/drc_engine.cpp:1365
+#: pcbnew/drc/drc_engine.cpp:763 pcbnew/drc/drc_engine.cpp:1352
+#: pcbnew/drc/drc_engine.cpp:1367
 #, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Marge mínim de la placa: %s."
 
-#: pcbnew/drc/drc_engine.cpp:770
+#: pcbnew/drc/drc_engine.cpp:772
 #, fuzzy
 msgid "board minimum hole"
 msgstr "Amplada màxima"
 
-#: pcbnew/drc/drc_engine.cpp:773
+#: pcbnew/drc/drc_engine.cpp:775
 #, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "Marge d'orifici mínim de placa: %s."
 
-#: pcbnew/drc/drc_engine.cpp:792
+#: pcbnew/drc/drc_engine.cpp:794
 #, c-format
 msgid "Local override on %s; zone connection: %s."
 msgstr "Anul·lació local a %s; zona de connexió: %s."
 
-#: pcbnew/drc/drc_engine.cpp:809
+#: pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
 msgstr "Anul·lació local a %s; marge d'alleujament tèrmic: %s."
 
-#: pcbnew/drc/drc_engine.cpp:826
+#: pcbnew/drc/drc_engine.cpp:828
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Anul·lació local a %s; amplada del radi tèrmic: %s."
 
-#: pcbnew/drc/drc_engine.cpp:835
+#: pcbnew/drc/drc_engine.cpp:837
 #, fuzzy, c-format
 msgid "%s min thickness: %s."
 msgstr "Zona %s gruix mínim: %s."
 
-#: pcbnew/drc/drc_engine.cpp:849
+#: pcbnew/drc/drc_engine.cpp:851
 #, fuzzy, c-format
 msgid "Checking assertion \"%s\"."
 msgstr "S'està comprovant la condició de la norma \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:855 pcbnew/drc/drc_engine.cpp:1475
+#: pcbnew/drc/drc_engine.cpp:857 pcbnew/drc/drc_engine.cpp:1477
 msgid "Assertion passed."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:859 pcbnew/drc/drc_engine.cpp:1479
+#: pcbnew/drc/drc_engine.cpp:861 pcbnew/drc/drc_engine.cpp:1481
 msgid "--> Assertion failed. <--"
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:879
+#: pcbnew/drc/drc_engine.cpp:881
 #, c-format
 msgid "Checking %s clearance: %s."
 msgstr "S'està verificant %s marges: %s."
 
-#: pcbnew/drc/drc_engine.cpp:885
+#: pcbnew/drc/drc_engine.cpp:887
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
 msgstr "S'està verificant la longitud màxima desacoblada de %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:891
+#: pcbnew/drc/drc_engine.cpp:893
 #, c-format
 msgid "Checking %s max skew: %s."
 msgstr "S'està comprovant l'inclinació màxima de %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:897
+#: pcbnew/drc/drc_engine.cpp:899
 #, c-format
 msgid "Checking %s gap: %s."
 msgstr "S'està comprovant el marge de %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:903
+#: pcbnew/drc/drc_engine.cpp:905
 #, fuzzy, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "Zona %s Amplada del radi tèrmic: %s."
 
-#: pcbnew/drc/drc_engine.cpp:909
+#: pcbnew/drc/drc_engine.cpp:911
 #, fuzzy, c-format
 msgid "Checking %s min spoke count: %s."
 msgstr "S'està comprovant %s %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:916
+#: pcbnew/drc/drc_engine.cpp:918
 #, fuzzy, c-format
 msgid "Checking %s zone connection: %s."
 msgstr "S'estan comprovant les connexions de xarxa..."
 
-#: pcbnew/drc/drc_engine.cpp:934 pcbnew/drc/drc_engine.cpp:935
-#: pcbnew/drc/drc_engine.cpp:936 pcbnew/tools/board_inspection_tool.cpp:213
+#: pcbnew/drc/drc_engine.cpp:936 pcbnew/drc/drc_engine.cpp:937
+#: pcbnew/drc/drc_engine.cpp:938 pcbnew/tools/board_inspection_tool.cpp:213
 #: pcbnew/tools/board_inspection_tool.cpp:222
 #: pcbnew/tools/board_inspection_tool.cpp:231
 #, fuzzy
 msgid "undefined"
 msgstr "No definit"
 
-#: pcbnew/drc/drc_engine.cpp:948
+#: pcbnew/drc/drc_engine.cpp:950
 #, fuzzy, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "S'estan verificant les amplades de les pistes..."
 
-#: pcbnew/drc/drc_engine.cpp:954
+#: pcbnew/drc/drc_engine.cpp:956
 #, c-format
 msgid "Checking board setup constraints track width: min %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:962
+#: pcbnew/drc/drc_engine.cpp:964
 #, fuzzy, c-format
 msgid "Checking %s annular width: min %s."
 msgstr "S'està verificant %s marges: %s."
 
-#: pcbnew/drc/drc_engine.cpp:970
+#: pcbnew/drc/drc_engine.cpp:972
 #, fuzzy, c-format
 msgid "Checking %s via diameter: opt %s."
 msgstr "S'estan verificant els diàmetres de les vies..."
 
-#: pcbnew/drc/drc_engine.cpp:976
+#: pcbnew/drc/drc_engine.cpp:978
 #, c-format
 msgid "Checking board setup constraints via diameter: min %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:985
+#: pcbnew/drc/drc_engine.cpp:987
 #, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "S'està verificant la mida del forat de %s: opt %s."
 
-#: pcbnew/drc/drc_engine.cpp:991
+#: pcbnew/drc/drc_engine.cpp:993
 #, c-format
 msgid "Checking board setup constraints hole size: min %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1001
+#: pcbnew/drc/drc_engine.cpp:1003
 #, fuzzy, c-format
 msgid "Checking %s: min %s."
 msgstr "S'està comprovant %s %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1009
+#: pcbnew/drc/drc_engine.cpp:1011
 #, fuzzy, c-format
 msgid "Checking %s diff pair gap: opt %s."
 msgstr "S'està verificant %s marges: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1016
+#: pcbnew/drc/drc_engine.cpp:1018
 #, c-format
 msgid "Checking board setup constraints clearance: min %s."
 msgstr ""
 "S'està verificant el marge de les restriccions de la configuració de la "
 "placa: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1024
+#: pcbnew/drc/drc_engine.cpp:1026
 #, fuzzy, c-format
 msgid "Checking board setup constraints hole to hole: min %s."
 msgstr ""
 "S'està verificant el marge de les restriccions de la configuració de la "
 "placa: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1030 pcbnew/drc/drc_engine.cpp:1056
-#: pcbnew/drc/drc_engine.cpp:1488
+#: pcbnew/drc/drc_engine.cpp:1032 pcbnew/drc/drc_engine.cpp:1058
+#: pcbnew/drc/drc_engine.cpp:1490
 #, c-format
 msgid "Checking %s."
 msgstr "S'està comprovant %s."
 
-#: pcbnew/drc/drc_engine.cpp:1045
+#: pcbnew/drc/drc_engine.cpp:1047
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "S'està verificant %s: min %s; opt %s; max %s."
 
-#: pcbnew/drc/drc_engine.cpp:1064
+#: pcbnew/drc/drc_engine.cpp:1066
 msgid "Board and netclass clearances apply only between copper items."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1112
+#: pcbnew/drc/drc_engine.cpp:1114
 msgid "Keepout constraint not met."
 msgstr "No es compleix la restricció d'àrea restringida."
 
-#: pcbnew/drc/drc_engine.cpp:1114
+#: pcbnew/drc/drc_engine.cpp:1116
 msgid "Disallow constraint not met."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1136
+#: pcbnew/drc/drc_engine.cpp:1138
 msgid "Keepout layer(s) not matched."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1140 pcbnew/drc/drc_engine.cpp:1161
-#: pcbnew/drc/drc_engine.cpp:1492
+#: pcbnew/drc/drc_engine.cpp:1142 pcbnew/drc/drc_engine.cpp:1163
+#: pcbnew/drc/drc_engine.cpp:1494
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "La capa de normes '%s' no coincideix; norma ignorada."
 
-#: pcbnew/drc/drc_engine.cpp:1145 pcbnew/drc/drc_engine.cpp:1166
+#: pcbnew/drc/drc_engine.cpp:1147 pcbnew/drc/drc_engine.cpp:1168
 msgid "Rule layer not matched; rule ignored."
 msgstr "La capa de normes no coincideix, norma ignorada."
 
-#: pcbnew/drc/drc_engine.cpp:1180
+#: pcbnew/drc/drc_engine.cpp:1182
 #, fuzzy, c-format
 msgid "%s is not a drilled hole; rule ignored."
 msgstr "La capa de normes no coincideix, norma ignorada."
 
-#: pcbnew/drc/drc_engine.cpp:1192
+#: pcbnew/drc/drc_engine.cpp:1194
 msgid "Unconditional constraint applied."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1196 pcbnew/drc/drc_engine.cpp:1498
+#: pcbnew/drc/drc_engine.cpp:1198 pcbnew/drc/drc_engine.cpp:1500
 msgid "Unconditional rule applied."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1201
+#: pcbnew/drc/drc_engine.cpp:1203
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1216 pcbnew/drc/drc_engine.cpp:1503
+#: pcbnew/drc/drc_engine.cpp:1218 pcbnew/drc/drc_engine.cpp:1505
 #, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "S'està comprovant la condició de la norma \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:1226
+#: pcbnew/drc/drc_engine.cpp:1228
 msgid "Constraint applied."
 msgstr "Restricció aplicada."
 
-#: pcbnew/drc/drc_engine.cpp:1230 pcbnew/drc/drc_engine.cpp:1509
+#: pcbnew/drc/drc_engine.cpp:1232 pcbnew/drc/drc_engine.cpp:1511
 msgid "Rule applied."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1235
+#: pcbnew/drc/drc_engine.cpp:1237
 msgid "Rule applied; overrides previous constraints."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1261
+#: pcbnew/drc/drc_engine.cpp:1263
 msgid "Membership not satisfied; constraint ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1262 pcbnew/drc/drc_engine.cpp:1514
+#: pcbnew/drc/drc_engine.cpp:1264 pcbnew/drc/drc_engine.cpp:1516
 msgid "Condition not satisfied; rule ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1318 pcbnew/drc/drc_engine.cpp:1335
+#: pcbnew/drc/drc_engine.cpp:1320 pcbnew/drc/drc_engine.cpp:1337
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
 msgstr "Marge local en %s; marge: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1386
+#: pcbnew/drc/drc_engine.cpp:1388
 #, fuzzy, c-format
 msgid "%s zone connection: %s."
 msgstr "S'estan comprovant les connexions de xarxa..."
 
-#: pcbnew/drc/drc_engine.cpp:1402
+#: pcbnew/drc/drc_engine.cpp:1404
 #, fuzzy, c-format
 msgid "%s pad connection: %s."
 msgstr "Zona %s de connexió de pad: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1407 pcbnew/drc/drc_engine.cpp:1424
-#: pcbnew/drc/drc_engine.cpp:1441 pcbnew/zone.cpp:362 pcbnew/zone.cpp:473
+#: pcbnew/drc/drc_engine.cpp:1409 pcbnew/drc/drc_engine.cpp:1426
+#: pcbnew/drc/drc_engine.cpp:1443 pcbnew/zone.cpp:362 pcbnew/zone.cpp:473
 msgid "zone"
 msgstr "zona"
 
-#: pcbnew/drc/drc_engine.cpp:1419
+#: pcbnew/drc/drc_engine.cpp:1421
 #, fuzzy, c-format
 msgid "%s thermal relief gap: %s."
 msgstr "Zona %s marge termal d'alleujament: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1436
+#: pcbnew/drc/drc_engine.cpp:1438
 #, fuzzy, c-format
 msgid "%s thermal spoke width: %s."
 msgstr "Zona %s Amplada del radi tèrmic: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1469
+#: pcbnew/drc/drc_engine.cpp:1471
 #, fuzzy, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "S'està comprovant la condició de la norma \"%s\"."
@@ -32996,7 +33005,7 @@ msgstr "Norma: %s"
 msgid "Local override"
 msgstr "Anul·lació local"
 
-#: pcbnew/drc/drc_rule.h:154
+#: pcbnew/drc/drc_rule.h:156
 #, c-format
 msgid "rule %s"
 msgstr "norma %s"
@@ -33179,14 +33188,14 @@ msgid "Checking copper zone clearances..."
 msgstr "S'estan verificant els marges de les zones de coure..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:242
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:295
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:375
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:414
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:661
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:693
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:714
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:735
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:986
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:297
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:378
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:417
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:664
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:696
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:717
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:738
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:989
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:232
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:265
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:120
@@ -33202,7 +33211,12 @@ msgstr "S'estan verificant els marges de les zones de coure..."
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s marge %s; actual %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:630
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
+#, fuzzy, c-format
+msgid "(%s clearance %s; actual < 0)"
+msgstr "(%s marge %s; actual %s)"
+
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, fuzzy, c-format
 msgid "(nets %s and %s)"
 msgstr "Rescata %s com a %s"
@@ -33630,48 +33644,48 @@ msgstr ""
 msgid "STEP file has been created, but there are warnings."
 msgstr ""
 
-#: pcbnew/files.cpp:150
+#: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
 msgstr "Tots els fitxers de Placa de KiCad"
 
-#: pcbnew/files.cpp:191
+#: pcbnew/files.cpp:192
 msgid "Open Board File"
 msgstr "Obre el fitxer de la placa"
 
-#: pcbnew/files.cpp:191
+#: pcbnew/files.cpp:192
 msgid "Import Non KiCad Board File"
 msgstr "Importa un fitxer de placa No Kicad"
 
-#: pcbnew/files.cpp:227
+#: pcbnew/files.cpp:228
 msgid "Save Board File As"
 msgstr "Anomena i desa el fitxer de la placa"
 
-#: pcbnew/files.cpp:273
+#: pcbnew/files.cpp:271
 msgid "Printed circuit board"
 msgstr "Placa de circuit imprès"
 
-#: pcbnew/files.cpp:337
+#: pcbnew/files.cpp:335
 #, fuzzy, c-format
 msgid "Recovery file '%s' not found."
 msgstr "No s'ha trobat el fitxer de recuperació «%s»."
 
-#: pcbnew/files.cpp:342
+#: pcbnew/files.cpp:340
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "Vols carregar el fitxer de recuperació '%s'?"
 
-#: pcbnew/files.cpp:381
+#: pcbnew/files.cpp:379
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "Es tancarà la placa actual, vols desar els canvis a '%s' abans de continuar?"
 
-#: pcbnew/files.cpp:395
+#: pcbnew/files.cpp:393
 #, fuzzy
 msgid "Current Board will be closed. Continue?"
 msgstr "Les dades actuals es perdran?"
 
-#: pcbnew/files.cpp:565
+#: pcbnew/files.cpp:563
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33679,75 +33693,75 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 
-#: pcbnew/files.cpp:570
+#: pcbnew/files.cpp:568
 #, fuzzy
 msgid "Edge Clearance Warning"
 msgstr "Marge de seguretat local i ajusts"
 
-#: pcbnew/files.cpp:601
+#: pcbnew/files.cpp:599
 #, c-format
 msgid "PCB '%s' is already open."
 msgstr "La PCB '%s' ja està oberta."
 
-#: pcbnew/files.cpp:609
+#: pcbnew/files.cpp:607
 #, fuzzy
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "La placa actual ha estat modificada. Voleu desar els canvis?"
 
-#: pcbnew/files.cpp:631
+#: pcbnew/files.cpp:629
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "La PCB '%s' no existeix. Vols crear-la?"
 
-#: pcbnew/files.cpp:640
+#: pcbnew/files.cpp:638
 msgid "Creating PCB"
 msgstr "S'està creant la PCB"
 
-#: pcbnew/files.cpp:745 pcbnew/files.cpp:755
+#: pcbnew/files.cpp:743 pcbnew/files.cpp:753
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "Error en carregar la PCB '%s'."
 
-#: pcbnew/files.cpp:764
+#: pcbnew/files.cpp:762
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "S'ha exhaurit la memòria en carregar la '%s'"
 
-#: pcbnew/files.cpp:877
+#: pcbnew/files.cpp:875
 #, fuzzy, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "S'ha produït un error quan s'intentava desar la peça a la biblioteca de "
 "símbols «%s»."
 
-#: pcbnew/files.cpp:908
+#: pcbnew/files.cpp:906
 #, fuzzy
 msgid "Error saving project specific footprint library table."
 msgstr ""
 "S'ha produït un error quan s'intentava desar la peça a la biblioteca de "
 "símbols «%s»."
 
-#: pcbnew/files.cpp:984
+#: pcbnew/files.cpp:982
 msgid "Converting zone fills"
 msgstr "S'estan convertint els ompliments de les zones"
 
-#: pcbnew/files.cpp:988
+#: pcbnew/files.cpp:986
 #, fuzzy
 msgid "Convert Zone(s)"
 msgstr "Convertit"
 
-#: pcbnew/files.cpp:1025 pcbnew/files.cpp:1160
+#: pcbnew/files.cpp:1023 pcbnew/files.cpp:1158
 #: pcbnew/footprint_libraries_utils.cpp:367
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Permisos insuficients per escriure al fitxer '%s'."
 
-#: pcbnew/files.cpp:1053 pcbnew/files.cpp:1205
+#: pcbnew/files.cpp:1051 pcbnew/files.cpp:1203
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Error en desar el fitxer de normes personalitzades '%s'."
 
-#: pcbnew/files.cpp:1079 pcbnew/files.cpp:1181
+#: pcbnew/files.cpp:1077 pcbnew/files.cpp:1179
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33756,7 +33770,7 @@ msgstr ""
 "Error en desar el fitxer de la placa '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1096
+#: pcbnew/files.cpp:1094
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33765,7 +33779,7 @@ msgstr ""
 "Error en desar el fitxer de la placa '%s'.\n"
 "No s'ha pogut canviar el nom al fitxer temporal '%s'."
 
-#: pcbnew/files.cpp:1209
+#: pcbnew/files.cpp:1207
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -33931,8 +33945,8 @@ msgstr "Editor d'empremtes KiCad"
 msgid "Inner layers"
 msgstr "Capes internes"
 
-#: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:834
-#: pcbnew/pcb_edit_frame.cpp:293 pcbnew/pcb_edit_frame.cpp:1447
+#: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:836
+#: pcbnew/pcb_edit_frame.cpp:293 pcbnew/pcb_edit_frame.cpp:1435
 msgid "Selection Filter"
 msgstr "Filtre de selecció"
 
@@ -33940,30 +33954,30 @@ msgstr "Filtre de selecció"
 msgid "Footprint changes are unsaved"
 msgstr "No s'han desat els canvis de l'empremta"
 
-#: pcbnew/footprint_edit_frame.cpp:521
+#: pcbnew/footprint_edit_frame.cpp:523
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:874
+#: pcbnew/footprint_edit_frame.cpp:876
 #, c-format
 msgid "[from %s]"
 msgstr "[des de %s]"
 
-#: pcbnew/footprint_edit_frame.cpp:909
+#: pcbnew/footprint_edit_frame.cpp:911
 msgid "[no footprint loaded]"
 msgstr "[no s'ha carregat cap empremta]"
 
-#: pcbnew/footprint_edit_frame.cpp:965
+#: pcbnew/footprint_edit_frame.cpp:967
 #, fuzzy
 msgid "Updating Footprint Libraries"
 msgstr "Càrrega de biblioteques de símbols"
 
-#: pcbnew/footprint_edit_frame.cpp:1276
+#: pcbnew/footprint_edit_frame.cpp:1266
 msgid "No footprint selected."
 msgstr "No s'ha seleccionat cap empremta."
 
-#: pcbnew/footprint_edit_frame.cpp:1285
+#: pcbnew/footprint_edit_frame.cpp:1275
 msgid "Footprint Image File Name"
 msgstr "Nom del fitxer de la imatge de l'empremta"
 
@@ -35141,15 +35155,15 @@ msgstr "Longitud al paquet"
 msgid "Hole X / Y"
 msgstr "Perforació X / Y"
 
-#: pcbnew/pad.cpp:1045 pcbnew/pcb_track.cpp:868 pcbnew/pcb_track.cpp:913
+#: pcbnew/pad.cpp:1045 pcbnew/pcb_track.cpp:871 pcbnew/pcb_track.cpp:916
 #: pcbnew/router/router_tool.cpp:2537 pcbnew/router/router_tool.cpp:2554
 #: pcbnew/zone.cpp:608
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Marge mínim: %s"
 
-#: pcbnew/pad.cpp:1047 pcbnew/pcb_track.cpp:870 pcbnew/pcb_track.cpp:879
-#: pcbnew/pcb_track.cpp:885 pcbnew/pcb_track.cpp:915 pcbnew/pcb_track.cpp:921
+#: pcbnew/pad.cpp:1047 pcbnew/pcb_track.cpp:873 pcbnew/pcb_track.cpp:882
+#: pcbnew/pcb_track.cpp:888 pcbnew/pcb_track.cpp:918 pcbnew/pcb_track.cpp:924
 #: pcbnew/router/router_tool.cpp:2534 pcbnew/router/router_tool.cpp:2539
 #: pcbnew/router/router_tool.cpp:2544 pcbnew/router/router_tool.cpp:2551
 #: pcbnew/router/router_tool.cpp:2556 pcbnew/zone.cpp:610
@@ -35261,7 +35275,7 @@ msgstr "Mida del forat Y"
 msgid "Fabrication Property"
 msgstr "Sortides de &fabricació"
 
-#: pcbnew/pad.cpp:1798 pcbnew/pcb_track.cpp:858
+#: pcbnew/pad.cpp:1798 pcbnew/pcb_track.cpp:861
 msgid "Pad To Die Length"
 msgstr "Pad a la llargada del dau"
 
@@ -35333,60 +35347,60 @@ msgstr "Cerca un text"
 msgid "New PCB file is unsaved"
 msgstr "El fitxer nou de la PCB no s'ha desat"
 
-#: pcbnew/pcb_edit_frame.cpp:1103
+#: pcbnew/pcb_edit_frame.cpp:1091
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "¡No es pot eliminar el fitxer de desat automàtic '%s'!"
 
-#: pcbnew/pcb_edit_frame.cpp:1378
+#: pcbnew/pcb_edit_frame.cpp:1366
 msgid "Board file is read only."
 msgstr "El fitxer de placa només és de lectura."
 
-#: pcbnew/pcb_edit_frame.cpp:1413
+#: pcbnew/pcb_edit_frame.cpp:1401
 msgid "PCB file changes are unsaved"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1711
+#: pcbnew/pcb_edit_frame.cpp:1700
 #, fuzzy
 msgid "The schematic for this board cannot be found."
 msgstr "El camp %s no pot estar buit."
 
-#: pcbnew/pcb_edit_frame.cpp:1735
+#: pcbnew/pcb_edit_frame.cpp:1724
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1760
+#: pcbnew/pcb_edit_frame.cpp:1749
 #, fuzzy
 msgid "Eeschema netlist"
 msgstr "Netlist d'EEschema"
 
-#: pcbnew/pcb_edit_frame.cpp:1771
+#: pcbnew/pcb_edit_frame.cpp:1760
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1798
+#: pcbnew/pcb_edit_frame.cpp:1787
 #, fuzzy, c-format
 msgid "Schematic file '%s' not found."
 msgstr "No s'ha trobat el fitxer de recuperació «%s»."
 
-#: pcbnew/pcb_edit_frame.cpp:1828
+#: pcbnew/pcb_edit_frame.cpp:1817
 msgid "Eeschema failed to load."
 msgstr "No s'ha pogut carregar l'Eeschema."
 
-#: pcbnew/pcb_edit_frame.cpp:1992
+#: pcbnew/pcb_edit_frame.cpp:1981
 msgid "Edit design rules"
 msgstr "Edita normes de disseny"
 
-#: pcbnew/pcb_edit_frame.cpp:2004
+#: pcbnew/pcb_edit_frame.cpp:1993
 msgid "Could not compile custom design rules."
 msgstr "No s'han pogut compilar les normes de disseny personalitzades."
 
-#: pcbnew/pcb_edit_frame.cpp:2042
+#: pcbnew/pcb_edit_frame.cpp:2031
 msgid "Export Hyperlynx Layout"
 msgstr ""
 
@@ -35527,80 +35541,80 @@ msgstr "Valor %s de %s"
 msgid "removed annular ring"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:827
+#: pcbnew/pcb_track.cpp:822
 msgid "Track (arc)"
 msgstr "Pista (arc)"
 
-#: pcbnew/pcb_track.cpp:842
+#: pcbnew/pcb_track.cpp:845
 msgid "Segment Length"
 msgstr "Longitud del segment"
 
-#: pcbnew/pcb_track.cpp:853
+#: pcbnew/pcb_track.cpp:856
 #, fuzzy
 msgid "Routed Length"
 msgstr "Cara de la placa"
 
-#: pcbnew/pcb_track.cpp:861
+#: pcbnew/pcb_track.cpp:864
 msgid "Full Length"
 msgstr "Tota la longitud"
 
-#: pcbnew/pcb_track.cpp:876
+#: pcbnew/pcb_track.cpp:879
 #, fuzzy, c-format
 msgid "Width Constraints: min %s, max %s"
 msgstr "S'està verificant %s: min %s; opt %s; max %s."
 
-#: pcbnew/pcb_track.cpp:883
+#: pcbnew/pcb_track.cpp:886
 #, fuzzy, c-format
 msgid "Width Constraints: min %s"
 msgstr "Restriccions"
 
-#: pcbnew/pcb_track.cpp:896
+#: pcbnew/pcb_track.cpp:899
 msgid "Micro Via"
 msgstr "Microvia"
 
-#: pcbnew/pcb_track.cpp:897
+#: pcbnew/pcb_track.cpp:900
 msgid "Blind/Buried Via"
 msgstr "Via cega o enterrada"
 
-#: pcbnew/pcb_track.cpp:898
+#: pcbnew/pcb_track.cpp:901
 msgid "Through Via"
 msgstr "A través d'una via"
 
-#: pcbnew/pcb_track.cpp:919
+#: pcbnew/pcb_track.cpp:922
 #, c-format
 msgid "Min Annular Width: %s"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:935
+#: pcbnew/pcb_track.cpp:938
 msgid "NetCode"
 msgstr "Codi de xarxa"
 
-#: pcbnew/pcb_track.cpp:1064
+#: pcbnew/pcb_track.cpp:1067
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
 msgstr "Pista (arc) %s sobre %s, longitud %s"
 
-#: pcbnew/pcb_track.cpp:1065
+#: pcbnew/pcb_track.cpp:1068
 #, c-format
 msgid "Track %s on %s, length %s"
 msgstr "Pista %s sobre (%s), longitud %s"
 
-#: pcbnew/pcb_track.cpp:1287
+#: pcbnew/pcb_track.cpp:1269
 #, fuzzy
 msgid "Via Properties"
 msgstr "Propietats del pin"
 
-#: pcbnew/pcb_track.cpp:1297 pcbnew/widgets/pcb_properties_panel.cpp:155
+#: pcbnew/pcb_track.cpp:1279 pcbnew/widgets/pcb_properties_panel.cpp:156
 #, fuzzy
 msgid "Layer Top"
 msgstr "Capa"
 
-#: pcbnew/pcb_track.cpp:1299 pcbnew/widgets/pcb_properties_panel.cpp:156
+#: pcbnew/pcb_track.cpp:1281 pcbnew/widgets/pcb_properties_panel.cpp:157
 #, fuzzy
 msgid "Layer Bottom"
 msgstr "Inferior"
 
-#: pcbnew/pcb_track.cpp:1301
+#: pcbnew/pcb_track.cpp:1283
 msgid "Via Type"
 msgstr "Tipus de via"
 
@@ -36980,40 +36994,40 @@ msgstr ""
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:574 pcbnew/router/pns_kicad_iface.cpp:645
+#: pcbnew/router/pns_kicad_iface.cpp:590 pcbnew/router/pns_kicad_iface.cpp:661
 #: pcbnew/router/router_tool.cpp:756
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Marge mínim de la placa: %s."
 
-#: pcbnew/router/pns_kicad_iface.cpp:578 pcbnew/router/pns_kicad_iface.cpp:644
+#: pcbnew/router/pns_kicad_iface.cpp:594 pcbnew/router/pns_kicad_iface.cpp:660
 #: pcbnew/router/router_tool.cpp:723 pcbnew/router/router_tool.cpp:743
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Amplada màxima"
 
-#: pcbnew/router/pns_kicad_iface.cpp:585
+#: pcbnew/router/pns_kicad_iface.cpp:601
 #, fuzzy
 msgid "existing track"
 msgstr "Quan es creïn les pistes"
 
-#: pcbnew/router/pns_kicad_iface.cpp:606
+#: pcbnew/router/pns_kicad_iface.cpp:622
 #, fuzzy
 msgid "netclass 'Default'"
 msgstr "Utilitza els valors de la classe de xarxa"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1134
+#: pcbnew/router/pns_kicad_iface.cpp:1150
 #, c-format
 msgid "%s is malformed."
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:1137
+#: pcbnew/router/pns_kicad_iface.cpp:1153
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:1764 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1802 pcbnew/router/router_tool.cpp:453
 msgid "Interactive Router"
 msgstr "Encaminador interactiu"
 
@@ -37646,7 +37660,7 @@ msgstr "Utilitza la mida de la classe de la xarxa"
 msgid "Via: %s (%s)"
 msgstr "Via: %s (%s)"
 
-#: pcbnew/tools/board_editor_control.cpp:116
+#: pcbnew/tools/board_editor_control.cpp:117
 msgid "Locking"
 msgstr "Bloqueig"
 
@@ -38319,95 +38333,95 @@ msgstr "ERC"
 msgid "Positioning Tools"
 msgstr "Desplaçament de la posició:"
 
-#: pcbnew/tools/edit_tool.cpp:417
+#: pcbnew/tools/edit_tool.cpp:419
 #, c-format
 msgid "Unable to resize arc tracks of %s or greater."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:764
+#: pcbnew/tools/edit_tool.cpp:766
 #, fuzzy
 msgid "Drag Arc Track"
 msgstr "Arrossega la via o pista"
 
-#: pcbnew/tools/edit_tool.cpp:826
+#: pcbnew/tools/edit_tool.cpp:828
 msgid "Edit track width/via size"
 msgstr "Edita l'amplada de la pista o la mida de la via"
 
-#: pcbnew/tools/edit_tool.cpp:861
+#: pcbnew/tools/edit_tool.cpp:863
 msgid "At least two straight track segments must be selected."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:865 pcbnew/tools/edit_tool.cpp:1140
+#: pcbnew/tools/edit_tool.cpp:867 pcbnew/tools/edit_tool.cpp:1142
 msgid "Enter fillet radius:"
 msgstr "Introdueix el radi d'arrodoniment:"
 
-#: pcbnew/tools/edit_tool.cpp:865 pcbnew/tools/edit_tool.cpp:1029
+#: pcbnew/tools/edit_tool.cpp:867 pcbnew/tools/edit_tool.cpp:1031
 #: pcbnew/tools/pcb_actions.cpp:364
 #, fuzzy
 msgid "Fillet Tracks"
 msgstr "Radi de l'arrodoniment"
 
-#: pcbnew/tools/edit_tool.cpp:875 pcbnew/tools/edit_tool.cpp:1150
+#: pcbnew/tools/edit_tool.cpp:877 pcbnew/tools/edit_tool.cpp:1152
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1036
+#: pcbnew/tools/edit_tool.cpp:1038
 msgid "Unable to fillet the selected track segments."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1038
+#: pcbnew/tools/edit_tool.cpp:1040
 msgid "Some of the track segments could not be filleted."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1136
+#: pcbnew/tools/edit_tool.cpp:1138
 msgid "A shape with least two lines must be selected."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1140 pcbnew/tools/edit_tool.cpp:1307
+#: pcbnew/tools/edit_tool.cpp:1142 pcbnew/tools/edit_tool.cpp:1309
 #: pcbnew/tools/pcb_actions.cpp:368
 #, fuzzy
 msgid "Fillet Lines"
 msgstr "Omple la zona"
 
-#: pcbnew/tools/edit_tool.cpp:1310
+#: pcbnew/tools/edit_tool.cpp:1312
 #, fuzzy
 msgid "Unable to fillet the selected lines."
 msgstr "Visualitza l'empremta seleccionada"
 
-#: pcbnew/tools/edit_tool.cpp:1312
+#: pcbnew/tools/edit_tool.cpp:1314
 #, fuzzy
 msgid "Some of the lines could not be filleted."
 msgstr "No s'ha pogut fer còpia de seguretat d'alguns fitxers del projecte."
 
-#: pcbnew/tools/edit_tool.cpp:1480
+#: pcbnew/tools/edit_tool.cpp:1482
 msgid "Rotate"
 msgstr "Gira"
 
-#: pcbnew/tools/edit_tool.cpp:1776 pcbnew/tools/pcb_actions.cpp:326
+#: pcbnew/tools/edit_tool.cpp:1778 pcbnew/tools/pcb_actions.cpp:326
 #, fuzzy
 msgid "Change Side / Flip"
 msgstr "Canvia la mida de la via i de la perforació"
 
-#: pcbnew/tools/edit_tool.cpp:2143
+#: pcbnew/tools/edit_tool.cpp:2145
 msgid "Move exact"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2279
+#: pcbnew/tools/edit_tool.cpp:2281
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "S'ha(n) duplicat %d element(s)"
 
-#: pcbnew/tools/edit_tool.cpp:2505
+#: pcbnew/tools/edit_tool.cpp:2507
 msgid "Select reference point for the copy..."
 msgstr "Selecciona el punt de referència per la còpia..."
 
-#: pcbnew/tools/edit_tool.cpp:2506 pcbnew/tools/edit_tool.cpp:2523
+#: pcbnew/tools/edit_tool.cpp:2508 pcbnew/tools/edit_tool.cpp:2525
 msgid "Selection copied"
 msgstr "Selecció copiada"
 
-#: pcbnew/tools/edit_tool.cpp:2507
+#: pcbnew/tools/edit_tool.cpp:2509
 #, fuzzy
 msgid "Copy canceled"
 msgstr "Cancel·la"
@@ -41323,7 +41337,7 @@ msgstr "D&imensions"
 msgid "Other items"
 msgstr "Altres pàgines"
 
-#: pcbnew/widgets/pcb_properties_panel.cpp:133
+#: pcbnew/widgets/pcb_properties_panel.cpp:134
 #, fuzzy
 msgid "Change property"
 msgstr "Canvia les propietats del text"
@@ -41646,6 +41660,12 @@ msgstr "Edita l'esquemàtic"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "Fitxers de plaques de circuits impresos de KiCad (*.brd)|*.brd"
+
+#~ msgid "Break Wire"
+#~ msgstr "Talla el fil"
+
+#~ msgid " X "
+#~ msgstr " X "
 
 #~ msgid "Change Edit Method"
 #~ msgstr "Canvia el mètode d'edició"
@@ -45348,10 +45368,6 @@ msgstr "Fitxers de plaques de circuits impresos de KiCad (*.brd)|*.brd"
 #, fuzzy
 #~ msgid "Minimum uVia drill:"
 #~ msgstr "Diàmetre mín. de perforació de la μvia"
-
-#, fuzzy
-#~ msgid "Via is not connected"
-#~ msgstr "No connectat"
 
 #, fuzzy
 #~ msgid "Unused Pad Layers"
@@ -50203,9 +50219,6 @@ msgstr "Fitxers de plaques de circuits impresos de KiCad (*.brd)|*.brd"
 
 #~ msgid "Clearance must be smaller than %f\" / %f mm."
 #~ msgstr "El marge de seguretat ha de ser més petit que %f\" / %f mm."
-
-#~ msgid "No net selected."
-#~ msgstr "Cap xarxa seleccionada."
 
 #, fuzzy
 #~ msgid "Net Filtering:"
