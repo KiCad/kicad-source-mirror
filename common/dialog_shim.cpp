@@ -150,8 +150,7 @@ DIALOG_SHIM::~DIALOG_SHIM()
     if( HasKiway() )
         Kiway().SetBlockingDialog( nullptr );
 
-    if( m_qmodal_parent_disabler )
-        delete m_qmodal_parent_disabler;    // usually NULL by now
+    delete m_qmodal_parent_disabler;
 }
 
 
@@ -599,7 +598,7 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
                 [&]( int& idx )
                 {
                     // Wrap-around modulus
-                    int size = m_tabOrder.size();
+                    int size = (int) m_tabOrder.size();
                     idx = ( ( idx + delta ) % size + size ) % size;
                 };
 
