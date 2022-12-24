@@ -301,7 +301,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-                // Pick the footprint to be placed
+                // Pick the symbol to be placed
                 bool footprintPreviews = m_frame->eeconfig()->m_Appearance.footprint_preview;
                 PICKED_SYMBOL sel = m_frame->PickSymbolFromLibTree( &filter, *historyList, true,
                                                                     1, 1, footprintPreviews );
@@ -411,6 +411,20 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     m_toolMgr->RunAction( ACTIONS::refreshPreview );
                 }
             }
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate ) )
+        {
+            if( symbol )
+            {
+                // This doesn't really make sense; we'll just end up dragging a stack of
+                // objects so we ignore the duplicate and just carry on.
+                wxBell();
+                continue;
+            }
+
+            // Exit.  The duplicate will run in its own loop.
+            m_frame->PopTool( aEvent );
+            break;
         }
         else if( symbol && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {

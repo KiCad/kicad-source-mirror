@@ -790,6 +790,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // This doesn't really make sense; we'll just end up dragging a stack of
                 // objects so we ignore the duplicate and just carry on.
+                wxBell();
                 continue;
             }
 
