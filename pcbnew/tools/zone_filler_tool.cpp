@@ -401,7 +401,9 @@ void ZONE_FILLER_TOOL::rebuildConnectivity()
 
 void ZONE_FILLER_TOOL::refresh()
 {
-    canvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+    // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
+    // they won't be found in the view layer's itemset for re-painting.
+    canvas()->GetView()->UpdateAllItemsConditionally( KIGFX::ALL,
             [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
             {
                 if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )

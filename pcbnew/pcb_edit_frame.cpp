@@ -1161,8 +1161,11 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
                         if( settings->m_Display.m_PadClearance )
                             return KIGFX::REPAINT;
 
+                        // Note: KIGFX::REPAINT isn't enough for things that go from invisible
+                        // to visible as they won't be found in the view layer's itemset for
+                        // re-painting.
                         if( ( GetBoard()->GetVisibleLayers() & maskAndPasteLayers ).any() )
-                            return KIGFX::REPAINT;
+                            return KIGFX::ALL;
                     }
 
                     EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
@@ -1276,18 +1279,38 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     GetCanvas()->SetFocus();                                // allow capture of hotkeys
     GetCanvas()->SetHighContrastLayer( aLayer );
 
-    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-            [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+    GetCanvas()->GetView()->UpdateAllItemsConditionally(
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
-                if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
+                BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+
+                if( !item )
+                    return 0;
+
+                // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible
+                // as they won't be found in the view layer's itemset for re-painting.
+                if( GetDisplayOptions().m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN )
                 {
+                    if( item->IsOnLayer( oldLayer ) || item->IsOnLayer( aLayer ) )
+                        return KIGFX::ALL;
+                }
+
+                if( item->Type() == PCB_VIA_T )
+                {
+                    PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
                     // Vias on a restricted layer set must be redrawn when the active layer
                     // is changed
-                    return ( via->GetViaType() == VIATYPE::BLIND_BURIED ||
-                             via->GetViaType() == VIATYPE::MICROVIA );
+                    if( via->GetViaType() == VIATYPE::BLIND_BURIED
+                            || via->GetViaType() == VIATYPE::MICROVIA )
+                    {
+                        return KIGFX::REPAINT;
+                    }
                 }
-                else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                else if( item->Type() == PCB_PAD_T )
                 {
+                    PAD* pad = static_cast<PAD*>( item );
+
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed
                     if( GetPcbNewSettings()->m_Display.m_PadClearance )
@@ -1298,27 +1321,32 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                         if( pad->GetAttribute() == PAD_ATTRIB::SMD )
                         {
                             if( ( oldLayer == F_Cu || aLayer == F_Cu ) && pad->IsOnLayer( F_Cu ) )
-                                return true;
+                                return KIGFX::REPAINT;
 
                             if( ( oldLayer == B_Cu || aLayer == B_Cu ) && pad->IsOnLayer( B_Cu ) )
-                                return true;
+                                return KIGFX::REPAINT;
                         }
-
-                        return true;
+                        else if( pad->IsOnLayer( oldLayer ) || pad->IsOnLayer( aLayer ) )
+                        {
+                            return KIGFX::REPAINT;
+                        }
                     }
                 }
-                else if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
+                else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
                 {
+                    PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
+
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed
                     if( GetPcbNewSettings()->m_Display.m_TrackClearance )
                     {
                         // Tracks aren't particularly expensive to draw, but it's an easy check.
-                        return track->IsOnLayer( oldLayer ) || track->IsOnLayer( aLayer );
+                        if( track->IsOnLayer( oldLayer ) || track->IsOnLayer( aLayer ) )
+                            return KIGFX::REPAINT;
                     }
                 }
 
-                return false;
+                return 0;
             } );
 
     GetCanvas()->Refresh();

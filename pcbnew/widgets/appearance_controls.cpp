@@ -1260,15 +1260,15 @@ void APPEARANCE_CONTROLS::setVisibleLayers( LSET aLayers )
     {
         m_frame->GetBoard()->SetVisibleLayers( aLayers );
 
-        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+        // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
+        // they won't be found in the view layer's itemset for repainting.
+        view->UpdateAllItemsConditionally( KIGFX::ALL,
                 []( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
-                    if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
-                        return via->GetRemoveUnconnected();
-                    else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                        return pad->GetRemoveUnconnected();
-
-                    return false;
+                    // Items rendered to composite layers (such as LAYER_PAD_TH) must be redrawn
+                    // whether they're optionally flashed or not (as the layer being hidden/shown
+                    // might be the last layer the item is visible on).
+                    return dynamic_cast<PCB_VIA*>( aItem ) || dynamic_cast<PAD*>( aItem );
                 } );
     }
 }

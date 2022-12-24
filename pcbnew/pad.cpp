@@ -249,11 +249,11 @@ bool PAD::FlashLayer( LSET aLayers ) const
 
 bool PAD::FlashLayer( int aLayer ) const
 {
-    if( aLayer != UNDEFINED_LAYER && !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
-        return false;
-
     if( aLayer == UNDEFINED_LAYER )
         return true;
+
+    if( !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
+        return false;
 
     if( GetAttribute() == PAD_ATTRIB::NPTH && IsCopperLayer( aLayer ) )
     {

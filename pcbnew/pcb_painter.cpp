@@ -1231,7 +1231,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     {
         drawShape = aPad->FlashLayer( m_pcbSettings.GetPrintLayers() );
     }
-    else if( aPad->FlashLayer( board->GetEnabledLayers() ) )
+    else if( aPad->FlashLayer( board->GetVisibleLayers() & board->GetEnabledLayers() ) )
     {
         drawShape = true;
     }
@@ -1482,6 +1482,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         if( IsCopperLayer( activeLayer ) )
             flashActiveLayer = aPad->FlashLayer( activeLayer );
+
+        if( !board->GetVisibleLayers().test( activeLayer ) )
+            flashActiveLayer = false;
 
         if( flashActiveLayer || aPad->GetDrillSize().x )
         {

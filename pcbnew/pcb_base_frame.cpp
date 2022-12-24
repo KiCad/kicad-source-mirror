@@ -966,23 +966,25 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     renderSettings->LoadColors( GetColorSettings( true ) );
     renderSettings->LoadDisplayOptions( GetDisplayOptions() );
 
-    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-            [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+    // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
+    // they won't be found in the view layer's itemset for re-painting.
+    GetCanvas()->GetView()->UpdateAllItemsConditionally(
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
                 if( dynamic_cast<RATSNEST_VIEW_ITEM*>( aItem ) )
                 {
-                    return true;    // ratsnest display
+                    return KIGFX::ALL;        // ratsnest display
                 }
                 else if( dynamic_cast<PCB_TRACK*>( aItem ) )
                 {
-                    return true;    // track, arc & via clearance display
+                    return KIGFX::REPAINT;    // track, arc & via clearance display
                 }
                 else if( dynamic_cast<PAD*>( aItem ) )
                 {
-                    return true;    // pad clearance display
+                    return KIGFX::REPAINT;    // pad clearance display
                 }
 
-                return false;
+                return 0;
             } );
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
@@ -1068,8 +1070,10 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
 
 void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aRefresh )
 {
-    bool hcChanged   = m_displayOptions.m_ContrastModeDisplay != aOptions.m_ContrastModeDisplay;
-    m_displayOptions = aOptions;
+    bool hcChanged    = m_displayOptions.m_ContrastModeDisplay != aOptions.m_ContrastModeDisplay;
+    bool hcVisChanged = m_displayOptions.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN
+                        || aOptions.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN;
+    m_displayOptions  = aOptions;
 
     EDA_DRAW_PANEL_GAL* canvas = GetCanvas();
     KIGFX::PCB_VIEW*    view   = static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() );
@@ -1081,21 +1085,27 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
     // Vias on a restricted layer set must be redrawn when high contrast mode is changed
     if( hcChanged )
     {
-        GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                []( KIGFX::VIEW_ITEM* aItem ) -> bool
+        // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
+        // they won't be found in the view layer's itemset for re-painting.
+        GetCanvas()->GetView()->UpdateAllItemsConditionally(
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
                     if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
                     {
-                        return via->GetViaType() == VIATYPE::BLIND_BURIED
+                        if( via->GetViaType() == VIATYPE::BLIND_BURIED
                                 || via->GetViaType() == VIATYPE::MICROVIA
-                                || via->GetRemoveUnconnected();
+                                || via->GetRemoveUnconnected() )
+                        {
+                            return hcVisChanged ? KIGFX::ALL : KIGFX::REPAINT;
+                        }
                     }
                     else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
                     {
-                        return pad->GetRemoveUnconnected();
+                        if( pad->GetRemoveUnconnected() )
+                            return hcVisChanged ? KIGFX::ALL : KIGFX::REPAINT;
                     }
 
-                    return false;
+                    return 0;
                 } );
     }
 
