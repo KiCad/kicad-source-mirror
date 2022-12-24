@@ -155,12 +155,10 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
     }
 
-    m_keepSymbol = new wxCheckBox( this, wxID_ANY, _( "Place repeated copies" ), wxDefaultPosition,
-                                   wxDefaultSize, wxALIGN_RIGHT );
+    m_keepSymbol = new wxCheckBox( this, wxID_ANY, _( "Place repeated copies" ) );
     m_keepSymbol->SetToolTip( _( "Keep the symbol selected for subsequent clicks." ) );
 
-    m_useUnits = new wxCheckBox( this, wxID_ANY, _( "Place all units" ), wxDefaultPosition,
-                                 wxDefaultSize, wxALIGN_RIGHT );
+    m_useUnits = new wxCheckBox( this, wxID_ANY, _( "Place all units" ) );
     m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
 
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
@@ -169,8 +167,8 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         m_useUnits->SetValue( cfg->m_SymChooserPanel.place_all_units );
     }
 
-    buttonsSizer->Add( m_keepSymbol, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
-    buttonsSizer->Add( m_useUnits, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+    buttonsSizer->Add( m_keepSymbol, 0, wxLEFT | wxALIGN_CENTER_VERTICAL, 30 );
+    buttonsSizer->Add( m_useUnits, 0, wxLEFT | wxALIGN_CENTER_VERTICAL, 30 );
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
     wxButton*               okButton = new wxButton( this, wxID_OK );
