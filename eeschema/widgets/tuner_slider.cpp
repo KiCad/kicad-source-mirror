@@ -164,14 +164,22 @@ void TUNER_SLIDER::updateComponentValue()
 void TUNER_SLIDER::updateSlider()
 {
     wxASSERT( m_max >= m_value && m_value >= m_min );
-    m_slider->SetValue( ( ( m_value - m_min ) / ( m_max - m_min ) ).ToDouble() * 100 );
+    SPICE_VALUE value = ( m_value - m_min ) / ( m_max - m_min );
+    m_slider->SetValue( KiROUND( value.ToDouble() * 100.0 ) );
 }
 
 
 void TUNER_SLIDER::updateValueText()
 {
-    bool spiceString = m_min.IsSpiceString() || m_max.IsSpiceString();
-    m_valueText->SetValue( spiceString ? m_value.ToSpiceString() : m_value.ToString() );
+    if( m_min.IsSpiceString() || m_max.IsSpiceString() )
+    {
+        m_valueText->SetValue( m_value.ToSpiceString() );
+        return;
+    }
+
+    double value = m_value.ToDouble();
+
+    m_valueText->SetValue( wxString::Format( "%.3f", value ) );
 }
 
 
