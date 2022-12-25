@@ -312,6 +312,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Lưu và khôi phục hướng xem và thu phóng.\n"
+"Sử dụng %s+Tab để kích hoạt bộ chọn.\n"
+"Các Tab liên tiếp trong khi nhấn giữ %s sẽ chuyển qua các khung nhìn trong "
+"cửa sổ bật lên."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -385,7 +389,8 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:176
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:188
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:200
-#: pcbnew/pcb_marker.cpp:205
+#: pcbnew/pcb_marker.cpp:205 eeschema/files-io.cpp:842
+#: eeschema/files-io.cpp:914
 msgid "Error"
 msgstr "Lỗi"
 
@@ -1327,12 +1332,14 @@ msgstr "Bộ chuyển đổi Bitmap thành linh kiện"
 #: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:572
 #: pagelayout_editor/pl_editor_frame.cpp:842 pcbnew/tools/drawing_tool.cpp:665
+#: eeschema/tools/sch_drawing_tools.cpp:570
 msgid "Choose Image"
 msgstr "Chọn Ảnh"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:375
 #: eeschema/tools/sch_drawing_tools.cpp:573
 #: pagelayout_editor/pl_editor_frame.cpp:843 pcbnew/tools/drawing_tool.cpp:666
+#: eeschema/tools/sch_drawing_tools.cpp:571
 msgid "Image Files"
 msgstr "Các file Ảnh"
 
@@ -1557,7 +1564,7 @@ msgstr "Xuất ra Bộ nhớ tạm"
 #: bitmap2component/bitmap2cmp_gui_base.h:96
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Image Converter"
-msgstr ""
+msgstr "Chuyển đổi hình ảnh"
 
 #: common/common.cpp:227
 #, c-format
@@ -1667,6 +1674,7 @@ msgstr "Nếu bạn không lưu, tất cả các thay đổi của bạn sẽ b�
 #: eeschema/symbol_editor/symbol_editor.cpp:550
 #: eeschema/widgets/tuner_slider_base.cpp:75
 #: pcbnew/footprint_libraries_utils.cpp:1059
+#: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "Save"
 msgstr "Lưu lại"
 
@@ -1723,7 +1731,7 @@ msgstr "Xác nhận"
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:495
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:506
 msgid "Yes"
-msgstr ""
+msgstr "Đồng ý"
 
 #: common/confirm.cpp:395 eeschema/lib_field.cpp:534 eeschema/lib_pin.cpp:1150
 #: eeschema/sch_field.cpp:766 eeschema/sch_pin.cpp:222
@@ -1735,7 +1743,7 @@ msgstr ""
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:495
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:505
 msgid "No"
-msgstr ""
+msgstr "Không."
 
 #: common/dialog_about/AboutDialog_main.cpp:115
 #: common/widgets/widget_hotkey_list.cpp:474 eeschema/sch_symbol.cpp:1627
@@ -1964,6 +1972,7 @@ msgid "Report"
 msgstr "Báo cáo"
 
 #: common/dialogs/dialog_assign_netclass.cpp:104
+#: common/dialogs/dialog_assign_netclass.cpp:92
 #, fuzzy
 msgid "<b>Currently matching nets:</b>"
 msgstr "<b> Các Net hiện đang khớp:</b>"
@@ -2122,7 +2131,7 @@ msgstr "Biến môi trường"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:964
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:460
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:589
-#: pcbnew/zone.cpp:1414
+#: pcbnew/zone.cpp:1414 eeschema/widgets/tuner_slider_base.cpp:20
 msgid "Name"
 msgstr "Tên"
 
@@ -3028,12 +3037,12 @@ msgstr "Các Đường dẫn có sẵn:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
 msgid ">>"
-msgstr ""
+msgstr ">>"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:43
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
 msgid "<<"
-msgstr ""
+msgstr "<<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:52
 #, fuzzy
@@ -3249,7 +3258,7 @@ msgstr "Hiển thị các biểu tượng trong menu"
 
 #: common/dialogs/panel_common_settings_base.cpp:125
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "Thay đổi này có hiệu lực khi khởi chạy lại trình chỉnh sửa."
 
 #: common/dialogs/panel_common_settings_base.cpp:129
 msgid "Focus follows mouse between schematic and PCB editors"
@@ -3984,7 +3993,7 @@ msgstr "Kiểu cách Đường thẳng"
 #: eeschema/sch_textbox.cpp:449 include/stroke_params.h:80
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:315
 #: pcbnew/pcb_dimension.cpp:329 pcbnew/pcb_text.cpp:142
-#: pcbnew/pcb_textbox.cpp:309
+#: pcbnew/pcb_textbox.cpp:309 eeschema/dialogs/dialog_sim_model.cpp:457
 msgid "Default"
 msgstr "Mặc định"
 
@@ -4319,7 +4328,7 @@ msgstr "Tên trường mẫu"
 
 #: common/eda_base_frame.cpp:1065 common/tool/actions.cpp:610
 #: kicad/tools/kicad_manager_actions.cpp:98 pcbnew/footprint_edit_frame.cpp:914
-#: pcbnew/menubar_footprint_editor.cpp:92
+#: pcbnew/menubar_footprint_editor.cpp:92 pcbnew/footprint_edit_frame.cpp:912
 msgid "Footprint Editor"
 msgstr "Trình chỉnh sửa Footprint"
 
@@ -4331,7 +4340,7 @@ msgstr "Giá trị mặc định"
 #: common/eda_base_frame.cpp:1074 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:92 pcbnew/menubar_pcb_editor.cpp:185
 #: pcbnew/pcb_edit_frame.cpp:182 pcbnew/pcb_edit_frame.cpp:1528
-#: pcbnew/tools/zone_filler_tool.cpp:272
+#: pcbnew/tools/zone_filler_tool.cpp:272 pcbnew/pcb_edit_frame.cpp:1539
 #, fuzzy
 msgid "PCB Editor"
 msgstr "Trình chỉnh sửa Ảnh"
@@ -4557,12 +4566,13 @@ msgid "Zone"
 msgstr "Zone"
 
 #: common/eda_item.cpp:340 common/eda_item.cpp:341 pcbnew/pcb_track.cpp:822
+#: pcbnew/pcb_track.cpp:827
 #, fuzzy
 msgid "Track"
 msgstr "Track"
 
 #: common/eda_item.cpp:342 pcbnew/dialogs/dialog_board_statistics.cpp:501
-#: pcbnew/pcb_track.cpp:902
+#: pcbnew/pcb_track.cpp:902 pcbnew/pcb_track.cpp:899
 #, fuzzy
 msgid "Via"
 msgstr "Via"
@@ -4757,7 +4767,7 @@ msgstr "Hình dạng"
 
 #: common/eda_shape.cpp:637 common/eda_shape.cpp:644
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:213
-#: pcbnew/pcb_track.cpp:842
+#: pcbnew/pcb_track.cpp:842 pcbnew/pcb_track.cpp:839
 msgid "Radius"
 msgstr "Bán kính"
 
@@ -4788,7 +4798,9 @@ msgstr "Điểm"
 #: pcbnew/fp_text.cpp:311 pcbnew/fp_text_grid_table.cpp:102 pcbnew/pad.cpp:1002
 #: pcbnew/pcb_bitmap.cpp:211 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:201 pcbnew/pcb_text.cpp:144 pcbnew/pcb_track.cpp:837
-#: pcbnew/pcb_track.cpp:1243 pcbnew/pcb_track.cpp:1273
+#: pcbnew/pcb_track.cpp:1243 pcbnew/pcb_track.cpp:1273 pcbnew/pcb_track.cpp:834
+#: pcbnew/pcb_track.cpp:1240 pcbnew/pcb_track.cpp:1261
+#: pcbnew/pcb_track.cpp:1291
 #, fuzzy
 msgid "Width"
 msgstr "Chiều rộng"
@@ -4814,22 +4826,26 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1693 pcbnew/pcb_textbox.cpp:529
-#: pcbnew/pcb_track.cpp:1246
+#: pcbnew/pcb_track.cpp:1246 pcbnew/pcb_track.cpp:1243
+#: pcbnew/pcb_track.cpp:1265
 msgid "Start X"
 msgstr "Bắt đầu X"
 
 #: common/eda_shape.cpp:1696 pcbnew/pcb_textbox.cpp:530
-#: pcbnew/pcb_track.cpp:1250
+#: pcbnew/pcb_track.cpp:1250 pcbnew/pcb_track.cpp:1247
+#: pcbnew/pcb_track.cpp:1270
 msgid "Start Y"
 msgstr "Bắt đầu Y"
 
 #: common/eda_shape.cpp:1699 pcbnew/pcb_textbox.cpp:531
-#: pcbnew/pcb_track.cpp:1253
+#: pcbnew/pcb_track.cpp:1253 pcbnew/pcb_track.cpp:1250
+#: pcbnew/pcb_track.cpp:1274
 msgid "End X"
 msgstr "Kết thúc X"
 
 #: common/eda_shape.cpp:1702 pcbnew/pcb_textbox.cpp:532
-#: pcbnew/pcb_track.cpp:1256
+#: pcbnew/pcb_track.cpp:1256 pcbnew/pcb_track.cpp:1253
+#: pcbnew/pcb_track.cpp:1278
 msgid "End Y"
 msgstr "Kết thúc Y"
 
@@ -5268,7 +5284,7 @@ msgstr "Không thể sao chép tệp \"%s\"."
 
 #: common/grid_tricks.cpp:325 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:157 pcbnew/dialogs/panel_setup_rules.cpp:111
-#: pcbnew/tools/edit_tool.cpp:1973
+#: pcbnew/tools/edit_tool.cpp:1973 pcbnew/tools/edit_tool.cpp:1971
 msgid "Cut"
 msgstr "Cắt"
 
@@ -5302,6 +5318,7 @@ msgstr "Dán các ô bảng tạm vào ma trận tại ô hiện tại"
 #: common/grid_tricks.cpp:331 common/tool/actions.cpp:192
 #: kicad/project_tree_pane.cpp:762 pcbnew/dialogs/panel_setup_rules.cpp:114
 #: pcbnew/plugins/kicad/pcb_parser.cpp:923 pcbnew/tools/edit_tool.cpp:1975
+#: pcbnew/tools/edit_tool.cpp:1973
 msgid "Delete"
 msgstr "Xóa bỏ"
 
@@ -5347,7 +5364,7 @@ msgstr "Thêm vào Lựa chọn"
 
 #: common/hotkey_store.cpp:47 eeschema/tools/ee_actions.cpp:582
 #: gerbview/tools/gerbview_actions.cpp:119 pcbnew/tools/pcb_actions.cpp:790
-#: pcbnew/tools/pcb_actions.cpp:810
+#: pcbnew/tools/pcb_actions.cpp:810 eeschema/tools/ee_actions.cpp:583
 msgid "Highlight Net"
 msgstr "Tô sáng Net"
 
@@ -5824,6 +5841,7 @@ msgstr "Xóa bỏ (các) khoản mục đã chọn"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:201
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:223
+#: eeschema/dialogs/dialog_sim_model.cpp:456
 msgid "Unit"
 msgstr "Đơn vị"
 
@@ -6140,15 +6158,15 @@ msgstr "Lỗi: "
 msgid "Unable to open %s for reading."
 msgstr "Không thể mở tên tệp \"%s\" để đọc"
 
-#: common/richio.cpp:226 common/richio.cpp:324
+#: common/richio.cpp:226 common/richio.cpp:324 common/richio.cpp:322
 msgid "Maximum line length exceeded"
 msgstr "Chiều dài dòng tối đa vượt quá"
 
-#: common/richio.cpp:289
+#: common/richio.cpp:289 common/richio.cpp:288
 msgid "Line length exceeded"
 msgstr "Chiều dài dòng vượt quá"
 
-#: common/richio.cpp:573
+#: common/richio.cpp:573 common/richio.cpp:571
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER lỗi ghi"
 
@@ -6465,17 +6483,18 @@ msgstr "Phóng to tại Con trỏ"
 
 #: common/tool/actions.cpp:325 common/widgets/mathplot.cpp:1678
 #: eeschema/sim/sim_plot_frame_base.cpp:87
-#: pcbnew/dialogs/panel_setup_rules.cpp:122
+#: pcbnew/dialogs/panel_setup_rules.cpp:122 common/widgets/mathplot.cpp:1667
 msgid "Zoom In"
 msgstr "Phóng to"
 
 #: common/tool/actions.cpp:331 common/widgets/mathplot.cpp:1679
 #: eeschema/sim/sim_plot_frame_base.cpp:91
-#: pcbnew/dialogs/panel_setup_rules.cpp:123
+#: pcbnew/dialogs/panel_setup_rules.cpp:123 common/widgets/mathplot.cpp:1668
 msgid "Zoom Out"
 msgstr "Thu nhỏ"
 
 #: common/tool/actions.cpp:337 common/widgets/mathplot.cpp:1676
+#: common/widgets/mathplot.cpp:1665
 #, fuzzy
 msgid "Center on Cursor"
 msgstr "Kích thước trung tâm"
@@ -6639,6 +6658,7 @@ msgid "Use millimeters"
 msgstr "Sử dụng milimét"
 
 #: common/tool/actions.cpp:518 common/widgets/lib_tree.cpp:674
+#: common/widgets/lib_tree.cpp:665
 #, fuzzy
 msgid "Select Columns"
 msgstr "Chọn Không có"
@@ -7084,26 +7104,27 @@ msgstr "Chọn Đường dẫn"
 msgid "recent searches"
 msgstr ""
 
-#: common/widgets/mathplot.cpp:1676
+#: common/widgets/mathplot.cpp:1676 common/widgets/mathplot.cpp:1665
 #, fuzzy
 msgid "Center plot view to this position"
 msgstr "Trung tâm bản in hiển thị đến vị trí này"
 
 #: common/widgets/mathplot.cpp:1677 eeschema/sim/sim_plot_frame_base.cpp:95
+#: common/widgets/mathplot.cpp:1666
 #, fuzzy
 msgid "Fit on Screen"
 msgstr "Tràn trên Màn hình"
 
-#: common/widgets/mathplot.cpp:1677
+#: common/widgets/mathplot.cpp:1677 common/widgets/mathplot.cpp:1666
 msgid "Set plot view to show all items"
 msgstr "Cài đặt dạng xem bản in để hiển thị tất cả các mục"
 
-#: common/widgets/mathplot.cpp:1678
+#: common/widgets/mathplot.cpp:1678 common/widgets/mathplot.cpp:1667
 #, fuzzy
 msgid "Zoom in plot view."
 msgstr "Phóng to vùng hiển thị bản in"
 
-#: common/widgets/mathplot.cpp:1679
+#: common/widgets/mathplot.cpp:1679 common/widgets/mathplot.cpp:1668
 #, fuzzy
 msgid "Zoom out plot view."
 msgstr "Thu nhỏ chế độ xem bản in"
@@ -7141,16 +7162,19 @@ msgstr "Đặt lại về Mặc định"
 
 #: common/widgets/properties_panel.cpp:69
 #: common/widgets/properties_panel.cpp:147
+#: common/widgets/properties_panel.cpp:141
 #, fuzzy
 msgid "No objects selected"
 msgstr "Không có symbol nào được chọn"
 
 #: common/widgets/properties_panel.cpp:161
+#: common/widgets/properties_panel.cpp:155
 #, fuzzy, c-format
 msgid "%d objects selected"
 msgstr "Không có symbol nào được chọn"
 
 #: common/widgets/properties_panel.cpp:280
+#: common/widgets/properties_panel.cpp:274
 #, fuzzy
 msgid "Basic Properties"
 msgstr "Thuộc tính Văn bản"
@@ -7718,7 +7742,7 @@ msgid "Configuration Error"
 msgstr "Lỗi Cấu hình"
 
 #: cvpcb/cvpcb_mainframe.cpp:910 pcbnew/footprint_edit_frame.cpp:939
-#: pcbnew/load_select_footprint.cpp:225
+#: pcbnew/load_select_footprint.cpp:225 pcbnew/footprint_edit_frame.cpp:937
 msgid "Loading Footprint Libraries"
 msgstr "Đang tải Thư viện Footprint"
 
@@ -8158,13 +8182,13 @@ msgstr ""
 "Net %s được kết nối bằng đồ thị với bus %s nhưng không phải là thành viên "
 "của bus đó"
 
-#: eeschema/connection_graph.cpp:3266
+#: eeschema/connection_graph.cpp:3266 eeschema/connection_graph.cpp:3259
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "chân pin trang tính %s không có nhãn phân cấp phù hợp bên trong trang tính"
 
-#: eeschema/connection_graph.cpp:3283
+#: eeschema/connection_graph.cpp:3283 eeschema/connection_graph.cpp:3276
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -8453,12 +8477,12 @@ msgid ""
 "python <script file name> <input filename> <output filename>\n"
 "```\n"
 "\n"
-"On Windows, if the desired generator script for a CSV BOM is `C:"
-"\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:\\Users"
+"\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
+"\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -9054,7 +9078,7 @@ msgid "Export Netlist"
 msgstr "Xuất Netlist"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:317
-#: eeschema/sim/sim_plot_frame.cpp:465
+#: eeschema/sim/sim_plot_frame.cpp:465 eeschema/sim/sim_plot_frame.cpp:473
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Trình mô phỏng yêu cầu một giản đồ được chú thích đầy đủ."
 
@@ -9592,6 +9616,7 @@ msgid "Ibis parser log"
 msgstr ""
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
+#: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:47
 msgid "Ibis parser"
 msgstr ""
 
@@ -10425,6 +10450,7 @@ msgstr "Nhãn mới"
 #: pcbnew/fp_textbox.cpp:309 pcbnew/pad.cpp:970 pcbnew/pcb_dimension.cpp:363
 #: pcbnew/pcb_group.cpp:403 pcbnew/pcb_shape.cpp:307 pcbnew/pcb_text.cpp:134
 #: pcbnew/pcb_textbox.cpp:303 pcbnew/pcb_track.cpp:951 pcbnew/zone.cpp:569
+#: pcbnew/pcb_track.cpp:948
 msgid "Status"
 msgstr "Tình trạng"
 
@@ -11323,7 +11349,7 @@ msgid "Add signal by name:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_signal_list_base.h:50
-#: eeschema/sim/sim_plot_frame.cpp:161
+#: eeschema/sim/sim_plot_frame.cpp:161 eeschema/sim/sim_plot_frame.cpp:169
 msgid "Add Signals"
 msgstr ""
 
@@ -11619,16 +11645,19 @@ msgid "Simulation Command"
 msgstr "Chỉnh sửa Mô hình Spice..."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:183
+#: eeschema/dialogs/dialog_sim_model.cpp:181
 #, fuzzy, c-format
 msgid "No model named '%s' in library."
 msgstr "Tệp \"%s\" đã tồn tại trong danh sách"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:266
+#: eeschema/dialogs/dialog_sim_model.cpp:262
 #, fuzzy
 msgid "Failed to read simulation model from fields."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:380
+#: eeschema/dialogs/dialog_sim_model.cpp:374
 #, fuzzy
 msgid "Component:"
 msgstr "Linh kiện"
@@ -11636,21 +11665,25 @@ msgstr "Linh kiện"
 #: eeschema/dialogs/dialog_sim_model.cpp:380
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
+#: eeschema/dialogs/dialog_sim_model.cpp:374
 #, fuzzy
 msgid "Model:"
 msgstr "Mô hình 3D bởi"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:441
+#: eeschema/dialogs/dialog_sim_model.cpp:430
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model.cpp:449
+#: eeschema/dialogs/dialog_sim_model.cpp:438
 msgid "Save primary parameter in Value field"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model.cpp:466
 #: pcbnew/footprint_wizard_frame.cpp:322
+#: eeschema/dialogs/dialog_sim_model.cpp:455
 msgid "Parameter"
 msgstr ""
 
@@ -11665,16 +11698,21 @@ msgstr ""
 #: pcbnew/fp_text.cpp:294 pcbnew/pcb_marker.cpp:193 pcbnew/pcb_shape.cpp:304
 #: pcbnew/pcb_track.cpp:831 pcbnew/pcb_track.cpp:905
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:249 pcbnew/zone.cpp:527
+#: eeschema/dialogs/dialog_sim_model.cpp:458 pcbnew/pcb_track.cpp:826
+#: pcbnew/pcb_track.cpp:902
 msgid "Type"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model.cpp:590
 #: eeschema/dialogs/dialog_sim_model.cpp:633
+#: eeschema/dialogs/dialog_sim_model.cpp:572
+#: eeschema/dialogs/dialog_sim_model.cpp:615
 #, fuzzy
 msgid "Not Connected"
 msgstr "Không kết nối"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1053
+#: eeschema/dialogs/dialog_sim_model.cpp:1035
 #, fuzzy
 msgid "Browse Models"
 msgstr "Mô hình 3D bởi"
@@ -11978,7 +12016,7 @@ msgid "Edit Symbol..."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:233
-#: eeschema/tools/ee_actions.cpp:606
+#: eeschema/tools/ee_actions.cpp:606 eeschema/tools/ee_actions.cpp:607
 msgid "Edit Library Symbol..."
 msgstr ""
 
@@ -12262,6 +12300,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
 #: pcbnew/footprint_edit_frame.cpp:227 pcbnew/footprint_edit_frame.cpp:834
 #: pcbnew/pcb_edit_frame.cpp:288 pcbnew/pcb_edit_frame.cpp:1434
+#: pcbnew/footprint_edit_frame.cpp:832 pcbnew/pcb_edit_frame.cpp:1446
 msgid "Appearance"
 msgstr ""
 
@@ -13426,6 +13465,7 @@ msgid "Allow Autoplacement"
 msgstr ""
 
 #: eeschema/files-io.cpp:101 eeschema/files-io.cpp:1197
+#: eeschema/files-io.cpp:1199
 #, fuzzy, c-format
 msgid "Schematic '%s' is already open."
 msgstr "Schematic Field"
@@ -13456,7 +13496,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:249 eeschema/files-io.cpp:257
-#: eeschema/files-io.cpp:1272 eeschema/sheet.cpp:160
+#: eeschema/files-io.cpp:1272 eeschema/sheet.cpp:160 eeschema/files-io.cpp:1274
 #, fuzzy, c-format
 msgid "Error loading schematic '%s'."
 msgstr ""
@@ -13471,7 +13511,8 @@ msgstr ""
 "%s"
 
 #: eeschema/files-io.cpp:284 eeschema/files-io.cpp:1275
-#: eeschema/files-io.cpp:1289 eeschema/sheet.cpp:163
+#: eeschema/files-io.cpp:1289 eeschema/sheet.cpp:163 eeschema/files-io.cpp:1277
+#: eeschema/files-io.cpp:1291
 #, fuzzy, c-format
 msgid "Failed to load '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
@@ -13526,7 +13567,7 @@ msgid "Abort"
 msgstr ""
 
 #: eeschema/files-io.cpp:427 eeschema/files-io.cpp:444
-#: pagelayout_editor/files.cpp:258 pcbnew/files.cpp:835
+#: pagelayout_editor/files.cpp:258 pcbnew/files.cpp:835 pcbnew/files.cpp:837
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13550,7 +13591,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:615 pcbnew/files.cpp:170
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:191
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:191 pcbnew/files.cpp:169
 msgid "All supported formats|"
 msgstr ""
 
@@ -13572,7 +13613,7 @@ msgstr ""
 "Lỗi tải sơ đồ mạch.\n"
 "%s"
 
-#: eeschema/files-io.cpp:711 pcbnew/files.cpp:1081
+#: eeschema/files-io.cpp:711 pcbnew/files.cpp:1081 pcbnew/files.cpp:1083
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
@@ -13584,13 +13625,13 @@ msgid ""
 "Failed to rename temporary file '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: eeschema/files-io.cpp:734 pcbnew/files.cpp:1099
+#: eeschema/files-io.cpp:734 pcbnew/files.cpp:1099 pcbnew/files.cpp:1101
 #, fuzzy, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
 #: eeschema/files-io.cpp:757 pagelayout_editor/files.cpp:185
-#: pcbnew/files.cpp:1132
+#: pcbnew/files.cpp:1132 pcbnew/files.cpp:1134
 #, fuzzy, c-format
 msgid "File '%s' saved."
 msgstr "không tìm thấy tệp tin \"%s\"."
@@ -13601,7 +13642,8 @@ msgstr ""
 
 #: eeschema/files-io.cpp:836 eeschema/files-io.cpp:908
 #: kicad/tools/kicad_manager_control.cpp:117
-#: kicad/tools/kicad_manager_control.cpp:225
+#: kicad/tools/kicad_manager_control.cpp:225 eeschema/files-io.cpp:838
+#: eeschema/files-io.cpp:910
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -13609,46 +13651,46 @@ msgid ""
 "Make sure you have write permissions and try again."
 msgstr ""
 
-#: eeschema/files-io.cpp:977
+#: eeschema/files-io.cpp:977 eeschema/files-io.cpp:979
 msgid "Saving will overwrite existing files."
 msgstr ""
 
-#: eeschema/files-io.cpp:978
+#: eeschema/files-io.cpp:978 eeschema/files-io.cpp:980
 #, fuzzy
 msgid "Save Warning"
 msgstr "Cảnh báo"
 
-#: eeschema/files-io.cpp:981
+#: eeschema/files-io.cpp:981 eeschema/files-io.cpp:983
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
 
-#: eeschema/files-io.cpp:982
+#: eeschema/files-io.cpp:982 eeschema/files-io.cpp:984
 msgid "Overwrite Files"
 msgstr ""
 
-#: eeschema/files-io.cpp:983
+#: eeschema/files-io.cpp:983 eeschema/files-io.cpp:985
 msgid "Abort Project Save"
 msgstr ""
 
-#: eeschema/files-io.cpp:1207
+#: eeschema/files-io.cpp:1207 eeschema/files-io.cpp:1209
 #, fuzzy
 msgid "Importing Schematic"
 msgstr "Chú thích Sơ đồ mạch"
 
-#: eeschema/files-io.cpp:1285
+#: eeschema/files-io.cpp:1285 eeschema/files-io.cpp:1287
 #, fuzzy, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
 msgstr ""
 "Lỗi tải sơ đồ mạch.\n"
 "%s"
 
-#: eeschema/files-io.cpp:1319
+#: eeschema/files-io.cpp:1319 eeschema/files-io.cpp:1321
 msgid "The current schematic has been modified.  Save changes?"
 msgstr ""
 
-#: eeschema/files-io.cpp:1405
+#: eeschema/files-io.cpp:1405 eeschema/files-io.cpp:1407
 #, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -13663,32 +13705,32 @@ msgstr ""
 "nó không được lưu đúng cách.  Bạn có muốn khôi phục các chỉnh sửa đã lưu "
 "cuối cùng mà bạn đã thực hiện không?"
 
-#: eeschema/files-io.cpp:1416
+#: eeschema/files-io.cpp:1416 eeschema/files-io.cpp:1418
 #, c-format
 msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
 
-#: eeschema/files-io.cpp:1467
+#: eeschema/files-io.cpp:1467 eeschema/files-io.cpp:1469
 #, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp in bo mạch."
 
-#: eeschema/files-io.cpp:1472
+#: eeschema/files-io.cpp:1472 eeschema/files-io.cpp:1474
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
 
-#: eeschema/files-io.cpp:1492
+#: eeschema/files-io.cpp:1492 eeschema/files-io.cpp:1494
 #, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp in bo mạch."
 
-#: eeschema/files-io.cpp:1497
+#: eeschema/files-io.cpp:1497 eeschema/files-io.cpp:1499
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
-#: eeschema/files-io.cpp:1508
+#: eeschema/files-io.cpp:1508 eeschema/files-io.cpp:1510
 #, fuzzy, c-format
 msgid ""
 "The automatic save master file\n"
@@ -13696,7 +13738,7 @@ msgid ""
 "could not be deleted."
 msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp in bo mạch."
 
-#: eeschema/files-io.cpp:1516
+#: eeschema/files-io.cpp:1516 eeschema/files-io.cpp:1518
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
@@ -13946,6 +13988,7 @@ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr ""
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:274
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:277
 #, fuzzy, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
@@ -13956,6 +13999,7 @@ msgstr ""
 "%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:408
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:411
 #, fuzzy, c-format
 msgid ""
 "Error reading simulation model library '%s':\n"
@@ -13966,11 +14010,13 @@ msgstr ""
 "%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:467
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:470
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr ""
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:518
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:521
 #, fuzzy, c-format
 msgid "Could not find library file '%s'"
 msgstr "Không thể mở tệp cấu hình"
@@ -14191,6 +14237,7 @@ msgstr ""
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:912
 #: eeschema/sch_line.cpp:912 pcbnew/pad.cpp:966 pcbnew/pcb_track.cpp:933
 #: pcbnew/tools/pcb_control.cpp:1529 pcbnew/zone.cpp:557
+#: pcbnew/pcb_track.cpp:930
 #, fuzzy
 msgid "Resolved Netclass"
 msgstr "Clearance"
@@ -14224,7 +14271,9 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:1153
 #: pagelayout_editor/pl_editor_frame.cpp:381
 #: pcbnew/footprint_edit_frame.cpp:687 pcbnew/footprint_edit_frame.cpp:727
-#: pcbnew/pcb_edit_frame.cpp:1040
+#: pcbnew/pcb_edit_frame.cpp:1040 eeschema/sim/sim_plot_frame.cpp:1673
+#: pcbnew/footprint_edit_frame.cpp:685 pcbnew/footprint_edit_frame.cpp:725
+#: pcbnew/pcb_edit_frame.cpp:1052
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr ""
@@ -14264,12 +14313,15 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1412 eeschema/sim/sim_plot_frame.cpp:343
 #: kicad/kicad_manager_frame.cpp:774 pcbnew/footprint_edit_frame.cpp:898
-#: pcbnew/pcb_edit_frame.cpp:1523
+#: pcbnew/pcb_edit_frame.cpp:1523 eeschema/sim/sim_plot_frame.cpp:351
+#: pcbnew/footprint_edit_frame.cpp:896 pcbnew/pcb_edit_frame.cpp:1534
 msgid "[Read Only]"
 msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1415 eeschema/sim/sim_plot_frame.cpp:346
 #: pcbnew/footprint_edit_frame.cpp:907 pcbnew/pcb_edit_frame.cpp:1526
+#: eeschema/sim/sim_plot_frame.cpp:354 pcbnew/footprint_edit_frame.cpp:905
+#: pcbnew/pcb_edit_frame.cpp:1537
 msgid "[Unsaved]"
 msgstr ""
 
@@ -14336,7 +14388,8 @@ msgstr "Vertical Justification"
 #: pcbnew/pad.cpp:1745 pcbnew/pcb_track.cpp:931
 #: pcbnew/tools/pcb_control.cpp:1526
 #: pcbnew/widgets/pcb_properties_panel.cpp:163 pcbnew/zone.cpp:555
-#: pcbnew/zone.cpp:1405
+#: pcbnew/zone.cpp:1405 pcbnew/pcb_track.cpp:928
+#: pcbnew/widgets/pcb_properties_panel.cpp:162
 msgid "Net"
 msgstr "Net"
 
@@ -14771,6 +14824,7 @@ msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:281
+#: eeschema/sch_plugins/database/sch_database_plugin.cpp:278
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
@@ -16064,7 +16118,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/sim/sim_lib_mgr.cpp:287
+#: eeschema/sim/sim_lib_mgr.cpp:287 eeschema/sim/sim_lib_mgr.cpp:283
 #, fuzzy, c-format
 msgid "Error loading simulation model library '%s': %s"
 msgstr ""
@@ -16072,14 +16126,14 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/sim/sim_lib_mgr.cpp:294
+#: eeschema/sim/sim_lib_mgr.cpp:294 eeschema/sim/sim_lib_mgr.cpp:290
 #, fuzzy, c-format
 msgid "Error loading simulation model: no '%s' field"
 msgstr ""
 "Lỗi tải sơ đồ mạch.\n"
 "%s"
 
-#: eeschema/sim/sim_lib_mgr.cpp:302
+#: eeschema/sim/sim_lib_mgr.cpp:302 eeschema/sim/sim_lib_mgr.cpp:298
 #, fuzzy, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
@@ -16089,105 +16143,107 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/sim/sim_model.cpp:691
+#: eeschema/sim/sim_model.cpp:691 eeschema/sim/sim_model.cpp:700
 #, fuzzy, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
 msgstr "Không thể mở tệp cấu hình"
 
-#: eeschema/sim/sim_model.cpp:781
+#: eeschema/sim/sim_model.cpp:781 eeschema/sim/sim_model.cpp:816
+#: eeschema/sim/sim_model.cpp:833
 #, fuzzy, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
 msgstr "Không thể mở tệp cấu hình"
 
-#: eeschema/sim/sim_model.h:468
+#: eeschema/sim/sim_model.h:468 eeschema/sim/sim_model.h:467
 #, c-format
 msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
 
-#: eeschema/sim/sim_model_kibis.cpp:76
+#: eeschema/sim/sim_model_kibis.cpp:76 eeschema/sim/sim_model_kibis.cpp:77
 #, fuzzy, c-format
 msgid "Invalid IBIS file '%s'"
 msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
 
-#: eeschema/sim/sim_model_kibis.cpp:81
+#: eeschema/sim/sim_model_kibis.cpp:81 eeschema/sim/sim_model_kibis.cpp:82
 #, fuzzy, c-format
 msgid "Could not find IBIS component '%s'"
 msgstr "Không thể mở tệp cấu hình"
 
-#: eeschema/sim/sim_model_kibis.cpp:87
+#: eeschema/sim/sim_model_kibis.cpp:87 eeschema/sim/sim_model_kibis.cpp:88
 #, fuzzy, c-format
 msgid "Invalid IBIS component '%s'"
 msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
 
-#: eeschema/sim/sim_model_kibis.cpp:91
+#: eeschema/sim/sim_model_kibis.cpp:91 eeschema/sim/sim_model_kibis.cpp:92
 #, fuzzy, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
 msgstr "Không thể mở tệp cấu hình"
 
-#: eeschema/sim/sim_model_kibis.cpp:98
+#: eeschema/sim/sim_model_kibis.cpp:98 eeschema/sim/sim_model_kibis.cpp:99
 #, fuzzy, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
 msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
 
-#: eeschema/sim/sim_model_kibis.cpp:106
+#: eeschema/sim/sim_model_kibis.cpp:106 eeschema/sim/sim_model_kibis.cpp:107
 #, fuzzy, c-format
 msgid "Could not find IBIS model '%s'"
 msgstr "Không thể mở tệp cấu hình"
 
-#: eeschema/sim/sim_model_kibis.cpp:109
+#: eeschema/sim/sim_model_kibis.cpp:109 eeschema/sim/sim_model_kibis.cpp:110
 #, fuzzy, c-format
 msgid "Invalid IBIS model '%s'"
 msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
 
-#: eeschema/sim/sim_model_kibis.cpp:340
+#: eeschema/sim/sim_model_kibis.cpp:340 eeschema/sim/sim_model_kibis.cpp:347
 #, fuzzy
 msgid "Power supply"
 msgstr "Biểu tượng nguồn điện"
 
-#: eeschema/sim/sim_model_kibis.cpp:350
+#: eeschema/sim/sim_model_kibis.cpp:350 eeschema/sim/sim_model_kibis.cpp:357
 #, fuzzy
 msgid "Parasitic pin resistance"
 msgstr "Kiểu dáng đường kẻ:"
 
-#: eeschema/sim/sim_model_kibis.cpp:360
+#: eeschema/sim/sim_model_kibis.cpp:360 eeschema/sim/sim_model_kibis.cpp:367
 #, fuzzy
 msgid "Parasitic pin inductance"
 msgstr "Kiểu dáng đường kẻ:"
 
-#: eeschema/sim/sim_model_kibis.cpp:370
+#: eeschema/sim/sim_model_kibis.cpp:370 eeschema/sim/sim_model_kibis.cpp:377
 #, fuzzy
 msgid "Parasitic pin capacitance"
 msgstr "Kiểu dáng đường kẻ:"
 
-#: eeschema/sim/sim_model_kibis.cpp:414
+#: eeschema/sim/sim_model_kibis.cpp:414 eeschema/sim/sim_model_kibis.cpp:421
 #, fuzzy
 msgid "DC Value"
 msgstr "Giá trị"
 
-#: eeschema/sim/sim_model_kibis.cpp:432
+#: eeschema/sim/sim_model_kibis.cpp:432 eeschema/sim/sim_model_kibis.cpp:439
 msgid "ON time"
 msgstr ""
 
-#: eeschema/sim/sim_model_kibis.cpp:440
+#: eeschema/sim/sim_model_kibis.cpp:440 eeschema/sim/sim_model_kibis.cpp:447
 msgid "OFF time"
 msgstr ""
 
 #: eeschema/sim/sim_model_kibis.cpp:448 eeschema/sim/sim_model_kibis.cpp:481
+#: eeschema/sim/sim_model_kibis.cpp:455 eeschema/sim/sim_model_kibis.cpp:488
 msgid "Delay"
 msgstr ""
 
-#: eeschema/sim/sim_model_kibis.cpp:456
+#: eeschema/sim/sim_model_kibis.cpp:456 eeschema/sim/sim_model_kibis.cpp:463
 #, fuzzy
 msgid "Number of cycles"
 msgstr "Số lượng mẫu"
 
-#: eeschema/sim/sim_model_kibis.cpp:473
+#: eeschema/sim/sim_model_kibis.cpp:473 eeschema/sim/sim_model_kibis.cpp:480
 msgid "Bitrate"
 msgstr ""
 
-#: eeschema/sim/sim_model_kibis.cpp:489
+#: eeschema/sim/sim_model_kibis.cpp:489 eeschema/sim/sim_model_kibis.cpp:496
 #, fuzzy
 msgid "Number of bits"
 msgstr "Số lượng đơn vị:"
@@ -16197,86 +16253,92 @@ msgid ""
 "This simulation provide no plots. Please refer to console window for results"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:159
+#: eeschema/sim/sim_plot_frame.cpp:159 eeschema/sim/sim_plot_frame.cpp:167
 msgid "Run/Stop Simulation"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:160 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Run Simulation"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:162
+#: eeschema/sim/sim_plot_frame.cpp:162 eeschema/sim/sim_plot_frame.cpp:170
 msgid "Add signals to plot"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:163
+#: eeschema/sim/sim_plot_frame.cpp:163 eeschema/sim/sim_plot_frame.cpp:171
 msgid "Probe"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:164
+#: eeschema/sim/sim_plot_frame.cpp:164 eeschema/sim/sim_plot_frame.cpp:172
 msgid "Probe signals on the schematic"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:165 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:173
 msgid "Tune"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:166
+#: eeschema/sim/sim_plot_frame.cpp:166 eeschema/sim/sim_plot_frame.cpp:174
 msgid "Tune component values"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:167
+#: eeschema/sim/sim_plot_frame.cpp:167 eeschema/sim/sim_plot_frame.cpp:175
 #, fuzzy
 msgid "Sim Command"
 msgstr "Lệnh"
 
-#: eeschema/sim/sim_plot_frame.cpp:168
+#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame.cpp:176
 msgid "Simulation command and settings"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:348 eeschema/sim/sim_plot_frame_base.h:129
+#: eeschema/sim/sim_plot_frame.cpp:356
 msgid "Spice Simulator"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:468 eeschema/sim/sim_plot_frame.cpp:1487
+#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1494
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:485
+#: eeschema/sim/sim_plot_frame.cpp:485 eeschema/sim/sim_plot_frame.cpp:493
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:508 eeschema/sim/sim_plot_frame.cpp:1900
+#: eeschema/sim/sim_plot_frame.cpp:516 eeschema/sim/sim_plot_frame.cpp:1901
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "%s đã chạy rồi. Tiếp tục?"
 
-#: eeschema/sim/sim_plot_frame.cpp:536
+#: eeschema/sim/sim_plot_frame.cpp:536 eeschema/sim/sim_plot_frame.cpp:544
 #, c-format
 msgid "Plot%u - "
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:660
+#: eeschema/sim/sim_plot_frame.cpp:660 eeschema/sim/sim_plot_frame.cpp:669
 msgid "Error: simulation type not defined!\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:666
+#: eeschema/sim/sim_plot_frame.cpp:666 eeschema/sim/sim_plot_frame.cpp:675
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:731
+#: eeschema/sim/sim_plot_frame.cpp:731 eeschema/sim/sim_plot_frame.cpp:742
 msgid " (mag)"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:733
+#: eeschema/sim/sim_plot_frame.cpp:733 eeschema/sim/sim_plot_frame.cpp:744
 msgid " (phase)"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:845 eeschema/sim/sim_plot_frame.cpp:1718
+#: eeschema/sim/sim_plot_frame.cpp:856 eeschema/sim/sim_plot_frame.cpp:1720
 msgid "Signal"
 msgstr ""
 
@@ -16285,37 +16347,37 @@ msgstr ""
 msgid "%s not found."
 msgstr "%s không tìm thấy"
 
-#: eeschema/sim/sim_plot_frame.cpp:1121
+#: eeschema/sim/sim_plot_frame.cpp:1121 eeschema/sim/sim_plot_frame.cpp:1128
 #, fuzzy
 msgid "noname"
 msgstr "Tên Pin"
 
-#: eeschema/sim/sim_plot_frame.cpp:1170
+#: eeschema/sim/sim_plot_frame.cpp:1170 eeschema/sim/sim_plot_frame.cpp:1177
 msgid "Open simulation workbook"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1199
+#: eeschema/sim/sim_plot_frame.cpp:1199 eeschema/sim/sim_plot_frame.cpp:1206
 msgid "Save Simulation Workbook As"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1215
+#: eeschema/sim/sim_plot_frame.cpp:1215 eeschema/sim/sim_plot_frame.cpp:1222
 msgid "Save Plot as Image"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1232
+#: eeschema/sim/sim_plot_frame.cpp:1232 eeschema/sim/sim_plot_frame.cpp:1239
 msgid "Save Plot Data"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1542
+#: eeschema/sim/sim_plot_frame.cpp:1542 eeschema/sim/sim_plot_frame.cpp:1544
 msgid "You need to run plot-providing simulation first."
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1668
+#: eeschema/sim/sim_plot_frame.cpp:1668 eeschema/sim/sim_plot_frame.cpp:1670
 #, fuzzy
 msgid "Save changes to workbook?"
 msgstr "Lưu thay đổi?"
 
-#: eeschema/sim/sim_plot_frame.cpp:1830
+#: eeschema/sim/sim_plot_frame.cpp:1830 eeschema/sim/sim_plot_frame.cpp:1832
 msgid ""
 "\n"
 "\n"
@@ -16478,7 +16540,7 @@ msgstr ""
 msgid "Voltage (measured)"
 msgstr ""
 
-#: eeschema/sim/sim_value.cpp:386
+#: eeschema/sim/sim_value.cpp:386 eeschema/sim/sim_value.cpp:385
 #, fuzzy
 msgid "Unknown SIM_VALUE type"
 msgstr "Nút không biết '%s' trong '%s'"
@@ -16566,15 +16628,15 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:146
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
 msgstr ""
 
 #: eeschema/symbol_checker.cpp:159
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b> in units %s and %s."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 
 #: eeschema/symbol_checker.cpp:187
@@ -16691,6 +16753,7 @@ msgstr "Đang tải thư viện symbol"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:191
 #: pcbnew/footprint_edit_frame.cpp:218 pcbnew/footprint_edit_frame.cpp:830
+#: pcbnew/footprint_edit_frame.cpp:828
 msgid "Libraries"
 msgstr ""
 
@@ -16810,6 +16873,7 @@ msgstr "Không có symbol nào được chọn"
 #: eeschema/symbol_editor/symbol_editor.cpp:115
 #: eeschema/symbol_editor/symbol_editor.cpp:448
 #: eeschema/tools/symbol_editor_control.cpp:651
+#: eeschema/tools/symbol_editor_control.cpp:646
 msgid "No schematic currently open."
 msgstr ""
 
@@ -16914,7 +16978,7 @@ msgid "Keep Symbol"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:908 pcbnew/files.cpp:362
-#: pcbnew/footprint_libraries_utils.cpp:1205
+#: pcbnew/footprint_libraries_utils.cpp:1205 pcbnew/files.cpp:364
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr ""
@@ -17459,10 +17523,12 @@ msgid "Add a text box item"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:850
+#: eeschema/tools/ee_actions.cpp:851
 msgid "Add Lines"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:850
+#: eeschema/tools/ee_actions.cpp:851
 msgid "Add connected graphic lines"
 msgstr ""
 
@@ -17892,474 +17958,484 @@ msgstr ""
 msgid "Divide into unconnected segments"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:573
+#: eeschema/tools/ee_actions.cpp:573 eeschema/tools/ee_actions.cpp:574
 msgid "Add a simulator probe"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:577
+#: eeschema/tools/ee_actions.cpp:577 eeschema/tools/ee_actions.cpp:578
 msgid "Select a value to be tuned"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:582 pcbnew/tools/pcb_actions.cpp:790
+#: eeschema/tools/ee_actions.cpp:583
 msgid "Highlight net under cursor"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:587 pcbnew/tools/pcb_actions.cpp:800
+#: eeschema/tools/ee_actions.cpp:588
 msgid "Clear Net Highlighting"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:587 pcbnew/tools/pcb_actions.cpp:800
+#: eeschema/tools/ee_actions.cpp:588
 msgid "Clear any existing net highlighting"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:594
+#: eeschema/tools/ee_actions.cpp:594 eeschema/tools/ee_actions.cpp:595
 msgid "Highlight Nets"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:594
+#: eeschema/tools/ee_actions.cpp:594 eeschema/tools/ee_actions.cpp:595
 msgid "Highlight wires and pins of a net"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:600
+#: eeschema/tools/ee_actions.cpp:600 eeschema/tools/ee_actions.cpp:601
 msgid "Edit with Symbol Editor"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:600
+#: eeschema/tools/ee_actions.cpp:600 eeschema/tools/ee_actions.cpp:601
 msgid "Open the selected symbol in the Symbol Editor"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:606
+#: eeschema/tools/ee_actions.cpp:606 eeschema/tools/ee_actions.cpp:607
 msgid "Open the library symbol in the Symbol Editor"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:611
+#: eeschema/tools/ee_actions.cpp:611 eeschema/tools/ee_actions.cpp:612
 msgid "Edit Symbol Fields..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:611
+#: eeschema/tools/ee_actions.cpp:611 eeschema/tools/ee_actions.cpp:612
 msgid "Bulk-edit fields of all symbols in schematic"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:616
+#: eeschema/tools/ee_actions.cpp:616 eeschema/tools/ee_actions.cpp:617
 msgid "Edit Symbol Library Links..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:616
+#: eeschema/tools/ee_actions.cpp:616 eeschema/tools/ee_actions.cpp:617
 msgid "Edit links between schematic and library symbols"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:621
+#: eeschema/tools/ee_actions.cpp:621 eeschema/tools/ee_actions.cpp:622
 msgid "Assign Footprints..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:621
+#: eeschema/tools/ee_actions.cpp:621 eeschema/tools/ee_actions.cpp:622
 msgid "Run footprint assignment tool"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:626
+#: eeschema/tools/ee_actions.cpp:626 eeschema/tools/ee_actions.cpp:627
 msgid "Import Footprint Assignments..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:627
+#: eeschema/tools/ee_actions.cpp:627 eeschema/tools/ee_actions.cpp:628
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:632
+#: eeschema/tools/ee_actions.cpp:632 eeschema/tools/ee_actions.cpp:633
 msgid "Annotate Schematic..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:632
+#: eeschema/tools/ee_actions.cpp:632 eeschema/tools/ee_actions.cpp:633
 msgid "Fill in schematic symbol reference designators"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:637
+#: eeschema/tools/ee_actions.cpp:637 eeschema/tools/ee_actions.cpp:638
 msgid "Schematic Setup..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:638
+#: eeschema/tools/ee_actions.cpp:638 eeschema/tools/ee_actions.cpp:639
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:643
+#: eeschema/tools/ee_actions.cpp:643 eeschema/tools/ee_actions.cpp:644
 msgid "Edit Sheet Page Number..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:644
+#: eeschema/tools/ee_actions.cpp:644 eeschema/tools/ee_actions.cpp:645
 msgid "Edit the page number of the current or selected sheet"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:648
+#: eeschema/tools/ee_actions.cpp:648 eeschema/tools/ee_actions.cpp:649
 msgid "Rescue Symbols..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:649
+#: eeschema/tools/ee_actions.cpp:649 eeschema/tools/ee_actions.cpp:650
 msgid "Find old symbols in project and rename/rescue them"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:654
+#: eeschema/tools/ee_actions.cpp:654 eeschema/tools/ee_actions.cpp:655
 msgid "Remap Legacy Library Symbols..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:655
+#: eeschema/tools/ee_actions.cpp:655 eeschema/tools/ee_actions.cpp:656
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:660
+#: eeschema/tools/ee_actions.cpp:660 eeschema/tools/ee_actions.cpp:661
 msgid "Export Drawing to Clipboard"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:660
+#: eeschema/tools/ee_actions.cpp:660 eeschema/tools/ee_actions.cpp:661
 msgid "Export drawing of current sheet to clipboard"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:665
+#: eeschema/tools/ee_actions.cpp:665 eeschema/tools/ee_actions.cpp:666
 msgid "Switch to PCB Editor"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:665
+#: eeschema/tools/ee_actions.cpp:665 eeschema/tools/ee_actions.cpp:666
 msgid "Open PCB in board editor"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:670
+#: eeschema/tools/ee_actions.cpp:670 eeschema/tools/ee_actions.cpp:671
 msgid "Export Netlist..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:670
+#: eeschema/tools/ee_actions.cpp:670 eeschema/tools/ee_actions.cpp:671
 msgid "Export file containing netlist in one of several formats"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:675
+#: eeschema/tools/ee_actions.cpp:675 eeschema/tools/ee_actions.cpp:676
 msgid "Generate BOM..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:675
+#: eeschema/tools/ee_actions.cpp:675 eeschema/tools/ee_actions.cpp:676
 msgid "Generate a bill of materials for the current schematic"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:680
+#: eeschema/tools/ee_actions.cpp:680 eeschema/tools/ee_actions.cpp:681
 #, fuzzy
 msgid "Export Symbols to Library..."
 msgstr "Cập nhật các Symbol từ Thư viện"
 
-#: eeschema/tools/ee_actions.cpp:681
+#: eeschema/tools/ee_actions.cpp:681 eeschema/tools/ee_actions.cpp:682
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:687
+#: eeschema/tools/ee_actions.cpp:687 eeschema/tools/ee_actions.cpp:688
 #, fuzzy
 msgid "Export Symbols to New Library..."
 msgstr "Thư viện Footprint"
 
-#: eeschema/tools/ee_actions.cpp:688
+#: eeschema/tools/ee_actions.cpp:688 eeschema/tools/ee_actions.cpp:689
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:694
+#: eeschema/tools/ee_actions.cpp:694 eeschema/tools/ee_actions.cpp:695
 #, fuzzy
 msgid "Select on PCB"
 msgstr "Chọn Không có"
 
-#: eeschema/tools/ee_actions.cpp:695
+#: eeschema/tools/ee_actions.cpp:695 eeschema/tools/ee_actions.cpp:696
 msgid "Select corresponding items in PCB editor"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:700
+#: eeschema/tools/ee_actions.cpp:700 eeschema/tools/ee_actions.cpp:701
 msgid "Show Hidden Pins"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:700
+#: eeschema/tools/ee_actions.cpp:700 eeschema/tools/ee_actions.cpp:701
 #, fuzzy
 msgid "Toggle display of hidden pins"
 msgstr "Bật tắt hiển thị các lớp adhesive"
 
-#: eeschema/tools/ee_actions.cpp:705
+#: eeschema/tools/ee_actions.cpp:705 eeschema/tools/ee_actions.cpp:706
 msgid "Show Hidden Fields"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:705
+#: eeschema/tools/ee_actions.cpp:705 eeschema/tools/ee_actions.cpp:706
 #, fuzzy
 msgid "Toggle display of hidden text fields"
 msgstr "Bật tắt hiển thị các lớp solder paste"
 
-#: eeschema/tools/ee_actions.cpp:709
+#: eeschema/tools/ee_actions.cpp:709 eeschema/tools/ee_actions.cpp:710
 #, fuzzy
 msgid "Show ERC Warnings"
 msgstr "Cảnh báo DRC"
 
-#: eeschema/tools/ee_actions.cpp:709
+#: eeschema/tools/ee_actions.cpp:709 eeschema/tools/ee_actions.cpp:710
 msgid "Show markers for electrical rules checker warnings"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:713
+#: eeschema/tools/ee_actions.cpp:713 eeschema/tools/ee_actions.cpp:714
 #, fuzzy
 msgid "Show ERC Errors"
 msgstr "Lỗi DRC"
 
-#: eeschema/tools/ee_actions.cpp:713
+#: eeschema/tools/ee_actions.cpp:713 eeschema/tools/ee_actions.cpp:714
 #, fuzzy
 msgid "Show markers for electrical rules checker errors"
 msgstr "Tệp kiểm tra quy tắc điện tử"
 
-#: eeschema/tools/ee_actions.cpp:717
+#: eeschema/tools/ee_actions.cpp:717 eeschema/tools/ee_actions.cpp:718
 #, fuzzy
 msgid "Show ERC Exclusions"
 msgstr "Loại trừ DRC"
 
-#: eeschema/tools/ee_actions.cpp:718
+#: eeschema/tools/ee_actions.cpp:718 eeschema/tools/ee_actions.cpp:719
 msgid "Show markers for excluded electrical rules checker violations"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:722 eeschema/tools/ee_actions.cpp:727
 #: eeschema/tools/ee_actions.cpp:733 eeschema/tools/ee_actions.cpp:739
+#: eeschema/tools/ee_actions.cpp:723 eeschema/tools/ee_actions.cpp:728
+#: eeschema/tools/ee_actions.cpp:734 eeschema/tools/ee_actions.cpp:740
 msgid "Line Mode for Wires and Buses"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:722
+#: eeschema/tools/ee_actions.cpp:722 eeschema/tools/ee_actions.cpp:723
 msgid "Draw and drag at any angle"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:728
+#: eeschema/tools/ee_actions.cpp:728 eeschema/tools/ee_actions.cpp:729
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:734
+#: eeschema/tools/ee_actions.cpp:734 eeschema/tools/ee_actions.cpp:735
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:739
+#: eeschema/tools/ee_actions.cpp:739 eeschema/tools/ee_actions.cpp:740
 #, fuzzy
 msgid "Switch to next line mode"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: eeschema/tools/ee_actions.cpp:744
+#: eeschema/tools/ee_actions.cpp:744 eeschema/tools/ee_actions.cpp:745
 #, fuzzy
 msgid "Annotate Automatically"
 msgstr "Chú thích Sơ đồ mạch"
 
-#: eeschema/tools/ee_actions.cpp:744
+#: eeschema/tools/ee_actions.cpp:744 eeschema/tools/ee_actions.cpp:745
 msgid "Toggle automatic annotation of new parts symbols"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:749
+#: eeschema/tools/ee_actions.cpp:749 eeschema/tools/ee_actions.cpp:750
 #, fuzzy
 msgid "Repair Schematic"
 msgstr "Lưu vào Sơ đồ mạch"
 
-#: eeschema/tools/ee_actions.cpp:750
+#: eeschema/tools/ee_actions.cpp:750 eeschema/tools/ee_actions.cpp:751
 msgid "Run various diagnostics and attempt to repair schematic"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:756 pcbnew/tools/pcb_actions.cpp:855
+#: eeschema/tools/ee_actions.cpp:757
 msgid "Scripting Console"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:756 pcbnew/tools/pcb_actions.cpp:855
+#: eeschema/tools/ee_actions.cpp:757
 msgid "Show the Python scripting console"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:763
+#: eeschema/tools/ee_actions.cpp:763 eeschema/tools/ee_actions.cpp:764
 #, fuzzy
 msgid "Change Sheet"
 msgstr "Thay đổi phương pháp chỉnh sửa"
 
-#: eeschema/tools/ee_actions.cpp:763
+#: eeschema/tools/ee_actions.cpp:763 eeschema/tools/ee_actions.cpp:764
 #, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
 msgstr "Chỉnh sửa tệp tập lệnh trong trình soạn thảo văn bản"
 
-#: eeschema/tools/ee_actions.cpp:768
+#: eeschema/tools/ee_actions.cpp:768 eeschema/tools/ee_actions.cpp:769
 msgid "Enter Sheet"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:768
+#: eeschema/tools/ee_actions.cpp:768 eeschema/tools/ee_actions.cpp:769
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:774
+#: eeschema/tools/ee_actions.cpp:774 eeschema/tools/ee_actions.cpp:775
 msgid "Leave Sheet"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:774
+#: eeschema/tools/ee_actions.cpp:774 eeschema/tools/ee_actions.cpp:775
 #, fuzzy
 msgid "Display the parent sheet in the schematic editor"
 msgstr "Chỉnh sửa tệp tập lệnh trong trình soạn thảo văn bản"
 
-#: eeschema/tools/ee_actions.cpp:779
+#: eeschema/tools/ee_actions.cpp:779 eeschema/tools/ee_actions.cpp:780
 msgid "Navigate Up"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:779
+#: eeschema/tools/ee_actions.cpp:779 eeschema/tools/ee_actions.cpp:780
 msgid "Navigate up one sheet in the hierarchy"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:785
+#: eeschema/tools/ee_actions.cpp:785 eeschema/tools/ee_actions.cpp:786
 #, fuzzy
 msgid "Navigate Back"
 msgstr "Góc nhìn mặt sau"
 
-#: eeschema/tools/ee_actions.cpp:785
+#: eeschema/tools/ee_actions.cpp:785 eeschema/tools/ee_actions.cpp:786
 msgid "Move forward in sheet navigation history"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:791
+#: eeschema/tools/ee_actions.cpp:791 eeschema/tools/ee_actions.cpp:792
 msgid "Navigate Forward"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:791
+#: eeschema/tools/ee_actions.cpp:791 eeschema/tools/ee_actions.cpp:792
 msgid "Move backward in sheet navigation history"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:797
+#: eeschema/tools/ee_actions.cpp:797 eeschema/tools/ee_actions.cpp:798
 #, fuzzy
 msgid "Previous Sheet"
 msgstr "Xem trước trang giấy"
 
-#: eeschema/tools/ee_actions.cpp:797
+#: eeschema/tools/ee_actions.cpp:797 eeschema/tools/ee_actions.cpp:798
 msgid "Move to previous sheet by number"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:803
+#: eeschema/tools/ee_actions.cpp:803 eeschema/tools/ee_actions.cpp:804
 #, fuzzy
 msgid "Next Sheet"
 msgstr "Sheet"
 
-#: eeschema/tools/ee_actions.cpp:803
+#: eeschema/tools/ee_actions.cpp:803 eeschema/tools/ee_actions.cpp:804
 msgid "Move to next sheet by number"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:809
+#: eeschema/tools/ee_actions.cpp:809 eeschema/tools/ee_actions.cpp:810
 msgid "Hierarchy Navigator"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:809
+#: eeschema/tools/ee_actions.cpp:809 eeschema/tools/ee_actions.cpp:810
 msgid "Show or hide the schematic sheet hierarchy navigator"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:817
+#: eeschema/tools/ee_actions.cpp:817 eeschema/tools/ee_actions.cpp:818
 msgid "Add Junctions to Selection where needed"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:830
+#: eeschema/tools/ee_actions.cpp:830 eeschema/tools/ee_actions.cpp:831
 msgid "Add Wire"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:830
+#: eeschema/tools/ee_actions.cpp:830 eeschema/tools/ee_actions.cpp:831
 msgid "Add a wire"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:837
+#: eeschema/tools/ee_actions.cpp:837 eeschema/tools/ee_actions.cpp:838
 msgid "Add Bus"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:837
+#: eeschema/tools/ee_actions.cpp:837 eeschema/tools/ee_actions.cpp:838
 msgid "Add a bus"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:843
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:76
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:132
+#: eeschema/tools/ee_actions.cpp:844
 msgid "Unfold from Bus"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:843
+#: eeschema/tools/ee_actions.cpp:843 eeschema/tools/ee_actions.cpp:844
 msgid "Break a wire out of a bus"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:856 pcbnew/tools/pcb_actions.cpp:1502
+#: eeschema/tools/ee_actions.cpp:857
 #, fuzzy
 msgid "Undo Last Segment"
 msgstr "Hoàn tác chỉnh sửa cuối cùng"
 
-#: eeschema/tools/ee_actions.cpp:856
+#: eeschema/tools/ee_actions.cpp:856 eeschema/tools/ee_actions.cpp:857
 msgid "Walks the current line back one segment."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:862
+#: eeschema/tools/ee_actions.cpp:862 eeschema/tools/ee_actions.cpp:863
 msgid "Switch Segment Posture"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:862
+#: eeschema/tools/ee_actions.cpp:862 eeschema/tools/ee_actions.cpp:863
 msgid "Switches posture of the current segment."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:868
+#: eeschema/tools/ee_actions.cpp:868 eeschema/tools/ee_actions.cpp:869
 msgid "Finish Wire or Bus"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:868
+#: eeschema/tools/ee_actions.cpp:868 eeschema/tools/ee_actions.cpp:869
 msgid "Complete drawing at current segment"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:873
+#: eeschema/tools/ee_actions.cpp:873 eeschema/tools/ee_actions.cpp:874
 msgid "Finish Wire"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:873
+#: eeschema/tools/ee_actions.cpp:873 eeschema/tools/ee_actions.cpp:874
 msgid "Complete wire with current segment"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:878
+#: eeschema/tools/ee_actions.cpp:878 eeschema/tools/ee_actions.cpp:879
 msgid "Finish Bus"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:878
+#: eeschema/tools/ee_actions.cpp:878 eeschema/tools/ee_actions.cpp:879
 msgid "Complete bus with current segment"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:883
+#: eeschema/tools/ee_actions.cpp:883 eeschema/tools/ee_actions.cpp:884
 msgid "Finish Lines"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:883
+#: eeschema/tools/ee_actions.cpp:883 eeschema/tools/ee_actions.cpp:884
 msgid "Complete connected lines with current segment"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:892 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/dialogs/panel_edit_options_base.cpp:359
 #: pcbnew/tools/edit_tool_move_fct.cpp:241 pcbnew/tools/pcb_actions.cpp:270
+#: eeschema/tools/ee_actions.cpp:893
 msgid "Move"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:892 pagelayout_editor/tools/pl_actions.cpp:68
-#: pcbnew/tools/pcb_actions.cpp:270
+#: pcbnew/tools/pcb_actions.cpp:270 eeschema/tools/ee_actions.cpp:893
 msgid "Moves the selected item(s)"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:897
+#: eeschema/tools/ee_actions.cpp:897 eeschema/tools/ee_actions.cpp:898
 msgid "Drag"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:897
+#: eeschema/tools/ee_actions.cpp:897 eeschema/tools/ee_actions.cpp:898
 msgid "Drags the selected item(s)"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:901
+#: eeschema/tools/ee_actions.cpp:901 eeschema/tools/ee_actions.cpp:902
 msgid "Move Activate"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:905
+#: eeschema/tools/ee_actions.cpp:905 eeschema/tools/ee_actions.cpp:906
 msgid "Symbol Move Activate"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:909
+#: eeschema/tools/ee_actions.cpp:909 eeschema/tools/ee_actions.cpp:910
 msgid "Align Elements to Grid"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:915
+#: eeschema/tools/ee_actions.cpp:915 eeschema/tools/ee_actions.cpp:916
 #, fuzzy
 msgid "Save Current Sheet Copy As..."
 msgstr "Lưu bản sao dưới dạng ..."
 
-#: eeschema/tools/ee_actions.cpp:915
+#: eeschema/tools/ee_actions.cpp:915 eeschema/tools/ee_actions.cpp:916
 #, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Lưu bản sao của tài liệu hiện tại vào một vị trí khác"
@@ -18378,39 +18454,48 @@ msgid "No datasheet defined."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:282
+#: eeschema/tools/sch_drawing_tools.cpp:280
 msgid "Press <ESC> to cancel symbol creation."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:550 pcbnew/tools/drawing_tool.cpp:643
+#: eeschema/tools/sch_drawing_tools.cpp:548
 msgid "Press <ESC> to cancel image creation."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:601
 #: pagelayout_editor/pl_editor_frame.cpp:854
 #: pagelayout_editor/pl_editor_frame.cpp:862 pcbnew/tools/drawing_tool.cpp:695
+#: eeschema/tools/sch_drawing_tools.cpp:599
 #, fuzzy, c-format
 msgid "Could not load image from '%s'."
 msgstr "Không thể mở tệp cấu hình"
 
 #: eeschema/tools/sch_drawing_tools.cpp:731
 #: eeschema/tools/sch_drawing_tools.cpp:1358
+#: eeschema/tools/sch_drawing_tools.cpp:729
+#: eeschema/tools/sch_drawing_tools.cpp:1356
 msgid "No new hierarchical labels found."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:813
+#: eeschema/tools/sch_drawing_tools.cpp:812
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:1235
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:175
+#: eeschema/tools/sch_drawing_tools.cpp:1233
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:1346
+#: eeschema/tools/sch_drawing_tools.cpp:1344
 msgid "Click over a sheet."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:1758
+#: eeschema/tools/sch_drawing_tools.cpp:1756
 msgid "Press <ESC> to cancel sheet creation."
 msgstr ""
 
@@ -18432,42 +18517,46 @@ msgstr ""
 msgid "Edit Main Fields"
 msgstr "Chỉnh sửa tập tin"
 
-#: eeschema/tools/sch_edit_tool.cpp:484
+#: eeschema/tools/sch_edit_tool.cpp:484 eeschema/tools/sch_edit_tool.cpp:482
 #, fuzzy
 msgid "Change To"
 msgstr "Thay đổi"
 
-#: eeschema/tools/sch_edit_tool.cpp:1108
+#: eeschema/tools/sch_edit_tool.cpp:1108 eeschema/tools/sch_edit_tool.cpp:1106
 msgid "Label value cannot go below zero"
 msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:1377 eeschema/tools/sch_edit_tool.cpp:1380
 #: eeschema/tools/symbol_editor_edit_tool.cpp:531
+#: eeschema/tools/sch_edit_tool.cpp:1375 eeschema/tools/sch_edit_tool.cpp:1378
 #, c-format
 msgid "Edit %s Field"
 msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:1382
 #: eeschema/tools/symbol_editor_edit_tool.cpp:533
+#: eeschema/tools/sch_edit_tool.cpp:1380
 #, fuzzy, c-format
 msgid "Edit '%s' Field"
 msgstr "Chỉnh sửa tập tin"
 
 #: eeschema/tools/sch_edit_tool.cpp:1918 eeschema/tools/sch_edit_tool.cpp:2007
+#: eeschema/tools/sch_edit_tool.cpp:1910 eeschema/tools/sch_edit_tool.cpp:1999
 msgid "<empty>"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:2274
+#: eeschema/tools/sch_edit_tool.cpp:2274 eeschema/tools/sch_edit_tool.cpp:2246
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:2334
+#: eeschema/tools/sch_edit_tool.cpp:2334 eeschema/tools/sch_edit_tool.cpp:2306
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:2337
 #: eeschema/widgets/hierarchy_pane.cpp:287
+#: eeschema/tools/sch_edit_tool.cpp:2309
 msgid "Edit Sheet Page Number"
 msgstr ""
 
@@ -18499,6 +18588,7 @@ msgid "Update symbols in schematic to refer to new library?"
 msgstr "Cập nhật các Symbol từ Thư viện"
 
 #: eeschema/tools/sch_editor_control.cpp:1103
+#: eeschema/tools/sch_editor_control.cpp:1102
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
 
@@ -18508,10 +18598,12 @@ msgid "No net selected."
 msgstr "Không có symbol nào được chọn"
 
 #: eeschema/tools/sch_editor_control.cpp:1229
+#: eeschema/tools/sch_editor_control.cpp:1216
 msgid "Net must be labeled to assign a netclass."
 msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:1904
+#: eeschema/tools/sch_editor_control.cpp:1892
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18520,6 +18612,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:2288
+#: eeschema/tools/sch_editor_control.cpp:2276
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "Không có symbol nào được chọn"
@@ -18527,6 +18620,7 @@ msgstr "Không có symbol nào được chọn"
 #: eeschema/tools/sch_editor_control.cpp:2582
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:705
+#: eeschema/tools/sch_editor_control.cpp:2570
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr ""
@@ -18534,12 +18628,14 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:2589
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:720
+#: eeschema/tools/sch_editor_control.cpp:2577
 #, c-format
 msgid "%d potential problems repaired."
 msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:2596
 #: pcbnew/drc/drc_rule_parser.cpp:179
+#: eeschema/tools/sch_editor_control.cpp:2584
 msgid "No errors found."
 msgstr ""
 
@@ -18555,12 +18651,13 @@ msgstr ""
 msgid "Press <ESC> to cancel drawing."
 msgstr ""
 
-#: eeschema/tools/sch_move_tool.cpp:757
+#: eeschema/tools/sch_move_tool.cpp:757 eeschema/tools/sch_move_tool.cpp:751
 msgid "Press <ESC> to cancel drag."
 msgstr ""
 
 #: eeschema/tools/sch_move_tool.cpp:759
 #: pagelayout_editor/tools/pl_edit_tool.cpp:217
+#: eeschema/tools/sch_move_tool.cpp:753
 msgid "Press <ESC> to cancel move."
 msgstr ""
 
@@ -18709,12 +18806,12 @@ msgid ""
 "an integer to prevent duplicate table entries."
 msgstr ""
 
-#: eeschema/widgets/tuner_slider.cpp:54
+#: eeschema/widgets/tuner_slider.cpp:54 eeschema/widgets/tuner_slider.cpp:52
 #, fuzzy, c-format
 msgid "Could not find Spice item with reference '%s'"
 msgstr "Không thể mở tệp cấu hình"
 
-#: eeschema/widgets/tuner_slider.cpp:65
+#: eeschema/widgets/tuner_slider.cpp:65 eeschema/widgets/tuner_slider.cpp:62
 #, c-format
 msgid "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
 msgstr ""
@@ -18911,7 +19008,10 @@ msgstr ""
 #: pcbnew/widgets/pcb_properties_panel.cpp:150
 #: pcbnew/widgets/pcb_properties_panel.cpp:151
 #: pcbnew/widgets/pcb_properties_panel.cpp:155 pcbnew/zone.cpp:586
-#: pcbnew/zone.cpp:1399 pcbnew/zone.cpp:1402
+#: pcbnew/zone.cpp:1399 pcbnew/zone.cpp:1402 pcbnew/pcb_track.cpp:832
+#: pcbnew/pcb_track.cpp:906 pcbnew/pcb_track.cpp:1289 pcbnew/pcb_track.cpp:1296
+#: pcbnew/widgets/pcb_properties_panel.cpp:149
+#: pcbnew/widgets/pcb_properties_panel.cpp:154
 msgid "Layer"
 msgstr ""
 
@@ -19349,7 +19449,7 @@ msgstr ""
 
 #: gerbview/gerber_draw_item.cpp:697 pcbnew/fp_text.cpp:304
 #: pcbnew/fp_textbox.cpp:312 pcbnew/pcb_text.cpp:138 pcbnew/pcb_textbox.cpp:306
-#: pcbnew/tools/edit_tool.cpp:1701
+#: pcbnew/tools/edit_tool.cpp:1701 pcbnew/tools/edit_tool.cpp:1699
 msgid "Mirror"
 msgstr ""
 
@@ -21405,7 +21505,8 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:756
 #: kicad/tools/kicad_manager_control.cpp:763 pcbnew/pcb_edit_frame.cpp:1788
-#: pcbnew/pcb_edit_frame.cpp:1818
+#: pcbnew/pcb_edit_frame.cpp:1818 pcbnew/pcb_edit_frame.cpp:1799
+#: pcbnew/pcb_edit_frame.cpp:1829
 msgid "KiCad Error"
 msgstr ""
 
@@ -21762,7 +21863,7 @@ msgid "coord origin: Right Bottom page corner"
 msgstr ""
 
 #: pagelayout_editor/pl_editor_frame.cpp:188 pcbnew/pcb_edit_frame.cpp:297
-#: pcbnew/pcb_edit_frame.cpp:1436
+#: pcbnew/pcb_edit_frame.cpp:1436 pcbnew/pcb_edit_frame.cpp:1448
 msgid "Properties"
 msgstr ""
 
@@ -23853,12 +23954,12 @@ msgid "no layers"
 msgstr ""
 
 #: pcbnew/board_item.cpp:280 pcbnew/pcb_track.cpp:1245 pcbnew/zone.cpp:1374
-#: pcbnew/zone.cpp:1387
+#: pcbnew/zone.cpp:1387 pcbnew/pcb_track.cpp:1242 pcbnew/pcb_track.cpp:1264
 msgid "Position X"
 msgstr ""
 
 #: pcbnew/board_item.cpp:283 pcbnew/pcb_track.cpp:1249 pcbnew/zone.cpp:1381
-#: pcbnew/zone.cpp:1388
+#: pcbnew/zone.cpp:1388 pcbnew/pcb_track.cpp:1246 pcbnew/pcb_track.cpp:1269
 msgid "Position Y"
 msgstr ""
 
@@ -23875,6 +23976,7 @@ msgstr ""
 #: pcbnew/pad.cpp:970 pcbnew/pcb_dimension.cpp:363 pcbnew/pcb_group.cpp:403
 #: pcbnew/pcb_marker.cpp:363 pcbnew/pcb_shape.cpp:307 pcbnew/pcb_text.cpp:134
 #: pcbnew/pcb_textbox.cpp:303 pcbnew/pcb_track.cpp:951 pcbnew/zone.cpp:569
+#: pcbnew/pcb_track.cpp:948
 msgid "Locked"
 msgstr ""
 
@@ -24831,6 +24933,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:113
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
 #: pcbnew/dialogs/dialog_drc.cpp:230 pcbnew/pcb_edit_frame.cpp:1987
+#: pcbnew/pcb_edit_frame.cpp:1998
 #, fuzzy
 msgid "Custom Rules"
 msgstr "Tùy chỉnh:"
@@ -24847,7 +24950,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:194 pcbnew/files.cpp:639
-#: pcbnew/tools/pcb_control.cpp:1257
+#: pcbnew/tools/pcb_control.cpp:1257 pcbnew/files.cpp:641
 #, fuzzy
 msgid "Loading PCB"
 msgstr "Đang tải "
@@ -27451,6 +27554,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:335
 #: pcbnew/widgets/panel_selection_filter.cpp:192
 #: pcbnew/widgets/panel_selection_filter_base.cpp:53
+#: pcbnew/tools/board_editor_control.cpp:86
 msgid "Zones"
 msgstr ""
 
@@ -27682,7 +27786,7 @@ msgid "Set Track and Via Properties"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
-#: pcbnew/drc/drc_engine.cpp:1393
+#: pcbnew/drc/drc_engine.cpp:1393 pcbnew/drc/drc_engine.cpp:1391
 msgid "footprint"
 msgstr ""
 
@@ -29276,7 +29380,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:65
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:66
 #: pcbnew/router/pns_kicad_iface.cpp:624 pcbnew/router/pns_kicad_iface.cpp:697
-#: pcbnew/router/pns_kicad_iface.cpp:698
+#: pcbnew/router/pns_kicad_iface.cpp:698 pcbnew/router/pns_kicad_iface.cpp:608
+#: pcbnew/router/pns_kicad_iface.cpp:681 pcbnew/router/pns_kicad_iface.cpp:682
 msgid "user choice"
 msgstr ""
 
@@ -29939,17 +30044,17 @@ msgid "Via type:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1223
+#: pcbnew/pcb_track.cpp:1223 pcbnew/pcb_track.cpp:1220
 msgid "Through"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1225
+#: pcbnew/pcb_track.cpp:1225 pcbnew/pcb_track.cpp:1222
 msgid "Micro"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1224
+#: pcbnew/pcb_track.cpp:1224 pcbnew/pcb_track.cpp:1221
 msgid "Blind/buried"
 msgstr ""
 
@@ -31582,13 +31687,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -31725,14 +31830,16 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:101 pcbnew/pad.cpp:998
-#: pcbnew/pcb_track.cpp:910 pcbnew/pcb_track.cpp:1274
+#: pcbnew/pcb_track.cpp:910 pcbnew/pcb_track.cpp:1274 pcbnew/pcb_track.cpp:907
+#: pcbnew/pcb_track.cpp:1292
 msgid "Diameter"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:102 pcbnew/pad.cpp:1027
 #: pcbnew/pcb_track.cpp:911 pcbnew/pcb_track.cpp:1276
 #: pcbnew/tools/board_inspection_tool.cpp:921
-#: pcbnew/tools/board_inspection_tool.cpp:950
+#: pcbnew/tools/board_inspection_tool.cpp:950 pcbnew/pcb_track.cpp:908
+#: pcbnew/pcb_track.cpp:1294
 msgid "Hole"
 msgstr ""
 
@@ -31810,107 +31917,112 @@ msgstr ""
 msgid "keepout area '%s'"
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:618
+#: pcbnew/drc/drc_engine.cpp:618 pcbnew/drc/drc_engine.cpp:616
 #, fuzzy, c-format
 msgid "Resolved zone connection type: %s."
 msgstr "Tạo các lớp"
 
-#: pcbnew/drc/drc_engine.cpp:636
+#: pcbnew/drc/drc_engine.cpp:636 pcbnew/drc/drc_engine.cpp:634
 #, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:735 pcbnew/drc/drc_engine.cpp:745
+#: pcbnew/drc/drc_engine.cpp:733 pcbnew/drc/drc_engine.cpp:743
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:760 pcbnew/drc/drc_engine.cpp:1358
-#: pcbnew/drc/drc_engine.cpp:1373
+#: pcbnew/drc/drc_engine.cpp:1373 pcbnew/drc/drc_engine.cpp:758
+#: pcbnew/drc/drc_engine.cpp:1356 pcbnew/drc/drc_engine.cpp:1371
 #, fuzzy
 msgid "board minimum"
 msgstr "Chiều rộng Track"
 
 #: pcbnew/drc/drc_engine.cpp:763 pcbnew/drc/drc_engine.cpp:1352
-#: pcbnew/drc/drc_engine.cpp:1367
+#: pcbnew/drc/drc_engine.cpp:1367 pcbnew/drc/drc_engine.cpp:761
+#: pcbnew/drc/drc_engine.cpp:1350 pcbnew/drc/drc_engine.cpp:1365
 #, fuzzy, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Clearance lớp đồng tối thiểu"
 
-#: pcbnew/drc/drc_engine.cpp:772
+#: pcbnew/drc/drc_engine.cpp:772 pcbnew/drc/drc_engine.cpp:770
 #, fuzzy
 msgid "board minimum hole"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/drc/drc_engine.cpp:775
+#: pcbnew/drc/drc_engine.cpp:775 pcbnew/drc/drc_engine.cpp:773
 #, fuzzy, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "Clearance lớp đồng tối thiểu"
 
-#: pcbnew/drc/drc_engine.cpp:794
+#: pcbnew/drc/drc_engine.cpp:794 pcbnew/drc/drc_engine.cpp:792
 #, c-format
 msgid "Local override on %s; zone connection: %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:811
+#: pcbnew/drc/drc_engine.cpp:811 pcbnew/drc/drc_engine.cpp:809
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:828
+#: pcbnew/drc/drc_engine.cpp:828 pcbnew/drc/drc_engine.cpp:826
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:837
+#: pcbnew/drc/drc_engine.cpp:837 pcbnew/drc/drc_engine.cpp:835
 #, fuzzy, c-format
 msgid "%s min thickness: %s."
 msgstr "Độ dày lưới:"
 
-#: pcbnew/drc/drc_engine.cpp:851
+#: pcbnew/drc/drc_engine.cpp:851 pcbnew/drc/drc_engine.cpp:849
 #, fuzzy, c-format
 msgid "Checking assertion \"%s\"."
 msgstr "Đang kiểm tra xung đột bus ..."
 
 #: pcbnew/drc/drc_engine.cpp:857 pcbnew/drc/drc_engine.cpp:1477
+#: pcbnew/drc/drc_engine.cpp:855 pcbnew/drc/drc_engine.cpp:1475
 msgid "Assertion passed."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:861 pcbnew/drc/drc_engine.cpp:1481
+#: pcbnew/drc/drc_engine.cpp:859 pcbnew/drc/drc_engine.cpp:1479
 msgid "--> Assertion failed. <--"
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:881
+#: pcbnew/drc/drc_engine.cpp:881 pcbnew/drc/drc_engine.cpp:879
 #, fuzzy, c-format
 msgid "Checking %s clearance: %s."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_engine.cpp:887
+#: pcbnew/drc/drc_engine.cpp:887 pcbnew/drc/drc_engine.cpp:885
 #, fuzzy, c-format
 msgid "Checking %s max uncoupled length: %s."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_engine.cpp:893
+#: pcbnew/drc/drc_engine.cpp:893 pcbnew/drc/drc_engine.cpp:891
 #, fuzzy, c-format
 msgid "Checking %s max skew: %s."
 msgstr "Đang kiểm tra các pin..."
 
-#: pcbnew/drc/drc_engine.cpp:899
+#: pcbnew/drc/drc_engine.cpp:899 pcbnew/drc/drc_engine.cpp:897
 #, fuzzy, c-format
 msgid "Checking %s gap: %s."
 msgstr "Đang kiểm tra các pin..."
 
-#: pcbnew/drc/drc_engine.cpp:905
+#: pcbnew/drc/drc_engine.cpp:905 pcbnew/drc/drc_engine.cpp:903
 #, fuzzy, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_engine.cpp:911
+#: pcbnew/drc/drc_engine.cpp:911 pcbnew/drc/drc_engine.cpp:909
 #, fuzzy, c-format
 msgid "Checking %s min spoke count: %s."
 msgstr "Đang kiểm tra các pin..."
 
-#: pcbnew/drc/drc_engine.cpp:918
+#: pcbnew/drc/drc_engine.cpp:918 pcbnew/drc/drc_engine.cpp:916
 #, fuzzy, c-format
 msgid "Checking %s zone connection: %s."
 msgstr "Tên tín hiệu không được chứa khoảng trắng"
@@ -31918,175 +32030,186 @@ msgstr "Tên tín hiệu không được chứa khoảng trắng"
 #: pcbnew/drc/drc_engine.cpp:936 pcbnew/drc/drc_engine.cpp:937
 #: pcbnew/drc/drc_engine.cpp:938 pcbnew/tools/board_inspection_tool.cpp:213
 #: pcbnew/tools/board_inspection_tool.cpp:222
-#: pcbnew/tools/board_inspection_tool.cpp:231
+#: pcbnew/tools/board_inspection_tool.cpp:231 pcbnew/drc/drc_engine.cpp:934
+#: pcbnew/drc/drc_engine.cpp:935
 msgid "undefined"
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:950
+#: pcbnew/drc/drc_engine.cpp:950 pcbnew/drc/drc_engine.cpp:948
 #, fuzzy, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_engine.cpp:956
+#: pcbnew/drc/drc_engine.cpp:956 pcbnew/drc/drc_engine.cpp:954
 #, c-format
 msgid "Checking board setup constraints track width: min %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:964
+#: pcbnew/drc/drc_engine.cpp:964 pcbnew/drc/drc_engine.cpp:962
 #, fuzzy, c-format
 msgid "Checking %s annular width: min %s."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_engine.cpp:972
+#: pcbnew/drc/drc_engine.cpp:972 pcbnew/drc/drc_engine.cpp:970
 #, fuzzy, c-format
 msgid "Checking %s via diameter: opt %s."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_engine.cpp:978
+#: pcbnew/drc/drc_engine.cpp:978 pcbnew/drc/drc_engine.cpp:976
 #, c-format
 msgid "Checking board setup constraints via diameter: min %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:987
+#: pcbnew/drc/drc_engine.cpp:987 pcbnew/drc/drc_engine.cpp:985
 #, fuzzy, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "Đang kiểm tra các pin..."
 
-#: pcbnew/drc/drc_engine.cpp:993
+#: pcbnew/drc/drc_engine.cpp:993 pcbnew/drc/drc_engine.cpp:991
 #, c-format
 msgid "Checking board setup constraints hole size: min %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1003
+#: pcbnew/drc/drc_engine.cpp:1003 pcbnew/drc/drc_engine.cpp:1001
 #, fuzzy, c-format
 msgid "Checking %s: min %s."
 msgstr "Đang kiểm tra các pin..."
 
-#: pcbnew/drc/drc_engine.cpp:1011
+#: pcbnew/drc/drc_engine.cpp:1011 pcbnew/drc/drc_engine.cpp:1009
 #, fuzzy, c-format
 msgid "Checking %s diff pair gap: opt %s."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_engine.cpp:1018
+#: pcbnew/drc/drc_engine.cpp:1018 pcbnew/drc/drc_engine.cpp:1016
 #, fuzzy, c-format
 msgid "Checking board setup constraints clearance: min %s."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_engine.cpp:1026
+#: pcbnew/drc/drc_engine.cpp:1026 pcbnew/drc/drc_engine.cpp:1024
 #, fuzzy, c-format
 msgid "Checking board setup constraints hole to hole: min %s."
 msgstr "Đang kiểm tra nhãn..."
 
 #: pcbnew/drc/drc_engine.cpp:1032 pcbnew/drc/drc_engine.cpp:1058
-#: pcbnew/drc/drc_engine.cpp:1490
+#: pcbnew/drc/drc_engine.cpp:1490 pcbnew/drc/drc_engine.cpp:1030
+#: pcbnew/drc/drc_engine.cpp:1056 pcbnew/drc/drc_engine.cpp:1488
 #, c-format
 msgid "Checking %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1047
+#: pcbnew/drc/drc_engine.cpp:1047 pcbnew/drc/drc_engine.cpp:1045
 #, fuzzy, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
 
-#: pcbnew/drc/drc_engine.cpp:1066
+#: pcbnew/drc/drc_engine.cpp:1066 pcbnew/drc/drc_engine.cpp:1064
 msgid "Board and netclass clearances apply only between copper items."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1114
+#: pcbnew/drc/drc_engine.cpp:1114 pcbnew/drc/drc_engine.cpp:1112
 msgid "Keepout constraint not met."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1116
+#: pcbnew/drc/drc_engine.cpp:1116 pcbnew/drc/drc_engine.cpp:1114
 msgid "Disallow constraint not met."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1138
+#: pcbnew/drc/drc_engine.cpp:1138 pcbnew/drc/drc_engine.cpp:1136
 msgid "Keepout layer(s) not matched."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1142 pcbnew/drc/drc_engine.cpp:1163
-#: pcbnew/drc/drc_engine.cpp:1494
+#: pcbnew/drc/drc_engine.cpp:1494 pcbnew/drc/drc_engine.cpp:1140
+#: pcbnew/drc/drc_engine.cpp:1161 pcbnew/drc/drc_engine.cpp:1492
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1147 pcbnew/drc/drc_engine.cpp:1168
+#: pcbnew/drc/drc_engine.cpp:1145 pcbnew/drc/drc_engine.cpp:1166
 msgid "Rule layer not matched; rule ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1182
+#: pcbnew/drc/drc_engine.cpp:1182 pcbnew/drc/drc_engine.cpp:1180
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1194
+#: pcbnew/drc/drc_engine.cpp:1194 pcbnew/drc/drc_engine.cpp:1192
 msgid "Unconditional constraint applied."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1198 pcbnew/drc/drc_engine.cpp:1500
+#: pcbnew/drc/drc_engine.cpp:1196 pcbnew/drc/drc_engine.cpp:1498
 msgid "Unconditional rule applied."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1203
+#: pcbnew/drc/drc_engine.cpp:1203 pcbnew/drc/drc_engine.cpp:1201
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1218 pcbnew/drc/drc_engine.cpp:1505
+#: pcbnew/drc/drc_engine.cpp:1216 pcbnew/drc/drc_engine.cpp:1503
 #, fuzzy, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Đang kiểm tra xung đột bus ..."
 
-#: pcbnew/drc/drc_engine.cpp:1228
+#: pcbnew/drc/drc_engine.cpp:1228 pcbnew/drc/drc_engine.cpp:1226
 msgid "Constraint applied."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1232 pcbnew/drc/drc_engine.cpp:1511
+#: pcbnew/drc/drc_engine.cpp:1230 pcbnew/drc/drc_engine.cpp:1509
 msgid "Rule applied."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1237
+#: pcbnew/drc/drc_engine.cpp:1237 pcbnew/drc/drc_engine.cpp:1235
 msgid "Rule applied; overrides previous constraints."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1263
+#: pcbnew/drc/drc_engine.cpp:1263 pcbnew/drc/drc_engine.cpp:1261
 msgid "Membership not satisfied; constraint ignored."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1264 pcbnew/drc/drc_engine.cpp:1516
+#: pcbnew/drc/drc_engine.cpp:1262 pcbnew/drc/drc_engine.cpp:1514
 msgid "Condition not satisfied; rule ignored."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1320 pcbnew/drc/drc_engine.cpp:1337
+#: pcbnew/drc/drc_engine.cpp:1318 pcbnew/drc/drc_engine.cpp:1335
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1388
+#: pcbnew/drc/drc_engine.cpp:1388 pcbnew/drc/drc_engine.cpp:1386
 #, fuzzy, c-format
 msgid "%s zone connection: %s."
 msgstr "Tên tín hiệu không được chứa khoảng trắng"
 
-#: pcbnew/drc/drc_engine.cpp:1404
+#: pcbnew/drc/drc_engine.cpp:1404 pcbnew/drc/drc_engine.cpp:1402
 #, fuzzy, c-format
 msgid "%s pad connection: %s."
 msgstr "Tên tín hiệu không được chứa khoảng trắng"
 
 #: pcbnew/drc/drc_engine.cpp:1409 pcbnew/drc/drc_engine.cpp:1426
 #: pcbnew/drc/drc_engine.cpp:1443 pcbnew/zone.cpp:362 pcbnew/zone.cpp:473
+#: pcbnew/drc/drc_engine.cpp:1407 pcbnew/drc/drc_engine.cpp:1424
+#: pcbnew/drc/drc_engine.cpp:1441
 msgid "zone"
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1421
+#: pcbnew/drc/drc_engine.cpp:1421 pcbnew/drc/drc_engine.cpp:1419
 #, fuzzy, c-format
 msgid "%s thermal relief gap: %s."
 msgstr "Khác"
 
-#: pcbnew/drc/drc_engine.cpp:1438
+#: pcbnew/drc/drc_engine.cpp:1438 pcbnew/drc/drc_engine.cpp:1436
 #, fuzzy, c-format
 msgid "%s thermal spoke width: %s."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_engine.cpp:1471
+#: pcbnew/drc/drc_engine.cpp:1471 pcbnew/drc/drc_engine.cpp:1469
 #, fuzzy, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "Đang kiểm tra xung đột bus ..."
@@ -32333,7 +32456,7 @@ msgstr ""
 msgid "Local override"
 msgstr ""
 
-#: pcbnew/drc/drc_rule.h:156
+#: pcbnew/drc/drc_rule.h:156 pcbnew/drc/drc_rule.h:154
 #, c-format
 msgid "rule %s"
 msgstr ""
@@ -32535,6 +32658,14 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:795
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:240
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:278
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:295
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:375
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:414
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:661
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:693
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:714
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:735
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:986
 #, c-format
 msgid "(%s clearance %s; actual %s)"
 msgstr ""
@@ -32545,6 +32676,7 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:630
 #, c-format
 msgid "(nets %s and %s)"
 msgstr ""
@@ -32975,46 +33107,46 @@ msgstr ""
 msgid "STEP file has been created, but there are warnings."
 msgstr ""
 
-#: pcbnew/files.cpp:151
+#: pcbnew/files.cpp:151 pcbnew/files.cpp:150
 msgid "All KiCad Board Files"
 msgstr ""
 
-#: pcbnew/files.cpp:192
+#: pcbnew/files.cpp:192 pcbnew/files.cpp:191
 msgid "Open Board File"
 msgstr ""
 
-#: pcbnew/files.cpp:192
+#: pcbnew/files.cpp:192 pcbnew/files.cpp:191
 msgid "Import Non KiCad Board File"
 msgstr ""
 
-#: pcbnew/files.cpp:228
+#: pcbnew/files.cpp:228 pcbnew/files.cpp:227
 msgid "Save Board File As"
 msgstr ""
 
-#: pcbnew/files.cpp:271
+#: pcbnew/files.cpp:271 pcbnew/files.cpp:273
 msgid "Printed circuit board"
 msgstr ""
 
-#: pcbnew/files.cpp:335
+#: pcbnew/files.cpp:335 pcbnew/files.cpp:337
 #, fuzzy, c-format
 msgid "Recovery file '%s' not found."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: pcbnew/files.cpp:340
+#: pcbnew/files.cpp:340 pcbnew/files.cpp:342
 #, fuzzy, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "Không thể tạo tệp báo cáo '%s'"
 
-#: pcbnew/files.cpp:379
+#: pcbnew/files.cpp:379 pcbnew/files.cpp:381
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 
-#: pcbnew/files.cpp:393
+#: pcbnew/files.cpp:393 pcbnew/files.cpp:395
 msgid "Current Board will be closed. Continue?"
 msgstr ""
 
-#: pcbnew/files.cpp:563
+#: pcbnew/files.cpp:563 pcbnew/files.cpp:565
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33022,36 +33154,37 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 
-#: pcbnew/files.cpp:568
+#: pcbnew/files.cpp:568 pcbnew/files.cpp:570
 msgid "Edge Clearance Warning"
 msgstr ""
 
-#: pcbnew/files.cpp:599
+#: pcbnew/files.cpp:599 pcbnew/files.cpp:601
 #, fuzzy, c-format
 msgid "PCB '%s' is already open."
 msgstr "Schematic Field"
 
-#: pcbnew/files.cpp:607
+#: pcbnew/files.cpp:607 pcbnew/files.cpp:609
 msgid "The current PCB has been modified.  Save changes?"
 msgstr ""
 
-#: pcbnew/files.cpp:629
+#: pcbnew/files.cpp:629 pcbnew/files.cpp:631
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr ""
 
-#: pcbnew/files.cpp:638
+#: pcbnew/files.cpp:638 pcbnew/files.cpp:640
 msgid "Creating PCB"
 msgstr ""
 
-#: pcbnew/files.cpp:743 pcbnew/files.cpp:753
+#: pcbnew/files.cpp:743 pcbnew/files.cpp:753 pcbnew/files.cpp:745
+#: pcbnew/files.cpp:755
 #, fuzzy, c-format
 msgid "Error loading PCB '%s'."
 msgstr ""
 "Lỗi tải sơ đồ mạch.\n"
 "%s"
 
-#: pcbnew/files.cpp:762
+#: pcbnew/files.cpp:762 pcbnew/files.cpp:764
 #, fuzzy, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr ""
@@ -33059,36 +33192,38 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:875
+#: pcbnew/files.cpp:875 pcbnew/files.cpp:877
 #, fuzzy, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "Linh kiện %s: footprint %s không được tìm thấy trong bất kỳ thư viện "
 "footprint nào của dự án."
 
-#: pcbnew/files.cpp:906
+#: pcbnew/files.cpp:906 pcbnew/files.cpp:908
 #, fuzzy
 msgid "Error saving project specific footprint library table."
 msgstr "Lỗi tải bảng thư viện footprint trong dự án"
 
-#: pcbnew/files.cpp:982
+#: pcbnew/files.cpp:982 pcbnew/files.cpp:984
 #, fuzzy
 msgid "Converting zone fills"
 msgstr "Đang tải..."
 
-#: pcbnew/files.cpp:986
+#: pcbnew/files.cpp:986 pcbnew/files.cpp:988
 msgid "Convert Zone(s)"
 msgstr ""
 
 #: pcbnew/files.cpp:1023 pcbnew/files.cpp:1158
-#: pcbnew/footprint_libraries_utils.cpp:367
+#: pcbnew/footprint_libraries_utils.cpp:367 pcbnew/files.cpp:1025
+#: pcbnew/files.cpp:1160
 #, fuzzy, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr ""
 "Không đủ quyền cần thiết để lưu File\n"
 "%s"
 
-#: pcbnew/files.cpp:1051 pcbnew/files.cpp:1203
+#: pcbnew/files.cpp:1051 pcbnew/files.cpp:1203 pcbnew/files.cpp:1053
+#: pcbnew/files.cpp:1205
 #, fuzzy, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr ""
@@ -33096,7 +33231,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:1077 pcbnew/files.cpp:1179
+#: pcbnew/files.cpp:1077 pcbnew/files.cpp:1179 pcbnew/files.cpp:1079
+#: pcbnew/files.cpp:1181
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33106,14 +33242,14 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:1094
+#: pcbnew/files.cpp:1094 pcbnew/files.cpp:1096
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: pcbnew/files.cpp:1207
+#: pcbnew/files.cpp:1207 pcbnew/files.cpp:1209
 #, fuzzy, c-format
 msgid ""
 "Board copied to:\n"
@@ -33281,6 +33417,7 @@ msgstr ""
 
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:836
 #: pcbnew/pcb_edit_frame.cpp:293 pcbnew/pcb_edit_frame.cpp:1435
+#: pcbnew/footprint_edit_frame.cpp:834 pcbnew/pcb_edit_frame.cpp:1447
 msgid "Selection Filter"
 msgstr ""
 
@@ -33288,30 +33425,30 @@ msgstr ""
 msgid "Footprint changes are unsaved"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:523
+#: pcbnew/footprint_edit_frame.cpp:523 pcbnew/footprint_edit_frame.cpp:521
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:876
+#: pcbnew/footprint_edit_frame.cpp:876 pcbnew/footprint_edit_frame.cpp:874
 #, c-format
 msgid "[from %s]"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:911
+#: pcbnew/footprint_edit_frame.cpp:911 pcbnew/footprint_edit_frame.cpp:909
 #, fuzzy
 msgid "[no footprint loaded]"
 msgstr "Không có footprint nào được nạp vào."
 
-#: pcbnew/footprint_edit_frame.cpp:967
+#: pcbnew/footprint_edit_frame.cpp:967 pcbnew/footprint_edit_frame.cpp:965
 msgid "Updating Footprint Libraries"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:1266
+#: pcbnew/footprint_edit_frame.cpp:1266 pcbnew/footprint_edit_frame.cpp:1276
 msgid "No footprint selected."
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:1275
+#: pcbnew/footprint_edit_frame.cpp:1275 pcbnew/footprint_edit_frame.cpp:1285
 msgid "Footprint Image File Name"
 msgstr ""
 
@@ -34410,7 +34547,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:1045 pcbnew/pcb_track.cpp:871 pcbnew/pcb_track.cpp:916
 #: pcbnew/router/router_tool.cpp:2537 pcbnew/router/router_tool.cpp:2554
-#: pcbnew/zone.cpp:608
+#: pcbnew/zone.cpp:608 pcbnew/pcb_track.cpp:868 pcbnew/pcb_track.cpp:913
 #, c-format
 msgid "Min Clearance: %s"
 msgstr ""
@@ -34420,6 +34557,8 @@ msgstr ""
 #: pcbnew/router/router_tool.cpp:2534 pcbnew/router/router_tool.cpp:2539
 #: pcbnew/router/router_tool.cpp:2544 pcbnew/router/router_tool.cpp:2551
 #: pcbnew/router/router_tool.cpp:2556 pcbnew/zone.cpp:610
+#: pcbnew/pcb_track.cpp:870 pcbnew/pcb_track.cpp:879 pcbnew/pcb_track.cpp:885
+#: pcbnew/pcb_track.cpp:915 pcbnew/pcb_track.cpp:921
 #, c-format
 msgid "(from %s)"
 msgstr ""
@@ -34522,7 +34661,7 @@ msgstr ""
 msgid "Fabrication Property"
 msgstr ""
 
-#: pcbnew/pad.cpp:1798 pcbnew/pcb_track.cpp:861
+#: pcbnew/pad.cpp:1798 pcbnew/pcb_track.cpp:861 pcbnew/pcb_track.cpp:858
 msgid "Pad To Die Length"
 msgstr ""
 
@@ -34593,61 +34732,61 @@ msgstr "Tìm kiếm Văn bản"
 msgid "New PCB file is unsaved"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1091
+#: pcbnew/pcb_edit_frame.cpp:1091 pcbnew/pcb_edit_frame.cpp:1103
 #, fuzzy, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp in bo mạch."
 
-#: pcbnew/pcb_edit_frame.cpp:1366
+#: pcbnew/pcb_edit_frame.cpp:1366 pcbnew/pcb_edit_frame.cpp:1378
 msgid "Board file is read only."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1401
+#: pcbnew/pcb_edit_frame.cpp:1401 pcbnew/pcb_edit_frame.cpp:1413
 msgid "PCB file changes are unsaved"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1700
+#: pcbnew/pcb_edit_frame.cpp:1700 pcbnew/pcb_edit_frame.cpp:1711
 msgid "The schematic for this board cannot be found."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1724
+#: pcbnew/pcb_edit_frame.cpp:1724 pcbnew/pcb_edit_frame.cpp:1735
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1749
+#: pcbnew/pcb_edit_frame.cpp:1749 pcbnew/pcb_edit_frame.cpp:1760
 msgid "Eeschema netlist"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1760
+#: pcbnew/pcb_edit_frame.cpp:1760 pcbnew/pcb_edit_frame.cpp:1771
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1787
+#: pcbnew/pcb_edit_frame.cpp:1787 pcbnew/pcb_edit_frame.cpp:1798
 #, fuzzy, c-format
 msgid "Schematic file '%s' not found."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: pcbnew/pcb_edit_frame.cpp:1817
+#: pcbnew/pcb_edit_frame.cpp:1817 pcbnew/pcb_edit_frame.cpp:1828
 #, fuzzy
 msgid "Eeschema failed to load."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: pcbnew/pcb_edit_frame.cpp:1981
+#: pcbnew/pcb_edit_frame.cpp:1981 pcbnew/pcb_edit_frame.cpp:1992
 #, fuzzy
 msgid "Edit design rules"
 msgstr "Chỉnh sửa tập tin"
 
-#: pcbnew/pcb_edit_frame.cpp:1993
+#: pcbnew/pcb_edit_frame.cpp:1993 pcbnew/pcb_edit_frame.cpp:2004
 #, fuzzy
 msgid "Could not compile custom design rules."
 msgstr "Không thể mở tệp cấu hình"
 
-#: pcbnew/pcb_edit_frame.cpp:2031
+#: pcbnew/pcb_edit_frame.cpp:2031 pcbnew/pcb_edit_frame.cpp:2042
 msgid "Export Hyperlynx Layout"
 msgstr ""
 
@@ -34781,79 +34920,81 @@ msgstr ""
 msgid "removed annular ring"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:822
+#: pcbnew/pcb_track.cpp:822 pcbnew/pcb_track.cpp:827
 #, fuzzy
 msgid "Track (arc)"
 msgstr "Track"
 
-#: pcbnew/pcb_track.cpp:845
+#: pcbnew/pcb_track.cpp:845 pcbnew/pcb_track.cpp:842
 msgid "Segment Length"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:856
+#: pcbnew/pcb_track.cpp:856 pcbnew/pcb_track.cpp:853
 msgid "Routed Length"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:864
+#: pcbnew/pcb_track.cpp:864 pcbnew/pcb_track.cpp:861
 msgid "Full Length"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:879
+#: pcbnew/pcb_track.cpp:879 pcbnew/pcb_track.cpp:876
 #, fuzzy, c-format
 msgid "Width Constraints: min %s, max %s"
 msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
 
-#: pcbnew/pcb_track.cpp:886
+#: pcbnew/pcb_track.cpp:886 pcbnew/pcb_track.cpp:883
 #, c-format
 msgid "Width Constraints: min %s"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:899
+#: pcbnew/pcb_track.cpp:899 pcbnew/pcb_track.cpp:896
 #, fuzzy
 msgid "Micro Via"
 msgstr "Micro Via"
 
-#: pcbnew/pcb_track.cpp:900
+#: pcbnew/pcb_track.cpp:900 pcbnew/pcb_track.cpp:897
 msgid "Blind/Buried Via"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:901
+#: pcbnew/pcb_track.cpp:901 pcbnew/pcb_track.cpp:898
 msgid "Through Via"
 msgstr "Via xuyên lỗ"
 
-#: pcbnew/pcb_track.cpp:922
+#: pcbnew/pcb_track.cpp:922 pcbnew/pcb_track.cpp:919
 #, c-format
 msgid "Min Annular Width: %s"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:938
+#: pcbnew/pcb_track.cpp:938 pcbnew/pcb_track.cpp:935
 msgid "NetCode"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1067
+#: pcbnew/pcb_track.cpp:1067 pcbnew/pcb_track.cpp:1064
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1068
+#: pcbnew/pcb_track.cpp:1068 pcbnew/pcb_track.cpp:1065
 #, c-format
 msgid "Track %s on %s, length %s"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1269
+#: pcbnew/pcb_track.cpp:1269 pcbnew/pcb_track.cpp:1287
 #, fuzzy
 msgid "Via Properties"
 msgstr "Thuộc tính nhãn"
 
 #: pcbnew/pcb_track.cpp:1279 pcbnew/widgets/pcb_properties_panel.cpp:156
+#: pcbnew/pcb_track.cpp:1297 pcbnew/widgets/pcb_properties_panel.cpp:155
 msgid "Layer Top"
 msgstr ""
 
 #: pcbnew/pcb_track.cpp:1281 pcbnew/widgets/pcb_properties_panel.cpp:157
+#: pcbnew/pcb_track.cpp:1299 pcbnew/widgets/pcb_properties_panel.cpp:156
 msgid "Layer Bottom"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1283
+#: pcbnew/pcb_track.cpp:1283 pcbnew/pcb_track.cpp:1301
 msgid "Via Type"
 msgstr ""
 
@@ -36195,39 +36336,44 @@ msgid "?"
 msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:590 pcbnew/router/pns_kicad_iface.cpp:661
-#: pcbnew/router/router_tool.cpp:756
+#: pcbnew/router/router_tool.cpp:756 pcbnew/router/pns_kicad_iface.cpp:574
+#: pcbnew/router/pns_kicad_iface.cpp:645
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Clearance lớp đồng tối thiểu"
 
 #: pcbnew/router/pns_kicad_iface.cpp:594 pcbnew/router/pns_kicad_iface.cpp:660
 #: pcbnew/router/router_tool.cpp:723 pcbnew/router/router_tool.cpp:743
+#: pcbnew/router/pns_kicad_iface.cpp:578 pcbnew/router/pns_kicad_iface.cpp:644
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/router/pns_kicad_iface.cpp:601
+#: pcbnew/router/pns_kicad_iface.cpp:601 pcbnew/router/pns_kicad_iface.cpp:585
 #, fuzzy
 msgid "existing track"
 msgstr "Đường dẫn hiện tại:"
 
-#: pcbnew/router/pns_kicad_iface.cpp:622
+#: pcbnew/router/pns_kicad_iface.cpp:622 pcbnew/router/pns_kicad_iface.cpp:606
 #, fuzzy
 msgid "netclass 'Default'"
 msgstr "Bộ lọc Net class:"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1150
+#: pcbnew/router/pns_kicad_iface.cpp:1134
 #, c-format
 msgid "%s is malformed."
 msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:1153
+#: pcbnew/router/pns_kicad_iface.cpp:1137
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:1802 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1764
 msgid "Interactive Router"
 msgstr ""
 
@@ -36835,6 +36981,7 @@ msgid "Via: %s (%s)"
 msgstr ""
 
 #: pcbnew/tools/board_editor_control.cpp:117
+#: pcbnew/tools/board_editor_control.cpp:116
 msgid "Locking"
 msgstr ""
 
@@ -37497,91 +37644,97 @@ msgstr ""
 msgid "Positioning Tools"
 msgstr "Vị trí offset:"
 
-#: pcbnew/tools/edit_tool.cpp:419
+#: pcbnew/tools/edit_tool.cpp:419 pcbnew/tools/edit_tool.cpp:417
 #, c-format
 msgid "Unable to resize arc tracks of %s or greater."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:766
+#: pcbnew/tools/edit_tool.cpp:766 pcbnew/tools/edit_tool.cpp:764
 msgid "Drag Arc Track"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:828
+#: pcbnew/tools/edit_tool.cpp:828 pcbnew/tools/edit_tool.cpp:826
 msgid "Edit track width/via size"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:863
+#: pcbnew/tools/edit_tool.cpp:863 pcbnew/tools/edit_tool.cpp:861
 msgid "At least two straight track segments must be selected."
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:867 pcbnew/tools/edit_tool.cpp:1142
+#: pcbnew/tools/edit_tool.cpp:865 pcbnew/tools/edit_tool.cpp:1140
 msgid "Enter fillet radius:"
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:867 pcbnew/tools/edit_tool.cpp:1031
-#: pcbnew/tools/pcb_actions.cpp:364
+#: pcbnew/tools/pcb_actions.cpp:364 pcbnew/tools/edit_tool.cpp:865
+#: pcbnew/tools/edit_tool.cpp:1029
 msgid "Fillet Tracks"
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:877 pcbnew/tools/edit_tool.cpp:1152
+#: pcbnew/tools/edit_tool.cpp:875 pcbnew/tools/edit_tool.cpp:1150
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1038
+#: pcbnew/tools/edit_tool.cpp:1038 pcbnew/tools/edit_tool.cpp:1036
 msgid "Unable to fillet the selected track segments."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1040
+#: pcbnew/tools/edit_tool.cpp:1040 pcbnew/tools/edit_tool.cpp:1038
 msgid "Some of the track segments could not be filleted."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1138
+#: pcbnew/tools/edit_tool.cpp:1138 pcbnew/tools/edit_tool.cpp:1136
 msgid "A shape with least two lines must be selected."
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1142 pcbnew/tools/edit_tool.cpp:1309
-#: pcbnew/tools/pcb_actions.cpp:368
+#: pcbnew/tools/pcb_actions.cpp:368 pcbnew/tools/edit_tool.cpp:1140
+#: pcbnew/tools/edit_tool.cpp:1307
 msgid "Fillet Lines"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1312
+#: pcbnew/tools/edit_tool.cpp:1312 pcbnew/tools/edit_tool.cpp:1310
 #, fuzzy
 msgid "Unable to fillet the selected lines."
 msgstr "Hiện footprint được chọn"
 
-#: pcbnew/tools/edit_tool.cpp:1314
+#: pcbnew/tools/edit_tool.cpp:1314 pcbnew/tools/edit_tool.cpp:1312
 #, fuzzy
 msgid "Some of the lines could not be filleted."
 msgstr "Tệp \"%s\" không thể được tạo ra."
 
-#: pcbnew/tools/edit_tool.cpp:1482
+#: pcbnew/tools/edit_tool.cpp:1482 pcbnew/tools/edit_tool.cpp:1480
 msgid "Rotate"
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1778 pcbnew/tools/pcb_actions.cpp:326
+#: pcbnew/tools/edit_tool.cpp:1776
 msgid "Change Side / Flip"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2145
+#: pcbnew/tools/edit_tool.cpp:2145 pcbnew/tools/edit_tool.cpp:2143
 msgid "Move exact"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2281
+#: pcbnew/tools/edit_tool.cpp:2281 pcbnew/tools/edit_tool.cpp:2279
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2507
+#: pcbnew/tools/edit_tool.cpp:2507 pcbnew/tools/edit_tool.cpp:2505
 msgid "Select reference point for the copy..."
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:2508 pcbnew/tools/edit_tool.cpp:2525
+#: pcbnew/tools/edit_tool.cpp:2506 pcbnew/tools/edit_tool.cpp:2523
 msgid "Selection copied"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2509
+#: pcbnew/tools/edit_tool.cpp:2509 pcbnew/tools/edit_tool.cpp:2507
 #, fuzzy
 msgid "Copy canceled"
 msgstr "Hủy bỏ"
@@ -40285,6 +40438,7 @@ msgid "Other items"
 msgstr "Khác"
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:134
+#: pcbnew/widgets/pcb_properties_panel.cpp:133
 #, fuzzy
 msgid "Change property"
 msgstr "Thay đổi phương pháp chỉnh sửa"
@@ -40563,7 +40717,7 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "Cửa sổ chính KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 #, fuzzy
@@ -40599,6 +40753,26 @@ msgstr "Lưu vào Sơ đồ mạch"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "Tệp bảng mạch in KiCad"
+
+#: eeschema/tools/ee_actions.cpp:558
+msgid "Break Wire"
+msgstr ""
+
+#: eeschema/tools/ee_actions.cpp:558
+msgid "Divide a wire into segments which can be dragged independently"
+msgstr ""
+
+#: eeschema/tools/ee_actions.cpp:563
+msgid "Break Bus"
+msgstr ""
+
+#: eeschema/tools/ee_actions.cpp:563
+msgid "Divide a bus into segments which can be dragged independently"
+msgstr ""
+
+#: eeschema/widgets/tuner_slider_base.cpp:24
+msgid " X "
+msgstr ""
 
 #~ msgid "Change Edit Method"
 #~ msgstr "Thay đổi phương pháp chỉnh sửa"
@@ -40815,8 +40989,8 @@ msgstr "Tệp bảng mạch in KiCad"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 #~ msgstr ""
 #~ "# 1 - Tài liệu đầy đủ\n"
@@ -40914,8 +41088,8 @@ msgstr "Tệp bảng mạch in KiCad"
 #~ "vào tập lệnh Python):\n"
 #~ "\n"
 #~ "``\n"
-#~ "python f: /kicad/bin/plugins/bom-in-python/myconverter.py \"% I\" \"% "
-#~ "O\"\n"
+#~ "python f: /kicad/bin/plugins/bom-in-python/myconverter.py \"% I\" \"% O"
+#~ "\"\n"
 #~ "``\n"
 #~ "\n"
 #~ "hoặc là\n"
@@ -41000,8 +41174,8 @@ msgstr "Tệp bảng mạch in KiCad"
 #~ "\n"
 #~ "Trên Windows:\n"
 #~ "``\n"
-#~ "python.exe f: /kicad/bin/plugins/bom-in-python/my_python_script.py \"% "
-#~ "I\" \"% O.html\"\n"
+#~ "python.exe f: /kicad/bin/plugins/bom-in-python/my_python_script.py \"% I"
+#~ "\" \"% O.html\"\n"
 #~ "``\n"
 #~ "\n"
 #~ "Trên Linux:\n"
