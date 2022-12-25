@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney@ieee.org>
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -330,6 +330,27 @@ bool KIID_PATH::MakeRelativeTo( const KIID_PATH& aPath )
 
     for( size_t i = aPath.size(); i < copy.size(); ++i )
         push_back( copy.at( i ) );
+
+    return true;
+}
+
+
+bool KIID_PATH::EndsWith( const KIID_PATH& aPath ) const
+{
+    if( aPath.size() > size() )
+        return false;                      // this path can not end aPath
+
+    KIID_PATH copyThis = *this;
+    KIID_PATH copyThat = aPath;
+
+    while( !copyThat.empty() )
+    {
+        if( *std::prev( copyThis.end() ) != *std::prev( copyThat.end() ) )
+            return false;
+
+        copyThis.pop_back();
+        copyThat.pop_back();
+    }
 
     return true;
 }

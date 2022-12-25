@@ -477,11 +477,19 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 
 
 bool SCH_SYMBOL::GetInstance( SYMBOL_INSTANCE_REFERENCE& aInstance,
-                              const KIID_PATH& aSheetPath ) const
+                              const KIID_PATH& aSheetPath, bool aTestFromEnd ) const
 {
     for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
-        if( instance.m_Path == aSheetPath )
+        if( !aTestFromEnd )
+        {
+            if( instance.m_Path == aSheetPath )
+            {
+                aInstance = instance;
+                return true;
+            }
+        }
+        else if( instance.m_Path.EndsWith( aSheetPath ) )
         {
             aInstance = instance;
             return true;

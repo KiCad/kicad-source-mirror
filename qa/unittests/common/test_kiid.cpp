@@ -49,4 +49,25 @@ BOOST_AUTO_TEST_CASE( Seeding )
 }
 
 
+BOOST_AUTO_TEST_CASE( KiidPathTest )
+{
+    KIID a, b, c, d;
+
+    KIID_PATH path1;
+    KIID_PATH path2;
+
+    path1.push_back( a );
+    path1.push_back( b );
+    path1.push_back( c );
+    path1.push_back( d );
+
+    path2.push_back( b );
+    path2.push_back( c );
+    path2.push_back( d );
+
+    BOOST_CHECK( path1.EndsWith( path2 ) == true );
+    BOOST_CHECK( path2.EndsWith( path1 ) == false );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

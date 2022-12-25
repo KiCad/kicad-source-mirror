@@ -29,6 +29,8 @@
 
 class KIID_PATH;
 class SCH_SCREEN;
+class SCH_SEXPR_PARSER;
+class SCH_SHEET_LIST;
 class SCH_SHEET_PIN;
 class SCH_SHEET_PATH;
 class EDA_DRAW_FRAME;
@@ -378,28 +380,6 @@ public:
      */
     const std::vector<SCH_SHEET_INSTANCE>& GetInstances() const { return m_instances; }
 
-    void SetInstances( const std::vector<SCH_SHEET_INSTANCE>& aInstances )
-    {
-        m_instances = aInstances;
-    }
-
-    /**
-     * Add a new instance \a aSheetPath to the instance list.
-     *
-     * If \a aSheetPath  does not already exist, it is added to the list.  If already exists
-     * in the list, do nothing.  Sheet instances allow for the sharing in complex hierarchies
-     * which allows for per instance data such as page number for sheets to stored.
-     *
-     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
-     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
-     *          will raise an assertion on debug builds and silently fail and return false
-     *          on release builds.
-     *
-     * @param[in] aInstance is the #SCH_SHEET_PATH of the sheet instance to the instance list.
-     * @return false if the instance already exists, true if the instance was added.
-     */
-    bool AddInstance( const SCH_SHEET_PATH& aInstance );
-
     /**
      * Check to see if this sheet has a root sheet instance.
      *
@@ -436,6 +416,29 @@ public:
 
 protected:
     friend SCH_SHEET_PATH;
+    friend SCH_SEXPR_PARSER;
+
+    void setInstances( const std::vector<SCH_SHEET_INSTANCE>& aInstances )
+    {
+        m_instances = aInstances;
+    }
+
+    /**
+     * Add a new instance \a aSheetPath to the instance list.
+     *
+     * If \a aSheetPath  does not already exist, it is added to the list.  If already exists
+     * in the list, do nothing.  Sheet instances allow for the sharing in complex hierarchies
+     * which allows for per instance data such as page number for sheets to stored.
+     *
+     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
+     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
+     *          will raise an assertion on debug builds and silently fail and return false
+     *          on release builds.
+     *
+     * @param[in] aInstance is the #SCH_SHEET_PATH of the sheet instance to the instance list.
+     * @return false if the instance already exists, true if the instance was added.
+     */
+    bool addInstance( const SCH_SHEET_PATH& aInstance );
 
     /**
      * Return the sheet page number for \a aInstance.
@@ -462,6 +465,9 @@ protected:
      */
     void setPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& aPageNumber );
 
+    bool getInstance( SCH_SHEET_INSTANCE& aInstance, const KIID_PATH& aSheetPath,
+                      bool aTestFromEnd = false ) const;
+
     /**
      * Renumber the sheet pins in the sheet.
      *
@@ -481,6 +487,7 @@ private:
     bool doIsConnected( const VECTOR2I& aPosition ) const override;
 
     friend class SCH_SHEET_PIN;
+    friend class SCH_SHEET_LIST;
 
 private:
     SCH_SCREEN*                 m_screen;       // Screen that contains the physical data for the

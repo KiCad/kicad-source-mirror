@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney@ieee.org>
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,6 +146,17 @@ public:
     KIID_PATH( const wxString& aString );
 
     bool MakeRelativeTo( const KIID_PATH& aPath );
+
+    /**
+     * Test if \a aPath from the last path towards the first path.
+     *
+     * This is useful for testing for existing schematic symbol and sheet instances when
+     * copying or adding a new sheet that is lower in the hierarchy than the current path.
+     *
+     * @param aPath is the path to compare this path against.
+     * @return true if this path ends with \a aPath or false if it does not.
+     */
+    bool EndsWith( const KIID_PATH& aPath ) const;
 
     wxString AsString() const;
 

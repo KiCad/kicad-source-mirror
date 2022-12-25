@@ -3157,7 +3157,7 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
                 }
             }
 
-            sheet->SetInstances( instances );
+            sheet->setInstances( instances );
             break;
         }
 

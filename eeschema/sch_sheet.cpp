@@ -1202,7 +1202,7 @@ bool SCH_SHEET::operator <( const SCH_ITEM& aItem ) const
 }
 
 
-bool SCH_SHEET::AddInstance( const SCH_SHEET_PATH& aSheetPath )
+bool SCH_SHEET::addInstance( const SCH_SHEET_PATH& aSheetPath )
 {
     wxCHECK( aSheetPath.IsFullPath(), false );
     wxCHECK( !aSheetPath.Last() || ( aSheetPath.Last()->m_Uuid != m_Uuid ), false );
@@ -1225,6 +1225,30 @@ bool SCH_SHEET::AddInstance( const SCH_SHEET_PATH& aSheetPath )
     // This entry does not exist: add it with an empty page number.
     m_instances.emplace_back( instance );
     return true;
+}
+
+
+bool SCH_SHEET::getInstance( SCH_SHEET_INSTANCE& aInstance, const KIID_PATH& aSheetPath,
+                             bool aTestFromEnd ) const
+{
+    for( const SCH_SHEET_INSTANCE& instance : m_instances )
+    {
+        if( !aTestFromEnd )
+        {
+            if( instance.m_Path == aSheetPath )
+            {
+                aInstance = instance;
+                return true;
+            }
+        }
+        else if( instance.m_Path.EndsWith( aSheetPath ) )
+        {
+            aInstance = instance;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 

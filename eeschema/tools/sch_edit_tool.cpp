@@ -1673,7 +1673,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Keep track of existing sheet paths. EditSheet() can modify this list.
         // Note that we use the validity checking/repairing version here just to make sure
         // we've got a valid hierarchy to begin with.
-        SCH_SHEET_LIST initial_sheetpathList( &m_frame->Schematic().Root(), true );
+        SCH_SHEET_LIST originalHierarchy( &m_frame->Schematic().Root(), true );
 
         doRefresh = m_frame->EditSheetProperties( sheet, &m_frame->GetCurrentSheet(),
                                                   &doClearAnnotation );
@@ -1684,8 +1684,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         if( doClearAnnotation )
         {
             SCH_SCREENS screensList( &m_frame->Schematic().Root() );
+
             // We clear annotation of new sheet paths here:
-            screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
+            screensList.ClearAnnotationOfNewSheetPaths( originalHierarchy );
+
             // Clear annotation of g_CurrentSheet itself, because its sheetpath is not a new
             // path, but symbols managed by its sheet path must have their annotation cleared
             // because they are new:

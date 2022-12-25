@@ -1015,7 +1015,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
         m_out->Print( aNestLevel + 1, ")\n" );  // Closes pin token.
     }
 
-    // We all sheet instances here except the root sheet instance.
+    // Save all sheet instances here except the root sheet instance.
     std::vector< SCH_SHEET_INSTANCE > sheetInstances = aSheet->GetInstances();
 
     auto it = sheetInstances.begin();
@@ -1045,12 +1045,12 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
             //
             // Keep all instance data when copying to the clipboard.  It may be needed on paste.
             if( ( sheetInstances[i].m_Path[0] == rootSheetUuid )
-              && !fullHierarchy.GetSheetPathByKIIDPath( sheetInstances[i].m_Path ) )
+              && !fullHierarchy.GetSheetPathByKIIDPath( sheetInstances[i].m_Path, false ) )
             {
                 if( project_open && ( ( i + 1 == sheetInstances.size() )
                   || lastProjectUuid != sheetInstances[i+1].m_Path[0] ) )
                 {
-                    m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
+                    m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project` token.
                     project_open = false;
                 }
 
@@ -1081,12 +1081,12 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
             if( project_open && ( ( i + 1 == sheetInstances.size() )
               || lastProjectUuid != sheetInstances[i+1].m_Path[0] ) )
             {
-                m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
+                m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project` token.
                 project_open = false;
             }
         }
 
-        m_out->Print( aNestLevel + 1, ")\n" );  // Closes `instances`.
+        m_out->Print( aNestLevel + 1, ")\n" );  // Closes `instances` token.
     }
 
     m_out->Print( aNestLevel, ")\n" );          // Closes sheet token.

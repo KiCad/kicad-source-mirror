@@ -538,13 +538,19 @@ void SCH_SHEET_PATH::SetPageNumber( const wxString& aPageNumber )
 
     tmpPath.pop_back();
 
-    sheet->AddInstance( tmpPath );
+    sheet->addInstance( tmpPath );
     sheet->setPageNumber( tmpPath, aPageNumber );
 }
 
 
 void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath )
 {
+    SCH_SHEET_PATH newSheetPath( aPrefixSheetPath );
+    SCH_SHEET_PATH currentSheetPath( *this );
+
+    // Prefix the new hierarchical path.
+    newSheetPath = newSheetPath + currentSheetPath;
+
     for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
@@ -552,17 +558,8 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
         wxCHECK2( symbol, continue );
 
         SYMBOL_INSTANCE_REFERENCE newSymbolInstance;
-        SCH_SHEET_PATH newSheetPath( aPrefixSheetPath );
-        SCH_SHEET_PATH currentSheetPath( *this );
 
-        // Remove the root sheet from this path.
-        currentSheetPath.m_sheets.erase( currentSheetPath.m_sheets.begin() );
-
-        // Prefix the new hierarchical path.
-        newSheetPath = newSheetPath + currentSheetPath;
-        newSymbolInstance.m_Path = newSheetPath.Path();
-
-        if( symbol->GetInstance( newSymbolInstance, Path() ) )
+        if( symbol->GetInstance( newSymbolInstance, Path(), true ) )
         {
             // Use an existing symbol instance for this path if it exists.
             newSymbolInstance.m_Path = newSheetPath.Path();
@@ -570,25 +567,18 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
         }
         else if( !symbol->GetInstanceReferences().empty() )
         {
-            // Use the first symbol instance if any symbol exists.
+            // Use the first symbol instance if any symbol instance data exists.
             newSymbolInstance = symbol->GetInstanceReferences()[0];
             newSymbolInstance.m_Path = newSheetPath.Path();
             symbol->AddHierarchicalReference( newSymbolInstance );
         }
-        else if( symbol->GetLibSymbolRef() )
-        {
-            // Fall back to library symbol reference prefix, value, and footprint fields and
-            // set the unit to 1 if the library symbol is valid.
-            newSymbolInstance.m_Reference = symbol->GetLibSymbolRef()->GetReferenceField().GetText();
-            newSymbolInstance.m_Reference += wxT( "?" );
-            newSymbolInstance.m_Unit = 1;
-            symbol->AddHierarchicalReference( newSymbolInstance );
-        }
         else
         {
-            // All hope is lost so set the reference to 'U' and the unit to 1.
-            newSymbolInstance.m_Reference += wxT( "U?" );
-            newSymbolInstance.m_Unit = 1;
+            // Fall back to the last saved symbol field and unit settings if there is no
+            // instance data.
+            newSymbolInstance.m_Path = newSheetPath.Path();
+            newSymbolInstance.m_Reference = symbol->GetField( REFERENCE_FIELD )->GetText();
+            newSymbolInstance.m_Unit = symbol->GetUnit();
             symbol->AddHierarchicalReference( newSymbolInstance );
         }
     }
@@ -610,39 +600,6 @@ void SCH_SHEET_PATH::RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
         fullSheetPath = fullSheetPath + currentSheetPath;
         symbol->RemoveInstance( fullSheetPath );
     }
-}
-
-
-int SCH_SHEET_PATH::AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
-                                          int aNextVirtualPageNumber )
-{
-    int nextVirtualPageNumber = aNextVirtualPageNumber;
-
-    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SHEET_T ) )
-    {
-        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-
-        wxCHECK2( sheet, continue );
-
-        SCH_SHEET_PATH newSheetPath( aPrefixSheetPath );
-        SCH_SHEET_PATH currentSheetPath( *this );
-
-        // Remove the root sheet from current sheet path.
-        currentSheetPath.m_sheets.erase( currentSheetPath.m_sheets.begin() );
-
-        // Prefix the new hierarchical path.
-        newSheetPath = newSheetPath + currentSheetPath;
-
-        wxString pageNumber;
-
-        pageNumber.Printf( wxT( "%d" ), nextVirtualPageNumber );
-        sheet->AddInstance( newSheetPath );
-        newSheetPath.SetVirtualPageNumber( nextVirtualPageNumber );
-        newSheetPath.SetPageNumber( pageNumber );
-        nextVirtualPageNumber += 1;
-    }
-
-    return nextVirtualPageNumber;
 }
 
 
@@ -988,11 +945,17 @@ void SCH_SHEET_LIST::GetSheetsWithinPath( SCH_SHEET_PATHS&      aSheets,
 }
 
 
-std::optional<SCH_SHEET_PATH> SCH_SHEET_LIST::GetSheetPathByKIIDPath( const KIID_PATH& aPath ) const
+std::optional<SCH_SHEET_PATH> SCH_SHEET_LIST::GetSheetPathByKIIDPath( const KIID_PATH& aPath,
+                                                                      bool aIncludeLastSheet ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
-        if( sheet.Path() == aPath )
+        KIID_PATH testPath = sheet.Path();
+
+        if( !aIncludeLastSheet )
+            testPath.pop_back();
+
+        if( testPath == aPath )
             return SCH_SHEET_PATH( sheet );
     }
 
@@ -1248,11 +1211,66 @@ void SCH_SHEET_LIST::RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
 void SCH_SHEET_LIST::AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
                                            int aLastVirtualPageNumber )
 {
-    int nextVirtualPageNumber = aLastVirtualPageNumber + 1;
+    wxString pageNumber;
+    int lastUsedPageNumber = 1;
+    int nextVirtualPageNumber = aLastVirtualPageNumber;
+
+    // Fetch the list of page numbers already in use.
+    std::vector< wxString > usedPageNumbers;
+
+    if( aPrefixSheetPath.size() )
+    {
+        SCH_SHEET_LIST prefixHierarchy( aPrefixSheetPath.at( 0 ) );
+
+        for( const SCH_SHEET_PATH& path : prefixHierarchy )
+        {
+            pageNumber = path.GetPageNumber();
+
+            if( !pageNumber.IsEmpty() )
+                usedPageNumbers.emplace_back( pageNumber );
+        }
+    }
 
     for( SCH_SHEET_PATH& sheetPath : *this )
-        nextVirtualPageNumber = sheetPath.AddNewSheetInstances( aPrefixSheetPath,
-                                                                nextVirtualPageNumber );
+    {
+        SCH_SHEET_PATH tmp( sheetPath );
+        SCH_SHEET_PATH newSheetPath( aPrefixSheetPath );
+
+        // Prefix the new hierarchical path.
+        newSheetPath = newSheetPath + sheetPath;
+
+        // Sheets cannot have themselves in the path.
+        tmp.pop_back();
+
+        SCH_SHEET* sheet = sheetPath.Last();
+
+        wxCHECK2( sheet, continue );
+
+        nextVirtualPageNumber += 1;
+
+        SCH_SHEET_INSTANCE instance;
+
+        if( sheet->getInstance( instance, tmp.Path(), true )
+          && !instance.m_PageNumber.IsEmpty() )
+        {
+            newSheetPath.SetPageNumber( instance.m_PageNumber );
+            usedPageNumbers.push_back( instance.m_PageNumber );
+        }
+        else
+        {
+            // Generate the next available page number.
+            do
+            {
+                pageNumber.Printf( wxT( "%d" ), lastUsedPageNumber );
+                lastUsedPageNumber += 1;
+            } while( std::find( usedPageNumbers.begin(), usedPageNumbers.end(), pageNumber ) !=
+                     usedPageNumbers.end() );
+
+            newSheetPath.SetVirtualPageNumber( nextVirtualPageNumber );
+            newSheetPath.SetPageNumber( pageNumber );
+            usedPageNumbers.push_back( pageNumber );
+        }
+    }
 }
 
 

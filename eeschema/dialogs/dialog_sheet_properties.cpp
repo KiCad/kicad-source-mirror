@@ -179,9 +179,21 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 
     instance.push_back( m_sheet );
 
-    wxString nextPageNumber = instance.GetPageNumber();
+    wxString pageNumber;
 
-    m_pageNumberTextCtrl->ChangeValue( nextPageNumber );
+    if( m_sheet->IsNew() )
+    {
+        // Don't try to be too clever when assigning the next availabe page number.  Just use
+        // the number of sheets plus one.
+        pageNumber.Printf( wxT( "%d" ), static_cast<int>( hierarchy.size() ) + 1 );
+        instance.SetPageNumber( pageNumber );
+    }
+    else
+    {
+        pageNumber = instance.GetPageNumber();
+    }
+
+    m_pageNumberTextCtrl->ChangeValue( pageNumber );
 
     return true;
 }
@@ -420,10 +432,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     }
 
     SCHEMATIC&                             schematic = m_frame->Schematic();
-    SCH_SCREEN*                            rootScreen = schematic.RootScreen();
     SCH_SHEET_LIST                         fullHierarchy = schematic.GetFullHierarchy();
-    std::vector<SCH_SHEET_INSTANCE>        sheetInstances = fullHierarchy.GetSheetInstances();
-    std::vector<SYMBOL_INSTANCE_REFERENCE> symbolInstances = rootScreen->GetSymbolInstances();
     wxFileName                             screenFileName( sheetFileName );
     wxFileName                             tmp( sheetFileName );
 
@@ -615,7 +624,6 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
         // It's safe to set the sheet screen now.
         m_sheet->SetScreen( useScreen );
-        // currentSheet.LastScreen()->Append( m_sheet );
     }
     else if( loadFromFile )
     {
@@ -646,11 +654,6 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
         if( restoreSheet )
             currentSheet.LastScreen()->Append( m_sheet );
-
-        // The full hierarchy needs to be reloaded due to the addition of a new sheet.
-        fullHierarchy = schematic.GetFullHierarchy();
-        fullHierarchy.UpdateSheetInstanceData( sheetInstances );
-        fullHierarchy.UpdateSymbolInstanceData( symbolInstances );
     }
 
     if( m_clearAnnotationNewItems )

@@ -400,8 +400,6 @@ public:
 
     void RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
 
-    int AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPath, int aNextVirtualPageNumber );
-
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
     bool operator!=( const SCH_SHEET_PATH& d1 ) const { return !( *this == d1 ) ; }
@@ -542,7 +540,8 @@ public:
      *
      * @param aPath The KIID_PATH to search for.
      */
-    std::optional<SCH_SHEET_PATH> GetSheetPathByKIIDPath( const KIID_PATH& aPath ) const;
+    std::optional<SCH_SHEET_PATH> GetSheetPathByKIIDPath( const KIID_PATH& aPath,
+                                                          bool aIncludeLastSheet = true ) const;
 
 
     /**

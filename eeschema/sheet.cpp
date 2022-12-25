@@ -112,11 +112,12 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     bool        libTableChanged = false;
     SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( aFileName );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( schFileType ) );
-    std::unique_ptr< SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( &Schematic() );
+    std::unique_ptr< SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>( &Schematic() );
 
-    // This will cause the sheet UUID to be set to the loaded schematic UUID.  This is required
-    // to ensure all of the sheet paths in any subsheets are correctly generated.
-    const_cast<KIID&>( newSheet->m_Uuid ) = KIID( 0 );
+    // This will cause the sheet UUID to be set to the UUID of the aSheet argument.  This is
+    // required to ensure all of the sheet paths in any sub-sheets are correctly generated when
+    // using the temporary SCH_SHEET object that the file is loaded into..
+    const_cast<KIID&>( tmpSheet->m_Uuid ) = aSheet->m_Uuid;
 
     wxFileName fileName( aFileName );
 
@@ -132,12 +133,12 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     {
         if( aSheet->GetScreen() != nullptr )
         {
-            newSheet.reset( pi->Load( fullFilename, &Schematic() ) );
+            tmpSheet.reset( pi->Load( fullFilename, &Schematic() ) );
         }
         else
         {
-            newSheet->SetFileName( fullFilename );
-            pi->Load( fullFilename, &Schematic(), newSheet.get() );
+            tmpSheet->SetFileName( fullFilename );
+            pi->Load( fullFilename, &Schematic(), tmpSheet.get() );
         }
 
         if( !pi->GetError().IsEmpty() )
@@ -168,9 +169,9 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     // If the loaded schematic is in a different folder from the current project and
     // it contains hierarchical sheets, the hierarchical sheet paths need to be updated.
-    if( fileName.GetPathWithSep() != Prj().GetProjectPath() && newSheet->CountSheets() )
+    if( fileName.GetPathWithSep() != Prj().GetProjectPath() && tmpSheet->CountSheets() )
     {
-        SCH_SHEET_LIST loadedSheets( newSheet.get() );
+        SCH_SHEET_LIST loadedSheets( tmpSheet.get() );
 
         for( const SCH_SHEET_PATH& sheetPath : loadedSheets )
         {
@@ -208,12 +209,12 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         }
     }
 
-    SCH_SHEET_LIST sheetHierarchy( newSheet.get() );    // This is the hierarchy of the loaded file.
+    SCH_SHEET_LIST sheetHierarchy( tmpSheet.get() );    // This is the hierarchy of the loaded file.
     SCH_SHEET_LIST hierarchy = Schematic().GetSheets(); // This is the schematic sheet hierarchy.
 
     // Make sure any new sheet changes do not cause any recursion issues.
-    if( CheckSheetForRecursion( newSheet.get(), aHierarchy )
-          || checkForNoFullyDefinedLibIds( newSheet.get() ) )
+    if( CheckSheetForRecursion( tmpSheet.get(), aHierarchy )
+          || checkForNoFullyDefinedLibIds( tmpSheet.get() ) )
     {
         return false;
     }
@@ -222,7 +223,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     // be broken symbol library links.
     wxArrayString    names;
     wxArrayString    newLibNames;
-    SCH_SCREENS      newScreens( newSheet.get() );   // All screens associated with the import.
+    SCH_SCREENS      newScreens( tmpSheet.get() );   // All screens associated with the import.
     SCH_SCREENS      prjScreens( &Schematic().Root() );
 
     newScreens.GetLibNicknames( names );
@@ -234,8 +235,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     // sheet so loading a hierarchical sheet that is not the root sheet will have no symbol
     // instance data.  Give the user a chance to go back and save the project that contains this
     // hierarchical sheet so the symbol instance data will be correct on load.
-    if( ( newSheet->GetScreen()->GetFileFormatVersionAtLoad() < 20221002 )
-      && newSheet->GetScreen()->GetSymbolInstances().empty() )
+    if( ( tmpSheet->GetScreen()->GetFileFormatVersionAtLoad() < 20221002 )
+      && tmpSheet->GetScreen()->GetSymbolInstances().empty() )
     {
         msg = _( "There hierarchical sheets in the loaded schematic file from an older "
                  "file version resulting in  missing symbol instance data.  This will "
@@ -482,7 +483,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         }
     }
 
-    SCH_SCREEN* newScreen = newSheet->GetScreen();
+    SCH_SCREEN* newScreen = tmpSheet->GetScreen();
     wxCHECK_MSG( newScreen, false, "No screen defined for sheet." );
 
     if( libTableChanged )
@@ -516,8 +517,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     else
         aSheet->GetScreen()->Append( newScreen );
 
-    SCH_SCREENS allScreens( Schematic().Root() );
-    allScreens.ReplaceDuplicateTimeStamps();
+    SCH_SCREENS allLoadedScreens( aSheet );
+    allLoadedScreens.ReplaceDuplicateTimeStamps();
 
     return true;
 }

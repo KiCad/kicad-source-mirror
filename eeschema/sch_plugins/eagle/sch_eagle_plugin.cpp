@@ -708,7 +708,6 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     m_sheetPath.push_back( m_rootSheet );
 
     SCH_SHEET_PATH rootPath;
-    m_rootSheet->AddInstance( m_sheetPath );
     rootPath.SetPageNumber( wxT( "1" ) );
 
     int sheetCount = countChildren( sheetNode->GetParent(), wxT( "sheet" ) );

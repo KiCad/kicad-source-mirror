@@ -143,7 +143,7 @@ public:
     }
 
     bool GetInstance( SYMBOL_INSTANCE_REFERENCE& aInstance,
-                      const KIID_PATH& aSheetPath ) const;
+                      const KIID_PATH& aSheetPath, bool aTestFromEnd = false ) const;
 
     void RemoveInstance( const SCH_SHEET_PATH& aInstancePath );
 
