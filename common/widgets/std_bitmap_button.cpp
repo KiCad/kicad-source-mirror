@@ -173,7 +173,7 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
                     dc.SetPen( fg );
                 }
 
-                dc.DrawRoundedRectangle( aRect, aRect.height / 4 );
+                dc.DrawRoundedRectangle( aRect, aRect.height / 4.0 );
             };
 #endif
 
@@ -187,7 +187,10 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     // wxRendereNative doesn't handle dark mode on OSX.
     drawBackground( r1 );
 #else
-    r1.width += 1;
+    #ifdef __WXMSW__
+        r1.width += 1;
+    #endif
+
     wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
 #endif
 

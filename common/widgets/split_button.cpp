@@ -245,7 +245,7 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
                     dc.SetPen( fg );
                 }
 
-                dc.DrawRoundedRectangle( aRect, aRect.height / 4 );
+                dc.DrawRoundedRectangle( aRect, aRect.height / 4.0 );
             };
 #endif
 
@@ -260,7 +260,10 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     // wxRendereNative doesn't handle dark mode on OSX.
     drawBackground( r1 );
 #else
-    r1.width += 2;
+    #ifdef _WXMSW_
+        r1.width += 2;
+    #endif
+
     wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
 #endif
 
