@@ -87,6 +87,7 @@ private:
 
     void onClose( wxCommandEvent& event ) override;
     void onSave( wxCommandEvent& event ) override;
+    void onSliderScroll( wxScrollEvent& event ) override;
     void onSliderChanged( wxScrollEvent& event ) override;
 
     void onMaxKillFocus( wxFocusEvent& event ) override;
@@ -97,18 +98,12 @@ private:
     void onValueTextEnter( wxCommandEvent& event ) override;
     void onMinTextEnter( wxCommandEvent& event ) override;
 
-    void onSimTimer( wxTimerEvent& event );
-
-    ///< Timer that restarts the simulation after the slider value has changed
-    wxTimer m_simTimer;
-
     KIID            m_symbol;
     SCH_SHEET_PATH  m_sheetPath;
 
     SPICE_VALUE     m_min;
     SPICE_VALUE     m_max;
     SPICE_VALUE     m_value;
-    bool            m_changed;
 
     SIM_PLOT_FRAME* m_frame;
 };

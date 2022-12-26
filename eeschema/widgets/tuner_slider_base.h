@@ -51,6 +51,7 @@ class TUNER_SLIDER_BASE : public wxPanel
 		STD_BITMAP_BUTTON* m_closeBtn;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onSliderScroll( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onSliderChanged( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onMaxKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onMaxTextEnter( wxCommandEvent& event ) { event.Skip(); }

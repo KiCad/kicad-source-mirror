@@ -43,17 +43,13 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent,
     m_min( 0.0 ),
     m_max( 0.0 ),
     m_value( 0.0 ),
-    m_changed( false ),
     m_frame ( aFrame )
 {
     wxString          ref = aSymbol->GetRef( &m_sheetPath );
     const SPICE_ITEM* item = aFrame->GetExporter()->FindItem( std::string( ref.ToUTF8() ) );
 
     if( !item )
-    {
-        throw KI_PARAM_ERROR( wxString::Format( _( "Could not find Spice item with reference '%s'" ),
-                                                ref ) );
-    }
+        throw KI_PARAM_ERROR( wxString::Format( _( "%s not found" ), ref ) );
 
     m_name->SetLabel( ref );
     m_closeBtn->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
@@ -94,9 +90,6 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent,
 
     updateValueText();
     updateSlider();
-
-    m_simTimer.SetOwner( this );
-    Connect( wxEVT_TIMER, wxTimerEventHandler( TUNER_SLIDER::onSimTimer ), nullptr, this );
 
     Layout();
 }
@@ -156,16 +149,15 @@ bool TUNER_SLIDER::SetMax( const SPICE_VALUE& aVal )
 
 void TUNER_SLIDER::updateComponentValue()
 {
-    // Start simulation in 100 ms, if the value does not change meanwhile
-    m_simTimer.StartOnce( 100 );
+    wxQueueEvent( m_frame, new wxCommandEvent( EVT_SIM_UPDATE ) );
 }
 
 
 void TUNER_SLIDER::updateSlider()
 {
     wxASSERT( m_max >= m_value && m_value >= m_min );
-    SPICE_VALUE value = ( m_value - m_min ) / ( m_max - m_min );
-    m_slider->SetValue( KiROUND( value.ToDouble() * 100.0 ) );
+    double value = ( ( m_value - m_min ) / ( m_max - m_min ) ).ToDouble();
+    m_slider->SetValue( KiROUND( value * 100.0 ) );
 }
 
 
@@ -204,7 +196,6 @@ void TUNER_SLIDER::updateValue()
     {
         SPICE_VALUE newCur( m_valueText->GetValue() );
         SetValue( newCur );
-        m_changed = true;
     }
     catch( const KI_PARAM_ERROR& )
     {
@@ -241,12 +232,18 @@ void TUNER_SLIDER::onSave( wxCommandEvent& event )
 }
 
 
+void TUNER_SLIDER::onSliderScroll( wxScrollEvent& event )
+{
+    m_value = m_min + ( m_max - m_min ) * SPICE_VALUE( m_slider->GetValue() / 100.0 );
+    updateValueText();
+}
+
+
 void TUNER_SLIDER::onSliderChanged( wxScrollEvent& event )
 {
     m_value = m_min + ( m_max - m_min ) * SPICE_VALUE( m_slider->GetValue() / 100.0 );
     updateValueText();
     updateComponentValue();
-    m_changed = true;
 }
 
 
@@ -287,14 +284,4 @@ void TUNER_SLIDER::onValueTextEnter( wxCommandEvent& event )
 void TUNER_SLIDER::onMinTextEnter( wxCommandEvent& event )
 {
     updateMin();
-}
-
-
-void TUNER_SLIDER::onSimTimer( wxTimerEvent& event )
-{
-    if( m_changed )
-    {
-        wxQueueEvent( m_frame, new wxCommandEvent( EVT_SIM_UPDATE ) );
-        m_changed = false;
-    }
 }
