@@ -666,7 +666,8 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL::GetPins() c
 
 void SIM_MODEL::SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbolPinNumber )
 {
-    m_pins.at( aPinIndex ).symbolPinNumber = aSymbolPinNumber;
+    if( aPinIndex >= 0 && aPinIndex < (int) m_pins.size() )
+        m_pins.at( aPinIndex ).symbolPinNumber = aSymbolPinNumber;
 }
 
 
@@ -686,7 +687,7 @@ void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
     // for legacy files which didn't use pin names.
     int aPinIndex = (int) strtol( aPinName.c_str(), nullptr, 10 );
 
-    if( aPinIndex < 1 )
+    if( aPinIndex < 1 || aPinIndex > (int) m_pins.size() )
     {
         THROW_IO_ERROR( wxString::Format( _( "Could not find a pin named '%s' in simulation "
                                              "model of type '%s'" ),
