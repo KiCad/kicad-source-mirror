@@ -35036,7 +35036,7 @@ msgstr "NPTH конт. площадка з %s"
 #: pcbnew/pad.cpp:1246
 #, c-format
 msgid "PTH pad %s of %s"
-msgstr "Контактна площадка %s не знайдена в %s."
+msgstr "Контактна площадка %s не знайдена в %s"
 
 #: pcbnew/pad.cpp:1255
 #, c-format
@@ -35247,174 +35247,173 @@ msgstr "Пропущено аргумент посадкового місця (A
 
 #: pcbnew/pcb_expr_functions.cpp:446
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr ""
+msgstr "Зона встановлення посадкового місця не є незамкнутим контуром."
 
 #: pcbnew/pcb_expr_functions.cpp:458
 msgid "Footprint has no front courtyard."
-msgstr ""
+msgstr "Посадкове місце немає зони розташування спереду."
 
 #: pcbnew/pcb_expr_functions.cpp:475
 msgid "Footprint has no back courtyard."
-msgstr ""
+msgstr "Посадкове місце немає зони розташування з зворотної сторони."
 
 #: pcbnew/pcb_expr_functions.cpp:593
 #, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr ""
+msgstr "Відсутні аргументи зони правил (A, B, або імені зони правил) для %s."
 
 #: pcbnew/pcb_expr_functions.cpp:744
 #, c-format
 msgid "Missing group name argument to %s."
-msgstr ""
+msgstr "Відсутній аргумент назви групи для %s."
 
 #: pcbnew/pcb_expr_functions.cpp:858
 #, c-format
 msgid "Missing diff-pair name argument to %s."
-msgstr ""
+msgstr "Пропущено аргумент імені диференційної пари для %s."
 
 #: pcbnew/pcb_expr_functions.cpp:922
 #, c-format
 msgid "Missing field name argument to %s."
-msgstr ""
+msgstr "Відсутній аргумент назви поля для %s."
 
 #: pcbnew/pcb_group.cpp:385
 #, c-format
 msgid "Unnamed Group, %zu members"
-msgstr ""
+msgstr "Безіменна Група, %zu учасників"
 
 #: pcbnew/pcb_group.cpp:387
 #, c-format
 msgid "Group '%s', %zu members"
-msgstr ""
+msgstr "Група '%s', %zu членів"
 
 #: pcbnew/pcb_group.cpp:399
 msgid "<unnamed>"
-msgstr ""
+msgstr "<без назви>"
 
 #: pcbnew/pcb_group.cpp:400
 msgid "Members"
-msgstr ""
+msgstr "Члени"
 
 #: pcbnew/pcb_layer_box_selector.cpp:98
 msgid "(not activated)"
-msgstr ""
+msgstr "(не активований)"
 
 #: pcbnew/pcb_marker.cpp:194
 msgid "Violation"
-msgstr ""
+msgstr "Порушення"
 
 #: pcbnew/pcb_marker.cpp:199 pcbnew/pcb_marker.cpp:202
 #: pcbnew/pcb_marker.cpp:205
 msgid "Severity"
-msgstr ""
+msgstr "Рівень"
 
 #: pcbnew/pcb_marker.cpp:263
 #, c-format
 msgid "Marker (%s)"
-msgstr ""
+msgstr "Маркер (%s)"
 
 #: pcbnew/pcb_shape.cpp:304
 msgid "Drawing"
-msgstr ""
+msgstr "Креслення"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
-msgstr ""
+msgstr "PCB ціль"
 
 #: pcbnew/pcb_text.cpp:131
 msgid "PCB Text"
-msgstr ""
+msgstr "PCB текст"
 
 #: pcbnew/pcb_text.cpp:257
 #, c-format
 msgid "PCB Text '%s' on %s"
-msgstr ""
+msgstr "PCB текст '%s' на %s"
 
 #: pcbnew/pcb_textbox.cpp:418
 #, c-format
 msgid "PCB Text Box on %s"
-msgstr ""
+msgstr "PCB блок тексту на %s"
 
 #: pcbnew/pcb_track.cpp:111
 #, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr ""
+msgstr "Сліпий/Похований перехідний отвір %s на %s"
 
 #: pcbnew/pcb_track.cpp:112
 #, c-format
 msgid "Micro Via %s on %s"
-msgstr ""
+msgstr "Мікро перехідний отвір %s на %s"
 
 #: pcbnew/pcb_track.cpp:113
 #, c-format
 msgid "Via %s on %s"
-msgstr ""
+msgstr "Перехідний отвір %s на %s"
 
 #: pcbnew/pcb_track.cpp:166
 msgid "removed annular ring"
-msgstr ""
+msgstr "видалення пояска кільця"
 
-#: pcbnew/pcb_track.cpp:822 pcbnew/pcb_track.cpp:827
+#: pcbnew/pcb_track.cpp:827
 msgid "Track (arc)"
-msgstr ""
+msgstr "Доріжка (дуга)"
 
-#: pcbnew/pcb_track.cpp:845 pcbnew/pcb_track.cpp:842
+#: pcbnew/pcb_track.cpp:842
 msgid "Segment Length"
-msgstr ""
+msgstr "Довжина сегменту"
 
-#: pcbnew/pcb_track.cpp:856 pcbnew/pcb_track.cpp:853
+#: pcbnew/pcb_track.cpp:853
 msgid "Routed Length"
-msgstr ""
+msgstr "Довжина трасування"
 
-#: pcbnew/pcb_track.cpp:864 pcbnew/pcb_track.cpp:861
+#: pcbnew/pcb_track.cpp:861
 msgid "Full Length"
-msgstr ""
+msgstr "Повна довжина"
 
-#: pcbnew/pcb_track.cpp:879 pcbnew/pcb_track.cpp:876
+#: pcbnew/pcb_track.cpp:876
 #, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr ""
+msgstr "Обмеження ширини: мін %s, макс %s"
 
-#: pcbnew/pcb_track.cpp:886 pcbnew/pcb_track.cpp:883
+#: pcbnew/pcb_track.cpp:883
 #, c-format
 msgid "Width Constraints: min %s"
-msgstr ""
+msgstr "Обмеження ширини: мін %s"
 
-#: pcbnew/pcb_track.cpp:899 pcbnew/pcb_track.cpp:896
+#: pcbnew/pcb_track.cpp:896
 msgid "Micro Via"
-msgstr ""
+msgstr "Мікро перехідний отвір"
 
-#: pcbnew/pcb_track.cpp:900 pcbnew/pcb_track.cpp:897
+#: pcbnew/pcb_track.cpp:897
 msgid "Blind/Buried Via"
-msgstr ""
+msgstr "Сліпий/Прихований перехідний отвір"
 
-#: pcbnew/pcb_track.cpp:901 pcbnew/pcb_track.cpp:898
+#: pcbnew/pcb_track.cpp:898
 msgid "Through Via"
-msgstr ""
+msgstr "Наскрізний перехідний отвір"
 
-#: pcbnew/pcb_track.cpp:922 pcbnew/pcb_track.cpp:919
+#: pcbnew/pcb_track.cpp:919
 #, c-format
 msgid "Min Annular Width: %s"
-msgstr ""
+msgstr "Мінімальна ширина пояска: %s"
 
 #: pcbnew/pcb_track.cpp:938 pcbnew/pcb_track.cpp:935
 msgid "NetCode"
 msgstr "Код Звʼязків"
 
-#: pcbnew/pcb_track.cpp:1067 pcbnew/pcb_track.cpp:1064
+#: pcbnew/pcb_track.cpp:1064
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr ""
+msgstr "Доріжка (дуга) %s на %s, довжина %s"
 
-#: pcbnew/pcb_track.cpp:1068 pcbnew/pcb_track.cpp:1065
+#: pcbnew/pcb_track.cpp:1065
 #, c-format
 msgid "Track %s on %s, length %s"
-msgstr ""
+msgstr "Доріжка %s на %s, довжина %s"
 
-#: pcbnew/pcb_track.cpp:1269 pcbnew/pcb_track.cpp:1287
-#, fuzzy
+#: pcbnew/pcb_track.cpp:1287
 msgid "Via Properties"
-msgstr "Властивості виводів"
+msgstr "Властивості перехідного отвору"
 
 #: pcbnew/pcb_track.cpp:1279 pcbnew/widgets/pcb_properties_panel.cpp:156
 #: pcbnew/pcb_track.cpp:1297 pcbnew/widgets/pcb_properties_panel.cpp:155
@@ -35426,9 +35425,9 @@ msgstr "Верхній шар"
 msgid "Layer Bottom"
 msgstr "Нижній шар"
 
-#: pcbnew/pcb_track.cpp:1283 pcbnew/pcb_track.cpp:1301
+#: pcbnew/pcb_track.cpp:1301
 msgid "Via Type"
-msgstr ""
+msgstr "Тип перехідного отвору"
 
 #: pcbnew/pcbnew.cpp:376
 msgid ""
@@ -35447,56 +35446,52 @@ msgid "Loading board\n"
 msgstr "Завантаження плати\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:142
-#, fuzzy
 msgid "Successfully created svg file"
-msgstr "PCB успішно повторно позначено"
+msgstr "Файл svg успішно створено"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:144 pcbnew/pcbnew_jobs_handler.cpp:748
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "Помилка читання файлу."
+msgstr "Помилка створення svg файла"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:578 pcbnew/pcbnew_jobs_handler.cpp:649
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "Завантаження бібліотек посадкових місць"
+msgstr "Завантаження бібліотеки посадкового місця\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:615
-#, fuzzy
 msgid "Saving footprint library\n"
-msgstr "Завантаження бібліотек посадкових місць"
+msgstr "Збереження бібліотек посадкових місць\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:634
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "Ідентифікатор посадкового місця '%s' недійсний."
+msgstr "Бібліотека посадкового місця не оновлена\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:699
-#, fuzzy
 msgid "The given footprint could not be found to export."
-msgstr "Файл відповідностей '%s' не знайдено."
+msgstr "Не вдалося знайти вказане посадкове місце для експорту."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "Змінено посадкове місце %s з '%s' на '%s'"
+msgstr "Креслення посадкове місце '%s' на'%s'\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
-msgstr ""
+msgstr "Кілька шарів"
 
 #: pcbnew/plugin.cpp:149
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr ""
+"Включити журнал логів <b>відлагодження</b> для посадкового місця*() функцій "
+"в PLUGIN."
 
 #: pcbnew/plugin.cpp:152
 msgid "Regular expression <b>footprint name</b> filter."
-msgstr ""
+msgstr "Регулярний вираз фільтру<b>імен посадкових місць</b>."
 
 #: pcbnew/plugin.cpp:170
 msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
-msgstr ""
+msgstr "Введіть модуль python, який реалізує функції PLUGIN::Footprint*()."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:152
 #: pcbnew/plugins/altium/altium_pcb.cpp:555
@@ -35504,32 +35499,32 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:711
 #, c-format
 msgid "File not found: '%s'."
-msgstr ""
+msgstr "Файл не знайдено: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
-msgstr ""
+msgstr "Невідоме відображення шару Altium '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
 #, c-format
 msgid "Unknown Mode string: '%s'."
-msgstr ""
+msgstr "Невідомий рядок режиму: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
 #, c-format
 msgid "Unknown Record name string: '%s'."
-msgstr ""
+msgstr "Невідомий рядок імені запису: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
 #, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
-msgstr ""
+msgstr "Невідомий тип розширеної первинної інформації: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr ""
+msgstr "Потік Pads6 має неочікувану довжину для підзапису 6: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:327
 #, c-format
@@ -35553,12 +35548,12 @@ msgstr "Відкриття скасовано користувачем."
 #: pcbnew/plugins/altium/altium_pcb.cpp:512
 #, c-format
 msgid "'%s' was not parsed correctly."
-msgstr ""
+msgstr "'%s' було не оброблено правильно."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:520
 #, c-format
 msgid "'%s' was not fully parsed."
-msgstr ""
+msgstr "'%s' було не повністю проаналізовано."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:784
 #, c-format
@@ -35664,11 +35659,15 @@ msgstr "Завантаження конт. пл..."
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
+"В посадковому місці %s контактна площадка %s не відмічена як багатошарова, "
+"але є TH контактна площадка."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2463
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
+"В посадковому місці %s контактна площадка %s має квадратний отвір (зараз не "
+"підтримується)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2490
 #, c-format
@@ -35676,21 +35675,29 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
+"В посадковому місці %s контактна площадка %s має отвір під кутом %f "
+"градусів. KiCad підтримує тільки обертання на 90 градусів."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2502
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
+"В посадковому місці %s контактна площадка %s використовується отвір "
+"невідомого типу %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2519
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
+"В посадковому місці %s контактна площадка %s використовує складну структуру "
+"(зараз не підтримується.)"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2556
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
+"В посадковому місці %s контактна площадка %s використовується невідома форма "
+"контактної площадки."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2614
 #: pcbnew/plugins/altium/altium_pcb.cpp:2635
@@ -35711,49 +35718,55 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2661
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr ""
+msgstr "Не мідна контактна площадка %s має отвір, що не підтримується."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2666
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
+"Не мідна контактна площадка %s має складну структуру (не підтримується "
+"зараз)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2808
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr ""
+"Не мідна контактна площадка %s використовує невідому форму контактної "
+"площадки."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2818
 msgid "Loading vias..."
-msgstr ""
+msgstr "Завантаження перехідних отворів..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2859
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
+"Перехідний отвір з шару %d в %d використовує не мідний шар, що не "
+"піддержується."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2878
 msgid "Loading tracks..."
-msgstr ""
+msgstr "Завантаження доріжок..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3048
 msgid "Loading unicode strings..."
-msgstr ""
+msgstr "Завантаження рядків unicode..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3062
 msgid "Loading text..."
-msgstr ""
+msgstr "Завантажується текст..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3091
 #: pcbnew/plugins/altium/altium_pcb.cpp:3104
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
-msgstr ""
+msgstr "Проігноровано штрих-код на шарі Altium %d (не підтримується зараз)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3253
 msgid "Loading rectangles..."
-msgstr ""
+msgstr "Завантаження прямокутників..."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:92
 msgid ""
@@ -35762,6 +35775,10 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
+"Вибраний файл вказує на те, що зв'язки можуть бути не синхронізовані зі "
+"схемою. Щоб уникнути невідповідності між друкованою платою та схемою, "
+"рекомендовано виконати процедуру «вирівнювання зв'язків» у CADSTAR і "
+"повторно імпортувати. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:132
 #, c-format
@@ -35770,12 +35787,17 @@ msgid ""
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
 msgstr ""
+"Не вдалося визначити пріоритети заповнення зони для шару '%s. Найкраща "
+"спроба була зроблена, але можливо, що помилки DRC існують, і потрібне ручне "
+"редагування пріоритетів зони."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:146
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr ""
+"Дизайн CADSTAR містить елементи трасування, що не містять еквіваленту KiCad, "
+"ці елементи не були завантажені."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:153
 #, c-format
@@ -35783,6 +35805,8 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
+"Дизайн CADSTAR містить варіанти, які не мають еквіваленту KiCad. Завантажено "
+"лише варіант '%s."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:165
 msgid ""
@@ -35790,6 +35814,10 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
+"Шрифти CADSTAR відрізняються від шрифтів KiCad. Це, ймовірно, призведе до "
+"проблем з вирівнюванням, які можуть спричинити помилки DRC. Будь ласка, "
+"уважно перегляньте імпортовані текстові елементи та за потреби виправте "
+"вручну."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -35797,6 +35825,8 @@ msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
+"CADSTAR шар '%s' не має жодного еквіваленту KiCad. Всі елементи цього шару "
+"були відображені в шарі KiCad '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:207
 #, c-format
@@ -35804,16 +35834,18 @@ msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
+"Шар CADSTAR '%s' вважається технічним. Усі елементи на цьому шарі зіставлено "
+"з шаром KiCad '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:516
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr ""
+msgstr "Несподіваний шар'%s' в наборі шарів."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:673
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr ""
+msgstr "Правило дизайну %s не знайдено. Це було проігноровано."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:703
 msgid ""
@@ -35821,6 +35853,8 @@ msgid ""
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
+"Правила дизайну KiCad відрізняються від CADSTAR. Імпортовані сумісні правила "
+"дизайну. Рекомендується переглянути правила дизайну, які були застосовані."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:902
 #, c-format
@@ -35829,6 +35863,9 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
+"Область CADSTAR '%s' у компоненті бібліотеки '%s' не має еквівалентного в "
+"KiCad. Область не є забороненою зоною для трасування. Область не "
+"імпортується."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:988
 #, c-format
@@ -35837,6 +35874,9 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
+"Визначення контактної площадки CADSTAR '%s' - це складний стек, який не "
+"підтримується у KiCad. Будь ласка, передивіться імпортовані контактні "
+"площадки, оскільки вони можуть вимагати ручної виправлення."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1207
 #, c-format
@@ -35844,27 +35884,34 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
+"Визначення контактної площадки CADSTAR '%s' має контактну площадку з отвором "
+"поза межами контактної площадки. Отвір переміщено до центру контактної "
+"площадки."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1238
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr ""
+"Визначення контактної площадки CADSTAR '%s' імпортовано з помилками: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1256
 #, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
 msgstr ""
+"Не вдалося знайти індекс контактної площадки '%d' у посадковому місці '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1289
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
-msgstr ""
+msgstr "Неможливо знайти ID групи %s у описі групи."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1295
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
 msgstr ""
+"Не вдалося знайти підгрупу %s на карті групи (ID батьківської групи =%s, "
+"ім'я=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1372
 #, c-format
@@ -35872,6 +35919,8 @@ msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
+"Розмір ID %s є кутовим виміром, в якого немає еквівалента KiCad. Замість "
+"цього було завантажено розмір дозволеного значення."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1383
 #, c-format
@@ -35880,11 +35929,14 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"Розмір ID %s має стиль \"Зовнішній\" в CADSTAR. Стиль зовнішнього виміру ще "
+"не підтримуються в KiCad. Натомість було імпортовано об'єкт розміру з "
+"внутрішнього виміру."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1440
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr ""
+msgstr "Неочікуваний тип розмірності (ID %s). Цей тип не імпортовано."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1575
 #, c-format
@@ -35892,6 +35944,8 @@ msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr ""
+"Розміри %s є кутовими вимірами, у яких немає еквівалента KiCad. Об'єкт не "
+"було імпортовано."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1615
 #, c-format
