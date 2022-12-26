@@ -93,7 +93,7 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
 
         PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
                                                          pgProp->GetName() );
-        wxASSERT( property );
+        wxCHECK2( property, continue );
 
         bool writeable = true;
 
