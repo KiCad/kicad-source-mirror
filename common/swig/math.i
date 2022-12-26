@@ -40,6 +40,7 @@
 %include <math/box2.h>
 
 %template(VECTOR2I) VECTOR2<int>;
+%template(VECTOR2I_EXTENDED_TYPE) VECTOR2_TRAITS<int>;
 %template(BOX2I) BOX2<VECTOR2I>;
 
 %extend VECTOR2<int>
