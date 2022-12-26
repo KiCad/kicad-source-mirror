@@ -228,7 +228,8 @@ bool EDIT_TOOL::Init()
 
     menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
 
-    menu.AddItem( PCB_ACTIONS::assignNetClass,    SELECTION_CONDITIONS::OnlyTypes( connectedTypes ) );
+    menu.AddItem( PCB_ACTIONS::assignNetClass,    SELECTION_CONDITIONS::OnlyTypes( connectedTypes )
+                                                      && !inFootprintEditor );
     menu.AddItem( PCB_ACTIONS::inspectClearance,  SELECTION_CONDITIONS::Count( 2 ) );
 
     // Footprint actions
