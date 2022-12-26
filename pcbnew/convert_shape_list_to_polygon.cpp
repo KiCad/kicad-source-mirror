@@ -874,7 +874,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
     if( !segList.empty() )
     {
         success = ConvertOutlineToPolygon( segList, outlines, aErrorMax, aChainingEpsilon,
-                                           false, aErrorHandler );
+                                           true, aErrorHandler );
     }
 
     // A closed outline was found on Edge_Cuts
