@@ -322,22 +322,25 @@ void SIM_PLOT_FRAME::initWorkbook()
 
 void SIM_PLOT_FRAME::updateTitle()
 {
-    wxFileName filename = Prj().AbsolutePath( m_simulator->Settings()->GetWorkbookFilename() );
-
-    bool readOnly = false;
-    bool unsaved = false;
-
-    if( filename.IsOk() && filename.FileExists() )
-        readOnly = !filename.IsFileWritable();
-    else
-        unsaved = true;
-
+    bool     unsaved = true;
+    bool     readOnly = false;
     wxString title;
 
-    if( m_workbook->IsModified() )
-        title = wxT( "*" ) + filename.GetName();
-    else
-        title = filename.GetName();
+    if( m_simulator && m_simulator->Settings() )
+    {
+        wxFileName filename = Prj().AbsolutePath( m_simulator->Settings()->GetWorkbookFilename() );
+
+        if( filename.IsOk() && filename.FileExists() )
+        {
+            unsaved = false;
+            readOnly = !filename.IsFileWritable();
+        }
+
+        if( m_workbook->IsModified() )
+            title = wxT( "*" ) + filename.GetName();
+        else
+            title = filename.GetName();
+    }
 
     if( readOnly )
         title += wxS( " " ) + _( "[Read Only]" );
