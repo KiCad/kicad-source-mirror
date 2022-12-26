@@ -1088,7 +1088,7 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
         // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
         // they won't be found in the view layer's itemset for re-painting.
         GetCanvas()->GetView()->UpdateAllItemsConditionally(
-                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> int
                 {
                     if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
                     {
