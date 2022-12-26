@@ -1106,6 +1106,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         case PCB_LOCATE_HOLE_T:  mask = DRC_DISALLOW_HOLES;      break;
                         default:                 mask = 0;                       break;
                         }
+
+                        if( const ZONE* zone = dynamic_cast<const ZONE*>( a ) )
+                        {
+                            if( zone->IsTeardropArea() )
+                                mask = DRC_DISALLOW_TRACKS;
+                        }
                     }
 
                     if( ( c->constraint.m_DisallowFlags & mask ) == 0 )
