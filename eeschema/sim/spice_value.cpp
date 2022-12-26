@@ -107,6 +107,33 @@ void SPICE_VALUE::Normalize()
 }
 
 
+wxString prefix( SPICE_VALUE::UNIT_PREFIX aPrefix )
+{
+    switch( aPrefix )
+    {
+        case SPICE_VALUE::PFX_FEMTO: return wxT( "f" );
+        case SPICE_VALUE::PFX_PICO:  return wxT( "p" );
+        case SPICE_VALUE::PFX_NANO:  return wxT( "n" );
+        case SPICE_VALUE::PFX_MICRO: return wxT( "u" );
+        case SPICE_VALUE::PFX_MILI:  return wxT( "m" );
+        case SPICE_VALUE::PFX_NONE:  return wxEmptyString;
+        case SPICE_VALUE::PFX_KILO:  return wxT( "k" );
+        case SPICE_VALUE::PFX_MEGA:  return wxT( "Meg" );
+        case SPICE_VALUE::PFX_GIGA:  return wxT( "G" );
+        case SPICE_VALUE::PFX_TERA:  return wxT( "T" );
+    }
+}
+
+
+double SPICE_VALUE::ToNormalizedDouble( wxString* aPrefix )
+{
+    Normalize();
+
+    *aPrefix = prefix( m_prefix );
+    return m_base;
+}
+
+
 double SPICE_VALUE::ToDouble() const
 {
     double res = m_base;
@@ -120,7 +147,7 @@ double SPICE_VALUE::ToDouble() const
 wxString SPICE_VALUE::ToString() const
 {
     wxString res( wxString::Format( "%.3f", ToDouble() ) );
-    stripZeros( res );
+    StripZeros( res );
 
     return res;
 }
@@ -129,21 +156,8 @@ wxString SPICE_VALUE::ToString() const
 wxString SPICE_VALUE::ToSpiceString() const
 {
     wxString res = wxString::FromCDouble( m_base );
-    stripZeros( res );
-
-    switch( m_prefix )
-    {
-        case PFX_FEMTO: res += "f"; break;
-        case PFX_PICO:  res += "p"; break;
-        case PFX_NANO:  res += "n"; break;
-        case PFX_MICRO: res += "u"; break;
-        case PFX_MILI:  res += "m"; break;
-        case PFX_NONE:  break;
-        case PFX_KILO:  res += "k"; break;
-        case PFX_MEGA:  res += "Meg"; break;
-        case PFX_GIGA:  res += "G"; break;
-        case PFX_TERA:  res += "T"; break;
-    }
+    StripZeros( res );
+    res += prefix( m_prefix );
 
     return res;
 }
@@ -231,7 +245,7 @@ SPICE_VALUE SPICE_VALUE::operator/( const SPICE_VALUE& aOther ) const
 }
 
 
-void SPICE_VALUE::stripZeros( wxString& aString )
+void SPICE_VALUE::StripZeros( wxString& aString )
 {
     if ( aString.Find( ',' ) >= 0 || aString.Find( '.' ) >= 0 )
     {

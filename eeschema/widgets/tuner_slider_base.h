@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class BITMAP_BUTTON;
 class STD_BITMAP_BUTTON;
 
 #include <wx/string.h>
@@ -20,13 +21,13 @@ class STD_BITMAP_BUTTON;
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
-#include <wx/slider.h>
-#include <wx/textctrl.h>
-#include <wx/button.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
+#include <wx/button.h>
+#include <wx/slider.h>
+#include <wx/textctrl.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,6 +44,11 @@ class TUNER_SLIDER_BASE : public wxPanel
 		wxPanel* m_panel1;
 		wxStaticText* m_name;
 		wxStaticLine* m_staticline4;
+		BITMAP_BUTTON* m_e24;
+		BITMAP_BUTTON* m_separator;
+		BITMAP_BUTTON* m_e48;
+		BITMAP_BUTTON* m_e96;
+		BITMAP_BUTTON* m_e192;
 		wxSlider* m_slider;
 		wxTextCtrl* m_maxText;
 		wxTextCtrl* m_valueText;
@@ -51,6 +57,7 @@ class TUNER_SLIDER_BASE : public wxPanel
 		STD_BITMAP_BUTTON* m_closeBtn;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onESeries( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSliderScroll( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onSliderChanged( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onMaxKillFocus( wxFocusEvent& event ) { event.Skip(); }

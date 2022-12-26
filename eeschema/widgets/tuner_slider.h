@@ -85,6 +85,7 @@ private:
     void updateValue();
     void updateMin();
 
+    void onESeries( wxCommandEvent& event ) override;
     void onClose( wxCommandEvent& event ) override;
     void onSave( wxCommandEvent& event ) override;
     void onSliderScroll( wxScrollEvent& event ) override;

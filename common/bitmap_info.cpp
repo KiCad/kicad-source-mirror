@@ -26,6 +26,10 @@
 
 void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBitmapInfoCache )
 {
+    aBitmapInfoCache[BITMAPS::e_24].emplace_back( BITMAPS::e_24, wxT( "e_24_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::e_48].emplace_back( BITMAPS::e_48, wxT( "e_48_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::e_96].emplace_back( BITMAPS::e_96, wxT( "e_96_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::e_192].emplace_back( BITMAPS::e_192, wxT( "e_192_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_bitmap2component_16].emplace_back( BITMAPS::icon_bitmap2component_16, wxT( "icon_bitmap2component_16_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_eeschema_16].emplace_back( BITMAPS::icon_eeschema_16, wxT( "icon_eeschema_16_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_gerbview_16].emplace_back( BITMAPS::icon_gerbview_16, wxT( "icon_gerbview_16_16.png" ), 16, wxT( "light" ) );

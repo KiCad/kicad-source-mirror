@@ -73,6 +73,8 @@ public:
      */
     void Normalize();
 
+    double ToNormalizedDouble( wxString* aPrefix );
+
     double ToDouble() const;
 
     /**
@@ -132,15 +134,15 @@ public:
     SPICE_VALUE operator*( const SPICE_VALUE& aOther ) const;
     SPICE_VALUE operator/( const SPICE_VALUE& aOther ) const;
 
-private:
     ///< Remove redundant zeros from the end of a string.
-    static void stripZeros( wxString& aString );
+    static void StripZeros( wxString& aString );
 
-    double m_base;
+private:
+    double      m_base;
     UNIT_PREFIX m_prefix;
 
     ///< Was the value defined using the Spice notation?
-    bool m_spiceStr;
+    bool        m_spiceStr;
 };
 
 

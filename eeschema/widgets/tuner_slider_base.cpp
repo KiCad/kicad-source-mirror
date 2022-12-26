@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/bitmap_button.h"
 #include "widgets/std_bitmap_button.h"
 
 #include "tuner_slider_base.h"
@@ -33,7 +34,44 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	bSizer6->Add( bSizerUpper, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline4 = new wxStaticLine( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer6->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	bSizer6->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_e24 = new BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_e24->SetToolTip( _("Bold") );
+
+	bSizer7->Add( m_e24, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_separator = new BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator->SetToolTip( _("Bold") );
+
+	bSizer7->Add( m_separator, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_e48 = new BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_e48->SetToolTip( _("Bold") );
+
+	bSizer7->Add( m_e48, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_e96 = new BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_e96->SetToolTip( _("Bold") );
+
+	bSizer7->Add( m_e96, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_e192 = new BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_e192->SetToolTip( _("Bold") );
+
+	bSizer7->Add( m_e192, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizer6->Add( bSizer7, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizerMiddle;
 	bSizerMiddle = new wxBoxSizer( wxHORIZONTAL );
@@ -42,7 +80,9 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	bSizerSlider = new wxBoxSizer( wxVERTICAL );
 
 	m_slider = new wxSlider( m_panel1, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LEFT|wxSL_VERTICAL );
-	bSizerSlider->Add( m_slider, 1, wxALL, 5 );
+	m_slider->SetMinSize( wxSize( -1,200 ) );
+
+	bSizerSlider->Add( m_slider, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerMiddle->Add( bSizerSlider, 0, wxEXPAND, 5 );
@@ -66,7 +106,7 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	gSizerTxtCtr->Add( m_minText, 0, wxALIGN_BOTTOM|wxALL, 5 );
 
 
-	bSizerMiddle->Add( gSizerTxtCtr, 1, wxEXPAND, 5 );
+	bSizerMiddle->Add( gSizerTxtCtr, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	bSizer6->Add( bSizerMiddle, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -75,13 +115,10 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_saveBtn = new wxButton( m_panel1, wxID_ANY, _("Save"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_saveBtn, 0, wxEXPAND|wxRIGHT|wxLEFT, 3 );
-
-
-	bSizerBottom->Add( 5, 0, 1, wxEXPAND, 5 );
+	bSizerBottom->Add( m_saveBtn, 1, wxEXPAND|wxRIGHT|wxLEFT, 3 );
 
 	m_closeBtn = new STD_BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerBottom->Add( m_closeBtn, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerBottom->Add( m_closeBtn, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 8 );
 
 
 	bSizer6->Add( bSizerBottom, 0, wxEXPAND|wxALL, 3 );
@@ -98,6 +135,10 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	bSizerMain->Fit( this );
 
 	// Connect Events
+	m_e24->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
+	m_e48->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
+	m_e96->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
+	m_e192->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_slider->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
 	m_slider->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
 	m_slider->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
@@ -121,6 +162,10 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 TUNER_SLIDER_BASE::~TUNER_SLIDER_BASE()
 {
 	// Disconnect Events
+	m_e24->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
+	m_e48->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
+	m_e96->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
+	m_e192->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_slider->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
 	m_slider->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
 	m_slider->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );

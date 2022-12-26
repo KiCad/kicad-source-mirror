@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="e_192.svg"
+   inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1429"
+     inkscape:window-height="800"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="21.189179"
+     inkscape:cx="13.945798"
+     inkscape:cy="11.37373"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="text863"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_glabel</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs174">
+    <style
+       id="style172">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#1a81c4;}.cls-2{stroke:#545454;}.cls-3{fill:#545454;}</style>
+  </defs>
+  <title
+     id="title176">add_glabel</title>
+  <g
+     aria-label="E192"
+     transform="scale(0.95155707,1.0509091)"
+     id="text863"
+     style="font-size:17.3333px;line-height:1.25;fill:#333333;stroke-width:0.951557">
+    <path
+       d="M 1.1538982,18.084029 V 4.7996539 H 6.4232213 V 6.5908051 H 2.9218948 v 3.8994869 h 3.0506607 v 1.791154 H 2.9218948 v 3.899486 h 3.5013265 v 1.903097 z"
+       style="font-weight:bold;font-family:'DIN Condensed';-inkscape-font-specification:'DIN Condensed,  Bold';stroke-width:0.987244"
+       id="path1034" />
+    <path
+       d="M 9.3166766,18.084213 V 6.7767877 L 7.5486802,8.1808549 V 6.1589981 L 9.3166766,4.7549308 H 11.084672 V 18.084213 Z"
+       style="font-weight:bold;font-family:'DIN Condensed';-inkscape-font-specification:'DIN Condensed,  Bold';stroke-width:0.988912"
+       id="path1036" />
+    <path
+       d="m 13.677857,18.084213 2.010663,-5.537977 -0.03467,-0.03705 q -0.08667,0.07408 -0.277333,0.129651 -0.173333,0.03705 -0.467999,0.03705 -0.467999,0 -0.866665,-0.240781 -0.398666,-0.240782 -0.623999,-0.611215 -0.121333,-0.185217 -0.190666,-0.388955 -0.06933,-0.22226 -0.104,-0.55565 -0.052,-0.333393 -0.06933,-0.833479 -0.01733,-0.5186068 -0.01733,-1.2965167 0,-0.6482583 0.01733,-1.0557348 0.01733,-0.4259983 0.06933,-0.7223449 0.03467,-0.277825 0.104,-0.4815633 0.08667,-0.2037383 0.207999,-0.4259983 0.346666,-0.611215 0.918665,-0.9446049 0.589332,-0.33339 1.317331,-0.33339 0.727998,0 1.299997,0.3519116 0.571999,0.33339 0.918665,0.9260833 0.121333,0.22226 0.208,0.4259983 0.08667,0.2037383 0.138666,0.4815633 0.03467,0.2963466 0.052,0.7223449 0.01733,0.4074765 0.01733,1.0557348 0,0.6112149 -0.01733,1.0186916 -0.01733,0.3889551 -0.052,0.6667811 -0.052,0.296348 -0.121333,0.537131 -0.052,0.22226 -0.138666,0.481563 l -2.322662,6.630756 z m 1.126665,-8.019885 q 0,0.426001 0.259999,0.685304 0.26,0.259306 0.606666,0.259306 0.346666,0 0.606665,-0.259306 0.26,-0.259303 0.26,-0.685304 V 7.6194688 q 0,-0.4259983 -0.26,-0.6853016 -0.259999,-0.2593033 -0.606665,-0.2593033 -0.346666,0 -0.606666,0.2593033 -0.259999,0.2593033 -0.259999,0.6853016 z"
+       style="font-weight:bold;font-family:'DIN Condensed';-inkscape-font-specification:'DIN Condensed,  Bold';stroke-width:0.983635"
+       id="path1038" />
+    <path
+       d="m 18.85436,18.084213 v -1.778079 l 3.189327,-6.4270221 q 0.242666,-0.4815633 0.277333,-0.833475 0.03467,-0.3704333 0.03467,-0.9075616 0,-0.2407816 -0.01733,-0.5000848 0,-0.277825 -0.08667,-0.4815633 -0.08667,-0.2037383 -0.26,-0.33339 -0.173333,-0.1481733 -0.502665,-0.1481733 -0.398666,0 -0.641332,0.2407817 -0.225333,0.2407816 -0.225333,0.7038232 v 1.0742565 h -1.768 V 7.6565122 q 0,-0.5926933 0.208,-1.1112999 0.207999,-0.5186067 0.571999,-0.9075616 0.346666,-0.388955 0.831998,-0.611215 0.485332,-0.2407816 1.039998,-0.2407816 0.693332,0 1.178664,0.277825 0.502666,0.2593033 0.831999,0.7223449 0.311999,0.4630416 0.450665,1.0557349 0.156,0.5926933 0.156,1.2594731 0,0.4815633 -0.01733,0.8149533 -0.01733,0.3148683 -0.06933,0.6112149 -0.052,0.2963467 -0.173333,0.5926938 -0.121333,0.296347 -0.329333,0.722348 l -2.599995,5.352762 h 3.189327 v 1.889209 z"
+       style="font-weight:bold;font-family:'DIN Condensed';-inkscape-font-specification:'DIN Condensed,  Bold';stroke-width:0.983635"
+       id="path1040" />
+  </g>
+</svg>
