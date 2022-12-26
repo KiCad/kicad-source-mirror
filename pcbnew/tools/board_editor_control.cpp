@@ -149,7 +149,7 @@ void BOARD_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_EDIT_FRAME>();
 
-    if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
+    if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH || aReason == REDRAW )
     {
         m_placeOrigin->SetPosition( getModel<BOARD>()->GetDesignSettings().GetAuxOrigin() );
         getView()->Remove( m_placeOrigin.get() );

@@ -108,6 +108,11 @@ public:
     void HardRedraw() override;
 
     /**
+     * Rebuilds board connectivity, refreshes canvas.
+     */
+    void RebuildAndRefresh();
+
+    /**
      * Execute a remote command send by Eeschema via a socket, port KICAD_PCB_PORT_SERVICE_NUMBER
      * (currently 4242).
      *

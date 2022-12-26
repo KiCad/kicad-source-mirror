@@ -89,7 +89,7 @@ void PCB_CONTROL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_BASE_FRAME>();
 
-    if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
+    if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH || aReason == REDRAW )
     {
         m_gridOrigin->SetPosition( board()->GetDesignSettings().GetGridOrigin() );
         m_gridOrigin->SetColor( m_frame->GetGridColor() );

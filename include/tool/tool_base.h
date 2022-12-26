@@ -78,7 +78,8 @@ public:
     {
         RUN,                ///< Tool is invoked after being inactive
         MODEL_RELOAD,       ///< Model changes (required full reload)
-        GAL_SWITCH          ///< Rendering engine changes
+        GAL_SWITCH,         ///< Rendering engine changes
+        REDRAW              ///< Full drawing refresh
     };
 
     /**

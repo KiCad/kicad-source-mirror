@@ -32,7 +32,6 @@
 
 #include "pcbnew_scripting_helpers.h"
 
-#include <tool/tool_manager.h>
 #include <action_plugin.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -398,27 +397,7 @@ void Refresh()
 {
     if( s_PcbEditFrame )
     {
-        TOOL_MANAGER*       toolMgr = s_PcbEditFrame->GetToolManager();
-        BOARD*              board = s_PcbEditFrame->GetBoard();
-        PCB_DRAW_PANEL_GAL* canvas = s_PcbEditFrame->GetCanvas();
-
-        canvas->SyncLayersVisibility( board );
-
-        canvas->GetView()->Clear();
-        canvas->GetView()->InitPreview();
-        canvas->GetGAL()->SetGridOrigin( VECTOR2D( board->GetDesignSettings().GetGridOrigin() ) );
-        canvas->DisplayBoard( board );
-
-        // allow tools to re-add their view items (selection previews, grids, etc.)
-        if( toolMgr )
-            toolMgr->ResetTools( TOOL_BASE::GAL_SWITCH );
-
-        // reload the drawing-sheet
-        s_PcbEditFrame->SetPageSettings( board->GetPageSettings() );
-
-        board->BuildConnectivity();
-
-        canvas->Refresh();
+        s_PcbEditFrame->RebuildAndRefresh();
     }
 }
 

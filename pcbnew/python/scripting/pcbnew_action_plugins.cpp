@@ -28,6 +28,7 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <board_commit.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <pcb_track.h>
 #include <zone.h>
@@ -35,6 +36,8 @@
 #include <pcbnew_settings.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
+#include <tool/tool_manager.h>
+#include <pcb_painter.h>
 #include <wx/msgdlg.h>
 #include "../../scripting/python_scripting.h"
 
@@ -372,7 +375,32 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
 
     // Apply changes, UndoList already handled
     commit.Push( _( "Apply action script" ), SKIP_UNDO | SKIP_SET_DIRTY );
-    ActivateGalCanvas();
+
+    RebuildAndRefresh();
+}
+
+
+void PCB_EDIT_FRAME::RebuildAndRefresh()
+{
+    m_pcb->BuildConnectivity();
+
+    PCB_DRAW_PANEL_GAL* canvas = GetCanvas();
+
+    canvas->GetView()->Clear();
+    canvas->GetView()->InitPreview();
+    canvas->GetGAL()->SetGridOrigin( VECTOR2D( m_pcb->GetDesignSettings().GetGridOrigin() ) );
+    canvas->DisplayBoard( m_pcb );
+
+    // allow tools to re-add their view items (selection previews, grids, etc.)
+    if( m_toolManager )
+        m_toolManager->ResetTools( TOOL_BASE::REDRAW );
+
+    // reload the drawing-sheet
+    SetPageSettings( m_pcb->GetPageSettings() );
+
+    canvas->SyncLayersVisibility( m_pcb );
+
+    canvas->Refresh();
 }
 
 

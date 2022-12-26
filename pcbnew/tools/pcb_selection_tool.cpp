@@ -224,7 +224,7 @@ void PCB_SELECTION_TOOL::Reset( RESET_REASON aReason )
 
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
     }
-    else
+    else if ( aReason != TOOL_BASE::REDRAW )
     {
         // Restore previous properties of selected items and remove them from containers
         ClearSelection( true );

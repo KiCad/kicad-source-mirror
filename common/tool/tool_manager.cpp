@@ -572,7 +572,8 @@ void TOOL_MANAGER::DeactivateTool()
 
 void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 {
-    DeactivateTool();
+    if( aReason != TOOL_BASE::REDRAW )
+        DeactivateTool();
 
     for( auto& state : m_toolState )
     {
