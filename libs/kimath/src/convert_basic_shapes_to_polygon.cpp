@@ -295,7 +295,7 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
 
             EDA_ANGLE angPos = lastSeg.IsZero() ? angDelta : ( angDelta + lastSeg ) / 2;
 
-            double   arcTransitionDistance = radius / tanAngle2;
+            double   arcTransitionDistance = ( tanAngle2 > 0 ) ? ( radius / tanAngle2 ) : 0;
             VECTOR2I arcStart = cornerPosition - incoming.Resize( arcTransitionDistance );
             VECTOR2I arcCenter = arcStart + incoming.Perpendicular().Resize( radius );
             VECTOR2I arcEnd, arcStartOrigin;
