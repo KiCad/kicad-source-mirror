@@ -477,79 +477,74 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
     if( !m_dryRun )
         removeItems( toRemove );
 
-    if( aMergeSegments )
-    {
-        bool merged;
-
-        do
-        {
-            merged = false;
-            m_brd->BuildConnectivity();
-
-            std::shared_ptr<CN_CONNECTIVITY_ALGO> connectivity =
-                                    m_brd->GetConnectivity()->GetConnectivityAlgo();
-
-            // Keep a duplicate deque to all deleting in the primary
-            std::deque<PCB_TRACK*> temp_segments( m_brd->Tracks() );
-
-            m_connectedItemsCache.clear();
-
-            // merge collinear segments:
-            for( PCB_TRACK* segment : temp_segments )
+    auto mergeSegments =
+            [&]( CN_CONNECTIVITY_ALGO* connectivity ) -> bool
             {
-                // one can merge only collinear segments, not vias or arcs.
-                if( segment->Type() != PCB_TRACE_T )
-                    continue;
-
-                if( segment->HasFlag( IS_DELETED ) )  // already taken into account
-                    continue;
-
-                // for each end of the segment:
-                for( CN_ITEM* citem : connectivity->ItemEntry( segment ).GetItems() )
+                for( PCB_TRACK* segment : m_brd->Tracks() )
                 {
-                    // Do not merge an end which has different width tracks attached -- it's a
-                    // common use-case for necking-down a track between pads.
-                    std::vector<PCB_TRACK*> sameWidthCandidates;
-                    std::vector<PCB_TRACK*> differentWidthCandidates;
-
-                    for( CN_ITEM* connected : citem->ConnectedItems() )
-                    {
-                        if( !connected->Valid() )
-                            continue;
-
-                        BOARD_CONNECTED_ITEM* candidate = connected->Parent();
-
-                        if( candidate->Type() == PCB_TRACE_T && !candidate->HasFlag( IS_DELETED ) )
-                        {
-                            PCB_TRACK* candidateSegment = static_cast<PCB_TRACK*>( candidate );
-
-                            if( candidateSegment->GetWidth() == segment->GetWidth() )
-                            {
-                                sameWidthCandidates.push_back( candidateSegment );
-                            }
-                            else
-                            {
-                                differentWidthCandidates.push_back( candidateSegment );
-                                break;
-                            }
-                        }
-                    }
-
-                    if( !differentWidthCandidates.empty() )
+                    // one can merge only collinear segments, not vias or arcs.
+                    if( segment->Type() != PCB_TRACE_T )
                         continue;
 
-                    for( PCB_TRACK* candidate : sameWidthCandidates )
+                    if( segment->HasFlag( IS_DELETED ) )  // already taken into account
+                        continue;
+
+                    // for each end of the segment:
+                    for( CN_ITEM* citem : connectivity->ItemEntry( segment ).GetItems() )
                     {
-                        if( segment->ApproxCollinear( *candidate )
-                                && mergeCollinearSegments( segment, candidate ) )
+                        // Do not merge an end which has different width tracks attached -- it's a
+                        // common use-case for necking-down a track between pads.
+                        std::vector<PCB_TRACK*> sameWidthCandidates;
+                        std::vector<PCB_TRACK*> differentWidthCandidates;
+
+                        for( CN_ITEM* connected : citem->ConnectedItems() )
                         {
-                            merged = true;
-                            break;
+                            if( !connected->Valid() )
+                                continue;
+
+                            BOARD_CONNECTED_ITEM* candidate = connected->Parent();
+
+                            if( candidate->Type() == PCB_TRACE_T
+                                    && !candidate->HasFlag( IS_DELETED ) )
+                            {
+                                PCB_TRACK* candidateSegment = static_cast<PCB_TRACK*>( candidate );
+
+                                if( candidateSegment->GetWidth() == segment->GetWidth() )
+                                {
+                                    sameWidthCandidates.push_back( candidateSegment );
+                                }
+                                else
+                                {
+                                    differentWidthCandidates.push_back( candidateSegment );
+                                    break;
+                                }
+                            }
+                        }
+
+                        if( !differentWidthCandidates.empty() )
+                            continue;
+
+                        for( PCB_TRACK* candidate : sameWidthCandidates )
+                        {
+                            if( segment->ApproxCollinear( *candidate )
+                                    && mergeCollinearSegments( segment, candidate ) )
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
-            }
-        } while( merged );
+
+                return false;
+            };
+
+    if( aMergeSegments )
+    {
+        do
+        {
+            m_brd->BuildConnectivity();
+            m_connectedItemsCache.clear();
+        } while( mergeSegments( m_brd->GetConnectivity()->GetConnectivityAlgo().get() ) );
     }
 
     for( PCB_TRACK* track : m_brd->Tracks() )
