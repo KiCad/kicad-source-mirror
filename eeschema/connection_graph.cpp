@@ -2725,7 +2725,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         if( unique_pins.size() > 1 && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
-            VECTOR2I pos;
+            wxPoint pos;
 
             if( pin )
             {
