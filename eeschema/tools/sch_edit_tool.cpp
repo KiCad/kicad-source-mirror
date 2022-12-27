@@ -193,29 +193,10 @@ bool SCH_EDIT_TOOL::Init()
     auto orientCondition =
             []( const SELECTION& aSel )
             {
-                if( aSel.Empty() )
-                    return false;
-
                 if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
                     return false;
 
-                if( aSel.GetSize() > 1 )
-                    return true;
-
-                SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
-
-                switch( item->Type() )
-                {
-                case SCH_MARKER_T:
-                case SCH_JUNCTION_T:
-                case SCH_NO_CONNECT_T:
-                case SCH_PIN_T:
-                    return false;
-                case SCH_LINE_T:
-                    return item->GetLayer() != LAYER_WIRE && item->GetLayer() != LAYER_BUS;
-                default:
-                    return true;
-                }
+                return SELECTION_CONDITIONS::HasTypes( SCH_EDIT_TOOL::RotatableItems )( aSel );
             };
 
     auto propertiesCondition =
@@ -510,7 +491,7 @@ bool SCH_EDIT_TOOL::Init()
 }
 
 
-const std::vector<KICAD_T> rotatableItems = {
+const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
@@ -526,15 +507,13 @@ const std::vector<KICAD_T> rotatableItems = {
     SCH_BUS_BUS_ENTRY_T,
     SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
-    SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T
 };
 
 
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     bool          clockwise = ( aEvent.Matches( EE_ACTIONS::rotateCW.MakeEvent() ) );
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( rotatableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -797,7 +776,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( rotatableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -1447,7 +1426,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( rotatableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
     SCH_ITEM*     head = static_cast<SCH_ITEM*>( selection.Front() );
     bool          moving = head && head->IsMoving();
 

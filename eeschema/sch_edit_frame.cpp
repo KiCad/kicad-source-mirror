@@ -414,6 +414,16 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( SchematicHierarchyPaneName() ).IsShown();
             };
 
+    auto orientCondition =
+            []( const SELECTION& aSel )
+            {
+                if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
+                    return false;
+
+                return SELECTION_CONDITIONS::HasTypes( SCH_EDIT_TOOL::RotatableItems )( aSel );
+            };
+
+
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
@@ -443,10 +453,10 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( hasElements ) );
 
-    mgr->SetConditions( EE_ACTIONS::rotateCW,         ENABLE( hasElements ) );
-    mgr->SetConditions( EE_ACTIONS::rotateCCW,        ENABLE( hasElements ) );
-    mgr->SetConditions( EE_ACTIONS::mirrorH,          ENABLE( hasElements ) );
-    mgr->SetConditions( EE_ACTIONS::mirrorV,          ENABLE( hasElements ) );
+    mgr->SetConditions( EE_ACTIONS::rotateCW,         ENABLE( orientCondition ) );
+    mgr->SetConditions( EE_ACTIONS::rotateCCW,        ENABLE( orientCondition ) );
+    mgr->SetConditions( EE_ACTIONS::mirrorH,          ENABLE( orientCondition ) );
+    mgr->SetConditions( EE_ACTIONS::mirrorV,          ENABLE( orientCondition ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,
                         CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
