@@ -144,8 +144,6 @@ static const std::vector<EVAL_CASE> eval_cases_valid = {
     { "-(1 + (2 - 4)) * 20.8 / 2", "10.4" },
     // Unary addition is a sign, not a leading operator
     { "+2 - 1", "1" },
-    // Unknown vars are 0.0
-    { "1 + unknown", "1" },
     // Set var in-string
     { "x = 1; 1 + x", "2" },
     // Multiple set vars
@@ -202,7 +200,8 @@ static const std::vector<EVAL_INVALID_CASE> eval_cases_invalid = {
     { "sdfsdf sdfsd" },
     // Div by 0
     { "1 / 0" },
-    { "1 / unknown" },
+    // Unknown vars are errors
+    { "1 + unknown" },
     // Semicolons can't be empty or redundant
     { ";" },
     { ";1" },
