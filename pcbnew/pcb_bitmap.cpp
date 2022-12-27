@@ -229,7 +229,7 @@ static struct PCB_BITMAP_DESC
         REGISTER_TYPE( PCB_BITMAP );
         propMgr.InheritsAfter( TYPE_HASH( PCB_BITMAP ), TYPE_HASH( BOARD_ITEM ) );
 
-        const wxString groupBitmap = _( "Bitmap Properties" );
+        const wxString groupBitmap = _HKI( "Bitmap Properties" );
 
         propMgr.AddProperty( new PROPERTY<PCB_BITMAP, double>( _HKI( "Scale" ),
                              &PCB_BITMAP::SetImageScale, &PCB_BITMAP::GetImageScale ),

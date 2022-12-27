@@ -1746,7 +1746,7 @@ static struct PAD_DESC
         propMgr.OverrideAvailability( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
                                       _HKI( "Net Class" ), isCopperPad );
 
-        const wxString groupPad = _( "Pad Properties" );
+        const wxString groupPad = _HKI( "Pad Properties" );
 
         auto padType = new PROPERTY_ENUM<PAD, PAD_ATTRIB>( _HKI( "Pad Type" ),
                     &PAD::SetAttribute, &PAD::GetAttribute );
@@ -1801,7 +1801,7 @@ static struct PAD_DESC
         padToDie->SetAvailableFunc( isCopperPad );
         propMgr.AddProperty( padToDie, groupPad );
 
-        const wxString groupOverrides = _( "Overrides" );
+        const wxString groupOverrides = _HKI( "Overrides" );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Clearance Override" ),
                     &PAD::SetLocalClearance, &PAD::GetLocalClearance,

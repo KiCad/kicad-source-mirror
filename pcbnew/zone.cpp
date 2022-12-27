@@ -1432,7 +1432,7 @@ static struct ZONE_DESC
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
                     &ZONE::SetZoneName, &ZONE::GetZoneName ) );
 
-        const wxString groupFill = _( "Fill Style" );
+        const wxString groupFill = _HKI( "Fill Style" );
 
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>( _HKI( "Fill Mode" ),
                     &ZONE::SetFillMode, &ZONE::GetFillMode ), groupFill );
@@ -1461,7 +1461,7 @@ static struct ZONE_DESC
         // TODO: Smoothing amount (double)
         // Unexposed properties (HatchHoleMinArea / HatchBorderAlgorithm)?
 
-        const wxString groupOverrides = _( "Overrides" );
+        const wxString groupOverrides = _HKI( "Overrides" );
 
         auto clearanceOverride = new PROPERTY<ZONE, int>( _HKI( "Clearance Override" ),
                     &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,

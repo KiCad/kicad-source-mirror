@@ -1301,7 +1301,7 @@ static struct DIMENSION_DESC
         REGISTER_TYPE( PCB_DIMENSION_BASE );
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIMENSION_BASE ), TYPE_HASH( BOARD_ITEM ) );
 
-        const wxString groupDimension = _( "Dimension Properties" );
+        const wxString groupDimension = _HKI( "Dimension Properties" );
 
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Override Text" ),
                 &PCB_DIMENSION_BASE::SetOverrideText, &PCB_DIMENSION_BASE::GetOverrideText ),

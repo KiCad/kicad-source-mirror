@@ -2866,7 +2866,7 @@ static struct FOOTPRINT_DESC
                     &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ) );
 
-        const wxString groupFootprint = _( "Footprint Properties" );
+        const wxString groupFootprint = _HKI( "Footprint Properties" );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Reference" ),
                     &FOOTPRINT::SetReference, &FOOTPRINT::GetReferenceAsString ),
@@ -2885,7 +2885,7 @@ static struct FOOTPRINT_DESC
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ),
                     groupFootprint );
 
-        const wxString groupAttributes = _( "Fabrication Attributes" );
+        const wxString groupAttributes = _HKI( "Fabrication Attributes" );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Not in schematic" ),
                     &FOOTPRINT::SetBoardOnly, &FOOTPRINT::IsBoardOnly ), groupAttributes );
@@ -2896,7 +2896,7 @@ static struct FOOTPRINT_DESC
                     &FOOTPRINT::SetExcludedFromBOM, &FOOTPRINT::IsExcludedFromBOM ),
                     groupAttributes );
 
-        const wxString groupOverrides = _( "Overrides" );
+        const wxString groupOverrides = _HKI( "Overrides" );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>(
                     _HKI( "Exempt from courtyard requirement" ),
