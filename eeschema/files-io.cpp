@@ -674,6 +674,9 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     wxCHECK( screen, false );
 
+    // Cannot save to nowhere
+    wxCHECK( !aSavePath.IsEmpty(), false );
+
     // Construct the name of the file to be saved
     schematicFileName = Prj().AbsolutePath( aSavePath );
     oldFileName = schematicFileName;
@@ -771,10 +774,10 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     wxString msg;
     SCH_SCREEN* screen;
     SCH_SCREENS screens( Schematic().Root() );
-    bool        saveCopy         = aSaveAs && !Kiface().IsSingle();
-    bool        success          = true;
-    bool        updateFileType   = false;
-    bool        createNewProject = false;
+    bool        saveCopy          = aSaveAs && !Kiface().IsSingle();
+    bool        success           = true;
+    bool        updateFileHistory = false;
+    bool        createNewProject  = false;
 
     // I want to see it in the debugger, show me the string!  Can't do that with wxFileName.
     wxString    fileName = Prj().AbsolutePath( Schematic().Root().GetFileName() );
@@ -856,6 +859,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         {
             Schematic().Root().SetFileName( newFileName.GetFullName() );
             Schematic().RootScreen()->SetFileName( newFileName.GetFullPath() );
+            updateFileHistory = true;
         }
         else
         {
@@ -933,6 +937,11 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             sheet.MakeFilePathRelativeToParentSheet();
         }
     }
+    else if( !fn.FileExists() )
+    {
+        // File doesn't exist yet; true if we just imported something
+        updateFileHistory = true;
+    }
 
     if( filenameMap.empty() || !saveCopy )
     {
@@ -999,7 +1008,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
         if( tmpFn.IsOk() && tmpFn.GetExt() != KiCadSchematicFileExtension )
         {
-            updateFileType = true;
+            updateFileHistory = true;
             tmpFn.SetExt( KiCadSchematicFileExtension );
 
             for( EDA_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
@@ -1020,6 +1029,10 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             if( !saveCopy )
                 screen->SetFileName( tmpFn.GetFullPath() );
         }
+
+        // Do not save sheet symbols with no valid filename set
+        if( !tmpFn.IsOk() )
+            continue;
 
         std::vector<SCH_SHEET_PATH>& sheets = screen->GetClientSheetPaths();
 
@@ -1045,7 +1058,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     if( aSaveAs && success )
         LockFile( Schematic().RootScreen()->GetFileName() );
 
-    if( updateFileType )
+    if( updateFileHistory )
         UpdateFileHistory( Schematic().RootScreen()->GetFileName() );
 
     // Save the sheet name map to the project file
