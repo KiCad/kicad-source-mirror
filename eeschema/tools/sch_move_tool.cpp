@@ -486,20 +486,40 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     EDA_ITEMS connectedDragItems;
 
                     // Add connections to the selection for a drag.
-                    //
+                    // Do all non-labels/entries first so we don't add junctions to drag
+                    // when the line will eventually be drag selected.
+                    std::vector<SCH_ITEM*> stageTwo;
+
                     for( EDA_ITEM* edaItem : selection )
                     {
                         SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
                         std::vector<VECTOR2I> connections;
 
-                        if( item->Type() == SCH_LINE_T )
+                        switch( item->Type() )
+                        {
+                        case SCH_LABEL_T:
+                        case SCH_HIER_LABEL_T:
+                        case SCH_GLOBAL_LABEL_T:
+                        case SCH_DIRECTIVE_LABEL_T:
+                            stageTwo.emplace_back(item);
+                            break;
+
+                        case SCH_LINE_T:
                             static_cast<SCH_LINE*>( item )->GetSelectedPoints( connections );
-                        else
+                            break;
+                        default:
                             connections = item->GetConnectionPoints();
+                        }
 
                         for( VECTOR2I point : connections )
                             getConnectedDragItems( item, point, connectedDragItems, appendUndo );
                     }
+
+                    // Go back and get all label connections now that we can test for drag-selected
+                    // lines the labels might be on
+                    for( SCH_ITEM* item : stageTwo )
+                        for( VECTOR2I point : item->GetConnectionPoints() )
+                            getConnectedDragItems( item, point, connectedDragItems, appendUndo );
 
                     for( EDA_ITEM* item : connectedDragItems )
                     {
@@ -1219,7 +1239,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                 case SCH_DIRECTIVE_LABEL_T:
                     // Only add a line if this line is unselected; if the label and line are both
                     // selected they'll move together
-                    if( line->HitTest( aPoint, 1 ) && !line->HasFlag( SELECTED ) )
+                    if( line->HitTest( aPoint, 1 ) && !line->HasFlag( SELECTED )
+                        && !line->HasFlag( SELECTED_BY_DRAG ) )
                     {
                         newWire = makeNewWire( line, aSelectedItem, aPoint, aPoint );
                         newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
@@ -1234,7 +1255,6 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                             // Split line in half
                             if( !line->IsNew() )
                             {
-                                line->SetFlags( SELECTED_BY_DRAG );
                                 saveCopyInUndoList( line, UNDO_REDO::CHANGED, aAppendUndo );
                                 aAppendUndo = true;
                             }
@@ -1245,11 +1265,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                             SCH_LINE*     secondHalf = makeNewWire( line, line, aPoint, oldEnd );
                             SCH_JUNCTION* junction = makeNewJunction( line, aPoint );
 
-                            secondHalf->SetFlags( SELECTED_BY_DRAG );
                             saveCopyInUndoList( secondHalf, UNDO_REDO::NEWITEM, aAppendUndo );
                             aAppendUndo = true;
 
-                            junction->SetFlags( SELECTED_BY_DRAG );
                             saveCopyInUndoList( junction, UNDO_REDO::NEWITEM, aAppendUndo );
                             aAppendUndo = true;
                         }
