@@ -99,18 +99,21 @@ void NUMERIC_EVALUATOR::LocaleChanged()
 }
 
 
+// NOT UNUSED.  Called by LEMON grammar.
 void NUMERIC_EVALUATOR::parseError( const char* s )
 {
     m_parseError = true;
 }
 
 
+// NOT UNUSED.  Called by LEMON grammar.
 void NUMERIC_EVALUATOR::parseOk()
 {
     m_parseFinished = true;
 }
 
 
+// NOT UNUSED.  Called by LEMON grammar.
 void NUMERIC_EVALUATOR::parseSetResult( double val )
 {
     if( std::isnan( val ) )
@@ -429,7 +432,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         const char* cptr = &m_token.input[ m_token.pos ];
         cptr++;
 
-        while( isalnum( *cptr ))
+        while( isalnum( *cptr ) )
             cptr++;
 
         retval.token = VAR;
@@ -474,8 +477,15 @@ void NUMERIC_EVALUATOR::SetVar( const wxString& aString, double aValue )
 
 double NUMERIC_EVALUATOR::GetVar( const wxString& aString )
 {
-    if( m_varMap[ aString ] )
-        return m_varMap[ aString ];
+    auto it = m_varMap.find( aString );
+
+    if( it != m_varMap.end() )
+    {
+        return it->second;
+    }
     else
+    {
+        m_parseError = true;
         return 0.0;
+    }
 }

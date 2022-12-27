@@ -47,8 +47,8 @@ void SIM_PROPERTY::Disable()
 }
 
 
-SIM_BOOL_PROPERTY::SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName, SIM_MODEL& aModel,
-                                      int aParamIndex ) :
+SIM_BOOL_PROPERTY::SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName,
+                                      SIM_MODEL& aModel, int aParamIndex ) :
         wxBoolProperty( aLabel, aName ),
         SIM_PROPERTY( aModel, aParamIndex )
 {
@@ -84,8 +84,9 @@ void SIM_BOOL_PROPERTY::OnSetValue()
 }
 
 
-SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName, SIM_MODEL& aModel,
-                                          int aParamIndex, SIM_VALUE::TYPE aValueType,
+SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName,
+                                          SIM_MODEL& aModel, int aParamIndex,
+                                          SIM_VALUE::TYPE aValueType,
                                           SIM_VALUE_GRAMMAR::NOTATION aNotation ) :
         wxStringProperty( aLabel, aName ),
         SIM_PROPERTY( aModel, aParamIndex ),
@@ -161,7 +162,8 @@ bool SIM_STRING_PROPERTY::allowEval() const
 }
 
 
-bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
+bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                         int aArgFlags ) const
 {
     if( m_disabled )
         return false;
@@ -191,16 +193,22 @@ static wxArrayString convertStringsToWx( const std::vector<std::string>& aString
 }
 
 
-SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName, SIM_MODEL& aModel,
-                                      int aParamIndex ) :
-        wxEnumProperty( aLabel, aName, convertStringsToWx( aModel.GetParam( aParamIndex ).info.enumValues ) ),
+SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
+                                      SIM_MODEL& aModel, int aParamIndex ) :
+        wxEnumProperty( aLabel, aName,
+                        convertStringsToWx( aModel.GetParam( aParamIndex ).info.enumValues ) ),
         SIM_PROPERTY( aModel, aParamIndex )
 {
-    auto it = std::find( GetParam().info.enumValues.begin(), GetParam().info.enumValues.end(),
-                         GetParam().value->ToString() );
+    for( int ii = 0; ii < (int) GetParam().info.enumValues.size(); ++ii )
+    {
+        if( GetParam().info.enumValues[ii] == GetParam().value->ToString() )
+        {
+            SetValue( ii );
+            return;
+        }
+    }
 
-    // we need the force cast for msvc because wxVariant lacks 64-bit methods due to `long`
-    SetValue( static_cast<int>( std::distance( GetParam().info.enumValues.begin(), it ) ) );
+    SetValue( -1 );
 }
 
 
