@@ -95,6 +95,9 @@ public:
     bool OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event ) override;
 
 protected:
+    bool allowEval() const;
+
+protected:
     SIM_VALUE::TYPE              m_valueType;
     SIM_VALUE_GRAMMAR::NOTATION  m_notation;
 };

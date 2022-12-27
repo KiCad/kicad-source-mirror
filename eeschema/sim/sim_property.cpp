@@ -98,7 +98,7 @@ SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString
 
 bool SIM_STRING_PROPERTY::OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event )
 {
-    if( event.GetEventType() == wxEVT_SET_FOCUS )
+    if( event.GetEventType() == wxEVT_SET_FOCUS && allowEval() )
     {
         wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wnd_primary );
 
@@ -116,7 +116,7 @@ bool SIM_STRING_PROPERTY::OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_prima
             return true;
         }
     }
-    else if( event.GetEventType() == wxEVT_KILL_FOCUS )
+    else if( event.GetEventType() == wxEVT_KILL_FOCUS && allowEval() )
     {
         wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wnd_primary );
 
@@ -154,19 +154,26 @@ wxValidator* SIM_STRING_PROPERTY::DoGetValidator() const
 }
 
 
+bool SIM_STRING_PROPERTY::allowEval() const
+{
+    return m_valueType == SIM_VALUE::TYPE_INT
+            || m_valueType == SIM_VALUE::TYPE_FLOAT;
+}
+
+
 bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
 {
     if( m_disabled )
         return false;
 
-    wxString evaledText;
+    wxString text;
 
-    if( m_needsEval && m_eval.Process( aText ) )
-        evaledText = m_eval.Result();
+    if( allowEval() && m_needsEval && m_eval.Process( aText ) )
+        text = m_eval.Result();
     else
-        evaledText = aText;
+        text = aText;
 
-    m_model.SetParamValue( m_paramIndex, std::string( evaledText.ToUTF8() ) );
+    m_model.SetParamValue( m_paramIndex, std::string( text.ToUTF8() ) );
     aVariant = GetParam().value->ToString();
 
     return true;
