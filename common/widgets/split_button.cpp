@@ -103,8 +103,11 @@ void SPLIT_BUTTON::SetBitmap( const wxBitmap& aBmp )
 
 void SPLIT_BUTTON::SetLabel( const wxString& aLabel )
 {
-    m_label = aLabel;
-    Refresh();
+    if( m_label != aLabel )
+    {
+        m_label = aLabel;
+        Refresh();
+    }
 }
 
 
@@ -116,9 +119,12 @@ wxMenu* SPLIT_BUTTON::GetSplitButtonMenu()
 
 void SPLIT_BUTTON::OnKillFocus( wxFocusEvent& aEvent )
 {
-    m_stateButton = wxCONTROL_CURRENT;
-    m_stateMenu   = wxCONTROL_CURRENT;
-    Refresh();
+    if( m_stateButton != 0 || m_stateMenu != 0 )
+    {
+        m_stateButton = 0;
+        m_stateMenu   = 0;
+        Refresh();
+    }
 
     aEvent.Skip();
 }
@@ -126,9 +132,12 @@ void SPLIT_BUTTON::OnKillFocus( wxFocusEvent& aEvent )
 
 void SPLIT_BUTTON::OnMouseLeave( wxMouseEvent& aEvent )
 {
-    m_stateButton = 0;
-    m_stateMenu   = 0;
-    Refresh();
+    if( m_stateButton != 0 || m_stateMenu != 0 )
+    {
+        m_stateButton = 0;
+        m_stateMenu   = 0;
+        Refresh();
+    }
 
     aEvent.Skip();
 }
@@ -136,9 +145,12 @@ void SPLIT_BUTTON::OnMouseLeave( wxMouseEvent& aEvent )
 
 void SPLIT_BUTTON::OnMouseEnter( wxMouseEvent& aEvent )
 {
-    m_stateButton = wxCONTROL_CURRENT;
-    m_stateMenu   = wxCONTROL_CURRENT;
-    Refresh();
+    if( m_stateButton != wxCONTROL_CURRENT || m_stateMenu != wxCONTROL_CURRENT )
+    {
+        m_stateButton = wxCONTROL_CURRENT;
+        m_stateMenu   = wxCONTROL_CURRENT;
+        Refresh();
+    }
 
     aEvent.Skip();
 }
@@ -313,18 +325,21 @@ bool SPLIT_BUTTON::Enable( bool aEnable )
     m_bIsEnable = aEnable;
     wxPanel::Enable( m_bIsEnable );
 
-    if( m_bIsEnable )
+    if( m_bIsEnable
+            && ( m_stateButton == wxCONTROL_DISABLED || m_stateMenu == wxCONTROL_DISABLED ) )
     {
         m_stateButton = 0;
         m_stateMenu   = 0;
+        Refresh();
     }
-    else
+
+    if( !m_bIsEnable
+            && ( m_stateButton != wxCONTROL_DISABLED || m_stateMenu != wxCONTROL_DISABLED ) )
     {
         m_stateButton = wxCONTROL_DISABLED;
         m_stateMenu   = wxCONTROL_DISABLED;
+        Refresh();
     }
-
-    Refresh();
 
     return aEnable;
 }

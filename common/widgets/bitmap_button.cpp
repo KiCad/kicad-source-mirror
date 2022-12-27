@@ -115,24 +115,36 @@ void BITMAP_BUTTON::AcceptDragInAsClick( bool aAcceptDragIn )
 
 void BITMAP_BUTTON::OnMouseLeave( wxEvent& aEvent )
 {
-    clearFlag( wxCONTROL_CURRENT | wxCONTROL_PRESSED );
-    Refresh();
+    if( hasFlag( wxCONTROL_CURRENT | wxCONTROL_PRESSED ) )
+    {
+        clearFlag( wxCONTROL_CURRENT | wxCONTROL_PRESSED );
+        Refresh();
+    }
+
     aEvent.Skip();
 }
 
 
 void BITMAP_BUTTON::OnMouseEnter( wxEvent& aEvent )
 {
-    setFlag( wxCONTROL_CURRENT );
-    Refresh();
+    if( !hasFlag( wxCONTROL_CURRENT ) )
+    {
+        setFlag( wxCONTROL_CURRENT );
+        Refresh();
+    }
+
     aEvent.Skip();
 }
 
 
 void BITMAP_BUTTON::OnKillFocus( wxEvent& aEvent )
 {
-    clearFlag( wxCONTROL_FOCUSED );
-    Refresh();
+    if( hasFlag( wxCONTROL_FOCUSED | wxCONTROL_CURRENT | wxCONTROL_PRESSED ) )
+    {
+        clearFlag( wxCONTROL_FOCUSED | wxCONTROL_CURRENT | wxCONTROL_PRESSED );
+        Refresh();
+    }
+
     aEvent.Skip();
 }
 
@@ -140,9 +152,14 @@ void BITMAP_BUTTON::OnKillFocus( wxEvent& aEvent )
 void BITMAP_BUTTON::OnSetFocus( wxEvent& aEvent )
 {
     if( !hasFlag( wxCONTROL_CHECKABLE ) )
-        setFlag( wxCONTROL_FOCUSED );
+    {
+        if( !hasFlag( wxCONTROL_FOCUSED ) )
+        {
+            setFlag( wxCONTROL_FOCUSED );
+            Refresh();
+        }
+    }
 
-    Refresh();
     aEvent.Skip();
 }
 
@@ -288,12 +305,17 @@ bool BITMAP_BUTTON::Enable( bool aEnable )
 
     wxPanel::Enable( aEnable );
 
-    if( aEnable )
+    if( aEnable && hasFlag( wxCONTROL_DISABLED ) )
+    {
         clearFlag( wxCONTROL_DISABLED );
-    else
-        setFlag( wxCONTROL_DISABLED );
+        Refresh();
+    }
 
-    Refresh();
+    if( !aEnable && !hasFlag( wxCONTROL_DISABLED ) )
+    {
+        setFlag( wxCONTROL_DISABLED );
+        Refresh();
+    }
 
     return true;
 }
@@ -323,12 +345,17 @@ void BITMAP_BUTTON::Check( bool aCheck )
 {
     wxASSERT_MSG( hasFlag( wxCONTROL_CHECKABLE ), "Button is not a checkButton." );
 
-    if( aCheck )
+    if( aCheck && !hasFlag( wxCONTROL_CHECKED ) )
+    {
         setFlag( wxCONTROL_CHECKED );
-    else
-        clearFlag( wxCONTROL_CHECKED );
+        Refresh();
+    }
 
-    Refresh();
+    if( !aCheck && hasFlag( wxCONTROL_CHECKED ) )
+    {
+        clearFlag( wxCONTROL_CHECKED );
+        Refresh();
+    }
 }
 
 

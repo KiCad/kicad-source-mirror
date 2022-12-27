@@ -83,8 +83,11 @@ void STD_BITMAP_BUTTON::SetBitmap( const wxBitmap& aBmp )
 
 void STD_BITMAP_BUTTON::OnKillFocus( wxFocusEvent& aEvent )
 {
-    m_stateButton = wxCONTROL_CURRENT;
-    Refresh();
+    if( m_stateButton != 0 )
+    {
+        m_stateButton = 0;
+        Refresh();
+    }
 
     aEvent.Skip();
 }
@@ -92,8 +95,11 @@ void STD_BITMAP_BUTTON::OnKillFocus( wxFocusEvent& aEvent )
 
 void STD_BITMAP_BUTTON::OnMouseLeave( wxMouseEvent& aEvent )
 {
-    m_stateButton = 0;
-    Refresh();
+    if( m_stateButton != 0 )
+    {
+        m_stateButton = 0;
+        Refresh();
+    }
 
     aEvent.Skip();
 }
@@ -101,8 +107,11 @@ void STD_BITMAP_BUTTON::OnMouseLeave( wxMouseEvent& aEvent )
 
 void STD_BITMAP_BUTTON::OnMouseEnter( wxMouseEvent& aEvent )
 {
-    m_stateButton = wxCONTROL_CURRENT;
-    Refresh();
+    if( m_stateButton != wxCONTROL_CURRENT )
+    {
+        m_stateButton = wxCONTROL_CURRENT;
+        Refresh();
+    }
 
     aEvent.Skip();
 }
@@ -213,12 +222,17 @@ bool STD_BITMAP_BUTTON::Enable( bool aEnable )
     m_bIsEnable = aEnable;
     wxPanel::Enable( m_bIsEnable );
 
-    if( m_bIsEnable )
+    if( m_bIsEnable && m_stateButton == wxCONTROL_DISABLED )
+    {
         m_stateButton = 0;
-    else
-        m_stateButton = wxCONTROL_DISABLED;
+        Refresh();
+    }
 
-    Refresh();
+    if( !m_bIsEnable && m_stateButton != wxCONTROL_DISABLED )
+    {
+        m_stateButton = wxCONTROL_DISABLED;
+        Refresh();
+    }
 
     return aEnable;
 }
