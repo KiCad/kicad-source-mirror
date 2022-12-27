@@ -1690,7 +1690,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
     if( drawingDangling || drawingShadows )
     {
         if( ( aLine->IsWire() && aLine->IsStartDangling() )
-            || ( drawingShadows && aLine->IsSelected() && !aLine->IsNew()
+            || ( aLine->IsGraphicLine() && drawingShadows && aLine->IsSelected() && !aLine->IsNew()
                  && !aLine->HasFlag( STARTPOINT ) ) )
         {
             COLOR4D danglingColor =
@@ -1702,7 +1702,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
         }
 
         if( ( aLine->IsWire() && aLine->IsEndDangling() )
-            || ( drawingShadows && aLine->IsSelected() && !aLine->IsNew()
+            || ( aLine->IsGraphicLine() && drawingShadows && aLine->IsSelected() && !aLine->IsNew()
                  && !aLine->HasFlag( ENDPOINT ) ) )
         {
             COLOR4D danglingColor =
