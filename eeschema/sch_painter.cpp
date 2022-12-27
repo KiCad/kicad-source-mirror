@@ -1690,7 +1690,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
     if( drawingDangling || drawingShadows )
     {
         if( ( aLine->IsWire() && aLine->IsStartDangling() )
-            || ( aLine->IsGraphicLine() && drawingShadows && aLine->IsSelected() && !aLine->IsNew()
+            || ( drawingShadows && aLine->IsSelected() && !aLine->IsNew()
                  && !aLine->HasFlag( STARTPOINT ) ) )
         {
             COLOR4D danglingColor =
@@ -1702,7 +1702,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
         }
 
         if( ( aLine->IsWire() && aLine->IsEndDangling() )
-            || ( aLine->IsGraphicLine() && drawingShadows && aLine->IsSelected() && !aLine->IsNew()
+            || ( drawingShadows && aLine->IsSelected() && !aLine->IsNew()
                  && !aLine->HasFlag( ENDPOINT ) ) )
         {
             COLOR4D danglingColor =
@@ -2670,14 +2670,18 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
         return;
 
     if( aEntry->IsSelected() )
+    {
         line.SetSelected();
+        // Never show unselected endpoints on bus entries
+        line.SetFlags( STARTPOINT | ENDPOINT );
+    }
     else if( aEntry->IsBrightened() )
         line.SetBrightened();
 
     line.SetStartPoint( aEntry->GetPosition() );
     line.SetEndPoint( aEntry->GetEnd() );
     line.SetStroke( aEntry->GetStroke() );
-    line.SetLineWidth( KiROUND( getLineWidth( aEntry, drawingShadows ) ) );
+    line.SetLineWidth( KiROUND( getLineWidth( aEntry, false ) ) );
 
     COLOR4D color = getRenderColor( aEntry, LAYER_WIRE, drawingShadows );
 
