@@ -465,7 +465,10 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
         return true;
 
     if( frame->NonUserClose( doForce ) )
+    {
+        m_playerFrameId[aFrameType] = wxID_NONE;
         return true;
+    }
 
     return false;
 }

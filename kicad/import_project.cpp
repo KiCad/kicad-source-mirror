@@ -69,7 +69,8 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     // OK, we got a new project to open.  Time to close any existing project before we go on
     // to collect info about where to put the new one, etc.  Otherwise the workflow is kind of
     // disjoint.
-    CloseProject( true );
+    if( !CloseProject( true ) )
+        return;
 
     wxFileName sch( schdlg.GetPath() );
     sch.SetExt( aSchFileExtension );
