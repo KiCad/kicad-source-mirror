@@ -345,9 +345,19 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
         {
             SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
 
-            if( label->GetFields().size() > 0 ) // Can be not the case when reading a old .sch schematic
+            if( label->GetFields().size() > 0 ) // Possible when reading a legacy .sch schematic
             {
-                SCH_FIELD&       intersheetRefs = label->GetFields()[0];
+                SCH_FIELD&  intersheetRefs = label->GetFields()[0];
+
+                // Fixup for legacy files which didn't store a position for the intersheet refs
+                // unless they were shown.
+                if( label->GetFields().size() == 1
+                        && intersheetRefs.GetInternalName() == wxT( "Intersheet References" )
+                        && intersheetRefs.GetPosition() == VECTOR2I( 0, 0 )
+                        && !intersheetRefs.IsVisible() )
+                {
+                    label->AutoplaceFields( LastScreen(), false );
+                }
 
                 intersheetRefs.SetVisible( label->Schematic()->Settings().m_IntersheetRefsShow );
                 LastScreen()->Update( &intersheetRefs );
