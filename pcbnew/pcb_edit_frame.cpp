@@ -684,6 +684,21 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::doDelete, ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::duplicate, ENABLE( cond.HasItems() ) );
 
+    auto canMirror =
+            [ this ]( const SELECTION& aSelection )
+            {
+                if( !this->IsType( FRAME_FOOTPRINT_EDITOR )
+                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_PAD_T } )( aSelection ) )
+                {
+                    return false;
+                }
+
+                return SELECTION_CONDITIONS::HasTypes( EDIT_TOOL::MirrorableItems )( aSelection );
+            };
+
+    mgr->SetConditions( PCB_ACTIONS::mirrorH, ENABLE( canMirror ) );
+    mgr->SetConditions( PCB_ACTIONS::mirrorV, ENABLE( canMirror ) );
+
     mgr->SetConditions( PCB_ACTIONS::group, ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
     mgr->SetConditions( PCB_ACTIONS::ungroup, ENABLE( SELECTION_CONDITIONS::HasType( PCB_GROUP_T ) ) );
     mgr->SetConditions( PCB_ACTIONS::lock, ENABLE( PCB_SELECTION_CONDITIONS::HasUnlockedItems ) );

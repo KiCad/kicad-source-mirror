@@ -111,6 +111,8 @@ public:
      */
     int Mirror( const TOOL_EVENT& aEvent );
 
+    static const std::vector<KICAD_T> MirrorableItems;
+
     /**
      * Swap currently selected items' positions. Changes position of each item to the next.
      */

@@ -144,6 +144,18 @@ bool EDIT_TOOL::Init()
                 return m_isFootprintEditor;
             };
 
+    auto canMirror =
+            [ this ]( const SELECTION& aSelection )
+            {
+                if( !m_isFootprintEditor
+                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_PAD_T } )( aSelection ) )
+                {
+                    return false;
+                }
+
+                return SELECTION_CONDITIONS::HasTypes( EDIT_TOOL::MirrorableItems )( aSelection );
+            };
+
     auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } )
                                         && SELECTION_CONDITIONS::Count( 1 );
 
@@ -218,10 +230,8 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirrorH,           SELECTION_CONDITIONS::NotEmpty
-                                                      && !singleFootprintCondition );
-    menu.AddItem( PCB_ACTIONS::mirrorV,           SELECTION_CONDITIONS::NotEmpty
-                                                      && !singleFootprintCondition );
+    menu.AddItem( PCB_ACTIONS::mirrorH,           canMirror );
+    menu.AddItem( PCB_ACTIONS::mirrorV,           canMirror );
     menu.AddItem( PCB_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ) );
     menu.AddItem( PCB_ACTIONS::packAndMoveFootprints, SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
@@ -1582,6 +1592,21 @@ static void mirrorPadY( PAD& aPad, const VECTOR2I& aMirrorPoint )
 }
 
 
+const std::vector<KICAD_T> EDIT_TOOL::MirrorableItems = {
+        PCB_FP_SHAPE_T,
+        PCB_SHAPE_T,
+        PCB_FP_TEXT_T,
+        PCB_TEXT_T,
+        PCB_FP_TEXTBOX_T,
+        PCB_TEXTBOX_T,
+        PCB_FP_ZONE_T,
+        PCB_ZONE_T,
+        PCB_PAD_T,
+        PCB_TRACE_T,
+        PCB_ARC_T,
+        PCB_VIA_T,
+};
+
 int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -1623,29 +1648,11 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        // only modify items we can mirror
-        switch( item->Type() )
-        {
-        case PCB_FP_SHAPE_T:
-        case PCB_SHAPE_T:
-        case PCB_FP_TEXT_T:
-        case PCB_TEXT_T:
-        case PCB_FP_TEXTBOX_T:
-        case PCB_TEXTBOX_T:
-        case PCB_FP_ZONE_T:
-        case PCB_ZONE_T:
-        case PCB_PAD_T:
-        case PCB_TRACE_T:
-        case PCB_ARC_T:
-        case PCB_VIA_T:
-            if( !item->IsNew() && !IsFootprintEditor() )
-                m_commit->Modify( item );
-
-            break;
-
-        default:
+        if( !item->IsType( MirrorableItems ) )
             continue;
-        }
+
+        if( !item->IsNew() && !IsFootprintEditor() )
+            m_commit->Modify( item );
 
         // modify each object as necessary
         switch( item->Type() )
