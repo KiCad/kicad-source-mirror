@@ -744,9 +744,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     // along the sheet edges.
                     for( const auto& [pin, lineEnd] : m_specialCaseSheetPins )
                     {
-                        if( lineEnd.second )
+                        if( lineEnd.second && lineEnd.first->HasFlag( STARTPOINT ) )
                             lineEnd.first->SetStartPoint( pin->GetPosition() );
-                        else
+                        else if( !lineEnd.second && lineEnd.first->HasFlag( ENDPOINT ) )
                             lineEnd.first->SetEndPoint( pin->GetPosition() );
                     }
                 }
