@@ -72,6 +72,7 @@ public:
     long GetSelection();
 
 private:
+    virtual void onSize( wxSizeEvent& event ) override;
     void onListItemActivated( wxListEvent& event ) override;
     void textChangeInFilterBox(wxCommandEvent& event) override;
 

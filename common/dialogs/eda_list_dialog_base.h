@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,6 +42,7 @@ class EDA_LIST_DIALOG_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onSize( wxSizeEvent& event ) = 0;
 		virtual void onListItemActivated( wxListEvent& event ) = 0;
 		virtual void textChangeInFilterBox( wxCommandEvent& event ) = 0;
 
@@ -50,6 +51,7 @@ class EDA_LIST_DIALOG_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_ButtonsSizer;
 
 		EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~EDA_LIST_DIALOG_BASE();
 
 };

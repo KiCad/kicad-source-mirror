@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 // not, in repeatedly creating/destroying a wxDC to do the measurement in).
 // Use default column widths instead.
 static int DEFAULT_SINGLE_COL_WIDTH = 260;
-static int DEFAULT_COL_WIDTHS[] = { 200, 600 };
+static int DEFAULT_COL_WIDTHS[] = { 200, 300 };
 
 
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
@@ -55,9 +55,8 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
 
     SetupStandardButtons();
 
-    // this line fixes an issue on Linux Ubuntu using Unity (dialog not shown),
-    // and works fine on all systems
-    GetSizer()->Fit(  this );
+    Layout();
+    GetSizer()->Fit( this );
 
     Centre();
 }
@@ -69,14 +68,20 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxStr
     {
         m_listBox->InsertColumn( 0, aItemHeaders.Item( 0 ), wxLIST_FORMAT_LEFT,
                                  DEFAULT_SINGLE_COL_WIDTH );
+
+        m_listBox->SetMinClientSize( wxSize( DEFAULT_SINGLE_COL_WIDTH, 200 ) );
+        SetMinClientSize( wxSize( DEFAULT_COL_WIDTHS[0], 220 ) );
     }
-    else
+    else if( aItemHeaders.Count() == 2 )
     {
         for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
         {
             m_listBox->InsertColumn( i, aItemHeaders.Item( i ), wxLIST_FORMAT_LEFT,
                                      DEFAULT_COL_WIDTHS[ i ] );
         }
+
+        m_listBox->SetMinClientSize( wxSize( DEFAULT_COL_WIDTHS[0] * 3, 200 ) );
+        SetMinClientSize( wxSize( DEFAULT_COL_WIDTHS[0] * 2, 220 ) );
     }
 
     InsertItems( m_itemsList, 0 );
@@ -219,6 +224,23 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
 void EDA_LIST_DIALOG::onListItemActivated( wxListEvent& event )
 {
     wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+}
+
+
+void EDA_LIST_DIALOG::onSize( wxSizeEvent& event )
+{
+    if( m_listBox->GetColumnCount() == 1 )
+    {
+        m_listBox->SetColumnWidth( 0, m_listBox->GetClientSize().x );
+    }
+    else if( m_listBox->GetColumnCount() == 2 )
+    {
+        int first = KiROUND( m_listBox->GetClientSize().x * 0.42 );
+        m_listBox->SetColumnWidth( 0, first );
+        m_listBox->SetColumnWidth( 1, m_listBox->GetClientSize().x - first );
+    }
+
+    event.Skip();
 }
 
 
