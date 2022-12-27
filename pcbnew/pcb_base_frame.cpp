@@ -677,9 +677,6 @@ void PCB_BASE_FRAME::ShowChangedLanguage()
 
     // tooltips in toolbars
     RecreateToolbars();
-
-    // status bar
-    UpdateMsgPanel();
 }
 
 

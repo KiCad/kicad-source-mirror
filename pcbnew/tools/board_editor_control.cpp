@@ -1243,7 +1243,6 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
         commit.Push( aMode == ON ? _( "Lock" ) : _( "Unlock" ) );
 
         m_toolMgr->PostEvent( EVENTS::SelectedEvent );
-        m_frame->UpdateMsgPanel();
         m_frame->OnModify();
     }
 
@@ -1524,7 +1523,8 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     if( dlg.ShowModal() == wxID_OK )
     {
         board()->SynchronizeNetsAndNetClasses( false );
-        m_frame->UpdateMsgPanel();
+        // Refresh UI that depends on netclasses, such as the properties panel
+        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
     }
 
     return 0;

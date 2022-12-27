@@ -407,8 +407,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     if( wasLocked != m_item->IsLocked() )
         m_parent->GetToolManager()->PostEvent( EVENTS::SelectedEvent );
 
-    m_parent->UpdateMsgPanel();
-
     return true;
 }
 

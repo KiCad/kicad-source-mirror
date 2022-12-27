@@ -669,8 +669,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     m_editedPoint = nullptr;
 
-    frame()->UpdateMsgPanel();
-
     return 0;
 }
 

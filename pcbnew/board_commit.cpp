@@ -171,6 +171,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     bool                itemsDeselected = false;
     bool                solderMaskDirty = false;
     bool                autofillZones = false;
+    bool                selectedModified = false;
 
     if( Empty() )
         return;
@@ -243,6 +244,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         {
             solderMaskDirty = true;
         }
+
+        if( boardItem->IsSelected() )
+            selectedModified = true;
 
         switch( changeType )
         {
@@ -569,6 +573,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     if( autofillZones )
         m_toolMgr->RunAction( PCB_ACTIONS::zoneFillDirty );
+
+    if( selectedModified )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( frame )
     {

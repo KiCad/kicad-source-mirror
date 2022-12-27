@@ -758,7 +758,6 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
     }
 
     m_router->UpdateSizes( sizes );
-    frame()->UpdateMsgPanel();
 }
 
 
