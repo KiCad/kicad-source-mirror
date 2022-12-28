@@ -304,12 +304,13 @@ void SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
 
     newSegment->SetStartPoint( aPoint );
     newSegment->SetConnectivityDirty( true );
+    newSegment->SetFlags( IS_NEW | IS_BROKEN );
     AddToScreen( newSegment, aScreen );
 
     SaveCopyInUndoList( aScreen, newSegment, UNDO_REDO::NEWITEM, true );
     SaveCopyInUndoList( aScreen, aSegment, UNDO_REDO::CHANGED, true );
 
-    aSegment->SetFlags( IS_CHANGED );
+    aSegment->SetFlags( IS_CHANGED | IS_BROKEN );
 
     UpdateItem( aSegment, false, true );
     aSegment->SetEndPoint( aPoint );

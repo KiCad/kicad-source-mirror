@@ -144,7 +144,7 @@ public:
 
     EDA_ITEM_FLAGS GetEditFlags() const
     {
-        constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_DRAGGING
+        constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_DRAGGING | IS_BROKEN
                                | IS_CHANGED | STRUCT_DELETED );
 
         return m_flags & mask;
