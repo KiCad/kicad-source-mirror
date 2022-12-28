@@ -50,7 +50,7 @@
 #define STRUCT_DELETED (1 << 13)   ///< flag indication structures to be erased
 #define CANDIDATE      (1 << 14)   ///< flag indicating that the structure is connected
 #define SKIP_STRUCT    (1 << 15)   ///< flag indicating that the structure should be ignored
-#define DO_NOT_DRAW    (1 << 16)   ///< Used to disable draw function
+
 #define IS_PASTED      (1 << 17)   ///< Modifier on IS_NEW which indicates it came from clipboard
 #define IS_SHOWN_AS_BITMAP    (1 << 18)
 #define COURTYARD_CONFLICT    (1 << 19)     ///< temporary set when moving footprints
