@@ -5,7 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "widgets/infobar.h"
+#include "widgets/wx_infobar.h"
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 

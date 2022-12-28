@@ -29,7 +29,7 @@
 #include <core/arraydim.h>
 #include <dialog_shim.h>
 #include <eda_draw_frame.h>
-#include <filehistory.h>
+#include <file_history.h>
 #include <id.h>
 #include <kiface_base.h>
 #include <lockfile.h>

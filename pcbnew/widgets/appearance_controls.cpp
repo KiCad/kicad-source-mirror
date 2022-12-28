@@ -40,13 +40,13 @@
 #include <tools/pcb_actions.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/bitmap_toggle.h>
-#include <widgets/collapsible_pane.h>
+#include <widgets/wx_collapsible_pane.h>
 #include <widgets/color_swatch.h>
 #include <widgets/grid_bitmap_toggle.h>
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/indicator_icon.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/wx_grid.h>
 #include <dialogs/eda_view_switcher.h>
 #include <wx/bmpbuttn.h>

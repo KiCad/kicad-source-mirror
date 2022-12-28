@@ -8,7 +8,7 @@
 #include "widgets/bitmap_button.h"
 #include "widgets/color_swatch.h"
 #include "widgets/font_choice.h"
-#include "widgets/infobar.h"
+#include "widgets/wx_infobar.h"
 #include "widgets/wx_combobox.h"
 
 #include "dialog_text_properties_base.h"

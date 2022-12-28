@@ -26,7 +26,7 @@
 
 #include <advanced_config.h>
 #include <bitmaps.h>
-#include <filehistory.h>
+#include <file_history.h>
 #include <kiface_base.h>
 #include <menus_helpers.h>
 #include <pcb_edit_frame.h>

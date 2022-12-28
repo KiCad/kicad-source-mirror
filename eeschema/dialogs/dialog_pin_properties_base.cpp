@@ -7,7 +7,7 @@
 
 #include "pin_shape_combobox.h"
 #include "pin_type_combobox.h"
-#include "widgets/infobar.h"
+#include "widgets/wx_infobar.h"
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 #include "wx/bmpcbox.h"

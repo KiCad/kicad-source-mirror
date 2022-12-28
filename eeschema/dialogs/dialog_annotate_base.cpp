@@ -5,7 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "widgets/infobar.h"
+#include "widgets/wx_infobar.h"
 #include "widgets/wx_html_report_panel.h"
 
 #include "dialog_annotate_base.h"

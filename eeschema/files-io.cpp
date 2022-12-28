@@ -55,7 +55,7 @@
 #include <tools/sch_editor_control.h>
 #include <tools/sch_navigate_tool.h>
 #include <trace_helpers.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <wx/app.h>

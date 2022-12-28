@@ -32,7 +32,7 @@
 #include <footprint_edit_frame.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_group.h>

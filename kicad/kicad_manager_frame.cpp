@@ -35,7 +35,7 @@
 #include <dialogs/panel_kicad_launcher.h>
 #include <eda_base_frame.h>
 #include <executable_names.h>
-#include <filehistory.h>
+#include <file_history.h>
 #include <policy_keys.h>
 #include <gestfich.h>
 #include <kiplatform/app.h>

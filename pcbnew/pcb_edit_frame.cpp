@@ -96,7 +96,7 @@
 #include <ratsnest/ratsnest_view_item.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/pcb_search_pane.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/panel_selection_filter.h>
 #include <widgets/pcb_properties_panel.h>
 #include <widgets/wx_aui_utils.h>

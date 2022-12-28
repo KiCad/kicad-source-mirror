@@ -46,7 +46,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 
 #include <kiplatform/ui.h>
 

@@ -54,7 +54,7 @@
 #include <tools/pcb_editor_conditions.h>  // Shared conditions with other Pcbnew frames
 #include <tools/pcb_viewer_tools.h>       // shared tools with other Pcbnew frames
 #include <tools/cvpcb_fpviewer_selection_tool.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <wx/choice.h>
 #include <wx/debug.h>
 #include <cvpcb_id.h>

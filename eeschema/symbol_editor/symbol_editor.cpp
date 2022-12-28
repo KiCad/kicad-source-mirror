@@ -26,7 +26,7 @@
 #include <pgm_base.h>
 #include <confirm.h>
 #include <kiway.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <tools/ee_actions.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <symbol_edit_frame.h>

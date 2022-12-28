@@ -53,7 +53,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 
 #if defined( KICAD_USE_3DCONNEXION )

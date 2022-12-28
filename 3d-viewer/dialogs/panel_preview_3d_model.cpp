@@ -38,7 +38,7 @@
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <eda_3d_viewer_settings.h>
 #include <board_design_settings.h>
 

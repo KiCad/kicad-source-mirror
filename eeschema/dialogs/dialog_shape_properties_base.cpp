@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/color_swatch.h"
-#include "widgets/infobar.h"
+#include "widgets/wx_infobar.h"
 
 #include "dialog_shape_properties_base.h"
 

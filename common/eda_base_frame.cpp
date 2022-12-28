@@ -30,7 +30,7 @@
 #include <dialogs/panel_mouse_settings.h>
 #include <dialogs/panel_data_collection.h>
 #include <eda_dde.h>
-#include <filehistory.h>
+#include <file_history.h>
 #include <id.h>
 #include <kiface_base.h>
 #include <menus_helpers.h>
@@ -53,7 +53,7 @@
 #include <tool/tool_dispatcher.h>
 #include <trace_helpers.h>
 #include <widgets/paged_dialog.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/wx_aui_art_providers.h>
 #include <wx/app.h>
 #include <wx/config.h>

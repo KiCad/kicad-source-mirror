@@ -59,7 +59,7 @@
 #include <tool/tool_manager.h>
 #include <footprint_edit_frame.h>
 #include <widgets/wx_progress_reporters.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <wx/hyperlink.h>
 
 using namespace std::placeholders;

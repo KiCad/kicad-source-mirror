@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <filehistory.h>
+#include <file_history.h>
 #include <id.h>
 #include <settings/app_settings.h>
 #include <tool/action_menu.h>

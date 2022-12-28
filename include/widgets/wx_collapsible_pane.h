@@ -17,8 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_COLLAPSIBLE_PANE_H
-#define KICAD_COLLAPSIBLE_PANE_H
+#ifndef KICAD_WX_COLLAPSIBLE_PANE_H
+#define KICAD_WX_COLLAPSIBLE_PANE_H
 
 #include <wx/control.h>
 #include <wx/containr.h>
@@ -172,4 +172,4 @@ private:
     void onHeaderClicked( wxCommandEvent& aEvent );
 };
 
-#endif // KICAD_COLLAPSIBLE_PANE_H
+#endif // KICAD_WX_COLLAPSIBLE_PANE_H

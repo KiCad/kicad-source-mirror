@@ -41,7 +41,7 @@
 #include <tools/pcb_selection_conditions.h>
 #include <tools/edit_tool.h>
 #include <dialogs/dialog_enum_pads.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 
 PAD_TOOL::PAD_TOOL() :
         PCB_TOOL_BASE( "pcbnew.PadTool" ),

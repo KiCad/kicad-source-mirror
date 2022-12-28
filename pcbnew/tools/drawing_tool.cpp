@@ -48,7 +48,7 @@
 #include <tools/zone_filler_tool.h>
 #include <view/view.h>
 #include <widgets/appearance_controls.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <wx/filedlg.h>
 
 #include <bitmaps.h>

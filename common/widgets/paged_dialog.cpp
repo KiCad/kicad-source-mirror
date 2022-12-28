@@ -26,7 +26,7 @@
 #include <wx/treebook.h>
 #include <wx/treectrl.h>
 
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/paged_dialog.h>
 #include <wx/stc/stc.h>
 

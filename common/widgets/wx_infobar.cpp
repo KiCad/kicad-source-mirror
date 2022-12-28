@@ -20,7 +20,7 @@
 
 #include <id.h>
 #include <kiplatform/ui.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include "wx/artprov.h"
 #include <wx/aui/framemanager.h>
 #include <wx/debug.h>

@@ -77,7 +77,7 @@
 #include <tools/sch_move_tool.h>
 #include <tools/sch_navigate_tool.h>
 #include <view/view_controls.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/hierarchy_pane.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>

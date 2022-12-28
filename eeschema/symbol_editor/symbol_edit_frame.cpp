@@ -65,7 +65,7 @@
 #include <tools/symbol_editor_move_tool.h>
 #include <tools/symbol_editor_pin_tool.h>
 #include <widgets/app_progress_dialog.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/symbol_tree_pane.h>

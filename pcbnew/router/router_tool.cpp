@@ -41,7 +41,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_track_via_size.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/appearance_controls.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>

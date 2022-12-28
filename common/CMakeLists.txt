@@ -169,7 +169,7 @@ set( COMMON_WIDGET_SRCS
     widgets/bitmap_button.cpp
     widgets/bitmap_toggle.cpp
     widgets/button_row_panel.cpp
-    widgets/collapsible_pane.cpp
+        widgets/wx_collapsible_pane.cpp
     widgets/color_swatch.cpp
     widgets/font_choice.cpp
     widgets/footprint_choice.cpp
@@ -183,7 +183,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_text_button_helpers.cpp
     widgets/grid_text_helpers.cpp
     widgets/indicator_icon.cpp
-    widgets/infobar.cpp
+        widgets/wx_infobar.cpp
     widgets/layer_box_selector.cpp
     widgets/lib_tree.cpp
     widgets/mathplot.cpp
@@ -324,7 +324,7 @@ set( COMMON_SRCS
     exceptions.cpp
     executable_names.cpp
     filename_resolver.cpp
-    filehistory.cpp
+        file_history.cpp
     filter_reader.cpp
     footprint_filter.cpp
     footprint_info.cpp

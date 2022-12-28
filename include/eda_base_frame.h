@@ -42,7 +42,7 @@
 #include <kiway_holder.h>
 #include <tool/tools_holder.h>
 #include <widgets/ui_common.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <undo_redo_container.h>
 #include <units_provider.h>
 #include <origin_transforms.h>

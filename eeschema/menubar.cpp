@@ -25,7 +25,7 @@
  */
 
 #include <bitmaps.h>
-#include <filehistory.h>
+#include <file_history.h>
 #include <kiface_base.h>
 #include <menus_helpers.h>
 #include <schematic.h>

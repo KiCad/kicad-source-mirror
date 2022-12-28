@@ -29,7 +29,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_file_versions.h>
 #include <paths.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 
 #include "pl_editor_frame.h"

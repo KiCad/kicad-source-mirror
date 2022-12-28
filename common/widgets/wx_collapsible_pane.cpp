@@ -18,7 +18,7 @@
  */
 
 #include <bitmaps.h>
-#include <widgets/collapsible_pane.h>
+#include <widgets/wx_collapsible_pane.h>
 
 #include <wx/collpane.h>
 #include <wx/dc.h>

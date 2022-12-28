@@ -27,7 +27,7 @@
 
 #include <macros.h>
 #include <reporter.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/wx_html_report_panel.h>
 #include <wx/log.h>
 #include <wx/textctrl.h>

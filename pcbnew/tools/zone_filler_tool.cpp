@@ -33,7 +33,7 @@
 #include <pcb_group.h>
 #include <board_design_settings.h>
 #include <progress_reporter.h>
-#include <widgets/infobar.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/wx_progress_reporters.h>
 #include <wx/event.h>
 #include <wx/hyperlink.h>

@@ -35,7 +35,7 @@
 #include <wx/msgdlg.h>
 #include <wx/cmdline.h>
 
-#include <filehistory.h>
+#include <file_history.h>
 #include <hotkeys_basic.h>
 #include <kiway.h>
 #include <macros.h>
