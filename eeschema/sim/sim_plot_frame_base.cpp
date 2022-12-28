@@ -198,7 +198,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_staticTextSignals->Wrap( -1 );
 	bSizer10->Add( m_staticTextSignals, 0, wxTOP|wxRIGHT, 5 );
 
-	m_signals = new wxListView( m_panelSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL );
+	m_signals = new wxListView( m_panelSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
 	bSizer10->Add( m_signals, 1, wxEXPAND, 5 );
 
 
