@@ -332,11 +332,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     // fix the pad render mode (filled/not filled)
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    if( m_cbShowPadOutline->IsChecked() )
-        settings->m_ForcePadSketchModeOn = true;
-    else
-        settings->m_ForcePadSketchModeOff = true;
-
+    settings->m_ForcePadSketchModeOn = m_cbShowPadOutline->IsChecked();
     settings->SetHighContrast( false );
     settings->m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
@@ -783,11 +779,7 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
     // fix the pad render mode (filled/not filled)
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    if( m_cbShowPadOutline->IsChecked() )
-        settings->m_ForcePadSketchModeOn = true;
-    else
-        settings->m_ForcePadSketchModeOff = true;
-
+    settings->m_ForcePadSketchModeOn = m_cbShowPadOutline->IsChecked();
     settings->SetHighContrast( false );
     settings->m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
@@ -1584,11 +1576,6 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         return true;
 
     commit.Modify( m_currentPad );
-
-    // redraw the area where the pad was, without pad (delete pad on screen)
-    m_currentPad->SetFlags( DO_NOT_DRAW );
-    m_parent->GetCanvas()->Refresh();
-    m_currentPad->ClearFlags( DO_NOT_DRAW );
 
     // Update values
     m_currentPad->SetShape( m_padMaster->GetShape() );

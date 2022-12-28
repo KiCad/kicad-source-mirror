@@ -111,7 +111,6 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_zoneOpacity     = 1.0;
     m_imageOpacity    = 1.0;
 
-    m_ForcePadSketchModeOff    = false;
     m_ForcePadSketchModeOn     = false;
 
     SetDashLengthRatio( 12 );       // From ISO 128-2
@@ -1195,9 +1194,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
     bool outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayPadFill;
 
-    if( m_pcbSettings.m_ForcePadSketchModeOff )
-        outline_mode = false;
-    else if( m_pcbSettings.m_ForcePadSketchModeOn )
+    if( m_pcbSettings.m_ForcePadSketchModeOn )
         outline_mode = true;
 
     if( outline_mode )
