@@ -340,7 +340,7 @@ private:
 
             enum SIGNAL_CONTEXT_MENU_EVENTS
             {
-                HIDE_SIGNAL,
+                HIDE_SIGNAL = 944,
                 SHOW_CURSOR,
                 HIDE_CURSOR
             };
