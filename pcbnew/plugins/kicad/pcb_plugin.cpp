@@ -1355,48 +1355,48 @@ void PCB_PLUGIN::formatLayers( LSET aLayerMask, int aNestLevel ) const
 
     if( ( aLayerMask & cu_mask ) == cu_mask )
     {
-        output += " *.Cu";
+        output += ' ' + m_out->Quotew( "*.Cu" );
         aLayerMask &= ~cu_all;          // clear bits, so they are not output again below
     }
     else if( ( aLayerMask & cu_mask ) == fr_bk )
     {
-        output += " F&B.Cu";
+        output += ' ' + m_out->Quotew( "F&B.Cu" );
         aLayerMask &= ~fr_bk;
     }
 
     if( ( aLayerMask & adhes ) == adhes )
     {
-        output += " *.Adhes";
+        output += ' ' + m_out->Quotew( "*.Adhes" );
         aLayerMask &= ~adhes;
     }
 
     if( ( aLayerMask & paste ) == paste )
     {
-        output += " *.Paste";
+        output += ' ' + m_out->Quotew( "*.Paste" );
         aLayerMask &= ~paste;
     }
 
     if( ( aLayerMask & silks ) == silks )
     {
-        output += " *.SilkS";
+        output += ' ' + m_out->Quotew( "*.SilkS" );
         aLayerMask &= ~silks;
     }
 
     if( ( aLayerMask & mask ) == mask )
     {
-        output += " *.Mask";
+        output += ' ' + m_out->Quotew( "*.Mask" );
         aLayerMask &= ~mask;
     }
 
     if( ( aLayerMask & crt_yd ) == crt_yd )
     {
-        output += " *.CrtYd";
+        output += ' ' + m_out->Quotew( "*.CrtYd" );
         aLayerMask &= ~crt_yd;
     }
 
     if( ( aLayerMask & fab ) == fab )
     {
-        output += " *.Fab";
+        output += ' ' + m_out->Quotew( "*.Fab" );
         aLayerMask &= ~fab;
     }
 
