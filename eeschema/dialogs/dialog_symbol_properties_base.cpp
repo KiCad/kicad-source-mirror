@@ -111,7 +111,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	sbFields->Add( bButtonSize, 0, wxALL|wxEXPAND, 5 );
+	sbFields->Add( bButtonSize, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	generalPageSizer->Add( sbFields, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -120,13 +120,13 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	bLowerSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticBoxSizer* sbGeneralProps;
-	sbGeneralProps = new wxStaticBoxSizer( new wxStaticBox( generalPage, wxID_ANY, _("General") ), wxHORIZONTAL );
+	sbGeneralProps = new wxStaticBoxSizer( new wxStaticBox( generalPage, wxID_ANY, _("General") ), wxVERTICAL );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 3, 3 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbSizer1->SetEmptyCellSize( wxSize( -1,10 ) );
+	gbSizer1->SetEmptyCellSize( wxSize( -1,12 ) );
 
 	m_unitLabel = new wxStaticText( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Unit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitLabel->Wrap( -1 );
@@ -142,7 +142,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_cbAlternateSymbol = new wxCheckBox( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Alternate symbol (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbAlternateSymbol->SetToolTip( _("Use the alternate shape of this symbol.\nFor gates, this is the \"De Morgan\" conversion") );
 
-	gbSizer1->Add( m_cbAlternateSymbol, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	gbSizer1->Add( m_cbAlternateSymbol, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 4 );
 
 	m_orientationLabel = new wxStaticText( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_orientationLabel->Wrap( -1 );
@@ -169,51 +169,58 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 
 	sbGeneralProps->Add( gbSizer1, 1, wxEXPAND, 5 );
 
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
 
-	bLowerSizer->Add( sbGeneralProps, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_ShowPinNumButt = new wxCheckBox( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Show pin numbers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNumButt->SetValue(true);
+	m_ShowPinNumButt->SetToolTip( _("Show or hide pin numbers") );
+
+	bSizer11->Add( m_ShowPinNumButt, 1, wxALL, 3 );
+
+	m_ShowPinNameButt = new wxCheckBox( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Show pin names"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNameButt->SetValue(true);
+	m_ShowPinNameButt->SetToolTip( _("Show or hide pin names") );
+
+	bSizer11->Add( m_ShowPinNameButt, 1, wxALL, 3 );
+
+
+	sbGeneralProps->Add( bSizer11, 0, wxEXPAND|wxTOP, 13 );
+
+
+	bLowerSizer->Add( sbGeneralProps, 4, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bMiddleCol;
 	bMiddleCol = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizerPinTextOpts;
-	sbSizerPinTextOpts = new wxStaticBoxSizer( new wxStaticBox( generalPage, wxID_ANY, _("Pin Text") ), wxVERTICAL );
-
-	m_ShowPinNumButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Show pin numbers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ShowPinNumButt->SetValue(true);
-	m_ShowPinNumButt->SetToolTip( _("Show or hide pin numbers") );
-
-	sbSizerPinTextOpts->Add( m_ShowPinNumButt, 0, wxRIGHT|wxLEFT, 4 );
-
-	m_ShowPinNameButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Show pin names"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ShowPinNameButt->SetValue(true);
-	m_ShowPinNameButt->SetToolTip( _("Show or hide pin names") );
-
-	sbSizerPinTextOpts->Add( m_ShowPinNameButt, 0, wxALL, 4 );
-
-
-	bMiddleCol->Add( sbSizerPinTextOpts, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
 	wxStaticBoxSizer* sbAttributes;
 	sbAttributes = new wxStaticBoxSizer( new wxStaticBox( generalPage, wxID_ANY, _("Attributes") ), wxVERTICAL );
+
+	m_cbExcludeFromSim = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExcludeFromSim->SetValue(true);
+	sbAttributes->Add( m_cbExcludeFromSim, 0, wxRIGHT|wxLEFT, 5 );
+
+
+	sbAttributes->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_cbExcludeFromBom = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExcludeFromBom->SetToolTip( _("This is useful for adding symbols for board footprints such as fiducials\nand logos that you do not want to appear in the bill of materials export") );
 
-	sbAttributes->Add( m_cbExcludeFromBom, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	sbAttributes->Add( m_cbExcludeFromBom, 0, wxALL, 5 );
 
 	m_cbExcludeFromBoard = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExcludeFromBoard->SetToolTip( _("This is useful for adding symbols that only get exported to the bill of materials but\nnot required to layout the board such as mechanical fasteners and enclosures") );
 
-	sbAttributes->Add( m_cbExcludeFromBoard, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	sbAttributes->Add( m_cbExcludeFromBoard, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbDNP = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Do not populate"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbAttributes->Add( m_cbDNP, 0, wxBOTTOM|wxLEFT|wxRIGHT, 4 );
+	sbAttributes->Add( m_cbDNP, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bMiddleCol->Add( sbAttributes, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMiddleCol->Add( sbAttributes, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bLowerSizer->Add( bMiddleCol, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bLowerSizer->Add( bMiddleCol, 3, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* buttonsSizer;
 	buttonsSizer = new wxBoxSizer( wxVERTICAL );
@@ -234,7 +241,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	buttonsSizer->Add( m_editLibrarySymbolBtn, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bLowerSizer->Add( buttonsSizer, 1, wxEXPAND|wxALL, 5 );
+	bLowerSizer->Add( buttonsSizer, 3, wxEXPAND|wxALL, 5 );
 
 
 	generalPageSizer->Add( bLowerSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -357,6 +364,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_mirrorCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_ShowPinNumButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_ShowPinNameButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_cbExcludeFromSim->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnExcludeFromSimulation ), NULL, this );
 	m_cbExcludeFromBom->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbExcludeFromBoard->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_updateSymbolBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnUpdateSymbol ), NULL, this );
@@ -389,6 +397,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::~DIALOG_SYMBOL_PROPERTIES_BASE()
 	m_mirrorCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_ShowPinNumButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_ShowPinNameButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_cbExcludeFromSim->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnExcludeFromSimulation ), NULL, this );
 	m_cbExcludeFromBom->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbExcludeFromBoard->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_updateSymbolBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnUpdateSymbol ), NULL, this );

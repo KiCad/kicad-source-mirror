@@ -63,6 +63,7 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_mirrorCtrl;
 		wxCheckBox* m_ShowPinNumButt;
 		wxCheckBox* m_ShowPinNameButt;
+		wxCheckBox* m_cbExcludeFromSim;
 		wxCheckBox* m_cbExcludeFromBom;
 		wxCheckBox* m_cbExcludeFromBoard;
 		wxCheckBox* m_cbDNP;
@@ -92,6 +93,7 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnUnitChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExcludeFromSimulation( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateSymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExchangeSymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditSymbol( wxCommandEvent& event ) { event.Skip(); }

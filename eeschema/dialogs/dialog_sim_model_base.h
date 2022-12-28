@@ -79,7 +79,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_saveInValueCheckbox;
 		wxPanel* m_pinAssignmentsPanel;
 		WX_GRID* m_pinAssignmentsGrid;
-		wxCheckBox* m_excludeCheckbox;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -113,7 +112,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onSaveInValueCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridSize( wxSizeEvent& event ) { event.Skip(); }
-		virtual void onExcludeCheckbox( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

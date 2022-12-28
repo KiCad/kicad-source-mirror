@@ -70,6 +70,7 @@ private:
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnFilterDClick( wxMouseEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
+    void OnExcludeFromSimulation( wxCommandEvent& event ) override;
 
     void adjustGridColumns();
     void syncControlStates( bool aIsAlias );

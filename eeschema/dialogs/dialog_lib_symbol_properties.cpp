@@ -181,6 +181,10 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_AsConvertButt->SetValue( m_Parent->GetShowDeMorgan() );
 
     m_OptionPower->SetValue( m_libEntry->IsPower() );
+
+    LIB_FIELD* simEnableField = m_libEntry->FindField( SIM_MODEL::ENABLE_FIELD );
+    m_excludeFromSim->SetValue( simEnableField && simEnableField->GetText() == wxT( "0" ) );
+
     m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetIncludeInBom() );
     m_excludeFromBoardCheckBox->SetValue( !m_libEntry->GetIncludeOnBoard() );
 
@@ -223,6 +227,43 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 }
 
 
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
+{
+    int simEnableFieldRow = -1;
+
+    for( int ii = MANDATORY_FIELDS; ii < m_grid->GetNumberRows(); ++ii )
+    {
+        if( m_grid->GetCellValue( ii, FDC_NAME ) == SIM_MODEL::ENABLE_FIELD )
+            simEnableFieldRow = ii;
+    }
+
+    if( event.IsChecked() )
+    {
+        if( simEnableFieldRow == -1 )
+        {
+            simEnableFieldRow = (int) m_fields->size();
+            m_fields->emplace_back( m_libEntry, simEnableFieldRow );
+
+            // notify the grid
+            wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+            m_grid->ProcessTableMessage( msg );
+        }
+
+        m_grid->SetCellValue( simEnableFieldRow, FDC_VALUE, wxT( "0" ) );
+    }
+    else if( simEnableFieldRow >= 0 )
+    {
+        m_fields->erase( m_fields->begin() + simEnableFieldRow );
+
+        // notify the grid
+        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, simEnableFieldRow, 1 );
+        m_grid->ProcessTableMessage( msg );
+    }
+
+    OnModify();
+}
+
+
 bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
 {
     if( !m_grid->CommitPendingChanges() )
@@ -245,9 +286,9 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
     }
 
     // Check for missing field names.
-    for( size_t i = MANDATORY_FIELDS;  i < m_fields->size(); ++i )
+    for( int ii = MANDATORY_FIELDS; ii < (int) m_fields->size(); ++ii )
     {
-        LIB_FIELD& field = m_fields->at( i );
+        LIB_FIELD& field = m_fields->at( ii );
         wxString   fieldName = field.GetName( false );
 
         if( fieldName.IsEmpty() )
@@ -258,7 +299,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
             m_delayedErrorMessage = _( "Fields must have a name." );
             m_delayedFocusGrid = m_grid;
             m_delayedFocusColumn = FDC_NAME;
-            m_delayedFocusRow = i;
+            m_delayedFocusRow = ii;
             m_delayedFocusPage = 0;
 
             return false;
@@ -333,12 +374,12 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign when writing back to the library
-    for( size_t i = 0; i < m_fields->size(); ++i )
+    for( int ii = 0; ii < (int) m_fields->size(); ++ii )
     {
-        VECTOR2I pos = m_fields->at( i ).GetPosition();
+        VECTOR2I pos = m_fields->at( ii ).GetPosition();
         pos.y = -pos.y;
-        m_fields->at( i ).SetPosition( pos );
-        m_fields->at( i ).SetId( i );
+        m_fields->at( ii ).SetPosition( pos );
+        m_fields->at( ii ).SetId( ii );
     }
 
     m_libEntry->SetFields( *m_fields );
@@ -486,7 +527,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
         return;
 
     SYMBOL_EDITOR_SETTINGS* settings = m_Parent->GetSettings();
-    int       fieldID = m_fields->size();
+    int       fieldID = (int) m_fields->size();
     LIB_FIELD newField( m_libEntry, fieldID );
 
     newField.SetTextSize( wxSize( schIUScale.MilsToIU( settings->m_Defaults.text_size ),

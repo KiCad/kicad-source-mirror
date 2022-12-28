@@ -522,6 +522,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     case SYM_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 ); break;
     }
 
+    m_cbExcludeFromSim->SetValue( m_symbol->GetFieldText( SIM_MODEL::ENABLE_FIELD ) == "0" );
     m_cbExcludeFromBom->SetValue( !m_symbol->GetIncludeInBom() );
     m_cbExcludeFromBoard->SetValue( !m_symbol->GetIncludeOnBoard() );
     m_cbDNP->SetValue( m_symbol->GetDNP() );
@@ -540,6 +541,44 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     wxSafeYield();
 
     return true;
+}
+
+
+void DIALOG_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
+{
+    int simEnableFieldRow = -1;
+
+    for( int ii = MANDATORY_FIELDS; ii < m_fieldsGrid->GetNumberRows(); ++ii )
+    {
+        if( m_fieldsGrid->GetCellValue( ii, FDC_NAME ) == SIM_MODEL::ENABLE_FIELD )
+            simEnableFieldRow = ii;
+    }
+
+    if( event.IsChecked() )
+    {
+        if( simEnableFieldRow == -1 )
+        {
+            simEnableFieldRow = (int) m_fields->size();
+            m_fields->emplace_back( VECTOR2I( 0, 0 ), simEnableFieldRow, m_symbol,
+                                    SIM_MODEL::ENABLE_FIELD );
+
+            // notify the grid
+            wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+            m_fieldsGrid->ProcessTableMessage( msg );
+        }
+
+        m_fieldsGrid->SetCellValue( simEnableFieldRow, FDC_VALUE, wxT( "0" ) );
+    }
+    else if( simEnableFieldRow >= 0 )
+    {
+        m_fields->erase( m_fields->begin() + simEnableFieldRow );
+
+        // notify the grid
+        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, simEnableFieldRow, 1 );
+        m_fieldsGrid->ProcessTableMessage( msg );
+    }
+
+    OnModify();
 }
 
 
@@ -901,7 +940,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
         return;
 
     SCHEMATIC_SETTINGS& settings = m_symbol->Schematic()->Settings();
-    int                 fieldID = m_fields->size();
+    int                 fieldID = (int) m_fields->size();
     SCH_FIELD           newField( wxPoint( 0, 0 ), fieldID, m_symbol,
                                   TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID, DO_TRANSLATE ) );
 

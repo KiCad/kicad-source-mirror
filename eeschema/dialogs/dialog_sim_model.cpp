@@ -277,7 +277,6 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     curModel().SetIsStoredInValue( storeInValue );
 
     m_saveInValueCheckbox->SetValue( curModel().IsStoredInValue() );
-    m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
 
     onRadioButton( dummyEvent );
     return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
@@ -349,8 +348,6 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
     updateModelParamsTab();
     updateModelCodeTab();
     updatePinAssignments();
-
-    m_excludeCheckbox->SetValue( !curModel().IsEnabled() );
 
     std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
 
@@ -1270,13 +1267,6 @@ template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onSaveInValueCheckbox( wxCommandEvent& aEvent )
 {
     curModel().SetIsStoredInValue( m_saveInValueCheckbox->GetValue() );
-}
-
-
-template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::onExcludeCheckbox( wxCommandEvent& aEvent )
-{
-    curModel().SetIsEnabled( !m_excludeCheckbox->GetValue() );
 }
 
 

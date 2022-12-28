@@ -127,34 +127,34 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	wxStaticText* staticNameLabel;
 	staticNameLabel = new wxStaticText( m_PanelBasic, wxID_ANY, _("Symbol name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticNameLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizerFPID->Add( staticNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 8 );
 
 	m_SymbolNameCtrl = new wxTextCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_SymbolNameCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizerFPID->Add( m_SymbolNameCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 8 );
 
 	wxStaticText* staticDescriptionLabel;
 	staticDescriptionLabel = new wxStaticText( m_PanelBasic, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticDescriptionLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticDescriptionLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( staticDescriptionLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 8 );
 
 	m_DescCtrl = new wxTextCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_DescCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizerFPID->Add( m_DescCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 8 );
 
 	staticKeywordsLabel = new wxStaticText( m_PanelBasic, wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticKeywordsLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticKeywordsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( staticKeywordsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 8 );
 
 	m_KeywordCtrl = new wxTextCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_KeywordCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizerFPID->Add( m_KeywordCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 8 );
 
 	m_inheritsStaticText = new wxStaticText( m_PanelBasic, wxID_ANY, _("Derive from symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_inheritsStaticText->Wrap( -1 );
-	fgSizerFPID->Add( m_inheritsStaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizerFPID->Add( m_inheritsStaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 8 );
 
 	m_inheritanceSelectCombo = new wxComboBox( m_PanelBasic, wxID_ANY, _("<None>"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
 	m_inheritanceSelectCombo->SetToolTip( _("Select symbol to derive this symbol from or select\n<None> for root symbol.\n\nDerived symbols were formerly referred to as aliases.\nThis is no longer the case and all symbols are either\nderived from another symbols or they stand alone as\nroot symbols.") );
 
-	fgSizerFPID->Add( m_inheritanceSelectCombo, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizerFPID->Add( m_inheritanceSelectCombo, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 7 );
 
 
 	bSizerMidBasicPanel->Add( fgSizerFPID, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -168,23 +168,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bSizerLeftCol = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerSymbol;
-	sbSizerSymbol = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("Symbol") ), wxVERTICAL );
-
-	m_AsConvertButt = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Has alternate body style (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AsConvertButt->SetToolTip( _("Check this option if the symbol has an alternate body style (De Morgan)") );
-
-	sbSizerSymbol->Add( m_AsConvertButt, 0, wxRIGHT|wxLEFT, 5 );
-
-	m_OptionPower = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Define as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptionPower->SetToolTip( _("Setting this option makes the symbol in question appear in the\n\"add power symbol\" dialog.  It will lock the value text to protect it\nfrom editing in the schematic.  The symbol will not be included in\nthe BOM and cannot be assigned a footprint.") );
-
-	sbSizerSymbol->Add( m_OptionPower, 0, wxALL, 5 );
-
-	m_excludeFromBomCheckBox = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Exclude from schematic bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerSymbol->Add( m_excludeFromBomCheckBox, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-	m_excludeFromBoardCheckBox = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerSymbol->Add( m_excludeFromBoardCheckBox, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	sbSizerSymbol = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("General") ), wxVERTICAL );
 
 	wxBoxSizer* bSizerUnitCount;
 	bSizerUnitCount = new wxBoxSizer( wxHORIZONTAL );
@@ -193,18 +177,34 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_staticTextNbUnits->Wrap( -1 );
 	m_staticTextNbUnits->SetToolTip( _("Enter the number of units for a symbol that contains more than one unit") );
 
-	bSizerUnitCount->Add( m_staticTextNbUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerUnitCount->Add( m_staticTextNbUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_SelNumberOfUnits = new wxSpinCtrl( sbSizerSymbol->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 64, 1 );
 	bSizerUnitCount->Add( m_SelNumberOfUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerSymbol->Add( bSizerUnitCount, 1, wxEXPAND|wxLEFT|wxTOP, 5 );
+	sbSizerSymbol->Add( bSizerUnitCount, 1, wxEXPAND|wxLEFT, 4 );
 
 	m_OptionPartsInterchangeable = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("All units are interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptionPartsInterchangeable->SetToolTip( _("Check this option when all symbol units are identical except\nfor pin numbers.") );
 
-	sbSizerSymbol->Add( m_OptionPartsInterchangeable, 0, wxALL, 5 );
+	sbSizerSymbol->Add( m_OptionPartsInterchangeable, 0, wxALL, 4 );
+
+
+	sbSizerSymbol->Add( 0, 8, 0, wxEXPAND, 5 );
+
+	m_AsConvertButt = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Has alternate body style (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AsConvertButt->SetToolTip( _("Check this option if the symbol has an alternate body style (De Morgan)") );
+
+	sbSizerSymbol->Add( m_AsConvertButt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+
+
+	sbSizerSymbol->Add( 0, 7, 0, wxEXPAND, 5 );
+
+	m_OptionPower = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Define as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptionPower->SetToolTip( _("Setting this option makes the symbol in question appear in the\n\"add power symbol\" dialog.  It will lock the value text to protect it\nfrom editing in the schematic.  The symbol will not be included in\nthe BOM and cannot be assigned a footprint.") );
+
+	sbSizerSymbol->Add( m_OptionPower, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 
 	bSizerLeftCol->Add( sbSizerSymbol, 0, wxEXPAND|wxALL, 5 );
@@ -212,8 +212,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	bSizerLowerBasicPanel->Add( bSizerLeftCol, 1, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizerRightCol;
-	bSizerRightCol = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerMiddleCol;
+	bSizerMiddleCol = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerPinTextOpts;
 	sbSizerPinTextOpts = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("Pin Text Options") ), wxVERTICAL );
@@ -231,7 +231,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	sbSizerPinTextOpts->Add( m_ShowPinNameButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerPinTextOpts->Add( 0, 0, 1, wxEXPAND, 5 );
+	sbSizerPinTextOpts->Add( 0, 12, 0, wxEXPAND, 5 );
 
 	m_PinsNameInsideButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Place pin names inside"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PinsNameInsideButt->SetValue(true);
@@ -256,13 +256,37 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bSizerNameOffset->Add( m_nameOffsetUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxBOTTOM|wxEXPAND|wxTOP, 4 );
 
 
 	sbSizerPinTextOpts->Add( 0, 0, 0, wxEXPAND, 5 );
 
 
-	bSizerRightCol->Add( sbSizerPinTextOpts, 1, wxALL|wxEXPAND, 5 );
+	bSizerMiddleCol->Add( sbSizerPinTextOpts, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizerLowerBasicPanel->Add( bSizerMiddleCol, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerRightCol;
+	bSizerRightCol = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* sbSizerAttributes;
+	sbSizerAttributes = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("Attributes") ), wxVERTICAL );
+
+	m_excludeFromSim = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerAttributes->Add( m_excludeFromSim, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	sbSizerAttributes->Add( 0, 10, 0, wxEXPAND, 5 );
+
+	m_excludeFromBomCheckBox = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from schematic bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerAttributes->Add( m_excludeFromBomCheckBox, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_excludeFromBoardCheckBox = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerAttributes->Add( m_excludeFromBoardCheckBox, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+
+	bSizerRightCol->Add( sbSizerAttributes, 1, wxEXPAND|wxALL, 5 );
 
 
 	bSizerLowerBasicPanel->Add( bSizerRightCol, 1, wxEXPAND, 5 );
@@ -371,17 +395,18 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_KeywordCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
 	m_inheritanceSelectCombo->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCombobox ), NULL, this );
 	m_inheritanceSelectCombo->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
-	m_AsConvertButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
-	m_OptionPower->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
-	m_excludeFromBomCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
-	m_excludeFromBoardCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_SelNumberOfUnits->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrl ), NULL, this );
 	m_SelNumberOfUnits->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrlText ), NULL, this );
 	m_OptionPartsInterchangeable->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_AsConvertButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_OptionPower->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
 	m_ShowPinNumButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_ShowPinNameButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_PinsNameInsideButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_nameOffsetCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
+	m_excludeFromSim->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnExcludeFromSimulation ), NULL, this );
+	m_excludeFromBomCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_excludeFromBoardCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_FootprintFilterListBox->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnFilterDClick ), NULL, this );
 	m_FootprintFilterListBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddFootprintFilter ), NULL, this );
@@ -406,17 +431,18 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::~DIALOG_LIB_SYMBOL_PROPERTIES_BASE()
 	m_KeywordCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
 	m_inheritanceSelectCombo->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCombobox ), NULL, this );
 	m_inheritanceSelectCombo->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
-	m_AsConvertButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
-	m_OptionPower->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
-	m_excludeFromBomCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
-	m_excludeFromBoardCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_SelNumberOfUnits->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrl ), NULL, this );
 	m_SelNumberOfUnits->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrlText ), NULL, this );
 	m_OptionPartsInterchangeable->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_AsConvertButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_OptionPower->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
 	m_ShowPinNumButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_ShowPinNameButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_PinsNameInsideButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_nameOffsetCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
+	m_excludeFromSim->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnExcludeFromSimulation ), NULL, this );
+	m_excludeFromBomCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_excludeFromBoardCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_FootprintFilterListBox->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnFilterDClick ), NULL, this );
 	m_FootprintFilterListBox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddFootprintFilter ), NULL, this );

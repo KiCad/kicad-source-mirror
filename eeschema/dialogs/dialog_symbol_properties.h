@@ -84,6 +84,7 @@ private:
     void OnGridEditorHidden( wxGridEvent& event ) override;
     void OnUnitChoice( wxCommandEvent& event ) override;
   	void OnCheckBox( wxCommandEvent& event ) override;
+    void OnExcludeFromSimulation( wxCommandEvent& event ) override;
 
     void OnEditSymbol( wxCommandEvent&  ) override;
     void OnEditLibrarySymbol( wxCommandEvent&  ) override;
