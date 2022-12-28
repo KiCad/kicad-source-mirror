@@ -696,6 +696,8 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return SELECTION_CONDITIONS::HasTypes( EDIT_TOOL::MirrorableItems )( aSelection );
             };
 
+    mgr->SetConditions( PCB_ACTIONS::rotateCcw, ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( PCB_ACTIONS::rotateCw, ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( PCB_ACTIONS::mirrorH, ENABLE( canMirror ) );
     mgr->SetConditions( PCB_ACTIONS::mirrorV, ENABLE( canMirror ) );
 
