@@ -1586,6 +1586,10 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
     // tooltips in toolbars
     RecreateToolbars();
 
+    m_auimgr.GetPane( m_hierarchy ).Caption( _( "Schematic Hierarchy" ) );
+    m_auimgr.Update();
+    m_hierarchy->UpdateHierarchyTree();
+
     // status bar
     UpdateMsgPanel();
 
