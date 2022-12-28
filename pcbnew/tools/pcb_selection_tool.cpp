@@ -2715,15 +2715,24 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
             if( item->HitTest( aPoint, margin ) )
                 return true;
 
+            bool found = false;
+
+            std::function<void( PCB_GROUP* )> checkGroup;
+            checkGroup = [&]( PCB_GROUP* aGroup )
+                {
+                    aGroup->RunOnChildren(
+                            [&]( BOARD_ITEM* aItem )
+                                {
+                                    if( PCB_GROUP* group = dyn_cast<PCB_GROUP*>( aItem ) )
+                                        checkGroup( group );
+                                    else if( aItem->HitTest( aPoint, margin ) )
+                                        found = true;
+                                } );
+                };
+
             if( PCB_GROUP* group = dyn_cast<PCB_GROUP*>( item ) )
             {
-                bool found = false;
-
-                group->RunOnChildren( [&] ( BOARD_ITEM* aItem )
-                    {
-                        if( aItem->HitTest( aPoint, margin ) )
-                            found = true;
-                    } );
+                checkGroup( group );
 
                 if( found )
                     return true;
