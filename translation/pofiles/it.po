@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
-"PO-Revision-Date: 2022-12-19 14:11+0100\n"
+"PO-Revision-Date: 2022-12-28 09:39+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -17790,9 +17790,7 @@ msgstr "Impostazioni dello schema..."
 
 #: eeschema/tools/ee_actions.cpp:639
 msgid "Edit schematic setup including annotation styles and electrical rules"
-msgstr ""
-"Modifica impostazione schemi inclusi gli stili di annotazione e regole "
-"elettriche"
+msgstr "Modifica le impostazioni schema inclusi gli stili di annotazione e le regole elettriche"
 
 #: eeschema/tools/ee_actions.cpp:644
 msgid "Edit Sheet Page Number..."
