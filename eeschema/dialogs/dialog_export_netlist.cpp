@@ -298,7 +298,7 @@ void DIALOG_EXPORT_NETLIST::OnRunExternSpiceCommand( wxCommandEvent& event )
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
     wxString simulatorCommand = settings.m_SpiceCommandString;
 
-    unsigned netlist_opt = 0;
+    unsigned netlist_opt = NETLIST_EXPORTER_SPICE::OPTION_SIM_COMMAND;
 
     // Calculate the netlist filename and options
     wxFileName fn = m_Parent->Schematic().GetFileName();
