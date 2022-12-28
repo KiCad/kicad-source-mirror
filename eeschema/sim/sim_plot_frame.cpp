@@ -688,9 +688,16 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType )
     {
         int baseType = aType & ~( SPT_AC_MAG | SPT_AC_PHASE );
 
-        // Add two plots: magnitude & phase
-        updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_MAG ), plotPanel );
-        updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_PHASE ), plotPanel );
+        // If magnitude or phase wasn't specified, then add both
+        if( baseType == aType )
+        {
+            updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_MAG ), plotPanel );
+            updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_PHASE ), plotPanel );
+        }
+        else
+        {
+            updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( aType ), plotPanel );
+        }
     }
     else
     {
