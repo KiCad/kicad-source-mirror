@@ -931,6 +931,10 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_isDrag && !isSlice )
             trimDanglingLines();
 
+        // Auto-rotate any moved labels
+        for( EDA_ITEM* item : selection )
+            m_frame->AutoRotateItem( m_frame->GetScreen(), static_cast<SCH_ITEM*>( item ) );
+
         m_frame->RecalculateConnections( LOCAL_CLEANUP );
         m_frame->OnModify();
     }

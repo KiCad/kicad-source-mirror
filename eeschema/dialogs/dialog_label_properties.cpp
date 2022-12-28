@@ -548,11 +548,16 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         selectedSpinStyle = TEXT_SPIN_STYLE::BOTTOM;
 
     if( m_currentLabel->AutoRotateOnPlacementSupported() )
+    {
+        SCH_EDIT_FRAME* frame = static_cast<SCH_EDIT_FRAME*>( m_parentFrame );
         m_currentLabel->SetAutoRotateOnPlacement( m_autoRotate->IsChecked() );
+        frame->AutoRotateItem( frame->GetScreen(), m_currentLabel );
+    }
     else
         m_currentLabel->SetAutoRotateOnPlacement( false );
 
-    if( m_currentLabel->GetTextSpinStyle() != selectedSpinStyle )
+    if( !m_currentLabel->AutoRotateOnPlacement()
+        && m_currentLabel->GetTextSpinStyle() != selectedSpinStyle )
         m_currentLabel->SetTextSpinStyle( selectedSpinStyle );
 
     if( doAutoplace )
