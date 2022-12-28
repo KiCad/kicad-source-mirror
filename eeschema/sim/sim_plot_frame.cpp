@@ -1922,10 +1922,12 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
 {
     SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
 
-    AddMenuItem( this, HIDE_SIGNAL, _( "Hide Signal" ), _( "Erase the signal from plot screen" ),
+    AddMenuItem( this, REMOVE_SIGNAL, _( "Remove Signal" ), _( "Remove the signal from the plot" ),
                  KiBitmap( BITMAPS::trash ) );
 
     TRACE* trace = plot->GetTrace( m_signal );
+
+    AppendSeparator();
 
     if( trace->HasCursor() )
         AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ), KiBitmap( BITMAPS::pcb_target ) );
@@ -1943,9 +1945,9 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
 
     switch( aEvent.GetId() )
     {
-    case HIDE_SIGNAL: m_plotFrame->removePlot( m_signal );   break;
-    case SHOW_CURSOR: plot->EnableCursor( m_signal, true );  break;
-    case HIDE_CURSOR: plot->EnableCursor( m_signal, false ); break;
+    case REMOVE_SIGNAL: m_plotFrame->removePlot( m_signal );   break;
+    case SHOW_CURSOR:   plot->EnableCursor( m_signal, true );  break;
+    case HIDE_CURSOR:   plot->EnableCursor( m_signal, false ); break;
     }
 }
 
