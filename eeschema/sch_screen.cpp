@@ -1040,7 +1040,7 @@ void SCH_SCREEN::Print( const RENDER_SETTINGS* aSettings )
 
     for( SCH_ITEM* item : Items() )
     {
-        if( item->IsMoving() || item->IsResized() )
+        if( item->IsMoving() )
             continue;
 
         if( item->Type() == SCH_JUNCTION_T )
@@ -1085,7 +1085,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
 
     for( SCH_ITEM* item : Items() )
     {
-        if( item->IsMoving() || item->IsResized() )
+        if( item->IsMoving() )
             continue;
 
         if( item->Type() == SCH_JUNCTION_T )

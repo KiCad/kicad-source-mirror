@@ -105,7 +105,6 @@ public:
     inline bool IsDragging() const { return m_flags & IS_DRAGGING; }
     inline bool IsSelected() const { return m_flags & SELECTED; }
     inline bool IsEntered() const { return m_flags & ENTERED; }
-    inline bool IsResized() const { return m_flags & IS_RESIZING; }
     inline bool IsBrightened() const { return m_flags & BRIGHTENED; }
 
     inline bool IsRollover() const
@@ -145,7 +144,7 @@ public:
 
     EDA_ITEM_FLAGS GetEditFlags() const
     {
-        constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_RESIZING | IS_DRAGGING
+        constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_DRAGGING
                                | IS_CHANGED | STRUCT_DELETED );
 
         return m_flags & mask;

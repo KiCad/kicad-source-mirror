@@ -39,7 +39,7 @@
 #define IN_EDIT        (1 << 2)    ///< Item currently edited
 #define IS_MOVING      (1 << 3)    ///< Item being moved
 #define IS_NEW         (1 << 4)    ///< New item, just created
-#define IS_RESIZING    (1 << 5)    ///< Item being resized
+
 #define IS_DRAGGING    (1 << 6)    ///< Item being dragged
 #define IS_DELETED     (1 << 7)
 

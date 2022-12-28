@@ -46,7 +46,7 @@ bool SELECTION_CONDITIONS::Empty( const SELECTION& aSelection )
 
 bool SELECTION_CONDITIONS::Idle( const SELECTION& aSelection )
 {
-    constexpr int busyMask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_RESIZING | IS_DRAGGING );
+    constexpr int busyMask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_DRAGGING );
 
     return !aSelection.Front() || ( aSelection.Front()->GetEditFlags() & busyMask ) == 0;
 }

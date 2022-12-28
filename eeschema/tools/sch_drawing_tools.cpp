@@ -1813,7 +1813,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
-            sheet->SetFlags( IS_NEW | IS_RESIZING );
+            sheet->SetFlags( IS_NEW | IS_MOVING );
             sheet->SetScreen( nullptr );
             sheet->SetBorderWidth( schIUScale.MilsToIU( cfg->m_Drawing.default_line_thickness ) );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
