@@ -1669,9 +1669,6 @@ void SCH_EDIT_FRAME::FixupJunctions()
     {
         size_t num_undos = m_undoList.m_CommandsList.size();
 
-        // We require a set here to avoid adding multiple junctions to the same spot
-        std::set<wxPoint> junctions;
-
         SetCurrentSheet( sheet );
         GetCurrentSheet().UpdateAllScreenReferences();
 
