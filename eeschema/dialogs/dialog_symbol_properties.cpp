@@ -319,15 +319,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_spiceFieldsButton->Hide();
 #endif /* not KICAD_SPICE */
 
-    // disable some options inside the edit dialog which can cause problems while dragging
-    if( m_symbol->IsDragging() )
-    {
-        m_orientationLabel->Disable();
-        m_orientationCtrl->Disable();
-        m_mirrorLabel->Disable();
-        m_mirrorCtrl->Disable();
-    }
-
     // Give a bit more room for combobox editors
     m_fieldsGrid->SetDefaultRowSize( m_fieldsGrid->GetDefaultRowSize() + 4 );
     m_pinGrid->SetDefaultRowSize( m_pinGrid->GetDefaultRowSize() + 4 );
