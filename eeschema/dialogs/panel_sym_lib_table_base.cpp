@@ -21,8 +21,6 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_top_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Libraries by Scope") ), wxVERTICAL );
 
 	m_notebook = new wxNotebook( m_top_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_notebook->SetMinSize( wxSize( 400,-1 ) );
-
 	m_global_panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
@@ -30,16 +28,29 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_global_grid = new WX_GRID( m_global_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_global_grid->CreateGrid( 1, 5 );
+	m_global_grid->CreateGrid( 1, 7 );
 	m_global_grid->EnableEditing( true );
 	m_global_grid->EnableGridLines( true );
 	m_global_grid->EnableDragGridSize( false );
 	m_global_grid->SetMargins( 0, 0 );
 
 	// Columns
-	m_global_grid->AutoSizeColumns();
+	m_global_grid->SetColSize( 0, 48 );
+	m_global_grid->SetColSize( 1, 48 );
+	m_global_grid->SetColSize( 2, 100 );
+	m_global_grid->SetColSize( 3, 240 );
+	m_global_grid->SetColSize( 4, 100 );
+	m_global_grid->SetColSize( 5, 80 );
+	m_global_grid->SetColSize( 6, 240 );
 	m_global_grid->EnableDragColMove( false );
 	m_global_grid->EnableDragColSize( true );
+	m_global_grid->SetColLabelValue( 0, _("Active") );
+	m_global_grid->SetColLabelValue( 1, _("Visible") );
+	m_global_grid->SetColLabelValue( 2, _("Nickname") );
+	m_global_grid->SetColLabelValue( 3, _("Library Path") );
+	m_global_grid->SetColLabelValue( 4, _("LIbrary Format") );
+	m_global_grid->SetColLabelValue( 5, _("Options") );
+	m_global_grid->SetColLabelValue( 6, _("Description") );
 	m_global_grid->SetColLabelSize( 22 );
 	m_global_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -67,16 +78,29 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_grid = new WX_GRID( m_project_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_project_grid->CreateGrid( 1, 5 );
+	m_project_grid->CreateGrid( 1, 7 );
 	m_project_grid->EnableEditing( true );
 	m_project_grid->EnableGridLines( true );
 	m_project_grid->EnableDragGridSize( false );
 	m_project_grid->SetMargins( 0, 0 );
 
 	// Columns
-	m_project_grid->AutoSizeColumns();
+	m_project_grid->SetColSize( 0, 48 );
+	m_project_grid->SetColSize( 1, 48 );
+	m_project_grid->SetColSize( 2, 100 );
+	m_project_grid->SetColSize( 3, 240 );
+	m_project_grid->SetColSize( 4, 100 );
+	m_project_grid->SetColSize( 5, 80 );
+	m_project_grid->SetColSize( 6, 240 );
 	m_project_grid->EnableDragColMove( false );
 	m_project_grid->EnableDragColSize( true );
+	m_project_grid->SetColLabelValue( 0, _("Active") );
+	m_project_grid->SetColLabelValue( 1, _("Visible") );
+	m_project_grid->SetColLabelValue( 2, _("Nickname") );
+	m_project_grid->SetColLabelValue( 3, _("Library Path") );
+	m_project_grid->SetColLabelValue( 4, _("LIbrary Format") );
+	m_project_grid->SetColLabelValue( 5, _("Options") );
+	m_project_grid->SetColLabelValue( 6, _("Description") );
 	m_project_grid->SetColLabelSize( 22 );
 	m_project_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -89,6 +113,8 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 
 	// Cell Defaults
 	m_project_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_project_grid->SetMinSize( wxSize( 600,-1 ) );
+
 	m_project_sizer->Add( m_project_grid, 2, wxALL|wxEXPAND, 5 );
 
 

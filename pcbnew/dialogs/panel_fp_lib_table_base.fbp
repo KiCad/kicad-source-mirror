@@ -127,11 +127,11 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <object class="notebookpage" expanded="0">
+                                <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Global Libraries</property>
                                     <property name="select">1</property>
-                                    <object class="wxPanel" expanded="0">
+                                    <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -182,7 +182,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style">wxTAB_TRAVERSAL</property>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">m_global_sizer</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -200,7 +200,7 @@
                                                     <property name="aui_name"></property>
                                                     <property name="aui_position"></property>
                                                     <property name="aui_row"></property>
-                                                    <property name="autosize_cols">1</property>
+                                                    <property name="autosize_cols">0</property>
                                                     <property name="autosize_rows">0</property>
                                                     <property name="best_size"></property>
                                                     <property name="bg"></property>
@@ -215,10 +215,10 @@
                                                     <property name="close_button">1</property>
                                                     <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
                                                     <property name="col_label_size">22</property>
-                                                    <property name="col_label_values"></property>
+                                                    <property name="col_label_values">&quot;Active&quot; &quot;Visible&quot; &quot;Nickname&quot; &quot;Library Path&quot; &quot;LIbrary Format&quot; &quot;Options&quot; &quot;Description&quot;</property>
                                                     <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
-                                                    <property name="cols">5</property>
-                                                    <property name="column_sizes"></property>
+                                                    <property name="cols">7</property>
+                                                    <property name="column_sizes">48,48,100,240,100,80,240</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
                                                     <property name="default_pane">0</property>
@@ -278,11 +278,11 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="notebookpage" expanded="0">
+                                <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Project Specific Libraries</property>
                                     <property name="select">0</property>
-                                    <object class="wxPanel" expanded="0">
+                                    <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -333,7 +333,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style">wxTAB_TRAVERSAL</property>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">m_project_sizer</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -351,7 +351,7 @@
                                                     <property name="aui_name"></property>
                                                     <property name="aui_position"></property>
                                                     <property name="aui_row"></property>
-                                                    <property name="autosize_cols">1</property>
+                                                    <property name="autosize_cols">0</property>
                                                     <property name="autosize_rows">0</property>
                                                     <property name="best_size"></property>
                                                     <property name="bg"></property>
@@ -366,10 +366,10 @@
                                                     <property name="close_button">1</property>
                                                     <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
                                                     <property name="col_label_size">22</property>
-                                                    <property name="col_label_values"></property>
+                                                    <property name="col_label_values">&quot;Active&quot; &quot;Visible&quot; &quot;Nickname&quot; &quot;Library Path&quot; &quot;LIbrary Format&quot; &quot;Options&quot; &quot;Description&quot;</property>
                                                     <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
-                                                    <property name="cols">5</property>
-                                                    <property name="column_sizes"></property>
+                                                    <property name="cols">7</property>
+                                                    <property name="column_sizes">48,48,100,240,100,80,240</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
                                                     <property name="default_pane">0</property>

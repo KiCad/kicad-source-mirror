@@ -224,6 +224,15 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     m_lastProjectLibDir = m_project->GetProjectPath();
 
+    auto autoSizeCol =
+            [&]( WX_GRID* aGrid, int aCol )
+            {
+                int prevWidth = aGrid->GetColSize( aCol );
+
+                aGrid->AutoSizeColumn( aCol, false );
+                aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
+            };
+
     auto setupGrid =
             [&]( WX_GRID* aGrid )
             {
@@ -234,7 +243,6 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
                 aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, aGrid ) );
 
                 aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-                aGrid->AutoSizeColumns( false );
 
                 // Set special attributes
                 wxGridCellAttr* attr;
@@ -264,14 +272,11 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
                 aGrid->SetColAttr( COL_VISIBLE, attr );
 
                 // all but COL_OPTIONS, which is edited with Option Editor anyways.
-                aGrid->AutoSizeColumn( COL_NICKNAME, false );
-                aGrid->AutoSizeColumn( COL_TYPE, false );
-                aGrid->AutoSizeColumn( COL_URI, false );
-                aGrid->AutoSizeColumn( COL_DESCR, false );
-                aGrid->AutoSizeColumn( COL_ENABLED, false );
-
-                // would set this to width of title, if it was easily known.
-                aGrid->SetColSize( COL_OPTIONS, 80 );
+                autoSizeCol( aGrid, COL_NICKNAME );
+                autoSizeCol( aGrid, COL_TYPE );
+                autoSizeCol( aGrid, COL_URI );
+                autoSizeCol( aGrid, COL_DESCR );
+                autoSizeCol( aGrid, COL_ENABLED );
 
                 // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
                 // a currentCell which is sometimes not highlighted.
