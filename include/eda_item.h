@@ -103,7 +103,6 @@ public:
     inline bool IsNew() const { return m_flags & IS_NEW; }
     inline bool IsMoving() const { return m_flags & IS_MOVING; }
     inline bool IsDragging() const { return m_flags & IS_DRAGGING; }
-    inline bool IsWireImage() const { return m_flags & IS_WIRE_IMAGE; }
     inline bool IsSelected() const { return m_flags & SELECTED; }
     inline bool IsEntered() const { return m_flags & ENTERED; }
     inline bool IsResized() const { return m_flags & IS_RESIZING; }
@@ -114,7 +113,6 @@ public:
         return ( m_flags & ( IS_ROLLOVER | IS_MOVING ) ) == IS_ROLLOVER;
     }
 
-    inline void SetWireImage() { SetFlags( IS_WIRE_IMAGE ); }
     inline void SetSelected() { SetFlags( SELECTED ); }
     inline void SetBrightened() { SetFlags( BRIGHTENED ); }
 
@@ -148,7 +146,7 @@ public:
     EDA_ITEM_FLAGS GetEditFlags() const
     {
         constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_RESIZING | IS_DRAGGING
-                               | IS_CHANGED | IS_WIRE_IMAGE | STRUCT_DELETED );
+                               | IS_CHANGED | STRUCT_DELETED );
 
         return m_flags & mask;
     }

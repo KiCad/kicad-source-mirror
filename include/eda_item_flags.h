@@ -42,7 +42,7 @@
 #define IS_RESIZING    (1 << 5)    ///< Item being resized
 #define IS_DRAGGING    (1 << 6)    ///< Item being dragged
 #define IS_DELETED     (1 << 7)
-#define IS_WIRE_IMAGE  (1 << 8)    ///< Item to be drawn as wireframe while editing
+
 #define STARTPOINT     (1 << 9)    ///< When a line is selected, these flags indicate which
 #define ENDPOINT       (1 << 10)   ///< ends.  (Used to support dragging.)
 #define SELECTED       (1 << 11)   ///< Item was manually selected by the user
