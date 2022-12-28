@@ -393,7 +393,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
             field.SetTextAngle( ANGLE_HORIZONTAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
-            if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
+            if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
                 offset.x = - ( labelLen + margin );
             else
                 offset.y = accumulated + field.GetTextHeight() / 2;
@@ -404,7 +404,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
             field.SetTextAngle( ANGLE_VERTICAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-            if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
+            if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
                 offset.y = - ( labelLen + margin );
             else
                 offset.x = accumulated + field.GetTextHeight() / 2;
@@ -415,7 +415,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
             field.SetTextAngle( ANGLE_HORIZONTAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-            if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
+            if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
                 offset.x = labelLen + margin;
             else
                 offset.y = accumulated + field.GetTextHeight() / 2;
@@ -426,7 +426,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
             field.SetTextAngle( ANGLE_VERTICAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
-            if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
+            if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
                 offset.y = labelLen + margin;
             else
                 offset.x = accumulated + field.GetTextHeight() / 2;
@@ -436,7 +436,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
         field.SetTextPos( GetTextPos() + offset );
 
-        if( Type() != SCH_GLOBAL_LABEL_T || field.GetId() > 0 )
+        if( field.GetCanonicalName() != wxT( "Intersheetrefs" ) )
             accumulated += field.GetTextHeight() + margin;
     }
 
