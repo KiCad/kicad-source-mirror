@@ -40,7 +40,7 @@
 #define IS_MOVING      (1 << 3)    ///< Item being moved
 #define IS_NEW         (1 << 4)    ///< New item, just created
 #define IS_BROKEN      (1 << 5)    ///< Is a segment just broken by BreakSegment
-#define IS_DRAGGING    (1 << 6)    ///< Item being dragged
+
 #define IS_DELETED     (1 << 7)
 
 #define STARTPOINT     (1 << 9)    ///< When a line is selected, these flags indicate which

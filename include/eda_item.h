@@ -102,7 +102,7 @@ public:
     inline bool IsModified() const { return m_flags & IS_CHANGED; }
     inline bool IsNew() const { return m_flags & IS_NEW; }
     inline bool IsMoving() const { return m_flags & IS_MOVING; }
-    inline bool IsDragging() const { return m_flags & IS_DRAGGING; }
+
     inline bool IsSelected() const { return m_flags & SELECTED; }
     inline bool IsEntered() const { return m_flags & ENTERED; }
     inline bool IsBrightened() const { return m_flags & BRIGHTENED; }
@@ -144,8 +144,8 @@ public:
 
     EDA_ITEM_FLAGS GetEditFlags() const
     {
-        constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_DRAGGING | IS_BROKEN
-                               | IS_CHANGED | STRUCT_DELETED );
+        constexpr int mask =
+                ( IS_NEW | IS_PASTED | IS_MOVING | IS_BROKEN | IS_CHANGED | STRUCT_DELETED );
 
         return m_flags & mask;
     }
