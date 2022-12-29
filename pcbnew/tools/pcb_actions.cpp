@@ -1438,7 +1438,7 @@ TOOL_ACTION PCB_ACTIONS::routeDiffPair( "pcbnew.InteractiveRouter.DiffPair",
 
 TOOL_ACTION PCB_ACTIONS::routerSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
         AS_GLOBAL,
-        MD_CTRL + MD_SHIFT + ',', LEGACY_HK_NAME( "Routing Options" ),
+        MD_CTRL + '<', LEGACY_HK_NAME( "Routing Options" ),
         _( "Interactive Router Settings..." ), _( "Open Interactive Router settings" ),
         BITMAPS::tools );
 

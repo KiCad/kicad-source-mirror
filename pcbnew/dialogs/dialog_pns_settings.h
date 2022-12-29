@@ -39,8 +39,9 @@ class DIALOG_PNS_SETTINGS : public DIALOG_PNS_SETTINGS_BASE
     public:
         DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTINGS& aSettings );
 
+        bool TransferDataFromWindow() override;
+
     private:
-        virtual void OnOkClick( wxCommandEvent& aEvent ) override;
         virtual void onModeChange( wxCommandEvent& aEvent ) override;
 
         PNS::ROUTING_SETTINGS& m_settings;

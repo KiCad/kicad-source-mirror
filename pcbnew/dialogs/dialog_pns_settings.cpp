@@ -56,13 +56,13 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
     // Don't show options that are not implemented
     m_suggestEnding->Hide();
 
-    SetDefaultItem( m_stdButtonsOK );
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
+    SetupStandardButtons();
+
+    finishDialogSettings();
 }
 
 
-void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
+bool DIALOG_PNS_SETTINGS::TransferDataFromWindow()
 {
     // Save widgets' values to settings
     m_settings.SetMode( (PNS::PNS_MODE) m_mode->GetSelection() );
@@ -82,7 +82,7 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     if( m_freeAngleMode->IsEnabled() )
         m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
 
-    aEvent.Skip();      // ends returning wxID_OK (default behavior)
+    return true;
 }
 
 
