@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "html_window.h"
 #include "calculator_panel.h"
 #include <wx/string.h>
@@ -54,7 +56,7 @@ class PANEL_ATTENUATORS_BASE : public CALCULATOR_PANEL
 		wxTextCtrl* m_ZoutValueCtrl;
 		wxStaticText* m_attZoutUnit;
 		wxButton* m_buttonAlcAtt;
-		wxBitmapButton* m_bpButtonCalcAtt;
+		STD_BITMAP_BUTTON* m_bpButtonCalcAtt;
 		wxStaticText* m_attenuatorR1Label;
 		wxTextCtrl* m_Att_R1_Value;
 		wxStaticText* m_attR1Unit;
@@ -75,7 +77,7 @@ class PANEL_ATTENUATORS_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_ATTENUATORS_BASE();
 

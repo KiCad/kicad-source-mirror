@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,12 +25,12 @@ class UNIT_SELECTOR_THICKNESS;
 #include <wx/radiobut.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/html/htmlwin.h>
+#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ class PANEL_FUSING_CURRENT_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_FUSING_CURRENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 576,574 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_FUSING_CURRENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 512,574 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_FUSING_CURRENT_BASE();
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,92 +21,92 @@ PANEL_WAVELENGTH_BASE::PANEL_WAVELENGTH_BASE( wxWindow* parent, wxWindowID id, c
 
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer3->SetFlexibleDirection( wxBOTH );
+	fgSizer3->SetFlexibleDirection( wxHORIZONTAL );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticText18 = new wxStaticText( this, wxID_ANY, _("Frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
-	fgSizer3->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer3->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_frequencyCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_frequencyCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizer3->Add( m_frequencyCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_frequencyUnitChoices;
 	m_frequencyUnit = new UNIT_SELECTOR_FREQUENCY( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_frequencyUnitChoices, 0 );
 	m_frequencyUnit->SetSelection( 0 );
-	fgSizer3->Add( m_frequencyUnit, 0, wxALL, 5 );
+	fgSizer3->Add( m_frequencyUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 	m_staticText181 = new wxStaticText( this, wxID_ANY, _("Period:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText181->Wrap( -1 );
-	fgSizer3->Add( m_staticText181, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer3->Add( m_staticText181, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_periodCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_periodCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizer3->Add( m_periodCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_periodUnitChoices;
 	m_periodUnit = new UNIT_SELECTOR_TIME( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_periodUnitChoices, 0 );
 	m_periodUnit->SetSelection( 0 );
-	fgSizer3->Add( m_periodUnit, 0, wxALL, 5 );
+	fgSizer3->Add( m_periodUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 	m_staticText1811 = new wxStaticText( this, wxID_ANY, _("Wavelength in vacuum:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1811->Wrap( -1 );
-	fgSizer3->Add( m_staticText1811, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer3->Add( m_staticText1811, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_wavelengthVacuumCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_wavelengthVacuumCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizer3->Add( m_wavelengthVacuumCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_wavelengthVacuumUnitChoices;
 	m_wavelengthVacuumUnit = new UNIT_SELECTOR_LEN_CABLE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_wavelengthVacuumUnitChoices, 0 );
 	m_wavelengthVacuumUnit->SetSelection( 0 );
-	fgSizer3->Add( m_wavelengthVacuumUnit, 0, wxALL, 5 );
+	fgSizer3->Add( m_wavelengthVacuumUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 	m_staticText18111 = new wxStaticText( this, wxID_ANY, _("Wavelength in medium:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18111->Wrap( -1 );
-	fgSizer3->Add( m_staticText18111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer3->Add( m_staticText18111, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_wavelengthMediumCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_wavelengthMediumCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizer3->Add( m_wavelengthMediumCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_wavelengthMediumUnitChoices;
 	m_wavelengthMediumUnit = new UNIT_SELECTOR_LEN_CABLE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_wavelengthMediumUnitChoices, 0 );
 	m_wavelengthMediumUnit->SetSelection( 0 );
-	fgSizer3->Add( m_wavelengthMediumUnit, 0, wxALL, 5 );
+	fgSizer3->Add( m_wavelengthMediumUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 	m_staticText181112 = new wxStaticText( this, wxID_ANY, _("Speed in medium:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText181112->Wrap( -1 );
-	fgSizer3->Add( m_staticText181112, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer3->Add( m_staticText181112, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_speedCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer3->Add( m_speedCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizer3->Add( m_speedCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_speedUnitChoices;
 	m_speedUnit = new UNIT_SELECTOR_SPEED( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_speedUnitChoices, 0 );
 	m_speedUnit->SetSelection( 0 );
-	fgSizer3->Add( m_speedUnit, 0, wxALL, 5 );
+	fgSizer3->Add( m_speedUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 	m_staticText181111 = new wxStaticText( this, wxID_ANY, _("er:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText181111->Wrap( -1 );
 	m_staticText181111->SetToolTip( _("relative permittivity (dielectric constant)") );
 
-	fgSizer3->Add( m_staticText181111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer3->Add( m_staticText181111, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_permittivityCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_permittivityCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizer3->Add( m_permittivityCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_button1 = new wxButton( this, wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_button1, 0, wxALL, 5 );
+	fgSizer3->Add( m_button1, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 	m_staticText42 = new wxStaticText( this, wxID_ANY, _("mur:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText42->Wrap( -1 );
 	m_staticText42->SetToolTip( _("relative permeability") );
 
-	fgSizer3->Add( m_staticText42, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer3->Add( m_staticText42, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_permeabilityCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_permeabilityCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizer3->Add( m_permeabilityCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer4->Add( fgSizer3, 1, wxEXPAND, 5 );
+	bSizer4->Add( fgSizer3, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizer6->Add( bSizer4, 1, wxEXPAND, 5 );

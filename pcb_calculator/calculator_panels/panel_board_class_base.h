@@ -46,7 +46,7 @@ class PANEL_BOARD_CLASS_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 701,347 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_BOARD_CLASS_BASE();
 

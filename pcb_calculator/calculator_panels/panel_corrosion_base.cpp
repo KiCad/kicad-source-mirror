@@ -43,38 +43,42 @@ PANEL_CORROSION_BASE::PANEL_CORROSION_BASE( wxWindow* parent, wxWindowID id, con
 
 	// Cell Defaults
 	m_table->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer7->Add( m_table, 1, wxALL|wxEXPAND, 5 );
+	bSizer7->Add( m_table, 1, wxEXPAND, 5 );
 
 
 	m_scrolledWindow1->SetSizer( bSizer7 );
 	m_scrolledWindow1->Layout();
 	bSizer7->Fit( m_scrolledWindow1 );
-	bSizer6->Add( m_scrolledWindow1, 1, wxEXPAND | wxALL, 5 );
+	bSizer6->Add( m_scrolledWindow1, 1, wxEXPAND|wxALL, 5 );
 
-	m_staticText16 = new wxStaticText( this, wxID_ANY, _("This table shows the difference in electrochemical potential between various metals and alloys. A positive number indicates that the row is anodic and the column is cathodic.\nGalvanic corrosion affects different metals in contact and under certain conditions.\nThe anode of an electrochemical pair gets oxidized and eaten away, while the cathode gets dissolved metals plated onto it but stays protected.\nEN 50310 suggests a voltage difference below 300mV. Known practices make use of a third interface metal in between the main pair(ie the ENIG surface finish)."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText16->Wrap( -1 );
-	bSizer6->Add( m_staticText16, 0, wxALL, 5 );
+	m_helpText = new HTML_WINDOW( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	m_helpText->SetMinSize( wxSize( 400,100 ) );
+
+	bSizer6->Add( m_helpText, 0, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Threshold voltage:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	bSizer3->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer3->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_corFilterCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_corFilterCtrl->SetMinSize( wxSize( 100,-1 ) );
+
 	bSizer3->Add( m_corFilterCtrl, 0, wxALL, 5 );
 
 	m_staticText3 = new wxStaticText( this, wxID_ANY, _("mV"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	bSizer3->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxRIGHT, 5 );
+	bSizer3->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
 
-	bSizer6->Add( bSizer3, 0, wxEXPAND, 5 );
+	bSizer6->Add( bSizer3, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
 	this->SetSizer( bSizer6 );
 	this->Layout();
+	bSizer6->Fit( this );
 
 	// Connect Events
 	m_corFilterCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CORROSION_BASE::OnCorFilterChange ), NULL, this );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -84,42 +84,42 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_labelRegultR1 = new wxStaticText( this, wxID_ANY, _("R1:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelRegultR1->Wrap( -1 );
-	fgSizerRegParams->Add( m_labelRegultR1, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_labelRegultR1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulR1Value = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_RegulR1Value, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_r1Units = new wxStaticText( this, wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_r1Units->Wrap( -1 );
-	fgSizerRegParams->Add( m_r1Units, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerRegParams->Add( m_r1Units, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rbRegulR2 = new wxRadioButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_rbRegulR2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_labelRegultR2 = new wxStaticText( this, wxID_ANY, _("R2:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelRegultR2->Wrap( -1 );
-	fgSizerRegParams->Add( m_labelRegultR2, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_labelRegultR2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulR2Value = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_RegulR2Value, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_r2Units = new wxStaticText( this, wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_r2Units->Wrap( -1 );
-	fgSizerRegParams->Add( m_r2Units, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerRegParams->Add( m_r2Units, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rbRegulVout = new wxRadioButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_rbRegulVout, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_labelVout = new wxStaticText( this, wxID_ANY, _("Vout:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelVout->Wrap( -1 );
-	fgSizerRegParams->Add( m_labelVout, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_labelVout, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulVoutValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_RegulVoutValue, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_unitsVout = new wxStaticText( this, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitsVout->Wrap( -1 );
-	fgSizerRegParams->Add( m_unitsVout, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerRegParams->Add( m_unitsVout, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -128,14 +128,14 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	m_labelVRef->Wrap( -1 );
 	m_labelVRef->SetToolTip( _("The internal reference voltage of the regulator.\nShould not be 0.") );
 
-	fgSizerRegParams->Add( m_labelVRef, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_labelVRef, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulVrefValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_RegulVrefValue, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_unitsVref = new wxStaticText( this, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitsVref->Wrap( -1 );
-	fgSizerRegParams->Add( m_unitsVref, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerRegParams->Add( m_unitsVref, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -144,38 +144,35 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	m_RegulIadjTitle->Wrap( -1 );
 	m_RegulIadjTitle->SetToolTip( _("For 3 terminal regulators only, the  Adjust pin current.") );
 
-	fgSizerRegParams->Add( m_RegulIadjTitle, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_RegulIadjTitle, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulIadjValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_RegulIadjValue, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_IadjUnitLabel = new wxStaticText( this, wxID_ANY, _("uA"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_IadjUnitLabel->Wrap( -1 );
-	fgSizerRegParams->Add( m_IadjUnitLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerRegParams->Add( m_IadjUnitLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerRegulRight->Add( fgSizerRegParams, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bSizerRegulRight->Add( fgSizerRegParams, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 10 );
 
 	wxBoxSizer* bSizerRegulButtonCalcReset;
 	bSizerRegulButtonCalcReset = new wxBoxSizer( wxHORIZONTAL );
 
-
-	bSizerRegulButtonCalcReset->Add( 0, 0, 3, wxEXPAND, 5 );
-
 	m_buttonCalculate = new wxButton( this, wxID_ANY, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRegulButtonCalcReset->Add( m_buttonCalculate, 6, wxTOP, 10 );
+	bSizerRegulButtonCalcReset->Add( m_buttonCalculate, 0, wxTOP, 10 );
 
 
-	bSizerRegulButtonCalcReset->Add( 0, 0, 2, wxEXPAND, 5 );
+	bSizerRegulButtonCalcReset->Add( 10, 0, 0, 0, 5 );
 
 	m_buttonRegulReset = new wxButton( this, wxID_ANY, _("Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRegulButtonCalcReset->Add( m_buttonRegulReset, 6, wxTOP, 10 );
+	bSizerRegulButtonCalcReset->Add( m_buttonRegulReset, 0, wxTOP, 10 );
 
 
 	bSizerRegulButtonCalcReset->Add( 0, 0, 3, wxEXPAND, 5 );
 
 
-	bSizerRegulRight->Add( bSizerRegulButtonCalcReset, 0, wxEXPAND|wxLEFT, 30 );
+	bSizerRegulRight->Add( bSizerRegulButtonCalcReset, 0, wxEXPAND|wxLEFT, 5 );
 
 	m_RegulMessage = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_RegulMessage->Wrap( -1 );
@@ -232,7 +229,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerRegulRight->Add( sbSizerRegulatorsChooser, 0, wxEXPAND|wxRIGHT, 10 );
 
 
-	bSizerColBalancer->Add( bSizerRegulRight, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bSizerColBalancer->Add( bSizerRegulRight, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	bSizerMainReg->Add( bSizerColBalancer, 0, wxEXPAND, 5 );
@@ -240,6 +237,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 
 	this->SetSizer( bSizerMainReg );
 	this->Layout();
+	bSizerMainReg->Fit( this );
 
 	// Connect Events
 	m_choiceRegType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulTypeSelection ), NULL, this );

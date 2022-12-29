@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/std_bitmap_button.h"
 
 #include "panel_attenuators_base.h"
 
@@ -28,10 +30,10 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 	bLeftSizerAtt->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_attenuatorBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizerAtt->Add( m_attenuatorBitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
+	bLeftSizerAtt->Add( m_attenuatorBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxBOTTOM, 10 );
 
 
-	bSizerAtt->Add( bLeftSizerAtt, 0, wxEXPAND|wxRIGHT, 5 );
+	bSizerAtt->Add( bLeftSizerAtt, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 	wxBoxSizer* bMiddleSizerAtt;
 	bMiddleSizerAtt = new wxBoxSizer( wxVERTICAL );
@@ -50,33 +52,39 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerAttPrms->Add( m_attenuationLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_AttValueCtrl = new wxTextCtrl( sbSizerAttPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_AttValueCtrl->SetMinSize( wxSize( 100,-1 ) );
+
 	fgSizerAttPrms->Add( m_AttValueCtrl, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_attUnit = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("dB"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attUnit->Wrap( -1 );
-	fgSizerAttPrms->Add( m_attUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerAttPrms->Add( m_attUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_attenuationZinLabel = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Zin:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attenuationZinLabel->Wrap( -1 );
 	fgSizerAttPrms->Add( m_attenuationZinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ZinValueCtrl = new wxTextCtrl( sbSizerAttPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ZinValueCtrl->SetMinSize( wxSize( 100,-1 ) );
+
 	fgSizerAttPrms->Add( m_ZinValueCtrl, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_attZinUnit = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attZinUnit->Wrap( -1 );
-	fgSizerAttPrms->Add( m_attZinUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerAttPrms->Add( m_attZinUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ZoutLabel = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Zout:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ZoutLabel->Wrap( -1 );
 	fgSizerAttPrms->Add( m_ZoutLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ZoutValueCtrl = new wxTextCtrl( sbSizerAttPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ZoutValueCtrl->SetMinSize( wxSize( 100,-1 ) );
+
 	fgSizerAttPrms->Add( m_ZoutValueCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_attZoutUnit = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attZoutUnit->Wrap( -1 );
-	fgSizerAttPrms->Add( m_attZoutUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerAttPrms->Add( m_attZoutUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizerAttPrms->Add( fgSizerAttPrms, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -88,13 +96,15 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 	bSizerAttButt = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonAlcAtt = new wxButton( this, wxID_ANY, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerAttButt->Add( m_buttonAlcAtt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_buttonAlcAtt->SetMinSize( wxSize( 120,-1 ) );
 
-	m_bpButtonCalcAtt = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizerAttButt->Add( m_buttonAlcAtt, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_bpButtonCalcAtt = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerAttButt->Add( m_bpButtonCalcAtt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bMiddleSizerAtt->Add( bSizerAttButt, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bMiddleSizerAtt->Add( bSizerAttButt, 0, 0, 5 );
 
 	wxStaticBoxSizer* sbSizerAttValues;
 	sbSizerAttValues = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Values") ), wxVERTICAL );
@@ -114,7 +124,7 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 
 	m_attR1Unit = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attR1Unit->Wrap( -1 );
-	fgSizerAttResults->Add( m_attR1Unit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerAttResults->Add( m_attR1Unit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_attenuatorR2Label = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("R2:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attenuatorR2Label->Wrap( -1 );
@@ -125,7 +135,7 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 
 	m_attR2Unit = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attR2Unit->Wrap( -1 );
-	fgSizerAttResults->Add( m_attR2Unit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerAttResults->Add( m_attR2Unit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_attenuatorR3Label = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("R3:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attenuatorR3Label->Wrap( -1 );
@@ -136,7 +146,7 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 
 	m_attR3Unit = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attR3Unit->Wrap( -1 );
-	fgSizerAttResults->Add( m_attR3Unit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerAttResults->Add( m_attR3Unit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizerAttValues->Add( fgSizerAttResults, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -164,20 +174,29 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 	bMiddleSizerAtt->Add( bSizerMessages, 1, wxEXPAND|wxLEFT, 3 );
 
 
-	bSizerAtt->Add( bMiddleSizerAtt, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerAtt->Add( bMiddleSizerAtt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbRightSizerFormula;
 	sbRightSizerFormula = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Formula") ), wxVERTICAL );
 
 	m_panelAttFormula = new HTML_WINDOW( sbRightSizerFormula->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	m_panelAttFormula->SetMinSize( wxSize( 200,-1 ) );
+
 	sbRightSizerFormula->Add( m_panelAttFormula, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bSizerAtt->Add( sbRightSizerFormula, 1, wxEXPAND|wxALL, 5 );
+	bSizer7->Add( sbRightSizerFormula, 1, wxEXPAND|wxALL, 5 );
+
+
+	bSizerAtt->Add( bSizer7, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
 	this->SetSizer( bSizerAtt );
 	this->Layout();
+	bSizerAtt->Fit( this );
 
 	// Connect Events
 	m_AttenuatorsSelection->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( PANEL_ATTENUATORS_BASE::OnAttenuatorSelection ), NULL, this );

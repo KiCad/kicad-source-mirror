@@ -28,7 +28,7 @@ class PCB_CALCULATOR_SETTINGS;
 class CORROSION_TABLE_ENTRY
 {
 public:
-    CORROSION_TABLE_ENTRY( wxString aName, wxString aSymbol, double aPot );
+    CORROSION_TABLE_ENTRY( const wxString& aName, const wxString& aSymbol, double aPot );
     /** @brief Translatable name ( Copper ) */
     wxString m_name;
     /** @brief Chemical symbol (Cu), not translatable */
@@ -51,6 +51,7 @@ public:
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void ThemeChanged() override;
     void OnCorFilterChange( wxCommandEvent& aEvent ) override;
+
 private:
     double m_corFilterValue;
     void FillTable();

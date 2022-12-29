@@ -22,8 +22,8 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 
 	wxFlexGridSizer* fgSizerAttPrms1;
 	fgSizerAttPrms1 = new wxFlexGridSizer( 4, 3, 3, 0 );
-	fgSizerAttPrms1->AddGrowableRow( 1 );
-	fgSizerAttPrms1->SetFlexibleDirection( wxBOTH );
+	fgSizerAttPrms1->AddGrowableCol( 1 );
+	fgSizerAttPrms1->SetFlexibleDirection( wxHORIZONTAL );
 	fgSizerAttPrms1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_ESrequired = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("Required resistance:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -31,7 +31,7 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 	fgSizerAttPrms1->Add( m_ESrequired, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ResRequired = new wxTextCtrl( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerAttPrms1->Add( m_ResRequired, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerAttPrms1->Add( m_ResRequired, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_reqResUnits = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_reqResUnits->Wrap( -1 );
@@ -42,7 +42,7 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 	fgSizerAttPrms1->Add( m_ESrequired1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ResExclude1 = new wxTextCtrl( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerAttPrms1->Add( m_ResExclude1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerAttPrms1->Add( m_ResExclude1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_exclude1Units = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_exclude1Units->Wrap( -1 );
@@ -53,7 +53,7 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 	fgSizerAttPrms1->Add( m_ESrequired11, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ResExclude2 = new wxTextCtrl( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerAttPrms1->Add( m_ResExclude2, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerAttPrms1->Add( m_ResExclude2, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_exclude2Units = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_exclude2Units->Wrap( -1 );
@@ -104,6 +104,8 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 	fgSizerESeriesResults->Add( m_ESeriesSimpleSolution, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ESeries_Sol2R = new wxTextCtrl( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ESeries_Sol2R->SetMinSize( wxSize( 200,-1 ) );
+
 	fgSizerESeriesResults->Add( m_ESeries_Sol2R, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_ESeriesSimpleErr = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("Approximation:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -122,7 +124,7 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 	fgSizerESeriesResults->Add( m_ESeries3RSolution1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ESeries_Sol3R = new wxTextCtrl( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_ESeries_Sol3R->SetMinSize( wxSize( 220,-1 ) );
+	m_ESeries_Sol3R->SetMinSize( wxSize( 200,-1 ) );
 
 	fgSizerESeriesResults->Add( m_ESeries_Sol3R, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
@@ -142,6 +144,8 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 	fgSizerESeriesResults->Add( m_ESeries4RSolution, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ESeries_Sol4R = new wxTextCtrl( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ESeries_Sol4R->SetMinSize( wxSize( 200,-1 ) );
+
 	fgSizerESeriesResults->Add( m_ESeries_Sol4R, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 
 	m_ESeriesAltErr1 = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("Approximation:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -174,7 +178,7 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 	bMiddleSizerESeries->Add( bSizer47, 1, wxALIGN_BOTTOM, 5 );
 
 
-	bSizerESeries->Add( bMiddleSizerESeries, 0, wxEXPAND|wxTOP, 5 );
+	bSizerESeries->Add( bMiddleSizerESeries, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 	wxBoxSizer* bLowerESeries;
 	bLowerESeries = new wxBoxSizer( wxHORIZONTAL );
@@ -188,10 +192,10 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 	sbLowerSizerEseriesHelp->Add( m_panelESeriesHelp, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bLowerESeries->Add( sbLowerSizerEseriesHelp, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bLowerESeries->Add( sbLowerSizerEseriesHelp, 1, wxEXPAND|wxALL, 5 );
 
 
-	bSizerESeries->Add( bLowerESeries, 1, wxEXPAND, 5 );
+	bSizerESeries->Add( bLowerESeries, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
 	this->SetSizer( bSizerESeries );

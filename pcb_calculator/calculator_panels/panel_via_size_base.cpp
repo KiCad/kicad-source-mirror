@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,7 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	m_staticTextHoleDia->Wrap( -1 );
 	m_staticTextHoleDia->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	fgSizerVS_Inputs->Add( m_staticTextHoleDia, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextHoleDia, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlHoleDia = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerVS_Inputs->Add( m_textCtrlHoleDia, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -40,11 +40,11 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	wxArrayString m_choiceHoleDiaChoices;
 	m_choiceHoleDia = new UNIT_SELECTOR_LEN( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceHoleDiaChoices, 0 );
 	m_choiceHoleDia->SetSelection( 0 );
-	fgSizerVS_Inputs->Add( m_choiceHoleDia, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizerVS_Inputs->Add( m_choiceHoleDia, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticTextPlatingThickness = new wxStaticText( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("Plating thickness (T):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPlatingThickness->Wrap( -1 );
-	fgSizerVS_Inputs->Add( m_staticTextPlatingThickness, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextPlatingThickness, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlPlatingThickness = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerVS_Inputs->Add( m_textCtrlPlatingThickness, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -52,13 +52,13 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	wxArrayString m_choicePlatingThicknessChoices;
 	m_choicePlatingThickness = new UNIT_SELECTOR_LEN( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePlatingThicknessChoices, 0 );
 	m_choicePlatingThickness->SetSelection( 0 );
-	fgSizerVS_Inputs->Add( m_choicePlatingThickness, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizerVS_Inputs->Add( m_choicePlatingThickness, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticTextViaLength = new wxStaticText( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("Via length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextViaLength->Wrap( -1 );
 	m_staticTextViaLength->SetToolTip( _("Via length is the board thickness for through hole vias") );
 
-	fgSizerVS_Inputs->Add( m_staticTextViaLength, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextViaLength, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlViaLength = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerVS_Inputs->Add( m_textCtrlViaLength, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -66,13 +66,13 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	wxArrayString m_choiceViaLengthChoices;
 	m_choiceViaLength = new UNIT_SELECTOR_LEN( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceViaLengthChoices, 0 );
 	m_choiceViaLength->SetSelection( 0 );
-	fgSizerVS_Inputs->Add( m_choiceViaLength, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizerVS_Inputs->Add( m_choiceViaLength, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticTextViaPadDia = new wxStaticText( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("Via pad diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextViaPadDia->Wrap( -1 );
 	m_staticTextViaPadDia->SetToolTip( _("Diameter of pad surrounding via (annular ring)") );
 
-	fgSizerVS_Inputs->Add( m_staticTextViaPadDia, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextViaPadDia, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlViaPadDia = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerVS_Inputs->Add( m_textCtrlViaPadDia, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -80,13 +80,13 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	wxArrayString m_choiceViaPadDiaChoices;
 	m_choiceViaPadDia = new UNIT_SELECTOR_LEN( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceViaPadDiaChoices, 0 );
 	m_choiceViaPadDia->SetSelection( 0 );
-	fgSizerVS_Inputs->Add( m_choiceViaPadDia, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizerVS_Inputs->Add( m_choiceViaPadDia, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticTextClearanceDia = new wxStaticText( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("Clearance hole diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextClearanceDia->Wrap( -1 );
 	m_staticTextClearanceDia->SetToolTip( _("Diameter of clearance hole in ground plane(s)") );
 
-	fgSizerVS_Inputs->Add( m_staticTextClearanceDia, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextClearanceDia, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlClearanceDia = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerVS_Inputs->Add( m_textCtrlClearanceDia, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -94,13 +94,13 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	wxArrayString m_choiceClearanceDiaChoices;
 	m_choiceClearanceDia = new UNIT_SELECTOR_LEN( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceClearanceDiaChoices, 0 );
 	m_choiceClearanceDia->SetSelection( 0 );
-	fgSizerVS_Inputs->Add( m_choiceClearanceDia, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizerVS_Inputs->Add( m_choiceClearanceDia, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticTextImpedance = new wxStaticText( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("Z0:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextImpedance->Wrap( -1 );
 	m_staticTextImpedance->SetToolTip( _("Characteristic impedance of conductor") );
 
-	fgSizerVS_Inputs->Add( m_staticTextImpedance, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextImpedance, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlImpedance = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerVS_Inputs->Add( m_textCtrlImpedance, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -108,11 +108,11 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	wxArrayString m_choiceImpedanceChoices;
 	m_choiceImpedance = new UNIT_SELECTOR_RESISTOR( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceImpedanceChoices, 0 );
 	m_choiceImpedance->SetSelection( 0 );
-	fgSizerVS_Inputs->Add( m_choiceImpedance, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizerVS_Inputs->Add( m_choiceImpedance, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticAppliedCurrent = new wxStaticText( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("Applied current:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticAppliedCurrent->Wrap( -1 );
-	fgSizerVS_Inputs->Add( m_staticAppliedCurrent, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticAppliedCurrent, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlAppliedCurrent = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerVS_Inputs->Add( m_textCtrlAppliedCurrent, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -125,7 +125,7 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	m_staticTextResistivity->Wrap( -1 );
 	m_staticTextResistivity->SetToolTip( _("Specific resistance in ohms * meters") );
 
-	fgSizerVS_Inputs->Add( m_staticTextResistivity, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextResistivity, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerResistivity;
 	bSizerResistivity = new wxBoxSizer( wxHORIZONTAL );
@@ -147,7 +147,7 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	m_staticTextPermittivity->Wrap( -1 );
 	m_staticTextPermittivity->SetToolTip( _("Relative dielectric constant (epsilon r)") );
 
-	fgSizerVS_Inputs->Add( m_staticTextPermittivity, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextPermittivity, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerPermittivity;
 	bSizerPermittivity = new wxBoxSizer( wxHORIZONTAL );
@@ -168,7 +168,7 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	m_staticTextTemperatureDiff->Wrap( -1 );
 	m_staticTextTemperatureDiff->SetToolTip( _("Maximum acceptable rise in temperature") );
 
-	fgSizerVS_Inputs->Add( m_staticTextTemperatureDiff, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextTemperatureDiff, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlTemperatureDiff = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerVS_Inputs->Add( m_textCtrlTemperatureDiff, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -181,7 +181,7 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	m_staticTextRiseTime->Wrap( -1 );
 	m_staticTextRiseTime->SetToolTip( _("Pulse rise time to calculate reactance") );
 
-	fgSizerVS_Inputs->Add( m_staticTextRiseTime, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+	fgSizerVS_Inputs->Add( m_staticTextRiseTime, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlRiseTime = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerVS_Inputs->Add( m_textCtrlRiseTime, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -205,25 +205,27 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	bSizerViaLeftColumn->Add( m_staticTextWarning, 0, wxALL|wxEXPAND, 10 );
 
 
-	bSizerViaSize->Add( bSizerViaLeftColumn, 1, wxEXPAND, 5 );
+	bSizerViaSize->Add( bSizerViaLeftColumn, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 
 	bSizerRight->SetMinSize( wxSize( -1,460 ) );
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
+
 	wxStaticBoxSizer* sbSizerVS_Result;
 	sbSizerVS_Result = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Results") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTW_Results11;
-	fgSizerTW_Results11 = new wxFlexGridSizer( 0, 3, 3, 0 );
+	fgSizerTW_Results11 = new wxFlexGridSizer( 0, 3, 5, 0 );
 	fgSizerTW_Results11->AddGrowableCol( 1 );
-	fgSizerTW_Results11->AddGrowableCol( 2 );
 	fgSizerTW_Results11->SetFlexibleDirection( wxBOTH );
 	fgSizerTW_Results11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextArea11 = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Resistance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextArea11->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_staticTextArea11, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextArea11, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ViaResistance = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaResistance->Wrap( -1 );
@@ -231,11 +233,11 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_viaResUnits = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaResUnits->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_viaResUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerTW_Results11->Add( m_viaResUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText65111 = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Voltage drop:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText65111->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_staticText65111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results11->Add( m_staticText65111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ViaVoltageDrop = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaVoltageDrop->Wrap( -1 );
@@ -243,11 +245,11 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_staticText8411 = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8411->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_staticText8411, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerTW_Results11->Add( m_staticText8411, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText66111 = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Power loss:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText66111->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_staticText66111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results11->Add( m_staticText66111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ViaPowerLoss = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaPowerLoss->Wrap( -1 );
@@ -255,13 +257,13 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_staticText8311 = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("W"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8311->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_staticText8311, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerTW_Results11->Add( m_staticText8311, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText79211 = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Thermal resistance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText79211->Wrap( -1 );
 	m_staticText79211->SetToolTip( _("Using thermal conductivity value 401 Watts/(meter-Kelvin)") );
 
-	fgSizerTW_Results11->Add( m_staticText79211, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results11->Add( m_staticText79211, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ViaThermalResistance = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaThermalResistance->Wrap( -1 );
@@ -269,13 +271,13 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_viaThermalResUnits = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("deg C/W"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaThermalResUnits->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_viaThermalResUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerTW_Results11->Add( m_viaThermalResUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticTextAmpacity = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Estimated ampacity:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAmpacity->Wrap( -1 );
 	m_staticTextAmpacity->SetToolTip( _("Based on temperature rise") );
 
-	fgSizerTW_Results11->Add( m_staticTextAmpacity, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextAmpacity, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ViaAmpacity = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaAmpacity->Wrap( -1 );
@@ -283,11 +285,11 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_staticTextAmpacityUnits = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("A"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAmpacityUnits->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_staticTextAmpacityUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextAmpacityUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticTextCapacitance = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Capacitance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCapacitance->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_staticTextCapacitance, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextCapacitance, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ViaCapacitance = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaCapacitance->Wrap( -1 );
@@ -297,13 +299,13 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	m_staticTextCapacitanceUnits->Wrap( -1 );
 	m_staticTextCapacitanceUnits->SetToolTip( _("pico-Farad") );
 
-	fgSizerTW_Results11->Add( m_staticTextCapacitanceUnits, 0, wxRIGHT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextCapacitanceUnits, 0, 0, 5 );
 
 	m_staticTextRiseTimeOutput = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Rise time degradation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRiseTimeOutput->Wrap( -1 );
 	m_staticTextRiseTimeOutput->SetToolTip( _("Rise time degradation for given Z0 and calculated capacitance") );
 
-	fgSizerTW_Results11->Add( m_staticTextRiseTimeOutput, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextRiseTimeOutput, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RiseTimeOutput = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RiseTimeOutput->Wrap( -1 );
@@ -313,11 +315,11 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	m_staticTextRiseTimeOutputUnits->Wrap( -1 );
 	m_staticTextRiseTimeOutputUnits->SetToolTip( _("picoseconds") );
 
-	fgSizerTW_Results11->Add( m_staticTextRiseTimeOutputUnits, 0, wxRIGHT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextRiseTimeOutputUnits, 0, 0, 5 );
 
 	m_staticTextInductance = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Inductance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInductance->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_staticTextInductance, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextInductance, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_Inductance = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Inductance->Wrap( -1 );
@@ -327,13 +329,13 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 	m_staticTextInductanceUnits->Wrap( -1 );
 	m_staticTextInductanceUnits->SetToolTip( _("nano-Henry") );
 
-	fgSizerTW_Results11->Add( m_staticTextInductanceUnits, 0, wxRIGHT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextInductanceUnits, 0, 0, 5 );
 
 	m_staticTextReactance = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Reactance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextReactance->Wrap( -1 );
 	m_staticTextReactance->SetToolTip( _("Inductive reactance for given rise time and calculated inductance") );
 
-	fgSizerTW_Results11->Add( m_staticTextReactance, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results11->Add( m_staticTextReactance, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_Reactance = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Reactance->Wrap( -1 );
@@ -341,31 +343,35 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_viaReactanceUnits = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaReactanceUnits->Wrap( -1 );
-	fgSizerTW_Results11->Add( m_viaReactanceUnits, 0, wxRIGHT, 5 );
+	fgSizerTW_Results11->Add( m_viaReactanceUnits, 0, 0, 5 );
 
 
-	sbSizerVS_Result->Add( fgSizerTW_Results11, 0, wxEXPAND, 5 );
+	sbSizerVS_Result->Add( fgSizerTW_Results11, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bSizerRight->Add( sbSizerVS_Result, 0, wxEXPAND|wxALL, 5 );
+	bSizer6->Add( sbSizerVS_Result, 0, wxALL, 5 );
 
 	m_viaBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaBitmap->SetToolTip( _("Top view of via") );
 
-	bSizerRight->Add( m_viaBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizer6->Add( m_viaBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 10 );
+
+
+	bSizerRight->Add( bSizer6, 0, 0, 5 );
 
 
 	bSizerRight->Add( 0, 0, 1, 0, 5 );
 
 	m_buttonViaReset = new wxButton( this, wxID_ANY, _("Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonViaReset, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizerRight->Add( m_buttonViaReset, 0, wxALIGN_RIGHT|wxALL, 10 );
 
 
-	bSizerViaSize->Add( bSizerRight, 0, wxEXPAND, 5 );
+	bSizerViaSize->Add( bSizerRight, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerViaSize );
 	this->Layout();
+	bSizerViaSize->Fit( this );
 
 	// Connect Events
 	m_textCtrlHoleDia->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_VIA_SIZE_BASE::OnViaCalculate ), NULL, this );

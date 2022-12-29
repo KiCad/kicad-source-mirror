@@ -25,7 +25,7 @@
 extern double DoubleFromString( const wxString& TextValue );
 
 
-CORROSION_TABLE_ENTRY::CORROSION_TABLE_ENTRY( wxString aName, wxString aSymbol, double aPot )
+CORROSION_TABLE_ENTRY::CORROSION_TABLE_ENTRY( const wxString& aName, const wxString& aSymbol, double aPot )
 {
     m_potential = aPot;
     m_name = aName;
@@ -40,8 +40,7 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
     m_entries.emplace_back( CORROSION_TABLE_ENTRY( _( "Platinum" ), "Pt", -0.57 ) );
     m_entries.emplace_back( CORROSION_TABLE_ENTRY( _( "Gold" ), "Au", -0.44 ) );
     m_entries.emplace_back( CORROSION_TABLE_ENTRY( _( "Titanium" ), "Ti", -0.32 ) );
-    m_entries.emplace_back( CORROSION_TABLE_ENTRY( _( "Stainless steel 18-9" ), "X8CrNiS18-9",
-                                                   -0.32 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( _( "Stainless steel 18-9" ), "X8CrNiS18-9", -0.32 ) );
     m_entries.emplace_back( CORROSION_TABLE_ENTRY( _( "Silver" ), "Ag", -0.22 ) );
     m_entries.emplace_back( CORROSION_TABLE_ENTRY( _( "Mercury" ), "Hg", -0.22 ) );
     m_entries.emplace_back( CORROSION_TABLE_ENTRY( _( "Nickel" ), "Ni", -0.14 ) );
@@ -66,13 +65,28 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
 
     m_table->DeleteCols( 0, m_table->GetNumberCols() );
     m_table->DeleteRows( 0, m_table->GetNumberRows() );
-    m_table->AppendCols( m_entries.size() );
-    m_table->AppendRows( m_entries.size() );
+    m_table->AppendCols( (int) m_entries.size() );
+    m_table->AppendRows( (int) m_entries.size() );
+
+    // This is not currently HTML because we're in string freeze.  But it might be nice to pretty
+    // it up for the next version....
+    wxString help( _( "This table shows the difference in electrochemical potential between "
+                      "various metals and alloys. A positive number indicates that the row is "
+                      "anodic and the column is cathodic.\n"
+                      "Galvanic corrosion affects different metals in contact and under certain "
+                      "conditions.\n"
+                      "The anode of an electrochemical pair gets oxidized and eaten away, while "
+                      "the cathode gets dissolved metals plated onto it but stays protected.\n"
+                      "EN 50310 suggests a voltage difference below 300mV. Known practices make "
+                      "use of a third interface metal in between the main pair(ie the ENIG surface "
+                      "finish)." ) );
+
+    help.Replace( "\n", "<br/>" );
+
+    m_helpText->SetPage( help );
 
     m_corFilterValue = 0;
     FillTable();
-    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
-    GetSizer()->SetSizeHints( this );
 }
 
 
@@ -108,31 +122,26 @@ void PANEL_CORROSION::OnCorFilterChange( wxCommandEvent& aEvent )
 void PANEL_CORROSION::FillTable()
 {
     // Fill the table with data
-    int i = 0;
-
+    int      i = 0;
     wxColour color_ok( 122, 166, 194 );
-
     wxColour color_text( 0, 0, 0 );
     wxString value;
 
-
-    for( CORROSION_TABLE_ENTRY entryA : m_entries )
+    for( const CORROSION_TABLE_ENTRY& entryA : m_entries )
     {
-        int j = 0;
-
+        int      j = 0;
         wxString label = entryA.m_name;
 
         if( entryA.m_symbol.size() > 0 )
-        {
             label += " (" + entryA.m_symbol + ")";
-        }
+
         m_table->SetRowLabelValue( i, label );
         m_table->SetColLabelValue( i, label );
 
-        for( CORROSION_TABLE_ENTRY entryB : m_entries )
+        for( const CORROSION_TABLE_ENTRY& entryB : m_entries )
         {
             double diff = entryA.m_potential - entryB.m_potential;
-            int diff_temp = KiROUND( abs( diff * 100 ) );
+            int    diff_temp = KiROUND( abs( diff * 100 ) );
             value = "";
             value << diff * 1000; // Let's display it in mV instead of V.
             m_table->SetCellValue( i, j, value );
@@ -140,22 +149,25 @@ void PANEL_CORROSION::FillTable()
             // Overide anything that could come from a dark them
             m_table->SetCellTextColour( i, j, color_text );
 
-            if( ( abs( diff ) ) == 0 )
+            if( abs( diff ) == 0 )
             {
                 m_table->SetCellBackgroundColour( i, j, wxColor( 193, 231, 255 ) );
             }
             else if( ( KiROUND( abs( diff * 1000 ) ) ) > m_corFilterValue )
             {
-                m_table->SetCellBackgroundColour(
-                        i, j, wxColour( 202 - diff_temp, 206 - diff_temp, 225 - diff_temp ) );
+                m_table->SetCellBackgroundColour( i, j, wxColour( 202 - diff_temp,
+                                                                  206 - diff_temp,
+                                                                  225 - diff_temp ) );
             }
             else
             {
                 m_table->SetCellBackgroundColour( i, j, color_ok );
             }
+
             m_table->SetReadOnly( i, j, true );
             j++;
         }
+
         i++;
     }
 

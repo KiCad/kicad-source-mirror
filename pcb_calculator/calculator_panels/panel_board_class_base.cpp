@@ -32,7 +32,7 @@ PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id,
 
 	m_staticTextBrdClass = new wxStaticText( this, wxID_ANY, _("Note: Values are minimal values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBrdClass->Wrap( -1 );
-	m_staticTextBrdClass->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextBrdClass->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	brdclsSizerRight->Add( m_staticTextBrdClass, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
@@ -76,7 +76,7 @@ PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id,
 	m_gridClassesValuesDisplay->SetRowLabelValue( 3, _("Plated Pad: (diam - drill)") );
 	m_gridClassesValuesDisplay->SetRowLabelValue( 4, _("NP Pad: (diam - drill)") );
 	m_gridClassesValuesDisplay->SetRowLabelSize( 160 );
-	m_gridClassesValuesDisplay->SetRowLabelAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
+	m_gridClassesValuesDisplay->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
 
@@ -93,6 +93,7 @@ PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id,
 
 	this->SetSizer( bSizerBoardClass );
 	this->Layout();
+	bSizerBoardClass->Fit( this );
 
 	// Connect Events
 	m_BoardClassesUnitsSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_BOARD_CLASS_BASE::OnBoardClassesUnitsSelection ), NULL, this );

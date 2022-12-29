@@ -33,10 +33,11 @@ PANEL_WAVELENGTH::PANEL_WAVELENGTH( wxWindow* parent, wxWindowID id, const wxPoi
         PANEL_WAVELENGTH_BASE( parent, id, pos, size, style, name )
 {
     // Set the min size of wxTextCtrls showing long values
-    wxString msg( wxT( "1.234567890E+99" ) );
-    wxClientDC dc( m_speedCtrl );
-    wxSize txt_size = dc.GetTextExtent( msg );
-    m_speedCtrl->SetMinSize( txt_size );
+    wxSize minSize = m_speedCtrl->GetSize();
+    int    minWidth = m_speedCtrl->GetTextExtent( wxT( "1.234567890E+99" ) ).x;
+
+    m_speedCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+
     Layout();
 }
 

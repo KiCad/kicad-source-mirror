@@ -45,7 +45,7 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_BOARD_CLASS_BASE</property>
             <property name="pos"></property>
-            <property name="size">701,347</property>
+            <property name="size">-1,-1</property>
             <property name="subclass">CALCULATOR_PANEL; calculator_panels/calculator_panel.h; </property>
             <property name="tooltip"></property>
             <property name="two_step_creation">0</property>
@@ -275,7 +275,7 @@
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
-                                <property name="row_label_horiz_alignment">wxALIGN_RIGHT</property>
+                                <property name="row_label_horiz_alignment">wxALIGN_LEFT</property>
                                 <property name="row_label_size">160</property>
                                 <property name="row_label_values">&quot;Lines width&quot; &quot;Min clearance&quot; &quot;Via: (diam - drill)&quot; &quot;Plated Pad: (diam - drill)&quot; &quot;NP Pad: (diam - drill)&quot;</property>
                                 <property name="row_label_vert_alignment">wxALIGN_CENTER</property>

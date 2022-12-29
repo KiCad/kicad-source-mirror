@@ -44,6 +44,20 @@ PANEL_E_SERIES::PANEL_E_SERIES( wxWindow* parent, wxWindowID id, const wxPoint& 
     m_exclude1Units->SetLabel( wxT( "kΩ" ) );
     m_exclude2Units->SetLabel( wxT( "kΩ" ) );
 
+    wxSize minSize = m_ResRequired->GetMinSize();
+    int    minWidth = m_ResRequired->GetTextExtent( wxT( "XXX.XXX" ) ).GetWidth();
+
+    m_ResRequired->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+    m_ResExclude1->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+    m_ResExclude2->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+
+    minSize = m_ESeriesError2R->GetMinSize();
+    minWidth = m_ESeriesError2R->GetTextExtent( wxT( "XX" ) + _( "Exact" ) ).GetWidth();
+
+    m_ESeriesError2R->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+    m_ESeriesError3R->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+    m_ESeriesError4R->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+
     // show markdown formula explanation in lower help panel
     wxString msg;
     ConvertMarkdown2Html( wxGetTranslation( eseries_help ), msg );

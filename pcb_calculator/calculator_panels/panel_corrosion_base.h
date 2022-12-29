@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "html_window.h"
 #include "calculator_panels/calculator_panel.h"
 #include <wx/colour.h>
 #include <wx/settings.h>
@@ -19,6 +20,7 @@
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
 #include <wx/scrolwin.h>
+#include <wx/html/htmlwin.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/panel.h>
@@ -36,7 +38,7 @@ class PANEL_CORROSION_BASE : public CALCULATOR_PANEL
 	protected:
 		wxScrolledWindow* m_scrolledWindow1;
 		wxGrid* m_table;
-		wxStaticText* m_staticText16;
+		HTML_WINDOW* m_helpText;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_corFilterCtrl;
 		wxStaticText* m_staticText3;
@@ -47,7 +49,7 @@ class PANEL_CORROSION_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_CORROSION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 677,453 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_CORROSION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_CORROSION_BASE();
 
