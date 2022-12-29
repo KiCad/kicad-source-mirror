@@ -33946,9 +33946,8 @@ msgid "Library link"
 msgstr "Bibliotheksverknüpfung"
 
 #: pcbnew/footprint.cpp:2899 pcbnew/pad.cpp:1804 pcbnew/zone.cpp:1417
-#, fuzzy
 msgid "Overrides"
-msgstr "Überschreiben"
+msgstr "Überschreibungen"
 
 #: pcbnew/footprint.cpp:2905 pcbnew/pad.cpp:1806 pcbnew/zone.cpp:1419
 msgid "Clearance Override"
