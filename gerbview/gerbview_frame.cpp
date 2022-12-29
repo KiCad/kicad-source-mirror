@@ -1124,6 +1124,10 @@ void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
+    // Update gal display options like cursor shape, grid options:
+    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+
     SetPageSettings( PAGE_INFO( gvconfig()->m_Appearance.page_type ) );
 
     UpdateXORLayers();

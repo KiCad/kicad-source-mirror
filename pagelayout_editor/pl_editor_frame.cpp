@@ -609,6 +609,9 @@ void PL_EDITOR_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVar
     PL_EDITOR_SETTINGS* cfg = settingsManager.GetAppSettings<PL_EDITOR_SETTINGS>();
     COLOR_SETTINGS*     colors = settingsManager.GetColorSettings( cfg->m_ColorTheme );
 
+    // Update gal display options like cursor shape, grid options:
+    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+
     GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( colors );
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
