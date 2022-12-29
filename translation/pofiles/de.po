@@ -6023,13 +6023,12 @@ msgid "Delete clicked items"
 msgstr "Elemente durch Anklicken entfernen"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "Realistischen Modus umschalten"
+msgstr "Bogen-Bearbeitungsmethode umschalten"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Zu einer anderen Methode der Bogenbearbeitung umschalten"
 
 #: common/tool/actions.cpp:210
 msgid "Show Search Panel"
@@ -12714,7 +12713,7 @@ msgstr "Es wurde kein Symbol zum Speichern ausgewählt."
 
 #: eeschema/eeschema_jobs_handler.cpp:503 pcbnew/pcbnew_jobs_handler.cpp:585
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "Ausgabepfad darf nicht mit bestehendem Pfad in Konflikt stehen\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:513
 msgid "Saving symbol library in updated format\n"
@@ -14154,6 +14153,8 @@ msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
+"Der Dateiname für Blatt %s ist undefiniert; dies ist wahrscheinlich ein "
+"Altium-Signalbündel, welches in ein Schaltplanblatt umgewandelt wurde."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
@@ -15814,32 +15815,38 @@ msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"Kibis unterstützt noch keine DUT-Werte. https://ibis.org/summits/nov16a/chen."
+"pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:877
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "Modell hat nur ein Waveform-Paar; verringerte Genauigkeit"
 
 #: eeschema/sim/kibis/kibis.cpp:897 eeschema/sim/kibis/kibis.cpp:1102
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "Treiber benötigt wenigstens einen Pullup oder Pulldown"
 
 #: eeschema/sim/kibis/kibis.cpp:1085 eeschema/sim/kibis/kibis.cpp:1094
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"Es bestehen zwei Waveform-Paare, aber nur ein Transistor. Mehr Gleichungen "
+"als Unbekannte."
 
 #: eeschema/sim/kibis/kibis.cpp:1202
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"Modell hat kein Waveform-Paar; verwende stattdessen [Ramp]; geringe "
+"Genauigkeit"
 
 #: eeschema/sim/kibis/kibis.cpp:1215
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "Modell hat mehr als zwei Waveform-Paare; verwende die ersten zwei."
 
 #: eeschema/sim/kibis/kibis.cpp:1253
 msgid "Invalid model type for a driver."
-msgstr ""
+msgstr "Ungültiger Modelltyp für einen Treiber."
 
 #: eeschema/sim/kibis/kibis.cpp:1305
 msgid "Invalid model type for a device"
@@ -15883,11 +15890,11 @@ msgstr "Anzahl der Bits sollte größer als 0 sein."
 
 #: eeschema/sim/kibis/kibis.cpp:1631
 msgid "Bitrate is too high for rising / falling edges"
-msgstr ""
+msgstr "Bitrate ist zu hoch für steigende / fallende Flanken"
 
 #: eeschema/sim/kibis/kibis.cpp:1658
 msgid "Bitrate could be too high for rising / falling edges"
-msgstr ""
+msgstr "Bitrate könnte zu hoch sein für steigende / fallende Flanken"
 
 #: eeschema/sim/sim_lib_mgr.cpp:73
 #, fuzzy, c-format
@@ -16083,11 +16090,13 @@ msgstr ""
 "abgebrochen.\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:485 eeschema/sim/sim_plot_frame.cpp:493
+#: eeschema/sim/sim_plot_frame.cpp:493
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
+"Befehlsanweisung für Schaltplan-Simulationsbefehl hat sich geändert.  Soll "
+"der Simulationsbefehl aktualisiert werden?"
 
 #: eeschema/sim/sim_plot_frame.cpp:508 eeschema/sim/sim_plot_frame.cpp:1900
 #: eeschema/sim/sim_plot_frame.cpp:516 eeschema/sim/sim_plot_frame.cpp:1901
@@ -19995,7 +20004,7 @@ msgstr "Ausgabeeinheiten, gültige Optionen: mm, in"
 #: kicad/cli/command_export_pcb_pos.cpp:99
 #: kicad/cli/command_export_pcb_svg.cpp:88
 msgid "Board file does not exist or is not accessible\n"
-msgstr ""
+msgstr "Platinendatei existiert nicht oder ist nicht zugreifbar\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:49
@@ -20021,7 +20030,7 @@ msgstr "Blendenmakros deaktivieren"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
-msgstr ""
+msgstr "Genauigkeit von Gerber-Koordinaten, gültige Optionen: 5 oder 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
 #, fuzzy
@@ -20034,7 +20043,7 @@ msgstr ""
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
-msgstr ""
+msgstr "Gerber-Ploteinstellungen aus der Platinendatei verwenden"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:54
 #: kicad/cli/command_export_pcb_svg.cpp:52
@@ -20052,19 +20061,20 @@ msgstr "Nur Schwarz/Weiß"
 #: kicad/cli/command_fp_export_svg.cpp:38
 #: kicad/cli/command_sym_export_svg.cpp:38
 msgid "Color theme to use (will default to pcbnew settings)"
-msgstr ""
+msgstr "Zu verwendendes Farbthema (Standard sind pcbnew-Einstellungen)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:47
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
 msgstr ""
+"Gültige Optionen: front,back,both. Gerber-Format unterstützt nur \"both\"."
 
 #: kicad/cli/command_export_pcb_pos.cpp:51
 msgid "Valid options: ascii,csv,gerber"
-msgstr ""
+msgstr "Gültige Optionen: ascii,csv,gerber"
 
 #: kicad/cli/command_export_pcb_pos.cpp:55
 msgid "Output units; ascii or csv format only; valid options: in,mm"
-msgstr ""
+msgstr "Ausgabe-Einheiten; nur ascii oder csv Format; gültige Optionen: in,mm"
 
 #: kicad/cli/command_export_pcb_pos.cpp:58
 msgid ""
@@ -20098,7 +20108,7 @@ msgstr "Ungültiges Format\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:150
 msgid "\"both\" not supported for gerber format\n"
-msgstr ""
+msgstr "Option \"both\" wird für Gerber-Format nicht unterstützt\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:166
 msgid "Invalid side specified\n"
@@ -20120,6 +20130,7 @@ msgstr "3D-Modelle für Komponenten mit Attribut 'Virtuell' ausschließen"
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
 msgstr ""
+"Gleichnamige STEP- oder IGS-Modelle anstelle von VRML-Modellen verwenden"
 
 #: kicad/cli/command_export_pcb_step.cpp:68
 msgid "Overwrite output file"
@@ -20143,7 +20154,7 @@ msgstr ""
 
 #: kicad/cli/command_export_pcb_svg.cpp:43
 msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr ""
+msgstr "Platine spiegeln (nützlich, um Unterseiten darzustellen)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:57
 msgid ""
@@ -20162,6 +20173,8 @@ msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
 msgstr ""
+"Ausgabeformat für Netzliste; gültige Optionen: kicadsexpr, kicadxml, "
+"cadstar, orcadpcb2, spice, spicemodel"
 
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_pdf.cpp:69
@@ -20175,7 +20188,7 @@ msgstr ""
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
 msgid "Avoid setting a background color (regardless of theme)"
-msgstr ""
+msgstr "Festlegen von Hintergrundfarben vermeiden (unabhängig vom Thema)"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:42
@@ -29690,7 +29703,7 @@ msgstr "Bogen"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:160
 msgid "Single-sided"
-msgstr ""
+msgstr "Einseitig"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:166
 msgid "Miter radius (r):"
@@ -30502,7 +30515,7 @@ msgstr "Mittelpunkt beibehalten, Radius anpassen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "Endpunkte oder Richtung des Startpunkts beibehalten"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
@@ -30630,6 +30643,7 @@ msgstr "Umriss zeichnen, um die Blattgröße anzuzeigen."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:393
 msgid "Show courtyard collisions when moving/dragging"
 msgstr ""
+"Kollisionen zwischen Abstandsflächen beim Bewegen oder Verschieben anzeigen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:397
 msgid "Auto-refill zones"
@@ -33606,7 +33620,7 @@ msgstr "Einstellungen zum Lagenaufbau nicht aktuell."
 
 #: pcbnew/exporters/step/exporter_step.cpp:318
 msgid "Determining PCB data\n"
-msgstr ""
+msgstr "Bestimme Platinendaten\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:323
 msgid "Build STEP data\n"
@@ -33617,6 +33631,8 @@ msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Fehler beim Erstellen des STEP-Platinenmodells. Export abgebrochen. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:331
 msgid "Writing STEP file\n"
@@ -33645,6 +33661,8 @@ msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr ""
+"\n"
+"** Fehler beim Exportieren der STEP-Datei. Export abgebrochen. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:361
 msgid ""
@@ -33895,15 +33913,15 @@ msgstr "(Loch des PTH-Pads lässt kein Kupfer zurück)"
 
 #: pcbnew/footprint.cpp:2385
 msgid "(SMD pad appears on both front and back copper)"
-msgstr ""
+msgstr "(SMD-Pad erscheint in Kupferlagen der Ober- und Unterseite)"
 
 #: pcbnew/footprint.cpp:2392 pcbnew/footprint.cpp:2405
 msgid "(SMD pad copper and mask layers don't match)"
-msgstr ""
+msgstr "(Kupfer- und Maskenlagen des SMD-Pads passen nicht zusammen)"
 
 #: pcbnew/footprint.cpp:2397 pcbnew/footprint.cpp:2410
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr ""
+msgstr "(Kupfer- und Pastenlagen des SMD-Pads passen nicht zusammen)"
 
 #: pcbnew/footprint.cpp:2586
 #, c-format
