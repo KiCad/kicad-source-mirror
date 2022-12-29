@@ -105,14 +105,6 @@ enum VIA_ACTION_FLAGS
 #undef _
 #define _(s) s
 
-static const TOOL_ACTION ACT_EndTrack( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveRouter.EndTrack" )
-        .Scope( AS_CONTEXT )
-        .DefaultHotkey( WXK_END )
-        .FriendlyName( _( "Finish Track" ) )
-        .Tooltip( _( "Stops laying the current track." ) )
-        .Icon( BITMAPS::checked_ok ) );
-
 // Pass all the parameters as int to allow combining flags
 static const TOOL_ACTION ACT_PlaceThroughVia( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.PlaceVia" )
@@ -527,7 +519,7 @@ bool ROUTER_TOOL::Init()
 
     menu.AddItem( PCB_ACTIONS::routeSingleTrack,      notRoutingCond );
     menu.AddItem( PCB_ACTIONS::routeDiffPair,         notRoutingCond );
-    menu.AddItem( ACT_EndTrack,                       SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACTIONS::finishInteractive,         SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( PCB_ACTIONS::routerUndoLastSegment, SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( PCB_ACTIONS::routerContinueFromEnd, hasOtherEnd );
     menu.AddItem( PCB_ACTIONS::routerAttemptFinish,   hasOtherEnd );
@@ -1442,7 +1434,7 @@ void ROUTER_TOOL::performRouting()
             setCursor();
             UpdateMessagePanel();
         }
-        else if( evt->IsAction( &ACT_EndTrack ) || evt->IsDblClick( BUT_LEFT )  )
+        else if( evt->IsAction( &ACTIONS::finishInteractive ) || evt->IsDblClick( BUT_LEFT )  )
         {
             // Stop current routing:
             m_router->FixRoute( m_endSnapPoint, m_endItem, true );

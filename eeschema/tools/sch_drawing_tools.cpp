@@ -1864,10 +1864,10 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         else if( item && ( evt->IsClick( BUT_LEFT )
                         || evt->IsDblClick( BUT_LEFT )
                         || isSyntheticClick
-                        || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
+                        || evt->IsAction( &ACTIONS::finishInteractive ) ) )
         {
             if( evt->IsDblClick( BUT_LEFT )
-                    || evt->IsAction( &EE_ACTIONS::finishDrawing )
+                    || evt->IsAction( &ACTIONS::finishInteractive )
                     || !item->ContinueEdit( cursorPos ) )
             {
                 item->EndEdit();
@@ -2097,7 +2097,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         else if( sheet && ( evt->IsClick( BUT_LEFT )
                          || evt->IsDblClick( BUT_LEFT )
                          || isSyntheticClick
-                         || evt->IsAction( &EE_ACTIONS::finishSheet ) ) )
+                         || evt->IsAction( &ACTIONS::finishInteractive ) ) )
         {
             getViewControls()->SetAutoPan( false );
             getViewControls()->CaptureCursor( false );

@@ -100,11 +100,6 @@ public:
     static TOOL_ACTION schImportGraphics;
     static TOOL_ACTION undoLastSegment;
     static TOOL_ACTION switchSegmentPosture;
-    static TOOL_ACTION finishLineWireOrBus;
-    static TOOL_ACTION finishWire;
-    static TOOL_ACTION finishBus;
-    static TOOL_ACTION finishLine;
-    static TOOL_ACTION finishSheet;
 
     // Symbol Tools
     static TOOL_ACTION placeSymbolPin;
@@ -114,7 +109,6 @@ public:
     static TOOL_ACTION drawSymbolPolygon;
     static TOOL_ACTION placeSymbolAnchor;
     static TOOL_ACTION symbolImportGraphics;
-    static TOOL_ACTION finishDrawing;
 
     // Interactive Editing
     static TOOL_ACTION alignToGrid;

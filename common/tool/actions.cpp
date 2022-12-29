@@ -147,6 +147,15 @@ TOOL_ACTION ACTIONS::cancelInteractive( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::cancel )
         .Flags( AF_NONE ) );
 
+TOOL_ACTION ACTIONS::finishInteractive( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.finish" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_END )
+        .FriendlyName( _( "Finish" ) )
+        .Tooltip( _( "Finish current tool" ) )
+        .Icon( BITMAPS::checked_ok )
+        .Flags( AF_NONE ) );
+
 TOOL_ACTION ACTIONS::showContextMenu( TOOL_ACTION_ARGS()
         .Name( "common.Control.showContextMenu" )
         .Scope( AS_GLOBAL )

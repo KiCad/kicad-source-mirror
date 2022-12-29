@@ -379,13 +379,6 @@ TOOL_ACTION EE_ACTIONS::symbolImportGraphics( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::import_vector )
         .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::finishDrawing( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolDrawing.finishDrawing" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Finish Drawing" ) )
-        .Tooltip( _( "Finish drawing shape" ) )
-        .Icon( BITMAPS::checked_ok ) );
-
 // SYMBOL_EDITOR_PIN_TOOL
 //
 TOOL_ACTION EE_ACTIONS::pushPinLength( TOOL_ACTION_ARGS()
@@ -588,14 +581,6 @@ TOOL_ACTION EE_ACTIONS::schImportGraphics( TOOL_ACTION_ARGS()
         .Tooltip( _( "Import 2D drawing file" ) )
         .Icon( BITMAPS::import_vector )
         .Flags( AF_ACTIVATE ) );
-
-TOOL_ACTION EE_ACTIONS::finishSheet( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveDrawing.finishSheet" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Finish Sheet" ) )
-        .Tooltip( _( "Finish drawing sheet" ) )
-        .Icon( BITMAPS::checked_ok ) );
-
 
 // SCH_EDIT_TOOL
 //
@@ -1341,41 +1326,6 @@ TOOL_ACTION EE_ACTIONS::switchSegmentPosture( TOOL_ACTION_ARGS()
         .Tooltip( _( "Switches posture of the current segment." ) )
         .Icon( BITMAPS::change_entry_orient )
         .Flags( AF_NONE ) );
-
-TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveDrawingLineWireBus.finish" )
-        .Scope( AS_GLOBAL )
-        .DefaultHotkey( 'K' )
-        .LegacyHotkeyName( "End Line Wire Bus" )
-        .FriendlyName( _( "Finish Wire or Bus" ) )
-        .Tooltip( _( "Complete drawing at current segment" ) )
-        .Icon( BITMAPS::checked_ok )
-        .Flags( AF_NONE ) );
-
-TOOL_ACTION EE_ACTIONS::finishWire( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveDrawingLineWireBus.finishWire" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Finish Wire" ) )
-        .Tooltip( _( "Complete wire with current segment" ) )
-        .Icon( BITMAPS::checked_ok )
-        .Flags( AF_NONE ) );
-
-TOOL_ACTION EE_ACTIONS::finishBus( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveDrawingLineWireBus.finishBus" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Finish Bus" ) )
-        .Tooltip( _( "Complete bus with current segment" ) )
-        .Icon( BITMAPS::checked_ok )
-        .Flags( AF_NONE ) );
-
-TOOL_ACTION EE_ACTIONS::finishLine( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveDrawingLineWireBus.finishLine" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Finish Lines" ) )
-        .Tooltip( _( "Complete connected lines with current segment" ) )
-        .Icon( BITMAPS::checked_ok )
-        .Flags( AF_NONE ) );
-
 
 // SCH_MOVE_TOOL
 //

@@ -61,6 +61,7 @@ public:
 
     // Generic edit actions
     static TOOL_ACTION cancelInteractive;
+    static TOOL_ACTION finishInteractive;
     static TOOL_ACTION showContextMenu;
     static TOOL_ACTION undo;
     static TOOL_ACTION redo;

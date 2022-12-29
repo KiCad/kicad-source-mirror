@@ -74,7 +74,7 @@ bool SYMBOL_EDITOR_DRAWING_TOOLS::Init()
                 return item && item->IsNew();
             };
 
-    m_menu.GetMenu().AddItem( EE_ACTIONS::finishDrawing, isDrawingCondition, 2 );
+    m_menu.GetMenu().AddItem( ACTIONS::finishInteractive, isDrawingCondition, 2 );
 
     return true;
 }
@@ -496,7 +496,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
         else if( item && ( evt->IsClick( BUT_LEFT )
                         || evt->IsDblClick( BUT_LEFT )
                         || isSyntheticClick
-                        || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
+                        || evt->IsAction( &ACTIONS::finishInteractive ) ) )
         {
             if( symbol != m_frame->GetCurSymbol() )
             {
@@ -504,7 +504,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
                 item->SetParent( symbol );
             }
 
-            if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &EE_ACTIONS::finishDrawing )
+            if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::finishInteractive )
                     || !item->ContinueEdit( VECTOR2I( cursorPos.x, -cursorPos.y ) ) )
             {
                 if( toolType == SHAPE_T::POLY )

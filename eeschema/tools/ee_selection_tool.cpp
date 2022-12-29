@@ -283,10 +283,7 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::drawBus,            schEditCondition && EE_CONDITIONS::Empty, 100 );
 
     menu.AddSeparator( 100 );
-    menu.AddItem( EE_ACTIONS::finishWire,         SCH_LINE_WIRE_BUS_TOOL::IsDrawingWire, 100 );
-
-    menu.AddSeparator( 100 );
-    menu.AddItem( EE_ACTIONS::finishBus,          SCH_LINE_WIRE_BUS_TOOL::IsDrawingBus, 100 );
+    menu.AddItem( ACTIONS::finishInteractive,     SCH_LINE_WIRE_BUS_TOOL::IsDrawingWire, 100 );
 
     menu.AddSeparator( 200 );
     menu.AddItem( EE_ACTIONS::selectConnection,   connectedSelection && EE_CONDITIONS::Idle, 250 );
