@@ -729,29 +729,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         previewItem->SetParent( m_frame->GetScreen() );
         break;
 
-    case SCH_SHEET_PIN_T:
-    {
-        EE_SELECTION& selection = m_selectionTool->GetSelection();
-        SCH_SHEET*    sheet = dynamic_cast<SCH_SHEET*>( selection.Front() );
-
-        if( !sheet )
-            return 0;
-
-        SCH_HIERLABEL* label = importHierLabel( sheet );
-
-        if( !label )
-        {
-            m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
-            m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
-            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-            m_statusPopup->PopupFor( 2000 );
-            return 0;
-        }
-
-        previewItem = createSheetPin( sheet, label, cursorPos );
-    }
-        break;
-
     default:
         wxASSERT_MSG( false, "Unknown item type in SCH_DRAWING_TOOLS::SingleClickPlace" );
         return 0;
@@ -1130,6 +1107,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  ignorePrimePosition = false;
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
+    SCH_SHEET*            sheet = nullptr;
 
     if( m_inTwoClickPlace )
         return 0;
@@ -1144,9 +1122,14 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     bool isSheetPin    = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
     int  snapLayer     = isText ? LAYER_GRAPHICS : LAYER_CONNECTABLE;
 
+    // If we have a selected sheet use it, otherwise try to get one under the cursor
+    if( isSheetPin )
+        sheet = dynamic_cast<SCH_SHEET*>( m_selectionTool->GetSelection().Front() );
+
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_frame->PushTool( aEvent );
+
     auto setCursor =
             [&]()
             {
@@ -1220,6 +1203,33 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
                                 && evt->Matches( aEvent );
+
+        auto createNextSheetPin =
+                [&]()
+                {
+                    if( !sheet )
+                        return;
+
+                    SCH_HIERLABEL* label = importHierLabel( sheet );
+
+                    if( !label )
+                    {
+                        m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
+                        m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
+                        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                        m_statusPopup->PopupFor( 2000 );
+                        item = nullptr;
+                    }
+                    else
+                    {
+                        item = createSheetPin( sheet, label, cursorPos );
+
+                        if( item->Type() == SCH_SHEET_PIN_T )
+                        {
+                            item->ClearSelected();
+                        }
+                    }
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -1345,14 +1355,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 }
                 else if( isSheetPin )
                 {
-                    EDA_ITEM*      i;
-                    SCH_HIERLABEL* label = nullptr;
-                    SCH_SHEET*     sheet = nullptr;
+                    EDA_ITEM* i;
 
-                    if( m_selectionTool->SelectPoint( cursorPos, { SCH_SHEET_T }, &i ) )
+                    // If we didn't have a sheet selected, try to find one under the cursor
+                    if( !sheet && m_selectionTool->SelectPoint( cursorPos, { SCH_SHEET_T }, &i ) )
                         sheet = dynamic_cast<SCH_SHEET*>( i );
-
-                    m_selectionTool->ClearSelection();
 
                     if( !sheet )
                     {
@@ -1364,24 +1371,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        label = importHierLabel( sheet );
+                        createNextSheetPin();
 
-                        if( !label )
+                        if( !item )
                         {
-                            m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
-                            m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
-                            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                            m_statusPopup->PopupFor( 2000 );
-                            item = nullptr;
-                        }
-                        else
-                        {
-                            item = createSheetPin( sheet, label, cursorPos );
-
-                            if( item->Type() == SCH_SHEET_PIN_T )
-                            {
-                                item->ClearSelected();
-                            }
+                            m_frame->PopTool( aEvent );
+                            break;
                         }
                     }
                 }
@@ -1426,6 +1421,18 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 item = nullptr;
 
                 m_view->ClearPreview();
+
+                // Exit the tool when this sheet runs out of pins for convenience
+                if( isSheetPin )
+                {
+                    createNextSheetPin();
+
+                    if( !item )
+                    {
+                        m_frame->PopTool( aEvent );
+                        break;
+                    }
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -1909,7 +1916,6 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeGlobalLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheet.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::importSheetPin.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::importSingleSheetPin.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeSchematicText.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawRectangle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawCircle.MakeEvent() );

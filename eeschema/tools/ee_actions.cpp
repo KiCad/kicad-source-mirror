@@ -336,11 +336,6 @@ TOOL_ACTION EE_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
         _( "Add Sheet" ), _( "Add a hierarchical sheet" ),
         BITMAPS::add_hierarchical_subsheet, AF_ACTIVATE, (void*) SCH_SHEET_T );
 
-TOOL_ACTION EE_ACTIONS::importSingleSheetPin( "eeschema.InteractiveDrawing.importSingleSheetPin",
-        AS_GLOBAL, 0, "",
-        _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),
-        BITMAPS::add_hierar_pin, AF_ACTIVATE, (void*) SCH_SHEET_PIN_T );
-
 TOOL_ACTION EE_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
         AS_GLOBAL, 0, "",
         _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),

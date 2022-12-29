@@ -274,7 +274,7 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::placeHierLabel,     wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::breakWire,          linesSelection     && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::slice,              linesSelection     && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::importSingleSheetPin, sheetSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::importSheetPin,     sheetSelection     && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::assignNetclass,     connectedSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::editPageNumber,     schEditSheetPageNumberCondition, 250 );
 

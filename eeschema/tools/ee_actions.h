@@ -91,7 +91,6 @@ public:
     static TOOL_ACTION placeGlobalLabel;
     static TOOL_ACTION placeHierLabel;
     static TOOL_ACTION drawSheet;
-    static TOOL_ACTION importSingleSheetPin;
     static TOOL_ACTION importSheetPin;
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawTextBox;
