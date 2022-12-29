@@ -1554,6 +1554,13 @@ int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
     if( netcode > 0 )
     {
         SelectAllItemsOnNet( netcode, select );
+
+        // Inform other potentially interested tools
+        if( m_selection.Size() > 0 )
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+        else
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+
         return 0;
     }
 
@@ -1574,6 +1581,8 @@ int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    else
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
     return 0;
 }
