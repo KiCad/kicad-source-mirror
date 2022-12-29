@@ -264,12 +264,13 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
     // Sync PNS engine settings with the general PCB editor options.
     auto& pnss = m_router->Settings();
 
-    // If we're dragging a track segment, don't try to snap to items on the same copper layer.
+    // If we're dragging a track segment, don't try to snap to items on the same copper layer with same nets. This is not a perfect heuristic, but seems to work reasonably well :-)
     // This way we avoid 'flickery' behaviour for short segments when the snap algo is trying to
     // snap to the corners of the segments next to the one being dragged.
     if( m_startItem && aItem && m_router->GetState() == ROUTER::DRAG_SEGMENT
         && aItem->Layer() == m_startItem->Layer() && aItem->OfKind( ITEM::SEGMENT_T )
-        && m_startItem->OfKind( ITEM::SEGMENT_T ) )
+        && m_startItem->OfKind( ITEM::SEGMENT_T ) 
+        && aItem->Net() == m_startItem->Net() )
         return false;
 
     pnss.SetSnapToPads(
