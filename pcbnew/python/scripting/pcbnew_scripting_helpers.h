@@ -168,6 +168,11 @@ void UpdateUserInterface();
 int GetUserUnits();
 
 /**
+ * Get the list of selected objects.
+ */
+std::deque<BOARD_ITEM*> GetCurrentSelection();
+
+/**
  * Are we currently in an action plugin?
  */
 bool IsActionRunning();

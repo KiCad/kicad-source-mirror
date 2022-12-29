@@ -418,6 +418,25 @@ int GetUserUnits()
 }
 
 
+std::deque<BOARD_ITEM*> GetCurrentSelection()
+{
+    std::deque<BOARD_ITEM*> items;
+
+    if( s_PcbEditFrame )
+    {
+        SELECTION& selection = s_PcbEditFrame->GetCurrentSelection();
+
+        std::for_each( selection.begin(), selection.end(),
+                       [&items]( EDA_ITEM* item )
+                       {
+                           items.push_back( static_cast<BOARD_ITEM*>( item ) );
+                       } );
+    }
+
+    return items;
+}
+
+
 bool IsActionRunning()
 {
     return ACTION_PLUGINS::IsActionRunning();
