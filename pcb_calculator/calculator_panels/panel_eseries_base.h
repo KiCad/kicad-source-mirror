@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,9 +34,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_E_SERIE_BASE
+/// Class PANEL_E_SERIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_E_SERIE_BASE : public CALCULATOR_PANEL
+class PANEL_E_SERIES_BASE : public CALCULATOR_PANEL
 {
 	private:
 
@@ -56,12 +56,12 @@ class PANEL_E_SERIE_BASE : public CALCULATOR_PANEL
 		wxRadioButton* m_e6;
 		wxRadioButton* m_e12;
 		wxRadioButton* m_e24;
-		wxStaticText* m_ESerieSimpleSolution;
+		wxStaticText* m_ESeriesSimpleSolution;
 		wxTextCtrl* m_ESeries_Sol2R;
 		wxStaticText* m_ESeriesSimpleErr;
 		wxTextCtrl* m_ESeriesError2R;
 		wxStaticText* m_ESeriesSimplePercent;
-		wxStaticText* m_ESerie3RSolution1;
+		wxStaticText* m_ESeries3RSolution1;
 		wxTextCtrl* m_ESeries_Sol3R;
 		wxStaticText* m_ESeriesAltErr;
 		wxTextCtrl* m_ESeriesError3R;
@@ -82,9 +82,9 @@ class PANEL_E_SERIE_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_E_SERIE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 887,453 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_E_SERIE_BASE();
+		~PANEL_E_SERIES_BASE();
 
 };
 

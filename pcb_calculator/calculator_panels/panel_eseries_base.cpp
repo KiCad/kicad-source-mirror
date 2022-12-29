@@ -1,18 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_eserie_base.h"
+#include "panel_eseries_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_E_SERIE_BASE::PANEL_E_SERIE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
+PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
 {
-	wxBoxSizer* bSizerESerie;
-	bSizerESerie = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerESeries;
+	bSizerESeries = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bMiddleSizerESeries;
 	bMiddleSizerESeries = new wxBoxSizer( wxHORIZONTAL );
@@ -93,70 +93,70 @@ PANEL_E_SERIE_BASE::PANEL_E_SERIE_BASE( wxWindow* parent, wxWindowID id, const w
 	wxStaticBoxSizer* sbSizerESeriesSolutions;
 	sbSizerESeriesSolutions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Solutions") ), wxVERTICAL );
 
-	wxFlexGridSizer* fgSizerESerieResults;
-	fgSizerESerieResults = new wxFlexGridSizer( 6, 5, 3, 0 );
-	fgSizerESerieResults->AddGrowableCol( 1 );
-	fgSizerESerieResults->SetFlexibleDirection( wxBOTH );
-	fgSizerESerieResults->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* fgSizerESeriesResults;
+	fgSizerESeriesResults = new wxFlexGridSizer( 6, 5, 3, 0 );
+	fgSizerESeriesResults->AddGrowableCol( 1 );
+	fgSizerESeriesResults->SetFlexibleDirection( wxBOTH );
+	fgSizerESeriesResults->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_ESerieSimpleSolution = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("Simple solution:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ESerieSimpleSolution->Wrap( -1 );
-	fgSizerESerieResults->Add( m_ESerieSimpleSolution, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_ESeriesSimpleSolution = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("Simple solution:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ESeriesSimpleSolution->Wrap( -1 );
+	fgSizerESeriesResults->Add( m_ESeriesSimpleSolution, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ESeries_Sol2R = new wxTextCtrl( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerESerieResults->Add( m_ESeries_Sol2R, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizerESeriesResults->Add( m_ESeries_Sol2R, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_ESeriesSimpleErr = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("Approximation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ESeriesSimpleErr->Wrap( -1 );
-	fgSizerESerieResults->Add( m_ESeriesSimpleErr, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerESeriesResults->Add( m_ESeriesSimpleErr, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_ESeriesError2R = new wxTextCtrl( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerESerieResults->Add( m_ESeriesError2R, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerESeriesResults->Add( m_ESeriesError2R, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 	m_ESeriesSimplePercent = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ESeriesSimplePercent->Wrap( -1 );
-	fgSizerESerieResults->Add( m_ESeriesSimplePercent, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerESeriesResults->Add( m_ESeriesSimplePercent, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_ESerie3RSolution1 = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("3R solution:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ESerie3RSolution1->Wrap( -1 );
-	fgSizerESerieResults->Add( m_ESerie3RSolution1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_ESeries3RSolution1 = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("3R solution:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ESeries3RSolution1->Wrap( -1 );
+	fgSizerESeriesResults->Add( m_ESeries3RSolution1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ESeries_Sol3R = new wxTextCtrl( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ESeries_Sol3R->SetMinSize( wxSize( 220,-1 ) );
 
-	fgSizerESerieResults->Add( m_ESeries_Sol3R, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizerESeriesResults->Add( m_ESeries_Sol3R, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_ESeriesAltErr = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("Approximation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ESeriesAltErr->Wrap( -1 );
-	fgSizerESerieResults->Add( m_ESeriesAltErr, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerESeriesResults->Add( m_ESeriesAltErr, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_ESeriesError3R = new wxTextCtrl( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerESerieResults->Add( m_ESeriesError3R, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerESeriesResults->Add( m_ESeriesError3R, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_ESeriesAltPercent = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ESeriesAltPercent->Wrap( -1 );
-	fgSizerESerieResults->Add( m_ESeriesAltPercent, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerESeriesResults->Add( m_ESeriesAltPercent, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_ESeries4RSolution = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("4R solution:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ESeries4RSolution->Wrap( -1 );
-	fgSizerESerieResults->Add( m_ESeries4RSolution, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerESeriesResults->Add( m_ESeries4RSolution, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ESeries_Sol4R = new wxTextCtrl( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerESerieResults->Add( m_ESeries_Sol4R, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	fgSizerESeriesResults->Add( m_ESeries_Sol4R, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 
 	m_ESeriesAltErr1 = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("Approximation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ESeriesAltErr1->Wrap( -1 );
-	fgSizerESerieResults->Add( m_ESeriesAltErr1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerESeriesResults->Add( m_ESeriesAltErr1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_ESeriesError4R = new wxTextCtrl( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerESerieResults->Add( m_ESeriesError4R, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerESeriesResults->Add( m_ESeriesError4R, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 	m_ESeriesAltPercent1 = new wxStaticText( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ESeriesAltPercent1->Wrap( -1 );
-	fgSizerESerieResults->Add( m_ESeriesAltPercent1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerESeriesResults->Add( m_ESeriesAltPercent1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerESeriesSolutions->Add( fgSizerESerieResults, 0, wxBOTTOM|wxEXPAND, 5 );
+	sbSizerESeriesSolutions->Add( fgSizerESeriesResults, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	m_staticline7 = new wxStaticLine( sbSizerESeriesSolutions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sbSizerESeriesSolutions->Add( m_staticline7, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -174,44 +174,47 @@ PANEL_E_SERIE_BASE::PANEL_E_SERIE_BASE( wxWindow* parent, wxWindowID id, const w
 	bMiddleSizerESeries->Add( bSizer47, 1, wxALIGN_BOTTOM, 5 );
 
 
-	bSizerESerie->Add( bMiddleSizerESeries, 0, wxEXPAND|wxTOP, 5 );
+	bSizerESeries->Add( bMiddleSizerESeries, 0, wxEXPAND|wxTOP, 5 );
 
-	wxBoxSizer* bLowerESerie;
-	bLowerESerie = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bLowerESeries;
+	bLowerESeries = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticBoxSizer* sbLowerSizerEseriesHelp;
 	sbLowerSizerEseriesHelp = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Help") ), wxVERTICAL );
 
 	m_panelESeriesHelp = new HTML_WINDOW( sbLowerSizerEseriesHelp->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	m_panelESeriesHelp->SetMinSize( wxSize( -1,100 ) );
+
 	sbLowerSizerEseriesHelp->Add( m_panelESeriesHelp, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bLowerESerie->Add( sbLowerSizerEseriesHelp, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bLowerESeries->Add( sbLowerSizerEseriesHelp, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerESerie->Add( bLowerESerie, 1, wxEXPAND, 5 );
+	bSizerESeries->Add( bLowerESeries, 1, wxEXPAND, 5 );
 
 
-	this->SetSizer( bSizerESerie );
+	this->SetSizer( bSizerESeries );
 	this->Layout();
+	bSizerESeries->Fit( this );
 
 	// Connect Events
-	m_e1->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_e3->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_e6->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_e12->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_e24->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_buttonEScalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnCalculateESeries ), NULL, this );
+	m_e1->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_e3->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_e6->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_e12->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_e24->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_buttonEScalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnCalculateESeries ), NULL, this );
 }
 
-PANEL_E_SERIE_BASE::~PANEL_E_SERIE_BASE()
+PANEL_E_SERIES_BASE::~PANEL_E_SERIES_BASE()
 {
 	// Disconnect Events
-	m_e1->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_e3->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_e6->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_e12->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_e24->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnESeriesSelection ), NULL, this );
-	m_buttonEScalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_E_SERIE_BASE::OnCalculateESeries ), NULL, this );
+	m_e1->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_e3->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_e6->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_e12->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_e24->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
+	m_buttonEScalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnCalculateESeries ), NULL, this );
 
 }

@@ -316,6 +316,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_fieldsGrid, m_symbol );
 
 #ifndef KICAD_SPICE
+    m_cbExcludeFromSim->Hide();
     m_spiceFieldsButton->Hide();
 #endif /* not KICAD_SPICE */
 
@@ -513,7 +514,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     case SYM_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 ); break;
     }
 
+#ifdef KICAD_SPICE
     m_cbExcludeFromSim->SetValue( m_symbol->GetFieldText( SIM_MODEL::ENABLE_FIELD ) == "0" );
+#endif
     m_cbExcludeFromBom->SetValue( !m_symbol->GetIncludeInBom() );
     m_cbExcludeFromBoard->SetValue( !m_symbol->GetIncludeOnBoard() );
     m_cbDNP->SetValue( m_symbol->GetDNP() );
@@ -537,6 +540,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
 void DIALOG_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
 {
+#ifdef KICAD_SPICE
     int simEnableFieldRow = -1;
 
     for( int ii = MANDATORY_FIELDS; ii < m_fieldsGrid->GetNumberRows(); ++ii )
@@ -570,6 +574,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
     }
 
     OnModify();
+#endif
 }
 
 

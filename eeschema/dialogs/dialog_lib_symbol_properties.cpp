@@ -97,6 +97,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     }
 
 #ifndef KICAD_SPICE
+    m_excludeFromSim->Hide();
     m_spiceFieldsButton->Hide();
 #endif
 
@@ -182,8 +183,10 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     m_OptionPower->SetValue( m_libEntry->IsPower() );
 
+#ifdef KICAD_SPICE
     LIB_FIELD* simEnableField = m_libEntry->FindField( SIM_MODEL::ENABLE_FIELD );
     m_excludeFromSim->SetValue( simEnableField && simEnableField->GetText() == wxT( "0" ) );
+#endif
 
     m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetIncludeInBom() );
     m_excludeFromBoardCheckBox->SetValue( !m_libEntry->GetIncludeOnBoard() );
@@ -229,6 +232,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
 {
+#ifdef KICAD_SPICE
     int simEnableFieldRow = -1;
 
     for( int ii = MANDATORY_FIELDS; ii < m_grid->GetNumberRows(); ++ii )
@@ -261,6 +265,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& even
     }
 
     OnModify();
+#endif
 }
 
 

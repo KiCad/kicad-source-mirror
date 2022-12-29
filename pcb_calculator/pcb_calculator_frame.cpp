@@ -39,7 +39,7 @@
 #include <calculator_panels/panel_corrosion.h>
 #include <calculator_panels/panel_color_code.h>
 #include <calculator_panels/panel_electrical_spacing.h>
-#include <calculator_panels/panel_eserie.h>
+#include <calculator_panels/panel_eseries.h>
 #include <calculator_panels/panel_fusing_current.h>
 #include <calculator_panels/panel_regulator.h>
 #include <calculator_panels/panel_track_width.h>
@@ -109,7 +109,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_treebook->AddPage( nullptr, _( "Memo" ) );
 
-    AddCalculator( new PANEL_E_SERIE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
+    AddCalculator( new PANEL_E_SERIES( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _( "E-Series" ) );
     AddCalculator( new PANEL_COLOR_CODE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _( "Color Code" ) );
@@ -156,14 +156,14 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
           wxSysColourChangedEventHandler( PCB_CALCULATOR_FRAME::onThemeChanged ), this );
 
     m_treebook->Connect( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED, wxTreebookEventHandler(
-                         PCB_CALCULATOR_FRAME::OnPageChanged  ), NULL, this );
+                         PCB_CALCULATOR_FRAME::OnPageChanged  ), nullptr, this );
 }
 
 
 PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
 {
     m_treebook->Disconnect( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED, wxTreebookEventHandler(
-                            PCB_CALCULATOR_FRAME::OnPageChanged ), NULL, this );
+                            PCB_CALCULATOR_FRAME::OnPageChanged ), nullptr, this );
     // This needed for OSX: avoids further OnDraw processing after this destructor and before
     // the native window is destroyed
     this->Freeze();

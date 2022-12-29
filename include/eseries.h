@@ -86,16 +86,16 @@ struct R_DATA
     double      e_value;
 };
 
-class E_SERIE
+class E_SERIES
 {
 public:
-    E_SERIE();
+    E_SERIES();
 
     /**
-     * If any value of the selected E-serie not available, it can be entered as an exclude value.
+     * If any value of the selected E-series not available, it can be entered as an exclude value.
      *
      * @param aValue is the value to exclude from calculation
-     * Values to exclude are set to false in the selected E-serie source lookup table
+     * Values to exclude are set to false in the selected E-series source lookup table
      */
     void Exclude( double aValue );
 
@@ -120,17 +120,15 @@ public:
 
 private:
     /**
-     * Build the list of R_DATA existing for a given serie
-     * Series are E1, E6 ..
-     * The values are extracted from the E96_VALUES list
-     * @return the count of items added in list
+     * Add values from aList to m_tables.  Covers all decades between FIRST_VALUE and LAST_VALUE.
+     * @return the count of items added to m_tables.
      */
-    int buildSerieData( int aEserie, double aList[] );
+    int buildSeriesData( const double aList[] );
 
     /**
-     * Build all 2R combinations from the selected E-serie values
+     * Build all 2R combinations from the selected E-series values
      *
-     * Pre-calculated value combinations are saved in intermediate look up table m_cmb_lut
+     * Pre-calculated value combinations are saved in intermediate look up table m_combined_table
      * @return is the number of found combinations what also depends from exclude values
     */
     uint32_t combine2();
@@ -138,7 +136,7 @@ private:
     /**
      * Search for closest two component solution
      *
-     * @param aSize is the number of valid 2R combinations in m_cmb_lut on where to search
+     * @param aSize is the number of valid 2R combinations in m_combined_table on where to search
      * The 2R result with smallest deviation will be saved in results
     */
     void simple_solution( uint32_t aSize );
@@ -146,19 +144,20 @@ private:
     /**
      * Check if there is a better 3 R solution than previous one using only two components.
      *
-     * @param aSize gives the number of available combinations to be checked inside m_cmb_lut
-     * Therefore m_cmb_lut is combinated with the primary E-serie look up table
-     * The 3R result with smallest deviation will be saved in results if better than 2R
+     * @param aSize gives the number of available combinations to be checked inside
+     *              m_combined_table.  Therefore m_combined_table is combined with the primary
+     *              E-series look up table.  The 3R result with smallest deviation will be saved
+     *              in results if better than 2R
      */
     void combine3( uint32_t aSize );
 
     /**
      * Check if there is a better four component solution.
      *
-     * @param aSsize gives the number of 2R combinations to be checked inside m_cmb_lut
-     * Occupied calculation time depends from number of available E-serie values
-     * with the power of 4 why execution for E12 is conditional with 4R check box
-     * for the case the previously found 3R solution is already exact
+     * @param aSsize gives the number of 2R combinations to be checked inside m_combined_table
+     * Occupied calculation time depends from number of available E-series values with the power
+     * of 4 why execution for E12 is conditional with 4R check box for the case the previously
+     * found 3R solution is already exact
      */
     void combine4( uint32_t aSize );
 
@@ -181,9 +180,9 @@ private:
     void strip4();
 
 private:
-    std::vector<std::vector<R_DATA>> m_luts;
+    std::vector<std::vector<R_DATA>> m_tables;
 
-    /* Note: intermediate calculations use m_cmb_lut
+    /* Note: intermediate calculations use m_combined_table
      * if the biggest list is En, reserved array size should be 2*En*En of std::vector primary list.
      * 2 component combinations including redundant swappable terms are for the moment
      * ( using values between 10 ohms and 1Mohm )
@@ -193,10 +192,9 @@ private:
      * 7442 combinations for E12
      * 29282 combinations for E24
      */
-    std::vector<R_DATA> m_cmb_lut;                      // intermediate 2R combinations
+    std::vector<R_DATA>       m_combined_table;         // intermediate 2R combinations
 
-    std::array<R_DATA, S4R+1>   m_results;              // 2R, 3R and 4R results
-    uint32_t                    m_series = E6;          // Radio Button State
-    uint32_t                    m_enable_4R = false;    // Check Box 4R enable
-    double                      m_required_value = 0.0;	// required Resistor
+    std::array<R_DATA, S4R+1> m_results;                // 2R, 3R and 4R results
+    uint32_t                  m_series = E6;            // Radio Button State
+    double                    m_required_value = 0.0;	// required Resistor
 };

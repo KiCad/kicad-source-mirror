@@ -8,7 +8,6 @@ include_directories(
     )
 
 set( PCB_CALCULATOR_SRCS
-    eserie.cpp
     common_data.cpp
     params_read_write.cpp
     pcb_calculator_frame.cpp
@@ -26,8 +25,8 @@ set( PCB_CALCULATOR_SRCS
     calculator_panels/panel_corrosion_base.cpp
     calculator_panels/panel_electrical_spacing.cpp
     calculator_panels/panel_electrical_spacing_base.cpp
-    calculator_panels/panel_eserie.cpp
-    calculator_panels/panel_eserie_base.cpp
+    calculator_panels/panel_eseries.cpp
+    calculator_panels/panel_eseries_base.cpp
     calculator_panels/panel_fusing_current.cpp
     calculator_panels/panel_fusing_current_base.cpp
     calculator_panels/panel_regulator.cpp
@@ -220,7 +219,7 @@ endfunction()
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula )
-    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/eserie_help )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/eseries_help )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help )
 
 set( DOCS_LIST
@@ -229,7 +228,7 @@ set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/eserie_help.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/eseries_help.h
         ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help.h
     )
 

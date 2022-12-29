@@ -183,7 +183,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_text_button_helpers.cpp
     widgets/grid_text_helpers.cpp
     widgets/indicator_icon.cpp
-        widgets/wx_infobar.cpp
+    widgets/wx_infobar.cpp
     widgets/layer_box_selector.cpp
     widgets/lib_tree.cpp
     widgets/mathplot.cpp
@@ -321,10 +321,11 @@ set( COMMON_SRCS
     eda_units.cpp
     env_paths.cpp
     env_vars.cpp
+    eseries.cpp
     exceptions.cpp
     executable_names.cpp
     filename_resolver.cpp
-        file_history.cpp
+    file_history.cpp
     filter_reader.cpp
     footprint_filter.cpp
     footprint_info.cpp
