@@ -51,11 +51,10 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
     m_showClearance = false;
 
     // initialize variables, overwritten by Update( aItem ), if aItem != NULL
-    m_router = nullptr;
     m_type = PR_SHAPE;
-    m_style = 0;
     m_width = 0;
     m_depth = 0;
+    m_isHeadTrace = false;
 
     if( aItem )
         Update( aItem );
@@ -76,11 +75,10 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aVie
     m_showClearance = false;
 
     // initialize variables, overwritten by Update( aItem ), if aItem != NULL
-    m_router = nullptr;
     m_type = PR_SHAPE;
-    m_style = 0;
     m_width = 0;
     m_depth = 0;
+    m_isHeadTrace = false;
 }
 
 
@@ -468,7 +466,14 @@ const COLOR4D ROUTER_PREVIEW_ITEM::getLayerColor( int aLayer ) const
 {
     auto settings = static_cast<PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
 
-    return settings->GetLayerColor( aLayer );
+    COLOR4D color = settings->GetLayerColor( aLayer );
+
+    if( m_isHeadTrace )
+    {
+        return color.Saturate( 1.0 );
+    }
+
+    return color;
 }
 
 

@@ -76,6 +76,11 @@ public:
         m_showClearance = aEnabled;
     }
 
+    void SetIsHeadTrace( bool aIsHead )
+    {
+        m_isHeadTrace = aIsHead;
+    }
+
 #if defined(DEBUG)
     void Show( int aA, std::ostream& aB ) const override {}
 #endif
@@ -109,13 +114,12 @@ private:
 private:
     KIGFX::VIEW* m_view;
 
-    PNS::ROUTER* m_router;
     SHAPE*       m_shape;
     SHAPE*       m_hole;
 
     ITEM_TYPE    m_type;
 
-    int          m_style;
+    bool         m_isHeadTrace;
     int          m_width;
     int          m_layer;
     int          m_originLayer;

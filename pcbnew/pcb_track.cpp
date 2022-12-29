@@ -613,7 +613,9 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
         return false;
 
     if( !m_removeUnconnectedLayer )
+    {
         return true;
+    }
 
     if( m_keepStartEndLayer && ( aLayer == m_layer || aLayer == m_bottomLayer ) )
         return true;

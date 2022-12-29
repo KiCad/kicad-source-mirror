@@ -262,7 +262,7 @@ void PNS_LOG_PLAYER_KICAD_IFACE::HideItem( PNS::ITEM* aItem )
     m_viewTracker->HideItem( aItem );
 }
 
-void PNS_LOG_PLAYER_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit )
+void PNS_LOG_PLAYER_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit, bool aIsHeadTrace )
 {
     //printf("DBG disp %p\n", aItem);
     m_viewTracker->DisplayItem( aItem );

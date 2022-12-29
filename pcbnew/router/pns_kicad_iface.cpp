@@ -1228,7 +1228,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
         solid->SetShape( rectShape );
     }
     else
-        solid->SetShape( aText->GetEffectiveTextShape()->Clone() );
+    solid->SetShape( aText->GetEffectiveTextShape()->Clone() );
 
     solid->SetRoutable( false );
 
@@ -1253,7 +1253,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
     solid->SetRoutable( false );
     aWorld->Add( std::move( solid ) );
     return true;
-    */
+     */
 }
 
 
@@ -1516,7 +1516,7 @@ void PNS_KICAD_IFACE_BASE::SetDebugDecorator( PNS::DEBUG_DECORATOR *aDec )
 }
 
 
-void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit )
+void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit, bool aIsHeadTrace )
 {
     if( aItem->IsVirtual() )
         return;
@@ -1552,6 +1552,12 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
             pitem->ShowClearance( false );
             break;
         }
+    }
+
+    if( aIsHeadTrace )
+    {
+        pitem->SetIsHeadTrace( true );
+        pitem->Update( aItem );
     }
 
     m_previewItems->Add( pitem );

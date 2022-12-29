@@ -750,7 +750,7 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
         const LINE* l = static_cast<const LINE*>( item );
         int clearance = GetRuleResolver()->Clearance( item, nullptr );
 
-        m_iface->DisplayItem( l, clearance );
+        m_iface->DisplayItem( l, clearance, false, true );
 
         if( l->EndsWithVia() )
         {
@@ -761,7 +761,7 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
             if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
                 viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
 
-            m_iface->DisplayItem( &l->Via(), viaClearance );
+            m_iface->DisplayItem( &l->Via(), viaClearance, false, true );
         }
     }
 

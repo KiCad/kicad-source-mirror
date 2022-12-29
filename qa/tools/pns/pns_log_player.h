@@ -69,7 +69,7 @@ public:
     ~PNS_LOG_PLAYER_KICAD_IFACE();
 
     void HideItem( PNS::ITEM* aItem ) override;
-    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false ) override;
+    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false, bool aIsHeadTrace = false ) override;
 
 private:
     PNS_LOG_VIEW_TRACKER *m_viewTracker;
