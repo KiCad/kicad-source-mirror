@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:15-0800\n"
-"PO-Revision-Date: 2022-12-28 09:39+0100\n"
+"PO-Revision-Date: 2022-12-29 14:36+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -5945,7 +5945,7 @@ msgstr "Salva i cambiamenti"
 
 #: common/tool/actions.cpp:73 eeschema/tools/ee_actions.cpp:147
 msgid "Save As..."
-msgstr "Salva con nome..."
+msgstr "Salva come..."
 
 #: common/tool/actions.cpp:73
 msgid "Save current document to another location"
@@ -16733,7 +16733,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:740
 #: eeschema/tools/ee_actions.cpp:152
 msgid "Delete Symbol"
-msgstr "Cancella simbolo"
+msgstr "Elimina simbolo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:741
 msgid "Keep Symbol"
@@ -17090,7 +17090,7 @@ msgstr "Selezione nodo"
 
 #: eeschema/tools/ee_actions.cpp:87
 msgid "Select a connection item under the cursor"
-msgstr "Selezionare un elemento di connessione sotto il puntatore"
+msgstr "Seleziona un elemento di connessione sotto il puntatore"
 
 #: eeschema/tools/ee_actions.cpp:92
 msgid "Select Connection"
@@ -17192,7 +17192,7 @@ msgstr "Aggiungi simbolo allo schema"
 
 #: eeschema/tools/ee_actions.cpp:196
 msgid "Show Pin Electrical Types"
-msgstr "Mostra i tipi elettrici del pin"
+msgstr "Mostra tipi elettrici pin"
 
 #: eeschema/tools/ee_actions.cpp:196
 msgid "Annotate pins with their electrical types"
@@ -17241,10 +17241,8 @@ msgid ""
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
 "Modalità pin sincronizzati\n"
-"propaga ad altre unità tutti i cambiamenti (eccetto la numerazione dei "
-"pin).\n"
-"Abilitata come impostazione predefinita per le parti multiunità con unità "
-"interscambiabili."
+"Propaga ad altre unità tutti i cambiamenti (eccetto la numerazione dei pin).\n"
+"Abilitata come impostazione predefinita per le parti multiunità con unità interscambiabili."
 
 #: eeschema/tools/ee_actions.cpp:238
 msgid "Add Pin"
@@ -17591,7 +17589,7 @@ msgstr "Commuta tra rappresentazioni De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "De Morgan Standard"
-msgstr "Standard De Morgan"
+msgstr "De Morgan standard"
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "Switch to standard De Morgan representation"
@@ -17643,7 +17641,7 @@ msgstr "Cambia in testo"
 
 #: eeschema/tools/ee_actions.cpp:528
 msgid "Change existing item to a text comment"
-msgstr "Cambia elemento esistente in testo commento"
+msgstr "Cambia elemento esistente in testo di commento"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Change to Text Box"
@@ -17984,7 +17982,7 @@ msgstr "Cambia nei contenuti del foglio fornito nell'editor degli schemi"
 
 #: eeschema/tools/ee_actions.cpp:769
 msgid "Enter Sheet"
-msgstr "Accedi al foglio"
+msgstr "Entra nel foglio"
 
 #: eeschema/tools/ee_actions.cpp:769
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -21508,7 +21506,7 @@ msgstr "Impossibile scrivere \"%s\"."
 
 #: pagelayout_editor/files.cpp:193
 msgid "Save As"
-msgstr "Salva con nome"
+msgstr "Salva come"
 
 #: pagelayout_editor/files.cpp:243
 msgid "Error reading drawing sheet"
