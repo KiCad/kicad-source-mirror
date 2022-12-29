@@ -53,7 +53,7 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	wxArrayString m_diameterUnitChoices;
 	m_diameterUnit = new UNIT_SELECTOR_LEN( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_diameterUnitChoices, 0 );
 	m_diameterUnit->SetSelection( 0 );
-	fgSizerLeft->Add( m_diameterUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgSizerLeft->Add( m_diameterUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 	m_staticText161 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Area:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText161->Wrap( -1 );
@@ -76,6 +76,8 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerResistivity = new wxBoxSizer( wxHORIZONTAL );
 
 	m_textCtrlConductorResistivity = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlConductorResistivity->SetMinSize( wxSize( 100,-1 ) );
+
 	bSizerResistivity->Add( m_textCtrlConductorResistivity, 1, wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_button_ResistivityConductor = new wxButton( sbSizer1->GetStaticBox(), wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -119,7 +121,7 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	wxArrayString m_linResistanceUnitChoices;
 	m_linResistanceUnit = new UNIT_SELECTOR_LINEAR_RESISTANCE( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_linResistanceUnitChoices, 0 );
 	m_linResistanceUnit->SetSelection( 0 );
-	fgSizerLeft->Add( m_linResistanceUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgSizerLeft->Add( m_linResistanceUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 	m_staticText164 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Frequency for 100% skin depth:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText164->Wrap( -1 );
@@ -131,7 +133,7 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	wxArrayString m_frequencyUnitChoices;
 	m_frequencyUnit = new UNIT_SELECTOR_FREQUENCY( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_frequencyUnitChoices, 0 );
 	m_frequencyUnit->SetSelection( 0 );
-	fgSizerLeft->Add( m_frequencyUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgSizerLeft->Add( m_frequencyUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 	m_staticText1642 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Ampacity:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1642->Wrap( -1 );
@@ -197,7 +199,7 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	wxArrayString m_lengthUnitChoices;
 	m_lengthUnit = new UNIT_SELECTOR_LEN_CABLE( sbSizer12->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_lengthUnitChoices, 0 );
 	m_lengthUnit->SetSelection( 0 );
-	fgSizerRight->Add( m_lengthUnit, 0, wxTOP, 5 );
+	fgSizerRight->Add( m_lengthUnit, 0, wxTOP|wxEXPAND, 5 );
 
 	m_staticText16121 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("Resistance DC:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16121->Wrap( -1 );
@@ -222,7 +224,7 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	wxArrayString m_vDropUnitChoices;
 	m_vDropUnit = new UNIT_SELECTOR_VOLTAGE( sbSizer12->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_vDropUnitChoices, 0 );
 	m_vDropUnit->SetSelection( 0 );
-	fgSizerRight->Add( m_vDropUnit, 0, wxTOP|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRight->Add( m_vDropUnit, 0, wxTOP|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticText1612122 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("Dissipated power:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1612122->Wrap( -1 );
@@ -234,7 +236,7 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	wxArrayString m_powerUnitChoices;
 	m_powerUnit = new UNIT_SELECTOR_POWER( sbSizer12->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_powerUnitChoices, 0 );
 	m_powerUnit->SetSelection( 0 );
-	fgSizerRight->Add( m_powerUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgSizerRight->Add( m_powerUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 
 	sbSizer12->Add( fgSizerRight, 1, 0, 5 );
@@ -243,7 +245,7 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer4->Add( sbSizer12, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizer9->Add( bSizer4, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizer9->Add( bSizer4, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizer6->Add( bSizer9, 0, wxEXPAND, 5 );

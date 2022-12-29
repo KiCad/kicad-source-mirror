@@ -24,9 +24,9 @@
 #include <wx/icon.h>
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
-#include <wx/radiobut.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
+#include <wx/radiobut.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -45,6 +45,13 @@ class PANEL_REGULATOR_BASE : public CALCULATOR_PANEL
 		wxStaticBitmap* m_bitmapRegul4pins;
 		wxStaticBitmap* m_bitmapRegul3pins;
 		wxStaticText* m_RegulFormula;
+		wxChoice* m_choiceRegulatorSelector;
+		wxStaticText* m_staticTextRegFile;
+		wxTextCtrl* m_regulators_fileNameCtrl;
+		wxButton* m_buttonDataFile;
+		wxButton* m_buttonEditItem;
+		wxButton* m_buttonAddItem;
+		wxButton* m_buttonRemoveItem;
 		wxRadioButton* m_rbRegulR1;
 		wxStaticText* m_labelRegultR1;
 		wxTextCtrl* m_RegulR1Value;
@@ -64,25 +71,18 @@ class PANEL_REGULATOR_BASE : public CALCULATOR_PANEL
 		wxTextCtrl* m_RegulIadjValue;
 		wxStaticText* m_IadjUnitLabel;
 		wxButton* m_buttonCalculate;
-		wxButton* m_buttonRegulReset;
 		wxStaticText* m_RegulMessage;
-		wxChoice* m_choiceRegulatorSelector;
-		wxStaticText* m_staticTextRegFile;
-		wxTextCtrl* m_regulators_fileNameCtrl;
-		wxButton* m_buttonDataFile;
-		wxButton* m_buttonEditItem;
-		wxButton* m_buttonAddItem;
-		wxButton* m_buttonRemoveItem;
+		wxButton* m_buttonRegulReset;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnRegulTypeSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRegulatorResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDataFileSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveRegulator( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRegulatorResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

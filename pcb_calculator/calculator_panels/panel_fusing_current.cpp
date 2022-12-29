@@ -40,6 +40,9 @@ PANEL_FUSING_CURRENT::PANEL_FUSING_CURRENT( wxWindow * parent, wxWindowID id,
                                             long style, const wxString& name ) :
 PANEL_FUSING_CURRENT_BASE( parent, id, pos, size, style, name )
 {
+    m_ambientUnit->SetLabel( wxT( "°C" ) );
+    m_meltingUnit->SetLabel( wxT( "°C" ) );
+
     // Set some defaults
     m_ambientValue->SetValue( wxString::Format( wxT( "%i" ), 25 ) );
     m_meltingValue->SetValue( wxString::Format( wxT( "%i" ), 1084 ) ); // Value for copper

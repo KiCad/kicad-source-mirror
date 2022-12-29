@@ -69,7 +69,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizer4</property>
@@ -367,7 +367,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -725,7 +725,7 @@
                                                                 <property name="maxlength">0</property>
                                                                 <property name="min_size"></property>
                                                                 <property name="minimize_button">0</property>
-                                                                <property name="minimum_size"></property>
+                                                                <property name="minimum_size">100,-1</property>
                                                                 <property name="moveable">1</property>
                                                                 <property name="name">m_textCtrlConductorResistivity</property>
                                                                 <property name="pane_border">1</property>
@@ -1238,7 +1238,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1429,7 +1429,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -2213,7 +2213,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxTOP</property>
+                                                    <property name="flag">wxTOP|wxEXPAND</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -2591,7 +2591,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxTOP|wxALIGN_CENTER_VERTICAL</property>
+                                                    <property name="flag">wxTOP|wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -2782,7 +2782,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="1">
                                                         <property name="BottomDockable">1</property>

@@ -34,7 +34,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	int m_choiceRegTypeNChoices = sizeof( m_choiceRegTypeChoices ) / sizeof( wxString );
 	m_choiceRegType = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceRegTypeNChoices, m_choiceRegTypeChoices, 0 );
 	m_choiceRegType->SetSelection( 0 );
-	bSizerType->Add( m_choiceRegType, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerType->Add( m_choiceRegType, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizeLeftpReg->Add( bSizerType, 0, wxEXPAND|wxALL, 5 );
@@ -49,7 +49,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	bSizeLeftpReg->Add( m_bitmapRegul3pins, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
 
 
-	bSizeLeftpReg->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizeLeftpReg->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizerRegFormula;
 	sbSizerRegFormula = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Formula") ), wxVERTICAL );
@@ -71,6 +71,62 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 
 	wxBoxSizer* bSizerRegulRight;
 	bSizerRegulRight = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* sbSizerRegulatorsChooser;
+	sbSizerRegulatorsChooser = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Regulator") ), wxVERTICAL );
+
+	wxArrayString m_choiceRegulatorSelectorChoices;
+	m_choiceRegulatorSelector = new wxChoice( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceRegulatorSelectorChoices, 0 );
+	m_choiceRegulatorSelector->SetSelection( 0 );
+	sbSizerRegulatorsChooser->Add( m_choiceRegulatorSelector, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_staticTextRegFile = new wxStaticText( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Regulators data file:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRegFile->Wrap( -1 );
+	m_staticTextRegFile->SetToolTip( _("The name of the data file which stores known regulators parameters.") );
+
+	sbSizerRegulatorsChooser->Add( m_staticTextRegFile, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerDataFile;
+	bSizerDataFile = new wxBoxSizer( wxHORIZONTAL );
+
+	m_regulators_fileNameCtrl = new wxTextCtrl( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerDataFile->Add( m_regulators_fileNameCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_buttonDataFile = new wxButton( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerDataFile->Add( m_buttonDataFile, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	sbSizerRegulatorsChooser->Add( bSizerDataFile, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerReulBtn;
+	bSizerReulBtn = new wxBoxSizer( wxHORIZONTAL );
+
+	m_buttonEditItem = new wxButton( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Edit Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonEditItem->SetToolTip( _("Edit the current selected regulator.") );
+
+	bSizerReulBtn->Add( m_buttonEditItem, 1, wxALL, 5 );
+
+	m_buttonAddItem = new wxButton( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Add Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonAddItem->SetToolTip( _("Enter a new item to the current list of available regulators") );
+
+	bSizerReulBtn->Add( m_buttonAddItem, 1, wxALL, 5 );
+
+	m_buttonRemoveItem = new wxButton( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Remove Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRemoveItem->SetToolTip( _("Remove an item from the current list of available regulators") );
+
+	bSizerReulBtn->Add( m_buttonRemoveItem, 1, wxALL, 5 );
+
+
+	sbSizerRegulatorsChooser->Add( bSizerReulBtn, 1, wxEXPAND, 5 );
+
+
+	bSizer9->Add( sbSizerRegulatorsChooser, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+
+	bSizer9->Add( 0, 10, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerRegParams;
 	fgSizerRegParams = new wxFlexGridSizer( 6, 4, 4, 0 );
@@ -154,22 +210,18 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerRegParams->Add( m_IadjUnitLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerRegulRight->Add( fgSizerRegParams, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 10 );
+	bSizer9->Add( fgSizerRegParams, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
+
+
+	bSizerRegulRight->Add( bSizer9, 0, 0, 5 );
 
 	wxBoxSizer* bSizerRegulButtonCalcReset;
 	bSizerRegulButtonCalcReset = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonCalculate = new wxButton( this, wxID_ANY, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRegulButtonCalcReset->Add( m_buttonCalculate, 0, wxTOP, 10 );
+	m_buttonCalculate->SetMinSize( wxSize( 120,-1 ) );
 
-
-	bSizerRegulButtonCalcReset->Add( 10, 0, 0, 0, 5 );
-
-	m_buttonRegulReset = new wxButton( this, wxID_ANY, _("Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRegulButtonCalcReset->Add( m_buttonRegulReset, 0, wxTOP, 10 );
-
-
-	bSizerRegulButtonCalcReset->Add( 0, 0, 3, wxEXPAND, 5 );
+	bSizerRegulButtonCalcReset->Add( m_buttonCalculate, 0, wxTOP, 5 );
 
 
 	bSizerRegulRight->Add( bSizerRegulButtonCalcReset, 0, wxEXPAND|wxLEFT, 5 );
@@ -178,61 +230,17 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	m_RegulMessage->Wrap( -1 );
 	bSizerRegulRight->Add( m_RegulMessage, 0, wxALL, 10 );
 
-	wxStaticBoxSizer* sbSizerRegulatorsChooser;
-	sbSizerRegulatorsChooser = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Regulator") ), wxVERTICAL );
 
-	wxArrayString m_choiceRegulatorSelectorChoices;
-	m_choiceRegulatorSelector = new wxChoice( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceRegulatorSelectorChoices, 0 );
-	m_choiceRegulatorSelector->SetSelection( 0 );
-	sbSizerRegulatorsChooser->Add( m_choiceRegulatorSelector, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerRegulRight->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_staticTextRegFile = new wxStaticText( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Regulators data file:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextRegFile->Wrap( -1 );
-	m_staticTextRegFile->SetToolTip( _("The name of the data file which stores known regulators parameters.") );
-
-	sbSizerRegulatorsChooser->Add( m_staticTextRegFile, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizerDataFile;
-	bSizerDataFile = new wxBoxSizer( wxHORIZONTAL );
-
-	m_regulators_fileNameCtrl = new wxTextCtrl( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerDataFile->Add( m_regulators_fileNameCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_buttonDataFile = new wxButton( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerDataFile->Add( m_buttonDataFile, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_buttonRegulReset = new wxButton( this, wxID_ANY, _("Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRegulRight->Add( m_buttonRegulReset, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxRIGHT, 10 );
 
 
-	sbSizerRegulatorsChooser->Add( bSizerDataFile, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizerReulBtn;
-	bSizerReulBtn = new wxBoxSizer( wxHORIZONTAL );
-
-	m_buttonEditItem = new wxButton( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Edit Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonEditItem->SetToolTip( _("Edit the current selected regulator.") );
-
-	bSizerReulBtn->Add( m_buttonEditItem, 1, wxALL, 5 );
-
-	m_buttonAddItem = new wxButton( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Add Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonAddItem->SetToolTip( _("Enter a new item to the current list of available regulators") );
-
-	bSizerReulBtn->Add( m_buttonAddItem, 1, wxALL, 5 );
-
-	m_buttonRemoveItem = new wxButton( sbSizerRegulatorsChooser->GetStaticBox(), wxID_ANY, _("Remove Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonRemoveItem->SetToolTip( _("Remove an item from the current list of available regulators") );
-
-	bSizerReulBtn->Add( m_buttonRemoveItem, 1, wxALL, 5 );
+	bSizerColBalancer->Add( bSizerRegulRight, 1, wxEXPAND|wxLEFT, 10 );
 
 
-	sbSizerRegulatorsChooser->Add( bSizerReulBtn, 1, wxEXPAND, 5 );
-
-
-	bSizerRegulRight->Add( sbSizerRegulatorsChooser, 0, wxEXPAND|wxRIGHT, 10 );
-
-
-	bSizerColBalancer->Add( bSizerRegulRight, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
-
-
-	bSizerMainReg->Add( bSizerColBalancer, 0, wxEXPAND, 5 );
+	bSizerMainReg->Add( bSizerColBalancer, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMainReg );
@@ -241,25 +249,25 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 
 	// Connect Events
 	m_choiceRegType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulTypeSelection ), NULL, this );
-	m_buttonCalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorCalcButtonClick ), NULL, this );
-	m_buttonRegulReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorResetButtonClick ), NULL, this );
 	m_choiceRegulatorSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorSelection ), NULL, this );
 	m_buttonDataFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnDataFileSelection ), NULL, this );
 	m_buttonEditItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnEditRegulator ), NULL, this );
 	m_buttonAddItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnAddRegulator ), NULL, this );
 	m_buttonRemoveItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRemoveRegulator ), NULL, this );
+	m_buttonCalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorCalcButtonClick ), NULL, this );
+	m_buttonRegulReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorResetButtonClick ), NULL, this );
 }
 
 PANEL_REGULATOR_BASE::~PANEL_REGULATOR_BASE()
 {
 	// Disconnect Events
 	m_choiceRegType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulTypeSelection ), NULL, this );
-	m_buttonCalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorCalcButtonClick ), NULL, this );
-	m_buttonRegulReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorResetButtonClick ), NULL, this );
 	m_choiceRegulatorSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorSelection ), NULL, this );
 	m_buttonDataFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnDataFileSelection ), NULL, this );
 	m_buttonEditItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnEditRegulator ), NULL, this );
 	m_buttonAddItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnAddRegulator ), NULL, this );
 	m_buttonRemoveItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRemoveRegulator ), NULL, this );
+	m_buttonCalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorCalcButtonClick ), NULL, this );
+	m_buttonRegulReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorResetButtonClick ), NULL, this );
 
 }
