@@ -29,9 +29,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_CORROSION_BASE
+/// Class PANEL_GALVANIC_CORROSION_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_CORROSION_BASE : public CALCULATOR_PANEL
+class PANEL_GALVANIC_CORROSION_BASE : public CALCULATOR_PANEL
 {
 	private:
 
@@ -49,9 +49,9 @@ class PANEL_CORROSION_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_CORROSION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_GALVANIC_CORROSION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_CORROSION_BASE();
+		~PANEL_GALVANIC_CORROSION_BASE();
 
 };
 

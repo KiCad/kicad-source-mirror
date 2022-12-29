@@ -20,7 +20,7 @@
 #ifndef PANEL_CORROSION_H
 #define PANEL_CORROSION_H
 
-#include "panel_corrosion_base.h"
+#include "panel_galvanic_corrosion_base.h"
 #include <vector>
 
 class PCB_CALCULATOR_SETTINGS;
@@ -28,7 +28,7 @@ class PCB_CALCULATOR_SETTINGS;
 class CORROSION_TABLE_ENTRY
 {
 public:
-    CORROSION_TABLE_ENTRY( const wxString& aName, const wxString& aSymbol, double aPot );
+    CORROSION_TABLE_ENTRY( const wxString& aName, const wxString& aSymbol, double aPotential );
     /** @brief Translatable name ( Copper ) */
     wxString m_name;
     /** @brief Chemical symbol (Cu), not translatable */
@@ -37,13 +37,14 @@ public:
     double m_potential;
 };
 
-class PANEL_CORROSION : public PANEL_CORROSION_BASE
+class PANEL_GALVANIC_CORROSION : public PANEL_GALVANIC_CORROSION_BASE
 {
 public:
-    PANEL_CORROSION( wxWindow* parent, wxWindowID id = wxID_ANY,
-                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                     long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-    ~PANEL_CORROSION();
+    PANEL_GALVANIC_CORROSION( wxWindow* parent, wxWindowID id = wxID_ANY,
+                              const wxPoint& pos = wxDefaultPosition,
+                              const wxSize& size = wxDefaultSize,
+                              long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+    ~PANEL_GALVANIC_CORROSION();
 
     std::vector<CORROSION_TABLE_ENTRY> m_entries;
     // Methods from CALCULATOR_PANEL that must be overriden
@@ -53,8 +54,10 @@ public:
     void OnCorFilterChange( wxCommandEvent& aEvent ) override;
 
 private:
+    void fillTable();
+
+private:
     double m_corFilterValue;
-    void FillTable();
 };
 
 #endif

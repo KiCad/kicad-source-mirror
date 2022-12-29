@@ -17,24 +17,24 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_ATTENUATORS_H
-#define PANEL_ATTENUATORS_H
+#ifndef PANEL_RF_ATTENUATORS_H
+#define PANEL_RF_ATTENUATORS_H
 
-#include "panel_attenuators_base.h"
+#include "panel_rf_attenuators_base.h"
 
 #include <vector>
 
 class ATTENUATOR;
 class PCB_CALCULATOR_SETTINGS;
 
-class PANEL_ATTENUATORS : public PANEL_ATTENUATORS_BASE
+class PANEL_RF_ATTENUATORS : public PANEL_RF_ATTENUATORS_BASE
 {
 public:
-    PANEL_ATTENUATORS( wxWindow* parent, wxWindowID id = wxID_ANY,
+    PANEL_RF_ATTENUATORS( wxWindow* parent, wxWindowID id = wxID_ANY,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-    ~PANEL_ATTENUATORS();
+    ~PANEL_RF_ATTENUATORS();
 
     wxRadioBox* GetAttenuatorsSelector() { return m_AttenuatorsSelection; }
 
@@ -55,7 +55,6 @@ public:
 public:
     ATTENUATOR*              m_CurrAttenuator;
     std::vector<ATTENUATOR*> m_AttenuatorList;
-
 };
 
 #endif

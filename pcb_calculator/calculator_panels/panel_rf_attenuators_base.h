@@ -37,9 +37,9 @@ class STD_BITMAP_BUTTON;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_ATTENUATORS_BASE
+/// Class PANEL_RF_ATTENUATORS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_ATTENUATORS_BASE : public CALCULATOR_PANEL
+class PANEL_RF_ATTENUATORS_BASE : public CALCULATOR_PANEL
 {
 	private:
 
@@ -77,9 +77,9 @@ class PANEL_ATTENUATORS_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_ATTENUATORS_BASE();
+		~PANEL_RF_ATTENUATORS_BASE();
 
 };
 

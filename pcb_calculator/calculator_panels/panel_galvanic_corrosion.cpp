@@ -17,7 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <calculator_panels/panel_corrosion.h>
+#include <calculator_panels/panel_galvanic_corrosion.h>
 #include <pcb_calculator_settings.h>
 #include <widgets/unit_selector.h>
 #include <math/util.h>      // for KiROUND
@@ -25,16 +25,17 @@
 extern double DoubleFromString( const wxString& TextValue );
 
 
-CORROSION_TABLE_ENTRY::CORROSION_TABLE_ENTRY( const wxString& aName, const wxString& aSymbol, double aPot )
+CORROSION_TABLE_ENTRY::CORROSION_TABLE_ENTRY( const wxString& aName, const wxString& aSymbol,
+                                              double aPotential )
 {
-    m_potential = aPot;
+    m_potential = aPotential;
     m_name = aName;
     m_symbol = aSymbol;
 }
 
-PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint& pos,
-                                  const wxSize& size, long style, const wxString& name ) :
-        PANEL_CORROSION_BASE( parent, id, pos, size, style, name )
+PANEL_GALVANIC_CORROSION::PANEL_GALVANIC_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                                    const wxSize& size, long style, const wxString& name ) :
+        PANEL_GALVANIC_CORROSION_BASE( parent, id, pos, size, style, name )
 {
     m_entries.clear();
     m_entries.emplace_back( CORROSION_TABLE_ENTRY( _( "Platinum" ), "Pt", -0.57 ) );
@@ -86,40 +87,40 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
     m_helpText->SetPage( help );
 
     m_corFilterValue = 0;
-    FillTable();
+    fillTable();
 }
 
 
-PANEL_CORROSION::~PANEL_CORROSION()
+PANEL_GALVANIC_CORROSION::~PANEL_GALVANIC_CORROSION()
 {
 }
 
-void PANEL_CORROSION::ThemeChanged()
+void PANEL_GALVANIC_CORROSION::ThemeChanged()
 {
 }
 
 
-void PANEL_CORROSION::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+void PANEL_GALVANIC_CORROSION::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     m_corFilterCtrl->SetValue( aCfg->m_CorrosionTable.threshold_voltage );
     m_corFilterValue = DoubleFromString( m_corFilterCtrl->GetValue() );
 }
 
 
-void PANEL_CORROSION::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+void PANEL_GALVANIC_CORROSION::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     aCfg->m_CorrosionTable.threshold_voltage = wxString( "" ) << m_corFilterValue;
 }
 
 
-void PANEL_CORROSION::OnCorFilterChange( wxCommandEvent& aEvent )
+void PANEL_GALVANIC_CORROSION::OnCorFilterChange( wxCommandEvent& aEvent )
 {
     m_corFilterValue = DoubleFromString( m_corFilterCtrl->GetValue() );
-    FillTable();
+    fillTable();
 }
 
 
-void PANEL_CORROSION::FillTable()
+void PANEL_GALVANIC_CORROSION::fillTable()
 {
     // Fill the table with data
     int      i = 0;

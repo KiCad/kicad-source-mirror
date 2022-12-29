@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_corrosion_base.h"
+#include "panel_galvanic_corrosion_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_CORROSION_BASE::PANEL_CORROSION_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
+PANEL_GALVANIC_CORROSION_BASE::PANEL_GALVANIC_CORROSION_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
@@ -81,12 +81,12 @@ PANEL_CORROSION_BASE::PANEL_CORROSION_BASE( wxWindow* parent, wxWindowID id, con
 	bSizer6->Fit( this );
 
 	// Connect Events
-	m_corFilterCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CORROSION_BASE::OnCorFilterChange ), NULL, this );
+	m_corFilterCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_GALVANIC_CORROSION_BASE::OnCorFilterChange ), NULL, this );
 }
 
-PANEL_CORROSION_BASE::~PANEL_CORROSION_BASE()
+PANEL_GALVANIC_CORROSION_BASE::~PANEL_GALVANIC_CORROSION_BASE()
 {
 	// Disconnect Events
-	m_corFilterCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CORROSION_BASE::OnCorFilterChange ), NULL, this );
+	m_corFilterCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_GALVANIC_CORROSION_BASE::OnCorFilterChange ), NULL, this );
 
 }

@@ -7,11 +7,11 @@
 
 #include "widgets/std_bitmap_button.h"
 
-#include "panel_attenuators_base.h"
+#include "panel_rf_attenuators_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
+PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizerAtt;
 	bSizerAtt = new wxBoxSizer( wxHORIZONTAL );
@@ -199,16 +199,16 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 	bSizerAtt->Fit( this );
 
 	// Connect Events
-	m_AttenuatorsSelection->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( PANEL_ATTENUATORS_BASE::OnAttenuatorSelection ), NULL, this );
-	m_buttonAlcAtt->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_ATTENUATORS_BASE::OnCalculateAttenuator ), NULL, this );
-	m_bpButtonCalcAtt->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_ATTENUATORS_BASE::OnCalculateAttenuator ), NULL, this );
+	m_AttenuatorsSelection->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( PANEL_RF_ATTENUATORS_BASE::OnAttenuatorSelection ), NULL, this );
+	m_buttonAlcAtt->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_RF_ATTENUATORS_BASE::OnCalculateAttenuator ), NULL, this );
+	m_bpButtonCalcAtt->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_RF_ATTENUATORS_BASE::OnCalculateAttenuator ), NULL, this );
 }
 
-PANEL_ATTENUATORS_BASE::~PANEL_ATTENUATORS_BASE()
+PANEL_RF_ATTENUATORS_BASE::~PANEL_RF_ATTENUATORS_BASE()
 {
 	// Disconnect Events
-	m_AttenuatorsSelection->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( PANEL_ATTENUATORS_BASE::OnAttenuatorSelection ), NULL, this );
-	m_buttonAlcAtt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_ATTENUATORS_BASE::OnCalculateAttenuator ), NULL, this );
-	m_bpButtonCalcAtt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_ATTENUATORS_BASE::OnCalculateAttenuator ), NULL, this );
+	m_AttenuatorsSelection->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( PANEL_RF_ATTENUATORS_BASE::OnAttenuatorSelection ), NULL, this );
+	m_buttonAlcAtt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_RF_ATTENUATORS_BASE::OnCalculateAttenuator ), NULL, this );
+	m_bpButtonCalcAtt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_RF_ATTENUATORS_BASE::OnCalculateAttenuator ), NULL, this );
 
 }

@@ -20,10 +20,9 @@
 
 
 #include <wx/choicdlg.h>
-#include <wx/msgdlg.h>
 
 #include <attenuators/attenuator_classes.h>
-#include <calculator_panels/panel_attenuators.h>
+#include <calculator_panels/panel_rf_attenuators.h>
 #include <pcb_calculator_settings.h>
 
 #include <bitmaps.h>
@@ -34,10 +33,9 @@
 extern double DoubleFromString( const wxString& TextValue );
 
 
-PANEL_ATTENUATORS::PANEL_ATTENUATORS( wxWindow* parent, wxWindowID id,
-                                  const wxPoint& pos, const wxSize& size,
-                                  long style, const wxString& name ) :
-        PANEL_ATTENUATORS_BASE( parent, id, pos, size, style, name )
+PANEL_RF_ATTENUATORS::PANEL_RF_ATTENUATORS( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                            const wxSize& size, long style, const wxString& name ) :
+        PANEL_RF_ATTENUATORS_BASE( parent, id, pos, size, style, name )
 {
     m_CurrAttenuator = nullptr;
     m_bpButtonCalcAtt->SetBitmap( KiBitmap( BITMAPS::small_down ) );
@@ -63,14 +61,14 @@ PANEL_ATTENUATORS::PANEL_ATTENUATORS( wxWindow* parent, wxWindowID id,
 }
 
 
-PANEL_ATTENUATORS::~PANEL_ATTENUATORS()
+PANEL_RF_ATTENUATORS::~PANEL_RF_ATTENUATORS()
 {
     for( ATTENUATOR* attenuator : m_AttenuatorList )
         delete attenuator;
 }
 
 
-void PANEL_ATTENUATORS::ThemeChanged()
+void PANEL_RF_ATTENUATORS::ThemeChanged()
 {
     // Update the bitmaps
     m_bpButtonCalcAtt->SetBitmap( KiBitmap( BITMAPS::small_down ) );
@@ -88,7 +86,7 @@ void PANEL_ATTENUATORS::ThemeChanged()
 }
 
 
-void PANEL_ATTENUATORS::UpdateUI()
+void PANEL_RF_ATTENUATORS::UpdateUI()
 {
     m_attenuatorBitmap->SetBitmap( KiBitmap( m_CurrAttenuator->m_SchBitmapName ) );
 
@@ -97,7 +95,7 @@ void PANEL_ATTENUATORS::UpdateUI()
 }
 
 
-void PANEL_ATTENUATORS::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+void PANEL_RF_ATTENUATORS::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     wxASSERT( aCfg );
 
@@ -109,7 +107,7 @@ void PANEL_ATTENUATORS::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 }
 
 
-void PANEL_ATTENUATORS::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+void PANEL_RF_ATTENUATORS::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     wxASSERT( aCfg );
 
@@ -121,14 +119,14 @@ void PANEL_ATTENUATORS::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 
 
 // Called on a attenuator selection
-void PANEL_ATTENUATORS::OnAttenuatorSelection( wxCommandEvent& event )
+void PANEL_RF_ATTENUATORS::OnAttenuatorSelection( wxCommandEvent& event )
 {
     SetAttenuator( (unsigned) event.GetSelection() );
     Refresh();
 }
 
 
-void PANEL_ATTENUATORS::SetAttenuator( unsigned aIdx )
+void PANEL_RF_ATTENUATORS::SetAttenuator( unsigned aIdx )
 {
     if( aIdx >=m_AttenuatorList.size() )
         aIdx = m_AttenuatorList.size() - 1;
@@ -148,7 +146,7 @@ void PANEL_ATTENUATORS::SetAttenuator( unsigned aIdx )
 }
 
 
-void PANEL_ATTENUATORS::OnCalculateAttenuator( wxCommandEvent& event )
+void PANEL_RF_ATTENUATORS::OnCalculateAttenuator( wxCommandEvent& event )
 {
     TransfPanelDataToAttenuator();
     m_CurrAttenuator->Calculate();
@@ -156,7 +154,7 @@ void PANEL_ATTENUATORS::OnCalculateAttenuator( wxCommandEvent& event )
 }
 
 
-void PANEL_ATTENUATORS::TransfPanelDataToAttenuator()
+void PANEL_RF_ATTENUATORS::TransfPanelDataToAttenuator()
 {
     wxString msg;
 
@@ -169,7 +167,7 @@ void PANEL_ATTENUATORS::TransfPanelDataToAttenuator()
 }
 
 
-void PANEL_ATTENUATORS::TransfAttenuatorDataToPanel()
+void PANEL_RF_ATTENUATORS::TransfAttenuatorDataToPanel()
 {
     m_attenuatorBitmap->SetBitmap( KiBitmap( m_CurrAttenuator->m_SchBitmapName ) );
 
@@ -211,7 +209,7 @@ void PANEL_ATTENUATORS::TransfAttenuatorDataToPanel()
 }
 
 
-void PANEL_ATTENUATORS::TransfAttenuatorResultsToPanel()
+void PANEL_RF_ATTENUATORS::TransfAttenuatorResultsToPanel()
 {
     wxString msg;
 

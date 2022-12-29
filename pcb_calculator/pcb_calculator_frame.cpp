@@ -33,10 +33,10 @@
 #include <pcb_calculator_frame.h>
 #include <pcb_calculator_settings.h>
 
-#include <calculator_panels/panel_attenuators.h>
+#include <calculator_panels/panel_rf_attenuators.h>
 #include <calculator_panels/panel_board_class.h>
 #include <calculator_panels/panel_cable_size.h>
-#include <calculator_panels/panel_corrosion.h>
+#include <calculator_panels/panel_galvanic_corrosion.h>
 #include <calculator_panels/panel_color_code.h>
 #include <calculator_panels/panel_electrical_spacing.h>
 #include <calculator_panels/panel_eseries.h>
@@ -102,7 +102,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     AddCalculator( new PANEL_WAVELENGTH( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxTAB_TRAVERSAL ),
                    _( "Wavelength" ) );
-    AddCalculator( new PANEL_ATTENUATORS( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
+    AddCalculator( new PANEL_RF_ATTENUATORS( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _( "RF Attenuators" ) );
     AddCalculator( new PANEL_TRANSLINE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _( "Transmission Lines") );
@@ -115,7 +115,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                    _( "Color Code" ) );
     AddCalculator( new PANEL_BOARD_CLASS( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _("Board Classes") );
-    AddCalculator( new PANEL_CORROSION( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
+    AddCalculator( new PANEL_GALVANIC_CORROSION( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _( "Galvanic Corrosion" ) );
 
     LoadSettings( config() );
@@ -212,7 +212,7 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         // Kick all the things that wxWidgets can't seem to redraw on its own.
         // This is getting seriously ridiculous....
         PANEL_TRANSLINE*          translinePanel   = GetCalculator<PANEL_TRANSLINE>();
-        PANEL_ATTENUATORS*        attenPanel       = GetCalculator<PANEL_ATTENUATORS>();
+        PANEL_RF_ATTENUATORS*        attenPanel       = GetCalculator<PANEL_RF_ATTENUATORS>();
         PANEL_VIA_SIZE*           viaSizePanel     = GetCalculator<PANEL_VIA_SIZE>();
         PANEL_REGULATOR*          regulPanel       = GetCalculator<PANEL_REGULATOR>();
         PANEL_ELECTRICAL_SPACING* elecSpacingPanel = GetCalculator<PANEL_ELECTRICAL_SPACING>();
