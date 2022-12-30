@@ -98,6 +98,7 @@ public:
     wxCheckBox*       m_CurSheetAsRoot;
     wxCheckBox*       m_SaveAllVoltages;
     wxCheckBox*       m_SaveAllCurrents;
+    wxCheckBox*       m_RunExternalSpiceCommand;
     wxTextCtrl*       m_CommandStringCtrl;
     wxTextCtrl*       m_TitleStringCtrl;
     wxBoxSizer*       m_LeftBoxSizer;
@@ -147,16 +148,6 @@ private:
     void OnDelGenerator( wxCommandEvent& event ) override;
 
     /**
-     * Run the external spice simulator command.
-     */
-    void OnRunExternSpiceCommand( wxCommandEvent& event );
-
-    /**
-     * Enable (if the command line is not empty or disable the button to run spice command.
-     */
-    void OnRunSpiceButtUI( wxUpdateUIEvent& event );
-
-    /**
      * Write the current netlist options setup in the configuration.
      */
     void WriteCurrentNetlistSetup();
@@ -171,8 +162,6 @@ private:
      * @return true for known netlist type, false for custom formats.
      */
     bool FilenamePrms( NETLIST_TYPE_ID aType,  wxString* aExt, wxString* aWildCard );
-
-    DECLARE_EVENT_TABLE()
 
 public:
     SCH_EDIT_FRAME*      m_Parent;
@@ -208,12 +197,6 @@ enum id_netlist {
     ID_SAVE_ALL_CURRENTS,
     ID_RUN_SIMULATOR
 };
-
-
-BEGIN_EVENT_TABLE( DIALOG_EXPORT_NETLIST, DIALOG_EXPORT_NETLIST_BASE )
-    EVT_BUTTON( ID_RUN_SIMULATOR, DIALOG_EXPORT_NETLIST::OnRunExternSpiceCommand )
-    EVT_UPDATE_UI( ID_RUN_SIMULATOR, DIALOG_EXPORT_NETLIST::OnRunSpiceButtUI )
-END_EVENT_TABLE()
 
 
 EXPORT_NETLIST_PAGE::EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& aTitle,
@@ -290,53 +273,6 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent ) :
 }
 
 
-void DIALOG_EXPORT_NETLIST::OnRunExternSpiceCommand( wxCommandEvent& event )
-{
-    // Run the external spice simulator command
-    NetlistUpdateOpt();
-
-    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
-    wxString simulatorCommand = settings.m_SpiceCommandString;
-
-    unsigned netlist_opt = NETLIST_EXPORTER_SPICE::OPTION_SIM_COMMAND;
-
-    // Calculate the netlist filename and options
-    wxFileName fn = m_Parent->Schematic().GetFileName();
-    fn.SetExt( SpiceFileExtension );
-
-    if( settings.m_SpiceCurSheetAsRoot )
-        netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_CUR_SHEET_AS_ROOT;
-
-    if( settings.m_SpiceSaveAllVoltages )
-        netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
-
-    if( settings.m_SpiceSaveAllCurrents )
-        netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
-
-    // Build the command line
-    wxString commandLine = simulatorCommand;
-    commandLine.Replace( wxS( "%I" ), fn.GetFullPath(), true );
-
-    if( m_Parent->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) ) )
-    {
-        m_Parent->WriteNetListFile( NET_TYPE_SPICE, fn.GetFullPath(), netlist_opt,
-                                    &m_MessagesBox->Reporter() );
-
-        commandLine.Trim( true ).Trim( false );
-
-        if( !commandLine.IsEmpty() )
-            wxExecute( commandLine, wxEXEC_ASYNC );
-    }
-}
-
-
-void DIALOG_EXPORT_NETLIST::OnRunSpiceButtUI( wxUpdateUIEvent& aEvent )
-{
-    bool disable = m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->IsEmpty();
-    aEvent.Enable( !disable );
-}
-
-
 void DIALOG_EXPORT_NETLIST::InstallPageSpice()
 {
     EXPORT_NETLIST_PAGE* page = m_PanelNetType[PANELSPICE] =
@@ -363,12 +299,14 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpice()
     page->m_LeftBoxSizer->Add( page->m_SaveAllCurrents, 0, wxBOTTOM | wxRIGHT, 5 );
 
 
+    page->m_RunExternalSpiceCommand = new wxCheckBox( page, ID_RUN_SIMULATOR,
+                                                      _( "Run external simulator command:" ) );
     wxString simulatorCommand = settings.m_SpiceCommandString;
-    wxStaticText* spice_label = new wxStaticText( page, -1, _( "External simulator command:" ) );
-    spice_label->SetToolTip( _( "Enter the command line to run spice\n"
-                                "Usually <path to spice binary> %I\n"
-                                "%I will be replaced by the actual spice netlist name" ) );
-    page->m_LowBoxSizer->Add( spice_label, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+    page->m_RunExternalSpiceCommand->SetToolTip( _( "Enter the command line to run SPICE\n"
+                                                    "Usually '<path to SPICE binary> \"%I\"'\n"
+                                                    "%I will be replaced by the netlist filepath" ) );
+    page->m_LowBoxSizer->Add( page->m_RunExternalSpiceCommand, 0,
+                              wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     page->m_CommandStringCtrl = new wxTextCtrl( page, -1, simulatorCommand,
                                                 wxDefaultPosition, wxDefaultSize );
@@ -376,11 +314,6 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpice()
     page->m_CommandStringCtrl->SetInsertionPoint( 1 );
     page->m_LowBoxSizer->Add( page->m_CommandStringCtrl, 0,
                               wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-
-    // Add button to run spice command
-    wxButton* button = new wxButton( page, ID_RUN_SIMULATOR,
-                                     _( "Create Netlist and Run Simulator Command" ) );
-    page->m_LowBoxSizer->Add( button, 0, wxGROW | wxBOTTOM | wxLEFT | wxRIGHT, 5 );
 }
 
 
@@ -402,8 +335,7 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpiceModel()
 void DIALOG_EXPORT_NETLIST::InstallCustomPages()
 {
     EXPORT_NETLIST_PAGE* currPage;
-
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS*   cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
     if( cfg )
@@ -428,8 +360,8 @@ void DIALOG_EXPORT_NETLIST::InstallCustomPages()
 
 
 EXPORT_NETLIST_PAGE* DIALOG_EXPORT_NETLIST::AddOneCustomPage( const wxString& aTitle,
-                                                       const wxString& aCommandString,
-                                                       NETLIST_TYPE_ID aNetTypeId )
+                                                              const wxString& aCommandString,
+                                                              NETLIST_TYPE_ID aNetTypeId )
 {
     EXPORT_NETLIST_PAGE* currPage = new EXPORT_NETLIST_PAGE( m_NoteBook, aTitle, aNetTypeId, true );
 
@@ -494,6 +426,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
     EXPORT_NETLIST_PAGE* currPage;
     currPage = (EXPORT_NETLIST_PAGE*) m_NoteBook->GetCurrentPage();
 
+    bool     runExternalSpiceCommand = false;
     unsigned netlist_opt = 0;
 
     // Calculate the netlist filename
@@ -516,6 +449,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
         if( currPage->m_CurSheetAsRoot->GetValue() )
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_CUR_SHEET_AS_ROOT;
 
+        runExternalSpiceCommand = currPage->m_RunExternalSpiceCommand->GetValue();
         break;
 
     case NET_TYPE_SPICE_MODEL:
@@ -540,39 +474,101 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
     }
     }
 
-    fn.SetExt( fileExt );
+    wxString fullpath;
 
-    if( fn.GetPath().IsEmpty() )
-       fn.SetPath( wxPathOnly( Prj().GetProjectFullName() ) );
+    if( runExternalSpiceCommand )
+    {
+        fn.SetExt( SpiceFileExtension );
+        fullpath = fn.GetFullPath();
+    }
+    else
+    {
+        fn.SetExt( fileExt );
 
-    wxString fullpath = fn.GetFullPath();
-    wxString fullname = fn.GetFullName();
-    wxString path     = fn.GetPath();
+        if( fn.GetPath().IsEmpty() )
+           fn.SetPath( wxPathOnly( Prj().GetProjectFullName() ) );
 
-    // full name does not and should not include the path, per wx docs.
-    wxFileDialog dlg( this, title, path, fullname, fileWildcard, wxFD_SAVE );
+        wxString fullname = fn.GetFullName();
+        wxString path     = fn.GetPath();
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return false;
+        // full name does not and should not include the path, per wx docs.
+        wxFileDialog dlg( this, title, path, fullname, fileWildcard, wxFD_SAVE );
 
-    fullpath = dlg.GetPath();   // directory + filename
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        fullpath = dlg.GetPath();   // directory + filename
+    }
 
     m_Parent->ClearMsgPanel();
+    REPORTER& reporter = m_MessagesBox->Reporter();
 
     if( currPage->m_CommandStringCtrl )
         m_Parent->SetNetListerCommand( currPage->m_CommandStringCtrl->GetValue() );
     else
         m_Parent->SetNetListerCommand( wxEmptyString );
 
-    if( m_Parent->ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
+    if( !m_Parent->ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
+        return false;
+
+    m_Parent->WriteNetListFile( currPage->m_IdNetType, fullpath, netlist_opt, &reporter );
+
+    if( runExternalSpiceCommand )
     {
-        m_Parent->WriteNetListFile( currPage->m_IdNetType, fullpath, netlist_opt,
-                                    &m_MessagesBox->Reporter() );
+        // Build the command line
+        wxString commandLine = m_Parent->Schematic().Settings().m_SpiceCommandString;
+        commandLine.Replace( wxS( "%I" ), fullpath, true );
+        commandLine.Trim( true ).Trim( false );
+
+        if( !commandLine.IsEmpty() )
+        {
+            wxArrayString output;
+            wxArrayString errors;
+            wxExecute( commandLine, output, errors, wxEXEC_ASYNC );
+
+            reporter.ReportHead( commandLine, RPT_SEVERITY_ACTION );
+
+            if( output.GetCount() )
+            {
+                for( unsigned ii = 0; ii < output.GetCount(); ii++ )
+                    reporter.Report( output[ii], RPT_SEVERITY_INFO );
+            }
+
+            if( errors.GetCount() )
+            {
+                for( unsigned ii = 0; ii < errors.GetCount(); ii++ )
+                {
+                    // wxExecute returns -1 for all error conditions, so we've no choice but
+                    // to scrape the stderr messages for the error code(s).
+
+                    if( errors[ii].EndsWith( wxS( "failed with error 2!" ) ) )      // ENOENT
+                    {
+                        reporter.Report( _( "external simulator not found" ), RPT_SEVERITY_ERROR );
+                        reporter.Report( _( "Note: command line is usually: "
+                                            "<tt>&lt;path to SPICE binary&gt; \"%I\"</tt>" ),
+                                         RPT_SEVERITY_INFO );
+                    }
+                    else if( errors[ii].EndsWith( wxS( "failed with error 8!" ) ) ) // ENOEXEC
+                    {
+                        reporter.Report( _( "external simulator has the wrong format or "
+                                            "architecture" ), RPT_SEVERITY_ERROR );
+                    }
+                    else if( errors[ii].EndsWith( "failed with error 13!" ) ) // EACCES
+                    {
+                        reporter.Report( _( "permission denied" ), RPT_SEVERITY_ERROR );
+                    }
+                    else
+                    {
+                        reporter.Report( errors[ii], RPT_SEVERITY_ERROR );
+                    }
+                }
+            }
+        }
     }
 
     WriteCurrentNetlistSetup();
 
-    return true;
+    return !runExternalSpiceCommand;
 }
 
 
