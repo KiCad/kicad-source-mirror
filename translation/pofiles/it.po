@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 11:14-0800\n"
-"PO-Revision-Date: 2022-12-29 14:38+0100\n"
+"PO-Revision-Date: 2022-12-30 12:35+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -5582,7 +5582,7 @@ msgstr "Salva il documento corrente in un'altra posizione"
 
 #: common/tool/actions.cpp:79
 msgid "Save Copy As..."
-msgstr "Salva copia con nome..."
+msgstr "Salva copia come..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -5695,7 +5695,7 @@ msgstr "Strumento di cancellazione interattivo"
 
 #: common/tool/actions.cpp:196
 msgid "Delete clicked items"
-msgstr "Elimina elementi selezionati"
+msgstr "Elimina gli elementi con il clic"
 
 #: common/tool/actions.cpp:203
 msgid "Change Edit Method"
@@ -5703,17 +5703,17 @@ msgstr "Cambia metodo modifica"
 
 #: common/tool/actions.cpp:203
 msgid "Change edit method constraints"
-msgstr "Cambia vincoli metodo modifica"
+msgstr "Cambia i vincoli del metodo di modifica"
 
 #: common/tool/actions.cpp:208 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
 #: pcbnew/dialogs/dialog_find.cpp:55
 msgid "Find"
-msgstr "Cerca"
+msgstr "Trova"
 
 #: common/tool/actions.cpp:208
 msgid "Find text"
-msgstr "Trova testo"
+msgstr "Trova il testo"
 
 #: common/tool/actions.cpp:214 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
@@ -5721,7 +5721,7 @@ msgstr "Trova e sostituisci"
 
 #: common/tool/actions.cpp:214
 msgid "Find and replace text"
-msgstr "Trova e sostituisci testo"
+msgstr "Trova e sostituisci il testo"
 
 #: common/tool/actions.cpp:220 pcbnew/dialogs/dialog_find_base.cpp:93
 msgid "Find Next"
@@ -5745,7 +5745,7 @@ msgstr "Rimpiazza la corrispondenza corrente e trova la prossima"
 
 #: common/tool/actions.cpp:238
 msgid "Replace All"
-msgstr "Rimpiazza tutti"
+msgstr "Rimpiazza tutto"
 
 #: common/tool/actions.cpp:238
 msgid "Replace all matches"
@@ -5854,7 +5854,7 @@ msgstr "Esegue il clic del tasto sinistro del mouse"
 
 #: common/tool/actions.cpp:400
 msgid "Double-click"
-msgstr "doppio clic"
+msgstr "Doppio clic"
 
 #: common/tool/actions.cpp:400
 msgid "Performs left mouse button double-click"
@@ -5930,7 +5930,7 @@ msgstr "Imposta dimensioni griglia"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
-msgstr "Usa pollici"
+msgstr "Usa i pollici"
 
 #: common/tool/actions.cpp:491
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5942,7 +5942,7 @@ msgstr "Mils"
 
 #: common/tool/actions.cpp:491
 msgid "Use mils"
-msgstr "Usa mils"
+msgstr "Usa i mils"
 
 #: common/tool/actions.cpp:496
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5965,7 +5965,7 @@ msgstr "Commuta unità"
 
 #: common/tool/actions.cpp:508
 msgid "Switch between imperial and metric units"
-msgstr "Commuta tra unità in pollici e millimetri"
+msgstr "Commuta tra unità imperiali e metriche"
 
 #: common/tool/actions.cpp:513
 msgid "Polar Coordinates"
