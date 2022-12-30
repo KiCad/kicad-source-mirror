@@ -634,7 +634,10 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
         {
             SHAPE_POLY_SET fpOutlines;
             success = ConvertOutlineToPolygon( fpSegList, fpOutlines, aErrorMax, aChainingEpsilon,
-                                               false, aErrorHandler );
+                                               false,
+                                               // don't report errors here; the second pass also
+                                               // gets an opportunity to use these segments
+                                               nullptr );
 
             if( success && isCopperOutside( fp, fpOutlines ) )
             {
