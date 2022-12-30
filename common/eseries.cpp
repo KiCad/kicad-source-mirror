@@ -21,6 +21,7 @@
 
 #include <array>
 #include <algorithm>
+#include <limits>
 #include "eseries.h"
 
 /*
