@@ -381,8 +381,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
                         // Whole segment is inside: clip out this segment
                         clip = vertex;
                     }
-                    else if( containsB &&
-                             ( aForward ? vertex < aLine.PointCount() - 1 : vertex > 0 ) )
+                    else if( containsB )
                     {
                         // Only one point inside: Find the intersection
                         VECTOR2I loc;
