@@ -871,16 +871,19 @@ public:
     PNS_PCBNEW_DEBUG_DECORATOR( KIGFX::VIEW* aView = nullptr ) :
             PNS::DEBUG_DECORATOR(),
             m_view( nullptr ),
-            m_items( nullptr )
+            m_items( nullptr ),
+            m_depth( 0 )
     {
         SetView( aView );
     }
+
 
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
         PNS_PCBNEW_DEBUG_DECORATOR::Clear();
         delete m_items;
     }
+
 
     void SetView( KIGFX::VIEW* aView )
     {
@@ -892,31 +895,89 @@ public:
         if( m_view == nullptr )
             return;
 
+        if( m_view->GetGAL() )
+            m_depth = m_view->GetGAL()->GetMinDepth();
+
         m_items = new KIGFX::VIEW_GROUP( m_view );
         m_items->SetLayer( LAYER_SELECT_OVERLAY ) ;
         m_view->Add( m_items );
     }
 
-    virtual void AddPoint( const VECTOR2I& aP, const KIGFX::COLOR4D& aColor, int aSize,
-                           const wxString& aName = wxT( "" ),
-                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
+
+    void AddPoint( const VECTOR2I& aP, const KIGFX::COLOR4D& aColor, int aSize,
+                   const wxString&          aName = wxT( "" ),
+                   const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
 
     {
-        #if 0
-        SHAPE_LINE_CHAIN l;
+        SHAPE_LINE_CHAIN sh;
 
-        l.Append( aP - VECTOR2I( -aSize, -aSize ) );
-        l.Append( aP + VECTOR2I( -aSize, -aSize ) );
+        sh.SetWidth( 10000 );
 
-        AddLine( l, aColor, 10000, aName );
+        sh.Append( aP.x - aSize, aP.y - aSize );
+        sh.Append( aP.x + aSize, aP.y + aSize );
+        sh.Append( aP.x, aP.y );
+        sh.Append( aP.x - aSize, aP.y + aSize );
+        sh.Append( aP.x + aSize, aP.y - aSize );
 
-        l.Clear();
-        l.Append( aP - VECTOR2I( aSize, -aSize ) );
-        l.Append( aP + VECTOR2I( aSize, -aSize ) );
-
-        AddLine( l, aColor, 10000, aName );
-        #endif
+        AddShape( &sh, aColor, sh.Width(), aName, aSrcLoc );
     }
+
+
+    void AddItem( const PNS::ITEM* aItem, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
+                  const wxString&          aName = wxT( "" ),
+                  const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
+    {
+        if( !m_view || !aItem )
+            return;
+
+        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_view );
+
+        pitem->SetColor( aColor.WithAlpha( 0.5 ) );
+        pitem->SetWidth( aOverrideWidth );
+        pitem->SetDepth( nextDepth() );
+
+        m_items->Add( pitem );
+        m_view->Update( m_items );
+    }
+
+
+    void AddShape( const BOX2I& aBox, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
+                   const wxString&          aName = wxT( "" ),
+                   const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
+    {
+        SHAPE_LINE_CHAIN l;
+        l.SetWidth( aOverrideWidth );
+
+        VECTOR2I o = aBox.GetOrigin();
+        VECTOR2I s = aBox.GetSize();
+
+        l.Append( o );
+        l.Append( o.x + s.x, o.y );
+        l.Append( o.x + s.x, o.y + s.y );
+        l.Append( o.x, o.y + s.y );
+        l.Append( o );
+
+        AddShape( &l, aColor, aOverrideWidth, aName, aSrcLoc );
+    }
+
+
+    void AddShape( const SHAPE* aShape, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
+                   const wxString&          aName = wxT( "" ),
+                   const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
+    {
+        if( !m_view || !aShape )
+            return;
+
+        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( *aShape, m_view );
+
+        pitem->SetColor( aColor.WithAlpha( 0.5 ) );
+        pitem->SetWidth( aOverrideWidth );
+        pitem->SetDepth( nextDepth() );
+
+        m_items->Add( pitem );
+        m_view->Update( m_items );
+    }
+
 
     void Clear() override
     {
@@ -924,12 +985,29 @@ public:
         {
             m_items->FreeItems();
             m_view->Update( m_items );
+
+            if( m_view->GetGAL() )
+                m_depth = m_view->GetGAL()->GetMinDepth();
         }
     }
 
 private:
+    double nextDepth()
+    {
+        // Use different depths so that the transculent shapes won't overwrite each other.
+
+        m_depth++;
+
+        if( m_depth >= 0 && m_view->GetGAL() )
+            m_depth = m_view->GetGAL()->GetMinDepth();
+
+        return m_depth;
+    }
+
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_items;
+
+    double m_depth;
 };
 
 

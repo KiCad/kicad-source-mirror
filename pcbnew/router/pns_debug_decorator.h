@@ -86,10 +86,9 @@ public:
                          const wxString& aName = wxT( "" ),
                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) {};
 
-    void AddShape( const BOX2I& aBox, const KIGFX::COLOR4D& aColor,
-                         int aOverrideWidth = 0,
-                         const wxString& aName = wxT( "" ),
-                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
+    virtual void AddShape( const BOX2I& aBox, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
+                           const wxString&          aName = wxT( "" ),
+                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
     {
         SHAPE_RECT r( aBox );
         AddShape( &r, aColor, aOverrideWidth, aName, aSrcLoc );

@@ -66,6 +66,16 @@ public:
         m_color = aColor;
     }
 
+    void SetDepth( double aDepth )
+    {
+        m_depth = aDepth;
+    }
+
+    void SetWidth( double aWidth )
+    {
+        m_width = aWidth;
+    }
+
     void SetClearance( int aClearance )
     {
         m_clearance = aClearance;
