@@ -109,8 +109,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 09:38+0100\n"
-"PO-Revision-Date: 2022-12-30 09:37+0100\n"
+"POT-Creation-Date: 2022-12-30 17:57+0100\n"
+"PO-Revision-Date: 2022-12-30 12:34+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -6085,7 +6085,7 @@ msgstr "Strumento di cancellazione interattivo"
 
 #: common/tool/actions.cpp:197
 msgid "Delete clicked items"
-msgstr "Elimina elementi selezionati"
+msgstr "Elimina gli elementi con il clic"
 
 #: common/tool/actions.cpp:204
 msgid "Cycle arc editing mode"
@@ -6107,11 +6107,11 @@ msgstr "Mostra/nascondi il pannello ricerca"
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
 #: pcbnew/dialogs/dialog_find.cpp:56
 msgid "Find"
-msgstr "Cerca"
+msgstr "Trova"
 
 #: common/tool/actions.cpp:216
 msgid "Find text"
-msgstr "Trova testo"
+msgstr "Trova il testo"
 
 #: common/tool/actions.cpp:222 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
@@ -6119,7 +6119,7 @@ msgstr "Trova e sostituisci"
 
 #: common/tool/actions.cpp:222
 msgid "Find and replace text"
-msgstr "Trova e sostituisci testo"
+msgstr "Trova e sostituisci il testo"
 
 #: common/tool/actions.cpp:228 pcbnew/dialogs/dialog_find_base.cpp:91
 msgid "Find Next"
@@ -6143,7 +6143,7 @@ msgstr "Rimpiazza la corrispondenza corrente e trova la prossima"
 
 #: common/tool/actions.cpp:246
 msgid "Replace All"
-msgstr "Rimpiazza tutti"
+msgstr "Rimpiazza tutto"
 
 #: common/tool/actions.cpp:246
 msgid "Replace all matches"
@@ -6256,7 +6256,7 @@ msgstr "Esegue il clic del tasto sinistro del mouse"
 
 #: common/tool/actions.cpp:411
 msgid "Double-click"
-msgstr "doppio clic"
+msgstr "Doppio clic"
 
 #: common/tool/actions.cpp:411
 msgid "Performs left mouse button double-click"
@@ -6332,7 +6332,7 @@ msgstr "Imposta dimensioni griglia"
 
 #: common/tool/actions.cpp:497
 msgid "Use inches"
-msgstr "Usa pollici"
+msgstr "Usa i pollici"
 
 #: common/tool/actions.cpp:502
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
@@ -6344,7 +6344,7 @@ msgstr "Mils"
 
 #: common/tool/actions.cpp:502
 msgid "Use mils"
-msgstr "Usa mils"
+msgstr "Usa i mils"
 
 #: common/tool/actions.cpp:507
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
@@ -6371,7 +6371,7 @@ msgstr "Commuta unità"
 
 #: common/tool/actions.cpp:523
 msgid "Switch between imperial and metric units"
-msgstr "Commuta tra unità in pollici e millimetri"
+msgstr "Commuta tra unità imperiali e metriche"
 
 #: common/tool/actions.cpp:528
 msgid "Polar Coordinates"
@@ -37091,12 +37091,12 @@ msgstr "pista esistente"
 msgid "netclass 'Default'"
 msgstr "netclass 'Default'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1150
+#: pcbnew/router/pns_kicad_iface.cpp:1228
 #, c-format
 msgid "%s is malformed."
 msgstr "%s is malforme."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1153
+#: pcbnew/router/pns_kicad_iface.cpp:1231
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -37104,7 +37104,7 @@ msgstr ""
 "Questa zona non può essere gestita dallo sbrogliatore.\n"
 "Verificare che non sia un poligono autointersecante."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1808 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1886 pcbnew/router/router_tool.cpp:453
 msgid "Interactive Router"
 msgstr "Sbroglio interattivo"
 
