@@ -89,6 +89,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     }
 
     m_titleName = aParent->GetAboutTitle();
+    m_untranslatedTitleName = aParent->GetUntranslatedAboutTitle();
     m_staticTextAppTitle->SetLabel( m_titleName );
     m_staticTextCopyright->SetLabel( m_info.GetCopyright() );
     m_staticTextBuildVersion->SetLabel( "Version: " + m_info.GetBuildVersion() );
@@ -126,7 +127,7 @@ void DIALOG_ABOUT::createNotebooks()
     createNotebookHtmlPage( m_notebook, _( "About" ), IMAGES::INFORMATION,
                             m_info.GetDescription() );
 
-    wxString version = GetVersionInfoData( m_titleName, true );
+    wxString version = GetVersionInfoData( m_untranslatedTitleName, true );
 
     createNotebookHtmlPage( m_notebook, _( "Version" ), IMAGES::VERSION, version, true );
 
@@ -464,7 +465,7 @@ void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
         return;
     }
 
-    wxString msg_version = GetVersionInfoData( m_titleName );
+    wxString msg_version = GetVersionInfoData( m_untranslatedTitleName );
 
     wxTheClipboard->SetData( new wxTextDataObject( msg_version ) );
     wxTheClipboard->Flush(); // Allow clipboard data to be available after KiCad closes

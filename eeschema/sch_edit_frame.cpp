@@ -123,7 +123,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_supportsAutoSave = true;
     m_syncingPcbToSchSelection = false;
-    m_aboutTitle = _( "KiCad Schematic Editor" );
+    m_aboutTitle = _HKI( "KiCad Schematic Editor" );
 
     m_findReplaceDialog = nullptr;
 

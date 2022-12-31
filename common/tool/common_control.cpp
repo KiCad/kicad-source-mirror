@@ -287,7 +287,7 @@ int COMMON_CONTROL::ReportBug( const TOOL_EVENT& aEvent )
     if( WarnUserIfOperatingSystemUnsupported() )
         return 0;
 
-    wxString version = GetVersionInfoData( m_frame->GetAboutTitle(), false, true );
+    wxString version = GetVersionInfoData( m_frame->GetUntranslatedAboutTitle(), false, true );
 
     wxString message;
     message.Printf( m_bugReportTemplate, version );

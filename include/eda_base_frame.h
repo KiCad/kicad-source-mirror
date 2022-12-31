@@ -503,7 +503,9 @@ public:
      */
     virtual void ProjectChanged() {}
 
-    const wxString& GetAboutTitle() const { return m_aboutTitle; }
+    const wxString& GetAboutTitle() const { return wxGetTranslation( m_aboutTitle ); }
+
+    const wxString& GetUntranslatedAboutTitle() const { return m_aboutTitle; }
 
     /**
      * Get if the contents of the frame have been modified since the last save.

@@ -117,7 +117,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     if( aFrameType == FRAME_SCH_VIEWER_MODAL )
         SetModal( true );
 
-    m_aboutTitle = _( "KiCad Symbol Library Viewer" );
+    m_aboutTitle = _HKI( "KiCad Symbol Library Viewer" );
 
     // Force the frame name used in config. the lib viewer frame has a name
     // depending on aFrameType (needed to identify the frame by wxWidgets),

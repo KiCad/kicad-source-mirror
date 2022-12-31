@@ -111,7 +111,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_libMgr = nullptr;
     m_unit = 1;
     m_convert = 1;
-    m_aboutTitle = _( "KiCad Symbol Editor" );
+    m_aboutTitle = _HKI( "KiCad Symbol Editor" );
 
     wxIcon icon;
     wxIconBundle icon_bundle;

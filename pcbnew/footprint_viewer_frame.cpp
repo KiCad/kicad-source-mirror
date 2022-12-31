@@ -124,7 +124,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     if( aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL )
         SetModal( true );
 
-    m_aboutTitle = _( "KiCad Footprint Library Viewer" );
+    m_aboutTitle = _HKI( "KiCad Footprint Library Viewer" );
 
     // Force the items to always snap
     m_magneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;

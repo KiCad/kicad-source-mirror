@@ -55,6 +55,7 @@ class DIALOG_ABOUT : public DIALOG_ABOUT_BASE
 private:
     wxImageList* m_images;
     wxString     m_titleName;
+    wxString     m_untranslatedTitleName;
 
     ABOUT_APP_INFO& m_info;
 

@@ -95,7 +95,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
     DS_DATA_MODEL::GetTheInstance().m_EditMode = true;
-    m_aboutTitle = _( "KiCad Drawing Sheet Editor" );
+    m_aboutTitle = _HKI( "KiCad Drawing Sheet Editor" );
 
     // Give an icon
     wxIcon icon;
