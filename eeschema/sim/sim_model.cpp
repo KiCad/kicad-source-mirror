@@ -80,7 +80,7 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceInfo( DEVICE_T aDeviceType )
         case DEVICE_T::V:         return { "V",      "Voltage Source",    true };
         case DEVICE_T::I:         return { "I",      "Current Source",    true };
 
-        case DEVICE_T::KIBIS:     return { "IBIS",  "IBIS Model",         false };
+        case DEVICE_T::KIBIS:     return { "IBIS",   "IBIS Model",        false };
 
         case DEVICE_T::SUBCKT:    return { "SUBCKT", "Subcircuit",        false };
         case DEVICE_T::XSPICE:    return { "XSPICE", "XSPICE Code Model", true };

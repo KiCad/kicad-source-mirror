@@ -155,3 +155,14 @@ void SIM_MODEL_SUBCKT::SetBaseModel( const SIM_MODEL& aBaseModel )
         AddParam( param.info );
 }
 
+
+std::string SIM_MODEL_SUBCKT::GetSpiceCode() const
+{
+    if( !m_spiceCode.empty() )
+        return m_spiceCode;
+
+    if( const SIM_MODEL_SUBCKT* baseModel = dynamic_cast<const SIM_MODEL_SUBCKT*>( m_baseModel ) )
+        return baseModel->GetSpiceCode();
+
+    return "";
+}

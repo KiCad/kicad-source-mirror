@@ -249,13 +249,55 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_pinAssignmentsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	bSizer10->Add( m_pinAssignmentsGrid, 1, wxALL|wxEXPAND, 5 );
 
+	m_subcktLabel = new wxStaticText( m_pinAssignmentsPanel, wxID_ANY, _("Reference"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_subcktLabel->Wrap( -1 );
+	bSizer10->Add( m_subcktLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+
+	m_subckt = new wxStyledTextCtrl( m_pinAssignmentsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
+	m_subckt->SetUseTabs( true );
+	m_subckt->SetTabWidth( 4 );
+	m_subckt->SetIndent( 4 );
+	m_subckt->SetTabIndents( true );
+	m_subckt->SetBackSpaceUnIndents( true );
+	m_subckt->SetViewEOL( false );
+	m_subckt->SetViewWhiteSpace( false );
+	m_subckt->SetMarginWidth( 2, 0 );
+	m_subckt->SetIndentationGuides( true );
+	m_subckt->SetReadOnly( false );
+	m_subckt->SetMarginType( 1, wxSTC_MARGIN_SYMBOL );
+	m_subckt->SetMarginMask( 1, wxSTC_MASK_FOLDERS );
+	m_subckt->SetMarginWidth( 1, 16);
+	m_subckt->SetMarginSensitive( 1, true );
+	m_subckt->SetProperty( wxT("fold"), wxT("1") );
+	m_subckt->SetFoldFlags( wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED | wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED );
+	m_subckt->SetMarginType( 0, wxSTC_MARGIN_NUMBER );
+	m_subckt->SetMarginWidth( 0, m_subckt->TextWidth( wxSTC_STYLE_LINENUMBER, wxT("_99999") ) );
+	m_subckt->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
+	m_subckt->MarkerSetBackground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("BLACK") ) );
+	m_subckt->MarkerSetForeground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("WHITE") ) );
+	m_subckt->MarkerDefine( wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_BOXMINUS );
+	m_subckt->MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPEN, wxColour( wxT("BLACK") ) );
+	m_subckt->MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPEN, wxColour( wxT("WHITE") ) );
+	m_subckt->MarkerDefine( wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_EMPTY );
+	m_subckt->MarkerDefine( wxSTC_MARKNUM_FOLDEREND, wxSTC_MARK_BOXPLUS );
+	m_subckt->MarkerSetBackground( wxSTC_MARKNUM_FOLDEREND, wxColour( wxT("BLACK") ) );
+	m_subckt->MarkerSetForeground( wxSTC_MARKNUM_FOLDEREND, wxColour( wxT("WHITE") ) );
+	m_subckt->MarkerDefine( wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUS );
+	m_subckt->MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPENMID, wxColour( wxT("BLACK") ) );
+	m_subckt->MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPENMID, wxColour( wxT("WHITE") ) );
+	m_subckt->MarkerDefine( wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY );
+	m_subckt->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
+	m_subckt->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+	m_subckt->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+	bSizer10->Add( m_subckt, 1, wxEXPAND | wxALL, 5 );
+
 
 	m_pinAssignmentsPanel->SetSizer( bSizer10 );
 	m_pinAssignmentsPanel->Layout();
 	bSizer10->Fit( m_pinAssignmentsPanel );
 	m_notebook->AddPage( m_pinAssignmentsPanel, _("Pin Assignments"), false );
 
-	bSizer8->Add( m_notebook, 1, wxEXPAND|wxALL, 10 );
+	bSizer8->Add( m_notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bSizer81;
 	bSizer81 = new wxBoxSizer( wxHORIZONTAL );

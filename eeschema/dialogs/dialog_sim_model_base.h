@@ -79,6 +79,8 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_saveInValueCheckbox;
 		wxPanel* m_pinAssignmentsPanel;
 		WX_GRID* m_pinAssignmentsGrid;
+		wxStaticText* m_subcktLabel;
+		wxStyledTextCtrl* m_subckt;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

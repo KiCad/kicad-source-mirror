@@ -57,6 +57,8 @@ public:
 
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
+    std::string GetSpiceCode() const;
+
 private:
     bool requiresSpiceModelLine() const override { return true; }
 

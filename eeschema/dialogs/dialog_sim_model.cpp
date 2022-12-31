@@ -32,6 +32,7 @@
 #include <sim/sim_model_kibis.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_spice_fallback.h>
+#include <sim/sim_model_subckt.h>
 #include <grid_tricks.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/std_bitmap_button.h>
@@ -41,7 +42,7 @@
 #include <locale_io.h>
 #include <wx/filedlg.h>
 #include <wx/textfile.h>
-#include "fmt/format.h"
+#include <fmt/format.h>
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
@@ -102,6 +103,8 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
     grid->DedicateKey( WXK_DOWN );
 
     m_pinAssignmentsGrid->PushEventHandler( new GRID_TRICKS( m_pinAssignmentsGrid ) );
+
+    m_subcktLabel->SetFont( KIUI::GetInfoFont( m_subcktLabel ) );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -637,7 +640,19 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments()
     }
 
     // TODO: Show a preview of the symbol with the pin numbers shown.
-    // TODO: Maybe show a preview of the code for subcircuits and code models.
+
+    SIM_MODEL* model = &curModel();
+
+    if( model->GetType() == SIM_MODEL::TYPE::SUBCKT )
+    {
+        SIM_MODEL_SUBCKT* subckt = static_cast<SIM_MODEL_SUBCKT*>( model );
+        m_subckt->SetText( subckt->GetSpiceCode() );
+    }
+    else
+    {
+        m_subcktLabel->Show( false );
+        m_subckt->Show( false );
+    }
 }
 
 
@@ -653,7 +668,8 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::removeOrphanedPinAssignments()
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryPath, bool aForceReload )
+void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryPath,
+                                                       bool aForceReload )
 {
     auto libraries = m_libraryModelsMgr.GetLibraries();
 
