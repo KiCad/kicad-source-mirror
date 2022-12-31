@@ -1334,12 +1334,10 @@ msgid "Load Source Image"
 msgstr "元となる画像をロード"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
-#, fuzzy
 msgid "Output Size"
-msgstr "出力ピン"
+msgstr "出力サイズ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
 msgstr "高さ/幅の比率を固定"
 
@@ -1371,7 +1369,6 @@ msgid "Options"
 msgstr "オプション"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
-#, fuzzy
 msgid "Black / white threshold:"
 msgstr "モノクロ閾値:"
 
@@ -6702,11 +6699,9 @@ msgstr "オブジェクトが選択されていません"
 msgid "%d objects selected"
 msgstr "%d 個のオブジェクトが選択されています"
 
-#: common/widgets/properties_panel.cpp:280
 #: common/widgets/properties_panel.cpp:274
-#, fuzzy
 msgid "Basic Properties"
-msgstr "%s プロパティ"
+msgstr "基本プロパティ"
 
 #: common/widgets/unit_binder.cpp:318
 #, c-format
@@ -7865,7 +7860,6 @@ msgid "Generator file name not found."
 msgstr "ジェネレーター ファイル名が見つかりません。"
 
 #: eeschema/dialogs/dialog_bom.cpp:460
-#, fuzzy
 msgid "Bill of Materials Generation Help"
 msgstr "部品表 (BOM) 生成ヘルプ"
 
@@ -7908,7 +7902,6 @@ msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr "BOM ジェネレーター スクリプトのリストをデフォルト値にリセットします"
 
 #: eeschema/dialogs/dialog_bom_base.h:83
-#, fuzzy
 msgid "Bill of Materials"
 msgstr "部品表 (BOM)"
 
@@ -8363,9 +8356,8 @@ msgid "Checking conflicts..."
 msgstr "競合をチェック..."
 
 #: eeschema/dialogs/dialog_erc.cpp:488
-#, fuzzy
 msgid "Checking units..."
-msgstr "ピンをチェック..."
+msgstr "単位をチェック..."
 
 #: eeschema/dialogs/dialog_erc.cpp:493
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
@@ -11047,9 +11039,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "シミュレーション"
+msgstr "シミュレーションコマンド"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:183
 #: eeschema/dialogs/dialog_sim_model.cpp:181
@@ -11132,7 +11123,7 @@ msgstr "差動ペア"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:101
 msgid "Built-in SPICE model"
-msgstr ""
+msgstr "内蔵のSPICEモデル"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:110
 msgid "Device:"
@@ -12560,9 +12551,8 @@ msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:513
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "不正なシンボル ライブラリー識別子"
+msgstr "シンボルライブラリを更新された形式で保存\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:527 pcbnew/pcbnew_jobs_handler.cpp:628
 msgid "Unable to save library\n"
@@ -12789,9 +12779,8 @@ msgid "Unresolved text variable"
 msgstr "未解決のテキスト変数"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "SPICE model issue"
-msgstr "SPICE ネットリスト ファイル"
+msgstr "SPICE モデルの問題"
 
 #: eeschema/erc_item.cpp:142
 msgid "Wires not connected to anything"
