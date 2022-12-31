@@ -89,7 +89,7 @@ SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aCommand, wxWindow* parent, 
             wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
     m_textInfo->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
     m_textInfo->SetLabel(
-            _( "This simulation provide no plots. Please refer to console window for results" ) );
+            _( "Simulation provided no plots. Please refer to console window for results." ) );
 
     m_sizer->Add( m_textInfo, 1, wxALL | wxEXPAND, 5 );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );
