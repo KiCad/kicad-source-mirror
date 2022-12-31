@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,7 +48,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_global_grid->SetColLabelValue( 1, _("Visible") );
 	m_global_grid->SetColLabelValue( 2, _("Nickname") );
 	m_global_grid->SetColLabelValue( 3, _("Library Path") );
-	m_global_grid->SetColLabelValue( 4, _("LIbrary Format") );
+	m_global_grid->SetColLabelValue( 4, _("Library Format") );
 	m_global_grid->SetColLabelValue( 5, _("Options") );
 	m_global_grid->SetColLabelValue( 6, _("Description") );
 	m_global_grid->SetColLabelSize( 22 );
