@@ -184,8 +184,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::V_SIN:                return { DEVICE_T::V,      "SIN",            "Sine"                       };
     case TYPE::V_PULSE:              return { DEVICE_T::V,      "PULSE",          "Pulse"                      };
     case TYPE::V_EXP:                return { DEVICE_T::V,      "EXP",            "Exponential"                };
-    /*case TYPE::V_SFAM:               return { DEVICE_TYPE::V,      "SFAM",           "Single-frequency AM"        };
-    case TYPE::V_SFFM:               return { DEVICE_TYPE::V,      "SFFM",           "Single-frequency FM"        };*/
+    //case TYPE::V_SFAM:               return { DEVICE_TYPE::V,      "SFAM",           "Single-frequency AM"        };
+    //case TYPE::V_SFFM:               return { DEVICE_TYPE::V,      "SFFM",           "Single-frequency FM"        };
     case TYPE::V_PWL:                return { DEVICE_T::V,      "PWL",            "Piecewise linear"           };
     case TYPE::V_WHITENOISE:         return { DEVICE_T::V,      "WHITENOISE",     "White noise"                };
     case TYPE::V_PINKNOISE:          return { DEVICE_T::V,      "PINKNOISE",      "Pink noise (1/f)"           };
@@ -200,8 +200,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::I_SIN:                return { DEVICE_T::I,      "SIN",            "Sine"                       };
     case TYPE::I_PULSE:              return { DEVICE_T::I,      "PULSE",          "Pulse"                      };
     case TYPE::I_EXP:                return { DEVICE_T::I,      "EXP",            "Exponential"                };
-    /*case TYPE::I_SFAM:               return { DEVICE_TYPE::I,      "SFAM",           "Single-frequency AM"        };
-    case TYPE::I_SFFM:               return { DEVICE_TYPE::I,      "SFFM",           "Single-frequency FM"        };*/
+    //case TYPE::I_SFAM:               return { DEVICE_TYPE::I,      "SFAM",           "Single-frequency AM"        };
+    //case TYPE::I_SFFM:               return { DEVICE_TYPE::I,      "SFFM",           "Single-frequency FM"        };
     case TYPE::I_PWL:                return { DEVICE_T::I,      "PWL",            "Piecewise linear"           };
     case TYPE::I_WHITENOISE:         return { DEVICE_T::I,      "WHITENOISE",     "White noise"                };
     case TYPE::I_PINKNOISE:          return { DEVICE_T::I,      "PINKNOISE",      "Pink noise (1/f)"           };
@@ -1561,6 +1561,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                                                       SIM_VALUE_GRAMMAR::NOTATION::SPICE );
                             }
 
+                            spiceType = SIM_MODEL::TypeInfo( type ).fieldValue;
                             spiceParams = wxString( model->Serializer().GenerateParams() );
                             paramsTextAttrs = modelTextAttrs;
                         }
