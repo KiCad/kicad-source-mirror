@@ -194,6 +194,7 @@ std::string SPICE_GENERATOR::Preview( const SPICE_ITEM& aItem ) const
     std::string spiceCode = ModelLine( aItem );
 
     std::string itemLine = ItemLine( aItem );
+
     if( spiceCode != "" )
         spiceCode.append( "\n" );
 

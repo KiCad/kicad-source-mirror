@@ -443,19 +443,20 @@ void SIM_MODEL::WriteFields( std::vector<LIB_FIELD>& aFields ) const
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::CreateFallback( TYPE aType, const std::string& aSpiceCode )
-{
-    std::unique_ptr<SIM_MODEL> model( new SIM_MODEL_SPICE_FALLBACK( aType, aSpiceCode ) );
-    return model;
-}
-
-
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_PIN*>& aPins )
 {
     std::unique_ptr<SIM_MODEL> model = Create( aType );
 
-    // Passing nullptr to ReadDataFields will make it act as if all fields were empty.
-    model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
+    try
+    {
+        // Passing nullptr to ReadDataFields will make it act as if all fields were empty.
+        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
+    }
+    catch( ... )
+    {
+        // Shouldn't happen with nothing to read from fields
+    }
+
     return model;
 }
 
@@ -466,12 +467,15 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
     std::unique_ptr<SIM_MODEL> model;
 
     if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( &aBaseModel ) )
-        model = CreateFallback( aBaseModel.GetType() );
+        model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( aBaseModel.GetType() );
+    else if( dynamic_cast< const SIM_MODEL_RAW_SPICE*>( &aBaseModel ) )
+        model = std::make_unique<SIM_MODEL_RAW_SPICE>();
     else
         model = Create( aBaseModel.GetType() );
 
     try
     {
+        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
         model->SetBaseModel( aBaseModel );
     }
     catch( IO_ERROR& err )
@@ -479,7 +483,6 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
         DisplayErrorMessage( nullptr, err.What() );
     }
 
-    model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
     return model;
 }
 
@@ -498,20 +501,22 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
     std::unique_ptr<SIM_MODEL> model;
 
     if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( &aBaseModel ) )
-        model = CreateFallback( type );
+        model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type );
+    else if( dynamic_cast< const SIM_MODEL_RAW_SPICE*>( &aBaseModel ) )
+        model = std::make_unique<SIM_MODEL_RAW_SPICE>();
     else
         model = Create( type );
 
     try
     {
         model->SetBaseModel( aBaseModel );
+        model->ReadDataFields( &aFields, aPins );
     }
     catch( IO_ERROR& err )
     {
         DisplayErrorMessage( nullptr, err.What() );
     }
 
-    model->ReadDataFields( &aFields, aPins );
     return model;
 }
 
@@ -531,7 +536,34 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
     TYPE type = ReadTypeFromFields( aFields );
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
-    model->ReadDataFields( &aFields, aPins );
+    try
+    {
+        model->ReadDataFields( &aFields, aPins );
+    }
+    catch( const IO_ERROR& e )
+    {
+        // Just because we can't parse it doesn't mean that a SPICE interpreter can't.  Fall
+        // back to a raw spice code model.
+
+        std::string modelData = GetFieldValue( &aFields, PARAMS_FIELD );
+
+        if( modelData.empty() )
+            modelData = GetFieldValue( &aFields, VALUE_FIELD );
+
+        model = std::make_unique<SIM_MODEL_RAW_SPICE>( modelData );
+
+        try
+        {
+            model->createPins( aPins );
+            model->m_serializer->ParsePins( GetFieldValue( &aFields, PINS_FIELD ) );
+        }
+        catch( const IO_ERROR& e )
+        {
+            // We own the pin syntax, so if we can't parse it then there's an error, full stop.
+            DisplayErrorMessage( nullptr, e.What() );
+        }
+    }
+
     return model;
 }
 
@@ -965,22 +997,15 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
     bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
     SwitchSingleEndedDiff( diffMode );
 
-    try
-    {
-        m_serializer->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
+    m_serializer->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
 
-        createPins( aPins );
-        m_serializer->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
+    createPins( aPins );
+    m_serializer->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
 
-        std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
+    std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
 
-        if( !m_serializer->ParseParams( paramsField ) )
-            m_serializer->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
-    }
-    catch( IO_ERROR& err )
-    {
-        DisplayErrorMessage( nullptr, err.What() );
-    }
+    if( !m_serializer->ParseParams( paramsField ) )
+        m_serializer->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
 }
 
 

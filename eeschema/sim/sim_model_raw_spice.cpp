@@ -112,13 +112,16 @@ std::string SPICE_GENERATOR_RAW_SPICE::Preview( const SPICE_ITEM& aItem ) const
 }
 
 
-SIM_MODEL_RAW_SPICE::SIM_MODEL_RAW_SPICE() :
-    SIM_MODEL( TYPE::RAWSPICE, std::make_unique<SPICE_GENERATOR_RAW_SPICE>( *this ) )
+SIM_MODEL_RAW_SPICE::SIM_MODEL_RAW_SPICE( const std::string& aSpiceSource ) :
+    SIM_MODEL( TYPE::RAWSPICE, std::make_unique<SPICE_GENERATOR_RAW_SPICE>( *this ) ),
+    m_spiceCode( aSpiceSource )
 {
     static std::vector<PARAM::INFO> paramInfos = makeParamInfos();
 
     for( const PARAM::INFO& paramInfo : paramInfos )
         AddParam( paramInfo );
+
+    SetParamValue( "model", aSpiceSource );
 }
 
 

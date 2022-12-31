@@ -414,9 +414,6 @@ public:
     static std::unique_ptr<SIM_MODEL> Create( const std::vector<T>& aFields,
                                               const std::vector<LIB_PIN*>& aPins );
 
-    static std::unique_ptr<SIM_MODEL> CreateFallback( TYPE aType,
-                                                      const std::string& aSpiceCode = "" );
-
     template <typename T>
     static std::string GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName,
                                       bool aResolve = true );

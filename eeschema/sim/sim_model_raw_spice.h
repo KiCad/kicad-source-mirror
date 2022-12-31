@@ -62,7 +62,7 @@ public:
     static constexpr auto LEGACY_ENABLED_FIELD = "Spice_Netlist_Enabled";
     static constexpr auto LEGACY_LIB_FIELD = "Spice_Lib_File";
 
-    SIM_MODEL_RAW_SPICE();
+    SIM_MODEL_RAW_SPICE( const std::string& aSpiceSource = "" );
 
     void SetSource( const std::string& aSpiceSource ) { m_spiceCode = aSpiceSource; }
 

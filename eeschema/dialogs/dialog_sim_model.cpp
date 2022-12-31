@@ -568,9 +568,6 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab()
 
     text << model.SpiceGenerator().Preview( item );
 
-    if( SIM_MODEL_RAW_SPICE* rawSpice = dynamic_cast<SIM_MODEL_RAW_SPICE*>( &model ) )
-        text << rawSpice->GetSource();
-
     m_codePreview->SetText( text );
     m_codePreview->SelectNone();
 }
