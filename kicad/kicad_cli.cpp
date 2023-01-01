@@ -270,10 +270,25 @@ bool PGM_KICAD::OnPgmInit()
     return true;
 }
 
+#define ARG_VERSION "--version"
+#define ARG_HELP    "--help"
 
 int PGM_KICAD::OnPgmRun()
 {
-    argparse::ArgumentParser argParser( std::string( "kicad-cli" ), KICAD_MAJOR_MINOR_VERSION );
+    argparse::ArgumentParser argParser( std::string( "kicad-cli" ), KICAD_MAJOR_MINOR_VERSION,
+                                        argparse::default_arguments::none );
+
+    argParser.add_argument( "-v", ARG_VERSION )
+            .default_value( false )
+            .help( UTF8STDSTR( _( "prints version information and exits" ) ) )
+            .implicit_value( true )
+            .nargs( 0 );
+
+    argParser.add_argument( "-h", ARG_HELP )
+            .default_value( false )
+            .help( UTF8STDSTR( _( "shows help message and exits" ) ) )
+            .implicit_value( true )
+            .nargs( 0 );
 
     for( COMMAND_ENTRY& entry : commandStack )
     {
@@ -310,6 +325,22 @@ int PGM_KICAD::OnPgmRun()
         wxPrintf( FROM_UTF8( ss.str().c_str() ) );
 
         return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    if( argParser[ ARG_VERSION ] == true )
+    {
+        wxPrintf( KICAD_MAJOR_MINOR_VERSION );
+
+        return 0;
+    }
+
+    if( argParser[ ARG_HELP ] == true )
+    {
+        std::stringstream ss;
+        ss << argParser;
+        wxPrintf( FROM_UTF8( ss.str().c_str() ) );
+
+        return 0;
     }
 
     COMMAND_ENTRY* cliCmd = nullptr;
