@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Sylwester Kocjan <s.kocjan@o2.pl>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,23 +92,23 @@ wxColour SIM_PLOT_COLORS::GetPlotColor( COLOR_SET aColorId )
 }
 
 
-void SIM_PLOT_COLORS::FillDefaultColorList( bool aWhiteBg )
+void SIM_PLOT_COLORS::FillDefaultColorList( bool aDarkMode )
 {
     m_colorList.clear();
 
-    if( aWhiteBg )
-    {
-        m_colorList.emplace_back( 255, 255, 255 ); // Bg color
-        m_colorList.emplace_back( 0, 0, 0 );       // Fg color (texts)
-        m_colorList.emplace_back( 130, 130, 130 ); // Axis color
-        m_colorList.emplace_back( 0, 0, 0 );       // cursors color
-    }
-    else
+    if( aDarkMode )
     {
         m_colorList.emplace_back( 0, 0, 0 );       // Bg color
         m_colorList.emplace_back( 255, 255, 255 ); // Fg color (texts)
         m_colorList.emplace_back( 130, 130, 130 ); // Axis color
         m_colorList.emplace_back( 255, 255, 255 ); // cursors color
+    }
+    else
+    {
+        m_colorList.emplace_back( 255, 255, 255 ); // Bg color
+        m_colorList.emplace_back( 0, 0, 0 );       // Fg color (texts)
+        m_colorList.emplace_back( 130, 130, 130 ); // Axis color
+        m_colorList.emplace_back( 0, 0, 0 );       // cursors color
     }
 
     // Add a list of color for traces, starting at index SIM_TRACE_COLOR

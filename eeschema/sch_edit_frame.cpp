@@ -769,9 +769,7 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
-    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
-
-    if( simFrame && !simFrame->Close() )   // Can close the simulator?
+    if( !Kiway().PlayerClose( FRAME_SIMULATOR, false ) )   // Can close the simulator?
         return false;
 
     // We may have gotten multiple events; don't clean up twice

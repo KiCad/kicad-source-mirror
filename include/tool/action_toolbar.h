@@ -196,6 +196,8 @@ public:
      */
     void SetAuiManager( wxAuiManager* aManager ) { m_auiManager = aManager; }
 
+    void SetToolManager( TOOL_MANAGER* aManager ) { m_toolManager = aManager; }
+
     /**
      * Add a TOOL_ACTION-based button to the toolbar.
      *

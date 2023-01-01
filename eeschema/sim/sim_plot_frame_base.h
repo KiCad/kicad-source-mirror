@@ -10,20 +10,18 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class ACTION_TOOLBAR;
 class wxListView;
 
 #include "sim_workbook.h"
 #include "kiway_player.h"
-#include <wx/string.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/menu.h>
 #include <wx/gdicmn.h>
+#include <wx/aui/aui.h>
+#include <wx/aui/auibar.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/toolbar.h>
+#include <wx/string.h>
 #include <wx/aui/auibook.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
@@ -35,18 +33,6 @@ class wxListView;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_SAVE_AS_IMAGE 1000
-#define ID_SAVE_AS_CSV 1001
-#define ID_MENU_RUN_SIM 1002
-#define ID_MENU_ADD_SIGNAL 1003
-#define ID_MENU_PROBE_SIGNALS 1004
-#define ID_MENU_TUNE_SIGNALS 1005
-#define ID_MENU_SHOW_NETLIST 1006
-#define ID_MENU_SET_SIMUL 1007
-#define ID_MENU_SHOW_GRID 1008
-#define ID_MENU_SHOW_LEGEND 1009
-#define ID_MENU_DOTTED 1010
-#define ID_MENU_WHITE_BG 1011
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class SIM_PLOT_FRAME_BASE
@@ -56,18 +42,8 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 	private:
 
 	protected:
-		wxMenuBar* m_mainMenu;
-		wxMenu* m_fileMenu;
-		wxMenu* m_simulationMenu;
-		wxMenuItem* m_runSimulation;
-		wxMenuItem* m_addSignals;
-		wxMenuItem* m_probeSignals;
-		wxMenuItem* m_tuneValue;
-		wxMenuItem* m_showNetlist;
-		wxMenuItem* m_boardAdapter;
-		wxMenu* m_viewMenu;
 		wxBoxSizer* m_sizerMain;
-		wxToolBar* m_toolBar;
+		ACTION_TOOLBAR* m_toolBar;
 		wxSplitterWindow* m_splitterLeftRight;
 		wxPanel* m_panelLeft;
 		wxBoxSizer* m_sizer11;
@@ -94,28 +70,6 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxBoxSizer* m_tuneSizer;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void menuNewPlot( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuOpenWorkbook( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuSaveWorkbook( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuSaveWorkbookAs( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuSaveImage( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuSaveCsv( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuExit( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuSimulateUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void menuAddSignalsUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void menuProbeUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void menuTuneUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void menuZoomIn( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuZoomOut( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuZoomFit( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuShowGrid( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuShowGridUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void menuShowLegend( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuShowLegendUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void menuShowDotted( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuShowDottedUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void menuWhiteBackground( wxCommandEvent& event ) { event.Skip(); }
-		virtual void menuShowWhiteBackgroundUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPlotDragged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }

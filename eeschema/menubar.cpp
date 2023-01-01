@@ -253,7 +253,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
 #ifdef KICAD_SPICE
     inspectMenu->AppendSeparator();
-    inspectMenu->Add( EE_ACTIONS::runSimulation );
+    inspectMenu->Add( EE_ACTIONS::showSimulator );
 #endif
 
 

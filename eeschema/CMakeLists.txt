@@ -351,6 +351,7 @@ if( KICAD_SPICE )
         dialogs/dialog_sim_command_base.cpp
         dialogs/dialog_sim_model.cpp
         dialogs/dialog_sim_model_base.cpp
+        tools/simulator_control.cpp
         sim/ngspice_circuit_model.cpp
         sim/ngspice.cpp
         sim/sim_panel_base.cpp
@@ -362,6 +363,7 @@ if( KICAD_SPICE )
         sim/sim_workbook.cpp
         sim/spice_simulator.cpp
         sim/spice_value.cpp
+        sim/toolbars_sim_plot_frame.cpp
         widgets/tuner_slider.cpp
         widgets/tuner_slider_base.cpp
     )

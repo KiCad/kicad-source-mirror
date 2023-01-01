@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "tool/action_toolbar.h"
+
 #include "sim_plot_frame_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -13,115 +15,9 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
-	m_mainMenu = new wxMenuBar( 0 );
-	m_fileMenu = new wxMenu();
-	wxMenuItem* m_newPlot;
-	m_newPlot = new wxMenuItem( m_fileMenu, wxID_NEW, wxString( _("New Plot") ) , wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_newPlot );
-
-	m_fileMenu->AppendSeparator();
-
-	wxMenuItem* m_openWorkbook;
-	m_openWorkbook = new wxMenuItem( m_fileMenu, wxID_OPEN, wxString( _("Open Workbook...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_openWorkbook );
-
-	wxMenuItem* m_saveWorkbook;
-	m_saveWorkbook = new wxMenuItem( m_fileMenu, wxID_SAVE, wxString( _("Save Workbook") ) , wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_saveWorkbook );
-
-	wxMenuItem* m_saveWorkbookAs;
-	m_saveWorkbookAs = new wxMenuItem( m_fileMenu, wxID_SAVEAS, wxString( _("Save Workbook As...") ) + wxT('\t') + wxT("SHIFT+CTRL+S"), wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_saveWorkbookAs );
-
-	m_fileMenu->AppendSeparator();
-
-	wxMenuItem* m_saveImage;
-	m_saveImage = new wxMenuItem( m_fileMenu, ID_SAVE_AS_IMAGE, wxString( _("Export Current Plot as PNG...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_saveImage );
-
-	wxMenuItem* m_saveCsv;
-	m_saveCsv = new wxMenuItem( m_fileMenu, ID_SAVE_AS_CSV, wxString( _("Export Current Plot as CSV...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_saveCsv );
-
-	m_fileMenu->AppendSeparator();
-
-	wxMenuItem* m_exitSim;
-	m_exitSim = new wxMenuItem( m_fileMenu, wxID_CLOSE, wxString( _("Close") ) + wxT('\t') + wxT("CTRL+W"), wxEmptyString, wxITEM_NORMAL );
-	m_fileMenu->Append( m_exitSim );
-
-	m_mainMenu->Append( m_fileMenu, _("File") );
-
-	m_simulationMenu = new wxMenu();
-	m_runSimulation = new wxMenuItem( m_simulationMenu, ID_MENU_RUN_SIM, wxString( _("Run Simulation") ) + wxT('\t') + wxT("Ctrl+R"), wxEmptyString, wxITEM_NORMAL );
-	m_simulationMenu->Append( m_runSimulation );
-	m_runSimulation->Enable( false );
-
-	m_simulationMenu->AppendSeparator();
-
-	m_addSignals = new wxMenuItem( m_simulationMenu, ID_MENU_ADD_SIGNAL, wxString( _("Add Signals...") ) + wxT('\t') + wxT("Ctrl+A"), wxEmptyString, wxITEM_NORMAL );
-	m_simulationMenu->Append( m_addSignals );
-	m_addSignals->Enable( false );
-
-	m_probeSignals = new wxMenuItem( m_simulationMenu, ID_MENU_PROBE_SIGNALS, wxString( _("Probe from schematics") ) + wxT('\t') + wxT("Ctrl+P"), wxEmptyString, wxITEM_NORMAL );
-	m_simulationMenu->Append( m_probeSignals );
-	m_probeSignals->Enable( false );
-
-	m_tuneValue = new wxMenuItem( m_simulationMenu, ID_MENU_TUNE_SIGNALS, wxString( _("Tune Component Value") ) + wxT('\t') + wxT("Ctrl+T"), wxEmptyString, wxITEM_NORMAL );
-	m_simulationMenu->Append( m_tuneValue );
-	m_tuneValue->Enable( false );
-
-	m_simulationMenu->AppendSeparator();
-
-	m_showNetlist = new wxMenuItem( m_simulationMenu, ID_MENU_SHOW_NETLIST, wxString( _("Show SPICE Netlist...") ) , _("Shows current simulation's netlist. Useful for debugging SPICE errors."), wxITEM_NORMAL );
-	m_simulationMenu->Append( m_showNetlist );
-
-	m_simulationMenu->AppendSeparator();
-
-	m_boardAdapter = new wxMenuItem( m_simulationMenu, ID_MENU_SET_SIMUL, wxString( _("Settings...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_simulationMenu->Append( m_boardAdapter );
-
-	m_mainMenu->Append( m_simulationMenu, _("Simulation") );
-
-	m_viewMenu = new wxMenu();
-	wxMenuItem* m_zoomIn;
-	m_zoomIn = new wxMenuItem( m_viewMenu, wxID_ZOOM_IN, wxString( _("Zoom In") ) , wxEmptyString, wxITEM_NORMAL );
-	m_viewMenu->Append( m_zoomIn );
-
-	wxMenuItem* m_zoomOut;
-	m_zoomOut = new wxMenuItem( m_viewMenu, wxID_ZOOM_OUT, wxString( _("Zoom Out") ) , wxEmptyString, wxITEM_NORMAL );
-	m_viewMenu->Append( m_zoomOut );
-
-	wxMenuItem* m_zoomFit;
-	m_zoomFit = new wxMenuItem( m_viewMenu, wxID_ZOOM_FIT, wxString( _("Fit on Screen") ) , wxEmptyString, wxITEM_NORMAL );
-	m_viewMenu->Append( m_zoomFit );
-
-	m_viewMenu->AppendSeparator();
-
-	wxMenuItem* m_showGrid;
-	m_showGrid = new wxMenuItem( m_viewMenu, ID_MENU_SHOW_GRID, wxString( _("Show &Grid") ) , wxEmptyString, wxITEM_CHECK );
-	m_viewMenu->Append( m_showGrid );
-
-	wxMenuItem* m_showLegend;
-	m_showLegend = new wxMenuItem( m_viewMenu, ID_MENU_SHOW_LEGEND, wxString( _("Show &Legend") ) , wxEmptyString, wxITEM_CHECK );
-	m_viewMenu->Append( m_showLegend );
-
-	m_viewMenu->AppendSeparator();
-
-	wxMenuItem* m_showDotted;
-	m_showDotted = new wxMenuItem( m_viewMenu, ID_MENU_DOTTED, wxString( _("Dotted Current/Phase") ) , wxEmptyString, wxITEM_CHECK );
-	m_viewMenu->Append( m_showDotted );
-
-	wxMenuItem* m_showWhiteBackground;
-	m_showWhiteBackground = new wxMenuItem( m_viewMenu, ID_MENU_WHITE_BG, wxString( _("White Background") ) , wxEmptyString, wxITEM_CHECK );
-	m_viewMenu->Append( m_showWhiteBackground );
-
-	m_mainMenu->Append( m_viewMenu, _("View") );
-
-	this->SetMenuBar( m_mainMenu );
-
 	m_sizerMain = new wxBoxSizer( wxVERTICAL );
 
-	m_toolBar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT|wxTB_HORIZONTAL|wxTB_TEXT );
+	m_toolBar = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE|wxAUI_TB_HORZ_LAYOUT|wxAUI_TB_PLAIN_BACKGROUND );
 	m_toolBar->Realize();
 
 	m_sizerMain->Add( m_toolBar, 0, wxEXPAND, 5 );
@@ -276,28 +172,6 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuNewPlot ), this, m_newPlot->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuOpenWorkbook ), this, m_openWorkbook->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbook ), this, m_saveWorkbook->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbookAs ), this, m_saveWorkbookAs->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveImage ), this, m_saveImage->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveCsv ), this, m_saveCsv->GetId());
-	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ), this, m_exitSim->GetId());
-	this->Connect( m_runSimulation->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuSimulateUpdate ) );
-	this->Connect( m_addSignals->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuAddSignalsUpdate ) );
-	this->Connect( m_probeSignals->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuProbeUpdate ) );
-	this->Connect( m_tuneValue->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuTuneUpdate ) );
-	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomIn ), this, m_zoomIn->GetId());
-	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomOut ), this, m_zoomOut->GetId());
-	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomFit ), this, m_zoomFit->GetId());
-	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuShowGrid ), this, m_showGrid->GetId());
-	this->Connect( m_showGrid->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowGridUpdate ) );
-	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuShowLegend ), this, m_showLegend->GetId());
-	this->Connect( m_showLegend->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowLegendUpdate ) );
-	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuShowDotted ), this, m_showDotted->GetId());
-	this->Connect( m_showDotted->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowDottedUpdate ) );
-	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuWhiteBackground ), this, m_showWhiteBackground->GetId());
-	this->Connect( m_showWhiteBackground->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowWhiteBackgroundUpdate ) );
 	m_workbook->Connect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotDragged ), NULL, this );
 	m_workbook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotChanged ), NULL, this );
 	m_workbook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClose ), NULL, this );
@@ -310,14 +184,6 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 SIM_PLOT_FRAME_BASE::~SIM_PLOT_FRAME_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( ID_MENU_RUN_SIM, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuSimulateUpdate ) );
-	this->Disconnect( ID_MENU_ADD_SIGNAL, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuAddSignalsUpdate ) );
-	this->Disconnect( ID_MENU_PROBE_SIGNALS, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuProbeUpdate ) );
-	this->Disconnect( ID_MENU_TUNE_SIGNALS, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuTuneUpdate ) );
-	this->Disconnect( ID_MENU_SHOW_GRID, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowGridUpdate ) );
-	this->Disconnect( ID_MENU_SHOW_LEGEND, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowLegendUpdate ) );
-	this->Disconnect( ID_MENU_DOTTED, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowDottedUpdate ) );
-	this->Disconnect( ID_MENU_WHITE_BG, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowWhiteBackgroundUpdate ) );
 	m_workbook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotDragged ), NULL, this );
 	m_workbook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotChanged ), NULL, this );
 	m_workbook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClose ), NULL, this );

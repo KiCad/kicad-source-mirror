@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 CERN
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -302,14 +302,13 @@ void CURSOR::UpdateReference()
 
 
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent,
-                                SIM_PLOT_FRAME* aMainFrame, wxWindowID id, const wxPoint& pos,
-                                const wxSize& size, long style, const wxString& name )
+                                wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
+                                const wxString& name )
     : SIM_PANEL_BASE( aCommand, aOptions, parent, id, pos, size, style, name ),
       m_axis_x( nullptr ),
       m_axis_y1( nullptr ),
       m_axis_y2( nullptr ),
-      m_dotted_cp( false ),
-      m_masterFrame( aMainFrame )
+      m_dotted_cp( false )
 {
     m_sizer   = new wxBoxSizer( wxVERTICAL );
     m_plotWin = new mpWindow( this, wxID_ANY, pos, size, style );

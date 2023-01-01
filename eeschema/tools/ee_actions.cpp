@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 CERN
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ TOOL_ACTION EE_ACTIONS::checkSymbol( "eeschema.InspectionTool.checkSymbol",
         _( "Symbol Checker" ), _( "Show the symbol checker window" ),
         BITMAPS::erc );
 
-TOOL_ACTION EE_ACTIONS::runSimulation( "eeschema.EditorControl.runSimulation",
+TOOL_ACTION EE_ACTIONS::showSimulator( "eeschema.EditorControl.showSimulator",
         AS_GLOBAL, 0, "",
         _( "Simulator..." ), _( "Simulate circuit in SPICE" ),
         BITMAPS::simulator );
@@ -563,14 +563,6 @@ TOOL_ACTION EE_ACTIONS::slice( "eeschema.InteractiveEdit.slice",
 TOOL_ACTION EE_ACTIONS::restartMove( "eeschema.EditorControl.restartMove",
         AS_GLOBAL );
 
-TOOL_ACTION EE_ACTIONS::simProbe( "eeschema.Simulation.probe",
-        AS_GLOBAL, 0, "",
-        _( "Add a simulator probe" ), "" );
-
-TOOL_ACTION EE_ACTIONS::simTune( "eeschema.Simulation.tune",
-        AS_GLOBAL, 0, "",
-        _( "Select a value to be tuned" ), "" );
-
 TOOL_ACTION EE_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
         AS_GLOBAL,
         '`', "",
@@ -902,3 +894,94 @@ TOOL_ACTION EE_ACTIONS::saveCurrSheetCopyAs( "eeschema.EditorControl.saveCurrShe
 // Drag and drop
 TOOL_ACTION EE_ACTIONS::ddAppendFile( "eeschema.EditorControl.ddAppendFile",
         AS_GLOBAL );
+
+// SIMULATOR
+TOOL_ACTION EE_ACTIONS::newPlot( "eeschema.Simulation.newPlot",
+        AS_GLOBAL,
+        MD_CTRL + 'N', LEGACY_HK_NAME( "New" ),
+        _( "New Plot" ), "",
+        BITMAPS::new_generic );
+
+TOOL_ACTION EE_ACTIONS::openWorkbook( "eeschema.Simulation.openWorkbook",
+        AS_GLOBAL,
+        MD_CTRL + 'O', LEGACY_HK_NAME( "Open" ),
+        _( "Open Workbook..." ), "",
+        BITMAPS::directory_open );
+
+TOOL_ACTION EE_ACTIONS::saveWorkbook( "eeschema.Simulation.saveWorkbook",
+        AS_GLOBAL,
+        MD_CTRL + 'S', LEGACY_HK_NAME( "Save" ),
+        _( "Save Workbook" ), "",
+        BITMAPS::save );
+
+TOOL_ACTION EE_ACTIONS::saveWorkbookAs( "eeschema.Simulation.saveWorkbookAs",
+        AS_GLOBAL,
+        MD_SHIFT + MD_CTRL + 'S', LEGACY_HK_NAME( "Save As" ),
+        _( "Save Workbook As..." ), "",
+        BITMAPS::sim_add_signal );
+
+TOOL_ACTION EE_ACTIONS::exportPlotAsPNG( "eeschema.Simulator.exportPNG",
+        AS_GLOBAL, 0, "",
+        _( "Export Current Plot as PNG..." ), "",
+        BITMAPS::export_png );
+
+TOOL_ACTION EE_ACTIONS::exportPlotAsCSV( "eeschema.Simulator.exportCSV",
+        AS_GLOBAL, 0, "",
+        _( "Export Current Plot as CSV..." ), "",
+        BITMAPS::export_file );
+
+TOOL_ACTION EE_ACTIONS::toggleLegend( "eeschema.Simulator.toggleLegend",
+        AS_GLOBAL, 0, "",
+        _( "Show Legend" ), "",
+        BITMAPS::text );
+
+TOOL_ACTION EE_ACTIONS::toggleDottedSecondary( "eeschema.Simulator.toggleDottedSecondary",
+        AS_GLOBAL, 0, "",
+        _( "Dotted Current/Phase" ),
+        _( "Draw secondary signal trace (current or phase) with a dotted line" ) );
+
+TOOL_ACTION EE_ACTIONS::toggleDarkModePlots( "eeschema.Simulator.toggleDarkModePlots",
+        AS_GLOBAL, 0, "",
+        _( "Dark Mode Plots" ),
+        _( "Draw plots with a black background" ) );
+
+TOOL_ACTION EE_ACTIONS::simCommand( "eeschema.Simulation.simCommand",
+        AS_GLOBAL, 0, "",
+        _( "Simulation Command..." ),
+        _( "Edit the simulation command for the current plot tab" ),
+        BITMAPS::sim_command );
+
+TOOL_ACTION EE_ACTIONS::runSimulation( "eeschema.Simulation.runSimulation",
+        AS_GLOBAL,
+        'R', "",
+        _( "Run Simulation" ), "",
+        BITMAPS::sim_run );
+
+TOOL_ACTION EE_ACTIONS::stopSimulation( "eeschema.Simulation.stopSimulation",
+        AS_GLOBAL, 0, "",
+        _( "Stop Simulation" ), "",
+        BITMAPS::sim_stop );
+
+TOOL_ACTION EE_ACTIONS::addSignals( "eeschema.Simulation.addSignals",
+        AS_GLOBAL,
+        'A', "",
+        _( "Add Signals..." ), "",
+        BITMAPS::sim_add_signal );
+
+TOOL_ACTION EE_ACTIONS::simProbe( "eeschema.Simulation.probe",
+        AS_GLOBAL,
+        'P', "",
+        _( "Probe Schematic..." ), _( "Add a simulator probe" ),
+        BITMAPS::sim_probe );
+
+TOOL_ACTION EE_ACTIONS::simTune( "eeschema.Simulation.tune",
+        AS_GLOBAL,
+        'T', "",
+        _( "Add Tuned Value..." ), _( "Select a value to be tuned" ),
+        BITMAPS::sim_tune );
+
+TOOL_ACTION EE_ACTIONS::showNetlist( "eeschema.Simulation.showNetlist",
+        AS_GLOBAL, 0, "",
+        _( "Show SPICE Netlist" ), "",
+        BITMAPS::netlist );
+

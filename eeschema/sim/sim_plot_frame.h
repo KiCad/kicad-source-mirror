@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2022 CERN
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 CERN
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -29,8 +29,8 @@
 #define __SIM_PLOT_FRAME__
 
 
-#include "sim_plot_frame_base.h"
-#include "sim_types.h"
+#include <sim/sim_plot_frame_base.h>
+#include <sim/sim_types.h>
 
 #include <kiway_player.h>
 #include <dialogs/dialog_sim_command.h>
@@ -48,16 +48,14 @@ class SPICE_SIMULATOR;
 class SPICE_SIMULATOR_SETTINGS;
 class NGSPICE_CIRCUIT_MODEL;
 
-#include "sim_plot_panel.h"
-#include "sim_panel_base.h"
-#include "sim_workbook.h"
+#include <sim/sim_plot_panel.h>
+#include <sim/sim_panel_base.h>
+#include <sim/sim_workbook.h>
 
 class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
 
-/**
- * Implementing SIM_PLOT_FRAME_BASE
- */
+
 class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 {
 public:
@@ -74,6 +72,12 @@ public:
      * @return The new plot panel.
      */
     SIM_PANEL_BASE* NewPlotPanel( wxString aSimCommand, int aSimOptions );
+
+    /**
+     * Shows a dialog for editing the current tab's simulation command, or creating a new tab
+     * with a different simulation command type.
+     */
+    void EditSimCommand();
 
     /**
      * Add a voltage plot for a given net name.
@@ -126,10 +130,27 @@ public:
     const NGSPICE_CIRCUIT_MODEL* GetExporter() const;
 
     /**
-     * @return the current background option for plotting.
-     * false for drak bg, true for clear bg
+     * Toggle dark-mode of the plot.
      */
-    bool GetPlotBgOpt() const { return m_plotUseWhiteBg; }
+    void ToggleDarkModePlots();
+
+    void ReCreateHToolbar();
+
+    /**
+     * Load plot settings from a file.
+     *
+     * @param aPath is the file name.
+     * @return True if successful.
+     */
+    bool LoadWorkbook( const wxString& aPath );
+
+    /**
+     * Save plot settings to a file.
+     *
+     * @param aPath is the file name.
+     * @return True if successful.
+     */
+    bool SaveWorkbook( const wxString& aPath );
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
@@ -137,10 +158,37 @@ public:
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
 
+    SCH_EDIT_FRAME* GetSchematicFrame() const { return m_schematicFrame; }
+
+    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> GetCircuitModel() const { return m_circuitModel; }
+
+    std::shared_ptr<SPICE_SIMULATOR> GetSimulator() const { return m_simulator; }
+
+    wxString GetCurrentSimCommand() const
+    {
+        if( getCurrentPlotWindow() == nullptr )
+            return m_circuitModel->GetSheetSimCommand();
+        else
+            return m_workbook->GetSimCommand( getCurrentPlotWindow() );
+    }
+
+    int GetCurrentOptions() const
+    {
+        if( getCurrentPlotWindow() == nullptr )
+            return m_circuitModel->GetSimOptions();
+        else
+            return m_workbook->GetSimOptions( getCurrentPlotWindow() );
+    }
+
     // Simulator doesn't host a tool framework
     wxWindow* GetToolCanvas() const override { return nullptr; }
 
 private:
+    void setupTools();
+    void doReCreateMenuBar() override;
+
+    void setupUIConditions() override;
+
     /**
      * Load the currently active workbook stored in the project settings. If there is none,
      * generate a filename for the currently active workbook and store it in the project settings.
@@ -151,11 +199,6 @@ private:
      * Set the main window title bar text.
      */
     void updateTitle();
-
-    /**
-     * Give icons to menuitems of the main menubar.
-     */
-    void setIconsForMenuItems();
 
     /**
      * Add a new plot to the current panel.
@@ -196,32 +239,6 @@ private:
     void applyTuners();
 
     /**
-     * Load plot settings from a file.
-     *
-     * @param aPath is the file name.
-     * @return True if successful.
-     */
-    bool loadWorkbook( const wxString& aPath );
-
-    /**
-     * Save plot settings to a file.
-     *
-     * @param aPath is the file name.
-     * @return True if successful.
-     */
-    bool saveWorkbook( const wxString& aPath );
-
-    /**
-     * Return the default filename (with extension) to be used in file browser dialog.
-     */
-    wxString getDefaultFilename();
-
-    /**
-     * Return the default path to be used in file browser dialog.
-     */
-    wxString getDefaultPath();
-
-    /**
      * Return the currently opened plot panel (or NULL if there is none).
      */
     SIM_PANEL_BASE* getCurrentPlotWindow() const
@@ -232,54 +249,10 @@ private:
     /**
      *
      */
-    wxString getCurrentSimCommand() const
-    {
-        if( getCurrentPlotWindow() == nullptr )
-            return m_circuitModel->GetSheetSimCommand();
-        else
-            return m_workbook->GetSimCommand( getCurrentPlotWindow() );
-    }
-
-    int getCurrentOptions() const
-    {
-        if( getCurrentPlotWindow() == nullptr )
-            return m_circuitModel->GetSimOptions();
-        else
-            return m_workbook->GetSimOptions( getCurrentPlotWindow() );
-    }
-
     /**
      * Return X axis for a given simulation type.
      */
     SIM_PLOT_TYPE getXAxisType( SIM_TYPE aType ) const;
-
-    // Menu handlers
-    void menuNewPlot( wxCommandEvent& aEvent ) override;
-    void menuOpenWorkbook( wxCommandEvent& event ) override;
-    void menuSaveWorkbook( wxCommandEvent& event ) override;
-    void menuSaveWorkbookAs( wxCommandEvent& event ) override;
-    void menuExit( wxCommandEvent& event ) override;
-    void menuSaveImage( wxCommandEvent& event ) override;
-    void menuSaveCsv( wxCommandEvent& event ) override;
-    void menuZoomIn( wxCommandEvent& event ) override;
-    void menuZoomOut( wxCommandEvent& event ) override;
-    void menuZoomFit( wxCommandEvent& event ) override;
-    void menuShowGrid( wxCommandEvent& event ) override;
-    void menuShowGridUpdate( wxUpdateUIEvent& event ) override;
-    void menuShowLegend( wxCommandEvent& event ) override;
-    void menuShowLegendUpdate( wxUpdateUIEvent& event ) override;
-    void menuShowDotted( wxCommandEvent& event ) override;
-    void menuShowDottedUpdate( wxUpdateUIEvent& event ) override;
-    void menuWhiteBackground( wxCommandEvent& event ) override;
-    void menuShowWhiteBackgroundUpdate( wxUpdateUIEvent& event ) override
-    {
-        event.Check( m_plotUseWhiteBg );
-    }
-
-    void menuSimulateUpdate( wxUpdateUIEvent& event ) override;
-    void menuAddSignalsUpdate( wxUpdateUIEvent& event ) override;
-    void menuProbeUpdate( wxUpdateUIEvent& event ) override;
-    void menuTuneUpdate( wxUpdateUIEvent& event ) override;
 
     // Event handlers
     void onPlotClose( wxAuiNotebookEvent& event ) override;
@@ -295,13 +268,6 @@ private:
     void onWorkbookModified( wxCommandEvent& event );
     void onWorkbookClrModified( wxCommandEvent& event );
 
-    void onSimulate( wxCommandEvent& event );
-    void onSettings( wxCommandEvent& event );
-    void onAddSignal( wxCommandEvent& event );
-    void onProbe( wxCommandEvent& event );
-    void onTune( wxCommandEvent& event );
-    void onShowNetlist( wxCommandEvent& event );
-
     bool canCloseWindow( wxCloseEvent& aEvent ) override;
     void doCloseWindow() override;
 
@@ -311,26 +277,13 @@ private:
     void onSimStarted( wxCommandEvent& aEvent );
     void onSimFinished( wxCommandEvent& aEvent );
 
+    void onExit( wxCommandEvent& event );
+
     // adjust the sash dimension of splitter windows after reading
     // the config settings
     // must be called after the config settings are read, and once the
     // frame is initialized (end of the Ctor)
     void setSubWindowsSashSize();
-
-    // Toolbar buttons
-    wxToolBarToolBase* m_toolSimulate;
-    wxToolBarToolBase* m_toolAddSignals;
-    wxToolBarToolBase* m_toolProbe;
-    wxToolBarToolBase* m_toolTune;
-    wxToolBarToolBase* m_toolSettings;
-
-    SCH_EDIT_FRAME*                        m_schematicFrame;
-    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
-    std::shared_ptr<SPICE_SIMULATOR>       m_simulator;
-    SIM_THREAD_REPORTER*                   m_reporter;
-
-    ///< List of currently displayed tuners
-    std::list<TUNER_SLIDER*>               m_tuners;
 
     enum CONTEXT_MENU_EVENTS
     {
@@ -365,21 +318,29 @@ private:
         SIM_PLOT_FRAME* m_plotFrame;
     };
 
+private:
+    SCH_EDIT_FRAME*                        m_schematicFrame;
+    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
+    std::shared_ptr<SPICE_SIMULATOR>       m_simulator;
+    SIM_THREAD_REPORTER*                   m_reporter;
+
+    std::list<TUNER_SLIDER*>               m_tuners;
+
     ///< Panel that was used as the most recent one for simulations
-    SIM_PANEL_BASE* m_lastSimPlot;
+    SIM_PANEL_BASE*                        m_lastSimPlot;
 
     ///< imagelists used to add a small colored icon to signal names
     ///< and cursors name, the same color as the corresponding signal traces
-    wxImageList* m_signalsIconColorList;
+    wxImageList*  m_signalsIconColorList;
 
     // Variables for temporary storage:
-    int m_splitterLeftRightSashPosition;
-    int m_splitterPlotAndConsoleSashPosition;
-    int m_splitterSignalsSashPosition;
-    int m_splitterTuneValuesSashPosition;
-    bool m_plotUseWhiteBg;
-    unsigned int m_plotNumber;
-    bool m_simFinished;
+    int           m_splitterLeftRightSashPosition;
+    int           m_splitterPlotAndConsoleSashPosition;
+    int           m_splitterSignalsSashPosition;
+    int           m_splitterTuneValuesSashPosition;
+    bool          m_darkMode;
+    unsigned int  m_plotNumber;
+    bool          m_simFinished;
 };
 
 // Commands

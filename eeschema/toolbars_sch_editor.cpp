@@ -109,7 +109,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::annotate );
     m_mainToolBar->Add( EE_ACTIONS::runERC );
-    m_mainToolBar->Add( EE_ACTIONS::runSimulation );
+    m_mainToolBar->Add( EE_ACTIONS::showSimulator );
     m_mainToolBar->Add( EE_ACTIONS::assignFootprints );
     m_mainToolBar->Add( EE_ACTIONS::editSymbolFields );
     m_mainToolBar->Add( EE_ACTIONS::generateBOM );

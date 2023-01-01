@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2022 CERN
+ * Copyright (C) 2016-2023 CERN
  * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -25,7 +25,6 @@
  */
 
 #include <wx/debug.h>
-#include <wx/stc/stc.h>
 
 // For some obscure reason, needed on msys2 with some wxWidgets versions (3.0) to avoid
 // undefined symbol at link stage (due to use of #include <pegtl.hpp>)
@@ -34,15 +33,19 @@
 
 #include <project/project_file.h>
 #include <sch_edit_frame.h>
-#include <eeschema_id.h>
 #include <kiway.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/tuner_slider.h>
-#include <dialogs/dialog_signal_list.h>
-#include <scintilla_tricks.h>
-#include "string_utils.h"
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/action_manager.h>
+#include <tool/action_toolbar.h>
+#include <tool/common_control.h>
+#include <tools/simulator_control.h>
+#include <tools/ee_actions.h>
+#include <string_utils.h>
 #include <pgm_base.h>
 #include "ngspice.h"
 #include "sim_plot_frame.h"
@@ -50,12 +53,9 @@
 #include "spice_simulator.h"
 #include "spice_reporter.h"
 #include <menus_helpers.h>
-#include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
 #include <eeschema_settings.h>
-#include <wx/ffile.h>
-#include <wx/filedlg.h>
-#include <wx_filename.h>
+
+#include <memory>
 
 
 SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
@@ -109,6 +109,7 @@ private:
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SIM_PLOT_FRAME_BASE( aParent ),
         m_lastSimPlot( nullptr ),
+        m_darkMode( true ),
         m_plotNumber( 0 ),
         m_simFinished( false )
 {
@@ -116,9 +117,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_signalsIconColorList = nullptr;
 
     m_schematicFrame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
-
-    if( m_schematicFrame == nullptr )
-        throw std::runtime_error( "There is no schematic window" );
+    wxASSERT( m_schematicFrame );
 
     // Give an icon
     wxIcon icon;
@@ -126,30 +125,28 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetIcon( icon );
 
     m_simulator = SIMULATOR::CreateInstance( "ngspice" );
-
-    if( !m_simulator )
-    {
-        throw std::runtime_error( "Could not create simulator instance" );
-        return;
-    }
+    wxASSERT( m_simulator );
 
     // Get the previous size and position of windows:
     LoadSettings( config() );
 
     // Prepare the color list to plot traces
-    SIM_PLOT_COLORS::FillDefaultColorList( GetPlotBgOpt() );
-
-    // Give icons to menuitems
-    setIconsForMenuItems();
+    SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
 
     m_simulator->Init();
 
     m_reporter = new SIM_THREAD_REPORTER( this );
     m_simulator->SetReporter( m_reporter );
 
-    m_circuitModel.reset( new NGSPICE_CIRCUIT_MODEL( &m_schematicFrame->Schematic(), this ) );
+    m_circuitModel = std::make_shared<NGSPICE_CIRCUIT_MODEL>( &m_schematicFrame->Schematic(), this );
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME::menuExit ), this,
+    setupTools();
+    setupUIConditions();
+
+    ReCreateHToolbar();
+    ReCreateMenuBar();
+
+    Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME::onExit ), this,
           wxID_EXIT );
 
     Bind( EVT_SIM_UPDATE, &SIM_PLOT_FRAME::onSimUpdate, this );
@@ -158,56 +155,11 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( EVT_SIM_FINISHED, &SIM_PLOT_FRAME::onSimFinished, this );
     Bind( EVT_SIM_CURSOR_UPDATE, &SIM_PLOT_FRAME::onCursorUpdate, this );
 
-    // Toolbar buttons
-    m_toolSimulate = m_toolBar->AddTool( ID_SIM_RUN, _( "Run/Stop Simulation" ),
-            KiBitmap( BITMAPS::sim_run ), _( "Run Simulation" ), wxITEM_NORMAL );
-    m_toolAddSignals = m_toolBar->AddTool( ID_SIM_ADD_SIGNALS, _( "Add Signals" ),
-            KiBitmap( BITMAPS::sim_add_signal ), _( "Add signals to plot" ), wxITEM_NORMAL );
-    m_toolProbe = m_toolBar->AddTool( ID_SIM_PROBE,  _( "Probe" ),
-            KiBitmap( BITMAPS::sim_probe ), _( "Probe signals on the schematic" ), wxITEM_NORMAL );
-    m_toolTune = m_toolBar->AddTool( ID_SIM_TUNE, _( "Tune" ),
-            KiBitmap( BITMAPS::sim_tune ), _( "Tune component values" ), wxITEM_NORMAL );
-    m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Sim Command" ),
-            KiBitmap( BITMAPS::config ), _( "Simulation command and settings" ), wxITEM_NORMAL );
-
-    // Start all toolbar buttons except settings as disabled
-    m_toolSimulate->Enable( false );
-    m_toolAddSignals->Enable( false );
-    m_toolProbe->Enable( false );
-    m_toolTune->Enable( false );
-    m_toolSettings->Enable( true );
-
-    Bind( wxEVT_UPDATE_UI, &SIM_PLOT_FRAME::menuSimulateUpdate, this, m_toolSimulate->GetId() );
-    Bind( wxEVT_UPDATE_UI, &SIM_PLOT_FRAME::menuAddSignalsUpdate, this,
-          m_toolAddSignals->GetId() );
-    Bind( wxEVT_UPDATE_UI, &SIM_PLOT_FRAME::menuProbeUpdate, this, m_toolProbe->GetId() );
-    Bind( wxEVT_UPDATE_UI, &SIM_PLOT_FRAME::menuTuneUpdate, this, m_toolTune->GetId() );
-
-    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onSimulate, this, m_toolSimulate->GetId() );
-    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onAddSignal, this,
-          m_toolAddSignals->GetId() );
-    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onProbe, this, m_toolProbe->GetId() );
-    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onTune, this, m_toolTune->GetId() );
-    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onSettings, this, m_toolSettings->GetId() );
-
     Bind( EVT_WORKBOOK_MODIFIED, &SIM_PLOT_FRAME::onWorkbookModified, this );
     Bind( EVT_WORKBOOK_CLR_MODIFIED, &SIM_PLOT_FRAME::onWorkbookClrModified, this );
 
-    // Bind toolbar buttons event to existing menu event handlers, so they behave the same
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSimulate, this,
-          m_runSimulation->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onAddSignal, this, m_addSignals->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onProbe, this, m_probeSignals->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onTune, this, m_tuneValue->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onShowNetlist, this,
-          m_showNetlist->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSettings, this,
-          m_boardAdapter->GetId() );
-
-    m_toolBar->Realize();
-
 #ifndef wxHAS_NATIVE_TABART
-    // Non-native default tab art has ugly gradients we don't want
+    // Default non-native tab art has ugly gradients we don't want
     m_workbook->SetArtProvider( new wxAuiSimpleTabArt() );
 #endif
 
@@ -241,6 +193,25 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 }
 
 
+void SIM_PLOT_FRAME::setupTools()
+{
+    // Create the manager
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
+
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+
+    // Attach the events to the tool dispatcher
+    Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+    Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+
+    // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
+    m_toolManager->RegisterTool( new SIMULATOR_CONTROL );
+    m_toolManager->InitTools();
+}
+
+
 void SIM_PLOT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
@@ -255,7 +226,7 @@ void SIM_PLOT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         m_splitterPlotAndConsoleSashPosition = cfg->m_Simulator.plot_panel_height;
         m_splitterSignalsSashPosition        = cfg->m_Simulator.signal_panel_height;
         m_splitterTuneValuesSashPosition     = cfg->m_Simulator.cursors_panel_height;
-        m_plotUseWhiteBg                     = cfg->m_Simulator.white_background;
+        m_darkMode                           = !cfg->m_Simulator.white_background;
     }
 
     PROJECT_FILE& project = Prj().GetProjectFile();
@@ -280,7 +251,7 @@ void SIM_PLOT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_Simulator.plot_panel_height    = m_splitterPlotAndConsole->GetSashPosition();
         cfg->m_Simulator.signal_panel_height  = m_splitterSignals->GetSashPosition();
         cfg->m_Simulator.cursors_panel_height = m_splitterTuneValues->GetSashPosition();
-        cfg->m_Simulator.white_background     = m_plotUseWhiteBg;
+        cfg->m_Simulator.white_background     = !m_darkMode;
     }
 
     if( !m_isNonUserClose )     // If we're exiting the project has already been released.
@@ -357,78 +328,6 @@ void SIM_PLOT_FRAME::updateTitle()
 }
 
 
-// A small helper struct to handle bitmaps initialization in menus
-struct BM_MENU_INIT_ITEM
-{
-    int m_MenuId;
-    BITMAPS m_Bitmap;
-};
-
-
-void SIM_PLOT_FRAME::setIconsForMenuItems()
-{
-    // Give icons to menuitems of the main menubar
-    BM_MENU_INIT_ITEM bm_list[]
-    {
-        // File menu:
-        { wxID_NEW, BITMAPS::simulator },
-        { wxID_OPEN, BITMAPS::directory_open },
-        { wxID_SAVE, BITMAPS::save },
-        { wxID_CLOSE, BITMAPS::exit },
-
-        // simulator menu:
-        { ID_MENU_RUN_SIM, BITMAPS::sim_run },
-        { ID_MENU_ADD_SIGNAL, BITMAPS::sim_add_signal },
-        { ID_MENU_PROBE_SIGNALS, BITMAPS::sim_probe },
-        { ID_MENU_TUNE_SIGNALS, BITMAPS::sim_tune },
-        { ID_MENU_SHOW_NETLIST, BITMAPS::netlist },
-        { ID_MENU_SET_SIMUL, BITMAPS::config },
-
-        // View menu
-        { wxID_ZOOM_IN, BITMAPS::zoom_in },
-        { wxID_ZOOM_OUT, BITMAPS::zoom_out },
-        { wxID_ZOOM_FIT, BITMAPS::zoom_fit_in_page },
-        { ID_MENU_SHOW_GRID, BITMAPS::grid },
-        { ID_MENU_SHOW_LEGEND, BITMAPS::text },
-        { ID_MENU_DOTTED, BITMAPS::add_dashed_line },
-        { ID_MENU_WHITE_BG, BITMAPS::swap_layer },
-
-        { 0, BITMAPS::INVALID_BITMAP }  // Sentinel
-    };
-
-    // wxMenuItems are already created and attached to the m_mainMenu wxMenuBar.
-    // A problem is the fact setting bitmaps in wxMenuItems after they are attached
-    // to a wxMenu do not work in all cases.
-    // So the trick is:
-    // Remove the wxMenuItem from its wxMenu
-    // Set the bitmap
-    // Insert the modified wxMenuItem to its previous place
-    for( int ii = 0; bm_list[ii].m_MenuId; ++ii )
-    {
-        wxMenuItem* item = m_mainMenu->FindItem( bm_list[ii].m_MenuId );
-
-        if( !item || ( bm_list[ii].m_Bitmap == BITMAPS::INVALID_BITMAP ) )
-            continue;
-
-        wxMenu* menu = item->GetMenu();
-
-        // Calculate the initial index of item inside the wxMenu parent.
-        wxMenuItemList& mlist = menu->GetMenuItems();
-        int mpos = mlist.IndexOf( item );
-
-        if( mpos >= 0 ) // Should be always the case
-        {
-            // Modify the bitmap
-            menu->Remove( item );
-            AddBitmapToMenuItem( item, KiBitmap( bm_list[ii].m_Bitmap ) );
-
-            // Insert item to its the initial index
-            menu->Insert( mpos, item );
-        }
-    }
-}
-
-
 void SIM_PLOT_FRAME::setSubWindowsSashSize()
 {
     if( m_splitterLeftRightSashPosition > 0 )
@@ -447,7 +346,7 @@ void SIM_PLOT_FRAME::setSubWindowsSashSize()
 
 void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 {
-    wxCHECK_RET( m_circuitModel->CommandToSimType( getCurrentSimCommand() ) != ST_UNKNOWN,
+    wxCHECK_RET( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) != ST_UNKNOWN,
                  wxT( "Unknown simulation type" ) );
 
     m_simConsole->Clear();
@@ -455,7 +354,7 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     if( aSimCommand != wxEmptyString )
         m_circuitModel->SetSimCommandOverride( aSimCommand );
 
-    m_circuitModel->SetSimOptions( getCurrentOptions() );
+    m_circuitModel->SetSimOptions( GetCurrentOptions() );
 
     wxString           errors;
     WX_STRING_REPORTER reporter( &errors );
@@ -516,7 +415,7 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand, int aOptions
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
         SIM_PLOT_PANEL* panel;
-        panel = new SIM_PLOT_PANEL( aSimCommand, aOptions, m_workbook, this, wxID_ANY );
+        panel = new SIM_PLOT_PANEL( aSimCommand, aOptions, m_workbook, wxID_ANY );
 
         panel->GetPlotWin()->EnableMouseWheelPan(
                 Pgm().GetCommonSettings()->m_Input.scroll_modifier_zoom != 0 );
@@ -935,7 +834,7 @@ void SIM_PLOT_FRAME::applyTuners()
 }
 
 
-bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
+bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
 {
     m_workbook->DeleteAllPages();
 
@@ -1087,7 +986,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 }
 
 
-bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
+bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
 {
     wxFileName filename = aPath;
     filename.SetExt( WorkbookFileExtension );
@@ -1169,37 +1068,6 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
 }
 
 
-wxString SIM_PLOT_FRAME::getDefaultFilename()
-{
-    wxFileName filename = m_simulator->Settings()->GetWorkbookFilename();
-
-    if( filename.GetName().IsEmpty() )
-    {
-        if( Prj().GetProjectName().IsEmpty() )
-        {
-            filename.SetName( _( "noname" ) );
-            filename.SetExt( WorkbookFileExtension );
-        }
-        else
-        {
-            filename.SetName( Prj().GetProjectName() );
-            filename.SetExt( WorkbookFileExtension );
-        }
-    }
-
-    return filename.GetFullName();
-}
-
-
-wxString SIM_PLOT_FRAME::getDefaultPath()
-{
-    wxFileName path = m_simulator->Settings()->GetWorkbookFilename();
-
-    path.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS, Prj().GetProjectPath() );
-    return path.GetPath();
-}
-
-
 SIM_PLOT_TYPE SIM_PLOT_FRAME::getXAxisType( SIM_TYPE aType ) const
 {
     switch( aType )
@@ -1215,200 +1083,12 @@ SIM_PLOT_TYPE SIM_PLOT_FRAME::getXAxisType( SIM_TYPE aType ) const
 }
 
 
-void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
+void SIM_PLOT_FRAME::ToggleDarkModePlots()
 {
-    SIM_TYPE type = m_circuitModel->GetSimType();
-
-    if( SIM_PANEL_BASE::IsPlottable( type ) )
-        NewPlotPanel( m_circuitModel->GetSimCommand(), m_circuitModel->GetSimOptions() );
-}
-
-
-void SIM_PLOT_FRAME::menuOpenWorkbook( wxCommandEvent& event )
-{
-    wxFileDialog openDlg( this, _( "Open simulation workbook" ), getDefaultPath(), "",
-                          WorkbookFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-    if( openDlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    loadWorkbook( openDlg.GetPath() );
-}
-
-
-void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
-{
-    if( !m_workbook->IsModified() )
-        return;
-
-    wxString filename = m_simulator->Settings()->GetWorkbookFilename();
-
-    if( filename.IsEmpty() )
-    {
-        menuSaveWorkbookAs( event );
-        return;
-    }
-
-    saveWorkbook( Prj().AbsolutePath( m_simulator->Settings()->GetWorkbookFilename() ) );
-}
-
-
-void SIM_PLOT_FRAME::menuSaveWorkbookAs( wxCommandEvent& event )
-{
-    wxFileDialog saveAsDlg( this, _( "Save Simulation Workbook As" ), getDefaultPath(),
-                            getDefaultFilename(), WorkbookFileWildcard(),
-                            wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( saveAsDlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    saveWorkbook( Prj().AbsolutePath( saveAsDlg.GetPath() ) );
-}
-
-void SIM_PLOT_FRAME::menuSaveImage( wxCommandEvent& event )
-{
-    if( !GetCurrentPlot() )
-        return;
-
-    wxFileDialog saveDlg( this, _( "Save Plot as Image" ), "", "", PngFileWildcard(),
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( saveDlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    GetCurrentPlot()->GetPlotWin()->SaveScreenshot( saveDlg.GetPath(), wxBITMAP_TYPE_PNG );
-}
-
-
-void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
-{
-    if( !GetCurrentPlot() )
-        return;
-
-    const wxChar SEPARATOR = ';';
-
-    wxFileDialog saveDlg( this, _( "Save Plot Data" ), "", "", CsvFileWildcard(),
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( saveDlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxFFile out( saveDlg.GetPath(), "wb" );
-
-    std::map<wxString, TRACE *> traces = GetCurrentPlot()->GetTraces();
-
-    if( traces.size() == 0 )
-        return;
-
-    SIM_TYPE simType = m_circuitModel->GetSimType();
-
-    std::size_t rowCount = traces.begin()->second->GetDataX().size();
-
-    // write column header names on the first row
-    wxString xAxisName( m_simulator->GetXAxis( simType ) );
-    out.Write( wxString::Format( wxT( "%s%c" ), xAxisName, SEPARATOR ) );
-
-    for( const auto& [name, trace] : traces )
-        out.Write( wxString::Format( wxT( "%s%c" ), name, SEPARATOR ) );
-
-    out.Write( wxS( "\r\n" ) );
-
-    // write each row's numerical value
-    for ( std::size_t curRow=0; curRow < rowCount; curRow++ )
-    {
-        double xAxisValue = traces.begin()->second->GetDataX().at( curRow );
-        out.Write( wxString::Format( wxT( "%g%c" ), xAxisValue, SEPARATOR ) );
-
-        for( const auto& [name, trace] : traces )
-        {
-            double yAxisValue = trace->GetDataY().at( curRow );
-            out.Write( wxString::Format( wxT( "%g%c" ), yAxisValue, SEPARATOR ) );
-        }
-
-        out.Write( wxS( "\r\n" ) );
-    }
-
-    out.Close();
-}
-
-
-void SIM_PLOT_FRAME::menuZoomIn( wxCommandEvent& event )
-{
-    if( GetCurrentPlot() )
-        GetCurrentPlot()->GetPlotWin()->ZoomIn();
-}
-
-
-void SIM_PLOT_FRAME::menuZoomOut( wxCommandEvent& event )
-{
-    if( GetCurrentPlot() )
-        GetCurrentPlot()->GetPlotWin()->ZoomOut();
-}
-
-
-void SIM_PLOT_FRAME::menuZoomFit( wxCommandEvent& event )
-{
-    if( GetCurrentPlot() )
-        GetCurrentPlot()->GetPlotWin()->Fit();
-}
-
-
-void SIM_PLOT_FRAME::menuShowGrid( wxCommandEvent& event )
-{
-    SIM_PLOT_PANEL* plot = GetCurrentPlot();
-
-    if( plot )
-        plot->ShowGrid( !plot->IsGridShown() );
-}
-
-
-void SIM_PLOT_FRAME::menuShowGridUpdate( wxUpdateUIEvent& event )
-{
-    SIM_PLOT_PANEL* plot = GetCurrentPlot();
-
-    event.Check( plot ? plot->IsGridShown() : false );
-}
-
-
-void SIM_PLOT_FRAME::menuShowLegend( wxCommandEvent& event )
-{
-    SIM_PLOT_PANEL* plot = GetCurrentPlot();
-
-    if( plot )
-        plot->ShowLegend( !plot->IsLegendShown() );
-}
-
-
-void SIM_PLOT_FRAME::menuShowLegendUpdate( wxUpdateUIEvent& event )
-{
-    SIM_PLOT_PANEL* plot = GetCurrentPlot();
-    event.Check( plot ? plot->IsLegendShown() : false );
-}
-
-
-void SIM_PLOT_FRAME::menuShowDotted( wxCommandEvent& event )
-{
-    SIM_PLOT_PANEL* plot = GetCurrentPlot();
-
-    if( plot )
-        plot->SetDottedCurrentPhase( !plot->GetDottedCurrentPhase() );
-}
-
-
-void SIM_PLOT_FRAME::menuShowDottedUpdate( wxUpdateUIEvent& event )
-{
-    SIM_PLOT_PANEL* plot = GetCurrentPlot();
-
-    event.Check( plot ? plot->GetDottedCurrentPhase() : false );
-}
-
-
-void SIM_PLOT_FRAME::menuWhiteBackground( wxCommandEvent& event )
-{
-    m_plotUseWhiteBg = not m_plotUseWhiteBg;
+    m_darkMode = !m_darkMode;
 
     // Rebuild the color list to plot traces
-    SIM_PLOT_COLORS::FillDefaultColorList( GetPlotBgOpt() );
+    SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
 
     // Now send changes to all SIM_PLOT_PANEL
     for( size_t page = 0; page < m_workbook->GetPageCount(); page++ )
@@ -1422,30 +1102,6 @@ void SIM_PLOT_FRAME::menuWhiteBackground( wxCommandEvent& event )
         if( panel )
             panel->UpdatePlotColors();
     }
-}
-
-
-void SIM_PLOT_FRAME::menuSimulateUpdate( wxUpdateUIEvent& event )
-{
-    event.Enable( m_circuitModel->CommandToSimType( getCurrentSimCommand() ) != ST_UNKNOWN );
-}
-
-
-void SIM_PLOT_FRAME::menuAddSignalsUpdate( wxUpdateUIEvent& event )
-{
-    event.Enable( m_simFinished );
-}
-
-
-void SIM_PLOT_FRAME::menuProbeUpdate( wxUpdateUIEvent& event )
-{
-    event.Enable( m_simFinished );
-}
-
-
-void SIM_PLOT_FRAME::menuTuneUpdate( wxUpdateUIEvent& event )
-{
-    event.Enable( m_simFinished );
 }
 
 
@@ -1541,16 +1197,7 @@ void SIM_PLOT_FRAME::onWorkbookClrModified( wxCommandEvent& event )
 }
 
 
-void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
-{
-    if( m_simulator->IsRunning() )
-        m_simulator->Stop();
-    else
-        StartSimulation();
-}
-
-
-void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
+void SIM_PLOT_FRAME::EditSimCommand()
 {
     SIM_PANEL_BASE*     plotPanelWindow = getCurrentPlotWindow();
     DIALOG_SIM_COMMAND  dlg( this, m_circuitModel, m_simulator->Settings() );
@@ -1617,128 +1264,6 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 }
 
 
-void SIM_PLOT_FRAME::onAddSignal( wxCommandEvent& event )
-{
-    wxCHECK_RET( m_simFinished, wxT( "No simulation results available" ) );
-
-    SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
-
-    if( !plotPanel || !m_circuitModel || plotPanel->GetType() != m_circuitModel->GetSimType() )
-    {
-        DisplayInfoMessage( this, _( "You need to run plot-providing simulation first." ) );
-        return;
-    }
-
-    DIALOG_SIGNAL_LIST dialog( this, m_circuitModel.get() );
-    dialog.ShowModal();
-}
-
-
-void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
-{
-    wxCHECK_RET( m_simFinished, wxT( "No simulation results available" ) );
-
-    if( m_schematicFrame == nullptr )
-        return;
-
-    wxWindow* blocking_dialog = m_schematicFrame->Kiway().GetBlockingDialog();
-
-    if( blocking_dialog )
-        blocking_dialog->Close( true );
-
-    m_schematicFrame->GetToolManager()->RunAction( EE_ACTIONS::simProbe );
-    m_schematicFrame->Raise();
-}
-
-
-void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
-{
-    wxCHECK_RET( m_simFinished, wxT( "No simulation results available" ) );
-
-    if( m_schematicFrame == nullptr )
-        return;
-
-    wxWindow* blocking_dialog = m_schematicFrame->Kiway().GetBlockingDialog();
-
-    if( blocking_dialog )
-        blocking_dialog->Close( true );
-
-    m_schematicFrame->GetToolManager()->RunAction( EE_ACTIONS::simTune );
-    m_schematicFrame->Raise();
-}
-
-
-class NETLIST_VIEW_DIALOG : public DIALOG_SHIM
-{
-public:
-    enum
-    {
-        MARGIN_LINE_NUMBERS
-    };
-
-    void onClose( wxCloseEvent& evt )
-    {
-        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
-    }
-
-    NETLIST_VIEW_DIALOG( wxWindow* parent, const wxString& source) :
-            DIALOG_SHIM( parent, wxID_ANY, _( "SPICE Netlist" ), wxDefaultPosition,
-                         wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
-    {
-        wxStyledTextCtrl* textCtrl = new wxStyledTextCtrl( this, wxID_ANY );
-        textCtrl->SetMinSize( wxSize( 600, 400 ) );
-
-        textCtrl->SetMarginWidth( MARGIN_LINE_NUMBERS, 50 );
-        textCtrl->StyleSetForeground( wxSTC_STYLE_LINENUMBER, wxColour( 75, 75, 75 ) );
-        textCtrl->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
-        textCtrl->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
-
-        wxFont fixedFont = KIUI::GetMonospacedUIFont();
-
-        for( int i = 0; i < wxSTC_STYLE_MAX; ++i )
-            textCtrl->StyleSetFont( i, fixedFont );
-
-        textCtrl->StyleClearAll();  // Addresses a bug in wx3.0 where styles are not correctly set
-
-        textCtrl->SetWrapMode( wxSTC_WRAP_WORD );
-
-        textCtrl->SetText( source );
-
-        textCtrl->SetLexer( wxSTC_LEX_SPICE );
-
-        wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-        sizer->Add( textCtrl, 1, wxEXPAND | wxALL, 5 );
-        SetSizer( sizer );
-
-        Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ),
-                 nullptr, this );
-
-        m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( textCtrl, wxT( "{}" ), false );
-
-        finishDialogSettings();
-    }
-
-    std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
-};
-
-
-void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
-{
-    if( m_schematicFrame == nullptr || m_simulator == nullptr )
-        return;
-
-    wxString           errors;
-    WX_STRING_REPORTER reporter( &errors );
-    STRING_FORMATTER   formatter;
-
-    m_circuitModel->SetSimOptions( getCurrentOptions() );
-    m_circuitModel->GetNetlist( &formatter, reporter );
-
-    NETLIST_VIEW_DIALOG dlg( this, errors.IsEmpty() ? wxString( formatter.GetString() ) : errors );
-    dlg.ShowModal();
-}
-
-
 bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     if( m_workbook->IsModified() )
@@ -1764,7 +1289,7 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         return HandleUnsavedChanges( this, msg,
                                      [&]() -> bool
                                      {
-                                         return saveWorkbook( Prj().AbsolutePath( fullFilename ) );
+                                         return SaveWorkbook( Prj().AbsolutePath( fullFilename ) );
                                      } );
     }
 
@@ -1839,16 +1364,100 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
 }
 
 
+void SIM_PLOT_FRAME::setupUIConditions()
+{
+    EDA_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    wxASSERT( mgr );
+
+    auto showGridCondition =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_PANEL* plot = GetCurrentPlot();
+                return plot && plot->IsGridShown();
+            };
+
+    auto showLegendCondition =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_PANEL* plot = GetCurrentPlot();
+                return plot && plot->IsLegendShown();
+            };
+
+    auto showDottedCondition =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_PANEL* plot = GetCurrentPlot();
+                return plot && plot->GetDottedSecondary();
+            };
+
+    auto darkModePlotCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return m_darkMode;
+            };
+
+    auto haveCommand =
+            [this]( const SELECTION& aSel )
+            {
+                return m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) != ST_UNKNOWN;
+            };
+
+    auto simRunning =
+            [this]( const SELECTION& aSel )
+            {
+                return m_simulator && m_simulator->IsRunning();
+            };
+
+    auto simFinished =
+            [this]( const SELECTION& aSel )
+            {
+                return m_simFinished;
+            };
+
+    auto havePlot =
+            [this]( const SELECTION& aSel )
+            {
+                return GetCurrentPlot() != nullptr;
+            };
+
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
+
+    mgr->SetConditions( EE_ACTIONS::openWorkbook,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::saveWorkbook,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::saveWorkbookAs,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+
+    mgr->SetConditions( EE_ACTIONS::exportPlotAsPNG,       ENABLE( havePlot ) );
+    mgr->SetConditions( EE_ACTIONS::exportPlotAsCSV,       ENABLE( havePlot ) );
+
+    mgr->SetConditions( EE_ACTIONS::toggleGrid,            CHECK( showGridCondition ) );
+    mgr->SetConditions( EE_ACTIONS::toggleLegend,          CHECK( showLegendCondition ) );
+    mgr->SetConditions( EE_ACTIONS::toggleDottedSecondary, CHECK( showDottedCondition ) );
+    mgr->SetConditions( EE_ACTIONS::toggleDarkModePlots,   CHECK( darkModePlotCondition ) );
+
+    mgr->SetConditions( EE_ACTIONS::simCommand,            ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::runSimulation,         ENABLE( haveCommand && !simRunning ) );
+    mgr->SetConditions( EE_ACTIONS::stopSimulation,        ENABLE( simRunning ) );
+    mgr->SetConditions( EE_ACTIONS::addSignals,            ENABLE( simFinished ) );
+    mgr->SetConditions( EE_ACTIONS::simProbe,              ENABLE( simFinished ) );
+    mgr->SetConditions( EE_ACTIONS::simTune,               ENABLE( simFinished ) );
+    mgr->SetConditions( EE_ACTIONS::showNetlist,           ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+
+#undef CHECK
+#undef ENABLE
+}
+
+
 void SIM_PLOT_FRAME::onSimStarted( wxCommandEvent& aEvent )
 {
-    m_toolBar->SetToolNormalBitmap( ID_SIM_RUN, KiBitmap( BITMAPS::sim_stop ) );
     SetCursor( wxCURSOR_ARROWWAIT );
 }
 
 
 void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 {
-    m_toolBar->SetToolNormalBitmap( ID_SIM_RUN, KiBitmap( BITMAPS::sim_run ) );
     SetCursor( wxCURSOR_ARROW );
 
     SIM_TYPE simType = m_circuitModel->GetSimType();
@@ -2061,13 +1670,9 @@ void SIM_PLOT_FRAME::CURSOR_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
 }
 
 
-void SIM_PLOT_FRAME::menuExit( wxCommandEvent& event )
+void SIM_PLOT_FRAME::onExit( wxCommandEvent& event )
 {
-    if( event.GetId() == wxID_EXIT )
-        Kiway().OnKiCadExit();
-
-    if( event.GetId() == wxID_CLOSE )
-        Close( false );
+    Kiway().OnKiCadExit();
 }
 
 

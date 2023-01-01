@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 CERN
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -241,9 +241,23 @@ public:
     static TOOL_ACTION toggleAnnotateAuto;
 
     // SPICE
-    static TOOL_ACTION runSimulation;
+    static TOOL_ACTION newPlot;
+    static TOOL_ACTION openWorkbook;
+    static TOOL_ACTION saveWorkbook;
+    static TOOL_ACTION saveWorkbookAs;
+    static TOOL_ACTION exportPlotAsPNG;
+    static TOOL_ACTION exportPlotAsCSV;
+    static TOOL_ACTION showSimulator;
     static TOOL_ACTION simProbe;
     static TOOL_ACTION simTune;
+    static TOOL_ACTION toggleLegend;
+    static TOOL_ACTION toggleDottedSecondary;
+    static TOOL_ACTION toggleDarkModePlots;
+    static TOOL_ACTION simCommand;
+    static TOOL_ACTION runSimulation;
+    static TOOL_ACTION stopSimulation;
+    static TOOL_ACTION addSignals;
+    static TOOL_ACTION showNetlist;
 
     // Net highlighting
     static TOOL_ACTION highlightNet;

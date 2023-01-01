@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 CERN
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -168,13 +168,13 @@ public:
 
 
 protected:
-    CURSOR* m_cursor;
+    CURSOR*       m_cursor;
     SIM_PLOT_TYPE m_type;
-    wxColour m_traceColour;
+    wxColour      m_traceColour;
 
 private:
     ///< Name of the signal parameter
-    wxString m_param;
+    wxString      m_param;
 };
 
 
@@ -183,18 +183,11 @@ class SIM_PLOT_PANEL : public SIM_PANEL_BASE
     friend class SIM_WORKBOOK;
 
 public:
-    SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent,
-                    SIM_PLOT_FRAME* aMainFrame, wxWindowID id,
+    SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent, wxWindowID id,
                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                     long style = 0, const wxString& name = wxPanelNameStr );
 
     virtual ~SIM_PLOT_PANEL();
-
-    ///< set the pointer to the sim plot frame
-    void SetMasterFrame( SIM_PLOT_FRAME* aFrame )
-    {
-        m_masterFrame = aFrame;
-    }
 
     wxString GetLabelX() const
     {
@@ -256,19 +249,20 @@ public:
         return m_legend->IsVisible();
     }
 
-    void SetDottedCurrentPhase( bool aEnable )
+    /**
+     * Draw secondary signal traces (current or phase) with dotted lines
+     */
+    void SetDottedSecondary( bool aEnable )
     {
         m_dotted_cp = aEnable;
 
         for( const auto& tr : m_traces )
-        {
             UpdateTraceStyle( tr.second );
-        }
 
         m_plotWin->UpdateAll();
     }
 
-    bool GetDottedCurrentPhase() const
+    bool GetDottedSecondary() const
     {
         return m_dotted_cp;
     }
@@ -304,25 +298,24 @@ private:
     ///> Create/Ensure axes are available for plotting
     void updateAxes();
 
-    SIM_PLOT_COLORS m_colors;
+private:
+    SIM_PLOT_COLORS            m_colors;
 
     // Top-level plot window
-    mpWindow*   m_plotWin;
-    wxBoxSizer* m_sizer;
+    mpWindow*                  m_plotWin;
+    wxBoxSizer*                m_sizer;
 
     // Traces to be plotted
     std::map<wxString, TRACE*> m_traces;
 
-    mpScaleXBase* m_axis_x;
-    mpScaleY* m_axis_y1;
-    mpScaleY* m_axis_y2;
-    mpInfoLegend* m_legend;
+    mpScaleXBase*              m_axis_x;
+    mpScaleY*                  m_axis_y1;
+    mpScaleY*                  m_axis_y2;
+    mpInfoLegend*              m_legend;
 
-    bool m_dotted_cp;
+    bool                       m_dotted_cp;
 
-    std::vector<mpLayer*> m_topLevel;
-
-    SIM_PLOT_FRAME* m_masterFrame;
+    std::vector<mpLayer*>      m_topLevel;
 };
 
 wxDECLARE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );
