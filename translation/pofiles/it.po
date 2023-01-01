@@ -109,7 +109,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 17:57+0100\n"
+"POT-Creation-Date: 2023-01-01 15:11-0800\n"
 "PO-Revision-Date: 2022-12-30 12:34+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
@@ -1846,60 +1846,60 @@ msgstr "Autori impronte"
 msgid "Icons by"
 msgstr "Autori icone"
 
-#: common/dialog_about/dialog_about.cpp:97
+#: common/dialog_about/dialog_about.cpp:98
 #, c-format
 msgid "About %s"
 msgstr "Info su %s"
 
-#: common/dialog_about/dialog_about.cpp:126
+#: common/dialog_about/dialog_about.cpp:127
 #: common/dialog_about/dialog_about_base.h:58
 msgid "About"
 msgstr "Informazioni su KiCad"
 
-#: common/dialog_about/dialog_about.cpp:131
+#: common/dialog_about/dialog_about.cpp:132
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:90
 msgid "Version"
 msgstr "Versione"
 
-#: common/dialog_about/dialog_about.cpp:133
+#: common/dialog_about/dialog_about.cpp:134
 msgid "Developers"
 msgstr "Sviluppo"
 
-#: common/dialog_about/dialog_about.cpp:135
+#: common/dialog_about/dialog_about.cpp:136
 msgid "Doc Writers"
 msgstr "Autori manuali"
 
-#: common/dialog_about/dialog_about.cpp:138
+#: common/dialog_about/dialog_about.cpp:139
 msgid "Librarians"
 msgstr "Autori librerie"
 
-#: common/dialog_about/dialog_about.cpp:141
+#: common/dialog_about/dialog_about.cpp:142
 msgid "Artists"
 msgstr "Artisti"
 
-#: common/dialog_about/dialog_about.cpp:143
+#: common/dialog_about/dialog_about.cpp:144
 msgid "Translators"
 msgstr "Traduttori"
 
-#: common/dialog_about/dialog_about.cpp:145
+#: common/dialog_about/dialog_about.cpp:146
 msgid "Packagers"
 msgstr "Pacchetti"
 
-#: common/dialog_about/dialog_about.cpp:148
+#: common/dialog_about/dialog_about.cpp:149
 msgid "License"
 msgstr "Licenza"
 
-#: common/dialog_about/dialog_about.cpp:462
+#: common/dialog_about/dialog_about.cpp:463
 msgid "Could not open clipboard to write version information."
 msgstr ""
 "Impossibile aprire gli appunti per scrivere le informazioni sulla versione."
 
-#: common/dialog_about/dialog_about.cpp:463
+#: common/dialog_about/dialog_about.cpp:464
 msgid "Clipboard Error"
 msgstr "Errore degli appunti"
 
-#: common/dialog_about/dialog_about.cpp:472
+#: common/dialog_about/dialog_about.cpp:473
 msgid "Copied..."
 msgstr "Copiate..."
 
@@ -3906,7 +3906,7 @@ msgstr "Stile linea"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:465
+#: eeschema/dialogs/dialog_sim_model.cpp:468
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:536 eeschema/lib_text.cpp:400
@@ -4532,7 +4532,7 @@ msgid "Symbol"
 msgstr "Simbolo"
 
 #: common/eda_item.cpp:370 common/eda_item.cpp:385
-#: eeschema/dialogs/dialog_sim_model.cpp:551 eeschema/lib_pin.h:71
+#: eeschema/dialogs/dialog_sim_model.cpp:554 eeschema/lib_pin.h:71
 #: eeschema/sch_pin.cpp:206
 msgid "Pin"
 msgstr "Pin"
@@ -5574,7 +5574,7 @@ msgstr "Disattiva selezionati"
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:464 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:467 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1233
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -7356,7 +7356,7 @@ msgstr "Conteggio pin"
 
 #: cvpcb/cvpcb_mainframe.cpp:825 eeschema/sch_base_frame.cpp:576
 #: eeschema/sch_symbol.cpp:1619 eeschema/sch_symbol.cpp:1623
-#: eeschema/sch_symbol.cpp:1653 pcbnew/tools/pcb_control.cpp:1353
+#: eeschema/sch_symbol.cpp:1653 pcbnew/tools/pcb_control.cpp:1361
 msgid "Library"
 msgstr "Libreria"
 
@@ -7775,32 +7775,32 @@ msgstr ""
 "%s\n"
 "non trovato. Script non disponibile."
 
-#: eeschema/component_references_lister.cpp:687
+#: eeschema/component_references_lister.cpp:688
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)"
 msgstr "Elemento non annotato: %s%s (unità %d)"
 
-#: eeschema/component_references_lister.cpp:694
+#: eeschema/component_references_lister.cpp:695
 #, c-format
 msgid "Item not annotated: %s%s"
 msgstr "Elemento non annotato: %s%s"
 
-#: eeschema/component_references_lister.cpp:712
+#: eeschema/component_references_lister.cpp:713
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
 msgstr "Errore: il simbolo %s%s%s (unità %d) eccede le unità definite (%d)"
 
-#: eeschema/component_references_lister.cpp:751
+#: eeschema/component_references_lister.cpp:752
 #, c-format
 msgid "Duplicate items %s%s%s\n"
 msgstr "Elementi duplicati %s%s%s\n"
 
-#: eeschema/component_references_lister.cpp:775
+#: eeschema/component_references_lister.cpp:777
 #, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
 msgstr "Numero unità diverse per elemento %s%s%s e %s%s%s\n"
 
-#: eeschema/component_references_lister.cpp:791
+#: eeschema/component_references_lister.cpp:793
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Valori differenti per %s%d%s (%s) e %s%d%s (%s)"
@@ -10565,6 +10565,7 @@ msgid "Action Taken"
 msgstr "Azione presa"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
+#: eeschema/dialogs/dialog_sim_model_base.cpp:252
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1040
 #: eeschema/sch_symbol.cpp:1597 eeschema/sch_symbol.cpp:1641
 #: pcbnew/footprint.cpp:2871 pcbnew/fp_text.cpp:279
@@ -11296,40 +11297,40 @@ msgstr "HSpice"
 msgid "Simulation Command"
 msgstr "Comando simulazione"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:183
+#: eeschema/dialogs/dialog_sim_model.cpp:186
 #, c-format
 msgid "No model named '%s' in library."
 msgstr "Nessun modello \"%s\" in libreria."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:266
+#: eeschema/dialogs/dialog_sim_model.cpp:269
 msgid "Failed to read simulation model from fields."
 msgstr "Fallita la lettura delo modello di simulazione dai campi."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:377
+#: eeschema/dialogs/dialog_sim_model.cpp:380
 msgid "Component:"
 msgstr "Componente:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:377
+#: eeschema/dialogs/dialog_sim_model.cpp:380
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr "Modello:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:438
+#: eeschema/dialogs/dialog_sim_model.cpp:441
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "Salva il parametro '%s (%s)' nel campo valore"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:446
+#: eeschema/dialogs/dialog_sim_model.cpp:449
 msgid "Save primary parameter in Value field"
 msgstr "Salva il parametro primarion nel campo valore"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:463
+#: eeschema/dialogs/dialog_sim_model.cpp:466
 #: pcbnew/footprint_wizard_frame.cpp:322
 msgid "Parameter"
 msgstr "Parametro"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:466 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:469 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1147 eeschema/sch_label.cpp:880
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1247
@@ -11348,7 +11349,7 @@ msgstr "Tipo"
 msgid "Not Connected"
 msgstr "Non connesso"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1050
+#: eeschema/dialogs/dialog_sim_model.cpp:1063
 msgid "Browse Models"
 msgstr "Scorri modelli"
 
@@ -11410,11 +11411,11 @@ msgstr "Pin simbolo"
 msgid "Model Pin"
 msgstr "Pin modello"
 
-#: eeschema/dialogs/dialog_sim_model_base.cpp:256
+#: eeschema/dialogs/dialog_sim_model_base.cpp:298
 msgid "Pin Assignments"
 msgstr "Assegnamenti pin"
 
-#: eeschema/dialogs/dialog_sim_model_base.h:119
+#: eeschema/dialogs/dialog_sim_model_base.h:121
 msgid "Simulation Model Editor"
 msgstr "Editor modello simulazione"
 
@@ -12683,9 +12684,8 @@ msgstr "Percorso libreria"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:51
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:101
-#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:51
-#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:100
-msgid "LIbrary Format"
+#: include/lib_table_grid.h:190 pcbnew/dialogs/panel_fp_lib_table_base.cpp:51
+msgid "Library Format"
 msgstr "Formato libreria"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:73
@@ -13918,7 +13918,7 @@ msgstr "Tipo voce bus"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:912
 #: eeschema/sch_line.cpp:912 pcbnew/pad.cpp:966 pcbnew/pcb_track.cpp:935
-#: pcbnew/tools/pcb_control.cpp:1529 pcbnew/zone.cpp:557
+#: pcbnew/tools/pcb_control.cpp:1537 pcbnew/zone.cpp:557
 msgid "Resolved Netclass"
 msgstr "Netclass risolta"
 
@@ -13965,6 +13965,7 @@ msgstr ""
 "necessario eseguire il gestore di progetti KiCad e creare un progetto."
 
 #: eeschema/sch_edit_frame.cpp:1095 eeschema/sch_plotter.cpp:1026
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schema"
 
@@ -14059,7 +14060,7 @@ msgstr "Giustificazione"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:963 pcbnew/pad.cpp:964
 #: pcbnew/pad.cpp:1745 pcbnew/pcb_track.cpp:933
-#: pcbnew/tools/pcb_control.cpp:1526
+#: pcbnew/tools/pcb_control.cpp:1534
 #: pcbnew/widgets/pcb_properties_panel.cpp:194 pcbnew/zone.cpp:555
 #: pcbnew/zone.cpp:1423
 msgid "Net"
@@ -15982,18 +15983,18 @@ msgstr ""
 "Errore nel caricare il modello di simulazione: impossibile trovare il "
 "modello base '%s' nella libreria '%s'"
 
-#: eeschema/sim/sim_model.cpp:692
+#: eeschema/sim/sim_model.cpp:724
 #, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
 msgstr "Pin di nome '%s' non trovato nel modello di simulazione di tipo '%s'"
 
-#: eeschema/sim/sim_model.cpp:782
+#: eeschema/sim/sim_model.cpp:814
 #, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
 msgstr ""
 "Parametro di nome '%s' non trovato nel modello di simulazione di tipo '%s'."
 
-#: eeschema/sim/sim_model.h:468
+#: eeschema/sim/sim_model.h:465
 #, c-format
 msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
@@ -16082,8 +16083,9 @@ msgid "Number of bits"
 msgstr "Numero di bit"
 
 #: eeschema/sim/sim_panel_base.cpp:92
+#, fuzzy
 msgid ""
-"This simulation provide no plots. Please refer to console window for results"
+"Simulation provided no plots. Please refer to console window for results."
 msgstr ""
 "Questa simulazione non fornisce grafici. Andare alla finestra console per i "
 "risultati"
@@ -19790,10 +19792,6 @@ msgstr "Reimposta tutti i colori in questo tema ai predefiniti in KiCad"
 msgid "This file is already open."
 msgstr "Questo file è già aperto."
 
-#: include/lib_table_grid.h:190
-msgid "Library Format"
-msgstr "Formato libreria"
-
 #: include/libeval_compiler/libeval_compiler.h:342
 msgid "Malformed expression"
 msgstr "Espressione malformata"
@@ -19825,6 +19823,10 @@ msgstr "Nascondi questo messaggio."
 #: include/wxstream_helper.h:49
 msgid "Failed to output data"
 msgstr "Fallita emissione dati"
+
+#: kicad/cli/command.h:32
+msgid "shows help message and exits"
+msgstr ""
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -20314,6 +20316,10 @@ msgid ""
 msgstr ""
 "Il file \"%s\"\n"
 "non sembra essere un file progetto KiCad valido."
+
+#: kicad/kicad_cli.cpp:284
+msgid "prints version information and exits"
+msgstr ""
 
 #: kicad/kicad_manager_frame.cpp:210
 msgid "Project Files"
@@ -23756,6 +23762,7 @@ msgid "Tessellating copper zones..."
 msgstr "Tassellazione zone in rame..."
 
 #: pcbnew/board.cpp:913
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "C.S."
 
@@ -23763,7 +23770,7 @@ msgstr "C.S."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:79
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 #: pcbnew/netinfo_item.cpp:106 pcbnew/pcb_draw_panel_gal.cpp:527
-#: pcbnew/tools/pcb_control.cpp:1357 pcbnew/widgets/appearance_controls.cpp:334
+#: pcbnew/tools/pcb_control.cpp:1365 pcbnew/widgets/appearance_controls.cpp:334
 #: pcbnew/widgets/panel_selection_filter.cpp:190
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -24874,7 +24881,7 @@ msgstr ""
 "Il file progetto associato %s è impossibile da caricare"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:194 pcbnew/files.cpp:639
-#: pcbnew/tools/pcb_control.cpp:1257
+#: pcbnew/tools/pcb_control.cpp:1265
 msgid "Loading PCB"
 msgstr "Caricamento C.S."
 
@@ -29155,6 +29162,7 @@ msgid "Plot format:"
 msgstr "Formato tracciatura:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -30610,6 +30618,10 @@ msgstr "Fallita l'apertura di cartelle per cercare librerie"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:904
 msgid "Warning: Duplicate Nicknames"
 msgstr "Attenzione: denominatori duplicati"
+
+#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:100
+msgid "LIbrary Format"
+msgstr "Formato libreria"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:167
 msgid "Path Substitutions"
@@ -33839,12 +33851,12 @@ msgstr "Forma 3D: %s"
 msgid "<none>"
 msgstr "<nessuno>"
 
-#: pcbnew/footprint.cpp:1068 pcbnew/tools/pcb_control.cpp:1359
+#: pcbnew/footprint.cpp:1068 pcbnew/tools/pcb_control.cpp:1367
 #, c-format
 msgid "Doc: %s"
 msgstr "Specifiche: %s"
 
-#: pcbnew/footprint.cpp:1069 pcbnew/tools/pcb_control.cpp:1360
+#: pcbnew/footprint.cpp:1069 pcbnew/tools/pcb_control.cpp:1368
 #, c-format
 msgid "Keywords: %s"
 msgstr "Parole chiave: %s"
@@ -40240,7 +40252,7 @@ msgstr ""
 msgid "Item locked."
 msgstr "Elemento bloccato."
 
-#: pcbnew/tools/pcb_control.cpp:791
+#: pcbnew/tools/pcb_control.cpp:799
 msgid ""
 "Warning: some pasted items were on layers which are not present in the "
 "current board.\n"
@@ -40250,11 +40262,11 @@ msgstr ""
 "scheda corrente.\n"
 "Questi elementi non possono essere incollati.\n"
 
-#: pcbnew/tools/pcb_control.cpp:976
+#: pcbnew/tools/pcb_control.cpp:984
 msgid "Invalid clipboard contents"
 msgstr "Contenuto appunti non valido"
 
-#: pcbnew/tools/pcb_control.cpp:1264
+#: pcbnew/tools/pcb_control.cpp:1272
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -40263,35 +40275,35 @@ msgstr ""
 "Errore nel caricamento della scheda.\n"
 "%s"
 
-#: pcbnew/tools/pcb_control.cpp:1355
+#: pcbnew/tools/pcb_control.cpp:1363
 msgid "Footprint Name"
 msgstr "Nome impronta"
 
-#: pcbnew/tools/pcb_control.cpp:1405
+#: pcbnew/tools/pcb_control.cpp:1413
 msgid "Resolved clearance"
 msgstr "Distanza risolta"
 
-#: pcbnew/tools/pcb_control.cpp:1410
+#: pcbnew/tools/pcb_control.cpp:1418
 msgid "Actual clearance"
 msgstr "Distanza effettiva"
 
-#: pcbnew/tools/pcb_control.cpp:1453
+#: pcbnew/tools/pcb_control.cpp:1461
 msgid "Resolved hole clearance"
 msgstr "Distanza foro risolta"
 
-#: pcbnew/tools/pcb_control.cpp:1458
+#: pcbnew/tools/pcb_control.cpp:1466
 msgid "Actual hole clearance"
 msgstr "Distanza foro effettiva"
 
-#: pcbnew/tools/pcb_control.cpp:1491
+#: pcbnew/tools/pcb_control.cpp:1499
 msgid "Resolved edge clearance"
 msgstr "Distanza bordo risolta"
 
-#: pcbnew/tools/pcb_control.cpp:1496
+#: pcbnew/tools/pcb_control.cpp:1504
 msgid "Resolved margin clearance"
 msgstr "Distanza margine risolta"
 
-#: pcbnew/tools/pcb_control.cpp:1507
+#: pcbnew/tools/pcb_control.cpp:1515
 msgid "Selected Items"
 msgstr "Elementi selezionati"
 
@@ -41384,6 +41396,15 @@ msgstr "pcbnew"
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite EDA per la progettazione di schemi elettrici e circuiti stampati"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+#, fuzzy
+msgid "Circuit board"
+msgstr "Circuito stampato"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""

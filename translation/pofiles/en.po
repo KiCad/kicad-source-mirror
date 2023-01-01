@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-23 20:09-0800\n"
+"POT-Creation-Date: 2023-01-01 15:11-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6285,6 +6285,13 @@ msgstr ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 
+msgid "Number of Units:"
+msgstr "Number of Units:"
+
+msgid "Enter the number of units for a symbol that contains more than one unit"
+msgstr ""
+"Enter the number of units for a symbol that contains more than one unit"
+
 msgid "Has alternate body style (De Morgan)"
 msgstr "Has alternate body style (De Morgan)"
 
@@ -6305,13 +6312,6 @@ msgstr ""
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
-
-msgid "Number of Units:"
-msgstr "Number of Units:"
-
-msgid "Enter the number of units for a symbol that contains more than one unit"
-msgstr ""
-"Enter the number of units for a symbol that contains more than one unit"
 
 msgid "Pin Text Options"
 msgstr "Pin Text Options"
@@ -6346,6 +6346,12 @@ msgstr "Margin between the pin name position and the symbol body."
 
 msgid "units"
 msgstr "units"
+
+msgid "Attributes"
+msgstr "Attributes"
+
+msgid "Exclude from simulation"
+msgstr "Exclude from simulation"
 
 msgid "Footprint filters:"
 msgstr "Footprint filters:"
@@ -7300,9 +7306,6 @@ msgstr "Model Pin"
 msgid "Pin Assignments"
 msgstr "Pin Assignments"
 
-msgid "Exclude from simulation"
-msgstr "Exclude from simulation"
-
 msgid "Simulation Model Editor"
 msgstr "Simulation Model Editor"
 
@@ -7417,17 +7420,11 @@ msgstr "Around X axis"
 msgid "Around Y axis"
 msgstr "Around Y axis"
 
-msgid "Pin Text"
-msgstr "Pin Text"
-
 msgid "Show pin numbers"
 msgstr "Show pin numbers"
 
 msgid "Show pin names"
 msgstr "Show pin names"
-
-msgid "Attributes"
-msgstr "Attributes"
 
 msgid "Exclude from bill of materials"
 msgstr "Exclude from bill of materials"
@@ -8177,6 +8174,18 @@ msgstr ""
 
 msgid "Libraries by Scope"
 msgstr "Libraries by Scope"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Nickname"
+msgstr "Nickname"
+
+msgid "Library Path"
+msgstr "Library Path"
+
+msgid "Library Format"
+msgstr "Library Format"
 
 msgid "Global Libraries"
 msgstr "Global Libraries"
@@ -10806,9 +10815,9 @@ msgid "Number of bits"
 msgstr "Number of bits"
 
 msgid ""
-"This simulation provide no plots. Please refer to console window for results"
+"Simulation provided no plots. Please refer to console window for results."
 msgstr ""
-"This simulation provide no plots. Please refer to console window for results"
+"Simulation provided no plots. Please refer to console window for results."
 
 msgid "Run/Stop Simulation"
 msgstr "Run/Stop Simulation"
@@ -10861,6 +10870,13 @@ msgstr "Another simulation is already running."
 msgid "Plot%u - "
 msgstr "Plot%u - "
 
+msgid "Could not apply tuned value(s):"
+msgstr "Could not apply tuned value(s):"
+
+#, c-format
+msgid "%s is not tunable"
+msgstr "%s is not tunable"
+
 msgid "Error: simulation type not defined!\n"
 msgstr "Error: simulation type not defined!\n"
 
@@ -10875,10 +10891,6 @@ msgstr " (phase)"
 
 msgid "Signal"
 msgstr "Signal"
-
-#, c-format
-msgid "%s not found."
-msgstr "%s not found."
 
 msgid "noname"
 msgstr "noname"
@@ -10898,6 +10910,9 @@ msgstr "Save Plot Data"
 msgid "You need to run plot-providing simulation first."
 msgstr "You need to run plot-providing simulation first."
 
+msgid "SPICE Netlist"
+msgstr "SPICE Netlist"
+
 msgid "Save changes to workbook?"
 msgstr "Save changes to workbook?"
 
@@ -10912,11 +10927,11 @@ msgstr ""
 "Simulation results:\n"
 "\n"
 
-msgid "Hide Signal"
-msgstr "Hide Signal"
+msgid "Remove Signal"
+msgstr "Remove Signal"
 
-msgid "Erase the signal from plot screen"
-msgstr "Erase the signal from plot screen"
+msgid "Remove the signal from the plot"
+msgstr "Remove the signal from the plot"
 
 msgid "Hide Cursor"
 msgstr "Hide Cursor"
@@ -11320,9 +11335,6 @@ msgstr "Symbol library '%s' is not writable."
 
 msgid "You must save to a different location."
 msgstr "You must save to a different location."
-
-msgid "Nickname"
-msgstr "Nickname"
 
 msgid "Save Symbol As"
 msgstr "Save Symbol As"
@@ -12449,11 +12461,11 @@ msgstr "Press <ESC> to cancel image creation."
 msgid "Could not load image from '%s'."
 msgstr "Could not load image from '%s'."
 
-msgid "No new hierarchical labels found."
-msgstr "No new hierarchical labels found."
-
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "Junction location contains no joinable wires and/or pins."
+
+msgid "No new hierarchical labels found."
+msgstr "No new hierarchical labels found."
 
 msgid "Press <ESC> to cancel item creation."
 msgstr "Press <ESC> to cancel item creation."
@@ -12683,10 +12695,6 @@ msgstr ""
 "\n"
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
-
-#, c-format
-msgid "Could not find Spice item with reference '%s'"
-msgstr "Could not find Spice item with reference '%s'"
 
 #, c-format
 msgid "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
@@ -13490,15 +13498,6 @@ msgstr "Reset all colors in this theme to the KiCad defaults"
 msgid "This file is already open."
 msgstr "This file is already open."
 
-msgid "Library Path"
-msgstr "Library Path"
-
-msgid "Library Format"
-msgstr "Library Format"
-
-msgid "Active"
-msgstr "Active"
-
 msgid "Malformed expression"
 msgstr "Malformed expression"
 
@@ -13511,17 +13510,20 @@ msgstr "untitled"
 msgid "Leave unchanged"
 msgstr "Leave unchanged"
 
-msgid "Hide this message."
-msgstr "Hide this message."
-
 msgid "Reset all settings on this page to their default"
 msgstr "Reset all settings on this page to their default"
 
 msgid "-- mixed values --"
 msgstr "-- mixed values --"
 
+msgid "Hide this message."
+msgstr "Hide this message."
+
 msgid "Failed to output data"
 msgstr "Failed to output data"
+
+msgid "shows help message and exits"
+msgstr "shows help message and exits"
 
 msgid "Output file name"
 msgstr "Output file name"
@@ -13869,6 +13871,9 @@ msgid ""
 msgstr ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
+
+msgid "prints version information and exits"
+msgstr "prints version information and exits"
 
 msgid "Project Files"
 msgstr "Project Files"
@@ -15037,52 +15042,6 @@ msgstr ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
-#, c-format
-msgid "Attenuation more than %f dB"
-msgstr "Attenuation more than %f dB"
-
-msgid "Pi"
-msgstr "Pi"
-
-msgid "Tee"
-msgstr "Tee"
-
-msgid "Bridged tee"
-msgstr "Bridged tee"
-
-msgid "Resistive splitter"
-msgstr "Resistive splitter"
-
-msgid "Attenuators"
-msgstr "Attenuators"
-
-msgid "Attenuation (a):"
-msgstr "Attenuation (a):"
-
-msgid "dB"
-msgstr "dB"
-
-msgid "Zin:"
-msgstr "Zin:"
-
-msgid "Zout:"
-msgstr "Zout:"
-
-msgid "Calculate"
-msgstr "Calculate"
-
-msgid "R1:"
-msgstr "R1:"
-
-msgid "R2:"
-msgstr "R2:"
-
-msgid "R3:"
-msgstr "R3:"
-
-msgid "Formula"
-msgstr "Formula"
-
 msgid "Note: Values are minimal values"
 msgstr "Note: Values are minimal values"
 
@@ -15327,107 +15286,6 @@ msgstr "4th Band"
 msgid "Multiplier"
 msgstr "Multiplier"
 
-msgid "Platinum"
-msgstr "Platinum"
-
-msgid "Gold"
-msgstr "Gold"
-
-msgid "Titanium"
-msgstr "Titanium"
-
-msgid "Stainless steel 18-9"
-msgstr "Stainless steel 18-9"
-
-msgid "Silver"
-msgstr "Silver"
-
-msgid "Mercury"
-msgstr "Mercury"
-
-msgid "Nickel"
-msgstr "Nickel"
-
-msgid "Copper"
-msgstr "Copper"
-
-msgid "Copper-Aluminium"
-msgstr "Copper-Aluminium"
-
-msgid "Brass"
-msgstr "Brass"
-
-msgid "Bronze"
-msgstr "Bronze"
-
-msgid "Tin"
-msgstr "Tin"
-
-msgid "Lead"
-msgstr "Lead"
-
-msgid "Aluminium-Copper"
-msgstr "Aluminium-Copper"
-
-msgid "Cast iron"
-msgstr "Cast iron"
-
-msgid "Carbon steel"
-msgstr "Carbon steel"
-
-msgid "Aluminium"
-msgstr "Aluminium"
-
-msgid "Cadmium"
-msgstr "Cadmium"
-
-msgid "Iron"
-msgstr "Iron"
-
-msgid "Chrome"
-msgstr "Chrome"
-
-msgid "Zinc"
-msgstr "Zinc"
-
-msgid "Manganese"
-msgstr "Manganese"
-
-msgid "Magnesium"
-msgstr "Magnesium"
-
-msgid "Copper (Cu)"
-msgstr "Copper (Cu)"
-
-msgid ""
-"This table shows the difference in electrochemical potential between various "
-"metals and alloys. A positive number indicates that the row is anodic and "
-"the column is cathodic.\n"
-"Galvanic corrosion affects different metals in contact and under certain "
-"conditions.\n"
-"The anode of an electrochemical pair gets oxidized and eaten away, while the "
-"cathode gets dissolved metals plated onto it but stays protected.\n"
-"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
-"of a third interface metal in between the main pair(ie the ENIG surface "
-"finish)."
-msgstr ""
-"This table shows the difference in electrochemical potential between various "
-"metals and alloys. A positive number indicates that the row is anodic and "
-"the column is cathodic.\n"
-"Galvanic corrosion affects different metals in contact and under certain "
-"conditions.\n"
-"The anode of an electrochemical pair gets oxidized and eaten away, while the "
-"cathode gets dissolved metals plated onto it but stays protected.\n"
-"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
-"of a third interface metal in between the main pair(ie the ENIG surface "
-"finish)."
-
-msgid "Threshold voltage:"
-msgstr "Threshold voltage:"
-
-msgid "mV"
-msgstr "mV"
-
 msgid "Voltage > 500 V:"
 msgstr "Voltage > 500 V:"
 
@@ -15506,6 +15364,12 @@ msgstr ""
 "*  A7 - External Component lead termination, with conformal coating (any "
 "elevation)"
 
+msgid "Exact"
+msgstr "Exact"
+
+msgid "Not worth using"
+msgstr "Not worth using"
+
 msgid "Inputs"
 msgstr "Inputs"
 
@@ -15551,6 +15415,9 @@ msgstr "3R solution:"
 msgid "4R solution:"
 msgstr "4R solution:"
 
+msgid "Calculate"
+msgstr "Calculate"
+
 msgid "Current calculation is underestimated due to long fusing time."
 msgstr "Current calculation is underestimated due to long fusing time."
 
@@ -15571,6 +15438,107 @@ msgstr "Time to fuse:"
 
 msgid "s"
 msgstr "s"
+
+msgid "Platinum"
+msgstr "Platinum"
+
+msgid "Gold"
+msgstr "Gold"
+
+msgid "Titanium"
+msgstr "Titanium"
+
+msgid "Stainless steel 18-9"
+msgstr "Stainless steel 18-9"
+
+msgid "Silver"
+msgstr "Silver"
+
+msgid "Mercury"
+msgstr "Mercury"
+
+msgid "Nickel"
+msgstr "Nickel"
+
+msgid "Copper"
+msgstr "Copper"
+
+msgid "Copper-Aluminium"
+msgstr "Copper-Aluminium"
+
+msgid "Brass"
+msgstr "Brass"
+
+msgid "Bronze"
+msgstr "Bronze"
+
+msgid "Tin"
+msgstr "Tin"
+
+msgid "Lead"
+msgstr "Lead"
+
+msgid "Aluminium-Copper"
+msgstr "Aluminium-Copper"
+
+msgid "Cast iron"
+msgstr "Cast iron"
+
+msgid "Carbon steel"
+msgstr "Carbon steel"
+
+msgid "Aluminium"
+msgstr "Aluminium"
+
+msgid "Cadmium"
+msgstr "Cadmium"
+
+msgid "Iron"
+msgstr "Iron"
+
+msgid "Chrome"
+msgstr "Chrome"
+
+msgid "Zinc"
+msgstr "Zinc"
+
+msgid "Manganese"
+msgstr "Manganese"
+
+msgid "Magnesium"
+msgstr "Magnesium"
+
+msgid ""
+"This table shows the difference in electrochemical potential between various "
+"metals and alloys. A positive number indicates that the row is anodic and "
+"the column is cathodic.\n"
+"Galvanic corrosion affects different metals in contact and under certain "
+"conditions.\n"
+"The anode of an electrochemical pair gets oxidized and eaten away, while the "
+"cathode gets dissolved metals plated onto it but stays protected.\n"
+"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
+"of a third interface metal in between the main pair(ie the ENIG surface "
+"finish)."
+msgstr ""
+"This table shows the difference in electrochemical potential between various "
+"metals and alloys. A positive number indicates that the row is anodic and "
+"the column is cathodic.\n"
+"Galvanic corrosion affects different metals in contact and under certain "
+"conditions.\n"
+"The anode of an electrochemical pair gets oxidized and eaten away, while the "
+"cathode gets dissolved metals plated onto it but stays protected.\n"
+"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
+"of a third interface metal in between the main pair(ie the ENIG surface "
+"finish)."
+
+msgid "Copper (Cu)"
+msgstr "Copper (Cu)"
+
+msgid "Threshold voltage:"
+msgstr "Threshold voltage:"
+
+msgid "mV"
+msgstr "mV"
 
 msgid "PCB Calculator data file"
 msgstr "PCB Calculator data file"
@@ -15617,27 +15585,8 @@ msgstr "Standard Type"
 msgid "3 Terminal Type"
 msgstr "3 Terminal Type"
 
-msgid "Vout:"
-msgstr "Vout:"
-
-msgid "Vref:"
-msgstr "Vref:"
-
-msgid ""
-"The internal reference voltage of the regulator.\n"
-"Should not be 0."
-msgstr ""
-"The internal reference voltage of the regulator.\n"
-"Should not be 0."
-
-msgid "Iadj:"
-msgstr "Iadj:"
-
-msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "For 3 terminal regulators only, the  Adjust pin current."
-
-msgid "uA"
-msgstr "µA"
+msgid "Formula"
+msgstr "Formula"
 
 msgid "Regulator"
 msgstr "Regulator"
@@ -15665,6 +15614,68 @@ msgstr "Enter a new item to the current list of available regulators"
 
 msgid "Remove an item from the current list of available regulators"
 msgstr "Remove an item from the current list of available regulators"
+
+msgid "R1:"
+msgstr "R1:"
+
+msgid "R2:"
+msgstr "R2:"
+
+msgid "Vout:"
+msgstr "Vout:"
+
+msgid "Vref:"
+msgstr "Vref:"
+
+msgid ""
+"The internal reference voltage of the regulator.\n"
+"Should not be 0."
+msgstr ""
+"The internal reference voltage of the regulator.\n"
+"Should not be 0."
+
+msgid "Iadj:"
+msgstr "Iadj:"
+
+msgid "For 3 terminal regulators only, the  Adjust pin current."
+msgstr "For 3 terminal regulators only, the  Adjust pin current."
+
+msgid "uA"
+msgstr "µA"
+
+#, c-format
+msgid "Attenuation more than %f dB"
+msgstr "Attenuation more than %f dB"
+
+msgid "Pi"
+msgstr "Pi"
+
+msgid "Tee"
+msgstr "Tee"
+
+msgid "Bridged tee"
+msgstr "Bridged tee"
+
+msgid "Resistive splitter"
+msgstr "Resistive splitter"
+
+msgid "Attenuators"
+msgstr "Attenuators"
+
+msgid "Attenuation (a):"
+msgstr "Attenuation (a):"
+
+msgid "dB"
+msgstr "dB"
+
+msgid "Zin:"
+msgstr "Zin:"
+
+msgid "Zout:"
+msgstr "Zout:"
+
+msgid "R3:"
+msgstr "R3:"
 
 msgid "Temperature rise"
 msgstr "Temperature rise"
@@ -15947,12 +15958,6 @@ msgstr "Volt"
 
 msgid "Regulator Parameters"
 msgstr "Regulator Parameters"
-
-msgid "Exact"
-msgstr "Exact"
-
-msgid "Not worth using"
-msgstr "Not worth using"
 
 msgid ""
 "E-series are defined in IEC 60063.\n"
@@ -21320,6 +21325,9 @@ msgstr "Failed to open directories to look for libraries"
 
 msgid "Warning: Duplicate Nicknames"
 msgstr "Warning: Duplicate Nicknames"
+
+msgid "LIbrary Format"
+msgstr "LIbrary Format"
 
 msgid "Path Substitutions"
 msgstr "Path Substitutions"
@@ -29479,6 +29487,30 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Pin Text"
+#~ msgstr "Pin Text"
+
+#~ msgid ""
+#~ "This simulation provide no plots. Please refer to console window for "
+#~ "results"
+#~ msgstr ""
+#~ "This simulation provide no plots. Please refer to console window for "
+#~ "results"
+
+#, c-format
+#~ msgid "%s not found."
+#~ msgstr "%s not found."
+
+#~ msgid "Hide Signal"
+#~ msgstr "Hide Signal"
+
+#~ msgid "Erase the signal from plot screen"
+#~ msgstr "Erase the signal from plot screen"
+
+#, c-format
+#~ msgid "Could not find Spice item with reference '%s'"
+#~ msgstr "Could not find Spice item with reference '%s'"
 
 #~ msgid "Break Wire"
 #~ msgstr "Break Wire"
