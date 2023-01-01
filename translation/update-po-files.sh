@@ -59,6 +59,7 @@ CSVFILE=${PWD}/i18n_status.csv
 POTDIRS=`cat $LOCALDIR/POTDIRS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
 
 cd $SOURCEDIR
+NPROC=`nproc --ignore=1`
 
 #Generate/update template pot file
 find $POTDIRS -name '*.cpp' -or -name '*.h' -or -name '*.xml.in' -or -name '*.desktop.in' |
@@ -89,21 +90,17 @@ fi
 echo "Writing summary to ${CSVFILE}"
 echo "LANG;TRANSLATED;FUZZY;UNTRANSLATED" > "${CSVFILE}"
 
-for i in $LINGUAS
-do
-  echo "## $i"
-  if [ "$i" = "en" ] ; then
-    msgmerge --no-location --no-fuzzy-matching --force-po $LOCALDIR/pofiles/$i.po $LOCALDIR/pofiles/kicad.pot -o $LOCALDIR/pofiles/$i.po 2> /dev/null
-    msgen $LOCALDIR/pofiles/$i.po -o $LOCALDIR/pofiles/$i.po.tmp && mv $LOCALDIR/pofiles/$i.po.tmp $LOCALDIR/pofiles/$i.po
+translate () {
+  if [ "$1" = "en" ] ; then
+    msgmerge --no-location --no-fuzzy-matching --force-po $LOCALDIR/pofiles/$1.po $LOCALDIR/pofiles/kicad.pot -o $LOCALDIR/pofiles/$1.po 2> /dev/null
+    msgen $LOCALDIR/pofiles/$1.po -o $LOCALDIR/pofiles/$1.po.tmp && mv $LOCALDIR/pofiles/$1.po.tmp $LOCALDIR/pofiles/$1.po
   else
-    msgmerge --force-po $LOCALDIR/pofiles/$i.po $LOCALDIR/pofiles/kicad.pot -o $LOCALDIR/pofiles/$i.po 2> /dev/null
+    msgmerge --force-po $LOCALDIR/pofiles/$1.po $LOCALDIR/pofiles/kicad.pot -o $LOCALDIR/pofiles/$1.po 2> /dev/null
   fi
-  msgfmt --statistics $LOCALDIR/pofiles/$i.po -o $LOCALDIR/pofiles/messages.mo 2>&1 >>/dev/null |
+
+  msgfmt --statistics $LOCALDIR/pofiles/$1.po -o $LOCALDIR/pofiles/$1_messages.mo 2>&1 >>/dev/null |
     while IFS=",." read A B C D ; do
-      echo $A
-      echo $B
-      echo $C
-      echo $D
+      echo -e "## $1\n$A\n$B\n$C\n$D"
 
       for STRING in "$A" "$B" "$C" "$D" ; do
         STRING=${STRING# }
@@ -120,15 +117,23 @@ do
         "" )
           ;;
         * )
-          echo >&2 "$0: Unknown format of \"msgfmt --statistics $LOCALDIR/$i/kicad.po \": \"$STRING\""
+          echo >&2 "$0: Unknown format of \"msgfmt --statistics $LOCALDIR/$1/kicad.po \": \"$STRING\""
           exit 1
           ;;
         esac
       done
-      echo "$i;${TRANSLATED};${FUZZY};${UNTRANSLATED}">>"${CSVFILE}"
+      echo "$1;${TRANSLATED};${FUZZY};${UNTRANSLATED}">>"${CSVFILE}"
     done
-    rm $LOCALDIR/pofiles/messages.mo
+    rm $LOCALDIR/pofiles/$1_messages.mo
+}
+
+for i in $LINGUAS
+do
+  { 
+    translate $i 
+  } &
 done
+wait
 
 if [ "$PLOT" = "1" ]; then
   cd $LOCALDIR
