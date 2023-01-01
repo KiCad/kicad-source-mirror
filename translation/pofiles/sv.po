@@ -13308,11 +13308,11 @@ msgstr "Privat"
 
 #: eeschema/lib_pin.cpp:1161 pcbnew/dialogs/dialog_pad_properties_base.cpp:1456
 msgid "Pos X"
-msgstr "Pos X"
+msgstr "Position X"
 
 #: eeschema/lib_pin.cpp:1162 pcbnew/dialogs/dialog_pad_properties_base.cpp:1457
 msgid "Pos Y"
-msgstr "Pos Y"
+msgstr "Position Y"
 
 #: eeschema/lib_pin.cpp:1331
 #, c-format
@@ -14158,9 +14158,8 @@ msgstr ""
 "Vänligen kontrollera det importerade kretsschemat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
-#, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "Strömförsörjningsport med okänd stil har importerats med typ 'Bar'."
+msgstr "Strömförsörjningsport med okänd stil har importerats som typ 'Bar'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2332
 #, c-format
@@ -31550,7 +31549,6 @@ msgid "Check rule syntax"
 msgstr "Kontrollera regelsyntax"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -31899,6 +31897,7 @@ msgstr ""
 "### Typer av begränsningar\n"
 "\n"
 " * annular\\_width\n"
+" * assertion\n"
 " * clearance\n"
 " * connection\\_width\n"
 " * courtyard_clearance\n"
