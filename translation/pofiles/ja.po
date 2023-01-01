@@ -1212,9 +1212,8 @@ msgid "Open..."
 msgstr "開く..."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
-#, fuzzy
 msgid "Load source image"
-msgstr "ユーザー画像を表示"
+msgstr "元となる画像をロード"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1331,9 +1330,8 @@ msgid "bits"
 msgstr "ビット"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
-#, fuzzy
 msgid "Load Source Image"
-msgstr "イメージの選択"
+msgstr "元となる画像をロード"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
 #, fuzzy
@@ -5479,9 +5477,9 @@ msgid "Unrecognized function '%s'"
 msgstr "認識されないファンクション '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "予期されない '%s'"
+msgstr "'%s'に対して想定外の単位です"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -5945,9 +5943,8 @@ msgid "Delete clicked items"
 msgstr "クリックしたアイテムを削除"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "リアル モードの切り替え"
+msgstr "円弧編集モードの切り替え"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
@@ -8388,9 +8385,8 @@ msgid "Checking for unresolved variables..."
 msgstr "未解決の変数をチェック..."
 
 #: eeschema/dialogs/dialog_erc.cpp:534
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "ゾーンをチェック中..."
+msgstr "SPICEモデルをチェック中..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
@@ -11399,7 +11395,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:209
 msgid "Do not populate"
-msgstr "移入しないでください"
+msgstr "未実装にする"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:221
 msgid "Update Symbol from Library..."
@@ -12534,19 +12530,19 @@ msgid "Unknown netlist format.\n"
 msgstr "未知のフォーマットのネットリストです。\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "シンボル %s を '%s' から '%s' に変更します"
+msgstr "シンボル '%s' の ユニット%d を '%s' にプロット\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "シンボル %s を '%s' から '%s' に変更します"
+msgstr "シンボル '%s' を '%s' にプロット\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "'%s' をパース出来ません ('%s' 中)"
+msgstr "出力先 '%s' を開けませんでした"
 
 #: eeschema/eeschema_jobs_handler.cpp:435
 #: eeschema/eeschema_jobs_handler.cpp:495 pcbnew/pcbnew_jobs_handler.cpp:599
@@ -12639,24 +12635,26 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "%s と %s に関連付けられた異なったフットプリント"
 
 #: eeschema/erc.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "シンボル \"%s\" は \"%s\" 内に既に存在します。"
+msgstr "シンボル %s のユニット %s は配置されていません"
 
 #: eeschema/erc.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "シンボルが定義しているよりも多くのユニットがある"
+msgstr ""
+"電源入力ピンがシンボル %s の配置されていないユニット %s に含まれています。"
 
 #: eeschema/erc.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "シンボルが定義しているよりも多くのユニットがある"
+msgstr "入力ピンがシンボル %s の配置されていないユニット %s に含まれています。"
 
 #: eeschema/erc.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "シンボルが定義しているよりも多くのユニットがある"
+msgstr ""
+"双方向ピンがシンボル %s の配置されていないユニット %s に含まれています。"
 
 #: eeschema/erc.cpp:583
 msgid "Pins with 'no connection' type are connected"
@@ -12861,12 +12859,10 @@ msgid "Vertical"
 msgstr "垂直"
 
 #: eeschema/fields_grid_table.cpp:341
-#, fuzzy
 msgid "Show Name"
-msgstr "ネットを表示"
+msgstr "名前を表示"
 
 #: eeschema/fields_grid_table.cpp:352
-#, fuzzy
 msgid "Allow Autoplacement"
 msgstr "自動配置を許可する"
 
@@ -13223,14 +13219,14 @@ msgid "Pin %s [%s, %s]"
 msgstr "ピン %s [%s, %s]"
 
 #: eeschema/lib_pin.cpp:1349
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
-msgstr "ピン %s [%s, %s, %s]"
+msgstr "非表示ピン %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1357
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s]"
-msgstr "ピン %s [%s, %s]"
+msgstr "非表示ピン %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:457 eeschema/sch_shape.cpp:407
 #, c-format
@@ -13400,21 +13396,23 @@ msgstr "設定 (&r)"
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr "'%s' の名前を生成できませんでした: UINT64_MAX を超過しました"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:274
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
-msgstr "シミュレーション モデル ライブラリー %s のロード中にエラーしました:%s"
+msgstr ""
+"シミュレーション モデル を シンボル '%s' から読み込み中にエラーしました:\n"
+"%s"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:408
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model library '%s':\n"
 "%s"
-msgstr "シミュレーション モデル ライブラリー %s のロード中にエラーしました:%s"
+msgstr ""
+"シミュレーション モデル ライブラリー %s の読み込み中にエラーしました:\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:467
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:470
@@ -15720,16 +15718,16 @@ msgstr ""
 "シミュレーション モデルの読み込み中にエラーが発生しました: ベース モデル "
 "'%s' がライブラリ '%s' 内に見つかりませんでした"
 
-#: eeschema/sim/sim_model.cpp:691 eeschema/sim/sim_model.cpp:700
-#, fuzzy, c-format
+#: eeschema/sim/sim_model.cpp:700
+#, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
-msgstr "シミュレーションモデルのパラメーター '%s' が見つかりません"
+msgstr "シミュレーションモデルの '%s' のピン (タイプ '%s'の) が見つかりません"
 
-#: eeschema/sim/sim_model.cpp:781 eeschema/sim/sim_model.cpp:816
-#: eeschema/sim/sim_model.cpp:833
-#, fuzzy, c-format
+#: eeschema/sim/sim_model.cpp:816 eeschema/sim/sim_model.cpp:833
+#, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
-msgstr "シミュレーションモデルのパラメーター '%s' が見つかりません"
+msgstr ""
+"シミュレーションモデルのパラメーター '%s' (タイプ '%s'の) が見つかりません"
 
 #: eeschema/sim/sim_model.h:468 eeschema/sim/sim_model.h:467
 #, c-format
@@ -15740,20 +15738,20 @@ msgstr ""
 "シミュレーション モデル タイプは、その基本クラス '%s' と同じである必要があり"
 "ますが、'%s' です"
 
-#: eeschema/sim/sim_model_kibis.cpp:76 eeschema/sim/sim_model_kibis.cpp:77
-#, fuzzy, c-format
+#: eeschema/sim/sim_model_kibis.cpp:77
+#, c-format
 msgid "Invalid IBIS file '%s'"
-msgstr "無効なIBISモデル '%s'"
+msgstr "'%s' は無効なIBISファイルです"
 
 #: eeschema/sim/sim_model_kibis.cpp:81 eeschema/sim/sim_model_kibis.cpp:82
 #, c-format
 msgid "Could not find IBIS component '%s'"
 msgstr "IBISコンポーネント '%s' が見つかりません"
 
-#: eeschema/sim/sim_model_kibis.cpp:87 eeschema/sim/sim_model_kibis.cpp:88
-#, fuzzy, c-format
+#: eeschema/sim/sim_model_kibis.cpp:88
+#, c-format
 msgid "Invalid IBIS component '%s'"
-msgstr "無効なIBISモデル '%s'"
+msgstr "'%s' は無効なIBISコンポーネントです"
 
 #: eeschema/sim/sim_model_kibis.cpp:91 eeschema/sim/sim_model_kibis.cpp:92
 #, c-format
@@ -15861,15 +15859,13 @@ msgstr "調整"
 msgid "Tune component values"
 msgstr "コンポーネント定数を調整"
 
-#: eeschema/sim/sim_plot_frame.cpp:167 eeschema/sim/sim_plot_frame.cpp:175
-#, fuzzy
+#: eeschema/sim/sim_plot_frame.cpp:175
 msgid "Sim Command"
 msgstr "コマンド"
 
-#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame.cpp:176
-#, fuzzy
+#: eeschema/sim/sim_plot_frame.cpp:176
 msgid "Simulation command and settings"
-msgstr "シミュレーションのパラメーターと設定"
+msgstr "シミュレーションのコマンドと設定"
 
 #: eeschema/sim/sim_plot_frame.cpp:348 eeschema/sim/sim_plot_frame_base.h:129
 #: eeschema/sim/sim_plot_frame.cpp:356
@@ -15908,9 +15904,9 @@ msgstr "エラー: シミュレーション タイプが定義されていませ
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "エラー: シミュレーション タイプはプロットをサポートしていません!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:731 eeschema/sim/sim_plot_frame.cpp:742
+#: eeschema/sim/sim_plot_frame.cpp:742
 msgid " (mag)"
-msgstr ""
+msgstr " (利得)"
 
 #: eeschema/sim/sim_plot_frame.cpp:744
 msgid " (phase)"
@@ -17178,9 +17174,8 @@ msgid "Add Power"
 msgstr "電源を追加"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "シンボルを追加"
+msgstr "電源シンボルを追加"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -18317,7 +18312,7 @@ msgid "Edit Page Number"
 msgstr "ページ番号を編集"
 
 #: eeschema/widgets/hierarchy_pane.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Enter page number for sheet path %s"
 msgstr "シートパス %s のページ番号を入力します"
 
@@ -19408,19 +19403,16 @@ msgid "Show in Differential Mode"
 msgstr "差動モードで表示"
 
 #: gerbview/tools/gerbview_actions.cpp:191
-#, fuzzy
 msgid "Show layers in differential compare mode"
-msgstr "差動モードでレイヤーを表示"
+msgstr "差分比較モードでレイヤーを表示"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show in XOR Mode"
-msgstr "3D モデルを表示 (&o)"
+msgstr "XOR モードで表示"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show layers in exclusive-or compare mode"
-msgstr "差動 (compare) モードでレイヤーを表示"
+msgstr "XOR比較モードでレイヤーを表示"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Flip Gerber View"
@@ -19621,7 +19613,6 @@ msgstr "データの出力に失敗しました"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
-#, fuzzy
 msgid "Output file name"
 msgstr "出力ファイル名"
 
@@ -19632,9 +19623,9 @@ msgid "Input file"
 msgstr "入力ファイル"
 
 #: kicad/cli/command_export_pcb_base.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name \"%s\"\n"
-msgstr "不正なプロパティ名"
+msgstr "\"%s\" は不正なレイヤー名です\n"
 
 #: kicad/cli/command_export_pcb_base.cpp:96
 msgid ""
@@ -19694,9 +19685,8 @@ msgid "Precision of gerber coordinates (5 or 6)"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_drill.cpp:109
-#, fuzzy
 msgid "Output must be a directory\n"
-msgstr "出力ディレクトリー:"
+msgstr "出力先はディレクトリーである必要があります\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
 msgid "Invalid drill format\n"
@@ -19705,24 +19695,20 @@ msgstr "不正なドリル フォーマットです\n"
 #: kicad/cli/command_export_pcb_drill.cpp:141
 #: kicad/cli/command_export_pcb_dxf.cpp:97
 #: kicad/cli/command_export_pcb_pos.cpp:140
-#, fuzzy
 msgid "Invalid units specified\n"
-msgstr "不正な単位の接頭辞"
+msgstr "不正な単位が指定されています\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:165
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "不正なフットプリントが指定されました"
+msgstr "不正なゼロの扱いが指定されています\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:193
-#, fuzzy
 msgid "Invalid map format specified\n"
-msgstr "不正なフットプリントが指定されました"
+msgstr "不正なマップファイル形式が指定されています\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
-#, fuzzy
 msgid "Invalid origin mode specified\n"
-msgstr "不正なフットプリントが指定されました"
+msgstr "不正な原点の設定が指定されました\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:220
 #: kicad/cli/command_export_pcb_gerber.cpp:109
@@ -19762,14 +19748,12 @@ msgstr "基板ファイルは存在しないかアクセス不可です\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:49
-#, fuzzy
 msgid "Include the border and title block"
-msgstr "境界線とタイトル ブロックをプロット"
+msgstr "境界線とタイトル ブロックを含める"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:55
-#, fuzzy
 msgid "Do not use the extended X2 format"
-msgstr "拡張 X2 フォーマットを使用 (推奨)"
+msgstr "拡張 X2 フォーマットを使用しない"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:60
 #, fuzzy
@@ -19782,9 +19766,8 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "シルクをレジストで抜く"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
-#, fuzzy
 msgid "Disable aperature macros"
-msgstr "アパーチャ マクロを無効化 (非推奨)"
+msgstr "アパーチャ マクロを無効化"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
@@ -19854,9 +19837,8 @@ msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
 msgstr "スルーホールのあるフットプリントを全て除外する"
 
 #: kicad/cli/command_export_pcb_pos.cpp:80
-#, fuzzy
 msgid "Include board edge layer (gerber only)"
-msgstr "基板外形レイヤーを含む"
+msgstr "基板外形レイヤーを含める (ガーバーのみ)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:124
 #: kicad/cli/command_export_sch_netlist.cpp:81
@@ -19868,9 +19850,8 @@ msgid "\"both\" not supported for gerber format\n"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:166
-#, fuzzy
 msgid "Invalid side specified\n"
-msgstr "不正なフットプリントが指定されました"
+msgstr "不正な面が指定されました\n"
 
 #: kicad/cli/command_export_pcb_step.cpp:48
 msgid "Use Drill Origin for output origin"
@@ -19891,9 +19872,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_export_pcb_step.cpp:68
-#, fuzzy
 msgid "Overwrite output file"
-msgstr "出力ファイルで上書き"
+msgstr "出力ファイルを上書き"
 
 #: kicad/cli/command_export_pcb_step.cpp:73
 #, fuzzy
@@ -21602,7 +21582,6 @@ msgstr ""
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21619,10 +21598,11 @@ msgid ""
 msgstr ""
 "### &#x03c0;型減衰器\n"
 "___a___ 減衰量 (dB)<br>\n"
-"__Zin__ 要求される入力インピーダンス (&#x2126;)<br>\n"
-"__Zout__ 要求される出力インピーダンス (&#x2126;)<br>\n"
+"___Z<sub>in</sub>___ 要求される入力インピーダンス (&#x2126;)<br>\n"
+"___Z<sub>out</sub>___ 要求される出力インピーダンス (&#x2126;)<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
 "___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
 "sub> / L)___<br>\n"
@@ -21648,7 +21628,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21664,11 +21643,12 @@ msgid ""
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
 "### T型減衰器\n"
-"__a__ 減衰量 (dB)\n"
-"__Zin__ 要求される入力インピーダンス (&#x2126;)<br>\n"
-"__Zout__ 要求される出力インピーダンス (&#x2126;)<br>\n"
+"___a___ 減衰量 (dB)\n"
+"___Z<sub>in</sub>___ 要求される入力インピーダンス (&#x2126;)<br>\n"
+"___Z<sub>out</sub>___ 要求される出力インピーダンス (&#x2126;)<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
 "___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</"
 "sub>) / (L&minus;1)___<br>\n"
@@ -21927,14 +21907,12 @@ msgid "AWG30"
 msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
-#, fuzzy
 msgid "Electrical Resistivity in Ohm*m at 20 deg C"
-msgstr "Ω・m 単位表記での電気抵抗率"
+msgstr "20℃でのΩ・m 単位表記での電気抵抗率"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:236
-#, fuzzy
 msgid "Temperature coefficient"
-msgstr "温度上昇"
+msgstr "温度係数"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
@@ -21958,9 +21936,8 @@ msgid "Conductor resistivity:"
 msgstr "導体の抵抗率:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
-#, fuzzy
 msgid "Specific resistance in Ohm*m at 20 deg C"
-msgstr "単位 Ω・m の比抵抗"
+msgstr "20℃での単位 Ω・m の比抵抗"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:103
@@ -21981,9 +21958,8 @@ msgid "ohm-meter"
 msgstr "Ω•m"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:91
-#, fuzzy
 msgid "Temperature Coefficient:"
-msgstr "温度上昇:"
+msgstr "温度係数:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
@@ -29215,9 +29191,8 @@ msgid "When disabled, the color from the chosen layer will be used to plot."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:391
-#, fuzzy
 msgid "PDF Options"
-msgstr "DXF オプション"
+msgstr "PDF オプション"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
 msgid "Run DRC..."
@@ -30144,9 +30119,8 @@ msgid ""
 msgstr "チェックすろと、パッドをフットプリントから移動することができます。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:45
-#, fuzzy
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "水平、垂直、45度に制限"
+msgstr "操作を水平、垂直、45度に制限"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:51
 msgid "Step for &rotate commands:"
@@ -30159,9 +30133,8 @@ msgstr ""
 "ます。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "位置モード:"
+msgstr "円弧編集モード:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
 #, fuzzy
@@ -33354,7 +33327,6 @@ msgstr ""
 "した。**\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:331
-#, fuzzy
 msgid "Writing STEP file\n"
 msgstr "STEPファイルを書き込み\n"
 
@@ -35008,9 +34980,8 @@ msgid "Error loading project footprint libraries."
 msgstr "プロジェクトのフットプリント ライブラリーをロード中にエラーしました。"
 
 #: pcbnew/pcb_bitmap.cpp:232
-#, fuzzy
 msgid "Bitmap Properties"
-msgstr "ピン プロパティ"
+msgstr "ビットマップ プロパティ"
 
 #: pcbnew/pcb_bitmap.cpp:239
 #, fuzzy
@@ -35363,9 +35334,9 @@ msgstr ""
 "フットプリント ライブラリー \"%s\" はデフォルト検索パス内に存在しません。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "フットプリント %s を '%s' から '%s' に変更"
+msgstr "フットプリント '%s' '%s' にプロット\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -38171,10 +38142,9 @@ msgstr "少なくとも2つの直線の配線セグメントを選択する必�
 msgid "Fillet Lines"
 msgstr "ゾーンを塗り潰し"
 
-#: pcbnew/tools/edit_tool.cpp:1312 pcbnew/tools/edit_tool.cpp:1310
-#, fuzzy
+#: pcbnew/tools/edit_tool.cpp:1310
 msgid "Unable to fillet the selected lines."
-msgstr "選択した配線セグメントをフィレットできません。"
+msgstr "選択した配線をフィレットできません。"
 
 #: pcbnew/tools/edit_tool.cpp:1314 pcbnew/tools/edit_tool.cpp:1312
 #, fuzzy
@@ -38218,13 +38188,13 @@ msgid "Pack footprints"
 msgstr "フットプリントをロックする"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %ld of %ld)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"パッド %s%d 上でクリック\n"
-"<esc> を押してキャンセル、またはダブル クリックしてコミット"
+"クリックで %s を配置 (%ld 個目のアイテム:%ld個中)\n"
+"<esc> を押すとすべてキャンセル、ダブル クリックすると完了"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
 #, fuzzy, c-format
@@ -39216,9 +39186,8 @@ msgid "Switch to Schematic Editor"
 msgstr "回路図エディターに切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Open in schematic editor"
-msgstr "回路図を開く"
+msgstr "回路図エディターで開く"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Local Ratsnest"
@@ -39241,14 +39210,12 @@ msgid "Show/hide the appearance manager"
 msgstr "外観マネージャーの表示/非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show Properties Manager"
-msgstr "プロパティを表示"
+msgstr "プロパティマネージャーを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show/hide the properties manager"
-msgstr "プロパティの表示/非表示"
+msgstr "プロパティ マネージャーの表示/非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Flip Board View"
