@@ -108,6 +108,7 @@ PGM_KICAD& PgmTop()
     return program;
 }
 
+
 struct COMMAND_ENTRY
 {
     CLI::COMMAND* handler;
@@ -118,6 +119,7 @@ struct COMMAND_ENTRY
     COMMAND_ENTRY( CLI::COMMAND* aHandler, std::vector<COMMAND_ENTRY> aSub ) :
             handler( aHandler ), subCommands( aSub ){};
 };
+
 
 static CLI::EXPORT_PCB_DRILL_COMMAND     exportPcbDrillCmd{};
 static CLI::EXPORT_PCB_DXF_COMMAND       exportPcbDxfCmd{};
@@ -143,6 +145,7 @@ static CLI::SYM_COMMAND                  symCmd{};
 static CLI::SYM_EXPORT_COMMAND           symExportCmd{};
 static CLI::SYM_EXPORT_SVG_COMMAND       symExportSvgCmd{};
 static CLI::SYM_UPGRADE_COMMAND          symUpgradeCmd{};
+
 
 static std::vector<COMMAND_ENTRY> commandStack = {
     {
@@ -270,8 +273,6 @@ bool PGM_KICAD::OnPgmInit()
     return true;
 }
 
-#define ARG_VERSION "--version"
-#define ARG_HELP    "--help"
 
 int PGM_KICAD::OnPgmRun()
 {
@@ -284,9 +285,9 @@ int PGM_KICAD::OnPgmRun()
             .implicit_value( true )
             .nargs( 0 );
 
-    argParser.add_argument( "-h", ARG_HELP )
+    argParser.add_argument( ARG_HELP_SHORT, ARG_HELP )
             .default_value( false )
-            .help( UTF8STDSTR( _( "shows help message and exits" ) ) )
+            .help( UTF8STDSTR( ARG_HELP_DESC ) )
             .implicit_value( true )
             .nargs( 0 );
 
@@ -316,13 +317,14 @@ int PGM_KICAD::OnPgmRun()
         // arg parser uses a stream overload for printing the help
         // we want to intercept so we can wxString the utf8 contents
         // because on windows our terminal codepage might not be utf8
-        std::stringstream ss;
         if( cliCmd )
-            ss << cliCmd->handler->GetArgParser();
+            cliCmd->handler->PrintHelp();
         else
+        {
+            std::stringstream ss;
             ss << argParser;
-
-        wxPrintf( FROM_UTF8( ss.str().c_str() ) );
+            wxPrintf( FROM_UTF8( ss.str().c_str() ) );
+        }
 
         return CLI::EXIT_CODES::ERR_ARGS;
     }

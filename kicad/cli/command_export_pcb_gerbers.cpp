@@ -51,9 +51,9 @@ CLI::EXPORT_PCB_GERBERS_COMMAND::EXPORT_PCB_GERBERS_COMMAND() :
 }
 
 
-int CLI::EXPORT_PCB_GERBERS_COMMAND::Perform( KIWAY& aKiway )
+int CLI::EXPORT_PCB_GERBERS_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int exitCode = EXPORT_PCB_BASE_COMMAND::Perform( aKiway );
+    int exitCode = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 

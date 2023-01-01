@@ -34,7 +34,7 @@ CLI::EXPORT_SCH_PYTHONBOM_COMMAND::EXPORT_SCH_PYTHONBOM_COMMAND() :
 }
 
 
-int CLI::EXPORT_SCH_PYTHONBOM_COMMAND::Perform( KIWAY& aKiway )
+int CLI::EXPORT_SCH_PYTHONBOM_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_SCH_PYTHONBOM> bomJob =
             std::make_unique<JOB_EXPORT_SCH_PYTHONBOM>( true );

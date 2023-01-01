@@ -48,7 +48,7 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "
 }
 
 
-int CLI::FP_EXPORT_SVG_COMMAND::Perform( KIWAY& aKiway )
+int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_FP_EXPORT_SVG> svgJob = std::make_unique<JOB_FP_EXPORT_SVG>( true );
 

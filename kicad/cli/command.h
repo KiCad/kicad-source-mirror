@@ -26,25 +26,44 @@
 
 #define UTF8STDSTR( s ) ( std::string( s.utf8_str() ) )
 
+#define ARG_VERSION "--version"
+#define ARG_HELP "--help"
+#define ARG_HELP_SHORT "-h"
+#define ARG_HELP_DESC _( "shows help message and exits" )
+
 namespace CLI
 {
 
 class COMMAND
 {
 public:
-    COMMAND( const std::string&          aName,
-             argparse::default_arguments aDefaultArgs = argparse::default_arguments::help ) :
-             m_name( aName ),
-             m_argParser( aName, "", aDefaultArgs ){};
+    /**
+    * Define a new COMMAND instance
+    *
+    * @param aName The name of the command that is to be used in the cli interface
+    */
+    COMMAND( const std::string& aName );
 
-    virtual int Perform( KIWAY& aKiway );
+    /**
+    * Entry point to processing commands from args and doing work
+    */
+    int Perform( KIWAY& aKiway );
 
     virtual ~COMMAND() = default;
 
     argparse::ArgumentParser& GetArgParser() { return m_argParser; }
     const std::string&        GetName() const { return m_name; }
 
+    void PrintHelp();
 protected:
+    /**
+     * The internal handler that should be overloaded to implement command specific
+     * processing and work.
+     *
+     * If not overloaded, the command will simply emit the help options by default
+     */
+    virtual int              doPerform( KIWAY& aKiway );
+
     std::string              m_name;
     argparse::ArgumentParser m_argParser;
 };

@@ -39,9 +39,8 @@ struct EXPORT_PCB_BASE_COMMAND : public COMMAND
 {
     EXPORT_PCB_BASE_COMMAND( const std::string& aName );
 
-    int Perform( KIWAY& aKiway ) override;
-
 protected:
+    int  doPerform( KIWAY& aKiway ) override;
     LSET convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const;
     void addLayerArg( bool aRequire );
 

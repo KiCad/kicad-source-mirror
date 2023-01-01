@@ -48,7 +48,7 @@ CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 }
 
 
-int CLI::SYM_EXPORT_SVG_COMMAND::Perform( KIWAY& aKiway )
+int CLI::SYM_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_SYM_EXPORT_SVG> svgJob = std::make_unique<JOB_SYM_EXPORT_SVG>( true );
 

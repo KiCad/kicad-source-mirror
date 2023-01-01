@@ -30,7 +30,8 @@ class SYM_UPGRADE_COMMAND : public EXPORT_PCB_BASE_COMMAND
 public:
     SYM_UPGRADE_COMMAND();
 
-    int Perform( KIWAY& aKiway ) override;
+protected:
+    int doPerform( KIWAY& aKiway ) override;
 };
 } // namespace CLI
 

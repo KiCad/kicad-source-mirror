@@ -101,7 +101,7 @@ void CLI::EXPORT_PCB_BASE_COMMAND::addLayerArg( bool aRequire )
 }
 
 
-int CLI::EXPORT_PCB_BASE_COMMAND::Perform( KIWAY& aKiway )
+int CLI::EXPORT_PCB_BASE_COMMAND::doPerform( KIWAY& aKiway )
 {
     if( m_hasLayerArg )
     {

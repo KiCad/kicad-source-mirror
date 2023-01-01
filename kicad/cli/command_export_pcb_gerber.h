@@ -39,9 +39,8 @@ public:
     EXPORT_PCB_GERBER_COMMAND( const std::string& aName );
     EXPORT_PCB_GERBER_COMMAND();
 
-    int Perform( KIWAY& aKiway ) override;
-
 protected:
+    int doPerform( KIWAY& aKiway ) override;
     int populateJob( JOB_EXPORT_PCB_GERBER* aJob );
 };
 } // namespace CLI

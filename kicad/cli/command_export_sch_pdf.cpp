@@ -54,7 +54,7 @@ CLI::EXPORT_SCH_PDF_COMMAND::EXPORT_SCH_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 }
 
 
-int CLI::EXPORT_SCH_PDF_COMMAND::Perform( KIWAY& aKiway )
+int CLI::EXPORT_SCH_PDF_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_SCH_PDF> pdfJob = std::make_unique<JOB_EXPORT_SCH_PDF>( true );
 

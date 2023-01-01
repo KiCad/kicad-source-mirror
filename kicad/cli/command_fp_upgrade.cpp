@@ -40,7 +40,7 @@ CLI::FP_UPGRADE_COMMAND::FP_UPGRADE_COMMAND() : EXPORT_PCB_BASE_COMMAND( "upgrad
 }
 
 
-int CLI::FP_UPGRADE_COMMAND::Perform( KIWAY& aKiway )
+int CLI::FP_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_FP_UPGRADE> fpJob = std::make_unique<JOB_FP_UPGRADE>( true );
 

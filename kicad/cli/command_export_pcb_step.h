@@ -29,7 +29,8 @@ struct EXPORT_PCB_STEP_COMMAND : public COMMAND
 {
     EXPORT_PCB_STEP_COMMAND();
 
-    int Perform( KIWAY& aKiway ) override;
+protected:
+    int doPerform( KIWAY& aKiway ) override;
 };
 }
 

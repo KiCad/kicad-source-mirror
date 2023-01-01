@@ -40,7 +40,7 @@ CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : EXPORT_PCB_BASE_COMMAND( "upgr
 }
 
 
-int CLI::SYM_UPGRADE_COMMAND::Perform( KIWAY& aKiway )
+int CLI::SYM_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_SYM_UPGRADE> symJob = std::make_unique<JOB_SYM_UPGRADE>( true );
 

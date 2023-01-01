@@ -89,7 +89,7 @@ CLI::EXPORT_PCB_STEP_COMMAND::EXPORT_PCB_STEP_COMMAND() : COMMAND( "step" )
     m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
 }
 
-int CLI::EXPORT_PCB_STEP_COMMAND::Perform( KIWAY& aKiway )
+int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_STEP> step( new JOB_EXPORT_PCB_STEP( true ) );
 

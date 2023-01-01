@@ -30,7 +30,8 @@ class EXPORT_PCB_DRILL_COMMAND : public EXPORT_PCB_BASE_COMMAND
 public:
     EXPORT_PCB_DRILL_COMMAND();
 
-    int Perform( KIWAY& aKiway ) override;
+protected:
+    int doPerform( KIWAY& aKiway ) override;
 };
 } // namespace CLI
 

@@ -114,9 +114,9 @@ int CLI::EXPORT_PCB_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
 }
 
 
-int CLI::EXPORT_PCB_GERBER_COMMAND::Perform( KIWAY& aKiway )
+int CLI::EXPORT_PCB_GERBER_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int exitCode = EXPORT_PCB_BASE_COMMAND::Perform( aKiway );
+    int exitCode = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 

@@ -30,7 +30,8 @@ class EXPORT_PCB_GERBERS_COMMAND : public EXPORT_PCB_GERBER_COMMAND
 public:
     EXPORT_PCB_GERBERS_COMMAND();
 
-    int Perform( KIWAY& aKiway ) override;
+protected:
+    int doPerform( KIWAY& aKiway ) override;
 };
 } // namespace CLI
 

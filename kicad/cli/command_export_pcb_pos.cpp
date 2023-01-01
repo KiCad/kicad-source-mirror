@@ -83,9 +83,9 @@ CLI::EXPORT_PCB_POS_COMMAND::EXPORT_PCB_POS_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 }
 
 
-int CLI::EXPORT_PCB_POS_COMMAND::Perform( KIWAY& aKiway )
+int CLI::EXPORT_PCB_POS_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int baseExit = EXPORT_PCB_BASE_COMMAND::Perform( aKiway );
+    int baseExit = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
     if( baseExit != EXIT_CODES::OK )
         return baseExit;
 
