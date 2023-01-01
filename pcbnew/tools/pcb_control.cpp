@@ -720,6 +720,13 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
 
 void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
 {
+    // Do not prune items or layers when copying to the FP editor, because all
+    // layers are accepted, even if they are not enabled in the dummy board
+    // This is mainly true for internal copper layers: all are allowed but only one
+    // (In1.cu) is enabled for the GUI.
+    if( m_isFootprintEditor || frame()->IsType( FRAME_FOOTPRINT_EDITOR ) )
+        return;
+
     LSET                     enabledLayers = board()->GetEnabledLayers();
     std::vector<BOARD_ITEM*> returnItems;
     bool                     fpItemDeleted = false;
@@ -746,6 +753,7 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
 
     for( BOARD_ITEM* item : aItems )
     {
+
         if( item->Type() == PCB_FOOTPRINT_T )
         {
             FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
