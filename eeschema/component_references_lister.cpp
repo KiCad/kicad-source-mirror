@@ -682,7 +682,8 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             else
                 tmp = wxT( "?" );
 
-            if( ( m_flatList[ii].m_unit > 0 ) && ( m_flatList[ii].m_unit < 0x7FFFFFFF )  )
+            if( ( m_flatList[ii].m_unit > 0 ) && ( m_flatList[ii].m_unit < 0x7FFFFFFF )
+                && m_flatList[ii].GetLibPart()->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Item not annotated: %s%s (unit %d)" ),
                             m_flatList[ii].GetRef(),
@@ -751,7 +752,8 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             msg.Printf( _( "Duplicate items %s%s%s\n" ),
                         first.GetRef(),
                         tmp,
-                        LIB_SYMBOL::SubReference( first.m_unit ) );
+                        first.GetLibPart()->GetUnitCount() > 1 ?
+                            LIB_SYMBOL::SubReference( first.m_unit ) : wxT( "" ) );
 
             aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &m_flatList[ii+1] );
             error++;
