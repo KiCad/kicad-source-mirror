@@ -238,7 +238,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     if( ( tmpSheet->GetScreen()->GetFileFormatVersionAtLoad() < 20221002 )
       && tmpSheet->GetScreen()->GetSymbolInstances().empty() )
     {
-        msg = _( "There hierarchical sheets in the loaded schematic file from an older "
+        msg = _( "There are hierarchical sheets in the loaded schematic file from an older "
                  "file version resulting in  missing symbol instance data.  This will "
                  "result in all of the symbols in the loaded schematic to use either the "
                  "default instance setting or fall back to the library symbol settings.  "
