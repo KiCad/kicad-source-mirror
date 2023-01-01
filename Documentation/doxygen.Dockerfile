@@ -19,5 +19,5 @@ RUN make doxygen-python
 
 FROM scratch as output-image
 
-COPY --from=build-doxygen-env /src/doxygen/out/html /doxygen-docs_html
+COPY --from=build-doxygen-env /src/Documentation/doxygen/html /doxygen-docs_html
 COPY --from=build-doxygen-env /src/build/pcbnew/doxygen-python/html /doxygen-python_html
