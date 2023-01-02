@@ -1113,7 +1113,10 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
             {
                 // Dimensions need to have their units updated if they are automatic
                 if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
+                {
                     dimension->SetUnits( frame()->GetUserUnits() );
+                    dimension->Update();
+                }
             };
 
     for( BOARD_ITEM* item : aItems )

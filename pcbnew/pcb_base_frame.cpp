@@ -245,6 +245,28 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
         // Place it in orientation 0 even if it is not saved with orientation 0 in lib (note that
         // it might be stored in another orientation if the lib is an archive built from a board)
         aFootprint->SetOrientation( ANGLE_0 );
+
+        EDA_UNITS units = GetUserUnits();
+
+        INSPECTOR_FUNC inspector =
+                [units]( EDA_ITEM* aItem, void* aTestData )
+                {
+                    PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( aItem );
+
+                    if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
+                    {
+                        dimension->SetUnits( units );
+                        dimension->Update();
+                    }
+
+                    return INSPECT_RESULT::CONTINUE;
+                };
+
+        aFootprint->Visit( inspector, nullptr, { PCB_FP_DIM_ALIGNED_T,
+                                                 PCB_FP_DIM_LEADER_T,
+                                                 PCB_FP_DIM_ORTHOGONAL_T,
+                                                 PCB_FP_DIM_CENTER_T,
+                                                 PCB_FP_DIM_RADIAL_T } );
     }
 }
 
