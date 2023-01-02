@@ -1851,6 +1851,36 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     GetCurrentSheet().UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
+    EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+
+    auto visit =
+            [&]( EDA_ITEM* item )
+            {
+                if( m_findReplaceDialog
+                        && !m_findReplaceData->findString.IsEmpty()
+                        && item->Matches( *m_findReplaceData, &GetCurrentSheet() ) )
+                {
+                    item->SetForceVisible( true );
+                    selectionTool->BrightenItem( item );
+                }
+                else if( item->IsBrightened() )
+                {
+                    item->SetForceVisible( false );
+                    selectionTool->UnbrightenItem( item );
+                }
+            };
+
+    for( SCH_ITEM* item : screen->Items() )
+    {
+        visit( item );
+
+        item->RunOnChildren(
+                [&]( SCH_ITEM* aChild )
+                {
+                    visit( aChild );
+                } );
+    }
+
     if( !screen->m_zoomInitialized )
     {
         initScreenZoom();

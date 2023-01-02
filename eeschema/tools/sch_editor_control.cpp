@@ -542,7 +542,6 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
             {
                 m_frame->Schematic().SetCurrentSheet( *sheet );
                 m_frame->DisplayCurrentSheet();
-                UpdateFind( ACTIONS::updateFind.MakeEvent() );
 
                 break;
             }
