@@ -1,5 +1,5 @@
 # Mark Roszko <mark.roszko@gmail.com>, 2020.
-# ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022.
+# ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022, 2023.
 # Pomian <kontakt@rapiddev.pl>, 2021.
 # Krzysztof Kawa <christophorus72@gmail.com>, 2022.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2022-12-20 15:47+0000\n"
-"Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"PO-Revision-Date: 2023-01-03 18:04+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16006,12 +16006,11 @@ msgid "Number of bits"
 msgstr "Liczba bitów"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
-"Ta symulacja nie dostarcza wykresów. Proszę przejrzeć w okno konsoli w "
-"poszukiwaniu wyników"
+"Symulacja nie dała żadnych wykresów. Proszę przejrzeć okno konsoli w "
+"poszukiwaniu wyników."
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -16081,12 +16080,12 @@ msgstr "Rysuję%u - "
 #: eeschema/sim/sim_plot_frame.cpp:603 eeschema/sim/sim_plot_frame.cpp:615
 #: eeschema/sim/sim_plot_frame.cpp:940
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "Nie można zastosować dostrojonej(-ych) wartości:"
 
 #: eeschema/sim/sim_plot_frame.cpp:616 eeschema/sim/sim_plot_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "Zapis w folderze \"%s\" nie jest możliwy."
+msgstr "%s nie może być dostrajany"
 
 #: eeschema/sim/sim_plot_frame.cpp:659
 msgid "Error: simulation type not defined!\n"
@@ -17725,18 +17724,16 @@ msgid "Break"
 msgstr "Przerwij magistralę"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Divide into connected segments"
-msgstr "Przelotka nie jest połączona"
+msgstr "Podziel na złączone segmenty"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr ""
+msgstr "Kawałek"
 
 #: eeschema/tools/ee_actions.cpp:558
-#, fuzzy
 msgid "Divide into unconnected segments"
-msgstr "Przelotka nie jest połączona"
+msgstr "Podziel na niezłączone segmenty"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -19762,7 +19759,7 @@ msgstr "Nie udało się wygenerować danych"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "pokazuje informacje pomocnicze i wychodzi"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -20248,9 +20245,8 @@ msgstr ""
 "nie wygląda na prawidłowy plik z projektem programu KiCad."
 
 #: kicad/kicad_cli.cpp:284
-#, fuzzy
 msgid "prints version information and exits"
-msgstr "drukuj parsowane informacje"
+msgstr "drukuje informacje o wersji i wychodzi"
 
 #: kicad/kicad_manager_frame.cpp:210
 msgid "Project Files"
