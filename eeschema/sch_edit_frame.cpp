@@ -1782,6 +1782,8 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
     if( principalSymbol->IsAnnotated( &principalPath ) )
         principalRef = principalSymbol->GetRef( &principalPath, false );
 
+    std::vector< std::pair<SCH_SYMBOL*, SCH_SHEET_PATH> > otherUnits;
+
     for( const SCH_SHEET_PATH& path : Schematic().GetSheets() )
     {
         for( SCH_ITEM* candidate : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
@@ -1792,29 +1794,33 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
                 || ( candidateSymbol->IsAnnotated( &path )
                      && candidateSymbol->GetRef( &path, false ) == principalRef ) )
             {
-                // This needs to be done before the LIB_SYMBOL is changed to prevent stale
-                // library symbols in the schematic file.
-                path.LastScreen()->Remove( candidateSymbol );
-
-                if( !candidateSymbol->IsNew() )
-                {
-                    SaveCopyInUndoList( path.LastScreen(), candidateSymbol,
-                                        UNDO_REDO::CHANGED, appendToUndo );
-                    appendToUndo = true;
-                }
-
-                candidateSymbol->SetLibSymbol( aSymbol.Flatten().release() );
-                candidateSymbol->UpdateFields( &GetCurrentSheet(),
-                                               true, /* update style */
-                                               true, /* update ref */
-                                               true, /* update other fields */
-                                               false, /* reset ref */
-                                               false /* reset other fields */ );
-
-                path.LastScreen()->Append( candidateSymbol );
-                GetCanvas()->GetView()->Update( candidateSymbol );
+                otherUnits.emplace_back( candidateSymbol, path );
             }
         }
+    }
+
+    for( auto& [ otherUnit, path ] : otherUnits )
+    {
+        // This needs to be done before the LIB_SYMBOL is changed to prevent stale
+        // library symbols in the schematic file.
+        path.LastScreen()->Remove( otherUnit );
+
+        if( !otherUnit->IsNew() )
+        {
+            SaveCopyInUndoList( path.LastScreen(), otherUnit, UNDO_REDO::CHANGED, appendToUndo );
+            appendToUndo = true;
+        }
+
+        otherUnit->SetLibSymbol( aSymbol.Flatten().release() );
+        otherUnit->UpdateFields( &GetCurrentSheet(),
+                                 true, /* update style */
+                                 true, /* update ref */
+                                 true, /* update other fields */
+                                 false, /* reset ref */
+                                 false /* reset other fields */ );
+
+        path.LastScreen()->Append( otherUnit );
+        GetCanvas()->GetView()->Update( otherUnit );
     }
 
     GetCanvas()->Refresh();
