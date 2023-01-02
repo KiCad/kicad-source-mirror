@@ -90,8 +90,12 @@ bool SCRIPTING::IsWxAvailable()
     pybind11::dict locals;
 
     pybind11::exec( R"(
-from wx import version
-wx_version = version()
+wx_version = ""
+try:
+    from wx import version
+    wx_version = version()
+except (ImportError, ModuleNotFoundError):
+    pass
     )", pybind11::globals(), locals );
 
     // e.g. "4.0.7 gtk3 (phoenix) wxWidgets 3.0.4"
@@ -99,7 +103,7 @@ wx_version = version()
 
     int idx = version.Find( wxT( "wxWidgets " ) );
 
-    if( idx == wxNOT_FOUND )
+    if( idx == wxNOT_FOUND || version.IsEmpty() )
     {
         wxLogError( wxT( "Could not determine wxPython version. "
                          "Python plugins will not be available." ) );
@@ -107,7 +111,9 @@ wx_version = version()
     }
 
     version = version.Mid( idx + 10 );
-    wxString wxVersion = wxGetLibraryVersionInfo().GetVersionString();
+    wxVersionInfo wxVI = wxGetLibraryVersionInfo();
+    wxString wxVersion = wxString::Format( wxT( "%d.%d.%d" ),
+                                           wxVI.GetMajor(), wxVI.GetMinor(), wxVI.GetMicro() );
 
     if( wxVersion.Cmp( version ) != 0 )
     {
