@@ -115,18 +115,20 @@ except:
                          "Python plugins will not be available." ) );
         available = false;
     }
-
-    version = version.Mid( idx + 10 );
-    wxVersionInfo wxVI = wxGetLibraryVersionInfo();
-    wxString wxVersion = wxString::Format( wxT( "%d.%d.%d" ),
-                                           wxVI.GetMajor(), wxVI.GetMinor(), wxVI.GetMicro() );
-
-    if( wxVersion.Cmp( version ) != 0 )
+    else
     {
-        wxString msg = wxT( "The wxPython library was compiled against wxWidgets %s but KiCad is "
-                            "using %s.  Python plugins will not be available." );
-        wxLogError( wxString::Format( msg, version, wxVersion ) );
-        available = false;
+        wxVersionInfo wxVI = wxGetLibraryVersionInfo();
+        wxString wxVersion = wxString::Format( wxT( "%d.%d.%d" ),
+                                           wxVI.GetMajor(), wxVI.GetMinor(), wxVI.GetMicro() );
+        version = version.Mid( idx + 10 );
+
+        if( wxVersion.Cmp( version ) != 0 )
+        {
+            wxString msg = wxT( "The wxPython library was compiled against wxWidgets %s but KiCad is "
+                                "using %s.  Python plugins will not be available." );
+            wxLogError( wxString::Format( msg, version, wxVersion ) );
+            available = false;
+        }
     }
 
     run = true;
