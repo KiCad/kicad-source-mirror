@@ -1302,7 +1302,11 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
         // Hit-test against other spokes
         for( const SHAPE_LINE_CHAIN& other : thermalSpokes )
         {
-            if( &other != &spoke && other.PointInside( testPt, 1, USE_BBOX_CACHES  ) )
+            // Hit test in both directions to avoid interactions with round-off errors.
+            // (See https://gitlab.com/kicad/code/kicad/-/issues/13316.)
+            if( &other != &spoke
+                && other.PointInside( testPt, 1, USE_BBOX_CACHES )
+                && spoke.PointInside( other.CPoint( 3 ), 1, USE_BBOX_CACHES ) )
             {
                 if( m_debugZoneFiller )
                     debugSpokes.AddOutline( spoke );
