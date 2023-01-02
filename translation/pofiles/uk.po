@@ -1,5 +1,5 @@
 # Kuzemko Alexsandr <alexandrkuzemko@gmail.com>, 2022.
-# Ivan Chuba <xtrvweb@gmail.com>, 2022.
+# Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
 # Artem <artem@molotov.work>, 2022.
 # Andrii Shelestov <streamx3@gmail.com>, 2022.
 # Stanislav Kaliuk <staskalyuk.096@gmail.com>, 2022.
@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2022-12-24 04:08+0000\n"
+"PO-Revision-Date: 2023-01-03 18:05+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15889,12 +15889,11 @@ msgid "Number of bits"
 msgstr "Кількість біт"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
-"Це моделювання не містить сюжетів. Будь ласка, зверніться до вікна консолі "
-"для отримання результатів"
+"Моделювання не відображає графіків. Будь ласка, зверніться до вікна консолі "
+"для отримання результатів."
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -15964,12 +15963,12 @@ msgstr "Діаграма%u - "
 #: eeschema/sim/sim_plot_frame.cpp:603 eeschema/sim/sim_plot_frame.cpp:615
 #: eeschema/sim/sim_plot_frame.cpp:940
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "Не вдалося застосувати значення налаштувань:"
 
 #: eeschema/sim/sim_plot_frame.cpp:616 eeschema/sim/sim_plot_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "%s не знайдено"
+msgstr "%s не налаштовується"
 
 #: eeschema/sim/sim_plot_frame.cpp:659
 msgid "Error: simulation type not defined!\n"
@@ -16016,9 +16015,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Спершу потрібно запустити симуляцію."
 
 #: eeschema/sim/sim_plot_frame.cpp:1605
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "SPICE файл зв'язку"
+msgstr "SPICE список зв'язків"
 
 #: eeschema/sim/sim_plot_frame.cpp:1672
 msgid "Save changes to workbook?"
@@ -16037,14 +16035,12 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove Signal"
-msgstr "Приховати сигнал"
+msgstr "Видалити сигнал"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove the signal from the plot"
-msgstr "Стерти сигнал з відображення графіку"
+msgstr "Видалити сигнал з відображення графіку"
 
 #: eeschema/sim/sim_plot_frame.cpp:1933
 msgid "Hide Cursor"
@@ -17598,21 +17594,20 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Показати таблицю виводів для масового редагування виводів"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Break"
-msgstr "Розірвати шину"
+msgstr "Розірвати"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Divide into connected segments"
-msgstr ""
+msgstr "Розділити на об'єднані сегменти"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr ""
+msgstr "Нарізати"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Divide into unconnected segments"
-msgstr ""
+msgstr "Розділити на роз'єднані сегменти"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -18217,9 +18212,8 @@ msgstr ""
 "Помилка: дубльовані назви вкладених листів, виявлено в поточному листі."
 
 #: eeschema/tools/sch_editor_control.cpp:1203
-#, fuzzy
 msgid "No net selected."
-msgstr "Жоден шар не вибраний."
+msgstr "Зв'язок не вибраний."
 
 #: eeschema/tools/sch_editor_control.cpp:1229
 msgid "Net must be labeled to assign a netclass."
@@ -19632,7 +19626,7 @@ msgstr "Помилка виведення даних"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "показати допоміжне повідомлення і вийти"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -20121,7 +20115,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:284
 msgid "prints version information and exits"
-msgstr ""
+msgstr "вивести інформацію про версію і вийти"
 
 #: kicad/kicad_manager_frame.cpp:210
 msgid "Project Files"
@@ -30424,7 +30418,6 @@ msgid "Warning: Duplicate Nicknames"
 msgstr "Попередження: Дублювання унікальних імен"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:100
-#, fuzzy
 msgid "LIbrary Format"
 msgstr "Формат бібліотеки"
 
@@ -33018,9 +33011,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s зазор %s; актуально %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "Вивід %s з'єднано з %s та %s"
+msgstr "(%s зазор %s; актуальний < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, c-format
