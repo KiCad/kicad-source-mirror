@@ -3,17 +3,17 @@
 # Axel Henriksson <axe.henriksson@gmail.com>, 2021, 2022.
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
 # Richard Jonsson <richard_jonsson@hotmail.com>, 2021.
-# Henrik Kauhanen <henrik@kauhanen.se>, 2022.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023.
 # Hanna Breisand <weblate.org@breisand.se>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2022-12-20 15:47+0000\n"
+"PO-Revision-Date: 2023-01-03 18:05+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2997,9 +2997,9 @@ msgid ""
 msgstr ""
 "Ställ in skalan för duken.\n"
 "\n"
-"På skärmar med hög DPI på vissa plattformar kan KiCad inte bestämma "
-"skalningsfaktorn. I det här fallet kan du behöva ställa in detta till ett "
-"värde som matchar ditt systems DPI-skalning. 2.0 är ett vanligt värde.\n"
+"På vissa plattformar kan KiCad inte bestämma skalningsfaktorn för skärmar "
+"med hög DPI. I så fall kan du behöva ställa in detta till ett värde som "
+"matchar ditt systems DPI-skalning. 2.0 är ett vanligt värde.\n"
 "\n"
 "Om detta inte matchar systemets DPI-skalning, matchar duken inte "
 "fönsterstorlek och markörposition."
@@ -11095,7 +11095,7 @@ msgstr "sekunder"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:367
 msgid "Final time:"
-msgstr "Sista gången:"
+msgstr "Sluttid:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:381
 msgid "Initial time:"
@@ -11702,7 +11702,7 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"Normalt är fotavtryck länkade till deras symboler via deras unika ID. Välj "
+"Normalt är fotavtryck länkade till sina symboler via deras unika ID. Välj "
 "det här alternativet endast om du vill återställa fotavtryckslänkarna "
 "baserat på deras referensbeteckning."
 
@@ -15917,10 +15917,10 @@ msgid "Number of bits"
 msgstr "Antal bitar"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr "Denna simulering ger inga diagram. Se konsolfönstret för resultat"
+msgstr ""
+"Denna simulering gav inga diagram. Vänligen se konsolfönstret för resultat."
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -15932,19 +15932,19 @@ msgstr "Kör simulering"
 
 #: eeschema/sim/sim_plot_frame.cpp:162
 msgid "Add signals to plot"
-msgstr "Lägg till signaler för att plotta"
+msgstr "Lägg till signaler att plotta"
 
 #: eeschema/sim/sim_plot_frame.cpp:163
 msgid "Probe"
-msgstr "Sond"
+msgstr "Mätprob"
 
 #: eeschema/sim/sim_plot_frame.cpp:164
 msgid "Probe signals on the schematic"
-msgstr "Probsignaler på schemat"
+msgstr "Mät signaler i kretsschemat"
 
 #: eeschema/sim/sim_plot_frame.cpp:165 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr "Ställa in"
+msgstr "Ställ in"
 
 #: eeschema/sim/sim_plot_frame.cpp:166
 msgid "Tune component values"
@@ -15990,12 +15990,12 @@ msgstr "Plotta%u - "
 #: eeschema/sim/sim_plot_frame.cpp:603 eeschema/sim/sim_plot_frame.cpp:615
 #: eeschema/sim/sim_plot_frame.cpp:940
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "Kunde inte verkställa inställda värde(n):"
 
 #: eeschema/sim/sim_plot_frame.cpp:616 eeschema/sim/sim_plot_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "Katalogen \"%s\" är inte skrivbar."
+msgstr "%s är inte ställbar"
 
 #: eeschema/sim/sim_plot_frame.cpp:659
 msgid "Error: simulation type not defined!\n"
@@ -16042,9 +16042,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Du måste köra plot-tillhandahållande simulering först."
 
 #: eeschema/sim/sim_plot_frame.cpp:1605
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "SPICE netlist-fil"
+msgstr "SPICE-nätlista"
 
 #: eeschema/sim/sim_plot_frame.cpp:1672
 msgid "Save changes to workbook?"
@@ -16063,14 +16062,12 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove Signal"
-msgstr "Dölj signal"
+msgstr "Ta bort signal"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove the signal from the plot"
-msgstr "Radera signalen från plot-skärmen"
+msgstr "Ta bort signalen från plotten"
 
 #: eeschema/sim/sim_plot_frame.cpp:1933
 msgid "Hide Cursor"
@@ -16114,11 +16111,11 @@ msgstr "Lägg till signaler ..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Probe from schematics"
-msgstr "Sond från scheman"
+msgstr "Mät signaler i schemat"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:69
 msgid "Tune Component Value"
-msgstr "Ställa in komponentvärde"
+msgstr "Ställ in komponentvärde"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Show SPICE Netlist..."
@@ -16143,7 +16140,7 @@ msgstr "Visa stö&drutor"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 msgid "Show &Legend"
-msgstr "Show & Legend"
+msgstr "Visa förklaringar"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
 msgid "Dotted Current/Phase"
@@ -17624,23 +17621,20 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Visar stifttabell för massredigering av stift"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Break"
-msgstr "Bryt buss"
+msgstr "Dela upp"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Divide into connected segments"
-msgstr "Via är inte ansluten"
+msgstr "Dela upp i anslutna segment"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr ""
+msgstr "Skiva"
 
 #: eeschema/tools/ee_actions.cpp:558
-#, fuzzy
 msgid "Divide into unconnected segments"
-msgstr "Via är inte ansluten"
+msgstr "Dela upp i icke anslutna segment"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -17648,7 +17642,7 @@ msgstr "Lägg till en simulatorprob"
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Select a value to be tuned"
-msgstr "Välj ett värde som ska ställas in"
+msgstr "Välj ett värde att ställa in"
 
 #: eeschema/tools/ee_actions.cpp:577 pcbnew/tools/pcb_actions.cpp:790
 msgid "Highlight net under cursor"
@@ -18247,9 +18241,8 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Fel: dubbletter av underarknamn hittades i det aktuella arket."
 
 #: eeschema/tools/sch_editor_control.cpp:1203
-#, fuzzy
 msgid "No net selected."
-msgstr "Inget lager angivet"
+msgstr "Inget nät valt."
 
 #: eeschema/tools/sch_editor_control.cpp:1229
 msgid "Net must be labeled to assign a netclass."
@@ -19661,7 +19654,7 @@ msgstr "Misslyckades med utmatning av data"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "visar hjälpmeddelande och avslutar"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -20160,7 +20153,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:284
 msgid "prints version information and exits"
-msgstr ""
+msgstr "skriver ut versionsinformation och avslutar"
 
 #: kicad/kicad_manager_frame.cpp:210
 msgid "Project Files"
@@ -20271,9 +20264,8 @@ msgid "Open project directory in file explorer"
 msgstr "Öppna projektkatalogen i filutforskaren"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
-#, fuzzy
 msgid "Add Default Repository"
-msgstr "Lägg till förvalt repository"
+msgstr "Lägg till förvald programvarukälla"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Please enter fully qualified repository url"
@@ -25915,7 +25907,9 @@ msgstr "Kör DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
 msgid "DRC incomplete: could not compile custom design rules.  "
-msgstr "DRC ofullständig: kunde inte sammanställa anpassade designregler.  "
+msgstr ""
+"Designregelkontroll (DRC) ofullständig: kunde inte sammanställa anpassade "
+"designregler.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:176
 msgid "Show design rules."
@@ -29385,11 +29379,11 @@ msgstr "Längd / skev"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:30
 msgid "Tune from:"
-msgstr "Ställa in från:"
+msgstr "Ställ in från:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:46
 msgid "Tune to:"
-msgstr "Ställ in:"
+msgstr "Ställ in till:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:62
 msgid "Constraint:"
@@ -29579,7 +29573,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
 msgid "Use mouse path to set track posture"
-msgstr "Använd musvägen för att ställa in ledarställning"
+msgstr "Använd musrörelsen för att ställa in ledarställning"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid ""
@@ -30427,7 +30421,6 @@ msgid "Warning: Duplicate Nicknames"
 msgstr "Varning: Dubblett smeknamn"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:100
-#, fuzzy
 msgid "LIbrary Format"
 msgstr "Biblioteksformat"
 
@@ -33033,9 +33026,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s clearance %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s clearance %s; faktisk %s)"
+msgstr "(%s frigång %s; faktisk <0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, c-format
@@ -36016,7 +36009,7 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2369
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr "Textvariabler kunde inte ställas in eftersom inget projekt laddades."
+msgstr "Textvariabler kunde inte ställas in eftersom inget projekt är öppnat."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2454
 msgid ""
@@ -36790,7 +36783,7 @@ msgstr "Minska slingrande amplitud med ett steg."
 
 #: pcbnew/router/length_tuner_tool.cpp:100
 msgid "Length Tuner"
-msgstr "Längdmottagare"
+msgstr "Längdanpassning"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:475
 msgid ""
@@ -36842,7 +36835,7 @@ msgstr "För kort: "
 #: pcbnew/router/pns_dp_meander_placer.cpp:445
 #: pcbnew/router/pns_meander_placer.cpp:285
 msgid "Tuned: "
-msgstr "Stämd: "
+msgstr "Anpassad: "
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:448
 #: pcbnew/router/pns_meander_placer.cpp:288
@@ -36887,7 +36880,8 @@ msgstr "Interaktiv router"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
-msgstr "Välj ett differentiellt ledarpar som du vill anpassa."
+msgstr ""
+"Välj ett differentiellt ledarpar för vilken du vill anpassa ledarlängden."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:70
 msgid ""
@@ -36909,7 +36903,7 @@ msgstr "För kort: skevhet "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:170
 msgid "Tuned: skew "
-msgstr "Avstämd: skevhet "
+msgstr "Avstämning: skevhet "
 
 #: pcbnew/router/pns_router.cpp:223
 msgid "Diff pair gap is less than board minimum clearance."
@@ -39899,11 +39893,11 @@ msgstr "Anpassa längden för en enskild ledare"
 
 #: pcbnew/tools/pcb_actions.cpp:1486
 msgid "Tune length of a differential pair"
-msgstr "Ställ in längden på ett differentialpar"
+msgstr "Anpassa längden på ett differentialpar"
 
 #: pcbnew/tools/pcb_actions.cpp:1493
 msgid "Tune skew of a differential pair"
-msgstr "Ställ in skevhet för ett differentiellt par"
+msgstr "Anpassa skevhet för ett differentiellt par"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Walks the current track back one segment."
