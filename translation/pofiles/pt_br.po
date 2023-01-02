@@ -5,13 +5,13 @@
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
-# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022.
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2022-12-20 15:47+0000\n"
+"PO-Revision-Date: 2023-01-03 18:05+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -16079,12 +16079,11 @@ msgid "Number of bits"
 msgstr "Número de bits"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
-"Esta simulação não mostra gráficos. Consulte a janela do console para ver os "
-"resultados"
+"A simulação não forneceu nenhum gráfico. Consulte a janela do console para "
+"obter resultados."
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -16154,12 +16153,12 @@ msgstr "Plot%u - "
 #: eeschema/sim/sim_plot_frame.cpp:603 eeschema/sim/sim_plot_frame.cpp:615
 #: eeschema/sim/sim_plot_frame.cpp:940
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "Não foi possível aplicar o(s) valor(es) ajustado(s):"
 
 #: eeschema/sim/sim_plot_frame.cpp:616 eeschema/sim/sim_plot_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "A pasta \"%s\" não tem permissão de escrita."
+msgstr "%s não é ajustável"
 
 #: eeschema/sim/sim_plot_frame.cpp:659
 msgid "Error: simulation type not defined!\n"
@@ -16206,9 +16205,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Você precisa executar a simulação de plotagem primeiro."
 
 #: eeschema/sim/sim_plot_frame.cpp:1605
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "Arquivo netlist SPICE"
+msgstr "SPICE Netlist"
 
 #: eeschema/sim/sim_plot_frame.cpp:1672
 msgid "Save changes to workbook?"
@@ -16227,14 +16225,12 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove Signal"
-msgstr "Oculte o sinal"
+msgstr "Remover o sinal"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove the signal from the plot"
-msgstr "Apague o sinal da tela de plotagem"
+msgstr "Remove o sinal do gráfico"
 
 #: eeschema/sim/sim_plot_frame.cpp:1933
 msgid "Hide Cursor"
@@ -17798,23 +17794,20 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Exibe a tabela dos pinos para a edição em massa dos pinos"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Break"
-msgstr "Divida o barramento"
+msgstr "Interrupção"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Divide into connected segments"
-msgstr "Não conectado"
+msgstr "Divida em segmentos conectados"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr ""
+msgstr "Corte"
 
 #: eeschema/tools/ee_actions.cpp:558
-#, fuzzy
 msgid "Divide into unconnected segments"
-msgstr "Não conectado"
+msgstr "Divida em segmentos conectados"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -18419,9 +18412,8 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Erro: nomes duplicados da sub-folha foram encontrados na folha atual."
 
 #: eeschema/tools/sch_editor_control.cpp:1203
-#, fuzzy
 msgid "No net selected."
-msgstr "Nenhuma camada foi selecionada."
+msgstr "Nenhuma rede selecionada."
 
 #: eeschema/tools/sch_editor_control.cpp:1229
 msgid "Net must be labeled to assign a netclass."
@@ -19842,7 +19834,7 @@ msgstr "Houve uma falha ao enviar os dados"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "mostra mensagem de ajuda e encerra"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -20342,7 +20334,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:284
 msgid "prints version information and exits"
-msgstr ""
+msgstr "imprime as informações sobre a versão e encerra"
 
 #: kicad/kicad_manager_frame.cpp:210
 msgid "Project Files"
@@ -30681,7 +30673,6 @@ msgid "Warning: Duplicate Nicknames"
 msgstr "Aviso: apelidos duplicados"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:100
-#, fuzzy
 msgid "LIbrary Format"
 msgstr "Formato da biblioteca"
 
@@ -33296,9 +33287,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s isolamento %s; atual %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s isolamento %s; atual %s)"
+msgstr "(%s isolamento %s; atual < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, c-format
