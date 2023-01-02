@@ -1089,6 +1089,8 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
     {
         std::vector<VECTOR2I> pts;
         PCB_SHAPE *graphic = static_cast<PCB_SHAPE*>( item );
+        PCB_LAYER_ID layer = graphic->GetLayer();
+        int width = graphic->GetWidth();
 
         if( graphic->GetShape() == SHAPE_T::RECT )
         {
@@ -1120,6 +1122,8 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
 
             line->SetStart( pts[jj - 1] );
             line->SetEnd( pts[jj] );
+            line->SetWidth( width );
+            line->SetLayer( layer );
             lines_to_add.insert( line );
         }
 
@@ -1134,6 +1138,8 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
 
             line->SetStart( pts.back() );
             line->SetEnd( pts.front() );
+            line->SetWidth( width );
+            line->SetLayer( layer );
             lines_to_add.insert( line );
         }
     }
