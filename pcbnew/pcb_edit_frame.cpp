@@ -1351,7 +1351,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                 }
                 else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
                 {
-                    PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
+                    PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed

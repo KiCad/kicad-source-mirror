@@ -30,7 +30,10 @@ public:
     JOB_EXPORT_SCH_SVG( bool aIsCli ) :
             JOB( "svg", aIsCli ),
             m_filename(),
-            m_outputDirectory()
+            m_outputDirectory(),
+            m_blackAndWhite( false ),
+            m_useBackgroundColor( false ),
+            m_plotDrawingSheet( false )
     {
     }
 

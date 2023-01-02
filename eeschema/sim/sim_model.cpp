@@ -540,7 +540,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
     {
         model->ReadDataFields( &aFields, aPins );
     }
-    catch( const IO_ERROR& e )
+    catch( const IO_ERROR& parse_err )
     {
         // Just because we can't parse it doesn't mean that a SPICE interpreter can't.  Fall
         // back to a raw spice code model.
@@ -557,10 +557,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
             model->createPins( aPins );
             model->m_serializer->ParsePins( GetFieldValue( &aFields, PINS_FIELD ) );
         }
-        catch( const IO_ERROR& e )
+        catch( const IO_ERROR& err )
         {
             // We own the pin syntax, so if we can't parse it then there's an error, full stop.
-            DisplayErrorMessage( nullptr, e.What() );
+            DisplayErrorMessage( nullptr, err.What() );
         }
     }
 

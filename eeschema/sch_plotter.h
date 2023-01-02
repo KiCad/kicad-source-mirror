@@ -95,6 +95,7 @@ struct SCH_PLOT_SETTINGS
     SCH_PLOT_SETTINGS() :
         m_plotAll( true ),
         m_plotDrawingSheet( true ),
+        m_blackAndWhite( false ),
         m_pageSizeSelect( 0 ),
         m_useBackgroundColor( true ),
         m_HPGLPenSize( 1.0 ),

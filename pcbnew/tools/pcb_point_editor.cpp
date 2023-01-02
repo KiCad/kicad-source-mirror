@@ -832,9 +832,6 @@ void PCB_POINT_EDITOR::editArcCenterKeepEndpoints( PCB_SHAPE* aArc, const VECTOR
 
     SEG legal( m - perp, m + perp );
 
-    OPT_VECTOR2I hIntersect = legal.IntersectLines( SEG( aCenter, aCenter + VECTOR2( 1, 0 ) ) );
-    OPT_VECTOR2I vIntersect = legal.IntersectLines( SEG( aCenter, aCenter + VECTOR2( 0, 1 ) ) );
-
     const SEG testSegments[] = { SEG( aCenter, aCenter + VECTOR2( 1, 0 ) ),
                                  SEG( aCenter, aCenter + VECTOR2( 0, 1 ) ) };
 

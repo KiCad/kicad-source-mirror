@@ -661,7 +661,6 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
-    FOOTPRINT* symbol = nullptr;
     if( !svgJob->m_outputDirectory.IsEmpty() && !wxDir::Exists( svgJob->m_outputDirectory ) )
     {
         wxFileName::Mkdir( svgJob->m_outputDirectory );

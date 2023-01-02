@@ -115,7 +115,7 @@ int E_SERIES::buildSeriesData( const double aList[] )
 
     for( ; ; )
     {
-        double curr_r;
+        double curr_r = LAST_VALUE;
 
         for( int ii = 0; ; ii++ )
         {

@@ -30,7 +30,10 @@ public:
     JOB_EXPORT_SCH_PDF( bool aIsCli ) :
             JOB( "pdf", aIsCli ),
             m_filename(),
-            m_outputFile()
+            m_outputFile(),
+            m_blackAndWhite( false ),
+            m_useBackgroundColor( false ),
+            m_plotDrawingSheet( false )
     {
     }
 
