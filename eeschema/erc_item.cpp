@@ -193,6 +193,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::globalLabelDangling,
                  ERC_ITEM::wireDangling,
                  ERC_ITEM::busEntryNeeded,
+                 ERC_ITEM::endpointOffGrid,
 
                  ERC_ITEM::heading_conflicts,
                  ERC_ITEM::duplicateReference,
@@ -207,6 +208,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::busToBusConflict,
                  ERC_ITEM::busToNetConflict,
                  ERC_ITEM::netNotBusMember,
+                 ERC_ITEM::netclassConflict,
 
                  ERC_ITEM::heading_misc,
                  ERC_ITEM::unannotated,
