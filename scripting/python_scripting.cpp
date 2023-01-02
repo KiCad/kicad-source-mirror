@@ -94,7 +94,7 @@ wx_version = ""
 try:
     from wx import version
     wx_version = version()
-except (ImportError, ModuleNotFoundError):
+except:
     pass
     )", pybind11::globals(), locals );
 
