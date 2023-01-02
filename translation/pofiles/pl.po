@@ -2,7 +2,7 @@
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022, 2023.
 # Pomian <kontakt@rapiddev.pl>, 2021.
 # Krzysztof Kawa <christophorus72@gmail.com>, 2022.
-# Ivan Chuba <xtrvweb@gmail.com>, 2022.
+# Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
 # Grzegorz Szymaszek <gszymaszek@short.pl>, 2022.
 msgid ""
 msgstr ""
@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
 "PO-Revision-Date: 2023-01-03 18:04+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -16132,9 +16132,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Musisz najpierw uruchomić symulację generującą wykresy."
 
 #: eeschema/sim/sim_plot_frame.cpp:1605
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "Plik listy sieci SPICE"
+msgstr "listy sieci SPICE"
 
 #: eeschema/sim/sim_plot_frame.cpp:1672
 msgid "Save changes to workbook?"
@@ -16153,12 +16152,10 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove Signal"
-msgstr "Ukryj sygnał"
+msgstr "Usuń sygnał"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove the signal from the plot"
 msgstr "Usuń sygnał z ekranu wykresu"
 
@@ -17719,9 +17716,8 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Wyświetla tabelę pinów przeznaczoną do masowej ich edycji"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Break"
-msgstr "Przerwij magistralę"
+msgstr "Przerwij"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Divide into connected segments"
@@ -18340,9 +18336,8 @@ msgstr ""
 "BŁĄD: znaleziono zdublowane nazwy arkuszy podrzędnych w bieżącym arkuszu."
 
 #: eeschema/tools/sch_editor_control.cpp:1203
-#, fuzzy
 msgid "No net selected."
-msgstr "Nie wybrano warstwy."
+msgstr "Nie wybrano sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:1229
 msgid "Net must be labeled to assign a netclass."
@@ -30566,7 +30561,6 @@ msgid "Warning: Duplicate Nicknames"
 msgstr "Ostrzeżenie: Zduplikowane nazwy skrótowe"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:100
-#, fuzzy
 msgid "LIbrary Format"
 msgstr "Format biblioteki"
 
@@ -33166,9 +33160,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s prześwit %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s prześwit %s; obecnie %s)"
+msgstr "(%s prześwit %s; obecnie < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, c-format
