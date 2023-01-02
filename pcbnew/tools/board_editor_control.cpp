@@ -1102,10 +1102,11 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
                 fp->SetLink( niluuid );
 
-                fp->SetFlags(IS_NEW ); // whatever
+                fp->SetFlags( IS_NEW ); // whatever
 
                 // Set parent so that clearance can be loaded
                 fp->SetParent( board );
+                m_frame->UpdateUserUnits( fp );
 
                 for( PAD* pad : fp->Pads() )
                 {

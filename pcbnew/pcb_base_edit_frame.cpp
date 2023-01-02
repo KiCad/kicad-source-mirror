@@ -229,41 +229,11 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
 
     if( BOARD* board = GetBoard() )
     {
-        EDA_UNITS    units = GetUserUnits();
-        KIGFX::VIEW* view  = GetCanvas()->GetView();
-        bool         selectedItemModified = false;
+        bool selectedItemsModified = false;
 
-        INSPECTOR_FUNC inspector =
-                [units, view, &selectedItemModified]( EDA_ITEM* aItem, void* aTestData )
-                {
-                    PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( aItem );
+        UpdateUserUnits( board, &selectedItemsModified );
 
-                    if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
-                    {
-                        dimension->SetUnits( units );
-                        dimension->Update();
-
-                        if( dimension->IsSelected() )
-                            selectedItemModified = true;
-
-                        view->Update( dimension );
-                    }
-
-                    return INSPECT_RESULT::CONTINUE;
-                };
-
-        board->Visit( inspector, nullptr, { PCB_DIM_ALIGNED_T,
-                                            PCB_DIM_LEADER_T,
-                                            PCB_DIM_ORTHOGONAL_T,
-                                            PCB_DIM_CENTER_T,
-                                            PCB_DIM_RADIAL_T,
-                                            PCB_FP_DIM_ALIGNED_T,
-                                            PCB_FP_DIM_LEADER_T,
-                                            PCB_FP_DIM_ORTHOGONAL_T,
-                                            PCB_FP_DIM_CENTER_T,
-                                            PCB_FP_DIM_RADIAL_T } );
-
-        if( selectedItemModified )
+        if( selectedItemsModified )
             m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
     }
 
