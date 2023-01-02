@@ -40,7 +40,7 @@ class SCH_SYMBOL;
 class SIM_LIB_MGR
 {
 public:
-    SIM_LIB_MGR( const PROJECT* aPrj );
+    SIM_LIB_MGR( const PROJECT* aPrj, REPORTER* aReporter = nullptr );
     virtual ~SIM_LIB_MGR() = default;
 
     void Clear();
@@ -80,6 +80,7 @@ public:
 
 private:
     const PROJECT*                                   m_project;
+    REPORTER*                                        m_reporter;
     std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries;
     std::vector<std::unique_ptr<SIM_MODEL>>          m_models;
 };

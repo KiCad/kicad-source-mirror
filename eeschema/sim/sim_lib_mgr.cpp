@@ -36,8 +36,9 @@
 #include <sim/sim_model.h>
 #include <sim/sim_model_ideal.h>
 
-SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj ) :
-        m_project( aPrj )
+SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj, REPORTER* aReporter ) :
+        m_project( aPrj ),
+        m_reporter( aReporter )
 {
 }
 
@@ -146,7 +147,7 @@ SIM_LIBRARY& SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER* aR
 
 SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins )
 {
-    m_models.push_back( SIM_MODEL::Create( aType, aPins ) );
+    m_models.push_back( SIM_MODEL::Create( aType, aPins, m_reporter ) );
     return *m_models.back();
 }
 
@@ -154,7 +155,7 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, const std::vector<LI
 SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel,
                                      const std::vector<LIB_PIN*>& aPins )
 {
-    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins ) );
+    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, m_reporter ) );
     return *m_models.back();
 }
 
@@ -164,7 +165,7 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL& aBaseModel,
                                      const std::vector<LIB_PIN*>& aPins,
                                      const std::vector<T>& aFields )
 {
-    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, aFields ) );
+    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, aFields, m_reporter ) );
     return *m_models.back();
 }
 
@@ -254,7 +255,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<T>& aFields,
     }
     else
     {
-        m_models.push_back( SIM_MODEL::Create( aFields, aPins ) );
+        m_models.push_back( SIM_MODEL::Create( aFields, aPins, m_reporter ) );
         return { baseModelName, *m_models.back() };
     }
 }
@@ -273,6 +274,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
 {
     wxString     path = ResolveLibraryPath( aLibraryPath, m_project );
     SIM_LIBRARY* library = nullptr;
+    wxString     msg;
 
     std::function<std::string(const std::string&, const std::string&)> f2 =
             std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, std::placeholders::_1, std::placeholders::_2 );
@@ -284,28 +286,42 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
     }
     catch( const IO_ERROR& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error loading simulation model library '%s': %s" ),
-                                          path,
-                                          e.What() ) );
+        msg.Printf( _( "Error loading simulation model library '%s': %s" ),
+                    path,
+                    e.What() );
+
+        if( m_reporter )
+            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        else
+            THROW_IO_ERROR( msg );
     }
 
     if( aBaseModelName == "" )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error loading simulation model: no '%s' field" ),
-                                          SIM_LIBRARY::NAME_FIELD ) );
+        msg.Printf( _( "Error loading simulation model: no '%s' field" ),
+                    SIM_LIBRARY::NAME_FIELD );
+
+        if( m_reporter )
+            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        else
+            THROW_IO_ERROR( msg );
     }
 
     SIM_MODEL* baseModel = library->FindModel( aBaseModelName );
 
     if( !baseModel )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error loading simulation model: could not find "
-                                             "base model '%s' in library '%s'" ),
-                                          aBaseModelName,
-                                          path ) );
+        msg.Printf( _( "Error loading simulation model: could not find base model '%s' in library '%s'" ),
+                    aBaseModelName,
+                    path );
+
+        if( m_reporter )
+            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        else
+            THROW_IO_ERROR( msg );
     }
 
-    m_models.push_back( SIM_MODEL::Create( *baseModel, aPins, aFields ) );
+    m_models.push_back( SIM_MODEL::Create( *baseModel, aPins, aFields, m_reporter ) );
 
     return { aBaseModelName, *m_models.back() };
 }

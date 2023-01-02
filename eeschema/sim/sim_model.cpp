@@ -443,7 +443,8 @@ void SIM_MODEL::WriteFields( std::vector<LIB_FIELD>& aFields ) const
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_PIN*>& aPins )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_PIN*>& aPins,
+                                              REPORTER* aReporter )
 {
     std::unique_ptr<SIM_MODEL> model = Create( aType );
 
@@ -452,9 +453,12 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_
         // Passing nullptr to ReadDataFields will make it act as if all fields were empty.
         model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
     }
-    catch( ... )
+    catch( IO_ERROR& err )
     {
-        // Shouldn't happen with nothing to read from fields
+        if( aReporter )
+            aReporter->Report( err.What(), RPT_SEVERITY_ERROR );
+        else
+            DisplayErrorMessage( nullptr, err.What() );
     }
 
     return model;
@@ -462,7 +466,8 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_
 
 
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
-                                              const std::vector<LIB_PIN*>& aPins)
+                                              const std::vector<LIB_PIN*>& aPins,
+                                              REPORTER* aReporter )
 {
     std::unique_ptr<SIM_MODEL> model;
 
@@ -480,7 +485,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
     }
     catch( IO_ERROR& err )
     {
-        DisplayErrorMessage( nullptr, err.What() );
+        if( aReporter )
+            aReporter->Report( err.What(), RPT_SEVERITY_ERROR );
+        else
+            DisplayErrorMessage( nullptr, err.What() );
     }
 
     return model;
@@ -490,7 +498,8 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
 template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
-                                              const std::vector<T>& aFields )
+                                              const std::vector<T>& aFields,
+                                              REPORTER* aReporter )
 {
     TYPE type = ReadTypeFromFields( aFields );
 
@@ -514,7 +523,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
     }
     catch( IO_ERROR& err )
     {
-        DisplayErrorMessage( nullptr, err.What() );
+        if( aReporter )
+            aReporter->Report( err.What(), RPT_SEVERITY_ERROR );
+        else
+            DisplayErrorMessage( nullptr, err.What() );
     }
 
     return model;
@@ -522,16 +534,19 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
                                                        const std::vector<LIB_PIN*>& aPins,
-                                                       const std::vector<SCH_FIELD>& aFields );
+                                                       const std::vector<SCH_FIELD>& aFields,
+                                                       REPORTER* aReporter );
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
                                                        const std::vector<LIB_PIN*>& aPins,
-                                                       const std::vector<LIB_FIELD>& aFields );
+                                                       const std::vector<LIB_FIELD>& aFields,
+                                                       REPORTER* aReporter );
 
 
 template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
-                                              const std::vector<LIB_PIN*>& aPins )
+                                              const std::vector<LIB_PIN*>& aPins,
+                                              REPORTER* aReporter )
 {
     TYPE type = ReadTypeFromFields( aFields );
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
@@ -560,7 +575,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
         catch( const IO_ERROR& err )
         {
             // We own the pin syntax, so if we can't parse it then there's an error, full stop.
-            DisplayErrorMessage( nullptr, err.What() );
+            if( aReporter )
+                aReporter->Report( err.What(), RPT_SEVERITY_ERROR );
+            else
+                DisplayErrorMessage( nullptr, err.What() );
         }
     }
 
@@ -568,9 +586,11 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
 }
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFields,
-                                                       const std::vector<LIB_PIN*>& aPins );
+                                                       const std::vector<LIB_PIN*>& aPins,
+                                                       REPORTER* aReporter );
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<LIB_FIELD>& aFields,
-                                                       const std::vector<LIB_PIN*>& aPins );
+                                                       const std::vector<LIB_PIN*>& aPins,
+                                                       REPORTER* aReporter );
 
 
 template <typename T>
@@ -1529,40 +1549,35 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     }
 
     wxString spiceDeviceType = spiceDeviceInfo.m_Text.Trim( true ).Trim( false );
+    wxString spiceLib = spiceLibInfo.m_Text.Trim( true ).Trim( false );
     wxString spiceModel = spiceModelInfo.m_Text.Trim( true ).Trim( false );
 
     bool libraryModel = false;
     bool inferredModel = false;
     bool internalModel = false;
 
-    if( !spiceLibInfo.IsEmpty() )
+    if( !spiceLib.IsEmpty() )
     {
-        SIM_LIB_MGR libMgr( aProject );
+        wxString             msg;
+        WX_STRING_REPORTER   reporter( &msg );
+        SIM_LIB_MGR          libMgr( aProject, &reporter );
+        std::vector<T_field> emptyFields;
 
-        try
+        SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
+                                                       emptyFields, sourcePins );
+
+        libraryModel = !reporter.HasMessage();  // Otherwise we'll fall back to raw spice model
+
+        if( pinMapInfo.IsEmpty() )
         {
-            std::vector<T_field> emptyFields;
-            SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLibInfo.m_Text,
-                                                           spiceModel.ToStdString(),
-                                                           emptyFields, sourcePins );
+            // Try to generate a default pin map from the SIM_MODEL's pins; if that fails,
+            // generate one from the symbol's pins
 
-            libraryModel = true;
+            model.model.SIM_MODEL::createPins( sourcePins );
+            pinMapInfo.m_Text = wxString( model.model.Serializer().GeneratePins() );
 
             if( pinMapInfo.IsEmpty() )
-            {
-                // Try to generate a default pin map from the SIM_MODEL's pins; if that fails,
-                // generate one from the symbol's pins
-
-                model.model.SIM_MODEL::createPins( sourcePins );
-                pinMapInfo.m_Text = wxString( model.model.Serializer().GeneratePins() );
-
-                if( pinMapInfo.IsEmpty() )
-                    pinMapInfo.m_Text = generateDefaultPinMapFromSymbol( sourcePins );
-            }
-        }
-        catch( ... )
-        {
-            // Fall back to raw spice model
+                pinMapInfo.m_Text = generateDefaultPinMapFromSymbol( sourcePins );
         }
     }
     else if( ( spiceDeviceType == "R" || spiceDeviceType == "L" || spiceDeviceType == "C" )
@@ -1670,14 +1685,14 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     }
     else    // Insert a raw spice model as a substitute.
     {
-        if( spiceDeviceType.IsEmpty() && spiceLibInfo.IsEmpty() )
+        if( spiceDeviceType.IsEmpty() && spiceLib.IsEmpty() )
         {
             spiceParamsInfo = spiceModelInfo;
         }
         else
         {
             spiceParamsInfo.m_Text.Printf( wxT( "type=\"%s\" model=\"%s\" lib=\"%s\"" ),
-                                           spiceDeviceType, spiceModel, spiceLibInfo.m_Text );
+                                           spiceDeviceType, spiceModel, spiceLib );
         }
 
         T_field deviceField = spiceDeviceInfo.CreateField( &aSymbol, SIM_MODEL::DEVICE_TYPE_FIELD );

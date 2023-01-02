@@ -258,6 +258,8 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                 spiceItem.fields.back().SetText( pinMap );
             }
 
+            // JEY TODO: move from try/catch to REPORTER interface...
+            // readModel() is the only one that throws, and it won't if m_libMgr has a REPORTER
             try
             {
                 readRefName( sheet, *symbol, spiceItem, refNames );

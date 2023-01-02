@@ -43,8 +43,7 @@
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <wx/ffile.h>
-
-#include "sim/sim_model.h"
+#include <sim/sim_lib_mgr.h>
 
 
 /* ERC tests :
@@ -1013,8 +1012,11 @@ int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
 
 int ERC_TESTER::TestSimModelIssues()
 {
-    SCH_SHEET_LIST  sheets = m_schematic->GetSheets();
-    int         err_count = 0;
+    wxString           msg;
+    WX_STRING_REPORTER reporter( &msg );
+    SCH_SHEET_LIST     sheets = m_schematic->GetSheets();
+    int                err_count = 0;
+    SIM_LIB_MGR        libMgr( &m_schematic->Prj(), &reporter );
 
     for( SCH_SHEET_PATH& sheet : sheets )
     {
@@ -1022,18 +1024,16 @@ int ERC_TESTER::TestSimModelIssues()
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            // Reset for each symbol
+            msg.Clear();
 
-            try
-            {
-                /* JEY TODO
-                std::unique_ptr<SIM_MODEL>  model = SIM_MODEL::Create( &sheet, symbol, true );
-                 */
-            }
-            catch( IO_ERROR& e )
+            SCH_SYMBOL*        symbol = static_cast<SCH_SYMBOL*>( item );
+            SIM_LIBRARY::MODEL model = libMgr.CreateModel( &sheet, *symbol );
+
+            if( !msg.IsEmpty() )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMULATION_MODEL );
-                ercItem->SetErrorMessage( e.Problem() );
+                ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
