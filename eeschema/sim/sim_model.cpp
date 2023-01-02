@@ -1303,6 +1303,39 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         return;
     }
 
+    class FIELD_INFO
+    {
+    public:
+        FIELD_INFO()
+        {
+            m_Attributes.m_Visible = false;
+        };
+
+        FIELD_INFO( const wxString& aText, T_field* aField ) :
+                m_Text( aText ),
+                m_Attributes( aField->GetAttributes() ),
+                m_Pos( aField->GetPosition() )
+        {}
+
+        bool IsEmpty() { return m_Text.IsEmpty(); }
+
+        T_field CreateField( T_symbol* aSymbol, const wxString& aFieldName )
+        {
+            T_field field( aSymbol, -1, aFieldName );
+
+            field.SetText( m_Text );
+            field.SetAttributes( m_Attributes );
+            field.SetPosition( m_Pos );
+
+            return std::move( field );
+        }
+
+    public:
+        wxString        m_Text;
+        TEXT_ATTRIBUTES m_Attributes;
+        VECTOR2I        m_Pos;
+    };
+
     auto getSIValue =
             []( T_field* aField )
             {
@@ -1349,26 +1382,13 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
                } );
 
-    wxString        spiceDeviceType;
-    wxString        spiceModel;
-    wxString        spiceType;
-    wxString        spiceLib;
-    wxString        pinMap;
-    wxString        spiceParams;
-    TEXT_ATTRIBUTES deviceTypeTextAttrs;
-    TEXT_ATTRIBUTES modelTextAttrs;
-    TEXT_ATTRIBUTES spiceTypeTextAttrs;
-    TEXT_ATTRIBUTES spiceLibTextAttrs;
-    TEXT_ATTRIBUTES pinMapTextAttrs;
-    TEXT_ATTRIBUTES paramsTextAttrs;
-    bool            modelFromValueField = false;
-
-    deviceTypeTextAttrs.m_Visible = false;
-    modelTextAttrs.m_Visible = false;
-    spiceTypeTextAttrs.m_Visible = false;
-    spiceLibTextAttrs.m_Visible = false;
-    pinMapTextAttrs.m_Visible = false;
-    paramsTextAttrs.m_Visible = false;
+    FIELD_INFO spiceDeviceInfo;
+    FIELD_INFO spiceModelInfo;
+    FIELD_INFO spiceTypeInfo;
+    FIELD_INFO spiceLibInfo;
+    FIELD_INFO spiceParamsInfo;
+    FIELD_INFO pinMapInfo;
+    bool       modelFromValueField = false;
 
     if( aSymbol.FindField( wxT( "Spice_Primitive" ) )
         || aSymbol.FindField( wxT( "Spice_Node_Sequence" ) )
@@ -1378,8 +1398,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     {
         if( T_field* primitiveField = aSymbol.FindField( wxT( "Spice_Primitive" ) ) )
         {
-            spiceDeviceType = primitiveField->GetText();
-            deviceTypeTextAttrs = primitiveField->GetAttributes();
+            spiceDeviceInfo = FIELD_INFO( primitiveField->GetText(), primitiveField );
             aSymbol.RemoveField( primitiveField );
         }
 
@@ -1387,6 +1406,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         {
             const wxString  delimiters( "{:,; }" );
             const wxString& nodeSequence = nodeSequenceField->GetText();
+            wxString        pinMap;
 
             if( nodeSequence != "" )
             {
@@ -1404,19 +1424,18 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 }
             }
 
-            pinMapTextAttrs = nodeSequenceField->GetAttributes();
+            pinMapInfo = FIELD_INFO( pinMap, nodeSequenceField );
             aSymbol.RemoveField( nodeSequenceField );
         }
 
         if( T_field* modelField = aSymbol.FindField( wxT( "Spice_Model" ) ) )
         {
-            spiceModel = getSIValue( modelField );
-            modelTextAttrs = modelField->GetAttributes();
+            spiceModelInfo = FIELD_INFO( getSIValue( modelField ), modelField );
             aSymbol.RemoveField( modelField );
         }
         else
         {
-            spiceModel = getSIValue( valueField );
+            spiceModelInfo = FIELD_INFO( getSIValue( valueField ), valueField );
             modelFromValueField = true;
         }
 
@@ -1439,8 +1458,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
         if( T_field* libFileField = aSymbol.FindField( wxT( "Spice_Lib_File" ) ) )
         {
-            spiceLib = libFileField->GetText();
-            spiceLibTextAttrs = libFileField->GetAttributes();
+            spiceLibInfo = FIELD_INFO( libFileField->GetText(), libFileField );
             aSymbol.RemoveField( libFileField );
         }
     }
@@ -1465,6 +1483,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                             || prefix.StartsWith( wxT( "C" ) );
 
             // Migrate pins from array of indexes to name-value-pairs
+            wxString      pinMap;
             wxArrayString pinIndexes;
 
             wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
@@ -1509,36 +1528,36 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         return;
     }
 
-    spiceDeviceType = spiceDeviceType.Trim( true ).Trim( false );
-    spiceModel = spiceModel.Trim( true ).Trim( false );
-    spiceType = spiceType.Trim( true ).Trim( false );
+    wxString spiceDeviceType = spiceDeviceInfo.m_Text.Trim( true ).Trim( false );
+    wxString spiceModel = spiceModelInfo.m_Text.Trim( true ).Trim( false );
 
     bool libraryModel = false;
     bool inferredModel = false;
     bool internalModel = false;
 
-    if( !spiceLib.IsEmpty() )
+    if( !spiceLibInfo.IsEmpty() )
     {
         SIM_LIB_MGR libMgr( aProject );
 
         try
         {
             std::vector<T_field> emptyFields;
-            SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
+            SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLibInfo.m_Text,
+                                                           spiceModel.ToStdString(),
                                                            emptyFields, sourcePins );
 
             libraryModel = true;
 
-            if( pinMap.IsEmpty() )
+            if( pinMapInfo.IsEmpty() )
             {
                 // Try to generate a default pin map from the SIM_MODEL's pins; if that fails,
                 // generate one from the symbol's pins
 
                 model.model.SIM_MODEL::createPins( sourcePins );
-                pinMap = wxString( model.model.Serializer().GeneratePins() );
+                pinMapInfo.m_Text = wxString( model.model.Serializer().GeneratePins() );
 
-                if( pinMap.IsEmpty() )
-                    pinMap = generateDefaultPinMapFromSymbol( sourcePins );
+                if( pinMapInfo.IsEmpty() )
+                    pinMapInfo.m_Text = generateDefaultPinMapFromSymbol( sourcePins );
             }
         }
         catch( ... )
@@ -1561,7 +1580,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
         if( tokenizer.HasMoreTokens() )
         {
-            spiceType = tokenizer.GetNextToken();
+            wxString spiceType = tokenizer.GetNextToken();
             spiceType.MakeUpper();
 
             for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
@@ -1586,18 +1605,19 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                                                       SIM_VALUE_GRAMMAR::NOTATION::SPICE );
                             }
 
-                            spiceType = SIM_MODEL::TypeInfo( type ).fieldValue;
-                            spiceParams = wxString( model->Serializer().GenerateParams() );
-                            paramsTextAttrs = modelTextAttrs;
+                            spiceTypeInfo.m_Text = SIM_MODEL::TypeInfo( type ).fieldValue;
+
+                            spiceParamsInfo = spiceModelInfo;
+                            spiceParamsInfo.m_Text = wxString( model->Serializer().GenerateParams() );
                         }
 
                         internalModel = true;
 
-                        if( pinMap.IsEmpty() )
+                        if( pinMapInfo.IsEmpty() )
                         {
                             // Generate a default pin map from the SIM_MODEL's pins
                             model->createPins( sourcePins );
-                            pinMap = wxString( model->Serializer().GeneratePins() );
+                            pinMapInfo.m_Text = wxString( model->Serializer().GeneratePins() );
                         }
                     }
                     catch( ... )
@@ -1613,22 +1633,16 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
     if( libraryModel )
     {
-        T_field libraryField( &aSymbol, -1, SIM_MODEL::LIBRARY_FIELD );
-        libraryField.SetText( spiceLib );
-        libraryField.SetAttributes( spiceLibTextAttrs );
+        T_field libraryField = spiceLibInfo.CreateField( &aSymbol, SIM_MODEL::LIBRARY_FIELD );
         aSymbol.AddField( libraryField );
 
-        T_field nameField( &aSymbol, -1, SIM_MODEL::NAME_FIELD );
-        nameField.SetText( spiceModel );
-        nameField.SetAttributes( modelTextAttrs );
+        T_field nameField = spiceModelInfo.CreateField( &aSymbol, SIM_MODEL::NAME_FIELD );
         aSymbol.AddField( nameField );
 
         // Don't write a paramsField unless we actually have overrides
-        if( !spiceParams.IsEmpty() )
+        if( !spiceParamsInfo.IsEmpty() )
         {
-            T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
-            paramsField.SetText( spiceParams );
-            paramsField.SetAttributes( paramsTextAttrs );
+            T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_MODEL::PARAMS_FIELD );
             aSymbol.AddField( paramsField );
         }
 
@@ -1642,19 +1656,13 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     }
     else if( internalModel )
     {
-        T_field deviceTypeField( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
-        deviceTypeField.SetText( spiceDeviceType );
-        deviceTypeField.SetAttributes( deviceTypeTextAttrs );
-        aSymbol.AddField( deviceTypeField );
+        T_field deviceField = spiceDeviceInfo.CreateField( &aSymbol, SIM_MODEL::DEVICE_TYPE_FIELD );
+        aSymbol.AddField( deviceField );
 
-        T_field typeField( &aSymbol, -1, SIM_MODEL::TYPE_FIELD );
-        typeField.SetText( spiceType );
-        typeField.SetAttributes( spiceTypeTextAttrs );
+        T_field typeField = spiceTypeInfo.CreateField( &aSymbol, SIM_MODEL::TYPE_FIELD );
         aSymbol.AddField( typeField );
 
-        T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
-        paramsField.SetText( spiceParams );
-        paramsField.SetAttributes( paramsTextAttrs );
+        T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_MODEL::PARAMS_FIELD );
         aSymbol.AddField( paramsField );
 
         if( modelFromValueField )
@@ -1662,25 +1670,20 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     }
     else    // Insert a raw spice model as a substitute.
     {
-        if( spiceDeviceType.IsEmpty() && spiceLib.IsEmpty() )
+        if( spiceDeviceType.IsEmpty() && spiceLibInfo.IsEmpty() )
         {
-            spiceParams = spiceModel;
-            paramsTextAttrs = modelTextAttrs;
+            spiceParamsInfo = spiceModelInfo;
         }
         else
         {
-            spiceParams.Printf( wxT( "type=\"%s\" model=\"%s\" lib=\"%s\"" ),
-                                spiceDeviceType, spiceModel, spiceLib );
+            spiceParamsInfo.m_Text.Printf( wxT( "type=\"%s\" model=\"%s\" lib=\"%s\"" ),
+                                           spiceDeviceType, spiceModel, spiceLibInfo.m_Text );
         }
 
-        T_field deviceTypeField( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
-        deviceTypeField.SetText( SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_T::SPICE ).fieldValue );
-        deviceTypeField.SetAttributes( deviceTypeTextAttrs );
-        aSymbol.AddField( deviceTypeField );
+        T_field deviceField = spiceDeviceInfo.CreateField( &aSymbol, SIM_MODEL::DEVICE_TYPE_FIELD );
+        aSymbol.AddField( deviceField );
 
-        T_field paramsField( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
-        paramsField.SetText( spiceParams );
-        paramsField.SetAttributes( paramsTextAttrs );
+        T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_MODEL::PARAMS_FIELD );
         aSymbol.AddField( paramsField );
 
         if( modelFromValueField )
@@ -1695,15 +1698,13 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         // We know nothing about the SPICE model here, so we've got no choice but to generate
         // the default pin map from the symbol's pins.
 
-        if( pinMap.IsEmpty() )
-            pinMap = generateDefaultPinMapFromSymbol( sourcePins );
+        if( pinMapInfo.IsEmpty() )
+            pinMapInfo.m_Text = generateDefaultPinMapFromSymbol( sourcePins );
     }
 
-    if( !pinMap.IsEmpty() )
+    if( !pinMapInfo.IsEmpty() )
     {
-        T_field pinsField( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
-        pinsField.SetText( pinMap );
-        pinsField.SetAttributes( pinMapTextAttrs );
+        T_field pinsField = pinMapInfo.CreateField( &aSymbol, SIM_MODEL::PINS_FIELD );
         aSymbol.AddField( pinsField );
     }
 }
