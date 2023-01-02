@@ -354,7 +354,7 @@ public:
      * Set the viewport center to the current cursor position and warps the cursor to the
      * screen center.
      */
-    virtual void CenterOnCursor() const = 0;
+    virtual void CenterOnCursor() = 0;
 
     /**
      * Restore the default VIEW_CONTROLS settings.

@@ -808,7 +808,7 @@ void WX_VIEW_CONTROLS::WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCo
 }
 
 
-void WX_VIEW_CONTROLS::CenterOnCursor() const
+void WX_VIEW_CONTROLS::CenterOnCursor()
 {
     const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
     VECTOR2I screenCenter( screenSize / 2 );
@@ -816,7 +816,8 @@ void WX_VIEW_CONTROLS::CenterOnCursor() const
     if( GetMousePosition( false ) != screenCenter )
     {
         m_view->SetCenter( GetCursorPosition() );
-        KIPLATFORM::UI::WarpPointer( m_parentPanel, KiROUND( screenSize.x / 2 ), KiROUND( screenSize.y / 2 ) );
+        m_dragStartPoint = screenCenter;
+        KIPLATFORM::UI::WarpPointer( m_parentPanel, screenCenter.x, screenCenter.y );
     }
 }
 

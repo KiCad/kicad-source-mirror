@@ -100,7 +100,7 @@ public:
                           bool aWarpView = false ) override;
 
     ///< @copydoc VIEW_CONTROLS::CenterOnCursor()
-    void CenterOnCursor() const override;
+    void CenterOnCursor() override;
 
     ///< Adjusts the scrollbars position to match the current viewport.
     void UpdateScrollbars();
