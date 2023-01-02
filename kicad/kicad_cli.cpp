@@ -71,6 +71,7 @@
 #include "cli/command_sym_export.h"
 #include "cli/command_sym_export_svg.h"
 #include "cli/command_sym_upgrade.h"
+#include "cli/command_version.h"
 #include "cli/exit_codes.h"
 #include "cli/cli_names.h"
 
@@ -145,6 +146,7 @@ static CLI::SYM_COMMAND                  symCmd{};
 static CLI::SYM_EXPORT_COMMAND           symExportCmd{};
 static CLI::SYM_EXPORT_SVG_COMMAND       symExportSvgCmd{};
 static CLI::SYM_UPGRADE_COMMAND          symUpgradeCmd{};
+static CLI::VERSION_COMMAND              versionCmd{};
 
 
 static std::vector<COMMAND_ENTRY> commandStack = {
@@ -208,6 +210,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
             }
         }
     },
+    {
+            &versionCmd,
+    }
 };
 
 
@@ -241,6 +246,14 @@ static COMMAND_ENTRY* recurseArgParserSubCommandUsed( argparse::ArgumentParser& 
     }
 
     return cliCmd;
+}
+
+
+static void printHelp( argparse::ArgumentParser& argParser )
+{
+    std::stringstream ss;
+    ss << argParser;
+    wxPrintf( FROM_UTF8( ss.str().c_str() ) );
 }
 
 
@@ -321,19 +334,10 @@ int PGM_KICAD::OnPgmRun()
             cliCmd->handler->PrintHelp();
         else
         {
-            std::stringstream ss;
-            ss << argParser;
-            wxPrintf( FROM_UTF8( ss.str().c_str() ) );
+            printHelp( argParser );
         }
 
         return CLI::EXIT_CODES::ERR_ARGS;
-    }
-
-    if( argParser[ ARG_VERSION ] == true )
-    {
-        wxPrintf( KICAD_MAJOR_MINOR_VERSION );
-
-        return 0;
     }
 
     if( argParser[ ARG_HELP ] == true )
@@ -345,18 +349,33 @@ int PGM_KICAD::OnPgmRun()
         return 0;
     }
 
-    COMMAND_ENTRY* cliCmd = nullptr;
-    for( COMMAND_ENTRY& entry : commandStack )
+    CLI::COMMAND* cliCmd = nullptr;
+
+    // the version arg gets redirected to the version subcommand
+    if( argParser[ARG_VERSION] == true )
     {
-        if( argParser.is_subcommand_used( entry.handler->GetName() ) )
+        cliCmd = &versionCmd;
+    }
+
+    if( !cliCmd )
+    {
+        for( COMMAND_ENTRY& entry : commandStack )
         {
-            cliCmd = recurseArgParserSubCommandUsed( argParser, entry );
+            if( argParser.is_subcommand_used( entry.handler->GetName() ) )
+            {
+                COMMAND_ENTRY* cmdSubEntry = recurseArgParserSubCommandUsed( argParser, entry );
+                if( cmdSubEntry != nullptr )
+                {
+                    cliCmd = cmdSubEntry->handler;
+                    break;
+                }
+            }
         }
     }
 
     if( cliCmd )
     {
-        int exitCode = cliCmd->handler->Perform( Kiway );
+        int exitCode = cliCmd->Perform( Kiway );
 
         if( exitCode != CLI::EXIT_CODES::AVOID_CLOSING )
         {
@@ -369,9 +388,7 @@ int PGM_KICAD::OnPgmRun()
     }
     else
     {
-        std::stringstream ss;
-        ss << argParser;
-        wxPrintf( FROM_UTF8( ss.str().c_str() ) );
+        printHelp( argParser );
 
         return CLI::EXIT_CODES::ERR_ARGS;
     }
