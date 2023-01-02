@@ -174,6 +174,7 @@ wxPanel* DIALOG_CHOOSE_FOOTPRINT::ConstructRightPanel( wxWindow* aParent )
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     m_preview_ctrl = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
+    m_preview_ctrl->SetUserUnits( GetUserUnits() );
     sizer->Add( m_preview_ctrl, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
 
     panel->SetSizer( sizer );

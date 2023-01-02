@@ -86,6 +86,12 @@ void FOOTPRINT_PREVIEW_WIDGET::ClearStatus()
 }
 
 
+void FOOTPRINT_PREVIEW_WIDGET::SetUserUnits( EDA_UNITS aUnits )
+{
+    m_prev_panel->SetUserUnits( aUnits );
+}
+
+
 void FOOTPRINT_PREVIEW_WIDGET::DisplayFootprint( const LIB_ID& aFPID )
 {
     if( !m_prev_panel || m_libid == aFPID )

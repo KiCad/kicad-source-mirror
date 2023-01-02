@@ -53,6 +53,7 @@ public:
 
     virtual ~FOOTPRINT_PREVIEW_PANEL( );
 
+    virtual void SetUserUnits( EDA_UNITS aUnits ) override { m_userUnits = aUnits; }
     virtual bool DisplayFootprint( const LIB_ID& aFPID ) override;
 
     virtual const KIGFX::COLOR4D& GetBackgroundColor() const override;
@@ -81,6 +82,7 @@ private:
 private:
     std::unique_ptr<BOARD>                      m_dummyBoard;
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_displayOptions;
+    EDA_UNITS                                   m_userUnits;
     std::shared_ptr<FOOTPRINT>                  m_currentFootprint;
 };
 

@@ -26,6 +26,7 @@
 #include <base_units.h>
 #include <board.h>
 #include <footprint.h>
+#include <pcb_dimension.h>
 #include <eda_draw_frame.h>
 #include <footprint_preview_panel.h>
 #include <fp_lib_table.h>
@@ -107,6 +108,25 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
 
     m_currentFootprint->SetParent( m_dummyBoard.get() );
 
+    INSPECTOR_FUNC inspector =
+            [&]( EDA_ITEM* descendant, void* aTestData )
+            {
+                PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( descendant );
+
+                if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
+                {
+                    dimension->SetUnits( m_userUnits );
+                    dimension->Update();
+                }
+
+                return INSPECT_RESULT::CONTINUE;
+            };
+
+    m_currentFootprint->Visit( inspector, nullptr, { PCB_FP_DIM_LEADER_T,
+                                                     PCB_FP_DIM_ORTHOGONAL_T,
+                                                     PCB_FP_DIM_CENTER_T,
+                                                     PCB_FP_DIM_RADIAL_T } );
+
     // Ensure we are not using the high contrast mode to display the selected footprint
     KIGFX::PAINTER* painter = GetView()->GetPainter();
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
@@ -139,7 +159,8 @@ bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
 
     try
     {
-        const FOOTPRINT* fp = fptbl->GetEnumeratedFootprint( aFPID.GetLibNickname(), aFPID.GetLibItemName() );
+        const FOOTPRINT* fp = fptbl->GetEnumeratedFootprint( aFPID.GetLibNickname(),
+                                                             aFPID.GetLibItemName() );
 
         if( fp )
             m_currentFootprint.reset( static_cast<FOOTPRINT*>( fp->Duplicate() ) );

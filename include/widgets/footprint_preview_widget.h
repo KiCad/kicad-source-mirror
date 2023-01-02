@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -25,10 +25,9 @@
 #include <functional>
 #include <import_export.h>
 #include <lib_id.h>
-
+#include <eda_units.h>
 #include <gal/color4d.h>
 
-class FOOTPRINT_LOAD_EVENT;
 class FOOTPRINT_PREVIEW_PANEL_BASE;
 class KIWAY;
 class wxStaticText;
@@ -65,6 +64,11 @@ public:
     void ClearStatus();
 
     /**
+     * Set the units for the preview.
+     */
+    void SetUserUnits( EDA_UNITS aUnits );
+
+    /**
      * Set the currently displayed footprint. Any footprint passed in here
      * must have been passed to CacheFootprint before.
      */
@@ -73,12 +77,11 @@ public:
 private:
     FOOTPRINT_PREVIEW_PANEL_BASE* m_prev_panel;
 
-    wxStaticText* m_status;
-    wxPanel*      m_statusPanel;
-    wxSizer*      m_statusSizer;
-    wxSizer*      m_outerSizer;
-    LIB_ID        m_libid;
-
+    wxStaticText*                 m_status;
+    wxPanel*                      m_statusPanel;
+    wxSizer*                      m_statusSizer;
+    wxSizer*                      m_outerSizer;
+    LIB_ID                        m_libid;
 };
 
 
@@ -90,6 +93,8 @@ class APIEXPORT FOOTPRINT_PREVIEW_PANEL_BASE
 {
 public:
     virtual ~FOOTPRINT_PREVIEW_PANEL_BASE() {}
+
+    virtual void SetUserUnits( EDA_UNITS aUnits ) = 0;
 
     /**
      * Set the currently displayed footprint. Any footprint passed in here

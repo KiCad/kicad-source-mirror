@@ -305,6 +305,7 @@ wxPanel* DIALOG_CHOOSE_SYMBOL::ConstructRightPanel( wxWindow* aParent )
                 m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( m_parent, panel, fp_list, true );
 
             m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
+            m_fp_preview->SetUserUnits( GetUserUnits() );
         }
 
         if( m_fp_sel_ctrl )
