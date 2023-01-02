@@ -50,6 +50,7 @@
 #include <kiplatform/environment.h>
 
 #include <wx/app.h>
+#include <wx/utils.h>
 
 #include <config.h>
 
@@ -83,6 +84,39 @@ SCRIPTING::~SCRIPTING()
 bool SCRIPTING::IsWxAvailable()
 {
 #ifdef KICAD_SCRIPTING_WXPYTHON
+    PyLOCK lock;
+    using namespace pybind11::literals;
+
+    pybind11::dict locals;
+
+    pybind11::exec( R"(
+from wx import version
+wx_version = version()
+    )", pybind11::globals(), locals );
+
+    // e.g. "4.0.7 gtk3 (phoenix) wxWidgets 3.0.4"
+    wxString version( locals["wx_version"].cast<std::string>().c_str(), wxConvUTF8 );
+
+    int idx = version.Find( wxT( "wxWidgets " ) );
+
+    if( idx == wxNOT_FOUND )
+    {
+        wxLogError( wxT( "Could not determine wxPython version. "
+                         "Python plugins will not be available." ) );
+        return false;
+    }
+
+    version = version.Mid( idx + 10 );
+    wxString wxVersion = wxGetLibraryVersionInfo().GetVersionString();
+
+    if( wxVersion.Cmp( version ) != 0 )
+    {
+        wxString msg = wxT( "The wxPython library was compiled against wxWidgets %s but KiCad is "
+                            "using %s.  Python plugins will not be available." );
+        wxLogError( wxString::Format( msg, version, wxVersion ) );
+        return false;
+    }
+
     return true;
 #else
     return false;
