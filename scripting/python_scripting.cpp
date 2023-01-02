@@ -84,6 +84,12 @@ SCRIPTING::~SCRIPTING()
 bool SCRIPTING::IsWxAvailable()
 {
 #ifdef KICAD_SCRIPTING_WXPYTHON
+    static bool run = false;
+    static bool available = true;
+
+    if( run )
+        return available;
+
     PyLOCK lock;
     using namespace pybind11::literals;
 
@@ -107,7 +113,7 @@ except:
     {
         wxLogError( wxT( "Could not determine wxPython version. "
                          "Python plugins will not be available." ) );
-        return false;
+        available = false;
     }
 
     version = version.Mid( idx + 10 );
@@ -120,10 +126,12 @@ except:
         wxString msg = wxT( "The wxPython library was compiled against wxWidgets %s but KiCad is "
                             "using %s.  Python plugins will not be available." );
         wxLogError( wxString::Format( msg, version, wxVersion ) );
-        return false;
+        available = false;
     }
 
-    return true;
+    run = true;
+
+    return available;
 #else
     return false;
 #endif
