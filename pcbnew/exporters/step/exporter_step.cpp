@@ -32,6 +32,7 @@
 #include <pgm_base.h>
 #include <base_units.h>
 #include <filename_resolver.h>
+#include <trace_helpers.h>
 
 #include <Message.hxx>                // OpenCascade messenger
 #include <Message_PrinterOStream.hxx> // OpenCascade output messenger
@@ -77,7 +78,8 @@ protected:
                         const Message_Gravity theGravity ) const override
 #endif
     {
-      if( theGravity >= Message_Info )
+        if( theGravity >= Message_Warning
+            || ( wxLog::IsAllowedTraceMask( traceKiCad2Step ) && theGravity == Message_Info ) )
       {
           ReportMessage( theString.ToCString() );
 
@@ -88,6 +90,9 @@ protected:
           ReportMessage( wxT( "\n" ) );
 #endif
       }
+
+      if( theGravity == Message_Warning )
+          m_converter->SetWarn();
 
       if( theGravity >= Message_Alarm )
           m_converter->SetError();
@@ -105,6 +110,7 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     m_params( aParams ),
     m_error( false ),
     m_fail( false ),
+    m_warn( false ),
     m_hasDrillOrigin( false ),
     m_hasGridOrigin( false ),
     m_board( aBoard ),
@@ -361,7 +367,7 @@ bool EXPORTER_STEP::Export()
             msg = _( "Unable to create STEP file.\n"
                      "Check that the board has a valid outline and models." );
         }
-        else if( m_error )
+        else if( m_error || m_warn )
         {
             msg = _( "STEP file has been created, but there are warnings." );
         }

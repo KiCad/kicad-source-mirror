@@ -72,7 +72,8 @@ public:
     wxString m_outputFile;
 
     void SetError() { m_error = true; }
-    void SetFail() { m_error = true; }
+    void SetFail() { m_fail = true; }
+    void SetWarn() { m_warn = true; }
 
 private:
     bool composePCB();
@@ -84,6 +85,7 @@ private:
 
     bool m_error;
     bool m_fail;
+    bool m_warn;
 
     bool            m_hasDrillOrigin;
     bool            m_hasGridOrigin;
