@@ -1695,6 +1695,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                                            spiceDeviceType, spiceModel, spiceLib );
         }
 
+        spiceDeviceInfo.m_Text = SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_T::SPICE ).fieldValue;
+
         T_field deviceField = spiceDeviceInfo.CreateField( &aSymbol, SIM_MODEL::DEVICE_TYPE_FIELD );
         aSymbol.AddField( deviceField );
 
