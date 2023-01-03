@@ -1709,8 +1709,11 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         T_field typeField = spiceTypeInfo.CreateField( &aSymbol, SIM_MODEL::TYPE_FIELD );
         aSymbol.AddField( typeField );
 
-        T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_MODEL::PARAMS_FIELD );
-        aSymbol.AddField( paramsField );
+        if( !spiceParamsInfo.IsEmpty() )
+        {
+            T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_MODEL::PARAMS_FIELD );
+            aSymbol.AddField( paramsField );
+        }
 
         if( modelFromValueField )
             valueField->SetText( wxT( "${SIM.PARAMS}" ) );
