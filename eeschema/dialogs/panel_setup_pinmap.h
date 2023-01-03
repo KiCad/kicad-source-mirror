@@ -33,7 +33,7 @@
 
 class SCH_EDIT_FRAME;
 class SCHEMATIC;
-class wxBitmapButton;
+class BITMAP_BUTTON;
 
 
 class PANEL_SETUP_PINMAP : public PANEL_SETUP_PINMAP_BASE
@@ -48,13 +48,13 @@ public:
 private:
     void changeErrorLevel( wxCommandEvent& event );
     void reBuildMatrixPanel();
-    void setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_ERROR aState );
+    void setDRCMatrixButtonState( BITMAP_BUTTON *aButton, PIN_ERROR aState );
 
     DECLARE_EVENT_TABLE()
 
     SCH_EDIT_FRAME*   m_parent;
     SCHEMATIC*        m_schematic;
-    wxBitmapButton*   m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
+    BITMAP_BUTTON*    m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
     bool              m_initialized;
 };
 
