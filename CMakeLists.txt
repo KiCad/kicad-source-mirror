@@ -1009,25 +1009,8 @@ add_custom_target( uninstall
 # Installation
 #================================================
 
-
 include( CTest )
 enable_testing()
-
-if( UNIX AND NOT APPLE )
-
-    # Create a *.deb file:
-    set( CPACK_GENERATOR "DEB" )
-    set( CPACK_DEBIAN_PACKAGE_MAINTAINER "http://launchpad.net/kicad" )
-
-    set( CPACK_PACKAGE_VERSION_MAJOR 1 )
-    set( CPACK_PACKAGE_VERSION_MINOR 0 )
-    set( CPACK_PACKAGE_VERSION_PATCH 0 )
-    #set( CPACK_PACKAGE_CONTACT Firstname Lastname <email@company.com> )
-    set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "KiCad built by CMake build system." )
-
-    include( CPack )
-
-endif()
 
 #================================================
 # Let CMake look in these directories for nested
