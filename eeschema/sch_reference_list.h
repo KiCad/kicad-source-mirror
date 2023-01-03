@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,6 +131,14 @@ public:
     void Annotate();
 
     /**
+     * Verify the reference should always be automatically annotated.
+     *
+     * @return true if the symbol reference should always be automatically annotated otherwise
+     *         false.
+     */
+    bool AlwaysAnnotate() const;
+
+    /**
      * Attempt to split the reference designator into a name (U) and number (1).
      *
      * If the last character is '?' or not a digit, the reference is tagged as not annotated.
@@ -251,10 +259,6 @@ typedef std::function<void( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* a
  */
 class SCH_REFERENCE_LIST
 {
-
-private:
-    std::vector<SCH_REFERENCE> m_flatList;
-
 public:
     SCH_REFERENCE_LIST()
     {
@@ -616,6 +620,8 @@ private:
 
     // Used for sorting static sortByTimeStamp function
     friend class BACK_ANNOTATE;
+
+    std::vector<SCH_REFERENCE> m_flatList;
 };
 
 #endif    // _SCH_REFERENCE_LIST_H_

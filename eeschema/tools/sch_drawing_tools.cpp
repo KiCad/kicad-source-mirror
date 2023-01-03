@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,12 +192,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     SCH_REFERENCE_LIST refs;
                     refs.AddItem( newReference );
 
-                    if( symbol->GetLibSymbolRef()->IsPower() )
-                    {
-                        refs.ReannotateByOptions( UNSORTED, INCREMENTAL_BY_REF, 1, existingRefs,
-                                                  true, nullptr );
-                    }
-                    else if( cfg->m_AnnotatePanel.automatic )
+                    if( cfg->m_AnnotatePanel.automatic || newReference.AlwaysAnnotate() )
                     {
                         refs.ReannotateByOptions(
                                 (ANNOTATE_ORDER_T) cfg->m_AnnotatePanel.sort_order,
@@ -331,6 +326,12 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 addSymbol( symbol );
                 annotate();
 
+                // Update the list of references for the next symbol placement.
+                SCH_REFERENCE placedSymbolReference( symbol, symbol->GetLibSymbolRef().get(),
+                                                     m_frame->GetCurrentSheet() );
+                existingRefs.AddItem( placedSymbolReference );
+                existingRefs.SortByReferenceOnly();
+
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                     symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
@@ -384,6 +385,13 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                         addSymbol( nextSymbol );
                         symbol = nextSymbol; // annotate() looks at symbol, update it
                         annotate();
+
+                        // Update the list of references for the next symbol placement.
+                        SCH_REFERENCE placedSymbolReference( symbol,
+                                                             symbol->GetLibSymbolRef().get(),
+                                                             m_frame->GetCurrentSheet() );
+                        existingRefs.AddItem( placedSymbolReference );
+                        existingRefs.SortByReferenceOnly();
                     }
                 }
 

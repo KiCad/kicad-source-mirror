@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jean-pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -603,6 +603,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 {
                     // This is the symbol we're currently annotating. Hold the unit!
                     ref_unit.m_unit = lockedRef.m_unit;
+
                     // lock this new full reference
                     inUseRefs.insert( buildFullReference( ref_unit ) );
                 }
@@ -629,6 +630,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                         m_flatList[jj].m_numRef = ref_unit.m_numRef;
                         m_flatList[jj].m_isNew = false;
                         m_flatList[jj].m_flag = 1;
+
                         // lock this new full reference
                         inUseRefs.insert( ref_candidate );
                         break;
@@ -851,6 +853,16 @@ void SCH_REFERENCE::Annotate()
     m_rootSymbol->SetRef( &m_sheetPath, FROM_UTF8( m_ref.c_str() ) );
     m_rootSymbol->SetUnit( m_unit );
     m_rootSymbol->SetUnitSelection( &m_sheetPath, m_unit );
+}
+
+
+bool SCH_REFERENCE::AlwaysAnnotate() const
+{
+    wxCHECK( m_rootSymbol && m_rootSymbol->GetLibSymbolRef()
+          && !m_rootSymbol->GetRef( &m_sheetPath ).IsEmpty(), false );
+
+    return m_rootSymbol->GetLibSymbolRef()->IsPower()
+        || m_rootSymbol->GetRef( &m_sheetPath )[0] == wxUniChar( '#' );
 }
 
 

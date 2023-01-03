@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1675,8 +1675,9 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
                                              const KIID_PATH& aClipPath,
                                              bool aForceKeepAnnotations )
 {
+    wxCHECK( aSymbol && aPasteScreen, /* void */ );
+
     KIID_PATH clipItemPath = aClipPath;
-    clipItemPath.push_back( aSymbol->m_Uuid );
 
     wxString reference, value, footprint;
     int      unit;
@@ -1720,17 +1721,11 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
                                                       SCH_SHEET_LIST* aPastedSheetsSoFar,
                                                       SCH_REFERENCE_LIST* aPastedSymbolsSoFar )
 {
+    wxCHECK( aSheet && aPastedSheetsSoFar && aPastedSymbolsSoFar, aPastePath );
+
     SCH_SHEET_PATH sheetPath = aPastePath;
     sheetPath.push_back( aSheet );
 
-    wxString pageNum;
-
-    if( m_clipboardSheetInstances.count( aClipPath ) > 0 )
-        pageNum = m_clipboardSheetInstances.at( aClipPath ).m_PageNumber;
-    else
-        pageNum = wxString::Format( "%d", static_cast<int>( aPastedSheetsSoFar->size() ) );
-
-    sheetPath.SetPageNumber( pageNum );
     aPastedSheetsSoFar->push_back( sheetPath );
 
     if( aSheet->GetScreen() == nullptr )
@@ -1756,8 +1751,8 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
                                aPastedSheetsSoFar, aPastedSymbolsSoFar );
 
             SCH_SHEET_PATH subSheetPath = sheetPath;
-            subSheetPath.push_back( subsheet );
 
+            subSheetPath.push_back( subsheet );
             subSheetPath.GetSymbols( *aPastedSymbolsSoFar );
         }
     }
@@ -1917,7 +1912,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     for( unsigned i = 0; i < loadedItems.size(); ++i )
     {
         EDA_ITEM* item = loadedItems[i];
-        KIID_PATH clipPath( wxT("/") ); // clipboard is at root
+        KIID_PATH clipPath( wxT( "/" ) ); // clipboard is at root
 
         if( item->Type() == SCH_SYMBOL_T )
         {
@@ -2115,46 +2110,42 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         hierarchy = m_frame->Schematic().GetSheets();
     }
 
-    if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS || pasteMode == PASTE_MODE::RESPECT_OPTIONS )
-    {
-        pastedSymbols.clear();
+    std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST> annotatedSymbols;
 
-        // The symbol references may be changed by adding them to the schematic
-        // if they only exist on the schematic (e.g. from non-standard libraries), so
-        // recreate the pastedSymbols reference list here with the current data
-        for( unsigned i = 0; i < loadedItems.size(); ++i )
+    // Update the list of symbol instances that satisfy the annotation criteria.
+    for( const SCH_SHEET_PATH& sheetPath : pasteInstances )
+    {
+        for( size_t i = 0; i < pastedSymbols[sheetPath].GetCount(); i++ )
         {
-            if( SCH_SYMBOL* symbol = dyn_cast<SCH_SYMBOL*>( loadedItems[i] ) )
+            if(  pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS
+              || pasteMode == PASTE_MODE::RESPECT_OPTIONS
+              || pastedSymbols[sheetPath][i].AlwaysAnnotate() )
             {
-                for( SCH_SHEET_PATH& instance : pasteInstances )
-                {
-                    // Ignore pseudo-symbols (e.g. power symbols)
-                    if( symbol->GetRef( &instance )[0] != wxT( '#' ) )
-                    {
-                        SCH_REFERENCE schReference( symbol, symbol->GetLibSymbolRef().get(), instance );
-                        pastedSymbols[instance].AddItem( schReference );
-                    }
-                }
+                annotatedSymbols[sheetPath].AddItem( pastedSymbols[sheetPath][i] );
             }
         }
+    }
 
+    if( !annotatedSymbols.empty() )
+    {
         for( SCH_SHEET_PATH& instance : pasteInstances )
         {
-            pastedSymbols[instance].SortByReferenceOnly();
+            annotatedSymbols[instance].SortByReferenceOnly();
 
             if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
-                pastedSymbols[instance].ReannotateDuplicates( existingRefs );
+                annotatedSymbols[instance].ReannotateDuplicates( existingRefs );
             else
-                pastedSymbols[instance].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
-                                                             (ANNOTATE_ALGO_T) annotate.method,
-                                                             annotateStartNum, existingRefs, true,
-                                                             &hierarchy );
+                annotatedSymbols[instance].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
+                                                                (ANNOTATE_ALGO_T) annotate.method,
+                                                                annotateStartNum, existingRefs,
+                                                                true,
+                                                                &hierarchy );
 
-            pastedSymbols[instance].UpdateAnnotation();
+            annotatedSymbols[instance].UpdateAnnotation();
 
             // Update existing refs for next iteration
-            for( size_t i = 0; i < pastedSymbols[instance].GetCount(); i++ )
-                existingRefs.AddItem( pastedSymbols[instance][i] );
+            for( size_t i = 0; i < annotatedSymbols[instance].GetCount(); i++ )
+                existingRefs.AddItem( annotatedSymbols[instance][i] );
         }
     }
 
