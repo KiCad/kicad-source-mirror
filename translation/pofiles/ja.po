@@ -1,4 +1,4 @@
-# Tokita, Hiroshi <tokita.hiroshi@gmail.com>, 2021, 2022.
+# Tokita, Hiroshi <tokita.hiroshi@gmail.com>, 2021, 2022, 2023.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>, 2021, 2022.
 # co8 j <co8@nifty.com>, 2022.
@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2022-12-14 15:48+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2023-01-03 18:04+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -299,6 +299,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"表示の向きとズームを保存および復元します。\n"
+"%s+Tabを使用して選択項目をアクティブにします。\n"
+"%sを押したまま連続してタブを押下すると、ポップアップにあるビューポートを循環"
+"します。"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -1291,11 +1295,11 @@ msgstr "モノクロ画像"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:38
 msgid "Image Information"
-msgstr "イメージ情報"
+msgstr "画像情報"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
 msgid "Image size:"
-msgstr "イメージサイズ:"
+msgstr "画像サイズ:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1307,12 +1311,11 @@ msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:59
 msgid "pixels"
-msgstr "ピクセル"
+msgstr "pixels"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
-#, fuzzy
 msgid "Image PPI:"
-msgstr "ビットマップ Pixel/Inch:"
+msgstr "画素密度:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
@@ -1328,7 +1331,7 @@ msgstr "ビット"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
 msgid "Load Source Image"
-msgstr "元となる画像をロード"
+msgstr "元の画像をロード"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
 msgid "Output Size"
@@ -3186,13 +3189,11 @@ msgid "Remember open files for next project launch"
 msgstr "次のプロジェクト起動のために開いているファイルを記憶"
 
 #: common/dialogs/panel_common_settings_base.cpp:230
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
-msgstr ""
-"チェックした場合、プロジェクトを起動すると、以前に開いたファイルでeeschemaや"
-"pcbnewなどのツールも起動します"
+msgstr "チェックした場合、プロジェクトを起動するときに以前開いたファイルで回路図エデ"
+"ィターおよびPCBエディターのツールも起動します"
 
 #: common/dialogs/panel_common_settings_base.cpp:243
 msgid "&Auto save:"
@@ -5407,7 +5408,7 @@ msgstr "ロックされたアイテムの影"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "コートヤード衝突の領域"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -5944,7 +5945,7 @@ msgstr "円弧編集モードの切り替え"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "円弧の編集方法を切り替え"
 
 #: common/tool/actions.cpp:210
 msgid "Show Search Panel"
@@ -9596,9 +9597,8 @@ msgid "Fields must have a name."
 msgstr "フィールドは名前を持たなければなりません。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:321
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "代替シンボルは親が選択されている必要があります"
+msgstr "派生したシンボルは親のシンボルを選択する必要があります"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:333
 msgid "Delete extra units from symbol?"
@@ -9693,19 +9693,17 @@ msgid "Define as power symbol"
 msgstr "電源シンボルとして定義"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:205
-#, fuzzy
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"このオプションをセットすることで、\"電源ポートを追加\" ダイアログに当該シンボ"
-"ルを\n"
-"表示させます。  Eeschema での編集から保護するために値のテキストは\n"
-"ロックされます。  シンボルは BOM に含まれず、フットプリントを割り当てること"
-"は\n"
-"できません。"
+"このオプションをセットすることで、\"電源ポートを追加\" "
+"ダイアログに当該シンボルを\n"
+"表示させます。  \n"
+"回路図での編集から保護するために値のテキストはロックされます。  \n"
+"シンボルは BOM に含まれず、フットプリントを割り当てることはできません。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:219
 msgid "Pin Text Options"
@@ -12522,7 +12520,8 @@ msgstr "回路図 \"%s\" のロードに失敗しました\n"
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
-msgstr ""
+msgstr "警告: 回路図にアノテーションのエラーがあります。"
+"回路図エディターで修正してください\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:206
 #: eeschema/eeschema_jobs_handler.cpp:306
@@ -12561,7 +12560,7 @@ msgstr "保存するシンボルが選択されていません。"
 
 #: eeschema/eeschema_jobs_handler.cpp:503 pcbnew/pcbnew_jobs_handler.cpp:585
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "出力パスは既存のパスと衝突しないようにする必要があります\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:513
 msgid "Saving symbol library in updated format\n"
@@ -12812,24 +12811,20 @@ msgid "Symbol has more units than are defined"
 msgstr "シンボルが定義しているよりも多くのユニットがある"
 
 #: eeschema/erc_item.cpp:158
-#, fuzzy
 msgid "Symbol has units that are not placed"
-msgstr "シンボルが定義しているよりも多くのユニットがある"
+msgstr "シンボルに配置されていないユニットがある"
 
 #: eeschema/erc_item.cpp:162
-#, fuzzy
 msgid "Symbol has input pins that are not placed"
-msgstr "シンボルが定義しているよりも多くのユニットがある"
+msgstr "シンボルに配置されていない入力ピンがある"
 
 #: eeschema/erc_item.cpp:166
-#, fuzzy
 msgid "Symbol has bidirectional pins that are not placed"
-msgstr "シンボルが定義しているよりも多くのユニットがある"
+msgstr "シンボルに配置されていない双方向ピンがある"
 
 #: eeschema/erc_item.cpp:170
-#, fuzzy
 msgid "Symbol has power input pins that are not placed"
-msgstr "シンボルが定義しているよりも多くのユニットがある"
+msgstr "シンボルに配置されていない電源入力ピンがある"
 
 #: eeschema/erc_item.cpp:174
 msgid "Units of same symbol have different values"
@@ -13099,9 +13094,9 @@ msgid "Importing Schematic"
 msgstr "回路図をインポート"
 
 #: eeschema/files-io.cpp:1298
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "回路図ファイル '%s' のロード中にメモリー不足が発生しました。"
+msgstr "回路図ファイル '%s' のロード中に未処理の例外が発生しました。"
 
 #: eeschema/files-io.cpp:1332
 msgid "The current schematic has been modified.  Save changes?"
@@ -13164,9 +13159,8 @@ msgstr ""
 "回路図エディタを起動するたびに表示されます。"
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1615
-#, fuzzy
 msgid "Derived from"
-msgstr "シンボルから派生:"
+msgstr "派生元"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
 #: kicad/pcm/pcm.cpp:798 pcbnew/footprint.cpp:1023 pcbnew/zone.cpp:595
@@ -13468,7 +13462,7 @@ msgstr "フリー"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:186
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 msgid "Unspecified"
-msgstr "不特定"
+msgstr "未指定"
 
 #: eeschema/pin_type.cpp:59 eeschema/pin_type.cpp:251
 msgid "Power input"
@@ -13968,30 +13962,28 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "ストレージファイルは完全に読み込まれていません(%d バイト残っています)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
-msgstr ""
-"\"Additional\" セクション内の不明または予期しないレコード、レコード ID: %dが"
-"見つかりました。"
+msgstr "\"Additional\" セクション内の不明または予期しないレコード ID "
+"%dが見つかりました。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
-msgstr ""
+msgstr "'IEEE_SYMBOL'のレコードは処理されません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
-msgstr ""
+msgstr "'PIECHART'のレコードは処理されません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
 msgstr "コンパイルマスクは現在サポートされていません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
-msgstr ""
-"\"FileHeader\" セクション内の不明または予期しないレコードが見つかりました, レ"
-"コード ID: %d。"
+msgstr "\"FileHeader\" セクション内の不明または予期しないレコード ID "
+"%dが見つかりました。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
@@ -15401,9 +15393,8 @@ msgid "Error on line "
 msgstr "ラインにあるエラー "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:769
-#, fuzzy
 msgid "A line did not end properly."
-msgstr "行が正しく終了しませんでした.."
+msgstr "行が正しく終了していません。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:905
 #: eeschema/sim/kibis/ibis_parser.cpp:922
@@ -15590,9 +15581,8 @@ msgid "Error while reading temporary file"
 msgstr "テンポラリファイル読み込み中のエラー"
 
 #: eeschema/sim/kibis/kibis.cpp:735
-#, fuzzy
 msgid "Error while creating temporary output file"
-msgstr "テンポラリファイル作成に失敗しました"
+msgstr "出力の一時ファイル作成に失敗しました"
 
 #: eeschema/sim/kibis/kibis.cpp:774
 msgid ""
@@ -15635,9 +15625,8 @@ msgid "Invalid model type for a device"
 msgstr "デバイスのモデルタイプが無効です"
 
 #: eeschema/sim/kibis/kibis.cpp:1525 eeschema/sim/kibis/kibis.cpp:1571
-#, fuzzy
 msgid "Number of cycles should be greater than 0."
-msgstr "配線間の間隔は 0 以上でなければなりません。"
+msgstr "サイクル数は 0 以上でなければなりません。"
 
 #: eeschema/sim/kibis/kibis.cpp:1531 eeschema/sim/kibis/kibis.cpp:1577
 #, fuzzy
@@ -15666,14 +15655,12 @@ msgid "Falling edge is longer than OFF time."
 msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:1613 eeschema/sim/kibis/kibis.cpp:1644
-#, fuzzy
 msgid "Bitrate should be greater than 0."
-msgstr "配線間の間隔は 0 以上でなければなりません。"
+msgstr "ビットレートは 0 以上でなければなりません。"
 
 #: eeschema/sim/kibis/kibis.cpp:1619 eeschema/sim/kibis/kibis.cpp:1650
-#, fuzzy
 msgid "Number of bits should be greater than 0."
-msgstr "配線間の間隔は 0 以上でなければなりません。"
+msgstr "ビット数は 0 以上でなければなりません。"
 
 #: eeschema/sim/kibis/kibis.cpp:1631
 msgid "Bitrate is too high for rising / falling edges"
@@ -15799,9 +15786,8 @@ msgid "Delay"
 msgstr "遅延"
 
 #: eeschema/sim/sim_model_kibis.cpp:456
-#, fuzzy
 msgid "Number of cycles"
-msgstr "サンプル数"
+msgstr "サイクル数"
 
 #: eeschema/sim/sim_model_kibis.cpp:473
 msgid "Bitrate"
@@ -15812,12 +15798,10 @@ msgid "Number of bits"
 msgstr "ビット数"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr ""
-"このシミュレーションはプロットを提供していません。結果はコンソール ウィンドウ"
-"を参照して下さい"
+msgstr "このシミュレーションはプロットを行いません。結果はコンソール "
+"ウィンドウを参照して下さい。"
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -15885,12 +15869,12 @@ msgstr "プロット %u - "
 #: eeschema/sim/sim_plot_frame.cpp:603 eeschema/sim/sim_plot_frame.cpp:615
 #: eeschema/sim/sim_plot_frame.cpp:940
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "調整した値を適用できません:"
 
 #: eeschema/sim/sim_plot_frame.cpp:616 eeschema/sim/sim_plot_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "ファイル \"%s\" が読み込めません。"
+msgstr "%s の調整はできません"
 
 #: eeschema/sim/sim_plot_frame.cpp:659
 msgid "Error: simulation type not defined!\n"
@@ -15937,9 +15921,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "最初にプロット付きのシミュレーションを実行する必要があります。"
 
 #: eeschema/sim/sim_plot_frame.cpp:1605
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "SPICE ネットリスト ファイル"
+msgstr "SPICEネットリスト"
 
 #: eeschema/sim/sim_plot_frame.cpp:1672
 msgid "Save changes to workbook?"
@@ -15958,14 +15941,12 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove Signal"
-msgstr "エイリアスを削除"
+msgstr "信号を削除"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove the signal from the plot"
-msgstr "プロット スクリーンから信号を消去"
+msgstr "プロットから信号を削除"
 
 #: eeschema/sim/sim_plot_frame.cpp:1933
 msgid "Hide Cursor"
@@ -15992,14 +15973,12 @@ msgid "Save Workbook As..."
 msgstr "ワークブックを保存…"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "現在のビューを PNG としてエクスポート..."
+msgstr "現在のプロットをPNGとしてエクスポート..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "現在のビューを PNG としてエクスポート..."
+msgstr "現在のプロットをCSVしてエクスポート..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -17011,14 +16990,12 @@ msgid "Update symbol to match changes made in parent symbol"
 msgstr "親シンボルの変更に一致するようにシンボルを更新"
 
 #: eeschema/tools/ee_actions.cpp:186
-#, fuzzy
 msgid "Set Unit Display Name..."
-msgstr "ユニット表示名の設定"
+msgstr "ユニットの表示名を設定..."
 
 #: eeschema/tools/ee_actions.cpp:187
-#, fuzzy
 msgid "Set the display name for a unit"
-msgstr "ユニット %s の表示名を入力"
+msgstr "ユニットの表示名を設定"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -17517,23 +17494,20 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "ピンの一括編集用にピン テーブルを表示"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Break"
-msgstr "バスを切断"
+msgstr "切断"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Divide into connected segments"
-msgstr "ビアは接続されていません"
+msgstr "接続されたセグメントに分割します"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:558
-#, fuzzy
 msgid "Divide into unconnected segments"
-msgstr "未接続の配線を削除 (&D)"
+msgstr "未接続のセグメントに分割します"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -17604,12 +17578,10 @@ msgid "Import Footprint Assignments..."
 msgstr "フットプリントの割り当てをインポート..."
 
 #: eeschema/tools/ee_actions.cpp:622
-#, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr ""
-"Pcbnewで作成された .cmp ファイルからシンボルのフットプリント割り当てをイン"
-"ポート"
+msgstr "基板エディターで作成された .cmp "
+"ファイルからシンボルのフットプリント割り当てをインポート"
 
 #: eeschema/tools/ee_actions.cpp:627
 msgid "Annotate Schematic..."
@@ -17672,7 +17644,7 @@ msgstr "PCBエディターに切り替え"
 
 #: eeschema/tools/ee_actions.cpp:660
 msgid "Open PCB in board editor"
-msgstr "基板 (PCB) を基板エディターを開く"
+msgstr "基板をPCBエディターを開く"
 
 #: eeschema/tools/ee_actions.cpp:665
 msgid "Export Netlist..."
@@ -17812,9 +17784,8 @@ msgid "Show the Python scripting console"
 msgstr "Python スクリプト コンソールを表示"
 
 #: eeschema/tools/ee_actions.cpp:758
-#, fuzzy
 msgid "Change Sheet"
-msgstr "ネットを変更"
+msgstr "シートを変更"
 
 #: eeschema/tools/ee_actions.cpp:758
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -18003,7 +17974,7 @@ msgstr "現在のシートを別の場所または名前で保存"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
-msgstr "シンボルの問題は見つかりません。"
+msgstr "シンボルに問題はありません。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:226
 msgid "Symbol Warnings"
@@ -18248,7 +18219,7 @@ msgstr "ユニット %s の表示名を入力"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:672
 msgid "Set Unit Display Name"
-msgstr "ユニット表示名の設定"
+msgstr "ユニットの表示名を設定"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -18347,7 +18318,7 @@ msgstr ""
 #: eeschema/widgets/tuner_slider.cpp:61
 #, c-format
 msgid "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
-msgstr ""
+msgstr "シンボル %s ('%s %s' のシミュレーションモデルタイプの)は調整できません"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -19550,7 +19521,7 @@ msgstr "データの出力に失敗しました"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "ヘルプメッセージを表示して終了する"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -19559,7 +19530,6 @@ msgstr "出力ファイル名"
 
 #: kicad/cli/command_export_pcb_base.cpp:41
 #: kicad/cli/command_export_pcb_step.cpp:89
-#, fuzzy
 msgid "Input file"
 msgstr "入力ファイル"
 
@@ -19579,19 +19549,19 @@ msgstr "一つ以上のレイヤーを指定する必要があります\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:47
 msgid "Valid options excellon, gerber."
-msgstr ""
+msgstr "有効なオプション: excellon, gerber."
 
 #: kicad/cli/command_export_pcb_drill.cpp:52
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
-msgstr ""
+msgstr "有効なオプション: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:56
 msgid "Valid options are: absolute,plot"
-msgstr ""
+msgstr "有効なオプション: absolute,plot"
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
 msgid "Output units, valid options:in,mm"
-msgstr ""
+msgstr "有効なオプション: in,mm"
 
 #: kicad/cli/command_export_pcb_drill.cpp:63
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:52
@@ -19659,16 +19629,14 @@ msgstr ""
 #: kicad/cli/command_export_pcb_dxf.cpp:44
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Include the reference designator text"
-msgstr "リファレンス指定子をプロット"
+msgstr "リファレンス指定子のテキストを含める"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:49
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Include the value text"
-msgstr "文字アイテムを含む (&e)"
+msgstr "値のテキストを含める"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
@@ -19697,9 +19665,8 @@ msgid "Do not use the extended X2 format"
 msgstr "拡張 X2 フォーマットを使用しない"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:60
-#, fuzzy
 msgid "Do not generate netlist attributes"
-msgstr "ネットリスト属性を含む"
+msgstr "ネットリスト属性を生成しない"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
@@ -19730,9 +19697,8 @@ msgstr ""
 #: kicad/cli/command_export_sch_svg.cpp:41
 #: kicad/cli/command_fp_export_svg.cpp:45
 #: kicad/cli/command_sym_export_svg.cpp:45
-#, fuzzy
 msgid "Black and white only"
-msgstr "モノクロ"
+msgstr "モノクロで出力"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:61
 #: kicad/cli/command_export_pcb_svg.cpp:49
@@ -19756,26 +19722,22 @@ msgid "Output units; ascii or csv format only; valid options: in,mm"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:58
-#, fuzzy
 msgid ""
 "Use negative X coordinates for footprints on bottom layer (ascii or csv "
 "formats only)"
-msgstr "最下層のフットプリントに負のX座標を使用する"
+msgstr "裏面のフットプリントに負のX座標を使用する (ASCIIかCSVの場合のみ)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:64
-#, fuzzy
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr "ドリル/配置ファイルの原点を原点に使用"
+msgstr "ドリル/配置ファイルの原点を使用 (ASCIIかCSVの場合のみ)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:69
-#, fuzzy
 msgid "Include only SMD footprints (ascii or csv only)"
-msgstr "表面実装のフットプリントのみを含む"
+msgstr "表面実装のフットプリントのみを含む (ASCIIかCSVの場合のみ)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:75
-#, fuzzy
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr "スルーホールのあるフットプリントを全て除外する"
+msgstr "スルーホールのあるフットプリントを全て除外する (ASCIIかCSVの場合のみ)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:80
 msgid "Include board edge layer (gerber only)"
@@ -19803,9 +19765,8 @@ msgid "Use Grid Origin for output origin"
 msgstr "出力の原点にグリッド原点を使用"
 
 #: kicad/cli/command_export_pcb_step.cpp:58
-#, fuzzy
 msgid "Exclude 3D models for components with 'virtual' attribute"
-msgstr "\"仮想 (virtual)\" 属性を持つコンポーネントの 3D モデルを除く"
+msgstr "\"virtual\" 属性のコンポーネントの 3D モデルを除く"
 
 #: kicad/cli/command_export_pcb_step.cpp:63
 msgid ""
@@ -19817,9 +19778,8 @@ msgid "Overwrite output file"
 msgstr "出力ファイルを上書き"
 
 #: kicad/cli/command_export_pcb_step.cpp:73
-#, fuzzy
 msgid "Only generate a board with no components"
-msgstr "ネットなしパッドの警告を生成"
+msgstr "部品なしのボードのみを生成する"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 #, fuzzy
@@ -19827,16 +19787,14 @@ msgid "Minimum distance between points to treat them as separate ones"
 msgstr "分離した点として扱う最小間隔 (デフォルトは 0.01mm)"
 
 #: kicad/cli/command_export_pcb_step.cpp:83
-#, fuzzy
 msgid ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
-msgstr ""
-"ユーザー定義の出力原点　例: 1x1in, 1x1inch, 25.4x25.4mm (デフォルトは mm)"
+msgstr "ユーザー定義の出力原点 例: 1x1in, 1x1inch, 25.4x25.4mm (デフォルトは mm)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:43
 msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr ""
+msgstr "基板を反転 (裏面から表示するのに便利です)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:57
 msgid ""
@@ -19876,9 +19834,8 @@ msgid "Specific symbol to export within the library"
 msgstr "クリップボードにエクスポートできません"
 
 #: kicad/cli/command_fp_export_svg.cpp:62
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "フットプリントのパスが存在しないか、アクセス不可です\n"
+msgstr "フットプリント ライブラリーが存在しないかアクセス不可です\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
@@ -19889,9 +19846,8 @@ msgid "Footprint path does not exist or is not accessible\n"
 msgstr "フットプリントのパスが存在しないか、アクセス不可です\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:62 kicad/cli/command_sym_upgrade.cpp:53
-#, fuzzy
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "基板ファイルは存在しないかアクセス不可です\n"
+msgstr "シンボルファイルは存在しないかアクセス不可です\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -20045,9 +20001,8 @@ msgstr ""
 "は有効なKiCadプロジェクトファイルではないようです。"
 
 #: kicad/kicad_cli.cpp:284
-#, fuzzy
 msgid "prints version information and exits"
-msgstr "構文解析情報をプリント"
+msgstr "バージョン情報を表示して終了"
 
 #: kicad/kicad_manager_frame.cpp:210
 msgid "Project Files"
@@ -20326,12 +20281,10 @@ msgid "Pin package"
 msgstr "パッケージをピン留めする"
 
 #: kicad/pcm/dialogs/panel_package.cpp:68
-#, fuzzy
 msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with 'Update All' button."
-msgstr ""
-"ピン留めされたパッケージは、利用可能なアップデートの通知には影響せず、[すべて"
+msgstr "ピン留めされたパッケージは、利用可能なアップデートの通知には影響せず、[すべて"
 "更新]ボタンで更新されません。"
 
 #: kicad/pcm/dialogs/panel_package.cpp:120
@@ -21842,7 +21795,7 @@ msgstr "温度係数:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:95
 msgid "Thermal coefficient at 20 deg C"
-msgstr ""
+msgstr "20℃での温度係数"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:114
 msgid "Linear resistance:"
@@ -26133,7 +26086,7 @@ msgstr "仮想コンポーネントを無視"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:111
 msgid "Do not show components not in BOM and not in place file"
-msgstr ""
+msgstr "部品表にも部品配置ファイルにもないコンポーネントを表示しない"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
 msgid "Substitute similarly named models"
@@ -29129,14 +29082,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
 #: pcbnew/dialogs/dialog_plot_base.cpp:393
-#, fuzzy
 msgid "Plot in black and white"
-msgstr "モノクロ印刷 (&b)"
+msgstr "モノクロでプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
 #: pcbnew/dialogs/dialog_plot_base.cpp:394
 msgid "When disabled, the color from the chosen layer will be used to plot."
-msgstr ""
+msgstr "無効の場合、選択されたレイヤーの色がプロットに使われます。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:391
 msgid "PDF Options"
@@ -30084,13 +30036,12 @@ msgid "Arc editing mode:"
 msgstr "円弧編集モード:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
-#, fuzzy
 msgid "Keep center, adjust radius"
-msgstr "円 中心 (%s, %s) 半径 %s"
+msgstr "中心を固定、半径を調整"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "終点もしくは始点の方向を固定"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
@@ -30213,7 +30164,7 @@ msgstr "シートサイズを示す枠線を描画します。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:393
 msgid "Show courtyard collisions when moving/dragging"
-msgstr ""
+msgstr "移動/ドラッグ時にコートヤードの衝突を表示する"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:397
 msgid "Auto-refill zones"
@@ -31352,7 +31303,6 @@ msgid "Check rule syntax"
 msgstr "ルールの文法をチェック"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -31701,6 +31651,7 @@ msgstr ""
 "### 制約タイプ\n"
 "\n"
 " * annular\\_width\n"
+" * assertion\n"
 " * clearance\n"
 " * connection\\_width\n"
 " * courtyard_clearance\n"
@@ -31725,9 +31676,10 @@ msgstr ""
 " * via\\_diameter\n"
 " * zone\\_connection\n"
 "\n"
-"注: `clearance` と `hole_clearance`のルールは同一ネットにあるアイテムで動作し"
-"ません; `physical_clearance` と `physical_hole_clearance` のルールについても"
-"同様です。\n"
+"注: `clearance` と "
+"`hole_clearance`のルールは同一ネットにあるアイテムで動作しません; "
+"`physical_clearance` と `physical_hole_clearance` "
+"のルールについても同様です。\n"
 "<br><br>\n"
 "\n"
 "### アイテム\n"
@@ -31792,7 +31744,7 @@ msgstr ""
 "\n"
 "    (rule HV_unshielded\n"
 "       (constraint clearance (min 2mm))\n"
-"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')\"))\n"
 "\n"
 "\n"
 "    (rule heavy_thermals\n"
@@ -31802,8 +31754,8 @@ msgstr ""
 "\n"
 "### 注\n"
 "\n"
-"Version句は最初の句でなければなりません。  これはファイルの文法のバージョンを"
-"示し、\n"
+"Version句は最初の句でなければなりません。  "
+"これはファイルの文法のバージョンを示し、\n"
 "将来のルールパーサーが自動的にアップデート可能にするためです。\n"
 "\"1\"を設定しなければなりません。\n"
 "\n"
@@ -31816,34 +31768,34 @@ msgstr ""
 "\n"
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
-"    A.insideCourtyard('<footprint_refdes>')\n"
+"    A.intersectsCourtyard('<footprint_refdes>')\n"
 "`A`のいずれかの部分が与えられたフットプリントのコートヤードの中にある場合、真"
 "になります。\n"
 "<br><br>\n"
 "\n"
-"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
 "`A`のいずれかの部分が与えられたフットプリントの表面のコートヤードの中にある場"
 "合、真になります。\n"
 "<br><br>\n"
 "\n"
-"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"    A.intersectsBackCourtyard('<footprint_refdes>')\n"
 "`A`のいずれかの部分が与えられたフットプリントの裏面のコートヤードの中にある場"
 "合、真になります。\n"
 "<br><br>\n"
 "\n"
-"    A.insideArea('<zone_name>')\n"
+"    A.intersectsArea('<zone_name>')\n"
 "`A`のいずれかの部分が与えられたゾーンの中にある場合、真になります。\n"
 "<br><br>\n"
 "\n"
 "    A.enclosedByArea('<zone_name>')\n"
 "`A` のすべてが指定されたゾーンのアウトライン内にある場合に真になります。\n"
 "\n"
-"注意: これは、`intersectsArea()`よりも高コストな呼び出しになる可能性がありま"
-"す。\n"
+"注意: "
+"これは、`intersectsArea()`よりも高コストな呼び出しになる可能性があります。\n"
 "可能であれば`intersectsArea()`を使用してください。\n"
 "<br><br>\n"
 "\n"
@@ -31871,8 +31823,8 @@ msgstr ""
 "レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、\n"
 "正規化名(例: `F.Cu`)が使えます。\n"
 "\n"
-"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわら"
-"ず\n"
+"注意: これは、"
+"ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
 "`A`がレイヤーにある場合に真を返します。\n"
 "後者の場合、`(layer \"layer_name\")`の句をルールの中で使います。\n"
 "<br><br>\n"
@@ -31897,13 +31849,13 @@ msgstr ""
 "\n"
 "    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
-"       (condition \"A.insideArea('zone3')\"))\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
 "    (rule \"BGA neckdown\"\n"
 "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
 "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.insideCourtyard('U3')\"))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
 "    # テンティングされたビアにシルクがかかるのを防ぐ\n"
@@ -31914,13 +31866,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -31971,8 +31923,8 @@ msgstr ""
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅を上書きす"
-"る\n"
+"    # GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅をオーバラ"
+"イドする\n"
 "    (rule defined_relief_pwr\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
@@ -31990,7 +31942,7 @@ msgstr ""
 "        (condition \"A.Type == 'Pad'\"))\n"
 "\n"
 "\n"
-"    # 部品と基板端間の物理的クリアランスを強制する\n"
+"    # 部品と基板端間の機械的クリアランスを強制する\n"
 "    (rule front_mechanical_board_edge_clearance\n"
 "        (layer \"F.Courtyard\")\n"
 "        (constraint physical_clearance (min 3mm))\n"
@@ -32861,9 +32813,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s クリアランス %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s クリアランス %s; 現状 %s)"
+msgstr "(%s クリアランス %s; 現状 < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, c-format
@@ -33555,14 +33507,12 @@ msgid "Thermal reliefs for PTH"
 msgstr "PTH用のサーマルリリーフ"
 
 #: pcbnew/footprint.cpp:2878
-#, fuzzy
 msgid "Library link"
-msgstr "ライブラリー リンク:"
+msgstr "ライブラリーへのリンク"
 
 #: pcbnew/footprint.cpp:2899 pcbnew/pad.cpp:1804 pcbnew/zone.cpp:1464
-#, fuzzy
 msgid "Overrides"
-msgstr "上書き"
+msgstr "オーバーライド"
 
 #: pcbnew/footprint.cpp:2905 pcbnew/pad.cpp:1806 pcbnew/zone.cpp:1466
 msgid "Clearance Override"
@@ -33577,9 +33527,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "ハンダペースト マージン比率の上書き値"
 
 #: pcbnew/footprint.cpp:2919 pcbnew/pad.cpp:1819
-#, fuzzy
 msgid "Zone Connection Style"
-msgstr "未接続"
+msgstr "ゾーンの接続スタイル"
 
 #: pcbnew/footprint.h:236
 #, c-format
@@ -34905,7 +34854,6 @@ msgid "Bitmap Properties"
 msgstr "ビットマップ プロパティ"
 
 #: pcbnew/pcb_bitmap.cpp:239
-#, fuzzy
 msgid "Greyscale"
 msgstr "グレースケール画像"
 
@@ -35192,9 +35140,8 @@ msgid "Track %s on %s, length %s"
 msgstr "配線 %s ( %s 上、長さ: %s )"
 
 #: pcbnew/pcb_track.cpp:1271
-#, fuzzy
 msgid "Via Properties"
-msgstr "ピン プロパティ"
+msgstr "ビア プロパティ"
 
 #: pcbnew/pcb_track.cpp:1281 pcbnew/widgets/pcb_properties_panel.cpp:187
 msgid "Layer Top"
@@ -35234,9 +35181,8 @@ msgid "Error creating svg file"
 msgstr "svg ファイルの作成中にエラーが発生しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:578 pcbnew/pcbnew_jobs_handler.cpp:649
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "フットプリント ライブラリーを保存\n"
+msgstr "フットプリント ライブラリーをロード\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:615
 msgid "Saving footprint library\n"
@@ -38041,24 +37987,21 @@ msgid "Some of the track segments could not be filleted."
 msgstr "いくつかの配線セグメントにフィレットをかけられません。"
 
 #: pcbnew/tools/edit_tool.cpp:1149
-#, fuzzy
 msgid "A shape with least two lines must be selected."
-msgstr "少なくとも2つの直線の配線セグメントを選択する必要があります。"
+msgstr "少なくとも2つの線を選択する必要があります。"
 
 #: pcbnew/tools/edit_tool.cpp:1153 pcbnew/tools/edit_tool.cpp:1320
 #: pcbnew/tools/pcb_actions.cpp:368
-#, fuzzy
 msgid "Fillet Lines"
-msgstr "ゾーンを塗り潰し"
+msgstr "線をフィレット"
 
 #: pcbnew/tools/edit_tool.cpp:1323
 msgid "Unable to fillet the selected lines."
 msgstr "選択した配線をフィレットできません。"
 
 #: pcbnew/tools/edit_tool.cpp:1325
-#, fuzzy
 msgid "Some of the lines could not be filleted."
-msgstr "いくつかの配線セグメントにフィレットをかけられません。"
+msgstr "いくつかの線にフィレットをかけられません。"
 
 #: pcbnew/tools/edit_tool.cpp:1493
 msgid "Rotate"
@@ -39069,9 +39012,8 @@ msgid "Highlight all copper items on the selected net(s)"
 msgstr "選択したネットの全導体アイテムをハイライト表示"
 
 #: pcbnew/tools/pcb_actions.cpp:818
-#, fuzzy
 msgid "Hide Net in Ratsnest"
-msgstr "ラッツネストをハイライト表示"
+msgstr "ラッツネストを非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:819
 #, fuzzy
@@ -39079,7 +39021,6 @@ msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr "右のリストで選択したネットを左のリストへ移動"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show Net in Ratsnest"
 msgstr "ラッツネストを表示"
 
@@ -39643,9 +39584,8 @@ msgid "Update copper fill of all zones"
 msgstr "全てのゾーンの導体塗りつぶしを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
-#, fuzzy
 msgid "Unfill Selected Zone(s)"
-msgstr "すべてのゾーンの塗りつぶしを削除"
+msgstr "選択したゾーンの塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid "Remove copper fill from selected zone(s)"
@@ -39765,7 +39705,7 @@ msgstr "現在の配線を1セグメント前に戻します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1507
 msgid "Route From Other End"
-msgstr ""
+msgstr "別の終端から配線"
 
 #: pcbnew/tools/pcb_actions.cpp:1508
 msgid ""
@@ -39774,7 +39714,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1513
 msgid "Attempt Finish"
-msgstr ""
+msgstr "試行を終了"
 
 #: pcbnew/tools/pcb_actions.cpp:1514
 msgid "Attempts to complete current route to nearest ratsnest end."
@@ -40189,9 +40129,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "フットプリントとテキストの原点を十字で表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Locked Item Shadow"
-msgstr "ロックされたアイテムの影"
+msgstr "ロックされたアイテムの領域"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show a shadow marker on locked items"
@@ -40242,6 +40181,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"レイヤーの可視性の組み合わせを保存および復元します。\n"
+"%s+Tabを使用して選択項目をアクティブにします。\n"
+"%sを押したまま連続してタブを押下すると、ポップアップにあるビューポートを循環"
+"します。"
 
 #: pcbnew/widgets/appearance_controls.cpp:443
 #, c-format
@@ -40251,6 +40194,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"表示の位置とズームを保存および復元します。\n"
+"%s+Tabを使用して選択項目をアクティブにします。\n"
+"%sを押したまま連続してタブを押下すると、ポップアップにあるビューポートを循環"
+"します。"
 
 #: pcbnew/widgets/appearance_controls.cpp:458
 msgid "Filter nets"
@@ -40742,9 +40689,8 @@ msgid "Textbox"
 msgstr "テキストボックス"
 
 #: pcbnew/widgets/search_handlers.cpp:317
-#, fuzzy
 msgid "No Net"
-msgstr "新規ネット"
+msgstr "ネットなし"
 
 #: pcbnew/zone.cpp:525
 msgid "Cutout"
@@ -40832,7 +40778,6 @@ msgid "Zone %s on %s"
 msgstr "ゾーン %s ( %s 上)"
 
 #: pcbnew/zone.cpp:1471
-#, fuzzy
 msgid "Minimum Width"
 msgstr "最小幅"
 
