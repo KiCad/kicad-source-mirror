@@ -146,6 +146,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // NB: also links the schematic to the loaded project
     CreateScreens();
+    SetCurrentSheet( Schematic().GetSheets()[0] );
 
     setupTools();
     setupUIConditions();
