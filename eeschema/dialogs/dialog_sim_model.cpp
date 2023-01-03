@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mikolaj Wielgus
  * Copyright (C) 2022 CERN
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,7 +185,9 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         {
             DisplayErrorMessage( this, wxString::Format( _( "No model named '%s' in library." ),
                                                          modelName ) );
-            m_modelNameChoice->SetSelection( -1 );
+
+            // Default to first item in library
+            m_modelNameChoice->SetSelection( 0 );
         }
         else
         {
@@ -257,18 +259,20 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        try
-        {
-            if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
-                m_builtinModelsMgr.CreateModel( m_fields, sourcePins );
-            else
-                m_builtinModelsMgr.CreateModel( type, sourcePins );
-        }
-        catch( const IO_ERROR& e )
+        wxString           msg;
+        WX_STRING_REPORTER reporter( &msg );
+
+        m_builtinModelsMgr.SetReporter( &reporter );
+
+        if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
+            m_builtinModelsMgr.CreateModel( m_fields, sourcePins, false );
+        else
+            m_builtinModelsMgr.CreateModel( type, sourcePins );
+
+        if( reporter.HasMessage() )
         {
             DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
-                                       + wxT( "\n\n" )
-                                       + e.What() );
+                                       + wxT( "\n\n" ) + msg );
         }
 
         SIM_MODEL::DEVICE_T deviceTypeT = SIM_MODEL::TypeInfo( type ).deviceType;
@@ -670,25 +674,15 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
 {
     auto libraries = m_libraryModelsMgr.GetLibraries();
 
-    DIALOG_IBIS_PARSER_REPORTER dlg( this );
-    dlg.m_messagePanel->Clear();
+    wxString           msg;
+    WX_STRING_REPORTER reporter( &msg );
 
-    try
-    {
-        m_libraryModelsMgr.SetLibrary( aLibraryPath, &dlg.m_messagePanel->Reporter() );
-    }
-    catch( const IO_ERROR& e )
-    {
-        if( dlg.m_messagePanel->Reporter().HasMessage() )
-        {
-            dlg.m_messagePanel->Flush();
-            dlg.ShowQuasiModal();
-        }
-        else
-        {
-            DisplayErrorMessage( this, e.What() );
-        }
+    m_libraryModelsMgr.SetReporter( &reporter );
+    m_libraryModelsMgr.SetLibrary( aLibraryPath );
 
+    if( reporter.HasMessage() )
+    {
+        DisplayErrorMessage( this, msg );
         return;
     }
 
@@ -700,30 +694,26 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
                } );
 
-    try
-    {
-        std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
+    std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
 
-        for( auto& [baseModelName, baseModel] : library()->GetModels() )
-        {
-            if( baseModelName == modelName )
-                m_libraryModelsMgr.CreateModel( baseModel, sourcePins, m_fields );
-            else
-                m_libraryModelsMgr.CreateModel( baseModel, sourcePins );
-        }
-    }
-    catch( const IO_ERROR& e )
+    for( auto& [baseModelName, baseModel] : library()->GetModels() )
     {
-        DisplayErrorMessage( this, e.What() );
+        if( baseModelName == modelName )
+            m_libraryModelsMgr.CreateModel( &baseModel, sourcePins, m_fields );
+        else
+            m_libraryModelsMgr.CreateModel( &baseModel, sourcePins );
     }
+
+    if( reporter.HasMessage() )
+        DisplayErrorMessage( this, msg );
 
     m_useLibraryModelRadioButton->SetValue( true );
     m_libraryPathText->ChangeValue( aLibraryPath );
 
     wxArrayString modelNames;
 
-    for( auto& [modelName, model] : library()->GetModels() )
-        modelNames.Add( modelName );
+    for( auto& [name, model] : library()->GetModels() )
+        modelNames.Add( name );
 
     m_modelNameChoice->Clear();
     m_modelNameChoice->Append( modelNames );

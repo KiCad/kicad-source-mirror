@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,8 @@
 #include <boost/algorithm/string/case_conv.hpp>
 
 
-std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString &aFilePath, REPORTER *aReporter,
-        std::function<std::string( const std::string&, const std::string& )> *aResolver )
+std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString& aFilePath, REPORTER* aReporter,
+                                                  std::function<std::string( const std::string&, const std::string& )> *aResolver )
 {
     std::unique_ptr<SIM_LIBRARY> library;
 
@@ -40,12 +40,12 @@ std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString &aFilePath, REP
 
     library->m_reporter = aReporter;
     library->m_pathResolver = aResolver;
-    library->ReadFile( std::string( aFilePath.c_str() ) );
+    library->ReadFile( std::string( aFilePath.c_str() ), aReporter );
     return library;
 }
 
 
-void SIM_LIBRARY::ReadFile( const std::string& aFilePath )
+void SIM_LIBRARY::ReadFile( const std::string& aFilePath, REPORTER* aReporter )
 {
     m_filePath = aFilePath;
 }

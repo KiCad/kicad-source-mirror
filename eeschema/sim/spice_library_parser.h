@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 #include <wx/string.h>
 
 class SIM_LIBRARY_SPICE;
+class REPORTER;
 
 class SPICE_LIBRARY_PARSER
 {
@@ -39,10 +40,10 @@ public:
     virtual ~SPICE_LIBRARY_PARSER()
     {};
 
-    virtual void ReadFile( const std::string& aFilePath );
+    virtual void ReadFile( const std::string& aFilePath, REPORTER* aReporter );
 
 protected:
-    void readElement( const std::string& aFilePath );
+    void readElement( const std::string& aFilePath, REPORTER& aReporter );
 
 private:
     SIM_LIBRARY_SPICE& m_library;

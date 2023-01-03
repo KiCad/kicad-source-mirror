@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,21 +23,23 @@
 
 #include <sim/sim_library_kibis.h>
 #include <sim/sim_model_kibis.h>
-#include <sim/spice_grammar.h>
 #include <ki_exception.h>
 #include <locale_io.h>
-#include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 #include <lib_pin.h>
 
 
-void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath )
+void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, REPORTER* aReporter )
 {
-    SIM_LIBRARY::ReadFile( aFilePath );
+    SIM_LIBRARY::ReadFile( aFilePath, aReporter );
     m_kibis = KIBIS( aFilePath, m_reporter );
 
     if( !m_kibis.m_valid )
-        THROW_IO_ERROR( wxString::Format( "Invalid ibis file" ) );
+    {
+        aReporter->Report( wxString::Format( _( "Invalid IBIS file '%s'" ), aFilePath ),
+                           RPT_SEVERITY_ERROR );
+        return;
+    }
 
     LIB_PIN pinA( nullptr );
     LIB_PIN pinB( nullptr );

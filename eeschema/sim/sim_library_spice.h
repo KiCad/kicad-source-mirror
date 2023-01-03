@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public:
     SIM_LIBRARY_SPICE();
 
     // @copydoc SIM_LIBRARY::ReadFile()
-    void ReadFile( const std::string& aFilePath ) override;
+    void ReadFile( const std::string& aFilePath, REPORTER* aReporter ) override;
 
     // @copydoc SIM_LIBRARY::WriteFile()
     void WriteFile( const std::string& aFilePath ) override;

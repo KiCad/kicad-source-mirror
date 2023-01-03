@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,6 +107,7 @@ NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic ) :
 bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
                                            REPORTER& aReporter )
 {
+    m_libMgr.SetReporter( &aReporter );
     FILE_OUTPUTFORMATTER formatter( aOutFileName, wxT( "wt" ), '\'' );
     return DoWriteNetlist( formatter, aNetlistOptions, aReporter );
 }
@@ -394,29 +395,11 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, REPORTER&
             for( const auto& node : root->children )
             {
                 if( node->is_type<NETLIST_EXPORTER_SPICE_PARSER::dotTitle>() )
-                {
                     m_title = node->children.at( 0 )->string();
-                }
                 else if( node->is_type<NETLIST_EXPORTER_SPICE_PARSER::dotInclude>() )
-                {
-                    std::string path = node->children.at( 0 )->string();
-
-                    try
-                    {
-                        m_libMgr.AddLibrary( path, &aReporter );
-                    }
-                    catch( const IO_ERROR& e )
-                    {
-                        msg.Printf( _( "Error reading simulation model library '%s':\n%s" ),
-                                    path,
-                                    e.What() );
-                        aReporter.Report( msg, RPT_SEVERITY_ERROR );
-                    }
-                }
+                    m_libMgr.AddLibrary( node->children.at( 0 )->string() );
                 else
-                {
                     m_directives.emplace_back( node->string() );
-                }
             }
         }
     }

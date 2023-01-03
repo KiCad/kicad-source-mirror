@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,65 +57,89 @@ namespace SIM_LIBRARY_SPICE_PARSER
 };
 
 
-void SPICE_LIBRARY_PARSER::readElement( const std::string &aFilePath )
+void SPICE_LIBRARY_PARSER::readElement( const std::string &aFilePath, REPORTER& aReporter )
 {
-    tao::pegtl::file_input in( aFilePath );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root =
-                tao::pegtl::parse_tree::parse<SIM_LIBRARY_SPICE_PARSER::libraryGrammar,
-                                              SIM_LIBRARY_SPICE_PARSER::librarySelector,
-                                              tao::pegtl::nothing,
-                                              SIM_LIBRARY_SPICE_PARSER::control>( in );
-
-    for( const auto& node : root->children )
+    try
     {
-        if( node->is_type<SIM_LIBRARY_SPICE_PARSER::modelUnit>() )
-        {
-            try
-            {
-                m_library.m_models.push_back( SIM_MODEL_SPICE::Create( m_library, node->string() ) );
-                m_library.m_modelNames.emplace_back( node->children.at( 0 )->string() );
-            }
-            catch( const IO_ERROR& e )
-            {
-                DisplayErrorMessage( nullptr, e.What() );
-            }
-        }
-        else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::dotInclude>() )
-        {
-            std::string lib = node->children.at( 0 )->string();
+        tao::pegtl::file_input in( aFilePath );
+        std::unique_ptr<tao::pegtl::parse_tree::node> root =
+                    tao::pegtl::parse_tree::parse<SIM_LIBRARY_SPICE_PARSER::libraryGrammar,
+                                                  SIM_LIBRARY_SPICE_PARSER::librarySelector,
+                                                  tao::pegtl::nothing,
+                                                  SIM_LIBRARY_SPICE_PARSER::control>
+                ( in );
 
-            if( m_library.m_pathResolver )
-                lib = ( *m_library.m_pathResolver )( lib, aFilePath );
+        for( const auto& node : root->children )
+        {
+            if( node->is_type<SIM_LIBRARY_SPICE_PARSER::modelUnit>() )
+            {
+                std::string model = node->string();
+                std::string modelName = node->children.at( 0 )->string();
 
-            readElement( lib );
+                try
+                {
+                    m_library.m_models.push_back( SIM_MODEL_SPICE::Create( m_library, model ) );
+                    m_library.m_modelNames.emplace_back( modelName );
+                }
+                catch( const IO_ERROR& e )
+                {
+                    aReporter.Report( e.What(), RPT_SEVERITY_ERROR );
+                }
+            }
+            else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::dotInclude>() )
+            {
+                std::string lib = node->children.at( 0 )->string();
+
+                try
+                {
+                    if( m_library.m_pathResolver )
+                        lib = ( *m_library.m_pathResolver )( lib, aFilePath );
+
+                    readElement( lib, aReporter );
+                }
+                catch( const IO_ERROR& e )
+                {
+                    aReporter.Report( e.What(), RPT_SEVERITY_ERROR );
+                }
+            }
+            else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::unknownLine>() )
+            {
+                // Do nothing.
+            }
+            else
+            {
+                wxFAIL_MSG( "Unhandled parse tree node" );
+            }
         }
-        else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::unknownLine>() )
-        {
-            // Do nothing.
-        }
-        else
-        {
-            wxFAIL_MSG( "Unhandled parse tree node" );
-        }
+    }
+    catch( const std::filesystem::filesystem_error& e )
+    {
+        aReporter.Report( e.what(), RPT_SEVERITY_ERROR );
+    }
+    catch( const tao::pegtl::parse_error& e )
+    {
+        aReporter.Report( e.what(), RPT_SEVERITY_ERROR );
     }
 }
 
 
-void SPICE_LIBRARY_PARSER::ReadFile( const std::string& aFilePath )
+void SPICE_LIBRARY_PARSER::ReadFile( const std::string& aFilePath, REPORTER* aReporter )
 {
     m_library.m_models.clear();
     m_library.m_modelNames.clear();
 
-    try
+    if( aReporter )
     {
-        readElement( aFilePath );
+        readElement( aFilePath, *aReporter );
     }
-    catch( const std::filesystem::filesystem_error& e )
+    else
     {
-        THROW_IO_ERROR( e.what() );
-    }
-    catch( const tao::pegtl::parse_error& e )
-    {
-        THROW_IO_ERROR( e.what() );
+        wxString           msg;
+        WX_STRING_REPORTER reporter( &msg );
+
+        readElement( aFilePath, reporter );
+
+        if( reporter.HasMessage() )
+            THROW_IO_ERROR( msg );
     }
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public:
      */
     static std::unique_ptr<SIM_LIBRARY> Create( const wxString& aFilePath,
                                                 REPORTER* aReporter = nullptr,
-                                                std::function<std::string(const std::string&, const std::string&)>* aResolver = nullptr);
+                                                std::function<std::string( const std::string&, const std::string& )>* aResolver = nullptr);
 
     /**
      * Read library from a source file. Must be in the format appropriate to the subclass, e.g.
@@ -63,7 +63,7 @@ public:
      * @param aFilePath Path to the file.
      * @throw IO_ERROR on read or parsing error.
      */
-    virtual void ReadFile( const std::string& aFilePath ) = 0;
+    virtual void ReadFile( const std::string& aFilePath, REPORTER* aReporter ) = 0;
 
     /**
      * Write library to a source file (e.g. in Spice format).

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,20 +40,22 @@ class SCH_SYMBOL;
 class SIM_LIB_MGR
 {
 public:
-    SIM_LIB_MGR( const PROJECT* aPrj, REPORTER* aReporter = nullptr );
+    SIM_LIB_MGR( const PROJECT* aPrj );
     virtual ~SIM_LIB_MGR() = default;
+
+    void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
     void Clear();
 
-    SIM_LIBRARY& AddLibrary( const wxString& aLibraryPath, REPORTER* aReporter );
-    SIM_LIBRARY& SetLibrary( const wxString& aLibraryPath, REPORTER* aReporter );
+    void AddLibrary( const wxString& aLibraryPath );
+    void SetLibrary( const wxString& aLibraryPath );
 
     SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins );
 
-    SIM_MODEL& CreateModel( const SIM_MODEL& aBaseModel, const std::vector<LIB_PIN*>& aPins );
+    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<LIB_PIN*>& aPins );
 
     template <typename T>
-    SIM_MODEL& CreateModel( const SIM_MODEL& aBaseModel, const std::vector<LIB_PIN*>& aPins,
+    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<LIB_PIN*>& aPins,
                             const std::vector<T>& aFields );
 
     // TODO: The argument can be made const.
@@ -61,7 +63,7 @@ public:
 
     template <typename T>
     SIM_LIBRARY::MODEL CreateModel( const std::vector<T>& aFields,
-                                    const std::vector<LIB_PIN*>& aPins );
+                                    const std::vector<LIB_PIN*>& aPins, bool aResolved );
 
     template <typename T>
     SIM_LIBRARY::MODEL CreateModel( const wxString& aLibraryPath,

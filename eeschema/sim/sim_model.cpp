@@ -465,23 +465,28 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
                                               REPORTER* aReporter )
 {
+    TYPE                       type = aBaseModel ? aBaseModel->GetType() : TYPE::NONE;
     std::unique_ptr<SIM_MODEL> model;
 
-    if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( &aBaseModel ) )
-        model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( aBaseModel.GetType() );
-    else if( dynamic_cast< const SIM_MODEL_RAW_SPICE*>( &aBaseModel ) )
+    // A null base model means the model wasn't found in the library, so create a fallback
+
+    if( !aBaseModel || dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( aBaseModel ) )
+        model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type );
+    else if( dynamic_cast< const SIM_MODEL_RAW_SPICE*>( aBaseModel ) )
         model = std::make_unique<SIM_MODEL_RAW_SPICE>();
     else
-        model = Create( aBaseModel.GetType() );
+        model = Create( type );
 
     try
     {
+        if( aBaseModel )
+            model->SetBaseModel( *aBaseModel );
+
         model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
-        model->SetBaseModel( aBaseModel );
     }
     catch( IO_ERROR& err )
     {
@@ -496,7 +501,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
 
 
 template <typename T>
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
                                               const std::vector<T>& aFields,
                                               REPORTER* aReporter )
@@ -504,21 +509,25 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
     TYPE type = ReadTypeFromFields( aFields );
 
     // If the model has a specified type, it takes priority over the type of its base class.
-    if( type == TYPE::NONE )
-        type = aBaseModel.GetType();
+    if( type == TYPE::NONE && aBaseModel )
+        type = aBaseModel->GetType();
 
     std::unique_ptr<SIM_MODEL> model;
 
-    if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( &aBaseModel ) )
+    // A null base model means the model wasn't found in the library, so create a fallback
+
+    if( !aBaseModel || dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( aBaseModel ) )
         model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type );
-    else if( dynamic_cast< const SIM_MODEL_RAW_SPICE*>( &aBaseModel ) )
+    else if( dynamic_cast< const SIM_MODEL_RAW_SPICE*>( aBaseModel ) )
         model = std::make_unique<SIM_MODEL_RAW_SPICE>();
     else
         model = Create( type );
 
     try
     {
-        model->SetBaseModel( aBaseModel );
+        if( aBaseModel )
+            model->SetBaseModel( *aBaseModel );
+
         model->ReadDataFields( &aFields, aPins );
     }
     catch( IO_ERROR& err )
@@ -532,12 +541,12 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
     return model;
 }
 
-template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
+template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                                        const std::vector<LIB_PIN*>& aPins,
                                                        const std::vector<SCH_FIELD>& aFields,
                                                        REPORTER* aReporter );
 
-template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
+template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                                        const std::vector<LIB_PIN*>& aPins,
                                                        const std::vector<LIB_FIELD>& aFields,
                                                        REPORTER* aReporter );
@@ -546,7 +555,7 @@ template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseMod
 template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
                                               const std::vector<LIB_PIN*>& aPins,
-                                              REPORTER* aReporter )
+                                              bool aResolved, REPORTER* aReporter )
 {
     TYPE type = ReadTypeFromFields( aFields );
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
@@ -557,6 +566,12 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
     }
     catch( const IO_ERROR& parse_err )
     {
+        if( !aResolved )
+        {
+            aReporter->Report( parse_err.What(), RPT_SEVERITY_ERROR );
+            return model;
+        }
+
         // Just because we can't parse it doesn't mean that a SPICE interpreter can't.  Fall
         // back to a raw spice code model.
 
@@ -587,10 +602,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFields,
                                                        const std::vector<LIB_PIN*>& aPins,
-                                                       REPORTER* aReporter );
+                                                       bool aResolved, REPORTER* aReporter  );
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<LIB_FIELD>& aFields,
                                                        const std::vector<LIB_PIN*>& aPins,
-                                                       REPORTER* aReporter );
+                                                       bool aResolved, REPORTER* aReporter );
 
 
 template <typename T>
@@ -1560,13 +1575,18 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     {
         wxString             msg;
         WX_STRING_REPORTER   reporter( &msg );
-        SIM_LIB_MGR          libMgr( aProject, &reporter );
+        SIM_LIB_MGR          libMgr( aProject );
         std::vector<T_field> emptyFields;
+
+        libMgr.SetReporter( &reporter );
 
         SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
                                                        emptyFields, sourcePins );
 
-        libraryModel = !reporter.HasMessage();  // Otherwise we'll fall back to raw spice model
+        if( reporter.HasMessage() )
+            libraryModel = false;    // Fall back to raw spice model
+        else
+            libraryModel = true;
 
         if( pinMapInfo.IsEmpty() )
         {
