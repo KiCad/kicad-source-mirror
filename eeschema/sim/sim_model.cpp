@@ -1374,7 +1374,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             field.SetAttributes( m_Attributes );
             field.SetPosition( m_Pos );
 
-            return std::move( field );
+            return field;
         }
 
     public:
