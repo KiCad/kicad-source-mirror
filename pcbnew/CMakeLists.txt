@@ -451,10 +451,7 @@ endforeach()
 # i.e. swig_add_footprint()) because we want full control.
 
 # Avoid threading in SWIG (breaks threads in pcbnew)
-set( SWIG_OPTS -python -c++ -nothreads  )
-
-# Use python3-specific features
-set( SWIG_OPTS ${SWIG_OPTS} -py3 )
+set( SWIG_OPTS -python -c++ -nothreads -O  )
 
 set( SWIG_OPTS ${SWIG_OPTS} -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
