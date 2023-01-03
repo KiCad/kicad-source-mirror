@@ -9,7 +9,7 @@
 # Jan Vykydal <vvykys@gmail.com>, 2020, 2021.
 # Jan Straka <bach@email.cz>, 2020, 2021, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
-# Radek Kuznik <radek.kzn@gmail.com>, 2021, 2022.
+# Radek Kuznik <radek.kzn@gmail.com>, 2021, 2022, 2023.
 # Ondřej Čertík <ondrej@certik.us>, 2022.
 # ZbeeGin <zbeegin@op.pl>, 2022.
 msgid ""
@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2022-12-20 15:47+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2023-01-03 18:04+0000\n"
+"Last-Translator: Radek K <radek.kzn@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24447,11 +24447,8 @@ msgid "Exclude locked footprints"
 msgstr "Vyloučit zamknutá pouzdra"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:265
-#, fuzzy
 msgid "Locked footprints will not be reannotated"
-msgstr ""
-"\n"
-"Zamčené pouzdra nebudou očíslovány"
+msgstr "Zamčené pouzdra nebudou očíslovány"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
 msgid "Exclude references:"
@@ -39240,9 +39237,8 @@ msgid "Show constraints resolution for the selected object"
 msgstr "Přesune vybranou položku(y)"
 
 #: pcbnew/tools/pcb_actions.cpp:1179
-#, fuzzy
 msgid "Geographical Reannotate..."
-msgstr "Geografická reanotace"
+msgstr "Geografická reanotace..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Reannotate PCB in geographical order"
