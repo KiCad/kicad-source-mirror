@@ -692,7 +692,6 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
                     wxMemoryInputStream istream( stream );
                     image->LoadFile( istream, wxBITMAP_TYPE_PNG );
                     bitmap->GetImage()->SetImage( image );
-                    bitmap->GetImage()->SetBitmap( new wxBitmap( *image ) );
                     break;
                 }
 

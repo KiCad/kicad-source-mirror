@@ -27,6 +27,7 @@
 
 #include <wx/bitmap.h>
 #include <wx/image.h>
+#include <kiid.h>
 #include <math/box2.h>
 
 namespace KIGFX
@@ -69,27 +70,12 @@ public:
     wxImage* GetImageData() { return m_image; }
     const wxImage* GetImageData() const { return m_image; }
 
-    void SetImage( wxImage* aImage )
-    {
-        delete m_image;
-        m_image = aImage;
-    }
+    void SetImage( wxImage* aImage );
 
     double GetScale() const { return m_scale; }
     void SetScale( double aScale ) { m_scale = aScale; }
 
-    /*
-     * Rebuild the internal bitmap used to draw/plot image.
-     *
-     * This must be called after a #m_image change.
-     */
-    void RebuildBitmap() { *m_bitmap = wxBitmap( *m_image ); }
-
-    void SetBitmap( wxBitmap* aBitMap )
-    {
-        delete m_bitmap;
-        m_bitmap = aBitMap;
-    }
+    KIID GetImageID() const { return m_imageId; }
 
     /**
      * Copy aItem image to this object and update #m_bitmap.
@@ -219,6 +205,8 @@ public:
      */
     void Rotate( bool aRotateCCW );
 
+    void ConvertToGreyscale();
+
     /**
      * Plot bitmap on plotter.
      *
@@ -233,6 +221,13 @@ public:
                     const KIGFX::COLOR4D& aDefaultColor, int aDefaultPensize ) const;
 
 private:
+    /*
+     * Rebuild the internal bitmap used to draw/plot image.
+     *
+     * This must be called after a #m_image change.
+     */
+    void rebuildBitmap();
+
     double    m_scale;              // The scaling factor of the bitmap
                                     // With m_pixelSizeIu, controls the actual draw size
     wxImage*  m_image;              // the raw image data (png format)
@@ -242,6 +237,7 @@ private:
                                     // to internal KiCad units
                                     // Usually does not change
     int       m_ppi;                // the bitmap definition. the default is 300PPI
+    KIID      m_imageId;
 };
 
 

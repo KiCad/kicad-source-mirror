@@ -2903,7 +2903,6 @@ PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
             wxMemoryInputStream  istream( stream );
             image->LoadFile( istream, wxBITMAP_TYPE_PNG );
             bitmap->GetImage()->SetImage( image );
-            bitmap->GetImage()->SetBitmap( new wxBitmap( *image ) );
             break;
         }
 

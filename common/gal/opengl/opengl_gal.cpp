@@ -56,22 +56,11 @@
 #include <functional>
 #include <limits>
 #include <memory>
+#include <list>
 using namespace std::placeholders;
 using namespace KIGFX;
 
-// Currently the bitmap cache is disabled because the code has serious issues and
-//  work fine does not work fine:
-// created GL textures are never deleted when a bitmap is deleted
-// the key to retrieve a CACHED_BITMAP is the BITMAP_BASE items* pointer.
-// Because in code many BITMAP_BASE items are temporary cloned for drawing purposes,
-// it creates a lot of CACHED_BITMAP never deleted thus created memory leak
-// So to reenable the bitmaps cache, serious changes in code are needed:
-// At least:
-//  - use a key that works on cloned BITMAP_BASE items
-//  - handle rotated bitmaps without create a new cached item
-//  - add a "garbage collector" to delete not existing BITMAP_BASE items
-// After tests, caching bitmaps do not speedup significantly drawings.
-#define DISABLE_BITMAP_CACHE
+//#define DISABLE_BITMAP_CACHE
 
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
@@ -93,7 +82,9 @@ namespace KIGFX
 class GL_BITMAP_CACHE
 {
 public:
-    GL_BITMAP_CACHE() {}
+    GL_BITMAP_CACHE() :
+            m_cacheSize( 0 )
+    {}
 
     ~GL_BITMAP_CACHE();
 
@@ -104,11 +95,18 @@ private:
     {
         GLuint id;
         int    w, h;
+        size_t size;
     };
 
     GLuint cacheBitmap( const BITMAP_BASE* aBitmap );
 
-    std::map< const BITMAP_BASE*, CACHED_BITMAP> m_bitmaps;
+    const size_t m_cacheMaxElements = 50;
+    const size_t m_cacheMaxSize     = 256 * 1024 * 1024;
+
+    std::map<const KIID, CACHED_BITMAP> m_bitmaps;
+    std::list<KIID> m_cacheLru;
+    size_t m_cacheSize;
+    std::list<GLuint> m_freedTextureIds;
 };
 
 }; // namespace KIGFX
@@ -124,17 +122,12 @@ GL_BITMAP_CACHE::~GL_BITMAP_CACHE()
 GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
 {
 #ifndef DISABLE_BITMAP_CACHE
-    auto it = m_bitmaps.find( aBitmap );
+    auto it = m_bitmaps.find( aBitmap->GetImageID() );
 
     if( it != m_bitmaps.end() )
     {
-        // A bitmap is found in cache bitmap. Ensure the associated texture
-        // is still valid.
-        // It can be destroyed somewhere or the corresponding bitmap can be
-        // modifed (rotated)
-        if( ( it->second.w == aBitmap->GetSizePixels().x ) &&
-            ( it->second.h == aBitmap->GetSizePixels().y ) &&
-            glIsTexture( it->second.id ) )
+        // A bitmap is found in cache bitmap. Ensure the associated texture is still valid.
+        if( glIsTexture( it->second.id ) )
         {
             return it->second.id;
         }
@@ -142,6 +135,15 @@ GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
         {
             // Delete the invalid bitmap cache and its data
             glDeleteTextures( 1, &it->second.id );
+            m_freedTextureIds.emplace_back( it->second.id );
+
+            auto listIt = std::find( m_cacheLru.begin(), m_cacheLru.end(), it->first );
+
+            if( listIt != m_cacheLru.end() )
+                m_cacheLru.erase( listIt );
+
+            m_cacheSize -= it->second.size;
+
             m_bitmaps.erase( it );
         }
 
@@ -169,10 +171,21 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
         extra_w = 4 - extra_w;
 
     GLuint textureID;
-    glGenTextures( 1, &textureID );
+
+    if( m_freedTextureIds.empty() )
+    {
+        glGenTextures( 1, &textureID );
+    }
+    else
+    {
+        textureID = m_freedTextureIds.front();
+        m_freedTextureIds.pop_front();
+    }
 
     // make_unique initializes this to 0, so extra pixels are transparent
-    auto           buf = std::make_unique<uint8_t[]>( ( bmp.w + extra_w ) * bmp.h * 4 );
+    bmp.size = ( bmp.w + extra_w ) * bmp.h * 4;
+    auto buf = std::make_unique<uint8_t[]>( bmp.size );
+
     const wxImage& imgData = *aBitmap->GetImageData();
 
     for( int y = 0; y < bmp.h; y++ )
@@ -205,7 +218,23 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     bmp.id = textureID;
 
 #ifndef DISABLE_BITMAP_CACHE
-    m_bitmaps[aBitmap] = bmp;
+    m_cacheLru.emplace_back( aBitmap->GetImageID() );
+    m_cacheSize += bmp.size;
+    m_bitmaps.emplace( aBitmap->GetImageID(), std::move( bmp ) );
+
+    if( m_cacheLru.size() > m_cacheMaxElements
+        || m_cacheSize > m_cacheMaxSize )
+    {
+        KIID last = m_cacheLru.front();
+        CACHED_BITMAP& cachedBitmap = m_bitmaps[last];
+
+        m_cacheSize -= cachedBitmap.size;
+        glDeleteTextures( 1, &cachedBitmap.id );
+        m_freedTextureIds.emplace_back( cachedBitmap.id );
+
+        m_bitmaps.erase( last );
+        m_cacheLru.pop_front();
+    }
 #endif
 
     return textureID;

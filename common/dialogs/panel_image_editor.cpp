@@ -47,9 +47,7 @@ PANEL_IMAGE_EDITOR::PANEL_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem ) 
 
 void PANEL_IMAGE_EDITOR::OnGreyScaleConvert( wxCommandEvent& event )
 {
-    wxImage& image = *m_workingImage->GetImageData();
-    image = image.ConvertToGreyscale();
-    m_workingImage->RebuildBitmap();
+    m_workingImage->ConvertToGreyscale();
     m_panelDraw->Refresh();
 }
 

@@ -54,9 +54,28 @@ BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
 
     if( aSchBitmap.m_image )
     {
-        m_image = new wxImage( *aSchBitmap.m_image );
-        m_bitmap = new wxBitmap( *m_image );
+        m_image   = new wxImage( *aSchBitmap.m_image );
+        m_bitmap  = new wxBitmap( *m_image );
+        m_imageId = aSchBitmap.m_imageId;
     }
+}
+
+
+void BITMAP_BASE::SetImage( wxImage* aImage )
+{
+    delete m_image;
+    m_image = aImage;
+    rebuildBitmap();
+}
+
+
+void BITMAP_BASE::rebuildBitmap()
+{
+    if( m_bitmap )
+        delete m_bitmap;
+
+    m_bitmap  = new wxBitmap( *m_image );
+    m_imageId = KIID();
 }
 
 
@@ -64,6 +83,7 @@ void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
 {
     *m_image  = *aItem->m_image;
     *m_bitmap = *aItem->m_bitmap;
+    m_imageId = aItem->m_imageId;
     m_scale   = aItem->m_scale;
     m_ppi     = aItem->m_ppi;
     m_pixelSizeIu = aItem->m_pixelSizeIu;
@@ -79,7 +99,7 @@ bool BITMAP_BASE::ReadImageFile( wxInputStream& aInStream )
 
     delete m_image;
     m_image = new_image.release();
-    m_bitmap = new wxBitmap( *m_image );
+    rebuildBitmap();
 
     return true;
 }
@@ -97,7 +117,7 @@ bool BITMAP_BASE::ReadImageFile( const wxString& aFullFilename )
 
     delete m_image;
     m_image  = new_image;
-    m_bitmap = new wxBitmap( *m_image );
+    rebuildBitmap();
 
     return true;
 }
@@ -331,8 +351,8 @@ void BITMAP_BASE::Mirror( bool aVertically )
 {
     if( m_image )
     {
-        *m_image  = m_image->Mirror( not aVertically );
-        RebuildBitmap();
+        *m_image = m_image->Mirror( not aVertically );
+        rebuildBitmap();
     }
 }
 
@@ -341,8 +361,18 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
 {
     if( m_image )
     {
-        *m_image  = m_image->Rotate90( aRotateCCW );
-        RebuildBitmap();
+        *m_image = m_image->Rotate90( aRotateCCW );
+        rebuildBitmap();
+    }
+}
+
+
+void BITMAP_BASE::ConvertToGreyscale()
+{
+    if( m_image )
+    {
+        *m_image  = m_image->ConvertToGreyscale();
+        rebuildBitmap();
     }
 }
 
