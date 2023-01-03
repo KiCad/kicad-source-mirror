@@ -29,6 +29,8 @@
 #include <kiplatform/app.h>
 #include <font/outline_font.h>
 
+#include <tuple>
+
 // kicad_curl.h must be included before wx headers, to avoid
 // conflicts for some defines, at least on Windows
 // kicad_curl.h can create conflicts for some defines, at least on Windows
@@ -46,8 +48,9 @@ extern std::string GetCurlLibVersion();
 // The include file version.h is always created even if the repo version cannot be
 // determined.  In this case KICAD_VERSION_FULL will default to the KICAD_VERSION
 // that is set in KiCadVersion.cmake.
+#define INCLUDE_KICAD_VERSION
 #include <kicad_build_version.h>
-
+#undef INCLUDE_KICAD_VERSION
 
 wxString GetPlatformGetBitnessName()
 {
@@ -62,6 +65,12 @@ wxString GetPlatformGetBitnessName()
 #else
     return platform.GetArchName();
 #endif
+}
+
+
+bool IsNightlyVersion()
+{
+    return !!KICAD_IS_NIGHTLY;
 }
 
 
@@ -90,6 +99,27 @@ wxString GetMajorMinorVersion()
 {
     wxString msg = wxString::Format( wxT( "%s" ), wxT( KICAD_MAJOR_MINOR_VERSION ) );
     return msg;
+}
+
+
+wxString GetCommitHash()
+{
+    wxString msg = wxString::Format( wxT( "%s" ), wxT( KICAD_COMMIT_HASH ) );
+    return msg;
+}
+
+
+wxString GetMajorMinorPatchVersion()
+{
+    wxString msg = wxString::Format( wxT( "%s" ), wxT( KICAD_MAJOR_MINOR_PATCH_VERSION ) );
+    return msg;
+}
+
+const std::tuple<int,int,int>& GetMajorMinorPatchTuple()
+{
+    static std::tuple<int, int, int> retval = KICAD_MAJOR_MINOR_PATCH_TUPLE;
+
+    return retval;
 }
 
 

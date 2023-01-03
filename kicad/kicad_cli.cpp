@@ -43,7 +43,7 @@
 #include "pgm_kicad.h"
 #include "kicad_manager_frame.h"
 
-#include <kicad_build_version.h>
+#include <build_version.h>
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
 
@@ -289,7 +289,7 @@ bool PGM_KICAD::OnPgmInit()
 
 int PGM_KICAD::OnPgmRun()
 {
-    argparse::ArgumentParser argParser( std::string( "kicad-cli" ), KICAD_MAJOR_MINOR_VERSION,
+    argparse::ArgumentParser argParser( std::string( "kicad-cli" ), GetMajorMinorVersion().ToStdString(),
                                         argparse::default_arguments::none );
 
     argParser.add_argument( "-v", ARG_VERSION )

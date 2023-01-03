@@ -68,7 +68,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <sentry.h>
-#include <kicad_build_version.h>
+#include <build_version.h>
 #endif
 
 /**
@@ -325,11 +325,10 @@ void PGM_BASE::sentryInit()
         sentry_options_set_symbolize_stacktraces( options, true );
         sentry_options_set_auto_session_tracking( options, false );
 
-#if !KICAD_IS_NIGHTLY
-        sentry_options_set_release( options, KICAD_SEMANTIC_VERSION );
-#else
-        sentry_options_set_release( options, KICAD_COMMIT_HASH );
-#endif
+        if( IsNightlyVersion() )
+            sentry_options_set_release( options, GetSemanticVersion().ToStdString().c_str() );
+        else
+            sentry_options_set_release( options, GetCommitHash().ToStdString().c_str() );
 
         sentry_init( options );
 
@@ -337,7 +336,7 @@ void PGM_BASE::sentryInit()
         sentry_value_set_by_key( user, "id", sentry_value_new_string( m_sentryUid.c_str() ) );
         sentry_set_user( user );
 
-        sentry_set_tag( "kicad.version", KICAD_VERSION_FULL );
+        sentry_set_tag( "kicad.version", GetBuildVersion().ToStdString().c_str() );
     }
 }
 

@@ -26,7 +26,7 @@
 #include <config.h>
 #include <string>
 
-#include <kicad_build_version.h>
+#include <build_version.h>
 
 #include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
@@ -79,11 +79,12 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     else
     {
         wxIcon icon;
-#if KICAD_IS_NIGHTLY
-        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly ) );
-#else
-        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad ) );
-#endif
+
+        if( IsNightlyVersion() )
+            icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly ) );
+        else
+            icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad ) );
+
         SetIcon( icon );
         m_bitmapApp->SetBitmap( icon );
     }

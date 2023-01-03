@@ -24,7 +24,7 @@
 #include <kicad_curl/kicad_curl.h>
 
 #include "core/wx_stl_compat.h"
-#include "kicad_build_version.h"
+#include "build_version.h"
 #include "paths.h"
 #include "pcm.h"
 #include "pgm_base.h"
@@ -45,7 +45,7 @@
 
 
 const std::tuple<int, int, int> PLUGIN_CONTENT_MANAGER::m_kicad_version =
-        KICAD_MAJOR_MINOR_PATCH_TUPLE;
+        GetMajorMinorPatchTuple();
 
 
 class THROWING_ERROR_HANDLER : public nlohmann::json_schema::error_handler
@@ -199,7 +199,7 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
                     PACKAGE_VERSION version;
                     version.version = "0.0";
                     version.status = PVS_STABLE;
-                    version.kicad_version = KICAD_MAJOR_MINOR_VERSION;
+                    version.kicad_version = GetMajorMinorVersion();
 
                     entry.package.versions.emplace_back( version );
 

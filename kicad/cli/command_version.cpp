@@ -21,7 +21,7 @@
 #include "command_version.h"
 #include <cli/exit_codes.h>
 #include <wx/crt.h>
-#include <kicad_build_version.h>
+#include <build_version.h>
 
 #include <macros.h>
 #include <build_version.h>
@@ -41,11 +41,11 @@ int CLI::VERSION_COMMAND::doPerform( KIWAY& aKiway )
     wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == wxS( "plain" ) )
     {
-        wxPrintf( KICAD_MAJOR_MINOR_PATCH_VERSION );
+        wxPrintf( GetMajorMinorPatchVersion() );
     }
     else if( format == wxS( "commit" ) )
     {
-        wxPrintf( KICAD_COMMIT_HASH );
+        wxPrintf( GetCommitHash() );
     }
     else if( format == wxS( "about" ) )
     {

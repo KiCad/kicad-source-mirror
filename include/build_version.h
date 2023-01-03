@@ -27,8 +27,9 @@
 #ifndef KICAD_BUILD_VERSION_H
 #define KICAD_BUILD_VERSION_H
 
-class wxString;
+#include <tuple>
 
+class wxString;
 
 /**
  * Get the full KiCad version string. This string contains platform-specific information
@@ -60,12 +61,39 @@ wxString GetSemanticVersion();
 wxString GetMajorMinorVersion();
 
 /**
+ * Get the major, minor and patch version in a string major.minor.patch
+ * This is extracted by CMake from the KICAD_SEMANTIC_VERSION variable.
+ *
+ * @return the major.minor.patch version as a string
+ */
+wxString GetMajorMinorPatchVersion();
+
+/**
  * Get the build date as a string.
  *
  * @return the build date string
  */
 wxString GetBuildDate();
 
+/**
+ * Get the commit hash as a string.
+ *
+ * @return the commit hash string
+ */
+wxString GetCommitHash();
+
+/**
+ * Get the build version numbers as a tuple
+ *
+ * @return A tuple with three ints for major/minor/patch revisions
+ */
+const std::tuple<int,int,int>& GetMajorMinorPatchTuple();
+
+/**
+ * Check if the build is meant to be nightly
+ * @return true if running nightly build
+ */
+bool IsNightlyVersion();
 
 /**
  * Create a version info string for bug reports and the about dialog

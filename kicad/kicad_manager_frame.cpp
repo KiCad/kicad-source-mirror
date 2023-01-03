@@ -40,7 +40,7 @@
 #include <gestfich.h>
 #include <kiplatform/app.h>
 #include <kiplatform/policy.h>
-#include <kicad_build_version.h>
+#include <build_version.h>
 #include <kiway.h>
 #include <kiway_express.h>
 #include <launch_ext.h>
@@ -141,21 +141,24 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-#if KICAD_IS_NIGHTLY
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly ) );
-    icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly_32 ) );
-    icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly_16 ) );
-    icon_bundle.AddIcon( icon );
-#else
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad ) );
-    icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_32 ) );
-    icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_16 ) );
-    icon_bundle.AddIcon( icon );
-#endif
+    if( IsNightlyVersion())
+    {
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly ) );
+        icon_bundle.AddIcon( icon );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly_32 ) );
+        icon_bundle.AddIcon( icon );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly_16 ) );
+        icon_bundle.AddIcon( icon );
+    }
+    else
+    {
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad ) );
+        icon_bundle.AddIcon( icon );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_32 ) );
+        icon_bundle.AddIcon( icon );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_16 ) );
+        icon_bundle.AddIcon( icon );
+    }
 
     SetIcons( icon_bundle );
 

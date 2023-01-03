@@ -24,15 +24,15 @@
 
 #pragma SWIG nowarn=305
 
-%include kicad_build_version.h
+%include build_version.h
 
 %pythoncode
 %{
     def Version():
         """Return the semantic version of KiCad"""
-        return KICAD_SEMANTIC_VERSION
+        return GetSemanticVersion()
 
     def FullVersion():
         """Return the full, git-based version of KiCad"""
-        return KICAD_VERSION_FULL
+        return GetBuildVersion()
 %}
