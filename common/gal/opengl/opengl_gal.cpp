@@ -186,7 +186,7 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     bmp.size = ( bmp.w + extra_w ) * bmp.h * 4;
     auto buf = std::make_unique<uint8_t[]>( bmp.size );
 
-    const wxImage& imgData = *aBitmap->GetImageData();
+    const wxImage& imgData = *aBitmap->GetOriginalImageData();
 
     for( int y = 0; y < bmp.h; y++ )
     {
@@ -1407,6 +1407,13 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     if( !glIsTexture( texture_id ) ) // ensure the bitmap texture is still valid
         return;
 
+    glMatrixMode( GL_TEXTURE );
+    glPushMatrix();
+    glTranslated( 0.5, 0.5, 0.5 );
+    glRotated( aBitmap.Rotation().AsDegrees(), 0, 0, 1 );
+    glTranslated( -0.5, -0.5, -0.5 );
+
+    glMatrixMode( GL_MODELVIEW );
     glPushMatrix();
     glTranslated( trans.x, trans.y, trans.z );
 
@@ -1414,18 +1421,21 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, texture_id );
 
+    float texStartX = aBitmap.IsMirrored() ? 1.0 : 0.0;
+    float texEndX   = aBitmap.IsMirrored() ? 0.0 : 1.0;
+
     glBegin( GL_QUADS );
     glColor4f( 1.0, 1.0, 1.0, alpha );
-    glTexCoord2f( 0.0, 0.0 );
+    glTexCoord2f( texStartX, 0.0 );
     glVertex3f( v0.x, v0.y, m_layerDepth );
     glColor4f( 1.0, 1.0, 1.0, alpha );
-    glTexCoord2f( 1.0, 0.0 );
+    glTexCoord2f( texEndX, 0.0 );
     glVertex3f( v1.x, v0.y, m_layerDepth );
     glColor4f( 1.0, 1.0, 1.0, alpha );
-    glTexCoord2f( 1.0, 1.0 );
+    glTexCoord2f( texEndX, 1.0 );
     glVertex3f( v1.x, v1.y, m_layerDepth );
     glColor4f( 1.0, 1.0, 1.0, alpha );
-    glTexCoord2f( 0.0, 1.0 );
+    glTexCoord2f( texStartX, 1.0 );
     glVertex3f( v0.x, v1.y, m_layerDepth );
     glEnd();
 
@@ -1436,6 +1446,10 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
 #endif
 
     glPopMatrix();
+
+    glMatrixMode( GL_TEXTURE );
+    glPopMatrix();
+    glMatrixMode( GL_MODELVIEW );
 }
 
 

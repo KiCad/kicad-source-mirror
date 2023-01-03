@@ -59,6 +59,7 @@ public:
     {
         delete m_bitmap;
         delete m_image;
+        delete m_originalImage;
     }
 
     /*
@@ -69,6 +70,8 @@ public:
 
     wxImage* GetImageData() { return m_image; }
     const wxImage* GetImageData() const { return m_image; }
+
+    const wxImage* GetOriginalImageData() const { return m_originalImage; }
 
     void SetImage( wxImage* aImage );
 
@@ -207,6 +210,9 @@ public:
 
     void ConvertToGreyscale();
 
+    bool IsMirrored() const { return m_isMirrored; }
+    EDA_ANGLE Rotation() const { return m_rotation; }
+
     /**
      * Plot bitmap on plotter.
      *
@@ -225,12 +231,15 @@ private:
      * Rebuild the internal bitmap used to draw/plot image.
      *
      * This must be called after a #m_image change.
+     *
+     * @param aResetID is used to reset the cache ID used for OpenGL rendering.
      */
-    void rebuildBitmap();
+    void rebuildBitmap( bool aResetID = true );
 
     double    m_scale;              // The scaling factor of the bitmap
                                     // With m_pixelSizeIu, controls the actual draw size
     wxImage*  m_image;              // the raw image data (png format)
+    wxImage*  m_originalImage;      // Raw image data, not transformed by rotate/mirror
     wxBitmap* m_bitmap;             // the bitmap used to draw/plot image
     double    m_pixelSizeIu;        // The scaling factor of the bitmap
                                     // to convert the bitmap size (in pixels)
@@ -238,6 +247,8 @@ private:
                                     // Usually does not change
     int       m_ppi;                // the bitmap definition. the default is 300PPI
     KIID      m_imageId;
+    bool      m_isMirrored;         // Used for OpenGL rendering only
+    EDA_ANGLE m_rotation;           // Used for OpenGL rendering only
 };
 
 

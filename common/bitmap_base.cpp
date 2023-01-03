@@ -37,9 +37,12 @@ BITMAP_BASE::BITMAP_BASE( const VECTOR2I& pos )
     m_scale  = 1.0;                     // 1.0 = original bitmap size
     m_bitmap = nullptr;
     m_image  = nullptr;
+    m_originalImage = nullptr;
     m_ppi    = 300;                     // the bitmap definition. the default is 300PPI
     m_pixelSizeIu = 254000.0 / m_ppi;   // a pixel size value OK for bitmaps using 300 PPI
                                         // for Eeschema which uses currently 254000PPI
+    m_isMirrored = false;
+    m_rotation   = ANGLE_0;
 }
 
 
@@ -48,14 +51,18 @@ BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
     m_scale = aSchBitmap.m_scale;
     m_ppi   = aSchBitmap.m_ppi;
     m_pixelSizeIu = aSchBitmap.m_pixelSizeIu;
+    m_isMirrored = aSchBitmap.m_isMirrored;
+    m_rotation = aSchBitmap.m_rotation;
 
     m_image = nullptr;
     m_bitmap = nullptr;
+    m_originalImage = nullptr;
 
     if( aSchBitmap.m_image )
     {
         m_image   = new wxImage( *aSchBitmap.m_image );
         m_bitmap  = new wxBitmap( *m_image );
+        m_originalImage = new wxImage( *aSchBitmap.m_originalImage );
         m_imageId = aSchBitmap.m_imageId;
     }
 }
@@ -65,17 +72,21 @@ void BITMAP_BASE::SetImage( wxImage* aImage )
 {
     delete m_image;
     m_image = aImage;
+    delete m_originalImage;
+    m_originalImage = new wxImage( *aImage );
     rebuildBitmap();
 }
 
 
-void BITMAP_BASE::rebuildBitmap()
+void BITMAP_BASE::rebuildBitmap( bool aResetID )
 {
     if( m_bitmap )
         delete m_bitmap;
 
     m_bitmap  = new wxBitmap( *m_image );
-    m_imageId = KIID();
+
+    if( aResetID )
+        m_imageId = KIID();
 }
 
 
@@ -83,10 +94,13 @@ void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
 {
     *m_image  = *aItem->m_image;
     *m_bitmap = *aItem->m_bitmap;
+    *m_originalImage = *aItem->m_originalImage;
     m_imageId = aItem->m_imageId;
     m_scale   = aItem->m_scale;
     m_ppi     = aItem->m_ppi;
     m_pixelSizeIu = aItem->m_pixelSizeIu;
+    m_isMirrored = aItem->m_isMirrored;
+    m_rotation = aItem->m_rotation;
 }
 
 
@@ -99,6 +113,8 @@ bool BITMAP_BASE::ReadImageFile( wxInputStream& aInStream )
 
     delete m_image;
     m_image = new_image.release();
+    delete m_originalImage;
+    m_originalImage = new wxImage( *m_image );
     rebuildBitmap();
 
     return true;
@@ -117,6 +133,8 @@ bool BITMAP_BASE::ReadImageFile( const wxString& aFullFilename )
 
     delete m_image;
     m_image  = new_image;
+    delete m_originalImage;
+    m_originalImage = new wxImage( *m_image );
     rebuildBitmap();
 
     return true;
@@ -352,7 +370,8 @@ void BITMAP_BASE::Mirror( bool aVertically )
     if( m_image )
     {
         *m_image = m_image->Mirror( not aVertically );
-        rebuildBitmap();
+        m_isMirrored = !m_isMirrored;
+        rebuildBitmap( false );
     }
 }
 
@@ -362,7 +381,8 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
     if( m_image )
     {
         *m_image = m_image->Rotate90( aRotateCCW );
-        rebuildBitmap();
+        m_rotation += ( aRotateCCW ? -ANGLE_90 : ANGLE_90 );
+        rebuildBitmap( false );
     }
 }
 
