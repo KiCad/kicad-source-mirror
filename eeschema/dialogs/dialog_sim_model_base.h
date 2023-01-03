@@ -111,7 +111,6 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onTypeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPageChanging( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void onSizeParamGrid( wxSizeEvent& event ) { event.Skip(); }
-		virtual void onSaveInValueCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridSize( wxSizeEvent& event ) { event.Skip(); }
 

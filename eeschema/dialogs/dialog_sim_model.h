@@ -106,7 +106,6 @@ private:
     void onPageChanging( wxNotebookEvent& event ) override;
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
-    void onSaveInValueCheckbox( wxCommandEvent& aEvent ) override;
     void onDifferentialCheckbox( wxCommandEvent& event ) override;
     void onSizeParamGrid( wxSizeEvent& event ) override;
 

@@ -281,7 +281,8 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
             m_curModelTypeOfDeviceType[deviceTypeT] = type;
     }
 
-    curModel().SetIsStoredInValue( storeInValue );
+    if( storeInValue )
+        curModel().SetIsStoredInValue( true );
 
     m_saveInValueCheckbox->SetValue( curModel().IsStoredInValue() );
 
@@ -340,6 +341,8 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
                     ( kibismodel->CanDifferential() && m_differentialCheckbox->GetValue() ) ? "1" : "" );
         }
     }
+
+    curModel().SetIsStoredInValue( m_saveInValueCheckbox->GetValue() );
 
     curModel().WriteFields( m_fields );
 
@@ -1263,13 +1266,6 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onPinAssignmentsGridSize( wxSizeEvent&
     m_pinAssignmentsGrid->SetColSize( PIN_COLUMN::SYMBOL, gridWidth / 2 );
 
     aEvent.Skip();
-}
-
-
-template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::onSaveInValueCheckbox( wxCommandEvent& aEvent )
-{
-    curModel().SetIsStoredInValue( m_saveInValueCheckbox->GetValue() );
 }
 
 

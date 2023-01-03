@@ -1040,7 +1040,19 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
     std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
 
     if( !m_serializer->ParseParams( paramsField ) )
-        m_serializer->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
+    {
+        // We're relying on the absence of the primary parameter in PARAMS_FIELD to signal that
+        // it's stored in VALUE_FIELD.  But that's a poor determinant as it may just be that the
+        // primary parameter is its default value.  So see if we have anything in VALUE_FIELD,
+        // but don't be belligerent about it.
+        try
+        {
+            m_serializer->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
+        }
+        catch( ... )
+        {
+        }
+    }
 }
 
 
@@ -1615,19 +1627,19 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
         if( tokenizer.HasMoreTokens() )
         {
-            wxString spiceType = tokenizer.GetNextToken();
-            spiceType.MakeUpper();
+            spiceTypeInfo.m_Text = tokenizer.GetNextToken();
+            spiceTypeInfo.m_Text.MakeUpper();
 
             for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
             {
                 if( spiceDeviceType == SIM_MODEL::SpiceInfo( type ).itemType
-                        && spiceType == SIM_MODEL::SpiceInfo( type ).inlineTypeString )
+                        && spiceTypeInfo.m_Text == SIM_MODEL::SpiceInfo( type ).inlineTypeString )
                 {
                     try
                     {
                         std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
-                        if( spiceType == wxT( "DC" ) && tokenizer.CountTokens() == 1 )
+                        if( spiceTypeInfo.m_Text == wxT( "DC" ) && tokenizer.CountTokens() == 1 )
                         {
                             valueField->SetText( tokenizer.GetNextToken() );
                             modelFromValueField = false;

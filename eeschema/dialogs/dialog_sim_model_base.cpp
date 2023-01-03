@@ -353,7 +353,6 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_typeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_modelNotebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SIM_MODEL_BASE::onPageChanging ), NULL, this );
 	m_paramGridMgr->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onSizeParamGrid ), NULL, this );
-	m_saveInValueCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onSaveInValueCheckbox ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
 }
@@ -389,7 +388,6 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	m_typeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_modelNotebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SIM_MODEL_BASE::onPageChanging ), NULL, this );
 	m_paramGridMgr->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onSizeParamGrid ), NULL, this );
-	m_saveInValueCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onSaveInValueCheckbox ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
 
