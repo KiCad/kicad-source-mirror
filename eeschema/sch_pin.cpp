@@ -282,11 +282,29 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     }
 
     wxString name = "Net-(";
+    bool unconnected = false;
 
     if( aForceNoConnect || GetType() == ELECTRICAL_PINTYPE::PT_NC )
+    {
+        unconnected = true;
         name = ( "unconnected-(" );
+    }
 
     bool annotated = true;
+
+    std::vector<SCH_PIN*> pins = GetParentSymbol()->GetPins( &aPath );
+    bool has_multiple = false;
+
+    for( SCH_PIN* pin : pins )
+    {
+        if( pin->GetShownName() == GetShownName()
+                && pin->GetShownNumber() != GetShownNumber()
+                && unconnected == ( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC ) )
+        {
+            has_multiple = true;
+            break;
+        }
+    }
 
     // Use timestamp for unannotated symbols
     if( GetParentSymbol()->GetRef( &aPath, false ).Last() == '?' )
@@ -301,7 +319,12 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
         // Pin names might not be unique between different units so we must have the
         // unit token in the reference designator
         name << GetParentSymbol()->GetRef( &aPath, true );
-        name << "-" << EscapeString( m_libPin->GetShownName(), CTX_NETNAME ) << ")";
+        name << "-" << EscapeString( m_libPin->GetShownName(), CTX_NETNAME );
+
+        if( unconnected || has_multiple )
+            name << "-Pad" << EscapeString( m_libPin->GetShownNumber(), CTX_NETNAME );
+
+        name << ")";
     }
     else
     {
