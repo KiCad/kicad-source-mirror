@@ -562,8 +562,8 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND}
         -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md
         -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
-        -P ${CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
-    DEPENDS ${CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md
+        -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
+    DEPENDS ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md
     COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
        from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md"
     )

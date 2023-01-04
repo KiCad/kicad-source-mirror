@@ -49,8 +49,9 @@ include( CMakeDependentOption )
 # Output compile_commands.json for various LSP and other users
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
-# Path to local CMake modules.
-set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake )
+# Path to KiCad's CMake modules.
+set( KICAD_CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" )
+set( CMAKE_MODULE_PATH       "${KICAD_CMAKE_MODULE_PATH}" )
 
 # On Windows, binaries created by link option -g3 are very large (more than 1Gb for pcbnew,
 # and more than 3Gb for the full kicad suite)
@@ -244,7 +245,7 @@ perform_feature_checks()
 
 
 # Setup the compiler warnings
-include( ${CMAKE_MODULE_PATH}/Warnings.cmake )
+include( ${KICAD_CMAKE_MODULE_PATH}/Warnings.cmake )
 
 if( KICAD_WIN32_CONTEXT_WINFIBER )
     set(LIBCONTEXT_USE_WINFIBER true)
@@ -997,7 +998,7 @@ endif()
 # "make uninstall" rules
 #================================================
 configure_file(
-    "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
+    "${KICAD_CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
     IMMEDIATE @ONLY )
 

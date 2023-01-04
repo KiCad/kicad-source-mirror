@@ -23,8 +23,8 @@
 #
 
 # Create the KiCad version strings
-include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
-include( ${CMAKE_MODULE_PATH}/KiCadFullVersion.cmake )
+include( ${KICAD_CMAKE_MODULE_PATH}/KiCadVersion.cmake )
+include( ${KICAD_CMAKE_MODULE_PATH}/KiCadFullVersion.cmake )
 
 # Extract the major and minor build version as a string
 string( REGEX MATCH

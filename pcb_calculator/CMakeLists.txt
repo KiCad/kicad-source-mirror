@@ -194,8 +194,8 @@ function( html_doc2h inputFile )
     add_custom_command(
         OUTPUT ${inputFile}.h
         COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile}.html -DoutputFile=${inputFile}.h
-            -P ${CMAKE_MODULE_PATH}/BuildSteps/Html2C.cmake
-        DEPENDS ${inputFile}.html ${CMAKE_MODULE_PATH}/BuildSteps/Html2C.cmake
+            -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/Html2C.cmake
+        DEPENDS ${inputFile}.html ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/Html2C.cmake
         COMMENT "creating ${inputFile}.h from ${inputFile}.html"
         )
 endfunction()
@@ -208,8 +208,8 @@ function( md_doc2h inputFile )
         OUTPUT ${inputFile}.h
 
         COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile}.md -DoutputFile=${inputFile}.h
-            -P ${CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
-        DEPENDS ${inputFile}.md ${CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
+            -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
+        DEPENDS ${inputFile}.md ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
         COMMENT "creating ${inputFile}.h from ${inputFile}.md"
         )
 endfunction()

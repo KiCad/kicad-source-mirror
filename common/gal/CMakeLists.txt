@@ -77,9 +77,9 @@ function( add_shader outTarget inFile shaderName )
             -DOUT_CPP_FILENAME="${outCppName}"
             -DOUT_HEADER_FILENAME="${outHeaderName}"
             -DOUT_VAR_NAME="${shaderName}"
-            -P ${CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
+            -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/shaders/${inFile}
-                ${CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
+                ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
         )
 
     target_sources( ${outTarget} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/${outCppName} )

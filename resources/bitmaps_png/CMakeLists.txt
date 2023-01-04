@@ -740,9 +740,9 @@ function( png2cpp inputFile outFile )
         OUTPUT  ${outFile}
 
         COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile} -DoutCppFile=${outFile}
-            -P ${CMAKE_MODULE_PATH}/BuildSteps/PNG2cpp.cmake
+            -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/PNG2cpp.cmake
 
-        DEPENDS ${inputFile} ${CMAKE_MODULE_PATH}/BuildSteps/PNG2cpp.cmake
+        DEPENDS ${inputFile} ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/PNG2cpp.cmake
         COMMENT "Creating ${outFile}"
         )
 endfunction()

@@ -91,11 +91,11 @@ add_custom_target(
         -DOUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.h
         -DTEXT_OUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.txt
         -DSRC_PATH=${PROJECT_SOURCE_DIR}
-        -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
-        -P ${CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
+        -DKICAD_CMAKE_MODULE_PATH=${KICAD_CMAKE_MODULE_PATH}
+        -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     BYPRODUCTS ${CMAKE_BINARY_DIR}/kicad_build_version.h
-    DEPENDS ${CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
+    DEPENDS ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
     COMMENT "Generating version string header"
     )
 

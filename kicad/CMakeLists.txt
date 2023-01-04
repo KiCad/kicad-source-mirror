@@ -298,7 +298,7 @@ if( APPLE )
         move_to_main_bundle( \"pl_editor.app\" \"Page Layout Editor.app\" )
 
         if ( ${PYTHON_FRAMEWORK_HELPER} )
-            include( ${CMAKE_MODULE_PATH}/RefixupMacOS.cmake )
+            include( ${KICAD_CMAKE_MODULE_PATH}/RefixupMacOS.cmake )
             refix_kicad_bundle( ${OSX_BUNDLE_INSTALL_DIR} )
         endif( )
 

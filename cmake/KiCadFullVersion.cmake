@@ -28,7 +28,7 @@
 # KICAD_VERSION_EXTRA is then appended to the base version string.
 
 # Use git to determine the version string if it's available.
-include( ${CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
+include( ${KICAD_CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
 create_git_version_header( ${SRC_PATH} )
 
 # $KICAD_VERSION is set in KiCadVersion.cmake or by git (if it is available).

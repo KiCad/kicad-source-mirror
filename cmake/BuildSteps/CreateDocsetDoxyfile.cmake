@@ -22,7 +22,7 @@
 
 function(get_kicad_doc_version RESULT_NAME)
 
-    include( ${CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
+    include( ${KICAD_CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
     create_git_version_header(${CMAKE_SOURCE_DIR})
 
     # Now we have KICAD_VERSION, but it's got () around it
