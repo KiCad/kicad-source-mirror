@@ -82,7 +82,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
 #ifdef __WXMAC__
     bitmapSize += { 4, 2 };
-#elifdef __WXMSW__
+#elif defined( __WXMSW__ )
     bitmapSize += { 3, 2 };
 #else
     bitmapSize += { -3, 1 };
@@ -121,7 +121,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
 #ifdef __WXMAC__
     charSize += { 0, 2 };
-#elifdef __WXGTK__
+#elif defined( __WXGTK__ )
     offset += { -6, -3 };
 #endif
 
@@ -156,7 +156,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
 #ifdef __WXMAC__
             btn->SetSize( btn->GetSize().x - 1, btn->GetSize().y );
-#elifdef __WXMSW__
+#elif defined( __WXMSW__ )
             btn->SetSize( btn->GetSize().x + 1, btn->GetSize().y );
 #else
             btn->SetSize( btn->GetSize().x - 6, btn->GetSize().y );
