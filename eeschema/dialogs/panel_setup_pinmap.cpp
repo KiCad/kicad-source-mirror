@@ -71,9 +71,11 @@ void PANEL_SETUP_PINMAP::ResetPanel()
 void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 {
     // Try to know the size of bitmap button used in drc matrix
-    wxBitmapButton* dummy = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( BITMAPS::ercerr ) );
+    wxBitmapButton* dummy = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( BITMAPS::ercerr ), wxDefaultPosition, wxDefaultSize, wxBORDER_NONE );
     wxSize          bitmapSize = dummy->GetSize();
     delete dummy;
+
+    const wxSize text_padding( 8, 6 );
 
     wxSize        charSize = KIUI::GetTextSize( "X", m_matrixPanel );
     wxPoint       pos( 0, charSize.y * 2 );
@@ -164,8 +166,8 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         // Print row labels
         for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
         {
-            int y = pos.y + (ii * bitmapSize.y);
-            text = new wxStaticText( m_matrixPanel, -1, CommentERC_H[ii],
+            int y = pos.y + ( ii * ( bitmapSize.y + text_padding.y ) );
+            text = new wxStaticText( m_matrixPanel, - 1, CommentERC_H[ii],
                                      wxPoint( 5, y + ( bitmapSize.y / 2 ) - ( 12 / 2 ) ) );
             labels.push_back( text );
 
@@ -190,22 +192,22 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
     for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
     {
-        int y = pos.y + (ii * bitmapSize.y);
+        int y = pos.y + (ii * ( bitmapSize.y + text_padding.y ) );
 
         for( int jj = 0; jj <= ii; jj++ )
         {
             // Add column labels (only once)
             PIN_ERROR diag = m_schematic->ErcSettings().GetPinMapValue( ii, jj );
 
-            int x = pos.x + ( jj * ( bitmapSize.x + 2 ) );
+            int x = pos.x + ( jj * ( bitmapSize.x + text_padding.x ) );
 
             if( ( ii == jj ) && !m_initialized )
             {
-                wxPoint textPos( x + KiROUND( bitmapSize.x / 2 ) - KiROUND( charSize.x ),
+                wxPoint textPos( x + KiROUND( bitmapSize.x / 2 ),
                                  y - charSize.y * 2 );
                 new wxStaticText( m_matrixPanel, wxID_ANY, CommentERC_V[ii], textPos );
 
-                wxPoint calloutPos( x + KiROUND( bitmapSize.x / 2 ) - KiROUND( charSize.x / 2 ),
+                wxPoint calloutPos( x + KiROUND( bitmapSize.x / 2 ),
                                     y - charSize.y );
                 new wxStaticText( m_matrixPanel, wxID_ANY, "|", calloutPos );
             }
@@ -215,8 +217,8 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
             delete m_buttonList[ii][jj];
             wxBitmapButton* btn = new wxBitmapButton( m_matrixPanel, event_id,
-                                                      KiBitmap( bitmap_butt ), wxPoint( x, y ) );
-            btn->SetSize( btn->GetSize().x + 4, btn->GetSize().y );
+                                                      KiBitmap( bitmap_butt ), wxPoint( x, y ), wxDefaultSize, wxBORDER_NONE );
+            btn->SetSize( btn->GetSize() + text_padding );
             m_buttonList[ii][jj] = btn;
             setDRCMatrixButtonState( m_buttonList[ii][jj], diag );
         }
