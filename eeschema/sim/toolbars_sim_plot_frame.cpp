@@ -25,6 +25,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <widgets/wx_menubar.h>
+#include "menus_helpers.h"
 
 
 void SIM_PLOT_FRAME::ReCreateHToolbar()
@@ -79,6 +80,7 @@ void SIM_PLOT_FRAME::doReCreateMenuBar()
     wxMenuBar*  oldMenuBar = dynamic_cast<EDA_BASE_FRAME*>( this )->GetMenuBar();
     WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
+
     //-- File menu -----------------------------------------------------------
     //
     ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
@@ -97,6 +99,7 @@ void SIM_PLOT_FRAME::doReCreateMenuBar()
     fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "Simulator" ) );
 
+
     //-- View menu -----------------------------------------------------------
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, tool );
@@ -110,6 +113,7 @@ void SIM_PLOT_FRAME::doReCreateMenuBar()
     viewMenu->Add( EE_ACTIONS::toggleLegend,          ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleDottedSecondary, ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleDarkModePlots,   ACTION_MENU::CHECK );
+
 
     //-- Simulation menu -----------------------------------------------------------
     //
@@ -126,11 +130,31 @@ void SIM_PLOT_FRAME::doReCreateMenuBar()
     simulationMenu->AppendSeparator();
     simulationMenu->Add( EE_ACTIONS::showNetlist );
 
+
+    //-- Preferences menu -----------------------------------------------
+    //
+    ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
+
+    //prefsMenu->Add( ACTIONS::configurePaths );
+    //prefsMenu->Add( EE_ACTIONS::showSimLibTable );
+
+    // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
+    // Mac, and it needs the wxID_PREFERENCES id to find it.
+    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    BITMAPS::preference );
+
+    prefsMenu->AppendSeparator();
+    AddMenuLanguageList( prefsMenu, tool );
+
+
     //-- Menubar -------------------------------------------------------------
     //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( simulationMenu, _( "&Simulation" ) );
+    menuBar->Append( prefsMenu, _( "&Preferences" ) );
     dynamic_cast<EDA_BASE_FRAME*>( this )->AddStandardHelpMenu( menuBar );
 
     dynamic_cast<EDA_BASE_FRAME*>( this )->SetMenuBar( menuBar );

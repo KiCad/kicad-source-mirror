@@ -85,10 +85,11 @@ public:
     }
 
 private:
-    const TRACE* m_trace;
-    bool m_updateRequired, m_updateRef;
-    wxRealPoint m_coords;
-    mpWindow* m_window;
+    const TRACE*  m_trace;
+    bool          m_updateRequired;
+    bool          m_updateRef;
+    wxRealPoint   m_coords;
+    mpWindow*     m_window;
 
     static constexpr int DRAG_MARGIN = 10;
 };
@@ -279,6 +280,8 @@ public:
     ///> Update plot colors
     void UpdatePlotColors();
 
+    void OnLanguageChanged() override;
+
     ///< Getter for math plot window
     mpWindow* GetPlotWin() const
     {
@@ -314,8 +317,6 @@ private:
     mpInfoLegend*              m_legend;
 
     bool                       m_dotted_cp;
-
-    std::vector<mpLayer*>      m_topLevel;
 };
 
 wxDECLARE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );

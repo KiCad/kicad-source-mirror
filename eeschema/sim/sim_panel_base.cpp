@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 CERN
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Sylwester Kocjan <s.kocjan@o2.pl>
  *
  * This program is free software; you can redistribute it and/or
@@ -86,8 +86,8 @@ SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aCommand, int aOptions, wxWi
     m_textInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT,
             wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
     m_textInfo->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-    m_textInfo->SetLabel(
-            _( "Simulation provided no plots. Please refer to console window for results." ) );
+    m_textInfo->SetLabel( _( "Simulation provided no plots. Please refer to console window "
+                             "for results." ) );
 
     m_sizer->Add( m_textInfo, 1, wxALL | wxEXPAND, 5 );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );
@@ -99,3 +99,12 @@ SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aCommand, int aOptions, wxWi
 SIM_NOPLOT_PANEL::~SIM_NOPLOT_PANEL()
 {
 }
+
+
+void SIM_NOPLOT_PANEL::OnLanguageChanged()
+{
+    m_textInfo->SetLabel( _( "Simulation provided no plots. Please refer to console window "
+                             "for results." ) );
+}
+
+

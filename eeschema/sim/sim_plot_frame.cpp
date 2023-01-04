@@ -212,6 +212,35 @@ void SIM_PLOT_FRAME::setupTools()
 }
 
 
+void SIM_PLOT_FRAME::ShowChangedLanguage()
+{
+    EDA_BASE_FRAME::ShowChangedLanguage();
+
+    updateTitle();
+
+    for( int ii = 0; ii < (int) m_workbook->GetPageCount(); ++ii )
+    {
+        SIM_PANEL_BASE* plot = dynamic_cast<SIM_PLOT_PANEL*>( m_workbook->GetPage( ii ) );
+
+        plot->OnLanguageChanged();
+
+        wxString pageTitle( m_simulator->TypeToName( plot->GetType(), true ) );
+        pageTitle.Prepend( wxString::Format( _( "Plot%u - " ), ii+1 /* 1-based */ ) );
+
+        m_workbook->SetPageText( ii, pageTitle );
+    }
+
+    m_staticTextSignals->SetLabel( _( "Signals" ) );
+    updateSignalList();
+
+    m_staticTextCursors->SetLabel( _( "Cursors" ) );
+    wxCommandEvent dummy;
+    onCursorUpdate( dummy );
+
+    m_staticTextTune->SetLabel( _( "Tune" ) );
+}
+
+
 void SIM_PLOT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );

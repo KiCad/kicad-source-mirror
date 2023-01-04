@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 CERN
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Sylwester Kocjan <s.kocjan@o2.pl>
  *
  * This program is free software; you can redistribute it and/or
@@ -46,6 +46,8 @@ public:
 
     static bool IsPlottable( SIM_TYPE aSimType );
 
+    virtual void OnLanguageChanged() = 0;
+
     SIM_TYPE GetType() const;
 
 protected:
@@ -80,6 +82,8 @@ public:
                       long style = 0, const wxString& name = wxPanelNameStr );
 
     virtual ~SIM_NOPLOT_PANEL();
+
+    void OnLanguageChanged() override;
 
 private:
     wxSizer*      m_sizer;

@@ -134,6 +134,8 @@ public:
      */
     void ToggleDarkModePlots();
 
+    void ShowChangedLanguage() override;
+
     void ReCreateHToolbar();
 
     /**

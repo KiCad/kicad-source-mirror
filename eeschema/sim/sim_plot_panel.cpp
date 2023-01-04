@@ -341,16 +341,25 @@ SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
 
 void SIM_PLOT_PANEL::updateAxes()
 {
+    bool skipAddToView = false;
+
     if( m_axis_x )
-        return;
+        skipAddToView = true;
 
     switch( GetType() )
     {
         case ST_AC:
-            m_axis_x = new LOG_SCALE<mpScaleXLog>( _( "Frequency" ), wxT( "Hz" ), mpALIGN_BOTTOM );
-            m_axis_y1 = new LIN_SCALE<mpScaleY>( _( "Gain" ), wxT( "dBV" ), mpALIGN_LEFT );
-            m_axis_y2 = new LIN_SCALE<mpScaleY>( _( "Phase" ), wxT( "°" ), mpALIGN_RIGHT );
-            m_axis_y2->SetMasterScale( m_axis_y1 );
+            if( !m_axis_x )
+            {
+                m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
+                m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "dBV" ), mpALIGN_LEFT );
+                m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "°" ), mpALIGN_RIGHT );
+                m_axis_y2->SetMasterScale( m_axis_y1 );
+            }
+
+            m_axis_x->SetName( _( "Frequency" ) );
+            m_axis_y1->SetName( _( "Gain" ) );
+            m_axis_y2->SetName( _( "Phase" ) );
             break;
 
         case ST_DC:
@@ -358,21 +367,37 @@ void SIM_PLOT_PANEL::updateAxes()
             break;
 
         case ST_NOISE:
-            m_axis_x = new LOG_SCALE<mpScaleXLog>( _( "Frequency" ), wxT( "Hz" ), mpALIGN_BOTTOM );
-            m_axis_y1 = new mpScaleY( _( "noise [(V or A)^2/Hz]" ), mpALIGN_LEFT );
+            if( !m_axis_x )
+            {
+                m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
+                m_axis_y1 = new mpScaleY( wxEmptyString, mpALIGN_LEFT );
+            }
+
+            m_axis_x->SetName( _( "Frequency" ) );
+            m_axis_y1->SetName( _( "noise [(V or A)^2/Hz]" ) );
             break;
 
         case ST_TRANSIENT:
-            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Time" ), wxT( "s" ), mpALIGN_BOTTOM );
-            m_axis_y1 = new LIN_SCALE<mpScaleY>( _( "Voltage" ), wxT( "V" ), mpALIGN_LEFT );
-            m_axis_y2 = new LIN_SCALE<mpScaleY>( _( "Current" ), wxT( "A" ), mpALIGN_RIGHT );
-            m_axis_y2->SetMasterScale( m_axis_y1 );
+            if( !m_axis_x )
+            {
+                m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "s" ), mpALIGN_BOTTOM );
+                m_axis_y1 = new LIN_SCALE<mpScaleY>(wxEmptyString, wxT( "V" ), mpALIGN_LEFT );
+                m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "A" ), mpALIGN_RIGHT );
+                m_axis_y2->SetMasterScale( m_axis_y1 );
+            }
+
+            m_axis_x->SetName( _( "Time" ) );
+            m_axis_y1->SetName( _( "Voltage" ) );
+            m_axis_y2->SetName( _( "Current" ) );
             break;
 
         default:
             // suppress warnings
             break;
     }
+
+    if( skipAddToView )
+        return;
 
     if( m_axis_x )
     {
@@ -413,32 +438,51 @@ void SIM_PLOT_PANEL::prepareDCAxes()
             ch = rem.GetChar( 0 );
         }
         catch( ... )
-        {;}
+        {
+            // Best efforts
+        }
 
         switch( ch )
         {
         // Make sure that we have a reliable default (even if incorrectly labeled)
         default:
         case 'v':
-            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Voltage (swept)" ), wxT( "V" ),
-                                                mpALIGN_BOTTOM );
+            if( !m_axis_x )
+                m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "V" ), mpALIGN_BOTTOM );
+
+            m_axis_x->SetName( _( "Voltage (swept)" ) );
             break;
+
         case 'i':
-            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Current (swept)" ), wxT( "A" ),
-                                                mpALIGN_BOTTOM );
+            if( !m_axis_x )
+                m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "A" ), mpALIGN_BOTTOM );
+
+            m_axis_x->SetName( _( "Current (swept)" ) );
             break;
+
         case 'r':
-            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Resistance (swept)" ), wxT( "Ω" ),
-                                                mpALIGN_BOTTOM );
+            if( !m_axis_x )
+                m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "Ω" ), mpALIGN_BOTTOM );
+
+            m_axis_x->SetName( _( "Resistance (swept)" ) );
             break;
+
         case 't':
-            m_axis_x = new LIN_SCALE<mpScaleX>( _( "Temperature (swept)" ), wxT( "°C" ),
-                                                mpALIGN_BOTTOM );
+            if( !m_axis_x )
+                m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "°C" ), mpALIGN_BOTTOM );
+
+            m_axis_x->SetName( _( "Temperature (swept)" ) );
             break;
         }
 
-        m_axis_y1 = new LIN_SCALE<mpScaleY>( _( "Voltage (measured)" ), wxT( "V" ), mpALIGN_LEFT );
-        m_axis_y2 = new LIN_SCALE<mpScaleY>( _( "Current" ), wxT( "A" ), mpALIGN_RIGHT );
+        if( !m_axis_y1 )
+            m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "V" ), mpALIGN_LEFT );
+
+        if( !m_axis_y2 )
+            m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "A" ), mpALIGN_RIGHT );
+
+        m_axis_y1->SetName( _( "Voltage (measured)" ) );
+        m_axis_y2->SetName( _( "Current" ) );
     }
 }
 
@@ -457,6 +501,13 @@ void SIM_PLOT_PANEL::UpdatePlotColors()
             cursor->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
     }
 
+    m_plotWin->UpdateAll();
+}
+
+
+void SIM_PLOT_PANEL::OnLanguageChanged()
+{
+    updateAxes();
     m_plotWin->UpdateAll();
 }
 
@@ -509,14 +560,7 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
         UpdateTraceStyle( trace );
         m_traces[ aTitle ] = trace;
 
-        // It is a trick to keep legend & coords always on the top
-        for( mpLayer* l : m_topLevel )
-            m_plotWin->DelLayer( l );
-
         m_plotWin->AddLayer( (mpLayer*) trace );
-
-        for( mpLayer* l : m_topLevel )
-            m_plotWin->AddLayer( l );
     }
     else
     {
