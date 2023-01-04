@@ -10,7 +10,7 @@
 # Simo Mattila <simo.mattila@kapsi.fi>, 2021.
 # Vesa Solonen <vesa.solonen@vli.fi>, 2021.
 # Petri Niemelä <petrinm@gmail.com>, 2022.
-# Henrik Kauhanen <henrik@kauhanen.se>, 2022.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023.
 # Toni Laiho <apelegeos@gmail.com>, 2022, 2023.
 msgid ""
 msgstr ""
@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
 "PO-Revision-Date: 2023-01-06 00:33+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -34057,7 +34057,7 @@ msgstr "Jalanjälkiteksti '%s' / %s"
 #: pcbnew/fp_textbox.cpp:332
 #, c-format
 msgid "Footprint Text Box of %s"
-msgstr "Jalanjäljen Tekstilaatikko %s"
+msgstr "Jalanjäljen %s Tekstilaatikko"
 
 #: pcbnew/generate_footprint_info.cpp:43
 msgid "Documentation"
@@ -37980,7 +37980,7 @@ msgstr "Häviötangentti"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
-msgstr "Dielektrinen"
+msgstr "Dielektrinen aine"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:353
 msgid "Insert board stackup table"
