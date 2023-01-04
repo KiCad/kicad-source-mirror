@@ -285,7 +285,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
             MOUSE_DRAG_ACTION::NONE ) );
 
     m_params.emplace_back( new PARAM<int>( "graphics.opengl_antialiasing_mode",
-            &m_Graphics.opengl_aa_mode, 0, 0, 2 ) );
+            &m_Graphics.opengl_aa_mode, 1, 0, 2 ) );
 
     m_params.emplace_back( new PARAM<int>( "graphics.cairo_antialiasing_mode",
             &m_Graphics.cairo_aa_mode, 0, 0, 2 ) );
