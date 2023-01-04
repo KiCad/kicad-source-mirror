@@ -8,13 +8,13 @@
 # VicSanRoPe <vicsanrope@protonmail.com>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Ulices <ulicesah@gmail.com>, 2021, 2022.
-# Ulices <dev.n47os@aleeas.com>, 2022.
+# Ulices <dev.n47os@aleeas.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2022-12-20 15:47+0000\n"
+"PO-Revision-Date: 2023-01-06 00:33+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -3209,13 +3209,12 @@ msgid "Remember open files for next project launch"
 msgstr "Recordar archivos abiertos en la próxima apertura del proyecto"
 
 #: common/dialogs/panel_common_settings_base.cpp:230
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
 "Si se selecciona, al lanzar un proyecto también se abrirán herramientas como "
-"Eeschema o Pcbnew con los archivos abiertos previamente"
+"los editores esquemático y de placa con los archivos abiertos previamente"
 
 #: common/dialogs/panel_common_settings_base.cpp:243
 msgid "&Auto save:"
@@ -5519,9 +5518,9 @@ msgid "Unrecognized function '%s'"
 msgstr "Función no reconocida '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "Inesperado '%s'"
+msgstr "Unidades inesperadas para '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -16079,12 +16078,11 @@ msgid "Number of bits"
 msgstr "Número de bits"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
 "Esta simulación no proporciona gráficas. Consulte la ventana de la consola "
-"para ver los resultados"
+"para ver los resultados."
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -16156,12 +16154,12 @@ msgstr "Trazar%u - "
 #: eeschema/sim/sim_plot_frame.cpp:603 eeschema/sim/sim_plot_frame.cpp:615
 #: eeschema/sim/sim_plot_frame.cpp:940
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "No se pudieron aplicar los valores ajustados:"
 
 #: eeschema/sim/sim_plot_frame.cpp:616 eeschema/sim/sim_plot_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "%s pin %s no encontrado"
+msgstr "%s no es ajustable"
 
 #: eeschema/sim/sim_plot_frame.cpp:659
 msgid "Error: simulation type not defined!\n"
@@ -17812,7 +17810,7 @@ msgstr "Sin conectar"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr ""
+msgstr "Cortar"
 
 #: eeschema/tools/ee_actions.cpp:558
 #, fuzzy
@@ -19863,7 +19861,7 @@ msgstr "No se pudieron generar datos"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "muestra un mensaje de ayuda y sale"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -19931,9 +19929,8 @@ msgid "Generate map / summary of drill hits"
 msgstr "Generar mapa/resumen de impactos de perforación"
 
 #: kicad/cli/command_export_pcb_drill.cpp:84
-#, fuzzy
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
-msgstr "Opciones válidas excellon, gerber."
+msgstr "Opciones válidas: pdf,gerberx2,ps,dxf,svg"
 
 #: kicad/cli/command_export_pcb_drill.cpp:87
 #, fuzzy
@@ -19942,7 +19939,7 @@ msgstr "Generar archivo(s) de posicionamiento de componentes para Pick & Place"
 
 #: kicad/cli/command_export_pcb_drill.cpp:92
 msgid "Precision of gerber coordinates (5 or 6)"
-msgstr ""
+msgstr "Precisión de las coordenadas gerber (5 ó 6)"
 
 #: kicad/cli/command_export_pcb_drill.cpp:109
 msgid "Output must be a directory\n"
@@ -19973,7 +19970,7 @@ msgstr "Modo de origen inválido especificado\n"
 #: kicad/cli/command_export_pcb_drill.cpp:220
 #: kicad/cli/command_export_pcb_gerber.cpp:109
 msgid "Gerber coordinate precision should be either 5 or 6\n"
-msgstr ""
+msgstr "La precisión de las coordenadas Gerber debe ser 5 ó 6\n"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:44
 #: kicad/cli/command_export_pcb_gerber.cpp:40
@@ -20036,7 +20033,7 @@ msgstr "Desactivar las macros de apertura (no recomendado)"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
-msgstr ""
+msgstr "Precisión de las coordenadas gerber, opciones válidas: 5 ó 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
 #, fuzzy
@@ -20050,6 +20047,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
 msgstr ""
+"Utilice los ajustes de trazado gerber ya configurados en el archivo de la "
+"placa"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:54
 #: kicad/cli/command_export_pcb_svg.cpp:52
@@ -20068,16 +20067,17 @@ msgstr "Monocromo"
 #: kicad/cli/command_fp_export_svg.cpp:38
 #: kicad/cli/command_sym_export_svg.cpp:38
 msgid "Color theme to use (will default to pcbnew settings)"
-msgstr ""
+msgstr "Tema de color a utilizar (por defecto será la configuración de pcbnew)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:47
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
 msgstr ""
+"Opciones válidas: anverso, reverso, ambos. El formato Gerber sólo admite "
+"\"ambos\"."
 
 #: kicad/cli/command_export_pcb_pos.cpp:51
-#, fuzzy
 msgid "Valid options: ascii,csv,gerber"
-msgstr "Opciones válidas excellon, gerber."
+msgstr "Opciones válidas: ascii,csv,gerber"
 
 #: kicad/cli/command_export_pcb_pos.cpp:55
 #, fuzzy
@@ -20118,7 +20118,7 @@ msgstr "Formato inválido\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:150
 msgid "\"both\" not supported for gerber format\n"
-msgstr ""
+msgstr "\"ambos\" no es compatible con el formato gerber\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:166
 msgid "Invalid side specified\n"
@@ -20171,13 +20171,15 @@ msgstr ""
 
 #: kicad/cli/command_export_pcb_svg.cpp:43
 msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr ""
+msgstr "Reflejar el tablero (útil para intentar mostrar las capas inferiores)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:57
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
 msgstr ""
+"Establecer el modo de tamaño de página (0 = página con marco y caja de "
+"título, 1 = tamaño de página actual, 2 = sólo área de tablero)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:63
 #: kicad/cli/command_export_sch_pdf.cpp:46
@@ -20191,6 +20193,8 @@ msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
 msgstr ""
+"Formato de salida del netlist, opciones válidas: kicadsexpr, kicadxml, "
+"cadstar, orcadpcb2, spice, spicemodel"
 
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_pdf.cpp:69
@@ -20202,7 +20206,7 @@ msgstr "El archivo esquemático no existe o no es accesible\n"
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
 msgid "Avoid setting a background color (regardless of theme)"
-msgstr ""
+msgstr "Evite establecer un color de fondo (independientemente del tema)"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:42
@@ -20218,6 +20222,8 @@ msgstr "La ruta de la huella no existe o no es accesible\n"
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr ""
+"Fuerza a que la biblioteca de huellas se vuelva a guardar independientemente "
+"de la versión"
 
 #: kicad/cli/command_fp_upgrade.cpp:53
 msgid "Footprint path does not exist or is not accessible\n"
@@ -20231,6 +20237,8 @@ msgstr "El archivo esquemático no existe o no es accesible\n"
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
 msgstr ""
+"Fuerza a que la biblioteca de símbolos se vuelva a guardar "
+"independientemente de la versión"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
@@ -26526,6 +26534,8 @@ msgstr "Ignorar componentes virtuales"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:111
 msgid "Do not show components not in BOM and not in place file"
 msgstr ""
+"No mostrar componentes que no estén en la lista de materiales ni en el "
+"archivo de posición"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
 msgid "Substitute similarly named models"
@@ -29573,6 +29583,8 @@ msgstr "Imprimir solo en &blanco y negro"
 #: pcbnew/dialogs/dialog_plot_base.cpp:394
 msgid "When disabled, the color from the chosen layer will be used to plot."
 msgstr ""
+"Cuando está desactivado, el color de la capa elegida se utilizará para "
+"trazar."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:391
 #, fuzzy
@@ -30541,7 +30553,7 @@ msgstr "Centro del círculo (%s, %s), radio %s"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:78
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "Mantener puntos finales o la dirección del punto de partida"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
@@ -30666,7 +30678,7 @@ msgstr "Dibujar un perímetro para mostrar el tamaño de la hoja."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:393
 msgid "Show courtyard collisions when moving/dragging"
-msgstr ""
+msgstr "Mostrar colisiones de patio al mover/arrastrar"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:397
 msgid "Auto-refill zones"
@@ -33354,9 +33366,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s margen %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s margen %s; real %s)"
+msgstr "(%s margen %s; real < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, c-format
@@ -33739,7 +33751,7 @@ msgstr "La configuración del apilado de la placa está desactualizada."
 
 #: pcbnew/exporters/step/exporter_step.cpp:318
 msgid "Determining PCB data\n"
-msgstr ""
+msgstr "Determinación de los datos de placa\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:323
 msgid "Build STEP data\n"
@@ -38393,7 +38405,7 @@ msgstr "Afirmaciones para:"
 
 #: pcbnew/tools/convert_tool.cpp:67
 msgid "Copy line width of first object"
-msgstr ""
+msgstr "Copiar el ancho de línea del primer objeto"
 
 #: pcbnew/tools/convert_tool.cpp:176
 msgid "Create from Selection"
@@ -40117,16 +40129,21 @@ msgstr "Centro del arco (%s, %s), radio %s"
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
 msgstr ""
+"Cambiar el modo de edición de arco para mantener el centro, ajustar el radio "
+"y los puntos finales"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Keep arc endpoints or direction of starting point"
 msgstr ""
+"Mantener los puntos finales del arco o la dirección del punto de partida"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
 msgstr ""
+"Cambiar el modo de edición de arco para mantener los puntos finales o para "
+"mantener la dirección del otro punto"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
@@ -40623,6 +40640,8 @@ msgid ""
 "Automatic refill of zones can be turned off in Preferences if it becomes too "
 "slow."
 msgstr ""
+"El relleno automático de zonas se puede desactivar en Preferencias si se "
+"vuelve demasiado lento."
 
 #: pcbnew/tools/zone_filler_tool.cpp:324
 msgid "Fill Zone"
