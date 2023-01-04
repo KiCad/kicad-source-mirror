@@ -182,12 +182,15 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
                     if( inURL )
                     {
-                        if( c == ' ' )
+                        if( c == ' ' || c == '\n')
                         {
                             result += wxString::Format( wxT( "<a href='%s'>%s</a>" ), url, url );
                             inURL = false;
 
-                            result += c;
+                            if( c == '\n' )
+                                result += wxT( "</p><p>" );
+                            else
+                                result += c;
                         }
                         else
                         {
@@ -209,6 +212,9 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
                         result += c;
                     }
                 }
+
+                if( inURL )
+                    result += wxString::Format( wxT( "<a href='%s'>%s</a>" ), url, url );
 
                 return result;
             };
