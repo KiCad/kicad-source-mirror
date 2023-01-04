@@ -188,7 +188,6 @@ set( EESCHEMA_SRCS
     bom_plugins.cpp
     bus-wire-junction.cpp
     cmp_library_lexer.cpp
-    component_references_lister.cpp
     connection_graph.cpp
     cross-probing.cpp
     ee_collectors.cpp
@@ -235,6 +234,7 @@ set( EESCHEMA_SRCS
     sch_plotter.cpp
     sch_plugin.cpp
     sch_preview_panel.cpp
+    sch_reference_list.cpp
     sch_screen.cpp
     sch_shape.cpp
     sch_sheet.cpp
