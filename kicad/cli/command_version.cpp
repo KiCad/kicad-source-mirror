@@ -23,15 +23,40 @@
 #include <wx/crt.h>
 #include <kicad_build_version.h>
 
+#include <macros.h>
+#include <build_version.h>
+
+#define ARG_FORMAT "--format"
 
 CLI::VERSION_COMMAND::VERSION_COMMAND() : COMMAND( "version" )
 {
+    m_argParser.add_argument( ARG_FORMAT )
+            .default_value( std::string( "plain" ) )
+            .help( UTF8STDSTR( _( "version info format (plain, commit, about)" ) ) );
 }
 
 
 int CLI::VERSION_COMMAND::doPerform( KIWAY& aKiway )
 {
-    wxPrintf( KICAD_MAJOR_MINOR_PATCH_VERSION );
+    wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+    if( format == wxS( "plain" ) )
+    {
+        wxPrintf( KICAD_MAJOR_MINOR_PATCH_VERSION );
+    }
+    else if( format == wxS( "commit" ) )
+    {
+        wxPrintf( KICAD_COMMIT_HASH );
+    }
+    else if( format == wxS( "about" ) )
+    {
+        wxString msg_version = GetVersionInfoData( wxS( "kicad-cli" ) );
+        wxPrintf( msg_version );
+    }
+    else
+    {
+        wxFprintf( stderr, _( "Invalid format\n" ) );
+        return EXIT_CODES::ERR_ARGS;
+    }
 
     return 0;
 }
