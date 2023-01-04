@@ -85,7 +85,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 #elif defined( __WXMSW__ )
     bitmapSize += { 3, 2 };
 #else
-    bitmapSize = { charSize.x * 5, charSize.x * 5 };
+    bitmapSize += { -charSize.x / 4, 0 };
 #endif
 
     if( !m_initialized )
