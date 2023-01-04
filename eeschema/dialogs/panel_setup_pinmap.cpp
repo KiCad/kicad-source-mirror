@@ -83,7 +83,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 #ifdef __WXMAC__
     bitmapSize += { 4, 2 };
 #else
-    bitmapSize += { 2, 1 };
+    bitmapSize += { 3, 2 };
 #endif
 
     if( !m_initialized )
