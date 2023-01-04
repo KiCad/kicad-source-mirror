@@ -11,16 +11,16 @@
 # Vesa Solonen <vesa.solonen@vli.fi>, 2021.
 # Petri Niemelä <petrinm@gmail.com>, 2022.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022.
-# Toni Laiho <apelegeos@gmail.com>, 2022.
+# Toni Laiho <apelegeos@gmail.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2022-12-20 15:47+0000\n"
+"PO-Revision-Date: 2023-01-06 00:33+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10822,7 +10822,7 @@ msgstr "Kytkentäkaavion '%s' tallentaminen epäonnistui"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:679
 msgid "A sheet must have a name."
-msgstr "Arkin on oltava nimi."
+msgstr "Arkilla on oltava nimi."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:687
 msgid "A sheet must have a file specified."
@@ -10843,15 +10843,15 @@ msgstr "Tyyli"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:192
 msgid "Border width:"
-msgstr "Reunaviivan leveys:"
+msgstr "Reunan leveys:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:144
 msgid "Border color:"
-msgstr "Reunaviivan väri:"
+msgstr "Reunan väri:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:157
 msgid "Background fill:"
-msgstr "Tausta:"
+msgstr "Taustan täyttö:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:178
 msgid "Page number:"
@@ -13862,7 +13862,7 @@ msgstr "[Tallentamaton]"
 
 #: eeschema/sch_edit_frame.cpp:1429
 msgid "[no schematic loaded]"
-msgstr "[Kytkentäkaaviota ei ladattu]"
+msgstr "[Kytkentäkaaviota ei ole ladattu]"
 
 #: eeschema/sch_edit_frame.cpp:1612
 #, c-format
@@ -15466,7 +15466,7 @@ msgstr "Jäsentäjä ei käsittele tätä IBIS-versiota"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:572
 msgid "Missing [File Rev]"
-msgstr "Puuttuva [Tiedosto Versio]"
+msgstr "Puuttuva [Tiedostoversio]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:578
 msgid "Missing [File Name]"
@@ -15937,10 +15937,9 @@ msgid "Number of bits"
 msgstr "Bittien määrä"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr "Tämä simulaatio ei näytä kuvaajaa. Katso tulokset konsolin ikkunasta"
+msgstr "Tämä simulaatio ei näytä kuvaajaa. Katso tulokset konsolin ikkunasta."
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -16010,12 +16009,12 @@ msgstr "Juoni %u - "
 #: eeschema/sim/sim_plot_frame.cpp:603 eeschema/sim/sim_plot_frame.cpp:615
 #: eeschema/sim/sim_plot_frame.cpp:940
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "Ei voitu asettaa virettyä arvoa(s):"
 
 #: eeschema/sim/sim_plot_frame.cpp:616 eeschema/sim/sim_plot_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "%s nastaa %s ei löytynyt"
+msgstr "%s ei ole viritettävä"
 
 #: eeschema/sim/sim_plot_frame.cpp:659
 msgid "Error: simulation type not defined!\n"
@@ -16062,9 +16061,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Sinun on ensin suoritettava piirustuksen-antava simulointi."
 
 #: eeschema/sim/sim_plot_frame.cpp:1605
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "SPICE netlist-tiedosto"
+msgstr "SPICE Verkkolista"
 
 #: eeschema/sim/sim_plot_frame.cpp:1672
 msgid "Save changes to workbook?"
@@ -16083,12 +16081,10 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove Signal"
-msgstr "Poista kenttiä"
+msgstr "Poista Signaali"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove the signal from the plot"
 msgstr "Poista signaali kuvaajanäytöltä"
 
@@ -17641,23 +17637,20 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Näyttää nastataulukon nastojen joukkomuokkausta varten"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Break"
-msgstr "Murra väylä"
+msgstr "Riko"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Divide into connected segments"
-msgstr "Via ei ole yhteydessä"
+msgstr "Jaa yhdistettyihin segmentteihin"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr ""
+msgstr "Leikkaa"
 
 #: eeschema/tools/ee_actions.cpp:558
-#, fuzzy
 msgid "Divide into unconnected segments"
-msgstr "Via ei ole yhteydessä"
+msgstr "Jaa toisiinsa yhdistämättömiin osiin"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -19677,7 +19670,7 @@ msgstr "Epäonnistui lähettää dataa"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "näyttää ohjeviestin ja poistuu"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -20174,7 +20167,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:284
 msgid "prints version information and exits"
-msgstr ""
+msgstr "tulostaa versiotiedot ja poistuu"
 
 #: kicad/kicad_manager_frame.cpp:210
 msgid "Project Files"
@@ -27307,7 +27300,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Use route command (recommended)"
-msgstr "Käytä jyrsinkomentoa (suositus)"
+msgstr "Käytä reititä komentoa (suositus)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Use alternate drill mode"
@@ -29505,7 +29498,7 @@ msgid ""
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
 "Kun tämä on käytössä, reititin yrittää siirtää törmäysjälkiä kiinteiden "
-"esteiden (esim. Tyynyjen) taakse sen sijaan, että \"heijastaisi\" törmäystä "
+"esteiden taakse (esim. Anturat ) sen sijaan, että \"heijastaisi\" törmäyksen "
 "takaisin"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:41
@@ -30431,7 +30424,6 @@ msgid "Warning: Duplicate Nicknames"
 msgstr "Varoitus: Päällekkäiset lempinimet"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:100
-#, fuzzy
 msgid "LIbrary Format"
 msgstr "Kirjastomuoto"
 
@@ -33008,9 +33000,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s välys %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s välys %s; todellinen %s)"
+msgstr "(%s välys %s; todellinen <0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, c-format
