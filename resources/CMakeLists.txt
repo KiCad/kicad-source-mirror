@@ -11,7 +11,7 @@ elseif( UNIX )
         COMMAND ${CMAKE_COMMAND}
             -DSRC_PATH=${PROJECT_SOURCE_DIR}
             -DBUILD_PATH=${PROJECT_BINARY_DIR}
-            -DCMAKE_MODULE_PATH=${PROJECT_SOURCE_DIR}/cmake
+            -DKICAD_CMAKE_MODULE_PATH=${PROJECT_SOURCE_DIR}/cmake
             -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WritePlatformMetadata_linux.cmake
         DEPENDS ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WritePlatformMetadata_linux.cmake
         COMMENT "Configuring Linux metainfo"
