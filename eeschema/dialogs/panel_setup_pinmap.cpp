@@ -80,12 +80,12 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     wxStaticText* text;
     wxPoint       offset( 2, 3 );
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ )
     bitmapSize += { 4, 2 };
 #elif defined( __WXMSW__ )
     bitmapSize += { 3, 2 };
 #else
-    bitmapSize += { -3, 1 };
+    bitmapSize = { charSize.x * 5, charSize.x * 5 };
 #endif
 
     if( !m_initialized )
@@ -119,10 +119,8 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         pos = m_buttonList[0][0]->GetPosition();
     }
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ )
     charSize += { 0, 2 };
-#elif defined( __WXGTK__ )
-    offset += wxPoint( -6, -3 );
 #endif
 
     for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
@@ -154,12 +152,10 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
             BITMAP_BUTTON* btn = new BITMAP_BUTTON( m_matrixPanel, id, KiBitmap( bitmap_butt ),
                                                     wxPoint( x, y ), bitmapSize );
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ )
             btn->SetSize( btn->GetSize().x - 1, btn->GetSize().y );
 #elif defined( __WXMSW__ )
             btn->SetSize( btn->GetSize().x + 1, btn->GetSize().y );
-#else
-            btn->SetSize( btn->GetSize().x - 6, btn->GetSize().y );
 #endif
             m_buttonList[ii][jj] = btn;
             setDRCMatrixButtonState( m_buttonList[ii][jj], diag );
