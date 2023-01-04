@@ -1101,16 +1101,22 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         case PCB_TEXTBOX_T:      mask = DRC_DISALLOW_TEXTS;      break;
                         case PCB_FP_TEXT_T:      mask = DRC_DISALLOW_TEXTS;      break;
                         case PCB_FP_TEXTBOX_T:   mask = DRC_DISALLOW_TEXTS;      break;
-                        case PCB_ZONE_T:         mask = DRC_DISALLOW_ZONES;      break;
-                        case PCB_FP_ZONE_T:      mask = DRC_DISALLOW_ZONES;      break;
-                        case PCB_LOCATE_HOLE_T:  mask = DRC_DISALLOW_HOLES;      break;
-                        default:                 mask = 0;                       break;
+                        case PCB_ZONE_T:
+                        case PCB_FP_ZONE_T:
+                        {
+                            const ZONE* test_zone = static_cast<const ZONE*>( a );
+
+                            // Treat teardrop areas as tracks for DRC purposes
+                            if( test_zone->IsTeardropArea() )
+                                mask = DRC_DISALLOW_TRACKS;
+                            else
+                                mask = DRC_DISALLOW_ZONES;
+
+                            break;
                         }
 
-                        if( const ZONE* zone = dynamic_cast<const ZONE*>( a ) )
-                        {
-                            if( zone->IsTeardropArea() )
-                                mask = DRC_DISALLOW_TRACKS;
+                        case PCB_LOCATE_HOLE_T:  mask = DRC_DISALLOW_HOLES;      break;
+                        default:                 mask = 0;                       break;
                         }
                     }
 
