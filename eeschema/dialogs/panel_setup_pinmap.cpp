@@ -122,7 +122,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 #ifdef __WXMAC__
     charSize += { 0, 2 };
 #elif defined( __WXGTK__ )
-    offset += { -6, -3 };
+    offset += wxPoint( -6, -3 );
 #endif
 
     for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
