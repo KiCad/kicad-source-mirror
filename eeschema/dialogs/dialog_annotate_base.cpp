@@ -5,8 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "widgets/wx_infobar.h"
 #include "widgets/wx_html_report_panel.h"
+#include "widgets/wx_infobar.h"
 
 #include "dialog_annotate_base.h"
 
@@ -67,16 +67,13 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerXpos->Add( annotate_down_right_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	sbSizer1->Add( bSizerXpos, 0, wxEXPAND, 5 );
+	sbSizer1->Add( bSizerXpos, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerYpos;
 	bSizerYpos = new wxBoxSizer( wxHORIZONTAL );
 
 	m_rbSortBy_Y_Position = new wxRadioButton( sbSizer1->GetStaticBox(), ID_SORT_BY_Y_POSITION, _("Sort symbols by &Y position"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerYpos->Add( m_rbSortBy_Y_Position, 0, wxALIGN_CENTER_VERTICAL, 3 );
-
-
-	bSizerYpos->Add( 0, 0, 1, 0, 5 );
 
 	annotate_right_down_bitmap = new wxStaticBitmap( sbSizer1->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerYpos->Add( annotate_right_down_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
