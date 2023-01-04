@@ -82,6 +82,8 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
 #ifdef __WXMAC__
     bitmapSize += { 4, 2 };
+#else
+    bitmapSize += { 2, 1 };
 #endif
 
     if( !m_initialized )
@@ -151,7 +153,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 #ifdef __WXMAC__
             btn->SetSize( btn->GetSize().x - 1, btn->GetSize().y );
 #else
-            btn->SetSize( btn->GetSize().x + 4, btn->GetSize().y );
+            btn->SetSize( btn->GetSize().x + 1, btn->GetSize().y );
 #endif
             m_buttonList[ii][jj] = btn;
             setDRCMatrixButtonState( m_buttonList[ii][jj], diag );
