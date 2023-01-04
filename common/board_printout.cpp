@@ -150,22 +150,18 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     // Fit to page
     if( m_settings.m_scale <= 0.0 )
     {
+        if( !m_settings.PrintBorderAndTitleBlock() )
+            bBox = getBoundingBox(); // Fit to "objects", new centre
+
         if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
         {
             // Nothing to print
             m_settings.m_scale = 1.0;
         }
-        else if( !m_settings.PrintBorderAndTitleBlock() )
-        {
-            BOX2I content_box = getBoundingBox();
-            double scaleX = (double) pageSizeIU.x / content_box.GetWidth();
-            double scaleY = (double) pageSizeIU.y / content_box.GetHeight();
-            m_settings.m_scale = std::min( scaleX, scaleY );
-        }
         else
         {
-            double scaleX = (double) pageSizeIU.x / sheetSizeIU.x;
-            double scaleY = (double) pageSizeIU.y / sheetSizeIU.y;
+            double scaleX = (double) pageSizeIU.x / bBox.GetWidth();
+            double scaleY = (double) pageSizeIU.y / bBox.GetHeight();
             m_settings.m_scale = std::min( scaleX, scaleY );
         }
     }
