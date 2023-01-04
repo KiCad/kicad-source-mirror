@@ -225,6 +225,7 @@ bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
             wxMemoryInputStream istream( stream );
             m_image->LoadFile( istream, wxBITMAP_TYPE_PNG );
             m_bitmap = new wxBitmap( *m_image );
+            m_originalImage = new wxImage( *m_image );
             break;
         }
 
