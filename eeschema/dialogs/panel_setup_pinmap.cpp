@@ -78,15 +78,11 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     wxSize        charSize = KIUI::GetTextSize( "X", m_matrixPanel );
     wxPoint       pos( 0, charSize.y * 2 );
     wxStaticText* text;
+
+#ifdef __WXMAC__
     wxPoint       offset( 2, 3 );
 
-#if defined( __WXMAC__ )
     bitmapSize += { 4, 2 };
-#elif defined( __WXMSW__ )
-    bitmapSize += { 3, 2 };
-#else
-    bitmapSize += { -charSize.x / 4, 0 };
-#endif
 
     if( !m_initialized )
     {
@@ -119,9 +115,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         pos = m_buttonList[0][0]->GetPosition();
     }
 
-#if defined( __WXMAC__ )
     charSize += { 0, 2 };
-#endif
 
     for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
     {
@@ -162,11 +156,78 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         }
     }
 
+#else
+    if( !m_initialized )
+    {
+        std::vector<wxStaticText*> labels;
+
+        // Print row labels
+        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+        {
+            int y = pos.y + (ii * bitmapSize.y);
+            text = new wxStaticText( m_matrixPanel, -1, CommentERC_H[ii],
+                                     wxPoint( 5, y + ( bitmapSize.y / 2 ) - ( 12 / 2 ) ) );
+            labels.push_back( text );
+
+            int x = text->GetRect().GetRight();
+            pos.x = std::max( pos.x, x );
+        }
+
+        // Right-align
+        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+        {
+            wxPoint labelPos = labels[ ii ]->GetPosition();
+            labelPos.x = pos.x - labels[ ii ]->GetRect().GetWidth();
+            labels[ ii ]->SetPosition( labelPos );
+        }
+
+        pos.x += 5;
+    }
+    else
+    {
+        pos = m_buttonList[0][0]->GetPosition();
+    }
+
+    for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+    {
+        int y = pos.y + (ii * bitmapSize.y);
+
+        for( int jj = 0; jj <= ii; jj++ )
+        {
+            // Add column labels (only once)
+            PIN_ERROR diag = m_schematic->ErcSettings().GetPinMapValue( ii, jj );
+
+            int x = pos.x + ( jj * ( bitmapSize.x + 2 ) );
+
+            if( ( ii == jj ) && !m_initialized )
+            {
+                wxPoint textPos( x + KiROUND( bitmapSize.x / 2 ) - KiROUND( charSize.x ),
+                                 y - charSize.y * 2 );
+                new wxStaticText( m_matrixPanel, wxID_ANY, CommentERC_V[ii], textPos );
+
+                wxPoint calloutPos( x + KiROUND( bitmapSize.x / 2 ) - KiROUND( charSize.x / 2 ),
+                                    y - charSize.y );
+                new wxStaticText( m_matrixPanel, wxID_ANY, "|", calloutPos );
+            }
+
+            int event_id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );
+            BITMAPS bitmap_butt = BITMAPS::erc_green;
+
+            delete m_buttonList[ii][jj];
+            wxBitmapButton* btn = new wxBitmapButton( m_matrixPanel, event_id,
+                                                      KiBitmap( bitmap_butt ), wxPoint( x, y ) );
+            btn->SetSize( btn->GetSize().x + 4, btn->GetSize().y );
+            m_buttonList[ii][jj] = btn;
+            setDRCMatrixButtonState( m_buttonList[ii][jj], diag );
+        }
+    }
+#endif
+
     m_initialized = true;
 }
 
 
-void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( BITMAP_BUTTON *aButton, PIN_ERROR aState )
+void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxWindow *aButton, PIN_ERROR aState )
 {
     BITMAPS bitmap_butt = BITMAPS::INVALID_BITMAP;
     wxString tooltip;
@@ -194,7 +255,11 @@ void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( BITMAP_BUTTON *aButton, PIN_ER
 
     if( !!bitmap_butt )
     {
-        aButton->SetBitmap( KiBitmap( bitmap_butt ) );
+        if( wxBitmapButton* wxBtn = dynamic_cast<wxBitmapButton*>( aButton ) )
+            wxBtn->SetBitmap( KiBitmap( bitmap_butt ) );
+        else if( BITMAP_BUTTON* kiBtn = dynamic_cast<BITMAP_BUTTON*>( aButton ) )
+            kiBtn->SetBitmap( KiBitmap( bitmap_butt ) );
+
         aButton->SetToolTip( tooltip );
     }
 }

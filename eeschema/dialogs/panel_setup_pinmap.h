@@ -48,14 +48,14 @@ public:
 private:
     void changeErrorLevel( wxCommandEvent& event );
     void reBuildMatrixPanel();
-    void setDRCMatrixButtonState( BITMAP_BUTTON *aButton, PIN_ERROR aState );
+    void setDRCMatrixButtonState( wxWindow *aButton, PIN_ERROR aState );
 
     DECLARE_EVENT_TABLE()
 
-    SCH_EDIT_FRAME*   m_parent;
-    SCHEMATIC*        m_schematic;
-    BITMAP_BUTTON*    m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
-    bool              m_initialized;
+    SCH_EDIT_FRAME*  m_parent;
+    SCHEMATIC*       m_schematic;
+    wxWindow*        m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
+    bool             m_initialized;
 };
 
 
