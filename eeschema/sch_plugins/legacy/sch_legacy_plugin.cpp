@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -1352,7 +1352,7 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
                     KIID_PATH path;
                     path.push_back( m_rootSheet->GetScreen()->GetUuid() );
 
-                    SYMBOL_INSTANCE_REFERENCE instance;
+                    SCH_SYMBOL_INSTANCE instance;
                     instance.m_Path = path;
                     instance.m_Reference = symbol->GetField( REFERENCE_FIELD )->GetText();
                     instance.m_Unit = symbol->GetUnit();
@@ -1360,9 +1360,9 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
                 }
                 else
                 {
-                    for( const SYMBOL_INSTANCE_REFERENCE& instance : symbol->GetInstanceReferences() )
+                    for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstanceReferences() )
                     {
-                        SYMBOL_INSTANCE_REFERENCE tmpInstance = instance;
+                        SCH_SYMBOL_INSTANCE tmpInstance = instance;
                         symbol->AddHierarchicalReference( tmpInstance );
                     }
                 }
@@ -1622,7 +1622,7 @@ void SCH_LEGACY_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol )
     // This is redundant with the AR entries below, but it makes the files backwards-compatible.
     if( aSymbol->GetInstanceReferences().size() > 0 )
     {
-        const SYMBOL_INSTANCE_REFERENCE& instance = aSymbol->GetInstanceReferences()[0];
+        const SCH_SYMBOL_INSTANCE& instance = aSymbol->GetInstanceReferences()[0];
         name1 = toUTFTildaText( instance.m_Reference );
     }
     else
@@ -1665,7 +1665,7 @@ void SCH_LEGACY_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol )
      */
     if( aSymbol->GetInstanceReferences().size() > 1 )
     {
-        for( const SYMBOL_INSTANCE_REFERENCE& instance : aSymbol->GetInstanceReferences() )
+        for( const SCH_SYMBOL_INSTANCE& instance : aSymbol->GetInstanceReferences() )
         {
             /*format:
              * AR Path="/140/2" Ref="C99"   Part="1"

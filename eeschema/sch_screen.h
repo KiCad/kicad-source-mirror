@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@
 #include <title_block.h>
 
 #include <lib_id.h>
-#include <sch_symbol.h>         // SYMBOL_INSTANCE_REFERENCE
+#include <sch_symbol.h>         // SCH_SYMBOL_INSTANCE
 #include <sch_reference_list.h>
 #include <sch_rtree.h>
 #include <sch_sheet.h>
@@ -486,7 +486,7 @@ public:
         return m_aliases;
     }
 
-    const std::vector<SYMBOL_INSTANCE_REFERENCE>& GetSymbolInstances() const
+    const std::vector<SCH_SYMBOL_INSTANCE>& GetSymbolInstances() const
     {
         return m_symbolInstances;
     }
@@ -593,7 +593,7 @@ private:
      *          schematic file is loaded.  It is read only and it is only written to non-root
      *          schematic files.
      */
-    std::vector<SYMBOL_INSTANCE_REFERENCE> m_symbolInstances;
+    std::vector<SCH_SYMBOL_INSTANCE> m_symbolInstances;
     std::vector<SCH_SHEET_INSTANCE> m_sheetInstances;
 
     /**

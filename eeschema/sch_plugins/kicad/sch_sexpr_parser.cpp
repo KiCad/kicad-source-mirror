@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -2225,7 +2225,7 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
         {
             NeedSYMBOL();
 
-            SYMBOL_INSTANCE_REFERENCE instance;
+            SCH_SYMBOL_INSTANCE instance;
 
             instance.m_Path = KIID_PATH( FromUTF8() );
 
@@ -2695,7 +2695,7 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
         case T_default_instance:
         {
-            SYMBOL_INSTANCE_REFERENCE defaultInstance;
+            SCH_SYMBOL_INSTANCE defaultInstance;
 
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
@@ -2763,7 +2763,7 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
                     if( token != T_path )
                         Expecting( "path" );
 
-                    SYMBOL_INSTANCE_REFERENCE instance;
+                    SCH_SYMBOL_INSTANCE instance;
 
                     instance.m_ProjectName = projectName;
 

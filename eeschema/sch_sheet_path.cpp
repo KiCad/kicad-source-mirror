@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,8 +86,8 @@ public:
 };
 
 
-bool SortSymbolInstancesByProjectUuid( const SYMBOL_INSTANCE_REFERENCE& aLhs,
-                                       const SYMBOL_INSTANCE_REFERENCE& aRhs )
+bool SortSymbolInstancesByProjectUuid( const SCH_SYMBOL_INSTANCE& aLhs,
+                                       const SCH_SYMBOL_INSTANCE& aRhs )
 {
     wxCHECK( !aLhs.m_Path.empty() && !aRhs.m_Path.empty(), false );
 
@@ -567,7 +567,7 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
 
         wxCHECK2( symbol, continue );
 
-        SYMBOL_INSTANCE_REFERENCE newSymbolInstance;
+        SCH_SYMBOL_INSTANCE newSymbolInstance;
 
         if( symbol->GetInstance( newSymbolInstance, Path(), true ) )
         {
@@ -1072,7 +1072,7 @@ SCH_SHEET_LIST SCH_SHEET_LIST::FindAllSheetsForScreen( const SCH_SCREEN* aScreen
 
 
 void SCH_SHEET_LIST::UpdateSymbolInstanceData(
-                                const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbolInstances )
+                                const std::vector<SCH_SYMBOL_INSTANCE>& aSymbolInstances )
 {
     for( SCH_SHEET_PATH& sheetPath : *this )
     {
@@ -1086,7 +1086,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstanceData(
             sheetPathWithSymbolUuid.push_back( symbol->m_Uuid );
 
             auto it = std::find_if( aSymbolInstances.begin(), aSymbolInstances.end(),
-                    [ sheetPathWithSymbolUuid ]( const SYMBOL_INSTANCE_REFERENCE& r ) -> bool
+                    [ sheetPathWithSymbolUuid ]( const SCH_SYMBOL_INSTANCE& r ) -> bool
                     {
                         return sheetPathWithSymbolUuid == r.m_Path;
                     } );

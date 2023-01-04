@@ -565,7 +565,7 @@ public:
     int FindFirstUnusedReference( const SCH_REFERENCE& aRef, int aMinValue,
                                   const std::vector<int>& aRequiredUnits ) const;
 
-    std::vector<SYMBOL_INSTANCE_REFERENCE> GetSymbolInstances() const;
+    std::vector<SCH_SYMBOL_INSTANCE> GetSymbolInstances() const;
 
 #if defined(DEBUG)
     void Show( const char* aPrefix = "" )

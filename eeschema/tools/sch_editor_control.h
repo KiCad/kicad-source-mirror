@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -237,7 +237,7 @@ private:
     std::map<wxString, SCH_SCREEN*> m_supplementaryClipboard;
 
     // A map of KIID_PATH --> symbol instances for the clipboard contents.
-    std::map<KIID_PATH, SYMBOL_INSTANCE_REFERENCE> m_clipboardSymbolInstances;
+    std::map<KIID_PATH, SCH_SYMBOL_INSTANCE> m_clipboardSymbolInstances;
 
     // A map of KIID_PATH --> sheet instances for the clipboard contents.
     std::map<KIID_PATH, SCH_SHEET_INSTANCE> m_clipboardSheetInstances;

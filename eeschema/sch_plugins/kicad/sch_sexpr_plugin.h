@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -45,7 +45,7 @@ class SCH_TEXT;
 class SCH_TEXTBOX;
 class SCH_SYMBOL;
 class SCH_FIELD;
-struct SYMBOL_INSTANCE_REFERENCE;
+struct SCH_SYMBOL_INSTANCE;
 class STRING_UTF8_MAP;
 class EE_SELECTION;
 class SCH_SEXPR_PLUGIN_CACHE;

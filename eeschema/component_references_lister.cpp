@@ -306,13 +306,13 @@ int SCH_REFERENCE_LIST::FindFirstUnusedReference( const SCH_REFERENCE& aRef, int
 }
 
 
-std::vector<SYMBOL_INSTANCE_REFERENCE> SCH_REFERENCE_LIST::GetSymbolInstances() const
+std::vector<SCH_SYMBOL_INSTANCE> SCH_REFERENCE_LIST::GetSymbolInstances() const
 {
-    std::vector<SYMBOL_INSTANCE_REFERENCE> retval;
+    std::vector<SCH_SYMBOL_INSTANCE> retval;
 
     for( const SCH_REFERENCE& ref : m_flatList )
     {
-        SYMBOL_INSTANCE_REFERENCE instance;
+        SCH_SYMBOL_INSTANCE instance;
         instance.m_Path = ref.GetSheetPath().Path();
         instance.m_Reference = ref.GetRef();
         instance.m_Unit = ref.GetUnit();

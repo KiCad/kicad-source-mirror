@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@
 /**
  * A simple container for schematic symbol instance information.
  */
-struct SYMBOL_INSTANCE_REFERENCE
+struct SCH_SYMBOL_INSTANCE
 {
     KIID_PATH m_Path;
 
@@ -58,8 +58,8 @@ struct SYMBOL_INSTANCE_REFERENCE
 };
 
 
-extern bool SortSymbolInstancesByProjectUuid( const SYMBOL_INSTANCE_REFERENCE& aLhs,
-                                              const SYMBOL_INSTANCE_REFERENCE& aRhs );
+extern bool SortSymbolInstancesByProjectUuid( const SCH_SYMBOL_INSTANCE& aLhs,
+                                              const SCH_SYMBOL_INSTANCE& aRhs );
 
 
 /**
@@ -619,7 +619,7 @@ public:
      * WARNING: Do not call this on anything other than the full hierarchy.
      * @param aSymbolInstances is the symbol path information loaded from the root schematic.
      */
-    void UpdateSymbolInstanceData( const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbolInstances );
+    void UpdateSymbolInstanceData( const std::vector<SCH_SYMBOL_INSTANCE>& aSymbolInstances );
 
     /**
      * Update all of the sheet instance information using \a aSheetInstances.

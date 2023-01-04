@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -476,10 +476,10 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 }
 
 
-bool SCH_SYMBOL::GetInstance( SYMBOL_INSTANCE_REFERENCE& aInstance,
+bool SCH_SYMBOL::GetInstance( SCH_SYMBOL_INSTANCE& aInstance,
                               const KIID_PATH& aSheetPath, bool aTestFromEnd ) const
 {
-    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
         if( !aTestFromEnd )
         {
@@ -522,8 +522,8 @@ void SCH_SYMBOL::RemoveInstance( const SCH_SHEET_PATH& aInstancePath )
 }
 
 
-void SCH_SYMBOL::SortInstances( bool (*aSortFunction)( const SYMBOL_INSTANCE_REFERENCE& aLhs,
-                                                       const SYMBOL_INSTANCE_REFERENCE& aRhs ) )
+void SCH_SYMBOL::SortInstances( bool (*aSortFunction)( const SCH_SYMBOL_INSTANCE& aLhs,
+                                                       const SCH_SYMBOL_INSTANCE& aRhs ) )
 {
     std::sort( m_instanceReferences.begin(), m_instanceReferences.end(), aSortFunction );
 }
@@ -549,7 +549,7 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
         }
     }
 
-    SYMBOL_INSTANCE_REFERENCE instance;
+    SCH_SYMBOL_INSTANCE instance;
     instance.m_Path = aPath;
     instance.m_Reference = aRef;
     instance.m_Unit = aUnit;
@@ -576,11 +576,11 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
 }
 
 
-void SCH_SYMBOL::AddHierarchicalReference( const SYMBOL_INSTANCE_REFERENCE& aInstance )
+void SCH_SYMBOL::AddHierarchicalReference( const SCH_SYMBOL_INSTANCE& aInstance )
 {
     KIID_PATH searchPath( aInstance.m_Path );
 
-    std::vector<SYMBOL_INSTANCE_REFERENCE>::iterator resultIt;
+    std::vector<SCH_SYMBOL_INSTANCE>::iterator resultIt;
 
     do
     {
@@ -607,7 +607,7 @@ void SCH_SYMBOL::AddHierarchicalReference( const SYMBOL_INSTANCE_REFERENCE& aIns
     }
     while( resultIt != m_instanceReferences.end() );
 
-    SYMBOL_INSTANCE_REFERENCE instance = aInstance;
+    SCH_SYMBOL_INSTANCE instance = aInstance;
 
     wxLogTrace( traceSchSheetPaths,
                 "Adding symbol '%s' instance:\n"
@@ -637,7 +637,7 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     wxString  ref;
     wxString  subRef;
 
-    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
@@ -679,7 +679,7 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     bool      found = false;
 
     // check to see if it is already there before inserting it
-    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
@@ -713,7 +713,7 @@ bool SCH_SYMBOL::IsAnnotated( const SCH_SHEET_PATH* aSheet )
 {
     KIID_PATH path = aSheet->Path();
 
-    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
             return instance.m_Reference.Last() != '?';
@@ -754,7 +754,7 @@ int SCH_SYMBOL::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 {
     KIID_PATH path = aSheet->Path();
 
-    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
             return instance.m_Unit;
@@ -771,7 +771,7 @@ void SCH_SYMBOL::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelect
     KIID_PATH path = aSheet->Path();
 
     // check to see if it is already there before inserting it
-    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
@@ -787,7 +787,7 @@ void SCH_SYMBOL::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelect
 
 void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 {
-    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
         instance.m_Unit = aUnitSelection;
 }
 
@@ -1233,7 +1233,7 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetP
     {
         KIID_PATH path = aSheetPath->Path();
 
-        for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+        for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
         {
             if( instance.m_Path == path )
             {
@@ -1246,7 +1246,7 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetP
     }
     else
     {
-        for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+        for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
         {
             if( instance.m_Reference.IsEmpty() || aResetPrefix)
                 instance.m_Reference = UTIL::GetRefDesUnannotated( m_prefix );
@@ -1276,7 +1276,7 @@ bool SCH_SYMBOL::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPat
     // An empty sheet path is illegal, at a minimum the root sheet UUID must be present.
     wxCHECK( aSheetPath.size() > 0, false );
 
-    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
         // if aSheetPath is found, nothing to do:
         if( instance.m_Path == aSheetPath )
@@ -1293,7 +1293,7 @@ bool SCH_SYMBOL::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
                                            const KIID_PATH& aNewSheetPath )
 {
     auto it = std::find_if( m_instanceReferences.begin(), m_instanceReferences.end(),
-                [ aOldSheetPath ]( SYMBOL_INSTANCE_REFERENCE& r )->bool
+                [ aOldSheetPath ]( SCH_SYMBOL_INSTANCE& r )->bool
                 {
                     return aOldSheetPath == r.m_Path;
                 }

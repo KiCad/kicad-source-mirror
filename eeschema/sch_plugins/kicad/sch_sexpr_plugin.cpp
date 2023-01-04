@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -631,9 +631,9 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 
     selectionPath = aSelectionPath->Path();
     selectedSymbols.SortByReferenceOnly();
-    std::vector<SYMBOL_INSTANCE_REFERENCE> symbolInstances = selectedSymbols.GetSymbolInstances();
+    std::vector<SCH_SYMBOL_INSTANCE> symbolInstances = selectedSymbols.GetSymbolInstances();
 
-    for( SYMBOL_INSTANCE_REFERENCE& symbolInstance : symbolInstances )
+    for( SCH_SYMBOL_INSTANCE& symbolInstance : symbolInstances )
     {
         wxASSERT_MSG( symbolInstance.m_Path.MakeRelativeTo( selectionPath ),
                       "Symbol is not inside the selection path?" );

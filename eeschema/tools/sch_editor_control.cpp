@@ -1684,7 +1684,7 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
 
     if( m_clipboardSymbolInstances.count( clipItemPath ) > 0 )
     {
-        SYMBOL_INSTANCE_REFERENCE instance = m_clipboardSymbolInstances.at( clipItemPath );
+        SCH_SYMBOL_INSTANCE instance = m_clipboardSymbolInstances.at( clipItemPath );
 
         unit = instance.m_Unit;
         reference = instance.m_Reference;
@@ -1770,7 +1770,7 @@ void SCH_EDITOR_CONTROL::setClipboardInstances( const SCH_SCREEN* aPastedScreen 
 
     m_clipboardSymbolInstances.clear();
 
-    for( const SYMBOL_INSTANCE_REFERENCE& symbol : aPastedScreen->GetSymbolInstances() )
+    for( const SCH_SYMBOL_INSTANCE& symbol : aPastedScreen->GetSymbolInstances() )
         m_clipboardSymbolInstances[symbol.m_Path] = symbol;
 }
 

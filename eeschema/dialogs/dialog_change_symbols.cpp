@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -517,7 +517,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
     wxString  msg;
     wxString  references;
 
-    for( SYMBOL_INSTANCE_REFERENCE instance : aSymbol->GetInstanceReferences() )
+    for( SCH_SYMBOL_INSTANCE instance : aSymbol->GetInstanceReferences() )
     {
         if( references.IsEmpty() )
             references = instance.m_Reference;

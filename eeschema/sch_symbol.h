@@ -5,7 +5,7 @@
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2022 CERN
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@
 #include <sch_field.h>
 #include <sch_item.h>
 #include <sch_pin.h>
-#include <sch_sheet_path.h>    // SYMBOL_INSTANCE_REFERENCE
+#include <sch_sheet_path.h>    // SCH_SYMBOL_INSTANCE
 #include <symbol_lib_table.h>
 #include <transform.h>
 
@@ -137,20 +137,20 @@ public:
      */
     bool IsMissingLibSymbol() const;
 
-    const std::vector<SYMBOL_INSTANCE_REFERENCE>& GetInstanceReferences()
+    const std::vector<SCH_SYMBOL_INSTANCE>& GetInstanceReferences()
     {
         return m_instanceReferences;
     }
 
-    bool GetInstance( SYMBOL_INSTANCE_REFERENCE& aInstance,
+    bool GetInstance( SCH_SYMBOL_INSTANCE& aInstance,
                       const KIID_PATH& aSheetPath, bool aTestFromEnd = false ) const;
 
     void RemoveInstance( const SCH_SHEET_PATH& aInstancePath );
 
     void RemoveAllInstances() { m_instanceReferences.clear(); }
 
-    void SortInstances( bool ( *aSortFunction )( const SYMBOL_INSTANCE_REFERENCE& aLhs,
-                                                 const SYMBOL_INSTANCE_REFERENCE& aRhs ) );
+    void SortInstances( bool ( *aSortFunction )( const SCH_SYMBOL_INSTANCE& aLhs,
+                                                 const SCH_SYMBOL_INSTANCE& aRhs ) );
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -614,7 +614,7 @@ public:
                                    const wxString&  aRef,
                                    int              aUnit );
 
-    void AddHierarchicalReference( const SYMBOL_INSTANCE_REFERENCE& aInstance );
+    void AddHierarchicalReference( const SCH_SYMBOL_INSTANCE& aInstance );
 
     /// Return the instance-specific unit selection for the given sheet path.
     int GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const;
@@ -789,7 +789,7 @@ private:
 
     // Defines the hierarchical path and reference of the symbol.  This allows support
     // for multiple references to a single sub-sheet.
-    std::vector<SYMBOL_INSTANCE_REFERENCE> m_instanceReferences;
+    std::vector<SCH_SYMBOL_INSTANCE> m_instanceReferences;
 };
 
 #endif /* __SYMBOL_H__ */
