@@ -1,4 +1,5 @@
 #include <winver.h> // defines VS_VERSION_INFO
+#define INCLUDE_KICAD_VERSION
 #include <kicad_build_version.h>
 
 #ifndef DEBUG

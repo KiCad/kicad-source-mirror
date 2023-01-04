@@ -1,3 +1,4 @@
+#define INCLUDE_KICAD_VERSION
 #include <kicad_build_version.h>
 
 #if KICAD_IS_NIGHTLY
