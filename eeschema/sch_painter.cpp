@@ -1687,11 +1687,10 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
     float          width = getLineWidth( aLine, drawingShadows );
     PLOT_DASH_TYPE lineStyle = aLine->GetEffectiveLineStyle();
 
-    if( drawingDangling || drawingShadows )
+    if( ( drawingDangling || drawingShadows ) && !aLine->IsNew() )
     {
         if( ( aLine->IsWire() && aLine->IsStartDangling() )
-            || ( drawingShadows && aLine->IsSelected() && !aLine->IsNew()
-                 && !aLine->HasFlag( STARTPOINT ) ) )
+            || ( drawingShadows && aLine->IsSelected() && !aLine->HasFlag( STARTPOINT ) ) )
         {
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( STARTPOINT ) ) ? color.Inverted() : color;
@@ -1702,8 +1701,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
         }
 
         if( ( aLine->IsWire() && aLine->IsEndDangling() )
-            || ( drawingShadows && aLine->IsSelected() && !aLine->IsNew()
-                 && !aLine->HasFlag( ENDPOINT ) ) )
+            || ( drawingShadows && aLine->IsSelected() && !aLine->HasFlag( ENDPOINT ) ) )
         {
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( ENDPOINT ) ) ? color.Inverted() : color;
@@ -1712,10 +1710,10 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
                                 aLine->IsWire() && aLine->IsEndDangling(), drawingShadows,
                                 aLine->IsBrightened() );
         }
-
-        if( drawingDangling )
-            return;
     }
+
+    if( drawingDangling )
+        return;
 
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );

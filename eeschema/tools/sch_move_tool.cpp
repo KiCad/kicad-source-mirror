@@ -322,14 +322,6 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_LINE* line, const VECTOR2I& splitDelta, i
                                            splitDelta.y ? splitDelta.y : yMove ) );
             }
 
-            // Update the dangling state of our original line to not show a dangling
-            // end since it is now connected. This doesn't effect anything but is more
-            // consistent visually
-            std::vector<DANGLING_END_ITEM> endPoints;
-            b->GetEndPoints( endPoints );
-            line->UpdateDanglingState( endPoints );
-            updateItem( line, true );
-
             // Update our cache of the connected items. First, attach our drag labels to the line
             // left behind.
             for( EDA_ITEM* candidate : m_lineConnectionCache[line] )
