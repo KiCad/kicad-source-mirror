@@ -871,6 +871,7 @@ protected:
             return compareUInt( i1.GetTotalLength(), i2.GetTotalLength(), aAsc );
 
         else if( aCol > COLUMN_NUM_STATIC_COL
+                && aCol < m_parent.m_columns.size()
                 && i1.GetLayerWireLength( m_parent.m_columns[aCol].layer )
                         != i2.GetLayerWireLength( m_parent.m_columns[aCol].layer ) )
         {
