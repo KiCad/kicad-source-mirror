@@ -499,7 +499,6 @@ protected:
     bool               m_polarCoords;       // For those frames that support polar coordinates
 
     bool               m_showBorderAndTitleBlock;  // Show the drawing sheet (border & title block).
-    long               m_firstRunDialogSetting;    // Show first run dialog on startup
 
     wxChoice*          m_gridSelectBox;
     wxChoice*          m_zoomSelectBox;
@@ -521,6 +520,9 @@ protected:
 
     ///< The current canvas type.
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
+
+    static bool m_openGLFailureOccured; ///< Has any failure occured when switching to OpenGL in
+                                        ///< any EDA_DRAW_FRAME?
 
 private:
     BASE_SCREEN*                m_currentScreen;      ///< current used SCREEN

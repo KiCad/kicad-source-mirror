@@ -78,6 +78,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_ACTIVATE( EDA_DRAW_FRAME::onActivate )
 END_EVENT_TABLE()
 
+bool EDA_DRAW_FRAME::m_openGLFailureOccured = false;
 
 EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
@@ -92,7 +93,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_gridSelectBox       = nullptr;
     m_zoomSelectBox       = nullptr;
     m_searchPane          = nullptr;
-    m_firstRunDialogSetting = 0;
     m_undoRedoCountMax    = DEFAULT_MAX_UNDO_ITEMS;
 
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
@@ -319,14 +319,21 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
 
 #ifndef __WXMAC__
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
+    resolveCanvasType();
 
-    if( cfg )
-        canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
+    if( m_canvasType != GetCanvas()->GetBackend() )
+    {
+        // Try to switch (will automatically fallback if necessary)
+        GetCanvas()->SwitchBackend( m_canvasType );
+        EDA_DRAW_PANEL_GAL::GAL_TYPE newGAL = GetCanvas()->GetBackend();
+        bool                         success = newGAL == m_canvasType;
 
-    if( canvasType != GetCanvas()->GetBackend() )
-        GetCanvas()->SwitchBackend( canvasType );
+        if( !success )
+        {
+            m_canvasType = newGAL;
+            m_openGLFailureOccured = true; // Store failure for other EDA_DRAW_FRAMEs
+        }
+    }
 #endif
 
     // Notify all tools the preferences have changed
@@ -666,7 +673,6 @@ void EDA_DRAW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     SetUserUnits( static_cast<EDA_UNITS>( aCfg->m_System.units ) );
 
     m_undoRedoCountMax = aCfg->m_System.max_undo_items;
-    m_firstRunDialogSetting = aCfg->m_System.first_run_shown;
 
     m_galDisplayOptions.ReadConfig( *cmnCfg, *window, this );
 
@@ -692,7 +698,6 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     WINDOW_SETTINGS* window = GetWindowSettings( aCfg );
 
     aCfg->m_System.units = static_cast<int>( GetUserUnits() );
-    aCfg->m_System.first_run_shown = m_firstRunDialogSetting;
     aCfg->m_System.max_undo_items = GetMaxUndoItems();
 
     m_galDisplayOptions.WriteConfig( *window );
@@ -1192,27 +1197,11 @@ void EDA_DRAW_FRAME::resolveCanvasType()
 {
     m_canvasType = loadCanvasTypeSetting();
 
-    // Nudge user to switch to OpenGL if they are on legacy or Cairo
-    if( m_firstRunDialogSetting < 1 )
-    {
-        if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
-        {
-            // Save Cairo as default in case OpenGL crashes
-            saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+    // If we had an OpenGL failure this session, use the fallback GAL but don't update the
+    // user preference silently:
 
-            // Switch to OpenGL, which will save the new setting if successful
-            SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-
-            // Switch back to Cairo if OpenGL is not supported
-            if( GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-                SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-
-            HardRedraw();
-        }
-
-        m_firstRunDialogSetting = 1;
-        SaveSettings( config() );
-    }
+    if( m_openGLFailureOccured && m_canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+        m_canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 }
 
 

@@ -153,7 +153,7 @@ public:
 
     struct SYSTEM
     {
-        bool                  first_run_shown;
+        bool                  first_run_shown; //@todo RFB remove? - not used
         int                   max_undo_items;
         std::vector<wxString> file_history;
         int                   units;

@@ -43,7 +43,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
         m_appSettingsSchemaVersion( aSchemaVersion )
 {
     // Make Coverity happy:
-    m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
+    m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
 
     // Build parameters list:
     m_params.emplace_back(
@@ -68,7 +68,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_FindReplace.replace_history, {} ) );
 
     m_params.emplace_back( new PARAM<int>( "graphics.canvas_type",
-            &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_FALLBACK ) );
+            &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );
 
     m_params.emplace_back( new PARAM<float>( "graphics.highlight_factor",
             &m_Graphics.highlight_factor, 0.5f, 0.0, 1.0f ) );
@@ -130,7 +130,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_Printing.layers, {} ) );
 
     m_params.emplace_back( new PARAM<bool>( "system.first_run_shown",
-            &m_System.first_run_shown, false ) );
+            &m_System.first_run_shown, false ) ); //@todo RFB remove? - not used
 
     m_params.emplace_back( new PARAM<int>( "system.max_undo_items",
             &m_System.max_undo_items, 0 ) );
