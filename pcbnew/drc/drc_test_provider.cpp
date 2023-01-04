@@ -371,8 +371,8 @@ wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxSt
     if( constraint_str == actual_str )
     {
         // Use more precise formatting if the message-text strings were equal.
-        constraint_str = StringFromValue( aConstraint );
-        actual_str = StringFromValue( aActual );
+        constraint_str = StringFromValue( aConstraint, true );
+        actual_str = StringFromValue( aActual, true );
     }
 
     return wxString::Format( aFormatString, aSource, constraint_str, actual_str );

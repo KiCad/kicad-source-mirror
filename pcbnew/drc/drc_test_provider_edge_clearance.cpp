@@ -102,6 +102,10 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
     {
         if( itemShape->Collide( shape.get(), minClearance, &actual, &pos ) )
         {
+            // Exact clearance is allowed
+            if( minClearance > 0 && actual == minClearance )
+                return true;
+
             if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
             {
                 // Edge collisions are allowed inside the holes of castellated pads
