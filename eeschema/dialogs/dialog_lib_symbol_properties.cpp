@@ -184,7 +184,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_OptionPower->SetValue( m_libEntry->IsPower() );
 
 #ifdef KICAD_SPICE
-    LIB_FIELD* simEnableField = m_libEntry->FindField( SIM_MODEL::ENABLE_FIELD );
+    LIB_FIELD* simEnableField = m_libEntry->FindField( SIM_ENABLE_FIELD );
     m_excludeFromSim->SetValue( simEnableField && simEnableField->GetText() == wxT( "0" ) );
 #endif
 
@@ -237,7 +237,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& even
 
     for( int ii = MANDATORY_FIELDS; ii < m_grid->GetNumberRows(); ++ii )
     {
-        if( m_grid->GetCellValue( ii, FDC_NAME ) == SIM_MODEL::ENABLE_FIELD )
+        if( m_grid->GetCellValue( ii, FDC_NAME ) == SIM_ENABLE_FIELD )
             simEnableFieldRow = ii;
     }
 

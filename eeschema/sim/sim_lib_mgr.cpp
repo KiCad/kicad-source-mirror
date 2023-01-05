@@ -217,19 +217,19 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
     if( SIM_MODEL::InferSimModel( aSymbol, &fields, true, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
     {
-        fields.emplace_back( &aSymbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
+        fields.emplace_back( &aSymbol, -1, SIM_DEVICE_TYPE_FIELD );
         fields.back().SetText( deviceType );
 
         if( !modelType.IsEmpty() )
         {
-            fields.emplace_back( &aSymbol, -1, SIM_MODEL::TYPE_FIELD );
+            fields.emplace_back( &aSymbol, -1, SIM_TYPE_FIELD );
             fields.back().SetText( modelType );
         }
 
-        fields.emplace_back( &aSymbol, -1, SIM_MODEL::PARAMS_FIELD );
+        fields.emplace_back( &aSymbol, -1, SIM_PARAMS_FIELD );
         fields.back().SetText( modelParams );
 
-        fields.emplace_back( &aSymbol, -1, SIM_MODEL::PINS_FIELD );
+        fields.emplace_back( &aSymbol, -1, SIM_PINS_FIELD );
         fields.back().SetText( pinMap );
 
         storeInValue = true;

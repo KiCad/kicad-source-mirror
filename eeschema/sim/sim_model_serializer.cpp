@@ -175,7 +175,7 @@ void SIM_MODEL_SERIALIZER::ParseValue( const std::string& aValue )
 {
     try
     {
-        tao::pegtl::string_input<> in( aValue, SIM_MODEL::VALUE_FIELD );
+        tao::pegtl::string_input<> in( aValue, "'Value' symbol field" );
         auto root =
                 tao::pegtl::parse_tree::parse<SIM_MODEL_SERIALIZER_PARSER::fieldInferValueGrammar,
                                               SIM_MODEL_SERIALIZER_PARSER::fieldInferValueSelector,
@@ -206,7 +206,7 @@ void SIM_MODEL_SERIALIZER::ParseValue( const std::string& aValue )
 
 bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
 {
-    tao::pegtl::string_input<> in( aParams, SIM_MODEL::PARAMS_FIELD );
+    tao::pegtl::string_input<> in( aParams, "'Sim.Params' symbol field" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -270,7 +270,7 @@ void SIM_MODEL_SERIALIZER::ParsePins( const std::string& aPins )
     if( aPins == "" )
         return;
 
-    tao::pegtl::string_input<> in( aPins, PINS_FIELD );
+    tao::pegtl::string_input<> in( aPins, "'Sim.Pins' symbol field" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try

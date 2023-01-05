@@ -367,8 +367,8 @@ template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFiel
 template <typename T>
 TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
 {
-    std::string deviceTypeFieldValue = GetFieldValue( &aFields, DEVICE_TYPE_FIELD );
-    std::string typeFieldValue = GetFieldValue( &aFields, TYPE_FIELD );
+    std::string deviceTypeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_TYPE_FIELD );
+    std::string typeFieldValue = GetFieldValue( &aFields, SIM_TYPE_FIELD );
 
     if( deviceTypeFieldValue != "" )
     {
@@ -575,17 +575,17 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
         // Just because we can't parse it doesn't mean that a SPICE interpreter can't.  Fall
         // back to a raw spice code model.
 
-        std::string modelData = GetFieldValue( &aFields, PARAMS_FIELD );
+        std::string modelData = GetFieldValue( &aFields, SIM_PARAMS_FIELD );
 
         if( modelData.empty() )
-            modelData = GetFieldValue( &aFields, VALUE_FIELD );
+            modelData = GetFieldValue( &aFields, SIM_VALUE_FIELD );
 
         model = std::make_unique<SIM_MODEL_RAW_SPICE>( modelData );
 
         try
         {
             model->createPins( aPins );
-            model->m_serializer->ParsePins( GetFieldValue( &aFields, PINS_FIELD ) );
+            model->m_serializer->ParsePins( GetFieldValue( &aFields, SIM_PINS_FIELD ) );
         }
         catch( const IO_ERROR& err )
         {
@@ -609,7 +609,7 @@ template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<LIB_FIE
 
 
 template <typename T>
-std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName,
+std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const wxString& aFieldName,
                                       bool aResolve )
 {
     static_assert( std::is_same<T, SCH_FIELD>::value || std::is_same<T, LIB_FIELD>::value );
@@ -629,15 +629,15 @@ std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const std::
 
 // This specialization is used when no fields are passed.
 template <>
-std::string SIM_MODEL::GetFieldValue( const std::vector<void>* aFields,
-                                      const std::string& aFieldName, bool aResolve )
+std::string SIM_MODEL::GetFieldValue( const std::vector<void>* aFields, const wxString& aFieldName,
+                                      bool aResolve )
 {
     return "";
 }
 
 
 template <typename T>
-void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const std::string& aFieldName,
+void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const wxString& aFieldName,
                                const std::string& aValue )
 {
     static_assert( std::is_same<T, SCH_FIELD>::value || std::is_same<T, LIB_FIELD>::value );
@@ -678,10 +678,10 @@ void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const std::string& aFiel
 
 
 template void SIM_MODEL::SetFieldValue<SCH_FIELD>( std::vector<SCH_FIELD>& aFields,
-                                                   const std::string& aFieldName,
+                                                   const wxString& aFieldName,
                                                    const std::string& aValue );
 template void SIM_MODEL::SetFieldValue<LIB_FIELD>( std::vector<LIB_FIELD>& aFields,
-                                                   const std::string& aFieldName,
+                                                   const wxString& aFieldName,
                                                    const std::string& aValue );
 
 SIM_MODEL::~SIM_MODEL() = default;
@@ -1032,12 +1032,12 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
     bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
     SwitchSingleEndedDiff( diffMode );
 
-    m_serializer->ParseEnable( GetFieldValue( aFields, ENABLE_FIELD ) );
+    m_serializer->ParseEnable( GetFieldValue( aFields, SIM_ENABLE_FIELD ) );
 
     createPins( aPins );
-    m_serializer->ParsePins( GetFieldValue( aFields, PINS_FIELD ) );
+    m_serializer->ParsePins( GetFieldValue( aFields, SIM_PINS_FIELD ) );
 
-    std::string paramsField = GetFieldValue( aFields, PARAMS_FIELD );
+    std::string paramsField = GetFieldValue( aFields, SIM_PARAMS_FIELD );
 
     if( !m_serializer->ParseParams( paramsField ) )
     {
@@ -1047,7 +1047,7 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
         // but don't be belligerent about it.
         try
         {
-            m_serializer->ParseValue( GetFieldValue( aFields, VALUE_FIELD ) );
+            m_serializer->ParseValue( GetFieldValue( aFields, SIM_VALUE_FIELD ) );
         }
         catch( ... )
         {
@@ -1059,16 +1059,16 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
 template <typename T>
 void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 {
-    SetFieldValue( aFields, DEVICE_TYPE_FIELD, m_serializer->GenerateDevice() );
-    SetFieldValue( aFields, TYPE_FIELD, m_serializer->GenerateType() );
+    SetFieldValue( aFields, SIM_DEVICE_TYPE_FIELD, m_serializer->GenerateDevice() );
+    SetFieldValue( aFields, SIM_TYPE_FIELD, m_serializer->GenerateType() );
 
-    SetFieldValue( aFields, ENABLE_FIELD, m_serializer->GenerateEnable() );
-    SetFieldValue( aFields, PINS_FIELD, m_serializer->GeneratePins() );
+    SetFieldValue( aFields, SIM_ENABLE_FIELD, m_serializer->GenerateEnable() );
+    SetFieldValue( aFields, SIM_PINS_FIELD, m_serializer->GeneratePins() );
 
-    SetFieldValue( aFields, PARAMS_FIELD, m_serializer->GenerateParams() );
+    SetFieldValue( aFields, SIM_PARAMS_FIELD, m_serializer->GenerateParams() );
 
     if( IsStoredInValue() )
-        SetFieldValue( aFields, VALUE_FIELD, m_serializer->GenerateValue() );
+        SetFieldValue( aFields, SIM_VALUE_FIELD, m_serializer->GenerateValue() );
 }
 
 
@@ -1184,13 +1184,13 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
             };
 
     wxString              prefix = aSymbol.GetPrefix();
-    wxString              value = GetFieldValue( aFields, VALUE_FIELD, aResolve );
+    wxString              value = GetFieldValue( aFields, SIM_VALUE_FIELD, aResolve );
     std::vector<LIB_PIN*> pins = aSymbol.GetAllLibPins();
 
-    *aDeviceType = GetFieldValue( aFields, DEVICE_TYPE_FIELD, aResolve );
-    *aModelType = GetFieldValue( aFields, TYPE_FIELD, aResolve );
-    *aModelParams = GetFieldValue( aFields, PARAMS_FIELD, aResolve );
-    *aPinMap = GetFieldValue( aFields, PINS_FIELD, aResolve );
+    *aDeviceType = GetFieldValue( aFields, SIM_DEVICE_TYPE_FIELD, aResolve );
+    *aModelType = GetFieldValue( aFields, SIM_TYPE_FIELD, aResolve );
+    *aModelParams = GetFieldValue( aFields, SIM_PARAMS_FIELD, aResolve );
+    *aPinMap = GetFieldValue( aFields, SIM_PINS_FIELD, aResolve );
 
     if( pins.size() != 2 )
         return false;
@@ -1341,10 +1341,10 @@ template bool SIM_MODEL::InferSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymb
 template <typename T_symbol, typename T_field>
 void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 {
-    if( aSymbol.FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
-        || aSymbol.FindField( SIM_MODEL::TYPE_FIELD )
-        || aSymbol.FindField( SIM_MODEL::PINS_FIELD )
-        || aSymbol.FindField( SIM_MODEL::PARAMS_FIELD ) )
+    if( aSymbol.FindField( SIM_DEVICE_TYPE_FIELD )
+        || aSymbol.FindField( SIM_TYPE_FIELD )
+        || aSymbol.FindField( SIM_PINS_FIELD )
+        || aSymbol.FindField( SIM_PARAMS_FIELD ) )
     {
         // Has a V7 model field -- skip.
         return;
@@ -1494,7 +1494,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 || netlistEnabled.StartsWith( wxT( "n" ) )
                 || netlistEnabled.StartsWith( wxT( "f" ) ) )
             {
-                netlistEnabledField->SetName( SIM_MODEL::ENABLE_FIELD );
+                netlistEnabledField->SetName( SIM_ENABLE_FIELD );
                 netlistEnabledField->SetText( wxT( "0" ) );
             }
             else
@@ -1515,12 +1515,12 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
         if( T_field* legacyType = aSymbol.FindField( wxT( "Sim_Type" ) ) )
         {
-            legacyType->SetName( SIM_MODEL::TYPE_FIELD );
+            legacyType->SetName( SIM_TYPE_FIELD );
         }
 
         if( T_field* legacyDevice = aSymbol.FindField( wxT( "Sim_Device" ) ) )
         {
-            legacyDevice->SetName( SIM_MODEL::DEVICE_TYPE_FIELD );
+            legacyDevice->SetName( SIM_DEVICE_TYPE_FIELD );
         }
 
         if( T_field* legacyPins = aSymbol.FindField( wxT( "Sim_Pins" ) ) )
@@ -1563,13 +1563,13 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 }
             }
 
-            legacyPins->SetName( SIM_MODEL::PINS_FIELD );
+            legacyPins->SetName( SIM_PINS_FIELD );
             legacyPins->SetText( pinMap );
         }
 
         if( T_field* legacyParams = aSymbol.FindField( wxT( "Sim_Params" ) ) )
         {
-            legacyParams->SetName( SIM_MODEL::PARAMS_FIELD );
+            legacyParams->SetName( SIM_PARAMS_FIELD );
         }
 
         return;
@@ -1680,16 +1680,16 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
     if( libraryModel )
     {
-        T_field libraryField = spiceLibInfo.CreateField( &aSymbol, SIM_MODEL::LIBRARY_FIELD );
+        T_field libraryField = spiceLibInfo.CreateField( &aSymbol, SIM_LIBRARY_FIELD );
         aSymbol.AddField( libraryField );
 
-        T_field nameField = spiceModelInfo.CreateField( &aSymbol, SIM_MODEL::NAME_FIELD );
+        T_field nameField = spiceModelInfo.CreateField( &aSymbol, SIM_NAME_FIELD );
         aSymbol.AddField( nameField );
 
         // Don't write a paramsField unless we actually have overrides
         if( !spiceParamsInfo.IsEmpty() )
         {
-            T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_MODEL::PARAMS_FIELD );
+            T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_PARAMS_FIELD );
             aSymbol.AddField( paramsField );
         }
 
@@ -1703,15 +1703,15 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     }
     else if( internalModel )
     {
-        T_field deviceField = spiceDeviceInfo.CreateField( &aSymbol, SIM_MODEL::DEVICE_TYPE_FIELD );
+        T_field deviceField = spiceDeviceInfo.CreateField( &aSymbol, SIM_DEVICE_TYPE_FIELD );
         aSymbol.AddField( deviceField );
 
-        T_field typeField = spiceTypeInfo.CreateField( &aSymbol, SIM_MODEL::TYPE_FIELD );
+        T_field typeField = spiceTypeInfo.CreateField( &aSymbol, SIM_TYPE_FIELD );
         aSymbol.AddField( typeField );
 
         if( !spiceParamsInfo.IsEmpty() )
         {
-            T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_MODEL::PARAMS_FIELD );
+            T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_PARAMS_FIELD );
             aSymbol.AddField( paramsField );
         }
 
@@ -1732,10 +1732,10 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
         spiceDeviceInfo.m_Text = SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_T::SPICE ).fieldValue;
 
-        T_field deviceField = spiceDeviceInfo.CreateField( &aSymbol, SIM_MODEL::DEVICE_TYPE_FIELD );
+        T_field deviceField = spiceDeviceInfo.CreateField( &aSymbol, SIM_DEVICE_TYPE_FIELD );
         aSymbol.AddField( deviceField );
 
-        T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_MODEL::PARAMS_FIELD );
+        T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_PARAMS_FIELD );
         aSymbol.AddField( paramsField );
 
         if( modelFromValueField )
@@ -1756,7 +1756,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
     if( !pinMapInfo.IsEmpty() )
     {
-        T_field pinsField = pinMapInfo.CreateField( &aSymbol, SIM_MODEL::PINS_FIELD );
+        T_field pinsField = pinMapInfo.CreateField( &aSymbol, SIM_PINS_FIELD );
         aSymbol.AddField( pinsField );
     }
 }

@@ -215,7 +215,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
-            if( !symbol || symbol->GetFieldText( SIM_MODEL::ENABLE_FIELD ) == wxT( "0" ) )
+            if( !symbol || symbol->GetFieldText( SIM_ENABLE_FIELD ) == wxT( "0" ) )
                 continue;
 
             CreatePinList( symbol, &sheet, true );
@@ -243,19 +243,19 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                                           SIM_VALUE_GRAMMAR::NOTATION::SPICE, &deviceType,
                                           &modelType, &modelParams, &pinMap ) )
             {
-                spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
+                spiceItem.fields.emplace_back( symbol, -1, SIM_DEVICE_TYPE_FIELD );
                 spiceItem.fields.back().SetText( deviceType );
 
                 if( !modelType.IsEmpty() )
                 {
-                    spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::TYPE_FIELD );
+                    spiceItem.fields.emplace_back( symbol, -1, SIM_TYPE_FIELD );
                     spiceItem.fields.back().SetText( modelType );
                 }
 
-                spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PARAMS_FIELD );
+                spiceItem.fields.emplace_back( symbol, -1, SIM_PARAMS_FIELD );
                 spiceItem.fields.back().SetText( modelParams );
 
-                spiceItem.fields.emplace_back( symbol, -1, SIM_MODEL::PINS_FIELD );
+                spiceItem.fields.emplace_back( symbol, -1, SIM_PINS_FIELD );
                 spiceItem.fields.back().SetText( pinMap );
             }
 

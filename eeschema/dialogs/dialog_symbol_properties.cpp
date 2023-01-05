@@ -515,7 +515,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     }
 
 #ifdef KICAD_SPICE
-    m_cbExcludeFromSim->SetValue( m_symbol->GetFieldText( SIM_MODEL::ENABLE_FIELD ) == "0" );
+    m_cbExcludeFromSim->SetValue( m_symbol->GetFieldText( SIM_ENABLE_FIELD ) == "0" );
 #endif
     m_cbExcludeFromBom->SetValue( !m_symbol->GetIncludeInBom() );
     m_cbExcludeFromBoard->SetValue( !m_symbol->GetIncludeOnBoard() );
@@ -545,7 +545,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
 
     for( int ii = MANDATORY_FIELDS; ii < m_fieldsGrid->GetNumberRows(); ++ii )
     {
-        if( m_fieldsGrid->GetCellValue( ii, FDC_NAME ) == SIM_MODEL::ENABLE_FIELD )
+        if( m_fieldsGrid->GetCellValue( ii, FDC_NAME ) == SIM_ENABLE_FIELD )
             simEnableFieldRow = ii;
     }
 
@@ -554,8 +554,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
         if( simEnableFieldRow == -1 )
         {
             simEnableFieldRow = (int) m_fields->size();
-            m_fields->emplace_back( VECTOR2I( 0, 0 ), simEnableFieldRow, m_symbol,
-                                    SIM_MODEL::ENABLE_FIELD );
+            m_fields->emplace_back( VECTOR2I( 0, 0 ), simEnableFieldRow, m_symbol, SIM_ENABLE_FIELD );
 
             // notify the grid
             wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );

@@ -147,19 +147,19 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
     {
-        m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::DEVICE_TYPE_FIELD );
+        m_fields.emplace_back( &m_symbol, -1, SIM_DEVICE_TYPE_FIELD );
         m_fields.back().SetText( deviceType );
 
         if( !modelType.IsEmpty() )
         {
-            m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::TYPE_FIELD );
+            m_fields.emplace_back( &m_symbol, -1, SIM_TYPE_FIELD );
             m_fields.back().SetText( modelType );
         }
 
-        m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PARAMS_FIELD );
+        m_fields.emplace_back( &m_symbol, -1, SIM_PARAMS_FIELD );
         m_fields.back().SetText( modelParams );
 
-        m_fields.emplace_back( &m_symbol, -1, SIM_MODEL::PINS_FIELD );
+        m_fields.emplace_back( &m_symbol, -1, SIM_PINS_FIELD );
         m_fields.back().SetText( pinMap );
 
         storeInValue = true;
@@ -359,7 +359,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
     updateModelCodeTab();
     updatePinAssignments();
 
-    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_MODEL::REFERENCE_FIELD );
+    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_REFERENCE_FIELD );
 
     m_modelPanel->Layout();
     m_pinAssignmentsPanel->Layout();

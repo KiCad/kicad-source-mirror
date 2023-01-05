@@ -45,6 +45,18 @@ class SIM_MODEL_SERIALIZER;
 class PROJECT;
 
 
+#define SIM_REFERENCE_FIELD wxT( "Reference" )
+#define SIM_VALUE_FIELD wxT( "Value" )
+
+#define SIM_DEVICE_TYPE_FIELD wxT( "Sim.Device" )
+#define SIM_TYPE_FIELD wxT( "Sim.Type" )
+#define SIM_PINS_FIELD wxT( "Sim.Pins" )
+#define SIM_PARAMS_FIELD wxT( "Sim.Params" )
+#define SIM_ENABLE_FIELD wxT( "Sim.Enable" )
+#define SIM_LIBRARY_FIELD wxT( "Sim.Library" )
+#define SIM_NAME_FIELD wxT( "Sim.Name" )
+
+
 class SIM_MODEL
 {
 public:
@@ -53,18 +65,6 @@ public:
 
     struct PIN;
     struct PARAM;
-
-    static constexpr auto REFERENCE_FIELD = "Reference";
-    static constexpr auto VALUE_FIELD = "Value";
-
-    static constexpr auto DEVICE_TYPE_FIELD = "Sim.Device";
-    static constexpr auto TYPE_FIELD = "Sim.Type";
-    static constexpr auto PINS_FIELD = "Sim.Pins";
-    static constexpr auto PARAMS_FIELD = "Sim.Params";
-    static constexpr auto ENABLE_FIELD = "Sim.Enable";
-    static constexpr auto LIBRARY_FIELD = "Sim.Library";
-    static constexpr auto NAME_FIELD = "Sim.Name";
-
 
     // There's a trailing '_' because `DEVICE_TYPE` collides with something in Windows headers.
     DEFINE_ENUM_CLASS_WITH_ITERATOR( DEVICE_T,
@@ -420,11 +420,11 @@ public:
                                               bool aResolved, REPORTER* aReporter );
 
     template <typename T>
-    static std::string GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName,
+    static std::string GetFieldValue( const std::vector<T>* aFields, const wxString& aFieldName,
                                       bool aResolve = true );
 
     template <typename T>
-    static void SetFieldValue( std::vector<T>& aFields, const std::string& aFieldName,
+    static void SetFieldValue( std::vector<T>& aFields, const wxString& aFieldName,
                                const std::string& aValue );
 
     const SPICE_GENERATOR& SpiceGenerator() const { return *m_spiceGenerator; }
