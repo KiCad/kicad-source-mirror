@@ -65,6 +65,9 @@ for group in grouped:
         refs += fromNetlistText( component.getRef() ) + ", "
         c = component
 
+    # remove last, not needed trailing comma and whitespace
+    refs = refs.removesuffix(', ')
+
     # Fill in the component groups common data
     out.writerow([refs, len(group),
         fromNetlistText( c.getValue() ),
