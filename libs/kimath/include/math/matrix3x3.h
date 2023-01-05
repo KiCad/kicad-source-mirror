@@ -28,6 +28,7 @@
 #define MATRIX3X3_H_
 
 #include <math/vector2d.h>
+#include <math/vector3.h>
 
 /**
  * MATRIX3x3 describes a general 3x3 matrix.
@@ -67,6 +68,11 @@ public:
      * Initialize all matrix members to zero.
      */
     MATRIX3x3();
+
+    /**
+     * Initialize with 3 vectors
+     */
+    MATRIX3x3( VECTOR3<T> a1, VECTOR3<T> a2, VECTOR3<T> a3 );
 
     /**
      * Initialize with given matrix members
@@ -168,6 +174,8 @@ template <class T> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& aA, MATRIX3
 //! Multiplication with a 2D vector, the 3rd z-component is assumed to be 1
 template <class T> VECTOR2<T> const operator*( MATRIX3x3<T> const& aA, VECTOR2<T> const& aB );
 
+template <class T> VECTOR3<T> const operator*( MATRIX3x3<T> const& aA, VECTOR3<T> const& aB );
+
 //! Multiplication with a scalar
 template <class T, class S> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& aA, T aScalar );
 template <class T, class S> MATRIX3x3<T> const operator*( T aScalar, MATRIX3x3<T> const& aMatrix );
@@ -186,6 +194,23 @@ MATRIX3x3<T>::MATRIX3x3()
             m_data[i][j] = 0.0;
         }
     }
+}
+
+
+template <class T>
+MATRIX3x3<T>::MATRIX3x3( VECTOR3<T> a1, VECTOR3<T> a2, VECTOR3<T> a3 )
+{
+    m_data[0][0] = a1.x;
+    m_data[0][1] = a1.y;
+    m_data[0][2] = a1.z;
+
+    m_data[1][0] = a2.x;
+    m_data[1][1] = a2.y;
+    m_data[1][2] = a2.z;
+
+    m_data[2][0] = a3.x;
+    m_data[2][1] = a3.y;
+    m_data[2][2] = a3.z;
 }
 
 
@@ -297,6 +322,21 @@ VECTOR2<T> const operator*( MATRIX3x3<T> const& aMatrix, VECTOR2<T> const& aVect
                + aMatrix.m_data[0][2];
     result.y = aMatrix.m_data[1][0] * aVector.x + aMatrix.m_data[1][1] * aVector.y
                + aMatrix.m_data[1][2];
+
+    return result;
+}
+
+
+template <class T>
+VECTOR3<T> const operator*( MATRIX3x3<T> const& aMatrix, VECTOR3<T> const& aVector )
+{
+    VECTOR3<T> result( 0, 0, 0 );
+    result.x = aMatrix.m_data[0][0] * aVector.x + aMatrix.m_data[0][1] * aVector.y
+               + aMatrix.m_data[0][2] * aVector.z;
+    result.y = aMatrix.m_data[1][0] * aVector.x + aMatrix.m_data[1][1] * aVector.y
+               + aMatrix.m_data[1][2] * aVector.z;
+    result.y = aMatrix.m_data[2][0] * aVector.x + aMatrix.m_data[2][1] * aVector.y
+               + aMatrix.m_data[2][2] * aVector.z;
 
     return result;
 }

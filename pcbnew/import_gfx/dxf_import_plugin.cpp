@@ -406,7 +406,7 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
 
     const DL_VertexData* vertex = &aData;
 
-    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
+    MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
     VECTOR3D vertexCoords      = ocsToWcs( arbAxis, VECTOR3D( vertex->x, vertex->y, vertex->z ) );
 
     if( m_curr_entity.m_EntityParseStatus == 1 )    // This is the first vertex of an entity
@@ -486,7 +486,7 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
     if( block == nullptr )
         return;
 
-    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
+    MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
     VECTOR3D insertCoords      = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
 
     VECTOR2D translation( mapX( insertCoords.x ), mapY( insertCoords.y ) );
@@ -507,7 +507,7 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
 
 void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 {
-    DXF_ARBITRARY_AXIS arbAxis      = getArbitraryAxis( getExtrusion() );
+    MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
     VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
 
     VECTOR2D          center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
@@ -527,8 +527,8 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 
 void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 {
-    DXF_ARBITRARY_AXIS arbAxis      = getArbitraryAxis( getExtrusion() );
-    VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
+    MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
+    VECTOR3D   centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
 
     // Init arc centre:
     VECTOR2D center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
@@ -565,9 +565,9 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 
 void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
 {
-    DXF_ARBITRARY_AXIS arbAxis      = getArbitraryAxis( getExtrusion() );
-    VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
-    VECTOR3D           majorCoords  = ocsToWcs( arbAxis, VECTOR3D( aData.mx, aData.my, aData.mz ) );
+    MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
+    VECTOR3D   centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
+    VECTOR3D   majorCoords = ocsToWcs( arbAxis, VECTOR3D( aData.mx, aData.my, aData.mz ) );
 
     // DXF ellipses store the minor axis length as a ratio to the major axis.
     // The major coords are relative to the center point.
@@ -631,7 +631,7 @@ void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
 
 void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 {
-    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
+    MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
     VECTOR3D refPointCoords    = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
     VECTOR3D secPointCoords    = ocsToWcs( arbAxis, VECTOR3D( std::isnan( aData.apx ) ? 0 : aData.apx,
                                                               std::isnan( aData.apy ) ? 0 : aData.apy,
@@ -830,8 +830,8 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
         text    = tmp;
     }
 
-    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
-    VECTOR3D textposCoords     = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
+    MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
+    VECTOR3D   textposCoords = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
 
     VECTOR2D textpos( mapX( textposCoords.x ), mapY( textposCoords.y ) );
 
@@ -1266,10 +1266,10 @@ void DXF_IMPORT_PLUGIN::addTextStyle( const DL_StyleData& aData )
 
 void DXF_IMPORT_PLUGIN::addPoint( const DL_PointData& aData )
 {
-    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
-    VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.x, aData.y, aData.z ) );
+    MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
+    VECTOR3D   centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.x, aData.y, aData.z ) );
 
-    VECTOR2D          center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
+    VECTOR2D center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
 
     // we emulate points with filled circles
     // set the linewidth to something that even small circles look good with
@@ -1499,7 +1499,7 @@ void DXF_IMPORT_PLUGIN::updateImageLimits( const VECTOR2D& aPoint )
 }
 
 
-DXF_ARBITRARY_AXIS DXF_IMPORT_PLUGIN::getArbitraryAxis( DL_Extrusion* aData )
+MATRIX3x3D DXF_IMPORT_PLUGIN::getArbitraryAxis( DL_Extrusion* aData )
 {
     VECTOR3D arbZ, arbX, arbY;
 
@@ -1519,34 +1519,23 @@ DXF_ARBITRARY_AXIS DXF_IMPORT_PLUGIN::getArbitraryAxis( DL_Extrusion* aData )
 
     arbY = arbZ.Cross( arbX ).Normalize();
 
-    return DXF_ARBITRARY_AXIS{ arbX, arbY, arbZ };
+    return MATRIX3x3D{ arbX, arbY, arbZ };
 }
 
 
-VECTOR3D DXF_IMPORT_PLUGIN::wcsToOcs( const DXF_ARBITRARY_AXIS& arbitraryAxis, VECTOR3D point )
+VECTOR3D DXF_IMPORT_PLUGIN::wcsToOcs( const MATRIX3x3D& arbitraryAxis, VECTOR3D point )
 {
-    double x, y, z;
-    x = point.x * arbitraryAxis.vecX.x + point.y * arbitraryAxis.vecX.y
-        + point.z * arbitraryAxis.vecX.z;
-    y = point.x * arbitraryAxis.vecY.x + point.y * arbitraryAxis.vecY.y
-        + point.z * arbitraryAxis.vecY.z;
-    z = point.x * arbitraryAxis.vecZ.x + point.y * arbitraryAxis.vecZ.y
-        + point.z * arbitraryAxis.vecZ.z;
-
-    return VECTOR3D( x, y, z );
+    return arbitraryAxis * point;
 }
 
 
-VECTOR3D DXF_IMPORT_PLUGIN::ocsToWcs( const DXF_ARBITRARY_AXIS& arbitraryAxis, VECTOR3D point )
+VECTOR3D DXF_IMPORT_PLUGIN::ocsToWcs( const MATRIX3x3D& arbitraryAxis, VECTOR3D point )
 {
     VECTOR3D worldX = wcsToOcs( arbitraryAxis, VECTOR3D( 1, 0, 0 ) );
     VECTOR3D worldY = wcsToOcs( arbitraryAxis, VECTOR3D( 0, 1, 0 ) );
     VECTOR3D worldZ = wcsToOcs( arbitraryAxis, VECTOR3D( 0, 0, 1 ) );
 
-    double x, y, z;
-    x = point.x * worldX.x + point.y * worldX.y + point.z * worldX.z;
-    y = point.x * worldY.x + point.y * worldY.y + point.z * worldY.z;
-    z = point.x * worldZ.x + point.y * worldZ.y + point.z * worldZ.z;
+    MATRIX3x3 world( worldX, worldY, worldZ );
 
-    return VECTOR3D( x, y, z );
+    return world * point;
 }
