@@ -1117,7 +1117,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                 NULL_REPORTER reporter;
                 m_frame->AnnotateSymbols( ANNOTATE_SELECTION,
                                           (ANNOTATE_ORDER_T) annotate.sort_order,
-                                          (ANNOTATE_ALGO_T) annotate.method, annotate.recursive,
+                                          (ANNOTATE_ALGO_T) annotate.method, true /* recursive */,
                                           annotateStartNum, false, false, reporter, appendUndo );
             }
 

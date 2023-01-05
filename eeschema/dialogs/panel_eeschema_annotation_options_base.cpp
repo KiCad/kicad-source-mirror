@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,10 +23,6 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	m_checkAutoAnnotate = new wxCheckBox( sbSizerAutomatic->GetStaticBox(), wxID_ANY, _("Automatically annotate symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkAutoAnnotate->SetValue(true);
 	sbSizerAutomatic->Add( m_checkAutoAnnotate, 0, wxLEFT|wxRIGHT|wxBOTTOM, 5 );
-
-	m_checkRecursive = new wxCheckBox( sbSizerAutomatic->GetStaticBox(), wxID_ANY, _("Recursively annotate subsheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkRecursive->SetValue(true);
-	sbSizerAutomatic->Add( m_checkRecursive, 0, wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
 
 	bLeftColumn->Add( sbSizerAutomatic, 0, wxALL|wxEXPAND, 5 );

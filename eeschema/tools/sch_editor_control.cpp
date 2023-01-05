@@ -2043,7 +2043,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( SCH_SHEET_PATH& instance : pasteInstances )
             {
                 SCH_SHEET_PATH sheetPath = updatePastedSheet( instance, clipPath, sheet,
-                                                              ( forceKeepAnnotations && annotate.recursive ),
+                                                              ( forceKeepAnnotations && annotate.automatic ),
                                                               &pastedSheets[instance],
                                                               &pastedSymbols[instance] );
 
