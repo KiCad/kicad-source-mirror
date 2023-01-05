@@ -161,7 +161,15 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
 
                 if( m_propertiesDialog )
                 {
-                    m_propertiesDialog->DoAddMember( sel.Front() );
+                    EDA_ITEM* elem = sel.Front();
+
+                    if( !m_isFootprintEditor )
+                    {
+                        while( elem->GetParent() && elem->GetParent()->Type() != PCB_T )
+                            elem = elem->GetParent();
+                    }
+
+                    m_propertiesDialog->DoAddMember( elem );
                     m_propertiesDialog->Show( true );
                 }
 

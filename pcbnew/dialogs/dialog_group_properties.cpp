@@ -147,6 +147,7 @@ void DIALOG_GROUP_PROPERTIES::OnAddMember( wxCommandEvent& event )
 
 void DIALOG_GROUP_PROPERTIES::DoAddMember( EDA_ITEM* aItem )
 {
+
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
         if( aItem == static_cast<BOARD_ITEM*>( m_membersList->GetClientData( ii ) ) )
