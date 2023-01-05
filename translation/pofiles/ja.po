@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2023-01-03 18:04+0000\n"
+"PO-Revision-Date: 2023-01-06 00:33+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7984,6 +7984,86 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"# 1. 概要\n"
+"\n"
+"部品表ツールは、設計内のすべての部品を一覧にしたBOMを作成します。\n"
+"\n"
+"このツールは外部スクリプトを使用して、目的の出力形式でBOMを生成します。別のス"
+"クリプトを選択すると、BOMの書式が変わります。\n"
+"\n"
+"部品表の生成の生成の詳細については、回路図エディターのマニュアルに記載されて"
+"います。\n"
+"\n"
+"# 2. 使用方法\n"
+"\n"
+"**BOM ジェネレーター スクリプト**のリストからジェネレーター スクリプトを選択"
+"します。選択したジェネレーターの詳細がダイアログの右側に表示されます。\n"
+"\n"
+"**生成** "
+"ボタンをクリックすると、選択したジェネレーターでBOMファイルを作成します。\n"
+"\n"
+"デフォルト設定ではいくつかのジェネレータースクリプトが表示されますが、KiCadと"
+"共にインストールされた追加のスクリプトは、**+** "
+"ボタンでリストに追加できます。\n"
+"\n"
+"**注:** Windowsでは、追加のオプション **コンソール "
+"ウィンドウを表示する**があります。このオプションをオフにすると、BOM "
+"ジェネレータは非表示のコンソール ウィンドウで実行され、出力はリダイレクトされ"
+"てダイアログに出力されます。このオプションをオンにすると、BOM "
+"ジェネレータは独立したコンソール ウィンドウで実行されます。\n"
+"\n"
+"# 3.カスタムジェネレーターとコマンドライン\n"
+"\n"
+"内部的には、"
+"KiCadはデザイン内のすべてのコンポーネントに関する情報を含む中間ネットリスト "
+"ファイルをXMLフォーマットで作成します。BOMジェネレーター スクリプトは、"
+"中間ネットリスト ファイルを目的の出力形式に変換します。KiCadはBOMダイアログの"
+"一番下に入力されたコマンドラインに従ってBOMジェネレーター "
+"スクリプトを実行します。\n"
+"\n"
+"コマンドラインでファイル名のパラメータを受け付けます。各書式設定パラメーター"
+"は、プロジェクト固有のパスまたはファイル名に置き換えられます。サポートされて"
+"いるパラメーターは次のとおりです。\n"
+"\n"
+" * `%I`: BOMジェネレーターへの入力である中間ネットリスト "
+"ファイルの絶対パスとファイル名\n"
+" * `%O`: 出力BOMファイルの絶対パスとファイル名 (ファイル拡張子なし)\n"
+" * `%B`: 出力BOMファイルの基本ファイル名 (ファイル拡張子なし)\n"
+" * `%P`: 末尾のスラッシュなしのプロジェクトディレクトリの絶対パス\n"
+"\n"
+"**注:** `%O` 出力ファイル パラメーターにはファイル拡張子は含まれていません。"
+"KiCad はコマンドラインに適切な拡張子を自動的に追加しようとしますが、 "
+"拡張子は手動で追加する必要があるかもしれません。\n"
+"\n"
+"PythonはBOM ジェネレータ "
+"スクリプトに推奨されるツールですが、他のツールも使用できます。\n"
+"\n"
+"## Pythonスクリプトのコマンドラインの例\n"
+"\n"
+"Pythonスクリプトのコマンドラインは、次の形式になります。\n"
+"\n"
+"```\n"
+"python <スクリプトファイル名> <入力ファイル名> <出力ファイル名>\n"
+"```\n"
+"\n"
+"Windowsでは、CSV BOMに使うジェネレーター スクリプトが `C:\\Users\\username"
+"\\kicad\\my_python_script.py` の場合、コマンドラインは以下のようになります。"
+"\n"
+"\n"
+"```\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
+"```\n"
+"\n"
+"Linuxでは、CSV BOMに使うジェネレーター スクリプトが `/home/username/kicad/"
+"my_python_script.py` の場合、コマンドラインは以下のようになります。\n"
+"\n"
+"```\n"
+"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
+"\n"
+"引数を二重引用符 ('\"') で囲むことは、ファイル名にスペースや特殊文字が含まれ"
+"ている場合に推奨されます。\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -13954,7 +14034,8 @@ msgstr ""
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
-msgstr ""
+msgstr "シート %s のファイル名が指定されていません。これはおそらくAltiumの信号ハーネ"
+"スがシートに変換されたものです。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
@@ -13988,7 +14069,8 @@ msgstr "\"FileHeader\" セクション内の不明または予期しないレコ
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
-msgstr ""
+msgstr "シンボル \"%s\" (シート \"%s\" 中のインデックス %dの) はシンボル \"%s\" "
+"によって置き換えられました。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2404
@@ -14022,7 +14104,8 @@ msgstr "(X = %d; Y = %d)にある予期しない円弧がインポートされ�
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
-msgstr ""
+msgstr "Altiumのハーネスコネクター(%s)は階層シートとしてインポートされました。インポ"
+"ートされた回路図を確認してください。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
 msgid "Power Port with unknown style imported as 'Bar' type."
@@ -14038,7 +14121,8 @@ msgstr "電源シンボルは '%s' という名前のグローバル ラベル�
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
-msgstr ""
+msgstr "Altiumのハーネスポート(%s)はテキストボックスとしてインポートされました。イン"
+"ポートされた回路図を確認してください。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2525
 #, c-format
@@ -17503,7 +17587,7 @@ msgstr "接続されたセグメントに分割します"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr ""
+msgstr "スライス"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Divide into unconnected segments"
@@ -19574,26 +19658,24 @@ msgid "Minimal header"
 msgstr "最小のヘッダー"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files file"
-msgstr "PTHとNPTHを一つのファイルにマージ"
+msgstr "PTHとNPTHを別のファイルに出力する"
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
 msgid "Generate map / summary of drill hits"
-msgstr ""
+msgstr "マップファイルとドリル穴の概要を生成する"
 
 #: kicad/cli/command_export_pcb_drill.cpp:84
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
-msgstr ""
+msgstr "有効なオプション: pdf,gerberx2,ps,dxf,svg"
 
 #: kicad/cli/command_export_pcb_drill.cpp:87
-#, fuzzy
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr "ピックアンドプレースのための部品配置ファイルを生成"
+msgstr "NPTHの穴とPTHの穴にそれぞれ独立したファイルを生成する"
 
 #: kicad/cli/command_export_pcb_drill.cpp:92
 msgid "Precision of gerber coordinates (5 or 6)"
-msgstr ""
+msgstr "ガーバーの座標系の精度 (5か6)"
 
 #: kicad/cli/command_export_pcb_drill.cpp:109
 msgid "Output must be a directory\n"
@@ -19624,7 +19706,7 @@ msgstr "不正な原点の設定が指定されました\n"
 #: kicad/cli/command_export_pcb_drill.cpp:220
 #: kicad/cli/command_export_pcb_gerber.cpp:109
 msgid "Gerber coordinate precision should be either 5 or 6\n"
-msgstr ""
+msgstr "ガーバーの座標系の精度は5もしくは6である必要があります\n"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:44
 #: kicad/cli/command_export_pcb_gerber.cpp:40
@@ -19645,7 +19727,7 @@ msgstr "外形線を使用してグラフィック アイテムをプロット"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:60
 msgid "Output units, valid options: mm, in"
-msgstr ""
+msgstr "出力単位の有効なオプション: mm,in"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:77
 #: kicad/cli/command_export_pcb_gerber.cpp:103
@@ -19679,7 +19761,7 @@ msgstr "アパーチャ マクロを無効化"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
-msgstr ""
+msgstr "ガーバー座標系の精度の有効なオプション: 5,6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
 msgid ""
@@ -19707,19 +19789,19 @@ msgstr "モノクロで出力"
 #: kicad/cli/command_fp_export_svg.cpp:38
 #: kicad/cli/command_sym_export_svg.cpp:38
 msgid "Color theme to use (will default to pcbnew settings)"
-msgstr ""
+msgstr "カラーテーマを使用する (pcbnewの設定でのデフォルト)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:47
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
-msgstr ""
+msgstr "有効なオプション: front,back,both ガーバーの場合のみ\"both\"もサポート."
 
 #: kicad/cli/command_export_pcb_pos.cpp:51
 msgid "Valid options: ascii,csv,gerber"
-msgstr ""
+msgstr "有効なオプション: ascii,csv,gerber"
 
 #: kicad/cli/command_export_pcb_pos.cpp:55
 msgid "Output units; ascii or csv format only; valid options: in,mm"
-msgstr ""
+msgstr "出力単位の有効なオプション(ASCIIかCSVのみ): in,mm"
 
 #: kicad/cli/command_export_pcb_pos.cpp:58
 msgid ""
@@ -19750,7 +19832,7 @@ msgstr "不正な フォーマットです\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:150
 msgid "\"both\" not supported for gerber format\n"
-msgstr ""
+msgstr "\"both\"はガーバーではサポートされていません\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:166
 msgid "Invalid side specified\n"
@@ -19814,6 +19896,8 @@ msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
 msgstr ""
+"ネットリスト出力フォーマットの有効なオプション: kicadsexpr, kicadxml, "
+"cadstar, orcadpcb2, spice, spicemodel"
 
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_pdf.cpp:69
@@ -19825,7 +19909,7 @@ msgstr "回路図ファイルは存在しないかアクセス不可です\n"
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
 msgid "Avoid setting a background color (regardless of theme)"
-msgstr ""
+msgstr "背景色の設定を行いません (テーマに関わらず)"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:42
@@ -19839,7 +19923,7 @@ msgstr "フットプリント ライブラリーが存在しないかアクセ�
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
-msgstr ""
+msgstr "バージョンに関係なくフットプリント ライブラリーを強制的に再保存します"
 
 #: kicad/cli/command_fp_upgrade.cpp:53
 msgid "Footprint path does not exist or is not accessible\n"
@@ -19851,7 +19935,7 @@ msgstr "シンボルファイルは存在しないかアクセス不可です\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
-msgstr ""
+msgstr "バージョンに関係なくシンボル ライブラリーを強制的に再保存します"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
@@ -24783,7 +24867,7 @@ msgstr "重なっている図形をパッドに結合"
 msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
-msgstr ""
+msgstr "(ネットタイのグループにあるパッドはマージの考慮はされません。)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -25776,7 +25860,7 @@ msgstr "実行しない"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr "DRC 実行前に全てのゾーンを再塗り潰し"
+msgstr "DRC 実行前に全てのゾーンを再塗りつぶし"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -26611,7 +26695,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:299
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:270
 msgid "Allow bridged solder mask apertures between pads"
-msgstr "パッド間のハンダ マスクアパーチャを許容する"
+msgstr "パッド間を接続するハンダマスク アパーチャを許容する"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:302
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:273
@@ -26842,13 +26926,12 @@ msgstr ""
 "に上書きできます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:339
-#, fuzzy
 msgid "Net Ties"
-msgstr "ネット配線"
+msgstr "ネットタイ"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:341
 msgid "Pad groups allowed to short different nets:"
-msgstr ""
+msgstr "異なるネットを接続しても問題ないパッドのグループを定義:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
@@ -30168,7 +30251,7 @@ msgstr "移動/ドラッグ時にコートヤードの衝突を表示する"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:397
 msgid "Auto-refill zones"
-msgstr "ゾーンを自動的に再塗り潰し"
+msgstr "ゾーンを自動的に再塗りつぶし"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:399
 #, fuzzy
@@ -31225,9 +31308,8 @@ msgstr "ハンダ マスクと導体間のクリアランス:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
-msgstr ""
-"フットプリント内のパッド間のハンダマスクアパーチャー（開口部）をブリッジさせ"
-"ることを許可する"
+msgstr "ハンダマスク "
+"アパーチャ（開口部）がフットプリント内のパッド間を接続することを許容する"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
 msgid "Tent vias"
@@ -32545,7 +32627,7 @@ msgstr "導体スライバー"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "ハンダマスクのアパーチャーが異なるネットとブリッジしている"
+msgstr "異なるネットのアイテムがハンダマスクのアパーチャで接続されている"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Silkscreen clipped by solder mask"
@@ -33042,16 +33124,13 @@ msgstr "基板セットアップの半田マスクの最小幅"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:510
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:604
-#, fuzzy
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr ""
-"裏面ハンダマスクアパーチャーが異なるネットのアイテムとブリッジしています"
+msgstr "異なるネットのアイテムが表面ハンダマスクのアパーチャで接続されている"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:512
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:606
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr ""
-"裏面ハンダマスクアパーチャーが異なるネットのアイテムとブリッジしています"
+msgstr "異なるネットのアイテムが裏面ハンダマスクのアパーチャで接続されている"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:729
 msgid "Building solder mask..."
@@ -33190,7 +33269,7 @@ msgstr "基板のスタックアップ設定が最新ではありません。"
 
 #: pcbnew/exporters/step/exporter_step.cpp:318
 msgid "Determining PCB data\n"
-msgstr ""
+msgstr "PCB データの判別しています\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:323
 msgid "Build STEP data\n"
@@ -33294,10 +33373,11 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"基板のゾーンが塗り潰される場合には、基板端クリアランス設定が使用されます (基"
-"板の設定 > デザインルール > 制約 を参照)。\n"
-"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前の"
-"バージョンの KiCad とは異なった塗り潰しの結果となります。"
+"基板のゾーンが塗りつぶされる場合には、基板端クリアランス設定が使用されます ("
+"基板の設定 > デザインルール > 制約 を参照)。\n"
+"これにより、Edge Cuts "
+"レイヤーにおける基板外形線の太さを使用していた以前のバージョンの KiCad "
+"とは異なった塗りつぶしの結果となります。"
 
 #: pcbnew/files.cpp:568
 msgid "Edge Clearance Warning"
@@ -33478,25 +33558,25 @@ msgstr "(PTHパッドの穴は導体を残しません)"
 
 #: pcbnew/footprint.cpp:2385
 msgid "(SMD pad appears on both front and back copper)"
-msgstr ""
+msgstr "(表面実装パッドが表裏両面の導体層にあります)"
 
 #: pcbnew/footprint.cpp:2392 pcbnew/footprint.cpp:2405
 msgid "(SMD pad copper and mask layers don't match)"
-msgstr ""
+msgstr "(表面実装パッドの導体部とマスクレイヤーが不一致です)"
 
 #: pcbnew/footprint.cpp:2397 pcbnew/footprint.cpp:2410
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr ""
+msgstr "(表面実装パッドの導体部とペーストレイヤーが不一致です)"
 
 #: pcbnew/footprint.cpp:2586
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr ""
+msgstr "(ネットタイのグループに未知のパッド番号 %s が含まれています)"
 
 #: pcbnew/footprint.cpp:2591
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr ""
+msgstr "(パッド %s は一つ以上のネットタイのグループにあります)"
 
 #: pcbnew/footprint.cpp:2832 pcbnew/pad.cpp:1718 pcbnew/zone.cpp:1362
 msgid "Inherited"
@@ -37930,7 +38010,7 @@ msgstr "ビアを配置"
 
 #: pcbnew/tools/drc_tool.cpp:150
 msgid "Refilling all zones..."
-msgstr "すべてのゾーンを再塗り潰し..."
+msgstr "すべてのゾーンを再塗りつぶし..."
 
 #: pcbnew/tools/drc_tool.cpp:159
 msgid "Schematic parity tests require a fully annotated schematic."
@@ -39939,7 +40019,7 @@ msgstr ""
 #: pcbnew/tools/zone_filler_tool.cpp:245
 #, c-format
 msgid "Refill %d Zones"
-msgstr "%d ゾーンを再塗り潰し"
+msgstr "%d ゾーンを再塗りつぶし"
 
 #: pcbnew/tools/zone_filler_tool.cpp:254
 msgid "Auto-fill Zone(s)"
@@ -39954,7 +40034,8 @@ msgstr "設定を開く"
 msgid ""
 "Automatic refill of zones can be turned off in Preferences if it becomes too "
 "slow."
-msgstr ""
+msgstr "処理が遅くなるのであれば、ゾーンの自動再塗りつぶしは設定で無効にすることがで"
+"きます。"
 
 #: pcbnew/tools/zone_filler_tool.cpp:324
 msgid "Fill Zone"
@@ -40803,11 +40884,11 @@ msgstr "ゾーンの塗りつぶしは古いままです。再度塗りつぶし
 
 #: pcbnew/zone_filler.cpp:572
 msgid "Refill"
-msgstr "再塗り潰し"
+msgstr "再塗りつぶし"
 
 #: pcbnew/zone_filler.cpp:572
 msgid "Continue without Refill"
-msgstr "再塗り潰しせずに続行"
+msgstr "再塗りつぶしせずに続行"
 
 #: pcbnew/zones.h:64
 msgid "inherited"
