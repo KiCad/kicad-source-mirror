@@ -923,6 +923,7 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             selectionRect.Normalize();
 
             GENERAL_COLLECTOR collector;
+            GENERAL_COLLECTOR padsCollector;
             std::set<BOARD_ITEM*> group_items;
 
             for( PCB_GROUP* group : board()->Groups() )
@@ -949,14 +950,17 @@ bool PCB_SELECTION_TOOL::selectMultiple()
                     group_items.emplace( group_item );
             }
 
-            for( auto it = candidates.begin(), it_end = candidates.end(); it != it_end; ++it )
+            for( const KIGFX::VIEW::LAYER_ITEM_PAIR& candidate : candidates )
             {
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( candidate.first );
 
                 if( item && Selectable( item ) && item->HitTest( selectionRect, !greedySelection )
                         && ( greedySelection || !group_items.count( item ) ) )
                 {
-                    collector.Append( item );
+                    if( item->Type() == PCB_PAD_T && !m_isFootprintEditor )
+                        padsCollector.Append( item );
+                    else
+                        collector.Append( item );
                 }
             }
 
@@ -964,6 +968,14 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             FilterCollectedItems( collector, true );
 
             FilterCollectorForHierarchy( collector, true );
+
+            // If we selected nothing but pads, allow them to be selected
+            if( collector.GetCount() == 0 )
+            {
+                collector = padsCollector;
+                FilterCollectedItems( collector, true );
+                FilterCollectorForHierarchy( collector, true );
+            }
 
             for( EDA_ITEM* i : collector )
             {
@@ -2547,16 +2559,6 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         break;
 
     case PCB_PAD_T:
-        // Multiple selection is only allowed in footprint editor mode.  In pcbnew, you have to
-        // select footprint subparts one by one, rather than with a drag selection.  This is so
-        // you can pick up items under an (unlocked) footprint without also moving the
-        // footprint's sub-parts.
-        if( !m_isFootprintEditor && !checkVisibilityOnly )
-        {
-            if( m_multiple )
-                return false;
-        }
-
         pad = static_cast<const PAD*>( aItem );
 
         if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
