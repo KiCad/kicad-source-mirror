@@ -41,16 +41,16 @@ int CLI::VERSION_COMMAND::doPerform( KIWAY& aKiway )
     wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == wxS( "plain" ) )
     {
-        wxPrintf( GetMajorMinorPatchVersion() );
+        wxPrintf( "%s\n", GetMajorMinorPatchVersion() );
     }
     else if( format == wxS( "commit" ) )
     {
-        wxPrintf( GetCommitHash() );
+        wxPrintf( "%s\n", GetCommitHash() );
     }
     else if( format == wxS( "about" ) )
     {
         wxString msg_version = GetVersionInfoData( wxS( "kicad-cli" ) );
-        wxPrintf( msg_version );
+        wxPrintf( "%s\n", msg_version );
     }
     else
     {
