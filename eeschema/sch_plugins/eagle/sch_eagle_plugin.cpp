@@ -31,6 +31,7 @@
 #include <memory>
 #include <wx/filename.h>
 #include <wx/string.h>
+#include <wx/textfile.h>
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
@@ -434,12 +435,20 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     wxXmlDocument xmlDocument;
     wxFFileInputStream stream( m_filename.GetFullPath() );
 
-    // read first line to check for legacy kicad sch file
-    wxTextInputStream text( stream );
-    wxString line = text.ReadLine();
-    if( line.StartsWith( wxT( "EESchema" ) ) )
+    // check if this is an eagle XML file as we currently only support XML files, not binary files
+    wxString    str;
+
+    // open the file
+    wxTextFile tfile;
+    tfile.Open(aFileName);
+
+    // read the first line
+    str = tfile.GetFirstLine();
+
+    if(!str.StartsWith(wxT("<?xml")))
     {
-        THROW_IO_ERROR( wxString::Format( _( "'%s' is an legacy Kicad schematic format file.  Try to open this file instead of importing it." ),
+        THROW_IO_ERROR( wxString::Format( _( "'%s' is an Eagle binary-format schematic file;"
+                                             "only Eagle XML-format schematics are supported." ),
                                           m_filename.GetFullPath() ) );
     }
 
