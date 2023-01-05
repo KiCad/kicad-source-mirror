@@ -38,6 +38,16 @@ CLI::VERSION_COMMAND::VERSION_COMMAND() : COMMAND( "version" )
 
 int CLI::VERSION_COMMAND::doPerform( KIWAY& aKiway )
 {
+    if( !m_argParser )
+    {
+        // were we redirected from the --version?
+        // m_argParser override for bool() returns false if we didnt parse any args normally
+        // we need to exit here early because it'll exception in the later arg handling code if we dont
+        // no arg provided also ends up here on the version command
+        wxPrintf( "%s\n", GetMajorMinorPatchVersion() );
+        return EXIT_CODES::OK;
+    }
+
     wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == wxS( "plain" ) )
     {
@@ -58,5 +68,5 @@ int CLI::VERSION_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    return 0;
+    return EXIT_CODES::OK;
 }
