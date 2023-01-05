@@ -611,6 +611,9 @@ COMMON_SETTINGS* PGM_BASE::GetCommonSettings() const
 
 bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
 {
+    // Suppress wxWidgets error popups if locale is not found
+    wxLogNull doNotLog;
+
     if( first_time )
     {
         setLanguageId( wxLANGUAGE_DEFAULT );
