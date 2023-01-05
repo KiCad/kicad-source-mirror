@@ -931,7 +931,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         m_frame->OnModify();
     }
 
-    for( EDA_ITEM* item : selectionCopy )
+    for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
         item->ClearEditFlags();
 
     if( unselect )

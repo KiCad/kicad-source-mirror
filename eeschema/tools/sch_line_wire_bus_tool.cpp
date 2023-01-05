@@ -1230,6 +1230,9 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     if( m_busUnfold.in_progress )
         m_busUnfold = {};
 
+    for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
+        item->ClearEditFlags();
+
     m_frame->TestDanglingEnds();
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
