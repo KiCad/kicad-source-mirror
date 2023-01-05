@@ -29,6 +29,7 @@
 
 #include "graphics_importer.h"
 
+#include <math/matrix3x3.h>
 #include <list>
 
 class IMPORTED_SHAPE
@@ -39,8 +40,7 @@ public:
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const = 0;
 
-    virtual void Translate( const VECTOR2D& aVec ) = 0;
-    virtual void Scale( double scaleX, double scaleY ) = 0;
+    virtual void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) = 0;
 
     void SetParentShapeIndex( int aIndex ) { m_parentShapeIndex = aIndex; }
     int GetParentShapeIndex() const { return m_parentShapeIndex; }
@@ -70,18 +70,10 @@ public:
         return std::make_unique<IMPORTED_LINE>( *this );
     }
 
-    void Translate( const VECTOR2D& aVec ) override
+    void Transform(const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation) override
     {
-        m_start += aVec;
-        m_end += aVec;
-    }
-
-    void Scale( double scaleX, double scaleY ) override
-    {
-        m_start.x *= scaleX;
-        m_start.y *= scaleY;
-        m_end.x *= scaleX;
-        m_end.y *= scaleY;
+        m_start = aTransform * m_start + aTranslation;
+        m_end = aTransform * m_end + aTranslation;
     }
 
 private:
@@ -112,18 +104,15 @@ public:
         return std::make_unique<IMPORTED_CIRCLE>( *this );
     }
 
-    void Translate( const VECTOR2D& aVec ) override
+    void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
     {
-        m_center += aVec;
-    }
+        VECTOR2D newCenter = ( aTransform * m_center ) + aTranslation;
 
-    void Scale( double scaleX, double scaleY ) override
-    {
-        m_center.x *= scaleX;
-        m_center.y *= scaleY;
+        VECTOR2D newRadius = VECTOR2D( m_radius, 0 );
+        newRadius = aTransform * newRadius;
 
-        // we really can't handle scalex != scaleY cleanly...it would be an ellipse
-        m_radius *= scaleX;
+        m_center = newCenter;
+        m_radius = newRadius.EuclideanNorm();
     }
 
 private:
@@ -156,19 +145,10 @@ public:
         return std::make_unique<IMPORTED_ARC>( *this );
     }
 
-    void Translate( const VECTOR2D& aVec ) override
+    void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
     {
-        m_center += aVec;
-        m_start += aVec;
-    }
-
-    void Scale( double scaleX, double scaleY ) override
-    {
-        m_center.x *= scaleX;
-        m_center.y *= scaleY;
-
-        m_start.x *= scaleX;
-        m_start.y *= scaleY;
+        m_start = aTransform * m_start + aTranslation;
+        m_center = aTransform * m_center + aTranslation;
     }
 
 private:
@@ -198,20 +178,11 @@ public:
         return std::make_unique<IMPORTED_POLYGON>( *this );
     }
 
-    void Translate( const VECTOR2D& aVec ) override
+    void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
     {
-        for( auto& vertex : m_vertices )
+        for(VECTOR2D& vert : m_vertices )
         {
-            vertex += aVec;
-        }
-    }
-
-    void Scale( double scaleX, double scaleY ) override
-    {
-        for( auto& vertex : m_vertices )
-        {
-            vertex.x *= scaleX;
-            vertex.y *= scaleY;
+            vert = aTransform * vert + aTranslation;
         }
     }
 
@@ -221,7 +192,7 @@ public:
 
 private:
     std::vector<VECTOR2D> m_vertices;
-    double                      m_width;
+    double                m_width;
 };
 
 
@@ -253,15 +224,9 @@ public:
         return std::make_unique<IMPORTED_TEXT>( *this );
     }
 
-    void Translate( const VECTOR2D& aVec ) override
+    void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
     {
-        m_origin += aVec;
-    }
-
-    void Scale( double scaleX, double scaleY ) override
-    {
-        m_origin.x *= scaleX;
-        m_origin.y *= scaleY;
+        m_origin = aTransform * m_origin + aTranslation;
     }
 
 private:
@@ -299,24 +264,12 @@ public:
         return std::make_unique<IMPORTED_SPLINE>( *this );
     }
 
-    void Translate( const VECTOR2D& aVec ) override
+    void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
     {
-        m_start += aVec;
-        m_bezierControl1 += aVec;
-        m_bezierControl2 += aVec;
-        m_end += aVec;
-    }
-
-    void Scale( double scaleX, double scaleY ) override
-    {
-        m_start.x *= scaleX;
-        m_start.y *= scaleY;
-        m_bezierControl1.x *= scaleX;
-        m_bezierControl1.y *= scaleY;
-        m_bezierControl2.x *= scaleX;
-        m_bezierControl2.y *= scaleY;
-        m_end.x *= scaleX;
-        m_end.y *= scaleY;
+        m_start = aTransform * m_start + aTranslation;
+        m_bezierControl1 = aTransform * m_bezierControl1 + aTranslation;
+        m_bezierControl2 = aTransform * m_bezierControl2 + aTranslation;
+        m_end = aTransform * m_end + aTranslation;
     }
 
 private:

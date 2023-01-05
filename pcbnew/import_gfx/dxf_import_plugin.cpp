@@ -487,18 +487,24 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
         return;
 
     MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
+
+    MATRIX3x3D rot;
+    rot.SetRotation( aData.angle );
+
+    MATRIX3x3D scale;
+    scale.SetScale( VECTOR2D( aData.sx, aData.sy ) );
+
+    MATRIX3x3D trans = ( arbAxis * rot ) * scale;
     VECTOR3D insertCoords      = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
 
     VECTOR2D translation( mapX( insertCoords.x ), mapY( insertCoords.y ) );
     translation -= VECTOR2D( mapX( block->m_baseX ), mapY( block->m_baseY ) );
 
-
     for( auto& shape : block->m_buffer.GetShapes() )
     {
         std::unique_ptr<IMPORTED_SHAPE> newShape = shape->clone();
 
-        newShape->Translate( translation  );
-        newShape->Scale( aData.sx, aData.sy );
+        newShape->Transform( trans, translation );
 
         m_internalImporter.AddShape( newShape );
     }
