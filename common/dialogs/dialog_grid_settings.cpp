@@ -22,7 +22,6 @@
  */
 
 #include <dialogs/dialog_grid_settings.h>
-#include <base_units.h>
 #include <common.h>
 #include <settings/app_settings.h>
 #include <eda_draw_frame.h>
@@ -30,6 +29,8 @@
 #include <tool/actions.h>
 #include <tool/grid_menu.h>
 #include <tool/common_tools.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
     DIALOG_GRID_SETTINGS_BASE( aParent ),
@@ -114,7 +115,8 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
         return false;
 
     // Apply the new settings
-    GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
+    APP_SETTINGS_BASE* cfg = m_parent->config();
+    GRID_SETTINGS&     gridCfg = cfg->m_Window.grid;
 
     gridCfg.last_size_idx = m_currentGridCtrl->GetSelection();
     m_parent->SetGridOrigin( wxPoint( m_gridOriginX.GetValue(), m_gridOriginY.GetValue() ) );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -177,7 +177,7 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_buttonResetSizes->Hide();
 	m_buttonResetSizes->SetToolTip( _("Resets the list of grid sizes to default values") );
 
-	bButtonSizer->Add( m_buttonResetSizes, 0, wxALL, 5 );
+	bButtonSizer->Add( m_buttonResetSizes, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );

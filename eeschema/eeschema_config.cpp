@@ -188,32 +188,34 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    // Currently values read from config file are not used because the user cannot
-    // change this config
-    // if( aCfg->m_Window.grid.sizes.empty() )  // Will be probably never enabled
-    {
-        /*
-         * Do NOT add others values (mainly grid values in mm), because they can break the
-         * schematic: Because wires and pins are considered as connected when the are to the
-         * same coordinate we cannot mix coordinates in mils (internal units) and mm (that
-         * cannot exactly converted in mils in many cases).  In fact schematic must only use
-         * 50 and 25 mils to place labels, wires and symbols others values are useful only
-         * for graphic items (mainly in library editor) so use integer values in mils only.
-         * The 100 mil grid is added to help conform to the KiCad Library Convention which
-         * states: "Using a 100mil grid, pin ends and origin must lie on grid nodes IEC-60617"
-         */
-        aCfg->m_Window.grid.sizes = { "100 mil",
-                                      "50 mil",
-                                      "25 mil",
-                                      "10 mil",
-                                      "5 mil",
-                                      "2 mil",
-                                      "1 mil" };
-    }
+    /*
+     * Do NOT add other values (particularly grid values in mm), because they can break the
+     * schematic: Because wires and pins are considered as connected when the are to the same
+     * coordinate we cannot mix coordinates in mils (internal units) and mm (that cannot exactly
+     * converted in mils in many cases).  In fact schematic must only use 50 and 25 mils to
+     * place labels, wires and symbols others values are useful only for graphic items (mainly
+     * in library editor) so use integer values in mils only.
+     * The 100 mil grid is added to help conform to the KiCad Library Convention which states:
+     * "Using a 100mil grid, pin ends and origin must lie on grid nodes IEC-60617"
+     */
+    aCfg->m_Window.grid.sizes = { "100 mil",
+                                  "50 mil",
+                                  "25 mil",
+                                  "10 mil",
+                                  "5 mil",
+                                  "2 mil",
+                                  "1 mil" };
 
-    // Currently values read from config file are not used because the user cannot
-    // change this config
-    // if( aCfg->m_Window.zoom_factors.empty() )
+    if( aCfg->m_Window.grid.last_size_idx > (int) aCfg->m_Window.grid.sizes.size() )
+        aCfg->m_Window.grid.last_size_idx = 1;
+
+    if( aCfg->m_Window.grid.fast_grid_1 > (int) aCfg->m_Window.grid.sizes.size() )
+        aCfg->m_Window.grid.fast_grid_1 = 1;
+
+    if( aCfg->m_Window.grid.fast_grid_2 > (int) aCfg->m_Window.grid.sizes.size() )
+        aCfg->m_Window.grid.fast_grid_2 = 2;
+
+    if( aCfg->m_Window.zoom_factors.empty() )
     {
         aCfg->m_Window.zoom_factors = { ZOOM_LIST_EESCHEMA };
     }

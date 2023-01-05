@@ -27,7 +27,6 @@
 #include <settings/json_settings_internals.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
-#include <base_units.h>
 
 
 APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion ) :
@@ -316,15 +315,28 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.axes_enabled",
             &aWindow->grid.axes_enabled, false ) );
 
-    m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
-            &aWindow->grid.sizes, DefaultGridSizeList() ) );
-
     int defaultGridIdx;
 
-    if( m_filename == "eeschema" || m_filename == "symbol_editor" || m_filename == "pl_editor" )
+    if( m_filename == "pl_editor" )
+    {
         defaultGridIdx = 1;
+
+        m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
+                &aWindow->grid.sizes, DefaultGridSizeList() ) );
+    }
+    else if( m_filename == "eeschema" || m_filename == "symbol_editor" )
+    {
+        defaultGridIdx = 1;
+
+        // Eeschema's grids are fixed to keep wires/pins connected
+    }
     else
+    {
         defaultGridIdx = 4;
+
+        m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
+                &aWindow->grid.sizes, DefaultGridSizeList() ) );
+    }
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
             &aWindow->grid.last_size_idx, defaultGridIdx ) );
