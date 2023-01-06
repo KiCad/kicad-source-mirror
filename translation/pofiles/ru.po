@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
-"PO-Revision-Date: 2023-01-06 00:33+0000\n"
+"PO-Revision-Date: 2023-01-06 17:41+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15107,6 +15107,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"В загруженном файле схемы есть иерархические листы из более старой версии "
+"файла,  что приводит к отсутствию данных экземпляра символа.  Это приведет к "
+"тому, что все символы в загруженной схеме будут использовать либо настройки "
+"экземпляра по умолчанию, либо вернуться к настройкам символов библиотеки.  "
+"Загрузка проекта, в котором используется этот файл схемы, и сохранение "
+"последней версии файла решит эту проблему.\n"
+"\n"
+"Вы хотите продолжить?"
 
 #: eeschema/sheet.cpp:248 eeschema/sheet.cpp:276 eeschema/sheet.cpp:317
 #: eeschema/sheet.cpp:366 eeschema/sheet.cpp:427
@@ -20124,7 +20132,7 @@ msgstr ""
 
 #: kicad/cli/command_version.cpp:35
 msgid "version info format (plain, commit, about)"
-msgstr ""
+msgstr "формат информации о версии (обычный, коммит, о ПО)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
