@@ -484,7 +484,10 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
 {
     JOB_SYM_UPGRADE* upgradeJob = dynamic_cast<JOB_SYM_UPGRADE*>( aJob );
 
-    SCH_SEXPR_PLUGIN_CACHE schLibrary( upgradeJob->m_libraryPath );
+    wxFileName fn( upgradeJob->m_libraryPath );
+    fn.MakeAbsolute();
+
+    SCH_SEXPR_PLUGIN_CACHE schLibrary( fn.GetFullPath() );
 
     try
     {
