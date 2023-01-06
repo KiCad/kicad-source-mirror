@@ -748,11 +748,11 @@ int FOOTPRINT::GetLikelyAttribute() const
         }
     }
 
-    if( tht_count > 0 )
-        return FP_THROUGH_HOLE;
-
     if( smd_count > 0 )
         return FP_SMD;
+
+    if( tht_count > 0 )
+        return FP_THROUGH_HOLE;
 
     return 0;
 }
