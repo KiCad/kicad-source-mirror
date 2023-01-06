@@ -1082,6 +1082,10 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
     m_transform = symbol->m_transform;
     symbol->m_transform = tmp;
 
+    std::swap( m_inBom, symbol->m_inBom );
+    std::swap( m_DNP, symbol->m_DNP );
+    std::swap( m_onBoard, symbol->m_onBoard );
+
     std::swap( m_instanceReferences, symbol->m_instanceReferences );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
 }
