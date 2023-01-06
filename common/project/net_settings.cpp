@@ -382,6 +382,10 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
                     return ii->second;
             };
 
+    // <no net> is forced to be part of the Default netclass.
+    if( aNetName.IsEmpty() )
+        return m_DefaultNetClass;
+
     auto it = m_NetClassLabelAssignments.find( aNetName );
 
     if( it != m_NetClassLabelAssignments.end() )
