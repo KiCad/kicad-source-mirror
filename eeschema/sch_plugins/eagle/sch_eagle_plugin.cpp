@@ -447,8 +447,8 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
     if(!str.StartsWith(wxT("<?xml")))
     {
-        THROW_IO_ERROR( wxString::Format( _( "'%s' is an Eagle binary-format schematic file;"
-                                             "only Eagle XML-format schematics are supported." ),
+        THROW_IO_ERROR( wxString::Format( _( "'%s' is an Eagle binary-format schematic file; "
+                                             "only Eagle XML-format schematics can be imported." ),
                                           m_filename.GetFullPath() ) );
     }
 
