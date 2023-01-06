@@ -215,6 +215,12 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                     LIB_TEXT* text = new LIB_TEXT( symbol );
 
+                    if( m_drawSpecificUnit )
+                        text->SetUnit( m_frame->GetUnit() );
+
+                    if( m_drawSpecificConvert )
+                        text->SetConvert( m_frame->GetConvert() );
+
                     text->SetPosition( VECTOR2I( cursorPos.x, -cursorPos.y ) );
                     text->SetTextSize( wxSize( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
                                                schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );

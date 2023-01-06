@@ -1428,6 +1428,12 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     m_unit = std::max( 1, aSymbol->GetUnit() );
     m_convert = std::max( 1, aSymbol->GetConvert() );
 
+    // Optimize default edit options for this symbol
+    // Usually if units are locked, graphic items are specific to each unit
+    // and if units are interchangeable, graphic items are common to units
+    SYMBOL_EDITOR_DRAWING_TOOLS* tools = GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
+    tools->SetDrawSpecificUnit( symbol->UnitsLocked() );
+
     // The buffered screen for the symbol
     SCH_SCREEN* tmpScreen = new SCH_SCREEN();
 

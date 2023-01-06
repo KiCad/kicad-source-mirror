@@ -41,7 +41,8 @@ LIB_TEXT::LIB_TEXT( LIB_SYMBOL* aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
     EDA_TEXT( schIUScale, wxEmptyString )
 {
-    SetTextSize( wxSize( schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ), schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ) ) );
+    SetTextSize( wxSize( schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ),
+                         schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ) ) );
 }
 
 
