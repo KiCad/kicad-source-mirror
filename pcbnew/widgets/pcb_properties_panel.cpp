@@ -144,6 +144,9 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( selection.Front() );
+
+    wxCHECK( firstItem, /* void */ );
+
     PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
                                                      aEvent.GetPropertyName() );
     wxVariant newValue = aEvent.GetPropertyValue();

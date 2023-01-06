@@ -2613,6 +2613,13 @@ void PCB_SELECTION_TOOL::select( EDA_ITEM* aItem )
             return;
     }
 
+    if( m_enteredGroup &&
+        !PCB_GROUP::WithinScope( static_cast<BOARD_ITEM*>( aItem ), m_enteredGroup,
+                                 m_isFootprintEditor ) )
+    {
+        ExitGroup();
+    }
+
     highlight( aItem, SELECTED, &m_selection );
 }
 
