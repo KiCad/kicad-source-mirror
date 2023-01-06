@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
-"PO-Revision-Date: 2023-01-06 22:47+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2023-01-06 23:36+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -15921,12 +15921,11 @@ msgstr "Ошибка: тип симуляции не поддерживает г
 
 #: eeschema/sim/sim_plot_frame.cpp:737
 msgid " (mag)"
-msgstr ""
+msgstr " (mag)"
 
 #: eeschema/sim/sim_plot_frame.cpp:739
-#, fuzzy
 msgid " (phase)"
-msgstr "Фаза AC:"
+msgstr " (фаза)"
 
 #: eeschema/sim/sim_plot_frame.cpp:851 eeschema/sim/sim_plot_frame.cpp:1722
 msgid "Signal"
@@ -16209,14 +16208,13 @@ msgstr ""
 "с выводом %s%s, координаты <b>(%.3f, %.3f)</b> в доп.обозначении."
 
 #: eeschema/symbol_checker.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
-"<b>Вывод-дубликат %s</b> %s с координатами <b>(%.3f, %.3f)</b>, конфликтует "
-"с выводом %s%s, координаты <b>(%.3f, %.3f)</b> в частях %c и %c доп."
-"обозначения."
+"<b>Дубликат вывода %s</b> %s с координатами <b>(%.3f, %.3f)</b>, конфликтует "
+"с выводом %s%s, координаты <b>(%.3f, %.3f)</b> в частях %s и %s изменено."
 
 #: eeschema/symbol_checker.cpp:146
 #, c-format
@@ -16253,12 +16251,16 @@ msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
 msgstr ""
+"<b>Подозрительный символ питания</b><br>Контакт имеет значение только вход "
+"или выход питания<br><br>"
 
 #: eeschema/symbol_checker.cpp:215
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
 msgstr ""
+"<b>Подозрительный символ питания</b><br>Підключаються только невидимые "
+"входные контакты<br><br>"
 
 #: eeschema/symbol_checker.cpp:240
 #, c-format
@@ -16980,14 +16982,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "Создать копию выделенного символа"
 
 #: eeschema/tools/ee_actions.cpp:142
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Переназначить символы..."
+msgstr "Переименовать символ..."
 
 #: eeschema/tools/ee_actions.cpp:142
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "Обновить выбранные символы"
+msgstr "Переименовать выбранный символ"
 
 #: eeschema/tools/ee_actions.cpp:147
 msgid "Save the current symbol to a different library."
@@ -17026,14 +17026,12 @@ msgid "Update symbol to match changes made in parent symbol"
 msgstr "Обновить символ, получив последние изменения родительского символа"
 
 #: eeschema/tools/ee_actions.cpp:186
-#, fuzzy
 msgid "Set Unit Display Name..."
-msgstr "Фильтровать по имени"
+msgstr "Установить название ед. измерения..."
 
 #: eeschema/tools/ee_actions.cpp:187
-#, fuzzy
 msgid "Set the display name for a unit"
-msgstr "Введите номер для листа %s"
+msgstr "Установить отображаемое имя ед. измерения"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -17048,14 +17046,12 @@ msgid "Annotate pins with their electrical types"
 msgstr "Отображать возле вывода его электрический тип"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Show Pin Numbers"
-msgstr "Показать номер вывода"
+msgstr "Показать номера выводов"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "Отображать возле вывода его электрический тип"
+msgstr "Обозначить выводы их номерами"
 
 #: eeschema/tools/ee_actions.cpp:206
 msgid "Show Symbol Tree"
@@ -17082,9 +17078,8 @@ msgid "Create SVG file from the current symbol"
 msgstr "Создать SVG-файл из текущего символа"
 
 #: eeschema/tools/ee_actions.cpp:226
-#, fuzzy
 msgid "Synchronized Pins Mode"
-msgstr "Режим синхронного редактирования выводов"
+msgstr "Режим синхронизации выводов"
 
 #: eeschema/tools/ee_actions.cpp:227
 #, fuzzy
@@ -17118,14 +17113,12 @@ msgstr "Добавить текстовую надпись"
 
 #: eeschema/tools/ee_actions.cpp:248 eeschema/tools/ee_actions.cpp:358
 #: pcbnew/tools/pcb_actions.cpp:133
-#, fuzzy
 msgid "Add Text Box"
-msgstr "Добавить текст"
+msgstr "Добавить текстовый блок"
 
 #: eeschema/tools/ee_actions.cpp:248
-#, fuzzy
 msgid "Add a text box item"
-msgstr "Добавить текстовую надпись"
+msgstr "Добавить элемент текстового блока"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:845
 msgid "Add Lines"
@@ -17184,9 +17177,8 @@ msgid "Add Power"
 msgstr "Добавить питание"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "Добавить символ"
+msgstr "Добавить символ питания"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -17351,12 +17343,11 @@ msgstr "Перевернуть выбранные элементы слева н
 #: eeschema/tools/ee_actions.cpp:424 pcbnew/tools/edit_tool_move_fct.cpp:183
 #: pcbnew/tools/pcb_actions.cpp:342
 msgid "Swap"
-msgstr ""
+msgstr "Замена"
 
 #: eeschema/tools/ee_actions.cpp:424 pcbnew/tools/pcb_actions.cpp:342
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "Вращать выбранные элементы по часовой стрелке"
+msgstr "Заменить выбранные элементы"
 
 #: eeschema/tools/ee_actions.cpp:430 pcbnew/tools/pcb_actions.cpp:379
 msgid "Properties..."
@@ -20511,9 +20502,8 @@ msgid "Pending"
 msgstr "Отложено"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:38
-#, fuzzy
 msgid "Update All"
-msgstr "Обновить"
+msgstr "Обновить все"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:91
 msgid "Download Size"
@@ -20536,29 +20526,26 @@ msgid "Download"
 msgstr "Загрузить"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:20
-#, fuzzy
 msgid "Check for package updates on startup"
-msgstr "Проверка посад.мест"
+msgstr "Проверить обновления пакетов во время запуска"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:28
-#, fuzzy
 msgid "Library package handling"
-msgstr "Изменения библиотеки не сохранены"
+msgstr "Обработка пакета библиотеки"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "Добавить библиотеку в глобальную таблицу библиотек?"
+msgstr ""
+"Автоматически добавить библиотеку при установке в глобальную таблицу "
+"библиотек"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Автоматически разведённые дорожки"
+msgstr "Автоматическое удаление не установленных библиотек"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Ошибка уникального имени библиотеки"
+msgstr "Префикс псевдонима библиотеки:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:51
 msgid ""
@@ -20582,9 +20569,9 @@ msgid "Error loading installed packages list: %s"
 msgstr "Ошибка загрузки списка установленных пакетов: %s"
 
 #: kicad/pcm/pcm.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld kB"
-msgstr "Загрузка %lld/%lld КБ"
+msgstr "Загрузка %lld/%lld кБ"
 
 #: kicad/pcm/pcm.cpp:282
 msgid "Download is too large."
@@ -20599,12 +20586,9 @@ msgid "Unable to load repository url"
 msgstr "Не удалось загрузить URL репозитория"
 
 #: kicad/pcm/pcm.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"Не удаётся разобрать репозиторий:\n"
-"\n"
-"%s"
+msgstr "Не удаётся обработать репозиторий: %s"
 
 #: kicad/pcm/pcm.cpp:324
 msgid ""
@@ -21743,144 +21727,140 @@ msgid "NP Pad: (diam - drill)"
 msgstr "Неметал. конт.пл.: (диаметр - сверло)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
-#, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
-#, fuzzy
 msgid "AWG000"
-msgstr "0000"
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
-#, fuzzy
 msgid "AWG00"
-msgstr "0000"
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
-#, fuzzy
 msgid "AWG0"
-msgstr "0000"
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:78
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:79
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:80
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
 #, fuzzy
@@ -22227,9 +22207,8 @@ msgstr "Простое решение:"
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:111
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:131
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:151
-#, fuzzy
 msgid "Approximation:"
-msgstr "Позиция по X:"
+msgstr "Приблизительная точность:"
 
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:122
 msgid "3R solution:"
@@ -22251,14 +22230,12 @@ msgid "Current calculation is underestimated due to long fusing time."
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:31
-#, fuzzy
 msgid "Ambient temperature:"
-msgstr "Окружающее освещение:"
+msgstr "Окружающее температура:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:48
-#, fuzzy
 msgid "Melting point:"
-msgstr "Рабочая точка"
+msgstr "Точка плавления:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:62
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -22267,48 +22244,44 @@ msgid "Track width:"
 msgstr "Ширина дорожки:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:77
-#, fuzzy
 msgid "Track thickness:"
-msgstr "Толщина дорожки (H):"
+msgstr "Толщина дорожки:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:106
-#, fuzzy
 msgid "Time to fuse:"
-msgstr "Период:"
+msgstr "Время до плавления:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:113
 msgid "s"
 msgstr "сек"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:41
-#, fuzzy
 msgid "Platinum"
-msgstr "Алюминий"
+msgstr "Платина"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:42
 msgid "Gold"
-msgstr ""
+msgstr "Золото"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:43
 msgid "Titanium"
-msgstr ""
+msgstr "Титан"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:44
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "Нержавеющая сталь 18-9"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:45
 msgid "Silver"
-msgstr ""
+msgstr "Серебро"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:46
 msgid "Mercury"
-msgstr ""
+msgstr "Меркурий"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:47
-#, fuzzy
 msgid "Nickel"
-msgstr "Уникальное имя"
+msgstr "Никель"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:48
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:839
@@ -22317,43 +22290,38 @@ msgid "Copper"
 msgstr "Медь"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:49
-#, fuzzy
 msgid "Copper-Aluminium"
-msgstr "Алюминий"
+msgstr "Медь-Алюминий"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:50
 msgid "Brass"
-msgstr ""
+msgstr "Латунь"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:51
 msgid "Bronze"
-msgstr ""
+msgstr "Бронза"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:52
-#, fuzzy
 msgid "Tin"
-msgstr "\""
+msgstr "Цинк"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:53
-#, fuzzy
 msgid "Lead"
-msgstr "Линия-выноска"
+msgstr "Свинец"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:54
-#, fuzzy
 msgid "Aluminium-Copper"
-msgstr "Алюминий"
+msgstr "Алюминий-Медь"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:55
 msgid "Cast iron"
-msgstr ""
+msgstr "Железо"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:56
 msgid "Carbon steel"
-msgstr ""
+msgstr "Углеродистая сталь"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:57
-#, fuzzy
 msgid "Aluminium"
 msgstr "Алюминий"
 
@@ -23935,7 +23903,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr "Следить за импедансом"
+msgstr "Контроль импеданса"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
