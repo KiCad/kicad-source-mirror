@@ -394,22 +394,18 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
 
         if( symbol )
         {
-            constexpr bool background = true;
-            TRANSFORM      temp; // Uses default transform
-            VECTOR2I        plotPos;
+            bool      background = true;
+            TRANSFORM temp; // Uses default transform
+            VECTOR2I  plotPos;
 
             plotPos.x = pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
             plotPos.y = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
 
             symbol->Plot( plotter, unit, convert, background, plotPos, temp, false );
-
-            // Plot lib fields, not plotted by m_symbol->Plot():
-            symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false );
+            symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false, false );
 
             symbol->Plot( plotter, unit, convert, !background, plotPos, temp, false );
-
-            // Plot lib fields, not plotted by m_symbol->Plot():
-            symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false );
+            symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false, false );
         }
 
         plotter->EndPlot();
@@ -424,7 +420,10 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 {
     JOB_SYM_EXPORT_SVG* svgJob = dynamic_cast<JOB_SYM_EXPORT_SVG*>( aJob );
 
-    SCH_SEXPR_PLUGIN_CACHE schLibrary( svgJob->m_libraryPath );
+    wxFileName fn( svgJob->m_libraryPath );
+    fn.MakeAbsolute();
+
+    SCH_SEXPR_PLUGIN_CACHE schLibrary( fn.GetFullPath() );
 
     try
     {

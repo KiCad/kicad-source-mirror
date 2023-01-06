@@ -741,7 +741,8 @@ void LIB_SYMBOL::Plot( PLOTTER *aPlotter, int aUnit, int aConvert, bool aBackgro
 
 
 void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
-                                const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed )
+                                const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed,
+                                bool aPlotHidden )
 {
     wxASSERT( aPlotter != nullptr );
 
@@ -759,6 +760,9 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool
     for( LIB_ITEM& item : m_drawings )
     {
         if( item.Type() != LIB_FIELD_T )
+            continue;
+
+        if( !aPlotHidden && !( (LIB_FIELD&) item ).IsVisible() )
             continue;
 
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )

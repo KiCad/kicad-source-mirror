@@ -370,7 +370,7 @@ public:
      * @param aDimmed - reduce brightness of fields
      */
     void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
-                        const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed );
+                        const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed, bool aPlotHidden = true );
 
     /**
      * Add a new draw \a aItem to the draw object list and sort according to \a aSort.
