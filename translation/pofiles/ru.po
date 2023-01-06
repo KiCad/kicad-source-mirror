@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
 "PO-Revision-Date: 2023-01-06 22:26+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -4210,7 +4210,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Недостаточно прав для каталога '%s'."
 
 #: common/eda_base_frame.cpp:1246
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4220,10 +4220,11 @@ msgid ""
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
 "Возможны некоторые затруднения!\n"
-"При последнем редактировании файл\n"
+"Последний раз вы редактировании файл\n"
 "%s\n"
-"не был корректно сохранён. Желаете восстановить последние сохранённые "
-"изменения?"
+"KiCad был закрыт до сохранения.\n"
+"\n"
+"Желаете восстановить последние сохранённые изменения?"
 
 #: common/eda_base_frame.cpp:1263
 msgid "The auto save file could not be renamed to the board file name."
