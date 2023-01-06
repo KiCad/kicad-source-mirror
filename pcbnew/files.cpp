@@ -65,6 +65,8 @@
 
 #include <wx/wupdlock.h>
 #include <wx/filedlg.h>
+#include <wx/wfstream.h>
+#include <wx/txtstrm.h>
 
 #if wxCHECK_VERSION( 3, 1, 7 )
 #include "widgets/filedlg_hook_save_project.h"
@@ -493,8 +495,20 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
 
     if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::LEGACY ) ) == 0 )
     {
+        wxFileInputStream input( aFileName );
+        bool is_legacy = true;
+
+        if(input.IsOk() && !input.Eof() )
+        {
+            wxTextInputStream text( input );
+            wxString line = text.ReadLine();
+
+            if( !line.StartsWith( wxT( "PCBNEW" ) ) )
+                is_legacy = false;
+        }
+
         // both legacy and eagle share a common file extension.
-        pluginType = ( aCtl & KICTL_EAGLE_BRD ) ? IO_MGR::EAGLE : IO_MGR::LEGACY;
+        pluginType = ( aCtl & KICTL_EAGLE_BRD ) || !is_legacy ? IO_MGR::EAGLE : IO_MGR::LEGACY;
     }
     else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::PCAD ) ) == 0 )
     {
