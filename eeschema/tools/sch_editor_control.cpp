@@ -1956,9 +1956,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             for( SCH_SHEET_PATH& instance : pasteInstances )
             {
-                // Ignore pseudo-symbols (e.g. power symbols) and symbols from a non-existant
-                // library.
-                if( libSymbol && symbol->GetRef( &instance )[0] != wxT( '#' ) )
+                // Ignore symbols from a non-existant library.
+                if( libSymbol )
                 {
                     SCH_REFERENCE schReference( symbol, libSymbol, instance );
                     schReference.SetSheetNumber( instance.GetVirtualPageNumber() );
