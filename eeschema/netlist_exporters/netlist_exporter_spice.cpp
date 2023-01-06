@@ -44,7 +44,6 @@
 #include <string_utils.h>
 
 #include <dialogs/html_message_box.h>
-#include <boost/algorithm/string/replace.hpp>
 #include <fmt/core.h>
 #include <paths.h>
 #include <pegtl.hpp>
@@ -320,9 +319,16 @@ void NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( std::string& aNetName )
 
     convertMarkup( root );
 
-    boost::replace_all( converted, "(", "_" );
-    boost::replace_all( converted, ")", "_" );
-    boost::replace_all( converted, " ", "_" );
+    // Remove ngspice-disallowed chars
+    std::replace( converted.begin(), converted.end(), '%', '_' );
+    std::replace( converted.begin(), converted.end(), '(', '_' );
+    std::replace( converted.begin(), converted.end(), ')', '_' );
+    std::replace( converted.begin(), converted.end(), ',', '_' );
+    std::replace( converted.begin(), converted.end(), '[', '_' );
+    std::replace( converted.begin(), converted.end(), ']', '_' );
+    std::replace( converted.begin(), converted.end(), '<', '_' );
+    std::replace( converted.begin(), converted.end(), '>', '_' );
+    std::replace( converted.begin(), converted.end(), '~', '_' );
 
     aNetName = converted;
 }
