@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2023-01-03 18:05+0000\n"
+"PO-Revision-Date: 2023-01-06 00:33+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -11855,7 +11855,7 @@ msgstr "(markeringens färg kan redigeras på sidan \"Färger\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:95
 msgid "Highlight thickness:"
-msgstr "Framhävningstjocklek:"
+msgstr "Linjebredd för markering:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:110
 #: pcbnew/dialogs/panel_display_options_base.cpp:70
@@ -22793,7 +22793,7 @@ msgstr "Pläteringstjocklek (T):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:57
 msgid "Via length:"
-msgstr "Via längd:"
+msgstr "Vialängd:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
@@ -23688,7 +23688,7 @@ msgstr "Låst"
 #: pcbnew/board_stackup_manager/board_stackup.cpp:303
 #, c-format
 msgid "Dielectric %d"
-msgstr "Dielektrisk %d"
+msgstr "Dielektrikum %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:534
 msgid "Top Silk Screen"
@@ -23831,7 +23831,7 @@ msgstr "Lager '%s' underlager %d/%d"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:347
 msgid "Remove Dielectric Layer"
-msgstr "Ta bort Dielectric Layer"
+msgstr "Ta bort dielektriskt lager"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:349
 msgid "Select layer to remove:"
@@ -25099,7 +25099,7 @@ msgstr "Fasavstånd:"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:428
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:149
 msgid "Fillet radius:"
-msgstr "Filéradie:"
+msgstr "Avrundningens radie:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:583
 msgid "Thermal spoke width cannot be smaller than the minimum width."
@@ -25326,7 +25326,7 @@ msgid ""
 "0 = no smoothing\n"
 "1.0 = max radius/chamfer size (half gap value)"
 msgstr ""
-"Storleksförhållandet mellan hörnutjämningen och rutnätsöppningen:\n"
+"Storleksförhållandet mellan hörnavrundningen och rutnätsöppningen:\n"
 "0 = ingen utjämning\n"
 "1,0 = max radie / fasstorlek (halva gapets värde)"
 
@@ -27602,7 +27602,7 @@ msgstr "Upprätt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:34
 msgid "Other footprint text items"
-msgstr "Andra textavtryck"
+msgstr "Andra textobjekt tillhörande fotavtryck"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Footprint graphic items"
@@ -28084,7 +28084,7 @@ msgstr "Vior"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:967
 msgid "Via Length"
-msgstr "Via längd"
+msgstr "Vialängd"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:968
 msgid "Track Length"
@@ -28092,7 +28092,7 @@ msgstr "Ledarlängd"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:969
 msgid "Die Length"
-msgstr "Die längd"
+msgstr "Längd till chip"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:970
 msgid "Total Length"
@@ -28151,7 +28151,7 @@ msgstr "Visa nät utan lödytor"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:41
 msgid "Group by:"
-msgstr "Grupp av:"
+msgstr "Gruppera enligt:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:47
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
@@ -28586,7 +28586,7 @@ msgid ""
 msgstr ""
 "Hörnradie.\n"
 "Kan inte vara mer än halva lödytans bredd.\n"
-"Bredden är det mindre värdet mellan storlek X och storlek Y.\n"
+"Bredden är det mindre värdet av storlek X och storlek Y.\n"
 "Obs! IPC-normen ger ett maxvärde = 0,25 mm."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:186
@@ -29862,7 +29862,7 @@ msgstr "Egenskaper för fotavtrycks värde"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:86
 msgid "Footprint Text Properties"
-msgstr "Egenskaper för textavtryck"
+msgstr "Egenskaper för fotavtrycks text"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:91
 msgid "Reference:"
@@ -34083,7 +34083,7 @@ msgstr "Footprint Text '%s' av %s"
 #: pcbnew/fp_textbox.cpp:332
 #, c-format
 msgid "Footprint Text Box of %s"
-msgstr "Fotavtrycks textruta för %s"
+msgstr "Textruta för fotavtryck %s"
 
 #: pcbnew/generate_footprint_info.cpp:43
 msgid "Documentation"
@@ -34573,12 +34573,12 @@ msgstr "Uppdaterade %s symbolassociation från %s till %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:350
 #, c-format
 msgid "Update %s properties."
-msgstr "Uppdatera %s egenskaper."
+msgstr "Uppdatera egenskaper för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:355
 #, c-format
 msgid "Updated %s properties."
-msgstr "Uppdaterade %s egenskaper."
+msgstr "Uppdaterade egenskaper för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:372
 #, c-format
@@ -34724,7 +34724,7 @@ msgstr "%s pad %s hittades inte i %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:923
 #, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "Bearbetningssymbol '%s: %s'."
+msgstr "Bearbetar symbol '%s: %s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:992
 #, c-format
@@ -35013,7 +35013,7 @@ msgstr "Storlek Y"
 
 #: pcbnew/pad.cpp:1779
 msgid "Round Radius Ratio"
-msgstr "Runt radieförhållande"
+msgstr "Avrundningsradieförhållande"
 
 #: pcbnew/pad.cpp:1788
 msgid "Hole Size X"
@@ -36423,7 +36423,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3990
 #, c-format
 msgid "Cannot handle footprint text type %s"
-msgstr "Kan inte hantera textavtryck för fotavtryck %s"
+msgstr "Kan inte hantera fotavtrycks texttyp %s"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4770
 #, c-format
@@ -38154,7 +38154,7 @@ msgstr "Minst två raka ledarsegment måste väljas."
 
 #: pcbnew/tools/edit_tool.cpp:878 pcbnew/tools/edit_tool.cpp:1153
 msgid "Enter fillet radius:"
-msgstr "Ange filéradie:"
+msgstr "Ange avrundningsradie:"
 
 #: pcbnew/tools/edit_tool.cpp:878 pcbnew/tools/edit_tool.cpp:1042
 #: pcbnew/tools/pcb_actions.cpp:364
@@ -38167,7 +38167,7 @@ msgid ""
 "The fillet operation was not performed."
 msgstr ""
 "En radie på noll angavs.\n"
-"Filetoperationen utfördes inte."
+"Avrundningsoperationen utfördes inte."
 
 #: pcbnew/tools/edit_tool.cpp:1049
 msgid "Unable to fillet the selected track segments."
@@ -39155,7 +39155,7 @@ msgstr "Dela upp"
 
 #: pcbnew/tools/pcb_actions.cpp:763
 msgid "Ungroup any selected groups"
-msgstr "Avgruppera markerade grupper"
+msgstr "Avgruppera valda grupper"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Remove Items"
@@ -40295,7 +40295,7 @@ msgstr "Dold text"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show footprint text marked as invisible"
-msgstr "Visa textavtryck markerat som osynligt"
+msgstr "Visa fotavtrycks text som är markerad som osynligt"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Show unconnected nets as a ratsnest"
