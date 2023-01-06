@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
-"PO-Revision-Date: 2023-01-06 22:26+0000\n"
+"PO-Revision-Date: 2023-01-06 22:47+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -14316,9 +14316,9 @@ msgstr "Неверное имя символа"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:202
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2616
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "Символ %s содержит недопустимый символ '%c'"
+msgstr "Символ %s содержит недопустимый знак '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:209
 msgid "Invalid library identifier"
@@ -15180,9 +15180,8 @@ msgid "There are NaN elements in a matrix."
 msgstr "В матрице есть элементы NaN."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:161
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Недопустимое значение R_pkg."
+msgstr "Некорректное значение R_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:166
 msgid "Invalid L_pkg value."
@@ -15870,14 +15869,12 @@ msgid "Tune component values"
 msgstr "Подстроить значения компонентов"
 
 #: eeschema/sim/sim_plot_frame.cpp:167
-#, fuzzy
 msgid "Sim Command"
-msgstr "Команда"
+msgstr "Команда симуляции"
 
 #: eeschema/sim/sim_plot_frame.cpp:168
-#, fuzzy
 msgid "Simulation command and settings"
-msgstr "Параметры и настройки симулятора"
+msgstr "Параметры и настройки команд симуляции"
 
 #: eeschema/sim/sim_plot_frame.cpp:351 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
@@ -20155,7 +20152,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:297
 msgid "prints version information and exits"
-msgstr ""
+msgstr "вывести информацию о версии и выйти"
 
 #: kicad/kicad_manager_frame.cpp:213
 msgid "Project Files"
@@ -20189,12 +20186,11 @@ msgstr "Восстановление '%s'"
 
 #: kicad/kicad_manager_frame.cpp:903
 msgid "Would you like to automatically check for plugin updates on startup?"
-msgstr ""
+msgstr "Желаете проверить обновления для плагина во время запуска?"
 
 #: kicad/kicad_manager_frame.cpp:904
-#, fuzzy
 msgid "Check for updates"
-msgstr "Проверка посад.мест"
+msgstr "Проверка обновлений"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
@@ -20265,9 +20261,8 @@ msgid "Open project directory in file explorer"
 msgstr "Открыть каталог проекта в файловом менеджере"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
-#, fuzzy
 msgid "Add Default Repository"
-msgstr "Добавить репозиторий"
+msgstr "Добавить репозиторий по умолчанию"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Please enter fully qualified repository url"
@@ -20303,14 +20298,13 @@ msgid "Color themes (%d)"
 msgstr "Цветовые темы (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:75
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "Уверены в удалении %d элементов?"
+msgstr "Вы уверены, что хотите обновить прикрепленный пакет с версии %s к %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:78
-#, fuzzy
 msgid "Confirm update"
-msgstr "Подтвердить изменения"
+msgstr "Подтвердить обновление"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:99 kicad/pcm/dialogs/panel_package.cpp:97
 #: kicad/pcm/dialogs/panel_package.cpp:103
@@ -20335,14 +20329,12 @@ msgid "Repository (%d)"
 msgstr "Репозиторий (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
-#, fuzzy
 msgid "Apply Pending Changes"
-msgstr "Применить изменения"
+msgstr "Применить ожидающие изменения"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:161
-#, fuzzy
 msgid "Discard Pending Changes"
-msgstr "Отменить изменения"
+msgstr "Отменить ожидаемые изменения"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:202
 msgid ""
@@ -20367,9 +20359,8 @@ msgid "Installed (%d)"
 msgstr "Установлено (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage..."
-msgstr "Управлять"
+msgstr "Управлять..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -20397,9 +20388,8 @@ msgid "Install from File..."
 msgstr "Установить из файла..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "Открыть каталог плагинов"
+msgstr "Открыть каталог пакетов"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -20410,9 +20400,9 @@ msgid "Aborting remaining tasks."
 msgstr "Прерывание оставшихся задач."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr "Загружено %lld/%lld КБ"
+msgstr "Загружено %lld/%lld кБ"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download Progress"
@@ -20435,9 +20425,8 @@ msgid "Applying Package Changes"
 msgstr "Применение изменений в пакетах"
 
 #: kicad/pcm/dialogs/panel_package.cpp:67
-#, fuzzy
 msgid "Pin package"
-msgstr "Корпус"
+msgstr "Присоединить пакет"
 
 #: kicad/pcm/dialogs/panel_package.cpp:68
 msgid ""
@@ -20446,19 +20435,16 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_package.cpp:120
-#, fuzzy
 msgid "Install Pending"
-msgstr "Размер установки"
+msgstr "Установка в ожидании"
 
 #: kicad/pcm/dialogs/panel_package.cpp:126
-#, fuzzy
 msgid "Uninstall Pending"
-msgstr "Удалить"
+msgstr "Ожидание удаления"
 
 #: kicad/pcm/dialogs/panel_package.cpp:159
-#, fuzzy
 msgid "Update Pending"
-msgstr "Обновить плату"
+msgstr "Ожидание обновления"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:225
 msgid "Metadata"
@@ -20529,9 +20515,8 @@ msgid "Install package"
 msgstr "Установить пакет"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:718
-#, fuzzy
 msgid "Pending"
-msgstr "Отложено (%d)"
+msgstr "Отложено"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:38
 #, fuzzy
