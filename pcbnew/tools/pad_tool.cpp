@@ -23,6 +23,7 @@
 
 
 #include "pad_tool.h"
+#include "pcb_painter.h"
 #include <macros.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
@@ -42,6 +43,10 @@
 #include <tools/edit_tool.h>
 #include <dialogs/dialog_enum_pads.h>
 #include <widgets/wx_infobar.h>
+
+
+using KIGFX::PCB_RENDER_SETTINGS;
+
 
 PAD_TOOL::PAD_TOOL() :
         PCB_TOOL_BASE( "pcbnew.PadTool" ),
@@ -566,10 +571,11 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
-    WX_INFOBAR*         infoBar = frame()->GetInfoBar();
-    PCB_SELECTION&      selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
-    wxString            msg;
+    PCB_DISPLAY_OPTIONS  opts = frame()->GetDisplayOptions();
+    PCB_RENDER_SETTINGS* settings = static_cast<PCB_RENDER_SETTINGS*>( view()->GetPainter()->GetSettings() );
+    WX_INFOBAR*          infoBar = frame()->GetInfoBar();
+    PCB_SELECTION&       selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+    wxString             msg;
 
     if( m_editPad != niluuid )
     {
@@ -591,6 +597,14 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 
         m_wasHighContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
         frame()->SetActiveLayer( layer );
+
+        settings->m_PadEditModePad = pad;
+
+        canvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    return dynamic_cast<PAD*>( aItem ) != nullptr;
+                } );
 
         if( !m_wasHighContrast )
             m_toolMgr->RunAction( ACTIONS::highContrastMode, true );
@@ -618,6 +632,20 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 
         if( m_wasHighContrast != highContrast )
             m_toolMgr->RunAction( ACTIONS::highContrastMode, true );
+
+        settings->m_PadEditModePad = nullptr;
+
+        // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
+        // they won't be found in the view layer's itemset for re-painting.
+        canvas()->GetView()->UpdateAllItemsConditionally( KIGFX::ALL,
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    return dynamic_cast<PAD*>( aItem ) != nullptr;
+                } );
+
+        // Refresh now (otherwise there's an uncomfortably long pause while the infoBar
+        // closes before refresh).
+        canvas()->ForceRefresh();
 
         infoBar->Dismiss();
     }

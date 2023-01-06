@@ -124,6 +124,8 @@ public:
     ZONE_DISPLAY_MODE  m_ZoneDisplayMode;
     HIGH_CONTRAST_MODE m_ContrastModeDisplay;
 
+    PAD*               m_PadEditModePad;       // Pad currently in Pad Edit Mode (if any)
+
 protected:
     ///< Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;

@@ -111,7 +111,9 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_zoneOpacity     = 1.0;
     m_imageOpacity    = 1.0;
 
-    m_ForcePadSketchModeOn     = false;
+    m_ForcePadSketchModeOn = false;
+
+    m_PadEditModePad = nullptr;
 
     SetDashLengthRatio( 12 );       // From ISO 128-2
     SetGapLengthRatio( 3 );         // From ISO 128-2
@@ -307,24 +309,39 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         switch( originalLayer )
         {
         case LAYER_PADS_TH:
-            if( !static_cast<const PAD*>( item )->FlashLayer( primary ) )
+        {
+            const PAD* pad = static_cast<const PAD*>( item );
+
+            if( !pad->FlashLayer( primary ) )
+                isActive = false;
+
+            if( m_PadEditModePad && pad != m_PadEditModePad )
                 isActive = false;
 
             break;
+        }
 
         case LAYER_VIA_BBLIND:
         case LAYER_VIA_MICROVIA:
+        {
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
+
             // Target graphic is active if the via crosses the primary layer
-            if( static_cast<const PCB_VIA*>( item )->GetLayerSet().test( primary ) == 0 )
+            if( via->GetLayerSet().test( primary ) == 0 )
                 isActive = false;
 
             break;
+        }
 
         case LAYER_VIA_THROUGH:
-            if( !static_cast<const PCB_VIA*>( item )->FlashLayer( primary ) )
+        {
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
+
+            if( !via->FlashLayer( primary ) )
                 isActive = false;
 
             break;
+        }
 
         case LAYER_PAD_PLATEDHOLES:
         case LAYER_PAD_HOLEWALLS:
@@ -337,11 +354,14 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
         case LAYER_VIA_HOLES:
         case LAYER_VIA_HOLEWALLS:
-            if( static_cast<const PCB_VIA*>( item )->GetViaType() == VIATYPE::BLIND_BURIED
-                    || static_cast<const PCB_VIA*>( item )->GetViaType() == VIATYPE::MICROVIA )
+        {
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
+
+            if( via->GetViaType() == VIATYPE::BLIND_BURIED
+                    || via->GetViaType() == VIATYPE::MICROVIA )
             {
                 // A blind or micro via's hole is active if it crosses the primary layer
-                if( static_cast<const PCB_VIA*>( item )->GetLayerSet().test( primary ) == 0 )
+                if( via->GetLayerSet().test( primary ) == 0 )
                     isActive = false;
             }
             else
@@ -352,6 +372,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             }
 
             break;
+        }
 
         default:
             break;
