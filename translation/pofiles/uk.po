@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
-"PO-Revision-Date: 2023-01-06 17:41+0000\n"
+"PO-Revision-Date: 2023-01-06 22:47+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -20295,11 +20295,11 @@ msgstr "Репозиторій (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
 msgid "Apply Pending Changes"
-msgstr "Застосувати зміни"
+msgstr "Застосувати очікувані зміни"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:161
 msgid "Discard Pending Changes"
-msgstr "Відмінити зміни"
+msgstr "Відмінити очікувані зміни"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:202
 msgid ""
@@ -20355,7 +20355,7 @@ msgstr "Встановити з файлу..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
 msgid "Open Package Directory"
-msgstr "Відкрити каталог пакунків"
+msgstr "Відкрити теку пакетів"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -20368,7 +20368,7 @@ msgstr "Переривання завдань, що залишилися."
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
 #, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr "Звантажено %lld/%lld КБ"
+msgstr "Звантажено %lld/%lld кБ"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download Progress"
@@ -20392,7 +20392,7 @@ msgstr "Застосування змін пакунка"
 
 #: kicad/pcm/dialogs/panel_package.cpp:67
 msgid "Pin package"
-msgstr "Пакет виводів"
+msgstr "Прикріпити пакет"
 
 #: kicad/pcm/dialogs/panel_package.cpp:68
 msgid ""
@@ -20404,7 +20404,7 @@ msgstr ""
 
 #: kicad/pcm/dialogs/panel_package.cpp:120
 msgid "Install Pending"
-msgstr "Встановлення в процесі"
+msgstr "Очікування встановлення"
 
 #: kicad/pcm/dialogs/panel_package.cpp:126
 msgid "Uninstall Pending"
