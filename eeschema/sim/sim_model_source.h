@@ -63,9 +63,6 @@ class SIM_MODEL_SOURCE_SERIALIZER : public SIM_MODEL_SERIALIZER
 {
 public:
     using SIM_MODEL_SERIALIZER::SIM_MODEL_SERIALIZER;
-
-protected:
-    std::string GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const override;
 };
 
 

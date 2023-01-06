@@ -212,15 +212,6 @@ std::string SPICE_GENERATOR_SOURCE::getParamValueString( const std::string& aPar
 }
 
 
-std::string SIM_MODEL_SOURCE_SERIALIZER::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const
-{
-    if( aParam.value->ToString() == "0" )
-        return "";
-
-    return SIM_MODEL_SERIALIZER::GenerateParamValuePair( aParam );
-}
-
-
 SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType ) :
         SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SOURCE>( *this ),
                    std::make_unique<SIM_MODEL_SOURCE_SERIALIZER>( *this ) )
@@ -483,15 +474,13 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( std::
     paramInfo.description = "Period";
     paramInfos.push_back( paramInfo );
 
-    // "phase" is not needed. "td" is enough.
-
-    /*paramInfo.name = "phase";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = "°";
+    paramInfo.name = "np";
+    paramInfo.type = SIM_VALUE::TYPE_INT;
+    paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "0";
-    paramInfo.description = "Phase";
-    paramInfos.push_back( paramInfo );*/
+    paramInfo.defaultValue = "";
+    paramInfo.description = "Number of pulses";
+    paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
     return paramInfos;

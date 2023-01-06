@@ -117,12 +117,6 @@ public:
     static constexpr auto REFERENCE_FIELD = "Reference";
     static constexpr auto VALUE_FIELD = "Value";
 
-    static constexpr auto DEVICE_TYPE_FIELD = "Sim.Device";
-    static constexpr auto TYPE_FIELD = "Sim.Type";
-    static constexpr auto PINS_FIELD = "Sim.Pins";
-    static constexpr auto PARAMS_FIELD = "Sim.Params";
-    static constexpr auto ENABLE_FIELD = "Sim.Enable";
-
     virtual ~SIM_MODEL_SERIALIZER() = default;
     SIM_MODEL_SERIALIZER( SIM_MODEL& aModel ) : m_model( aModel ) {}
 
@@ -133,15 +127,13 @@ public:
     std::string GeneratePins() const;
     std::string GenerateEnable() const;
 
-    SIM_MODEL::TYPE ParseDeviceAndType( const std::string& aDevice,
-                                        const std::string& aType );
     void ParseValue( const std::string& aValue );
     bool ParseParams( const std::string& aParams );
     void ParsePins( const std::string& aPins );
     void ParseEnable( const std::string& aEnable );
 
 protected:
-    virtual std::string GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const;
+    std::string generateParamValuePair( const SIM_MODEL::PARAM& aParam ) const;
 
 private:
     SIM_MODEL& m_model;

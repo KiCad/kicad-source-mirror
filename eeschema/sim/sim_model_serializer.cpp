@@ -98,7 +98,7 @@ std::string SIM_MODEL_SERIALIZER::GenerateParams() const
         if( param.info.enumValues.size() >= 1 && param.value->ToString() == param.info.defaultValue )
             continue;
 
-        std::string paramValuePair = GenerateParamValuePair( param );
+        std::string paramValuePair = generateParamValuePair( param );
 
         if( paramValuePair == "" )
             continue; // Prevent adding empty spaces.
@@ -152,22 +152,6 @@ std::string SIM_MODEL_SERIALIZER::GeneratePins() const
 std::string SIM_MODEL_SERIALIZER::GenerateEnable() const
 {
     return m_model.IsEnabled() ? "" : "0";
-}
-
-
-SIM_MODEL::TYPE SIM_MODEL_SERIALIZER::ParseDeviceAndType( const std::string& aDevice,
-                                                          const std::string& aType )
-{
-    for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
-    {
-        if( aType == SIM_MODEL::TypeInfo( type ).fieldValue
-            && aDevice == SIM_MODEL::DeviceInfo( SIM_MODEL::TypeInfo( type ).deviceType ).fieldValue )
-        {
-            return type;
-        }
-    }
-
-    return SIM_MODEL::TYPE::NONE;
 }
 
 
@@ -310,7 +294,7 @@ void SIM_MODEL_SERIALIZER::ParseEnable( const std::string& aEnable )
 }
 
 
-std::string SIM_MODEL_SERIALIZER::GenerateParamValuePair( const SIM_MODEL::PARAM& aParam ) const
+std::string SIM_MODEL_SERIALIZER::generateParamValuePair( const SIM_MODEL::PARAM& aParam ) const
 {
     std::string name = aParam.info.name;
 
