@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-01 15:11-0800\n"
+"POT-Creation-Date: 2023-01-05 16:35-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4903,30 +4903,6 @@ msgstr ""
 "not found. Script not available."
 
 #, c-format
-msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Item not annotated: %s%s (unit %d)"
-
-#, c-format
-msgid "Item not annotated: %s%s"
-msgstr "Item not annotated: %s%s"
-
-#, c-format
-msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-
-#, c-format
-msgid "Duplicate items %s%s%s\n"
-msgstr "Duplicate items %s%s%s\n"
-
-#, c-format
-msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Differing unit counts for item %s%s%s and %s%s%s\n"
-
-#, c-format
-msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
-msgstr "Different values for %s%d%s (%s) and %s%d%s (%s)"
-
-#, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
@@ -7656,9 +7632,6 @@ msgstr "Symbol Annotation"
 msgid "Automatically annotate symbols"
 msgstr "Automatically annotate symbols"
 
-msgid "Recursively annotate subsheets"
-msgstr "Recursively annotate subsheets"
-
 msgid ""
 "Some items have the same color as the background\n"
 "and they will not be seen on the screen.  Are you\n"
@@ -8913,14 +8886,6 @@ msgstr ""
 "%s"
 
 #, c-format
-msgid ""
-"Error reading simulation model library '%s':\n"
-"%s"
-msgstr ""
-"Error reading simulation model library '%s':\n"
-"%s"
-
-#, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Could not open file '%s' to write IBIS model"
 
@@ -9751,6 +9716,30 @@ msgid "expected unquoted string"
 msgstr "expected unquoted string"
 
 #, c-format
+msgid "Item not annotated: %s%s (unit %d)"
+msgstr "Item not annotated: %s%s (unit %d)"
+
+#, c-format
+msgid "Item not annotated: %s%s"
+msgstr "Item not annotated: %s%s"
+
+#, c-format
+msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
+msgstr "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
+
+#, c-format
+msgid "Duplicate items %s%s%s\n"
+msgstr "Duplicate items %s%s%s\n"
+
+#, c-format
+msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
+msgstr "Differing unit counts for item %s%s%s and %s%s%s\n"
+
+#, c-format
+msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
+msgstr "Different values for %s%d%s (%s) and %s%d%s (%s)"
+
+#, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "Setting schematic symbol '%s %s' library identifier to '%s'."
 
@@ -10225,21 +10214,21 @@ msgid "Cancel Load"
 msgstr "Cancel Load"
 
 msgid ""
-"There hierarchical sheets in the loaded schematic file from an older file "
-"version resulting in  missing symbol instance data.  This will result in all "
-"of the symbols in the loaded schematic to use either the default instance "
-"setting or fall back to the library symbol settings.  Loading the project "
-"that uses this schematic file and saving to the lastest file version will "
-"resolve this issue.\n"
+"There are hierarchical sheets in the loaded schematic file from an older "
+"file version resulting in  missing symbol instance data.  This will result "
+"in all of the symbols in the loaded schematic to use either the default "
+"instance setting or fall back to the library symbol settings.  Loading the "
+"project that uses this schematic file and saving to the lastest file version "
+"will resolve this issue.\n"
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"There hierarchical sheets in the loaded schematic file from an older file "
-"version resulting in  missing symbol instance data.  This will result in all "
-"of the symbols in the loaded schematic to use either the default instance "
-"setting or fall back to the library symbol settings.  Loading the project "
-"that uses this schematic file and saving to the lastest file version will "
-"resolve this issue.\n"
+"There are hierarchical sheets in the loaded schematic file from an older "
+"file version resulting in  missing symbol instance data.  This will result "
+"in all of the symbols in the loaded schematic to use either the default "
+"instance setting or fall back to the library symbol settings.  Loading the "
+"project that uses this schematic file and saving to the lastest file version "
+"will resolve this issue.\n"
 "\n"
 "Do you wish to continue?"
 
@@ -10729,6 +10718,9 @@ msgstr "Error loading simulation model library '%s': %s"
 msgid "Error loading simulation model: no '%s' field"
 msgstr "Error loading simulation model: no '%s' field"
 
+msgid "unknown"
+msgstr "unknown"
+
 #, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
@@ -10736,6 +10728,10 @@ msgid ""
 msgstr ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
+
+#, c-format
+msgid "Invalid IBIS file '%s'"
+msgstr "Invalid IBIS file '%s'"
 
 #, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
@@ -10752,10 +10748,6 @@ msgid ""
 msgstr ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
-
-#, c-format
-msgid "Invalid IBIS file '%s'"
-msgstr "Invalid IBIS file '%s'"
 
 #, c-format
 msgid "Could not find IBIS component '%s'"
@@ -13756,6 +13748,9 @@ msgstr "Symbol file does not exist or is not accessible\n"
 
 msgid "Forces the symbol library to be resaved regardless of versioning"
 msgstr "Forces the symbol library to be resaved regardless of versioning"
+
+msgid "version info format (plain, commit, about)"
+msgstr "version info format (plain, commit, about)"
 
 msgid "<h1>Template Selector</h1>"
 msgstr "<h1>Template Selector</h1>"
@@ -17253,9 +17248,6 @@ msgstr "Micro vias:"
 
 msgid "Total:"
 msgstr "Total:"
-
-msgid "unknown"
-msgstr "unknown"
 
 msgid "Round"
 msgstr "Round"
@@ -29443,12 +29435,6 @@ msgstr "pcbnew"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
-msgid "EDA"
-msgstr "EDA"
-
-msgid "Circuit board"
-msgstr "Circuit board"
-
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -29487,6 +29473,42 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Recursively annotate subsheets"
+#~ msgstr "Recursively annotate subsheets"
+
+#, c-format
+#~ msgid ""
+#~ "Error reading simulation model library '%s':\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Error reading simulation model library '%s':\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "There hierarchical sheets in the loaded schematic file from an older file "
+#~ "version resulting in  missing symbol instance data.  This will result in "
+#~ "all of the symbols in the loaded schematic to use either the default "
+#~ "instance setting or fall back to the library symbol settings.  Loading "
+#~ "the project that uses this schematic file and saving to the lastest file "
+#~ "version will resolve this issue.\n"
+#~ "\n"
+#~ "Do you wish to continue?"
+#~ msgstr ""
+#~ "There hierarchical sheets in the loaded schematic file from an older file "
+#~ "version resulting in  missing symbol instance data.  This will result in "
+#~ "all of the symbols in the loaded schematic to use either the default "
+#~ "instance setting or fall back to the library symbol settings.  Loading "
+#~ "the project that uses this schematic file and saving to the lastest file "
+#~ "version will resolve this issue.\n"
+#~ "\n"
+#~ "Do you wish to continue?"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Circuit board"
 
 #~ msgid "Pin Text"
 #~ msgstr "Pin Text"
