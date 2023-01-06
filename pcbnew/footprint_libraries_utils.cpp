@@ -571,8 +571,14 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* a
 
     if( libName.IsEmpty() )
         return false;
+    IO_MGR::PCB_FILE_T lib_type = IO_MGR::GuessPluginTypeFromLibPath( libPath );
 
-    wxString type = IO_MGR::ShowType( IO_MGR::GuessPluginTypeFromLibPath( libPath ) );
+    wxString type = IO_MGR::ShowType( lib_type );
+
+    // KiCad lib is our default guess.  So it might not have the .pretty extension
+    // In this case, the extension is part of the library name
+    if( lib_type == IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
+        libName = fn.GetFullName();
 
     // try to use path normalized to an environmental variable or project path
     wxString normalizedPath = NormalizePath( libPath, &Pgm().GetLocalEnvVariables(), &Prj() );
