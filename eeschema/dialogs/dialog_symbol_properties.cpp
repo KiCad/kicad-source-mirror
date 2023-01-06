@@ -1171,6 +1171,21 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         if( !m_fieldsGrid->IsCellEditControlShown() )
             AdjustFieldsGridColumns();
     }
+
+#ifdef KICAD_SPICE
+    wxString simEnable;
+
+    for( int ii = MANDATORY_FIELDS; ii < m_fieldsGrid->GetNumberRows(); ++ii )
+    {
+        if( m_fieldsGrid->GetCellValue( ii, FDC_NAME ) == SIM_ENABLE_FIELD )
+        {
+            simEnable = m_fieldsGrid->GetCellValue( ii, FDC_VALUE );
+            break;
+        }
+    }
+
+    m_cbExcludeFromSim->SetValue( simEnable == "0" );
+#endif
 }
 
 
