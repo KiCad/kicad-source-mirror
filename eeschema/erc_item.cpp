@@ -215,7 +215,9 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::unresolvedVariable,
                  ERC_ITEM::simulationModelIssues,
                  ERC_ITEM::similarLabels,
-                 ERC_ITEM::busLabelSyntax,
+                 // Commented out until the logic for this element is coded
+                 // TODO: Add bus label syntax checking
+//                 ERC_ITEM::busLabelSyntax,
                  ERC_ITEM::libSymbolIssues,
                  ERC_ITEM::extraUnits,
                  ERC_ITEM::missingUnits,
