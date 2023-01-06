@@ -164,6 +164,11 @@ public:
      */
     friend std::ostream& operator<<<T>( std::ostream& aStream, const MATRIX3x3<T>& aMatrix );
 
+    ///< Equality operator
+    bool operator==( const MATRIX3x3<T>& aOtherMatrix ) const;
+
+    ///< Not equality operator
+    bool operator!=( const MATRIX3x3<T>& aOtherMatrix ) const;
 };
 
 // Operators
@@ -335,7 +340,7 @@ VECTOR3<T> const operator*( MATRIX3x3<T> const& aMatrix, VECTOR3<T> const& aVect
                + aMatrix.m_data[0][2] * aVector.z;
     result.y = aMatrix.m_data[1][0] * aVector.x + aMatrix.m_data[1][1] * aVector.y
                + aMatrix.m_data[1][2] * aVector.z;
-    result.y = aMatrix.m_data[2][0] * aVector.x + aMatrix.m_data[2][1] * aVector.y
+    result.z = aMatrix.m_data[2][0] * aVector.x + aMatrix.m_data[2][1] * aVector.y
                + aMatrix.m_data[2][2] * aVector.z;
 
     return result;
@@ -431,6 +436,36 @@ std::ostream& operator<<( std::ostream& aStream, const MATRIX3x3<T>& aMatrix )
     }
 
     return aStream;
+}
+
+
+template <class T>
+bool MATRIX3x3<T>::operator==( MATRIX3x3<T> const& aOtherMatrix ) const
+{
+    return aOtherMatrix.m_data[0][0] == m_data[0][0] &&
+        aOtherMatrix.m_data[0][1] == m_data[0][1] &&
+        aOtherMatrix.m_data[0][2] == m_data[0][2] &&
+        aOtherMatrix.m_data[1][0] == m_data[1][0] &&
+        aOtherMatrix.m_data[1][1] == m_data[1][1] &&
+        aOtherMatrix.m_data[1][2] == m_data[1][2] &&
+        aOtherMatrix.m_data[2][0] == m_data[2][0] &&
+        aOtherMatrix.m_data[2][1] == m_data[2][1] &&
+        aOtherMatrix.m_data[2][2] == m_data[2][2];
+}
+
+
+template <class T>
+bool MATRIX3x3<T>::operator!=( MATRIX3x3<T> const& aOtherMatrix ) const
+{
+    return aOtherMatrix.m_data[0][0] != m_data[0][0] ||
+        aOtherMatrix.m_data[0][1] != m_data[0][1] ||
+        aOtherMatrix.m_data[0][2] != m_data[0][2] ||
+        aOtherMatrix.m_data[1][0] != m_data[1][0] ||
+        aOtherMatrix.m_data[1][1] != m_data[1][1] ||
+        aOtherMatrix.m_data[1][2] != m_data[1][2] ||
+        aOtherMatrix.m_data[2][0] != m_data[2][0] ||
+        aOtherMatrix.m_data[2][1] != m_data[2][1] ||
+        aOtherMatrix.m_data[2][2] != m_data[2][2];
 }
 
 

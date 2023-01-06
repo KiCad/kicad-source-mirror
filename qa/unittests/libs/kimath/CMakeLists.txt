@@ -41,6 +41,7 @@ set( QA_KIMATH_SRCS
     geometry/test_shape_line_chain.cpp
 
     math/test_box2.cpp
+    math/test_matrix3x3.cpp
     math/test_vector2.cpp
     math/test_vector3.cpp
     math/test_util.cpp
@@ -60,7 +61,7 @@ endif()
 add_executable( qa_kimath
     ${QA_KIMATH_SRCS}
     ${QA_KIMATH_RESOURCES}
-    
+
     # Mock Pgm needed for advanced_config
     ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
 )
