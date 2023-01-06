@@ -1152,6 +1152,8 @@ void APPEARANCE_CONTROLS::OnDarkModeToggle()
 
     m_layerPanelColour = m_panelLayers->GetBackgroundColour().ChangeLightness( 110 );
 
+    m_windowLayers->SetBackgroundColour( m_layerPanelColour );
+    
     for( wxSizerItem* child : m_layersOuterSizer->GetChildren() )
     {
         if( child && child->GetWindow() )
