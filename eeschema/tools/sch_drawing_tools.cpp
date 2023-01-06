@@ -25,6 +25,7 @@
 #include <memory>
 
 #include <tools/sch_drawing_tools.h>
+#include <tools/sch_line_wire_bus_tool.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_grid_helper.h>
 #include <ee_actions.h>
@@ -347,10 +348,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 m_view->Update( symbol );
                 m_frame->GetScreen()->Update( symbol );
 
-                m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true,
-                                      &m_selectionTool->GetSelection() );
-                m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true,
-                                      &m_selectionTool->GetSelection() );
+                SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+                lwbTool->TrimOverLappingWires( &m_selectionTool->GetSelection() );
+                lwbTool->AddJunctionsIfNeeded( &m_selectionTool->GetSelection() );
 
                 m_frame->OnModify();
 
@@ -1275,6 +1275,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             }
             else if( evt->IsMoveTool() )
             {
+                // leave ourselves on the stack so we come back after the move
                 break;
             }
             else

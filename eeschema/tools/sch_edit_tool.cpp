@@ -761,8 +761,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-        m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &selectionCopy );
-        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selectionCopy );
+        SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+        lwbTool->TrimOverLappingWires( &selectionCopy );
+        lwbTool->AddJunctionsIfNeeded( &selectionCopy );
 
         m_frame->RecalculateConnections( LOCAL_CLEANUP );
         m_frame->TestDanglingEnds();
@@ -1131,8 +1132,9 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
     if( !newItems.Empty() )
     {
-        m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &newItems );
-        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &newItems );
+        SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+        lwbTool->TrimOverLappingWires( &newItems );
+        lwbTool->AddJunctionsIfNeeded( &newItems );
 
         m_frame->RecalculateConnections( LOCAL_CLEANUP );
         m_frame->TestDanglingEnds();

@@ -807,17 +807,6 @@ TOOL_ACTION EE_ACTIONS::showHierarchy( "eeschema.EditorTool.showHierarchy",
 
 // SCH_LINE_WIRE_BUS_TOOL
 //
-TOOL_ACTION EE_ACTIONS::addNeededJunctions( "eeschema.InteractiveDrawingLineWireBus.addNeededJunctions",
-        AS_ACTIVE, 0, "",
-        _( "Add Junctions to Selection where needed" ), "",
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::trimOverlappingWires( "eeschema.InteractiveDrawingLineWireBus.trimOverlappingWires",
-        AS_ACTIVE, 0, "",
-        "", "",
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
-
-
 const DRAW_SEGMENT_EVENT_PARAMS drawWireActionParam = { LAYER_WIRE, false, nullptr };
 TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.InteractiveDrawingLineWireBus.drawWires",
         AS_GLOBAL,

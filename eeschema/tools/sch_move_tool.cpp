@@ -915,8 +915,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_frame->AddJunction( m_frame->GetScreen(), it.GetPosition(), true, false );
         }
 
-        m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &selectionCopy );
-        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selectionCopy );
+        SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+        lwbTool->TrimOverLappingWires( &selectionCopy );
+        lwbTool->AddJunctionsIfNeeded( &selectionCopy );
 
         // This needs to run prior to `RecalculateConnections` because we need to identify
         // the lines that are newly dangling
@@ -1707,9 +1708,11 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
         }
     }
 
+    SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+    lwbTool->TrimOverLappingWires( &selection );
+    lwbTool->AddJunctionsIfNeeded( &selection );
+
     m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
-    m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &selection );
-    m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
 
     m_frame->RecalculateConnections( LOCAL_CLEANUP );
     m_frame->TestDanglingEnds();

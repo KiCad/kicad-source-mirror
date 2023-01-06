@@ -1240,9 +1240,8 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( const TOOL_EVENT& aEvent )
+int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires(  EE_SELECTION* aSelection  )
 {
-    EE_SELECTION* aSelection = aEvent.Parameter<EE_SELECTION*>();
     SCHEMATIC* sch = getModel<SCHEMATIC>();
     SCH_SCREEN* screen = sch->CurrentSheet().LastScreen();
 
@@ -1285,10 +1284,8 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
+int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( EE_SELECTION* aSelection )
 {
-    EE_SELECTION* aSelection = aEvent.Parameter<EE_SELECTION*>();
-
     std::vector<VECTOR2I> pts;
     std::vector<VECTOR2I> connections = m_frame->GetSchematicConnections();
 
@@ -1343,8 +1340,6 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
 
 void SCH_LINE_WIRE_BUS_TOOL::setTransitions()
 {
-    Go( &SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded, EE_ACTIONS::addNeededJunctions.MakeEvent() );
-    Go( &SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires, EE_ACTIONS::trimOverlappingWires.MakeEvent() );
     Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments,         EE_ACTIONS::drawWire.MakeEvent() );
     Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments,         EE_ACTIONS::drawBus.MakeEvent() );
     Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments,         EE_ACTIONS::drawLines.MakeEvent() );

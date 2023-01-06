@@ -92,12 +92,12 @@ public:
     /**
      * Handle the addition of junctions to a selection of objects
      */
-    int AddJunctionsIfNeeded( const TOOL_EVENT& aEvent );
+    int AddJunctionsIfNeeded( EE_SELECTION* aSelection );
 
     /**
      * Logic to remove wires when overlapping correct items
      */
-    int TrimOverLappingWires( const TOOL_EVENT& aEvent );
+    int TrimOverLappingWires( EE_SELECTION* aSelection );
 
 private:
     int       doDrawSegments( const TOOL_EVENT& aTool, int aType, bool aQuitOnDraw );

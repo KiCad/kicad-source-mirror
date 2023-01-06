@@ -1670,7 +1670,7 @@ void SCH_EDIT_FRAME::FixupJunctions()
         for( auto item : screen->Items() )
             allItems.Add( item );
 
-        m_toolManager->RunAction( EE_ACTIONS::addNeededJunctions, true, &allItems );
+        m_toolManager->GetTool<SCH_LINE_WIRE_BUS_TOOL>()->AddJunctionsIfNeeded( &allItems );
 
         // Check if we modified anything during this routine
         // Needs to happen for every sheet to set the proper modified flag
