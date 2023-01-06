@@ -5,7 +5,7 @@
 # Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>, 2020, 2021, 2022.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Дмитрий Дёмин <dmitrodem@gmail.com>, 2021.
-# dsa-t <dudesuchamazing@gmail.com>, 2022.
+# dsa-t <dudesuchamazing@gmail.com>, 2022, 2023.
 # Andrey Fedorushkov <andrf@mail.ru>, 2022.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
 msgid ""
@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
-"PO-Revision-Date: 2023-01-06 17:41+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"PO-Revision-Date: 2023-01-06 22:26+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -317,6 +317,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Сохранение и восстановление ориентации и масштабирования вида.\n"
+"Используйте %s+Tab для активации селектора.\n"
+"Последующие нажатия Tab при зажатой кнопке %s переключают виды."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -553,11 +556,11 @@ msgstr "Переключить отображение 3D-моделей комп
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle unspecified 3D models"
-msgstr "Переключить отображение неопределенных 3D-моделей"
+msgstr "Переключить отображение 3D-моделей неопределённых"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "Переключить отображение 3D-моделей для \"неопределенных\" компонентов"
+msgstr "Переключить отображение 3D-моделей компонентов типа \"неопределённый\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
 msgid "Toggle 3D models not in pos file"
@@ -3113,6 +3116,8 @@ msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"При наведении курсора мыши на рабочие области редакторов схем или плат, окна "
+"редакторов перемещаются на передний план."
 
 #: common/dialogs/panel_common_settings_base.cpp:134
 msgid "Icon theme:"
@@ -3215,13 +3220,12 @@ msgid "Remember open files for next project launch"
 msgstr "Запоминать открытые файлы для следующего запуска проекта"
 
 #: common/dialogs/panel_common_settings_base.cpp:230
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"Если отмечено, при запуске проекта будут также запущены открытые в прошлый "
-"раз инструменты, такие как eescheam или pcbnew"
+"Если отмечено, при запуске проекта будут открываться последние файлы в "
+"редакторах схем и плат"
 
 #: common/dialogs/panel_common_settings_base.cpp:243
 msgid "&Auto save:"
@@ -4463,9 +4467,8 @@ msgstr "Графический элемент"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:159
-#, fuzzy
 msgid "Number Box"
-msgstr "Номер"
+msgstr "Контейнер номера"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1206
 msgid "Rect"
@@ -4504,9 +4507,8 @@ msgid "Curve"
 msgstr "Кривая"
 
 #: common/eda_shape.cpp:619
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Номер конт.пл."
+msgstr "Контейнер номера конт.пл."
 
 #: common/eda_shape.cpp:620 common/eda_shape.cpp:1674
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:78
@@ -4749,7 +4751,7 @@ msgstr "Свойства текста"
 
 #: common/eda_text.cpp:1036 pcbnew/pcb_text.cpp:362
 msgid "Hyperlink"
-msgstr "Hyperlink"
+msgstr "Гиперссылка"
 
 #: common/eda_text.cpp:1040
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -4971,9 +4973,8 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr "файлы fp-lib-table не содержат библиотек с именем \"%s\"."
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:572
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "Менеджер плагинов и контента"
+msgstr "Добавлено из менеджера плагинов и контента"
 
 #: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:600
 #, c-format
@@ -5314,9 +5315,8 @@ msgid "Cursor"
 msgstr "Курсор"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "Перемещение элемента"
+msgstr "Элементы с наведением"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5457,7 +5457,7 @@ msgstr "Подсветка заблокированных элементов"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "Пересечения областей установки"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -5523,9 +5523,9 @@ msgid "Unrecognized function '%s'"
 msgstr "Неопознанная функция '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "Неожиданный '%s'"
+msgstr "Неожиданные части у '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -5987,23 +5987,20 @@ msgid "Delete clicked items"
 msgstr "Удаление элементов щелчком мыши"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "Переключить реалистичный режим"
+msgstr "Переключить режим редактирования дуг"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Переключить на другой способ редактирования дуг"
 
 #: common/tool/actions.cpp:210
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "Свойства листа"
+msgstr "Показать панель поиска"
 
 #: common/tool/actions.cpp:210
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Показать/скрыть менеджер внешнего вида"
+msgstr "Показать/скрыть панель поиска"
 
 #: common/tool/actions.cpp:216 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -6108,9 +6105,8 @@ msgid "Zoom Out"
 msgstr "Уменьшить"
 
 #: common/tool/actions.cpp:337 common/widgets/mathplot.cpp:1676
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Центр листа"
+msgstr "Центрировать на курсоре"
 
 #: common/tool/actions.cpp:343
 msgid "Zoom to Selection"
@@ -6264,9 +6260,8 @@ msgid "Use millimeters"
 msgstr "Использовать миллиметры"
 
 #: common/tool/actions.cpp:518 common/widgets/lib_tree.cpp:700
-#, fuzzy
 msgid "Select Columns"
-msgstr "Сбросить выбор"
+msgstr "Выбор столбцов"
 
 #: common/tool/actions.cpp:523
 msgid "Switch units"
@@ -6688,9 +6683,8 @@ msgid "Select Path"
 msgstr "Выбор каталога"
 
 #: common/widgets/lib_tree.cpp:289
-#, fuzzy
 msgid "recent searches"
-msgstr "Использовать дюймы"
+msgstr "недавние поиски"
 
 #: common/widgets/mathplot.cpp:1676
 msgid "Center plot view to this position"
@@ -6744,19 +6738,17 @@ msgstr "Сбросить '%s' по умолчанию"
 
 #: common/widgets/properties_panel.cpp:69
 #: common/widgets/properties_panel.cpp:147
-#, fuzzy
 msgid "No objects selected"
-msgstr "Шина не выделена"
+msgstr "Нет выделенных объектов"
 
 #: common/widgets/properties_panel.cpp:161
 #, c-format
 msgid "%d objects selected"
-msgstr "%d объекты выбраны"
+msgstr "%d объектов выбрано"
 
 #: common/widgets/properties_panel.cpp:287
-#, fuzzy
 msgid "Basic Properties"
-msgstr "Свойства %s"
+msgstr "Основные свойства"
 
 #: common/widgets/unit_binder.cpp:318
 #, c-format
@@ -6921,9 +6913,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "Файлы устаревших библиотек символов KiCad"
 
 #: common/wildcards_and_files_ext.cpp:226
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "Файлы библиотек символов KiCad"
+msgstr "Файлы баз данных библиотек KiCad"
 
 #: common/wildcards_and_files_ext.cpp:233
 msgid "All KiCad symbol library files"
@@ -7876,7 +7867,6 @@ msgid "Generator file name not found."
 msgstr "Имя файла плагина не найдено."
 
 #: eeschema/dialogs/dialog_bom.cpp:460
-#, fuzzy
 msgid "Bill of Materials Generation Help"
 msgstr "Помощь в формировании перечня элементов (BOM)"
 
@@ -8372,9 +8362,8 @@ msgid "Checking conflicts..."
 msgstr "Проверка конфликтов..."
 
 #: eeschema/dialogs/dialog_erc.cpp:488
-#, fuzzy
 msgid "Checking units..."
-msgstr "Проверка выводов..."
+msgstr "Проверка частей..."
 
 #: eeschema/dialogs/dialog_erc.cpp:493
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
@@ -8394,9 +8383,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Проверка текстовых переменных..."
 
 #: eeschema/dialogs/dialog_erc.cpp:534
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "Проверка зон..."
+msgstr "Проверка моделей SPICE..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
@@ -8570,15 +8558,13 @@ msgstr "Для симуляции требуется полностью обоз
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:345
 #: eeschema/dialogs/dialog_export_netlist.cpp:392
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Только текущий лист"
+msgstr "Использовать текущий лист как корневой"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:346
 #: eeschema/dialogs/dialog_export_netlist.cpp:393
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Очистить существующие обозначения для текущего листа?"
+msgstr "Экспортировать список цепей только для текущего листа"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:351
 msgid "Save all voltages"
@@ -8691,13 +8677,12 @@ msgstr "Имя файла листа можно изменить только в
 
 #: eeschema/dialogs/dialog_field_properties.cpp:676
 #: eeschema/dialogs/dialog_label_properties.cpp:468
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Зазор вокруг текста определяется параметром относительно смещения текста\n"
-"в меню Параметры схемы > Общие > Форматирование."
+"Видимость межлистовых ссылок настраивается глобально в Параметры схемы > "
+"Общие > Форматирование"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -8716,23 +8701,20 @@ msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:93
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:298
-#, fuzzy
 msgid "Show field name"
-msgstr "Имя нового поля:"
+msgstr "Отображать имя поля"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:95
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Отображать имя поля вместе с его значением"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:102
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "Правила авто-размещения"
+msgstr "Разрешить авто-размещение"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:105
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "Выполнить размещение выбранных компонентов автоматически"
+msgstr "Разрешить автоматическое размещение поля на схеме"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:118
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
@@ -8981,9 +8963,8 @@ msgstr "Гориз. выравн.:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "Видимость (только поля)"
+msgstr "(только поля)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
 msgid "V Align:"
@@ -9032,11 +9013,13 @@ msgid "symbol"
 msgstr "символ"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Ошибка создания библиотеки символов '%s'."
+msgstr ""
+"Ошибка создания таблицы библиотек символов '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -9050,31 +9033,32 @@ msgid "File '%s' not found."
 msgstr "Файл '%s' не найден."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "Ошибка при загрузке библиотеки символов '%s'."
+msgstr ""
+"Ошибка чтения таблицы библиотек символов '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "Не удалось создать глобальную таблицу библиотек по пути '%s'."
+msgstr "Не удалось создать глобальную таблицу библиотек '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
 msgstr ""
-"Не удалось скопировать файл глобальной таблицы библиотек символов '%s' в "
-"'%s'."
+"Не удалось скопировать глобальную таблицу библиотек символов '%s' в '%s'."
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Лог парсера Ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
-msgstr ""
+msgstr "Парсер Ibis"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9622,9 +9606,8 @@ msgid "Fields must have a name."
 msgstr "У поля должно быть имя."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:321
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "Для символа псевдонима нужно выбрать родителя"
+msgstr "У производного символа должен быть выбран родитель"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:333
 msgid "Delete extra units from symbol?"
@@ -9798,9 +9781,8 @@ msgstr "Атрибуты"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:276
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Исключить символ из симуляции"
+msgstr "Исключить из симуляции"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:309
 msgid "Footprint filters:"
@@ -9833,9 +9815,8 @@ msgid "Footprint Filters"
 msgstr "Посад.места"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "Править Spice-модель..."
+msgstr "Править модель симуляции..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:118
 msgid "Library Symbol Properties"
@@ -9955,7 +9936,7 @@ msgid "Alternate pin definitions must have a name."
 msgstr "Альтернативная функция вывода должна иметь название."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
@@ -10273,18 +10254,16 @@ msgid "Pen width:"
 msgstr "Толщина линий:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:159
-#, fuzzy
 msgid "Other options"
-msgstr "Другие параметры:"
+msgstr "Другие параметры"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:161
-#, fuzzy
 msgid "Open file after plot"
-msgstr "Каждый слой в отдельном файле"
+msgstr "Открыть файл после черчения"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "Открыть выходной файл подходящим приложением после успешного черчения"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:89
 msgid "Plot Schematic Options"
@@ -10367,9 +10346,8 @@ msgid "Rescue Symbols"
 msgstr "Спасение символов"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Пропустить восстановления символа"
+msgstr "Пропустить восстановление"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -10570,7 +10548,6 @@ msgid "Net Classes"
 msgstr "Классы цепей"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:85
-#, fuzzy
 msgid "Bus Alias Definitions"
 msgstr "Псевдонимы шин"
 
@@ -10867,9 +10844,8 @@ msgid "Frequency scale"
 msgstr "Шкала частот"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "Кол-во частей на корпус:"
+msgstr "Кол-во точек на декаду:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -11082,9 +11058,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "Симуляция"
+msgstr "Управление симуляцией"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
 #, c-format
@@ -11092,9 +11067,8 @@ msgid "No model named '%s' in library."
 msgstr "Нет модели с именем '%s' в библиотеке."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:274
-#, fuzzy
 msgid "Failed to read simulation model from fields."
-msgstr "Не удалось создать файл библиотеки символов '%s'."
+msgstr "Не удалось считать модель симуляции из полей."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:387
 msgid "Component:"
@@ -11109,11 +11083,11 @@ msgstr "Модель:"
 #: eeschema/dialogs/dialog_sim_model.cpp:448
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "Хранить параметр '%s (%s)' в поле 'Значение'"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:456
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "Хранить основной параметр в поле 'Значение'"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:473
 #: pcbnew/footprint_wizard_frame.cpp:322
@@ -11136,9 +11110,8 @@ msgstr "Тип"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:594
 #: eeschema/dialogs/dialog_sim_model.cpp:637
-#, fuzzy
 msgid "Not Connected"
-msgstr "\"Не подключено\""
+msgstr "Не подключено"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1056
 msgid "Browse Models"
@@ -11146,21 +11119,19 @@ msgstr "Выбор моделей"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:30
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "SPICE модель из файла (*.lib, *.sub или *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:66
 msgid "Pin:"
-msgstr ""
+msgstr "Вывод:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:77
-#, fuzzy
 msgid "Differential"
-msgstr "Диф.пары"
+msgstr "Дифференциальная"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:101
-#, fuzzy
 msgid "Built-in SPICE model"
-msgstr "Проверка зон..."
+msgstr "Встроенная SPICE модель"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:110
 msgid "Device:"
@@ -11190,7 +11161,7 @@ msgstr "Код"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:204
 msgid "Save {} in Value field as \"{}\""
-msgstr ""
+msgstr "Хранить {} в поле 'Значение' как \"{}\""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:217
 msgid "Model"
@@ -11209,9 +11180,8 @@ msgid "Pin Assignments"
 msgstr "Назначение выводов"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:120
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Редактор Spice модели"
+msgstr "Редактор модели симуляции"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:86
 #: eeschema/fields_grid_table.cpp:863
@@ -11272,9 +11242,9 @@ msgid "Field name '%s' already in use."
 msgstr "Поле с именем '%s' уже используется."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "Подтвердите удаление файла '%s'."
+msgstr "Вы уверены что хотите удалить поле '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1379
 msgid "Unsaved data"
@@ -11410,9 +11380,8 @@ msgstr ""
 "но исключить из печатной платы, например винты или корпус"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
-#, fuzzy
 msgid "Do not populate"
-msgstr "Не экспортировать"
+msgstr "Не размещать (DNP)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:228
 msgid "Update Symbol from Library..."
@@ -11450,9 +11419,8 @@ msgid "Library link:"
 msgstr "Ссылка на библиотеку:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:331
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "Симулятор..."
+msgstr "Модель симуляции..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:111
 msgid "Symbol Properties"
@@ -11499,14 +11467,13 @@ msgid "Library '%s' not found."
 msgstr "Библиотека '%s' не найдена."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"Произошла ошибка записи пустого файла таблицы библиотек сиволов.\n"
-"\n"
-"%s"
+"Ошибка записи таблицы библиотек символов.\n"
+"   %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -11585,9 +11552,9 @@ msgid "<root sheet>"
 msgstr "<корневой лист>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Перейти к листу %s (%s)"
+msgstr "Страница %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:493
 msgid ""
@@ -11595,14 +11562,17 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"Неверное место назначения гиперссылки. Введите либо действительный URL ("
+"например, file:// или http(s)://), либо \"#<номер страницы>\" для создания "
+"гиперссылки на страницу в этой схеме."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:288
 msgid "Link:"
-msgstr ""
+msgstr "Ссылка:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:290
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Сделать этот текстовый элемент гиперссылкой, на которую можно нажать"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:77
@@ -11999,38 +11969,34 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Показать изображение посад.места в диалоге выбора символа"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "Поле с именем '%s' уже используется."
+msgstr "Имя псевдонима '%s' уже используется."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:290
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Имя цепи не может быть пустым."
+msgstr "Цепь члена/имя псевдонима не может быть пустым."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "Псевдонимы шин"
+msgstr "Определения шин:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:41
 msgid "Alias"
 msgstr "Псевдоним"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:73
-#, fuzzy
 msgid "(source)"
-msgstr "Источник"
+msgstr "(источник)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "нужно число для '%s'"
+msgstr "Члены '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:108
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Имя цепи или шины"
+msgstr "Имя цепи/вложенной шины"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -12072,19 +12038,17 @@ msgid "Default text size:"
 msgstr "Размер текста по умолчанию:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "Относительное смещение текста:"
+msgstr "Относительные отступы меток:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
 msgstr ""
-"Процентное отношение зазора между проводником/шиной и текстом к размеру "
-"текста"
+"Процент от размера текста для смещения меток выше (или ниже) проводника, "
+"шины или вывода"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Global label margin:"
@@ -12127,11 +12091,11 @@ msgstr "Наибольший"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
 msgid "Inter-sheet References"
-msgstr "Обозначения листов"
+msgstr "Межлистовые ссылки"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:170
 msgid "Show inter-sheet references"
-msgstr "Показать обозначения листов"
+msgstr "Показать межлистовые ссылки"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:176
 msgid "Show own page reference"
@@ -12541,6 +12505,8 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
+"Невозможно скопировать файл '%s', так как он будет перезаписан новым файлом "
+"корневого листа."
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -12555,9 +12521,8 @@ msgstr "Ошибка при загрузке библиотеки символо
 #: eeschema/eeschema_jobs_handler.cpp:150
 #: eeschema/eeschema_jobs_handler.cpp:186
 #: eeschema/eeschema_jobs_handler.cpp:281
-#, fuzzy
 msgid "Failed to load schematic file\n"
-msgstr "Не удалось загрузить схему \"%s\""
+msgstr "Не удалось загрузить файл схемы\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:197
 #: eeschema/eeschema_jobs_handler.cpp:296
@@ -12565,39 +12530,38 @@ msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
+"Предупреждение: схема содержит ошибки обозначения, пожалуйста, используйте "
+"редактор схем для их исправления\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:206
 #: eeschema/eeschema_jobs_handler.cpp:306
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "Предупреждение: дублирование уникальных имён"
+msgstr "Предупреждение: повторяющиеся имена листов.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:248
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "неизвестный тип перех.отв. %d"
+msgstr "Неизвестный формат списка сетей.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Замена символа %s из '%s' на '%s'"
+msgstr "Черчение символа '%s' части %d в '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Замена символа %s из '%s' на '%s'"
+msgstr "Черчение символа '%s' в '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "Не удалось разобрать '%s' в '%s'"
+msgstr "Невозможно открыть путь назначения '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:435
 #: eeschema/eeschema_jobs_handler.cpp:495 pcbnew/pcbnew_jobs_handler.cpp:599
 #: pcbnew/pcbnew_jobs_handler.cpp:660
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "Не удалось загрузить файл %s"
+msgstr "Не удалось загрузить библиотеку\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:446
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:121
@@ -12606,22 +12570,19 @@ msgstr "Не выбраны символы для сохранения."
 
 #: eeschema/eeschema_jobs_handler.cpp:503 pcbnew/pcbnew_jobs_handler.cpp:585
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "Выходной путь не должен конфликтовать с существующим\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:513
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "Неверное обозначение библиотеки символов"
+msgstr "Сохранение библиотеки символов в обновленном формате\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:527 pcbnew/pcbnew_jobs_handler.cpp:628
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "Не удалось сохранить спасённую библиотеку %s."
+msgstr "Не удалось сохранить библиотеку\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:533
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "Библиотека символов не задействована."
+msgstr "Библиотека символов не была обновлена\n"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 msgid "Input Pin"
@@ -12649,7 +12610,7 @@ msgstr "Свободный вывод"
 
 #: eeschema/erc.cpp:72 eeschema/erc.cpp:89
 msgid "Unspecified Pin"
-msgstr "Не определено"
+msgstr "Неопределённый"
 
 #: eeschema/erc.cpp:73 eeschema/erc.cpp:90
 msgid "Power Input Pin"
@@ -12672,9 +12633,8 @@ msgid "No Connection"
 msgstr "Не соединено"
 
 #: eeschema/erc.cpp:287
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Неопределённая текстовая переменная в форматной рамке."
+msgstr "Неразрешенная текстовая переменная в форматной рамке"
 
 #: eeschema/erc.cpp:324
 #, c-format
@@ -12689,27 +12649,26 @@ msgstr "Разные посадочные места назначены %s и %s
 #: eeschema/erc.cpp:483
 #, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "Символ %s имеет неразмещенные единицы %s"
+msgstr "Символ %s имеет неразмещенные части %s"
 
 #: eeschema/erc.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "Символ содержит больше частей, чем указано"
+msgstr "Символ %s имеет не размещенные входные выводы питания в частях %s."
 
 #: eeschema/erc.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "Символ содержит больше частей, чем указано"
+msgstr "Символ %s имеет не размещенные входные выводы в частях %s."
 
 #: eeschema/erc.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "Символ содержит больше частей, чем указано"
+msgstr "Символ %s имеет не размещенные двунаправленные выводы в частях %s."
 
 #: eeschema/erc.cpp:582
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
-msgstr "Вывод с флагом \"Не подключено\" имеет подключение"
+msgstr "Выводы с типами 'Не подключён' имеют подключение"
 
 #: eeschema/erc.cpp:707
 #, c-format
@@ -12722,24 +12681,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Вывод %s соединён как с %s, так и с %s"
 
 #: eeschema/erc.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "Текущая конфигурация не содержит библиотеку '%s'."
+msgstr "Текущая конфигурация не содержит библиотеку '%s'"
 
 #: eeschema/erc.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "Библиотека '%s' не задействована в текущей конфигурации."
+msgstr "Библиотека '%s' не задействована в текущей конфигурации"
 
 #: eeschema/erc.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Символ '%s' не найден в библиотеке '%s'."
+msgstr "Символ '%s' не найден в библиотеке символов '%s'"
 
 #: eeschema/erc.cpp:921
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "Символ %s не найден в библиотеке '%s'."
+msgstr "Символ '%s' был изменен в библиотеке '%s'"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -12839,9 +12798,8 @@ msgid "Unresolved text variable"
 msgstr "Неопределённая текстовая переменная"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "SPICE model issue"
-msgstr "Файл цепей SPICE"
+msgstr "Проблема со SPICE моделью"
 
 #: eeschema/erc_item.cpp:142
 msgid "Wires not connected to anything"
@@ -12860,24 +12818,20 @@ msgid "Symbol has more units than are defined"
 msgstr "Символ содержит больше частей, чем указано"
 
 #: eeschema/erc_item.cpp:158
-#, fuzzy
 msgid "Symbol has units that are not placed"
-msgstr "Символ содержит больше частей, чем указано"
+msgstr "Некоторые части символа не размещены"
 
 #: eeschema/erc_item.cpp:162
-#, fuzzy
 msgid "Symbol has input pins that are not placed"
-msgstr "Символ содержит больше частей, чем указано"
+msgstr "Некоторые входные выводы символа не размещены"
 
 #: eeschema/erc_item.cpp:166
-#, fuzzy
 msgid "Symbol has bidirectional pins that are not placed"
-msgstr "Символ содержит больше частей, чем указано"
+msgstr "Некоторые двунаправленные выводы символа не размещены"
 
 #: eeschema/erc_item.cpp:170
-#, fuzzy
 msgid "Symbol has power input pins that are not placed"
-msgstr "Символ содержит больше частей, чем указано"
+msgstr "Некоторые входные выводы питания символа не размещены"
 
 #: eeschema/erc_item.cpp:174
 msgid "Units of same symbol have different values"
@@ -12909,14 +12863,12 @@ msgid "Vertical"
 msgstr "Верт."
 
 #: eeschema/fields_grid_table.cpp:341
-#, fuzzy
 msgid "Show Name"
-msgstr "Показать цепь"
+msgstr "Показать имя"
 
 #: eeschema/fields_grid_table.cpp:352
-#, fuzzy
 msgid "Allow Autoplacement"
-msgstr "Правила авто-размещения"
+msgstr "Разрешить авторазмещение"
 
 #: eeschema/files-io.cpp:101 eeschema/files-io.cpp:1210
 #, c-format
@@ -13147,9 +13099,9 @@ msgid "Importing Schematic"
 msgstr "Импорт схемы"
 
 #: eeschema/files-io.cpp:1298
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "Закончилась память при загрузке файла схемы '%s'."
+msgstr "Произошло необработанное исключение при загрузке схемы '%s'."
 
 #: eeschema/files-io.cpp:1332
 msgid "The current schematic has been modified.  Save changes?"
@@ -13212,9 +13164,8 @@ msgstr ""
 "будет отображаться при каждом запуске редактора схем."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1615
-#, fuzzy
 msgid "Derived from"
-msgstr "Родительский символ:"
+msgstr "Основано на"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
 #: kicad/pcm/pcm.cpp:798 pcbnew/footprint.cpp:1023 pcbnew/zone.cpp:595
@@ -13266,14 +13217,14 @@ msgid "Pin %s [%s, %s]"
 msgstr "Вывод %s [%s, %s]"
 
 #: eeschema/lib_pin.cpp:1349
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
-msgstr "Вывод %s [%s, %s, %s]"
+msgstr "Скрытый вывод %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1357
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s]"
-msgstr "Вывод %s [%s, %s]"
+msgstr "Скрытый вывод %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:457 eeschema/sch_shape.cpp:407
 #, c-format
@@ -13317,15 +13268,13 @@ msgstr "Полужирный курсив"
 
 #: eeschema/lib_textbox.cpp:478 eeschema/sch_textbox.cpp:457
 #: pcbnew/fp_textbox.cpp:321 pcbnew/pcb_textbox.cpp:314
-#, fuzzy
 msgid "Box Width"
-msgstr "Ширина текста"
+msgstr "Ширина блока"
 
 #: eeschema/lib_textbox.cpp:481 eeschema/sch_textbox.cpp:460
 #: pcbnew/fp_textbox.cpp:324 pcbnew/pcb_textbox.cpp:317
-#, fuzzy
 msgid "Box Height"
-msgstr "Высота текста"
+msgstr "Высота блока"
 
 #: eeschema/libarch.cpp:101
 #, c-format
@@ -13401,14 +13350,12 @@ msgid "Netlist..."
 msgstr "Список цепей..."
 
 #: eeschema/menubar.cpp:125
-#, fuzzy
 msgid "Symbols to Library..."
-msgstr "Обновить символы из библиотеки..."
+msgstr "Символы в библиотеку..."
 
 #: eeschema/menubar.cpp:127
-#, fuzzy
 msgid "Symbols to New Library..."
-msgstr "Посад.места в новую библиотеку..."
+msgstr "Символы в новую библиотеку..."
 
 #: eeschema/menubar.cpp:195
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
@@ -13446,24 +13393,26 @@ msgstr "Настройки"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:95
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "Не удалось сгенерировать имя для '%s': превышен UINT64_MAX"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
-msgstr "Ошибка загрузки библиотеки символов '%s'."
+msgstr ""
+"Ошибка чтения модели симуляции из символа '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr "Не удалось найти конт.пл. сложной формы с именем '%s'."
+msgstr "Не удалось открыть файл «%s» для записи модели IBIS."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "Не удалось найти файл библиотеки %s."
+msgstr "Не удалось найти файл библиотеки '%s'"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:145
 #, c-format
@@ -13510,7 +13459,7 @@ msgstr "Свободно"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:186
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 msgid "Unspecified"
-msgstr "Не определено"
+msgstr "Неопределённый"
 
 #: eeschema/pin_type.cpp:59 eeschema/pin_type.cpp:251
 msgid "Power input"
@@ -13687,9 +13636,8 @@ msgstr "Тип элемента шины"
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:912
 #: eeschema/sch_line.cpp:912 pcbnew/pad.cpp:966 pcbnew/pcb_track.cpp:935
 #: pcbnew/tools/pcb_control.cpp:1540 pcbnew/zone.cpp:557
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "Присвоенный класс цепей"
+msgstr "Разрешенный класс цепи"
 
 #: eeschema/sch_connection.cpp:410
 msgid "Connection Name"
@@ -13706,9 +13654,8 @@ msgid "KiCad Schematic Editor"
 msgstr "Редактор схем KiCad"
 
 #: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1580
-#, fuzzy
 msgid "Schematic Hierarchy"
-msgstr "Соответствие схеме"
+msgstr "Иерархия схемы"
 
 #: eeschema/sch_edit_frame.cpp:270
 msgid "New schematic file is unsaved"
@@ -13835,14 +13782,12 @@ msgid "Net"
 msgstr "Цепь"
 
 #: eeschema/sch_label.cpp:964 eeschema/sch_line.cpp:855
-#, fuzzy
 msgid "Resolved netclass"
-msgstr "Присвоенный класс цепей"
+msgstr "Разрешенный класс цепи"
 
 #: eeschema/sch_label.cpp:979
-#, fuzzy
 msgid "Hierarchical Labels"
-msgstr "Иерархическая метка"
+msgstr "Иерархические метки"
 
 #: eeschema/sch_label.cpp:1064
 #, c-format
@@ -13850,9 +13795,9 @@ msgid "Label '%s'"
 msgstr "Метка '%s'"
 
 #: eeschema/sch_label.cpp:1241
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Директивная метка"
+msgstr "Директивная метка [%s %s]"
 
 #: eeschema/sch_label.cpp:1517
 #, c-format
@@ -14004,6 +13949,8 @@ msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
+"Имя файла для листа %s не определено, вероятно, это жгут сигналов Altium, "
+"преобразованный в лист."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
@@ -14014,14 +13961,16 @@ msgstr "Файл хранилища обработан не полностью (
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
+"Неизвестный или неожиданный идентификатор записи %d найден в разделе "
+"\"Additional\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
-msgstr ""
+msgstr "Запись 'IEEE_SYMBOL' не обработана."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
-msgstr ""
+msgstr "Запись 'PIECHART' не обработана."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
@@ -14031,11 +13980,13 @@ msgstr "Маска сборки пока не поддерживается."
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
+"Неизвестный или неожиданный идентификатор записи %d найден в разделе "
+"\"FileHeader\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
-msgstr ""
+msgstr "Символ \"%s\" на листе \"%s\" с индексом %d заменен на символ \"%s\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2404
@@ -14062,7 +14013,7 @@ msgstr "Кривая Безье имеет %d контрольных точек.
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "Неподдерживаемый эллипс не был импортирован в (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1935
 #, c-format
@@ -14070,11 +14021,12 @@ msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
+"Разъем жгута Altium (%s) был импортирован в виде иерархического листа. "
+"Пожалуйста, проверьте импортированную схему."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
-#, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "Порт питания имеет неизвестный стиль, будет использована линия."
+msgstr "Порт питания с неизвестным стилем импортирован как тип 'Bar'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2332
 #, c-format
@@ -14087,6 +14039,8 @@ msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
+"Порт жгута Altium (%s) был импортирован в виде текстового блока. Пожалуйста, "
+"проверьте импортированную схему."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2525
 #, c-format
@@ -14158,6 +14112,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"Шрифты CADSTAR отличаются от шрифтов в KiCad. Это может привести к проблемам "
+"с выравниванием. Пожалуйста, внимательно просмотрите импортированные "
+"текстовые элементы и при необходимости исправьте их вручную."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:265
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -14184,14 +14141,13 @@ msgstr ""
 "библиотеку KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
 msgstr ""
-"Компонент '%s' ссылается на часть символа '%s' (доп.обозначение '%s'), "
-"которую не удаётся найти в библиотеке символов. Эта часть не загружена в "
-"библиотеку KiCad."
+"Определение детали '%s' имеет неполное определение (с ним не связаны "
+"определения символов). Эта деталь не была загружена в библиотеку KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:454
 #, c-format
@@ -14303,19 +14259,23 @@ msgstr ""
 "который не определён."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Ошибка чтения изображения %s."
+msgstr "Ошибка чтения таблицы базы данных %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:218
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
+"Не удалось загрузить библиотеку из базы данных: файл настроек %s отсутствует "
+"или недействителен"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:281
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
+"Не удалось загрузить библиотеку из базы данных: не удалось подключиться к "
+"базе данных %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:452
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -14357,7 +14317,7 @@ msgstr "Неверное имя символа"
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2616
 #, fuzzy, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "Символ %s не найден в библиотеке '%s'."
+msgstr "Символ %s содержит недопустимый символ '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:209
 msgid "Invalid library identifier"
@@ -14397,9 +14357,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "Неверное количество альтернативных представлений символа %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Неверный номер вывода"
+msgstr "Недопустимый URL-адрес гиперссылки '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:743
 msgid "Invalid pin names definition"
@@ -14467,6 +14427,8 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
+"Не удалось загрузить лист '%s', поскольку он уже является прямым предком в "
+"иерархии схем."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1519
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2169
@@ -14549,10 +14511,9 @@ msgid "Item not annotated: %s%s"
 msgstr "Элемент не обозначен: %s%s"
 
 #: eeschema/sch_reference_list.cpp:715
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr ""
-"Ошибка: символ %s%s%s (часть %d) превышает количество указанных частей (%d)\n"
+msgstr "Ошибка: символ %s%s%s (часть %d) превышает кол-во заданных частей (%d)."
 
 #: eeschema/sch_reference_list.cpp:754
 #, c-format
@@ -14560,9 +14521,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Дублирование элементов %s%s%s\n"
 
 #: eeschema/sch_reference_list.cpp:779
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Различаются значения для %s%d%s (%s) и %s%d%s (%s)"
+msgstr "Различное количество частей у элементов %s%s%s и %s%s%s\n"
 
 #: eeschema/sch_reference_list.cpp:795
 #, c-format
@@ -14635,19 +14596,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "Иерархический вывод листа %s"
 
 #: eeschema/sch_symbol.cpp:1212
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "Исключить из перечня элементов"
+msgstr "Исключен из перечня элементов"
 
 #: eeschema/sch_symbol.cpp:1217
-#, fuzzy
 msgid "Excluded from board"
-msgstr "Исключить из платы"
+msgstr "Исключен из платы"
 
 #: eeschema/sch_symbol.cpp:1222
-#, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1593
 msgid "Power symbol"
@@ -15110,7 +15068,7 @@ msgstr ""
 "В загруженном файле схемы есть иерархические листы из более старой версии "
 "файла,  что приводит к отсутствию данных экземпляра символа.  Это приведет к "
 "тому, что все символы в загруженной схеме будут использовать либо настройки "
-"экземпляра по умолчанию, либо вернуться к настройкам символов библиотеки.  "
+"экземпляра по умолчанию, либо вернутся к настройкам символов библиотеки.  "
 "Загрузка проекта, в котором используется этот файл схемы, и сохранение "
 "последней версии файла решит эту проблему.\n"
 "\n"
@@ -15209,629 +15167,550 @@ msgstr "Отменить создание листа"
 #: eeschema/sim/kibis/ibis_parser.cpp:66 eeschema/sim/kibis/ibis_parser.cpp:95
 #: eeschema/sim/kibis/ibis_parser.cpp:118
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "Размерность матриц должна быть >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:72
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "Ширина полосы ленточных матриц должна быть >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:80 eeschema/sim/kibis/ibis_parser.cpp:103
 #: eeschema/sim/kibis/ibis_parser.cpp:126
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "В матрице есть элементы NaN."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:161
 #, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Неверное значение длинны"
+msgstr "Недопустимое значение R_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:166
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "Неверное значение длинны"
+msgstr "Недопустимое значение L_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:171
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "Неверное значение длинны"
+msgstr "Недопустимое значение C_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:185
-#, fuzzy
 msgid "Checking pin "
-msgstr "Проверка выводов..."
+msgstr "Проверка вывода "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:190
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "Имя цепи не может быть пустым."
+msgstr "Имя вывода не может быть пустым."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:195
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "Имя переменной не может быть пустым."
+msgstr "Имя сигнала не может быть пустым."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:200
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "Имя цепи не может быть пустым."
+msgstr "Имя модели не может быть пустым."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:205
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Неправильное имя файла!"
+msgstr "Недопустимый Rpin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:210
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Неправильное имя файла!"
+msgstr "Недопустимый Lpin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:215
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Неправильное имя файла!"
+msgstr "Недопустимый Cpin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:229
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "Имя цепи не может быть пустым."
+msgstr "Имя компонента не может быть пустым."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:234
-#, fuzzy
 msgid "Checking component "
-msgstr "Проверка зон"
+msgstr "Проверка компонента "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:239
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "Имя цепи не может быть пустым."
+msgstr "Компонент: производитель не может быть пустым."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:245
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "Значение компонента:"
+msgstr "Компонент: Недопустимый корпус."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:251
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Обозначение"
+msgstr "Компонент: нет вывода"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:348
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "Невозможно интерполировать ток на основе этой таблицы IV."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:366
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "В таблице IV имеется напряжение Nan"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:373
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "В таблице IV есть недопустимый ток"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:416
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "Неверное"
+msgstr "Неверный R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:420
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "Неверное значение длинны"
+msgstr "Недопустимое falling dv/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:425
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "Неверное значение сопротивления"
+msgstr "Недопустимое rising dv/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:440
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "Имя цепи не может быть пустым."
+msgstr "Имя модели не может быть пустым"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:445
-#, fuzzy
 msgid "Checking model "
-msgstr "Проверка зон"
+msgstr "Проверка модели "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Неопределённые слои:"
+msgstr "Неопределенный тип модели"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:456
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "Неверное значение длинны"
+msgstr "Недопустимое значение Vinh."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:461
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "Неверное значение задержки"
+msgstr "Недопустимое значение Vinl."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:466
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "Неверное значение задержки"
+msgstr "Недопустимое значение R_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:471
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "Неверное значение задержки"
+msgstr "Недопустимое значение C_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:476
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "Неверное значение задержки"
+msgstr "Недопустимое значение V_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:481
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "Неверное значение задержки"
+msgstr "Недопустимое значение V_meas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:486
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Неправильное имя файла!"
+msgstr "Недопустимый C_comp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Повышение температуры"
+msgstr "Недопустимый температурный диапазон."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:516
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Неправильное имя файла!"
+msgstr "Недопустимый диапазон напряжения."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:522
-#, fuzzy
 msgid "Invalid pulldown."
-msgstr "Неверное имя вывода"
+msgstr "Недопустимый pulldown."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:527
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "Неверное значение задержки"
+msgstr "Недопустимый pullup."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:532
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "Неверное имя вывода"
+msgstr "Недопустимый POWER clamp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:537
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "Неверное имя вывода"
+msgstr "Недопустимый GND clamp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:546
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "Неверное"
+msgstr "Недопустимый Ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:556
-#, fuzzy
 msgid "Checking Header..."
-msgstr "Проверка конт.пл..."
+msgstr "Проверка заголовка..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:560
-#, fuzzy
 msgid "Missing [IBIS Ver]"
-msgstr "Отсутствует имя правила."
+msgstr "Отсутствует [IBIS Ver]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:566
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "Парсер не поддерживает эту версию IBIS"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:572
-#, fuzzy
 msgid "Missing [File Rev]"
-msgstr "Отсутствует имя правила."
+msgstr "Отсутствует [File Rev]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:578
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "Отсутствует имя правила."
+msgstr "Отсутствует [File Name]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
-#, fuzzy
 msgid "Package model name cannot be empty."
-msgstr "Имя цепи не может быть пустым."
+msgstr "Имя модели корпуса не может быть пустым."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:606
-#, fuzzy
 msgid "Checking package model "
-msgstr "Проверка отверстий конт.пл..."
+msgstr "Проверка модели корпуса "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:611
-#, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "Имя цепи не может быть пустым."
+msgstr "Manufacturer не может быть пустым."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:617
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "Текстовое поле не может быть пустым."
+msgstr "OEM не может быть пустым."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:623
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "Число точек"
+msgstr "Отрицательное кол-во выводов."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:637
-#, fuzzy
 msgid "Empty pin number"
-msgstr "Ожидалось число."
+msgstr "Номер вывода пуст"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:645
-#, fuzzy
 msgid "Resistance matrix is incorrect"
-msgstr "Сопротивление на ед.длины"
+msgstr "Матрица сопротивления некорректна"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:653
-#, fuzzy
 msgid "Capacitance matrix is undefined"
-msgstr "Емкость на ед.длины"
+msgstr "Матрица емкостей не определена"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:659
-#, fuzzy
 msgid "Capacitance matrix is incorrect"
-msgstr "Емкость на ед.длины"
+msgstr "Матрица емкостей некорректна"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:665
-#, fuzzy
 msgid "Capacitance matrix is nullptr"
-msgstr "Емкость на ед.длины"
+msgstr "Емкостная матрица равна nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:673
-#, fuzzy
 msgid "Inductance matrix is undefined"
-msgstr "Индуктивность на ед.длины"
+msgstr "Матрица индуктивности не определена"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:679
-#, fuzzy
 msgid "Inductance matrix is incorrect"
-msgstr "Индуктивность на ед.длины"
+msgstr "Матрица индуктивности некорректна"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:685
-#, fuzzy
 msgid "Inductance matrix is nullptr"
-msgstr "Индуктивность на ед.длины"
+msgstr "Матрица индуктивности равна nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:701
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Не удалось открыть файл '%s'"
+msgstr "Невозможно открыть файл "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:707
-#, fuzzy
 msgid "Reading file "
-msgstr "Загрузка правил..."
+msgstr "Чтение файла "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:729
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Неожиданный конец файла."
+msgstr "Неожиданный конец файла. Отсутствует [END] ?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:741
-#, fuzzy
 msgid "Error on line "
-msgstr "Ошибка подключения к принтеру"
+msgstr "Ошибка в строке "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:769
-#, fuzzy
 msgid "A line did not end properly."
-msgstr "Не удалось должным образом обработать элементы импортируемого файла."
+msgstr "Строка не закончилась должным образом."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:905
 #: eeschema/sim/kibis/ibis_parser.cpp:922
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "Строка превышает максимальную длину."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:948
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "Не удалось создать каталог '%s'."
+msgstr "Не удалось прочитать double."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:954
 #: eeschema/sim/kibis/ibis_parser.cpp:998
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "Не удалось загрузить '%s'."
+msgstr "Не удалось прочитать слово."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:991
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "Символ не обозначен"
+msgstr "Число не является целым"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1035
-#, fuzzy
 msgid "Unable to read string, input is empty."
-msgstr "Не удалось прочитать файл данных '%s'."
+msgstr "Невозможно прочитать строку, входные данные пусты."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1085
-#, fuzzy
 msgid "New comment character is invalid."
-msgstr "Повышение температуры"
+msgstr "Неверный символ нового комментария."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1098
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Недопустимый синтаксис. Должно быть |_char или &_char и т.д."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1109
 msgid "No extra argument was expected"
-msgstr ""
+msgstr "Дополнительных аргументов не ожидалось"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1261
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Неизвестный Record ID: %d."
+msgstr "Неизвестное ключевое слово в "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1261
-#, fuzzy
 msgid " context: "
-msgstr "Инкремент:"
+msgstr " контекст: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1327
-#, fuzzy
 msgid "Invalid ramp data"
-msgstr "Неверное имя вывода"
+msgstr "Недопустимые данные ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1411
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "Невозможно задать bandwidth для такого типа матрицы"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "Неверное определение строки"
+msgstr "Недопустимая строка в матрице"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1460
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "Слишком много данных в этой строке матрицы."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1468
 msgid "Too much data for this matrix."
-msgstr ""
+msgstr "Слишком много данных для этой матрицы."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1473
 #: eeschema/sim/kibis/ibis_parser.cpp:1506
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Невозможно считать элемент матрицы"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1511
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Невозможно считать индекс матрицы"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1579
-#, fuzzy
 msgid "Unknown matrix type"
-msgstr "неизвестный тип перех.отв. %d"
+msgstr "Неизвестный тип матрицы"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1587
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "Отсутствует макс. значение."
+msgstr "Отсутствует тип матрицы"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1593
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
+" Матрица уже инициализирована. Но m_continue не был установлен ( внутренняя "
+"ошибка )"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1619
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Попытка прочитать строку из неопределенной матрицы"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1625
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "указатель матрицы равен null"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1774
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Для значений Typ-Min-Max требуется как минимум Typ."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1867
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Неизвестный метод"
+msgstr "Неизвестный Model_type "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1874
-#, fuzzy
 msgid "Internal Error while reading model_type"
-msgstr "Ошибка чтения файла."
+msgstr "Внутренняя ошибка при чтении model_type"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1889
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Неизвестный слой PCad %u"
+msgstr "Неизвестный Enable: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1896
 #: eeschema/sim/kibis/ibis_parser.cpp:1918
-#, fuzzy
 msgid "Internal Error while reading Enable"
-msgstr "Ошибка чтения файла."
+msgstr "Внутренняя ошибка при чтении Enable"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1911
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Неизвестный примитив"
+msgstr "Неизвестная полярность "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1948
 msgid "Continued reading a model that did not begin. ( internal error )"
 msgstr ""
+"Продолжил чтение модели, которая так и не началась. ( внутренняя ошибка )"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2115
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "Для строки с [Package] требуется ровно 4 элемента."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2168
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Неверная запись о выводе: 6 значений из таблицы, в которой только 3."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2178
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "Не удается прочитать значение R, L или C для вывода."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2201
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "Неверное определение имён вывода"
+msgstr "Недопустимое имя поля в [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2208
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "Отсутствует родитель"
+msgstr "Отсутствует аргумент в [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2243
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Неверное количество столбцов для сопоставления выводов."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2283
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "Неправильный номер масштаба"
+msgstr "Некорректное имя дифф. вывода"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2288
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "Неправильный номер масштаба"
+msgstr "Некорректное имя inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2368
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "неизвестный тип перех.отв. %d"
+msgstr "Неизвестный тип формы сигнала"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2379
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "Обнаружена внутренняя ошибка, форма сигнала должна существовать"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2444
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "Внутренняя ошибка: Плохой контекст парсера."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2481
-#, fuzzy
 msgid "Missing keyword."
-msgstr "Ключевые слова псевдонима:"
+msgstr "Отсутствует ключевое слово."
 
 #: eeschema/sim/kibis/kibis.cpp:454
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "Форма не имеет вершин."
+msgstr "форма сигнала имеет менее двух точек"
 
 #: eeschema/sim/kibis/kibis.cpp:675 eeschema/sim/kibis/kibis.cpp:740
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr "Не удалось переименовать временный файл '%s' в '%s'"
+msgstr "Невозможно удалить временный выходной файл"
 
 #: eeschema/sim/kibis/kibis.cpp:726
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "Ошибка чтения файла."
+msgstr "Ошибка при чтении временного файла"
 
 #: eeschema/sim/kibis/kibis.cpp:735
-#, fuzzy
 msgid "Error while creating temporary output file"
-msgstr "Не удалось создать временный файл \"%s\""
+msgstr "Ошибка при создании временного выходного файла"
 
 #: eeschema/sim/kibis/kibis.cpp:774
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"Kibis пока не поддерживает значения DUT. https://ibis.org/summits/nov16a/chen"
+".pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:877
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "Модель имеет только одну пару форм сигналов, точность снижена"
 
 #: eeschema/sim/kibis/kibis.cpp:897 eeschema/sim/kibis/kibis.cpp:1102
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "Драйверу требуется как минимум pullup или pulldown"
 
 #: eeschema/sim/kibis/kibis.cpp:1085 eeschema/sim/kibis/kibis.cpp:1094
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"Есть две пары форм сигналов, но только один транзистор. Уравнений больше, "
+"чем неизвестных."
 
 #: eeschema/sim/kibis/kibis.cpp:1202
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"Модель не имеет пары форм сигналов, вместо этого используется [Ramp], низкая "
+"точность"
 
 #: eeschema/sim/kibis/kibis.cpp:1215
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "Модель имеет более 2 пар форм сигналов, используются первые две."
 
 #: eeschema/sim/kibis/kibis.cpp:1253
-#, fuzzy
 msgid "Invalid model type for a driver."
-msgstr "Неверное значение задержки"
+msgstr "Недопустимый тип модели для драйвера."
 
 #: eeschema/sim/kibis/kibis.cpp:1305
-#, fuzzy
 msgid "Invalid model type for a device"
-msgstr "Неверное значение задержки"
+msgstr "Недопустимый тип модели для устройства"
 
 #: eeschema/sim/kibis/kibis.cpp:1525 eeschema/sim/kibis/kibis.cpp:1571
-#, fuzzy
 msgid "Number of cycles should be greater than 0."
-msgstr "Зазор дорожки должен быть больше 0."
+msgstr "Количество циклов должно быть больше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1531 eeschema/sim/kibis/kibis.cpp:1577
-#, fuzzy
 msgid "ON time should be greater than 0."
-msgstr "Зазор дорожки должен быть больше 0."
+msgstr "ON time должно быть больше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1537 eeschema/sim/kibis/kibis.cpp:1583
-#, fuzzy
 msgid "OFF time should be greater than 0."
-msgstr "Зазор дорожки должен быть больше 0."
+msgstr "OFF time должно быть больше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1545
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "Нарастающий фронт длиннее, чем время ON."
 
 #: eeschema/sim/kibis/kibis.cpp:1554
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "Спадающий фронт длиннее, чем время OFF."
 
 #: eeschema/sim/kibis/kibis.cpp:1591
 msgid "Rising edge is longer than ON time."
-msgstr ""
+msgstr "Нарастающий фронт длиннее, чем время ON."
 
 #: eeschema/sim/kibis/kibis.cpp:1599
 msgid "Falling edge is longer than OFF time."
-msgstr ""
+msgstr "Спадающий фронт длиннее, чем время OFF."
 
 #: eeschema/sim/kibis/kibis.cpp:1613 eeschema/sim/kibis/kibis.cpp:1644
-#, fuzzy
 msgid "Bitrate should be greater than 0."
-msgstr "Зазор дорожки должен быть больше 0."
+msgstr "Битрейт должен быть больше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1619 eeschema/sim/kibis/kibis.cpp:1650
-#, fuzzy
 msgid "Number of bits should be greater than 0."
-msgstr "Зазор дорожки должен быть больше 0."
+msgstr "Количество бит должно быть больше 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1631
 msgid "Bitrate is too high for rising / falling edges"
-msgstr ""
+msgstr "Битрейт слишком высок для нарастающего / спадающего фронтов"
 
 #: eeschema/sim/kibis/kibis.cpp:1658
 msgid "Bitrate could be too high for rising / falling edges"
 msgstr ""
+"Битрейт может быть слишком высоким для нарастающего / спадающего фронтов"
 
 #: eeschema/sim/sim_lib_mgr.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr "Ошибка загрузки библиотеки символов '%s'."
+msgstr "Библиотека моделей симуляции не найдена в '%s' или '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "Ошибка загрузки библиотеки символов '%s'."
+msgstr "Ошибка загрузки библиотеки моделей симуляции '%s': %s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "Ошибка загрузки схемы '%s'."
+msgstr "Ошибка при загрузке модели симуляции: нет поля '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:324
 #: pcbnew/dialogs/dialog_board_statistics.cpp:448
@@ -15844,26 +15723,28 @@ msgid "unknown"
 msgstr "неизвестно"
 
 #: eeschema/sim/sim_lib_mgr.cpp:333
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "При загрузке символа %s из библиотеки '%s' возникла ошибка."
+msgstr ""
+"Ошибка загрузки модели симуляции: не удалось найти базовую модель '%s' в "
+"библиотеке '%s'"
 
 #: eeschema/sim/sim_library_kibis.cpp:39 eeschema/sim/sim_model_kibis.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS file '%s'"
-msgstr "Неверное количество частей символа %s"
+msgstr "Недопустимый файл IBIS '%s'"
 
 #: eeschema/sim/sim_model.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
-msgstr "Не удалось найти конт.пл. сложной формы с именем '%s'."
+msgstr "Не удалось найти вывод с именем '%s' в модели симуляции типа '%s'."
 
 #: eeschema/sim/sim_model.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
-msgstr "Не удалось найти конт.пл. сложной формы с именем '%s'."
+msgstr "Не удалось найти параметр с именем '%s' в модели симуляции типа '%s'."
 
 #: eeschema/sim/sim_model.h:470
 #, c-format
@@ -15871,76 +15752,70 @@ msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
+"Тип модели симуляции должен быть таким же, как у ее базового класса: '%s', "
+"но является '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "Не удалось найти конт.пл. сложной формы с именем '%s'."
+msgstr "Не удалось найти компонент IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS component '%s'"
-msgstr "Неверное количество частей символа %s"
+msgstr "Недопустимый компонент IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "Не удалось найти конт.пл. сложной формы с именем '%s'."
+msgstr "Не удалось найти вывод IBIS '%s' в компоненте '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Неверное количество частей символа %s"
+msgstr "Недопустимый вывод IBIS '%s' в компоненте '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "Не удалось найти конт.пл. сложной формы с именем '%s'."
+msgstr "Не удалось найти модель IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Неверное количество частей символа %s"
+msgstr "Недопустимая модель IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:340
-#, fuzzy
 msgid "Power supply"
-msgstr "Символ питания"
+msgstr "Источник питания"
 
 #: eeschema/sim/sim_model_kibis.cpp:350
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "Удельное сопротивление"
+msgstr "Паразитное сопротивление вывода"
 
 #: eeschema/sim/sim_model_kibis.cpp:360
-#, fuzzy
 msgid "Parasitic pin inductance"
-msgstr "Удельное сопротивление"
+msgstr "Паразитная индуктивность вывода"
 
 #: eeschema/sim/sim_model_kibis.cpp:370
-#, fuzzy
 msgid "Parasitic pin capacitance"
-msgstr "Удельное сопротивление"
+msgstr "Паразитная емкость вывода"
 
 #: eeschema/sim/sim_model_kibis.cpp:414
-#, fuzzy
 msgid "DC Value"
-msgstr "Значение"
+msgstr "Значение DC"
 
 #: eeschema/sim/sim_model_kibis.cpp:432
-#, fuzzy
 msgid "ON time"
-msgstr "Время спада:"
+msgstr "Время ON"
 
 #: eeschema/sim/sim_model_kibis.cpp:440
-#, fuzzy
 msgid "OFF time"
-msgstr "Время спада:"
+msgstr "Время OFF"
 
 #: eeschema/sim/sim_model_kibis.cpp:448 eeschema/sim/sim_model_kibis.cpp:481
-#, fuzzy
 msgid "Delay"
-msgstr "Задержка:"
+msgstr "Задержка"
 
 #: eeschema/sim/sim_model_kibis.cpp:456
 #, fuzzy
@@ -20132,7 +20007,7 @@ msgstr ""
 
 #: kicad/cli/command_version.cpp:35
 msgid "version info format (plain, commit, about)"
-msgstr "формат информации о версии (обычный, коммит, о ПО)"
+msgstr "формат информации о версии (plain, commit, about)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
@@ -24928,9 +24803,8 @@ msgid "SMD:"
 msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "Не определено"
+msgstr "Неопределённые:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -40271,17 +40145,17 @@ msgid "Route Selected From Other End"
 msgstr "Группировать выбранные"
 
 #: pcbnew/tools/pcb_actions.cpp:1527
-#, fuzzy
 msgid "Sequentially route selected items from other end of ratsnest anchor."
-msgstr "Выровнять выбранные элементы по левому краю"
+msgstr ""
+"Последовательно трассировать выбранные элементы с другого конца якоря связи."
 
 #: pcbnew/tools/pcb_actions.cpp:1533
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "Доразвести выделенное (Автотрассировка)"
 
 #: pcbnew/tools/pcb_actions.cpp:1534
 msgid "Sequentially attempt to automatically route all selected pads."
-msgstr ""
+msgstr "Попытка последовательной автотрассировки всех выделенных конт.пл."
 
 #: pcbnew/tools/pcb_actions.cpp:1540
 msgid ""
