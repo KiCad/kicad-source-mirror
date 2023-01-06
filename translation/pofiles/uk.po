@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-01 15:11-0800\n"
-"PO-Revision-Date: 2023-01-03 18:05+0000\n"
+"PO-Revision-Date: 2023-01-06 00:33+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -294,7 +294,7 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Зберегти і відновити орієнтацію і масштабування вигляду.\n"
+"Зберегти та відновити орієнтацію і масштабування вигляду.\n"
 "Використовуйте %s+Tab що б активувати селектор.\n"
 "Послідовні вкладки, утримуючи %s вниз перемикатиметься між вікнами перегляду "
 "у спливаючому вікні."
@@ -1339,7 +1339,7 @@ msgstr "Завантажити вихідне зображення"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
 msgid "Output Size"
-msgstr "Вихідне зовбраження"
+msgstr "Вихідний розмір"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height / width ratio"
@@ -4712,7 +4712,7 @@ msgstr "Властивості тексту"
 
 #: common/eda_text.cpp:1036 pcbnew/pcb_text.cpp:362
 msgid "Hyperlink"
-msgstr "Гіперпосилання"
+msgstr "Hyperlink"
 
 #: common/eda_text.cpp:1040
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
