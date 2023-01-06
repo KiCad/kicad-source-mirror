@@ -71,6 +71,8 @@ public:
 
     long GetSelection();
 
+    bool Show( bool show ) override;
+
 private:
     virtual void onSize( wxSizeEvent& event ) override;
     void onListItemActivated( wxListEvent& event ) override;

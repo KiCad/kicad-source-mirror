@@ -62,6 +62,20 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
 }
 
 
+bool EDA_LIST_DIALOG::Show( bool show )
+{
+    bool retVal = DIALOG_SHIM::Show( show );
+
+    if( show )
+    {
+        wxSizeEvent dummy;
+        onSize( dummy );
+    }
+
+    return retVal;
+}
+
+
 void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxString& aSelection )
 {
     if( aItemHeaders.Count() == 1 )
