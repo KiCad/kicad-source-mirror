@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
 "PO-Revision-Date: 2023-01-06 22:47+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -15818,27 +15818,23 @@ msgid "Delay"
 msgstr "Задержка"
 
 #: eeschema/sim/sim_model_kibis.cpp:456
-#, fuzzy
 msgid "Number of cycles"
-msgstr "Кол. проходов"
+msgstr "Количество циклов"
 
 #: eeschema/sim/sim_model_kibis.cpp:473
-#, fuzzy
 msgid "Bitrate"
-msgstr "подложка"
+msgstr "Битрейт"
 
 #: eeschema/sim/sim_model_kibis.cpp:489
-#, fuzzy
 msgid "Number of bits"
-msgstr "Кол-во частей:"
+msgstr "Количество бит"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
-"Симуляция не формирует ни единого графика. Пожалуйста, просмотрите окно "
-"вывода с результатами"
+"Симуляция не сформировала ни единого графика. Пожалуйста, проверьте окно "
+"вывода для результатов."
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -15881,22 +15877,24 @@ msgid "Spice Simulator"
 msgstr "Spice симулятор"
 
 #: eeschema/sim/sim_plot_frame.cpp:471 eeschema/sim/sim_plot_frame.cpp:1491
-#, fuzzy
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
-msgstr "Произошли ошибки во время экспорта списка цепей, прервано."
+msgstr ""
+"Ошибки при генерации списка цепей; симуляция прервана.\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:488
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
+"Директива команды симуляции листа схемы изменилась.  Хотите ли вы обновить "
+"команду симуляции?"
 
 #: eeschema/sim/sim_plot_frame.cpp:511 eeschema/sim/sim_plot_frame.cpp:1904
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "%s уже запущен. Продолжить?"
+msgstr "Уже запущена другая симуляция."
 
 #: eeschema/sim/sim_plot_frame.cpp:539
 #, c-format
@@ -15906,12 +15904,12 @@ msgstr "График%u - "
 #: eeschema/sim/sim_plot_frame.cpp:603 eeschema/sim/sim_plot_frame.cpp:615
 #: eeschema/sim/sim_plot_frame.cpp:940
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "Не удалось применить настроенное значение(я):"
 
 #: eeschema/sim/sim_plot_frame.cpp:616 eeschema/sim/sim_plot_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "Нет прав для записи в каталог \"%s\"."
+msgstr "%s не настраивается"
 
 #: eeschema/sim/sim_plot_frame.cpp:659
 msgid "Error: simulation type not defined!\n"
@@ -15959,14 +15957,12 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Чтобы сформировать графики нужно запустить симуляцию."
 
 #: eeschema/sim/sim_plot_frame.cpp:1605
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "Файл цепей SPICE"
+msgstr "Список цепей SPICE"
 
 #: eeschema/sim/sim_plot_frame.cpp:1672
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Сохранить изменения в библиотеке"
+msgstr "Сохранить изменения в рабочую книгу?"
 
 #: eeschema/sim/sim_plot_frame.cpp:1834
 msgid ""
@@ -15981,14 +15977,12 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove Signal"
-msgstr "Скрыть сигнал"
+msgstr "Удалить сигнал"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove the signal from the plot"
-msgstr "Стереть сигнал с изображения графика"
+msgstr "Удалить сигнал с графика"
 
 #: eeschema/sim/sim_plot_frame.cpp:1933
 msgid "Hide Cursor"
@@ -16003,28 +15997,24 @@ msgid "New Plot"
 msgstr "Создать график"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Открыть сессию"
+msgstr "Открыть рабочую книгу..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 msgid "Save Workbook"
 msgstr "Сохранить сессию"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "Сохранить сессию"
+msgstr "Сохранить рабочую книгу как..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "Экспорт в PNG-файл..."
+msgstr "Экспорт графика в PNG..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "Экспорт в PNG-файл..."
+msgstr "Экспорт графика в CSV..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -16137,15 +16127,15 @@ msgid "Voltage (measured)"
 msgstr "Напряжение (измеренное)"
 
 #: eeschema/sim/sim_value.cpp:386
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "Неизвестный метод"
+msgstr "Неизвестный тип SIM_VALUE"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr "Не удалось найти конт.пл. сложной формы с именем '%s'."
+msgstr ""
+"Не удалось найти модель '%s' для копирования для модели \"A Kind Of\" '%s'."
 
 #: eeschema/sim/spice_simulator.cpp:63
 msgid "DC Sweep"
@@ -16206,6 +16196,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
+"<b>Предупреждение: префикс обозначения</b><br> префикс, заканчивающийся на "
+"'%s' может создать проблемы при сохранении в библиотеке символов"
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -16236,25 +16228,25 @@ msgstr ""
 "выводом %s%s, координаты <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>Вывод-дубликат %s</b> %s с координатами <b>(%s, %s)</b>, конфликтует с "
-"выводом %s%s, координаты <b>(%s, %s)</b> в частях %c и %c."
+"выводом %s%s, координаты <b>(%s, %s)</b> в частях %s и %s."
 
 #: eeschema/symbol_checker.cpp:187
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
+msgstr "<b>Символ питания должен иметь только одну часть</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:193
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
-msgstr ""
+msgstr "<b>Символ питания не должен иметь опции преобразования</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:199
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>Символ питания должен иметь только один вывод</b><br><br>."
 
 #: eeschema/symbol_checker.cpp:208
 msgid ""
