@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
-"PO-Revision-Date: 2023-01-06 22:47+0000\n"
+"PO-Revision-Date: 2023-01-06 23:36+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -17086,15 +17086,15 @@ msgstr "Оновити символ до відповідності змін, в
 
 #: eeschema/tools/ee_actions.cpp:186
 msgid "Set Unit Display Name..."
-msgstr "Встановити назву частини..."
+msgstr "Встановити назву один. вимірювання..."
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr "Встановіть відображуване ім’я для елементу"
+msgstr "Встановіть відображуване ім’я для од. вимірювання"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
-msgstr "Додати символ до схеми"
+msgstr "Додати символ в схему"
 
 #: eeschema/tools/ee_actions.cpp:196
 msgid "Show Pin Electrical Types"
@@ -38020,7 +38020,7 @@ msgstr "Втрата Тангесу"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
-msgstr "Діелектрик"
+msgstr "Діалектрик"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:353
 msgid "Insert board stackup table"
