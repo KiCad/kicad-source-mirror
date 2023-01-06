@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
 "PO-Revision-Date: 2023-01-06 23:36+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -15870,7 +15870,7 @@ msgstr "Команда симуляции"
 
 #: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Simulation command and settings"
-msgstr "Параметры и настройки команд симуляции"
+msgstr "Команда симуляции и настройки"
 
 #: eeschema/sim/sim_plot_frame.cpp:351 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
@@ -20169,7 +20169,7 @@ msgstr "Восстановление '%s'"
 
 #: kicad/kicad_manager_frame.cpp:903
 msgid "Would you like to automatically check for plugin updates on startup?"
-msgstr "Желаете проверить обновления для плагина во время запуска?"
+msgstr "Желаете проверять обновления плагинов во время запуска?"
 
 #: kicad/kicad_manager_frame.cpp:904
 msgid "Check for updates"
@@ -20283,7 +20283,7 @@ msgstr "Цветовые темы (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:75
 #, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "Вы уверены, что хотите обновить прикрепленный пакет с версии %s к %s?"
+msgstr "Вы уверены, что хотите обновить закрепленный пакет с версии %s до %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:78
 msgid "Confirm update"
@@ -20317,7 +20317,7 @@ msgstr "Применить ожидающие изменения"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:161
 msgid "Discard Pending Changes"
-msgstr "Отменить ожидаемые изменения"
+msgstr "Отменить ожидающие изменения"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:202
 msgid ""
