@@ -56,8 +56,28 @@ PANEL_SETUP_PINMAP::PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* paren
 {
     m_parent    = parent;
     m_schematic = &parent->Schematic();
+    m_btnBackground = wxSystemSettings::GetColour( wxSystemColour::wxSYS_COLOUR_WINDOW );
 
     reBuildMatrixPanel();
+}
+
+PANEL_SETUP_PINMAP::~PANEL_SETUP_PINMAP()
+{
+#ifndef __WXMAC__
+    if( m_initialized )
+    {
+        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+        {
+            for( int jj = 0; jj <= ii; jj++ )
+            {
+                m_buttonList[ii][jj]->Unbind( wxEVT_ENTER_WINDOW,
+                        &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+                m_buttonList[ii][jj]->Unbind( wxEVT_LEAVE_WINDOW,
+                        &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+            }
+        }
+    }
+#endif
 }
 
 
@@ -65,6 +85,22 @@ void PANEL_SETUP_PINMAP::ResetPanel()
 {
     m_schematic->ErcSettings().ResetPinMap();
     reBuildMatrixPanel();
+}
+
+
+void PANEL_SETUP_PINMAP::OnMouseEnter( wxMouseEvent& aEvent )
+{
+    wxBitmapButton* btn = static_cast<wxBitmapButton*>( aEvent.GetEventObject() );
+    m_btnBackground = btn->GetBackgroundColour();
+
+    btn->SetBackgroundColour( wxSystemSettings::GetColour( wxSystemColour::wxSYS_COLOUR_HIGHLIGHT ) );
+}
+
+
+void PANEL_SETUP_PINMAP::OnMouseLeave( wxMouseEvent& aEvent )
+{
+    wxBitmapButton* btn = static_cast<wxBitmapButton*>( aEvent.GetEventObject() );
+    btn->SetBackgroundColour( m_btnBackground );
 }
 
 
@@ -145,15 +181,24 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
             int id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );
             BITMAPS bitmap_butt = BITMAPS::erc_green;
 
-            delete m_buttonList[ii][jj];
 #ifdef __WXMAC__
             BITMAP_BUTTON* btn = new BITMAP_BUTTON( m_matrixPanel, id, KiBitmap( bitmap_butt ),
                                                     wxPoint( x, y ), bitmapSize );
 #else
+            if( m_initialized )
+            {
+                m_buttonList[ii][jj]->Unbind(wxEVT_ENTER_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+                m_buttonList[ii][jj]->Unbind(wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+            }
+
             wxBitmapButton* btn = new wxBitmapButton( m_matrixPanel, id, KiBitmap( bitmap_butt ),
                                                       wxPoint( x, y ), wxDefaultSize, wxBORDER_NONE );
+            btn->Bind( wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+            btn->Bind( wxEVT_ENTER_WINDOW, &PANEL_SETUP_PINMAP::OnMouseEnter, this );
 #endif
             btn->SetSize( btn->GetSize() + text_padding );
+
+            delete m_buttonList[ii][jj];
             m_buttonList[ii][jj] = btn;
             setDRCMatrixButtonState( m_buttonList[ii][jj], diag );
         }

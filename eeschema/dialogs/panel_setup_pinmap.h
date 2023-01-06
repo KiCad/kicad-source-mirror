@@ -34,17 +34,21 @@
 class SCH_EDIT_FRAME;
 class SCHEMATIC;
 class BITMAP_BUTTON;
+class wxColour;
 
 
 class PANEL_SETUP_PINMAP : public PANEL_SETUP_PINMAP_BASE
 {
 public:
     PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* aParent );
+    ~PANEL_SETUP_PINMAP();
 
     void ImportSettingsFrom( PIN_ERROR aPinMap[][ELECTRICAL_PINTYPES_TOTAL] );
 
     void ResetPanel() override;
 
+    void OnMouseEnter( wxMouseEvent& aEvent );
+    void OnMouseLeave( wxMouseEvent& aEvent );
 private:
     void changeErrorLevel( wxCommandEvent& event );
     void reBuildMatrixPanel();
@@ -54,6 +58,7 @@ private:
 
     SCH_EDIT_FRAME*  m_parent;
     SCHEMATIC*       m_schematic;
+    wxColour         m_btnBackground;
     wxWindow*        m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
     bool             m_initialized;
 };
