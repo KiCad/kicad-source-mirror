@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
-"PO-Revision-Date: 2022-12-30 12:34+0100\n"
+"PO-Revision-Date: 2023-01-07 16:37+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -15305,7 +15305,6 @@ msgid "Cancel Load"
 msgstr "Annulla caricamento"
 
 #: eeschema/sheet.cpp:241
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -15316,13 +15315,7 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Sono presenti fogli gerarchici nel file schema caricato provenienti da una "
-"versione precedente del file, con conseguente mancanza di dati di istanza "
-"dei simboli. Ciò significa che tutti i simboli dello schema caricato "
-"useranno l'impostazione dell'istanza predefinita o torneranno alle "
-"impostazioni dei simboli di libreria. Caricando il progetto che usa questo "
-"file schema e salvandolo nell'ultima versione del file si risolverà il "
-"problema.\n"
+"Sono presenti fogli gerarchici nel file schema caricato provenienti da un file di versione precedente, con conseguente mancanza di dati di istanza dei simboli. Ciò significa che tutti i simboli dello schema caricato useranno l'impostazione dell'istanza predefinita o torneranno alle impostazioni dei simboli di libreria. Caricando il progetto che usa questo file schema e salvandolo nell'ultima versione del file si risolverà il problema.\n"
 "\n"
 "Continuare?"
 
@@ -16080,7 +16073,6 @@ msgid "Number of bits"
 msgstr "Numero di bit"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
@@ -19823,7 +19815,7 @@ msgstr "Fallita emissione dati"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "mostra il messaggio di aiuto ed esce"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -20171,7 +20163,7 @@ msgstr ""
 
 #: kicad/cli/command_version.cpp:35
 msgid "version info format (plain, commit, about)"
-msgstr ""
+msgstr "formato info versione (semplice, commit, info)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
@@ -20320,7 +20312,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:297
 msgid "prints version information and exits"
-msgstr ""
+msgstr "stampa le informazioni di versione ed esce"
 
 #: kicad/kicad_manager_frame.cpp:213
 msgid "Project Files"
@@ -41435,18 +41427,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "Recursively annotate subsheets"
-#~ msgstr "Annota ricorsivamente i sottofogli"
-
-#, c-format
-#~ msgid ""
-#~ "Error reading simulation model library '%s':\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Errore leggendo la libreria di modelli di simulazione '%s':\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "Circuit board"
-#~ msgstr "Circuito stampato"
