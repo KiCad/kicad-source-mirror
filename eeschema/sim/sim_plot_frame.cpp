@@ -1710,7 +1710,7 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
     m_circuitModel->SetSimOptions( getCurrentOptions() );
     m_circuitModel->GetNetlist( &formatter, reporter );
 
-    NETLIST_VIEW_DIALOG dlg( this, errors.IsEmpty() ? formatter.GetString() : errors );
+    NETLIST_VIEW_DIALOG dlg( this, errors.IsEmpty() ? wxString( formatter.GetString() ) : errors );
     dlg.ShowModal();
 }
 
