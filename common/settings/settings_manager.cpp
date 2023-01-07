@@ -663,6 +663,21 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
         }
     }
 
+    std::sort( aPaths->begin(), aPaths->end(),
+               [&]( const wxString& a, const wxString& b ) -> bool
+               {
+                   wxString verA = wxFileName::DirName( a ).GetDirs().back();
+                   wxString verB = wxFileName::DirName( b ).GetDirs().back();
+
+                   if( !extractVersion( verA.ToStdString() )
+                       || !extractVersion( verB.ToStdString() ) )
+                   {
+                       return false;
+                   }
+
+                   return compareVersions( verA.ToStdString(), verB.ToStdString() ) >= 0;
+               } );
+
     return aPaths->size() > 0;
 }
 
@@ -793,8 +808,14 @@ bool SETTINGS_MANAGER::extractVersion( const std::string& aVersionString, int* a
     {
         try
         {
-            *aMajor = std::stoi( match[1].str() );
-            *aMinor = std::stoi( match[2].str() );
+            int major = std::stoi( match[1].str() );
+            int minor = std::stoi( match[2].str() );
+
+            if( aMajor )
+                *aMajor = major;
+
+            if( aMinor )
+                *aMinor = minor;
         }
         catch( ... )
         {

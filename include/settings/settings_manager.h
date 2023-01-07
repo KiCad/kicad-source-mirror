@@ -385,7 +385,8 @@ private:
      * @param aMinor will store the second part
      * @return true if extraction succeeded
      */
-    static bool extractVersion( const std::string& aVersionString, int* aMajor, int* aMinor );
+    static bool extractVersion( const std::string& aVersionString, int* aMajor = nullptr,
+                                int* aMinor = nullptr );
 
     /**
      * Attempts to load a color theme by name (the color theme directory and .json ext are assumed)
