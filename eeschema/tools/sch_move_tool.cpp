@@ -1564,8 +1564,13 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             {
                 saveCopyInUndoList( item, UNDO_REDO::CHANGED, appendUndo );
                 appendUndo = true;
-
+                // Ensure only one end is moved when calling moveItem
+                // i.e. we are in drag mode
+                bool tmp_isDrag = m_isDrag;
+                m_isDrag = true;
                 moveItem( item, delta );
+                m_isDrag = tmp_isDrag;
+
                 item->ClearFlags( IS_MOVING );
                 updateItem( item, true );
             };
