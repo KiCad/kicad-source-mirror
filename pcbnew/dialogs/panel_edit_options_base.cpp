@@ -34,7 +34,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_sizerBoardEdit->Add( m_allowFreePads, 0, wxBOTTOM|wxLEFT, 5 );
 
 	m_staticline3 = new wxStaticLine( bOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_sizerBoardEdit->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 4 );
+	m_sizerBoardEdit->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM, 6 );
 
 
 	bOptionsSizer->Add( m_sizerBoardEdit, 0, wxEXPAND, 5 );
@@ -43,14 +43,14 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizerUniversal = new wxBoxSizer( wxVERTICAL );
 
 	m_cbConstrainHV45Mode = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Constrain actions to H, V, 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerUniversal->Add( m_cbConstrainHV45Mode, 0, wxTOP|wxBOTTOM, 5 );
+	bSizerUniversal->Add( m_cbConstrainHV45Mode, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerRotationStep;
 	bSizerRotationStep = new wxBoxSizer( wxHORIZONTAL );
 
 	m_rotationAngleLabel = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Step for &rotate commands:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotationAngleLabel->Wrap( -1 );
-	bSizerRotationStep->Add( m_rotationAngleLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	bSizerRotationStep->Add( m_rotationAngleLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_rotationAngleCtrl = new wxTextCtrl( bOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotationAngleCtrl->SetToolTip( _("Set increment (in degrees) for context menu and hotkey rotation.") );
@@ -69,23 +69,26 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizer101 = new wxBoxSizer( wxVERTICAL );
 
 	m_staticline4 = new wxStaticLine( bOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer101->Add( m_staticline4, 0, wxBOTTOM|wxEXPAND|wxTOP, 4 );
+	bSizer101->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 6 );
 
 	m_arcEditModeLabel = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Arc editing mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_arcEditModeLabel->Wrap( -1 );
-	bSizer101->Add( m_arcEditModeLabel, 0, wxRIGHT, 5 );
+	bSizer101->Add( m_arcEditModeLabel, 0, wxTOP|wxLEFT, 5 );
+
+
+	bSizer101->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	wxString m_arcEditModeChoices[] = { _("Keep center, adjust radius"), _("Keep endpoints or direction of starting point") };
 	int m_arcEditModeNChoices = sizeof( m_arcEditModeChoices ) / sizeof( wxString );
 	m_arcEditMode = new wxChoice( bOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_arcEditModeNChoices, m_arcEditModeChoices, 0 );
 	m_arcEditMode->SetSelection( 0 );
-	bSizer101->Add( m_arcEditMode, 0, wxBOTTOM|wxTOP, 5 );
+	bSizer101->Add( m_arcEditMode, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizerUniversal->Add( bSizer101, 1, wxEXPAND, 5 );
 
 
-	bOptionsSizer->Add( bSizerUniversal, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bOptionsSizer->Add( bSizerUniversal, 0, wxEXPAND, 5 );
 
 
 	bMiddleLeftSizer->Add( bOptionsSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
