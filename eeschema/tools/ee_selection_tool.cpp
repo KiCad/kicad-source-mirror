@@ -1047,9 +1047,10 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
         // Lines are hard to hit.  Give them a bit more slop to still be considered "exact".
 
-        if( line || ( shape && shape->GetShape() == SHAPE_T::POLY ) )
+        if( line || ( shape && shape->GetShape() == SHAPE_T::POLY )
+                 || ( shape && shape->GetShape() == SHAPE_T::ARC ) )
         {
-            int pixelThreshold = KiROUND( getView()->ToWorld( 1 ) );
+            int pixelThreshold = KiROUND( getView()->ToWorld( 6 ) );
 
             if( item->HitTest( aPos, pixelThreshold ) )
                 exactHits.insert( item );
