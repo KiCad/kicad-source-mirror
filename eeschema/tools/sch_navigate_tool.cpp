@@ -77,7 +77,7 @@ void SCH_NAVIGATE_TOOL::HypertextCommand( const wxString& href )
             }
         }
 
-        m_frame->ShowInfoBarError( wxString::Format( _( "Page '%d' not found." ), destPage ) );
+        m_frame->ShowInfoBarError( wxString::Format( _( "Page '%s' not found." ), destPage ) );
     }
     else
     {
