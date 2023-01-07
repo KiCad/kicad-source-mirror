@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <memory>
 #include <wx/filename.h>
+#include <wx/string.h>
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
