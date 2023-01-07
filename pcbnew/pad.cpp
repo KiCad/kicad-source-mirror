@@ -247,7 +247,7 @@ bool PAD::FlashLayer( LSET aLayers ) const
 }
 
 
-bool PAD::FlashLayer( int aLayer ) const
+bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 {
     if( aLayer == UNDEFINED_LAYER )
         return true;
@@ -304,9 +304,20 @@ bool PAD::FlashLayer( int aLayer ) const
             // clearance.
             // See https://gitlab.com/kicad/code/kicad/-/issues/11299.
             if( m_zoneLayerConnections[ aLayer ] == ZLC_CONNECTED )
+            {
                 return true;
-
-            return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, types );
+            }
+            else if( m_zoneLayerConnections[ aLayer ] == ZLC_UNCONNECTED )
+            {
+                return false;
+            }
+            else /* ZLC_UNRESOLVED */
+            {
+                if( aOnlyCheckIfPermitted )
+                    return true;
+                else
+                    return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, types );
+            }
         }
     }
 

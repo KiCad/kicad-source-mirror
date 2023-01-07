@@ -305,6 +305,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     {
         PCB_LAYER_ID primary = GetPrimaryHighContrastLayer();
         bool         isActive = m_highContrastLayers.count( aLayer );
+        bool         hide = false;
 
         switch( originalLayer )
         {
@@ -313,7 +314,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             const PAD* pad = static_cast<const PAD*>( item );
 
             if( !pad->FlashLayer( primary ) )
+            {
                 isActive = false;
+                hide = true;
+            }
 
             if( m_PadEditModePad && pad != m_PadEditModePad )
                 isActive = false;
@@ -328,7 +332,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
             // Target graphic is active if the via crosses the primary layer
             if( via->GetLayerSet().test( primary ) == 0 )
+            {
                 isActive = false;
+                hide = true;
+            }
 
             break;
         }
@@ -338,7 +345,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
 
             if( !via->FlashLayer( primary ) )
+            {
                 isActive = false;
+                hide = true;
+            }
 
             break;
         }
@@ -380,8 +390,12 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
         if( !isActive )
         {
-            if( m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN || IsNetnameLayer( aLayer ) )
+            if( m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN
+                || IsNetnameLayer( aLayer )
+                || hide )
+            {
                 color = COLOR4D::CLEAR;
+            }
             else
             {
                 color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );

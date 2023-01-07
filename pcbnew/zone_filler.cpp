@@ -734,10 +734,16 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone,
                                                          aLayer );
                 padClearance = constraint.GetValue().Min();
-                holeClearance = padClearance;
 
-                if( pad->FlashLayer( aLayer ) )
+                if( pad->CanFlashLayer( aLayer ) )
+                {
                     aThermalConnectionPads.push_back( pad );
+                    addKnockout( pad, aLayer, padClearance, holes );
+                }
+                else if( pad->GetDrillSize().x > 0 )
+                {
+                    pad->TransformHoleToPolygon( holes, padClearance, m_maxError, ERROR_OUTSIDE );
+                }
 
                 break;
 
@@ -750,13 +756,22 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 else
                     padClearance = aZone->GetLocalClearance();
 
-                constraint = bds.m_DRCEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, pad,
-                                                         aZone, aLayer );
+                if( pad->FlashLayer( aLayer ) )
+                {
+                    addKnockout( pad, aLayer, padClearance, holes );
+                }
+                else if( pad->GetDrillSize().x > 0 )
+                {
+                    constraint = bds.m_DRCEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT,
+                                                             pad, aZone, aLayer );
 
-                if( constraint.GetValue().Min() > padClearance )
-                    holeClearance = constraint.GetValue().Min();
-                else
-                    holeClearance = padClearance;
+                    if( constraint.GetValue().Min() > padClearance )
+                        holeClearance = constraint.GetValue().Min();
+                    else
+                        holeClearance = padClearance;
+
+                    pad->TransformHoleToPolygon( holes, holeClearance, m_maxError, ERROR_OUTSIDE );
+                }
 
                 break;
 
@@ -764,11 +779,6 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 // No knockout
                 continue;
             }
-
-            if( pad->FlashLayer( aLayer ) )
-                addKnockout( pad, aLayer, padClearance, holes );
-            else if( pad->GetDrillSize().x > 0 )
-                pad->TransformHoleToPolygon( holes, holeClearance, m_maxError, ERROR_OUTSIDE );
         }
     }
 

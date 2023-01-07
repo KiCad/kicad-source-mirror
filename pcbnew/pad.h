@@ -631,9 +631,16 @@ public:
      * Check to see whether the pad should be flashed on the specific layer.
      *
      * @param aLayer Layer to check for connectivity
+     * @param aOnlyCheckIfPermitted indicates that the routine should just return whether or not
+     *        a flashed connection is permitted on this layer (without checking for a connection)
      * @return true if connected by pad or track (or optionally zone)
      */
-    bool FlashLayer( int aLayer ) const;
+    bool FlashLayer( int aLayer, bool aOnlyCheckIfPermitted = false ) const;
+
+    bool CanFlashLayer( int aLayer )
+    {
+        return FlashLayer( aLayer, true );
+    }
 
     PCB_LAYER_ID GetLayer() const override;
 
