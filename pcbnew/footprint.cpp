@@ -740,7 +740,9 @@ int FOOTPRINT::GetLikelyAttribute() const
             break;
 
         case PAD_ATTRIB::SMD:
-            smd_count++;
+            if( pad->IsOnCopperLayer() )
+                smd_count++;
+
             break;
 
         default:
