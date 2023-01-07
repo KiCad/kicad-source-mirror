@@ -30,8 +30,6 @@
 #include <algorithm>
 #include <memory>
 #include <wx/filename.h>
-#include <wx/string.h>
-#include <wx/textfile.h>
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
@@ -435,17 +433,10 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     wxXmlDocument xmlDocument;
     wxFFileInputStream stream( m_filename.GetFullPath() );
 
-    // check if this is an eagle XML file as we currently only support XML files, not binary files
-    wxString    str;
-
-    // open the file
-    wxTextFile tfile;
-    tfile.Open(aFileName);
-
-    // read the first line
-    str = tfile.GetFirstLine();
-
-    if(!str.StartsWith(wxT("<?xml")))
+    // read first line to check for Eagle XML format file
+    wxTextInputStream text( stream );
+    wxString line = text.ReadLine();
+    if( !line.StartsWith( wxT( "<?xml" ) ) )
     {
         THROW_IO_ERROR( wxString::Format( _( "'%s' is an Eagle binary-format schematic file; "
                                              "only Eagle XML-format schematics can be imported." ),
