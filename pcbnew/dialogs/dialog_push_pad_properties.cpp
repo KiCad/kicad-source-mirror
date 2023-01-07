@@ -52,6 +52,8 @@ DIALOG_PUSH_PAD_PROPERTIES::DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent 
     if( aParent->IsType( FRAME_FOOTPRINT_EDITOR ) )
         m_sdbSizer1Apply->Show( false );
 
+    m_sdbSizer1->Layout();
+
     finishDialogSettings();
 }
 
