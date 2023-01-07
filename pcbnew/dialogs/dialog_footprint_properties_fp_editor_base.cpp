@@ -166,7 +166,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	bButtonSize1 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bpAddLayer = new STD_BITMAP_BUTTON( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize1->Add( m_bpAddLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bButtonSize1->Add( m_bpAddLayer, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bButtonSize1->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -384,7 +384,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	bButtonSize2->Add( m_bpRemovePadGroup, 0, wxRIGHT, 5 );
 
 
-	sbSizerNetTies->Add( bButtonSize2, 0, wxEXPAND|wxBOTTOM, 2 );
+	sbSizerNetTies->Add( bButtonSize2, 0, wxEXPAND, 2 );
 
 
 	bSizerPanelClearances->Add( sbSizerNetTies, 1, wxEXPAND|wxALL, 5 );

@@ -180,12 +180,18 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
+
 	wxStaticText* staticPreviewLabel;
 	staticPreviewLabel = new wxStaticText( this, wxID_ANY, _("Preview"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticPreviewLabel->Wrap( -1 );
 	staticPreviewLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizerRight->Add( staticPreviewLabel, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
+	bSizer6->Add( staticPreviewLabel, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
+
+
+	bSizerRight->Add( bSizer6, 0, wxEXPAND, 5 );
 
 	m_SizerPanelView = new wxBoxSizer( wxVERTICAL );
 
@@ -193,13 +199,10 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	bSizerRight->Add( m_SizerPanelView, 1, wxEXPAND|wxBOTTOM, 8 );
 
 
-	bSizermain->Add( bSizerRight, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizermain->Add( bSizerRight, 1, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer3DButtons;
 	bSizer3DButtons = new wxBoxSizer( wxVERTICAL );
-
-
-	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND, 5 );
 
 	m_bpvISO = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_bpvISO->SetToolTip( _("Enable/disable orthographic projection") );
@@ -236,7 +239,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	bSizer3DButtons->Add( m_bpUpdate, 0, wxBOTTOM, 5 );
 
 
-	bSizermain->Add( bSizer3DButtons, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizermain->Add( bSizer3DButtons, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizermain );
