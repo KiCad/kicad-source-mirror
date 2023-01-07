@@ -158,7 +158,6 @@ void DIALOG_FIELD_PROPERTIES::init()
     // Predefined fields cannot contain some chars, or cannot be empty,
     // and need a SCH_FIELD_VALIDATOR (m_StyledTextCtrl cannot use a SCH_FIELD_VALIDATOR).
     bool use_validator = m_fieldId == REFERENCE_FIELD
-                         || m_fieldId == VALUE_FIELD
                          || m_fieldId == FOOTPRINT_FIELD
                          || m_fieldId == DATASHEET_FIELD
                          || m_fieldId == SHEETNAME_V
@@ -186,8 +185,8 @@ void DIALOG_FIELD_PROPERTIES::init()
     // the text box and display an explanation.
     if( m_fieldId == VALUE_FIELD && m_isPower )
     {
-        m_note->SetLabel( wxString::Format( m_note->GetLabel(),
-                                            _( "Power symbol value field text cannot be changed." ) ) );
+        m_note->SetLabel( wxString::Format( m_note->GetLabel(), _( "Power symbol value field text "
+                                                                   "cannot be changed." ) ) );
         m_note->Show( true );
         m_TextCtrl->Enable( false );
     }
@@ -363,14 +362,6 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
             return false;
         }
     }
-    else if( m_fieldId == VALUE_FIELD )
-    {
-        if( m_text.IsEmpty() )
-        {
-            DisplayError( this, _( "Value may not be empty." ) );
-            return false;
-        }
-    }
     else if( m_fieldId == SHEETFILENAME_V )
     {
         wxFileName fn( m_text );
@@ -454,16 +445,7 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
 void DIALOG_LIB_FIELD_PROPERTIES::UpdateField( LIB_FIELD* aField )
 {
-    wxString value = m_text;
-
-    if( m_fieldId == VALUE_FIELD )
-        value = EscapeString( value, CTX_LIBID );
-
-    aField->SetText( value );
-
-    // VALUE === symbol name, so update the parent symbol if it changes.
-    if( m_fieldId == VALUE_FIELD && aField->GetParent() )
-        aField->GetParent()->SetName( value );
+    aField->SetText( m_text );
 
     updateText( aField );
 
