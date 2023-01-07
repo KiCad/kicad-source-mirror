@@ -332,7 +332,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
     FT_Set_Char_Size( face, 0, scaler, GLYPH_RESOLUTION, 0 );
 
     hb_buffer_t* buf = hb_buffer_create();
-    hb_buffer_add_utf8( buf, aText.c_str(), -1, 0, -1 );
+    hb_buffer_add_utf8( buf, UTF8( aText ).c_str(), -1, 0, -1 );
     hb_buffer_guess_segment_properties( buf );  // guess direction, script, and language based on
                                                 // contents
 
@@ -525,7 +525,7 @@ void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const wxString
                                          const EDA_ANGLE& aOrientation, bool aIsMirrored ) const
 {
     hb_buffer_t* buf = hb_buffer_create();
-    hb_buffer_add_utf8( buf, aString.c_str(), -1, 0, -1 );
+    hb_buffer_add_utf8( buf, UTF8( aString ).c_str(), -1, 0, -1 );
     hb_buffer_guess_segment_properties( buf ); // guess direction, script, and language based on contents
 
     unsigned int         glyphCount;
