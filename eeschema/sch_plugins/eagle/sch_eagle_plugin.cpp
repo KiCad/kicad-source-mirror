@@ -30,8 +30,10 @@
 #include <algorithm>
 #include <memory>
 #include <wx/filename.h>
+#include <wx/string.h>
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
+#include <wx/txtstrm.h>
 #include <wx/xml/xml.h>
 
 #include <symbol_library.h>
@@ -431,6 +433,15 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     // Load the document
     wxXmlDocument xmlDocument;
     wxFFileInputStream stream( m_filename.GetFullPath() );
+
+    // read first line to check for legacy kicad sch file
+    wxTextInputStream text( stream );
+    wxString line = text.ReadLine();
+    if( line.StartsWith( wxT( "EESchema" ) ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "'%s' is an legacy Kicad schematic format file.  Try to open this file instead of importing it." ),
+                                          m_filename.GetFullPath() ) );
+    }
 
     if( !stream.IsOk() || !xmlDocument.Load( stream ) )
     {
