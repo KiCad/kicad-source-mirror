@@ -57,9 +57,8 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
 
     long style = GetStyle();
 
-    // The reference, value sheetname and sheetfilename fields cannot be empty.
+    // The reference, sheetname and sheetfilename fields cannot be empty.
     if( aFieldId == REFERENCE_FIELD
-      || aFieldId == VALUE_FIELD
       || aFieldId == SHEETNAME_V
       || aFieldId == SHEETFILENAME_V
       || aFieldId == FIELD_NAME )
