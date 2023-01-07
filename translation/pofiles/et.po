@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-05 16:35-0800\n"
-"PO-Revision-Date: 2023-01-06 23:36+0000\n"
+"PO-Revision-Date: 2023-01-08 20:14+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/"
 "master-source/et/>\n"
@@ -11574,27 +11574,27 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
-msgstr ""
+msgstr ".A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-A"
-msgstr ""
+msgstr "-A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_A"
-msgstr ""
+msgstr "_A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".1"
-msgstr ""
+msgstr ".1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-1"
-msgstr ""
+msgstr "-1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:44
@@ -11678,7 +11678,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:197
 msgid "["
-msgstr ""
+msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:202
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
@@ -11770,11 +11770,11 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:110
 msgid "100"
-msgstr ""
+msgstr "100"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:110
 msgid "50"
-msgstr ""
+msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:545
@@ -12032,7 +12032,7 @@ msgstr ""
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:45
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: eeschema/eeschema.cpp:366
 msgid ""
@@ -15226,7 +15226,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
-msgstr ""
+msgstr "Fail"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:61
 msgid "Add Signals..."
@@ -17786,7 +17786,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:77
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
@@ -17796,7 +17796,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:77
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
@@ -17808,7 +17808,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:172
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:77
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
@@ -17822,7 +17822,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:173
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:77
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
@@ -17833,14 +17833,14 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:113
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:174
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:83
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:109
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:392
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:448
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:96
 msgid "Format for inches"
@@ -21124,7 +21124,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:113
 msgid "s"
-msgstr ""
+msgstr "s"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:41
 msgid "Platinum"
