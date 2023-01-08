@@ -22,7 +22,7 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 
 	m_lblWelcome = new wxStaticText( this, wxID_ANY, _("Welcome to KiCad %s!"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblWelcome->Wrap( -1 );
-	m_lblWelcome->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_lblWelcome->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	bSizer6->Add( m_lblWelcome, 0, wxALL|wxEXPAND, 5 );
 
@@ -73,9 +73,6 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 
 
 	m_sizer->Add( bSizer6, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_sizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_standardButtons = new wxStdDialogButtonSizer();
 	m_standardButtonsOK = new wxButton( this, wxID_OK );

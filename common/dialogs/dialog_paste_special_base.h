@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,7 +18,6 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -34,7 +33,6 @@ class DIALOG_PASTE_SPECIAL_BASE : public DIALOG_SHIM
 
 	protected:
 		wxRadioBox* m_pasteOptions;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -46,6 +44,7 @@ class DIALOG_PASTE_SPECIAL_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_PASTE_SPECIAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Paste Special"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_PASTE_SPECIAL_BASE();
 
 };

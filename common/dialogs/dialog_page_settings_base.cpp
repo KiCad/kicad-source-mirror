@@ -154,16 +154,16 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_staticText30 = new wxStaticText( this, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText30->Wrap( -1 );
-	bSizerfileSelection->Add( m_staticText30, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerfileSelection->Add( m_staticText30, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
 
 	m_textCtrlFilePicker = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerfileSelection->Add( m_textCtrlFilePicker, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerfileSelection->Add( m_textCtrlFilePicker, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
 
 	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerfileSelection->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerfileSelection->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5 );
 
 
-	bSizerFilename->Add( bSizerfileSelection, 1, wxEXPAND, 5 );
+	bSizerFilename->Add( bSizerfileSelection, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
 	bSizerRight->Add( bSizerFilename, 0, wxEXPAND|wxALL, 5 );
@@ -211,16 +211,16 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_TextDate = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextDate->SetMinSize( wxSize( 100,-1 ) );
 
-	bSizerDate->Add( m_TextDate, 3, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerDate->Add( m_TextDate, 3, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ApplyDate = new wxButton( this, wxID_ANY, _("<<<"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizerDate->Add( m_ApplyDate, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerDate->Add( m_ApplyDate, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_PickDate = new wxDatePickerCtrl( this, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT );
 	bSizerDate->Add( m_PickDate, 2, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	fgSizer2->Add( bSizerDate, 0, wxEXPAND, 5 );
+	fgSizer2->Add( bSizerDate, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	m_DateExport = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_DateExport, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -378,9 +378,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	bMainSizer->Add( bUpperSizerH, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -388,7 +385,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bMainSizer->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bMainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

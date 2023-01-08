@@ -38,6 +38,7 @@
 #include <pcbnew_settings.h>
 #include "footprint_wizard_frame.h"
 #include <wx/listbox.h>
+#include <wx/statline.h>
 #include <wx/tokenzr.h>
 #include <wx/numformatter.h>
 #include <wildcards_and_files_ext.h>

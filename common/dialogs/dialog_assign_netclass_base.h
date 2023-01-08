@@ -22,7 +22,6 @@ class WX_HTML_REPORT_BOX;
 #include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/html/htmlwin.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -43,7 +42,6 @@ class DIALOG_ASSIGN_NETCLASS_BASE : public DIALOG_SHIM
 		wxComboBox* m_netclassCtrl;
 		WX_HTML_REPORT_BOX* m_matchingNets;
 		wxStaticText* m_info;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;

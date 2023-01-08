@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,7 +27,6 @@
 #include <wx/slider.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
-#include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -65,7 +64,6 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_SizerTransparency;
 		wxStaticText* m_opacityLabel;
 		wxSlider* m_sliderTransparency;
-		wxStaticLine* m_staticline;
 		wxStaticText* m_staticTextOldColor;
 		wxStaticBitmap* m_OldColorRect;
 		wxStaticBitmap* m_NewColorRect;
@@ -94,6 +92,7 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Color Picker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_COLOR_PICKER_BASE();
 
 };

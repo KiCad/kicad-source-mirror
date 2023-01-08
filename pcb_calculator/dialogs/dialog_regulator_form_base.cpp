@@ -75,9 +75,6 @@ DIALOG_REGULATOR_FORM_BASE::DIALOG_REGULATOR_FORM_BASE( wxWindow* parent, wxWind
 
 	bSizerMain->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline, 0, wxEXPAND, 5 );
-
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );

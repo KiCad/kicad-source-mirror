@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,6 @@
 #include <wx/settings.h>
 #include <wx/radiobut.h>
 #include <wx/filepicker.h>
-#include <wx/statline.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -42,7 +41,6 @@ class DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
 		wxRadioButton* m_emptyRb;
 		wxStaticText* m_staticText2;
 		wxFilePickerCtrl* m_filePicker1;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 
@@ -54,6 +52,7 @@ class DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Global Library Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER );
+
 		~DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE();
 
 };

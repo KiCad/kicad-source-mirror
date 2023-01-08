@@ -113,7 +113,6 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextComment9;
 		wxTextCtrl* m_TextComment9;
 		wxCheckBox* m_Comment9Export;
-		wxStaticLine* m_staticline5;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

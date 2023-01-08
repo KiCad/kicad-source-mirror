@@ -28,7 +28,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -51,7 +50,6 @@ class DIALOG_MIGRATE_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblPathError;
 		wxCheckBox* m_cbCopyLibraryTables;
 		wxRadioButton* m_btnUseDefaults;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_standardButtons;
 		wxButton* m_standardButtonsOK;
 		wxButton* m_standardButtonsCancel;

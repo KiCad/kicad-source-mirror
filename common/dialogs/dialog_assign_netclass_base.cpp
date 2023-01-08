@@ -52,17 +52,8 @@ DIALOG_ASSIGN_NETCLASS_BASE::DIALOG_ASSIGN_NETCLASS_BASE( wxWindow* parent, wxWi
 	m_info->Wrap( -1 );
 	bLowerSizer->Add( m_info, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLowerSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP, 10 );
 
-
-	bMainSizer->Add( bLowerSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
-
-	wxBoxSizer* bSizerButtons;
-	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
-
-
-	bSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bLowerSizer, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
@@ -71,10 +62,7 @@ DIALOG_ASSIGN_NETCLASS_BASE::DIALOG_ASSIGN_NETCLASS_BASE( wxWindow* parent, wxWi
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
 
-	bSizerButtons->Add( m_sdbSizerStdButtons, 0, wxALL, 5 );
-
-
-	bMainSizer->Add( bSizerButtons, 0, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( m_sdbSizerStdButtons, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

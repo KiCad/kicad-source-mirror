@@ -23,7 +23,6 @@
 #include <wx/panel.h>
 #include <wx/choice.h>
 #include <wx/simplebook.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -61,7 +60,6 @@ class DIALOG_GRID_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextGrid2;
 		wxChoice* m_grid2Ctrl;
 		wxStaticText* m_grid2HotKey;
-		wxStaticLine* m_staticline1;
 		wxButton* m_buttonResetOrigin;
 		wxButton* m_buttonResetSizes;
 		wxStdDialogButtonSizer* m_sdbSizer;

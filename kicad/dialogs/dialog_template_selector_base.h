@@ -29,7 +29,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/sizer.h>
 #include <wx/notebook.h>
 #include <wx/html/htmlwin.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
@@ -52,7 +51,6 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_reloadButton;
 		wxNotebook* m_notebook;
 		HTML_WINDOW* m_htmlWin;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

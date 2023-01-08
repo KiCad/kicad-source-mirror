@@ -48,9 +48,6 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 
 	bmainSizer->Add( m_htmlWin, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 12 );
 
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bmainSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
-
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );

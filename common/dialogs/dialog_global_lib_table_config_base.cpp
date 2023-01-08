@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,15 +53,12 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWind
 
 	bSizer2->Add( m_filePicker1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer2->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
-
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
 	m_sdbSizer1->Realize();
 
-	bSizer2->Add( m_sdbSizer1, 1, wxEXPAND, 5 );
+	bSizer2->Add( m_sdbSizer1, 1, wxEXPAND|wxTOP, 5 );
 
 
 	bSizer1->Add( bSizer2, 1, wxALL|wxEXPAND, 5 );

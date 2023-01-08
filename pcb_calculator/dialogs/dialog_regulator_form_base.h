@@ -20,7 +20,6 @@
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -45,7 +44,6 @@ class DIALOG_REGULATOR_FORM_BASE : public DIALOG_SHIM
 		wxStaticText* m_RegulIadjTitle;
 		wxTextCtrl* m_RegulIadjValue;
 		wxStaticText* m_IadjUnitLabel;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

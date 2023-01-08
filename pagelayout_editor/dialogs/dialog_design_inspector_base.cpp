@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,12 +32,12 @@ DIALOG_INSPECTOR_BASE::DIALOG_INSPECTOR_BASE( wxWindow* parent, wxWindowID id, c
 	// Columns
 	m_gridListItems->EnableDragColMove( false );
 	m_gridListItems->EnableDragColSize( true );
-	m_gridListItems->SetColLabelSize( 30 );
 	m_gridListItems->SetColLabelValue( 0, _("-") );
 	m_gridListItems->SetColLabelValue( 1, _("Type") );
 	m_gridListItems->SetColLabelValue( 2, _("Count") );
 	m_gridListItems->SetColLabelValue( 3, _("Comment") );
 	m_gridListItems->SetColLabelValue( 4, _("Text") );
+	m_gridListItems->SetColLabelSize( 30 );
 	m_gridListItems->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -62,11 +62,12 @@ DIALOG_INSPECTOR_BASE::DIALOG_INSPECTOR_BASE( wxWindow* parent, wxWindowID id, c
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizerMain->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 

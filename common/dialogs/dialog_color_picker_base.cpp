@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -116,7 +116,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	bSizerBright->Add( m_staticTextBright, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_sliderBrightness = new wxSlider( sbSizerViewHSV->GetStaticBox(), wxID_ANY, 255, 0, 255, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
-	bSizerBright->Add( m_sliderBrightness, 1, wxTOP|wxRIGHT|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizerBright->Add( m_sliderBrightness, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxTOP, 5 );
 
 
 	sbSizerViewHSV->Add( bSizerBright, 0, wxEXPAND, 5 );
@@ -143,7 +143,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_fgridColor->AddGrowableCol( 9 );
 	m_fgridColor->SetFlexibleDirection( wxBOTH );
 	m_fgridColor->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
+
 
 	m_SizerDefinedColors->Add( m_fgridColor, 1, wxALL|wxEXPAND, 10 );
 
@@ -175,9 +175,6 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 
 
 	bSizerMain->Add( bSizerUpperMain, 0, wxEXPAND, 5 );
-
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
