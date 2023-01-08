@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -57,10 +57,6 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     m_treebook = new wxTreebook( this, wxID_ANY );
     m_treebook->SetFont( KIUI::GetControlFont( this ) );
     mainSizer->Add( m_treebook, 1, wxEXPAND|wxLEFT|wxTOP, 10 );
-
-    auto line = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                  wxLI_HORIZONTAL );
-    mainSizer->Add( line, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 10 );
 
     m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 

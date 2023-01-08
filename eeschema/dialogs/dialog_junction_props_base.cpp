@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -66,9 +66,6 @@ DIALOG_JUNCTION_PROPS_BASE::DIALOG_JUNCTION_PROPS_BASE( wxWindow* parent, wxWind
 	m_helpLabel2->Wrap( -1 );
 	bSizer2->Add( m_helpLabel2, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer2->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
-
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -78,7 +75,7 @@ DIALOG_JUNCTION_PROPS_BASE::DIALOG_JUNCTION_PROPS_BASE( wxWindow* parent, wxWind
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizer2->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND, 5 );
+	bSizer2->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizer2 );

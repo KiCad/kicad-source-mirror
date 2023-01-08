@@ -38,7 +38,6 @@ class WX_INFOBAR;
 #include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -94,7 +93,6 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_fillColorSwatch;
 		wxCheckBox* m_hyperlinkCb;
 		WX_COMBOBOX* m_hyperlinkCombo;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

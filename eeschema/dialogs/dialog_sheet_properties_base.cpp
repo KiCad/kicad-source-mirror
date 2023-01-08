@@ -5,9 +5,9 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "widgets/wx_infobar.h"
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
+#include "widgets/wx_infobar.h"
 
 #include "dialog_sheet_properties_base.h"
 
@@ -187,9 +187,6 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 
 
 	mainSizer->Add( bSizer6, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_sizerBottom = new wxBoxSizer( wxHORIZONTAL );
 

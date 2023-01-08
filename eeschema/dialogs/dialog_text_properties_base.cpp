@@ -8,8 +8,8 @@
 #include "widgets/bitmap_button.h"
 #include "widgets/color_swatch.h"
 #include "widgets/font_choice.h"
-#include "widgets/wx_infobar.h"
 #include "widgets/wx_combobox.h"
+#include "widgets/wx_infobar.h"
 
 #include "dialog_text_properties_base.h"
 
@@ -305,12 +305,6 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	bMainSizer->Add( m_textEntrySizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
-
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
@@ -318,10 +312,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizer4->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
-
-
-	bMainSizer->Add( bSizer4, 0, wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

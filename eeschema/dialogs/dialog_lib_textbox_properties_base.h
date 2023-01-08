@@ -35,7 +35,6 @@ class FONT_CHOICE;
 #include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -91,7 +90,6 @@ class DIALOG_LIB_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_privateCheckbox;
 		wxCheckBox* m_CommonUnit;
 		wxCheckBox* m_CommonConvert;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

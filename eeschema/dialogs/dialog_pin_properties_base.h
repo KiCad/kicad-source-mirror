@@ -38,7 +38,6 @@ class wxBitmapComboBox;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/collpane.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -86,7 +85,6 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		WX_GRID* m_alternatesGrid;
 		STD_BITMAP_BUTTON* m_addAlternate;
 		STD_BITMAP_BUTTON* m_deleteAlternate;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;

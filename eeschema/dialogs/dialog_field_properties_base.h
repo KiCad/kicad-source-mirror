@@ -33,7 +33,6 @@ class FONT_CHOICE;
 #include <wx/choice.h>
 #include <wx/panel.h>
 #include <wx/gbsizer.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -85,7 +84,6 @@ class DIALOG_FIELD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_yPosUnits;
 		wxCheckBox* m_CommonUnit;
 		wxCheckBox* m_CommonConvert;
-		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;

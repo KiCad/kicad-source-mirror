@@ -89,7 +89,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_dcEnable2 = new wxCheckBox( m_pgDC, wxID_ANY, _("Source 2"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_dcEnable2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_dcEnable2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	gbSizer1->Add( m_dcEnable2, wxGBPosition( 0, 3 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -115,7 +115,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText411 = new wxStaticText( m_pgDC, wxID_ANY, _("Source 1"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText411->Wrap( -1 );
-	m_staticText411->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_staticText411->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	gbSizer1->Add( m_staticText411, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -400,7 +400,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_pgTransient->SetSizer( bSizer81 );
 	m_pgTransient->Layout();
 	bSizer81->Fit( m_pgTransient );
-	m_simPages->AddPage( m_pgTransient, _("Transient"), true );
+	m_simPages->AddPage( m_pgTransient, _("Transient"), false );
 	m_pgCustom = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
@@ -421,7 +421,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_pgCustom->SetSizer( bSizer2 );
 	m_pgCustom->Layout();
 	bSizer2->Fit( m_pgCustom );
-	m_simPages->AddPage( m_pgCustom, _("Custom"), false );
+	m_simPages->AddPage( m_pgCustom, _("Custom"), true );
 
 	bSizer1->Add( m_simPages, 1, wxALL|wxEXPAND, 10 );
 
@@ -447,9 +447,6 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 
 	bSizer88->Add( m_compatibilityMode, 1, wxEXPAND|wxBOTTOM, 5 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer88->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer1->Add( bSizer88, 0, wxEXPAND, 5 );

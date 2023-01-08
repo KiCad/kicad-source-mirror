@@ -31,7 +31,6 @@
 #include <wx/button.h>
 #include <wx/combobox.h>
 #include <wx/notebook.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -120,7 +119,6 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_fixIncludePaths;
 		wxBoxSizer* m_compatibilityMode;
 		wxChoice* m_compatibilityModeChoice;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

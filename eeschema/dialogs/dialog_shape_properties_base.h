@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,7 +27,6 @@ class WX_INFOBAR;
 #include <wx/panel.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -64,12 +63,11 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_fillColorSwatch;
 		wxStaticText* m_helpLabel1;
 		wxStaticText* m_helpLabel2;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFillChecked( wxCommandEvent& event ) { event.Skip(); }
 
@@ -77,6 +75,7 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("%s Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_SHAPE_PROPERTIES_BASE();
 
 };

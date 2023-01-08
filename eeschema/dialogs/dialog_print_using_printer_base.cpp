@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,9 +53,6 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 
 	bMainSizer->Add( bleftSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
 
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -63,7 +60,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	bbuttonsSizer->Add( m_buttonPageSetup, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bbuttonsSizer->Add( 40, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bbuttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -74,10 +71,10 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bbuttonsSizer->Add( m_sdbSizer1, 0, wxALL, 5 );
+	bbuttonsSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 
 
-	bMainSizer->Add( bbuttonsSizer, 0, wxEXPAND|wxLEFT, 10 );
+	bMainSizer->Add( bbuttonsSizer, 0, wxEXPAND|wxLEFT|wxTOP, 10 );
 
 
 	this->SetSizer( bMainSizer );

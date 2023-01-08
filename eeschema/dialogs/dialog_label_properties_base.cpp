@@ -177,7 +177,7 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_shapeSizer->Add( m_rectangle, 0, wxBOTTOM|wxRIGHT, 3 );
 
 
-	optionsSizer->Add( m_shapeSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	optionsSizer->Add( m_shapeSizer, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
 
 	wxStaticBoxSizer* formatting;
 	formatting = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Formatting") ), wxVERTICAL );
@@ -188,7 +188,7 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_fontLabel = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontLabel->Wrap( -1 );
-	m_formattingGB->Add( m_fontLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_formattingGB->Add( m_fontLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_fontCtrlChoices[] = { _("Default Font"), _("KiCad Font") };
 	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
@@ -243,7 +243,7 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_textSizeLabel = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	m_formattingGB->Add( m_textSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_formattingGB->Add( m_textSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer71;
 	bSizer71 = new wxBoxSizer( wxHORIZONTAL );
@@ -282,13 +282,10 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	formatting->Add( m_formattingGB, 1, wxEXPAND, 5 );
 
 
-	optionsSizer->Add( formatting, 1, wxEXPAND|wxTOP, 5 );
+	optionsSizer->Add( formatting, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	bMainSizer->Add( optionsSizer, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -297,10 +294,7 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizer4->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
-
-
-	bMainSizer->Add( bSizer4, 0, wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizer1, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bMainSizer );

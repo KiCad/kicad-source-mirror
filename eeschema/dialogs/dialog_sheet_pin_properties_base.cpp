@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -80,7 +80,7 @@ DIALOG_SHEET_PIN_PROPERTIES_BASE::DIALOG_SHEET_PIN_PROPERTIES_BASE( wxWindow* pa
 
 	m_fontLabel = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontLabel->Wrap( -1 );
-	gbSizer1->Add( m_fontLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_fontLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_fontCtrlChoices[] = { _("Default Font"), _("KiCad Font") };
 	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
@@ -116,7 +116,7 @@ DIALOG_SHEET_PIN_PROPERTIES_BASE::DIALOG_SHEET_PIN_PROPERTIES_BASE( wxWindow* pa
 
 	m_textSizeLabel = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	gbSizer1->Add( m_textSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer1->Add( m_textSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer71;
 	bSizer71 = new wxBoxSizer( wxHORIZONTAL );
@@ -162,9 +162,6 @@ DIALOG_SHEET_PIN_PROPERTIES_BASE::DIALOG_SHEET_PIN_PROPERTIES_BASE( wxWindow* pa
 
 
 	m_mainSizer->Add( m_nameSizer, 1, wxALL|wxEXPAND, 10 );
-
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_mainSizer->Add( m_staticline2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

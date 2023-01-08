@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,11 +19,10 @@
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,14 +40,13 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBackgroundColor;
 		wxCheckBox* m_checkUseColorTheme;
 		wxChoice* m_colorTheme;
-		wxStaticLine* m_staticline1;
 		wxButton* m_buttonPageSetup;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnMonochromeChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUseColorThemeChecked( wxCommandEvent& event ) { event.Skip(); }
@@ -59,6 +57,7 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_PRINT_USING_PRINTER_BASE();
 
 };

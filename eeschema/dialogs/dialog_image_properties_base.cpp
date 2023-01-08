@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -67,12 +67,6 @@ DIALOG_IMAGE_PROPERTIES_BASE::DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_GeneralBoxSizer->Add( m_Notebook, 1, wxEXPAND | wxALL, 5 );
 
-	wxBoxSizer* bSizerButtons;
-	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
-
-
-	bSizerButtons->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsOK );
@@ -80,10 +74,7 @@ DIALOG_IMAGE_PROPERTIES_BASE::DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
 
-	bSizerButtons->Add( m_sdbSizerStdButtons, 0, wxALL, 5 );
-
-
-	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND, 5 );
+	m_GeneralBoxSizer->Add( m_sdbSizerStdButtons, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( m_GeneralBoxSizer );

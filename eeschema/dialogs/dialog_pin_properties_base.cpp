@@ -7,9 +7,9 @@
 
 #include "pin_shape_combobox.h"
 #include "pin_type_combobox.h"
-#include "widgets/wx_infobar.h"
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
+#include "widgets/wx_infobar.h"
 #include "wx/bmpcbox.h"
 
 #include "dialog_pin_properties_base.h"
@@ -255,9 +255,6 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	mainSizer->Add( bLowerSizer, 1, wxEXPAND|wxLEFT, 10 );
 
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsOK );
@@ -265,7 +262,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
 
-	mainSizer->Add( m_sdbSizerButtons, 0, wxALL|wxALIGN_RIGHT, 5 );
+	mainSizer->Add( m_sdbSizerButtons, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( mainSizer );

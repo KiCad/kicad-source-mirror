@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -282,6 +282,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	this->SetSizer( bPanelSizer );
 	this->Layout();
+	bPanelSizer->Fit( this );
 }
 
 PANEL_EESCHEMA_EDITING_OPTIONS_BASE::~PANEL_EESCHEMA_EDITING_OPTIONS_BASE()

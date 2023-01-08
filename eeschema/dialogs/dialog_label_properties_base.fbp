@@ -840,7 +840,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP|wxRIGHT</property>
+                            <property name="flag">wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
@@ -1430,7 +1430,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP</property>
+                            <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
                             <property name="proportion">1</property>
                             <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
@@ -1459,7 +1459,7 @@
                                             <property name="border">5</property>
                                             <property name="colspan">1</property>
                                             <property name="column">0</property>
-                                            <property name="flag">wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                                             <property name="row">0</property>
                                             <property name="rowspan">1</property>
                                             <object class="wxStaticText" expanded="1">
@@ -2325,7 +2325,7 @@
                                             <property name="border">5</property>
                                             <property name="colspan">1</property>
                                             <property name="column">0</property>
-                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                                             <property name="row">1</property>
                                             <property name="rowspan">1</property>
                                             <object class="wxStaticText" expanded="0">
@@ -2728,31 +2728,20 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
                     <property name="proportion">0</property>
-                    <object class="wxBoxSizer" expanded="1">
+                    <object class="wxStdDialogButtonSizer" expanded="1">
+                        <property name="Apply">0</property>
+                        <property name="Cancel">1</property>
+                        <property name="ContextHelp">0</property>
+                        <property name="Help">0</property>
+                        <property name="No">0</property>
+                        <property name="OK">1</property>
+                        <property name="Save">0</property>
+                        <property name="Yes">0</property>
                         <property name="minimum_size"></property>
-                        <property name="name">bSizer4</property>
-                        <property name="orient">wxHORIZONTAL</property>
-                        <property name="permission">none</property>
-                        <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
-                            <property name="flag">wxALL|wxEXPAND</property>
-                            <property name="proportion">1</property>
-                            <object class="wxStdDialogButtonSizer" expanded="1">
-                                <property name="Apply">0</property>
-                                <property name="Cancel">1</property>
-                                <property name="ContextHelp">0</property>
-                                <property name="Help">0</property>
-                                <property name="No">0</property>
-                                <property name="OK">1</property>
-                                <property name="Save">0</property>
-                                <property name="Yes">0</property>
-                                <property name="minimum_size"></property>
-                                <property name="name">m_sdbSizer1</property>
-                                <property name="permission">protected</property>
-                            </object>
-                        </object>
+                        <property name="name">m_sdbSizer1</property>
+                        <property name="permission">protected</property>
                     </object>
                 </object>
             </object>

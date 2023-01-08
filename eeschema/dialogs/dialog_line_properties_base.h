@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,6 @@ class COLOR_SWATCH;
 #include <wx/panel.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -53,7 +52,6 @@ class DIALOG_LINE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBitmapComboBox* m_typeCombo;
 		wxStaticText* m_helpLabel1;
 		wxStaticText* m_helpLabel2;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerApply;
@@ -65,7 +63,7 @@ class DIALOG_LINE_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 412,182 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_LINE_PROPERTIES_BASE();
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,7 +33,6 @@ class FONT_CHOICE;
 #include <wx/panel.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -74,12 +73,11 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_privateCheckbox;
 		wxCheckBox* m_CommonUnit;
 		wxCheckBox* m_CommonConvert;
-		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSetFocusText( wxFocusEvent& event ) { event.Skip(); }
@@ -88,6 +86,7 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_LIB_TEXT_PROPERTIES_BASE();
 
 };

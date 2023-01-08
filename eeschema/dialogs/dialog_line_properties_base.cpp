@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -85,10 +85,7 @@ DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer3->Add( m_helpLabel2, 0, wxRIGHT|wxLEFT, 10 );
 
 
-	mainSizer->Add( bSizer3, 0, wxEXPAND|wxTOP, 5 );
-
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	mainSizer->Add( bSizer3, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -99,11 +96,12 @@ DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	mainSizer->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
+	mainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 }

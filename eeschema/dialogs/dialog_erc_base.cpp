@@ -5,8 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "widgets/wx_infobar.h"
 #include "widgets/wx_html_report_box.h"
+#include "widgets/wx_infobar.h"
 
 #include "dialog_erc_base.h"
 
@@ -156,9 +156,6 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 
 	bSizer1->Add( bMainSizer, 1, wxEXPAND|wxALL, 5 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 

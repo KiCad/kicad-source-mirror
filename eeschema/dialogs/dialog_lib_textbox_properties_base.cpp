@@ -294,13 +294,7 @@ DIALOG_LIB_TEXTBOX_PROPERTIES_BASE::DIALOG_LIB_TEXTBOX_PROPERTIES_BASE( wxWindow
 
 	m_textEntrySizer->AddGrowableCol( 3 );
 
-	bMainSizer->Add( m_textEntrySizer, 1, wxEXPAND|wxALL, 10 );
-
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+	bMainSizer->Add( m_textEntrySizer, 1, wxALL|wxEXPAND, 10 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -309,10 +303,7 @@ DIALOG_LIB_TEXTBOX_PROPERTIES_BASE::DIALOG_LIB_TEXTBOX_PROPERTIES_BASE( wxWindow
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizer4->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
-
-
-	bMainSizer->Add( bSizer4, 0, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

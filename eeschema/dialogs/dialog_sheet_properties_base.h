@@ -32,7 +32,6 @@ class WX_INFOBAR;
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -62,7 +61,6 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_backgroundSwatch;
 		wxStaticText* m_pageNumberStaticText;
 		wxTextCtrl* m_pageNumberTextCtrl;
-		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_sizerBottom;
 		wxStaticText* m_hierarchicalPathLabel;
 		wxStaticText* m_hierarchicalPath;

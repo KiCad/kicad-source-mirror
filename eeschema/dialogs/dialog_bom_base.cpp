@@ -108,9 +108,6 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	bMainSizer->Add( bbottomSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
