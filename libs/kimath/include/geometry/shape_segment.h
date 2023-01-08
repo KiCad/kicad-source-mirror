@@ -157,6 +157,8 @@ public:
         m_seg.B += aVector;
     }
 
+    bool Is45Degree( EDA_ANGLE aTollerance = EDA_ANGLE( 1.0, DEGREES_T ) ) const;
+
     virtual const std::string Format( bool aCplusPlus = true ) const override;
 
 private:

@@ -87,3 +87,18 @@ const std::string SHAPE_CIRCLE::Format( bool aCplusPlus ) const
     return ss.str();
 }
 
+bool SHAPE_SEGMENT::Is45Degree( EDA_ANGLE aTollerance ) const
+{
+    EDA_ANGLE mag = EDA_ANGLE( m_seg.A - m_seg.B ).Normalize180();
+    
+    double f = fmod( mag.AsDegrees(), 45.0 );
+    double d = aTollerance.AsDegrees();
+
+    if( f >= 45.0 - d || f <= d )
+    {
+        return true;
+    }
+
+    return false;
+}
+
