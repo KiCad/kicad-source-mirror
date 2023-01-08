@@ -91,6 +91,17 @@ BOOST_AUTO_TEST_CASE( Parse )
             "A string ~{overbar}",
             " { {'A string '}  {OVER {'overbar'} } } "
         },
+        {
+            "A string ~{incomplete markup",
+            " { {'A string ~{incomplete markup'} } "
+        },
+        {
+            "A string ~{overbar} ~{incomplete markup",
+            " { {'A string '}  {OVER {'overbar'} }  {' ~{incomplete markup'} } "
+        },
+        {   "A string ~{incomplete markup ~{overbar}",
+            " { {'A string ~{incomplete markup '}  {OVER {'overbar'} } } "
+        }
     };
 
     for( auto& c : cases )
