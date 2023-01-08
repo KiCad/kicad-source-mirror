@@ -935,6 +935,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
         item->ClearEditFlags();
 
+    // ensure any selected item not in screen main list (for instance symbol fields)
+    // has its edit flags cleared
+    for( EDA_ITEM* item : selectionCopy )
+        item->ClearEditFlags();
+
     if( unselect )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     else
@@ -944,6 +949,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     m_lineConnectionCache.clear();
     m_moveInProgress = false;
     m_frame->PopTool( aEvent );
+
     return 0;
 }
 
