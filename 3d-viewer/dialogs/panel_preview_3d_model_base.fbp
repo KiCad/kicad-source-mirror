@@ -87,13 +87,13 @@
                                         <property name="flexible_direction">wxBOTH</property>
                                         <property name="growablecols">1</property>
                                         <property name="growablerows"></property>
-                                        <property name="hgap">0</property>
+                                        <property name="hgap">3</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">fgSizerScale</property>
                                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                         <property name="permission">none</property>
                                         <property name="rows">0</property>
-                                        <property name="vgap">0</property>
+                                        <property name="vgap">3</property>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
@@ -680,13 +680,13 @@
                                         <property name="flexible_direction">wxBOTH</property>
                                         <property name="growablecols">1</property>
                                         <property name="growablerows"></property>
-                                        <property name="hgap">0</property>
+                                        <property name="hgap">3</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">fgSizerRotate</property>
                                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                         <property name="permission">none</property>
                                         <property name="rows">0</property>
-                                        <property name="vgap">0</property>
+                                        <property name="vgap">3</property>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
@@ -1273,13 +1273,13 @@
                                         <property name="flexible_direction">wxBOTH</property>
                                         <property name="growablecols">1</property>
                                         <property name="growablerows"></property>
-                                        <property name="hgap">0</property>
+                                        <property name="hgap">3</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">fgSizerOffset</property>
                                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                         <property name="permission">none</property>
                                         <property name="rows">0</property>
-                                        <property name="vgap">0</property>
+                                        <property name="vgap">3</property>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>

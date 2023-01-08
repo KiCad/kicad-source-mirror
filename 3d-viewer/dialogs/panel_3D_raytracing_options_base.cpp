@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -164,7 +164,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	sbSizerRaytracingLightConfiguration->Add( bSizer11, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 	wxFlexGridSizer* fgSizer11;
-	fgSizer11 = new wxFlexGridSizer( 0, 9, 0, 0 );
+	fgSizer11 = new wxFlexGridSizer( 0, 9, 3, 0 );
 	fgSizer11->AddGrowableCol( 4 );
 	fgSizer11->SetFlexibleDirection( wxHORIZONTAL );
 	fgSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );

@@ -21,7 +21,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	sbSizerScale = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scale") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerScale;
-	fgSizerScale = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerScale = new wxFlexGridSizer( 0, 3, 3, 3 );
 	fgSizerScale->AddGrowableCol( 1 );
 	fgSizerScale->SetFlexibleDirection( wxBOTH );
 	fgSizerScale->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -66,7 +66,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	sbSizerRotation = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Rotation") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerRotate;
-	fgSizerRotate = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerRotate = new wxFlexGridSizer( 0, 3, 3, 3 );
 	fgSizerRotate->AddGrowableCol( 1 );
 	fgSizerRotate->SetFlexibleDirection( wxBOTH );
 	fgSizerRotate->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -111,7 +111,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	sbSizerOffset = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Offset") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerOffset;
-	fgSizerOffset = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerOffset = new wxFlexGridSizer( 0, 3, 3, 3 );
 	fgSizerOffset->AddGrowableCol( 1 );
 	fgSizerOffset->SetFlexibleDirection( wxBOTH );
 	fgSizerOffset->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
