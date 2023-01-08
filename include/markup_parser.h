@@ -49,22 +49,20 @@ struct NODE : parse_tree::basic_node<NODE>
     bool isSuperscript() const { return is_type<MARKUP::superscript>(); }
 };
 
-template< typename ControlChar >
-struct plain : seq< not_at< seq< ControlChar, string< '{' > > >, ControlChar > {};
+struct markup : sor< subscript,
+                     superscript,
+                     overbar > {};
 
-struct plainControlChar : sor< plain< string<'_'> >,
-                               plain< string<'^'> >,
-                               plain< string<'~'> > > {};
 /**
  * anyString =
  * a run of characters that do not start a command sequence, or if they do, they do not start
  * a complete command prefix (command char + open brace)
  */
-struct anyString : plus< sor< utf8::not_one< '~', '_', '^' >,
-                              plainControlChar > > {};
+struct anyString : plus< seq< not_at< markup >,
+                              utf8::any > > {};
 
-struct anyStringWithinBraces : plus< sor< utf8::not_one< '~', '_', '^', '}' >,
-                                          plainControlChar > > {};
+struct anyStringWithinBraces : plus< seq< not_at< markup >,
+                                          utf8::not_one< '}' > > > {};
 
 template< typename ControlChar >
 struct braces : seq< seq< ControlChar, string< '{' > >,
