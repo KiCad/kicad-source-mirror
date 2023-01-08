@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,7 +57,7 @@ DIALOG_SELECT_3D_MODEL_BASE::DIALOG_SELECT_3D_MODEL_BASE( wxWindow* parent, wxWi
 
 	m_stDirChoice = new wxStaticText( this, wxID_ANY, _("Available paths:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stDirChoice->Wrap( -1 );
-	bSizerLower->Add( m_stDirChoice, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerLower->Add( m_stDirChoice, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxArrayString m_dirChoicesChoices;
 	m_dirChoices = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dirChoicesChoices, 0 );
