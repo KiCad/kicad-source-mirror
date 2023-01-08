@@ -456,12 +456,10 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_EXPR_CONTEXT* aCtx, ZONE* aArea )
             {
                 if( aCtx->HasErrorCallback() )
                     aCtx->ReportError( _( "Footprint has no front courtyard." ) );
-
-                return false;
             }
-            else
+            else if( areaOutline.Collide( &courtyard.Outline( 0 ) ) )
             {
-                return areaOutline.Collide( &courtyard.Outline( 0 ) );
+                return true;
             }
         }
 
@@ -473,12 +471,10 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_EXPR_CONTEXT* aCtx, ZONE* aArea )
             {
                 if( aCtx->HasErrorCallback() )
                     aCtx->ReportError( _( "Footprint has no back courtyard." ) );
-
-                return false;
             }
-            else
+            else if( areaOutline.Collide( &courtyard.Outline( 0 ) ) )
             {
-                return areaOutline.Collide( &courtyard.Outline( 0 ) );
+                return true;
             }
         }
 
@@ -619,7 +615,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
             [item, arg, context]() -> double
             {
                 BOARD*       board = item->GetBoard();
-                PCB_LAYER_ID layer = context->GetLayer();
+                PCB_LAYER_ID aLayer = context->GetLayer();
                 BOX2I        itemBBox = item->GetBoundingBox();
 
                 if( searchAreas( board, arg->AsString(), context,
@@ -628,25 +624,40 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             if( !aArea || aArea == item || aArea->GetParent() == item )
                                 return false;
 
-                            if( !( aArea->GetLayerSet() & item->GetLayerSet() ).any() )
+                            LSET commonLayers = aArea->GetLayerSet() & item->GetLayerSet();
+
+                            if( !commonLayers.any() )
                                 return false;
 
                             if( !aArea->GetBoundingBox().Intersects( itemBBox ) )
                                 return false;
 
                             std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
-                            PTR_PTR_LAYER_CACHE_KEY      key = { aArea, item, layer };
+                            LSET                         testLayers;
 
-                            auto i = board->m_IntersectsAreaCache.find( key );
+                            if( aLayer != UNDEFINED_LAYER )
+                                testLayers.set( aLayer );
+                            else
+                                testLayers = commonLayers;
 
-                            if( i != board->m_IntersectsAreaCache.end() )
-                                return i->second;
+                            for( PCB_LAYER_ID layer : testLayers.UIOrder() )
+                            {
+                                PTR_PTR_LAYER_CACHE_KEY key = { aArea, item, layer };
 
-                            bool collides = collidesWithArea( item, context, aArea );
+                                auto i = board->m_IntersectsAreaCache.find( key );
 
-                            board->m_IntersectsAreaCache[ key ] = collides;
+                                if( i != board->m_IntersectsAreaCache.end() && i->second )
+                                    return true;
 
-                            return collides;
+                                bool collides = collidesWithArea( item, context, aArea );
+
+                                board->m_IntersectsAreaCache[ key ] = collides;
+
+                                if( collides )
+                                    return true;
+                            }
+
+                            return false;
                         } ) )
                 {
                     return 1.0;
