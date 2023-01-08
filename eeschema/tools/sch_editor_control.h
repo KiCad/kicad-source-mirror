@@ -42,7 +42,8 @@ public:
             EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
             m_probingPcbToSch( false ),
             m_pickerItem( nullptr ),
-            m_duplicateIsHoverSelection( false )
+            m_duplicateIsHoverSelection( false ),
+            m_foundItemHighlighted( false )
     { }
 
     ~SCH_EDITOR_CONTROL() { }
@@ -225,25 +226,25 @@ private:
                          EDA_SEARCH_DATA& aData );
 
 private:
-    bool      m_probingPcbToSch; // Recursion guard when cross-probing to schematic editor
-    EDA_ITEM* m_pickerItem;      // Current item for picker highlighting.
+    bool        m_probingPcbToSch;          // Recursion guard for PCB to schematic cross-probing
+    EDA_ITEM*   m_pickerItem;               // Current item for picker highlighting.
 
-    // Temporary storage location for Duplicate action
-    std::string m_duplicateClipboard;
+    std::string m_duplicateClipboard;       // Temporary storage for Duplicate action
     bool        m_duplicateIsHoverSelection;
+
+    bool        m_foundItemHighlighted;
+    wxTimer     m_wrapAroundTimer;          // A timer during which a subsequent FindNext will
+                                            //  result in a wrap-around
 
     // A map of sheet filename --> screens for the clipboard contents.  We use these to hook up
     // cut/paste operations for unsaved sheet content.
-    std::map<wxString, SCH_SCREEN*> m_supplementaryClipboard;
+    std::map<wxString, SCH_SCREEN*>          m_supplementaryClipboard;
 
     // A map of KIID_PATH --> symbol instances for the clipboard contents.
     std::map<KIID_PATH, SCH_SYMBOL_INSTANCE> m_clipboardSymbolInstances;
 
     // A map of KIID_PATH --> sheet instances for the clipboard contents.
-    std::map<KIID_PATH, SCH_SHEET_INSTANCE> m_clipboardSheetInstances;
-
-    // A timer during which a subsequent FindNext will result in a wrap-around
-    wxTimer m_wrapAroundTimer;
+    std::map<KIID_PATH, SCH_SHEET_INSTANCE>  m_clipboardSheetInstances;
 };
 
 

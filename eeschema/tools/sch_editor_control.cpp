@@ -337,6 +337,7 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
                 {
                     aItem->SetForceVisible( true );
                     m_selectionTool->BrightenItem( aItem );
+                    m_foundItemHighlighted = true;
                 }
                 else if( aItem->IsBrightened() )
                 {
@@ -348,6 +349,7 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
     if( aEvent.IsAction( &ACTIONS::find ) || aEvent.IsAction( &ACTIONS::findAndReplace )
         || aEvent.IsAction( &ACTIONS::updateFind ) )
     {
+        m_foundItemHighlighted = false;
         m_selectionTool->ClearSelection();
 
         for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
@@ -365,6 +367,21 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
     {
         for( EDA_ITEM* item : m_selectionTool->GetSelection() )
             visit( item, &m_frame->GetCurrentSheet() );
+    }
+    else if( m_foundItemHighlighted )
+    {
+        m_foundItemHighlighted = false;
+
+        for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
+        {
+            visit( item, &m_frame->GetCurrentSheet() );
+
+            item->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        visit( aChild, &m_frame->GetCurrentSheet() );
+                    } );
+        }
     }
 
     getView()->UpdateItems();
@@ -550,6 +567,17 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 
     if( item )
     {
+        if( !item->IsBrightened() )
+        {
+            // Clear any previous brightening
+            UpdateFind( aEvent );
+
+            // Brighten (and show) found object
+            item->SetForceVisible( true );
+            m_selectionTool->BrightenItem( item );
+            m_foundItemHighlighted = true;
+        }
+
         m_selectionTool->AddItemToSel( item );
         m_frame->FocusOnLocation( item->GetBoundingBox().GetCenter() );
         m_frame->GetCanvas()->Refresh();
@@ -2615,6 +2643,8 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ReplaceAll,            ACTIONS::replaceAll.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::UpdateFind,            ACTIONS::updateFind.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::UpdateFind,            EVENTS::SelectedItemsModified );
+    Go( &SCH_EDITOR_CONTROL::UpdateFind,            EVENTS::PointSelectedEvent );
+    Go( &SCH_EDITOR_CONTROL::UpdateFind,            EVENTS::SelectedEvent );
 
     Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::PointSelectedEvent );
     Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::SelectedEvent );
