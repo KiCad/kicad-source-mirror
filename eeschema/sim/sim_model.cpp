@@ -1650,6 +1650,9 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                             {
                                 model->SetParamValue( ii, tokenizer.GetNextToken().ToStdString(),
                                                       SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+
+                                if( !model->GetParam( ii ).value->HasValue() )
+                                    THROW_IO_ERROR( "fall back to raw SPICE" );
                             }
 
                             spiceTypeInfo.m_Text = SIM_MODEL::TypeInfo( type ).fieldValue;

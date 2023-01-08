@@ -530,11 +530,6 @@ private:
 
     void clearLibSymbols();
 
-    /**
-     * Migrate the symbol's V6 simulation model SCH_FIELDs to their V7 equivalents
-     */
-    void migrateSimModel( SCH_SYMBOL& aSymbol );
-
 public:
     /**
      * last value for the zoom level, useful in Eeschema when changing the current displayed
