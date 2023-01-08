@@ -117,8 +117,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         m_statusLine->Show( false );
     }
 
-    m_separator0->SetIsSeparator();
-
     m_bold->SetIsCheckButton();
     m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
     m_italic->SetIsCheckButton();
@@ -135,10 +133,17 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     m_separator2->SetIsSeparator();
 
-    m_mirrored->SetIsCheckButton();
-    m_mirrored->SetBitmap( KiBitmap( BITMAPS::text_mirrored ) );
+    m_valignBottom->SetIsRadioButton();
+    m_valignBottom->SetBitmap( KiBitmap( BITMAPS::text_valign_bottom ) );
+    m_valignCenter->SetIsRadioButton();
+    m_valignCenter->SetBitmap( KiBitmap( BITMAPS::text_valign_center ) );
+    m_valignTop->SetIsRadioButton();
+    m_valignTop->SetBitmap( KiBitmap( BITMAPS::text_valign_top ) );
 
     m_separator3->SetIsSeparator();
+
+    m_mirrored->SetIsCheckButton();
+    m_mirrored->SetBitmap( KiBitmap( BITMAPS::text_mirrored ) );
 
     SetTitle( title );
     m_hash_key = title;
@@ -285,6 +290,13 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check( true );  break;
     }
 
+    switch ( m_edaText->GetVertJustify() )
+    {
+    case GR_TEXT_V_ALIGN_BOTTOM: m_valignBottom->Check( true ); break;
+    case GR_TEXT_V_ALIGN_CENTER: m_valignCenter->Check( true ); break;
+    case GR_TEXT_V_ALIGN_TOP:    m_valignTop->Check( true );    break;
+    }
+
     m_mirrored->Check( m_edaText->IsMirrored() );
 
     EDA_ANGLE orientation = m_edaText->GetTextAngle();
@@ -329,6 +341,16 @@ void DIALOG_TEXT_PROPERTIES::onBoldToggle( wxCommandEvent & aEvent )
 void DIALOG_TEXT_PROPERTIES::onAlignButton( wxCommandEvent& aEvent )
 {
     for( BITMAP_BUTTON* btn : { m_alignLeft, m_alignCenter, m_alignRight } )
+    {
+        if( btn->IsChecked() && btn != aEvent.GetEventObject() )
+            btn->Check( false );
+    }
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onValignButton( wxCommandEvent& aEvent )
+{
+    for( BITMAP_BUTTON* btn : { m_valignBottom, m_valignCenter, m_valignTop } )
     {
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );
@@ -439,6 +461,13 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
     else
         m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+
+    if( m_valignBottom->IsChecked() )
+        m_edaText->SetVertJustify ( GR_TEXT_V_ALIGN_BOTTOM );
+    else if( m_valignCenter->IsChecked() )
+        m_edaText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+    else
+        m_edaText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 
     m_edaText->SetMirrored( m_mirrored->IsChecked() );
 
