@@ -73,6 +73,9 @@ wxString AltiumPropertyToKiCadString( const wxString& aString )
         }
     }
 
+    if( inOverbar )
+        converted += "}";
+
     return converted;
 }
 
