@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 16:35-0800\n"
+"POT-Creation-Date: 2023-01-08 12:14-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5711,9 +5711,6 @@ msgstr "Power symbol value field text cannot be changed."
 
 msgid "Illegal reference designator value!"
 msgstr "Illegal reference designator value!"
-
-msgid "Value may not be empty."
-msgstr "Value may not be empty."
 
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "Sheet filename can only be modified in Sheet Properties dialog."
@@ -12350,9 +12347,6 @@ msgstr "Hierarchy Navigator"
 msgid "Show or hide the schematic sheet hierarchy navigator"
 msgstr "Show or hide the schematic sheet hierarchy navigator"
 
-msgid "Add Junctions to Selection where needed"
-msgstr "Add Junctions to Selection where needed"
-
 msgid "Add Wire"
 msgstr "Add Wire"
 
@@ -12576,8 +12570,8 @@ msgid "Press <ESC> to cancel move."
 msgstr "Press <ESC> to cancel move."
 
 #, c-format
-msgid "Page '%d' not found."
-msgstr "Page '%d' not found."
+msgid "Page '%s' not found."
+msgstr "Page '%s' not found."
 
 msgid "No symbol library selected."
 msgstr "No symbol library selected."
@@ -29435,6 +29429,12 @@ msgstr "pcbnew"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
+msgid "EDA"
+msgstr "EDA"
+
+msgid "Circuit board"
+msgstr "Circuit board"
+
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -29474,6 +29474,16 @@ msgstr "KiCad Schematic"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
 
+#~ msgid "Value may not be empty."
+#~ msgstr "Value may not be empty."
+
+#~ msgid "Add Junctions to Selection where needed"
+#~ msgstr "Add Junctions to Selection where needed"
+
+#, c-format
+#~ msgid "Page '%d' not found."
+#~ msgstr "Page '%d' not found."
+
 #~ msgid "Recursively annotate subsheets"
 #~ msgstr "Recursively annotate subsheets"
 
@@ -29503,12 +29513,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ "version will resolve this issue.\n"
 #~ "\n"
 #~ "Do you wish to continue?"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit board"
 
 #~ msgid "Pin Text"
 #~ msgstr "Pin Text"
