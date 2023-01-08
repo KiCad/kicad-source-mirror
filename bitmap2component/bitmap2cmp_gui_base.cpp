@@ -21,13 +21,13 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	m_InitialPicturePanel = new wxScrolledWindow( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_InitialPicturePanel->SetScrollRate( 5, 5 );
-	m_Notebook->AddPage( m_InitialPicturePanel, _("Original Picture"), true );
+	m_Notebook->AddPage( m_InitialPicturePanel, _("Original Picture"), false );
 	m_GreyscalePicturePanel = new wxScrolledWindow( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_GreyscalePicturePanel->SetScrollRate( 5, 5 );
 	m_Notebook->AddPage( m_GreyscalePicturePanel, _("Greyscale Picture"), false );
 	m_BNPicturePanel = new wxScrolledWindow( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_BNPicturePanel->SetScrollRate( 5, 5 );
-	m_Notebook->AddPage( m_BNPicturePanel, _("Black && White Picture"), false );
+	m_Notebook->AddPage( m_BNPicturePanel, _("Black && White Picture"), true );
 
 	bMainSizer->Add( m_Notebook, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
@@ -114,7 +114,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	m_staticTextOSize = new wxStaticText( sbSizerImgPrms->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOSize->Wrap( -1 );
-	bSizerRes->Add( m_staticTextOSize, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerRes->Add( m_staticTextOSize, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_UnitSizeX = new wxTextCtrl( sbSizerImgPrms->GetStaticBox(), wxID_ANY, _("300"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UnitSizeX->SetMinSize( wxSize( 60,-1 ) );
@@ -131,7 +131,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_PixelUnit->SetSelection( 0 );
 	m_PixelUnit->SetMinSize( wxSize( 80,-1 ) );
 
-	bSizerRes->Add( m_PixelUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	bSizerRes->Add( m_PixelUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 
 	sbSizerImgPrms->Add( bSizerRes, 0, wxEXPAND, 5 );
@@ -144,12 +144,12 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	m_ThresholdText = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Black / white threshold:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThresholdText->Wrap( -1 );
-	sbSizer2->Add( m_ThresholdText, 0, 0, 5 );
+	sbSizer2->Add( m_ThresholdText, 0, wxLEFT, 5 );
 
 	m_sliderThreshold = new wxSlider( sbSizer2->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sliderThreshold->SetToolTip( _("Adjust the level to convert the greyscale picture to a black and white picture.") );
 
-	sbSizer2->Add( m_sliderThreshold, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbSizer2->Add( m_sliderThreshold, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_checkNegative = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Negative"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer2->Add( m_checkNegative, 0, wxTOP|wxBOTTOM, 5 );
