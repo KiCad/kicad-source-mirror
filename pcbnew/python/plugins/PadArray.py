@@ -47,11 +47,11 @@ class PadMaker(object):
         @param rot_degree: the pad rotation, in degrees
         """
         pad = pcbnew.PAD(self.module)
-        pad.SetSize(pcbnew.VECTOR2I(Hsize, Vsize))
+        pad.SetSize(pcbnew.VECTOR2I( int(Hsize), int(Vsize) ))
         pad.SetShape(shape)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
         pad.SetLayerSet(pad.PTHMask())
-        pad.SetDrillSize(pcbnew.VECTOR2I(drill, drill))
+        pad.SetDrillSize(pcbnew.VECTOR2I( int(drill), int(drill) ))
         pad.SetOrientation( pcbnew.EDA_ANGLE( rot_degree, pcbnew.DEGREES_T ) )
 
         return pad
@@ -72,11 +72,11 @@ class PadMaker(object):
         @param drill: the drill diameter (equals the NPTH diameter)
         """
         pad = pcbnew.PAD(self.module)
-        pad.SetSize(pcbnew.VECTOR2I(drill, drill))
+        pad.SetSize(pcbnew.VECTOR2I( int(drill), int(drill) ))
         pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_NPTH)
         pad.SetLayerSet(pad.UnplatedHoleMask())
-        pad.SetDrillSize(pcbnew.VECTOR2I(drill, drill))
+        pad.SetDrillSize(pcbnew.VECTOR2I( int(drill), int(drill) ))
         return pad
 
     def SMDPad(self, Vsize, Hsize, shape=pcbnew.PAD_SHAPE_RECT, rot_degree=0):
