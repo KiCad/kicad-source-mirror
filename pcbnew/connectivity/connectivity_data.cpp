@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -755,6 +755,12 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* 
 
             if( hitStart && hitEnd )
             {
+                if( zone )
+                {
+                    // Both start and end in a zone: track may be redundant, but it's not dangling
+                    return false;
+                }
+
                 if( getMinDist( item, aTrack->GetStart() ) < getMinDist( item, aTrack->GetEnd() ) )
                     start_count++;
                 else
