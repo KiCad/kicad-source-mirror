@@ -1155,6 +1155,9 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
             field.Plot( aPlotter, false );
 
         sym->PlotPins( aPlotter );
+
+        if( sym->GetDNP() )
+            sym->PlotDNP( aPlotter );
     }
 
     for( const SCH_ITEM* item : junctions )

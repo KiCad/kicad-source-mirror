@@ -473,6 +473,21 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 
     for( SCH_FIELD& field : m_fields )
         field.Print( aSettings, aOffset );
+
+    if( m_DNP )
+    {
+        BOX2I bbox = GetBodyAndPinsBoundingBox();
+        wxDC* DC = aSettings->GetPrintDC();
+
+        GRFilledSegment( DC, bbox.GetOrigin(), bbox.GetEnd(),
+                             4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
+                             COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+
+        GRFilledSegment( DC, bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
+                             bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
+                             4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
+                             COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+    }
 }
 
 
@@ -2102,6 +2117,9 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
                 field.Plot( aPlotter, local_background );
         }
 
+        if( m_DNP )
+            PlotDNP( aPlotter );
+
         // Plot attributes to a hypertext menu
         std::vector<wxString> properties;
 
@@ -2122,11 +2140,29 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
 
+
+
         aPlotter->EndBlock( nullptr );
 
         if( !m_part->IsPower() )
             aPlotter->Bookmark( GetBoundingBox(), GetField( REFERENCE_FIELD )->GetShownText(), _("Symbols") );
     }
+}
+
+
+void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
+{
+    BOX2I bbox = GetBodyAndPinsBoundingBox();
+    aPlotter->SetColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+
+    aPlotter->ThickSegment( bbox.GetOrigin(), bbox.GetEnd(),
+                            4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
+                            FILLED, nullptr );
+
+    aPlotter->ThickSegment( bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
+                            bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
+                            4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
+                            FILLED, nullptr );
 }
 
 

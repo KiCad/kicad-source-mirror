@@ -470,6 +470,12 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDr
 
     if( aDimmed )
     {
+        double hue;
+        double sat;
+        double light;
+
+        color.ToHSL( hue, sat, light );
+        color.FromHSL( hue, 0.0, light );
         COLOR4D sheetColour = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
         color = color.Mix( sheetColour, 0.5f );
     }
@@ -737,6 +743,10 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimm
 
             if( aDimmed )
             {
+                double hue, sat, light;
+
+                fillColour.ToHSL( hue, sat, light );
+                fillColour.FromHSL( hue, 0.0, light );
                 fillColour = fillColour.Mix(
                         m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ), 0.5f );
             }
@@ -2253,6 +2263,22 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         tempPin->ClearFlags( IS_DANGLING );             // Clear this temporary flag
         symbolPin->SetFlags( tempPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
                                                         // IS_SHOWN_AS_BITMAP
+    }
+
+    if( aSymbol->GetDNP() )
+    {
+        BOX2I bbox = aSymbol->GetBodyAndPinsBoundingBox();
+
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( true );
+        m_gal->SetStrokeColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+        m_gal->SetFillColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+
+            m_gal->DrawSegment( bbox.GetOrigin(), bbox.GetEnd(),
+                    4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+            m_gal->DrawSegment( bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
+                                bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
+                    4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
     }
 }
 
