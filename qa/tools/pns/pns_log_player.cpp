@@ -67,8 +67,8 @@ void PNS_LOG_PLAYER::createRouter()
 const PNS_LOG_FILE::COMMIT_STATE PNS_LOG_PLAYER::GetRouterUpdatedItems()
 {
     PNS_LOG_FILE::COMMIT_STATE state;
-    std::vector<PNS::ITEM*> added, removed;
-    m_router->GetUpdatedItems( removed, added );
+    std::vector<PNS::ITEM*> added, removed, heads;
+    m_router->GetUpdatedItems( removed, added, heads );
 
     //printf("a %d r %d\n", added.size(), removed.size() );
     for( auto item : removed )
@@ -80,6 +80,8 @@ const PNS_LOG_FILE::COMMIT_STATE PNS_LOG_PLAYER::GetRouterUpdatedItems()
     {
         state.m_addedItems.insert( item );
     }
+
+    // fixme: update the state with the head trace (not supported in current testsuite)
 
     return state;
 }

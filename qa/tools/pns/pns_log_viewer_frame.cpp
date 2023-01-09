@@ -232,8 +232,7 @@ void PNS_LOG_VIEWER_FRAME::drawSimpleShape( SHAPE* aShape, bool aIsSelected, con
     case SH_LINE_CHAIN:
     {
         auto lc = static_cast<SHAPE_LINE_CHAIN*>( aShape );
-        m_overlay->AnnotatedPolyline( *lc, aName,
-                                      m_showVertices ||  aIsSelected );
+        m_overlay->AnnotatedPolyline( *lc, aName, m_showVertices ||  aIsSelected );
 
         break;
     }
@@ -746,6 +745,7 @@ static void collapseAllChildren( wxTreeListCtrl* tree )
 
 void PNS_LOG_VIEWER_FRAME::updateDumpPanel( int iter )
 {
+    printf("UpdateDUmp %d\n", iter );
     if( !m_logPlayer )
         return;
 
