@@ -42,7 +42,7 @@ CLI::EXPORT_PCB_DXF_COMMAND::EXPORT_PCB_DXF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-iv", ARG_EXCLUDE_VALUE )
+    m_argParser.add_argument( "-ev", ARG_EXCLUDE_VALUE )
             .help( UTF8STDSTR( _( "Exclude the value text" ) ) )
             .implicit_value( true )
             .default_value( false );
