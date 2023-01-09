@@ -28,7 +28,10 @@ namespace CLI
 {
 #define ARG_OUTPUT "--output"
 #define ARG_INPUT "input"
+
 #define ARG_BLACKANDWHITE "--black-and-white"
+#define ARG_BLACKANDWHITE_DESC "Black and white only"
+
 #define ARG_LAYERS "--layers"
 #define ARG_INCLUDE_REFDES "--include-refdes"
 #define ARG_INCLUDE_VALUE "--include-value"

@@ -30,6 +30,8 @@
 
 #define ARG_NO_BACKGROUND_COLOR "--no-background-color"
 #define ARG_SYMBOL "--symbol"
+#define ARG_INC_HIDDEN_PINS "--include-hidden-pins"
+#define ARG_INC_HIDDEN_FIELDS "--include-hidden-fields"
 
 CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg" )
 {
@@ -42,7 +44,17 @@ CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
             .help( UTF8STDSTR( _( "Specific symbol to export within the library" ) ) );
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
-            .help( UTF8STDSTR( _( "Black and white only" ) ) )
+            .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
+    m_argParser.add_argument( ARG_INC_HIDDEN_PINS )
+            .help( UTF8STDSTR( _( "Include hidden pins" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
+    m_argParser.add_argument( ARG_INC_HIDDEN_FIELDS )
+            .help( UTF8STDSTR( _( "Include hidden fields" ) ) )
             .implicit_value( true )
             .default_value( false );
 }
@@ -56,6 +68,8 @@ int CLI::SYM_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_outputDirectory = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     svgJob->m_symbol = FROM_UTF8( m_argParser.get<std::string>( ARG_SYMBOL ).c_str() );
+    svgJob->m_includeHiddenFields = m_argParser.get<bool>( ARG_INC_HIDDEN_FIELDS );
+    svgJob->m_includeHiddenPins = m_argParser.get<bool>( ARG_INC_HIDDEN_PINS );
 
     if( !wxFile::Exists( svgJob->m_libraryPath ) )
     {

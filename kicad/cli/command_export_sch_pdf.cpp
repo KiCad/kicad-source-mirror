@@ -38,7 +38,7 @@ CLI::EXPORT_SCH_PDF_COMMAND::EXPORT_SCH_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
             .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
-            .help( UTF8STDSTR( _( "Black and white only" ) ) )
+            .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
             .implicit_value( true )
             .default_value( false );
 

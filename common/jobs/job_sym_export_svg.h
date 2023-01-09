@@ -32,7 +32,9 @@ public:
             m_libraryPath(),
             m_symbol(),
             m_outputDirectory(),
-            m_blackAndWhite( false )
+            m_blackAndWhite( false ),
+            m_includeHiddenPins( false ),
+            m_includeHiddenFields( false )
     {
     }
 
@@ -44,6 +46,9 @@ public:
     wxString m_colorTheme;
 
     bool m_blackAndWhite;
+
+    bool m_includeHiddenPins;
+    bool m_includeHiddenFields;
 };
 
 #endif

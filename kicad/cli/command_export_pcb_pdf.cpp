@@ -51,7 +51,7 @@ CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
             .default_value( false );
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
-            .help( UTF8STDSTR( _( "Black and white only" ) ) )
+            .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
             .implicit_value( true )
             .default_value( false );
 

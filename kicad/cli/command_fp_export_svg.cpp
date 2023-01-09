@@ -42,7 +42,7 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "
             .help( UTF8STDSTR( _( "Specific symbol to export within the library" ) ) );
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
-            .help( UTF8STDSTR( _( "Black and white only" ) ) )
+            .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
             .implicit_value( true )
             .default_value( false );
 }

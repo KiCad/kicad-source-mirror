@@ -347,6 +347,19 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
         symbolToPlot = parent.get();
     }
 
+    if( aSvgJob->m_includeHiddenPins )
+    {
+        // horrible hack, TODO overhaul the Plot method to handle this
+        for( LIB_ITEM& item : symbolToPlot->GetDrawItems() )
+        {
+            if( item.Type() != LIB_PIN_T )
+                continue;
+
+            LIB_PIN& pin = static_cast<LIB_PIN&>( item );
+            pin.SetVisible( true );
+        }
+    }
+
     // iterate from unit 1, unit 0 would be "all units" which we don't want
     for( int unit = 1; unit < symbol->GetUnitCount() + 1; unit++ )
     {
@@ -410,10 +423,10 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
 
         // note, we want to use the fields from the original symbol pointer (in case of non-alias)
         symbolToPlot->Plot( plotter, unit, convert, background, plotPos, temp, false );
-        symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false, false );
+        symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false, aSvgJob->m_includeHiddenFields );
 
         symbolToPlot->Plot( plotter, unit, convert, !background, plotPos, temp, false );
-        symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false, false );
+        symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false, aSvgJob->m_includeHiddenFields );
 
         plotter->EndPlot();
         delete plotter;
