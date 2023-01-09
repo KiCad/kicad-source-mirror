@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,7 +133,6 @@ DIALOG_FILTER_SELECTION_BASE::DIALOG_FILTER_SELECTION_BASE( wxWindow* parent, wx
     m_Include_Edges_Items = nullptr;
     m_Include_Zones = nullptr;
     m_sdbSizer1 = nullptr;
-    m_staticLine = nullptr;
     m_sdbSizer1OK = nullptr;
     m_sdbSizer1Cancel = nullptr;
 }
