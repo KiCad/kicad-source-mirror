@@ -1040,19 +1040,7 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
     std::string paramsField = GetFieldValue( aFields, SIM_PARAMS_FIELD );
 
     if( !m_serializer->ParseParams( paramsField ) )
-    {
-        // We're relying on the absence of the primary parameter in PARAMS_FIELD to signal that
-        // it's stored in VALUE_FIELD.  But that's a poor determinant as it may just be that the
-        // primary parameter is its default value.  So see if we have anything in VALUE_FIELD,
-        // but don't be belligerent about it.
-        try
-        {
-            m_serializer->ParseValue( GetFieldValue( aFields, SIM_VALUE_FIELD ) );
-        }
-        catch( ... )
-        {
-        }
-    }
+        m_serializer->ParseValue( GetFieldValue( aFields, SIM_VALUE_FIELD ) );
 }
 
 
