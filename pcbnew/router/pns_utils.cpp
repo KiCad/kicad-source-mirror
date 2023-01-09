@@ -193,54 +193,59 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
     }
     */
 
-    if ( !IsSegment45Degree( aSeg.GetSeg() ) )
+    if( a != b )
     {
-        if ( len <= kinkThreshold && len > 0 )
+        if ( !IsSegment45Degree( aSeg.GetSeg() ) )
         {
-            int ll = std::max( std::abs( w ), std::abs( h ) );
+            if ( len <= kinkThreshold && len > 0 )
+            {
+                int ll = std::max( std::abs( w ), std::abs( h ) );
 
-            b = a + VECTOR2I( sgn( w ) * ll, sgn( h ) * ll );
+                b = a + VECTOR2I( sgn( w ) * ll, sgn( h ) * ll );
+            }
         }
-    }
-    else
-    {
-        if( len <= kinkThreshold )
+        else
         {
-            int delta45 = std::abs( std::abs(w) - std::abs(h) );
-            if( std::abs(w) <= 1 ) // almost vertical
+            if( len <= kinkThreshold )
             {
-                w = 0;
-                cl ++;
-            }
-            else if ( std::abs(h) <= 1 ) // almost horizontal
-            {
-                h = 0;
-                cl ++;
-            }
-            else if ( delta45 <= 2 ) // almost 45 degree
-            {
-                int newW = sgn( w ) * std::max( std::abs(w), std::abs( h ) );
-                int newH = sgn( h ) * std::max( std::abs(w), std::abs( h ) );
-                w = newW;
-                h = newH;
-                cl += 2;
-                //PNS_DBG( dbg, AddShape, &aSeg, CYAN,  10000, wxString::Format( "almostkinky45 45 %d l %d dx %d dy %d", !!IsSegment45Degree( aSeg.GetSeg() ), len, w, h ) );
+                int delta45 = std::abs( std::abs(w) - std::abs(h) );
+                if( std::abs(w) <= 1 ) // almost vertical
+                {
+                    w = 0;
+                    cl ++;
+                }
+                else if ( std::abs(h) <= 1 ) // almost horizontal
+                {
+                    h = 0;
+                    cl ++;
+                }
+                else if ( delta45 <= 2 ) // almost 45 degree
+                {
+                    int newW = sgn( w ) * std::max( std::abs(w), std::abs( h ) );
+                    int newH = sgn( h ) * std::max( std::abs(w), std::abs( h ) );
+                    w = newW;
+                    h = newH;
+                    cl += 2;
+                    //PNS_DBG( dbg, AddShape, &aSeg, CYAN,  10000, wxString::Format( "almostkinky45 45 %d l %d dx %d dy %d", !!IsSegment45Degree( aSeg.GetSeg() ), len, w, h ) );
 
-            }
+                }
 
-            b.x = a.x + w;
-            b.y = a.y + h;
+                b.x = a.x + w;
+                b.y = a.y + h;
+            }
         }
     }
 
     if( a == b )
     {
-        int xx2 = KiROUND( 2.0 * ( 1.0 - M_SQRT2 ) * d );
+        int xx2 = KiROUND( 2.0 * ( 1.0 - M_SQRT1_2 ) * d );
 
-        return OctagonalHull( a - VECTOR2I( aSeg.GetWidth() / 2, aSeg.GetWidth() / 2 ),
+        auto ohull = OctagonalHull( a - VECTOR2I( aSeg.GetWidth() / 2, aSeg.GetWidth() / 2 ),
                               VECTOR2I( aSeg.GetWidth(), aSeg.GetWidth() ),
                               cl,
                               xx2 );
+
+        return ohull;
     }
 
     VECTOR2I dir = b - a;
