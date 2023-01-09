@@ -132,7 +132,7 @@ private:
     void          loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
                                 const wxString& aNetClass );
     SCH_SHAPE*    loadPolyLine( wxXmlNode* aPolygonNode );
-    SCH_LINE*     loadWire( wxXmlNode* aWireNode );
+    SCH_ITEM*     loadWire( wxXmlNode* aWireNode, SEG& endpoints );
     SCH_SHAPE*    loadCircle( wxXmlNode* aCircleNode );
     SCH_SHAPE*    loadRectangle( wxXmlNode* aRectNode );
     SCH_TEXT*     loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );

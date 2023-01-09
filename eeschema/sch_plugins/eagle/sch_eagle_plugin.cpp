@@ -945,7 +945,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
         }
         else if( nodeName == wxT( "wire" ) )
         {
-            screen->Append( loadWire( plainNode ) );
+            SEG endpoints;
+            screen->Append( loadWire( plainNode, endpoints ) );
         }
         else if( nodeName == wxT( "text" ) )
         {
@@ -1074,7 +1075,8 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
     {
         bool      labelled = false; // has a label been added to this continuously connected segment
         NODE_MAP  segmentChildren = MapChildren( currentSegment );
-        SCH_LINE* firstWire       = nullptr;
+        bool      firstWireFound  = false;
+        SEG       firstWire;
         m_segments.emplace_back();
         SEG_DESC& segDesc = m_segments.back();
 
@@ -1085,14 +1087,20 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
         {
             if( segmentAttribute->GetName() == wxT( "wire" ) )
             {
-                SCH_LINE* wire = loadWire( segmentAttribute );
+                // TODO: Check how intersections used in adjustNetLabels should be
+                // calculated - for now we pretend that all wires are line segments.
+                SEG thisWire;
+                SCH_ITEM* wire = loadWire( segmentAttribute, thisWire );
+                m_connPoints[thisWire.A].emplace( wire );
+                m_connPoints[thisWire.B].emplace( wire );
 
-                if( !firstWire )
-                    firstWire = wire;
+                if( !firstWireFound )
+                {
+                    firstWire = thisWire;
+                    firstWireFound = true;
+                }
 
                 // Test for intersections with other wires
-                SEG thisWire( wire->GetStartPoint(), wire->GetEndPoint() );
-
                 for( SEG_DESC& desc : m_segments )
                 {
                     if( !desc.labels.empty() && desc.labels.front()->GetText() == netName )
@@ -1163,7 +1171,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
         // Add a small label to the net segment if it hasn't been labeled already or is not
         // connect to a power symbol with a pin on the same net.  This preserves the named net
         // feature of Eagle schematics.
-        if( !labelled && firstWire )
+        if( !labelled && firstWireFound )
         {
             std::unique_ptr<SCH_TEXT> label;
 
@@ -1175,12 +1183,12 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 
             if( label )
             {
-                label->SetPosition( firstWire->GetStartPoint() );
+                label->SetPosition( firstWire.A );
                 label->SetText( escapeName( netName ) );
                 label->SetTextSize( wxSize( schIUScale.MilsToIU( 40 ),
                                             schIUScale.MilsToIU( 40 ) ) );
 
-                if( firstWire->GetEndPoint().x > firstWire->GetStartPoint().x )
+                if( firstWire.B.x > firstWire.A.x )
                     label->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
                 else
                     label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
@@ -1214,35 +1222,50 @@ SCH_SHAPE* SCH_EAGLE_PLUGIN::loadPolyLine( wxXmlNode* aPolygonNode )
     }
 
     poly->SetLayer( kiCadLayer( epoly.layer ) );
+    poly->SetStroke( STROKE_PARAMS( epoly.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
     poly->SetFillMode( FILL_T::FILLED_SHAPE );
 
     return poly.release();
 }
 
 
-SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
+SCH_ITEM* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode, SEG& endpoints )
 {
-    std::unique_ptr<SCH_LINE> wire = std::make_unique<SCH_LINE>();
-
     EWIRE ewire = EWIRE( aWireNode );
 
-    wire->SetLayer( kiCadLayer( ewire.layer ) );
-    wire->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+    VECTOR2I start, end;
 
-    VECTOR2I begin, end;
-
-    begin.x = ewire.x1.ToSchUnits();
-    begin.y = -ewire.y1.ToSchUnits();
+    start.x = ewire.x1.ToSchUnits();
+    start.y = -ewire.y1.ToSchUnits();
     end.x   = ewire.x2.ToSchUnits();
     end.y   = -ewire.y2.ToSchUnits();
+    // For segment wires.
+    endpoints = SEG( start, end );
 
-    wire->SetStartPoint( begin );
-    wire->SetEndPoint( end );
+    if( ewire.curve )
+    {
+        std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC );
 
-    m_connPoints[begin].emplace( wire.get() );
-    m_connPoints[end].emplace( wire.get() );
+        VECTOR2I center = ConvertArcCenter( start, end, *ewire.curve );
+        arc->SetCenter( center );
+        arc->SetStart( start );
+        arc->SetArcAngleAndEnd( -EDA_ANGLE( *ewire.curve, DEGREES_T ), true ); // KiCad rotates the other way
+        arc->SetLayer( kiCadLayer( ewire.layer ) );
+        arc->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
 
-    return wire.release();
+        return arc.release();
+    }
+    else
+    {
+        std::unique_ptr<SCH_LINE> line = std::make_unique<SCH_LINE>();
+
+        line->SetStartPoint( start );
+        line->SetEndPoint( end );
+        line->SetLayer( kiCadLayer( ewire.layer ) );
+        line->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+
+        return line.release();
+    }
 }
 
 
