@@ -465,6 +465,7 @@ public:
             if( *iter == *aRow )
             {
                 rows.erase( iter, iter + 1 );
+                reindex();
                 return true;
             }
         }
