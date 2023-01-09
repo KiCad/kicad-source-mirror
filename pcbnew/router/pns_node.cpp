@@ -719,6 +719,14 @@ void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
         break;
 
     case ITEM::LINE_T:
+    {
+        //fixme(twl): I don't like unique_ptr in this methods as the router has its own garbage collecting
+        //mechanism. This particular case is used exclusively in ROUTER::GetUpdatedItems() for
+        //dumping debug logs. Please don't call Add ( up<LINE> ) otherwise, dragons live here.
+        LINE *l = static_cast<LINE*>( aItem.get() );
+        Add( *l );
+        break;
+    }
     default:
         assert( false );
     }
