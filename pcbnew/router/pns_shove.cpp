@@ -421,7 +421,11 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
     SHOVE_STATUS rv;
     bool viaOnEnd = aCurLine.EndsWithVia();
 
-    if( viaOnEnd && ( !aCurLine.Via().LayersOverlap( &aObstacleLine ) || aCurLine.SegmentCount() == 0 ) )
+    PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove process-single: voe1 %d voe2 %d" ),
+                                          aCurLine.EndsWithVia()?1:0, aObstacleLine.EndsWithVia()?1:0 ) );
+
+
+    if( viaOnEnd && ( !aCurLine.LayersOverlap( &aObstacleLine ) || aCurLine.SegmentCount() == 0 ) )
     {
         // Shove aObstacleLine to the hull of aCurLine's via.
 
@@ -521,8 +525,8 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
     if( Dbg() )
     {
         PNS_DBG( Dbg(), AddItem, aObstacleSeg, BLUE, 0, wxT( "shove-changed-area" ) );
-        PNS_DBG( Dbg(), AddItem, &aCurrent, RED, 10000, wxT( "current-line" ) );
-        PNS_DBG( Dbg(), AddItem, &obstacleLine, GREEN, 10000, wxT( "obstacle-line" ) );
+        PNS_DBG( Dbg(), AddItem, &aCurrent, RED, 10000, wxString::Format( "current-line [l %d v %d]", aCurrent.Layer(), aCurrent.EndsWithVia() ) );
+        PNS_DBG( Dbg(), AddItem, &obstacleLine, GREEN, 10000, wxString::Format( "obstacle-line [l %d v %d]", obstacleLine.Layer(), obstacleLine.EndsWithVia() ) );
         PNS_DBG( Dbg(), AddItem, &shovedLine, BLUE, 10000, wxT( "shoved-line" ) );
     }
 
@@ -1375,7 +1379,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         {
             PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: reverse-collide-via", aIter ).ToStdString(), 0 );
 
-            if( currentLine.EndsWithVia() )
+            if( currentLine.EndsWithVia() && nearest->m_item->Collide( &currentLine.Via(), m_currentNode ) )
             {
                 st = SH_INCOMPLETE;
             }
