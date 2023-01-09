@@ -514,6 +514,7 @@ const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
     SCH_BUS_BUS_ENTRY_T,
     SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
+    SCH_JUNCTION_T,
 };
 
 
@@ -620,6 +621,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
 
             KI_FALLTHROUGH;
+        case SCH_JUNCTION_T:
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
@@ -955,11 +957,20 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     }
     else
     {
+        EE_SELECTION selectionCopy = selection;
+
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         if( connections )
+        {
+            SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+            lwbTool->TrimOverLappingWires( &selectionCopy );
+            lwbTool->AddJunctionsIfNeeded( &selectionCopy );
+
+            m_frame->RecalculateConnections( LOCAL_CLEANUP );
             m_frame->TestDanglingEnds();
+        }
 
         m_frame->OnModify();
     }
