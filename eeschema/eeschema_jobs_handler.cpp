@@ -338,6 +338,15 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
     if( symbol == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
+    LIB_SYMBOL* symbolToPlot = symbol;
+
+    // if the symbol is an alias, then the draw items are stored in the parent
+    if( symbol->IsAlias() )
+    {
+        LIB_SYMBOL_SPTR parent = symbol->GetParent().lock();
+        symbolToPlot = parent.get();
+    }
+
     // iterate from unit 1, unit 0 would be "all units" which we don't want
     for( int unit = 1; unit < symbol->GetUnitCount() + 1; unit++ )
     {
@@ -392,21 +401,19 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
 
         plotter->StartPlot( wxT( "1" ) );
 
-        if( symbol )
-        {
-            bool      background = true;
-            TRANSFORM temp; // Uses default transform
-            VECTOR2I  plotPos;
+        bool      background = true;
+        TRANSFORM temp; // Uses default transform
+        VECTOR2I  plotPos;
 
-            plotPos.x = pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
-            plotPos.y = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
+        plotPos.x = pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
+        plotPos.y = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
 
-            symbol->Plot( plotter, unit, convert, background, plotPos, temp, false );
-            symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false, false );
+        // note, we want to use the fields from the original symbol pointer (in case of non-alias)
+        symbolToPlot->Plot( plotter, unit, convert, background, plotPos, temp, false );
+        symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false, false );
 
-            symbol->Plot( plotter, unit, convert, !background, plotPos, temp, false );
-            symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false, false );
-        }
+        symbolToPlot->Plot( plotter, unit, convert, !background, plotPos, temp, false );
+        symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false, false );
 
         plotter->EndPlot();
         delete plotter;
