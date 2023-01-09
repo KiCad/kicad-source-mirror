@@ -35,13 +35,13 @@ CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 {
     addLayerArg( true );
 
-    m_argParser.add_argument( "-ird", ARG_INCLUDE_REFDES )
-            .help( UTF8STDSTR( _( "Include the reference designator text" ) ) )
+    m_argParser.add_argument( "-erd", ARG_EXCLUDE_REFDES )
+            .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-iv", ARG_INCLUDE_VALUE )
-            .help( UTF8STDSTR( _( "Include the value text" ) ) )
+    m_argParser.add_argument( "-ev", ARG_EXCLUDE_VALUE )
+            .help( UTF8STDSTR( _( "Exclude the value text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
@@ -79,8 +79,9 @@ int CLI::EXPORT_PCB_PDF_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    pdfJob->m_plotFootprintValues = m_argParser.get<bool>( ARG_INCLUDE_VALUE );
-    pdfJob->m_plotRefDes = m_argParser.get<bool>( ARG_INCLUDE_REFDES );
+    pdfJob->m_plotFootprintValues = !m_argParser.get<bool>( ARG_EXCLUDE_VALUE );
+    pdfJob->m_plotRefDes = !m_argParser.get<bool>( ARG_EXCLUDE_REFDES );
+
     pdfJob->m_plotBorderTitleBlocks = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
 
     pdfJob->m_printMaskLayer = m_selectedLayers;

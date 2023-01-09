@@ -36,13 +36,13 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND( const std::string& aN
 {
     addLayerArg( true );
 
-    m_argParser.add_argument( "-ird", ARG_INCLUDE_REFDES )
-            .help( UTF8STDSTR( _( "Include the reference designator text" ) ) )
+    m_argParser.add_argument( "-erd", ARG_EXCLUDE_REFDES )
+            .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-iv", ARG_INCLUDE_VALUE )
-            .help( UTF8STDSTR( _( "Include the value text" ) ) )
+    m_argParser.add_argument( "-ev", ARG_EXCLUDE_VALUE )
+            .help( UTF8STDSTR( _( "Exclude the value text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
@@ -88,8 +88,8 @@ int CLI::EXPORT_PCB_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     aJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
 
-    aJob->m_plotFootprintValues = m_argParser.get<bool>( ARG_INCLUDE_VALUE );
-    aJob->m_plotRefDes = m_argParser.get<bool>( ARG_INCLUDE_VALUE );
+    aJob->m_plotFootprintValues = !m_argParser.get<bool>( ARG_EXCLUDE_VALUE );
+    aJob->m_plotRefDes = !m_argParser.get<bool>( ARG_EXCLUDE_REFDES );
     aJob->m_plotBorderTitleBlocks = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
     aJob->m_disableApertureMacros = m_argParser.get<bool>( ARG_DISABLE_APERTURE_MACROS );
     aJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );

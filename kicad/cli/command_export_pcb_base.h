@@ -33,8 +33,8 @@ namespace CLI
 #define ARG_BLACKANDWHITE_DESC "Black and white only"
 
 #define ARG_LAYERS "--layers"
-#define ARG_INCLUDE_REFDES "--include-refdes"
-#define ARG_INCLUDE_VALUE "--include-value"
+#define ARG_EXCLUDE_REFDES "--exclude-refdes"
+#define ARG_EXCLUDE_VALUE "--exclude-value"
 #define ARG_THEME "--theme"
 #define ARG_INCLUDE_BORDER_TITLE "--include-border-title"
 

@@ -30,9 +30,6 @@
 
 #include <locale_io.h>
 
-#define ARG_LAYERS "--layers"
-#define ARG_INCLUDE_REFDES "--include-refdes"
-#define ARG_INCLUDE_VALUE "--include-value"
 #define ARG_USE_CONTOURS "--use-contours"
 #define ARG_OUTPUT_UNITS "--output-units"
 
@@ -40,13 +37,13 @@ CLI::EXPORT_PCB_DXF_COMMAND::EXPORT_PCB_DXF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 {
     addLayerArg( true );
 
-    m_argParser.add_argument( "-ird", ARG_INCLUDE_REFDES )
-            .help( UTF8STDSTR( _( "Include the reference designator text" ) ) )
+    m_argParser.add_argument( "-erd", ARG_EXCLUDE_REFDES )
+            .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-iv", ARG_INCLUDE_VALUE )
-            .help( UTF8STDSTR( _( "Include the value text" ) ) )
+    m_argParser.add_argument( "-iv", ARG_EXCLUDE_VALUE )
+            .help( UTF8STDSTR( _( "Exclude the value text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
@@ -78,8 +75,8 @@ int CLI::EXPORT_PCB_DXF_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    dxfJob->m_plotFootprintValues = m_argParser.get<bool>( ARG_INCLUDE_VALUE );
-    dxfJob->m_plotRefDes = m_argParser.get<bool>( ARG_INCLUDE_VALUE );
+    dxfJob->m_plotFootprintValues = m_argParser.get<bool>( ARG_EXCLUDE_VALUE );
+    dxfJob->m_plotRefDes = !m_argParser.get<bool>( ARG_EXCLUDE_REFDES );
     dxfJob->m_plotGraphicItemsUsingContours = m_argParser.get<bool>( ARG_USE_CONTOURS );
 
     wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT_UNITS ).c_str() );
