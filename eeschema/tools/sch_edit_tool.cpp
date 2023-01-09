@@ -291,7 +291,14 @@ bool SCH_EDIT_TOOL::Init()
                 return false;
             };
 
-    static std::vector<KICAD_T> allTextTypes = { SCH_LABEL_LOCATE_ANY_T, SCH_TEXT_T, SCH_TEXTBOX_T };
+    // allTextTypes does not include SCH_SHEET_PIN_T because one cannot convert other
+    // types to/from this type, living only in a SHEET
+    static std::vector<KICAD_T> allTextTypes = { SCH_LABEL_T,
+                                                 SCH_DIRECTIVE_LABEL_T,
+                                                 SCH_GLOBAL_LABEL_T,
+                                                 SCH_HIER_LABEL_T,
+                                                 SCH_TEXT_T,
+                                                 SCH_TEXTBOX_T };
 
     auto toChangeCondition = ( E_C::OnlyTypes( allTextTypes ) );
 
