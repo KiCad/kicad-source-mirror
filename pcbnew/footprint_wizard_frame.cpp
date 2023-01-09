@@ -4,7 +4,7 @@
  * Copyright (C) 2012-2015 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
  * Copyright (C) 2012-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,7 @@
 #include "tools/pcb_selection_tool.h"
 #include "tools/pcb_control.h"
 #include "tools/pcb_actions.h"
+#include <python/scripting/pcb_scripting_tool.h>
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
@@ -142,6 +143,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     m_toolManager->RegisterTool( new PCB_CONTROL );
     m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );  // for std context menus (zoom & grid)
+    m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->InitTools();
 
@@ -636,12 +638,12 @@ void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
 {
     // Reload the Python plugins
     // Because the board editor has also a plugin python menu,
-    // call PCB_EDIT_FRAME::PythonPluginsReload() if the board editor
-    // is running
-    auto brd_frame = static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
+    // call the PCB_EDIT_FRAME RunAction() if the board editor is running
+    // Otherwise run the current RunAction().
+    PCB_EDIT_FRAME* pcbframe = static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
 
-    if( brd_frame )
-        brd_frame->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
+    if( pcbframe )
+        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
     else
-        GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
+        GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
 }
