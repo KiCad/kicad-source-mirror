@@ -48,6 +48,7 @@
 #include <gendrill_gerber_writer.h>
 #include <wildcards_and_files_ext.h>
 #include <plugins/kicad/pcb_plugin.h>
+#include <gerber_jobfile_writer.h>
 
 #include "pcbnew_scripting_helpers.h"
 
@@ -262,7 +263,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
     BOARD*          brd = LoadBoard( aGerberJob->m_filename );
     PCB_PLOT_PARAMS boardPlotOptions = brd->GetPlotOptions();
-    LSET            plotOnAllLayersSelection = boardPlotOptions.GetPlotOnAllLayersSelection();
+    LSET                  plotOnAllLayersSelection = boardPlotOptions.GetPlotOnAllLayersSelection();
+    GERBER_JOBFILE_WRITER jobfile_writer( brd );
 
     wxString fileExt;
 
@@ -313,9 +315,11 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         BuildPlotFileName( &fn, aGerberJob->m_outputFile, brd->GetLayerName( layer ), fileExt );
         wxString fullname = fn.GetFullName();
 
+        jobfile_writer.AddGbrFile( layer, fullname );
+
         // We are feeding it one layer at the start here to silence a logic check
         GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard(
-                brd, &plotOpts, layer, fullname, wxEmptyString, wxEmptyString );
+                brd, &plotOpts, layer, fn.GetFullPath(), wxEmptyString, wxEmptyString );
 
         if( plotter )
         {
@@ -326,6 +330,11 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
         delete plotter;
     }
+
+    wxFileName fn( aGerberJob->m_filename );
+    // Build gerber job file from basename
+    BuildPlotFileName( &fn, aGerberJob->m_outputFile, wxT( "job" ), GerberJobFileExtension );
+    jobfile_writer.CreateJobFile( fn.GetFullPath() );
 
     return CLI::EXIT_CODES::OK;
 }
