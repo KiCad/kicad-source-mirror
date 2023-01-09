@@ -394,6 +394,12 @@ void PGM_BASE::BuildArgvUtf8()
 
 bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 {
+#if defined( __WXMAC__ )
+    // Set the application locale to the system default
+    wxLocale loc;
+    loc.Init();
+#endif
+
     // Just make sure we init precreate any folders early for later code
     // In particular, the user cache path is the most likely to be hit by startup code
     PATHS::EnsureUserPathsExist();
