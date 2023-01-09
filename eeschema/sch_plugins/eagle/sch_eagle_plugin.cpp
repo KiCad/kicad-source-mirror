@@ -52,6 +52,7 @@
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_marker.h>
 #include <sch_screen.h>
+#include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_label.h>
@@ -938,13 +939,25 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
         wxString nodeName = plainNode->GetName();
 
-        if( nodeName == wxT( "text" ) )
+        if( nodeName == wxT( "polygon" ) )
         {
-            screen->Append( loadPlainText( plainNode ) );
+            screen->Append( loadPolyLine( plainNode ) );
         }
         else if( nodeName == wxT( "wire" ) )
         {
             screen->Append( loadWire( plainNode ) );
+        }
+        else if( nodeName == wxT( "text" ) )
+        {
+            screen->Append( loadPlainText( plainNode ) );
+        }
+        else if( nodeName == wxT( "circle" ) )
+        {
+            screen->Append( loadCircle( plainNode ) );
+        }
+        else if( nodeName == wxT( "rectangle" ) )
+        {
+            screen->Append( loadRectangle( plainNode ) );
         }
         else if( nodeName == wxT( "frame" ) )
         {
@@ -1181,6 +1194,32 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 }
 
 
+SCH_SHAPE* SCH_EAGLE_PLUGIN::loadPolyLine( wxXmlNode* aPolygonNode )
+{
+    std::unique_ptr<SCH_SHAPE> poly = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY );
+    EPOLYGON   epoly( aPolygonNode );
+    wxXmlNode* vertex = aPolygonNode->GetChildren();
+    VECTOR2I   pt;
+
+    while( vertex )
+    {
+        if( vertex->GetName() == wxT( "vertex" ) ) // skip <xmlattr> node
+        {
+            EVERTEX evertex( vertex );
+            pt = VECTOR2I( evertex.x.ToSchUnits(), -evertex.y.ToSchUnits() );
+            poly->AddPoint( pt );
+        }
+
+        vertex = vertex->GetNext();
+    }
+
+    poly->SetLayer( kiCadLayer( epoly.layer ) );
+    poly->SetFillMode( FILL_T::FILLED_SHAPE );
+
+    return poly.release();
+}
+
+
 SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
 {
     std::unique_ptr<SCH_LINE> wire = std::make_unique<SCH_LINE>();
@@ -1188,6 +1227,7 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
     EWIRE ewire = EWIRE( aWireNode );
 
     wire->SetLayer( kiCadLayer( ewire.layer ) );
+    wire->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
 
     VECTOR2I begin, end;
 
@@ -1203,6 +1243,50 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
     m_connPoints[end].emplace( wire.get() );
 
     return wire.release();
+}
+
+
+SCH_SHAPE* SCH_EAGLE_PLUGIN::loadCircle( wxXmlNode* aCircleNode )
+{
+    std::unique_ptr<SCH_SHAPE> circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE );
+    ECIRCLE    c( aCircleNode );
+    VECTOR2I   center( c.x.ToSchUnits(), -c.y.ToSchUnits() );
+
+    circle->SetLayer( kiCadLayer( c.layer ) );
+    circle->SetPosition( center );
+    circle->SetEnd( VECTOR2I( center.x + c.radius.ToSchUnits(), center.y ) );
+    circle->SetStroke( STROKE_PARAMS( c.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+
+    return circle.release();
+}
+
+
+SCH_SHAPE* SCH_EAGLE_PLUGIN::loadRectangle( wxXmlNode* aRectNode )
+{
+    std::unique_ptr<SCH_SHAPE> rectangle = std::make_unique<SCH_SHAPE>( SHAPE_T::RECT );
+    ERECT      rect( aRectNode );
+
+    rectangle->SetLayer( kiCadLayer( rect.layer ) );
+    rectangle->SetPosition( VECTOR2I( rect.x1.ToSchUnits(), -rect.y1.ToSchUnits() ) );
+    rectangle->SetEnd( VECTOR2I( rect.x2.ToSchUnits(), -rect.y2.ToSchUnits() ) );
+
+    if( rect.rot )
+    {
+        VECTOR2I pos( rectangle->GetPosition() );
+        VECTOR2I end( rectangle->GetEnd() );
+        VECTOR2I center( rectangle->GetCenter() );
+
+        RotatePoint( pos, center, EDA_ANGLE( rect.rot->degrees, DEGREES_T ) );
+        RotatePoint( end,  center, EDA_ANGLE( rect.rot->degrees, DEGREES_T ) );
+
+        rectangle->SetPosition( pos );
+        rectangle->SetEnd( end );
+    }
+
+    // Eagle rectangles are filled by definition.
+    rectangle->SetFillMode( FILL_T::FILLED_SHAPE );
+
+    return rectangle.release();
 }
 
 

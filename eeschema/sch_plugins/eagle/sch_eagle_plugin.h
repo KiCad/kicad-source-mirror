@@ -41,6 +41,7 @@ class SCH_SHEET;
 class SCH_BITMAP;
 class SCH_JUNCTION;
 class SCH_NO_CONNECT;
+class SCH_SHAPE;
 class SCH_LINE;
 class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
@@ -130,7 +131,10 @@ private:
 
     void          loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
                                 const wxString& aNetClass );
+    SCH_SHAPE*    loadPolyLine( wxXmlNode* aPolygonNode );
     SCH_LINE*     loadWire( wxXmlNode* aWireNode );
+    SCH_SHAPE*    loadCircle( wxXmlNode* aCircleNode );
+    SCH_SHAPE*    loadRectangle( wxXmlNode* aRectNode );
     SCH_TEXT*     loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
     SCH_JUNCTION* loadJunction( wxXmlNode* aJunction );
     SCH_TEXT*     loadPlainText( wxXmlNode* aSchText );
