@@ -150,7 +150,10 @@ public:
 
     void UndoLastSegment();
     void CommitRouting();
-    std::unique_ptr<NODE> GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded );
+
+    void GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded,
+                          std::vector<PNS::ITEM*>& aHeads );
+
     void StopRouting();
     void ClearViewDecorations();
 

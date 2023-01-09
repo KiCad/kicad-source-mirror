@@ -772,7 +772,9 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
     return ret;
 }
 
-std::unique_ptr<NODE> ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded )
+
+void ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded,
+                              std::vector<PNS::ITEM*>& aHeads )
 {
     NODE *node;
     ITEM_SET current;
@@ -788,18 +790,14 @@ std::unique_ptr<NODE> ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved
         current = m_dragger->Traces();
     }
 
-    std::unique_ptr<NODE> tmpNode( node->Branch() );
+    node->GetUpdatedItems( aRemoved, aAdded );
 
-    for( auto item : current )
+    for( auto item : current.CItems() )
     {
-        std::unique_ptr<ITEM> ip( item.item->Clone() );
-        tmpNode->Add( std::move( ip ) );
+        aHeads.push_back( item.item->Clone() );
     }
-
-    tmpNode->GetUpdatedItems( aRemoved, aAdded );
-
-    return std::move( tmpNode );
 }
+
 
 void ROUTER::CommitRouting( NODE* aNode )
 {
