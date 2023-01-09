@@ -607,14 +607,8 @@ void ROUTER_TOOL::saveRouterDebugLog()
     PROJECT* prj = m_iface->GetBoard()->GetProject();
     prj->GetProjectFile().SaveAs( cwd, "pns" );
 
-    std::vector<PNS::ITEM*> added, removed;
-    auto tmpNode = m_router->GetUpdatedItems( removed, added );
-
-    if( !tmpNode )
-    {
-        fclose( f );
-        return;
-    }
+    std::vector<PNS::ITEM*> added, removed, heads;
+    m_router->GetUpdatedItems( removed, added, heads );
 
     for( auto item : removed )
     {
@@ -624,6 +618,11 @@ void ROUTER_TOOL::saveRouterDebugLog()
     for( auto item : added )
     {
         fprintf(f, "added %s\n", item->Format().c_str() );
+    }
+
+    for( auto item : heads )
+    {
+        fprintf(f, "head %s\n", item->Format().c_str() );
     }
 
     fclose( f );
