@@ -28,7 +28,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -49,7 +48,6 @@ class DIALOG_GROUP_PROPERTIES_BASE : public DIALOG_SHIM
 		wxListBox* m_membersList;
 		STD_BITMAP_BUTTON* m_bpAddMember;
 		STD_BITMAP_BUTTON* m_bpRemoveMember;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

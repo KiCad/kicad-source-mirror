@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,7 +34,6 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/textctrl.h>
 #include <wx/combobox.h>
 #include <wx/gbsizer.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -82,12 +81,11 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_borderWidthUnits;
 		wxStaticText* m_borderStyleLabel;
 		wxBitmapComboBox* m_borderStyleCombo;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onFontSelected( wxCommandEvent& event ) { event.Skip(); }
@@ -101,6 +99,7 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Box Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+
 		~DIALOG_TEXTBOX_PROPERTIES_BASE();
 
 };

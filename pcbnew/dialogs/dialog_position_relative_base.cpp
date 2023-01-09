@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -66,56 +66,47 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 
 	m_xLabel = new wxStaticText( this, wxID_ANY, _("Offset X:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_xLabel->Wrap( -1 );
-	fgSizer2->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	fgSizer2->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_xEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_xEntry, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_xEntry, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_xUnit = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_xUnit->Wrap( -1 );
-	fgSizer2->Add( m_xUnit, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxTOP|wxRIGHT, 5 );
+	fgSizer2->Add( m_xUnit, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
 
 
 	fgSizer2->Add( 10, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_clearX = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	fgSizer2->Add( m_clearX, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_clearX, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_yLabel = new wxStaticText( this, wxID_ANY, _("Offset Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );
 	fgSizer2->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 	m_yEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_yEntry, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_yEntry, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_yUnit = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yUnit->Wrap( -1 );
-	fgSizer2->Add( m_yUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_yUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	fgSizer2->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_clearY = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	fgSizer2->Add( m_clearY, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer2->Add( m_clearY, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bMainSizer->Add( fgSizer2, 1, wxEXPAND|wxALL, 10 );
-
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxVERTICAL );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer5->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
-
-
-	bMainSizer->Add( bSizer5, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_polarCoords = new wxCheckBox( this, wxID_ANY, _("Use polar coordinates"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_polarCoords->SetValue(true);
-	bSizerBottom->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerBottom->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bSizerBottom->Add( 40, 0, 1, wxEXPAND, 5 );
@@ -127,10 +118,10 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	m_stdButtons->AddButton( m_stdButtonsCancel );
 	m_stdButtons->Realize();
 
-	bSizerBottom->Add( m_stdButtons, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerBottom->Add( m_stdButtons, 0, wxBOTTOM|wxTOP, 5 );
 
 
-	bMainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
+	bMainSizer->Add( bSizerBottom, 0, wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bMainSizer );

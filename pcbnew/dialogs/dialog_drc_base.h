@@ -34,7 +34,6 @@ class WX_HTML_REPORT_BOX;
 #include <wx/stattext.h>
 #include <widgets/number_badge.h>
 #include <wx/button.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -78,7 +77,6 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		wxCheckBox* m_showExclusions;
 		NUMBER_BADGE* m_exclusionsBadge;
 		wxButton* m_saveReport;
-		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_DeleteCurrentMarkerButton;
 		wxButton* m_DeleteAllMarkersButton;

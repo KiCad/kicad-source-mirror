@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,7 +23,6 @@
 #include <wx/radiobox.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -53,18 +52,18 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 		wxRadioBox* m_rbSelectUnits;
 		wxCheckBox* m_cbCopyFiles;
 		wxCheckBox* m_cbUseRelativePaths;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUseRelativePath( wxUpdateUIEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("VRML Export Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_EXPORT_3DFILE_BASE();
 
 };

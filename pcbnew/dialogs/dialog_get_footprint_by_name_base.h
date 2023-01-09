@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,7 +21,6 @@
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -41,12 +40,11 @@ class DIALOG_GET_FOOTPRINT_BY_NAME_BASE : public DIALOG_SHIM
 		wxStaticText* m_multipleHint;
 		wxStaticText* m_staticTextRef1;
 		wxChoice* m_choiceFpList;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnSelectFootprint( wxCommandEvent& event ) { event.Skip(); }
 
@@ -54,6 +52,7 @@ class DIALOG_GET_FOOTPRINT_BY_NAME_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_GET_FOOTPRINT_BY_NAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Get and Move Footprint"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_GET_FOOTPRINT_BY_NAME_BASE();
 
 };

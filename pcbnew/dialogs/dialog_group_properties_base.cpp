@@ -64,13 +64,10 @@ DIALOG_GROUP_PROPERTIES_BASE::DIALOG_GROUP_PROPERTIES_BASE( wxWindow* parent, wx
 	bMembershipButtons->Add( m_bpRemoveMember, 0, wxALL, 5 );
 
 
-	bSizerUpper->Add( bMembershipButtons, 0, wxEXPAND, 5 );
+	bSizerUpper->Add( bMembershipButtons, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -79,7 +76,7 @@ DIALOG_GROUP_PROPERTIES_BASE::DIALOG_GROUP_PROPERTIES_BASE( wxWindow* parent, wx
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizerMain->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizerMain );

@@ -29,7 +29,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,7 +53,6 @@ class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_renameNet;
 		STD_BITMAP_BUTTON* m_deleteNet;
 		wxButton* m_ReportButt;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 
@@ -71,7 +69,7 @@ class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Net Inspector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 579,503 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Net Inspector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_NET_INSPECTOR_BASE();
 

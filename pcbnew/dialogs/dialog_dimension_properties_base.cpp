@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -203,7 +203,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	gbSizerFormat->AddGrowableCol( 1 );
 	gbSizerFormat->AddGrowableCol( 5 );
 
-	m_sizerFormat->Add( gbSizerFormat, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	m_sizerFormat->Add( gbSizerFormat, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	m_mainSizer->Add( m_sizerFormat, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
@@ -296,7 +296,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	m_lblTextPosXUnits = new wxStaticText( m_sizerText->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblTextPosXUnits->Wrap( -1 );
-	gbSizerText->Add( m_lblTextPosXUnits, wxGBPosition( 1, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+	gbSizerText->Add( m_lblTextPosXUnits, wxGBPosition( 1, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT|wxRIGHT, 5 );
 
 	m_lblTextHeight = new wxStaticText( m_sizerText->GetStaticBox(), wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblTextHeight->Wrap( -1 );
@@ -309,7 +309,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	m_lblTextHeightUnits = new wxStaticText( m_sizerText->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblTextHeightUnits->Wrap( -1 );
-	gbSizerText->Add( m_lblTextHeightUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizerText->Add( m_lblTextHeightUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_lblTextPosY = new wxStaticText( m_sizerText->GetStaticBox(), wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblTextPosY->Wrap( -1 );
@@ -348,7 +348,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	m_cbTextOrientation->Append( _("90.0") );
 	m_cbTextOrientation->Append( _("-90.0") );
 	m_cbTextOrientation->Append( _("180.0") );
-	gbSizerText->Add( m_cbTextOrientation, wxGBPosition( 3, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizerText->Add( m_cbTextOrientation, wxGBPosition( 3, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_lblTextPositionMode = new wxStaticText( m_sizerText->GetStaticBox(), wxID_ANY, _("Position mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblTextPositionMode->Wrap( -1 );
@@ -371,7 +371,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	gbSizerText->AddGrowableCol( 1 );
 	gbSizerText->AddGrowableCol( 5 );
 
-	m_sizerText->Add( gbSizerText, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	m_sizerText->Add( gbSizerText, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
 
 
 	m_mainSizer->Add( m_sizerText, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
@@ -430,16 +430,10 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	gbSizerLine->AddGrowableCol( 1 );
 	gbSizerLine->AddGrowableCol( 5 );
 
-	sbSizerLine->Add( gbSizerLine, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	sbSizerLine->Add( gbSizerLine, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	m_mainSizer->Add( sbSizerLine, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
-
-	wxBoxSizer* lowerSizer;
-	lowerSizer = new wxBoxSizer( wxHORIZONTAL );
-
-
-	lowerSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_mainSizer->Add( sbSizerLine, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -448,10 +442,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	lowerSizer->Add( m_sdbSizer, 0, wxALL, 5 );
-
-
-	m_mainSizer->Add( lowerSizer, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( m_mainSizer );

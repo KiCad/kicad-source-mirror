@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #include <dialog_rule_area_properties_base.h>
 #include <widgets/unit_binder.h>
 #include <wx/statbox.h>
+#include <wx/statline.h>
 #include <wx/radiobut.h>
 
 #define LAYER_LIST_COLUMN_CHECK 0
@@ -92,7 +93,8 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( aConvertSettings )
     {
-        wxStaticBox*      bConvertBox = new wxStaticBox( this, wxID_ANY, _( "Conversion Settings" ) );
+        wxStaticBox*      bConvertBox = new wxStaticBox( this, wxID_ANY,
+                                                         _( "Conversion Settings" ) );
         wxStaticBoxSizer* bConvertSizer = new wxStaticBoxSizer( bConvertBox, wxVERTICAL  );
 
         m_rbCenterline = new wxRadioButton( this, wxID_ANY, _( "Use centerlines" ) );
@@ -103,7 +105,8 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
         bConvertSizer->Add( m_rbEnvelope, 0, wxLEFT|wxRIGHT, 5 );
 
         bConvertSizer->AddSpacer( 6 );
-        m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY, _( "Delete source objects after conversion" ) );
+        m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY,
+                                              _( "Delete source objects after conversion" ) );
         bConvertSizer->Add( m_cbDeleteOriginals, 0, wxALL, 5 );
 
         GetSizer()->Insert( 0, bConvertSizer, 0, wxALL|wxEXPAND, 10 );

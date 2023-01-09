@@ -27,7 +27,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,7 +42,6 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_MainSizer;
 		wxTextCtrl* m_filePathCtrl;
 		STD_BITMAP_BUTTON* m_browseButton;
-		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_buttonsSizer;
 		wxButton* m_selectAllButton;
 		wxStdDialogButtonSizer* m_sdbSizer1;

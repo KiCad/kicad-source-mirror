@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,6 @@
 #include <wx/sizer.h>
 #include <wx/dialog.h>
 #include <wx/stattext.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -49,6 +48,7 @@ class DIALOG_LAYER_SELECTION_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Layer"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_LAYER_SELECTION_BASE();
 
 };
@@ -65,7 +65,6 @@ class DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE : public DIALOG_SHIM
 		wxGrid* m_leftGridLayers;
 		wxStaticText* m_staticTextBottomLayer;
 		wxGrid* m_rightGridLayers;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -78,6 +77,7 @@ class DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Copper Layer Pair"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE();
 
 };

@@ -20,7 +20,6 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/listctrl.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -43,7 +42,6 @@ class DIALOG_DIELECTRIC_MATERIAL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_tcLossTg;
 		wxStaticText* m_staticText;
 		wxListCtrl* m_lcMaterials;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

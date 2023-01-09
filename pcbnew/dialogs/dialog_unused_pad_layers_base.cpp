@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -39,13 +39,13 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 	int m_rbActionNChoices = sizeof( m_rbActionChoices ) / sizeof( wxString );
 	m_rbAction = new wxRadioBox( this, wxID_ANY, _("Action"), wxDefaultPosition, wxDefaultSize, m_rbActionNChoices, m_rbActionChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbAction->SetSelection( 1 );
-	fgSizerProps->Add( m_rbAction, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerProps->Add( m_rbAction, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_cbSelectedOnly = new wxCheckBox( this, wxID_ANY, _("&Selection only"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerProps->Add( m_cbSelectedOnly, 0, wxEXPAND|wxLEFT, 10 );
+	fgSizerProps->Add( m_cbSelectedOnly, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 	m_cbPreservePads = new wxCheckBox( this, wxID_ANY, _("Keep &outside layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerProps->Add( m_cbPreservePads, 0, wxEXPAND|wxLEFT, 10 );
+	fgSizerProps->Add( m_cbPreservePads, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
 	bSizer2->Add( fgSizerProps, 0, wxEXPAND|wxALL, 5 );
@@ -66,10 +66,7 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 	bSizer2->Add( bSizerPreview, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	m_MainSizer->Add( bSizer2, 6, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_MainSizer->Add( m_staticline2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_MainSizer->Add( bSizer2, 6, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_StdButtons = new wxStdDialogButtonSizer();
 	m_StdButtonsOK = new wxButton( this, wxID_OK );
@@ -78,7 +75,7 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 	m_StdButtons->AddButton( m_StdButtonsCancel );
 	m_StdButtons->Realize();
 
-	m_MainSizer->Add( m_StdButtons, 0, wxEXPAND|wxALL, 5 );
+	m_MainSizer->Add( m_StdButtons, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( m_MainSizer );

@@ -65,16 +65,7 @@ DIALOG_DIELECTRIC_MATERIAL_BASE::DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* pare
 	bSizerUpper->Add( m_lcMaterials, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizerMain->Add( bSizerUpper, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
-
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
-
-	wxBoxSizer* bSizerBottom;
-	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
-
-
-	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerUpper, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -83,10 +74,7 @@ DIALOG_DIELECTRIC_MATERIAL_BASE::DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* pare
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizerBottom->Add( m_sdbSizer, 0, wxALL, 5 );
-
-
-	bSizerMain->Add( bSizerBottom, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizerMain );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,6 +37,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_MultiLineText->SetViewWhiteSpace( false );
 	m_MultiLineText->SetMarginWidth( 2, 0 );
 	m_MultiLineText->SetIndentationGuides( true );
+	m_MultiLineText->SetReadOnly( false );
 	m_MultiLineText->SetMarginWidth( 1, 0 );
 	m_MultiLineText->SetMarginWidth( 0, 0 );
 	m_MultiLineText->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
@@ -254,16 +255,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bMargins->Add( m_statusLine, 0, wxBOTTOM|wxRIGHT|wxLEFT, 3 );
 
 
-	bMainSizer->Add( bMargins, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 12 );
-
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
-
-	wxBoxSizer* lowerSizer;
-	lowerSizer = new wxBoxSizer( wxHORIZONTAL );
-
-
-	lowerSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bMargins, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -272,10 +264,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	lowerSizer->Add( m_sdbSizer, 0, wxALL, 5 );
-
-
-	bMainSizer->Add( lowerSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bMainSizer );

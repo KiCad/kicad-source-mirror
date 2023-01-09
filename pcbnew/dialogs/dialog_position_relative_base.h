@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,10 +17,10 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/textctrl.h>
@@ -51,13 +51,12 @@ class DIALOG_POSITION_RELATIVE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_yEntry;
 		wxStaticText* m_yUnit;
 		wxButton* m_clearY;
-		wxStaticLine* m_staticline1;
 		wxCheckBox* m_polarCoords;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUseUserOriginClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUseGridOriginClick( wxCommandEvent& event ) { event.Skip(); }
@@ -71,6 +70,7 @@ class DIALOG_POSITION_RELATIVE_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Position Relative To Reference Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_POSITION_RELATIVE_BASE();
 
 };

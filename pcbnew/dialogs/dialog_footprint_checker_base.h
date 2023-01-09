@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,11 +21,10 @@
 #include <wx/checkbox.h>
 #include <widgets/number_badge.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -48,14 +47,13 @@ class DIALOG_FOOTPRINT_CHECKER_BASE : public DIALOG_SHIM
 		NUMBER_BADGE* m_warningsBadge;
 		wxCheckBox* m_showExclusions;
 		NUMBER_BADGE* m_exclusionsBadge;
-		wxStaticLine* m_staticline1;
 		wxButton* m_DeleteCurrentMarkerButton;
 		wxButton* m_DeleteAllMarkersButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnSelectItem( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickItem( wxMouseEvent& event ) { event.Skip(); }
@@ -69,6 +67,7 @@ class DIALOG_FOOTPRINT_CHECKER_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_FOOTPRINT_CHECKER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Checker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_FOOTPRINT_CHECKER_BASE();
 
 };

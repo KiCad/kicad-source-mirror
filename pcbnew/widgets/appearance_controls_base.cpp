@@ -196,6 +196,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	this->SetSizer( m_sizerOuter );
 	this->Layout();
+	m_sizerOuter->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ) );

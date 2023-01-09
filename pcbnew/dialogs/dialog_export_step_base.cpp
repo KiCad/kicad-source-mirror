@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -136,16 +136,13 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	bSizer2->Add( sbOtherOptions, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
-	bSizerSTEPFile->Add( bSizer2, 1, wxEXPAND|wxTOP, 5 );
+	bSizerSTEPFile->Add( bSizer2, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSizer81;
 	bSizer81 = new wxBoxSizer( wxHORIZONTAL );
 
 
-	bSizerSTEPFile->Add( bSizer81, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
-
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerSTEPFile->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerSTEPFile->Add( bSizer81, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -154,7 +151,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizerSTEPFile->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerSTEPFile->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
 
 
 	this->SetSizer( bSizerSTEPFile );

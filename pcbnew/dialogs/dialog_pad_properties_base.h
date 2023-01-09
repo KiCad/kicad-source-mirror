@@ -318,7 +318,6 @@ class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;
 		wxCheckBox* m_filledCtrl;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -353,7 +352,6 @@ class DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_scaleCtrl;
 		wxStaticText* m_staticTextDupCnt;
 		wxSpinCtrl* m_spinCtrlDuplicateCount;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -384,7 +382,6 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 		wxPanel* m_panelPoly;
 		wxStaticBitmap* m_warningIcon;
 		wxStaticText* m_warningText;
-		wxStaticLine* m_staticline3;
 		wxStaticText* m_statusLine1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

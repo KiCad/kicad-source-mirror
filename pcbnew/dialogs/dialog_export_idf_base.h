@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,7 +26,6 @@ class TEXT_CTRL_EVAL;
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/radiobox.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -51,7 +50,6 @@ class DIALOG_EXPORT_IDF3_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText4;
 		TEXT_CTRL_EVAL* m_IDF_Yref;
 		wxRadioBox* m_rbUnitSelection;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -59,6 +57,7 @@ class DIALOG_EXPORT_IDF3_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export IDFv3"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_EXPORT_IDF3_BASE();
 
 };

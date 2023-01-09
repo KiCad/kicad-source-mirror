@@ -196,7 +196,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizerHighContrast->Add( m_highContrastUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	m_sbUserInterface->Add( bSizerHighContrast, 1, wxEXPAND, 5 );
+	m_sbUserInterface->Add( bSizerHighContrast, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
 	bLeftSizer->Add( m_sbUserInterface, 1, wxEXPAND|wxALL, 5 );

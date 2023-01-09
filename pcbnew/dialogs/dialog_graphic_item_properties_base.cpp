@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -191,13 +191,10 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	bMiddleSizer->Add( gbSizer2, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bUpperSizer->Add( bMiddleSizer, 0, wxEXPAND, 5 );
+	bUpperSizer->Add( bMiddleSizer, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND|wxALL, 5 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_StandardButtonsSizer = new wxStdDialogButtonSizer();
 	m_StandardButtonsSizerOK = new wxButton( this, wxID_OK );
@@ -206,7 +203,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_StandardButtonsSizer->AddButton( m_StandardButtonsSizerCancel );
 	m_StandardButtonsSizer->Realize();
 
-	bMainSizer->Add( m_StandardButtonsSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bMainSizer->Add( m_StandardButtonsSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

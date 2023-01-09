@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,6 @@
 #include <wx/icon.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
 
@@ -53,7 +52,6 @@ class DIALOG_MOVE_EXACT_BASE : public DIALOG_SHIM
 		wxStaticText* m_rotUnit;
 		wxButton* m_clearRot;
 		wxChoice* m_anchorOptions;
-		wxStaticLine* m_staticline1;
 		wxCheckBox* m_polarCoords;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;

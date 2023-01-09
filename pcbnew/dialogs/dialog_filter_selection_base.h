@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,7 +18,6 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -43,12 +42,11 @@ class DIALOG_FILTER_SELECTION_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Include_Edges_Items;
 		wxCheckBox* m_Include_Vias;
 		wxCheckBox* m_Include_Zones;
-		wxStaticLine* m_staticLine;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void allItemsClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void checkBoxClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ExecuteCommand( wxCommandEvent& event ) { event.Skip(); }
@@ -57,6 +55,7 @@ class DIALOG_FILTER_SELECTION_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_FILTER_SELECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Filter Selected Items"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_FILTER_SELECTION_BASE();
 
 };

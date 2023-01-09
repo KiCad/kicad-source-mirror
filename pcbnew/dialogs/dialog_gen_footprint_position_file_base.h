@@ -30,7 +30,6 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/radiobox.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -56,7 +55,6 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxCheckBox* m_useDrillPlaceOrigin;
 		wxCheckBox* m_negateXcb;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,6 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -46,7 +45,6 @@ class DIALOG_UNUSED_PAD_LAYERS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbSelectedOnly;
 		wxCheckBox* m_cbPreservePads;
 		wxStaticBitmap* m_image;
-		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_StdButtons;
 		wxButton* m_StdButtonsOK;
 		wxButton* m_StdButtonsCancel;
