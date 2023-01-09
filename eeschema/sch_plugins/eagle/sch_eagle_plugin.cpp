@@ -1491,10 +1491,15 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     symbol->GetField( VALUE_FIELD )->SetText( value );
 
+    // Hide the value field if the Eagle "package" element is empty which is the case for most
+    // power symbols which Eagle hides by default or no Eagle "value" element is defined.
+    bool showValueField = !( package.IsEmpty() || !epart->value ||
+                             !part->GetFieldById( VALUE_FIELD )->IsVisible() );
+
     // Set the visibility of fields.
     symbol->GetField( REFERENCE_FIELD )->SetVisible(
             part->GetFieldById( REFERENCE_FIELD )->IsVisible() );
-    symbol->GetField( VALUE_FIELD )->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
+    symbol->GetField( VALUE_FIELD )->SetVisible( showValueField );
 
     for( const auto& a : epart->attribute )
     {
