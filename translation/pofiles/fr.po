@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-08 12:14-0800\n"
-"PO-Revision-Date: 2022-12-31 11:39+0100\n"
+"POT-Creation-Date: 2023-01-09 08:18+0100\n"
+"PO-Revision-Date: 2023-01-09 08:20+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -12741,46 +12741,46 @@ msgstr "Attention : noms de feuilles en double.\n"
 msgid "Unknown netlist format.\n"
 msgstr "Format de listliste inconnu.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:355
+#: eeschema/eeschema_jobs_handler.cpp:377
 #, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Tracé du symbole '%s' unité %d sur '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:361
+#: eeschema/eeschema_jobs_handler.cpp:383
 #, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Tracé du symbole '%s' sur '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:385
+#: eeschema/eeschema_jobs_handler.cpp:407
 #, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Impossible d'ouvrir la destination '%s'"
 
-#: eeschema/eeschema_jobs_handler.cpp:434
-#: eeschema/eeschema_jobs_handler.cpp:497 pcbnew/pcbnew_jobs_handler.cpp:599
-#: pcbnew/pcbnew_jobs_handler.cpp:660
+#: eeschema/eeschema_jobs_handler.cpp:454
+#: eeschema/eeschema_jobs_handler.cpp:517 pcbnew/pcbnew_jobs_handler.cpp:608
+#: pcbnew/pcbnew_jobs_handler.cpp:669
 msgid "Unable to load library\n"
 msgstr "Impossible de charger la librairie\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:445
+#: eeschema/eeschema_jobs_handler.cpp:465
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:121
 msgid "There is no symbol selected to save."
 msgstr "Pas de composant sélectionné à sauver."
 
-#: eeschema/eeschema_jobs_handler.cpp:505 pcbnew/pcbnew_jobs_handler.cpp:585
+#: eeschema/eeschema_jobs_handler.cpp:525 pcbnew/pcbnew_jobs_handler.cpp:594
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 "Le chemin de sortie ne doit pas entrer en conflit avec un chemin existant\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:515
+#: eeschema/eeschema_jobs_handler.cpp:535
 msgid "Saving symbol library in updated format\n"
 msgstr "Sauvegarde de la librairie de symboles dans un format actualisé\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:529 pcbnew/pcbnew_jobs_handler.cpp:628
+#: eeschema/eeschema_jobs_handler.cpp:549 pcbnew/pcbnew_jobs_handler.cpp:637
 msgid "Unable to save library\n"
 msgstr "Impossible de sauver la librairie\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:535
+#: eeschema/eeschema_jobs_handler.cpp:555
 msgid "Symbol library was not updated\n"
 msgstr "La librairie de symboles n'a pas été mise à jour\n"
 
@@ -13916,7 +13916,6 @@ msgstr ""
 "devrez lancer Kicad manager et créez un projet."
 
 #: eeschema/sch_edit_frame.cpp:1086 eeschema/sch_plotter.cpp:1026
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -14121,7 +14120,7 @@ msgstr "Non Connexion"
 msgid "Root"
 msgstr "Racine"
 
-#: eeschema/sch_plotter.cpp:206 pcbnew/pcbnew_jobs_handler.cpp:322
+#: eeschema/sch_plotter.cpp:206 pcbnew/pcbnew_jobs_handler.cpp:326
 #, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Tracé en '%s'\n"
@@ -15309,7 +15308,6 @@ msgid "Cancel Load"
 msgstr "Annuler Chargement"
 
 #: eeschema/sheet.cpp:241
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -15321,12 +15319,12 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Il existe des feuilles hiérarchiques dans le fichier schématique chargé "
-"provenant d'une ancienne version de fichier, ce qui entraîne des données "
-"d'instance de symbole manquantes.  Par conséquent, tous les symboles du "
-"schéma chargé utilisent soit le paramètre d'instance par défaut, soit les "
-"paramètres de symbole de la bibliothèque.  Le chargement du projet qui "
-"utilise ce fichier schématique et l'enregistrement dans la dernière version "
-"du fichier résoudront ce problème.\n"
+"provenant d'une ancienne version, ce qui entraîne des données d'instance de "
+"symbole manquantes.  Par conséquent, tous les symboles du schéma chargé "
+"utilisent soit le paramètre d'instance par défaut, soit les paramètres de "
+"symbole de la bibliothèque.  Le chargement du projet qui utilise ce fichier "
+"schématique et l'enregistrement dans la dernière version du fichier "
+"résoudront ce problème.\n"
 "\n"
 "Voulez-vous continuer ?"
 
@@ -16104,12 +16102,11 @@ msgid "Number of bits"
 msgstr "Nombre de bits"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
 "Cette simulation ne fournit aucun tracé. SVP se référer à la fenêtre des "
-"messages pour les résultats"
+"messages pour les résultats."
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -18517,9 +18514,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "Appuyez <ESC> sur pour annuler le déplacement."
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' not found."
-msgstr "Page '%d' non trouvée."
+msgstr "Page '%s' non trouvée."
 
 #: eeschema/tools/symbol_editor_control.cpp:180
 msgid "No symbol library selected."
@@ -19876,7 +19873,7 @@ msgstr "Impossible de générer les données"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "afficher un message d'aide et quitter"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -19959,7 +19956,7 @@ msgid "Invalid drill format\n"
 msgstr "Format de fichier de perçage non valide\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:141
-#: kicad/cli/command_export_pcb_dxf.cpp:97
+#: kicad/cli/command_export_pcb_dxf.cpp:94
 #: kicad/cli/command_export_pcb_pos.cpp:140
 msgid "Invalid units specified\n"
 msgstr "Unités spécifiées non valides\n"
@@ -19981,28 +19978,28 @@ msgstr "Le mode d'origine de tracé spécifié n'est pas valide\n"
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr "La précision des coordonnées Gerber doit être de 5 ou 6\n"
 
-#: kicad/cli/command_export_pcb_dxf.cpp:44
+#: kicad/cli/command_export_pcb_dxf.cpp:41
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-msgid "Include the reference designator text"
-msgstr "Inclure références schématiques"
+msgid "Exclude the reference designator text"
+msgstr "Exclure texte référence schématique"
 
-#: kicad/cli/command_export_pcb_dxf.cpp:49
+#: kicad/cli/command_export_pcb_dxf.cpp:46
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-msgid "Include the value text"
-msgstr "Inclure le texte valeur"
+msgid "Exclude the value text"
+msgstr "Exclure le texte valeur"
 
-#: kicad/cli/command_export_pcb_dxf.cpp:54
+#: kicad/cli/command_export_pcb_dxf.cpp:51
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
 msgid "Plot graphic items using their contours"
 msgstr "Tracer des éléments graphiques en utilisant leurs contours"
 
-#: kicad/cli/command_export_pcb_dxf.cpp:60
+#: kicad/cli/command_export_pcb_dxf.cpp:57
 msgid "Output units, valid options: mm, in"
 msgstr "Unités de sortie, options valables : mm, in"
 
-#: kicad/cli/command_export_pcb_dxf.cpp:77
+#: kicad/cli/command_export_pcb_dxf.cpp:74
 #: kicad/cli/command_export_pcb_gerber.cpp:103
 #: kicad/cli/command_export_pcb_pdf.cpp:78
 #: kicad/cli/command_export_pcb_pos.cpp:99
@@ -20050,21 +20047,12 @@ msgstr ""
 "Utiliser les paramètres de tracé gerber déjà configurés dans le fichier du "
 "PCB"
 
-#: kicad/cli/command_export_pcb_pdf.cpp:54
-#: kicad/cli/command_export_pcb_svg.cpp:52
-#: kicad/cli/command_export_sch_pdf.cpp:41
-#: kicad/cli/command_export_sch_svg.cpp:41
-#: kicad/cli/command_fp_export_svg.cpp:45
-#: kicad/cli/command_sym_export_svg.cpp:45
-msgid "Black and white only"
-msgstr "Noir et blanc seulement"
-
 #: kicad/cli/command_export_pcb_pdf.cpp:61
 #: kicad/cli/command_export_pcb_svg.cpp:49
 #: kicad/cli/command_export_sch_pdf.cpp:38
 #: kicad/cli/command_export_sch_svg.cpp:38
 #: kicad/cli/command_fp_export_svg.cpp:38
-#: kicad/cli/command_sym_export_svg.cpp:38
+#: kicad/cli/command_sym_export_svg.cpp:40
 msgid "Color theme to use (will default to pcbnew settings)"
 msgstr "Thème de couleur à utiliser (par défaut, les paramètres de Pcbnew)"
 
@@ -20198,7 +20186,7 @@ msgid "Avoid setting a background color (regardless of theme)"
 msgstr "Éviter de définir une couleur de fond (quel que soit le thème)"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
-#: kicad/cli/command_sym_export_svg.cpp:42
+#: kicad/cli/command_sym_export_svg.cpp:44
 msgid "Specific symbol to export within the library"
 msgstr "Spécifier symbole à exporter de la librairie"
 
@@ -20216,7 +20204,15 @@ msgstr ""
 msgid "Footprint path does not exist or is not accessible\n"
 msgstr "Le chemin de l'empreinte n'existe pas ou n'est pas accessible\n"
 
-#: kicad/cli/command_sym_export_svg.cpp:62 kicad/cli/command_sym_upgrade.cpp:53
+#: kicad/cli/command_sym_export_svg.cpp:52
+msgid "Include hidden pins"
+msgstr "Inclure les pins invisibles"
+
+#: kicad/cli/command_sym_export_svg.cpp:57
+msgid "Include hidden fields"
+msgstr "Inclure les champs cachés"
+
+#: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
 msgid "Symbol file does not exist or is not accessible\n"
 msgstr "Le fichier de symboles n'existe pas ou n'est pas accessible\n"
 
@@ -20228,7 +20224,7 @@ msgstr ""
 
 #: kicad/cli/command_version.cpp:35
 msgid "version info format (plain, commit, about)"
-msgstr ""
+msgstr "format des informations sur la version (plain, commit, about)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
@@ -20377,7 +20373,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:297
 msgid "prints version information and exits"
-msgstr ""
+msgstr "imprimer les informations de version et quitter"
 
 #: kicad/kicad_manager_frame.cpp:213
 msgid "Project Files"
@@ -23845,7 +23841,6 @@ msgid "Tessellating copper zones..."
 msgstr "Découpage des zone de cuivre..."
 
 #: pcbnew/board.cpp:913
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "PCB"
 
@@ -24391,17 +24386,20 @@ msgstr "Action de nettoyage inconnue"
 msgid "Updating nets..."
 msgstr "Mise à jour nets..."
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:317
+#: pcbnew/convert_shape_list_to_polygon - Copie.cpp:317 Copie.cpp:455
+#: Copie.cpp:571 Copie.cpp:585 pcbnew/convert_shape_list_to_polygon.cpp:317
 #: pcbnew/convert_shape_list_to_polygon.cpp:455
 #: pcbnew/convert_shape_list_to_polygon.cpp:571
 #: pcbnew/convert_shape_list_to_polygon.cpp:585
 msgid "(self-intersecting)"
 msgstr "(auto intersectant)"
 
+#: pcbnew/convert_shape_list_to_polygon - Copie.cpp:462
 #: pcbnew/convert_shape_list_to_polygon.cpp:462
 msgid "(not a closed shape)"
 msgstr "(n'est pas une forme fermée)"
 
+#: pcbnew/convert_shape_list_to_polygon - Copie.cpp:517
 #: pcbnew/convert_shape_list_to_polygon.cpp:517
 msgid "(multiple board outlines not supported)"
 msgstr "(multiples contours du circuit non supportés)"
@@ -29260,7 +29258,6 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -33481,27 +33478,33 @@ msgstr "<non contraint>"
 msgid "Checking length constraints..."
 msgstr "Vérification des contraintes de longueur..."
 
+#: pcbnew/drc/drc_test_provider_misc - Copie.cpp:113
 #: pcbnew/drc/drc_test_provider_misc.cpp:113
 msgid "(no edges found on Edge.Cuts layer)"
 msgstr "(Aucun contour trouvé sur couche Contour)"
 
+#: pcbnew/drc/drc_test_provider_misc - Copie.cpp:199
 #: pcbnew/drc/drc_test_provider_misc.cpp:199
 #, c-format
 msgid "(layer %s)"
 msgstr "(couche %s)"
 
+#: pcbnew/drc/drc_test_provider_misc - Copie.cpp:341
 #: pcbnew/drc/drc_test_provider_misc.cpp:341
 msgid "Checking board outline..."
 msgstr "Vérification du contour du PCB..."
 
+#: pcbnew/drc/drc_test_provider_misc - Copie.cpp:349
 #: pcbnew/drc/drc_test_provider_misc.cpp:349
 msgid "Checking disabled layers..."
 msgstr "Vérifications couches inactives..."
 
+#: pcbnew/drc/drc_test_provider_misc - Copie.cpp:357
 #: pcbnew/drc/drc_test_provider_misc.cpp:357
 msgid "Checking text variables..."
 msgstr "Vérification variables texte..."
 
+#: pcbnew/drc/drc_test_provider_misc - Copie.cpp:365
 #: pcbnew/drc/drc_test_provider_misc.cpp:365
 msgid "Checking assertions..."
 msgstr "Vérification des assertions..."
@@ -35528,27 +35531,27 @@ msgstr "La zone d'occupation de l'empreinte n'est pas une forme fermée unique."
 msgid "Footprint has no front courtyard."
 msgstr "L'empreinte n’a pas zone d'occupation sur le dessus."
 
-#: pcbnew/pcb_expr_functions.cpp:475
+#: pcbnew/pcb_expr_functions.cpp:473
 msgid "Footprint has no back courtyard."
 msgstr "L'empreinte n’a pas zone d'occupation sur le dessous."
 
-#: pcbnew/pcb_expr_functions.cpp:593
+#: pcbnew/pcb_expr_functions.cpp:589
 #, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
 msgstr ""
 "Argument de zone à règle manquant (A, B ou nom de zone de règle) pour %s."
 
-#: pcbnew/pcb_expr_functions.cpp:744
+#: pcbnew/pcb_expr_functions.cpp:755
 #, c-format
 msgid "Missing group name argument to %s."
 msgstr "Nom de groupe manquant à '%s'."
 
-#: pcbnew/pcb_expr_functions.cpp:858
+#: pcbnew/pcb_expr_functions.cpp:869
 #, c-format
 msgid "Missing diff-pair name argument to %s."
 msgstr "Nom de paire différentielle manquant à '%s'."
 
-#: pcbnew/pcb_expr_functions.cpp:922
+#: pcbnew/pcb_expr_functions.cpp:933
 #, c-format
 msgid "Missing field name argument to %s."
 msgstr "Nom de champ manquant à '%s'."
@@ -35713,38 +35716,38 @@ msgstr ""
 "SVP éditer cette table globale des librairies d'empreintes dans le menu "
 "Préférences."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:83 pcbnew/pcbnew_jobs_handler.cpp:135
-#: pcbnew/pcbnew_jobs_handler.cpp:159 pcbnew/pcbnew_jobs_handler.cpp:215
-#: pcbnew/pcbnew_jobs_handler.cpp:261 pcbnew/pcbnew_jobs_handler.cpp:363
-#: pcbnew/pcbnew_jobs_handler.cpp:408 pcbnew/pcbnew_jobs_handler.cpp:505
+#: pcbnew/pcbnew_jobs_handler.cpp:84 pcbnew/pcbnew_jobs_handler.cpp:136
+#: pcbnew/pcbnew_jobs_handler.cpp:160 pcbnew/pcbnew_jobs_handler.cpp:216
+#: pcbnew/pcbnew_jobs_handler.cpp:262 pcbnew/pcbnew_jobs_handler.cpp:372
+#: pcbnew/pcbnew_jobs_handler.cpp:417 pcbnew/pcbnew_jobs_handler.cpp:514
 msgid "Loading board\n"
 msgstr "Chargement du PCB\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:142
+#: pcbnew/pcbnew_jobs_handler.cpp:143
 msgid "Successfully created svg file"
 msgstr "Le fichier svg a été créé avec succès"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:144 pcbnew/pcbnew_jobs_handler.cpp:747
+#: pcbnew/pcbnew_jobs_handler.cpp:145 pcbnew/pcbnew_jobs_handler.cpp:756
 msgid "Error creating svg file"
 msgstr "Erreur de création du fichier svg"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:578 pcbnew/pcbnew_jobs_handler.cpp:649
+#: pcbnew/pcbnew_jobs_handler.cpp:587 pcbnew/pcbnew_jobs_handler.cpp:658
 msgid "Loading footprint library\n"
 msgstr "Chargement de la librairie d'empreintes\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:615
+#: pcbnew/pcbnew_jobs_handler.cpp:624
 msgid "Saving footprint library\n"
 msgstr "Sauvegarde de librairie d'empreintes\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:634
+#: pcbnew/pcbnew_jobs_handler.cpp:643
 msgid "Footprint library was not updated\n"
 msgstr "La librairie d'empreintes n'a pas été mise à jour\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:698
+#: pcbnew/pcbnew_jobs_handler.cpp:707
 msgid "The given footprint could not be found to export."
 msgstr "L'empreinte donnée n'a pas pu être trouvée pour être exportée."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:733
+#: pcbnew/pcbnew_jobs_handler.cpp:742
 #, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Traçage de l'empreinte '%s' dans'%s'\n"
@@ -41466,6 +41469,11 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -41480,9 +41488,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -41496,9 +41505,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -41508,9 +41518,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -41525,6 +41535,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -41536,6 +41550,11 @@ msgstr "PCB Calculator"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -41549,22 +41568,9 @@ msgstr "Éditeur de circuit imprimé"
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
-
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
-msgid "EDA"
-msgstr ""
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
-msgid "Circuit board"
-msgstr "Imprimer PCB"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -41618,25 +41624,21 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgid "Value may not be empty."
 #~ msgstr "La valeur ne peut pas être vide."
 
-#~ msgid "Add Junctions to Selection where needed"
-#~ msgstr "Ajouter Jonctions à la Sélection si Néceessaire"
+#~ msgid "Black and white only"
+#~ msgstr "Noir et blanc seulement"
 
 #~ msgid "Recursively annotate subsheets"
 #~ msgstr "Numéroter récursivement les sous-feuilles"
 
-#, c-format
+#~ msgid "Add Junctions to Selection where needed"
+#~ msgstr "Ajouter Jonctions à la Sélection si Néceessaire"
+
 #~ msgid ""
 #~ "Error reading simulation model library '%s':\n"
 #~ "%s"
 #~ msgstr ""
 #~ "Erreur de lecture de la librairie de modèles de simulation '%s' :\n"
 #~ "%s"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid "Pin Text"
 #~ msgstr "Texte de Pin"
@@ -51453,6 +51455,9 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Settings for sheet size and frame references"
 #~ msgstr "Sélection de la dimension de la page et des textes du cartouche"
+
+#~ msgid "Print board"
+#~ msgstr "Imprimer PCB"
 
 #~ msgid "P&lot..."
 #~ msgstr "&Tracer..."
