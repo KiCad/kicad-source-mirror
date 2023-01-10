@@ -1207,7 +1207,8 @@ SCH_SHAPE* SCH_EAGLE_PLUGIN::loadPolyLine( wxXmlNode* aPolygonNode )
     std::unique_ptr<SCH_SHAPE> poly = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY );
     EPOLYGON   epoly( aPolygonNode );
     wxXmlNode* vertex = aPolygonNode->GetChildren();
-    VECTOR2I   pt;
+    VECTOR2I   pt, prev_pt;
+    opt_double prev_curve;
 
     while( vertex )
     {
@@ -1215,7 +1216,20 @@ SCH_SHAPE* SCH_EAGLE_PLUGIN::loadPolyLine( wxXmlNode* aPolygonNode )
         {
             EVERTEX evertex( vertex );
             pt = VECTOR2I( evertex.x.ToSchUnits(), -evertex.y.ToSchUnits() );
-            poly->AddPoint( pt );
+
+            if( prev_curve )
+            {
+                SHAPE_ARC arc;
+                arc.ConstructFromStartEndAngle( prev_pt, pt, -EDA_ANGLE( *prev_curve, DEGREES_T ) );
+                poly->GetPolyShape().Append( arc );
+            }
+            else
+            {
+                poly->AddPoint( pt );
+            }
+
+            prev_pt = pt;
+            prev_curve = evertex.curve;
         }
 
         vertex = vertex->GetNext();
@@ -2024,7 +2038,8 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aS
     LIB_SHAPE* poly = new LIB_SHAPE( aSymbol.get(), SHAPE_T::POLY );
     EPOLYGON   epoly( aPolygonNode );
     wxXmlNode* vertex = aPolygonNode->GetChildren();
-    VECTOR2I   pt;
+    VECTOR2I   pt, prev_pt;
+    opt_double prev_curve;
 
     while( vertex )
     {
@@ -2032,12 +2047,26 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aS
         {
             EVERTEX evertex( vertex );
             pt = VECTOR2I( evertex.x.ToSchUnits(), evertex.y.ToSchUnits() );
-            poly->AddPoint( pt );
+
+            if( prev_curve )
+            {
+                SHAPE_ARC arc;
+                arc.ConstructFromStartEndAngle( prev_pt, pt, -EDA_ANGLE( *prev_curve, DEGREES_T ) );
+                poly->GetPolyShape().Append( arc );
+            }
+            else
+            {
+                poly->AddPoint( pt );
+            }
+
+            prev_pt = pt;
+            prev_curve = evertex.curve;
         }
 
         vertex = vertex->GetNext();
     }
 
+    poly->SetStroke( STROKE_PARAMS( epoly.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
     poly->SetFillMode( FILL_T::FILLED_SHAPE );
     poly->SetUnit( aGateNumber );
 
