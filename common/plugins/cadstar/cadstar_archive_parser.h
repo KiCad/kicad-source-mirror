@@ -449,7 +449,8 @@ public:
         void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
 
         void AppendToChain( SHAPE_LINE_CHAIN* aChainToAppendTo,
-                const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const;
+                const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
+                double aAccuracy ) const;
     };
 
     /**
@@ -483,10 +484,12 @@ public:
         void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
 
         SHAPE_LINE_CHAIN OutlineAsChain( const std::function<VECTOR2I( const VECTOR2I& )>
-                                                 aCadstarToKicadPointCallback ) const;
+                                                 aCadstarToKicadPointCallback,
+                                         double aAccuracy ) const;
 
         SHAPE_POLY_SET ConvertToPolySet( const std::function<VECTOR2I( const VECTOR2I& )>
-                                                 aCadstarToKicadPointCallback ) const;
+                                                 aCadstarToKicadPointCallback,
+                                         double aAccuracy  ) const;
     };
 
 

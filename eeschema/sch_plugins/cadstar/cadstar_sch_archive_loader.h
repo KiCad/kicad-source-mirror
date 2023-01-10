@@ -54,6 +54,7 @@ class CADSTAR_SCH_ARCHIVE_LOADER : public CADSTAR_SCH_ARCHIVE_PARSER
 public:
     // Size of tiny net labels when none present in original design
     const int SMALL_LABEL_SIZE = KiROUND( (double) SCH_IU_PER_MM * 0.4 );
+    const double ARC_ACCURACY = SCH_IU_PER_MM * 0.01; // 0.01mm
 
     explicit CADSTAR_SCH_ARCHIVE_LOADER( wxString aFilename, REPORTER* aReporter,
                                          PROGRESS_REPORTER* aProgressReporter ) :
@@ -234,7 +235,7 @@ private:
 
     VECTOR2I getKiCadPoint( const VECTOR2I& aCadstarPoint );
 
-    wxPoint getKiCadLibraryPoint( const wxPoint& aCadstarPoint, const wxPoint& aCadstarCentre );
+    VECTOR2I getKiCadLibraryPoint( const VECTOR2I& aCadstarPoint, const VECTOR2I& aCadstarCentre );
 
     VECTOR2I applyTransform( const VECTOR2I& aPoint, const VECTOR2I& aMoveVector = { 0, 0 },
                              const EDA_ANGLE& aRotation = ANGLE_0,

@@ -483,7 +483,8 @@ void CADSTAR_ARCHIVE_PARSER::VERTEX::Parse( XNODE* aNode, PARSER_CONTEXT* aConte
 
 
 void CADSTAR_ARCHIVE_PARSER::VERTEX::AppendToChain( SHAPE_LINE_CHAIN* aChainToAppendTo,
-        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const
+        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
+        double aAccuracy ) const
 {
     VECTOR2I endPoint = aCadstarToKicadPointCallback( End );
 
@@ -517,7 +518,7 @@ void CADSTAR_ARCHIVE_PARSER::VERTEX::AppendToChain( SHAPE_LINE_CHAIN* aChainToAp
     SHAPE_ARC arc;
     arc.ConstructFromStartEndCenter( startPoint, endPoint, centerPoint, clockwise );
 
-    aChainToAppendTo->Append( arc );
+    aChainToAppendTo->Append( arc, aAccuracy );
 }
 
 
@@ -586,37 +587,53 @@ void CADSTAR_ARCHIVE_PARSER::SHAPE::Parse( XNODE* aNode, PARSER_CONTEXT* aContex
 }
 
 SHAPE_LINE_CHAIN CADSTAR_ARCHIVE_PARSER::SHAPE::OutlineAsChain(
-        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const
+        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
+        double aAccuracy  ) const
 {
     SHAPE_LINE_CHAIN outline;
 
+    if( Vertices.size() == 0 )
+        return outline;
+
     for( const auto& vertex : Vertices )
-        vertex.AppendToChain( &outline, aCadstarToKicadPointCallback );
+        vertex.AppendToChain( &outline, aCadstarToKicadPointCallback, aAccuracy );
 
     if( Type != SHAPE_TYPE::OPENSHAPE )
+    {
         outline.SetClosed( true );
+
+        // Append after closing, to ensre first and last point remain the same
+        Vertices.at( 0 ).AppendToChain( &outline, aCadstarToKicadPointCallback, aAccuracy );
+    }
 
     return outline;
 }
 
 
 SHAPE_POLY_SET CADSTAR_ARCHIVE_PARSER::SHAPE::ConvertToPolySet(
-        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const
+        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
+        double aAccuracy  ) const
 {
     SHAPE_POLY_SET polyset;
 
     wxCHECK( Type != SHAPE_TYPE::OPENSHAPE, polyset ); // We shouldn't convert openshapes to polyset!
 
-    polyset.AddOutline( OutlineAsChain( aCadstarToKicadPointCallback) );
+    polyset.AddOutline( OutlineAsChain( aCadstarToKicadPointCallback, aAccuracy ) );
 
     for( const auto& cutout : Cutouts )
     {
         SHAPE_LINE_CHAIN hole;
 
+        if( cutout.Vertices.size() == 0 )
+            continue;
+
         for( const auto& cutoutVertex : cutout.Vertices )
-            cutoutVertex.AppendToChain( &hole, aCadstarToKicadPointCallback );
+            cutoutVertex.AppendToChain( &hole, aCadstarToKicadPointCallback, aAccuracy );
 
         hole.SetClosed( true );
+
+        // Append after closing, to ensre first and last point remain the same
+        cutout.Vertices.at( 0 ).AppendToChain( &hole, aCadstarToKicadPointCallback, aAccuracy );
 
         polyset.AddHole( hole );
     }

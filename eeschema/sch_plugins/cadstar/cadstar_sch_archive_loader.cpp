@@ -1324,14 +1324,35 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
     {
         FIGURE fig = figPair.second;
         int    lineThickness = getLineThickness( fig.LineCodeID );
+        PLOT_DASH_TYPE linestyle = getLineStyle( fig.LineCodeID );
 
-        loadLibrarySymbolShapeVertices( fig.Shape.Vertices, symbol.Origin, aSymbol, gateNumber,
-                                        lineThickness );
-
-        for( CUTOUT c : fig.Shape.Cutouts )
+        if( fig.Shape.Type == SHAPE_TYPE::OPENSHAPE )
         {
-            loadLibrarySymbolShapeVertices( c.Vertices, symbol.Origin, aSymbol, gateNumber,
+            loadLibrarySymbolShapeVertices( fig.Shape.Vertices, symbol.Origin, aSymbol, gateNumber,
                                             lineThickness );
+        }
+        else
+        {
+            LIB_SHAPE* shape = new LIB_SHAPE( aSymbol, SHAPE_T::POLY );
+            shape->SetPolyShape( fig.Shape.ConvertToPolySet(
+                    [&]( const VECTOR2I& aPt )
+                    {
+                        return getKiCadLibraryPoint( aPt, symbol.Origin );
+                    },
+                    ARC_ACCURACY ) );
+
+            shape->SetUnit( gateNumber );
+
+            shape->SetStroke( STROKE_PARAMS( lineThickness, linestyle ) );
+
+            if( fig.Shape.Type == SHAPE_TYPE::SOLID )
+                shape->SetFillMode( FILL_T::FILLED_SHAPE );
+            else if( fig.Shape.Type == SHAPE_TYPE::OUTLINE )
+                shape->SetFillMode( FILL_T::NO_FILL );
+            else if( fig.Shape.Type == SHAPE_TYPE::HATCHED ) // We don't have an equivalent
+                shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
+
+            aSymbol->AddDrawItem( shape );
         }
     }
 
@@ -1647,9 +1668,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
 
         LIB_SHAPE* shape      = nullptr;
         bool       cw         = false;
-        wxPoint    startPoint = getKiCadLibraryPoint( prev->End, aSymbolOrigin );
-        wxPoint    endPoint   = getKiCadLibraryPoint( cur->End, aSymbolOrigin );
-        wxPoint    centerPoint;
+        VECTOR2I startPoint = getKiCadLibraryPoint( prev->End, aSymbolOrigin );
+        VECTOR2I endPoint   = getKiCadLibraryPoint( cur->End, aSymbolOrigin );
+        VECTOR2I centerPoint;
 
         if( cur->Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE
                 || cur->Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE )
@@ -2094,7 +2115,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
             // TODO: Load as arc...
 
             SHAPE_ARC        tempArc( centerPoint, startPoint, arcAngle );
-            SHAPE_LINE_CHAIN arcSegments = tempArc.ConvertToPolyline( schIUScale.mmToIU( 0.1 ) );
+            SHAPE_LINE_CHAIN arcSegments = tempArc.ConvertToPolyline( ARC_ACCURACY );
 
             // Load the arc as a series of piece-wise segments
 
@@ -3040,10 +3061,10 @@ VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::getKiCadPoint( const VECTOR2I& aCadstarPoin
 }
 
 
-wxPoint CADSTAR_SCH_ARCHIVE_LOADER::getKiCadLibraryPoint( const wxPoint& aCadstarPoint,
-                                                          const wxPoint& aCadstarCentre )
+VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::getKiCadLibraryPoint( const VECTOR2I& aCadstarPoint,
+                                                           const VECTOR2I& aCadstarCentre )
 {
-    wxPoint retval;
+    VECTOR2I retval;
 
     retval.x = getKiCadLength( aCadstarPoint.x - aCadstarCentre.x );
     retval.y = getKiCadLength( aCadstarPoint.y - aCadstarCentre.y );
