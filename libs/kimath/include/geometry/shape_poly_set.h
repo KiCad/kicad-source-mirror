@@ -601,9 +601,11 @@ public:
      * @param aArc      The arc to be inserted
      * @param aOutline  Index of the polygon
      * @param aHole     Index of the hole (-1 for the main outline)
+     * @param aAccuracy Accuracy of the arc representation in IU
      * @return the number of points in the arc (including the interpolated points from the arc)
      */
-    int Append( SHAPE_ARC& aArc, int aOutline = -1, int aHole = -1 );
+    int Append( SHAPE_ARC& aArc, int aOutline = -1, int aHole = -1,
+                double aAccuracy = SHAPE_ARC::DefaultAccuracyForPCB() );
 
     /**
      * Adds a vertex in the globally indexed position \a aGlobalIndex.

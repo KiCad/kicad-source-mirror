@@ -273,7 +273,7 @@ int SHAPE_POLY_SET::Append( int x, int y, int aOutline, int aHole, bool aAllowDu
 }
 
 
-int SHAPE_POLY_SET::Append( SHAPE_ARC& aArc, int aOutline, int aHole )
+int SHAPE_POLY_SET::Append( SHAPE_ARC& aArc, int aOutline, int aHole, double aAccuracy )
 {
     assert( m_polys.size() );
 
@@ -290,7 +290,7 @@ int SHAPE_POLY_SET::Append( SHAPE_ARC& aArc, int aOutline, int aHole )
     assert( aOutline < (int) m_polys.size() );
     assert( idx < (int) m_polys[aOutline].size() );
 
-    m_polys[aOutline][idx].Append( aArc );
+    m_polys[aOutline][idx].Append( aArc, aAccuracy );
 
     return m_polys[aOutline][idx].PointCount();
 }

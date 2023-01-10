@@ -81,6 +81,8 @@ typedef boost::ptr_map<wxString, EPART> EPART_LIST;
 class SCH_EAGLE_PLUGIN : public SCH_PLUGIN
 {
 public:
+    const double ARC_ACCURACY = SCH_IU_PER_MM * 0.01; // 0.01mm
+
     SCH_EAGLE_PLUGIN();
     ~SCH_EAGLE_PLUGIN();
 

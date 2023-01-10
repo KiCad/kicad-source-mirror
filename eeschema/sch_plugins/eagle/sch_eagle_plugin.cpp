@@ -1221,7 +1221,7 @@ SCH_SHAPE* SCH_EAGLE_PLUGIN::loadPolyLine( wxXmlNode* aPolygonNode )
             {
                 SHAPE_ARC arc;
                 arc.ConstructFromStartEndAngle( prev_pt, pt, -EDA_ANGLE( *prev_curve, DEGREES_T ) );
-                poly->GetPolyShape().Append( arc );
+                poly->GetPolyShape().Append( arc, -1, -1, ARC_ACCURACY );
             }
             else
             {
@@ -2052,7 +2052,7 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aS
             {
                 SHAPE_ARC arc;
                 arc.ConstructFromStartEndAngle( prev_pt, pt, -EDA_ANGLE( *prev_curve, DEGREES_T ) );
-                poly->GetPolyShape().Append( arc );
+                poly->GetPolyShape().Append( arc, -1, -1, ARC_ACCURACY );
             }
             else
             {
