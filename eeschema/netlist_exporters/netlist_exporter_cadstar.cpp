@@ -76,6 +76,9 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
             if( !symbol )
                 continue;
 
+            if( !symbol->GetIncludeOnBoard() )
+                continue;
+
             footprint = symbol->GetFootprintFieldText( true );
 
             if( footprint.IsEmpty() )

@@ -76,6 +76,9 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             if( !symbol )
                 continue;
 
+            if( !symbol->GetIncludeOnBoard() )
+                continue;
+
             CreatePinList( symbol, &sheet, true );
 
             if( symbol->GetLibSymbolRef()

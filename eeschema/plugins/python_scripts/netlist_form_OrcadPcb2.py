@@ -41,7 +41,7 @@ except IOError:
     print(__file__, ":", e, sys.stderr)
     f = sys.stdout
 
-components = netlist.getInterestingComponents()
+components = netlist.getInterestingComponents( excludeBoard=True )
 
 row =""
 
