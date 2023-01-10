@@ -55,21 +55,21 @@ msgstr "Crie as camadas"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:669
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "Nenhumfootprint foi carregado."
+msgstr "Nenhum footprint foi carregado."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:685
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"O contorno do footprint do componente está ausente ou malformado. Execute o "
-"Verificador do footprint do componente para uma análise completa."
+"O contorno do footprint ausente ou malformado. Execute o Verificador de "
+"footprints para uma análise completa."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:694
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"O contorno da placa está faltando ou malformado. Execute o DRC para realizar "
-"uma análise completa."
+"Contorno da placa faltando ou malformado. Execute o DRC para uma análise "
+"completa."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
@@ -4605,7 +4605,7 @@ msgstr "polegadas"
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:84
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:116
 msgid "mils"
-msgstr "mil"
+msgstr "milésimo de polegada"
 
 #: common/eda_draw_frame.cpp:627
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
@@ -26604,12 +26604,12 @@ msgstr "O texto para ser impresso após o valor da dimensão"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:130
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "Precision:"
-msgstr "Precisão:"
+msgstr "Exatidão:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:168
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 msgid "Choose how many digits of precision to display"
-msgstr "Escolha quantos dígitos de precisão deseja exibir"
+msgstr "Escolha quantos dígitos significativos deseja exibir"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:347
@@ -26620,47 +26620,47 @@ msgstr "Escolha quantos dígitos de precisão deseja exibir"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:186
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.0"
-msgstr "0.0"
+msgstr "0,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:134
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.00"
-msgstr "0.00"
+msgstr "0,00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:134
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.000"
-msgstr "0.000"
+msgstr "0,000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:134
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.0000"
-msgstr "0.0000"
+msgstr "0,0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:134
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.00000"
-msgstr "0.00000"
+msgstr "0,00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr "0.00 in / 0 mils / 0.0 mm"
+msgstr "0,00 in / 0 mils / 0,0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.000 / 0 / 0.00"
-msgstr "0.000 / 0 / 0.00"
+msgstr "0,000 / 0 / 0,00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.0000 / 0.0 / 0.000"
-msgstr "0.0000 / 0.0 / 0.000"
+msgstr "0,0000 / 0,0 / 0,000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00000 / 0.00 / 0.0000"
-msgstr "0.00000 / 0.00 / 0.0000"
+msgstr "0,00000 / 0,00 / 0,0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:153
@@ -26674,7 +26674,7 @@ msgid ""
 "setting is higher"
 msgstr ""
 "Quando marcado, o valor \"0,100\" será mostrado como \"0,1\" mesmo que a "
-"configuração de precisão seja maior"
+"configuração de dígitos significativos seja maior"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:211
 msgid "Dimension Text"
@@ -26739,7 +26739,7 @@ msgstr "Orientação do texto"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:238
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:187
 msgid "90.0"
-msgstr "90.0"
+msgstr "90,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:349
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:240
@@ -26747,7 +26747,7 @@ msgstr "90.0"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:239
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:188
 msgid "-90.0"
-msgstr "-90.0"
+msgstr "-90,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:350
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:241
@@ -26755,7 +26755,7 @@ msgstr "-90.0"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:240
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:189
 msgid "180.0"
-msgstr "180.0"
+msgstr "180,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Position mode:"
