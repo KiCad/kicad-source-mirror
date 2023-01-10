@@ -529,6 +529,7 @@ public:
     void Append( const SHAPE_LINE_CHAIN& aOtherLine );
 
     void Append( const SHAPE_ARC& aArc );
+    void Append( const SHAPE_ARC& aArc, double aAccuracy );
 
     void Insert( size_t aVertex, const VECTOR2I& aP );
 

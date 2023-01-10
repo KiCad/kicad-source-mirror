@@ -1325,6 +1325,12 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
 
 void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
 {
+    Append( aArc, SHAPE_ARC::DefaultAccuracyForPCB() );
+}
+
+
+void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc, double aAccuracy )
+{
     SEG startToEnd( aArc.GetP0(), aArc.GetP1() );
 
     if( startToEnd.Distance( aArc.GetArcMid() ) < 1 )
@@ -1335,7 +1341,7 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
     }
     else
     {
-        SHAPE_LINE_CHAIN chain = aArc.ConvertToPolyline();
+        SHAPE_LINE_CHAIN chain = aArc.ConvertToPolyline( aAccuracy );
 
         // @todo should the below 4 LOC be moved to SHAPE_ARC::ConvertToPolyline ?
         chain.m_arcs.push_back( aArc );
