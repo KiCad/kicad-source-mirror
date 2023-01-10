@@ -331,7 +331,7 @@ class comp():
     def __eq__(self, other):
         """ Equivalency operator, remember this can be easily overloaded
             2 components are equivalent ( i.e. can be grouped
-            if they have same value and same footprint
+            if they have same value and same footprint and are both set to be populated
 
             Override the component equivalence operator must be done before
             loading the netlist, otherwise all components will have the original
@@ -347,7 +347,8 @@ class comp():
         if self.getValue() == other.getValue():
             if self.getFootprint() == other.getFootprint():
                 if self.getRef().rstrip(string.digits) == other.getRef().rstrip(string.digits):
-                    result = True
+                    if self.getDNP() == other.getDNP():
+                        result = True
         return result
 
     def setLibPart(self, part):
@@ -417,6 +418,15 @@ class comp():
                 continue
 
         return False
+
+    '''
+    Return 'DNP' if the component has the DNP property set
+    '''
+    def getDNPString(self):
+        if self.getDNP():
+            return 'DNP'
+
+        return ''
 
     '''
     Return true if the component has the exclude from BOM property set
@@ -758,7 +768,6 @@ class netlist():
         # Make sure to start off will all components ungrouped to begin with
         for c in components:
             c.grouped = False
-            c.getExcludeFromBOM()
 
         # Group components based on the value, library and part identifiers
         for c in components:

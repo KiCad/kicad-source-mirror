@@ -69,7 +69,7 @@ row =""
 row += "<tr><th>Ref</th>"
 row += "<th>Qnty</th>"
 row += "<th>Value</th>" + "<th>Part</th>" + "<th>Datasheet</th>"
-row += "<th>Description</th>" + "<th>Vendor</th></tr>"
+row += "<th>Description</th>" + "<th>Vendor</th>" + "<th>DNP</th></tr>"
 
 html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
@@ -94,7 +94,8 @@ for group in grouped:
     row += "</td><td>" + c.getLibName() + ":" + c.getPartName()
     row += "</td><td>" + c.getDatasheet()
     row += "</td><td>" + c.getDescription()
-    row += "</td><td>" + c.getField("Vendor")+ "</td></tr>"
+    row += "</td><td>" + c.getField("Vendor")
+    row += "</td><td>" + c.getDNPString() + "</td></tr>"
     row += "\n"
 
     html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")

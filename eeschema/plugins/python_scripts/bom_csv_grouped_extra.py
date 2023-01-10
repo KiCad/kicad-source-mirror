@@ -43,6 +43,8 @@ def myEqu(self, other):
         result = False
     elif self.getFootprint() != other.getFootprint():
         result = False
+    elif self.getDNP() != other.getDNP():
+        result = False
     else:
         for field_name in extra_fields:
             if self.getField(field_name) != other.getField(field_name):
@@ -72,7 +74,7 @@ except IOError:
 out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_ALL)
 
 # Output a CSV header
-out.writerow(['#', 'Reference', 'Qty', 'Value', 'Footprint'] + extra_fields)
+out.writerow(['#', 'Reference', 'Qty', 'Value', 'Footprint', 'DNP'] + extra_fields)
 
 # Get all of the components in groups of matching parts + values
 # (see kicad_netlist_reader.py)
@@ -99,6 +101,7 @@ for group in grouped:
     row.append( len(group) )
     row.append( c.getValue() )
     row.append( c.getFootprint() )
+    row.append( c.getDNPString() )
     
     # Add the values of extra fields
     for field_name in extra_fields:

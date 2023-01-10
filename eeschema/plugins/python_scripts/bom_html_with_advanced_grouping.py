@@ -69,6 +69,8 @@ def myEqu(self, other):
         result = False
     elif self.getField("Voltage") != other.getField("Voltage"):
         result = False
+    elif self.getDNP() != other.getDNP():
+        result = False
 
     return result
 
@@ -99,7 +101,7 @@ html = html.replace('<!--COMPCOUNT-->', "<b>Component Count:</b>" + \
 
 row  = "<tr><th style='width:640px'>Ref</th>" + "<th>Qnty</th>"
 row += "<th>Value</th>" + "<th>Part</th>" + "<th>Footprint</th>"
-row += "<th>Description</th>" + "<th>Vendor</th></tr>"
+row += "<th>Description</th>" + "<th>Vendor</th> + "<th>DNP</th></tr>"
 
 html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
@@ -125,7 +127,8 @@ for group in grouped:
     row += "<tr><td>" + refs +"</td><td>" + str(len(group))
     row += "</td><td>" + c.getValue() + "</td><td>" + c.getLibName() + ":"
     row += c.getPartName() + "</td><td>" + c.getFootprint() + "</td><td>"
-    row += c.getDescription() + "</td><td>" + c.getField("Vendor")
+    row += c.getDescription() + "</td><td>" + c.getField("Vendor") + "</td><td>"
+    row += c.getDNPString()
     row += "</td></tr>"
 
     html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")

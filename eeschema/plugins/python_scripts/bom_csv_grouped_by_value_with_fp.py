@@ -48,7 +48,7 @@ out.writerow(['Date:', net.getDate()])
 out.writerow(['Tool:', net.getTool()])
 out.writerow( ['Generator:', sys.argv[0]] )
 out.writerow(['Component Count:', len(net.components)])
-out.writerow(['Ref', 'Qnty', 'Value', 'Cmp name', 'Footprint', 'Description', 'Vendor'])
+out.writerow(['Ref', 'Qnty', 'Value', 'Cmp name', 'Footprint', 'Description', 'Vendor', 'DNP'])
 
 
 # Get all of the components in groups of matching parts + values
@@ -74,6 +74,7 @@ for group in grouped:
         fromNetlistText( c.getPartName() ),
         fromNetlistText( c.getFootprint() ),
         fromNetlistText( c.getDescription() ),
-        fromNetlistText( c.getField("Vendor") )])
+        fromNetlistText( c.getField("Vendor") ),
+        c.getDNPString()])
 
 

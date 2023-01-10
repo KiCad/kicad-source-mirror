@@ -45,6 +45,8 @@ def myEqu(self, other):
         result = False
     elif self.getFootprint() != other.getFootprint():
         result = False
+    elif self.getDNP() != other.getDNP():
+        result = False
 
     return result
 
@@ -84,7 +86,7 @@ partfields -= set( ['Reference', 'Value', 'Datasheet', 'Footprint'] )
 columnset = compfields | partfields     # union
 
 # prepend an initial 'hard coded' list and put the enchillada into list 'columns'
-columns = ['Item', 'Qty', 'Reference(s)', 'Value', 'LibPart', 'Footprint', 'Datasheet'] + sorted(list(columnset))
+columns = ['Item', 'Qty', 'Reference(s)', 'Value', 'LibPart', 'Footprint', 'Datasheet', 'DNP'] + sorted(list(columnset))
 
 # Create a new csv writer object to use as the output formatter
 out = csv.writer( f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_ALL )
@@ -103,39 +105,12 @@ writerow( out, ['Tool:', net.getTool()] )
 writerow( out, ['Generator:', sys.argv[0]] )
 writerow( out, ['Component Count:', len(components)] )
 writerow( out, [] )
-writerow( out, ['Individual Components:'] )
-writerow( out, [] )                        # blank line
-writerow( out, columns )
-
-# Output all the interesting components individually first:
-row = []
-for c in components:
-    del row[:]
-    row.append('')                                      # item is blank in individual table
-    row.append('')                                      # Qty is always 1, why print it
-    row.append( c.getRef() )                            # Reference
-    row.append( c.getValue() )                          # Value
-    row.append( c.getLibName() + ":" + c.getPartName() ) # LibPart
-    #row.append( c.getDescription() )
-    row.append( c.getFootprint() )
-    row.append( c.getDatasheet() )
-
-    # from column 7 upwards, use the fieldnames to grab the data
-    for field in columns[7:]:
-        row.append( c.getField( field ) );
-
-    writerow( out, row )
-
-
-writerow( out, [] )                        # blank line
-writerow( out, [] )                        # blank line
-writerow( out, [] )                        # blank line
 
 writerow( out, ['Collated Components:'] )
 writerow( out, [] )                        # blank line
 writerow( out, columns )                   # reuse same columns
 
-
+row=[]
 
 # Get all of the components in groups of matching parts + values
 # (see kicad_netlist_reader.py)
@@ -147,7 +122,7 @@ item = 0
 for group in grouped:
     del row[:]
     refs = ""
-
+    
     # Add the reference of every component in the group and keep a reference
     # to the component so that the other data can be filled in once per group
     for component in group:
@@ -157,7 +132,7 @@ for group in grouped:
         c = component
 
     # Fill in the component groups common data
-    # columns = ['Item', 'Qty', 'Reference(s)', 'Value', 'LibPart', 'Footprint', 'Datasheet'] + sorted(list(columnset))
+    # columns = ['Item', 'Qty', 'Reference(s)', 'Value', 'LibPart', 'Footprint', 'Datasheet', 'DNP'] + sorted(list(columnset))
     item += 1
     row.append( item )
     row.append( len(group) )
@@ -166,6 +141,7 @@ for group in grouped:
     row.append( c.getLibName() + ":" + c.getPartName() )
     row.append( net.getGroupFootprint(group) )
     row.append( net.getGroupDatasheet(group) )
+    row.append( c.getDNPString() )
 
     # from column 7 upwards, use the fieldnames to grab the data
     for field in columns[7:]:

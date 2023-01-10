@@ -59,9 +59,9 @@ writerow( out, ['Source:', net.getSource()] )
 writerow( out, ['Date:', net.getDate()] )
 writerow( out, ['Tool:', net.getTool()] )
 writerow( out, ['Component Count:', len(components)] )
-writerow( out, ['Ref', 'Value', 'Part', 'Footprint', 'Description', 'Vendor'] )
+writerow( out, ['Ref', 'Value', 'Part', 'Footprint', 'Description', 'Vendor', 'DNP'] )
 
 # Output all of the component information
 for c in components:
     writerow( out, [c.getRef(), c.getValue(), c.getLibName() + ":" + c.getPartName(),
-        c.getFootprint(), c.getDescription(), c.getField("Vendor")])
+        c.getFootprint(), c.getDescription(), c.getField("Vendor"), c.getDNPString()])
