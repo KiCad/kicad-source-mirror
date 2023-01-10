@@ -931,7 +931,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     {
         float ratio =
                 std::max( 1.0f, m_objectContainer.GetBBox().GetMaxDimension() / RANGE_SCALE_3D );
-        m_camera.SetMaxZoom( m_camera.GetMaxZoom() * ratio );
+        m_camera.SetMaxZoom( CAMERA::DEFAULT_MAX_ZOOM * ratio );
 
         m_camera.SetMinZoom( static_cast<float>( MIN_DISTANCE_IU * m_boardAdapter.BiuTo3dUnits()
                                                  / -m_camera.GetCameraInitPos().z ) );

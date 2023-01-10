@@ -46,9 +46,8 @@ inline void normalise2PI( float& aAngle )
  */
 const wxChar *CAMERA::m_logTrace = wxT( "KI_TRACE_CAMERA" );
 
-
-#define DEFAULT_MIN_ZOOM 0.020f
-#define DEFAULT_MAX_ZOOM 2.0f
+const float CAMERA::DEFAULT_MIN_ZOOM = 0.020f;
+const float CAMERA::DEFAULT_MAX_ZOOM = 2.0f;
 
 
 CAMERA::CAMERA( float aInitialDistance )

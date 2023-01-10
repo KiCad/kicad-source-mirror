@@ -77,6 +77,9 @@ enum class CAMERA_INTERPOLATION
 class CAMERA
 {
 public:
+    static const float DEFAULT_MIN_ZOOM;
+    static const float DEFAULT_MAX_ZOOM;
+
     /**
      * Initialize a camera.
      *
