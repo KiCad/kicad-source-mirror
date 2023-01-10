@@ -52,7 +52,7 @@ def writerow( acsvwriter, columns ):
         utf8row.append( fromNetlistText(txt) )
     acsvwriter.writerow( utf8row )
 
-components = net.getInterestingComponents()
+components = net.getInterestingComponents( excludeBOM=True )
 
 # Output a field delimited header line
 writerow( out, ['Source:', net.getSource()] )

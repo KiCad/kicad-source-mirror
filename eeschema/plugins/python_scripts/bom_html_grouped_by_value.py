@@ -56,7 +56,7 @@ except IOError:
     print(__file__, ":", e, file=sys.stderr)
     f = sys.stdout
 
-components = net.getInterestingComponents()
+components = net.getInterestingComponents( excludeBOM=True )
 
 # Output a set of rows for a header providing general information
 html = html.replace('<!--SOURCE-->', net.getSource())

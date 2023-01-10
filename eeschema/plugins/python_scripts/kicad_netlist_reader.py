@@ -406,6 +406,45 @@ class comp():
         return self.element.get("comp", "ref")
 
     '''
+    Return true if the component has the DNP property set
+    '''
+    def getDNP(self):
+        for child in self.element.getChildren( "property"):
+            try:
+                if child.attributes['name'] == 'dnp':
+                    return True
+            except KeyError:
+                continue
+
+        return False
+
+    '''
+    Return true if the component has the exclude from BOM property set
+    '''
+    def getExcludeFromBOM(self):
+        for child in self.element.getChildren( "property"):
+            try:
+                if child.attributes['name'] == 'exclude_from_bom':
+                    return True
+            except KeyError:
+                continue
+
+        return False
+
+    '''
+    Return true if the component has the exclude from Board property set
+    '''
+    def getExcludeFromBoard(self):
+        for child in self.element.getChildren( "property"):
+            try:
+                if child.attributes['name'] == 'exclude_from_board':
+                    return True
+            except KeyError:
+                continue
+
+        return False
+
+    '''
     return the footprint name. if empty and aLibraryToo = True, return the
     footprint name from libary
     '''
@@ -634,7 +673,7 @@ class netlist():
 
         return ret       # this is a python 'set'
 
-    def getInterestingComponents(self):
+    def getInterestingComponents(self, excludeBOM=False, excludeBoard=False, DNP=False):
         """Return a subset of all components, those that should show up in the BOM.
         Omit those that should not, by consulting the blacklists:
         excluded_values, excluded_refs, and excluded_footprints, which hold one
@@ -667,23 +706,26 @@ class netlist():
                 for refs in self.excluded_references:
                     if refs.match(c.getRef()):
                         exclude = True
-                        break;
+                        break
             if not exclude:
                 for vals in self.excluded_values:
                     if vals.match(c.getValue()):
                         exclude = True
-                        break;
+                        break
             if not exclude:
                 for mods in self.excluded_footprints:
                     if mods.match(c.getFootprint()):
                         exclude = True
-                        break;
+                        break
 
-            if not exclude:
-                # This is a fairly personal way to flag DNS (Do Not Stuff).  NU for
-                # me means Normally Uninstalled.  You can 'or in' another expression here.
-                if c.getField( "Installed" ) == 'NU':
-                    exclude = True
+            if excludeBOM and c.getExcludeFromBOM():
+                exclude = True
+
+            if excludeBoard and c.getExcludeFromBoard():
+                exclude = True
+
+            if DNP and c.getDNP():
+                exclude = True
 
             if not exclude:
                 ret.append(c)
@@ -716,6 +758,7 @@ class netlist():
         # Make sure to start off will all components ungrouped to begin with
         for c in components:
             c.grouped = False
+            c.getExcludeFromBOM()
 
         # Group components based on the value, library and part identifiers
         for c in components:

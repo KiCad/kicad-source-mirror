@@ -73,7 +73,7 @@ except IOError:
 
 # subset the components to those wanted in the BOM, controlled
 # by <configure> block in kicad_netlist_reader.py
-components = net.getInterestingComponents()
+components = net.getInterestingComponents( excludeBOM=True )
 
 compfields = net.gatherComponentFieldUnion(components)
 partfields = net.gatherLibPartFieldUnion()

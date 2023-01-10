@@ -103,7 +103,7 @@ row += "<th>Description</th>" + "<th>Vendor</th></tr>"
 
 html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
-components = net.getInterestingComponents()
+components = net.getInterestingComponents( excludeBOM=True )
 
 # Get all of the components in groups of matching parts + values
 # (see kicad_netlist_reader.py)
