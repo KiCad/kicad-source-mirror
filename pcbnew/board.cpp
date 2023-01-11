@@ -252,6 +252,11 @@ void BOARD::IncrementTimeStamp()
         m_CopperZoneRTreeCache.clear();
         m_CopperItemRTreeCache = std::make_unique<DRC_RTREE>();
     }
+    else if( !m_CopperItemRTreeCache )
+    {
+        std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
+        m_CopperItemRTreeCache = std::make_unique<DRC_RTREE>();
+    }
 }
 
 
