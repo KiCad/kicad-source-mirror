@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,10 +24,10 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	bSizerLayerCnt->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_addUserDefinedLayerButton = new wxButton( this, wxID_ANY, _("Add User Defined Layer..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLayerCnt->Add( m_addUserDefinedLayerButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	bSizerLayerCnt->Add( m_addUserDefinedLayerButton, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerMargins->Add( bSizerLayerCnt, 0, wxEXPAND, 5 );
+	bSizerMargins->Add( bSizerLayerCnt, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMargins->Add( m_staticline2, 0, wxEXPAND|wxTOP, 5 );
@@ -37,8 +37,17 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer = new wxFlexGridSizer( 0, 3, 2, 8 );
 	m_LayerListFlexGridSizer->AddGrowableCol( 1 );
 	m_LayerListFlexGridSizer->AddGrowableCol( 2 );
-	m_LayerListFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
+	m_LayerListFlexGridSizer->SetFlexibleDirection( wxBOTH );
 	m_LayerListFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	m_LayerListFlexGridSizer->Add( 0, 5, 0, 0, 5 );
+
+
+	m_LayerListFlexGridSizer->Add( 0, 0, 0, 0, 5 );
+
+
+	m_LayerListFlexGridSizer->Add( 0, 0, 0, 0, 5 );
 
 
 	m_LayerListFlexGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -798,10 +807,10 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayersListPanel->SetSizer( m_LayerListFlexGridSizer );
 	m_LayersListPanel->Layout();
 	m_LayerListFlexGridSizer->Fit( m_LayersListPanel );
-	bSizerMargins->Add( m_LayersListPanel, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerMargins->Add( m_LayersListPanel, 1, wxEXPAND|wxTOP, 5 );
 
 
-	bMainSizer->Add( bSizerMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bSizerMargins, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

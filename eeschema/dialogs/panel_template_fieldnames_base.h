@@ -38,8 +38,6 @@ class PANEL_TEMPLATE_FIELDNAMES_BASE : public wxPanel
 	private:
 
 	protected:
-		wxBoxSizer* m_leftMargin;
-		wxBoxSizer* m_topMargin;
 		wxStaticText* m_title;
 		WX_GRID* m_grid;
 		STD_BITMAP_BUTTON* m_addFieldButton;

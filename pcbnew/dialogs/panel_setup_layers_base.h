@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,12 +10,12 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include <wx/button.h>
 #include <wx/string.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/gdicmn.h>
-#include <wx/button.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
@@ -343,7 +343,7 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 		wxTextCtrl* m_User9Name;
 		wxStaticText* m_User9StaticText;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void addUserDefinedLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void DenyChangeCheckBox( wxCommandEvent& event ) { event.Skip(); }
@@ -352,6 +352,7 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 	public:
 
 		PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_SETUP_LAYERS_BASE();
 
 };

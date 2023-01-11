@@ -41,10 +41,9 @@ class PANEL_SETUP_RULES_BASE : public wxPanel
 	private:
 
 	protected:
-		wxBoxSizer* m_leftMargin;
-		wxBoxSizer* m_topMargin;
 		wxStaticText* m_title;
 		wxHyperlinkCtrl* m_syntaxHelp;
+		wxBoxSizer* m_topMargin;
 		wxStyledTextCtrl* m_textEditor;
 		wxBitmapButton* m_compileButton;
 		WX_HTML_REPORT_BOX* m_errorsReport;

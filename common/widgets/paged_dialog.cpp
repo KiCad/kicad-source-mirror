@@ -22,7 +22,6 @@
 #include <wx/button.h>
 #include <wx/grid.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/treebook.h>
 #include <wx/treectrl.h>
 
@@ -32,6 +31,7 @@
 
 #include <algorithm>
 #include "wx/listctrl.h"
+#include "widgets/wx_panel.h"
 
 // Maps from dialogTitle <-> pageTitle for keeping track of last-selected pages.
 // This is not a simple page index because some dialogs have dynamic page sets.
@@ -48,15 +48,27 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
         m_cancelButton( nullptr ),
         m_title( aTitle )
 {
-    auto mainSizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
 
     m_infoBar = new WX_INFOBAR( this );
     mainSizer->Add( m_infoBar, 0, wxEXPAND, 0 );
 
-    m_treebook = new wxTreebook( this, wxID_ANY );
+    WX_PANEL* treebookPanel = new WX_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                            wxBORDER_NONE | wxTAB_TRAVERSAL );
+    treebookPanel->SetBorders( false, false, false, true );
+    wxBoxSizer* treebookSizer = new wxBoxSizer( wxVERTICAL );
+    treebookPanel->SetSizer( treebookSizer );
+
+    m_treebook = new wxTreebook( treebookPanel, wxID_ANY );
     m_treebook->SetFont( KIUI::GetControlFont( this ) );
-    mainSizer->Add( m_treebook, 1, wxEXPAND|wxLEFT|wxTOP, 10 );
+
+    long treeCtrlFlags = m_treebook->GetTreeCtrl()->GetWindowStyleFlag();
+    treeCtrlFlags = ( treeCtrlFlags & ~wxBORDER_MASK ) | wxBORDER_NONE;
+    m_treebook->GetTreeCtrl()->SetWindowStyleFlag( treeCtrlFlags );
+
+    treebookSizer->Add( m_treebook, 1, wxEXPAND|wxBOTTOM, 2 );
+    mainSizer->Add( treebookPanel, 1, wxEXPAND, 0 );
 
     m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -389,7 +401,7 @@ void PAGED_DIALOG::onPageChanged( wxBookCtrlEvent& event )
     if( page < m_macHack.size() && m_macHack[ page ] )
     {
         wxSize pageSize = m_treebook->GetPage( page )->GetSize();
-        pageSize.x -= 5;
+        pageSize.x += 1;
         pageSize.y += 2;
 
         m_treebook->GetPage( page )->SetSize( pageSize );

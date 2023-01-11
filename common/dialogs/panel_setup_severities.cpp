@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,9 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
     bool              firstLine     = true;
 
     scrollWin->SetScrollRate( 0, 5 );
+
+    wxBoxSizer* scrollWinSizer = new wxBoxSizer( wxVERTICAL );
+    scrollWin->SetSizer( scrollWinSizer );
 
     wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 5 );
     gridSizer->SetFlexibleDirection( wxBOTH );
@@ -144,10 +147,8 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
         gridSizer->Add( radioPanel, 0, wxALIGN_CENTER_VERTICAL  );
     }
 
-    scrollWin->SetSizer( gridSizer );
-    scrollWin->Layout();
-    gridSizer->Fit( scrollWin );
-    panelSizer->Add( scrollWin, 1, wxEXPAND | wxALL, 5 );
+    scrollWinSizer->Add( gridSizer, 1, wxEXPAND | wxALL, 5 );
+    panelSizer->Add( scrollWin, 1, wxEXPAND, 0 );
 
     SetSizer( panelSizer );
     Layout();

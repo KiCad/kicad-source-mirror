@@ -29,7 +29,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	m_staticText23 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText23->Wrap( -1 );
-	fgFeatureConstraints->Add( m_staticText23, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxLEFT, 4 );
+	fgFeatureConstraints->Add( m_staticText23, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxBOTTOM|wxLEFT, 4 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -341,7 +341,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	bScrolledSizer->Add( sbFeatureConstraints, 0, wxEXPAND|wxRIGHT, 5 );
+	bScrolledSizer->Add( sbFeatureConstraints, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 
 	bScrolledSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 20 );
@@ -354,7 +354,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	m_stCircleToPolyOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Arc/circle approximated by segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stCircleToPolyOpt->Wrap( -1 );
-	bSizerArcToPoly->Add( m_stCircleToPolyOpt, 0, wxRIGHT|wxLEFT, 5 );
+	bSizerArcToPoly->Add( m_stCircleToPolyOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 4, 3, 0 );
@@ -449,7 +449,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	sbFeatureRules->Add( bSizer11, 1, wxEXPAND, 5 );
 
 
-	bScrolledSizer->Add( sbFeatureRules, 0, wxEXPAND|wxRIGHT, 5 );
+	bScrolledSizer->Add( sbFeatureRules, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 
 	bScrolledSizer->Add( 0, 0, 1, wxEXPAND, 0 );
@@ -458,7 +458,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_scrolledWindow->SetSizer( bScrolledSizer );
 	m_scrolledWindow->Layout();
 	bScrolledSizer->Fit( m_scrolledWindow );
-	bMainSizer->Add( m_scrolledWindow, 1, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_scrolledWindow, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

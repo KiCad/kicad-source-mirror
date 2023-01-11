@@ -15,15 +15,14 @@
 PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bPanelSizer;
-	bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_leftMargin = new wxBoxSizer( wxHORIZONTAL );
-
-	m_topMargin = new wxBoxSizer( wxVERTICAL );
+	bPanelSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Field name templates:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	m_topMargin->Add( m_title, 0, wxTOP|wxBOTTOM, 5 );
+	bPanelSizer->Add( m_title, 0, wxTOP|wxLEFT|wxEXPAND, 8 );
+
+
+	bPanelSizer->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -43,7 +42,7 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	m_grid->SetColLabelValue( 0, _("Name") );
 	m_grid->SetColLabelValue( 1, _("Visible") );
 	m_grid->SetColLabelValue( 2, _("URL") );
-	m_grid->SetColLabelSize( 22 );
+	m_grid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -52,33 +51,28 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	m_grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
+	m_grid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetMinSize( wxSize( -1,180 ) );
 
-	m_topMargin->Add( m_grid, 1, wxEXPAND, 10 );
+	bPanelSizer->Add( m_grid, 1, wxEXPAND, 10 );
 
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addFieldButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer10->Add( m_addFieldButton, 0, wxTOP|wxRIGHT, 5 );
+	bSizer10->Add( m_addFieldButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer10->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_deleteFieldButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer10->Add( m_deleteFieldButton, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer10->Add( m_deleteFieldButton, 0, wxALL, 5 );
 
 
-	m_topMargin->Add( bSizer10, 0, wxEXPAND, 10 );
-
-
-	m_leftMargin->Add( m_topMargin, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
-
-
-	bPanelSizer->Add( m_leftMargin, 1, wxEXPAND, 5 );
+	bPanelSizer->Add( bSizer10, 0, wxEXPAND, 10 );
 
 
 	this->SetSizer( bPanelSizer );

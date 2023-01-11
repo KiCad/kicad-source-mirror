@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,10 +17,9 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
 #include <wx/radiobox.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/statline.h>
 #include <wx/choice.h>
 #include <wx/panel.h>
 
@@ -35,13 +34,15 @@ class PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
-		wxStaticText* m_staticText11;
+		wxStaticText* m_fileFormatLabel;
+		wxStaticLine* m_staticline1;
+		wxStaticText* m_fileFormatHelp;
 		wxRadioBox* m_rbUnits;
 		wxRadioBox* m_rbZeroFormat;
-		wxStaticLine* m_staticline1;
-		wxStaticText* m_staticText6;
-		wxStaticText* m_staticText10;
-		wxStaticText* m_staticText7;
+		wxStaticText* m_coordinatesLabel;
+		wxStaticLine* m_staticline2;
+		wxStaticText* m_coordsFormatHelp;
+		wxStaticText* m_hint1;
 		wxStaticText* m_staticTextUnitsmm;
 		wxChoice* m_choiceIntegerMM;
 		wxStaticText* m_staticText8;
@@ -50,6 +51,7 @@ class PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxChoice* m_choiceIntegerInch;
 		wxStaticText* m_staticText9;
 		wxChoice* m_choiceMantissaInch;
+		wxStaticText* m_hint2;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onUnitsChange( wxCommandEvent& event ) { event.Skip(); }
@@ -57,7 +59,7 @@ class PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE : public RESETTABLE_PANEL
 
 	public:
 
-		PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 440,336 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE();
 

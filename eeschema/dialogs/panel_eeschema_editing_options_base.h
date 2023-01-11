@@ -18,11 +18,10 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/choice.h>
-#include <wx/checkbox.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/statline.h>
+#include <wx/choice.h>
+#include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/simplebook.h>
 #include <wx/textctrl.h>
@@ -38,20 +37,27 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
+		wxStaticText* m_editingLabel;
+		wxStaticLine* m_staticline3;
 		wxStaticText* m_staticText24;
 		wxChoice* m_choiceLineMode;
 		wxCheckBox* m_mouseDragIsDrag;
 		wxCheckBox* m_cbAutoStartWires;
 		wxCheckBox* m_escClearsNetHighlight;
+		wxStaticText* m_staticText26;
+		wxStaticLine* m_staticline4;
 		wxStaticText* m_borderColorLabel;
 		COLOR_SWATCH* m_borderColorSwatch;
 		wxStaticText* m_backgroundColorLabel;
 		COLOR_SWATCH* m_backgroundColorSwatch;
+		wxStaticText* m_selectionLabel;
+		wxStaticLine* m_staticline5;
 		wxCheckBox* m_cbPinSelectionOpt;
 		wxSimplebook* m_leftClickCmdsBook;
 		wxPanel* m_pageWinLin;
-		wxStaticText* m_staticText8;
-		wxStaticLine* m_staticline1;
+		wxStaticText* m_leftClickLabel;
+		wxStaticLine* m_staticline6;
+		wxStaticText* m_hint1;
 		wxStaticText* m_staticText91;
 		wxStaticText* m_staticText101;
 		wxStaticText* m_staticText131;
@@ -59,8 +65,9 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_staticText151;
 		wxStaticText* m_staticText161;
 		wxPanel* m_pageMac;
-		wxStaticText* m_staticText81;
-		wxStaticLine* m_staticline2;
+		wxStaticText* m_leftClickLabel1;
+		wxStaticLine* m_staticline7;
+		wxStaticText* m_hint2;
 		wxStaticText* m_staticText11;
 		wxStaticText* m_staticText12;
 		wxStaticText* m_staticText9;
@@ -69,9 +76,13 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_staticText16;
 		wxStaticText* m_staticText13;
 		wxStaticText* m_staticText14;
+		wxStaticText* m_staticText32;
+		wxStaticLine* m_staticline10;
 		wxCheckBox* m_checkAutoplaceFields;
 		wxCheckBox* m_checkAutoplaceJustify;
 		wxCheckBox* m_checkAutoplaceAlign;
+		wxStaticText* m_staticText321;
+		wxStaticLine* m_staticline9;
 		wxStaticText* m_hPitchLabel;
 		wxTextCtrl* m_hPitchCtrl;
 		wxStaticText* m_hPitchUnits;
@@ -80,6 +91,8 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_vPitchUnits;
 		wxStaticText* m_labelIncrementLabel;
 		wxSpinCtrl* m_spinLabelRepeatStep;
+		wxStaticText* m_staticText322;
+		wxStaticLine* m_staticline8;
 		wxCheckBox* m_footprintPreview;
 
 	public:

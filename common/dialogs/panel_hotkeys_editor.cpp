@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,14 +32,11 @@
 #include <widgets/button_row_panel.h>
 #include <widgets/ui_common.h>
 #include <wx/filedlg.h>
-#include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/srchctrl.h>
-#include <wx/tokenzr.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 
-static const wxSize default_dialog_size { 500, 350 };
 
 /**
  * Helper function to add a filter box to a panel, with some
@@ -75,22 +72,19 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
         m_readOnly( aReadOnly ),
         m_hotkeyStore()
 {
-    const auto margin = KIUI::GetStdMargin();
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
-
-    const int side_margins = margin * 2;
     wxBoxSizer* bMargins = new wxBoxSizer( wxVERTICAL );
 
     wxSearchCtrl* filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
-    bMargins->Add( filterSearch, 0, wxALL | wxEXPAND, margin );
+    bMargins->Add( filterSearch, 0,  wxEXPAND, 0 );
 
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore, m_readOnly );
-    bMargins->Add( m_hotkeyListCtrl, 1, wxALL | wxEXPAND, margin );
+    bMargins->Add( m_hotkeyListCtrl, 1, wxEXPAND, 0 );
 
     if( !m_readOnly )
         installButtons( bMargins );
 
-    mainSizer->Add( bMargins, 1, wxEXPAND | wxRIGHT | wxLEFT, side_margins );
+    mainSizer->Add( bMargins, 1, wxEXPAND, 0 );
 
 #ifdef __WXGTK__
     // Work around a bug that clips the text vertically in the wxSearchCtrl on GTK
@@ -152,7 +146,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 
     auto btnPanel = std::make_unique<BUTTON_ROW_PANEL>( this, l_btn_defs, r_btn_defs );
 
-    aSizer->Add( btnPanel.release(), 0, wxEXPAND | wxTOP, KIUI::GetStdMargin() );
+    aSizer->Add( btnPanel.release(), 0, wxEXPAND | wxALL, KIUI::GetStdMargin() * 2 );
 }
 
 

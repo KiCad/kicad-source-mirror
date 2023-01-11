@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,7 +18,6 @@
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,13 +40,14 @@ class PANEL_SYM_COLOR_SETTINGS_BASE : public wxPanel
 		wxRadioButton* m_themeRB;
 		wxChoice* m_themes;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnThemeChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		PANEL_SYM_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_SYM_COLOR_SETTINGS_BASE();
 
 };

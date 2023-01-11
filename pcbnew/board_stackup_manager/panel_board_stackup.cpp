@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <dialogs/dialog_color_picker.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/layer_box_selector.h>
+#include <widgets/wx_panel.h>
 #include <wx/log.h>
 #include <wx/rawbmp.h>
 #include <math/util.h>      // for KiROUND
@@ -85,6 +86,8 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     m_panelLayers = aPanelLayers;
     m_board = m_frame->GetBoard();
     m_brdSettings = &m_board->GetDesignSettings();
+
+    m_panel1->SetBorders( false, false, true, true );
 
     m_panelLayers->SetPhysicalStackupPanel( this );
 

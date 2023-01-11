@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,13 +17,14 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/statline.h>
 #include <wx/radiobut.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
+#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
@@ -45,10 +46,14 @@ class PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE : public RESETTABLE_PANEL
 
 	protected:
 		wxCheckBox* m_checkAutoAnnotate;
+		wxStaticText* m_orderLabel;
+		wxStaticLine* m_staticline2;
 		wxRadioButton* m_rbSortBy_X_Position;
 		wxStaticBitmap* annotate_down_right_bitmap;
 		wxRadioButton* m_rbSortBy_Y_Position;
 		wxStaticBitmap* annotate_right_down_bitmap;
+		wxStaticText* m_numberingLabel;
+		wxStaticLine* m_staticline3;
 		wxRadioButton* m_rbFirstFree;
 		wxTextCtrl* m_textNumberAfter;
 		wxRadioButton* m_rbSheetX100;

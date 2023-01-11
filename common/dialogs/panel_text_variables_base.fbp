@@ -60,7 +60,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                    <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -69,7 +69,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxALL</property>
+                            <property name="flag">wxEXPAND|wxBOTTOM</property>
                             <property name="proportion">1</property>
                             <object class="wxGrid" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -94,7 +94,7 @@
                                 <property name="center_pane">0</property>
                                 <property name="close_button">1</property>
                                 <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
-                                <property name="col_label_size">22</property>
+                                <property name="col_label_size">wxGRID_AUTOSIZE</property>
                                 <property name="col_label_values">&quot;Variable Name&quot; &quot;Text Substitution&quot;</property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                 <property name="cols">2</property>
@@ -120,7 +120,7 @@
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="label_bg"></property>
-                                <property name="label_font"></property>
+                                <property name="label_font">,90,400,12,70,0</property>
                                 <property name="label_text"></property>
                                 <property name="margin_height">0</property>
                                 <property name="margin_width">0</property>
@@ -159,7 +159,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
@@ -168,7 +168,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxRIGHT</property>
+                                    <property name="flag"></property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -242,12 +242,12 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                                    <property name="flag">wxEXPAND</property>
                                     <property name="proportion">0</property>
                                     <object class="spacer" expanded="1">
                                         <property name="height">0</property>
                                         <property name="permission">protected</property>
-                                        <property name="width">0</property>
+                                        <property name="width">20</property>
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">

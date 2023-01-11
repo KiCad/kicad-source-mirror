@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -14,15 +14,15 @@ class COLOR_SWATCH;
 
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
+#include <wx/statline.h>
+#include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,6 +36,8 @@ class PANEL_3D_OPENGL_OPTIONS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
+		wxStaticText* m_renderingLabel;
+		wxStaticLine* m_staticline1;
 		wxCheckBox* m_checkBoxBoundingBoxes;
 		wxCheckBox* m_checkBoxCuThickness;
 		wxCheckBox* m_checkBoxHighlightOnRollOver;
@@ -43,6 +45,8 @@ class PANEL_3D_OPENGL_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxChoice* m_choiceAntiAliasing;
 		wxStaticText* m_selectionColorLabel;
 		COLOR_SWATCH* m_selectionColorSwatch;
+		wxStaticText* m_movingLabel;
+		wxStaticLine* m_staticline2;
 		wxCheckBox* m_checkBoxDisableAAMove;
 		wxCheckBox* m_checkBoxDisableMoveThickness;
 		wxCheckBox* m_checkBoxDisableMoveVias;

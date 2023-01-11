@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,6 +19,7 @@ class WX_GRID;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/grid.h>
+#include <wx/statline.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
@@ -40,7 +41,7 @@ class PANEL_SETUP_TEXT_AND_GRAPHICS_BASE : public wxPanel
 		wxStaticText* m_staticTextDefProp;
 		WX_GRID* m_grid;
 		wxStaticText* m_staticTextDefPropDim;
-		wxPanel* m_panel1;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_lblDimensionUnits;
 		wxChoice* m_dimensionUnits;
 		wxStaticText* m_lblTextPositionMode;
@@ -61,6 +62,7 @@ class PANEL_SETUP_TEXT_AND_GRAPHICS_BASE : public wxPanel
 	public:
 
 		PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_SETUP_TEXT_AND_GRAPHICS_BASE();
 
 };

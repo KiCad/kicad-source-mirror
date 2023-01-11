@@ -43,7 +43,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizerUniversal = new wxBoxSizer( wxVERTICAL );
 
 	m_cbConstrainHV45Mode = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Constrain actions to H, V, 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerUniversal->Add( m_cbConstrainHV45Mode, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerUniversal->Add( m_cbConstrainHV45Mode, 0, wxBOTTOM|wxTOP|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerRotationStep;
 	bSizerRotationStep = new wxBoxSizer( wxHORIZONTAL );
@@ -248,7 +248,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bMiddleLeftSizer->Add( m_mouseCmdsOSX, 1, wxEXPAND|wxALL, 5 );
 
 
-	bMargins->Add( bMiddleLeftSizer, 1, wxEXPAND|wxRIGHT, 5 );
+	bMargins->Add( bMiddleLeftSizer, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 	m_optionsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	wxPanel* fpPage;
@@ -267,7 +267,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbFPMagnets->Add( m_magneticGraphics, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizer10->Add( sbFPMagnets, 1, wxEXPAND, 5 );
+	bSizer10->Add( sbFPMagnets, 1, wxEXPAND|wxTOP, 5 );
 
 
 	fpPage->SetSizer( bSizer10 );
@@ -333,7 +333,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbMagnets->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	pcbOptionsSizer->Add( sbMagnets, 0, wxEXPAND, 5 );
+	pcbOptionsSizer->Add( sbMagnets, 0, wxEXPAND|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Ratsnest") ), wxVERTICAL );

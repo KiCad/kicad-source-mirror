@@ -20,140 +20,167 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	wxBoxSizer* bSizeLeft;
 	bSizeLeft = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbBoardLayers;
-	sbBoardLayers = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Board Layers") ), wxVERTICAL );
+	m_boardLayersLabel = new wxStaticText( this, wxID_ANY, _("Board Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_boardLayersLabel->Wrap( -1 );
+	bSizeLeft->Add( m_boardLayersLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
+
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizeLeft->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 1, 5, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 1, 4, 0 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_checkBoxSilkscreen = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_checkBoxSilkscreen, 0, 0, 5 );
+	m_checkBoxSilkscreen = new wxCheckBox( this, wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_checkBoxSilkscreen, 0, wxLEFT, 5 );
 
-	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Clip silkscreen at solder mask edges"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at solder mask edges"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_checkBoxSubtractMaskFromSilk, 0, wxLEFT, 25 );
 
-	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Clip silkscreen at via annuli"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at via annuli"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxLEFT, 25 );
 
-	m_checkBoxSolderMask = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_checkBoxSolderMask, 0, wxTOP, 8 );
+	m_checkBoxSolderMask = new wxCheckBox( this, wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_checkBoxSolderMask, 0, wxTOP|wxLEFT, 5 );
 
-	m_checkBoxSolderpaste = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show solder paste layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_checkBoxSolderpaste, 0, 0, 5 );
+	m_checkBoxSolderpaste = new wxCheckBox( this, wxID_ANY, _("Show solder paste layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_checkBoxSolderpaste, 0, wxLEFT, 5 );
 
-	m_checkBoxAdhesive = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show adhesive layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_checkBoxAdhesive, 0, 0, 5 );
-
-
-	sbBoardLayers->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_checkBoxAdhesive = new wxCheckBox( this, wxID_ANY, _("Show adhesive layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_checkBoxAdhesive, 0, wxLEFT, 5 );
 
 
-	bSizeLeft->Add( sbBoardLayers, 0, wxEXPAND|wxALL, 5 );
-
-	wxStaticBoxSizer* sbUserLayers;
-	sbUserLayers = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Layers (not shown in realistic mode)") ), wxVERTICAL );
-
-	m_checkBoxComments = new wxCheckBox( sbUserLayers->GetStaticBox(), wxID_ANY, _("Show comment and drawing layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbUserLayers->Add( m_checkBoxComments, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-	m_checkBoxECO = new wxCheckBox( sbUserLayers->GetStaticBox(), wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbUserLayers->Add( m_checkBoxECO, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizeLeft->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
-	bSizeLeft->Add( sbUserLayers, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizeLeft->Add( 0, 15, 0, wxEXPAND, 5 );
+
+	m_userLayersLabel = new wxStaticText( this, wxID_ANY, _("User Layers (not shown in realistic mode)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_userLayersLabel->Wrap( -1 );
+	bSizeLeft->Add( m_userLayersLabel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
+
+	m_staticline31 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizeLeft->Add( m_staticline31, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bSizer7->Add( bSizeLeft, 1, wxEXPAND|wxRIGHT, 10 );
+	bSizeLeft->Add( 0, 5, 0, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizerRight;
-	bSizerRight = new wxBoxSizer( wxVERTICAL );
+	m_checkBoxComments = new wxCheckBox( this, wxID_ANY, _("Show comment and drawing layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizeLeft->Add( m_checkBoxComments, 0, wxRIGHT|wxLEFT, 10 );
 
-	wxStaticBoxSizer* sbRenderOptions;
-	sbRenderOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Render Options") ), wxVERTICAL );
 
-	m_checkBoxRealisticMode = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Realistic mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxRealisticMode, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizeLeft->Add( 0, 4, 0, wxEXPAND, 5 );
 
-	m_checkBoxBoardBody = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Show board body"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxBoardBody, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	m_checkBoxECO = new wxCheckBox( this, wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizeLeft->Add( m_checkBoxECO, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_checkBoxAreas = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Show filled areas in zones"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxAreas, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
-	m_checkBoxRenderPlatedPadsAsPlated = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Use bare copper color for unplated copper"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizeLeft->Add( 0, 15, 0, wxEXPAND, 5 );
+
+	m_renderOptionsLabel = new wxStaticText( this, wxID_ANY, _("Render Options"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_renderOptionsLabel->Wrap( -1 );
+	bSizeLeft->Add( m_renderOptionsLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
+
+	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizeLeft->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 1, 4, 0 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_checkBoxBoardBody = new wxCheckBox( this, wxID_ANY, _("Show board body"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_checkBoxBoardBody, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_checkBoxRealisticMode = new wxCheckBox( this, wxID_ANY, _("Realistic mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_checkBoxRealisticMode, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_checkBoxAreas = new wxCheckBox( this, wxID_ANY, _("Show filled areas in zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_checkBoxAreas, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_checkBoxRenderPlatedPadsAsPlated = new wxCheckBox( this, wxID_ANY, _("Use bare copper color for unplated copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxRenderPlatedPadsAsPlated->SetToolTip( _("Use different colors for plated and unplated copper. (Slow)") );
 
-	sbRenderOptions->Add( m_checkBoxRenderPlatedPadsAsPlated, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer2->Add( m_checkBoxRenderPlatedPadsAsPlated, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerMaterials;
 	bSizerMaterials = new wxBoxSizer( wxHORIZONTAL );
 
-	m_materialPropertiesLabel = new wxStaticText( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Material properties:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_materialPropertiesLabel = new wxStaticText( this, wxID_ANY, _("Material properties:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_materialPropertiesLabel->Wrap( -1 );
-	bSizerMaterials->Add( m_materialPropertiesLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerMaterials->Add( m_materialPropertiesLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	wxString m_materialPropertiesChoices[] = { _("Realistic"), _("Solid colors"), _("CAD colors") };
 	int m_materialPropertiesNChoices = sizeof( m_materialPropertiesChoices ) / sizeof( wxString );
-	m_materialProperties = new wxChoice( sbRenderOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_materialPropertiesNChoices, m_materialPropertiesChoices, 0 );
+	m_materialProperties = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_materialPropertiesNChoices, m_materialPropertiesChoices, 0 );
 	m_materialProperties->SetSelection( 0 );
-	bSizerMaterials->Add( m_materialProperties, 0, wxALL, 5 );
+	bSizerMaterials->Add( m_materialProperties, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbRenderOptions->Add( bSizerMaterials, 1, wxEXPAND, 5 );
+	fgSizer2->Add( bSizerMaterials, 1, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( sbRenderOptions, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
+	bSizeLeft->Add( fgSizer2, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 
-	wxStaticBoxSizer* sbCameraOptions;
-	sbCameraOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Camera Options") ), wxVERTICAL );
+
+	bSizer7->Add( bSizeLeft, 1, wxEXPAND|wxRIGHT, 20 );
+
+	wxBoxSizer* bSizerRight;
+	bSizerRight = new wxBoxSizer( wxVERTICAL );
+
+	m_cameraOptionsLabel = new wxStaticText( this, wxID_ANY, _("Camera Options"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cameraOptionsLabel->Wrap( -1 );
+	bSizerRight->Add( m_cameraOptionsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+
+	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerRight->Add( m_staticline5, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizerRotAngle;
 	bSizerRotAngle = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextRotAngle = new wxStaticText( sbCameraOptions->GetStaticBox(), wxID_ANY, _("Rotation increment:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotAngle = new wxStaticText( this, wxID_ANY, _("Rotation increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotAngle->Wrap( -1 );
 	bSizerRotAngle->Add( m_staticTextRotAngle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_spinCtrlRotationAngle = new wxSpinCtrlDouble( sbCameraOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 359, 10, 1 );
+	m_spinCtrlRotationAngle = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 359, 10, 1 );
 	m_spinCtrlRotationAngle->SetDigits( 0 );
 	bSizerRotAngle->Add( m_spinCtrlRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_staticTextRotAngleUnits = new wxStaticText( sbCameraOptions->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotAngleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotAngleUnits->Wrap( -1 );
 	bSizerRotAngle->Add( m_staticTextRotAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbCameraOptions->Add( bSizerRotAngle, 0, wxBOTTOM, 5 );
+	bSizerRight->Add( bSizerRotAngle, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_staticline3 = new wxStaticLine( sbCameraOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	sbCameraOptions->Add( m_staticline3, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxVERTICAL );
 
-	m_checkBoxEnableAnimation = new wxCheckBox( sbCameraOptions->GetStaticBox(), wxID_ANY, _("Enable animation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxEnableAnimation = new wxCheckBox( this, wxID_ANY, _("Enable animation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxEnableAnimation->SetValue(true);
-	sbCameraOptions->Add( m_checkBoxEnableAnimation, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer9->Add( m_checkBoxEnableAnimation, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerRight->Add( bSizer9, 0, wxEXPAND|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerSlider;
 	bSizerSlider = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticAnimationSpeed = new wxStaticText( sbCameraOptions->GetStaticBox(), wxID_ANY, _("Animation speed:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticAnimationSpeed = new wxStaticText( this, wxID_ANY, _("Animation speed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticAnimationSpeed->Wrap( -1 );
-	bSizerSlider->Add( m_staticAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerSlider->Add( m_staticAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_sliderAnimationSpeed = new wxSlider( sbCameraOptions->GetStaticBox(), wxID_ANY, 3, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_sliderAnimationSpeed = new wxSlider( this, wxID_ANY, 3, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sliderAnimationSpeed->SetMinSize( wxSize( 100,-1 ) );
 
-	bSizerSlider->Add( m_sliderAnimationSpeed, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerSlider->Add( m_sliderAnimationSpeed, 1, wxEXPAND|wxLEFT|wxRIGHT, 15 );
 
 
-	sbCameraOptions->Add( bSizerSlider, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizerRight->Add( bSizerSlider, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	bSizerRight->Add( sbCameraOptions, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
-
-
-	bSizer7->Add( bSizerRight, 1, wxEXPAND|wxRIGHT, 10 );
+	bSizer7->Add( bSizerRight, 1, wxEXPAND, 15 );
 
 
 	bSizerMain->Add( bSizer7, 1, 0, 5 );

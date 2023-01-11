@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,8 +44,6 @@
 #include "panel_setup_rules.h"
 
 #include <wx/treebook.h>
-
-using std::placeholders::_1;
 
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :

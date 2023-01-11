@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/wx_panel.h"
 
 #include "panel_color_settings_base.h"
 
@@ -44,20 +46,15 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bControlSizer->Add( m_btnOpenFolder, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	m_mainSizer->Add( bControlSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_mainSizer->Add( bControlSizer, 0, wxEXPAND|wxALL, 5 );
 
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_mainSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
-
+	m_panel1 = new WX_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_colorsMainSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bottomMargin;
-	bottomMargin = new wxBoxSizer( wxVERTICAL );
-
-	m_colorsListWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxVSCROLL );
+	m_colorsListWindow = new wxScrolledWindow( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 	m_colorsListWindow->SetScrollRate( 5, 5 );
 	m_colorsListWindow->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_colorsListWindow->SetMinSize( wxSize( 240,-1 ) );
+	m_colorsListWindow->SetMinSize( wxSize( 240,240 ) );
 
 	m_colorsGridSizer = new wxFlexGridSizer( 0, 2, 0, 0 );
 	m_colorsGridSizer->AddGrowableCol( 0 );
@@ -69,10 +66,7 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_colorsListWindow->SetSizer( m_colorsGridSizer );
 	m_colorsListWindow->Layout();
 	m_colorsGridSizer->Fit( m_colorsListWindow );
-	bottomMargin->Add( m_colorsListWindow, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	m_colorsMainSizer->Add( bottomMargin, 0, wxEXPAND|wxBOTTOM, 3 );
+	m_colorsMainSizer->Add( m_colorsListWindow, 0, wxEXPAND, 5 );
 
 	m_previewPanelSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -80,7 +74,10 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_colorsMainSizer->Add( m_previewPanelSizer, 1, wxEXPAND, 5 );
 
 
-	m_mainSizer->Add( m_colorsMainSizer, 1, wxEXPAND|wxLEFT, 5 );
+	m_panel1->SetSizer( m_colorsMainSizer );
+	m_panel1->Layout();
+	m_colorsMainSizer->Fit( m_panel1 );
+	m_mainSizer->Add( m_panel1, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( m_mainSizer );

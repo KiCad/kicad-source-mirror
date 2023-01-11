@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,7 +19,6 @@
  */
 
 #include <bitmaps.h>
-#include <dialogs/dialog_color_picker.h>
 #include <launch_ext.h>
 #include <layer_ids.h>
 #include <menus_helpers.h>
@@ -30,6 +29,7 @@
 #include <settings/settings_manager.h>
 #include <validators.h>
 #include <widgets/color_swatch.h>
+#include <widgets/wx_panel.h>
 
 #include <wx/msgdlg.h>
 #include <wx/textdlg.h>
@@ -53,6 +53,8 @@ PANEL_COLOR_SETTINGS::PANEL_COLOR_SETTINGS( wxWindow* aParent ) :
     // Simple border is too dark on OSX
     m_colorsListWindow->SetWindowStyle( wxBORDER_SUNKEN|wxVSCROLL );
 #endif
+
+    m_panel1->SetBorders( false, false, true, false );
 }
 
 

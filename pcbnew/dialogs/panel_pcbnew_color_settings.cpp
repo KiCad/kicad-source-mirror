@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,6 +24,7 @@
 #include <board.h>
 #include <layer_ids.h>
 #include <panel_pcbnew_color_settings.h>
+#include <widgets/wx_panel.h>
 #include <pcbnew_settings.h>
 #include <settings/settings_manager.h>
 #include <footprint_preview_panel.h>
@@ -459,10 +460,10 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
         createSwatch( layer, name );
     }
 
-    m_preview = FOOTPRINT_PREVIEW_PANEL::New( nullptr, this );
+    m_preview = FOOTPRINT_PREVIEW_PANEL::New( nullptr, m_panel1 );
     m_preview->GetGAL()->SetAxesEnabled( false );
 
-    m_previewPanelSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );
+    m_previewPanelSizer->Add( m_preview, 1, wxEXPAND, 5 );
 
     createPreviewItems();
     Layout();

@@ -18,9 +18,10 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/stattext.h>
+#include <wx/statline.h>
 #include <wx/radiobox.h>
 #include <wx/checkbox.h>
-#include <wx/statbox.h>
 #include <wx/simplebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,10 +41,16 @@ class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 
 		wxBoxSizer* m_galOptionsSizer;
 		wxSimplebook* m_optionsBook;
+		wxStaticText* m_annotationsLabel;
+		wxStaticLine* m_staticline1;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxCheckBox* m_OptDisplayPadNumber;
+		wxStaticText* m_clearanceLabel;
+		wxStaticLine* m_staticline2;
 		wxRadioBox* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayPadClearence;
+		wxStaticText* m_crossProbingLabel;
+		wxStaticLine* m_staticline3;
 		wxCheckBox* m_checkCrossProbeOnSelection;
 		wxCheckBox* m_checkCrossProbeCenter;
 		wxCheckBox* m_checkCrossProbeZoom;

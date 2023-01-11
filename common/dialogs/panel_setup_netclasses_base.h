@@ -13,19 +13,20 @@
 class STD_BITMAP_BUTTON;
 class WX_GRID;
 class WX_HTML_REPORT_BOX;
+class WX_PANEL;
 
+#include <wx/string.h>
+#include <wx/stattext.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/font.h>
 #include <wx/grid.h>
-#include <wx/gdicmn.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/html/htmlwin.h>
@@ -42,12 +43,13 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 
 	protected:
 		wxSplitterWindow* m_splitter;
-		wxPanel* m_netclassesPane;
+		WX_PANEL* m_netclassesPane;
+		wxStaticText* m_staticText3;
 		WX_GRID* m_netclassGrid;
 		STD_BITMAP_BUTTON* m_addButton;
 		STD_BITMAP_BUTTON* m_removeButton;
 		wxStaticText* m_colorDefaultHelpText;
-		wxPanel* m_membershipPane;
+		WX_PANEL* m_membershipPane;
 		wxStaticText* m_staticText5;
 		WX_GRID* m_assignmentGrid;
 		WX_HTML_REPORT_BOX* m_matchingNets;

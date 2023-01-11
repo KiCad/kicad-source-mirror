@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_panel.h"
+
 #include "panel_board_stackup_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -49,12 +51,19 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	bTopSizer->Add( m_buttonRemoveDielectricLayer, 0, wxEXPAND|wxALL, 5 );
 
 
-	bMainSizer->Add( bTopSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bTopSizer, 0, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* m_sizerStackup;
 	m_sizerStackup = new wxBoxSizer( wxVERTICAL );
 
-	m_scGridWin = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN|wxHSCROLL|wxVSCROLL );
+	m_panel1 = new WX_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
+
+
+	bSizer6->Add( 0, 1, 0, wxEXPAND, 5 );
+
+	m_scGridWin = new wxScrolledWindow( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE|wxHSCROLL|wxVSCROLL );
 	m_scGridWin->SetScrollRate( 5, 5 );
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
@@ -65,31 +74,31 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	m_staticTextLayer = new wxStaticText( m_scGridWin, wxID_ANY, _("Layer"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextLayer->Wrap( -1 );
-	m_staticTextLayer->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextLayer->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgGridSizer->Add( m_staticTextLayer, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
 	m_staticTextLayerId = new wxStaticText( m_scGridWin, wxID_ANY, _("Id"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextLayerId->Wrap( -1 );
-	m_staticTextLayerId->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextLayerId->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgGridSizer->Add( m_staticTextLayerId, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_staticTextType = new wxStaticText( m_scGridWin, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgGridSizer->Add( m_staticTextType, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
 	m_staticTextMaterial = new wxStaticText( m_scGridWin, wxID_ANY, _("Material"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextMaterial->Wrap( -1 );
-	m_staticTextMaterial->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextMaterial->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgGridSizer->Add( m_staticTextMaterial, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
 	m_staticTextThickness = new wxStaticText( m_scGridWin, wxID_ANY, _("Thickness"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextThickness->Wrap( -1 );
-	m_staticTextThickness->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextThickness->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgGridSizer->Add( m_staticTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
@@ -98,33 +107,39 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	m_staticTextColor = new wxStaticText( m_scGridWin, wxID_ANY, _("Color"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextColor->Wrap( -1 );
-	m_staticTextColor->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextColor->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgGridSizer->Add( m_staticTextColor, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
 	m_staticTextEpsilonR = new wxStaticText( m_scGridWin, wxID_ANY, _("Epsilon R"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextEpsilonR->Wrap( -1 );
-	m_staticTextEpsilonR->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextEpsilonR->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgGridSizer->Add( m_staticTextEpsilonR, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
 	m_staticTextLossTg = new wxStaticText( m_scGridWin, wxID_ANY, _("Loss Tan"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextLossTg->Wrap( -1 );
-	m_staticTextLossTg->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextLossTg->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgGridSizer->Add( m_staticTextLossTg, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
 
-	bMargins->Add( m_fgGridSizer, 1, wxEXPAND|wxLEFT, 5 );
+	bMargins->Add( m_fgGridSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_scGridWin->SetSizer( bMargins );
 	m_scGridWin->Layout();
 	bMargins->Fit( m_scGridWin );
-	m_sizerStackup->Add( m_scGridWin, 1, wxEXPAND|wxRIGHT, 10 );
+	bSizer6->Add( m_scGridWin, 1, wxEXPAND|wxBOTTOM, 2 );
 
 
-	bMainSizer->Add( m_sizerStackup, 3, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	m_panel1->SetSizer( bSizer6 );
+	m_panel1->Layout();
+	bSizer6->Fit( m_panel1 );
+	m_sizerStackup->Add( m_panel1, 1, wxEXPAND, 5 );
+
+
+	bMainSizer->Add( m_sizerStackup, 3, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bBottomSizer;
 	bBottomSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -134,19 +149,22 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	bBottomSizer->Add( m_staticTextCT, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcCTValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	bBottomSizer->Add( m_tcCTValue, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bBottomSizer->Add( m_tcCTValue, 0, wxALL|wxALIGN_CENTER_VERTICAL, 2 );
+
+
+	bBottomSizer->Add( 10, 0, 0, wxEXPAND, 5 );
 
 	m_buttonAdjust = new wxButton( this, wxID_ANY, _("Adjust Dielectric Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
-	bBottomSizer->Add( m_buttonAdjust, 0, wxALL, 5 );
+	bBottomSizer->Add( m_buttonAdjust, 0, wxALL|wxALIGN_CENTER_VERTICAL, 2 );
 
 
 	bBottomSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_buttonExport = new wxButton( this, wxID_ANY, _("Export to Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
-	bBottomSizer->Add( m_buttonExport, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bBottomSizer->Add( m_buttonExport, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
 
 
-	bMainSizer->Add( bBottomSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bBottomSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bMainSizer );

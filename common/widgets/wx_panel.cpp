@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 #include <widgets/wx_panel.h>
 #include <wx/dcclient.h>
 #include <wx/settings.h>
+#include "gal/color4d.h"
 
 WX_PANEL::WX_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
                     long style, const wxString& name ) :
@@ -48,8 +49,10 @@ void WX_PANEL::OnPaint( wxPaintEvent& event )
     wxRect    rect( wxPoint( 0, 0 ), GetClientSize() );
     wxPaintDC dc( this );
 
-    dc.SetBrush( wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK ) );
-    dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ), 1 ) );
+    KIGFX::COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK );
+    KIGFX::COLOR4D fg = wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER );
+    KIGFX::COLOR4D border = fg.Mix( bg, 0.18 );
+    dc.SetPen( wxPen( border.ToColour(), 1 ) );
 
     if( m_leftBorder )
         dc.DrawLine( rect.GetLeft(), rect.GetTop(), rect.GetLeft(), rect.GetBottom() );

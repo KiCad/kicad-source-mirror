@@ -22,12 +22,15 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 
 	defaultTextItemsLabel = new wxStaticText( this, wxID_ANY, _("Default text items for new footprints:"), wxDefaultPosition, wxDefaultSize, 0 );
 	defaultTextItemsLabel->Wrap( -1 );
-	bSizerMargins->Add( defaultTextItemsLabel, 0, wxTOP|wxLEFT, 5 );
+	bSizerMargins->Add( defaultTextItemsLabel, 0, wxTOP|wxLEFT|wxEXPAND, 8 );
+
+
+	bSizerMargins->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* defaultTextItemsSizer;
 	defaultTextItemsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_textItemsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
+	m_textItemsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
 
 	// Grid
 	m_textItemsGrid->CreateGrid( 2, 3 );
@@ -45,7 +48,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_textItemsGrid->SetColLabelValue( 0, _("Text Items") );
 	m_textItemsGrid->SetColLabelValue( 1, _("Show") );
 	m_textItemsGrid->SetColLabelValue( 2, _("Layer") );
-	m_textItemsGrid->SetColLabelSize( 24 );
+	m_textItemsGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_textItemsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -56,12 +59,13 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_textItemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
+	m_textItemsGrid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_textItemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_textItemsGrid->SetMinSize( wxSize( -1,140 ) );
 
-	defaultTextItemsSizer->Add( m_textItemsGrid, 1, wxALL|wxBOTTOM|wxEXPAND, 5 );
+	defaultTextItemsSizer->Add( m_textItemsGrid, 1, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bButtonSize;
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
@@ -69,10 +73,10 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_bpAdd = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 
-	bButtonSize->Add( m_bpAdd, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bButtonSize->Add( m_bpAdd, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bButtonSize->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_bpDelete = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
@@ -84,16 +88,16 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 
 	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Note: a blank reference designator or value will use the footprint name."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
-	bButtonSize->Add( m_staticTextInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bButtonSize->Add( m_staticTextInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 15 );
 
 
 	defaultTextItemsSizer->Add( bButtonSize, 0, wxEXPAND, 5 );
 
 
-	bSizerMargins->Add( defaultTextItemsSizer, 1, wxEXPAND|wxLEFT, 20 );
+	bSizerMargins->Add( defaultTextItemsSizer, 1, wxEXPAND, 20 );
 
 
-	bSizerMargins->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
+	bSizerMargins->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* defaultPropertiesSizer;
 	defaultPropertiesSizer = new wxBoxSizer( wxVERTICAL );
@@ -101,9 +105,12 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	wxStaticText* defaultPropertiesLabel;
 	defaultPropertiesLabel = new wxStaticText( this, wxID_ANY, _("Default properties for new graphic items:"), wxDefaultPosition, wxDefaultSize, 0 );
 	defaultPropertiesLabel->Wrap( -1 );
-	defaultPropertiesSizer->Add( defaultPropertiesLabel, 0, wxBOTTOM|wxRIGHT, 5 );
+	defaultPropertiesSizer->Add( defaultPropertiesLabel, 0, wxEXPAND|wxRIGHT|wxLEFT, 8 );
 
-	m_graphicsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
+
+	defaultPropertiesSizer->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	m_graphicsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
 	// Grid
 	m_graphicsGrid->CreateGrid( 6, 5 );
@@ -125,7 +132,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_graphicsGrid->SetColLabelValue( 2, _("Text Height") );
 	m_graphicsGrid->SetColLabelValue( 3, _("Text Thickness") );
 	m_graphicsGrid->SetColLabelValue( 4, _("Italic") );
-	m_graphicsGrid->SetColLabelSize( 22 );
+	m_graphicsGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_graphicsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -140,16 +147,17 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_graphicsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
+	m_graphicsGrid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_graphicsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	defaultPropertiesSizer->Add( m_graphicsGrid, 1, wxBOTTOM|wxLEFT, 20 );
+	defaultPropertiesSizer->Add( m_graphicsGrid, 1, wxEXPAND|wxBOTTOM, 1 );
 
 
-	bSizerMargins->Add( defaultPropertiesSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerMargins->Add( defaultPropertiesSizer, 0, wxEXPAND|wxTOP, 5 );
 
 
-	bSizerMain->Add( bSizerMargins, 1, wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( bSizerMargins, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );

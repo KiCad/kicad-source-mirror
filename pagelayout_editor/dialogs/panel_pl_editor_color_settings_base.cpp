@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,26 +12,22 @@
 PANEL_PL_EDITOR_COLOR_SETTINGS_BASE::PANEL_PL_EDITOR_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : RESETTABLE_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* p1mainSizer;
-	p1mainSizer = new wxBoxSizer( wxHORIZONTAL );
+	p1mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Color Theme") ), wxHORIZONTAL );
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 
-	sbSizer1->SetMinSize( wxSize( 250,-1 ) );
-	m_txtTheme = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Theme:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtTheme = new wxStaticText( this, wxID_ANY, _("Color theme:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtTheme->Wrap( -1 );
-	sbSizer1->Add( m_txtTheme, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer2->Add( m_txtTheme, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxArrayString m_themesChoices;
-	m_themes = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_themesChoices, 0 );
+	m_themes = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_themesChoices, 0 );
 	m_themes->SetSelection( 0 );
-	sbSizer1->Add( m_themes, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	bSizer2->Add( m_themes, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	p1mainSizer->Add( sbSizer1, 0, wxALL, 10 );
-
-
-	p1mainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	p1mainSizer->Add( bSizer2, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
 
 
 	this->SetSizer( p1mainSizer );

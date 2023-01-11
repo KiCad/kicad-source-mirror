@@ -36,7 +36,7 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	m_TextVars->EnableDragColSize( true );
 	m_TextVars->SetColLabelValue( 0, _("Variable Name") );
 	m_TextVars->SetColLabelValue( 1, _("Text Substitution") );
-	m_TextVars->SetColLabelSize( 22 );
+	m_TextVars->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_TextVars->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -45,30 +45,31 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	m_TextVars->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
+	m_TextVars->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_TextVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_TextVars->SetMinSize( wxSize( 604,170 ) );
 
-	bSizer3->Add( m_TextVars, 1, wxEXPAND|wxALL, 5 );
+	bSizer3->Add( m_TextVars, 1, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizerEnvVarBtns;
 	bSizerEnvVarBtns = new wxBoxSizer( wxHORIZONTAL );
 
 	m_btnAddTextVar = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerEnvVarBtns->Add( m_btnAddTextVar, 0, wxRIGHT, 5 );
+	bSizerEnvVarBtns->Add( m_btnAddTextVar, 0, 0, 5 );
 
 
-	bSizerEnvVarBtns->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerEnvVarBtns->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_btnDeleteTextVar = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerEnvVarBtns->Add( m_btnDeleteTextVar, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer3->Add( bSizerEnvVarBtns, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer3->Add( bSizerEnvVarBtns, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bPanelSizer->Add( bSizer3, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bPanelSizer->Add( bSizer3, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bPanelSizer );

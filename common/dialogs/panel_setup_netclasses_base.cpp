@@ -8,6 +8,7 @@
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 #include "widgets/wx_html_report_box.h"
+#include "widgets/wx_panel.h"
 
 #include "panel_setup_netclasses_base.h"
 
@@ -22,13 +23,20 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	bMargins = new wxBoxSizer( wxVERTICAL );
 
 	m_splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxSP_NO_XP_THEME );
-	m_splitter->SetMinimumPaneSize( 80 );
+	m_splitter->SetMinimumPaneSize( 100 );
 
-	m_netclassesPane = new wxPanel( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_netclassesPane = new WX_PANEL( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_netclassGrid = new WX_GRID( m_netclassesPane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_DEFAULT|wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
+	m_staticText3 = new wxStaticText( m_netclassesPane, wxID_ANY, _("Netclasses:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3->Wrap( -1 );
+	bUpperSizer->Add( m_staticText3, 0, wxTOP|wxLEFT|wxEXPAND, 8 );
+
+
+	bUpperSizer->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	m_netclassGrid = new WX_GRID( m_netclassesPane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 
 	// Grid
 	m_netclassGrid->CreateGrid( 3, 13 );
@@ -40,7 +48,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	// Columns
 	m_netclassGrid->EnableDragColMove( false );
 	m_netclassGrid->EnableDragColSize( true );
-	m_netclassGrid->SetColLabelValue( 0, _("Net Class") );
+	m_netclassGrid->SetColLabelValue( 0, _("Name") );
 	m_netclassGrid->SetColLabelValue( 1, _("Clearance") );
 	m_netclassGrid->SetColLabelValue( 2, _("Track Width") );
 	m_netclassGrid->SetColLabelValue( 3, _("Via Size") );
@@ -53,7 +61,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetColLabelValue( 10, _("Bus Thickness") );
 	m_netclassGrid->SetColLabelValue( 11, _("Color") );
 	m_netclassGrid->SetColLabelValue( 12, _("Line Style") );
-	m_netclassGrid->SetColLabelSize( 24 );
+	m_netclassGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_netclassGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -63,19 +71,20 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
+	m_netclassGrid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_netclassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bUpperSizer->Add( m_netclassGrid, 1, wxEXPAND|wxLEFT, 2 );
+	bUpperSizer->Add( m_netclassGrid, 1, wxEXPAND|wxLEFT, 1 );
 
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addButton = new STD_BITMAP_BUTTON( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	buttonBoxSizer->Add( m_addButton, 0, wxBOTTOM|wxLEFT, 2 );
+	buttonBoxSizer->Add( m_addButton, 0, wxLEFT, 2 );
 
 
-	buttonBoxSizer->Add( 5, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	buttonBoxSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_removeButton = new STD_BITMAP_BUTTON( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer->Add( m_removeButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -85,22 +94,25 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use KiCad default color."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorDefaultHelpText->Wrap( -1 );
-	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 10 );
+	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 10 );
 
 
-	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_netclassesPane->SetSizer( bUpperSizer );
 	m_netclassesPane->Layout();
 	bUpperSizer->Fit( m_netclassesPane );
-	m_membershipPane = new wxPanel( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_membershipPane = new WX_PANEL( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 
+
+	bLowerSizer->Add( 0, 5, 0, wxEXPAND, 5 );
+
 	m_staticText5 = new wxStaticText( m_membershipPane, wxID_ANY, _("Netclass assignments:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
-	bLowerSizer->Add( m_staticText5, 0, wxTOP|wxEXPAND, 8 );
+	bLowerSizer->Add( m_staticText5, 0, wxEXPAND|wxTOP|wxLEFT, 8 );
 
 	wxBoxSizer* bColumns;
 	bColumns = new wxBoxSizer( wxHORIZONTAL );
@@ -124,7 +136,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_assignmentGrid->EnableDragColSize( true );
 	m_assignmentGrid->SetColLabelValue( 0, _("Pattern") );
 	m_assignmentGrid->SetColLabelValue( 1, _("Net Class") );
-	m_assignmentGrid->SetColLabelSize( 24 );
+	m_assignmentGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_assignmentGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -133,10 +145,11 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_assignmentGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
+	m_assignmentGrid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_assignmentGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer14->Add( m_assignmentGrid, 1, wxEXPAND, 5 );
+	bSizer14->Add( m_assignmentGrid, 1, wxEXPAND|wxLEFT, 1 );
 
 
 	bColumns->Add( bSizer14, 3, wxEXPAND, 5 );
@@ -151,23 +164,23 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	buttonBoxSizer1 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addAssignmentButton = new STD_BITMAP_BUTTON( m_membershipPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	buttonBoxSizer1->Add( m_addAssignmentButton, 0, 0, 2 );
+	buttonBoxSizer1->Add( m_addAssignmentButton, 0, wxLEFT, 2 );
 
 
-	buttonBoxSizer1->Add( 5, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	buttonBoxSizer1->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_removeAssignmentButton = new STD_BITMAP_BUTTON( m_membershipPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer1->Add( m_removeAssignmentButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	bLowerSizer->Add( buttonBoxSizer1, 0, wxEXPAND|wxTOP, 5 );
+	bLowerSizer->Add( buttonBoxSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_membershipPane->SetSizer( bLowerSizer );
 	m_membershipPane->Layout();
 	bLowerSizer->Fit( m_membershipPane );
 	m_splitter->SplitHorizontally( m_netclassesPane, m_membershipPane, -1 );
-	bMargins->Add( m_splitter, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bMargins->Add( m_splitter, 1, wxEXPAND, 10 );
 
 
 	bpanelNetClassesSizer->Add( bMargins, 1, wxEXPAND|wxTOP, 2 );

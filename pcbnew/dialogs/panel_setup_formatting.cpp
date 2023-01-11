@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,8 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( PAGED_DIALOG* aParent, PCB_EDIT_
 
     m_dashLengthCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
     m_gapLengthCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+
+    m_dashedLineHelp->SetFont( KIUI::GetInfoFont( this ).Italic() );
 }
 
 

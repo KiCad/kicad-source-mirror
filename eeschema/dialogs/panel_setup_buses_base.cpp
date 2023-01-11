@@ -23,7 +23,10 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 
 	m_busesLabel = new wxStaticText( this, wxID_ANY, _("Bus definitions:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_busesLabel->Wrap( -1 );
-	bLeftCol->Add( m_busesLabel, 0, wxTOP|wxBOTTOM, 5 );
+	bLeftCol->Add( m_busesLabel, 0, wxTOP|wxLEFT, 8 );
+
+
+	bLeftCol->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	m_aliasesGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -39,7 +42,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	m_aliasesGrid->EnableDragColMove( false );
 	m_aliasesGrid->EnableDragColSize( true );
 	m_aliasesGrid->SetColLabelValue( 0, _("Alias") );
-	m_aliasesGrid->SetColLabelSize( 22 );
+	m_aliasesGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_aliasesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -48,6 +51,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	m_aliasesGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
+	m_aliasesGrid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_aliasesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
@@ -59,13 +63,13 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addAlias = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer10->Add( m_addAlias, 0, wxTOP, 5 );
+	bSizer10->Add( m_addAlias, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer10->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_deleteAlias = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer10->Add( m_deleteAlias, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer10->Add( m_deleteAlias, 0, wxALL, 5 );
 
 
 	bSizer10->Add( 15, 0, 0, 0, 5 );
@@ -78,7 +82,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	bLeftCol->Add( bSizer10, 0, wxEXPAND, 10 );
 
 
-	bMargins->Add( bLeftCol, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bMargins->Add( bLeftCol, 1, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bRightColumn;
 	bRightColumn = new wxBoxSizer( wxVERTICAL );
@@ -90,7 +94,10 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 
 	m_membersLabel = new wxStaticText( membersPanel, wxID_ANY, _("Members of '%s':"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_membersLabel->Wrap( -1 );
-	bSizer7->Add( m_membersLabel, 0, wxALL|wxEXPAND, 5 );
+	bSizer7->Add( m_membersLabel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
+
+
+	bSizer7->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	m_membersGrid = new WX_GRID( membersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -106,7 +113,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	m_membersGrid->EnableDragColMove( false );
 	m_membersGrid->EnableDragColSize( true );
 	m_membersGrid->SetColLabelValue( 0, _("Net / Nested Bus Name") );
-	m_membersGrid->SetColLabelSize( 22 );
+	m_membersGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_membersGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -115,27 +122,28 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	m_membersGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
+	m_membersGrid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_membersGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_membersGrid->SetMinSize( wxSize( -1,180 ) );
 
-	bSizer7->Add( m_membersGrid, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer7->Add( m_membersGrid, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer101;
 	bSizer101 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addMember = new STD_BITMAP_BUTTON( membersPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer101->Add( m_addMember, 0, wxTOP, 5 );
+	bSizer101->Add( m_addMember, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer101->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_removeMember = new STD_BITMAP_BUTTON( membersPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer101->Add( m_removeMember, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer101->Add( m_removeMember, 0, wxALL, 5 );
 
 
-	bSizer7->Add( bSizer101, 0, wxEXPAND|wxLEFT, 5 );
+	bSizer7->Add( bSizer101, 0, wxEXPAND, 5 );
 
 
 	membersPanel->SetSizer( bSizer7 );
@@ -150,7 +158,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	bRightColumn->Add( m_membersBook, 1, wxEXPAND, 5 );
 
 
-	bMargins->Add( bRightColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( bRightColumn, 1, wxEXPAND|wxLEFT, 5 );
 
 
 	bPanelSizer->Add( bMargins, 1, wxEXPAND, 5 );

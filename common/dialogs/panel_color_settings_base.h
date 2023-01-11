@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_PANEL;
+
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -24,7 +26,6 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
 
@@ -42,7 +43,7 @@ class PANEL_COLOR_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_staticText9;
 		wxChoice* m_cbTheme;
 		wxButton* m_btnOpenFolder;
-		wxStaticLine* m_staticline2;
+		WX_PANEL* m_panel1;
 		wxBoxSizer* m_colorsMainSizer;
 		wxScrolledWindow* m_colorsListWindow;
 		wxFlexGridSizer* m_colorsGridSizer;

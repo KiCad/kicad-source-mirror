@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,9 +20,9 @@ class FONT_CHOICE;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
-#include <wx/statbox.h>
 #include <wx/spinctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
@@ -38,6 +38,8 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 
 	protected:
 		wxBoxSizer* m_galOptionsSizer;
+		wxStaticText* m_appearanceLabel;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_defaultFontLabel;
 		FONT_CHOICE* m_defaultFontCtrl;
 		wxCheckBox* m_checkShowHiddenPins;
@@ -46,6 +48,8 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_checkShowERCWarnings;
 		wxCheckBox* m_checkShowERCExclusions;
 		wxCheckBox* m_checkPageLimits;
+		wxStaticText* m_selectionLabel;
+		wxStaticLine* m_staticline2;
 		wxCheckBox* m_checkSelDrawChildItems;
 		wxCheckBox* m_checkSelFillShapes;
 		wxStaticText* m_selWidthLabel;
@@ -53,6 +57,8 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_highlightColorNote;
 		wxStaticText* m_highlightWidthLabel;
 		wxSpinCtrlDouble* m_highlightWidthCtrl;
+		wxStaticText* m_crossprobeLabel;
+		wxStaticLine* m_staticline3;
 		wxCheckBox* m_checkCrossProbeOnSelection;
 		wxCheckBox* m_checkCrossProbeCenter;
 		wxCheckBox* m_checkCrossProbeZoom;

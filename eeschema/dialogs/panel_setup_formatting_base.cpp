@@ -41,7 +41,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer1->Add( bSizer6, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bLeftColumn->Add( sbSizer1, 0, wxEXPAND|wxALL, 5 );
+	bLeftColumn->Add( sbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Text") ), wxVERTICAL );
@@ -97,7 +97,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer4->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bLeftColumn->Add( sbSizer4, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bLeftColumn->Add( sbSizer4, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizer41;
 	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbols") ), wxVERTICAL );
@@ -134,7 +134,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer41->Add( fgSizer321, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bLeftColumn->Add( sbSizer41, 0, wxEXPAND|wxALL, 5 );
+	bLeftColumn->Add( sbSizer41, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Connections") ), wxVERTICAL );
@@ -156,10 +156,10 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer2->Add( bSizer61, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bLeftColumn->Add( sbSizer2, 1, wxEXPAND|wxALL, 5 );
+	bLeftColumn->Add( sbSizer2, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bPanelSizer->Add( bLeftColumn, 1, wxEXPAND, 10 );
+	bPanelSizer->Add( bLeftColumn, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 	wxBoxSizer* bRightColumn;
 	bRightColumn = new wxBoxSizer( wxVERTICAL );
@@ -247,10 +247,10 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer6->Add( m_dashedLineHelp, 0, wxALL, 5 );
 
 
-	bRightColumn->Add( sbSizer6, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bRightColumn->Add( sbSizer6, 1, wxEXPAND|wxALL, 5 );
 
 
-	bPanelSizer->Add( bRightColumn, 1, wxRIGHT|wxLEFT|wxEXPAND, 10 );
+	bPanelSizer->Add( bRightColumn, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bPanelSizer );

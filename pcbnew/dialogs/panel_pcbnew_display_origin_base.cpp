@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,7 +57,7 @@ PANEL_PCBNEW_DISPLAY_ORIGIN_BASE::PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( wxWindow* pa
 	bMargins->Add( bRightSizer, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	bPanelSizer->Add( bMargins, 1, wxRIGHT, 5 );
+	bPanelSizer->Add( bMargins, 1, wxTOP|wxRIGHT, 5 );
 
 
 	this->SetSizer( bPanelSizer );

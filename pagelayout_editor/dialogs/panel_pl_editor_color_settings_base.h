@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,6 @@
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -39,6 +38,7 @@ class PANEL_PL_EDITOR_COLOR_SETTINGS_BASE : public RESETTABLE_PANEL
 	public:
 
 		PANEL_PL_EDITOR_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_PL_EDITOR_COLOR_SETTINGS_BASE();
 
 };

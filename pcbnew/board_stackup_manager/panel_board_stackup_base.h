@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_PANEL;
+
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -25,8 +27,8 @@
 #include <wx/sizer.h>
 #include <wx/statbmp.h>
 #include <wx/scrolwin.h>
-#include <wx/textctrl.h>
 #include <wx/panel.h>
+#include <wx/textctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -44,6 +46,7 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxCheckBox* m_impedanceControlled;
 		wxButton* m_buttonAddDielectricLayer;
 		wxButton* m_buttonRemoveDielectricLayer;
+		WX_PANEL* m_panel1;
 		wxScrolledWindow* m_scGridWin;
 		wxFlexGridSizer* m_fgGridSizer;
 		wxStaticText* m_staticTextLayer;

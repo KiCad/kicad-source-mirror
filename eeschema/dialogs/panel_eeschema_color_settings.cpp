@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,7 +20,6 @@
 
 #include <regex>
 
-#include <bitmaps.h>
 #include <eeschema_settings.h>
 #include <gal/gal_display_options.h>
 #include <layer_ids.h>
@@ -44,6 +43,7 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <sch_base_frame.h>
 #include <widgets/color_swatch.h>
+#include <widgets/wx_panel.h>
 #include <wx/msgdlg.h>
 
 
@@ -209,7 +209,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
     const int margin = 20;  // A margin around the sizer
     m_colorsListWindow->SetMinSize( wxSize( min_width + margin, -1 ) );
 
-    m_preview = new SCH_PREVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
+    m_preview = new SCH_PREVIEW_PANEL( m_panel1, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
                                        m_galDisplayOptions, m_galType );
     m_preview->SetStealsFocus( false );
     m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
@@ -218,9 +218,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
     KIGFX::SCH_RENDER_SETTINGS* settings = m_preview->GetRenderSettings();
     settings->m_IsSymbolEditor = true;
 
-    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
-    m_colorsMainSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );
-    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
+    m_colorsMainSizer->Add( m_preview, 1, wxTOP | wxEXPAND, 1 );
 
     m_colorsMainSizer->Layout();
 

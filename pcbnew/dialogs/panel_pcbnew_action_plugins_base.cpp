@@ -39,7 +39,7 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	m_grid->SetColLabelValue( 3, _("Category") );
 	m_grid->SetColLabelValue( 4, _("Description") );
 	m_grid->SetColLabelValue( 5, _("Path") );
-	m_grid->SetColLabelSize( 22 );
+	m_grid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -48,13 +48,14 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	m_grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
+	m_grid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bGridSizer->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
+	bGridSizer->Add( m_grid, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bPanelSizer->Add( bGridSizer, 1, wxALIGN_LEFT|wxEXPAND|wxLEFT, 0 );
+	bPanelSizer->Add( bGridSizer, 1, wxALIGN_LEFT|wxEXPAND, 0 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -62,33 +63,33 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	m_moveUpButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_moveUpButton->SetToolTip( _("Move Up") );
 
-	bButtonsSizer->Add( m_moveUpButton, 0, wxLEFT|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_moveUpButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_moveDownButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_moveDownButton->SetToolTip( _("Move Down") );
 
-	bButtonsSizer->Add( m_moveDownButton, 0, wxRIGHT, 5 );
+	bButtonsSizer->Add( m_moveDownButton, 0, wxBOTTOM, 5 );
 
 
-	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
+	bButtonsSizer->Add( 15, 0, 0, wxEXPAND, 5 );
 
 	m_openDirectoryButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_openDirectoryButton->SetToolTip( _("Open Plugin Directory") );
 
-	bButtonsSizer->Add( m_openDirectoryButton, 0, wxLEFT|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_openDirectoryButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_reloadButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_reloadButton->SetToolTip( _("Reload Plugins") );
 
-	bButtonsSizer->Add( m_reloadButton, 0, wxRIGHT, 5 );
+	bButtonsSizer->Add( m_reloadButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_showErrorsButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_showErrorsButton->SetToolTip( _("Show Plugin Errors") );
 
-	bButtonsSizer->Add( m_showErrorsButton, 0, wxRIGHT, 5 );
+	bButtonsSizer->Add( m_showErrorsButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	bPanelSizer->Add( bButtonsSizer, 0, wxEXPAND, 0 );
+	bPanelSizer->Add( bButtonsSizer, 0, wxEXPAND|wxBOTTOM|wxLEFT, 0 );
 
 
 	this->SetSizer( bPanelSizer );

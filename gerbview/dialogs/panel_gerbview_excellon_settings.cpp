@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,6 +19,7 @@
  */
 
 #include <pgm_base.h>
+#include <widgets/ui_common.h>
 #include <settings/settings_manager.h>
 #include <gerbview_settings.h>
 
@@ -28,6 +29,11 @@
 PANEL_GERBVIEW_EXCELLON_SETTINGS::PANEL_GERBVIEW_EXCELLON_SETTINGS( wxWindow* aParent ) :
         PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( aParent, wxID_ANY )
 {
+    wxFont helpFont = KIUI::GetInfoFont( this ).Italic();
+    m_fileFormatHelp->SetFont( helpFont );
+    m_coordsFormatHelp->SetFont( helpFont );
+    m_hint1->SetFont( helpFont );
+    m_hint2->SetFont( helpFont );
 }
 
 

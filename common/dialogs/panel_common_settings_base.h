@@ -19,10 +19,10 @@ class STD_BITMAP_BUTTON;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
@@ -44,16 +44,21 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
+		wxStaticText* m_staticText20;
+		wxStaticLine* m_staticline3;
 		wxChoice* m_antialiasing;
 		wxStaticText* m_antialiasingFallbackLabel;
 		wxChoice* m_antialiasingFallback;
+		wxStaticText* m_staticText21;
+		wxStaticLine* m_staticline2;
 		wxTextCtrl* m_textEditorPath;
 		STD_BITMAP_BUTTON* m_textEditorBtn;
 		wxRadioButton* m_defaultPDFViewer;
 		wxRadioButton* m_otherPDFViewer;
 		wxTextCtrl* m_PDFViewerPath;
 		STD_BITMAP_BUTTON* m_pdfViewerBtn;
-		wxStaticBoxSizer* m_sbUserInterface;
+		wxStaticText* m_staticText22;
+		wxStaticLine* m_staticline1;
 		wxGridBagSizer* m_gbUserInterface;
 		wxCheckBox* m_checkBoxIconsInMenus;
 		wxCheckBox* m_showScrollbars;
@@ -70,8 +75,12 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_highContrastLabel;
 		wxTextCtrl* m_highContrastCtrl;
 		wxStaticText* m_highContrastUnits;
+		wxStaticText* m_staticText23;
+		wxStaticLine* m_staticline6;
 		wxCheckBox* m_warpMouseOnMove;
 		wxCheckBox* m_NonImmediateActions;
+		wxStaticText* m_staticText24;
+		wxStaticLine* m_staticline5;
 		wxCheckBox* m_cbRememberOpenFiles;
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;
@@ -80,6 +89,8 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_staticTextClear3DCache;
 		wxSpinCtrl* m_Clear3DCacheFilesOlder;
 		wxStaticText* m_staticTextDays;
+		wxStaticText* m_staticText25;
+		wxStaticLine* m_staticline4;
 		wxCheckBox* m_cbBackupEnabled;
 		wxCheckBox* m_cbBackupAutosave;
 		wxStaticText* m_staticText9;

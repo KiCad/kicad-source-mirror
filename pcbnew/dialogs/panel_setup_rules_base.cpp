@@ -14,18 +14,14 @@
 PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bPanelSizer;
-	bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_leftMargin = new wxBoxSizer( wxHORIZONTAL );
-
-	m_topMargin = new wxBoxSizer( wxVERTICAL );
+	bPanelSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_title = new wxStaticText( this, wxID_ANY, _("DRC rules:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	bSizer4->Add( m_title, 0, wxTOP|wxBOTTOM, 5 );
+	bSizer4->Add( m_title, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -36,7 +32,9 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	bSizer4->Add( m_syntaxHelp, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 
-	m_topMargin->Add( bSizer4, 0, wxEXPAND, 5 );
+	bPanelSizer->Add( bSizer4, 0, wxEXPAND, 5 );
+
+	m_topMargin = new wxBoxSizer( wxVERTICAL );
 
 	m_textEditor = new wxStyledTextCtrl( this, ID_RULES_EDITOR, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
 	m_textEditor->SetUseTabs( true );
@@ -69,7 +67,7 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	m_textEditor->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
 	m_textEditor->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 	m_textEditor->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-	m_topMargin->Add( m_textEditor, 3, wxEXPAND | wxALL, 5 );
+	m_topMargin->Add( m_textEditor, 3, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
@@ -82,16 +80,13 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	m_errorsReport = new WX_HTML_REPORT_BOX( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	m_errorsReport->SetMinSize( wxSize( 400,60 ) );
 
-	bSizer5->Add( m_errorsReport, 1, wxALL|wxEXPAND, 5 );
+	bSizer5->Add( m_errorsReport, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
 	m_topMargin->Add( bSizer5, 1, wxEXPAND, 5 );
 
 
-	m_leftMargin->Add( m_topMargin, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
-
-
-	bPanelSizer->Add( m_leftMargin, 1, wxEXPAND, 5 );
+	bPanelSizer->Add( m_topMargin, 1, wxEXPAND, 10 );
 
 
 	this->SetSizer( bPanelSizer );

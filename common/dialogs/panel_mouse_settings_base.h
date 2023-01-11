@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,16 +12,16 @@
 #include <wx/intl.h>
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
+#include <wx/statline.h>
+#include <wx/checkbox.h>
 #include <wx/slider.h>
 #include <wx/sizer.h>
 #include <wx/gbsizer.h>
-#include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -41,6 +41,8 @@ class PANEL_MOUSE_SETTINGS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
+		wxStaticText* m_panZoomLabel;
+		wxStaticLine* m_staticline1;
 		wxCheckBox* m_checkZoomCenter;
 		wxCheckBox* m_checkAutoPan;
 		wxCheckBox* m_checkZoomAcceleration;
@@ -51,12 +53,16 @@ class PANEL_MOUSE_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxBoxSizer* m_panSizer;
 		wxStaticText* m_staticText22;
 		wxSlider* m_autoPanSpeed;
+		wxStaticText* m_dragLabel;
+		wxStaticLine* m_staticline3;
 		wxStaticText* m_leftButtonDragLabel;
 		wxChoice* m_choiceLeftButtonDrag;
 		wxStaticText* m_staticText3;
 		wxChoice* m_choiceMiddleButtonDrag;
 		wxStaticText* m_staticText31;
 		wxChoice* m_choiceRightButtonDrag;
+		wxStaticText* m_scrollLabel;
+		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticText21;
 		wxStaticBitmap* m_scrollWarning;
 		wxStaticText* m_staticText19;

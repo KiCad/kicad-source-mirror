@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,14 +11,14 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/panel.h>
 
@@ -33,7 +33,11 @@ class PANEL_PCM_SETTINGS_BASE : public wxPanel
 	private:
 
 	protected:
+		wxStaticText* m_generalLabel;
+		wxStaticLine* m_staticline1;
 		wxCheckBox* m_updateCheck;
+		wxStaticText* m_staticText4;
+		wxStaticLine* m_staticline2;
 		wxCheckBox* m_libAutoAdd;
 		wxCheckBox* m_libAutoRemove;
 		wxStaticText* m_staticText1;
@@ -42,7 +46,7 @@ class PANEL_PCM_SETTINGS_BASE : public wxPanel
 
 	public:
 
-		PANEL_PCM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_PCM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_PCM_SETTINGS_BASE();
 

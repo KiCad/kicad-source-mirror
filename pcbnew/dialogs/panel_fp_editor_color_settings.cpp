@@ -67,8 +67,6 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( wxWindow* aParen
     }
 
     m_backgroundLayer = LAYER_PCB_BACKGROUND;
-
-    m_colorsMainSizer->Insert( 0, 10, 0, 0, wxEXPAND, 5 );
 }
 
 

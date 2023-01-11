@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,10 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindo
     // Make the color swatch show "Clear Color" instead
     m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_backgroundColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+
+    wxFont helpFont = KIUI::GetInfoFont( this ).Italic();
+    m_hint1->SetFont( helpFont );
+    m_hint2->SetFont( helpFont );
 
     m_spinLabelRepeatStep->SetRange( -100000, 100000 );
 #if wxCHECK_VERSION( 3, 1, 6 )

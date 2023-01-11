@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2009-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_html_report_box.h>
+#include <widgets/wx_panel.h>
 #include <widgets/std_bitmap_button.h>
 #include <wx/treebook.h>
 #include <project/net_settings.h>
@@ -101,6 +102,9 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_
 
     m_schUnitsProvider = std::make_unique<UNITS_PROVIDER>( schIUScale, m_frame->GetUserUnits() );
     m_pcbUnitsProvider = std::make_unique<UNITS_PROVIDER>( pcbIUScale, m_frame->GetUserUnits() );
+
+    m_netclassesPane->SetBorders( true, false, false, false );
+    m_membershipPane->SetBorders( true, false, false, false );
 
     // Prevent Size events from firing before we are ready
     Freeze();

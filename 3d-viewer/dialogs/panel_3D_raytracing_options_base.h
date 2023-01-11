@@ -13,16 +13,16 @@
 #include "widgets/color_swatch.h"
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,6 +36,8 @@ class PANEL_3D_RAYTRACING_OPTIONS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
+		wxStaticText* m_renderingLabel;
+		wxStaticLine* m_staticline1;
 		wxCheckBox* m_cbRaytracing_proceduralTextures;
 		wxCheckBox* m_cbRaytracing_addFloor;
 		wxCheckBox* m_cbRaytracing_antiAliasing;
@@ -54,6 +56,8 @@ class PANEL_3D_RAYTRACING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrl* m_numSamples_Refractions;
 		wxTextCtrl* m_spreadFactor_Refractions;
 		wxSpinCtrl* m_recursiveLevel_Refractions;
+		wxStaticText* m_lightsLabel;
+		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticText17;
 		COLOR_SWATCH* m_colourPickerCameraLight;
 		wxStaticText* m_staticText5;

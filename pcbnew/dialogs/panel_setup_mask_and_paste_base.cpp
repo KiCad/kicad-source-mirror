@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bMessages->Add( 4, 0, 0, wxEXPAND, 5 );
 
 	m_bitmapWarning = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
-	bMessages->Add( m_bitmapWarning, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bMessages->Add( m_bitmapWarning, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -44,7 +44,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bSizer3->Add( bMessages, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer3->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bSizer3->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 5, 0 );
