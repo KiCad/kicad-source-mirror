@@ -316,7 +316,9 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             if( !pad->FlashLayer( primary ) )
             {
                 isActive = false;
-                hide = true;
+
+                if( IsCopperLayer( primary ) )
+                    hide = true;
             }
 
             if( m_PadEditModePad && pad != m_PadEditModePad )
@@ -347,7 +349,9 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             if( !via->FlashLayer( primary ) )
             {
                 isActive = false;
-                hide = true;
+
+                if( IsCopperLayer( primary ) )
+                    hide = true;
             }
 
             break;
