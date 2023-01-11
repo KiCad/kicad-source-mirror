@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2017-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -1454,6 +1454,16 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     symbolname.Replace( wxT( "*" ), wxEmptyString );
     wxString kisymbolname = EscapeString( symbolname, CTX_LIBID );
 
+    // Eagle schematics can have multiple libraries containing symbols with duplicate symbol
+    // names. Because this parser stores all of the symbols in a single library,  the
+    // loadSymbol() function, prefixed the original Eagle library name to the symbol name
+    // in case of a name clash.  Check for the prefixed symbol first.  This ensures that
+    // the correct library symbol gets mapped on load.
+    wxString altSymbolName = libraryname + wxT( "_" ) + symbolname;
+    altSymbolName = EscapeString( altSymbolName, CTX_LIBID );
+
+    wxString libIdSymbolName = altSymbolName;
+
     int unit = m_eagleLibs[libraryname].GateUnit[gatename];
 
     wxString       package;
@@ -1464,8 +1474,15 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     if( p != elib->package.end() )
         package = p->second;
 
-    LIB_SYMBOL* part = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
+    LIB_SYMBOL* part = m_pi->LoadSymbol( getLibFileName().GetFullPath(), altSymbolName,
                                          m_properties.get() );
+
+    if( !part )
+    {
+        part = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
+                                 m_properties.get() );
+        libIdSymbolName = kisymbolname;
+    }
 
     if( !part )
     {
@@ -1475,15 +1492,18 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         return;
     }
 
-    LIB_ID                      libId( getLibName(), kisymbolname );
+    LIB_ID                      libId( getLibName(), libIdSymbolName );
     std::unique_ptr<SCH_SYMBOL> symbol = std::make_unique<SCH_SYMBOL>();
     symbol->SetLibId( libId );
     symbol->SetUnit( unit );
     symbol->SetPosition( VECTOR2I( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
 
     // assume that footprint library is identical to project name
-    wxString footprint = m_schematic->Prj().GetProjectName() + wxT( ":" ) + package;
-    symbol->GetField( FOOTPRINT_FIELD )->SetText( footprint );
+    if( !package.IsEmpty() )
+    {
+        wxString footprint = m_schematic->Prj().GetProjectName() + wxT( ":" ) + package;
+        symbol->GetField( FOOTPRINT_FIELD )->SetText( footprint );
+    }
 
     if( einstance.rot )
     {
@@ -1622,6 +1642,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         attributeNode = attributeNode->GetNext();
     }
 
+    // Use the instance attribute to determine the reference and value field visibility.
     if( einstance.smashed && einstance.smashed.Get() )
     {
         if( !valueAttributeFound )
@@ -1743,15 +1764,30 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             if( gates_count == 1 && ispower )
                 libSymbol->SetPower();
 
-            // assume that footprint library is identical to project name
-            wxString packageString = m_schematic->Prj().GetProjectName() + wxT( ":" ) + aEagleLibrary->package[symbolName];
-            libSymbol->GetFootprintField().SetText( packageString );
+            // Don't set the footprint field if no package is defined in the Eagle schematic.
+            if( edevice.package )
+            {
+                // assume that footprint library is identical to project name
+                wxString packageString = m_schematic->Prj().GetProjectName() + wxT( ":" ) +
+                                         aEagleLibrary->package[symbolName];
+                libSymbol->GetFootprintField().SetText( packageString );
+            }
 
-            wxString name = libSymbol->GetName();
-            libSymbol->SetName( name );
+            wxString libName = libSymbol->GetName();
+            libSymbol->SetName( libName );
+
+            // If duplicate symbol names exist in multiple Eagle symbol libraries, prefix the
+            // Eagle symbol library name to the symbol which should ensure that it is unique.
+            if( m_pi->LoadSymbol( getLibFileName().GetFullPath(), libName ) )
+            {
+                libName = aEagleLibrary->name + wxT( "_" ) + libName;
+                libName = EscapeString( libName, CTX_LIBID );
+                libSymbol->SetName( libName );
+            }
+
             m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *libSymbol.get() ),
                               m_properties.get() );
-            aEagleLibrary->KiCadSymbols.insert( name, libSymbol.release() );
+            aEagleLibrary->KiCadSymbols.insert( libName, libSymbol.release() );
 
             deviceNode = deviceNode->GetNext();
         } // devicenode
