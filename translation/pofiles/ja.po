@@ -20465,9 +20465,8 @@ msgid "Only generate a board with no components"
 msgstr "部品なしのボードのみを生成する"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
-#, fuzzy
 msgid "Minimum distance between points to treat them as separate ones"
-msgstr "分離した点として扱う最小間隔 (デフォルトは 0.01mm)"
+msgstr "別の点として扱う点間の最小距離"
 
 #: kicad/cli/command_export_pcb_step.cpp:83
 msgid ""
@@ -26900,9 +26899,8 @@ msgid "Other Options"
 msgstr "その他オプション"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
-#, fuzzy
 msgid "Ignore not mounted components"
-msgstr "仮想コンポーネントを無視"
+msgstr "実装されていない部品を無視"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:111
 msgid "Do not show components not in BOM and not in place file"
@@ -31069,11 +31067,8 @@ msgid "Auto-refill zones"
 msgstr "ゾーンを自動的に再塗りつぶし"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:402
-#, fuzzy
 msgid "If checked, zones will be re-filled after each edit operation"
-msgstr ""
-"チェックすると、[ゾーンのプロパティ] ダイアログ でゾーンのプロパティを編集し"
-"た後に、ゾーンが再塗りつぶしが行われます"
+msgstr "チェックすると、編集を行った後にゾーンが再塗りつぶしが行われます"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:113
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:115
@@ -31135,7 +31130,6 @@ msgid "Warning: Duplicate Nicknames"
 msgstr "警告: 重複したニックネーム"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:100
-#, fuzzy
 msgid "LIbrary Format"
 msgstr "ライブラリー形式"
 
@@ -31332,7 +31326,7 @@ msgstr "穴"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Minimum through hole:"
-msgstr "最小スルーホール:"
+msgstr "最小スルーホール穴径:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:190
 msgid ""
@@ -31375,7 +31369,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
 msgid "Minimum uVia hole:"
-msgstr "最小マイクロビア穴:"
+msgstr "最小マイクロビア穴径:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:263
 msgid ""
@@ -33391,7 +33385,7 @@ msgstr "%s の配線幅を確認しています:選択肢は：%s。"
 #: pcbnew/drc/drc_engine.cpp:956
 #, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "基板設定の配線幅を確認しています:最小は%s。"
+msgstr "[基板の設定]の配線幅の制約確認しています: 最小 %s."
 
 #: pcbnew/drc/drc_engine.cpp:964
 #, c-format
@@ -33406,7 +33400,7 @@ msgstr "%sのビアの直径を確認しています:最適は %s。"
 #: pcbnew/drc/drc_engine.cpp:978
 #, c-format
 msgid "Checking board setup constraints via diameter: min %s."
-msgstr "基板設定のビア直径の制約を確認しています:最小は%s。"
+msgstr "[基板の設定]のビア直径の制約を確認しています: 最小 %s."
 
 #: pcbnew/drc/drc_engine.cpp:987
 #, c-format
@@ -33416,7 +33410,7 @@ msgstr "%s のホールサイズをチェックしています:選択肢: %s."
 #: pcbnew/drc/drc_engine.cpp:993
 #, c-format
 msgid "Checking board setup constraints hole size: min %s."
-msgstr "基板設定のホールサイズの制約を確認しています:最小は%s。"
+msgstr "[基板の設定]の穴のサイズの制約を確認しています: 最小 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1003
 #, c-format
@@ -33431,12 +33425,12 @@ msgstr "%s の差動ペアギャップをチェックしています: 最適は 
 #: pcbnew/drc/drc_engine.cpp:1018
 #, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr "基板設定の制約クリアランスを確認しています: 最小は %s。"
+msgstr "[基板の設定]のクリアランスの制約を確認しています: 最小 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole to hole: min %s."
-msgstr "基板設定のホールサイズの制約を確認しています:最小は%s。"
+msgstr "[基板の設定]の穴から穴への制約を確認しています: 最小 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1032 pcbnew/drc/drc_engine.cpp:1058
 #: pcbnew/drc/drc_engine.cpp:1502
@@ -38749,9 +38743,8 @@ msgstr "穴から穴"
 
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:960
-#, fuzzy
 msgid "Hole to hole clearance resolution for:"
-msgstr "穴のクリアランスの解決:"
+msgstr "穴から穴のクリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:451
 msgid "Edge Clearance"
@@ -39278,13 +39271,13 @@ msgid "Push Pad Settings"
 msgstr "パッドの設定をプッシュ"
 
 #: pcbnew/tools/pad_tool.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click on pad %s%d\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"パッド %s%d 上でクリック\n"
-"<esc> を押してキャンセル、またはダブル クリックしてコミット"
+"パッド %s%d 上をクリック\n"
+"<ESC> ですべてキャンセル、ダブル クリックで確定します"
 
 #: pcbnew/tools/pad_tool.cpp:362 pcbnew/tools/pad_tool.cpp:458
 msgid "Renumber pads"
@@ -40632,9 +40625,8 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "選択したアイテムを垂直方向に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
-#, fuzzy
 msgid "Keep arc center, adjust radius"
-msgstr "円弧 中心 (%s, %s) 半径 %s"
+msgstr "円弧の中心を固定し、半径を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
@@ -40909,9 +40901,8 @@ msgid "Sequentially route selected items from ratsnest anchor."
 msgstr "選択したアイテムのラッツネストのある端子をを順番に配線します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1526
-#, fuzzy
 msgid "Route Selected From Other End"
-msgstr "選択したグループ"
+msgstr "選択対象を他の端子から配線"
 
 #: pcbnew/tools/pcb_actions.cpp:1527
 msgid "Sequentially route selected items from other end of ratsnest anchor."
