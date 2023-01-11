@@ -40,6 +40,7 @@
 #include <lib_text.h>
 #include <lib_textbox.h>
 #include <math/util.h>
+#include <pgm_base.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
@@ -59,6 +60,7 @@
 #include <kiface_base.h>
 #include <default_values.h>
 #include <advanced_config.h>
+#include <settings/settings_manager.h>
 #include <string_utils.h>
 #include <stroke_params.h>
 #include "sch_painter.h"
@@ -2271,14 +2273,16 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
-        m_gal->SetStrokeColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
-        m_gal->SetFillColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+        COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+
+        m_gal->SetStrokeColor( colors->GetColor( LAYER_ERC_ERR ) );
+        m_gal->SetFillColor( colors->GetColor( LAYER_ERC_ERR ) );
 
             m_gal->DrawSegment( bbox.GetOrigin(), bbox.GetEnd(),
-                    4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+                    3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
             m_gal->DrawSegment( bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
                                 bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
-                    4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+                    3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
     }
 }
 

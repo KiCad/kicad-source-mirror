@@ -29,6 +29,7 @@
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <lib_shape.h>
+#include <pgm_base.h>
 #include <sch_symbol.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
@@ -36,6 +37,7 @@
 #include <trigo.h>
 #include <refdes_utils.h>
 #include <wx/log.h>
+#include <settings/settings_manager.h>
 #include <string_utils.h>
 
 #include <utility>
@@ -478,15 +480,17 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
     {
         BOX2I bbox = GetBodyAndPinsBoundingBox();
         wxDC* DC = aSettings->GetPrintDC();
+        COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+        COLOR4D dnp_color = colors->GetColor( LAYER_ERC_ERR );
 
         GRFilledSegment( DC, bbox.GetOrigin(), bbox.GetEnd(),
-                             4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
-                             COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+                             3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
+                             dnp_color );
 
         GRFilledSegment( DC, bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
                              bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
-                             4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
-                             COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+                             3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
+                             dnp_color );
     }
 }
 
@@ -2153,15 +2157,18 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
 void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
 {
     BOX2I bbox = GetBodyAndPinsBoundingBox();
-    aPlotter->SetColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+
+    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+
+    aPlotter->SetColor( colors->GetColor( LAYER_ERC_ERR ) );
 
     aPlotter->ThickSegment( bbox.GetOrigin(), bbox.GetEnd(),
-                            4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
+                            3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
                             FILLED, nullptr );
 
     aPlotter->ThickSegment( bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
                             bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
-                            4.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
+                            3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
                             FILLED, nullptr );
 }
 
