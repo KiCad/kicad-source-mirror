@@ -80,20 +80,19 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
 #if defined( __WXGTK__ ) || defined( __WXMSW__ )
     // Sadly wxSlider is poorly implemented and adds its legends as sibling windows (so that
     // showing/hiding the control doesn't work).  So we have to create it conditionally.
-    wxWindow*       parent = m_sbUserInterface->GetStaticBox();
     wxGridBagSizer* gb = m_gbUserInterface;
 
-    m_iconScaleLabel = new wxStaticText( parent, wxID_ANY, _( "Icon scale:" ) );
+    m_iconScaleLabel = new wxStaticText( this, wxID_ANY, _( "Icon scale:" ) );
    	m_iconScaleLabel->Wrap( -1 );
    	gb->Add( m_iconScaleLabel, wxGBPosition( 3, 0 ),
              wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-   	m_iconScaleSlider = new STEPPED_SLIDER( parent, wxID_ANY, 100, 50, 275, wxDefaultPosition,
+   	m_iconScaleSlider = new STEPPED_SLIDER( this, wxID_ANY, 100, 50, 275, wxDefaultPosition,
                                             wxDefaultSize, wxSL_HORIZONTAL|wxSL_VALUE_LABEL );
    	m_iconScaleSlider->SetStep( 25 );
    	gb->Add( m_iconScaleSlider, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxEXPAND|wxBOTTOM, 5 );
 
-   	m_iconScaleAuto = new wxCheckBox( parent, wxID_ANY, _( "Automatic" ) );
+   	m_iconScaleAuto = new wxCheckBox( this, wxID_ANY, _( "Automatic" ) );
    	gb->Add( m_iconScaleAuto, wxGBPosition( 3, 3 ),
              wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 #endif
