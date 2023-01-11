@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-08 12:14-0800\n"
+"POT-Creation-Date: 2023-01-11 12:35-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -499,11 +499,11 @@ msgstr "Show ECO layers"
 msgid "Render Options"
 msgstr "Render Options"
 
-msgid "Realistic mode"
-msgstr "Realistic mode"
-
 msgid "Show board body"
 msgstr "Show board body"
+
+msgid "Realistic mode"
+msgstr "Realistic mode"
 
 msgid "Show filled areas in zones"
 msgstr "Show filled areas in zones"
@@ -1667,8 +1667,8 @@ msgstr "Color"
 msgid "Black and white"
 msgstr "Black and white"
 
-msgid "Print border and title block"
-msgstr "Print border and title block"
+msgid "Print drawing sheet"
+msgstr "Print drawing sheet"
 
 msgid "Print Frame references."
 msgstr "Print Frame references."
@@ -2278,8 +2278,8 @@ msgstr "The default net class is required."
 msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Nets matching '%s':</b>"
 
-msgid "Net Class"
-msgstr "Net Class"
+msgid "Netclasses:"
+msgstr "Netclasses:"
 
 msgid "Clearance"
 msgstr "Clearance"
@@ -2325,6 +2325,9 @@ msgstr "Netclass assignments:"
 
 msgid "Pattern"
 msgstr "Pattern"
+
+msgid "Net Class"
+msgstr "Net Class"
 
 msgid "Ignore"
 msgstr "Ignore"
@@ -6667,14 +6670,8 @@ msgstr "An error occurred attempting to print the schematic."
 msgid "Print page %d"
 msgstr "Print page %d"
 
-msgid "Print sheet &reference and title block"
-msgstr "Print sheet &reference and title block"
-
 msgid "Print (or not) the Frame references."
 msgstr "Print (or not) the Frame references."
-
-msgid "Print in &black and white only"
-msgstr "Print in &black and white only"
 
 msgid "Print background color"
 msgstr "Print background color"
@@ -7623,9 +7620,6 @@ msgstr "Set width to 0 to use netclass's wire/bus widths."
 msgid "Wire & Bus Properties"
 msgstr "Wire & Bus Properties"
 
-msgid "Symbol Annotation"
-msgstr "Symbol Annotation"
-
 msgid "Automatically annotate symbols"
 msgstr "Automatically annotate symbols"
 
@@ -7969,12 +7963,6 @@ msgstr "Generate warning"
 
 msgid "Generate error"
 msgstr "Generate error"
-
-msgid "Pin to Pin Connections"
-msgstr "Pin to Pin Connections"
-
-msgid "Color Theme"
-msgstr "Color Theme"
 
 msgid "Use schematic editor color theme"
 msgstr "Use schematic editor color theme"
@@ -12505,15 +12493,6 @@ msgstr "Edit Sheet Page Number"
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Revert '%s' (and all sub-sheets) to last version saved?"
 
-msgid "Reached end of schematic."
-msgstr "Reached end of schematic."
-
-msgid "Reached end of sheet."
-msgstr "Reached end of sheet."
-
-msgid "Find again to wrap around to the start."
-msgstr "Find again to wrap around to the start."
-
 #, c-format
 msgid "Could not add library '%s'."
 msgstr "Could not add library '%s'."
@@ -12553,6 +12532,15 @@ msgstr "%d potential problems repaired."
 
 msgid "No errors found."
 msgstr "No errors found."
+
+msgid "Reached end of schematic."
+msgstr "Reached end of schematic."
+
+msgid "Reached end of sheet."
+msgstr "Reached end of sheet."
+
+msgid "Find again to wrap around to the start."
+msgstr "Find again to wrap around to the start."
 
 msgid "No bus selected"
 msgstr "No bus selected"
@@ -12830,6 +12818,9 @@ msgstr "Sketch lines"
 msgid "Sketch polygons"
 msgstr "Sketch polygons"
 
+msgid "Page Size"
+msgstr "Page Size"
+
 msgid "Full size"
 msgstr "Full size"
 
@@ -12850,9 +12841,6 @@ msgstr "Size B"
 
 msgid "Size C"
 msgstr "Size C"
-
-msgid "Page Size"
-msgstr "Page Size"
 
 msgid "File Format"
 msgstr "File Format"
@@ -12890,9 +12878,6 @@ msgstr "The coordinates format is not specified in Excellon format."
 msgid "(The decimal format does not use these settings)"
 msgstr "(The decimal format does not use these settings)"
 
-msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr "Usually: 3:3 in mm and 2:4 in inches"
-
 msgid "Format for mm"
 msgstr "Format for mm"
 
@@ -12916,6 +12901,9 @@ msgstr ":"
 
 msgid "Format for inches"
 msgstr "Format for inches"
+
+msgid "Usually: 3:3 in mm and 2:4 in inches"
+msgstr "Usually: 3:3 in mm and 2:4 in inches"
 
 msgid "Layers Manager"
 msgstr "Layers Manager"
@@ -13583,11 +13571,11 @@ msgstr "Invalid origin mode specified\n"
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr "Gerber coordinate precision should be either 5 or 6\n"
 
-msgid "Include the reference designator text"
-msgstr "Include the reference designator text"
+msgid "Exclude the reference designator text"
+msgstr "Exclude the reference designator text"
 
-msgid "Include the value text"
-msgstr "Include the value text"
+msgid "Exclude the value text"
+msgstr "Exclude the value text"
 
 msgid "Plot graphic items using their contours"
 msgstr "Plot graphic items using their contours"
@@ -13625,9 +13613,6 @@ msgstr ""
 
 msgid "Use the gerber plot settings already configured in the board file"
 msgstr "Use the gerber plot settings already configured in the board file"
-
-msgid "Black and white only"
-msgstr "Black and white only"
 
 msgid "Color theme to use (will default to pcbnew settings)"
 msgstr "Color theme to use (will default to pcbnew settings)"
@@ -13736,6 +13721,12 @@ msgstr "Forces the footprint library to be resaved regardless of versioning"
 
 msgid "Footprint path does not exist or is not accessible\n"
 msgstr "Footprint path does not exist or is not accessible\n"
+
+msgid "Include hidden pins"
+msgstr "Include hidden pins"
+
+msgid "Include hidden fields"
+msgstr "Include hidden fields"
 
 msgid "Symbol file does not exist or is not accessible\n"
 msgstr "Symbol file does not exist or is not accessible\n"
@@ -20237,9 +20228,6 @@ msgstr "Gerber"
 msgid "Include Layers"
 msgstr "Include Layers"
 
-msgid "Plot border and title block"
-msgstr "Plot border and title block"
-
 msgid "Plot footprint values"
 msgstr "Plot footprint values"
 
@@ -20459,12 +20447,6 @@ msgstr ""
 "This number defines how many digits are exported that are below 1 mm.\n"
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
-
-msgid "Plot in black and white"
-msgstr "Plot in black and white"
-
-msgid "When disabled, the color from the chosen layer will be used to plot."
-msgstr "When disabled, the color from the chosen layer will be used to plot."
 
 msgid "PDF Options"
 msgstr "PDF Options"
@@ -22695,9 +22677,6 @@ msgstr "No via hole size defined."
 
 msgid "No differential pair gap defined."
 msgstr "No differential pair gap defined."
-
-msgid "Pre-defined track and via dimensions:"
-msgstr "Pre-defined track and via dimensions:"
 
 msgid "7"
 msgstr "7"
@@ -29473,6 +29452,46 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Print border and title block"
+#~ msgstr "Print border and title block"
+
+#~ msgid "Print sheet &reference and title block"
+#~ msgstr "Print sheet &reference and title block"
+
+#~ msgid "Print in &black and white only"
+#~ msgstr "Print in &black and white only"
+
+#~ msgid "Symbol Annotation"
+#~ msgstr "Symbol Annotation"
+
+#~ msgid "Pin to Pin Connections"
+#~ msgstr "Pin to Pin Connections"
+
+#~ msgid "Color Theme"
+#~ msgstr "Color Theme"
+
+#~ msgid "Include the reference designator text"
+#~ msgstr "Include the reference designator text"
+
+#~ msgid "Include the value text"
+#~ msgstr "Include the value text"
+
+#~ msgid "Black and white only"
+#~ msgstr "Black and white only"
+
+#~ msgid "Plot border and title block"
+#~ msgstr "Plot border and title block"
+
+#~ msgid "Plot in black and white"
+#~ msgstr "Plot in black and white"
+
+#~ msgid "When disabled, the color from the chosen layer will be used to plot."
+#~ msgstr ""
+#~ "When disabled, the color from the chosen layer will be used to plot."
+
+#~ msgid "Pre-defined track and via dimensions:"
+#~ msgstr "Pre-defined track and via dimensions:"
 
 #~ msgid "Value may not be empty."
 #~ msgstr "Value may not be empty."
