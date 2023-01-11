@@ -649,12 +649,7 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
                            aFormatter->Quotew( layer_name ).c_str(),
                            aFormatter->Quotew( item->GetTypeName() ).c_str() );
 
-        if( item->IsColorEditable() && IsPrmSpecified( item->GetColor() ) )
-        {
-            aFormatter->Print( 0, " (color %s)",
-                               aFormatter->Quotew( item->GetColor() ).c_str() );
-        }
-
+        // Output other parameters ( in sub layer list there is at least one item)
         for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
         {
             if( idx )    // not for the main (first) layer.
