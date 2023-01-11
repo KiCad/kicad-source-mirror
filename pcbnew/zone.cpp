@@ -93,6 +93,9 @@ ZONE::~ZONE()
 {
     delete m_Poly;
     delete m_CornerSelection;
+
+    if( BOARD* board = GetBoard() )
+        board->IncrementTimeStamp();
 }
 
 
@@ -643,7 +646,7 @@ void ZONE::Move( const VECTOR2I& offset )
     if( GetBoard() )
     {
         auto it = GetBoard()->m_ZoneBBoxCache.find( this );
-        
+
         if( it != GetBoard()->m_ZoneBBoxCache.end() )
             it->second.Move( offset );
     }
@@ -1413,7 +1416,7 @@ static struct ZONE_DESC
 
                     return false;
                 };
-        
+
         auto layer = new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
                     &ZONE::SetLayer, &ZONE::GetLayer );
         layer->SetIsInternal( true );
@@ -1467,12 +1470,12 @@ static struct ZONE_DESC
                     &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE );
         clearanceOverride->SetAvailableFunc( isCopperZone );
-        
+
         auto minWidth = new PROPERTY<ZONE, int>( _HKI( "Minimum Width" ),
                     &ZONE::SetMinThickness, &ZONE::GetMinThickness,
                     PROPERTY_DISPLAY::PT_SIZE );
         minWidth->SetAvailableFunc( isCopperZone );
-        
+
         auto padConnections = new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
                     &ZONE::SetPadConnection, &ZONE::GetPadConnection );
         padConnections->SetAvailableFunc( isCopperZone );

@@ -229,6 +229,9 @@ FOOTPRINT::~FOOTPRINT()
         delete d;
 
     m_drawings.clear();
+
+    if( BOARD* board = GetBoard() )
+        board->IncrementTimeStamp();
 }
 
 
