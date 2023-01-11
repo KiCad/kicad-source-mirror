@@ -1982,28 +1982,14 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
     {
         LIB_SHAPE* arc = new LIB_SHAPE( aSymbol.get(), SHAPE_T::ARC );
         VECTOR2I   center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
-        double     radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
-                                     + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) )
-                            * 2;
+        double     radius = sqrt( ( ( center.x - begin.x ) * ( center.x - begin.x ) ) +
+                                  ( ( center.y - begin.y ) * ( center.y - begin.y ) ) );
 
         // this emulates the filled semicircles created by a thick arc with flat ends caps.
-        if( ewire.width.ToSchUnits() * 2 > radius )
+        if( ewire.cap == EWIRE::FLAT && ewire.width.ToSchUnits() >= 2 * radius )
         {
-            VECTOR2I centerStartVector = begin - center;
-            VECTOR2I centerEndVector = end - center;
-
-            centerStartVector.x = centerStartVector.x * ewire.width.ToSchUnits() * 2 / radius;
-            centerStartVector.y = centerStartVector.y * ewire.width.ToSchUnits() * 2 / radius;
-
-            centerEndVector.x = centerEndVector.x * ewire.width.ToSchUnits() * 2 / radius;
-            centerEndVector.y = centerEndVector.y * ewire.width.ToSchUnits() * 2 / radius;
-
+            VECTOR2I centerStartVector = ( begin - center ) * ( ewire.width.ToSchUnits() / radius );
             begin = center + centerStartVector;
-            end   = center + centerEndVector;
-
-            radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
-                                + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) )
-                     * 2;
 
             arc->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
             arc->SetFillMode( FILL_T::FILLED_SHAPE );
@@ -2013,7 +1999,9 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
             arc->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
         }
 
-        arc->SetArcGeometry( begin, CalcArcMid( begin, end, center ), end );
+        arc->SetCenter( center );
+        arc->SetStart( begin );
+        arc->SetArcAngleAndEnd( EDA_ANGLE( *ewire.curve, DEGREES_T ), true );
         arc->SetUnit( aGateNumber );
 
         return arc;
