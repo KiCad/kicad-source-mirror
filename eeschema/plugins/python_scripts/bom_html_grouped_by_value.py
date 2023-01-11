@@ -8,9 +8,9 @@
 """
     @package
     Output: HTML
-    Grouped By: Value
+    Grouped By: Value, DNP
     Sorted By: Ref
-    Fields: Ref, Qnty, Value, Part, Datasheet, Description, Vendor
+    Fields: Ref, Qnty, Value, Part, Datasheet, Description, Vendor, DNP
 
     Command line:
     python "pathToFile/bom_html_grouped_by_value.py" "%I" "%O.html"

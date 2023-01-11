@@ -7,7 +7,7 @@
     Output: text file (tab-separated)
     Grouped By: ungrouped, one component per line
     Sorted By: Ref
-    Fields: Ref, Value, Part, Footprint, Description, Vendor
+    Fields: Ref, Value, Part, Footprint, Description, Vendor, DNP
 
     Command line:
     python "pathToFile/bom_txt_sorted_by_ref.py" "%I" "%O.txt"

@@ -7,10 +7,10 @@
 """
     @package
     Output: CSV (comma-separated)
-    Grouped By: Value, Footprint, specified extra fields
+    Grouped By: Value, Footprint, DNP, specified extra fields
     Sorted By: Reference
-    Fields: #, Reference, Qty, Value, Footprint, specified extra fields
-    
+    Fields: #, Reference, Qty, Value, Footprint, DNP, specified extra fields
+
     Outputs components grouped by Value, Footprint, and specified extra fields.
     Extra fields can be passed as command line arguments at the end, one field per argument.
 

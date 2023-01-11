@@ -8,9 +8,9 @@
 """
     @package
     Output: HTML
-    Grouped By: Value, Part, Footprint, Tolerance, Manufacturer, Voltage
+    Grouped By: Value, Part, Footprint, Tolerance, Manufacturer, Voltage, DNP
     Sorted By: Ref
-    Fields: Ref, Qnty, Value, Part, Footprint, Description, Vendor
+    Fields: Ref, Qnty, Value, Part, Footprint, Description, Vendor, DNP
 
     Command line:
     python "pathToFile/bom_with_advanced_grouping.py" "%I" "%O.html"

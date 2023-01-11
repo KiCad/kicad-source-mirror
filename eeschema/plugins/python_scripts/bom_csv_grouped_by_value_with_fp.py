@@ -7,9 +7,9 @@
 """
     @package
     Output: CSV (comma-separated)
-    Grouped By: Value, Footprint
+    Grouped By: Value, Footprint, DNP
     Sorted By: Ref
-    Fields: Ref, Qnty, Value, Cmp name, Footprint, Description, Vendor
+    Fields: Ref, Qnty, Value, Cmp name, Footprint, Description, Vendor, DNP
 
     Command line:
     python "pathToFile/bom_csv_grouped_by_value_with_fp.py" "%I" "%O.csv"

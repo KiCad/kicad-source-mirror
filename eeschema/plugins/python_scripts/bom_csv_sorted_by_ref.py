@@ -9,7 +9,7 @@
     Output: CSV (comma-separated)
     Grouped By: ungrouped, one component per line
     Sorted By: Ref
-    Fields: Ref, Value, Part, Footprint, Datasheet, Manufacturer, Vendor
+    Fields: Ref, Value, Part, Footprint, Datasheet, Manufacturer, Vendor, DNP
 
     Command line:
     python "pathToFile/bom_csv_sorted_by_ref.py" "%I" "%O.csv"
