@@ -515,6 +515,7 @@ const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
     SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
     SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T
 };
 
 
