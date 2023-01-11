@@ -26,6 +26,7 @@
 #include <memory>
 #include <sch_io_mgr.h>
 #include <sch_file_versions.h>
+#include <sch_sheet_path.h>
 #include <stack>
 
 
@@ -34,7 +35,6 @@ class LINE_READER;
 class SCH_SCREEN;
 class SCH_SHEET;
 struct SCH_SHEET_INSTANCE;
-class SCH_SHEET_PATH;
 class SCH_BITMAP;
 class SCH_JUNCTION;
 class SCH_NO_CONNECT;

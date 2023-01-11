@@ -919,6 +919,7 @@ private:
     // The schematic editor control class should be able to access some internal
     // functions of the editor frame.
     friend class SCH_EDITOR_CONTROL;
+    friend class SCH_FIND_REPLACE_TOOL;
 
     SCHEMATIC*              m_schematic;          ///< The currently loaded schematic
     const SCH_CONNECTION*   m_highlightedConn;    ///< The highlighted net or bus, or nullptr

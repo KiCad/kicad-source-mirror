@@ -25,7 +25,7 @@
 #include <dialog_schematic_find.h>
 #include <tool/actions.h>
 #include <sch_edit_frame.h>
-#include <tools/sch_editor_control.h>
+#include <tools/sch_find_replace_tool.h>
 
 
 DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aData,
@@ -33,7 +33,7 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aDat
     DIALOG_SCH_FIND_BASE( aParent, wxID_ANY, _( "Find" ), aPosition, aSize,
                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | aStyle ),
     m_frame( aParent ),
-    m_editorControl( m_frame->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>() ),
+    m_findReplaceTool( m_frame->GetToolManager()->GetTool<SCH_FIND_REPLACE_TOOL>() ),
     m_findReplaceData( aData ),
     m_findDirty( true )
 {
@@ -96,7 +96,7 @@ void DIALOG_SCH_FIND::OnIdle( wxIdleEvent& aEvent )
 {
     if( m_findDirty )
     {
-        m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
+        m_findReplaceTool->UpdateFind( ACTIONS::updateFind.MakeEvent() );
         m_findDirty = false;
     }
 }
@@ -112,7 +112,7 @@ void DIALOG_SCH_FIND::OnCancel( wxCommandEvent& aEvent )
 void DIALOG_SCH_FIND::OnUpdateReplaceUI( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( HasFlag( wxFR_REPLACEDIALOG ) && !m_comboFind->GetValue().empty() &&
-                    m_editorControl->HasMatch() );
+                   m_findReplaceTool->HasMatch() );
 }
 
 
@@ -152,7 +152,7 @@ void DIALOG_SCH_FIND::OnSearchForSelect( wxCommandEvent& aEvent )
         m_comboFind->SetSelection( 0 );
     }
 
-    m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
+    m_findReplaceTool->UpdateFind( ACTIONS::updateFind.MakeEvent() );
 }
 
 
@@ -252,7 +252,7 @@ void DIALOG_SCH_FIND::OnFind( wxCommandEvent& aEvent )
         m_comboFind->SetSelection( 0 );
     }
 
-    m_editorControl->FindNext( ACTIONS::findNext.MakeEvent() );
+    m_findReplaceTool->FindNext( ACTIONS::findNext.MakeEvent() );
 }
 
 
@@ -276,9 +276,9 @@ void DIALOG_SCH_FIND::OnReplace( wxCommandEvent& aEvent )
     }
 
     if( aEvent.GetId() == wxID_REPLACE )
-        m_editorControl->ReplaceAndFindNext( ACTIONS::replaceAndFindNext.MakeEvent() );
+        m_findReplaceTool->ReplaceAndFindNext( ACTIONS::replaceAndFindNext.MakeEvent() );
     else if( aEvent.GetId() == wxID_REPLACE_ALL )
-        m_editorControl->ReplaceAll( ACTIONS::replaceAll.MakeEvent() );
+        m_findReplaceTool->ReplaceAll( ACTIONS::replaceAll.MakeEvent() );
 }
 
 

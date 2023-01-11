@@ -67,6 +67,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_eeschema_page_settings.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
+    dialogs/dialog_export_netlist.cpp
+    dialogs/dialog_export_netlist_base.cpp
     dialogs/dialog_field_properties.cpp
     dialogs/dialog_field_properties_base.cpp
     dialogs/dialog_global_edit_text_and_graphics.cpp
@@ -96,8 +98,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_line_properties_base.cpp
     dialogs/dialog_migrate_buses.cpp
     dialogs/dialog_migrate_buses_base.cpp
-        dialogs/dialog_export_netlist.cpp
-        dialogs/dialog_export_netlist_base.cpp
     dialogs/dialog_pin_properties.cpp
     dialogs/dialog_pin_properties_base.cpp
     dialogs/dialog_plot_schematic.cpp
@@ -325,6 +325,7 @@ set( EESCHEMA_SRCS
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
     tools/sch_editor_conditions.cpp
+    tools/sch_find_replace_tool.cpp
     tools/sch_line_wire_bus_tool.cpp
     tools/sch_move_tool.cpp
     tools/sch_navigate_tool.cpp

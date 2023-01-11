@@ -42,8 +42,7 @@ public:
             EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
             m_probingPcbToSch( false ),
             m_pickerItem( nullptr ),
-            m_duplicateIsHoverSelection( false ),
-            m_foundItemHighlighted( false )
+            m_duplicateIsHoverSelection( false )
     { }
 
     ~SCH_EDITOR_CONTROL() { }
@@ -76,15 +75,6 @@ public:
 
     bool RescueLegacyProject( bool aRunningOnDemand );
     bool RescueSymbolLibTableProject( bool aRunningOnDemand );
-
-    int FindAndReplace( const TOOL_EVENT& aEvent );
-
-    int FindNext( const TOOL_EVENT& aEvent );
-    bool HasMatch();
-    int ReplaceAndFindNext( const TOOL_EVENT& aEvent );
-    int ReplaceAll( const TOOL_EVENT& aEvent );
-
-    int UpdateFind( const TOOL_EVENT& aEvent );
 
     ///< Notifies pcbnew about the selected item.
     int CrossProbeToPcb( const TOOL_EVENT& aEvent );
@@ -214,27 +204,12 @@ private:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
-    /**
-     * Advance the search and returns the next matching item after \a aAfter.
-     *
-     * @param aScreen Pointer to the screen used for searching
-     * @param aAfter Starting match to compare
-     * @param aData Search data to compare against or NULL to match the first item found
-     * @return pointer to the next search item found or NULL if nothing found
-     */
-    SCH_ITEM* nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, SCH_ITEM* aAfter,
-                         EDA_SEARCH_DATA& aData );
-
 private:
     bool        m_probingPcbToSch;          // Recursion guard for PCB to schematic cross-probing
     EDA_ITEM*   m_pickerItem;               // Current item for picker highlighting.
 
     std::string m_duplicateClipboard;       // Temporary storage for Duplicate action
     bool        m_duplicateIsHoverSelection;
-
-    bool        m_foundItemHighlighted;
-    wxTimer     m_wrapAroundTimer;          // A timer during which a subsequent FindNext will
-                                            //  result in a wrap-around
 
     // A map of sheet filename --> screens for the clipboard contents.  We use these to hook up
     // cut/paste operations for unsaved sheet content.
