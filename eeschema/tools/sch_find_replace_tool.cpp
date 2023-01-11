@@ -108,22 +108,37 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
 
 
 SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet,
-                                         SCH_ITEM* aAfter, EDA_SEARCH_DATA& aData )
+                                            SCH_ITEM* aAfter, EDA_SEARCH_DATA& aData )
 {
-    bool past_item = true;
-
-    if( aAfter != nullptr )
-    {
-        past_item = false;
-
-        if( aAfter->Type() == SCH_PIN_T || aAfter->Type() == SCH_FIELD_T )
-            aAfter = static_cast<SCH_ITEM*>( aAfter->GetParent() );
-    }
-
+    bool                   past_item = !aAfter;
     std::vector<SCH_ITEM*> sorted_items;
 
     for( SCH_ITEM* item : aScreen->Items() )
+    {
         sorted_items.push_back( item );
+
+        if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* cmp = static_cast<SCH_SYMBOL*>( item );
+
+            for( SCH_FIELD& field : cmp->GetFields() )
+                sorted_items.push_back( &field );
+
+            for( SCH_PIN* pin : cmp->GetPins() )
+                sorted_items.push_back( pin );
+        }
+
+        if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            for( SCH_FIELD& field : sheet->GetFields() )
+                sorted_items.push_back( &field );
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                sorted_items.push_back( pin );
+        }
+    }
 
     std::sort( sorted_items.begin(), sorted_items.end(),
             [&]( SCH_ITEM* a, SCH_ITEM* b )
@@ -153,40 +168,6 @@ SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH*
 
             if( item->Matches( aData, aSheet ) )
                 return item;
-
-            if( item->Type() == SCH_SYMBOL_T )
-            {
-                SCH_SYMBOL* cmp = static_cast<SCH_SYMBOL*>( item );
-
-                for( SCH_FIELD& field : cmp->GetFields() )
-                {
-                    if( field.Matches( aData, aSheet ) )
-                        return &field;
-                }
-
-                for( SCH_PIN* pin : cmp->GetPins() )
-                {
-                    if( pin->Matches( aData, aSheet ) )
-                        return pin;
-                }
-            }
-
-            if( item->Type() == SCH_SHEET_T )
-            {
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-
-                for( SCH_FIELD& field : sheet->GetFields() )
-                {
-                    if( field.Matches( aData, aSheet ) )
-                        return &field;
-                }
-
-                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                {
-                    if( pin->Matches( aData, aSheet ) )
-                        return pin;
-                }
-            }
         }
     }
 
