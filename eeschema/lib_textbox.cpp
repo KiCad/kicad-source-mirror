@@ -253,7 +253,10 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
             bg = COLOR4D::WHITE;
 
         if( aDimmed )
+        {
+            color.Desaturate( );
             color = color.Mix( bg, 0.5f );
+        }
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
             lineStyle = PLOT_DASH_TYPE::SOLID;
@@ -295,7 +298,10 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
         bg = COLOR4D::WHITE;
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetMinPenWidth() );
 
@@ -411,7 +417,10 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
             lineStyle = PLOT_DASH_TYPE::DASH;
 
         if( aDimmed )
+        {
+            color.Desaturate( );
             color = color.Mix( bg, 0.5f );
+        }
 
         aPlotter->SetColor( color );
         aPlotter->SetDash( penWidth, lineStyle );
@@ -432,7 +441,10 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
         color = renderSettings->GetLayerColor( LAYER_DEVICE );
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
 

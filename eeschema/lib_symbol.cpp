@@ -714,8 +714,10 @@ void LIB_SYMBOL::Plot( PLOTTER *aPlotter, int aUnit, int aConvert, bool aBackgro
         bg = COLOR4D::WHITE;
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
-
+    }
     aPlotter->SetColor( color );
 
     for( const LIB_ITEM& item : m_drawings )
@@ -753,7 +755,10 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool
         bg = COLOR4D::WHITE;
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     aPlotter->SetColor( color );
 

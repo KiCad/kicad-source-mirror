@@ -237,7 +237,10 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, 
                 bg = COLOR4D::WHITE;
 
             if( aDimmed )
+            {
+                color.Desaturate( );
                 color = color.Mix( bg, 0.5f );
+            }
 
             GRCircle( DC, pos1, TARGET_PIN_RADIUS, 0, color );
         }
@@ -261,7 +264,10 @@ void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& 
         bg = aSettings->GetLayerColor( LAYER_HIDDEN );
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     MapX1 = MapY1 = 0;
     x1    = posX;
@@ -400,6 +406,8 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
     if( aDimmed )
     {
+        nameColor.Desaturate();
+        numColor.Desaturate();
         nameColor = nameColor.Mix( bg, 0.5f );
         numColor = numColor.Mix( bg, 0.5f );
     }
@@ -565,7 +573,10 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
         bg = aSettings->GetLayerColor( LAYER_HIDDEN );
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     VECTOR2I          txtpos = aPosition;
     int               offset = schIUScale.mmToIU( 0.4 );
@@ -613,7 +624,10 @@ void LIB_PIN::PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition, int aOri
         bg = COLOR4D::WHITE;
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     aPlotter->SetColor( color );
     aPlotter->SetCurrentLineWidth( penWidth );
@@ -776,6 +790,8 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
 
     if( aDimmed )
     {
+        nameColor.Desaturate( );
+        numColor.Desaturate( );
         nameColor = nameColor.Mix( bg, 0.5f );
         numColor = numColor.Mix( bg, 0.5f );
     }

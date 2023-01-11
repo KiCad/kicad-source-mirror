@@ -270,6 +270,12 @@ public:
     COLOR4D& Saturate( double aFactor );
 
     /**
+     * Removes color (in HSL model)
+     * @return greyscale version of color
+     */
+    COLOR4D& Desaturate();
+
+    /**
      * Return a color that is brighter by a given factor, without modifying object.
      *
      * @param aFactor Specifies how bright the color should become (valid values: 0.0 .. 1.0).

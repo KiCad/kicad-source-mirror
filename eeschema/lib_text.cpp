@@ -294,7 +294,10 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
         bg = COLOR4D::WHITE;
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     int penWidth = std::max( GetEffectiveTextPenWidth(), settings->GetMinPenWidth() );
 
@@ -346,7 +349,10 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
         bg = aSettings->GetLayerColor( LAYER_HIDDEN );
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     // Calculate the text orientation, according to the symbol orientation/mirror (needed when
     // draw text in schematic)

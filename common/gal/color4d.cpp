@@ -527,6 +527,21 @@ COLOR4D& COLOR4D::Saturate( double aFactor )
 }
 
 
+COLOR4D& COLOR4D::Desaturate()
+{
+    // One can desaturate a color only when r, v, b are not equal
+    if( r == g && r == b )
+        return *this;
+
+    double h, s, l;
+
+    ToHSL( h, s, l );
+    FromHSL( h, 0.0, l );
+
+    return *this;
+}
+
+
 const COLOR4D COLOR4D::UNSPECIFIED( 0, 0, 0, 0 );
 const COLOR4D COLOR4D::WHITE( 1, 1, 1, 1 );
 const COLOR4D COLOR4D::BLACK( 0, 0, 0, 1 );

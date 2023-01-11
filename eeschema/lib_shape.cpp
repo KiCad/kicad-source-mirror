@@ -226,7 +226,10 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         bg = COLOR4D::WHITE;
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     aPlotter->SetColor( color );
     aPlotter->SetDash( penWidth, lineStyle );
@@ -296,7 +299,10 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         bg = COLOR4D::WHITE;
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     unsigned ptCount = 0;
     VECTOR2I* buffer = nullptr;
@@ -351,6 +357,12 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
     if( fillColor != COLOR4D::UNSPECIFIED )
     {
+        if( aDimmed )
+        {
+            fillColor.Desaturate( );
+            fillColor = color.Mix( bg, 0.5f );
+        }
+
         switch( GetShape() )
         {
         case SHAPE_T::ARC:

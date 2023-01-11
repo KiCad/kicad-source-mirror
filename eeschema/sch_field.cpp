@@ -375,7 +375,10 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         }
 
         if( parentSymbol && parentSymbol->GetDNP() )
+        {
+            color.Desaturate();
             color = color.Mix( bg, 0.5f );
+        }
     }
 
     KIFONT::FONT* font = GetFont();
@@ -1002,7 +1005,10 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
         SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
         if( parentSymbol->GetDNP() )
+        {
+            color.Desaturate();
             color = color.Mix( bg, 0.5f );
+        }
 
         if( parentSymbol->GetTransform().y1 )  // Rotate symbol 90 deg.
         {

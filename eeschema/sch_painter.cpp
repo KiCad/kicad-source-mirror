@@ -472,13 +472,8 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDr
 
     if( aDimmed )
     {
-        double hue;
-        double sat;
-        double light;
-
-        color.ToHSL( hue, sat, light );
-        color.FromHSL( hue, 0.0, light );
         COLOR4D sheetColour = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
+        color.Desaturate();
         color = color.Mix( sheetColour, 0.5f );
     }
 
@@ -745,12 +740,9 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimm
 
             if( aDimmed )
             {
-                double hue, sat, light;
-
-                fillColour.ToHSL( hue, sat, light );
-                fillColour.FromHSL( hue, 0.0, light );
                 fillColour = fillColour.Mix(
                         m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ), 0.5f );
+                fillColour.Desaturate( );
             }
 
             m_gal->SetFillColor( fillColour );
@@ -1136,7 +1128,10 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
             }
 
             if( aDimmed )
+            {
+                borderColor.Desaturate( );
                 borderColor = borderColor.Mix( bg, 0.5f );
+            }
 
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );

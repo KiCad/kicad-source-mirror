@@ -146,7 +146,10 @@ void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         color = GetTextColor();
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     KIFONT::FONT* font = GetFont();
 
@@ -369,7 +372,10 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     }
 
     if( aDimmed )
+    {
+        color.Desaturate( );
         color = color.Mix( bg, 0.5f );
+    }
 
     int           penWidth = GetEffectivePenWidth( renderSettings );
     KIFONT::FONT* font = GetFont();
