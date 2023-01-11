@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE( AppendToChain )
                     return { x, y };
                 };
 
-            c.m_VertexToAppend.AppendToChain( &chain, transformCoord );
+            c.m_VertexToAppend.AppendToChain( &chain, transformCoord, SCH_IU_PER_MM * 0.01 );
 
             BOX2I expBoxTransformed;
             expBoxTransformed.SetOrigin( transformCoord( c.m_ExpBBox.GetPosition() ) );
