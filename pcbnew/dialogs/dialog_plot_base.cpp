@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -72,7 +72,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	gbSizer1->SetFlexibleDirection( wxHORIZONTAL );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_plotSheetRef = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotSheetRef = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot drawing sheet"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotSheetRef->SetMinSize( wxSize( 280,-1 ) );
 
 	gbSizer1->Add( m_plotSheetRef, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
@@ -370,17 +370,22 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	svgPrecisionLabel = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	svgPrecisionLabel->Wrap( -1 );
-	gbSizer3->Add( svgPrecisionLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer3->Add( svgPrecisionLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_svgPrecsision = new wxSpinCtrl( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 6, 4 );
 	m_svgPrecsision->SetToolTip( _("This number defines how many digits are exported that are below 1 mm.\nUser unit is 10^-<N> mm\nChoose 4 if you are not sure.") );
 
 	gbSizer3->Add( m_svgPrecsision, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
-	m_SVGBlackAndWhite = new wxCheckBox( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot in black and white"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SVGBlackAndWhite->SetToolTip( _("When disabled, the color from the chosen layer will be used to plot.") );
+	wxString m_SVGColorChoiceChoices[] = { _("Color"), _("Black and white") };
+	int m_SVGColorChoiceNChoices = sizeof( m_SVGColorChoiceChoices ) / sizeof( wxString );
+	m_SVGColorChoice = new wxChoice( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SVGColorChoiceNChoices, m_SVGColorChoiceChoices, 0 );
+	m_SVGColorChoice->SetSelection( 0 );
+	gbSizer3->Add( m_SVGColorChoice, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
-	gbSizer3->Add( m_SVGBlackAndWhite, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	m_staticText18 = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18->Wrap( -1 );
+	gbSizer3->Add( m_staticText18, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	m_svgOptionsSizer->Add( gbSizer3, 1, wxEXPAND, 5 );
@@ -388,12 +393,25 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_PlotOptionsSizer->Add( m_svgOptionsSizer, 1, wxEXPAND|wxALL, 5 );
 
-	m_PDFOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PDF Options") ), wxVERTICAL );
+	m_PDFOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PDF Options") ), wxHORIZONTAL );
 
-	m_PDFBlackAndWhite = new wxCheckBox( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot in black and white"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PDFBlackAndWhite->SetToolTip( _("When disabled, the color from the chosen layer will be used to plot.") );
+	wxGridBagSizer* gbSizer4;
+	gbSizer4 = new wxGridBagSizer( 0, 0 );
+	gbSizer4->SetFlexibleDirection( wxBOTH );
+	gbSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_PDFOptionsSizer->Add( m_PDFBlackAndWhite, 0, wxALL, 5 );
+	wxString m_PDFColorChoiceChoices[] = { _("Color"), _("Black and white") };
+	int m_PDFColorChoiceNChoices = sizeof( m_PDFColorChoiceChoices ) / sizeof( wxString );
+	m_PDFColorChoice = new wxChoice( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PDFColorChoiceNChoices, m_PDFColorChoiceChoices, 0 );
+	m_PDFColorChoice->SetSelection( 0 );
+	gbSizer4->Add( m_PDFColorChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+	m_staticText19 = new wxStaticText( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19->Wrap( -1 );
+	gbSizer4->Add( m_staticText19, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	m_PDFOptionsSizer->Add( gbSizer4, 1, wxEXPAND, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_PDFOptionsSizer, 1, wxALL|wxEXPAND, 5 );

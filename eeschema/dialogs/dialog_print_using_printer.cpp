@@ -45,7 +45,7 @@ public:
     ~DIALOG_PRINT_USING_PRINTER() override;
 
 protected:
-    void OnMonochromeChecked( wxCommandEvent& event ) override;
+    void OnOutputChoice( wxCommandEvent& event ) override;
     void OnUseColorThemeChecked( wxCommandEvent& event ) override;
 
 private:
@@ -173,7 +173,7 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
     }
 
     m_checkReference->SetValue( cfg->m_Printing.title_block );
-    m_checkMonochrome->SetValue( cfg->m_Printing.monochrome );
+    m_colorPrint->SetSelection( cfg->m_Printing.monochrome ? 1 : 0 );
     m_checkBackgroundColor->SetValue( cfg->m_Printing.background );
     m_checkUseColorTheme->SetValue( cfg->m_Printing.use_theme );
 
@@ -230,11 +230,12 @@ void DIALOG_PRINT_USING_PRINTER::OnUseColorThemeChecked( wxCommandEvent& event )
 }
 
 
-void DIALOG_PRINT_USING_PRINTER::OnMonochromeChecked( wxCommandEvent& event )
+void DIALOG_PRINT_USING_PRINTER::OnOutputChoice( wxCommandEvent& event )
 {
-    m_checkBackgroundColor->Enable( !m_checkMonochrome->GetValue() );
+    long sel = event.GetSelection();
+    m_checkBackgroundColor->Enable( sel == 0 );
 
-    if( m_checkMonochrome->GetValue() )
+    if( sel )
         m_checkBackgroundColor->SetValue( false );
     else
         m_checkBackgroundColor->SetValue( m_parent->eeconfig()->m_Printing.background );
@@ -245,7 +246,7 @@ void DIALOG_PRINT_USING_PRINTER::SavePrintOptions()
 {
     EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
 
-    cfg->m_Printing.monochrome  = m_checkMonochrome->IsChecked();
+    cfg->m_Printing.monochrome  = !!m_colorPrint->GetSelection();
     cfg->m_Printing.title_block = m_checkReference->IsChecked();
 
     if( m_checkBackgroundColor->IsEnabled() )

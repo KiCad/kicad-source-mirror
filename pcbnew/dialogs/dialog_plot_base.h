@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -122,9 +122,11 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_svgOptionsSizer;
 		wxStaticText* svgPrecisionLabel;
 		wxSpinCtrl* m_svgPrecsision;
-		wxCheckBox* m_SVGBlackAndWhite;
+		wxChoice* m_SVGColorChoice;
+		wxStaticText* m_staticText18;
 		wxStaticBoxSizer* m_PDFOptionsSizer;
-		wxCheckBox* m_PDFBlackAndWhite;
+		wxChoice* m_PDFColorChoice;
+		wxStaticText* m_staticText19;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_buttonDRC;

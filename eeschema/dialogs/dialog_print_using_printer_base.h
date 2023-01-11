@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,6 +17,7 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
@@ -36,7 +37,8 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 
 	protected:
 		wxCheckBox* m_checkReference;
-		wxCheckBox* m_checkMonochrome;
+		wxStaticText* m_staticText1;
+		wxChoice* m_colorPrint;
 		wxCheckBox* m_checkBackgroundColor;
 		wxCheckBox* m_checkUseColorTheme;
 		wxChoice* m_colorTheme;
@@ -48,7 +50,7 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnMonochromeChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOutputChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUseColorThemeChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPrintPreview( wxCommandEvent& event ) { event.Skip(); }

@@ -334,8 +334,8 @@ void DIALOG_PLOT::init_Dialog()
     m_plotNoViaOnMaskOpt->SetValue( m_plotOpts.GetPlotViaOnMaskLayer() );
 
     // Black and white plotting
-    m_SVGBlackAndWhite->SetValue( m_plotOpts.GetBlackAndWhite() );
-    m_PDFBlackAndWhite->SetValue( m_plotOpts.GetBlackAndWhite() );
+    m_SVGColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
+    m_PDFColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
 
     // Initialize a few other parameters, which can also be modified
     // from the drill dialog
@@ -798,9 +798,9 @@ void DIALOG_PLOT::applyPlotSettings()
                                                                            PLOT_TEXT_MODE::NATIVE );
 
     if( getPlotFormat() == PLOT_FORMAT::SVG )
-        tempOptions.SetBlackAndWhite( m_SVGBlackAndWhite->GetValue() );
+        tempOptions.SetBlackAndWhite( !!m_SVGColorChoice->GetSelection() );
     else if( getPlotFormat() == PLOT_FORMAT::PDF )
-        tempOptions.SetBlackAndWhite( m_PDFBlackAndWhite->GetValue() );
+        tempOptions.SetBlackAndWhite( !!m_PDFColorChoice->GetSelection() );
     else
         tempOptions.SetBlackAndWhite( true );
 

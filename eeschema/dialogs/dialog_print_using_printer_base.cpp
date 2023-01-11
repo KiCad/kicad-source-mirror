@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,15 +19,29 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxBoxSizer* bleftSizer;
 	bleftSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_checkReference = new wxCheckBox( this, wxID_ANY, _("Print sheet &reference and title block"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkReference = new wxCheckBox( this, wxID_ANY, _("Print drawing sheet"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkReference->SetValue(true);
 	m_checkReference->SetToolTip( _("Print (or not) the Frame references.") );
 
 	bleftSizer->Add( m_checkReference, 0, wxALL, 5 );
 
-	m_checkMonochrome = new wxCheckBox( this, wxID_ANY, _("Print in &black and white only"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkMonochrome->SetValue(true);
-	bleftSizer->Add( m_checkMonochrome, 0, wxALL, 5 );
+	wxBoxSizer* bSizer41;
+	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	bSizer41->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+
+	wxString m_colorPrintChoices[] = { _("Color"), _("Black and White") };
+	int m_colorPrintNChoices = sizeof( m_colorPrintChoices ) / sizeof( wxString );
+	m_colorPrint = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_colorPrintNChoices, m_colorPrintChoices, 0 );
+	m_colorPrint->SetSelection( 0 );
+	m_colorPrint->SetMinSize( wxSize( 200,-1 ) );
+
+	bSizer41->Add( m_colorPrint, 0, wxLEFT, 25 );
+
+
+	bleftSizer->Add( bSizer41, 1, wxEXPAND, 5 );
 
 	m_checkBackgroundColor = new wxCheckBox( this, wxID_ANY, _("Print background color"), wxDefaultPosition, wxDefaultSize, 0 );
 	bleftSizer->Add( m_checkBackgroundColor, 0, wxALL, 5 );
@@ -83,7 +97,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnCloseWindow ) );
-	m_checkMonochrome->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnMonochromeChecked ), NULL, this );
+	m_colorPrint->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnOutputChoice ), NULL, this );
 	m_checkUseColorTheme->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnUseColorThemeChecked ), NULL, this );
 	m_buttonPageSetup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPageSetup ), NULL, this );
 	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPrintPreview ), NULL, this );
@@ -93,7 +107,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::~DIALOG_PRINT_USING_PRINTER_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnCloseWindow ) );
-	m_checkMonochrome->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnMonochromeChecked ), NULL, this );
+	m_colorPrint->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnOutputChoice ), NULL, this );
 	m_checkUseColorTheme->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnUseColorThemeChecked ), NULL, this );
 	m_buttonPageSetup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPageSetup ), NULL, this );
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPrintPreview ), NULL, this );

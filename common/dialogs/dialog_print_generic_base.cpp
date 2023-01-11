@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,7 @@ DIALOG_PRINT_GENERIC_BASE::DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindow
 	m_outputMode->SetSelection( 0 );
 	m_gbOptionsSizer->Add( m_outputMode, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_titleBlock = new wxCheckBox( m_sbOptionsSizer->GetStaticBox(), wxID_FRAME_SEL, _("Print border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_titleBlock = new wxCheckBox( m_sbOptionsSizer->GetStaticBox(), wxID_FRAME_SEL, _("Print drawing sheet"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_titleBlock->SetValue(true);
 	m_titleBlock->SetToolTip( _("Print Frame references.") );
 
