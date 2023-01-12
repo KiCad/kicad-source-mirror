@@ -512,7 +512,7 @@ struct APP_KICAD_CLI : public wxAppConsole
                     dlgs.push_back( dialog );
                 }
                 // Under GTK, sometimes the modal flag is cleared before hiding
-                else if( !event.IsShown() )
+                else if( !event.IsShown() && !dlgs.empty()  )
                 {
                     // If we close the expected dialog, remove it from our stack
                     if( dlgs.back() == dialog )
