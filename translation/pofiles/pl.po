@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2023-01-08 20:14+0000\n"
+"PO-Revision-Date: 2023-01-13 08:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2934,13 +2934,12 @@ msgstr "Czarno-biały"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
 msgstr "Drukuj ramkę arkusza"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
-msgstr "Drukuj referencje ramki."
+msgstr "Drukuje zewnętrzną ramkę z polami odniesienia."
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:122
@@ -3991,9 +3990,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Sieci pasujące do '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "Klasy sieci"
+msgstr "Klasy sieci:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:493
@@ -20451,16 +20449,14 @@ msgstr "Precyzja współrzędnych Gerbera powinna wynosić 5 lub 6\n"
 #: kicad/cli/command_export_pcb_dxf.cpp:41
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Exclude the reference designator text"
-msgstr "Dołącz teksty z pól z oznaczeniami"
+msgstr "Wyklucz tekst z pól zawierające oznaczenia"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:46
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Exclude the value text"
-msgstr "Dołącz teksty z pól z wartościami"
+msgstr "Wyklucz tekst z pól zawierające wartości"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:51
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
@@ -20676,14 +20672,12 @@ msgid "Footprint path does not exist or is not accessible\n"
 msgstr "Ścieżka do footprintu nie istnieje lub nie jest dostępna\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:52
-#, fuzzy
 msgid "Include hidden pins"
-msgstr "Pokaż ukryte piny"
+msgstr "Uwzględnij ukryte piny"
 
 #: kicad/cli/command_sym_export_svg.cpp:57
-#, fuzzy
 msgid "Include hidden fields"
-msgstr "Przeszukuj ukryte pola"
+msgstr "Uwzględnij ukryte pola"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
 #: kicad/cli/command_sym_export_svg.cpp:62
