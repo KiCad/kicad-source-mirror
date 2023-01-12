@@ -128,7 +128,8 @@ PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* a
         PANEL_SETUP_LAYERS_BASE( aParent->GetTreebook() ),
         m_parentDialog( aParent ),
         m_frame( aFrame ),
-        m_physicalStackup( nullptr )
+        m_physicalStackup( nullptr ),
+        m_initialized( false )
 {
     m_pcb = aFrame->GetBoard();
 }
@@ -247,6 +248,8 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
     showLayerTypes();
     setMandatoryLayerCheckBoxes();
     setUserDefinedLayerCheckBoxes();
+
+    m_initialized = true;
 
     return true;
 }

@@ -1315,6 +1315,10 @@ void PANEL_SETUP_BOARD_STACKUP::ImportSettingsFrom( BOARD* aBoard )
 
 void PANEL_SETUP_BOARD_STACKUP::OnLayersOptionsChanged( LSET aNewLayerSet )
 {
+    // Can be called spuriously from events before the layers page is even created
+    if( !m_panelLayers->IsInitialized() )
+        return;
+
     // First, verify the list of layers currently in stackup:
     // if it does not mach the list of layers set in PANEL_SETUP_LAYERS
     // rebuild the panel

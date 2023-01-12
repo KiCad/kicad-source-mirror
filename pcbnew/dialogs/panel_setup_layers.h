@@ -91,6 +91,8 @@ public:
         m_physicalStackup = aPanel;
     }
 
+    bool IsInitialized() const { return m_initialized; }
+
 private:
 
     void setLayerCheckBox( int layer, bool isChecked );
@@ -132,6 +134,7 @@ private:
     PANEL_SETUP_BOARD_STACKUP* m_physicalStackup;
     BOARD*                     m_pcb;
     LSET                       m_enabledLayers;
+    bool                       m_initialized;
 };
 
 
