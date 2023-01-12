@@ -12,15 +12,16 @@
 # Radek Kuznik <radek.kzn@gmail.com>, 2021, 2022, 2023.
 # Ondřej Čertík <ondrej@certik.us>, 2022.
 # ZbeeGin <zbeegin@op.pl>, 2022.
+# René Široký <siroky.rene@wideservis.cz>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2023-01-03 18:04+0000\n"
-"Last-Translator: Radek K <radek.kzn@gmail.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2023-01-13 08:09+0000\n"
+"Last-Translator: René Široký <siroky.rene@wideservis.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11796,7 +11797,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 msgid "Do not populate"
-msgstr "Nevyplňovat"
+msgstr "Není osazeno (DNP)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:228
 msgid "Update Symbol from Library..."
