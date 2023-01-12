@@ -187,7 +187,6 @@ set( EESCHEMA_SRCS
     autoplace_fields.cpp
     bom_plugins.cpp
     bus-wire-junction.cpp
-    cmp_library_lexer.cpp
     connection_graph.cpp
     cross-probing.cpp
     ee_collectors.cpp
