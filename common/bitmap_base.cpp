@@ -393,6 +393,7 @@ void BITMAP_BASE::ConvertToGreyscale()
     if( m_image )
     {
         *m_image  = m_image->ConvertToGreyscale();
+        *m_originalImage = m_originalImage->ConvertToGreyscale();
         rebuildBitmap();
     }
 }
