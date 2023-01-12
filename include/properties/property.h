@@ -185,6 +185,7 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         m_display( aDisplay ),
         m_coordType( aCoordType ),
         m_isInternal( false ),
+        m_isDeprecated( false ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } ),
         m_writeableFunc( [](INSPECTABLE*)->bool { return true; } )
     {
@@ -274,8 +275,11 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
 
     ORIGIN_TRANSFORMS::COORD_TYPES_T CoordType() const { return m_coordType; }
 
-    void SetIsInternal( bool aIsInternal ) { m_isInternal = aIsInternal; }
+    void SetIsInternal( bool aIsInternal = true ) { m_isInternal = aIsInternal; }
     bool IsInternal() const { return m_isInternal; }
+
+    void SetIsDeprecated( bool aIsDeprecated = true ) { m_isDeprecated = aIsDeprecated; }
+    bool IsDeprecated() const { return m_isDeprecated; }
 
     wxString Group() const { return m_group; }
     void SetGroup( const wxString& aGroup ) { m_group = aGroup; }
@@ -328,8 +332,11 @@ private:
     const PROPERTY_DISPLAY m_display;
     const ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
 
-    /// Internal properties are hidden from the GUI
+    /// Internal properties are hidden from the GUI but not from the rules editor autocomplete
     bool m_isInternal;
+
+    /// Deprecated properties are hidden from the GUI and rules editor autocomplete
+    bool m_isDeprecated;
 
     /// Optional group identifier
     wxString m_group;
