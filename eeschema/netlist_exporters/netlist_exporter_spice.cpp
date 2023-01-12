@@ -26,6 +26,7 @@
 #include <sim/kibis/kibis.h>
 #include <netlist_exporter_spice.h>
 #include <sim/ngspice_circuit_model.h>
+#include <sim/sim_library_spice.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_ideal.h>
 #include <sim/spice_grammar.h>
@@ -542,6 +543,12 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
 
 void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
+    for( auto& [path, library] : m_libMgr.GetLibraries() )
+    {
+        if( dynamic_cast<const SIM_LIBRARY_SPICE*>( &library.get() ) )
+            writeInclude( aFormatter, aNetlistOptions, path );
+    }
+
     for( const wxString& path : m_rawIncludes )
         writeInclude( aFormatter, aNetlistOptions, path );
 }
