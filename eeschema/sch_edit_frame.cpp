@@ -264,7 +264,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Net list generator
     DefaultExecFlags();
 
-    UpdateTitle();
+    updateTitle();
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
 
     // Default shutdown reason until a file is loaded
@@ -944,7 +944,7 @@ void SCH_EDIT_FRAME::OnModify()
     UpdateHierarchyNavigator();
 
     if( !GetTitle().StartsWith( "*" ) )
-        UpdateTitle();
+        updateTitle();
 }
 
 
@@ -1382,7 +1382,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 }
 
 
-void SCH_EDIT_FRAME::UpdateTitle()
+void SCH_EDIT_FRAME::updateTitle()
 {
     SCH_SCREEN* screen = GetScreen();
 
@@ -1586,7 +1586,7 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
     // status bar
     UpdateMsgPanel();
 
-    UpdateTitle();
+    updateTitle();
 
     // This ugly hack is to fix an option(left) toolbar update bug that seems to only affect
     // windows.  See https://bugs.launchpad.net/kicad/+bug/1816492.  For some reason, calling
@@ -1885,7 +1885,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
         RedrawScreen( (wxPoint) GetScreen()->m_ScrollCenter, false );
     }
 
-    UpdateTitle();
+    updateTitle();
 
     HardRedraw();   // Ensure all items are redrawn (especially the drawing-sheet items)
 

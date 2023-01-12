@@ -500,7 +500,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     TestDanglingEnds();
 
     UpdateHierarchyNavigator();
-    UpdateTitle();
+    updateTitle();
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
 
     wxFileName fn = Prj().AbsolutePath( GetScreen()->GetFileName() );
@@ -1113,7 +1113,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             SetStatusText( msg, 0 );
     }
 
-    UpdateTitle();
+    updateTitle();
 
     if( m_infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE )
         m_infoBar->Dismiss();
@@ -1273,7 +1273,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             SyncView();
 
             UpdateHierarchyNavigator();
-            UpdateTitle();
+            updateTitle();
         }
         catch( const IO_ERROR& ioe )
         {

@@ -870,7 +870,7 @@ private:
      * Otherwise, the title is set to the hierarchical sheet path and the full file name, and
      * read only is appended to the title if the user does not have write access to the file.
      */
-    void UpdateTitle();
+    void updateTitle();
 
     /**
      * Initialize the zoom value of the current screen and mark the screen as zoom-initialized.

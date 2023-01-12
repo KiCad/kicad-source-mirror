@@ -101,7 +101,7 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
 
     getView()->UpdateItems();
     m_frame->GetCanvas()->Refresh();
-    m_frame->UpdateTitle();
+    m_frame->updateTitle();
 
     return 0;
 }
