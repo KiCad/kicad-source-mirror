@@ -509,15 +509,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             connections = item->GetConnectionPoints();
                         }
 
-                        for( VECTOR2I point : connections )
+                        for( const VECTOR2I& point : connections )
                             getConnectedDragItems( item, point, connectedDragItems, appendUndo );
                     }
 
                     // Go back and get all label connections now that we can test for drag-selected
                     // lines the labels might be on
                     for( SCH_ITEM* item : stageTwo )
-                        for( VECTOR2I point : item->GetConnectionPoints() )
+                    {
+                        for( const VECTOR2I& point : item->GetConnectionPoints() )
                             getConnectedDragItems( item, point, connectedDragItems, appendUndo );
+                    }
 
                     for( EDA_ITEM* item : connectedDragItems )
                     {
@@ -539,7 +541,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             //which segment to extend when they've become zero length
                             line->StoreAngle();
 
-                            for( VECTOR2I point : line->GetConnectionPoints() )
+                            for( const VECTOR2I& point : line->GetConnectionPoints() )
                                 getConnectedItems( line, point, m_lineConnectionCache[line] );
                         }
                     }
@@ -707,7 +709,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             int yBendCount = 1;
 
             // Split the move into X and Y moves so we can correctly drag orthogonal lines
-            for( VECTOR2I splitDelta : splitMoves )
+            for( const VECTOR2I& splitDelta : splitMoves )
             {
                 // Skip non-moves
                 if( splitDelta == VECTOR2I( 0, 0 ) )
@@ -1133,10 +1135,15 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
 
                 // Add a new newWire between the fixed item and the selected item so the selected
                 // item can be dragged.
-                if( fixed->GetLayer() == LAYER_BUS_JUNCTION || selected->GetLayer() == LAYER_BUS )
+                if( fixed->GetLayer() == LAYER_BUS_JUNCTION || fixed->GetLayer() == LAYER_BUS
+                    || selected->GetLayer() == LAYER_BUS )
+                {
                     newWire = new SCH_LINE( start, LAYER_BUS );
+                }
                 else
+                {
                     newWire = new SCH_LINE( start, LAYER_WIRE );
+                }
 
                 newWire->SetFlags( IS_NEW );
                 newWire->SetConnectivityDirty( true );
@@ -1149,12 +1156,15 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
             };
 
     auto makeNewJunction =
-            [&]( SCH_LINE* line, const VECTOR2I pt )
+            [&]( SCH_LINE* line, const VECTOR2I& pt )
             {
                 SCH_JUNCTION* junction = new SCH_JUNCTION( pt );
                 junction->SetFlags( IS_NEW );
                 junction->SetConnectivityDirty( true );
                 junction->SetLastResolvedState( line );
+
+                if( line->IsBus() )
+                    junction->SetLayer( LAYER_BUS_JUNCTION );
 
                 m_frame->AddToScreen( junction, m_frame->GetScreen() );
 
