@@ -3,15 +3,16 @@
 # Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>, 2021, 2022.
 # co8 j <co8@nifty.com>, 2022.
 # Keisuke Nakao <chome@argv.org>, 2022.
+# Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2023-01-08 20:14+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2023-01-13 08:09+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2922,7 +2923,6 @@ msgstr "モノクロ"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
 msgstr "図面シートを印刷"
 
@@ -3962,9 +3962,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>%s' に一致するネット:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "ネットクラス"
+msgstr "ネットクラス:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:493
@@ -20312,16 +20311,14 @@ msgstr "ガーバーの座標系の精度は5もしくは6である必要があ�
 #: kicad/cli/command_export_pcb_dxf.cpp:41
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Exclude the reference designator text"
-msgstr "リファレンス指定子のテキストを含める"
+msgstr "リファレンス指定子のテキストを除外する"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:46
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Exclude the value text"
-msgstr "値のテキストを含める"
+msgstr "値のテキストをを除外する"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:51
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
@@ -20454,7 +20451,7 @@ msgstr "\"virtual\" 属性のコンポーネントの 3D モデルを除く"
 #: kicad/cli/command_export_pcb_step.cpp:63
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
-msgstr ""
+msgstr "VRMLモデルの代わりに同じ名前のSTEPまたはIGSモデルで置き換える"
 
 #: kicad/cli/command_export_pcb_step.cpp:68
 msgid "Overwrite output file"
@@ -20483,14 +20480,14 @@ msgstr "基板を反転 (裏面から表示するのに便利です)"
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
-msgstr ""
+msgstr "ページサイズのモードを設定 (0 = フレームとタイトルブロックを含める, 1 = "
+"現在のページサイズ, 2 = 基板の領域のみ)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:63
 #: kicad/cli/command_export_sch_pdf.cpp:46
 #: kicad/cli/command_export_sch_svg.cpp:46
-#, fuzzy
 msgid "No drawing sheet"
-msgstr "図面シートを描画"
+msgstr "図面シートを含めない"
 
 #: kicad/cli/command_export_sch_netlist.cpp:36
 msgid ""
@@ -20530,14 +20527,12 @@ msgid "Footprint path does not exist or is not accessible\n"
 msgstr "フットプリントのパスが存在しないか、アクセス不可です\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:52
-#, fuzzy
 msgid "Include hidden pins"
-msgstr "非表示ピンを表示"
+msgstr "非表示ピンを含める"
 
 #: kicad/cli/command_sym_export_svg.cpp:57
-#, fuzzy
 msgid "Include hidden fields"
-msgstr "非表示フィールドを検索"
+msgstr "非表示フィールドを含める"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
 #: kicad/cli/command_sym_export_svg.cpp:62
@@ -28975,7 +28970,6 @@ msgstr "角の数 %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:740
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2166
-#, fuzzy
 msgid "Number box"
 msgstr "ピン番号"
 
@@ -35668,12 +35662,12 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "レイヤー %s 上の( %s, %s) の導体ゾーンにパッドが接続されていません。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:861
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
-msgstr ""
-"電源入力ピンがシンボル %s の配置されていないユニット %s に含まれています。"
+msgstr "シンボル %s に番号のないピンがあります。  これらのピンはパッド %s "
+"と対応させられられません。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:871
 #, c-format
@@ -36369,10 +36363,8 @@ msgid "Footprint library was not updated\n"
 msgstr "フットプリント ライブラリーが更新できませんでした\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:707 pcbnew/pcbnew_jobs_handler.cpp:698
-#, fuzzy
 msgid "The given footprint could not be found to export."
-msgstr ""
-"フットプリント ライブラリー \"%s\" はデフォルト検索パス内に存在しません。"
+msgstr "指定されたフットプリントは見つからないのでエクスポートできません。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:742 pcbnew/pcbnew_jobs_handler.cpp:733
 #, c-format
@@ -39221,9 +39213,9 @@ msgstr ""
 "<esc> を押すとすべてキャンセル、ダブル クリックすると完了"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad %s"
-msgstr "%s と %s"
+msgstr "%s のパッド %s"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:404
 msgid "Select reference point for move..."
@@ -39624,16 +39616,14 @@ msgid "Pack and Move Footprints"
 msgstr "フットプリントを詰めて移動"
 
 #: pcbnew/tools/pcb_actions.cpp:349
-#, fuzzy
 msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
-msgstr "リファレンスでフットプリントを選択し、移動用にカーソル直下に配置する"
+msgstr "リファレンスでフットプリントを整列、サイズを基準に詰めて移動を開始する"
 
 #: pcbnew/tools/pcb_actions.cpp:355
-#, fuzzy
 msgid "Skip item"
-msgstr "ロックされたアイテムを除外"
+msgstr "このアイテムをスキップ"
 
 #: pcbnew/tools/pcb_actions.cpp:360
 msgid "Change Track Width"
@@ -39648,9 +39638,8 @@ msgid "Adds arcs tangent to the selected straight track segments"
 msgstr "選択した直線の配線セグメントに接する円弧を追加します"
 
 #: pcbnew/tools/pcb_actions.cpp:368
-#, fuzzy
 msgid "Adds arcs tangent to the selected lines"
-msgstr "選択した直線の配線セグメントに接する円弧を追加します"
+msgstr "選択した直線に接する円弧を追加します"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Delete Full Track"
@@ -40189,18 +40178,16 @@ msgid "Hide Net in Ratsnest"
 msgstr "ラッツネストを非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:819
-#, fuzzy
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "右のリストで選択したネットを左のリストへ移動"
+msgstr "選択されたネットの未接続部分のラッツネストを非表示にする"
 
 #: pcbnew/tools/pcb_actions.cpp:824
 msgid "Show Net in Ratsnest"
 msgstr "ラッツネストを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:825
-#, fuzzy
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "右のリストで選択したネットを左のリストへ移動"
+msgstr "選択されたネットの未接続部分のラッツネストを表示する"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Switch to Schematic Editor"
@@ -40630,17 +40617,17 @@ msgstr "円弧の中心を固定し、半径を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
-msgstr ""
+msgstr "円弧編集モードを中心を保持して半径と端点を調整するモードに切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Keep arc endpoints or direction of starting point"
-msgstr ""
+msgstr "円弧の終点もしくは始点の方向を固定"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
-msgstr ""
+msgstr "円弧編集モードを端点を保持するか他の点の方向を保持するモードに切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
@@ -40885,7 +40872,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1513
 msgid "Attempt Finish"
-msgstr "試行を終了"
+msgstr "試行を完了"
 
 #: pcbnew/tools/pcb_actions.cpp:1514
 msgid "Attempts to complete current route to nearest ratsnest end."
@@ -40911,11 +40898,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1533
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "選択対象の試行を完了 (自動配線)"
 
 #: pcbnew/tools/pcb_actions.cpp:1534
 msgid "Sequentially attempt to automatically route all selected pads."
-msgstr ""
+msgstr "選択したすべてのパッドに対して自動的に配線を試行します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1540
 msgid ""
