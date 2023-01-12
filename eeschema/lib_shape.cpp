@@ -360,7 +360,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         if( aDimmed )
         {
             fillColor.Desaturate( );
-            fillColor = color.Mix( bg, 0.5f );
+            fillColor = fillColor.Mix( bg, 0.5f );
         }
 
         switch( GetShape() )
