@@ -26,7 +26,6 @@
 #include <sim/kibis/kibis.h>
 #include <netlist_exporter_spice.h>
 #include <sim/ngspice_circuit_model.h>
-#include <sim/sim_library_spice.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_ideal.h>
 #include <sim/spice_grammar.h>
@@ -56,7 +55,7 @@ namespace NETLIST_EXPORTER_SPICE_PARSER
 {
     using namespace SPICE_GRAMMAR;
 
-    struct textGrammar : must<spiceSourceNothrow> {};
+    struct textGrammar : must<spiceSource> {};
 
     template <typename Rule> struct textSelector : std::false_type {};
     template <> struct textSelector<modelUnit> : std::true_type {};
@@ -162,7 +161,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
     std::set<std::string> refNames; // Set of reference names to check for duplication.
     int                   ncCounter = 1;
 
-    ReadDirectives( aNetlistOptions, aReporter );
+    ReadDirectives( aNetlistOptions );
 
     m_nets.clear();
     m_items.clear();
@@ -260,8 +259,6 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                 spiceItem.fields.back().SetText( pinMap );
             }
 
-            // JEY TODO: move from try/catch to REPORTER interface...
-            // readModel() is the only one that throws, and it won't if m_libMgr has a REPORTER
             try
             {
                 readRefName( sheet, *symbol, spiceItem, refNames );
@@ -277,7 +274,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             {
                 msg.Printf( _( "Error reading simulation model from symbol '%s':\n%s" ),
                             symbol->GetRef( &sheet ),
-                            e.What() );
+                            e.Problem() );
                 aReporter.Report( msg, RPT_SEVERITY_ERROR );
             }
         }
@@ -364,7 +361,7 @@ const SPICE_ITEM* NETLIST_EXPORTER_SPICE::FindItem( const std::string& aRefName 
 }
 
 
-void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, REPORTER& aReporter )
+void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 {
     wxString msg;
     wxString text;
@@ -395,6 +392,10 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, REPORTER&
             }
             catch( const tao::pegtl::parse_error& )
             {
+                // If we couldn't parse it, but it -looks- like SPICE, then send it as raw SPICE
+                if( text.StartsWith( "." ) || text.StartsWith( "*" ) )
+                    m_directives.emplace_back( text );
+
                 continue;
             }
 
@@ -404,8 +405,6 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, REPORTER&
             {
                 if( node->is_type<NETLIST_EXPORTER_SPICE_PARSER::dotTitle>() )
                     m_title = node->children.at( 0 )->string();
-                else if( node->is_type<NETLIST_EXPORTER_SPICE_PARSER::dotInclude>() )
-                    m_libMgr.AddLibrary( node->children.at( 0 )->string() );
                 else
                     m_directives.emplace_back( node->string() );
             }
@@ -415,8 +414,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions, REPORTER&
 
 
 void NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
-                                          SPICE_ITEM& aItem,
-                                          std::set<std::string>& aRefNames )
+                                          SPICE_ITEM& aItem, std::set<std::string>& aRefNames )
 {
     aItem.refName = aSymbol.GetRef( &aSheet );
 
@@ -524,12 +522,6 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
 
 void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
-    for( auto& [path, library] : m_libMgr.GetLibraries() )
-    {
-        if( dynamic_cast<const SIM_LIBRARY_SPICE*>( &library.get() ) )
-            writeInclude( aFormatter, aNetlistOptions, path );
-    }
-
     for( const wxString& path : m_rawIncludes )
         writeInclude( aFormatter, aNetlistOptions, path );
 }
@@ -560,7 +552,7 @@ void NETLIST_EXPORTER_SPICE::writeItems( OUTPUTFORMATTER& aFormatter )
 
 
 void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
-                                              unsigned         aNetlistOptions ) const
+                                              unsigned aNetlistOptions ) const
 {
     if( aNetlistOptions & OPTION_SAVE_ALL_VOLTAGES )
         aFormatter.Print( 0, ".save all\n" );

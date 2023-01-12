@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -260,7 +260,6 @@ namespace SPICE_GRAMMAR
 
 
     struct spiceSource : star<spiceUnit> {};
-    struct spiceSourceNothrow : star<try_catch<spiceUnit>> {};
     struct spiceSourceGrammar : must<spiceSource> {};
 
 
@@ -288,8 +287,6 @@ namespace SPICE_GRAMMAR
     template <> inline constexpr auto errorMessage<spiceUnit> =
             "expected Spice directive, item, subcircuit definitions, or empty or commented-out line";
     template <> inline constexpr auto errorMessage<spiceSource> =
-            "expected zero or more Spice directives, items, subcircuit definitions, or empty or commented-out lines";
-    template <> inline constexpr auto errorMessage<spiceSourceNothrow> =
             "expected zero or more Spice directives, items, subcircuit definitions, or empty or commented-out lines";
 
     // We create a custom PEGTL control to modify the parser error messages.

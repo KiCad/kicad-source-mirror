@@ -489,9 +489,14 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         LIB_PIN* pin = static_cast<SCH_PIN*>( item )->GetLibPin();
                         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
 
-                        // JEY TODO: move to reporter interface instead of try/catch....
-                        SIM_LIB_MGR mgr( &m_frame->Prj() );
+                        wxString           msg;
+                        WX_STRING_REPORTER reporter( &msg );
+                        SIM_LIB_MGR        mgr( &m_frame->Prj(), &reporter );
+
                         SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol ).model;
+
+                        if( reporter.HasMessage() )
+                            THROW_IO_ERROR( msg );
 
                         SPICE_ITEM spiceItem;
                         spiceItem.refName = std::string( symbol->GetRef( &sheet ).ToUTF8() );

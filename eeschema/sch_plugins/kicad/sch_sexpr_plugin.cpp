@@ -350,7 +350,8 @@ void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEM
 
     Format( aSheet );
 
-    aSheet->GetScreen()->SetFileExists( true );
+    if( aSheet->GetScreen() )
+        aSheet->GetScreen()->SetFileExists( true );
 }
 
 

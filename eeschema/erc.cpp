@@ -1016,9 +1016,7 @@ int ERC_TESTER::TestSimModelIssues()
     WX_STRING_REPORTER reporter( &msg );
     SCH_SHEET_LIST     sheets = m_schematic->GetSheets();
     int                err_count = 0;
-    SIM_LIB_MGR        libMgr( &m_schematic->Prj() );
-
-    libMgr.SetReporter( &reporter );
+    SIM_LIB_MGR        libMgr( &m_schematic->Prj(), &reporter );
 
     for( SCH_SHEET_PATH& sheet : sheets )
     {

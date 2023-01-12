@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,7 +126,7 @@ public:
     const std::vector<std::string>& GetDirectives() { return m_directives; }
 
 protected:
-    void ReadDirectives( unsigned aNetlistOptions, REPORTER& aReporter );
+    void ReadDirectives( unsigned aNetlistOptions );
     virtual void WriteDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) const;
 
     virtual std::string GenerateItemPinNetName( const std::string& aNetName, int& aNcCounter ) const;

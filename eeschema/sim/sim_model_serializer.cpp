@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,7 +159,7 @@ void SIM_MODEL_SERIALIZER::ParseValue( const std::string& aValue )
 {
     try
     {
-        tao::pegtl::string_input<> in( aValue, "'Value' symbol field" );
+        tao::pegtl::string_input<> in( aValue, "Value field" );
         auto root =
                 tao::pegtl::parse_tree::parse<SIM_MODEL_SERIALIZER_PARSER::fieldInferValueGrammar,
                                               SIM_MODEL_SERIALIZER_PARSER::fieldInferValueSelector,
@@ -179,9 +179,7 @@ void SIM_MODEL_SERIALIZER::ParseValue( const std::string& aValue )
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        wxString msg;
-        msg.Printf( wxT( "ParseValue: parse <%s>, error <%s>" ), aValue.c_str(), e.what() );
-        THROW_IO_ERROR( msg );
+        THROW_IO_ERROR( e.what() );
     }
 
     m_model.SetIsStoredInValue( true );
@@ -190,7 +188,7 @@ void SIM_MODEL_SERIALIZER::ParseValue( const std::string& aValue )
 
 bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
 {
-    tao::pegtl::string_input<> in( aParams, "'Sim.Params' symbol field" );
+    tao::pegtl::string_input<> in( aParams, "Sim.Params field" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -205,9 +203,7 @@ bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        wxString msg;
-        msg.Printf( wxT( "ParseParams: parse <%s>, error <%s>" ), aParams.c_str(), e.what() );
-        THROW_IO_ERROR( msg );
+        THROW_IO_ERROR( e.what() );
     }
 
     std::string paramName;
@@ -254,7 +250,7 @@ void SIM_MODEL_SERIALIZER::ParsePins( const std::string& aPins )
     if( aPins == "" )
         return;
 
-    tao::pegtl::string_input<> in( aPins, "'Sim.Pins' symbol field" );
+    tao::pegtl::string_input<> in( aPins, "Sim.Pins field" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -275,9 +271,7 @@ void SIM_MODEL_SERIALIZER::ParsePins( const std::string& aPins )
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        wxString msg;
-        msg.Printf( wxT( "ParsePins: parse <%s>, error <%s>" ), aPins.c_str(), e.what() );
-        THROW_IO_ERROR( msg );
+        THROW_IO_ERROR( e.what() );
     }
 }
 

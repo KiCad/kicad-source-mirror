@@ -86,7 +86,6 @@ private:
     int findSymbolPinRow( const wxString& aSymbolPinNumber ) const;
 
     SIM_MODEL& curModel() const;
-    const SIM_LIBRARY* library() const;
 
     wxString getSymbolPinString( int aSymbolPinNumber ) const;
     wxString getModelPinString( int aModelPinIndex ) const;
@@ -114,7 +113,10 @@ private:
 
     void adjustParamGridColumns( int aWidth, bool aForce );
 
-    bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() ); }
+    bool isIbisLoaded()
+    {
+        return dynamic_cast<const SIM_LIBRARY_KIBIS*>( m_libraryModelsMgr.GetLibrary() ) != nullptr;
+    }
 
 private:
     T_symbol&              m_symbol;

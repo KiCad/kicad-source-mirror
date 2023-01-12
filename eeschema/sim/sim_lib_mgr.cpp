@@ -36,17 +36,13 @@
 #include <sim/sim_model.h>
 #include <sim/sim_model_ideal.h>
 
-SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj ) :
+using namespace std::placeholders;
+
+
+SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj, REPORTER* aReporter ) :
         m_project( aPrj ),
-        m_reporter( nullptr )
+        m_reporter( aReporter )
 {
-}
-
-
-void SIM_LIB_MGR::Clear()
-{
-    m_libraries.clear();
-    m_models.clear();
 }
 
 
@@ -77,7 +73,8 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PR
 }
 
 
-std::string SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const std::string& aLibPath, const std::string& aRelativeLib )
+std::string SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const std::string& aLibPath,
+                                                     const std::string& aRelativeLib )
 {
     wxFileName testPath( aLibPath );
     wxString fullPath( aLibPath );
@@ -115,37 +112,19 @@ std::string SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const std::string& aLibPath
 }
 
 
-void SIM_LIB_MGR::AddLibrary( const wxString& aLibraryPath )
-{
-    try
-    {
-        wxString path = ResolveLibraryPath( aLibraryPath, m_project );
-
-        std::function<std::string(const std::string&, const std::string&)> f2 =
-                std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, std::placeholders::_1, std::placeholders::_2 );
-
-        m_libraries.try_emplace( path, SIM_LIBRARY::Create( path, m_reporter, &f2 ) );
-    }
-    catch( const IO_ERROR& e )
-    {
-        m_reporter->Report( e.What() );
-    }
-}
-
-
 void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath )
 {
+    m_models.clear();
+    m_library = nullptr;
+
     try
     {
         wxString path = ResolveLibraryPath( aLibraryPath, m_project );
 
         std::function<std::string(const std::string&, const std::string&)> f2 =
-                std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, std::placeholders::_1, std::placeholders::_2 );
+                std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
-        std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, m_reporter, &f2 );
-
-        Clear();
-        m_libraries[path] = std::move( library );
+        m_library = SIM_LIBRARY::Create( path, m_reporter, &f2 );
     }
     catch( const IO_ERROR& e )
     {
@@ -285,60 +264,60 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
 {
     wxString     path;
     wxString     msg;
-    SIM_LIBRARY* library = nullptr;
     SIM_MODEL*   baseModel = nullptr;
     std::string  modelName;
+
+    wxASSERT( !m_library );
 
     try
     {
         path = ResolveLibraryPath( aLibraryPath, m_project );
 
         std::function<std::string( const std::string&, const std::string& )> f2 =
-                std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, std::placeholders::_1, std::placeholders::_2 );
+                std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
-        auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path, m_reporter, &f2 ) ).first;
-        library = &*it->second;
+        m_library = SIM_LIBRARY::Create( path, m_reporter, &f2 );
     }
     catch( const IO_ERROR& e )
     {
-        msg.Printf( _( "Error loading simulation model library '%s': %s" ),
-                    path,
-                    e.What() );
-
         if( m_reporter )
+        {
+            msg.Printf( _( "Error loading simulation model library '%s': %s" ),
+                        path,
+                        e.What() );
+
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-        else
-            THROW_IO_ERROR( msg );
+        }
     }
 
     if( aBaseModelName == "" )
     {
-        msg.Printf( _( "Error loading simulation model: no '%s' field" ),
-                    SIM_LIBRARY::NAME_FIELD );
-
         if( m_reporter )
+        {
+            msg.Printf( _( "Error loading simulation model: no '%s' field" ),
+                        SIM_LIBRARY::NAME_FIELD );
+
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-        else
-            THROW_IO_ERROR( msg );
+        }
 
         modelName = _( "unknown" ).ToStdString();
     }
-    else if( library )
+    else if( m_library )
     {
-        baseModel = library->FindModel( aBaseModelName );
+        baseModel = m_library->FindModel( aBaseModelName );
         modelName = aBaseModelName;
 
         if( !baseModel )
         {
-            msg.Printf( _( "Error loading simulation model: could not find base model '%s' "
-                           "in library '%s'" ),
-                        aBaseModelName,
-                        path );
-
             if( m_reporter )
+            {
+                msg.Printf( _( "Error loading simulation model: could not find base model '%s' "
+                               "in library '%s'" ),
+                            aBaseModelName,
+                            path );
+
                 m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-            else
-                THROW_IO_ERROR( msg );
+            }
         }
     }
 
@@ -348,20 +327,15 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
 }
 
 
-void SIM_LIB_MGR::SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel )
+const SIM_LIBRARY* SIM_LIB_MGR::GetLibrary() const
 {
-    m_models.at( aIndex ) = std::move( aModel );
+    return m_library.get();
 }
 
 
-std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> SIM_LIB_MGR::GetLibraries() const
+void SIM_LIB_MGR::SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel )
 {
-    std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> libraries;
-
-    for( auto& [path, library] : m_libraries )
-        libraries.try_emplace( path, *library );
-
-    return libraries;
+    m_models.at( aIndex ) = std::move( aModel );
 }
 
 

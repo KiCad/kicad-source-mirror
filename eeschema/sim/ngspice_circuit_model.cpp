@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2022 CERN
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -67,10 +67,9 @@ SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
 
 wxString NGSPICE_CIRCUIT_MODEL::GetSheetSimCommand()
 {
-    NULL_REPORTER devnull;
     wxString      simCmd;
 
-    ReadDirectives( 0, devnull );
+    ReadDirectives( 0 );
 
     for( const std::string& directive : GetDirectives() )
     {

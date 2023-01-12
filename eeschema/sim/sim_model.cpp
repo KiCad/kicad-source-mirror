@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mikolaj Wielgus
  * Copyright (C) 2022 CERN
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -591,9 +591,9 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
         {
             // We own the pin syntax, so if we can't parse it then there's an error, full stop.
             if( aReporter )
-                aReporter->Report( err.What(), RPT_SEVERITY_ERROR );
+                aReporter->Report( err.Problem(), RPT_SEVERITY_ERROR );
             else
-                DisplayErrorMessage( nullptr, err.What() );
+                THROW_IO_ERROR( err.Problem() );
         }
     }
 
@@ -1575,10 +1575,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     {
         wxString             msg;
         WX_STRING_REPORTER   reporter( &msg );
-        SIM_LIB_MGR          libMgr( aProject );
+        SIM_LIB_MGR          libMgr( aProject, &reporter );
         std::vector<T_field> emptyFields;
-
-        libMgr.SetReporter( &reporter );
 
         SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
                                                        emptyFields, sourcePins );

@@ -40,15 +40,13 @@ class SCH_SYMBOL;
 class SIM_LIB_MGR
 {
 public:
-    SIM_LIB_MGR( const PROJECT* aPrj );
+    SIM_LIB_MGR( const PROJECT* aPrj, REPORTER* aReporter = nullptr );
     virtual ~SIM_LIB_MGR() = default;
 
     void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
-    void Clear();
-
-    void AddLibrary( const wxString& aLibraryPath );
     void SetLibrary( const wxString& aLibraryPath );
+    const SIM_LIBRARY* GetLibrary() const;
 
     SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins );
 
@@ -73,18 +71,18 @@ public:
 
     void SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel );
 
-    std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> GetLibraries() const;
     std::vector<std::reference_wrapper<SIM_MODEL>> GetModels() const;
 
     static wxString ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject );
 
-    std::string ResolveEmbeddedLibraryPath( const std::string& aLibPath, const std::string& aRelativeLib );
+    std::string ResolveEmbeddedLibraryPath( const std::string& aLibPath,
+                                            const std::string& aRelativeLib );
 
 private:
-    const PROJECT*                                   m_project;
-    REPORTER*                                        m_reporter;
-    std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries;
-    std::vector<std::unique_ptr<SIM_MODEL>>          m_models;
+    const PROJECT*                          m_project;
+    REPORTER*                               m_reporter;
+    std::unique_ptr<SIM_LIBRARY>            m_library;
+    std::vector<std::unique_ptr<SIM_MODEL>> m_models;
 };
 
 
