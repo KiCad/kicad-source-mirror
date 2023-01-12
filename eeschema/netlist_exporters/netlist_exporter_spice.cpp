@@ -393,10 +393,9 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
             }
             catch( const tao::pegtl::parse_error& )
             {
-                // Even if we couldn't parse it, send anything that _looks_ like a directive to
-                // SPICE
+                // Even if we couldn't parse it, send anything that _looks_ like it contains
+                // directives straight through to SPICE
                 wxStringTokenizer tokenizer( text, wxT( "\r\n" ), wxTOKEN_STRTOK );
-                bool              inDirective = false;
 
                 while( tokenizer.HasMoreTokens() )
                 {
@@ -404,16 +403,8 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 
                     if( line.StartsWith( "." ) )
                     {
-                        m_directives.emplace_back( line );
-                        inDirective = true;
-                    }
-                    else if( inDirective && line.StartsWith( "+" ) )
-                    {
-                        m_directives.emplace_back( line );
-                    }
-                    else
-                    {
-                        inDirective = false;
+                        m_directives.emplace_back( text );
+                        break;
                     }
                 }
 
