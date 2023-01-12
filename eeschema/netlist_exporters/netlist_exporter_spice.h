@@ -153,7 +153,6 @@ private:
     SIM_LIB_MGR                      m_libMgr;             ///< Holds libraries and models
     NAME_GENERATOR                   m_modelNameGenerator; ///< Generates unique model names
     NAME_GENERATOR                   m_netNameGenerator;   ///< Generates unique net names (only unique for NC nets for now)
-    std::string                      m_title;              ///< Spice simulation title found in the schematic sheet
     std::vector<std::string>         m_directives;         ///< Spice directives found in the schematic sheet
     //std::map<std::string, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
     std::set<wxString>               m_rawIncludes;        ///< include directives found in symbols

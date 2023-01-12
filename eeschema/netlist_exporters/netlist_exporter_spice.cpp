@@ -46,11 +46,14 @@
 #include <dialogs/html_message_box.h>
 #include <fmt/core.h>
 #include <paths.h>
-#include <pegtl.hpp>
-#include <pegtl/contrib/parse_tree.hpp>
 #include <wx/dir.h>
 #include <locale_io.h>
 #include "markup_parser.h"
+
+#if 0
+
+#include <pegtl.hpp>
+#include <pegtl/contrib/parse_tree.hpp>
 
 namespace NETLIST_EXPORTER_SPICE_PARSER
 {
@@ -75,6 +78,7 @@ namespace NETLIST_EXPORTER_SPICE_PARSER
 
     template <> struct textSelector<dotLine> : std::true_type {};
 }
+#endif
 
 
 std::string NAME_GENERATOR::Generate( const std::string& aProposedName )
@@ -120,9 +124,6 @@ bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsign
    // Cleanup list to avoid duplicate if the netlist exporter is run more than once.
     m_rawIncludes.clear();
 
-    // Default title.
-    m_title = "KiCad schematic";
-
     if( !ReadSchematicAndLibraries( aNetlistOptions, aReporter ) )
         return false;
 
@@ -145,7 +146,7 @@ bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsign
 
 void NETLIST_EXPORTER_SPICE::WriteHead( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
-    aFormatter.Print( 0, ".title %s\n", m_title.c_str() );
+    aFormatter.Print( 0, "KiCad schematic\n" );
 }
 
 
@@ -380,46 +381,59 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
             else
                 continue;
 
-            tao::pegtl::string_input<> in( text.ToUTF8(), "from_content" );
-            std::unique_ptr<tao::pegtl::parse_tree::node> root;
+            // Send anything that contains directives to SPICE
+            wxStringTokenizer tokenizer( text, wxT( "\r\n" ), wxTOKEN_STRTOK );
+            bool              foundDirective = false;
 
-            try
+            while( tokenizer.HasMoreTokens() )
             {
-                root = tao::pegtl::parse_tree::parse<NETLIST_EXPORTER_SPICE_PARSER::textGrammar,
-                                                     NETLIST_EXPORTER_SPICE_PARSER::textSelector,
-                                                     tao::pegtl::nothing,
-                                                     NETLIST_EXPORTER_SPICE_PARSER::control>
-                    ( in );
-            }
-            catch( const tao::pegtl::parse_error& )
-            {
-                // Even if we couldn't parse it, send anything that _looks_ like it contains
-                // directives straight through to SPICE
-                wxStringTokenizer tokenizer( text, wxT( "\r\n" ), wxTOKEN_STRTOK );
+                wxString line = tokenizer.GetNextToken().Upper();
 
-                while( tokenizer.HasMoreTokens() )
+                if( line.StartsWith( wxT( ".AC" ) )
+                    || line.StartsWith( wxT( ".CONTROL" ) )
+                    || line.StartsWith( wxT( ".CSPARAM" ) )
+                    || line.StartsWith( wxT( ".DISTO" ) )
+                    || line.StartsWith( wxT( ".ELSE" ) )
+                    || line.StartsWith( wxT( ".ELSEIF" ) )
+                    || line.StartsWith( wxT( ".END" ) )
+                    || line.StartsWith( wxT( ".ENDC" ) )
+                    || line.StartsWith( wxT( ".ENDIF" ) )
+                    || line.StartsWith( wxT( ".ENDS" ) )
+                    || line.StartsWith( wxT( ".FOUR" ) )
+                    || line.StartsWith( wxT( ".FUNC" ) )
+                    || line.StartsWith( wxT( ".GLOBAL" ) )
+                    || line.StartsWith( wxT( ".IC" ) )
+                    || line.StartsWith( wxT( ".IF" ) )
+                    || line.StartsWith( wxT( ".INCLUDE" ) )
+                    || line.StartsWith( wxT( ".LIB" ) )
+                    || line.StartsWith( wxT( ".MEAS" ) )
+                    || line.StartsWith( wxT( ".MODEL" ) )
+                    || line.StartsWith( wxT( ".NODESET" ) )
+                    || line.StartsWith( wxT( ".NOISE" ) )
+                    || line.StartsWith( wxT( ".OP" ) )
+                    || line.StartsWith( wxT( ".OPTIONS" ) )
+                    || line.StartsWith( wxT( ".PARAM" ) )
+                    || line.StartsWith( wxT( ".PLOT" ) )
+                    || line.StartsWith( wxT( ".PRINT" ) )
+                    || line.StartsWith( wxT( ".PROBE" ) )
+                    || line.StartsWith( wxT( ".PZ" ) )
+                    || line.StartsWith( wxT( ".SAVE" ) )
+                    || line.StartsWith( wxT( ".SENS" ) )
+                    || line.StartsWith( wxT( ".SP" ) )
+                    || line.StartsWith( wxT( ".SUBCKT" ) )
+                    || line.StartsWith( wxT( ".TEMP" ) )
+                    || line.StartsWith( wxT( ".TF" ) )
+                    || line.StartsWith( wxT( ".TITLE" ) )
+                    || line.StartsWith( wxT( ".TRAN" ) )
+                    || line.StartsWith( wxT( ".WIDTH" ) ) )
                 {
-                    wxString line = tokenizer.GetNextToken();
-
-                    if( line.StartsWith( "." ) )
-                    {
-                        m_directives.emplace_back( text );
-                        break;
-                    }
+                    foundDirective = true;
+                    break;
                 }
-
-                continue;
             }
 
-            wxASSERT( root );
-
-            for( const auto& node : root->children )
-            {
-                if( node->is_type<NETLIST_EXPORTER_SPICE_PARSER::dotTitle>() )
-                    m_title = node->children.at( 0 )->string();
-                else
-                    m_directives.emplace_back( node->string() );
-            }
+            if( foundDirective )
+                m_directives.emplace_back( text );
         }
     }
 }
