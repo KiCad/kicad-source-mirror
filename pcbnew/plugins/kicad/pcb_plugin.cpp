@@ -805,21 +805,18 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
     {
         Format( &aDimension->Text(), aNestLevel + 1 );
 
-        m_out->Print( aNestLevel + 1, "(format" );
-
-        if( !aDimension->GetPrefix().IsEmpty() )
-            m_out->Print( 0, " (prefix %s)", m_out->Quotew( aDimension->GetPrefix() ).c_str() );
-
-        if( !aDimension->GetSuffix().IsEmpty() )
-            m_out->Print( 0, " (suffix %s)", m_out->Quotew( aDimension->GetSuffix() ).c_str() );
-
-        m_out->Print( 0, " (units %d) (units_format %d) (precision %d)",
-                static_cast<int>( aDimension->GetUnitsMode() ),
-                static_cast<int>( aDimension->GetUnitsFormat() ), aDimension->GetPrecision() );
+        m_out->Print( aNestLevel + 1, "(format (prefix %s) (suffix %s) (units %d) (units_format %d) (precision %d)",
+                      m_out->Quotew( aDimension->GetPrefix() ).c_str(),
+                      m_out->Quotew( aDimension->GetSuffix() ).c_str(),
+                      static_cast<int>( aDimension->GetUnitsMode() ),
+                      static_cast<int>( aDimension->GetUnitsFormat() ),
+                      aDimension->GetPrecision() );
 
         if( aDimension->GetOverrideTextEnabled() )
+        {
             m_out->Print( 0, " (override_value %s)",
                           m_out->Quotew( aDimension->GetOverrideText() ).c_str() );
+        }
 
         if( aDimension->GetSuppressZeroes() )
             m_out->Print( 0, " suppress_zeroes" );
