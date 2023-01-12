@@ -714,6 +714,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolAs()
             return;
         }
 
+        new_name = EscapeString( new_name, CTX_LIBID );
+
         // Test if there is a symbol with this name already.
         if( m_libMgr->SymbolExists( new_name, new_lib ) )
         {
