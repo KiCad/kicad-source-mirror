@@ -159,8 +159,10 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 {
     CACHED_BITMAP bmp;
 
-    bmp.w = aBitmap->GetSizePixels().x;
-    bmp.h = aBitmap->GetSizePixels().y;
+    const wxImage& imgData = *aBitmap->GetOriginalImageData();
+
+    bmp.w = imgData.GetSize().x;
+    bmp.h = imgData.GetSize().y;
 
     // The bitmap size needs to be a multiple of 4.
     // This is easiest to achieve by ensuring that each row
@@ -185,8 +187,6 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     // make_unique initializes this to 0, so extra pixels are transparent
     bmp.size = ( bmp.w + extra_w ) * bmp.h * 4;
     auto buf = std::make_unique<uint8_t[]>( bmp.size );
-
-    const wxImage& imgData = *aBitmap->GetOriginalImageData();
 
     for( int y = 0; y < bmp.h; y++ )
     {
