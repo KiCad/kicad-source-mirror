@@ -54,6 +54,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_tool_base.h>
+#include <tools/pcb_selection_tool.h>
 #include <plugins/kicad/pcb_plugin.h>
 
 #include "pcb_test_frame.h"
@@ -81,8 +82,11 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
     KI_TRACE( traceGalProfile, "%s\n", cntView.to_string() );
 
 #ifdef USE_TOOL_MANAGER
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
-                                   m_galPanel->GetViewControls(), nullptr );
+                                   m_galPanel->GetViewControls(), cfg, nullptr );
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 #endif
@@ -142,14 +146,17 @@ void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL
     m_galPanel->GetViewControls()->ShowCursor( true );
 
 #ifdef USE_TOOL_MANAGER
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+
     m_toolManager = std::make_unique<TOOL_MANAGER>( );
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
-                                   m_galPanel->GetViewControls(), nullptr );
+                                   m_galPanel->GetViewControls(), cfg, nullptr );
 
     m_pcbActions = std::make_unique<TEST_ACTIONS>( );
     m_toolDispatcher = std::make_unique<TOOL_DISPATCHER>( m_toolManager.get() );
 
-    //m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );
     createUserTools();
 
     m_toolManager->InitTools();
