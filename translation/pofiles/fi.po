@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2023-01-06 00:33+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2023-01-13 08:09+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2944,9 +2944,8 @@ msgstr "Mustavalkoinen"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
-msgstr "Tulosta Piirustuslehti"
+msgstr "Tulosta piirustusarkki"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -3998,9 +3997,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Verkot, jotka vastaavat '%s':</b>'"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "Verkkoluokat"
+msgstr "Verkkoluokat:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:493
@@ -20367,16 +20365,14 @@ msgstr "Gerber-koordinaattitarkkuuden tulee olla joko 5 tai 6\n"
 #: kicad/cli/command_export_pcb_dxf.cpp:41
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Exclude the reference designator text"
-msgstr "Sisällytä viitemerkinnän teksti"
+msgstr "Jätä pois viitemerkinnän teksti"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:46
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Exclude the value text"
-msgstr "Sisällytä arvoteksti"
+msgstr "Sulje pois arvoteksti"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:51
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
@@ -20600,14 +20596,12 @@ msgid "Footprint path does not exist or is not accessible\n"
 msgstr "Jalanjälkipolkua ei ole olemassa tai se ei ole käytettävissä\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:52
-#, fuzzy
 msgid "Include hidden pins"
-msgstr "S & kuinka piilotetut nastat"
+msgstr "Sisällytä piilotetut nastat"
 
 #: kicad/cli/command_sym_export_svg.cpp:57
-#, fuzzy
 msgid "Include hidden fields"
-msgstr "Etsi piilotettuja kenttiä"
+msgstr "Sisällytä piilotetut kentät"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
 #: kicad/cli/command_sym_export_svg.cpp:62
