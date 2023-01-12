@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
 "PO-Revision-Date: 2023-01-13 08:09+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -26098,7 +26098,7 @@ msgstr "Schraffiert"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:120
 msgid "Fully hatched"
-msgstr "Vollständig schraffiert"
+msgstr "Durchgehend schraffiert"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:140
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:65
@@ -30862,7 +30862,7 @@ msgstr "Löst einen DRC-Fehler aus, wenn ein Pad diesen Bereich überlappt"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 msgid "Keep out copper fill"
-msgstr "Kupferfüllungen sperren"
+msgstr "Kupferfüllungen aussparen"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "Zones will not fill copper into this area"
