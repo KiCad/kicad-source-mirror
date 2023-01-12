@@ -135,7 +135,7 @@ public:
     GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                        FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

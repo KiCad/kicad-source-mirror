@@ -1237,7 +1237,7 @@ wxString PAD::ShowPadAttr() const
 }
 
 
-wxString PAD::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PAD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     if( GetNumber().IsEmpty() )
     {

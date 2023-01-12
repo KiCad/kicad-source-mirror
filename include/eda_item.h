@@ -347,8 +347,8 @@ public:
     wxString GetTypeDesc() const;
 
     /**
-     * Return the text to display to be used in the selection clarification context menu
-     * when multiple items are found at the current cursor position.
+     * Return a user-visible description string of this item.  This description is used in
+     * disambiguation menus, the message panel, ERC/DRC reports, etc.
      *
      * The default version of this function raises an assertion in the debug mode and
      * returns a string to indicate that it was not overridden to provide the object
@@ -356,7 +356,7 @@ public:
      *
      * @return The menu text string.
      */
-    virtual wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const;
+    virtual wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const;
 
     /**
      * Return a pointer to an image to be used in menus.

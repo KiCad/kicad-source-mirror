@@ -105,7 +105,7 @@ public:
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
     void Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle ) override;
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override
     {
         return wxString( _( "Image" ) );
     }

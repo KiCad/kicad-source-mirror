@@ -199,7 +199,7 @@ public:
 
     MINOPTMAX<int> GetWidthConstraint( wxString* aSource ) const;
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 
@@ -449,7 +449,7 @@ public:
         return wxT( "PCB_VIA" );
     }
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

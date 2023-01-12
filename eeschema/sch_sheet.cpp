@@ -1034,7 +1034,7 @@ void SCH_SHEET::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
 }
 
 
-wxString SCH_SHEET::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_SHEET::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Hierarchical Sheet %s" ),
                              m_fields[ SHEETNAME ].GetText() );

@@ -166,7 +166,7 @@ public:
     void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
                const TRANSFORM& aTransform, bool aDimmed ) const override;
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

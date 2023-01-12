@@ -221,8 +221,8 @@ public:
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
                           const std::vector<KICAD_T>& aScanTypes ) override;
 
-    ///< @copydoc EDA_ITEM::GetSelectMenuText()
-    virtual wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
+    ///< @copydoc EDA_ITEM::GetItemDescription()
+    virtual wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     ///< @copydoc EDA_ITEM::GetMenuImage()
     BITMAPS GetMenuImage() const override;

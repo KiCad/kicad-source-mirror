@@ -1338,7 +1338,7 @@ BITMAPS LIB_PIN::GetMenuImage() const
 }
 
 
-wxString LIB_PIN::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString LIB_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     // This code previously checked "m_name.IsEmpty()" to choose the correct 
     // formatting path, but that check fails if the pin is called "~" which is

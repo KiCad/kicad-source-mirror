@@ -49,7 +49,7 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
     m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
 
     for( BOARD_ITEM* item : m_group->GetItems() )
-        m_membersList->Append( item->GetSelectMenuText( m_brdEditor ), item );
+        m_membersList->Append( item->GetItemDescription( m_brdEditor ), item );
 
     SetupStandardButtons();
 
@@ -157,7 +157,7 @@ void DIALOG_GROUP_PROPERTIES::DoAddMember( EDA_ITEM* aItem )
     if( aItem == m_group )
         return;
 
-    m_membersList->Append( aItem->GetSelectMenuText( m_brdEditor ), aItem );
+    m_membersList->Append( aItem->GetItemDescription( m_brdEditor ), aItem );
 }
 
 

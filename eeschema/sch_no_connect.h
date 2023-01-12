@@ -92,7 +92,7 @@ public:
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override
     {
         return wxString( _( "No Connect" ) );
     }

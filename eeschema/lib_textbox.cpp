@@ -370,7 +370,7 @@ bool LIB_TEXTBOX::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) 
 }
 
 
-wxString LIB_TEXTBOX::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString LIB_TEXTBOX::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Graphic Text Box" ) );
 }

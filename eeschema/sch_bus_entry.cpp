@@ -413,13 +413,13 @@ std::vector<VECTOR2I> SCH_BUS_ENTRY_BASE::GetConnectionPoints() const
 }
 
 
-wxString SCH_BUS_WIRE_ENTRY::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_BUS_WIRE_ENTRY::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString( _( "Bus to Wire Entry" ) );
 }
 
 
-wxString SCH_BUS_BUS_ENTRY::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_BUS_BUS_ENTRY::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString( _( "Bus to Bus Entry" ) );
 }

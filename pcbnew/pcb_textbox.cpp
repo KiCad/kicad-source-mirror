@@ -413,7 +413,7 @@ bool PCB_TEXTBOX::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) 
 }
 
 
-wxString PCB_TEXTBOX::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_TEXTBOX::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "PCB Text Box on %s"), GetLayerName() );
 }

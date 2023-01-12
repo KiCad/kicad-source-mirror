@@ -367,7 +367,7 @@ void SCH_TEXTBOX::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 }
 
 
-wxString SCH_TEXTBOX::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_TEXTBOX::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Graphic Text Box" ) );
 }

@@ -399,7 +399,7 @@ void SCH_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-wxString SCH_SHAPE::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     switch( GetShape() )
     {

@@ -1346,7 +1346,7 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
 }
 
 
-wxString FOOTPRINT::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString FOOTPRINT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     wxString reference = GetReference();
 

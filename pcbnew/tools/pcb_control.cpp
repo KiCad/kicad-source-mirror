@@ -1389,8 +1389,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection[0] );
         BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection[1] );
 
-        msgItems.emplace_back( MSG_PANEL_ITEM( a->GetSelectMenuText( m_frame ),
-                                               b->GetSelectMenuText( m_frame ) ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( a->GetItemDescription( m_frame ),
+                                               b->GetItemDescription( m_frame ) ) );
 
         BOARD_CONNECTED_ITEM* a_conn = dyn_cast<BOARD_CONNECTED_ITEM*>( a );
         BOARD_CONNECTED_ITEM* b_conn = dyn_cast<BOARD_CONNECTED_ITEM*>( b );

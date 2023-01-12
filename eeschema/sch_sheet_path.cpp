@@ -52,7 +52,7 @@ public:
         SCH_ITEM( nullptr, NOT_USED )
     {}
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override
     {
         return _( "(Deleted Item)" );
     }

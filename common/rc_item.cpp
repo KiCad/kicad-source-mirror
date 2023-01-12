@@ -121,9 +121,9 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
                                  GetViolatingRuleDesc(),
                                  severity,
                                  showCoord( aUnitsProvider, mainItem->GetPosition()),
-                                 mainItem->GetSelectMenuText( aUnitsProvider ),
+                                 mainItem->GetItemDescription( aUnitsProvider ),
                                  showCoord( aUnitsProvider, auxItem->GetPosition()),
-                                 auxItem->GetSelectMenuText( aUnitsProvider ) );
+                                 auxItem->GetItemDescription( aUnitsProvider ) );
     }
     else if( mainItem )
     {
@@ -133,7 +133,7 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
                                  GetViolatingRuleDesc(),
                                  severity,
                                  showCoord( aUnitsProvider, mainItem->GetPosition()),
-                                 mainItem->GetSelectMenuText( aUnitsProvider ) );
+                                 mainItem->GetItemDescription( aUnitsProvider ) );
     }
     else
     {
@@ -374,7 +374,7 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
         else
         {
             EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
-            aVariant = item->GetSelectMenuText( m_editFrame );
+            aVariant = item->GetItemDescription( m_editFrame );
         }
 
         break;
@@ -382,21 +382,21 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     case RC_TREE_NODE::AUX_ITEM:
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
-        aVariant = item->GetSelectMenuText( m_editFrame );
+        aVariant = item->GetItemDescription( m_editFrame );
     }
         break;
 
     case RC_TREE_NODE::AUX_ITEM2:
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem2ID() );
-        aVariant = item->GetSelectMenuText( m_editFrame );
+        aVariant = item->GetItemDescription( m_editFrame );
     }
         break;
 
     case RC_TREE_NODE::AUX_ITEM3:
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem3ID() );
-        aVariant = item->GetSelectMenuText( m_editFrame );
+        aVariant = item->GetItemDescription( m_editFrame );
     }
         break;
     }

@@ -98,7 +98,7 @@ public:
         return BOARD_ITEM::Matches( m_rcItem->GetErrorMessage(), aSearchData );
     }
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

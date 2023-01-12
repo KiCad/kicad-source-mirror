@@ -252,7 +252,7 @@ void PCB_TEXT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
-wxString PCB_TEXT::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "PCB Text '%s' on %s"),
                              KIUI::EllipsizeMenuText( GetShownText() ),

@@ -1857,7 +1857,7 @@ LIB_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
 }
 
 
-wxString SCH_SYMBOL::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_SYMBOL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Symbol %s [%s]" ),
                              GetField( REFERENCE_FIELD )->GetShownText(),

@@ -68,7 +68,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override {}

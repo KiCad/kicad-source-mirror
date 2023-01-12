@@ -327,7 +327,7 @@ void FP_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 }
 
 
-wxString FP_TEXTBOX::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString FP_TEXTBOX::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Footprint Text Box of %s" ),
                              static_cast<FOOTPRINT*>( GetParent() )->GetReference() );

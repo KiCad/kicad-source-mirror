@@ -448,7 +448,7 @@ const BOX2I PCB_DIMENSION_BASE::GetBoundingBox() const
 }
 
 
-wxString PCB_DIMENSION_BASE::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_DIMENSION_BASE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Dimension '%s' on %s" ), GetText(), GetLayerName() );
 }

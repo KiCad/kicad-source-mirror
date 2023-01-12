@@ -751,7 +751,7 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter )
 }
 
 
-wxString SCH_FIELD::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( "%s '%s'", GetName(), KIUI::EllipsizeMenuText( GetShownText() ) );
 }

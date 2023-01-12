@@ -196,7 +196,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

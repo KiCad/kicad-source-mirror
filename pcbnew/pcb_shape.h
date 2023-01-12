@@ -136,7 +136,7 @@ public:
                                   int aError, ERROR_LOC aErrorLoc,
                                   bool ignoreLineWidth = false ) const override;
 
-    virtual wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
+    virtual wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     virtual BITMAPS GetMenuImage() const override;
 

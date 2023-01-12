@@ -105,12 +105,12 @@ INSPECT_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData,
 }
 
 
-wxString EDA_ITEM::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString EDA_ITEM::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    wxFAIL_MSG( wxT( "GetSelectMenuText() was not overridden for schematic item type " ) +
+    wxFAIL_MSG( wxT( "GetItemDescription() was not overridden for schematic item type " ) +
                 GetClass() );
 
-    return wxString( wxT( "Undefined menu text for " ) + GetClass() );
+    return wxString( wxT( "Undefined item description for " ) + GetClass() );
 }
 
 

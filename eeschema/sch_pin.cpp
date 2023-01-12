@@ -191,11 +191,11 @@ SCH_SYMBOL* SCH_PIN::GetParentSymbol() const
 }
 
 
-wxString SCH_PIN::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( "Symbol %s %s",
                              GetParentSymbol()->GetField( REFERENCE_FIELD )->GetShownText(),
-                             m_libPin->GetSelectMenuText( aUnitsProvider ) );
+                             m_libPin->GetItemDescription( aUnitsProvider ) );
 }
 
 

@@ -508,7 +508,7 @@ void LIB_FIELD::SetName( const wxString& aName )
 }
 
 
-wxString LIB_FIELD::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString LIB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( "%s '%s'", GetName(), KIUI::EllipsizeMenuText( GetShownText() ) );
 }

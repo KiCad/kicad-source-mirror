@@ -121,7 +121,7 @@ void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 }
 
 
-wxString FP_SHAPE::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
+wxString FP_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "%s on %s" ),
                              ShowShape(),
