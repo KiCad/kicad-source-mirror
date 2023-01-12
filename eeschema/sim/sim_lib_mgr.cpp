@@ -46,6 +46,13 @@ SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj, REPORTER* aReporter ) :
 }
 
 
+void SIM_LIB_MGR::Clear()
+{
+    m_libraries.clear();
+    m_models.clear();
+}
+
+
 wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject )
 {
     wxString   expandedPath = ExpandEnvVarSubstitutions( aLibraryPath, aProject );
@@ -114,9 +121,6 @@ std::string SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const std::string& aLibPath
 
 void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath )
 {
-    m_models.clear();
-    m_library = nullptr;
-
     try
     {
         wxString path = ResolveLibraryPath( aLibraryPath, m_project );
@@ -124,7 +128,10 @@ void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath )
         std::function<std::string(const std::string&, const std::string&)> f2 =
                 std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
-        m_library = SIM_LIBRARY::Create( path, m_reporter, &f2 );
+        std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, m_reporter, &f2 );
+
+        Clear();
+        m_libraries[path] = std::move( library );
     }
     catch( const IO_ERROR& e )
     {
@@ -264,10 +271,9 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
 {
     wxString     path;
     wxString     msg;
+    SIM_LIBRARY* library = nullptr;
     SIM_MODEL*   baseModel = nullptr;
     std::string  modelName;
-
-    wxASSERT( !m_library );
 
     try
     {
@@ -276,7 +282,8 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
         std::function<std::string( const std::string&, const std::string& )> f2 =
                 std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
-        m_library = SIM_LIBRARY::Create( path, m_reporter, &f2 );
+        auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path, m_reporter, &f2 ) ).first;
+        library = &*it->second;
     }
     catch( const IO_ERROR& e )
     {
@@ -302,9 +309,9 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
 
         modelName = _( "unknown" ).ToStdString();
     }
-    else if( m_library )
+    else if( library )
     {
-        baseModel = m_library->FindModel( aBaseModelName );
+        baseModel = library->FindModel( aBaseModelName );
         modelName = aBaseModelName;
 
         if( !baseModel )
@@ -327,15 +334,20 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
 }
 
 
-const SIM_LIBRARY* SIM_LIB_MGR::GetLibrary() const
-{
-    return m_library.get();
-}
-
-
 void SIM_LIB_MGR::SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel )
 {
     m_models.at( aIndex ) = std::move( aModel );
+}
+
+
+std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> SIM_LIB_MGR::GetLibraries() const
+{
+    std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> libraries;
+
+    for( auto& [path, library] : m_libraries )
+        libraries.try_emplace( path, *library );
+
+    return libraries;
 }
 
 
