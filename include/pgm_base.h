@@ -32,6 +32,7 @@
 #define  PGM_BASE_H_
 
 #include <map>
+#include <vector>
 #include <memory>
 #include <search_stack.h>
 #include <settings/environment.h>
@@ -302,7 +303,7 @@ public:
      */
     bool m_Printing;
 
-    int  m_ModalDialogCount;
+    std::vector<void*> m_ModalDialogs;
 
     bool m_Quitting;
 

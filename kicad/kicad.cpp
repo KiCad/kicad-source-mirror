@@ -476,8 +476,25 @@ struct APP_KICAD : public wxApp
             wxShowEvent& event = static_cast<wxShowEvent&>( aEvent );
             wxDialog*    dialog = dynamic_cast<wxDialog*>( event.GetEventObject() );
 
-            if( dialog && dialog->IsModal() )
-                Pgm().m_ModalDialogCount += event.IsShown() ? 1 : -1;
+            std::vector<void*>& dlgs = Pgm().m_ModalDialogs;
+
+            if( dialog )
+            {
+                if( event.IsShown() && dialog->IsModal() )
+                {
+                    dlgs.push_back( dialog );
+                }
+                // Under GTK, sometimes the modal flag is cleared before hiding
+                else if( !event.IsShown() )
+                {
+                    // If we close the expected dialog, remove it from our stack
+                    if( dlgs.back() == dialog )
+                        dlgs.pop_back();
+                    // If an out-of-order, remove all dialogs added after the closed one
+                    else if( auto it = std::find( dlgs.begin(), dlgs.end(), dialog ) ; it != dlgs.end() )
+                        dlgs.erase( it, dlgs.end() );
+                }
+            }
         }
 
         return Event_Skip;

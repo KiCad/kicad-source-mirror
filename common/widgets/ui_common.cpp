@@ -314,7 +314,7 @@ bool KIUI::IsInputControlEditable( wxWindow* aFocus )
 
 bool KIUI::IsModalDialogFocused()
 {
-    return Pgm().m_ModalDialogCount > 0;
+    return !Pgm().m_ModalDialogs.empty();
 }
 
 
