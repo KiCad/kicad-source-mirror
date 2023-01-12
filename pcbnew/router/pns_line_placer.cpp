@@ -1637,7 +1637,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         m_mouseTrailTracer.Clear();
         m_mouseTrailTracer.SetTolerance( m_head.Width() );
         m_mouseTrailTracer.AddTrailPoint( m_currentStart );
-        m_mouseTrailTracer.SetDefaultDirections( m_initial_direction, lastSegDir );
+        m_mouseTrailTracer.SetDefaultDirections( lastSegDir, DIRECTION_45::UNDEFINED );
 
         m_placementCorrect = true;
     }
@@ -1985,7 +1985,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
 
             aHead.AppendVia( v );
 
-            PNS_DBG( Dbg(), AddPoint, v.Pos(), GREEN, 1000000, "via-force-coll-2" );
+	PNS_DBG( Dbg(), AddPoint, v.Pos(), GREEN, 1000000, "via-force-coll-2" );
 
         return true;
         }

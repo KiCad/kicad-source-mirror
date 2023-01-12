@@ -92,10 +92,10 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
     const double minAreaCutoffDistanceFactor = 6;
 
     // Adjusts how far away from p0 we get before whatever posture we solved is locked in
-    const int lockDistanceFactor = 25;
+    const int lockDistanceFactor = 30;
 
     // Adjusts how close to p0 we unlock the posture again if one was locked already
-    const int unlockDistanceFactor = 4;
+    const int unlockDistanceFactor = 10;
 
     if( m_trail.PointCount() < 2 || m_manuallyForced )
     {
@@ -130,7 +130,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
     double areaDiag = diag.Area();
     double ratio    = areaS / ( areaDiag + 1.0 );
-
+    
     // heuristic to detect that the user dragged back the cursor to the beginning of the trace
     // in this case, we cancel any forced posture and restart the trail
     if( m_forced && refLength < unlockDistanceFactor * m_tolerance )
@@ -155,6 +155,8 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
         if( trail.Area() > areaCutoff )
             areaOk = true;
     }
+
+    PNS_DBG( dbg, Message, wxString::Format( "Posture: rl %.0f thr %d tol %d as %.3f area OK %d forced %d\n", refLength, (int)(unlockDistanceFactor * m_tolerance), m_tolerance, ratio, areaOk?1:0, m_forced?1:0 ) );
 
     DIRECTION_45 straightDirection;
     DIRECTION_45 diagDirection;
