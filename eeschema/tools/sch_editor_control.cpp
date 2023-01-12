@@ -413,6 +413,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         return 0;
 
     bool map = IsOK( m_frame, _( "Update symbols in schematic to refer to new library?" ) );
+    bool append = false;
 
     SYMBOL_LIB_TABLE_ROW* row = mgr.GetLibrary( targetLib );
     SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->GetType() );
@@ -433,10 +434,18 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
             LIB_ID id = it.first;
             id.SetLibNickname( targetLib );
 
+
             for( SCH_SYMBOL* symbol : symbolMap[it.first] )
+            {
+                m_frame->SaveCopyInUndoList( m_frame->GetScreen(), symbol, UNDO_REDO::CHANGED, append, false);
                 symbol->SetLibId( id );
+                append = true;
+            }
         }
     }
+
+    if( append )
+        m_frame->OnModify();
 
     return 0;
 }
