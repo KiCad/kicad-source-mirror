@@ -389,46 +389,74 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
             {
                 wxString line = tokenizer.GetNextToken().Upper();
 
-                if( line.StartsWith( wxT( ".AC" ) )
-                    || line.StartsWith( wxT( ".CONTROL" ) )
-                    || line.StartsWith( wxT( ".CSPARAM" ) )
-                    || line.StartsWith( wxT( ".DISTO" ) )
-                    || line.StartsWith( wxT( ".ELSE" ) )
-                    || line.StartsWith( wxT( ".ELSEIF" ) )
-                    || line.StartsWith( wxT( ".END" ) )
-                    || line.StartsWith( wxT( ".ENDC" ) )
-                    || line.StartsWith( wxT( ".ENDIF" ) )
-                    || line.StartsWith( wxT( ".ENDS" ) )
-                    || line.StartsWith( wxT( ".FOUR" ) )
-                    || line.StartsWith( wxT( ".FUNC" ) )
-                    || line.StartsWith( wxT( ".GLOBAL" ) )
-                    || line.StartsWith( wxT( ".IC" ) )
-                    || line.StartsWith( wxT( ".IF" ) )
-                    || line.StartsWith( wxT( ".INCLUDE" ) )
-                    || line.StartsWith( wxT( ".LIB" ) )
-                    || line.StartsWith( wxT( ".MEAS" ) )
-                    || line.StartsWith( wxT( ".MODEL" ) )
-                    || line.StartsWith( wxT( ".NODESET" ) )
-                    || line.StartsWith( wxT( ".NOISE" ) )
-                    || line.StartsWith( wxT( ".OP" ) )
-                    || line.StartsWith( wxT( ".OPTIONS" ) )
-                    || line.StartsWith( wxT( ".PARAM" ) )
-                    || line.StartsWith( wxT( ".PLOT" ) )
-                    || line.StartsWith( wxT( ".PRINT" ) )
-                    || line.StartsWith( wxT( ".PROBE" ) )
-                    || line.StartsWith( wxT( ".PZ" ) )
-                    || line.StartsWith( wxT( ".SAVE" ) )
-                    || line.StartsWith( wxT( ".SENS" ) )
-                    || line.StartsWith( wxT( ".SP" ) )
-                    || line.StartsWith( wxT( ".SUBCKT" ) )
-                    || line.StartsWith( wxT( ".TEMP" ) )
-                    || line.StartsWith( wxT( ".TF" ) )
-                    || line.StartsWith( wxT( ".TITLE" ) )
-                    || line.StartsWith( wxT( ".TRAN" ) )
-                    || line.StartsWith( wxT( ".WIDTH" ) ) )
+                if( line.StartsWith( wxT( "." ) ) )
                 {
-                    foundDirective = true;
-                    break;
+                    if(    line.StartsWith( wxT( ".AC" ) )
+                        || line.StartsWith( wxT( ".CONTROL" ) )
+                        || line.StartsWith( wxT( ".CSPARAM" ) )
+                        || line.StartsWith( wxT( ".DISTO" ) )
+                        || line.StartsWith( wxT( ".ELSE" ) )
+                        || line.StartsWith( wxT( ".ELSEIF" ) )
+                        || line.StartsWith( wxT( ".END" ) )
+                        || line.StartsWith( wxT( ".ENDC" ) )
+                        || line.StartsWith( wxT( ".ENDIF" ) )
+                        || line.StartsWith( wxT( ".ENDS" ) )
+                        || line.StartsWith( wxT( ".FOUR" ) )
+                        || line.StartsWith( wxT( ".FUNC" ) )
+                        || line.StartsWith( wxT( ".GLOBAL" ) )
+                        || line.StartsWith( wxT( ".IC" ) )
+                        || line.StartsWith( wxT( ".IF" ) )
+                        || line.StartsWith( wxT( ".INCLUDE" ) )
+                        || line.StartsWith( wxT( ".LIB" ) )
+                        || line.StartsWith( wxT( ".MEAS" ) )
+                        || line.StartsWith( wxT( ".MODEL" ) )
+                        || line.StartsWith( wxT( ".NODESET" ) )
+                        || line.StartsWith( wxT( ".NOISE" ) )
+                        || line.StartsWith( wxT( ".OP" ) )
+                        || line.StartsWith( wxT( ".OPTIONS" ) )
+                        || line.StartsWith( wxT( ".PARAM" ) )
+                        || line.StartsWith( wxT( ".PLOT" ) )
+                        || line.StartsWith( wxT( ".PRINT" ) )
+                        || line.StartsWith( wxT( ".PROBE" ) )
+                        || line.StartsWith( wxT( ".PZ" ) )
+                        || line.StartsWith( wxT( ".SAVE" ) )
+                        || line.StartsWith( wxT( ".SENS" ) )
+                        || line.StartsWith( wxT( ".SP" ) )
+                        || line.StartsWith( wxT( ".SUBCKT" ) )
+                        || line.StartsWith( wxT( ".TEMP" ) )
+                        || line.StartsWith( wxT( ".TF" ) )
+                        || line.StartsWith( wxT( ".TITLE" ) )
+                        || line.StartsWith( wxT( ".TRAN" ) )
+                        || line.StartsWith( wxT( ".WIDTH" ) ) )
+                    {
+                        foundDirective = true;
+                        break;
+                    }
+                }
+                else if( line.StartsWith( wxT( "K" ) ) )
+                {
+                    // Check for mutual inductor declaration
+                    wxStringTokenizer line_t( line, wxT( " \t" ), wxTOKEN_STRTOK );
+
+                    // Coupling ID
+                    if( !line_t.HasMoreTokens() || !line_t.GetNextToken().StartsWith( wxT( "K" ) ) )
+                        continue;
+
+                    // Inductor 1 ID
+                    if( !line_t.HasMoreTokens() || !line_t.GetNextToken().StartsWith( wxT( "L" ) ) )
+                        continue;
+
+                    // Inductor 2 ID
+                    if( !line_t.HasMoreTokens() || !line_t.GetNextToken().StartsWith( wxT( "L" ) ) )
+                        continue;
+
+                    // That's probably distinctive enough not to bother trying to parse the
+                    // coupling value.  If there's anything else, assume it's the value.
+                    if( line_t.HasMoreTokens() )
+                    {
+                        foundDirective = true;
+                        break;
+                    }
                 }
             }
 
