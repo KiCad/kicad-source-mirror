@@ -140,7 +140,7 @@ private:
     SCH_TEXT*     loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
     SCH_JUNCTION* loadJunction( wxXmlNode* aJunction );
     SCH_TEXT*     loadPlainText( wxXmlNode* aSchText );
-    void          loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_LINE*>& aLines );
+    void          loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aItems );
 
     bool          loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBOL>& aSymbol,
                               EDEVICE* aDevice, int aGateNumber, const wxString& aGateName );

@@ -962,12 +962,12 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
         }
         else if( nodeName == wxT( "frame" ) )
         {
-            std::vector<SCH_LINE*> lines;
+            std::vector<SCH_ITEM*> frameItems;
 
-            loadFrame( plainNode, lines );
+            loadFrame( plainNode, frameItems );
 
-            for( SCH_LINE* line : lines )
-                screen->Append( line );
+            for( SCH_ITEM* item : frameItems )
+                screen->Append( item );
         }
 
         plainNode = plainNode->GetNext();
@@ -1025,38 +1025,200 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 }
 
 
-void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_LINE*>& aLines )
+void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aItems )
 {
     EFRAME eframe( aFrameNode );
 
-    VECTOR2I corner1( eframe.x1.ToSchUnits(), -eframe.y1.ToSchUnits() );
-    VECTOR2I corner3( eframe.x2.ToSchUnits(), -eframe.y2.ToSchUnits() );
-    VECTOR2I corner2( corner3.x, corner1.y );
-    VECTOR2I corner4( corner1.x, corner3.y );
+    int xMin = eframe.x1.ToSchUnits();
+    int xMax = eframe.x2.ToSchUnits();
+    int yMin = -eframe.y1.ToSchUnits();
+    int yMax = -eframe.y2.ToSchUnits();
 
-    SCH_LINE* line = new SCH_LINE();
-    line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
-    line->SetStartPoint( corner1 );
-    line->SetEndPoint( corner2 );
-    aLines.push_back( line );
+    if( xMin > xMax )
+        std::swap( xMin, xMax );
 
-    line = new SCH_LINE();
-    line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
-    line->SetStartPoint( corner2 );
-    line->SetEndPoint( corner3 );
-    aLines.push_back( line );
+    if( yMin > yMax )
+        std::swap( yMin, yMax );
 
-    line = new SCH_LINE();
-    line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
-    line->SetStartPoint( corner3 );
-    line->SetEndPoint( corner4 );
-    aLines.push_back( line );
+    SCH_SHAPE* lines = new SCH_SHAPE( SHAPE_T::POLY );
+    lines->AddPoint( VECTOR2I( xMin, yMin ) );
+    lines->AddPoint( VECTOR2I( xMax, yMin ) );
+    lines->AddPoint( VECTOR2I( xMax, yMax ) );
+    lines->AddPoint( VECTOR2I( xMin, yMax ) );
+    lines->AddPoint( VECTOR2I( xMin, yMin ) );
+    aItems.push_back( lines );
 
-    line = new SCH_LINE();
-    line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
-    line->SetStartPoint( corner4 );
-    line->SetEndPoint( corner1 );
-    aLines.push_back( line );
+    if( !( eframe.border_left == false ) )
+    {
+        lines = new SCH_SHAPE( SHAPE_T::POLY );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ),
+                                   yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ),
+                                   yMax - schIUScale.MilsToIU( 150 ) ) );
+        aItems.push_back( lines );
+
+        int i;
+        int height = yMax - yMin;
+        int x1 = xMin;
+        int x2 = x1 + schIUScale.MilsToIU( 150 );
+        int legendPosX = xMin + schIUScale.MilsToIU( 75 );
+        double rowSpacing = height / double( eframe.rows );
+        double legendPosY = yMin + ( rowSpacing / 2 );
+
+        for( i = 1; i < eframe.rows; i++ )
+        {
+            int newY = KiROUND( yMin + ( rowSpacing * (double) i ) );
+            lines = new SCH_SHAPE( SHAPE_T::POLY );
+            lines->AddPoint( VECTOR2I( x1, newY ) );
+            lines->AddPoint( VECTOR2I( x2, newY ) );
+            aItems.push_back( lines );
+        }
+
+        char legendChar = 'A';
+
+        for( i = 0; i < eframe.rows; i++ )
+        {
+            SCH_TEXT* legendText = new SCH_TEXT();
+            legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
+            legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+            legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+            legendText->SetText( wxString( legendChar ) );
+            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
+                                             schIUScale.MilsToIU( 100 ) ) );
+            aItems.push_back( legendText );
+            legendChar++;
+            legendPosY += rowSpacing;
+        }
+    }
+
+    if( !( eframe.border_right == false ) )
+    {
+        lines = new SCH_SHAPE( SHAPE_T::POLY );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
+                                   yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
+                                   yMax - schIUScale.MilsToIU( 150 ) ) );
+        aItems.push_back( lines );
+
+        int i;
+        int height = yMax - yMin;
+        int x1 = xMax - schIUScale.MilsToIU( 150 );
+        int x2 = xMax;
+        int legendPosX = xMax - schIUScale.MilsToIU( 75 );
+        double rowSpacing = height / double( eframe.rows );
+        double legendPosY = yMin + ( rowSpacing / 2 );
+
+        for( i = 1; i < eframe.rows; i++ )
+        {
+            int newY = KiROUND( yMin + ( rowSpacing * (double) i ) );
+            lines = new SCH_SHAPE( SHAPE_T::POLY );
+            lines->AddPoint( VECTOR2I( x1, newY ) );
+            lines->AddPoint( VECTOR2I( x2, newY ) );
+            aItems.push_back( lines );
+        }
+
+        char legendChar = 'A';
+
+        for( i = 0; i < eframe.rows; i++ )
+        {
+            SCH_TEXT* legendText = new SCH_TEXT();
+            legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
+            legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+            legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+            legendText->SetText( wxString( legendChar ) );
+            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
+                                             schIUScale.MilsToIU( 100 ) ) );
+            aItems.push_back( legendText );
+            legendChar++;
+            legendPosY += rowSpacing;
+        }
+    }
+
+    if( !( eframe.border_top == false ) )
+    {
+        lines = new SCH_SHAPE( SHAPE_T::POLY );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
+                                   yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ),
+                                   yMin + schIUScale.MilsToIU( 150 ) ) );
+        aItems.push_back( lines );
+
+        int i;
+        int width = xMax - xMin;
+        int y1 = yMin;
+        int y2 = yMin + schIUScale.MilsToIU( 150 );
+        int legendPosY = yMin + schIUScale.MilsToIU( 75 );
+        double columnSpacing = width / double( eframe.columns );
+        double legendPosX = xMin + ( columnSpacing / 2 );
+
+        for( i = 1; i < eframe.columns; i++ )
+        {
+            int newX = KiROUND( xMin + ( columnSpacing * (double) i ) );
+            lines = new SCH_SHAPE( SHAPE_T::POLY );
+            lines->AddPoint( VECTOR2I( newX, y1 ) );
+            lines->AddPoint( VECTOR2I( newX, y2 ) );
+            aItems.push_back( lines );
+        }
+
+        char legendChar = '1';
+
+        for( i = 0; i < eframe.columns; i++ )
+        {
+            SCH_TEXT* legendText = new SCH_TEXT();
+            legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
+            legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+            legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+            legendText->SetText( wxString( legendChar ) );
+            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
+                                             schIUScale.MilsToIU( 100 ) ) );
+            aItems.push_back( legendText );
+            legendChar++;
+            legendPosX += columnSpacing;
+        }
+    }
+
+    if( !( eframe.border_bottom == false ) )
+    {
+        lines = new SCH_SHAPE( SHAPE_T::POLY );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
+                                   yMax - schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ),
+                                   yMax - schIUScale.MilsToIU( 150 ) ) );
+        aItems.push_back( lines );
+
+        int i;
+        int width = xMax - xMin;
+        int y1 = yMax - schIUScale.MilsToIU( 150 );
+        int y2 = yMax;
+        int legendPosY = yMax - schIUScale.MilsToIU( 75 );
+        double columnSpacing = width / double( eframe.columns );
+        double legendPosX = xMin + ( columnSpacing / 2 );
+
+        for( i = 1; i < eframe.columns; i++ )
+        {
+            int newX = KiROUND( xMin + ( columnSpacing * (double) i ) );
+            lines = new SCH_SHAPE( SHAPE_T::POLY );
+            lines->AddPoint( VECTOR2I( newX, y1 ) );
+            lines->AddPoint( VECTOR2I( newX, y2 ) );
+            aItems.push_back( lines );
+        }
+
+        char legendChar = '1';
+
+        for( i = 0; i < eframe.columns; i++ )
+        {
+            SCH_TEXT* legendText = new SCH_TEXT();
+            legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
+            legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+            legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+            legendText->SetText( wxString( legendChar ) );
+            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
+                                             schIUScale.MilsToIU( 100 ) ) );
+            aItems.push_back( legendText );
+            legendChar++;
+            legendPosX += columnSpacing;
+        }
+    }
 }
 
 
@@ -2247,7 +2409,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
     lines->AddPoint( VECTOR2I( xMin, yMin ) );
     aItems.push_back( lines );
 
-    if( !eframe.border_left )
+    if( !( eframe.border_left == false ) )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
         lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ),
@@ -2288,7 +2450,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         }
     }
 
-    if( !eframe.border_right )
+    if( !( eframe.border_right == false ) )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
         lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
@@ -2329,7 +2491,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         }
     }
 
-    if( !eframe.border_top )
+    if( !( eframe.border_top == false ) )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
         lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
@@ -2370,7 +2532,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         }
     }
 
-    if( !eframe.border_bottom )
+    if( !( eframe.border_bottom == false ) )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
         lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
