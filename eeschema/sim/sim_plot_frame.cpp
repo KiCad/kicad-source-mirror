@@ -149,6 +149,8 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_circuitModel.reset( new NGSPICE_CIRCUIT_MODEL( &m_schematicFrame->Schematic() ) );
 
+    Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME::menuExit ), this, wxID_EXIT );
+
     Bind( EVT_SIM_UPDATE, &SIM_PLOT_FRAME::onSimUpdate, this );
     Bind( EVT_SIM_REPORT, &SIM_PLOT_FRAME::onSimReport, this );
     Bind( EVT_SIM_STARTED, &SIM_PLOT_FRAME::onSimStarted, this );
@@ -1204,7 +1206,6 @@ void SIM_PLOT_FRAME::menuSaveWorkbookAs( wxCommandEvent& event )
     saveWorkbook( Prj().AbsolutePath( saveAsDlg.GetPath() ) );
 }
 
-
 void SIM_PLOT_FRAME::menuSaveImage( wxCommandEvent& event )
 {
     if( !GetCurrentPlot() )
@@ -1943,6 +1944,16 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
     case SHOW_CURSOR:   plot->EnableCursor( m_signal, true );  break;
     case HIDE_CURSOR:   plot->EnableCursor( m_signal, false ); break;
     }
+}
+
+
+void SIM_PLOT_FRAME::menuExit( wxCommandEvent& event )
+{
+    if( event.GetId() == wxID_EXIT )
+        Kiway().OnKiCadExit();
+
+    if( event.GetId() == wxID_CLOSE )
+        Close( false );
 }
 
 

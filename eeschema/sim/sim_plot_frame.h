@@ -249,12 +249,7 @@ private:
     void menuOpenWorkbook( wxCommandEvent& event ) override;
     void menuSaveWorkbook( wxCommandEvent& event ) override;
     void menuSaveWorkbookAs( wxCommandEvent& event ) override;
-
-    void menuExit( wxCommandEvent& event ) override
-    {
-        Close();
-    }
-
+    void menuExit( wxCommandEvent& event ) override;
     void menuSaveImage( wxCommandEvent& event ) override;
     void menuSaveCsv( wxCommandEvent& event ) override;
     void menuZoomIn( wxCommandEvent& event ) override;
