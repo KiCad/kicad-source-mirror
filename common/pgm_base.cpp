@@ -138,10 +138,10 @@ PGM_BASE::~PGM_BASE()
 
     for( int n = 0; n < m_argcUtf8; n++ )
     {
-        delete m_argvUtf8[n];
+        free( m_argvUtf8[n] );
     }
 
-    delete m_argvUtf8;
+    delete[] m_argvUtf8;
 }
 
 
