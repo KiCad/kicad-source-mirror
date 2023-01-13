@@ -446,8 +446,11 @@ private:
      *
      * If this subgraph contains hierarchical links, this method will descent the
      * hierarchy and propagate the connectivity across all linked sheets.
+     *
+     * @param aSubgraph is the subgraph being processed
+     * @param aForce prevents this routine from skipping subgraphs
      */
-    void propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph );
+    void propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, bool aForce );
 
     /**
      * Search for a matching bus member inside a bus connection

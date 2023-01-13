@@ -1534,7 +1534,17 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
         }
 
         // This call will handle descending the hierarchy and updating child subgraphs
-        propagateToNeighbors( subgraph );
+        propagateToNeighbors( subgraph, false );
+    }
+
+    // After processing and allowing some to be skipped if they have hierarchical
+    // pins connecting both up and down the hierarchy, we check to see if any of them
+    // have not been processed.  This would indicate that they do not have off-sheet connections
+    // but we still need to handle the subgraph
+    for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
+    {
+        if( subgraph->m_dirty )
+            propagateToNeighbors( subgraph, true );
     }
 
     // Handle buses that have been linked together somewhere by member (net) connections.
@@ -1798,7 +1808,7 @@ void CONNECTION_GRAPH::assignNetCodesToBus( SCH_CONNECTION* aConnection )
 }
 
 
-void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
+void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, bool aForce )
 {
     SCH_CONNECTION* conn = aSubgraph->m_driver_connection;
     std::vector<CONNECTION_SUBGRAPH*> search_list;
@@ -1970,7 +1980,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 
                     // Recurse onto this neighbor in case it needs to re-propagate
                     neighbor->m_dirty = true;
-                    propagateToNeighbors( neighbor );
+                    propagateToNeighbors( neighbor, aForce );
                 }
             }
         }
