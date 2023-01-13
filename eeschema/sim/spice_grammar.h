@@ -99,10 +99,14 @@ namespace SPICE_GRAMMAR
                                       TAO_PEGTL_ISTRING( "pchan" )>>,
                               plus<alpha>> {};
 
-    struct numparamBracedExpr : seq<one<'{'>,
-                                    star<sor<numparamBracedExpr,
-                                             not_one<'}'>>>,
-                                    one<'}'>> {};
+    struct vectorExpr : seq<one<'['>,
+                            star<not_one<']'>>,
+                            one<']'>> {};
+
+    struct bracedExpr : seq<one<'{'>,
+                            star<sor<bracedExpr,
+                                     not_one<'}'>>>,
+                            one<'}'>> {};
 
     // Ngspice has some heuristic logic to allow + and - in tokens. We replicate that here.
     struct tokenStart : seq<opt<one<'+', '-'>>,
@@ -120,7 +124,8 @@ namespace SPICE_GRAMMAR
     // Param names cannot be `token` because LTspice models contain spurious values without
     // parameter names, which we need to skip.
     struct param : identifier {};
-    struct paramValue : sor<numparamBracedExpr,
+    struct paramValue : sor<bracedExpr,
+                            vectorExpr,
                             token> {};
 
     struct paramValuePair : seq<param,
