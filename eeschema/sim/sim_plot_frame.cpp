@@ -755,9 +755,6 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
     std::vector<double> data_x = m_simulator->GetMagPlot( (const char*) xAxisName.c_str() );
     unsigned int        size = data_x.size();
 
-    if( data_x.empty() )
-        return false;
-
     std::vector<double> data_y;
 
     // Now, Y axis data
@@ -786,9 +783,6 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
         wxASSERT_MSG( false, wxT( "Unhandled plot type" ) );
         return false;
     }
-
-    if( data_y.size() != size )
-        return false;
 
     // If we did a two-source DC analysis, we need to split the resulting vector and add traces
     // for each input step
