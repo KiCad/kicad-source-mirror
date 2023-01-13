@@ -233,8 +233,10 @@ private:
     /// Get Eagle layer number by its name
     int eagle_layer_id( const wxString& aLayerName ) const;
 
+    void setKeepoutSettingsToZone( ZONE* aZone, int aLayer ) const;
+
     /// This PLUGIN only caches one footprint library, this determines which one.
-    void    cacheLib( const wxString& aLibraryPath );
+    void cacheLib( const wxString& aLibraryPath );
 
     /// get a file's  or dir's modification time.
     static wxDateTime getModificationTime( const wxString& aPath );

@@ -199,7 +199,7 @@ static wxString interpret_text( const wxString& aText )
 }
 
 
-static void setKeepoutSettingsToZone( ZONE* aZone, int aLayer )
+void EAGLE_PLUGIN::setKeepoutSettingsToZone( ZONE* aZone, int aLayer ) const
 {
     if( aLayer == EAGLE_LAYER::TRESTRICT || aLayer == EAGLE_LAYER::BRESTRICT )
     {
@@ -225,6 +225,17 @@ static void setKeepoutSettingsToZone( ZONE* aZone, int aLayer )
         aZone->SetDoNotAllowFootprints( false );
 
         aZone->SetLayerSet( LSET::AllCuMask() );
+    }
+    else    // copper pour cutout
+    {
+        aZone->SetIsRuleArea( true );
+        aZone->SetDoNotAllowVias( false );
+        aZone->SetDoNotAllowTracks( false );
+        aZone->SetDoNotAllowCopperPour( true );
+        aZone->SetDoNotAllowPads( false );
+        aZone->SetDoNotAllowFootprints( false );
+
+        aZone->SetLayerSet( kicad_layer( aLayer ) );
     }
 }
 
@@ -2279,9 +2290,10 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
         }
     }
 
-    if( p.layer == EAGLE_LAYER::TRESTRICT
-     || p.layer == EAGLE_LAYER::BRESTRICT
-     || p.layer == EAGLE_LAYER::VRESTRICT )
+    if( p.pour == EPOLYGON::CUTOUT
+        || p.layer == EAGLE_LAYER::TRESTRICT
+        || p.layer == EAGLE_LAYER::BRESTRICT
+        || p.layer == EAGLE_LAYER::VRESTRICT )
     {
         FP_ZONE* zone = new FP_ZONE( aFootprint );
         aFootprint->Add( zone, ADD_MODE::APPEND );
