@@ -31,9 +31,6 @@
 #include <am_primitive.h>
 #include <macros.h>
 
-#include <wx/debug.h>
-
-
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 extern double Evaluate( AM_PARAM_EVAL_STACK& aExp );
@@ -208,8 +205,10 @@ bool AM_PARAM::ReadParam( char*& aText  )
             // defered value defined later, in ADD command which define defered parameters
             ++aText;
             ivalue = ReadInt( aText, false );
+
             if( m_index < 1 )
                 SetIndex( ivalue );
+
             PushOperator( PUSHPARM, ivalue );
             found = true;
             break;

@@ -224,7 +224,7 @@ wxString GERBER_DRAW_ITEM::ShowGBRShape() const
         D_CODE* dcode = GetDcodeDescr();
 
         if( dcode && dcode->GetMacro() )
-            name << wxT(" ") << dcode->GetMacro()->name;
+            name << wxT(" ") << dcode->GetMacro()->m_AmName;
 
         return name;
     }

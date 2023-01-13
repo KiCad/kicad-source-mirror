@@ -92,15 +92,14 @@ enum AM_PRIMITIVE_ID {
 class AM_PRIMITIVE
 {
 public:
-    AM_PRIMITIVE_ID primitive_id;       ///< The primitive type
-    AM_PARAMS       params;             ///< A sequence of parameters used by
-                                        //   the primitive
+    AM_PRIMITIVE_ID m_Primitive_id;     ///< The primitive type
+    AM_PARAMS       m_Params;           ///< A sequence of parameters used by the primitive
     bool            m_GerbMetric;       // units for this primitive:
                                         // false = Inches, true = metric
 
     AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
     {
-        primitive_id = aId;
+        m_Primitive_id = aId;
         m_GerbMetric = aGerbMetric;
     }
 
@@ -163,8 +162,9 @@ typedef std::vector<AM_PRIMITIVE> AM_PRIMITIVES;
 /**
  * Support the "aperture macro" defined within standard RS274X.
  */
-struct APERTURE_MACRO
+class APERTURE_MACRO
 {
+public:
     /**
      * Usually, parameters are defined inside the aperture primitive using immediate mode or
      * deferred mode.
@@ -207,9 +207,7 @@ struct APERTURE_MACRO
                                  const VECTOR2I& aShapePos, bool aFilledShape );
 
     /**
-     * C
-     *
-     * alculate a value that can be used to evaluate the size of text when displaying the
+     * Calculate a value that can be used to evaluate the size of text when displaying the
      * D-Code of an item.
      *
      * Due to the complexity of a shape using many primitives one cannot calculate the "size" of
@@ -228,8 +226,9 @@ struct APERTURE_MACRO
         return m_boundingBox;
     }
 
-    wxString      name;             ///< The name of the aperture macro
-    AM_PRIMITIVES primitives;       ///< A sequence of AM_PRIMITIVEs
+    wxString      m_AmName;             ///< The name of the aperture macro as defined
+                                        ///< like %AMVB_RECTANGLE* (name is VB_RECTANGLE)
+    AM_PRIMITIVES m_PrimitivesList;     ///< A sequence of AM_PRIMITIVEs
 
     /*  A deferred parameter can be defined in aperture macro,
      *  but outside aperture primitives. Example
@@ -237,8 +236,9 @@ struct APERTURE_MACRO
      *  $4=$3/2*    parameter $4 is half value of parameter $3
      * m_localparamStack handle a list of local deferred parameters
      */
-    AM_PARAMS m_localparamStack;
+    AM_PARAMS m_LocalParamStack;
 
+private:
     SHAPE_POLY_SET m_shape;         ///< The shape of the item, calculated by GetApertureMacroShape
     BOX2I          m_boundingBox;   ///< The bounding box of the item, calculated by
                                     ///< GetApertureMacroShape.
@@ -254,7 +254,7 @@ struct APERTURE_MACRO_less_than
     // a "less than" test on two APERTURE_MACROs (.name wxStrings)
     bool operator()( const APERTURE_MACRO& am1, const APERTURE_MACRO& am2 ) const
     {
-        return am1.name.Cmp( am2.name ) < 0;  // case specific wxString compare
+        return am1.m_AmName.Cmp( am2.m_AmName ) < 0;  // case specific wxString compare
     }
 };
 

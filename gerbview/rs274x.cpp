@@ -35,6 +35,7 @@
 #include <macros.h>
 #include <X2_gerber_attributes.h>
 #include <gbr_metadata.h>
+#include <wx/log.h>
 
 extern int ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
@@ -852,7 +853,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
             APERTURE_MACRO am_lookup;
 
             while( *aText && *aText != '*' && *aText != ',' )
-                am_lookup.name.Append( *aText++ );
+                am_lookup.m_AmName.Append( *aText++ );
 
             // When an aperture definition is like %AMLINE2* 22,1,$1,$2,0,0,-45*
             // the ADDxx<MACRO_NAME> command has parameters, like %ADD14LINE2,0.8X0.5*%
@@ -869,7 +870,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                     {
                         msg.Printf( wxT( "RS274X: aperture macro %s has invalid template "
                                          "parameters\n" ),
-                                    TO_UTF8( am_lookup.name ) );
+                                    TO_UTF8( am_lookup.m_AmName ) );
                         AddMessageToList( msg );
                         ok = false;
                         break;
@@ -890,7 +891,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
             if( !pam )
             {
                 msg.Printf( wxT( "RS274X: aperture macro %s not found\n" ),
-                           TO_UTF8( am_lookup.name ) );
+                           TO_UTF8( am_lookup.m_AmName ) );
                 AddMessageToList( msg );
                 ok = false;
                 break;
@@ -986,7 +987,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             break;
         }
 
-        am.name.Append( *aText++ );
+        am.m_AmName.Append( *aText++ );
     }
 
     // Read aperture macro parameters
@@ -1019,18 +1020,20 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
         // all other symbols are illegal.
         if( *aText == '$' )  // local parameter declaration, inside the aperture macro
         {
-            am.m_localparamStack.push_back( AM_PARAM() );
-            AM_PARAM& param = am.m_localparamStack.back();
+            am.m_LocalParamStack.push_back( AM_PARAM() );
+            AM_PARAM& param = am.m_LocalParamStack.back();
             aText = GetNextLine(  aBuff, aBuffSize, aText, gerber_file );
+
             if( aText == nullptr)   // End of File
                 return false;
+
             param.ReadParam( aText );
             continue;
         }
         else if( !isdigit(*aText)  )     // Ill. symbol
         {
             msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": ill. symbol, line: \"%s\"" ),
-                        am.name, FROM_UTF8( aBuff ) );
+                        am.m_AmName, FROM_UTF8( aBuff ) );
             AddMessageToList( msg );
             primitive_type = AMP_COMMENT;
         }
@@ -1088,7 +1091,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
 
         default:
             msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Invalid primitive id code %d, line %d: \"%s\"" ),
-                        am.name, primitive_type, m_LineNum, FROM_UTF8( aBuff ) );
+                        am.m_AmName, primitive_type, m_LineNum, FROM_UTF8( aBuff ) );
             AddMessageToList( msg );
             return false;
         }
@@ -1097,14 +1100,14 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             continue;
 
         AM_PRIMITIVE prim( m_GerbMetric );
-        prim.primitive_id = (AM_PRIMITIVE_ID) primitive_type;
+        prim.m_Primitive_id = (AM_PRIMITIVE_ID) primitive_type;
         int ii;
 
         for( ii = 0; ii < paramCount && *aText && *aText != '*'; ++ii )
         {
-            prim.params.push_back( AM_PARAM() );
+            prim.m_Params.push_back( AM_PARAM() );
 
-            AM_PARAM& param = prim.params.back();
+            AM_PARAM& param = prim.m_Params.back();
 
             aText = GetNextLine( aBuff, aBuffSize, aText, gerber_file );
 
@@ -1119,27 +1122,27 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             // maybe some day we can throw an exception and track a line number
             msg.Printf( wxT( "RS274X: read macro descr type %d: read %d parameters, insufficient "
                              "parameters\n" ),
-                        prim.primitive_id, ii );
+                        prim.m_Primitive_id, ii );
             AddMessageToList( msg );
         }
 
         // there are more parameters to read if this is an AMP_OUTLINE
-        if( prim.primitive_id == AMP_OUTLINE )
+        if( prim.m_Primitive_id == AMP_OUTLINE )
         {
             // so far we have read [0]:exposure, [1]:#points, [2]:X start, [3]: Y start
             // Now read all the points, plus trailing rotation in degrees.
 
-            // params[1] is a count of polygon points, so it must be given
+            // m_Params[1] is a count of polygon points, so it must be given
             // in advance, i.e. be immediate.
-            wxASSERT( prim.params[1].IsImmediate() );
+            wxASSERT( prim.m_Params[1].IsImmediate() );
 
-            paramCount = (int) prim.params[1].GetValue( nullptr ) * 2 + 1;
+            paramCount = (int) prim.m_Params[1].GetValue( nullptr ) * 2 + 1;
 
             for( int jj = 0; jj < paramCount && *aText != '*'; ++jj )
             {
-                prim.params.push_back( AM_PARAM() );
+                prim.m_Params.push_back( AM_PARAM() );
 
-                AM_PARAM& param = prim.params.back();
+                AM_PARAM& param = prim.m_Params.back();
 
                 aText = GetNextLine( aBuff, aBuffSize, aText, gerber_file );
 
@@ -1151,14 +1154,14 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
         }
 
         // AMP_CIRCLE can have a optional parameter (rotation)
-        if( prim.primitive_id == AMP_CIRCLE && aText && *aText != '*' )
+        if( prim.m_Primitive_id == AMP_CIRCLE && aText && *aText != '*' )
         {
-            prim.params.push_back( AM_PARAM() );
-            AM_PARAM& param = prim.params.back();
+            prim.m_Params.push_back( AM_PARAM() );
+            AM_PARAM& param = prim.m_Params.back();
             param.ReadParam( aText );
         }
 
-        am.primitives.push_back( prim );
+        am.m_PrimitivesList.push_back( prim );
     }
 
     m_aperture_macros.insert( am );
