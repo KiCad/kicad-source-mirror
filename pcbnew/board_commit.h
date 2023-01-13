@@ -77,7 +77,7 @@ private:
 
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
-    void dirtyIntersectingZones( BOARD_ITEM* item );
+    void dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType );
 
 private:
     TOOL_MANAGER*  m_toolMgr;

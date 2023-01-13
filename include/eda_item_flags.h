@@ -29,8 +29,7 @@
 
 #include <cstdint>
 
-// These define are used for the .m_flags and .m_UndoRedoStatus member of the
-// class EDA_ITEM
+// These define are used for the .m_flags member of the class EDA_ITEM
 //
 // NB: DO NOT ADD FLAGS ANYWHERE BUT AT THE END: THE FLAG-SET IS STORED AS AN INTEGER IN FILES.
 //
@@ -65,8 +64,8 @@
 #define SHOW_ELEC_TYPE (1 << 25)   ///< Show pin electrical type.  Shared with IS_ROLLOVER.
 #define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
 
-#define DP_COUPLED     (1 << 27)   ///< item is coupled with another item making a differential pair
-                                   ///< (applies to segments only)
+#define IS_MODIFIED_CHILD (1 << 27)///< when a child is promoted to its parent for a COMMIT, this
+                                   ///< flag indicates the modified child
 #define UR_TRANSIENT   (1 << 28)   ///< indicates the item is owned by the undo/redo stack
 
 #define IS_DANGLING    (1 << 29)   ///< indicates a pin is dangling

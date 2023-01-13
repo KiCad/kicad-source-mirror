@@ -79,14 +79,26 @@ BOARD* BOARD_COMMIT::GetBoard() const
 
 COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 {
-    // if aItem belongs a footprint, the full footprint will be saved
-    // because undo/redo does not handle "sub items" modifications
-    if( aItem && aItem->Type() != PCB_FOOTPRINT_T && aChangeType == CHT_MODIFY )
-    {
-        EDA_ITEM* item = aItem->GetParent();
+    aItem->ClearFlags( IS_MODIFIED_CHILD );
 
-        if( item && item->Type() == PCB_FOOTPRINT_T )  // means aItem belongs a footprint
-            aItem = item;
+    // If aItem belongs a footprint, the full footprint will be saved because undo/redo does
+    // not handle "sub items" modifications.  This has implications for auto-zone-refill, so
+    // we need to store a bit more information.
+    if( aItem && aChangeType == CHT_MODIFY )
+    {
+        if( aItem->Type() == PCB_FOOTPRINT_T )
+        {
+            static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        child->SetFlags( IS_MODIFIED_CHILD );
+                    } );
+        }
+        else if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() ) )
+        {
+            aItem->SetFlags( IS_MODIFIED_CHILD );
+            aItem = fp;
+        }
     }
 
     return COMMIT::Stage( aItem, aChangeType );
@@ -105,7 +117,7 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 }
 
 
-void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
+void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
 {
     wxCHECK( item, /* void */ );
 
@@ -119,7 +131,8 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
         static_cast<FOOTPRINT*>( item )->RunOnChildren(
                 [&]( BOARD_ITEM* child )
                 {
-                    dirtyIntersectingZones( child );
+                    if( aChangeType != CHT_MODIFY || ( child->GetFlags() & IS_MODIFIED_CHILD ) )
+                        dirtyIntersectingZones( child, aChangeType );
                 } );
     }
     else if( item->Type() == PCB_GROUP_T )
@@ -127,7 +140,7 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
         static_cast<PCB_GROUP*>( item )->RunOnChildren(
                 [&]( BOARD_ITEM* child )
                 {
-                    dirtyIntersectingZones( child );
+                    dirtyIntersectingZones( child, aChangeType );
                 } );
     }
     else
@@ -295,7 +308,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             }
 
             if( autofillZones && boardItem->Type() != PCB_MARKER_T )
-                dirtyIntersectingZones( boardItem );
+                dirtyIntersectingZones( boardItem, changeType );
 
             if( view && boardItem->Type() != PCB_NETINFO_T )
                 view->Add( boardItem );
@@ -322,7 +335,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 parentGroup->RemoveItem( boardItem );
 
             if( autofillZones )
-                dirtyIntersectingZones( boardItem );
+                dirtyIntersectingZones( boardItem, changeType );
 
             switch( boardItem->Type() )
             {
@@ -462,8 +475,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( autofillZones )
             {
-                dirtyIntersectingZones( static_cast<BOARD_ITEM*>( ent.m_copy ));   // before
-                dirtyIntersectingZones( boardItem );                               // after
+                dirtyIntersectingZones( static_cast<BOARD_ITEM*>( ent.m_copy ), changeType );   // before
+                dirtyIntersectingZones( boardItem, changeType );                                // after
             }
 
             if( view )
