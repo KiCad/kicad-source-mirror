@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2023-01-13 08:10+0000\n"
+"PO-Revision-Date: 2023-01-17 17:11+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/"
 "master-source/et/>\n"
@@ -29934,7 +29934,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:55
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:46
 msgid "CrtYd_Front"
-msgstr ""
+msgstr "CrtYd_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:60
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:648
@@ -29951,7 +29951,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:71
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:62
 msgid "Fab_Front"
-msgstr ""
+msgstr "Fab_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:74
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:638
@@ -29968,7 +29968,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:83
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:74
 msgid "Adhes_Front"
-msgstr ""
+msgstr "Adhes_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
@@ -29997,7 +29997,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:95
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
 msgid "SoldP_Front"
-msgstr ""
+msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:103
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:94
@@ -30007,7 +30007,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:107
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
 msgid "SilkS_Front"
-msgstr ""
+msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:115
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
@@ -30017,7 +30017,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:119
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:110
 msgid "Mask_Front"
-msgstr ""
+msgstr "Mask_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:118
@@ -30027,7 +30027,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:131
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:122
 msgid "Front_layer"
-msgstr ""
+msgstr "Front_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:132
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:123
@@ -30374,152 +30374,152 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:147
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:138
 msgid "In1"
-msgstr ""
+msgstr "In1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:161
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:152
 msgid "In2"
-msgstr ""
+msgstr "In2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:175
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:166
 msgid "In3"
-msgstr ""
+msgstr "In3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:189
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:180
 msgid "In4"
-msgstr ""
+msgstr "In4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:203
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:194
 msgid "In5"
-msgstr ""
+msgstr "In5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:217
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:208
 msgid "In6"
-msgstr ""
+msgstr "In6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:231
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:222
 msgid "In7"
-msgstr ""
+msgstr "In7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:245
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:236
 msgid "In8"
-msgstr ""
+msgstr "In8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:259
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:250
 msgid "In9"
-msgstr ""
+msgstr "In9"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:273
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:264
 msgid "In10"
-msgstr ""
+msgstr "In10"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:287
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:278
 msgid "In11"
-msgstr ""
+msgstr "In11"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:301
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:292
 msgid "In12"
-msgstr ""
+msgstr "In12"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:315
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:306
 msgid "In13"
-msgstr ""
+msgstr "In13"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:329
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:320
 msgid "In14"
-msgstr ""
+msgstr "In14"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:343
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:334
 msgid "In15"
-msgstr ""
+msgstr "In15"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:357
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:348
 msgid "In16"
-msgstr ""
+msgstr "In16"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:371
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:362
 msgid "In17"
-msgstr ""
+msgstr "In17"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:385
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:376
 msgid "In18"
-msgstr ""
+msgstr "In18"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:399
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:390
 msgid "In19"
-msgstr ""
+msgstr "In19"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:413
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:404
 msgid "In20"
-msgstr ""
+msgstr "In20"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:427
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:418
 msgid "In21"
-msgstr ""
+msgstr "In21"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:441
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:432
 msgid "In22"
-msgstr ""
+msgstr "In22"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:455
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:446
 msgid "In23"
-msgstr ""
+msgstr "In23"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:469
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:460
 msgid "In24"
-msgstr ""
+msgstr "In24"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:483
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:474
 msgid "In25"
-msgstr ""
+msgstr "In25"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:497
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:488
 msgid "In26"
-msgstr ""
+msgstr "In26"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:511
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:502
 msgid "In27"
-msgstr ""
+msgstr "In27"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:525
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:516
 msgid "In28"
-msgstr ""
+msgstr "In28"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:539
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:530
 msgid "In29"
-msgstr ""
+msgstr "In29"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:553
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:544
 msgid "In30"
-msgstr ""
+msgstr "In30"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:556
@@ -30539,7 +30539,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:587
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:578
 msgid "SoldM_Back"
-msgstr ""
+msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:595
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:586
@@ -30549,7 +30549,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:599
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:590
 msgid "SilkS_Back"
-msgstr ""
+msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:607
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
@@ -30559,7 +30559,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:611
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:602
 msgid "SoldP_Back"
-msgstr ""
+msgstr "SoldP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:619
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:610
@@ -30569,7 +30569,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:623
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:614
 msgid "Adhes_Back"
-msgstr ""
+msgstr "Adhes_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:631
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:622
@@ -30579,17 +30579,17 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:635
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:626
 msgid "Fab_Back"
-msgstr ""
+msgstr "Fab_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:645
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:636
 msgid "CrtYd_Back"
-msgstr ""
+msgstr "CrtYd_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:655
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:646
 msgid "Pcb_Edges"
-msgstr ""
+msgstr "Pcb_Edges"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:658
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
@@ -30599,7 +30599,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr ""
+msgstr "Margin"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:668
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
@@ -30609,7 +30609,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:675
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:666
 msgid "Eco1"
-msgstr ""
+msgstr "Eco1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:678
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:688
@@ -30625,7 +30625,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:685
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:676
 msgid "Eco2"
-msgstr ""
+msgstr "Eco2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:693
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:684
@@ -30650,7 +30650,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:719
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:710
 msgid "User1"
-msgstr ""
+msgstr "User1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:722
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:732
@@ -30676,42 +30676,42 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:729
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:720
 msgid "User2"
-msgstr ""
+msgstr "User2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:739
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:730
 msgid "User3"
-msgstr ""
+msgstr "User3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:749
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:740
 msgid "User4"
-msgstr ""
+msgstr "User4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:759
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:750
 msgid "User5"
-msgstr ""
+msgstr "User5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:769
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:760
 msgid "User6"
-msgstr ""
+msgstr "User6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:779
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:770
 msgid "User7"
-msgstr ""
+msgstr "User7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:789
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:780
 msgid "User8"
-msgstr ""
+msgstr "User8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:799
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:790
 msgid "User9"
-msgstr ""
+msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
 msgid ""
@@ -31206,7 +31206,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:114
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:175
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:103 pcbnew/pad.cpp:1009
 #: pcbnew/pcb_track.cpp:912 pcbnew/pcb_track.cpp:1276
@@ -33029,7 +33029,7 @@ msgstr ""
 
 #: pcbnew/generate_footprint_info.cpp:122
 msgid "doc url"
-msgstr ""
+msgstr "doc url"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Centimeter"
@@ -33229,7 +33229,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:131
 msgid "GenCAD..."
-msgstr ""
+msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:131
 msgid "Export GenCAD board representation"
@@ -33237,7 +33237,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:133
 msgid "VRML..."
-msgstr ""
+msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:133
 msgid "Export VRML 3D board representation"
@@ -33245,7 +33245,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:135
 msgid "IDFv3..."
-msgstr ""
+msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:135
 msgid "Export IDF 3D board representation"
@@ -33253,7 +33253,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 msgid "STEP..."
-msgstr ""
+msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 msgid "Export STEP 3D board representation"
@@ -33261,7 +33261,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "SVG..."
-msgstr ""
+msgstr "SVG..."
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "Export SVG board representation"
@@ -33277,7 +33277,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:144
 msgid "Hyperlynx..."
-msgstr ""
+msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:151
 msgid "Footprints to Library..."
@@ -33788,7 +33788,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:996
 msgid "BGA"
-msgstr ""
+msgstr "BGA"
 
 #: pcbnew/pad.cpp:997
 msgid "Fiducial global"
@@ -35560,7 +35560,7 @@ msgstr ""
 #: pcbnew/router/pns_meander_placer.cpp:288
 #: pcbnew/router/pns_meander_skew_placer.cpp:173
 msgid "?"
-msgstr ""
+msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:600 pcbnew/router/pns_kicad_iface.cpp:671
 #: pcbnew/router/router_tool.cpp:756
@@ -35886,7 +35886,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:2517
 msgid "45-degree"
-msgstr ""
+msgstr "45°"
 
 #: pcbnew/router/router_tool.cpp:2518
 msgid "45-degree rounded"
@@ -35894,7 +35894,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:2519
 msgid "90-degree"
-msgstr ""
+msgstr "90°"
 
 #: pcbnew/router/router_tool.cpp:2520
 msgid "90-degree rounded"
@@ -36804,7 +36804,7 @@ msgstr ""
 
 #: pcbnew/tools/drc_tool.cpp:193
 msgid "DRC"
-msgstr ""
+msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:95
 msgid "Positioning Tools"
@@ -37669,7 +37669,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Gerbers (.gbr)..."
-msgstr ""
+msgstr "Gerbers (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Generate Gerbers for fabrication"
@@ -37709,7 +37709,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "BOM..."
-msgstr ""
+msgstr "BOM..."
 
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "Create bill of materials from board"
@@ -39659,7 +39659,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "bitmap2component"
-msgstr ""
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -39675,7 +39675,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
-msgstr ""
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -39687,7 +39687,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview"
-msgstr ""
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -39696,7 +39696,7 @@ msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
-msgstr ""
+msgstr "EDA Suite"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
@@ -39736,7 +39736,7 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Circuit board"
