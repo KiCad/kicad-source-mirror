@@ -8,22 +8,22 @@
 # VEDAT YAMAN <weddat@gmail.com>, 2021.
 # Gökhan Koçmarlı <gokhankocmarli@gmail.com>, 2022.
 # prometheus <181903185@ogrenci.ibu.edu.tr>, 2022.
-# Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>, 2022.
+# Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2022-07-04 20:14+0000\n"
+"PO-Revision-Date: 2023-01-17 17:11+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -111,19 +111,19 @@ msgid "Net %s\tNet class %s"
 msgstr "Ağ %s\tAğSınıfı %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "Ayak şekli"
+msgstr "ayak %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:709
-#, c-format
+#, c-format, fuzzy
 msgid "Rule area %s\t"
-msgstr ""
+msgstr "Kural alanı %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:711
 #, fuzzy, c-format
 msgid "Zone %s\t"
-msgstr "Bölge"
+msgstr "Bölge %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:464
 msgid "Load OpenGL: board"
@@ -278,28 +278,32 @@ msgstr "&Tercihler"
 #: pcbnew/widgets/appearance_controls.cpp:2730
 #, fuzzy, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Görünüm Alanları (Alt+Sekme(tab)):"
+msgstr "Görünüm alanları (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2739
 #, fuzzy
 msgid "Save viewport..."
-msgstr "Görünümü Kaydet"
+msgstr "Görünüm alanını kaydet..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 #: pcbnew/widgets/appearance_controls.cpp:2740
 #, fuzzy
 msgid "Delete viewport..."
-msgstr "Görünüm penceresini seçin:"
+msgstr "Görünüm alanını sil..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Save and restore view orientation and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Görünüm yönünü ve yakınlaştırmayı kaydedin ve geri yükleyin.\n"
+"Seçiciyi etkinleştirmek için %s+Tab tuşlarını kullanın.\n"
+" %s adresini basılı tutarken art arda Sekmeler açılır pencerede görünüm "
+"alanları arasında geçiş yapacaktır."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -337,7 +341,7 @@ msgstr "Görünümler"
 #: pcbnew/widgets/appearance_controls.cpp:2836
 #, fuzzy
 msgid "Delete Viewport"
-msgstr "Görünüm penceresini seçin:"
+msgstr "Görünüm Alanı Sil"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:571
 #: pcbnew/widgets/appearance_controls.cpp:2837
@@ -536,19 +540,16 @@ msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr "'Yüzey monte' özelliği olan 3D modelleri aç/kapat"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle unspecified 3D models"
-msgstr "Diğer 3B modelleri gizle/göster"
+msgstr "Belirtilmemiş 3B modellere geçiş yap"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "'Diğer' tip bileşenler için 3D modelleri aç/kapat"
+msgstr "'Belirtilmemiş' tip bileşenler için 3B modellere geçiş yap"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
-#, fuzzy
 msgid "Toggle 3D models not in pos file"
-msgstr "'Diğer' tip bileşenler için 3D modelleri aç/kapat"
+msgstr "Pos dosyasında olmayan 3B modellere geçiş yap"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
@@ -1068,9 +1069,8 @@ msgid "Opacity"
 msgstr "Matlık"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "Kart Kalınlığı: "
+msgstr "Kart Kalınlığı"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:152
@@ -1220,7 +1220,7 @@ msgstr "Aç..."
 #: bitmap2component/bitmap2cmp_gui.cpp:219
 #, fuzzy
 msgid "Load source image"
-msgstr "Lehim maskesi katmanlarını göster"
+msgstr "Kaynak görüntüyü yükle"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1228,9 +1228,8 @@ msgid "Quit"
 msgstr "Kapat"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:229
-#, fuzzy
 msgid "Quit Image Converter"
-msgstr "KiCad Görüntü Dönüştürücüsü"
+msgstr "Resim Dönüştürücüsünden(Image Converter) Çık"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:594
@@ -1295,19 +1294,16 @@ msgid "Greyscale Picture"
 msgstr "Gri Tonlamalı Resim"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:30
-#, fuzzy
 msgid "Black && White Picture"
-msgstr "Siyah Beyaz Resim"
+msgstr "Siyah && Beyaz Resim"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:38
-#, fuzzy
 msgid "Image Information"
-msgstr "Bitmap Bilgileri"
+msgstr "Resim Bilgileri"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
-#, fuzzy
 msgid "Image size:"
-msgstr "Sayfa boyutu:"
+msgstr "Resim boyutu:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1322,9 +1318,8 @@ msgid "pixels"
 msgstr "piksel"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
-#, fuzzy
 msgid "Image PPI:"
-msgstr "Bitmap PPI:"
+msgstr "Resim PPI:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
@@ -1341,7 +1336,7 @@ msgstr "bit"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
 #, fuzzy
 msgid "Load Source Image"
-msgstr "Görüntü Seç"
+msgstr "Kaynak Resmi Yükle"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
 #, fuzzy
@@ -5533,6 +5528,7 @@ msgid "Select Preferred Editor"
 msgstr "Tercih Edilen Düzenleyiciyi Seç"
 
 #: common/pgm_base.cpp:354
+#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -5541,6 +5537,13 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad, kullanıcı tabanındaki kritik hataların daha etkili bir şekilde "
+"tanımlanmasına yardımcı olmak ve iyileştirmelere rehberlik etmek için "
+"işlevsellik profiline yardımcı olmak amacıyla çökmeleri ve özel olay "
+"verilerini geliştiricilere anonim olarak bildirebilir. \n"
+"Gönüllü olarak katılmayı seçerseniz, KiCad çökmeler veya olaylar meydana "
+"geldiğinde söz konusu raporları göndermeyi otomatik olarak halledecektir. \n"
+"Şematik veya PCB gibi tasarım dosyalarınız bu süreçte paylaşılmaz."
 
 #: common/pgm_base.cpp:361
 #, fuzzy
@@ -8446,9 +8449,8 @@ msgid "Violations will not be checked or reported"
 msgstr "İhlaller kontrol edilmeyecek veya bildirilmeyecek"
 
 #: eeschema/dialogs/dialog_erc.cpp:678
-#, fuzzy
 msgid "Edit pin-to-pin conflict map..."
-msgstr "Pin-to-pin çakışma haritasını düzenle..."
+msgstr "Pin pin'e çakışma haritasını düzenle..."
 
 #: eeschema/dialogs/dialog_erc.cpp:682 pcbnew/dialogs/dialog_drc.cpp:639
 msgid "Edit violation severities..."
@@ -8491,7 +8493,7 @@ msgid ""
 "***** Sheet %s\n"
 msgstr ""
 "\n"
-"Sayfa %s\n"
+"***** Sayfa %s\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:1006
 #, c-format
@@ -9924,9 +9926,8 @@ msgstr "Veri Yollarını Geçir"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
-#, fuzzy
 msgid "Alternate Pin Name"
-msgstr "Alternatif Pin Adı"
+msgstr "Alternatif Bacak Adı"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:203
 #: eeschema/dialogs/dialog_symbol_properties.cpp:346
@@ -9952,9 +9953,8 @@ msgid "This symbol only has one unit. This control has no effect."
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:325
-#, fuzzy
 msgid "Alternate pin definitions must have a name."
-msgstr "Alanların bir adı olmalıdır."
+msgstr "Alternatif ayak tanımlarının bir adı olmalıdır."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:345
 #, c-format
@@ -9986,7 +9986,7 @@ msgstr "&Bacak Numarası:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr ""
+msgstr "Ayak numarası: 1 ila 4 ASCII harf ve/veya rakam"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
 msgid "&X position:"
@@ -10003,20 +10003,20 @@ msgstr "B&acak uzunluğu:"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:83
 #, fuzzy
 msgid "N&ame text size:"
-msgstr "Ad Metin Boyutu"
+msgstr "&Ad Metin Boyutu"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:90
-#, fuzzy
 msgid "Number text si&ze:"
-msgstr "Numara Metin boyutu"
+msgstr "Ra&kam Metin boyutu:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:97
 msgid "Electrical type:"
 msgstr "Elektriksel tipi:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:99
+#, fuzzy
 msgid "Used by the ERC."
-msgstr ""
+msgstr "ERC tarafından kullanılır."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:106
 msgid "Graphic style:"
@@ -10032,9 +10032,8 @@ msgid "Preview:"
 msgstr "Önizleme:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
-#, fuzzy
 msgid "Alternate pin definitions"
-msgstr "Alternatif Atama"
+msgstr "Alternatif bacak atama"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:103
 msgid "Pin Properties"
@@ -10310,7 +10309,7 @@ msgstr "Sayfayı yazdır %d"
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 #, fuzzy
 msgid "Print (or not) the Frame references."
-msgstr "Çerçeve referanslarını yazdırın."
+msgstr "Çerçeve referanslarını yazdırın (ya da yazdırmayın)."
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:46
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:209
@@ -11283,7 +11282,6 @@ msgid "Add Field"
 msgstr "Alan Ekle"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1074
-#, fuzzy
 msgid "Field must have a name."
 msgstr "Alanların bir adı olmalıdır."
 
@@ -14983,6 +14981,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Yüklenen şematik dosyada, eksik sembol örneği verileriyle sonuçlanan eski "
+"bir dosya sürümünden hiyerarşik sayfalar var.  Bu, yüklenen şemadaki tüm "
+"sembollerin varsayılan örnek ayarını kullanmasına veya kütüphane sembol "
+"ayarlarına geri dönmesine neden olur.  Bu şematik dosyayı kullanan projeyi "
+"yüklemek ve en son dosya sürümüne kaydetmek bu sorunu çözecektir.\n"
+"\n"
+"Devam etmek istiyor musunuz?"
 
 #: eeschema/sheet.cpp:248 eeschema/sheet.cpp:276 eeschema/sheet.cpp:317
 #: eeschema/sheet.cpp:366 eeschema/sheet.cpp:427
@@ -22338,6 +22343,7 @@ msgid " > 500 V"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:113
+#, fuzzy
 msgid ""
 "*  B1 - Internal Conductors\n"
 "*  B2 - External Conductors, uncoated, sea level to 3050 m\n"
@@ -22349,6 +22355,15 @@ msgid ""
 "*  A7 - External Component lead termination, with conformal coating (any "
 "elevation)"
 msgstr ""
+"* B1 - Dahili İletkenler\n"
+"* B2 - Harici İletkenler, kaplamasız, deniz seviyesinden 3050 m'ye kadar\n"
+"* B3 - Harici İletkenler, kaplamasız, 3050 m üzeri\n"
+"* B4 - Harici İletkenler, kalıcı polimer kaplamalı (herhangi bir yükseklik)\n"
+"* A5 - Harici İletkenler, montaj üzerinde konformal kaplama ile (herhangi "
+"bir yükseklik)\n"
+"* A6 - Harici Bileşen ucu/sonlandırması, kaplanmamış\n"
+"* A7 - Harici Bileşen uç sonlandırması, konformal kaplama ile (herhangi bir "
+"yükseklik)"
 
 #: pcb_calculator/calculator_panels/panel_eseries.cpp:55
 #: pcb_calculator/calculator_panels/panel_eseries.cpp:141
@@ -29200,6 +29215,14 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"Bu, bu ayak ile lehim pastası arasındaki yüzde cinsinden yerel boşluk "
+"oranıdır.\n"
+"10 değeri, boşluk değerinin ayak boyutunun yüzde 10'u olduğu anlamına gelir."
+"\n"
+"0 ise, ayak izi değeri veya genel değer kullanılır.\n"
+"Nihai boşluk değeri, bu değer ile boşluk değerinin toplamıdır.\n"
+"Negatif bir değer, ayak boyutundan daha küçük bir maske boyutu anlamına "
+"gelir."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:699
 msgid "Pad connection:"
@@ -36299,7 +36322,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1945
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The CADSTAR template '%s' has thermal reliefs in the original design but the "
 "spoke width (%.2f mm) is thinner than the minimum thickness of the zone "
@@ -36307,6 +36330,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"CADSTAR şablonu '%s' orijinal tasarımda termal kabartmalara sahiptir, ancak "
+"tel genişliği (%.2f mm) bölgenin minimum kalınlığından (%.2f mm) daha "
+"incedir. KiCad, bölgenin minimum kalınlığının korunmasını gerektirir. Bu "
+"nedenle, minimum kalınlık yeni tel genişliği olarak uygulanmıştır ve "
+"bölgeler bir dahaki sefere doldurulduğunda uygulanacaktır."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1992
 #, c-format
