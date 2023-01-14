@@ -396,6 +396,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 {
 #if defined( __WXMAC__ )
     // Set the application locale to the system default
+    wxLogNull noLog;
     wxLocale loc;
     loc.Init();
 #endif
