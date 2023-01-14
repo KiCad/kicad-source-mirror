@@ -40,6 +40,7 @@
 #include <erc.h>
 #include <wildcards_and_files_ext.h>
 #include <plotters/plotters_pslike.h>
+#include <drawing_sheet/ds_data_model.h>
 
 #include <settings/settings_manager.h>
 
@@ -86,6 +87,14 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRen
 
     aRenderSettings->SetDashLengthRatio( aSch->Settings().m_DashedLineDashRatio );
     aRenderSettings->SetGapLengthRatio( aSch->Settings().m_DashedLineGapRatio );
+
+    // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
+    // If empty, or not existing, the default drawing sheet is loaded.
+    wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                    aSch->Prj().GetProjectPath() );
+
+    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
+        wxFprintf( stderr, _( "Error loading drawing sheet." ) );
 }
 
 
@@ -130,7 +139,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     settings.m_pageSizeSelect = PAGE_SIZE_AUTO;
     settings.m_outputFile = aPdfJob->m_outputFile;
 
-    schPlotter->Plot( PLOT_FORMAT::PDF, settings, renderSettings.get(), nullptr );
+    schPlotter->Plot( PLOT_FORMAT::PDF, settings, renderSettings.get(), this );
 
     return CLI::EXIT_CODES::OK;
 }
@@ -166,7 +175,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     settings.m_outputDirectory = aSvgJob->m_outputDirectory;
     settings.m_useBackgroundColor = aSvgJob->m_useBackgroundColor;
 
-    schPlotter->Plot( PLOT_FORMAT::SVG, settings, renderSettings.get(), nullptr );
+    schPlotter->Plot( PLOT_FORMAT::SVG, settings, renderSettings.get(), this );
 
     return CLI::EXIT_CODES::OK;
 }
