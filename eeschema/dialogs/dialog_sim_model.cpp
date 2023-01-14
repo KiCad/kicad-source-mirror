@@ -341,6 +341,12 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
         }
     }
 
+    if( curModel().GetType() == SIM_MODEL::TYPE::RAWSPICE )
+    {
+        wxString code = m_codePreview->GetText().Trim( true ).Trim( false );
+        curModel().SetParamValue( "model", std::string( code.ToUTF8() ) );
+    }
+
     curModel().SetIsStoredInValue( m_saveInValueCheckbox->GetValue() );
 
     curModel().WriteFields( m_fields );
@@ -557,22 +563,14 @@ template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab()
 {
     wxString   text;
-    wxString   pin( _( "Pin" ) );
     SPICE_ITEM item;
-    item.modelName = m_modelNameChoice->GetStringSelection();
 
-    for( size_t ii = 1; ii <= m_symbol.GetFullPinCount(); ++ii )
-    {
-        item.pinNumbers.push_back( fmt::format( "{}", ii ) );
-        item.pinNetNames.push_back( pin.ToStdString() + fmt::format( "{}", ii ) );
-    }
+    item.modelName = m_modelNameChoice->GetStringSelection();
 
     if( m_useInstanceModelRadioButton->GetValue() || item.modelName == "" )
         item.modelName = m_fields.at( REFERENCE_FIELD ).GetText();
 
-    SIM_MODEL& model = curModel();
-
-    text << model.SpiceGenerator().Preview( item );
+    text << curModel().SpiceGenerator().Preview( item );
 
     m_codePreview->SetText( text );
     m_codePreview->SelectNone();

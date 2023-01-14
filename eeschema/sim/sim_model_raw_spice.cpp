@@ -61,16 +61,26 @@ std::string SPICE_GENERATOR_RAW_SPICE::ItemPins( const SPICE_ITEM& aItem ) const
 {
     std::string result;
 
-    for( const SIM_MODEL::PIN& pin : GetPins() )
+    if( !GetPins().empty() )
     {
-        auto it = std::find( aItem.pinNumbers.begin(), aItem.pinNumbers.end(),
-                             pin.symbolPinNumber );
-
-        if( it != aItem.pinNumbers.end() )
+        for( const SIM_MODEL::PIN& pin : GetPins() )
         {
-            long symbolPinIndex = std::distance( aItem.pinNumbers.begin(), it );
-            result.append( fmt::format( " {}", aItem.pinNetNames.at( symbolPinIndex ) ) );
+            auto it = std::find( aItem.pinNumbers.begin(), aItem.pinNumbers.end(),
+                                 pin.symbolPinNumber );
+
+            if( it != aItem.pinNumbers.end() )
+            {
+                long symbolPinIndex = std::distance( aItem.pinNumbers.begin(), it );
+                result.append( fmt::format( " {}", aItem.pinNetNames.at( symbolPinIndex ) ) );
+            }
         }
+    }
+    else
+    {
+        // If we don't know what pins the model has, just output the symbol's pins
+
+        for( const std::string& pinNetName : aItem.pinNetNames )
+            result.append( fmt::format( " {}", pinNetName ) );
     }
 
     return result;

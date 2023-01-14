@@ -318,7 +318,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer81->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
-	bSizer8->Add( bSizer81, 0, wxEXPAND|wxLEFT, 5 );
+	bSizer8->Add( bSizer81, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
 	this->SetSizer( bSizer8 );
