@@ -509,6 +509,7 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
 void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 {
     m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
+    m_originalFootprintCopy->SetParent( nullptr );
 
     m_footprintNameWhenLoaded = aFootprint->GetFPID().GetLibItemName();
 
