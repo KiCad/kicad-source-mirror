@@ -2248,8 +2248,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
             tempPin->ClearFlags( IS_DANGLING );
     }
 
-    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert(),
-            aSymbol->GetDNP() );
+    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert(), aSymbol->GetDNP() );
 
     for( unsigned i = 0; i < tempPins.size(); ++i )
     {
@@ -2595,6 +2594,9 @@ void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
         for( const SCH_FIELD& field : aSheet->GetFields() )
             draw( &field, aLayer, false );
     }
+
+    if( isFieldsLayer( aLayer ) )
+        return;
 
     if( aLayer == LAYER_HIERLABEL || aLayer == LAYER_SELECTION_SHADOWS )
     {
