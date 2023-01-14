@@ -416,7 +416,7 @@ void CN_CLUSTER::Add( CN_ITEM* item )
     if( m_originNet <= 0 )
         m_originNet = netCode;
 
-    if( item->Parent()->Type() == PCB_PAD_T )
+    if( item->Parent()->Type() == PCB_PAD_T && !static_cast<PAD*>( item->Parent() )->IsFreePad() )
     {
         if( m_netRanks.count( netCode ) )
         {

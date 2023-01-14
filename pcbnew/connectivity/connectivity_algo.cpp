@@ -553,19 +553,14 @@ void CN_CONNECTIVITY_ALGO::LocalBuild( const std::vector<BOARD_ITEM*>& aItems )
 
 void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMode )
 {
-    bool skipConflicts = ( aMode == PROPAGATE_MODE::SKIP_CONFLICTS );
+    bool resolveConflicts = ( aMode != PROPAGATE_MODE::SKIP_CONFLICTS );
 
-    wxLogTrace( wxT( "CN" ), wxT( "propagateConnections: propagate skip conflicts? %d" ),
-                skipConflicts );
+    wxLogTrace( wxT( "CN" ), wxT( "propagateConnections: resolve conflicts? %d" ),
+                resolveConflicts );
 
     for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
     {
-        if( skipConflicts && cluster->IsConflicting() )
-        {
-            wxLogTrace( wxT( "CN" ), wxT( "Conflicting nets in cluster %p; skipping update" ),
-                        cluster.get() );
-        }
-        else if( cluster->IsOrphaned() )
+        if( cluster->IsOrphaned() )
         {
             wxLogTrace( wxT( "CN" ), wxT( "Skipping orphaned cluster %p [net: %s]" ),
                         cluster.get(),
@@ -575,10 +570,18 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
         {
             if( cluster->IsConflicting() )
             {
-                wxLogTrace( wxT( "CN" ), wxT( "Conflicting nets in cluster %p; chose %d (%s)" ),
-                            cluster.get(),
-                            cluster->OriginNet(),
-                            cluster->OriginNetName() );
+                if( resolveConflicts )
+                {
+                    wxLogTrace( wxT( "CN" ), wxT( "Conflicting nets in cluster %p; chose %d (%s)" ),
+                                cluster.get(),
+                                cluster->OriginNet(),
+                                cluster->OriginNetName() );
+                }
+                else
+                {
+                    wxLogTrace( wxT( "CN" ), wxT( "Conflicting nets in cluster %p; skipping update" ),
+                                cluster.get() );
+                }
             }
 
             // normal cluster: just propagate from the pads
@@ -586,7 +589,10 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
 
             for( CN_ITEM* item : *cluster )
             {
-                if( item->CanChangeNet() )
+                bool isFreePad = item->Parent()->Type() == PCB_PAD_T
+                                    && static_cast<PAD*>( item->Parent() )->IsFreePad();
+
+                if( ( resolveConflicts && item->CanChangeNet() ) || isFreePad )
                 {
                     if( item->Valid() && item->Parent()->GetNetCode() != cluster->OriginNet() )
                     {
