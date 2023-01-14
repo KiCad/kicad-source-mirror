@@ -106,7 +106,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	sbSizer7 = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Position") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerPos;
-	fgSizerPos = new wxFlexGridSizer( 4, 3, 1, 0 );
+	fgSizerPos = new wxFlexGridSizer( 4, 3, 3, 0 );
 	fgSizerPos->AddGrowableCol( 1 );
 	fgSizerPos->AddGrowableRow( 2 );
 	fgSizerPos->SetFlexibleDirection( wxBOTH );
@@ -383,7 +383,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 
 	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryIDLabel->Wrap( -1 );
-	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 2 );
+	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
 
 	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
@@ -407,7 +407,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	bSizerButtons->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
 
 
-	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
 	this->SetSizer( m_GeneralBoxSizer );

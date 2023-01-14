@@ -341,7 +341,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	mainSizer->Add( bSizerBottom, 0, wxEXPAND, 5 );
+	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( mainSizer );

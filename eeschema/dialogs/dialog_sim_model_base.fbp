@@ -1657,6 +1657,16 @@
                                                 </object>
                                             </object>
                                             <object class="sizeritem" expanded="1">
+                                                <property name="border">5</property>
+                                                <property name="flag">wxEXPAND</property>
+                                                <property name="proportion">0</property>
+                                                <object class="spacer" expanded="1">
+                                                    <property name="height">4</property>
+                                                    <property name="permission">protected</property>
+                                                    <property name="width">0</property>
+                                                </object>
+                                            </object>
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">6</property>
                                                 <property name="flag">wxALL</property>
                                                 <property name="proportion">0</property>
@@ -1725,7 +1735,7 @@
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">0</property>
                                                 <object class="spacer" expanded="1">
-                                                    <property name="height">3</property>
+                                                    <property name="height">2</property>
                                                     <property name="permission">protected</property>
                                                     <property name="width">0</property>
                                                 </object>

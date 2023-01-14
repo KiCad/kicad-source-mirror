@@ -410,7 +410,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	bSizer16->Add( m_sdbSizerStdButtons, 1, wxEXPAND|wxALL, 5 );
 
 
-	m_GeneralBoxSizer->Add( bSizer16, 0, wxEXPAND, 5 );
+	m_GeneralBoxSizer->Add( bSizer16, 0, wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( m_GeneralBoxSizer );

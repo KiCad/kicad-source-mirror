@@ -201,11 +201,14 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	bSizerMargins->Add( m_modelNotebook, 1, wxEXPAND|wxALL, 5 );
 
+
+	bSizerMargins->Add( 0, 4, 0, wxEXPAND, 5 );
+
 	m_saveInValueCheckbox = new wxCheckBox( m_modelPanel, wxID_ANY, _("Save {} in Value field as \"{}\""), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_saveInValueCheckbox, 0, wxALL, 6 );
 
 
-	bSizerMargins->Add( 0, 3, 0, wxEXPAND, 5 );
+	bSizerMargins->Add( 0, 2, 0, wxEXPAND, 5 );
 
 
 	bSizerPanel->Add( bSizerMargins, 1, wxEXPAND, 5 );
