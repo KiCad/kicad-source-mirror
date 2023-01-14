@@ -1542,16 +1542,25 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     if( einstance.part.find_first_not_of( wxT( "#" ) ) != 0 )
         reference.Prepend( wxT( "UNK" ) );
 
-    symbol->GetField( REFERENCE_FIELD )->SetText( reference );
+    SCH_FIELD* referenceField = symbol->GetField( REFERENCE_FIELD );
+    referenceField->SetText( reference );
+    referenceField->SetVisible( part->GetFieldById( REFERENCE_FIELD )->IsVisible() );
 
-    wxString value = ( epart->value ) ? *epart->value : kisymbolname;
+    SCH_FIELD* valueField = symbol->GetField( VALUE_FIELD );
+    bool       userValue = m_userValue.at( libIdSymbolName );
+    valueField->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
 
-    symbol->GetField( VALUE_FIELD )->SetText( value );
+    if( userValue && epart->value )
+    {
+        valueField->SetText( *epart->value );
+    }
+    else
+    {
+        valueField->SetText( kisymbolname );
 
-    // Set the visibility of fields.
-    symbol->GetField( REFERENCE_FIELD )->SetVisible(
-            part->GetFieldById( REFERENCE_FIELD )->IsVisible() );
-    symbol->GetField( VALUE_FIELD )->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
+        if( userValue )
+            valueField->SetVisible( false );
+    }
 
     for( const auto& a : epart->attribute )
     {
@@ -1789,6 +1798,11 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
                               m_properties.get() );
             aEagleLibrary->KiCadSymbols.insert( libName, libSymbol.release() );
 
+            // Store information on whether the value of VALUE_FIELD for a part should be
+            // part/@value or part/@deviceset + part/@device.
+            m_userValue.emplace( std::make_pair( libName,
+                                                 edeviceset.uservalue == true ) );
+
             deviceNode = deviceNode->GetNext();
         } // devicenode
 
@@ -1892,17 +1906,27 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_S
         {
             std::unique_ptr<LIB_TEXT> libtext( loadSymbolText( aSymbol, currentNode,
                                                                aGateNumber ) );
+            const wxString&           text = libtext->GetText();
+            const wxString            textUpper = text.Upper();
 
-            if( libtext->GetText().Upper() == wxT( ">NAME" ) )
+            if( textUpper == wxT( ">NAME" ) )
             {
                 LIB_FIELD* field = aSymbol->GetFieldById( REFERENCE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
+
+                if( text != textUpper )
+                    field->SetVisible( false );
+
                 foundName = true;
             }
-            else if( libtext->GetText().Upper() == wxT( ">VALUE" ) )
+            else if( textUpper == wxT( ">VALUE" ) )
             {
                 LIB_FIELD* field = aSymbol->GetFieldById( VALUE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
+
+                if( text != textUpper )
+                    field->SetVisible( false );
+
                 foundValue = true;
             }
             else
@@ -2451,7 +2475,6 @@ void SCH_EAGLE_PLUGIN::loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* a
     aField->SetBold( aText->IsBold() );
     aField->SetVertJustify( aText->GetVertJustify() );
     aField->SetHorizJustify( aText->GetHorizJustify() );
-    aField->SetVisible( true );
 }
 
 

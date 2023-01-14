@@ -232,6 +232,7 @@ private:
 
     EPART_MAP                         m_partlist;
     std::map<wxString, EAGLE_LIBRARY> m_eagleLibs;
+    std::unordered_map<wxString, bool>   m_userValue;         ///< deviceset/@uservalue for device.
 
     SCH_PLUGIN::SCH_PLUGIN_RELEASER   m_pi;                ///< PI to create KiCad symbol library.
     std::unique_ptr<STRING_UTF8_MAP>     m_properties;        ///< Library plugin properties.
