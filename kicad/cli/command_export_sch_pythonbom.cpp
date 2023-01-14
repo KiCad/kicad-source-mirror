@@ -31,6 +31,8 @@
 CLI::EXPORT_SCH_PYTHONBOM_COMMAND::EXPORT_SCH_PYTHONBOM_COMMAND() :
         EXPORT_PCB_BASE_COMMAND( "python-bom" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Export the legacy bom xml format used in the "
+                                                "schematic editor with python scripts" ) ) );
 }
 
 

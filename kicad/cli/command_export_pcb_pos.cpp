@@ -41,6 +41,8 @@
 
 CLI::EXPORT_PCB_POS_COMMAND::EXPORT_PCB_POS_COMMAND() : EXPORT_PCB_BASE_COMMAND( "pos" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Export footprint position file" ) ) );
+
     m_argParser.add_argument( ARG_SIDE )
             .default_value( std::string( "both" ) )
             .help( UTF8STDSTR( _(
