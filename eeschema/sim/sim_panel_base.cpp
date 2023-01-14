@@ -30,21 +30,19 @@
 #include "ngspice_circuit_model.h"
 
 
-SIM_PANEL_BASE::SIM_PANEL_BASE() : m_simCommand( wxEmptyString )
+SIM_PANEL_BASE::SIM_PANEL_BASE() :
+        m_simCommand( wxEmptyString ),
+        m_simOptions( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS )
 {
 }
 
 
-SIM_PANEL_BASE::SIM_PANEL_BASE( const wxString& aCommand ) : m_simCommand( aCommand )
-{
-}
-
-
-SIM_PANEL_BASE::SIM_PANEL_BASE( const wxString& aCommand, wxWindow* parent, wxWindowID id,
-                                const wxPoint& pos, const wxSize& size, long style,
+SIM_PANEL_BASE::SIM_PANEL_BASE( const wxString& aCommand, int aOptions, wxWindow* parent,
+                                wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
                                 const wxString& name ) :
         wxWindow( parent, id, pos, size, style, name ),
-        m_simCommand( aCommand )
+        m_simCommand( aCommand ),
+        m_simOptions( aOptions )
 {
 }
 
@@ -75,10 +73,10 @@ SIM_TYPE SIM_PANEL_BASE::GetType() const
 }
 
 
-SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aCommand, wxWindow* parent, wxWindowID id,
-                                    const wxPoint& pos, const wxSize& size, long style,
-                                    const wxString& name ) :
-        SIM_PANEL_BASE( aCommand, parent, id, pos, size, style, name )
+SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent,
+                                    wxWindowID id, const wxPoint& pos, const wxSize& size,
+                                    long style, const wxString& name ) :
+        SIM_PANEL_BASE( aCommand, aOptions, parent, id, pos, size, style, name )
 {
     m_sizer = new wxBoxSizer( wxVERTICAL );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );

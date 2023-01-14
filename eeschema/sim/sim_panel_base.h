@@ -39,8 +39,7 @@ class SIM_PANEL_BASE : public wxWindow
 
 public:
     SIM_PANEL_BASE();
-    SIM_PANEL_BASE( const wxString& aCommand );
-    SIM_PANEL_BASE( const wxString& aCommand, wxWindow* parent, wxWindowID id,
+    SIM_PANEL_BASE( const wxString& aCommand, int aOptions, wxWindow* parent, wxWindowID id,
                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                     long style = 0, const wxString& name = wxPanelNameStr );
     virtual ~SIM_PANEL_BASE();
@@ -64,15 +63,19 @@ protected:
         m_simCommand = aSimCommand;
     }
 
+    const int getSimOptions() const { return m_simOptions; }
+    void setSimOptions( int aOptions ) { m_simOptions = aOptions; }
+
 private:
     wxString m_simCommand;
+    int      m_simOptions;
 };
 
 
 class SIM_NOPLOT_PANEL : public SIM_PANEL_BASE
 {
 public:
-    SIM_NOPLOT_PANEL( const wxString& aCommand, wxWindow* parent, wxWindowID id,
+    SIM_NOPLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent, wxWindowID id,
                       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                       long style = 0, const wxString& name = wxPanelNameStr );
 

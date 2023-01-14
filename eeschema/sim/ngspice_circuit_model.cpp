@@ -71,7 +71,7 @@ wxString NGSPICE_CIRCUIT_MODEL::GetSheetSimCommand()
 
     ReadDirectives( 0 );
 
-    for( const std::string& directive : GetDirectives() )
+    for( const wxString& directive : GetDirectives() )
     {
         if( IsSimCommand( directive ) )
             simCmd += wxString::Format( wxT( "%s\r\n" ), directive );

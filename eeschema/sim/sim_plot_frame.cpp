@@ -454,15 +454,7 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     if( aSimCommand != wxEmptyString )
         m_circuitModel->SetSimCommandOverride( aSimCommand );
 
-    // Make .save all and .probe all permanent for now.
-    int options = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS
-                    | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES
-                    | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
-
-    if( !m_simulator->Settings()->GetFixIncludePaths() )
-        options &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
-
-    m_circuitModel->SetOptions( options );
+    m_circuitModel->SetSimOptions( getCurrentOptions() );
 
     wxString           errors;
     WX_STRING_REPORTER reporter( &errors );
@@ -515,7 +507,7 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 }
 
 
-SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
+SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand, int aOptions )
 {
     SIM_PANEL_BASE* plotPanel = nullptr;
     SIM_TYPE        simType   = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
@@ -523,7 +515,7 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
         SIM_PLOT_PANEL* panel;
-        panel = new SIM_PLOT_PANEL( aSimCommand, m_workbook, this, wxID_ANY );
+        panel = new SIM_PLOT_PANEL( aSimCommand, aOptions, m_workbook, this, wxID_ANY );
 
         panel->GetPlotWin()->EnableMouseWheelPan(
                 Pgm().GetCommonSettings()->m_Input.scroll_modifier_zoom != 0 );
@@ -533,7 +525,7 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
     else
     {
         SIM_NOPLOT_PANEL* panel;
-        panel = new SIM_NOPLOT_PANEL( aSimCommand, m_workbook, wxID_ANY );
+        panel = new SIM_NOPLOT_PANEL( aSimCommand, aOptions, m_workbook, wxID_ANY );
         plotPanel = dynamic_cast<SIM_PANEL_BASE*>( panel );
     }
 
@@ -674,8 +666,8 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType )
 
     if( !plotPanel || plotPanel->GetType() != simType )
     {
-        plotPanel =
-                dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( m_circuitModel->GetSimCommand() ) );
+        plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( m_circuitModel->GetSimCommand(),
+                                                                 m_circuitModel->GetSimOptions() ) );
     }
 
     wxASSERT( plotPanel );
@@ -949,9 +941,30 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
     if( !file.Open() )
         return false;
 
+    long     version = 1;
+    wxString firstLine = file.GetFirstLine();
+    wxString plotCountLine;
+
+    if( firstLine.StartsWith( wxT( "version " ) ) )
+    {
+        if( !firstLine.substr( 8 ).ToLong( &version ) )
+        {
+            DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
+            file.Close();
+
+            return false;
+        }
+
+        plotCountLine = file.GetNextLine();
+    }
+    else
+    {
+        plotCountLine = firstLine;
+    }
+
     long plotsCount;
 
-    if( !file.GetFirstLine().ToLong( &plotsCount ) ) // GetFirstLine instead of GetNextLine
+    if( !plotCountLine.ToLong( &plotsCount ) ) // GetFirstLine instead of GetNextLine
     {
         DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
         file.Close();
@@ -971,8 +984,33 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
             return false;
         }
 
-        wxString        simCommand = UnescapeString( file.GetNextLine() );
-        NewPlotPanel( simCommand );
+        wxString          command = UnescapeString( file.GetNextLine() );
+        wxString          simCommand;
+        int               simOptions = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
+        wxStringTokenizer tokenizer( command, wxT( "\r\n" ), wxTOKEN_STRTOK );
+
+        if( version >= 2 )
+        {
+            simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
+            simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
+            simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+        }
+
+        while( tokenizer.HasMoreTokens() )
+        {
+            wxString line = tokenizer.GetNextToken();
+
+            if( line.StartsWith( wxT( ".kicad adjustpaths" ) ) )
+                simOptions |= NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
+            else if( line.StartsWith( wxT( ".save all" ) ) )
+                simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
+            else if( line.StartsWith( wxT( ".probe alli" ) ) )
+                simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+            else
+                simCommand += line + wxT( "\n" );
+        }
+
+        NewPlotPanel( simCommand, simOptions );
         StartSimulation( simCommand );
 
         // Perform simulation, so plots can be added with values
@@ -1062,6 +1100,8 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
         file.Create();
     }
 
+    file.AddLine( wxT( "version 2" ) );
+
     file.AddLine( wxString::Format( wxT( "%llu" ), m_workbook->GetPageCount() ) );
 
     for( size_t i = 0; i < m_workbook->GetPageCount(); i++ )
@@ -1075,7 +1115,20 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
         }
 
         file.AddLine( wxString::Format( wxT( "%d" ), basePanel->GetType() ) );
-        file.AddLine( EscapeString( m_workbook->GetSimCommand( basePanel ), CTX_LINE ) );
+
+        wxString command = m_workbook->GetSimCommand( basePanel );
+        int      options = m_workbook->GetSimOptions( basePanel );
+
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS )
+            command += wxT( "\n.kicad adjustpaths" );
+
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
+            command += wxT( "\n.save all" );
+
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS )
+            command += wxT( "\n.probe alli" );
+
+        file.AddLine( EscapeString( command, CTX_LINE ) );
 
         const SIM_PLOT_PANEL* plotPanel = dynamic_cast<const SIM_PLOT_PANEL*>( basePanel );
 
@@ -1161,7 +1214,7 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
     SIM_TYPE type = m_circuitModel->GetSimType();
 
     if( SIM_PANEL_BASE::IsPlottable( type ) )
-        NewPlotPanel( m_circuitModel->GetSimCommand() );
+        NewPlotPanel( m_circuitModel->GetSimCommand(), m_circuitModel->GetSimOptions() );
 }
 
 
@@ -1489,7 +1542,14 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
     }
 
     if( m_workbook->GetPageIndex( plotPanelWindow ) != wxNOT_FOUND )
+    {
         dlg.SetSimCommand( m_workbook->GetSimCommand( plotPanelWindow ) );
+        dlg.SetSimOptions( m_workbook->GetSimOptions( plotPanelWindow ) );
+    }
+    else
+    {
+        dlg.SetSimOptions( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS );
+    }
 
     if( dlg.ShowModal() == wxID_OK )
     {
@@ -1501,12 +1561,14 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
             oldCommand = wxString();
 
         const wxString& newCommand = dlg.GetSimCommand();
+        int             newOptions = dlg.GetSimOptions();
         SIM_TYPE        newSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( newCommand );
 
         if( !plotPanelWindow )
         {
             m_circuitModel->SetSimCommandOverride( newCommand );
-            plotPanelWindow = NewPlotPanel( newCommand );
+            m_circuitModel->SetSimOptions( newOptions );
+            plotPanelWindow = NewPlotPanel( newCommand, newOptions );
         }
         // If it is a new simulation type, open a new plot.  For the DC sim, check if sweep
         // source type has changed (char 4 will contain 'v', 'i', 'r' or 't'.
@@ -1514,7 +1576,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
                     || ( newSimType == ST_DC
                          && oldCommand.Lower().GetChar( 4 ) != newCommand.Lower().GetChar( 4 ) ) )
         {
-            plotPanelWindow = NewPlotPanel( newCommand );
+            plotPanelWindow = NewPlotPanel( newCommand, newOptions );
         }
         else
         {
@@ -1523,6 +1585,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
             // Update simulation command in the current plot
             m_workbook->SetSimCommand( plotPanelWindow, newCommand );
+            m_workbook->SetSimOptions( plotPanelWindow, newOptions );
         }
 
         m_simulator->Init();
@@ -1581,67 +1644,70 @@ void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
 }
 
 
-void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
+class NETLIST_VIEW_DIALOG : public DIALOG_SHIM
 {
-    class NETLIST_VIEW_DIALOG : public DIALOG_SHIM
+public:
+    enum
     {
-    public:
-        enum
-        {
-            MARGIN_LINE_NUMBERS
-        };
-
-        void onClose( wxCloseEvent& evt )
-        {
-            wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
-        }
-
-        NETLIST_VIEW_DIALOG( wxWindow* parent, const wxString& source) :
-                DIALOG_SHIM( parent, wxID_ANY, _( "SPICE Netlist" ), wxDefaultPosition,
-                             wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
-        {
-            wxStyledTextCtrl* textCtrl = new wxStyledTextCtrl( this, wxID_ANY );
-            textCtrl->SetMinSize( wxSize( 600, 400 ) );
-
-            textCtrl->SetMarginWidth( MARGIN_LINE_NUMBERS, 50 );
-            textCtrl->StyleSetForeground( wxSTC_STYLE_LINENUMBER, wxColour( 75, 75, 75 ) );
-            textCtrl->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
-            textCtrl->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
-
-            wxFont fixedFont = KIUI::GetMonospacedUIFont();
-
-            for( int i = 0; i < wxSTC_STYLE_MAX; ++i )
-                textCtrl->StyleSetFont( i, fixedFont );
-
-            textCtrl->StyleClearAll();  // Addresses a bug in wx3.0 where styles are not correctly set
-
-            textCtrl->SetWrapMode( wxSTC_WRAP_WORD );
-
-            textCtrl->SetText( source );
-
-            textCtrl->SetLexer( wxSTC_LEX_SPICE );
-
-            wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-            sizer->Add( textCtrl, 1, wxEXPAND | wxALL, 5 );
-            SetSizer( sizer );
-
-            Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ),
-                     nullptr, this );
-
-            m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( textCtrl, wxT( "{}" ), false );
-
-            finishDialogSettings();
-        }
-
-        std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
+        MARGIN_LINE_NUMBERS
     };
 
+    void onClose( wxCloseEvent& evt )
+    {
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
+    }
+
+    NETLIST_VIEW_DIALOG( wxWindow* parent, const wxString& source) :
+            DIALOG_SHIM( parent, wxID_ANY, _( "SPICE Netlist" ), wxDefaultPosition,
+                         wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+    {
+        wxStyledTextCtrl* textCtrl = new wxStyledTextCtrl( this, wxID_ANY );
+        textCtrl->SetMinSize( wxSize( 600, 400 ) );
+
+        textCtrl->SetMarginWidth( MARGIN_LINE_NUMBERS, 50 );
+        textCtrl->StyleSetForeground( wxSTC_STYLE_LINENUMBER, wxColour( 75, 75, 75 ) );
+        textCtrl->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
+        textCtrl->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
+
+        wxFont fixedFont = KIUI::GetMonospacedUIFont();
+
+        for( int i = 0; i < wxSTC_STYLE_MAX; ++i )
+            textCtrl->StyleSetFont( i, fixedFont );
+
+        textCtrl->StyleClearAll();  // Addresses a bug in wx3.0 where styles are not correctly set
+
+        textCtrl->SetWrapMode( wxSTC_WRAP_WORD );
+
+        textCtrl->SetText( source );
+
+        textCtrl->SetLexer( wxSTC_LEX_SPICE );
+
+        wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+        sizer->Add( textCtrl, 1, wxEXPAND | wxALL, 5 );
+        SetSizer( sizer );
+
+        Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ),
+                 nullptr, this );
+
+        m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( textCtrl, wxT( "{}" ), false );
+
+        finishDialogSettings();
+    }
+
+    std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
+};
+
+
+void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
+{
     if( m_schematicFrame == nullptr || m_simulator == nullptr )
         return;
 
     wxString           errors;
     WX_STRING_REPORTER reporter( &errors );
     STRING_FORMATTER   formatter;
+
+    m_circuitModel->SetSimOptions( getCurrentOptions() );
     m_circuitModel->GetNetlist( &formatter, reporter );
 
     NETLIST_VIEW_DIALOG dlg( this, errors.IsEmpty() ? formatter.GetString() : errors );
@@ -1769,7 +1835,10 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     SIM_PANEL_BASE* plotPanelWindow = getCurrentPlotWindow();
 
     if( !plotPanelWindow || plotPanelWindow->GetType() != simType )
-        plotPanelWindow = NewPlotPanel( m_circuitModel->GetSimCommand() );
+    {
+        plotPanelWindow = NewPlotPanel( m_circuitModel->GetSimCommand(),
+                                        m_circuitModel->GetSimOptions() );
+    }
 
     // Sometimes (for instance with a directive like wrdata my_file.csv "my_signal")
     // the simulator is in idle state (simulation is finished), but still running, during

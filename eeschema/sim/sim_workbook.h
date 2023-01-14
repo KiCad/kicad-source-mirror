@@ -63,6 +63,17 @@ public:
         return aPlotPanel->getSimCommand();
     }
 
+    void SetSimOptions( SIM_PANEL_BASE* aPlotPanel, int aOptions )
+    {
+        aPlotPanel->setSimOptions( aOptions );
+        setModified();
+    }
+
+    int GetSimOptions( const SIM_PANEL_BASE* aPlotPanel )
+    {
+        return aPlotPanel->getSimOptions();
+    }
+
     void ClrModified();
     bool IsModified() const { return m_modified; }
 

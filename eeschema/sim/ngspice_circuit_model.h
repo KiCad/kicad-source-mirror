@@ -49,9 +49,9 @@ class NGSPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_SPICE, public SIMULATION_M
 public:
     NGSPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic ) :
             NETLIST_EXPORTER_SPICE( aSchematic ),
-            m_options( 0 )
-    {
-    }
+            m_options( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS )
+    {}
+
     virtual ~NGSPICE_CIRCUIT_MODEL() {}
 
     /**
@@ -64,10 +64,8 @@ public:
      */
     SIM_PLOT_TYPE VectorToSignal( const std::string& aVector, wxString& aSignal ) const;
 
-    void SetOptions( int aOptions )
-    {
-        m_options = aOptions;
-    }
+    void SetSimOptions( int aOptions ) { m_options = aOptions; }
+    int  GetSimOptions() const { return m_options; }
 
     bool GetNetlist( OUTPUTFORMATTER* aFormatter, REPORTER& aReporter )
     {

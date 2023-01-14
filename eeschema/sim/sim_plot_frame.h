@@ -69,10 +69,11 @@ public:
     /**
      * Create a new plot panel for a given simulation type and adds it to the main notebook.
      *
-     * @param aSimType is requested simulation type.
+     * @param aSimCommand is requested simulation command.
+     * @param aSimOptions netlisting options
      * @return The new plot panel.
      */
-    SIM_PANEL_BASE* NewPlotPanel( wxString aSimCommand );
+    SIM_PANEL_BASE* NewPlotPanel( wxString aSimCommand, int aSimOptions );
 
     /**
      * Add a voltage plot for a given net name.
@@ -239,6 +240,14 @@ private:
             return m_workbook->GetSimCommand( getCurrentPlotWindow() );
     }
 
+    int getCurrentOptions() const
+    {
+        if( getCurrentPlotWindow() == nullptr )
+            return m_circuitModel->GetSimOptions();
+        else
+            return m_workbook->GetSimOptions( getCurrentPlotWindow() );
+    }
+
     /**
      * Return X axis for a given simulation type.
      */
@@ -313,13 +322,13 @@ private:
     wxToolBarToolBase* m_toolTune;
     wxToolBarToolBase* m_toolSettings;
 
-    SCH_EDIT_FRAME* m_schematicFrame;
+    SCH_EDIT_FRAME*                        m_schematicFrame;
     std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
-    std::shared_ptr<SPICE_SIMULATOR> m_simulator;
-    SIM_THREAD_REPORTER* m_reporter;
+    std::shared_ptr<SPICE_SIMULATOR>       m_simulator;
+    SIM_THREAD_REPORTER*                   m_reporter;
 
     ///< List of currently displayed tuners
-    std::list<TUNER_SLIDER*> m_tuners;
+    std::list<TUNER_SLIDER*>               m_tuners;
 
     // Right click context menu for signals in the listbox
     class SIGNAL_CONTEXT_MENU : public wxMenu

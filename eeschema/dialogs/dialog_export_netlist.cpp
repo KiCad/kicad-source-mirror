@@ -351,13 +351,13 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpice()
                                               _( "Save all voltages" ) );
     page->m_SaveAllVoltages->SetToolTip( _( "Write a directive to save all voltages (.save all)" ) );
     page->m_SaveAllVoltages->SetValue( settings.m_SpiceSaveAllVoltages );
-    page->m_RightBoxSizer->Add( page->m_SaveAllVoltages, 0, wxBOTTOM | wxRIGHT, 5 );
+    page->m_LeftBoxSizer->Add( page->m_SaveAllVoltages, 0, wxBOTTOM | wxRIGHT, 5 );
 
     page->m_SaveAllCurrents = new wxCheckBox( page, ID_SAVE_ALL_CURRENTS,
                                               _( "Save all currents" ) );
     page->m_SaveAllCurrents->SetToolTip( _( "Write a directive to save all currents (.probe alli)" ) );
     page->m_SaveAllCurrents->SetValue( settings.m_SpiceSaveAllCurrents );
-    page->m_RightBoxSizer->Add( page->m_SaveAllCurrents, 0, wxBOTTOM | wxRIGHT, 5 );
+    page->m_LeftBoxSizer->Add( page->m_SaveAllCurrents, 0, wxBOTTOM | wxRIGHT, 5 );
 
 
     wxString simulatorCommand = settings.m_SpiceCommandString;

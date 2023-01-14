@@ -620,19 +620,27 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
     if( aNetlistOptions & OPTION_SAVE_ALL_CURRENTS )
         aFormatter.Print( 0, ".probe alli\n" );
 
-    for( const std::string& directive : m_directives )
+    for( const wxString& directive : m_directives )
     {
-#ifdef KICAD_SPICE
-        if( NGSPICE_CIRCUIT_MODEL::IsSimCommand( directive ) )
+        bool simCommand = false;
+
+        if( directive.StartsWith( "." ) )
         {
-            if( aNetlistOptions & OPTION_SIM_COMMAND )
-                aFormatter.Print( 0, "%s\n", directive.c_str() );
+            wxString candidate = directive.Upper();
+
+            simCommand = ( candidate.StartsWith( wxT( ".AC" ) )
+                        || candidate.StartsWith( wxT( ".DC" ) )
+                        || candidate.StartsWith( wxT( ".TRAN" ) )
+                        || candidate.StartsWith( wxT( ".OP" ) )
+                        || candidate.StartsWith( wxT( ".DISTO" ) )
+                        || candidate.StartsWith( wxT( ".NOISE" ) )
+                        || candidate.StartsWith( wxT( ".PZ" ) )
+                        || candidate.StartsWith( wxT( ".SENS" ) )
+                        || candidate.StartsWith( wxT( ".TF" ) ) );
         }
-        else
-#endif
-        {
-            aFormatter.Print( 0, "%s\n", directive.c_str() );
-        }
+
+        if( !simCommand || ( aNetlistOptions & OPTION_SIM_COMMAND ) )
+            aFormatter.Print( 0, "%s\n", UTF8( directive ).c_str() );
     }
 }
 

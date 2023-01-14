@@ -123,7 +123,7 @@ public:
      */
     const SPICE_ITEM* FindItem( const std::string& aRefName ) const;
 
-    const std::vector<std::string>& GetDirectives() { return m_directives; }
+    const std::vector<wxString>& GetDirectives() { return m_directives; }
 
 protected:
     void ReadDirectives( unsigned aNetlistOptions );
@@ -150,14 +150,13 @@ private:
     void writeModels( OUTPUTFORMATTER& aFormatter );
     void writeItems( OUTPUTFORMATTER& aFormatter );
 
-    SIM_LIB_MGR                      m_libMgr;             ///< Holds libraries and models
-    NAME_GENERATOR                   m_modelNameGenerator; ///< Generates unique model names
-    NAME_GENERATOR                   m_netNameGenerator;   ///< Generates unique net names (only unique for NC nets for now)
-    std::vector<std::string>         m_directives;         ///< Spice directives found in the schematic sheet
-    //std::map<std::string, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
-    std::set<wxString>               m_rawIncludes;        ///< include directives found in symbols
-    std::set<std::string>            m_nets;
-    std::list<SPICE_ITEM>            m_items;              ///< Items representing schematic symbols in Spice world
+    SIM_LIB_MGR             m_libMgr;             ///< Holds libraries and models
+    NAME_GENERATOR          m_modelNameGenerator; ///< Generates unique model names
+    NAME_GENERATOR          m_netNameGenerator;   ///< Generates unique net names (only unique for NC nets for now)
+    std::vector<wxString>   m_directives;         ///< Spice directives found in the schematic sheet
+    std::set<wxString>      m_rawIncludes;        ///< include directives found in symbols
+    std::set<std::string>   m_nets;
+    std::list<SPICE_ITEM>   m_items;              ///< Items representing schematic symbols in Spice world
 };
 
 

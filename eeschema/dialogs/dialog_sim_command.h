@@ -28,6 +28,7 @@
 #define DIALOG_SIM_COMMAND_H
 
 #include "dialog_sim_command_base.h"
+#include <netlist_exporter_spice.h>
 #include <sim/spice_value.h>
 
 #include <wx/valnum.h>
@@ -55,6 +56,29 @@ public:
             m_simCommand = aCommand;
 
         return res;
+    }
+
+    int GetSimOptions() const
+    {
+        int options = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
+
+        if( !m_fixIncludePaths->GetValue() )
+            options &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
+
+        if( !m_saveAllVoltages->GetValue() )
+            options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
+
+        if( !m_saveAllCurrents->GetValue() )
+            options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+
+        return options;
+    }
+
+    void SetSimOptions( int aOptions )
+    {
+        m_fixIncludePaths->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS );
+        m_saveAllVoltages->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES );
+        m_saveAllCurrents->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS );
     }
 
     bool TransferDataFromWindow() override;

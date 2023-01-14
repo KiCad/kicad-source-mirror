@@ -46,7 +46,10 @@ class CURSOR : public mpInfoLayer
 public:
     CURSOR( const TRACE* aTrace, SIM_PLOT_PANEL* aPlotPanel ) :
             mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
-            m_trace( aTrace ), m_updateRequired( true ), m_updateRef( false ), m_coords( 0.0, 0.0 ),
+            m_trace( aTrace ),
+            m_updateRequired( true ),
+            m_updateRef( false ),
+            m_coords( 0.0, 0.0 ),
             m_window( nullptr )
     {
         SetDrawOutsideMargins( false );
@@ -95,7 +98,9 @@ class TRACE : public mpFXYVector
 {
 public:
     TRACE( const wxString& aName, SIM_PLOT_TYPE aType ) :
-            mpFXYVector( aName ), m_cursor( nullptr ), m_type( aType )
+            mpFXYVector( aName ),
+            m_cursor( nullptr ),
+            m_type( aType )
     {
         SetContinuity( true );
         SetDrawOutsideMargins( false );
@@ -178,10 +183,10 @@ class SIM_PLOT_PANEL : public SIM_PANEL_BASE
     friend class SIM_WORKBOOK;
 
 public:
-    SIM_PLOT_PANEL( const wxString& aCommand, wxWindow* parent, SIM_PLOT_FRAME* aMainFrame,
-                    wxWindowID id, const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize, long style = 0,
-                    const wxString& name = wxPanelNameStr );
+    SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent,
+                    SIM_PLOT_FRAME* aMainFrame, wxWindowID id,
+                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                    long style = 0, const wxString& name = wxPanelNameStr );
 
     virtual ~SIM_PLOT_PANEL();
 
