@@ -163,7 +163,7 @@ void E_SERIES::simple_solution( uint32_t aSize )
 
     for( i = 0; i < aSize; i++ )
     {
-        if( abs( m_combined_table.at( i ).e_value - m_required_value ) < abs( m_results.at( S2R ).e_value ) )
+        if( std::abs( m_combined_table.at( i ).e_value - m_required_value ) < std::abs( m_results.at( S2R ).e_value ) )
         {
             m_results[S2R].e_value = m_combined_table[ i ].e_value - m_required_value;  // save signed deviation in Ohms
             m_results[S2R].e_name  = m_combined_table[ i ].e_name;                      // save combination text
@@ -192,7 +192,7 @@ void E_SERIES::combine4( uint32_t aSize )
             tmp = m_combined_table[i].e_value + m_combined_table[j].e_value;    // calculate 2R+2R serial
             tmp -= m_required_value;                                            // calculate 4R deviation
 
-            if( abs( tmp ) < abs( m_results.at(S4R).e_value ) )    // if new 4R is better
+            if( std::abs( tmp ) < std::abs( m_results.at(S4R).e_value ) )    // if new 4R is better
             {
                 m_results[S4R].e_value = tmp;                      // save amount of benefit
                 std::string s = "( ";
@@ -208,7 +208,7 @@ void E_SERIES::combine4( uint32_t aSize )
                   ( m_combined_table[i].e_value + m_combined_table[j].e_value );   // calculate 2R|2R parallel
             tmp -= m_required_value;                                               // calculate 4R deviation
 
-            if( abs( tmp ) < abs( m_results[S4R].e_value ) )       // if new 4R is better
+            if( std::abs( tmp ) < std::abs( m_results[S4R].e_value ) )       // if new 4R is better
             {
                 m_results[S4R].e_value = tmp;                      // save amount of benefit
                 std::string s = "( ";
@@ -293,7 +293,7 @@ void E_SERIES::combine3( uint32_t aSize )
                 tmp  = m_combined_table[j].e_value + i.e_value;
                 tmp -= m_required_value;                           // calculate deviation
 
-                if( abs( tmp ) < abs( m_results[S3R].e_value ) )   // compare if better
+                if( std::abs( tmp ) < std::abs( m_results[S3R].e_value ) )   // compare if better
                 {                                                  // then take it
                     s = i.e_name;                                  // mention 3rd component
                     s.append( " + ( " );                           // in series
@@ -308,7 +308,7 @@ void E_SERIES::combine3( uint32_t aSize )
                       ( i.e_value + m_combined_table[j].e_value ); // calculate R + 2R parallel
                 tmp -= m_required_value;                           // calculate deviation
 
-                if( abs( tmp ) < abs( m_results[S3R].e_value ) )   // compare if better
+                if( std::abs( tmp ) < std::abs( m_results[S3R].e_value ) )   // compare if better
                 {                                                  // then take it
                     s = i.e_name;                                  // mention 3rd component
                     s.append( " | ( " );                           // in parallel
