@@ -3,7 +3,7 @@
  * is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 <janvi@veith.net>
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -356,8 +356,8 @@ void E_SERIES::strip3()
         if( ( std::count( s.begin(), s.end(), '+' ) == 2 )
                 || ( std::count( s.begin(), s.end(), '|' ) == 2 ) )
         {                                     // then strip one pair of braces
-            s.erase( s.find( '(' ), 1 );      // it is known sure, this is available
-            s.erase( s.find( ')' ), 1 );      // in any unstripped 3R result term
+            s.erase( s.find( "( " ), 2 );     // it is known sure, this is available
+            s.erase( s.find( " )" ), 2 );     // in any unstripped 3R result term
             m_results[S3R].e_name = s;        // use stripped result
         }
     }
@@ -375,10 +375,10 @@ void E_SERIES::strip4()
         if( ( std::count( s.begin(), s.end(), '+' ) == 3 )
                 || ( std::count( s.begin(), s.end(), '|' ) == 3 ) )
         {                                     // then strip two pair of braces
-            s.erase( s.find( '(' ), 1 );      // it is known sure, they are available
-            s.erase( s.find( ')' ), 1 );      // in any unstripped 4R result term
-            s.erase( s.find( '(' ), 1 );
-            s.erase( s.find( ')' ), 1 );
+            s.erase( s.find( "( " ), 2 );     // it is known sure, they are available
+            s.erase( s.find( " )" ), 2 );     // in any unstripped 4R result term
+            s.erase( s.find( "( " ), 2 );
+            s.erase( s.find( " )" ), 2 );
             m_results[S4R].e_name = s;        // use stripped result
         }
     }
