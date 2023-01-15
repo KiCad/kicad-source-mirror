@@ -275,20 +275,17 @@ void SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
     if( aScreen == nullptr )
         aScreen = GetScreen();
 
-    SCH_LINE* newSegment = static_cast<SCH_LINE*>( aSegment->Duplicate() );
+    // Save the copy of aSegment before breaking it
+    SaveCopyInUndoList( aScreen, aSegment, UNDO_REDO::CHANGED, true );
 
-    newSegment->SetStartPoint( aPoint );
-    newSegment->SetConnectivityDirty( true );
+    SCH_LINE* newSegment = aSegment->BreakAt( aPoint );
+    aSegment->SetFlags( IS_CHANGED | IS_BROKEN );
     newSegment->SetFlags( IS_NEW | IS_BROKEN );
     AddToScreen( newSegment, aScreen );
 
     SaveCopyInUndoList( aScreen, newSegment, UNDO_REDO::NEWITEM, true );
-    SaveCopyInUndoList( aScreen, aSegment, UNDO_REDO::CHANGED, true );
-
-    aSegment->SetFlags( IS_CHANGED | IS_BROKEN );
 
     UpdateItem( aSegment, false, true );
-    aSegment->SetEndPoint( aPoint );
 
     if( aNewSegment )
         *aNewSegment = newSegment;

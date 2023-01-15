@@ -232,6 +232,20 @@ public:
      */
     SCH_LINE* MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCheckJunctions );
 
+    /**
+     * Break this segment into two at the specified point.
+     *
+     * @note No checks are made to verify if aPoint is contained within the segment. That is
+     * the responsibility of the caller.
+     *
+     * @note It is the responsibility of the caller to add the newly created segment
+     * to the screen.
+     *
+     * @param aPoint Point at which to break the segment
+     * @return The newly created segment.
+     */
+    SCH_LINE* BreakAt( const VECTOR2I& aPoint );
+
     bool IsParallel( const SCH_LINE* aLine ) const;
 
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;

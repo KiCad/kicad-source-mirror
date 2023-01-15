@@ -558,6 +558,18 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
 }
 
 
+SCH_LINE* SCH_LINE::BreakAt( const VECTOR2I& aPoint )
+{
+    SCH_LINE* newSegment = static_cast<SCH_LINE*>( Duplicate() );
+
+    newSegment->SetStartPoint( aPoint );
+    newSegment->SetConnectivityDirty( true );
+    SetEndPoint( aPoint );
+
+    return newSegment;
+}
+
+
 void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
     if( IsConnectable() )
