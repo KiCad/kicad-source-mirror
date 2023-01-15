@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN.
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
@@ -44,6 +44,29 @@ wxString escapeName( const wxString& aNetName )
     ret.Replace( "!", "~" );
 
     return ConvertToNewOverbarNotation( ret );
+}
+
+
+bool substituteVariable( wxString* aText )
+{
+    if     ( *aText == wxT( ">NAME" ) )             *aText = wxT( "${REFERENCE}" );
+    else if( *aText == wxT( ">VALUE" ) )            *aText = wxT( "${VALUE}" );
+    else if( *aText == wxT( ">PART" ) )             *aText = wxT( "${REFERENCE}" );
+    else if( *aText == wxT( ">GATE" ) )             *aText = wxT( "${UNIT}" );
+    else if( *aText == wxT( ">MODULE" ) )           *aText = wxT( "${FOOTPRINT_NAME}" );
+    else if( *aText == wxT( ">SHEETNR" ) )          *aText = wxT( "${#}" );
+    else if( *aText == wxT( ">SHEETS" ) )           *aText = wxT( "${##}" );
+    else if( *aText == wxT( ">SHEET" ) )            *aText = wxT( "${#}/${##}" );
+    else if( *aText == wxT( ">SHEETNR_TOTAL" ) )    *aText = wxT( "${#}" );
+    else if( *aText == wxT( ">SHEETS_TOTAL" ) )     *aText = wxT( "${##}" );
+    else if( *aText == wxT( ">SHEET_TOTAL" ) )      *aText = wxT( "${#}/${##}" );
+    else if( *aText == wxT( ">ASSEMBLY_VARIANT" ) ) *aText = wxT( "${ASSEMBLY_VARIANT}" );
+    else if( *aText == wxT( ">DRAWING_NAME" ) )     *aText = wxT( "${TITLE}" );
+    else if( *aText == wxT( ">LAST_DATE_TIME" ) )   *aText = wxT( "${ISSUE_DATE}" );
+    else if( *aText == wxT( ">PLOT_DATE_TIME" ) )   *aText = wxT( "${CURRENT_DATE}" );
+    else return false;
+
+    return true;
 }
 
 

@@ -212,17 +212,11 @@ void SCH_EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
          */
 
         if( elayer.name == wxT( "Nets" ) )
-        {
             m_layerMap[elayer.number] = LAYER_WIRE;
-        }
         else if( elayer.name == wxT( "Info" ) || elayer.name == wxT( "Guide" ) )
-        {
             m_layerMap[elayer.number] = LAYER_NOTES;
-        }
         else if( elayer.name == wxT( "Busses" ) )
-        {
             m_layerMap[elayer.number] = LAYER_BUS;
-        }
     }
 }
 
@@ -241,24 +235,15 @@ static SYMBOL_ORIENTATION_T kiCadComponentRotation( float eagleDegrees )
 
     switch( roti )
     {
+    case 0:   return SYM_ORIENT_0;
+    case 90:  return SYM_ORIENT_90;
+    case 180: return SYM_ORIENT_180;
+    case 270: return SYM_ORIENT_270;
+
     default:
         wxASSERT_MSG( false, wxString::Format( wxT( "Unhandled orientation (%d degrees)" ), roti ) );
-        KI_FALLTHROUGH;
-
-    case 0:
         return SYM_ORIENT_0;
-
-    case 90:
-        return SYM_ORIENT_90;
-
-    case 180:
-        return SYM_ORIENT_180;
-
-    case 270:
-        return SYM_ORIENT_270;
     }
-
-    return SYM_ORIENT_0;
 }
 
 
@@ -2588,9 +2573,11 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
     // Strip the whitespace from both ends of each line.
     while( tokenizer.HasMoreTokens() )
     {
-        wxString tmp = tokenizer.GetNextToken().Trim();
+        wxString tmp = tokenizer.GetNextToken().Trim( true ).Trim( false );
+        wxString var = tmp.Upper();
 
-        tmp = tmp.Trim( false );
+        if( substituteVariable( &var ) )
+            tmp = var;
 
         if( tokenizer.HasMoreTokens() )
             tmp += wxT( "\n" );

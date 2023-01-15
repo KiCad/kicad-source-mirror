@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,15 +58,11 @@ Load() TODO's
 #include <wx/log.h>
 #include <wx/wfstream.h>
 
-#include <eda_pattern_match.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <core/arraydim.h>
-#include <geometry/geometry_utils.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <string_utf8_map.h>
 #include <trigo.h>
-#include <math/util.h>      // for KiROUND
 #include <progress_reporter.h>
 #include <project.h>
 #include <board.h>
@@ -123,21 +119,8 @@ static wxString interpret_text( const wxString& aText )
 {
     wxString token = aText.Upper();
 
-    if     ( token == wxT( ">NAME" ) )             return wxT( "${REFERENCE}" );
-    else if( token == wxT( ">VALUE" ) )            return wxT( "${VALUE}" );
-    else if( token == wxT( ">PART" ) )             return wxT( "${REFERENCE}" );
-    else if( token == wxT( ">GATE" ) )             return wxT( "${UNIT}" );
-    else if( token == wxT( ">MODULE" ) )           return wxT( "${FOOTPRINT_NAME}" );
-    else if( token == wxT( ">SHEETNR" ) )          return wxT( "${#}" );
-    else if( token == wxT( ">SHEETS" ) )           return wxT( "${##}" );
-    else if( token == wxT( ">SHEET" ) )            return wxT( "${#}/${##}" );
-    else if( token == wxT( ">SHEETNR_TOTAL" ) )    return wxT( "${#}" );
-    else if( token == wxT( ">SHEETS_TOTAL" ) )     return wxT( "${##}" );
-    else if( token == wxT( ">SHEET_TOTAL" ) )      return wxT( "${#}/${##}" );
-    else if( token == wxT( ">ASSEMBLY_VARIANT" ) ) return wxT( "${ASSEMBLY_VARIANT}" );
-    else if( token == wxT( ">DRAWING_NAME" ) )     return wxT( "${TITLE}" );
-    else if( token == wxT( ">LAST_DATE_TIME" ) )   return wxT( "${ISSUE_DATE}" );
-    else if( token == wxT( ">PLOT_DATE_TIME" ) )   return wxT( "${CURRENT_DATE}" );
+    if( substituteVariable( &token ) )
+        return token;
 
     wxString text;
     bool sectionOpen = false;

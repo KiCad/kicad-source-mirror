@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
@@ -53,6 +53,9 @@ typedef std::map<wxString, std::unique_ptr<EPART>> EPART_MAP;
 
 ///< Translates Eagle special characters to their counterparts in KiCad.
 wxString escapeName( const wxString& aNetName );
+
+///< Translates Eagle special text reference to a KiCad variable reference
+bool substituteVariable( wxString* aText );
 
 static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const wxString& aName )
 {
