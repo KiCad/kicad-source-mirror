@@ -152,21 +152,21 @@ VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aP
 {
     typedef std::numeric_limits<int> coord_limits;
 
-    long max = coord_limits::max() - aPadding;
-    long min = -max;
+    long long max = long long( coord_limits::max() ) - aPadding;
+    long long min = -max;
 
     in_type x = aCoords.x;
     in_type y = aCoords.y;
 
     if( x < min )
-        x = min;
+        x = in_type( min );
     else if( x > max )
-        x = max;
+        x = in_type( max );
 
     if( y < min )
-        y = min;
+        y = in_type( min );
     else if( y > max )
-        y = max;
+        y = in_type( max );
 
     if( !std::is_integral<in_type>() && std::is_integral<ret_type>() )
         return VECTOR2<ret_type>( KiROUND( x ), KiROUND( y ) );
