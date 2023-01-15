@@ -424,9 +424,12 @@ void ZONE_FILLER_TOOL::refresh()
 
 bool ZONE_FILLER_TOOL::IsZoneFillAction( const TOOL_EVENT* aEvent )
 {
-    return aEvent->IsAction( &PCB_ACTIONS::zoneFillAll )
-           || aEvent->IsAction( &PCB_ACTIONS::zoneFillDirty )
+    return aEvent->IsAction( &PCB_ACTIONS::zoneFill )
+           || aEvent->IsAction( &PCB_ACTIONS::zoneFillAll )
+           || aEvent->IsAction( &PCB_ACTIONS::zoneUnfill )
            || aEvent->IsAction( &PCB_ACTIONS::zoneUnfillAll );
+
+    // Don't include zoneFillDirty; that's a system action not a user action
 }
 
 
