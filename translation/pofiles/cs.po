@@ -7,7 +7,7 @@
 # translation of kicad.po to
 # Radovan Blažek <blazra@gmail.com>, 2020.
 # Jan Vykydal <vvykys@gmail.com>, 2020, 2021.
-# Jan Straka <bach@email.cz>, 2020, 2021, 2022.
+# Jan Straka <bach@email.cz>, 2020, 2021, 2022, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # Radek Kuznik <radek.kzn@gmail.com>, 2021, 2022, 2023.
 # Ondřej Čertík <ondrej@certik.us>, 2022.
@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2023-01-13 08:09+0000\n"
-"Last-Translator: René Široký <siroky.rene@wideservis.cz>\n"
+"PO-Revision-Date: 2023-01-17 17:11+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -2506,7 +2506,7 @@ msgstr "Papír"
 
 #: common/dialogs/dialog_page_settings.cpp:112
 msgid "Title Block"
-msgstr "Název bloku"
+msgstr "Rohové razítko"
 
 #: common/dialogs/dialog_page_settings.cpp:473
 #, c-format
@@ -2924,9 +2924,8 @@ msgstr "Černobíle"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
-msgstr "Tisk výkresového listu"
+msgstr "Tisk listu výkresu"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -3235,12 +3234,12 @@ msgstr "Zobrazit posouvací lišty v editorech"
 #: common/dialogs/panel_common_settings_base.cpp:153
 #: common/dialogs/panel_common_settings_base.cpp:125
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "Tato změna se projeví při opětovném spuštění editoru."
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 #: common/dialogs/panel_common_settings_base.cpp:129
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Fokus sleduje myš mezi editory schémat a DPS"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 #: common/dialogs/panel_common_settings_base.cpp:130
@@ -3248,6 +3247,8 @@ msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Pokud je kurzor myši přesunut na obrazovku okna editoru schémat nebo DPS, "
+"toto okno je vloženo do popředí."
 
 #: common/dialogs/panel_common_settings_base.cpp:162
 #: common/dialogs/panel_common_settings_base.cpp:134
@@ -3964,9 +3965,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Sítě odpovídající '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "Třídy spojů"
+msgstr "Třídy spojů:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:493
@@ -10998,9 +10998,8 @@ msgstr ""
 "Nastavte šířku ohraničení na 0 pro použití výchozí šířky čáry schématu."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
-msgstr "Nastavit barvu průhlednosti pro použití barev editoru schémat."
+msgstr "Vymažte barvy pro použití barev editoru schémat."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:77
 #, c-format
@@ -11256,9 +11255,8 @@ msgid "Frequency scale"
 msgstr "Měřítko frekvence"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "Počet jednotek v pouzdře:"
+msgstr "Počet bodů za dekádu:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -11586,9 +11584,8 @@ msgid "Symbol Pin"
 msgstr "Vývod symbolu"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:237
-#, fuzzy
 msgid "Model Pin"
-msgstr "Přesunout vývod"
+msgstr "Model vývodu"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:298
 msgid "Pin Assignments"
@@ -11797,7 +11794,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 msgid "Do not populate"
-msgstr "Není osazeno (DNP)"
+msgstr "Nevyplňovat"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:228
 msgid "Update Symbol from Library..."
@@ -12531,12 +12528,12 @@ msgstr "Poměr posunu označení:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
 msgstr ""
-"Procento velikosti textu k odsazení textu nad nebo pod vodičem nebo sběrnicí"
+"Procento velikosti textu k posunutí popisků nad (nebo pod) spoj, sběrnici "
+"nebo vývod"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Global label margin:"
@@ -13601,9 +13598,9 @@ msgid "Importing Schematic"
 msgstr "Importování schématu"
 
 #: eeschema/files-io.cpp:1298
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "Vyčerpaná paměť při načítání souboru schématu '%s'."
+msgstr "Při načítání schématu '%s' došlo k neošetřené výjimce."
 
 #: eeschema/files-io.cpp:1332
 msgid "The current schematic has been modified.  Save changes?"
@@ -15898,9 +15895,8 @@ msgid "Capacitance matrix is incorrect"
 msgstr "Matice kapacity je nesprávná"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:665
-#, fuzzy
 msgid "Capacitance matrix is nullptr"
-msgstr "Indukční matice je nullptr"
+msgstr "Matice kapacity je nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:673
 msgid "Inductance matrix is undefined"
@@ -15989,9 +15985,8 @@ msgid "Invalid row in matrix"
 msgstr "Neplatný řádek v matici"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1460
-#, fuzzy
 msgid "Too much data for this matrix row."
-msgstr "Příliš mnoho dat pro tuto matici."
+msgstr "Příliš mnoho dat pro tento řádek matice."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1468
 msgid "Too much data for this matrix."
@@ -16035,9 +16030,8 @@ msgid "Unknown Model_type "
 msgstr "Neznámý typ_modelu "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1874
-#, fuzzy
 msgid "Internal Error while reading model_type"
-msgstr "Vnitřní chyba při čtení povolení"
+msgstr "Interní chyba při čtení model_type"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1889
 msgid "Unknown Enable: "
@@ -16093,9 +16087,8 @@ msgid "Unknown waveform type"
 msgstr "Neznámý typ tvaru vlny"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2379
-#, fuzzy
 msgid "Internal error detected, a waveform should exist"
-msgstr "Vnitřní chyba: Špatně zpracovaný kontext."
+msgstr "Zjištěná interní chyba, měla by existovat vlnová forma"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2444
 msgid "Internal error: Bad parser context."
@@ -16150,9 +16143,8 @@ msgid "Model has more than 2 waveform pairs, using the first two."
 msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:1253
-#, fuzzy
 msgid "Invalid model type for a driver."
-msgstr "Neplatný typ modelu pro zařízení"
+msgstr "Neplatný typ modelu pro zařízení."
 
 #: eeschema/sim/kibis/kibis.cpp:1305
 msgid "Invalid model type for a device"
@@ -16333,10 +16325,9 @@ msgid "Number of bits"
 msgstr "Počet bitů"
 
 #: eeschema/sim/sim_panel_base.cpp:92
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr "Tato simulace neposkytuje grafy. Výsledky najdete v okně konzoly"
+msgstr "Tato simulace neposkytuje grafy. Výsledky najdete v okně konzoly."
 
 #: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Run/Stop Simulation"
@@ -16407,9 +16398,9 @@ msgid "Could not apply tuned value(s):"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:616 eeschema/sim/sim_plot_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "Adresář \"%s\" není zapisovatelný."
+msgstr "%s není laditelné"
 
 #: eeschema/sim/sim_plot_frame.cpp:659
 msgid "Error: simulation type not defined!\n"
@@ -16456,9 +16447,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Nejdříve musíte spustit simulaci, která generuje grafy."
 
 #: eeschema/sim/sim_plot_frame.cpp:1605
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "Soubor netlistu SPICE"
+msgstr "Netlist SPICE"
 
 #: eeschema/sim/sim_plot_frame.cpp:1672
 msgid "Save changes to workbook?"
@@ -16477,14 +16467,12 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove Signal"
-msgstr "Odebrat alias"
+msgstr "Odebrat signál"
 
 #: eeschema/sim/sim_plot_frame.cpp:1925
-#, fuzzy
 msgid "Remove the signal from the plot"
-msgstr "Vymazat signál z obrazovky výkresu"
+msgstr "Odstraní signál z grafu"
 
 #: eeschema/sim/sim_plot_frame.cpp:1933
 msgid "Hide Cursor"
@@ -16633,9 +16621,9 @@ msgstr "Typ SIM_VALUE neznámý"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr "Nelze najít IBIS vývod '%s' v komponentě '%s'"
+msgstr "Nelze najít model '%s' ke kopírování pro \"A Kind Of“ model '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:63
 msgid "DC Sweep"
@@ -17188,12 +17176,12 @@ msgid "Symbol %s saved to library '%s'."
 msgstr "Symbol %s uložen do knihovny '%s'."
 
 #: eeschema/symbol_lib_table.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"V souboru tabulky knihoven součástek nalezen zdvojený název knihovny \"%s\" "
-"na řádku %d"
+"Nalezena duplicitní přezdívka '%s' knihovny v souboru tabulky knihoven "
+"symbolů na řádku %d"
 
 #: eeschema/symbol_library.cpp:556 eeschema/symbol_tree_model_adapter.cpp:214
 #, c-format
@@ -18016,23 +18004,20 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Zobrazí tabulku vývodů pro hromadnou úpravu vývodů"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Break"
-msgstr "Přerušit sběrnici"
+msgstr "Přerušit"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Divide into connected segments"
-msgstr "Prokov není připojen"
+msgstr "Rozdělení na propojené segmenty"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
 msgstr "Střih"
 
 #: eeschema/tools/ee_actions.cpp:558
-#, fuzzy
 msgid "Divide into unconnected segments"
-msgstr "Smazat nezapojené spoje:"
+msgstr "Rozdělte na nepropojené segmenty"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -18265,11 +18250,8 @@ msgid "Draw and drag at any angle"
 msgstr "Kreslit a táhnout v libovolném úhlu"
 
 #: eeschema/tools/ee_actions.cpp:723
-#, fuzzy
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
-msgstr ""
-"Omezuje rýsování a přetahování do pohybu vodorovně, svisle nebo pod úhlem 45 "
-"stupňů"
+msgstr "Omezit kresbu a přetažení na horizontální nebo vertikální pohyby"
 
 #: eeschema/tools/ee_actions.cpp:729
 msgid ""
@@ -18603,9 +18585,9 @@ msgid "Edit Sheet Page Number"
 msgstr "Upravit číslo stránky listu"
 
 #: eeschema/tools/sch_editor_control.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "Vrátit '%s' na poslední uloženou verzi?"
+msgstr "Vrátit '%s' (a všechny pod-listy) na poslední uloženou verzi?"
 
 #: eeschema/tools/sch_editor_control.cpp:402
 #: eeschema/tools/sch_editor_control.cpp:824
@@ -18711,9 +18693,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "Stisknout <ESC> pro zrušení přesunutí."
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' not found."
-msgstr "Stránka '%d' nenalezena."
+msgstr "Strana '%s' nenalezena."
 
 #: eeschema/tools/symbol_editor_control.cpp:180
 msgid "No symbol library selected."
@@ -18755,9 +18737,9 @@ msgid "Symbol is not derived from another symbol."
 msgstr "Symbol není odvozen z jiného symbolu."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Enter display name for unit %s"
-msgstr "Zadejte číslo stránky pro cestu listu%s"
+msgstr "Zadejte zobrazovaný název pro jednotku %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:672
 msgid "Set Unit Display Name"
@@ -19931,9 +19913,8 @@ msgid "Show layers in differential compare mode"
 msgstr "Zobrazit obrysy v režimu výplně"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show in XOR Mode"
-msgstr "Zobrazit 3D m&odely"
+msgstr "Zobrazit v režimu XOR"
 
 #: gerbview/tools/gerbview_actions.cpp:196
 #, fuzzy
@@ -20271,9 +20252,8 @@ msgstr "Soubor desky neexistuje nebo není přístupný\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:49
-#, fuzzy
 msgid "Include the border and title block"
-msgstr "Kreslit hranice a název bloku"
+msgstr "Zahrnout rámeček listu a rohové razítko"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:55
 msgid "Do not use the extended X2 format"
@@ -20415,9 +20395,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_svg.cpp:63
 #: kicad/cli/command_export_sch_pdf.cpp:46
 #: kicad/cli/command_export_sch_svg.cpp:46
-#, fuzzy
 msgid "No drawing sheet"
-msgstr "Vykreslit ohraničení stránky"
+msgstr "Žádný výkresový list"
 
 #: kicad/cli/command_export_sch_netlist.cpp:36
 msgid ""
@@ -20440,14 +20419,12 @@ msgstr ""
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:44
 #: kicad/cli/command_sym_export_svg.cpp:42
-#, fuzzy
 msgid "Specific symbol to export within the library"
-msgstr "Nelze exportovat do schránky"
+msgstr "Konkrétní symbol pro export v knihovně"
 
 #: kicad/cli/command_fp_export_svg.cpp:62
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "Cesta pouzdra neexistuje nebo není přístupná\n"
+msgstr "Knihovna pouzdra neexistuje nebo není přístupná\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
@@ -20458,20 +20435,17 @@ msgid "Footprint path does not exist or is not accessible\n"
 msgstr "Cesta pouzdra neexistuje nebo není přístupná\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:52
-#, fuzzy
 msgid "Include hidden pins"
-msgstr "Zob&razit skryté vývody"
+msgstr "Zahrnout skryté vývody"
 
 #: kicad/cli/command_sym_export_svg.cpp:57
-#, fuzzy
 msgid "Include hidden fields"
-msgstr "Hledat skrytá pole"
+msgstr "Zahrnout skrytá pole"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
 #: kicad/cli/command_sym_export_svg.cpp:62
-#, fuzzy
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "Soubor desky neexistuje nebo není přístupný\n"
+msgstr "Soubor symbolu neexistuje nebo není přístupný\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -20533,9 +20507,7 @@ msgstr "Zobrazit nástroj pro výpočet vodivosti, proudového zatížení atd."
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
-msgstr ""
-"Upravit rámeček a popisové pole výkresových listů pro schéma a návrh "
-"plošného spoje"
+msgstr "Upravit rámeček a rohové razítko pro schéma a návrh plošného spoje"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -20771,9 +20743,9 @@ msgid "Color themes (%d)"
 msgstr "Barevné témata (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:75
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "Opravdu chcete odstranit položky %d?"
+msgstr "Chcete aktualizovat připnutý balíček z verze %s na %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:78
 msgid "Confirm update"
@@ -20898,9 +20870,8 @@ msgid "Applying Package Changes"
 msgstr "Použít změny balíčku"
 
 #: kicad/pcm/dialogs/panel_package.cpp:67
-#, fuzzy
 msgid "Pin package"
-msgstr "Pouzdro"
+msgstr "Připněte balíček"
 
 #: kicad/pcm/dialogs/panel_package.cpp:68
 msgid ""
@@ -21018,9 +20989,8 @@ msgstr "Stáhnout"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:20
-#, fuzzy
 msgid "Check for package updates on startup"
-msgstr "Zkontrolovat aktualizace"
+msgstr "Kontrolovat aktualizace balíčků při spuštění"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:40
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:28
@@ -21034,9 +21004,8 @@ msgstr "Automaticky přidat nainstalované knihovny do globální tabulky knihov
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:57
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:34
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Automaticky vytvořené spoje"
+msgstr "Automaticky odstranit odinstalované knihovny"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:64
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:41
@@ -21821,7 +21790,7 @@ msgstr "Krok Y:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:435
 msgid "Distance to step on Y axis for each repeat."
-msgstr ""
+msgstr "Přírůstek vzdálenosti na ose Y pro každé opakování."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:449
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:609
@@ -22050,30 +22019,30 @@ msgstr "Nastavení náhledu stránky..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
-msgstr "Úprava dat náhledu pro velikost stránky a pole písma"
+msgstr "Úprava dat náhledu pro velikost stránky a rohové razítko"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr "Zobrazit název bloku v režimu náhledu"
+msgstr "Zobrazit rohové razítko v režimu náhledu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
-"Zobrazit razítko v režimu náhledu:\n"
+"Zobrazit rohové razítko v režimu náhledu:\n"
 "textové zástupné symboly budou nahrazeny s náhledem dat."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr "Zobrazit pole písma v režimu úprav"
+msgstr "Zobrazit rohové razítko v režimu úprav"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
-"Zobrazit razítko v režimu úprav:\n"
+"Zobrazit rohové razítko v režimu úprav:\n"
 "zástupné symboly textu jsou zobrazeny jako tokeny ${keyword}."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:515
@@ -22427,7 +22396,7 @@ msgstr "Lineární odpor:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr ""
+msgstr "Frekvence pro 100% skin:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
@@ -25527,9 +25496,8 @@ msgid "Cleanup Tracks and Vias"
 msgstr "Vyčistit spoje a prokovy"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
-#, fuzzy
 msgid "Constraints Resolution Report"
-msgstr "Rozlišení omezení..."
+msgstr "Zpráva o řešení omezení"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:209
 msgid "Teardrop on Vias/Pads Properties"
@@ -26894,7 +26862,7 @@ msgstr "Export jako černé prvky na bílém pozadí"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
 msgid "Page with frame and title block"
-msgstr "Stránka s rámečkem a titulním blokem"
+msgstr "Stránka s rámečkem a rohové razítko"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
 msgid "Current page size"
@@ -32701,6 +32669,8 @@ msgstr "Výchozí vlastnosti pro nové prvky typu kóty:"
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
+"Standardní jednotky pro rozměry (\"automatické\" pro použití vybraných "
+"jednotek uživatelského rozhraní)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:103
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
@@ -41973,7 +41943,7 @@ msgstr "Tisknout okraj a rohové razítko"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "Tisk listu &reference a název bloku"
+msgstr "Tisk listu &reference a rohové razítko"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Print in &black and white only"
@@ -42003,7 +41973,7 @@ msgstr "Pouze černobílá"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr "Kreslit hranice a název bloku"
+msgstr "Kreslit hranice a rohové razítko"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
 #: pcbnew/dialogs/dialog_plot_base.cpp:393
