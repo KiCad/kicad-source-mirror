@@ -1107,7 +1107,6 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
 
     auto smooth = [&]( SHAPE_POLY_SET& aPoly )
                   {
-
                       if( !smooth_requested )
                           return;
 

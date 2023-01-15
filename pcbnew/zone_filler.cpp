@@ -156,14 +156,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             static_cast<PCB_VIA*>( track )->ClearZoneConnectionCache();
     }
 
-    // Sort by priority to reduce deferrals waiting on higher priority zones.
-    //
-    std::sort( aZones.begin(), aZones.end(),
-               []( const ZONE* lhs, const ZONE* rhs )
-               {
-                   return lhs->HigherPriority( rhs );
-               } );
-
     for( ZONE* zone : aZones )
     {
         // Rule areas are not filled
