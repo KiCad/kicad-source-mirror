@@ -263,20 +263,20 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 if( !canFill )
                     return 0;
 
-
                 // Now we're ready to fill.
-                std::unique_lock<std::mutex> zoneLock( zone->GetLock(), std::try_to_lock );
+                {
+                    std::unique_lock<std::mutex> zoneLock( zone->GetLock(), std::try_to_lock );
 
-                if( !zoneLock.owns_lock() )
-                    return 0;
+                    if( !zoneLock.owns_lock() )
+                        return 0;
 
+                    SHAPE_POLY_SET fillPolys;
 
-                SHAPE_POLY_SET fillPolys;
+                    if( !fillSingleZone( zone, layer, fillPolys ) )
+                        return 0;
 
-                if( !fillSingleZone( zone, layer, fillPolys ) )
-                    return 0;
-
-                zone->SetFilledPolysList( layer, fillPolys );
+                    zone->SetFilledPolysList( layer, fillPolys );
+                }
 
                 if( m_progressReporter )
                     m_progressReporter->AdvanceProgress();
@@ -314,9 +314,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                             if( zone->Outline()->Collide( viaShape.get() ) )
                             {
                                 if( zone->GetFill( layer )->Collide( flashedShape.get() ) )
-                                    via->ZoneConnectionCache( layer ) = ZLC_CONNECTED;
+                                    via->SetZoneConnectionCache( layer, ZLC_CONNECTED );
                                 else
-                                    via->ZoneConnectionCache( layer ) = ZLC_UNCONNECTED;
+                                    via->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
                             }
                         }
                     }
@@ -341,9 +341,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                             if( zone->Outline()->Collide( padShape.get() ) )
                             {
                                 if( zone->GetFill( layer )->Collide( flashedShape.get() ) )
-                                    pad->ZoneConnectionCache( layer ) = ZLC_CONNECTED;
+                                    pad->SetZoneConnectionCache( layer, ZLC_CONNECTED );
                                 else
-                                    pad->ZoneConnectionCache( layer ) = ZLC_UNCONNECTED;
+                                    pad->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
                             }
                         }
                     }
@@ -353,19 +353,26 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     auto tesselate_lambda =
             [&]( std::pair<ZONE*, PCB_LAYER_ID> aFillItem ) -> int
             {
-
                 if( m_progressReporter && m_progressReporter->IsCancelled() )
                     return 0;
 
                 PCB_LAYER_ID layer = aFillItem.second;
                 ZONE*        zone = aFillItem.first;
 
-                zone->CacheTriangulation( layer );
+                {
+                    std::unique_lock<std::mutex> zoneLock( zone->GetLock(), std::try_to_lock );
 
-                if( zone->IsOnCopperLayer() )
-                    cache_optionally_flashed_connections( zone, layer );
+                    if( !zoneLock.owns_lock() )
+                        return 0;
 
-                zone->SetFillFlag( layer, true );
+                    zone->CacheTriangulation( layer );
+
+                    if( zone->IsOnCopperLayer() )
+                        cache_optionally_flashed_connections( zone, layer );
+
+                    zone->SetFillFlag( layer, true );
+                }
+
                 return 1;
             };
 
@@ -394,18 +401,19 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
             if( status == std::future_status::ready )
             {
-                if( ret.first.get() )
+                if( ret.first.get() )   // lambda completed
                 {
                     ++finished;
-
-                    if( !cancelled && ret.second == 0 )
-                        returns[ii].first = tp.submit( tesselate_lambda, toFill[ii] );
-
-                    ret.second++;
+                    ret.second++;       // go to next step
                 }
-                else if( !cancelled )
+
+                if( !cancelled )
                 {
-                    returns[ii].first = tp.submit( fill_lambda, toFill[ii] );
+                    // Queue the next step (will re-queue the existing step if it didn't complete)
+                    if( ret.second == 0 )
+                        returns[ii].first = tp.submit( fill_lambda, toFill[ii] );
+                    else if( ret.second == 1 )
+                        returns[ii].first = tp.submit( tesselate_lambda, toFill[ii] );
                 }
             }
         }

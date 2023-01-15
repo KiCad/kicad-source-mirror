@@ -5026,7 +5026,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 if( layer < F_Cu || layer > B_Cu )
                     Expecting( "copper layer name" );
 
-                pad->ZoneConnectionCache( layer ) = ZLC_CONNECTED;
+                pad->SetZoneConnectionCache( layer, ZLC_CONNECTED );
             }
 
             break;
@@ -5450,7 +5450,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
                 if( layer < F_Cu || layer > B_Cu )
                     Expecting( "copper layer name" );
 
-                via->ZoneConnectionCache( layer ) = ZLC_CONNECTED;
+                via->SetZoneConnectionCache( layer, ZLC_CONNECTED );
             }
 
             break;

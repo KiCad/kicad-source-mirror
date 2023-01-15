@@ -96,6 +96,36 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
 }
 
 
+PCB_VIA::PCB_VIA( const PCB_VIA& aOther ) :
+        PCB_TRACK( aOther.GetParent(), PCB_VIA_T )
+{
+    PCB_VIA::operator=( aOther );
+
+    const_cast<KIID&>( m_Uuid ) = aOther.m_Uuid;
+}
+
+
+PCB_VIA& PCB_VIA::operator=( const PCB_VIA &aOther )
+{
+    BOARD_CONNECTED_ITEM::operator=( aOther );
+
+    m_Width = aOther.m_Width;
+    m_Start = aOther.m_Start;
+    m_End = aOther.m_End;
+    m_CachedLOD = aOther.m_CachedLOD;
+    m_CachedScale = aOther.m_CachedScale;
+
+    m_bottomLayer = aOther.m_bottomLayer;
+    m_viaType = aOther.m_viaType;
+    m_drill = aOther.m_drill;
+    m_removeUnconnectedLayer = aOther.m_removeUnconnectedLayer;
+    m_keepStartEndLayer = aOther.m_keepStartEndLayer;
+    m_isFree = aOther.m_isFree;
+
+    return *this;
+}
+
+
 EDA_ITEM* PCB_VIA::Clone() const
 {
     return new PCB_VIA( *this );

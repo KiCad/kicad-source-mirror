@@ -740,9 +740,15 @@ public:
             m_zoneLayerConnections[ ii ] = ZLC_UNRESOLVED;
     }
 
-    ZONE_LAYER_CONNECTION& ZoneConnectionCache( PCB_LAYER_ID aLayer ) const
+    const ZONE_LAYER_CONNECTION& ZoneConnectionCache( PCB_LAYER_ID aLayer ) const
     {
         return m_zoneLayerConnections[ aLayer ];
+    }
+
+    void SetZoneConnectionCache( PCB_LAYER_ID aLayer, ZONE_LAYER_CONNECTION aConnection )
+    {
+        std::unique_lock<std::mutex> cacheLock( m_zoneLayerConnectionsMutex );
+        m_zoneLayerConnections[ aLayer ] = aConnection;
     }
 
 #if defined(DEBUG)
@@ -863,7 +869,8 @@ private:
                                                 //   while 90° will produce a +.
     int         m_thermalGap;
 
-    mutable ZONE_LAYER_CONNECTION m_zoneLayerConnections[B_Cu + 1];
+    std::mutex            m_zoneLayerConnectionsMutex;
+    ZONE_LAYER_CONNECTION m_zoneLayerConnections[B_Cu + 1];
 };
 
 #endif  // PAD_H
