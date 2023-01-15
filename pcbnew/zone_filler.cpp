@@ -200,13 +200,18 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 // Check to see if we have to knock-out the filled areas of a higher-priority
                 // zone.  If so we have to wait until said zone is filled before we can fill.
 
-                // If the other zone is already filled then we're good-to-go
+                // If the other zone is already filled on the requested layer then we're
+                // good-to-go
                 if( aOtherZone->GetFillFlag( aLayer ) )
                     return false;
 
-                // Even if keepouts exclude copper pours the exclusion is by outline, not by
-                // filled area, so we're good-to-go here too.
+                // Even if keepouts exclude copper pours, the exclusion is by outline rather than
+                // filled area, so we're good-to-go here too
                 if( aOtherZone->GetIsRuleArea() )
+                    return false;
+
+                // If the other zone is never going to be filled then don't wait for it
+                if( aOtherZone->GetNumCorners() <= 2 )
                     return false;
 
                 // If the zones share no common layers
@@ -216,7 +221,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 if( aZone->HigherPriority( aOtherZone ) )
                     return false;
 
-                // Same-net zones always use outline to produce predictable results
+                // Same-net zones always use outlines to produce determinate results
                 if( aOtherZone->SameNet( aZone ) )
                     return false;
 
@@ -1497,7 +1502,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
         aLayer = F_Cu;
     }
 
-    if ( !aZone->BuildSmoothedPoly( maxExtents, aLayer, boardOutline, &smoothedPoly ) )
+    if( !aZone->BuildSmoothedPoly( maxExtents, aLayer, boardOutline, &smoothedPoly ) )
         return false;
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
