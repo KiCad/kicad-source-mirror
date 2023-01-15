@@ -36,6 +36,7 @@
 #define CLASS_TRACK_H
 
 
+#include <mutex>
 #include <board_connected_item.h>
 #include <base_units.h>
 #include <geometry/shape_segment.h>
