@@ -152,7 +152,7 @@ VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aP
 {
     typedef std::numeric_limits<int> coord_limits;
 
-    long long max = long long( coord_limits::max() ) - aPadding;
+    long long max = static_cast<long long>( coord_limits::max() ) - aPadding;
     long long min = -max;
 
     in_type x = aCoords.x;
