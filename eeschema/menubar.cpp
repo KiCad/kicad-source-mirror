@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -263,8 +263,6 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
     wxMenuItem* update = toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
     update->Enable( !Kiface().IsSingle() );
-    update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
-    update->Enable( !Kiface().IsSingle() );
 
     toolsMenu->Add( EE_ACTIONS::showPcbNew );
 
@@ -290,6 +288,9 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( EE_ACTIONS::assignFootprints );
     toolsMenu->Add( EE_ACTIONS::generateBOM );
 
+    toolsMenu->AppendSeparator();
+    update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
+    update->Enable( !Kiface().IsSingle() );
 
     //-- Preferences menu -----------------------------------------------
     //
