@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
 "PO-Revision-Date: 2023-01-17 17:11+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -28028,7 +28028,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Use route command (recommended)"
-msgstr "Käytä reititä komentoa (suositus)"
+msgstr "Käytä jyrsinkomentoa (suositus)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Use alternate drill mode"
