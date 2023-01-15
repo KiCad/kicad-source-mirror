@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -143,7 +143,10 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
             layoutfn = wxFileName( Prj().GetProjectPath(), BASE_SCREEN::m_DrawingSheetFileName );
 
         if( !layoutfn.FileExists() )
-            DS_DATA_MODEL::GetTheInstance().Save( layoutfn.GetAbsolutePath() );
+        {
+            layoutfn.MakeAbsolute();
+            DS_DATA_MODEL::GetTheInstance().Save( layoutfn.GetFullPath() );
+        }
     }
 
     GetSettingsManager()->SaveProject( fn.GetFullPath() );
